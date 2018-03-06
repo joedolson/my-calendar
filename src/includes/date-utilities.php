@@ -1,17 +1,32 @@
 <?php
+/**
+ * Date Utilities file
+ *
+ * @category Utilities
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
 /**
  * Generate classes for a given date
+ * 
+ * @param string timestamp
+ *
+ * @return string classes
  */
 function mc_dateclass( $current ) {
-	$now      =  current_time( 'timestamp' );
+	$now      = current_time( 'timestamp' );
 	$dayclass = sanitize_html_class( strtolower( date_i18n( 'l', $now ) ) ) . ' ' . sanitize_html_class( strtolower( date_i18n( 'D', $now ) ) );
-	if ( date( "Ymd", $now ) == date( "Ymd", $current ) ) {
+	if ( date( 'Ymd', $now ) == date( 'Ymd', $current ) ) {
 		$dateclass = 'current-day';
-	} else if ( my_calendar_date_comp( date( 'Y-m-d', $now ), date( 'Y-m-d', $current ) ) ) {
+	} elseif ( my_calendar_date_comp( date( 'Y-m-d', $now ), date( 'Y-m-d', $current ) ) ) {
 		$dateclass = 'future-day';
 	} else {
 		$dateclass = 'past-day past-date'; // stupid legacy classes.
@@ -20,7 +35,16 @@ function mc_dateclass( $current ) {
 	return esc_attr( $dayclass . ' ' . $dateclass );
 }
 
-// receives: time string, amount to add; returns: timestamp
+/**
+ * Given a date and a quantity of time to add, produce new date
+ *
+ * @param string $givendate A time string
+ * @param int $day Number of days to add
+ * @param int $mth Number of months to add
+ * @param int $yr number of years to add
+ *
+ * @return timestamp
+ */ 
 function my_calendar_add_date( $givendate, $day = 0, $mth = 0, $yr = 0 ) {
 	$cd      = strtotime( $givendate );
 	$newdate = mktime( date( 'H', $cd ), date( 'i', $cd ), date( 's', $cd ), date( 'm', $cd ) + $mth, date( 'd', $cd ) + $day, date( 'Y', $cd ) + $yr );
@@ -28,7 +52,14 @@ function my_calendar_add_date( $givendate, $day = 0, $mth = 0, $yr = 0 ) {
 	return $newdate;
 }
 
-//returns true if the date is before or equal,
+/**
+ * Test if the date is before or equal to second date with time precision
+ *
+ * @param string $early date string
+ * @param string $late date string
+ *
+ * @return boolean true if first date earlier or equal
+ */
 function my_calendar_date_comp( $early, $late ) {
 	$firstdate = strtotime( $early );
 	$lastdate  = strtotime( $late );
@@ -41,7 +72,14 @@ function my_calendar_date_comp( $early, $late ) {
 	}
 }
 
-// true if first date before second date
+/**
+ * Test if first date before second date with time precision
+ *
+ * @param string $early date string
+ * @param string $late date string
+ *
+ * @return boolean true if first date earlier
+ */ 
 function my_calendar_date_xcomp( $early, $late ) {
 	$firstdate = strtotime( $early );
 	$lastdate  = strtotime( $late );
@@ -54,9 +92,16 @@ function my_calendar_date_xcomp( $early, $late ) {
 	}
 }
 
-// true if dates are the same
+/**
+ *  Test if dates are the same with day precision
+ *
+ * @param string $early date string
+ * @param string $late date string
+ *
+ * @return boolean true if first date equal to second
+ */
 function my_calendar_date_equal( $early, $late ) {
-	// convert full datetime to date only
+	// convert full datetime to date only.
 	$firstdate = strtotime( date( 'Y-m-d', strtotime( $early ) ) );
 	$lastdate  = strtotime( date( 'Y-m-d', strtotime( $late ) ) );
 	if ( $firstdate == $lastdate ) {
@@ -68,7 +113,14 @@ function my_calendar_date_equal( $early, $late ) {
 	}
 }
 
-// Function to compare time in event objects
+/**
+ * Function to compare time in event objects for sorting
+ *
+ * @param object $a event object
+ * @param object $b event object
+ *
+ * @param int (ternary value)
+ */ 
 function mc_time_cmp( $a, $b ) {
 	if ( $a->occur_begin == $b->occur_begin ) {
 		
@@ -78,12 +130,19 @@ function mc_time_cmp( $a, $b ) {
 	return ( $a->occur_begin < $b->occur_begin ) ? - 1 : 1;
 }
 
-// Function to compare datetime in event objects
+/**
+ * Function to compare datetime in event objects & sort by string
+ *
+ * @param object $a event object
+ * @param object $b event object
+ * 
+ * @return integer (ternary value)
+ */ 
 function mc_datetime_cmp( $a, $b ) {
 	$event_dt_a = strtotime( $a->occur_begin );
 	$event_dt_b = strtotime( $b->occur_begin );
 	if ( $event_dt_a == $event_dt_b ) {
-		// this should sub-sort by title if date is the same. But it doesn't seem to...
+		// this should sub-sort by title if date is the same. But it doesn't seem to.
 		$ta = $a->event_title;
 		$tb = $b->event_title;
 
@@ -93,6 +152,14 @@ function mc_datetime_cmp( $a, $b ) {
 	return ( $event_dt_a < $event_dt_b ) ? - 1 : 1;
 }
 
+/**
+ * Compare two event dates with time precision
+ *
+ * @param object $a event object
+ * @param object $b event object
+ * 
+ * @return integer (ternary value)
+ */
 function mc_timediff_cmp( $a, $b ) {
 	$a          = $a . date( ' H:i:s', current_time( 'timestamp' ) );
 	$b          = $b . date( ' H:i:s', current_time( 'timestamp' ) );
@@ -108,7 +175,15 @@ function mc_timediff_cmp( $a, $b ) {
 	return ( $diff_a < $diff_b ) ? - 1 : 1;
 }
 
-function mc_date_diff_precise( $start, $end = "NOW" ) {
+/**
+ * Compare two dates for diff with high precision
+ *
+ * @param int $start timestamp
+ * @param mixed int/string $end timestamp or 'now'
+ *
+ * @return absolute time diff
+ */
+function mc_date_diff_precise( $start, $end = 'NOW' ) {
 	if ( $end == "NOW" ) {
 		$end = strtotime( "NOW" );
 	}
@@ -120,8 +195,13 @@ function mc_date_diff_precise( $start, $end = "NOW" ) {
 	return abs( $time );
 }
 
-// @param integer $date_of_event The current month's date;
-// @return integer $week_of_event The week of the month this date falls in;
+/**
+ * Get the week of the month a given date falls on.
+ *
+ * @param integer $date_of_event  current month's date
+ *
+ * @return integer $week_of_event The week of the month this date falls in;
+ */
 function week_of_month( $date_of_event ) {
 	$week_of_event = 0;
 	switch ( $date_of_event ) {
@@ -145,6 +225,13 @@ function week_of_month( $date_of_event ) {
 	return $week_of_event;
 }
 
+/**
+ * Validate that a string is a valid date.
+ *
+ * @param string $date date string
+ *
+ * @return boolean true if verified date
+ */
 function mc_checkdate( $date ) {
 	$time = strtotime( $date );
 	$m    = date( 'n', $time );
@@ -154,6 +241,13 @@ function mc_checkdate( $date ) {
 	return checkdate( $m, $d, $y );
 }
 
+/**
+ * Get the first day value of the current week.
+ *
+ * @param $date mixed int/boolean timestamp or false if now
+ *
+ * @return array day and month
+ */
 function mc_first_day_of_week( $date = false ) {
 	$start_of_week = ( get_option( 'start_of_week' ) == 1 || get_option( 'start_of_week' ) == 0 ) ? get_option( 'start_of_week' ) : 0;
 	if ( $date ) {
@@ -199,6 +293,13 @@ function mc_first_day_of_week( $date = false ) {
 	return array( $day, $month );
 }
 
+/**
+ * Generate an ordinal string in English for numeric values
+ *
+ * @param int $number
+ *
+ * @return string number plus ordinal value
+ */
 function mc_ordinal( $number ) {
 	// when fed a number, adds the English ordinal suffix. Works for any
 	// number, even negatives
@@ -236,27 +337,27 @@ function mc_ordinal( $number ) {
  */
 function mc_name_days( $format ) {
 	$name_days = array(
-		"<abbr title='" . date_i18n( 'l', strtotime( 'Sunday' ) ) . "' aria-hidden='true'>" . date_i18n( 'D', strtotime( 'Sunday' ) ) . "</abbr><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Sunday' ) ) . "</span>",
-		"<abbr title='" . date_i18n( 'l', strtotime( 'Monday' ) ) . "' aria-hidden='true'>" . date_i18n( 'D', strtotime( 'Monday' ) ) . "</abbr><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Monday' ) ) . "</span>",
-		"<abbr title='" . date_i18n( 'l', strtotime( 'Tuesday' ) ) . "' aria-hidden='true'>" . date_i18n( 'D', strtotime( 'Tuesday' ) ) . "</abbr><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Tuesday' ) ) . "</span>",
-		"<abbr title='" . date_i18n( 'l', strtotime( 'Wednesday' ) ) . "' aria-hidden='true'>" . date_i18n( 'D', strtotime( 'Wednesday' ) ) . "</abbr><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Wednesday' ) ) . "</span>",
-		"<abbr title='" . date_i18n( 'l', strtotime( 'Thursday' ) ) . "' aria-hidden='true'>" . date_i18n( 'D', strtotime( 'Thursday' ) ) . "</abbr><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Thursday' ) ) . "</span>",
-		"<abbr title='" . date_i18n( 'l', strtotime( 'Friday' ) ) . "' aria-hidden='true'>" . date_i18n( 'D', strtotime( 'Friday' ) ) . "</abbr><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Friday' ) ) . "</span>",
-		"<abbr title='" . date_i18n( 'l', strtotime( 'Saturday' ) ) . "' aria-hidden='true'>" . date_i18n( 'D', strtotime( 'Saturday' ) ) . "</abbr><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Saturday' ) ) . "</span>"
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Sunday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) .  '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Tuesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Wednesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Thursday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Friday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Friday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>'
 	);
 	if ( $format == 'mini' ) {
 		// PHP doesn't have a single letter abbreviation, so this has to be a translatable.
 		$name_days = array(
-			"<span aria-hidden='true'>" . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . "</span><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Sunday' ) ) . "</span>",
-			"<span aria-hidden='true'>" . __( '<abbr title="Monday">M</abbr>', 'my-calendar' ) . "</span><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Monday' ) ) . "</span>",
-			"<span aria-hidden='true'>" . __( '<abbr title="Tuesday">T</abbr>', 'my-calendar' ) . "</span><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Tuesday' ) ) . "</span>",
-			"<span aria-hidden='true'>" . __( '<abbr title="Wednesday">W</abbr>', 'my-calendar' ) . "</span><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Wednesday' ) ) . "</span>",
-			"<span aria-hidden='true'>" . __( '<abbr title="Thursday">T</abbr>', 'my-calendar' ) . "</span><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Thursday' ) ) . "</span>",
-			"<span aria-hidden='true'>" . __( '<abbr title="Friday">F</abbr>', 'my-calendar' ) . "</span><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Friday' ) ) . "</span>",
-			"<span aria-hidden='true'>" . __( '<abbr title="Saturday">S</abbr>', 'my-calendar' ) . "</span><span class='screen-reader-text'>" . date_i18n( 'l', strtotime( 'Saturday' ) ) . "</span>"
+			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
+			'<span aria-hidden="true">' . __( '<abbr title="Monday">M</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
+			'<span aria-hidden="true">' . __( '<abbr title="Tuesday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>',
+			'<span aria-hidden="true">' . __( '<abbr title="Wednesday">W</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
+			'<span aria-hidden="true">' . __( '<abbr title="Thursday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
+			'<span aria-hidden="true">' . __( '<abbr title="Friday">F</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
+			'<span aria-hidden="true">' . __( '<abbr title="Saturday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>'
 		);
 	}
-		
+
 	return $name_days;
 }
 

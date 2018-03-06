@@ -52,7 +52,7 @@ function my_calendar_group_edit() {
 					$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
 					if ( $result === false ) {
 						$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Event not updated.', 'my-calendar' ) . " $url</p></div>";
-					} else if ( $result === 0 ) {
+					} elseif ( $result === 0 ) {
 						$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url</p></div>";
 					} else {
 						$message = "<div class='updated'><p>#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
@@ -77,7 +77,7 @@ function my_calendar_group_edit() {
 
 						if ( $result === false ) {
 							$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Event not grouped.', 'my-calendar' ) . "</p></div>";
-						} else if ( $result === 0 ) {
+						} elseif ( $result === 0 ) {
 							$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "</p></div>";
 						} else {
 							$message = "<div class='updated'><p>#$event_id: " . __( 'Event grouped successfully', 'my-calendar' ) . "</p></div>";
@@ -194,7 +194,7 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 			do_action( 'mc_save_grouped_events', $result, $event_id, $update );
 			if ( $result === false ) {
 				$message = "<div class='error'><p><strong>#$event_id; " . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Your event was not updated.', 'my-calendar' ) . " $url</p></div>";
-			} else if ( $result === 0 ) {
+			} elseif ( $result === 0 ) {
 				$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . " $url</p></div>";
 			} else {
 				$message = "<div class='updated'><p>#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
@@ -393,9 +393,9 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						<?php 
 						if ( ! empty( $data ) && $data->event_span == '1' ) {
 							echo " checked=\"checked\"";
-						} else if ( ! empty( $data ) && $data->event_span == '0' ) {
+						} elseif ( ! empty( $data ) && $data->event_span == '0' ) {
 							echo "";
-						} else if ( get_option( 'mc_event_span' ) == 'true' ) {
+						} elseif ( get_option( 'mc_event_span' ) == 'true' ) {
 							echo " checked=\"checked\"";
 						} 
 						?> /> <label for="e_span"><?php _e( 'Selected dates are a single multi-day event.', 'my-calendar' ); ?><?php if ( ! mc_compare_group_members( $group_id, 'event_span' ) ) {
@@ -474,7 +474,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 							echo '<option value="' . $u->ID . '"';
 							if ( is_object( $data ) && $data->event_host == $u->ID ) {
 								echo ' selected="selected"';
-							} else if ( is_object( $u ) && $u->ID == $user->ID && empty( $data->event_host ) ) {
+							} elseif ( is_object( $u ) && $u->ID == $user->ID && empty( $data->event_host ) ) {
 								echo ' selected="selected"';
 							}
 							$display_name = ( $u->display_name == '' ) ? $u->user_nicename : $u->display_name;
@@ -523,9 +523,9 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 												} ?>"/> <input type="checkbox" value="1" id="e_link_expires"
 															   name="event_link_expires"<?php if ( ! empty( $data ) && $data->event_link_expires == '1' ) {
 							echo " checked=\"checked\"";
-						} else if ( ! empty( $data ) && $data->event_link_expires == '0' ) {
+						} elseif ( ! empty( $data ) && $data->event_link_expires == '0' ) {
 							echo "";
-						} else if ( get_option( 'mc_event_link_expires' ) == 'true' ) {
+						} elseif ( get_option( 'mc_event_link_expires' ) == 'true' ) {
 							echo " checked=\"checked\"";
 						} ?> /> <label
 							for="e_link_expires"><?php _e( 'Link will expire after event.', 'my-calendar' ); ?></label>

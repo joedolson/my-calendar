@@ -1,8 +1,23 @@
 <?php
+/**
+ * General utilities, not directly related to events display, management, or organization.
+ *
+ * @category Utilities
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
+/**
+ * Switch sites in multisite environment
+ *
+ * @return boolean
+ */
 function mc_switch_sites() {
 	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 		if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() != my_calendar_table( 'global' ) ) {
@@ -10,7 +25,7 @@ function mc_switch_sites() {
 				// can post to either, but is currently set to post to central table
 				return true;
 			}
-		} else if ( get_site_option( 'mc_multisite' ) == 1 && my_calendar_table() != my_calendar_table( 'global' ) ) {
+		} elseif ( get_site_option( 'mc_multisite' ) == 1 && my_calendar_table() != my_calendar_table( 'global' ) ) {
 			// can only post to central table
 			return true;
 		}
@@ -19,7 +34,12 @@ function mc_switch_sites() {
 	return false;
 }
 
-
+/**
+ * Send a Tweet on approval of event
+ *
+ * @param $prev Previous status
+ * @param $new New status
+ */
 function mc_tweet_approval( $prev, $new ) {
 	if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) != '' ) {
 		if ( ( $prev == 0 || $prev == 2 ) && $new == 1 ) {
@@ -28,10 +48,13 @@ function mc_tweet_approval( $prev, $new ) {
 	}
 }
 
-
 /**
  * Flatten event array; need an array that isn't multi dimensional
  * Once used in upcoming events?
+ *
+ * @param array $events Array of events
+ *
+ * @return new array
  */
 function mc_flatten_array( $events ) {
 	$new_array = array();
@@ -47,32 +70,51 @@ function mc_flatten_array( $events ) {
 }
 
 add_action( 'admin_menu', 'mc_add_outer_box' );
-
-// begin add boxes
+/**
+ * Add meta boxes
+ */
 function mc_add_outer_box() {
 	add_meta_box( 'mcs_add_event', __('My Calendar Event', 'my-calendar'), 'mc_add_inner_box', 'mc-events', 'side','high' );
 }
 
+/**
+ * Add inner metabox
+ */
 function mc_add_inner_box() {
 	global $post;
 	$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 	if ( $event_id ) {
 		$url     = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id='.$event_id );
 		$event   = mc_get_first_event( $event_id );
-		$content = "<p><strong>" . strip_tags( $event->event_title, mc_strip_tags() ) . '</strong><br />' . $event->event_begin . ' @ ' . $event->event_time . "</p>";
+		$content = '<p><strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '</strong><br />' . $event->event_begin . ' @ ' . $event->event_time . '</p>';
 		if ( $event->event_label != '' ) {
-			$content .= "<p>" . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . "</p>";
+			$content .= '<p>' . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . '</p>';
 		}
-		$content .= "<p>" . sprintf( __( '<a href="%s">Edit event</a>.', 'my-calendar' ), $url ) . "</p>";
+		$content .= '<p>' . sprintf( __( '<a href="%s">Edit event</a>.', 'my-calendar' ), $url ) . '</p>';
 		
 		echo $content;
 	} 
 }
 
+/**
+ * Pass group of allowed tags to strip_tags 
+ *
+ * @return string of allowed tags parseable by strip_tags
+ */
 function mc_strip_tags() {
 	return '<strong><em><i><b><span>';
 }
 
+/**
+ * Old function for checking value of an option field
+ *
+ * @param $theFieldname Name of the field
+ * @param $theValue Current value
+ * @param $theArray if this setting is an array, the array key
+ * @param $return boolean whether to return or echo
+ *
+ * @return checked=checked
+ */
 function mc_is_checked( $theFieldname, $theValue, $theArray = '', $return = false ) {
 	if ( ! is_array( get_option( $theFieldname ) ) ) {
 		if ( get_option( $theFieldname ) == $theValue ) {
@@ -94,6 +136,15 @@ function mc_is_checked( $theFieldname, $theValue, $theArray = '', $return = fals
 	}
 }
 
+/**
+ * Old function for checking value of an option field in a select
+ *
+ * @param $theFieldname Name of the field
+ * @param $theValue Current value
+ * @param $theArray if this setting is an array, the array key
+ *
+ * @return string selected=selected
+ */
 function mc_is_selected( $theFieldname, $theValue, $theArray = '' ) {
 	if ( ! is_array( get_option( $theFieldname ) ) ) {
 		if ( get_option( $theFieldname ) == $theValue ) {
@@ -109,6 +160,15 @@ function mc_is_selected( $theFieldname, $theValue, $theArray = '' ) {
 	return '';
 }
 
+/**
+ * Old function for checking value of an option field
+ *
+ * @param $field Name of the field
+ * @param $value Current value
+ * @param $type checkbox, radio, option
+ *
+ * @return string
+ */
 function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 	switch ( $type ) {
 		case 'radio':
@@ -131,11 +191,16 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 	return $output;
 }
 
+/**
+ * @see mc_option_selected()
+ */
 function jd_option_selected( $field, $value, $type = 'checkbox' ) {
 	return mc_option_selected( $field, $value, $type );
 }
 
-// This is a hack for people who don't have PHP installed with exif_imagetype
+/**
+ * This is a hack for people who don't have PHP installed with exif_imagetype
+ */
 if ( ! function_exists( 'exif_imagetype' ) ) {
 	function exif_imagetype( $filename ) {
 		if ( ! is_dir( $filename ) && ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) {
@@ -146,8 +211,13 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 	}
 }
 
-
-
+/**
+ * Checks the contrast ratio of color & returns the optimal color to use with it.
+ *
+ * @param string $color hex
+ * 
+ * @return string white or black hex value
+ */
 function mc_inverse_color( $color ) {
 	$color = str_replace( '#', '', $color );
 	if ( strlen( $color ) != 6 ) {
@@ -166,6 +236,13 @@ function mc_inverse_color( $color ) {
 	}
 }
 
+/**
+ * Shift color to an acceptable alternate color.
+ *
+ * @param $color Color hex
+ *
+ * @return New color hex
+ */
 function mc_shift_color( $color ) {
 	$color   = str_replace( '#', '', $color );
 	$rgb     = ''; // Empty variable
@@ -193,6 +270,14 @@ function mc_shift_color( $color ) {
 
 /**
  * Convert a CSV string into an array
+ *
+ * @param string $csv Data
+ * @param string $delimiter to use
+ * @param string $enclosure to wrap strings
+ * @param string $escape character
+ * @param string $terminator end of line character
+ *
+ * @return array
  */
 function mc_csv_to_array( $csv, $delimiter = ',', $enclosure = '"', $escape = '\\', $terminator = "\n" ) {
 	$r    = array();
@@ -211,10 +296,17 @@ function mc_csv_to_array( $csv, $delimiter = ',', $enclosure = '"', $escape = '\
  * Return string for HTML email types
  */
 function mc_html_type() {
+	
 	return 'text/html';
 }
 
-// duplicate of mc_is_url, which really should have been in this file. Bugger.
+/**
+ * duplicate of mc_is_url, which really should have been in this file. Bugger.
+ *
+ * @param string $url URL
+ * 
+ * @return URL, if valid.
+ */ 
 function _mc_is_url( $url ) {
 	return preg_match( '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url );
 }
@@ -228,7 +320,7 @@ function _mc_is_url( $url ) {
  */
 function mc_external_link( $link ) {
 	if ( ! _mc_is_url( $link ) ) {
-		return "class='error-link'";
+		return 'class="error-link"';
 	}
 
 	$url   = parse_url( $link );

@@ -880,7 +880,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 								$beginning                   = $span_time[0];
 								$end                         = $span_time[1];
 								$spans[ $e->occur_group_id ] = $span_time;
-							} else if ( $e->event_span == 1 && ( isset( $spans[ $e->occur_group_id ] ) ) ) {
+							} elseif ( $e->event_span == 1 && ( isset( $spans[ $e->occur_group_id ] ) ) ) {
 								$span_time = $spans[ $e->occur_group_id ];
 								$beginning = $span_time[0];
 								$end       = $span_time[1];
@@ -912,11 +912,11 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										} else {
 											$near_events[] = $e;
 										}
-									} else if ( ( $past <= $before && $future <= $after ) ) {
+									} elseif ( ( $past <= $before && $future <= $after ) ) {
 										$near_events[] = $e; // if neither limit is reached, split off ly
-									} else if ( $past <= $before && ( my_calendar_date_comp( $beginning, $current ) ) ) {
+									} elseif ( $past <= $before && ( my_calendar_date_comp( $beginning, $current ) ) ) {
 										$near_events[] = $e; // split off another past event
-									} else if ( $future <= $after && ( ! my_calendar_date_comp( $end, $current ) ) ) {
+									} elseif ( $future <= $after && ( ! my_calendar_date_comp( $end, $current ) ) ) {
 										$near_events[] = $e; // split off another future event
 									}
 
@@ -924,11 +924,11 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										//if ( ! $same_event && ! $same_group ) {
 											$past ++;
 										//}
-									} else if ( my_calendar_date_equal( $beginning, $current ) ) {
+									} elseif ( my_calendar_date_equal( $beginning, $current ) ) {
 										if ( $show_today == 'yes' ) {
 											$extra ++;
 										}
-									} else if ( ! my_calendar_date_comp( $end, $current ) ) {
+									} elseif ( ! my_calendar_date_comp( $end, $current ) ) {
 										//if ( ! $same_event && ! $same_group ) {
 											$future ++;
 										//}
@@ -1095,9 +1095,9 @@ function my_calendar_todays_events( $args ) {
 				$category = mc_category_class( $e, 'mc_' );
 				if ( $ts < $now && $end > $now ) {
 					$class = 'on-now';
-				} else if ( $now < $ts ) {
+				} elseif ( $now < $ts ) {
 					$class = 'future-event';
-				} else if ( $now > $ts ) {
+				} elseif ( $now > $ts ) {
 					$class = 'past-event';
 				}
 				

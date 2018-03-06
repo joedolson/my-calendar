@@ -1,27 +1,69 @@
 <?php
+/**
+ * Database reference file
+ *
+ * @category Utilities
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
 /**
- * Handlers for backwards compatibility
+ * My Calendar main table
+ *
+ * @param mixed int/boolean $site Site ID in multisite
+ *
+ * @return string table name
  */
 function my_calendar_table( $site = false ) {
 	return my_calendar_select_table( 'my_calendar', $site );
 }
 
+/**
+ * My Calendar event table
+ *
+ * @param mixed int/boolean $site Site ID in multisite
+ *
+ * @return string table name
+ */
 function my_calendar_event_table( $site = false ) {
 	return my_calendar_select_table( 'my_calendar_events', $site );
 }
 
+/**
+ * My Calendar category table
+ *
+ * @param mixed int/boolean $site Site ID in multisite
+ *
+ * @return string table name
+ */
 function my_calendar_categories_table( $site = false ) {
 	return my_calendar_select_table( 'my_calendar_categories', $site );
 }
 
+/**
+ * My Calendar category relationships table
+ *
+ * @param mixed int/boolean $site Site ID in multisite
+ *
+ * @return string table name
+ */
 function my_calendar_category_relationships_table( $site = false ) {
 	return my_calendar_select_table( 'my_calendar_category_relationships', $site );
 }
 
+/**
+ * My Calendar locations table
+ *
+ * @param mixed int/boolean $site Site ID in multisite
+ *
+ * @return string table name
+ */
 function my_calendar_locations_table( $site = false ) {
 	return my_calendar_select_table( 'my_calendar_locations', $site );
 }

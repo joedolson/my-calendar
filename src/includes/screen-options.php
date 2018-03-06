@@ -1,4 +1,14 @@
 <?php
+/**
+ * Implement screen options on pages where needed.
+ *
+ * @category Utilities
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
@@ -17,6 +27,14 @@ function mc_event_editing() {
 }
 
 add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );
+/**
+ * Show event editing options for user
+ *
+ * @param $status string
+ * @param $args array Arguments
+ *
+ * @return string
+ */
 function mc_show_event_editing( $status, $args ) {
 	$return = $status;
 	if ( $args->base == 'toplevel_page_my-calendar' ) {
@@ -26,7 +44,7 @@ function mc_show_event_editing( $status, $args ) {
 			$input_options = $settings_options;
 		}
 		
-		// cannot change these keys
+		// cannot change these keys.
 		$input_labels = array(
 			'event_location_dropdown' => __( 'Event Location Dropdown Menu', 'my-calendar' ),
 			'event_short'             => __( 'Event Short Description field', 'my-calendar' ),
@@ -73,6 +91,15 @@ function mc_show_event_editing( $status, $args ) {
 }
 
 add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
+/**
+ * Save settings for screen options
+ *
+ * @param $status string
+ * @param $option option name
+ * @param $value new value
+ *
+ * @return value
+ */
 function mc_set_event_editing( $status, $option, $value ) {
 	if ( 'mc_show_on_page' == $option ) {
 		$orig  = get_option( 'mc_input_options' );
@@ -89,6 +116,9 @@ function mc_set_event_editing( $status, $option, $value ) {
 	return $value;
 }
 
+/**
+ * Add the screen option for num per page
+ */
 function mc_add_screen_option() {
 	$items_per_page = ( get_option( 'mc_num_per_page' ) ) ? get_option( 'mc_num_per_page' ) : 50;
 	$option         = 'per_page';
@@ -101,6 +131,9 @@ function mc_add_screen_option() {
 }
 
 add_filter( 'set-screen-option', 'mc_set_screen_option', 10, 3 );
+/**
+ * Set the num per page value
+ */
 function mc_set_screen_option( $status, $option, $value ) {
 	
 	return $value;

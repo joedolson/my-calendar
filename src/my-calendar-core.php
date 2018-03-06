@@ -165,7 +165,7 @@ function my_calendar_head() {
 					if ( get_option( 'mc_apply_color' ) == 'font' ) {
 						$type = 'color';
 						$alt  = 'background';
-					} else if ( get_option( 'mc_apply_color' ) == 'background' ) {
+					} elseif ( get_option( 'mc_apply_color' ) == 'background' ) {
 						$type = 'background';
 						$alt  = 'color';
 					}
@@ -1325,7 +1325,7 @@ $plugins_string
 
 		if ( ! $has_read_faq ) {
 			echo "<div class='message error'><p>" . __( 'Please read the FAQ and other Help documents before making a support request.', 'my-calendar' ) . "</p></div>";
-		} else if ( ! $request ) {
+		} elseif ( ! $request ) {
 			echo "<div class='message error'><p>" . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . "</p></div>";
 		} else {
 			$sent = wp_mail( "plugins@joedolson.com", $subject, $message, $from );

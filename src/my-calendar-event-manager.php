@@ -16,7 +16,7 @@ function mc_event_post( $action, $data, $event_id ) {
 	// if the event save was successful.
 	if ( $action == 'add' || $action == 'copy' ) {
 		$post_id = mc_create_event_post( $data, $event_id );
-	} else if ( $action == 'edit' ) {
+	} elseif ( $action == 'edit' ) {
 		if ( isset( $_POST['event_post'] ) && ( $_POST['event_post'] == 0 || $_POST['event_post'] == '' ) ) {
 			$post_id = mc_create_event_post( $data, $event_id );
 		} else {
@@ -497,7 +497,7 @@ function my_calendar_edit() {
 		} else {
 			mc_edit_event_form( 'edit', $event_id );
 		}
-	} else if ( $action == 'copy' ) {
+	} elseif ( $action == 'copy' ) {
 		?>
 		<h1><?php _e( 'Copy Event', 'my-calendar' ); ?></h1>
 		<?php
@@ -907,7 +907,7 @@ function mc_show_edit_block( $field ) {
 	} else {
 		if ( $input[ $field ] == 'off' || $input[ $field ] == '' ) {
 			return false;
-		} else if ( $show[ $field ] == 'off' ) {
+		} elseif ( $show[ $field ] == 'off' ) {
 			return false;
 		} else {
 			return true;
@@ -1042,9 +1042,9 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				$value = ( $has_data ) ? esc_url( $data->event_link ) : '';
 				if ( $has_data && $data->event_link_expires == '1' ) {
 					$checked = " checked=\"checked\"";
-				} else if ( $has_data && $data->event_link_expires == '0' ) {
+				} elseif ( $has_data && $data->event_link_expires == '0' ) {
 					$checked = "";
-				} else if ( get_option( 'mc_event_link_expires' ) == 'true' ) {
+				} elseif ( get_option( 'mc_event_link_expires' ) == 'true' ) {
 					$checked = " checked=\"checked\"";
 				}
 				$return = '
@@ -1289,7 +1289,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$date    = date_i18n( get_option( 'mc_date_format' ), mc_strtotime( $event->occur_begin ) );
 				$message = __( "You are editing the <strong>$date</strong> instance of this event. Other instances of this event will not be changed.", 'my-calendar' );
 				echo "<div class='message updated'><p>$message</p></div>";
-			} else if ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
+			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
 				echo "<div class='message updated'><p>" . __( 'There was an error acquiring information about this event instance. The ID for this event instance was not provided. <strong>You are editing this entire recurrence set.</strong>', 'my-calendar' ) . "</p></div>";
 			}
 			?>
@@ -1307,7 +1307,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							<input type="checkbox" value="0" id="e_flagged"
 							       name="event_flagged"<?php if ( $has_data && $data->event_flagged == '0' ) {
 								echo " checked=\"checked\"";
-							} else if ( $has_data && $data->event_flagged == '1' ) {
+							} elseif ( $has_data && $data->event_flagged == '1' ) {
 								echo "";
 							} ?> /> <label
 								for="e_flagged"><?php _e( 'This event is not spam', 'my-calendar' ); ?></label>
@@ -1356,9 +1356,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							<input type="checkbox" value="1" id="e_span"
 							       name="event_span"<?php if ( $has_data && $data->event_span == '1' ) {
 								echo " checked=\"checked\"";
-							} else if ( $has_data && $data->event_span == '0' ) {
+							} elseif ( $has_data && $data->event_span == '0' ) {
 								echo "";
-							} else if ( get_option( 'mc_event_span' ) == 'true' ) {
+							} elseif ( get_option( 'mc_event_span' ) == 'true' ) {
 								echo " checked=\"checked\"";
 							} ?> /> <label
 								for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
@@ -1523,9 +1523,9 @@ if ( mc_show_edit_block( 'event_specials' ) ) {
 					       name="event_holiday"<?php 
 					if ( $has_data && $data->event_holiday == '1' ) {
 						echo " checked=\"checked\"";
-					} else if ( $has_data && $data->event_holiday == '0' ) {
+					} elseif ( $has_data && $data->event_holiday == '0' ) {
 						echo "";
-					} else if ( get_option( 'mc_skip_holidays' ) == 'true' ) {
+					} elseif ( get_option( 'mc_skip_holidays' ) == 'true' ) {
 						echo " checked=\"checked\"";
 					} ?> />
 				</p>
@@ -1535,9 +1535,9 @@ if ( mc_show_edit_block( 'event_specials' ) ) {
 					<input type="checkbox" value="true" id="e_fifth_week"
 					       name="event_fifth_week"<?php if ( $has_data && $data->event_fifth_week == '1' ) {
 						echo " checked=\"checked\"";
-					} else if ( $has_data && $data->event_fifth_week == '0' ) {
+					} elseif ( $has_data && $data->event_fifth_week == '0' ) {
 						echo "";
-					} else if ( get_option( 'mc_no_fifth_week' ) == 'true' ) {
+					} elseif ( get_option( 'mc_no_fifth_week' ) == 'true' ) {
 						echo " checked=\"checked\"";
 					} ?> />
 				</p>
@@ -1771,7 +1771,7 @@ function mc_list_events() {
 		}
 		if ( $limit == '' && $filter != '' ) {
 			$limit = "WHERE $restrict = $filter";
-		} else if ( $limit != '' && $filter != '' ) {
+		} elseif ( $limit != '' && $filter != '' ) {
 			$limit .= "AND $restrict = $filter";
 		}
 		if ( $filter == '' || ! $allow_filters ) {
@@ -1965,7 +1965,7 @@ function mc_list_events() {
 								<div class='row-actions'>
 									<?php if ( mc_event_published( $event ) ) { ?>
 										<a href="<?php echo $view_url; ?>" class='view'><?php _e( 'View', 'my-calendar' ); ?></a> |
-									<?php } else if ( current_user_can( 'mc_manage_events' ) ) { ?>
+									<?php } elseif ( current_user_can( 'mc_manage_events' ) ) { ?>
 										<a href="<?php echo add_query_arg( 'preview', 'true', $view_url ); ?>" class='view'><?php _e( 'Preview', 'my-calendar' ); ?></a> |									
 									<?php } ?>
 									<a href="<?php echo $copy_url; ?>" class='copy'><?php _e( 'Copy', 'my-calendar' ); ?></a>
@@ -2182,7 +2182,7 @@ function mc_check_data( $action, $post, $i ) {
 				} else {
 					$newend = $newbegin;
 				}
-			} else if ( date( 'w', mc_strtotime( $begin ) ) == 6 ) {
+			} elseif ( date( 'w', mc_strtotime( $begin ) ) == 6 ) {
 				$newbegin = my_calendar_add_date( $begin, 2 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
 					$newend = my_calendar_add_date( $end, 2 );
@@ -2688,7 +2688,7 @@ function mc_instance_list( $args ) {
 			if ( in_array( $template, array( 'details', 'grid', 'list', 'mini' ) ) || mc_key_exists( $template ) ) {
 				if ( get_option( 'mc_use_' . $template . '_template' ) == 1 ) {
 					$template = mc_get_template( $template );
-				} else if ( mc_key_exists( $template ) ) {
+				} elseif ( mc_key_exists( $template ) ) {
 					$template = mc_get_custom_template( $template );
 				} else {
 					$details = my_calendar_draw_event( $event, $type = "single", $event->event_begin, $event->event_time, '' );
@@ -3002,7 +3002,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		$view_url = mc_get_details_link( $first );	
 		if ( mc_event_published( $event ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . $view_url . "' class='view'>" . __( 'View', 'my-calendar' ) . '</a>';										
-		} else if ( current_user_can( 'mc_manage_events' ) ) { 
+		} elseif ( current_user_can( 'mc_manage_events' ) ) { 
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( 'preview', 'true', $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';								
 		}
 	}
@@ -3019,7 +3019,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			if ( current_user_can( 'mc_approve_events' ) ) { // Added by Roland P. 
 				if ( $has_data && $event->event_approved == '1' ) {
 					$checked = " checked=\"checked\"";
-				} else if ( $has_data && $event->event_approved == '0' ) {
+				} elseif ( $has_data && $event->event_approved == '0' ) {
 					$checked = "";
 				}
 				$status_control = "
@@ -3165,7 +3165,7 @@ function mc_can_edit_event( $event = false ) {
 	
 	if ( current_user_can( 'mc_manage_events' ) && $has_permissions ) {
 		$return = true;
-	} else if ( $user == $event_author ) {
+	} elseif ( $user == $event_author ) {
 		$return = true;
 	} else {
 		$return = false;
@@ -3213,7 +3213,7 @@ function mc_recur_string( $event ) {
 	$eternity = _mc_increment_values( $recur );
 	if ( $event->event_repeats > 0 && $recur != 'S' ) {
 		$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $event->event_repeats );
-	} else if ( $eternity ) {
+	} elseif ( $eternity ) {
 		$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $eternity );
 	}
 	

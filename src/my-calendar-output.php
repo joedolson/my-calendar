@@ -424,7 +424,7 @@ function mc_get_details( $data, $template, $type ) {
 	if ( $template != '' && mc_file_exists( $template ) ) {
 		$template = @file_get_contents( mc_get_file( $template ) );
 		$details  = mc_draw_template( $data, $template );
-	} else if ( $template != '' && mc_key_exists( $template ) ) {
+	} elseif ( $template != '' && mc_key_exists( $template ) ) {
 		$template = mc_get_custom_template( $template );
 		$details  = mc_draw_template( $data, $template );
 	} else {
@@ -508,9 +508,9 @@ function mc_event_classes( $event, $uid, $type ) {
 	$now  = current_time( 'timestamp' );
 	if ( $ts < $now && $end > $now ) {
 		$date_relation = 'on-now';
-	} else if ( $now < $ts ) {
+	} elseif ( $now < $ts ) {
 		$date_relation = 'future-event';
-	} else if ( $now > $ts ) {
+	} elseif ( $now > $ts ) {
 		$date_relation = 'past-event';
 	}
 
@@ -947,7 +947,7 @@ function mc_list_title( $events ) {
 	$count = count( $events ) - 1;
 	if ( $count == 0 ) {
 		$cstate = '';
-	} else if ( $count == 1 ) {
+	} elseif ( $count == 1 ) {
 		$cstate = sprintf( __( " and %d other event", 'my-calendar' ), $count );
 	} else {
 		$cstate = sprintf( __( " and %d other events", 'my-calendar' ), $count );
@@ -1050,7 +1050,7 @@ function mc_show_search_results( $content ) {
 		if ( isset( $_GET['mcs'] ) ) { // simple search
 			$ret   = true;
 			$query = $_GET['mcs'];
-		} else if ( isset ( $_POST['mcs'] ) ) { // advanced search
+		} elseif ( isset ( $_POST['mcs'] ) ) { // advanced search
 			$ret   = true;
 			$query = $_POST;
 		}
@@ -1676,7 +1676,7 @@ function my_calendar( $args ) {
 								if ( $params['format'] == "list" ) {
 									if ( $list_info == 'true' ) {
 										$title = ' - ' . mc_wrap_title( "<span class='mc-list-details select-event'>" . mc_list_title( $events ) . "</span>" );
-									} else if ( $list_events == 'true' ) {
+									} elseif ( $list_events == 'true' ) {
 										$title = ' - ' . mc_wrap_title( "<span class='mc-list-details all-events'>" . mc_list_titles( $events ) . "</span>" );
 									} else {
 										$title = '';
@@ -2010,7 +2010,7 @@ add_filter( 'mc_display_format', 'mc_convert_format', 10, 2 );
 function mc_convert_format( $format, $params ) {
 	if ( get_option( 'mc_convert' ) == 'true' ) {
 		$format = ( mc_is_mobile() && $format == 'calendar' ) ? 'list' : $format;
-	} else if ( get_option( 'mc_convert' ) == 'mini' ) {
+	} elseif ( get_option( 'mc_convert' ) == 'mini' ) {
 		$format = ( mc_is_mobile() ) ? 'mini' : $format;
 	}
 
@@ -2072,7 +2072,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 			$dm    = mc_first_day_of_week();
 			$c_day = $dm[0];
 			$c_m   = $dm[1];
-		} else if ( $time == 'day' ) {
+		} elseif ( $time == 'day' ) {
 			$c_day = date( "d", $timestamp );
 		} else {
 			$c_day = 1;
@@ -2639,10 +2639,10 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 	if ( $home == '' ) {
 		if ( is_front_page() ) {
 			$home = home_url( '/' );
-		} else if ( is_home() ) {
+		} elseif ( is_home() ) {
 			$page = get_option( 'page_for_posts' );
 			$home = get_permalink( $page );
-		} else if ( is_archive() ) {
+		} elseif ( is_archive() ) {
 			$home = ''; // an empty string seems to work best; leaving it open.
 		} else {
 			wp_reset_query(); // break out of any alternate loop that's been set up. If a theme uses query_posts to fetch pages, this will cause problems. But themes should *never* use query_posts to replace the loop, so screw that.
@@ -2753,10 +2753,10 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 				} else {
 					$output .= "<li>$label</li>";
 				}
-			} else if ( $datatype == 'hcard' ) {
+			} elseif ( $datatype == 'hcard' ) {
 				$label = mc_hcard( $value, true, true, 'location' );
 				$output .= "<li>$label</li>";
-			} else if ( $template != '' ) {
+			} elseif ( $template != '' ) {
 				if ( mc_key_exists( $template ) ) {
 					$template = mc_get_custom_template( $template );
 				}

@@ -34,7 +34,7 @@ function mc_templates_edit() {
 				update_option( 'mc_templates', $templates );
 				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
 				echo "<div class=\"updated\"><p>" . sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) . "</p></div>";
-			} else if ( isset( $_POST['mc_template'] ) ) {
+			} elseif ( isset( $_POST['mc_template'] ) ) {
 				$template  = $_POST['mc_template'];
 				if ( mc_key_exists( $key ) ) {
 					$key = mc_update_template( $key, $template );

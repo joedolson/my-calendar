@@ -1,9 +1,27 @@
 <?php
+/**
+ * Custom KSES to allow some otherwise excluded attributes.
+ *
+ * @category Utilities
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
 
+/**
+ * Execute KSES post on strings, otherwise, return as is.
+ *
+ * @param $string Any string
+ *
+ * @return Value passed or cleaned string
+ */
 function mc_kses_post( $string ) {
 	if ( !is_string( $string ) ) {
 		return $string;
@@ -12,13 +30,16 @@ function mc_kses_post( $string ) {
 	}
 }
 
-
+add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
 /**
  * My Calendar needs to allow input and select in posts and a variety of other key elements; also provide support for schema.org data.
- * 
  * Call using wp_kses( $data, 'mycalendar' );
+ *
+ * @param $tags Original allowed tags
+ * @param $context Custom context for My Calendar to avoid running elsewhere
+ *
+ * @param return array tags
  */
-add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
 function mc_allowed_tags( $tags, $context ) {
 	if ( $context == 'mycalendar' ) {
 		global $allowedposttags;

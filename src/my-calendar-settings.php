@@ -190,7 +190,7 @@ function my_calendar_settings() {
 		$mc_uri         = get_option( 'mc_uri' );
 		if ( isset( $_POST['mc_uri'] ) && ! isset( $_POST['mc_uri_id'] ) ) {
 			$mc_uri = $_POST['mc_uri'];
-		} else if ( isset( $_POST['mc_uri_id'] ) && is_numeric( $_POST['mc_uri_id'] ) ) {
+		} elseif ( isset( $_POST['mc_uri_id'] ) && is_numeric( $_POST['mc_uri_id'] ) ) {
 			if ( get_post( absint( $_POST['mc_uri_id'] ) ) ) {
 				$mc_uri = get_permalink( absint( $_POST['mc_uri_id'] ) );
 			} else {

@@ -231,7 +231,7 @@ function my_calendar_style_edit() {
 										'title_left'  => __( 'Current (in use)', 'my-calendar' )
 									) );
 								echo '</div>';
-							} else if ( trim( $left_string ) != trim( $right_string ) ) {
+							} elseif ( trim( $left_string ) != trim( $right_string ) ) {
 								echo '<div class="wrap my-calendar-admin">';
 								echo '<div class="updated"><p>' . __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . admin_url( "admin.php?page=my-calendar-styles&amp;diff#diff" ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a></p></div>';
 								echo '</div>';

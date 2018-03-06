@@ -84,7 +84,7 @@ function my_calendar_add_locations() {
 		} else {
 			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be added to database', 'my-calendar' ) . "</strong></p></div>";
 		}
-	} else if ( isset( $_GET['location_id'] ) && $_GET['mode'] == 'delete' ) {
+	} elseif ( isset( $_GET['location_id'] ) && $_GET['mode'] == 'delete' ) {
 		$sql     = "DELETE FROM " . my_calendar_locations_table() . " WHERE location_id=" . (int) ( $_GET['location_id'] );
 		$results = $wpdb->query( $sql );
 		do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
@@ -93,10 +93,10 @@ function my_calendar_add_locations() {
 		} else {
 			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be deleted', 'my-calendar' ) . "</strong></p></div>";
 		}
-	} else if ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && $_GET['mode'] == 'edit' && ! isset( $_POST['mode'] ) ) {
+	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && $_GET['mode'] == 'edit' && ! isset( $_POST['mode'] ) ) {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
-	} else if ( isset( $_POST['location_id'] ) && isset( $_POST['location_label'] ) && $_POST['mode'] == 'edit' ) {
+	} elseif ( isset( $_POST['location_id'] ) && isset( $_POST['location_label'] ) && $_POST['mode'] == 'edit' ) {
 		$update  = array(
 			'location_label'     => $_POST['location_label'],
 			'location_street'    => $_POST['location_street'],
@@ -123,7 +123,7 @@ function my_calendar_add_locations() {
 		do_action( 'mc_modify_location', $where, $update );
 		if ( $results === false ) {
 			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be edited.', 'my-calendar' ) . "</strong></p></div>";
-		} else if ( $results == 0 ) {
+		} elseif ( $results == 0 ) {
 			echo "<div class=\"updated error\"><p><strong>" . __( 'Location was not changed.', 'my-calendar' ) . "</strong></p></div>";
 		} else {
 			echo "<div class=\"updated\"><p><strong>" . __( 'Location edited successfully', 'my-calendar' ) . "</strong></p></div>";

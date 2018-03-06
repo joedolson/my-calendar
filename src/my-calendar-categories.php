@@ -146,7 +146,7 @@ function my_calendar_manage_categories() {
 			} else {
 				echo "<div class=\"updated error\"><p><strong>" . __( 'Category addition failed.', 'my-calendar' ) . "</strong></p></div>";
 			}
-		} else if ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && $_GET['mode'] == 'delete' ) {
+		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && $_GET['mode'] == 'delete' ) {
 			$cat_ID  = (int) $_GET['category_id'];
 			$sql     = "DELETE FROM " . my_calendar_categories_table() . " WHERE category_id=$cat_ID";
 			$results = $wpdb->query( $sql );
@@ -171,17 +171,17 @@ function my_calendar_manage_categories() {
 			
 			if ( $results && ( $cal_results || $rel_results ) ) {
 				echo "<div class=\"updated\"><p><strong>" . __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) . "</strong></p></div>";
-			} else if ( $results && ! $cal_results ) {
+			} elseif ( $results && ! $cal_results ) {
 				echo "<div class=\"updated\"><p><strong>" . __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) . "</strong></p></div>";
-			} else if ( ! $results && $cal_results ) {
+			} elseif ( ! $results && $cal_results ) {
 				echo "<div class=\"updated error\"><p><strong>" . __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) . "</strong></p></div>";
 			}
 			
-		} else if ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && $_GET['mode'] == 'edit' && ! isset( $_POST['mode'] ) ) {
+		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && $_GET['mode'] == 'edit' && ! isset( $_POST['mode'] ) ) {
 			$cur_cat = (int) $_GET['category_id'];
 			mc_edit_category_form( 'edit', $cur_cat );
 			
-		} else if ( isset( $_POST['mode'] ) && isset( $_POST['category_id'] ) && isset( $_POST['category_name'] ) && isset( $_POST['category_color'] ) && $_POST['mode'] == 'edit' ) {
+		} elseif ( isset( $_POST['mode'] ) && isset( $_POST['category_id'] ) && isset( $_POST['category_name'] ) && isset( $_POST['category_color'] ) && $_POST['mode'] == 'edit' ) {
 
 			$append = '';
 			if ( isset( $_POST['mc_default_category'] ) ) {
@@ -677,7 +677,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			if ( ! empty( $data ) ) {
 				if ( ! is_object( $data ) ) {
 					$category = $data;
-				} else if ( is_array( $data ) && $multiple && $name == 'mc_user_permissions[]' ) {
+				} elseif ( is_array( $data ) && $multiple && $name == 'mc_user_permissions[]' ) {
 					$category = $data;
 				} else {
 					if ( $multiple ) {
@@ -743,7 +743,7 @@ function mc_get_categories( $event, $ids = true ) {
 		if ( property_exists( $event, 'categories' ) ) {
 			$results = $event->categories;
 		}
-	} else if ( is_numeric(  $event ) ) {
+	} elseif ( is_numeric(  $event ) ) {
 		$event_id = absint( $event );
 		$primary  = mc_get_data( 'event_category', $event_id );
 	} else {
@@ -763,7 +763,7 @@ function mc_get_categories( $event, $ids = true ) {
 		} else {
 			$return[] = $primary;
 		}
-	} else if ( $ids == 'html' ) {
+	} elseif ( $ids == 'html' ) {
 		$return = mc_categories_html( $results, $primary );
 	} else {
 		$return = ( is_array( $results ) ) ? $results : array( $event->event_category );

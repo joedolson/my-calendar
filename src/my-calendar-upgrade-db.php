@@ -27,7 +27,7 @@ function my_calendar_check_db() {
 			<p><?php _e( 'My Calendar Database is updated.', 'my-calendar' ); ?></p>
 		</div>
 	<?php
-	} else if ( $needs_update ) {
+	} elseif ( $needs_update ) {
 		if ( $_GET['page'] == 'my-calendar-config' ) {
 			?>
 			<div class='upgrade-db error'>
