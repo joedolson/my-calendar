@@ -1,14 +1,24 @@
 <?php
+/**
+ * Event Manager. Creation & Editing of events.
+ *
+ * @category Events
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * Handle post generation, updating, and processing after event is saved
  * 
- * @param string $action edit, copy, add
- * @param array $data saved event data
- * @param int $event_id My Calendar event ID
+ * @param string $action edit, copy, add.
+ * @param array $data saved event data.
+ * @param int $event_id My Calendar event ID.
  *
  * @return int post ID
  */

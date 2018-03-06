@@ -27,7 +27,7 @@ Version: 2.6.0-beta1
 */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 global $mc_version, $wpdb;
 $mc_version = '2.6.0-beta1';
@@ -36,16 +36,10 @@ define( 'MC_DEBUG', false );
 
 register_activation_hook( __FILE__, 'mc_plugin_activated' );
 register_deactivation_hook( __FILE__, 'mc_plugin_deactivated' );
+/**
+ * Actions to execute on activation.
+ */
 function mc_plugin_activated() {
-	flush_rewrite_rules();
-	if ( my_calendar_exists() ) {
-		mc_upgrade_db();
-	}
-	my_calendar_check();
-}
-
-register_activation_hook(__FILE__, 'mc_activation_hook');
-function mc_activation_hook() {
     $required_php_version = '5.3.0';
 
     if ( version_compare( PHP_VERSION, $required_php_version, '<' ) ) { 
@@ -53,9 +47,19 @@ function mc_activation_hook() {
 		$message = sprintf( __( '%s requires PHP version %s or higher. Your current PHP version is %s', 'my-calendar' ), $plugin_data['Name'], $required_php_version, phpversion() );
 		echo "<div class='error'><p>$message</p></div>";
 		exit;
-    } 
+    }
+	
+	flush_rewrite_rules();
+	if ( my_calendar_exists() ) {
+		mc_upgrade_db();
+	}
+	
+	my_calendar_check();
 }
 
+/**
+ * Actions to execute on plugin deactivation.
+ */
 function mc_plugin_deactivated() {
 	flush_rewrite_rules();
 }
@@ -89,14 +93,16 @@ include( dirname( __FILE__ ) . '/my-calendar-group-manager.php' );
 include( dirname( __FILE__ ) . '/my-calendar-api.php' );
 include( dirname( __FILE__ ) . '/my-calendar-generator.php' );
 
-// Enable internationalisation
 add_action( 'plugins_loaded', 'mc_load_textdomain' );
+/**
+ * Load internationalization.
+ */
 function mc_load_textdomain() {
 	// don't change this; just gradually remove shipped translations if .org trans become complete(r).
 	load_plugin_textdomain( 'my-calendar', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 }
 
-// Add actions
+// Add actions.
 add_action( 'admin_menu',          'my_calendar_menu' );
 add_action( 'wp_head',             'my_calendar_head' );
 add_action( 'delete_user',         'mc_deal_with_deleted_user' );
@@ -104,7 +110,7 @@ add_action( 'widgets_init',        'mc_register_widgets' );
 add_action( 'init',                'my_calendar_add_feed' );
 add_action( 'wp_footer',           'mc_footer_js' );
 add_action( 'init',                'mc_export_vcal', 200 );
-// Add filters 
+// Add filters.
 add_filter( 'widget_text',         'do_shortcode', 9 );
 add_filter( 'plugin_action_links', 'mc_plugin_action', 10, 2 );
 add_filter( 'wp_title',            'mc_event_filter', 10, 3 );
@@ -130,8 +136,11 @@ function mc_custom_canonical() {
 	remove_action( 'wp_head', 'rel_canonical' );
 }
 
+/**
+ * Generate canonical link
+ */
 function mc_canonical() {
-	// original code
+	// original code.
 	if ( !is_singular() ) {
 		return;
 	}
@@ -141,7 +150,7 @@ function mc_canonical() {
 		return;
 	}
 
-	// original code
+	// end original code.
 	$link = get_permalink( $id );
 	if ( $page = get_query_var('cpage') ) {
 		$link = get_comments_pagenum_link( $page );
@@ -334,14 +343,13 @@ function my_calendar_menu() {
 		add_action( "admin_head", 'my_calendar_sub_js' );
 		add_action( "admin_head", 'my_calendar_sub_styles' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Pro Settings', 'my-calendar' ), __( 'My Calendar Pro', 'my-calendar' ), $permission, 'my-calendar-submissions', 'mcs_settings' );
-		// only show payments screen if enabled
+		// only show payments screen if enabled.
 		if ( get_option( 'mcs_payments' ) == 'true' ) {
 			add_submenu_page( 'my-calendar', __( 'Payments Received', 'my-calendar' ), __( 'Payments', 'my-calendar' ), $permission, 'my-calendar-payments', 'mcs_sales_page' );
 		}
 	}
 }
 
-// add shortcode interpreters
 add_shortcode( 'my_calendar',                'my_calendar_insert' );
 add_shortcode( 'my_calendar_upcoming',       'my_calendar_insert_upcoming' );
 add_shortcode( 'my_calendar_today',          'my_calendar_insert_today' );

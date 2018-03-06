@@ -14,22 +14,22 @@
 					$( '#' + ref ).html( msg + xhr.status + " " + xhr.statusText );
 				}
 				// functions to execute when new view loads.
-				// List view
+				// List view.
 				if ( typeof( mclist ) !== "undefined" && mclist == 'true' ) {
 					$('li.mc-events').children().not('.event-date').hide();
 					$('li.current-day').children().show();
 				}
-				// Grid view
+				// Grid view.
 				if ( typeof( mcgrid ) !== "undefined" && mcgrid == 'true' ) {
 					$('.calendar-event').children().not('.event-title').hide();
 				}
-				// Mini view
+				// Mini view.
 				if  ( typeof( mcmini ) !== "undefined" && mcmini  == 'true' ) {
 					$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
 				}
-				// All views
+				// All views.
                 $( '#' + ref ).attr('tabindex', '-1').focus();
-				// Your Custom ajax load changes if needed
+				// Your Custom ajax load changes if needed.
             });
         });		
     });

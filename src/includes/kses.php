@@ -12,13 +12,13 @@
  
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 
 /**
  * Execute KSES post on strings, otherwise, return as is.
  *
- * @param $string Any string
+ * @param $string Any string.
  *
  * @return Value passed or cleaned string
  */
@@ -35,8 +35,8 @@ add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
  * My Calendar needs to allow input and select in posts and a variety of other key elements; also provide support for schema.org data.
  * Call using wp_kses( $data, 'mycalendar' );
  *
- * @param $tags Original allowed tags
- * @param $context Custom context for My Calendar to avoid running elsewhere
+ * @param $tags Original allowed tags.
+ * @param $context Custom context for My Calendar to avoid running elsewhere.
  *
  * @param return array tags
  */

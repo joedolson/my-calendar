@@ -1,9 +1,22 @@
 <?php
+/**
+ * Output the print view.
+ *
+ * @category Calendar
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 add_action( 'template_redirect', 'my_calendar_print_view' );
+/**
+ * Redirect to print view if query set.
+ */
 function my_calendar_print_view() {
 	if ( isset( $_GET['cid'] ) && $_GET['cid'] == 'mc-print-view' ) {
 		echo my_calendar_print();
@@ -12,8 +25,7 @@ function my_calendar_print_view() {
 }
 	
 /**
- * Produce print view
- *
+ * Produce print view output.
  */
 function my_calendar_print() {
 	$url      = plugin_dir_url( __FILE__ );

@@ -1,8 +1,26 @@
 <?php
+/**
+ * Shortcodes.
+ *
+ * @category Calendar
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
+/**
+ * Primary My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ * @param string $content Contained content.
+ *
+ * @return string Calendar.
+ */
 function my_calendar_insert( $atts, $content = null ) {
 	$args = shortcode_atts( array(
 		'name'     => 'all',
@@ -44,6 +62,13 @@ function my_calendar_insert( $atts, $content = null ) {
 	return my_calendar( $args );
 }
 
+/**
+ * Upcoming Events My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string Calendar.
+ */
 function my_calendar_insert_upcoming( $atts ) {
 	$args = shortcode_atts( array(
 		'before'     => 'default',
@@ -75,6 +100,13 @@ function my_calendar_insert_upcoming( $atts ) {
 	return my_calendar_upcoming_events( $args );
 }
 
+/**
+ * Today's Events My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string Calendar.
+ */
 function my_calendar_insert_today( $atts ) {
 	$args = shortcode_atts( array(
 		'category' => 'default',
@@ -98,7 +130,11 @@ function my_calendar_insert_today( $atts ) {
 }
 
 /**
- * Shortcode to show list of locations
+ * Locations List My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string locations.
  */
 function my_calendar_show_locations_list( $atts ) {
 	$args = shortcode_atts( array(
@@ -110,7 +146,11 @@ function my_calendar_show_locations_list( $atts ) {
 }
 
 /**
- * Shortcode to show location filters
+ * Location Filter My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string location filter.
  */
 function my_calendar_locations( $atts ) {
 	$args = shortcode_atts( array(
@@ -123,7 +163,11 @@ function my_calendar_locations( $atts ) {
 }
 
 /**
- * Shortcode to show category filters
+ * Category filter My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string category filter.
  */
 function my_calendar_categories( $atts ) {
 	$args = shortcode_atts( array(
@@ -135,7 +179,11 @@ function my_calendar_categories( $atts ) {
 }
 
 /**
- * Shortcode to show accessibility filters
+ * Accessibility Filter My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string accessibility filters.
  */
 function my_calendar_access( $atts ) {
 	$args = shortcode_atts( array(
@@ -147,7 +195,11 @@ function my_calendar_access( $atts ) {
 }
 
 /**
- * Shortcode to show filters panels
+ * All Filters My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string filters.
  */
 function my_calendar_filters( $atts ) {
 	$args = shortcode_atts( array(
@@ -160,7 +212,11 @@ function my_calendar_filters( $atts ) {
 }
 
 /**
- * Show a single event
+ * Single Event My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string event.
  */
 function my_calendar_show_event( $atts ) {
 	$args = shortcode_atts( array(
@@ -176,7 +232,11 @@ function my_calendar_show_event( $atts ) {
 }
 
 /**
- * Shortcode for simple search form.
+ * Search Form My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string search form.
  */
 function my_calendar_search( $atts ) {
 	$args = shortcode_atts( array(
@@ -188,7 +248,11 @@ function my_calendar_search( $atts ) {
 }
 
 /**
- * Currently happening event.
+ * Current Event My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string event.
  */
 function my_calendar_now( $atts ) {
 	$args = shortcode_atts( array(

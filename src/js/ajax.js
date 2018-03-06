@@ -55,7 +55,7 @@
             }, "json" );			
 		});
 		
-		// display notice informing users of lack of support for recur month by day
+		// display notice informing users of lack of support for recur month by day.
 		$( '#e_recur' ).on( 'change', function (e) {
 			var recur = $(this).val();
 			if ( recur == 'U' ) {

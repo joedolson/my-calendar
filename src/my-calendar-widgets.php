@@ -1,7 +1,17 @@
 <?php
+/**
+ * Widgets.
+ *
+ * @category Calendar
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 class my_calendar_simple_search extends WP_Widget {
 	function __construct() {

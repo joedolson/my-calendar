@@ -1,8 +1,23 @@
 <?php
+/**
+ * Installation process. Create tables, default options, etc.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
+/**
+ * Default settings for widgets.
+ *
+ * @return array 
+ */
 function mc_widget_defaults() {
 	$default_template = '<strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}';
 	
@@ -27,7 +42,11 @@ function mc_widget_defaults() {
 	return apply_filters( 'mc_widget_defaults', $defaults );
 }
 
-// define global variables;
+/**
+ * define variables to be saved in settings. (Formerly globals.)
+ *
+ * @return array
+ */
 function mc_globals() {
 	global $wpdb; 
 
@@ -204,6 +223,9 @@ $initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " (
 	return $globals;
 }
 
+/**
+ * Save default settings.
+ */
 function mc_default_settings() {
 	$globals = mc_globals();
 	foreach( $globals as $key => $global ) {
@@ -302,6 +324,10 @@ function mc_default_settings() {
 
 /**
  * Create new calendar page
+ *
+ * @param string $slug Intended page name.
+ *
+ * @return int $post_ID for new page or previously existing page with same name.
  */
 function mc_generate_calendar_page( $slug ) {
 	global $current_user;
@@ -330,26 +356,25 @@ function mc_generate_calendar_page( $slug ) {
 
 /**
  * recreates event occurrences if event occurrences being recreated
- *
  */
 function mc_migrate_db() {
 	global $wpdb;
 
-	// check if early escapement is needed
+	// check if early escapement is needed.
 	$count  = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_event_table() );
 	$count2 = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_table() );
 	if ( $count2 > 0 && $count > 0 ) {
 		return;
 	}
 	if ( $count2 == 0 && $count == 0 ) {
-		return; // no events, migration unnecessary
+		return; // no events, migration unnecessary.
 	}
 
-	// 2) migrate events
+	// 2) migrate events.
 	$sql    = "SELECT event_id, event_begin, event_time, event_end, event_endtime FROM " . my_calendar_table();
 	$events = $wpdb->get_results( $sql );
 	foreach ( $events as $event ) {
-		// assign endtimes to all events
+		// assign endtimes to all events.
 		if ( $event->event_endtime == '00:00:00' && $event->event_time != '00:00:00' ) {
 			$event->event_endtime = date( 'H:i:s', strtotime( "$event->event_time +1 hour" ) );
 			mc_flag_event( $event->event_id, $event->event_endtime );
@@ -368,8 +393,8 @@ function mc_migrate_db() {
 /**
  * If an event has time values that are no longer valid in current versions of My Calendar, modify to usable values.
  *
- * @param int $id event ID
- * @param string $time New end time
+ * @param int $id event ID.
+ * @param string $time New end time.
  *
  */
 function mc_flag_event( $id, $time ) {
@@ -388,6 +413,11 @@ function mc_flag_event( $id, $time ) {
 
 /**
  * Review location table to find matches between saved locations event locations
+ *
+ * @param object $event Event object
+ * @param array $locations array of location objects
+ *
+ * @return boolean
  */
 function mc_check_location_table( $event, $locations ) {
 	$location = array(
@@ -490,7 +520,11 @@ function mc_transition_db() {
 	}
 }
 
-
+/**
+ * See whether there are importable calendars present.
+ *
+ * @return string HTML form.
+ */
 function mc_check_imports() {
 	$output = '';
 	if ( get_option( 'ko_calendar_imported' ) != 'true' ) {
@@ -538,55 +572,55 @@ function mc_transition_categories() {
  * Make a copy of modified CSS files and restore.
  */
 function my_calendar_copyr( $source, $dest ) {
-	// Sanity check
+	// Sanity check.
 	if ( ! file_exists( $source ) ) {
 		return false;
 	}
-	// Check for symlinks
+	// Check for symlinks.
 	if ( is_link( $source ) ) {
 		return symlink( readlink( $source ), $dest );
 	}
-	// Simple copy for a file
+	// Simple copy for a file.
 	if ( is_file( $source ) ) {
 		return @copy( $source, $dest );
 	}
-	// Make destination directory
+	// Make destination directory.
 	if ( ! is_dir( $dest ) ) {
 		@mkdir( $dest );
 	}
-	// Loop through the folder
+	// Loop through the folder.
 	$dir = dir( $source );
 	while ( false !== $entry = $dir->read() ) {
-		// Skip pointers
+		// Skip pointers.
 		if ( $entry == '.' || $entry == '..' ) {
 			continue;
 		}
-		// Deep copy directories
+		// Deep copy directories.
 		my_calendar_copyr( "$source/$entry", "$dest/$entry" );
 	}
-	// Clean up
+	// Clean up.
 	$dir->close();
 
 	return true;
 }
 
 function my_calendar_rmdirr( $dirname ) {
-	// Sanity check
+	// Sanity check.
 	if ( ! file_exists( $dirname ) ) {
 		return false;
 	}
-	// Simple delete for a file
+	// Simple delete for a file.
 	if ( is_file( $dirname ) ) {
 		return unlink( $dirname );
 	}
-	// Loop through the folder
+	// Loop through the folder.
 	$dir = dir( $dirname );
 	while ( false !== $entry = $dir->read() ) {
-		// Skip pointers
+		// Skip pointers.
 		if ( $entry == '.' || $entry == '..' ) {
 			continue;
 		}
-		// Recurse
+		// Recurse.
 		my_calendar_rmdirr( "$dirname/$entry" );
 	}
 	// Clean up
@@ -595,6 +629,12 @@ function my_calendar_rmdirr( $dirname ) {
 	return @rmdir( $dirname );
 }
 
+/**
+ * Backup styles and icons.
+ * 
+ * @param string $process current process
+ * @param array $plugin Current plugin.
+ */
 function my_calendar_backup( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) && $plugin['plugin'] == 'my-calendar/my-calendar.php' ) {
 		$to   = dirname( __FILE__ ) . "/../styles_backup/";
@@ -607,6 +647,12 @@ function my_calendar_backup( $process, $plugin ) {
 	}
 }
 
+/**
+ * Restore styles and icons.
+ * 
+ * @param string $process current process
+ * @param array $plugin Current plugin.
+ */
 function my_calendar_recover( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) && $plugin['plugin'] == 'my-calendar/my-calendar.php' ) {
 		$from = dirname( __FILE__ ) . "/../styles_backup/";

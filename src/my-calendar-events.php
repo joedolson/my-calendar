@@ -1,7 +1,17 @@
 <?php
+/**
+ * Get event data. Queries to fetch events and create or modify objects.
+ *
+ * @category Events
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * Processes objects to add needed properties.

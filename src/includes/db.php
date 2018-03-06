@@ -11,12 +11,12 @@
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * My Calendar main table
  *
- * @param mixed int/boolean $site Site ID in multisite
+ * @param mixed int/boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -27,7 +27,7 @@ function my_calendar_table( $site = false ) {
 /**
  * My Calendar event table
  *
- * @param mixed int/boolean $site Site ID in multisite
+ * @param mixed int/boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -38,7 +38,7 @@ function my_calendar_event_table( $site = false ) {
 /**
  * My Calendar category table
  *
- * @param mixed int/boolean $site Site ID in multisite
+ * @param mixed int/boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -49,7 +49,7 @@ function my_calendar_categories_table( $site = false ) {
 /**
  * My Calendar category relationships table
  *
- * @param mixed int/boolean $site Site ID in multisite
+ * @param mixed int/boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -60,7 +60,7 @@ function my_calendar_category_relationships_table( $site = false ) {
 /**
  * My Calendar locations table
  *
- * @param mixed int/boolean $site Site ID in multisite
+ * @param mixed int/boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -73,7 +73,7 @@ function my_calendar_locations_table( $site = false ) {
  *
  * @since 2.5.0
  * 
- * @param string table name
+ * @param string table name.
  * @param mixed 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
  *
  * @return prefixed string table name
@@ -85,7 +85,7 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 	if ( is_multisite() ) {	
 		$option = (int) get_site_option( 'mc_multisite' );
 		$choice = (int) get_option( 'mc_current_table' );
-		$show   = (int) get_site_option( 'mc_multisite_show' ); // 1 == use global instead of local
+		$show   = (int) get_site_option( 'mc_multisite_show' ); // 1 == use global instead of local.
 		
 		if ( $site == 'global' ) {
 			return $wpdb->base_prefix . $table;

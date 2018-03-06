@@ -9,15 +9,14 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * Generate classes for a given date
  * 
- * @param string timestamp
+ * @param string $current timestamp.
  *
  * @return string classes
  */
@@ -38,10 +37,10 @@ function mc_dateclass( $current ) {
 /**
  * Given a date and a quantity of time to add, produce new date
  *
- * @param string $givendate A time string
- * @param int $day Number of days to add
- * @param int $mth Number of months to add
- * @param int $yr number of years to add
+ * @param string $givendate A time string.
+ * @param int $day Number of days to add.
+ * @param int $mth Number of months to add.
+ * @param int $yr number of years to add.
  *
  * @return timestamp
  */ 
@@ -55,8 +54,8 @@ function my_calendar_add_date( $givendate, $day = 0, $mth = 0, $yr = 0 ) {
 /**
  * Test if the date is before or equal to second date with time precision
  *
- * @param string $early date string
- * @param string $late date string
+ * @param string $early date string.
+ * @param string $late date string.
  *
  * @return boolean true if first date earlier or equal
  */
@@ -75,8 +74,8 @@ function my_calendar_date_comp( $early, $late ) {
 /**
  * Test if first date before second date with time precision
  *
- * @param string $early date string
- * @param string $late date string
+ * @param string $early date string.
+ * @param string $late date string.
  *
  * @return boolean true if first date earlier
  */ 
@@ -95,8 +94,8 @@ function my_calendar_date_xcomp( $early, $late ) {
 /**
  *  Test if dates are the same with day precision
  *
- * @param string $early date string
- * @param string $late date string
+ * @param string $early date string.
+ * @param string $late date string.
  *
  * @return boolean true if first date equal to second
  */
@@ -116,8 +115,8 @@ function my_calendar_date_equal( $early, $late ) {
 /**
  * Function to compare time in event objects for sorting
  *
- * @param object $a event object
- * @param object $b event object
+ * @param object $a event object.
+ * @param object $b event object.
  *
  * @param int (ternary value)
  */ 
@@ -133,8 +132,8 @@ function mc_time_cmp( $a, $b ) {
 /**
  * Function to compare datetime in event objects & sort by string
  *
- * @param object $a event object
- * @param object $b event object
+ * @param object $a event object.
+ * @param object $b event object.
  * 
  * @return integer (ternary value)
  */ 
@@ -155,8 +154,8 @@ function mc_datetime_cmp( $a, $b ) {
 /**
  * Compare two event dates with time precision
  *
- * @param object $a event object
- * @param object $b event object
+ * @param object $a event object.
+ * @param object $b event object.
  * 
  * @return integer (ternary value)
  */
@@ -178,8 +177,8 @@ function mc_timediff_cmp( $a, $b ) {
 /**
  * Compare two dates for diff with high precision
  *
- * @param int $start timestamp
- * @param mixed int/string $end timestamp or 'now'
+ * @param int $start timestamp.
+ * @param mixed int/string $end timestamp or 'now'.
  *
  * @return absolute time diff
  */
@@ -198,7 +197,7 @@ function mc_date_diff_precise( $start, $end = 'NOW' ) {
 /**
  * Get the week of the month a given date falls on.
  *
- * @param integer $date_of_event  current month's date
+ * @param integer $date_of_event  current month's date.
  *
  * @return integer $week_of_event The week of the month this date falls in;
  */
@@ -228,7 +227,7 @@ function week_of_month( $date_of_event ) {
 /**
  * Validate that a string is a valid date.
  *
- * @param string $date date string
+ * @param string $date date string.
  *
  * @return boolean true if verified date
  */
@@ -244,7 +243,7 @@ function mc_checkdate( $date ) {
 /**
  * Get the first day value of the current week.
  *
- * @param $date mixed int/boolean timestamp or false if now
+ * @param $date mixed int/boolean timestamp or false if now.
  *
  * @return array day and month
  */
@@ -257,29 +256,29 @@ function mc_first_day_of_week( $date = false ) {
 		$today = date( 'w', current_time( 'timestamp' ) );
 		$now   = date( 'Y-m-d', current_time( 'timestamp' ) );
 	}
-	$month = $sub = 0; // don't change month
+	$month = $sub = 0; // don't change month.
 	switch ( $today ) {
 		case 1:
 			$sub = ( $start_of_week == 1 ) ? 0 : 1;
-			break; // mon
+			break; // mon.
 		case 2:
 			$sub = ( $start_of_week == 1 ) ? 1 : 2;
-			break; // tues
+			break; // tues.
 		case 3:
 			$sub = ( $start_of_week == 1 ) ? 2 : 3;
-			break; // wed
+			break; // wed.
 		case 4:
 			$sub = ( $start_of_week == 1 ) ? 3 : 4;
-			break; // thu
+			break; // thu.
 		case 5:
 			$sub = ( $start_of_week == 1 ) ? 4 : 5;
-			break; // fri
+			break; // fri.
 		case 6:
 			$sub = ( $start_of_week == 1 ) ? 5 : 6;
-			break; // sat
+			break; // sat.
 		case 0:
 			$sub = ( $start_of_week == 1 ) ? 6 : 0;
-			break; // sun
+			break; // sun.
 	}
 	$day = date( 'j', strtotime( $now . ' -' . $sub . ' day' ) );
 	if ( $sub != 0 ) {
@@ -296,13 +295,12 @@ function mc_first_day_of_week( $date = false ) {
 /**
  * Generate an ordinal string in English for numeric values
  *
- * @param int $number
+ * @param int $number.
  *
  * @return string number plus ordinal value
  */
 function mc_ordinal( $number ) {
-	// when fed a number, adds the English ordinal suffix. Works for any
-	// number, even negatives
+	// when fed a number, adds the English ordinal suffix. Works for any number.
 	if ( $number % 100 > 10 && $number % 100 < 14 ) {
 		$suffix = "th";
 	} else {
@@ -331,7 +329,7 @@ function mc_ordinal( $number ) {
 /**
  * Generate abbreviations & code used for HTML output of calendar headings.
  *
- * @param string $format 'mini', 'list', 'grid'
+ * @param string $format 'mini', 'list', 'grid'.
  *
  * @return array HTML for each day in an array.
  */
@@ -364,8 +362,8 @@ function mc_name_days( $format ) {
 /** 
  * Handles all cases for exiting processing early: private events, drafts, etc.
  *
- * @param object $event Event object
- * @param string $process_date Current date being articulated
+ * @param object $event Event object.
+ * @param string $process_date Current date being articulated.
  *
  * @return boolean true if early exit is qualified.
  */
@@ -379,7 +377,7 @@ function mc_exit_early( $event, $process_date ) {
 	$today            = date( 'Y-m-d', strtotime( $event->occur_begin ) );
 	$current          = date( 'Y-m-d', strtotime( $process_date ) );
 	$end              = date( 'Y-m-d', strtotime( $event->occur_end ) );
-	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing
+	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing.
 	// or if event started yesterday & has event_hide_end checked.
 	$ends_at_midnight = ( $event->event_endtime == '00:00:00' && $end == $process_date && $current != $process_date ) ? true : false;
 	// hides events if hiding end time & not first day.
@@ -399,7 +397,7 @@ function mc_exit_early( $event, $process_date ) {
 /**
  * Check whether an object with a category_private property is private
  *
- * @param object $event [can be a category object]
+ * @param object $event [can be a category object].
  *
  * @return boolean
  */

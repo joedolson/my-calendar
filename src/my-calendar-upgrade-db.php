@@ -1,7 +1,17 @@
 <?php
+/**
+ * Upgrade Database.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * Check whether the My Calendar database is up to date
@@ -55,6 +65,9 @@ function my_calendar_check_db() {
 	}
 }
 
+/**
+ * Execute DB upgrade.
+ */
 function mc_upgrade_db() {
 	$globals = mc_globals();
 	foreach( $globals as $key => $global ) {

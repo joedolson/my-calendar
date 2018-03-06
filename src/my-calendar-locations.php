@@ -1,8 +1,27 @@
 <?php
+/**
+ * Update & Add Locations
+ *
+ * @category Locations
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
+/**
+ * Update a single field in a location.
+ *
+ * @param string $field field name
+ * @param mixed $data data to update to
+ * @param int $location location ID
+ *
+ * @return mixed boolean/int query result
+ */
 function mc_update_location( $field, $data, $location ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
@@ -11,7 +30,11 @@ function mc_update_location( $field, $data, $location ) {
 	return $result;
 }
 
-
+/**
+ * Update settings for how location inputs are limited.
+ *
+ * @return string update notice.
+ */
 function mc_update_location_controls() {
 	if ( isset( $_POST['mc_locations'] ) && $_POST['mc_locations'] == 'true' ) {
 		$nonce = $_POST['_wpnonce'];
@@ -28,6 +51,13 @@ function mc_update_location_controls() {
 	}
 }
 
+/**
+ * Insert a new location.
+ *
+ * @param array $add Array of location details to add.
+ *
+ * @return mixed boolean/int query result.
+ */
 function mc_insert_location( $add ) {
 	global $wpdb;
 	$add     = array_map( 'mc_kses_post', $add );			
@@ -37,6 +67,14 @@ function mc_insert_location( $add ) {
 	return $results;
 }
 
+/**
+ * Update a location.
+ *
+ * @param array $update Array of location details to modify.
+ * @param int $where Location ID to update.
+ *
+ * @return mixed boolean/int query result.
+ */
 function mc_modify_location( $update, $where ) {
 	global $wpdb;
 	$update  = array_map( 'mc_kses_post', $update );		
@@ -46,6 +84,9 @@ function mc_modify_location( $update, $where ) {
 	return $results;
 }
 
+/**
+ * Handle results of form submit & display form.
+ */
 function my_calendar_add_locations() {
 	global $wpdb;
 	?>
@@ -138,6 +179,14 @@ function my_calendar_add_locations() {
 	}
 }
 
+/**
+ * Create location editing form.
+ *
+ * @param string $view type of view add/edit
+ * @param int $curID Location ID.
+ *
+ * @param string HTML form.
+ */
 function mc_show_location_form( $view = 'add', $curID = '' ) {
 	$cur_loc = false;
 	if ( $curID != '' ) {
@@ -207,6 +256,13 @@ function mc_show_location_form( $view = 'add', $curID = '' ) {
 <?php
 }
 
+/**
+ * Get details about one location.
+ *
+ * @param int $location_id Location ID
+ *
+ * @return object location
+ */
 function mc_get_location( $location_id ) {
 	global $wpdb;
 	$sql      = $wpdb->prepare( "SELECT * FROM " . my_calendar_locations_table() . " WHERE location_id = %d", $location_id );
@@ -214,6 +270,7 @@ function mc_get_location( $location_id ) {
 
 	return $location;
 }
+
 /**
  * Check whether this location field has pre-entered controls on input
  *
@@ -270,6 +327,8 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 
 /**
  * Location controls for limiting location submission options.
+ *
+ * @return string HTML controls.
  */
 function mc_location_controls() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
@@ -489,6 +548,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 
 /**
  * array of location access features
+ *
+ * @return array
  */
 function mc_location_access() {
 	$location_access = array(

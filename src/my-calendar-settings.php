@@ -1,8 +1,30 @@
 <?php
+/**
+ * Manage My Calendar settings
+ *
+ * @category Settings
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
+/**
+ * Generate input & field for a My Calendar setting.
+ *
+ * @param string $name Name of option.
+ * @param string $label Label for input.
+ * @param string $default default value if not set.
+ * @param string $note Note to associate with field via aria-describedby
+ * @param array $atts Array of keys and values to use as input attributes.
+ * @param string $type Field type for option.
+ * @param boolean $echo True to echo, false to return.
+ *
+ */
 function mc_settings_field( $name, $label, $default = '', $note = '', $atts = array( 'size' => '30' ), $type = 'text',$echo = true ) {
 	$options = $attributes = '';
 	if ( is_array( $atts ) && ! empty( $atts ) ) {
@@ -88,7 +110,9 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 	}
 }
 
-// Display the admin configuration page
+/**
+ * Display the admin configuration page
+ */ 
 function my_calendar_import() {
 	if ( get_option( 'ko_calendar_imported' ) != 'true' ) {
 		global $wpdb;
@@ -157,7 +181,7 @@ function my_calendar_import() {
 }
 
 /**
- * Build settings form
+ * Build settings form.
  */
 function my_calendar_settings() {
 	my_calendar_check();
@@ -181,12 +205,12 @@ function my_calendar_settings() {
 		}
 	}
 	if ( isset( $_POST['mc_manage'] ) ) {
-		// management
+		// management.
 		$clear          = '';
 		$mc_api_enabled = ( ! empty( $_POST['mc_api_enabled'] ) && $_POST['mc_api_enabled'] == 'on' ) ? 'true' : 'false';
 		$mc_remote      = ( ! empty( $_POST['mc_remote'] ) && $_POST['mc_remote'] == 'on' ) ? 'true' : 'false';
 		$mc_drop_tables = ( ! empty( $_POST['mc_drop_tables'] ) && $_POST['mc_drop_tables'] == 'on' ) ? 'true' : 'false';
-		// Handle My Calendar primary URL
+		// Handle My Calendar primary URL.
 		$mc_uri         = get_option( 'mc_uri' );
 		if ( isset( $_POST['mc_uri'] ) && ! isset( $_POST['mc_uri_id'] ) ) {
 			$mc_uri = $_POST['mc_uri'];
@@ -199,7 +223,7 @@ function my_calendar_settings() {
 		}
 		update_option( 'mc_uri', $mc_uri );
 		update_option( 'mc_uri_id', absint( $_POST['mc_uri_id'] ) );
-		// end handling of primary URL
+		// end handling of primary URL.
 		update_option( 'mc_api_enabled', $mc_api_enabled );
 		update_option( 'mc_remote', $mc_remote );
 		update_option( 'mc_drop_tables', $mc_drop_tables );
@@ -239,7 +263,7 @@ function my_calendar_settings() {
 		}
 		echo "<div class='updated'><p><strong>" . __( 'My Calendar Permissions Updated', 'my-calendar' ) . "</strong></p></div>";
 	}
-	// output
+	// output.
 	if ( isset( $_POST['mc_show_months'] ) ) {
 		$permalinks = get_option( 'mc_use_permalinks' );
 		$mc_open_day_uri = ( ! empty( $_POST['mc_open_day_uri'] ) ) ? $_POST['mc_open_day_uri'] : '';
@@ -253,7 +277,7 @@ function my_calendar_settings() {
 		update_option( 'mc_show_list_info', ( ! empty( $_POST['mc_show_list_info'] ) && $_POST['mc_show_list_info'] == 'on' ) ? 'true' : 'false' );
 		update_option( 'mc_show_list_events', ( ! empty( $_POST['mc_show_list_events'] ) && $_POST['mc_show_list_events'] == 'on' ) ? 'true' : 'false' );
 		update_option( 'mc_show_months', (int) $_POST['mc_show_months'] );
-		// calculate sequence for navigation elements
+		// calculate sequence for navigation elements.
 		$top = $bottom = array();
 		$nav = $_POST['mc_nav'];
 		$set = 'top';
@@ -296,7 +320,7 @@ function my_calendar_settings() {
 		}
 		echo "<div class=\"updated\"><p><strong>" . __( 'Output Settings saved', 'my-calendar' ) . "</strong>$note</p></div>";
 	}
-	// INPUT
+	// INPUT.
 	if ( isset( $_POST['mc_input'] ) ) {
 		$mc_input_options_administrators = ( ! empty( $_POST['mc_input_options_administrators'] ) && $_POST['mc_input_options_administrators'] == 'on' ) ? 'true' : 'false';
 		$mc_input_options                = array(
@@ -330,7 +354,7 @@ function my_calendar_settings() {
 			echo "<div class=\"updated\"><p><strong>" . __( 'Multisite settings saved', 'my-calendar' ) . ".</strong></p></div>";
 		}
 	}
-	// custom text
+	// custom text.
 	if ( isset( $_POST['mc_previous_events'] ) ) {
 		$mc_title_template       = $_POST['mc_title_template'];
 		$mc_title_template_solo  = $_POST['mc_title_template_solo'];
@@ -356,14 +380,14 @@ function my_calendar_settings() {
 		update_option( 'mc_next_events', $mc_next_events );
 		update_option( 'mc_previous_events', $mc_previous_events );
 		update_option( 'mc_caption', $mc_caption );
-		// date/time
+		// date/time.
 		update_option( 'mc_date_format', stripslashes( $_POST['mc_date_format'] ) );
 		update_option( 'mc_week_format', stripslashes( $_POST['mc_week_format'] ) );
 		update_option( 'mc_time_format', stripslashes( $_POST['mc_time_format'] ) );
 		update_option( 'mc_month_format', stripslashes( $_POST['mc_month_format'] ) );
 		echo "<div class=\"updated\"><p><strong>" . __( 'Custom text settings saved', 'my-calendar' ) . ".</strong></p></div>";
 	}
-	// Mail function by Roland
+	// Mail function by Roland.
 	if ( isset( $_POST['mc_email'] ) ) {
 		$mc_event_mail         = ( ! empty( $_POST['mc_event_mail'] ) && $_POST['mc_event_mail'] == 'on' ) ? 'true' : 'false';
 		$mc_html_email         = ( ! empty( $_POST['mc_html_email'] ) && $_POST['mc_html_email'] == 'on' ) ? 'true' : 'false';
@@ -381,7 +405,7 @@ function my_calendar_settings() {
 		update_option( 'mc_html_email', $mc_html_email );
 		echo "<div class=\"updated\"><p><strong>" . __( 'Email notice settings saved', 'my-calendar' ) . ".</strong></p></div>";
 	}
-	// Custom User Settings
+	// Custom User Settings.
 
 	apply_filters( 'mc_save_settings', '', $_POST );
 
@@ -401,7 +425,8 @@ function my_calendar_settings() {
 	<div class="mc-tabs settings postbox-container jcd-wide">
 	<div class="metabox-holder">
 	<?php
-	//update_option( 'ko_calendar_imported','false' ); // for testing importing.
+	// update_option( 'ko_calendar_imported','false' ); 
+	// for testing importing.
 	if ( isset( $_POST['import'] ) && $_POST['import'] == 'true' ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -739,7 +764,9 @@ function mc_remote_db() {
 								'event_host'              => __( 'Event Host', 'my-calendar' )
 							);
 							$output        = '';
-							// if input options isn't an array, we'll assume that this plugin wasn't upgraded properly, and reset them to the default.
+							/*
+								if input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
+							*/
 							if ( ! is_array( $input_options ) ) {
 								update_option( 'mc_input_options', array(
 										'event_short'             => 'on',
@@ -775,7 +802,7 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_no_fifth_week', __( 'If a recurring event falls on a date that doesn\'t exist (like the 5th Wednesday in February), move it back one week.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_skip_holidays', __( 'If an event coincides with an event in the designated "Holiday" category, do not show the event.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 						</ul>
-						<?php // End Scheduling Options // ?>
+						<?php // End Scheduling Options. ?>
 					</fieldset>					
 					<p>
 						<input type="submit" name="save" class="button-primary"
@@ -929,6 +956,14 @@ function mc_remote_db() {
 <?php
 }
 
+/**
+ * Check whether given role has defined capability.
+ * 
+ * @param string $role Name of a role defined in WordPress.
+ * @param string $cap Name of capability to check for.
+ * 
+ * @return string 
+ */
 function mc_check_caps( $role, $cap ) {
 	$role = get_role( $role );
 	if ( $role->has_cap( $cap ) ) {
@@ -938,6 +973,15 @@ function mc_check_caps( $role, $cap ) {
 	return '';
 }
 
+/**
+ * Checkbox for displaying capabilities.
+ *
+ * @param string $role Name of a role.
+ * @param string $cap Name of a capability.
+ * @param string $name Display name of role.
+ *
+ * @return string HTML checkbox.
+ */
 function mc_cap_checkbox( $role, $cap, $name ) {
 	return "<li><input type='checkbox' id='mc_caps_{$role}_$cap' name='mc_caps[$role][$cap]' value='on'" . mc_check_caps( $role, $cap ) . " /> <label for='mc_caps_{$role}_$cap'>$name</label></li>";
 }

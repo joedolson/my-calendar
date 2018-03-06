@@ -1,9 +1,21 @@
 <?php
+/**
+ * Manage My Calendar templates.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
-// Display the admin configuration page
+/**
+ * Template editing page.
+ */
 function mc_templates_edit() {
 	$templates = get_option( 'mc_templates' );
 
@@ -249,7 +261,7 @@ function mc_templates_edit() {
 /**
  * Check whether the current key refers to a core template
  *
- * @param string $key
+ * @param string $key.
  * 
  * @return boolean
  */
@@ -270,7 +282,7 @@ function mc_is_core_template( $key ) {
 /**
  * Get stored data for custom template
  *
- * @param string $key
+ * @param string $key.
  *
  * @return string template
  */
@@ -283,12 +295,12 @@ function mc_get_custom_template( $key ) {
 /**
  * Check whether key exists in database
  *
- * @param string $key
+ * @param string $key.
  * 
  * @return boolean
  */
 function mc_key_exists( $key ) {
-	// keys are md5 hashed, so should always be 32 chars
+	// keys are md5 hashed, so should always be 32 chars.
 	if ( strlen( $key ) != 32 ) {
 		return false;
 	}
@@ -303,8 +315,8 @@ function mc_key_exists( $key ) {
 /**
  * Create a new template from posted data. If this template key already exists, will update existing.
  *
- * @param string $template Full template
- * @param array $post POST data or array of relevant data
+ * @param string $template Full template.
+ * @param array $post POST data or array of relevant data.
  *
  * @return string $key
  */
@@ -320,8 +332,8 @@ function mc_create_template( $template, $post = array() ) {
 /**
  * Update an existing template from posted data
  *
- * @param string $key template key
- * @param string $template full template
+ * @param string $key template key.
+ * @param string $template full template.
  *
  * @return string $key
  */
@@ -334,7 +346,7 @@ function mc_update_template( $key, $template ) {
 /**
  * Get description of current key
  *
- * @param string $key
+ * @param string $key.
  *
  * @return Description
  */

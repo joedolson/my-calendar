@@ -1,11 +1,27 @@
 <?php
+/**
+ * Manage event categories.
+ *
+ * @category Events
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 
 /**
  * Update a single field of a category
+ *
+ * @param string $field field name
+ * @param mixed $data 
+ * @param int $category Category ID
+ *
+ * @return result
  */
 function mc_update_category( $field, $data, $category ) {
 	global $wpdb;
@@ -15,9 +31,14 @@ function mc_update_category( $field, $data, $category ) {
 	return $result;
 }
 
-// Function to handle the management of categories
-
-function my_dirlist( $directory ) {
+/**
+ * List image files in a directory.
+ *
+ * @param string $directory
+ *
+ * @return array images in directory.
+ */
+function mc_directory_list( $directory ) {
 	$results = array();
 	$handler = opendir( $directory );
 	// keep going until all files in directory have been read
@@ -32,23 +53,6 @@ function my_dirlist( $directory ) {
 			) {
 				$results[] = $file;
 			}
-		}
-	}
-	closedir( $handler );
-	sort( $results, SORT_STRING );
-
-	return $results;
-}
-
-function my_csslist( $directory ) {
-	$results = array();
-	$handler = opendir( $directory );
-	// keep going until all files in directory have been read
-	while ( $file = readdir( $handler ) ) {
-		// if $file isn't this directory or its parent,
-		// add it to the results array
-		if ( $file != '.' && $file != '..' ) {
-			$results[] = $file;
 		}
 	}
 	closedir( $handler );
@@ -98,11 +102,16 @@ function mc_get_private_categories() {
 	return apply_filters( 'mc_private_categories', $categories );
 }
 
+/**
+ * Check whether a given icon is a custom or stock icon
+ *
+ * @return boolean
+ */
 function mc_is_custom_icon() {
 	$dir  = plugin_dir_path( __FILE__ );
 	$base = basename( $dir );
 	if ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) ) {
-		$results = my_dirlist( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
+		$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
 		if ( empty( $results ) ) {
 			return false;
 		} else {
@@ -113,6 +122,9 @@ function mc_is_custom_icon() {
 	return false;
 }
 
+/**
+ * Generate form to manage categories
+ */
 function my_calendar_manage_categories() {
 	global $wpdb;
 	?>
@@ -224,6 +236,13 @@ function my_calendar_manage_categories() {
 <?php
 }
 
+/**
+ * Update a category.
+ * 
+ * @param array $category Array of params to update.
+ *
+ * @return mixed boolean/int query result
+ */
 function mc_update_cat( $category ) {
 	global $wpdb;
 	$formats = array( '%s', '%s', '%s', '%d', '%d' );
@@ -234,6 +253,13 @@ function mc_update_cat( $category ) {
 	return $result;
 }
 
+/**
+ * Create a category.
+ * 
+ * @param array $category Array of params to update.
+ *
+ * @return mixed boolean/int query result
+ */
 function mc_create_category( $category ) {
 	global $wpdb;
 
@@ -266,6 +292,12 @@ function mc_create_category( $category ) {
 	return $cat_ID;
 }
 
+/**
+ * Form to edit a category
+ *
+ * @param string $view Edit or create
+ * @param id $catID Category ID
+ */
 function mc_edit_category_form( $view = 'edit', $catID = '' ) {
 	global $wpdb;
 	$dir     = plugin_dir_path( __FILE__ );
@@ -279,11 +311,11 @@ function mc_edit_category_form( $view = 'edit', $catID = '' ) {
 	if ( mc_is_custom_icon() ) {
 		$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
 		$path      = '/my-calendar-custom';
-		$iconlist  = my_dirlist( $directory );
+		$iconlist  = mc_directory_list( $directory );
 	} else {
 		$directory = dirname( __FILE__ ) . '/images/icons/';
 		$path      = '/' . dirname( plugin_basename( __FILE__ ) ) . '/images/icons';
-		$iconlist  = my_dirlist( $directory );
+		$iconlist  = mc_directory_list( $directory );
 	}
 	if ( $view == 'add' ) {
 		?>
@@ -293,8 +325,6 @@ function mc_edit_category_form( $view = 'edit', $catID = '' ) {
 		<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a> 
 		<hr class="wp-header-end">		
 	<?php } ?>
-	
-	
 
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
@@ -423,6 +453,11 @@ function mc_edit_category_form( $view = 'edit', $catID = '' ) {
 		mc_show_sidebar( '', $category_settings );
 }
 
+/**
+ * Update category settings.
+ *
+ * @return Update message.
+ */
 function mc_category_settings_update() {
 	$message = '';
 	$nonce = ( isset( $_POST['_wpnonce'] ) ) ? $_POST['_wpnonce'] : false;
@@ -438,6 +473,11 @@ function mc_category_settings_update() {
 	return $message;
 }
 
+/**
+ * Generate category settings form.
+ *
+ * @return string HTML form.
+ */
 function mc_category_settings() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
 		$response = mc_category_settings_update();
@@ -471,6 +511,14 @@ function mc_category_settings() {
 	}
 }
 
+/**
+ * Get single field about a category.
+ *
+ * @param int $cat_id Category ID.
+ * @param string $field Field name to get.
+ *
+ * @return mixed string/int Query result.
+ */
 function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 	global $wpdb;
 	$mcdb     = $wpdb;
@@ -491,6 +539,10 @@ function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 
 /**
  * Fetch the category ID for categories passed by name
+ *
+ * @param string $string Name of category.
+ *
+ * @return int $cat_id or false.
  */
 function mc_category_by_name( $string ) {
 	global $wpdb;
@@ -509,6 +561,11 @@ function mc_category_by_name( $string ) {
 	return $cat_id;
 }
 
+/**
+ * Generate list of categories to edit.
+ *
+ * @return string HTML form.
+ */
 function mc_manage_categories() {
 	global $wpdb;
 
@@ -646,7 +703,16 @@ function mc_save_profile() {
 }
 
 
-// @data object with event_category value
+/**
+ * Generate fields to select event categories.
+ *
+ * @param object $data object with event_category value.
+ * @param boolean $option Type of form.
+ * @param boolean $multiple Allow multiple categories to be entered.
+ * @param mixed boolean/string $name Field name for input
+ * 
+ * @param string HTML fields.
+ */
 function mc_category_select( $data = false, $option = true, $multiple = false, $name = false ) {
 	global $wpdb;
 	$mcdb = $wpdb;
@@ -727,6 +793,11 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 
 /**
  * Get all categories for given event
+ * 
+ * @param object $event.
+ * @param boolean $ids Return objects or ids.
+ *
+ * @return array of values
  */
 function mc_get_categories( $event, $ids = true ) {	
 	global $wpdb;
@@ -772,6 +843,14 @@ function mc_get_categories( $event, $ids = true ) {
 	return $return;
 }
 
+/**
+ * Return HTML representing categories. 
+ *
+ * @param array $results array of categories.
+ * @param int $primary Primary selected category for event.
+ *
+ * @return String
+ */
 function mc_categories_html( $results, $primary ) {
 	if ( $results ) {
 		foreach( $results as $result ) {

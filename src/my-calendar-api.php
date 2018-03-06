@@ -1,8 +1,23 @@
 <?php
+/**
+ * My Calendar API - get events outside of My Calendar UI
+ *
+ * @category Events
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
+/**
+ * Main API function
+ *
+ * @return string/file JSON, CSV, etc
+ */
 function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) ) {
 		if ( get_option( 'mc_api_enabled' ) == 'true' ) {
@@ -42,6 +57,14 @@ function my_calendar_api() {
 	}
 }
 
+/**
+ * Check which format the API should return
+ * 
+ * @param array $data Array of event objects
+ * @param string $format Format to return
+ *
+ * @return file/string formatted data
+ */
 function mc_format_api( $data, $format ) {
 	switch ( $format ) {
 		case 'json' :
@@ -56,15 +79,25 @@ function mc_format_api( $data, $format ) {
 	}
 }
 
+/**
+ * JSON formatted events
+ *
+ * @param array $data array of event objects
+ */
 function mc_format_json( $data ) {
 	echo json_encode( $data );
 }
 
+/**
+ * CSV formatted events
+ *
+ * @param array $data array of event objects
+ */
 function mc_format_csv( $data ) {
 	$keyed = false;
-	// Create a stream opening it with read / write mode
+	// Create a stream opening it with read / write mode.
 	$stream = fopen( 'data://text/plain,' . "", 'w+' );
-	// Iterate over the data, writing each line to the text stream
+	// Iterate over the data, writing each line to the text stream.
 	foreach ( $data as $key => $val ) {
 		foreach ( $val as $v ) {
 			$values = get_object_vars( $v );
@@ -76,20 +109,25 @@ function mc_format_csv( $data ) {
 			fputcsv( $stream, $values );
 		}
 	}
-	// Rewind the stream
+	// Rewind the stream.
 	rewind( $stream );
-	// You can now echo its content
+	// You can now echo its content.
 	header( "Content-type: text/csv" );
 	header( "Content-Disposition: attachment; filename=my-calendar.csv" );
 	header( "Pragma: no-cache" );
 	header( "Expires: 0" );
 
 	echo stream_get_contents( $stream );
-	// Close the stream
+	// Close the stream.
 	fclose( $stream );
 	die;
 }
 
+/**
+ * RSS formatted events
+ *
+ * @param array $data array of event objects
+ */
 function mc_api_format_rss( $data ) {
 	$output = mc_format_rss( $data );
 	header( 'Content-type: application/rss+xml' );
@@ -98,7 +136,9 @@ function mc_api_format_rss( $data ) {
 	echo $output;
 }
 
-// Export single event as iCal file
+/**
+ * Export single event as iCal file
+ */
 function mc_export_vcal() {
 	if ( isset( $_GET['vcal'] ) ) {
 		$vcal = $_GET['vcal'];
@@ -308,7 +348,7 @@ function mc_strip_to_xml( $value ) {
  * Generate an iCal subscription export with most recently added events by category.
  */
 function mc_ics_subscribe() {
-	// get event category
+	// get event category.
 	if ( isset( $_GET['mcat'] ) ) {
 		$cat_id = (int) $_GET['mcat'];
 	} else {
@@ -434,7 +474,7 @@ function my_calendar_ical() {
 
 function mc_ical_template() {
 	global $mc_version;
-	// establish template
+	// establish template.
 	$template = "
 BEGIN:VEVENT
 UID:{dateid}-{id}
@@ -473,5 +513,3 @@ function mc_generate_alert_ical( $alarm ) {
 	
 	return $alert;
 }
-
-

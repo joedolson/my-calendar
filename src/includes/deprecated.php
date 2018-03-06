@@ -26,7 +26,7 @@ if ( is_multisite() && get_site_option( 'mc_multisite_show' ) == 1 ) {
 }
 
 if ( is_multisite() ) {
-	// Define the tables used in My Calendar
+	// Define the tables used in My Calendar.
 	define( 'MY_CALENDAR_GLOBAL_TABLE', $wpdb->base_prefix . 'my_calendar' );
 	define( 'MY_CALENDAR_GLOBAL_EVENT_TABLE', $wpdb->base_prefix . 'my_calendar_events' );
 	define( 'MY_CALENDAR_GLOBAL_CATEGORIES_TABLE', $wpdb->base_prefix . 'my_calendar_categories' );
@@ -71,7 +71,7 @@ function mc_create_cache( $arr_events, $hash, $category, $ltype, $lvalue, $autho
  * @deprecated 
  */
 function mc_delete_cache() {
-	// doesn't do anything anymore
+	// doesn't do anything anymore.
 }
 
 /**
@@ -91,7 +91,7 @@ function mc_get_cache( $cache ) {
  * @deprecated 
  */
 function mc_set_cache( $cache, $time ) {
-	// doesn't do anything
+	// doesn't do anything.
 }
 
 /**
@@ -101,13 +101,13 @@ function mc_set_cache( $cache, $time ) {
  * @deprecated 
  */
 function mc_remove_cache( $cache ) {
-	// doesn't do anything
+	// doesn't do anything.
 }
 
 /**
  * Old function to get users
  *
- * @param string User role
+ * @param string User role.
  * 
  * @return @mc_get_users
  */
@@ -131,7 +131,7 @@ function jd_show_support_box() {
 /**
  * Odd toggle. Unknown when last used.
  *
- * @param int $int
+ * @param int $int.
  *
  * @deprecated
  *
@@ -144,8 +144,8 @@ function my_calendar_is_odd( $int ) {
 /**
  * Get label for "forever" events (no longer exist.)
  *
- * @param string $recur
- * @param string $repeats
+ * @param string $recur.
+ * @param string $repeats.
  *
  * @deprecated 2.5.16
  *
@@ -156,19 +156,19 @@ function mc_event_repeats_forever( $recur, $repeats ) {
 		return true;
 	}
 	switch ( $recur ) {
-		case "S": // single
+		case "S": // single.
 			return false;
 			break;
-		case "D": // daily
+		case "D": // daily.
 			return ( $repeats == 500 ) ? true : false;
 			break;
-		case "W": // weekly
+		case "W": // weekly.
 			return ( $repeats == 240 ) ? true : false;
 			break;
-		case "B": // biweekly
+		case "B": // biweekly.
 			return ( $repeats == 120 ) ? true : false;
 			break;
-		case "M": // monthly
+		case "M": // monthly.
 		case "U":
 			return ( $repeats == 60 ) ? true : false;
 			break;
@@ -207,9 +207,9 @@ if ( ! function_exists( 'is_ssl' ) ) {
  *
  * @see mc_draw_template()
  * 
- * @param array $array
- * @param string $template
- * @param string $type
+ * @param array $array.
+ * @param string $template.
+ * @param string $type.
  * 
  * @return string
  */
@@ -222,8 +222,8 @@ function jd_draw_template( $array, $template, $type = 'list' ) {
  * test whether two dates are day-consecutive
  * not used per audit 3/1/2018
  * 
- * @param string $current date string
- * @param string $last_date previous date
+ * @param string $current date string.
+ * @param string $last_date previous date.
  *
  * @return boolean
  */ 
@@ -239,8 +239,8 @@ function mc_dates_consecutive( $current, $last_date ) {
 /**
  * Reverse Function to compare datetime in event objects
  * 
- * @param object $b
- * @param object $a
+ * @param object $b.
+ * @param object $a.
  *
  * return int (ternary value)
  */
@@ -257,8 +257,8 @@ function my_calendar_reverse_datetime_cmp( $b, $a ) {
 /**
  * Compare two dates for diff
  *
- * @param string $start date string
- * @param string $end datee string
+ * @param string $start date string.
+ * @param string $end datee string.
  *
  * @deprecated
  *
@@ -282,8 +282,8 @@ function jd_date_diff( $start, $end = "NOW" ) {
 /**
  * Function to find the start date of a week in a year
  *
- * @param integer $week The week number of the year
- * @param integer $year The year of the week we need to calculate on
+ * @param integer $week The week number of the year.
+ * @param integer $year The year of the week we need to calculate on.
  *
  * @return integer The unix timestamp of the date is returned
  */
@@ -304,8 +304,8 @@ function get_week_date( $week, $year ) {
 /**
  * Add days to a given date
  *
- * @param string $givendate
- * @param int $day days to add
+ * @param string $givendate.
+ * @param int $day days to add.
  *
  * @return new date
  */

@@ -11,7 +11,7 @@
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * Implement show on page selection fields
@@ -30,8 +30,8 @@ add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );
 /**
  * Show event editing options for user
  *
- * @param $status string
- * @param $args array Arguments
+ * @param $status string.
+ * @param $args array Arguments.
  *
  * @return string
  */
@@ -94,9 +94,9 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
 /**
  * Save settings for screen options
  *
- * @param $status string
- * @param $option option name
- * @param $value new value
+ * @param $status string.
+ * @param $option option name.
+ * @param $value new value.
  *
  * @return value
  */

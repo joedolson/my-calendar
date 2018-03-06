@@ -1,8 +1,25 @@
 <?php
+/**
+ * Generate limits to event queries.
+ *
+ * @category Events
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
+/**
+ * Prepare search query.
+ * 
+ * @param string $query search term.
+ *
+ * @return string query params for SQL
+ */
 function mc_prepare_search_query( $query ) {
 	$query   = esc_sql( $query );
 	$db_type = mc_get_db_type();
@@ -28,6 +45,11 @@ function mc_prepare_search_query( $query ) {
 /**
  * Generate WHERE pattern for a given category passed
  *
+ * @param mixed int/string $category Single or list of categories separated by commas using IDs or names.
+ * @param string $type context of query.
+ * @param string $group context of query.
+ *
+ * @return string SQL modifiers.
  */
 function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 	$category = urldecode( $category );
@@ -56,7 +78,7 @@ function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 /**
  * Get array of category IDs from passed comma-separated data
  *
- * @param string $category numeric or string-based category tokens
+ * @param string $category numeric or string-based category tokens.
  *
  * @return array category IDs
  */
@@ -105,9 +127,9 @@ function mc_category_select_ids( $category ) {
 /**
  * Get select parameter values for authors & hosts
  *
- * @param string $author numeric or string tokens for authors or list of authors
- * @param string $type context of query
- * @param string $context context of data
+ * @param string $author numeric or string tokens for authors or list of authors.
+ * @param string $type context of query.
+ * @param string $context context of data.
  *
  * @return string WHERE limits
  */
@@ -136,7 +158,7 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
 /**
  * Get array of category IDs from passed comma-separated data
  *
- * @param string $category numeric or string-based category tokens
+ * @param string $category numeric or string-based category tokens.
  *
  * @return array category IDs
  */
@@ -153,7 +175,7 @@ function mc_author_select_ids( $author ) {
 				$add       = absint( $key );
 			} else {
 				$key       = trim( $key );
-				$author    = get_user_by( 'login', $key ); // get author by username
+				$author    = get_user_by( 'login', $key ); // get author by username.
 				$add       = $author->ID;
 			}
 			
@@ -164,7 +186,7 @@ function mc_author_select_ids( $author ) {
 			$authors[] = absint( $author );
 		} else {
 			$author = trim( $author );
-			$author = get_user_by( 'login', $author ); // get author by username
+			$author = get_user_by( 'login', $author ); // get author by username.
 
 			if ( is_object( $author ) ) {
 				$authors[] = $author->ID;
@@ -175,6 +197,16 @@ function mc_author_select_ids( $author ) {
 	return $authors;
 }
 
+/**
+ * Select host params. 
+ * 
+ * @uses mc_select_author()
+ * 
+ * @param mixed int/string $host.
+ * @param string $type context.
+ *
+ * @return string SQL
+ */
 function mc_select_host( $host, $type = 'event' ) {
 	
 	return mc_select_author( $host, $type, 'host' );
@@ -184,9 +216,11 @@ function mc_select_host( $host, $type = 'event' ) {
 /**
  * Function to limit event query by location. 
  *
- * @string $type {deprecated}
- * @string $ltype {location type}
- * @mixed (string/integer) $lvalue {location value}
+ * @param string $type {deprecated}.
+ * @param string $ltype {location type}.
+ * @param mixed string/integer $lvalue {location value}.
+ *
+ * @return 
 */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
 	global $user_ID;
@@ -256,7 +290,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 /**
  * Get events based on accessibility features available
  *
- * @param string type of accessibility feature
+ * @param string type of accessibility feature.
  * 
  * @return string limits to add to query
  */
@@ -269,6 +303,11 @@ function mc_access_limit( $access ) {
 	return $limit_string;
 }
 
+/**
+ * SQL modifiers for published vs. preview
+ *
+ * @return boolean 
+ */
 function mc_select_published() {
 	if ( mc_is_preview() ) {
 		$published = "event_flagged <> 1 AND ( event_approved = 1 OR event_approved = 0 )";
@@ -279,7 +318,14 @@ function mc_select_published() {
 	return $published;
 }
 
-// set up a secondary limit on location
+/**
+ * set up a secondary limit on location
+ *
+ * @param string $ltype type of limit.
+ * @param string $lvalue value.
+ *
+ * @return string SQL.
+ */
 function mc_secondary_limit( $ltype = '', $lvalue = '' ) {
 	$limit_string     = "";
 	$current_location = urldecode( $lvalue );

@@ -11,10 +11,10 @@
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
- * Switch sites in multisite environment
+ * Switch sites in multisite environment.
  *
  * @return boolean
  */
@@ -22,11 +22,11 @@ function mc_switch_sites() {
 	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 		if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() != my_calendar_table( 'global' ) ) {
 			if ( get_option( 'mc_current_table' ) == '1' ) {
-				// can post to either, but is currently set to post to central table
+				// can post to either, but is currently set to post to central table.
 				return true;
 			}
 		} elseif ( get_site_option( 'mc_multisite' ) == 1 && my_calendar_table() != my_calendar_table( 'global' ) ) {
-			// can only post to central table
+			// can only post to central table.
 			return true;
 		}
 	}
@@ -37,8 +37,8 @@ function mc_switch_sites() {
 /**
  * Send a Tweet on approval of event
  *
- * @param $prev Previous status
- * @param $new New status
+ * @param $prev Previous status.
+ * @param $new New status.
  */
 function mc_tweet_approval( $prev, $new ) {
 	if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) != '' ) {
@@ -52,7 +52,7 @@ function mc_tweet_approval( $prev, $new ) {
  * Flatten event array; need an array that isn't multi dimensional
  * Once used in upcoming events?
  *
- * @param array $events Array of events
+ * @param array $events Array of events.
  *
  * @return new array
  */
@@ -99,7 +99,7 @@ function mc_add_inner_box() {
 /**
  * Pass group of allowed tags to strip_tags 
  *
- * @return string of allowed tags parseable by strip_tags
+ * @return string of allowed tags parseable by strip_tags.
  */
 function mc_strip_tags() {
 	return '<strong><em><i><b><span>';
@@ -108,10 +108,10 @@ function mc_strip_tags() {
 /**
  * Old function for checking value of an option field
  *
- * @param $theFieldname Name of the field
- * @param $theValue Current value
- * @param $theArray if this setting is an array, the array key
- * @param $return boolean whether to return or echo
+ * @param $theFieldname Name of the field.
+ * @param $theValue Current value.
+ * @param $theArray if this setting is an array, the array key.
+ * @param $return boolean whether to return or echo.
  *
  * @return checked=checked
  */
@@ -139,9 +139,9 @@ function mc_is_checked( $theFieldname, $theValue, $theArray = '', $return = fals
 /**
  * Old function for checking value of an option field in a select
  *
- * @param $theFieldname Name of the field
- * @param $theValue Current value
- * @param $theArray if this setting is an array, the array key
+ * @param $theFieldname Name of the field.
+ * @param $theValue Current value.
+ * @param $theArray if this setting is an array, the array key.
  *
  * @return string selected=selected
  */
@@ -163,9 +163,9 @@ function mc_is_selected( $theFieldname, $theValue, $theArray = '' ) {
 /**
  * Old function for checking value of an option field
  *
- * @param $field Name of the field
- * @param $value Current value
- * @param $type checkbox, radio, option
+ * @param $field Name of the field.
+ * @param $value Current value.
+ * @param $type checkbox, radio, option.
  *
  * @return string
  */
@@ -192,6 +192,12 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 }
 
 /**
+ * Check selection
+ *
+ * @param string $field.
+ * @param any $value.
+ * @param string $type.
+ *
  * @see mc_option_selected()
  */
 function jd_option_selected( $field, $value, $type = 'checkbox' ) {
@@ -214,7 +220,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 /**
  * Checks the contrast ratio of color & returns the optimal color to use with it.
  *
- * @param string $color hex
+ * @param string $color hex.
  * 
  * @return string white or black hex value
  */
@@ -239,25 +245,25 @@ function mc_inverse_color( $color ) {
 /**
  * Shift color to an acceptable alternate color.
  *
- * @param $color Color hex
+ * @param $color Color hex.
  *
  * @return New color hex
  */
 function mc_shift_color( $color ) {
 	$color   = str_replace( '#', '', $color );
-	$rgb     = ''; // Empty variable
+	$rgb     = ''; 
 	$percent = ( mc_inverse_color( $color ) == '#ffffff' ) ? - 20 : 20;
-	$per     = $percent / 100 * 255; // Creates a percentage to work with. Change the middle figure to control colour temperature
+	$per     = $percent / 100 * 255; // Percentage to work with. Change middle figure to control color temperature.
 	if ( $per < 0 ) {
-		// DARKER
-		$per = abs( $per ); // Turns Neg Number to Pos Number
+		// DARKER.
+		$per = abs( $per ); // Turns Neg Number to Pos Number.
 		for ( $x = 0; $x < 3; $x ++ ) {
 			$c = hexdec( substr( $color, ( 2 * $x ), 2 ) ) - $per;
 			$c = ( $c < 0 ) ? 0 : dechex( $c );
 			$rgb .= ( strlen( $c ) < 2 ) ? '0' . $c : $c;
 		}
 	} else {
-		// LIGHTER        
+		// LIGHTER.      
 		for ( $x = 0; $x < 3; $x ++ ) {
 			$c = hexdec( substr( $color, ( 2 * $x ), 2 ) ) + $per;
 			$c = ( $c > 255 ) ? 'ff' : dechex( $c );
@@ -271,11 +277,11 @@ function mc_shift_color( $color ) {
 /**
  * Convert a CSV string into an array
  *
- * @param string $csv Data
- * @param string $delimiter to use
- * @param string $enclosure to wrap strings
- * @param string $escape character
- * @param string $terminator end of line character
+ * @param string $csv Data.
+ * @param string $delimiter to use.
+ * @param string $enclosure to wrap strings.
+ * @param string $escape character.
+ * @param string $terminator end of line character.
  *
  * @return array
  */
@@ -303,7 +309,7 @@ function mc_html_type() {
 /**
  * duplicate of mc_is_url, which really should have been in this file. Bugger.
  *
- * @param string $url URL
+ * @param string $url URL.
  * 
  * @return URL, if valid.
  */ 
@@ -314,7 +320,7 @@ function _mc_is_url( $url ) {
 /**
  * Check whether a link is external
  *
- * @param string $link URL
+ * @param string $link URL.
  *
  * @return boolean true if not on current host
  */
@@ -338,7 +344,7 @@ function mc_external_link( $link ) {
 /**
  * Replace newline characters in a string
  *
- * @param string $string
+ * @param string $string.
  * 
  * @return string string without newline chars
  */
@@ -349,9 +355,9 @@ function mc_newline_replace( $string ) {
 /**
  * Reverse the order of an array
  *
- * @param array $array Any array
- * @param boolean $boolean true or false arguments for array_reverse
- * @param string $order sort order to use
+ * @param array $array Any array.
+ * @param boolean $boolean true or false arguments for array_reverse.
+ * @param string $order sort order to use.
  *
  * @return array
  */
@@ -366,9 +372,9 @@ function reverse_array( $array, $boolean, $order ) {
 /**
  * Debugging handler shortcut
  *
- * @param string $subjecct
- * @param string $body
- * @param string $email target email (if sending via email)
+ * @param string $subject.
+ * @param string $body.
+ * @param string $email target email (if sending via email).
  */
 function mc_debug( $subject, $body, $email = false ) {
 	if ( defined( 'MC_DEBUG' ) && MC_DEBUG == true ) {
@@ -386,7 +392,7 @@ function mc_debug( $subject, $body, $email = false ) {
 /**
  * Drop a table
  *
- * @param string name of function used to call table name
+ * @param string name of function used to call table name.
  */
 function mc_drop_table( $table ) {
 	global $wpdb;

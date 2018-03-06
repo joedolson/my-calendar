@@ -1,8 +1,17 @@
 <?php
-// Display the style configuration page
+/**
+ * Manage My Calendar styles.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
 /**
  * Generate stylesheet editor
@@ -119,7 +128,7 @@ function my_calendar_style_edit() {
 								$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
 								$directory        = dirname( __FILE__ ) . '/styles/';
 
-								$files = @my_csslist( $custom_directory );
+								$files = @mc_css_list( $custom_directory );
 							?>
 							<fieldset>
 								<p>
@@ -138,7 +147,7 @@ function my_calendar_style_edit() {
 											}
 											echo "</optgroup>";
 										}
-										$files = my_csslist( $directory );
+										$files = mc_css_list( $directory );
 										echo "<optgroup label='" . __( 'Installed Stylesheets', 'my-calendar' ) . "'>\n";
 										foreach ( $files as $value ) {
 											$filepath = mc_get_style_path( $value );
@@ -256,8 +265,8 @@ function my_calendar_style_edit() {
 /**
  * Get path for given filename or current selected stylesheet.
  *
- * @param string $filename
- * @param string $type path or url
+ * @param string $filename.
+ * @param string $type path or url.
  *
  * @return mixed string/boolean 
  */
@@ -287,7 +296,7 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 /**
  * Identify whether a given file is a custom style or a core style
  *
- * @param string $filename
+ * @param string $filename.
  *
  * @return boolean
  */
@@ -302,8 +311,8 @@ function mc_is_custom_style( $filename ) {
 /**
  * Fetch the styles for the current selected style
  *
- * @param string $filename
- * @param string $return content or filename
+ * @param string $filename.
+ * @param string $return content or filename.
  *
  * @return string
  */
@@ -336,10 +345,34 @@ function mc_default_style( $filename = false, $return = 'content' ) {
 }
 
 /**
+ * List CSS files in a directory
+ *
+ * @param string $directory.
+ *
+ * @return array list of CSS files
+ */
+function mc_css_list( $directory ) {
+	$results = array();
+	$handler = opendir( $directory );
+	// keep going until all files in directory have been read.
+	while ( $file = readdir( $handler ) ) {
+		// if $file isn't this directory or its parent,.
+		// add it to the results array.
+		if ( $file != '.' && $file != '..' ) {
+			$results[] = $file;
+		}
+	}
+	closedir( $handler );
+	sort( $results, SORT_STRING );
+
+	return $results;
+}
+
+/**
  * Write updated styles to file
  *
- * @param string $file File to write to
- * @param string $style New styles to write
+ * @param string $file File to write to.
+ * @param string $style New styles to write.
  *
  * @return boolean;
  */
@@ -349,7 +382,7 @@ function mc_write_styles( $file, $style ) {
 	}
 	
 	$standard        = dirname( __FILE__ ) . '/styles/';
-	$files = my_csslist( $standard );
+	$files = mc_css_list( $standard );
 	foreach ( $files as $f ) {
 		$filepath = mc_get_style_path( $f );
 		$path = pathinfo( $filepath );
@@ -380,9 +413,9 @@ function mc_write_styles( $file, $style ) {
 /**
  * Check diff between current styles and shipped styles
  *
- * @param string $left_string 
- * @param string $right_string
- * @param array/null $args
+ * @param string $left_string Currently installed.
+ * @param string $right_string Shipped.
+ * @param array/null $args.
  *
  * @return string
  */

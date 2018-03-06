@@ -1,10 +1,23 @@
 <?php
+/**
+ * Manage Locations
+ *
+ * @category Locations
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
-
-
+/**
+ * List of locations to edit.
+ *
+ * @return string HTML
+ */
 function my_calendar_manage_locations() {
 	?>
 	<div class="wrap my-calendar-admin">
@@ -39,9 +52,14 @@ function my_calendar_manage_locations() {
 	<?php
 }
 
+/**
+ * Mass delete locations.
+ *
+ * @return mixed boolean/int query result.
+ */
 function mc_mass_delete_locations() {
 	global $wpdb;
-	// mass delete locations
+	// mass delete locations.
 	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_delete'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -60,7 +78,7 @@ function mc_mass_delete_locations() {
 		$sql       = 'DELETE FROM ' . my_calendar_locations_table() . " WHERE location_id IN ($statement)";
 		$result    = $wpdb->query( $sql );
 		if ( $result !== 0 && $result !== false ) {
-			// argument: array of event IDs
+			// argument: array of event IDs.
 			do_action( 'mc_mass_delete_locations', $deleted );
 			$message = "<div class='updated'><p>" . sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . "</p></div>";
 		} else {
@@ -70,6 +88,11 @@ function mc_mass_delete_locations() {
 	}
 }
 
+/**
+ * Generate list of locations.
+ *
+ * @return string list of locations in a table.
+ */
 function mc_manage_locations() {
 	global $wpdb;
 	$orderby = 'location_label';

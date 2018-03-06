@@ -1,9 +1,21 @@
 <?php
+/**
+ * Manage My Calendar scripting.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ *
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-} // Exit if accessed directly
+}
 
-// Edit or configure scripts used with My Calendar
+/**
+ * Edit or configure scripts used with My Calendar
+ */
 function my_calendar_behaviors_edit() {
 	if ( isset( $_POST['mc-js-save'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
@@ -39,7 +51,6 @@ function my_calendar_behaviors_edit() {
 	$mc_minijs  = stripcslashes( get_option( 'mc_minijs' ) );
 	$mc_ajaxjs  = stripcslashes( get_option( 'mc_ajaxjs' ) );
 	$mc_show_js = stripcslashes( get_option( 'mc_show_js' ) );
-	// Now we render the form
 	?>
 	<div class="wrap my-calendar-admin">
 		<h1><?php _e( 'My Calendar Scripting', 'my-calendar' ); ?></h1>
