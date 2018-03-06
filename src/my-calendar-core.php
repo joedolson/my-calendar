@@ -1147,9 +1147,9 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 
 if ( ! function_exists( 'wp_is_mobile' ) ) {
 	if ( ! is_plugin_active_for_network( 'my-calendar/my-calendar.php' ) ) {
-		function wp_is_mobile() {
-			return false;
-		}
+		//function wp_is_mobile() {
+		//	return false;
+		//}
 	}
 }
 
