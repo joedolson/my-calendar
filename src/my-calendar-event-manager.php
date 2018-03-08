@@ -650,7 +650,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$wpdb->insert(
 						my_calendar_table(),
 						$update,
-						$formats,
+						$formats
 					);
 					$new_event = $wpdb->insert_id; // need to get this variable into URL for form submit.
 					$result    = mc_update_instance( $event_instance, $new_event, $update );
@@ -666,7 +666,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			} else {
 				$result = $wpdb->update( my_calendar_table(), $update, array( 
 					'event_id' => $event_id 
-				), $formats, '%d', );	
+				), $formats, '%d' );	
 
 				$recur_changed = ( $update['event_repeats'] != $_POST['prev_event_repeats'] || $update['event_recur'] != $_POST['prev_event_recur'] ) ? true : false;
 				if ( $date_changed || $recur_changed ) {
