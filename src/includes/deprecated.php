@@ -343,7 +343,7 @@ function add_days_to_date( $givendate, $day = 0 ) {
 			date( 's', $cd ),
 			date( 'm', $cd ),
 			date( 'd', $cd ) + $day,
-			date( 'Y', $cd ),
+			date( 'Y', $cd )
 		) 
 	);
 
