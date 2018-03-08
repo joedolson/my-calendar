@@ -112,10 +112,10 @@ function mc_strip_tags() {
 /**
  * Old function for checking value of an option field
  *
- * @param string $field Name of the field.
+ * @param string                   $field Name of the field.
  * @param mixed string/int/boolean $value Current value.
- * @param string $array if this setting is an array, the array key.
- * @param boolean $return whether to return or echo.
+ * @param string                   $array if this setting is an array, the array key.
+ * @param boolean                  $return whether to return or echo.
  *
  * @return checked=checked
  */
@@ -143,9 +143,9 @@ function mc_is_checked( $field, $value, $array = '', $return = false ) {
 /**
  * Old function for checking value of an option field in a select
  *
- * @param string $field Name of the field.
+ * @param string                   $field Name of the field.
  * @param mixed string/int/boolean $value Current value.
- * @param string $array if this setting is an array, the array key.
+ * @param string                   $array if this setting is an array, the array key.
  *
  * @return string selected=selected
  */
@@ -167,9 +167,9 @@ function mc_is_selected( $field, $value, $array = '' ) {
 /**
  * Old function for checking value of an option field
  *
- * @param string $field Name of the field.
+ * @param string                   $field Name of the field.
  * @param mixed string/int/boolean $value Current value.
- * @param string $type checkbox, radio, option.
+ * @param string                   $type checkbox, radio, option.
  *
  * @return string
  */
@@ -198,9 +198,9 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 /**
  * Check selection
  *
- * @param string $field Name of field.
+ * @param string                   $field Name of field.
  * @param mixed string/int/boolean $value Type of value.
- * @param string $type Type of input.
+ * @param string                   $type Type of input.
  *
  * @see mc_option_selected()
  */
@@ -362,9 +362,9 @@ function mc_newline_replace( $string ) {
 /**
  * Reverse the order of an array
  *
- * @param array $array Any array.
+ * @param array   $array Any array.
  * @param boolean $boolean true or false arguments for array_reverse.
- * @param string $order sort order to use.
+ * @param string  $order sort order to use.
  *
  * @return array
  */

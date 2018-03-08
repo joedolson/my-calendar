@@ -31,8 +31,8 @@ add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );
 /**
  * Show event editing options for user
  *
- * @param $status string.
- * @param $args array Arguments.
+ * @param string $status string.
+ * @param array  $args array Arguments.
  *
  * @return string
  */
@@ -95,9 +95,9 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
 /**
  * Save settings for screen options
  *
- * @param $status string.
- * @param $option option name.
- * @param $value new value.
+ * @param string $status string.
+ * @param string $option option name.
+ * @param string $value new value.
  *
  * @return value
  */
@@ -134,6 +134,12 @@ function mc_add_screen_option() {
 add_filter( 'set-screen-option', 'mc_set_screen_option', 10, 3 );
 /**
  * Set the num per page value
+ *
+ * @param string $status Status.
+ * @param string $option Option name.
+ * @param string $value New value.
+ *
+ * @return string $value
  */
 function mc_set_screen_option( $status, $option, $value ) {
 	

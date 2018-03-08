@@ -74,8 +74,8 @@ function my_calendar_locations_table( $site = false ) {
  *
  * @since 2.5.0
  * 
- * @param string $table table name.
- * @param mixed $site 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
+ * @param string           $table table name.
+ * @param mixed int/string $site 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
  *
  * @return prefixed string table name
  */

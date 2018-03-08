@@ -44,7 +44,7 @@ function my_calendar_api() {
 					'author'   => $author,
 					'host'     => $host,
 					'search'   => $search,
-					'source'   => 'api'
+					'source'   => 'api',
 				);
 				$args     = apply_filters( 'mc_filter_api_args', $args, $_REQUEST );
 				$data     = my_calendar_events( $args );
