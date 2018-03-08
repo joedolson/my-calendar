@@ -9,14 +9,14 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
  * Prepare search query.
- * 
+ *
  * @param string $query search term.
  *
  * @return string query params for SQL
@@ -38,7 +38,7 @@ function mc_prepare_search_query( $query ) {
 						event_registration LIKE '%$query%' ";
 		}
 	}
-	
+
 	return $search;
 }
 
@@ -57,21 +57,21 @@ function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 	$select_clause = '';
 	$data          = ( $group == 'category' ) ? 'category_id' : 'r.category_id';
 	if ( preg_match( '/^all$|^all,|,all$|,all,/i', $category ) > 0 ) {
-		
+
 		return '';
 	} else {
-		
+
 		$categories    = mc_category_select_ids( $category );
 		if ( count( $categories ) > 0 ) {
 			$cats          = implode( ',', $categories );
 			$select_clause = "AND $data IN ($cats)";
 		}
-		
+
 		$join = '';
 		if ( $select_clause != '' ) {
 			$join = " JOIN " . my_calendar_category_relationships_table() . " AS r ON r.event_id = e.event_id ";
-		} 
-				
+		}
+
 		return array( $join, $select_clause );
 	}
 }
@@ -87,11 +87,11 @@ function mc_category_select_ids( $category ) {
 	global $wpdb;
 	$mcdb = $wpdb;
 	$select = array();
-	
+
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	
+
 	if ( strpos( $category, "|" ) || strpos( $category, ',' ) ) {
 		if ( strpos( $category, "|" ) ) {
 			$categories = explode( "|", $category );
@@ -107,7 +107,7 @@ function mc_category_select_ids( $category ) {
 				$cat = $mcdb->get_row( "SELECT category_id FROM " . my_calendar_categories_table() . " WHERE category_name = '$key'" );
 				if ( is_object( $cat ) ) {
 					$add = $cat->category_id;
-				} 
+				}
 			}
 			$select[] = $add;
 		}
@@ -121,7 +121,7 @@ function mc_category_select_ids( $category ) {
 			}
 		}
 	}
-		
+
 	return $select;
 }
 
@@ -141,17 +141,17 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
 	}
 	$select_author = '';
 	$data          = ( $context == 'author' ) ? 'event_author' : 'event_host';
-	
+
 	if ( preg_match( '/^all$|^all,|,all$|,all,/i', $author ) > 0 ) {
 		return '';
 	} else {
-		
+
 		$authors       = mc_author_select_ids( $author );
 		if ( count ( $authors ) > 0 ) {
 			$auths         = implode( ',', $authors );
 			$select_author = "AND $data IN ($auths)";
 		}
-		
+
 		return $select_author;
 	}
 }
@@ -179,7 +179,7 @@ function mc_author_select_ids( $author ) {
 				$author    = get_user_by( 'login', $key ); // get author by username.
 				$add       = $author->ID;
 			}
-			
+
 			$authors[] = $add;
 		}
 	} else {
@@ -194,34 +194,34 @@ function mc_author_select_ids( $author ) {
 			}
 		}
 	}
-	
+
 	return $authors;
 }
 
 /**
- * Select host params. 
- * 
+ * Select host params.
+ *
  * @uses mc_select_author()
- * 
+ *
  * @param mixed int/string $host.
  * @param string $type context.
  *
  * @return string SQL
  */
 function mc_select_host( $host, $type = 'event' ) {
-	
+
 	return mc_select_author( $host, $type, 'host' );
 }
 
 
 /**
- * Function to limit event query by location. 
+ * Function to limit event query by location.
  *
  * @param string $type {deprecated}.
  * @param string $ltype {location type}.
  * @param mixed string/integer $lvalue {location value}.
  *
- * @return 
+ * @return
 */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
 	global $user_ID;
@@ -260,9 +260,9 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 				'event_postcode',
 				'event_country',
 				'event_region',
-				'event_location', 
+				'event_location',
 				'event_street',
-				'event_street2', 
+				'event_street2',
 				'event_url',
 				'event_longitude',
 				'event_latitude',
@@ -272,9 +272,9 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 			) ) ) {
 			if ( $current_location != 'all' && $current_location != '' ) {
 				if ( is_numeric( $current_location ) ) {
-					$limit_string = 'AND ' . $location_type . ' = ' . absint( $current_location );				
+					$limit_string = 'AND ' . $location_type . ' = ' . absint( $current_location );
 				} else {
-					$limit_string = 'AND ' . $location_type . " = '" . esc_sql( $current_location ) . "'";				
+					$limit_string = 'AND ' . $location_type . " = '" . esc_sql( $current_location ) . "'";
 				}
 			}
 		}
@@ -292,11 +292,11 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
  * Get events based on accessibility features available
  *
  * @param string type of accessibility feature.
- * 
+ *
  * @return string limits to add to query
  */
 function mc_access_limit( $access ) {
-	global $wpdb; 
+	global $wpdb;
 	$options      = mc_event_access();
 	$format       = ( isset( $options[ $access ] ) ) ? $wpdb->esc_like( $options[ $access ] ) : false;
 	$limit_string = ( $format ) ? "AND event_access LIKE '%$format%'" : '';
@@ -307,7 +307,7 @@ function mc_access_limit( $access ) {
 /**
  * SQL modifiers for published vs. preview
  *
- * @return boolean 
+ * @return boolean
  */
 function mc_select_published() {
 	if ( mc_is_preview() ) {
@@ -315,7 +315,7 @@ function mc_select_published() {
 	} else {
 		$published = "event_flagged <> 1 AND event_approved = 1";
 	}
-	
+
 	return $published;
 }
 

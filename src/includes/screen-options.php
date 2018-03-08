@@ -43,7 +43,7 @@ function mc_show_event_editing( $status, $args ) {
 		if ( ! is_array( $input_options ) ) {
 			$input_options = $settings_options;
 		}
-		
+
 		// cannot change these keys.
 		$input_labels = array(
 			'event_location_dropdown' => __( 'Event Location Dropdown Menu', 'my-calendar' ),
@@ -59,12 +59,12 @@ function mc_show_event_editing( $status, $args ) {
 			'event_access'            => __( 'Event Accessibility', 'my-calendar' ),
 			'event_host'              => __( 'Event Host', 'my-calendar' ),
 		);
-		
+
 		$output = '';
 		foreach ( $input_options as $key => $value ) {
 			$checked = ( 'on' == $value ) ? "checked='checked'" : '';
 			$allowed = ( isset( $settings_options[ $key ] ) && 'on' == $settings_options[ $key ] ) ? true : false;
-			if ( ! ( current_user_can( 'manage_options' ) && 'true' ==get_option( 'mc_input_options_administrators' ) ) && ! $allowed ) {
+			if ( ! ( current_user_can( 'manage_options' ) && 'true' == get_option( 'mc_input_options_administrators' ) ) && ! $allowed ) {
 				// don't display options if this user can't use them.
 				$output .= "<input type='hidden' name='mc_show_on_page[$key]' value='off' />";
 			} else {
@@ -74,7 +74,7 @@ function mc_show_event_editing( $status, $args ) {
 				}
 			}
 		}
-		$button = get_submit_button( __( 'Apply' ), 'button', 'screen-options-apply', false );
+		$button  = get_submit_button( __( 'Apply' ), 'button', 'screen-options-apply', false );
 		$return .= '
 	<fieldset>
 	<legend>' . __( 'Event editing fields to show', 'my-calendar' ) . "</legend>

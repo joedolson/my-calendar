@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -61,7 +61,7 @@ function mc_update_location_controls() {
  */
 function mc_insert_location( $add ) {
 	global $wpdb;
-	$add     = array_map( 'mc_kses_post', $add );			
+	$add     = array_map( 'mc_kses_post', $add );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->insert( my_calendar_locations_table(), $add, $formats );
 
@@ -78,7 +78,7 @@ function mc_insert_location( $add ) {
  */
 function mc_modify_location( $update, $where ) {
 	global $wpdb;
-	$update  = array_map( 'mc_kses_post', $update );		
+	$update  = array_map( 'mc_kses_post', $update );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->update( my_calendar_locations_table(), $update, $where, $formats, '%d' );
 
@@ -156,12 +156,12 @@ function my_calendar_add_locations() {
 			'location_phone2'    => $_POST['location_phone2'],
 			'location_access'    => isset( $_POST['location_access'] ) ? serialize( $_POST['location_access'] ) : ''
 		);
-				
+
 		$where   = array(
 			'location_id' => (int) $_POST['location_id']
 		);
 		$results = mc_modify_location( $update, $where );
-				
+
 		do_action( 'mc_modify_location', $where, $update );
 		if ( $results === false ) {
 			echo '<div class="error"><p><strong>' . __( 'Location could not be edited.', 'my-calendar' ) . '</strong></p></div>';
@@ -199,8 +199,8 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 		<h1><?php _e( 'Add New Location', 'my-calendar' ); ?></h1>
 	<?php } else { ?>
 		<h1 class="wp-heading-inline"><?php _e( 'Edit Location', 'my-calendar' ); ?></h1>
-		<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a> 
-		<hr class="wp-header-end">		
+		<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<hr class="wp-header-end">
 	<?php } ?>
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
@@ -245,12 +245,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 				<p>
 					<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations" ); ?>"><?php _e( 'Add a New Location', 'my-calendar' ); ?> &raquo;</a>
 				</p>
-			<?php } ?>		
+			<?php } ?>
 		</div>
 	</div>
-		<?php 
+		<?php
 			$controls = array( __( 'Location Controls', 'my-calendar' ) => mc_location_controls() );
-			mc_show_sidebar( '', $controls ); 
+			mc_show_sidebar( '', $controls );
 		?>
 	</div>
 
@@ -276,7 +276,7 @@ function mc_get_location( $location_id ) {
  * Check whether this location field has pre-entered controls on input
  *
  * @param string $this_field field name
- * 
+ *
  * @return boolean true if location field is controlled
  */
 function mc_controlled_field( $this_field ) {
@@ -301,7 +301,7 @@ function mc_controlled_field( $this_field ) {
  * @param string $context current context: entering new location or new event
  *
  * @return string HTML select element with values
- */ 
+ */
 function mc_location_controller( $fieldname, $selected, $context = 'location' ) {
 	$field    = ( $context == 'location' ) ? 'location_' . $fieldname : 'event_' . $fieldname;
 	$selected = esc_attr( trim( $selected ) );
@@ -343,14 +343,14 @@ function mc_location_controls() {
 			'event_region'
 		);
 		$mc_location_controls = get_option( 'mc_location_controls' );
-				
+
 		$output = $response . '
 		<form method="post" action="' . admin_url( "admin.php?page=my-calendar-locations" ) . '">
 		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
 		<div><input type="hidden" name="mc_locations" value="true" /></div>
 		<fieldset>
 			<legend>' . __( 'Limit Input Options', 'my-calendar' ) . '</legend>
-			<div id="mc-accordion">'; 
+			<div id="mc-accordion">';
 
 			foreach ( $location_fields as $field ) {
 				$locations = '';
@@ -377,14 +377,14 @@ function mc_location_controls() {
 			<p><input type='submit' class='button secondary' value='" . __( 'Save Location Controls', 'my-calendar' ) . "'/></p>
 		</fieldset>
 		</form>";
-	
+
 		return $output;
 	}
 }
 
 /**
  * Produce the form to submit location data
- * 
+ *
  * @param boolean $has_data Whether currently have data
  * @param object $data event or location data
  * @param string $context whether currently in an event or a location context
@@ -418,7 +418,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</p>
 	<p>
 		<label for="e_street2">' . __( 'Street Address (2)', 'my-calendar' ) . '</label> <input type="text" id="e_street2" name="' . $context . '_street2" size="40" value="' . $street_address2 . '" />
-	</p>		
+	</p>
 	<p>
 		<label for="e_city">' . __( 'City', 'my-calendar' ) . '</label> ';
 	$cur_city = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_city'} ) ) : '';
@@ -455,7 +455,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 		$return .= '<input type="text" id="e_region" name="' . $context . '_region" size="40" value="' . esc_attr( $cur_region ) . '" />';
 	}
 	$return .= '</p>
-	<p>		
+	<p>
 	<label for="e_country">' . __( 'Country', 'my-calendar' ) . '</label> ';
 	$cur_country = ( $has_data ) ? ( stripslashes( $data->{$context . '_country'} ) ) : '';
 	if ( mc_controlled_field( 'country' ) ) {
@@ -489,7 +489,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</p>
 	<p>
 	<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" /> <label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
-	</p>			
+	</p>
 	</fieldset>
 	</div>
 	<div class="location-secondary">
@@ -500,7 +500,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</p>
 	<p>
 	<label for="e_phone2">' . __( 'Secondary Phone', 'my-calendar' ) . '</label> <input type="text" id="e_phone2" name="' . $context . '_phone2" size="32" value="' . $event_phone2 . '" />
-	</p>	
+	</p>
 	<p>
 	<label for="e_url">' . __( 'Location URL', 'my-calendar' ) . '</label> <input type="text" id="e_url" name="' . $context . '_url" size="40" value="' . $event_url . '" />
 	</p>
@@ -539,9 +539,9 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</fieldset></div>
 	</div>
 	</div>';
-	
+
 	$map = mc_generate_map( $data, $context );
-	
+
 	$return .= $map;
 
 	return $return;
@@ -567,7 +567,7 @@ function mc_location_access() {
 		'11' => __( 'Fragrance-Free Policy', 'my-calendar' ),
 		'12' => __( 'Other', 'my-calendar' )
 	);
-	
+
 	return apply_filters( 'mc_location_access_choices', $location_access );
 }
 
@@ -578,7 +578,7 @@ function mc_location_access() {
  * @param int $id Location ID
  *
  * @return mixed value
- */ 
+ */
 function mc_location_data( $field, $id ) {
 	if ( $id ) {
 		global $wpdb;
@@ -601,12 +601,12 @@ function mc_location_data( $field, $id ) {
  * @param object $location location object
  *
  * @return string set of option elements
- */ 
+ */
 function mc_location_select( $location = false ) {
 	// Grab all locations and list them
 	$list = '';
 	$locs = mc_get_locations( 'select-locations' );
-	
+
 	foreach ( $locs as $loc ) {
 		$l = '<option value="' . $loc->location_id . '"';
 		if ( $location ) {
@@ -643,11 +643,11 @@ function mc_get_locations( $args ) {
 		$is      = '1';
 	}
 	global $wpdb;
-	$results = $wpdb->get_results( 
-		$wpdb->prepare( 
-			"SELECT location_id,location_label FROM " . my_calendar_locations_table() . " WHERE %s = %s ORDER BY %s %s", $where, $is, $orderby, $order 
-		) 
+	$results = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT location_id,location_label FROM " . my_calendar_locations_table() . " WHERE %s = %s ORDER BY %s %s", $where, $is, $orderby, $order
+		)
 	);
-	
+
 	return apply_filters( 'mc_filter_results', $results, $args );
 }

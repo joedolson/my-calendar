@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -26,13 +26,13 @@ function mc_templates_edit() {
 			die( 'Security check failed' );
 		}
 	}
-	
+
 	if ( isset( $_POST['mc_template_key'] ) ) {
 		$key = $_POST['mc_template_key'];
 	} else {
 		$key = ( isset( $_GET['mc_template'] ) ) ? $_GET['mc_template'] : 'grid';
 	}
-		
+
 	if ( isset( $_POST['delete'] ) ) {
 		delete_option( 'mc_ctemplate_' . $key );
 		echo "<div class=\"updated\"><p>" . __( 'Custom template deleted', 'my-calendar' ) . '</p></div>';
@@ -40,7 +40,7 @@ function mc_templates_edit() {
 	} else {
 		if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
 			echo "<div class=\"updated\"><p>" . __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) . '</p></div>';
-		} else {	
+		} else {
 			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
 				$template  = $_POST['mc_template'];
 				$templates[$key] = $template;
@@ -65,14 +65,14 @@ function mc_templates_edit() {
 	$mc_list_template    = ( $templates['list'] != '' ) ? $templates['list'] : $globals['list_template'];
 	$mc_mini_template    = ( $templates['mini'] != '' ) ? $templates['mini'] : $globals['mini_template'];
 	$mc_details_template = ( $templates['details'] != '' ) ? $templates['details'] : $globals['single_template'];
-	
+
 	$template = ( mc_is_core_template( $key ) ) ? ${"mc_" . $key . "_template"} : mc_get_custom_template( $key );
 	$template = stripslashes( $template );
 	$core     = mc_template_description( $key );
 	?>
 	<div class="wrap my-calendar-admin">
 		<h1 class="wp-heading-inline"><?php _e( 'My Calendar Templates', 'my-calendar' ); ?></h1>
-		<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( "admin.php?page=my-calendar-templates" ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a> 
+		<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( "admin.php?page=my-calendar-templates" ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 		<div class="postbox-container jcd-wide">
 			<div class="metabox-holder">
@@ -84,7 +84,7 @@ function mc_templates_edit() {
 								<a href="<?php echo admin_url( "admin.php?page=my-calendar-help#templates" ); ?>"><?php _e( "Templates Help", 'my-calendar' ); ?></a> &raquo;
 							</p>
 							<?php if ( $core != '' ) { echo "<p class='template-description'>$core</p>"; } ?>
-							<?php 
+							<?php
 							if ( $key == 'add-new' ) {
 							?>
 								<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( "admin.php?page=my-calendar-templates" ) ); ?>">
@@ -103,7 +103,7 @@ function mc_templates_edit() {
 								<p>
 									<input type="submit" name="save" class="button-primary" value="<?php _e( 'Add Template', 'my-calendar' ); ?>" />
 								</p>
-							</form>								
+							</form>
 							<?php
 							} else {
 							?>
@@ -142,7 +142,7 @@ function mc_templates_edit() {
 							<?php mc_list_templates(); ?>
 							<p>
 								<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( "admin.php?page=my-calendar-templates" ) ); ?>"><?php _e( 'Add New Template', 'my-calendar' ); ?></a>
-							</p>							
+							</p>
 						</div>
 					</div>
 				</div>
@@ -155,7 +155,7 @@ function mc_templates_edit() {
 						<div class='mc_template_tags inside'>
 							<p>
 								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-help#templates' ); ?>"><?php _e( 'All Template Tags &raquo;', 'my-calendar' ); ?></a>
-							</p>						
+							</p>
 							<dl>
 								<dt><code>{title}</code></dt>
 								<dd><?php _e( 'Title of the event.', 'my-calendar' ); ?></dd>
@@ -263,7 +263,7 @@ function mc_templates_edit() {
  * Check whether the current key refers to a core template
  *
  * @param string $key.
- * 
+ *
  * @return boolean
  */
 function mc_is_core_template( $key ) {
@@ -289,7 +289,7 @@ function mc_is_core_template( $key ) {
  */
 function mc_get_custom_template( $key ) {
 	$return = get_option( "mc_ctemplate_$key" );
-	
+
 	return $return;
 }
 
@@ -297,7 +297,7 @@ function mc_get_custom_template( $key ) {
  * Check whether key exists in database
  *
  * @param string $key.
- * 
+ *
  * @return boolean
  */
 function mc_key_exists( $key ) {
@@ -305,12 +305,12 @@ function mc_key_exists( $key ) {
 	if ( strlen( $key ) != 32 ) {
 		return false;
 	}
-	
+
 	if ( get_option( "mc_ctemplate_$key", 'missing' ) != 'missing' ) {
 		return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 /**
@@ -340,7 +340,7 @@ function mc_create_template( $template, $post = array() ) {
  */
 function mc_update_template( $key, $template ) {
 	update_option( "mc_ctemplate_$key", $template );
-	
+
 	return $key;
 }
 
@@ -374,13 +374,13 @@ function mc_template_description( $key ) {
 			$return = __( '<strong>Core Template:</strong> used in pop-ups for the mini calendar.', 'my-calendar' );
 			break;
 	}
-	
+
 	if ( ! mc_is_core_template( $key ) ) {
 		$description = strip_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
 	}
-	
+
 	$br = ( $description != '' ) ? '<br />' : '';
-	
+
 	return $description . $br . $return;
 }
 
@@ -397,7 +397,7 @@ function mc_list_templates() {
 	$mini_enabled    = ( get_option( 'mc_use_mini_template' ) == 1 ) ? $check : $uncheck;
 	$details_enabled = ( get_option( 'mc_use_details_template' ) == 1 ) ? $check : $uncheck;
 	$rss_enabled     = ( get_option( 'mc_use_rss_template' ) == 1 ) ? $check : $uncheck;
-	
+
 	$list = "<table class='widefat'>
 				<thead>
 					<tr>
@@ -415,22 +415,22 @@ function mc_list_templates() {
 					<tr>
 						<td><a href='" . add_query_arg( 'mc_template', 'list', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>list</a></td>
 						<td>" . mc_template_description( 'list' ) . "</td>
-						<td>$list_enabled</td>						
+						<td>$list_enabled</td>
 					</tr>
 					<tr>
 						<td><a href='" . add_query_arg( 'mc_template', 'mini', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>mini</a></td>
 						<td>" . mc_template_description( 'mini' ) . "</td>
-						<td>$mini_enabled</td>						
+						<td>$mini_enabled</td>
 					</tr>
 					<tr>
 						<td><a href='" . add_query_arg( 'mc_template', 'details', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>details</a></td>
 						<td>" . mc_template_description( 'details' ) . "</td>
-						<td>$details_enabled</td>						
+						<td>$details_enabled</td>
 					</tr>
 					<tr>
 						<td><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>rss</a></td>
 						<td>" . mc_template_description( 'rss' ) . "</td>
-						<td>$rss_enabled</td>						
+						<td>$rss_enabled</td>
 					</tr>";
 	global $wpdb;
 	$select = 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'";
@@ -444,10 +444,10 @@ function mc_list_templates() {
 					<td> -- </td>
 				</tr>";
 	}
-					
+
 	$list .= "</tbody>
 	</table>";
-					
+
 	echo $list;
 }
 
@@ -455,21 +455,21 @@ add_action( 'admin_enqueue_scripts', function() {
 	if ( !function_exists( 'wp_enqueue_code_editor' ) ) {
 		return;
 	}
-	
+
     if ( 'my-calendar_page_my-calendar-templates' !== get_current_screen()->id ) {
         return;
     }
- 
+
     // Enqueue code editor and settings for manipulating HTML.
-    $settings = wp_enqueue_code_editor( array( 
+    $settings = wp_enqueue_code_editor( array(
 		'type' => 'text/html'
 	) );
- 
+
     // Bail if user disabled CodeMirror.
     if ( false === $settings ) {
         return;
     }
- 
+
     wp_add_inline_script(
         'code-editor',
         sprintf(

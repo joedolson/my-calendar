@@ -43,18 +43,18 @@ register_deactivation_hook( __FILE__, 'mc_plugin_deactivated' );
 function mc_plugin_activated() {
     $required_php_version = '5.3.0';
 
-    if ( version_compare( PHP_VERSION, $required_php_version, '<' ) ) { 
+    if ( version_compare( PHP_VERSION, $required_php_version, '<' ) ) {
 		$plugin_data = get_plugin_data(__FILE__, false);
 		$message = sprintf( __( '%s requires PHP version %s or higher. Your current PHP version is %s', 'my-calendar' ), $plugin_data['Name'], $required_php_version, phpversion() );
 		echo "<div class='error'><p>$message</p></div>";
 		exit;
     }
-	
+
 	flush_rewrite_rules();
 	if ( my_calendar_exists() ) {
 		mc_upgrade_db();
 	}
-	
+
 	my_calendar_check();
 }
 
@@ -128,9 +128,9 @@ function mc_register_widgets() {
 }
 
 
-/** 
+/**
  * Customize canonical URL for My Calendar custom links
- */ 
+ */
 add_action( 'init', 'mc_custom_canonical' );
 function mc_custom_canonical() {
 	add_action( 'wp_head', 'mc_canonical' );
@@ -145,7 +145,7 @@ function mc_canonical() {
 	if ( !is_singular() ) {
 		return;
 	}
-	
+
 	global $wp_the_query;
 	if ( !$id = $wp_the_query->get_queried_object_id() ) {
 		return;
@@ -156,17 +156,17 @@ function mc_canonical() {
 	if ( $page = get_query_var('cpage') ) {
 		$link = get_comments_pagenum_link( $page );
 	}
-	if ( isset( $_GET['mc_id'] ) ) { 
+	if ( isset( $_GET['mc_id'] ) ) {
 		$mc_id = ( absint( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 		$link = add_query_arg( 'mc_id', $mc_id, $link );
 	}
-	
-	echo "<link rel='canonical' href='$link' />\n";	
+
+	echo "<link rel='canonical' href='$link' />\n";
 }
 
 /**
  * Produce My Calendar admin sidebar
- * 
+ *
  * @param string $show deprecated
  * @param mixed $add boolean or array
  * @param boolean $remove Hide commercial blocks
@@ -194,8 +194,8 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				</div>
 			<?php
 			}
-		} 
-		if ( ! $remove ) { 
+		}
+		if ( ! $remove ) {
 			if ( ! function_exists( 'mcs_submit_exists' ) ) { ?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell support">
@@ -206,9 +206,9 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						</div>
 					</div>
 				</div>
-			<?php 
+			<?php
 			}
-			if ( ! function_exists( 'mt_update_check' ) ) { 
+			if ( ! function_exists( 'mt_update_check' ) ) {
 			?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell my-tickets">
@@ -216,13 +216,13 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 
 						<div class="inside resources">
 							<p class="mcbuy"><?php printf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) ); ?></p>
-						
+
 						</div>
 					</div>
 				</div>
-			<?php 
+			<?php
 			}
-			if ( ! function_exists( 'mcs_submit_exists' ) ) { 
+			if ( ! function_exists( 'mcs_submit_exists' ) ) {
 			?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox support">
@@ -287,7 +287,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 							<div class="dashicons dashicons-translation" aria-hidden='true'></div>
 							<a href="http://translate.joedolson.com/projects/my-calendar"><?php _e( 'Help translate this plug-in!', 'my-calendar' ); ?></a>
 						</li>
-					</ul>					
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -328,7 +328,7 @@ function my_calendar_menu() {
 			$manage = add_submenu_page( 'my-calendar', __( 'Manage Events', 'my-calendar' ), __( '&rarr; Manage Events', 'my-calendar' ), 'mc_add_events', 'my-calendar-manage', 'my_calendar_manage' );
 			add_action( "load-$manage", 'mc_add_screen_option' );
 			$groups = add_submenu_page( 'my-calendar', __( 'Event Groups', 'my-calendar' ), __( '&rarr; Event Groups', 'my-calendar' ), 'mc_manage_events', 'my-calendar-groups', 'my_calendar_group_edit' );
-			add_action( "load-$groups", 'mc_add_screen_option' );			
+			add_action( "load-$groups", 'mc_add_screen_option' );
 			add_submenu_page( 'my-calendar', __( 'Add Event Locations', 'my-calendar' ), __( 'Add New Location', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-locations', 'my_calendar_add_locations' );
 			add_submenu_page( 'my-calendar', __( 'Manage Event Locations', 'my-calendar' ), __( '&rarr; Manage Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
 			add_submenu_page( 'my-calendar', __( 'Event Categories', 'my-calendar' ), __( 'Manage Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );

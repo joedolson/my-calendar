@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Default settings for widgets.
  *
- * @return array 
+ * @return array
  */
 function mc_widget_defaults() {
 	$default_template = '<strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}';
-	
+
 	$defaults = array(
 		'upcoming' => array(
 			'type'     => 'event',
@@ -49,7 +49,7 @@ function mc_widget_defaults() {
  * @return array
  */
 function mc_globals() {
-	global $wpdb; 
+	global $wpdb;
 
 	$grid_template = addslashes( '<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time\' title=\'{dtend}\'>" after="</span>"}</span>
 
@@ -89,13 +89,13 @@ function mc_globals() {
 		<title>{rss_title}: {date}, {time}</title>
 		<link>{link}</link>
 		<pubDate>{rssdate}</pubDate>
-		<dc:creator>{author}</dc:creator>  	
+		<dc:creator>{author}</dc:creator>
 		<description><![CDATA[{rss_description}]]></description>
 		<content:encoded><![CDATA[<div class='vevent'>
 		<h1 class='summary'>{rss_title}</h1>
 		<div class='description'>{rss_description}</div>
 		<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
-		<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>	
+		<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
 		<p>Recurrence: {recurs}</p>
 		<p>Repetition: {repeats} times</p>
 		<div class='location'>{rss_hcard}</div>
@@ -110,7 +110,7 @@ function mc_globals() {
 
 	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) == 'true' ) ? 1 : 0;
 
-$initial_db = "CREATE TABLE " . my_calendar_table() . " ( 
+$initial_db = "CREATE TABLE " . my_calendar_table() . " (
  event_id INT(11) NOT NULL AUTO_INCREMENT,
  event_begin DATE NOT NULL,
  event_end DATE NOT NULL,
@@ -123,9 +123,9 @@ $initial_db = "CREATE TABLE " . my_calendar_table() . " (
  event_endtime TIME,
  event_recur CHAR(3),
  event_repeats INT(3),
- event_status INT(1) NOT NULL DEFAULT '1',  
+ event_status INT(1) NOT NULL DEFAULT '1',
  event_author BIGINT(20) UNSIGNED,
- event_host BIGINT(20) UNSIGNED, 
+ event_host BIGINT(20) UNSIGNED,
  event_category BIGINT(20) UNSIGNED NOT NULL DEFAULT '1',
  event_link TEXT,
  event_post BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
@@ -144,7 +144,7 @@ $initial_db = "CREATE TABLE " . my_calendar_table() . " (
  event_latitude FLOAT(10,6) NOT NULL DEFAULT '0',
  event_zoom INT(2) NOT NULL DEFAULT '14',
  event_phone VARCHAR(32) NOT NULL,
- event_phone2 VARCHAR(32) NOT NULL, 
+ event_phone2 VARCHAR(32) NOT NULL,
  event_access TEXT,
  event_group_id INT(11) NOT NULL DEFAULT '0',
  event_span INT(1) NOT NULL DEFAULT '0',
@@ -159,7 +159,7 @@ $initial_db = "CREATE TABLE " . my_calendar_table() . " (
  KEY event_category (event_category)
  ) $charset_collate;";
 
-$initial_occur_db = "CREATE TABLE " . my_calendar_event_table() . " ( 
+$initial_occur_db = "CREATE TABLE " . my_calendar_event_table() . " (
  occur_id INT(11) NOT NULL AUTO_INCREMENT,
  occur_event_id INT(11) NOT NULL,
  occur_begin DATETIME NOT NULL,
@@ -169,27 +169,27 @@ $initial_occur_db = "CREATE TABLE " . my_calendar_event_table() . " (
  KEY occur_event_id (occur_event_id)
  ) $charset_collate;";
 
-$initial_cat_db = "CREATE TABLE " . my_calendar_categories_table() . " ( 
- category_id INT(11) NOT NULL AUTO_INCREMENT, 
- category_name VARCHAR(255) NOT NULL, 
- category_color VARCHAR(7) NOT NULL, 
+$initial_cat_db = "CREATE TABLE " . my_calendar_categories_table() . " (
+ category_id INT(11) NOT NULL AUTO_INCREMENT,
+ category_name VARCHAR(255) NOT NULL,
+ category_color VARCHAR(7) NOT NULL,
  category_icon VARCHAR(128) NOT NULL,
  category_private INT(1) NOT NULL DEFAULT '0',
  category_term INT(11) NOT NULL DEFAULT '0',
- PRIMARY KEY  (category_id) 
+ PRIMARY KEY  (category_id)
  ) $charset_collate;";
 
 
-$initial_rel_db = "CREATE TABLE " . my_calendar_category_relationships_table() . " ( 
- relationship_id INT(11) NOT NULL AUTO_INCREMENT, 
- event_id INT(11) NOT NULL, 
+$initial_rel_db = "CREATE TABLE " . my_calendar_category_relationships_table() . " (
+ relationship_id INT(11) NOT NULL AUTO_INCREMENT,
+ event_id INT(11) NOT NULL,
  category_id INT(11) NOT NULL DEFAULT '0',
  PRIMARY KEY  (relationship_id),
  KEY event_id (event_id)
- ) $charset_collate;"; 
- 
-$initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " ( 
- location_id INT(11) NOT NULL AUTO_INCREMENT, 
+ ) $charset_collate;";
+
+$initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " (
+ location_id INT(11) NOT NULL AUTO_INCREMENT,
  location_label VARCHAR(255) NOT NULL,
  location_street VARCHAR(255) NOT NULL,
  location_street2 VARCHAR(255) NOT NULL,
@@ -205,9 +205,9 @@ $initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " (
  location_phone VARCHAR(32) NOT NULL,
  location_phone2 VARCHAR(32) NOT NULL,
  location_access TEXT,
- PRIMARY KEY  (location_id) 
+ PRIMARY KEY  (location_id)
  ) $charset_collate;";
- 
+
 	$globals = array(
 		'initial_db'       => $initial_db,
 		'initial_occur_db' => $initial_occur_db,
@@ -218,9 +218,9 @@ $initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " (
 		'list_template'    => $list_template,
 		'rss_template'     => $rss_template,
 		'mini_template'    => $mini_template,
-		'single_template'  => $single_template		
+		'single_template'  => $single_template
 	);
-	
+
 	return $globals;
 }
 
@@ -248,7 +248,7 @@ function mc_default_settings() {
 	add_option( 'mc_event_link_expires', 'false' );
 	add_option( 'mc_apply_color', 'background' );
 	add_option( 'mc_inverse_color', 'true' );
-	add_option( 'mc_input_options', array( 
+	add_option( 'mc_input_options', array(
 			'event_short'             => 'off',
 			'event_desc'              => 'on',
 			'event_category'          => 'on',
@@ -261,7 +261,7 @@ function mc_default_settings() {
 			'event_specials'          => 'off',
 			'event_access'            => 'on',
 			'event_host'              => 'off'
-		) 
+		)
 	);
 	add_option( 'mc_input_options_administrators', 'false' );
 	add_site_option( 'mc_multisite', '0' );
@@ -285,7 +285,7 @@ function mc_default_settings() {
 			'rss'        => $rss_template,
 			'details'    => $single_template,
 			'label'      => __( 'Read more', 'my-calendar' )
-		) 
+		)
 	);
 	add_option( 'mc_skip_holidays', 'false' );
 	add_option( 'mc_css_file', 'twentyeighteen.css' );
@@ -297,7 +297,7 @@ function mc_default_settings() {
 		  '--highlight-dark' => '#666',
 		  '--highlight-light' => '#efefef',
 		)
-	);	
+	);
 	add_option( 'mc_time_format', get_option( 'time_format' ) );
 	add_option( 'mc_show_weekends', 'true' );
 	add_option( 'mc_convert', 'true' );
@@ -305,8 +305,8 @@ function mc_default_settings() {
 	add_option( 'mc_multisite_show', 0 );
 	add_option( 'mc_event_link', 'true' );
 	add_option( 'mc_topnav', 'toggle,timeframe,jump,nav' );
-	add_option( 'mc_bottomnav', 'key,category,feeds' );	
-	add_option( 'mc_default_direction', 'DESC' );	
+	add_option( 'mc_bottomnav', 'key,category,feeds' );
+	add_option( 'mc_default_direction', 'DESC' );
 	update_option( 'mc_update_notice', 1 );
 	mc_add_roles();
 	$has_uri = mc_guess_calendar();
@@ -351,8 +351,8 @@ function mc_generate_calendar_page( $slug ) {
 	}
 	update_option( 'mc_uri', get_permalink( $post_ID ) );
 	update_option( 'mc_uri_id', $post_ID );
-	
-	return $post_ID;	
+
+	return $post_ID;
 }
 
 /**
@@ -380,13 +380,13 @@ function mc_migrate_db() {
 			$event->event_endtime = date( 'H:i:s', strtotime( "$event->event_time +1 hour" ) );
 			mc_flag_event( $event->event_id, $event->event_endtime );
 		}
-		
+
 		$dates = array( 'event_begin'   => $event->event_begin,
 		                'event_end'     => $event->event_end,
 		                'event_time'    => $event->event_time,
 		                'event_endtime' => $event->event_endtime
 		);
-		
+
 		mc_increment_event( $event->event_id, $dates );
 	}
 }
@@ -532,7 +532,7 @@ function mc_check_imports() {
 		if ( function_exists( 'check_calendar' ) ) {
 			$output .= "
 			<div id='message' class='updated'>
-				<p>" . 
+				<p>" .
 					__( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ) . '
 				</p>
 				<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">
@@ -564,8 +564,8 @@ function mc_transition_categories() {
 	foreach ( $results as $result ) {
 		$event_id = $result->event_id;
 		$category = $result->event_category;
-		
-		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array( 'event_id' => $event_id, 'category_id' => $category ), array( '%d', '%d' ) );		
+
+		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array( 'event_id' => $event_id, 'category_id' => $category ), array( '%d', '%d' ) );
 	}
 }
 
@@ -632,7 +632,7 @@ function my_calendar_rmdirr( $dirname ) {
 
 /**
  * Backup styles and icons.
- * 
+ *
  * @param string $process current process
  * @param array $plugin Current plugin.
  */
@@ -650,7 +650,7 @@ function my_calendar_backup( $process, $plugin ) {
 
 /**
  * Restore styles and icons.
- * 
+ *
  * @param string $process current process
  * @param array $plugin Current plugin.
  */

@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -36,11 +36,11 @@ function mc_generate() {
 					break;
 				case 'upcoming':
 					$shortcode = 'my_calendar_upcoming';
-					$templatekey = 'Upcoming Events Shortcode';					
+					$templatekey = 'Upcoming Events Shortcode';
 					break;
 				case 'today':
 					$shortcode = 'my_calendar_today';
-					$templatekey = "Today's Events Shortcode";					
+					$templatekey = "Today's Events Shortcode";
 					break;
 				default:
 					$shortcode = 'my_calendar';
@@ -52,7 +52,7 @@ function mc_generate() {
 						$v        = $template;
 						$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>" . __( 'Edit this Template', 'my-calendar' ) . " &rarr;</a>";
 					} else {
-						if ( is_array( $value ) ) {		
+						if ( is_array( $value ) ) {
 							if ( in_array( 'all', $value ) ) {
 								unset( $value[0] );
 							}
@@ -66,7 +66,7 @@ function mc_generate() {
 					}
 				}
 			}
-			$output = esc_html( $shortcode . $string );	
+			$output = esc_html( $shortcode . $string );
 		}
 		$return = "<div class='updated'><p><textarea readonly='readonly' class='large-text readonly'>[$output]</textarea>$append</p></div>";
 		echo $return;
@@ -83,7 +83,7 @@ function mc_generator( $type ) {
 		<legend><strong><?php echo ucfirst( $type ); ?></strong>: <?php _e( 'Shortcode Attributes', 'my-calendar' ); ?>
 		</legend>
 		<div id="mc-generator" class="generator">
-			<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>		
+			<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
 			<input type='hidden' name='shortcode' value='<?php esc_attr_e( $type ); ?>'/>
 			<?php // Common Elements to all Shortcodes ?>
 			<p><?php echo my_calendar_categories_list( 'select', 'admin' ); ?></p>
@@ -129,7 +129,7 @@ function mc_generator( $type ) {
 			$options = '';
 			foreach ( $users as $u ) {
 				$options .= '<option value="' . $u->ID . '">' . esc_html( $u->display_name ) . "</option>\n";
-			} ?>			
+			} ?>
 			<p>
 				<label for="host"><?php _e( 'Limit by Host', 'my-calendar' ); ?></label>
 				<select name="host[]" id="host" multiple="multiple">
@@ -162,7 +162,7 @@ function mc_generator( $type ) {
 				<p>
 					<label for="year"><?php _e( 'Year', 'my-calendar' ); ?></label>
 					<select name="year" id="year">
-						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>					
+						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
 						<?php
 						global $wpdb;
 						$mcdb = $wpdb;
@@ -198,7 +198,7 @@ function mc_generator( $type ) {
 					<p>
 					<label for="month"><?php _e( 'Month', 'my-calendar' ); ?></label>
 					<select name="month" id="month">
-						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>					
+						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
 						<?php
 							$months = '';
 							for ( $i = 1; $i <= 12; $i ++ ) {
@@ -220,7 +220,7 @@ function mc_generator( $type ) {
 							echo $days;
 						?>
 					</select>
-				</p>				
+				</p>
 				<p id='navigation-info'>
 					<?php printf( __( "Navigation above and below the calendar: your <a href='%s'>settings</a> if this is left blank. Use <code>none</code> to hide all navigation.", 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>
 				</p>
@@ -235,7 +235,7 @@ function mc_generator( $type ) {
 				<p>
 					<label for="months" id='lmonths'><?php _e( 'Months to show in list view', 'my-calendar' ); ?></label>
 					<input type="number" min="1" max="12" step="1" name="months" id="lmonths" value="" /><br/>
-				</p>				
+				</p>
 			<?php
 			}
 			if ( $type == 'upcoming' || $type == 'today' ) {

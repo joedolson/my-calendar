@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -24,7 +24,7 @@ function my_calendar_print_view() {
 		exit;
 	}
 }
-	
+
 /**
  * Produce print view output.
  */
@@ -39,7 +39,7 @@ function my_calendar_print() {
 		$stylesheet = mc_get_file( 'css/mc-print.css', 'url' );
 	} else {
 		$stylesheet = $url . "css/mc-print.css";
-	}	
+	}
 	$rtl = ( is_rtl() ) ? 'rtl' : 'ltr';
 	$head = '<!DOCTYPE html>
 <html dir="' . $rtl . '" lang="' . get_bloginfo( 'language' ) . '">
@@ -57,35 +57,35 @@ function my_calendar_print() {
 </head>
 <body>';
 echo $head;
-	$args = array( 
+	$args = array(
 		'type' => 'print',
 		'category' => $category,
 		'time' => $time,
 		'ltype' => $ltype,
 		'lvalue' => $lvalue
 	);
-	
+
 	$calendar = array(
 		'name' => 'print',
 		'format' => 'calendar',
 		'category' => $category,
-		'time' => $time, 
+		'time' => $time,
 		'ltype' => $ltype,
 		'lvalue' => $lvalue,
 		'id' => 'mc-print-view'
 	);
-	
+
 	echo my_calendar( $calendar );
 	$return_url = mc_get_uri( false, $args );
 	$return_url = apply_filters( 'mc_print_return_url', $return_url, $category, $time, $ltype, $lvalue );
-	
+
 	if ( isset( $_GET['href'] ) ) {
 		$ref_url = esc_url( urldecode( $_GET['href'] ) );
 		if ( $ref_url ) {
 			$return_url = $ref_url;
 		}
 	}
-	
+
 	$add        = array_map( 'esc_html', $_GET );
 	unset( $add['cid'] );
 	unset( $add['feed'] );

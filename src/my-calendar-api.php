@@ -57,7 +57,7 @@ function my_calendar_api() {
 
 /**
  * Check which format the API should return
- * 
+ *
  * @param array  $data Array of event objects.
  * @param string $format Format to return.
  */
@@ -92,7 +92,7 @@ function mc_format_json( $data ) {
 function mc_format_csv( $data ) {
 	$keyed = false;
 	// Create a stream opening it with read / write mode.
-	$stream = fopen( 'data://text/plain,' . "", 'w+' );
+	$stream = fopen( 'data://text/plain,' . '', 'w+' );
 	// Iterate over the data, writing each line to the text stream.
 	foreach ( $data as $key => $val ) {
 		foreach ( $val as $v ) {
@@ -179,10 +179,10 @@ function mc_generate_vcal( $event_id = false ) {
 		$array = mc_create_tags( $event );
 		$alarm = apply_filters( 'mc_event_has_alarm', array(), $event_id, $array['post'] );
 		$alert = '';
-		if ( !empty( $alarm ) ) {
+		if ( ! empty( $alarm ) ) {
 			$alert = mc_generate_alert_ical( $alarm );
 		}
-		
+
 		$template = "BEGIN:VCALENDAR
 VERSION:2.0
 METHOD:PUBLISH
@@ -240,12 +240,12 @@ function my_calendar_rss( $events = array() ) {
  * @return string RSS/XML.
  */
 function mc_format_rss( $events ) {
-	if ( is_array( $events ) && !empty( $events ) ) {
+	if ( is_array( $events ) && ! empty( $events ) ) {
 		$template = PHP_EOL . "<item>
 			<title>{rss_title}</title>
 			<link>{details_link}</link>
 			<pubDate>{rssdate}</pubDate>
-			<dc:creator>{author}</dc:creator>  	
+			<dc:creator>{author}</dc:creator>
 			<description><![CDATA[{rss_description}]]></description>
 			<ev:startdate>{dtstart}</ev:startdate>
 			<ev:enddate>{dtend}</ev:enddate>
@@ -253,7 +253,7 @@ function mc_format_rss( $events ) {
 			<h1 class='summary'>{rss_title}</h1>
 			<div class='description'>{rss_description}</div>
 			<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
-			<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>	
+			<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
 			<p>Recurrance: {recurs}</p>
 			<p>Repetition: {repeats} times</p>
 			<div class='location'>{rss_hcard}</div>
@@ -308,9 +308,9 @@ function mc_format_rss( $events ) {
  * Double check to try to ensure that the XML feed can be rendered.
  *
  * @param string $value Any string value.
- * 
+ *
  * @return string unsupported characters stripped
- */ 
+ */
 function mc_strip_to_xml( $value ) {
 	// if there's still an ampersand surrounded by whitespace, kill it.
 	$value   = str_replace( ' & ', ' &amp; ', $value );
@@ -349,25 +349,25 @@ function mc_ics_subscribe() {
 	} else {
 		$cat_id = false;
 	}
-	
+
 	$events    = mc_get_rss_events( $cat_id );
 	$templates = mc_ical_templates();
-	
+
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
 			if ( is_object( $event ) ) {
 				if ( ! mc_private_event( $event ) ) {
 					$array = mc_create_tags( $event );
-								
+
 					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
 					$alert = '';
-					if ( !empty( $alarm ) ) {
+					if ( ! empty( $alarm ) ) {
 						$alert = mc_generate_alert_ical( $alarm );
-					}					
+					}
 					$template = apply_filters( 'mc_filter_ical_template', $templates['template'] );
 					$template = str_replace( '{alert}', $alert, $template );
-					
+
 					$output .= "\n" . mc_draw_template( $array, $template, 'ical' );
 				}
 			}
@@ -394,7 +394,7 @@ function my_calendar_ical() {
 	$m   = ( isset( $_GET['month'] ) ) ? $_GET['month'] : date( 'n' );
 	$ny  = ( isset( $_GET['nyr'] ) ) ? $_GET['nyr'] : $y;
 	$nm  = ( isset( $_GET['nmonth'] ) ) ? $_GET['nmonth'] : $m;
-	
+
 	if ( $p ) {
 		$from = "$y-1-1";
 		$to   = "$y-12-31";
@@ -415,8 +415,8 @@ function my_calendar_ical() {
 
 	$templates = mc_ical_templates();
 	$template  = $templates['template'];
-	
-	$site   = ( !isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
+
+	$site   = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
 	$args     = array(
 		'from'     => $from,
 		'to'       => $to,
@@ -432,22 +432,22 @@ function my_calendar_ical() {
 	$args   = apply_filters( 'mc_ical_attributes', $args, $_GET );
 	$data   = my_calendar_events( $args );
 	$events = mc_flatten_array( $data );
-	
+
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
 			if ( is_object( $event ) ) {
 				if ( ! mc_private_event( $event ) ) {
 					$array = mc_create_tags( $event );
-								
+
 					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
 					$alert = '';
-					if ( !empty( $alarm ) ) {
+					if ( ! empty( $alarm ) ) {
 						$alert = mc_generate_alert_ical( $alarm );
-					}					
+					}
 					$template = apply_filters( 'mc_filter_ical_template', $template );
 					$template = str_replace( '{alert}', $alert, $template );
-					
+
 					$output .= "\n" . mc_draw_template( $array, $template, 'ical' );
 				}
 			}
@@ -462,7 +462,7 @@ function my_calendar_ical() {
 		header( 'Expires: 0' );
 		header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
 	}
-	
+
 	echo $output;
 }
 
@@ -498,7 +498,7 @@ CALSCALE:GREGORIAN
 X-WR-CALDESC:' . $events_from;
 	$foot = "\nEND:VCALENDAR";
 
-	return array( 
+	return array(
 		'template' => $template,
 		'head'     => $head,
 		'foot'     => $foot,
@@ -513,7 +513,7 @@ X-WR-CALDESC:' . $events_from;
  * @return string iCal alert block.
  */
 function mc_generate_alert_ical( $alarm ) {
-	$defaults = array( 
+	$defaults = array(
 		'TRIGGER'     => '-PT30M',
 		'REPEAT'      => '0',
 		'DURATION'    => '',
@@ -528,7 +528,7 @@ function mc_generate_alert_ical( $alarm ) {
 	$alert .= ( '' != $values['DURATION'] ) ? "REPEAT:$values[DURATION]\n" : '';
 	$alert .= "ACTION:$values[ACTION]\n";
 	$alert .= "DESCRIPTION:$values[DESCRIPTION]\n";
-	$alert .= 'END:VALARM';	
+	$alert .= 'END:VALARM';
 
 	return $alert;
 }

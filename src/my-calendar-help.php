@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -37,7 +37,7 @@ function my_calendar_help() {
 							__( 'Please, consider a <a href="%s">donation</a> or a <a href="%s">purchase</a> to support My Calendar!', 'my-calendar' )
 						, "https://www.joedolson.com/donate/", "https://www.joedolson.com/my-calendar/pro/" ); ?>
 					</p>
-				</div>	
+				</div>
 				<ul class='list'>
 					<?php if ( ! mc_get_uri( 'boolean' ) ) { ?>
 						<li><?php _e( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ); ?></li>
@@ -46,14 +46,14 @@ function my_calendar_help() {
 					<li><?php _e( 'Select your preferred stylesheet in the Styles Editor', 'my-calendar' ); ?></li>
 					<?php if ( mc_get_uri( 'boolean' ) ) { ?>
 						<li><?php printf( __( 'View <a href="%s">your calendar</a>', 'my-calendar' ), mc_get_uri() ); ?></li>
-					<?php } ?>					
+					<?php } ?>
 				</ul>
 				<?php do_action( 'mc_before_help' ); ?>
 				<ul class="mc-settings checkboxes">
 					<li><a href="#mc-generator"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></li>
 					<li><a href="#files"><?php _e( 'Custom Files', 'my-calendar' ); ?></a></li>
 					<li><a href="#get-support"><?php _e( 'Get Support', 'my-calendar' ); ?></a></li>
-				</ul>				
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -100,7 +100,7 @@ function my_calendar_help() {
 				</ul>
 				<p>
 					<?php _e( 'Custom print, mobile, and tablet stylesheet file names: <code>mc-print.css</code>, <code>mc-mobile.css</code>, and <code>mc-tablet.css</code>.', 'my-calendar' ); ?>
-				</p>				
+				</p>
 			</div>
 		</div>
 	</div>
@@ -118,7 +118,7 @@ function my_calendar_help() {
 							__( 'Please, consider a <a href="%s">donation</a> or a <a href="%s">purchase</a> to support My Calendar!', 'my-calendar' )
 						, "https://www.joedolson.com/donate/", "https://www.joedolson.com/my-calendar/pro/" ); ?>
 					</p>
-				</div>				
+				</div>
 				<?php if ( current_user_can( 'administrator' ) ) { ?>
 					<?php mc_get_support_form(); ?>
 				<?php } else { ?>

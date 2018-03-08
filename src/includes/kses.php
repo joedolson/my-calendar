@@ -57,46 +57,46 @@ function mc_allowed_tags( $tags, $context ) {
 			'checked'          => true,
 			'required'         => true,
 		);
-		
+
 		$tags['select'] = array(
 			'name'  => true,
 			'id'    => true,
 			'class' => true,
 		);
-		
-		$tags['span'] = array_merge( $tags['span'], array( 
+
+		$tags['span'] = array_merge( $tags['span'], array(
 			'itemprop'  => true,
 			'itemscope' => true,
 			'itemtype'  => true,
 		) );
-		
+
 		$tags['button'] = array_merge( $tags['button'], array(
 			'name'     => true,
 			'type'     => true,
 			'disabled' => true,
 			'class'    => true,
 		) );
-		
-		$tags['form'] = array_merge( $tags['form'], array( 
+
+		$tags['form'] = array_merge( $tags['form'], array(
 			'action'   => true,
 			'method'   => true,
 			'class'    => true,
 			'id'       => true,
 			'tabindex' => true,
 		) );
-		
+
 		$tags['div'] = array_merge( $tags['div'], array(
 			'class'     => true,
 			'id'        => true,
 			'aria-live' => true,
 		) );
-		
+
 		$tags['fieldset'] = array_merge( $tags['fieldset'], array() );
 		$tags['legend']   = array_merge( $tags['legend'], array() );
 		$tags['p']        = array_merge( $tags['p'], array(
 			'class' => true,
 		) );
-		
+
 		$tags['img'] = array_merge( $tags['img'], array(
 			'class'    => true,
 			'src'      => true,
@@ -107,21 +107,21 @@ function mc_allowed_tags( $tags, $context ) {
 			'longdesc' => true,
 			'tabindex' => true,
 		) );
-		
+
 		$tags['iframe'] = array(
 			'width'       => true,
 			'height'      => true,
 			'src'         => true,
 			'frameborder' => true,
 		);
-		
+
 		$tags['a'] = array(
 			'aria-labelledby'  => true,
-			'aria-describedby' => true,	
+			'aria-describedby' => true,
 			'href'             => true,
 			'class'            => true,
 		);
 	}
-	
+
 	return apply_filters( 'mc_kses_post', $tags );
 }

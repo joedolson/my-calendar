@@ -215,7 +215,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 	 * @param string $filename Name of file.
 	 *
 	 * @return string type of file.
-	 */	
+	 */
 	function exif_imagetype( $filename ) {
 		if ( ! is_dir( $filename ) && ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) {
 			return $type;
@@ -229,7 +229,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
  * Checks the contrast ratio of color & returns the optimal color to use with it.
  *
  * @param string $color hex value.
- * 
+ *
  * @return string white or black hex value
  */
 function mc_inverse_color( $color ) {
@@ -261,7 +261,7 @@ function mc_shift_color( $color ) {
 	$color   = str_replace( '#', '', $color );
 	$rgb     = '';
 	$percent = ( mc_inverse_color( $color ) == '#ffffff' ) ? - 20 : 20;
-	$per     = $percent / 100 * 255; 
+	$per     = $percent / 100 * 255;
 	// Percentage to work with. Change middle figure to control color temperature.
 	if ( $per < 0 ) {
 		// DARKER.
@@ -272,7 +272,7 @@ function mc_shift_color( $color ) {
 			$rgb .= ( strlen( $c ) < 2 ) ? '0' . $c : $c;
 		}
 	} else {
-		// LIGHTER.    
+		// LIGHTER.
 		for ( $x = 0; $x < 3; $x ++ ) {
 			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) + $per;
 			$c    = ( $c > 255 ) ? 'ff' : dechex( $c );
@@ -321,7 +321,7 @@ function mc_html_type() {
  * @param string $url URL.
  *
  * @return URL, if valid.
- */ 
+ */
 function _mc_is_url( $url ) {
 
 	return preg_match( '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url );
@@ -343,7 +343,7 @@ function mc_external_link( $link ) {
 	$host  = $url['host'];
 	$site  = parse_url( get_option( 'siteurl' ) );
 	$known = $site['host'];
-	
+
 	if ( false === strpos( $host, $known ) ) {
 		return true;
 	}
@@ -355,7 +355,7 @@ function mc_external_link( $link ) {
  * Replace newline characters in a string
  *
  * @param string $string Any string.
- * 
+ *
  * @return string string without newline chars
  */
 function mc_newline_replace( $string ) {

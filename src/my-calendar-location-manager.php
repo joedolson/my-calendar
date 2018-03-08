@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -33,10 +33,10 @@ function my_calendar_manage_locations() {
 	}
 	?>
 		<h1 class="wp-heading-inline"><?php _e( 'Manage Locations', 'my-calendar' ); ?></h1>
-		<a href="<?php echo admin_url( "admin.php?page=my-calendar-location-manager" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a> 
-		<hr class="wp-header-end">		
+		<a href="<?php echo admin_url( "admin.php?page=my-calendar-location-manager" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<hr class="wp-header-end">
 	<div class="postbox-container jcd-wide">
-		<div class="metabox-holder">	
+		<div class="metabox-holder">
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
 					<h2><?php _e( 'Manage Locations', 'my-calendar' ); ?></h2>
@@ -49,7 +49,7 @@ function my_calendar_manage_locations() {
 		</div>
 	</div>
 		<?php mc_show_sidebar(); ?>
-	</div>			
+	</div>
 	<?php
 }
 
@@ -97,7 +97,7 @@ function mc_mass_delete_locations() {
 function mc_manage_locations() {
 	global $wpdb;
 	$orderby = 'location_label';
-	
+
 	if ( isset( $_GET['orderby'] ) ) {
 		switch( $_GET['orderby'] ) {
 			case 'city' : $orderby = 'location_city'; break;
@@ -127,9 +127,9 @@ function mc_manage_locations() {
 			}
 		} else {
 			$search = '';
-		}		
+		}
 	}
-		
+
 	$locations      = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS * FROM " . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT " . ( ( $current - 1 ) * $items_per_page ) . ", " . $items_per_page );
 	$found_rows     = $wpdb->get_col( "SELECT FOUND_ROWS();" );
 	$items          = $found_rows[0];
@@ -164,7 +164,7 @@ function mc_manage_locations() {
 					                      class='button-secondary'/>
 				</div>
 			</form>
-		</div>		
+		</div>
 	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 		<div class='mc-actions'>
@@ -183,7 +183,7 @@ function mc_manage_locations() {
 			</tr>
 			</thead>
 			<?php
-			$class = '';	
+			$class = '';
 			foreach ( $locations as $location ) {
 				$class = ( $class == 'alternate' ) ? '' : 'alternate'; ?>
 				<tr class="<?php echo $class; ?>">

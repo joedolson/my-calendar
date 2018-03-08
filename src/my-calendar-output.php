@@ -794,7 +794,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( isset( $_GET['time'] ) && $_GET['time'] == 'day' ) {
 		// don't adjust day if viewing day format.
 	} else {
-		if ( !isset( $_GET['dy'] ) && $day > 20 ) {
+		if ( ! isset( $_GET['dy'] ) && $day > 20 ) {
 			$day = date( 'j', strtotime( "$from + 1 week" ) );
 		}
 	}
@@ -1919,7 +1919,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		if ( in_array( 'exports', $used ) ) {
 			$ical_m = ( isset( $_GET['month'] ) ) ? (int) $_GET['month'] : date( 'n' );
 			$ical_y = ( isset( $_GET['yr'] ) ) ? (int) $_GET['yr'] : date( 'Y' );
-			if ( !isset( $nLink ) ) { 
+			if ( ! isset( $nLink ) ) { 
 				$nLink = my_calendar_next_link( $date, $format, $time, $show_months );
 			}
 			$exports  = mc_export_links( $ical_y, $ical_m, $nLink, $add, $subtract  );
@@ -1975,7 +1975,7 @@ function mc_show_week_number( $events, $args, $format, $td, $start ) {
 				$body              = "<$td class='week_number'>$weeknumber</$td>";
 				$week_number_shown = true;
 			}
-			if ( $format == 'list' && !empty( $events ) && !$week_number_shown ) {
+			if ( $format == 'list' && ! empty( $events ) && !$week_number_shown ) {
 				$weeknumber        = date( 'W', $start);
 				$body              = "<li class='mc-week-number'><span class='week-number-text'>" . __( 'Week', 'my-calendar' ) . "</span> <span class='week-number-number'>$weeknumber</span></li>";
 				$week_number_shown = true;
@@ -2150,7 +2150,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		$c_year = (int) $_GET['yr'];			
 	} else {
 		// weeks suck. seriously.
-		if ( $time == 'week' && !isset( $_GET['dy'] ) ) {
+		if ( $time == 'week' && ! isset( $_GET['dy'] ) ) {
 			if ( $is_start_of_week ) {
 				$c_year = ( date( "Y", current_time( 'timestamp' ) ) );			
 			} else {
@@ -2506,7 +2506,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
  * @return string HTML output of form
  */
 function mc_filters( $args, $target_url, $ltype ) {
-	if ( !is_array( $args ) ) {
+	if ( ! is_array( $args ) ) {
 		$fields      = explode( ',', $args );
 	} else {
 		$fields = $args;

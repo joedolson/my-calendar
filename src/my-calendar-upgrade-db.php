@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -21,16 +21,16 @@ function my_calendar_check_db() {
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		return;
 	}
-	
+
 	global $wpdb;
 	$cols         = $wpdb->get_col( "DESC " . my_calendar_table() );
 	$needs_update = false;
-	
+
 	if ( !in_array( 'event_tickets', $cols ) ) {
 		$needs_update = true;
-	} 
-	
-	
+	}
+
+
 	if ( isset( $_POST['upgrade'] ) && $_POST['upgrade'] == 'true' ) {
 		mc_upgrade_db();
 		?>
@@ -58,7 +58,7 @@ function my_calendar_check_db() {
 		<?php } else { ?>
 			<div class='upgrade-db error'>
 			<p>
-				<?php _e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?> 
+				<?php _e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
 				<a href="<?php echo admin_url( "admin.php?page=my-calendar-config" ); ?>"><?php _e( 'Update now', 'my-calendar' ); ?></a>
 			</p>
 			</div><?php
