@@ -9,6 +9,7 @@ Text Domain: my-calendar
 Domain Path: lang
 Version: 2.6.0-beta1
 */
+
 /*  Copyright 2009-2018  Joe Dolson (email : joe@joedolson.com)
 
     This program is free software; you can redistribute it and/or modify
@@ -98,7 +99,7 @@ add_action( 'plugins_loaded', 'mc_load_textdomain' );
  * Load internationalization.
  */
 function mc_load_textdomain() {
-	// don't change this; just gradually remove shipped translations if .org trans become complete(r).
+	// don't change this; remove shipped translations as .org trans become complete(r).
 	load_plugin_textdomain( 'my-calendar', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 }
 

@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -40,7 +41,7 @@ function mc_event_post( $action, $data, $event_id ) {
 		$terms      = array();
 		$privacy    = 'publish';
 		
-		foreach( $categories as $category ) {
+		foreach ( $categories as $category ) {
 			$term              = mc_get_category_detail( $category, 'category_term' );
 			if( !$term ) {
 				$term   = wp_insert_term( 'General', 'mc-event-category' );
@@ -136,7 +137,7 @@ function mc_create_event_post( $data, $event_id ) {
 		$terms      = array();
 		$term       = null;
 		$privacy    = 'publish';
-		foreach( $categories as $category ) {
+		foreach ( $categories as $category ) {
 			$term = mc_get_category_detail( $category, 'category_term' );
 			// if any selected category is private, make private
 			if ( $privacy != 'private' ) {
@@ -731,7 +732,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 function mc_set_category_relationships( $cats, $event_id ) {
 	global $wpdb;
 	if ( is_array( $cats ) ) {
-		foreach( $cats as $cat ) {
+		foreach ( $cats as $cat ) {
 			$wpdb->insert( my_calendar_category_relationships_table(), array( 'event_id' => $event_id, 'category_id' => $cat ), array( '%d', '%d' ) );
 		}
 	}
@@ -751,7 +752,7 @@ function mc_update_category_relationships( $cats, $event_id ) {
 	}
 	$wpdb->delete( my_calendar_category_relationships_table(), array( 'event_id' => $event_id ),  '%d' );
 	
-	foreach( $cats as $cat ) {
+	foreach ( $cats as $cat ) {
 		$wpdb->insert( my_calendar_category_relationships_table(), array( 'event_id' => $event_id, 'category_id' => $cat ), array( '%d', '%d' ) );
 	}	
 }
@@ -1041,7 +1042,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			} else {
 				$categories = mc_get_categories( $data );
 				$return     = '<div>';
-				foreach( $categories as $category ) {
+				foreach ( $categories as $category ) {
 					$return .= '<input type="hidden" name="event_category[]" value="' . absint( $category ) . '" />';
 				}
 				$return .= "</div>";
@@ -2061,7 +2062,7 @@ function mc_list_events() {
 								<?php 
 								$string = '';
 								if ( is_array( $categories ) ) {
-									foreach( $categories as $category ) {
+									foreach ( $categories as $category ) {
 										if ( $category != $event->event_category ) {
 											$cats[] = mc_get_category_detail( $category, 'category_name' );
 										}
@@ -2240,7 +2241,7 @@ function mc_check_data( $action, $post, $i ) {
 			if ( is_array( $cats ) ) {
 			// set first category as primary
 			$primary = ( is_numeric( $cats[0] ) ) ? $cats[0] : 1;			
-				foreach( $cats as $cat ) {
+				foreach ( $cats as $cat ) {
 					$private = mc_get_category_detail( $cat,'category_private' );
 					// if a selected category is private, set that category as primary instead.
 					if ( $private == 1 ) {
@@ -3059,7 +3060,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	}
 
 	$controls_output = '';
-	foreach( $controls as $key => $control ) {
+	foreach ( $controls as $key => $control ) {
 		if ( $key != 'prev_status' ) {
 			$control = "<li>" . $control . "</li>";
 		}
@@ -3164,7 +3165,7 @@ function mc_can_edit_event( $event = false ) {
 	$categories      = mc_get_categories( $event->event_id );
 	$has_permissions = true;
 	if ( is_array( $categories ) ) {
-		foreach( $categories as $cat ) {
+		foreach ( $categories as $cat ) {
 			// if user doesn't have access to all relevant categories, prevent editing
 			if ( !$has_permissions ) {
 				continue;
@@ -3299,7 +3300,7 @@ function mc_get_instances( $id ) {
 	$results = $wpdb->get_results( $sql );
 	$return  = array();
 	
-	foreach( $results as $result ) {
+	foreach ( $results as $result ) {
 		$key            = sanitize_key( date( 'Y-m-d', strtotime( $result->occur_begin ) ) );
 		$return[ $key ] = $result->occur_id;
 	}
@@ -3688,7 +3689,7 @@ function mc_list_problems() {
 	$problems = array();
 	
 	if ( is_array( $events ) && count( $events ) > 0 ) {
-		foreach( $events as $event ) {
+		foreach ( $events as $event ) {
 			$event_id  = get_post_meta( $event->ID, '_mc_event_id', true );
 			$event_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $event_id ) );
 			$list[]    = "<a href='$event_url'>$event->post_title</a>";

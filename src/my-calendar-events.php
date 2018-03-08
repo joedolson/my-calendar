@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -760,7 +761,7 @@ function mc_get_db_type() {
 		}	
 		$my_calendar = my_calendar_table();
 		$dbs = $mcdb->get_results( "SHOW TABLE STATUS WHERE name='$my_calendar'" );
-		foreach( $dbs as $db ) {
+		foreach ( $dbs as $db ) {
 			if ( $db->Name == my_calendar_table() ) {
 				$db_type = $db->Engine;
 			}

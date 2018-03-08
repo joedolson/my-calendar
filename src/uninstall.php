@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 } else {

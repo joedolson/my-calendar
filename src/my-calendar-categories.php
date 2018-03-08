@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -828,7 +829,7 @@ function mc_get_categories( $event, $ids = true ) {
 	}
 	if ( $ids === true ) {
 		if ( $results ) {
-			foreach( $results as $result ) {
+			foreach ( $results as $result ) {
 				$return[] = $result->category_id;
 			}
 		} else {
@@ -853,7 +854,7 @@ function mc_get_categories( $event, $ids = true ) {
  */
 function mc_categories_html( $results, $primary ) {
 	if ( $results ) {
-		foreach( $results as $result ) {
+		foreach ( $results as $result ) {
 			$icon     = mc_category_icon( $result );
 			$return[] = $icon . $result->category_name;
 		}

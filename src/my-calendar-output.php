@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -542,7 +543,7 @@ function mc_event_classes( $event, $uid, $type ) {
 	} else {
 		$categories = mc_get_categories( $event, false );
 	}
-	foreach( $categories as $category ) {
+	foreach ( $categories as $category ) {
 		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name );
 	}
 	
@@ -975,7 +976,7 @@ function mc_list_titles( $events ) {
 	usort( $events, 'mc_time_cmp' );
 	$titles = array();
 	
-	foreach( $events as $event ) {
+	foreach ( $events as $event ) {
 		$title = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $event->event_title ), mc_strip_tags() ), $event, $events );
 		$titles[] = $title;
 	}
@@ -3006,7 +3007,7 @@ function mc_refresh_cache( $action, $data, $event_id, $result ) {
 	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ): false;
 	$to_refresh = apply_filters( 'mc_cached_pages_to_refresh', array( $mc_uri_id ), $action, $data, $event_id, $result );
 
-	foreach( $to_refresh as $calendar ) {
+	foreach ( $to_refresh as $calendar ) {
 		if ( ! $calendar || ! get_post( $calendar ) ) {
 			continue;
 		}

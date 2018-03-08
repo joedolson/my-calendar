@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -228,7 +229,7 @@ $initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " (
  */
 function mc_default_settings() {
 	$globals = mc_globals();
-	foreach( $globals as $key => $global ) {
+	foreach ( $globals as $key => $global ) {
 		${$key} = $global;
 	}
 	add_option( 'mc_display_author', 'false' );
@@ -560,7 +561,7 @@ function mc_check_imports() {
 function mc_transition_categories() {
 	global $wpdb;
 	$results   = $wpdb->get_results( 'SELECT event_id, event_category FROM ' . my_calendar_table() );
-	foreach( $results as $result ) {
+	foreach ( $results as $result ) {
 		$event_id = $result->event_id;
 		$category = $result->event_category;
 		

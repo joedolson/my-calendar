@@ -9,13 +9,14 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
  * Generate classes for a given date
- * 
+ *
  * @param string $current timestamp.
  *
  * @return string classes
@@ -118,7 +119,7 @@ function my_calendar_date_equal( $early, $late ) {
  * @param object $a event object.
  * @param object $b event object.
  *
- * @param int (ternary value)
+ * @return int (ternary value)
  */ 
 function mc_time_cmp( $a, $b ) {
 	if ( $a->occur_begin == $b->occur_begin ) {
@@ -183,7 +184,7 @@ function mc_timediff_cmp( $a, $b ) {
  * @return absolute time diff
  */
 function mc_date_diff_precise( $start, $end = 'NOW' ) {
-	if ( $end == "NOW" ) {
+	if ( "NOW" == $end ) {
 		$end = strtotime( "NOW" );
 	}
 	$sdate = $start;
@@ -243,7 +244,7 @@ function mc_checkdate( $date ) {
 /**
  * Get the first day value of the current week.
  *
- * @param $date mixed int/boolean timestamp or false if now.
+ * @param mixed int/boolean $date timestamp or false if now.
  *
  * @return array day and month
  */
@@ -256,32 +257,33 @@ function mc_first_day_of_week( $date = false ) {
 		$today = date( 'w', current_time( 'timestamp' ) );
 		$now   = date( 'Y-m-d', current_time( 'timestamp' ) );
 	}
-	$month = $sub = 0; // don't change month.
+	$month = 0;
+	$sub   = 0; // don't change month.
 	switch ( $today ) {
 		case 1:
-			$sub = ( $start_of_week == 1 ) ? 0 : 1;
+			$sub = ( 1 == $start_of_week ) ? 0 : 1;
 			break; // mon.
 		case 2:
-			$sub = ( $start_of_week == 1 ) ? 1 : 2;
+			$sub = ( 1 == $start_of_week ) ? 1 : 2;
 			break; // tues.
 		case 3:
-			$sub = ( $start_of_week == 1 ) ? 2 : 3;
+			$sub = ( 1 == $start_of_week ) ? 2 : 3;
 			break; // wed.
 		case 4:
-			$sub = ( $start_of_week == 1 ) ? 3 : 4;
+			$sub = ( 1 == $start_of_week ) ? 3 : 4;
 			break; // thu.
 		case 5:
-			$sub = ( $start_of_week == 1 ) ? 4 : 5;
+			$sub = ( 1 == $start_of_week ) ? 4 : 5;
 			break; // fri.
 		case 6:
-			$sub = ( $start_of_week == 1 ) ? 5 : 6;
+			$sub = ( 1 == $start_of_week ) ? 5 : 6;
 			break; // sat.
 		case 0:
-			$sub = ( $start_of_week == 1 ) ? 6 : 0;
+			$sub = ( 1 == $start_of_week ) ? 6 : 0;
 			break; // sun.
 	}
 	$day = date( 'j', strtotime( $now . ' -' . $sub . ' day' ) );
-	if ( $sub != 0 ) {
+	if ( 0 != $sub ) {
 		if ( date( 'n', strtotime( $now . ' -' . $sub . ' day' ) ) != date( 'n', strtotime( $now ) ) ) {
 			$month = - 1;
 		} else {
@@ -295,30 +297,30 @@ function mc_first_day_of_week( $date = false ) {
 /**
  * Generate an ordinal string in English for numeric values
  *
- * @param int $number.
+ * @param int $number Any integer value.
  *
  * @return string number plus ordinal value
  */
 function mc_ordinal( $number ) {
 	// when fed a number, adds the English ordinal suffix. Works for any number.
 	if ( $number % 100 > 10 && $number % 100 < 14 ) {
-		$suffix = "th";
+		$suffix = 'th';
 	} else {
 		switch ( $number % 10 ) {
 			case 0:
-				$suffix = "th";
+				$suffix = 'th';
 				break;
 			case 1:
-				$suffix = "st";
+				$suffix = 'st';
 				break;
 			case 2:
-				$suffix = "nd";
+				$suffix = 'nd';
 				break;
 			case 3:
-				$suffix = "rd";
+				$suffix = 'rd';
 				break;
 			default:
-				$suffix = "th";
+				$suffix = 'th';
 				break;
 		}
 	}
@@ -341,7 +343,7 @@ function mc_name_days( $format ) {
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Wednesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Thursday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Friday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Friday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>'
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>',
 	);
 	if ( $format == 'mini' ) {
 		// PHP doesn't have a single letter abbreviation, so this has to be a translatable.
@@ -352,14 +354,14 @@ function mc_name_days( $format ) {
 			'<span aria-hidden="true">' . __( '<abbr title="Wednesday">W</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
 			'<span aria-hidden="true">' . __( '<abbr title="Thursday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
 			'<span aria-hidden="true">' . __( '<abbr title="Friday">F</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
-			'<span aria-hidden="true">' . __( '<abbr title="Saturday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>'
+			'<span aria-hidden="true">' . __( '<abbr title="Saturday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>',
 		);
 	}
 
 	return $name_days;
 }
 
-/** 
+/**
  * Handles all cases for exiting processing early: private events, drafts, etc.
  *
  * @param object $event Event object.
@@ -368,25 +370,25 @@ function mc_name_days( $format ) {
  * @return boolean true if early exit is qualified.
  */
 function mc_exit_early( $event, $process_date ) {
-	// if event is not approved, return without processing
+	// if event is not approved, return without processing.
 	if ( (int) $event->event_approved !== 1 && ! mc_is_preview() ) {
 		return true;
 	}
-	
+
 	$hide_days        = apply_filters( 'mc_hide_additional_days', false, $event );
 	$today            = date( 'Y-m-d', strtotime( $event->occur_begin ) );
 	$current          = date( 'Y-m-d', strtotime( $process_date ) );
 	$end              = date( 'Y-m-d', strtotime( $event->occur_end ) );
 	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing.
 	// or if event started yesterday & has event_hide_end checked.
-	$ends_at_midnight = ( $event->event_endtime == '00:00:00' && $end == $process_date && $current != $process_date ) ? true : false;
+	$ends_at_midnight = ( '00:00:00' == $event->event_endtime && $end == $process_date && $current != $process_date ) ? true : false;
 	// hides events if hiding end time & not first day.
 	$hide_day_two     = ( $hide_days && ( $today != $current ) ) ? true : false;
-	
+
 	if ( $ends_at_midnight || $hide_day_two ) {
 		return true;
 	}
-	
+
 	if ( mc_private_event( $event ) ) {
 		return true;
 	}

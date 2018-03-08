@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -37,12 +38,12 @@ function mc_switch_sites() {
 /**
  * Send a Tweet on approval of event
  *
- * @param $prev Previous status.
- * @param $new New status.
+ * @param string $prev Previous status.
+ * @param string $new New status.
  */
 function mc_tweet_approval( $prev, $new ) {
 	if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) != '' ) {
-		if ( ( $prev == 0 || $prev == 2 ) && $new == 1 ) {
+		if ( ( 0 == $prev || 2 == $prev ) && 1 == $new ) {
 			jd_doTwitterAPIPost( stripslashes( $_POST['mc_twitter'] ) );
 		}
 	}
@@ -59,8 +60,8 @@ function mc_tweet_approval( $prev, $new ) {
 function mc_flatten_array( $events ) {
 	$new_array = array();
 	if ( is_array( $events ) ) {
-		foreach( $events as $event ) {
-			foreach( $event as $e ) {
+		foreach ( $events as $event ) {
+			foreach ( $event as $e ) {
 				$new_array[] = $e;
 			}
 		}
@@ -88,8 +89,10 @@ function mc_add_inner_box() {
 		$event   = mc_get_first_event( $event_id );
 		$content = '<p><strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '</strong><br />' . $event->event_begin . ' @ ' . $event->event_time . '</p>';
 		if ( $event->event_label != '' ) {
+			// Translators: Name of event location.
 			$content .= '<p>' . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . '</p>';
 		}
+		// Translators: Event URL.
 		$content .= '<p>' . sprintf( __( '<a href="%s">Edit event</a>.', 'my-calendar' ), $url ) . '</p>';
 		
 		echo $content;
@@ -102,22 +105,23 @@ function mc_add_inner_box() {
  * @return string of allowed tags parseable by strip_tags.
  */
 function mc_strip_tags() {
+	
 	return '<strong><em><i><b><span>';
 }
 
 /**
  * Old function for checking value of an option field
  *
- * @param $theFieldname Name of the field.
- * @param $theValue Current value.
- * @param $theArray if this setting is an array, the array key.
- * @param $return boolean whether to return or echo.
+ * @param string $field Name of the field.
+ * @param mixed string/int/boolean $value Current value.
+ * @param string $array if this setting is an array, the array key.
+ * @param boolean $return whether to return or echo.
  *
  * @return checked=checked
  */
-function mc_is_checked( $theFieldname, $theValue, $theArray = '', $return = false ) {
-	if ( ! is_array( get_option( $theFieldname ) ) ) {
-		if ( get_option( $theFieldname ) == $theValue ) {
+function mc_is_checked( $field, $value, $array = '', $return = false ) {
+	if ( ! is_array( get_option( $field ) ) ) {
+		if ( get_option( $field ) == $value ) {
 			if ( $return ) {
 				return 'checked="checked"';
 			} else {
@@ -125,8 +129,8 @@ function mc_is_checked( $theFieldname, $theValue, $theArray = '', $return = fals
 			}
 		}
 	} else {
-		$theSetting = get_option( $theFieldname );
-		if ( ! empty( $theSetting[ $theArray ]['enabled'] ) && $theSetting[ $theArray ]['enabled'] == $theValue ) {
+		$theSetting = get_option( $field );
+		if ( ! empty( $theSetting[ $array ]['enabled'] ) && $theSetting[ $array ]['enabled'] == $value ) {
 			if ( $return ) {
 				return 'checked="checked"';
 			} else {
@@ -139,20 +143,20 @@ function mc_is_checked( $theFieldname, $theValue, $theArray = '', $return = fals
 /**
  * Old function for checking value of an option field in a select
  *
- * @param $theFieldname Name of the field.
- * @param $theValue Current value.
- * @param $theArray if this setting is an array, the array key.
+ * @param string $field Name of the field.
+ * @param mixed string/int/boolean $value Current value.
+ * @param string $array if this setting is an array, the array key.
  *
  * @return string selected=selected
  */
-function mc_is_selected( $theFieldname, $theValue, $theArray = '' ) {
-	if ( ! is_array( get_option( $theFieldname ) ) ) {
-		if ( get_option( $theFieldname ) == $theValue ) {
+function mc_is_selected( $field, $value, $array = '' ) {
+	if ( ! is_array( get_option( $field ) ) ) {
+		if ( get_option( $field ) == $value ) {
 			return 'selected="selected"';
 		}
 	} else {
-		$theSetting = get_option( $theFieldname );
-		if ( $theSetting[ $theArray ]['enabled'] == $theValue ) {
+		$theSetting = get_option( $field );
+		if ( $theSetting[ $array ]['enabled'] == $value ) {
 			return 'selected="selected"';
 		}
 	}
@@ -163,9 +167,9 @@ function mc_is_selected( $theFieldname, $theValue, $theArray = '' ) {
 /**
  * Old function for checking value of an option field
  *
- * @param $field Name of the field.
- * @param $value Current value.
- * @param $type checkbox, radio, option.
+ * @param string $field Name of the field.
+ * @param mixed string/int/boolean $value Current value.
+ * @param string $type checkbox, radio, option.
  *
  * @return string
  */
@@ -194,13 +198,14 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 /**
  * Check selection
  *
- * @param string $field.
- * @param any $value.
- * @param string $type.
+ * @param string $field Name of field.
+ * @param mixed string/int/boolean $value Type of value.
+ * @param string $type Type of input.
  *
  * @see mc_option_selected()
  */
 function jd_option_selected( $field, $value, $type = 'checkbox' ) {
+
 	return mc_option_selected( $field, $value, $type );
 }
 
@@ -220,7 +225,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 /**
  * Checks the contrast ratio of color & returns the optimal color to use with it.
  *
- * @param string $color hex.
+ * @param string $color hex value.
  * 
  * @return string white or black hex value
  */
@@ -258,15 +263,15 @@ function mc_shift_color( $color ) {
 		// DARKER.
 		$per = abs( $per ); // Turns Neg Number to Pos Number.
 		for ( $x = 0; $x < 3; $x ++ ) {
-			$c = hexdec( substr( $color, ( 2 * $x ), 2 ) ) - $per;
-			$c = ( $c < 0 ) ? 0 : dechex( $c );
+			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) - $per;
+			$c    = ( $c < 0 ) ? 0 : dechex( $c );
 			$rgb .= ( strlen( $c ) < 2 ) ? '0' . $c : $c;
 		}
 	} else {
 		// LIGHTER.      
 		for ( $x = 0; $x < 3; $x ++ ) {
-			$c = hexdec( substr( $color, ( 2 * $x ), 2 ) ) + $per;
-			$c = ( $c > 255 ) ? 'ff' : dechex( $c );
+			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) + $per;
+			$c    = ( $c > 255 ) ? 'ff' : dechex( $c );
 			$rgb .= ( strlen( $c ) < 2 ) ? '0' . $c : $c;
 		}
 	}
@@ -314,6 +319,7 @@ function mc_html_type() {
  * @return URL, if valid.
  */ 
 function _mc_is_url( $url ) {
+
 	return preg_match( '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url );
 }
 
@@ -334,7 +340,7 @@ function mc_external_link( $link ) {
 	$site  = parse_url( get_option( 'siteurl' ) );
 	$known = $site['host'];
 	
-	if ( strpos( $host, $known ) === false ) {
+	if ( false === strpos( $host, $known ) ) {
 		return true;
 	}
 
@@ -349,6 +355,7 @@ function mc_external_link( $link ) {
  * @return string string without newline chars
  */
 function mc_newline_replace( $string ) {
+
 	return (string) str_replace( array( "\r", "\r\n", "\n" ), '', $string );
 }
 
@@ -363,8 +370,10 @@ function mc_newline_replace( $string ) {
  */
 function reverse_array( $array, $boolean, $order ) {
 	if ( $order == 'desc' ) {
+
 		return array_reverse( $array, $boolean );
 	} else {
+
 		return $array;
 	}
 }

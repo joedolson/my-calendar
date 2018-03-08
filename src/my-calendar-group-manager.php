@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -814,7 +815,7 @@ function mc_check_group_data( $action, $post ) {
 			$cats    = $post['event_category'];
 			// set first category as primary
 			$primary = ( is_numeric( $cats[0] ) ) ? $cats[0] : 1;			
-			foreach( $cats as $cat ) {
+			foreach ( $cats as $cat ) {
 				$private = mc_get_category_detail( $cat,'category_private' );
 				// if a selected category is private, set that category as primary instead.
 				if ( $private == 1 ) {

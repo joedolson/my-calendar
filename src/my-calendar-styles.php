@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -70,7 +71,7 @@ function my_calendar_style_edit() {
 					$styles[$key] = $val;
 				}
 			}
-			foreach( $_POST['style_vars'] as $key => $value ) {
+			foreach ( $_POST['style_vars'] as $key => $value ) {
 				if ( $value != '' ) {
 					$styles[$key] = $value;
 				}

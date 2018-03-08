@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -70,7 +71,7 @@ function my_calendar_check_db() {
  */
 function mc_upgrade_db() {
 	$globals = mc_globals();
-	foreach( $globals as $key => $global ) {
+	foreach ( $globals as $key => $global ) {
 		${$key} = $global;
 	}
 	global $mc_version;

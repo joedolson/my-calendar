@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -21,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) ) {
 		if ( get_option( 'mc_api_enabled' ) == 'true' ) {
-			// use this filter to add custom scripting handling API keys
+			// use this filter to add custom scripting handling API keys.
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
 				$format = ( isset( $_REQUEST['my-calendar-api'] ) ) ? $_REQUEST['my-calendar-api'] : 'json';
@@ -159,7 +160,7 @@ function my_calendar_send_vcal( $event_id ) {
 	header( "Content-Type: text/calendar" );
 	header( "Cache-control: private" );
 	header( 'Pragma: private' );
-	header( "Expires: Thu, 11 Nov 1977 05:40:00 GMT" ); // That's my birthday. :)
+	header( "Expires: Thu, 11 Nov 1977 05:40:00 GMT" ); // That's my birthday. :).
 	header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
 	$output = preg_replace( "~(?<!\r)\n~", "\r\n", mc_generate_vcal( $event_id ) );
 
@@ -179,7 +180,7 @@ function mc_generate_vcal( $event_id = false ) {
 	$mc_id  = ( isset( $_GET['vcal'] ) ) ? (int) str_replace( 'mc_', '', $_GET['vcal'] ) : $event_id;
 	if ( $mc_id ) {
 		$event = mc_get_event( $mc_id );
-		// need to modify date values to match real values using date above
+		// need to modify date values to match real values using date above.
 		$array = mc_create_tags( $event );
 
 		$alarm = apply_filters( 'mc_event_has_alarm', array(), $event_id, $array['post'] );
@@ -220,13 +221,13 @@ END:VCALENDAR";
  * @return string headers & output for RSS feed
  */
 function my_calendar_rss( $events = array() ) {
-	// establish template
+	// establish template.
 	if ( isset( $_GET['mcat'] ) ) {
 		$cat_id = (int) $_GET['mcat'];
 	} else {
 		$cat_id = false;
 	}
-	// add RSS headers
+	// add RSS headers.
 	if ( empty( $events ) ) {
 		$events = mc_get_rss_events( $cat_id );
 	}
@@ -488,7 +489,7 @@ URL;VALUE=URI:{link}
 DESCRIPTION:{ical_desc}
 CATEGORIES:{categories}{alert}
 END:VEVENT";
-// add ICAL headers
+// add ICAL headers.
 	$head = 'BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//My Calendar//http://www.joedolson.com//v' . $mc_version . '//EN

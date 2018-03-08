@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -29,7 +30,7 @@ function my_calendar_behaviors_edit() {
 		update_option( 'mc_list_javascript', ( empty( $_POST['list_js'] ) ) ? 0 : 1 );
 		update_option( 'mc_mini_javascript', ( empty( $_POST['mini_js'] ) ) ? 0 : 1 );
 		update_option( 'mc_ajax_javascript', ( empty( $_POST['ajax_js'] ) ) ? 0 : 1 );
-		// set js
+		// set js.
 		if ( isset( $_POST['mc_caljs'] ) ) {
 			$mc_caljs  = $_POST['mc_caljs'];
 			$mc_listjs = $_POST['mc_listjs'];

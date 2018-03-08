@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -434,7 +435,7 @@ function mc_list_templates() {
 	global $wpdb;
 	$select = "SELECT * FROM " . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'";
 	$results = $wpdb->get_results( $select );
-	foreach( $results as $result ) {
+	foreach ( $results as $result ) {
 		$key  = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc = mc_template_description( $key );
 		$list .= "<tr>

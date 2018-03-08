@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -193,7 +194,7 @@ function my_calendar_head() {
 			
 			$styles     = (array) get_option( 'mc_style_vars' );
 			$style_vars = '';
-			foreach( $styles as $key => $var ) {
+			foreach ( $styles as $key => $var ) {
 				if ( $var ) {
 					$style_vars .= sanitize_key( $key ) . ': ' . $var . "; ";
 				}

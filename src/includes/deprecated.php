@@ -33,10 +33,15 @@ if ( is_multisite() ) {
 	define( 'MY_CALENDAR_GLOBAL_LOCATIONS_TABLE', $wpdb->base_prefix . 'my_calendar_locations' );
 }
 
- 
 /**
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
+ *
+ * @param int $category Deprecated.
+ * @param string $lvalue Deprecated.
+ * @param string $author Deprecated.
+ * @param int $host Deprecated.
+ * @param int $hash Deprecated.
  *
  * @deprecated 
  */
@@ -48,6 +53,12 @@ function mc_check_cache( $category, $ltype, $lvalue, $author, $host, $hash ) {
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
  *
+ * @param string $cache Deprecated.
+ * @param int $category Deprecated.
+ * @param string $lvalue Deprecated.
+ * @param string $author Deprecated.
+ * @param int $host Deprecated.
+ * 
  * @deprecated 
  */
 function mc_clean_cache( $cache, $category, $ltype, $lvalue, $auth, $host ) {
@@ -57,6 +68,14 @@ function mc_clean_cache( $cache, $category, $ltype, $lvalue, $auth, $host ) {
 /**
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
+ *
+ * @param array $arr_events Deprecated.
+ * @param string $hash Deprecated.
+ * @param int $category Deprecated.
+ * @param string $ltype Deprecated.
+ * @param string $lvalue Deprecated.
+ * @param int $author Deprecated.
+ * @param int $host Deprecated.
  *
  * @deprecated 
  */
@@ -78,6 +97,8 @@ function mc_delete_cache() {
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
  *
+ * @param string $cache Deprecated.
+ *
  * @deprecated 
  */
 function mc_get_cache( $cache ) {
@@ -87,6 +108,9 @@ function mc_get_cache( $cache ) {
 /**
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
+ *
+ * @string $cache Deprecated.
+ * @string $time Deprecated.
  *
  * @deprecated 
  */
@@ -98,6 +122,8 @@ function mc_set_cache( $cache, $time ) {
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
  *
+ * @string $cache Deprecated.
+ * 
  * @deprecated 
  */
 function mc_remove_cache( $cache ) {
@@ -107,7 +133,7 @@ function mc_remove_cache( $cache ) {
 /**
  * Old function to get users
  *
- * @param string User role.
+ * @param string $group User role.
  * 
  * @return @mc_get_users
  */
@@ -311,15 +337,15 @@ function get_week_date( $week, $year ) {
  */
 function add_days_to_date( $givendate, $day = 0 ) {
 	$cd      = strtotime( $givendate );
-	$newdate = date( 'Y-m-d h:i:s',
-		mktime(
+	$newdate = date( 'Y-m-d h:i:s',	mktime(
 			date( 'h', $cd ),
 			date( 'i', $cd ),
 			date( 's', $cd ),
 			date( 'm', $cd ),
 			date( 'd', $cd ) + $day,
-			date( 'Y', $cd )
-		) );
+			date( 'Y', $cd ),
+		) 
+	);
 
 	return $newdate;
 }

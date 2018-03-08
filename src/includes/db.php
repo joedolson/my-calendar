@@ -9,6 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
+ 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -73,32 +74,29 @@ function my_calendar_locations_table( $site = false ) {
  *
  * @since 2.5.0
  * 
- * @param string table name.
- * @param mixed 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
+ * @param string $table table name.
+ * @param mixed $site 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
  *
  * @return prefixed string table name
  */
 function my_calendar_select_table( $table = 'my_calendar_events', $site = false ) {
 	global $wpdb;
 	$local = $wpdb->prefix . $table;
-		
+
 	if ( is_multisite() ) {	
 		$option = (int) get_site_option( 'mc_multisite' );
 		$choice = (int) get_option( 'mc_current_table' );
 		$show   = (int) get_site_option( 'mc_multisite_show' ); // 1 == use global instead of local.
-		
-		if ( $site == 'global' ) {
+		if (  'global' == $site ) {
 			return $wpdb->base_prefix . $table;
 		}
-		
-		if ( $site != false && $site ) {
+		if ( false != $site && $site ) {
 			$site = absint( $site );
 			$wpdb->set_blog_id( $site );
 		} 
-
-		$local  = ( $show == 1 ) ? $wpdb->base_prefix . $table : $wpdb->prefix . $table;
+		$local  = ( 1 == $show ) ? $wpdb->base_prefix . $table : $wpdb->prefix . $table;
 		$global = $wpdb->base_prefix . $table;
-		
+
 		switch ( $option ) {
 			case 0:
 				return $local;
