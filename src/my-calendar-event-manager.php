@@ -805,7 +805,7 @@ function mc_delete_event( $event_id ) {
 			$wpdb->query( $wpdb->prepare( $delete_occurrences, $event_id ) );
 			$wpdb->query( $wpdb->prepare( $sql, $event_id ) );
 			$sql    = 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_id=%d';
-			$result = $wpdb->get_results( $wpdb->prepare( $sql, $event_id );
+			$result = $wpdb->get_results( $wpdb->prepare( $sql, $event_id ) );
 		} else {
 			$event_in = absint( $_POST['event_instance'] );
 			$delete   = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d';
