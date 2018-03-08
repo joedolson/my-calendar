@@ -115,8 +115,8 @@ function mc_register_styles() {
 	}
 	
 	$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
-	$js_array  = ( get_option( 'mc_show_js' ) != '' ) ? explode( ",", get_option( 'mc_show_js' ) ) : array();
-	$css_array = ( get_option( 'mc_show_css' ) != '' ) ? explode( ",", get_option( 'mc_show_css' ) ) : array();
+	$js_array  = ( get_option( 'mc_show_js' ) != '' ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
+	$css_array = ( get_option( 'mc_show_css' ) != '' ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
 	
 	// check whether any scripts are actually enabled.
 	if ( get_option( 'mc_calendar_javascript' ) != 1 || get_option( 'mc_list_javascript' ) != 1 || get_option( 'mc_mini_javascript' ) != 1 || get_option( 'mc_ajax_javascript' ) != 1 ) {
@@ -202,7 +202,7 @@ function my_calendar_head() {
 			$style_vars = '';
 			foreach ( $styles as $key => $var ) {
 				if ( $var ) {
-					$style_vars .= sanitize_key( $key ) . ': ' . $var . "; ";
+					$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
 				}
 			}
 			if ( $style_vars != '' ) {
@@ -319,7 +319,7 @@ function mc_footer_js() {
 	} else {
 		$pages = array();
 		if ( get_option( 'mc_show_js' ) != '' ) {
-			$pages = explode( ",", get_option( 'mc_show_js' ) );
+			$pages = explode( ',', get_option( 'mc_show_js' ) );
 		}
 		if ( is_object( $wp_query ) && isset( $wp_query->post ) ) {
 			$id = $wp_query->post->ID;
@@ -617,7 +617,7 @@ function my_calendar_check() {
 			// Loop will run every relevant upgrade cycle.
 			$valid_upgrades = array( '2.0.0', '2.2.10', '2.3.0', '2.3.11', '2.3.15', '2.4.4', '2.6.0', );
 			foreach ( $valid_upgrades as $upgrade ) {
-				if ( version_compare( $current_version, $upgrade, "<" ) ) {
+				if ( version_compare( $current_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
 				}
 			}
@@ -1380,9 +1380,9 @@ $plugins_string
 			wp_die( 'Security check failed' );
 		}
 		$request       = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
-		$has_donated   = ( $_POST['has_donated'] == 'on' ) ? "Donor" : "No donation";
+		$has_donated   = ( $_POST['has_donated'] == 'on' ) ? 'Donor' : 'No donation';
 		$has_purchased = ( $checked ) ? "Purchaser" : "No purchase";
-		$has_read_faq  = ( $_POST['has_read_faq'] == 'on' ) ? "Read FAQ" : false;
+		$has_read_faq  = ( $_POST['has_read_faq'] == 'on' ) ? 'Read FAQ' : false;
 		$subject       = "My Calendar support request. $has_donated; $has_purchased";
 		$message       = $request . "\n\n" . $data;
 		// Get the site domain and get rid of www. from pluggable.php
@@ -1398,7 +1398,7 @@ $plugins_string
 		} elseif ( ! $request ) {
 			echo '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>';
 		} else {
-			$sent = wp_mail( "plugins@joedolson.com", $subject, $message, $from );
+			$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
 			if ( $sent ) {
 				if ( 'Donor' == $has_donated || 'Purchaser' == $has_purchased ) {
 					echo '<div class="message updated"><p>' . __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) . '</p></div>';
@@ -1533,7 +1533,7 @@ function mc_posttypes() {
 				'exclude_from_search' => $raw['exclude_from_search'],
 				'show_ui'             => $raw['show_ui'],
 				'show_in_menu'        => $raw['show_in_menu'],
-				'menu_icon'           => ( $raw['menu_icon'] == null ) ? plugins_url( 'images', __FILE__ ) . "/icon.png" : $raw['menu_icon'],
+				'menu_icon'           => ( $raw['menu_icon'] == null ) ? plugins_url( 'images', __FILE__ ) . '/icon.png' : $raw['menu_icon'],
 				'query_var'           => true,
 				'rewrite'             => array(
 					'with_front' => false,
@@ -1673,7 +1673,7 @@ function mc_update_notice() {
 	// Deprecate this notice when 2.3 no longer in upgrade cycles.
 	if ( current_user_can( 'activate_plugins' ) && 0 == get_option( 'mc_update_notice' ) || ! get_option( 'mc_update_notice' ) ) {
 		$dismiss = admin_url( 'admin.php?page=my-calendar-behaviors&dismiss=update' );
-		echo "<div class='updated fade'><p>" . sprintf( __( "<strong>Update notice:</strong> if you use custom JS with My Calendar, you need to activate your custom scripts following this update. <a href='%s'>Dismiss Notice</a>", 'wp-to-twitter' ), $dismiss ) . "</p></div>";
+		echo "<div class='updated fade'><p>" . sprintf( __( "<strong>Update notice:</strong> if you use custom JS with My Calendar, you need to activate your custom scripts following this update. <a href='%s'>Dismiss Notice</a>", 'wp-to-twitter' ), $dismiss ) . '</p></div>';
 	}
 	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
 		if ( 'true' == get_option( 'mc_remote' ) ) {

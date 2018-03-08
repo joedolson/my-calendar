@@ -35,18 +35,18 @@ function mc_templates_edit() {
 		
 	if ( isset( $_POST['delete'] ) ) {
 		delete_option( 'mc_ctemplate_' . $key );
-		echo "<div class=\"updated\"><p>" . __( 'Custom template deleted', 'my-calendar' ) . "</p></div>";
+		echo "<div class=\"updated\"><p>" . __( 'Custom template deleted', 'my-calendar' ) . '</p></div>';
 		$key = 'grid';
 	} else {
 		if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
-			echo "<div class=\"updated\"><p>" . __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) . "</p></div>";
+			echo "<div class=\"updated\"><p>" . __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) . '</p></div>';
 		} else {	
 			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
 				$template  = $_POST['mc_template'];
 				$templates[$key] = $template;
 				update_option( 'mc_templates', $templates );
 				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
-				echo "<div class=\"updated\"><p>" . sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) . "</p></div>";
+				echo "<div class=\"updated\"><p>" . sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) . '</p></div>';
 			} elseif ( isset( $_POST['mc_template'] ) ) {
 				$template  = $_POST['mc_template'];
 				if ( mc_key_exists( $key ) ) {
@@ -54,7 +54,7 @@ function mc_templates_edit() {
 				} else {
 					$key = mc_create_template( $template, $_POST );
 				}
-				echo "<div class='updated'><p>" . __( 'Custom Template saved', 'my-calendar' ) . "</p></div>";
+				echo "<div class='updated'><p>" . __( 'Custom Template saved', 'my-calendar' ) . '</p></div>';
 			}
 		}
 	}

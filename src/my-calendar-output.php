@@ -618,7 +618,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 			$edit .= "<a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;date=$mc_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit All', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;date=$mc_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete All', 'my-calendar' ) . "</a>
 			$groupedit";
 		}
-		$edit .= "</p></div>";
+		$edit .= '</p></div>';
 	}
 	if ( ! mc_show_details( $time, $type ) ) {
 		$edit = '';
@@ -650,7 +650,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		$mcdb = mc_remote_db();
 	}
 	$current_url   = mc_get_current_url();
-	$date_switcher = "";
+	$date_switcher = '';
 	$date_switcher .= '<div class="my-calendar-date-switcher">
             <form action="' . $current_url . '" method="get"><div>';
 	$qsa = array();
@@ -2261,7 +2261,7 @@ function mc_category_key( $category ) {
 		}
 		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
 		$url      = mc_build_url( array( 'mcat' => $cat->category_id ), array( 'mcat' ) );
-		if ( $cat->category_icon != "" && get_option( 'mc_hide_icons' ) != 'true' ) {
+		if ( '' != $cat->category_icon && 'true' != get_option( 'mc_hide_icons' ) ) {
 			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"><span class="category-color-sample"><img src="' . $path . $cat->category_icon . '" alt="" style="background:' . $hex . $cat->category_color . ';" /></span>' . $cat_name . '</a></li>';
 		} else {
 			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"><span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' . $cat_name . '</a></li>';

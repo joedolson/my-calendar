@@ -79,7 +79,7 @@ function mc_private_categories() {
 
 /**
  * Fetch array of private categories.
- * 
+ *
  * @uses filter mc_private_categories
  *
  * @return array private categories
@@ -130,7 +130,7 @@ function my_calendar_manage_categories() {
 		<?php
 		my_calendar_check_db();
 		$append = '';
-		// We do some checking to see what we're doing
+		// We do some checking to see what we're doing.
 		if ( ! empty( $_POST ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
 			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -139,41 +139,41 @@ function my_calendar_manage_categories() {
 		}
 
 		if ( isset( $_POST['mode'] ) && 'add' == $_POST['mode'] ) {
-			$cat_ID = mc_create_category( $_POST );
+			$cat_id = mc_create_category( $_POST );
 
 			if ( isset( $_POST['mc_default_category'] ) ) {
-				update_option( 'mc_default_category', $cat_ID );
+				update_option( 'mc_default_category', $cat_id );
 				$append .= __( 'Default category changed.', 'my-calendar' );
 			}
 			
 			if ( isset( $_POST['mc_skip_holidays_category'] ) ) {
-				update_option( 'mc_skip_holidays_category', $cat_ID );
+				update_option( 'mc_skip_holidays_category', $cat_id );
 				$append .= __( 'Holiday category changed.', 'my-calendar' );
 			}
 			
-			if ( $cat_ID ) {
+			if ( $cat_id ) {
 				echo '<div class="updated"><p><strong>' . __( 'Category added successfully', 'my-calendar' ) . ". $append</strong></p></div>";
 			} else {
 				echo '<div class="updated error"><p><strong>' . __( 'Category addition failed.', 'my-calendar' ) . '</strong></p></div>';
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' == $_GET['mode'] ) {
-			$cat_ID  = (int) $_GET['category_id'];
-			$sql     = 'DELETE FROM ' . my_calendar_categories_table() . " WHERE category_id=$cat_ID";
+			$cat_id  = (int) $_GET['category_id'];
+			$sql     = 'DELETE FROM ' . my_calendar_categories_table() . " WHERE category_id=$cat_id";
 			$results = $wpdb->query( $sql );
 		
 			// also delete relationships for this category.
-			$rel_sql     = 'DELETE FROM ' . my_calendar_category_relationships_table() . " WHERE category_id = $cat_ID";
+			$rel_sql     = 'DELETE FROM ' . my_calendar_category_relationships_table() . " WHERE category_id = $cat_id";
 			$rel_results = $wpdb->query( $rel_sql );
 			
 			if ( $results ) {
 				$default_category = get_option( 'mc_default_category' );
 				$default_category = ( is_numeric( $default_category ) ) ? absint( $default_category ) : 1;
-				$sql         = 'UPDATE ' . my_calendar_table() . " SET event_category=$default_category WHERE event_category=$cat_ID";
+				$sql         = 'UPDATE ' . my_calendar_table() . " SET event_category=$default_category WHERE event_category=$cat_id";
 				$cal_results = $wpdb->query( $sql );
 			} else {
 				$cal_results = false;
 			}
-			if ( get_option( 'mc_default_category' ) == $cat_ID ) {
+			if ( get_option( 'mc_default_category' ) == $cat_id ) {
 				update_option( 'mc_default_category', 1 );
 			}
 			if ( $results && ( $cal_results || $rel_results ) ) {
@@ -181,7 +181,7 @@ function my_calendar_manage_categories() {
 			} elseif ( $results && ! $cal_results ) {
 				echo '<div class="updated"><p><strong>' . __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) . '</strong></p></div>';
 			} elseif ( ! $results && $cal_results ) {
-				echo "<div class=\"updated error\"><p><strong>" . __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) . '</strong></p></div>';
+				echo '<div class="updated error"><p><strong>' . __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) . '</strong></p></div>';
 			}
 			
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'edit' == $_GET['mode'] && ! isset( $_POST['mode'] ) ) {
@@ -277,10 +277,10 @@ function mc_create_category( $category ) {
 	$add     = array_map( 'mc_kses_post', $add );		
 	$add     = apply_filters( 'mc_pre_add_category', $add, $category );
 	$results = $wpdb->insert( my_calendar_categories_table(), $add, $formats );
-	$cat_ID  = $wpdb->insert_id;
-	do_action( 'mc_post_add_category', $add, $cat_ID, $category );
+	$cat_id  = $wpdb->insert_id;
+	do_action( 'mc_post_add_category', $add, $cat_id, $category );
 
-	return $cat_ID;
+	return $cat_id;
 }
 
 /**
@@ -313,7 +313,7 @@ function mc_edit_category_form( $view = 'edit', $catID = '' ) {
 		<h1><?php _e( 'Add Category', 'my-calendar' ); ?></h1>
 	<?php } else { ?>
 		<h1 class="wp-heading-inline"><?php _e( 'Edit Category', 'my-calendar' ); ?></h1>
-		<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a> 
+		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-categories' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a> 
 		<hr class="wp-header-end">		
 	<?php } ?>
 
@@ -451,7 +451,7 @@ function mc_category_settings_update() {
 		update_option( 'mc_inverse_color', ( ! empty( $_POST['mc_inverse_color'] ) && 'on' == $_POST['mc_inverse_color'] ) ? 'true' : 'false' );
 		update_option( 'mc_multiple_categories', ( ! empty( $_POST['mc_multiple_categories'] ) && 'on' == $_POST['mc_multiple_categories'] ) ? 'true' : 'false' );
 		
-		$message = "<div class='updated'><p>" . __( 'My Calendar Category Configuration Updated', 'my-calendar' ) . "</p></div>";
+		$message = "<div class='updated'><p>" . __( 'My Calendar Category Configuration Updated', 'my-calendar' ) . '</p></div>';
 	}
 	
 	return $message;
@@ -572,8 +572,8 @@ function mc_manage_categories() {
 		<table class="widefat page fixed mc-categories" id="my-calendar-admin-table">
 		<thead>
 		<tr>
-			<th scope="col"><?php echo ( $co == 2 ) ? "<a href='" . admin_url( "admin.php?page=my-calendar-categories&amp;co=1" ) . "'>" : ''; ?><?php _e( 'ID', 'my-calendar' ) ?><?php echo ( $co == 2 ) ? '</a>' : ''; ?></th>
-			<th scope="col"><?php echo ( $co == 1 ) ? "<a href='" . admin_url( "admin.php?page=my-calendar-categories&amp;co=2" ) . "'>" : ''; ?><?php _e( 'Category Name', 'my-calendar' ) ?><?php echo ( $co == 1 ) ? '</a>' : ''; ?></th>
+			<th scope="col"><?php echo ( $co == 2 ) ? "<a href='" . admin_url( 'admin.php?page=my-calendar-categories&amp;co=1' ) . "'>" : ''; ?><?php _e( 'ID', 'my-calendar' ) ?><?php echo ( $co == 2 ) ? '</a>' : ''; ?></th>
+			<th scope="col"><?php echo ( $co == 1 ) ? "<a href='" . admin_url( 'admin.php?page=my-calendar-categories&amp;co=2' ) . "'>" : ''; ?><?php _e( 'Category Name', 'my-calendar' ) ?><?php echo ( $co == 1 ) ? '</a>' : ''; ?></th>
 			<th scope="col"><?php _e( 'Color/Icon', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Private', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>
@@ -765,7 +765,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 	} else {
 		$category_url = admin_url( 'admin.php?page=my-calendar-categories' );
 		// Translators: URL to add a new category.
-		echo "<div class='updated error'><p>" . sprintf( __( 'You do not have any categories created. Please <a href="%s">create at least one category!</a>', 'my-calendar' ), $category_url ) . "</p></div>";
+		echo "<div class='updated error'><p>" . sprintf( __( 'You do not have any categories created. Please <a href="%s">create at least one category!</a>', 'my-calendar' ), $category_url ) . '</p></div>';
 	}
 	if ( ! $option ) {
 		$default = ( get_option( 'mc_default_category' ) ) ? get_option( 'mc_default_category' ) : 1;

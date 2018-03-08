@@ -188,7 +188,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		}
 		$zoom       = ( $event->event_zoom != 0 ) ? $event->event_zoom : '15';
 		$url        = $event->event_url;
-		$map_label  = strip_tags( stripslashes( ( $event->event_label != "" ) ? $event->event_label : $event->event_title ), mc_strip_tags() );		
+		$map_label  = strip_tags( stripslashes( ( $event->event_label != '' ) ? $event->event_label : $event->event_title ), mc_strip_tags() );		
 		$map_string = str_replace( " ", "+", $map_string );
 		if ( $event->event_longitude != '0.000000' && $event->event_latitude != '0.000000' ) {
 			$dir_lat = ( $event->event_latitude > 0 ) ? 'N' : 'S';
@@ -199,7 +199,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		}
 	} else {
 		$url        = $event->location_url;
-		$map_label  = strip_tags( stripslashes( ( $event->location_label != "" ) ? $event->location_label : $event->event_title ), mc_strip_tags() );				
+		$map_label  = strip_tags( stripslashes( ( $event->location_label != '' ) ? $event->location_label : $event->event_title ), mc_strip_tags() );				
 		$zoom       = ( $event->location_zoom != 0 ) ? $event->location_zoom : '15';
 		$map_string = str_replace( " ", "+", $map_string );
 		if ( $event->location_longitude != '0.000000' && $event->location_latitude != '0.000000' ) {
@@ -288,15 +288,15 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= "<div class=\"adr\" itemprop='address' itemscope itemtype=\"http://schema.org/PostalAddress\">";
 		$hcard .= ( $label != '' ) ? "<strong class=\"org\" itemprop='name'>" . $link . "</strong><br />" : '';
 		$hcard .= ( $street . $street2 . $city . $state . $zip . $country . $phone == '' ) ? '' : "<div class='sub-address'>";
-		$hcard .= ( $street != "" ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street . "</div>" : '';
-		$hcard .= ( $street2 != "" ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street2 . "</div>" : '';
+		$hcard .= ( $street != '' ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street . "</div>" : '';
+		$hcard .= ( $street2 != '' ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street2 . "</div>" : '';
 		$hcard .= ( $city . $state . $zip != '' ) ? "<div>" : '';
-		$hcard .= ( $city != "" ) ? "<span class=\"locality\" itemprop=\"addressLocality\">" . $city . "</span><span class='sep'>, </span>" : '';
-		$hcard .= ( $state != "" ) ? "<span class=\"region\" itemprop=\"adddressRegion\">" . $state . "</span> " : '';
-		$hcard .= ( $zip != "" ) ? " <span class=\"postal-code\" itemprop=\"postalCode\">" . $zip . "</span>" : '';
+		$hcard .= ( $city != '' ) ? "<span class=\"locality\" itemprop=\"addressLocality\">" . $city . "</span><span class='sep'>, </span>" : '';
+		$hcard .= ( $state != '' ) ? "<span class=\"region\" itemprop=\"adddressRegion\">" . $state . "</span> " : '';
+		$hcard .= ( $zip != '' ) ? " <span class=\"postal-code\" itemprop=\"postalCode\">" . $zip . "</span>" : '';
 		$hcard .= ( $city . $state . $zip != '' ) ? "</div>" : '';
-		$hcard .= ( $country != "" ) ? "<div class=\"country-name\" itemprop=\"addressCountry\">" . $country . "</div>" : '';
-		$hcard .= ( $phone != "" ) ? "<div class=\"tel\" itemprop=\"telephone\">" . $phone . "</div>" : '';
+		$hcard .= ( $country != '' ) ? "<div class=\"country-name\" itemprop=\"addressCountry\">" . $country . "</div>" : '';
+		$hcard .= ( $phone != '' ) ? "<div class=\"tel\" itemprop=\"telephone\">" . $phone . "</div>" : '';
 		$hcard .= ( $street . $street2 . $city . $state . $zip . $country . $phone == '' ) ? '' : "</div>";
 		$hcard .= "</div>";
 	}

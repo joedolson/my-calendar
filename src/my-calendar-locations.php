@@ -48,7 +48,7 @@ function mc_update_location_controls() {
 			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
 		}
 		update_option( 'mc_location_controls', $mc_location_controls );
-		echo "<div class='notice updated'><p>" . __( 'Location Controls Updated', 'my-calendar' ) . "</p></div>";
+		echo "<div class='notice updated'><p>" . __( 'Location Controls Updated', 'my-calendar' ) . '</p></div>';
 	}
 }
 
@@ -124,7 +124,7 @@ function my_calendar_add_locations() {
 		if ( $results ) {
 			echo '<div class="updated"><p><strong>' . __( 'Location added successfully', 'my-calendar' ) . '</strong></p></div>';
 		} else {
-			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be added to database', 'my-calendar' ) . '</strong></p></div>';
+			echo '<div class="error"><p><strong>' . __( 'Location could not be added to database', 'my-calendar' ) . '</strong></p></div>';
 		}
 	} elseif ( isset( $_GET['location_id'] ) && $_GET['mode'] == 'delete' ) {
 		$sql     = "DELETE FROM " . my_calendar_locations_table() . " WHERE location_id=" . (int) ( $_GET['location_id'] );
@@ -133,7 +133,7 @@ function my_calendar_add_locations() {
 		if ( $results ) {
 			echo '<div class="updated"><p><strong>' . __( 'Location deleted successfully', 'my-calendar' ) . '</strong></p></div>';
 		} else {
-			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be deleted', 'my-calendar' ) . '</strong></p></div>';
+			echo '<div class="error"><p><strong>' . __( 'Location could not be deleted', 'my-calendar' ) . '</strong></p></div>';
 		}
 	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && $_GET['mode'] == 'edit' && ! isset( $_POST['mode'] ) ) {
 		$cur_loc = (int) $_GET['location_id'];
@@ -164,9 +164,9 @@ function my_calendar_add_locations() {
 				
 		do_action( 'mc_modify_location', $where, $update );
 		if ( $results === false ) {
-			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be edited.', 'my-calendar' ) . '</strong></p></div>';
+			echo '<div class="error"><p><strong>' . __( 'Location could not be edited.', 'my-calendar' ) . '</strong></p></div>';
 		} elseif ( $results == 0 ) {
-			echo "<div class=\"updated error\"><p><strong>" . __( 'Location was not changed.', 'my-calendar' ) . '</strong></p></div>';
+			echo '<div class="updated error"><p><strong>' . __( 'Location was not changed.', 'my-calendar' ) . '</strong></p></div>';
 		} else {
 			echo '<div class="updated"><p><strong>' . __( 'Location edited successfully', 'my-calendar' ) . '</strong></p></div>';
 		}
@@ -184,14 +184,14 @@ function my_calendar_add_locations() {
  * Create location editing form.
  *
  * @param string $view type of view add/edit
- * @param int $curID Location ID.
+ * @param int $loc_id Location ID.
  *
  * @param string HTML form.
  */
-function mc_show_location_form( $view = 'add', $curID = '' ) {
+function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 	$cur_loc = false;
-	if ( $curID != '' ) {
-		$cur_loc = mc_get_location( $curID );
+	if ( $loc_id != '' ) {
+		$cur_loc = mc_get_location( $loc_id );
 	}
 	$has_data = ( empty( $cur_loc ) ) ? false : true;
 	if ( $view == 'add' ) {

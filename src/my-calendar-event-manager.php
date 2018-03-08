@@ -1227,7 +1227,7 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
 	if ( !$single_recur && !$start_end ) {
 		$check = mc_increment_event( $data->event_id, array(), 'test' );
 		if ( my_calendar_date_xcomp( $check['occur_begin'], $data->event_end . '' . $data->event_endtime ) ) {
-			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . "</strong> " . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . "</p><p>" . sprintf( __( 'Event end date: <strong>%s %s</strong>. Next occurrence starts: <strong>%s</strong>', 'my-calendar' ), $data->event_end, $data->event_endtime, $check['occur_begin'] ) . "</p></div>";
+			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . "</strong> " . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . "</p><p>" . sprintf( __( 'Event end date: <strong>%s %s</strong>. Next occurrence starts: <strong>%s</strong>', 'my-calendar' ), $data->event_end, $data->event_endtime, $check['occur_begin'] ) . '</p></div>';
 			update_post_meta( $data->event_post, '_occurrence_overlap', 'false' );
 		} else {
 			delete_post_meta( $data->event_post, '_occurrence_overlap' );
@@ -1336,7 +1336,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$message = __( "You are editing the <strong>$date</strong> instance of this event. Other instances of this event will not be changed.", 'my-calendar' );
 				echo "<div class='message updated'><p>$message</p></div>";
 			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
-				echo "<div class='message updated'><p>" . __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) . "</p></div>";
+				echo "<div class='message updated'><p>" . __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) . '</p></div>';
 			}
 			?>
 			<fieldset>
@@ -2075,13 +2075,13 @@ function mc_list_events() {
 							</td>
 							<td><?php
 								if ( $event->event_endtime != "23:59:59" ) {
-									$eventTime = date_i18n( get_option( 'mc_time_format' ), mc_strtotime( $event->event_time ) );
+									$event_time = date_i18n( get_option( 'mc_time_format' ), mc_strtotime( $event->event_time ) );
 								} else {
-									$eventTime = mc_notime_label( $event );
+									$event_time = mc_notime_label( $event );
 								}
 								$date_format = ( get_option( 'mc_date_format' ) == '' ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
 								$begin       = date_i18n( $date_format, mc_strtotime( $event->event_begin ) );
-								echo "$begin, $eventTime"; ?>
+								echo "$begin, $event_time"; ?>
 								<div class="recurs">
 									<?php echo mc_recur_string( $event ); ?>
 								</div>
@@ -2413,10 +2413,10 @@ function mc_check_data( $action, $post, $i ) {
 		if ( mc_checkdate( $begin ) && mc_checkdate( $end ) ) {
 			// Make sure dates are equal or end date is later than start date
 			if ( mc_strtotime( "$end $endtime" ) < mc_strtotime( "$begin $time" ) ) {
-				$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'Your event end date must be either after or the same as your event begin date', 'my-calendar' ) . "</p></div>";
+				$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'Your event end date must be either after or the same as your event begin date', 'my-calendar' ) . '</p></div>';
 			}
 		} else {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'Your date formatting is correct but one or more of your dates is invalid. Check for number of days in month and leap year related errors.', 'my-calendar' ) . "</p></div>";
+			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'Your date formatting is correct but one or more of your dates is invalid. Check for number of days in month and leap year related errors.', 'my-calendar' ) . '</p></div>';
 		}
 
 		// We check for a valid time, or an empty one
@@ -2425,12 +2425,12 @@ function mc_check_data( $action, $post, $i ) {
 		$time_format_two = '/^([2][0-3]):([0-5][0-9]):([0-5][0-9])$/';
 		if ( preg_match( $time_format_one, $time ) || preg_match( $time_format_two, $time ) || $time == '' ) {
 		} else {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'The time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ) . "</p></div>";
+			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'The time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ) . '</p></div>';
 		}
 		// Check for a valid or empty end time
 		if ( preg_match( $time_format_one, $endtime ) || preg_match( $time_format_two, $endtime ) || $endtime == '' ) {
 		} else {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'The end time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ) . "</p></div>";
+			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'The end time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ) . '</p></div>';
 		}
 		// Check for valid URL (blank or starting with http://)
 		if ( ! ( $event_link == '' || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
@@ -2453,7 +2453,7 @@ function mc_check_data( $action, $post, $i ) {
 	if ( function_exists( 'mcs_submissions' ) && isset( $post['mcs_check_conflicts'] ) ) {
 		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label );
 		if ( $conflicts ) {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'That event conflicts with a previously scheduled event.', 'my-calendar' ) . "</p></div>";
+			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong> " . __( 'That event conflicts with a previously scheduled event.', 'my-calendar' ) . '</p></div>';
 		}
 	}
 	$spam = mc_spam( $event_link, $desc, $post );
@@ -3086,7 +3086,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 				if ( $has_data && $event->event_approved == '1' ) {
 					$checked = " checked=\"checked\"";
 				} elseif ( $has_data && $event->event_approved == '0' ) {
-					$checked = "";
+					$checked = '';
 				}
 				$status_control = "
 						<option value='1'" . selected( $event->event_approved, '1', false ) . ">" . __( 'Publish', 'my-calendar' ) . "</option>

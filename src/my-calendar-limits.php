@@ -92,11 +92,11 @@ function mc_category_select_ids( $category ) {
 		$mcdb = mc_remote_db();
 	}
 	
-	if ( strpos( $category, "|" ) || strpos( $category, "," ) ) {
+	if ( strpos( $category, "|" ) || strpos( $category, ',' ) ) {
 		if ( strpos( $category, "|" ) ) {
 			$categories = explode( "|", $category );
 		} else {
-			$categories = explode( ",", $category );
+			$categories = explode( ',', $category );
 		}
 		$numcat = count( $categories );
 		foreach ( $categories as $key ) {
@@ -165,11 +165,11 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
  */
 function mc_author_select_ids( $author ) {
 	$authors = array();
-	if ( strpos( $author, "|" ) || strpos( $author, "," ) ) {
+	if ( strpos( $author, "|" ) || strpos( $author, ',' ) ) {
 		if ( strpos( $author, "|" ) ) {
 			$authors = explode( "|", $author );
 		} else {
-			$authors = explode( ",", $author );
+			$authors = explode( ',', $author );
 		}
 		foreach ( $authors as $key ) {
 			if ( is_numeric( $key ) ) {
@@ -225,7 +225,7 @@ function mc_select_host( $host, $type = 'event' ) {
 */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
 	global $user_ID;
-	$limit_string  = $location = $current_location = "";
+	$limit_string  = $location = $current_location = '';
 	if ( $ltype != '' && $lvalue != '' ) {
 		if ( $ltype != '' && $lvalue != '' ) {
 			$location         = $ltype;
@@ -328,7 +328,7 @@ function mc_select_published() {
  * @return string SQL.
  */
 function mc_secondary_limit( $ltype = '', $lvalue = '' ) {
-	$limit_string     = "";
+	$limit_string     = '';
 	$current_location = urldecode( $lvalue );
 	$location         = urldecode( $ltype );
 	switch ( $location ) {

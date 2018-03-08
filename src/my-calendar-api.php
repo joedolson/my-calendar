@@ -260,9 +260,9 @@ function mc_format_rss( $events ) {
 			{rss_link_title}
 			</div>]]></content:encoded>
 			<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
-			<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . "</dc:source>
+			<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
 			{guid}
-		  </item>" . PHP_EOL;
+		  </item>' . PHP_EOL;
 
 		if ( get_option( 'mc_use_rss_template' ) == 1 ) {
 			$template  = mc_get_template( 'rss' );
@@ -522,13 +522,13 @@ function mc_generate_alert_ical( $alarm ) {
 	);
 
 	$values = array_merge( $defaults, $alarm );
-	$alert  = "\nBEGIN:VALARM\n";
+	$alert  = PHP_EOL . 'BEGIN:VALARM' . PHP_EOL;
 	$alert .= "TRIGGER:$values[TRIGGER]\n";
 	$alert .= ( 0 != $values['REPEAT'] ) ? "REPEAT:$values[REPEAT]\n" : '';
 	$alert .= ( '' != $values['DURATION'] ) ? "REPEAT:$values[DURATION]\n" : '';
 	$alert .= "ACTION:$values[ACTION]\n";
 	$alert .= "DESCRIPTION:$values[DESCRIPTION]\n";
-	$alert .= "END:VALARM";	
+	$alert .= 'END:VALARM';	
 
 	return $alert;
 }

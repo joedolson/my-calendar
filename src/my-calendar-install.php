@@ -102,9 +102,9 @@ function mc_globals() {
 		{link_title}
 		</div>]]></content:encoded>
 		<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
-		<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . "</dc:source>
+		<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
 		{guid}
-	  </item>\n" );
+	  </item>' . PHP_EOL );
 
 	$charset_collate = $wpdb->get_charset_collate();
 

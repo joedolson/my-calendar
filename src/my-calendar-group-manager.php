@@ -87,11 +87,11 @@ function my_calendar_group_edit() {
 							'%d' );
 
 						if ( $result === false ) {
-							$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Event not grouped.', 'my-calendar' ) . "</p></div>";
+							$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Event not grouped.', 'my-calendar' ) . '</p></div>';
 						} elseif ( $result === 0 ) {
-							$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "</p></div>";
+							$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . '</p></div>';
 						} else {
-							$message = "<div class='updated'><p>#$event_id: " . __( 'Event grouped successfully', 'my-calendar' ) . "</p></div>";
+							$message = "<div class='updated'><p>#$event_id: " . __( 'Event grouped successfully', 'my-calendar' ) . '</p></div>';
 						}
 					}
 				}
@@ -230,11 +230,11 @@ function mc_group_data( $event_id = false ) {
 	global $wpdb, $submission;
 	if ( $event_id !== false ) {
 		if ( intval( $event_id ) != $event_id ) {
-			return "<div class=\"error\"><p>" . __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ) . "</p></div>";
+			return "<div class=\"error\"><p>" . __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ) . '</p></div>';
 		} else {
 			$data = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_table() . " WHERE event_id='" . (int) $event_id . "' LIMIT 1" );
 			if ( empty( $data ) ) {
-				return "<div class=\"error\"><p>" . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . "</p></div>";
+				return "<div class=\"error\"><p>" . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . '</p></div>';
 			}
 			$data = $data[0];
 		}
@@ -480,8 +480,8 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<select id="e_host" name="event_host">
 						<?php
 						// Grab hosts and list them
-						$userList = mc_get_users( 'hosts' );
-						foreach ( $userList as $u ) {
+						$user_list = mc_get_users( 'hosts' );
+						foreach ( $user_list as $u ) {
 							echo '<option value="' . $u->ID . '"';
 							if ( is_object( $data ) && $data->event_host == $u->ID ) {
 								echo ' selected="selected"';
@@ -805,7 +805,7 @@ function mc_check_group_data( $action, $post ) {
 	if ( ! wp_verify_nonce( $post['event_nonce_name'], 'event_nonce' ) ) {
 		return '';
 	}
-	$errors = "";
+	$errors = '';
 	if ( $action == 'add' || $action == 'edit' || $action == 'copy' ) {
 		$title              = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
 		$desc               = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
@@ -1116,14 +1116,14 @@ function mc_list_groups() {
 			</td>
 			<td><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></td>
 			<?php if ( $event->event_endtime != "23:59:59" ) {
-				$eventTime = date_i18n( get_option( 'mc_time_format' ), strtotime( $event->event_time ) );
+				$event_time = date_i18n( get_option( 'mc_time_format' ), strtotime( $event->event_time ) );
 			} else {
-				$eventTime = mc_notime_label( $event );
+				$event_time = mc_notime_label( $event );
 			} ?>
 			<td><?php
 				$date_format = ( get_option( 'mc_date_format' ) == '' ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
 				$begin       = date_i18n( $date_format, strtotime( $event->event_begin ) );
-				echo "$begin, $eventTime"; ?>
+				echo "$begin, $event_time"; ?>
 				<div class="recurs">
 					<?php echo mc_recur_string( $event ); ?>
 				</div>
