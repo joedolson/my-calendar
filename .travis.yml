@@ -62,5 +62,5 @@ script:
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcbf" ]] ; then
-      phpcs
+      phpcbf
     fi

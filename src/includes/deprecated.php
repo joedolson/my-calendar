@@ -39,6 +39,7 @@ if ( is_multisite() ) {
  *
  * @param int $category Deprecated.
  * @param string $lvalue Deprecated.
+ * @param string $ltype Deprecated.
  * @param string $author Deprecated.
  * @param int $host Deprecated.
  * @param int $hash Deprecated.
@@ -56,7 +57,8 @@ function mc_check_cache( $category, $ltype, $lvalue, $author, $host, $hash ) {
  * @param string $cache Deprecated.
  * @param int $category Deprecated.
  * @param string $lvalue Deprecated.
- * @param string $author Deprecated.
+ * @param string $ltype Deprecated.
+ * @param string $auth Deprecated.
  * @param int $host Deprecated.
  * 
  * @deprecated 

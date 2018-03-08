@@ -345,7 +345,7 @@ function mc_name_days( $format ) {
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Friday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Friday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>',
 	);
-	if ( $format == 'mini' ) {
+	if ( 'mini' == $format ) {
 		// PHP doesn't have a single letter abbreviation, so this has to be a translatable.
 		$name_days = array(
 			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
@@ -371,7 +371,7 @@ function mc_name_days( $format ) {
  */
 function mc_exit_early( $event, $process_date ) {
 	// if event is not approved, return without processing.
-	if ( (int) $event->event_approved !== 1 && ! mc_is_preview() ) {
+	if ( 1 !== (int) $event->event_approved && ! mc_is_preview() ) {
 		return true;
 	}
 
@@ -404,7 +404,7 @@ function mc_exit_early( $event, $process_date ) {
  * @return boolean
  */
 function mc_private_event( $event ) {
-	$status = ( $event->category_private == 1 && ! is_user_logged_in() ) ? true : false;
+	$status = ( 1 == $event->category_private && ! is_user_logged_in() ) ? true : false;
 	// custom filter to grant custom reasons for exiting.
 	// $event may not be an event object; in some cases it's a category object. 
 	$status = apply_filters( 'mc_private_event', $status, $event );

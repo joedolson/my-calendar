@@ -9,7 +9,7 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -105,7 +105,7 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 				return $global;
 				break;
 			case 2:
-				return ( $choice == 1 ) ? $global : $local;
+				return ( 1 == $choice ) ? $global : $local;
 				break;
 			default:
 				return $local;
