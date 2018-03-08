@@ -154,8 +154,8 @@ function mc_is_selected( $field, $value, $array = '' ) {
 			return 'selected="selected"';
 		}
 	} else {
-		$theSetting = get_option( $field );
-		if ( $theSetting[ $array ]['enabled'] == $value ) {
+		$setting = get_option( $field );
+		if ( $setting[ $array ]['enabled'] == $value ) {
 			return 'selected="selected"';
 		}
 	}
@@ -208,10 +208,14 @@ function jd_option_selected( $field, $value, $type = 'checkbox' ) {
 	return mc_option_selected( $field, $value, $type );
 }
 
-/**
- * This is a hack for people who don't have PHP installed with exif_imagetype
- */
 if ( ! function_exists( 'exif_imagetype' ) ) {
+	/**
+	 * This is a hack for people who don't have PHP installed with exif_imagetype
+	 *
+	 * @param string $filename Name of file.
+	 *
+	 * @return string type of file.
+	 */	
 	function exif_imagetype( $filename ) {
 		if ( ! is_dir( $filename ) && ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) {
 			return $type;
@@ -251,11 +255,11 @@ function mc_inverse_color( $color ) {
  *
  * @param string $color Color hex.
  *
- * @return New color hex
+ * @return string New color hex
  */
 function mc_shift_color( $color ) {
 	$color   = str_replace( '#', '', $color );
-	$rgb     = ''; 
+	$rgb     = '';
 	$percent = ( mc_inverse_color( $color ) == '#ffffff' ) ? - 20 : 20;
 	$per     = $percent / 100 * 255; 
 	// Percentage to work with. Change middle figure to control color temperature.
@@ -268,7 +272,7 @@ function mc_shift_color( $color ) {
 			$rgb .= ( strlen( $c ) < 2 ) ? '0' . $c : $c;
 		}
 	} else {
-		// LIGHTER.      
+		// LIGHTER.    
 		for ( $x = 0; $x < 3; $x ++ ) {
 			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) + $per;
 			$c    = ( $c > 255 ) ? 'ff' : dechex( $c );
@@ -296,7 +300,7 @@ function mc_csv_to_array( $csv, $delimiter = ',', $enclosure = '"', $escape = '\
 	foreach ( $rows as $row ) {
 		if ( trim( $row ) ) {
 			$values          = explode( $delimiter, $row );
-			$r[ $values[0] ] = ( isset( $values[1] ) ) ? str_replace( array( $enclosure, $escape ), '', $values[1] ) : $values[0] ;
+			$r[ $values[0] ] = ( isset( $values[1] ) ) ? str_replace( array( $enclosure, $escape ), '', $values[1] ) : $values[0];
 		}
 	}
 
@@ -307,7 +311,7 @@ function mc_csv_to_array( $csv, $delimiter = ',', $enclosure = '"', $escape = '\
  * Return string for HTML email types
  */
 function mc_html_type() {
-	
+
 	return 'text/html';
 }
 
@@ -315,7 +319,7 @@ function mc_html_type() {
  * Duplicate of mc_is_url, which really should have been in this file. Bugger.
  *
  * @param string $url URL.
- * 
+ *
  * @return URL, if valid.
  */ 
 function _mc_is_url( $url ) {
@@ -350,7 +354,7 @@ function mc_external_link( $link ) {
 /**
  * Replace newline characters in a string
  *
- * @param string $string.
+ * @param string $string Any string.
  * 
  * @return string string without newline chars
  */
@@ -369,7 +373,7 @@ function mc_newline_replace( $string ) {
  * @return array
  */
 function reverse_array( $array, $boolean, $order ) {
-	if ( $order == 'desc' ) {
+	if ( 'desc' == $order ) {
 
 		return array_reverse( $array, $boolean );
 	} else {
@@ -381,16 +385,16 @@ function reverse_array( $array, $boolean, $order ) {
 /**
  * Debugging handler shortcut
  *
- * @param string $subject.
- * @param string $body.
+ * @param string $subject Text for email subject.
+ * @param string $body Text for email body.
  * @param string $email target email (if sending via email).
  */
 function mc_debug( $subject, $body, $email = false ) {
-	if ( defined( 'MC_DEBUG' ) && MC_DEBUG == true ) {
+	if ( defined( 'MC_DEBUG' ) && true == MC_DEBUG ) {
 		if ( ! $email ) {
 			$email = get_option( 'admin_email' );
 		}
-		if ( defined( 'MC_DEBUG_METHOD' ) && MC_DEBUG_METHOD == 'email' ) {
+		if ( defined( 'MC_DEBUG_METHOD' ) && 'email' == MC_DEBUG_METHOD ) {
 			wp_mail( get_option( 'admin_email' ), $subject, print_r( $body ) );
 		} else {
 			do_action( 'mc_debug', $subject, $body );
@@ -406,5 +410,5 @@ function mc_debug( $subject, $body, $email = false ) {
 function mc_drop_table( $table ) {
 	global $wpdb;
 	$sql = 'DROP TABLE ' . $table();
-	$wpdb->query( $sql );
+	$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
 }

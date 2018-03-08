@@ -1977,7 +1977,7 @@ function mc_list_events() {
 				</thead>
 				<?php
 				$class      = '';
-				$sql        = "SELECT * FROM " . my_calendar_categories_table();
+				$sql        = 'SELECT * FROM ' . my_calendar_categories_table();
 				$categories = $wpdb->get_results( $sql );
 
 				foreach ( array_keys( $events ) as $key ) {
@@ -2334,7 +2334,7 @@ function mc_check_data( $action, $post, $i ) {
 		$event_hide_end     = ( $time == '' || $time == '23:59:59' ) ? 1 : $event_hide_end; // hide end time automatically on all day events
 		// set location
 		if ( $location_preset != 'none' && is_numeric( $location_preset ) ) {
-			$sql             = "SELECT * FROM " . my_calendar_locations_table() . " WHERE location_id = $location_preset";
+			$sql             = 'SELECT * FROM ' . my_calendar_locations_table() . " WHERE location_id = $location_preset";
 			$location        = $wpdb->get_row( $sql );
 			$event_label     = $location->location_label;
 			$event_street    = $location->location_street;
@@ -2740,9 +2740,9 @@ function mc_instance_list( $args ) {
 	global $wpdb;
 	$output  = '';
 	if ( $instance == true ) {
-		$sql     = "SELECT * FROM " . my_calendar_event_table() . " WHERE occur_id=%d ORDER BY occur_begin ASC";		
+		$sql     = 'SELECT * FROM ' . my_calendar_event_table() . " WHERE occur_id=%d ORDER BY occur_begin ASC";		
 	} else {
-		$sql     = "SELECT * FROM " . my_calendar_event_table() . " WHERE occur_event_id=%d ORDER BY occur_begin ASC";
+		$sql     = 'SELECT * FROM ' . my_calendar_event_table() . " WHERE occur_event_id=%d ORDER BY occur_begin ASC";
 	}
 	$results = $wpdb->get_results( $wpdb->prepare( $sql, $id ) );
 	if ( is_array( $results ) ) {
@@ -2787,7 +2787,7 @@ function mc_instance_list( $args ) {
 function mc_admin_instances( $id, $occur = false ) {
 	global $wpdb;
 	$output  = '';
-	$sql     = "SELECT * FROM " . my_calendar_event_table() . " WHERE occur_event_id=%d ORDER BY occur_begin ASC";
+	$sql     = 'SELECT * FROM ' . my_calendar_event_table() . " WHERE occur_event_id=%d ORDER BY occur_begin ASC";
 	$results = $wpdb->get_results( $wpdb->prepare( $sql, $id ) );
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {

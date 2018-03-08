@@ -646,7 +646,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$c_month = isset( $date['month'] ) ? $date['month'] : date( "n", current_time( 'timestamp' ) );
 	$c_year  = isset( $date['year'] ) ? $date['year'] : date( "Y", current_time( 'timestamp' ) );
 	$c_day   = isset( $date['day'] ) ? $date['day'] : date( "j", current_time( 'timestamp' ) );
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$current_url   = mc_get_current_url();
@@ -1165,11 +1165,11 @@ function mc_event_filter( $title, $sep = ' | ', $seplocation = 'right' ) {
 function mc_valid_id( $mc_id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	
-	$result = $mcdb->get_row( $mcdb->prepare( "SELECT * FROM " . my_calendar_event_table() . " WHERE occur_id = %d", $mc_id ) );
+	$result = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . " WHERE occur_id = %d", $mc_id ) );
 	
 	if ( is_object( $result ) ) {
 		return true;
@@ -2233,14 +2233,14 @@ function mc_category_key( $category ) {
 	global $wpdb;
 	$url  = plugin_dir_url( __FILE__ );
 	$mcdb = $wpdb;
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$key             = '';
 	$cat_limit       = mc_select_category( $category, 'all', 'category' );
 	$select_category = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
 	
-	$sql             = "SELECT * FROM " . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
+	$sql             = 'SELECT * FROM ' . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
 	$categories      = $mcdb->get_results( $sql );
 	$key            .= '<div class="category-key"><h3>' . __( 'Categories', 'my-calendar' ) . "</h3>\n<ul>\n";
 	$path            = ( mc_is_custom_icon() ) ? str_replace( 'my-calendar', 'my-calendar-custom', $url ) : plugins_url( 'images/icons', __FILE__ ) . '/';
@@ -2575,7 +2575,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 	global $wpdb;
 	$mcdb = $wpdb;
 
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	
@@ -2608,9 +2608,9 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		</div><p>';
 	$public_form = ( $context == 'public' ) ? $form : '';
 	if ( !is_user_logged_in() ) {
-		$categories = $mcdb->get_results( "SELECT * FROM " . my_calendar_categories_table() . " WHERE category_private = 1 ORDER BY category_name ASC" );		
+		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . " WHERE category_private = 1 ORDER BY category_name ASC" );		
 	} else {
-		$categories = $mcdb->get_results( "SELECT * FROM " . my_calendar_categories_table() . " ORDER BY category_name ASC" );
+		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . " ORDER BY category_name ASC" );
 	}
 	if ( ! empty( $categories ) && count( $categories ) >= 1 ) {
 		$output = "<div id='mc_categories'>\n";

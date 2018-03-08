@@ -119,7 +119,7 @@ function my_calendar_import() {
 		global $wpdb;
 		define( 'KO_CALENDAR_TABLE', $wpdb->prefix . 'calendar' );
 		define( 'KO_CALENDAR_CATS', $wpdb->prefix . 'calendar_categories' );
-		$events         = $wpdb->get_results( "SELECT * FROM " . KO_CALENDAR_TABLE, 'ARRAY_A' );
+		$events         = $wpdb->get_results( 'SELECT * FROM ' . KO_CALENDAR_TABLE, 'ARRAY_A' );
 		$event_ids      = array();
 		$events_results = false;
 		foreach ( $events as $key ) {
@@ -155,7 +155,7 @@ function my_calendar_import() {
 			);
 			mc_increment_event( $value, $dates );
 		}
-		$cats         = $wpdb->get_results( "SELECT * FROM " . KO_CALENDAR_CATS, 'ARRAY_A' );
+		$cats         = $wpdb->get_results( 'SELECT * FROM ' . KO_CALENDAR_CATS, 'ARRAY_A' );
 		$cats_results = false;
 		foreach ( $cats as $key ) {
 			$name         = esc_sql( $key['category_name'] );
@@ -262,7 +262,7 @@ function my_calendar_settings() {
 				}
 			}
 		}
-		echo "<div class='updated'><p><strong>" . __( 'My Calendar Permissions Updated', 'my-calendar' ) . "</strong></p></div>";
+		echo "<div class='updated'><p><strong>" . __( 'My Calendar Permissions Updated', 'my-calendar' ) . '</strong></p></div>';
 	}
 	// output.
 	if ( isset( $_POST['mc_show_months'] ) ) {
@@ -319,7 +319,7 @@ function my_calendar_settings() {
 		} else {
 			$note = '';
 		}
-		echo "<div class=\"updated\"><p><strong>" . __( 'Output Settings saved', 'my-calendar' ) . "</strong>$note</p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Output Settings saved', 'my-calendar' ) . "</strong>$note</p></div>";
 	}
 	// INPUT.
 	if ( isset( $_POST['mc_input'] ) ) {
@@ -344,7 +344,7 @@ function my_calendar_settings() {
 		update_option( 'mc_no_fifth_week', ( ! empty( $_POST['mc_no_fifth_week'] ) && $_POST['mc_no_fifth_week'] == 'on' ) ? 'true' : 'false' );
 		update_option( 'mc_event_link_expires', ( ! empty( $_POST['mc_event_link_expires'] ) && $_POST['mc_event_link_expires'] == 'on' ) ? 'true' : 'false' );
 		
-		echo "<div class=\"updated\"><p><strong>" . __( 'Input Settings saved', 'my-calendar' ) . ".</strong></p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Input Settings saved', 'my-calendar' ) . ".</strong></p></div>";
 	}
 	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 		if ( isset( $_POST['mc_network'] ) ) {
@@ -352,7 +352,7 @@ function my_calendar_settings() {
 			update_site_option( 'mc_multisite', $mc_multisite );
 			$mc_multisite_show = (int) $_POST['mc_multisite_show'];
 			update_site_option( 'mc_multisite_show', $mc_multisite_show );
-			echo "<div class=\"updated\"><p><strong>" . __( 'Multisite settings saved', 'my-calendar' ) . ".</strong></p></div>";
+			echo '<div class="updated"><p><strong>' . __( 'Multisite settings saved', 'my-calendar' ) . ".</strong></p></div>";
 		}
 	}
 	// custom text.
@@ -386,7 +386,7 @@ function my_calendar_settings() {
 		update_option( 'mc_week_format', stripslashes( $_POST['mc_week_format'] ) );
 		update_option( 'mc_time_format', stripslashes( $_POST['mc_time_format'] ) );
 		update_option( 'mc_month_format', stripslashes( $_POST['mc_month_format'] ) );
-		echo "<div class=\"updated\"><p><strong>" . __( 'Custom text settings saved', 'my-calendar' ) . ".</strong></p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Custom text settings saved', 'my-calendar' ) . ".</strong></p></div>";
 	}
 	// Mail function by Roland.
 	if ( isset( $_POST['mc_email'] ) ) {
@@ -404,7 +404,7 @@ function my_calendar_settings() {
 		update_option( 'mc_event_mail_bcc', $mc_event_mail_bcc );
 		update_option( 'mc_event_mail', $mc_event_mail );
 		update_option( 'mc_html_email', $mc_html_email );
-		echo "<div class=\"updated\"><p><strong>" . __( 'Email notice settings saved', 'my-calendar' ) . ".</strong></p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Email notice settings saved', 'my-calendar' ) . ".</strong></p></div>";
 	}
 	// Custom User Settings.
 
@@ -499,7 +499,7 @@ function my_calendar_settings() {
 									} 
 								?>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-								<?php if ( get_option( 'mc_remote' ) == 'true' && !function_exists( 'mc_remote_db' ) ) { ?>
+								<?php if ( 'true' == get_option( 'mc_remote' ) && !function_exists( 'mc_remote_db' ) ) { ?>
 								<li><?php _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ); ?>
 <pre>
 function mc_remote_db() {

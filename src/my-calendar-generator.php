@@ -166,7 +166,7 @@ function mc_generator( $type ) {
 						<?php
 						global $wpdb;
 						$mcdb = $wpdb;
-						if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+						if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 							$mcdb = mc_remote_db();
 						}
 						$query  = "SELECT event_begin FROM " . my_calendar_table() . " WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1";

@@ -314,7 +314,7 @@ function my_calendar_menu() {
 	if ( function_exists( 'add_submenu_page' ) ) {
 		add_action( "admin_head", 'my_calendar_write_js' );
 		add_action( "admin_enqueue_scripts", 'my_calendar_add_styles' );
-		if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+		if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 			// if we're accessing a remote site, remove these pages.
 		} else {
 			if ( isset( $_GET['event_id'] ) ) {

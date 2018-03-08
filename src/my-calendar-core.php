@@ -157,7 +157,7 @@ function mc_register_styles() {
 function my_calendar_head() {
 	global $wpdb, $wp_query;
 	$mcdb = $wpdb;
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}	
 	$array = array();

@@ -122,18 +122,18 @@ function my_calendar_add_locations() {
 		$results = mc_insert_location( $add );
 		do_action( 'mc_save_location', $results, $add );
 		if ( $results ) {
-			echo "<div class=\"updated\"><p><strong>" . __( 'Location added successfully', 'my-calendar' ) . "</strong></p></div>";
+			echo '<div class="updated"><p><strong>' . __( 'Location added successfully', 'my-calendar' ) . '</strong></p></div>';
 		} else {
-			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be added to database', 'my-calendar' ) . "</strong></p></div>";
+			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be added to database', 'my-calendar' ) . '</strong></p></div>';
 		}
 	} elseif ( isset( $_GET['location_id'] ) && $_GET['mode'] == 'delete' ) {
 		$sql     = "DELETE FROM " . my_calendar_locations_table() . " WHERE location_id=" . (int) ( $_GET['location_id'] );
 		$results = $wpdb->query( $sql );
 		do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
 		if ( $results ) {
-			echo "<div class=\"updated\"><p><strong>" . __( 'Location deleted successfully', 'my-calendar' ) . "</strong></p></div>";
+			echo '<div class="updated"><p><strong>' . __( 'Location deleted successfully', 'my-calendar' ) . '</strong></p></div>';
 		} else {
-			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be deleted', 'my-calendar' ) . "</strong></p></div>";
+			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be deleted', 'my-calendar' ) . '</strong></p></div>';
 		}
 	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && $_GET['mode'] == 'edit' && ! isset( $_POST['mode'] ) ) {
 		$cur_loc = (int) $_GET['location_id'];
@@ -164,11 +164,11 @@ function my_calendar_add_locations() {
 				
 		do_action( 'mc_modify_location', $where, $update );
 		if ( $results === false ) {
-			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be edited.', 'my-calendar' ) . "</strong></p></div>";
+			echo "<div class=\"error\"><p><strong>" . __( 'Location could not be edited.', 'my-calendar' ) . '</strong></p></div>';
 		} elseif ( $results == 0 ) {
-			echo "<div class=\"updated error\"><p><strong>" . __( 'Location was not changed.', 'my-calendar' ) . "</strong></p></div>";
+			echo "<div class=\"updated error\"><p><strong>" . __( 'Location was not changed.', 'my-calendar' ) . '</strong></p></div>';
 		} else {
-			echo "<div class=\"updated\"><p><strong>" . __( 'Location edited successfully', 'my-calendar' ) . "</strong></p></div>";
+			echo '<div class="updated"><p><strong>' . __( 'Location edited successfully', 'my-calendar' ) . '</strong></p></div>';
 		}
 		$cur_loc = (int) $_POST['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
@@ -266,7 +266,7 @@ function mc_show_location_form( $view = 'add', $curID = '' ) {
  */
 function mc_get_location( $location_id ) {
 	global $wpdb;
-	$sql      = $wpdb->prepare( "SELECT * FROM " . my_calendar_locations_table() . " WHERE location_id = %d", $location_id );
+	$sql      = $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . " WHERE location_id = %d", $location_id );
 	$location = $wpdb->get_row( $sql );
 
 	return $location;
@@ -583,7 +583,7 @@ function mc_location_data( $field, $id ) {
 	if ( $id ) {
 		global $wpdb;
 		$mcdb = $wpdb;
-		if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+		if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 			$mcdb = mc_remote_db();
 		}
 		$field  = $field;

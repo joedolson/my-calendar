@@ -30,7 +30,7 @@ matrix:
     - php: 5.6
       env: WP_VERSION=trunk
     - php: 5.6
-      env: WP_TRAVISCI=phpcs
+      env: WP_TRAVISCI=phpcbf
     - php: 5.3
       env: WP_VERSION=latest
       dist: precise
@@ -49,9 +49,9 @@ before_script:
       composer global require "phpunit/phpunit=4.8.*|5.7.*"
     fi
   - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
+    if [[ "$WP_TRAVISCI" == "phpcbf" ]] ; then
       composer global require wp-coding-standards/wpcs
-      phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+      phpcbf --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
     fi
 
 script:
@@ -61,6 +61,6 @@ script:
       WP_MULTISITE=1 phpunit
     fi
   - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      phpcs
+    if [[ "$WP_TRAVISCI" == "phpcbf" ]] ; then
+      phpcbf
     fi

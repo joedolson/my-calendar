@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Check whether the My Calendar database is up to date
  */
 function my_calendar_check_db() {
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		return;
 	}
 	

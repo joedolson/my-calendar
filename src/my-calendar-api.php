@@ -211,8 +211,6 @@ END:VCALENDAR";
  * Fetch events & create RSS feed output.
  *
  * @param array $events Array of event objects.
- *
- * @return string headers & output for RSS feed
  */
 function my_calendar_rss( $events = array() ) {
 	// establish template.
@@ -307,7 +305,7 @@ function mc_format_rss( $events ) {
 }
 
 /**
- * double check to try to ensure that the XML feed can be rendered.
+ * Double check to try to ensure that the XML feed can be rendered.
  *
  * @param string $value Any string value.
  * 
@@ -315,17 +313,18 @@ function mc_format_rss( $events ) {
  */ 
 function mc_strip_to_xml( $value ) {
 	// if there's still an ampersand surrounded by whitespace, kill it.
-	$value = str_replace( ' & ', ' &amp; ', $value );
-	$ret = $current = "";
+	$value   = str_replace( ' & ', ' &amp; ', $value );
+	$ret     = '';
+	$current = '';
 	if ( empty( $value ) ) {
 		return $ret;
 	}
 	$length = strlen( $value );
 	for ( $i = 0; $i < $length; $i ++ ) {
 		$current = ord( $value{$i} );
-		if ( ( $current == 0x9 ) ||
-		     ( $current == 0xA ) ||
-		     ( $current == 0xD ) ||
+		if ( ( 0x9 == $current ) ||
+		     ( 0xA == $current ) ||
+		     ( 0xD == $current ) ||
 		     ( ( $current >= 0x20 ) && ( $current <= 0xD7FF ) ) ||
 		     ( ( $current >= 0xE000 ) && ( $current <= 0xFFFD ) ) ||
 		     ( ( $current >= 0x10000 ) && ( $current <= 0x10FFFF ) )
@@ -467,6 +466,11 @@ function my_calendar_ical() {
 	echo $output;
 }
 
+/**
+ * Templates for iCal event formats.
+ *
+ * @return array Parts of iCal events.
+ */
 function mc_ical_template() {
 	global $mc_version;
 	// Translators: Blogname
@@ -501,6 +505,13 @@ X-WR-CALDESC:' . $events_from;
 	);
 }
 
+/**
+ * Generate alert parameters for an iCal event.
+ *
+ * @param array $alarm Parameters for describing an alarm.
+ *
+ * @return string iCal alert block.
+ */
 function mc_generate_alert_ical( $alarm ) {
 	$defaults = array( 
 		'TRIGGER'     => '-PT30M',
@@ -513,8 +524,8 @@ function mc_generate_alert_ical( $alarm ) {
 	$values = array_merge( $defaults, $alarm );
 	$alert  = "\nBEGIN:VALARM\n";
 	$alert .= "TRIGGER:$values[TRIGGER]\n";
-	$alert .= ( $values['REPEAT'] != 0 ) ? "REPEAT:$values[REPEAT]\n" : '';
-	$alert .= ( $values['DURATION'] != '' ) ? "REPEAT:$values[DURATION]\n" : '';
+	$alert .= ( 0 != $values['REPEAT'] ) ? "REPEAT:$values[REPEAT]\n" : '';
+	$alert .= ( '' != $values['DURATION'] ) ? "REPEAT:$values[DURATION]\n" : '';
 	$alert .= "ACTION:$values[ACTION]\n";
 	$alert .= "DESCRIPTION:$values[DESCRIPTION]\n";
 	$alert .= "END:VALARM";	

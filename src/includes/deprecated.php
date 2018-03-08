@@ -231,7 +231,7 @@ if ( ! function_exists( 'is_ssl' ) ) {
  * Old name of template drawing function
  *
  * @see mc_draw_template()
- * 
+ *
  * @param array  $array Associative Array of information.
  * @param string $template String containing tags.
  * @param string $type Type of display.
@@ -239,12 +239,12 @@ if ( ! function_exists( 'is_ssl' ) ) {
  * @return string
  */
 function jd_draw_template( $array, $template, $type = 'list' ) {
-	
+
 	return mc_draw_template( $array, $template, $type );
 }
 
 /**
- * test whether two dates are day-consecutive
+ * Test whether two dates are day-consecutive
  * not used per audit 3/1/2018
  *
  * @param string $current date string.
@@ -263,11 +263,11 @@ function mc_dates_consecutive( $current, $last_date ) {
 }
 /**
  * Reverse Function to compare datetime in event objects
- * 
+ *
  * @param object $b Event object.
  * @param object $a Event object.
  *
- * return int (ternary value)
+ * @return int (ternary value)
  */
 function my_calendar_reverse_datetime_cmp( $b, $a ) {
 	$event_dt_a = strtotime( $a->occur_begin );
@@ -336,8 +336,8 @@ function get_week_date( $week, $year ) {
  */
 function add_days_to_date( $givendate, $day = 0 ) {
 	$cd      = strtotime( $givendate );
-	$time    = mktime( date( 'h', $cd ), date( 'i', $cd ),	date( 's', $cd ), date( 'm', $cd ), date( 'd', $cd ) + $day, date( 'Y', $cd ) );
-	$newdate = date( 'Y-m-d h:i:s',	$time );
+	$time    = mktime( date( 'h', $cd ), date( 'i', $cd ), date( 's', $cd ), date( 'm', $cd ), date( 'd', $cd ) + $day, date( 'Y', $cd ) );
+	$newdate = date( 'Y-m-d h:i:s', $time );
 
 	return $newdate;
 }

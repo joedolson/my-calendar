@@ -88,7 +88,7 @@ function mc_category_select_ids( $category ) {
 	$mcdb = $wpdb;
 	$select = array();
 	
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	
@@ -115,7 +115,7 @@ function mc_category_select_ids( $category ) {
 		if ( is_numeric( $category ) ) {
 			$select[] = absint( $category );
 		} else {
-			$cat = $mcdb->get_row( $mcdb->prepare( "SELECT category_id FROM " . my_calendar_categories_table() . " WHERE category_name = %s", trim( $category ) ) );
+			$cat = $mcdb->get_row( $mcdb->prepare( "SELECT category_id FROM " . my_calendar_categories_table() . ' WHERE category_name = %s', trim( $category ) ) );
 			if ( is_object( $cat ) ) {
 				$select[] = $cat->category_id;
 			}

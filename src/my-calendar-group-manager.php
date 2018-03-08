@@ -211,7 +211,7 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 				$message = "<div class='updated'><p>#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
 			}
 		} else {
-			$message = "<div class='error'><p><strong>#$event_id: " . __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ) . "</strong></p></div>";
+			$message = "<div class='error'><p><strong>#$event_id: " . __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ) . '</strong></p></div>';
 		}
 	}
 	$message = $message . "\n" . $output[3];
@@ -232,7 +232,7 @@ function mc_group_data( $event_id = false ) {
 		if ( intval( $event_id ) != $event_id ) {
 			return "<div class=\"error\"><p>" . __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ) . "</p></div>";
 		} else {
-			$data = $wpdb->get_results( "SELECT * FROM " . my_calendar_table() . " WHERE event_id='" . (int) $event_id . "' LIMIT 1" );
+			$data = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_table() . " WHERE event_id='" . (int) $event_id . "' LIMIT 1" );
 			if ( empty( $data ) ) {
 				return "<div class=\"error\"><p>" . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . "</p></div>";
 			}
@@ -833,7 +833,7 @@ function mc_check_group_data( $action, $post ) {
 		$event_span         = ! empty( $post['event_span'] ) ? 1 : 0;
 		// set location
 		if ( $location_preset != 'none' ) {
-			$sql             = "SELECT * FROM " . my_calendar_locations_table() . " WHERE location_id = $location_preset";
+			$sql             = 'SELECT * FROM ' . my_calendar_locations_table() . " WHERE location_id = $location_preset";
 			$location        = $wpdb->get_row( $sql );
 			$event_label     = $location->location_label;
 			$event_street    = $location->location_street;
@@ -1067,7 +1067,7 @@ function mc_list_groups() {
 		</thead>
 		<?php
 		$class      = '';
-		$sql        = "SELECT * FROM " . my_calendar_categories_table();
+		$sql        = 'SELECT * FROM ' . my_calendar_categories_table();
 		$categories = $wpdb->get_results( $sql );
 
 		foreach ( $events as $event ) {

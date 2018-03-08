@@ -901,7 +901,7 @@ function mc_event_date_span( $group_id, $event_span, $dates = array() ) {
 	if ( get_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span ) ) {
 		return get_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span );
 	}
-	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$group_id = (int) $group_id;
