@@ -36,7 +36,7 @@ function my_calendar_group_edit() {
 		global $mc_output;
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( "Security check failed" );
+			wp_die( 'Security check failed' );
 		}
 		switch ( $_POST['event_action'] ) {
 			case 'edit':

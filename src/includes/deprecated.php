@@ -8,7 +8,6 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
 
 // Define the table constants used in My Calendar in case anybody is still using them.
@@ -44,14 +43,14 @@ if ( is_multisite() ) {
  * @param int    $host Deprecated.
  * @param int    $hash Deprecated.
  *
- * @deprecated 
+ * @deprecated
  */
 function mc_check_cache( $category, $ltype, $lvalue, $author, $host, $hash ) {
 	return false;
 }
 
 /**
- * Caching has been disabled by default with no option to enable for some time. 
+ * Caching has been disabled by default with no option to enable for some time.
  * Leaving functions, but they will only return false.
  *
  * @param string $cache Deprecated.
@@ -108,7 +107,7 @@ function mc_get_cache( $cache ) {
 }
 
 /**
- * Caching has been disabled by default with no option to enable for some time. 
+ * Caching has been disabled by default with no option to enable for some time.
  * Leaving functions, but they will only return false.
  *
  * @param string $cache Deprecated.
@@ -121,7 +120,7 @@ function mc_set_cache( $cache, $time ) {
 }
 
 /**
- * Caching has been disabled by default with no option to enable for some time. 
+ * Caching has been disabled by default with no option to enable for some time.
  * Leaving functions, but they will only return false.
  *
  * @param string $cache Deprecated.
@@ -154,7 +153,7 @@ function jd_show_support_box() {
 	mc_show_sidebar();
 }
 
-/** 
+/**
  * Odd toggle. Unknown when last used.
  *
  * @param int $int Any integer.
@@ -170,48 +169,48 @@ function my_calendar_is_odd( $int ) {
 /**
  * Get label for "forever" events (no longer exist.)
  *
- * @param string $recur.
- * @param string $repeats.
+ * @param string $recur Recurrence string (single character).
+ * @param int    $repeats Number of occurrences to repeat.
  *
  * @deprecated 2.5.16
  *
  * @return string label
  */
 function mc_event_repeats_forever( $recur, $repeats ) {
-	if ( $recur != 'S' && $repeats == 0 ) {
+	if ( 'S' != $recur && 0 == $repeats ) {
 		return true;
 	}
 	switch ( $recur ) {
-		case "S": // single.
+		case 'S': // single.
 			return false;
 			break;
-		case "D": // daily.
-			return ( $repeats == 500 ) ? true : false;
+		case 'D': // daily.
+			return ( 500 == $repeats ) ? true : false;
 			break;
-		case "W": // weekly.
-			return ( $repeats == 240 ) ? true : false;
+		case 'W': // weekly.
+			return ( 240 == $repeats ) ? true : false;
 			break;
-		case "B": // biweekly.
-			return ( $repeats == 120 ) ? true : false;
+		case 'B': // biweekly.
+			return ( 120 == $repeats ) ? true : false;
 			break;
-		case "M": // monthly.
-		case "U":
-			return ( $repeats == 60 ) ? true : false;
+		case 'M': // monthly.
+		case 'U':
+			return ( 60 == $repeats ) ? true : false;
 			break;
-		case "Y":
-			return ( $repeats == 5 ) ? true : false;
+		case 'Y':
+			return ( 5 == $repeats ) ? true : false;
 			break;
 		default:
 			return false;
 	}
 }
 
-/**
- * Try to check whether site is running in an HTTPS environment.
- *
- * Currently used only in My Calendar PRO; exists in both for back compat 
- */
 if ( ! function_exists( 'is_ssl' ) ) {
+	/**
+	 * Try to check whether site is running in an HTTPS environment.
+	 *
+	 * Currently used only in My Calendar PRO; exists in both for back compat
+	 */
 	function is_ssl() {
 		if ( isset( $_SERVER['HTTPS'] ) ) {
 			if ( 'on' == strtolower( $_SERVER['HTTPS'] ) ) {
@@ -233,10 +232,10 @@ if ( ! function_exists( 'is_ssl' ) ) {
  *
  * @see mc_draw_template()
  * 
- * @param array  $array.
- * @param string $template.
- * @param string $type.
- * 
+ * @param array  $array Associative Array of information.
+ * @param string $template String containing tags.
+ * @param string $type Type of display.
+ *
  * @return string
  */
 function jd_draw_template( $array, $template, $type = 'list' ) {
@@ -247,26 +246,26 @@ function jd_draw_template( $array, $template, $type = 'list' ) {
 /**
  * test whether two dates are day-consecutive
  * not used per audit 3/1/2018
- * 
+ *
  * @param string $current date string.
  * @param string $last_date previous date.
  *
  * @return boolean
- */ 
+ */
 function mc_dates_consecutive( $current, $last_date ) {
 	if ( strtotime( $last_date . '+ 1 day' ) == strtotime( $current ) ) {
-		
+
 		return true;
 	} else {
-		
+
 		return false;
 	}
 }
 /**
  * Reverse Function to compare datetime in event objects
  * 
- * @param object $b.
- * @param object $a.
+ * @param object $b Event object.
+ * @param object $a Event object.
  *
  * return int (ternary value)
  */
@@ -290,7 +289,7 @@ function my_calendar_reverse_datetime_cmp( $b, $a ) {
  *
  * @return diff
  */
-function jd_date_diff( $start, $end = "NOW" ) {
+function jd_date_diff( $start, $end = 'NOW' ) {
 	$sdate = strtotime( $start );
 	$edate = strtotime( $end );
 
@@ -337,15 +336,8 @@ function get_week_date( $week, $year ) {
  */
 function add_days_to_date( $givendate, $day = 0 ) {
 	$cd      = strtotime( $givendate );
-	$newdate = date( 'Y-m-d h:i:s',	mktime(
-			date( 'h', $cd ),
-			date( 'i', $cd ),
-			date( 's', $cd ),
-			date( 'm', $cd ),
-			date( 'd', $cd ) + $day,
-			date( 'Y', $cd )
-		) 
-	);
+	$time    = mktime( date( 'h', $cd ), date( 'i', $cd ),	date( 's', $cd ), date( 'm', $cd ), date( 'd', $cd ) + $day, date( 'Y', $cd ) );
+	$newdate = date( 'Y-m-d h:i:s',	$time );
 
 	return $newdate;
 }

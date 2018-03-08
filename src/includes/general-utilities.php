@@ -7,9 +7,8 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -66,7 +65,7 @@ function mc_flatten_array( $events ) {
 			}
 		}
 	}
-	
+
 	return $new_array;
 }
 
@@ -75,7 +74,7 @@ add_action( 'admin_menu', 'mc_add_outer_box' );
  * Add meta boxes
  */
 function mc_add_outer_box() {
-	add_meta_box( 'mcs_add_event', __('My Calendar Event', 'my-calendar'), 'mc_add_inner_box', 'mc-events', 'side','high' );
+	add_meta_box( 'mcs_add_event', __( 'My Calendar Event', 'my-calendar' ), 'mc_add_inner_box', 'mc-events', 'side', 'high' );
 }
 
 /**
@@ -85,27 +84,27 @@ function mc_add_inner_box() {
 	global $post;
 	$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 	if ( $event_id ) {
-		$url     = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id='.$event_id );
+		$url     = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id );
 		$event   = mc_get_first_event( $event_id );
 		$content = '<p><strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '</strong><br />' . $event->event_begin . ' @ ' . $event->event_time . '</p>';
-		if ( $event->event_label != '' ) {
+		if ( '' != $event->event_label ) {
 			// Translators: Name of event location.
 			$content .= '<p>' . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . '</p>';
 		}
 		// Translators: Event URL.
 		$content .= '<p>' . sprintf( __( '<a href="%s">Edit event</a>.', 'my-calendar' ), $url ) . '</p>';
-		
+
 		echo $content;
-	} 
+	}
 }
 
 /**
- * Pass group of allowed tags to strip_tags 
+ * Pass group of allowed tags to strip_tags
  *
  * @return string of allowed tags parseable by strip_tags.
  */
 function mc_strip_tags() {
-	
+
 	return '<strong><em><i><b><span>';
 }
 
@@ -129,8 +128,8 @@ function mc_is_checked( $field, $value, $array = '', $return = false ) {
 			}
 		}
 	} else {
-		$theSetting = get_option( $field );
-		if ( ! empty( $theSetting[ $array ]['enabled'] ) && $theSetting[ $array ]['enabled'] == $value ) {
+		$setting = get_option( $field );
+		if ( ! empty( $setting[ $array ]['enabled'] ) && $setting[ $array ]['enabled'] == $value ) {
 			if ( $return ) {
 				return 'checked="checked"';
 			} else {
@@ -250,7 +249,7 @@ function mc_inverse_color( $color ) {
 /**
  * Shift color to an acceptable alternate color.
  *
- * @param $color Color hex.
+ * @param string $color Color hex.
  *
  * @return New color hex
  */
@@ -258,7 +257,8 @@ function mc_shift_color( $color ) {
 	$color   = str_replace( '#', '', $color );
 	$rgb     = ''; 
 	$percent = ( mc_inverse_color( $color ) == '#ffffff' ) ? - 20 : 20;
-	$per     = $percent / 100 * 255; // Percentage to work with. Change middle figure to control color temperature.
+	$per     = $percent / 100 * 255; 
+	// Percentage to work with. Change middle figure to control color temperature.
 	if ( $per < 0 ) {
 		// DARKER.
 		$per = abs( $per ); // Turns Neg Number to Pos Number.
@@ -312,7 +312,7 @@ function mc_html_type() {
 }
 
 /**
- * duplicate of mc_is_url, which really should have been in this file. Bugger.
+ * Duplicate of mc_is_url, which really should have been in this file. Bugger.
  *
  * @param string $url URL.
  * 
@@ -401,10 +401,10 @@ function mc_debug( $subject, $body, $email = false ) {
 /**
  * Drop a table
  *
- * @param string name of function used to call table name.
+ * @param string $table name of function used to call table name.
  */
 function mc_drop_table( $table ) {
 	global $wpdb;
-	$sql = "DROP TABLE " . $table();
+	$sql = 'DROP TABLE ' . $table();
 	$wpdb->query( $sql );
 }

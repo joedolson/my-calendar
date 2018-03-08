@@ -7,23 +7,21 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-
 /**
  * Execute KSES post on strings, otherwise, return as is.
  *
- * @param $string Any string.
+ * @param string $string Any string.
  *
  * @return Value passed or cleaned string
  */
 function mc_kses_post( $string ) {
-	if ( !is_string( $string ) ) {
+	if ( ! is_string( $string ) ) {
 		return $string;
 	} else {
 		return wp_kses( $string, 'mycalendar' );
@@ -38,12 +36,12 @@ add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
  * @param array  $tags Original allowed tags.
  * @param string $context Custom context for My Calendar to avoid running elsewhere.
  *
- * @param return array tags
+ * @return return array tags
  */
 function mc_allowed_tags( $tags, $context ) {
-	if ( $context == 'mycalendar' ) {
+	if ( 'mycalendar' == $context ) {
 		global $allowedposttags;
-		$tags = $allowedposttags;
+		$tags          = $allowedposttags;
 		$tags['input'] = array(
 			'type'             => true,
 			'value'            => true,
@@ -59,22 +57,26 @@ function mc_allowed_tags( $tags, $context ) {
 			'checked'          => true,
 			'required'         => true,
 		);
+		
 		$tags['select'] = array(
 			'name'  => true,
 			'id'    => true,
 			'class' => true,
 		);
+		
 		$tags['span'] = array_merge( $tags['span'], array( 
 			'itemprop'  => true,
 			'itemscope' => true,
 			'itemtype'  => true,
 		) );
+		
 		$tags['button'] = array_merge( $tags['button'], array(
 			'name'     => true,
 			'type'     => true,
 			'disabled' => true,
 			'class'    => true,
 		) );
+		
 		$tags['form'] = array_merge( $tags['form'], array( 
 			'action'   => true,
 			'method'   => true,
@@ -82,16 +84,19 @@ function mc_allowed_tags( $tags, $context ) {
 			'id'       => true,
 			'tabindex' => true,
 		) );
+		
 		$tags['div'] = array_merge( $tags['div'], array(
 			'class'     => true,
 			'id'        => true,
 			'aria-live' => true,
 		) );
+		
 		$tags['fieldset'] = array_merge( $tags['fieldset'], array() );
 		$tags['legend']   = array_merge( $tags['legend'], array() );
 		$tags['p']        = array_merge( $tags['p'], array(
 			'class' => true,
 		) );
+		
 		$tags['img'] = array_merge( $tags['img'], array(
 			'class'    => true,
 			'src'      => true,
@@ -102,12 +107,14 @@ function mc_allowed_tags( $tags, $context ) {
 			'longdesc' => true,
 			'tabindex' => true,
 		) );
+		
 		$tags['iframe'] = array(
 			'width'       => true,
 			'height'      => true,
 			'src'         => true,
 			'frameborder' => true,
 		);
+		
 		$tags['a'] = array(
 			'aria-labelledby'  => true,
 			'aria-describedby' => true,	

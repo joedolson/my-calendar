@@ -7,9 +7,8 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -21,7 +20,7 @@ function my_calendar_behaviors_edit() {
 	if ( isset( $_POST['mc-js-save'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( "Security check failed" );
+			die( 'Security check failed' );
 		}
 
 		$use_custom_js = ( isset( $_POST['mc_use_custom_js'] ) ) ? 1 : 0;
@@ -42,9 +41,9 @@ function my_calendar_behaviors_edit() {
 			update_option( 'mc_ajaxjs', $mc_ajaxjs );
 		}
 
-		$mc_show_js = ( $_POST['mc_show_js'] == '' ) ? '' : $_POST['mc_show_js'];
+		$mc_show_js = ( '' == $_POST['mc_show_js'] ) ? '' : $_POST['mc_show_js'];
 		update_option( 'mc_show_js', $mc_show_js );
-		echo "<div class=\"updated\"><p><strong>" . __( 'Behavior Settings saved', 'my-calendar' ) . ".</strong></p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Behavior Settings saved', 'my-calendar' ) . '.</strong></p></div>';
 	}
 
 	$mc_listjs  = stripcslashes( get_option( 'mc_listjs' ) );

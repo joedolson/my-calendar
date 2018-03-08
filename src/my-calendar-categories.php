@@ -137,7 +137,7 @@ function my_calendar_manage_categories() {
 		if ( ! empty( $_POST ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
 			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-				die( "Security check failed" );
+				die( 'Security check failed' );
 			}
 		}
 

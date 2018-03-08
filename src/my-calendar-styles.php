@@ -27,7 +27,7 @@ function my_calendar_style_edit() {
 	if ( isset( $_POST['mc_edit_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( "Security check failed" );
+			die( 'Security check failed' );
 		}
 		$my_calendar_style = ( isset( $_POST['style'] ) ) ? stripcslashes( $_POST['style'] ) : false;
 		$mc_css_file       = stripcslashes( $_POST['mc_css_file'] );
@@ -89,7 +89,7 @@ function my_calendar_style_edit() {
 	if ( isset( $_POST['mc_choose_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( "Security check failed" );
+			die( 'Security check failed' );
 		}
 		$mc_css_file = stripcslashes( $_POST['mc_css_file'] );
 

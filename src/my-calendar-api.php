@@ -7,21 +7,18 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
  * Main API function
- *
- * @return string/file JSON, CSV, etc
  */
 function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) ) {
-		if ( get_option( 'mc_api_enabled' ) == 'true' ) {
+		if ( 'true' == get_option( 'mc_api_enabled' ) ) {
 			// use this filter to add custom scripting handling API keys.
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
@@ -61,20 +58,18 @@ function my_calendar_api() {
 /**
  * Check which format the API should return
  * 
- * @param array $data Array of event objects
- * @param string $format Format to return
- *
- * @return file/string formatted data
+ * @param array  $data Array of event objects.
+ * @param string $format Format to return.
  */
 function mc_format_api( $data, $format ) {
 	switch ( $format ) {
-		case 'json' :
+		case 'json':
 			mc_format_json( $data );
 			break;
-		case 'rss' :
+		case 'rss':
 			mc_api_format_rss( $data );
 			break;
-		case 'csv' :
+		case 'csv':
 			mc_format_csv( $data );
 			break;
 	}
@@ -83,7 +78,7 @@ function mc_format_api( $data, $format ) {
 /**
  * JSON formatted events
  *
- * @param array $data array of event objects
+ * @param array $data array of event objects.
  */
 function mc_format_json( $data ) {
 	echo json_encode( $data );
@@ -92,7 +87,7 @@ function mc_format_json( $data ) {
 /**
  * CSV formatted events
  *
- * @param array $data array of event objects
+ * @param array $data array of event objects.
  */
 function mc_format_csv( $data ) {
 	$keyed = false;
@@ -113,10 +108,10 @@ function mc_format_csv( $data ) {
 	// Rewind the stream.
 	rewind( $stream );
 	// You can now echo its content.
-	header( "Content-type: text/csv" );
-	header( "Content-Disposition: attachment; filename=my-calendar.csv" );
-	header( "Pragma: no-cache" );
-	header( "Expires: 0" );
+	header( 'Content-type: text/csv' );
+	header( 'Content-Disposition: attachment; filename=my-calendar.csv' );
+	header( 'Pragma: no-cache' );
+	header( 'Expires: 0' );
 
 	echo stream_get_contents( $stream );
 	// Close the stream.
@@ -127,13 +122,13 @@ function mc_format_csv( $data ) {
 /**
  * RSS formatted events
  *
- * @param array $data array of event objects
+ * @param array $data array of event objects.
  */
 function mc_api_format_rss( $data ) {
 	$output = mc_format_rss( $data );
 	header( 'Content-type: application/rss+xml' );
-	header( "Pragma: no-cache" );
-	header( "Expires: 0" );
+	header( 'Pragma: no-cache' );
+	header( 'Expires: 0' );
 	echo $output;
 }
 
@@ -151,16 +146,16 @@ function mc_export_vcal() {
 /**
  * Send iCal event to browser
  *
- * @param integer Event ID
+ * @param integer $event_id Event ID.
  *
  * @return string headers & text for iCal event.
  */
 function my_calendar_send_vcal( $event_id ) {
 	$sitename = sanitize_title( get_bloginfo( 'name' ) );
-	header( "Content-Type: text/calendar" );
-	header( "Cache-control: private" );
+	header( 'Content-Type: text/calendar' );
+	header( 'Cache-control: private' );
 	header( 'Pragma: private' );
-	header( "Expires: Thu, 11 Nov 1977 05:40:00 GMT" ); // That's my birthday. :).
+	header( 'Expires: Thu, 11 Nov 1977 05:40:00 GMT' ); // That's my birthday. :).
 	header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
 	$output = preg_replace( "~(?<!\r)\n~", "\r\n", mc_generate_vcal( $event_id ) );
 
@@ -170,7 +165,7 @@ function my_calendar_send_vcal( $event_id ) {
 /**
  * Generate iCal formatted event for one event
  *
- * @param integer Event ID
+ * @param integer $event_id Event ID.
  *
  * @return string text for iCal
  */
@@ -182,7 +177,6 @@ function mc_generate_vcal( $event_id = false ) {
 		$event = mc_get_event( $mc_id );
 		// need to modify date values to match real values using date above.
 		$array = mc_create_tags( $event );
-
 		$alarm = apply_filters( 'mc_event_has_alarm', array(), $event_id, $array['post'] );
 		$alert = '';
 		if ( !empty( $alarm ) ) {
@@ -216,7 +210,7 @@ END:VCALENDAR";
 /**
  * Fetch events & create RSS feed output.
  *
- * @param array $events 
+ * @param array $events Array of event objects.
  *
  * @return string headers & output for RSS feed
  */
@@ -234,8 +228,8 @@ function my_calendar_rss( $events = array() ) {
 	$output = mc_format_rss( $events );
 	if ( $output ) {
 		header( 'Content-type: application/rss+xml' );
-		header( "Pragma: no-cache" );
-		header( "Expires: 0" );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
 		echo $output;
 	}
 }
@@ -297,8 +291,8 @@ function mc_format_rss( $events ) {
 		  <atom:link href="' . htmlentities( esc_url( add_query_arg( $_GET, get_feed_link( 'my-calendar-rss' ) ) ) ) . '" rel="self" type="application/rss+xml" />' . PHP_EOL;
 		foreach ( $events as $date ) {
 			foreach ( array_keys( $date ) as $key ) {
-				$event =& $date[ $key ];
-				$array = mc_create_tags( $event );
+				$event   =& $date[ $key ];
+				$array   = mc_create_tags( $event );
 				$output .= mc_draw_template( $array, $template, 'rss' );
 			}
 		}
@@ -307,6 +301,7 @@ function mc_format_rss( $events ) {
 
 		return mc_strip_to_xml( $output );
 	} else {
+
 		return false;
 	}
 }
@@ -314,7 +309,7 @@ function mc_format_rss( $events ) {
 /**
  * double check to try to ensure that the XML feed can be rendered.
  *
- * @param string $value
+ * @param string $value Any string value.
  * 
  * @return string unsupported characters stripped
  */ 
@@ -340,7 +335,7 @@ function mc_strip_to_xml( $value ) {
 			$ret .= " ";
 		}
 	}
-	$ret = iconv( "UTF-8", "UTF-8//IGNORE", $ret );
+	$ret = iconv( 'UTF-8', 'UTF-8//IGNORE', $ret );
 
 	return $ret;
 }
@@ -356,7 +351,7 @@ function mc_ics_subscribe() {
 		$cat_id = false;
 	}
 	
-	$events = mc_get_rss_events( $cat_id );
+	$events    = mc_get_rss_events( $cat_id );
 	$templates = mc_ical_templates();
 	
 	if ( is_array( $events ) && ! empty( $events ) ) {
@@ -382,14 +377,13 @@ function mc_ics_subscribe() {
 	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
 	if ( ! ( isset( $_GET['sync'] ) && $_GET['sync'] == 'true' ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
-		header( "Content-Type: text/calendar; charset=UTF-8" );
-		header( "Pragma: no-cache" );
-		header( "Expires: 0" );
+		header( 'Content-Type: text/calendar; charset=UTF-8' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
 		header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
 	}
-	
-	echo $output;	
-	
+
+	echo $output;
 }
 
 /**
@@ -464,9 +458,9 @@ function my_calendar_ical() {
 	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
 	if ( ! ( isset( $_GET['sync'] ) && $_GET['sync'] == 'true' ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
-		header( "Content-Type: text/calendar; charset=UTF-8" );
-		header( "Pragma: no-cache" );
-		header( "Expires: 0" );
+		header( 'Content-Type: text/calendar; charset=UTF-8' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
 		header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
 	}
 	
@@ -475,6 +469,8 @@ function my_calendar_ical() {
 
 function mc_ical_template() {
 	global $mc_version;
+	// Translators: Blogname
+	$events_from = sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
 	// establish template.
 	$template = "
 BEGIN:VEVENT
@@ -495,22 +491,33 @@ VERSION:2.0
 PRODID:-//My Calendar//http://www.joedolson.com//v' . $mc_version . '//EN
 METHOD:PUBLISH
 CALSCALE:GREGORIAN
-X-WR-CALDESC:' . sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
+X-WR-CALDESC:' . $events_from;
 	$foot = "\nEND:VCALENDAR";
 
-	return array( 'template' => $template, 'head' => $head, 'foot' => $foot );
+	return array( 
+		'template' => $template,
+		'head'     => $head,
+		'foot'     => $foot,
+	);
 }
 
 function mc_generate_alert_ical( $alarm ) {
-	$defaults = array( 'TRIGGER' => '-PT30M', 'REPEAT' => '0', 'DURATION' => '', 'ACTION' => 'DISPLAY', 'DESCRIPTION' => '{title}' );
+	$defaults = array( 
+		'TRIGGER'     => '-PT30M',
+		'REPEAT'      => '0',
+		'DURATION'    => '',
+		'ACTION'      => 'DISPLAY',
+		'DESCRIPTION' => '{title}',
+	);
+
 	$values = array_merge( $defaults, $alarm );
-	$alert = "\nBEGIN:VALARM\n";
+	$alert  = "\nBEGIN:VALARM\n";
 	$alert .= "TRIGGER:$values[TRIGGER]\n";
 	$alert .= ( $values['REPEAT'] != 0 ) ? "REPEAT:$values[REPEAT]\n" : '';
 	$alert .= ( $values['DURATION'] != '' ) ? "REPEAT:$values[DURATION]\n" : '';
 	$alert .= "ACTION:$values[ACTION]\n";
 	$alert .= "DESCRIPTION:$values[DESCRIPTION]\n";
 	$alert .= "END:VALARM";	
-	
+
 	return $alert;
 }

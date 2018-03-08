@@ -7,9 +7,8 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -22,7 +21,7 @@ function mc_event_editing() {
 	$args   = array(
 		'label'   => 'Show these fields',
 		'default' => get_option( 'mc_input_options' ),
-		'option'  => 'mc_show_on_page'
+		'option'  => 'mc_show_on_page',
 	);
 	add_screen_option( $option, $args );
 }
@@ -38,7 +37,7 @@ add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );
  */
 function mc_show_event_editing( $status, $args ) {
 	$return = $status;
-	if ( $args->base == 'toplevel_page_my-calendar' ) {
+	if ( 'toplevel_page_my-calendar' == $args->base ) {
 		$input_options    = get_user_meta( get_current_user_id(), 'mc_show_on_page', true );
 		$settings_options = get_option( 'mc_input_options' );
 		if ( ! is_array( $input_options ) ) {
@@ -58,13 +57,14 @@ function mc_show_event_editing( $status, $args ) {
 			'event_location'          => __( 'Event Location fields', 'my-calendar' ),
 			'event_specials'          => __( 'Set Special Scheduling options', 'my-calendar' ),
 			'event_access'            => __( 'Event Accessibility', 'my-calendar' ),
-			'event_host'              => __( 'Event Host', 'my-calendar' )
+			'event_host'              => __( 'Event Host', 'my-calendar' ),
 		);
-		$output       = '';
+		
+		$output = '';
 		foreach ( $input_options as $key => $value ) {
-			$checked = ( $value == 'on' ) ? "checked='checked'" : '';
-			$allowed = ( isset( $settings_options[ $key ] ) && $settings_options[ $key ] == 'on' ) ? true : false;
-			if ( ! ( current_user_can( 'manage_options' ) && get_option( 'mc_input_options_administrators' ) == 'true' ) && ! $allowed ) {
+			$checked = ( 'on' == $value ) ? "checked='checked'" : '';
+			$allowed = ( isset( $settings_options[ $key ] ) && 'on' == $settings_options[ $key ] ) ? true : false;
+			if ( ! ( current_user_can( 'manage_options' ) && 'true' ==get_option( 'mc_input_options_administrators' ) ) && ! $allowed ) {
 				// don't display options if this user can't use them.
 				$output .= "<input type='hidden' name='mc_show_on_page[$key]' value='off' />";
 			} else {
@@ -75,9 +75,9 @@ function mc_show_event_editing( $status, $args ) {
 			}
 		}
 		$button = get_submit_button( __( 'Apply' ), 'button', 'screen-options-apply', false );
-		$return .= "
+		$return .= '
 	<fieldset>
-	<legend>" . __( 'Event editing fields to show', 'my-calendar' ) . "</legend>
+	<legend>' . __( 'Event editing fields to show', 'my-calendar' ) . "</legend>
 	<div class='metabox-prefs'>
 		<div><input type='hidden' name='wp_screen_options[option]' value='mc_show_on_page' /></div>
 		<div><input type='hidden' name='wp_screen_options[value]' value='yes' /></div>
@@ -126,7 +126,7 @@ function mc_add_screen_option() {
 	$args           = array(
 		'label'   => 'Events',
 		'default' => $items_per_page,
-		'option'  => 'mc_num_per_page'
+		'option'  => 'mc_num_per_page',
 	);
 	add_screen_option( $option, $args );
 }
@@ -142,6 +142,6 @@ add_filter( 'set-screen-option', 'mc_set_screen_option', 10, 3 );
  * @return string $value
  */
 function mc_set_screen_option( $status, $option, $value ) {
-	
+
 	return $value;
 }

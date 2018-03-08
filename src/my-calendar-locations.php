@@ -98,7 +98,7 @@ function my_calendar_add_locations() {
 	if ( ! empty( $_POST ) && ( ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( "Security check failed" );
+			die( 'Security check failed' );
 		}
 	}
 	if ( isset( $_POST['mode'] ) && $_POST['mode'] == 'add' ) {

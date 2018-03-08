@@ -7,13 +7,15 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
- 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Add feeds to WordPress feed handler.
+ */
 function my_calendar_add_feed() {
 	add_feed( 'my-calendar-rss', 'my_calendar_rss' );
 	add_feed( 'my-calendar-ics', 'my_calendar_ical' );
@@ -23,17 +25,17 @@ function my_calendar_add_feed() {
 /**
  * Add plug-in info page links to Plugins page
  *
- * @param array $links default set of plug-in links.
+ * @param array  $links default set of plug-in links.
  * @param string $file Current file (not used by custom function.).
  *
  * @return array updated set of links
  */
 function mc_plugin_action( $links, $file ) {
 	if ( $file == plugin_basename( dirname( __FILE__ ) . '/my-calendar.php' ) ) {
-		$links[] = "<a href='admin.php?page=my-calendar-config'>" . __( 'Settings', 'my-calendar' ) . "</a>";
-		$links[] = "<a href='admin.php?page=my-calendar-help'>" . __( 'Help', 'my-calendar' ) . "</a>";
+		$links[] = '<a href="admin.php?page=my-calendar-config">' . __( 'Settings', 'my-calendar' ) . '</a>';
+		$links[] = '<a href="admin.php?page=my-calendar-help">' . __( 'Help', 'my-calendar' ) . '</a>';
 		if ( !function_exists( 'mcs_submissions' ) ) {
-			$links[] = "<a href='https://www.joedolson.com/my-calendar-pro/'>" . __( 'Go Pro', 'my-calendar' ) . "</a>";
+			$links[] = '<a href="https://www.joedolson.com/my-calendar-pro/">' . __( 'Go Pro', 'my-calendar' ) . '</a>';
 		}
 	}
 
@@ -56,9 +58,11 @@ function mc_file_exists( $file ) {
 		return true;
 	}
 	if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
+
 		return true;
 	}
 	if ( file_exists( str_replace( $base, 'my-calendar-custom', $dir ) . $file ) ) {
+
 		return true;
 	}
 
@@ -68,8 +72,8 @@ function mc_file_exists( $file ) {
 /**
  * Fetch a file by path or URL. Checks multiple directories to see which to get.
  *
- * @param string $file name of file to get, relative to /my-calendar/, /my-calendar-custom/ or theme directory e.g. 'css/mc-print.css'
- * @param string $type either path or url
+ * @param string $file name of file to get, relative to /my-calendar/, /my-calendar-custom/ or theme directory e.g. 'css/mc-print.css'.
+ * @param string $type either path or url.
  * 
  * @return string full path or url
  */
@@ -78,14 +82,14 @@ function mc_get_file( $file, $type = 'path' ) {
 	$dir  = plugin_dir_path( __FILE__ );
 	$url  = plugin_dir_url( __FILE__ );
 	$base = basename( $dir );
-	$path = ( $type == 'path' ) ? $dir . $file : $url . $file;
+	$path = ( 'path' == $type ) ? $dir . $file : $url . $file;
 	
 	if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
-		$path = ( $type == 'path' ) ? get_stylesheet_directory() . '/' . $file : get_stylesheet_directory_uri() . '/' . $file;
+		$path = ( 'path' == $type ) ? get_stylesheet_directory() . '/' . $file : get_stylesheet_directory_uri() . '/' . $file;
 	}
 	
 	if ( file_exists( str_replace( $base, 'my-calendar-custom', $dir ) . $file ) ) {
-		$path = ( $type == 'path' ) ? str_replace( $base, 'my-calendar-custom', $dir ) . $file : str_replace( $base, 'my-calendar-custom', $url ) . $file;
+		$path = ( 'path' == $type ) ? str_replace( $base, 'my-calendar-custom', $dir ) . $file : str_replace( $base, 'my-calendar-custom', $url ) . $file;
 	}
 	$path = apply_filters( 'mc_get_file', $path, $file );
 
@@ -98,8 +102,7 @@ add_action( 'wp_enqueue_scripts', 'mc_register_styles' );
  */
 function mc_register_styles() {
 	global $wp_query;
-	$this_post = $wp_query->get_queried_object();
-	
+	$this_post  = $wp_query->get_queried_object();
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'dashicons', 'my-calendar-reset' ) );
@@ -153,7 +156,7 @@ function mc_register_styles() {
  */
 function my_calendar_head() {
 	global $wpdb, $wp_query;
-	$mcdb  = $wpdb;
+	$mcdb = $wpdb;
 	if ( get_option( 'mc_remote' ) == 'true' && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}	
@@ -162,29 +165,32 @@ function my_calendar_head() {
 	if ( get_option( 'mc_use_styles' ) != 'true' ) {
 		$this_post = $wp_query->get_queried_object();
 		$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
-		$array     = ( get_option( 'mc_show_css' ) != '' ) ? explode( ",", get_option( 'mc_show_css' ) ) : $array;
+		$array     = ( '' != get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
 		if ( @in_array( $id, $array ) || get_option( 'mc_show_css' ) == '' ) {
 			// generate category colors.
-			$category_styles = $inv = $type = $alt = '';
-			$categories      = $mcdb->get_results( "SELECT * FROM " . my_calendar_categories_table( get_current_blog_id() ) . " ORDER BY category_id ASC" );
+			$category_styles = '';
+			$inv             = '';
+			$type            = '';
+			$alt             = '';
+			$categories      = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table( get_current_blog_id() ) . ' ORDER BY category_id ASC' );
 			foreach ( $categories as $category ) {
 				$class = mc_category_class( $category, 'mc_' );
 				$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
 				$color = $hex . $category->category_color;
 				if ( $color != '#' ) {
 					$hcolor = mc_shift_color( $category->category_color );
-					if ( get_option( 'mc_apply_color' ) == 'font' ) {
+					if ( 'font' == get_option( 'mc_apply_color' ) ) {
 						$type = 'color';
 						$alt  = 'background';
-					} elseif ( get_option( 'mc_apply_color' ) == 'background' ) {
+					} elseif ( 'background' == get_option( 'mc_apply_color' ) ) {
 						$type = 'background';
 						$alt  = 'color';
 					}
-					if ( get_option( 'mc_inverse_color' ) == 'true' ) {
+					if ( 'true' == get_option( 'mc_inverse_color' ) ) {
 						$inverse = mc_inverse_color( $color );
 						$inv     = "$alt: $inverse;";
 					}
-					if ( get_option( 'mc_apply_color' ) == 'font' || get_option( 'mc_apply_color' ) == 'background' ) {
+					if ( 'font' == get_option( 'mc_apply_color' ) || 'background' == get_option( 'mc_apply_color' ) ) {
 						// always an anchor as of 1.11.0, apply also to title.
 						$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
 						$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor;}";
@@ -222,19 +228,19 @@ $style_vars
 /**
  * Deal with events posted by a user when that user is deleted
  *
- * @param user ID of deleted user.
+ * @param int $id user ID of deleted user.
  */
 function mc_deal_with_deleted_user( $id ) {
 	global $wpdb;
 	// This may not work quite right in multi-site. Need to explore further when I have time.
 	$wpdb->get_results( 
 		$wpdb->prepare( 
-			"UPDATE " . my_calendar_table() . " SET event_author=" . apply_filters( 'mc_deleted_author', $wpdb->get_var( "SELECT MIN(ID) FROM " . $wpdb->users, 0, 0 ) ) . " WHERE event_author=%d", $id
+			'UPDATE ' . my_calendar_table() . ' SET event_author=' . apply_filters( 'mc_deleted_author', $wpdb->get_var( "SELECT MIN(ID) FROM " . $wpdb->users, 0, 0 ) ) . ' WHERE event_author=%d', $id
 		)
 	);
 	$wpdb->get_results( 
 		$wpdb->prepare( 
-			"UPDATE " . my_calendar_table() . " SET event_host=" . apply_filters( 'mc_deleted_host', $wpdb->get_var( "SELECT MIN(ID) FROM " . $wpdb->users, 0, 0 ) ) . " WHERE event_host=%d", $id 
+			'UPDATE ' . my_calendar_table() . ' SET event_host=' . apply_filters( 'mc_deleted_host', $wpdb->get_var( "SELECT MIN(ID) FROM " . $wpdb->users, 0, 0 ) ) . ' WHERE event_host=%d', $id 
 		)
 	);
 }
@@ -242,12 +248,12 @@ function mc_deal_with_deleted_user( $id ) {
 /**
  * Move sidebars into the footer.
  *
- * @param string Existing admin body classes
+ * @param string $classes Existing admin body classes
  *
  * @return string New admin body classes
  */
 function mc_admin_body_class( $classes ) {
-	if ( get_option( 'mc_sidebar_footer' ) == 'true' ) {
+	if ( 'true' == get_option( 'mc_sidebar_footer' ) ) {
 		$classes .= ' mc-sidebar-footer';
 	}
 	
@@ -258,18 +264,18 @@ function mc_admin_body_class( $classes ) {
  * Write custom JS in admin head.
  */
 function my_calendar_write_js() {
-	if ( isset( $_GET['page'] ) && ( $_GET['page'] == 'my-calendar' || $_GET['page'] == 'my-calendar-locations' ) ) {	
+	if ( isset( $_GET['page'] ) && ( 'my-calendar' == $_GET['page'] || 'my-calendar-locations' == $_GET['page'] ) ) {	
 		?>
 		<script>
 			//<![CDATA[		
 			jQuery(document).ready(function ($) {		
 				$( '#mc-accordion' ).accordion( { collapsible: true, active: false, heightStyle: 'content' } );
 				<?php
-				if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_GET['page'] ) && $_GET['page'] == 'my-calendar' ) { 
+				if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_GET['page'] ) && 'my-calendar' == $_GET['page'] ) { 
 				?>
 				$('#mc_twitter').charCount({
 					allowed: 140,
-					counterText: '<?php _e('Characters left: ','my-calendar') ?>'
+					counterText: '<?php _e( 'Characters left: ', 'my-calendar' ) ?>'
 				});
 				<?php 
 				} 
@@ -308,6 +314,7 @@ function mc_footer_js() {
 	$mcjs = "<script>(function ($) { 'use strict'; $(function () { $( '.mc-main' ).removeClass( 'mcjs' ); });}(jQuery));</script>";
 
 	if ( mc_is_mobile() && apply_filters( 'mc_disable_mobile_js', false ) ) {
+
 		return;
 	} else {
 		$pages = array();
@@ -319,13 +326,13 @@ function mc_footer_js() {
 		} else {
 			$id = false;
 		}
-		if ( get_option( 'mc_use_custom_js' ) == 1 ) {
+		if ( 1 == get_option( 'mc_use_custom_js' ) ) {
 			$top     = '';
 			$bottom  = '';
 			$inner   = '';
 			$list_js = stripcslashes( get_option( 'mc_listjs' ) );
 			$cal_js  = stripcslashes( get_option( 'mc_caljs' ) );
-			if ( get_option( 'mc_open_uri' ) == 'true' ) { 
+			if ( 'true' == get_option( 'mc_open_uri' ) ) { 
 				// remove sections of javascript if necessary.
 				$replacements = array(
 					'$(this).parent().children().not(".event-title").toggle();',
@@ -335,12 +342,12 @@ function mc_footer_js() {
 			}
 			$mini_js  = stripcslashes( get_option( 'mc_minijs' ) );
 			$open_day = get_option( 'mc_open_day_uri' );
-			if ( $open_day == 'true' || $open_day == 'listanchor' || $open_day == 'calendaranchor' ) {
+			if ( 'true' == $open_day || 'listanchor' == $open_day || 'calendaranchor' == $open_day ) {
 				$mini_js = str_replace( 'e.preventDefault();', '', $mini_js );
 			}
 			$ajax_js = stripcslashes( get_option( 'mc_ajaxjs' ) );
 
-			if ( @in_array( $id, $pages ) || get_option( 'mc_show_js' ) == '' ) {
+			if ( @in_array( $id, $pages ) || '' == get_option( 'mc_show_js' ) ) {
 				$inner = '';
 				if ( get_option( 'mc_calendar_javascript' ) != 1 ) {
 					$inner .= "\n" . $cal_js;
@@ -365,26 +372,26 @@ $script = '
 			echo ( $inner != '' ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
-			if ( @in_array( $id, $pages ) || get_option( 'mc_show_js' ) == '' ) {
-				if ( get_option( 'mc_calendar_javascript' ) != 1 && get_option( 'mc_open_uri' ) != 'true' ) {
+			if ( @in_array( $id, $pages ) || '' == get_option( 'mc_show_js' ) ) {
+				if ( 1 != get_option( 'mc_calendar_javascript' ) && 'true' != get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.grid', 'mcgrid', 'true' );
 				}
-				if ( get_option( 'mc_list_javascript' ) != 1 ) {
+				if ( 1 != get_option( 'mc_list_javascript' ) ) {
 					$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.list', 'mclist', 'true' );					
 				}
-				if ( get_option( 'mc_mini_javascript' ) != 1 && get_option( 'mc_open_day_uri' ) != 'true' ) {
+				if ( 1 != get_option( 'mc_mini_javascript' ) && 'true' != get_option( 'mc_open_day_uri' ) ) {
 					$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.mini', 'mcmini', 'true' );
 				}
-				if ( get_option( 'mc_ajax_javascript' ) != 1 ) {
+				if ( 1 != get_option( 'mc_ajax_javascript' ) ) {
 					$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ) );
@@ -398,17 +405,16 @@ $script = '
 	}
 }
 
-
 /**
  * Add stylesheets to My Calendar admin screens
  */
 function my_calendar_add_styles() {
 	global $current_screen;
 	$id = $current_screen->id;
-	if ( strpos( $id, 'my-calendar' ) !== false ) {
+	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ) );
 		
-		if ( $id == 'toplevel_page_my-calendar' ) {
+		if ( 'toplevel_page_my-calendar' == $id ) {
 			wp_enqueue_style( 'mc-pickadate-default', plugins_url( 'js/pickadate/themes/default.css', __FILE__ ) );
 			wp_enqueue_style( 'mc-pickadate-date', plugins_url( 'js/pickadate/themes/default.date.css', __FILE__ ) );
 			wp_enqueue_style( 'mc-pickadate-time', plugins_url( 'js/pickadate/themes/default.time.css', __FILE__ ) );
@@ -424,17 +430,20 @@ function mc_get_current_url() {
 	global $wp, $wp_rewrite;
 	$args = array();
 	if ( isset( $_GET['page_id'] ) ) {
-		$args = array( 'page_id' => $_GET['page_id'] );
+		$args = array( 
+			'page_id' => $_GET['page_id'] 
+		);
 	}
 	$current_url = home_url( add_query_arg( $args, $wp->request ) );
-		
-	if ( $wp_rewrite->using_index_permalinks() && strpos( $current_url, 'index.php' ) === false ) {
+
+	if ( $wp_rewrite->using_index_permalinks() && false === strpos( $current_url, 'index.php' ) ) {
 		$current_url = str_replace( home_url(), home_url( '/' ) . 'index.php', $current_url );
 	}
+
 	if ( $wp_rewrite->using_permalinks() ) {
 		$current_url = trailingslashit( $current_url );
 	}
-	
+
 	return esc_url( $current_url );
 }
 
@@ -446,6 +455,7 @@ function mc_if_needs_permissions() {
 	if ( is_object( $role ) ) {
 		$caps = $role->capabilities;
 		if ( isset( $caps['mc_add_events'] ) ) {
+
 			return;
 		} else {
 			$role->add_cap( 'mc_add_events' );
@@ -460,6 +470,7 @@ function mc_if_needs_permissions() {
 			$role->add_cap( 'mc_view_help' );
 		}
 	} else {
+
 		return;
 	}
 }
@@ -579,13 +590,14 @@ function my_calendar_check() {
 	if ( current_user_can( 'manage_options' ) ) {
 		global $wpdb, $mc_version;
 		mc_if_needs_permissions();
-		$current_version = ( get_option( 'mc_version' ) == '' ) ? get_option( 'my_calendar_version' ) : get_option( 'mc_version' );
+		$current_version = ( '' == get_option( 'mc_version' ) ) ? get_option( 'my_calendar_version' ) : get_option( 'mc_version' );
 		if ( version_compare( $current_version, '2.3.12', '>=' ) ) {
 			// if current is a version higher than 2.3.11, they've already seen this notice and handled it.
 			update_option( 'mc_update_notice', 1 );
 		}
 		// If current version matches, don't bother running this.
 		if ( $current_version == $mc_version ) {
+
 			return true;
 		}
 		// Assume this is not a new install until we prove otherwise.
@@ -593,7 +605,7 @@ function my_calendar_check() {
 		$upgrade_path       = array();
 		$my_calendar_exists = my_calendar_exists();
 		
-		if ( $my_calendar_exists && $current_version == '' ) {
+		if ( $my_calendar_exists && '' == $current_version ) {
 			// If the table exists, but I don't know what version it is, I have to run the full cycle of upgrades. 
 			$current_version = '1.11.3';
 		}
@@ -603,16 +615,7 @@ function my_calendar_check() {
 		} else {
 			// for each release requiring an upgrade path, add a version compare. 
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array(
-				'2.0.0',
-				'2.1.0',
-				'2.2.10',
-				'2.3.0',
-				'2.3.11',
-				'2.3.15',
-				'2.4.4',
-				'2.6.0',
-			);
+			$valid_upgrades = array( '2.0.0', '2.2.10', '2.3.0', '2.3.11', '2.3.15', '2.4.4', '2.6.0', );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $current_version, $upgrade, "<" ) ) {
 					$upgrade_path[] = $upgrade;
@@ -622,10 +625,15 @@ function my_calendar_check() {
 		// having determined upgrade path, assign new version number.
 		update_option( 'mc_version', $mc_version );
 		// Now we've determined what the current install is or isn't.
-		if ( $new_install == true ) {
+		if ( true == $new_install ) {
 			//add default settings
 			mc_default_settings();
-			mc_create_category( array( 'category_name' => 'General', 'category_color' => '#ffffcc', 'category_icon' => 'event.png' ) );
+			mc_create_category( array( 
+					'category_name'  => 'General',
+					'category_color' => '#ffffcc',
+					'category_icon' => 'event.png',
+				)
+			);
 			
 		}
 		
@@ -634,7 +642,7 @@ function my_calendar_check() {
 		if the user has fully uninstalled the plugin but kept the database of events, this will restore default
 		settings and upgrade db if needed.
 		*/
-		if ( get_option( 'mc_uninstalled' ) == 'true' ) {
+		if ( 'true' == get_option( 'mc_uninstalled' ) ) {
 			mc_default_settings();
 			update_option( 'mc_db_version', $mc_version );
 			delete_option( 'mc_uninstalled' );
@@ -663,11 +671,11 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_event_approve_perms' );
 				delete_option( 'mc_location_type' );
 				add_option( 'mc_style_vars', array(
-					  '--primary-dark' => '#313233',
-					  '--primary-light' => '#fff',
+					  '--primary-dark'    => '#313233',
+					  '--primary-light'   => '#fff',
 					  '--secondary-light' => '#fff',
-					  '--secondary-dark' => '#000',
-					  '--highlight-dark' => '#666',
+					  '--secondary-dark'  => '#000',
+					  '--highlight-dark'  => '#666',
 					  '--highlight-light' => '#efefef',
 					)
 				);
@@ -676,7 +684,7 @@ function mc_do_upgrades( $upgrade_path ) {
 			// only upgrade db on most recent version.
 			case '2.4.4': // 8-11-2015 (2.4.0).
 				add_option( 'mc_display_more', 'true' );
-				$input_options = get_option( 'mc_input_options' );
+				$input_options               = get_option( 'mc_input_options' );
 				$input_options['event_host'] = 'on';
 				update_option( 'mc_input_options', $input_options );
 				add_option( 'mc_default_direction', 'DESC' );
@@ -711,12 +719,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_caching_enabled' ); // remove caching support via options. Filter only.
 				add_option( 'mc_inverse_color', 'true' );
 				break;
-			case '2.1.0': // 4/17/2013 (2.1.5).
-				$templates = get_option( 'mc_templates' );
-				global $rss_template;
-				$templates['rss'] = $rss_template;
-				update_option( 'mc_templates', $templates );
-				break;
 			case '2.0.0': // 11/20/2012 (2.0.12).
 				mc_migrate_db();
 				$mc_input = get_option( 'mc_input_options' );
@@ -737,18 +739,30 @@ add_action( 'admin_bar_menu', 'my_calendar_admin_bar', 200 );
  */
 function my_calendar_admin_bar() {
 	global $wp_admin_bar;
-	if ( current_user_can( 'mc_add_events' ) && get_option( 'mc_remote' ) != 'true' ) {
+	if ( current_user_can( 'mc_add_events' ) && 'true' != get_option( 'mc_remote' ) ) {
 		$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
-		$args = array( 'id' => 'mc-add-event', 'title' => __( 'Add Event', 'my-calendar' ), 'href' => $url );
+		$args = array( 
+			'id'    => 'mc-add-event',
+			'title' => __( 'Add Event', 'my-calendar' ),
+			'href'  => $url,
+		);
 		$wp_admin_bar->add_node( $args );
 	}
 	if ( mc_get_uri( 'boolean' ) ) {
 		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
-		$args = array( 'id' => 'mc-my-calendar', 'title' => __( 'View Calendar', 'my-calendar' ), 'href' => $url );
+		$args = array( 
+			'id'    => 'mc-my-calendar',
+			'title' => __( 'View Calendar', 'my-calendar' ),
+			'href'  => $url,
+		);
 		$wp_admin_bar->add_node( $args );
 	} else {
 		$url  = admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' );
-		$args = array( 'id' => 'mc-my-calendar', 'title' => __( 'Set Calendar URL', 'my-calendar' ), 'href' => $url );
+		$args = array( 
+			'id'    => 'mc-my-calendar',
+			'title' => __( 'Set Calendar URL', 'my-calendar' ),
+			'href'  => $url,
+		);
 		$wp_admin_bar->add_node( $args );		
 	}
 	if ( current_user_can( 'mc_manage_events' ) && current_user_can( 'mc_add_events' ) ) {
@@ -757,7 +771,7 @@ function my_calendar_admin_bar() {
 			'id'     => 'mc-manage-events',
 			'title'  => __( 'Events', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event'
+			'parent' => 'mc-add-event',
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -767,7 +781,7 @@ function my_calendar_admin_bar() {
 			'id'     => 'mc-manage-categories',
 			'title'  => __( 'Categories', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event'
+			'parent' => 'mc-add-event',
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -777,7 +791,7 @@ function my_calendar_admin_bar() {
 			'id'     => 'mc-manage-locations',
 			'title'  => __( 'Locations', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event'
+			'parent' => 'mc-add-event',
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -787,7 +801,7 @@ function my_calendar_admin_bar() {
 			'id'     => 'mc-submit-events',
 			'title'  => __( 'Public Submissions', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event'
+			'parent' => 'mc-add-event',
 		);
 		$wp_admin_bar->add_node( $args );		
 	}
@@ -802,16 +816,16 @@ function my_calendar_send_email( $event ) {
 	$details = mc_create_tags( $event );
 	$headers = array();
 	// shift to boolean.
-	$send_email_option = ( get_option( 'mc_event_mail' ) == 'true' ) ? true : false;
+	$send_email_option = ( 'true' == get_option( 'mc_event_mail' ) ) ? true : false;
 	$send_email        = apply_filters( 'mc_send_notification', $send_email_option, $details );
-	if ( $send_email == true ) {
+	if ( true == $send_email ) {
 		add_filter( 'wp_mail_content_type', 'mc_html_type' );
 	}
-	if ( get_option( 'mc_event_mail' ) == 'true' ) {
+	if ( 'true' == get_option( 'mc_event_mail' ) ) {
 		$to        = apply_filters( 'mc_event_mail_to', get_option( 'mc_event_mail_to' ), $details );
-		$from      = ( get_option( 'mc_event_mail_from' ) == '' ) ? get_bloginfo( 'admin_email' ) : get_option( 'mc_event_mail_from' );
+		$from      = ( '' == get_option( 'mc_event_mail_from' ) ) ? get_bloginfo( 'admin_email' ) : get_option( 'mc_event_mail_from' );
 		$from      = apply_filters( 'mc_event_mail_from', $from, $details );
-		$headers[] = "From: " . __( 'Event Notifications', 'my-calendar' ) . " <$from>";
+		$headers[] = 'From: ' . __( 'Event Notifications', 'my-calendar' ) . " <$from>";
 		$bcc       = apply_filters( 'mc_event_mail_bcc', get_option( 'mc_event_mail_bcc' ), $details );
 		if ( $bcc ) {
 			$bcc = explode( PHP_EOL, $bcc );
@@ -829,7 +843,7 @@ function my_calendar_send_email( $event ) {
 		$message = mc_draw_template( $details, $body );
 		wp_mail( $to, $subject, $message, $headers );
 	}
-	if ( get_option( 'mc_html_email' ) == 'true' ) {
+	if ( 'true' == get_option( 'mc_html_email' ) ) {
 		remove_filter( 'wp_mail_content_type', 'mc_html_type' );
 	}
 }
@@ -846,12 +860,13 @@ function my_calendar_send_email( $event ) {
 function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	global $akismet_api_host, $akismet_api_port, $current_user;
 	$wpcom_api_key = defined( 'WPCOM_API_KEY' ) ? WPCOM_API_KEY : false;
-	$current_user = wp_get_current_user();
+	$current_user  = wp_get_current_user();
 	if ( current_user_can( 'mc_manage_events' ) ) { // is a privileged user.
 		return 0;
 	}
-	$bs = $akismet = false;
-	$c  = array();
+	$bs      = false;
+	$akismet = false;
+	$c       = array();
 	// check for Akismet.
 	if ( ! function_exists( 'akismet_http_post' ) || ! ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) ) {
 		// check for BotSmasher.
@@ -936,17 +951,17 @@ function mc_scripts() {
 	global $current_screen;
 	$id = $current_screen->id;
 		
-	if ( strpos( $id, 'my-calendar' ) !== false ) {
+	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable' ) );
 		wp_localize_script( 'mc.admin', 'thumbHeight', get_option( 'thumbnail_size_h' ) );		
 		wp_localize_script( 'mc.admin', 'draftText', __( 'Save Draft', 'my-calendar' ) );		
 	}
 	
-	if ( $id == 'toplevel_page_my-calendar' || $id == 'my-calendar_page_my-calendar-groups' || $id == 'my-calendar_page_my-calendar-locations' ) {
+	if ( 'toplevel_page_my-calendar' == $id || 'my-calendar_page_my-calendar-groups' == $id || 'my-calendar_page_my-calendar-locations' == $id ) {
 		wp_enqueue_script( 'jquery-ui-accordion' );		
 	}
 		
-	if ( $id == 'toplevel_page_my-calendar' || $id == 'my-calendar_page_my-calendar-groups' ) {
+	if ( 'toplevel_page_my-calendar' == $id || 'my-calendar_page_my-calendar-groups' == $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' ); // required for character counting.
 		wp_enqueue_script( 'pickadate', plugins_url( 'js/pickadate/picker.js', __FILE__ ), array( 'jquery' ) );
 		wp_enqueue_script( 'pickadate.date', plugins_url( 'js/pickadate/picker.date.js', __FILE__ ), array( 'pickadate' ) );
@@ -963,7 +978,7 @@ function mc_scripts() {
 			date_i18n( 'F', strtotime( 'September 1' ) ),
 			date_i18n( 'F', strtotime( 'October 1' ) ),
 			date_i18n( 'F', strtotime( 'November 1' ) ),
-			date_i18n( 'F', strtotime( 'December 1' ) )
+			date_i18n( 'F', strtotime( 'December 1' ) ),
 		) );
 		wp_localize_script( 'pickadate.date', 'mc_days', array(
 			date_i18n( 'D', strtotime( 'Sunday' ) ),
@@ -972,19 +987,18 @@ function mc_scripts() {
 			date_i18n( 'D', strtotime( 'Wednesday' ) ),
 			date_i18n( 'D', strtotime( 'Thursday' ) ),
 			date_i18n( 'D', strtotime( 'Friday' ) ),
-			date_i18n( 'D', strtotime( 'Saturday' ) )
+			date_i18n( 'D', strtotime( 'Saturday' ) ),
 		) );
 		$sweek = get_option( 'start_of_week' );	
 		wp_localize_script( 'pickadate.date', 'mc_text', array(
-			'today' => addslashes( __( 'Today', 'my-calendar' ) ),
-			'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
-			'close' => addslashes( __( 'Close', 'my-calendar' ) ),
-			'start' => ( $sweek == 1 || $sweek == 0 ) ? $sweek : 0
+				'today' => addslashes( __( 'Today', 'my-calendar' ) ),
+				'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
+				'close' => addslashes( __( 'Close', 'my-calendar' ) ),
+				'start' => ( $sweek == 1 || $sweek == 0 ) ? $sweek : 0
 			)
 		);
 		wp_localize_script( 'pickadate.time', 'mc_time_format', apply_filters( 'mc_time_format', 'h:i A' ) );
 		wp_localize_script( 'pickadate.time', 'mc_interval', apply_filters( 'mc_interval', '15' ) );
-		
 		wp_enqueue_script( 'mc.pickadate', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'jquery', 'pickadate.date', 'pickadate.time' ) );
 		
 		if ( function_exists( 'wp_enqueue_media' ) && ! did_action( 'wp_enqueue_media' ) ) {
@@ -992,8 +1006,8 @@ function mc_scripts() {
 		}
 	}
 		
-	if ( $id == 'my-calendar_page_my-calendar-locations' ) {
-		if ( get_option( 'mc_gmap' ) == 'true' ) {
+	if ( 'my-calendar_page_my-calendar-locations' == $id ) {
+		if ( 'true' == get_option( 'mc_gmap' ) ) {
 			$api_key = get_option( 'mc_gmap_api_key' );
 			if ( $api_key ) {
 				wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
@@ -1002,31 +1016,32 @@ function mc_scripts() {
 		}			
 	}	
 	
-	if ( $id == 'toplevel_page_my-calendar' && function_exists( 'jd_doTwitterAPIPost' ) ) {
+	if ( 'toplevel_page_my-calendar' == $id && function_exists( 'jd_doTwitterAPIPost' ) ) {
 		wp_enqueue_script( 'charCount', plugins_url( 'wp-to-twitter/js/jquery.charcount.js' ), array( 'jquery' ) );
 	}
-	if ( $id == 'toplevel_page_my-calendar' ) {
+	if ( 'toplevel_page_my-calendar' == $id ) {
 		if ( current_user_can( 'mc_manage_events' ) ) {
 			wp_enqueue_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ) );
 			wp_localize_script( 'mc.ajax', 'mc_data', array(
-				'action'   => 'delete_occurrence',
-				'recur'    => 'add_date',
-				'security' => wp_create_nonce( 'mc-delete-nonce' )
-			) );
+					'action'   => 'delete_occurrence',
+					'recur'    => 'add_date',
+					'security' => wp_create_nonce( 'mc-delete-nonce' )
+				)
+			);
 		}
 	}
 	
-	if ( $id == 'my-calendar_page_my-calendar-config' ) {
+	if ( 'my-calendar_page_my-calendar-config' == $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
 		wp_enqueue_script( 'mc.suggest', plugins_url( 'js/jquery.suggest.js', __FILE__ ), array(
 				'jquery',
 				'jquery-ui-autocomplete'
-			) );	
+			)
+		);	
 		wp_localize_script( 'mc.suggest', 'mc_ajax_action', 'mc_post_lookup' );
-			
 	}
 	
-	if ( $id == 'my-calendar_page_my-calendar-categories' ) {
+	if ( 'my-calendar_page_my-calendar-categories' == $id ) {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
 	}
@@ -1039,10 +1054,11 @@ add_action( 'wp_ajax_mc_post_lookup', 'mc_post_lookup' );
  */
 function mc_post_lookup() {
 	if ( isset( $_REQUEST['term'] ) ) {
-		$posts       = get_posts( array(
-			's'         => $_REQUEST['term'],
-			'post_type' => array( 'post', 'page' )
-		) );
+		$posts = get_posts( array(
+				's'         => $_REQUEST['term'],
+				'post_type' => array( 'post', 'page' ),
+			)
+		);
 		$suggestions = array();
 		global $post;
 		foreach ( $posts as $post ) {
@@ -1053,7 +1069,7 @@ function mc_post_lookup() {
 			$suggestions[]       = $suggestion;
 		}
 
-		echo $_GET["callback"] . "(" . json_encode( $suggestions ) . ")";
+		echo $_GET['callback'] . '(' . json_encode( $suggestions ) . ')';
 		exit;
 	}
 }
@@ -1071,21 +1087,32 @@ function mc_ajax_delete_occurrence() {
 	}
 
 	if ( current_user_can( 'mc_manage_events' ) ) {
-		
 		global $wpdb;
 		$occur_id = (int) $_REQUEST['occur_id'];
 				
-		$delete = "DELETE FROM " . my_calendar_event_table() . " WHERE occur_id = $occur_id";
+		$delete = 'DELETE FROM ' . my_calendar_event_table() . " WHERE occur_id = $occur_id";
 		$result = $wpdb->query( $delete );
 				
 		if ( $result ) {
-			wp_send_json( array( 'success'=>1, 'response' => __( 'Event instance has been deleted.', 'my-calendar' ) ) );
+			wp_send_json( array( 
+					'success'  => 1,
+					'response' => __( 'Event instance has been deleted.', 'my-calendar' ),
+				)
+			);
 		} else {
-			wp_send_json( array( 'success'=>0, 'response' => __( 'Event instance was not deleted.', 'my-calendar' ) ) );
+			wp_send_json( array( 
+					'success'  => 0,
+					'response' => __( 'Event instance was not deleted.', 'my-calendar' ),
+				)
+			);
 		}
 
 	} else {
-		wp_send_json( array( 'success'=>0, 'response' => __( 'You are not authorized to perform this action', 'my-calendar' ) ) );
+		wp_send_json( array( 
+				'success'  => 0,
+				'response' => __( 'You are not authorized to perform this action', 'my-calendar' ),
+			)
+		);
 	}
 }
 
@@ -1098,49 +1125,67 @@ add_action( 'wp_ajax_add_date', 'mc_ajax_add_date' );
  */
 function mc_ajax_add_date() {
 	if ( ! check_ajax_referer( 'mc-delete-nonce', 'security', false ) ) {
-		wp_send_json( array( 'success'=>0, 'response' => __( "Invalid Security Check", 'my-calendar' ) ) );
+		wp_send_json( array( 
+				'success'  => 0,
+				'response' => __( "Invalid Security Check", 'my-calendar' )
+			)
+		);
 	}
-
 	if ( current_user_can( 'mc_manage_events' ) ) {
-		
 		global $wpdb;
 		$event_id = (int) $_REQUEST['event_id'];
 		
-		if ( $event_id === 0 ) {
-			wp_send_json( array( 'success' => 0, 'response' => __( 'No event ID in that request.', 'my-calendar' ) ) );
+		if ( 0 === $event_id ) {
+			wp_send_json( array( 
+					'success'  => 0,
+					'response' => __( 'No event ID in that request.', 'my-calendar' ),
+				)
+			);
 		}
 		
-		$event_date = $_REQUEST['event_date'];
-		$event_end   = isset( $_REQUEST['event_end'] ) ? $_REQUEST['event_end'] : $event_date;
-		$event_time  = $_REQUEST['event_time'];
+		$event_date    = $_REQUEST['event_date'];
+		$event_end     = isset( $_REQUEST['event_end'] ) ? $_REQUEST['event_end'] : $event_date;
+		$event_time    = $_REQUEST['event_time'];
 		$event_endtime = isset( $_REQUEST['event_endtime'] ) ? $_REQUEST['event_endtime'] : '';
-		$group_id = (int) $_REQUEST['group_id'];
-		
+		$group_id      = (int) $_REQUEST['group_id'];
+
 		// event end can not be earlier than event start.
 		if ( ! $event_end || strtotime( $event_end ) < strtotime( $event_date ) ) {
 			$event_end = $event_date;
 		}
-		
+
 		$begin = strtotime( $event_date . ' ' . $event_time );
 		$end   = ( $event_endtime != '' ) ? strtotime( $event_end . ' ' . $event_endtime ) : strtotime( $event_end . ' ' . $event_time ) + HOUR_IN_SECONDS;
-		
-		$format   = array( '%d', '%s', '%s', '%d' );
-		$data = array(
+
+		$format = array( '%d', '%s', '%s', '%d' );
+		$data   = array(
 				'occur_event_id' => $event_id,
 				'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
 				'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
-				'occur_group_id' => $group_id
+				'occur_group_id' => $group_id,
 			);
 		$result = $wpdb->insert( my_calendar_event_table(), $data, $format );
-		
+
 		if ( $result ) {
-			wp_send_json( array( 'success'=>1, 'response' => __( 'Thanks! I added your new date.', 'my-calendar' ) ) );
+			wp_send_json( array(
+					'success'  => 1,
+					'response' => __( 'Thanks! I added your new date.', 'my-calendar' ),
+				)
+			);
 		} else {
-			wp_send_json( array( 'success'=>0, 'response' => __( 'Sorry! I failed to add that date.', 'my-calendar' ) ) );
+			wp_send_json( array(
+					'success'  => 0,
+					'response' => __( 'Sorry! I failed to add that date.', 'my-calendar' ),
+				)
+			);
 		}
 
 	} else {
-		wp_send_json( array( 'success'=>0, 'response' => __( 'You are not authorized to perform this action', 'my-calendar' ) ) );
+		wp_send_json( array(
+				'success'  => 0,
+				'response' => __( 'You are not authorized to perform this action', 'my-calendar' ),
+			)
+		);
 	}
 }
 
@@ -1172,6 +1217,7 @@ function mc_is_mobile() {
 	if ( function_exists( 'wp_is_mobile' ) ) {
 		$mobile = wp_is_mobile();
 	}
+
 	return apply_filters( 'mc_is_mobile', $mobile );
 }
 
@@ -1181,6 +1227,7 @@ function mc_is_mobile() {
  * @return boolean
  */
 function mc_is_tablet() {
+
 	return apply_filters( 'mc_is_tablet', false );
 }
 
@@ -1204,7 +1251,7 @@ function mc_guess_calendar() {
 			}
 		}
 	}
-	
+
 	if ( ! $has_uri ) {
 		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_name LIKE '%my-calendar%' AND post_status = 'publish'" );
 		if ( $post_ID ) {
@@ -1214,15 +1261,16 @@ function mc_guess_calendar() {
 			if ( ! has_shortcode( $content, 'my_calendar' ) ) {
 				$content .= "\n\n[my_calendar]";
 				wp_update_post( array( 
-					'ID' => $post_ID, 
-					'post_content' => $content ) 
+						'ID'           => $post_ID, 
+						'post_content' => $content,
+					)
 				);
 			}
 			update_option( 'mc_uri', $link );
 			update_option( 'mc_uri_id', $post_ID );
 			$return = array( 
 				'response' => true, 
-				'message'=> __( 'Is this your calendar page?', 'my-calendar' ) . ' <code>' . $link . '</code>' 
+				'message'  => __( 'Is this your calendar page?', 'my-calendar' ) . ' <code>' . $link . '</code>',
 			);
 
 			return $return;
@@ -1231,13 +1279,13 @@ function mc_guess_calendar() {
 			update_option( 'mc_uri_id', '' );
 			$return = array( 
 				'response' => false, 
-				'message' => __( 'No valid calendar detected. Please provide a URL!', 'my-calendar' ) 
+				'message'  => __( 'No valid calendar detected. Please provide a URL!', 'my-calendar' ),
 			);
-			
+
 			return $return;
 		}
 	}
-	
+
 	return;
 }
 
@@ -1256,9 +1304,9 @@ function mc_get_support_form() {
 	$mc_css        = get_option( 'mc_css_file' );
 
 	// Pro license status.
-	$license       = ( get_option( 'mcs_license_key' ) != '' ) ? get_option( 'mcs_license_key' ) : '';
+	$license       = ( '' != get_option( 'mcs_license_key' ) ) ? get_option( 'mcs_license_key' ) : '';
 	$license_valid = get_option( 'mcs_license_key_valid' );
-	$checked       = ( get_option( 'mcs_license_key_valid' ) == 'valid' ) ? true : false;
+	$checked       = ( 'valid' == get_option( 'mcs_license_key_valid' ) ) ? true : false;
 	
 	if ( $license ) {
 		$license = "
@@ -1273,7 +1321,6 @@ function mc_get_support_form() {
 	$charset    = get_bloginfo( 'charset' );
 	// server.
 	$php_version = phpversion();
-
 	$admin_email = get_option( 'admin_email' );
 	// theme data.
 	$theme         = wp_get_theme();
@@ -1288,10 +1335,10 @@ function mc_get_support_form() {
 
 	foreach ( array_keys( $plugins ) as $key ) {
 		if ( is_plugin_active( $key ) ) {
-			$plugin         =& $plugins[ $key ];
-			$plugin_name    = $plugin['Name'];
-			$plugin_uri     = $plugin['PluginURI'];
-			$plugin_version = $plugin['Version'];
+			$plugin          =& $plugins[ $key ];
+			$plugin_name     = $plugin['Name'];
+			$plugin_uri      = $plugin['PluginURI'];
+			$plugin_version  = $plugin['Version'];
 			$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
 		}
 	}
@@ -1330,7 +1377,7 @@ $plugins_string
 	if ( isset( $_POST['mc_support'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( "Security check failed" );
+			wp_die( 'Security check failed' );
 		}
 		$request       = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
 		$has_donated   = ( $_POST['has_donated'] == 'on' ) ? "Donor" : "No donation";
@@ -1347,28 +1394,28 @@ $plugins_string
 		$from       = "From: \"$current_user->username\" <$from_email>\r\nReply-to: \"$current_user->username\" <$current_user->user_email>\r\n";
 
 		if ( ! $has_read_faq ) {
-			echo "<div class='message error'><p>" . __( 'Please read the FAQ and other Help documents before making a support request.', 'my-calendar' ) . "</p></div>";
+			echo '<div class="message error"><p>' . __( 'Please read the FAQ and other Help documents before making a support request.', 'my-calendar' ) . '</p></div>';
 		} elseif ( ! $request ) {
-			echo "<div class='message error'><p>" . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . "</p></div>";
+			echo '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>';
 		} else {
 			$sent = wp_mail( "plugins@joedolson.com", $subject, $message, $from );
 			if ( $sent ) {
-				if ( $has_donated == 'Donor' || $has_purchased == 'Purchaser' ) {
-					echo "<div class='message updated'><p>" . __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) . "</p></div>";
+				if ( 'Donor' == $has_donated || 'Purchaser' == $has_purchased ) {
+					echo '<div class="message updated"><p>' . __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) . '</p></div>';
 				} else {
-					echo "<div class='message updated'><p>" . __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . "</p></div>";
+					echo '<div class="message updated"><p>' . __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . '</p></div>';
 				}
 			} else {
-				echo "<div class='message error'><p>" . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . "</p><p>" . sprintf( __( '<a href="%s">Contact me here</a>, instead</p>', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "<pre>$request</pre></div>";
+				echo '<div class="message error"><p>' . __( 'Sorry! I couldn't send that message. Here's the text of your request:', 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
 			}
 		}
 	}
 
-	echo "
-	<form method='post' action='" . admin_url( 'admin.php?page=my-calendar-help' ) . "'>
-		<div><input type='hidden' name='_wpnonce' value='" . wp_create_nonce( 'my-calendar-nonce' ) . "' /></div>
+	echo '
+	<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-help' ) . '">
+		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
 		<div>
-		<code>" . __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;</code>
+		<code>' . __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;</code>
 		</p>
 		<p>
 			<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>" . __( 'I have read <a href="http://www.joedolson.com/my-calendar/faq/">the FAQ for this plug-in</a>.', 'my-calendar' ) . " <span>(required)</span></label>
@@ -1384,12 +1431,12 @@ $plugins_string
 		</p>
 		<p>" .
 	     __( 'The following additional information will be sent with your support request:', 'my-calendar' )
-	     . "</p>
-		<div class='mc_support'>
-		" . wpautop( $data ) . "
+	     . '</p>
+		<div class="mc_support">
+		' . wpautop( $data ) . '
 		</div>
 		</div>
-	</form>";
+	</form>';
 }
 
 add_action( 'init', 'mc_register_actions' );
@@ -1422,9 +1469,11 @@ function mc_load_permalinks() {
 	if( isset( $_POST['mc_cpt_base'] ) )	{
 		update_option( 'mc_cpt_base', sanitize_text_field( $_POST['mc_cpt_base'] ) );
 	}
-	
+	$opts = array( 
+		'label_for'=>'mc_cpt_base' 
+	);
 	// Add a settings field to the permalink page.
-	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base' ), 'mc_field_callback', 'permalink', 'optional', array( 'label_for'=>'mc_cpt_base' ) );
+	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base' ), 'mc_field_callback', 'permalink', 'optional', $opts	);
 }
 
 /**
@@ -1446,7 +1495,7 @@ function mc_posttypes() {
 		'show_ui'             => true,
 		'show_in_menu'        => apply_filters( 'mc_show_custom_posts_in_menu', false ),
 		'menu_icon'           => null,
-		'supports'            => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields' )
+		'supports'            => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields' ),
 	);
 
 	$types   = array(
@@ -1455,7 +1504,7 @@ function mc_posttypes() {
 			__( 'events', 'my-calendar' ),
 			__( 'Event', 'my-calendar' ),
 			__( 'Events', 'my-calendar' ),
-			$arguments
+			$arguments,
 		),
 	);
 	$enabled = array( 'mc-events' );
@@ -1474,7 +1523,7 @@ function mc_posttypes() {
 				'search_items'       => sprintf( __( 'Search %s', 'my-calendar' ), $value[3] ),
 				'not_found'          => sprintf( __( 'No %s found', 'my-calendar' ), $value[1] ),
 				'not_found_in_trash' => sprintf( __( 'No %s found in Trash', 'my-calendar' ), $value[1] ),
-				'parent_item_colon'  => ''
+				'parent_item_colon'  => '',
 			);
 			$raw    = $value[4];
 			$args   = array(
@@ -1492,7 +1541,7 @@ function mc_posttypes() {
 				),
 				'hierarchical'        => false,
 				'menu_position'       => 20,
-				'supports'            => $raw['supports']
+				'supports'            => $raw['supports'],
 			);
 			register_post_type( $key, $args );
 		}
@@ -1511,7 +1560,7 @@ function mc_close_comments( $posts ) {
 	if ( !is_single() || empty( $posts ) ) { return $posts; }
 	
 	if ( 'mc-events' == get_post_type($posts[0]->ID) ) {
-		if ( apply_filters( 'mc_autoclose_comments', true ) && $posts[0]->comment_status != 'closed' ) {
+		if ( apply_filters( 'mc_autoclose_comments', true ) && 'closed' != $posts[0]->comment_status ) {
 			$posts[0]->comment_status = 'closed';
 			$posts[0]->ping_status    = 'closed';
 			wp_update_post( $posts[0] );
@@ -1574,7 +1623,7 @@ function mc_taxonomies() {
 /**
  * Custom post type strings
  *
- * @param array $messagges default text.
+ * @param array $messages default text.
  * 
  * @return array Modified messages array.
  */
@@ -1611,7 +1660,7 @@ add_action( 'admin_init', 'mc_dismiss_notice' );
  * Dismiss admin notices
  */
 function mc_dismiss_notice() {
-	if ( isset( $_GET['dismiss'] ) && $_GET['dismiss'] == 'update' ) {
+	if ( isset( $_GET['dismiss'] ) && 'update' == $_GET['dismiss'] ) {
 		update_option( 'mc_update_notice', 1 );
 	}
 }
@@ -1622,13 +1671,13 @@ add_action( 'admin_notices', 'mc_update_notice' );
  */
 function mc_update_notice() {
 	// Deprecate this notice when 2.3 no longer in upgrade cycles.
-	if ( current_user_can( 'activate_plugins' ) && get_option( 'mc_update_notice' ) == 0 || ! get_option( 'mc_update_notice' ) ) {
+	if ( current_user_can( 'activate_plugins' ) && 0 == get_option( 'mc_update_notice' ) || ! get_option( 'mc_update_notice' ) ) {
 		$dismiss = admin_url( 'admin.php?page=my-calendar-behaviors&dismiss=update' );
 		echo "<div class='updated fade'><p>" . sprintf( __( "<strong>Update notice:</strong> if you use custom JS with My Calendar, you need to activate your custom scripts following this update. <a href='%s'>Dismiss Notice</a>", 'wp-to-twitter' ), $dismiss ) . "</p></div>";
 	}
 	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
-		if ( get_option( 'mc_remote' ) == 'true' ) {
-			echo "<div class='updated'><p>" . sprintf( __( 'My Calendar is configured to retrieve events from a remote source. %s', 'my-calendar' ),  '<a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' ) . "</p></div>";
+		if ( 'true' == get_option( 'mc_remote' ) ) {
+			echo '<div class="updated"><p>' . sprintf( __( 'My Calendar is configured to retrieve events from a remote source. %s', 'my-calendar' ),  '<a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' ) . '</p></div>';
 		}
 	}
 }

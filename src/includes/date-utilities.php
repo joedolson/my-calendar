@@ -7,8 +7,8 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
