@@ -1406,7 +1406,7 @@ $plugins_string
 					echo '<div class="message updated"><p>' . __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . '</p></div>';
 				}
 			} else {
-				echo '<div class="message error"><p>' . __( 'Sorry! I couldn't send that message. Here's the text of your request:', 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
+				echo '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
 			}
 		}
 	}
