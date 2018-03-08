@@ -265,7 +265,7 @@ function mc_format_rss( $events ) {
 		  </item>' . PHP_EOL;
 
 		if ( get_option( 'mc_use_rss_template' ) == 1 ) {
-			$template  = mc_get_template( 'rss' );
+			$template = mc_get_template( 'rss' );
 		}
 
 		$charset = get_bloginfo( 'charset' );
@@ -421,9 +421,9 @@ function my_calendar_ical() {
 		'host'     => null,
 		'search'   => '',
 		'source'   => 'calendar',
-		'site'     => $site
+		'site'     => $site,
 	);
-	
+
 	$args   = apply_filters( 'mc_ical_attributes', $args, $_GET );
 	$data   = my_calendar_events( $args );
 	$events = mc_flatten_array( $data );
@@ -450,7 +450,7 @@ function my_calendar_ical() {
 	}
 
 	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
-	if ( ! ( isset( $_GET['sync'] ) && $_GET['sync'] == 'true' ) ) {
+	if ( ! ( isset( $_GET['sync'] ) && 'true' == $_GET['sync'] ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
 		header( 'Pragma: no-cache' );
@@ -468,7 +468,7 @@ function my_calendar_ical() {
  */
 function mc_ical_template() {
 	global $mc_version;
-	// Translators: Blogname
+	// Translators: Blogname.
 	$events_from = sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
 	// establish template.
 	$template = "
@@ -484,7 +484,7 @@ URL;VALUE=URI:{link}
 DESCRIPTION:{ical_desc}
 CATEGORIES:{categories}{alert}
 END:VEVENT";
-// add ICAL headers.
+	// add ICAL headers.
 	$head = 'BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//My Calendar//http://www.joedolson.com//v' . $mc_version . '//EN
