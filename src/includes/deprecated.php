@@ -34,12 +34,12 @@ if ( is_multisite() ) {
 }
 
 /**
- * Caching has been disabled by default with no option to enable for some time. 
+ * Caching has been disabled by default with no option to enable for some time.
  * Leaving functions, but they will only return false.
  *
  * @param int    $category Deprecated.
- * @param string $lvalue Deprecated.
  * @param string $ltype Deprecated.
+ * @param string $lvalue Deprecated.
  * @param string $author Deprecated.
  * @param int    $host Deprecated.
  * @param int    $hash Deprecated.
@@ -56,19 +56,19 @@ function mc_check_cache( $category, $ltype, $lvalue, $author, $host, $hash ) {
  *
  * @param string $cache Deprecated.
  * @param int    $category Deprecated.
- * @param string $lvalue Deprecated.
  * @param string $ltype Deprecated.
+ * @param string $lvalue Deprecated.
  * @param string $auth Deprecated.
  * @param int    $host Deprecated.
- * 
- * @deprecated 
+ *
+ * @deprecated
  */
 function mc_clean_cache( $cache, $category, $ltype, $lvalue, $auth, $host ) {
 	return false;
 }
 
 /**
- * Caching has been disabled by default with no option to enable for some time. 
+ * Caching has been disabled by default with no option to enable for some time.
  * Leaving functions, but they will only return false.
  *
  * @param array  $arr_events Deprecated.
@@ -79,29 +79,29 @@ function mc_clean_cache( $cache, $category, $ltype, $lvalue, $auth, $host ) {
  * @param int    $author Deprecated.
  * @param int    $host Deprecated.
  *
- * @deprecated 
+ * @deprecated
  */
 function mc_create_cache( $arr_events, $hash, $category, $ltype, $lvalue, $author, $host ) {
 	return false;
 }
 
 /**
- * Caching has been disabled by default with no option to enable for some time. 
+ * Caching has been disabled by default with no option to enable for some time.
  * Leaving functions, but they will only return false.
  *
- * @deprecated 
+ * @deprecated
  */
 function mc_delete_cache() {
 	// doesn't do anything anymore.
 }
 
 /**
- * Caching has been disabled by default with no option to enable for some time. 
+ * Caching has been disabled by default with no option to enable for some time.
  * Leaving functions, but they will only return false.
  *
  * @param string $cache Deprecated.
  *
- * @deprecated 
+ * @deprecated
  */
 function mc_get_cache( $cache ) {
 	return false;
@@ -111,10 +111,10 @@ function mc_get_cache( $cache ) {
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
  *
- * @string $cache Deprecated.
- * @string $time Deprecated.
+ * @param string $cache Deprecated.
+ * @param string $time Deprecated.
  *
- * @deprecated 
+ * @deprecated
  */
 function mc_set_cache( $cache, $time ) {
 	// doesn't do anything.
@@ -124,9 +124,9 @@ function mc_set_cache( $cache, $time ) {
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
  *
- * @string $cache Deprecated.
- * 
- * @deprecated 
+ * @param string $cache Deprecated.
+ *
+ * @deprecated
  */
 function mc_remove_cache( $cache ) {
 	// doesn't do anything.
@@ -136,7 +136,7 @@ function mc_remove_cache( $cache ) {
  * Old function to get users
  *
  * @param string $group User role.
- * 
+ *
  * @return @mc_get_users
  */
 function my_calendar_getUsers( $group = 'authors' ) {
@@ -149,17 +149,15 @@ function my_calendar_getUsers( $group = 'authors' ) {
  *
  * @see mc_show_sidebar()
  * @deprecated
- *
- * @return string
  */
 function jd_show_support_box() {
 	mc_show_sidebar();
 }
 
-/**
+/** 
  * Odd toggle. Unknown when last used.
  *
- * @param int $int.
+ * @param int $int Any integer.
  *
  * @deprecated
  *

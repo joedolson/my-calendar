@@ -9,7 +9,6 @@
  * @link     https://www.joedolson.com/my-calendar/
  *
  */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -64,10 +63,10 @@ function my_calendar_date_comp( $early, $late ) {
 	$firstdate = strtotime( $early );
 	$lastdate  = strtotime( $late );
 	if ( $firstdate <= $lastdate ) {
-		
+
 		return true;
 	} else {
-		
+
 		return false;
 	}
 }
@@ -79,15 +78,15 @@ function my_calendar_date_comp( $early, $late ) {
  * @param string $late date string.
  *
  * @return boolean true if first date earlier
- */ 
+ */
 function my_calendar_date_xcomp( $early, $late ) {
 	$firstdate = strtotime( $early );
 	$lastdate  = strtotime( $late );
 	if ( $firstdate < $lastdate ) {
-		
+
 		return true;
 	} else {
-		
+
 		return false;
 	}
 }
@@ -120,7 +119,7 @@ function my_calendar_date_equal( $early, $late ) {
  * @param object $b event object.
  *
  * @return int (ternary value)
- */ 
+ */
 function mc_time_cmp( $a, $b ) {
 	if ( $a->occur_begin == $b->occur_begin ) {
 
@@ -135,9 +134,9 @@ function mc_time_cmp( $a, $b ) {
  *
  * @param object $a event object.
  * @param object $b event object.
- * 
+ *
  * @return integer (ternary value)
- */ 
+ */
 function mc_datetime_cmp( $a, $b ) {
 	$event_dt_a = strtotime( $a->occur_begin );
 	$event_dt_b = strtotime( $b->occur_begin );
@@ -157,7 +156,7 @@ function mc_datetime_cmp( $a, $b ) {
  *
  * @param object $a event object.
  * @param object $b event object.
- * 
+ *
  * @return integer (ternary value)
  */
 function mc_timediff_cmp( $a, $b ) {
@@ -184,8 +183,8 @@ function mc_timediff_cmp( $a, $b ) {
  * @return absolute time diff
  */
 function mc_date_diff_precise( $start, $end = 'NOW' ) {
-	if ( "NOW" == $end ) {
-		$end = strtotime( "NOW" );
+	if ( 'NOW' == $end ) {
+		$end = strtotime( 'NOW' );
 	}
 	$sdate = $start;
 	$edate = $end;
@@ -338,7 +337,7 @@ function mc_ordinal( $number ) {
 function mc_name_days( $format ) {
 	$name_days = array(
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Sunday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) .  '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Tuesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Wednesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Thursday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
@@ -375,15 +374,15 @@ function mc_exit_early( $event, $process_date ) {
 		return true;
 	}
 
-	$hide_days        = apply_filters( 'mc_hide_additional_days', false, $event );
-	$today            = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-	$current          = date( 'Y-m-d', strtotime( $process_date ) );
-	$end              = date( 'Y-m-d', strtotime( $event->occur_end ) );
+	$hide_days = apply_filters( 'mc_hide_additional_days', false, $event );
+	$today     = date( 'Y-m-d', strtotime( $event->occur_begin ) );
+	$current   = date( 'Y-m-d', strtotime( $process_date ) );
+	$end       = date( 'Y-m-d', strtotime( $event->occur_end ) );
 	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing.
 	// or if event started yesterday & has event_hide_end checked.
 	$ends_at_midnight = ( '00:00:00' == $event->event_endtime && $end == $process_date && $current != $process_date ) ? true : false;
 	// hides events if hiding end time & not first day.
-	$hide_day_two     = ( $hide_days && ( $today != $current ) ) ? true : false;
+	$hide_day_two = ( $hide_days && ( $today != $current ) ) ? true : false;
 
 	if ( $ends_at_midnight || $hide_day_two ) {
 		return true;
@@ -406,8 +405,8 @@ function mc_exit_early( $event, $process_date ) {
 function mc_private_event( $event ) {
 	$status = ( 1 == $event->category_private && ! is_user_logged_in() ) ? true : false;
 	// custom filter to grant custom reasons for exiting.
-	// $event may not be an event object; in some cases it's a category object. 
+	// $event may not be an event object; in some cases it's a category object.
 	$status = apply_filters( 'mc_private_event', $status, $event );
-	
+
 	return $status;
 }

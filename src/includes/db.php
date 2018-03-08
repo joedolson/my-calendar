@@ -73,7 +73,7 @@ function my_calendar_locations_table( $site = false ) {
  * Get table to query based on table data required & required site.
  *
  * @since 2.5.0
- * 
+ *
  * @param string           $table table name.
  * @param mixed int/string $site 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
  *
@@ -83,17 +83,17 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 	global $wpdb;
 	$local = $wpdb->prefix . $table;
 
-	if ( is_multisite() ) {	
+	if ( is_multisite() ) {
 		$option = (int) get_site_option( 'mc_multisite' );
 		$choice = (int) get_option( 'mc_current_table' );
 		$show   = (int) get_site_option( 'mc_multisite_show' ); // 1 == use global instead of local.
-		if (  'global' == $site ) {
+		if ( 'global' == $site ) {
 			return $wpdb->base_prefix . $table;
 		}
 		if ( false != $site && $site ) {
 			$site = absint( $site );
 			$wpdb->set_blog_id( $site );
-		} 
+		}
 		$local  = ( 1 == $show ) ? $wpdb->base_prefix . $table : $wpdb->prefix . $table;
 		$global = $wpdb->base_prefix . $table;
 

@@ -38,7 +38,7 @@ function my_calendar_help() {
 						, "https://www.joedolson.com/donate/", "https://www.joedolson.com/my-calendar/pro/" ); ?>
 					</p>
 				</div>	
-				<ul class="list">
+				<ul class='list'>
 					<?php if ( ! mc_get_uri( 'boolean' ) ) { ?>
 						<li><?php _e( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ); ?></li>
 					<?php } ?>

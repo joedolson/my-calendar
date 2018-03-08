@@ -146,7 +146,7 @@ function mc_generator( $type ) {
 					<label for="format"><?php _e( 'Format', 'my-calendar' ); ?></label>
 					<select name="format" id="format">
 						<option value="calendar" selected="selected"><?php _e( 'Grid', 'my-calendar' ); ?></option>
-						<option value="list"><?php _e( 'List', 'my-calendar' ); ?></option>
+						<option value='list'><?php _e( 'List', 'my-calendar' ); ?></option>
 						<option value="mini"><?php _e( 'Mini', 'my-calendar' ); ?></option>
 					</select>
 				</p>
