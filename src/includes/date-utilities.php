@@ -39,12 +39,12 @@ function mc_dateclass( $current ) {
  * Given a date and a quantity of time to add, produce new date
  *
  * @param string $givendate A time string.
- * @param int $day Number of days to add.
- * @param int $mth Number of months to add.
- * @param int $yr number of years to add.
+ * @param int    $day Number of days to add.
+ * @param int    $mth Number of months to add.
+ * @param int    $yr number of years to add.
  *
  * @return timestamp
- */ 
+ */
 function my_calendar_add_date( $givendate, $day = 0, $mth = 0, $yr = 0 ) {
 	$cd      = strtotime( $givendate );
 	$newdate = mktime( date( 'H', $cd ), date( 'i', $cd ), date( 's', $cd ), date( 'm', $cd ) + $mth, date( 'd', $cd ) + $day, date( 'Y', $cd ) + $yr );
@@ -105,10 +105,10 @@ function my_calendar_date_equal( $early, $late ) {
 	$firstdate = strtotime( date( 'Y-m-d', strtotime( $early ) ) );
 	$lastdate  = strtotime( date( 'Y-m-d', strtotime( $late ) ) );
 	if ( $firstdate == $lastdate ) {
-		
+
 		return true;
 	} else {
-		
+
 		return false;
 	}
 }
@@ -123,7 +123,7 @@ function my_calendar_date_equal( $early, $late ) {
  */ 
 function mc_time_cmp( $a, $b ) {
 	if ( $a->occur_begin == $b->occur_begin ) {
-		
+
 		return 0;
 	}
 
@@ -178,7 +178,7 @@ function mc_timediff_cmp( $a, $b ) {
 /**
  * Compare two dates for diff with high precision
  *
- * @param int $start timestamp.
+ * @param int              $start timestamp.
  * @param mixed int/string $end timestamp or 'now'.
  *
  * @return absolute time diff
