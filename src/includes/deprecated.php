@@ -37,12 +37,12 @@ if ( is_multisite() ) {
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
  *
- * @param int $category Deprecated.
+ * @param int    $category Deprecated.
  * @param string $lvalue Deprecated.
  * @param string $ltype Deprecated.
  * @param string $author Deprecated.
- * @param int $host Deprecated.
- * @param int $hash Deprecated.
+ * @param int    $host Deprecated.
+ * @param int    $hash Deprecated.
  *
  * @deprecated 
  */
@@ -55,11 +55,11 @@ function mc_check_cache( $category, $ltype, $lvalue, $author, $host, $hash ) {
  * Leaving functions, but they will only return false.
  *
  * @param string $cache Deprecated.
- * @param int $category Deprecated.
+ * @param int    $category Deprecated.
  * @param string $lvalue Deprecated.
  * @param string $ltype Deprecated.
  * @param string $auth Deprecated.
- * @param int $host Deprecated.
+ * @param int    $host Deprecated.
  * 
  * @deprecated 
  */
@@ -71,13 +71,13 @@ function mc_clean_cache( $cache, $category, $ltype, $lvalue, $auth, $host ) {
  * Caching has been disabled by default with no option to enable for some time. 
  * Leaving functions, but they will only return false.
  *
- * @param array $arr_events Deprecated.
+ * @param array  $arr_events Deprecated.
  * @param string $hash Deprecated.
- * @param int $category Deprecated.
+ * @param int    $category Deprecated.
  * @param string $ltype Deprecated.
  * @param string $lvalue Deprecated.
- * @param int $author Deprecated.
- * @param int $host Deprecated.
+ * @param int    $author Deprecated.
+ * @param int    $host Deprecated.
  *
  * @deprecated 
  */
@@ -235,7 +235,7 @@ if ( ! function_exists( 'is_ssl' ) ) {
  *
  * @see mc_draw_template()
  * 
- * @param array $array.
+ * @param array  $array.
  * @param string $template.
  * @param string $type.
  * 
@@ -332,8 +332,8 @@ function get_week_date( $week, $year ) {
 /**
  * Add days to a given date
  *
- * @param string $givendate.
- * @param int $day days to add.
+ * @param string $givendate original date.
+ * @param int    $day days to add.
  *
  * @return new date
  */
