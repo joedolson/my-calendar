@@ -41,15 +41,15 @@ function mc_event_post( $action, $data, $event_id ) {
 		$privacy    = 'publish';
 
 		foreach ( $categories as $category ) {
-			$term              = mc_get_category_detail( $category, 'category_term' );
-			if( !$term ) {
-				$term   = wp_insert_term( 'General', 'mc-event-category' );
-				$term   = ( !is_wp_error( $term ) ) ? $term['term_id'] : false;
+			$term = mc_get_category_detail( $category, 'category_term' );
+			if ( ! $term ) {
+				$term = wp_insert_term( 'General', 'mc-event-category' );
+				$term = ( !is_wp_error( $term ) ) ? $term['term_id'] : false;
 				if ( $term ) {
 					$update = mc_update_category( 'category_term', $term, $category );
 				}
 			}
-			// if any selected category is private, make private
+			// if any selected category is private, make private.
 			if ( 'private' != $privacy ) {
 				$privacy = ( mc_get_category_detail( $category, 'category_private' ) == 1 ) ? 'private' : 'publish';
 			}
@@ -79,10 +79,10 @@ function mc_event_post( $action, $data, $event_id ) {
 		}
 		$post_id = wp_update_post( $my_post );
 		wp_set_object_terms( $post_id, (int) $terms, 'mc-event-category' );
-		if ( $data['event_image'] == '' ) {
+		if ( '' == $data['event_image'] ) {
 			delete_post_thumbnail( $post_id );
 		} else {
-			// check POST data
+			// check POST data.
 			$attachment_id = ( isset( $_POST['event_image_id'] ) && is_numeric( $_POST['event_image_id'] ) ) ? $_POST['event_image_id'] : false;
 			if ( $attachment_id ) {
 				set_post_thumbnail( $post_id, $attachment_id );
@@ -104,10 +104,10 @@ add_action( 'mc_update_event_post', 'mc_add_post_meta_data', 10, 4 );
 /**
  * Add post meta data to an event post.
  *
- * @param int   $post_id Post ID
- * @param array $post Post object
- * @param array $data Event POST data or event data
- * @param int   $event_id Event ID
+ * @param int   $post_id Post ID.
+ * @param array $post Post object.
+ * @param array $data Event POST data or event data.
+ * @param int   $event_id Event ID.
  */
 function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	// access features for the event.
@@ -131,13 +131,13 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 /**
  * Create a post for My Calendar event data on save
  *
- * @param array $data Saved event data
- * @param int   $event_id Newly-saved event ID
+ * @param array $data Saved event data.
+ * @param int   $event_id Newly-saved event ID.
  *
  * @return int newly created post ID
  */
 function mc_create_event_post( $data, $event_id ) {
-	$post_id               = mc_get_event_post( $event_id );
+	$post_id = mc_get_event_post( $event_id );
 	if ( ! $post_id ) {
 		$categories = mc_get_categories( $event_id );
 		$terms      = array();
@@ -145,8 +145,8 @@ function mc_create_event_post( $data, $event_id ) {
 		$privacy    = 'publish';
 		foreach ( $categories as $category ) {
 			$term = mc_get_category_detail( $category, 'category_term' );
-			// if any selected category is private, make private
-			if ( $privacy != 'private' ) {
+			// if any selected category is private, make private.
+			if ( 'private' != $privacy ) {
 				$privacy = ( 1 == mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
 			}
 			$terms[] = $term;
@@ -189,7 +189,7 @@ function mc_create_event_post( $data, $event_id ) {
 /**
  * Delete event posts when event is deleted
  *
- * @param array $deleted Array of event IDs
+ * @param array $deleted Array of event IDs.
  */
 function mc_event_delete_posts( $deleted ) {
 	foreach ( $deleted as $delete ) {
@@ -197,7 +197,8 @@ function mc_event_delete_posts( $deleted ) {
 				'post_type'  => 'mc-events',
 				'meta_key'   => '_mc_event_id',
 				'meta_value' => $delete
-		) );
+			) 
+		);
 		if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
 			$post_id = $posts[0]->ID;
 			wp_delete_post( $post_id, true );
@@ -208,17 +209,24 @@ function mc_event_delete_posts( $deleted ) {
 /**
  * Update a single field in an event.
  *
- * @param string $field database column
- * @param mixed $data value to be saved
+ * @param string               $field database column
+ * @param mixed                $data value to be saved
  * @param mixed string/integer $event could be integer or string
- * @param string $type signifier representing data type of $data (e.g. %d or %s)
+ * @param string               $type signifier representing data type of $data (e.g. %d or %s)
  *
  * @return database result
  */
 function mc_update_event( $field, $data, $event, $type = '%d' ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( "UPDATE " . my_calendar_table() . " SET $field = $type WHERE event_id=$type", $data, $event ) );
+	if ( '%d' == $type ) {
+		$sql = $wpdb->prepare( "UPDATE " . my_calendar_table() . " SET $field = %d WHERE event_id=%d", $data, $event );
+	} elseif ( '%s' == $type ) {
+		$sql = $wpdb->prepare( "UPDATE " . my_calendar_table() . " SET $field = %s WHERE event_id=%d", $data, $event );
+	} else {
+		$sql = $wpdb->prepare( "UPDATE " . my_calendar_table() . " SET $field = %f WHERE event_id=%d", $data, $event );		
+	}
+	$result = $wpdb->query( $sql );
 
 	return $result;
 }
@@ -240,10 +248,10 @@ function mc_event_delete_post( $event_id, $post_id ) {
 function my_calendar_manage() {
 	my_calendar_check();
 	global $wpdb;
-	if ( isset( $_GET['mode'] ) &&  'delete' == $_GET['mode'] ) {
+	if ( isset( $_GET['mode'] ) && 'delete' == $_GET['mode'] ) {
 		$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
-		$sql    = 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d';
-		$result = $wpdb->get_results( $wpdb->prepare( $sql, $event_id ), ARRAY_A );
+		$sql      = 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d';
+		$result   = $wpdb->get_results( $wpdb->prepare( $sql, $event_id ), ARRAY_A );
 		if ( mc_can_edit_event( $event_id ) ) {
 			if ( isset( $_GET['date'] ) ) {
 				$event_instance = (int) $_GET['date'];
@@ -259,27 +267,34 @@ function my_calendar_manage() {
 						:</strong> <?php _e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 					<input type="hidden" value="delete" name="event_action" />
-					<?php if ( ! empty( $_GET['date'] ) ) { ?>
+					<?php 
+					if ( ! empty( $_GET['date'] ) ) { 
+					?>
 						<input type="hidden" name="event_instance" value="<?php echo (int) $_GET['date']; ?>"/>
-					<?php } ?>
-					<?php if ( isset( $_GET['ref'] ) ) { ?>
-						<input type="hidden" name="ref" value="<?php echo esc_url( $_GET['ref'] ); ?>"/>
-					<?php } ?>
-
+					<?php 
+					}
+					if ( isset( $_GET['ref'] ) ) { 
+					?>
+						<input type="hidden" name="ref" value="<?php echo esc_url( $_GET['ref'] ); ?>" />
+					<?php 
+					}
+					?>
 					<input type="hidden" name="event_id" value="<?php echo $event_id; ?>"/>
 					<input type="submit" name="submit" class="button-secondary delete" value="<?php _e( 'Delete', 'my-calendar' ); echo " &quot;" . stripslashes( $result[0]['event_title'] ) . "&quot; $instance_date"; ?>"/>
 			</form>
-			</div><?php
+			</div>
+			<?php
 		} else {
 			?>
 			<div class="error">
 				<p><strong><?php _e( 'You do not have permission to delete that event.', 'my-calendar' ); ?></strong></p>
-			</div><?php
+			</div>
+			<?php
 		}
 	}
 
 	// Approve and show an Event ...originally by Roland
-	if ( isset( $_GET['mode'] ) && $_GET['mode'] == 'publish' ) {
+	if ( isset( $_GET['mode'] ) && 'publish' == $_GET['mode'] ) {
 		if ( current_user_can( 'mc_approve_events' ) ) {
 			$event_id = absint( $_GET['event_id'] );
 			$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d';
@@ -294,7 +309,7 @@ function my_calendar_manage() {
 	}
 
 	// Reject and hide an Event ...by Roland
-	if ( isset( $_GET['mode'] ) && $_GET['mode'] == 'reject' ) {
+	if ( isset( $_GET['mode'] ) && 'reject' == $_GET['mode'] ) {
 		if ( current_user_can( 'mc_approve_events' ) ) {
 			$event_id = absint( $_GET['event_id'] );
 			$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d';
@@ -319,13 +334,14 @@ function my_calendar_manage() {
 		$ids     = array();
 		foreach ( $events as $value ) {
 			$value  = (int) $value;
-			$ea     = "SELECT event_author FROM " . my_calendar_table() . " WHERE event_id = %d";
+			$ea     = 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d';
 			$result = $wpdb->get_results( $wpdb->prepare( $ea, $value ), ARRAY_A );
 			$total  = count( $events );
 			if ( mc_can_edit_event( $value ) ) {
-				$delete_occurrences = "DELETE FROM " . my_calendar_event_table() . " WHERE occur_event_id = %d";
+				$delete_occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
 				$wpdb->query( $wpdb->prepare( $delete_occurrences, $value ) );
-				$ids[]     = (int) $value;
+				
+				$ids[] = (int) $value;
 				$i ++;
 			}
 		}
@@ -334,6 +350,7 @@ function my_calendar_manage() {
 		$result    = $wpdb->query( $sql );
 		if ( 0 !== $result && false !== $result ) {
 			do_action( 'mc_mass_delete_events', $ids );
+			// Translators: Number of events deleted, number selected.
 			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
 		} else {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Your events have not been deleted. Please investigate.', 'my-calendar' ) . '</p></div>';
@@ -362,7 +379,7 @@ function my_calendar_manage() {
 		$sql = substr( $sql, 0, - 1 );
 		$sql .= ')';
 		$result = $wpdb->query( $sql );
-		if ( $result == 0 || $result == false ) {
+		if ( $result == 0 || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been approved. Please investigate.', 'my-calendar' ) . '</p></div>';
 		} else {
 			do_action( 'mc_mass_approve_events', $approved );
@@ -387,10 +404,10 @@ function my_calendar_manage() {
 			$archived[] = $value;
 			$i ++;
 		}
-		$sql = substr( $sql, 0, - 1 );
-		$sql .= ')';
+		$sql    = substr( $sql, 0, - 1 );
+		$sql   .= ')';
 		$result = $wpdb->query( $sql );
-		if ( $result == 0 || $result == false ) {
+		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not archive those events.', 'my-calendar' ) . '</p></div>';
 		} else {
 			do_action( 'mc_mass_archive_events', $archived );
@@ -418,7 +435,7 @@ function my_calendar_manage() {
 		$sql = substr( $sql, 0, - 1 );
 		$sql .= ')';
 		$result = $wpdb->query( $sql );
-		if ( $result == 0 || $result == false ) {
+		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not undo the archive status on those events.', 'my-calendar' ) . '</p></div>';
 		} else {
 			do_action( 'mc_mass_undo_archive_events', $archived );
@@ -503,7 +520,8 @@ function my_calendar_edit() {
 	?>
 
 	<div class="wrap my-calendar-admin">
-	<?php my_calendar_check_db();
+	<?php 
+	my_calendar_check_db();
 	if ( 2 == get_site_option( 'mc_multisite' ) ) {
 		if ( 0 == get_option( 'mc_current_table' ) ) {
 			$message = __( 'Currently editing your local calendar', 'my-calendar' );
@@ -535,8 +553,10 @@ function my_calendar_edit() {
 		<h1><?php _e( 'Add Event', 'my-calendar' ); ?></h1><?php
 		mc_edit_event_form();
 	}
-	mc_show_sidebar(); ?>
-	</div><?php
+	mc_show_sidebar(); 
+	?>
+	</div>
+	<?php
 }
 
 /**
@@ -553,9 +573,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	$proceed = $output[0];
 	$message = '';
 	$formats = array(
-		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s',
-		'%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d',
-		'%f', '%f'
+		'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f'
 	);
 
 	if ( ( 'add' == $action || 'copy' == $action ) && true == $proceed ) {
@@ -600,6 +618,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				} else {
 					$message = '<div class="updated notice"><p>' . __( 'Event added. It will now show on the calendar.', 'my-calendar' );
 					if ( $event_link !== false ) {
+						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
 					}
 					$message .= '</p></div>';
@@ -609,11 +628,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	}
 
 	if ( 'edit' == $action && true == $proceed ) {
-		$result       = true;
-		$url          = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
+		$result = true;
+		$url    = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
 		if ( mc_can_edit_event( $event_id ) ) {
-			$update       = $output[2];
-			$cats         = $update['event_categories'];
+			$update = $output[2];
+			$cats   = $update['event_categories'];
 			unset( $update['event_categories'] );
 			mc_update_category_relationships( $cats, $event_id );
 
@@ -647,25 +666,22 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 						$location                 = absint( $_POST['preset_location'] );
 						$update['event_location'] = $location;
 					}
-					$wpdb->insert(
-						my_calendar_table(),
-						$update,
-						$formats
-					);
-					$new_event = $wpdb->insert_id; // need to get this variable into URL for form submit.
+					$wpdb->insert( my_calendar_table(), $update, $formats );
+					// need to get this variable into URL for form submit.
+					$new_event = $wpdb->insert_id; 
 					$result    = mc_update_instance( $event_instance, $new_event, $update );
 				} else {
 					if ( $update['event_begin'][0] == $_POST['prev_event_begin'] && $update['event_end'][0] == $_POST['prev_event_end'] ) {
 						// There were no changes at all.
 					} else {
-						$result  = mc_update_instance( $event_instance, $event_id, $update );
 						// Only dates were changed.
+						$result  = mc_update_instance( $event_instance, $event_id, $update );
 						$message = '<div class="updated notice"><p>' . __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url</p></div>";
 					}
 				}
 			} else {
 				$result = $wpdb->update( my_calendar_table(), $update, array(
-					'event_id' => $event_id
+					'event_id' => $event_id,
 				), $formats, '%d' );
 
 				$recur_changed = ( $update['event_repeats'] != $_POST['prev_event_repeats'] || $update['event_recur'] != $_POST['prev_event_recur'] ) ? true : false;
@@ -718,7 +734,7 @@ function mc_set_category_relationships( $cats, $event_id ) {
 		foreach ( $cats as $cat ) {
 			$wpdb->insert( my_calendar_category_relationships_table(), array(
 				'event_id'    => $event_id,
-				'category_id' => $cat
+				'category_id' => $cat,
 			), array( '%d', '%d' ) );
 		}
 	}
@@ -736,9 +752,7 @@ function mc_update_category_relationships( $cats, $event_id ) {
 	if ( $old_cats == $cats ) {
 		return;
 	}
-	$wpdb->delete( my_calendar_category_relationships_table(), array(
-		'event_id' => $event_id
-	), '%d' );
+	$wpdb->delete( my_calendar_category_relationships_table(), array( 'event_id' => $event_id ), '%d' );
 
 	foreach ( $cats as $cat ) {
 		$wpdb->insert( my_calendar_category_relationships_table(), array(
@@ -756,14 +770,14 @@ function mc_update_category_relationships( $cats, $event_id ) {
  * @return string with edit link to go to event.
  */
 function mc_error_check( $event_id ) {
-	$data = mc_form_data( $event_id );
-	$test = ( $data ) ?  mc_test_occurrence_overlap( $data, true ) : '';
-	$args = array(
+	$data      = mc_form_data( $event_id );
+	$test      = ( $data ) ?  mc_test_occurrence_overlap( $data, true ) : '';
+	$args      = array(
 		'mode'     => 'edit',
 		'event_id' => $event_id,
 	);
 	$edit_link = ' <a href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar' ) ) ) . '">' . __( 'Edit Event', 'my-calendar' ) . '</a>';
-	$test = ( '' != $test ) ? str_replace( '</p></div>', "$edit_link</p></div>", $test ) : $test;
+	$test      = ( '' != $test ) ? str_replace( '</p></div>', "$edit_link</p></div>", $test ) : $test;
 
 	return $test;
 }
@@ -781,24 +795,27 @@ function mc_delete_event( $event_id ) {
 	if ( empty( $event_id ) ) {
 		$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( "You can't delete an event if you haven't submitted an event id", 'my-calendar' ) . '</p></div>';
 	} else {
+		$event_id = absint( $event_id );
+		$event_in = false;
 		$instance = false;
-		$post_id = mc_get_data( 'event_post', $event_id );
+		$post_id  = mc_get_data( 'event_post', $event_id );
 		if ( empty( $_POST['event_instance'] ) ) {
-			$sql                = 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id=' . (int) $event_id;
-			$delete_occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = ' . (int) $event_id;
-			$wpdb->query( $delete_occurrences );
-			$wpdb->query( $sql );
-			$sql    = 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_id=' . (int) $event_id;
-			$result = $wpdb->get_results( $sql );
+			$sql                = 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id=%d';
+			$delete_occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id =%d';
+			$wpdb->query( $wpdb->prepare( $delete_occurrences, $event_id ) );
+			$wpdb->query( $wpdb->prepare( $sql, $event_id ) );
+			$sql    = 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_id=%d';
+			$result = $wpdb->get_results( $wpdb->prepare( $sql, $event_id );
 		} else {
-			$delete   = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id = ' . (int) $_POST['event_instance'];
-			$result   = $wpdb->get_results( $delete );
+			$event_in = absint( $_POST['event_instance'] );
+			$delete   = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d';
+			$result   = $wpdb->get_results( $wpdb->prepare( $delete, $event_in ) );
 			$instance = true;
 		}
 		if ( empty( $result ) || empty( $result[0]->event_id ) ) {
 			// do an action using the event_id
 			if ( $instance ) {
-				do_action( 'mc_delete_event_instance', $event_id, $post_id, (int) $_POST['event_instance'] );
+				do_action( 'mc_delete_event_instance', $event_id, $post_id, $event_in );
 			} else {
 				do_action( 'mc_delete_event', $event_id, $post_id );
 			}
@@ -820,16 +837,13 @@ function mc_delete_event( $event_id ) {
  */
 function mc_form_data( $event_id = false ) {
 	global $wpdb, $submission;
-	if ( $event_id !== false ) {
-		if ( intval( $event_id ) != $event_id ) {
-			return '<div class="error"><p>' . __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ) . '</p></div>';
-		} else {
-			$data = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=' . (int) $event_id . ' LIMIT 1' );
-			if ( empty( $data ) ) {
-				return '<div class="error"><p>' . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . '</p></div>';
-			}
-			$data = $data[0];
+	if ( false !== $event_id ) {
+		$event_id = absint( $event_id );
+		$data     = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) );
+		if ( empty( $data ) ) {
+			return '<div class="error"><p>' . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . '</p></div>';
 		}
+		$data = $data[0];
 		// Recover users entries if there was an error.
 		if ( ! empty( $submission ) ) {
 			$data = $submission;
@@ -874,7 +888,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	} else {
 		$message = '';
 	}
-	echo ( $message != '' ) ? '<div class="error"><p>' . $message . '</p></div>' : '';
+	echo ( '' != $message ) ? '<div class="error"><p>' . $message . '</p></div>' : '';
 
 	mc_form_fields( $data, $mode, $event_id );
 }
@@ -892,7 +906,7 @@ function mc_get_instance_data( $instance_id ) {
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$result = $mcdb->get_row( 'SELECT * FROM ' . my_calendar_event_table() . " WHERE occur_id = $instance_id" );
+	$result = $mcdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . " WHERE occur_id = %d", $instance_id ) );
 
 	return $result;
 }
@@ -1224,7 +1238,7 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
 	// if event starts and ends on same day, skip query
 	$start_end = ( $data->event_begin == $data->event_end ) ? true : false;
 	// only run test when an event is set up to recur & starts/ends on different days.
-	if ( !$single_recur && !$start_end ) {
+	if ( ! $single_recur && !$start_end ) {
 		$check = mc_increment_event( $data->event_id, array(), 'test' );
 		if ( my_calendar_date_xcomp( $check['occur_begin'], $data->event_end . '' . $data->event_endtime ) ) {
 			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . "</strong> " . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . "</p><p>" . sprintf( __( 'Event end date: <strong>%s %s</strong>. Next occurrence starts: <strong>%s</strong>', 'my-calendar' ), $data->event_end, $data->event_endtime, $check['occur_begin'] ) . '</p></div>';
@@ -3138,7 +3152,7 @@ function mc_related_events( $id ) {
 	$id = (int) $id;
 
 
-	if ( !$id && $return === false ) {
+	if ( ! $id && $return === false ) {
 		echo "<li>" . __( 'No related events', 'my-calendar' ) . "</li>";
 
 		return;
@@ -3193,7 +3207,7 @@ function mc_can_edit_category( $category, $user ) {
  * @return boolean
  */
 function mc_can_edit_event( $event = false ) {
-	if ( !$event ) {
+	if ( ! $event ) {
 		return false;
 	}
 
@@ -3222,7 +3236,7 @@ function mc_can_edit_event( $event = false ) {
 	if ( is_array( $categories ) ) {
 		foreach ( $categories as $cat ) {
 			// if user doesn't have access to all relevant categories, prevent editing
-			if ( !$has_permissions ) {
+			if ( ! $has_permissions ) {
 				continue;
 			}
 			$has_permissions = mc_can_edit_category( $cat, $user );

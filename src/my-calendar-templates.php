@@ -611,7 +611,7 @@ function mc_get_uri( $event = false, $args = array() ) {
 		}
 	}
 
-	if ( !$uri ) {
+	if ( ! $uri ) {
 		$uri = home_url();
 	}
 
@@ -806,7 +806,7 @@ function mc_generate_map( $event, $source = 'event' ) {
 		$width  = apply_filters( 'mc_map_height', '100%', $event );
 		$height = apply_filters( 'mc_map_height', '300px', $event );
 		$styles = " style='width: $width;height: $height'";
-		$location = ( !$latlng ) ? "address: '$address'," : $latlng;
+		$location = ( ! $latlng ) ? "address: '$address'," : $latlng;
 		$value  = "
 <script type='text/javascript'>
 	(function ($) { 'use strict';

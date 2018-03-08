@@ -29,7 +29,7 @@ function mc_generate() {
 		$templatekey = '';
 		$append      = '';
 		$output = apply_filters( 'mc_shortcode_generator', false, $_POST );
-		if ( !$output ) {
+		if ( ! $output ) {
 			switch ( $_POST['shortcode'] ) {
 				case 'main':
 					$shortcode   = 'my_calendar';

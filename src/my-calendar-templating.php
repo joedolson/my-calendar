@@ -452,7 +452,7 @@ function mc_list_templates() {
 }
 
 add_action( 'admin_enqueue_scripts', function() {
-	if ( !function_exists( 'wp_enqueue_code_editor' ) ) {
+	if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 		return;
 	}
 

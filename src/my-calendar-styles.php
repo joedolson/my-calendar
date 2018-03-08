@@ -274,7 +274,7 @@ function my_calendar_style_edit() {
 function mc_get_style_path( $filename = false, $type = 'path' ) {
 	$url = plugin_dir_url( __FILE__ );
 	$dir = plugin_dir_path( __FILE__ );
-	if ( !$filename ) {
+	if ( ! $filename ) {
 		$filename = get_option( 'mc_css_file' );
 	}
 	if ( strpos( $filename, 'mc_custom_' ) === 0 ) {
@@ -437,7 +437,7 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 	$diff = $renderer->render($text_diff);
 	$r = '';
 
-	if ( !$diff )
+	if ( ! $diff )
 		return '';
 	if ( $args['title'] ) {
 		$r .= "<h2>$args[title]</h2>\n";
@@ -466,7 +466,7 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 }
 
 add_action( 'admin_enqueue_scripts', function() {
-	if ( !function_exists( 'wp_enqueue_code_editor' ) ) {
+	if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 		return;
 	}
 

@@ -31,10 +31,10 @@ function my_calendar_add_feed() {
  * @return array updated set of links
  */
 function mc_plugin_action( $links, $file ) {
-	if ( $file == plugin_basename( dirname( __FILE__ ) . '/my-calendar.php' ) ) {
+	if ( plugin_basename( dirname( __FILE__ ) . '/my-calendar.php' ) == $file ) {
 		$links[] = '<a href="admin.php?page=my-calendar-config">' . __( 'Settings', 'my-calendar' ) . '</a>';
 		$links[] = '<a href="admin.php?page=my-calendar-help">' . __( 'Help', 'my-calendar' ) . '</a>';
-		if ( !function_exists( 'mcs_submissions' ) ) {
+		if ( ! function_exists( 'mcs_submissions' ) ) {
 			$links[] = '<a href="https://www.joedolson.com/my-calendar-pro/">' . __( 'Go Pro', 'my-calendar' ) . '</a>';
 		}
 	}
@@ -177,7 +177,7 @@ function my_calendar_head() {
 				$class = mc_category_class( $category, 'mc_' );
 				$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
 				$color = $hex . $category->category_color;
-				if ( $color != '#' ) {
+				if ( '#' != $color ) {
 					$hcolor = mc_shift_color( $category->category_color );
 					if ( 'font' == get_option( 'mc_apply_color' ) ) {
 						$type = 'color';
@@ -205,7 +205,7 @@ function my_calendar_head() {
 					$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
 				}
 			}
-			if ( $style_vars != '' ) {
+			if ( '' != $style_vars ) {
 				$style_vars = '.mc-main {' . $style_vars . '}';
 			}
 
@@ -232,23 +232,23 @@ $style_vars
  */
 function mc_deal_with_deleted_user( $id ) {
 	global $wpdb;
+	$new        = $wpdb->get_var( 'SELECT MIN(ID) FROM ' . $wpdb->users, 0, 0 );
+	$new_author = apply_filters( 'mc_deleted_author', $new );
 	// This may not work quite right in multi-site. Need to explore further when I have time.
 	$wpdb->get_results(
-		$wpdb->prepare(
-			'UPDATE ' . my_calendar_table() . ' SET event_author=' . apply_filters( 'mc_deleted_author', $wpdb->get_var( "SELECT MIN(ID) FROM " . $wpdb->users, 0, 0 ) ) . ' WHERE event_author=%d', $id
-		)
+		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id )
 	);
+
+	$new_host = apply_filters( 'mc_deleted_host', $new );
 	$wpdb->get_results(
-		$wpdb->prepare(
-			'UPDATE ' . my_calendar_table() . ' SET event_host=' . apply_filters( 'mc_deleted_host', $wpdb->get_var( "SELECT MIN(ID) FROM " . $wpdb->users, 0, 0 ) ) . ' WHERE event_host=%d', $id
-		)
+		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id )
 	);
 }
 
 /**
  * Move sidebars into the footer.
  *
- * @param string $classes Existing admin body classes
+ * @param string $classes Existing admin body classes.
  *
  * @return string New admin body classes
  */
@@ -275,14 +275,15 @@ function my_calendar_write_js() {
 				?>
 				$('#mc_twitter').charCount({
 					allowed: 140,
-					counterText: '<?php _e( 'Characters left: ', 'my-calendar' ) ?>'
+					counterText: '<?php _e( 'Characters left: ', 'my-calendar' ); ?>'
 				});
 				<?php
 				}
 				?>
 			});
 			//]]>
-		</script><?php
+		</script>
+		<?php
 	}
 }
 
@@ -338,7 +339,7 @@ function mc_footer_js() {
 					'$(this).parent().children().not(".event-title").toggle();',
 					'e.preventDefault();'
 				);
-				$cal_js = str_replace( $replacements, '', $cal_js );
+				$cal_js       = str_replace( $replacements, '', $cal_js );
 			}
 			$mini_js  = stripcslashes( get_option( 'mc_minijs' ) );
 			$open_day = get_option( 'mc_open_day_uri' );
@@ -361,11 +362,9 @@ function mc_footer_js() {
 				if ( get_option( 'mc_ajax_javascript' ) != 1 ) {
 					$inner .= "\n" . $ajax_js;
 				}
-$script = '
+				$script = '
 <script type="text/javascript">
-(function( $ ) { \'use strict\';'.
-	$inner
-.'}(jQuery));
+(function( $ ) { \'use strict\';' . $inner . '}(jQuery));
 </script>';
 			}
 			$inner = apply_filters( 'mc_filter_javascript_footer', $inner );
@@ -572,7 +571,7 @@ function my_calendar_exists() {
 	$tables = $wpdb->get_results( "show tables;" );
 	foreach ( $tables as $table ) {
 		foreach ( $table as $value ) {
-			if ( $value == my_calendar_table() ) {
+			if ( my_calendar_table() == $value ) {
 				// if the table exists, then My Calendar was already installed.
 				return true;
 			}
@@ -626,9 +625,10 @@ function my_calendar_check() {
 		update_option( 'mc_version', $mc_version );
 		// Now we've determined what the current install is or isn't.
 		if ( true == $new_install ) {
-			//add default settings
+			//add default settings.
 			mc_default_settings();
-			mc_create_category( array(
+			mc_create_category( 
+				array(
 					'category_name'  => 'General',
 					'category_color' => '#ffffcc',
 					'category_icon' => 'event.png',
@@ -639,7 +639,7 @@ function my_calendar_check() {
 
 		mc_do_upgrades( $upgrade_path );
 		/*
-		if the user has fully uninstalled the plugin but kept the database of events, this will restore default
+		if the user has fully uninstalled the plugin but kept the database of events, this will restore default.
 		settings and upgrade db if needed.
 		*/
 		if ( 'true' == get_option( 'mc_uninstalled' ) ) {
@@ -1466,7 +1466,7 @@ add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
  * Add custom fields to permalinks settings page.
  */
 function mc_load_permalinks() {
-	if( isset( $_POST['mc_cpt_base'] ) )	{
+	if ( isset( $_POST['mc_cpt_base'] ) )	{
 		update_option( 'mc_cpt_base', sanitize_text_field( $_POST['mc_cpt_base'] ) );
 	}
 	$opts = array(
@@ -1508,7 +1508,7 @@ function mc_posttypes() {
 		),
 	);
 	$enabled = array( 'mc-events' );
-	$slug = ( get_option( 'mc_cpt_base' ) != '' ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
+	$slug    = ( '' != get_option( 'mc_cpt_base' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
 			$value  =& $types[ $key ];
@@ -1557,7 +1557,9 @@ add_filter( 'the_posts', 'mc_close_comments' );
  * @return array $posts
  */
 function mc_close_comments( $posts ) {
-	if ( !is_single() || empty( $posts ) ) { return $posts; }
+	if ( !is_single() || empty( $posts ) ) { 
+		return $posts; 
+	}
 
 	if ( 'mc-events' == get_post_type($posts[0]->ID) ) {
 		if ( apply_filters( 'mc_autoclose_comments', true ) && 'closed' != $posts[0]->comment_status ) {

@@ -499,7 +499,7 @@ function my_calendar_settings() {
 									}
 								?>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-								<?php if ( 'true' == get_option( 'mc_remote' ) && !function_exists( 'mc_remote_db' ) ) { ?>
+								<?php if ( 'true' == get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) { ?>
 								<li><?php _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ); ?>
 <pre>
 function mc_remote_db() {

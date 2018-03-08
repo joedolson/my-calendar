@@ -1103,7 +1103,7 @@ function mc_hidden_event() {
 		}
 		if ( is_object( $post ) && $post->post_type == 'mc-events' ) {
 			$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
-			if ( !$event_id ) { 
+			if ( ! $event_id ) { 
 				return; 
 			}
 			$event = mc_get_first_event( $event_id );
@@ -1114,7 +1114,7 @@ function mc_hidden_event() {
 	}
 	if ( $do_redirect ) {
 		$uri = mc_get_uri();
-		if ( !$is_404 ) {
+		if ( ! $is_404 ) {
 			wp_safe_redirect( $uri );	
 		} else {
 			global $wp_query;
@@ -1410,7 +1410,7 @@ function mc_calendar_params( $args ) {
 	unset( $hash_args['format'] );
 	
 	$hash              = md5( implode( ',', $hash_args ) );
-	$id                = ( !$id ) ? "mc-$hash" : $id;
+	$id                = ( ! $id ) ? "mc-$hash" : $id;
 	$params['id']      = $id;
 
 	return $params;
@@ -1968,7 +1968,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	$body = '';
 	if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
-		if ( ( date( 'N', $start ) == $start_of_week || $start == strtotime( $from ) || !$week_number_shown ) ) {
+		if ( ( date( 'N', $start ) == $start_of_week || $start == strtotime( $from ) || ! $week_number_shown ) ) {
 			$week_number_shown = false;
 			if ( $format != 'list' ) {
 				$weeknumber        = date( 'W', $start);
@@ -2156,7 +2156,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 			} else {
 				$current_year = date( 'Y', current_time( 'timestamp' ) );
 				$c_year = ( $dm[1] == 0 ) ? $current_year : false;
-				if ( !$c_year ) {
+				if ( ! $c_year ) {
 					$c_year = ( date( 'Y', strtotime( '-1 month' ) ) == $current_year ) ? $current_year : $current_year - 1;
 				}
 			}
@@ -2778,7 +2778,7 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 function my_calendar_searchform( $type, $url ) {
 	$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : '';
 	if ( $type == 'simple' ) {
-		if ( !$url || '' == $url ) {
+		if ( ! $url || '' == $url ) {
 			$url = mc_get_uri( false, array( 'type' => $type ) );
 		}
 		return '
@@ -3032,7 +3032,7 @@ function mc_refresh_cache( $action, $data, $event_id, $result ) {
 		}
 
 		// WP Fastest Cache.
-		if( isset( $GLOBALS['wp_fastest_cache'] ) && method_exists( $GLOBALS['wp_fastest_cache'], 'singleDeleteCache' ) ) {
+		if ( isset( $GLOBALS['wp_fastest_cache'] ) && method_exists( $GLOBALS['wp_fastest_cache'], 'singleDeleteCache' ) ) {
 			$GLOBALS['wp_fastest_cache']->singleDeleteCache( false, $calendar );
 		}
 

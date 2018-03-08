@@ -635,7 +635,7 @@ function my_calendar_upcoming_events( $args ) {
 		$template = @file_get_contents( mc_get_file( $template ) );
 	}
 
-	$template      = ( !$template || $template == 'default' ) ? $defaults['upcoming']['template'] : $template;
+	$template      = ( ! $template || $template == 'default' ) ? $defaults['upcoming']['template'] : $template;
 	if ( mc_key_exists( $template ) ) {
 		$template = mc_get_custom_template( $template );
 	}
@@ -1062,7 +1062,7 @@ function my_calendar_todays_events( $args ) {
 		$template = @file_get_contents( mc_get_file( $template ) );
 	}
 	$defaults = mc_widget_defaults();
-	$template = ( !$template || $template == 'default' ) ? $defaults['today']['template'] : $template;
+	$template = ( ! $template || $template == 'default' ) ? $defaults['today']['template'] : $template;
 
 	if ( mc_key_exists( $template ) ) {
 		$template = mc_get_custom_template( $template );

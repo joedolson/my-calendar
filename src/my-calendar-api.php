@@ -322,16 +322,10 @@ function mc_strip_to_xml( $value ) {
 	$length = strlen( $value );
 	for ( $i = 0; $i < $length; $i ++ ) {
 		$current = ord( $value{$i} );
-		if ( ( 0x9 == $current ) ||
-		     ( 0xA == $current ) ||
-		     ( 0xD == $current ) ||
-		     ( ( $current >= 0x20 ) && ( $current <= 0xD7FF ) ) ||
-		     ( ( $current >= 0xE000 ) && ( $current <= 0xFFFD ) ) ||
-		     ( ( $current >= 0x10000 ) && ( $current <= 0x10FFFF ) )
-		) {
+		if ( ( 0x9 == $current ) || ( 0xA == $current ) || ( 0xD == $current ) || ( ( $current >= 0x20 ) && ( $current <= 0xD7FF ) ) || ( ( $current >= 0xE000 ) && ( $current <= 0xFFFD ) ) || ( ( $current >= 0x10000 ) && ( $current <= 0x10FFFF ) ) ) {
 			$ret .= chr( $current );
 		} else {
-			$ret .= " ";
+			$ret .= ' ';
 		}
 	}
 	$ret = iconv( 'UTF-8', 'UTF-8//IGNORE', $ret );
@@ -374,7 +368,7 @@ function mc_ics_subscribe() {
 		}
 	}
 	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
-	if ( ! ( isset( $_GET['sync'] ) && $_GET['sync'] == 'true' ) ) {
+	if ( ! ( isset( $_GET['sync'] ) && 'true' == $_GET['sync'] ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
 		header( 'Pragma: no-cache' );
@@ -389,11 +383,11 @@ function mc_ics_subscribe() {
  * Generate ICS export of current period of events
  */
 function my_calendar_ical() {
-	$p   = ( isset( $_GET['span'] ) ) ? 'year' : false;
-	$y   = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : date( 'Y' );
-	$m   = ( isset( $_GET['month'] ) ) ? $_GET['month'] : date( 'n' );
-	$ny  = ( isset( $_GET['nyr'] ) ) ? $_GET['nyr'] : $y;
-	$nm  = ( isset( $_GET['nmonth'] ) ) ? $_GET['nmonth'] : $m;
+	$p  = ( isset( $_GET['span'] ) ) ? 'year' : false;
+	$y  = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : date( 'Y' );
+	$m  = ( isset( $_GET['month'] ) ) ? $_GET['month'] : date( 'n' );
+	$ny = ( isset( $_GET['nyr'] ) ) ? $_GET['nyr'] : $y;
+	$nm = ( isset( $_GET['nmonth'] ) ) ? $_GET['nmonth'] : $m;
 
 	if ( $p ) {
 		$from = "$y-1-1";
@@ -404,8 +398,8 @@ function my_calendar_ical() {
 		$to   = "$ny-$nm-$d";
 	}
 
-	$from = apply_filters( 'mc_ical_download_from', $from, $p );
-	$to   = apply_filters( 'mc_ical_download_to', $to, $p );
+	$from     = apply_filters( 'mc_ical_download_from', $from, $p );
+	$to       = apply_filters( 'mc_ical_download_to', $to, $p );
 	$category = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcal'] ) : null;
 
 	$tz_id = get_option( 'timezone_string' );
@@ -416,8 +410,8 @@ function my_calendar_ical() {
 	$templates = mc_ical_templates();
 	$template  = $templates['template'];
 
-	$site   = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
-	$args     = array(
+	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
+	$args = array(
 		'from'     => $from,
 		'to'       => $to,
 		'category' => $category,
@@ -429,6 +423,7 @@ function my_calendar_ical() {
 		'source'   => 'calendar',
 		'site'     => $site
 	);
+	
 	$args   = apply_filters( 'mc_ical_attributes', $args, $_GET );
 	$data   = my_calendar_events( $args );
 	$events = mc_flatten_array( $data );

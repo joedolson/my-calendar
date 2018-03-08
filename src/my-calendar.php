@@ -147,7 +147,7 @@ function mc_canonical() {
 	}
 
 	global $wp_the_query;
-	if ( !$id = $wp_the_query->get_queried_object_id() ) {
+	if ( ! $id = $wp_the_query->get_queried_object_id() ) {
 		return;
 	}
 
