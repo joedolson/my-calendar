@@ -7,7 +7,6 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,14 +29,14 @@ function mc_widget_defaults() {
 			'template' => $default_template,
 			'category' => '',
 			'text'     => '',
-			'title'    => 'Upcoming Events'
+			'title'    => 'Upcoming Events',
 		),
 		'today'    => array(
 			'template' => $default_template,
 			'category' => '',
 			'title'    => 'Today\'s Events',
-			'text'     => ''
-		)
+			'text'     => '',
+		),
 	);
 
 	return apply_filters( 'mc_widget_defaults', $defaults );
@@ -110,7 +109,7 @@ function mc_globals() {
 
 	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) == 'true' ) ? 1 : 0;
 
-$initial_db = "CREATE TABLE " . my_calendar_table() . " (
+	$initial_db = 'CREATE TABLE ' . my_calendar_table() . " (
  event_id INT(11) NOT NULL AUTO_INCREMENT,
  event_begin DATE NOT NULL,
  event_end DATE NOT NULL,
@@ -159,7 +158,7 @@ $initial_db = "CREATE TABLE " . my_calendar_table() . " (
  KEY event_category (event_category)
  ) $charset_collate;";
 
-$initial_occur_db = "CREATE TABLE " . my_calendar_event_table() . " (
+	$initial_occur_db = 'CREATE TABLE ' . my_calendar_event_table() . " (
  occur_id INT(11) NOT NULL AUTO_INCREMENT,
  occur_event_id INT(11) NOT NULL,
  occur_begin DATETIME NOT NULL,
@@ -169,7 +168,7 @@ $initial_occur_db = "CREATE TABLE " . my_calendar_event_table() . " (
  KEY occur_event_id (occur_event_id)
  ) $charset_collate;";
 
-$initial_cat_db = "CREATE TABLE " . my_calendar_categories_table() . " (
+	$initial_cat_db = 'CREATE TABLE ' . my_calendar_categories_table() . " (
  category_id INT(11) NOT NULL AUTO_INCREMENT,
  category_name VARCHAR(255) NOT NULL,
  category_color VARCHAR(7) NOT NULL,
@@ -180,7 +179,7 @@ $initial_cat_db = "CREATE TABLE " . my_calendar_categories_table() . " (
  ) $charset_collate;";
 
 
-$initial_rel_db = "CREATE TABLE " . my_calendar_category_relationships_table() . " (
+	$initial_rel_db = 'CREATE TABLE ' . my_calendar_category_relationships_table() . " (
  relationship_id INT(11) NOT NULL AUTO_INCREMENT,
  event_id INT(11) NOT NULL,
  category_id INT(11) NOT NULL DEFAULT '0',
@@ -188,7 +187,7 @@ $initial_rel_db = "CREATE TABLE " . my_calendar_category_relationships_table() .
  KEY event_id (event_id)
  ) $charset_collate;";
 
-$initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " (
+	$initial_loc_db = 'CREATE TABLE ' . my_calendar_locations_table() . " (
  location_id INT(11) NOT NULL AUTO_INCREMENT,
  location_label VARCHAR(255) NOT NULL,
  location_street VARCHAR(255) NOT NULL,
@@ -218,7 +217,7 @@ $initial_loc_db = "CREATE TABLE " . my_calendar_locations_table() . " (
 		'list_template'    => $list_template,
 		'rss_template'     => $rss_template,
 		'mini_template'    => $mini_template,
-		'single_template'  => $single_template
+		'single_template'  => $single_template,
 	);
 
 	return $globals;
@@ -249,20 +248,19 @@ function mc_default_settings() {
 	add_option( 'mc_apply_color', 'background' );
 	add_option( 'mc_inverse_color', 'true' );
 	add_option( 'mc_input_options', array(
-			'event_short'             => 'off',
-			'event_desc'              => 'on',
-			'event_category'          => 'on',
-			'event_image'             => 'on',
-			'event_link'              => 'on',
-			'event_recurs'            => 'on',
-			'event_open'              => 'off',
-			'event_location'          => 'off',
-			'event_location_dropdown' => 'on',
-			'event_specials'          => 'off',
-			'event_access'            => 'on',
-			'event_host'              => 'off'
-		)
-	);
+		'event_short'             => 'off',
+		'event_desc'              => 'on',
+		'event_category'          => 'on',
+		'event_image'             => 'on',
+		'event_link'              => 'on',
+		'event_recurs'            => 'on',
+		'event_open'              => 'off',
+		'event_location'          => 'off',
+		'event_location_dropdown' => 'on',
+		'event_specials'          => 'off',
+		'event_access'            => 'on',
+		'event_host'              => 'off'
+	) );
 	add_option( 'mc_input_options_administrators', 'false' );
 	add_site_option( 'mc_multisite', '0' );
 	add_option( 'mc_event_mail', 'false' );
@@ -275,29 +273,27 @@ function mc_default_settings() {
 	add_option( 'mc_date_format', get_option( 'date_format' ) );
 	// This option *must* be complete, if it's partial we get errors. So use update instead of add.
 	update_option( 'mc_templates', array(
-			'title'      => '{time}: {title}',
-			'title_list' => '{title}',
-			'title_solo' => '{title}',
-			'link'       => __( 'More information', 'my-calendar' ),
-			'grid'       => $grid_template,
-			'list'       => $list_template,
-			'mini'       => $mini_template,
-			'rss'        => $rss_template,
-			'details'    => $single_template,
-			'label'      => __( 'Read more', 'my-calendar' )
-		)
-	);
+		'title'      => '{time}: {title}',
+		'title_list' => '{title}',
+		'title_solo' => '{title}',
+		'link'       => __( 'More information', 'my-calendar' ),
+		'grid'       => $grid_template,
+		'list'       => $list_template,
+		'mini'       => $mini_template,
+		'rss'        => $rss_template,
+		'details'    => $single_template,
+		'label'      => __( 'Read more', 'my-calendar' )
+	) );
 	add_option( 'mc_skip_holidays', 'false' );
 	add_option( 'mc_css_file', 'twentyeighteen.css' );
 	add_option( 'mc_style_vars', array(
-		  '--primary-dark' => '#313233',
-		  '--primary-light' => '#fff',
-		  '--secondary-light' => '#fff',
-		  '--secondary-dark' => '#000',
-		  '--highlight-dark' => '#666',
-		  '--highlight-light' => '#efefef',
-		)
-	);
+	  '--primary-dark' => '#313233',
+	  '--primary-light' => '#fff',
+	  '--secondary-light' => '#fff',
+	  '--secondary-dark' => '#000',
+	  '--highlight-dark' => '#666',
+	  '--highlight-light' => '#efefef',
+	) );
 	add_option( 'mc_time_format', get_option( 'time_format' ) );
 	add_option( 'mc_show_weekends', 'true' );
 	add_option( 'mc_convert', 'true' );
@@ -310,7 +306,7 @@ function mc_default_settings() {
 	update_option( 'mc_update_notice', 1 );
 	mc_add_roles();
 	$has_uri = mc_guess_calendar();
-	if ( $has_uri['response'] == false ) {
+	if ( false == $has_uri['response'] ) {
 		// if mc_guess_calendar returns a string, no valid URI was found.
 		$slug = sanitize_title( __( 'my-calendar', 'my-calendar' ) );
 		mc_generate_calendar_page( $slug );
@@ -334,7 +330,7 @@ function mc_generate_calendar_page( $slug ) {
 	global $current_user;
 	$current_user = wp_get_current_user();
 	if ( ! get_page_by_path( $slug ) ) {
-		$page      = array(
+		$page = array(
 			'post_title'   => __( 'My Calendar', 'my-calendar' ),
 			'post_status'  => 'publish',
 			'post_type'    => 'page',
@@ -356,7 +352,7 @@ function mc_generate_calendar_page( $slug ) {
 }
 
 /**
- * recreates event occurrences if event occurrences being recreated
+ * Recreates event occurrences if event occurrences being recreated
  */
 function mc_migrate_db() {
 	global $wpdb;
@@ -367,7 +363,7 @@ function mc_migrate_db() {
 	if ( $count2 > 0 && $count > 0 ) {
 		return;
 	}
-	if ( $count2 == 0 && $count == 0 ) {
+	if ( 0 == $count2 && 0 == $count ) {
 		return; // no events, migration unnecessary.
 	}
 
@@ -376,15 +372,16 @@ function mc_migrate_db() {
 	$events = $wpdb->get_results( $sql );
 	foreach ( $events as $event ) {
 		// assign endtimes to all events.
-		if ( $event->event_endtime == '00:00:00' && $event->event_time != '00:00:00' ) {
+		if ( '00:00:00' == $event->event_endtime && '00:00:00' != $event->event_time ) {
 			$event->event_endtime = date( 'H:i:s', strtotime( "$event->event_time +1 hour" ) );
 			mc_flag_event( $event->event_id, $event->event_endtime );
 		}
 
-		$dates = array( 'event_begin'   => $event->event_begin,
-		                'event_end'     => $event->event_end,
-		                'event_time'    => $event->event_time,
-		                'event_endtime' => $event->event_endtime
+		$dates = array( 
+			'event_begin'   => $event->event_begin,
+			'event_end'     => $event->event_end,
+			'event_time'    => $event->event_time,
+			'event_endtime' => $event->event_endtime,
 		);
 
 		mc_increment_event( $event->event_id, $dates );
@@ -394,7 +391,7 @@ function mc_migrate_db() {
 /**
  * If an event has time values that are no longer valid in current versions of My Calendar, modify to usable values.
  *
- * @param int $id event ID.
+ * @param int    $id event ID.
  * @param string $time New end time.
  *
  */
@@ -402,12 +399,7 @@ function mc_flag_event( $id, $time ) {
 	global $wpdb;
 	$data    = array( 'event_hide_end' => 1, 'event_endtime' => $time );
 	$formats = array( '%d', '%s' );
-	$result  = $wpdb->update(
-		my_calendar_table(),
-		$data,
-		array( 'event_id' => $id ),
-		$formats,
-		'%d' );
+	$result  = $wpdb->update( my_calendar_table(), $data, array( 'event_id' => $id ), $formats, '%d' );
 
 	return;
 }
@@ -415,8 +407,8 @@ function mc_flag_event( $id, $time ) {
 /**
  * Review location table to find matches between saved locations event locations
  *
- * @param object $event Event object
- * @param array $locations array of location objects
+ * @param object $event Event object.
+ * @param array  $locations array of location objects.
  *
  * @return boolean
  */
@@ -440,7 +432,7 @@ function mc_check_location_table( $event, $locations ) {
 	);
 
 	foreach ( $locations as $id => $loc ) {
-		// compare locations - if there are differences, return as not existing
+		// Compare locations - if there are differences, return as not existing.
 		$diff = array_diff( $location, $loc );
 		if ( empty( $diff ) ) {
 			return $id;
@@ -456,7 +448,7 @@ function mc_check_location_table( $event, $locations ) {
  * @since 2.3.0
  */
 function mc_transition_db() {
-	if ( get_option( 'mc_remote' ) != 'true' ) {
+	if ( 'true' != get_option( 'mc_remote' ) ) {
 		global $wpdb;
 		$results   = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_locations_table(), ARRAY_A );
 		$locations = array();
@@ -488,13 +480,7 @@ function mc_transition_db() {
 			if ( $location ) {
 				mc_update_event( 'event_location', $location, $event['event_id'] );
 			} else {
-				if ( $event['event_label'] == '' &&
-				     $event['event_street'] == '' &&
-				     $event['event_url'] == '' &&
-				     $event['event_city'] == '' &&
-				     $event['event_state'] == '' &&
-				     $event['event_country'] == ''
-				) {
+				if ( '' == $event['event_label'] && '' == $event['event_street'] && '' == $event['event_url'] && '' == $event['event_city'] && '' == $event['event_state'] && '' == $event['event_country'] ) {
 					// don't insert the row if location does not have basic data.
 				} else {
 					$add = array(
@@ -511,11 +497,11 @@ function mc_transition_db() {
 						'location_latitude'  => $event['event_latitude'],
 						'location_zoom'      => $event['event_zoom'],
 						'location_phone'     => $event['event_phone'],
-						'location_access'    => '' // no events in this transition will have access data.
+						'location_access'    => '' // No events in this transition will have access data.
 					);
 					mc_insert_location( $add );
 				}
-				// could add delete routine to allow user to select what location to use for events using a given location.
+				// Could add delete routine to allow user to select what location to use for events using a given location.
 			}
 		}
 	}
@@ -528,13 +514,11 @@ function mc_transition_db() {
  */
 function mc_check_imports() {
 	$output = '';
-	if ( get_option( 'ko_calendar_imported' ) != 'true' ) {
+	if ( 'true' != get_option( 'ko_calendar_imported' ) ) {
 		if ( function_exists( 'check_calendar' ) ) {
 			$output .= "
 			<div id='message' class='updated'>
-				<p>" .
-					__( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ) . '
-				</p>
+				<p>" . __( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ) . '</p>
 				<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">
 					<div>
 						<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" />
@@ -544,9 +528,7 @@ function mc_check_imports() {
 						<input type="submit" value="' . __( 'Import from Calendar', 'my-calendar' ) . '" name="import-calendar" class="button-primary"/>
 					</div>
 				</form>
-				<p>' .
-					__( 'Although it is possible that this import could fail to import your events correctly, it should not have any impact on your existing Calendar database.', 'my-calendar' ) . '
-				</p>
+				<p>' . __( 'Although it is possible that this import could fail to import your events correctly, it should not have any impact on your existing Calendar database.', 'my-calendar' ) . '</p>
 			</div>';
 		}
 	}
@@ -560,7 +542,7 @@ function mc_check_imports() {
  */
 function mc_transition_categories() {
 	global $wpdb;
-	$results   = $wpdb->get_results( 'SELECT event_id, event_category FROM ' . my_calendar_table() );
+	$results = $wpdb->get_results( 'SELECT event_id, event_category FROM ' . my_calendar_table() );
 	foreach ( $results as $result ) {
 		$event_id = $result->event_id;
 		$category = $result->event_category;
@@ -571,6 +553,11 @@ function mc_transition_categories() {
 
 /**
  * Make a copy of modified CSS files and restore.
+ *
+ * @param string $source Source file.
+ * @param string $dest Destination file.
+ *
+ * @return boolean.
  */
 function my_calendar_copyr( $source, $dest ) {
 	// Sanity check.
@@ -593,7 +580,7 @@ function my_calendar_copyr( $source, $dest ) {
 	$dir = dir( $source );
 	while ( false !== $entry = $dir->read() ) {
 		// Skip pointers.
-		if ( $entry == '.' || $entry == '..' ) {
+		if ( '.' == $entry || '..' == $entry ) {
 			continue;
 		}
 		// Deep copy directories.
@@ -605,6 +592,13 @@ function my_calendar_copyr( $source, $dest ) {
 	return true;
 }
 
+/**
+ * Remove copied files after copy process.
+ *
+ * @param string $dirname File directory.
+ *
+ * @return result.
+ */
 function my_calendar_rmdirr( $dirname ) {
 	// Sanity check.
 	if ( ! file_exists( $dirname ) ) {
@@ -618,7 +612,7 @@ function my_calendar_rmdirr( $dirname ) {
 	$dir = dir( $dirname );
 	while ( false !== $entry = $dir->read() ) {
 		// Skip pointers.
-		if ( $entry == '.' || $entry == '..' ) {
+		if ( '.' == $entry || '..' == $entry ) {
 			continue;
 		}
 		// Recurse.
@@ -637,7 +631,7 @@ function my_calendar_rmdirr( $dirname ) {
  * @param array $plugin Current plugin.
  */
 function my_calendar_backup( $process, $plugin ) {
-	if ( isset( $plugin['plugin'] ) && $plugin['plugin'] == 'my-calendar/my-calendar.php' ) {
+	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
 		$to   = dirname( __FILE__ ) . "/../styles_backup/";
 		$from = dirname( __FILE__ ) . "/styles/";
 		my_calendar_copyr( $from, $to );
@@ -655,7 +649,7 @@ function my_calendar_backup( $process, $plugin ) {
  * @param array $plugin Current plugin.
  */
 function my_calendar_recover( $process, $plugin ) {
-	if ( isset( $plugin['plugin'] ) && $plugin['plugin'] == 'my-calendar/my-calendar.php' ) {
+	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
 		$from = dirname( __FILE__ ) . "/../styles_backup/";
 		$to   = dirname( __FILE__ ) . "/styles/";
 		my_calendar_copyr( $from, $to );

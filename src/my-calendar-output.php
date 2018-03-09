@@ -189,7 +189,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			return '';
 		}
 		if ( $type == "mini" && count( $events ) > 0 ) {
-			$end .= "</div>";
+			$end .= '</div>';
 		}
 
 		return $begin . $event_output . $end;
@@ -384,7 +384,7 @@ function my_calendar_draw_event( $event, $type = "calendar", $process_date, $tim
 			           . $image
 			           . "<div class='location'>"
 			           . $map . $address
-			           . "</div>"
+			           . '</div>'
 			           . $description
 			           . $short
 			           . $link
@@ -393,7 +393,7 @@ function my_calendar_draw_event( $event, $type = "calendar", $process_date, $tim
 			           . $author
 			           . "<div class='sharing'>"
 			           . $vcal . $gcal . $more
-			           . "</div>"
+			           . '</div>'
 			           . $return;
 		} else {
 			// if a custom template is in use.
@@ -413,7 +413,7 @@ function my_calendar_draw_event( $event, $type = "calendar", $process_date, $tim
 		$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) 
 				   . $header 
 				   . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time )
-				   . "</div>";
+				   . '</div>';
 	}
 
 	return $details;
@@ -749,7 +749,7 @@ function mc_format_toggle( $format, $toggle, $time ) {
 				$toggle .= "<a href='$url' class='list mcajax'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . "</a>";
 				break;
 		}
-		$toggle .= "</div>";
+		$toggle .= '</div>';
 	} else {
 		$toggle = '';
 	}
@@ -813,7 +813,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			case 'week':
 				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
 				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . "</a>";
-				$toggle .= "<span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . "</span>";
+				$toggle .= "<span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . '</span>';
 				$url     = mc_build_url( array( 'time' => 'day', 'dy' => $day ), array( 'dy', 'mc_id' ) );
 				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . "</a>";
 				break;
@@ -828,10 +828,10 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 						'yr'    => $year
 					), array( 'dy', 'month', 'mc_id' ) );
 				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . "</a>";
-				$toggle .= "<span class='mc-active day'>" . __( 'Day', 'my-calendar' ) . "</span>";
+				$toggle .= "<span class='mc-active day'>" . __( 'Day', 'my-calendar' ) . '</span>';
 				break;
 			default:
-				$toggle .= "<span class='mc-active month'>" . __( 'Month', 'my-calendar' ) . "</span>";				
+				$toggle .= "<span class='mc-active month'>" . __( 'Month', 'my-calendar' ) . '</span>';				
 				$url     = mc_build_url( array( 'time' => 'week', 'dy' => $day, 'month' => $wmonth ), array(
 						'dy',
 						'month',
@@ -842,7 +842,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . "</a>";
 				break;
 		}
-		$toggle .= "</div>";
+		$toggle .= '</div>';
 	} else {
 		$toggle = '';
 	}
@@ -1687,9 +1687,9 @@ function my_calendar( $args ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
 								if ( $params['format'] == 'list' ) {
 									if ( $list_info == 'true' ) {
-										$title = ' - ' . mc_wrap_title( "<span class='mc-list-details select-event'>" . mc_list_title( $events ) . "</span>" );
+										$title = ' - ' . mc_wrap_title( "<span class='mc-list-details select-event'>" . mc_list_title( $events ) . '</span>' );
 									} elseif ( $list_events == 'true' ) {
-										$title = ' - ' . mc_wrap_title( "<span class='mc-list-details all-events'>" . mc_list_titles( $events ) . "</span>" );
+										$title = ' - ' . mc_wrap_title( "<span class='mc-list-details all-events'>" . mc_list_titles( $events ) . '</span>' );
 									} else {
 										$title = '';
 									}

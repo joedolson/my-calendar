@@ -7,7 +7,6 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,29 +27,29 @@ function mc_generate() {
 		$string      = '';
 		$templatekey = '';
 		$append      = '';
-		$output = apply_filters( 'mc_shortcode_generator', false, $_POST );
+		$output      = apply_filters( 'mc_shortcode_generator', false, $_POST );
 		if ( ! $output ) {
 			switch ( $_POST['shortcode'] ) {
 				case 'main':
-					$shortcode   = 'my_calendar';
+					$shortcode = 'my_calendar';
 					break;
 				case 'upcoming':
-					$shortcode = 'my_calendar_upcoming';
+					$shortcode   = 'my_calendar_upcoming';
 					$templatekey = 'Upcoming Events Shortcode';
 					break;
 				case 'today':
-					$shortcode = 'my_calendar_today';
+					$shortcode   = 'my_calendar_today';
 					$templatekey = "Today's Events Shortcode";
 					break;
 				default:
 					$shortcode = 'my_calendar';
 			}
 			foreach ( $_POST as $key => $value ) {
-				if ( $key != 'generator' && $key != 'shortcode' && $key != '_wpnonce' ) {
-					if ( $key == 'template' ) {
+				if ( 'generator' != $key && 'shortcode' != $key && '_wpnonce' != $key ) {
+					if ( 'template' == $key ) {
 						$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
 						$v        = $template;
-						$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>" . __( 'Edit this Template', 'my-calendar' ) . " &rarr;</a>";
+						$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>" . __( 'Edit this Template', 'my-calendar' ) . ' &rarr;</a>';
 					} else {
 						if ( is_array( $value ) ) {
 							if ( in_array( 'all', $value ) ) {
@@ -61,7 +60,7 @@ function mc_generate() {
 							$v = $value;
 						}
 					}
-					if ( $v != '' ) {
+					if ( '' != $v ) {
 						$string .= " $key=&quot;$v&quot;";
 					}
 				}
@@ -75,23 +74,26 @@ function mc_generate() {
 
 /**
  * Form to create a shortcode
+ *
+ * @param string $type Type of shortcode to reproduce.
  */
 function mc_generator( $type ) {
 	?>
 <form action="<?php echo admin_url( 'admin.php?page=my-calendar-help' ); ?>" method="POST" id="my-calendar-generate">
 	<fieldset>
-		<legend><strong><?php echo ucfirst( $type ); ?></strong>: <?php _e( 'Shortcode Attributes', 'my-calendar' ); ?>
-		</legend>
+		<legend><strong><?php echo ucfirst( $type ); ?></strong>: <?php _e( 'Shortcode Attributes', 'my-calendar' ); ?></legend>
 		<div id="mc-generator" class="generator">
 			<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
-			<input type='hidden' name='shortcode' value='<?php esc_attr_e( $type ); ?>'/>
-			<?php // Common Elements to all Shortcodes ?>
+			<input type='hidden' name='shortcode' value='<?php esc_attr( $type ); ?>'/>
+			<?php
+			// Common Elements to all Shortcodes.
+			?>
 			<p><?php echo my_calendar_categories_list( 'select', 'admin' ); ?></p>
 
 			<p>
 				<label for="ltype"><?php _e( 'Location filter type:', 'my-calendar' ); ?></label>
 				<select name="ltype" id="ltype">
-					<option value="" selected="selected"><?php _e( 'All locations', 'my-calendar' ); ?></option>
+					<option value='' selected="selected"><?php _e( 'All locations', 'my-calendar' ); ?></option>
 					<option value='event_label'><?php _e( 'Location Name', 'my-calendar' ); ?></option>
 					<option value='event_city'><?php _e( 'City', 'my-calendar' ); ?></option>
 					<option value='event_state'><?php _e( 'State', 'my-calendar' ); ?></option>
@@ -109,12 +111,13 @@ function mc_generator( $type ) {
 				<?php _e( '<strong>Note:</strong> If you provide a location filter value, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
 			</p>
 			<?php
-			// Grab authors and list them
+			// Grab authors and list them.
 			$users   = mc_get_users( 'authors' );
 			$options = '';
 			foreach ( $users as $u ) {
 				$options .= '<option value="' . $u->ID . '">' . esc_html( $u->display_name ) . "</option>\n";
-			} ?>
+			}
+			?>
 			<p>
 				<label for="author"><?php _e( 'Limit by Author', 'my-calendar' ); ?></label>
 				<select name="author[]" id="author" multiple="multiple">
@@ -129,7 +132,8 @@ function mc_generator( $type ) {
 			$options = '';
 			foreach ( $users as $u ) {
 				$options .= '<option value="' . $u->ID . '">' . esc_html( $u->display_name ) . "</option>\n";
-			} ?>
+			}
+			?>
 			<p>
 				<label for="host"><?php _e( 'Limit by Host', 'my-calendar' ); ?></label>
 				<select name="host[]" id="host" multiple="multiple">
@@ -139,9 +143,9 @@ function mc_generator( $type ) {
 				</select>
 			</p>
 			<?php
-			// Main shortcode only
-			if ( $type == 'main' ) {
-				?>
+			// Main shortcode only.
+			if ( 'main' == $type ) {
+			?>
 				<p>
 					<label for="format"><?php _e( 'Format', 'my-calendar' ); ?></label>
 					<select name="format" id="format">
@@ -169,7 +173,7 @@ function mc_generator( $type ) {
 						if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 							$mcdb = mc_remote_db();
 						}
-						$query  = "SELECT event_begin FROM " . my_calendar_table() . " WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1";
+						$query  = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
 						$year1  = date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
 						$diff1  = date( 'Y' ) - $year1;
 						$past   = $diff1;
@@ -194,8 +198,8 @@ function mc_generator( $type ) {
 						echo $p . '<option value="' . date( "Y" ) . '">' . date( "Y" ) . "</option>\n" . $f;
 						?>
 					</select>
-					</p>
-					<p>
+				</p>
+				<p>
 					<label for="month"><?php _e( 'Month', 'my-calendar' ); ?></label>
 					<select name="month" id="month">
 						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
@@ -207,8 +211,8 @@ function mc_generator( $type ) {
 							echo $months;
 						?>
 					</select>
-					</p>
-					<p>
+				</p>
+				<p>
 					<label for="day"><?php _e( 'Day', 'my-calendar' ); ?></label>
 					<select name="day" id="day">
 						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
@@ -238,9 +242,9 @@ function mc_generator( $type ) {
 				</p>
 			<?php
 			}
-			if ( $type == 'upcoming' || $type == 'today' ) {
-				// Upcoming Events & Today's Events shortcodes
-				?>
+			if ( 'upcoming' == $type || 'today' == $type ) {
+			// Upcoming Events & Today's Events shortcodes.
+			?>
 				<p>
 					<label for="fallback"><?php _e( 'Fallback Text', 'my-calendar' ); ?></label>
 					<input type="text" name="fallback" id="fallback" value="" />
@@ -251,9 +255,9 @@ function mc_generator( $type ) {
 				</p>
 			<?php
 			}
-			if ( $type == 'upcoming' ) {
-				// Upcoming events only
-				?>
+			if ( 'upcoming' == $type ) {
+			// Upcoming events only.
+			?>
 				<p>
 					<label for="before"><?php _e( 'Events/Days Before Current Day', 'my-calendar' ); ?></label>
 					<input type="number" name="before" id="before" value="" />
@@ -307,12 +311,13 @@ function mc_generator( $type ) {
 						<option value="desc"><?php _e( 'Descending', 'my-calendar' ); ?></option>
 					</select>
 				</p>
-			<?php } ?>
+			<?php
+			}
+			?>
 		</div>
 	</fieldset>
 	<p>
-		<input type="submit" class="button-primary" name="generator"
-		       value="<?php _e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
+		<input type="submit" class="button-primary" name="generator" value="<?php _e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
 	</p>
 	</form><?php
 }

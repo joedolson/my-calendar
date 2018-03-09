@@ -318,7 +318,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	foreach ( $regions as $key => $value ) {
 		$key       = esc_attr( trim( $key ) );
 		$value     = esc_html( $value );
-		$aselected = ( $selected == $key ) ? " selected='selected'" : '';
+		$aselected = ( $selected == $key ) ? ' selected="selected"' : '';
 		$form     .= "<option value='$key'$aselected>$value</option>\n";
 	}
 	$form .= "</select>";

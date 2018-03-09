@@ -142,7 +142,7 @@ function my_calendar_style_edit() {
 												$filepath = mc_get_style_path( $test );
 												$path = pathinfo( $filepath );
 												if ( $path['extension'] == 'css' ) {
-													$selected = ( get_option( 'mc_css_file' ) == $test ) ? " selected='selected'" : "";
+													$selected = ( get_option( 'mc_css_file' ) == $test ) ? ' selected="selected"' : "";
 													echo "<option value='mc_custom_$value'$selected>$value</option>\n";
 												}
 											}
@@ -154,7 +154,7 @@ function my_calendar_style_edit() {
 											$filepath = mc_get_style_path( $value );
 											$path = pathinfo( $filepath );
 											if ( $path['extension'] == 'css' ) {
-												$selected = ( get_option( 'mc_css_file' ) == $value ) ? " selected='selected'" : "";
+												$selected = ( get_option( 'mc_css_file' ) == $value ) ? ' selected="selected"' : "";
 												echo "<option value='$value'$selected>$value</option>\n";
 											}
 										}

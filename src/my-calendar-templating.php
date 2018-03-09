@@ -390,8 +390,8 @@ function mc_template_description( $key ) {
  * @return string table of available templates
  */
 function mc_list_templates() {
-	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . "</span>";
-	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . "</span>";
+	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
+	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
 	$grid_enabled    = ( get_option( 'mc_use_grid_template' ) == 1 ) ? $check : $uncheck;
 	$list_enabled    = ( get_option( 'mc_use_list_template' ) == 1 ) ? $check : $uncheck;
 	$mini_enabled    = ( get_option( 'mc_use_mini_template' ) == 1 ) ? $check : $uncheck;

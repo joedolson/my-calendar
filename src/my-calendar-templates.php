@@ -288,17 +288,17 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= "<div class=\"adr\" itemprop='address' itemscope itemtype=\"http://schema.org/PostalAddress\">";
 		$hcard .= ( $label != '' ) ? "<strong class=\"org\" itemprop='name'>" . $link . "</strong><br />" : '';
 		$hcard .= ( $street . $street2 . $city . $state . $zip . $country . $phone == '' ) ? '' : "<div class='sub-address'>";
-		$hcard .= ( $street != '' ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street . "</div>" : '';
-		$hcard .= ( $street2 != '' ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street2 . "</div>" : '';
+		$hcard .= ( $street != '' ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street . '</div>' : '';
+		$hcard .= ( $street2 != '' ) ? "<div class=\"street-address\" itemprop=\"streetAddress\">" . $street2 . '</div>' : '';
 		$hcard .= ( $city . $state . $zip != '' ) ? "<div>" : '';
 		$hcard .= ( $city != '' ) ? "<span class=\"locality\" itemprop=\"addressLocality\">" . $city . "</span><span class='sep'>, </span>" : '';
 		$hcard .= ( $state != '' ) ? "<span class=\"region\" itemprop=\"adddressRegion\">" . $state . "</span> " : '';
-		$hcard .= ( $zip != '' ) ? " <span class=\"postal-code\" itemprop=\"postalCode\">" . $zip . "</span>" : '';
-		$hcard .= ( $city . $state . $zip != '' ) ? "</div>" : '';
-		$hcard .= ( $country != '' ) ? "<div class=\"country-name\" itemprop=\"addressCountry\">" . $country . "</div>" : '';
-		$hcard .= ( $phone != '' ) ? "<div class=\"tel\" itemprop=\"telephone\">" . $phone . "</div>" : '';
-		$hcard .= ( $street . $street2 . $city . $state . $zip . $country . $phone == '' ) ? '' : "</div>";
-		$hcard .= "</div>";
+		$hcard .= ( $zip != '' ) ? " <span class=\"postal-code\" itemprop=\"postalCode\">" . $zip . '</span>' : '';
+		$hcard .= ( $city . $state . $zip != '' ) ? '</div>' : '';
+		$hcard .= ( $country != '' ) ? "<div class=\"country-name\" itemprop=\"addressCountry\">" . $country . '</div>' : '';
+		$hcard .= ( $phone != '' ) ? "<div class=\"tel\" itemprop=\"telephone\">" . $phone . '</div>' : '';
+		$hcard .= ( $street . $street2 . $city . $state . $zip . $country . $phone == '' ) ? '' : '</div>';
+		$hcard .= '</div>';
 	}
 	if ( $map == 'true' ) {
 		$hcard .= "<meta itemprop='name' content='" . esc_attr( $label ) . "'/>";
@@ -306,7 +306,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$the_map = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
 		$hcard .= ( $the_map != '' ) ? "<div class='map'>$the_map</div>" : '';
 	}
-	$hcard .= "</div>";
+	$hcard .= '</div>';
 
 	return apply_filters( 'mc_hcard', $hcard, $event, $address, $map, $source );
 }
@@ -363,7 +363,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['date']      = ( $event->event_span != 1 ) ? $date : mc_format_date_span( $dates, 'simple', $date );
 	$e['enddate']   = $date_end;
 	$e['daterange'] = ( $date == $date_end ) ? $date : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
-	$e['timerange'] = ( ( $e['time'] == $e['endtime'] ) || $event->event_hide_end == 1 || date( 'H:i:s', strtotime( $real_end_date ) ) == '23:59:59' ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . "</span>";
+	$e['timerange'] = ( ( $e['time'] == $e['endtime'] ) || $event->event_hide_end == 1 || date( 'H:i:s', strtotime( $real_end_date ) ) == '23:59:59' ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . '</span>';
 	$e['datespan']  = ( $event->event_span == 1 || ( $e['date'] != $e['enddate'] ) ) ? mc_format_date_span( $dates ) : $date;
 	$e['multidate'] = mc_format_date_span( $dates, 'complex', "<span class='fallback-date'>$date</span><span class='separator'>,</span> <span class='fallback-time'>$e[time]</span>&ndash;<span class='fallback-endtime'>$e[endtime]</span>" );
 	$e['began']     = $event->event_begin; // returns date of first occurrence of an event.
@@ -382,7 +382,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$color = $hex . $event->category_color;
 		$inverse = mc_inverse_color( $color );
 	$e['color_css']       = "<span style='background-color: $event->category_color; color: $inverse'>"; // this is because widgets now strip out style attributes.
-	$e['close_color_css'] = "</span>";
+	$e['close_color_css'] = '</span>';
 
 	// special
 	$e['skip_holiday'] = ( $event->event_holiday == 0 ) ? 'false' : 'true';
@@ -945,11 +945,11 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 			$end           = $date->occur_end;
 			$day_begin     = date( 'Y-m-d', strtotime( $begin ) );
 			$day_end       = date( 'Y-m-d', strtotime( $end ) );
-			$bformat       = "<span class='multidate-date'>" . date_i18n( get_option( 'mc_date_format' ), strtotime( $begin ) ) . '</span> <span class="multidate-time">' . date_i18n( get_option( 'mc_time_format' ), strtotime( $begin ) ) . "</span>";
+			$bformat       = "<span class='multidate-date'>" . date_i18n( get_option( 'mc_date_format' ), strtotime( $begin ) ) . '</span> <span class="multidate-time">' . date_i18n( get_option( 'mc_time_format' ), strtotime( $begin ) ) . '</span>';
 			$endtimeformat = ( $date->occur_end == '00:00:00' ) ? '' : ' ' . get_option( 'mc_time_format' );
 			$eformat       = ( $day_begin != $day_end ) ? get_option( 'mc_date_format' ) . $endtimeformat : $endtimeformat;
 			$span          = ( $eformat != '' ) ? " <span>&ndash;</span> <span class='multidate-end'>" : '';
-			$endspan       = ( $eformat != '' ) ? "</span>" : '';
+			$endspan       = ( $eformat != '' ) ? '</span>' : '';
 			$return .= "<li>$bformat" . $span . date_i18n( $eformat, strtotime( $end ) ) . "$endspan</li>";
 		}
 		$return .= '</ul>';
