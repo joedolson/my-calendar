@@ -2249,7 +2249,7 @@ function mc_list_events() {
 				</div>
 				<div>
 					<label for="mc_search_footer" class='screen-reader-text'><?php _e( 'Search', 'my-calendar' ); ?></label>
-					<input type='text' role='search' name='mcs' id='mc_search_footer' value='<?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] : '' ); ?>' />
+					<input type='text' role='search' name='mcs' id='mc_search_footer' value='<?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
 					<input type='submit' value='<?php _e( 'Search Events', 'my-calendar' ); ?>' class='button-secondary'/>
 				</div>
 			</form>
