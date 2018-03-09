@@ -110,7 +110,7 @@ function mc_templates_edit() {
 							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( "admin.php?page=my-calendar-templates" ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-									<input type="hidden" name="mc_template_key" value="<?php esc_attr_e( $key ); ?>"/>
+									<input type="hidden" name="mc_template_key" value="<?php echo esc_attr( $key ); ?>"/>
 								</div>
 								<?php if ( mc_is_core_template( $key ) ) { ?>
 								<p>

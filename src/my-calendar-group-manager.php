@@ -423,7 +423,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						}
 						?>
 						</label><br/>
-						<textarea id="e_short" name="event_short" rows="2" cols="80"><?php esc_attr_e( $short ); ?></textarea>
+						<textarea id="e_short" name="event_short" rows="2" cols="80"><?php echo esc_attr( $short ); ?></textarea>
 					</p>
 				<?php
 				}

@@ -1278,7 +1278,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	}
 	?>
 	<input type="hidden" name="event_group_id" value="<?php echo $group_id; ?>" />
-	<input type="hidden" name="event_action" value="<?php esc_attr_e( $mode ); ?>" />
+	<input type="hidden" name="event_action" value="<?php echo esc_attr( $mode ); ?>" />
 	<?php
 	if ( ! empty( $_GET['date'] ) ) {
 		echo '<input type="hidden" name="event_instance" value="' . (int) $_GET['date'] . '"/>';
@@ -1306,7 +1306,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<?php
 			$text = ( 'edit' == $mode ) ? __( 'Edit Event', 'my-calendar' ) : __( 'Add Event', 'my-calendar' );
 		?>
-		<h2><?php esc_html_e( $text ); ?></h2>
+		<h2><?php esc_html( $text ); ?></h2>
 		<div class="inside">
 		<div class='mc-controls'>
 			<?php echo mc_controls( $mode, $has_data, $data ); ?>
@@ -1371,10 +1371,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			<?php
 			if ( is_object( $data ) ) { // Information for rewriting recurring data.
 			?>
-				<input type="hidden" name="prev_event_begin" value="<?php esc_attr_e( $data->event_begin ); ?>"/>
-				<input type="hidden" name="prev_event_time" value="<?php esc_attr_e( $data->event_time ); ?>"/>
-				<input type="hidden" name="prev_event_end" value="<?php esc_attr_e( $data->event_end ); ?>"/>
-				<input type="hidden" name="prev_event_endtime" value="<?php esc_attr_e( $data->event_endtime ); ?>"/>
+				<input type="hidden" name="prev_event_begin" value="<?php echo esc_attr( $data->event_begin ); ?>"/>
+				<input type="hidden" name="prev_event_time" value="<?php echo esc_attr( $data->event_time ); ?>"/>
+				<input type="hidden" name="prev_event_end" value="<?php echo esc_attr( $data->event_end ); ?>"/>
+				<input type="hidden" name="prev_event_endtime" value="<?php echo esc_attr( $data->event_endtime ); ?>"/>
 			<?php
 			}
 			?>
@@ -1595,8 +1595,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		}
 		?>
 		<div>
-		<input type="hidden" name="event_holiday" value="<?php esc_attr_e( $event_holiday ); ?>" />
-		<input type="hidden" name="event_fifth_week" value="<?php esc_attr_e( $event_fifth ); ?>" />
+		<input type="hidden" name="event_holiday" value="<?php echo esc_attr( $event_holiday ); ?>" />
+		<input type="hidden" name="event_fifth_week" value="<?php echo esc_attr( $event_fifth ); ?>" />
 		</div>
 		<?php
 	}

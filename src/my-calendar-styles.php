@@ -168,12 +168,12 @@ function my_calendar_style_edit() {
 						<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-styles" ); ?>">
 							<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 							<input type="hidden" value="true" name="mc_edit_style"/>
-							<input type="hidden" name="mc_css_file" value="<?php esc_attr_e( get_option( 'mc_css_file' ) ); ?>"/>
+							<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
 							<fieldset style="position:relative;">
 								<legend><?php _e( 'CSS Style Options', 'my-calendar' ); ?></legend>
 								<p>
 									<label for="mc_show_css"><?php _e( 'Apply CSS on these pages (comma separated IDs)', 'my-calendar' ); ?></label>
-									<input type="text" id="mc_show_css" name="mc_show_css" value="<?php esc_attr_e( $mc_show_css ); ?>" />
+									<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" />
 								</p>
 								<p>
 									<input type="checkbox" id="reset_styles" name="reset_styles" <?php if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {

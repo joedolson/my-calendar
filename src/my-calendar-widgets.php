@@ -43,7 +43,7 @@ class my_calendar_simple_search extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>
 				:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'title' ); ?>"
-			       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php esc_attr_e( $widget_title ); ?>"/>
+			       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Search Results Page', 'my-calendar' ); ?>
@@ -100,7 +100,7 @@ class my_calendar_filters extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>
 				:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'title' ); ?>"
-			       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php esc_attr_e( $widget_title ); ?>"/>
+			       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Target Calendar Page', 'my-calendar' ); ?>
@@ -570,7 +570,7 @@ class my_calendar_upcoming_widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'lvalue' ); ?>"><?php _e( 'Location (Value)', 'my-calendar' ); ?></label><br/>
 			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'lvalue' ); ?>"
 			       id="<?php echo $this->get_field_id( 'lvalue' ); ?>"
-			       value="<?php esc_attr_e( $lvalue ); ?>" />
+			       value="<?php echo esc_attr( $lvalue ); ?>" />
 		</p>
 
 
@@ -986,7 +986,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 				if ( $details['event_span'] == 1 ) {
 					$class = "multiday";
 				}
-				if ( $type == 'list' ) {
+				if ( 'list' == $type ) {
 					$prepend = "\n<li class=\"$class $category $classes\">";
 					$append  = "</li>\n";
 				} else {
@@ -1218,7 +1218,7 @@ class my_calendar_mini_widget extends WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_mini_title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_mini_title' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_mini_title' ); ?>" value="<?php esc_attr_e( $title ); ?>"/>
+			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_mini_title' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_mini_title' ); ?>" value="<?php echo esc_attr( $title ); ?>"/>
 		</p>
 		<?php
 			if ( function_exists( 'is_multisite' ) && is_multisite() ) {
@@ -1246,7 +1246,7 @@ class my_calendar_mini_widget extends WP_Widget {
 				for="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>"><?php _e( 'Category or categories to display:', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>"
 			       name="<?php echo $this->get_field_name( 'my_calendar_mini_category' ); ?>"
-			       value="<?php esc_attr_e( $widget_category ); ?>"/>
+			       value="<?php echo esc_attr( $widget_category ); ?>"/>
 		</p>
 		<p>
 			<label
@@ -1302,7 +1302,7 @@ class my_calendar_mini_widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'lvalue' ); ?>"><?php _e( 'Location (Value)', 'my-calendar' ); ?></label><br/>
 			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'lvalue' ); ?>"
 			       id="<?php echo $this->get_field_id( 'lvalue' ); ?>"
-			       value="<?php esc_attr_e( $lvalue ); ?>" />
+			       value="<?php echo esc_attr( $lvalue ); ?>" />
 		</p>
 		<p>
 			<label
