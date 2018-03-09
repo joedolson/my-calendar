@@ -15,14 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Create a shortcode for My Calendar.
- *
- * @return string shortcode
  */
 function mc_generate() {
 	if ( isset( $_POST['generator'] ) ) {
 		$nonce = $_POST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-generator' ) ) {
-			wp_die( "Invalid nonce" );
+			wp_die( 'Invalid nonce' );
 		}
 		$string      = '';
 		$templatekey = '';
@@ -127,7 +125,7 @@ function mc_generator( $type ) {
 				</select>
 			</p>
 			<?php
-			// Grab authors and list them
+			// Grab authors and list them.
 			$users   = mc_get_users( 'hosts' );
 			$options = '';
 			foreach ( $users as $u ) {
@@ -182,20 +180,20 @@ function mc_generator( $type ) {
 						$f      = '';
 						$p      = '';
 						while ( $past > 0 ) {
-							$p .= '<option value="';
-							$p .= date( "Y", current_time( 'timestamp' ) ) - $past;
-							$p .= '">';
-							$p .= date( "Y", current_time( 'timestamp' ) ) - $past . "</option>\n";
+							$p   .= '<option value="';
+							$p   .= date( 'Y', current_time( 'timestamp' ) ) - $past;
+							$p   .= '">';
+							$p   .= date( 'Y', current_time( 'timestamp' ) ) - $past . "</option>\n";
 							$past = $past - 1;
 						}
 						while ( $fut < $future ) {
-							$f .= '<option value="';
-							$f .= date( "Y", current_time( 'timestamp' ) ) + $fut;
-							$f .= '">';
-							$f .= date( "Y", current_time( 'timestamp' ) ) + $fut . "</option>\n";
+							$f  .= '<option value="';
+							$f  .= date( 'Y', current_time( 'timestamp' ) ) + $fut;
+							$f  .= '">';
+							$f  .= date( 'Y', current_time( 'timestamp' ) ) + $fut . "</option>\n";
 							$fut = $fut + 1;
 						}
-						echo $p . '<option value="' . date( "Y" ) . '">' . date( "Y" ) . "</option>\n" . $f;
+						echo $p . '<option value="' . date( 'Y' ) . '">' . date( 'Y' ) . "</option>\n" . $f;
 						?>
 					</select>
 				</p>
@@ -204,11 +202,11 @@ function mc_generator( $type ) {
 					<select name="month" id="month">
 						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
 						<?php
-							$months = '';
-							for ( $i = 1; $i <= 12; $i ++ ) {
-								$months .= "<option value='$i'>" . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '</option>' . "\n";
-							}
-							echo $months;
+						$months = '';
+						for ( $i = 1; $i <= 12; $i ++ ) {
+							$months .= "<option value='$i'>" . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '</option>' . "\n";
+						}
+						echo $months;
 						?>
 					</select>
 				</p>
@@ -217,16 +215,19 @@ function mc_generator( $type ) {
 					<select name="day" id="day">
 						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
 						<?php
-							$days = '';
-							for ( $i = 1; $i <= 31; $i++ ) {
-								$days .= "<option value='$i'>" . $i . '</option>' . "\n";
-							}
-							echo $days;
+						$days = '';
+						for ( $i = 1; $i <= 31; $i++ ) {
+							$days .= "<option value='$i'>" . $i . '</option>' . "\n";
+						}
+						echo $days;
 						?>
 					</select>
 				</p>
 				<p id='navigation-info'>
-					<?php printf( __( "Navigation above and below the calendar: your <a href='%s'>settings</a> if this is left blank. Use <code>none</code> to hide all navigation.", 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>
+					<?php
+					// Translators: Settings page URL.
+					printf( __( "Navigation above and below the calendar: your <a href='%s'>settings</a> if this is left blank. Use <code>none</code> to hide all navigation.", 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
+					?>
 				</p>
 				<p>
 					<label for="above" id='labove'><?php _e( 'Navigation above calendar', 'my-calendar' ); ?></label>

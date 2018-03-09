@@ -65,8 +65,8 @@ function my_calendar_get_events( $args ) {
 		return array();
 	}
 
-	if ( $holidays === null ) {
-		$ccategory = ( isset( $_GET['mcat'] ) && ''!= trim( $_GET['mcat'] ) ) ? $_GET['mcat'] : $category;
+	if ( null === $holidays ) {
+		$ccategory = ( isset( $_GET['mcat'] ) && '' != trim( $_GET['mcat'] ) ) ? $_GET['mcat'] : $category;
 	} else {
 		$ccategory = $category;
 	}
@@ -75,14 +75,14 @@ function my_calendar_get_events( $args ) {
 	$clauth  = ( isset( $_GET['mc_auth'] ) ) ? $_GET['mc_auth'] : $author;
 	$clhost  = ( isset( $_GET['mc_host'] ) ) ? $_GET['mc_host'] : $host;
 
-	// if location value is not set, then location type shouldn't be set
+	// If location value is not set, then location type shouldn't be set.
 	if ( 'all' == $clvalue ) {
 		$cltype = 'all';
 	}
 
 	if ( ! mc_checkdate( $from ) || ! mc_checkdate( $to ) ) {
 		return array();
-	} // not valid dates
+	} // Not valid dates.
 
 	$cat_limit          = ( 'all' != $ccategory ) ? mc_select_category( $ccategory ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
@@ -96,12 +96,12 @@ function my_calendar_get_events( $args ) {
 	$exclude_categories = mc_private_categories();
 	$arr_events         = array();
 
-	$event_query = "
+	$event_query = '
 SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
-FROM " . my_calendar_event_table( $site ) . "
-JOIN " . my_calendar_table( $site ) . " AS e
+FROM ' . my_calendar_event_table( $site ) . '
+JOIN ' . my_calendar_table( $site ) . ' AS e
 ON (event_id=occur_event_id)
-JOIN " . my_calendar_categories_table( $site ) . "
+JOIN ' . my_calendar_categories_table( $site ) . "
 ON (event_category=category_id)
 $join
 WHERE $select_published $select_category $select_location $select_author $select_host $select_access $search
@@ -110,7 +110,7 @@ AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 	OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
 	OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
 $exclude_categories
-ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ", " . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
 
 	$events = $mcdb->get_results( $event_query );
 
@@ -118,24 +118,24 @@ ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ", " . apply_fi
 		$cats = array();
 		$locs = array();
 		foreach ( array_keys( $events ) as $key ) {
-			$event             =& $events[ $key ];
-			$event->site_id    = $site;
-			$object_id         = $event->event_id;
-			$location_id       = $event->event_location;
-			if ( ! isset( $cats[$object_id] ) ) {
-				$categories          = mc_get_categories( $event, false );
-				$event->categories   = $categories;
-				$cats[$object_id]    = $categories;
+			$event          =& $events[ $key ];
+			$event->site_id = $site;
+			$object_id      = $event->event_id;
+			$location_id    = $event->event_location;
+			if ( ! isset( $cats[ $object_id ] ) ) {
+				$categories        = mc_get_categories( $event, false );
+				$event->categories = $categories;
+				$cats[$object_id]  = $categories;
 			} else {
-				$event->categories = $cats[$object_id];
+				$event->categories = $cats[ $object_id ];
 			}
 			if ( 0 != $location_id ) {
-				if ( ! isset( $locs[$object_id] ) ) {
+				if ( ! isset( $locs[ $object_id ] ) ) {
 					$location         = mc_get_location( $location_id );
 					$event->location  = $location;
 					$locs[$object_id] = $location;
 				} else {
-					$event->location = $locs[$object_id];
+					$event->location = $locs[ $object_id ];
 				}
 			}
 			$arr_events[] = mc_event_object( $event );
@@ -148,7 +148,7 @@ ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ", " . apply_fi
 /**
  * Fetch events for upcoming events list. Not date based; fetches the nearest events regardless of date.
  *
- * @param $args array of event limit parameters.
+ * @param array $args array of event limit parameters.
  *
  * @return array Set of matched events.
  */
@@ -182,14 +182,16 @@ function mc_get_all_events( $args ) {
 	$date               = date( 'Y-m-d', current_time( 'timestamp' ) );
 
 	$limit   = "$select_published $select_category $select_author $select_host $select_location $select_access $search";
-	$events1 = $events2 = $events3 = array();
+	$events1 = array();
+	$events2 = array();
+	$events3 = array();
 
-	// Events before today
+	// Events before today.
 	if ( $before > 0 ) {
 		$before  = $before + 15;
-		$events1 = $mcdb->get_results( "SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
-		FROM " . my_calendar_event_table( $site ) . "
-		JOIN " . my_calendar_table( $site ) . " AS e
+		$events1 = $mcdb->get_results( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		FROM ' . my_calendar_event_table( $site ) . '
+		JOIN ' . my_calendar_table( $site ) . " AS e
 		ON (event_id=occur_event_id)
 		$join
 		JOIN " . my_calendar_categories_table( $site ) . " as c
@@ -199,11 +201,11 @@ function mc_get_all_events( $args ) {
 		$exclude_categories
 		ORDER BY occur_begin DESC LIMIT 0,$before" );
 	}
-	// Events happening today
+	// Events happening today.
 	if ( 'yes' == $today ) {
-		$events3 = $mcdb->get_results( "SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
-		FROM " . my_calendar_event_table( $site ) . "
-		JOIN " . my_calendar_table( $site ) . " AS e
+		$events3 = $mcdb->get_results( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		FROM ' . my_calendar_event_table( $site ) . '
+		JOIN ' . my_calendar_table( $site ) . " AS e
 		ON (event_id=occur_event_id)
 		$join
 		JOIN " . my_calendar_categories_table( $site ) . " as c
@@ -212,12 +214,12 @@ function mc_get_all_events( $args ) {
 		$exclude_categories
 		AND ( ( DATE(occur_begin) < '$date' AND DATE(occur_end) > '$date' ) OR DATE(occur_begin) = '$date' )" );
 	}
-	// Upcoming Events
+	// Upcoming Events.
 	if ( $after > 0 ) {
 		$after   = $after + 15;
-		$events2 = $mcdb->get_results( "SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
-		FROM " . my_calendar_event_table( $site ) . "
-		JOIN " . my_calendar_table( $site ) . " AS e
+		$events2 = $mcdb->get_results( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		FROM ' . my_calendar_event_table( $site ) . '
+		JOIN ' . my_calendar_table( $site ) . " AS e
 		ON (event_id=occur_event_id)
 		$join
 		JOIN " . my_calendar_categories_table( $site ) . " as c
@@ -237,12 +239,12 @@ function mc_get_all_events( $args ) {
 		$event          =& $arr_events[ $key ];
 		$event->site_id = $site;
 		$object_id      = $event->event_id;
-		if ( ! isset( $fetched[$object_id] ) ) {
+		if ( ! isset( $fetched[ $object_id ] ) ) {
 			$cats                = mc_get_categories( $event, false );
 			$event->categories   = $cats;
-			$fetched[$object_id] = $cats;
+			$fetched[ $object_id ] = $cats;
 		} else {
-			$event->categories = $fetched[$object_id];
+			$event->categories = $fetched[ $object_id ];
 		}
 		$arr_events[] = mc_event_object( $event );
 	}
@@ -253,8 +255,8 @@ function mc_get_all_events( $args ) {
 /**
  * Fetch only the defined holiday category
  *
- * @param int $before Number of events before.
- * @param int $after Number of events after.
+ * @param int     $before Number of events before.
+ * @param int     $after Number of events after.
  * @param boolean $today Whether to include today's events.
  *
  * @return array events
@@ -297,10 +299,10 @@ function mc_get_rss_events( $cat_id = false ) {
 	$limit              = apply_filters( 'mc_rss_feed_size', 30 );
 
 	$events = $mcdb->get_results(
-		"SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
-		FROM " . my_calendar_event_table() . "
-		JOIN " . my_calendar_table() . " ON (event_id=occur_event_id)
-		JOIN " . my_calendar_categories_table() . " ON (event_category=category_id) $cat
+		'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		FROM ' . my_calendar_event_table() . '
+		JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
+		JOIN ' . my_calendar_categories_table() . " ON (event_category=category_id) $cat
 		$exclude_categories
 		ORDER BY event_added DESC LIMIT 0,$limit" );
 	$groups = array();
@@ -310,7 +312,7 @@ function mc_get_rss_events( $cat_id = false ) {
 		if ( ! in_array( $event->occur_group_id, $groups ) ) {
 			$output[ $event->event_begin ][] = $event;
 		}
-		if ( $event->event_span == 1 ) {
+		if ( 1 == $event->event_span ) {
 			$groups[] = $event->occur_group_id;
 		}
 	}
@@ -327,7 +329,7 @@ function mc_get_rss_events( $cat_id = false ) {
  */
 function mc_get_search_results( $search ) {
 	global $wpdb;
-	$mcdb = $wpdb;
+	$mcdb        = $wpdb;
 	$event_array = array();
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
@@ -344,7 +346,6 @@ function mc_get_search_results( $search ) {
 		$author   = ( isset( $search['author'] ) ) ? $search['author'] : null;
 		$host     = ( isset( $search['host'] ) ) ? $search['host'] : null;
 		$search   = ( isset( $search['search'] ) ) ? $search['search'] : '';
-
 		$args     = array(
 			'from'     => $from,
 			'to'       => $to,
@@ -366,7 +367,7 @@ function mc_get_search_results( $search ) {
 			'search' => $search,
 		);
 
-		$arr_events     = mc_get_all_events( $args );
+		$arr_events    = mc_get_all_events( $args );
 		$holidays      = mc_get_all_holidays( $before, $after, 'yes' );
 		$holiday_array = mc_set_date_array( $holidays );
 
@@ -382,7 +383,7 @@ function mc_get_search_results( $search ) {
 }
 
 /**
- * get event basic info
+ * Get event basic info
  *
  * @param int     $id Event ID in my_calendar db.
  * @param boolean $rebuild Get core data only if doing an event rebuild.
@@ -390,7 +391,7 @@ function mc_get_search_results( $search ) {
  * @return Event object
  */
 function mc_get_event_core( $id, $rebuild = false ) {
-	if ( !is_numeric( $id ) ) {
+	if ( ! is_numeric( $id ) ) {
 		return;
 	}
 
@@ -401,9 +402,9 @@ function mc_get_event_core( $id, $rebuild = false ) {
 	}
 
 	if ( $rebuild ) {
-		$event = $mcdb->get_row( 'SELECT * FROM ' . my_calendar_table() . " JOIN " . my_calendar_categories_table() . " ON (event_category=category_id) WHERE event_id=$id" );
+		$event = $mcdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE event_id=%d', $id ) );
 	} else {
-		$event = $mcdb->get_row( "SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM " . my_calendar_event_table() . " JOIN " . my_calendar_table() . " ON (event_id=occur_event_id) JOIN " . my_calendar_categories_table() . " ON (event_category=category_id) WHERE event_id = $id ORDER BY occur_id ASC LIMIT 1" );
+		$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE event_id = %d ORDER BY occur_id ASC LIMIT 1', $id ) );
 		$event = mc_event_object( $event );
 	}
 
@@ -423,7 +424,7 @@ function mc_get_first_event( $id ) {
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$event = $mcdb->get_row( "SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM " . my_calendar_event_table() . " JOIN " . my_calendar_table() . " ON (event_id=occur_event_id) JOIN " . my_calendar_categories_table() . " ON (event_category=category_id) WHERE occur_event_id=$id" );
+	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) );
 	$event = mc_event_object( $event );
 
 	return $event;
@@ -442,7 +443,7 @@ function mc_get_nearest_event( $id ) {
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$event = $mcdb->get_row( "SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM " . my_calendar_event_table() . " JOIN " . my_calendar_table() . " ON (event_id=occur_event_id) JOIN " . my_calendar_categories_table() . " ON (event_category=category_id) WHERE occur_event_id=$id ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )" );
+	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=$id ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) );
 	$event = mc_event_object( $event );
 
 	return $event;
@@ -457,7 +458,7 @@ function mc_get_nearest_event( $id ) {
  * @return mixed object/string
  */
 function mc_get_event( $id, $type = 'object' ) {
-	if ( !is_numeric( $id ) ) {
+	if ( ! is_numeric( $id ) ) {
 		return false;
 	}
 
@@ -467,13 +468,13 @@ function mc_get_event( $id, $type = 'object' ) {
 		$mcdb = mc_remote_db();
 	}
 	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_id=%d', $id ) );
-	if ( $type == 'object' ) {
+	if ( 'object' == $type ) {
 		$event = mc_event_object( $event );
 		return $event;
 	} else {
 		$date  = date( 'Y-m-d', strtotime( $event->occur_begin ) );
 		$time  = date( 'H:i:s', strtotime( $event->occur_begin ) );
-		$value = "<div id='mc_event'>" . my_calendar_draw_event( $event, 'single', $date, $time, 'single' ) . "</div>\n";
+		$value = '<div id="mc_event">' . my_calendar_draw_event( $event, 'single', $date, $time, 'single' ) . '</div>';
 
 		return $value;
 	}
@@ -495,17 +496,16 @@ function mc_get_data( $field, $id ) {
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$result = $mcdb->get_var( $mcdb->prepare( "SELECT $field FROM " . my_calendar_table() . " WHERE event_id = %d", $id ) );
+	$result = $mcdb->get_var( $mcdb->prepare( "SELECT $field FROM " . my_calendar_table() . ' WHERE event_id = %d', $id ) );
 
 	return $result;
 }
 
 
 /**
- * Main My Calendar event fetch
- * @since 2.3.0
- *
  * Fetch all events according to date parameters and supported limits.
+ *
+ * @since 2.3.0
  *
  * @param array $args array of My Calendar display & limit parameters.
  *
@@ -543,7 +543,7 @@ function my_calendar_events( $args ) {
  */
 function my_calendar_events_now( $category = 'default', $template = '<strong>{link_title}</strong> {timerange}', $site = false ) {
 	if ( $site ) {
-		$site = ( $site == 'global' ) ? BLOG_ID_CURRENT_SITE : $site;
+		$site = ( 'global' == $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
 	}
 
@@ -575,8 +575,9 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 					WHERE $select_published $select_category $select_location $select_author $select_host
 					$exclude_categories
 					AND ( CAST('$now' AS DATETIME) BETWEEN occur_begin AND occur_end )
-						ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ", " . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
-	$events           = $mcdb->get_results( $event_query );
+					ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+
+	$events = $mcdb->get_results( $event_query );
 	if ( ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event        =& $events[ $key ];
@@ -604,20 +605,16 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 }
 
 /**
- * Functions that return only partial event data or parse existing data sets
- */
-
-/**
- *  get all occurrences associated with an event.
+ *  Get all occurrences associated with an event.
  *
  * @param int $id Event ID.
  *
- * @param array of objects with instance and event IDs.
+ * @return array of objects with instance and event IDs.
  */
 function mc_get_occurrences( $id ) {
 	global $wpdb;
 	$id = absint( $id );
-	if ( $id === 0 ) {
+	if ( 0 === $id ) {
 		return array();
 	}
 	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT occur_id, occur_event_id FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d', $id ) );
@@ -628,7 +625,7 @@ function mc_get_occurrences( $id ) {
 /**
  * Get all events with a grouped relationship with the current event.
  *
- * @param int $it Event ID.
+ * @param int $id Event ID.
  *
  * @return array Array event IDs of related events
  */
@@ -668,7 +665,7 @@ function mc_holiday_limit( $events, $holidays ) {
 	foreach ( array_keys( $events ) as $key ) {
 		if ( ! empty( $holidays[ $key ] ) ) {
 			foreach ( $events[ $key ] as $k => $event ) {
-				if ( $event->event_category != get_option( 'mc_skip_holidays_category' ) && 1 == $event->event_holiday ) {
+				if ( get_option( 'mc_skip_holidays_category' ) != $event->event_category && 1 == $event->event_holiday ) {
 					unset( $events[ $key ][ $k ] );
 				}
 			}
@@ -697,7 +694,7 @@ function mc_set_date_array( $events ) {
 				do {
 					$date                   = date( 'Y-m-d', $start );
 					$event_array[ $date ][] = $event;
-					$start                  = strtotime( "+1 day", $start );
+					$start                  = strtotime( '+1 day', $start );
 				} while ( $start <= $end );
 			} else {
 				$event_array[ $date ][] = $event;
@@ -737,7 +734,7 @@ function mc_get_db_type() {
 	$db_type = get_transient( 'mc_db_type' );
 	if ( ! $db_type ) {
 		global $wpdb;
-		$mcdb = $wpdb;
+		$mcdb    = $wpdb;
 		$db_type = 'MyISAM';
 		if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 			$mcdb = mc_remote_db();

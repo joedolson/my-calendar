@@ -33,25 +33,20 @@ function my_calendar_help() {
 				<div class='mc-support-me'>
 					<p>
 						<?php
-							printf( __( 'Please, consider a <a href="%s">donation</a> or a <a href="%s">purchase</a> to support My Calendar!', 'my-calendar' ) , "https://www.joedolson.com/donate/", "https://www.joedolson.com/my-calendar/pro/" );
+							// Translators: Donate URL, Upgrade URL.
+							printf( __( 'Please, consider a <a href="%1$s">donation</a> or a <a href="%2$s">purchase</a> to support My Calendar!', 'my-calendar' ), 'https://www.joedolson.com/donate/', 'https://www.joedolson.com/my-calendar/pro/' );
 						?>
 					</p>
 				</div>
 				<ul class='list'>
 					<?php
 					if ( ! mc_get_uri( 'boolean' ) ) {
-					?>
-						<li><?php _e( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ); ?></li>
-					<?php
+						echo '<li>' . __( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ) . '</li>';
 					}
-					?>
-					<li><?php _e( 'Add events by clicking on the Add/Edit Events link in the admin or on "Add Events" in the toolbar.', 'my-calendar' ); ?></li>
-					<li><?php _e( 'Select your preferred stylesheet in the Styles Editor', 'my-calendar' ); ?></li>
-					<?php
+					echo '<li>' . __( 'Add events by clicking on the Add/Edit Events link in the admin or on "Add Events" in the toolbar.', 'my-calendar' ) . '</li>';
+					echo '<li>' . __( 'Select your preferred stylesheet in the Styles Editor', 'my-calendar' ) . '</li>';
 					if ( mc_get_uri( 'boolean' ) ) {
-					?>
-						<li><?php printf( __( 'View <a href="%s">your calendar</a>', 'my-calendar' ), mc_get_uri() ); ?></li>
-					<?php
+						echo '<li>' . sprintf( __( 'View <a href="%s">your calendar</a>', 'my-calendar' ), mc_get_uri() ) . '</li>';
 					}
 					?>
 				</ul>
@@ -121,9 +116,9 @@ function my_calendar_help() {
 			<div class="inside">
 				<div class='mc-support-me'>
 					<p>
-						<?php
-							printf( __( 'Please, consider a <a href="%s">donation</a> or a <a href="%s">purchase</a> to support My Calendar!', 'my-calendar' ), "https://www.joedolson.com/donate/", "https://www.joedolson.com/my-calendar/pro/" );
-						?>
+					<?php
+					printf( __( 'Please, consider a <a href="%1$s">donation</a> or a <a href="%2$s">purchase</a> to support My Calendar!', 'my-calendar' ), 'https://www.joedolson.com/donate/', 'https://www.joedolson.com/my-calendar/pro/' );
+					?>
 					</p>
 				</div>
 				<?php

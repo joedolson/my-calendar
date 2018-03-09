@@ -43,7 +43,7 @@ function mc_widget_defaults() {
 }
 
 /**
- * define variables to be saved in settings. (Formerly globals.)
+ * Define variables to be saved in settings. (Formerly globals.)
  *
  * @return array
  */
@@ -178,7 +178,6 @@ function mc_globals() {
  PRIMARY KEY  (category_id)
  ) $charset_collate;";
 
-
 	$initial_rel_db = 'CREATE TABLE ' . my_calendar_category_relationships_table() . " (
  relationship_id INT(11) NOT NULL AUTO_INCREMENT,
  event_id INT(11) NOT NULL,
@@ -259,7 +258,7 @@ function mc_default_settings() {
 		'event_location_dropdown' => 'on',
 		'event_specials'          => 'off',
 		'event_access'            => 'on',
-		'event_host'              => 'off'
+		'event_host'              => 'off',
 	) );
 	add_option( 'mc_input_options_administrators', 'false' );
 	add_site_option( 'mc_multisite', '0' );
@@ -282,17 +281,17 @@ function mc_default_settings() {
 		'mini'       => $mini_template,
 		'rss'        => $rss_template,
 		'details'    => $single_template,
-		'label'      => __( 'Read more', 'my-calendar' )
+		'label'      => __( 'Read more', 'my-calendar' ),
 	) );
 	add_option( 'mc_skip_holidays', 'false' );
 	add_option( 'mc_css_file', 'twentyeighteen.css' );
 	add_option( 'mc_style_vars', array(
-	  '--primary-dark' => '#313233',
-	  '--primary-light' => '#fff',
-	  '--secondary-light' => '#fff',
-	  '--secondary-dark' => '#000',
-	  '--highlight-dark' => '#666',
-	  '--highlight-light' => '#efefef',
+		'--primary-dark'    => '#313233',
+		'--primary-light'   => '#fff',
+		'--secondary-light' => '#fff',
+		'--secondary-dark'  => '#000',
+		'--highlight-dark'  => '#666',
+		'--highlight-light' => '#efefef',
 	) );
 	add_option( 'mc_time_format', get_option( 'time_format' ) );
 	add_option( 'mc_show_weekends', 'true' );
@@ -330,17 +329,20 @@ function mc_generate_calendar_page( $slug ) {
 	global $current_user;
 	$current_user = wp_get_current_user();
 	if ( ! get_page_by_path( $slug ) ) {
-		$page = array(
+		$page      = array(
 			'post_title'   => __( 'My Calendar', 'my-calendar' ),
 			'post_status'  => 'publish',
 			'post_type'    => 'page',
 			'post_author'  => $current_user->ID,
 			'ping_status'  => 'closed',
-			'post_content' => '[my_calendar id="my-calendar"]'
+			'post_content' => '[my_calendar id="my-calendar"]',
 		);
 		$post_ID   = wp_insert_post( $page );
 		$post_slug = wp_unique_post_slug( $slug, $post_ID, 'publish', 'page', 0 );
-		wp_update_post( array( 'ID' => $post_ID, 'post_name' => $post_slug ) );
+		wp_update_post( array(
+			'ID'        => $post_ID,
+			'post_name' => $post_slug
+		) );
 	} else {
 		$post    = get_page_by_path( $slug );
 		$post_ID = $post->ID;
@@ -357,19 +359,18 @@ function mc_generate_calendar_page( $slug ) {
 function mc_migrate_db() {
 	global $wpdb;
 
-	// check if early escapement is needed.
+	// Step 1) check if early escapement is needed.
 	$count  = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_event_table() );
 	$count2 = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_table() );
 	if ( $count2 > 0 && $count > 0 ) {
 		return;
 	}
 	if ( 0 == $count2 && 0 == $count ) {
-		return; // no events, migration unnecessary.
+		return; // No events, migration unnecessary.
 	}
 
-	// 2) migrate events.
-	$sql    = "SELECT event_id, event_begin, event_time, event_end, event_endtime FROM " . my_calendar_table();
-	$events = $wpdb->get_results( $sql );
+	// Step 2) migrate events.
+	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() );
 	foreach ( $events as $event ) {
 		// assign endtimes to all events.
 		if ( '00:00:00' == $event->event_endtime && '00:00:00' != $event->event_time ) {
@@ -377,7 +378,7 @@ function mc_migrate_db() {
 			mc_flag_event( $event->event_id, $event->event_endtime );
 		}
 
-		$dates = array( 
+		$dates = array(
 			'event_begin'   => $event->event_begin,
 			'event_end'     => $event->event_end,
 			'event_time'    => $event->event_time,
@@ -397,7 +398,10 @@ function mc_migrate_db() {
  */
 function mc_flag_event( $id, $time ) {
 	global $wpdb;
-	$data    = array( 'event_hide_end' => 1, 'event_endtime' => $time );
+	$data    = array( 
+		'event_hide_end' => 1, 
+		'event_endtime'  => $time,
+	);
 	$formats = array( '%d', '%s' );
 	$result  = $wpdb->update( my_calendar_table(), $data, array( 'event_id' => $id ), $formats, '%d' );
 
@@ -428,7 +432,7 @@ function mc_check_location_table( $event, $locations ) {
 		'location_zoom'      => $event['event_zoom'],
 		'location_phone'     => $event['event_phone'],
 		'location_phone2'    => $event['event_phone2'],
-		'location_access'    => $event['event_access']
+		'location_access'    => $event['event_access'],
 	);
 
 	foreach ( $locations as $id => $loc ) {
@@ -497,7 +501,7 @@ function mc_transition_db() {
 						'location_latitude'  => $event['event_latitude'],
 						'location_zoom'      => $event['event_zoom'],
 						'location_phone'     => $event['event_phone'],
-						'location_access'    => '' // No events in this transition will have access data.
+						'location_access'    => '', // No events in this transition will have access data.
 					);
 					mc_insert_location( $add );
 				}
@@ -509,8 +513,6 @@ function mc_transition_db() {
 
 /**
  * See whether there are importable calendars present.
- *
- * @return string HTML form.
  */
 function mc_check_imports() {
 	$output = '';
@@ -547,7 +549,10 @@ function mc_transition_categories() {
 		$event_id = $result->event_id;
 		$category = $result->event_category;
 
-		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array( 'event_id' => $event_id, 'category_id' => $category ), array( '%d', '%d' ) );
+		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array( 
+			'event_id'    => $event_id, 
+			'category_id' => $category 
+		), array( '%d', '%d' ) );
 	}
 }
 
@@ -627,17 +632,17 @@ function my_calendar_rmdirr( $dirname ) {
 /**
  * Backup styles and icons.
  *
- * @param string $process current process
+ * @param string $process current process.
  * @param array $plugin Current plugin.
  */
 function my_calendar_backup( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
-		$to   = dirname( __FILE__ ) . "/../styles_backup/";
-		$from = dirname( __FILE__ ) . "/styles/";
+		$to   = dirname( __FILE__ ) . '/../styles_backup/';
+		$from = dirname( __FILE__ ) . '/styles/';
 		my_calendar_copyr( $from, $to );
 
-		$to   = dirname( __FILE__ ) . "/../icons_backup/";
-		$from = dirname( __FILE__ ) . "/images/icons/";
+		$to   = dirname( __FILE__ ) . '/../icons_backup/';
+		$from = dirname( __FILE__ ) . '/images/icons/';
 		my_calendar_copyr( $from, $to );
 	}
 }
@@ -645,19 +650,19 @@ function my_calendar_backup( $process, $plugin ) {
 /**
  * Restore styles and icons.
  *
- * @param string $process current process
+ * @param string $process current process.
  * @param array $plugin Current plugin.
  */
 function my_calendar_recover( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
-		$from = dirname( __FILE__ ) . "/../styles_backup/";
-		$to   = dirname( __FILE__ ) . "/styles/";
+		$from = dirname( __FILE__ ) . '/../styles_backup/';
+		$to   = dirname( __FILE__ ) . '/styles/';
 		my_calendar_copyr( $from, $to );
 		if ( is_dir( $from ) ) {
 			my_calendar_rmdirr( $from );
 		}
-		$from = dirname( __FILE__ ) . "/../icons_backup/";
-		$to   = dirname( __FILE__ ) . "/images/icons/";
+		$from = dirname( __FILE__ ) . '/../icons_backup/';
+		$to   = dirname( __FILE__ ) . '/images/icons/';
 		my_calendar_copyr( $from, $to );
 		if ( is_dir( $from ) ) {
 			my_calendar_rmdirr( $from );

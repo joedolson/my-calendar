@@ -337,7 +337,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 							?>
 								<div>
 									<input type="hidden" name="mode" value="edit"/>
-									<input type="hidden" name="category_id" value="<?php if ( is_object( $cur_cat ) ) { echo $cur_cat->category_id; } ?>" />
+									<input type="hidden" name="category_id" value="<?php echo ( is_object( $cur_cat ) ) ? absint( $cur_cat->category_id ) : ''; ?>" />
 								</div>
 							<?php
 							}
@@ -607,7 +607,7 @@ function mc_manage_categories() {
 		foreach ( $categories as $cat ) {
 			$class = ( 'alternate' == $class ) ? '' : 'alternate';
 			if ( '' != $cat->category_icon && 'true' != get_option( 'mc_hide_icons' ) ) {
-				$icon_src   = ( mc_file_exists( $cat->category_icon ) ) ? mc_get_file( $cat->category_icon, 'url' ) : plugins_url( 'my-calendar/images/icons/' . $cat->category_icon );
+				$icon_src = ( mc_file_exists( $cat->category_icon ) ) ? mc_get_file( $cat->category_icon, 'url' ) : plugins_url( 'my-calendar/images/icons/' . $cat->category_icon );
 			} else {
 				$icon_src = false;
 			}
@@ -632,7 +632,12 @@ function mc_manage_categories() {
 			<td><?php echo ( 1 == $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 			<td>
 				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"
-				class='edit'><?php printf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' ); ?></a>
+				class='edit'>
+				<?php 
+				// Translators: Name of category being edited.
+				printf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' ); 
+				?>
+				</a>
 			</td>
 			<?php
 			if ( 1 == $cat->category_id ) {
@@ -675,7 +680,7 @@ function mc_profile() {
 		<table class="form-table">
 			<tr>
 				<th scope="row">
-					<label for="mc_user_permissions"><?php _e( "Allowed Categories", 'my-calendar' ); ?></label>
+					<label for="mc_user_permissions"><?php _e( 'Allowed Categories', 'my-calendar' ); ?></label>
 				</th>
 				<td>
 					<ul class='checkboxes'>
@@ -720,9 +725,9 @@ function mc_save_profile() {
  * @param object               $data object with event_category value.
  * @param boolean              $option Type of form.
  * @param boolean              $multiple Allow multiple categories to be entered.
- * @param mixed boolean/string $name Field name for input
+ * @param mixed boolean/string $name Field name for input.
  *
- * @param string HTML fields.
+ * @return string HTML fields.
  */
 function mc_category_select( $data = false, $option = true, $multiple = false, $name = false ) {
 	global $wpdb;
@@ -733,19 +738,17 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 	if ( ! $name ) {
 		$name = 'event_category[]';
 	}
-	// Grab all the categories and list them
+	// Grab all the categories and list them.
 	$list    = '';
 	$default = '';
-	$sql     = 'SELECT * FROM ' . my_calendar_categories_table() . " ORDER BY category_name ASC";
-	$cats    = $mcdb->get_results( $sql );
+	$cats    = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
 	if ( empty( $cats ) ) {
 		// need to have categories. Try to create again.
 		mc_create_category( array(
-				'category_name'  => 'General',
-				'category_color' => '#ffffcc',
-				'category_icon'  => 'event.png',
-			)
-		);
+			'category_name'  => 'General',
+			'category_color' => '#ffffcc',
+			'category_icon'  => 'event.png',
+		) );
 
 		$cats = $mcdb->get_results( $sql );
 	}
@@ -785,7 +788,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			}
 
 			if ( $multiple ) {
-				$c = '<li><input type="checkbox" name="' . esc_attr( $name ) . '" id="mc_cat_' . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /><label for="mc_cat_' .  $cat->category_id . '">' . strip_tags( stripslashes( $cat->category_name ) ) . '</label></li>';
+				$c = '<li><input type="checkbox" name="' . esc_attr( $name ) . '" id="mc_cat_' . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /><label for="mc_cat_' . $cat->category_id . '">' . strip_tags( stripslashes( $cat->category_name ) ) . '</label></li>';
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . strip_tags( stripslashes( $cat->category_name ) ) . '</option>';
 			}
@@ -832,7 +835,7 @@ function mc_get_categories( $event, $ids = true ) {
 		if ( property_exists( $event, 'categories' ) ) {
 			$results = $event->categories;
 		}
-	} elseif ( is_numeric(  $event ) ) {
+	} elseif ( is_numeric( $event ) ) {
 		$event_id = absint( $event );
 		$primary  = mc_get_data( 'event_category', $event_id );
 	} else {
@@ -841,8 +844,7 @@ function mc_get_categories( $event, $ids = true ) {
 	}
 
 	if ( ! $results ) {
-		$query   = 'SELECT * FROM ' . my_calendar_category_relationships_table() . ' as r JOIN ' . my_calendar_categories_table() . ' as c ON c.category_id = r.category_id WHERE event_id = %d';
-		$results = $mcdb->get_results( $wpdb->prepare( $query, $event_id ) );
+		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_category_relationships_table() . ' as r JOIN ' . my_calendar_categories_table() . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) );
 	}
 	if ( true === $ids ) {
 		if ( $results ) {

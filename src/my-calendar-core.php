@@ -681,6 +681,7 @@ function mc_do_upgrades( $upgrade_path ) {
 				) );
 				mc_upgrade_db();
 				mc_transition_categories();
+				break;
 			case '2.4.4': // 8-11-2015 (2.4.0).
 				add_option( 'mc_display_more', 'true' );
 				$input_options               = get_option( 'mc_input_options' );
@@ -889,7 +890,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		$c['user_agent']   = $_SERVER['HTTP_USER_AGENT'];
 		$c['referrer']     = $_SERVER['HTTP_REFERER'];
 		$c['comment_type'] = 'my_calendar_event';
-		if ( $permalink = get_permalink() ) {
+		if ( $permalink == get_permalink() ) {
 			$c['permalink'] = $permalink;
 		}
 		if ( '' != $event_url ) {
@@ -930,7 +931,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 			'name'   => $name,
 			'action' => 'check',
 		);
-		$args['ip'] = "216.152.251.41";
+		$args['ip'] = '216.152.251.41';
 		$response   = bs_checker( $args );
 		if ( $response ) {
 			return 1;
@@ -993,7 +994,7 @@ function mc_scripts() {
 			'today' => addslashes( __( 'Today', 'my-calendar' ) ),
 			'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
 			'close' => addslashes( __( 'Close', 'my-calendar' ) ),
-			'start' => ( 1 == $sweek || 0 == $sweek ) ? $sweek : 0
+			'start' => ( 1 == $sweek || 0 == $sweek ) ? $sweek : 0,
 		) );
 		wp_localize_script( 'pickadate.time', 'mc_time_format', apply_filters( 'mc_time_format', 'h:i A' ) );
 		wp_localize_script( 'pickadate.time', 'mc_interval', apply_filters( 'mc_interval', '15' ) );
@@ -1073,8 +1074,6 @@ function mc_post_lookup() {
 add_action( 'wp_ajax_delete_occurrence', 'mc_ajax_delete_occurrence' );
 /**
  * Delete a single occurrence of an event from the event manager.
- *
- * @return string Confirmation message indicating success or failure.
  */
 function mc_ajax_delete_occurrence() {
 	if ( ! check_ajax_referer( 'mc-delete-nonce', 'security', false ) ) {
@@ -1185,7 +1184,8 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 
 if ( ! function_exists( 'wp_is_mobile' ) ) {
 	if ( ! is_plugin_active_for_network( 'my-calendar/my-calendar.php' ) ) {
-		// Causes problems in Travis CI. JCD TODO
+		// Causes problems in Travis CI. JCD TODO.
+		
 		/*
 		function wp_is_mobile() {
 			return false;
@@ -1364,9 +1364,9 @@ $plugins_string
 			wp_die( 'Security check failed' );
 		}
 		$request       = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
-		$has_donated   = ( $_POST['has_donated'] == 'on' ) ? 'Donor' : 'No donation';
-		$has_purchased = ( $checked ) ? "Purchaser" : "No purchase";
-		$has_read_faq  = ( $_POST['has_read_faq'] == 'on' ) ? 'Read FAQ' : false;
+		$has_donated   = ( 'on' == $_POST['has_donated'] ) ? 'Donor' : 'No donation';
+		$has_purchased = ( $checked ) ? 'Purchaser' : 'No purchase';
+		$has_read_faq  = ( 'on' == $_POST['has_read_faq'] ) ? 'Read FAQ' : false;
 		$subject       = "My Calendar support request. $has_donated; $has_purchased";
 		$message       = $request . "\n\n" . $data;
 		// Get the site domain and get rid of www. from pluggable.php.
@@ -1413,9 +1413,7 @@ $plugins_string
 		<p>
 			<input type='submit' value='" . __( 'Send Support Request', 'my-calendar' ) . "' name='mc_support' class='button-primary' />
 		</p>
-		<p>" .
-	     __( 'The following additional information will be sent with your support request:', 'my-calendar' )
-	     . '</p>
+		<p>" . __( 'The following additional information will be sent with your support request:', 'my-calendar' ) . '</p>
 		<div class="mc_support">' . wpautop( $data ) . '</div>
 		</div>
 	</form>';
@@ -1435,11 +1433,11 @@ function mc_register_actions() {
 	add_action( 'parse_request', 'my_calendar_api' );
 }
 
-// Filters
+// Filters.
 add_filter( 'post_updated_messages', 'mc_posttypes_messages' );
 add_filter( 'tmp_grunion_allow_editor_view', '__return_false' );
 
-// Actions
+// Actions.
 add_action( 'init', 'mc_taxonomies', 0 );
 add_action( 'init', 'mc_posttypes' );
 
@@ -1460,7 +1458,7 @@ function mc_load_permalinks() {
  * Custom field callback for permalinks settings
  */
 function mc_field_callback() {
-	$value = ( get_option( 'mc_cpt_base' ) != '' ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
+	$value = ( '' != get_option( 'mc_cpt_base' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
 	echo '<input type="text" value="' . esc_attr( $value ) . '" name="mc_cpt_base" id="mc_cpt_base" class="regular-text" />';
 }
 
@@ -1495,7 +1493,7 @@ function mc_posttypes() {
 			$labels = array(
 				'name'               => $value[3],
 				'singular_name'      => $value[2],
-				'add_new'            => _x( 'Add New', $key, 'my-calendar' ),
+				'add_new'            => _x( 'Add New', 'Add new event', 'my-calendar' ),
 				'add_new_item'       => sprintf( __( 'Create New %s', 'my-calendar' ), $value[2] ),
 				'edit_item'          => sprintf( __( 'Modify %s', 'my-calendar' ), $value[2] ),
 				'new_item'           => sprintf( __( 'New %s', 'my-calendar' ), $value[2] ),
@@ -1517,7 +1515,7 @@ function mc_posttypes() {
 				'query_var'           => true,
 				'rewrite'             => array(
 					'with_front' => false,
-					'slug'       => apply_filters( 'mc_event_slug', $slug )
+					'slug'       => apply_filters( 'mc_event_slug', $slug ),
 				),
 				'hierarchical'        => false,
 				'menu_position'       => 20,
@@ -1532,7 +1530,7 @@ add_filter( 'the_posts', 'mc_close_comments' );
 /**
  * Most people don't want comments open on events. This will automatically close them.
  *
- * @param array $posts Array of WP Post objects
+ * @param array $posts Array of WP Post objects.
  *
  * @return array $posts
  */
@@ -1585,17 +1583,14 @@ function mc_taxonomies() {
 			$value = $types[ $key ];
 			register_taxonomy(
 				'mc-event-category',
-				// internal name = machine-readable taxonomy name.
+				// Internal name = machine-readable taxonomy name.
 				array( $key ),
-				// object type = post, page, link, or custom post-type.
 				array(
 					'hierarchical' => true,
+					// Translators: The cateogry name
 					'label'        => sprintf( __( '%s Categories', 'my-calendar' ), $value[2] ),
-					// the human-readable taxonomy name.
 					'query_var'    => true,
-					// enable taxonomy-specific querying.
 					'rewrite'      => array( 'slug' => apply_filters( 'mc_event_category_slug', 'mc-event-category' ) ),
-					// pretty permalinks for your taxonomy.
 				)
 			);
 		}
@@ -1622,13 +1617,12 @@ function mc_posttypes_messages( $messages ) {
 				2  => __( 'Custom field updated.' ),
 				3  => __( 'Custom field deleted.' ),
 				4  => sprintf( __( '%s updated.' ), $value[2] ),
-				/* translators: %s: date and time of the revision */
+				/* Translators: %s: date and time of the revision */
 				5  => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$ss' ), $value[2], wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
 				6  => sprintf( __( '%1$s published. <a href="%2$s">View %3$s</a>' ), $value[2], esc_url( get_permalink( $post_ID ) ), $value[0] ),
 				7  => sprintf( __( '%s saved.' ), $value[2] ),
 				8  => sprintf( __( '%1$s submitted. <a target="_blank" href="%2$s">Preview %3$s</a>' ), $value[2], esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), $value[0] ),
-				9  => sprintf( __( '%1$s scheduled for: <strong>%2$s</strong>. <a target="_blank" href="%3$s">Preview %4$s</a>' ),
-					$value[2], date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ), $value[0] ),
+				9  => sprintf( __( '%1$s scheduled for: <strong>%2$s</strong>. <a target="_blank" href="%3$s">Preview %4$s</a>' ), $value[2], date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ), $value[0] ),
 				10 => sprintf( __( '%1$s draft updated. <a target="_blank" href="%2$s">Preview %3$s</a>' ), $value[2], esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), $value[0] ),
 			);
 		}

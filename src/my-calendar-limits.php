@@ -7,7 +7,6 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,17 +24,11 @@ function mc_prepare_search_query( $query ) {
 	$query   = esc_sql( $query );
 	$db_type = mc_get_db_type();
 	$search  = '';
-	if ( $query != '' ) {
-		if ( $db_type == 'MyISAM' ) {
-			$search = " AND MATCH(" . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
+	if ( '' != $query ) {
+		if ( 'MyISAM' == $db_type ) {
+			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
-			$search = " AND event_title LIKE '%$query%' OR
-						event_desc LIKE '%$query%' OR
-						event_short LIKE '%$query%' OR
-						event_label LIKE '%$query%' OR
-						event_city LIKE '%$query%' OR
-						event_postcode LIKE '%$query%' OR
-						event_registration LIKE '%$query%' ";
+			$search = " AND event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_label LIKE '%$query%' OR event_city LIKE '%$query%' OR event_postcode LIKE '%$query%' OR event_registration LIKE '%$query%' ";
 		}
 	}
 
@@ -46,30 +39,30 @@ function mc_prepare_search_query( $query ) {
 /**
  * Generate WHERE pattern for a given category passed
  *
- * @param mixed int/string $category Single or list of categories separated by commas using IDs or names.
+ * @param mixed  int/string $category Single or list of categories separated by commas using IDs or names.
  * @param string $type context of query.
  * @param string $group context of query.
  *
  * @return string SQL modifiers.
  */
 function mc_select_category( $category, $type = 'event', $group = 'events' ) {
-	$category = urldecode( $category );
+	$category      = urldecode( $category );
 	$select_clause = '';
-	$data          = ( $group == 'category' ) ? 'category_id' : 'r.category_id';
+	$data          = ( 'category' == $group ) ? 'category_id' : 'r.category_id';
 	if ( preg_match( '/^all$|^all,|,all$|,all,/i', $category ) > 0 ) {
 
 		return '';
 	} else {
 
-		$categories    = mc_category_select_ids( $category );
+		$categories = mc_category_select_ids( $category );
 		if ( count( $categories ) > 0 ) {
 			$cats          = implode( ',', $categories );
 			$select_clause = "AND $data IN ($cats)";
 		}
 
 		$join = '';
-		if ( $select_clause != '' ) {
-			$join = " JOIN " . my_calendar_category_relationships_table() . " AS r ON r.event_id = e.event_id ";
+		if ( '' != $select_clause ) {
+			$join = ' JOIN ' . my_calendar_category_relationships_table() . ' AS r ON r.event_id = e.event_id ';
 		}
 
 		return array( $join, $select_clause );
@@ -85,16 +78,16 @@ function mc_select_category( $category, $type = 'event', $group = 'events' ) {
  */
 function mc_category_select_ids( $category ) {
 	global $wpdb;
-	$mcdb = $wpdb;
+	$mcdb   = $wpdb;
 	$select = array();
 
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
-	if ( strpos( $category, "|" ) || strpos( $category, ',' ) ) {
-		if ( strpos( $category, "|" ) ) {
-			$categories = explode( "|", $category );
+	if ( strpos( $category, '|' ) || strpos( $category, ',' ) ) {
+		if ( strpos( $category, '|' ) ) {
+			$categories = explode( '|', $category );
 		} else {
 			$categories = explode( ',', $category );
 		}
@@ -104,7 +97,7 @@ function mc_category_select_ids( $category ) {
 				$add = (int) $key;
 			} else {
 				$key = esc_sql( trim( $key ) );
-				$cat = $mcdb->get_row( "SELECT category_id FROM " . my_calendar_categories_table() . " WHERE category_name = '$key'" );
+				$cat = $mcdb->get_row( 'SELECT category_id FROM ' . my_calendar_categories_table() . " WHERE category_name = '$key'" );
 				if ( is_object( $cat ) ) {
 					$add = $cat->category_id;
 				}
@@ -115,7 +108,7 @@ function mc_category_select_ids( $category ) {
 		if ( is_numeric( $category ) ) {
 			$select[] = absint( $category );
 		} else {
-			$cat = $mcdb->get_row( $mcdb->prepare( "SELECT category_id FROM " . my_calendar_categories_table() . ' WHERE category_name = %s', trim( $category ) ) );
+			$cat = $mcdb->get_row( $mcdb->prepare( 'SELECT category_id FROM ' . my_calendar_categories_table() . ' WHERE category_name = %s', trim( $category ) ) );
 			if ( is_object( $cat ) ) {
 				$select[] = $cat->category_id;
 			}
@@ -136,17 +129,16 @@ function mc_category_select_ids( $category ) {
  */
 function mc_select_author( $author, $type = 'event', $context = 'author' ) {
 	$author = urldecode( $author );
-	if ( $author == '' || $author == 'all' || $author == 'default' || $author == null ) {
+	if ( '' == $author || 'all' == $author || 'default' == $author || null == $author ) {
 		return '';
 	}
 	$select_author = '';
-	$data          = ( $context == 'author' ) ? 'event_author' : 'event_host';
+	$data          = ( 'author' == $context ) ? 'event_author' : 'event_host';
 
 	if ( preg_match( '/^all$|^all,|,all$|,all,/i', $author ) > 0 ) {
 		return '';
 	} else {
-
-		$authors       = mc_author_select_ids( $author );
+		$authors = mc_author_select_ids( $author );
 		if ( count ( $authors ) > 0 ) {
 			$auths         = implode( ',', $authors );
 			$select_author = "AND $data IN ($auths)";
@@ -165,19 +157,19 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
  */
 function mc_author_select_ids( $author ) {
 	$authors = array();
-	if ( strpos( $author, "|" ) || strpos( $author, ',' ) ) {
-		if ( strpos( $author, "|" ) ) {
-			$authors = explode( "|", $author );
+	if ( strpos( $author, '|' ) || strpos( $author, ',' ) ) {
+		if ( strpos( $author, '|' ) ) {
+			$authors = explode( '|', $author );
 		} else {
 			$authors = explode( ',', $author );
 		}
 		foreach ( $authors as $key ) {
 			if ( is_numeric( $key ) ) {
-				$add       = absint( $key );
+				$add = absint( $key );
 			} else {
-				$key       = trim( $key );
-				$author    = get_user_by( 'login', $key ); // get author by username.
-				$add       = $author->ID;
+				$key    = trim( $key );
+				$author = get_user_by( 'login', $key ); // Get author by username.
+				$add    = $author->ID;
 			}
 
 			$authors[] = $add;
@@ -187,7 +179,7 @@ function mc_author_select_ids( $author ) {
 			$authors[] = absint( $author );
 		} else {
 			$author = trim( $author );
-			$author = get_user_by( 'login', $author ); // get author by username.
+			$author = get_user_by( 'login', $author ); // Get author by username.
 
 			if ( is_object( $author ) ) {
 				$authors[] = $author->ID;
@@ -203,8 +195,8 @@ function mc_author_select_ids( $author ) {
  *
  * @uses mc_select_author()
  *
- * @param mixed int/string $host.
- * @param string $type context.
+ * @param mixed int/string $host Host ID or name..
+ * @param string           $type context.
  *
  * @return string SQL
  */
@@ -217,38 +209,40 @@ function mc_select_host( $host, $type = 'event' ) {
 /**
  * Function to limit event query by location.
  *
- * @param string $type {deprecated}.
- * @param string $ltype {location type}.
+ * @param string               $type {deprecated}.
+ * @param string               $ltype {location type}.
  * @param mixed string/integer $lvalue {location value}.
  *
  * @return
 */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
 	global $user_ID;
-	$limit_string  = $location = $current_location = '';
-	if ( $ltype != '' && $lvalue != '' ) {
-		if ( $ltype != '' && $lvalue != '' ) {
+	$limit_string     = '';
+	$location         = '';
+	$current_location = '';
+	if ( '' != $ltype && '' != $lvalue ) {
+		if ( '' != $ltype && '' != $lvalue ) {
 			$location         = $ltype;
 			$current_location = $lvalue;
 		}
 		switch ( $location ) {
-			case "name" :
-				$location_type = "event_label";
+			case 'name':
+				$location_type = 'event_label';
 				break;
-			case "city" :
-				$location_type = "event_city";
+			case 'city':
+				$location_type = 'event_city';
 				break;
-			case "state" :
-				$location_type = "event_state";
+			case 'state':
+				$location_type = 'event_state';
 				break;
-			case "zip" :
-				$location_type = "event_postcode";
+			case 'zip':
+				$location_type = 'event_postcode';
 				break;
-			case "country" :
-				$location_type = "event_country";
+			case 'country':
+				$location_type = 'event_country';
 				break;
-			case "region" :
-				$location_type = "event_region";
+			case 'region':
+				$location_type = 'event_region';
 				break;
 			default :
 				$location_type = $location;
@@ -268,9 +262,9 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 				'event_latitude',
 				'event_zoom',
 				'event_phone',
-				'event_phone2'
+				'event_phone2',
 			) ) ) {
-			if ( $current_location != 'all' && $current_location != '' ) {
+			if ( 'all' != $current_location && '' != $current_location ) {
 				if ( is_numeric( $current_location ) ) {
 					$limit_string = 'AND ' . $location_type . ' = ' . absint( $current_location );
 				} else {
@@ -279,7 +273,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 			}
 		}
 	}
-	if ( $limit_string != '' ) {
+	if ( '' != $limit_string ) {
 		if ( isset( $_GET['loc2'] ) && isset( $_GET['ltype2'] ) ) {
 			$limit_string .= mc_secondary_limit( $_GET['ltype2'], $_GET['loc2'] );
 		}
@@ -311,9 +305,9 @@ function mc_access_limit( $access ) {
  */
 function mc_select_published() {
 	if ( mc_is_preview() ) {
-		$published = "event_flagged <> 1 AND ( event_approved = 1 OR event_approved = 0 )";
+		$published = 'event_flagged <> 1 AND ( event_approved = 1 OR event_approved = 0 )';
 	} else {
-		$published = "event_flagged <> 1 AND event_approved = 1";
+		$published = 'event_flagged <> 1 AND event_approved = 1';
 	}
 
 	return $published;
@@ -332,28 +326,28 @@ function mc_secondary_limit( $ltype = '', $lvalue = '' ) {
 	$current_location = urldecode( $lvalue );
 	$location         = urldecode( $ltype );
 	switch ( $location ) {
-		case "name":
-			$location_type = "event_label";
+		case 'name':
+			$location_type = 'event_label';
 			break;
-		case "city":
-			$location_type = "event_city";
+		case 'city':
+			$location_type = 'event_city';
 			break;
-		case "state":
-			$location_type = "event_state";
+		case 'state':
+			$location_type = 'event_state';
 			break;
-		case "zip":
-			$location_type = "event_postcode";
+		case 'zip':
+			$location_type = 'event_postcode';
 			break;
-		case "country":
-			$location_type = "event_country";
+		case 'country':
+			$location_type = 'event_country';
 			break;
-		case "region":
-			$location_type = "event_region";
+		case 'region':
+			$location_type = 'event_region';
 			break;
 		default:
-			$location_type = "event_label";
+			$location_type = 'event_label';
 	}
-	if ( $current_location != 'all' && $current_location != '' ) {
+	if ( 'all' != $current_location && 'all' != $current_location ) {
 		$limit_string = "OR $location_type='$current_location'";
 	}
 

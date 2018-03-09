@@ -375,8 +375,8 @@ function my_calendar_manage() {
 				$i ++;
 			}
 		}
-		$sql = substr( $sql, 0, - 1 );
-		$sql .= ')';
+		$sql    = substr( $sql, 0, - 1 );
+		$sql   .= ')';
 		$result = $wpdb->query( $sql );
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been approved. Please investigate.', 'my-calendar' ) . '</p></div>';
@@ -395,7 +395,8 @@ function my_calendar_manage() {
 		}
 		$events   = $_POST['mass_edit'];
 		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (';
-		$i        = $total = 0;
+		$i        = 0;
+		$total    = 0;
 		$archived = array();
 		foreach ( $events as $value ) {
 			$total      = count( $events );
@@ -432,8 +433,8 @@ function my_calendar_manage() {
 			$archived[] = $value;
 			$i ++;
 		}
-		$sql  = substr( $sql, 0, - 1 );
-		$sql .= ')';
+		$sql    = substr( $sql, 0, - 1 );
+		$sql   .= ')';
 		$result = $wpdb->query( $sql );
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not undo the archive status on those events.', 'my-calendar' ) . '</p></div>';
@@ -1208,13 +1209,13 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
 	if ( ! $single_recur && ! $start_end ) {
 		$check = mc_increment_event( $data->event_id, array(), 'test' );
 		if ( my_calendar_date_xcomp( $check['occur_begin'], $data->event_end . '' . $data->event_endtime ) ) {
-			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . "</strong> " . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . "</p><p>" . sprintf( __( 'Event end date: <strong>%s %s</strong>. Next occurrence starts: <strong>%s</strong>', 'my-calendar' ), $data->event_end, $data->event_endtime, $check['occur_begin'] ) . '</p></div>';
+			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . '</strong> ' . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . '</p><p>' . sprintf( __( 'Event end date: <strong>%1$s %2$s</strong>. Next occurrence starts: <strong>%3$s</strong>', 'my-calendar' ), $data->event_end, $data->event_endtime, $check['occur_begin'] ) . '</p></div>';
 			update_post_meta( $data->event_post, '_occurrence_overlap', 'false' );
 		} else {
 			delete_post_meta( $data->event_post, '_occurrence_overlap' );
 		}
 	} else {
-		// if event has been changed to same date, still delete meta
+		// If event has been changed to same date, still delete meta.
 		delete_post_meta( $data->event_post, '_occurrence_overlap' );
 	}
 	if ( $return ) {
@@ -1230,8 +1231,6 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
  * @param mixed array/object $data Passed data.
  * @param string             $mode Copy/edit/add.
  * @param int                $event_id Event ID.
- *
- * @return form
  */
 function mc_form_fields( $data, $mode, $event_id ) {
 	global $wpdb, $user_ID;
@@ -1248,13 +1247,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	?>
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
-		<?php if ( 'add' == $mode || 'copy' == $mode ) {
+		<?php
+		if ( 'add' == $mode || 'copy' == $mode ) {
 			$query_args = array();
 		} else {
-			$query_args = array(
-				'mode'     => $mode,
-				'event_id' => $event_id,
-			);
+			$query_args = array( 'mode' => $mode, 'event_id' => $event_id );
 			if ( $instance ) {
 				$query_args['date'] = $instance;
 			}
@@ -1275,27 +1272,32 @@ function mc_form_fields( $data, $mode, $event_id ) {
 <form id="my-calendar" method="post" action="<?php echo $action; ?>">
 <div>
 	<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-	<?php if ( isset( $_GET['ref'] ) ) { ?>
-		<input type="hidden" name="ref" value="<?php echo esc_url( $_GET['ref'] ); ?>" />
-	<?php } ?>
+	<?php
+	if ( isset( $_GET['ref'] ) ) {
+		echo '<input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />';
+	}
+	?>
 	<input type="hidden" name="event_group_id" value="<?php echo $group_id; ?>" />
 	<input type="hidden" name="event_action" value="<?php esc_attr_e( $mode ); ?>" />
-	<?php if ( ! empty( $_GET['date'] ) ) { ?>
-		<input type="hidden" name="event_instance" value="<?php echo (int) $_GET['date']; ?>"/>
-	<?php } ?>
+	<?php
+	if ( ! empty( $_GET['date'] ) ) {
+		echo '<input type="hidden" name="event_instance" value="' . (int) $_GET['date'] . '"/>';
+	}
+	?>
 	<input type="hidden" name="event_id" value="<?php echo (int) $event_id; ?>"/>
-	<?php if ( 'edit' == $mode ) {
+	<?php
+	if ( 'edit' == $mode ) {
 		if ( $has_data && ( ! property_exists( $data, 'event_post' ) || ! $data->event_post ) ) {
 			$array_data = (array) $data;
 			$post_id    = mc_event_post( 'add', $array_data, $event_id );
 		} else {
 			$post_id = ( $has_data ) ? $data->event_post : false;
 		}
-		?>
-		<input type='hidden' name='event_post' value="<?php echo $post_id; ?>" />
-	<?php } else {
+		echo '<input type="hidden" name="event_post" value="' . $post_id . '" />';
+	} else {
 		$post_id = false;
-	} ?>
+	}
+	?>
 	<input type="hidden" name="event_nonce_name" value="<?php echo wp_create_nonce( 'event_nonce' ); ?>" />
 </div>
 
@@ -1309,7 +1311,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<div class='mc-controls'>
 			<?php echo mc_controls( $mode, $has_data, $data ); ?>
 		</div>
-
 			<?php
 			if ( ! empty( $_GET['date'] ) && 'S' != $data->event_recur ) {
 				$event   = mc_get_event( $instance );
@@ -1323,21 +1324,21 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			<fieldset>
 				<legend class="screen-reader-text"><?php _e( 'Event Details', 'my-calendar' ); ?></legend>
 				<p>
-					<label for="e_title"><?php _e( 'Event Title', 'my-calendar' ); ?></label>
-					<br/><input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="<?php if ( $has_data ) {
-							echo apply_filters( 'mc_manage_event_title', stripslashes( esc_attr( $data->event_title ) ), $data );
-						} ?>" />
+					<label for="e_title"><?php _e( 'Event Title', 'my-calendar' ); ?></label><br/>
+					<input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="<?php echo ( $has_data ) ?  apply_filters( 'mc_manage_event_title', stripslashes( esc_attr( $data->event_title ) ), $data ) : ''; ?>" />
 				</p>
-				<?php if ( is_object( $data ) && 1 == $data->event_flagged  ) { ?>
+				<?php
+				if ( is_object( $data ) && 1 == $data->event_flagged  ) {
+					if ( '0' == $data->event_flagged ) {
+						$flagged = ' checked="checked"';
+					} elseif ( '1' == $data->event_flagged ) {
+						$flagged = '';
+					}
+				?>
 					<div class="error">
 						<p>
-							<input type="checkbox" value="0" id="e_flagged"
-							       name="event_flagged"<?php if ( $has_data && '0' == $data->event_flagged ) {
-								echo " checked=\"checked\"";
-							} elseif ( $has_data && '1' == $data->event_flagged ) {
-								echo "";
-							} ?> /> <label
-								for="e_flagged"><?php _e( 'This event is not spam', 'my-calendar' ); ?></label>
+							<input type="checkbox" value="0" id="e_flagged" name="event_flagged"<?php echo $flagged; ?> />
+							<label for="e_flagged"><?php _e( 'This event is not spam', 'my-calendar' ); ?></label>
 						</p>
 					</div>
 				<?php
@@ -1350,12 +1351,13 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						<p class='mc-twitter'>
 							<label for='mc_twitter'><?php _e( 'Post to Twitter (via WP to Twitter)', 'my-calendar' ); ?></label><br/>
 							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter'><?php echo apply_filters( 'mc_twitter_text', '', $data ); ?></textarea>
-						</p><?php
+						</p>
+						<?php
 					}
 				}
 				mc_show_block( 'event_desc', $has_data, $data );
 				mc_show_block( 'event_category', $has_data, $data );
-?>
+				?>
 			</fieldset>
 		</div>
 	</div>
@@ -1850,16 +1852,16 @@ function mc_list_events() {
 		}
 		// default limits
 		if ( '' == $limit ) {
-			$limit .= ( $restrict != 'event_flagged' ) ? ' WHERE event_flagged = 0' : '';
+			$limit .= (  'event_flagged' != $restrict ) ? ' WHERE event_flagged = 0' : '';
 		} else {
-			$limit .= ( $restrict != 'event_flagged' ) ? ' AND event_flagged = 0' : '';
+			$limit .= (  'event_flagged' != $restrict ) ? ' AND event_flagged = 0' : '';
 		}
 		if ( isset( $_POST['mcs'] ) ) {
 			$query  = $_POST['mcs'];
 			$limit .= mc_prepare_search_query( $query );
 		}
 		$limit .= ( 'archived' != $restrict ) ? ' AND event_status = 1' : ' AND event_status = 0';
-		if ( $sortbyvalue != 'event_category' ) {
+		if ( 'event_category' != $sortbyvalue ) {
 			$events = $wpdb->get_results( 'SELECT SQL_CALC_FOUND_ROWS event_id FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT " . ( ( $current - 1 ) * $items_per_page ) . ', ' . $items_per_page );
 		} else {
 			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
@@ -1873,37 +1875,35 @@ function mc_list_events() {
 		?>
 		<ul class="links">
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && $_GET['limit'] == 'published' ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php _e( 'Published', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'published' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php _e( 'Published', 'my-calendar' ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && $_GET['limit'] == 'draft' ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php _e( 'Drafts', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'draft' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php _e( 'Drafts', 'my-calendar' ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && $_GET['limit'] == 'trashed' ) ? 'class="active-link" aria-current="true"' : ''; ?>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'trashed' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>"><?php _e( 'Trash', 'my-calendar' ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['restrict'] ) && $_GET['restrict'] == 'archived' ) ? 'class="active-link" aria-current="true"' : ''; ?>
+				<a <?php echo ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php _e( 'Archived', 'my-calendar' ); ?></a>
 			</li>
 		<?php
 		if ( ( function_exists( 'akismet_http_post' ) || function_exists( 'bs_checker' ) ) && $allow_filters ) {
 		?>
 			<li>
-				<a <?php echo ( isset( $_GET['restrict'] ) && $_GET['restrict'] == 'flagged' ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php _e( 'Spam', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php _e( 'Spam', 'my-calendar' ); ?></a>
 			</li>
 		<?php
 		}
 		?>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && $_GET['limit'] == 'all' || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'all' == $_GET['limit'] || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
 			</li>
 		</ul>
 		<?php
 		$search_text = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
-		?>s
+		?>
 		<div class='mc-search'>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
@@ -1931,19 +1931,21 @@ function mc_list_events() {
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 		}
 		if ( ! empty( $events ) ) {
-			?>
+		?>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" /></div>
 				<div class='mc-actions'>
-					<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete events', 'my-calendar' ); ?>"/>
-					<?php if ( current_user_can( 'mc_approve_events' ) ) { ?>
-						<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="<?php _e( 'Publish events', 'my-calendar' ); ?>"/>
-					<?php } ?>
-					<?php if ( ! ( isset( $_GET['restrict'] ) && $_GET['restrict'] == 'archived' ) ) { ?>
-						<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="<?php _e( 'Archive events', 'my-calendar' ); ?>"/>
-					<?php } else { ?>
-						<input type="submit" class="button-secondary mc-archive" name="mass_undo_archive" value="<?php _e( 'Remove from archive', 'my-calendar' ); ?>" />
-					<?php } ?>
+					<?php
+					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/>';
+					if ( current_user_can( 'mc_approve_events' ) ) {
+						echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" />';
+					}
+					if ( ! ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ) {
+						echo '<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="' . __( 'Archive events', 'my-calendar' ) . '" />';
+					} else {
+						echo '<input type="submit" class="button-secondary mc-archive" name="mass_undo_archive" value="' . __( 'Remove from archive', 'my-calendar' ) . '" />';
+					}
+					?>
 				</div>
 
 			<table class="widefat wp-list-table" id="my-calendar-admin-table">
