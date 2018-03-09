@@ -643,7 +643,7 @@ function my_calendar_upcoming_events( $args ) {
 	$template      = apply_filters( 'mc_upcoming_events_template', $template );
 	$no_event_text = ( $substitute == '' ) ? $defaults['upcoming']['text'] : $substitute;
 	$header        = "<ul id='upcoming-events-$hash' class='upcoming-events'>";
-	$footer        = "</ul>";
+	$footer        = '</ul>';
 	$display_events = ( $display_type == 'events' || $display_type == 'event' ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
@@ -1093,7 +1093,7 @@ function my_calendar_todays_events( $args ) {
 
 	$today  = ( isset( $events[ $from ] ) ) ? $events[ $from ] : false;
 	$header = "<ul id='todays-events-$hash' class='todays-events'>";
-	$footer = "</ul>";
+	$footer = '</ul>';
 	$groups = $todays_events = array();
 	// quick loop through all events today to check for holidays
 	if ( is_array( $today ) ) {
@@ -1113,7 +1113,7 @@ function my_calendar_todays_events( $args ) {
 				}
 
 				$prepend = apply_filters( 'mc_todays_events_before', "<li class='$class $category'>", $class, $category );
-				$append  = apply_filters( 'mc_todays_events_after', "</li>" );
+				$append  = apply_filters( 'mc_todays_events_after', '</li>' );
 
 				$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $template );
 				if ( $item == '' ) {

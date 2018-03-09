@@ -62,7 +62,7 @@ function my_calendar_group_edit() {
 
 					$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
 					if ( $result === false ) {
-						$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Event not updated.', 'my-calendar' ) . " $url</p></div>";
+						$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Event not updated.', 'my-calendar' ) . " $url</p></div>";
 					} elseif ( $result === 0 ) {
 						$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url</p></div>";
 					} else {
@@ -87,7 +87,7 @@ function my_calendar_group_edit() {
 							'%d' );
 
 						if ( $result === false ) {
-							$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Event not grouped.', 'my-calendar' ) . '</p></div>';
+							$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Event not grouped.', 'my-calendar' ) . '</p></div>';
 						} elseif ( $result === 0 ) {
 							$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . '</p></div>';
 						} else {
@@ -204,7 +204,7 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 			do_action( 'mc_save_event', 'edit', $update, $event_id, $result ); // same as action on basic save
 			do_action( 'mc_save_grouped_events', $result, $event_id, $update );
 			if ( $result === false ) {
-				$message = "<div class='error'><p><strong>#$event_id; " . __( 'Error', 'my-calendar' ) . ":</strong>" . __( 'Your event was not updated.', 'my-calendar' ) . " $url</p></div>";
+				$message = "<div class='error'><p><strong>#$event_id; " . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your event was not updated.', 'my-calendar' ) . " $url</p></div>";
 			} elseif ( $result === 0 ) {
 				$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . " $url</p></div>";
 			} else {
@@ -594,7 +594,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 									<option value="none"> --</option>
 									<?php
 									foreach ( $locations as $location ) {
-										echo "<option value=\"" . $location->location_id . "\">" . esc_html( stripslashes( $location->location_label ) ) . "</option>";
+										echo "<option value=\"" . $location->location_id . "\">" . esc_html( stripslashes( $location->location_label ) ) . '</option>';
 									}
 									?>
 								</select>

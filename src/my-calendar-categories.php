@@ -159,18 +159,15 @@ function my_calendar_manage_categories() {
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' == $_GET['mode'] ) {
 			$cat_id  = (int) $_GET['category_id'];
-			$sql     = 'DELETE FROM ' . my_calendar_categories_table() . " WHERE category_id=$cat_id";
-			$results = $wpdb->query( $sql );
+			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
 
 			// also delete relationships for this category.
-			$rel_sql     = 'DELETE FROM ' . my_calendar_category_relationships_table() . " WHERE category_id = $cat_id";
-			$rel_results = $wpdb->query( $rel_sql );
+			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $cat_id ) );
 
 			if ( $results ) {
 				$default_category = get_option( 'mc_default_category' );
 				$default_category = ( is_numeric( $default_category ) ) ? absint( $default_category ) : 1;
-				$sql              = 'UPDATE ' . my_calendar_table() . " SET event_category=$default_category WHERE event_category=$cat_id";
-				$cal_results      = $wpdb->query( $sql );
+				$cal_results      = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_category=%d WHERE event_category=%d', $default_category, $cat_id ) );
 			} else {
 				$cal_results = false;
 			}
@@ -586,18 +583,19 @@ function mc_manage_categories() {
 		<thead>
 		<tr>
 			<th scope="col">
-				<?php 
+				<?php
 				echo ( 2 == $co ) ? '<a href="' . admin_url( 'admin.php?page=my-calendar-categories&amp;co=1' ) . '">' : '';
 				_e( 'ID', 'my-calendar' );
 				echo ( 2 == $co ) ? '</a>' : '';
 				?>
-				</th>
+			</th>
 			<th scope="col">
-				<?php 
+				<?php
 					echo ( 1 == $co ) ? '<a href="' . admin_url( 'admin.php?page=my-calendar-categories&amp;co=2' ) . '">' : '';
 					_e( 'Category Name', 'my-calendar' );
 					echo ( 1 == $co ) ? '</a>' : '';
-				?></th>
+				?>
+			</th>
 			<th scope="col"><?php _e( 'Color/Icon', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Private', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>
@@ -622,10 +620,10 @@ function mc_manage_categories() {
 			<td>
 			<?php
 			echo $cat_name;
-			if ( $cat->category_id == get_option( 'mc_default_category' ) ) {
+			if ( get_option( 'mc_default_category' ) == $cat->category_id ) {
 				echo ' <strong>' . __( '(Default)' ) . '</strong>';
 			}
-			if ( $cat->category_id == get_option( 'mc_skip_holidays_category' ) ) {
+			if ( get_option( 'mc_skip_holidays_category' ) == $cat->category_id ) {
 				echo ' <strong>' . __( '(Holiday)' ) . '</strong>';
 			}
 			?>
@@ -645,11 +643,11 @@ function mc_manage_categories() {
 				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')"><?php printf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' ); ?></a>
 			</td>
 			<?php
-			}  
+			}
 			?>
 		</tr>
 		<?php
-		} 
+		}
 		?>
 	</table>
 	<?php
@@ -663,8 +661,6 @@ add_action( 'edit_user_profile', 'mc_profile' );
 add_action( 'profile_update', 'mc_save_profile' );
 /**
  * Show user profile data on Edit User pages.
- *
- * return @string Configuration forms for My Calendar user-specific settings.
  */
 function mc_profile() {
 	global $user_ID;
@@ -738,9 +734,10 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 		$name = 'event_category[]';
 	}
 	// Grab all the categories and list them
-	$list = $default = '';
-	$sql  = 'SELECT * FROM ' . my_calendar_categories_table() . " ORDER BY category_name ASC";
-	$cats = $mcdb->get_results( $sql );
+	$list    = '';
+	$default = '';
+	$sql     = 'SELECT * FROM ' . my_calendar_categories_table() . " ORDER BY category_name ASC";
+	$cats    = $mcdb->get_results( $sql );
 	if ( empty( $cats ) ) {
 		// need to have categories. Try to create again.
 		mc_create_category( array(
@@ -757,7 +754,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 		foreach ( $cats as $cat ) {
 			$selected = '';
 			// if category is private, don't show if user is not logged in.
-			if ( '1' == $cat->category_private && !is_user_logged_in() ) {
+			if ( '1' == $cat->category_private && ! is_user_logged_in() ) {
 				continue;
 			}
 			if ( ! empty( $data ) ) {
@@ -782,7 +779,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					}
 				}
 			} else {
-				if ( $cat->category_id == get_option( 'mc_default_category' ) ) {
+				if ( get_option( 'mc_default_category' ) == $cat->category_id ) {
 					$selected = ' checked="checked"';
 				}
 			}
@@ -792,7 +789,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . strip_tags( stripslashes( $cat->category_name ) ) . '</option>';
 			}
-			if ( $cat->category_id != get_option( 'mc_default_category' ) ) {
+			if ( get_option( 'mc_default_category' ) != $cat->category_id ) {
 				$list .= $c;
 			} else {
 				$default = $c;
@@ -844,8 +841,8 @@ function mc_get_categories( $event, $ids = true ) {
 	}
 
 	if ( ! $results ) {
-		$query   = 'SELECT * FROM ' . my_calendar_category_relationships_table() . " as r JOIN " . my_calendar_categories_table() . " as c ON c.category_id = r.category_id WHERE event_id = $event_id";
-		$results = $mcdb->get_results( $query );
+		$query   = 'SELECT * FROM ' . my_calendar_category_relationships_table() . ' as r JOIN ' . my_calendar_categories_table() . ' as c ON c.category_id = r.category_id WHERE event_id = %d';
+		$results = $mcdb->get_results( $wpdb->prepare( $query, $event_id ) );
 	}
 	if ( true === $ids ) {
 		if ( $results ) {

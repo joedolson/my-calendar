@@ -1018,7 +1018,7 @@ function mc_search_results( $query ) {
 		// no filters parameter prevents infinite looping on the_content filters.
 		$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', 0, $before, $after, 'yes', 'nofilters' );
 	} else {
-		$output = apply_filters( 'mc_search_no_results', "<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . "</li>" );
+		$output = apply_filters( 'mc_search_no_results', "<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . '</li>' );
 	}
 				
 	$header = apply_filters( 'mc_search_before', '<ol class="mc-search-results">', $term );
@@ -1276,7 +1276,7 @@ function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
 			}
 		}
 	} else {
-		$output = "<li>" . __( 'No related events', 'my-calendar' ) . "</li>";
+		$output = '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
 	}
 
 	return $output;

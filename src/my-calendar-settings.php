@@ -193,15 +193,15 @@ function my_calendar_settings() {
 		}
 		if ( isset( $_POST['remigrate'] ) ) {
 			echo "<div class='updated fade'><ol>";
-			echo "<li>" . __( 'Dropping occurrences database table', 'my-calendar' ) . "</li>";
+			echo '<li>' . __( 'Dropping occurrences database table', 'my-calendar' ) . '</li>';
 			mc_drop_table( 'my_calendar_event_table' );
 			sleep( 1 );
-			echo "<li>" . __( 'Reinstalling occurrences database table.', 'my-calendar' ) . "</li>";
+			echo '<li>' . __( 'Reinstalling occurrences database table.', 'my-calendar' ) . '</li>';
 			mc_upgrade_db();
 			sleep( 1 );
-			echo "<li>" . __( 'Generating event occurrences.', 'my-calendar' ) . "</li>";
+			echo '<li>' . __( 'Generating event occurrences.', 'my-calendar' ) . '</li>';
 			mc_migrate_db();
-			echo "<li>" . __( 'Event generation completed.', 'my-calendar' ) . "</li>";
+			echo '<li>' . __( 'Event generation completed.', 'my-calendar' ) . '</li>';
 			echo "</ol></div>";
 		}
 	}
@@ -687,7 +687,7 @@ function mc_remote_db() {
 							$i++;
 						}
 
-						echo "</ul>";
+						echo '</ul>';
 						?>
 					</fieldset>
 

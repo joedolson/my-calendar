@@ -879,7 +879,7 @@ function mc_expand( $data ) {
 			}
 			$output .= "<li class='$class'><span>$label</span></li>\n";
 		}
-		$output = "<ul class='mc-access'>" . $output . "</ul>";
+		$output = "<ul class='mc-access'>" . $output . '</ul>';
 	}
 
 	return $output;
@@ -952,7 +952,7 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 			$endspan       = ( $eformat != '' ) ? "</span>" : '';
 			$return .= "<li>$bformat" . $span . date_i18n( $eformat, strtotime( $end ) ) . "$endspan</li>";
 		}
-		$return .= "</ul>";
+		$return .= '</ul>';
 	}
 
 	return $return;
