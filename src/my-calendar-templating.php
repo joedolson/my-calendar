@@ -7,7 +7,6 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,18 +34,19 @@ function mc_templates_edit() {
 
 	if ( isset( $_POST['delete'] ) ) {
 		delete_option( 'mc_ctemplate_' . $key );
-		echo "<div class=\"updated\"><p>" . __( 'Custom template deleted', 'my-calendar' ) . '</p></div>';
+		echo '<div class="updated"><p>' . __( 'Custom template deleted', 'my-calendar' ) . '</p></div>';
 		$key = 'grid';
 	} else {
 		if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
-			echo "<div class=\"updated\"><p>" . __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) . '</p></div>';
+			echo '<div class="updated"><p>' . __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) . '</p></div>';
 		} else {
 			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-				$template  = $_POST['mc_template'];
+				$template        = $_POST['mc_template'];
 				$templates[$key] = $template;
 				update_option( 'mc_templates', $templates );
 				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
-				echo "<div class=\"updated\"><p>" . sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) . '</p></div>';
+				// Translators: unique key for template.
+				echo '<div class="updated"><p>' . sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) . '</p></div>';
 			} elseif ( isset( $_POST['mc_template'] ) ) {
 				$template  = $_POST['mc_template'];
 				if ( mc_key_exists( $key ) ) {
@@ -60,11 +60,11 @@ function mc_templates_edit() {
 	}
 
 	$globals             = mc_globals();
-	$mc_grid_template    = ( $templates['grid'] != '' ) ? $templates['grid'] : $globals['grid_template'];
-	$mc_rss_template     = ( $templates['rss'] != '' ) ? $templates['rss'] : $globals['rss_template'];
-	$mc_list_template    = ( $templates['list'] != '' ) ? $templates['list'] : $globals['list_template'];
-	$mc_mini_template    = ( $templates['mini'] != '' ) ? $templates['mini'] : $globals['mini_template'];
-	$mc_details_template = ( $templates['details'] != '' ) ? $templates['details'] : $globals['single_template'];
+	$mc_grid_template    = ( '' != $templates['grid'] ) ? $templates['grid'] : $globals['grid_template'];
+	$mc_rss_template     = ( '' != $templates['rss'] ) ? $templates['rss'] : $globals['rss_template'];
+	$mc_list_template    = ( '' != $templates['list'] ) ? $templates['list'] : $globals['list_template'];
+	$mc_mini_template    = ( '' != $templates['mini'] ) ? $templates['mini'] : $globals['mini_template'];
+	$mc_details_template = ( '' != $templates['details'] ) ? $templates['details'] : $globals['single_template'];
 
 	$template = ( mc_is_core_template( $key ) ) ? ${"mc_" . $key . "_template"} : mc_get_custom_template( $key );
 	$template = stripslashes( $template );
@@ -83,7 +83,7 @@ function mc_templates_edit() {
 							<p>
 								<a href="<?php echo admin_url( "admin.php?page=my-calendar-help#templates" ); ?>"><?php _e( "Templates Help", 'my-calendar' ); ?></a> &raquo;
 							</p>
-							<?php if ( $core != '' ) { echo "<p class='template-description'>$core</p>"; } ?>
+							<?php echo ( $core != '' ) ? "<p class='template-description'>$core</p>" : ''; ?>
 							<?php
 							if ( $key == 'add-new' ) {
 							?>
@@ -107,14 +107,14 @@ function mc_templates_edit() {
 							<?php
 							} else {
 							?>
-							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( "admin.php?page=my-calendar-templates" ) ); ?>">
+							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 									<input type="hidden" name="mc_template_key" value="<?php echo esc_attr( $key ); ?>"/>
 								</div>
 								<?php if ( mc_is_core_template( $key ) ) { ?>
 								<p>
-									<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php mc_is_checked( "mc_use_".$key."_template", 1 ); ?> /> <label for="mc_use_template"><?php _e( 'Use this template', 'my-calendar' ); ?></label>
+									<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php mc_is_checked( 'mc_use_' . $key . '_template', 1 ); ?> /> <label for="mc_use_template"><?php _e( 'Use this template', 'my-calendar' ); ?></label>
 								</p>
 								<?php } ?>
 								<p>

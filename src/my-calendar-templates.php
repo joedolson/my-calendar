@@ -68,13 +68,13 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 						$number = count( $matches[0] );
 						for ( $i = 0; $i < $number; $i ++ ) {
 							$orig   = $value;
-							$before = $matches[1][$i];
-							$after  = $matches[2][$i];
-							$format = $matches[3][$i];
-							if ( $format != '' ) {
+							$before = $matches[1][ $i ];
+							$after  = $matches[2][ $i ];
+							$format = $matches[3][ $i ];
+							if ( '' != $format ) {
 								$value = date_i18n( stripslashes( $format ), strtotime( stripslashes( $value ) ) );
 							}
-							$value    = ( $value == '' ) ? '' : $before . $value . $after;
+							$value    = ( '' == $value ) ? '' : $before . $value . $after;
 							$search   = $matches[0][$i];
 							$template = str_replace( $search, $value, $template );
 							$value    = $orig;
@@ -125,7 +125,7 @@ function mc_map_string( $event, $source = 'event' ) {
  * @param string $source (event,location).
  *
  * @return object $event
-*/
+ */
 function mc_clean_location( $event, $source = 'event' ) {
 	if ( 'event' == $source ) {
 		if ( 'none' == strtolower( $event->event_city ) ) {
@@ -187,8 +187,8 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		}
 		$zoom       = ( 0 != $event->event_zoom ) ? $event->event_zoom : '15';
 		$url        = $event->event_url;
-		$map_label  = strip_tags( stripslashes( ( $event->event_label != '' ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
-		$map_string = str_replace( " ", "+", $map_string );
+		$map_label  = strip_tags( stripslashes( ( '' != $event->event_label ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
+		$map_string = str_replace( ' ', '+', $map_string );
 		if ( '0.000000' != $event->event_longitude && '0.000000' != $event->event_latitude ) {
 			$dir_lat    = ( $event->event_latitude > 0 ) ? 'N' : 'S';
 			$latitude   = abs( $event->event_latitude );
@@ -284,7 +284,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	}
 	$link  = ( '' != $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
 	$hcard = '<div class="address vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
-	if ( $address == 'true' ) {
+	if ( 'true' == $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 		$hcard .= ( '' != $label ) ? '<strong class="org" itemprop="name">' . $link . '</strong><br />' : '';
 		$hcard .= ( $street . $street2 . $city . $state . $zip . $country . $phone == '' ) ? '' : "<div class='sub-address'>";
@@ -300,11 +300,11 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= ( '' == $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : '</div>';
 		$hcard .= '</div>';
 	}
-	if ( $map == 'true' ) {
-		$hcard .= '<meta itemprop="name" content="' . esc_attr( $label ) . '"/>';
-		$hcard .= '<meta itemprop="address" content="' . esc_attr( mc_map_string( $event, $source ) ) . '"/>';
+	if ( 'true' == $map ) {
+		$hcard  .= '<meta itemprop="name" content="' . esc_attr( $label ) . '"/>';
+		$hcard  .= '<meta itemprop="address" content="' . esc_attr( mc_map_string( $event, $source ) ) . '"/>';
 		$the_map = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
-		$hcard .= ( $the_map != '' ) ? "<div class='map'>$the_map</div>" : '';
+		$hcard  .= ( '' != $the_map ) ? "<div class='map'>$the_map</div>" : '';
 	}
 	$hcard .= '</div>';
 
@@ -320,19 +320,23 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
  * @return array event data
  */
 function mc_create_tags( $event, $context = 'filters' ) {
-	$site               = ( isset( $event->site_id ) ) ? $event->site_id : false;
-	$event              = mc_clean_location( $event, 'event' );
-	$e                  = array();
-	$e['post']          = $event->event_post;
-	$date_format        = ( '' != get_option( 'mc_date_format' ) ) ? get_option( 'mc_date_format' ) : get_option( 'date_format' );
-	$e                  = apply_filters( 'mc_insert_author_data', $e, $event );
-	$e                  = apply_filters( 'mc_filter_image_data', $e, $event );
-	$sitelink_html      = "<div class='url link'><a href='$event->event_url' class='location-link external'>" . sprintf( __( 'Visit web site<span class="screen-reader-text">: %s</span>', 'my-calendar' ), $event->event_label ) . "</a></div>";
+	$site          = ( isset( $event->site_id ) ) ? $event->site_id : false;
+	$event         = mc_clean_location( $event, 'event' );
+	$e             = array();
+	$e['post']     = $event->event_post;
+	$date_format   = ( '' != get_option( 'mc_date_format' ) ) ? get_option( 'mc_date_format' ) : get_option( 'date_format' );
+	$e             = apply_filters( 'mc_insert_author_data', $e, $event );
+	$e             = apply_filters( 'mc_filter_image_data', $e, $event );
+	$sitelink_html = "<div class='url link'><a href='$event->event_url' class='location-link external'>";
+
+	// Translators: Location name.
+	$sitelink_html     .= sprintf( __( 'Visit web site<span class="screen-reader-text">: %s</span>', 'my-calendar' ), $event->event_label );
+	$sitelink_html     .= '</a></div>';
 	$e['sitelink_html'] = $sitelink_html;
 	$e['sitelink']      = $event->event_url;
 	$e['access']        = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
 
-	// date & time fields.
+	// Date & time fields.
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
 	$real_begin_date = ( isset( $event->occur_begin ) ) ? $event->occur_begin : $event->event_begin . ' ' . $event->event_time;
 	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ) );
@@ -347,13 +351,13 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['endtime']      = ( $real_end_date == $real_begin_date || 1 == $event->event_hide_end || '23:59:59' == date( 'H:i:s', strtotime( $real_end_date ) ) ) ? '' : date_i18n( get_option( 'mc_time_format' ), strtotime( $endtime ) );
 	$e['runtime']      = mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event );
 	$e['duration']     = mc_duration( $event );
-	$e['dtstart']      = date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ) );  // hcal formatted
-	$e['dtend']        = date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ) );    // hcal formatted end
+	$e['dtstart']      = date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ) );  // Date: hcal formatted.
+	$e['dtend']        = date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ) );    // Date: hcal formatted end.
 	$e['rssdate']      = date( 'D, d M Y H:i:s +0000', strtotime( $event->event_added ) );
 	$date              = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
 	$date_end          = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
-	$date_arr          = array( 
-		'occur_begin' => $real_begin_date, 
+	$date_arr          = array(
+		'occur_begin' => $real_begin_date,
 		'occur_end' => $real_end_date,
 	);
 	$date_obj          = (object) $date_arr;
@@ -381,13 +385,13 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['icon']       = mc_category_icon( $event, 'img' );
 	$e['icon_html']  = ( '' != $e['icon'] ) ? "<img src='$e[icon]' class='mc-category-icon' alt='" . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . "' />" : '';
 	$e['color']      = $event->category_color;
-	
+
 	$hex     = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color   = $hex . $event->category_color;
 	$inverse = mc_inverse_color( $color );
-	
+
 	// This is because widgets now strip out style attributes.
-	$e['color_css']       = "<span style='background-color: $event->category_color; color: $inverse'>"; 
+	$e['color_css']       = "<span style='background-color: $event->category_color; color: $inverse'>";
 	$e['close_color_css'] = '</span>';
 
 	// Special.
@@ -411,7 +415,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$templates    = get_option( 'mc_templates' );
 	$e_template   = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
 	$e_template   = apply_filters( 'mc_details_template', $e_template );
-	$tags         = array( "{title}", "{location}", "{color}", "{icon}", "{date}", "{time}" );
+	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
 	$replacements = array(
 		stripslashes( $event->event_title ),
 		stripslashes( $event->event_label ),
@@ -420,6 +424,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['date'],
 		$e['time'],
 	);
+
 	$e_label   = str_replace( $tags, $replacements, $e_template );
 	$e_link    = mc_get_details_link( $event );
 	$e['link'] = mc_event_link( $event );
@@ -437,7 +442,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['linking_title'] = ( '' != $e['linking'] ) ? "<a href='" . $e['linking'] . "'>" . $e['title'] . '</a>' : $e['title'];
 
 	if ( 'related' != $context && ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
-		$related_template = apply_filters( 'mc_related_template', "{date}, {time}", $event );
+		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
 		$e['related']     = '<ul class="related-events">' . mc_list_related( $event->event_group_id, $event->event_id, $related_template ) . '</ul>';
 	} else {
 		$e['related'] = '';
@@ -493,7 +498,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['gcal_link'] = "<a href='" . mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $event->event_title ), $map_gcal, $strip_desc ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
 
 	// IDs.
-	$e['dateid']     = $event->occur_id; // unique ID for this date of this event
+	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
 	$e['id']         = $event->event_id;
 	$e['group']      = $event->event_group_id;
 	$e['event_span'] = $event->event_span;
@@ -502,7 +507,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['guid'] = "<guid isPermaLink='true'>$e_link</guid>";
 
 	// ICAL.
-	$e['ical_description'] = str_replace( "\r", "=0D=0A=", $event->event_desc );
+	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
 	$e['ical_desc']        = $strip_desc;
 	$e['ical_start']       = $dtstart;
 	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? date( 'Ymd\THi00', strtotime( $dtend ) + 60 ) : $dtend;
@@ -589,7 +594,7 @@ function mc_get_details_link( $event ) {
  * Get URI from settings
  *
  * @param object/string $event Event object or string for boolean result.
- * @param array $args  Any arguments passed.
+ * @param array         $args  Any arguments passed.
  *
  * @uses filter 'mc_get_uri'
  *
@@ -607,7 +612,7 @@ function mc_get_uri( $event = false, $args = array() ) {
 	$mc_uri = get_option( 'mc_uri' );
 	$mc_id  = get_option( 'mc_uri_id' );
 
-	$uri  = ( get_permalink( $mc_id ) != get_option( 'mc_uri' ) ) ? get_option( 'mc_uri' ) : get_permalink( $mc_id );
+	$uri = ( get_permalink( $mc_id ) != get_option( 'mc_uri' ) ) ? get_option( 'mc_uri' ) : get_permalink( $mc_id );
 
 	if ( 'boolean' == $event ) {
 		if ( ! _mc_is_url( $uri ) ) {
@@ -636,11 +641,11 @@ function mc_get_details_label( $event, $e ) {
 	$templates  = get_option( 'mc_templates' );
 	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Read more', 'my-calendar' );
 	$e_label    = wp_kses( mc_draw_template( $e, $e_template ), array(
-			'span' => array( 
-				'class' => array( 'screen-reader-text' ) ),
-			'em',
-			'strong',
-		) );
+		'span' => array(
+			'class' => array( 'screen-reader-text' ) ),
+		'em',
+		'strong',
+	) );
 
 	return $e_label;
 }
@@ -668,7 +673,7 @@ function mc_format_timestamp( $os ) {
 			$date_object->setTime( date( 'H', $os ), date( 'i', $os ) );
 			$date_object->setDate( date( 'Y', $os ), date( 'm', $os ), date( 'd', $os ) );
 
-			$timestamp = $date_object->getTimestamp( );
+			$timestamp = $date_object->getTimestamp();
 			$time      = gmdate( 'Ymd\THi00', $timestamp ) . 'Z';
 
         } else {
@@ -700,8 +705,6 @@ function mc_runtime( $start, $end, $event ) {
 /**
  * Return ISO8601 duration marker
  *
- * @param string $start start date/time.
- * @param string $end end date/time.
  * @param object $event event object.
  *
  * @return string ISO8601 duration format
@@ -712,7 +715,7 @@ function mc_duration( $event ) {
 
 	$datetime1 = new DateTime( $start );
 	$datetime2 = new DateTime( $end );
-	$interval  = $datetime1->diff($datetime2);
+	$interval  = $datetime1->diff( $datetime2 );
 
 	$duration  = '';
 	$duration .= ( 0 != $interval->y ) ? $interval->y . 'Y' : '';
@@ -803,14 +806,14 @@ function mc_generate_map( $event, $source = 'event' ) {
 		if ( strlen( $address ) < 10 && !$latlng ) {
 			return '';
 		}
-		$hcard  = mc_hcard( $event, true, false, $source );
-		$hcard  = wp_kses( str_replace( array( '</div>', '<br />', '<br><br>' ), '<br>', $hcard ), array( 'br' => array() ) );
-		$html   = addslashes( apply_filters( 'mc_map_html', $hcard, $event ) );
-		$width  = apply_filters( 'mc_map_height', '100%', $event );
-		$height = apply_filters( 'mc_map_height', '300px', $event );
-		$styles = " style='width: $width;height: $height'";
+		$hcard    = mc_hcard( $event, true, false, $source );
+		$hcard    = wp_kses( str_replace( array( '</div>', '<br />', '<br><br>' ), '<br>', $hcard ), array( 'br' => array() ) );
+		$html     = addslashes( apply_filters( 'mc_map_html', $hcard, $event ) );
+		$width    = apply_filters( 'mc_map_height', '100%', $event );
+		$height   = apply_filters( 'mc_map_height', '300px', $event );
+		$styles   = " style='width: $width;height: $height'";
 		$location = ( ! $latlng ) ? "address: '$address'," : $latlng;
-		$value  = "
+		$value    = "
 <script type='text/javascript'>
 	(function ($) { 'use strict';
 		$(function () {
@@ -948,10 +951,10 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 			$day_begin     = date( 'Y-m-d', strtotime( $begin ) );
 			$day_end       = date( 'Y-m-d', strtotime( $end ) );
 			$bformat       = '<span class="multidate-date">' . date_i18n( get_option( 'mc_date_format' ), strtotime( $begin ) ) . "</span> <span class='multidate-time'>" . date_i18n( get_option( 'mc_time_format' ), strtotime( $begin ) ) . '</span>';
-			$endtimeformat = ( $date->occur_end == '00:00:00' ) ? '' : ' ' . get_option( 'mc_time_format' );
+			$endtimeformat = ( '00:00:00' == $date->occur_end ) ? '' : ' ' . get_option( 'mc_time_format' );
 			$eformat       = ( $day_begin != $day_end ) ? get_option( 'mc_date_format' ) . $endtimeformat : $endtimeformat;
-			$span          = ( $eformat != '' ) ? " <span>&ndash;</span> <span class='multidate-end'>" : '';
-			$endspan       = ( $eformat != '' ) ? '</span>' : '';
+			$span          = ( '' != $eformat ) ? " <span>&ndash;</span> <span class='multidate-end'>" : '';
+			$endspan       = ( '' != $eformat ) ? '</span>' : '';
 			$return .= "<li>$bformat" . $span . date_i18n( $eformat, strtotime( $end ) ) . "$endspan</li>";
 		}
 		$return .= '</ul>';
@@ -1118,13 +1121,13 @@ function mc_event_recur_string( $event, $begin ) {
 			break;
 		case 'U':
 			// Translators: The {number} {day name} of each month.
-			$event_recur = sprintf( __( 'the %s %s of each month', 'my-calendar' ), $week_number, $day_name );
+			$event_recur = sprintf( __( 'the %1$s %2$s of each month', 'my-calendar' ), $week_number, $day_name );
 			break;
 		case 'Y':
 			if ( $every == 1 ) {
 				$event_recur = __( 'Annually', 'my-calendar' );
 			} else {
-				// Number of years.
+				// Translators: Number of years.
 				$event_recur = sprintf( __( 'Every %d years', 'my-calendar' ), $every );
 			}
 			break;
