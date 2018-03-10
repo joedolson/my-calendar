@@ -222,7 +222,7 @@ function mc_group_data( $event_id = false ) {
 function mc_compare_group_members( $group_id, $field = false ) {
 	global $wpdb;
 	if ( ! $field ) {
-		$query = 'SELECT event_title, event_desc, event_short, event_link, event_label, event_street, event_street2, event_city, event_state, event_postcode, event_region, event_country, event_url, event_image, event_category, event_link_expires, event_zoom, event_phone, event_host, event_longitude, event_latitude FROM ' . my_calendar_table() . ' WHERE event_group_id = %d'
+		$query = 'SELECT event_title, event_desc, event_short, event_link, event_label, event_street, event_street2, event_city, event_state, event_postcode, event_region, event_country, event_url, event_image, event_category, event_link_expires, event_zoom, event_phone, event_host, event_longitude, event_latitude FROM ' . my_calendar_table() . ' WHERE event_group_id = %d';
 	} else {
 		// Just comparing a single field.
 		$query = "SELECT $field FROM " . my_calendar_table() . ' WHERE event_group_id = %d';
