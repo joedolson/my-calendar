@@ -244,7 +244,7 @@ function mc_generator( $type ) {
 			<?php
 			}
 			if ( 'upcoming' == $type || 'today' == $type ) {
-			// Upcoming Events & Today's Events shortcodes.
+				// Upcoming Events & Today's Events shortcodes.
 			?>
 				<p>
 					<label for="fallback"><?php _e( 'Fallback Text', 'my-calendar' ); ?></label>
@@ -252,12 +252,12 @@ function mc_generator( $type ) {
 				</p>
 				<p>
 					<label for="template"><?php _e( 'Template', 'my-calendar' ); ?></label>
-					<textarea cols="40" rows="4" name="template" id="template"><?php echo htmlentities( "<strong>{date}</strong>, {time}: {link_title}" ); ?></textarea>
+					<textarea cols="40" rows="4" name="template" id="template"><?php echo htmlentities( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
 				</p>
 			<?php
 			}
 			if ( 'upcoming' == $type ) {
-			// Upcoming events only.
+				// Upcoming events only.
 			?>
 				<p>
 					<label for="before"><?php _e( 'Events/Days Before Current Day', 'my-calendar' ); ?></label>
@@ -320,5 +320,6 @@ function mc_generator( $type ) {
 	<p>
 		<input type="submit" class="button-primary" name="generator" value="<?php _e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
 	</p>
-	</form><?php
+	</form>
+	<?php
 }

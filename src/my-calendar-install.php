@@ -341,7 +341,7 @@ function mc_generate_calendar_page( $slug ) {
 		$post_slug = wp_unique_post_slug( $slug, $post_ID, 'publish', 'page', 0 );
 		wp_update_post( array(
 			'ID'        => $post_ID,
-			'post_name' => $post_slug
+			'post_name' => $post_slug,
 		) );
 	} else {
 		$post    = get_page_by_path( $slug );
@@ -398,8 +398,8 @@ function mc_migrate_db() {
  */
 function mc_flag_event( $id, $time ) {
 	global $wpdb;
-	$data    = array( 
-		'event_hide_end' => 1, 
+	$data    = array(
+		'event_hide_end' => 1,
 		'event_endtime'  => $time,
 	);
 	$formats = array( '%d', '%s' );
@@ -549,9 +549,9 @@ function mc_transition_categories() {
 		$event_id = $result->event_id;
 		$category = $result->event_category;
 
-		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array( 
-			'event_id'    => $event_id, 
-			'category_id' => $category 
+		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array(
+			'event_id'    => $event_id,
+			'category_id' => $category
 		), array( '%d', '%d' ) );
 	}
 }

@@ -890,7 +890,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		$c['user_agent']   = $_SERVER['HTTP_USER_AGENT'];
 		$c['referrer']     = $_SERVER['HTTP_REFERER'];
 		$c['comment_type'] = 'my_calendar_event';
-		if ( $permalink == get_permalink() ) {
+		if ( get_permalink() == $permalink ) {
 			$c['permalink'] = $permalink;
 		}
 		if ( '' != $event_url ) {
@@ -1100,7 +1100,6 @@ function mc_ajax_delete_occurrence() {
 				'response' => __( 'Event instance was not deleted.', 'my-calendar' ),
 			) );
 		}
-
 	} else {
 		wp_send_json( array(
 			'success'  => 0,
@@ -1112,8 +1111,6 @@ function mc_ajax_delete_occurrence() {
 add_action( 'wp_ajax_add_date', 'mc_ajax_add_date' );
 /**
  * Add a single additional date for an event from the event manager.
- *
- * @return string Confirmation message indicating success or failure.
  */
 function mc_ajax_add_date() {
 	if ( ! check_ajax_referer( 'mc-delete-nonce', 'security', false ) ) {
@@ -1184,9 +1181,9 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 
 if ( ! function_exists( 'wp_is_mobile' ) ) {
 	if ( ! is_plugin_active_for_network( 'my-calendar/my-calendar.php' ) ) {
-		// Causes problems in Travis CI. JCD TODO.
-		
+
 		/*
+		// Causes problems in Travis CI. JCD TODO.
 		function wp_is_mobile() {
 			return false;
 		}
@@ -1446,7 +1443,7 @@ add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
  * Add custom fields to permalinks settings page.
  */
 function mc_load_permalinks() {
-	if ( isset( $_POST['mc_cpt_base'] ) )	{
+	if ( isset( $_POST['mc_cpt_base'] ) ) {
 		update_option( 'mc_cpt_base', sanitize_text_field( $_POST['mc_cpt_base'] ) );
 	}
 	$opts = array( 'label_for' => 'mc_cpt_base' );

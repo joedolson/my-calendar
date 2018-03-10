@@ -123,17 +123,17 @@ ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_fi
 			$object_id      = $event->event_id;
 			$location_id    = $event->event_location;
 			if ( ! isset( $cats[ $object_id ] ) ) {
-				$categories        = mc_get_categories( $event, false );
-				$event->categories = $categories;
-				$cats[$object_id]  = $categories;
+				$categories          = mc_get_categories( $event, false );
+				$event->categories   = $categories;
+				$cats[ $object_id ]  = $categories;
 			} else {
 				$event->categories = $cats[ $object_id ];
 			}
 			if ( 0 != $location_id ) {
 				if ( ! isset( $locs[ $object_id ] ) ) {
-					$location         = mc_get_location( $location_id );
-					$event->location  = $location;
-					$locs[$object_id] = $location;
+					$location           = mc_get_location( $location_id );
+					$event->location    = $location;
+					$locs[ $object_id ] = $location;
 				} else {
 					$event->location = $locs[ $object_id ];
 				}
@@ -240,8 +240,8 @@ function mc_get_all_events( $args ) {
 		$event->site_id = $site;
 		$object_id      = $event->event_id;
 		if ( ! isset( $fetched[ $object_id ] ) ) {
-			$cats                = mc_get_categories( $event, false );
-			$event->categories   = $cats;
+			$cats                  = mc_get_categories( $event, false );
+			$event->categories     = $cats;
 			$fetched[ $object_id ] = $cats;
 		} else {
 			$event->categories = $fetched[ $object_id ];
@@ -357,6 +357,7 @@ function mc_get_search_results( $search ) {
 			'search'   => $search,
 			'source'   => 'search',
 		);
+
 		$args        = apply_filters( 'mc_search_attributes', $args, $search );
 		$event_array = my_calendar_events( $args );
 	} else {
@@ -646,7 +647,7 @@ function mc_get_related( $id ) {
  * @return boolean
  */
 function mc_is_preview() {
-	if ( isset( $_GET['preview'] ) && 'true' ==  $_GET['preview'] && current_user_can( 'mc_manage_events' ) ) {
+	if ( isset( $_GET['preview'] ) && 'true' == $_GET['preview'] && current_user_can( 'mc_manage_events' ) ) {
 		return true;
 	}
 
@@ -742,7 +743,7 @@ function mc_get_db_type() {
 		$my_calendar = my_calendar_table();
 		$dbs         = $mcdb->get_results( $wpdb->prepare( 'SHOW TABLE STATUS WHERE name=%s', $my_calendar ) );
 		foreach ( $dbs as $db ) {
-			if ( $db->Name == my_calendar_table() ) {
+			if ( my_calendar_table() == $db->Name ) {
 				$db_type = $db->Engine;
 			}
 		}
