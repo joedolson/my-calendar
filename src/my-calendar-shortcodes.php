@@ -7,7 +7,6 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Primary My Calendar shortcode.
  *
- * @param array $atts Shortcode attributes.
+ * @param array  $atts Shortcode attributes.
  * @param string $content Contained content.
  *
  * @return string Calendar.
@@ -40,25 +39,21 @@ function my_calendar_insert( $atts, $content = null ) {
 		'month'    => false,
 		'day'      => false,
 		'site'     => false,
-		'months'   => false
+		'months'   => false,
 	), $atts, 'my_calendar' );
 
-	if ( $args['format'] != 'mini' ) {
+	if ( 'mini' != $args['format'] ) {
 		if ( isset( $_GET['format'] ) ) {
 			$args['format'] = $_GET['format'];
 		}
 	}
 	global $user_ID;
-	if ( $args['author'] == 'current' ) {
+	if ( 'current' == $args['author'] ) {
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'main' );
 	}
-	if ( $args['host'] == 'current' ) {
+	if ( 'current' == $args['host'] ) {
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'main' );
 	}
-
-	/*
-	 $args['name'], $args['format'], $args['category'], $args['time'], $args['ltype'], $args['lvalue'], $args['id'], $args['template'], $args['content'], $args['author'], $args['host'], $args['above'], $args['below'], $args['year'], $args['month'], $args['day'], 'shortcode', $args['site'], $args['months']
-	*/
 
 	return my_calendar( $args );
 }
@@ -87,14 +82,14 @@ function my_calendar_insert_upcoming( $atts ) {
 		'lvalue'     => '',
 		'from'       => false,
 		'to'         => false,
-		'site'       => false
+		'site'       => false,
 	), $atts, 'my_calendar_upcoming' );
 
 	global $user_ID;
-	if ( $args['author'] == 'current' ) {
+	if ( 'current' == $args['author'] ) {
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'upcoming' );
 	}
-	if ( $args['host'] == 'current' ) {
+	if ( 'current' == $args['host'] ) {
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'upcoming' );
 	}
 
@@ -116,14 +111,14 @@ function my_calendar_insert_today( $atts ) {
 		'template' => 'default',
 		'fallback' => '',
 		'date'     => false,
-		'site'     => false
+		'site'     => false,
 	), $atts, 'my_calendar_today' );
 
 	global $user_ID;
-	if ( $args['author'] == 'current' ) {
+	if ( 'current' == $args['author'] ) {
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'today' );
 	}
-	if ( $args['host'] == 'current' ) {
+	if ( 'current' == $args['host'] ) {
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'today' );
 	}
 
@@ -140,7 +135,7 @@ function my_calendar_insert_today( $atts ) {
 function my_calendar_show_locations_list( $atts ) {
 	$args = shortcode_atts( array(
 		'datatype' => 'name',
-		'template' => ''
+		'template' => '',
 	), $atts, 'my_calendar_locations_list' );
 
 	return my_calendar_show_locations( $args['datatype'], $args['template'] );
@@ -155,9 +150,9 @@ function my_calendar_show_locations_list( $atts ) {
  */
 function my_calendar_locations( $atts ) {
 	$args = shortcode_atts( array(
-		'show'     => 'list',
-		'datatype' => 'name',
-		'target_url' => ''
+		'show'       => 'list',
+		'datatype'   => 'name',
+		'target_url' => '',
 	), $atts, 'my_calendar_locations' );
 
 	return my_calendar_locations_list( $args['show'], $args['datatype'], $args['target_url'] );
@@ -173,7 +168,7 @@ function my_calendar_locations( $atts ) {
 function my_calendar_categories( $atts ) {
 	$args = shortcode_atts( array(
 		'show' => 'list',
-		'target_url' => ''
+		'target_url' => '',
 	), $atts, 'my_calendar_categories' );
 
 	return my_calendar_categories_list( $args['show'], 'public', 'single', $args['target_url'] );
@@ -204,9 +199,9 @@ function my_calendar_access( $atts ) {
  */
 function my_calendar_filters( $atts ) {
 	$args = shortcode_atts( array(
-		'show' => 'categories,locations',
+		'show'       => 'categories,locations',
 		'target_url' => '',
-		'ltype' => 'name'
+		'ltype'      => 'name',
 	), $atts, 'my_calendar_filters' );
 
 	return mc_filters( $args['show'], $args['target_url'], $args['ltype'] );
@@ -226,7 +221,7 @@ function my_calendar_show_event( $atts ) {
 		'list'     => '<li>{date}, {time}</li>',
 		'before'   => '<ul>',
 		'after'    => '</ul>',
-		'instance' => false
+		'instance' => false,
 	), $atts, 'my_calendar_event' );
 
 	return mc_instance_list( $args );
@@ -242,7 +237,7 @@ function my_calendar_show_event( $atts ) {
 function my_calendar_search( $atts ) {
 	$args = shortcode_atts( array(
 		'type' => 'simple',
-		'url' => ''
+		'url'  => '',
 	), $atts, 'my_calendar_search' );
 
 	return my_calendar_searchform( $args['type'], $args['url'] );
@@ -259,7 +254,7 @@ function my_calendar_now( $atts ) {
 	$args = shortcode_atts( array(
 		'category' => '',
 		'template' => '<strong>{link_title}</strong> {timerange}',
-		'site'     => false
+		'site'     => false,
 	), $atts, 'my_calendar_now' );
 
 	return my_calendar_events_now( $args['category'], $args['template'], $args['site'] );
