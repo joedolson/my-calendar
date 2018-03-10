@@ -213,7 +213,7 @@ function mc_select_host( $host, $type = 'event' ) {
  * @param mixed string/integer $lvalue {location value}.
  *
  * @return string
-*/
+ */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
 	global $user_ID;
 	$limit_string     = '';
@@ -246,8 +246,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 			default:
 				$location_type = $location;
 		}
-		if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2',
-			) ) ) {
+		if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2' ) ) ) {
 			if ( 'all' != $current_location && '' != $current_location ) {
 				if ( is_numeric( $current_location ) ) {
 					$limit_string = 'AND ' . $location_type . ' = ' . absint( $current_location );

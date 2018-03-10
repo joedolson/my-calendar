@@ -444,7 +444,7 @@ function mc_check_location_table( $event, $locations ) {
 }
 
 /**
- * 	Transition data into custom post types. Don't do this if referencing remote sites.
+ * Transition data into custom post types. Don't do this if referencing remote sites.
  *
  * @since 2.3.0
  */
@@ -630,7 +630,7 @@ function my_calendar_rmdirr( $dirname ) {
  * Backup styles and icons.
  *
  * @param string $process current process.
- * @param array $plugin Current plugin.
+ * @param array  $plugin Current plugin.
  */
 function my_calendar_backup( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
@@ -648,7 +648,7 @@ function my_calendar_backup( $process, $plugin ) {
  * Restore styles and icons.
  *
  * @param string $process current process.
- * @param array $plugin Current plugin.
+ * @param array  $plugin Current plugin.
  */
 function my_calendar_recover( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
