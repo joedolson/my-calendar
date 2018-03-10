@@ -538,31 +538,31 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 		</div>
 	</div>
 	<?php
-	if ( 'on' == $mc_input['event_open'] || $input_all ) { // add a "don't change" option here ?>
-		<div class="ui-sortable meta-box-sortables">
-			<div class="postbox">
-				<h2><?php _e( 'Event Registration Options', 'my-calendar' ); ?></h2>
+	if ( 'on' == $mc_input['event_open'] || $input_all ) { // Add a "don't change" option here. JCD TODO.
+	?>
+	<div class="ui-sortable meta-box-sortables">
+		<div class="postbox">
+			<h2><?php _e( 'Event Registration Options', 'my-calendar' ); ?></h2>
 
-				<div class="inside">
-					<fieldset>
-						<legend><?php _e( 'Event Registration Status', 'my-calendar' ); ?></legend>
-						<?php echo apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ); ?>
-					</fieldset>
-				</div>
+			<div class="inside">
+				<fieldset>
+					<legend><?php _e( 'Event Registration Status', 'my-calendar' ); ?></legend>
+					<?php echo apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ); ?>
+				</fieldset>
 			</div>
 		</div>
+	</div>
 	<?php
 	} else {
 	?>
-		<div>
-			<input type="hidden" name="event_tickets" value="<?php echo ( $has_data ) ? esc_attr( $data->event_tickets ) : ''; ?>"/>
-			<input type="hidden" name="event_registration" value="<?php echo ( $has_data ) ? esc_attr( $data->event_registration ) : ''; ?>"/>
-		</div>
+	<div>
+		<input type="hidden" name="event_tickets" value="<?php echo ( $has_data ) ? esc_attr( $data->event_tickets ) : ''; ?>"/>
+		<input type="hidden" name="event_registration" value="<?php echo ( $has_data ) ? esc_attr( $data->event_registration ) : ''; ?>"/>
+	</div>
 	<?php
 	}
 	if ( ( 'on' == $mc_input['event_location'] || 'on' == $mc_input['event_location_dropdown'] ) || $input_all ) {
 	?>
-
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
 			<h2><?php _e( 'Event Location', 'my-calendar' ); ?></h2>
@@ -575,25 +575,25 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					if ( 'on' == $mc_input['event_location_dropdown'] || $input_all ) {
 						$locations = mc_get_locations( 'group-manager' );
 						if ( ! empty( $locations ) ) {
-					?>
-							<p>
-								<label for="location_preset"><?php _e( 'Choose a preset location:', 'my-calendar' ); ?></label>
-								<select name="location_preset" id="location_preset">
-									<option value="none"> --</option>
-									<?php
-									foreach ( $locations as $location ) {
-										echo '<option value="' . $location->location_id . '">' . esc_html( stripslashes( $location->location_label ) ) . '</option>';
-									}
-									?>
-								</select>
-							</p>
+						?>
+						<p>
+							<label for="location_preset"><?php _e( 'Choose a preset location:', 'my-calendar' ); ?></label>
+							<select name="location_preset" id="location_preset">
+								<option value="none"> --</option>
+								<?php
+								foreach ( $locations as $location ) {
+									echo '<option value="' . $location->location_id . '">' . esc_html( stripslashes( $location->location_label ) ) . '</option>';
+								}
+								?>
+							</select>
+						</p>
 						<?php
 						} else {
 						?>
-							<input type="hidden" name="location_preset" value="none"/>
-							<p>
-								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add recurring locations for later use.', 'my-calendar' ); ?></a>
-							</p>
+						<input type="hidden" name="location_preset" value="none"/>
+						<p>
+							<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add recurring locations for later use.', 'my-calendar' ); ?></a>
+						</p>
 						<?php
 						}
 					} else {
@@ -672,7 +672,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 							}
 							?>
 							</label>
-							<input type="text" id="e_region" name="event_region" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_region ) ) : '';?>" />
+							<input type="text" id="e_region" name="event_region" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_region ) ) : ''; ?>" />
 						</p>
 						<p>
 							<label for="e_country">
@@ -1165,7 +1165,7 @@ function mc_list_groups() {
 	<?php
 	} else {
 	?>
-		<div class="inside"><p><?php _e( "There are no events in the database!", 'my-calendar' ) ?></p></div>
+		<div class="inside"><p><?php _e( 'There are no events in the database!', 'my-calendar' ); ?></p></div>
 	<?php
 	}
 }

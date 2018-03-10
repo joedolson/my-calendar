@@ -633,9 +633,9 @@ function mc_manage_categories() {
 			<td>
 				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"
 				class='edit'>
-				<?php 
+				<?php
 				// Translators: Name of category being edited.
-				printf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' ); 
+				printf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 				?>
 				</a>
 			</td>

@@ -1448,7 +1448,7 @@ function mc_load_permalinks() {
 	}
 	$opts = array( 'label_for' => 'mc_cpt_base' );
 	// Add a settings field to the permalink page.
-	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base' ), 'mc_field_callback', 'permalink', 'optional', $opts	);
+	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base' ), 'mc_field_callback', 'permalink', 'optional', $opts );
 }
 
 /**
@@ -1491,13 +1491,13 @@ function mc_posttypes() {
 				'name'               => $value[3],
 				'singular_name'      => $value[2],
 				'add_new'            => _x( 'Add New', 'Add new event', 'my-calendar' ),
-				'add_new_item'       => sprintf( __( 'Create New %s', 'my-calendar' ), $value[2] ),
-				'edit_item'          => sprintf( __( 'Modify %s', 'my-calendar' ), $value[2] ),
-				'new_item'           => sprintf( __( 'New %s', 'my-calendar' ), $value[2] ),
-				'view_item'          => sprintf( __( 'View %s', 'my-calendar' ), $value[2] ),
-				'search_items'       => sprintf( __( 'Search %s', 'my-calendar' ), $value[3] ),
-				'not_found'          => sprintf( __( 'No %s found', 'my-calendar' ), $value[1] ),
-				'not_found_in_trash' => sprintf( __( 'No %s found in Trash', 'my-calendar' ), $value[1] ),
+				'add_new_item'       => __( 'Create New Event', 'my-calendar' ),
+				'edit_item'          => __( 'Modify Event', 'my-calendar' ),
+				'new_item'           => __( 'New Event', 'my-calendar' ),
+				'view_item'          => __( 'View Event', 'my-calendar' ),
+				'search_items'       => __( 'Search Events', 'my-calendar' ),
+				'not_found'          => __( 'No event found', 'my-calendar' ),
+				'not_found_in_trash' => __( 'No events found in Trash', 'my-calendar' ),
 				'parent_item_colon'  => '',
 			);
 			$raw    = $value[4];

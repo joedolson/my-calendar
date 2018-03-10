@@ -394,7 +394,6 @@ function mc_migrate_db() {
  *
  * @param int    $id event ID.
  * @param string $time New end time.
- *
  */
 function mc_flag_event( $id, $time ) {
 	global $wpdb;
@@ -404,8 +403,6 @@ function mc_flag_event( $id, $time ) {
 	);
 	$formats = array( '%d', '%s' );
 	$result  = $wpdb->update( my_calendar_table(), $data, array( 'event_id' => $id ), $formats, '%d' );
-
-	return;
 }
 
 /**
@@ -551,7 +548,7 @@ function mc_transition_categories() {
 
 		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array(
 			'event_id'    => $event_id,
-			'category_id' => $category
+			'category_id' => $category,
 		), array( '%d', '%d' ) );
 	}
 }
@@ -623,7 +620,7 @@ function my_calendar_rmdirr( $dirname ) {
 		// Recurse.
 		my_calendar_rmdirr( "$dirname/$entry" );
 	}
-	// Clean up
+	// Clean up.
 	$dir->close();
 
 	return @rmdir( $dirname );

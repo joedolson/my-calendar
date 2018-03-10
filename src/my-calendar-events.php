@@ -123,9 +123,9 @@ ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_fi
 			$object_id      = $event->event_id;
 			$location_id    = $event->event_location;
 			if ( ! isset( $cats[ $object_id ] ) ) {
-				$categories          = mc_get_categories( $event, false );
-				$event->categories   = $categories;
-				$cats[ $object_id ]  = $categories;
+				$categories         = mc_get_categories( $event, false );
+				$event->categories  = $categories;
+				$cats[ $object_id ] = $categories;
 			} else {
 				$event->categories = $cats[ $object_id ];
 			}

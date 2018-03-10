@@ -40,8 +40,8 @@ function mc_prepare_search_query( $query ) {
  * Generate WHERE pattern for a given category passed
  *
  * @param mixed  int/string $category Single or list of categories separated by commas using IDs or names.
- * @param string $type context of query.
- * @param string $group context of query.
+ * @param string            $type context of query.
+ * @param string            $group context of query.
  *
  * @return string SQL modifiers.
  */
@@ -139,7 +139,7 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
 		return '';
 	} else {
 		$authors = mc_author_select_ids( $author );
-		if ( count ( $authors ) > 0 ) {
+		if ( count( $authors ) > 0 ) {
 			$auths         = implode( ',', $authors );
 			$select_author = "AND $data IN ($auths)";
 		}
@@ -149,11 +149,11 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
 }
 
 /**
- * Get array of category IDs from passed comma-separated data
+ * Get array of author IDs from passed comma-separated data
  *
- * @param string $category numeric or string-based category tokens.
+ * @param string $author numeric or string-based author tokens.
  *
- * @return array category IDs
+ * @return array author IDs
  */
 function mc_author_select_ids( $author ) {
 	$authors = array();
@@ -209,11 +209,10 @@ function mc_select_host( $host, $type = 'event' ) {
 /**
  * Function to limit event query by location.
  *
- * @param string               $type {deprecated}.
  * @param string               $ltype {location type}.
  * @param mixed string/integer $lvalue {location value}.
  *
- * @return
+ * @return string
 */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
 	global $user_ID;
@@ -244,25 +243,10 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 			case 'region':
 				$location_type = 'event_region';
 				break;
-			default :
+			default:
 				$location_type = $location;
 		}
-		if ( in_array( $location_type, array(
-				'event_label',
-				'event_city',
-				'event_state',
-				'event_postcode',
-				'event_country',
-				'event_region',
-				'event_location',
-				'event_street',
-				'event_street2',
-				'event_url',
-				'event_longitude',
-				'event_latitude',
-				'event_zoom',
-				'event_phone',
-				'event_phone2',
+		if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2',
 			) ) ) {
 			if ( 'all' != $current_location && '' != $current_location ) {
 				if ( is_numeric( $current_location ) ) {
@@ -285,7 +269,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 /**
  * Get events based on accessibility features available
  *
- * @param string type of accessibility feature.
+ * @param string $access type of accessibility feature.
  *
  * @return string limits to add to query
  */
@@ -314,7 +298,7 @@ function mc_select_published() {
 }
 
 /**
- * set up a secondary limit on location
+ * Set up a secondary limit on location
  *
  * @param string $ltype type of limit.
  * @param string $lvalue value.

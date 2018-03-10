@@ -46,6 +46,7 @@ function my_calendar_help() {
 					echo '<li>' . __( 'Add events by clicking on the Add/Edit Events link in the admin or on "Add Events" in the toolbar.', 'my-calendar' ) . '</li>';
 					echo '<li>' . __( 'Select your preferred stylesheet in the Styles Editor', 'my-calendar' ) . '</li>';
 					if ( mc_get_uri( 'boolean' ) ) {
+						// Translators: Calendar URL.
 						echo '<li>' . sprintf( __( 'View <a href="%s">your calendar</a>', 'my-calendar' ), mc_get_uri() ) . '</li>';
 					}
 					?>
@@ -117,6 +118,7 @@ function my_calendar_help() {
 				<div class='mc-support-me'>
 					<p>
 					<?php
+					// Translators: Donate URL, Purchase URL.
 					printf( __( 'Please, consider a <a href="%1$s">donation</a> or a <a href="%2$s">purchase</a> to support My Calendar!', 'my-calendar' ), 'https://www.joedolson.com/donate/', 'https://www.joedolson.com/my-calendar/pro/' );
 					?>
 					</p>

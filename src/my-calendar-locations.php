@@ -32,8 +32,6 @@ function mc_update_location( $field, $data, $location ) {
 
 /**
  * Update settings for how location inputs are limited.
- *
- * @return string update notice.
  */
 function mc_update_location_controls() {
 	if ( isset( $_POST['mc_locations'] ) && 'true' == $_POST['mc_locations'] ) {
@@ -91,7 +89,8 @@ function my_calendar_add_locations() {
 	global $wpdb;
 	?>
 	<div class="wrap my-calendar-admin">
-	<?php my_calendar_check_db();
+	<?php
+	my_calendar_check_db();
 	// We do some checking to see what we're doing.
 	mc_mass_delete_locations();
 	if ( ! empty( $_POST ) && ( ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) ) {
@@ -138,7 +137,7 @@ function my_calendar_add_locations() {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
 	} elseif ( isset( $_POST['location_id'] ) && isset( $_POST['location_label'] ) && 'edit' == $_POST['mode'] ) {
-		$update  = array(
+		$update = array(
 			'location_label'     => $_POST['location_label'],
 			'location_street'    => $_POST['location_street'],
 			'location_street2'   => $_POST['location_street2'],
@@ -181,9 +180,7 @@ function my_calendar_add_locations() {
  * Create location editing form.
  *
  * @param string $view type of view add/edit.
- * @param int $loc_id Location ID.
- *
- * @param string HTML form.
+ * @param int    $loc_id Location ID.
  */
 function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 	$cur_loc = false;
@@ -198,7 +195,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 	} else {
 	?>
 		<h1 class="wp-heading-inline"><?php _e( 'Edit Location', 'my-calendar' ); ?></h1>
-		<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 	<?php
 	}
@@ -211,8 +208,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 					<h2><?php _e( 'Location Editor', 'my-calendar' ); ?></h2>
 
 					<div class="inside location_form">
-						<form id="my-calendar" method="post"
-						      action="<?php echo admin_url( "admin.php?page=my-calendar-locations" ); ?>">
+						<form id="my-calendar" method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>">
 							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 							<?php
 							if ( 'add' == $view ) {
@@ -226,7 +222,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 							?>
 								<div>
 									<input type="hidden" name="mode" value="edit"/>
-									<input type="hidden" name="location_id" value="<?php echo $cur_loc->location_id ?>"/>
+									<input type="hidden" name="location_id" value="<?php echo $cur_loc->location_id; ?>"/>
 								</div>
 							<?php
 							}
@@ -243,7 +239,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 			if ( 'edit' == $view ) {
 			?>
 				<p>
-					<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations" ); ?>"><?php _e( 'Add a New Location', 'my-calendar' ); ?> &raquo;</a>
+					<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add a New Location', 'my-calendar' ); ?> &raquo;</a>
 				</p>
 			<?php
 			}
@@ -261,13 +257,13 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 /**
  * Get details about one location.
  *
- * @param int $location_id Location ID
+ * @param int $location_id Location ID.
  *
  * @return object location
  */
 function mc_get_location( $location_id ) {
 	global $wpdb;
-	$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . " WHERE location_id = %d", $location_id ) );
+	$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) );
 
 	return $location;
 }
@@ -309,10 +305,10 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	$regions  = $options[ 'event_' . $fieldname ];
 	$form     = "<select name='$field' id='e_$fieldname'>";
 	if ( '' == $selected || in_array( $selected, array_map( 'trim', array_keys( $regions ) ) ) ) {
-		$form .= "<option value=''>". __( 'None', 'my-calendar' )."</option>\n";
+		$form .= "<option value=''>" . __( 'None', 'my-calendar' ) . '</option>';
 	} else {
 		if ( is_admin() ) {
-			$form .= "<option value='$selected'>$selected " . __( '(Not a controlled value)', 'my-calendar' ) . "</option>\n";
+			$form .= "<option value='$selected'>$selected " . __( '(Not a controlled value)', 'my-calendar' ) . '</option>';
 		}
 	}
 	foreach ( $regions as $key => $value ) {
@@ -321,7 +317,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 		$aselected = ( $selected == $key ) ? ' selected="selected"' : '';
 		$form     .= "<option value='$key'$aselected>$value</option>\n";
 	}
-	$form .= "</select>";
+	$form .= '</select>';
 
 	return $form;
 }
@@ -345,33 +341,33 @@ function mc_location_controls() {
 		$mc_location_controls = get_option( 'mc_location_controls' );
 
 		$output = $response . '
-		<form method="post" action="' . admin_url( "admin.php?page=my-calendar-locations" ) . '">
+		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '">
 		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
 		<div><input type="hidden" name="mc_locations" value="true" /></div>
 		<fieldset>
 			<legend>' . __( 'Limit Input Options', 'my-calendar' ) . '</legend>
 			<div id="mc-accordion">';
-			foreach ( $location_fields as $field ) {
-				$locations = '';
-				$class     = '';
-				$active    = '';
-				if ( is_array( $mc_location_controls ) && isset( $mc_location_controls[ $field ] ) ) {
-					foreach ( $mc_location_controls[ $field ] as $key => $value ) {
-						$locations .= stripslashes( "$key,$value" ) . "\n";
-					}
+		foreach ( $location_fields as $field ) {
+			$locations = '';
+			$class     = '';
+			$active    = '';
+			if ( is_array( $mc_location_controls ) && isset( $mc_location_controls[ $field ] ) ) {
+				foreach ( $mc_location_controls[ $field ] as $key => $value ) {
+					$locations .= stripslashes( "$key,$value" ) . "\n";
 				}
-				if ( '' != trim( $locations ) ) {
-					$class  = ' class="active-limit"';
-					$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
-				}
-				$output .= '
-				<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span>' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</h4>
-				<div>
-					<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '(' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/>
-					<textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
-				</div>';
 			}
-			$output .= "
+			if ( '' != trim( $locations ) ) {
+				$class  = ' class="active-limit"';
+				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
+			}
+			$output .= '
+			<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span>' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</h4>
+			<div>
+				<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '(' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/>
+				<textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
+			</div>';
+		}
+		$output .= "
 			</div>
 			<p><input type='submit' class='button secondary' value='" . __( 'Save Location Controls', 'my-calendar' ) . "'/></p>
 		</fieldset>
@@ -385,8 +381,8 @@ function mc_location_controls() {
  * Produce the form to submit location data
  *
  * @param boolean $has_data Whether currently have data.
- * @param object $data event or location data.
- * @param string $context whether currently in an event or a location context.
+ * @param object  $data event or location data.
+ * @param string  $context whether currently in an event or a location context.
  *
  * @return string HTML form fields
  */
@@ -395,7 +391,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	if ( current_user_can( 'mc_edit_locations' ) && 'event' == $context ) {
 		$return .= '<p class="checkboxes"><input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location" /> <label for="mc_copy_location">' . __( 'Copy this location into the locations table', 'my-calendar' ) . '</label></p>';
 	}
-	$return .= '
+	$return   .= '
 	<p class="checkbox">
 	<label for="e_label">' . __( 'Name of Location (e.g. <em>Joe\'s Bar and Grill</em>)', 'my-calendar' ) . '</label>';
 	$cur_label = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_label'} ) ) : '';
@@ -406,7 +402,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	}
 	$street_address  = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_street'} ) ) : '';
 	$street_address2 = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_street2'} ) ) : '';
-	$return .= '
+	$return         .= '
 	</p>
 	<div class="locations-container">
 	<div class="location-primary">
@@ -426,36 +422,30 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	} else {
 		$return .= '<input type="text" id="e_city" name="' . $context . '_city" size="40" value="' . esc_attr( $cur_city ) . '" />';
 	}
-	$return .= '</p>
-	<p>';
-	$return .= '<label for="e_state">' . __( 'State/Province', 'my-calendar' ) . '</label> ';
+	$return   .= '</p><p>';
+	$return   .= '<label for="e_state">' . __( 'State/Province', 'my-calendar' ) . '</label> ';
 	$cur_state = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_state'} ) ) : '';
 	if ( mc_controlled_field( 'state' ) ) {
 		$return .= mc_location_controller( 'state', $cur_state, $context );
 	} else {
 		$return .= '<input type="text" id="e_state" name="' . $context . '_state" size="10" value="' . esc_attr( $cur_state ) . '" />';
 	}
-	$return .= '</p>
-	<p>
-		<label for="e_postcode">' . __( 'Postal Code', 'my-calendar' ) . '</label> ';
+	$return      .= '</p><p><label for="e_postcode">' . __( 'Postal Code', 'my-calendar' ) . '</label> ';
 	$cur_postcode = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_postcode'} ) ) : '';
 	if ( mc_controlled_field( 'postcode' ) ) {
 		$return .= mc_location_controller( 'postcode', $cur_postcode, $context );
 	} else {
 		$return .= '<input type="text" id="e_postcode" name="' . $context . '_postcode" size="40" value="' . esc_attr( $cur_postcode ) . '" />';
 	}
-	$return .= '</p>
-	<p>';
-	$return .= '<label for="e_region">' . __( 'Region', 'my-calendar' ) . '</label> ';
+	$return    .= '</p><p>';
+	$return    .= '<label for="e_region">' . __( 'Region', 'my-calendar' ) . '</label> ';
 	$cur_region = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_region'} ) ) : '';
 	if ( mc_controlled_field( 'region' ) ) {
 		$return .= mc_location_controller( 'region', $cur_region, $context );
 	} else {
 		$return .= '<input type="text" id="e_region" name="' . $context . '_region" size="40" value="' . esc_attr( $cur_region ) . '" />';
 	}
-	$return .= '</p>
-	<p>
-	<label for="e_country">' . __( 'Country', 'my-calendar' ) . '</label> ';
+	$return     .= '</p><p><label for="e_country">' . __( 'Country', 'my-calendar' ) . '</label> ';
 	$cur_country = ( $has_data ) ? ( stripslashes( $data->{$context . '_country'} ) ) : '';
 	if ( mc_controlled_field( 'country' ) ) {
 		$return .= mc_location_controller( 'country', $cur_country, $context );
@@ -623,7 +613,7 @@ function mc_location_select( $location = false ) {
 /**
  * Get list of locations (IDs and labels)
  *
- * @param $args array of relevant arguments.
+ * @param array $args array of relevant arguments.
  *
  * @return array locations (IDs and labels only)
  */

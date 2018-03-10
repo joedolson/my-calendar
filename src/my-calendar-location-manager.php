@@ -15,8 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * List of locations to edit.
- *
- * @return string HTML
  */
 function my_calendar_manage_locations() {
 	?>
@@ -33,7 +31,7 @@ function my_calendar_manage_locations() {
 	}
 	?>
 		<h1 class="wp-heading-inline"><?php _e( 'Manage Locations', 'my-calendar' ); ?></h1>
-		<a href="<?php echo admin_url( "admin.php?page=my-calendar-location-manager" ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-location-manager' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
@@ -83,6 +81,7 @@ function mc_mass_delete_locations() {
 		if ( 0 !== $result && false !== $result ) {
 			// Argument: array of event IDs.
 			do_action( 'mc_mass_delete_locations', $deleted );
+			// Translators: Number of locations deleted, number selected.
 			$message = "<div class='updated'><p>" . sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
 		} else {
 			$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ) . '</p></div>';
@@ -93,8 +92,6 @@ function mc_mass_delete_locations() {
 
 /**
  * Generate list of locations.
- *
- * @return string list of locations in a table.
  */
 function mc_manage_locations() {
 	global $wpdb;
@@ -173,12 +170,24 @@ function mc_manage_locations() {
 		<table class="widefat page" id="my-calendar-admin-table">
 			<thead>
 			<tr>
-				<th scope="col"><a href='<?php echo add_query_arg( array( 'paged' => $current, 'orderby' => 'id' ), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'ID', 'my-calendar' ) ?></a></th>
-				<th scope="col"><a href='<?php echo add_query_arg( array( 'paged' => $current, 'orderby' => 'location' ), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'Location', 'my-calendar' ) ?></th>
-				<th scope="col"><a href='<?php echo add_query_arg( array( 'paged' => $current, 'orderby' => 'city' ), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'City', 'my-calendar' ) ?></th>
-				<th scope="col"><a href='<?php echo add_query_arg( array( 'paged' => $current, 'orderby' => 'state' ), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'State/Province', 'my-calendar' ) ?></th>
-				<th scope="col"><?php _e( 'Edit', 'my-calendar' ) ?></th>
-				<th scope="col"><?php _e( 'Delete', 'my-calendar' ) ?></th>
+				<th scope="col"><a href='<?php echo add_query_arg( array(
+					'paged' => $current,
+					'orderby' => 'id',
+				), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'ID', 'my-calendar' ) ?></a></th>
+				<th scope="col"><a href='<?php echo add_query_arg( array(
+					'paged' => $current,
+					'orderby' => 'location',
+				), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'Location', 'my-calendar' ) ?></th>
+				<th scope="col"><a href='<?php echo add_query_arg( array(
+					'paged' => $current,
+					'orderby' => 'city'
+				), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'City', 'my-calendar' ) ?></th>
+				<th scope="col"><a href='<?php echo add_query_arg( array(
+					'paged' => $current,
+					'orderby' => 'state'
+				), admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>'><?php _e( 'State/Province', 'my-calendar' ) ?></th>
+				<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>
+				<th scope="col"><?php _e( 'Delete', 'my-calendar' ); ?></th>
 			</tr>
 			</thead>
 			<?php
