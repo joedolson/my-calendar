@@ -1,16 +1,24 @@
 <?php
-/*
-Plugin Name: My Calendar
-Plugin URI: http://www.joedolson.com/my-calendar/
-Description: Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
-Author: Joseph C Dolson
-Author URI: http://www.joedolson.com
-Text Domain: my-calendar
-Domain Path: lang
-Version: 2.6.0-beta1
+/**
+ * @package     MyCalendar
+ * @author      Joe Dolson
+ * @copyright   2009-2018 Joe Dolson
+ * @license     GPL-2.0+
+ *
+ * @wordpress-plugin
+ * Plugin Name: My Calendar
+ * Plugin URI:  http://www.joedolson.com/my-calendar/
+ * Description: Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
+ * Author:      Joseph C Dolson
+ * Author URI:  http://www.joedolson.com
+ * Text Domain: my-calendar
+ * License:     GPL-2.0+
+ * License URI: http://www.gnu.org/license/gpl-2.0.txt
+ * Domain Path: lang
+ * Version:     2.6.0-beta1
 */
 
-/*  
+/*
 	Copyright 2009-2018  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
@@ -146,13 +154,13 @@ function mc_canonical() {
 	if ( !is_singular() ) {
 		return;
 	}
-	
+
 	$id = get_queried_object_id();
-	
+
 	if ( 0 === $id ) {
 		return;
 	}
-	
+
 	$link = wp_get_canonical_url( $id );
 
 	// End original code.
@@ -178,7 +186,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 		?>
 		<div class="postbox-container jcd-narrow">
 		<div class="metabox-holder">
-		<?php 
+		<?php
 		if ( is_array( $add ) ) {
 			foreach ( $add as $key => $value ) {
 				?>
@@ -195,7 +203,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 			}
 		}
 		if ( ! $remove ) {
-			if ( ! function_exists( 'mcs_submit_exists' ) ) { 
+			if ( ! function_exists( 'mcs_submit_exists' ) ) {
 			?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell support">
@@ -203,9 +211,9 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 
 						<div class="inside resources">
 							<p class="mcbuy">
-							<?php 
+							<?php
 							// Translators: URL for My Calendar Pro.
-							printf( __( "Buy <a href='%s' rel='external'>My Calendar Pro</a> &mdash; a more powerful calendar for your site.", 'my-calendar' ), 'https://www.joedolson.com/my-calendar/pro/' ); 
+							printf( __( "Buy <a href='%s' rel='external'>My Calendar Pro</a> &mdash; a more powerful calendar for your site.", 'my-calendar' ), 'https://www.joedolson.com/my-calendar/pro/' );
 							?>
 							</p>
 						</div>
@@ -221,9 +229,9 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 
 						<div class="inside resources">
 							<p class="mcbuy">
-							<?php 
+							<?php
 							// Translators: URL to view details about My Tickets.
-							printf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) ); 
+							printf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) );
 							?>
 							</p>
 
@@ -264,9 +272,9 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 					</div>
 				</div>
 			</div>
-			<?php 
+			<?php
 			}
-		} 
+		}
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
