@@ -4,6 +4,7 @@
  *
  * @package Sample_Plugin
  */
+
 /**
  * Sample test case.
  */
