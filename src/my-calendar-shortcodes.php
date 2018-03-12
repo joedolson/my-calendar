@@ -197,12 +197,12 @@ function my_calendar_access( $atts ) {
  *
  * @return string filters.
  */
-function my_calendar_filters( $atts ) {
+function My_Calendar_Filters( $atts ) {
 	$args = shortcode_atts( array(
 		'show'       => 'categories,locations',
 		'target_url' => '',
 		'ltype'      => 'name',
-	), $atts, 'my_calendar_filters' );
+	), $atts, 'My_Calendar_Filters' );
 
 	return mc_filters( $args['show'], $args['target_url'], $args['ltype'] );
 }

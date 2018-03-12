@@ -333,7 +333,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$details_label = mc_get_details_label( $event, $data );
 				$details_link  = mc_get_details_link( $event );
 				// Translators: Event title.
-				$aria          = " aria-label='" . sprintf( __( 'Details about %s', 'my-calendar' ), $event_title ) . "'";
+				$aria = " aria-label='" . sprintf( __( 'Details about %s', 'my-calendar' ), $event_title ) . "'";
 				if ( _mc_is_url( $details_link ) ) {
 					$more = "<p class='mc_details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
 				} else {
@@ -443,7 +443,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
  *
  * @param array  $data event tags.
  * @param string $template File name, custom template, etc.
- * @param string $type Type of view. 
+ * @param string $type Type of view.
  *
  * @return string HTML output
  */
@@ -788,6 +788,7 @@ function mc_format_toggle( $format, $toggle, $time ) {
  * @param string $year current year.
  * @param string $current Current date.
  * @param int    $start_of_week Day week starts on.
+ * @param string $from Date started from.
  *
  * @return string HTML output
  */
@@ -826,33 +827,33 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		switch ( $time ) {
 			case 'week':
 				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
-				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . "</a>";
+				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . '</span>';
 				$url     = mc_build_url( array( 'time' => 'day', 'dy' => $day ), array( 'dy', 'mc_id' ) );
-				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . "</a>";
+				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
 				break;
 			case 'day':
 				$url     = mc_build_url( array( 'time' => 'month' ), array() );
-				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . "</a>";
+				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$url     = mc_build_url( array(
 					'time'  => 'week',
 					'dy'    => $day,
 					'month' => $wmonth,
 					'yr'    => $year,
 				), array( 'dy', 'month', 'mc_id' ) );
-				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . "</a>";
+				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active day'>" . __( 'Day', 'my-calendar' ) . '</span>';
 				break;
 			default:
 				$toggle .= "<span class='mc-active month'>" . __( 'Month', 'my-calendar' ) . '</span>';
-				$url     = mc_build_url( array( 
-					'time'  => 'week', 
+				$url     = mc_build_url( array(
+					'time'  => 'week',
 					'dy'    => $day,
 					'month' => $wmonth,
 				), array( 'dy', 'month', 'mc_id' ) );
-				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . "</a>";
+				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$url     = mc_build_url( array( 'time' => 'day' ), array() );
-				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . "</a>";
+				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
 				break;
 		}
 		$toggle .= '</div>';
@@ -886,8 +887,8 @@ function mc_date_array( $timestamp, $period ) {
 			if ( $sub == $start_of_week ) {
 				$from = date( 'Y-m-d', $timestamp );
 			} else {
-				$start   = strtotime( "-$n days", $timestamp );
-				$from    = date( 'Y-m-d', $start );
+				$start = strtotime( "-$n days", $timestamp );
+				$from  = date( 'Y-m-d', $start );
 			}
 			$endtime = mktime( 0, 0, 0, date( 'm', $timestamp ), date( 't', $timestamp ), date( 'Y', $timestamp ) );
 
@@ -900,9 +901,9 @@ function mc_date_array( $timestamp, $period ) {
 			}
 			$to = date( 'Y-m-d', strtotime( "+$n days", $endtime ) );
 
-			$return = array( 
-				'from' => $from, 
-				'to' => $to,
+			$return = array(
+				'from' => $from,
+				'to'   => $to,
 			);
 			break;
 		case 'week':
@@ -910,9 +911,9 @@ function mc_date_array( $timestamp, $period ) {
 			$from = date( 'Y-m-d', $timestamp );
 			$to   = date( 'Y-m-d', strtotime( '+6 days', $timestamp ) );
 
-			$return = array( 
+			$return = array(
 				'from' => $from,
-				'to' => $to,
+				'to'   => $to,
 			);
 			break;
 		default:
@@ -925,13 +926,14 @@ function mc_date_array( $timestamp, $period ) {
 /**
  * Create list of classes for a given date.
  *
- * @param array $events array of event objects.
- * @param mixed string/boolean current date if a date is being processed.
+ * @param array                $events array of event objects.
+ * @param mixed string/boolean $date current date if a date is being processed.
  *
  * @return string of classes
  */
 function mc_events_class( $events, $date = false ) {
-	$class = $events_class = '';
+	$class        = '';
+	$events_class = '';
 	if ( ! is_array( $events ) || ! count( $events ) ) {
 		$events_class = 'no-events';
 	} else {
@@ -1268,7 +1270,7 @@ function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
 	$count   = count( $results );
 	$output  = '';
 	$classes = '';
-	// If a large number of events, skip this;
+	// If a large number of events, skip this.
 	if ( $count > apply_filters( 'mc_related_event_limit', 50 ) ) {
 		// filter to return an subset of related events.
 		return apply_filters( 'mc_related_events', '', $results );
@@ -1283,7 +1285,7 @@ function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
 
 			$event = mc_get_first_event( $event_id );
 			if ( is_object( $event ) ) {
-				$array    = mc_create_tags( $event, 'related' );
+				$array = mc_create_tags( $event, 'related' );
 				if ( mc_key_exists( $template ) ) {
 					$template = mc_get_custom_template( $template );
 				}
@@ -1380,7 +1382,7 @@ function mc_calendar_params( $args ) {
 		$category = 'all';
 	}
 
-	if ( isset( $_GET['format'] ) && in_array( $_GET['format'], array( 'list', 'mini' ) ) && $format != 'mini' ) {
+	if ( isset( $_GET['format'] ) && in_array( $_GET['format'], array( 'list', 'mini' ) ) && 'mini' != $format ) {
 		$format = esc_attr( $_GET['format'] );
 	} else {
 		$format = esc_attr( $format );
@@ -1411,7 +1413,7 @@ function mc_calendar_params( $args ) {
 		'host'     => $host,
 		'syear'    => $syear,
 		'smonth'   => $smonth,
-		'sday'     => $sday
+		'sday'     => $sday,
 	);
 
 	// Hash cannot include 'time', 'category', or 'format', since those can be changed by navigation.
@@ -1468,30 +1470,29 @@ function my_calendar( $args ) {
 	$params = mc_calendar_params( $args );
 	$body   = apply_filters( 'mc_before_calendar', '', $params );
 
-	$id          = $params['id'];
-	$main_class  = ( $id != '' ) ? sanitize_title( $id ) : 'all';
-	$cid         = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
-
-	$mc_wrapper  = "
+	$id         = $params['id'];
+	$main_class = ( $id != '' ) ? sanitize_title( $id ) : 'all';
+	$cid        = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
+	$mc_wrapper = "
 <div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $params[format] $params[time] $main_class\" aria-live='assertive' aria-atomic='true' aria-relevant='additions'>";
-	$mc_closer   = "
+	$mc_closer  = "
 </div>";
 
 	$date_format = apply_filters( 'mc_date_format', $date_format, $params['format'], $params['time'] );
 
-	if ( isset( $_GET['mc_id'] ) && $source != 'widget' ) {
+	if ( isset( $_GET['mc_id'] ) && 'widget' != $source ) {
 		// single event, main calendar only.
 		$mc_id = ( is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 		if ( $mc_id ) {
 			$body .= mc_get_event( $mc_id, 'html' );
 		}
 	} else {
-		$end_of_week   = ( $start_of_week == 1 ) ? 7 : 6;
+		$end_of_week   = ( 1 == $start_of_week ) ? 7 : 6;
 		$start_of_week = ( $show_weekends ) ? $start_of_week : 1;
 		$name_days     = mc_name_days( $params['format'] );
 		$abbrevs       = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
 
-		if ( $start_of_week == 1 ) {
+		if ( 1 == $start_of_week ) {
 			$first       = array_shift( $name_days );
 			$afirst      = array_shift( $abbrevs );
 			$name_days[] = $first;
@@ -1519,7 +1520,7 @@ function my_calendar( $args ) {
 			'host'     => $params['host'],
 			'search'   => '',
 			'source'   => 'calendar',
-			'site'     => $site
+			'site'     => $site,
 		);
 		$query       = apply_filters( 'mc_calendar_attributes', $query, $params );
 		$event_array = my_calendar_events( $query );
@@ -1529,10 +1530,10 @@ function my_calendar( $args ) {
 		$top    = $nav['top'];
 		$bottom = $nav['bottom'];
 
-		if ( $params['time'] == 'day' ) {
+		if ( 'day' == $params['time'] ) {
 			$body .= "<div class='mcjs " . esc_attr( $params['format'] . ' ' . $params['time'] ) . "'>" . $top;
-			$from              = date( 'Y-m-d', $current );
-			$to                = date( 'Y-m-d', $current );
+			$from  = date( 'Y-m-d', $current );
+			$to    = date( 'Y-m-d', $current );
 
 			$query = array(
 				'from'     => $from,
@@ -1544,7 +1545,7 @@ function my_calendar( $args ) {
 				'host'     => $params['host'],
 				'search'   => '',
 				'source'   => 'calendar',
-				'site'     => $site
+				'site'     => $site,
 			);
 			$query  = apply_filters( 'mc_grab_events_attributes', $query, $params );
 			$events = my_calendar_get_events( $query );
@@ -1553,7 +1554,7 @@ function my_calendar( $args ) {
 			} else {
 				$query['category'] = $skip_holidays;
 				$query['holidays'] = 'holidays';
-				$holidays = my_calendar_get_events( $query );
+				$holidays          = my_calendar_get_events( $query );
 			}
 
 			$events_class = mc_events_class( $events, $from );
@@ -1577,7 +1578,7 @@ function my_calendar( $args ) {
 				<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
 			</div>";
 		} else {
-			// if showing multiple months, figure out how far we're going.
+			// If showing multiple months, figure out how far we're going.
 			$months       = ( $params['time'] == 'week' ) ? 1 : $show_months;
 			$through_date = mktime( 0, 0, 0, $date['month'] + ( $months - 1 ), $date['day'], $date['year'] );
 			if ( $params['time'] == 'month+1' ) {

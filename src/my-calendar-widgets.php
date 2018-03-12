@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class My_Calendar_Simple_Search extends WP_Widget {
 	function __construct() {
-		parent::__construct( 
+		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Simple Event Search', 'my-calendar' ),
 			array( 'customize_selective_refresh' => true )
@@ -26,7 +26,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	 * Build the My Calendar Event Search widget output.
 	 *
 	 * @param array $args Widget arguments.
-	 * @param array $instance This instance settings. 
+	 * @param array $instance This instance settings.
 	 *
 	 * @return string Widget output.
 	 */
@@ -61,7 +61,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 		</p>
 	<?php
 	}
-	
+
 	/**
 	 * Update the My Calendar Search Widget settings.
 	 *
@@ -93,7 +93,7 @@ class My_Calendar_Filters extends WP_Widget {
 	 * Build the My Calendar Event filters widget output.
 	 *
 	 * @param array $args Widget arguments.
-	 * @param array $instance This instance settings. 
+	 * @param array $instance This instance settings.
 	 *
 	 * @return string Widget output.
 	 */
@@ -117,7 +117,7 @@ class My_Calendar_Filters extends WP_Widget {
 	 * Edit the filters widget.
 	 *
 	 * @param array $instance Current widget settings.
-	 */	
+	 */
 	function form( $instance ) {
 		$widget_title = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : mc_get_uri();
@@ -183,10 +183,10 @@ class My_Calendar_Filters extends WP_Widget {
 class My_Calendar_Today_Widget extends WP_Widget {
 
 	function __construct() {
-		parent::__construct( 
-			false, 
-			$name = __( 'My Calendar: Today\'s Events', 'my-calendar' ), 
-			array( 'customize_selective_refresh' => true ) 
+		parent::__construct(
+			false,
+			$name = __( 'My Calendar: Today\'s Events', 'my-calendar' ),
+			array( 'customize_selective_refresh' => true )
 		);
 	}
 
@@ -194,7 +194,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	 * Build the My Calendar Today's Events widget output.
 	 *
 	 * @param array $args Widget arguments.
-	 * @param array $instance This instance settings. 
+	 * @param array $instance This instance settings.
 	 *
 	 * @return string Widget output.
 	 */
@@ -242,7 +242,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	 * Edit the today's events widget.
 	 *
 	 * @param array $instance Current widget settings.
-	 */	
+	 */
 	function form( $instance ) {
 		$defaults        = mc_widget_defaults();
 		$widget_title    = ( isset( $instance['my_calendar_today_title'] ) ) ? esc_attr( $instance['my_calendar_today_title'] ) : '';
@@ -335,10 +335,10 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 * Build the My Calendar Upcoming Events widget output.
 	 *
 	 * @param array $args Widget arguments.
-	 * @param array $instance This instance settings. 
+	 * @param array $instance This instance settings.
 	 *
 	 * @return string Widget output.
-	 */	
+	 */
 	function widget( $args, $instance ) {
 		extract( $args );
 		$the_title      = apply_filters( 'widget_title', $instance['my_calendar_upcoming_title'], $instance, $args );
@@ -477,8 +477,8 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 				<option value="custom" <?php echo ( $type == 'custom' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Custom Dates', 'my-calendar' ) ?></option>
 			</select>
 		</p>
-		<?php 
-		if ( 'custom' == $type ) { 
+		<?php
+		if ( 'custom' == $type ) {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mc_from' ); ?>"><?php _e( 'Start date', 'my-calendar' ); ?>:</label>
@@ -488,8 +488,8 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'mc_to' ); ?>"><?php _e( 'End date', 'my-calendar' ); ?>:</label>
 			<input type="text" id="<?php echo $this->get_field_id( 'mc_to' ); ?>" name="<?php echo $this->get_field_name( 'mc_to' ); ?>" value="<?php echo $to; ?>"/>
 		</p>
-		<?php 
-		} 
+		<?php
+		}
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_skip' ); ?>"><?php _e( 'Skip the first <em>n</em> events', 'my-calendar' ); ?></label>
@@ -502,16 +502,16 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 				<option value="desc" <?php echo ( 'desc' == $order ) ? 'selected="selected"' : ''; ?>><?php _e( 'Descending (far to near)', 'my-calendar' ) ?></option>
 			</select>
 		</p>
-		<?php 
-		if ( ! ( 'month' == $type || 'month+1' == $type || 'year' == $type ) ) { 
+		<?php
+		if ( ! ( 'month' == $type || 'month+1' == $type || 'year' == $type ) ) {
 		?>
 			<p>
-				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_after' ); ?>" value="<?php echo $after; ?>" size="1" maxlength="3"/> 
+				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_after' ); ?>" value="<?php echo $after; ?>" size="1" maxlength="3"/>
 				<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>"><?php printf( __( "%s into the future;", 'my-calendar' ), $type ); ?></label><br/>
 				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_before' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_before' ); ?>" value="<?php echo $before; ?>" size="1" maxlength="3"/> <label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_before' ); ?>"><?php printf( __( "%s from the past", 'my-calendar' ), $type ); ?></label>
 			</p>
-		<?php 
-		} 
+		<?php
+		}
 		?>
 		<p>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_show_today' ); ?>" value="yes"<?php echo ( 'yes' == $show_today ) ? ' checked="checked"' : ''; ?> />
@@ -551,7 +551,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</p>
 	<?php
 	}
-	
+
 	/**
 	 * Update the My Calendar Upcoming Widget settings.
 	 *
@@ -1152,7 +1152,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	 * Build the My Calendar Mini calendar widget output.
 	 *
 	 * @param array $args Widget arguments.
-	 * @param array $instance This instance settings. 
+	 * @param array $instance This instance settings.
 	 *
 	 * @return string Widget output.
 	 */
@@ -1173,7 +1173,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			$months      = ( ! isset( $instance['months'] ) || '' == $instance['months'] ) ? false : $instance['months'];
 		} else {
 			$the_title   = '';
-			$category    = ''; 
+			$category    = '';
 			$time        = '';
 			$widget_link = '';
 			$above       = '';
@@ -1182,7 +1182,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			$author      = '';
 			$ltype       = '';
 			$lvalue      = '';
-			$site        = ''; 
+			$site        = '';
 			$months      = '';
 		}
 
@@ -1325,7 +1325,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		</p>
 	<?php
 	}
-	
+
 	/**
 	 * Update the My Calendar Mini Widget settings.
 	 *
