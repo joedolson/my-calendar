@@ -1088,7 +1088,7 @@ function my_calendar_todays_events( $args ) {
 	$today         = ( isset( $events[ $from ] ) ) ? $events[ $from ] : false;
 	$header        = "<ul id='todays-events-$hash' class='todays-events'>";
 	$footer        = '</ul>';
-	$groups        = array;
+	$groups        = array();
 	$todays_events = array();
 	// quick loop through all events today to check for holidays
 	if ( is_array( $today ) ) {

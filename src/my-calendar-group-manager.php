@@ -371,12 +371,11 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 				$apply = mc_group_form( $group_id, 'apply' );
 				echo $apply;
 				if ( 0 == $data->event_repeats && ( 'S1' == $data->event_recur || 'S' == $data->event_recur ) ) {
+					$span_checked = '';
 					if ( ! empty( $data ) && 1 == $data->event_span ) {
 						$span_checked = ' checked="checked"';
 					} elseif ( ! empty( $data ) && 0 == $data->event_span ) {
 						$span_checked = '';
-					} elseif ( 'true' == get_option( 'mc_event_span' ) ) {
-						$span_checked = ' checked="checked"';
 					}
 					?>
 					<p>

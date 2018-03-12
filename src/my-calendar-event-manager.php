@@ -1390,12 +1390,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					</div>
 					<?php
 					if ( 'edit' != $mode ) {
+						$span_checked = '';
 						if ( $has_data && '1' == $data->event_span ) {
 							$span_checked = ' checked="checked"';
 						} elseif ( $has_data && '0' == $data->event_span ) {
 							$span_checked = '';
-						} elseif ( 'true' == get_option( 'mc_event_span' ) ) {
-							$span_checked = ' checked="checked"';
 						}
 					?>
 					<p id="event_span">

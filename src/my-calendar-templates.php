@@ -198,7 +198,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		}
 	} else {
 		$url        = $event->location_url;
-		$map_label  = strip_tags( stripslashes( ( '' == $event->location_label ) ? $event->location_label : $event->event_title ), mc_strip_tags() );
+		$map_label  = strip_tags( stripslashes( ( '' != $event->location_label ) ? $event->location_label : '' ), mc_strip_tags() );
 		$zoom       = ( 0 != $event->location_zoom ) ? $event->location_zoom : '15';
 		$map_string = str_replace( ' ', '+', $map_string );
 		if ( '0.000000' != $event->location_longitude && '0.000000' != $event->location_latitude ) {
