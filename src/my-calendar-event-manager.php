@@ -2830,7 +2830,7 @@ function mc_instance_list( $args ) {
 
 	}
 
-	return ( 'true' == get_option( 'mc_process_shortcodes' ) ) ? do_shortcode( $output ) : $output;
+	return mc_run_shortcodes( $output );
 }
 
 /**

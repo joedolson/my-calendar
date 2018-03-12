@@ -75,7 +75,7 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 								$value = date_i18n( stripslashes( $format ), strtotime( stripslashes( $value ) ) );
 							}
 							$value    = ( '' == $value ) ? '' : $before . $value . $after;
-							$search   = $matches[0][$i];
+							$search   = $matches[0][ $i ];
 							$template = str_replace( $search, $value, $template );
 							$value    = $orig;
 						}
@@ -287,7 +287,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( 'true' == $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 		$hcard .= ( '' != $label ) ? '<strong class="org" itemprop="name">' . $link . '</strong><br />' : '';
-		$hcard .= ( $street . $street2 . $city . $state . $zip . $country . $phone == '' ) ? '' : "<div class='sub-address'>";
+		$hcard .= ( '' == $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' != $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
 		$hcard .= ( '' != $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
 		$hcard .= ( '' != $city . $state . $zip ) ? '<div>' : '';
@@ -358,7 +358,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$date_end          = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
 	$date_arr          = array(
 		'occur_begin' => $real_begin_date,
-		'occur_end' => $real_end_date,
+		'occur_end'   => $real_end_date,
 	);
 	$date_obj          = (object) $date_arr;
 	if ( 1 == $event->event_span ) {
@@ -642,7 +642,10 @@ function mc_get_details_label( $event, $e ) {
 	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Read more', 'my-calendar' );
 	$e_label    = wp_kses( mc_draw_template( $e, $e_template ), array(
 		'span' => array(
-			'class' => array( 'screen-reader-text' ) ),
+			'class' => array(
+				'screen-reader-text',
+			),
+		),
 		'em',
 		'strong',
 	) );
@@ -782,7 +785,7 @@ function mc_event_expired( $event ) {
  * @return string HTML
  */
 function mc_generate_map( $event, $source = 'event' ) {
-	if ( !is_object( $event ) ) {
+	if ( ! is_object( $event ) ) {
 		return '';
 	}
 	$api_key = get_option( 'mc_gmap_api_key' );
@@ -803,7 +806,7 @@ function mc_generate_map( $event, $source = 'event' ) {
 			$latlng = false;
 		}
 
-		if ( strlen( $address ) < 10 && !$latlng ) {
+		if ( strlen( $address ) < 10 && ! $latlng ) {
 			return '';
 		}
 		$hcard    = mc_hcard( $event, true, false, $source );
@@ -955,7 +958,7 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 			$eformat       = ( $day_begin != $day_end ) ? get_option( 'mc_date_format' ) . $endtimeformat : $endtimeformat;
 			$span          = ( '' != $eformat ) ? " <span>&ndash;</span> <span class='multidate-end'>" : '';
 			$endspan       = ( '' != $eformat ) ? '</span>' : '';
-			$return .= "<li>$bformat" . $span . date_i18n( $eformat, strtotime( $end ) ) . "$endspan</li>";
+			$return       .= "<li>$bformat" . $span . date_i18n( $eformat, strtotime( $end ) ) . "$endspan</li>";
 		}
 		$return .= '</ul>';
 	}
@@ -1006,15 +1009,15 @@ add_filter( 'mc_filter_shortcodes', 'mc_auto_excerpt', 10, 2 );
 /**
  * Custom excerpt for use in templates.
  *
- * @param array $e Array of event details.
+ * @param array  $e Array of event details.
  * @param object $event Event object.
  *
  * @return array $e
  */
 function mc_auto_excerpt( $e, $event ) {
-	$description  = $e['description'];
-	$shortdesc    = $e['shortdesc'];
-	$excerpt      = '';
+	$description = $e['description'];
+	$shortdesc   = $e['shortdesc'];
+	$excerpt     = '';
 	if ( '' != $description && '' == $shortdesc ) { // if description is empty, this won't work, so skip it.
 		$num_words    = apply_filters( 'mc_excerpt_length', 55 );
 		$excerpt      = wp_trim_words( $description, $num_words );
@@ -1037,7 +1040,7 @@ add_filter( 'mc_filter_image_data', 'mc_image_data', 10, 2 );
  * @return array $e
  */
 function mc_image_data( $e, $event ) {
-	$atts      = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image' ) );
+	$atts = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image' ) );
 	if ( isset( $event->event_post ) && is_numeric( $event->event_post ) && get_post_status( $event->event_post ) && has_post_thumbnail( $event->event_post ) ) {
 		$e['full'] = get_the_post_thumbnail( $event->event_post );
 		$sizes     = get_intermediate_image_sizes();
@@ -1051,9 +1054,9 @@ function mc_image_data( $e, $event ) {
 			$e['image_url'] = strip_tags( $e['large'] );
 			$e['image']     = $e['large'];
 		} else {
-			$image_size = apply_filters( 'mc_default_image_size', 'thumbnail' );
-			$e['image_url'] = strip_tags( $e[$image_size] );
-			$e['image']     = $e[$image_size];
+			$image_size     = apply_filters( 'mc_default_image_size', 'thumbnail' );
+			$e['image_url'] = strip_tags( $e[ $image_size ] );
+			$e['image']     = $e[ $image_size ];
 		}
 	} else {
 		$sizes     = get_intermediate_image_sizes();
@@ -1080,7 +1083,7 @@ function mc_image_data( $e, $event ) {
 function mc_event_recur_string( $event, $begin ) {
 	$recurs      = str_split( $event->event_recur, 1 );
 	$recur       = $recurs[0];
-	$every    = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
+	$every       = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
 	$month_date  = date( 'dS', strtotime( $begin ) );
 	$day_name    = date_i18n( 'l', strtotime( $begin ) );
 	$week_number = mc_ordinal( week_of_month( date( 'j', strtotime( $begin ) ) ) + 1 );
@@ -1089,7 +1092,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = __( 'Does not recur', 'my-calendar' );
 			break;
 		case 'D':
-			if ( $every == 1 ) {
+			if ( 1 == $every ) {
 				$event_recur = __( 'Daily', 'my-calendar' );
 			} else {
 				// Translators: Number of days between recurrences.
@@ -1100,7 +1103,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = __( 'Daily, weekdays only', 'my-calendar' );
 			break;
 		case 'W':
-			if ( $every == 1 ) {
+			if ( 1 == $every ) {
 				$event_recur = __( 'Weekly', 'my-calendar' );
 			} else {
 				// Translators: Number of weeks between recurrences.
@@ -1111,7 +1114,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = __( 'Bi-weekly', 'my-calendar' );
 			break;
 		case 'M':
-			if ( $every == 1 ) {
+			if ( 1 == $every ) {
 				// Translators: The ordinal number of the month for the recurrence.
 				$event_recur = sprintf( __( 'the %s of each month', 'my-calendar' ), $month_date );
 			} else {
@@ -1124,7 +1127,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = sprintf( __( 'the %1$s %2$s of each month', 'my-calendar' ), $week_number, $day_name );
 			break;
 		case 'Y':
-			if ( $every == 1 ) {
+			if ( 1 == $every ) {
 				$event_recur = __( 'Annually', 'my-calendar' );
 			} else {
 				// Translators: Number of years.

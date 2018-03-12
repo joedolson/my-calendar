@@ -167,7 +167,7 @@ function my_calendar_locations( $atts ) {
  */
 function my_calendar_categories( $atts ) {
 	$args = shortcode_atts( array(
-		'show' => 'list',
+		'show'       => 'list',
 		'target_url' => '',
 	), $atts, 'my_calendar_categories' );
 
@@ -184,7 +184,7 @@ function my_calendar_categories( $atts ) {
 function my_calendar_access( $atts ) {
 	$args = shortcode_atts( array(
 		'show'       => 'list',
-		'target_url' => ''
+		'target_url' => '',
 	), $atts, 'my_calendar_access' );
 
 	return mc_access_list( $args['show'], 'single', $args['target_url'] );
@@ -197,12 +197,12 @@ function my_calendar_access( $atts ) {
  *
  * @return string filters.
  */
-function My_Calendar_Filters( $atts ) {
+function my_calendar_filters( $atts ) {
 	$args = shortcode_atts( array(
 		'show'       => 'categories,locations',
 		'target_url' => '',
 		'ltype'      => 'name',
-	), $atts, 'My_Calendar_Filters' );
+	), $atts, 'my_calendar_filters' );
 
 	return mc_filters( $args['show'], $args['target_url'], $args['ltype'] );
 }

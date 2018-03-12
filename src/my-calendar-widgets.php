@@ -27,14 +27,12 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	 *
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
-	 *
-	 * @return string Widget output.
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
 		$widget_title = apply_filters( 'widget_title', $instance['title'], $instance, $args );
 		$widget_title = ( '' != $widget_title ) ? $before_title . $widget_title . $after_title : '';
-		$widget_url = ( isset( $instance['url'] ) ) ? $instance['url'] : false;
+		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : false;
 		echo $before_widget;
 		echo ( '' != $instance['title'] ) ? $widget_title : '';
 
@@ -70,8 +68,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	 *
 	 * @return $instance Updated instance.
 	 */
-	function update( $new, $old ) {
-		$instance          = $old;
+	function update( $new, $instance ) {
 		$instance['title'] = mc_kses_post( $new['title'] );
 		$instance['url']   = esc_url_raw( $new['url'] );
 
@@ -94,8 +91,6 @@ class My_Calendar_Filters extends WP_Widget {
 	 *
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
-	 *
-	 * @return string Widget output.
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
@@ -150,12 +145,12 @@ class My_Calendar_Filters extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'ltype' ); ?>"><?php _e( 'Filter locations by', 'my-calendar' ); ?></label>
 			<select id="<?php echo $this->get_field_id( 'ltype' ); ?>" name="<?php echo $this->get_field_name( 'ltype' ); ?>">
-				<option value="name" <?php selected( $ltype, 'name' ); ?>><?php _e( 'Location Name', 'my-calendar' ) ?></option>
-				<option value="state" <?php selected( $ltype, 'state' ); ?>><?php _e( 'State/Province', 'my-calendar' ) ?></option>
-				<option value="city" <?php selected( $ltype, 'city' ); ?>><?php _e( 'City', 'my-calendar' ) ?></option>
-				<option value="region" <?php selected( $ltype, 'region' ); ?>><?php _e( 'Region', 'my-calendar' ) ?></option>
-				<option value="zip" <?php selected( $ltype, 'zip' ); ?>><?php _e( 'Postal Code', 'my-calendar' ) ?></option>
-				<option value="country" <?php selected( $ltype, 'country' ); ?>><?php _e( 'Country', 'my-calendar' ) ?></option>
+				<option value="name" <?php selected( $ltype, 'name' ); ?>><?php _e( 'Location Name', 'my-calendar' ); ?></option>
+				<option value="state" <?php selected( $ltype, 'state' ); ?>><?php _e( 'State/Province', 'my-calendar' ); ?></option>
+				<option value="city" <?php selected( $ltype, 'city' ); ?>><?php _e( 'City', 'my-calendar' ); ?></option>
+				<option value="region" <?php selected( $ltype, 'region' ); ?>><?php _e( 'Region', 'my-calendar' ); ?></option>
+				<option value="zip" <?php selected( $ltype, 'zip' ); ?>><?php _e( 'Postal Code', 'my-calendar' ); ?></option>
+				<option value="country" <?php selected( $ltype, 'country' ); ?>><?php _e( 'Country', 'my-calendar' ); ?></option>
 			</select>
 		</p>
 	<?php
@@ -169,8 +164,7 @@ class My_Calendar_Filters extends WP_Widget {
 	 *
 	 * @return $instance Updated instance.
 	 */
-	function update( $new, $old ) {
-		$instance          = $old;
+	function update( $new, $instance ) {
 		$instance['title'] = mc_kses_post( $new['title'] );
 		$instance['url']   = esc_url_raw( $new['url'] );
 		$instance['ltype'] = sanitize_title( $new['ltype'] );
@@ -204,7 +198,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$the_template   = $instance['my_calendar_today_template'];
 		$the_substitute = $instance['my_calendar_no_events_text'];
 		$the_category   = ( '' == $instance['my_calendar_today_category'] ) ? 'default' : esc_attr( $instance['my_calendar_today_category'] );
-		$author         = ( ! isset( $instance['my_calendar_today_author'] ) || $instance['my_calendar_today_author'] == '' ) ? 'all' : esc_attr( $instance['my_calendar_today_author'] );
+		$author         = ( ! isset( $instance['my_calendar_today_author'] ) || '' == $instance['my_calendar_today_author'] ) ? 'all' : esc_attr( $instance['my_calendar_today_author'] );
 		$host           = ( ! isset( $instance['mc_host'] ) || '' == $instance['mc_host'] ) ? 'all' : esc_attr( $instance['mc_host'] );
 		$default_link   = mc_get_uri( false, $args );
 		$widget_link    = ( ! empty( $instance['my_calendar_today_linked'] ) && 'yes' == $instance['my_calendar_today_linked'] ) ? $default_link : '';
@@ -318,8 +312,8 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	 *
 	 * @return $instance Updated instance.
 	 */
-	function update( $new, $old ) {
-		$instance = array_map( 'mc_kses_post', array_merge( $old, $new ) );
+	function update( $new, $instance ) {
+		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
 
 		return $instance;
 	}
@@ -336,8 +330,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 *
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
-	 *
-	 * @return string Widget output.
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
@@ -560,8 +552,8 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 *
 	 * @return $instance Updated instance.
 	 */
-	function update( $new, $old ) {
-		$instance = array_map( 'mc_kses_post', array_merge( $old, $new ) );
+	function update( $new, $instance ) {
+		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
 		if ( ! isset( $new['my_calendar_upcoming_show_today'] ) ) {
 			$instance['my_calendar_upcoming_show_today'] = 'no';
 		}
@@ -595,7 +587,6 @@ function my_calendar_upcoming_events( $args ) {
 	$to         = ( isset( $args['to'] ) ) ? $args['to'] : '';
 	$site       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 
-	$do_shortcodes = get_option( 'mc_process_shortcodes' );
 	if ( $site ) {
 		$site = ( 'global' == $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
@@ -607,11 +598,11 @@ function my_calendar_upcoming_events( $args ) {
 	$display_type = ( 'default' == $type ) ? $defaults['upcoming']['type'] : $type;
 	$display_type = ( '' == $display_type ) ? 'events' : $display_type;
 
-	// Get number of units we should go into the future
+	// Get number of units we should go into the future.
 	$after = ( 'default' == $after ) ? $defaults['upcoming']['after'] : $after;
 	$after = ( ''== $after ) ? 10 : $after;
 
-	// Get number of units we should go into the past
+	// Get number of units we should go into the past.
 	$before   = ( 'default' == $before ) ? $defaults['upcoming']['before'] : $before;
 	$before   = ( '' == $before ) ? 0 : $before;
 	$category = ( 'default' == $category ) ? '' : $category;
@@ -794,7 +785,7 @@ function my_calendar_upcoming_events( $args ) {
 	}
 	if ( '' != $output ) {
 		$output = apply_filters( 'mc_upcoming_events_header', $header ) . $output . apply_filters( 'mc_upcoming_events_footer', $footer );
-		$return = ( 'true' == $do_shortcodes ) ? do_shortcode( $output ) : $output;
+		$return = mc_run_shortcodes( $output );
 	} else {
 		$return = stripcslashes( $no_event_text );
 	}
@@ -1136,7 +1127,7 @@ function my_calendar_todays_events( $args ) {
 		restore_current_blog();
 	}
 
-	return ( 'true' == get_option( 'mc_process_shortcodes' ) ) ? do_shortcode( $return ) : $return;
+	return mc_run_shortcodes( $return )
 }
 
 /**
@@ -1153,8 +1144,6 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	 *
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
-	 *
-	 * @return string Widget output.
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );

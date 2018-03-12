@@ -7,7 +7,6 @@
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,15 +22,14 @@ function my_calendar_check_db() {
 	}
 
 	global $wpdb;
-	$cols         = $wpdb->get_col( "DESC " . my_calendar_table() );
+	$cols         = $wpdb->get_col( 'DESC ' . my_calendar_table() );
 	$needs_update = false;
 
 	if ( !in_array( 'event_tickets', $cols ) ) {
 		$needs_update = true;
 	}
 
-
-	if ( isset( $_POST['upgrade'] ) && $_POST['upgrade'] == 'true' ) {
+	if ( isset( $_POST['upgrade'] ) && 'true' == $_POST['upgrade'] ) {
 		mc_upgrade_db();
 		?>
 		<div class='upgrade-db updated'>
@@ -39,13 +37,13 @@ function my_calendar_check_db() {
 		</div>
 	<?php
 	} elseif ( $needs_update ) {
-		if ( $_GET['page'] == 'my-calendar-config' ) {
+		if ( 'my-calendar-config' == $_GET['page'] ) {
 			?>
 			<div class='upgrade-db error'>
 				<p>
 					<?php _e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
 				</p>
-				<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config" ); ?>">
+				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config' ); ?>">
 					<div>
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<input type="hidden" name="upgrade" value="true" />
@@ -55,13 +53,16 @@ function my_calendar_check_db() {
 					</p>
 				</form>
 			</div>
-		<?php } else { ?>
+		<?php
+		} else {
+		?>
 			<div class='upgrade-db error'>
 			<p>
 				<?php _e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-config" ); ?>"><?php _e( 'Update now', 'my-calendar' ); ?></a>
+				<a href="<?php echo admin_url( 'admin.php?page=my-calendar-config' ); ?>"><?php _e( 'Update now', 'my-calendar' ); ?></a>
 			</p>
-			</div><?php
+			</div>
+		<?php
 		}
 	}
 }

@@ -39,7 +39,7 @@ function my_calendar_style_edit() {
 		}
 
 		if ( 'disabled' === $wrote_styles ) {
-			$message = "<p>" . __( "Styles are disabled, and were not edited.", 'my-calendar' ) . "</p>";
+			$message = '<p>' . __( 'Styles are disabled, and were not edited.', 'my-calendar' ) . '</p>';
 		} else {
 			$message = ( true == $wrote_styles ) ? '<p>' . __( 'The stylesheet has been updated.', 'my-calendar' ) . '</p>' : '<p><strong>' . __( 'Write Error! Please verify write permissions on the style file.', 'my-calendar' ) . '</strong></p>';
 		}
@@ -54,7 +54,7 @@ function my_calendar_style_edit() {
 			$styles           = mc_default_style();
 			$wrote_old_styles = mc_write_styles( $stylefile, $styles );
 			if ( $wrote_old_styles ) {
-				$message .= "<p>" . __( 'Stylesheet reset to default.', 'my-calendar' ) . "</p>";
+				$message .= '<p>' . __( 'Stylesheet reset to default.', 'my-calendar' ) . '</p>';
 			}
 		}
 
@@ -64,20 +64,20 @@ function my_calendar_style_edit() {
 				$key = $_POST['new_style_var']['key'];
 				$val = $_POST['new_style_var']['val'];
 				if ( $key && $val ) {
-					if ( strpos( $key, '--' ) !== 0 ) {
+					if ( 0 !== strpos( $key, '--' ) ) {
 						$key = '--' . $key;
 					}
-					$styles[$key] = $val;
+					$styles[ $key ] = $val;
 				}
 			}
 			foreach ( $_POST['style_vars'] as $key => $value ) {
-				if ( $value != '' ) {
-					$styles[$key] = $value;
+				if ( '' != $value ) {
+					$styles[ $key ] = $value;
 				}
 			}
 			if ( isset( $_POST['delete_var'] ) ) {
 				$delete = $_POST['delete_var'];
-				unset( $styles[$delete] );
+				unset( $styles[ $delete ] );
 			}
 			update_option( 'mc_style_vars', $styles );
 		}
@@ -120,15 +120,13 @@ function my_calendar_style_edit() {
 
 					<div class="inside">
 
-						<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-styles" ); ?>">
-							<div><input type="hidden" name="_wpnonce"
-							            value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
+						<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-styles' ); ?>">
+							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 							<div><input type="hidden" value="true" name="mc_choose_style"/></div>
 							<?php
-								$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
-								$directory        = dirname( __FILE__ ) . '/styles/';
-
-								$files = @mc_css_list( $custom_directory );
+							$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
+							$directory        = dirname( __FILE__ ) . '/styles/';
+							$files            = @mc_css_list( $custom_directory );
 							?>
 							<fieldset>
 								<p>
@@ -138,10 +136,10 @@ function my_calendar_style_edit() {
 							if ( ! empty( $files ) ) {
 								echo '<optgroup label="' . __( 'Your Custom Stylesheets', 'my-calendar' ) . '">';
 								foreach ( $files as $value ) {
-									$test     = "mc_custom_" . $value;
+									$test     = 'mc_custom_' . $value;
 									$filepath = mc_get_style_path( $test );
-									$path = pathinfo( $filepath );
-									if ( $path['extension'] == 'css' ) {
+									$path     = pathinfo( $filepath );
+									if ( 'css' == $path['extension'] ) {
 										$selected = ( get_option( 'mc_css_file' ) == $test ) ? ' selected="selected"' : '';
 										echo "<option value='mc_custom_$value'$selected>$value</option>\n";
 									}
@@ -152,8 +150,8 @@ function my_calendar_style_edit() {
 							echo '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
 							foreach ( $files as $value ) {
 								$filepath = mc_get_style_path( $value );
-								$path = pathinfo( $filepath );
-								if ( $path['extension'] == 'css' ) {
+								$path     = pathinfo( $filepath );
+								if ( 'css' == $path['extension'] ) {
 									$selected = ( get_option( 'mc_css_file' ) == $value ) ? ' selected="selected"' : '';
 									echo "<option value='$value'$selected>$value</option>\n";
 								}
@@ -166,7 +164,7 @@ function my_calendar_style_edit() {
 							</fieldset>
 						</form>
 						<hr/>
-						<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-styles" ); ?>">
+						<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-styles' ); ?>">
 							<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 							<input type="hidden" value="true" name="mc_edit_style"/>
 							<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
@@ -199,7 +197,7 @@ function my_calendar_style_edit() {
 								$output = '';
 								$styles = get_option( 'mc_style_vars' );
 								foreach ( $styles as $var => $style ) {
-									$var_id  = 'mc' . sanitize_key( $var );
+									$var_id = 'mc' . sanitize_key( $var );
 									if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light' ) ) ) {
 										$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . __( 'Delete', 'my-calendar' ) . '</label>';
 									} else {
@@ -225,18 +223,18 @@ function my_calendar_style_edit() {
 						<?php
 						$left_string  = normalize_whitespace( $my_calendar_style );
 						$right_string = normalize_whitespace( $mc_current_style );
-						if ( $right_string ) { // if right string is blank, there is no default
+						if ( $right_string ) { // If right string is blank, there is no default.
 							if ( isset( $_GET['diff'] ) ) {
 								echo '<div class="wrap my-calendar-admin" id="diff">';
 								echo mc_text_diff( $left_string, $right_string, array(
 									'title'       => __( 'Comparing Your Style with latest installed version of My Calendar', 'my-calendar' ),
 									'title_right' => __( 'Latest (from plugin)', 'my-calendar' ),
-									'title_left'  => __( 'Current (in use)', 'my-calendar' )
+									'title_left'  => __( 'Current (in use)', 'my-calendar' ),
 								) );
 								echo '</div>';
 							} elseif ( trim( $left_string ) != trim( $right_string ) ) {
 								echo '<div class="wrap my-calendar-admin">';
-								echo '<div class="updated"><p>' . __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . admin_url( "admin.php?page=my-calendar-styles&amp;diff#diff" ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a></p></div>';
+								echo '<div class="updated"><p>' . __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-styles&amp;diff#diff' ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a></p></div>';
 								echo '</div>';
 							} else {
 								echo '
@@ -260,7 +258,7 @@ function my_calendar_style_edit() {
 /**
  * Get path for given filename or current selected stylesheet.
  *
- * @param string $filename.
+ * @param string $filename File name.
  * @param string $type path or url.
  *
  * @return mixed string/boolean
@@ -291,7 +289,7 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 /**
  * Identify whether a given file is a custom style or a core style
  *
- * @param string $filename.
+ * @param string $filename File name..
  *
  * @return boolean
  */
@@ -306,7 +304,7 @@ function mc_is_custom_style( $filename ) {
 /**
  * Fetch the styles for the current selected style
  *
- * @param string $filename.
+ * @param string $filename File name.
  * @param string $return content or filename.
  *
  * @return string
@@ -342,18 +340,17 @@ function mc_default_style( $filename = false, $return = 'content' ) {
 /**
  * List CSS files in a directory
  *
- * @param string $directory.
+ * @param string $directory File directory.
  *
  * @return array list of CSS files
  */
 function mc_css_list( $directory ) {
 	$results = array();
 	$handler = opendir( $directory );
-	// keep going until all files in directory have been read.
+	// Keep going until all files in directory have been read.
 	while ( $file = readdir( $handler ) ) {
-		// if $file isn't this directory or its parent,.
-		// add it to the results array.
-		if ( $file != '.' && $file != '..' ) {
+		// If $file isn't this directory or parent, add it to the results array.
+		if ( '.' != $file && '..' != $file ) {
 			$results[] = $file;
 		}
 	}
@@ -376,12 +373,12 @@ function mc_write_styles( $file, $style ) {
 		return false;
 	}
 
-	$standard        = dirname( __FILE__ ) . '/styles/';
-	$files = mc_css_list( $standard );
+	$standard = dirname( __FILE__ ) . '/styles/';
+	$files    = mc_css_list( $standard );
 	foreach ( $files as $f ) {
 		$filepath = mc_get_style_path( $f );
-		$path = pathinfo( $filepath );
-		if ( $path['extension'] == 'css' ) {
+		$path     = pathinfo( $filepath );
+		if ( 'css' == $path['extension'] ) {
 			$styles_whitelist[] = $filepath;
 		}
 	}
@@ -410,7 +407,7 @@ function mc_write_styles( $file, $style ) {
  *
  * @param string           $left_string Currently installed.
  * @param string           $right_string Shipped.
- * @param mixed array/null $args.
+ * @param mixed array/null $args Function table rendered arguments.
  *
  * @return string
  */
@@ -425,14 +422,14 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 	if ( ! class_exists( 'WP_Text_Diff_Renderer_Table' ) ) {
 		require( ABSPATH . WPINC . '/wp-diff.php' );
 	}
-	$left_string  = normalize_whitespace($left_string);
-	$right_string = normalize_whitespace($right_string);
+	$left_string  = normalize_whitespace( $left_string );
+	$right_string = normalize_whitespace( $right_string );
 
-	$left_lines  = explode("\n", $left_string);
-	$right_lines = explode("\n", $right_string);
-	$text_diff   = new Text_Diff($left_lines, $right_lines);
+	$left_lines  = explode( "\n", $left_string );
+	$right_lines = explode( "\n", $right_string );
+	$text_diff   = new Text_Diff( $left_lines, $right_lines );
 	$renderer    = new WP_Text_Diff_Renderer_Table( $args );
-	$diff        = $renderer->render($text_diff);
+	$diff        = $renderer->render( $text_diff );
 	$r           = '';
 
 	if ( ! $diff )
@@ -471,17 +468,15 @@ add_action( 'admin_enqueue_scripts', function() {
 		return;
 	}
 
-    // Enqueue code editor and settings for manipulating HTML.
-    $settings = wp_enqueue_code_editor( array(
-		'type' => 'text/css'
-	) );
+	// Enqueue code editor and settings for manipulating HTML.
+	$settings = wp_enqueue_code_editor( array( 'type' => 'text/css'	) );
 
-    // Bail if user disabled CodeMirror.
-    if ( false === $settings ) {
+	// Bail if user disabled CodeMirror.
+	if ( false === $settings ) {
 		return;
-    }
+	}
 
-    wp_add_inline_script(
+	wp_add_inline_script(
 		'code-editor',
 		sprintf(
 			'jQuery( function() { wp.codeEditor.initialize( "style", %s ); } );',

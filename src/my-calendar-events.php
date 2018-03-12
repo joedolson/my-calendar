@@ -593,7 +593,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 		}
 
 		$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
-		$return = ( get_option( 'mc_process_shortcodes' ) == 'true' ) ? do_shortcode( $output ) : $output;
+		$return = mc_run_shortcodes( $output );
 	} else {
 		$return = '';
 	}

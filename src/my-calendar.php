@@ -377,7 +377,7 @@ add_shortcode( 'my_calendar_today', 'my_calendar_insert_today' );
 add_shortcode( 'my_calendar_locations', 'my_calendar_locations' );
 add_shortcode( 'my_calendar_categories', 'my_calendar_categories' );
 add_shortcode( 'my_calendar_access', 'my_calendar_access' );
-add_shortcode( 'mc_filters', 'My_Calendar_Filters' );
+add_shortcode( 'mc_filters', 'my_calendar_filters' );
 add_shortcode( 'my_calendar_show_locations', 'my_calendar_show_locations_list' );
 add_shortcode( 'my_calendar_event', 'my_calendar_show_event' );
 add_shortcode( 'my_calendar_search', 'my_calendar_search' );

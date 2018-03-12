@@ -41,14 +41,14 @@ function mc_templates_edit() {
 			echo '<div class="updated"><p>' . __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) . '</p></div>';
 		} else {
 			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-				$template        = $_POST['mc_template'];
-				$templates[$key] = $template;
+				$template          = $_POST['mc_template'];
+				$templates[ $key ] = $template;
 				update_option( 'mc_templates', $templates );
 				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
 				// Translators: unique key for template.
 				echo '<div class="updated"><p>' . sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) . '</p></div>';
 			} elseif ( isset( $_POST['mc_template'] ) ) {
-				$template  = $_POST['mc_template'];
+				$template = $_POST['mc_template'];
 				if ( mc_key_exists( $key ) ) {
 					$key = mc_update_template( $key, $template );
 				} else {
@@ -66,13 +66,13 @@ function mc_templates_edit() {
 	$mc_mini_template    = ( '' != $templates['mini'] ) ? $templates['mini'] : $globals['mini_template'];
 	$mc_details_template = ( '' != $templates['details'] ) ? $templates['details'] : $globals['single_template'];
 
-	$template = ( mc_is_core_template( $key ) ) ? ${"mc_" . $key . "_template"} : mc_get_custom_template( $key );
+	$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
 	$template = stripslashes( $template );
 	$core     = mc_template_description( $key );
 	?>
 	<div class="wrap my-calendar-admin">
 		<h1 class="wp-heading-inline"><?php _e( 'My Calendar Templates', 'my-calendar' ); ?></h1>
-		<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( "admin.php?page=my-calendar-templates" ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 		<div class="postbox-container jcd-wide">
 			<div class="metabox-holder">
@@ -81,13 +81,13 @@ function mc_templates_edit() {
 						<h2><?php _e( 'Edit Template', 'my-calendar' ); ?></h2>
 						<div class="inside">
 							<p>
-								<a href="<?php echo admin_url( "admin.php?page=my-calendar-help#templates" ); ?>"><?php _e( "Templates Help", 'my-calendar' ); ?></a> &raquo;
+								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-help#templates' ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a> &raquo;
 							</p>
-							<?php echo ( $core != '' ) ? "<p class='template-description'>$core</p>" : ''; ?>
+							<?php echo ( '' != $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
 							<?php
-							if ( $key == 'add-new' ) {
+							if ( 'add-new' == $key ) {
 							?>
-								<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( "admin.php?page=my-calendar-templates" ) ); ?>">
+								<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 								</div>
@@ -141,7 +141,7 @@ function mc_templates_edit() {
 						<div class="inside">
 							<?php mc_list_templates(); ?>
 							<p>
-								<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( "admin.php?page=my-calendar-templates" ) ); ?>"><?php _e( 'Add New Template', 'my-calendar' ); ?></a>
+								<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>"><?php _e( 'Add New Template', 'my-calendar' ); ?></a>
 							</p>
 						</div>
 					</div>
@@ -256,18 +256,19 @@ function mc_templates_edit() {
 			</div>
 		</div>
 	</div>
-	<?php mc_show_sidebar();
+	<?php
+	mc_show_sidebar();
 }
 
 /**
  * Check whether the current key refers to a core template
  *
- * @param string $key.
+ * @param string $key Template unique key.
  *
  * @return boolean
  */
 function mc_is_core_template( $key ) {
-	switch( $key ) {
+	switch ( $key ) {
 		case 'grid':
 		case 'details':
 		case 'list':
@@ -283,7 +284,7 @@ function mc_is_core_template( $key ) {
 /**
  * Get stored data for custom template
  *
- * @param string $key.
+ * @param string $key Template unique key.
  *
  * @return string template
  */
@@ -296,17 +297,17 @@ function mc_get_custom_template( $key ) {
 /**
  * Check whether key exists in database
  *
- * @param string $key.
+ * @param string $key Template unique key.
  *
  * @return boolean
  */
 function mc_key_exists( $key ) {
-	// keys are md5 hashed, so should always be 32 chars.
-	if ( strlen( $key ) != 32 ) {
+	// Keys are md5 hashed, so should always be 32 chars.
+	if ( 25 != strlen( $key ) ) {
 		return false;
 	}
 
-	if ( get_option( "mc_ctemplate_$key", 'missing' ) != 'missing' ) {
+	if ( 'missing' != get_option( "mc_ctemplate_$key", 'missing' ) ) {
 		return true;
 	}
 
@@ -317,7 +318,7 @@ function mc_key_exists( $key ) {
  * Create a new template from posted data. If this template key already exists, will update existing.
  *
  * @param string $template Full template.
- * @param array $post POST data or array of relevant data.
+ * @param array  $post POST data or array of relevant data.
  *
  * @return string $key
  */
@@ -347,17 +348,19 @@ function mc_update_template( $key, $template ) {
 /**
  * Get description of current key
  *
- * @param string $key.
+ * @param string $key Template unique key.
  *
  * @return Description
  */
 function mc_template_description( $key ) {
-	if ( $key == 'add-new' ) {
+	if ( 'add-new' == $key ) {
 		return '';
 	}
+
+	// Translators: unique template key. (non-language string.)
 	$return      = sprintf( __( 'Custom template, keyword %s', 'my-calendar' ), "<code>$key</code>" );
 	$description = '';
-	switch( $key ) {
+	switch ( $key ) {
 		case 'grid':
 			$return = __( '<strong>Core Template:</strong> used in the details pop-up in the main calendar view.', 'my-calendar' );
 			break;
@@ -379,7 +382,7 @@ function mc_template_description( $key ) {
 		$description = strip_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
 	}
 
-	$br = ( $description != '' ) ? '<br />' : '';
+	$br = ( '' != $description ) ? '<br />' : '';
 
 	return $description . $br . $return;
 }
@@ -408,27 +411,27 @@ function mc_list_templates() {
 				</thead>
 				<tbody>
 					<tr>
-						<td><a href='" . add_query_arg( 'mc_template', 'grid', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>grid</a></td>
+						<td><a href='" . add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>grid</a></td>
 						<td>" . mc_template_description( 'grid' ) . "</td>
 						<td>$grid_enabled</td>
 					</tr>
 					<tr>
-						<td><a href='" . add_query_arg( 'mc_template', 'list', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>list</a></td>
+						<td><a href='" . add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>list</a></td>
 						<td>" . mc_template_description( 'list' ) . "</td>
 						<td>$list_enabled</td>
 					</tr>
 					<tr>
-						<td><a href='" . add_query_arg( 'mc_template', 'mini', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>mini</a></td>
+						<td><a href='" . add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>mini</a></td>
 						<td>" . mc_template_description( 'mini' ) . "</td>
 						<td>$mini_enabled</td>
 					</tr>
 					<tr>
-						<td><a href='" . add_query_arg( 'mc_template', 'details', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>details</a></td>
+						<td><a href='" . add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>details</a></td>
 						<td>" . mc_template_description( 'details' ) . "</td>
 						<td>$details_enabled</td>
 					</tr>
 					<tr>
-						<td><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>rss</a></td>
+						<td><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>rss</a></td>
 						<td>" . mc_template_description( 'rss' ) . "</td>
 						<td>$rss_enabled</td>
 					</tr>";
@@ -436,17 +439,17 @@ function mc_list_templates() {
 	$select = 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'";
 	$results = $wpdb->get_results( $select );
 	foreach ( $results as $result ) {
-		$key  = str_replace( 'mc_ctemplate_', '', $result->option_name );
-		$desc = mc_template_description( $key );
+		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
+		$desc  = mc_template_description( $key );
 		$list .= "<tr>
-					<td><a href='" . add_query_arg( 'mc_template', $key, admin_url( "admin.php?page=my-calendar-templates" ) ) . "'>$key</a></td>
+					<td><a href='" . add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>$key</a></td>
 					<td>$desc</td>
 					<td> -- </td>
 				</tr>";
 	}
 
-	$list .= "</tbody>
-	</table>";
+	$list .= '</tbody>
+	</table>';
 
 	echo $list;
 }
@@ -456,25 +459,23 @@ add_action( 'admin_enqueue_scripts', function() {
 		return;
 	}
 
-    if ( 'my-calendar_page_my-calendar-templates' !== get_current_screen()->id ) {
-        return;
-    }
+	if ( 'my-calendar_page_my-calendar-templates' !== get_current_screen()->id ) {
+		return;
+	}
 
-    // Enqueue code editor and settings for manipulating HTML.
-    $settings = wp_enqueue_code_editor( array(
-		'type' => 'text/html'
-	) );
+	// Enqueue code editor and settings for manipulating HTML.
+	$settings = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
 
-    // Bail if user disabled CodeMirror.
-    if ( false === $settings ) {
-        return;
-    }
+	// Bail if user disabled CodeMirror.
+	if ( false === $settings ) {
+		return;
+	}
 
-    wp_add_inline_script(
-        'code-editor',
-        sprintf(
-            'jQuery( function() { wp.codeEditor.initialize( "mc_template", %s ); } );',
-            wp_json_encode( $settings )
-        )
-    );
+	wp_add_inline_script(
+		'code-editor',
+		sprintf(
+			'jQuery( function() { wp.codeEditor.initialize( "mc_template", %s ); } );',
+			wp_json_encode( $settings )
+		)
+	);
 } );
