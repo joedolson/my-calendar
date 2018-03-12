@@ -130,11 +130,11 @@ add_filter( 'wp_title', 'mc_event_filter', 10, 3 );
  * Register all My Calendar widgets
  */
 function mc_register_widgets() {
-	register_widget( 'my_calendar_today_widget' );
-	register_widget( 'my_calendar_upcoming_widget' );
-	register_widget( 'my_calendar_mini_widget' );
-	register_widget( 'my_calendar_simple_search' );
-	register_widget( 'my_calendar_filters' );
+	register_widget( 'My_Calendar_Today_Widget' );
+	register_widget( 'My_Calendar_Upcoming_Widget' );
+	register_widget( 'My_Calendar_Mini_Widget' );
+	register_widget( 'My_Calendar_Simple_Search' );
+	register_widget( 'My_Calendar_Filters' );
 }
 
 /**
@@ -377,7 +377,7 @@ add_shortcode( 'my_calendar_today', 'my_calendar_insert_today' );
 add_shortcode( 'my_calendar_locations', 'my_calendar_locations' );
 add_shortcode( 'my_calendar_categories', 'my_calendar_categories' );
 add_shortcode( 'my_calendar_access', 'my_calendar_access' );
-add_shortcode( 'mc_filters', 'my_calendar_filters' );
+add_shortcode( 'mc_filters', 'My_Calendar_Filters' );
 add_shortcode( 'my_calendar_show_locations', 'my_calendar_show_locations_list' );
 add_shortcode( 'my_calendar_event', 'my_calendar_show_event' );
 add_shortcode( 'my_calendar_search', 'my_calendar_search' );
