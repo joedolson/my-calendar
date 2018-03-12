@@ -173,7 +173,7 @@ function mc_manage_locations() {
 				<th scope="col"><a href='
 				<?php
 				echo add_query_arg( array(
-					'paged' => $current,
+					'paged'   => $current,
 					'orderby' => 'id',
 				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
 				?>
@@ -181,27 +181,27 @@ function mc_manage_locations() {
 				<th scope="col"><a href='
 				<?php
 				echo add_query_arg( array(
-					'paged' => $current,
+					'paged'   => $current,
 					'orderby' => 'location',
 				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
 				?>
-				'><?php _e( 'Location', 'my-calendar' ) ?></th>
+				'><?php _e( 'Location', 'my-calendar' ); ?></a></th>
 				<th scope="col"><a href='
 				<?php
 				echo add_query_arg( array(
-					'paged' => $current,
-					'orderby' => 'city'
+					'paged'   => $current,
+					'orderby' => 'city',
 				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
 				?>
-				'><?php _e( 'City', 'my-calendar' ) ?></th>
+				'><?php _e( 'City', 'my-calendar' ); ?></a></th>
 				<th scope="col"><a href='
 				<?php
 				echo add_query_arg( array(
-					'paged' => $current,
-					'orderby' => 'state'
+					'paged'   => $current,
+					'orderby' => 'state',
 				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
 				?>
-				'><?php _e( 'State/Province', 'my-calendar' ) ?></th>
+				'><?php _e( 'State/Province', 'my-calendar' ) ?></a></th>
 				<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>
 				<th scope="col"><?php _e( 'Delete', 'my-calendar' ); ?></th>
 			</tr>

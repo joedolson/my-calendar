@@ -329,8 +329,8 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
  */
 function mc_location_controls() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
-		$response        = mc_update_location_controls();
-		$location_fields = array(
+		$response             = mc_update_location_controls();
+		$location_fields      = array(
 			'event_label',
 			'event_city',
 			'event_state',
@@ -416,7 +416,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</p>
 	<p>
 		<label for="e_city">' . __( 'City', 'my-calendar' ) . '</label> ';
-	$cur_city = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_city'} ) ) : '';
+	$cur_city        = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_city'} ) ) : '';
 	if ( mc_controlled_field( 'city' ) ) {
 		$return .= mc_location_controller( 'city', $cur_city, $context );
 	} else {
@@ -458,7 +458,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	$event_url    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_url'} ) ) : '';
 	$event_lat    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_latitude'} ) ) : '';
 	$event_lon    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_longitude'} ) ) : '';
-	$return .= '</p>
+	$return      .= '</p>
 	<p>
 	<label for="e_zoom">' . __( 'Initial Zoom', 'my-calendar' ) . '</label>
 		<select name="' . $context . '_zoom" id="e_zoom">
@@ -497,8 +497,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	<fieldset>
 	<legend>' . __( 'Location Accessibility', 'my-calendar' ) . '</legend>
 	<ul class="accessibility-features checkboxes">';
-	$access      = apply_filters( 'mc_venue_accessibility', mc_location_access() );
-	$access_list = '';
+	$access       = apply_filters( 'mc_venue_accessibility', mc_location_access() );
+	$access_list  = '';
 	if ( $has_data ) {
 		if ( 'location' == $context ) {
 			$location_access = unserialize( $data->{$context . '_access'} );
@@ -537,7 +537,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 }
 
 /**
- * array of location access features
+ * Array of location access features
  *
  * @return array
  */
@@ -561,7 +561,7 @@ function mc_location_access() {
 }
 
 /**
- * get a specific field with an location ID
+ * Get a specific field with an location ID
  *
  * @param string $field Specific field to get.
  * @param int    $id Location ID.
@@ -576,7 +576,7 @@ function mc_location_data( $field, $id ) {
 			$mcdb = mc_remote_db();
 		}
 		$field  = $field;
-		$sql    = $mcdb->prepare( "SELECT $field FROM " . my_calendar_locations_table() . " WHERE location_id = %d", $id );
+		$sql    = $mcdb->prepare( "SELECT $field FROM " . my_calendar_locations_table() . ' WHERE location_id = %d', $id );
 		$result = $mcdb->get_var( $sql );
 
 		return $result;
@@ -603,7 +603,7 @@ function mc_location_select( $location = false ) {
 				$l .= ' selected="selected"';
 			}
 		}
-		$l .= '>' . mc_kses_post( stripslashes( $loc->location_label ) ) . '</option>';
+		$l    .= '>' . mc_kses_post( stripslashes( $loc->location_label ) ) . '</option>';
 		$list .= $l;
 	}
 
