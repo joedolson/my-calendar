@@ -2201,7 +2201,7 @@ add_filter( 'my_calendar_body', 'mc_run_shortcodes', 10, 1 );
  * @return string Calendar body with shortcodes processed
  */
 function mc_run_shortcodes( $content ) {
-	$content = ( 'true' = get_option( 'mc_process_shortcodes' ) ) ? do_shortcode( $content ) : $content;
+	$content = ( 'true' == get_option( 'mc_process_shortcodes' ) ) ? do_shortcode( $content ) : $content;
 
 	return $content;
 }

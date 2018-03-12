@@ -1127,7 +1127,7 @@ function my_calendar_todays_events( $args ) {
 		restore_current_blog();
 	}
 
-	return mc_run_shortcodes( $return )
+	return mc_run_shortcodes( $return );
 }
 
 /**

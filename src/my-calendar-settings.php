@@ -155,7 +155,7 @@ function my_calendar_import() {
 				'event_begin'   => $event->event_begin,
 				'event_end'     => $event->event_end,
 				'event_time'    => $event->event_time,
-				'event_endtime' => $event->event_endtime.
+				'event_endtime' => $event->event_endtime,
 			);
 			mc_increment_event( $value, $dates );
 		}
@@ -166,7 +166,7 @@ function my_calendar_import() {
 			$color        = esc_sql( $key['category_colour'] );
 			$id           = (int) $key['category_id'];
 			$catsql       = 'INSERT INTO ' . my_calendar_categories_table() . ' SET category_id=%1$d, category_name=%2$s, category_color=%3$s ON DUPLICATE KEY UPDATE category_name=%2$s, category_color=%3$s;';
-			$cats_results = $wpdb->query( $wpdb->prepare( $catsql, $id, $name, $color );
+			$cats_results = $wpdb->query( $wpdb->prepare( $catsql, $id, $name, $color ) );
 		}
 		$message   = ( false !== $cats_results ) ? __( 'Categories imported successfully.', 'my-calendar' ) : __( 'Categories not imported.', 'my-calendar' );
 		$e_message = ( false !== $events_results ) ? __( 'Events imported successfully.', 'my-calendar' ) : __( 'Events not imported.', 'my-calendar' );
@@ -801,7 +801,7 @@ function mc_remote_db() {
 								$input_options = get_option( 'mc_input_options' );
 							}
 							foreach ( $input_options as $key => $value ) {
-								$checked = ( 'on' == $value ) "checked='checked'" : '';
+								$checked = ( 'on' == $value ) ? "checked='checked'" : '';
 								if ( isset( $input_labels[ $key ] ) ) {
 									$output .= "<li><input type='checkbox' id='mci_$key' name='mci_$key' $checked /> <label for='mci_$key'>$input_labels[$key]</label></li>";
 								}
