@@ -219,13 +219,13 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
 	global $wpdb;
 	$field = sanitize_key( $field );
 	if ( '%d' == $type ) {
-		$sql = $wpdb->prepare( 'UPDATE ' . my_calendar_table() . " SET $field = %d WHERE event_id=%d", $data, $event );
+		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %d WHERE event_id=%d";
 	} elseif ( '%s' == $type ) {
-		$sql = $wpdb->prepare( 'UPDATE ' . my_calendar_table() . " SET $field = %s WHERE event_id=%d", $data, $event );
+		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %s WHERE event_id=%d");
 	} else {
-		$sql = $wpdb->prepare( 'UPDATE ' . my_calendar_table() . " SET $field = %f WHERE event_id=%d", $data, $event );
+		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %f WHERE event_id=%d");
 	}
-	$result = $wpdb->query( $sql );
+	$result = $wpdb->query( $wpdb->prepare( $sql, $data, $event ) ); // WPCS: unprepared SQL ok.
 
 	return $result;
 }
@@ -365,21 +365,21 @@ function my_calendar_manage() {
 			die( 'Security check failed' );
 		}
 		$events   = $_POST['mass_edit'];
-		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id IN (';
 		$i        = 0;
 		$approved = array();
+		$prepare  = array();
 		foreach ( $events as $value ) {
 			$value = (int) $value;
 			$total = count( $events );
 			if ( current_user_can( 'mc_approve_events' ) ) {
-				$sql       .= (int) $value . ',';
 				$approved[] = $value;
+				$prepare[]  = '%d';
 				$i ++;
 			}
 		}
-		$sql    = substr( $sql, 0, - 1 );
-		$sql   .= ')';
-		$result = $wpdb->query( $sql );
+		$prepared = implode( ',', $prepare );
+		$sql    = 'UPDATE ' . my_calendar_table() . " SET event_approved = 1 WHERE event_id IN ($prepared)";
+		$result = $wpdb->query( $wpdb->prepare( $sql, $approved ); // WPCS: unprepared SQL ok.
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been approved. Please investigate.', 'my-calendar' ) . '</p></div>';
 		} else {
@@ -396,19 +396,22 @@ function my_calendar_manage() {
 			die( 'Security check failed' );
 		}
 		$events   = $_POST['mass_edit'];
-		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (';
 		$i        = 0;
 		$total    = 0;
-		$archived = array();
+		$updated  = array();
+		$prepare  = array();
 		foreach ( $events as $value ) {
-			$total      = count( $events );
-			$sql       .= (int) $value . ',';
-			$archived[] = $value;
-			$i ++;
+			$value = (int) $value;
+			$total = count( $events );
+			if ( current_user_can( 'mc_approve_events' ) ) {
+				$updated[]  = $value;
+				$prepare[]  = '%d';
+				$i ++;
+			}
 		}
-		$sql    = substr( $sql, 0, - 1 );
-		$sql   .= ')';
-		$result = $wpdb->query( $sql );
+		$prepared = implode( ',', $prepare );
+		$sql    = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
+		$result = $wpdb->query( $wpdb->prepare( $sql, $updated ); // WPCS: unprepared SQL ok.
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not archive those events.', 'my-calendar' ) . '</p></div>';
 		} else {
@@ -425,19 +428,22 @@ function my_calendar_manage() {
 			die( 'Security check failed' );
 		}
 		$events   = $_POST['mass_edit'];
-		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (';
 		$i        = 0;
 		$total    = 0;
 		$archived = array();
+		$prepare  = array();
 		foreach ( $events as $value ) {
-			$total      = count( $events );
-			$sql       .= (int) $value . ',';
-			$archived[] = $value;
-			$i ++;
+			$value = (int) $value;
+			$total = count( $events );
+			if ( current_user_can( 'mc_approve_events' ) ) {
+				$archived[] = $value;
+				$prepare[]  = '%d';
+				$i ++;
+			}
 		}
-		$sql    = substr( $sql, 0, - 1 );
-		$sql   .= ')';
-		$result = $wpdb->query( $sql );
+		$prepared = implode( ',', $prepare );
+		$sql    = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
+		$result = $wpdb->query( $wpdb->prepare( $sql, $archived ); // WPCS: unprepared SQL ok.
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not undo the archive status on those events.', 'my-calendar' ) . '</p></div>';
 		} else {
@@ -1863,13 +1869,14 @@ function mc_list_events() {
 			$query  = $_POST['mcs'];
 			$limit .= mc_prepare_search_query( $query );
 		}
-		$limit .= ( 'archived' != $restrict ) ? ' AND event_status = 1' : ' AND event_status = 0';
+		$query_limit = ( ( $current - 1 ) * $items_per_page );
+		$limit      .= ( 'archived' != $restrict ) ? ' AND event_status = 1' : ' AND event_status = 0';
 		if ( 'event_category' != $sortbyvalue ) {
-			$events = $wpdb->get_results( 'SELECT SQL_CALC_FOUND_ROWS event_id FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT " . ( ( $current - 1 ) * $items_per_page ) . ', ' . $items_per_page );
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS event_id FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %1$d, %2$d', $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
 		} else {
 			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
 			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
-			$events = $wpdb->get_results( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS events.event_id FROM ' . my_calendar_table() . ' AS events JOIN ' . my_calendar_categories_table() . " AS categories WHERE events.event_category = categories.category_id $limit ORDER BY categories.category_name $sortbydirection LIMIT " . ( ( $current - 1 ) * $items_per_page ) . ', ' . $items_per_page );
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS events.event_id FROM ' . my_calendar_table() . ' AS events JOIN ' . my_calendar_categories_table() . " AS categories WHERE events.event_category = categories.category_id $limit ORDER BY categories.category_name $sortbydirection " . 'LIMIT %1$d, %2$d', $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
 		}
 
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
@@ -2654,17 +2661,19 @@ function mc_check_data( $action, $post, $i ) {
  */
 function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
 	global $wpdb;
-	$select_location = ( '' != $event_label ) ? "event_label = '$event_label' AND" : '';
+	$select_location = ( '' != $event_label ) ? "event_label = '" . esc_sql( $event_label ) . "' AND" : '';
+	$begin_time      = $begin . ' ' . $time;
+	$end_time        = $end . ' ' . $endtime;
 	// Need two queries; one to find outer events, one to find inner events.
 	$event_query = 'SELECT occur_id
 					FROM ' . my_calendar_event_table() . '
 					JOIN ' . my_calendar_table() . "
 					ON (event_id=occur_event_id)
-					WHERE $select_location
-					( occur_begin BETWEEN cast( '$begin $time' AS DATETIME ) AND cast( '$end $endtime' AS DATETIME )
-					OR occur_end BETWEEN cast( '$begin $time' AS DATETIME ) AND cast( '$end $endtime' AS DATETIME ) )";
+					WHERE $select_location " . '
+					( occur_begin BETWEEN cast( %1$s AS DATETIME ) AND cast( %2$s AS DATETIME )
+					OR occur_end BETWEEN cast( %1$s AS DATETIME ) AND cast( %2$s AS DATETIME ) )';
 
-	$results = $wpdb->get_results( $event_query );
+	$results = $wpdb->get_results( $wpdb->prepare( $event_query, $begin_time, $end_time ) ); // WPCS: Unprepared SQL ok.
 
 	if ( empty( $results ) ) {
 		// Alternate: where "begin time" between occur_begin & occur_end OR "end time" between occur_begin & occur_end.
@@ -2674,11 +2683,11 @@ function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
 						FROM ' . my_calendar_event_table() . '
 						JOIN ' . my_calendar_table() . "
 						ON (event_id=occur_event_id)
-						WHERE $select_location
-						( cast( '$begin $time' AS DATETIME ) BETWEEN occur_begin AND occur_end
-						OR cast( '$end $endtime' AS DATETIME ) BETWEEN occur_begin AND occur_end )";
+						WHERE $select_location " . '
+						( cast( %1$s AS DATETIME ) BETWEEN occur_begin AND occur_end
+						OR cast( %2$s AS DATETIME ) BETWEEN occur_begin AND occur_end )';
 
-		$results = $wpdb->get_results( $event_query2 );
+		$results = $wpdb->get_results( $wpdb->prepare( $event_query2, $begin_time, $end_time ) ); // WPCS: Unprepared SQL ok.
 	}
 
 	return ( ! empty( $results ) ) ? $results : false;
