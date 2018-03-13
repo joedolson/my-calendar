@@ -221,9 +221,9 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
 	if ( '%d' == $type ) {
 		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %d WHERE event_id=%d";
 	} elseif ( '%s' == $type ) {
-		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %s WHERE event_id=%d");
+		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %s WHERE event_id=%d";
 	} else {
-		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %f WHERE event_id=%d");
+		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %f WHERE event_id=%d";
 	}
 	$result = $wpdb->query( $wpdb->prepare( $sql, $data, $event ) ); // WPCS: unprepared SQL ok.
 
