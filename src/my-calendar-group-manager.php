@@ -227,7 +227,7 @@ function mc_compare_group_members( $group_id, $field = false ) {
 		// Just comparing a single field.
 		$query = "SELECT $field FROM " . my_calendar_table() . ' WHERE event_group_id = %d';
 	}
-	$results = $wpdb->get_results( $wpdb->prepare( $query, $group_id ), ARRAY_N );
+	$results = $wpdb->get_results( $wpdb->prepare( $query, $group_id ), ARRAY_N ); // WPCS: Unprepared SQL ok.
 	$count   = count( $results );
 	for ( $i = 0; $i < $count; $i ++ ) {
 		$n = ( ( $i + 1 ) > $count - 1 ) ? 0 : $i + 1;
@@ -251,7 +251,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	global $wpdb;
 	$event_id = (int) $_GET['event_id'];
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
-	$results  = $wpdb->get_results( $wpdb->prepare(  'SELECT event_id, event_begin, event_time FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // WPCS: unprepared SQL OK.
+	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // WPCS: unprepared SQL OK.
 	if ( 'apply' == $type ) {
 		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>NOTE:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p>' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
 	} else {
@@ -991,9 +991,10 @@ function mc_list_groups() {
 		default:
 			$limit = '';
 	}
-	$events     = $wpdb->get_results( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT " . ( ( $current - 1 ) * $items_per_page ) . ', ' . $items_per_page );
-	$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
-	$items      = $found_rows[0];
+	$query_limit = ( ( $current - 1 ) * $items_per_page );
+	$events      = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT %d, %d", $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
+	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
+	$items       = $found_rows[0];
 	?>
 	<div class='inside'>
 		<ul class="links">

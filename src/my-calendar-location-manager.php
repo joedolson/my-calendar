@@ -120,8 +120,10 @@ function mc_manage_locations() {
 		$db_type = mc_get_db_type();
 		if ( '' != $query ) {
 			if ( 'MyISAM' == $db_type ) {
+				$query  = esc_sql( $query ); // Prepare query.
 				$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label,location_city,location_state,location_region,location_street,location_street2,location_phone' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 			} else {
+				$query  = esc_like( $query ); // Prepare query.
 				$search = " WHERE location_label LIKE '%$query%' OR location_city LIKE '%$query%' OR location_state LIKE '%$query%' OR location_region LIKE '%$query%' OR location_street LIKE '%$query%' OR location_street2 LIKE '%$query%' OR location_phone LIKE '%$query%' ";
 			}
 		} else {
@@ -129,9 +131,10 @@ function mc_manage_locations() {
 		}
 	}
 
-	$locations  = $wpdb->get_results( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT " . ( ( $current - 1 ) * $items_per_page ) . ', ' . $items_per_page );
-	$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
-	$items      = $found_rows[0];
+	$query_limit = ( ( $current - 1 ) * $items_per_page );
+	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT %d, %d", $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
+	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
+	$items       = $found_rows[0];
 
 	$num_pages = ceil( $items / $items_per_page );
 	if ( $num_pages > 1 ) {

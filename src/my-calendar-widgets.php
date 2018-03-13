@@ -715,7 +715,7 @@ function my_calendar_upcoming_events( $args ) {
 		}
 		if ( 'custom' == $display_type && '' != $from && '' != $to ) {
 			$from = date( 'Y-m-d', strtotime( $from ) );
-			$to = ( 'today' == $to ) ? date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d', strtotime( $to ) );
+			$to   = ( 'today' == $to ) ? date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d', strtotime( $to ) );
 		}
 		/* Yes, this is crude. But sometimes simplicity works best. There are only 12 possibilities, after all. */
 		if ( 'month+1' == $display_type ) {
@@ -773,7 +773,7 @@ function my_calendar_upcoming_events( $args ) {
 		$from = apply_filters( 'mc_upcoming_date_from', $from, $args );
 		$to   = apply_filters( 'mc_upcoming_date_to', $to, $args );
 
-		$query = array(
+		$query       = array(
 			'from'     => $from,
 			'to'       => $to,
 			'category' => $category,
@@ -908,7 +908,7 @@ function mc_span_time( $group_id ) {
  * @param string $template Custom template to use for display.
  * @param string $type Usually 'list', but also RSS or export.
  * @param string $order 'asc' or 'desc'.
- * $param int    $skip Number of events to skip over.
+ * @param int    $skip Number of events to skip over.
  * @param int    $before How many past events to show.
  * @param int    $after How many future events to show.
  * @param string $show_today 'yes' (anything else is false); whether to include events happening today.
@@ -960,7 +960,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 							}
 							$current = date( 'Y-m-d H:i:00', current_time( 'timestamp' ) );
 							if ( $e ) {
-							// If a multi-day event, show only once.
+								// If a multi-day event, show only once.
 								if ( 0 != $e->occur_group_id && 1 == $e->event_span && in_array( $e->occur_group_id, $group ) || in_array( $e->occur_id, $occur ) ) {
 									$md = true;
 								} else {
@@ -1022,7 +1022,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 
 	if ( is_array( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
-			$event =& $events[ $key ];
+			$event        =& $events[ $key ];
 			$temp_array[] = $event;
 		}
 		$i      = 0;
@@ -1123,7 +1123,7 @@ function my_calendar_todays_events( $args ) {
 
 	// allow reference by file to external template.
 	if ( '' != $template && mc_file_exists( $template ) ) {
-		$template = @file_get_contents( mc_get_file( $template ) );
+		$template = file_get_contents( mc_get_file( $template ) );
 	}
 	$defaults = mc_widget_defaults();
 	$template = ( ! $template || 'default' == $template ) ? $defaults['today']['template'] : $template;
@@ -1142,7 +1142,7 @@ function my_calendar_todays_events( $args ) {
 		$to   = date( 'Y-m-d', current_time( 'timestamp' ) );
 	}
 
-	$args     = array(
+	$args   = array(
 		'from'     => $from,
 		'to'       => $to,
 		'category' => $category,

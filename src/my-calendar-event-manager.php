@@ -395,23 +395,23 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events   = $_POST['mass_edit'];
-		$i        = 0;
-		$total    = 0;
-		$updated  = array();
-		$prepare  = array();
+		$events  = $_POST['mass_edit'];
+		$i       = 0;
+		$total   = 0;
+		$updated = array();
+		$prepare = array();
 		foreach ( $events as $value ) {
 			$value = (int) $value;
 			$total = count( $events );
 			if ( current_user_can( 'mc_approve_events' ) ) {
-				$updated[]  = $value;
-				$prepare[]  = '%d';
+				$updated[] = $value;
+				$prepare[] = '%d';
 				$i ++;
 			}
 		}
 		$prepared = implode( ',', $prepare );
-		$sql    = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
-		$result = $wpdb->query( $wpdb->prepare( $sql, $updated ) ); // WPCS: unprepared SQL ok.
+		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
+		$result   = $wpdb->query( $wpdb->prepare( $sql, $updated ) ); // WPCS: unprepared SQL ok.
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not archive those events.', 'my-calendar' ) . '</p></div>';
 		} else {
@@ -1872,11 +1872,11 @@ function mc_list_events() {
 		$query_limit = ( ( $current - 1 ) * $items_per_page );
 		$limit      .= ( 'archived' != $restrict ) ? ' AND event_status = 1' : ' AND event_status = 0';
 		if ( 'event_category' != $sortbyvalue ) {
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS event_id FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %1$d, %2$d', $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS event_id FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
 		} else {
 			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
 			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS events.event_id FROM ' . my_calendar_table() . ' AS events JOIN ' . my_calendar_categories_table() . " AS categories WHERE events.event_category = categories.category_id $limit ORDER BY categories.category_name $sortbydirection " . 'LIMIT %1$d, %2$d', $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS events.event_id FROM ' . my_calendar_table() . ' AS events JOIN ' . my_calendar_categories_table() . " AS categories WHERE events.event_category = categories.category_id $limit ORDER BY categories.category_name $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
 		}
 
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
@@ -2888,8 +2888,7 @@ function mc_event_is_grouped( $group_id ) {
 	if ( 0 == $group_id ) {
 		return false;
 	} else {
-		$query = $wpdb->prepare( 'SELECT count( event_group_id ) FROM ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id );
-		$value = $wpdb->get_var( $query ); // WPCS: unprepared SQL OK.
+		$value = $wpdb->get_var( $wpdb->prepare( 'SELECT count( event_group_id ) FROM ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // WPCS: unprepared SQL OK.
 		if ( $value > 1 ) {
 
 			return true;
