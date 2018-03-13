@@ -21,13 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string query params for SQL
  */
 function mc_prepare_search_query( $query ) {
-	$query   = esc_sql( $query );
 	$db_type = mc_get_db_type();
 	$search  = '';
 	if ( '' != $query ) {
 		if ( 'MyISAM' == $db_type ) {
+			$query  = esc_sql( $query );
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
+			$query  = esc_like( $query );
 			$search = " AND event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_label LIKE '%$query%' OR event_city LIKE '%$query%' OR event_postcode LIKE '%$query%' OR event_registration LIKE '%$query%' ";
 		}
 	}
@@ -273,9 +274,8 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
  * @return string limits to add to query
  */
 function mc_access_limit( $access ) {
-	global $wpdb;
 	$options      = mc_event_access();
-	$format       = ( isset( $options[ $access ] ) ) ? $wpdb->esc_like( $options[ $access ] ) : false;
+	$format       = ( isset( $options[ $access ] ) ) ? esc_like( $options[ $access ] ) : false;
 	$limit_string = ( $format ) ? "AND event_access LIKE '%$format%'" : '';
 
 	return $limit_string;

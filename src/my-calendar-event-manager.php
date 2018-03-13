@@ -442,8 +442,8 @@ function my_calendar_manage() {
 			}
 		}
 		$prepared = implode( ',', $prepare );
-		$sql    = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
-		$result = $wpdb->query( $wpdb->prepare( $sql, $archived ) ); // WPCS: unprepared SQL ok.
+		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
+		$result   = $wpdb->query( $wpdb->prepare( $sql, $archived ) ); // WPCS: unprepared SQL ok.
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not undo the archive status on those events.', 'my-calendar' ) . '</p></div>';
 		} else {
