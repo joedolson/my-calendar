@@ -44,9 +44,6 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 		 * unless you edit them or otherwise remove the compromised data.
 		 *
 		 * Based on my information, this is very unlikely.
-		 *
-		 *    $retain = array( 'map', 'map_url', 'sitelink', 'icon', 'link', 'details_link', 'linking', 'gcal', 'ical_link', 'edit_link', *    'register' );
-		 *    $value = !( in_array( $key, $retain ) ) ? mc_kses_post( $value ) : $value;
 		 */
 
 		if ( is_object( $value ) && ! empty( $value ) ) {
