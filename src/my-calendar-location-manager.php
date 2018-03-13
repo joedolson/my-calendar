@@ -75,8 +75,8 @@ function mc_mass_delete_locations() {
 			$prepare[] = '%d';
 			$i ++;
 		}
-		$prepared  = implode( ',', $prepare );
-		$result    = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . " WHERE location_id IN ($prepared)", $deleted ) ); // WPCS: unprepared SQL OK.
+		$prepared = implode( ',', $prepare );
+		$result   = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . " WHERE location_id IN ($prepared)", $deleted ) ); // WPCS: unprepared SQL OK.
 		if ( 0 !== $result && false !== $result ) {
 			// Argument: array of event IDs.
 			do_action( 'mc_mass_delete_locations', $deleted );

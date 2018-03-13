@@ -501,8 +501,8 @@ function my_calendar_settings() {
 								<li>
 								<?php
 								mc_settings_field( 'mc_uri_id', __( 'Where is your main calendar page?', 'my-calendar' ), '', "(<a href='$permalink'>$page_title</a>)", array(
-										'size' => '20',
-										'class' => 'suggest',
+									'size'  => '20',
+									'class' => 'suggest',
 								), 'text' );
 								?>
 								</li>
@@ -539,7 +539,8 @@ function mc_remote_db() {
 									'5' => __( 'Author', 'my-calendar' ),
 									'6' => __( 'Category', 'my-calendar' ),
 									'7' => __( 'Location Name', 'my-calendar' ),
-								), '', array(), 'select' ); ?> <?php mc_settings_field( 'mc_default_direction', __( 'Sort direction', 'my-calendar' ), array(
+								), '', array(), 'select' );
+								mc_settings_field( 'mc_default_direction', __( 'Sort direction', 'my-calendar' ), array(
 									'ASC'  => __( 'Ascending', 'my-calendar' ),
 									'DESC' => __( 'Descending', 'my-calendar' ),
 								), '', array(), 'select' );
@@ -592,7 +593,12 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_title_template_list', __( 'Event title (List)', 'my-calendar' ), $mc_title_template_list, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li><?php mc_settings_field( 'mc_details_label', __( 'Event details link text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_link_label', __( 'Event URL link text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
-							<li><?php mc_settings_field( 'mc_event_title_template', __( 'Title element template', 'my-calendar' ), '{title} &raquo; {date}', __( 'Current: %s', 'my-calendar' ) ); ?></li>
+							<li>
+							<?php
+							// Translators: Current title template (code).
+							mc_settings_field( 'mc_event_title_template', __( 'Title element template', 'my-calendar' ), '{title} &raquo; {date}', __( 'Current: %s', 'my-calendar' ) );
+							?>
+							</li>
 						</ul>
 					</fieldset>
 					<fieldset>
@@ -675,7 +681,7 @@ function mc_remote_db() {
 							'calendar'  => '<div class="dashicons dashicons-calendar"></div> ' . __( 'The calendar', 'my-calendar' ),
 							'key'       => '<div class="dashicons dashicons-admin-network"></div> ' . __( 'Categories', 'my-calendar' ),
 							'feeds'     => '<div class="dashicons dashicons-rss"></div> ' . __( 'RSS and iCal Subscription Links', 'my-calendar' ),
-							'exports'     => '<div class="dashicons dashicons-calendar-alt"></div> ' . __( 'Links to iCal Exports', 'my-calendar' ),
+							'exports'   => '<div class="dashicons dashicons-calendar-alt"></div> ' . __( 'Links to iCal Exports', 'my-calendar' ),
 							'stop'      => '<div class="dashicons dashicons-no"></div> ' . __( 'Elements below here will be hidden.' ),
 						);
 						echo "<div id='mc-sortable-update' aria-live='assertive'></div>";
@@ -687,7 +693,7 @@ function mc_remote_db() {
 						foreach ( $order as $k ) {
 							$k = trim( $k );
 							$v = ( isset( $nav_elements[ $k ] ) ) ? $nav_elements[ $k ] : false;
-							if ( $v !== false ) {
+							if ( false !== $v ) {
 								$inserted[ $k ] = $v;
 								if ( 'stop' == $k ) {
 									$label = 'hide';
@@ -840,7 +846,9 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-	<?php if ( current_user_can( 'manage_network' ) && is_multisite() ) { ?>
+	<?php
+	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
+	?>
 			<div class="wptab postbox" aria-labelledby="tab_multi" role="tabpanel" aria-live="assertive"  id="my-calendar-multisite">
 				<h2><?php _e( 'Multisite Settings (Network Administrators only)', 'my-calendar' ); ?></h2>
 
@@ -885,45 +893,49 @@ function mc_remote_db() {
 					</form>
 				</div>
 			</div>
-	<?php } ?>
+	<?php
+	}
+	?>
 
 		<div class="wptab postbox" aria-labelledby="tab_permissions" role="tabpanel" aria-live="assertive"  id="my-calendar-permissions">
 			<h2><?php _e( 'My Calendar Permissions', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<?php if ( current_user_can( 'administrator' ) ) { ?>
+	<?php
+	if ( current_user_can( 'administrator' ) ) {
+	?>
 
 					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-permissions' ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-	<?php
-	global $wp_roles;
-	$role_container = '';
-	$roles          = $wp_roles->get_names();
-	$caps           = array(
-		'mc_add_events'     => __( 'Add Events', 'my-calendar' ),
-		'mc_approve_events' => __( 'Approve Events', 'my-calendar' ),
-		'mc_manage_events'  => __( 'Manage Events', 'my-calendar' ),
-		'mc_edit_cats'      => __( 'Edit Categories', 'my-calendar' ),
-		'mc_edit_locations' => __( 'Edit Locations', 'my-calendar' ),
-		'mc_edit_styles'    => __( 'Edit Styles', 'my-calendar' ),
-		'mc_edit_behaviors' => __( 'Edit Behaviors', 'my-calendar' ),
-		'mc_edit_templates' => __( 'Edit Templates', 'my-calendar' ),
-		'mc_edit_settings'  => __( 'Edit Settings', 'my-calendar' ),
-		'mc_view_help'      => __( 'View Help', 'my-calendar' ),
-	);
-	foreach ( $roles as $role => $rolename ) {
-		if ( 'administrator' == $role ) {
-			continue;
+		<?php
+		global $wp_roles;
+		$role_container = '';
+		$roles          = $wp_roles->get_names();
+		$caps           = array(
+			'mc_add_events'     => __( 'Add Events', 'my-calendar' ),
+			'mc_approve_events' => __( 'Approve Events', 'my-calendar' ),
+			'mc_manage_events'  => __( 'Manage Events', 'my-calendar' ),
+			'mc_edit_cats'      => __( 'Edit Categories', 'my-calendar' ),
+			'mc_edit_locations' => __( 'Edit Locations', 'my-calendar' ),
+			'mc_edit_styles'    => __( 'Edit Styles', 'my-calendar' ),
+			'mc_edit_behaviors' => __( 'Edit Behaviors', 'my-calendar' ),
+			'mc_edit_templates' => __( 'Edit Templates', 'my-calendar' ),
+			'mc_edit_settings'  => __( 'Edit Settings', 'my-calendar' ),
+			'mc_view_help'      => __( 'View Help', 'my-calendar' ),
+		);
+		foreach ( $roles as $role => $rolename ) {
+			if ( 'administrator' == $role ) {
+				continue;
+			}
+			$role_container .= "<div class='mc_$role mc_permissions' id='container_mc_$role'><fieldset id='mc_$role' class='roles'><legend>$rolename</legend>";
+			$role_container .= "<input type='hidden' value='none' name='mc_caps[" . $role . "][none]' /><ul class='mc-settings checkboxes'>";
+			foreach ( $caps as $cap => $name ) {
+				$role_container .= mc_cap_checkbox( $role, $cap, $name );
+			}
+			$role_container .= '</ul></fieldset></div>';
 		}
-		$role_container .= "<div class='mc_$role mc_permissions' id='container_mc_$role'><fieldset id='mc_$role' class='roles'><legend>$rolename</legend>";
-		$role_container .= "<input type='hidden' value='none' name='mc_caps[" . $role . "][none]' /><ul class='mc-settings checkboxes'>";
-		foreach ( $caps as $cap => $name ) {
-			$role_container .= mc_cap_checkbox( $role, $cap, $name );
-		}
-		$role_container .= '</ul></fieldset></div>';
-	}
-	echo $role_container;
-	?>
+		echo $role_container;
+		?>
 						<p>
 							<input type="submit" name="mc_permissions" class="button-primary" value="<?php _e( 'Save Permissions', 'my-calendar' ); ?>"/>
 						</p>

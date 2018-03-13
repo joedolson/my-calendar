@@ -346,9 +346,9 @@ function my_calendar_manage() {
 				$i ++;
 			}
 		}
-		$prepared  = implode( ',', $prepare );
-		$sql       = 'DELETE FROM ' . my_calendar_table() . " WHERE event_id IN ($prepared)";
-		$result    = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
+		$prepared = implode( ',', $prepare );
+		$sql      = 'DELETE FROM ' . my_calendar_table() . " WHERE event_id IN ($prepared)";
+		$result   = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
 		if ( 0 !== $result && false !== $result ) {
 			do_action( 'mc_mass_delete_events', $ids );
 			// Translators: Number of events deleted, number selected.

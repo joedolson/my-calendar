@@ -442,8 +442,9 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 	$r .= "<table class='diff'>\n";
 	$r .= "<col class='content diffsplit left' /><col class='content diffsplit middle' /><col class='content diffsplit right' />";
 
-	if ( $args['title'] || $args['title_left'] || $args['title_right'] )
+	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
 		$r .= '<thead>';
+	}
 
 	if ( $args['title_left'] || $args['title_right'] ) {
 		$r .= "<tr class='diff-sub-title'>\n";

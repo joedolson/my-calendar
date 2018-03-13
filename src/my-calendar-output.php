@@ -984,7 +984,7 @@ function mc_list_title( $events ) {
 		$cstate = sprintf( __( '%s<span class="mc-list-extended"> and 1 other event</span>', 'my-calendar' ), $event_title );
 	} else {
 		// Translators: %s Title of event, %d number of other events.
-		$cstate = sprintf( __( '%s<span class="mc-list-extended"> and %d other events</span>', 'my-calendar' ), $event_title, $count );
+		$cstate = sprintf( __( '%1$s<span class="mc-list-extended"> and %2$d other events</span>', 'my-calendar' ), $event_title, $count );
 	}
 	$title = apply_filters( 'mc_list_event_title_hint', $cstate, $now, $events );
 
