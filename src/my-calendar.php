@@ -1,5 +1,7 @@
 <?php
 /**
+ * My Calendar, Accessible Events Manager for WordPress
+ *
  * @package     MyCalendar
  * @author      Joe Dolson
  * @copyright   2009-2018 Joe Dolson
@@ -16,7 +18,7 @@
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
  * Version:     2.6.0-beta1
-*/
+ */
 
 /*
 	Copyright 2009-2018  Joe Dolson (email : joe@joedolson.com)
@@ -53,7 +55,7 @@ function mc_plugin_activated() {
 	$required_php_version = '5.3.0';
 
 	if ( version_compare( PHP_VERSION, $required_php_version, '<' ) ) {
-		$plugin_data = get_plugin_data(__FILE__, false);
+		$plugin_data = get_plugin_data( __FILE__, false );
 		// Translators: Name of plug-in, required PHP version, current PHP version.
 		$message = sprintf( __( '%1$s requires PHP version %2$s or higher. Your current PHP version is %3$s', 'my-calendar' ), $plugin_data['Name'], $required_php_version, phpversion() );
 		echo "<div class='error'><p>$message</p></div>";
@@ -137,10 +139,10 @@ function mc_register_widgets() {
 	register_widget( 'My_Calendar_Filters' );
 }
 
+add_action( 'init', 'mc_custom_canonical' );
 /**
  * Customize canonical URL for My Calendar custom links
  */
-add_action( 'init', 'mc_custom_canonical' );
 function mc_custom_canonical() {
 	add_action( 'wp_head', 'mc_canonical' );
 	remove_action( 'wp_head', 'rel_canonical' );
@@ -151,7 +153,7 @@ function mc_custom_canonical() {
  */
 function mc_canonical() {
 	// Original code.
-	if ( !is_singular() ) {
+	if ( ! is_singular() ) {
 		return;
 	}
 
@@ -248,8 +250,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 
 					<div class="inside resources">
 						<p class="follow-me">
-							<a href="https://twitter.com/intent/follow?screen_name=joedolson"
-							   class="twitter-follow-button" data-size="small" data-related="joedolson">Follow
+							<a href="https://twitter.com/intent/follow?screen_name=joedolson" class="twitter-follow-button" data-size="small" data-related="joedolson">Follow
 								@joedolson</a>
 							<script>!function (d, s, id) {
 									var js, fjs = d.getElementsByTagName(s)[0];
@@ -332,12 +333,12 @@ function my_calendar_menu() {
 	}
 	if ( function_exists( 'add_submenu_page' ) ) {
 		add_action( 'admin_head', 'my_calendar_write_js' );
-		add_action( "admin_enqueue_scripts", 'my_calendar_add_styles' );
+		add_action( 'admin_enqueue_scripts', 'my_calendar_add_styles' );
 		if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 			// If we're accessing a remote site, remove these pages.
 		} else {
 			if ( isset( $_GET['event_id'] ) ) {
-				$event_id   = absint( $_GET['event_id'] );
+				$event_id = absint( $_GET['event_id'] );
 				// Translators: Title of event.
 				$page_title = sprintf( __( 'Editing Event: %s', 'my-calendar' ), mc_get_data( 'event_title', $event_id ) );
 			} else {

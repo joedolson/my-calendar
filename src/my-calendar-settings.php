@@ -646,7 +646,7 @@ function mc_remote_db() {
 								$note = '';
 							}
 							?>
-							<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events','my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open calendar links to event details', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
@@ -805,6 +805,7 @@ function mc_remote_db() {
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
 							if ( ! is_array( $input_options ) ) {
 								update_option( 'mc_input_options', array(
+									'event_location_dropdown' => 'on',
 									'event_short'             => 'on',
 									'event_desc'              => 'on',
 									'event_category'          => 'on',
@@ -813,7 +814,6 @@ function mc_remote_db() {
 									'event_recurs'            => 'on',
 									'event_open'              => 'on',
 									'event_location'          => 'off',
-									'event_location_dropdown' => 'on',
 									'event_specials'          => 'on',
 									'event_access'            => 'on',
 									'event_host'              => 'on',
