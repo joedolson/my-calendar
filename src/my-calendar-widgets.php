@@ -394,7 +394,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 		}
 	}
 	$events = $near_events;
-	@usort( $events, 'mc_datetime_cmp' ); // sort split events by date
+	@usort( $events, 'mc_datetime_cmp' ); // Sort split events by date.
 
 	if ( is_array( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {

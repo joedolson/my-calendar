@@ -743,8 +743,9 @@ function mc_get_db_type() {
 		$my_calendar = my_calendar_table();
 		$dbs         = $mcdb->get_results( $wpdb->prepare( 'SHOW TABLE STATUS WHERE name=%s', $my_calendar ) );
 		foreach ( $dbs as $db ) {
-			if ( my_calendar_table() == $db->Name ) {
-				$db_type = $db->Engine;
+			$db = (array) $db;
+			if ( my_calendar_table() == $db['Name'] ) {
+				$db_type = $db['Engine'];
 			}
 		}
 		set_transient( 'mc_db_type', $db_type, MONTH_IN_SECONDS );

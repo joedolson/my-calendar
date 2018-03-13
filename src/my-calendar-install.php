@@ -579,14 +579,16 @@ function my_calendar_copyr( $source, $dest ) {
 		@mkdir( $dest );
 	}
 	// Loop through the folder.
-	$dir = dir( $source );
-	while ( false !== $entry = $dir->read() ) {
+	$dir   = dir( $source );
+	$entry = $dir->read();
+	while ( false !== $entry ) {
 		// Skip pointers.
 		if ( '.' == $entry || '..' == $entry ) {
 			continue;
 		}
 		// Deep copy directories.
 		my_calendar_copyr( "$source/$entry", "$dest/$entry" );
+		$entry = $dir->read;
 	}
 	// Clean up.
 	$dir->close();
@@ -611,14 +613,16 @@ function my_calendar_rmdirr( $dirname ) {
 		return unlink( $dirname );
 	}
 	// Loop through the folder.
-	$dir = dir( $dirname );
-	while ( false !== $entry = $dir->read() ) {
+	$dir   = dir( $dirname );
+	$entry = $dir->read();
+	while ( false !== $entry ) {
 		// Skip pointers.
 		if ( '.' == $entry || '..' == $entry ) {
 			continue;
 		}
 		// Recurse.
 		my_calendar_rmdirr( "$dirname/$entry" );
+		$entry = $dir->read();
 	}
 	// Clean up.
 	$dir->close();

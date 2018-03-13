@@ -1,4 +1,14 @@
 <?php
+/**
+ * My Calendar Mini Calendar Widget
+ *
+ * @category Widgets
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
