@@ -132,18 +132,6 @@ function mc_remove_cache( $cache ) {
 }
 
 /**
- * Old function to get users
- *
- * @param string $group User role.
- *
- * @return @mc_get_users
- */
-function my_calendar_getUsers( $group = 'authors' ) {
-	return mc_get_users( $group );
-}
-
-
-/**
  * Old support box function
  *
  * @see mc_show_sidebar()
