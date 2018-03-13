@@ -2124,7 +2124,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	$syear     = $params['syear'];
 	$sday      = $params['sday'];
 	$c_m       = 0;
-	if ( isset( $_GET['dy'] ) && $main_class == $cid && ( 'day' == $time || 'week' == $time ) ) { //
+	if ( isset( $_GET['dy'] ) && $main_class == $cid && ( 'day' == $time || 'week' == $time ) ) {
 		$c_day = (int) $_GET['dy'];
 	} else {
 		if ( 'week' == $time ) {
@@ -2301,7 +2301,7 @@ function mc_sub_links( $subtract ) {
 	$sub_google  = "\n	<li class='ics google'><a href='" . $sub_google . "'>" . __( 'Google', 'my-calendar' ) . '</a></li>';
 	$sub_outlook = "\n	<li class='ics outlook'><a href='" . $sub_outlook . "'>" . __( 'Outlook', 'my-calendar' ) . '</a></li>';
 
-	$output     = "\n
+	$output = "\n
 <div class='mc-export'>
 	<ul>$rss$sub_google$sub_outlook</ul>
 </div>\n";
@@ -2328,9 +2328,9 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	unset( $add['href'] );
 
 	$add['export'] = 'google';
-	$ics 		   = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
+	$ics           = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
 	$add['export'] = 'outlook';
-	$ics2 		   = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
+	$ics2          = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
 
 	$google  = "\n <li class='ics google'><a href='" . $ics . "'>" . __( 'Google', 'my-calendar' ) . '</a></li>';
 	$outlook = "\n <li class='ics outlook'><a href='" . $ics2 . "'>" . __( 'Outlook', 'my-calendar' ) . '</a></li>';
@@ -2426,10 +2426,10 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 /**
  * Set up prev link based on current view
  *
- * @param array $date Current date of view.
+ * @param array  $date Current date of view.
  * @param string $format of calendar.
  * @param string $time current time view.
- * @param int $months number of months shown in list views.
+ * @param int    $months number of months shown in list views.
  *
  * @return string array of parameters for link
  */
@@ -2440,7 +2440,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 
 	$last_year       = $cur_year - 1;
 	$mc_previous     = get_option( 'mc_previous_events' );
-	$previous_events = ( $mc_previous == '' ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . '</span>' : stripslashes( $mc_previous );
+	$previous_events = ( '' == $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . '</span>' : stripslashes( $mc_previous );
 	if ( $months <= 1 || 'list' != $format ) {
 		if ( 1 == $cur_month ) {
 			$month = 12;
@@ -2492,7 +2492,12 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		$date = date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) );
 	}
 	$previous_events = str_replace( '{date}', $date, $previous_events );
-	$output          = array( 'month' => $month, 'yr' => $yr, 'day' => $day, 'label' => $previous_events );
+	$output          = array(
+		'month' => $month,
+		'yr'    => $yr,
+		'day'   => $day,
+		'label' => $previous_events,
+	);
 
 	return $output;
 }
@@ -2508,14 +2513,14 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
  */
 function mc_filters( $args, $target_url, $ltype ) {
 	if ( ! is_array( $args ) ) {
-		$fields      = explode( ',', $args );
+		$fields = explode( ',', $args );
 	} else {
 		$fields = $args;
 	}
 	if ( empty( $fields ) ) {
 		return;
 	}
-	$return      = false;
+	$return = false;
 
 	$current_url = mc_get_uri();
 	$current_url = ( '' != $target_url && _mc_is_url( $target_url ) ) ? $target_url : $current_url;
@@ -2582,7 +2587,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 
 	$output      = '';
 	$current_url = mc_get_uri();
-	$current_url = ( $target_url != '' && _mc_is_url( $target_url ) ) ? $target_url : $current_url;
+	$current_url = ( '' != $target_url && _mc_is_url( $target_url ) ) ? $target_url : $current_url;
 
 	$name         = ( 'public' == $context ) ? 'mcat' : 'category';
 	$admin_fields = ( 'public' == $context ) ? ' name="' . $name . '"' : ' multiple="multiple" size="5" name="' . $name . '[]"  ';
@@ -2605,7 +2610,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 			}
 		}
 	}
-	$form .= ( 'list' == $show ||  'group' == $group ) ? '' : '
+	$form       .= ( 'list' == $show || 'group' == $group ) ? '' : '
 		</div><p>';
 	$public_form = ( 'public' == $context ) ? $form : '';
 	if ( ! is_user_logged_in() ) {
@@ -2632,7 +2637,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 				$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$category_name</a></li>";
 			} else {
 				$selected = ( $category->category_id == $mcat ) ? ' selected="selected"' : '';
-				$output .= " <option$selected value='$category->category_id'>$category_name</option>\n";
+				$output  .= " <option$selected value='$category->category_id'>$category_name</option>\n";
 			}
 		}
 		$output .= ( 'list' == $show ) ? '</ul>' : '</select>';
@@ -2687,7 +2692,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 		$not_selected = ( ! isset( $_GET['access'] ) ) ? 'selected="selected"' : '';
 		$output      .= ( 'list' == $show ) ? "
 		<ul>
-			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . "</a></li>" : $form . '
+			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
 		<label for="access">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
 			<select name="access" id="access">
 			<option value="all"' . $not_selected . '>' . __( 'No Limit', 'my-calendar' ) . '</option>' . "\n";
@@ -2698,10 +2703,10 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			if ( 'list' == $show ) {
 				$this_url = mc_build_url( array( 'access' => $key ), array() );
 				$selected = ( $key == $this_access ) ? ' class="selected"' : '';
-				$output .= " <li$selected><a rel='nofollow' href='$this_url'>$access_name</a></li>";
+				$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$access_name</a></li>";
 			} else {
 				$selected = ( $this_access == $key ) ? ' selected="selected"' : '';
-				$output .= " <option$selected value='" . esc_attr( $key ) . "'>" . esc_html( $access_name ) . "</option>\n";
+				$output  .= " <option$selected value='" . esc_attr( $key ) . "'>" . esc_html( $access_name ) . "</option>\n";
 			}
 		}
 		$output .= ( 'list' == $show ) ? '</ul>' : '</select>';
@@ -2716,8 +2721,9 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 /**
  * Build a URL for My Calendar views.
  *
- * @param array $add keys and values to add to URL.
- * @param array $subtract keys to subtract from URL.
+ * @param array  $add keys and values to add to URL.
+ * @param array  $subtract keys to subtract from URL.
+ * @param string $root Root URL, optional.
  *
  * @return string URL.
  */
@@ -2743,9 +2749,8 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 			// An empty string seems to work best; leaving it open.
 		} else {
 			wp_reset_query();
-			/*
-				break out of any alternate loop that's been set up. If a theme uses query_posts to fetch pages, this will cause problems. But themes should *never* use query_posts to replace the loop, so screw that.
-			*/
+
+			// Break out of alternate loop. If theme uses query_posts to fetch, this causes problems. But themes should *never* use query_posts to replace the loop, so screw that.
 			$home = get_permalink();
 		}
 	}
@@ -2838,7 +2843,7 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
 			$data = 'location_label';
 	}
 
-	$where     = apply_filters( 'mc_filter_location_list', '', $datatype );
+	$where = apply_filters( 'mc_filter_location_list', '', $datatype );
 	if ( true !== $full ) {
 		$select = $data;
 	} else {
@@ -2864,7 +2869,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 		foreach ( $locations as $key => $value ) {
 			if ( 'hcard' != $datatype && '' != $template ) {
 				$label   = stripslashes( $value->{$data} );
-				$url     = mc_maplink( $value, 'url', $source = 'location' );
+				$url     = mc_maplink( $value, 'url', 'location' );
 				$output .= ( $url ) ? "<li>$url</li>" : "<li>$label</li>";
 			} elseif ( 'hcard' == $datatype ) {
 				$label   = mc_hcard( $value, true, true, 'location' );
@@ -2873,7 +2878,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 				if ( mc_key_exists( $template ) ) {
 					$template = mc_get_custom_template( $template );
 				}
-				$values = array(
+				$values  = array(
 					'id'        => $value->location_id,
 					'label'     => $value->location_label,
 					'street'    => $value->location_street,
@@ -2921,7 +2926,10 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 
 	if ( count( $locations ) > 1 ) {
 		if ( 'list' == $show ) {
-			$url     = mc_build_url( array( 'loc' => 'all', 'ltype' => 'all' ), array() );
+			$url     = mc_build_url( array(
+				'loc'   => 'all',
+				'ltype' => 'all',
+			), array() );
 			$output .= '<ul id="mc-locations-list">
 			<li class="mc-show-all"><a href="' . $url . '">' . __( 'Show all', 'my-calendar' ) . '</a></li>';
 		} else {
@@ -2960,7 +2968,10 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 				$loc = ( empty( $_GET['loc'] ) ) ? '' : $_GET['loc'];
 				if ( 'list' == $show ) {
 					$selected = ( $vt == $loc ) ? ' class="selected"' : '';
-					$this_url = esc_url( mc_build_url( array( 'loc' => $vt, 'ltype' => $datatype ), array() ) );
+					$this_url = esc_url( mc_build_url( array(
+						'loc'   => $vt,
+						'ltype' => $datatype,
+					), array() ) );
 					$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$value</a></li>\n";
 				} else {
 					$selected = ( $vt == $loc ) ? ' class="selected"' : '';
@@ -2991,13 +3002,13 @@ add_action( 'mc_save_event', 'mc_refresh_cache', 10, 4 );
 /**
  * Execute a refresh of the My Calendar primary URL cache if caching plug-in installed.
  *
- * @param $action Type of action performed.
- * @param $data Data passed to filter.
- * @param $event_id Event ID being affected.
- * @param $result Result of calendar save query.
+ * @param string $action Type of action performed.
+ * @param array  $data Data passed to filter.
+ * @param int    $event_id Event ID being affected.
+ * @param int    $result Result of calendar save query.
  */
 function mc_refresh_cache( $action, $data, $event_id, $result ) {
-	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ): false;
+	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
 	$to_refresh = apply_filters( 'mc_cached_pages_to_refresh', array( $mc_uri_id ), $action, $data, $event_id, $result );
 
 	foreach ( $to_refresh as $calendar ) {

@@ -138,7 +138,7 @@ function mc_remove_cache( $cache ) {
  *
  * @return @mc_get_users
  */
-function my_calendar_getUsers( $group = 'authors' ) {
+function my_calendar_getUsers( $group = 'authors' ) { // phpcs ok function name invalid.
 	return mc_get_users( $group );
 }
 

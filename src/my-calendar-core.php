@@ -115,14 +115,14 @@ function mc_register_styles() {
 	}
 
 	$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
-	$js_array  = ( get_option( 'mc_show_js' ) != '' ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
-	$css_array = ( get_option( 'mc_show_css' ) != '' ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
+	$js_array  = ( '' != get_option( 'mc_show_js' ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
+	$css_array = ( '' != get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
 
 	// check whether any scripts are actually enabled.
 	if ( get_option( 'mc_calendar_javascript' ) != 1 || get_option( 'mc_list_javascript' ) != 1 || get_option( 'mc_mini_javascript' ) != 1 || get_option( 'mc_ajax_javascript' ) != 1 ) {
-		if ( @in_array( $id, $js_array ) || get_option( 'mc_show_js' ) == '' || is_singular( 'mc-events' ) ) {
+		if ( is_array( $js_array ) && in_array( $id, $js_array ) || '' == get_option( 'mc_show_js' ) || is_singular( 'mc-events' ) ) {
 			wp_enqueue_script( 'jquery' );
-			if ( get_option( 'mc_gmap' ) == 'true' ) {
+			if ( 'true' == get_option( 'mc_gmap' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
 				if ( $api_key ) {
 					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
@@ -132,8 +132,8 @@ function mc_register_styles() {
 		}
 	}
 
-	if ( get_option( 'mc_use_styles' ) != 'true' ) {
-		if ( @in_array( $id, $css_array ) || get_option( 'mc_show_css' ) == '' ) {
+	if ( 'true' != get_option( 'mc_use_styles' ) ) {
+		if ( is_array( $css_array ) && in_array( $id, $css_array ) || get_option( 'mc_show_css' ) == '' ) {
 			wp_enqueue_style( 'my-calendar-style' );
 		}
 	}
@@ -166,7 +166,7 @@ function my_calendar_head() {
 		$this_post = $wp_query->get_queried_object();
 		$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
 		$array     = ( '' != get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
-		if ( @in_array( $id, $array ) || get_option( 'mc_show_css' ) == '' ) {
+		if ( is_array( $array ) && in_array( $id, $array ) || get_option( 'mc_show_css' ) == '' ) {
 			// generate category colors.
 			$category_styles = '';
 			$inv             = '';
@@ -236,12 +236,12 @@ function mc_deal_with_deleted_user( $id ) {
 	$new_author = apply_filters( 'mc_deleted_author', $new );
 	// This may not work quite right in multi-site. Need to explore further when I have time.
 	$wpdb->get_results(
-		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id )
+		$wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_author=%d WHERE event_author=%d', $new_author, $id )
 	);
 
 	$new_host = apply_filters( 'mc_deleted_host', $new );
 	$wpdb->get_results(
-		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id )
+		$wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_host=%d WHERE event_host=%d', $new_host, $id )
 	);
 }
 
@@ -1086,7 +1086,7 @@ function mc_ajax_delete_occurrence() {
 	if ( current_user_can( 'mc_manage_events' ) ) {
 		global $wpdb;
 		$occur_id = (int) $_REQUEST['occur_id'];
-		$delete   = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d';
+		$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
 		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) );
 
 		if ( $result ) {
@@ -1181,7 +1181,6 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 
 if ( ! function_exists( 'wp_is_mobile' ) ) {
 	if ( ! is_plugin_active_for_network( 'my-calendar/my-calendar.php' ) ) {
-
 		/*
 		// Causes problems in Travis CI. JCD TODO.
 		function wp_is_mobile() {
@@ -1460,7 +1459,9 @@ function mc_field_callback() {
 	echo '<input type="text" value="' . esc_attr( $value ) . '" name="mc_cpt_base" id="mc_cpt_base" class="regular-text" />';
 }
 
-
+/**
+ * Generate arguments for My Calendar post type.
+ */
 function mc_post_type() {
 	$arguments = array(
 		'public'              => apply_filters( 'mc_event_posts_public', true ),
@@ -1660,7 +1661,7 @@ function mc_update_notice() {
 	}
 	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
 		if ( 'true' == get_option( 'mc_remote' ) ) {
-			echo '<div class="updated"><p>' . sprintf( __( 'My Calendar is configured to retrieve events from a remote source. %s', 'my-calendar' ), '<a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' ) . '</p></div>';
+			echo '<div class="updated"><p>' . __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' . '</p></div>';
 		}
 	}
 }

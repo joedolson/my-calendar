@@ -50,7 +50,7 @@ function my_calendar_print() {
 <meta name="generator" content="My Calendar for WordPress" />
 <meta name="robots" content="noindex,nofollow" />
 <!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
-<link rel="stylesheet" href="' . $stylesheet. '" type="text/css" media="screen,print" />' . do_action( 'mc_print_view_head', '' ) . '
+<link rel="stylesheet" href="' . $stylesheet . '" type="text/css" media="screen,print" />' . do_action( 'mc_print_view_head', '' ) . '
 </head>
 <body>';
 	echo $head;

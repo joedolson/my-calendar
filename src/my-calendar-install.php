@@ -579,7 +579,7 @@ function my_calendar_copyr( $source, $dest ) {
 		@mkdir( $dest );
 	}
 	// Loop through the folder.
-	$dir   = dir( $source );
+	$dir = dir( $source );
 	while ( false !== $entry = $dir->read() ) {
 		// Skip pointers.
 		if ( '.' == $entry || '..' == $entry ) {

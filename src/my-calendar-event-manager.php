@@ -2738,7 +2738,7 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 		$group_id = mc_get_data( 'event_group_id', $event_id );
 		$data     = array(
 			'occur_event_id' => $event_id,
-			'occur_group_id' => $group_id
+			'occur_group_id' => $group_id,
 		);
 	}
 
