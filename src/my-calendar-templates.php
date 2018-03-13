@@ -47,7 +47,7 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 		 */
 
 		if ( is_object( $value ) && ! empty( $value ) ) {
-			// null values return false...
+			// If a value is an object, ignore it.
 		} else {
 			if ( strpos( $template, '{' . $key ) !== false ) {
 				if ( 'list' != $type ) {
