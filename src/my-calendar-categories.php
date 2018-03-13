@@ -159,10 +159,10 @@ function my_calendar_manage_categories() {
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' == $_GET['mode'] ) {
 			$cat_id  = (int) $_GET['category_id'];
-			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
+			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // WPCS: unprepared SQL OK.
 
-			// also delete relationships for this category.
-			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $cat_id ) );
+			// Also delete relationships for this category.
+			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $cat_id ) ); // WPCS: unprepared SQL OK.
 
 			if ( $results ) {
 				$default_category = get_option( 'mc_default_category' );
@@ -292,7 +292,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 	$cur_cat = false;
 	if ( '' != $cat_id ) {
 		$cat_id  = (int) $cat_id;
-		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
+		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // WPCS: unprepared SQL OK.
 	}
 	if ( mc_is_custom_icon() ) {
 		$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
@@ -576,7 +576,7 @@ function mc_manage_categories() {
 			$cat_order = 'category_id';
 	}
 	// We pull the categories from the database.
-	$categories = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY %s ASC', $cat_order ) );
+	$categories = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY %s ASC', $cat_order ) );  // WPCS: unprepared SQL OK.
 	if ( ! empty( $categories ) ) {
 		?>
 		<table class="widefat page fixed mc-categories" id="my-calendar-admin-table">
@@ -645,7 +645,12 @@ function mc_manage_categories() {
 			} else {
 			?>
 			<td>
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')"><?php printf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' ); ?></a>
+				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')">
+				<?php
+				// Translators: Category name.
+				printf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
+				?>
+				</a>
 			</td>
 			<?php
 			}
@@ -844,7 +849,9 @@ function mc_get_categories( $event, $ids = true ) {
 	}
 
 	if ( ! $results ) {
-		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_category_relationships_table() . ' as r JOIN ' . my_calendar_categories_table() . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) );
+		$relate  = my_calendar_category_relationships_table();
+		$catego  = my_calendar_categories_table();
+		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) );
 	}
 	if ( true === $ids ) {
 		if ( $results ) {

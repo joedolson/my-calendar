@@ -1617,7 +1617,7 @@ if ( mc_show_edit_block( 'event_specials' ) ) {
 /**
  * Get users.
  *
- * @arg string $group Not used except in filters.
+ * @param string $group Not used except in filters.
  *
  * @return array of users
  */
@@ -2129,7 +2129,7 @@ function mc_list_events() {
 							</td>
 							<?php
 							if ( ! $event->event_category ) {
-								// events *must* have a category
+								// Events *must* have a category.
 								mc_update_event( 'event_category', 1, $event->event_id, '%d' );
 							}
 							$cat        = mc_get_category_detail( $event->event_category, false );
@@ -2369,7 +2369,7 @@ function mc_check_data( $action, $post, $i ) {
 			$endtime = '23:59:59';
 		}
 
-		// verify formats
+		// Verify formats.
 		$time    = date( 'H:i:s', mc_strtotime( $time ) );
 		$endtime = date( 'H:i:s', mc_strtotime( $endtime ) );
 		$end     = date( 'Y-m-d', mc_strtotime( $end ) ); // regardless of entry format, convert.
@@ -2380,8 +2380,8 @@ function mc_check_data( $action, $post, $i ) {
 		if ( isset( $post['event_category'] ) ) {
 			$cats = $post['event_category'];
 			if ( is_array( $cats ) ) {
-			// Set first category as primary.
-			$primary = ( is_numeric( $cats[0] ) ) ? $cats[0] : 1;
+				// Set first category as primary.
+				$primary = ( is_numeric( $cats[0] ) ) ? $cats[0] : 1;
 				foreach ( $cats as $cat ) {
 					$private = mc_get_category_detail( $cat, 'category_private' );
 					// If a selected category is private, set that category as primary instead.
@@ -2389,7 +2389,7 @@ function mc_check_data( $action, $post, $i ) {
 						$primary = $cat;
 					}
 				}
-			// Backwards compatibility for old versions of My Calendar Pro.
+				// Backwards compatibility for old versions of My Calendar Pro.
 			} else {
 				$primary = $cats;
 				$cats    = array( $cats );
@@ -2451,7 +2451,7 @@ function mc_check_data( $action, $post, $i ) {
 			$event_access    = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
 			$event_access    = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
 			if ( isset( $post['mc_copy_location'] ) && 'on' == $post['mc_copy_location'] && 0 == $i ) {
-			// Only the first event, if adding multiples.
+				// Only the first event, if adding multiples.
 				$add_loc = array(
 					'location_label'     => $event_label,
 					'location_street'    => $event_street,
@@ -2588,7 +2588,7 @@ function mc_check_data( $action, $post, $i ) {
 		$event_access = ( is_array( $event_access ) ) ? serialize( $event_access ) : '';
 		// The form is going to be rejected due to field validation issues, so we preserve the users entries here.
 		// All submitted data should be in this object, regardless of data destination.
-		$submission                     = ( !is_object( $submission ) ) ? new stdClass() : $submission;
+		$submission                     = ( ! is_object( $submission ) ) ? new stdClass() : $submission;
 		$submission->event_id           = ( isset( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) ? $_GET['event_id'] : false;
 		$submission->event_title        = $title;
 		$submission->event_desc         = $desc;
@@ -2736,7 +2736,10 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 	} else {
 		$formats  = array( '%d', '%d' );
 		$group_id = mc_get_data( 'event_group_id', $event_id );
-		$data     = array( 'occur_event_id' => $event_id, 'occur_group_id' => $group_id );
+		$data     = array(
+			'occur_event_id' => $event_id,
+			'occur_group_id' => $group_id
+		);
 	}
 
 	$result = $wpdb->update( my_calendar_event_table(), $data, array( 'occur_id' => $event_instance ), $formats, '%d' );
@@ -3211,7 +3214,7 @@ function mc_related_events( $id ) {
 			$end      = '</a>';
 			$begin    = date_i18n( get_option( 'mc_date_format' ), strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), strtotime( $result->occur_begin ) );
 			$template = $current . $begin . $end;
-			$output .= "<li>$template</li>";
+			$output  .= "<li>$template</li>";
 		}
 	} else {
 		$output = '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
@@ -3508,8 +3511,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 		$orig_begin = $event->event_begin . ' ' . $event->event_time;
 		$orig_end   = $event->event_end . ' ' . $event->event_endtime;
 	} else {
-		$orig_begin = @$post['event_begin'] . ' ' . @$post['event_time'];
-		$orig_end   = @$post['event_end'] . ' ' . @$post['event_endtime'];
+		$post_begin   = ( isset( $post['event_begin'] ) ) ? $post['event_begin'] : '';
+		$post_time    = ( isset( $post['event_time'] ) ) ? $post['event_time'] : '';
+		$post_end     = ( isset( $post['event_end'] ) ) ? $post['event_end'] : '';
+		$post_endtime = ( isset( $post['event_endtime'] ) ) ? $post['event_endtime'] : '';
+		$orig_begin   = $post_begin . ' ' . $post_time;
+		$orig_end     = $post_end . ' ' . $post_endtime;
 	}
 
 	$group_id = $event->event_group_id;
@@ -3520,7 +3527,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 	$every = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
 	if ( 'S' != $recur ) {
 		// If this event had a rep of 0, translate that.
-		$event_repetition = ( $event->event_repeats != 0 ) ? $event->event_repeats : _mc_increment_values( $recur );
+		$event_repetition = ( 0 != $event->event_repeats ) ? $event->event_repeats : _mc_increment_values( $recur );
 		$numforward       = (int) $event_repetition;
 		if ( 'S' != $recur ) {
 			switch ( $recur ) {
@@ -3806,7 +3813,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
  * Check for events with known occurrence overlap problems.
  */
 function mc_list_problems() {
-	$events  = get_posts( array(
+	$events   = get_posts( array(
 		'post_type'  => 'mc-events',
 		'meta_key'   => '_occurrence_overlap',
 		'meta_value' => 'false',

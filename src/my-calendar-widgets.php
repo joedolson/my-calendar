@@ -13,7 +13,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * My Calendar Simple Search class.
+ *
+ * @category  Widgets
+ * @package   My Calendar
+ * @author    Joe Dolson
+ * @copyright 2009
+ * @license   GPLv2 or later
+ * @version   1.0
+ */
 class My_Calendar_Simple_Search extends WP_Widget {
+
+	/**
+	 * Contructor.
+	 */
 	function __construct() {
 		parent::__construct(
 			false,
@@ -76,8 +90,21 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	}
 }
 
-
+/**
+ * My Calendar Event Filters class.
+ *
+ * @category  Widgets
+ * @package   My Calendar
+ * @author    Joe Dolson
+ * @copyright 2009
+ * @license   GPLv2 or later
+ * @version   1.0
+ */
 class My_Calendar_Filters extends WP_Widget {
+
+	/**
+	 * Contructor.
+	 */
 	function __construct() {
 		parent::__construct(
 			false,
@@ -174,8 +201,21 @@ class My_Calendar_Filters extends WP_Widget {
 	}
 }
 
+/**
+ * My Calendar Today's Events class.
+ *
+ * @category  Widgets
+ * @package   My Calendar
+ * @author    Joe Dolson
+ * @copyright 2009
+ * @license   GPLv2 or later
+ * @version   1.0
+ */
 class My_Calendar_Today_Widget extends WP_Widget {
 
+	/**
+	 * Contructor.
+	 */
 	function __construct() {
 		parent::__construct(
 			false,
@@ -319,8 +359,21 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	}
 }
 
+/**
+ * My Calendar Upcoming Events class.
+ *
+ * @category  Widgets
+ * @package   My Calendar
+ * @author    Joe Dolson
+ * @copyright 2009
+ * @license   GPLv2 or later
+ * @version   1.0
+ */
 class My_Calendar_Upcoming_Widget extends WP_Widget {
 
+	/**
+	 * Contructor.
+	 */
 	function __construct() {
 		parent::__construct( false, $name = __( 'My Calendar: Upcoming Events', 'my-calendar' ), array( 'customize_selective_refresh' => true ) );
 	}
@@ -450,23 +503,23 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_type' ); ?>"><?php _e( 'Display upcoming events by:', 'my-calendar' ); ?></label>
 			<select id="<?php echo $this->get_field_id( 'my_calendar_upcoming_type' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_type' ); ?>">
-				<option value="events" <?php echo ( $type == 'events' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Events (e.g. 2 past, 3 future)', 'my-calendar' ) ?></option>
-				<option value="days" <?php echo ( $type == 'days' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Dates (e.g. 4 days past, 5 forward)', 'my-calendar' ) ?></option>
-				<option value="month" <?php echo ( $type == 'month' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current month', 'my-calendar' ) ?></option>
-				<option value="month+1" <?php echo ( $type == 'month+1' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show next month', 'my-calendar' ) ?></option>
-				<option value="month+2" <?php echo ( $type == 'month+2' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 2nd month out', 'my-calendar' ) ?></option>
-				<option value="month+3" <?php echo ( $type == 'month+3' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 3rd month out', 'my-calendar' ) ?></option>
-				<option value="month+4" <?php echo ( $type == 'month+4' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 4th month out', 'my-calendar' ) ?></option>
-				<option value="month+5" <?php echo ( $type == 'month+5' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 5th month out', 'my-calendar' ) ?></option>
-				<option value="month+6" <?php echo ( $type == 'month+6' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 6th month out', 'my-calendar' ) ?></option>
-				<option value="month+7" <?php echo ( $type == 'month+7' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 7th month out', 'my-calendar' ) ?></option>
-				<option value="month+8" <?php echo ( $type == 'month+8' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 8th month out', 'my-calendar' ) ?></option>
-				<option value="month+9" <?php echo ( $type == 'month+9' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 9th month out', 'my-calendar' ) ?></option>
-				<option value="month+10" <?php echo ( $type == 'month+10' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 10th month out', 'my-calendar' ) ?></option>
-				<option value="month+11" <?php echo ( $type == 'month+11' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 11th month out', 'my-calendar' ) ?></option>
-				<option value="month+12" <?php echo ( $type == 'month+12' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 12th month out', 'my-calendar' ) ?></option>
-				<option value="year" <?php echo ( $type == 'year' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current year', 'my-calendar' ) ?></option>
-				<option value="custom" <?php echo ( $type == 'custom' ) ? 'selected="selected"' : ''; ?>><?php _e( 'Custom Dates', 'my-calendar' ) ?></option>
+				<option value="events" <?php echo ( 'events' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Events (e.g. 2 past, 3 future)', 'my-calendar' ) ?></option>
+				<option value="days" <?php echo ( 'days' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Dates (e.g. 4 days past, 5 forward)', 'my-calendar' ) ?></option>
+				<option value="month" <?php echo ( 'month' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current month', 'my-calendar' ) ?></option>
+				<option value="month+1" <?php echo ( 'month+1' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show next month', 'my-calendar' ) ?></option>
+				<option value="month+2" <?php echo ( 'month+2' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 2nd month out', 'my-calendar' ) ?></option>
+				<option value="month+3" <?php echo ( 'month+3' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 3rd month out', 'my-calendar' ) ?></option>
+				<option value="month+4" <?php echo ( 'month+4' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 4th month out', 'my-calendar' ) ?></option>
+				<option value="month+5" <?php echo ( 'month+5' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 5th month out', 'my-calendar' ) ?></option>
+				<option value="month+6" <?php echo ( 'month+6' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 6th month out', 'my-calendar' ) ?></option>
+				<option value="month+7" <?php echo ( 'month+7' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 7th month out', 'my-calendar' ) ?></option>
+				<option value="month+8" <?php echo ( 'month+8' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 8th month out', 'my-calendar' ) ?></option>
+				<option value="month+9" <?php echo ( 'month+9' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 9th month out', 'my-calendar' ) ?></option>
+				<option value="month+10" <?php echo ( 'month+10' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 10th month out', 'my-calendar' ) ?></option>
+				<option value="month+11" <?php echo ( 'month+11' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 11th month out', 'my-calendar' ) ?></option>
+				<option value="month+12" <?php echo ( 'month+12' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 12th month out', 'my-calendar' ) ?></option>
+				<option value="year" <?php echo ( 'year' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current year', 'my-calendar' ) ?></option>
+				<option value="custom" <?php echo ( 'custom' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Custom Dates', 'my-calendar' ) ?></option>
 			</select>
 		</p>
 		<?php
@@ -1131,10 +1184,20 @@ function my_calendar_todays_events( $args ) {
 }
 
 /**
- * Mini calendar widget
+ * My Calendar Mini Calendar widget class.
+ *
+ * @category  Widgets
+ * @package   My Calendar
+ * @author    Joe Dolson
+ * @copyright 2009
+ * @license   GPLv2 or later
+ * @version   1.0
  */
 class My_Calendar_Mini_Widget extends WP_Widget {
 
+	/**
+	 * Contructor.
+	 */
 	function __construct() {
 		parent::__construct( false, $name = __( 'My Calendar: Mini Calendar', 'my-calendar' ), array( 'customize_selective_refresh' => true ) );
 	}

@@ -177,7 +177,7 @@ function mc_manage_locations() {
 					'orderby' => 'id',
 				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
 				?>
-				'><?php _e( 'ID', 'my-calendar' ) ?></a></th>
+				'><?php _e( 'ID', 'my-calendar' ); ?></a></th>
 				<th scope="col"><a href='
 				<?php
 				echo add_query_arg( array(
@@ -201,7 +201,7 @@ function mc_manage_locations() {
 					'orderby' => 'state',
 				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
 				?>
-				'><?php _e( 'State/Province', 'my-calendar' ) ?></a></th>
+				'><?php _e( 'State/Province', 'my-calendar' ); ?></a></th>
 				<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>
 				<th scope="col"><?php _e( 'Delete', 'my-calendar' ); ?></th>
 			</tr>
@@ -209,7 +209,8 @@ function mc_manage_locations() {
 			<?php
 			$class = '';
 			foreach ( $locations as $location ) {
-				$class = ( 'alternate' == $class ) ? '' : 'alternate'; ?>
+				$class = ( 'alternate' == $class ) ? '' : 'alternate';
+			?>
 				<tr class="<?php echo $class; ?>">
 					<th scope="row">
 						<input type="checkbox" value="<?php echo $location->location_id; ?>" name="mass_edit[]" id="mc<?php echo $location->location_id; ?>"/>
@@ -225,12 +226,15 @@ function mc_manage_locations() {
 						<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations&amp;mode=delete&amp;location_id=$location->location_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
 					</td>
 				</tr>
-			<?php } ?>
+			<?php
+			}
+			?>
 		</table>
 		<p>
 			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete locations', 'my-calendar' ); ?>" />
 		</p>
-		</form><?php
+		</form>
+		<?php
 	} else {
 		echo '<p>' . __( 'There are no locations in the database yet!', 'my-calendar' ) . '</p>';
 	}

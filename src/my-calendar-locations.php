@@ -362,7 +362,9 @@ function mc_location_controls() {
 			}
 			$output .= '
 			<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span>' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</h4>
-			<div>
+			<div>';
+			// Translators: Name of field being restricted, e.g. "Location Controls for State".
+			$output .= '
 				<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '(' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/>
 				<textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
 			</div>';
@@ -520,7 +522,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 		if ( is_array( $location_access ) ) {
 			$checked = ( in_array( $a, $location_access ) || in_array( $k, $location_access ) ) ? " checked='checked'" : '';
 		}
-		$item = sprintf( '<li><input type="checkbox" id="%1$s" name="' . $context . '_access[]" value="%4$s" class="checkbox" %2$s /> <label for="%1$s">%3$s</label></li>', esc_attr( $id ), $checked, esc_html( $label ), esc_attr( $a ) );
+		$item         = sprintf( '<li><input type="checkbox" id="%1$s" name="' . $context . '_access[]" value="%4$s" class="checkbox" %2$s /> <label for="%1$s">%3$s</label></li>', esc_attr( $id ), $checked, esc_html( $label ), esc_attr( $a ) );
 		$access_list .= $item;
 	}
 	$return .= $access_list;

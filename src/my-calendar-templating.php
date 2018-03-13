@@ -357,7 +357,7 @@ function mc_template_description( $key ) {
 		return '';
 	}
 
-	// Translators: unique template key. (non-language string.)
+	// Translators: unique template key. Non-language string.
 	$return      = sprintf( __( 'Custom template, keyword %s', 'my-calendar' ), "<code>$key</code>" );
 	$description = '';
 	switch ( $key ) {
@@ -389,8 +389,6 @@ function mc_template_description( $key ) {
 
 /**
  * List of templates available
- *
- * @return string table of available templates
  */
 function mc_list_templates() {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';

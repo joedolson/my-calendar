@@ -23,9 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param array   $atts Array of keys and values to use as input attributes.
  * @param string  $type Field type for option.
  * @param boolean $echo True to echo, false to return.
- *
  */
-function mc_settings_field( $name, $label, $default = '', $note = '', $atts = array( 'size' => '30' ), $type = 'text',$echo = true ) {
+function mc_settings_field( $name, $label, $default = '', $note = '', $atts = array( 'size' => '30' ), $type = 'text', $echo = true ) {
 	$options    = '';
 	$attributes = '';
 	if ( is_array( $atts ) && ! empty( $atts ) ) {
@@ -95,7 +94,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			}
 			if ( is_array( $default ) ) {
 				foreach ( $default as $k => $v ) {
-					$checked = ( $k == $value ) ? ' selected="selected"' : '';
+					$checked  = ( $k == $value ) ? ' selected="selected"' : '';
 					$options .= "<option value='" . esc_attr( $k ) . "'$checked>$v</option>";
 				}
 			}
@@ -108,7 +107,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			break;
 	}
 
-	if ( $echo == true ) {
+	if ( true == $echo ) {
 		echo $return;
 	} else {
 		return $return;
@@ -121,9 +120,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 function my_calendar_import() {
 	if ( 'true' != get_option( 'ko_calendar_imported' ) ) {
 		global $wpdb;
-		define( 'KO_CALENDAR_TABLE', $wpdb->prefix . 'calendar' );
-		define( 'KO_CALENDAR_CATS', $wpdb->prefix . 'calendar_categories' );
-		$events         = $wpdb->get_results( 'SELECT * FROM ' . KO_CALENDAR_TABLE, 'ARRAY_A' );
+		$events         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar', 'ARRAY_A' );
 		$event_ids      = array();
 		$events_results = false;
 		foreach ( $events as $key ) {
@@ -159,7 +156,7 @@ function my_calendar_import() {
 			);
 			mc_increment_event( $value, $dates );
 		}
-		$cats         = $wpdb->get_results( 'SELECT * FROM ' . KO_CALENDAR_CATS, 'ARRAY_A' );
+		$cats         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar_categories', 'ARRAY_A' );
 		$cats_results = false;
 		foreach ( $cats as $key ) {
 			$name         = esc_sql( $key['category_name'] );
@@ -197,7 +194,7 @@ function my_calendar_settings() {
 			echo '<li>' . __( 'Generating event occurrences.', 'my-calendar' ) . '</li>';
 			mc_migrate_db();
 			echo '<li>' . __( 'Event generation completed.', 'my-calendar' ) . '</li>';
-			echo "</ol></div>";
+			echo '</ol></div>';
 		}
 	}
 	if ( isset( $_POST['mc_manage'] ) ) {
@@ -207,7 +204,7 @@ function my_calendar_settings() {
 		$mc_remote      = ( ! empty( $_POST['mc_remote'] ) && 'on' == $_POST['mc_remote'] ) ? 'true' : 'false';
 		$mc_drop_tables = ( ! empty( $_POST['mc_drop_tables'] ) && 'on' == $_POST['mc_drop_tables'] ) ? 'true' : 'false';
 		// Handle My Calendar primary URL.
-		$mc_uri         = get_option( 'mc_uri' );
+		$mc_uri = get_option( 'mc_uri' );
 		if ( isset( $_POST['mc_uri'] ) && ! isset( $_POST['mc_uri_id'] ) ) {
 			$mc_uri = $_POST['mc_uri'];
 		} elseif ( isset( $_POST['mc_uri_id'] ) && is_numeric( $_POST['mc_uri_id'] ) ) {
@@ -302,7 +299,7 @@ function my_calendar_settings() {
 		update_option( 'mc_show_address', ( ! empty( $_POST['mc_show_address'] ) && 'on' == $_POST['mc_show_address'] ) ? 'true' : 'false' );
 		update_option( 'mc_display_more', ( ! empty( $_POST['mc_display_more'] ) && 'on' == $_POST['mc_display_more'] ) ? 'true' : 'false' );
 		update_option( 'mc_event_registration', ( ! empty( $_POST['mc_event_registration'] ) && 'on' == $_POST['mc_event_registration'] ) ? 'true' : 'false' );
-		update_option( 'mc_short', ( ! empty( $_POST['mc_short'] ) &&'on' == $_POST['mc_short'] ) ? 'true' : 'false' );
+		update_option( 'mc_short', ( ! empty( $_POST['mc_short'] ) && 'on' == $_POST['mc_short'] ) ? 'true' : 'false' );
 		update_option( 'mc_desc', ( ! empty( $_POST['mc_desc'] ) && 'on' == $_POST['mc_desc'] ) ? 'true' : 'false' );
 		update_option( 'mc_process_shortcodes', ( ! empty( $_POST['mc_process_shortcodes'] ) && 'on' == $_POST['mc_process_shortcodes'] ) ? 'true' : 'false' );
 		update_option( 'mc_event_link', ( ! empty( $_POST['mc_event_link'] ) && 'on' == $_POST['mc_event_link'] ) ? 'true' : 'false' );
@@ -311,6 +308,7 @@ function my_calendar_settings() {
 		update_option( 'mc_convert', ( ! empty( $_POST['mc_convert'] ) ) ? $_POST['mc_convert'] : 'false' );
 		if ( ( isset( $_POST['mc_use_permalinks'] ) && 'true' == get_option( 'mc_use_permalinks' ) ) && 'true' != $permalinks ) {
 			$url  = admin_url( 'options-permalink.php#mc_cpt_base' );
+			// Translators: URL to permalink settings page.
 			$note = ' ' . sprintf( __( 'You activated My Calendar permalinks. Go to <a href="%s">permalink settings</a> to set the base URL for My Calendar Events.', 'my-calendar' ), $url );
 		} else {
 			$note = '';
@@ -340,7 +338,7 @@ function my_calendar_settings() {
 		update_option( 'mc_no_fifth_week', ( ! empty( $_POST['mc_no_fifth_week'] ) && 'on' == $_POST['mc_no_fifth_week'] ) ? 'true' : 'false' );
 		update_option( 'mc_event_link_expires', ( ! empty( $_POST['mc_event_link_expires'] ) && 'on' == $_POST['mc_event_link_expires'] ) ? 'true' : 'false' );
 
-		echo '<div class="updated"><p><strong>' . __( 'Input Settings saved', 'my-calendar' ) . ".</strong></p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Input Settings saved', 'my-calendar' ) . '.</strong></p></div>';
 	}
 	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 		if ( isset( $_POST['mc_network'] ) ) {
@@ -348,7 +346,7 @@ function my_calendar_settings() {
 			update_site_option( 'mc_multisite', $mc_multisite );
 			$mc_multisite_show = (int) $_POST['mc_multisite_show'];
 			update_site_option( 'mc_multisite_show', $mc_multisite_show );
-			echo '<div class="updated"><p><strong>' . __( 'Multisite settings saved', 'my-calendar' ) . ".</strong></p></div>";
+			echo '<div class="updated"><p><strong>' . __( 'Multisite settings saved', 'my-calendar' ) . '.</strong></p></div>';
 		}
 	}
 	// custom text.
@@ -382,7 +380,7 @@ function my_calendar_settings() {
 		update_option( 'mc_week_format', stripslashes( $_POST['mc_week_format'] ) );
 		update_option( 'mc_time_format', stripslashes( $_POST['mc_time_format'] ) );
 		update_option( 'mc_month_format', stripslashes( $_POST['mc_month_format'] ) );
-		echo '<div class="updated"><p><strong>' . __( 'Custom text settings saved', 'my-calendar' ) . ".</strong></p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Custom text settings saved', 'my-calendar' ) . '.</strong></p></div>';
 	}
 	// Mail function by Roland.
 	if ( isset( $_POST['mc_email'] ) ) {
@@ -400,7 +398,7 @@ function my_calendar_settings() {
 		update_option( 'mc_event_mail_bcc', $mc_event_mail_bcc );
 		update_option( 'mc_event_mail', $mc_event_mail );
 		update_option( 'mc_html_email', $mc_html_email );
-		echo '<div class="updated"><p><strong>' . __( 'Email notice settings saved', 'my-calendar' ) . ".</strong></p></div>";
+		echo '<div class="updated"><p><strong>' . __( 'Email notice settings saved', 'my-calendar' ) . '.</strong></p></div>';
 	}
 
 	apply_filters( 'mc_save_settings', '', $_POST );
@@ -436,7 +434,7 @@ function my_calendar_settings() {
 					<?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
 				</p>
 
-				<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config" ); ?>">
+				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config' ); ?>">
 					<div>
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 						<input type="hidden" name="import" value="true" />
@@ -473,7 +471,7 @@ function my_calendar_settings() {
 				<?php
 				if ( current_user_can( 'administrator' ) ) {
 				?>
-					<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config#my-calendar-manage" ); ?>">
+					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<fieldset>
 							<legend class="screen-reader-text"><?php _e( 'Management', 'my-calendar' ); ?></legend>
@@ -486,19 +484,24 @@ function my_calendar_settings() {
 									$page_title = get_post( absint( get_option( 'mc_uri_id' ) ) )->post_title;
 									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
 								}
-								if ( '' != get_option( 'mc_uri' ) && ( $permalink != get_option( 'mc_uri' ) ) ) {
+								if ( '' != get_option( 'mc_uri' ) && ( get_option( 'mc_uri' ) != $permalink ) ) {
 								?>
 								<li><?php mc_settings_field( 'mc_uri', __( 'Where is your main calendar page?', 'my-calendar' ), '', "$guess[message]", array( 'size' => '60' ), 'url' ); ?></li>
 								<li><?php mc_settings_field( 'mc_uri_id', __( 'Calendar Page ID?', 'my-calendar' ), '', "($page_title)", array( 'size' => '20', 'class' => 'suggest' ), 'text' ); ?></li>
 								<?php
 								} else {
 								?>
-									<li><?php mc_settings_field( 'mc_uri_id', __( 'Where is your main calendar page?', 'my-calendar' ), '', "(<a href='$permalink'>$page_title</a>)", array( 'size' => '20', 'class' => 'suggest' ), 'text' ); ?></li>
+									<li><?php mc_settings_field( 'mc_uri_id', __( 'Where is your main calendar page?', 'my-calendar' ), '', "(<a href='$permalink'>$page_title</a>)", array(
+										'size' => '20',
+										'class' => 'suggest',
+									), 'text' ); ?></li>
 								<?php
 								}
 								?>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-								<?php if ( 'true' == get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) { ?>
+								<?php
+								if ( 'true' == get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
+								?>
 								<li><?php _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ); ?>
 <pre>
 function mc_remote_db() {
@@ -507,7 +510,7 @@ function mc_remote_db() {
 	return $mcdb;
 }
 </pre>
-									<?php _e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
+								<?php _e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
 								</li>
 								<?php
 								}
@@ -526,7 +529,7 @@ function mc_remote_db() {
 									'6' => __( 'Category', 'my-calendar' ),
 									'7' => __( 'Location Name', 'my-calendar' ),
 								), '', array(), 'select' ); ?> <?php mc_settings_field( 'mc_default_direction', __( 'Sort direction', 'my-calendar' ), array(
-									'ASC' => __( 'Ascending', 'my-calendar' ),
+									'ASC'  => __( 'Ascending', 'my-calendar' ),
 									'DESC' => __( 'Descending', 'my-calendar' ),
 								), '', array(), 'select' );
 								?>
@@ -563,7 +566,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Text Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config#my-calendar-text" ); ?>">
+				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-text' ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
 						<legend class="screen-reader-text"><?php _e( 'Customize Text Fields', 'my-calendar' ); ?></legend>
@@ -573,11 +576,11 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_next_events', __( 'Next events link', 'my-calendar' ), __( 'Next', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_week_caption', __( 'Week view caption:', 'my-calendar' ), '', __( 'Available tag: <code>{date format=""}</code>', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in list views.', 'my-calendar' ) ); ?></li>
-							<li><?php mc_settings_field( 'mc_title_template', __( 'Event title (Grid)', 'my-calendar' ), $mc_title_template, "<a href='" . admin_url( "admin.php?page=my-calendar-help#templates" ) . "'>" . __( "Templating Help", 'my-calendar' ) . '</a>' ); ?></li>
-							<li><?php mc_settings_field( 'mc_title_template_solo', __( 'Event title (Single)', 'my-calendar' ), $mc_title_template_solo, "<a href='" . admin_url( "admin.php?page=my-calendar-help#templates" ) . "'>" . __( "Templating Help", 'my-calendar' ) . '</a>' ); ?></li>
-							<li><?php mc_settings_field( 'mc_title_template_list', __( 'Event title (List)', 'my-calendar' ), $mc_title_template_list, "<a href='" . admin_url( "admin.php?page=my-calendar-help#templates" ) . "'>" . __( "Templating Help", 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_title_template', __( 'Event title (Grid)', 'my-calendar' ), $mc_title_template, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_title_template_solo', __( 'Event title (Single)', 'my-calendar' ), $mc_title_template_solo, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_title_template_list', __( 'Event title (List)', 'my-calendar' ), $mc_title_template_list, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li><?php mc_settings_field( 'mc_details_label', __( 'Event details link text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
-							<li><?php mc_settings_field( 'mc_link_label', __( 'Event URL link text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( "admin.php?page=my-calendar-help#templates" ) . "'>" . __( "Templating Help", 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_link_label', __( 'Event URL link text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li><?php mc_settings_field( 'mc_event_title_template', __( 'Title element template', 'my-calendar' ), '{title} &raquo; {date}', __( 'Current: %s', 'my-calendar' ) ); ?></li>
 						</ul>
 					</fieldset>
@@ -611,7 +614,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Output Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config#mc-output" ); ?>">
+				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#mc-output' ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Output Settings', 'my-calendar' ); ?>" /></p>
 					<fieldset>
@@ -619,7 +622,7 @@ function mc_remote_db() {
 						<ul>
 							<?php
 							if ( isset( $_POST['mc_use_permalinks'] ) && '' != $note ) {
-								$url  = admin_url( 'options-permalink.php#mc_cpt_base' );
+								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
 								// Translators: URL for WordPress Settings > Permalinks.
 								$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
 							} else {
@@ -758,7 +761,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config#my-calendar-input" ); ?>">
+				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
 						<legend><?php _e( 'Show in event manager', 'my-calendar' ); ?></legend>
@@ -785,19 +788,19 @@ function mc_remote_db() {
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
 							if ( ! is_array( $input_options ) ) {
 								update_option( 'mc_input_options', array(
-										'event_short'             => 'on',
-										'event_desc'              => 'on',
-										'event_category'          => 'on',
-										'event_image'             => 'on',
-										'event_link'              => 'on',
-										'event_recurs'            => 'on',
-										'event_open'              => 'on',
-										'event_location'          => 'off',
-										'event_location_dropdown' => 'on',
-										'event_specials'          => 'on',
-										'event_access'            => 'on',
-										'event_host'              => 'on',
-									) );
+									'event_short'             => 'on',
+									'event_desc'              => 'on',
+									'event_category'          => 'on',
+									'event_image'             => 'on',
+									'event_link'              => 'on',
+									'event_recurs'            => 'on',
+									'event_open'              => 'on',
+									'event_location'          => 'off',
+									'event_location_dropdown' => 'on',
+									'event_specials'          => 'on',
+									'event_access'            => 'on',
+									'event_host'              => 'on',
+								) );
 								$input_options = get_option( 'mc_input_options' );
 							}
 							foreach ( $input_options as $key => $value ) {
@@ -832,7 +835,7 @@ function mc_remote_db() {
 
 				<div class="inside">
 					<p><?php _e( 'The central calendar is the calendar associated with the primary site in your WordPress Multisite network.', 'my-calendar' ); ?></p>
-					<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config#my-calendar-multisite" ); ?>">
+					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-multisite' ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 						<input type='hidden' name='mc_network' value='true'/>
 						<fieldset>
@@ -879,7 +882,7 @@ function mc_remote_db() {
 			<div class="inside">
 				<?php if ( current_user_can( 'administrator' ) ) { ?>
 
-					<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config#my-calendar-permissions" ); ?>">
+					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-permissions' ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<?php
 						global $wp_roles;
@@ -928,7 +931,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Calendar Email Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-config#my-calendar-email" ); ?>">
+				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-email' ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
 						<legend><?php _e( 'Email Notifications', 'my-calendar' ); ?></legend>
@@ -949,7 +952,7 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_event_mail_subject', __( 'Email subject', 'my-calendar' ), get_bloginfo( 'name' ) . ': ' . __( 'New event added', 'my-calendar' ), '', array( 'size' => 60 ) ); ?></li>
 							<li>
 							<?php
-							mc_settings_field( 'mc_event_mail_message', __( 'Message Body', 'my-calendar' ), __( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}", "<br /><a href='" . admin_url( "admin.php?page=my-calendar-help#templates" ) . "'>" . __( "Templating Help", 'my-calendar' ) . '</a>', array(
+							mc_settings_field( 'mc_event_mail_message', __( 'Message Body', 'my-calendar' ), __( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}", "<br /><a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( "Templating Help", 'my-calendar' ) . '</a>', array(
 								'cols' => 60,
 								'rows' => 6,
 							), 'textarea' );

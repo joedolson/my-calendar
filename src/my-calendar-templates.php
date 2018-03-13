@@ -661,30 +661,30 @@ function mc_get_details_label( $event, $e ) {
  * @return string formatted time
  */
 function mc_format_timestamp( $os ) {
-        if ( isset( $_GET['outlook'] ) ) {
-			// Should iCal be in UTC or in current timezone.
-			$timezone_string = get_option( 'timezone_string' );
-			if ( ! $timezone_string ) {
-					// Multiply gmt_offset by -1 because POSIX has it reversed.
-					// See: http://stackoverflow.com/questions/20228224/php-timezone-issue.
-					$timezone_string = sprintf( 'Etc/GMT%+d', -1 * get_option( 'gmt_offset' ) );
-			}
+	if ( isset( $_GET['outlook'] ) ) {
+		// Should iCal be in UTC or in current timezone.
+		$timezone_string = get_option( 'timezone_string' );
+		if ( ! $timezone_string ) {
+				// Multiply gmt_offset by -1 because POSIX has it reversed.
+				// See: http://stackoverflow.com/questions/20228224/php-timezone-issue.
+				$timezone_string = sprintf( 'Etc/GMT%+d', -1 * get_option( 'gmt_offset' ) );
+		}
 
-			$timezone_object = timezone_open( $timezone_string );
-			$date_object     = date_create( null, $timezone_object );
+		$timezone_object = timezone_open( $timezone_string );
+		$date_object     = date_create( null, $timezone_object );
 
-			$date_object->setTime( date( 'H', $os ), date( 'i', $os ) );
-			$date_object->setDate( date( 'Y', $os ), date( 'm', $os ), date( 'd', $os ) );
+		$date_object->setTime( date( 'H', $os ), date( 'i', $os ) );
+		$date_object->setDate( date( 'Y', $os ), date( 'm', $os ), date( 'd', $os ) );
 
-			$timestamp = $date_object->getTimestamp();
-			$time      = gmdate( 'Ymd\THi00', $timestamp ) . 'Z';
+		$timestamp = $date_object->getTimestamp();
+		$time      = gmdate( 'Ymd\THi00', $timestamp ) . 'Z';
 
-        } else {
-			$os_time = mktime( date( 'H', $os ), date( 'i', $os ), date( 's', $os ), date( 'm', $os ), date( 'd', $os ), date( 'Y', $os ) );
-			$time    = date( 'Ymd\THi00', $os_time );
-        }
+	} else {
+		$os_time = mktime( date( 'H', $os ), date( 'i', $os ), date( 's', $os ), date( 'm', $os ), date( 'd', $os ), date( 'Y', $os ) );
+		$time    = date( 'Ymd\THi00', $os_time );
+	}
 
-        return $time;
+	return $time;
 }
 
 /**
@@ -724,7 +724,7 @@ function mc_duration( $event ) {
 	$duration .= ( 0 != $interval->y ) ? $interval->y . 'Y' : '';
 	$duration .= ( 0 != $interval->m ) ? $interval->m . 'M' : '';
 	if ( '23' == $interval->h && '59' == $interval->i ) {
-		$d = ( 0 == $interval->d ) ? 1 : $interval->d + 1;
+		$d         = ( 0 == $interval->d ) ? 1 : $interval->d + 1;
 		$duration .= 'D' . $d;
 		$duration .= 'TH0M0';
 	} else {
@@ -732,7 +732,7 @@ function mc_duration( $event ) {
 		$duration .= ( 0 != $interval->h ) ? 'T' . $interval->h . 'H' : '';
 		$duration .= ( 0 != $interval->i ) ? $interval->i . 'M' : '';
 	}
-	$duration  = 'P' . $duration;
+	$duration = 'P' . $duration;
 
 	return $duration;
 }
@@ -1019,8 +1019,8 @@ function mc_auto_excerpt( $e, $event ) {
 	$shortdesc   = $e['shortdesc'];
 	$excerpt     = '';
 	if ( '' != $description && '' == $shortdesc ) { // if description is empty, this won't work, so skip it.
-		$num_words    = apply_filters( 'mc_excerpt_length', 55 );
-		$excerpt      = wp_trim_words( $description, $num_words );
+		$num_words = apply_filters( 'mc_excerpt_length', 55 );
+		$excerpt   = wp_trim_words( $description, $num_words );
 	} else {
 		$excerpt = $shortdesc;
 	}
@@ -1059,7 +1059,7 @@ function mc_image_data( $e, $event ) {
 			$e['image']     = $e[ $image_size ];
 		}
 	} else {
-		$sizes     = get_intermediate_image_sizes();
+		$sizes = get_intermediate_image_sizes();
 		// create empty array values so that template tags will be removed even if post doesn't exist.
 		foreach ( $sizes as $size ) {
 			$e[ $size ]          = '';

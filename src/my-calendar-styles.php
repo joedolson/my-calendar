@@ -126,7 +126,7 @@ function my_calendar_style_edit() {
 							<?php
 							$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
 							$directory        = dirname( __FILE__ ) . '/styles/';
-							$files            = @mc_css_list( $custom_directory );
+							$files            = mc_css_list( $custom_directory );
 							?>
 							<fieldset>
 								<p>
@@ -417,7 +417,7 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 		'title_left'  => '',
 		'title_right' => '',
 	);
-	$args = wp_parse_args( $args, $defaults );
+	$args     = wp_parse_args( $args, $defaults );
 
 	if ( ! class_exists( 'WP_Text_Diff_Renderer_Table' ) ) {
 		require( ABSPATH . WPINC . '/wp-diff.php' );
@@ -432,8 +432,9 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 	$diff        = $renderer->render( $text_diff );
 	$r           = '';
 
-	if ( ! $diff )
+	if ( ! $diff ) {
 		return '';
+	}
 	if ( $args['title'] ) {
 		$r .= "<h2>$args[title]</h2>\n";
 	}
@@ -450,8 +451,9 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 		$r .= "\t<th scope='col'>$args[title_right]</th>\n";
 		$r .= "</tr>\n";
 	}
-	if ( $args['title'] || $args['title_left'] || $args['title_right'] )
+	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
 		$r .= "</thead>\n";
+	}
 
 	$r .= "<tbody>\n$diff\n</tbody>\n";
 	$r .= '</table>';
@@ -469,7 +471,7 @@ add_action( 'admin_enqueue_scripts', function() {
 	}
 
 	// Enqueue code editor and settings for manipulating HTML.
-	$settings = wp_enqueue_code_editor( array( 'type' => 'text/css'	) );
+	$settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
 
 	// Bail if user disabled CodeMirror.
 	if ( false === $settings ) {

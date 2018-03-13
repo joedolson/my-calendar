@@ -348,7 +348,7 @@ function mc_footer_js() {
 			}
 			$ajax_js = stripcslashes( get_option( 'mc_ajaxjs' ) );
 
-			if ( @in_array( $id, $pages ) || '' == get_option( 'mc_show_js' ) ) {
+			if ( ( is_array( $pages ) && in_array( $id, $pages ) ) || '' == get_option( 'mc_show_js' ) ) {
 				$inner = '';
 				if ( get_option( 'mc_calendar_javascript' ) != 1 ) {
 					$inner .= "\n" . $cal_js;
@@ -371,7 +371,7 @@ function mc_footer_js() {
 			echo ( '' != $inner ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
-			if ( @in_array( $id, $pages ) || '' == get_option( 'mc_show_js' ) ) {
+			if ( ( is_array( $pages ) && in_array( $id, $pages ) ) || '' == get_option( 'mc_show_js' ) ) {
 				if ( 1 != get_option( 'mc_calendar_javascript' ) && 'true' != get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
@@ -1387,6 +1387,7 @@ $plugins_string
 					echo '<div class="message updated"><p>' . __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . '</p></div>';
 				}
 			} else {
+				// Translators: Support form URL.
 				echo '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
 			}
 		}
@@ -1402,7 +1403,7 @@ $plugins_string
 			<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>" . __( 'I have read <a href="http://www.joedolson.com/my-calendar/faq/">the FAQ for this plug-in</a>.', 'my-calendar' ) . " <span>(required)</span></label>
 		</p>
 		<p>
-			<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . sprintf( __( 'I <a href="%s">made a donation to help support this plug-in</a>.', 'my-calendar' ), 'https://www.joedolson.com/donate/' ) . "</label>
+			<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . __( 'I made a donation to help support this plug-in.', 'my-calendar' ) . "</label>
 		</p>
 		<p>
 			<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'>" . stripslashes( $request ) . "</textarea>
@@ -1459,10 +1460,8 @@ function mc_field_callback() {
 	echo '<input type="text" value="' . esc_attr( $value ) . '" name="mc_cpt_base" id="mc_cpt_base" class="regular-text" />';
 }
 
-/**
- * Register custom post types for events
- */
-function mc_posttypes() {
+
+function mc_post_type() {
 	$arguments = array(
 		'public'              => apply_filters( 'mc_event_posts_public', true ),
 		'publicly_queryable'  => true,
@@ -1472,8 +1471,7 @@ function mc_posttypes() {
 		'menu_icon'           => null,
 		'supports'            => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields' ),
 	);
-
-	$types   = array(
+	$types     = array(
 		'mc-events' => array(
 			__( 'event', 'my-calendar' ),
 			__( 'events', 'my-calendar' ),
@@ -1482,6 +1480,14 @@ function mc_posttypes() {
 			$arguments,
 		),
 	);
+
+	return $types;
+}
+/**
+ * Register custom post types for events
+ */
+function mc_posttypes() {
+	$types   = mc_post_type();
 	$enabled = array( 'mc-events' );
 	$slug    = ( '' != get_option( 'mc_cpt_base' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
 	if ( is_array( $enabled ) ) {
@@ -1572,8 +1578,7 @@ function mc_posttypes_defaults( $post_content, $post ) {
  * Register taxonomies on My Calendar custom post types
  */
 function mc_taxonomies() {
-	global $mc_types;
-	$types   = $mc_types;
+	$types   = mc_post_type();
 	$enabled = array( 'mc-events' );
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
@@ -1584,8 +1589,7 @@ function mc_taxonomies() {
 				array( $key ),
 				array(
 					'hierarchical' => true,
-					// Translators: The cateogry name
-					'label'        => sprintf( __( '%s Categories', 'my-calendar' ), $value[2] ),
+					'label'        => __( 'Event Categories', 'my-calendar' ),
 					'query_var'    => true,
 					'rewrite'      => array( 'slug' => apply_filters( 'mc_event_category_slug', 'mc-event-category' ) ),
 				)
@@ -1602,25 +1606,30 @@ function mc_taxonomies() {
  * @return array Modified messages array.
  */
 function mc_posttypes_messages( $messages ) {
-	global $post, $post_ID, $mc_types;
-	$types   = $mc_types;
+	global $post, $post_ID;
+	$types   = mc_post_type();
 	$enabled = array( 'mc-events' );
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
 			$value            = $types[ $key ];
 			$messages[ $key ] = array(
 				0  => '', // Unused. Messages start at index 1.
-				1  => sprintf( __( '%1$s updated. <a href="%2$s">View %1$s</a>' ), $value[2], esc_url( get_permalink( $post_ID ) ) ),
+				// Translators: URL to view event.
+				1  => sprintf( __( 'Event updated. <a href="%s">View Event</a>' ), esc_url( get_permalink( $post_ID ) ) ),
 				2  => __( 'Custom field updated.' ),
 				3  => __( 'Custom field deleted.' ),
-				4  => sprintf( __( '%s updated.' ), $value[2] ),
-				/* Translators: %s: date and time of the revision */
-				5  => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$ss' ), $value[2], wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-				6  => sprintf( __( '%1$s published. <a href="%2$s">View %3$s</a>' ), $value[2], esc_url( get_permalink( $post_ID ) ), $value[0] ),
-				7  => sprintf( __( '%s saved.' ), $value[2] ),
-				8  => sprintf( __( '%1$s submitted. <a target="_blank" href="%2$s">Preview %3$s</a>' ), $value[2], esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), $value[0] ),
-				9  => sprintf( __( '%1$s scheduled for: <strong>%2$s</strong>. <a target="_blank" href="%3$s">Preview %4$s</a>' ), $value[2], date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ), $value[0] ),
-				10 => sprintf( __( '%1$s draft updated. <a target="_blank" href="%2$s">Preview %3$s</a>' ), $value[2], esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), $value[0] ),
+				4  => __( 'Event updated.' ),
+				// Translators: %s: date and time of the revision.
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Event restored to revision from %s' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				// Translators: URL to view event.
+				6  => sprintf( __( 'Event published. <a href="%s">View event</a>' ), esc_url( get_permalink( $post_ID ) ) ),
+				7  => sprintf( __( 'Event saved.' ) ),
+				// Translators: URL to preview event.
+				8  => sprintf( __( 'Event submitted. <a target="_blank" href="%s">Preview event</a>' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+				// Translators: Date event scheduled to be published, URL to preview event.
+				9  => sprintf( __( 'Event scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview event</a>' ), date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
+				// Translators: URL to preview event.
+				10 => sprintf( __( 'Event draft updated. <a target="_blank" href="%s">Preview event</a>' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 			);
 		}
 	}
