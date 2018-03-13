@@ -1173,25 +1173,6 @@ function mc_ajax_add_date() {
 }
 
 /**
- * In multi-site, wp_is_mobile() won't be defined yet if plug-in is network activated.
- */
-if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-	require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-}
-
-if ( ! function_exists( 'wp_is_mobile' ) ) {
-	$dirname = basename( __DIR__ );
-	if ( ! is_plugin_active_for_network( $dirname . '/my-calendar.php' ) ) {
-		/**
-		 * Declare core function wp_is_mobile() if not available.
-		 */
-		function wp_is_mobile() {
-			return false;
-		}
-	}
-}
-
-/**
  * Test whether currently mobile using wp_is_mobile() with custom filter
  *
  * @return boolean
