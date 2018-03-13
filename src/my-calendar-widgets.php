@@ -302,7 +302,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 	$future      = 1;
 	$now         = current_time( 'timestamp' );
 	$today       = date( 'Y-m-d', $now );
-	@uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
+	uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
 	$count = count( $events );
 	$group = array();
 	$spans = array();
@@ -394,7 +394,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 		}
 	}
 	$events = $near_events;
-	@usort( $events, 'mc_datetime_cmp' ); // Sort split events by date.
+	usort( $events, 'mc_datetime_cmp' ); // Sort split events by date.
 
 	if ( is_array( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {

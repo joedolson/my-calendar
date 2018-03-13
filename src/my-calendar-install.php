@@ -572,11 +572,11 @@ function my_calendar_copyr( $source, $dest ) {
 	}
 	// Simple copy for a file.
 	if ( is_file( $source ) ) {
-		return @copy( $source, $dest );
+		return copy( $source, $dest );
 	}
 	// Make destination directory.
 	if ( ! is_dir( $dest ) ) {
-		@mkdir( $dest );
+		mkdir( $dest );
 	}
 	// Loop through the folder.
 	$dir   = dir( $source );
@@ -627,7 +627,7 @@ function my_calendar_rmdirr( $dirname ) {
 	// Clean up.
 	$dir->close();
 
-	return @rmdir( $dirname );
+	return rmdir( $dirname );
 }
 
 /**

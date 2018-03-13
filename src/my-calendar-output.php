@@ -1950,14 +1950,14 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	foreach ( $mc_toporder as $value ) {
 		if ( 'none' != $value && in_array( $value, $used ) ) {
 			$value      = trim( $value );
-			$mc_topnav .= @${$value};
+			$mc_topnav .= ${$value};
 		}
 	}
 
 	foreach ( $mc_bottomorder as $value ) {
 		if ( 'none' != $value && 'stop' != $value && in_array( $value, $used ) ) {
 			$value         = trim( $value );
-			$mc_bottomnav .= @${$value};
+			$mc_bottomnav .= ${$value};
 		}
 	}
 
