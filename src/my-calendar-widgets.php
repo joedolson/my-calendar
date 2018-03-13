@@ -864,8 +864,7 @@ function mc_span_time( $group_id ) {
 		$mcdb = mc_remote_db();
 	}
 	$group_id = (int) $group_id;
-	$sql      = 'SELECT event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() . ' WHERE event_group_id = %d ORDER BY event_begin ASC';
-	$dates    = $mcdb->get_results( $wpdb->prepare( $sql, $group_id ) );
+	$dates    = $mcdb->get_results( $wpdb->prepare( 'SELECT event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() . ' WHERE event_group_id = %d ORDER BY event_begin ASC', $group_id ) ); // WPCS: unprepared SQL ok.
 	$count    = count( $dates );
 	$last     = $count - 1;
 	$begin    = $dates[0]->event_begin . ' ' . $dates[0]->event_time;

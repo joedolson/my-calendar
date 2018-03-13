@@ -249,11 +249,11 @@ function my_calendar_manage() {
 	global $wpdb;
 	if ( isset( $_GET['mode'] ) && 'delete' == $_GET['mode'] ) {
 		$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
-		$result   = $wpdb->get_results( $wpdb->prepare( 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ), ARRAY_A );
+		$result   = $wpdb->get_results( $wpdb->prepare( 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ), ARRAY_A ); // WPCS: unprepared SQL OK.
 		if ( mc_can_edit_event( $event_id ) ) {
 			if ( isset( $_GET['date'] ) ) {
 				$event_instance = (int) $_GET['date'];
-				$inst           = $wpdb->get_var( $wpdb->prepare( 'SELECT occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_instance ) );
+				$inst           = $wpdb->get_var( $wpdb->prepare( 'SELECT occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_instance ) ); // WPCS: unprepared SQL OK.
 				$instance_date  = '(' . date( 'Y-m-d', mc_strtotime( $inst ) ) . ')';
 			} else {
 				$instance_date = '';
@@ -299,7 +299,7 @@ function my_calendar_manage() {
 	if ( isset( $_GET['mode'] ) && 'publish' == $_GET['mode'] ) {
 		if ( current_user_can( 'mc_approve_events' ) ) {
 			$event_id = absint( $_GET['event_id'] );
-			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) );
+			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
 		} else {
 			?>
 			<div class="error">
@@ -313,7 +313,7 @@ function my_calendar_manage() {
 	if ( isset( $_GET['mode'] ) && 'reject' == $_GET['mode'] ) {
 		if ( current_user_can( 'mc_approve_events' ) ) {
 			$event_id = absint( $_GET['event_id'] );
-			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) );
+			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
 		} else {
 			?>
 			<div class="error">
@@ -328,25 +328,27 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events = $_POST['mass_edit'];
-		$i      = 0;
-		$total  = 0;
-		$ids    = array();
+		$events  = $_POST['mass_edit'];
+		$i       = 0;
+		$total   = 0;
+		$ids     = array();
+		$prepare = array();
 		foreach ( $events as $value ) {
 			$value  = (int) $value;
-			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A );
+			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A ); // WPCS: unprepared SQL OK.
 			$total  = count( $events );
 			if ( mc_can_edit_event( $value ) ) {
 				$delete_occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
-				$wpdb->query( $wpdb->prepare( $delete_occurrences, $value ) );
+				$wpdb->query( $wpdb->prepare( $delete_occurrences, $value ) ); // WPCS: unprepared SQL OK.
 
-				$ids[] = (int) $value;
+				$ids[]     = (int) $value;
+				$prepare[] = '%d';
 				$i ++;
 			}
 		}
-		$statement = implode( ',', $ids );
-		$sql       = 'DELETE FROM ' . my_calendar_table() . " WHERE event_id IN ($statement)";
-		$result    = $wpdb->query( $sql );
+		$prepared  = implode( ',', $prepare );
+		$sql       = 'DELETE FROM ' . my_calendar_table() . " WHERE event_id IN ($prepared)";
+		$result    = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
 		if ( 0 !== $result && false !== $result ) {
 			do_action( 'mc_mass_delete_events', $ids );
 			// Translators: Number of events deleted, number selected.
@@ -795,12 +797,12 @@ function mc_delete_event( $event_id ) {
 		$instance = false;
 		$post_id  = mc_get_data( 'event_post', $event_id );
 		if ( empty( $_POST['event_instance'] ) ) {
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id =%d', $event_id ) );
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ) );
-			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ) );
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id =%d', $event_id ) ); // WPCS: unprepared SQL OK.
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
+			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
 		} else {
 			$event_in = absint( $_POST['event_instance'] );
-			$result   = $wpdb->get_results( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $event_in ) );
+			$result   = $wpdb->get_results( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $event_in ) ); // WPCS: unprepared SQL OK.
 			$instance = true;
 		}
 		if ( empty( $result ) || empty( $result[0]->event_id ) ) {
@@ -830,7 +832,7 @@ function mc_form_data( $event_id = false ) {
 	global $wpdb, $submission;
 	if ( false !== $event_id ) {
 		$event_id = absint( $event_id );
-		$data     = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) );
+		$data     = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // WPCS: unprepared SQL OK.
 		if ( empty( $data ) ) {
 			return '<div class="error"><p>' . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . '</p></div>';
 		}
@@ -897,7 +899,7 @@ function mc_get_instance_data( $instance_id ) {
 	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$result = $mcdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $instance_id ) );
+	$result = $mcdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $instance_id ) ); // WPCS: unprepared SQL OK.
 
 	return $result;
 }
@@ -1975,7 +1977,7 @@ function mc_list_events() {
 				</thead>
 				<?php
 				$class      = '';
-				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() );
+				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // WPCS: unprepared SQL OK.
 
 				foreach ( array_keys( $events ) as $key ) {
 					$e     =& $events[ $key ];
@@ -2417,7 +2419,7 @@ function mc_check_data( $action, $post, $i ) {
 		$event_hide_end     = ( '' == $time || '23:59:59' == $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		// Set location.
 		if ( 'none' != $location_preset && is_numeric( $location_preset ) ) {
-			$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) );
+			$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // WPCS: unprepared SQL OK.
 			$event_label     = $location->location_label;
 			$event_street    = $location->location_street;
 			$event_street2   = $location->location_street2;
@@ -2773,7 +2775,7 @@ function mc_update_data( $event_id, $field, $value, $format = '%d' ) {
  */
 function mc_group_id() {
 	global $wpdb;
-	$result = $wpdb->get_var( 'SELECT MAX(event_id) FROM ' . my_calendar_table() );
+	$result = $wpdb->get_var( 'SELECT MAX(event_id) FROM ' . my_calendar_table() ); // WPCS: unprepared SQL OK.
 	$next   = $result + 1;
 
 	return $next;
@@ -2804,7 +2806,7 @@ function mc_instance_list( $args ) {
 	} else {
 		$sql = 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC';
 	}
-	$results = $wpdb->get_results( $wpdb->prepare( $sql, $id ) );
+	$results = $wpdb->get_results( $wpdb->prepare( $sql, $id ) ); // WPCS: unprepared SQL OK.
 	if ( is_array( $results ) ) {
 		$details = '';
 		foreach ( $results as $result ) {
@@ -2847,7 +2849,7 @@ function mc_instance_list( $args ) {
 function mc_admin_instances( $id, $occur = false ) {
 	global $wpdb;
 	$output  = '';
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) );
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // WPCS: unprepared SQL OK.
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
 			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( get_option( 'mc_date_format' ), mc_strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ) ) . '</span>';
@@ -2878,7 +2880,7 @@ function mc_event_is_grouped( $group_id ) {
 		return false;
 	} else {
 		$query = $wpdb->prepare( 'SELECT count( event_group_id ) FROM ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id );
-		$value = $wpdb->get_var( $query );
+		$value = $wpdb->get_var( $query ); // WPCS: unprepared SQL OK.
 		if ( $value > 1 ) {
 
 			return true;
@@ -3427,7 +3429,7 @@ function _mc_increment_values( $recur ) {
 function mc_get_instances( $id ) {
 	global $wpdb;
 	$id      = (int) $id;
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT occur_id, occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $id ) );
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT occur_id, occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $id ) ); // WPCS: unprepared SQL OK.
 	$return  = array();
 
 	foreach ( $results as $result ) {
@@ -3446,9 +3448,9 @@ function mc_get_instances( $id ) {
 function mc_delete_instances( $id ) {
 	global $wpdb;
 	$id = (int) $id;
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $id ) );
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $id ) ); // WPCS: unprepared SQL OK.
 	// After bulk deletion, optimize table.
-	$wpdb->query( 'OPTIMIZE TABLE ' . my_calendar_event_table() );
+	$wpdb->query( 'OPTIMIZE TABLE ' . my_calendar_event_table() ); // WPCS: unprepared SQL OK.
 }
 
 add_filter( 'mc_instance_data', 'mc_reuse_id', 10, 3 );

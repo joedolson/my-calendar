@@ -434,8 +434,7 @@ function mc_list_templates() {
 						<td>$rss_enabled</td>
 					</tr>";
 	global $wpdb;
-	$select = 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'";
-	$results = $wpdb->get_results( $select );
+	$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
 	foreach ( $results as $result ) {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_template_description( $key );

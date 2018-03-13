@@ -126,7 +126,7 @@ function my_calendar_add_locations() {
 			echo '<div class="error"><p><strong>' . __( 'Location could not be added to database', 'my-calendar' ) . '</strong></p></div>';
 		}
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' == $_GET['mode'] ) {
-		$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) );
+		$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // WPCS: unprepared SQL ok.
 		do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
 		if ( $results ) {
 			echo '<div class="updated"><p><strong>' . __( 'Location deleted successfully', 'my-calendar' ) . '</strong></p></div>';
@@ -263,7 +263,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
  */
 function mc_get_location( $location_id ) {
 	global $wpdb;
-	$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) );
+	$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // WPCS: unprepared SQL ok.
 
 	return $location;
 }
@@ -364,9 +364,7 @@ function mc_location_controls() {
 			<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span>' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</h4>
 			<div>';
 			// Translators: Name of field being restricted, e.g. "Location Controls for State".
-			$output .= '
-				<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '(' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/>
-				<textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
+			$output .= '<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '(' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
 			</div>';
 		}
 		$output .= "
@@ -634,9 +632,7 @@ function mc_get_locations( $args ) {
 		$is      = '1';
 	}
 	global $wpdb;
-	$results = $wpdb->get_results(
-		$wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE %s = %s ORDER BY %s %s', $where, $is, $orderby, $order )
-	);
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE %s = %s ORDER BY %s %s', $where, $is, $orderby, $order ) ); // WPCS: unprepared SQL ok.
 
 	return apply_filters( 'mc_filter_results', $results, $args );
 }

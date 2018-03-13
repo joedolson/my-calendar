@@ -22,10 +22,10 @@ function my_calendar_check_db() {
 	}
 
 	global $wpdb;
-	$cols         = $wpdb->get_col( 'DESC ' . my_calendar_table() );
+	$cols         = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // WPCS: unprepared SQL ok.
 	$needs_update = false;
 
-	if ( !in_array( 'event_tickets', $cols ) ) {
+	if ( ! in_array( 'event_tickets', $cols ) ) {
 		$needs_update = true;
 	}
 

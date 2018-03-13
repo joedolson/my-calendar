@@ -236,13 +236,13 @@ function mc_deal_with_deleted_user( $id ) {
 	$new_author = apply_filters( 'mc_deleted_author', $new );
 	// This may not work quite right in multi-site. Need to explore further when I have time.
 	$wpdb->get_results(
-		$wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_author=%d WHERE event_author=%d', $new_author, $id )
-	);
+		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id )
+	); // WPCS: unprepared SQL OK.
 
 	$new_host = apply_filters( 'mc_deleted_host', $new );
 	$wpdb->get_results(
-		$wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_host=%d WHERE event_host=%d', $new_host, $id )
-	);
+		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id )
+	); // WPCS: unprepared SQL OK.
 }
 
 /**
@@ -1087,7 +1087,7 @@ function mc_ajax_delete_occurrence() {
 		global $wpdb;
 		$occur_id = (int) $_REQUEST['occur_id'];
 		$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
-		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) );
+		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // WPCS: unprepared SQL OK.
 
 		if ( $result ) {
 			wp_send_json( array(
