@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_update_category( $field, $data, $category ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_categories_table() . "` SET $field = %d WHERE category_id=%d", $data, $category ) );
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) );
 
 	return $result;
 }
@@ -159,10 +159,10 @@ function my_calendar_manage_categories() {
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' == $_GET['mode'] ) {
 			$cat_id  = (int) $_GET['category_id'];
-			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM `' . my_calendar_categories_table() . '` WHERE category_id=%d', $cat_id ) );
+			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
 
 			// Also delete relationships for this category.
-			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM `' . my_calendar_category_relationships_table() . '` WHERE category_id = %d', $cat_id ) );
+			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $cat_id ) );
 
 			if ( $results ) {
 				$default_category = get_option( 'mc_default_category' );
@@ -851,7 +851,7 @@ function mc_get_categories( $event, $ids = true ) {
 	if ( ! $results ) {
 		$relate  = my_calendar_category_relationships_table();
 		$catego  = my_calendar_categories_table();
-		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM `' . $relate . '` as r JOIN `' . $catego . '` as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) );
+		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) );
 	}
 	if ( true === $ids ) {
 		if ( $results ) {
