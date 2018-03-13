@@ -1180,13 +1180,14 @@ if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 }
 
 if ( ! function_exists( 'wp_is_mobile' ) ) {
-	if ( ! is_plugin_active_for_network( 'my-calendar/my-calendar.php' ) ) {
-		/*
-		// Causes problems in Travis CI. JCD TODO.
+	$dirname = basename( __DIR__ );
+	if ( ! is_plugin_active_for_network( $dirname . '/my-calendar.php' ) ) {
+		/**
+		 * Declare core function wp_is_mobile() if not available.
+		 */
 		function wp_is_mobile() {
 			return false;
 		}
-		*/
 	}
 }
 
