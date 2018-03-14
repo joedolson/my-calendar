@@ -2,7 +2,7 @@
 
 Accessible Event Manager for WordPress
 
-[![Build Status](https://travis-ci.org/joedolson/my-calendar.svg)](https://travis-ci.org/joedolson/my-calendar)
+[![Build Status](https://travis-ci.org/joedolson/my-calendar.svg)](https://travis-ci.org/joedolson/my-calendar) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)]
 
 ## My Calendar Build Environment
 

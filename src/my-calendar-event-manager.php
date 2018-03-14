@@ -1244,7 +1244,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	global $wpdb, $user_ID;
 	$has_data = ( empty( $data ) ) ? false : true;
 	if ( $data ) {
-		$test = mc_test_occurrence_overlap( $data );
+		// Don't execute occurrence test if displaying pre-process error messages.
+		if ( ! is_object( $data ) ) {
+			$test = mc_test_occurrence_overlap( $data );
+		}
 	}
 	$instance = ( isset( $_GET['date'] ) ) ? (int) $_GET['date'] : false;
 	if ( $instance ) {
@@ -2498,7 +2501,7 @@ function mc_check_data( $action, $post, $i ) {
 		$time            = ( '' == $time ) ? '23:59:59' : date( 'H:i:00', mc_strtotime( $time ) );
 		$time_format_one = '/^([0-1][0-9]):([0-5][0-9]):([0-5][0-9])$/';
 		$time_format_two = '/^([2][0-3]):([0-5][0-9]):([0-5][0-9])$/';
-		if ( ! preg_match( $time_format_one, $time ) || preg_match( $time_format_two, $time ) ) {
+		if ( preg_match( $time_format_one, $time ) || preg_match( $time_format_two, $time ) ) {
 		} else {
 			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'The time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ) . '</p></div>';
 		}

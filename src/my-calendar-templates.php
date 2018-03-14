@@ -554,6 +554,9 @@ function mc_get_details_link( $event ) {
 	if ( is_numeric( $event ) ) {
 		$event = mc_get_event( $event );
 	}
+	if ( ! is_object( $event ) ) {
+		return;
+	}
 	$uri = mc_get_uri( $event );
 
 	// If available, and not querying remotely, use permalink.
@@ -742,6 +745,9 @@ function mc_duration( $event ) {
  * @return string
  */
 function mc_event_link( $event ) {
+	if ( ! is_object( $event ) ) {
+		return;
+	}
 	$expired = mc_event_expired( $event );
 	if ( 0 == $event->event_link_expires ) {
 		$link = esc_url( $event->event_link );
@@ -764,10 +770,12 @@ function mc_event_link( $event ) {
  * @return boolean
  */
 function mc_event_expired( $event ) {
-	if ( my_calendar_date_xcomp( $event->occur_end, date( 'Y-m-d', current_time( 'timestamp' ) ) ) ) {
-		do_action( 'mc_event_expired', $event );
+	if ( is_object( $event ) ) {
+		if ( my_calendar_date_xcomp( $event->occur_end, date( 'Y-m-d', current_time( 'timestamp' ) ) ) ) {
+			do_action( 'mc_event_expired', $event );
 
-		return true;
+			return true;
+		}
 	}
 
 	return false;
