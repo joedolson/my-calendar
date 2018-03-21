@@ -375,13 +375,15 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['repeats']   = $event->event_repeats;
 
 	// Category fields.
-	$e['cat_id']     = $event->event_category;
-	$e['category']   = stripslashes( $event->category_name );
-	$e['categories'] = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
-	$e['term']       = intval( $event->category_term );
-	$e['icon']       = mc_category_icon( $event, 'img' );
-	$e['icon_html']  = ( '' != $e['icon'] ) ? "<img src='$e[icon]' class='mc-category-icon' alt='" . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . "' />" : '';
-	$e['color']      = $event->category_color;
+	$e['cat_id']          = $event->event_category;
+	$e['category']        = stripslashes( $event->category_name );
+	$e['ical_category']   = strip_tags( stripslashes( $event->category_name ) );
+	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
+	$e['ical_categories'] = strip_tags( ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' ) );
+	$e['term']            = intval( $event->category_term );
+	$e['icon']            = mc_category_icon( $event, 'img' );
+	$e['icon_html']       = ( '' != $e['icon'] ) ? "<img src='$e[icon]' class='mc-category-icon' alt='" . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . "' />" : '';
+	$e['color']           = $event->category_color;
 
 	$hex     = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color   = $hex . $event->category_color;
@@ -467,7 +469,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $location, 'location' );
 		$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
-		$e['ical_location']   = $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode;
+		$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
 	} else {
 		$map                  = mc_maplink( $event );
 		$map_url              = mc_maplink( $event, 'url' );
@@ -487,7 +489,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $event );
 		$e['location_access'] = mc_expand( unserialize( mc_location_data( 'location_access', $event->event_location ) ) );
-		$e['ical_location']   = $event->event_label . ' ' . $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode;
+		$e['ical_location']   = trim( $event->event_label . ' ' . $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode );
 	}
 
 	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) );

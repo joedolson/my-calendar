@@ -195,7 +195,7 @@ DTSTAMP:{ical_start}
 ORGANIZER;CN={host}:MAILTO:{host_email}
 DTSTART:{ical_start}
 DTEND:{ical_end}
-CATEGORIES:{category}
+CATEGORIES:{ical_category}
 URL;VALUE=URI:{link}
 DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_desc}$alert
 END:VEVENT
@@ -482,7 +482,7 @@ DTSTART;TZID=$tz_id:{ical_start}
 DTEND;TZID=$tz_id:{ical_end}
 URL;VALUE=URI:{link}
 DESCRIPTION:{ical_desc}
-CATEGORIES:{categories}{alert}
+CATEGORIES:{ical_categories}{alert}
 END:VEVENT";
 	// add ICAL headers.
 	$head = 'BEGIN:VCALENDAR
