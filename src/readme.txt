@@ -83,9 +83,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
    
 == Changelog ==
 
-= 2.6.0 =
-
-TODO: Invalid events are filtered from main view, but are still in feeds; need to filter in all views.
+= 3.0.0 =
 
 * Bug fix: If category deleted, set events with that category to default cat, not cat ID 1.
 * Bug fix: Date/time comparison used front-end date value instead of dtstamp in upcoming events.
