@@ -41,9 +41,9 @@ function mc_switch_sites() {
  * @param string $new New status.
  */
 function mc_tweet_approval( $prev, $new ) {
-	if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) != '' ) {
+	if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) != '' ) {
 		if ( ( 0 == $prev || 2 == $prev ) && 1 == $new ) {
-			jd_doTwitterAPIPost( stripslashes( $_POST['mc_twitter'] ) );
+			wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
 		}
 	}
 }

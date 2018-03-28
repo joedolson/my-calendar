@@ -271,7 +271,7 @@ function my_calendar_write_js() {
 			jQuery(document).ready(function ($) {
 				$( '#mc-accordion' ).accordion( { collapsible: true, active: false, heightStyle: 'content' } );
 				<?php
-				if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_GET['page'] ) && 'my-calendar' == $_GET['page'] ) {
+				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_GET['page'] ) && 'my-calendar' == $_GET['page'] ) {
 				?>
 				$('#mc_twitter').charCount({
 					allowed: 140,
@@ -1015,7 +1015,7 @@ function mc_scripts() {
 		}
 	}
 
-	if ( 'toplevel_page_my-calendar' == $id && function_exists( 'jd_doTwitterAPIPost' ) ) {
+	if ( 'toplevel_page_my-calendar' == $id && function_exists( 'wpt_post_to_twitter' ) ) {
 		wp_enqueue_script( 'charCount', plugins_url( 'wp-to-twitter/js/jquery.charcount.js' ), array( 'jquery' ) );
 	}
 	if ( 'toplevel_page_my-calendar' == $id ) {

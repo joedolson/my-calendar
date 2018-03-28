@@ -611,8 +611,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$message = '<div class="updated notice"><p>' . __( 'Event draft saved.', 'my-calendar' ) . '</p></div>';
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
-				if ( function_exists( 'jd_doTwitterAPIPost' ) && isset( $_POST['mc_twitter'] ) && '' != trim( $_POST['mc_twitter'] ) ) {
-					jd_doTwitterAPIPost( stripslashes( $_POST['mc_twitter'] ) );
+				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' != trim( $_POST['mc_twitter'] ) ) {
+					wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
 				}
 				if ( mc_get_uri( 'boolean' ) ) {
 					$event_ids   = mc_get_occurrences( $event_id );
@@ -1360,7 +1360,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				}
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
 
-				if ( function_exists( 'jd_doTwitterAPIPost' ) && current_user_can( 'wpt_can_tweet' ) ) {
+				if ( function_exists( 'wpt_post_to_twitter' ) && current_user_can( 'wpt_can_tweet' ) ) {
 					if ( ! ( 'edit' == $mode && 1 == $data->event_approved ) ) {
 						?>
 						<p class='mc-twitter'>
