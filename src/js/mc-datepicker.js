@@ -11,7 +11,7 @@ if ( typeof(mc_months) !== "undefined" ) {
 		firstDay: mc_text.start,
 		today: mc_text.today,
 		clear: mc_text.clear,
-		close: mc_text.close,	
+		close: mc_text.close,
 		onClose: function() {
 			mc_update_date();
 		}
@@ -26,15 +26,17 @@ if ( typeof(mc_months) !== "undefined" ) {
 	var end   = $( '#mc_event_enddate' ).pickadate( 'picker' );
 	var time  = $( '#mc_event_time' ).pickatime( 'picker' );
 	var ends  = $( '#mc_event_endtime' ).pickatime( 'picker' );
-					
+
 	function mc_update_date() {
 		var startdate = new Date( $( '#mc_event_date' ).val() );
 		end.set( 'min', convertDateToUTC( startdate ) );
-		
-		var enddate   = new Date( $( '#mc_event_enddate' ).val() );
-		begin.set( 'max', enddate );
+
+		if ( $( '#mc_event_enddate' ).val() != '' ) {
+			var enddate   = new Date( $( '#mc_event_enddate' ).val() );
+			begin.set( 'max', enddate );
+		}
 	}
-	
+
 	/**
 	 * In admin, date needs to be converted to UTC
 	 */
@@ -42,7 +44,7 @@ if ( typeof(mc_months) !== "undefined" ) {
 		return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()); 
 	}
 	
-	});			
+	});
 
 } else {
 	jQuery(document).ready(function ($) {	
