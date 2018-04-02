@@ -3206,8 +3206,6 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
  * Get a list of related events and list admin editing links
  *
  * @param int $id group ID.
- *
- * @return string list of events linked to admin page
  */
 function mc_related_events( $id ) {
 	global $wpdb;
