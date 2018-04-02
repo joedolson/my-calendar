@@ -70,7 +70,7 @@ function mc_time_html( $event, $type, $current ) {
 	} else {
 		$notime = mc_notime_label( $event );
 		$time  .= "<span class='event-time'>";
-		$time  .= ( 'N/A' == $notime ) ? "<abbr title='" . __( 'Not Applicable', 'my-calendar' ) . "'>" . __( 'N/A', 'my-calendar' ) . "</abbr>\n" : $notime;
+		$time  .= ( 'N/A' == $notime ) ? "<abbr title='" . __( 'Not Applicable', 'my-calendar' ) . "'>" . __( 'N/A', 'my-calendar' ) . "</abbr>\n" : esc_html( $notime );
 		$time  .= '</span></p>';
 	}
 	$time .= apply_filters( 'mcs_end_time_block', '', $event );

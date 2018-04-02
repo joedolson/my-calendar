@@ -2123,7 +2123,7 @@ function mc_list_events() {
 							}
 							$date_format = ( get_option( 'mc_date_format' ) == '' ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
 							$begin       = date_i18n( $date_format, mc_strtotime( $event->event_begin ) );
-							echo "$begin, $event_time";
+							echo esc_html( "$begin, $event_time" );
 							?>
 								<div class="recurs">
 									<?php echo mc_recur_string( $event ); ?>
@@ -3211,17 +3211,13 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
  */
 function mc_related_events( $id ) {
 	global $wpdb;
-	$id = (int) $id;
-
-	if ( ! $id && false === $return ) {
-		echo '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
-
-		return;
-	}
+	$id     = (int) $id;
+	$output = '';
 
 	$results = mc_get_related( $id );
 	if ( is_array( $results ) && ! empty( $results ) ) {
 		foreach ( $results as $result ) {
+			$result   = mc_get_first_event( $result->event_id );
 			$event    = $result->occur_event_id;
 			$current  = '<a href="' . admin_url( 'admin.php?page=my-calendar' ) . '&amp;mode=edit&amp;event_id=' . $event . '">';
 			$end      = '</a>';
@@ -3233,11 +3229,7 @@ function mc_related_events( $id ) {
 		$output = '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
 	}
 
-	if ( 'template' == $return ) {
-		return $output;
-	} else {
-		echo $output;
-	}
+	echo $output;
 }
 
 /**

@@ -1130,7 +1130,7 @@ function mc_list_groups() {
 			<?php
 				$date_format = ( '' == get_option( 'mc_date_format' ) ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
 				$begin       = date_i18n( $date_format, strtotime( $event->event_begin ) );
-				echo "$begin, $event_time";
+				echo esc_html( "$begin, $event_time" );
 			?>
 				<div class="recurs">
 					<?php echo mc_recur_string( $event ); ?>
