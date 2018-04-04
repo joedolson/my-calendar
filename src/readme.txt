@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 2.5.16
+Stable tag: 2.5.17
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -13,9 +13,9 @@ Accessible WordPress event calendar plugin. Show events from multiple calendars 
 
 == Description ==
 
-My Calendar does WordPress event management with richly customizable ways to display events. The plug-in supports individual event calendars within WordPress Multisite, multiple calendars displayed by categories, locations or author, or simple lists of upcoming events. 
+My Calendar does WordPress event management with richly customizable ways to display events. The plug-in supports individual event calendars within WordPress Multisite, multiple calendars displayed by categories, locations or author, or simple lists of upcoming events.
 
-Easy to use for anybody, My Calendar provides enormous flexibility for designers and developers needing a custom calendar. My Calendar is built with accessibility in mind, so all your users can get equal access and experience in your calendar. 
+Easy to use for anybody, My Calendar provides enormous flexibility for designers and developers needing a custom calendar. My Calendar is built with accessibility in mind, so all your users can get equal access and experience in your calendar.
 
 = Premium Event Management =
 Looking for more? [Buy My Calendar Pro](https://www.joedolson.com/my-calendar/pro/), the premium extension for My Calendar to add support for user-submitted events, integration between posting and event creation, and import events from outside sources.
@@ -57,30 +57,30 @@ Do you need to sell tickets for events? [Use My Tickets](https://wordpress.org/p
 
 Visit [Wordpress Translations](https://translate.wordpress.org/projects/wp-plugins/my-calendar) to check progress or contribute to your language.
 
-Translating my plug-ins is always appreciated. Visit <a href="https://translate.wordpress.org/projects/wp-plugins/my-calendar">WordPress translations</a> to help get your language to 100%! 
+Translating my plug-ins is always appreciated. Visit <a href="https://translate.wordpress.org/projects/wp-plugins/my-calendar">WordPress translations</a> to help get your language to 100%!
 
 == Installation ==
 
 1. Upload the `/my-calendar/` directory into your WordPress plugins directory.
 
-2. Activate the plugin on your WordPress plugins page 
+2. Activate the plugin on your WordPress plugins page
 
 3. Configure My Calendar using the settings pages in the admin panel:
 
    My Calendar -> Add New Event
    My Calendar -> Manage Events
-   My Calendar -> Event Groups  
+   My Calendar -> Event Groups
    My Calendar -> Add New Location
    My Calendar -> Manage Locations
    My Calendar -> Manage Categories
-   My Calendar -> Style Editor   
+   My Calendar -> Style Editor
    My Calendar -> Script Manager
    My Calendar -> Template Editor
    My Calendar -> Settings
    My Calendar -> Help
-   
+
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
-   
+
 == Changelog ==
 
 = 3.0.0 =
@@ -104,7 +104,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add: map display to back-end location manager.
 * Add: location search in location manager
 * Add: ability to filter location lists used to submit data 'mc_get_locations'
-* Add: Support for multiple categories on events. 
+* Add: Support for multiple categories on events.
 * Add: stylesheet (Twenty Eighteen)
 * Add: CSS variables support
 * Add: list of problem events in Manage Events sidebar
@@ -182,7 +182,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: ensure date is retained if datepicker disabled
 * Bug fix: archived events filter marked as active when not
 
-= 2.5.12 = 
+= 2.5.12 =
 
 * Bug fix: missing space in conflict identification
 * Bug fix: internationalization of string to time created conflict when entering month abbreviations
@@ -210,7 +210,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * New filter: 'mc_show_week_number' to turn on column indicating displayed week's number. (props Josef Fällman)
 * UI Change: Duplicate navigation and search on events list at bottom of list
 * Miscellaneous improvements to the My Calendar Filters shortcode: set target URL & change location search type, add as widget
-* New widget: My Calendar event filters 
+* New widget: My Calendar event filters
 * Added inverse color style declaration to category color template tag
 
 = 2.5.9 =
@@ -309,7 +309,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add custom date option to upcoming events shortcode builder
 * Improved error message if user creates event with an invalid recurring cycle
 * Updated template editor; ability to create custom templates.
-* Add option to add new dates for an existing event. 
+* Add option to add new dates for an existing event.
 * For single event, show closest available date if no/invalid date ID provided.
 * Added first occurrence data to core event object
 * New template tag: {related} to list other events in the same group
@@ -331,7 +331,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: removed numerous notices
 * Bug fix: improved handling of missing event posts
 * Bug fix: allow more HTML elements & attributes
-* Bug fix: misc. notices 
+* Bug fix: misc. notices
 
 Breaking Changes:
 
@@ -364,7 +364,7 @@ Other changes in this release:
 * New filter: filter All Categories text
 * New filter: filter Map URL & Map Label
 * Bug fix: when sequentially switching from Month to Week to Month & back to Week, Week would revert to first week of month.
-* Bug fix: Maintain current view when switching categories 
+* Bug fix: Maintain current view when switching categories
 
 = 2.4.18 =
 
@@ -401,7 +401,7 @@ Other changes in this release:
 = 2.4.14 =
 
 * Bug fix: possible SQL error if event ID not saved in event post on event creation.
-* Bug fix: database didn't allow recurring spacing larger than 9; input allowed up to 12. 
+* Bug fix: database didn't allow recurring spacing larger than 9; input allowed up to 12.
 * Bug fix: multiple uses of {dtstart format=''} in upcoming events caused repeated data.
 * Bug fix: Escaping of address string in Google Maps
 * Bug fix: Pass parameter to indicate whether calendar is rendered in widget or shortcode. Only render single view in shortcode.
@@ -436,7 +436,7 @@ Other changes in this release:
 = 2.4.11 =
 
 * Bug fix: remove category parameter from 'All Categories'
-* Bug fix: Invalid closing </th> 
+* Bug fix: Invalid closing </th>
 * Bug fix: Update gmap3 to version 6.0
 * Bug fix: CSS conflict with max-width can cause Google Maps image to fail to render correctly.
 * Bug fix: duplicate ID in list view breaking layout.
@@ -527,7 +527,7 @@ New features:
 * New option: switch to mini calendar on mobile devices instead of list view.
 * Add [day] select field to date switcher if in 'day' view.
 * Option to set default sort direction
-* Ability to set three separate event title templates: grid, list, and single. 
+* Ability to set three separate event title templates: grid, list, and single.
 * Added admin-bar link to view calendar.
 * Added option to customize permalink slug on permalink page
 * Single event pages as permalinks use the same template as main if custom template isn't enabled.
@@ -603,7 +603,7 @@ Translations:
 
 = 2.3.27 =
 
-* Bug fix: Things that happen when you failed to write down a minor change - you don't test it. Couldn't choose a preset location when creating an event in 2.3.26. 
+* Bug fix: Things that happen when you failed to write down a minor change - you don't test it. Couldn't choose a preset location when creating an event in 2.3.26.
 
 = 2.3.26 =
 
@@ -652,7 +652,7 @@ Translations:
 * Feature add: AJAX control to delete individual instances of a recurring event from the event editor.
 * Feature change: Events post type content filter now replaces content instead of repeating. Use 'mc_event_content' filter to override.
 * Improvement: Show overlapping occurrences warnings in manage events view.
-* Improvement: List/Grid button only shows on month and week views. 
+* Improvement: List/Grid button only shows on month and week views.
 * Misc. UI improvements.
 * Performance fix: Hide overlapping recurring events on front-end. (They can consume massive amounts of memory.)
 * Language updates: French, Spanish, Japanese, Dutch, German, Ukrainian, Swedish
@@ -667,7 +667,7 @@ ISSUE: What's causing templates to not be set?
 * Bug fix: mc-ajax.js was not compatible with heading filter for output.
 * Language updates: French, Spanish, Ukrainian
 
-= 2.3.22 = 
+= 2.3.22 =
 
 * Edit: Allow integers up to 12 in the 'every' field for recurring events. (Previously 9)
 * Bug fix: Incorrect sprintf call in {recurs} template, effecting recurring events by month.
@@ -810,7 +810,7 @@ ISSUE: What's causing templates to not be set?
 * Bug fix: extended caption value saved but not shown.
 * Bug fix: For multi-day events ending at midnight, last date automatically extended one day at save.
 * Bug fix: on copy, if start date is changed, but end date isn't, increment end date to match length of original event.
-* Change: Eliminate error on empty title fields or invalid recurrence values. Set to default value instead. 
+* Change: Eliminate error on empty title fields or invalid recurrence values. Set to default value instead.
 
 = 2.3.7 =
 
@@ -818,7 +818,7 @@ ISSUE: What's causing templates to not be set?
 
 = 2.3.6 =
 
-* Error in yesterday's bug fix for upcoming events. 
+* Error in yesterday's bug fix for upcoming events.
 * Bug fix: Email notifications broken.
 
 = 2.3.5 =
@@ -900,9 +900,9 @@ This is a major revision.
 * New feature: filter events by available accessibility services
 * New feature: Combined filter shortcode to group all filters into a single form. [mc_filters show='locations,categories,access']
 * New feature: new API for adding custom fields to events.
-* New feature: data API to fetch event data in JSON, CSV, or RSS formats. 
-* New feature: Archive events to hide from admin events list. 
-* New feature: Control input options for multiple types of location input data. 
+* New feature: data API to fetch event data in JSON, CSV, or RSS formats.
+* New feature: Archive events to hide from admin events list.
+* New feature: Control input options for multiple types of location input data.
 * New feature: Shortcode generator for primary, upcoming, and today's events shortcodes.
 * New feature: admin-side event search
 * New feature: category key now acts as quick links to filter by category
