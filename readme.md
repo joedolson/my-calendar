@@ -2,7 +2,7 @@
 
 Accessible Event Manager for WordPress
 
-[![Build Status](https://travis-ci.org/joedolson/my-calendar.svg)](https://travis-ci.org/joedolson/my-calendar) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)]
+[![Build Status](https://travis-ci.org/joedolson/my-calendar.svg)](https://travis-ci.org/joedolson/my-calendar) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/license/gpl-2.0.html)
 
 ## My Calendar Build Environment
 
@@ -10,6 +10,7 @@ Accessible Event Manager for WordPress
 * Tags: calendar, event management, events  
 * Requires at least: 4.4  
 * Tested up to: 4.9
+* Requires PHP: 5.3
 * Stable tag: `2.5.16`
 * License: GPLv2 or later  
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html  
