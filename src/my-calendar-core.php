@@ -849,7 +849,7 @@ function my_calendar_send_email( $event ) {
 }
 
 /**
- * Checks submitted events against akismet or botsmasher, if available
+ * Checks submitted events against akismet, if available
  *
  * @param string $event_url Provided URL.
  * @param string $description Event description.
@@ -864,24 +864,10 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	if ( current_user_can( 'mc_manage_events' ) ) { // is a privileged user.
 		return 0;
 	}
-	$bs      = false;
 	$akismet = false;
 	$c       = array();
 	// check for Akismet.
-	if ( ! function_exists( 'akismet_http_post' ) || ! ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) ) {
-		// check for BotSmasher.
-		$bs = get_option( 'bs_options' );
-		if ( is_array( $bs ) ) {
-			$bskey = $bs['bs_api_key'];
-		} else {
-			$bskey = '';
-		}
-		if ( ! function_exists( 'bs_checker' ) || '' == $bskey ) {
-			return 0; // if neither exist.
-		} else {
-			$bs = true;
-		}
-	} else {
+	if ( function_exists( 'akismet_http_post' ) || ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) ) {
 		$akismet = true;
 	}
 	if ( $akismet ) {
@@ -912,28 +898,6 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		}
 		$response = akismet_http_post( $query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port );
 		if ( 'true' == $response[1] ) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-	if ( $bs ) {
-		if ( is_user_logged_in() ) {
-			$name  = $current_user->user_login;
-			$email = $current_user->user_email;
-		} else {
-			$name  = $post['mcs_name'];
-			$email = $post['mcs_email'];
-		}
-		$args       = array(
-			'ip'     => preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] ),
-			'email'  => $email,
-			'name'   => $name,
-			'action' => 'check',
-		);
-		$args['ip'] = '216.152.251.41';
-		$response   = bs_checker( $args );
-		if ( $response ) {
 			return 1;
 		} else {
 			return 0;
