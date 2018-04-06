@@ -2250,7 +2250,7 @@ function mc_list_events() {
 		}
 		?>
 		<div class='mc-admin-footer'>
-			<p class="event-actions">
+			<div class="mc-actions">
 				<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete events', 'my-calendar' ); ?>"/>
 				<input type="submit" class="button-secondary trash" name="mass_trash" value="<?php _e( 'Trash events', 'my-calendar' ); ?>"/>
 				<?php
@@ -2265,7 +2265,7 @@ function mc_list_events() {
 				<?php
 				}
 				?>
-			</p>
+			</div>
 
 			<p>
 				<?php

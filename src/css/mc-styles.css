@@ -498,11 +498,10 @@ input[name="mc_uri"] {
 }
 
 .mc-actions {
-    float: left;
     vertical-align: middle;
     height: 30px;
     margin: 6px 0 4px;
-    clear: left;
+    clear: both;
 }
 
 .my-calendar-admin fieldset legend {
@@ -749,10 +748,6 @@ tr.problem .error {
 }
 
 .my-calendar-admin .mc-none {
-	clear: both;
-}
-
-.event-actions {
 	clear: both;
 }
 
