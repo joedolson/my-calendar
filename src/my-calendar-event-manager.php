@@ -373,7 +373,7 @@ function my_calendar_manage() {
 			$total = count( $events );
 			if ( current_user_can( 'mc_approve_events' ) ) {
 				$trashed[] = $value;
-				$prepare[]  = '%d';
+				$prepare[] = '%d';
 				$i ++;
 			}
 		}
