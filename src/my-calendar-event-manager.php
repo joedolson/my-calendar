@@ -359,6 +359,37 @@ function my_calendar_manage() {
 		echo $message;
 	}
 
+	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_trash'] ) ) {
+		$nonce = $_REQUEST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			die( 'Security check failed' );
+		}
+		$events   = $_POST['mass_edit'];
+		$i        = 0;
+		$trashed  = array();
+		$prepare  = array();
+		foreach ( $events as $value ) {
+			$value = (int) $value;
+			$total = count( $events );
+			if ( current_user_can( 'mc_approve_events' ) ) {
+				$trashed[] = $value;
+				$prepare[]  = '%d';
+				$i ++;
+			}
+		}
+		$prepared = implode( ',', $prepare );
+		$sql      = 'UPDATE ' . my_calendar_table() . " SET event_approved = 2 WHERE event_id IN ($prepared)";
+		$result   = $wpdb->query( $wpdb->prepare( $sql, $trashed ) ); // WPCS: unprepared SQL ok.
+		if ( 0 == $result || false == $result ) {
+			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been trashed. Please investigate.', 'my-calendar' ) . '</p></div>';
+		} else {
+			do_action( 'mc_mass_trash_events', $trashed );
+			// Translators: Number of events trashed, number of events selected.
+			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events trashed successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
+		}
+		echo $message;
+	}
+
 	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_approve'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -1950,6 +1981,7 @@ function mc_list_events() {
 				<div class='mc-actions'>
 					<?php
 					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/>';
+					echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="'. __( 'Trash events', 'my-calendar' ) . '"/>';
 					if ( current_user_can( 'mc_approve_events' ) ) {
 						echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" />';
 					}
@@ -2220,6 +2252,7 @@ function mc_list_events() {
 		<div class='mc-admin-footer'>
 			<p class="event-actions">
 				<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete events', 'my-calendar' ); ?>"/>
+				<input type="submit" class="button-secondary trash" name="mass_trash" value="<?php _e( 'Trash events', 'my-calendar' ); ?>"/>
 				<?php
 				if ( current_user_can( 'mc_approve_events' ) ) {
 				?>
