@@ -364,10 +364,10 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events   = $_POST['mass_edit'];
-		$i        = 0;
-		$trashed  = array();
-		$prepare  = array();
+		$events  = $_POST['mass_edit'];
+		$i       = 0;
+		$trashed = array();
+		$prepare = array();
 		foreach ( $events as $value ) {
 			$value = (int) $value;
 			$total = count( $events );
@@ -1981,7 +1981,7 @@ function mc_list_events() {
 				<div class='mc-actions'>
 					<?php
 					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/>';
-					echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="'. __( 'Trash events', 'my-calendar' ) . '"/>';
+					echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . __( 'Trash events', 'my-calendar' ) . '"/>';
 					if ( current_user_can( 'mc_approve_events' ) ) {
 						echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" />';
 					}
