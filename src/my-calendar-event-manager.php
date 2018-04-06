@@ -415,7 +415,7 @@ function my_calendar_manage() {
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not archive those events.', 'my-calendar' ) . '</p></div>';
 		} else {
-			do_action( 'mc_mass_archive_events', $archived );
+			do_action( 'mc_mass_archive_events', $updated );
 			// Translators: Number of events archived, number selected.
 			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events archived successfully out of %2$d selected.', 'my-calendar' ), $i, $total ) . ' ' . __( 'Archived events remain on your calendar, but are removed from the event manager.', 'my-calendar' ) . '</p></div>';
 		}
