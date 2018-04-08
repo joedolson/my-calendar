@@ -1,6 +1,6 @@
 #my-calendar legend {
-    font-weight: 700;
-    font-size: 1em
+	font-weight: 700;
+	font-size: 1em
 }
 
 #my-calendar #wp-content-editor-tools {
@@ -8,8 +8,8 @@
 }
 
 .mcbuy, .follow-me {
-    font-size: 1.1em;
-    line-height: 1.5
+	font-size: 1.1em;
+	line-height: 1.5
 }
 
 .mcbuy a {
@@ -17,16 +17,16 @@
 }
 
 .mcd, .follow-me {
-    text-align: center;
-    margin: 0;
+	text-align: center;
+	margin: 0;
 }
 
 #cat_icon option {
-    padding: 5px 0 5px 24px
+	padding: 5px 0 5px 24px
 }
 
 #my-calendar-admin-table .delete {
-    color: #c00
+	color: #c00
 }
 
 #my-calendar-admin-table th .active {
@@ -35,34 +35,34 @@
 
 
 .import {
-    background: #ffa;
-    padding: 5px 10px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    margin: 15px 0
+	background: #ffa;
+	padding: 5px 10px;
+	border: 1px solid #aaa;
+	border-radius: 5px;
+	margin: 15px 0
 }
 
 .n4 {
-    width: 42px
+	width: 42px
 }
 
 .category-color {
-    width: 1.2em;
-    height: 1.2em;
-    display: inline-block;
-    border-radius: 3px;
-    border: 1px solid #000
+	width: 1.2em;
+	height: 1.2em;
+	display: inline-block;
+	border-radius: 3px;
+	border: 1px solid #000
 }
 
 .active-link {
-    font-weight: 700;
-    text-decoration: underline
+	font-weight: 700;
+	text-decoration: underline
 }
 
 ul.links li {
-    float: left;
-    margin: 0 5px 10px;
-    font-size: .9em
+	float: left;
+	margin: 0 5px 10px;
+	font-size: .9em
 }
 
 .my-calendar-admin .metabox-holder .postbox > h2 {
@@ -77,12 +77,12 @@ ul.links li {
 }
 
 #toggle {
-    height: 2em
+	height: 2em
 }
 
 #toggle li {
-    float: left;
-    margin-right: 5px
+	float: left;
+	margin-right: 5px
 }
 
 span.mc-notice {
@@ -93,96 +93,103 @@ span.mc-notice {
 }
 
 .my-calendar-admin .spam {
-    background: #ffa
+	background: #ffa
 }
 
 .my-calendar-admin fieldset fieldset {
-    margin: 0 0 20px 0;
-    padding-top: 2px
+	margin: 0 0 20px 0;
+	padding-top: 2px
 }
 
 #mceditor {
-    border: 1px solid #ddd;
-    margin: 0 0 5px
+	border: 1px solid #ddd;
+	margin: 0 0 5px
 }
 
 .mc_template_tags dt {
-    font-weight: 700
+	font-weight: 700
 }
 
 .mc_template_tags dd {
-    margin-left: 0;
-    padding: 2px 1px
+	margin-left: 0;
+	padding: 2px 1px
 }
 
 .mc_template_tags {
-    clear: right
+	clear: right
 }
 
 .clonedInput {
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ddd
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ddd
 }
 
 #my-calendar .apply {
-    padding: 1px 5px 0;
-    margin: 0 -5px;
-    border-radius: 3px;
-    box-shadow: 2px 2px 3px #aaa;
-    background: #ffc
+	padding: 1px 5px 0;
+	margin: 0 -5px;
+	border-radius: 3px;
+	box-shadow: 2px 2px 3px #aaa;
+	background: #ffe
 }
 
 #my-calendar .apply legend {
-    background: #ffd;
-    padding: 2px 0
+	padding: 2px 0
 }
 
-#my-calendar .apply .warning {
-    background: #ffe;
-    color: #333;
-    padding: 10px;
-    border-bottom: 1px solid #a00;
+#my-calendar .apply .warning, #my-calendar .apply .matched {
+	background: #ffc;
+	color: #333;
+	padding: 10px;
+	border-bottom: 1px solid #a00;
 	margin: 0 -5px 10px;
 }
 
+#my-calendar .apply .warning {
+	border-bottom: 1px solid #a00;
+}
+
+#my-calendar .apply .matched {
+	border-bottom: 1px solid #0a0;
+}
+
 #my-calendar .break ul {
-    padding: 10px 10px 0;
-    margin-right: 180px
+	padding: 10px 10px 0;
+	margin-right: 180px
 }
 
 #my-calendar .two-columns {
-    -moz-column-count: 2;
-    -moz-column-gap: 30px;
-    -webkit-column-count: 2;
-    -webkit-column-gap: 30px;
-    column-count: 2;
-    column-gap: 30px
+	-moz-column-count: 2;
+	-moz-column-gap: 30px;
+	-webkit-column-count: 2;
+	-webkit-column-gap: 30px;
+	column-count: 2;
+	column-gap: 30px
 }
 
 .my-calendar-admin .event_image {
-    float: right;
-    margin-left: 10px;
+	float: right;
+	margin-left: 10px;
 }
 
 .my-calendar-admin .event_image img {
-    width: 150px;
-    height: auto;
-    margin: 2px 0;
-    border-radius: 3px;
+	width: 150px;
+	height: auto;
+	margin: 2px 0;
+	border-radius: 3px;
 }
 
 .mc_support {
-    font-family: 'Courier New';
-    background: #fff;
-    padding: 5px
+	font-family: 'Courier New';
+	background: #fff;
+	padding: 5px
 }
 
 .template-editor, .style-editor {
-    width: 98%
+	width: 98%
 }
 
 .my-calendar-admin .postbox {
-    margin: 10px 10px 0 0
+	margin: 10px 10px 0 0
 }
 
 .my-calendar-admin .postbox.wptab {
@@ -191,25 +198,25 @@ span.mc-notice {
 }
 
 .my-calendar-admin .postbox .inside {
-    overflow: visible !important
+	overflow: visible !important
 }
 
 
 
 /* some plugins change this, but I need it at WP default. */
 .my-calendar-admin .meta-box-sortables {
-    min-height: 0
+	min-height: 0
 }
 
 .my-calendar-admin textarea {
-    width: 100%
+	width: 100%
 }
 
 .my-calendar-admin .message pre, .my-calendar-admin li pre {
-    background: #fff;
-    padding: 5px;
-    border: 1px solid #ddd;
-    box-shadow: 1px 1px 2px #ddd
+	background: #fff;
+	padding: 5px;
+	border: 1px solid #ddd;
+	box-shadow: 1px 1px 2px #ddd
 }
 
 #mc-shortcodes textarea {
@@ -220,61 +227,63 @@ span.mc-notice {
 }
 
 .my-calendar-admin label span.required {
-    font-size: .9em;
-    color: #c33
+	font-size: .9em;
+	color: #c33
 }
 
 .my-calendar-admin label .nomatch {
 	font-style: italic;
+	color: #b00;
+	font-weight: 700;
 }
 
 .my-calendar-admin .default {
-    background: #fff
+	background: #fff
 }
 
 .my-calendar-admin .button-adjust {
-    top: 10px;
-    right: 0
+	top: 10px;
+	right: 0
 }
 
 .my-calendar-admin hr {
-    width: 20%;
-    margin: 0 auto;
-    border: none;
-    border-top: 1px solid #ccc
+	width: 20%;
+	margin: 0 auto;
+	border: none;
+	border-top: 1px solid #ccc
 }
 
 #mc-shortcodes li code {
-    display: inline-block
+	display: inline-block
 }
 
 .my-calendar-admin .tablenav {
-    float: right
+	float: right
 }
 
 input[id=e_label], input[id=e_title], input[id=location_label], textarea[id=mc_twitter] {
-    font-size: 1.4em;
-    padding: 9px;
-    width: 100%;
+	font-size: 1.4em;
+	padding: 9px;
+	width: 100%;
 	margin-bottom: .5em;
 }
 
 label[for=mc_twitter] {
-    background: url(../images/twitter.png) left 50% no-repeat;
-    padding-left: 20px;
+	background: url(../images/twitter.png) left 50% no-repeat;
+	padding-left: 20px;
 }
 
 strong.label {
-    font-weight: 400;
+	font-weight: 400;
 }
 
 #my-calendar-text label {
-    display: inline-block;
-    width: 12em;
+	display: inline-block;
+	width: 12em;
 }
 
 .wp-picker-container {
-    display: inline-block;
+	display: inline-block;
 }
 
 .wp-picker-holder {
@@ -287,21 +296,21 @@ strong.label {
 }
 
 .my-calendar-admin .counter {
-    padding-right: 6px;
-    border-right: 16px solid green;
-    border-radius: 20px;
+	padding-right: 6px;
+	border-right: 16px solid green;
+	border-radius: 20px;
 }
 
 .my-calendar-admin .counter.warning {
-    border-color: orange;
+	border-color: orange;
 }
 
 .my-calendar-admin .counter.exceeded {
-    border-color: red;
+	border-color: red;
 }
 
 .mc-categories th:nth-of-type(5), .mc-categories th:nth-of-type(6), .mc-categories th:nth-of-type(7) {
-    width: 50px;
+	width: 50px;
 }
 
 .mc-categories td img {
@@ -309,11 +318,11 @@ strong.label {
 }
 
 .jcd-wide {
-    width: 75%;
+	width: 75%;
 }
 
 .jcd-narrow {
-    width: 20%;
+	width: 20%;
 }
 
 .mc-sidebar-footer .jcd-wide {
@@ -326,25 +335,25 @@ strong.label {
 }
 
 .mc-tabs .tabs {
-    margin: 0 !important;
-    padding: 0 4px;
-    position: relative;
-    top: 1px;
+	margin: 0 !important;
+	padding: 0 4px;
+	position: relative;
+	top: 1px;
 }
 
 .mc-tabs .tabs li {
-    display: inline;
-    margin: 0 auto;
-    line-height: 1;
+	display: inline;
+	margin: 0 auto;
+	line-height: 1;
 	float: none;
 }
 
 .mc-tabs .tabs a {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px 4px 0 0;
-    border: 1px solid #ccc;
-    background: #f3f3f3;
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 4px 4px 0 0;
+	border: 1px solid #ccc;
+	background: #f3f3f3;
 }
 
 .mc-tabs.settings .tabs a {
@@ -353,16 +362,16 @@ strong.label {
 }
 
 .mc-tabs .tabs a.active {
-    border-bottom: 1px solid #fefefe;
-    background: #fefefe;
+	border-bottom: 1px solid #fefefe;
+	background: #fefefe;
 	text-decoration: none;
 	cursor: text;
 }
 
 .mc-tabs .wptab {
-    background: #fff;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+	background: #fff;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
 }
 
 #mc-generator .mc-tabs .tabs a {
@@ -378,10 +387,10 @@ strong.label {
 }
 
 .my-calendar-admin .ui-accordion-header, .mc-settings-page #mc-sortable li {
-    border: 1px solid #ddd;
-    background: rgba(0, 0, 0, .10);
-    padding: .5em 1em;
-    margin: 1px 0;
+	border: 1px solid #ddd;
+	background: rgba(0, 0, 0, .10);
+	padding: .5em 1em;
+	margin: 1px 0;
 }
 
 .mc-settings-page #mc-sortable .mc-updated {
@@ -400,12 +409,12 @@ strong.label {
 }
 
 .my-calendar-admin .ui-accordion-header.ui-state-hover, .ui-accordion-header.ui-state-focus, .mc-settings-page #mc-sortable li:hover {
-    background: #f6f6f6;
-    box-shadow: 0 0 2px #ddd;
+	background: #f6f6f6;
+	box-shadow: 0 0 2px #ddd;
 }
 
 #mc-sortable li {
-    cursor: move;
+	cursor: move;
 }
 
 input[name="mc_uri"] {
@@ -420,7 +429,7 @@ input[name="mc_uri"] {
 }
 
 .my-calendar-admin .ui-accordion-header-active {
-    background: rgba(0, 0, 0, .05);
+	background: rgba(0, 0, 0, .05);
 }
 
 .my-calendar-admin .ui-accordion-header .dashicons:before {
@@ -432,12 +441,12 @@ input[name="mc_uri"] {
 }
 
 #mc-sortable .mc-calendar {
-    background-color: #fff !important;
-    border: 1px solid #777 !important;
+	background-color: #fff !important;
+	border: 1px solid #777 !important;
 }
 
 #mc-sortable li.mc-stop {
-    border-radius: none;
+	border-radius: none;
 	background-color: #222;
 	color: #eee;
 }
@@ -452,24 +461,24 @@ input[name="mc_uri"] {
 }
 
 #mc-sortable div.dashicons {
-    vertical-align: middle;
-    height: 1em;
+	vertical-align: middle;
+	height: 1em;
 }
 
 #mc-sortable code {
-    display: inline-block;
-    width: 5em;
-    text-align: center;
+	display: inline-block;
+	width: 5em;
+	text-align: center;
 }
 
 .my-calendar-admin .checkboxes {
-    margin: 0;
+	margin: 0;
 }
 .my-calendar-admin .checkboxes:after {
-    content: '';
-    display: table;
-    clear: both;
-    margin-bottom: 1em;
+	content: '';
+	display: table;
+	clear: both;
+	margin-bottom: 1em;
 }
 
 .mc_permissions {
@@ -487,62 +496,62 @@ input[name="mc_uri"] {
 }
 
 .my-calendar-admin .checkboxes li {
-    display: inline-block;
-    padding: 5px;
-    background: rgba(0, 0, 0, .05);
-    margin: 2px;
+	display: inline-block;
+	padding: 5px;
+	background: rgba(0, 0, 0, .05);
+	margin: 2px;
 }
 
 .my-calendar-admin .checkboxes li:hover {
-    background: #fff;
+	background: #fff;
 }
 
 .mc-actions {
-    vertical-align: middle;
-    height: 30px;
-    margin: 6px 0 4px;
-    clear: both;
+	vertical-align: middle;
+	height: 30px;
+	margin: 6px 0 4px;
+	clear: both;
 }
 
 .my-calendar-admin fieldset legend {
-    font-weight: 700;
-    padding: 0;
-    font-size: 1.1em;
+	font-weight: 700;
+	padding: 0;
+	font-size: 1.1em;
 }
 
 .generator fieldset {
-    border: 1px solid #ccc;
-    margin: 10px 0;
-    padding: 10px;
+	border: 1px solid #ccc;
+	margin: 10px 0;
+	padding: 10px;
 }
 
 .generator label {
-    display: block;
-    float: left;
-    width: 30%;
-    margin-right: 10px;
+	display: block;
+	float: left;
+	width: 30%;
+	margin-right: 10px;
 }
 
 .generator td input[type=text] {
-    width: 100%;
+	width: 100%;
 }
 
 .generator td label {
-    float: none;
-    width: auto;
-    display: inline;
+	float: none;
+	width: auto;
+	display: inline;
 }
 
 .generator .help, .generator .clear {
-    clear: left;
+	clear: left;
 }
 
 .generator input {
-    line-height: normal;
+	line-height: normal;
 }
 
 .generator input[type=text], .generator select {
-    width: 60%;
+	width: 60%;
 }
 
 select[name="event_recur"] {
@@ -554,7 +563,7 @@ select[name="event_recur"] {
 }
 
 .req {
-    color: red;
+	color: red;
 }
 
 .mc-controls {
@@ -568,7 +577,8 @@ select[name="event_recur"] {
 .mc-controls.footer {
 	background: transparent;
 	border-radius: 0;
-	border-top: 1px solid #ccc;
+	padding: 0;
+	margin: 20px 0 0;
 }
 
 .mc-controls ul {
@@ -587,41 +597,41 @@ select[name="event_recur"] {
 }
 
 .mc-locations label {
-    display: block;
+	display: block;
 }
 
 .mc-locations .checkboxes label, .checkbox label {
-    display: inline;
+	display: inline;
 }
 
 .locations-container {
-    position: relative;
+	position: relative;
 }
 
 .mc-locations .location-primary {
-    width: 47%;
-    margin-right: 20px;
+	width: 47%;
+	margin-right: 20px;
 }
 
 .mc-locations:after {
-    content: ' ';
-    display: table;
-    clear: both;
+	content: ' ';
+	display: table;
+	clear: both;
 }
 
 .mc-locations .location-secondary {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 47%;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	width: 47%;
 }
 
 .mc-locations .locations-container input {
-    max-width: 90%;
+	max-width: 90%;
 }
 
 .mc-search {
-    float: right;
+	float: right;
 }
 
 .mc-admin-footer .mc-search {
@@ -724,17 +734,17 @@ tr.problem .error {
 }
 
 .mc-support-me p {
-    font-size: 1.6em;
-    font-weight: 600;
-    background: #007eb3;
-    text-shadow: 1px 1px rgb( 35, 60, 127 );
-    padding: 1em;
-    text-align: center;
-    margin: 0 0 1em;
+	font-size: 1.6em;
+	font-weight: 600;
+	background: #007eb3;
+	text-shadow: 1px 1px rgb( 35, 60, 127 );
+	padding: 1em;
+	text-align: center;
+	margin: 0 0 1em;
 }
 
 .mc-support-me p, .mc-support-me a {
-    color: #f3f3f3;
+	color: #f3f3f3;
 }
 
 .wrap ul.list {
@@ -743,7 +753,7 @@ tr.problem .error {
 }
 
 .mc-support-me a:hover, .mc-support-me a:focus {
-    text-decoration: none !important;
+	text-decoration: none !important;
 	color: #fff !important;
 }
 
@@ -752,25 +762,25 @@ tr.problem .error {
 }
 
 @media (max-width: 1140px) {
-    .mc-locations .locations-container input {
-        max-width: 70%;
-    }
+	.mc-locations .locations-container input {
+		max-width: 70%;
+	}
 }
 
 @media (max-width: 782px) {
-    .my-calendar-admin .tablenav {
-        float: none;
-    }
+	.my-calendar-admin .tablenav {
+		float: none;
+	}
 	
 	.mc_permissions {
 		width: 50%;
 	}
 
-    .jcd-narrow {
-        width: 100%;
-    }
+	.jcd-narrow {
+		width: 100%;
+	}
 
-    .jcd-wide {
-        width: 100%;
-    }
+	.jcd-wide {
+		width: 100%;
+	}
 }

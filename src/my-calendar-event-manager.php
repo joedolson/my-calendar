@@ -1627,9 +1627,6 @@ if ( mc_show_edit_block( 'event_specials' ) ) {
 				</p>
 			</fieldset>
 		</div>
-		<div class='mc-controls footer'>
-			<?php echo mc_controls( $mode, $has_data, $data, 'footer' ); ?>
-		</div>
 	</div>
 	</div>
 	<?php
@@ -1649,6 +1646,15 @@ if ( mc_show_edit_block( 'event_specials' ) ) {
 	<?php
 }
 ?>
+	<div class="ui-sortable meta-box-sortables">
+	<div class="postbox">
+		<div class="inside">
+			<div class='mc-controls footer'>
+				<?php echo mc_controls( $mode, $has_data, $data, 'footer' ); ?>
+			</div>
+		</div>
+	</div>
+	</div>
 </form>
 </div>
 	</div>
@@ -2110,7 +2116,7 @@ function mc_list_events() {
 									?>
 									|
 									<?php
-									if ( current_user_can( 'mc_approve_events' ) ) { // Added by Roland P.
+									if ( current_user_can( 'mc_approve_events' ) ) {
 										if ( 1 == $event->event_approved ) {
 											$mo = 'reject';
 											$te = __( 'Trash', 'my-calendar' );
