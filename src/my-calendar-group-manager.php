@@ -253,7 +253,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
 	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // WPCS: unprepared SQL OK.
 	if ( 'apply' == $type ) {
-		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>NOTE:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p>' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
+		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>NOTE:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p class="matched">' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
 	} else {
 		$warning = '';
 	}
