@@ -26,22 +26,22 @@ Do you need to sell tickets for events? [Use My Tickets](https://wordpress.org/p
 = Features: =
 
 *	Calendar grid and list views of events
-* 	Monthly, weekly, or daily view.
-* 	Mini-calendar for compact displays (as widget or as shortcode)
+*	Monthly, weekly, or daily view.
+*	Mini-calendar for compact displays (as widget or as shortcode)
 *	Widgets: today's events, upcoming events, compact calendar, event search
 *	Custom templates for event output
 *	Limit views by categories, location, author, or host
 *	Editable CSS styles and JavaScript behaviors
 *	Schedule recurring events.
 *	Edit single occurrences of recurring events
-* 	Rich permissions handling to restrict access to parts of My Calendar
-* 	Email notification to administrator when events are scheduled or reserved
-* 	Post to Twitter when events are created (using [WP to Twitter](http://wordpress.org/extend/plugins/wp-to-twitter/))
+*	Rich permissions handling to restrict access to parts of My Calendar
+*	Email notification to administrator when events are scheduled or reserved
+*	Post to Twitter when events are created (using [WP to Twitter](http://wordpress.org/extend/plugins/wp-to-twitter/))
 *	Managing locations
-*   Fetch events from a remote database. (Sharing events in a network of sites.)
-* 	Multisite-friendly
-* 	Integrated help page
-* 	Shortcode Generator to create customized views of My Calendar
+*	Fetch events from a remote database. (Sharing events in a network of sites.)
+*	Multisite-friendly
+*	Integrated help page
+*	Shortcode Generator to create customized views of My Calendar
 
 = What's in My Calendar Pro? =
 
@@ -119,6 +119,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add: HTML code editor available in Template editing
 * Add: Schema.org address markup
 * Add: Schema.org event markup
+* Add: Include event link in 'Add to Google Cal' content.
 
 * Removed: event open & event closed text settings
 * Removed: event_open event status (little used and confusing; replaced by My Tickets)

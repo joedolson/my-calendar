@@ -183,7 +183,7 @@ function mc_generate_vcal( $event_id = false ) {
 			$alert = mc_generate_alert_ical( $alarm );
 		}
 		$all_day = '';
-		if ( $event->event_allday == 1 ) {
+		if ( 1 == $event->event_allday ) {
 			$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
 		}
 
@@ -445,7 +445,7 @@ function my_calendar_ical() {
 						$alert = mc_generate_alert_ical( $alarm );
 					}
 					$all_day = '';
-					if ( $event->event_allday == 1 ) {
+					if ( 1 == $event->event_allday ) {
 						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
 					}
 					$template = apply_filters( 'mc_filter_ical_template', $template );

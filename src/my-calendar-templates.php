@@ -242,9 +242,9 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	$base   = "&dates=$dtstart/$dtend";
 	$base  .= '&sprop=website:' . $url;
 	$base  .= '&text=' . urlencode( $title );
-	$base  .= '&location=' . urlencode( $location );
+	$base  .= '&location=' . urlencode( trim( $location ) );
 	$base  .= '&sprop=name:' . urlencode( get_bloginfo( 'name' ) );
-	$base  .= '&details=' . urlencode( stripcslashes( $description ) );
+	$base  .= '&details=' . urlencode( stripcslashes( trim( $description ) ) );
 	$base  .= '&sf=true&output=xml';
 
 	return $source . $base;
@@ -492,9 +492,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['ical_location']   = trim( $event->event_label . ' ' . $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode );
 	}
 
-	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) );
+	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
 	$e['gcal']      = mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $event->event_title ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "<a href='" . mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $event->event_title ), $map_gcal, $strip_desc ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
+	$e['gcal_link'] = "<a href='" . $e['gcal'] . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
