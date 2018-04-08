@@ -98,6 +98,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: character set and collation determination on install & update
 * Bug fix: When changing recurring events, only change instance IDs if the date of the instance has changed.
 * Bug fix: Event post should not change post date on update
+* Bug fix: All day events should export correctly to Outlook & Apple Calendar
 
 * Add: several new filters
 * Add: notice to alert users if their calendar configured for remote event source.

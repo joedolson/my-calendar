@@ -182,6 +182,10 @@ function mc_generate_vcal( $event_id = false ) {
 		if ( ! empty( $alarm ) ) {
 			$alert = mc_generate_alert_ical( $alarm );
 		}
+		$all_day = '';
+		if ( $event->event_allday == 1 ) {
+			$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
+		}
 
 		$template = "BEGIN:VCALENDAR
 VERSION:2.0
@@ -197,7 +201,7 @@ DTSTART:{ical_start}
 DTEND:{ical_end}
 CATEGORIES:{ical_category}
 URL;VALUE=URI:{link}
-DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_desc}$alert
+DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_desc}$alert$all_day
 END:VEVENT
 END:VCALENDAR";
 		$template = apply_filters( 'mc_single_ical_template', $template, $array );
@@ -440,8 +444,12 @@ function my_calendar_ical() {
 					if ( ! empty( $alarm ) ) {
 						$alert = mc_generate_alert_ical( $alarm );
 					}
+					$all_day = '';
+					if ( $event->event_allday == 1 ) {
+						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
+					}
 					$template = apply_filters( 'mc_filter_ical_template', $template );
-					$template = str_replace( '{alert}', $alert, $template );
+					$template = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
 
 					$output .= "\n" . mc_draw_template( $array, $template, 'ical' );
 				}
@@ -482,7 +490,7 @@ DTSTART;TZID=$tz_id:{ical_start}
 DTEND;TZID=$tz_id:{ical_end}
 URL;VALUE=URI:{link}
 DESCRIPTION:{ical_desc}
-CATEGORIES:{ical_categories}{alert}
+CATEGORIES:{ical_categories}{alert}{all_day}
 END:VEVENT";
 	// add ICAL headers.
 	$head = 'BEGIN:VCALENDAR
