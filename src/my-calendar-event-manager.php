@@ -571,7 +571,7 @@ function my_calendar_edit() {
 		<h1><?php _e( 'Edit Event', 'my-calendar' ); ?></h1>
 		<?php
 		if ( empty( $event_id ) ) {
-			echo mc_show_error( __( 'You must provide an event id in order to edit it', 'my-calendar' ) );
+			mc_show_error( __( 'You must provide an event ID to edit events.', 'my-calendar' ) );
 		} else {
 			mc_edit_event_form( 'edit', $event_id );
 		}
@@ -580,7 +580,7 @@ function my_calendar_edit() {
 		<h1><?php _e( 'Copy Event', 'my-calendar' ); ?></h1>
 		<?php
 		if ( empty( $event_id ) ) {
-			echo mc_show_error( __( 'You must provide an event id in order to edit it', 'my-calendar' ) );
+			mc_show_error( __( 'You must provide an event ID to copy events.', 'my-calendar' ) );
 		} else {
 			mc_edit_event_form( 'copy', $event_id );
 		}
@@ -622,7 +622,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		mc_increment_event( $event_id );
 		mc_set_category_relationships( $cats, $event_id );
 		if ( ! $result ) {
-			$message = '<div class="error notice"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( "I'm sorry! I couldn't add that event to the database.", 'my-calendar' ) . '</p></div>';
+			$message = mc_show_error( __( "I'm sorry! I couldn't add that event to the database.", 'my-calendar' ), false );
 		} else {
 			// do an action using the $action and processed event data.
 			$data        = $add;
@@ -894,9 +894,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	global $submission;
 
 	if ( $event_id && ! mc_can_edit_event( $event_id ) ) {
-		echo '<div class="error"><p>';
-			_e( 'You do not have permission to edit this event.', 'my-calendar' );
-		echo '</p></div>';
+		mc_show_error( __( 'You do not have permission to edit this event.', 'my-calendar' ) );
 
 		return;
 	}
@@ -910,11 +908,8 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	apply_filters( 'mc_event_notices', '', $data, $event_id );
 
 	if ( is_object( $data ) && 1 != $data->event_approved && 'edit' == $mode ) {
-		$message = __( 'This event must be published to show on the calendar.', 'my-calendar' );
-	} else {
-		$message = '';
-	}
-	mc_show_error( $message );
+		mc_show_error( __( 'This event must be published to show on the calendar.', 'my-calendar' ) );
+	} 
 
 	mc_form_fields( $data, $mode, $event_id );
 }
@@ -1982,15 +1977,15 @@ function mc_list_events() {
 				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" /></div>
 				<div class='mc-actions'>
 					<?php
-					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/>';
-					echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . __( 'Trash events', 'my-calendar' ) . '"/>';
+					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/> ';
+					echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . __( 'Trash events', 'my-calendar' ) . '"/> ';
 					if ( current_user_can( 'mc_approve_events' ) ) {
-						echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" />';
+						echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" /> ';
 					}
 					if ( ! ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ) {
-						echo '<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="' . __( 'Archive events', 'my-calendar' ) . '" />';
+						echo '<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="' . __( 'Archive events', 'my-calendar' ) . '" /> ';
 					} else {
-						echo '<input type="submit" class="button-secondary mc-archive" name="mass_undo_archive" value="' . __( 'Remove from archive', 'my-calendar' ) . '" />';
+						echo '<input type="submit" class="button-secondary mc-archive" name="mass_undo_archive" value="' . __( 'Remove from archive', 'my-calendar' ) . '" /> ';
 					}
 					?>
 				</div>

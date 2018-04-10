@@ -83,7 +83,7 @@ function mc_mass_delete_locations() {
 			// Translators: Number of locations deleted, number selected.
 			$message = "<div class='updated'><p>" . sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
 		} else {
-			$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ) . '</p></div>';
+			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
 		}
 		echo $message;
 	}

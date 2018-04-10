@@ -20,7 +20,7 @@ function my_calendar_style_edit() {
 	$edit_files = true;
 	if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT == true ) {
 		$edit_files = false;
-		echo "<div class='my-calendar-notice updated error'><p>" . __( 'File editing is disallowed in your WordPress installation. Edit your stylesheets offline.', 'my-calendar' ) . '</p></div>';
+		mc_show_error( __( 'File editing is disallowed in your WordPress installation. Edit your stylesheets offline.', 'my-calendar' ) );
 	}
 	$dir = plugin_dir_path( __FILE__ );
 	if ( isset( $_POST['mc_edit_style'] ) ) {

@@ -155,7 +155,7 @@ function my_calendar_manage_categories() {
 			if ( $cat_id ) {
 				echo '<div class="updated"><p><strong>' . __( 'Category added successfully', 'my-calendar' ) . ". $append</strong></p></div>";
 			} else {
-				echo '<div class="updated error"><p><strong>' . __( 'Category addition failed.', 'my-calendar' ) . '</strong></p></div>';
+				mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' == $_GET['mode'] ) {
 			$cat_id  = (int) $_GET['category_id'];
@@ -179,7 +179,7 @@ function my_calendar_manage_categories() {
 			} elseif ( $results && ! $cal_results ) {
 				echo '<div class="updated"><p><strong>' . __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) . '</strong></p></div>';
 			} elseif ( ! $results && $cal_results ) {
-				echo '<div class="updated error"><p><strong>' . __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) . '</strong></p></div>';
+				mc_show_error( __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) );
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'edit' == $_GET['mode'] && ! isset( $_POST['mode'] ) ) {
 			$cur_cat = (int) $_GET['category_id'];
@@ -213,7 +213,7 @@ function my_calendar_manage_categories() {
 			if ( $results ) {
 				echo '<div class="updated"><p><strong>' . __( 'Category edited successfully.', 'my-calendar' ) . " $append</strong></p></div>";
 			} else {
-				echo '<div class="updated error"><p><strong>' . __( 'Category was not edited.', 'my-calendar' ) . " $append</strong></p></div>";
+				mc_show_error( __( 'Category was not edited.', 'my-calendar' ) . " $append" );
 			}
 			$cur_cat = (int) $_POST['category_id'];
 			mc_edit_category_form( 'edit', $cur_cat );
@@ -806,7 +806,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 	} else {
 		$category_url = admin_url( 'admin.php?page=my-calendar-categories' );
 		// Translators: URL to add a new category.
-		echo "<div class='updated error'><p>" . sprintf( __( 'You do not have any categories created. Please <a href="%s">create at least one category!</a>', 'my-calendar' ), $category_url ) . '</p></div>';
+		mc_show_error( sprintf( __( 'You do not have any categories created. Please <a href="%s">create at least one category!</a>', 'my-calendar' ), $category_url ) );
 	}
 	if ( ! $option ) {
 		$default = ( get_option( 'mc_default_category' ) ) ? get_option( 'mc_default_category' ) : 1;

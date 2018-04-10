@@ -55,7 +55,7 @@ function my_calendar_group_edit() {
 					// Translators: Calendar URL.
 					$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
 					if ( false === $result ) {
-						$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Event not updated.', 'my-calendar' ) . " $url</p></div>";
+						$message = mc_show_error( __( 'Event not updated.', 'my-calendar' ) . " $url", false );
 					} elseif ( 0 === $result ) {
 						$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url</p></div>";
 					} else {
@@ -74,7 +74,7 @@ function my_calendar_group_edit() {
 						$result   = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
 
 						if ( false === $result ) {
-							$message = "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Event not grouped.', 'my-calendar' ) . '</p></div>';
+							$message = mc_show_error( __( 'Event not grouped.', 'my-calendar' ), false );
 						} elseif ( 0 === $result ) {
 							$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . '</p></div>';
 						} else {
@@ -93,10 +93,7 @@ function my_calendar_group_edit() {
 	if ( 'edit' == $action ) {
 		echo '<h1>' . __( 'Edit Event Group', 'my-calendar' ) . '</h1>';
 		if ( empty( $event_id ) || empty( $group_id ) ) {
-			echo '
-			<div class="error">
-				<p>' . __( 'You must provide an event group id in order to edit it', 'my-calendar' ) . '</p>
-			</div>';
+			mc_show_error( __( 'You must provide an event group id in order to edit it', 'my-calendar' ) );
 		} else {
 			mc_edit_groups( 'edit', $event_id, $group_id );
 		}
@@ -165,14 +162,14 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 			do_action( 'mc_save_event', 'edit', $update, $event_id, $result );
 			do_action( 'mc_save_grouped_events', $result, $event_id, $update );
 			if ( false === $result ) {
-				$message = "<div class='error'><p><strong>#$event_id; " . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your event was not updated.', 'my-calendar' ) . " $url</p></div>";
+				$message = mc_show_error( "#$event_id; " . __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} elseif ( 0 === $result ) {
 				$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . " $url</p></div>";
 			} else {
 				$message = "<div class='updated'><p>#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
 			}
 		} else {
-			$message = "<div class='error'><p><strong>#$event_id: " . __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ) . '</strong></p></div>';
+			$message = mc_show_error( "#$event_id: " . __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
 		}
 	}
 	$message = $message . "\n" . $output[3];
@@ -191,11 +188,11 @@ function mc_group_data( $event_id = false ) {
 	global $wpdb, $submission;
 	if ( false !== $event_id ) {
 		if ( intval( $event_id ) != $event_id ) {
-			return '<div class="error"><p>' . __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ) . '</p></div>';
+			return mc_show_error( __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ), false );
 		} else {
 			$data = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // WPCS: unprepared SQL OK.
 			if ( empty( $data ) ) {
-				return '<div class="error"><p>' . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . '</p></div>';
+				return mc_show_error( __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ), false );
 			}
 			$data = $data[0];
 		}
@@ -300,7 +297,7 @@ function mc_edit_groups( $mode = 'edit', $event_id = false, $group_id = false ) 
 	} else {
 		$message .= __( 'You must provide a group ID to edit groups', 'my-calendar' );
 	}
-	echo ( '' != $message ) ? "<div class='error'><p>$message</p></div>" : '';
+	mc_show_error( $message );
 	echo $group;
 
 	my_calendar_print_group_fields( $data, $mode, $event_id, $group_id );

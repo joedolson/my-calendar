@@ -123,7 +123,7 @@ function my_calendar_add_locations() {
 		if ( $results ) {
 			echo '<div class="updated"><p><strong>' . __( 'Location added successfully', 'my-calendar' ) . '</strong></p></div>';
 		} else {
-			echo '<div class="error"><p><strong>' . __( 'Location could not be added to database', 'my-calendar' ) . '</strong></p></div>';
+			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' == $_GET['mode'] ) {
 		$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // WPCS: unprepared SQL ok.
@@ -131,7 +131,7 @@ function my_calendar_add_locations() {
 		if ( $results ) {
 			echo '<div class="updated"><p><strong>' . __( 'Location deleted successfully', 'my-calendar' ) . '</strong></p></div>';
 		} else {
-			echo '<div class="error"><p><strong>' . __( 'Location could not be deleted', 'my-calendar' ) . '</strong></p></div>';
+			mc_show_error( __( 'Location could not be deleted', 'my-calendar' ) );
 		}
 	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && 'edit' == $_GET['mode'] && ! isset( $_POST['mode'] ) ) {
 		$cur_loc = (int) $_GET['location_id'];
@@ -160,9 +160,9 @@ function my_calendar_add_locations() {
 
 		do_action( 'mc_modify_location', $where, $update );
 		if ( false === $results ) {
-			echo '<div class="error"><p><strong>' . __( 'Location could not be edited.', 'my-calendar' ) . '</strong></p></div>';
+			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
 		} elseif ( 0 == $results ) {
-			echo '<div class="updated error"><p><strong>' . __( 'Location was not changed.', 'my-calendar' ) . '</strong></p></div>';
+			mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
 		} else {
 			echo '<div class="updated"><p><strong>' . __( 'Location edited successfully', 'my-calendar' ) . '</strong></p></div>';
 		}
