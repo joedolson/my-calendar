@@ -325,6 +325,10 @@ strong.label {
 	width: 20%;
 }
 
+#my-calendar-admin-table .row-actions {
+	color: #666;
+}
+
 .mc-sidebar-footer .jcd-wide {
 	width: 100%;
 }

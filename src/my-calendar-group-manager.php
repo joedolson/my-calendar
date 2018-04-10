@@ -1030,134 +1030,134 @@ function mc_list_groups() {
 			<p style="position:relative;display:inline-block;">
 				<input type="submit" class="button-primary group" value="<?php _e( 'Group checked events for mass editing', 'my-calendar' ); ?>" />
 			</p>
-	</div>
-	<table class="widefat wp-list-table" id="my-calendar-admin-table">
-		<thead>
-		<tr>
-			<th scope="col" style="width: 50px;">
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=1$sorting" ); ?>"><?php _e( 'ID', 'my-calendar' ); ?></a>
-			</th>
-			<th scope="col">
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=8$sorting" ); ?>"><?php _e( 'Group', 'my-calendar' ); ?></a>
-			</th>
-			<th scope="col">
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=2$sorting" ); ?>"><?php _e( 'Title', 'my-calendar' ); ?></a>
-			</th>
-			<th scope="col">
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=7$sorting" ); ?>"><?php _e( 'Where', 'my-calendar' ); ?></a>
-			</th>
-			<th scope="col">
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=4$sorting" ); ?>"><?php _e( 'Date/Time', 'my-calendar' ); ?></a>
-			</th>
-			<th scope="col">
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=5$sorting" ); ?>"><?php _e( 'Author', 'my-calendar' ); ?></a>
-			</th>
-			<th scope="col">
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=6$sorting" ); ?>"><?php _e( 'Category', 'my-calendar' ); ?></a>
-			</th>
-		</tr>
-		</thead>
-		<?php
-		$class      = '';
-		$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // WPCS: unprepared SQL OK.
-		foreach ( $events as $event ) {
-			$class      = ( 'alternate' == $class ) ? '' : 'alternate';
-			$spam       = ( 1 == $event->event_flagged ) ? ' spam' : '';
-			$spam_label = ( 1 == $event->event_flagged ) ? '<strong>Possible spam:</strong> ' : '';
-			$author     = ( 0 != $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
-			$can_edit   = mc_can_edit_event( $event );
-			if ( '' != $event->event_link ) {
-				$title = "<a href='" . esc_attr( $event->event_link ) . "'>" . strip_tags( $event->event_title, mc_strip_tags() ) . '</a>';
-			} else {
-				$title = $event->event_title;
-			}
-		?>
-		<tr class="<?php echo "$class $spam"; ?>" id="event<?php echo $event->event_id; ?>">
-			<th scope="row">
-				<input type="checkbox" value="<?php echo $event->event_id; ?>" name="group[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( mc_event_is_grouped( $event->event_group_id ) ) ? ' disabled="disabled"' : ''; ?> />
-				<label for="mc<?php echo $event->event_id; ?>"><?php echo $event->event_id; ?></label>
-			</th>
-			<th scope="row">
-				<?php echo ( 0 == $event->event_group_id ) ? '-' : $event->event_group_id; ?>
-			</th>
-			<td title="<?php echo esc_attr( substr( strip_tags( stripslashes( $event->event_desc ) ), 0, 240 ) ); ?>">
-				<strong>
+			<table class="widefat wp-list-table" id="my-calendar-admin-table">
+				<thead>
+				<tr>
+					<th scope="col" style="width: 50px;">
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=1$sorting" ); ?>"><?php _e( 'ID', 'my-calendar' ); ?></a>
+					</th>
+					<th scope="col">
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=8$sorting" ); ?>"><?php _e( 'Group', 'my-calendar' ); ?></a>
+					</th>
+					<th scope="col">
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=2$sorting" ); ?>"><?php _e( 'Title', 'my-calendar' ); ?></a>
+					</th>
+					<th scope="col">
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=7$sorting" ); ?>"><?php _e( 'Where', 'my-calendar' ); ?></a>
+					</th>
+					<th scope="col">
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=4$sorting" ); ?>"><?php _e( 'Date/Time', 'my-calendar' ); ?></a>
+					</th>
+					<th scope="col">
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=5$sorting" ); ?>"><?php _e( 'Author', 'my-calendar' ); ?></a>
+					</th>
+					<th scope="col">
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=6$sorting" ); ?>"><?php _e( 'Category', 'my-calendar' ); ?></a>
+					</th>
+				</tr>
+				</thead>
 				<?php
-				if ( $can_edit ) {
-				?>
-					<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit'>
-				<?php
-				}
-				echo $spam_label;
-				echo strip_tags( stripslashes( $title ) );
-				if ( $can_edit ) {
-					echo '</a>';
-				}
-				?>
-				</strong>
-
-				<div class='row-actions' style="visibility:visible;">
-					<?php
-					if ( $can_edit ) {
-					?>
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit'><?php _e( 'Edit Event', 'my-calendar' ); ?></a> |
-						<?php
-						if ( mc_event_is_grouped( $event->event_group_id ) ) {
-						?>
-							<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ); ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
-						<?php
-						} else {
-							echo '<em>' . __( 'Ungrouped', 'my-calendar' ) . '</em>';
-						}
+				$class      = '';
+				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // WPCS: unprepared SQL OK.
+				foreach ( $events as $event ) {
+					$class      = ( 'alternate' == $class ) ? '' : 'alternate';
+					$spam       = ( 1 == $event->event_flagged ) ? ' spam' : '';
+					$spam_label = ( 1 == $event->event_flagged ) ? '<strong>Possible spam:</strong> ' : '';
+					$author     = ( 0 != $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
+					$can_edit   = mc_can_edit_event( $event );
+					if ( '' != $event->event_link ) {
+						$title = "<a href='" . esc_attr( $event->event_link ) . "'>" . strip_tags( $event->event_title, mc_strip_tags() ) . '</a>';
 					} else {
-						_e( 'Not editable.', 'my-calendar' );
+						$title = $event->event_title;
+					}
+				?>
+				<tr class="<?php echo "$class $spam"; ?>" id="event<?php echo $event->event_id; ?>">
+					<th scope="row">
+						<input type="checkbox" value="<?php echo $event->event_id; ?>" name="group[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( mc_event_is_grouped( $event->event_group_id ) ) ? ' disabled="disabled"' : ''; ?> />
+						<label for="mc<?php echo $event->event_id; ?>"><?php echo $event->event_id; ?></label>
+					</th>
+					<th scope="row">
+						<?php echo ( 0 == $event->event_group_id ) ? '-' : $event->event_group_id; ?>
+					</th>
+					<td title="<?php echo esc_attr( substr( strip_tags( stripslashes( $event->event_desc ) ), 0, 240 ) ); ?>">
+						<strong>
+						<?php
+						if ( $can_edit ) {
+						?>
+							<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit'>
+						<?php
+						}
+						echo $spam_label;
+						echo strip_tags( stripslashes( $title ) );
+						if ( $can_edit ) {
+							echo '</a>';
+						}
+						?>
+						</strong>
+
+						<div class='row-actions' style="visibility:visible;">
+							<?php
+							if ( $can_edit ) {
+							?>
+								<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit'><?php _e( 'Edit Event', 'my-calendar' ); ?></a> |
+								<?php
+								if ( mc_event_is_grouped( $event->event_group_id ) ) {
+								?>
+									<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ); ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
+								<?php
+								} else {
+									echo '<em>' . __( 'Ungrouped', 'my-calendar' ) . '</em>';
+								}
+							} else {
+								_e( 'Not editable.', 'my-calendar' );
+							}
+							?>
+						</div>
+					</td>
+					<td><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></td>
+					<?php
+					if ( '23:59:59' != $event->event_endtime ) {
+						$event_time = date_i18n( get_option( 'mc_time_format' ), strtotime( $event->event_time ) );
+					} else {
+						$event_time = mc_notime_label( $event );
 					}
 					?>
-				</div>
-			</td>
-			<td><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></td>
-			<?php
-			if ( '23:59:59' != $event->event_endtime ) {
-				$event_time = date_i18n( get_option( 'mc_time_format' ), strtotime( $event->event_time ) );
-			} else {
-				$event_time = mc_notime_label( $event );
-			}
-			?>
-			<td>
-			<?php
-				$date_format = ( '' == get_option( 'mc_date_format' ) ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
-				$begin       = date_i18n( $date_format, strtotime( $event->event_begin ) );
-				echo esc_html( "$begin, $event_time" );
-			?>
-				<div class="recurs">
-					<?php echo mc_recur_string( $event ); ?>
-				</div>
-			</td>
-			<td><?php echo ( is_object( $author ) ) ? $author->display_name : $author; ?></td>
-			<?php
-			$this_category = $event->event_category;
-			foreach ( $categories as $key => $value ) {
-				if ( $value->category_id == $this_category ) {
-					$this_cat = $categories[ $key ];
+					<td>
+					<?php
+						$date_format = ( '' == get_option( 'mc_date_format' ) ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
+						$begin       = date_i18n( $date_format, strtotime( $event->event_begin ) );
+						echo esc_html( "$begin, $event_time" );
+					?>
+						<div class="recurs">
+							<?php echo mc_recur_string( $event ); ?>
+						</div>
+					</td>
+					<td><?php echo ( is_object( $author ) ) ? $author->display_name : $author; ?></td>
+					<?php
+					$this_category = $event->event_category;
+					foreach ( $categories as $key => $value ) {
+						if ( $value->category_id == $this_category ) {
+							$this_cat = $categories[ $key ];
+						}
+					}
+					$background = strip_tags( ( strpos( $this_cat->category_color, '#' ) !== 0 ) ? '#' : '' ) . $this_cat->category_color;
+					?>
+					<td>
+						<div class="category-color" style="background-color:<?php echo $background; ?>"></div> <?php echo mc_kses_post( stripslashes( $this_cat->category_name ) ); ?>
+					</td>
+					<?php unset( $this_cat ); ?>
+					</tr>
+					<?php
 				}
-			}
-			$background = strip_tags( ( strpos( $this_cat->category_color, '#' ) !== 0 ) ? '#' : '' ) . $this_cat->category_color;
-			?>
-			<td>
-				<div class="category-color" style="background-color:<?php echo $background; ?>"></div> <?php echo mc_kses_post( stripslashes( $this_cat->category_name ) ); ?>
-			</td>
-			<?php unset( $this_cat ); ?>
-			</tr>
-			<?php
-		}
-		?>
-	</table>
-		<div class="mc-controls">
+				?>
+			</table>
+		<div class="mc-controls footer">
 			<p>
 				<input type="submit" class="button-secondary group" value="<?php _e( 'Group checked events for mass editing', 'my-calendar' ); ?>"/>
 			</p>
 		</div>
 		</form>
+	</div>
 	<?php
 	} else {
 	?>
