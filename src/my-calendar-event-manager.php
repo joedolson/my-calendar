@@ -310,7 +310,7 @@ function mc_bulk_action( $action ) {
 /**
  * Generate a notification for bulk actions.
  *
- * @param array  $results of bulk action
+ * @param array  $results of bulk action.
  * @param string $action Type of action.
  *
  * @return string message
@@ -359,6 +359,14 @@ function mc_bulk_message( $results, $action ) {
 	return $message;
 }
 
+/**
+ * Display an error message.
+ *
+ * @param string $message Error message.
+ * @param boolean $echo Echo or return. Default true (echo).
+ *
+ * @return string
+ */
 function mc_show_error( $message, $echo = true ) {
 	if ( trim( $message ) == '' ) {
 		return '';
@@ -2518,7 +2526,7 @@ function mc_check_data( $action, $post, $i ) {
 		if ( mc_checkdate( $begin ) && mc_checkdate( $end ) ) {
 			// Make sure dates are equal or end date is later than start date.
 			if ( mc_strtotime( "$end $endtime" ) < mc_strtotime( "$begin $time" ) ) {
-				$errors .= mc_show_error( __( 'Your event end date must be either after or the same as your event begin date', 'my-calendar'), false );
+				$errors .= mc_show_error( __( 'Your event end date must be either after or the same as your event begin date', 'my-calendar' ), false );
 			}
 		} else {
 			$errors .= mc_show_error( __( 'Your date format is correct but one or more of your dates is invalid. Check for number of days in month and leap year related errors.', 'my-calendar' ), false );
