@@ -322,13 +322,11 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
  * Add My Calendar menu items to main admin menu
  */
 function my_calendar_menu() {
-	$icon_path = plugins_url( '/my-calendar/images' );
-
 	if ( function_exists( 'add_menu_page' ) ) {
 		if ( 'true' != get_option( 'mc_remote' ) ) {
-			add_menu_page( __( 'My Calendar', 'my-calendar' ), __( 'My Calendar', 'my-calendar' ), 'mc_add_events', apply_filters( 'mc_modify_default', 'my-calendar' ), apply_filters( 'mc_modify_default_cb', 'my_calendar_edit' ), $icon_path . '/icon.png' );
+			add_menu_page( __( 'My Calendar', 'my-calendar' ), __( 'My Calendar', 'my-calendar' ), 'mc_add_events', apply_filters( 'mc_modify_default', 'my-calendar' ), apply_filters( 'mc_modify_default_cb', 'my_calendar_edit' ), 'dashicons-calendar' );
 		} else {
-			add_menu_page( __( 'My Calendar', 'my-calendar' ), __( 'My Calendar', 'my-calendar' ), 'mc_edit_settings', 'my-calendar', 'my_calendar_settings', $icon_path . '/icon.png' );
+			add_menu_page( __( 'My Calendar', 'my-calendar' ), __( 'My Calendar', 'my-calendar' ), 'mc_edit_settings', 'my-calendar', 'my_calendar_settings', 'dashicons-calendar' );
 		}
 	}
 	if ( function_exists( 'add_submenu_page' ) ) {
