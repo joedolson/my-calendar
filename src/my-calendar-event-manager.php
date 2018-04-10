@@ -257,9 +257,9 @@ function mc_bulk_action( $action ) {
 	$prepare = array();
 
 	foreach ( $events as $value ) {
-		$value  = (int) $value;
-		$total  = count( $events );
-		if ( $action == 'delete' ) {
+		$value = (int) $value;
+		$total = count( $events );
+		if ( 'delete' == $action ) {
 			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A ); // WPCS: unprepared SQL OK.
 			if ( mc_can_edit_event( $value ) ) {
 				$occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
@@ -269,7 +269,7 @@ function mc_bulk_action( $action ) {
 				$i ++;
 			}
 		}
-		if ( $action != 'delete' && current_user_can ( 'mc_approve_events' ) ) {
+		if ( 'delete' != $action && current_user_can( 'mc_approve_events' ) ) {
 			$ids[]     = (int) $value;
 			$prepare[] = '%d';
 			$i ++;
@@ -277,7 +277,7 @@ function mc_bulk_action( $action ) {
 	}
 	$prepared = implode( ',', $prepare );
 
-	switch( $action ) {
+	switch ( $action ) {
 		case 'delete':
 			$sql = 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id IN (' . $prepared . ')';
 			break;
@@ -295,13 +295,13 @@ function mc_bulk_action( $action ) {
 			break;
 	}
 
-	$result   = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
+	$result = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
 
 	$results = array(
 		'count'  => $i,
 		'total'  => $total,
 		'ids'    => $ids,
-		'result' => $result
+		'result' => $result,
 	);
 
 	return mc_bulk_message( $results, $action );
@@ -310,7 +310,8 @@ function mc_bulk_action( $action ) {
 /**
  * Generate a notification for bulk actions.
  *
- * @param array $results of bulk action
+ * @param array  $results of bulk action
+ * @param string $action Type of action.
  *
  * @return string message
  */
@@ -320,7 +321,7 @@ function mc_bulk_message( $results, $action ) {
 	$ids    = $results['ids'];
 	$result = $results['result'];
 
-	switch( $action ) {
+	switch ( $action ) {
 		case 'delete':
 			// Translators: Number of events deleted, number selected.
 			$success = __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' );
@@ -344,7 +345,7 @@ function mc_bulk_message( $results, $action ) {
 		case 'unarchive':
 			// Translators: Number of events removed from archive, number of events selected.
 			$success = __( '%1$d events removed from archive successfully out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been removed from the archive. Please investigate.', 'my-calendar' );
+			$error   = '<strong>' . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been removed from the archive. Please investigate.', 'my-calendar' );
 			break;
 	}
 
@@ -352,10 +353,23 @@ function mc_bulk_message( $results, $action ) {
 		do_action( 'mc_mass_' . $action . '_events', $ids );
 		$message = '<div class="updated"><p>' . sprintf( $success, $count, $total ) . '</p></div>';
 	} else {
-		$message = '<div class="error"><p><strong>' . $error . '</p></div>';
+		$message = mc_show_error( $error, false );
 	}
 
 	return $message;
+}
+
+function mc_show_error( $message, $echo = true ) {
+	if ( trim( $message ) == '' ) {
+		return '';
+	}
+	$message = esc_html( $message );
+	$message = "<div class='error'><p><strong>$message</strong></p></div>";
+	if ( $echo ) {
+		echo $message;
+	} else {
+		return $message;
+	}
 }
 
 /**
@@ -404,11 +418,7 @@ function my_calendar_manage() {
 			</div>
 			<?php
 		} else {
-			?>
-			<div class="error">
-				<p><strong><?php _e( 'You do not have permission to delete that event.', 'my-calendar' ); ?></strong></p>
-			</div>
-			<?php
+			mc_show_error( __( 'You do not have permission to delete that event.', 'my-calendar' ) );
 		}
 	}
 
@@ -418,11 +428,7 @@ function my_calendar_manage() {
 			$event_id = absint( $_GET['event_id'] );
 			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
 		} else {
-			?>
-			<div class="error">
-				<p><strong><?php _e( 'You do not have permission to approve that event.', 'my-calendar' ); ?></strong></p>
-			</div>
-		<?php
+			mc_show_error( __( 'You do not have permission to approve that event.', 'my-calendar' ) );
 		}
 	}
 
@@ -432,11 +438,7 @@ function my_calendar_manage() {
 			$event_id = absint( $_GET['event_id'] );
 			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
 		} else {
-			?>
-			<div class="error">
-				<p><strong><?php _e( 'You do not have permission to trash that event.', 'my-calendar' ); ?></strong></p>
-			</div>
-		<?php
+			mc_show_error( __( 'You do not have permission to trash that event.', 'my-calendar' ) );
 		}
 	}
 
@@ -561,7 +563,7 @@ function my_calendar_edit() {
 		<h1><?php _e( 'Edit Event', 'my-calendar' ); ?></h1>
 		<?php
 		if ( empty( $event_id ) ) {
-			echo '<div class="error"><p>' . __( 'You must provide an event id in order to edit it', 'my-calendar' ) . '</p></div>';
+			echo mc_show_error( __( 'You must provide an event id in order to edit it', 'my-calendar' ) );
 		} else {
 			mc_edit_event_form( 'edit', $event_id );
 		}
@@ -570,7 +572,7 @@ function my_calendar_edit() {
 		<h1><?php _e( 'Copy Event', 'my-calendar' ); ?></h1>
 		<?php
 		if ( empty( $event_id ) ) {
-			echo '<div class="error"><p>' . __( 'You must provide an event id in order to edit it', 'my-calendar' ) . '</p></div>';
+			echo mc_show_error( __( 'You must provide an event id in order to edit it', 'my-calendar' ) );
 		} else {
 			mc_edit_event_form( 'copy', $event_id );
 		}
@@ -717,7 +719,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			$data = $update;
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 			if ( false === $result ) {
-				$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your event was not updated.', 'my-calendar' ) . " $url</p></div>";
+				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} else {
 				// do an action using the $action and processed event data.
 				$event_approved = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
@@ -729,7 +731,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$message = '<div class="updated"><p>' . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
 			}
 		} else {
-			$message = '<div class="error"><p><strong>' . __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ) . '</strong></p></div>';
+			$message = mc_show_error( __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
 		}
 	}
 
@@ -813,7 +815,7 @@ function mc_delete_event( $event_id ) {
 	global $wpdb;
 	// Deal with deleting an event from the database.
 	if ( empty( $event_id ) ) {
-		$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( "You can't delete an event if you haven't submitted an event id", 'my-calendar' ) . '</p></div>';
+		$message = mc_show_error( __( "You can't delete an event if you haven't submitted an event id", 'my-calendar' ), false );
 	} else {
 		$event_id = absint( $event_id );
 		$event_in = false;
@@ -837,7 +839,7 @@ function mc_delete_event( $event_id ) {
 			}
 			$message = '<div class="updated"><p>' . __( 'Event deleted successfully', 'my-calendar' ) . '</p></div>';
 		} else {
-			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Despite issuing a request to delete, the event still remains in the database. Please investigate.', 'my-calendar' ) . '</p></div>';
+			$message = mc_show_error( __( 'Despite issuing a request to delete, the event still remains in the database. Please investigate.', 'my-calendar' ), false );
 		}
 	}
 
@@ -857,7 +859,7 @@ function mc_form_data( $event_id = false ) {
 		$event_id = absint( $event_id );
 		$data     = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // WPCS: unprepared SQL OK.
 		if ( empty( $data ) ) {
-			return '<div class="error"><p>' . __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ) . '</p></div>';
+			return mc_show_error( __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ), false );
 		}
 		$data = $data[0];
 		// Recover users entries if there was an error.
@@ -904,7 +906,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	} else {
 		$message = '';
 	}
-	echo ( '' != $message ) ? '<div class="error"><p>' . $message . '</p></div>' : '';
+	mc_show_error( $message );
 
 	mc_form_fields( $data, $mode, $event_id );
 }
@@ -2516,10 +2518,10 @@ function mc_check_data( $action, $post, $i ) {
 		if ( mc_checkdate( $begin ) && mc_checkdate( $end ) ) {
 			// Make sure dates are equal or end date is later than start date.
 			if ( mc_strtotime( "$end $endtime" ) < mc_strtotime( "$begin $time" ) ) {
-				$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your event end date must be either after or the same as your event begin date', 'my-calendar' ) . '</p></div>';
+				$errors .= mc_show_error( __( 'Your event end date must be either after or the same as your event begin date', 'my-calendar'), false );
 			}
 		} else {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your date formatting is correct but one or more of your dates is invalid. Check for number of days in month and leap year related errors.', 'my-calendar' ) . '</p></div>';
+			$errors .= mc_show_error( __( 'Your date format is correct but one or more of your dates is invalid. Check for number of days in month and leap year related errors.', 'my-calendar' ), false );
 		}
 
 		// Check for a valid or empty time.
@@ -2528,12 +2530,12 @@ function mc_check_data( $action, $post, $i ) {
 		$time_format_two = '/^([2][0-3]):([0-5][0-9]):([0-5][0-9])$/';
 		if ( preg_match( $time_format_one, $time ) || preg_match( $time_format_two, $time ) ) {
 		} else {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'The time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ) . '</p></div>';
+			$errors .= mc_show_error( __( 'The time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ), false );
 		}
 		// Check for a valid or empty end time.
 		if ( preg_match( $time_format_one, $endtime ) || preg_match( $time_format_two, $endtime ) || '' == $endtime ) {
 		} else {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'The end time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ) . '</p></div>';
+			$errors .= mc_show_error( __( 'The end time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ), false );
 		}
 		// Check for valid URL (blank or starting with http://).
 		if ( ! ( '' == $event_link || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
@@ -2557,7 +2559,7 @@ function mc_check_data( $action, $post, $i ) {
 	if ( function_exists( 'mcs_submissions' ) && isset( $post['mcs_check_conflicts'] ) ) {
 		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label );
 		if ( $conflicts ) {
-			$errors .= "<div class='error'><p><strong>" . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'That event conflicts with a previously scheduled event.', 'my-calendar' ) . '</p></div>';
+			$errors .= mc_show_error( __( 'That event conflicts with a previously scheduled event.', 'my-calendar' ), false );
 		}
 	}
 	$spam = mc_spam( $event_link, $desc, $post );
