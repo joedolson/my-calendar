@@ -313,7 +313,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	}
 	foreach ( $regions as $key => $value ) {
 		$key       = esc_attr( trim( $key ) );
-		$value     = esc_html( $value );
+		$value     = esc_html( trim( $value ) );
 		$aselected = ( $selected == $key ) ? ' selected="selected"' : '';
 		$form     .= "<option value='$key'$aselected>$value</option>\n";
 	}
@@ -353,18 +353,19 @@ function mc_location_controls() {
 			$active    = '';
 			if ( is_array( $mc_location_controls ) && isset( $mc_location_controls[ $field ] ) ) {
 				foreach ( $mc_location_controls[ $field ] as $key => $value ) {
-					$locations .= stripslashes( "$key,$value" ) . "\n";
+					$key        = esc_html( trim( $key ) );
+					$value      = esc_html( trim( $value ) );
+					$locations .= stripslashes( "$key,$value" ) . PHP_EOL;
 				}
 			}
 			if ( '' != trim( $locations ) ) {
 				$class  = ' class="active-limit"';
 				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
 			}
-			$output .= '
-			<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span>' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</h4>
+			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span>' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</h4>
 			<div>';
 			// Translators: Name of field being restricted, e.g. "Location Controls for State".
-			$output .= '<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '(' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
+			$output .= '<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . ' (' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
 			</div>';
 		}
 		$output .= "
