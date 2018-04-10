@@ -325,33 +325,33 @@ function mc_bulk_message( $results, $action ) {
 		case 'delete':
 			// Translators: Number of events deleted, number selected.
 			$success = __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been deleted. Please investigate.', 'my-calendar' );
+			$error   = __( 'Your events have not been deleted. Please investigate.', 'my-calendar' );
 			break;
 		case 'trash':
 			// Translators: Number of events trashed, number of events selected.
 			$success = __( '%1$d events trashed successfully out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been trashed. Please investigate.', 'my-calendar' );
+			$error   = __( 'Your events have not been trashed. Please investigate.', 'my-calendar' );
 			break;
 		case 'approve':
 			// Translators: Number of events approved, number of events selected.
 			$success = __( '%1$d events approved out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been approved. Please investigate.', 'my-calendar' );
+			$error   = __( 'Your events have not been approved. Please investigate.', 'my-calendar' );
 			break;
 		case 'archive':
 			// Translators: Number of events arcnived, number of events selected.
 			$success = __( '%1$d events archived successfully out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been archived. Please investigate.', 'my-calendar' );
+			$error   = __( 'Your events have not been archived. Please investigate.', 'my-calendar' );
 			break;
 		case 'unarchive':
 			// Translators: Number of events removed from archive, number of events selected.
 			$success = __( '%1$d events removed from archive successfully out of %2$d selected', 'my-calendar' );
-			$error   = '<strong>' . __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been removed from the archive. Please investigate.', 'my-calendar' );
+			$error   = __( 'Your events have not been removed from the archive. Please investigate.', 'my-calendar' );
 			break;
 	}
 
 	if ( 0 !== $result && false !== $result ) {
 		do_action( 'mc_mass_' . $action . '_events', $ids );
-		$message = '<div class="updated"><p>' . sprintf( $success, $count, $total ) . '</p></div>';
+		$message = mc_show_notice( sprintf( $success, $count, $total ) );
 	} else {
 		$message = mc_show_error( $error, false );
 	}
@@ -362,7 +362,7 @@ function mc_bulk_message( $results, $action ) {
 /**
  * Display an error message.
  *
- * @param string $message Error message.
+ * @param string  $message Error message.
  * @param boolean $echo Echo or return. Default true (echo).
  *
  * @return string
@@ -372,13 +372,36 @@ function mc_show_error( $message, $echo = true ) {
 		return '';
 	}
 	$message = esc_html( $message );
-	$message = "<div class='error'><p><strong>$message</strong></p></div>";
+	$message = "<div class='error'><p>$message</p></div>";
 	if ( $echo ) {
 		echo $message;
 	} else {
 		return $message;
 	}
 }
+
+
+/**
+ * Display an update message.
+ *
+ * @param string  $message Update message.
+ * @param boolean $echo Echo or return. Default true (echo).
+ *
+ * @return string
+ */
+function mc_show_notice( $message, $echo = true ) {
+	if ( trim( $message ) == '' ) {
+		return '';
+	}
+	$message = esc_html( $message );
+	$message = "<div class='updated'><p>$message</p></div>";
+	if ( $echo ) {
+		echo $message;
+	} else {
+		return $message;
+	}
+}
+
 
 /**
  * Generate form for listing events that are editable by current user
@@ -564,7 +587,7 @@ function my_calendar_edit() {
 		} else {
 			$message = __( 'Currently editing your central calendar', 'my-calendar' );
 		}
-		echo '<div class="message updated"><p>' . $message . '</p></div>';
+		mc_show_notice( $message );
 	}
 	if ( 'edit' == $action ) {
 		?>
@@ -635,7 +658,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				my_calendar_send_email( $event );
 			}
 			if ( 0 == $add['event_approved'] ) {
-				$message = '<div class="updated notice"><p>' . __( 'Event draft saved.', 'my-calendar' ) . '</p></div>';
+				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ), false );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
 				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' != trim( $_POST['mc_twitter'] ) ) {
@@ -651,12 +674,12 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				if ( '' != $event_error ) {
 					$message = $event_error;
 				} else {
-					$message = '<div class="updated notice"><p>' . __( 'Event added. It will now show on the calendar.', 'my-calendar' );
+					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
 					if ( false !== $event_link ) {
 						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
 					}
-					$message .= '</p></div>';
+					$message = mc_show_notice( $message, false );
 				}
 			}
 		}
@@ -708,7 +731,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					} else {
 						// Only dates were changed.
 						$result  = mc_update_instance( $event_instance, $event_id, $update );
-						$message = '<div class="updated notice"><p>' . __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url</p></div>";
+						$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url", false );
 					}
 				}
 			} else {
@@ -736,7 +759,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$event_approved = absint( $post['event_approved'] );
 				}
 				do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $event_approved );
-				$message = '<div class="updated"><p>' . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
+				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
 			}
 		} else {
 			$message = mc_show_error( __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
@@ -845,7 +868,7 @@ function mc_delete_event( $event_id ) {
 			} else {
 				do_action( 'mc_delete_event', $event_id, $post_id );
 			}
-			$message = '<div class="updated"><p>' . __( 'Event deleted successfully', 'my-calendar' ) . '</p></div>';
+			$message = mc_show_notice( __( 'Event deleted successfully', 'my-calendar' ), false );
 		} else {
 			$message = mc_show_error( __( 'Despite issuing a request to delete, the event still remains in the database. Please investigate.', 'my-calendar' ), false );
 		}
@@ -909,7 +932,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 
 	if ( is_object( $data ) && 1 != $data->event_approved && 'edit' == $mode ) {
 		mc_show_error( __( 'This event must be published to show on the calendar.', 'my-calendar' ) );
-	} 
+	}
 
 	mc_form_fields( $data, $mode, $event_id );
 }
@@ -1353,9 +1376,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$date  = date_i18n( get_option( 'mc_date_format' ), mc_strtotime( $event->occur_begin ) );
 				// Translators: Date of a specific event occurrence.
 				$message = sprintf( __( 'You are editing the <strong>%s</strong> instance of this event. Other instances of this event will not be changed.', 'my-calendar' ), $date );
-				echo "<div class='message updated'><p>$message</p></div>";
+				mc_show_notice( $message );
 			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
-				echo "<div class='message updated'><p>" . __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) . '</p></div>';
+				mc_show_notice( __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) );
 			}
 			?>
 			<fieldset>

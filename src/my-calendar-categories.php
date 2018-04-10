@@ -153,7 +153,7 @@ function my_calendar_manage_categories() {
 			}
 
 			if ( $cat_id ) {
-				echo '<div class="updated"><p><strong>' . __( 'Category added successfully', 'my-calendar' ) . ". $append</strong></p></div>";
+				mc_show_notice( __( 'Category added successfully', 'my-calendar' ) . ". $append" );
 			} else {
 				mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
 			}
@@ -175,9 +175,9 @@ function my_calendar_manage_categories() {
 				update_option( 'mc_default_category', 1 );
 			}
 			if ( $results && ( $cal_results || $rel_results ) ) {
-				echo '<div class="updated"><p><strong>' . __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) . '</strong></p></div>';
+				mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) );
 			} elseif ( $results && ! $cal_results ) {
-				echo '<div class="updated"><p><strong>' . __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) . '</strong></p></div>';
+				mc_show_notice( __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) );
 			} elseif ( ! $results && $cal_results ) {
 				mc_show_error( __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) );
 			}
@@ -211,7 +211,7 @@ function my_calendar_manage_categories() {
 			);
 			$results = mc_update_cat( $update );
 			if ( $results ) {
-				echo '<div class="updated"><p><strong>' . __( 'Category edited successfully.', 'my-calendar' ) . " $append</strong></p></div>";
+				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append" );
 			} else {
 				mc_show_error( __( 'Category was not edited.', 'my-calendar' ) . " $append" );
 			}
@@ -458,7 +458,7 @@ function mc_category_settings_update() {
 		update_option( 'mc_inverse_color', ( ! empty( $_POST['mc_inverse_color'] ) && 'on' == $_POST['mc_inverse_color'] ) ? 'true' : 'false' );
 		update_option( 'mc_multiple_categories', ( ! empty( $_POST['mc_multiple_categories'] ) && 'on' == $_POST['mc_multiple_categories'] ) ? 'true' : 'false' );
 
-		$message = "<div class='updated'><p>" . __( 'My Calendar Category Configuration Updated', 'my-calendar' ) . '</p></div>';
+		$message = mc_show_notice( __( 'My Calendar Category Configuration Updated', 'my-calendar' ), false );
 	}
 
 	return $message;

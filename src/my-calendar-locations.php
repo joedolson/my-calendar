@@ -45,7 +45,7 @@ function mc_update_location_controls() {
 			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
 		}
 		update_option( 'mc_location_controls', $mc_location_controls );
-		echo "<div class='notice updated'><p>" . __( 'Location Controls Updated', 'my-calendar' ) . '</p></div>';
+		mc_show_notice( __( 'Location Controls Updated', 'my-calendar' ) );
 	}
 }
 
@@ -121,7 +121,7 @@ function my_calendar_add_locations() {
 		$results = mc_insert_location( $add );
 		do_action( 'mc_save_location', $results, $add );
 		if ( $results ) {
-			echo '<div class="updated"><p><strong>' . __( 'Location added successfully', 'my-calendar' ) . '</strong></p></div>';
+			mc_show_notice( __( 'Location added successfully', 'my-calendar' ) );
 		} else {
 			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
@@ -129,7 +129,7 @@ function my_calendar_add_locations() {
 		$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // WPCS: unprepared SQL ok.
 		do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
 		if ( $results ) {
-			echo '<div class="updated"><p><strong>' . __( 'Location deleted successfully', 'my-calendar' ) . '</strong></p></div>';
+			mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ) );
 		} else {
 			mc_show_error( __( 'Location could not be deleted', 'my-calendar' ) );
 		}
@@ -164,7 +164,7 @@ function my_calendar_add_locations() {
 		} elseif ( 0 == $results ) {
 			mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
 		} else {
-			echo '<div class="updated"><p><strong>' . __( 'Location edited successfully', 'my-calendar' ) . '</strong></p></div>';
+			mc_show_notice( __( 'Location edited successfully', 'my-calendar' ) );
 		}
 		$cur_loc = (int) $_POST['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );

@@ -1327,9 +1327,9 @@ $plugins_string
 			$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
 			if ( $sent ) {
 				if ( 'Donor' == $has_donated || 'Purchaser' == $has_purchased ) {
-					echo '<div class="message updated"><p>' . __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) . '</p></div>';
+					mc_show_notice( __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) );
 				} else {
-					echo '<div class="message updated"><p>' . __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . '</p></div>';
+					mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) );
 				}
 			} else {
 				// Translators: Support form URL.
@@ -1603,11 +1603,11 @@ function mc_update_notice() {
 	if ( current_user_can( 'activate_plugins' ) && 0 == get_option( 'mc_update_notice' ) || ! get_option( 'mc_update_notice' ) ) {
 		$dismiss = admin_url( 'admin.php?page=my-calendar-behaviors&dismiss=update' );
 		// Translators: URL to scripts manager.
-		echo "<div class='updated fade'><p>" . sprintf( __( "<strong>Update notice:</strong> if you use custom JS with My Calendar, you need to activate your custom scripts following this update. <a href='%s'>Dismiss Notice</a>", 'my-calendar' ), $dismiss ) . '</p></div>';
+		echo "<div class='updated'><p>" . sprintf( __( "<strong>Update notice:</strong> if you use custom JS with My Calendar, you need to activate your custom scripts following this update. <a href='%s'>Dismiss Notice</a>", 'my-calendar' ), $dismiss ) . '</p></div>';
 	}
 	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
 		if ( 'true' == get_option( 'mc_remote' ) ) {
-			echo '<div class="updated"><p>' . __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' . '</p></div>';
+			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' );
 		}
 	}
 }

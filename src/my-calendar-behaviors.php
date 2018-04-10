@@ -43,7 +43,7 @@ function my_calendar_behaviors_edit() {
 
 		$mc_show_js = ( '' == $_POST['mc_show_js'] ) ? '' : $_POST['mc_show_js'];
 		update_option( 'mc_show_js', $mc_show_js );
-		echo '<div class="updated"><p><strong>' . __( 'Behavior Settings saved', 'my-calendar' ) . '.</strong></p></div>';
+		mc_show_notice( __( 'Behavior Settings saved', 'my-calendar' ) );
 	}
 
 	$mc_listjs  = stripcslashes( get_option( 'mc_listjs' ) );

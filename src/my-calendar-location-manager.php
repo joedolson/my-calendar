@@ -81,7 +81,7 @@ function mc_mass_delete_locations() {
 			// Argument: array of event IDs.
 			do_action( 'mc_mass_delete_locations', $deleted );
 			// Translators: Number of locations deleted, number selected.
-			$message = "<div class='updated'><p>" . sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
+			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ), false );
 		} else {
 			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
 		}

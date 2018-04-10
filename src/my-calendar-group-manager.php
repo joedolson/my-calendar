@@ -57,9 +57,9 @@ function my_calendar_group_edit() {
 					if ( false === $result ) {
 						$message = mc_show_error( __( 'Event not updated.', 'my-calendar' ) . " $url", false );
 					} elseif ( 0 === $result ) {
-						$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url</p></div>";
+						$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url", false );
 					} else {
-						$message = "<div class='updated'><p>#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
+						$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
 					}
 				}
 				break;
@@ -76,9 +76,9 @@ function my_calendar_group_edit() {
 						if ( false === $result ) {
 							$message = mc_show_error( __( 'Event not grouped.', 'my-calendar' ), false );
 						} elseif ( 0 === $result ) {
-							$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . '</p></div>';
+							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false );
 						} else {
-							$message = "<div class='updated'><p>#$event_id: " . __( 'Event grouped successfully', 'my-calendar' ) . '</p></div>';
+							$message = mc_show_notice( "#$event_id: " . __( 'Event grouped successfully', 'my-calendar' ), false );
 						}
 					}
 				}
@@ -164,9 +164,9 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 			if ( false === $result ) {
 				$message = mc_show_error( "#$event_id; " . __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} elseif ( 0 === $result ) {
-				$message = "<div class='updated'><p>#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . " $url</p></div>";
+				$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . " $url", false );
 			} else {
-				$message = "<div class='updated'><p>#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url</p></div>";
+				$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
 			}
 		} else {
 			$message = mc_show_error( "#$event_id: " . __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
