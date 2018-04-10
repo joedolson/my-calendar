@@ -249,6 +249,7 @@ function mc_event_delete_post( $event_id, $post_id ) {
  * @return array bulk action details.
  */
 function mc_bulk_action( $action ) {
+	global $wpdb;
 	$events  = $_POST['mass_edit'];
 	$i       = 0;
 	$total   = 0;
@@ -260,7 +261,7 @@ function mc_bulk_action( $action ) {
 		$total  = count( $events );
 		if ( $action == 'delete' ) {
 			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A ); // WPCS: unprepared SQL OK.
-			if ( mc_can_edit_event( $value ) ) { 
+			if ( mc_can_edit_event( $value ) ) {
 				$occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
 				$wpdb->query( $wpdb->prepare( $occurrences, $value ) ); // WPCS: unprepared SQL OK.
 				$ids[]     = (int) $value;
@@ -296,12 +297,65 @@ function mc_bulk_action( $action ) {
 
 	$result   = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
 
-	return array( 
-		'count'  => $i, 
-		'total'  => $total, 
-		'ids'    => $ids, 
-		'result' => $result 
+	$results = array(
+		'count'  => $i,
+		'total'  => $total,
+		'ids'    => $ids,
+		'result' => $result
 	);
+
+	return mc_bulk_message( $results, $action );
+}
+
+/**
+ * Generate a notification for bulk actions.
+ *
+ * @param array $results of bulk action
+ *
+ * @return string message
+ */
+function mc_bulk_message( $results, $action ) {
+	$count  = $results['count'];
+	$total  = $results['total'];
+	$ids    = $results['ids'];
+	$result = $results['result'];
+
+	switch( $action ) {
+		case 'delete':
+			// Translators: Number of events deleted, number selected.
+			$success = __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' );
+			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been deleted. Please investigate.', 'my-calendar' );
+			break;
+		case 'trash':
+			// Translators: Number of events trashed, number of events selected.
+			$success = __( '%1$d events trashed successfully out of %2$d selected', 'my-calendar' );
+			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been trashed. Please investigate.', 'my-calendar' );
+			break;
+		case 'approve':
+			// Translators: Number of events approved, number of events selected.
+			$success = __( '%1$d events approved out of %2$d selected', 'my-calendar' );
+			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been approved. Please investigate.', 'my-calendar' );
+			break;
+		case 'archive':
+			// Translators: Number of events arcnived, number of events selected.
+			$success = __( '%1$d events archived successfully out of %2$d selected', 'my-calendar' );
+			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been archived. Please investigate.', 'my-calendar' );
+			break;
+		case 'unarchive':
+			// Translators: Number of events removed from archive, number of events selected.
+			$success = __( '%1$d events removed from archive successfully out of %2$d selected', 'my-calendar' );
+			$error   = __( 'Error', 'my-calendar' ) . ':</strong> ' . __( 'Your events have not been removed from the archive. Please investigate.', 'my-calendar' );
+			break;
+	}
+
+	if ( 0 !== $result && false !== $result ) {
+		do_action( 'mc_mass_' . $action . '_events', $ids );
+		$message = '<div class="updated"><p>' . sprintf( $success, $count, $total ) . '</p></div>';
+	} else {
+		$message = '<div class="error"><p><strong>' . $error . '</p></div>';
+	}
+
+	return $message;
 }
 
 /**
@@ -386,109 +440,35 @@ function my_calendar_manage() {
 		}
 	}
 
-	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_delete'] ) ) {
+	if ( ! empty( $_POST['mass_edit'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$results = mc_bulk_action( 'delete' );
-		$count   = $results['count'];
-		$total   = $results['total'];
-		$ids     = $results['ids'];
-		$result  = $results['result'];
-
-		if ( 0 !== $result && false !== $result ) {
-			do_action( 'mc_mass_delete_events', $ids );
-			// Translators: Number of events deleted, number selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' ), $count, $total ) . '</p></div>';
-		} else {
-			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been deleted. Please investigate.', 'my-calendar' ) . '</p></div>';
+		if ( isset( $_POST['mass_delete'] ) ) {
+			$results = mc_bulk_action( 'delete' );
+			echo $results;
 		}
-		echo $message;
-	}
 
-	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_trash'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+		if ( isset( $_POST['mass_trash'] ) ) {
+			$results = mc_bulk_action( 'trash' );
+			echo $results;
 		}
-		$results = mc_bulk_action( 'trash' );
-		$count   = $results['count'];
-		$total   = $results['total'];
-		$ids     = $results['ids'];
-		$result  = $results['result'];
 
-		if ( 0 == $result || false == $result ) {
-			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been trashed. Please investigate.', 'my-calendar' ) . '</p></div>';
-		} else {
-			do_action( 'mc_mass_trash_events', $trashed );
-			// Translators: Number of events trashed, number of events selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events trashed successfully out of %2$d selected', 'my-calendar' ), $count, $total ) . '</p></div>';
+		if ( isset( $_POST['mass_approve'] ) ) {
+			$results = mc_bulk_action( 'approve' );
+			echo $results;
 		}
-		echo $message;
-	}
 
-	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_approve'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+		if ( isset( $_POST['mass_archive'] ) ) {
+			$results = mc_bulk_action( 'archive' );
+			echo $results;
 		}
-		$results = mc_bulk_action( 'approve' );
-		$count   = $results['count'];
-		$total   = $results['total'];
-		$ids     = $results['ids'];
-		$result  = $results['result'];
 
-		if ( 0 == $result || false == $result ) {
-			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been approved. Please investigate.', 'my-calendar' ) . '</p></div>';
-		} else {
-			do_action( 'mc_mass_approve_events', $approved );
-			// Translators: Number of events approved, number of events selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events approved successfully out of %2$d selected', 'my-calendar' ), $count, $total ) . '</p></div>';
+		if ( isset( $_POST['mass_undo_archive'] ) ) {
+			$results = mc_bulk_action( 'unarchive' );
+			echo $results;
 		}
-		echo $message;
-	}
-
-	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_archive'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
-		}
-		$results = mc_bulk_action( 'archive' );
-		$count   = $results['count'];
-		$total   = $results['total'];
-		$ids     = $results['ids'];
-		$result  = $results['result'];
-
-		if ( 0 == $result || false == $result ) {
-			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not archive those events.', 'my-calendar' ) . '</p></div>';
-		} else {
-			do_action( 'mc_mass_archive_events', $updated );
-			// Translators: Number of events archived, number selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events archived successfully out of %2$d selected.', 'my-calendar' ), $count, $total ) . ' ' . __( 'Archived events remain on your calendar, but are removed from the event manager.', 'my-calendar' ) . '</p></div>';
-		}
-		echo $message;
-	}
-
-	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_undo_archive'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
-		}
-		$results = mc_bulk_action( 'unarchive' );
-		$count   = $results['count'];
-		$total   = $results['total'];
-		$ids     = $results['ids'];
-		$result  = $results['result'];
-
-		if ( 0 == $result || false == $result ) {
-			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not undo the archive status on those events.', 'my-calendar' ) . '</p></div>';
-		} else {
-			do_action( 'mc_mass_undo_archive_events', $archived );
-			// Translators: Number of events removed from archive, number selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events removed from archive successfully out of %2$d selected.', 'my-calendar' ), $count, $total ) . '</p></div>';
-		}
-		echo $message;
 	}
 	?>
 	<div class='wrap my-calendar-admin'>
