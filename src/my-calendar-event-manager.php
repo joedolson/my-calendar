@@ -1405,10 +1405,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 
 				if ( function_exists( 'wpt_post_to_twitter' ) && current_user_can( 'wpt_can_tweet' ) ) {
 					if ( ! ( 'edit' == $mode && 1 == $data->event_approved ) ) {
+						$mc_allowed = absint( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : 140 );
 						?>
 						<p class='mc-twitter'>
 							<label for='mc_twitter'><?php _e( 'Post to Twitter (via WP to Twitter)', 'my-calendar' ); ?></label><br/>
-							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter'><?php echo apply_filters( 'mc_twitter_text', '', $data ); ?></textarea>
+							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter' data-allowed="<?php echo $mc_allowed; ?>"><?php echo apply_filters( 'mc_twitter_text', '', $data ); ?></textarea>
 						</p>
 						<?php
 					}
