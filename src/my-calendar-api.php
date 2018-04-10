@@ -350,7 +350,7 @@ function mc_ics_subscribe() {
 
 	$events    = mc_get_rss_events( $cat_id );
 	$templates = mc_ical_template();
-	
+
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];

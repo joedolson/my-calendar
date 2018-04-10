@@ -242,6 +242,69 @@ function mc_event_delete_post( $event_id, $post_id ) {
 }
 
 /**
+ * Handle a bulk action.
+ *
+ * @param string $action type of action.
+ *
+ * @return array bulk action details.
+ */
+function mc_bulk_action( $action ) {
+	$events  = $_POST['mass_edit'];
+	$i       = 0;
+	$total   = 0;
+	$ids     = array();
+	$prepare = array();
+
+	foreach ( $events as $value ) {
+		$value  = (int) $value;
+		$total  = count( $events );
+		if ( $action == 'delete' ) {
+			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A ); // WPCS: unprepared SQL OK.
+			if ( mc_can_edit_event( $value ) ) { 
+				$occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
+				$wpdb->query( $wpdb->prepare( $occurrences, $value ) ); // WPCS: unprepared SQL OK.
+				$ids[]     = (int) $value;
+				$prepare[] = '%d';
+				$i ++;
+			}
+		}
+		if ( $action != 'delete' && current_user_can ( 'mc_approve_events' ) ) {
+			$ids[]     = (int) $value;
+			$prepare[] = '%d';
+			$i ++;
+		}
+	}
+	$prepared = implode( ',', $prepare );
+
+	switch( $action ) {
+		case 'delete':
+			$sql = 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'unarchive':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'archive':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'approve':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'trash':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id IN (' . $prepared . ')';
+			break;
+	}
+
+	$result   = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
+
+	return array( 
+		'count'  => $i, 
+		'total'  => $total, 
+		'ids'    => $ids, 
+		'result' => $result 
+	);
+}
+
+/**
  * Generate form for listing events that are editable by current user
  */
 function my_calendar_manage() {
@@ -328,31 +391,16 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events  = $_POST['mass_edit'];
-		$i       = 0;
-		$total   = 0;
-		$ids     = array();
-		$prepare = array();
-		foreach ( $events as $value ) {
-			$value  = (int) $value;
-			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A ); // WPCS: unprepared SQL OK.
-			$total  = count( $events );
-			if ( mc_can_edit_event( $value ) ) {
-				$delete_occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
-				$wpdb->query( $wpdb->prepare( $delete_occurrences, $value ) ); // WPCS: unprepared SQL OK.
+		$results = mc_bulk_action( 'delete' );
+		$count   = $results['count'];
+		$total   = $results['total'];
+		$ids     = $results['ids'];
+		$result  = $results['result'];
 
-				$ids[]     = (int) $value;
-				$prepare[] = '%d';
-				$i ++;
-			}
-		}
-		$prepared = implode( ',', $prepare );
-		$sql      = 'DELETE FROM ' . my_calendar_table() . " WHERE event_id IN ($prepared)";
-		$result   = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
 		if ( 0 !== $result && false !== $result ) {
 			do_action( 'mc_mass_delete_events', $ids );
 			// Translators: Number of events deleted, number selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
+			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' ), $count, $total ) . '</p></div>';
 		} else {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been deleted. Please investigate.', 'my-calendar' ) . '</p></div>';
 		}
@@ -364,28 +412,18 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events  = $_POST['mass_edit'];
-		$i       = 0;
-		$trashed = array();
-		$prepare = array();
-		foreach ( $events as $value ) {
-			$value = (int) $value;
-			$total = count( $events );
-			if ( current_user_can( 'mc_approve_events' ) ) {
-				$trashed[] = $value;
-				$prepare[] = '%d';
-				$i ++;
-			}
-		}
-		$prepared = implode( ',', $prepare );
-		$sql      = 'UPDATE ' . my_calendar_table() . " SET event_approved = 2 WHERE event_id IN ($prepared)";
-		$result   = $wpdb->query( $wpdb->prepare( $sql, $trashed ) ); // WPCS: unprepared SQL ok.
+		$results = mc_bulk_action( 'trash' );
+		$count   = $results['count'];
+		$total   = $results['total'];
+		$ids     = $results['ids'];
+		$result  = $results['result'];
+
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been trashed. Please investigate.', 'my-calendar' ) . '</p></div>';
 		} else {
 			do_action( 'mc_mass_trash_events', $trashed );
 			// Translators: Number of events trashed, number of events selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events trashed successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
+			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events trashed successfully out of %2$d selected', 'my-calendar' ), $count, $total ) . '</p></div>';
 		}
 		echo $message;
 	}
@@ -395,28 +433,18 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events   = $_POST['mass_edit'];
-		$i        = 0;
-		$approved = array();
-		$prepare  = array();
-		foreach ( $events as $value ) {
-			$value = (int) $value;
-			$total = count( $events );
-			if ( current_user_can( 'mc_approve_events' ) ) {
-				$approved[] = $value;
-				$prepare[]  = '%d';
-				$i ++;
-			}
-		}
-		$prepared = implode( ',', $prepare );
-		$sql      = 'UPDATE ' . my_calendar_table() . " SET event_approved = 1 WHERE event_id IN ($prepared)";
-		$result   = $wpdb->query( $wpdb->prepare( $sql, $approved ) ); // WPCS: unprepared SQL ok.
+		$results = mc_bulk_action( 'approve' );
+		$count   = $results['count'];
+		$total   = $results['total'];
+		$ids     = $results['ids'];
+		$result  = $results['result'];
+
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Your events have not been approved. Please investigate.', 'my-calendar' ) . '</p></div>';
 		} else {
 			do_action( 'mc_mass_approve_events', $approved );
 			// Translators: Number of events approved, number of events selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events approved successfully out of %2$d selected', 'my-calendar' ), $i, $total ) . '</p></div>';
+			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events approved successfully out of %2$d selected', 'my-calendar' ), $count, $total ) . '</p></div>';
 		}
 		echo $message;
 	}
@@ -426,29 +454,18 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events  = $_POST['mass_edit'];
-		$i       = 0;
-		$total   = 0;
-		$updated = array();
-		$prepare = array();
-		foreach ( $events as $value ) {
-			$value = (int) $value;
-			$total = count( $events );
-			if ( current_user_can( 'mc_approve_events' ) ) {
-				$updated[] = $value;
-				$prepare[] = '%d';
-				$i ++;
-			}
-		}
-		$prepared = implode( ',', $prepare );
-		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
-		$result   = $wpdb->query( $wpdb->prepare( $sql, $updated ) ); // WPCS: unprepared SQL ok.
+		$results = mc_bulk_action( 'archive' );
+		$count   = $results['count'];
+		$total   = $results['total'];
+		$ids     = $results['ids'];
+		$result  = $results['result'];
+
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not archive those events.', 'my-calendar' ) . '</p></div>';
 		} else {
 			do_action( 'mc_mass_archive_events', $updated );
 			// Translators: Number of events archived, number selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events archived successfully out of %2$d selected.', 'my-calendar' ), $i, $total ) . ' ' . __( 'Archived events remain on your calendar, but are removed from the event manager.', 'my-calendar' ) . '</p></div>';
+			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events archived successfully out of %2$d selected.', 'my-calendar' ), $count, $total ) . ' ' . __( 'Archived events remain on your calendar, but are removed from the event manager.', 'my-calendar' ) . '</p></div>';
 		}
 		echo $message;
 	}
@@ -458,29 +475,18 @@ function my_calendar_manage() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		$events   = $_POST['mass_edit'];
-		$i        = 0;
-		$total    = 0;
-		$archived = array();
-		$prepare  = array();
-		foreach ( $events as $value ) {
-			$value = (int) $value;
-			$total = count( $events );
-			if ( current_user_can( 'mc_approve_events' ) ) {
-				$archived[] = $value;
-				$prepare[]  = '%d';
-				$i ++;
-			}
-		}
-		$prepared = implode( ',', $prepare );
-		$sql      = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
-		$result   = $wpdb->query( $wpdb->prepare( $sql, $archived ) ); // WPCS: unprepared SQL ok.
+		$results = mc_bulk_action( 'unarchive' );
+		$count   = $results['count'];
+		$total   = $results['total'];
+		$ids     = $results['ids'];
+		$result  = $results['result'];
+
 		if ( 0 == $result || false == $result ) {
 			$message = '<div class="error"><p><strong>' . __( 'Error', 'my-calendar' ) . ':</strong>' . __( 'Could not undo the archive status on those events.', 'my-calendar' ) . '</p></div>';
 		} else {
 			do_action( 'mc_mass_undo_archive_events', $archived );
 			// Translators: Number of events removed from archive, number selected.
-			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events removed from archive successfully out of %2$d selected.', 'my-calendar' ), $i, $total ) . '</p></div>';
+			$message = '<div class="updated"><p>' . sprintf( __( '%1$d events removed from archive successfully out of %2$d selected.', 'my-calendar' ), $count, $total ) . '</p></div>';
 		}
 		echo $message;
 	}
