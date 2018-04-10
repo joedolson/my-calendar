@@ -362,11 +362,9 @@ function mc_location_controls() {
 				$class  = ' class="active-limit"';
 				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
 			}
-			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span>' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</h4>
-			<div>';
+			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span><button type="button" class="button-link">' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</button></h4>';
 			// Translators: Name of field being restricted, e.g. "Location Controls for State".
-			$output .= '<label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . ' (' . __( 'Value, Label (one per line)', 'my-calendar' ) . ')</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea>
-			</div>';
+			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea></div>';
 		}
 		$output .= "
 			</div>
