@@ -349,8 +349,8 @@ function mc_ics_subscribe() {
 	}
 
 	$events    = mc_get_rss_events( $cat_id );
-	$templates = mc_ical_templates();
-
+	$templates = mc_ical_template();
+	
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
@@ -411,7 +411,7 @@ function my_calendar_ical() {
 	$etc   = 'Etc/GMT' . ( ( 0 > $off ) ? $off : '+' . $off );
 	$tz_id = ( $tz_id ) ? $tz_id : $etc;
 
-	$templates = mc_ical_templates();
+	$templates = mc_ical_template();
 	$template  = $templates['template'];
 
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
