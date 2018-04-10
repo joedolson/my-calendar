@@ -371,7 +371,7 @@ function mc_show_error( $message, $echo = true ) {
 	if ( trim( $message ) == '' ) {
 		return '';
 	}
-	$message = esc_html( $message );
+	$message = strip_tags( $message, mc_admin_strip_tags() );
 	$message = "<div class='error'><p>$message</p></div>";
 	if ( $echo ) {
 		echo $message;
@@ -393,7 +393,7 @@ function mc_show_notice( $message, $echo = true ) {
 	if ( trim( $message ) == '' ) {
 		return '';
 	}
-	$message = esc_html( $message );
+	$message = strip_tags( $message, mc_admin_strip_tags() );
 	$message = "<div class='updated'><p>$message</p></div>";
 	if ( $echo ) {
 		echo $message;
@@ -401,7 +401,6 @@ function mc_show_notice( $message, $echo = true ) {
 		return $message;
 	}
 }
-
 
 /**
  * Generate form for listing events that are editable by current user
@@ -421,31 +420,30 @@ function my_calendar_manage() {
 				$instance_date = '';
 			} ?>
 			<div class="error">
-			<form action="<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>" method="post">
-				<p><strong><?php _e( 'Delete Event', 'my-calendar' ); ?>
-						:</strong> <?php _e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					<input type="hidden" value="delete" name="event_action" />
-					<?php
-					if ( ! empty( $_GET['date'] ) ) {
-					?>
+				<form action="<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>" method="post">
+					<p><strong><?php _e( 'Delete Event', 'my-calendar' ); ?>:</strong> <?php _e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
+						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+						<input type="hidden" value="delete" name="event_action" />
+						<?php
+						if ( ! empty( $_GET['date'] ) ) {
+						?>
 						<input type="hidden" name="event_instance" value="<?php echo (int) $_GET['date']; ?>"/>
-					<?php
-					}
-					if ( isset( $_GET['ref'] ) ) {
-					?>
+						<?php
+						}
+						if ( isset( $_GET['ref'] ) ) {
+						?>
 						<input type="hidden" name="ref" value="<?php echo esc_url( $_GET['ref'] ); ?>" />
-					<?php
-					}
-					?>
-					<input type="hidden" name="event_id" value="<?php echo $event_id; ?>"/>
-					<?php
-						$event_info = ' &quot;' . stripslashes( $result[0]['event_title'] ) . "&quot; $instance_date";
-						// Translators: Title & date of event to delete.
-						$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
-					?>
-					<input type="submit" name="submit" class="button-secondary delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
-			</form>
+						<?php
+						}
+						?>
+						<input type="hidden" name="event_id" value="<?php echo $event_id; ?>"/>
+						<?php
+							$event_info = ' &quot;' . stripslashes( $result[0]['event_title'] ) . "&quot; $instance_date";
+							// Translators: Title & date of event to delete.
+							$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
+						?>
+						<input type="submit" name="submit" class="button-secondary delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
+				</form>
 			</div>
 			<?php
 		} else {

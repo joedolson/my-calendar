@@ -109,6 +109,16 @@ function mc_strip_tags() {
 }
 
 /**
+ * Pass group of allowed tags to strip_tags
+ *
+ * @return string of allowed tags parseable by strip_tags.
+ */
+function mc_admin_strip_tags() {
+
+	return '<strong><em><i><b><span><a><code><pre>';
+}
+
+/**
  * Old function for checking value of an option field
  *
  * @param string                   $field Name of the field.
