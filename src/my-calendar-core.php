@@ -615,7 +615,7 @@ function my_calendar_check() {
 		} else {
 			// for each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '2.0.0', '2.2.10', '2.3.0', '2.3.11', '2.3.15', '2.4.4', '2.6.0' );
+			$valid_upgrades = array( '2.0.0', '2.2.10', '2.3.0', '2.3.11', '2.3.15', '2.4.4', '3.0.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $current_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -661,7 +661,7 @@ function mc_do_upgrades( $upgrade_path ) {
 
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
-			case '2.6.0':
+			case '3.0.0':
 				delete_option( 'mc_event_open' );
 				delete_option( 'mc_widget_defaults' );
 				delete_option( 'mc_event_closed' );
@@ -1161,7 +1161,7 @@ function mc_is_tablet() {
 }
 
 /**
- * As of version 2.6.0, this only checks for 'my-calendar', to see if this plug-in already exists.
+ * As of version 3.0.0, this only checks for 'my-calendar', to see if this plug-in already exists.
  *
  * @return mixed int/boolean
  */

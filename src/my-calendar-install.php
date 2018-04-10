@@ -537,7 +537,7 @@ function mc_check_imports() {
 /**
  * Transition event categories to category relationships
  *
- * @since 2.6.0
+ * @since 3.0.0
  */
 function mc_transition_categories() {
 	global $wpdb;
