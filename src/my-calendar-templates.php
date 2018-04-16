@@ -283,7 +283,6 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$hcard = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
 	if ( 'true' == $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
-		$hcard .= apply_filters( 'mc_hcard_internal', $event, $address, $map, $source );
 		$hcard .= ( '' != $label ) ? '<strong class="org fn" itemprop="name">' . $link . '</strong><br />' : '';
 		$hcard .= ( '' == $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' != $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
