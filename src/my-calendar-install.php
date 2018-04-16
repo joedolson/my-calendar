@@ -105,8 +105,7 @@ function mc_globals() {
 		{guid}
 	  </item>' . PHP_EOL );
 
-	$charset_collate = $wpdb->get_charset_collate();
-
+	$charset_collate  = $wpdb->get_charset_collate();
 	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) == 'true' ) ? 1 : 0;
 
 	$initial_db = 'CREATE TABLE ' . my_calendar_table() . " (

@@ -280,16 +280,16 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		return '';
 	}
 	$link  = ( '' != $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
-	$hcard = '<div class="address vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
+	$hcard = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
 	if ( 'true' == $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
-		$hcard .= ( '' != $label ) ? '<strong class="org" itemprop="name">' . $link . '</strong><br />' : '';
+		$hcard .= ( '' != $label ) ? '<strong class="org fn" itemprop="name">' . $link . '</strong><br />' : '';
 		$hcard .= ( '' == $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' != $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
 		$hcard .= ( '' != $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
 		$hcard .= ( '' != $city . $state . $zip ) ? '<div>' : '';
 		$hcard .= ( '' != $city ) ? '<span class="locality" itemprop="addressLocality">' . $city . '</span><span class="sep">, </span>' : '';
-		$hcard .= ( '' != $state ) ? '<span class="region" itemprop="adddressRegion">' . $state . '</span> ' : '';
+		$hcard .= ( '' != $state ) ? '<span class="region" itemprop="addressRegion">' . $state . '</span> ' : '';
 		$hcard .= ( '' != $zip ) ? ' <span class="postal-code" itemprop="postalCode">' . $zip . '</span>' : '';
 		$hcard .= ( '' != $city . $state . $zip ) ? '</div>' : '';
 		$hcard .= ( '' != $country ) ? '<div class="country-name" itemprop="addressCountry">' . $country . '</div>' : '';
