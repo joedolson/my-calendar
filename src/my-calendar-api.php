@@ -64,13 +64,13 @@ function my_calendar_api() {
 function mc_format_api( $data, $format ) {
 	switch ( $format ) {
 		case 'json':
-			mc_format_json( $data );
+			mc_api_format_json( $data );
 			break;
 		case 'rss':
 			mc_api_format_rss( $data );
 			break;
 		case 'csv':
-			mc_format_csv( $data );
+			mc_api_format_csv( $data );
 			break;
 	}
 }
@@ -80,7 +80,7 @@ function mc_format_api( $data, $format ) {
  *
  * @param array $data array of event objects.
  */
-function mc_format_json( $data ) {
+function mc_api_format_json( $data ) {
 	echo json_encode( $data );
 }
 
@@ -89,7 +89,7 @@ function mc_format_json( $data ) {
  *
  * @param array $data array of event objects.
  */
-function mc_format_csv( $data ) {
+function mc_api_format_csv( $data ) {
 	$keyed = false;
 	// Create a stream opening it with read / write mode.
 	$stream = fopen( 'data://text/plain,' . '', 'w+' );
@@ -157,7 +157,7 @@ function my_calendar_send_vcal( $event_id ) {
 	header( 'Pragma: private' );
 	header( 'Expires: Thu, 11 Nov 1977 05:40:00 GMT' ); // That's my birthday. :).
 	header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
-	$output = preg_replace( "~(?<!\r)\n~", "\r\n", mc_generate_vcal( $event_id ) );
+	$output = preg_replace( '~(?<!\r)\n~', "\r\n", mc_generate_vcal( $event_id ) );
 
 	return urldecode( stripcslashes( $output ) );
 }
