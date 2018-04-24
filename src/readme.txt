@@ -126,7 +126,6 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Removed: event_open event status (little used and confusing; replaced by My Tickets)
 * Removed: guessing calendar install location
 * Removed: event cache code
-* Removed: 'create_function' for PHP 7.2 compatibility
 * Removed: upgrade routines from 1.11.x
 * Removed: mc_widget_defaults option
 * Removed: user's guide references
@@ -153,6 +152,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Change: Audited options to remove unused or unneeded options
 * Change: Create a referential template when shortcode generated
 * Change: Feeds nav panel now shows subscription links; exports are available in 'exports' panel.
+
+= 2.5.17 =
+
+* Security: Authenticated XSS vulnerability resolved.
+* Remove 'create_function' for PHP 7.2 compatibility.
+* Updated: Upgrade Notice output.
 
 = 2.5.16 =
 
