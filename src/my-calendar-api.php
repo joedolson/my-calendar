@@ -352,26 +352,28 @@ function mc_ics_subscribe() {
 	$templates = mc_ical_template();
 
 	if ( is_array( $events ) && ! empty( $events ) ) {
-		foreach ( array_keys( $events ) as $key ) {
-			$event =& $events[ $key ];
-			if ( is_object( $event ) ) {
-				if ( ! mc_private_event( $event ) ) {
-					$array = mc_create_tags( $event );
+		foreach ( $events as $date ) {
+			foreach ( array_keys( $date ) as $key ) {
+				$event =& $date[ $key ];
+				if ( is_object( $event ) ) {
+					if ( ! mc_private_event( $event ) ) {
+						$array = mc_create_tags( $event );
 
-					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
-					$alert = '';
-					if ( ! empty( $alarm ) ) {
-						$alert = mc_generate_alert_ical( $alarm );
+						$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
+						$alert = '';
+						if ( ! empty( $alarm ) ) {
+							$alert = mc_generate_alert_ical( $alarm );
+						}
+						$template = apply_filters( 'mc_filter_ical_template', $templates['template'] );
+						$template = str_replace( '{alert}', $alert, $template );
+
+						$output .= "\n" . mc_draw_template( $array, $template, 'ical' );
 					}
-					$template = apply_filters( 'mc_filter_ical_template', $templates['template'] );
-					$template = str_replace( '{alert}', $alert, $template );
-
-					$output .= "\n" . mc_draw_template( $array, $template, 'ical' );
 				}
 			}
 		}
 	}
-	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
+	$output = html_entity_decode( preg_replace( '~(?<!\r)\n~', "\r\n", $templates['head'] . $output . $templates['foot'] ) );
 	if ( ! ( isset( $_GET['sync'] ) && 'true' == $_GET['sync'] ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
