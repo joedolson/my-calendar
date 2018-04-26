@@ -336,8 +336,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// Date & time fields.
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
 	$real_begin_date = ( isset( $event->occur_begin ) ) ? $event->occur_begin : $event->event_begin . ' ' . $event->event_time;
-	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ) );
-	$dtend           = mc_format_timestamp( strtotime( $real_end_date ) );
+	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ), $context );
+	$dtend           = mc_format_timestamp( strtotime( $real_end_date ), $context );
 
 	$e['date_utc']     = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
 	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
@@ -662,14 +662,14 @@ function mc_get_details_label( $event, $e ) {
  *
  * @return string formatted time
  */
-function mc_format_timestamp( $os ) {
-	if ( isset( $_GET['outlook'] ) ) {
+function mc_format_timestamp( $os, $source ) {
+	if ( isset( $_GET['outlook'] ) || $source == 'outlook' ) {
 		// Should iCal be in UTC or in current timezone.
 		$timezone_string = get_option( 'timezone_string' );
 		if ( ! $timezone_string ) {
-				// Multiply gmt_offset by -1 because POSIX has it reversed.
-				// See: http://stackoverflow.com/questions/20228224/php-timezone-issue.
-				$timezone_string = sprintf( 'Etc/GMT%+d', -1 * get_option( 'gmt_offset' ) );
+			// Multiply gmt_offset by -1 because POSIX has it reversed.
+			// See: http://stackoverflow.com/questions/20228224/php-timezone-issue.
+			$timezone_string = sprintf( 'Etc/GMT%+d', -1 * get_option( 'gmt_offset' ) );
 		}
 
 		$timezone_object = timezone_open( $timezone_string );
