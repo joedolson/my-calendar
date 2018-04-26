@@ -350,6 +350,7 @@ function mc_ics_subscribe() {
 
 	$events    = mc_get_rss_events( $cat_id );
 	$templates = mc_ical_template();
+	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
 
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( $events as $date ) {
@@ -364,10 +365,14 @@ function mc_ics_subscribe() {
 						if ( ! empty( $alarm ) ) {
 							$alert = mc_generate_alert_ical( $alarm );
 						}
-						$template = apply_filters( 'mc_filter_ical_template', $templates['template'] );
-						$template = str_replace( '{alert}', $alert, $template );
+						$all_day = '';
+						if ( 1 == $event->event_allday ) {
+							$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
+						}
+						$parse    = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
 
-						$output .= "\n" . mc_draw_template( $array, $template, 'ical' );
+
+						$output .= "\n" . mc_draw_template( $array, $parse, 'ical' );
 					}
 				}
 			}
@@ -408,13 +413,8 @@ function my_calendar_ical() {
 	$to       = apply_filters( 'mc_ical_download_to', $to, $p );
 	$category = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcal'] ) : null;
 
-	$tz_id = get_option( 'timezone_string' );
-	$off   = ( get_option( 'gmt_offset' ) * -1 );
-	$etc   = 'Etc/GMT' . ( ( 0 > $off ) ? $off : '+' . $off );
-	$tz_id = ( $tz_id ) ? $tz_id : $etc;
-
 	$templates = mc_ical_template();
-	$template  = $templates['template'];
+	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
 
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
 	$args = array(
@@ -450,10 +450,9 @@ function my_calendar_ical() {
 					if ( 1 == $event->event_allday ) {
 						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
 					}
-					$template = apply_filters( 'mc_filter_ical_template', $template );
-					$template = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
+					$parse    = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
 
-					$output .= "\n" . mc_draw_template( $array, $template, 'ical' );
+					$output .= "\n" . mc_draw_template( $array, $parse, 'ical' );
 				}
 			}
 		}
@@ -478,6 +477,11 @@ function my_calendar_ical() {
  */
 function mc_ical_template() {
 	global $mc_version;
+	$tz_id = get_option( 'timezone_string' );
+	$off   = ( get_option( 'gmt_offset' ) * -1 );
+	$etc   = 'Etc/GMT' . ( ( 0 > $off ) ? $off : '+' . $off );
+	$tz_id = ( $tz_id ) ? $tz_id : $etc;
+
 	// Translators: Blogname.
 	$events_from = sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
 	// establish template.
