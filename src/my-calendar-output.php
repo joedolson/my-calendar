@@ -2291,15 +2291,13 @@ function mc_category_key( $category ) {
  */
 function mc_sub_links( $subtract ) {
 
-	$feed        = get_feed_link( 'my-calendar-rss' );
-	$google      = array( 'export' => 'google' );
-	$sub_google  = mc_build_url( $google, $subtract, get_feed_link( 'my-calendar-subscribe' ) );
-	$outlook     = array( 'export' => 'outlook' );
-	$sub_outlook = mc_build_url( $outlook, $subtract, get_feed_link( 'my-calendar-subscribe' ) );
+	$feed    = get_feed_link( 'my-calendar-rss' );
+	$google  = get_feed_link( 'my-calendar-google' );
+	$outlook = get_feed_link( 'my-calendar-outlook' );
 
-	$rss         = "\n	<li class='rss'><a href='" . $feed . "'>" . __( 'RSS', 'my-calendar' ) . '</a></li>';
-	$sub_google  = "\n	<li class='ics google'><a href='" . $sub_google . "'>" . __( 'Google', 'my-calendar' ) . '</a></li>';
-	$sub_outlook = "\n	<li class='ics outlook'><a href='" . $sub_outlook . "'>" . __( 'Outlook', 'my-calendar' ) . '</a></li>';
+	$rss         = "\n	<li class='rss'><a href='" . esc_url( $feed ) . "'>" . __( 'RSS', 'my-calendar' ) . '</a></li>';
+	$sub_google  = "\n	<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( 'Google', 'my-calendar' ) . '</a></li>';
+	$sub_outlook = "\n	<li class='ics outlook'><a href='" . esc_url( $outlook ) . "'>" . __( 'Outlook', 'my-calendar' ) . '</a></li>';
 
 	$output = "\n
 <div class='mc-export'>
