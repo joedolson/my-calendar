@@ -659,11 +659,12 @@ function mc_get_details_label( $event, $e ) {
  * Format a timestamp for use in ical
  *
  * @param integer $os timestamp.
+ * @param string  $source google or outlook
  *
  * @return string formatted time
  */
 function mc_format_timestamp( $os, $source ) {
-	if ( isset( $_GET['outlook'] ) || $source == 'outlook' ) {
+	if ( isset( $_GET['outlook'] ) || 'outlook' == $source ) {
 		// Should iCal be in UTC or in current timezone.
 		$timezone_string = get_option( 'timezone_string' );
 		if ( ! $timezone_string ) {
