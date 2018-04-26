@@ -659,7 +659,7 @@ function mc_get_details_label( $event, $e ) {
  * Format a timestamp for use in ical
  *
  * @param integer $os timestamp.
- * @param string  $source google or outlook
+ * @param string  $source google or outlook.
  *
  * @return string formatted time
  */
