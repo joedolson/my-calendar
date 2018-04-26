@@ -23,6 +23,18 @@ function my_calendar_add_feed() {
 }
 
 /**
+ * If user is logged in, do not cache feeds.
+ *
+ * @param object $feed Feed object.
+ */
+function mc_cache_feeds( &$feed ) {
+	if ( is_user_logged_in() ) {
+		$feed->enable_cache( false );
+	}
+}
+add_action( 'wp_feed_options', 'mc_cache_feeds' );
+
+/**
  * Add plug-in info page links to Plugins page
  *
  * @param array  $links default set of plug-in links.
