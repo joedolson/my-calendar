@@ -183,7 +183,7 @@ function mc_generate_vcal( $event_id = false ) {
 			$alert = mc_generate_alert_ical( $alarm );
 		}
 		$all_day = '';
-		if ( 1 == $event->event_allday ) {
+		if ( mc_is_all_day( $event ) ) {
 			$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
 		}
 
@@ -339,8 +339,10 @@ function mc_strip_to_xml( $value ) {
 
 /**
  * Generate an iCal subscription export with most recently added events by category.
+ *
+ * @param string $source Google or outlook.
  */
-function mc_ics_subscribe() {
+function mc_ics_subscribe( $source ) {
 	// get event category.
 	if ( isset( $_GET['mcat'] ) ) {
 		$cat_id = (int) $_GET['mcat'];
@@ -358,7 +360,7 @@ function mc_ics_subscribe() {
 				$event =& $date[ $key ];
 				if ( is_object( $event ) ) {
 					if ( ! mc_private_event( $event ) ) {
-						$array = mc_create_tags( $event );
+						$array = mc_create_tags( $event, $source );
 
 						$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
 						$alert = '';
@@ -366,11 +368,10 @@ function mc_ics_subscribe() {
 							$alert = mc_generate_alert_ical( $alarm );
 						}
 						$all_day = '';
-						if ( 1 == $event->event_allday ) {
+						if ( mc_is_all_day( $event ) ) {
 							$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
 						}
-						$parse    = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
-
+						$parse = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
 
 						$output .= "\n" . mc_draw_template( $array, $parse, 'ical' );
 					}
@@ -384,10 +385,24 @@ function mc_ics_subscribe() {
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
 		header( 'Pragma: no-cache' );
 		header( 'Expires: 0' );
-		header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
+		header( "Content-Disposition: inline; filename=my-calendar-$sitename-$source.ics" );
 	}
 
 	echo $output;
+}
+
+/**
+ * Generate Google subscribe feed data.
+ */
+function mc_ics_subscribe_google() {
+	mc_ics_subscribe( 'google' );
+}
+
+/**
+ * Generate Outlook subscribe feed data.
+ */
+function mc_ics_subscribe_outlook() {
+	mc_ics_subscribe( 'outlook' );
 }
 
 /**
@@ -440,7 +455,6 @@ function my_calendar_ical() {
 			if ( is_object( $event ) ) {
 				if ( ! mc_private_event( $event ) ) {
 					$array = mc_create_tags( $event );
-
 					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
 					$alert = '';
 					if ( ! empty( $alarm ) ) {
@@ -450,7 +464,7 @@ function my_calendar_ical() {
 					if ( 1 == $event->event_allday ) {
 						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
 					}
-					$parse    = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
+					$parse = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
 
 					$output .= "\n" . mc_draw_template( $array, $parse, 'ical' );
 				}
