@@ -498,6 +498,7 @@ function mc_ical_template() {
 
 	// Translators: Blogname.
 	$events_from = sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
+	$ttl         = apply_filters( 'ical_x_published_ttl', 'PT24H' );
 	// establish template.
 	$template = "
 BEGIN:VEVENT
@@ -518,6 +519,9 @@ VERSION:2.0
 PRODID:-//My Calendar//http://www.joedolson.com//v' . $mc_version . '//EN
 METHOD:PUBLISH
 CALSCALE:GREGORIAN
+X-WR-CALNAME:' . get_bloginfo( 'blogname' ) . '
+X-PUBLISHED-TTL:' . $ttl . '
+REFRESH-INTERVAL;VALUE=DURATION:' . $ttl . '
 X-WR-CALDESC:' . $events_from;
 	$foot = "\nEND:VCALENDAR";
 
