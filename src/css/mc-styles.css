@@ -309,6 +309,10 @@ strong.label {
 	border-color: red;
 }
 
+.my-calendar-admin .button-primary:active {
+	vertical-align: baseline;
+}
+
 .mc-categories th:nth-of-type(5), .mc-categories th:nth-of-type(6), .mc-categories th:nth-of-type(7) {
 	width: 50px;
 }
