@@ -1083,13 +1083,18 @@ function mc_list_groups() {
 						<strong>
 						<?php
 						if ( $can_edit ) {
-						?>
-							<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit'>
-						<?php
+							if ( mc_event_is_grouped( $event->event_group_id ) ) {
+								$edit_link = admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
+							} else {
+								$edit_link = '';
+							}
+							if ( $edit_link ) {
+								echo '<a href="' . $edit_link . '" class="edit">';
+							}
 						}
 						echo $spam_label;
 						echo strip_tags( stripslashes( $title ) );
-						if ( $can_edit ) {
+						if ( $can_edit && $edit_link ) {
 							echo '</a>';
 						}
 						?>
