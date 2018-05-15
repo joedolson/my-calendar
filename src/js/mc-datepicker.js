@@ -33,7 +33,11 @@ if ( typeof(mc_months) !== "undefined" ) {
 
 		if ( $( '#mc_event_enddate' ).val() != '' ) {
 			var enddate   = new Date( $( '#mc_event_enddate' ).val() );
-			begin.set( 'max', enddate );
+			if ( enddate < startdate ) {
+				$( '#mc_event_enddate' ).val( '' );
+			} else {
+				begin.set( 'max', enddate );
+			}
 		}
 	}
 
