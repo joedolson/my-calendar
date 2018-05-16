@@ -305,7 +305,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	$regions  = $options[ 'event_' . $fieldname ];
 	$form     = "<select name='$field' id='e_$fieldname'>";
 	$form    .= "<option value=''>" . __( 'Select', 'my-calendar' ) . '</option>';
-	if ( is_admin() && $selected != '' ) {
+	if ( is_admin() && '' != $selected ) {
 		$form .= "<option value='$selected'>$selected :" . __( '(Not a controlled value)', 'my-calendar' ) . '</option>';
 	}
 	foreach ( $regions as $key => $value ) {
@@ -528,7 +528,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
 	$map     = mc_generate_map( $data, $context );
 
-	$return .= ( $map == '' ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
+	$return .= ( '' == $map ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
 
 	return $return;
 }
