@@ -1079,7 +1079,7 @@ function mc_list_groups() {
 					<th scope="row">
 						<?php echo ( 0 == $event->event_group_id ) ? '-' : $event->event_group_id; ?>
 					</th>
-					<td title="<?php echo esc_attr( substr( strip_tags( stripslashes( $event->event_desc ) ), 0, 240 ) ); ?>">
+					<td>
 						<strong>
 						<?php
 						if ( $can_edit ) {
@@ -1093,7 +1093,7 @@ function mc_list_groups() {
 							}
 						}
 						echo $spam_label;
-						echo strip_tags( stripslashes( $title ) );
+						echo '<span id="event_' . $event->event_id . '">' . strip_tags( stripslashes( $title ) ) . '</span>';
 						if ( $can_edit && $edit_link ) {
 							echo '</a>';
 						}
@@ -1104,7 +1104,7 @@ function mc_list_groups() {
 							<?php
 							if ( $can_edit ) {
 							?>
-								<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit'><?php _e( 'Edit Event', 'my-calendar' ); ?></a> |
+								<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit' aria-describedby='event_<?php echo $event->event_id; ?>'><?php _e( 'Edit Event', 'my-calendar' ); ?></a> |
 								<?php
 								if ( mc_event_is_grouped( $event->event_group_id ) ) {
 								?>
