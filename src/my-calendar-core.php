@@ -1625,3 +1625,76 @@ function mc_update_notice() {
 		}
 	}
 }
+
+add_filter( 'wp_privacy_personal_data_exporters', 'my_calendar_exporter', 10 );
+/**
+ * GDPR Privacy Exporter hook
+ *
+ * @param array $exporters All registered exporters.
+ *
+ * @return array
+ */
+function my_calendar_exporter( $exporters ) {
+	$exporters['my-calendar-exporter'] = array(
+		'exporter_friendly_name' => __( 'My Calendar - Privacy Export', 'my-calendar' ),
+		'callback'               => 'my_calendar_privacy_export',
+	);
+
+	return $exporters;
+}
+
+/**
+ * GDPR Privacy Exporter
+ *
+ * @param string $email_address Email address to get data for.
+ * @param int    $page Page of data to remove.
+ *
+ * @return array
+ */
+function my_calendar_privacy_export( $email_address, $page = 1 ) {
+	if ( empty( $email_address ) ) {
+		return array(
+			'items_removed'  => false,
+			'items_retained' => false,
+			'messages'       => array(),
+			'done'           => true,
+		);
+	}
+	// Need to get all events with this email address as host, author, or meta data.
+}
+
+add_filter( 'wp_privacy_personal_data_exporters', 'my_calendar_exporter', 10 );
+/**
+ * GDPR Privacy eraser hook
+ *
+ * @param array $exporters All registered exporters.
+ *
+ * @return array
+ */
+function my_calendar_exporter( $erasers ) {
+	$erasers['my-calendar-eraser'] = array(
+		'exporter_friendly_name' => __( 'My Calendar - Eraser', 'my-calendar' ),
+		'callback'               => 'my_calendar_privacy_eraser',
+	);
+
+	return $erasers;
+}
+
+/**
+ * GDPR Privacy eraser
+ *
+ * @param string $email_address Email address to get data for.
+ * @param int    $page Page of data to remove.
+ *
+ * @return array
+ */
+function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
+	if ( empty( $email_address ) ) {
+		return array(
+			'items_removed'  => false,
+			'items_retained' => false,
+			'messages'       => array(),
+			'done'           => true,
+		);
+	}
+}
