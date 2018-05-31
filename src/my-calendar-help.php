@@ -55,6 +55,7 @@ function my_calendar_help() {
 				<ul class="mc-settings checkboxes">
 					<li><a href="#mc-generator"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></li>
 					<li><a href="#files"><?php _e( 'Custom Files', 'my-calendar' ); ?></a></li>
+					<li><a href="#privacy"><?php _e( 'Privacy', 'my-calendar' ); ?></a></li>
 					<li><a href="#get-support"><?php _e( 'Get Support', 'my-calendar' ); ?></a></li>
 				</ul>
 			</div>
@@ -103,6 +104,29 @@ function my_calendar_help() {
 				</ul>
 				<p>
 					<?php _e( 'Custom print, mobile, and tablet stylesheet file names: <code>mc-print.css</code>, <code>mc-mobile.css</code>, and <code>mc-tablet.css</code>.', 'my-calendar' ); ?>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui-sortable meta-box-sortables" id="privacy">
+		<div class="postbox">
+			<h2><?php _e( 'Privacy', 'my-calendar' ); ?></h2>
+
+			<div class="inside">
+				<h3><?php _e( 'Data Collection by My Calendar', 'my-calendar' ); ?></h3>
+				<p>
+					<?php _e( 'My Calendar collects no personally identifying data.', 'my-calendar' ); ?>
+				</p>
+				<p>
+					<?php _e( 'My Calendar Pro, when installed, collects submitter names and email addresses when a public user submits an event from any public event submission form.', 'my-calendar' ); ?>
+				</p>
+				<h3><?php _e( 'Data Sharing by My Calendar', 'my-calendar' ); ?></h3>
+				<p>
+					<?php _e( 'The names and email addresses of people who author or host events are shared by My Calendar as part of the API output, RSS feeds, and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information.', 'my-calendar' ); ?>
+				</p>
+				<p>
+					<?php _e( 'Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted.', 'my-calendar' ); ?>
 				</p>
 			</div>
 		</div>

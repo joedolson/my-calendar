@@ -298,7 +298,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						</li>
 						<li>
 							<div class="dashicons dashicons-yes" aria-hidden='true'></div>
-							<a href="http://profiles.wordpress.org/users/joedolson/"><?php _e( 'Check out my other plug-ins', 'my-calendar' ); ?></a>
+							<a href="http://profiles.wordpress.org/joedolson/"><?php _e( 'Check out my other plug-ins', 'my-calendar' ); ?></a>
 						</li>
 						<li>
 							<div class="dashicons dashicons-star-filled" aria-hidden='true'></div>
