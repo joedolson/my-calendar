@@ -1663,7 +1663,7 @@ function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	// Need to get all events with this email address as host, author, or meta data.
 }
 
-add_filter( 'wp_privacy_personal_data_exporters', 'my_calendar_exporter', 10 );
+add_filter( 'wp_privacy_personal_data_exporters', 'my_calendar_eraser', 10 );
 /**
  * GDPR Privacy eraser hook
  *
@@ -1671,7 +1671,7 @@ add_filter( 'wp_privacy_personal_data_exporters', 'my_calendar_exporter', 10 );
  *
  * @return array
  */
-function my_calendar_exporter( $erasers ) {
+function my_calendar_eraser( $erasers ) {
 	$erasers['my-calendar-eraser'] = array(
 		'exporter_friendly_name' => __( 'My Calendar - Eraser', 'my-calendar' ),
 		'callback'               => 'my_calendar_privacy_eraser',
