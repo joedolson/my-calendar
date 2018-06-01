@@ -1672,8 +1672,7 @@ function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	$user = get_user_by( 'email', $email_address );
 	if ( $user ) {
 		$user_ID  = $user->ID;
-		$query    = 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d';
-		$calendar = $wpdb->get_results( $wpdb->prepare( $query, $user_ID, $user_ID ) );
+		$calendar = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d', $user_ID, $user_ID ) );
 		foreach ( $calendar as $obj ) {
 			$events[] = $obj->event_id;
 		}
@@ -1771,8 +1770,7 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 	if ( $user ) {
 		$user_ID = $user->ID;
 		// for deletion, if *author*, delete; if *host*, change host.
-		$query    = 'SELECT event_id, event_host, event_author FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d';
-		$calendar = $wpdb->get_results( $wpdb->prepare( $query, $user_ID, $user_ID ) );
+		$calendar = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_host, event_author FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d', $user_ID, $user_ID ) );
 		foreach ( $calendar as $obj ) {
 			if ( $user_ID == $obj->event_host && $obj->event_host != $obj->event_author ) {
 				$updates[] = array( $obj->event_id, $obj->event_author );
