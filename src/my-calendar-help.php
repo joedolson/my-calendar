@@ -128,6 +128,10 @@ function my_calendar_help() {
 				<p>
 					<?php _e( 'Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted.', 'my-calendar' ); ?>
 				</p>
+				<h3><?php _e( 'Data Removal in My Calendar', 'my-calendar' ); ?></h3>
+				<p>
+					<?php _e( 'My Calendar supports the data export and removal features in WordPress 4.9.6 and later. When a data removal is requested, all events authored using the requested email address will be deleted. All events with that user assigned only as the host will remain, but the host will be changed.', 'my-calendar' ); ?>
+				</p>
 			</div>
 		</div>
 	</div>
