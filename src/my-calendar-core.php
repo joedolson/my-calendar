@@ -1752,6 +1752,7 @@ function my_calendar_eraser( $erasers ) {
  * @return array
  */
 function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
+	global $wpdb;
 	if ( empty( $email_address ) ) {
 		return array(
 			'items_removed'  => false,
@@ -1777,27 +1778,25 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 		$calendar = $wpdb->get_results( $query );
 		foreach( $calendar as $obj ) {
 			if ( $user_ID == $obj->event_host && $obj->event_host != $obj->event_author ) {
-				$updates[] = array( $obj->event_id, $event_author ); 
+				$updates[] = array( $obj->event_id, $obj->event_author ); 
 			} else {
-				$deletions[] = $obj->event_id
+				$deletions[] = $obj->event_id;
 			}
 		}
 	}
 
-	if ( empty( $deletions ) ) {
-		$items_removed = false;
-	} 
-	if ( empty( $updates ) ) {
-		$items_retained = false;
-	}
+	$items_removed  = false;
+	$items_retained = false;
+	$messages       = array();
 
 	foreach( $deletions as $delete ) {
-		// Handle deleting the post.
-		// set items_removed to true
+		$event_deleted = mc_delete_event( $delete );
+		$items_removed = true;
 	}
+
 	foreach( $updates as $update ) {
-		// Handle updating each post to change host. 
-		// set items_retained to true
+		$event_updated  = mc_update_event( 'event_host', $update[1], $update[0], '%d' );
+		$items_retained = true;
 	}
 
 	return array(
