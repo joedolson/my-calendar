@@ -1652,28 +1652,91 @@ function my_calendar_exporter( $exporters ) {
  * @return array
  */
 function my_calendar_privacy_export( $email_address, $page = 1 ) {
+	global $wpdb;
+	$data = array(
+		'data' => array(),
+		'done' => true,
+	);
+	$export_items = array();
+
 	if ( empty( $email_address ) ) {
+		return $data;
+	}
+
+	// Need to get all events with this email address as host, author, or meta data.
+	$meta = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE '%" . $wpdb->esc_like( $email_address ) . "%'";
+	$posts = $wpdb->get_results( $meta );
+	foreach( $posts as $post ) {
+		$events[] = get_post_meta( $post, '_mc_event_id', true );
+	}
+
+	$user = get_user_by( 'email', $email_address );
+	if ( $user ) {
+		$user_ID  = $user->ID;
+		$query    = 'SELECT event_id FROM ' . my_calendar_table() . " WHERE event_host = $user_ID OR event_author = $user_ID";
+		$calendar = $wpdb->get_results( $query );
+		foreach( $calendar as $obj ) {
+			$events[] = $obj->event_id;
+		}
+	}
+
+	if ( empty( $events ) ) {
+		return $data;
+	} else {
+		foreach( $events as $e ) {
+			$event_export = array();
+			$event        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e ) ); // WPCS: unprepared SQL OK.
+			$meta         = get_post_meta( $event->event_post );
+
+			foreach( $event as $key => $value ) {
+				// Omit empty values.
+				if ( empty( $value ) ) {
+					continue;
+				}
+				$event_export[] = array(
+					'name'  => $key,
+					'value' => $value,
+				);
+			}
+			foreach( $meta as $mkey => $mvalue ) {
+				if ( stripos( $mkey, '_mt_' ) !== false || $mkey == '_mc_event_data' || $mkey == '_mc_event_desc' ) {
+					continue;
+				}
+				// Omit empty values.
+				if ( empty( $mvalue[0] ) ) {
+					continue;
+				}
+				$event_export[] = array(
+					'name'  => $mkey,
+					'value' => $mvalue[0],
+				);
+			}
+			$export_items[] = array(
+				'group_id'    => 'my-calendar-export',
+				'group_label' => 'My Calendar', 
+				'item_id'     => "event-$e",
+				'data'        => $event_export,
+			);
+		}
+
 		return array(
-			'items_removed'  => false,
-			'items_retained' => false,
-			'messages'       => array(),
-			'done'           => true,
+			'data' => $export_items,
+			'done' => true,
 		);
 	}
-	// Need to get all events with this email address as host, author, or meta data.
 }
 
-add_filter( 'wp_privacy_personal_data_exporters', 'my_calendar_eraser', 10 );
+add_filter( 'wp_privacy_personal_data_erasers', 'my_calendar_eraser', 10 );
 /**
  * GDPR Privacy eraser hook
  *
- * @param array $exporters All registered exporters.
+ * @param array $erasers All registered erasers.
  *
  * @return array
  */
 function my_calendar_eraser( $erasers ) {
 	$erasers['my-calendar-eraser'] = array(
-		'exporter_friendly_name' => __( 'My Calendar - Eraser', 'my-calendar' ),
+		'eraser_friendly_name' => __( 'My Calendar - Eraser', 'my-calendar' ),
 		'callback'               => 'my_calendar_privacy_eraser',
 	);
 
@@ -1697,4 +1760,50 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 			'done'           => true,
 		);
 	}
+
+
+	// Need to get all events with this email address as host, author, or meta data.
+	$meta = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE '%" . $wpdb->esc_like( $email_address ) . "%'";
+	$posts = $wpdb->get_results( $meta );
+	foreach( $posts as $post ) {
+		$deletions[] = get_post_meta( $post, '_mc_event_id', true );
+	}
+
+	$user = get_user_by( 'email', $email_address );
+	if ( $user ) {
+		$user_ID  = $user->ID;
+		// for deletion, if *author*, delete; if *host*, change host. 
+		$query    = 'SELECT event_id, event_host, event_author FROM ' . my_calendar_table() . " WHERE event_host = $user_ID OR event_author = $user_ID";
+		$calendar = $wpdb->get_results( $query );
+		foreach( $calendar as $obj ) {
+			if ( $user_ID == $obj->event_host && $obj->event_host != $obj->event_author ) {
+				$updates[] = array( $obj->event_id, $event_author ); 
+			} else {
+				$deletions[] = $obj->event_id
+			}
+		}
+	}
+
+	if ( empty( $deletions ) ) {
+		$items_removed = false;
+	} 
+	if ( empty( $updates ) ) {
+		$items_retained = false;
+	}
+
+	foreach( $deletions as $delete ) {
+		// Handle deleting the post.
+		// set items_removed to true
+	}
+	foreach( $updates as $update ) {
+		// Handle updating each post to change host. 
+		// set items_retained to true
+	}
+
+	return array(
+		'items_removed'  => $items_removed,
+		'items_retained' => $items_retained,
+		'messages'       => $messages,
+		'done'           => true,
+	);
 }
