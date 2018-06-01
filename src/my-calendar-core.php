@@ -1664,7 +1664,7 @@ function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	}
 
 	// Need to get all events with this email address as host, author, or meta data.
-	$posts = $wpdb->get_results( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE '%" . $wpdb->esc_like( $email_address ) . "%'" );
+	$posts = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE %s", '%' . $wpdb->esc_like( $email_address ) . '%s' ) );
 	foreach ( $posts as $post ) {
 		$events[] = get_post_meta( $post, '_mc_event_id', true );
 	}
@@ -1673,7 +1673,7 @@ function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	if ( $user ) {
 		$user_ID  = $user->ID;
 		$query    = 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d';
-		$calendar = $wpdb->get_results( $wpdb->prepare( $query, $user_ID ) );
+		$calendar = $wpdb->get_results( $wpdb->prepare( $query, $user_ID, $user_ID ) );
 		foreach ( $calendar as $obj ) {
 			$events[] = $obj->event_id;
 		}
@@ -1762,17 +1762,17 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 	}
 
 	// Need to get all events with this email address as host, author, or meta data.
-	$posts = $wpdb->get_results( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE '%" . $wpdb->esc_like( $email_address ) . "%'" );
+	$posts = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE %s", '%' . $wpdb->esc_like( $email_address ) . '%s' ) );
 	foreach ( $posts as $post ) {
 		$deletions[] = get_post_meta( $post, '_mc_event_id', true );
 	}
 
 	$user = get_user_by( 'email', $email_address );
 	if ( $user ) {
-		$user_ID  = $user->ID;
+		$user_ID = $user->ID;
 		// for deletion, if *author*, delete; if *host*, change host.
 		$query    = 'SELECT event_id, event_host, event_author FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d';
-		$calendar = $wpdb->get_results( $wpdb->prepare( $query, $user_ID ) );
+		$calendar = $wpdb->get_results( $wpdb->prepare( $query, $user_ID, $user_ID ) );
 		foreach ( $calendar as $obj ) {
 			if ( $user_ID == $obj->event_host && $obj->event_host != $obj->event_author ) {
 				$updates[] = array( $obj->event_id, $obj->event_author );
