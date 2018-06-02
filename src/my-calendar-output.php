@@ -1986,8 +1986,9 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
  */
 function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	$body = '';
+	static $weeknumber;
 	if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
-		if ( ( date( 'N', $start ) == $start_of_week || strtotime( $from ) == $start || ! $week_number_shown ) ) {
+		if ( ( date( 'N', $start ) == $start_of_week || strtotime( $from ) == $start || ! $week_number_shown ) && $weeknumber != date( 'W', $start) ) {
 			$week_number_shown = false;
 			if ( 'list' != $format ) {
 				$weeknumber        = date( 'W', $start );
