@@ -1658,8 +1658,8 @@ function my_calendar( $args ) {
 				$end               = strtotime( $to );
 				$week_number_shown = false;
 				do {
-					$date_is           = date( 'Y-m-d', $start );
-					$is_weekend        = ( date( 'N', $start ) < 6 ) ? false : true;
+					$date_is    = date( 'Y-m-d', $start );
+					$is_weekend = ( date( 'N', $start ) < 6 ) ? false : true;
 					if ( $show_weekends || ( ! $show_weekends && ! $is_weekend ) ) {
 						if ( date( 'N', $start ) == $start_of_week && 'list' != $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
@@ -1674,7 +1674,7 @@ function my_calendar( $args ) {
 						$dateclass    = mc_dateclass( $start );
 						$ariacurrent  = ( 'current-day' == $dateclass ) ? ' aria-current="date"' : '';
 
-						$td    = apply_filters( 'mc_grid_day_wrapper', 'td', $params['format'] );
+						$td = apply_filters( 'mc_grid_day_wrapper', 'td', $params['format'] );
 						if ( ! $week_number_shown ) {
 							$body             .= mc_show_week_number( $events, $args, $params['format'], $td, $start );
 							$week_number_shown = true;
