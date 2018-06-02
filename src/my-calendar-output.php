@@ -1654,11 +1654,12 @@ function my_calendar( $args ) {
 				$no_events = ( '' == $content ) ? __( 'There are no events scheduled during this period.', 'my-calendar' ) : $content;
 				$body     .= "<li class='mc-events no-events'>$no_events</li>";
 			} else {
-				$start = strtotime( $from );
-				$end   = strtotime( $to );
+				$start             = strtotime( $from );
+				$end               = strtotime( $to );
+				$week_number_shown = false;
 				do {
-					$date_is    = date( 'Y-m-d', $start );
-					$is_weekend = ( date( 'N', $start ) < 6 ) ? false : true;
+					$date_is           = date( 'Y-m-d', $start );
+					$is_weekend        = ( date( 'N', $start ) < 6 ) ? false : true;
 					if ( $show_weekends || ( ! $show_weekends && ! $is_weekend ) ) {
 						if ( date( 'N', $start ) == $start_of_week && 'list' != $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
@@ -1674,7 +1675,10 @@ function my_calendar( $args ) {
 						$ariacurrent  = ( 'current-day' == $dateclass ) ? ' aria-current="date"' : '';
 
 						$td    = apply_filters( 'mc_grid_day_wrapper', 'td', $params['format'] );
-						$body .= mc_show_week_number( $events, $args, $params['format'], $td, $start );
+						if ( ! $week_number_shown ) {
+							$body             .= mc_show_week_number( $events, $args, $params['format'], $td, $start );
+							$week_number_shown = true;
+						}
 
 						if ( ! empty( $events ) ) {
 							$hide_nextmonth = apply_filters( 'mc_hide_nextmonth', false );
@@ -1733,7 +1737,8 @@ function my_calendar( $args ) {
 						}
 
 						if ( date( 'N', $start ) == $end_of_week && 'list' != $params['format'] ) {
-							$body .= "</$tr>\n"; // End of 'is beginning of week'.
+							$body             .= "</$tr>\n"; // End of 'is beginning of week'.
+							$week_number_shown = false;
 						}
 					}
 					$start = strtotime( '+1 day', $start );
@@ -1987,18 +1992,12 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	$body = '';
 	if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
-		if ( ( date( 'N', $start ) == $start_of_week || strtotime( $from ) == $start || ! $week_number_shown ) ) {
-			$week_number_shown = false;
-			if ( 'list' != $format ) {
-				$weeknumber        = date( 'W', $start );
-				$body              = "<$td class='week_number'>$weeknumber</$td>";
-				$week_number_shown = true;
-			}
-			if ( 'list' == $format && ! empty( $events ) && ! $week_number_shown ) {
-				$weeknumber        = date( 'W', $start );
-				$body              = "<li class='mc-week-number'><span class='week-number-text'>" . __( 'Week', 'my-calendar' ) . "</span> <span class='week-number-number'>$weeknumber</span></li>";
-				$week_number_shown = true;
-			}
+		$weeknumber = date( 'W', $start );
+		if ( 'list' != $format ) {
+			$body = "<$td class='week_number'>$weeknumber</$td>";
+		}
+		if ( 'list' == $format && ! empty( $events ) ) {
+			$body = "<li class='mc-week-number'><span class='week-number-text'>" . __( 'Week', 'my-calendar' ) . "</span> <span class='week-number-number'>$weeknumber</span></li>";
 		}
 	}
 
