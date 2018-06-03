@@ -246,15 +246,16 @@
 
 .mc-main button.close {
 	position: absolute;
-	left: 10px;
-	top: 10px;
+	left: -22px;
+	top: -22px;
+	background: #fff;
+	border-radius: 20px;
 }
 
 .mc-main button.close, .mc-main button.close * {
 	padding: 0;
 	line-height: 1;
 	background: transparent;
-	border: none;
 	opacity: 1;
 }
 
