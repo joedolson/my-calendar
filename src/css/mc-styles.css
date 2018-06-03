@@ -72,6 +72,10 @@ ul.links li {
 	line-height: 1.4;
 }
 
+.my-calendar-admin .CodeMirror {
+	height: 600px;
+}
+
 #my-calendar-admin-table {
 	margin-bottom: 1em;
 }
