@@ -39,7 +39,7 @@
 .mc-main .my-calendar-header input,
 .mc-main .my-calendar-header span, .mc-main .my-calendar-header a, 
 .mc-main .mc_bottomnav span, .mc-main .mc_bottomnav a {
-	text-decoration: none;	
+	text-decoration: none;
 	-webkit-box-shadow: inset 0 -1px 0 rgba(15, 15, 15, 1);
 	box-shadow: inset 0 -1px 0 rgba(15, 15, 15, 1);
 	-webkit-transition: color 80ms ease-in, -webkit-box-shadow 130ms ease-in-out;
@@ -61,6 +61,12 @@
 	font-family: Arial;	
 	background: #fff;
 	background: var(--secondary-light);
+}
+
+.mc-main span.category-color-sample {
+	border: none !important;
+	background: transparent !important;
+	box-shadow: none !important;
 }
 
 .mc-main .my-calendar-header input,
@@ -194,7 +200,8 @@
 	left: 4px;
 	box-shadow: none;
 	background: transparent !important;
-	display: inline;	
+	display: inline;
+	vertical-align: middle;
 }
 
 .mc-main .category-color-sample img {
