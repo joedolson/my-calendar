@@ -2093,7 +2093,7 @@ function mc_list_events() {
 								echo $spam_label;
 								echo strip_tags( stripslashes( $event->event_title ) );
 								if ( $can_edit ) {
-									echo "</a>";
+									echo '</a>';
 									if ( '' != $check ) {
 										// Translators: URL to edit event.
 										echo '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), $edit_url ) . '</strong>';
