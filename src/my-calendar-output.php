@@ -260,6 +260,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$uid             = 'mc_' . $event->occur_id;
 	$day_id          = date( 'd', strtotime( $process_date ) );
 	$image           = mc_category_icon( $event );
+	$img             = '';
 	$has_image       = ( '' != $image ) ? ' has-image' : '';
 	$event_classes   = mc_event_classes( $event, $day_id, $type );
 	$header         .= "<div id='$uid-$day_id-$type' class='$event_classes'>\n";
@@ -349,7 +350,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			}
 
 			if ( 'true' == $display_image ) {
-				$image = mc_get_event_image( $event, $data );
+				$img = mc_get_event_image( $event, $data );
 			}
 
 			if ( 'true' == $display_desc || 'single' == $type ) {
@@ -401,7 +402,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 						. $close
 						. $time_html
 						. $list_title
-						. $image
+						. $img
 						. "<div class='location'>"
 						. $map . $address
 						. '</div>'
@@ -421,7 +422,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$details = $toggle . $details . "\n";
 		}
 
-		$img_class  = ( '' != $image ) ? ' has-image' : ' no-image';
+		$img_class  = ( '' != $img ) ? ' has-image' : ' no-image';
 		$container  = "<div id='$uid-$day_id-$type-details' class='details$img_class' role='alert' aria-labelledby='$uid-title' itemscope itemtype='http://schema.org/Event'>\n";
 		$container .= "<meta itemprop='name' content='" . strip_tags( $event->event_title ) . "' />";
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
