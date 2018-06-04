@@ -318,6 +318,9 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
  * @return array event data
  */
 function mc_create_tags( $event, $context = 'filters' ) {
+	if ( ! is_object( $event ) ) {
+		return;
+	}
 	$site          = ( isset( $event->site_id ) ) ? $event->site_id : false;
 	$event         = mc_clean_location( $event, 'event' );
 	$e             = array();

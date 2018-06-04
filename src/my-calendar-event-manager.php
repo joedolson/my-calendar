@@ -62,7 +62,7 @@ function mc_event_post( $action, $data, $event_id ) {
 		$description       = $data['event_desc'];
 		$excerpt           = $data['event_short'];
 		$post_status       = $privacy;
-		$auth              = ( isset( $data['event_author'] ) ) ? $data['event_author'] : get_vurrent_user_id();
+		$auth              = ( isset( $data['event_author'] ) ) ? $data['event_author'] : get_current_user_id();
 		$type              = 'mc-events';
 		$my_post           = array(
 			'ID'           => $post_id,
@@ -805,11 +805,13 @@ function mc_update_category_relationships( $cats, $event_id ) {
 	}
 	$wpdb->delete( my_calendar_category_relationships_table(), array( 'event_id' => $event_id ), '%d' );
 
-	foreach ( $cats as $cat ) {
-		$wpdb->insert( my_calendar_category_relationships_table(), array(
-			'event_id'    => $event_id,
-			'category_id' => $cat,
-		), array( '%d', '%d' ) );
+	if ( is_array( $cats ) && ! empty( $cats ) ) {
+		foreach ( $cats as $cat ) {
+			$wpdb->insert( my_calendar_category_relationships_table(), array(
+				'event_id'    => $event_id,
+				'category_id' => $cat,
+			), array( '%d', '%d' ) );
+		}
 	}
 }
 
@@ -3328,10 +3330,12 @@ function mc_can_edit_event( $event = false ) {
 	if ( is_object( $event ) ) {
 		$event_id     = $event->event_id;
 		$event_author = $event->event_author;
-	} else {
+	} else if ( is_int( $event ) ) {
 		$event_id     = $event;
 		$event        = mc_get_first_event( $event );
 		$event_author = $event->event_author;
+	} else {
+		$event_author = wp_get_current_user()->ID;
 	}
 
 	$current_user    = wp_get_current_user();

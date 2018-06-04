@@ -42,6 +42,9 @@ function my_calendar_group_edit() {
 				if ( isset( $_POST['apply'] ) && is_array( $_POST['apply'] ) ) {
 					$mc_output = mc_check_group_data( $action, $_POST );
 					foreach ( $_POST['apply'] as $event_id ) {
+						if ( ! is_int( $event_id ) ) {
+							continue;
+						}
 						$response = my_calendar_save_group( $action, $mc_output, $event_id );
 						echo $response;
 					}
@@ -811,14 +814,18 @@ function mc_check_group_data( $action, $post ) {
 		$host  = ! empty( $post['event_host'] ) ? $post['event_host'] : $current_user->ID;
 		if ( isset( $post['event_category'] ) ) {
 			$cats = $post['event_category'];
-			// Set first category as primary.
-			$primary = ( is_numeric( $cats[0] ) ) ? $cats[0] : 1;
-			foreach ( $cats as $cat ) {
-				$private = mc_get_category_detail( $cat, 'category_private' );
-				// If a selected category is private, set that category as primary instead.
-				if ( 1 == $private ) {
-					$primary = $cat;
+			if ( is_array( $cats ) && ! empty( $cats ) ) {
+				// Set first category as primary.
+				$primary = ( is_numeric( $cats[0] ) ) ? $cats[0] : 1;
+				foreach ( $cats as $cat ) {
+					$private = mc_get_category_detail( $cat, 'category_private' );
+					// If a selected category is private, set that category as primary instead.
+					if ( 1 == $private ) {
+						$primary = $cat;
+					}
 				}
+			} else {
+				$primary = $post['event_category'];
 			}
 		}
 
