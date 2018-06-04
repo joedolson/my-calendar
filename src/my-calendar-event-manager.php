@@ -2048,6 +2048,7 @@ function mc_list_events() {
 					}
 					$class   = ( 'alternate' == $class ) ? 'even' : 'alternate';
 					$pending = ( 0 == $event->event_approved ) ? 'pending' : '';
+					$trashed = ( 2 == $event->event_approved ) ? 'trashed' : '';
 					$author  = ( 0 != $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
 
 					if ( 1 == $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ) {
@@ -2059,7 +2060,8 @@ function mc_list_events() {
 						$spam_label = '';
 					}
 
-					$draft      = ( '' != $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
+					$trash      = ( '' != $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
+					$draft      = ( '' != $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : $trash;
 					$check      = mc_test_occurrence_overlap( $event, true );
 					$problem    = ( '' != $check ) ? 'problem' : '';
 					$edit_url   = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
@@ -2070,7 +2072,7 @@ function mc_list_events() {
 					$can_edit   = mc_can_edit_event( $event );
 					if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 						?>
-						<tr class="<?php echo "$class $spam $pending $problem"; ?>">
+						<tr class="<?php echo "$class $spam $pending $trashed $problem"; ?>">
 							<th scope="row">
 								<input type="checkbox" value="<?php echo $event->event_id; ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( 1 == $event->event_flagged ) ? 'checked="checked"' : ''; ?> />
 								<label for="mc<?php echo $event->event_id; ?>">
@@ -2091,12 +2093,13 @@ function mc_list_events() {
 								echo $spam_label;
 								echo strip_tags( stripslashes( $event->event_title ) );
 								if ( $can_edit ) {
-									echo "</a>$draft";
+									echo "</a>";
 									if ( '' != $check ) {
 										// Translators: URL to edit event.
 										echo '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), $edit_url ) . '</strong>';
 									}
 								}
+								echo $draft;
 								?>
 								</strong>
 
