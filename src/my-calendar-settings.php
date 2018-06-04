@@ -750,11 +750,11 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_show_weekends', __( 'Show Weekends on Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li>
 							<?php
-							mc_settings_field( 'mc_convert', array(
-								'true' => __( 'Switch to list view on mobile devices', 'my-calendar' ),
-								'mini' => __( 'Switch to mini calendar on mobile devices', 'my-calendar' ),
-								'none' => __( 'Do not switch calendar mode', 'my-calendar' ),
-							), 'false', '', array(), 'radio' );
+							mc_settings_field( 'mc_convert', __( 'Mobile View', 'my-calendar' ), array(
+								'true' => __( 'Switch to list view', 'my-calendar' ),
+								'mini' => __( 'Switch to mini calendar', 'my-calendar' ),
+								'none' => __( 'No change', 'my-calendar' ),
+							), '', array(), 'select' );
 							?>
 							</li>
 						</ul>
