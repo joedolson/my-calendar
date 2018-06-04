@@ -283,7 +283,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$hcard = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
 	if ( 'true' == $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
-		$hcard .= ( '' != $label ) ? '<strong class="org fn" itemprop="name">' . $link . '</strong><br />' : '';
+		$hcard .= ( '' != $label ) ? '<strong class="org fn" itemprop="name">' . $link . '</strong>' . PHP_EOL : '';
 		$hcard .= ( '' == $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' != $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
 		$hcard .= ( '' != $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
@@ -297,13 +297,14 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= ( '' == $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : '</div>';
 		$hcard .= '</div>';
 	}
-	if ( 'true' == $map ) {
+	if ( 'true' == $map && false != $the_map ) {
 		$hcard  .= '<meta itemprop="name" content="' . esc_attr( $label ) . '"/>';
 		$hcard  .= '<meta itemprop="address" content="' . esc_attr( mc_map_string( $event, $source ) ) . '"/>';
 		$the_map = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
 		$hcard  .= ( '' != $the_map ) ? "<div class='map'>$the_map</div>" : '';
 	}
 	$hcard .= '</div>';
+	$hcard  = ( ( false != $the_map && 'true' == $map ) || ( '' != $link && 'true' == $address ) ) ? $hcard : '';
 
 	return apply_filters( 'mc_hcard', $hcard, $event, $address, $map, $source );
 }
