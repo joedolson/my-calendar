@@ -376,6 +376,7 @@ function my_calendar_settings() {
 		update_option( 'mc_caption', $mc_caption );
 		// Date/time.
 		update_option( 'mc_date_format', stripslashes( $_POST['mc_date_format'] ) );
+		update_option( 'mc_multidate_format', stripslashes( $_POST['mc_multidate_format'] ) );
 		update_option( 'mc_week_format', stripslashes( $_POST['mc_week_format'] ) );
 		update_option( 'mc_time_format', stripslashes( $_POST['mc_time_format'] ) );
 		update_option( 'mc_month_format', stripslashes( $_POST['mc_month_format'] ) );
@@ -609,11 +610,15 @@ function mc_remote_db() {
 							$time_format  = ( '' == get_option( 'mc_time_format' ) ) ? date_i18n( get_option( 'time_format' ) ) : date_i18n( get_option( 'mc_time_format' ) );
 							$week_format  = ( '' == get_option( 'mc_week_format' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
 							$date_format  = ( '' == get_option( 'mc_date_format' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
+							$tomorrow     = date( 'j' ) + 1;
+							$multi_format = ( '' == get_option( 'mc_multidate_format' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
+							echo $multi_format;
 							?>
 							<li><?php mc_settings_field( 'mc_month_format', __( 'Month format (calendar headings)', 'my-calendar' ), '', $month_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_time_format', __( 'Time format', 'my-calendar' ), '', $time_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_week_format', __( 'Date in grid mode, week view', 'my-calendar' ), '', $week_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_date_format', __( 'Date Format in other views', 'my-calendar' ), '', $date_format ); ?></li>
+							<li><?php mc_settings_field( 'mc_multidate_format', __( 'Date Format for multi-day events', 'my-calendar' ), 'F j-%d, Y', $multi_format . ' (' . __( 'Use <code>&#37;d</code> to represent the end date.', 'my-calendar' ) . ')' ); ?></li>
 						</ul>
 					</fieldset>
 					<p>
