@@ -931,7 +931,11 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	apply_filters( 'mc_event_notices', '', $data, $event_id );
 
 	if ( is_object( $data ) && 1 != $data->event_approved && 'edit' == $mode ) {
-		mc_show_error( __( 'This event must be published to show on the calendar.', 'my-calendar' ) );
+		if ( 0 == $data->event_approved ) {
+			mc_show_error( __( '<strong>Draft</strong>: Publish this event to show it on the calendar.', 'my-calendar' ) );
+		} else {
+			mc_show_error( __( '<strong>Trash</strong>: Remove from the trash to show this event on the calendar.', 'my-calendar' ) );
+		}
 	}
 
 	mc_form_fields( $data, $mode, $event_id );
