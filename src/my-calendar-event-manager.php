@@ -3330,7 +3330,7 @@ function mc_can_edit_event( $event = false ) {
 	if ( is_object( $event ) ) {
 		$event_id     = $event->event_id;
 		$event_author = $event->event_author;
-	} else if ( is_int( $event ) ) {
+	} elseif ( is_int( $event ) ) {
 		$event_id     = $event;
 		$event        = mc_get_first_event( $event );
 		$event_author = $event->event_author;
