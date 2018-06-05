@@ -38,18 +38,20 @@ function mc_get_template( $template ) {
  *
  * @param object $event Current event.
  * @param string $type Type of view.
- * @param string $current Current date being processed.
  *
  * @return string HTML output.
  */
-function mc_time_html( $event, $type, $current ) {
+function mc_time_html( $event, $type ) {
+	$date_format = get_option( 'mc_date_format' );
+	$date_format = ( '' != $date_format ) ? $date_format : get_option( 'date_format' );
+	$current     = date_i18n( $date_format, strtotime( $event->occur_begin ) );
 	$id_start    = date( 'Y-m-d', strtotime( $event->occur_begin ) );
 	$id_end      = date( 'Y-m-d', strtotime( $event->occur_end ) );
-	$cur_date    = ( 'list' == $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $id_start . 'T' . $event->event_time . "' content='" . $id_start . 'T' . $event->event_time . "'>$current</span>";
+	$event_date  = ( 'list' == $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $id_start . 'T' . $event->event_time . "' content='" . $id_start . 'T' . $event->event_time . "'>$current</span>";
 	$time_format = get_option( 'mc_time_format' );
 
 	$time  = "<div class='time-block'>";
-	$time .= "<p>$cur_date ";
+	$time .= "<p>$event_date ";
 	if ( '00:00:00' != $event->event_time && '' != $event->event_time ) {
 		$time .= "\n
 		<span class='event-time dtstart'>
@@ -231,8 +233,6 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$gcal        = '';
 	$image       = '';
 	$tickets     = '';
-	$date_format = get_option( 'mc_date_format' );
-	$date_format = ( '' != $date_format ) ? $date_format : get_option( 'date_format' );
 	$data        = mc_create_tags( $event );
 	$details     = '';
 	if ( mc_show_details( $time, $type ) ) {
@@ -296,7 +296,6 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		$balance = '';
 	}
 
-	$current       = date_i18n( $date_format, strtotime( $process_date ) );
 	$group_class   = ( 1 == $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
 	$hlevel        = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
 	$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
@@ -316,7 +315,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			if ( ( 'true' == $display_address || 'true' == $display_map ) ) {
 				$address = mc_hcard( $event, $display_address, $display_map );
 			}
-			$time_html = mc_time_html( $event, $type, $current );
+			$time_html = mc_time_html( $event, $type );
 			if ( 'list' == $type ) {
 				$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 				$list_title = "<$hlevel class='event-title summary' id='$uid-title'>$image" . $event_title . "</$hlevel>\n";
