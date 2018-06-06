@@ -57,12 +57,12 @@ function mc_plugin_action( $links, $file ) {
 
 
 /**
- * Get custom styles dir locations, with trailing slash
- * or get custom styles url locations, with trailing slash
+ * Get custom styles dir locations, with trailing slash,
+ * or get custom styles url locations, with trailing slash.
  *
- * @param string path or url, default = path
- * @return array with locations or empty
+ * @param string $type path or url, default = path.
  * 
+ * @return array with locations or empty.
  */
 function mc_custom_dirs( $type = 'path' ) {
 	$dirs = array();
@@ -76,7 +76,7 @@ function mc_custom_dirs( $type = 'path' ) {
 
 
 /**
- * Check whether requested file exists either in plugin directory, theme directory, or calendar custom directory
+ * Check whether requested file exists either in plugin directory, theme directory, or calendar custom directory.
  *
  * @param string $file file name relative to 'my-calendar', 'my-calendar-custom', or theme directory.
  *
@@ -88,7 +88,7 @@ function mc_file_exists( $file ) {
 	if ( $return ) {
 		return true;
 	}
-	foreach (mc_custom_dirs() as $dir ) {
+	foreach ( mc_custom_dirs() as $dir ) {
 		if ( file_exists( $dir . $file ) ) {
 			return true;
 			break;
@@ -101,24 +101,24 @@ function mc_file_exists( $file ) {
 /**
  * Fetch a file by path or URL. Checks multiple directories to see which to get.
  *
- * @param string $file name of file to get
+ * @param string $file name of file to get.
  * @param string $type either path or url.
  *
- * @return string full path or url
+ * @return string full path or url.
  */
 function mc_get_file( $file, $type = 'path' ) {
-	$file   = sanitize_file_name( $file ); // This will remove slashes as well
+	$file = sanitize_file_name( $file ); // This will remove slashes as well.
 	$dir  = plugin_dir_path( __FILE__ );
 	$url  = plugin_dir_url( __FILE__ );
 	$path = ( 'path' == $type ) ? $dir . $file : $url . $file;
 
-	foreach (mc_custom_dirs() as $key => $dir ) {
+	foreach ( mc_custom_dirs() as $key => $dir ) {
 		if ( file_exists( $dir . $file ) ) {
 			if ( $type == 'path' ) {
 				$path = $dir . $file;
 			} else {
-				$urls = mc_custom_dirs($type);
-				$path = $urls[$key] . $file;
+				$urls = mc_custom_dirs( $type );
+				$path = $urls[ $key ] . $file;
 			}
 			break;
 		}

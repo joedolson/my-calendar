@@ -100,7 +100,7 @@ function my_calendar_help() {
 				<h3><?php _e( 'Custom Styles Locations', 'my-calendar' ); ?></h3>
 				<ul>
 					<?php
-					foreach (mc_custom_dirs() as $dir) {
+					foreach ( mc_custom_dirs() as $dir ) {
 						echo "<li><code>$dir</code></li>";
 					}
 					?>
