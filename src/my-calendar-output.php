@@ -1741,8 +1741,10 @@ function my_calendar( $args ) {
 							}
 						}
 
-						if ( date( 'N', $start ) == $end_of_week && 'list' != $params['format'] ) {
-							$body             .= "</$tr>\n"; // End of 'is beginning of week'.
+						if ( date( 'N', $start ) == $end_of_week ) {
+							if ( 'list' != $params['format'] ) {
+								$body .= "</$tr>\n"; // End of 'is beginning of week'.
+							}
 							$week_number_shown = false;
 						}
 					}
