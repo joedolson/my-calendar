@@ -34,8 +34,8 @@ function my_calendar_print() {
 	$ltype    = ( isset( $_GET['ltype'] ) ) ? $_GET['ltype'] : '';
 	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? $_GET['lvalue'] : '';
 	header( 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) );
-	if ( mc_file_exists( 'css/mc-print.css' ) ) {
-		$stylesheet = mc_get_file( 'css/mc-print.css', 'url' );
+	if ( mc_file_exists( 'mc-print.css' ) ) {
+		$stylesheet = mc_get_file( 'mc-print.css', 'url' );
 	} else {
 		$stylesheet = $url . 'css/mc-print.css';
 	}

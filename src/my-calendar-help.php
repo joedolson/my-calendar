@@ -99,8 +99,11 @@ function my_calendar_help() {
 				</ul>
 				<h3><?php _e( 'Custom Styles Locations', 'my-calendar' ); ?></h3>
 				<ul>
-					<li><code><?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/styles/'; ?></code></li>
-					<li><code><?php echo get_template_directory(); ?></code></li>
+					<?php
+					foreach (mc_custom_dirs() as $dir) {
+						echo "<li><code>$dir</code></li>";
+					}
+					?>
 				</ul>
 				<p>
 					<?php _e( 'Custom print, mobile, and tablet stylesheet file names: <code>mc-print.css</code>, <code>mc-mobile.css</code>, and <code>mc-tablet.css</code>.', 'my-calendar' ); ?>

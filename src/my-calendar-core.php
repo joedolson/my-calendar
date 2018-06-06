@@ -55,6 +55,26 @@ function mc_plugin_action( $links, $file ) {
 	return $links;
 }
 
+
+/**
+ * Get custom styles dir locations, with trailing slash
+ * or get custom styles url locations, with trailing slash
+ *
+ * @param string path or url, default = path
+ * @return array with locations or empty
+ * 
+ */
+function mc_custom_dirs( $type = 'path' ) {
+	$dirs = array();
+	
+	$dirs[] = ( $type == 'path' ) ? plugin_dir_path( __FILE__ ) . 'my-calendar-custom/css/' : plugin_dir_url( __FILE__ ) . 'my-calendar-custom/css/';
+	$dirs[] = ( $type == 'path' ) ? get_stylesheet_directory() . '/css/' : get_stylesheet_directory_uri() . '/css/';
+
+	$dirs = apply_filters( 'mc_custom_dirs', $dirs );
+	return $dirs;
+}
+
+
 /**
  * Check whether requested file exists either in plugin directory, theme directory, or calendar custom directory
  *
@@ -64,19 +84,15 @@ function mc_plugin_action( $links, $file ) {
  */
 function mc_file_exists( $file ) {
 	$file   = sanitize_file_name( $file );
-	$dir    = plugin_dir_path( __FILE__ );
-	$base   = basename( $dir );
 	$return = apply_filters( 'mc_file_exists', false, $file );
 	if ( $return ) {
 		return true;
 	}
-	if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
-
-		return true;
-	}
-	if ( file_exists( str_replace( $base, 'my-calendar-custom', $dir ) . $file ) ) {
-
-		return true;
+	foreach (mc_custom_dirs() as $dir ) {
+		if ( file_exists( $dir . $file ) ) {
+			return true;
+			break;
+		}
 	}
 
 	return false;
@@ -85,27 +101,29 @@ function mc_file_exists( $file ) {
 /**
  * Fetch a file by path or URL. Checks multiple directories to see which to get.
  *
- * @param string $file name of file to get, relative to /my-calendar/, /my-calendar-custom/ or theme directory e.g. 'css/mc-print.css'.
+ * @param string $file name of file to get
  * @param string $type either path or url.
  *
  * @return string full path or url
  */
 function mc_get_file( $file, $type = 'path' ) {
-	$file = sanitize_file_name( $file );
+	$file   = sanitize_file_name( $file ); // This will remove slashes as well
 	$dir  = plugin_dir_path( __FILE__ );
 	$url  = plugin_dir_url( __FILE__ );
-	$base = basename( $dir );
 	$path = ( 'path' == $type ) ? $dir . $file : $url . $file;
 
-	if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
-		$path = ( 'path' == $type ) ? get_stylesheet_directory() . '/' . $file : get_stylesheet_directory_uri() . '/' . $file;
-	}
-
-	if ( file_exists( str_replace( $base, 'my-calendar-custom', $dir ) . $file ) ) {
-		$path = ( 'path' == $type ) ? str_replace( $base, 'my-calendar-custom', $dir ) . $file : str_replace( $base, 'my-calendar-custom', $url ) . $file;
+	foreach (mc_custom_dirs() as $key => $dir ) {
+		if ( file_exists( $dir . $file ) ) {
+			if ( $type == 'path' ) {
+				$path = $dir . $file;
+			} else {
+				$urls = mc_custom_dirs($type);
+				$path = $urls[$key] . $file;
+			}
+			break;
+		}
 	}
 	$path = apply_filters( 'mc_get_file', $path, $file );
-
 	return $path;
 }
 
