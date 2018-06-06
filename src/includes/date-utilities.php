@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_dateclass( $current ) {
 	$now      = current_time( 'timestamp' );
-	$dayclass = sanitize_html_class( strtolower( date_i18n( 'l', $now ) ) ) . ' ' . sanitize_html_class( strtolower( date_i18n( 'D', $now ) ) );
+	$dayclass = sanitize_html_class( strtolower( date_i18n( 'l', $current ) ) ) . ' ' . sanitize_html_class( strtolower( date_i18n( 'D', $current ) ) );
 	if ( date( 'Ymd', $now ) == date( 'Ymd', $current ) ) {
 		$dateclass = 'current-day';
 	} elseif ( my_calendar_date_comp( date( 'Y-m-d', $now ), date( 'Y-m-d', $current ) ) ) {
