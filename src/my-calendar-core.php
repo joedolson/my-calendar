@@ -61,14 +61,14 @@ function mc_plugin_action( $links, $file ) {
  * or get custom styles url locations, with trailing slash.
  *
  * @param string $type path or url, default = path.
- * 
+ *
  * @return array with locations or empty.
  */
 function mc_custom_dirs( $type = 'path' ) {
 	$dirs = array();
-	
-	$dirs[] = ( $type == 'path' ) ? plugin_dir_path( __FILE__ ) . 'my-calendar-custom/css/' : plugin_dir_url( __FILE__ ) . 'my-calendar-custom/css/';
-	$dirs[] = ( $type == 'path' ) ? get_stylesheet_directory() . '/css/' : get_stylesheet_directory_uri() . '/css/';
+
+	$dirs[] = ( 'path' == $type ) ? plugin_dir_path( __FILE__ ) . 'my-calendar-custom/' : plugin_dir_url( __FILE__ ) . 'my-calendar-custom/';
+	$dirs[] = ( 'path' == $type ) ? get_stylesheet_directory() . '/' : get_stylesheet_directory_uri() . '/';
 
 	$dirs = apply_filters( 'mc_custom_dirs', $dirs );
 	return $dirs;
@@ -114,7 +114,7 @@ function mc_get_file( $file, $type = 'path' ) {
 
 	foreach ( mc_custom_dirs() as $key => $dir ) {
 		if ( file_exists( $dir . $file ) ) {
-			if ( $type == 'path' ) {
+			if ( 'path' == $type ) {
 				$path = $dir . $file;
 			} else {
 				$urls = mc_custom_dirs( $type );
