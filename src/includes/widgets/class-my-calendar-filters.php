@@ -107,7 +107,7 @@ class My_Calendar_Filters extends WP_Widget {
 				<option value="country" <?php selected( $ltype, 'country' ); ?>><?php _e( 'Country', 'my-calendar' ); ?></option>
 			</select>
 		</p>
-	<?php
+		<?php
 	}
 
 	/**

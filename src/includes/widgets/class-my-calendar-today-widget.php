@@ -119,12 +119,12 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		</p>
 		<?php
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-		?>
+			?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mc_site' ); ?>"><?php _e( 'Blog ID', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_site' ); ?>" name="<?php echo $this->get_field_name( 'mc_site' ); ?>" value="<?php echo esc_attr( $site ); ?>"/>
 		</p>
-		<?php
+			<?php
 		}
 		?>
 		<p>
@@ -155,7 +155,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'mc_host' ); ?>"><?php _e( 'Host or hosts to show:', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_host' ); ?>" name="<?php echo $this->get_field_name( 'mc_host' ); ?>" value="<?php echo $widget_host; ?>"/>
 		</p>
-	<?php
+		<?php
 	}
 
 	/**

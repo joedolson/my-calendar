@@ -75,7 +75,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Search Results Page', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'url' ); ?>" name="<?php echo $this->get_field_name( 'url' ); ?>" value="<?php echo esc_url( $widget_url ); ?>"/>
 		</p>
-	<?php
+		<?php
 	}
 
 	/**
