@@ -43,7 +43,7 @@ function mc_event_post( $action, $data, $event_id ) {
 		foreach ( $categories as $category ) {
 			$term = mc_get_category_detail( $category, 'category_term' );
 			if ( ! $term ) {
-				$term = wp_insert_term( 'General', 'mc-event-category' );
+				$term = wp_insert_term( mc_get_category_detail( $category, 'category_name' ), 'mc-event-category' );
 				$term = ( ! is_wp_error( $term ) ) ? $term['term_id'] : false;
 				if ( $term ) {
 					$update = mc_update_category( 'category_term', $term, $category );
@@ -51,7 +51,7 @@ function mc_event_post( $action, $data, $event_id ) {
 			}
 			// if any selected category is private, make private.
 			if ( 'private' != $privacy ) {
-				$privacy = ( mc_get_category_detail( $category, 'category_private' ) == 1 ) ? 'private' : 'publish';
+				$privacy = ( 1 == mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
 			}
 			$terms[] = $term;
 		}
