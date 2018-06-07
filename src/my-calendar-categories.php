@@ -213,7 +213,7 @@ function my_calendar_manage_categories() {
 			if ( $results ) {
 				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append" );
 			} else {
-				mc_show_error( __( 'Category was not edited.', 'my-calendar' ) . " $append" );
+				mc_show_error( __( 'Category was not changed.', 'my-calendar' ) . " $append" );
 			}
 			$cur_cat = (int) $_POST['category_id'];
 			mc_edit_category_form( 'edit', $cur_cat );
@@ -236,10 +236,25 @@ function my_calendar_manage_categories() {
  */
 function mc_update_cat( $category ) {
 	global $wpdb;
-	$formats = array( '%s', '%s', '%s', '%d', '%d' );
+	$formats = array( '%s', '%s', '%s', '%d', '%d', '%d' );
 	$where   = array(
 		'category_id' => (int) $_POST['category_id'],
 	);
+	$cat_name    = strip_tags( $category['category_name'] );
+	$term_exists = term_exists( $cat_name, 'mc-event-category' );
+	if ( ! $term_exists ) {
+		$term = wp_insert_term( $cat_name, 'mc-event-category' );
+		if ( ! is_wp_error( $term ) ) {
+			$term = $term['term_id'];
+		} else {
+			$term = false;
+		}
+	} else {
+		$term = get_term_by( 'name', $cat_name, 'mc-event-category' );
+		$term = $term->term_id;
+	}
+	$category['category_term'] = $term;
+
 	$result  = $wpdb->update( my_calendar_categories_table(), $category, $where, $formats, '%d' );
 
 	return $result;
