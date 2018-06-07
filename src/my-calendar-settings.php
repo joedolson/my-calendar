@@ -506,7 +506,7 @@ function my_calendar_settings() {
 									), 'text' );
 									?>
 								</li>
-								<?php
+									<?php
 								}
 								?>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
