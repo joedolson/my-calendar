@@ -53,7 +53,7 @@ function mc_event_post( $action, $data, $event_id ) {
 			if ( 'private' != $privacy ) {
 				$privacy = ( 1 == mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
 			}
-			$terms[] = $term;
+			$terms[] = (int) $term;
 		}
 
 		$title             = $data['event_title'];
@@ -78,7 +78,7 @@ function mc_event_post( $action, $data, $event_id ) {
 			switch_to_blog( BLOG_ID_CURRENT_SITE );
 		}
 		$post_id = wp_update_post( $my_post );
-		wp_set_object_terms( $post_id, (int) $terms, 'mc-event-category' );
+		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
 		if ( '' == $data['event_image'] ) {
 			delete_post_thumbnail( $post_id );
 		} else {
@@ -149,7 +149,7 @@ function mc_create_event_post( $data, $event_id ) {
 			if ( 'private' != $privacy ) {
 				$privacy = ( 1 == mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
 			}
-			$terms[] = $term;
+			$terms[] = (int) $term;
 		}
 
 		$title             = $data['event_title'];
@@ -172,7 +172,7 @@ function mc_create_event_post( $data, $event_id ) {
 			'post_excerpt' => $excerpt,
 		);
 		$post_id           = wp_insert_post( $my_post );
-		wp_set_object_terms( $post_id, (int) $terms, 'mc-event-category' );
+		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
 		$attachment_id = ( isset( $_POST['event_image_id'] ) && is_numeric( $_POST['event_image_id'] ) ) ? $_POST['event_image_id'] : false;
 		if ( $attachment_id ) {
 			set_post_thumbnail( $post_id, $attachment_id );
