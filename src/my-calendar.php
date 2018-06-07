@@ -201,12 +201,12 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						</div>
 					</div>
 				</div>
-			<?php
+				<?php
 			}
 		}
 		if ( ! $remove ) {
 			if ( ! function_exists( 'mcs_submit_exists' ) ) {
-			?>
+				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell support">
 						<h2 class='sales hndle'><strong><?php _e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
@@ -221,10 +221,10 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						</div>
 					</div>
 				</div>
-			<?php
+				<?php
 			}
 			if ( ! function_exists( 'mt_update_check' ) ) {
-			?>
+				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell my-tickets">
 						<h2 class='sales hndle'><strong><?php _e( 'My Tickets', 'my-calendar' ); ?></strong></h2>
@@ -240,10 +240,10 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						</div>
 					</div>
 				</div>
-			<?php
+				<?php
 			}
 			if ( ! function_exists( 'mcs_submit_exists' ) ) {
-			?>
+				?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox support">
 					<h2 class='hndle'><strong><?php _e( 'Support This Plug-in', 'my-calendar' ); ?></strong></h2>
@@ -273,7 +273,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 					</div>
 				</div>
 			</div>
-			<?php
+				<?php
 			}
 		}
 		?>
@@ -314,7 +314,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 		</div>
 		</div>
 		</div>
-	<?php
+		<?php
 	}
 }
 

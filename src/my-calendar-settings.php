@@ -428,7 +428,7 @@ function my_calendar_settings() {
 	}
 	if ( 'true' != get_option( 'ko_calendar_imported' ) ) {
 		if ( function_exists( 'check_calendar' ) ) {
-		?>
+			?>
 			<div class='import upgrade-db'>
 				<p>
 					<?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
@@ -442,7 +442,7 @@ function my_calendar_settings() {
 					</div>
 				</form>
 			</div>
-		<?php
+			<?php
 		}
 	}
 	?>
@@ -453,9 +453,9 @@ function my_calendar_settings() {
 			<li role="tab" id="tab_input" aria-controls="my-calendar-input"><a href="#my-calendar-input"><?php _e( 'Input', 'my-calendar' ); ?></a></li>
 			<?php
 			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
-			?>
+				?>
 				<li role="tab" id="tab_multi" aria-controls="my-calendar-multisite"><a href="#my-calendar-multisite"><?php _e( 'Multi-site', 'my-calendar' ); ?></a></li>
-			<?php
+				<?php
 			}
 			?>
 			<li role="tab" id="tab_permissions" aria-controls="my-calendar-permissions"><a href="#my-calendar-permissions"><?php _e( 'Permissions', 'my-calendar' ); ?></a></li>
@@ -470,7 +470,7 @@ function my_calendar_settings() {
 			<div class="inside">
 				<?php
 				if ( current_user_can( 'administrator' ) ) {
-				?>
+					?>
 					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<fieldset>
@@ -485,19 +485,19 @@ function my_calendar_settings() {
 									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
 								}
 								if ( '' != get_option( 'mc_uri' ) && ( get_option( 'mc_uri' ) != $permalink ) ) {
-								?>
+									?>
 								<li><?php mc_settings_field( 'mc_uri', __( 'Where is your main calendar page?', 'my-calendar' ), '', "$guess[message]", array( 'size' => '60' ), 'url' ); ?></li>
 								<li>
-								<?php
-								mc_settings_field( 'mc_uri_id', __( 'Calendar Page ID?', 'my-calendar' ), '', "($page_title)", array(
-									'size'  => '20',
-									'class' => 'suggest',
-								), 'text' );
+									<?php
+									mc_settings_field( 'mc_uri_id', __( 'Calendar Page ID?', 'my-calendar' ), '', "($page_title)", array(
+										'size'  => '20',
+										'class' => 'suggest',
+									), 'text' );
 								?>
 								</li>
-								<?php
+									<?php
 								} else {
-								?>
+									?>
 								<li>
 								<?php
 								mc_settings_field( 'mc_uri_id', __( 'Where is your main calendar page?', 'my-calendar' ), '', "(<a href='$permalink'>$page_title</a>)", array(
@@ -907,7 +907,7 @@ function mc_remote_db() {
 			<div class="inside">
 	<?php
 	if ( current_user_can( 'administrator' ) ) {
-	?>
+		?>
 
 					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-permissions' ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
@@ -944,7 +944,7 @@ function mc_remote_db() {
 							<input type="submit" name="mc_permissions" class="button-primary" value="<?php _e( 'Save Permissions', 'my-calendar' ); ?>"/>
 						</p>
 					</form>
-	<?php
+		<?php
 	} else {
 		_e( 'My Calendar permission settings are only available to administrators.', 'my-calendar' );
 	}
@@ -1001,7 +1001,7 @@ function mc_remote_db() {
 	<?php mc_show_sidebar(); ?>
 
 	</div>
-<?php
+	<?php
 }
 
 /**

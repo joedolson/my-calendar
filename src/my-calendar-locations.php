@@ -189,15 +189,15 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 	}
 	$has_data = ( empty( $cur_loc ) ) ? false : true;
 	if ( 'add' == $view ) {
-	?>
+		?>
 		<h1><?php _e( 'Add New Location', 'my-calendar' ); ?></h1>
-	<?php
+		<?php
 	} else {
-	?>
+		?>
 		<h1 class="wp-heading-inline"><?php _e( 'Edit Location', 'my-calendar' ); ?></h1>
 		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
-	<?php
+		<?php
 	}
 	?>
 	<div class="postbox-container jcd-wide">
@@ -219,12 +219,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 								</div>
 							<?php
 							} else {
-							?>
+								?>
 								<div>
 									<input type="hidden" name="mode" value="edit"/>
 									<input type="hidden" name="location_id" value="<?php echo $cur_loc->location_id; ?>"/>
 								</div>
-							<?php
+								<?php
 							}
 							echo mc_locations_fields( $has_data, $cur_loc, 'location' );
 							?>
@@ -237,11 +237,11 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 			</div>
 			<?php
 			if ( 'edit' == $view ) {
-			?>
+				?>
 				<p>
 					<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add a New Location', 'my-calendar' ); ?> &raquo;</a>
 				</p>
-			<?php
+				<?php
 			}
 			?>
 		</div>
@@ -251,7 +251,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 		mc_show_sidebar( '', $controls );
 		?>
 	</div>
-<?php
+	<?php
 }
 
 /**

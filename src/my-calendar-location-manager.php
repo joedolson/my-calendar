@@ -212,7 +212,7 @@ function mc_manage_locations() {
 			$class = '';
 			foreach ( $locations as $location ) {
 				$class = ( 'alternate' == $class ) ? '' : 'alternate';
-			?>
+				?>
 				<tr class="<?php echo $class; ?>">
 					<th scope="row">
 						<input type="checkbox" value="<?php echo $location->location_id; ?>" name="mass_edit[]" id="mc<?php echo $location->location_id; ?>"/>
@@ -228,7 +228,7 @@ function mc_manage_locations() {
 						<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations&amp;mode=delete&amp;location_id=$location->location_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
 					</td>
 				</tr>
-			<?php
+				<?php
 			}
 			?>
 		</table>

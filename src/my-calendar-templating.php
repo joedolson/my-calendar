@@ -86,7 +86,7 @@ function mc_templates_edit() {
 							<?php echo ( '' != $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
 							<?php
 							if ( 'add-new' == $key ) {
-							?>
+								?>
 								<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
@@ -104,9 +104,9 @@ function mc_templates_edit() {
 									<input type="submit" name="save" class="button-primary" value="<?php _e( 'Add Template', 'my-calendar' ); ?>" />
 								</p>
 							</form>
-							<?php
+								<?php
 							} else {
-							?>
+								?>
 							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>

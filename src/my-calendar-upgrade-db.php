@@ -35,7 +35,7 @@ function my_calendar_check_db() {
 		<div class='upgrade-db updated'>
 			<p><?php _e( 'My Calendar Database is updated.', 'my-calendar' ); ?></p>
 		</div>
-	<?php
+		<?php
 	} elseif ( $needs_update ) {
 		if ( 'my-calendar-config' == $_GET['page'] ) {
 			?>
@@ -53,16 +53,16 @@ function my_calendar_check_db() {
 					</p>
 				</form>
 			</div>
-		<?php
+			<?php
 		} else {
-		?>
+			?>
 			<div class='upgrade-db error'>
 			<p>
 				<?php _e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
 				<a href="<?php echo admin_url( 'admin.php?page=my-calendar-config' ); ?>"><?php _e( 'Update now', 'my-calendar' ); ?></a>
 			</p>
 			</div>
-		<?php
+			<?php
 		}
 	}
 }

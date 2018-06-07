@@ -185,9 +185,9 @@ function my_calendar_style_edit() {
 									_e( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' );
 								} else {
 									$disabled = ( $edit_files || get_option( 'mc_use_styles' ) == 'true' ) ? '' : ' disabled="disabled"';
-								?>
+									?>
 									<label for="style"><?php _e( 'Edit the stylesheet for My Calendar', 'my-calendar' ); ?></label><br/><textarea <?php echo $disabled; ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo $my_calendar_style; ?></textarea>
-								<?php
+									<?php
 								}
 								?>
 								</p>

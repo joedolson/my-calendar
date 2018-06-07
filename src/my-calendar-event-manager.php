@@ -2114,24 +2114,24 @@ function mc_list_events() {
 									if ( mc_event_published( $event ) ) {
 									?>
 										<a href="<?php echo $view_url; ?>" class='view'><?php _e( 'View', 'my-calendar' ); ?></a> |
-									<?php
+										<?php
 									} elseif ( current_user_can( 'mc_manage_events' ) ) {
-									?>
+										?>
 										<a href="<?php echo add_query_arg( 'preview', 'true', $view_url ); ?>" class='view'><?php _e( 'Preview', 'my-calendar' ); ?></a> |
-									<?php
+										<?php
 									}
 									?>
 									<a href="<?php echo $copy_url; ?>" class='copy'><?php _e( 'Copy', 'my-calendar' ); ?></a>
 									<?php
 									if ( $can_edit ) {
 										if ( mc_event_is_grouped( $event->event_group_id ) ) {
-										?>
+											?>
 											| <a href="<?php echo $group_url; ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
-										<?php
+											<?php
 										}
 										?>
 										| <a href="<?php echo $delete_url; ?>" class="delete"><?php _e( 'Delete', 'my-calendar' ); ?></a>
-									<?php
+										<?php
 									} else {
 										_e( 'Not editable.', 'my-calendar' );
 									}
@@ -2146,9 +2146,9 @@ function mc_list_events() {
 											$mo = 'publish';
 											$te = __( 'Publish', 'my-calendar' );
 										}
-									?>
+										?>
 										<a href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;event_id=$event->event_id" ); ?>" class='<?php echo $mo; ?>'><?php echo $te; ?></a>
-									<?php
+										<?php
 									} else {
 										switch ( $event->event_approved ) {
 											case 1:
@@ -2168,9 +2168,9 @@ function mc_list_events() {
 								<?php
 								if ( '' != $event->event_label ) {
 									$elabel = urlencode( $event->event_label );
-								?>
+									?>
 								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ); ?>' title="<?php _e( 'Filter by location', 'my-calendar' ); ?>"><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></a>
-								<?php
+									<?php
 								}
 								?>
 							</td>
@@ -2228,7 +2228,7 @@ function mc_list_events() {
 								?>
 							</td>
 						</tr>
-					<?php
+						<?php
 					}
 				}
 				?>
@@ -2246,51 +2246,51 @@ function mc_list_events() {
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php _e( 'Archived', 'my-calendar' ); ?></a>
 			</li>
-		<?php
-		if ( ( function_exists( 'akismet_http_post' ) || function_exists( 'bs_checker' ) ) && $allow_filters ) {
-		?>
+			<?php
+			if ( ( function_exists( 'akismet_http_post' ) || function_exists( 'bs_checker' ) ) && $allow_filters ) {
+				?>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php _e( 'Spam', 'my-calendar' ); ?></a>
 			</li>
-		<?php
+			<?php
 		}
-		?>
+			?>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'all' == $_GET['limit'] || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
 			</li>
 		</ul>
-		<?php
-		echo $filtered;
-		$num_pages = ceil( $items / $items_per_page );
-		if ( $num_pages > 1 ) {
-			$page_links = paginate_links( array(
-				'base'      => add_query_arg( 'paged', '%#%' ),
-				'format'    => '',
-				'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
-				'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
-				'total'     => $num_pages,
-				'current'   => $current,
-				'mid_size'  => 1,
-			) );
-			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
-		}
-		?>
+			<?php
+			echo $filtered;
+			$num_pages = ceil( $items / $items_per_page );
+			if ( $num_pages > 1 ) {
+				$page_links = paginate_links( array(
+					'base'      => add_query_arg( 'paged', '%#%' ),
+					'format'    => '',
+					'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
+					'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
+					'total'     => $num_pages,
+					'current'   => $current,
+					'mid_size'  => 1,
+				) );
+				printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
+			}
+			?>
 		<div class='mc-admin-footer'>
 			<div class="mc-actions">
 				<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete events', 'my-calendar' ); ?>"/>
 				<input type="submit" class="button-secondary trash" name="mass_trash" value="<?php _e( 'Trash events', 'my-calendar' ); ?>"/>
 				<?php
 				if ( current_user_can( 'mc_approve_events' ) ) {
-				?>
+					?>
 					<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="<?php _e( 'Publish events', 'my-calendar' ); ?>"/>
-				<?php
+					<?php
 				}
 				if ( ! ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ) {
-				?>
+					?>
 					<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="<?php _e( 'Archive events', 'my-calendar' ); ?>"/>
-				<?php
+					<?php
 				}
 				?>
 			</div>
@@ -2298,13 +2298,13 @@ function mc_list_events() {
 			<p>
 				<?php
 				if ( ! ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ) {
-				?>
+					?>
 					<a class='mc_filter' href='<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>'><?php _e( 'View Archived Events', 'my-calendar' ); ?></a>
-				<?php
+					<?php
 				} else {
-				?>
+					?>
 					<a class='mc_filter' href='<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>'><?php _e( 'Return to Manage Events', 'my-calendar' ); ?></a>
-				<?php
+					<?php
 				}
 				?>
 			</p>
@@ -2321,11 +2321,11 @@ function mc_list_events() {
 			</form>
 			</div>
 		</div>
-		<?php
+			<?php
 		} else {
-		?>
+			?>
 			<p class='mc-none'><?php _e( 'There are no events in the database meeting your current criteria.', 'my-calendar' ); ?></p>
-		<?php
+			<?php
 		}
 	}
 }

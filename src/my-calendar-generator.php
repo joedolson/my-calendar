@@ -143,7 +143,7 @@ function mc_generator( $type ) {
 			<?php
 			// Main shortcode only.
 			if ( 'main' == $type ) {
-			?>
+				?>
 				<p>
 					<label for="format"><?php _e( 'Format', 'my-calendar' ); ?></label>
 					<select name="format" id="format">
@@ -241,11 +241,11 @@ function mc_generator( $type ) {
 					<label for="months" id='lmonths'><?php _e( 'Months to show in list view', 'my-calendar' ); ?></label>
 					<input type="number" min="1" max="12" step="1" name="months" id="lmonths" value="" /><br/>
 				</p>
-			<?php
+				<?php
 			}
 			if ( 'upcoming' == $type || 'today' == $type ) {
 				// Upcoming Events & Today's Events shortcodes.
-			?>
+				?>
 				<p>
 					<label for="fallback"><?php _e( 'Fallback Text', 'my-calendar' ); ?></label>
 					<input type="text" name="fallback" id="fallback" value="" />
@@ -254,11 +254,11 @@ function mc_generator( $type ) {
 					<label for="template"><?php _e( 'Template', 'my-calendar' ); ?></label>
 					<textarea cols="40" rows="4" name="template" id="template"><?php echo htmlentities( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
 				</p>
-			<?php
+				<?php
 			}
 			if ( 'upcoming' == $type ) {
 				// Upcoming events only.
-			?>
+				?>
 				<p>
 					<label for="before"><?php _e( 'Events/Days Before Current Day', 'my-calendar' ); ?></label>
 					<input type="number" name="before" id="before" value="" />
@@ -312,7 +312,7 @@ function mc_generator( $type ) {
 						<option value="desc"><?php _e( 'Descending', 'my-calendar' ); ?></option>
 					</select>
 				</p>
-			<?php
+				<?php
 			}
 			?>
 		</div>

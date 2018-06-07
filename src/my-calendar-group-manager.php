@@ -101,7 +101,7 @@ function my_calendar_group_edit() {
 			mc_edit_groups( 'edit', $event_id, $group_id );
 		}
 	} else {
-	?>
+		?>
 		<h1><?php _e( 'Manage Event Groups', 'my-calendar' ); ?></h1>
 		<p>
 			<?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you started from. You will also see a set of checkboxes to choose which events you want to apply these changes to.', 'my-calendar' ); ?>
@@ -388,14 +388,14 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						?>
 						</label>
 					</p>
-				<?php
+					<?php
 				} else {
-				?>
+					?>
 					<div><input type='hidden' name='event_span' value='<?php echo esc_attr( $data->event_span ); ?>'/></div>
-				<?php
+					<?php
 				}
 				if ( 'on' == $mc_input['event_desc'] || $input_all ) {
-				?>
+					?>
 					<div id="group_description">
 						<label for="content">
 						<?php
@@ -407,10 +407,10 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						</label><br/>
 						<?php wp_editor( esc_attr( $description ), 'content', array( 'textarea_rows' => 10 ) ); ?>
 					</div>
-				<?php
+					<?php
 				}
 				if ( 'on' == $mc_input['event_short'] || $input_all ) {
-				?>
+					?>
 					<p>
 						<label for="e_short">
 						<?php
@@ -422,10 +422,10 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						</label><br/>
 						<textarea id="e_short" name="event_short" rows="2" cols="80"><?php echo esc_attr( $short ); ?></textarea>
 					</p>
-				<?php
+					<?php
 				}
 				if ( mc_show_edit_block( 'event_image' ) ) {
-				?>
+					?>
 					<div class='mc-image-upload field-holder'>
 						<?php
 						if ( ! empty( $data->event_image ) ) {
@@ -445,9 +445,9 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						</label>
 						<input type="text" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" placeholder="http://yourdomain.com/image.jpg"/> <button type='button' class="button textfield-field"><?php _e( 'Upload', 'my-calendar' ); ?></button>
 					</div>
-				<?php
+					<?php
 				} else {
-				?>
+					?>
 					<div>
 						<input type="hidden" name="event_image" value="<?php echo ( $has_data ) ? esc_attr( $data->event_image ) : ''; ?>" />
 						<?php
@@ -456,7 +456,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						}
 						?>
 					</div>
-				<?php
+					<?php
 				}
 				?>
 				<p>
@@ -501,11 +501,11 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 
 					echo $return;
 				} else {
-				?>
+					?>
 					<div>
 						<input type="hidden" name="event_category" value="1" />
 					</div>
-				<?php
+					<?php
 				}
 				if ( 'on' == $mc_input['event_link'] || $input_all ) {
 					if ( ! empty( $data ) && 1 == $data->event_link_expires ) {
@@ -515,7 +515,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					} elseif ( 'true' == get_option( 'mc_event_link_expires' ) ) {
 						$exp_checked = ' checked="checked"';
 					}
-				?>
+					?>
 					<p>
 						<label for="e_link">
 						<?php
@@ -529,7 +529,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						<input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"<?php echo $exp_checked; ?> />
 						<label for="e_link_expires"><?php _e( 'Link will expire after event.', 'my-calendar' ); ?></label>
 					</p>
-				<?php
+					<?php
 				}
 				?>
 			</div>
@@ -537,7 +537,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	</div>
 	<?php
 	if ( 'on' == $mc_input['event_open'] || $input_all ) { // Add a "don't change" option here. JCD TODO.
-	?>
+		?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
 			<h2><?php _e( 'Event Registration Options', 'my-calendar' ); ?></h2>
@@ -550,17 +550,17 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 			</div>
 		</div>
 	</div>
-	<?php
+		<?php
 	} else {
-	?>
+		?>
 	<div>
 		<input type="hidden" name="event_tickets" value="<?php echo ( $has_data ) ? esc_attr( $data->event_tickets ) : ''; ?>"/>
 		<input type="hidden" name="event_registration" value="<?php echo ( $has_data ) ? esc_attr( $data->event_registration ) : ''; ?>"/>
 	</div>
-	<?php
+		<?php
 	}
 	if ( ( 'on' == $mc_input['event_location'] || 'on' == $mc_input['event_location_dropdown'] ) || $input_all ) {
-	?>
+		?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
 			<h2><?php _e( 'Event Location', 'my-calendar' ); ?></h2>
@@ -568,12 +568,12 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 			<div class="inside location_form">
 				<fieldset>
 					<legend><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
-	<?php
+		<?php
 	}
 	if ( 'on' == $mc_input['event_location_dropdown'] || $input_all ) {
 		$locations = mc_get_locations( 'group-manager' );
 		if ( ! empty( $locations ) ) {
-		?>
+			?>
 		<p>
 			<label for="location_preset"><?php _e( 'Choose a preset location:', 'my-calendar' ); ?></label>
 			<select name="location_preset" id="location_preset">
@@ -585,20 +585,20 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 				?>
 			</select>
 		</p>
-		<?php
+			<?php
 		} else {
-		?>
+			?>
 		<input type="hidden" name="location_preset" value="none"/>
 		<p>
 			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add recurring locations for later use.', 'my-calendar' ); ?></a>
 		</p>
-		<?php
+			<?php
 		}
 	} else {
 		echo '<input type="hidden" name="location_preset" value="none"/>';
 	}
 	if ( 'on' == $mc_input['event_location'] || $input_all ) {
-	?>
+		?>
 	<p>
 		<label for="e_label">
 		<?php
@@ -768,21 +768,21 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 			?>
 		</ul>
 	</fieldset>
-	<?php
+		<?php
 	}
 	if ( ( 'on' == $mc_input['event_location'] || 'on' == $mc_input['event_location_dropdown'] ) || $input_all ) {
-	?>
+		?>
 				</fieldset>
 			</div>
 		</div>
 	</div>
-	<?php
+		<?php
 	}
 	?>
 	</form>
 	</div>
 	</div>
-<?php
+	<?php
 }
 
 /**
