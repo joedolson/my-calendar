@@ -3302,7 +3302,7 @@ function mc_related_events( $id ) {
 function mc_can_edit_category( $category, $user ) {
 	$permissions = get_user_meta( $user, 'mc_user_permissions', true );
 
-	if ( empty( $permissions ) || in_array( 'all', $permissions ) || in_array( $category, $permissions ) ) {
+	if ( empty( $permissions ) || in_array( 'all', $permissions ) || in_array( $category, $permissions ) || current_user_can( 'manage_options' ) ) {
 		return true;
 	}
 
@@ -3341,7 +3341,6 @@ function mc_can_edit_event( $event = false ) {
 	} else {
 		$event_author = wp_get_current_user()->ID;
 	}
-
 	$current_user    = wp_get_current_user();
 	$user            = $current_user->ID;
 	$categories      = mc_get_categories( $event->event_id );
@@ -3355,13 +3354,10 @@ function mc_can_edit_event( $event = false ) {
 			$has_permissions = mc_can_edit_category( $cat, $user );
 		}
 	}
+	$return = false;
 
-	if ( current_user_can( 'mc_manage_events' ) && $has_permissions ) {
+	if ( ( current_user_can( 'mc_manage_events' ) && $has_permissions ) || ( $user == $event_author ) ) {
 		$return = true;
-	} elseif ( $user == $event_author ) {
-		$return = true;
-	} else {
-		$return = false;
 	}
 
 	return apply_filters( 'mc_can_edit_event', $return, $event_id );

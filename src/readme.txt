@@ -101,6 +101,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: All day events should export correctly to Outlook & Apple Calendar
 * Bug fix: Location control accordion was not accessible.
 * Bug fix: Term ID was not set in category manager if term already existed.
+* Bug fix: Make sure that the 's' query var is not automatically added to My Calendar URLs
 
 * Add: several new filters
 * Add: notice to alert users if their calendar configured for remote event source.
