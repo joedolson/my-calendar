@@ -167,5 +167,5 @@ function my_calendar_help() {
 	<?php mc_show_sidebar(); ?>
 
 	</div>
-<?php
+	<?php
 }

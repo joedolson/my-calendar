@@ -1028,7 +1028,7 @@ function mc_list_groups() {
 		printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 	}
 	if ( ! empty( $events ) ) {
-	?>
+		?>
 		<form action="<?php echo admin_url( 'admin.php?page=my-calendar-groups' ); ?>" method="post">
 			<div>
 				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
@@ -1077,7 +1077,7 @@ function mc_list_groups() {
 					} else {
 						$title = $event->event_title;
 					}
-				?>
+					?>
 				<tr class="<?php echo "$class $spam"; ?>" id="event<?php echo $event->event_id; ?>">
 					<th scope="row">
 						<input type="checkbox" value="<?php echo $event->event_id; ?>" name="group[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( mc_event_is_grouped( $event->event_group_id ) ) ? ' disabled="disabled"' : ''; ?> />
@@ -1110,13 +1110,13 @@ function mc_list_groups() {
 						<div class='row-actions' style="visibility:visible;">
 							<?php
 							if ( $can_edit ) {
-							?>
+								?>
 								<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit' aria-describedby='event_<?php echo $event->event_id; ?>'><?php _e( 'Edit Event', 'my-calendar' ); ?></a> |
 								<?php
 								if ( mc_event_is_grouped( $event->event_group_id ) ) {
-								?>
+									?>
 									<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ); ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
-								<?php
+									<?php
 								} else {
 									echo '<em>' . __( 'Ungrouped', 'my-calendar' ) . '</em>';
 								}
@@ -1170,10 +1170,10 @@ function mc_list_groups() {
 		</div>
 		</form>
 	</div>
-	<?php
+		<?php
 	} else {
-	?>
+		?>
 		<div class="inside"><p><?php _e( 'There are no events in the database!', 'my-calendar' ); ?></p></div>
-	<?php
+		<?php
 	}
 }

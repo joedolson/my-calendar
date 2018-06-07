@@ -212,12 +212,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 							<?php
 							if ( 'add' == $view ) {
-							?>
+								?>
 								<div>
 									<input type="hidden" name="mode" value="add" />
 									<input type="hidden" name="location_id" value="" />
 								</div>
-							<?php
+								<?php
 							} else {
 								?>
 								<div>

@@ -1563,7 +1563,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<div class="inside location_form">
 			<fieldset>
 				<legend class='screen-reader-text'><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
-	<?php
+		<?php
 	}
 	if ( mc_show_edit_block( 'event_location_dropdown' ) ) {
 		$current_location = '';
@@ -1600,7 +1600,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			</p>
 			<?php
 		} else {
-		?>
+			?>
 		<input type="hidden" name="location_preset" value="none" />
 		<p>
 			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add recurring locations for later use.', 'my-calendar' ); ?></a>
@@ -1614,12 +1614,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	}
 	mc_show_block( 'event_location', $has_data, $data );
 	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
-	?>
+		?>
 			</fieldset>
 		</div>
 	</div>
 </div>
-	<?php
+		<?php
 	}
 	if ( mc_show_edit_block( 'event_specials' ) ) {
 		$hol_checked   = ( 'true' == get_option( 'mc_skip_holidays' ) ) ? ' checked="checked"' : '';
@@ -1959,11 +1959,11 @@ function mc_list_events() {
 			</li>
 		<?php
 		if ( ( function_exists( 'akismet_http_post' ) || function_exists( 'bs_checker' ) ) && $allow_filters ) {
-		?>
+			?>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php _e( 'Spam', 'my-calendar' ); ?></a>
 			</li>
-		<?php
+			<?php
 		}
 		?>
 			<li>
@@ -2000,7 +2000,7 @@ function mc_list_events() {
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 		}
 		if ( ! empty( $events ) ) {
-		?>
+			?>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" /></div>
 				<div class='mc-actions'>
@@ -2092,9 +2092,9 @@ function mc_list_events() {
 								<strong>
 								<?php
 								if ( $can_edit ) {
-								?>
+									?>
 									<a href="<?php echo $edit_url; ?>" class='edit'><span class="dashicons dashicons-edit" aria-hidden="true"></span>
-								<?php
+									<?php
 								}
 								echo $spam_label;
 								echo strip_tags( stripslashes( $event->event_title ) );
@@ -2112,7 +2112,7 @@ function mc_list_events() {
 								<div class='row-actions'>
 									<?php
 									if ( mc_event_published( $event ) ) {
-									?>
+										?>
 										<a href="<?php echo $view_url; ?>" class='view'><?php _e( 'View', 'my-calendar' ); ?></a> |
 										<?php
 									} elseif ( current_user_can( 'mc_manage_events' ) ) {
@@ -2253,8 +2253,8 @@ function mc_list_events() {
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php _e( 'Spam', 'my-calendar' ); ?></a>
 			</li>
-			<?php
-		}
+				<?php
+			}
 			?>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'all' == $_GET['limit'] || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?>

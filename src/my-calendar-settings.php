@@ -493,18 +493,18 @@ function my_calendar_settings() {
 										'size'  => '20',
 										'class' => 'suggest',
 									), 'text' );
-								?>
+									?>
 								</li>
 									<?php
 								} else {
 									?>
 								<li>
-								<?php
-								mc_settings_field( 'mc_uri_id', __( 'Where is your main calendar page?', 'my-calendar' ), '', "(<a href='$permalink'>$page_title</a>)", array(
-									'size'  => '20',
-									'class' => 'suggest',
-								), 'text' );
-								?>
+									<?php
+									mc_settings_field( 'mc_uri_id', __( 'Where is your main calendar page?', 'my-calendar' ), '', "(<a href='$permalink'>$page_title</a>)", array(
+										'size'  => '20',
+										'class' => 'suggest',
+									), 'text' );
+									?>
 								</li>
 								<?php
 								}
@@ -512,7 +512,7 @@ function my_calendar_settings() {
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( 'true' == get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
-								?>
+									?>
 								<li><?php _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ); ?>
 <pre>
 function mc_remote_db() {
@@ -521,9 +521,9 @@ function mc_remote_db() {
 	return $mcdb;
 }
 </pre>
-								<?php _e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
+									<?php _e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
 								</li>
-								<?php
+									<?php
 								}
 								?>
 								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
@@ -554,9 +554,9 @@ function mc_remote_db() {
 									), '0', '', array(), 'radio' );
 								} else {
 									if ( get_option( 'mc_remote' ) != 'true' && current_user_can( 'manage_network' ) && is_multisite() ) {
-									?>
+										?>
 										<li><?php _e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
-									<?php
+										<?php
 									}
 								}
 								?>
@@ -566,7 +566,7 @@ function mc_remote_db() {
 							<input type="submit" name="mc_manage" class="button-primary" value="<?php _e( 'Save Management Settings', 'my-calendar' ); ?>"/>
 						</p>
 					</form>
-				<?php
+					<?php
 				} else {
 					_e( 'My Calendar management settings are only available to administrators.', 'my-calendar' );
 				}
@@ -852,52 +852,52 @@ function mc_remote_db() {
 
 	<?php
 	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
-	?>
-			<div class="wptab postbox" aria-labelledby="tab_multi" role="tabpanel" aria-live="assertive"  id="my-calendar-multisite">
-				<h2><?php _e( 'Multisite Settings (Network Administrators only)', 'my-calendar' ); ?></h2>
+		?>
+		<div class="wptab postbox" aria-labelledby="tab_multi" role="tabpanel" aria-live="assertive"  id="my-calendar-multisite">
+			<h2><?php _e( 'Multisite Settings (Network Administrators only)', 'my-calendar' ); ?></h2>
 
-				<div class="inside">
-					<p><?php _e( 'The central calendar is the calendar associated with the primary site in your WordPress Multisite network.', 'my-calendar' ); ?></p>
-					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-multisite' ); ?>">
-						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-						<input type='hidden' name='mc_network' value='true'/>
-						<fieldset>
-							<legend><?php _e( 'Multisite configuration - input', 'my-calendar' ); ?></legend>
-							<ul>
-								<li>
-									<input type="radio" value="0" id="ms0" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php _e( 'Site owners may only post to their local calendar', 'my-calendar' ); ?></label>
-								</li>
-								<li>
-									<input type="radio" value="1" id="ms1" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php _e( 'Site owners may only post to the central calendar', 'my-calendar' ); ?></label>
-								</li>
-								<li>
-									<input type="radio" value="2" id="ms2" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php _e( 'Site owners may manage either calendar', 'my-calendar' ); ?></label>
-								</li>
-							</ul>
-							<p>
-								<em><?php _e( 'Changes only effect input permissions. Public-facing calendars will be unchanged.', 'my-calendar' ); ?></em>
-							</p>
-						</fieldset>
-						<fieldset>
-							<legend><?php _e( 'Multisite configuration - output', 'my-calendar' ); ?></legend>
-							<ul>
-								<li>
-									<input type="radio" value="0" id="mss0" name="mc_multisite_show"<?php echo mc_option_selected( get_site_option( 'mc_multisite_show' ), '0' ); ?> />
-									<label for="mss0"><?php _e( 'Sub-site calendars show events from their local calendar.', 'my-calendar' ); ?></label>
-								</li>
-								<li>
-									<input type="radio" value="1" id="mss1" name="mc_multisite_show"<?php echo mc_option_selected( get_site_option( 'mc_multisite_show' ), '1' ); ?> />
-									<label for="mss1"><?php _e( 'Sub-site calendars show events from the central calendar.', 'my-calendar' ); ?></label>
-								</li>
-							</ul>
-						</fieldset>
+			<div class="inside">
+				<p><?php _e( 'The central calendar is the calendar associated with the primary site in your WordPress Multisite network.', 'my-calendar' ); ?></p>
+				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-multisite' ); ?>">
+					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					<input type='hidden' name='mc_network' value='true'/>
+					<fieldset>
+						<legend><?php _e( 'Multisite configuration - input', 'my-calendar' ); ?></legend>
+						<ul>
+							<li>
+								<input type="radio" value="0" id="ms0" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php _e( 'Site owners may only post to their local calendar', 'my-calendar' ); ?></label>
+							</li>
+							<li>
+								<input type="radio" value="1" id="ms1" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php _e( 'Site owners may only post to the central calendar', 'my-calendar' ); ?></label>
+							</li>
+							<li>
+								<input type="radio" value="2" id="ms2" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php _e( 'Site owners may manage either calendar', 'my-calendar' ); ?></label>
+							</li>
+						</ul>
 						<p>
-							<input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Multisite Settings', 'my-calendar' ); ?>"/>
+							<em><?php _e( 'Changes only effect input permissions. Public-facing calendars will be unchanged.', 'my-calendar' ); ?></em>
 						</p>
-					</form>
-				</div>
+					</fieldset>
+					<fieldset>
+						<legend><?php _e( 'Multisite configuration - output', 'my-calendar' ); ?></legend>
+						<ul>
+							<li>
+								<input type="radio" value="0" id="mss0" name="mc_multisite_show"<?php echo mc_option_selected( get_site_option( 'mc_multisite_show' ), '0' ); ?> />
+								<label for="mss0"><?php _e( 'Sub-site calendars show events from their local calendar.', 'my-calendar' ); ?></label>
+							</li>
+							<li>
+								<input type="radio" value="1" id="mss1" name="mc_multisite_show"<?php echo mc_option_selected( get_site_option( 'mc_multisite_show' ), '1' ); ?> />
+								<label for="mss1"><?php _e( 'Sub-site calendars show events from the central calendar.', 'my-calendar' ); ?></label>
+							</li>
+						</ul>
+					</fieldset>
+					<p>
+						<input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Multisite Settings', 'my-calendar' ); ?>"/>
+					</p>
+				</form>
 			</div>
-	<?php
+		</div>
+		<?php
 	}
 	?>
 
