@@ -224,7 +224,7 @@ function my_calendar_manage_categories() {
 		}
 		?>
 		</div>
-<?php
+	<?php
 }
 
 /**
@@ -306,13 +306,13 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 	if ( 'add' == $view ) {
 		?>
 		<h1><?php _e( 'Add Category', 'my-calendar' ); ?></h1>
-	<?php
+		<?php
 	} else {
-	?>
+		?>
 		<h1 class="wp-heading-inline"><?php _e( 'Edit Category', 'my-calendar' ); ?></h1>
 		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-categories' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
-	<?php
+		<?php
 	}
 	?>
 	<div class="postbox-container jcd-wide">
@@ -327,19 +327,19 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 							<?php
 							if ( 'add' == $view ) {
-							?>
+								?>
 								<div>
 									<input type="hidden" name="mode" value="add"/>
 									<input type="hidden" name="category_id" value=""/>
 								</div>
-							<?php
+								<?php
 							} else {
-							?>
+								?>
 								<div>
 									<input type="hidden" name="mode" value="edit"/>
 									<input type="hidden" name="category_id" value="<?php echo ( is_object( $cur_cat ) ) ? absint( $cur_cat->category_id ) : ''; ?>" />
 								</div>
-							<?php
+								<?php
 							}
 							if ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) {
 								$color  = ( strpos( $cur_cat->category_color, '#' ) !== 0 ) ? '#' : '';
@@ -365,7 +365,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 							if ( 'true' == get_option( 'mc_hide_icons' ) ) {
 								echo "<input type='hidden' name='category_icon' value='' />";
 							} else {
-							?>
+								?>
 							<li>
 							<label for="cat_icon"><?php _e( 'Category Icon', 'my-calendar' ); ?></label>
 							<select name="category_icon" id="cat_icon">
@@ -377,7 +377,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								?>
 							</select>
 							</li>
-							<?php
+								<?php
 							}
 							?>
 							<li>
@@ -643,7 +643,7 @@ function mc_manage_categories() {
 			if ( 1 == $cat->category_id ) {
 				echo '<td>' . __( 'N/A', 'my-calendar' ) . '</td>';
 			} else {
-			?>
+				?>
 			<td>
 				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')">
 				<?php
@@ -652,15 +652,15 @@ function mc_manage_categories() {
 				?>
 				</a>
 			</td>
-			<?php
+				<?php
 			}
 			?>
 		</tr>
-		<?php
+			<?php
 		}
 		?>
 	</table>
-	<?php
+		<?php
 	} else {
 		echo '<p>' . __( 'There are no categories in the database - or something has gone wrong!', 'my-calendar' ) . '</p>';
 	}

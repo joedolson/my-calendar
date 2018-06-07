@@ -285,13 +285,13 @@ function my_calendar_write_js() {
 				$( '#mc-accordion' ).accordion( { collapsible: true, active: false, heightStyle: 'content' } );
 				<?php
 				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_GET['page'] ) && 'my-calendar' == $_GET['page'] ) {
-				?>
+					?>
 				var mc_allowed = $( '#mc_twitter' ).attr( 'data-allowed' );
 				$('#mc_twitter').charCount({
 					allowed: mc_allowed,
 					counterText: '<?php _e( 'Characters left: ', 'my-calendar' ); ?>'
 				});
-				<?php
+					<?php
 				}
 				?>
 			});

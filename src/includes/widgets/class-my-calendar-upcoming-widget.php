@@ -143,12 +143,12 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</p>
 		<?php
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-		?>
+			?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mc_site' ); ?>"><?php _e( 'Blog ID', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_site' ); ?>" name="<?php echo $this->get_field_name( 'mc_site' ); ?>" value="<?php echo esc_attr( $site ); ?>"/>
 		</p>
-		<?php
+			<?php
 		}
 		?>
 		<p>
@@ -186,7 +186,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</p>
 		<?php
 		if ( 'custom' == $type ) {
-		?>
+			?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mc_from' ); ?>"><?php _e( 'Start date', 'my-calendar' ); ?>:</label>
 			<input type="text" id="<?php echo $this->get_field_id( 'mc_from' ); ?>" name="<?php echo $this->get_field_name( 'mc_from' ); ?>" value="<?php echo $from; ?>"/>
@@ -195,7 +195,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'mc_to' ); ?>"><?php _e( 'End date', 'my-calendar' ); ?>:</label>
 			<input type="text" id="<?php echo $this->get_field_id( 'mc_to' ); ?>" name="<?php echo $this->get_field_name( 'mc_to' ); ?>" value="<?php echo $to; ?>"/>
 		</p>
-		<?php
+			<?php
 		}
 		?>
 		<p>
@@ -211,7 +211,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</p>
 		<?php
 		if ( ! ( 'month' == $type || 'month+1' == $type || 'year' == $type ) ) {
-		?>
+			?>
 			<p>
 				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_after' ); ?>" value="<?php echo $after; ?>" size="1" maxlength="3"/>
 				<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>">
@@ -227,7 +227,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 				?>
 				</label>
 			</p>
-		<?php
+			<?php
 		}
 		?>
 		<p>
@@ -266,7 +266,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'lvalue' ); ?>"><?php _e( 'Location (Value)', 'my-calendar' ); ?></label><br/>
 			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'lvalue' ); ?>" id="<?php echo $this->get_field_id( 'lvalue' ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" />
 		</p>
-	<?php
+		<?php
 	}
 
 	/**

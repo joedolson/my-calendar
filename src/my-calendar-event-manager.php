@@ -426,14 +426,14 @@ function my_calendar_manage() {
 						<input type="hidden" value="delete" name="event_action" />
 						<?php
 						if ( ! empty( $_GET['date'] ) ) {
-						?>
+							?>
 						<input type="hidden" name="event_instance" value="<?php echo (int) $_GET['date']; ?>"/>
-						<?php
+							<?php
 						}
 						if ( isset( $_GET['ref'] ) ) {
-						?>
+							?>
 						<input type="hidden" name="ref" value="<?php echo esc_url( $_GET['ref'] ); ?>" />
-						<?php
+							<?php
 						}
 						?>
 						<input type="hidden" name="event_id" value="<?php echo $event_id; ?>"/>
@@ -526,7 +526,7 @@ function my_calendar_manage() {
 		mc_show_sidebar( '', $problems );
 		?>
 	</div>
-<?php
+	<?php
 }
 
 /**
@@ -1398,14 +1398,14 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					} elseif ( '1' == $data->event_flagged ) {
 						$flagged = '';
 					}
-				?>
+					?>
 					<div class="error">
 						<p>
 							<input type="checkbox" value="0" id="e_flagged" name="event_flagged"<?php echo $flagged; ?> />
 							<label for="e_flagged"><?php _e( 'This event is not spam', 'my-calendar' ); ?></label>
 						</p>
 					</div>
-				<?php
+					<?php
 				}
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
 
@@ -1435,12 +1435,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<div class="inside">
 			<?php
 			if ( is_object( $data ) ) { // Information for rewriting recurring data.
-			?>
+				?>
 				<input type="hidden" name="prev_event_begin" value="<?php echo esc_attr( $data->event_begin ); ?>"/>
 				<input type="hidden" name="prev_event_time" value="<?php echo esc_attr( $data->event_time ); ?>"/>
 				<input type="hidden" name="prev_event_end" value="<?php echo esc_attr( $data->event_end ); ?>"/>
 				<input type="hidden" name="prev_event_endtime" value="<?php echo esc_attr( $data->event_endtime ); ?>"/>
-			<?php
+				<?php
 			}
 			?>
 			<fieldset>
@@ -1457,7 +1457,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						} elseif ( $has_data && '0' == $data->event_span ) {
 							$span_checked = '';
 						}
-					?>
+						?>
 					<p id="event_span">
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
@@ -1469,13 +1469,13 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						<input type="button" id="add_field" value="<?php _e( 'Add another occurrence', 'my-calendar' ); ?>" class="button" />
 						<input type="button" id="del_field" value="<?php _e( 'Remove last occurrence', 'my-calendar' ); ?>" class="button" />
 					</div>
-					<?php
+						<?php
 					} else {
-					?>
+						?>
 						<div id='mc-accordion'>
 							<?php
 							if ( 'S' != $data->event_recur ) {
-							?>
+								?>
 								<h4><span class='dashicons' aria-hidden='true'> </span><button type="button" class="button-link"><?php _e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
 								<div>
 									<p>
@@ -1498,11 +1498,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 									<button type='button' class='save-occurrence'><?php _e( 'Add Date', 'my-calendar' ); ?></button>
 									</div>
 								</div>
-							<?php
+								<?php
 							}
 							if ( 0 != $data->event_group_id ) {
 								$edit_group_url = admin_url( 'admin.php?page=my-calendar-groups&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
-							?>
+								?>
 								<h4><span class='dashicons' aria-hidden='true'> </span><button type="button" class="button-link"><?php _e( 'Related Events:', 'my-calendar' ); ?></button> (<a href='<?php echo $edit_group_url; ?>'><?php _e( 'Edit group', 'my-calendar' ); ?></a>)
 								</h4>
 								<div>
@@ -1510,11 +1510,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 										<?php mc_related_events( $data->event_group_id ); ?>
 									</ul>
 								</div>
-							<?php
+								<?php
 							}
 							?>
 						</div>
-					<?php
+						<?php
 					}
 					?>
 				</div>
@@ -1522,25 +1522,25 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		</div>
 	</div>
 </div>
-<?php mc_show_block( 'event_recurs', $has_data, $data ); ?>
+	<?php mc_show_block( 'event_recurs', $has_data, $data ); ?>
 <div class="ui-sortable meta-box-sortables">
 	<div class="postbox">
 		<h2><?php _e( 'Event Details', 'my-calendar' ); ?></h2>
 		<div class="inside">
-<?php
-mc_show_block( 'event_short', $has_data, $data );
-mc_show_block( 'event_image', $has_data, $data );
-mc_show_block( 'event_host', $has_data, $data );
-mc_show_block( 'event_author', $has_data, $data, true, $event_author );
-mc_show_block( 'event_link', $has_data, $data );
-?>
+	<?php
+		mc_show_block( 'event_short', $has_data, $data );
+		mc_show_block( 'event_image', $has_data, $data );
+		mc_show_block( 'event_host', $has_data, $data );
+		mc_show_block( 'event_author', $has_data, $data, true, $event_author );
+		mc_show_block( 'event_link', $has_data, $data );
+	?>
 		</div>
 	</div>
 </div>
-<?php
-$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
-if ( '' != $custom_fields ) {
-?>
+	<?php
+	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
+	if ( '' != $custom_fields ) {
+		?>
 <div class="ui-sortable meta-box-sortables">
 	<div class="postbox">
 		<h2><?php _e( 'Event Custom Fields', 'my-calendar' ); ?></h2>
@@ -1549,12 +1549,12 @@ if ( '' != $custom_fields ) {
 		</div>
 	</div>
 </div>
-<?php
-}
-mc_show_block( 'event_access', $has_data, $data );
-mc_show_block( 'event_open', $has_data, $data );
-if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
-?>
+		<?php
+	}
+	mc_show_block( 'event_access', $has_data, $data );
+	mc_show_block( 'event_open', $has_data, $data );
+	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
+		?>
 
 <div class="ui-sortable meta-box-sortables">
 	<div class="postbox">
@@ -1564,107 +1564,107 @@ if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_locati
 			<fieldset>
 				<legend class='screen-reader-text'><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 	<?php
-}
-if ( mc_show_edit_block( 'event_location_dropdown' ) ) {
-	$current_location = '';
-	$locs             = mc_get_locations( 'select-locations' );
-	if ( ! empty( $locs ) ) {
-		?>
-		<p>
-		<label for="l_preset"><?php _e( 'Choose location:', 'my-calendar' ); ?></label> <select
-			name="location_preset" id="l_preset" aria-describedby='mc-current-location'>
-			<option value="none">--</option>
-			<?php
-			foreach ( $locs as $loc ) {
-				if ( is_object( $loc ) ) {
-					$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
-					$selected = '';
-					if ( is_object( $data ) ) {
-						if ( property_exists( $data, 'event_location' ) ) {
-							$event_location = $data->event_location;
-						} else {
-							$event_location = false;
-						}
-						if ( $loc->location_id == $event_location ) {
-							// Translators: label for current location.
-							$current_location  = "<span id='mc-current-location'>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</span>';
-							$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
-						}
-					}
-					echo "<option value='" . $loc->location_id . "'$selected />" . $loc_name . '</option>';
-				}
-			}
+	}
+	if ( mc_show_edit_block( 'event_location_dropdown' ) ) {
+		$current_location = '';
+		$locs             = mc_get_locations( 'select-locations' );
+		if ( ! empty( $locs ) ) {
 			?>
-		</select>
-		<?php echo $current_location; ?>
-		</p>
-	<?php
-	} else {
-	?>
+			<p>
+			<label for="l_preset"><?php _e( 'Choose location:', 'my-calendar' ); ?></label> <select
+				name="location_preset" id="l_preset" aria-describedby='mc-current-location'>
+				<option value="none">--</option>
+				<?php
+				foreach ( $locs as $loc ) {
+					if ( is_object( $loc ) ) {
+						$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
+						$selected = '';
+						if ( is_object( $data ) ) {
+							if ( property_exists( $data, 'event_location' ) ) {
+								$event_location = $data->event_location;
+							} else {
+								$event_location = false;
+							}
+							if ( $loc->location_id == $event_location ) {
+								// Translators: label for current location.
+								$current_location  = "<span id='mc-current-location'>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</span>';
+								$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
+							}
+						}
+						echo "<option value='" . $loc->location_id . "'$selected />" . $loc_name . '</option>';
+					}
+				}
+				?>
+			</select>
+			<?php echo $current_location; ?>
+			</p>
+			<?php
+		} else {
+		?>
 		<input type="hidden" name="location_preset" value="none" />
 		<p>
 			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add recurring locations for later use.', 'my-calendar' ); ?></a>
 		</p>
-	<?php
+			<?php
+		}
+	} else {
+		?>
+		<input type="hidden" name="location_preset" value="none" />
+		<?php
 	}
-} else {
+	mc_show_block( 'event_location', $has_data, $data );
+	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
 	?>
-	<input type="hidden" name="location_preset" value="none" />
-	<?php
-}
-mc_show_block( 'event_location', $has_data, $data );
-if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
-?>
-		</fieldset>
-	</div>
-</div>
-</div>
-<?php
-}
-if ( mc_show_edit_block( 'event_specials' ) ) {
-	$hol_checked   = ( 'true' == get_option( 'mc_skip_holidays' ) ) ? ' checked="checked"' : '';
-	$fifth_checked = ( 'true' == get_option( 'mc_no_fifth_week' ) ) ? ' checked="checked"' : '';
-	if ( $has_data ) {
-		$hol_checked   = ( '1' == $data->event_holiday ) ? ' checked="checked"' : '';
-		$fifth_checked = ( '1' == $data->event_fifth_week ) ? ' checked="checked"' : '';
-	}
-?>
-	<div class="ui-sortable meta-box-sortables">
-	<div class="postbox">
-		<h2><?php _e( 'Special scheduling options', 'my-calendar' ); ?></h2>
-
-		<div class="inside">
-			<fieldset>
-				<legend class="screen-reader-text"><?php _e( 'Special Options', 'my-calendar' ); ?></legend>
-				<p>
-					<label for="e_holiday"><?php _e( 'Cancel this event if it occurs on a date with an event in the Holidays category', 'my-calendar' ); ?></label>
-					<input type="checkbox" value="true" id="e_holiday" name="event_holiday"<?php echo $hol_checked; ?> />
-				</p>
-				<p>
-					<label for="e_fifth_week"><?php _e( 'If this event recurs, and falls on the 5th week of the month in a month with only four weeks, move it back one week.', 'my-calendar' ); ?></label>
-					<input type="checkbox" value="true" id="e_fifth_week" name="event_fifth_week"<?php echo $fifth_checked; ?> />
-				</p>
 			</fieldset>
 		</div>
 	</div>
-	</div>
+</div>
 	<?php
-} else {
-	if ( $has_data ) {
-		$event_holiday = ( '1' == $data->event_holiday ) ? 'true' : 'false';
-		$event_fifth   = ( '1' == $data->event_fifth_week ) ? 'true' : 'false';
+	}
+	if ( mc_show_edit_block( 'event_specials' ) ) {
+		$hol_checked   = ( 'true' == get_option( 'mc_skip_holidays' ) ) ? ' checked="checked"' : '';
+		$fifth_checked = ( 'true' == get_option( 'mc_no_fifth_week' ) ) ? ' checked="checked"' : '';
+		if ( $has_data ) {
+			$hol_checked   = ( '1' == $data->event_holiday ) ? ' checked="checked"' : '';
+			$fifth_checked = ( '1' == $data->event_fifth_week ) ? ' checked="checked"' : '';
+		}
+		?>
+		<div class="ui-sortable meta-box-sortables">
+		<div class="postbox">
+			<h2><?php _e( 'Special scheduling options', 'my-calendar' ); ?></h2>
+
+			<div class="inside">
+				<fieldset>
+					<legend class="screen-reader-text"><?php _e( 'Special Options', 'my-calendar' ); ?></legend>
+					<p>
+						<label for="e_holiday"><?php _e( 'Cancel this event if it occurs on a date with an event in the Holidays category', 'my-calendar' ); ?></label>
+						<input type="checkbox" value="true" id="e_holiday" name="event_holiday"<?php echo $hol_checked; ?> />
+					</p>
+					<p>
+						<label for="e_fifth_week"><?php _e( 'If this event recurs, and falls on the 5th week of the month in a month with only four weeks, move it back one week.', 'my-calendar' ); ?></label>
+						<input type="checkbox" value="true" id="e_fifth_week" name="event_fifth_week"<?php echo $fifth_checked; ?> />
+					</p>
+				</fieldset>
+			</div>
+		</div>
+		</div>
+		<?php
 	} else {
-		$event_holiday = get_option( 'mc_skip_holidays' );
-		$event_fifth   = get_option( 'mc_no_fifth_week' );
+		if ( $has_data ) {
+			$event_holiday = ( '1' == $data->event_holiday ) ? 'true' : 'false';
+			$event_fifth   = ( '1' == $data->event_fifth_week ) ? 'true' : 'false';
+		} else {
+			$event_holiday = get_option( 'mc_skip_holidays' );
+			$event_fifth   = get_option( 'mc_no_fifth_week' );
+		}
+		?>
+		<div>
+		<input type="hidden" name="event_holiday" value="<?php echo esc_attr( $event_holiday ); ?>" />
+		<input type="hidden" name="event_fifth_week" value="<?php echo esc_attr( $event_fifth ); ?>" />
+		</div>
+		<?php
 	}
 	?>
-	<div>
-	<input type="hidden" name="event_holiday" value="<?php echo esc_attr( $event_holiday ); ?>" />
-	<input type="hidden" name="event_fifth_week" value="<?php echo esc_attr( $event_fifth ); ?>" />
-	</div>
-	<?php
-}
-?>
 	<div class="ui-sortable meta-box-sortables">
 	<div class="postbox">
 		<div class="inside">
