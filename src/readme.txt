@@ -100,6 +100,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: Event post should not change post date on update
 * Bug fix: All day events should export correctly to Outlook & Apple Calendar
 * Bug fix: Location control accordion was not accessible.
+* Bug fix: Term ID was not set in category manager if term already existed.
 
 * Add: several new filters
 * Add: notice to alert users if their calendar configured for remote event source.
@@ -121,6 +122,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add: Schema.org address markup
 * Add: Schema.org event markup
 * Add: Include event link in 'Add to Google Cal' content.
+* Add: date format for multi-day dates in grid view.
 
 * Removed: event open & event closed text settings
 * Removed: event_open event status (little used and confusing; replaced by My Tickets)
