@@ -256,16 +256,17 @@ function mc_create_category( $category ) {
 	global $wpdb;
 
 	$formats     = array( '%s', '%s', '%s', '%d', '%d' );
-	$term_exists = term_exists( strip_tags( $category['category_name'] ), 'mc-event-category' );
+	$cat_name    = strip_tags( $category['category_name'] );
+	$term_exists = term_exists( $cat_name, 'mc-event-category' );
 	if ( ! $term_exists ) {
-		$term    = wp_insert_term( strip_tags( $category['category_name'] ), 'mc-event-category' );
+		$term = wp_insert_term( $cat_name, 'mc-event-category' );
 		if ( ! is_wp_error( $term ) ) {
 			$term = $term['term_id'];
 		} else {
 			$term = false;
 		}
 	} else {
-		$term = get_term_by( 'name', strip_tags( $category['category_name'] ), 'mc-event-category' );
+		$term = get_term_by( 'name', $cat_name, 'mc-event-category' );
 		$term = $term->term_id;
 	}
 	$add = array(
