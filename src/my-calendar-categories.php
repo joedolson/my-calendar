@@ -236,8 +236,8 @@ function my_calendar_manage_categories() {
  */
 function mc_update_cat( $category ) {
 	global $wpdb;
-	$formats = array( '%s', '%s', '%s', '%d', '%d', '%d' );
-	$where   = array(
+	$formats     = array( '%s', '%s', '%s', '%d', '%d', '%d' );
+	$where       = array(
 		'category_id' => (int) $_POST['category_id'],
 	);
 	$cat_name    = strip_tags( $category['category_name'] );
@@ -255,7 +255,7 @@ function mc_update_cat( $category ) {
 	}
 	$category['category_term'] = $term;
 
-	$result  = $wpdb->update( my_calendar_categories_table(), $category, $where, $formats, '%d' );
+	$result = $wpdb->update( my_calendar_categories_table(), $category, $where, $formats, '%d' );
 
 	return $result;
 }
