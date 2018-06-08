@@ -1681,8 +1681,11 @@ function my_calendar( $args ) {
 
 						$td = apply_filters( 'mc_grid_day_wrapper', 'td', $params['format'] );
 						if ( ! $week_number_shown ) {
-							$body             .= mc_show_week_number( $events, $args, $params['format'], $td, $start );
-							$week_number_shown = true;
+							$weeknumber = mc_show_week_number( $events, $args, $params['format'], $td, $start );
+							if ( '' != $weeknumber ) {
+								$body             .= $weeknumber;
+								$week_number_shown = true;
+							}
 						}
 
 						if ( ! empty( $events ) ) {
