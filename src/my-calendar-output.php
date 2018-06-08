@@ -1683,7 +1683,7 @@ function my_calendar( $args ) {
 						if ( ! $week_number_shown ) {
 							$weeknumber = mc_show_week_number( $events, $args, $params['format'], $td, $start );
 							if ( '' != $weeknumber ) {
-								$body .= $weeknumber;
+								$body             .= $weeknumber;
 								$week_number_shown = true;
 							}
 						}
