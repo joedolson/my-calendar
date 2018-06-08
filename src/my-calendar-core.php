@@ -67,18 +67,20 @@ function mc_plugin_action( $links, $file ) {
 function mc_custom_dirs( $type = 'path' ) {
 	$dirs = array();
 
+	$dirs[] = ( 'path' == $type ) ? plugin_dir_path( __FILE__ ) . 'my-calendar-custom/styles/' : plugin_dir_url( __FILE__ ) . 'my-calendar-custom/styles/';
 	$dirs[] = ( 'path' == $type ) ? plugin_dir_path( __FILE__ ) . 'my-calendar-custom/' : plugin_dir_url( __FILE__ ) . 'my-calendar-custom/';
+	$dirs[] = ( 'path' == $type ) ? get_stylesheet_directory() . '/css/' : get_stylesheet_directory_uri() . '/css/';
 	$dirs[] = ( 'path' == $type ) ? get_stylesheet_directory() . '/' : get_stylesheet_directory_uri() . '/';
 
-	$dirs = apply_filters( 'mc_custom_dirs', $dirs );
+	$dirs = apply_filters( 'mc_custom_dirs', $dirs, $type );
 	return $dirs;
 }
 
 
 /**
- * Check whether requested file exists either in plugin directory, theme directory, or calendar custom directory.
+ * Check whether requested file exists in calendar custom directory.
  *
- * @param string $file file name relative to 'my-calendar', 'my-calendar-custom', or theme directory.
+ * @param string $file file name.
  *
  * @return boolean
  */
