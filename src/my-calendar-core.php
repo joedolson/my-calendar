@@ -72,8 +72,9 @@ function mc_custom_dirs( $type = 'path' ) {
 	$dirs[] = ( 'path' == $type ) ? get_stylesheet_directory() . '/css/' : get_stylesheet_directory_uri() . '/css/';
 	$dirs[] = ( 'path' == $type ) ? get_stylesheet_directory() . '/' : get_stylesheet_directory_uri() . '/';
 
-	$dirs = apply_filters( 'mc_custom_dirs', $dirs, $type );
-	return $dirs;
+	$directories = apply_filters( 'mc_custom_dirs', $dirs, $type );
+
+	return ( is_array( $directories ) && ! empty( $directories ) ) ? $directories : $dirs;
 }
 
 
