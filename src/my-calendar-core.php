@@ -1039,6 +1039,7 @@ function mc_scripts() {
 
 	if ( 'my-calendar_page_my-calendar-categories' == $id ) {
 		wp_enqueue_style( 'wp-color-picker' );
+		// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
 		wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
 	}
 }
