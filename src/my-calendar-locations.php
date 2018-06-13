@@ -525,10 +525,15 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</div>
 	</div>';
 
-	$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
-	$map     = mc_generate_map( $data, $context );
+	$api_key = get_option( 'mc_gmap_api_key' );
+	if ( $api_key ) {
+		$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
+		$map     = mc_generate_map( $data, $context );
 
-	$return .= ( '' == $map ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
+		$return .= ( '' == $map ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
+	} else {
+		$return .= sprintf( __( 'Add a <a href="%s">Google Maps API Key</a> to generate a location map.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
+	}
 
 	return $return;
 }
