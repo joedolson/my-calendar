@@ -204,6 +204,10 @@
 	vertical-align: middle;
 }
 
+.mc-main .category-key .category-color-sample {
+	padding: 4px 4px 4px 0;
+}
+
 .mc-main .category-color-sample img {
 	position: static;
 	top: 0;
