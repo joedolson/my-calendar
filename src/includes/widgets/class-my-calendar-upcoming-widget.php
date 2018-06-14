@@ -47,17 +47,26 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$after_widget  = $args['after_widget'];
 		$before_title  = $args['before_title'];
 		$after_title   = $args['after_title'];
+		
+		$title  = ( isset( $instance['my_calendar_upcoming_title'] ) ) ? $instance['my_calendar_upcoming_title'] : '';
+		$before = ( isset( $instance['my_calendar_upcoming_before'] ) ) ? $instance['my_calendar_upcoming_before'] : '';
+		$after  = ( isset( $instance['my_calendar_upcoming_after'] ) ) ? $instance['my_calendar_upcoming_after'] : '';
+		$skip   = ( isset( $instance['my_calendar_upcoming_skip'] ) ) ? $instance['my_calendar_upcoming_skip'] : '';
+		$show   = ( isset( $instance['my_calendar_upcoming_show_today'] ) ) ? $instance['my_calendar_upcoming_show_today'] : '';
+		$type   = ( isset( $instance['my_calendar_upcoming_type'] ) ) ? $instance['my_calendar_upcoming_type'] : '';
+		$order  = ( isset( $instance['my_calendar_upcoming_order'] ) ) ? $instance['my_calendar_upcoming_order'] : '';
+		$cat    = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? $instance['my_calendar_upcoming_category'] : '';
 
-		$the_title      = apply_filters( 'widget_title', $instance['my_calendar_upcoming_title'], $instance, $args );
-		$the_template   = $instance['my_calendar_upcoming_template'];
-		$the_substitute = $instance['my_calendar_no_events_text'];
-		$before         = ( '' != $instance['my_calendar_upcoming_before'] ) ? esc_attr( $instance['my_calendar_upcoming_before'] ) : 3;
-		$after          = ( '' != $instance['my_calendar_upcoming_after'] ) ? esc_attr( $instance['my_calendar_upcoming_after'] ) : 3;
-		$skip           = ( '' != $instance['my_calendar_upcoming_skip'] ) ? esc_attr( $instance['my_calendar_upcoming_skip'] ) : 0;
-		$show_today     = ( 'no' == $instance['my_calendar_upcoming_show_today'] ) ? 'no' : 'yes';
-		$type           = esc_attr( $instance['my_calendar_upcoming_type'] );
-		$order          = esc_attr( $instance['my_calendar_upcoming_order'] );
-		$the_category   = ( '' == $instance['my_calendar_upcoming_category'] ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_category'] );
+		$the_title      = apply_filters( 'widget_title', $title, $instance, $args );
+		$the_template   = ( isset( $instance['my_calendar_upcoming_template'] ) ) ? $instance['my_calendar_upcoming_template'] : '';
+		$the_substitute = ( isset( $instance['my_calendar_no_events_text'] ) ) ? $instance['my_calendar_no_events_text'] : '';
+		$before         = ( '' != $before ) ? esc_attr( $instance['my_calendar_upcoming_before'] ) : 3;
+		$after          = ( '' != $after ) ? esc_attr( $instance['my_calendar_upcoming_after'] ) : 3;
+		$skip           = ( '' != $skip ) ? esc_attr( $instance['my_calendar_upcoming_skip'] ) : 0;
+		$show_today     = ( 'no' == $show ) ? 'no' : 'yes';
+		$type           = esc_attr( $type );
+		$order          = esc_attr( $order );
+		$the_category   = ( '' == $cat ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_category'] );
 		$author         = ( ! isset( $instance['my_calendar_upcoming_author'] ) || '' == $instance['my_calendar_upcoming_author'] ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_author'] );
 		$host           = ( ! isset( $instance['mc_host'] ) || '' == $instance['mc_host'] ) ? 'default' : esc_attr( $instance['mc_host'] );
 		$ltype          = ( ! isset( $instance['ltype'] ) || '' == $instance['ltype'] ) ? '' : esc_attr( $instance['ltype'] );
