@@ -587,7 +587,7 @@ function my_calendar_copyr( $source, $dest ) {
 		}
 		// Deep copy directories.
 		my_calendar_copyr( "$source/$entry", "$dest/$entry" );
-		$entry = $dir->read;
+		$entry = $dir->read();
 	}
 	// Clean up.
 	$dir->close();
