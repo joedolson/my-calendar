@@ -47,7 +47,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$after_widget  = $args['after_widget'];
 		$before_title  = $args['before_title'];
 		$after_title   = $args['after_title'];
-		
+
 		$title  = ( isset( $instance['my_calendar_upcoming_title'] ) ) ? $instance['my_calendar_upcoming_title'] : '';
 		$before = ( isset( $instance['my_calendar_upcoming_before'] ) ) ? $instance['my_calendar_upcoming_before'] : '';
 		$after  = ( isset( $instance['my_calendar_upcoming_after'] ) ) ? $instance['my_calendar_upcoming_after'] : '';
