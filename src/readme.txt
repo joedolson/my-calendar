@@ -984,4 +984,4 @@ The search feature in My Calendar is pretty basic; but buying My Calendar Pro gi
 
 == Upgrade Notice ==
 
-* 2.5.0 Major update! New features, many bug fixes and improvements.
+* 3.0.0 Major update! New features, many bug fixes and improvements. 
