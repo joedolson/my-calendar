@@ -38,6 +38,9 @@ function mc_update_category( $field, $data, $category ) {
  * @return array images in directory.
  */
 function mc_directory_list( $directory ) {
+	if ( ! file_exists( $directory ) ) {
+		return array();
+	}
 	$results = array();
 	$handler = opendir( $directory );
 	// keep going until all files in directory have been read.

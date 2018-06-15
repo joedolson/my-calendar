@@ -345,6 +345,9 @@ function mc_default_style( $filename = false, $return = 'content' ) {
  * @return array list of CSS files
  */
 function mc_css_list( $directory ) {
+	if ( ! file_exists( $directory ) ) {
+		return array();
+	}
 	$results = array();
 	$handler = opendir( $directory );
 	// Keep going until all files in directory have been read.
