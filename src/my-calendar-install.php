@@ -579,8 +579,8 @@ function my_calendar_copyr( $source, $dest ) {
 	}
 	// Loop through the folder.
 	$dir = dir( $source );
-	while ( false !== ( 
-		$entry = $dir->read() 
+	while ( false !== (
+		$entry = $dir->read()
 		) ) {
 		// Skip pointers.
 		if ( '.' == $entry || '..' == $entry ) {
@@ -613,8 +613,8 @@ function my_calendar_rmdirr( $dirname ) {
 	}
 	// Loop through the folder.
 	$dir = dir( $dirname );
-	while ( false !== ( 
-		$entry = $dir->read() 
+	while ( false !== (
+		$entry = $dir->read()
 		) ) {
 		// Skip pointers.
 		if ( '.' == $entry || '..' == $entry ) {

@@ -2251,7 +2251,7 @@ function mc_category_key( $category ) {
 	}
 	$key             = '';
 	$cat_limit       = mc_select_category( $category, 'all', 'category' );
-	$select_category = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
+	$select_category = str_replace( 'AND', 'WHERE', ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '' );
 
 	$sql        = 'SELECT * FROM ' . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
 	$categories = $mcdb->get_results( $sql );
