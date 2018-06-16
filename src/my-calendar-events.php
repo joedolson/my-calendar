@@ -101,7 +101,7 @@ SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_en
 FROM ' . my_calendar_event_table( $site ) . '
 JOIN ' . my_calendar_table( $site ) . ' AS e
 ON (event_id=occur_event_id)
-JOIN ' . my_calendar_categories_table( $site ) . "
+JOIN ' . my_calendar_categories_table( $site ) . " AS c 
 ON (event_category=category_id)
 $join
 WHERE $select_published $select_category $select_location $select_author $select_host $select_access $search
@@ -302,7 +302,7 @@ function mc_get_rss_events( $cat_id = false ) {
 		'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
 		FROM ' . my_calendar_event_table() . '
 		JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
-		JOIN ' . my_calendar_categories_table() . " ON (event_category=category_id) $cat
+		JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
 		$exclude_categories
 		ORDER BY event_added DESC LIMIT 0,$limit" );
 	$groups = array();

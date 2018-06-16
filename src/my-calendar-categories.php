@@ -73,7 +73,7 @@ function mc_private_categories() {
 		$categories = mc_get_private_categories();
 		$cats       = implode( ',', $categories );
 		if ( '' != $cats ) {
-			$cats = " AND category_id NOT IN ($cats)";
+			$cats = " AND c.category_id NOT IN ($cats)";
 		}
 	}
 
