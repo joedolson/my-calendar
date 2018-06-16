@@ -87,6 +87,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: aria-current test was broken for current date
 * Bug fix: Private categories not disambiguated in MySQL query when excluded
+* Improve: Rewrite my_calendar_copyr backup functions to use core functions.
 
 = 3.0.3 =
 
