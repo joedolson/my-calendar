@@ -561,34 +561,19 @@ function mc_transition_categories() {
  * @return boolean.
  */
 function my_calendar_copyr( $source, $dest ) {
-	// Sanity check.
+	if ( ! WP_Filesystem() ) {
+		exit;
+	}
+	global $wp_filesystem;
 	if ( ! file_exists( $source ) ) {
 		return false;
 	}
-	// Check for symlinks.
-	if ( is_link( $source ) ) {
-		return symlink( readlink( $source ), $dest );
-	}
-	// Simple copy for a file.
-	if ( is_file( $source ) ) {
-		return copy( $source, $dest );
-	}
-	// Make destination directory.
+
 	if ( ! is_dir( $dest ) ) {
-		mkdir( $dest );
+		$wp_filesystem->mkdir( $dest );
 	}
-	// Loop through the folder.
-	$dir = dir( $source );
-	while ( false !== ( $entry = $dir->read() ) ) {
-		// Skip pointers.
-		if ( '.' == $entry || '..' == $entry ) {
-			continue;
-		}
-		// Deep copy directories.
-		my_calendar_copyr( "$source/$entry", "$dest/$entry" );
-	}
-	// Clean up.
-	$dir->close();
+	// Copy directory into backup location.
+	copy_dir( $source, $dest );
 
 	return true;
 }
@@ -609,18 +594,15 @@ function my_calendar_rmdirr( $dirname ) {
 	if ( is_file( $dirname ) ) {
 		return unlink( $dirname );
 	}
-	// Loop through the folder.
-	$dir = dir( $dirname );
-	while ( false !== ( $entry = $dir->read() ) ) {
-		// Skip pointers.
-		if ( '.' == $entry || '..' == $entry ) {
-			continue;
+	// List files for deletion.
+	$files = list_files( $dirname, 2 );
+	foreach( $files as $file ) {
+		if ( is_dir( $file ) ) {
+			rmdir( $file );
+		} else if ( is_file( $file ) ) {
+			unlink( $file );
 		}
-		// Recurse.
-		my_calendar_rmdirr( "$dirname/$entry" );
 	}
-	// Clean up.
-	$dir->close();
 
 	return rmdir( $dirname );
 }
