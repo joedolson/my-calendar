@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -87,7 +87,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: aria-current test was broken for current date
 * Bug fix: Private categories not disambiguated in MySQL query when excluded
-* Improve: Rewrite my_calendar_copyr backup functions to use core functions.
+* Improve: Rewrite my_calendar_copyr backup functions to use WP core functions.
 
 = 3.0.3 =
 
