@@ -1677,7 +1677,7 @@ function my_calendar( $args ) {
 						$events_class = mc_events_class( $events, $date_is );
 						$monthclass   = ( date( 'n', $start ) == $date['month'] || 'month' != $params['time'] ) ? '' : 'nextmonth';
 						$dateclass    = mc_dateclass( $start );
-						$ariacurrent  = ( 'current-day' == $dateclass ) ? ' aria-current="date"' : '';
+						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
 						$td = apply_filters( 'mc_grid_day_wrapper', 'td', $params['format'] );
 						if ( ! $week_number_shown ) {

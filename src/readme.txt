@@ -83,6 +83,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.4 =
+
+* Bug fix: aria-current test was broken for current date
+
 = 3.0.3 =
 
 * Bug fix: Category key needed to use a 'WHERE' not an 'AND'; broke output if limiting by category
@@ -997,4 +1001,4 @@ The search feature in My Calendar is pretty basic; but buying My Calendar Pro gi
 
 == Upgrade Notice ==
 
-* 3.0.0 Major update! New features, many bug fixes and improvements. 
+* 3.0.0 Major update! New features, many bug fixes and improvements.
