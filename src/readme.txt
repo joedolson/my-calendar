@@ -994,16 +994,14 @@ The search feature in My Calendar is pretty basic; but buying My Calendar Pro gi
 
 == Screenshots ==
 
-1. Calendar using calendar list format.
-2. Calendar using monthly calendar format.
+1. Monthly Grid View
+2. List View
 3. Event management page
 4. Category management page
 5. Settings page
 6. Location management
 7. Style editing
-8. Mini calendar
-9. Script/behavior editing
-10. Template editing
+8. Template editing
 
 == Upgrade Notice ==
 
