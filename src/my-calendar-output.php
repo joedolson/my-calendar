@@ -980,8 +980,8 @@ function mc_list_title( $events ) {
 	$now         = $events[0];
 	$count       = count( $events ) - 1;
 	$event_title = strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() );
-	if ( 0 == $count ) {
-		$cstate = '';
+	if ( 0 === $count ) {
+		$cstate = $event_title;
 	} elseif ( 1 == $count ) {
 		// Translators: %s Title of event.
 		$cstate = sprintf( __( '%s<span class="mc-list-extended"> and 1 other event</span>', 'my-calendar' ), $event_title );
