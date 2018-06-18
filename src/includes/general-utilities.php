@@ -105,7 +105,7 @@ function mc_add_inner_box() {
  */
 function mc_strip_tags() {
 
-	return '<strong><em><i><b><span>';
+	return apply_filters( 'mc_strip_tags', '<strong><em><i><b><span><br>' );
 }
 
 /**
