@@ -88,7 +88,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			'type'       => $type,
 			'category'   => $the_category,
 			'template'   => $the_template,
-			'substitute' => $the_substitute,
+			'fallback'   => $the_substitute,
 			'order'      => $order,
 			'skip'       => $skip,
 			'show_today' => $show_today,
