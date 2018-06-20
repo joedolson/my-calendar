@@ -86,6 +86,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.5 =
 
 * Bug fix: If only one event on a day, event title did not show in list view with show title option.
+* Bug fix: Incorrect array key for fallback parameter in widget
+* Bug fix: custom template query expected 25 chars instead of 32
 * Re-allow <br> in event titles.
 
 = 3.0.4 =

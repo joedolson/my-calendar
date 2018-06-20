@@ -303,7 +303,7 @@ function mc_get_custom_template( $key ) {
  */
 function mc_key_exists( $key ) {
 	// Keys are md5 hashed, so should always be 32 chars.
-	if ( 25 != strlen( $key ) ) {
+	if ( 32 != strlen( $key ) ) {
 		return false;
 	}
 
