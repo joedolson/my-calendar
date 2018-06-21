@@ -155,7 +155,7 @@ function my_calendar_locations( $atts ) {
 		'target_url' => '',
 	), $atts, 'my_calendar_locations' );
 
-	return my_calendar_locations_list( $args['show'], $args['datatype'], $args['target_url'] );
+	return my_calendar_locations_list( $args['show'], $args['datatype'], 'single', $args['target_url'] );
 }
 
 /**
