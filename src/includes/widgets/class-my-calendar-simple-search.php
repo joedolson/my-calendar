@@ -32,7 +32,10 @@ class My_Calendar_Simple_Search extends WP_Widget {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Simple Event Search', 'my-calendar' ),
-			array( 'customize_selective_refresh' => true )
+			array( 
+				'customize_selective_refresh' => true,
+				'description'                 => __( 'Search your events.', 'my-calendar' ),
+			)
 		);
 	}
 

@@ -32,7 +32,10 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Mini Calendar', 'my-calendar' ),
-			array( 'customize_selective_refresh' => true )
+			array( 
+				'customize_selective_refresh' => true,
+				'description'                 => __( 'Show events in a compact grid.', 'my-calendar' ),
+			)
 		);
 	}
 

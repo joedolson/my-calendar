@@ -32,7 +32,10 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Today\'s Events', 'my-calendar' ),
-			array( 'customize_selective_refresh' => true )
+			array(
+				'customize_selective_refresh' => true,
+				'description'                 => __( 'A list of events today.', 'my-calendar' ),
+			)
 		);
 	}
 
