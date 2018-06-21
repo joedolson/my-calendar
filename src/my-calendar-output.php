@@ -1467,7 +1467,7 @@ function my_calendar( $args ) {
 	$caption_text  = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
 	$week_format   = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
 	$week_template = ( get_option( 'mc_week_caption' ) != '' ) ? get_option( 'mc_week_caption' ) : 'Week of {date format="M jS"}';
-	$day_uri       = get_option( 'mc_open_day_uri' );
+	$day_uri       = get_option( 'mc_open_day_uri' ); // This is not a URL. It's a behavior reference.
 	$list_info     = get_option( 'mc_show_list_info' );
 	$list_events   = get_option( 'mc_show_list_events' );
 
