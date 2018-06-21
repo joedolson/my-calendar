@@ -648,7 +648,7 @@ function my_calendar_check() {
 		if ( ! $my_calendar_exists ) {
 			$new_install = true;
 		} else {
-			// for each release requiring an upgrade path, add a version compare.
+			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
 			$valid_upgrades = array( '2.0.0', '2.2.10', '2.3.0', '2.3.11', '2.3.15', '2.4.4', '3.0.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
@@ -657,11 +657,11 @@ function my_calendar_check() {
 				}
 			}
 		}
-		// having determined upgrade path, assign new version number.
+		// Having determined upgrade path, assign new version number.
 		update_option( 'mc_version', $mc_version );
-		// Now we've determined what the current install is or isn't.
+		// Now we've determined what the current install is.
 		if ( true == $new_install ) {
-			// add default settings.
+			// Add default settings.
 			mc_default_settings();
 			mc_create_category(
 				array(
@@ -1218,7 +1218,7 @@ function mc_guess_calendar() {
 	}
 
 	if ( ! $has_uri ) {
-		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_name LIKE '%my-calendar%' AND post_status = 'publish'" );
+		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_name LIKE '%my-calendar%' AND post_name NOT LIKE '%-my-calendar%' AND post_status = 'publish'" );
 		if ( $post_ID ) {
 			$link    = get_permalink( $post_ID );
 			$content = get_post( $post_ID )->post_content;
