@@ -32,7 +32,7 @@ class My_Calendar_Filters extends WP_Widget {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Event Filters', 'my-calendar' ),
-			array( 
+			array(
 				'customize_selective_refresh' => true,
 				'description'                 => __( 'Filter displayed events.', 'my-calendar' ),
 			)
