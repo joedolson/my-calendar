@@ -32,7 +32,10 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Upcoming Events', 'my-calendar' ),
-			array( 'customize_selective_refresh' => true )
+			array(
+				'customize_selective_refresh' => true,
+				'description'                 => __( 'List recent and future events.', 'my-calendar' ),
+			)
 		);
 	}
 
@@ -164,9 +167,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_template' ); ?>"><?php _e( 'Template', 'my-calendar' ); ?></label><br/>
 			<textarea class="widefat" rows="6" cols="20" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_template' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_template' ); ?>"><?php echo esc_attr( $template ); ?></textarea>
 		</p>
-		<fieldset>
-		<legend><?php _e( 'Widget Options', 'my-calendar' ); ?></legend>
-		<?php $config_url = admin_url( 'admin.php?page=my-calendar-config' ); ?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mc_link' ); ?>"><?php _e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_link' ); ?>" name="<?php echo $this->get_field_name( 'mc_link' ); ?>" value="<?php echo $link; ?>"/>
