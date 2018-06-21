@@ -229,8 +229,8 @@ function mc_default_settings() {
 	foreach ( $globals as $key => $global ) {
 		${$key} = $global;
 	}
+
 	add_option( 'mc_display_author', 'false' );
-	add_option( 'mc_version', $mc_version );
 	add_option( 'mc_use_styles', 'false' );
 	add_option( 'mc_show_months', 1 );
 	add_option( 'mc_show_map', 'false' );
