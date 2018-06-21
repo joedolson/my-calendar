@@ -80,9 +80,9 @@
 button.mc-toggle {
 	border: 0;
 	padding: 4px;
-	background-color: transparent;
+	background-color: transparent !important;
 	font-size: 20px;
-	color: #a00;
+	color: #a00 !important;
 }
 
 button.mc-toggle:hover, button.mc-toggle:focus {

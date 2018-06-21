@@ -655,7 +655,7 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
 							$disabled = ( ! get_option( 'mc_uri' ) && ! get_option( 'mc_mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
-							if ( !empty( $disabled ) ) {
+							if ( ! empty( $disabled ) ) {
 								// Ensure that this option is set to a valid value if no URI configured.
 								update_option( 'mc_open_day_uri', 'false' );
 							}
