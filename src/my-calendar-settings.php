@@ -553,7 +553,7 @@ function mc_remote_db() {
 										'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
 									), '0', '', array(), 'radio' );
 								} else {
-									if ( get_option( 'mc_remote' ) != 'true' && current_user_can( 'manage_network' ) && is_multisite() ) {
+									if ( get_option( 'mc_remote' ) != 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
 										?>
 										<li><?php _e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
 										<?php
@@ -612,7 +612,6 @@ function mc_remote_db() {
 							$date_format  = ( '' == get_option( 'mc_date_format' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
 							$tomorrow     = date( 'j' ) + 1;
 							$multi_format = ( '' == get_option( 'mc_multidate_format' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
-							echo $multi_format;
 							?>
 							<li><?php mc_settings_field( 'mc_month_format', __( 'Month format (calendar headings)', 'my-calendar' ), '', $month_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_time_format', __( 'Time format', 'my-calendar' ), '', $time_format ); ?></li>
