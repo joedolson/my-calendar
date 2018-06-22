@@ -83,6 +83,7 @@ button.mc-toggle {
 	background-color: transparent !important;
 	font-size: 20px;
 	color: #a00 !important;
+	font-family: dashicons !important;
 }
 
 button.mc-toggle:hover, button.mc-toggle:focus {

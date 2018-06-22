@@ -83,6 +83,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.6 =
+
+* Bug fix: Shortcode for locations forms always rendered as if in a group filter.
+
 = 3.0.5 =
 
 * Bug fix: If only one event on a day, event title did not show in list view with show title option.
