@@ -2427,6 +2427,10 @@ function mc_check_data( $action, $post, $i ) {
 		if ( '' != $time ) {
 			$default_modifier = apply_filters( 'mc_default_event_length', '1 hour' );
 			$endtime          = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : date( 'H:i:s', mc_strtotime( $time . ' +' . $default_modifier ) );
+			if ( empty( $post['event_endtime'][ $i ] ) && date( 'H', mc_strtotime( $endtime ) ) == '00' ) {
+				// If one hour pushes event into next day, reset to 11:59pm. 
+				$endtime = '23:59:00';
+			}
 		} else {
 			$endtime = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : '';
 		}
