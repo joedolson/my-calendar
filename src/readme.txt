@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -86,6 +86,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.6 =
 
 * Bug fix: Shortcode for locations forms always rendered as if in a group filter.
+* Bug fix: If the default length 1 hr event pushes into next day, adjust length.
+* Bug fix: Incorrectly nested parentheses caused math error in months-by-day recurrence
 
 = 3.0.5 =
 
