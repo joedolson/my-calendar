@@ -3789,7 +3789,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					for ( $i = 0; $i <= $numforward; $i ++ ) {
 						$next_week_diff = ( date( 'm', $newbegin ) == date( 'm', my_calendar_add_date( date( 'Y-m-d', $newbegin ), 7, 0, 0 ) ) ) ? false : true;
 						$move_event     = ( ( 1 == $fifth_week ) && ( ( week_of_month( date( 'd', $newbegin ) ) + 1 ) == $week_of_event ) && true == $next_week_diff ) ? true : false;
-						if ( week_of_month( date( 'd', $newbegin ) == $week_of_event ) || true == $move_event ) {
+						if ( week_of_month( date( 'd', $newbegin ) ) == $week_of_event || true == $move_event ) {
 						} else {
 							$newbegin   = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newbegin ), 7, 0, 0 );
 							$newend     = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newend ), 7, 0, 0 );

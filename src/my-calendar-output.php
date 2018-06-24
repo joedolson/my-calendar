@@ -518,7 +518,7 @@ function mc_get_event_image( $event, $data ) {
 		$image     = ( '' != $event->event_image ) ? "<img src='$event->event_image' alt='$alt' class='mc-image photo' />" : '';
 	}
 
-	$meta = ( $image ) ? "<meta itemprop='image' content='$image_url'/>" : '';
+	$meta = ( $image ) ? "<meta itemprop='image' content='$image_url' />" : '';
 
 	return $meta . $image;
 }
