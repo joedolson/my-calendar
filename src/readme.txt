@@ -83,6 +83,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.7 =
+
+* Bug fix: Case where events ending at midnight (AM) of current day were displayed
+* Bug fix: trim spaces from values earlier when parsing filter elements
+* Change: don't declare font-family in older stylesheets. 
+
 = 3.0.6 =
 
 * Bug fix: Shortcode for locations forms always rendered as if in a group filter.
