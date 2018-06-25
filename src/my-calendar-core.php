@@ -138,8 +138,8 @@ function mc_register_styles() {
 	global $wp_query;
 	$this_post  = $wp_query->get_queried_object();
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
-	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ) );
-	wp_register_style( 'my-calendar-style', $stylesheet, array( 'dashicons', 'my-calendar-reset' ) );
+	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ) );
+	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ) );
 
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
 	wp_register_style( 'my-calendar-admin-style', $admin_stylesheet );
