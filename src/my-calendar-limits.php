@@ -95,10 +95,11 @@ function mc_category_select_ids( $category ) {
 		}
 		$numcat = count( $categories );
 		foreach ( $categories as $key ) {
+			$key = trim( $key );
 			if ( is_numeric( $key ) ) {
 				$add = (int) $key;
 			} else {
-				$key = esc_sql( trim( $key ) );
+				$key = esc_sql( $key );
 				$cat = $mcdb->get_row( 'SELECT category_id FROM ' . my_calendar_categories_table() . " WHERE category_name = '$key'" );
 				if ( is_object( $cat ) ) {
 					$add = $cat->category_id;
@@ -107,6 +108,7 @@ function mc_category_select_ids( $category ) {
 			$select[] = $add;
 		}
 	} else {
+		$category = trim( $category );
 		if ( is_numeric( $category ) ) {
 			$select[] = absint( $category );
 		} else {
@@ -166,10 +168,10 @@ function mc_author_select_ids( $author ) {
 			$authors = explode( ',', $author );
 		}
 		foreach ( $authors as $key ) {
+			$key = trim( $key );
 			if ( is_numeric( $key ) ) {
 				$add = absint( $key );
 			} else {
-				$key    = trim( $key );
 				$author = get_user_by( 'login', $key ); // Get author by username.
 				$add    = $author->ID;
 			}
@@ -250,6 +252,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 		}
 		if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2' ) ) ) {
 			if ( 'all' != $current_location && '' != $current_location ) {
+				$current_location = trim( $current_location );
 				if ( is_numeric( $current_location ) ) {
 					$limit_string = 'AND ' . $location_type . ' = ' . absint( $current_location );
 				} else {
