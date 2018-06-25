@@ -380,7 +380,8 @@ function mc_exit_early( $event, $process_date ) {
 	$end       = date( 'Y-m-d', strtotime( $event->occur_end ) );
 	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing.
 	// or if event started yesterday & has event_hide_end checked.
-	$ends_at_midnight = ( '00:00:00' == $event->event_endtime && $end == $process_date && $current != $process_date ) ? true : false;
+	$ends_at_midnight = ( '00:00:00' == $event->event_endtime && $end == $process_date && $current != $today ) ? true : false;
+
 	// hides events if hiding end time & not first day.
 	$hide_day_two = ( $hide_days && ( $today != $current ) ) ? true : false;
 
