@@ -16,4 +16,4 @@
             $(this).closest( 'div.calendar-events' ).toggle();
         } );
     });
-}(jQuery));	
+}(jQuery));
