@@ -86,6 +86,10 @@ button.mc-toggle {
 	font-family: dashicons !important;
 }
 
+button .mc-toggle:before {
+	font-family: dashicons !important;
+}
+
 button.mc-toggle:hover, button.mc-toggle:focus {
 	outline: 1px solid #766;
 }
