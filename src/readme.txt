@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.8 =
+
+* Bug fix: need to allow <a> elements in mc_strip_tags so calendar linkscan point to non-calendar URLs
+* 
+
 = 3.0.7 =
 
 * Bug fix: Case where events ending at midnight (AM) of current day were displayed
