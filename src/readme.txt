@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.7
+Stable tag: 3.0.8
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -86,7 +86,6 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.8 =
 
 * Bug fix: need to allow <a> elements in mc_strip_tags so calendar linkscan point to non-calendar URLs
-* 
 
 = 3.0.7 =
 
