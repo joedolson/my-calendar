@@ -902,7 +902,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	$akismet = false;
 	$c       = array();
 	// check for Akismet.
-	if ( function_exists( 'akismet_http_post' ) || ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) ) {
+	if ( function_exists( 'akismet_http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) ) {
 		$akismet = true;
 	}
 	if ( $akismet ) {
