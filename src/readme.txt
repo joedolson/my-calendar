@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.9 =
+
+* Bug fix: Error thrown if Akismet had previously been configured, then deleted.
+* Bug fix: location type was added to params if category key was set.
+
 = 3.0.8 =
 
 * Bug fix: need to allow <a> elements in mc_strip_tags so calendar linkscan point to non-calendar URLs
