@@ -46,7 +46,7 @@ function my_calendar_get_events( $args ) {
 	$from     = isset( $args['from'] ) ? $args['from'] : '';
 	$to       = isset( $args['to'] ) ? $args['to'] : '';
 	$category = isset( $args['category'] ) ? $args['category'] : 'all';
-	$ltype    = isset( $args['category'] ) ? $args['ltype'] : 'all';
+	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : 'all';
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : 'all';
 	$source   = isset( $args['source'] ) ? $args['source'] : 'calendar';
 	$author   = isset( $args['author'] ) ? $args['author'] : 'all';
