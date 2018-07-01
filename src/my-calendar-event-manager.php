@@ -3282,6 +3282,9 @@ function mc_related_events( $id ) {
 	if ( is_array( $results ) && ! empty( $results ) ) {
 		foreach ( $results as $result ) {
 			$result   = mc_get_first_event( $result->event_id );
+			if ( !is_object( $result ) ) {
+				continue;
+			}
 			$event    = $result->occur_event_id;
 			$current  = '<a href="' . admin_url( 'admin.php?page=my-calendar' ) . '&amp;mode=edit&amp;event_id=' . $event . '">';
 			$end      = '</a>';
