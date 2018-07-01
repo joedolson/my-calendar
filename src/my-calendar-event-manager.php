@@ -723,7 +723,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					// need to get this variable into URL for form submit.
 					$new_event = $wpdb->insert_id;
 					mc_update_category_relationships( $cats, $new_event );
-					$result    = mc_update_instance( $event_instance, $new_event, $update );
+					$result = mc_update_instance( $event_instance, $new_event, $update );
 				} else {
 					if ( $update['event_begin'][0] == $_POST['prev_event_begin'] && $update['event_end'][0] == $_POST['prev_event_end'] ) {
 						// There were no changes at all.
@@ -3281,7 +3281,7 @@ function mc_related_events( $id ) {
 	$results = mc_get_related( $id );
 	if ( is_array( $results ) && ! empty( $results ) ) {
 		foreach ( $results as $result ) {
-			$result   = mc_get_first_event( $result->event_id );
+			$result = mc_get_first_event( $result->event_id );
 			if ( !is_object( $result ) ) {
 				continue;
 			}
