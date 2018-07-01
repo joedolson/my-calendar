@@ -2267,19 +2267,19 @@ function mc_category_key( $category ) {
 		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
 		$class = mc_category_class( $cat, '' );
 
-		$selected_categorys = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', $_GET['mcat'] );
+		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', $_GET['mcat'] );
 
-		if ( in_array( $cat->category_id, $selected_categorys ) || $category == $cat->category_id ) {
-			$selected_categorys = array_diff( $selected_categorys, array( $cat->category_id ) );
-			$class             .= ' current';
+		if ( in_array( $cat->category_id, $selected_categories ) || $category == $cat->category_id ) {
+			$selected_categories = array_diff( $selected_categories, array( $cat->category_id ) );
+			$class              .= ' current';
 		} else {
-			$selected_categorys[] = $cat->category_id;
+			$selected_categories[] = $cat->category_id;
 		}
-		$selectable_categorys = implode( ',', $selected_categorys );
-		if ( '' == $selectable_categorys ) {
+		$selectable_categories = implode( ',', $selected_categories );
+		if ( '' == $selectable_categories ) {
 			$url = esc_url( remove_query_arg( 'mcat', mc_get_current_url() ) );
 		} else {
-			$url = mc_build_url( array( 'mcat' => $selectable_categorys ), array( 'mcat' ) );
+			$url = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
 		}
 		if ( 1 == $cat->category_private ) {
 			$class .= ' private';
