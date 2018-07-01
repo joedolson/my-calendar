@@ -799,7 +799,7 @@ function mc_set_category_relationships( $cats, $event_id ) {
  */
 function mc_update_category_relationships( $cats, $event_id ) {
 	global $wpdb;
-	$old_cats = mc_get_categories( $event_id );
+	$old_cats = mc_get_categories( $event_id, 'testing' );
 	if ( $old_cats == $cats ) {
 		return;
 	}

@@ -888,6 +888,12 @@ function mc_get_categories( $event, $ids = true ) {
 		}
 	} elseif ( 'html' == $ids ) {
 		$return = mc_categories_html( $results, $primary );
+	} elseif ( 'testing' == $ids ) {
+		if ( $results ) {
+			foreach ( $results as $result ) {
+				$return[] = $result->category_id;
+			}
+		}
 	} else {
 		$return = ( is_array( $results ) ) ? $results : array( $event->event_category );
 	}
