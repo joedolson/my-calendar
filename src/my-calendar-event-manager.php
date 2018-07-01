@@ -722,6 +722,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$wpdb->insert( my_calendar_table(), $update, $formats );
 					// need to get this variable into URL for form submit.
 					$new_event = $wpdb->insert_id;
+					mc_update_category_relationships( $cats, $new_event );
 					$result    = mc_update_instance( $event_instance, $new_event, $update );
 				} else {
 					if ( $update['event_begin'][0] == $_POST['prev_event_begin'] && $update['event_end'][0] == $_POST['prev_event_end'] ) {
@@ -2794,7 +2795,7 @@ function mc_compare( $update, $id ) {
  * Update a single event instance.
  *
  * @param int   $event_instance Instance ID.
- * @param int   $event_id Event ID.
+ * @param int   $event_id New event ID.
  * @param array $update New date array.
  *
  * Return query result.
