@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.8
+Stable tag: 3.0.9
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -87,6 +87,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: Error thrown if Akismet had previously been configured, then deleted.
 * Bug fix: location type was added to params if category key was set.
+* Bug fix: remove a couple notices
+* Bug fix: category relationships not carried over when recurring events split
 
 = 3.0.8 =
 
