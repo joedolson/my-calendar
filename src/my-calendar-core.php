@@ -988,12 +988,15 @@ function mc_scripts() {
 			date_i18n( 'D', strtotime( 'Friday' ) ),
 			date_i18n( 'D', strtotime( 'Saturday' ) ),
 		) );
-		$sweek = get_option( 'start_of_week' );
+		$sweek = absint( get_option( 'start_of_week' ) );
 		wp_localize_script( 'pickadate.date', 'mc_text', array(
-			'today' => addslashes( __( 'Today', 'my-calendar' ) ),
-			'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
-			'close' => addslashes( __( 'Close', 'my-calendar' ) ),
-			'start' => ( 1 == $sweek || 0 == $sweek ) ? $sweek : 0,
+			'vals' => array(
+				'today' => addslashes( __( 'Today', 'my-calendar' ) ),
+				'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
+				'close' => addslashes( __( 'Close', 'my-calendar' ) ),
+				// False-y values = Sunday, truth-y = Monday.
+				'start' => ( 1 == $sweek || 0 == $sweek ) ? $sweek : 0,
+			),
 		) );
 		wp_localize_script( 'pickadate.time', 'mc_time_format', apply_filters( 'mc_time_format', 'h:i A' ) );
 		wp_localize_script( 'pickadate.time', 'mc_interval', apply_filters( 'mc_interval', '15' ) );

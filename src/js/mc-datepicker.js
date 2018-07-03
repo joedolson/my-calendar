@@ -8,10 +8,10 @@ if ( typeof(mc_months) !== "undefined" ) {
 		selectYears: true,
 		selectMonths: true,
 		editable: true,
-		firstDay: mc_text.start,
-		today: mc_text.today,
-		clear: mc_text.clear,
-		close: mc_text.close,
+		firstDay: mc_text.vals.start,
+		today: mc_text.vals.today,
+		clear: mc_text.vals.clear,
+		close: mc_text.vals.close,
 		onClose: function() {
 			mc_update_date();
 		}
