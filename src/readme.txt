@@ -83,6 +83,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.10 =
+
+* Bug fix: invalid method used to sort location lists.
+* Bug fix: shortcode generator missing input
+*
+
 = 3.0.9 =
 
 * Bug fix: Error thrown if Akismet had previously been configured, then deleted.

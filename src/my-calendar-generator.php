@@ -82,7 +82,7 @@ function mc_generator( $type ) {
 		<legend><strong><?php echo ucfirst( $type ); ?></strong>: <?php _e( 'Shortcode Attributes', 'my-calendar' ); ?></legend>
 		<div id="mc-generator" class="generator">
 			<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
-			<input type='hidden' name='shortcode' value='<?php esc_attr( $type ); ?>'/>
+			<input type='hidden' name='shortcode' value='<?php esc_attr_e( $type ); ?>'/>
 			<?php
 			// Common Elements to all Shortcodes.
 			?>
