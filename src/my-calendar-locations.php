@@ -635,11 +635,11 @@ function mc_get_locations( $args ) {
 		$where   = '1';
 		$is      = '1';
 	}
-	if ( ! ( $order == 'ASC' || $order == 'DESC' ) ) {
+	if ( ! ( 'ASC' == $order || 'DESC' == $order ) ) {
 		// Prevent invalid order parameters.
 		$order = 'ASC';
 	}
-	$valid_args = $wpdb->get_col( 'DESC ' . my_calendar_locations_table() );
+	$valid_args = $wpdb->get_col( 'DESC ' . my_calendar_locations_table() ); // WPCS: unprepared SQL ok.
 	if ( ! ( in_array( $orderby, $valid_args ) ) ) {
 		// Prevent invalid order columns.
 		$orderby = 'location_label';
