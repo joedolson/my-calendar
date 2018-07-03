@@ -621,6 +621,7 @@ function mc_location_select( $location = false ) {
  * @return array locations (IDs and labels only)
  */
 function mc_get_locations( $args ) {
+	global $wpdb;
 	if ( is_array( $args ) ) {
 		$context = ( isset( $args['context'] ) ) ? $args['context'] : 'general';
 		$orderby = ( isset( $args['orderby'] ) ) ? $args['orderby'] : 'location_label';
@@ -634,8 +635,16 @@ function mc_get_locations( $args ) {
 		$where   = '1';
 		$is      = '1';
 	}
-	global $wpdb;
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE %s = %s ORDER BY %s %s', $where, $is, $orderby, $order ) ); // WPCS: unprepared SQL ok.
+	if ( ! ( $order == 'ASC' || $order == 'DESC' ) ) {
+		// Prevent invalid order parameters.
+		$order = 'ASC';
+	}
+	$valid_args = $wpdb->get_col( 'DESC ' . my_calendar_locations_table() );
+	if ( ! ( in_array( $orderby, $valid_args ) ) ) {
+		// Prevent invalid order columns.
+		$orderby = 'location_label';
+	}
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE %s = %s ORDER BY ' . $orderby . ' ' . $order, $where, $is ) ); // WPCS: unprepared SQL ok.
 
 	return apply_filters( 'mc_filter_results', $results, $args );
 }
