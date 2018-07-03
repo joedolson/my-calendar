@@ -199,7 +199,7 @@
 	top: 6px;
 	left: 4px;
 	box-shadow: none;
-	background: transparent !important;
+	background: transparent;
 	display: inline;
 	vertical-align: middle;
 }
