@@ -86,8 +86,9 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.10 =
 
 * Bug fix: invalid method used to sort location lists.
-* Bug fix: shortcode generator missing input
-*
+* Bug fix: shortcode generator missing input value
+* Bug fix: datepicker did not reflect start of week settings
+* Stylesheet CSS change
 
 = 3.0.9 =
 
