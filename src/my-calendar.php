@@ -167,7 +167,7 @@ function mc_canonical() {
 
 	// End original code.
 	if ( isset( $_GET['mc_id'] ) ) {
-		$mc_id = ( absint( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+		$mc_id = ( absint( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
 		$link  = add_query_arg( 'mc_id', $mc_id, $link );
 	}
 
