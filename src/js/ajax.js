@@ -78,6 +78,5 @@
 				$( '.event_time_label' ).hide();
 			}
 		});
-
 	});
 }(jQuery));
