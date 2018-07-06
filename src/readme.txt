@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.10
+Stable tag: 3.0.11
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -82,6 +82,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.0.11 =
+
+* SECURITY: XSS - Canonical URL not properly sanitized. Affects 3.0.0 and up. 
 
 = 3.0.10 =
 
@@ -1038,4 +1042,4 @@ The search feature in My Calendar is pretty basic; but buying My Calendar Pro gi
 
 == Upgrade Notice ==
 
-* 3.0.0 Major update! New features, many bug fixes and improvements.
+* 3.0.11 URGENT: Security fix - XSS scripting vulnerability resolved.
