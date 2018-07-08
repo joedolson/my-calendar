@@ -1006,14 +1006,11 @@ function mc_scripts() {
 			wp_enqueue_media();
 		}
 	}
-
-	if ( 'my-calendar_page_my-calendar-locations' == $id ) {
-		if ( 'true' == get_option( 'mc_gmap' ) ) {
-			$api_key = get_option( 'mc_gmap_api_key' );
-			if ( $api_key ) {
-				wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
-				wp_enqueue_script( 'gmap3', plugins_url( 'js/gmap3.min.js', __FILE__ ), array( 'jquery' ) );
-			}
+	if ( 'my-calendar_page_my-calendar-locations' == $id || 'toplevel_page_my-calendar' == $id ) {
+		$api_key = get_option( 'mc_gmap_api_key' );
+		if ( $api_key ) {
+			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
+			wp_enqueue_script( 'gmap3', plugins_url( 'js/gmap3.min.js', __FILE__ ), array( 'jquery' ) );
 		}
 	}
 
