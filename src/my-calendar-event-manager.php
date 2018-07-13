@@ -1969,7 +1969,7 @@ function mc_list_events() {
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>">
 				<?php
 					// Translators: Number of published events.
-					printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); 
+					printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] );
 				?>
 				</a>
 			</li>
@@ -1978,7 +1978,7 @@ function mc_list_events() {
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>">
 				<?php
 					// Translators: Number of draft events.
-					printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); 
+					printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] );
 				?>
 				</a>
 			</li>
@@ -2292,7 +2292,7 @@ function mc_list_events() {
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>">
 				<?php
 					// Translators: Number of published events.
-					printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); 
+					printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] );
 				?>
 				</a>
 			</li>
@@ -2301,7 +2301,7 @@ function mc_list_events() {
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>">
 				<?php
 					// Translators: Number of draft events.
-					printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); 
+					printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] );
 				?>
 				</a>
 			</li>
