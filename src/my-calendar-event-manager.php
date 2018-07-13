@@ -293,10 +293,15 @@ function mc_bulk_action( $action ) {
 		case 'trash':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id IN (' . $prepared . ')';
 			break;
+		case 'unspam':
+			$sql = 'UPDATE ' .  my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
+			// send ham report to Akismet.
+			break;
 	}
 
 	$result = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // WPCS: unprepared SQL OK.
 
+	mc_update_count_cache();
 	$results = array(
 		'count'  => $i,
 		'total'  => $total,
@@ -346,6 +351,11 @@ function mc_bulk_message( $results, $action ) {
 			// Translators: Number of events removed from archive, number of events selected.
 			$success = __( '%1$d events removed from archive successfully out of %2$d selected', 'my-calendar' );
 			$error   = __( 'Your events have not been removed from the archive. Please investigate.', 'my-calendar' );
+			break;
+		case 'unspam':
+			// Translators: Number of events removed from archive, number of events selected.
+			$success = __( '%1$d events successfully unmarked as spam out of %2$d selected', 'my-calendar' );
+			$error   = __( 'Your events have not unmarked as spam. Please investigate.', 'my-calendar' );
 			break;
 	}
 
@@ -500,6 +510,11 @@ function my_calendar_manage() {
 			$results = mc_bulk_action( 'unarchive' );
 			echo $results;
 		}
+		
+		if ( isset( $_POST['mass_not_spam'] ) ) {
+			$results = mc_bulk_action( 'unspam' );
+			echo $results;
+		}
 	}
 	?>
 	<div class='wrap my-calendar-admin'>
@@ -640,6 +655,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		$add      = apply_filters( 'mc_before_save_insert', $add );
 		$result   = $wpdb->insert( my_calendar_table(), $add, $formats );
 		$event_id = $wpdb->insert_id;
+		mc_update_count_cache();
 		mc_increment_event( $event_id );
 		mc_set_category_relationships( $cats, $event_id );
 		if ( ! $result ) {
@@ -748,6 +764,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			}
 			$data = $update;
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
+			mc_update_count_cache();
 			if ( false === $result ) {
 				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} else {
@@ -1941,34 +1958,41 @@ function mc_list_events() {
 
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 		$items      = $found_rows[0];
-
+		$counts     = get_option( 'mc_count_cache' );
+		if ( empty( $counts ) ) {
+			$counts = mc_update_count_cache();
+		}
 		?>
 		<ul class="links">
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'published' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php _e( 'Published', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'published' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'draft' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php _e( 'Drafts', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'draft' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); ?></a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'trashed' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>"><?php _e( 'Trash', 'my-calendar' ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>"><?php printf( __( 'Trash (%d)', 'my-calendar' ), $counts['trash'] ); ?></a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php _e( 'Archived', 'my-calendar' ); ?></a>
-			</li>
-		<?php
-		if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
-			?>
-			<li>
-				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php _e( 'Spam', 'my-calendar' ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php printf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] ); ?></a>
 			</li>
 			<?php
-		}
-		?>
+			if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
+				?>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'all' == $_GET['limit'] || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php printf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] ); ?></a>
+			</li>
+				<?php
+			}
+			?>
+			<li>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'all' == $_GET['limit'] || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
 			</li>
 		</ul>
 		<?php
@@ -2015,6 +2039,9 @@ function mc_list_events() {
 						echo '<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="' . __( 'Archive events', 'my-calendar' ) . '" /> ';
 					} else {
 						echo '<input type="submit" class="button-secondary mc-archive" name="mass_undo_archive" value="' . __( 'Remove from archive', 'my-calendar' ) . '" /> ';
+					}
+					if ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) {
+						echo '<input type="submit" class="button-secondary mc-archive" name="mass_not_spam" value="' . __( 'Not spam', 'my-calendar' ) . '" /> ';
 					}
 					?>
 				</div>
@@ -2237,22 +2264,26 @@ function mc_list_events() {
 		<ul class="links">
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php _e( 'Published', 'my-calendar' ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); ?></a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'draft' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php _e( 'Drafts', 'my-calendar' ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); ?></a>
+			</li>
+			<li>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'trashed' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>"><?php printf( __( 'Trash (%d)', 'my-calendar' ), $counts['trash'] ); ?></a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php _e( 'Archived', 'my-calendar' ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php printf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] ); ?></a>
 			</li>
 			<?php
 			if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
 				?>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php _e( 'Spam', 'my-calendar' ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php printf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] ); ?></a>
 			</li>
 				<?php
 			}
