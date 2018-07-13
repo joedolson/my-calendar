@@ -294,7 +294,7 @@ function mc_bulk_action( $action ) {
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id IN (' . $prepared . ')';
 			break;
 		case 'unspam':
-			$sql = 'UPDATE ' .  my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
 			// send ham report to Akismet.
 			break;
 	}
@@ -510,7 +510,7 @@ function my_calendar_manage() {
 			$results = mc_bulk_action( 'unarchive' );
 			echo $results;
 		}
-		
+
 		if ( isset( $_POST['mass_not_spam'] ) ) {
 			$results = mc_bulk_action( 'unspam' );
 			echo $results;
@@ -1966,26 +1966,51 @@ function mc_list_events() {
 		<ul class="links">
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>">
+				<?php
+					// Translators: Number of published events.
+					printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); 
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'draft' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>">
+				<?php
+					// Translators: Number of draft events.
+					printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); 
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'trashed' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>"><?php printf( __( 'Trash (%d)', 'my-calendar' ), $counts['trash'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>">
+				<?php
+					// Translators: Number of trashed events.
+					printf( __( 'Trash (%d)', 'my-calendar' ), $counts['trash'] );
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php printf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>">
+				<?php
+					// Translators: Number of archived events.
+					printf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] );
+				?>
+				</a>
 			</li>
 			<?php
 			if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
 				?>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php printf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>">
+				<?php
+					// Translators: Number of events marked as spam.
+					printf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] );
+				?>
+				</a>
 			</li>
 				<?php
 			}
@@ -2264,26 +2289,51 @@ function mc_list_events() {
 		<ul class="links">
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>"><?php printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>">
+				<?php
+					// Translators: Number of published events.
+					printf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] ); 
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'draft' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>"><?php printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ); ?>">
+				<?php
+					// Translators: Number of draft events.
+					printf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] ); 
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'trashed' == $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>"><?php printf( __( 'Trash (%d)', 'my-calendar' ), $counts['trash'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ); ?>">
+				<?php
+					// Translators: Number of trashed events.
+					printf( __( 'Trash (%d)', 'my-calendar' ), $counts['trash'] );
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'archived' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>"><?php printf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>">
+				<?php
+					// Translators: Number of archived events.
+					printf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] );
+				?>
+				</a>
 			</li>
 			<?php
 			if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
 				?>
 			<li>
 				<a <?php echo ( isset( $_GET['restrict'] ) && 'flagged' == $_GET['restrict'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>"><?php printf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ); ?>">
+				<?php
+					// Translators: Number of events marked as spam.
+					printf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] );
+				?>
+				</a>
 			</li>
 				<?php
 			}
