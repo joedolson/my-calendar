@@ -893,8 +893,7 @@ function my_calendar_send_email( $event ) {
  * @return boolean true if spam
  */
 function mc_spam( $event_url = '', $description = '', $post = array() ) {
-	global $akismet_api_host, $akismet_api_port, $current_user;
-	$current_user  = wp_get_current_user();
+	global $akismet_api_host, $akismet_api_port;
 	if ( current_user_can( 'mc_manage_events' ) || apply_filter( 'mc_disable_spam_checking', false, $post ) ) { // is a privileged user.
 		return 0;
 	}
