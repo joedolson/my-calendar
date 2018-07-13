@@ -894,7 +894,6 @@ function my_calendar_send_email( $event ) {
  */
 function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	global $akismet_api_host, $akismet_api_port, $current_user;
-	$wpcom_api_key = defined( 'WPCOM_API_KEY' ) ? WPCOM_API_KEY : false;
 	$current_user  = wp_get_current_user();
 	if ( current_user_can( 'mc_manage_events' ) ) { // is a privileged user.
 		return 0;
@@ -902,7 +901,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	$akismet = false;
 	$c       = array();
 	// check for Akismet.
-	if ( function_exists( 'akismet_http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) ) {
+	if ( ( function_exists( 'akismet_http_post' ) || method_exists( 'Akismet', 'http_post' ) ) && ( akismet_get_key() ) {
 		$akismet = true;
 	}
 	if ( $akismet ) {
@@ -931,7 +930,11 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		foreach ( $c as $key => $data ) {
 			$query_string .= $key . '=' . urlencode( stripslashes( (string) $data ) ) . '&';
 		}
-		$response = akismet_http_post( $query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port );
+		if ( method_exists( 'Akismet', 'http_post' ) ) {
+			$response = Akismet::http_post( $query_string, 'comment-check' );
+		} else {
+			$response = akismet_http_post( $query_string, $akismet_api_host, '/1.1/comment-check', $akismet_api_port );
+		}
 		if ( 'true' == $response[1] ) {
 			return 1;
 		} else {

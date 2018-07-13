@@ -83,6 +83,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.12 =
+
+* Bug fix: My Calendar could prevent canonical link from displaying if canonical link being filtered by another application.
+* Modernize Akismet integration.
+* Add filter to disable Akismet checks.
+
 = 3.0.11 =
 
 * SECURITY: XSS - Canonical URL not properly sanitized. Affects 3.0.0 and up. 
