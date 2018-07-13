@@ -144,8 +144,10 @@ add_action( 'init', 'mc_custom_canonical' );
  * Customize canonical URL for My Calendar custom links
  */
 function mc_custom_canonical() {
-	add_action( 'wp_head', 'mc_canonical' );
-	remove_action( 'wp_head', 'rel_canonical' );
+	if ( isset( $_GET['mc_id'] ) ) {
+		add_action( 'wp_head', 'mc_canonical' );
+		remove_action( 'wp_head', 'rel_canonical' );
+	}
 }
 
 /**
