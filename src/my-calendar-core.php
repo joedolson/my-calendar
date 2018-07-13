@@ -945,6 +945,28 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	return 0;
 }
 
+/**
+ * Cache total number of events for admin.
+ */
+function mc_update_count_cache() {
+	global $wpdb;
+	$published = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table(). ' WHERE event_approved = 1' );
+	$draft     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table(). ' WHERE event_approved = 0' );
+	$trash     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table(). ' WHERE event_status = 2' );
+	$archive   = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table(). ' WHERE event_status = 0' );
+	$spam      = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table(). ' WHERE event_flagged = 1' );
+	$counts    = array(
+		'published' => $published,
+		'draft'     => $draft,
+		'trash'     => $trash,
+		'archive'   => $archive,
+		'spam'      => $spam,
+	);
+	update_option( 'mc_count_cache', $counts );
+
+	return $counts;
+}
+
 add_action( 'admin_enqueue_scripts', 'mc_scripts' );
 /**
  * Enqueue My Calendar admin scripts
