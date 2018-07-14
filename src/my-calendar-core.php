@@ -1390,7 +1390,7 @@ $plugins_string
 				if ( 'Donor' == $has_donated || 'Purchaser' == $has_purchased ) {
 					mc_show_notice( __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) );
 				} else {
-					mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) );
+					mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
 				}
 			} else {
 				// Translators: Support form URL.
