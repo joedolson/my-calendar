@@ -296,6 +296,16 @@ function mc_bulk_action( $action ) {
 		case 'unspam':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
 			// send ham report to Akismet.
+			// send notifications.
+			foreach( $ids as $id ) {
+				$post_ID   = mc_get_event_post( $event_id );
+				$submitter = get_post_meta( $post_ID, '_submitter_details', true );
+				if ( is_array( $submitter ) && ! empty( $submitter ) ) {
+					$name  = $submitter['first_name'] . ' ' . $submitter['last_name'];
+					$email = $submitter['email'];
+					do_action( 'mcs_complete_submission', $name, $email, $event_id, 'edit' );
+				}
+			}
 			break;
 	}
 
