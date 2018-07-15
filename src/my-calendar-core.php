@@ -895,7 +895,7 @@ function my_calendar_send_email( $event ) {
 function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	global $akismet_api_host, $akismet_api_port;
 	if ( current_user_can( 'mc_manage_events' ) || apply_filters( 'mc_disable_spam_checking', false, $post ) ) { // is a privileged user.
-		return 0;
+		return apply_filters( 'mc_custom_spam_status', 0, $post );
 	}
 	$akismet = false;
 	$c       = array();
@@ -904,21 +904,18 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		$akismet = true;
 	}
 	if ( $akismet ) {
-		$c['blog']               = home_url();
-		$c['user_ip']            = preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] );
-		$c['user_agent']         = $_SERVER['HTTP_USER_AGENT'];
-		$c['referrer']           = $_SERVER['HTTP_REFERER'];
-		$c['comment_type']       = 'calendar-event';
-		$c['blog_lang']          = get_bloginfo( 'language' );
-		$c['blog_charset']       = get_bloginfo( 'charset' );
-		$c['comment_author_url'] = $event_url;
+		$c['blog']                 = home_url();
+		$c['user_ip']              = preg_replace( '/[^0-9., ]/', '', $_SERVER['REMOTE_ADDR'] );
+		$c['user_agent']           = $_SERVER['HTTP_USER_AGENT'];
+		$c['referrer']             = $_SERVER['HTTP_REFERER'];
+		$c['comment_type']         = 'calendar-event';
+		$c['blog_lang']            = get_bloginfo( 'language' );
+		$c['blog_charset']         = get_bloginfo( 'charset' );
+		$c['comment_author_url']   = $event_url;
+		$c['comment_content']      = $description;
+		$c['comment_author']       = $post['mcs_name'];
+		$c['comment_author_email'] = $post['mcs_email'];
 
-		if ( esc_url( get_permalink() ) ) {
-			$c['permalink'] = get_permalink();
-		}
-		if ( '' != $description ) {
-			$c['comment_content'] = $description;
-		}
 		$ignore = array( 'HTTP_COOKIE' );
 
 		foreach ( $_SERVER as $key => $value ) {
