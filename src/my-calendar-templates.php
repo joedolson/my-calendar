@@ -288,7 +288,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= ( '' != $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
 		$hcard .= ( '' != $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
 		$hcard .= ( '' != $city . $state . $zip ) ? '<div>' : '';
-		$hcard .= ( '' != $city ) ? '<span class="locality" itemprop="addressLocality">' . $city . '</span><span class="sep">, </span>' : '';
+		$hcard .= ( '' != $city ) ? '<span class="locality" itemprop="addressLocality">' . $city . '</span><span class="mc-sep">, </span>' : '';
 		$hcard .= ( '' != $state ) ? '<span class="region" itemprop="addressRegion">' . $state . '</span> ' : '';
 		$hcard .= ( '' != $zip ) ? ' <span class="postal-code" itemprop="postalCode">' . $zip . '</span>' : '';
 		$hcard .= ( '' != $city . $state . $zip ) ? '</div>' : '';
