@@ -207,7 +207,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 			}
 		}
 		if ( ! $remove ) {
-			if ( ! function_exists( 'mcs_submit_exists' ) ) {
+			if ( ! function_exists( 'mcs_submissions' ) ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell support">
@@ -244,7 +244,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				</div>
 				<?php
 			}
-			if ( ! function_exists( 'mcs_submit_exists' ) ) {
+			if ( ! function_exists( 'mcs_submissions' ) ) {
 				?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox support">
