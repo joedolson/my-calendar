@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.0.11
+Stable tag: 3.0.12
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -86,7 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.12 =
 
 * Bug fix: My Calendar could prevent canonical link from displaying if canonical link being filtered by another application.
-* Modernize Akismet integration.
+* Modernize & improve Akismet integration.
 * Add filter to disable Akismet checks.
 
 = 3.0.11 =
