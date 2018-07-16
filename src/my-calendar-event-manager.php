@@ -2692,7 +2692,7 @@ function mc_check_data( $action, $post, $i ) {
 			$errors .= mc_show_error( __( 'That event conflicts with a previously scheduled event.', 'my-calendar' ), false );
 		}
 	}
-	$spam_content = ( $desc != '' ) ? $desc : $short;
+	$spam_content = ( '' != $desc ) ? $desc : $short;
 	$spam         = mc_spam( $event_link, $spam_content, $post );
 	// Likelihood that event will be flagged as spam, have a zero start time and be legit is minimal. Just kill it.
 	if ( 1 == $spam && '1970-01-01' == $begin ) {
