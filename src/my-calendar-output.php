@@ -462,7 +462,7 @@ function mc_get_details( $data, $template, $type ) {
 		switch ( $type ) {
 			case 'mini':
 				$template = mc_get_template( 'mini' );
-				if ( 1 == ( 'mc_use_mini_template' ) ) {
+				if ( 1 == get_option( 'mc_use_mini_template' ) ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
