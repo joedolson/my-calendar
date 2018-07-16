@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.13 =
+
+* Bug fix: missing function call when accessing custom mini templates
+*
+
 = 3.0.12 =
 
 * Bug fix: My Calendar could prevent canonical link from displaying if canonical link being filtered by another application.
