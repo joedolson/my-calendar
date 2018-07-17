@@ -86,7 +86,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.13 =
 
 * Bug fix: missing function call when accessing custom mini templates
-*
+* Bug fix: Syntax error in SQL query checking for conflicts
+* Change: pass short description to Akismet if long desc absent
 
 = 3.0.12 =
 
