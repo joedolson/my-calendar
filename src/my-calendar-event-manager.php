@@ -2689,7 +2689,10 @@ function mc_check_data( $action, $post, $i ) {
 	if ( function_exists( 'mcs_submissions' ) && isset( $post['mcs_check_conflicts'] ) ) {
 		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label );
 		if ( $conflicts ) {
-			$errors .= mc_show_error( __( 'That event conflicts with a previously scheduled event.', 'my-calendar' ), false );
+			$conflict_id = $conflicts[0]->occur_id;
+			$conflict_ev = mc_get_event( $conflict_id );
+			$conflict    = mc_get_details_link( $conflict_ev );
+			$errors     .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false );
 		}
 	}
 	$spam_content = ( '' != $desc ) ? $desc : $short;
@@ -2831,10 +2834,10 @@ function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
 					JOIN ' . my_calendar_table() . "
 					ON (event_id=occur_event_id)
 					WHERE $select_location " . '
-					( occur_begin BETWEEN cast( %1$s AS DATETIME ) AND cast( %2$s AS DATETIME )
-					OR occur_end BETWEEN cast( %1$s AS DATETIME ) AND cast( %2$s AS DATETIME ) )';
+					( occur_begin BETWEEN cast( \'%1$s\' AS DATETIME ) AND cast( \'%2$s\' AS DATETIME )
+					OR occur_end BETWEEN cast( \'%3$s\' AS DATETIME ) AND cast( \'%4$s\' AS DATETIME ) )';
 
-	$results = $wpdb->get_results( $wpdb->prepare( $event_query, $begin_time, $end_time ) ); // WPCS: Unprepared SQL ok.
+	$results = $wpdb->get_results( $wpdb->prepare( $event_query, $begin_time, $end_time, $begin_time, $end_time ) ); // WPCS: Unprepared SQL ok.
 
 	if ( empty( $results ) ) {
 		// Alternate: where "begin time" between occur_begin & occur_end OR "end time" between occur_begin & occur_end.
@@ -2845,8 +2848,8 @@ function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
 						JOIN ' . my_calendar_table() . "
 						ON (event_id=occur_event_id)
 						WHERE $select_location " . '
-						( cast( %1$s AS DATETIME ) BETWEEN occur_begin AND occur_end
-						OR cast( %2$s AS DATETIME ) BETWEEN occur_begin AND occur_end )';
+						( cast( \'%1$s\' AS DATETIME ) BETWEEN occur_begin AND occur_end
+						OR cast( \'%2$s\' AS DATETIME ) BETWEEN occur_begin AND occur_end )';
 
 		$results = $wpdb->get_results( $wpdb->prepare( $event_query2, $begin_time, $end_time ) ); // WPCS: Unprepared SQL ok.
 	}
