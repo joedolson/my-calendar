@@ -19,7 +19,7 @@ if ( typeof(mc_months) !== "undefined" ) {
 	$( '.mc-timepicker' ).pickatime({
 		interval: parseInt( mc_interval ),
 		format: mc_time_format,
-		editable: true		
+		editable: true
 	});
 
 	var begin = $( '#mc_event_date' ).pickadate( 'picker' );
