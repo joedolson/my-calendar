@@ -2692,7 +2692,8 @@ function mc_check_data( $action, $post, $i ) {
 			$conflict_id = $conflicts[0]->occur_id;
 			$conflict_ev = mc_get_event( $conflict_id );
 			$conflict    = mc_get_details_link( $conflict_ev );
-			$errors     .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false );
+			// Translators: URL to event details.
+			$errors .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false );
 		}
 	}
 	$spam_content = ( '' != $desc ) ? $desc : $short;
