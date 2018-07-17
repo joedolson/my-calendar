@@ -2686,7 +2686,7 @@ function mc_check_data( $action, $post, $i ) {
 		$repeats = 0;
 		$recur   = 'S1';
 	}
-	if ( function_exists( 'mcs_submissions' ) && isset( $post['mcs_check_conflicts'] ) ) {
+	if ( isset( $post['mcs_check_conflicts'] ) ) {
 		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label );
 		if ( $conflicts ) {
 			$conflict_id = $conflicts[0]->occur_id;
