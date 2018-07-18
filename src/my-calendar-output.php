@@ -2854,7 +2854,8 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
 	} else {
 		$select = '*';
 	}
-	$locations = $mcdb->get_results( $mcdb->prepare( "SELECT DISTINCT $select FROM " . my_calendar_locations_table() . " $where ORDER BY %s ASC", $data ), $return_type );
+	// Value of $data is set in switch above. $select is same as data unless *.
+	$locations = $mcdb->get_results( "SELECT DISTINCT $select FROM " . my_calendar_locations_table() . " $where ORDER BY $data ASC", $return_type ); // WPCS: unprepared SQL ok.
 
 	return $locations;
 }
