@@ -2971,7 +2971,7 @@ function mc_instance_list( $args ) {
 	$list     = isset( $args['list'] ) ? $args['list'] : '<li>{date}, {time}</li>';
 	$before   = isset( $args['before'] ) ? $args['before'] : '<ul>';
 	$after    = isset( $args['after'] ) ? $args['after'] : '</ul>';
-	$instance = isset( $args['instance'] ) ? true : false;
+	$instance = isset( $args['instance'] ) ? $args['instance'] : false;
 
 	global $wpdb;
 	$output = '';
