@@ -2272,8 +2272,10 @@ function mc_category_key( $category ) {
 		if ( in_array( $cat->category_id, $selected_categories ) || $category == $cat->category_id ) {
 			$selected_categories = array_diff( $selected_categories, array( $cat->category_id ) );
 			$class              .= ' current';
+			$aria_current        = 'aria-current="true"';
 		} else {
 			$selected_categories[] = $cat->category_id;
+			$aria_current          = '';
 		}
 		$selectable_categories = implode( ',', $selected_categories );
 		if ( '' == $selectable_categories ) {
@@ -2287,12 +2289,12 @@ function mc_category_key( $category ) {
 		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
 
 		if ( '' != $cat->category_icon && 'true' != get_option( 'mc_hide_icons' ) ) {
-			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"><span class="category-color-sample"><img src="' . $path . $cat->category_icon . '" alt="" style="background:' . $hex . $cat->category_color . ';" /></span>' . $cat_name . '</a></li>';
+			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"' . $aria_current . '><span class="category-color-sample"><img src="' . $path . $cat->category_icon . '" alt="" style="background:' . $hex . $cat->category_color . ';" /></span>' . $cat_name . '</a></li>';
 		} elseif ( 'default' != get_option( 'mc_apply_color' ) ) {
-			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"><span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' . $cat_name . '</a></li>';
+			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"' . $aria_current . '><span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' . $cat_name . '</a></li>';
 		} else {
 			// If category colors are ignored, don't render HTML for them.
-			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax">' . $cat_name . '</a></li>';
+			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"' . $aria_current . '>' . $cat_name . '</a></li>';
 		}
 	}
 	if ( isset( $_GET['mcat'] ) ) {
