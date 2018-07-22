@@ -83,6 +83,14 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.14 =
+
+* Bug fix: incorrect value passed for instance parameter on single event shortcode.
+* Bug fix: hide HTML wrapper for category color when colors disabled.
+* Bug fix: Remove transparent background in Twenty eighteen; blocks category colors
+* Bug fix: Invalid ordering parameter for location lists
+* 
+
 = 3.0.13 =
 
 * Bug fix: missing function call when accessing custom mini templates
