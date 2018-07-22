@@ -2266,14 +2266,26 @@ function mc_category_key( $category ) {
 		}
 		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
 		$class = mc_category_class( $cat, '' );
-		if ( isset( $_GET['mcat'] ) && $_GET['mcat'] == $cat->category_id || $category == $cat->category_id ) {
-			$class .= ' current';
+
+		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', $_GET['mcat'] );
+
+		if ( in_array( $cat->category_id, $selected_categories ) || $category == $cat->category_id ) {
+			$selected_categories = array_diff( $selected_categories, array( $cat->category_id ) );
+			$class              .= ' current';
+		} else {
+			$selected_categories[] = $cat->category_id;
+		}
+		$selectable_categories = implode( ',', $selected_categories );
+		if ( '' == $selectable_categories ) {
+			$url = esc_url( remove_query_arg( 'mcat', mc_get_current_url() ) );
+		} else {
+			$url = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
 		}
 		if ( 1 == $cat->category_private ) {
 			$class .= ' private';
 		}
 		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
-		$url      = mc_build_url( array( 'mcat' => $cat->category_id ), array( 'mcat' ) );
+
 		if ( '' != $cat->category_icon && 'true' != get_option( 'mc_hide_icons' ) ) {
 			$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"><span class="category-color-sample"><img src="' . $path . $cat->category_icon . '" alt="" style="background:' . $hex . $cat->category_color . ';" /></span>' . $cat_name . '</a></li>';
 		} elseif ( 'default' != get_option( 'mc_apply_color' ) ) {
