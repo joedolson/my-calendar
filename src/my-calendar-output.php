@@ -2279,7 +2279,7 @@ function mc_category_key( $category ) {
 		}
 		$selectable_categories = implode( ',', $selected_categories );
 		if ( '' == $selectable_categories ) {
-			$url = esc_url( remove_query_arg( 'mcat', mc_get_current_url() ) );
+			$url = remove_query_arg( 'mcat', mc_get_current_url() );
 		} else {
 			$url = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
 		}
