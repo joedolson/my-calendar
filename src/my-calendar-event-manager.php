@@ -30,7 +30,7 @@ function mc_event_post( $action, $data, $event_id ) {
 		if ( isset( $_POST['event_post'] ) && ( 0 == $_POST['event_post'] || '' == $_POST['event_post'] ) ) {
 			$post_id = mc_create_event_post( $data, $event_id );
 		} else {
-			$post_id = $_POST['event_post'];
+			$post_id = ( isset( $_POST['event_post'] ) ) ? absint( $_POST['event_post'] ) : false;
 		}
 		// If, after all that, the post doesn't exist, create it.
 		if ( ! get_post_status( $post_id ) ) {
@@ -763,8 +763,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$result = $wpdb->update( my_calendar_table(), $update, array(
 					'event_id' => $event_id,
 				), $formats, '%d' );
-
-				$recur_changed = ( $update['event_repeats'] != $_POST['prev_event_repeats'] || $update['event_recur'] != $_POST['prev_event_recur'] ) ? true : false;
+				if ( isset( $_POST['prev_event_repeats'] ) && isset( $_POST['prev_event_recur'] ) ) {
+					$recur_changed = ( $update['event_repeats'] != $_POST['prev_event_repeats'] || $update['event_recur'] != $_POST['prev_event_recur'] ) ? true : false;
+				} else {
+					$recur_changed = false;
+				}
 				if ( $date_changed || $recur_changed ) {
 					// Function mc_increment_event uses previous events and re-uses same ID if new has same date as old event.
 					$instances = mc_get_instances( $event_id );
@@ -784,7 +787,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				if ( isset( $post['event_approved'] ) && $post['event_approved'] != $event_approved ) {
 					$event_approved = absint( $post['event_approved'] );
 				}
-				do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $event_approved );
+				if ( isset( $_POST['prev_event_status'] ) ) {
+					// Don't execute transition actions if prev status not known.
+					do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $event_approved );
+				}
 				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
 			}
 		} else {
@@ -3443,11 +3449,13 @@ function mc_can_edit_event( $event = false ) {
 		$event        = mc_get_first_event( $event );
 		$event_author = $event->event_author;
 	} else {
+		// What is the case where the event is neither an object, int, or falsey? Hmm.
 		$event_author = wp_get_current_user()->ID;
+		$event_id     = $event;
 	}
 	$current_user    = wp_get_current_user();
 	$user            = $current_user->ID;
-	$categories      = mc_get_categories( $event->event_id );
+	$categories      = mc_get_categories( $event_id );
 	$has_permissions = true;
 	if ( is_array( $categories ) ) {
 		foreach ( $categories as $cat ) {
