@@ -83,6 +83,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.0.15 =
+
+* Bug fix: prevent some PHP notices when running Pro importer.
+
 = 3.0.14 =
 
 * Bug fix: incorrect value passed for instance parameter on single event shortcode.
