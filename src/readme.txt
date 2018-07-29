@@ -254,19 +254,19 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 = Hey! Why don't you have any Frequently Asked Questions here! =
 
-Because the majority of users end up on my web site asking for help anyway -- and it's simply more difficult to maintain two copies of my Frequently Asked Questions. Please visit [my web site FAQ](http://www.joedolson.com/my-calendar/faq/) to read my Frequently Asked Questions!
+Because the majority of users end up on my web site asking for help anyway -- and it's simply more work to maintain two copies. Please visit [my web site FAQ](http://www.joedolson.com/my-calendar/faq/) to read my Frequently Asked Questions!
 
-= This plug-in is really complicated. Why can't you personally help me figure out how to use it? =
+= This plug-in is complicated. Why won't you help me figure out how to use it? =
 
-I can! But not in person. Take a look at my [documentation website for My Calendar](http://docs.joedolson.com/my-calendar/) before making your request, and consider [making a donation](https://www.joedolson.com/donate.php)!
+I will! But not in person. Take a look at my [documentation website for My Calendar](http://docs.joedolson.com/my-calendar/) or [buy the User's Guide](https://www.joedolson.com/my-calendar/users-guide/) before making your request, and consider [making a donation](https://www.joedolson.com/donate/)!
 
 = Can my visitors or members submit events? =
 
-I've written a paid plug-in that adds this feature to My Calendar, called My Calendar Pro. [Buy it today](https://www.joedolson.com/my-calendar/pro/)!
+I've written a premium plug-in that adds this feature: My Calendar Pro. [Buy it today](https://www.joedolson.com/my-calendar/pro/)!
 
 = Is there an advanced search feature? =
 
-The search feature in My Calendar is pretty basic; but buying My Calendar Pro gives you a richer search feature, where you can narrow by dates, categories, authors, and more to refine your event search.
+The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/) gives you a richer search feature, where you can narrow by dates, categories, authors, and more to refine your event search.
 
 == Screenshots ==
 
