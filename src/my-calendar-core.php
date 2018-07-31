@@ -1279,7 +1279,7 @@ function mc_guess_calendar() {
  * Set up support form
  */
 function mc_get_support_form() {
-	global $current_user;
+	global $current_user, $wpdb;
 	$current_user = wp_get_current_user();
 	// send fields for My Calendar.
 	$version       = get_option( 'mc_version' );
@@ -1305,6 +1305,7 @@ function mc_get_support_form() {
 	$charset    = get_bloginfo( 'charset' );
 	// server.
 	$php_version = phpversion();
+	$db_version  = $wpdb->db_version();
 	$admin_email = get_option( 'admin_email' );
 	// theme data.
 	$theme         = wp_get_theme();
@@ -1345,6 +1346,7 @@ Charset: $charset
 
 ==Extra info:==
 PHP Version: $php_version
+DB Version: $db_version
 Server Software: $_SERVER[SERVER_SOFTWARE]
 User Agent: $_SERVER[HTTP_USER_AGENT]
 

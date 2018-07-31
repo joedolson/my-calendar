@@ -86,6 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.15 =
 
 * Bug fix: prevent some PHP notices when running Pro importer.
+* Change: Add DB version to debugging info
 
 = 3.0.14 =
 
