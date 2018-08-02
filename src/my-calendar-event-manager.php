@@ -476,6 +476,7 @@ function my_calendar_manage() {
 		if ( current_user_can( 'mc_approve_events' ) ) {
 			$event_id = absint( $_GET['event_id'] );
 			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
+			mc_update_count_cache();
 		} else {
 			mc_show_error( __( 'You do not have permission to approve that event.', 'my-calendar' ) );
 		}
@@ -486,6 +487,7 @@ function my_calendar_manage() {
 		if ( current_user_can( 'mc_approve_events' ) ) {
 			$event_id = absint( $_GET['event_id'] );
 			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // WPCS: unprepared SQL OK.
+			mc_update_count_cache();
 		} else {
 			mc_show_error( __( 'You do not have permission to trash that event.', 'my-calendar' ) );
 		}
@@ -665,7 +667,6 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		$add      = apply_filters( 'mc_before_save_insert', $add );
 		$result   = $wpdb->insert( my_calendar_table(), $add, $formats );
 		$event_id = $wpdb->insert_id;
-		mc_update_count_cache();
 		mc_increment_event( $event_id );
 		mc_set_category_relationships( $cats, $event_id );
 		if ( ! $result ) {
@@ -777,7 +778,6 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			}
 			$data = $update;
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
-			mc_update_count_cache();
 			if ( false === $result ) {
 				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} else {
@@ -803,6 +803,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		'event_id' => $event_id,
 		'message'  => $message,
 	);
+	mc_update_count_cache();
 
 	return apply_filters( 'mc_event_saved_message', $saved_response );
 }
@@ -2587,7 +2588,8 @@ function mc_check_data( $action, $post, $i ) {
 		$event_holiday      = ! empty( $post['event_holiday'] ) ? 1 : 0;
 		$group_id           = (int) $post['event_group_id'];
 		$event_group_id     = ( ( is_array( $post['event_begin'] ) && count( $post['event_begin'] ) > 1 ) || mc_event_is_grouped( $group_id ) ) ? $group_id : 0;
-		$event_span         = ( ! empty( $post['event_span'] ) && 0 != event_group_id ) ? 1 : 0;
+		$event_span         = ( ! empty( $post['event_span'] ) && 0 != $event_group_id ) ? 1 : 0;
+		echo $event_group_id . ' ' . $event_span . '<br />';
 		$event_hide_end     = ( ! empty( $post['event_hide_end'] ) ) ? (int) $post['event_hide_end'] : 0;
 		$event_hide_end     = ( '' == $time || '23:59:59' == $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		// Set location.
