@@ -42,14 +42,19 @@ function mc_get_template( $template ) {
  * @return string HTML output.
  */
 function mc_time_html( $event, $type ) {
-	$date_format = get_option( 'mc_date_format' );
-	$date_format = ( '' != $date_format ) ? $date_format : get_option( 'date_format' );
+	$orig_format = get_option( 'mc_date_format' );
+	$date_format = ( '' != $orig_format ) ? $orig_format : get_option( 'date_format' );
 	if ( $event->event_end != $event->event_begin ) {
 		$mult_format = get_option( 'mc_multidate_format' );
 		$mult_format = ( '' != $mult_format ) ? $mult_format : 'F j-%d, Y';
 		$date_format = str_replace( '%d', date( 'j', strtotime( $event->occur_end ) ), $mult_format );
 	}
-	$current     = date_i18n( $date_format, strtotime( $event->occur_begin ) );
+	// If this event crosses years or months, use original date format & show both dates.
+	if ( date( 'Y', strtotime( $event->occur_end ) ) != date( 'Y', strtotime( $event->occur_begin ) ) || date( 'm', strtotime( $event->occur_end ) ) != date( 'm', strtotime( $event->occur_begin ) ) ) {
+		$current     = date_i18n( $orig_format, strtotime( $event->occur_begin ) ) . ' &ndash; ' . date_i18n( $orig_format, strtotime( $event->occur_end ) );
+	} else {
+		$current = date_i18n( $date_format, strtotime( $event->occur_begin ) );
+	}
 	$id_start    = date( 'Y-m-d', strtotime( $event->occur_begin ) );
 	$id_end      = date( 'Y-m-d', strtotime( $event->occur_end ) );
 	$event_date  = ( 'list' == $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $id_start . 'T' . $event->event_time . "' content='" . $id_start . 'T' . $event->event_time . "'>$current</span>";
