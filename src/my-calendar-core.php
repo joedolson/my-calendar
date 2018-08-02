@@ -949,7 +949,7 @@ function mc_update_count_cache() {
 	global $wpdb;
 	$published = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 1' ); // WPCS: unprepared SQL OK.
 	$draft     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 0' ); // WPCS: unprepared SQL OK.
-	$trash     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_status = 2' ); // WPCS: unprepared SQL OK.
+	$trash     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 2' ); // WPCS: unprepared SQL OK.
 	$archive   = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_status = 0' ); // WPCS: unprepared SQL OK.
 	$spam      = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_flagged = 1' ); // WPCS: unprepared SQL OK.
 	$counts    = array(
