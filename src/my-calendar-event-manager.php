@@ -2589,7 +2589,6 @@ function mc_check_data( $action, $post, $i ) {
 		$group_id           = (int) $post['event_group_id'];
 		$event_group_id     = ( ( is_array( $post['event_begin'] ) && count( $post['event_begin'] ) > 1 ) || mc_event_is_grouped( $group_id ) ) ? $group_id : 0;
 		$event_span         = ( ! empty( $post['event_span'] ) && 0 != $event_group_id ) ? 1 : 0;
-		echo $event_group_id . ' ' . $event_span . '<br />';
 		$event_hide_end     = ( ! empty( $post['event_hide_end'] ) ) ? (int) $post['event_hide_end'] : 0;
 		$event_hide_end     = ( '' == $time || '23:59:59' == $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		// Set location.

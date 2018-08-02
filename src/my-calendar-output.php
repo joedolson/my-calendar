@@ -51,7 +51,7 @@ function mc_time_html( $event, $type ) {
 	}
 	// If this event crosses years or months, use original date format & show both dates.
 	if ( date( 'Y', strtotime( $event->occur_end ) ) != date( 'Y', strtotime( $event->occur_begin ) ) || date( 'm', strtotime( $event->occur_end ) ) != date( 'm', strtotime( $event->occur_begin ) ) ) {
-		$current     = date_i18n( $orig_format, strtotime( $event->occur_begin ) ) . ' &ndash; ' . date_i18n( $orig_format, strtotime( $event->occur_end ) );
+		$current = date_i18n( $orig_format, strtotime( $event->occur_begin ) ) . ' &ndash; ' . date_i18n( $orig_format, strtotime( $event->occur_end ) );
 	} else {
 		$current = date_i18n( $date_format, strtotime( $event->occur_begin ) );
 	}
