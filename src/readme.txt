@@ -86,6 +86,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.0.15 =
 
 * Bug fix: prevent some PHP notices when running Pro importer.
+* Bug fix: Display of multidate time string when crossing months or years.
+* Bug fix: Variable written as constant prevented event_span from saving correctly.
+* Bug fix: Trash counter updated with incorrect values.
+* Bug fix: Two cases where status counter not updated.
 * Change: Add DB version to debugging info
 
 = 3.0.14 =
