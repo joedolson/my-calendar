@@ -83,6 +83,15 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+TODO: Support limiting views to multiple locations
+
+= 3.0.16 =
+
+* Changed display UID to avoid duplicate IDs when multiple calendars shown.
+* Add option to display heading in details pop-up.
+* Unify position and size of close button in Twentyeighteen mini calendar.
+* Eliminate multi category parameter from CSV output (doesn't support multidimensional data)
+
 = 3.0.15 =
 
 * Bug fix: prevent some PHP notices when running Pro importer.
