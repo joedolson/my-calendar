@@ -240,6 +240,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$description = '';
 	$link        = '';
 	$vcal        = '';
+	$inner_title = '';
 	$gcal        = '';
 	$image       = '';
 	$tickets     = '';
@@ -266,14 +267,16 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$display_gmap    = get_option( 'mc_gmap' );
 	$display_link    = get_option( 'mc_event_link' );
 	$display_image   = get_option( 'mc_image' );
+	$display_title   = get_option( 'mc_title' );
 	$display_reg     = get_option( 'mc_event_registration' );
-	$uid             = 'mc_' . $event->occur_id;
 	$day_id          = date( 'd', strtotime( $process_date ) );
+	$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
+
 	$image           = mc_category_icon( $event );
 	$img             = '';
 	$has_image       = ( '' != $image ) ? ' has-image' : '';
 	$event_classes   = mc_event_classes( $event, $day_id, $type );
-	$header         .= "<div id='$uid-$day_id-$type' class='$event_classes'>\n";
+	$header         .= "<div id='$uid-$type' class='$event_classes'>\n";
 
 	switch ( $type ) {
 		case 'calendar':
@@ -298,7 +301,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image'>" : '<span class="no-link">';
 			$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 		} else {
-			$wrap    = "<a href='#$uid-$day_id-$type-details' class='et_smooth_scroll_disabled url summary$has_image'>";
+			$wrap    = "<a href='#$uid-$type-details' class='et_smooth_scroll_disabled url summary$has_image'>";
 			$balance = '</a>';
 		}
 	} else {
@@ -316,7 +319,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$header       .= '<span class="summary">' . $title . '</span>';
 
 	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
-	$close_button = "<button type='button' aria-controls='$uid-$day_id-$type-details' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
+	$close_button = "<button type='button' aria-controls='$uid-$type-details' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
 
 	if ( mc_show_details( $time, $type ) ) {
 		$close = ( 'calendar' == $type || 'mini' == $type ) ? $close_button : '';
@@ -360,6 +363,12 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 
 			if ( 'true' == $display_image ) {
 				$img = mc_get_event_image( $event, $data );
+			}
+			
+			if ( 'calendar' == $type && 'true' == $display_title ) {
+				// In all cases, this is semantically a duplicate of the title, but can be beneficial for sighted users.
+				$headingtype = ( $hlevel == 'h3' ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
+				$inner_title = '<h4 class="mc-title" aria-hidden="true">' . $event_title . '</h4>';
 			}
 
 			if ( 'true' == $display_desc || 'single' == $type ) {
@@ -409,6 +418,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 
 			$details = "\n"
 						. $close
+						. $inner_title
 						. $time_html
 						. $list_title
 						. $img
@@ -432,7 +442,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		}
 
 		$img_class  = ( '' != $img ) ? ' has-image' : ' no-image';
-		$container  = "<div id='$uid-$day_id-$type-details' class='details$img_class' role='alert' aria-labelledby='$uid-title' itemscope itemtype='http://schema.org/Event'>\n";
+		$container  = "<div id='$uid-$type-details' class='details$img_class' role='alert' aria-labelledby='$uid-title' itemscope itemtype='http://schema.org/Event'>\n";
 		$container .= "<meta itemprop='name' content='" . strip_tags( $event->event_title ) . "' />";
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
@@ -538,7 +548,7 @@ function mc_get_event_image( $event, $data ) {
  * @return string classes
  */
 function mc_event_classes( $event, $uid, $type ) {
-	$uid = 'mc_' . $event->occur_id;
+	$uid = 'mc_' . $type . '_' . $event->occur_id;
 	$ts  = strtotime( get_date_from_gmt( date( 'Y-m-d H:i:s', $event->ts_occur_begin ) ) );
 	$end = strtotime( get_date_from_gmt( date( 'Y-m-d H:i:s', $event->ts_occur_end ) ) );
 	$now = current_time( 'timestamp' );

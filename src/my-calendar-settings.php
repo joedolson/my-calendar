@@ -305,6 +305,7 @@ function my_calendar_settings() {
 		update_option( 'mc_event_link', ( ! empty( $_POST['mc_event_link'] ) && 'on' == $_POST['mc_event_link'] ) ? 'true' : 'false' );
 		update_option( 'mc_image', ( ! empty( $_POST['mc_image'] ) && 'on' == $_POST['mc_image'] ) ? 'true' : 'false' );
 		update_option( 'mc_show_weekends', ( ! empty( $_POST['mc_show_weekends'] ) && 'on' == $_POST['mc_show_weekends'] ) ? 'true' : 'false' );
+		update_option( 'mc_title', ( ! empty( $_POST['mc_title'] ) && 'on' == $_POST['mc_title'] ) ? 'true' : 'false' );
 		update_option( 'mc_convert', ( ! empty( $_POST['mc_convert'] ) ) ? $_POST['mc_convert'] : 'false' );
 		if ( ( isset( $_POST['mc_use_permalinks'] ) && 'true' == get_option( 'mc_use_permalinks' ) ) && 'true' != $permalinks ) {
 			$url = admin_url( 'options-permalink.php#mc_cpt_base' );
@@ -756,6 +757,7 @@ function mc_remote_db() {
 						<legend><?php _e( 'Grid Options', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_show_weekends', __( 'Show Weekends on Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_title', __( 'Include event title in details pop-up', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li>
 							<?php
 							mc_settings_field( 'mc_convert', __( 'Mobile View', 'my-calendar' ), array(
