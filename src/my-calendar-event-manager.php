@@ -3201,7 +3201,7 @@ add_action( 'save_post', 'mc_post_update_event' );
  */
 function mc_post_update_event( $id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $id ) || ! ( get_post_type( $id ) == 'mc-events' ) ) {
-		return;
+		return $id;
 	}
 	$post           = get_post( $id );
 	$featured_image = wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) );
