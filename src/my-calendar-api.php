@@ -24,7 +24,7 @@ function my_calendar_api() {
 			if ( $api_key ) {
 				$format = ( isset( $_REQUEST['my-calendar-api'] ) ) ? $_REQUEST['my-calendar-api'] : 'json';
 				$from   = ( isset( $_REQUEST['from'] ) ) ? $_REQUEST['from'] : date( 'Y-m-d', current_time( 'timestamp' ) );
-				$to     = ( isset( $_REQUEST['to'] ) ) ? $_REQUEST['to'] : date( 'Y-m-d', strtotime( current_time( 'timestamp' ) . apply_filters( 'mc_api_auto_date', '+ 7 days' ) ) );
+				$to     = ( isset( $_REQUEST['to'] ) ) ? $_REQUEST['to'] : date( 'Y-m-d', strtotime( apply_filters( 'mc_api_auto_date', '+ 7 days' ) ) );
 				// sanitization is handled elsewhere.
 				$category = ( isset( $_REQUEST['mcat'] ) ) ? $_REQUEST['mcat'] : '';
 				$ltype    = ( isset( $_REQUEST['ltype'] ) ) ? $_REQUEST['ltype'] : '';
