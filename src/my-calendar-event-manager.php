@@ -113,7 +113,11 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	// access features for the event.
 	$description = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 	$image       = isset( $data['event_image'] ) ? esc_url_raw( $data['event_image'] ) : '';
-
+	$guid        = get_post_meta( $post_id, '_mc_guid', true );
+	if ( '' == $guid ) {
+		$guid = md5( $post_id . $event_id . $data['event_title'] );
+		update_post_meta( $post_id, '_mc_guid', $guid );
+	}
 	update_post_meta( $post_id, '_mc_event_shortcode', $data['shortcode'] );
 	update_post_meta( $post_id, '_mc_event_access', ( isset( $_POST['events_access'] ) ) ? $_POST['events_access'] : '' );
 	update_post_meta( $post_id, '_mc_event_id', $event_id );

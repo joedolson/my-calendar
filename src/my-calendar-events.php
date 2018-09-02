@@ -28,9 +28,31 @@ function mc_event_object( $object ) {
 		if ( ! property_exists( $object, 'location' ) && is_numeric( $object->event_location ) && 0 != $object->event_location ) {
 			$object->location = mc_get_location( $object->event_location );
 		}
+		if ( ! property_exists( $object, 'uid' ) ) {
+			$guid = get_post_meta( $object->event_post, '_mc_guid', true );
+			if ( '' == $guid ) {
+				$guid = mc_create_guid( $object );
+			}
+			$object->uid = $guid;
+		}
 	}
 
 	return $object;
+}
+
+
+/**
+ * Create a GUID for an event.
+ *
+ * @param object $event Event object.
+ *
+ * @return string GUID
+ */
+function mc_create_guid( $event ) {
+	$guid = md5( $event->event_post . $event->event_id . $event->event_title );
+	update_post_meta( $event->event_post, '_mc_guid', $guid );
+
+	return $guid;
 }
 
 /**
