@@ -1,15 +1,15 @@
 (function ($) {
-    'use strict';
-    $(function () {
-        $(document).on('click', ".my-calendar-header a.mcajax, .my-calendar-footer a.mcajax", function (e) {
+	'use strict';
+	$(function () {
+		$(document).on('click', ".my-calendar-header a.mcajax, .my-calendar-footer a.mcajax", function (e) {
 			e.preventDefault();
 			var calendar = $( this ).closest( '.mc-main' );
 			var ref      = calendar.attr('id');
-            var link     = $(this).attr('href');
+			var link     = $(this).attr('href');
 			var height   = $('.mc-main' ).height();
-            $('#' + ref).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-            $('#' + ref).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
-				
+			$('#' + ref).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
+			$('#' + ref).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
+
 				if ( status == 'error' ) {
 					$( '#' + ref ).html( msg + xhr.status + " " + xhr.statusText );
 				}
@@ -28,9 +28,9 @@
 					$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
 				}
 				// All views.
-                $( '#' + ref ).attr('tabindex', '-1').focus();
+				$( '#' + ref ).attr('tabindex', '-1').focus();
 				// Your Custom ajax load changes if needed.
-            });
-        });		
-    });
+			});
+		});
+	});
 }(jQuery));
