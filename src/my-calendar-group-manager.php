@@ -42,9 +42,7 @@ function my_calendar_group_edit() {
 				if ( isset( $_POST['apply'] ) && is_array( $_POST['apply'] ) ) {
 					$mc_output = mc_check_group_data( $action, $_POST );
 					foreach ( $_POST['apply'] as $event_id ) {
-						if ( ! is_int( $event_id ) ) {
-							continue;
-						}
+						$event_id = absint( $event_id );
 						$response = my_calendar_save_group( $action, $mc_output, $event_id );
 						echo $response;
 					}
@@ -147,6 +145,7 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 	global $wpdb, $event_author;
 	$proceed = $output[0];
 	$message = '';
+
 	if ( 'edit' == $action && true == $proceed ) {
 		$event_author = (int) ( $_POST['event_author'] );
 		if ( mc_can_edit_event( $event_id ) ) {

@@ -91,6 +91,7 @@ TODO: Support limiting views to multiple locations
 * Add option to display heading in details pop-up.
 * Unify position and size of close button in Twentyeighteen mini calendar.
 * Eliminate multi category parameter from CSV output (doesn't support multidimensional data)
+* Add GUID to export data.
 
 = 3.0.15 =
 
