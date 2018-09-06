@@ -85,6 +85,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.0.17 =
+
+* Bug fix: Group event editing was broken.
+
 = 3.0.16 =
 
 * Changed display UID to avoid duplicate IDs when multiple calendars shown.
