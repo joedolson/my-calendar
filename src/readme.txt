@@ -88,6 +88,8 @@ TODO: Support limiting views to multiple locations
 = 3.0.17 =
 
 * Bug fix: Group event editing was broken.
+* Bug fix: Eliminate four PHP notices in the Today's Events widget.
+* Added: Filter to control whether CSS should be loaded on archives.
 
 = 3.0.16 =
 

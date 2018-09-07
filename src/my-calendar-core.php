@@ -148,6 +148,7 @@ function mc_register_styles() {
 		wp_enqueue_style( 'my-calendar-admin-style' );
 	}
 
+	$default   = apply_filters( 'mc_display_css_on_archives', true, $wp_query );
 	$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
 	$js_array  = ( '' != get_option( 'mc_show_js' ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
 	$css_array = ( '' != get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
@@ -165,9 +166,9 @@ function mc_register_styles() {
 			}
 		}
 	}
-
+	// True means styles are disabled.
 	if ( 'true' != get_option( 'mc_use_styles' ) ) {
-		if ( is_array( $css_array ) && in_array( $id, $css_array ) || get_option( 'mc_show_css' ) == '' ) {
+		if ( ( $default && ! $id ) || ( is_array( $css_array ) && in_array( $id, $css_array ) || get_option( 'mc_show_css' ) == '' ) ) {
 			wp_enqueue_style( 'my-calendar-style' );
 		}
 	}
