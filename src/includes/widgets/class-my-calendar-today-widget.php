@@ -50,11 +50,15 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$after_widget  = $args['after_widget'];
 		$before_title  = $args['before_title'];
 		$after_title   = $args['after_title'];
+		$today_title   = isset( $instance['my_calendar_today_title'] ) ? $instance['my_calendar_today_title'] : '';
+		$template      = isset( $instance['my_calendar_today_template'] ) ? $instance['my_calendar_today_template'] : '';
+		$no_events     = isset( $instance['my_calendar_no_events_text'] ) ? $instance['my_calendar_no_events_text'] : '';
+		$category      = isset( $instance['my_calendar_today_category'] ) ? $instance['my_calendar_today_category'] : '';
 
-		$the_title      = apply_filters( 'widget_title', $instance['my_calendar_today_title'], $instance, $args );
-		$the_template   = $instance['my_calendar_today_template'];
-		$the_substitute = $instance['my_calendar_no_events_text'];
-		$the_category   = ( '' == $instance['my_calendar_today_category'] ) ? 'default' : esc_attr( $instance['my_calendar_today_category'] );
+		$the_title      = apply_filters( 'widget_title', $today_title, $instance, $args );
+		$the_template   = $template;
+		$the_substitute = $no_events;
+		$the_category   = ( '' == $category ) ? 'default' : esc_attr( $instance['my_calendar_today_category'] );
 		$author         = ( ! isset( $instance['my_calendar_today_author'] ) || '' == $instance['my_calendar_today_author'] ) ? 'all' : esc_attr( $instance['my_calendar_today_author'] );
 		$host           = ( ! isset( $instance['mc_host'] ) || '' == $instance['mc_host'] ) ? 'all' : esc_attr( $instance['mc_host'] );
 		$default_link   = mc_get_uri( false, $args );
