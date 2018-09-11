@@ -299,7 +299,7 @@ function mc_default_settings() {
 	add_option( 'mc_multisite_show', 0 );
 	add_option( 'mc_event_link', 'true' );
 	add_option( 'mc_topnav', 'toggle,timeframe,jump,nav' );
-	add_option( 'mc_bottomnav', 'key,category,feeds' );
+	add_option( 'mc_bottomnav', 'key,print' );
 	add_option( 'mc_default_direction', 'DESC' );
 	update_option( 'mc_update_notice', 1 );
 	mc_add_roles();
