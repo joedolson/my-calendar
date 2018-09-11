@@ -318,15 +318,26 @@ function mc_get_rss_events( $cat_id = false ) {
 		$cat = 'WHERE event_approved = 1 AND event_flagged <> 1';
 	}
 	$exclude_categories = mc_private_categories();
-	$limit              = apply_filters( 'mc_rss_feed_size', 30 );
+	$limit              = apply_filters( 'mc_rss_feed_date_range', 2 );
 
 	$events = $mcdb->get_results(
 		'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
 		FROM ' . my_calendar_event_table() . '
 		JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
 		JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
+		AND event_added > NOW() - INTERVAL $limit DAY 
 		$exclude_categories
-		ORDER BY event_added DESC LIMIT 0,$limit" );
+		ORDER BY event_added DESC" );
+
+	if ( empty( $events ) ) {
+		$events = $mcdb->get_results(
+			'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+			FROM ' . my_calendar_event_table() . '
+			JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
+			JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
+			$exclude_categories
+			ORDER BY event_added DESC LIMIT 0,30" );
+	}
 	$groups = array();
 	$output = array();
 	foreach ( array_keys( $events ) as $key ) {

@@ -85,6 +85,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.0.18 =
+
+* Bug fix: Invalid setting in bottom nav defaults.
+* Bug fix: Generate feeds by date added rather than fixed number. If empty, get most recent regardless.
+
 = 3.0.17 =
 
 * Bug fix: Group event editing was broken.
