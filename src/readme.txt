@@ -89,6 +89,7 @@ TODO: Support limiting views to multiple locations
 
 * Bug fix: Invalid setting in bottom nav defaults.
 * Bug fix: Generate feeds by date added rather than fixed number. If empty, get most recent regardless.
+* Bug fix: Legitimate HTML escaped in visual editor in group event editor.
 
 = 3.0.17 =
 

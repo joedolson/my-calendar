@@ -404,7 +404,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						}
 						?>
 						</label><br/>
-						<?php wp_editor( esc_attr( $description ), 'content', array( 'textarea_rows' => 10 ) ); ?>
+						<?php wp_editor( $description, 'content', array( 'textarea_rows' => 10 ) ); ?>
 					</div>
 					<?php
 				}
