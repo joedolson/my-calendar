@@ -514,16 +514,20 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['ical_desc']        = $strip_desc;
 	$e['ical_start']       = $dtstart;
 	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? date( 'Ymd\THi00', strtotime( $dtend ) + 60 ) : $dtend;
-	$ical_link             = mc_build_url( array( 'vcal' => $event->occur_id ), array(
-		'month',
-		'dy',
-		'yr',
-		'ltype',
-		'loc',
-		'mcat',
-		'format',
-		'time',
-	), mc_get_uri( $event ) );
+	$ical_link             = mc_build_url(
+		array( 'vcal' => $event->occur_id ),
+		array(
+			'month',
+			'dy',
+			'yr',
+			'ltype',
+			'loc',
+			'mcat',
+			'format',
+			'time',
+		),
+		mc_get_uri( $event )
+	);
 	$e['ical']             = $ical_link;
 	$e['ical_html']        = "<a class='ical' rel='nofollow' href='$ical_link' aria-describedby='mc_$event->occur_id-title'>" . __( 'iCal', 'my-calendar' ) . '</a>';
 	$e                     = apply_filters( 'mc_filter_shortcodes', $e, $event );
@@ -573,23 +577,27 @@ function mc_get_details_link( $event ) {
 		$details_link = add_query_arg( 'mc_id', $event->occur_id, get_permalink( $event->event_post ) );
 	} else {
 		if ( mc_get_uri( 'boolean' ) ) {
-			$details_link = mc_build_url( array( 'mc_id' => $event->occur_id ), array(
-				'month',
-				'dy',
-				'yr',
-				'ltype',
-				'loc',
-				'mcat',
-				'format',
-				'feed',
-				'page_id',
-				'p',
-				'mcs',
-				'time',
-				'page',
-				'mode',
-				'event_id',
-			), $uri );
+			$details_link = mc_build_url(
+				array( 'mc_id' => $event->occur_id ),
+				array(
+					'month',
+					'dy',
+					'yr',
+					'ltype',
+					'loc',
+					'mcat',
+					'format',
+					'feed',
+					'page_id',
+					'p',
+					'mcs',
+					'time',
+					'page',
+					'mode',
+					'event_id',
+				),
+				$uri
+			);
 		}
 	}
 
@@ -646,15 +654,18 @@ function mc_get_uri( $event = false, $args = array() ) {
 function mc_get_details_label( $event, $e ) {
 	$templates  = get_option( 'mc_templates' );
 	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Read more', 'my-calendar' );
-	$e_label    = wp_kses( mc_draw_template( $e, $e_template ), array(
-		'span' => array(
-			'class' => array(
-				'screen-reader-text',
+	$e_label    = wp_kses(
+		mc_draw_template( $e, $e_template ),
+		array(
+			'span' => array(
+				'class' => array(
+					'screen-reader-text',
+				),
 			),
-		),
-		'em',
-		'strong',
-	) );
+			'em',
+			'strong',
+		)
+	);
 
 	return $e_label;
 }

@@ -226,11 +226,15 @@ function my_calendar_style_edit() {
 						if ( $right_string ) { // If right string is blank, there is no default.
 							if ( isset( $_GET['diff'] ) ) {
 								echo '<div class="wrap my-calendar-admin" id="diff">';
-								echo mc_text_diff( $left_string, $right_string, array(
-									'title'       => __( 'Comparing Your Style with latest installed version of My Calendar', 'my-calendar' ),
-									'title_right' => __( 'Latest (from plugin)', 'my-calendar' ),
-									'title_left'  => __( 'Current (in use)', 'my-calendar' ),
-								) );
+								echo mc_text_diff(
+									$left_string,
+									$right_string,
+									array(
+										'title'       => __( 'Comparing Your Style with latest installed version of My Calendar', 'my-calendar' ),
+										'title_right' => __( 'Latest (from plugin)', 'my-calendar' ),
+										'title_left'  => __( 'Current (in use)', 'my-calendar' ),
+									)
+								);
 								echo '</div>';
 							} elseif ( trim( $left_string ) != trim( $right_string ) ) {
 								echo '<div class="wrap my-calendar-admin">';
@@ -465,28 +469,30 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 	return $r;
 }
 
-add_action( 'admin_enqueue_scripts', function() {
-	if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
-		return;
+add_action( 'admin_enqueue_scripts',
+	function() {
+		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
+			return;
+		}
+
+		if ( 'my-calendar_page_my-calendar-styles' !== get_current_screen()->id ) {
+			return;
+		}
+
+		// Enqueue code editor and settings for manipulating HTML.
+		$settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+
+		// Bail if user disabled CodeMirror.
+		if ( false === $settings ) {
+			return;
+		}
+
+		wp_add_inline_script(
+			'code-editor',
+			sprintf(
+				'jQuery( function() { wp.codeEditor.initialize( "style", %s ); } );',
+				wp_json_encode( $settings )
+			)
+		);
 	}
-
-	if ( 'my-calendar_page_my-calendar-styles' !== get_current_screen()->id ) {
-		return;
-	}
-
-	// Enqueue code editor and settings for manipulating HTML.
-	$settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
-
-	// Bail if user disabled CodeMirror.
-	if ( false === $settings ) {
-		return;
-	}
-
-	wp_add_inline_script(
-		'code-editor',
-		sprintf(
-			'jQuery( function() { wp.codeEditor.initialize( "style", %s ); } );',
-			wp_json_encode( $settings )
-		)
-	);
-} );
+);

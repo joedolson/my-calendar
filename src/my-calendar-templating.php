@@ -451,28 +451,30 @@ function mc_list_templates() {
 	echo $list;
 }
 
-add_action( 'admin_enqueue_scripts', function() {
-	if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
-		return;
+add_action( 'admin_enqueue_scripts',
+	function() {
+		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
+			return;
+		}
+
+		if ( 'my-calendar_page_my-calendar-templates' !== get_current_screen()->id ) {
+			return;
+		}
+
+		// Enqueue code editor and settings for manipulating HTML.
+		$settings = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
+
+		// Bail if user disabled CodeMirror.
+		if ( false === $settings ) {
+			return;
+		}
+
+		wp_add_inline_script(
+			'code-editor',
+			sprintf(
+				'jQuery( function() { wp.codeEditor.initialize( "mc_template", %s ); } );',
+				wp_json_encode( $settings )
+			)
+		);
 	}
-
-	if ( 'my-calendar_page_my-calendar-templates' !== get_current_screen()->id ) {
-		return;
-	}
-
-	// Enqueue code editor and settings for manipulating HTML.
-	$settings = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
-
-	// Bail if user disabled CodeMirror.
-	if ( false === $settings ) {
-		return;
-	}
-
-	wp_add_inline_script(
-		'code-editor',
-		sprintf(
-			'jQuery( function() { wp.codeEditor.initialize( "mc_template", %s ); } );',
-			wp_json_encode( $settings )
-		)
-	);
-} );
+);

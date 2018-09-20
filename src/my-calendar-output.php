@@ -846,7 +846,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
 				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . '</span>';
-				$url     = mc_build_url( 
+				$url     = mc_build_url(
 					array(
 						'time' => 'day',
 						'dy'   => $day,

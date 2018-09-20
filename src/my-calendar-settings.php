@@ -1044,7 +1044,8 @@ function mc_remote_db() {
 	mc_settings_field(
 		'mc_event_mail_message',
 		__( 'Message Body', 'my-calendar' ),
-		__( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}", "<br /><a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+		__( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}",
+		"<br /><a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
 		array(
 			'cols' => 60,
 			'rows' => 6,
