@@ -707,14 +707,17 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_user_location_type' );
 				delete_option( 'mc_event_approve_perms' );
 				delete_option( 'mc_location_type' );
-				add_option( 'mc_style_vars', array(
-					'--primary-dark'    => '#313233',
-					'--primary-light'   => '#fff',
-					'--secondary-light' => '#fff',
-					'--secondary-dark'  => '#000',
-					'--highlight-dark'  => '#666',
-					'--highlight-light' => '#efefef',
-				) );
+				add_option(
+					'mc_style_vars',
+					array(
+						'--primary-dark'    => '#313233',
+						'--primary-light'   => '#fff',
+						'--secondary-light' => '#fff',
+						'--secondary-dark'  => '#000',
+						'--highlight-dark'  => '#666',
+						'--highlight-light' => '#efefef',
+					)
+				);
 				mc_upgrade_db();
 				mc_transition_categories();
 				break;
@@ -988,39 +991,51 @@ function mc_scripts() {
 		wp_enqueue_script( 'pickadate', plugins_url( 'js/pickadate/picker.js', __FILE__ ), array( 'jquery' ) );
 		wp_enqueue_script( 'pickadate.date', plugins_url( 'js/pickadate/picker.date.js', __FILE__ ), array( 'pickadate' ) );
 		wp_enqueue_script( 'pickadate.time', plugins_url( 'js/pickadate/picker.time.js', __FILE__ ), array( 'pickadate' ) );
-		wp_localize_script( 'pickadate.date', 'mc_months', array(
-			date_i18n( 'F', strtotime( 'January 1' ) ),
-			date_i18n( 'F', strtotime( 'February 1' ) ),
-			date_i18n( 'F', strtotime( 'March 1' ) ),
-			date_i18n( 'F', strtotime( 'April 1' ) ),
-			date_i18n( 'F', strtotime( 'May 1' ) ),
-			date_i18n( 'F', strtotime( 'June 1' ) ),
-			date_i18n( 'F', strtotime( 'July 1' ) ),
-			date_i18n( 'F', strtotime( 'August 1' ) ),
-			date_i18n( 'F', strtotime( 'September 1' ) ),
-			date_i18n( 'F', strtotime( 'October 1' ) ),
-			date_i18n( 'F', strtotime( 'November 1' ) ),
-			date_i18n( 'F', strtotime( 'December 1' ) ),
-		) );
-		wp_localize_script( 'pickadate.date', 'mc_days', array(
-			date_i18n( 'D', strtotime( 'Sunday' ) ),
-			date_i18n( 'D', strtotime( 'Monday' ) ),
-			date_i18n( 'D', strtotime( 'Tuesday' ) ),
-			date_i18n( 'D', strtotime( 'Wednesday' ) ),
-			date_i18n( 'D', strtotime( 'Thursday' ) ),
-			date_i18n( 'D', strtotime( 'Friday' ) ),
-			date_i18n( 'D', strtotime( 'Saturday' ) ),
-		) );
+		wp_localize_script(
+			'pickadate.date',
+			'mc_months',
+			array(
+				date_i18n( 'F', strtotime( 'January 1' ) ),
+				date_i18n( 'F', strtotime( 'February 1' ) ),
+				date_i18n( 'F', strtotime( 'March 1' ) ),
+				date_i18n( 'F', strtotime( 'April 1' ) ),
+				date_i18n( 'F', strtotime( 'May 1' ) ),
+				date_i18n( 'F', strtotime( 'June 1' ) ),
+				date_i18n( 'F', strtotime( 'July 1' ) ),
+				date_i18n( 'F', strtotime( 'August 1' ) ),
+				date_i18n( 'F', strtotime( 'September 1' ) ),
+				date_i18n( 'F', strtotime( 'October 1' ) ),
+				date_i18n( 'F', strtotime( 'November 1' ) ),
+				date_i18n( 'F', strtotime( 'December 1' ) ),
+			)
+		);
+		wp_localize_script(
+			'pickadate.date',
+			'mc_days',
+			array(
+				date_i18n( 'D', strtotime( 'Sunday' ) ),
+				date_i18n( 'D', strtotime( 'Monday' ) ),
+				date_i18n( 'D', strtotime( 'Tuesday' ) ),
+				date_i18n( 'D', strtotime( 'Wednesday' ) ),
+				date_i18n( 'D', strtotime( 'Thursday' ) ),
+				date_i18n( 'D', strtotime( 'Friday' ) ),
+				date_i18n( 'D', strtotime( 'Saturday' ) ),
+			)
+		);
 		$sweek = absint( get_option( 'start_of_week' ) );
-		wp_localize_script( 'pickadate.date', 'mc_text', array(
-			'vals' => array(
-				'today' => addslashes( __( 'Today', 'my-calendar' ) ),
-				'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
-				'close' => addslashes( __( 'Close', 'my-calendar' ) ),
-				// False-y values = Sunday, truth-y = Monday.
-				'start' => ( 1 == $sweek || 0 == $sweek ) ? $sweek : 0,
-			),
-		) );
+		wp_localize_script(
+			'pickadate.date',
+			'mc_text',
+			array(
+				'vals' => array(
+					'today' => addslashes( __( 'Today', 'my-calendar' ) ),
+					'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
+					'close' => addslashes( __( 'Close', 'my-calendar' ) ),
+					// False-y values = Sunday, truth-y = Monday.
+					'start' => ( 1 == $sweek || 0 == $sweek ) ? $sweek : 0,
+				),
+			)
+		);
 		wp_localize_script( 'pickadate.time', 'mc_time_format', apply_filters( 'mc_time_format', 'h:i A' ) );
 		wp_localize_script( 'pickadate.time', 'mc_interval', apply_filters( 'mc_interval', '15' ) );
 		wp_enqueue_script( 'mc.pickadate', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'jquery', 'pickadate.date', 'pickadate.time' ) );
@@ -1043,20 +1058,28 @@ function mc_scripts() {
 	if ( 'toplevel_page_my-calendar' == $id ) {
 		if ( current_user_can( 'mc_manage_events' ) ) {
 			wp_enqueue_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ) );
-			wp_localize_script( 'mc.ajax', 'mc_data', array(
-				'action'   => 'delete_occurrence',
-				'recur'    => 'add_date',
-				'security' => wp_create_nonce( 'mc-delete-nonce' ),
-			) );
+			wp_localize_script(
+				'mc.ajax',
+				'mc_data',
+				array(
+					'action'   => 'delete_occurrence',
+					'recur'    => 'add_date',
+					'security' => wp_create_nonce( 'mc-delete-nonce' ),
+				)
+			);
 		}
 	}
 
 	if ( 'my-calendar_page_my-calendar-config' == $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
-		wp_enqueue_script( 'mc.suggest', plugins_url( 'js/jquery.suggest.js', __FILE__ ), array(
-			'jquery',
-			'jquery-ui-autocomplete',
-		) );
+		wp_enqueue_script(
+			'mc.suggest',
+			plugins_url( 'js/jquery.suggest.js', __FILE__ ),
+			array(
+				'jquery',
+				'jquery-ui-autocomplete',
+			)
+		);
 		wp_localize_script( 'mc.suggest', 'mc_ajax_action', 'mc_post_lookup' );
 	}
 
@@ -1074,10 +1097,12 @@ add_action( 'wp_ajax_mc_post_lookup', 'mc_post_lookup' );
  */
 function mc_post_lookup() {
 	if ( isset( $_REQUEST['term'] ) ) {
-		$posts       = get_posts( array(
-			's'         => $_REQUEST['term'],
-			'post_type' => array( 'post', 'page' ),
-		) );
+		$posts       = get_posts(
+			array(
+				's'         => $_REQUEST['term'],
+				'post_type' => array( 'post', 'page' ),
+			)
+		);
 		$suggestions = array();
 		global $post;
 		foreach ( $posts as $post ) {
@@ -1100,10 +1125,12 @@ add_action( 'wp_ajax_delete_occurrence', 'mc_ajax_delete_occurrence' );
  */
 function mc_ajax_delete_occurrence() {
 	if ( ! check_ajax_referer( 'mc-delete-nonce', 'security', false ) ) {
-		wp_send_json( array(
-			'success'  => 0,
-			'response' => __( 'Invalid Security Check', 'my-calendar' ),
-		) );
+		wp_send_json(
+			array(
+				'success'  => 0,
+				'response' => __( 'Invalid Security Check', 'my-calendar' ),
+			)
+		);
 	}
 
 	if ( current_user_can( 'mc_manage_events' ) ) {
@@ -1118,16 +1145,20 @@ function mc_ajax_delete_occurrence() {
 				'response' => __( 'Event instance has been deleted.', 'my-calendar' ),
 			) );
 		} else {
-			wp_send_json( array(
-				'success'  => 0,
-				'response' => __( 'Event instance was not deleted.', 'my-calendar' ),
-			) );
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => __( 'Event instance was not deleted.', 'my-calendar' ),
+				)
+			);
 		}
 	} else {
-		wp_send_json( array(
-			'success'  => 0,
-			'response' => __( 'You are not authorized to perform this action', 'my-calendar' ),
-		) );
+		wp_send_json(
+			array(
+				'success'  => 0,
+				'response' => __( 'You are not authorized to perform this action', 'my-calendar' ),
+			)
+		);
 	}
 }
 
@@ -1137,20 +1168,24 @@ add_action( 'wp_ajax_add_date', 'mc_ajax_add_date' );
  */
 function mc_ajax_add_date() {
 	if ( ! check_ajax_referer( 'mc-delete-nonce', 'security', false ) ) {
-		wp_send_json( array(
-			'success'  => 0,
-			'response' => __( 'Invalid Security Check', 'my-calendar' ),
-		) );
+		wp_send_json(
+			array(
+				'success'  => 0,
+				'response' => __( 'Invalid Security Check', 'my-calendar' ),
+			)
+		);
 	}
 	if ( current_user_can( 'mc_manage_events' ) ) {
 		global $wpdb;
 		$event_id = (int) $_REQUEST['event_id'];
 
 		if ( 0 === $event_id ) {
-			wp_send_json( array(
-				'success'  => 0,
-				'response' => __( 'No event ID in that request.', 'my-calendar' ),
-			) );
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => __( 'No event ID in that request.', 'my-calendar' ),
+				)
+			);
 		}
 
 		$event_date    = $_REQUEST['event_date'];
@@ -1177,21 +1212,27 @@ function mc_ajax_add_date() {
 		$result = $wpdb->insert( my_calendar_event_table(), $data, $format );
 
 		if ( $result ) {
-			wp_send_json( array(
-				'success'  => 1,
-				'response' => __( 'Thanks! I added your new date.', 'my-calendar' ),
-			) );
+			wp_send_json(
+				array(
+					'success'  => 1,
+					'response' => __( 'Thanks! I added your new date.', 'my-calendar' ),
+				)
+			);
 		} else {
-			wp_send_json( array(
-				'success'  => 0,
-				'response' => __( 'Sorry! I failed to add that date.', 'my-calendar' ),
-			) );
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => __( 'Sorry! I failed to add that date.', 'my-calendar' ),
+				)
+			);
 		}
 	} else {
-		wp_send_json( array(
-			'success'  => 0,
-			'response' => __( 'You are not authorized to perform this action', 'my-calendar' ),
-		) );
+		wp_send_json(
+			array(
+				'success'  => 0,
+				'response' => __( 'You are not authorized to perform this action', 'my-calendar' ),
+			)
+		);
 	}
 }
 
@@ -1248,10 +1289,12 @@ function mc_guess_calendar() {
 			// if my-calendar exists but does not contain shortcode, add it.
 			if ( ! has_shortcode( $content, 'my_calendar' ) ) {
 				$content .= "\n\n[my_calendar]";
-				wp_update_post( array(
-					'ID'           => $post_ID,
-					'post_content' => $content,
-				) );
+				wp_update_post(
+					array(
+						'ID'           => $post_ID,
+						'post_content' => $content,
+					)
+				);
 			}
 			update_option( 'mc_uri', $link );
 			update_option( 'mc_uri_id', $post_ID );

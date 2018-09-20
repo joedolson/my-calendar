@@ -506,11 +506,19 @@ function mc_category_settings() {
 			<fieldset>
 			<legend>' . __( 'Category Colors', 'my-calendar' ) . '</legend>
 				<ul>' .
-				mc_settings_field( 'mc_apply_color', array(
-					'default'    => __( 'Ignore colors', 'my-calendar' ),
-					'font'       => __( 'Titles are in colors.', 'my-calendar' ),
-					'background' => __( 'Titles use colors as background.', 'my-calendar' ),
-				), 'default', '', array(), 'radio', false ) . '
+				mc_settings_field(
+					'mc_apply_color',
+					array(
+						'default'    => __( 'Ignore colors', 'my-calendar' ),
+						'font'       => __( 'Titles are in colors.', 'my-calendar' ),
+						'background' => __( 'Titles use colors as background.', 'my-calendar' ),
+					),
+					'default',
+					'',
+					array(),
+					'radio',
+					false
+				) . '
 				</ul>
 			</fieldset>
 			<ul>
@@ -774,11 +782,13 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 	$cats    = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
 	if ( empty( $cats ) ) {
 		// need to have categories. Try to create again.
-		mc_create_category( array(
-			'category_name'  => 'General',
-			'category_color' => '#ffffcc',
-			'category_icon'  => 'event.png',
-		) );
+		mc_create_category(
+			array(
+				'category_name'  => 'General',
+				'category_color' => '#ffffcc',
+				'category_icon'  => 'event.png',
+			)
+		);
 
 		$cats = $mcdb->get_results( $sql );
 	}

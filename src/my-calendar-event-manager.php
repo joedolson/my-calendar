@@ -197,11 +197,13 @@ function mc_create_event_post( $data, $event_id ) {
  */
 function mc_event_delete_posts( $deleted ) {
 	foreach ( $deleted as $delete ) {
-		$posts = get_posts( array(
-			'post_type'  => 'mc-events',
-			'meta_key'   => '_mc_event_id',
-			'meta_value' => $delete,
-		) );
+		$posts = get_posts(
+			array(
+				'post_type'  => 'mc-events',
+				'meta_key'   => '_mc_event_id',
+				'meta_value' => $delete,
+			)
+		);
 		if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
 			$post_id = $posts[0]->ID;
 			wp_delete_post( $post_id, true );
@@ -765,9 +767,15 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					}
 				}
 			} else {
-				$result = $wpdb->update( my_calendar_table(), $update, array(
-					'event_id' => $event_id,
-				), $formats, '%d' );
+				$result = $wpdb->update(
+					my_calendar_table(),
+					$update,
+					array(
+						'event_id' => $event_id,
+					),
+					$formats,
+					'%d'
+				);
 				if ( isset( $_POST['prev_event_repeats'] ) && isset( $_POST['prev_event_recur'] ) ) {
 					$recur_changed = ( $update['event_repeats'] != $_POST['prev_event_repeats'] || $update['event_recur'] != $_POST['prev_event_recur'] ) ? true : false;
 				} else {
@@ -822,10 +830,14 @@ function mc_set_category_relationships( $cats, $event_id ) {
 	global $wpdb;
 	if ( is_array( $cats ) ) {
 		foreach ( $cats as $cat ) {
-			$wpdb->insert( my_calendar_category_relationships_table(), array(
-				'event_id'    => $event_id,
-				'category_id' => $cat,
-			), array( '%d', '%d' ) );
+			$wpdb->insert(
+				my_calendar_category_relationships_table(),
+				array(
+					'event_id'    => $event_id,
+					'category_id' => $cat,
+				),
+				array( '%d', '%d' )
+			);
 		}
 	}
 }
@@ -846,10 +858,14 @@ function mc_update_category_relationships( $cats, $event_id ) {
 
 	if ( is_array( $cats ) && ! empty( $cats ) ) {
 		foreach ( $cats as $cat ) {
-			$wpdb->insert( my_calendar_category_relationships_table(), array(
-				'event_id'    => $event_id,
-				'category_id' => $cat,
-			), array( '%d', '%d' ) );
+			$wpdb->insert(
+				my_calendar_category_relationships_table(),
+				array(
+					'event_id'    => $event_id,
+					'category_id' => $cat,
+				),
+				array( '%d', '%d' )
+			);
 		}
 	}
 }
@@ -1772,20 +1788,23 @@ function mc_selected_users( $selected = '', $group = 'authors' ) {
  * @return array
  */
 function mc_event_access() {
-	$event_access = apply_filters( 'mc_event_access_choices', array(
-		'1'  => __( 'Audio Description', 'my-calendar' ),
-		'2'  => __( 'ASL Interpretation', 'my-calendar' ),
-		'3'  => __( 'ASL Interpretation with voicing', 'my-calendar' ),
-		'4'  => __( 'Deaf-Blind ASL', 'my-calendar' ),
-		'5'  => __( 'Real-time Captioning', 'my-calendar' ),
-		'6'  => __( 'Scripted Captioning', 'my-calendar' ),
-		'7'  => __( 'Assisted Listening Devices', 'my-calendar' ),
-		'8'  => __( 'Tactile/Touch Tour', 'my-calendar' ),
-		'9'  => __( 'Braille Playbill', 'my-calendar' ),
-		'10' => __( 'Large Print Playbill', 'my-calendar' ),
-		'11' => __( 'Sensory Friendly', 'my-calendar' ),
-		'12' => __( 'Other', 'my-calendar' ),
-	) );
+	$event_access = apply_filters(
+		'mc_event_access_choices',
+		array(
+			'1'  => __( 'Audio Description', 'my-calendar' ),
+			'2'  => __( 'ASL Interpretation', 'my-calendar' ),
+			'3'  => __( 'ASL Interpretation with voicing', 'my-calendar' ),
+			'4'  => __( 'Deaf-Blind ASL', 'my-calendar' ),
+			'5'  => __( 'Real-time Captioning', 'my-calendar' ),
+			'6'  => __( 'Scripted Captioning', 'my-calendar' ),
+			'7'  => __( 'Assisted Listening Devices', 'my-calendar' ),
+			'8'  => __( 'Tactile/Touch Tour', 'my-calendar' ),
+			'9'  => __( 'Braille Playbill', 'my-calendar' ),
+			'10' => __( 'Large Print Playbill', 'my-calendar' ),
+			'11' => __( 'Sensory Friendly', 'my-calendar' ),
+			'12' => __( 'Other', 'my-calendar' ),
+		)
+	);
 
 	return $event_access;
 }
@@ -2059,15 +2078,17 @@ function mc_list_events() {
 		echo $filtered;
 		$num_pages = ceil( $items / $items_per_page );
 		if ( $num_pages > 1 ) {
-			$page_links = paginate_links( array(
-				'base'      => add_query_arg( 'paged', '%#%' ),
-				'format'    => '',
-				'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
-				'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
-				'total'     => $num_pages,
-				'current'   => $current,
-				'mid_size'  => 1,
-			) );
+			$page_links = paginate_links(
+				array(
+					'base'      => add_query_arg( 'paged', '%#%' ),
+					'format'    => '',
+					'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
+					'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
+					'total'     => $num_pages,
+					'current'   => $current,
+					'mid_size'  => 1,
+				)
+			);
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 		}
 		if ( ! empty( $events ) ) {
@@ -2368,15 +2389,17 @@ function mc_list_events() {
 			echo $filtered;
 			$num_pages = ceil( $items / $items_per_page );
 			if ( $num_pages > 1 ) {
-				$page_links = paginate_links( array(
-					'base'      => add_query_arg( 'paged', '%#%' ),
-					'format'    => '',
-					'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
-					'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
-					'total'     => $num_pages,
-					'current'   => $current,
-					'mid_size'  => 1,
-				) );
+				$page_links = paginate_links(
+					array(
+						'base'      => add_query_arg( 'paged', '%#%' ),
+						'format'    => '',
+						'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
+						'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
+						'total'     => $num_pages,
+						'current'   => $current,
+						'mid_size'  => 1,
+					)
+				);
 				printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 			}
 			?>
@@ -3992,11 +4015,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
  * Check for events with known occurrence overlap problems.
  */
 function mc_list_problems() {
-	$events   = get_posts( array(
-		'post_type'  => 'mc-events',
-		'meta_key'   => '_occurrence_overlap',
-		'meta_value' => 'false',
-	) );
+	$events   = get_posts(
+		array(
+			'post_type'  => 'mc-events',
+			'meta_key'   => '_occurrence_overlap',
+			'meta_value' => 'false',
+		)
+	);
 	$list     = array();
 	$problems = array();
 
