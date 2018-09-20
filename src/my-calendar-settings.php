@@ -490,10 +490,17 @@ function my_calendar_settings() {
 								<li><?php mc_settings_field( 'mc_uri', __( 'Where is your main calendar page?', 'my-calendar' ), '', "$guess[message]", array( 'size' => '60' ), 'url' ); ?></li>
 								<li>
 									<?php
-									mc_settings_field( 'mc_uri_id', __( 'Calendar Page ID?', 'my-calendar' ), '', "($page_title)", array(
-										'size'  => '20',
-										'class' => 'suggest',
-									), 'text' );
+									mc_settings_field(
+										'mc_uri_id',
+										__( 'Calendar Page ID?', 'my-calendar' ),
+										'',
+										"($page_title)",
+										array(
+											'size'  => '20',
+											'class' => 'suggest',
+										),
+										'text'
+									);
 									?>
 								</li>
 									<?php
@@ -501,10 +508,17 @@ function my_calendar_settings() {
 									?>
 								<li>
 									<?php
-									mc_settings_field( 'mc_uri_id', __( 'Where is your main calendar page?', 'my-calendar' ), '', "(<a href='$permalink'>$page_title</a>)", array(
-										'size'  => '20',
-										'class' => 'suggest',
-									), 'text' );
+									mc_settings_field(
+										'mc_uri_id',
+										__( 'Where is your main calendar page?', 'my-calendar' ),
+										'',
+										"(<a href='$permalink'>$page_title</a>)",
+										array(
+											'size'  => '20',
+											'class' => 'suggest',
+										),
+										'text'
+									);
 									?>
 								</li>
 									<?php
@@ -532,27 +546,48 @@ function mc_remote_db() {
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li>
 								<?php
-								mc_settings_field( 'mc_default_sort', __( 'Default Sort order for Admin Events List', 'my-calendar' ), array(
-									'1' => __( 'Event ID', 'my-calendar' ),
-									'2' => __( 'Title', 'my-calendar' ),
-									'3' => __( 'Description', 'my-calendar' ),
-									'4' => __( 'Start Date', 'my-calendar' ),
-									'5' => __( 'Author', 'my-calendar' ),
-									'6' => __( 'Category', 'my-calendar' ),
-									'7' => __( 'Location Name', 'my-calendar' ),
-								), '', array(), 'select' );
-								mc_settings_field( 'mc_default_direction', __( 'Sort direction', 'my-calendar' ), array(
-									'ASC'  => __( 'Ascending', 'my-calendar' ),
-									'DESC' => __( 'Descending', 'my-calendar' ),
-								), '', array(), 'select' );
+								mc_settings_field(
+									'mc_default_sort',
+									__( 'Default Sort order for Admin Events List', 'my-calendar' ),
+									array(
+										'1' => __( 'Event ID', 'my-calendar' ),
+										'2' => __( 'Title', 'my-calendar' ),
+										'3' => __( 'Description', 'my-calendar' ),
+										'4' => __( 'Start Date', 'my-calendar' ),
+										'5' => __( 'Author', 'my-calendar' ),
+										'6' => __( 'Category', 'my-calendar' ),
+										'7' => __( 'Location Name', 'my-calendar' ),
+									),
+									'',
+									array(),
+									'select'
+								);
+								mc_settings_field(
+									'mc_default_direction',
+									__( 'Sort direction', 'my-calendar' ),
+									array(
+										'ASC'  => __( 'Ascending', 'my-calendar' ),
+										'DESC' => __( 'Descending', 'my-calendar' ),
+									),
+									'',
+									array(),
+									'select'
+								);
 								?>
 								</li>
 								<?php
 								if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() != my_calendar_table( 'global' ) ) {
-									mc_settings_field( 'mc_current_table', array(
-										'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
-										'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
-									), '0', '', array(), 'radio' );
+									mc_settings_field(
+										'mc_current_table',
+										array(
+											'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
+											'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
+										),
+										'0',
+										'',
+										array(),
+										'radio'
+									);
 								} else {
 									if ( get_option( 'mc_remote' ) != 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
 										?>
@@ -662,12 +697,19 @@ function mc_remote_db() {
 							?>
 							<li>
 							<?php
-							mc_settings_field( 'mc_open_day_uri', __( 'Mini calendar widget date links to:', 'my-calendar' ), array(
-								'false'          => __( 'jQuery pop-up view', 'my-calendar' ),
-								'true'           => __( 'daily view page (above)', 'my-calendar' ),
-								'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
-								'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
-							), '', $disabled, 'select' );
+							mc_settings_field(
+								'mc_open_day_uri',
+								__( 'Mini calendar widget date links to:', 'my-calendar' ),
+								array(
+									'false'          => __( 'jQuery pop-up view', 'my-calendar' ),
+									'true'           => __( 'daily view page (above)', 'my-calendar' ),
+									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
+									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
+								),
+								'',
+								$disabled,
+								'select'
+							);
 							?>
 							</li>
 						</ul>
@@ -760,11 +802,18 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_title', __( 'Include event title in details pop-up', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li>
 							<?php
-							mc_settings_field( 'mc_convert', __( 'Mobile View', 'my-calendar' ), array(
-								'true' => __( 'Switch to list view', 'my-calendar' ),
-								'mini' => __( 'Switch to mini calendar', 'my-calendar' ),
-								'none' => __( 'No change', 'my-calendar' ),
-							), '', array(), 'select' );
+							mc_settings_field(
+								'mc_convert',
+								__( 'Mobile View', 'my-calendar' ),
+								array(
+									'true' => __( 'Switch to list view', 'my-calendar' ),
+									'mini' => __( 'Switch to mini calendar', 'my-calendar' ),
+									'none' => __( 'No change', 'my-calendar' ),
+								),
+								'',
+								array(),
+								'select'
+							);
 							?>
 							</li>
 						</ul>
@@ -813,20 +862,23 @@ function mc_remote_db() {
 
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
 							if ( ! is_array( $input_options ) ) {
-								update_option( 'mc_input_options', array(
-									'event_location_dropdown' => 'on',
-									'event_short'    => 'on',
-									'event_desc'     => 'on',
-									'event_category' => 'on',
-									'event_image'    => 'on',
-									'event_link'     => 'on',
-									'event_recurs'   => 'on',
-									'event_open'     => 'on',
-									'event_location' => 'off',
-									'event_specials' => 'on',
-									'event_access'   => 'on',
-									'event_host'     => 'on',
-								) );
+								update_option(
+									'mc_input_options',
+									array(
+										'event_location_dropdown' => 'on',
+										'event_short'    => 'on',
+										'event_desc'     => 'on',
+										'event_category' => 'on',
+										'event_image'    => 'on',
+										'event_link'     => 'on',
+										'event_recurs'   => 'on',
+										'event_open'     => 'on',
+										'event_location' => 'off',
+										'event_specials' => 'on',
+										'event_access'   => 'on',
+										'event_host'     => 'on',
+									)
+								);
 								$input_options = get_option( 'mc_input_options' );
 							}
 							foreach ( $input_options as $key => $value ) {
@@ -973,19 +1025,32 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_event_mail_from', __( 'Notification messages are sent from:', 'my-calendar' ), get_bloginfo( 'admin_email' ) ); ?></li>
 							<li>
 	<?php
-	mc_settings_field( 'mc_event_mail_bcc', __( 'BCC on notifications (one per line):', 'my-calendar' ), '', '', array(
-		'cols' => 60,
-		'rows' => 6,
-	), 'textarea' );
+	mc_settings_field(
+		'mc_event_mail_bcc',
+		__( 'BCC on notifications (one per line):', 'my-calendar' ),
+		'',
+		'',
+		array(
+			'cols' => 60,
+			'rows' => 6,
+		),
+		'textarea'
+	);
 	?>
 							</li>
 							<li><?php mc_settings_field( 'mc_event_mail_subject', __( 'Email subject', 'my-calendar' ), get_bloginfo( 'name' ) . ': ' . __( 'New event added', 'my-calendar' ), '', array( 'size' => 60 ) ); ?></li>
 							<li>
 	<?php
-	mc_settings_field( 'mc_event_mail_message', __( 'Message Body', 'my-calendar' ), __( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}", "<br /><a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>', array(
-		'cols' => 60,
-		'rows' => 6,
-	), 'textarea' );
+	mc_settings_field(
+		'mc_event_mail_message',
+		__( 'Message Body', 'my-calendar' ),
+		__( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}", "<br /><a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+		array(
+			'cols' => 60,
+			'rows' => 6,
+		),
+		'textarea'
+	);
 	?>
 							</li>
 						</ul>

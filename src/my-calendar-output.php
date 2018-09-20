@@ -846,31 +846,40 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
 				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . '</span>';
-				$url     = mc_build_url( array(
-					'time' => 'day',
-					'dy'   => $day,
-				), array( 'dy', 'mc_id' ) );
+				$url     = mc_build_url( 
+					array(
+						'time' => 'day',
+						'dy'   => $day,
+					),
+					array( 'dy', 'mc_id' )
+				);
 				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
 				break;
 			case 'day':
 				$url     = mc_build_url( array( 'time' => 'month' ), array() );
 				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
-				$url     = mc_build_url( array(
-					'time'  => 'week',
-					'dy'    => $day,
-					'month' => $wmonth,
-					'yr'    => $year,
-				), array( 'dy', 'month', 'mc_id' ) );
+				$url     = mc_build_url(
+					array(
+						'time'  => 'week',
+						'dy'    => $day,
+						'month' => $wmonth,
+						'yr'    => $year,
+					),
+					array( 'dy', 'month', 'mc_id' )
+				);
 				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active day'>" . __( 'Day', 'my-calendar' ) . '</span>';
 				break;
 			default:
 				$toggle .= "<span class='mc-active month'>" . __( 'Month', 'my-calendar' ) . '</span>';
-				$url     = mc_build_url( array(
-					'time'  => 'week',
-					'dy'    => $day,
-					'month' => $wmonth,
-				), array( 'dy', 'month', 'mc_id' ) );
+				$url     = mc_build_url(
+					array(
+						'time'  => 'week',
+						'dy'    => $day,
+						'month' => $wmonth,
+					),
+					array( 'dy', 'month', 'mc_id' )
+				);
 				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$url     = mc_build_url( array( 'time' => 'day' ), array() );
 				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
@@ -2059,11 +2068,15 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 		$atype    = str_replace( 'anchor', '', $open_day_uri ); // List or grid.
 		$ad       = str_pad( date( 'j', $start ), 2, '0', STR_PAD_LEFT ); // Need to match format in ID.
 		$am       = str_pad( $date['month'], 2, '0', STR_PAD_LEFT );
-		$date_url = mc_build_url( array(
-			'yr'    => $date['year'],
-			'month' => $date['month'],
-			'dy'    => date( 'j', $start ),
-		), array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ), $mini_uri );
+		$date_url = mc_build_url(
+			array(
+				'yr'    => $date['year'],
+				'month' => $date['month'],
+				'dy'    => date( 'j', $start ),
+			),
+			array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ),
+			$mini_uri
+		);
 		$link     = esc_url( ( '' != $mini_uri ) ? $date_url . '#' . $atype . '-' . $date['year'] . '-' . $am . '-' . $ad : '#' );
 	}
 
@@ -2103,18 +2116,24 @@ function mc_convert_format( $format, $params ) {
 function mc_nav( $date, $format, $time, $show_months, $class ) {
 	$prev      = my_calendar_prev_link( $date, $format, $time, $show_months );
 	$next      = my_calendar_next_link( $date, $format, $time, $show_months );
-	$prev_link = mc_build_url( array(
-		'yr'    => $prev['yr'],
-		'month' => $prev['month'],
-		'dy'    => $prev['day'],
-		'cid'   => $class,
-	), array() );
-	$next_link = mc_build_url( array(
-		'yr'    => $next['yr'],
-		'month' => $next['month'],
-		'dy'    => $next['day'],
-		'cid'   => $class,
-	), array() );
+	$prev_link = mc_build_url(
+		array(
+			'yr'    => $prev['yr'],
+			'month' => $prev['month'],
+			'dy'    => $prev['day'],
+			'cid'   => $class,
+		),
+		array()
+	);
+	$next_link = mc_build_url(
+		array(
+			'yr'    => $next['yr'],
+			'month' => $next['month'],
+			'dy'    => $next['day'],
+			'cid'   => $class,
+		),
+		array()
+	);
 
 	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a href="' . $prev_link . '" rel="nofollow" class="mcajax">' . $prev['label'] . '</a></li>', $prev );
 	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a href="' . $next_link . '" rel="nofollow" class="mcajax">' . $next['label'] . '</a></li>', $next );
@@ -2964,10 +2983,13 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 
 	if ( count( $locations ) > 1 ) {
 		if ( 'list' == $show ) {
-			$url     = mc_build_url( array(
-				'loc'   => 'all',
-				'ltype' => 'all',
-			), array() );
+			$url     = mc_build_url(
+				array(
+					'loc'   => 'all',
+					'ltype' => 'all',
+				),
+				array()
+			);
 			$output .= '<ul id="mc-locations-list">
 			<li class="mc-show-all"><a href="' . $url . '">' . __( 'Show all', 'my-calendar' ) . '</a></li>';
 		} else {
@@ -3006,10 +3028,15 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 				$loc = ( empty( $_GET['loc'] ) ) ? '' : $_GET['loc'];
 				if ( 'list' == $show ) {
 					$selected = ( $vt == $loc ) ? ' class="selected"' : '';
-					$this_url = esc_url( mc_build_url( array(
-						'loc'   => $vt,
-						'ltype' => $datatype,
-					), array() ) );
+					$this_url = esc_url(
+						mc_build_url(
+							array(
+								'loc'   => $vt,
+								'ltype' => $datatype,
+							),
+							array()
+						)
+					);
 					$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$value</a></li>\n";
 				} else {
 					$selected = ( $vt == $loc ) ? ' class="selected"' : '';
