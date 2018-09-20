@@ -451,7 +451,8 @@ function mc_list_templates() {
 	echo $list;
 }
 
-add_action( 'admin_enqueue_scripts',
+add_action(
+	'admin_enqueue_scripts',
 	function() {
 		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			return;

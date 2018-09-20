@@ -469,7 +469,8 @@ function mc_text_diff( $left_string, $right_string, $args = null ) {
 	return $r;
 }
 
-add_action( 'admin_enqueue_scripts',
+add_action(
+	'admin_enqueue_scripts',
 	function() {
 		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			return;
