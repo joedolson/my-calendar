@@ -1140,10 +1140,12 @@ function mc_ajax_delete_occurrence() {
 		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // WPCS: unprepared SQL OK.
 
 		if ( $result ) {
-			wp_send_json( array(
-				'success'  => 1,
-				'response' => __( 'Event instance has been deleted.', 'my-calendar' ),
-			) );
+			wp_send_json(
+				array(
+					'success'  => 1,
+					'response' => __( 'Event instance has been deleted.', 'my-calendar' ),
+				)
+			);
 		} else {
 			wp_send_json(
 				array(

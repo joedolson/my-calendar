@@ -138,15 +138,17 @@ function mc_manage_locations() {
 
 	$num_pages = ceil( $items / $items_per_page );
 	if ( $num_pages > 1 ) {
-		$page_links = paginate_links( array(
-			'base'      => add_query_arg( 'paged', '%#%' ),
-			'format'    => '',
-			'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Locations</span>', 'my-calendar' ),
-			'next_text' => __( 'Next<span class="screen-reader-text"> Locations</span> &raquo;', 'my-calendar' ),
-			'total'     => $num_pages,
-			'current'   => $current,
-			'mid_size'  => 1,
-		) );
+		$page_links = paginate_links(
+			array(
+				'base'      => add_query_arg( 'paged', '%#%' ),
+				'format'    => '',
+				'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Locations</span>', 'my-calendar' ),
+				'next_text' => __( 'Next<span class="screen-reader-text"> Locations</span> &raquo;', 'my-calendar' ),
+				'total'     => $num_pages,
+				'current'   => $current,
+				'mid_size'  => 1,
+			)
+		);
 		printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 	}
 
@@ -174,34 +176,46 @@ function mc_manage_locations() {
 			<tr>
 				<th scope="col"><a href='
 				<?php
-				echo add_query_arg( array(
-					'paged'   => $current,
-					'orderby' => 'id',
-				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
+				echo add_query_arg(
+					array(
+						'paged'   => $current,
+						'orderby' => 'id',
+					),
+					admin_url( 'admin.php?page=my-calendar-location-manager' )
+				);
 				?>
 				'><?php _e( 'ID', 'my-calendar' ); ?></a></th>
 				<th scope="col"><a href='
 				<?php
-				echo add_query_arg( array(
-					'paged'   => $current,
-					'orderby' => 'location',
-				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
+				echo add_query_arg(
+					array(
+						'paged'   => $current,
+						'orderby' => 'location',
+					),
+					admin_url( 'admin.php?page=my-calendar-location-manager' )
+				);
 				?>
 				'><?php _e( 'Location', 'my-calendar' ); ?></a></th>
 				<th scope="col"><a href='
 				<?php
-				echo add_query_arg( array(
-					'paged'   => $current,
-					'orderby' => 'city',
-				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
+				echo add_query_arg(
+					array(
+						'paged'   => $current,
+						'orderby' => 'city',
+					),
+					admin_url( 'admin.php?page=my-calendar-location-manager' )
+				);
 				?>
 				'><?php _e( 'City', 'my-calendar' ); ?></a></th>
 				<th scope="col"><a href='
 				<?php
-				echo add_query_arg( array(
-					'paged'   => $current,
-					'orderby' => 'state',
-				), admin_url( 'admin.php?page=my-calendar-location-manager' ) );
+				echo add_query_arg(
+					array(
+						'paged'   => $current,
+						'orderby' => 'state',
+					),
+					admin_url( 'admin.php?page=my-calendar-location-manager' )
+				);
 				?>
 				'><?php _e( 'State/Province', 'my-calendar' ); ?></a></th>
 				<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>

@@ -50,60 +50,70 @@ function mc_widget_defaults() {
 function mc_globals() {
 	global $wpdb;
 
-	$grid_template = addslashes( '<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time\' title=\'{dtend}\'>" after="</span>"}</span>
+	$grid_template = addslashes(
+		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time\' title=\'{dtend}\'>" after="</span>"}</span>
 
-	<div class="sub-details">
-	{hcard}
-	{details before="<p class=\'mc_details\'>" after="</p>"}
-	<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>' );
+		<div class="sub-details">
+		{hcard}
+		{details before="<p class=\'mc_details\'>" after="</p>"}
+		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
+	);
 
-	$list_template = addslashes( '<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time value-title\' title=\'{dtend}\'>" after="</span>"}</span>
+	$list_template = addslashes(
+		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time value-title\' title=\'{dtend}\'>" after="</span>"}</span>
 
-	<h3 class="event-title">{title}</h3>
+		<h3 class="event-title">{title}</h3>
 
-	<div class="sub-details">
-	{hcard}
-	{details before="<p class=\'mc_details\'>" after="</p>"}
-	<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>' );
+		<div class="sub-details">
+		{hcard}
+		{details before="<p class=\'mc_details\'>" after="</p>"}
+		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
+	);
 
-	$mini_template = addslashes( '<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time value-title\' title=\'{dtend}\'>" after="</span>"}</span>
+	$mini_template = addslashes(
+		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time value-title\' title=\'{dtend}\'>" after="</span>"}</span>
 
-	<h3 class="event-title">{title}</h3>
+		<h3 class="event-title">{title}</h3>
 
-	<div class="sub-details">
-	{excerpt before="<div class=\'excerpt\'>" after="</div>"}
-	{hcard}
-	<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>' );
+		<div class="sub-details">
+		{excerpt before="<div class=\'excerpt\'>" after="</div>"}
+		{hcard}
+		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
+	);
 
-	$single_template = addslashes( '<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span><span class="end-time value-title" title="{dtend}">{endtime}</span></span>
+	$single_template = addslashes(
+		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span><span class="end-time value-title" title="{dtend}">{endtime}</span></span>
 
-	<div class="sub-details">
-	{hcard}
-	<div class="mc-description">{image}{description}</div>
-	<p>{ical_html} &bull; {gcal_link}</p>
-	{map}
-	<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>' );
+		<div class="sub-details">
+		{hcard}
+		<div class="mc-description">{image}{description}</div>
+		<p>{ical_html} &bull; {gcal_link}</p>
+		{map}
+		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
+	);
 
-	$rss_template = addslashes( "\n<item>
-		<title>{rss_title}: {date}, {time}</title>
-		<link>{link}</link>
-		<pubDate>{rssdate}</pubDate>
-		<dc:creator>{author}</dc:creator>
-		<description><![CDATA[{rss_description}]]></description>
-		<content:encoded><![CDATA[<div class='vevent'>
-		<h1 class='summary'>{rss_title}</h1>
-		<div class='description'>{rss_description}</div>
-		<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
-		<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
-		<p>Recurrence: {recurs}</p>
-		<p>Repetition: {repeats} times</p>
-		<div class='location'>{rss_hcard}</div>
-		{link_title}
-		</div>]]></content:encoded>
-		<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
-		<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
-		{guid}
-	  </item>' . PHP_EOL );
+	$rss_template = addslashes(
+		"\n<item>
+			<title>{rss_title}: {date}, {time}</title>
+			<link>{link}</link>
+			<pubDate>{rssdate}</pubDate>
+			<dc:creator>{author}</dc:creator>
+			<description><![CDATA[{rss_description}]]></description>
+			<content:encoded><![CDATA[<div class='vevent'>
+			<h1 class='summary'>{rss_title}</h1>
+			<div class='description'>{rss_description}</div>
+			<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
+			<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
+			<p>Recurrence: {recurs}</p>
+			<p>Repetition: {repeats} times</p>
+			<div class='location'>{rss_hcard}</div>
+			{link_title}
+			</div>]]></content:encoded>
+			<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
+			<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
+			{guid}
+		</item>' . PHP_EOL
+	);
 
 	$charset_collate  = $wpdb->get_charset_collate();
 	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) == 'true' ) ? 1 : 0;
@@ -245,20 +255,23 @@ function mc_default_settings() {
 	add_option( 'mc_event_link_expires', 'false' );
 	add_option( 'mc_apply_color', 'background' );
 	add_option( 'mc_inverse_color', 'true' );
-	add_option( 'mc_input_options', array(
-		'event_short'             => 'off',
-		'event_desc'              => 'on',
-		'event_category'          => 'on',
-		'event_image'             => 'on',
-		'event_link'              => 'on',
-		'event_recurs'            => 'on',
-		'event_open'              => 'off',
-		'event_location'          => 'off',
-		'event_location_dropdown' => 'on',
-		'event_specials'          => 'off',
-		'event_access'            => 'on',
-		'event_host'              => 'off',
-	) );
+	add_option(
+		'mc_input_options',
+		array(
+			'event_short'             => 'off',
+			'event_desc'              => 'on',
+			'event_category'          => 'on',
+			'event_image'             => 'on',
+			'event_link'              => 'on',
+			'event_recurs'            => 'on',
+			'event_open'              => 'off',
+			'event_location'          => 'off',
+			'event_location_dropdown' => 'on',
+			'event_specials'          => 'off',
+			'event_access'            => 'on',
+			'event_host'              => 'off',
+		)
+	);
 	add_option( 'mc_input_options_administrators', 'false' );
 	add_site_option( 'mc_multisite', '0' );
 	add_option( 'mc_event_mail', 'false' );
@@ -270,28 +283,34 @@ function mc_default_settings() {
 	add_option( 'mc_week_format', "M j, 'y" );
 	add_option( 'mc_date_format', get_option( 'date_format' ) );
 	// This option *must* be complete, if it's partial we get errors. So use update instead of add.
-	update_option( 'mc_templates', array(
-		'title'      => '{time}: {title}',
-		'title_list' => '{title}',
-		'title_solo' => '{title}',
-		'link'       => __( 'More information', 'my-calendar' ),
-		'grid'       => $grid_template,
-		'list'       => $list_template,
-		'mini'       => $mini_template,
-		'rss'        => $rss_template,
-		'details'    => $single_template,
-		'label'      => __( 'Read more', 'my-calendar' ),
-	) );
+	update_option(
+		'mc_templates',
+		array(
+			'title'      => '{time}: {title}',
+			'title_list' => '{title}',
+			'title_solo' => '{title}',
+			'link'       => __( 'More information', 'my-calendar' ),
+			'grid'       => $grid_template,
+			'list'       => $list_template,
+			'mini'       => $mini_template,
+			'rss'        => $rss_template,
+			'details'    => $single_template,
+			'label'      => __( 'Read more', 'my-calendar' ),
+		)
+	);
 	add_option( 'mc_skip_holidays', 'false' );
 	add_option( 'mc_css_file', 'twentyeighteen.css' );
-	add_option( 'mc_style_vars', array(
-		'--primary-dark'    => '#313233',
-		'--primary-light'   => '#fff',
-		'--secondary-light' => '#fff',
-		'--secondary-dark'  => '#000',
-		'--highlight-dark'  => '#666',
-		'--highlight-light' => '#efefef',
-	) );
+	add_option(
+		'mc_style_vars',
+		array(
+			'--primary-dark'    => '#313233',
+			'--primary-light'   => '#fff',
+			'--secondary-light' => '#fff',
+			'--secondary-dark'  => '#000',
+			'--highlight-dark'  => '#666',
+			'--highlight-light' => '#efefef',
+		)
+	);
 	add_option( 'mc_time_format', get_option( 'time_format' ) );
 	add_option( 'mc_show_weekends', 'true' );
 	add_option( 'mc_convert', 'true' );
@@ -338,10 +357,12 @@ function mc_generate_calendar_page( $slug ) {
 		);
 		$post_ID   = wp_insert_post( $page );
 		$post_slug = wp_unique_post_slug( $slug, $post_ID, 'publish', 'page', 0 );
-		wp_update_post( array(
-			'ID'        => $post_ID,
-			'post_name' => $post_slug,
-		) );
+		wp_update_post(
+			array(
+				'ID'        => $post_ID,
+				'post_name' => $post_slug,
+			)
+		);
 	} else {
 		$post    = get_page_by_path( $slug );
 		$post_ID = $post->ID;
@@ -545,10 +566,14 @@ function mc_transition_categories() {
 		$event_id = $result->event_id;
 		$category = $result->event_category;
 
-		$insert = $wpdb->insert( my_calendar_category_relationships_table(), array(
-			'event_id'    => $event_id,
-			'category_id' => $category,
-		), array( '%d', '%d' ) );
+		$insert = $wpdb->insert(
+			my_calendar_category_relationships_table(),
+			array(
+				'event_id'    => $event_id,
+				'category_id' => $category,
+			),
+			array( '%d', '%d' )
+		);
 	}
 }
 
