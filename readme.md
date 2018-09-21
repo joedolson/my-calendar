@@ -11,7 +11,7 @@ Accessible Event Manager for WordPress
 * Requires at least: 4.4  
 * Tested up to: 4.9
 * Requires PHP: 5.3
-* Stable tag: `3.0.16`
+* Stable tag: `3.0.18`
 * License: GPLv2 or later  
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
