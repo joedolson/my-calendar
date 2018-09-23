@@ -1136,47 +1136,46 @@ add_filter( 'mc_search_exportlinks', 'mc_search_exportlinks', 10, 0 );
  * Creates the export links for search result
  */
 function mc_search_exportlinks() {
-	if ( !session_id() ) {
+	if ( ! session_id() ) {
 		return;
 	}
-	
-	// setup print link
-	$print_add = array(
+
+	// Setup print link.
+	$print_add     = array(
 		'format'   => 'list',
 		'searched' => true,
 		'href'     => urlencode( mc_get_current_url() ),
-		'cid'      => 'mc-print-view'
+		'cid'      => 'mc-print-view',
 	);
-	$subtract = array(
+	$subtract      = array(
 		'time',
 		'ltype',
 		'lvalue',
 		'mcat',
 		'yr',
 		'month',
-		'dy',	
+		'dy',
 	);
 	$mc_print_url = mc_build_url( $print_add, '', home_url() );
-	$print        = "<div class='mc-print'><a href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . "</a></div>";
-	
+	$print        = "<div class='mc-print'><a href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
+
 	// Set up exports.
-	$ics_add = array('searched' => true);
-	$exports   = mc_export_links( 1, 1, 1, $ics_add, $subtract );
-	
+	$ics_add = array( 'searched' => true );
+	$exports = mc_export_links( 1, 1, 1, $ics_add, $subtract );
+
 	$before = "<div class='mc_bottomnav my-calendar-footer'> ";
-	$after = "</div>";
+	$after  = '</div>';
 
 	return $before . $exports . $print . $after;
 }
 
-add_filter( 'mc_searched_events', 'mc_searched_events', 10, 1);
+add_filter( 'mc_searched_events', 'mc_searched_events', 10, 1 );
 /**
  * Saves all searched events in $_SESSION
- * 
- * @param array $event_array The events to be saved
- * 
- * @return array Events
- * 
+ *
+ * @param array $event_array The events to be saved.
+ *
+ * @return array Events.
  */
 function mc_searched_events( $event_array ) {
 	if ( session_id() ) {
@@ -1189,21 +1188,19 @@ function mc_searched_events( $event_array ) {
  * Get searched events from $_SESSION array
  * 
  * @return array event_array
- * 
  */
 function mc_get_searched_events() {
-	if ( !session_id() || !isset( $_SESSION['SEARCH_RESULT'] ) ) {
+	if ( ! session_id() || ! isset( $_SESSION['SEARCH_RESULT'] ) ) {
 		return;
 	}
-	$event_searched = json_decode( $_SESSION['SEARCH_RESULT'], true);
-	//return $event_searched;
+	$event_searched = json_decode( $_SESSION['SEARCH_RESULT'], true );
 
-	foreach( $event_searched as $key => $value ) {
+	foreach ( $event_searched as $key => $value ) {
 		$daily_events = [];
-		foreach ($value as $k => $v) {
+		foreach ( $value as $k => $v ) {
 			$daily_events[] = (object) $v;
 		}
-		$event_array[$key] = $daily_events; 
+		$event_array[ $key ] = $daily_events;
 	}
 	return $event_array;
 }
@@ -1622,7 +1619,7 @@ function my_calendar( $args ) {
 		$from  = apply_filters( 'mc_from_date', $dates['from'] );
 		$to    = apply_filters( 'mc_to_date', $dates['to'] );
 
-		$query       = array(
+		$query = array(
 			'from'     => $from,
 			'to'       => $to,
 			'category' => $params['category'],
@@ -1634,20 +1631,19 @@ function my_calendar( $args ) {
 			'source'   => 'calendar',
 			'site'     => $site,
 		);
-		$query       = apply_filters( 'mc_calendar_attributes', $query, $params );
+		$query = apply_filters( 'mc_calendar_attributes', $query, $params );
 		if ( 'mc-print-view' == $id && isset( $_GET['searched'] ) && $_GET['searched'] ) {
 			$event_array = mc_get_searched_events();
-			if ( !empty( $event_array) ) {
-				reset($event_array);
-				$from = key($event_array);
-				end($event_array);
-				$to = key($event_array);
+			if ( ! empty( $event_array) ) {
+				reset( $event_array );
+				$from = key( $event_array );
+				end( $event_array );
+				$to = key( $event_array );
 			}
-		}
-		else {
+		} else {
 			$event_array = my_calendar_events( $query );
 		}
-		$no_events   = ( empty( $event_array ) ) ? true : false;
+		$no_events = ( empty( $event_array ) ) ? true : false;
 
 		$nav    = mc_generate_calendar_nav( $params, $args['category'], $start_of_week, $show_months, $main_class, $site, $date, $from );
 		$top    = $nav['top'];
