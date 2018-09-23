@@ -1141,13 +1141,13 @@ function mc_search_exportlinks() {
 	}
 
 	// Setup print link.
-	$print_add     = array(
+	$print_add    = array(
 		'format'   => 'list',
 		'searched' => true,
 		'href'     => urlencode( mc_get_current_url() ),
 		'cid'      => 'mc-print-view',
 	);
-	$subtract      = array(
+	$subtract     = array(
 		'time',
 		'ltype',
 		'lvalue',
@@ -1186,7 +1186,7 @@ function mc_searched_events( $event_array ) {
 
 /**
  * Get searched events from $_SESSION array
- * 
+ *
  * @return array event_array
  */
 function mc_get_searched_events() {
@@ -1196,7 +1196,7 @@ function mc_get_searched_events() {
 	$event_searched = json_decode( $_SESSION['SEARCH_RESULT'], true );
 
 	foreach ( $event_searched as $key => $value ) {
-		$daily_events = [];
+		$daily_events = array();
 		foreach ( $value as $k => $v ) {
 			$daily_events[] = (object) $v;
 		}
@@ -1634,7 +1634,7 @@ function my_calendar( $args ) {
 		$query = apply_filters( 'mc_calendar_attributes', $query, $params );
 		if ( 'mc-print-view' == $id && isset( $_GET['searched'] ) && $_GET['searched'] ) {
 			$event_array = mc_get_searched_events();
-			if ( ! empty( $event_array) ) {
+			if ( ! empty( $event_array ) ) {
 				reset( $event_array );
 				$from = key( $event_array );
 				end( $event_array );
