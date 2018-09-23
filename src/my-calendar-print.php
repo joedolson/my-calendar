@@ -70,6 +70,8 @@ function my_calendar_print() {
 		'ltype'    => $ltype,
 		'lvalue'   => $lvalue,
 		'id'       => 'mc-print-view',
+		'below'    => 'none',
+		'above'    => 'none',
 	);
 
 	echo my_calendar( $calendar );
