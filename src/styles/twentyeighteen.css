@@ -16,7 +16,7 @@
 }
 
 .my-calendar-header > div, .mc_bottomnav > div {
-	display: inline-block; 
+	display: inline-block;
 	margin-right: 4px;
 }
 
@@ -25,19 +25,19 @@
 	position: absolute !important;
 	height: 1px;
 	width: 1px;
-	overflow: hidden;	
+	overflow: hidden;
 }
 
 .my-calendar-header > div:nth-of-type(1), .mc_bottomnav > div:nth-of-type(1) {
 	margin-left: 0;
 }
-	
+
 .my-calendar-header > div:nth-of-type(last), .mc_bottomnav > div:nth-of-type(last) {
 	margin-right: 0;
 }
 
 .mc-main .my-calendar-header input,
-.mc-main .my-calendar-header span, .mc-main .my-calendar-header a, 
+.mc-main .my-calendar-header span, .mc-main .my-calendar-header a,
 .mc-main .mc_bottomnav span, .mc-main .mc_bottomnav a {
 	text-decoration: none;
 	-webkit-box-shadow: inset 0 -1px 0 rgba(15, 15, 15, 1);
@@ -45,10 +45,10 @@
 	-webkit-transition: color 80ms ease-in, -webkit-box-shadow 130ms ease-in-out;
 	transition: color 80ms ease-in, -webkit-box-shadow 130ms ease-in-out;
 	transition: color 80ms ease-in, box-shadow 130ms ease-in-out;
-	transition: color 80ms ease-in, box-shadow 130ms ease-in-out, -webkit-box-shadow 130ms ease-in-out;	
+	transition: color 80ms ease-in, box-shadow 130ms ease-in-out, -webkit-box-shadow 130ms ease-in-out;
 }
 
-.mc-main .my-calendar-header span, .mc-main .my-calendar-header a, 
+.mc-main .my-calendar-header span, .mc-main .my-calendar-header a,
 .mc-main .mc_bottomnav span, .mc-main .mc_bottomnav a,
 .mc-main .my-calendar-header select, .mc-main .my-calendar-header input {
 	color: #313233;
@@ -58,7 +58,7 @@
 	border-radius: 5px;
 	padding: 4px 6px;
 	font-size: 14px;
-	font-family: Arial;	
+	font-family: Arial;
 	background: #fff;
 	background: var(--secondary-light);
 }
@@ -69,13 +69,13 @@
 }
 
 .mc-main .my-calendar-header input,
-.mc-main .my-calendar-header a, 
+.mc-main .my-calendar-header a,
 .mc-main .mc_bottomnav a {
 	background: linear-gradient(to top, rgba( 210, 210, 210, .95 ) 0%, rgba( 230, 230, 230, .95 ) 70%);
 }
 
-.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus, 
-.mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover, 
+.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
+.mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover,
 .mc-main .my-calendar-header a:focus, .mc-main .mc_bottomnav a:focus {
 	color: #fff;
 	color: var(--primary-light);
@@ -124,7 +124,7 @@
 .mc-main td {
 	width: 14.285714%;
 	border: 1px solid #efefef;
-	border: 1px solid var(--highlight-light);	
+	border: 1px solid var(--highlight-light);
 	padding: 0 !important;
 	height: 6em;
 }
@@ -136,7 +136,7 @@
 .mc-main td .event-title {
 	text-overflow: ellipsis;
 	overflow: hidden;
-	font-size: 13px;	
+	font-size: 13px;
 }
 
 .mc-main {
@@ -151,14 +151,14 @@
 .mc-main .event-title a {
 	display: block;
 	line-height: 1.5;
-	padding: 6px;		
+	padding: 6px;
 	position: relative;
 	border-bottom: none;
-	box-shadow: none;	
+	box-shadow: none;
 }
 
 .mc-main .event-title .has-image {
-	padding-left: 24px; 
+	padding-left: 24px;
 }
 
 .mc-main.mini .event-title {
@@ -212,7 +212,7 @@
 	top: 0;
 	left: 0;
 }
- 
+
 .mc-main .calendar-event .details, .mc-main .calendar-events {
 	position: absolute;
 	left: 5%;
@@ -372,7 +372,7 @@
 .mc-main .current-day .mc-date {
 	background: #000 !important;
 	background: var(--secondary-dark) !important;
-	color: #fff !important;	
+	color: #fff !important;
 	color: var(--secondary-light) !important;
 	box-shadow: inset 0px 0px 0px 2px #666;
 	box-shadow: inset 0px 0px 0px 2px var(--highlight-dark);
@@ -387,7 +387,7 @@
 	background: var(--primary-dark);
 }
 
-.mc-main .has-events a.mc-date:hover, 
+.mc-main .has-events a.mc-date:hover,
 .mc-main .has-events a.mc-date:focus {
 	color: #333;
 	color: var(--primary-dark);
@@ -414,22 +414,22 @@
 
 .my-calendar-nav .my-calendar-prev a {
 	border-radius: 5px 0 0 5px;
-	border-right: 1px solid #bbb;	
+	border-right: 1px solid #bbb;
 }
 
 .my-calendar-nav .my-calendar-next a {
 	border-radius: 0 5px 5px 0;
-	border-left: 1px solid #fff;	
+	border-left: 1px solid #fff;
 }
 
 .mc-main .mc-time .month {
 	border-radius: 5px 0 0 5px;
-	border-right: 1px solid #bbb;		
+	border-right: 1px solid #bbb;
 }
 
 .mc-main .mc-time .week {
 	border-radius: 0;
-	border-right: 1px solid #bbb;	
+	border-right: 1px solid #bbb;
 }
 
 .mc-main .mc-time .day {
@@ -438,7 +438,7 @@
 
 .my-calendar-prev a:before, .my-calendar-next a:after {
 	font-family: 'dashicons';
-	vertical-align: middle;	
+	vertical-align: middle;
 }
 
 .mc-export .rss a:before {
@@ -467,7 +467,7 @@
 
 /* Category Key */
 .mc-main .category-key h3 {
-	margin: 0 0 10px 0 !important;	
+	margin: 0 0 10px 0 !important;
 }
 
 .mc-main .category-key li.current a {

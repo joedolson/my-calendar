@@ -85,6 +85,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.0.19 =
+
+* Bug fix: Fatal error in export API when location object included.
+* BUg fix: my calendar categories queried private categories instead of public.
+
 = 3.0.18 =
 
 * Bug fix: Invalid setting in bottom nav defaults.
