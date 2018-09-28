@@ -2670,7 +2670,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		</div><p>';
 	$public_form = ( 'public' == $context ) ? $form : '';
 	if ( ! is_user_logged_in() ) {
-		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_private = 1 ORDER BY category_name ASC' );
+		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_private = 0 ORDER BY category_name ASC' );
 	} else {
 		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
 	}
