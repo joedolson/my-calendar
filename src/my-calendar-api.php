@@ -98,6 +98,7 @@ function mc_api_format_csv( $data ) {
 		foreach ( $val as $v ) {
 			$values = get_object_vars( $v );
 			unset( $values['categories'] );
+			unset( $values['location'] );
 			if ( ! $keyed ) {
 				$keys = array_keys( $values );
 				fputcsv( $stream, $keys );
