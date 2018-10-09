@@ -274,7 +274,7 @@ function mc_get_all_events( $args ) {
 		} else {
 			$event->categories = $fetched[ $object_id ];
 		}
-		$arr_events[] = mc_event_object( $event );
+		$arr_events[ $key ] = mc_event_object( $event );
 	}
 
 	return $arr_events;
