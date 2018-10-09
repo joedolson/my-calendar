@@ -85,6 +85,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.1.0 =
+
+* Add feature (by Josef Fällman): Print & export view for search results
+* Bug fix: Fix issue causing duplication in some views.
+
 = 3.0.19 =
 
 * Bug fix: Fatal error in export API when location object included.
