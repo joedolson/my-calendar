@@ -4,7 +4,7 @@
 	size: landscape;
 }
 
-.my-calendar-header, .mc_bottomnav, h3 img, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text {
+.my-calendar-header, .mc_bottomnav, h3 img, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing {
 	display: none;
 }
 
@@ -40,8 +40,18 @@ td {
 	border-bottom: 1px solid #ddd;
 }
 
-.details * {
+.calendar .details * {
 	display: none;
+}
+
+button.mc-text-button {
+	border: 0;
+	color: inherit;
+	background-color: transparent;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 700;
+	padding: 0 0 .5em
 }
 
 h3 {
