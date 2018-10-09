@@ -150,6 +150,16 @@ function mc_custom_canonical() {
 	}
 }
 
+add_action( 'init', 'mc_start_session', 10 );
+/**
+ * Makes sure session is started to be able to save search results.
+ */
+function mc_start_session() {
+	if ( ! session_id() ) {
+		session_start();
+	}
+}
+
 /**
  * Generate canonical link
  */

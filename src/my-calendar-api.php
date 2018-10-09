@@ -447,8 +447,13 @@ function my_calendar_ical() {
 		'site'     => $site,
 	);
 
-	$args   = apply_filters( 'mc_ical_attributes', $args, $_GET );
-	$data   = my_calendar_events( $args );
+	$args = apply_filters( 'mc_ical_attributes', $args, $_GET );
+	/* Load search result from $_SESSION array. */
+	if ( isset( $_GET['searched'] ) and $_GET['searched'] and isset( $_SESSION['SEARCH_RESULT'] ) ) {
+		$data = mc_get_searched_events();
+	} else {
+		$data = my_calendar_events( $args );
+	}
 	$events = mc_flatten_array( $data );
 
 	if ( is_array( $events ) && ! empty( $events ) ) {

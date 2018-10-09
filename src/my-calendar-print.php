@@ -70,6 +70,8 @@ function my_calendar_print() {
 		'ltype'    => $ltype,
 		'lvalue'   => $lvalue,
 		'id'       => 'mc-print-view',
+		'below'    => 'none',
+		'above'    => 'none',
 	);
 
 	echo my_calendar( $calendar );
@@ -87,7 +89,7 @@ function my_calendar_print() {
 	unset( $add['cid'] );
 	unset( $add['feed'] );
 	unset( $add['href'] );
-	$return_url = apply_filters( 'mc_return_to_calendar', mc_build_url( $add, array( 'feed', 'cid', 'href' ), $return_url ), $add );
+	$return_url = apply_filters( 'mc_return_to_calendar', mc_build_url( $add, array( 'feed', 'cid', 'href', 'searched' ), $return_url ), $add );
 	if ( $return_url ) {
 		echo "<p class='return'>&larr; <a href='$return_url'>" . __( 'Return to calendar', 'my-calendar' ) . '</a></p>';
 	}
