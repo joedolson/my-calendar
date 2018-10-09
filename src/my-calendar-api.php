@@ -448,8 +448,8 @@ function my_calendar_ical() {
 	);
 
 	$args = apply_filters( 'mc_ical_attributes', $args, $_GET );
-	/* Load search result from $_SESSION array. */
-	if ( isset( $_GET['searched'] ) and $_GET['searched'] and isset( $_SESSION['SEARCH_RESULT'] ) ) {
+	// Load search result from $_SESSION array.
+	if ( isset( $_GET['searched'] ) && $_GET['searched'] && isset( $_SESSION['SEARCH_RESULT'] ) ) {
 		$data = mc_get_searched_events();
 	} else {
 		$data = my_calendar_events( $args );
