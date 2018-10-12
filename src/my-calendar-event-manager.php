@@ -3133,8 +3133,8 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 				$event_end = '';
 			}
 		}
-		$starttime = ( mc_is_all_day( $data ) ) ? '' : date( 'h:i A', mc_strtotime( $data->event_time ) );
-		$endtime   = ( mc_is_all_day( $data ) ) ? '' : date( 'h:i A', mc_strtotime( $data->event_endtime ) );
+		$starttime = ( mc_is_all_day( $data ) ) ? '' : date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_time ) );
+		$endtime   = ( mc_is_all_day( $data ) ) ? '' : date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_endtime ) );
 	} else {
 		$event_begin = date( 'Y-m-d' );
 		$event_end   = '';

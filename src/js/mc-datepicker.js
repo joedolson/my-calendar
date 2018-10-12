@@ -44,14 +44,14 @@ if ( typeof(mc_months) !== "undefined" ) {
 	/**
 	 * In admin, date needs to be converted to UTC
 	 */
-	function convertDateToUTC(date) { 
-		return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()); 
+	function convertDateToUTC(date) {
+		return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 	}
-	
+
 	});
 
 } else {
-	jQuery(document).ready(function ($) {	
+	jQuery(document).ready(function ($) {
 		var datepicked = $( '.mc-datepicker' ).attr( 'data-value' );
 		$( '.mc-datepicker' ).val( datepicked );
 	});
