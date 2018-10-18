@@ -87,8 +87,9 @@ TODO: Support limiting views to multiple locations
 
 = 3.1.0 =
 
-* Add feature (by Josef Fällman): Print & export view for search results
+* Add feature (by Josef Fällman): Print & export view for search results.
 * Bug fix: Fix issue causing duplication in some views.
+* Bug fix: Time format should be filtered in initial edit view.
 
 = 3.0.19 =
 

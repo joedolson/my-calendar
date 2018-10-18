@@ -2722,6 +2722,7 @@ function mc_check_data( $action, $post, $i ) {
 	}
 	if ( isset( $post['mcs_check_conflicts'] ) ) {
 		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label );
+		$conflicts = apply_filters( 'mcs_check_conflicts', $conflicts, $post );
 		if ( $conflicts ) {
 			$conflict_id = $conflicts[0]->occur_id;
 			$conflict_ev = mc_get_event( $conflict_id );
