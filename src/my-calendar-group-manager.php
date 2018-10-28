@@ -825,6 +825,7 @@ function mc_check_group_data( $action, $post ) {
 				}
 			} else {
 				$primary = $post['event_category'];
+				$cats    = array( $cats );
 			}
 		}
 
