@@ -1236,6 +1236,7 @@ function mc_hidden_event() {
 		$uri = mc_get_uri();
 		if ( ! $is_404 ) {
 			wp_safe_redirect( $uri );
+			exit;
 		} else {
 			global $wp_query;
 			$wp_query->set_404();
