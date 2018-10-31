@@ -36,63 +36,66 @@ function mc_get_template( $template ) {
 /**
  * HTML output for event time
  *
- * @param object $event Current event.
+ * @param object $e Current event.
  * @param string $type Type of view.
  *
  * @return string HTML output.
  */
-function mc_time_html( $event, $type ) {
-	$orig_format  = get_option( 'mc_date_format' );
-	$date_format  = ( '' != $orig_format ) ? $orig_format : get_option( 'date_format' );
-	$time_format  = get_option( 'mc_time_format' );
-	$id_start     = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-	$id_end       = date( 'Y-m-d', strtotime( $event->occur_end ) );
-	$has_time     = ( '00:00:00' != $event->event_time && '' != $event->event_time  ) ? true : false;
-
-	if ( $event->event_end != $event->event_begin ) {
+function mc_time_html( $e, $type ) {
+	$orig_format = get_option( 'mc_date_format' );
+	$date_format = ( '' != $orig_format ) ? $orig_format : get_option( 'date_format' );
+	$time_format = get_option( 'mc_time_format' );
+	$start       = date( 'Y-m-d', strtotime( $e->occur_begin ) );
+	$end         = date( 'Y-m-d', strtotime( $e->occur_end ) );
+	$has_time    = ( '00:00:00' != $e->event_time && '' != $e->event_time  ) ? true : false;
+	$final       = '';
+	// Manipulate date_format based on event data.
+	if ( $e->event_end != $e->event_begin && ! $has_time ) {
 		$mult_format = get_option( 'mc_multidate_format' );
 		$mult_format = ( '' != $mult_format ) ? $mult_format : 'F j-%d, Y';
-		$date_format = str_replace( '%d', date( 'j', strtotime( $event->occur_end ) ), $mult_format );
+		$date_format = str_replace( '%d', date( 'j', strtotime( $e->occur_end ) ), $mult_format );
 	}
 	// If this event crosses years or months, use original date format & show both dates.
-	if ( date( 'Y', strtotime( $event->occur_end ) ) != date( 'Y', strtotime( $event->occur_begin ) ) || date( 'm', strtotime( $event->occur_end ) ) != date( 'm', strtotime( $event->occur_begin ) ) ) {
-		$current = date_i18n( $orig_format, strtotime( $event->occur_begin ) ) . ' &ndash; ' . date_i18n( $orig_format, strtotime( $event->occur_end ) );
+	if ( date( 'Y', strtotime( $e->occur_end ) ) != date( 'Y', strtotime( $e->occur_begin ) ) || date( 'm', strtotime( $e->occur_end ) ) != date( 'm', strtotime( $e->occur_begin ) ) ) {
+		$current = date_i18n( $orig_format, strtotime( $e->occur_begin ) ) . ' &ndash; ' . date_i18n( $orig_format, strtotime( $e->occur_end ) );
 	} else {
-		$current = date_i18n( $date_format, strtotime( $event->occur_begin ) );
+		$current = date_i18n( $date_format, strtotime( $e->occur_begin ) );
+		$final   = ( $e->event_end != $e->event_begin ) ? date_i18n( $date_format, strtotime( $e->occur_end ) ) : $final;
 	}
-	$time_content = ( 'list' == $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $id_start . 'T' . $event->event_time . "' content='" . $id_start . 'T' . $event->event_time . "'>$current</span>";
-
+	// Do not show info in list view.
+	$time_content = ( 'list' == $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $start . 'T' . $e->event_time . "' content='" . $start . 'T' . $e->event_time . "'>$current</span>";
+	// Handle cases.
 	if ( $has_time ) {
 		$time_content .= "\n
 		<span class='event-time dtstart'>
-			<time class='value-title' datetime='" . $id_start . 'T' . $event->event_time . "' title='" . $id_start . 'T' . $event->event_time . "'>" .
-				date_i18n( $time_format, strtotime( $event->event_time ) ) . '
+			<time class='value-title' datetime='" . $start . 'T' . $e->event_time . "' title='" . $start . 'T' . $e->event_time . "'>" .
+				date_i18n( $time_format, strtotime( $e->event_time ) ) . '
 			</time>
 		</span>';
-		if ( 0 == $event->event_hide_end ) {
-			if ( '' != $event->event_endtime && $event->event_endtime != $event->event_time ) {
+		if ( 0 == $e->event_hide_end ) {
+			if ( '' != $e->event_endtime && $e->event_endtime != $e->event_time ) {
 				$time_content .= "
-					<span class='time-separator'> &ndash; </span>
+					<span class='time-separator'> &ndash; </span>$final
 					<span class='end-time dtend'>
-						<time class='value-title' datetime='" . $id_end . 'T' . $event->event_endtime . "' title='" . $id_end . 'T' . $event->event_endtime . "'>" . date_i18n( $time_format, strtotime( $event->event_endtime ) ) . '
+						<time class='value-title' datetime='" . $end . 'T' . $e->event_endtime . "' title='" . $end . 'T' . $e->event_endtime . "'>" . date_i18n( $time_format, strtotime( $e->event_endtime ) ) . '
 						</time>
 					</span>';
 			}
 		}
 	} else {
-		$notime        = mc_notime_label( $event );
+		$notime        = mc_notime_label( $e );
 		$time_content .= "<span class='event-time'>";
 		$time_content .= ( 'N/A' == $notime ) ? "<abbr title='" . __( 'Not Applicable', 'my-calendar' ) . "'>" . __( 'N/A', 'my-calendar' ) . "</abbr>\n" : esc_html( $notime );
-		$time_content .= '</span></p>';
+		$time_content .= '</span>';
 	}
-	$time_content .= apply_filters( 'mcs_end_time_block', '', $event );
+	$time_content .= apply_filters( 'mcs_end_time_block', '', $e );
 	// Generate date/time meta data.
-	$meta  = ( 0 == $event->event_hide_end ) ? "<meta itemprop='endDate' content='" . $id_start . 'T' . $event->event_endtime . "'/>" : '';
-	$meta .= '<meta itemprop="duration" content="' . mc_duration( $event ) . '"/>';
+	$meta  = ( 0 == $e->event_hide_end ) ? "<meta itemprop='endDate' content='" . $start . 'T' . $e->event_endtime . "'/>" : '';
+	$meta .= '<meta itemprop="duration" content="' . mc_duration( $e ) . '"/>';
 
 	$time = "<div class='time-block'><p>$time_content</p>$meta</div>";
 
-	return apply_filters( 'mcs_time_block', $time, $event );
+	return apply_filters( 'mcs_time_block', $time, $e );
 }
 
 /**
@@ -313,7 +316,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$group_class   = ( 1 == $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
 	$hlevel        = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
 	$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
-	$header       .= ( 'single' != $type && 'list' != $type ) ? "<$hlevel class='event-title summary$group_class' id='$uid-title'>$inner_heading</$hlevel>\n" : '';
+	$header       .= ( 'single' != $type && 'list' != $type ) ? "<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title'>$inner_heading</$hlevel>\n" : '';
 	$event_title   = ( 'single' == $type ) ? apply_filters( 'mc_single_event_title', $event_title, $event ) : $event_title;
 	$title         = ( 'single' == $type && ! is_singular( 'mc-events' ) ) ? "<h2 class='event-title summary'>$image $event_title</h2>\n" : '<span class="summary screen-reader-text">' . $event_title . '</span>';
 	$title         = apply_filters( 'mc_event_title', $title, $event, $event_title, $image );
@@ -332,7 +335,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$time_html = mc_time_html( $event, $type );
 			if ( 'list' == $type ) {
 				$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
-				$list_title = "<$hlevel class='event-title summary' id='$uid-title'>$image" . $event_title . "</$hlevel>\n";
+				$list_title = "<$hlevel class='event-title summary' id='mc_$event->occur_id-title'>$image" . $event_title . "</$hlevel>\n";
 			}
 			if ( 'true' == $display_author ) {
 				if ( 0 != $event->event_author ) {
@@ -413,7 +416,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$link_text      = mc_draw_template( $data, $link_template );
 				$link           = "
 				<p>
-					<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='$uid-title'>" . $link_text . '</a>
+					<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_$event->occur_id-title'>" . $link_text . '</a>
 				</p>';
 			}
 
@@ -443,7 +446,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		}
 
 		$img_class  = ( '' != $img ) ? ' has-image' : ' no-image';
-		$container  = "<div id='$uid-$type-details' class='details$img_class' role='alert' aria-labelledby='$uid-title' itemscope itemtype='http://schema.org/Event'>\n";
+		$container  = "<div id='$uid-$type-details' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title' itemscope itemtype='http://schema.org/Event'>\n";
 		$container .= "<meta itemprop='name' content='" . strip_tags( $event->event_title ) . "' />";
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );

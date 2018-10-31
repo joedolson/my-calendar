@@ -92,6 +92,7 @@ TODO: Support limiting views to multiple locations
 * Bug fix: Fix issue causing duplication in some views.
 * Bug fix: Time format should be filtered in initial edit view.
 * Bug fix: Category relationships not retained when Group editing applied.
+* Bug fix: aria-describedby ID mismatch.
 
 = 3.0.19 =
 
