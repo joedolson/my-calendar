@@ -47,7 +47,7 @@ function mc_time_html( $e, $type ) {
 	$time_format = get_option( 'mc_time_format' );
 	$start       = date( 'Y-m-d', strtotime( $e->occur_begin ) );
 	$end         = date( 'Y-m-d', strtotime( $e->occur_end ) );
-	$has_time    = ( '00:00:00' != $e->event_time && '' != $e->event_time  ) ? true : false;
+	$has_time    = ( '00:00:00' != $e->event_time && '' != $e->event_time ) ? true : false;
 	$final       = '';
 	// Manipulate date_format based on event data.
 	if ( $e->event_end != $e->event_begin && ! $has_time ) {
