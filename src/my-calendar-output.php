@@ -42,8 +42,13 @@ function mc_get_template( $template ) {
  * @return string HTML output.
  */
 function mc_time_html( $event, $type ) {
-	$orig_format = get_option( 'mc_date_format' );
-	$date_format = ( '' != $orig_format ) ? $orig_format : get_option( 'date_format' );
+	$orig_format  = get_option( 'mc_date_format' );
+	$date_format  = ( '' != $orig_format ) ? $orig_format : get_option( 'date_format' );
+	$time_format  = get_option( 'mc_time_format' );
+	$id_start     = date( 'Y-m-d', strtotime( $event->occur_begin ) );
+	$id_end       = date( 'Y-m-d', strtotime( $event->occur_end ) );
+	$has_time     = ( '00:00:00' != $event->event_time && '' != $event->event_time  ) ? true : false;
+
 	if ( $event->event_end != $event->event_begin ) {
 		$mult_format = get_option( 'mc_multidate_format' );
 		$mult_format = ( '' != $mult_format ) ? $mult_format : 'F j-%d, Y';
@@ -55,15 +60,10 @@ function mc_time_html( $event, $type ) {
 	} else {
 		$current = date_i18n( $date_format, strtotime( $event->occur_begin ) );
 	}
-	$id_start    = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-	$id_end      = date( 'Y-m-d', strtotime( $event->occur_end ) );
-	$event_date  = ( 'list' == $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $id_start . 'T' . $event->event_time . "' content='" . $id_start . 'T' . $event->event_time . "'>$current</span>";
-	$time_format = get_option( 'mc_time_format' );
+	$time_content = ( 'list' == $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $id_start . 'T' . $event->event_time . "' content='" . $id_start . 'T' . $event->event_time . "'>$current</span>";
 
-	$time  = "<div class='time-block'>";
-	$time .= "<p>$event_date ";
-	if ( '00:00:00' != $event->event_time && '' != $event->event_time ) {
-		$time .= "\n
+	if ( $has_time ) {
+		$time_content .= "\n
 		<span class='event-time dtstart'>
 			<time class='value-title' datetime='" . $id_start . 'T' . $event->event_time . "' title='" . $id_start . 'T' . $event->event_time . "'>" .
 				date_i18n( $time_format, strtotime( $event->event_time ) ) . '
@@ -71,7 +71,7 @@ function mc_time_html( $event, $type ) {
 		</span>';
 		if ( 0 == $event->event_hide_end ) {
 			if ( '' != $event->event_endtime && $event->event_endtime != $event->event_time ) {
-				$time .= "
+				$time_content .= "
 					<span class='time-separator'> &ndash; </span>
 					<span class='end-time dtend'>
 						<time class='value-title' datetime='" . $id_end . 'T' . $event->event_endtime . "' title='" . $id_end . 'T' . $event->event_endtime . "'>" . date_i18n( $time_format, strtotime( $event->event_endtime ) ) . '
@@ -80,15 +80,17 @@ function mc_time_html( $event, $type ) {
 			}
 		}
 	} else {
-		$notime = mc_notime_label( $event );
-		$time  .= "<span class='event-time'>";
-		$time  .= ( 'N/A' == $notime ) ? "<abbr title='" . __( 'Not Applicable', 'my-calendar' ) . "'>" . __( 'N/A', 'my-calendar' ) . "</abbr>\n" : esc_html( $notime );
-		$time  .= '</span></p>';
+		$notime        = mc_notime_label( $event );
+		$time_content .= "<span class='event-time'>";
+		$time_content .= ( 'N/A' == $notime ) ? "<abbr title='" . __( 'Not Applicable', 'my-calendar' ) . "'>" . __( 'N/A', 'my-calendar' ) . "</abbr>\n" : esc_html( $notime );
+		$time_content .= '</span></p>';
 	}
-	$time .= apply_filters( 'mcs_end_time_block', '', $event );
-	$time .= ( 0 == $event->event_hide_end ) ? "<meta itemprop='endDate' content='" . $id_start . 'T' . $event->event_endtime . "'/>" : '';
-	$time .= '<meta itemprop="duration" content="' . mc_duration( $event ) . '"/>';
-	$time .= '</div>';
+	$time_content .= apply_filters( 'mcs_end_time_block', '', $event );
+	// Generate date/time meta data.
+	$meta  = ( 0 == $event->event_hide_end ) ? "<meta itemprop='endDate' content='" . $id_start . 'T' . $event->event_endtime . "'/>" : '';
+	$meta .= '<meta itemprop="duration" content="' . mc_duration( $event ) . '"/>';
+
+	$time = "<div class='time-block'><p>$time_content</p>$meta</div>";
 
 	return apply_filters( 'mcs_time_block', $time, $event );
 }
