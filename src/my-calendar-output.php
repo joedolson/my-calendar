@@ -586,6 +586,9 @@ function mc_event_classes( $event, $uid, $type ) {
 		$categories = mc_get_categories( $event, false );
 	}
 	foreach ( $categories as $category ) {
+		if ( ! is_object( $category ) ) {
+			$category = (object) $category;
+		}
 		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name );
 	}
 

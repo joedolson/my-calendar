@@ -922,6 +922,9 @@ function mc_get_categories( $event, $ids = true ) {
 function mc_categories_html( $results, $primary ) {
 	if ( $results ) {
 		foreach ( $results as $result ) {
+			if ( ! is_object( $result ) ) {
+				$result = (object) $result;
+			}
 			$icon     = mc_category_icon( $result );
 			$return[] = $icon . $result->category_name;
 		}
