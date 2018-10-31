@@ -1724,6 +1724,9 @@ function my_calendar( $args ) {
 					$list_heading = ( $months <= 1 ) ? $current_header . $caption_text . "\n" : $current_month_header . '&ndash;' . $through_month_header . $caption_text;
 					// Translators: time period displayed.
 					$list_heading = sprintf( __( 'Events in %s', 'my-calendar' ), $list_heading );
+					if ( isset( $_GET['searched'] ) && 1 == $_GET['searched'] ) {
+						$list_heading = __( 'Search Results', 'my-calendar' );
+					}
 				} else {
 					$list_heading = mc_draw_template( $values, stripslashes( $week_template ) );
 				}
