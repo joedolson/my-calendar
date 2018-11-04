@@ -304,12 +304,12 @@ function mc_bulk_action( $action ) {
 			// send ham report to Akismet.
 			// send notifications.
 			foreach ( $ids as $id ) {
-				$post_ID   = mc_get_event_post( $event_id );
+				$post_ID   = mc_get_event_post( $id );
 				$submitter = get_post_meta( $post_ID, '_submitter_details', true );
 				if ( is_array( $submitter ) && ! empty( $submitter ) ) {
 					$name  = $submitter['first_name'] . ' ' . $submitter['last_name'];
 					$email = $submitter['email'];
-					do_action( 'mcs_complete_submission', $name, $email, $event_id, 'edit' );
+					do_action( 'mcs_complete_submission', $name, $email, $id, 'edit' );
 				}
 			}
 			break;
@@ -2233,7 +2233,7 @@ function mc_list_events() {
 									?>
 									|
 									<?php
-									if ( current_user_can( 'mc_approve_events' ) ) {
+									if ( current_user_can( 'mc_approve_events' ) && mc_can_edit_event( $event->event_id ) ) {
 										if ( 1 == $event->event_approved ) {
 											$mo = 'reject';
 											$te = __( 'Trash', 'my-calendar' );
