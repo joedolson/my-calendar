@@ -232,6 +232,7 @@ function my_calendar_settings() {
 		$perms = $_POST['mc_caps'];
 		$caps  = array(
 			'mc_add_events'     => __( 'Add Events', 'my-calendar' ),
+			'mc_publish_events' => __( 'Publish Events', 'my-calendar' ),
 			'mc_approve_events' => __( 'Approve Events', 'my-calendar' ),
 			'mc_manage_events'  => __( 'Manage Events', 'my-calendar' ),
 			'mc_edit_cats'      => __( 'Edit Categories', 'my-calendar' ),
@@ -974,6 +975,7 @@ function mc_remote_db() {
 		$roles          = $wp_roles->get_names();
 		$caps           = array(
 			'mc_add_events'     => __( 'Add Events', 'my-calendar' ),
+			'mc_publish_events' => __( 'Publish Events', 'my-calendar' ),
 			'mc_approve_events' => __( 'Approve Events', 'my-calendar' ),
 			'mc_manage_events'  => __( 'Manage Events', 'my-calendar' ),
 			'mc_edit_cats'      => __( 'Edit Categories', 'my-calendar' ),

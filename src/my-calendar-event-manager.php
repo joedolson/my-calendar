@@ -3357,7 +3357,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	if ( 'header' == $position ) {
 		if ( 'edit' == $mode ) {
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
-			if ( current_user_can( 'mc_approve_events' ) ) { // Added by Roland P.
+			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) { // Added by Roland P.
 				if ( $has_data && '1' == $event->event_approved ) {
 					$checked = ' checked="checked"';
 				} elseif ( $has_data && 0 == $event->event_approved ) {
@@ -3373,7 +3373,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 						<option value='2'" . selected( $event->event_approved, '2', false ) . '>' . __( 'Trash', 'my-calendar' ) . '</option>';
 			}
 		} else { // Case: adding new event (if user can, then 1, else 0).
-			if ( current_user_can( 'mc_approve_events' ) ) {
+			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
 				$status_control = "
 						<option value='1'>" . __( 'Published', 'my-calendar' ) . "</option>
 						<option value='0'>" . __( 'Draft', 'my-calendar' ) . '</option>';
