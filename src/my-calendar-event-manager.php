@@ -2216,9 +2216,9 @@ function mc_list_events() {
 										<?php
 									}
 									if ( $can_edit ) {
-									?>
-									<a href="<?php echo $copy_url; ?>" class='copy'><?php _e( 'Copy', 'my-calendar' ); ?></a>
-									<?php
+										?>
+										<a href="<?php echo $copy_url; ?>" class='copy'><?php _e( 'Copy', 'my-calendar' ); ?></a>
+										<?php
 									}
 									if ( $can_edit ) {
 										if ( mc_event_is_grouped( $event->event_group_id ) ) {
