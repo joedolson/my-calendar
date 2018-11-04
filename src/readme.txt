@@ -85,6 +85,14 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.1.1 =
+
+* Bug fix: unspamming event_ID passed incorrect variable name
+* Bug fix: Don't run spam check on users with mc_add_event 
+* Bug fix: Users with mc_add_event should not be able to trash other's events.
+* Bug fix: Refine permissions; add mc_publish_events allowing users to publish own events without access to others
+* Bug fix: Refine permissions; don't display links that users can't use.
+
 = 3.1.0 =
 
 * Add feature (by Josef Fällman): Print & export view for search results.
