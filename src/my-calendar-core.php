@@ -898,7 +898,7 @@ function my_calendar_send_email( $event ) {
  */
 function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	global $akismet_api_host, $akismet_api_port;
-	if ( current_user_can( 'mc_manage_events' ) || apply_filters( 'mc_disable_spam_checking', false, $post ) ) { // is a privileged user.
+	if ( current_user_can( 'mc_add_events' ) || apply_filters( 'mc_disable_spam_checking', false, $post ) ) { // is a privileged user.
 		return apply_filters( 'mc_custom_spam_status', 0, $post );
 	}
 	$akismet = false;
