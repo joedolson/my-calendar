@@ -2215,9 +2215,11 @@ function mc_list_events() {
 										<a href="<?php echo add_query_arg( 'preview', 'true', $view_url ); ?>" class='view'><?php _e( 'Preview', 'my-calendar' ); ?></a> |
 										<?php
 									}
+									if ( $can_edit ) {
 									?>
 									<a href="<?php echo $copy_url; ?>" class='copy'><?php _e( 'Copy', 'my-calendar' ); ?></a>
 									<?php
+									}
 									if ( $can_edit ) {
 										if ( mc_event_is_grouped( $event->event_group_id ) ) {
 											?>
@@ -2233,7 +2235,7 @@ function mc_list_events() {
 									?>
 									|
 									<?php
-									if ( current_user_can( 'mc_approve_events' ) && mc_can_edit_event( $event->event_id ) ) {
+									if ( current_user_can( 'mc_approve_events' ) && $can_edit ) {
 										if ( 1 == $event->event_approved ) {
 											$mo = 'reject';
 											$te = __( 'Trash', 'my-calendar' );
@@ -3377,7 +3379,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 						<option value='0'>" . __( 'Draft', 'my-calendar' ) . '</option>';
 			} else {
 				$status_control = "
-						<option value='0'" . $drafted . '>' . __( 'Draft', 'my-calendar' ) . '</option>';
+						<option value='0'>" . __( 'Draft', 'my-calendar' ) . '</option>';
 			}
 		}
 		$controls['status'] = "
