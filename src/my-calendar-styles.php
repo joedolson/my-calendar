@@ -223,9 +223,9 @@ function my_calendar_style_edit() {
  * @return string
  */
 function mc_stylesheet_selector() {
-	$dir     = plugin_dir_path( __FILE__ );
-	$options = '';
-	$return  = '
+	$dir              = plugin_dir_path( __FILE__ );
+	$options          = '';
+	$return           = '
 	<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-styles' ) . '">
 		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '"/></div>
 		<div><input type="hidden" value="true" name="mc_choose_style"/></div>';
