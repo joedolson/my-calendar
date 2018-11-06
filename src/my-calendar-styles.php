@@ -101,7 +101,8 @@ function my_calendar_style_edit() {
 	$stylefile   = mc_get_style_path();
 	if ( $stylefile ) {
 		$f                 = fopen( $stylefile, 'r' );
-		$file              = fread( $f, filesize( $stylefile ) );
+		$size              = ( 0 === filesize( $stylefile ) ) ? 1 : filesize( $stylefile );
+		$file              = fread( $f, $size );
 		$my_calendar_style = $file;
 		fclose( $f );
 		$mc_current_style = mc_default_style();
@@ -144,7 +145,7 @@ function my_calendar_style_edit() {
 										echo "<option value='mc_custom_$value'$selected>$value</option>\n";
 									}
 								}
-								echo '</optgroup';
+								echo '</optgroup>';
 							}
 							$files = mc_css_list( $directory );
 							echo '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
@@ -156,7 +157,7 @@ function my_calendar_style_edit() {
 									echo "<option value='$value'$selected>$value</option>\n";
 								}
 							}
-							echo '</optgroup';
+							echo '</optgroup>';
 							?>
 									</select>
 									<input type="submit" name="save" class="button-secondary" value="<?php _e( 'Choose Style', 'my-calendar' ); ?>"/>
