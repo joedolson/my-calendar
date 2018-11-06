@@ -22,7 +22,6 @@ function my_calendar_style_edit() {
 		$edit_files = false;
 		mc_show_error( __( 'File editing is disallowed in your WordPress installation. Edit your stylesheets offline.', 'my-calendar' ) );
 	}
-	$dir = plugin_dir_path( __FILE__ );
 	if ( isset( $_POST['mc_edit_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -120,51 +119,6 @@ function my_calendar_style_edit() {
 					<h2><?php _e( 'Calendar Style Settings', 'my-calendar' ); ?></h2>
 
 					<div class="inside">
-
-						<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-styles' ); ?>">
-							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
-							<div><input type="hidden" value="true" name="mc_choose_style"/></div>
-							<?php
-							$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
-							$directory        = dirname( __FILE__ ) . '/styles/';
-							$files            = mc_css_list( $custom_directory );
-							?>
-							<fieldset>
-								<p>
-									<label for="mc_css_file"><?php _e( 'Select My Calendar Theme', 'my-calendar' ); ?></label>
-									<select name="mc_css_file" id="mc_css_file">
-							<?php
-							if ( ! empty( $files ) ) {
-								echo '<optgroup label="' . __( 'Your Custom Stylesheets', 'my-calendar' ) . '">';
-								foreach ( $files as $value ) {
-									$test     = 'mc_custom_' . $value;
-									$filepath = mc_get_style_path( $test );
-									$path     = pathinfo( $filepath );
-									if ( 'css' == $path['extension'] ) {
-										$selected = ( get_option( 'mc_css_file' ) == $test ) ? ' selected="selected"' : '';
-										echo "<option value='mc_custom_$value'$selected>$value</option>\n";
-									}
-								}
-								echo '</optgroup>';
-							}
-							$files = mc_css_list( $directory );
-							echo '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
-							foreach ( $files as $value ) {
-								$filepath = mc_get_style_path( $value );
-								$path     = pathinfo( $filepath );
-								if ( 'css' == $path['extension'] ) {
-									$selected = ( get_option( 'mc_css_file' ) == $value ) ? ' selected="selected"' : '';
-									echo "<option value='$value'$selected>$value</option>\n";
-								}
-							}
-							echo '</optgroup>';
-							?>
-									</select>
-									<input type="submit" name="save" class="button-secondary" value="<?php _e( 'Choose Style', 'my-calendar' ); ?>"/>
-								</p>
-							</fieldset>
-						</form>
-						<hr/>
 						<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-styles' ); ?>">
 							<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 							<input type="hidden" value="true" name="mc_edit_style"/>
@@ -255,9 +209,62 @@ function my_calendar_style_edit() {
 			</div>
 		</div>
 	</div>
-	<?php mc_show_sidebar(); ?>
+	<?php 
+		$selector = mc_stylesheet_selector();
+		mc_show_sidebar( '', $selector );
+	?>
 	</div>
 	<?php
+}
+
+function mc_stylesheet_selector() {
+	$dir = plugin_dir_path( __FILE__ );
+	$options = '';
+	$return  = '
+	<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-styles' ) . '">
+		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '"/></div>
+		<div><input type="hidden" value="true" name="mc_choose_style"/></div>';
+	$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
+	$directory        = dirname( __FILE__ ) . '/styles/';
+	$files            = mc_css_list( $custom_directory );
+	if ( ! empty( $files ) ) {
+		$options .= '<optgroup label="' . __( 'Your Custom Stylesheets', 'my-calendar' ) . '">';
+		foreach ( $files as $value ) {
+			$test     = 'mc_custom_' . $value;
+			$filepath = mc_get_style_path( $test );
+			$path     = pathinfo( $filepath );
+			if ( 'css' == $path['extension'] ) {
+				$selected = ( get_option( 'mc_css_file' ) == $test ) ? ' selected="selected"' : '';
+				$options .= "<option value='mc_custom_$value'$selected>$value</option>\n";
+			}
+		}
+		$options .= '</optgroup>';
+	}
+	$files = mc_css_list( $directory );
+	$options .= '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
+	foreach ( $files as $value ) {
+		$filepath = mc_get_style_path( $value );
+		$path     = pathinfo( $filepath );
+		if ( 'css' == $path['extension'] ) {
+			$selected = ( get_option( 'mc_css_file' ) == $value ) ? ' selected="selected"' : '';
+			$options .= "<option value='$value'$selected>$value</option>\n";
+		}
+	}
+	$options .= '</optgroup>';
+
+	$return .= '
+		<fieldset>
+			<p>
+				<label for="mc_css_file">' . __( 'Select My Calendar Theme', 'my-calendar' ) . '</label>
+				<select name="mc_css_file" id="mc_css_file">' . $options . '</select>
+			</p>
+			<p>
+				<input type="submit" name="save" class="button-primary" value="' . __( 'Choose Style', 'my-calendar' ) . '"/>
+			</p>
+		</fieldset>
+	</form>';
+
+	return array( __( 'Select Stylesheet', 'my-calendar' ) => $return );
 }
 
 /**
