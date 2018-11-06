@@ -85,6 +85,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.1.2 =
+
+* Bug fix: Twentyeighteen styles missing from template directory
+* Bug fix: optgroup close element broken
+* Change: Move stylesheet selector into sidebar
+
 = 3.1.1 =
 
 * Bug fix: unspamming event_ID passed incorrect variable name
