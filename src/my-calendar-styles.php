@@ -209,7 +209,7 @@ function my_calendar_style_edit() {
 			</div>
 		</div>
 	</div>
-	<?php 
+	<?php
 		$selector = mc_stylesheet_selector();
 		mc_show_sidebar( '', $selector );
 	?>
@@ -217,8 +217,13 @@ function my_calendar_style_edit() {
 	<?php
 }
 
+/**
+ * Display stylesheet selector as added component in sidebar.
+ *
+ * @return string
+ */
 function mc_stylesheet_selector() {
-	$dir = plugin_dir_path( __FILE__ );
+	$dir     = plugin_dir_path( __FILE__ );
 	$options = '';
 	$return  = '
 	<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-styles' ) . '">
@@ -240,7 +245,7 @@ function mc_stylesheet_selector() {
 		}
 		$options .= '</optgroup>';
 	}
-	$files = mc_css_list( $directory );
+	$files    = mc_css_list( $directory );
 	$options .= '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
 	foreach ( $files as $value ) {
 		$filepath = mc_get_style_path( $value );
@@ -251,8 +256,7 @@ function mc_stylesheet_selector() {
 		}
 	}
 	$options .= '</optgroup>';
-
-	$return .= '
+	$return  .= '
 		<fieldset>
 			<p>
 				<label for="mc_css_file">' . __( 'Select My Calendar Theme', 'my-calendar' ) . '</label>
