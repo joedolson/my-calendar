@@ -589,7 +589,6 @@ function mc_event_classes( $event, $uid, $type ) {
 		if ( ! is_object( $category ) ) {
 			$category = (object) $category;
 		}
-		echo $category->category_name;
 		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
 	}
 
@@ -624,7 +623,7 @@ function mc_category_class( $object, $prefix ) {
 		$fallback = 'category_slug_missing';
 	}
 
-	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback, $id ) );
+	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback ) );
 }
 
 /**
