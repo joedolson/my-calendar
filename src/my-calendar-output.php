@@ -589,7 +589,8 @@ function mc_event_classes( $event, $uid, $type ) {
 		if ( ! is_object( $category ) ) {
 			$category = (object) $category;
 		}
-		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name );
+		echo $category->category_name;
+		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
 	}
 
 	$classes    = apply_filters( 'mc_event_classes', $classes, $event, $uid, $type );
@@ -610,9 +611,11 @@ function mc_category_class( $object, $prefix ) {
 	if ( is_array( $object ) ) {
 		$term = $object['term'];
 		$name = $object['category'];
+		$id   = $object['category_id'];
 	} else {
 		$term = $object->category_term;
 		$name = $object->category_name;
+		$id   = $object->category_id;
 	}
 	$fallback = get_term_by( 'id', $term, 'mc-event-category' );
 	if ( is_object( $fallback ) ) {
@@ -621,7 +624,7 @@ function mc_category_class( $object, $prefix ) {
 		$fallback = 'category_slug_missing';
 	}
 
-	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback ) );
+	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback, $id ) );
 }
 
 /**
