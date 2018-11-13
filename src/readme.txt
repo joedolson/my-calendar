@@ -89,6 +89,7 @@ TODO: Support limiting views to multiple locations
 
 * Bug fix: Twentyeighteen styles missing from template directory
 * Bug fix: optgroup close element broken
+* Bug fix: Shortcode generator fixes.
 * Change: Move stylesheet selector into sidebar
 
 = 3.1.1 =

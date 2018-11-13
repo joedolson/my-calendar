@@ -77,7 +77,7 @@ function mc_generate() {
  */
 function mc_generator( $type ) {
 	?>
-<form action="<?php echo admin_url( 'admin.php?page=my-calendar-help' ); ?>" method="POST" id="my-calendar-generate">
+<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-help' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
 	<fieldset>
 		<legend><strong><?php echo ucfirst( $type ); ?></strong>: <?php _e( 'Shortcode Attributes', 'my-calendar' ); ?></legend>
 		<div id="mc-generator" class="generator">
