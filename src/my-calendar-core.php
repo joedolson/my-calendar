@@ -1336,44 +1336,44 @@ function mc_get_support_form() {
 	// Pro license status.
 	$license       = ( '' != get_option( 'mcs_license_key' ) ) ? get_option( 'mcs_license_key' ) : '';
 	$license_valid = get_option( 'mcs_license_key_valid' );
-	$checked       = ( 'valid' == get_option( 'mcs_license_key_valid' ) ) ? true : false;
+	$checked       = ( 'valid' == $license_valid ) ? true : false;
 
 	if ( $license ) {
 		$license = "
 		License: $license, $license_valid";
 	}
+	if ( $checked ) {
+		// send fields for all plugins.
+		$wp_version = get_bloginfo( 'version' );
+		$home_url   = home_url();
+		$wp_url     = site_url();
+		$language   = get_bloginfo( 'language' );
+		$charset    = get_bloginfo( 'charset' );
+		// server.
+		$php_version = phpversion();
+		$db_version  = $wpdb->db_version();
+		$admin_email = get_option( 'admin_email' );
+		// theme data.
+		$theme         = wp_get_theme();
+		$theme_name    = $theme->get( 'Name' );
+		$theme_uri     = $theme->get( 'ThemeURI' );
+		$theme_parent  = $theme->get( 'Template' );
+		$theme_version = $theme->get( 'Version' );
 
-	// send fields for all plugins.
-	$wp_version = get_bloginfo( 'version' );
-	$home_url   = home_url();
-	$wp_url     = site_url();
-	$language   = get_bloginfo( 'language' );
-	$charset    = get_bloginfo( 'charset' );
-	// server.
-	$php_version = phpversion();
-	$db_version  = $wpdb->db_version();
-	$admin_email = get_option( 'admin_email' );
-	// theme data.
-	$theme         = wp_get_theme();
-	$theme_name    = $theme->get( 'Name' );
-	$theme_uri     = $theme->get( 'ThemeURI' );
-	$theme_parent  = $theme->get( 'Template' );
-	$theme_version = $theme->get( 'Version' );
+		// plugin data.
+		$plugins        = get_plugins();
+		$plugins_string = '';
 
-	// plugin data.
-	$plugins        = get_plugins();
-	$plugins_string = '';
-
-	foreach ( array_keys( $plugins ) as $key ) {
-		if ( is_plugin_active( $key ) ) {
-			$plugin          =& $plugins[ $key ];
-			$plugin_name     = $plugin['Name'];
-			$plugin_uri      = $plugin['PluginURI'];
-			$plugin_version  = $plugin['Version'];
-			$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
+		foreach ( array_keys( $plugins ) as $key ) {
+			if ( is_plugin_active( $key ) ) {
+				$plugin          =& $plugins[ $key ];
+				$plugin_name     = $plugin['Name'];
+				$plugin_uri      = $plugin['PluginURI'];
+				$plugin_version  = $plugin['Version'];
+				$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
+			}
 		}
-	}
-	$data    = "
+		$data    = "
 ================ Installation Data ====================
 ==My Calendar:==
 Version: $version
@@ -1404,68 +1404,69 @@ Version: $theme_version
 
 ==Active Plugins:==
 $plugins_string
-";
-	$request = '';
-	if ( isset( $_POST['mc_support'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'Security check failed' );
-		}
-		$request       = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
-		$has_donated   = ( 'on' == $_POST['has_donated'] ) ? 'Donor' : 'No donation';
-		$has_purchased = ( $checked ) ? 'Purchaser' : 'No purchase';
-		$has_read_faq  = ( 'on' == $_POST['has_read_faq'] ) ? 'Read FAQ' : false;
-		$subject       = "My Calendar support request. $has_donated; $has_purchased";
-		$message       = $request . "\n\n" . $data;
-		// Get the site domain and get rid of www. from pluggable.php.
-		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
-		if ( 'www.' == substr( $sitename, 0, 4 ) ) {
-			$sitename = substr( $sitename, 4 );
-		}
-		$from_email = 'wordpress@' . $sitename;
-		$from       = "From: \"$current_user->username\" <$from_email>\r\nReply-to: \"$current_user->username\" <$current_user->user_email>\r\n";
+	";
+		$request = '';
+		if ( isset( $_POST['mc_support'] ) ) {
+			$nonce = $_REQUEST['_wpnonce'];
+			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+				wp_die( 'Security check failed' );
+			}
+			$request       = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
+			$has_read_faq  = ( 'on' == $_POST['has_read_faq'] ) ? 'Read FAQ' : false;
+			$subject       = "My Calendar support request.";
+			$message       = $request . "\n\n" . $data;
+			// Get the site domain and get rid of www. from pluggable.php.
+			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
+			if ( 'www.' == substr( $sitename, 0, 4 ) ) {
+				$sitename = substr( $sitename, 4 );
+			}
+			$from_email = 'wordpress@' . $sitename;
+			$from       = "From: \"$current_user->username\" <$from_email>\r\nReply-to: \"$current_user->username\" <$current_user->user_email>\r\n";
 
-		if ( ! $has_read_faq ) {
-			echo '<div class="message error"><p>' . __( 'Please read the FAQ and other Help documents before making a support request.', 'my-calendar' ) . '</p></div>';
-		} elseif ( ! $request ) {
-			echo '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>';
-		} else {
-			$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
-			if ( $sent ) {
-				if ( 'Donor' == $has_donated || 'Purchaser' == $has_purchased ) {
-					mc_show_notice( __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) );
-				} else {
-					mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
-				}
+			if ( ! $has_read_faq ) {
+				echo '<div class="message error"><p>' . __( 'Please read the FAQ and other Help documents before making a support request.', 'my-calendar' ) . '</p></div>';
+			} elseif ( ! $request ) {
+				echo '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>';
 			} else {
-				// Translators: Support form URL.
-				echo '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
+				$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
+				if ( $sent ) {
+					if ( 'Donor' == $has_donated || 'Purchaser' == $has_purchased ) {
+						mc_show_notice( __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) );
+					} else {
+						mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
+					}
+				} else {
+					// Translators: Support form URL.
+					echo '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
+				}
 			}
 		}
-	}
 
-	echo '
-	<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-help' ) . '">
-		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
-		<div>
-		<code>' . __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;</code>
-		</p>
-		<p>
-			<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>" . __( 'I have read <a href="http://www.joedolson.com/my-calendar/faq/">the FAQ for this plug-in</a>.', 'my-calendar' ) . " <span>(required)</span></label>
-		</p>
-		<p>
-			<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . __( 'I made a donation to help support this plug-in.', 'my-calendar' ) . "</label>
-		</p>
-		<p>
-			<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'>" . stripslashes( $request ) . "</textarea>
-		</p>
-		<p>
-			<input type='submit' value='" . __( 'Send Support Request', 'my-calendar' ) . "' name='mc_support' class='button-primary' />
-		</p>
-		<p>" . __( 'The following additional information will be sent with your support request:', 'my-calendar' ) . '</p>
-		<div class="mc_support">' . wpautop( $data ) . '</div>
-		</div>
-	</form>';
+		echo '
+		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-help' ) . '">
+			<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
+			<div>
+			<code>' . __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;</code>
+			</p>
+			<p>
+				<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>" . __( 'I have read <a href="http://www.joedolson.com/my-calendar/faq/">the FAQ for this plug-in</a>.', 'my-calendar' ) . " <span>(required)</span></label>
+			</p>
+			<p>
+				<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . __( 'I made a donation to help support this plug-in.', 'my-calendar' ) . "</label>
+			</p>
+			<p>
+				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'>" . stripslashes( $request ) . "</textarea>
+			</p>
+			<p>
+				<input type='submit' value='" . __( 'Send Support Request', 'my-calendar' ) . "' name='mc_support' class='button-primary' />
+			</p>
+			<p>" . __( 'The following additional information will be sent with your support request:', 'my-calendar' ) . '</p>
+			<div class="mc_support">' . wpautop( $data ) . '</div>
+			</div>
+		</form>';
+	} else {
+		return '<p><a href="https://wordpress.org/support/plugin/my-calendar/">' . __( 'WordPress.org Support Forums', 'my-calendar' ) . '</a></p>';
+	}
 }
 
 add_action( 'init', 'mc_register_actions' );
