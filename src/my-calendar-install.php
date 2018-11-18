@@ -190,7 +190,7 @@ function mc_globals() {
 	$initial_rel_db = 'CREATE TABLE ' . my_calendar_category_relationships_table() . " (
  relationship_id INT(11) NOT NULL AUTO_INCREMENT,
  event_id INT(11) NOT NULL,
- category_id INT(11) NOT NULL DEFAULT '0',
+ category_id INT(11) NOT NULL DEFAULT '1',
  PRIMARY KEY  (relationship_id),
  KEY event_id (event_id)
  ) $charset_collate;";
