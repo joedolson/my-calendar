@@ -1179,8 +1179,12 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			} else {
 				$categories = mc_get_categories( $data );
 				$return     = '<div>';
-				foreach ( $categories as $category ) {
-					$return .= '<input type="hidden" name="event_category[]" value="' . absint( $category ) . '" />';
+				if ( is_array( $categories ) ) {
+					foreach ( $categories as $category ) {
+						$return .= '<input type="hidden" name="event_category[]" value="' . absint( $category ) . '" />';
+					}
+				} else {
+					$return .= '<input type="hidden" name="event_category[]" value="1" />';
 				}
 				$return .= '</div>';
 			}

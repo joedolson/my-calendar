@@ -90,6 +90,7 @@ TODO: Support limiting views to multiple locations
 * Bug fix: Twentyeighteen styles missing from template directory
 * Bug fix: optgroup close element broken
 * Bug fix: Shortcode generator fixes.
+* Bug fix: Handle case where hidden categories are not an array in event manager.
 * Change: Move stylesheet selector into sidebar
 
 = 3.1.1 =
