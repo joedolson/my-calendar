@@ -16,6 +16,10 @@
 	display: block;
 }
 
+.mc-main h2:before {
+	display: none;
+}
+
 .mc-main nav ul {
 	list-style: none;
 }
