@@ -107,6 +107,7 @@
 }
 
 .mc-main th {
+	width: 14.285714%;
 	text-align: center;
 	text-transform: uppercase;
 	padding: 4px 0;
