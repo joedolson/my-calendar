@@ -88,10 +88,14 @@ TODO: Support limiting views to multiple locations
 = 3.1.2 =
 
 * Bug fix: Twentyeighteen styles missing from template directory
+* Bug fix: Declare width on th as well as td
 * Bug fix: optgroup close element broken
 * Bug fix: Shortcode generator fixes.
 * Bug fix: Handle case where hidden categories are not an array in event manager.
-* Change: Move stylesheet selector into sidebar
+* Bug fix: If template tag value contains only whitespace, do not render before & after attributes.
+* Change: [UI] Move stylesheet selector into sidebar
+* Change: Allow target attribute on links.
+* Change: Add label to links that open in new tab.
 
 = 3.1.1 =
 
