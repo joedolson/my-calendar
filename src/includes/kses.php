@@ -138,6 +138,7 @@ function mc_allowed_tags( $tags, $context ) {
 			'aria-describedby' => true,
 			'href'             => true,
 			'class'            => true,
+			'target'           => true,
 		);
 	}
 
