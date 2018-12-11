@@ -71,7 +71,7 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 							if ( '' != $format ) {
 								$value = date_i18n( stripslashes( $format ), strtotime( stripslashes( $value ) ) );
 							}
-							$value    = ( '' == $value ) ? '' : $before . $value . $after;
+							$value    = ( '' == trim( $value ) ) ? '' : $before . $value . $after;
 							$search   = $matches[0][ $i ];
 							$template = str_replace( $search, $value, $template );
 							$value    = $orig;
