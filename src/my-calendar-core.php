@@ -434,7 +434,9 @@ function mc_footer_js() {
 				}
 				if ( $enqueue_mcjs ) {
 					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ) );
-					wp_localize_script( 'mc.mcjs', 'my_calendar', array(
+					wp_localize_script(
+						'mc.mcjs',
+						'my_calendar', array(
 							'newWindow' => __( 'Opens in new tab', 'my-calendar' ),
 						)
 					);
