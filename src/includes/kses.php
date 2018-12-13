@@ -42,27 +42,41 @@ function mc_allowed_tags( $tags, $context ) {
 	if ( 'mycalendar' == $context ) {
 		global $allowedposttags;
 		$tags          = $allowedposttags;
-		$tags['input'] = array(
-			'type'             => true,
-			'value'            => true,
-			'name'             => true,
-			'class'            => true,
-			'aria-labelledby'  => true,
-			'aria-describedby' => true,
-			'disabled'         => true,
-			'readonly'         => true,
-			'min'              => true,
-			'max'              => true,
-			'id'               => true,
-			'checked'          => true,
-			'required'         => true,
-		);
+		
+		if ( current_user_can( 'unfiltered_html' ) ) {
+			$tags['input'] = array(
+				'type'             => true,
+				'value'            => true,
+				'name'             => true,
+				'class'            => true,
+				'aria-labelledby'  => true,
+				'aria-describedby' => true,
+				'disabled'         => true,
+				'readonly'         => true,
+				'min'              => true,
+				'max'              => true,
+				'id'               => true,
+				'checked'          => true,
+				'required'         => true,
+			);
 
-		$tags['select'] = array(
-			'name'  => true,
-			'id'    => true,
-			'class' => true,
-		);
+			$tags['select'] = array(
+				'name'  => true,
+				'id'    => true,
+				'class' => true,
+			);
+
+			$formtags     = ( is_array( $tags['form'] ) ) ? $tags['form'] : array();
+			$tags['form'] = array_merge(
+				$formtags,
+				array(
+					'action'   => true,
+					'method'   => true,
+					'class'    => true,
+					'id'       => true,
+				)
+			);
+		}
 
 		$tags['span'] = array_merge(
 			$tags['span'],
@@ -80,17 +94,6 @@ function mc_allowed_tags( $tags, $context ) {
 				'type'     => true,
 				'disabled' => true,
 				'class'    => true,
-			)
-		);
-
-		$tags['form'] = array_merge(
-			$tags['form'],
-			array(
-				'action'   => true,
-				'method'   => true,
-				'class'    => true,
-				'id'       => true,
-				'tabindex' => true,
 			)
 		);
 
