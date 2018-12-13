@@ -66,7 +66,7 @@ function mc_allowed_tags( $tags, $context ) {
 				'class' => true,
 			);
 
-			$formtags     = ( is_array( $tags['form'] ) ) ? $tags['form'] : array();
+			$formtags     = ( isset( $tags['form'] ) && is_array( $tags['form'] ) ) ? $tags['form'] : array();
 			$tags['form'] = array_merge(
 				$formtags,
 				array(
