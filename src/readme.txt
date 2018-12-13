@@ -93,6 +93,7 @@ TODO: Support limiting views to multiple locations
 * Bug fix: Shortcode generator fixes.
 * Bug fix: Handle case where hidden categories are not an array in event manager.
 * Bug fix: If template tag value contains only whitespace, do not render before & after attributes.
+* Bug fix: Handle form restrictions in KSES introduced in WP 5.0.1.
 * Change: [UI] Move stylesheet selector into sidebar
 * Change: Allow target attribute on links.
 * Change: Add label to links that open in new tab.

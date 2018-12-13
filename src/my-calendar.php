@@ -150,7 +150,7 @@ function mc_custom_canonical() {
 	}
 }
 
-add_action( 'init', 'mc_start_session', 10 );
+add_action( 'init', 'mc_start_session', 1 );
 /**
  * Makes sure session is started to be able to save search results.
  */
