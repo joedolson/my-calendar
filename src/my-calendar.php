@@ -155,13 +155,20 @@ add_action( 'init', 'mc_start_session', 1 );
  * Makes sure session is started to be able to save search results.
  */
 function mc_start_session() {
-	$status = session_status();
-	if ( PHP_SESSION_DISABLED === $status ) {
-		return;
-	}
+	$required_php_version = '5.4.0';
+	if ( version_compare( PHP_VERSION, $required_php_version, '<' ) ) {
+		if ( ! session_id() ) {
+			session_start();
+		}
+	} else {
+		$status = session_status();
+		if ( PHP_SESSION_DISABLED === $status ) {
+			return;
+		}
 
-	if ( PHP_SESSION_NONE === $status ) {
-		session_start();
+		if ( PHP_SESSION_NONE === $status ) {
+			session_start();
+		}
 	}
 }
 
