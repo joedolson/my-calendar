@@ -1162,8 +1162,21 @@ function mc_search_exportlinks() {
 	$print        = "<div class='mc-print'><a href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 
 	// Set up exports.
-	$ics_add = array( 'searched' => true );
-	$exports = mc_export_links( 1, 1, 1, $ics_add, $subtract );
+	if ( '' != get_option( 'mc_topnav' ) ) {
+		$above = array_map( 'trim', explode( ',', get_option( 'mc_topnav' ) ) );
+	}
+
+	if ( '' != get_option( 'mc_bottomnav' ) ) {
+		$below = array_map( 'trim', explode( ',', get_option( 'mc_bottomnav' ) ) );
+	}
+	$used = array_merge( $above, $below );
+
+	if ( in_array( 'exports', $used ) ) {
+		$ics_add = array( 'searched' => true );
+		$exports = mc_export_links( 1, 1, 1, $ics_add, $subtract );
+	} else {
+		$exports = '';
+	}
 
 	$before = "<div class='mc_bottomnav my-calendar-footer'>";
 	$after  = '</div>';
