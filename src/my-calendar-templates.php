@@ -380,6 +380,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// Category fields.
 	$e['cat_id']          = $event->event_category;
+	$e['category_id']     = $event->event_category;
 	$e['category']        = stripslashes( $event->category_name );
 	$e['ical_category']   = strip_tags( stripslashes( $event->category_name ) );
 	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
