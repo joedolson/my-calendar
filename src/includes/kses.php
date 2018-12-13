@@ -41,8 +41,8 @@ add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
 function mc_allowed_tags( $tags, $context ) {
 	if ( 'mycalendar' == $context ) {
 		global $allowedposttags;
-		$tags          = $allowedposttags;
-		
+		$tags = $allowedposttags;
+
 		if ( current_user_can( 'unfiltered_html' ) ) {
 			$tags['input'] = array(
 				'type'             => true,
@@ -70,10 +70,10 @@ function mc_allowed_tags( $tags, $context ) {
 			$tags['form'] = array_merge(
 				$formtags,
 				array(
-					'action'   => true,
-					'method'   => true,
-					'class'    => true,
-					'id'       => true,
+					'action' => true,
+					'method' => true,
+					'class'  => true,
+					'id'     => true,
 				)
 			);
 		}
