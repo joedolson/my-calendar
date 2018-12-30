@@ -1046,7 +1046,7 @@ function mc_list_titles( $events ) {
 	$result = apply_filters( 'mc_titles_format', '', $titles );
 
 	if ( '' == $result ) {
-		$result = implode( ', ', $titles );
+		$result = implode( apply_filters( 'mc_list_titles_separator', ', ' ), $titles );
 	}
 
 	return "<span class='mc-list-event'>$result</span>";
