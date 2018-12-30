@@ -1349,38 +1349,37 @@ function mc_get_support_form() {
 		$license = "
 		License: $license, $license_valid";
 	}
-	if ( $checked ) {
-		// send fields for all plugins.
-		$wp_version = get_bloginfo( 'version' );
-		$home_url   = home_url();
-		$wp_url     = site_url();
-		$language   = get_bloginfo( 'language' );
-		$charset    = get_bloginfo( 'charset' );
-		// server.
-		$php_version = phpversion();
-		$db_version  = $wpdb->db_version();
-		$admin_email = get_option( 'admin_email' );
-		// theme data.
-		$theme         = wp_get_theme();
-		$theme_name    = $theme->get( 'Name' );
-		$theme_uri     = $theme->get( 'ThemeURI' );
-		$theme_parent  = $theme->get( 'Template' );
-		$theme_version = $theme->get( 'Version' );
+	// send fields for all plugins.
+	$wp_version = get_bloginfo( 'version' );
+	$home_url   = home_url();
+	$wp_url     = site_url();
+	$language   = get_bloginfo( 'language' );
+	$charset    = get_bloginfo( 'charset' );
+	// server.
+	$php_version = phpversion();
+	$db_version  = $wpdb->db_version();
+	$admin_email = get_option( 'admin_email' );
+	// theme data.
+	$theme         = wp_get_theme();
+	$theme_name    = $theme->get( 'Name' );
+	$theme_uri     = $theme->get( 'ThemeURI' );
+	$theme_parent  = $theme->get( 'Template' );
+	$theme_version = $theme->get( 'Version' );
 
-		// plugin data.
-		$plugins        = get_plugins();
-		$plugins_string = '';
+	// plugin data.
+	$plugins        = get_plugins();
+	$plugins_string = '';
 
-		foreach ( array_keys( $plugins ) as $key ) {
-			if ( is_plugin_active( $key ) ) {
-				$plugin          =& $plugins[ $key ];
-				$plugin_name     = $plugin['Name'];
-				$plugin_uri      = $plugin['PluginURI'];
-				$plugin_version  = $plugin['Version'];
-				$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
-			}
+	foreach ( array_keys( $plugins ) as $key ) {
+		if ( is_plugin_active( $key ) ) {
+			$plugin          =& $plugins[ $key ];
+			$plugin_name     = $plugin['Name'];
+			$plugin_uri      = $plugin['PluginURI'];
+			$plugin_version  = $plugin['Version'];
+			$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
 		}
-		$data    = "
+	}
+	$data    = "
 ================ Installation Data ====================
 ==My Calendar:==
 Version: $version
@@ -1412,6 +1411,7 @@ Version: $theme_version
 ==Active Plugins:==
 $plugins_string
 	";
+	if ( $checked ) {
 		$request = '';
 		if ( isset( $_POST['mc_support'] ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
@@ -1472,7 +1472,7 @@ $plugins_string
 			</div>
 		</form>';
 	} else {
-		return '<p><a href="https://wordpress.org/support/plugin/my-calendar/">' . __( 'WordPress.org Support Forums', 'my-calendar' ) . '</a></p>';
+		echo '<p><a href="https://wordpress.org/support/plugin/my-calendar/">' . __( 'Request support at the WordPress.org Support Forums', 'my-calendar' ) . '</a> &bull; <a href="https://www.joedolson.com/my-calendar/pro/">' . __( 'Upgrade to Pro for direct plugin support!', 'my-calendar' ) . '</a></p><div class="mc_support">' . wpautop( $data ) . '</div>';
 	}
 }
 
