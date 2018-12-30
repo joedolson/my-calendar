@@ -1379,7 +1379,7 @@ function mc_get_support_form() {
 			$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
 		}
 	}
-	$data    = "
+	$data = "
 ================ Installation Data ====================
 ==My Calendar:==
 Version: $version
