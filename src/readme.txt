@@ -85,6 +85,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.1.3 =
+
+* New filter: 'mc_list_titles_separator'
+* Bug fix: Help support data not displayed.
+
 = 3.1.2 =
 
 * Bug fix: Twentyeighteen styles missing from template directory
