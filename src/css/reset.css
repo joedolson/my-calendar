@@ -8,6 +8,11 @@
 	padding: 0;
 }
 
+/* Override overflow:hidden */
+div.site-content {
+	overflow: visible; 
+}
+
 .mc-main {
 	line-height: 1;
 }
