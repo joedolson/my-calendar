@@ -89,6 +89,8 @@ TODO: Support limiting views to multiple locations
 
 * New filter: 'mc_list_titles_separator'
 * Bug fix: Help support data not displayed.
+* Override content overflow in Twentynineteen
+* Add support for iCal format in API exports
 
 = 3.1.2 =
 
