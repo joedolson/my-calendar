@@ -72,6 +72,9 @@ function mc_format_api( $data, $format ) {
 		case 'csv':
 			mc_api_format_csv( $data );
 			break;
+		case 'ical':
+			mc_api_format_ical( $data );
+			break;
 	}
 }
 
@@ -351,46 +354,9 @@ function mc_ics_subscribe( $source ) {
 	} else {
 		$cat_id = false;
 	}
-
 	$events    = mc_get_rss_events( $cat_id );
-	$templates = mc_ical_template();
-	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
 
-	if ( is_array( $events ) && ! empty( $events ) ) {
-		foreach ( $events as $date ) {
-			foreach ( array_keys( $date ) as $key ) {
-				$event =& $date[ $key ];
-				if ( is_object( $event ) ) {
-					if ( ! mc_private_event( $event ) ) {
-						$array = mc_create_tags( $event, $source );
-
-						$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
-						$alert = '';
-						if ( ! empty( $alarm ) ) {
-							$alert = mc_generate_alert_ical( $alarm );
-						}
-						$all_day = '';
-						if ( mc_is_all_day( $event ) ) {
-							$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
-						}
-						$parse = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
-
-						$output .= "\n" . mc_draw_template( $array, $parse, 'ical' );
-					}
-				}
-			}
-		}
-	}
-	$output = html_entity_decode( preg_replace( '~(?<!\r)\n~', "\r\n", $templates['head'] . $output . $templates['foot'] ) );
-	if ( ! ( isset( $_GET['sync'] ) && 'true' == $_GET['sync'] ) ) {
-		$sitename = sanitize_title( get_bloginfo( 'name' ) );
-		header( 'Content-Type: text/calendar; charset=UTF-8' );
-		header( 'Pragma: no-cache' );
-		header( 'Expires: 0' );
-		header( "Content-Disposition: inline; filename=my-calendar-$sitename-$source.ics" );
-	}
-
-	echo $output;
+	mc_api_format_ical( $events );
 }
 
 /**
@@ -430,9 +396,6 @@ function my_calendar_ical() {
 	$to       = apply_filters( 'mc_ical_download_to', $to, $p );
 	$category = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcal'] ) : null;
 
-	$templates = mc_ical_template();
-	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
-
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
 	$args = array(
 		'from'     => $from,
@@ -454,8 +417,20 @@ function my_calendar_ical() {
 	} else {
 		$data = my_calendar_events( $args );
 	}
-	$events = mc_flatten_array( $data );
 
+	mc_api_format_ical( $data );
+}
+
+/**
+ * iCal formatted events
+ *
+ * @param array $data array of event objects.
+ */
+function mc_api_format_ical( $data ) {
+	$templates = mc_ical_template();
+	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
+	$events    = mc_flatten_array( $data );
+	$output    = '';
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
@@ -468,7 +443,7 @@ function my_calendar_ical() {
 						$alert = mc_generate_alert_ical( $alarm );
 					}
 					$all_day = '';
-					if ( 1 == $event->event_allday ) {
+					if ( mc_is_all_day( $event ) ) {
 						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
 					}
 					$parse = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
@@ -478,7 +453,6 @@ function my_calendar_ical() {
 			}
 		}
 	}
-
 	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
 	if ( ! ( isset( $_GET['sync'] ) && 'true' == $_GET['sync'] ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
