@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.1.2
+Stable tag: 3.1.3
 Text domain: my-calendar
 License: GPLv2 or later
 
