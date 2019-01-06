@@ -354,7 +354,7 @@ function mc_ics_subscribe( $source ) {
 	} else {
 		$cat_id = false;
 	}
-	$events    = mc_get_rss_events( $cat_id );
+	$events = mc_get_rss_events( $cat_id );
 
 	mc_api_format_ical( $events );
 }
@@ -422,7 +422,7 @@ function my_calendar_ical() {
 }
 
 /**
- * iCal formatted events
+ * Output iCal formatted events
  *
  * @param array $data array of event objects.
  */
