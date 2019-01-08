@@ -836,6 +836,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( isset( $_GET['time'] ) && 'day' == $_GET['time'] ) {
 		// don't adjust day if viewing day format.
 	} else {
+		// if the current date is displayed and the week beginning day is greater than 20 in the month.
 		if ( ! isset( $_GET['dy'] ) && $day > 20 ) {
 			$day = date( 'j', strtotime( "$from + 1 week" ) );
 		}

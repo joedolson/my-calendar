@@ -394,7 +394,7 @@ function my_calendar_ical() {
 
 	$from     = apply_filters( 'mc_ical_download_from', $from, $p );
 	$to       = apply_filters( 'mc_ical_download_to', $to, $p );
-	$category = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcal'] ) : null;
+	$category = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : null;
 
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
 	$args = array(
