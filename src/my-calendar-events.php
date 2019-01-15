@@ -667,7 +667,7 @@ function mc_get_occurrences( $id ) {
 /**
  * Get all events with a grouped relationship with the current event.
  *
- * @param int $id Event ID.
+ * @param int $id Group ID.
  *
  * @return array Array event IDs of related events
  */
