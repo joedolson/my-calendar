@@ -3030,9 +3030,9 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 		$output = '<ul class="mc-locations">';
 		foreach ( $locations as $key => $value ) {
 			if ( 'hcard' != $datatype && '' != $template ) {
-				$label   = stripslashes( $value->{$data} );
+				$label   = stripslashes( $value->{$datatype} );
 				$url     = mc_maplink( $value, 'url', 'location' );
-				$output .= ( $url ) ? "<li>$url</li>" : "<li>$label</li>";
+				$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
 			} elseif ( 'hcard' == $datatype ) {
 				$label   = mc_hcard( $value, true, true, 'location' );
 				$output .= "<li>$label</li>";
