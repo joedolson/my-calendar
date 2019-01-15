@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -84,6 +84,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 == Changelog ==
 
 TODO: Support limiting views to multiple locations
+
+= 3.1.4 =
+
+* Bug fix: typo in category string parameter for ical output
 
 = 3.1.3 =
 

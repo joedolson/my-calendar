@@ -17,11 +17,11 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.1.3
+ * Version:     3.1.4
  */
 
 /*
-	Copyright 2009-2018  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2009-2019  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $mc_version, $wpdb;
-$mc_version = '3.1.3';
+$mc_version = '3.1.4';
 
 define( 'MC_DEBUG', false );
 
