@@ -120,6 +120,30 @@ a {
 	text-decoration: none;
 }
 
+li.mc-events {
+	margin-top: 1em;
+	list-style-type: none;
+}
+
+ul.mc-list {
+	margin: 1em 0;
+	padding: 0;
+}
+
+.mc-events .list-event {
+	margin-bottom: .5em;
+	padding-bottom: .5em;
+	line-height: 1.4;
+}
+
+.mc-events .list-event h3 {
+	font-size: 16px;
+}
+
+.mc-events .list-event .address strong {
+	font-weight: 400;
+}
+
 @media print {
 	.return { display: none; }
 }
