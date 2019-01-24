@@ -155,6 +155,10 @@ add_action( 'init', 'mc_start_session', 1 );
  * Makes sure session is started to be able to save search results.
  */
 function mc_start_session() {
+	// Starting a session breaks the white screen check.
+	if ( isset( $_GET['wp_scrape_key'] ) ) {
+		return;
+	}
 	$required_php_version = '5.4.0';
 	if ( version_compare( PHP_VERSION, $required_php_version, '<' ) ) {
 		if ( ! session_id() ) {
