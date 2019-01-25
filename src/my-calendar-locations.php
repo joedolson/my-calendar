@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_update_location( $field, $data, $location ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 	return $result;
 }

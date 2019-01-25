@@ -270,14 +270,10 @@ function mc_deal_with_deleted_user( $id ) {
 	$new        = $wpdb->get_var( 'SELECT MIN(ID) FROM ' . $wpdb->users, 0, 0 );
 	$new_author = apply_filters( 'mc_deleted_author', $new );
 	// This may not work quite right in multi-site. Need to explore further when I have time.
-	$wpdb->get_results(
-		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id )
-	); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	$new_host = apply_filters( 'mc_deleted_host', $new );
-	$wpdb->get_results(
-		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id )
-	); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
 /**
