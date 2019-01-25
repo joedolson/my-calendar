@@ -85,6 +85,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.1.5 =
+
+* Bug fix: PHP error checking broken due to session creation
+
 = 3.1.4 =
 
 * Bug fix: typo in category string parameter for ical output
