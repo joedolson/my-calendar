@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_update_category( $field, $data, $category ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 	return $result;
 }
