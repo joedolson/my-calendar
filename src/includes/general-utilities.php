@@ -420,5 +420,5 @@ function mc_debug( $subject, $body, $email = false ) {
 function mc_drop_table( $table ) {
 	global $wpdb;
 	$sql = 'DROP TABLE ' . $table();
-	$wpdb->query( $sql ); // WPCS: unprepared SQL ok.
+	$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }

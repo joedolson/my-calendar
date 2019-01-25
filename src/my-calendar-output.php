@@ -3011,7 +3011,7 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
 		$select = '*';
 	}
 	// Value of $data is set in switch above. $select is same as data unless *.
-	$locations = $mcdb->get_results( "SELECT DISTINCT $select FROM " . my_calendar_locations_table() . " $where ORDER BY $data ASC", $return_type ); // WPCS: unprepared SQL ok.
+	$locations = $mcdb->get_results( "SELECT DISTINCT $select FROM " . my_calendar_locations_table() . " $where ORDER BY $data ASC", $return_type ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $locations;
 }

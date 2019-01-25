@@ -192,7 +192,7 @@ function mc_group_data( $event_id = false ) {
 		if ( intval( $event_id ) != $event_id ) {
 			return mc_show_error( __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ), false );
 		} else {
-			$data = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // WPCS: unprepared SQL OK.
+			$data = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			if ( empty( $data ) ) {
 				return mc_show_error( __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ), false );
 			}
@@ -226,7 +226,7 @@ function mc_compare_group_members( $group_id, $field = false ) {
 		// Just comparing a single field.
 		$query = "SELECT $field FROM " . my_calendar_table() . ' WHERE event_group_id = %d';
 	}
-	$results = $wpdb->get_results( $wpdb->prepare( $query, $group_id ), ARRAY_N ); // WPCS: Unprepared SQL ok.
+	$results = $wpdb->get_results( $wpdb->prepare( $query, $group_id ), ARRAY_N ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$count   = count( $results );
 	for ( $i = 0; $i < $count; $i ++ ) {
 		$n = ( ( $i + 1 ) > $count - 1 ) ? 0 : $i + 1;
@@ -250,7 +250,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	global $wpdb;
 	$event_id = (int) $_GET['event_id'];
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
-	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // WPCS: unprepared SQL OK.
+	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( 'apply' == $type ) {
 		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>NOTE:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p class="matched">' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
 	} else {
@@ -838,7 +838,7 @@ function mc_check_group_data( $action, $post ) {
 		$event_span         = ! empty( $post['event_span'] ) ? 1 : 0;
 		// Set location.
 		if ( 'none' != $location_preset ) {
-			$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // WPCS: unprepared SQL OK.
+			$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$event_label     = $location->location_label;
 			$event_street    = $location->location_street;
 			$event_street2   = $location->location_street2;
@@ -996,7 +996,7 @@ function mc_list_groups() {
 			$limit = '';
 	}
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
-	$events      = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT %d, %d", $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
+	$events      = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 	$items       = $found_rows[0];
 	?>
@@ -1067,7 +1067,7 @@ function mc_list_groups() {
 				</thead>
 				<?php
 				$class      = '';
-				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // WPCS: unprepared SQL OK.
+				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				foreach ( $events as $event ) {
 					$class      = ( 'alternate' == $class ) ? '' : 'alternate';
 					$spam       = ( 1 == $event->event_flagged ) ? ' spam' : '';

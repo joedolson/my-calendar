@@ -272,12 +272,12 @@ function mc_deal_with_deleted_user( $id ) {
 	// This may not work quite right in multi-site. Need to explore further when I have time.
 	$wpdb->get_results(
 		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id )
-	); // WPCS: unprepared SQL OK.
+	); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	$new_host = apply_filters( 'mc_deleted_host', $new );
 	$wpdb->get_results(
 		$wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id )
-	); // WPCS: unprepared SQL OK.
+	); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
 /**
@@ -958,11 +958,11 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
  */
 function mc_update_count_cache() {
 	global $wpdb;
-	$published = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 1' ); // WPCS: unprepared SQL OK.
-	$draft     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 0' ); // WPCS: unprepared SQL OK.
-	$trash     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 2' ); // WPCS: unprepared SQL OK.
-	$archive   = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_status = 0' ); // WPCS: unprepared SQL OK.
-	$spam      = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_flagged = 1' ); // WPCS: unprepared SQL OK.
+	$published = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$draft     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$trash     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 2' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$archive   = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_status = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$spam      = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_flagged = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$counts    = array(
 		'published' => $published,
 		'draft'     => $draft,
@@ -1144,7 +1144,7 @@ function mc_ajax_delete_occurrence() {
 		global $wpdb;
 		$occur_id = (int) $_REQUEST['occur_id'];
 		$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
-		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // WPCS: unprepared SQL OK.
+		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( $result ) {
 			wp_send_json(
@@ -1772,7 +1772,7 @@ function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	$user = get_user_by( 'email', $email_address );
 	if ( $user ) {
 		$user_ID  = $user->ID;
-		$calendar = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d', $user_ID, $user_ID ) ); // WPCS: unprepared SQL ok.
+		$calendar = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d', $user_ID, $user_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $calendar as $obj ) {
 			$events[] = $obj->event_id;
 		}
@@ -1783,7 +1783,7 @@ function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	} else {
 		foreach ( $events as $e ) {
 			$event_export = array();
-			$event        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e ) ); // WPCS: unprepared SQL OK.
+			$event        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$meta         = get_post_meta( $event->event_post );
 
 			foreach ( $event as $key => $value ) {
@@ -1870,7 +1870,7 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 	if ( $user ) {
 		$user_ID = $user->ID;
 		// for deletion, if *author*, delete; if *host*, change host.
-		$calendar = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_host, event_author FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d', $user_ID, $user_ID ) ); // WPCS: unprepared SQL ok.
+		$calendar = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_host, event_author FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d', $user_ID, $user_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $calendar as $obj ) {
 			if ( $user_ID == $obj->event_host && $obj->event_host != $obj->event_author ) {
 				$updates[] = array( $obj->event_id, $obj->event_author );

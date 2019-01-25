@@ -381,8 +381,8 @@ function mc_migrate_db() {
 	global $wpdb;
 
 	// Step 1) check if early escapement is needed.
-	$count  = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_event_table() ); // WPCS: unprepared SQL OK.
-	$count2 = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_table() ); // WPCS: unprepared SQL OK.
+	$count  = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_event_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$count2 = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( $count2 > 0 && $count > 0 ) {
 		return;
 	}
@@ -391,7 +391,7 @@ function mc_migrate_db() {
 	}
 
 	// Step 2) migrate events.
-	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() ); // WPCS: unprepared SQL OK.
+	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	foreach ( $events as $event ) {
 		// assign endtimes to all events.
 		if ( '00:00:00' == $event->event_endtime && '00:00:00' != $event->event_time ) {
@@ -472,7 +472,7 @@ function mc_check_location_table( $event, $locations ) {
 function mc_transition_db() {
 	if ( 'true' != get_option( 'mc_remote' ) ) {
 		global $wpdb;
-		$results   = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_locations_table(), ARRAY_A ); // WPCS: unprepared SQL OK.
+		$results   = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_locations_table(), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$locations = array();
 		foreach ( $results as $result ) {
 			$location_id = $result['location_id'];
@@ -480,7 +480,7 @@ function mc_transition_db() {
 			$hash                      = md5( serialize( $result ) );
 			$locations[ $location_id ] = $result;
 		}
-		$results = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // WPCS: unprepared SQL OK.
+		$results = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $results as $category ) {
 			$term = wp_insert_term( $category->category_name, 'mc-event-category' );
 			if ( ! is_wp_error( $term ) ) {
@@ -493,7 +493,7 @@ function mc_transition_db() {
 				}
 			}
 		}
-		$results = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_table(), ARRAY_A ); // WPCS: unprepared SQL OK.
+		$results = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_table(), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $results as $event ) {
 			$post_id = mc_create_event_post( $event, $event['event_id'] );
 			mc_update_event( 'event_post', $post_id, $event['event_id'] );
@@ -562,7 +562,7 @@ function mc_check_imports() {
  */
 function mc_transition_categories() {
 	global $wpdb;
-	$results = $wpdb->get_results( 'SELECT event_id, event_category FROM ' . my_calendar_table() ); // WPCS: unprepared SQL OK.
+	$results = $wpdb->get_results( 'SELECT event_id, event_category FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	foreach ( $results as $result ) {
 		$event_id = $result->event_id;
 		$category = $result->event_category;

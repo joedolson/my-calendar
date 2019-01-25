@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_update_location( $field, $data, $location ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // WPCS: unprepared SQL ok.
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $result;
 }
@@ -126,7 +126,7 @@ function my_calendar_add_locations() {
 			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' == $_GET['mode'] ) {
-		$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // WPCS: unprepared SQL ok.
+		$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
 		if ( $results ) {
 			mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ) );
@@ -263,7 +263,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
  */
 function mc_get_location( $location_id ) {
 	global $wpdb;
-	$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // WPCS: unprepared SQL ok.
+	$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $location;
 }
@@ -639,12 +639,12 @@ function mc_get_locations( $args ) {
 		// Prevent invalid order parameters.
 		$order = 'ASC';
 	}
-	$valid_args = $wpdb->get_col( 'DESC ' . my_calendar_locations_table() ); // WPCS: unprepared SQL ok.
+	$valid_args = $wpdb->get_col( 'DESC ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( ! ( in_array( $orderby, $valid_args ) ) ) {
 		// Prevent invalid order columns.
 		$orderby = 'location_label';
 	}
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE %s = %s ORDER BY ' . $orderby . ' ' . $order, $where, $is ) ); // WPCS: unprepared SQL ok.
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE %s = %s ORDER BY ' . $orderby . ' ' . $order, $where, $is ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return apply_filters( 'mc_filter_results', $results, $args );
 }

@@ -146,7 +146,7 @@ function my_calendar_import() {
 		}
 		foreach ( $event_ids as $value ) { // propagate event instances.
 			$sql   = 'SELECT event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() . ' WHERE event_id = %d';
-			$event = $wpdb->get_results( $wpdb->prepare( $sql, $value ) ); // WPCS: unprepared SQL ok.
+			$event = $wpdb->get_results( $wpdb->prepare( $sql, $value ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$event = $event[0];
 			$dates = array(
 				'event_begin'   => $event->event_begin,
@@ -163,7 +163,7 @@ function my_calendar_import() {
 			$color        = esc_sql( $key['category_colour'] );
 			$id           = (int) $key['category_id'];
 			$catsql       = 'INSERT INTO ' . my_calendar_categories_table() . ' SET category_id=%1$d, category_name=%2$s, category_color=%3$s ON DUPLICATE KEY UPDATE category_name=%2$s, category_color=%3$s;';
-			$cats_results = $wpdb->query( $wpdb->prepare( $catsql, $id, $name, $color ) ); // WPCS: unprepared SQL ok.
+			$cats_results = $wpdb->query( $wpdb->prepare( $catsql, $id, $name, $color ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 		$message   = ( false !== $cats_results ) ? __( 'Categories imported successfully.', 'my-calendar' ) : __( 'Categories not imported.', 'my-calendar' );
 		$e_message = ( false !== $events_results ) ? __( 'Events imported successfully.', 'my-calendar' ) : __( 'Events not imported.', 'my-calendar' );

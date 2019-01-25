@@ -132,7 +132,7 @@ function mc_manage_locations() {
 	}
 
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
-	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT %d, %d", $query_limit, $items_per_page ) ); // WPCS: Unprepared SQL ok.
+	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 	$items       = $found_rows[0];
 

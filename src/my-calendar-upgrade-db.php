@@ -22,7 +22,7 @@ function my_calendar_check_db() {
 	}
 
 	global $wpdb;
-	$cols         = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // WPCS: unprepared SQL ok.
+	$cols         = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$needs_update = false;
 
 	if ( ! in_array( 'event_tickets', $cols ) ) {

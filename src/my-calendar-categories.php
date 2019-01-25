@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_update_category( $field, $data, $category ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // WPCS: unprepared SQL ok.
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $result;
 }
@@ -162,15 +162,15 @@ function my_calendar_manage_categories() {
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' == $_GET['mode'] ) {
 			$cat_id  = (int) $_GET['category_id'];
-			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // WPCS: unprepared SQL OK.
+			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			// Also delete relationships for this category.
-			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $cat_id ) ); // WPCS: unprepared SQL OK.
+			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			if ( $results ) {
 				$default_category = get_option( 'mc_default_category' );
 				$default_category = ( is_numeric( $default_category ) ) ? absint( $default_category ) : 1;
-				$cal_results      = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $default_category, $cat_id ) ); // WPCS: unprepared SQL OK.
+				$cal_results      = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $default_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			} else {
 				$cal_results = false;
 			}
@@ -317,7 +317,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 	$cur_cat = false;
 	if ( '' != $cat_id ) {
 		$cat_id  = (int) $cat_id;
-		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // WPCS: unprepared SQL OK.
+		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 	if ( mc_is_custom_icon() ) {
 		$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
@@ -609,7 +609,7 @@ function mc_manage_categories() {
 			$cat_order = 'category_id';
 	}
 	// We pull the categories from the database.
-	$categories = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY %s ASC', $cat_order ) );  // WPCS: unprepared SQL OK.
+	$categories = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY %s ASC', $cat_order ) );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( ! empty( $categories ) ) {
 		?>
 		<table class="widefat page fixed mc-categories" id="my-calendar-admin-table">
@@ -886,7 +886,7 @@ function mc_get_categories( $event, $ids = true ) {
 	if ( ! $results ) {
 		$relate  = my_calendar_category_relationships_table();
 		$catego  = my_calendar_categories_table();
-		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // WPCS: unprepared SQL OK.
+		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 	if ( true === $ids ) {
 		if ( $results ) {

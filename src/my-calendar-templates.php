@@ -942,7 +942,7 @@ function mc_event_date_span( $group_id, $event_span, $dates = array() ) {
 
 		return $dates;
 	} else {
-		$dates = $mcdb->get_results( $wpdb->prepare( 'SELECT occur_begin, occur_end FROM ' . my_calendar_event_table() . ' WHERE occur_group_id = %d ORDER BY occur_begin ASC', $group_id ) ); // WPCS: unprepared SQL ok.
+		$dates = $mcdb->get_results( $wpdb->prepare( 'SELECT occur_begin, occur_end FROM ' . my_calendar_event_table() . ' WHERE occur_group_id = %d ORDER BY occur_begin ASC', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		set_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span, $dates, HOUR_IN_SECONDS );
 
 		return $dates;
