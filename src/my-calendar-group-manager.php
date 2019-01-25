@@ -996,7 +996,7 @@ function mc_list_groups() {
 			$limit = '';
 	}
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
-	$events      = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$events      = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared WordPress.DB.PreparedSQL.NotPrepared
 	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 	$items       = $found_rows[0];
 	?>
