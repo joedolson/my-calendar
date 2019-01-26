@@ -59,6 +59,7 @@ function mc_plugin_activated() {
 		// Translators: Name of plug-in, required PHP version, current PHP version.
 		$message = sprintf( __( '%1$s requires PHP version %2$s or higher. Your current PHP version is %3$s', 'my-calendar' ), $plugin_data['Name'], $required_php_version, phpversion() );
 		echo "<div class='error'><p>$message</p></div>";
+		deactivate_plugins( plugin_basename( __FILE__ ) );
 		exit;
 	}
 
