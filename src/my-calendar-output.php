@@ -2031,6 +2031,10 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		'href'   => urlencode( mc_get_current_url() ),
 	);
 
+	if ( 'list' == $format ) {
+		$add['format'] = 'list';
+	}
+
 	$subtract = array();
 	if ( '' == $ltype ) {
 		$subtract[] = 'ltype';
