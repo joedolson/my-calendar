@@ -48,6 +48,9 @@ function mc_prepare_search_query( $query ) {
  * @return string SQL modifiers.
  */
 function mc_select_category( $category, $type = 'event', $group = 'events' ) {
+	if ( '' == $category ) {
+		return '';
+	}
 	$category      = urldecode( $category );
 	$select_clause = '';
 	$data          = ( 'category' == $group ) ? 'category_id' : 'r.category_id';
@@ -132,6 +135,9 @@ function mc_category_select_ids( $category ) {
  * @return string WHERE limits
  */
 function mc_select_author( $author, $type = 'event', $context = 'author' ) {
+	if ( '' == $author ) {
+		return '';
+	}
 	$author = urldecode( $author );
 	if ( '' == $author || 'all' == $author || 'default' == $author || null == $author ) {
 		return '';
