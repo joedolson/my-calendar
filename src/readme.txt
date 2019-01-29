@@ -85,6 +85,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 TODO: Support limiting views to multiple locations
 
+= 3.1.6 =
+
+* Bug fix: If a category name was blank, it would automatically be filtered to by upcoming events lists.
+* Bug fix: Show print view as list if main view is list.
+
 = 3.1.5 =
 
 * Bug fix: PHP error checking broken due to session creation
