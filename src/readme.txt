@@ -3,9 +3,9 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
 Requires at least: 4.4
-Tested up to: 5.0
+Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 3.1.5
+Stable tag: 3.1.6
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -83,12 +83,13 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
-TODO: Support limiting views to multiple locations
-
 = 3.1.6 =
 
 * Bug fix: If a category name was blank, it would automatically be filtered to by upcoming events lists.
 * Bug fix: Show print view as list if main view is list.
+* Bug fix: Strip HTML tags from aria-label attributes
+* Bug fix: .details needs position: relative in twentyfifteen stylesheet
+* Adjust tested to value to 5.1
 
 = 3.1.5 =
 
