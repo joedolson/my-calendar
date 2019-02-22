@@ -172,6 +172,7 @@
 
 .mc-main .details {
 	padding: 10px;
+	position: relative;
 }
 
 .mc-main .mc-list .details {
