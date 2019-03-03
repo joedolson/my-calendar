@@ -83,6 +83,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.7 =
+
+* Add meta field '_mc_event_date' for use in My Tickets
+
 = 3.1.6 =
 
 * Bug fix: If a category name was blank, it would automatically be filtered to by upcoming events lists.

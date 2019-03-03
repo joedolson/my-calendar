@@ -123,6 +123,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	update_post_meta( $post_id, '_mc_event_id', $event_id );
 	update_post_meta( $post_id, '_mc_event_desc', $description );
 	update_post_meta( $post_id, '_mc_event_image', $image );
+	update_post_meta( $post_id, '_mc_event_date', strtotime( $data['event_begin'] ) );
 	update_post_meta( $post_id, '_event_time_label', ( isset( $_POST['event_time_label'] ) ) ? $_POST['event_time_label'] : '' );
 	$location_id = ( isset( $post['location_preset'] ) ) ? (int) $post['location_preset'] : false;
 	if ( $location_id ) { // only change location ID if dropdown set.
