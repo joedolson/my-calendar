@@ -544,6 +544,24 @@ function mc_get_event_image( $event, $data ) {
 }
 
 /**
+ * If option to disable link is toggled, disable the link.
+ *
+ * @param boolean $status Default value.
+ * @param array   $event Event details.
+ *
+ * @return boolean
+ */
+function mc_disable_link( $status, $event ) {
+	$option = get_option( 'mc_no_link' );
+	if ( 'true' == $option ) {
+		$status = true;
+	}
+
+	return $status;
+}
+add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
+
+/**
  * Generate classes for a given event
  *
  * @param object $event Event Object.
