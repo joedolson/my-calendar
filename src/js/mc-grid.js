@@ -1,15 +1,15 @@
 (function ($) {
 	'use strict';
 	$(function () {
-		$(".calendar-event").children().not(".event-title").hide();
+		$('.calendar-event').children().not('.event-title').hide();
 
-		$(document).on("click", ".calendar-event .event-title",
+		$(document).on('click', '.calendar-event .event-title a',
 			function (e) {
 				e.preventDefault();
 				var current_date = $(this).parent().children();
 
 				$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
-				$(this).parent().children().not(".event-title").toggle().attr("tabindex", "-1");
+				$(this).parent().children().not('.event-title').toggle().attr('tabindex', '-1');
 				$(this).parent().focus();
 
 				var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
@@ -24,8 +24,8 @@
 			function (e) {
 				e.preventDefault();
 				$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
-				$(this).closest(".vevent").find(".event-title a").focus();
-				$(this).closest("div.details").toggle();
+				$(this).closest('.vevent').find('.event-title a').focus();
+				$(this).closest('div.details').toggle();
 			});
 
 		$(document).on( 'keydown', function(e) {
