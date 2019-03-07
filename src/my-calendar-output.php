@@ -654,7 +654,7 @@ function mc_category_class( $object, $prefix ) {
  * @return boolean
  */
 function mc_show_details( $time, $type ) {
-	$no_link = apply_filters( 'mc_disable_link', false, $data );
+	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
 	return ( ( 'calendar' == $type && 'true' == get_option( 'mc_open_uri' ) && 'day' != $time ) || $no_link ) ? false : true;
 }
