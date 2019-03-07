@@ -263,6 +263,7 @@ function my_calendar_settings() {
 		$mc_open_day_uri = ( ! empty( $_POST['mc_open_day_uri'] ) ) ? $_POST['mc_open_day_uri'] : '';
 		update_option( 'mc_use_permalinks', ( ! empty( $_POST['mc_use_permalinks'] ) ) ? 'true' : 'false' );
 		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' == $_POST['mc_open_uri'] && '' != get_option( 'mc_uri' ) ) ? 'true' : 'false' );
+		update_option( 'mc_no_link', ( ! empty( $_POST['mc_no_link'] ) && 'on' == $_POST['mc_no_link'] ) ? 'true' : 'false' );
 		update_option( 'mc_mini_uri', $_POST['mc_mini_uri'] );
 		update_option( 'mc_open_day_uri', $mc_open_day_uri );
 		update_option( 'mc_display_author', ( ! empty( $_POST['mc_display_author'] ) && 'on' == $_POST['mc_display_author'] ) ? 'true' : 'false' );
@@ -688,6 +689,7 @@ function mc_remote_db() {
 							?>
 							<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open calendar links to event details', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_no_link', __( 'Disable calendar links', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
 							$disabled = ( ! get_option( 'mc_uri' ) && ! get_option( 'mc_mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
