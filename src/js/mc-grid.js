@@ -6,21 +6,21 @@
 		$(document).on('click', '.calendar-event .event-title a',
 			function (e) {
 				e.preventDefault();
-				var current_date = $(this).parent().children();
+				var current_date = $(this).parents( '.vevent' ).children();
 
 				$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
-				$(this).parent().children().not('.event-title').toggle().attr('tabindex', '-1');
-				$(this).parent().focus();
+				$(this).parents( '.vevent' ).children().not('.event-title').toggle().attr('tabindex', '-1');
+				$(this).parents( '.vevent' ).focus();
 
 				var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
 				var lastFocus  = focusable.last();
 				var firstFocus = focusable.first();
 				lastFocus.attr( 'data-action', 'shiftback' );
 
-				$(".calendar-event").children().not(".event-title").not( current_date ).hide();
+				$('.calendar-event').children().not('.event-title').not( current_date ).hide();
 			});
 
-		$(document).on("click", ".calendar-event .close",
+		$(document).on('click', '.calendar-event .close',
 			function (e) {
 				e.preventDefault();
 				$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
