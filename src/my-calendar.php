@@ -151,7 +151,10 @@ function mc_custom_canonical() {
 	}
 }
 
-add_action( 'init', 'mc_start_session', 1 );
+if ( isset( $_REQUEST['mcs'] ) ) {
+	// Only call a session if a search has been performed.
+	add_action( 'init', 'mc_start_session', 1 );
+}
 /**
  * Makes sure session is started to be able to save search results.
  */
