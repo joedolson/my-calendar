@@ -300,7 +300,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$event_title = ( '' == $event_title ) ? $data['title'] : strip_tags( $event_title, mc_strip_tags() );
 	$no_link     = apply_filters( 'mc_disable_link', false, $data );
 
-	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' != $type && 'list' != $type ) || $no_link ) {
+	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' != $type && 'list' != $type ) && ! $no_link ) {
 		if ( 'true' == $open_uri ) {
 			$details_link = esc_url( mc_get_details_link( $event ) );
 			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image'>" : '<span class="no-link">';
