@@ -1138,9 +1138,20 @@ function mc_ajax_delete_occurrence() {
 
 	if ( current_user_can( 'mc_manage_events' ) ) {
 		global $wpdb;
-		$occur_id = (int) $_REQUEST['occur_id'];
-		$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
-		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$occur_id    = (int) $_REQUEST['occur_id'];
+		$occur_begin = $_REQUEST['occur_begin'];
+		$occur_end   = $_REQUEST['occur_end'];
+		$delete      = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
+		$result      = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		$instances = get_post_meta( $event_post, '_mc_custom_instances', true );
+		if ( is_array( $instances ) ) {
+			foreach( $instances as $key => $instance ) {
+				if ( $occur_begin == $instance['occur_begin'] && $occur_end == $instance['occur_end'] ) {
+					unset( $instances[ $key ] );
+				}
+			}
+		}
 
 		if ( $result ) {
 			wp_send_json(
