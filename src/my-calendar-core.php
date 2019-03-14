@@ -1207,14 +1207,18 @@ function mc_ajax_add_date() {
 		$begin = strtotime( $event_date . ' ' . $event_time );
 		$end   = ( '' != $event_endtime ) ? strtotime( $event_end . ' ' . $event_endtime ) : strtotime( $event_end . ' ' . $event_time ) + HOUR_IN_SECONDS;
 
-		$format = array( '%d', '%s', '%s', '%d' );
-		$data   = array(
+		$format      = array( '%d', '%s', '%s', '%d' );
+		$data        = array(
 			'occur_event_id' => $event_id,
 			'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
 			'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
 			'occur_group_id' => $group_id,
 		);
-		$result = $wpdb->insert( my_calendar_event_table(), $data, $format );
+		$result      = $wpdb->insert( my_calendar_event_table(), $data, $format );
+		$event_post  = mc_get_event_post( $event_id );
+		$instances   = get_post_meta( $event_post, '_mc_custom_instances', true );
+		$instances[] = $data; 
+		update_post_meta( $event_id, '_mc_custom_instances', $instances );
 
 		if ( $result ) {
 			wp_send_json(
