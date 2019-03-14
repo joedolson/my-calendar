@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
 	$('#add_field').on('click', function () {
 		$('#event_span').show();
 		var num = $('.clonedInput').length; // how many "duplicatable" input fields we currently have.
-		var newNum = new Number(num + 1);	  // the numeric ID of the new input field being added.
+		var newNum = new Number(num + 1);   // the numeric ID of the new input field being added.
 		// create the new element via clone(), and manipulate it's ID using newNum value.
 		var newElem = $('#event' + num).clone().attr('id', 'event' + newNum);
 		// insert the new element after the last "duplicatable" input field.
@@ -51,13 +51,13 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	var publish_text = $( 'input[name=save]' ).val();
+	var publishText = $( 'input[name=save]' ).val();
 	$( '#e_approved' ).on( 'change', function (e) {
 		var event_status = $(this).val();
 		if ( event_status == 0 ) {
 			$( 'input[name=save]' ).val( draftText );
 		} else {
-			$( 'input[name=save]' ).val( publish_text );
+			$( 'input[name=save]' ).val( publishText );
 		}
 	});
 
