@@ -1220,7 +1220,7 @@ function mc_ajax_add_date() {
 			wp_send_json(
 				array(
 					'success'  => 1,
-					'response' => __( 'Thanks! I added your new date.', 'my-calendar' ),
+					'response' => __( 'Thanks! Your new date is saved to your calendar.', 'my-calendar' ),
 				)
 			);
 		} else {
