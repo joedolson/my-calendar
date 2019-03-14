@@ -377,11 +377,12 @@ function mc_ics_subscribe_outlook() {
  * Generate ICS export of current period of events
  */
 function my_calendar_ical() {
-	$p  = ( isset( $_GET['span'] ) ) ? 'year' : false;
-	$y  = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : date( 'Y' );
-	$m  = ( isset( $_GET['month'] ) ) ? $_GET['month'] : date( 'n' );
-	$ny = ( isset( $_GET['nyr'] ) ) ? $_GET['nyr'] : $y;
-	$nm = ( isset( $_GET['nmonth'] ) ) ? $_GET['nmonth'] : $m;
+	$p   = ( isset( $_GET['span'] ) ) ? 'year' : false;
+	$y   = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : date( 'Y' );
+	$m   = ( isset( $_GET['month'] ) ) ? $_GET['month'] : date( 'n' );
+	$ny  = ( isset( $_GET['nyr'] ) ) ? $_GET['nyr'] : $y;
+	$nm  = ( isset( $_GET['nmonth'] ) ) ? $_GET['nmonth'] : $m;
+	$cat = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : '';
 
 	if ( $p ) {
 		$from = "$y-1-1";
@@ -394,13 +395,12 @@ function my_calendar_ical() {
 
 	$from     = apply_filters( 'mc_ical_download_from', $from, $p );
 	$to       = apply_filters( 'mc_ical_download_to', $to, $p );
-	$category = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : null;
 
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
 	$args = array(
 		'from'     => $from,
 		'to'       => $to,
-		'category' => $category,
+		'category' => $cat,
 		'ltype'    => '',
 		'lvalue'   => '',
 		'author'   => null,
