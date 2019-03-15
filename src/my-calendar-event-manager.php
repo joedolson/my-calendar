@@ -1412,6 +1412,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	} else {
 		$post_id = false;
 	}
+	if ( $post_id && ! is_array( get_post_meta( $post_id, '_mc_custom_instances', true ) ) ) {
+		// If a post has an ID but does not have a meta reference for instances.
+		mc_construct_instances( $post_id );
+	}
 	?>
 	<input type="hidden" name="event_nonce_name" value="<?php echo wp_create_nonce( 'event_nonce' ); ?>" />
 </div>
