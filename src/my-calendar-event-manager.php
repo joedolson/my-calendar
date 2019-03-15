@@ -1380,17 +1380,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			}
 		}
 		echo apply_filters( 'mc_before_event_form', '', $event_id );
-		$action = add_query_arg( $query_args, admin_url( 'admin.php?page=my-calendar' ) );
-		if ( ! empty( $data->event_group_id ) && 'copy' != $mode ) {
-			$group_id = $data->event_group_id;
-		} else {
-			$group_id = mc_group_id();
-		}
-		if ( 'edit' != $mode ) {
-			$event_author = $user_ID;
-		} else {
-			$event_author = $data->event_author;
-		}
+		$action       = add_query_arg( $query_args, admin_url( 'admin.php?page=my-calendar' ) );
+		$group_id     = ( ! empty( $data->event_group_id ) && 'copy' != $mode ) ? $data->event_group_id : mc_group_id();
+		$event_author = ( 'edit' != $mode ) ? $user_ID : $data->event_author;
 		?>
 <form id="my-calendar" method="post" action="<?php echo $action; ?>">
 <div>
