@@ -3056,8 +3056,10 @@ function mc_instance_list( $args ) {
  */
 function mc_admin_instances( $id, $occur = false ) {
 	global $wpdb;
-	$output  = '';
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$output     = '';
+	$results    = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event_post = mc_get_event_post( $id );
+	$deleted    = get_post_meta( $event_post, '_mc_deleted_instances', true );
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
 			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( get_option( 'mc_date_format' ), mc_strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ) ) . '</span>';
@@ -3065,7 +3067,7 @@ function mc_admin_instances( $id, $occur = false ) {
 				$control = '';
 				$edit    = '<em>' . __( 'Editing Now', 'my-calendar' ) . '</em>';
 			} else {
-				$control = "$begin: <button class='delete_occurrence' type='button' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
+				$control = "$begin: <button class='delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
 				$edit    = "<a href='" . admin_url( 'admin.php?page=my-calendar' ) . "&amp;mode=edit&amp;event_id=$id&amp;date=$result->occur_id' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit', 'my-calendar' ) . '</a>';
 			}
 			$output .= "<li>$control$edit</li>";

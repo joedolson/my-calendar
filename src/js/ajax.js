@@ -4,9 +4,15 @@
 		$( '.mc_response' ).hide();
 		$('button.delete_occurrence').on( 'click', function () {
 			var value = $(this).attr( 'data-value' );
+			var id    = $(this).attr( 'data-event' );
+			var begin = $(this).attr( 'data-begin' );
+			var end   = $(this).attr( 'data-end' );
 			var data = {
 				'action': mc_data.action,
 				'occur_id': value,
+				'event_id': id,
+				'occur_begin': begin,
+				'occur_end': end,
 				'security': mc_data.security
 			};
 			$.post( ajaxurl, data, function (response) {
