@@ -1146,7 +1146,7 @@ function mc_ajax_delete_occurrence() {
 
 		$instances = get_post_meta( $event_post, '_mc_custom_instances', true );
 		if ( is_array( $instances ) ) {
-			foreach( $instances as $key => $instance ) {
+			foreach ( $instances as $key => $instance ) {
 				if ( $occur_begin == $instance['occur_begin'] && $occur_end == $instance['occur_end'] ) {
 					unset( $instances[ $key ] );
 				}
@@ -1228,7 +1228,7 @@ function mc_ajax_add_date() {
 		$result      = $wpdb->insert( my_calendar_event_table(), $data, $format );
 		$event_post  = mc_get_event_post( $event_id );
 		$instances   = get_post_meta( $event_post, '_mc_custom_instances', true );
-		$instances[] = $data; 
+		$instances[] = $data;
 		update_post_meta( $event_id, '_mc_custom_instances', $instances );
 
 		if ( $result ) {
@@ -1259,16 +1259,16 @@ function mc_ajax_add_date() {
 /**
  * Initial creation of instance meta record for back compat.
  *
- * @param int $post_ID Post ID.
- * @param int $event_ID Event ID.
+ * @param int $post_id Post ID.
+ * @param int $event_id Event ID.
  */
-function mc_construct_instances( $post_ID, $event_ID ) {
+function mc_construct_instances( $post_id, $event_id ) {
 	global $wpdb;
-	$instances = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $event_ID ) );
-	
+	$instances = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
 	foreach ( $instances as $key => $instance ) {
-		$data = array(
-			'occur_event_id' => $event_ID,
+		$data   = array(
+			'occur_event_id' => $event_id,
 			'occur_begin'    => $instance['occur_begin'],
 			'occur_end'      => $instance['occur_end'],
 			'occur_group_id' => $instance['group_id'],
@@ -1276,7 +1276,7 @@ function mc_construct_instances( $post_ID, $event_ID ) {
 		$meta[] = $data;
 	}
 
-	update_post_meta( $post_ID, '_mc_custom_instances', $meta );
+	update_post_meta( $post_id, '_mc_custom_instances', $meta );
 }
 
 
