@@ -393,9 +393,8 @@ function my_calendar_ical() {
 		$to   = "$ny-$nm-$d";
 	}
 
-	$from     = apply_filters( 'mc_ical_download_from', $from, $p );
-	$to       = apply_filters( 'mc_ical_download_to', $to, $p );
-
+	$from = apply_filters( 'mc_ical_download_from', $from, $p );
+	$to   = apply_filters( 'mc_ical_download_to', $to, $p );
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
 	$args = array(
 		'from'     => $from,
