@@ -1256,29 +1256,6 @@ function mc_ajax_add_date() {
 	}
 }
 
-/**
- * Initial creation of instance meta record for back compat.
- *
- * @param int $post_id Post ID.
- * @param int $event_id Event ID.
- */
-function mc_construct_instances( $post_id, $event_id ) {
-	global $wpdb;
-	$instances = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-	foreach ( $instances as $key => $instance ) {
-		$data   = array(
-			'occur_event_id' => $event_id,
-			'occur_begin'    => $instance['occur_begin'],
-			'occur_end'      => $instance['occur_end'],
-			'occur_group_id' => $instance['group_id'],
-		);
-		$meta[] = $data;
-	}
-
-	update_post_meta( $post_id, '_mc_custom_instances', $meta );
-}
-
 
 /**
  * Test whether currently mobile using wp_is_mobile() with custom filter
