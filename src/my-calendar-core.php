@@ -1138,20 +1138,22 @@ function mc_ajax_delete_occurrence() {
 
 	if ( current_user_can( 'mc_manage_events' ) ) {
 		global $wpdb;
-		$occur_id    = (int) $_REQUEST['occur_id'];
-		$occur_begin = $_REQUEST['occur_begin'];
-		$occur_end   = $_REQUEST['occur_end'];
-		$delete      = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
-		$result      = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$occur_id = (int) $_REQUEST['occur_id'];
+		$event_id = (int) $_REQUEST['event_id'];
+		$begin    = $_REQUEST['occur_begin'];
+		$end      = $_REQUEST['occur_end'];
+		$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
+		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		$instances = get_post_meta( $event_post, '_mc_custom_instances', true );
-		if ( is_array( $instances ) ) {
-			foreach ( $instances as $key => $instance ) {
-				if ( $occur_begin == $instance['occur_begin'] && $occur_end == $instance['occur_end'] ) {
-					unset( $instances[ $key ] );
-				}
-			}
-		}
+		$event_post  = mc_get_event_post( $event_id );
+		$instances   = get_post_meta( $event_post, '_mc_deleted_instances', true );
+		$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
+		$instances[] = array(
+			'occur_event_id' => $event_id,
+			'occur_begin'    => $begin,
+			'occur_end'      => $end,
+		);
+		update_post_meta( $event_post, '_mc_deleted_instances', $instances );
 
 		if ( $result ) {
 			wp_send_json(
@@ -1228,6 +1230,7 @@ function mc_ajax_add_date() {
 		$result      = $wpdb->insert( my_calendar_event_table(), $data, $format );
 		$event_post  = mc_get_event_post( $event_id );
 		$instances   = get_post_meta( $event_post, '_mc_custom_instances', true );
+		$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
 		$instances[] = $data;
 		update_post_meta( $event_id, '_mc_custom_instances', $instances );
 
