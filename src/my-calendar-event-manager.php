@@ -125,7 +125,6 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	update_post_meta( $post_id, '_mc_event_image', $image );
 	update_post_meta( $post_id, '_mc_event_date', strtotime( $data['event_begin'] ) );
 	update_post_meta( $post_id, '_event_time_label', ( isset( $_POST['event_time_label'] ) ) ? $_POST['event_time_label'] : '' );
-	mc_construct_instances( $post_id, $event_id );
 	$location_id = ( isset( $post['location_preset'] ) ) ? (int) $post['location_preset'] : false;
 	if ( $location_id ) { // only change location ID if dropdown set.
 		update_post_meta( $post_id, '_mc_event_location', $location_id );
@@ -1412,10 +1411,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		echo '<input type="hidden" name="event_post" value="' . $post_id . '" />';
 	} else {
 		$post_id = false;
-	}
-	if ( $post_id && ! is_array( get_post_meta( $post_id, '_mc_custom_instances', true ) ) ) {
-		// If a post has an ID but does not have a meta reference for instances.
-		mc_construct_instances( $post_id, $event_id );
 	}
 	?>
 	<input type="hidden" name="event_nonce_name" value="<?php echo wp_create_nonce( 'event_nonce' ); ?>" />
