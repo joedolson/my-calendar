@@ -1432,7 +1432,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						mc_show_notice( __( 'Some of the occurrences of this recurring event have been deleted or modified. Updating this event will reset occurrences to the default set.', 'my-calendar' ) );
 					}
 				}
-			echo mc_controls( $mode, $has_data, $data ); ?>
+				echo mc_controls( $mode, $has_data, $data );
+			?>
 		</div>
 			<?php
 			if ( ! empty( $_GET['date'] ) && 'S' != $data->event_recur ) {
