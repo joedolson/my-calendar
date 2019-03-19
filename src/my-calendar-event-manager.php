@@ -1429,14 +1429,14 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<div class="inside">
 		<div class='mc-controls'>
 			<?php
-				if ( $post_id ) {
-					$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
-					$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
-					if ( $deleted || $custom ) {
-						mc_show_notice( __( 'Some repetitions of this recurring event have been deleted or modified. Update the date or recurring pattern for the event to reset its repeat events.', 'my-calendar' ) );
-					}
+			if ( $post_id ) {
+				$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
+				$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
+				if ( $deleted || $custom ) {
+					mc_show_notice( __( 'Some repetitions of this recurring event have been deleted or modified. Update the date or recurring pattern for the event to reset its repeat events.', 'my-calendar' ) );
 				}
-				echo mc_controls( $mode, $has_data, $data );
+			}
+			echo mc_controls( $mode, $has_data, $data );
 			?>
 		</div>
 			<?php
