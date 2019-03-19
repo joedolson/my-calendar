@@ -1424,7 +1424,15 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<h2><?php esc_html( $text ); ?></h2>
 		<div class="inside">
 		<div class='mc-controls'>
-			<?php echo mc_controls( $mode, $has_data, $data ); ?>
+			<?php
+				if ( $post_id ) {
+					$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
+					$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
+					if ( $deleted || $custom ) {
+						mc_show_notice( __( 'Some of the occurrences of this recurring event have been deleted or modified. Updating this event will reset occurrences to the default set.', 'my-calendar' ) );
+					}
+				}
+			echo mc_controls( $mode, $has_data, $data ); ?>
 		</div>
 			<?php
 			if ( ! empty( $_GET['date'] ) && 'S' != $data->event_recur ) {
@@ -3749,9 +3757,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						if ( 'test' == $test && $i > 0 ) {
 							return $data;
 						}
-						if ( true == $test ) {
-							$return[] = $data;
-						}
+						$return[] = $data;
 						if ( ! $test ) {
 							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
 							if ( ! $insert ) {
@@ -3781,9 +3787,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 								if ( 'test' == $test && $i > 0 ) {
 									return $data;
 								}
-								if ( true == $test ) {
-									$return[] = $data;
-								}
+								$return[] = $data;
 								if ( ! $test ) {
 									$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
 									if ( ! $insert ) {
@@ -3810,9 +3814,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 							if ( 'test' == $test && $i > 0 ) {
 								return $data;
 							}
-							if ( true == $test ) {
-								$return[] = $data;
-							}
+							$return[] = $data;
 							if ( ! $test ) {
 								$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
 								if ( ! $insert ) {
@@ -3837,9 +3839,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						if ( 'test' == $test && $i > 0 ) {
 							return $data;
 						}
-						if ( true == $test ) {
-							$return[] = $data;
-						}
+						$return[] = $data;
 						if ( ! $test ) {
 							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'weekly' );
 							if ( ! $insert ) {
@@ -3863,9 +3863,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						if ( 'test' == $test && $i > 0 ) {
 							return $data;
 						}
-						if ( true == $test ) {
-							$return[] = $data;
-						}
+						$return[] = $data;
 						if ( ! $test ) {
 							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'biweekly' );
 							if ( ! $insert ) {
@@ -3889,9 +3887,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						if ( 'test' == $test && $i > 0 ) {
 							return $data;
 						}
-						if ( true == $test ) {
-							$return[] = $data;
-						}
+						$return[] = $data;
 						if ( ! $test ) {
 							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'monthly' );
 							if ( ! $insert ) {
@@ -3947,6 +3943,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						if ( 'test' == $test && $i > 0 ) {
 							return $data;
 						}
+						$return[] = $data;
 						if ( ! $test ) {
 							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'month-by-day' );
 							if ( ! $insert ) {
@@ -3972,9 +3969,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						if ( 'test' == $test && $i > 0 ) {
 							return $data;
 						}
-						if ( true == $test ) {
-							$return[] = $data;
-						}
+						$return[] = $data;
 						if ( ! $test ) {
 							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'annual' );
 							if ( ! $insert ) {
