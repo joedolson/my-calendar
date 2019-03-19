@@ -786,6 +786,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					// Function mc_increment_event uses previous events and re-uses same ID if new has same date as old event.
 					$instances = mc_get_instances( $event_id );
 					mc_delete_instances( $event_id );
+					// Delete previously created custom & deleted instance records.
+					$post_ID = mc_get_data( 'event_post', $event_id );
+					delete_post_meta( $post_ID, '_mc_custom_instances' );
+					delete_post_meta( $post_ID, '_mc_deleted_instances' );
 					mc_increment_event( $event_id, array(), false, $instances );
 				}
 			}
@@ -1429,7 +1433,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
 					$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
 					if ( $deleted || $custom ) {
-						mc_show_notice( __( 'Some of the occurrences of this recurring event have been deleted or modified. Updating this event will reset occurrences to the default set.', 'my-calendar' ) );
+						mc_show_notice( __( 'Some repetitions of this recurring event have been deleted or modified. Update the date or recurring pattern for the event to reset its repeat events.', 'my-calendar' ) );
 					}
 				}
 				echo mc_controls( $mode, $has_data, $data );
