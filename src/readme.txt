@@ -88,6 +88,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add meta field '_mc_event_date' for use in My Tickets
 * Add option to disable output link using an explicit option.
 * Change the JS so popups are only attached to links.
+* Better UI with custom & deleted occurrences in recurring events.
 * Bug fix: sessions should only be started if a search has been performed.
 
 = 3.1.6 =
