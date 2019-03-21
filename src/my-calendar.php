@@ -4,7 +4,7 @@
  *
  * @package     MyCalendar
  * @author      Joe Dolson
- * @copyright   2009-2018 Joe Dolson
+ * @copyright   2009-2019 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,7 +17,7 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.1.6
+ * Version:     3.1.7
  */
 
 /*
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $mc_version, $wpdb;
-$mc_version = '3.1.6';
+$mc_version = '3.1.7';
 
 define( 'MC_DEBUG', false );
 
