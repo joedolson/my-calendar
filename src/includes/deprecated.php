@@ -216,7 +216,7 @@ if ( ! function_exists( 'is_ssl' ) ) {
 }
 
 /**
- * Old name of template drawing function
+ * Old name of template drawing function. Deprecated 6/14/2018. Removed in Pro 3/31/2019.
  *
  * @see mc_draw_template()
  *
