@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.8 =
+
+* Bug fix: 'event_begin' is not always a string, so 'mc_event_date' not always registered correctly.
+* 
+
 = 3.1.7 =
 
 * Add meta field '_mc_event_date' for use in My Tickets
