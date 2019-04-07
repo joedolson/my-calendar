@@ -405,7 +405,8 @@ strong.label {
 	margin: 1px 0;
 }
 
-.mc-settings-page #mc-sortable .mc-updated {
+.mc-settings-page #mc-sortable .mc-updated,
+.mc-generator #mc-sortable .mc-updated {
 	background-color: #ffa;
 }
 
@@ -461,6 +462,11 @@ input[name="mc_uri"] {
 	border-radius: none;
 	background-color: #222;
 	color: #eee;
+}
+
+#mc-sortable .mc-ui-state-highlight {
+	background: #ffa;
+	padding: .5em;
 }
 
 #mc-sortable li.mc-stop.mc-updated {
