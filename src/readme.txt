@@ -86,7 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.1.8 =
 
 * Bug fix: 'event_begin' is not always a string, so 'mc_event_date' not always registered correctly.
-* 
+* Update 'sortable' code to be prepared for My Calendar Pro 1.9.0.
 
 = 3.1.7 =
 
