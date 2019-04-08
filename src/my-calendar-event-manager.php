@@ -1444,7 +1444,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			<?php
 			if ( ! empty( $_GET['date'] ) && 'S' != $data->event_recur ) {
 				$event = mc_get_event( $instance );
-				$date  = date_i18n( get_option( 'mc_date_format' ), mc_strtotime( $event->occur_begin ) );
+				$date  = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
 				// Translators: Date of a specific event occurrence.
 				$message = sprintf( __( 'You are editing the <strong>%s</strong> instance of this event. Other instances of this event will not be changed.', 'my-calendar' ), $date );
 				mc_show_notice( $message );
@@ -2290,8 +2290,7 @@ function mc_list_events() {
 							} else {
 								$event_time = mc_notime_label( $event );
 							}
-							$date_format = ( get_option( 'mc_date_format' ) == '' ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
-							$begin       = date_i18n( $date_format, mc_strtotime( $event->event_begin ) );
+							$begin = date_i18n( mc_date_format(), mc_strtotime( $event->event_begin ) );
 							echo esc_html( "$begin, $event_time" );
 							?>
 								<div class="recurs">
@@ -3077,7 +3076,7 @@ function mc_admin_instances( $id, $occur = false ) {
 	$deleted    = get_post_meta( $event_post, '_mc_deleted_instances', true );
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
-			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( get_option( 'mc_date_format' ), mc_strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ) ) . '</span>';
+			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( mc_date_format(), mc_strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ) ) . '</span>';
 			if ( $result->occur_id == $occur ) {
 				$control = '';
 				$edit    = '<em>' . __( 'Editing Now', 'my-calendar' ) . '</em>';
@@ -3435,7 +3434,7 @@ function mc_related_events( $id ) {
 			$event    = $result->occur_event_id;
 			$current  = '<a href="' . admin_url( 'admin.php?page=my-calendar' ) . '&amp;mode=edit&amp;event_id=' . $event . '">';
 			$end      = '</a>';
-			$begin    = date_i18n( get_option( 'mc_date_format' ), strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), strtotime( $result->occur_begin ) );
+			$begin    = date_i18n( mc_date_format(), strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), strtotime( $result->occur_begin ) );
 			$template = $current . $begin . $end;
 			$output  .= "<li>$template</li>";
 		}

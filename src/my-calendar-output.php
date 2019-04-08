@@ -34,6 +34,17 @@ function mc_get_template( $template ) {
 }
 
 /**
+ * Get the date format for My Calendar primary views.
+ *
+ * @return string
+ */
+function mc_date_format() {
+	$date_format = ( '' == get_option( 'mc_date_format' ) ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
+
+	return $date_format;
+}
+
+/**
  * HTML output for event time
  *
  * @param object $e Current event.
@@ -42,8 +53,7 @@ function mc_get_template( $template ) {
  * @return string HTML output.
  */
 function mc_time_html( $e, $type ) {
-	$orig_format = get_option( 'mc_date_format' );
-	$date_format = ( '' != $orig_format ) ? $orig_format : get_option( 'date_format' );
+	$date_format = mc_date_format();
 	$time_format = get_option( 'mc_time_format' );
 	$start       = date( 'Y-m-d', strtotime( $e->occur_begin ) );
 	$end         = date( 'Y-m-d', strtotime( $e->occur_end ) );
@@ -1594,7 +1604,7 @@ function my_calendar( $args ) {
 	$grid_js_class = ( 0 == get_option( 'mc_calendar_javascript' ) ) ? 'gridjs' : '';
 	$mini_js_class = ( 0 == get_option( 'mc_mini_javascript' ) ) ? 'minijs' : '';
 	$ajax_js_class = ( 0 == get_option( 'mc_ajax_javascript' ) ) ? 'ajaxjs' : '';
-	$date_format   = ( '' != get_option( 'mc_date_format' ) ) ? get_option( 'mc_date_format' ) : get_option( 'date_format' );
+	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) == 1 ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
 	$show_weekends = ( get_option( 'mc_show_weekends' ) == 'true' ) ? true : false;
 	$skip_holidays = get_option( 'mc_skip_holidays_category' );

@@ -69,7 +69,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$site           = ( isset( $instance['mc_site'] ) ) ? $instance['mc_site'] : false;
 
 		if ( false !== strpos( $widget_title, '{date}' ) ) {
-			$widget_title = str_replace( '{date}', date_i18n( get_option( 'mc_date_format' ), current_time( 'timestamp' ) ), $widget_title );
+			$widget_title = str_replace( '{date}', date_i18n( mc_date_format(), current_time( 'timestamp' ) ), $widget_title );
 		}
 		$widget_title = ( '' == $widget_link ) ? $widget_title : "<a href='$widget_link'>$widget_title</a>";
 		$widget_title = ( '' != $widget_title ) ? $before_title . $widget_title . $after_title : '';

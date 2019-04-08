@@ -325,7 +325,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$event         = mc_clean_location( $event, 'event' );
 	$e             = array();
 	$e['post']     = $event->event_post;
-	$date_format   = ( '' != get_option( 'mc_date_format' ) ) ? get_option( 'mc_date_format' ) : get_option( 'date_format' );
+	$date_format   = mc_date_format();
 	$e             = apply_filters( 'mc_insert_author_data', $e, $event );
 	$e             = apply_filters( 'mc_filter_image_data', $e, $event );
 	$sitelink_html = "<div class='url link'><a href='$event->event_url' class='location-link external'>";
@@ -967,8 +967,8 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 	if ( 'simple' == $display ) {
 		$begin  = $dates[0]->occur_begin;
 		$end    = $dates[ $last ]->occur_end;
-		$begin  = date_i18n( apply_filters( 'mc_date_format', get_option( 'mc_date_format' ), 'date_span_begin' ), strtotime( $begin ) );
-		$end    = date_i18n( apply_filters( 'mc_date_format', get_option( 'mc_date_format' ), 'date_span_end' ), strtotime( $end ) );
+		$begin  = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_begin' ), strtotime( $begin ) );
+		$end    = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_end' ), strtotime( $end ) );
 		$return = $begin . ' <span>&ndash;</span> ' . $end;
 	} else {
 		$return = '<ul class="multidate">';
@@ -977,9 +977,9 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 			$end           = $date->occur_end;
 			$day_begin     = date( 'Y-m-d', strtotime( $begin ) );
 			$day_end       = date( 'Y-m-d', strtotime( $end ) );
-			$bformat       = '<span class="multidate-date">' . date_i18n( get_option( 'mc_date_format' ), strtotime( $begin ) ) . "</span> <span class='multidate-time'>" . date_i18n( get_option( 'mc_time_format' ), strtotime( $begin ) ) . '</span>';
+			$bformat       = '<span class="multidate-date">' . date_i18n( mc_date_format(), strtotime( $begin ) ) . "</span> <span class='multidate-time'>" . date_i18n( get_option( 'mc_time_format' ), strtotime( $begin ) ) . '</span>';
 			$endtimeformat = ( '00:00:00' == $date->occur_end ) ? '' : ' ' . get_option( 'mc_time_format' );
-			$eformat       = ( $day_begin != $day_end ) ? get_option( 'mc_date_format' ) . $endtimeformat : $endtimeformat;
+			$eformat       = ( $day_begin != $day_end ) ? mc_date_format() . $endtimeformat : $endtimeformat;
 			$span          = ( '' != $eformat ) ? " <span>&ndash;</span> <span class='multidate-end'>" : '';
 			$endspan       = ( '' != $eformat ) ? '</span>' : '';
 			$return       .= "<li>$bformat" . $span . date_i18n( $eformat, strtotime( $end ) ) . "$endspan</li>";
