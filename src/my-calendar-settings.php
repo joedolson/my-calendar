@@ -651,10 +651,10 @@ function mc_remote_db() {
 							$tomorrow     = date( 'j' ) + 1;
 							$multi_format = ( '' == get_option( 'mc_multidate_format' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
 							?>
-							<li><?php mc_settings_field( 'mc_month_format', __( 'Month format (calendar headings)', 'my-calendar' ), '', $month_format ); ?></li>
+							<li><?php mc_settings_field( 'mc_date_format', __( 'Primary Date Format', 'my-calendar' ), '', $date_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_time_format', __( 'Time format', 'my-calendar' ), '', $time_format ); ?></li>
+							<li><?php mc_settings_field( 'mc_month_format', __( 'Month format (calendar headings)', 'my-calendar' ), '', $month_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_week_format', __( 'Date in grid mode, week view', 'my-calendar' ), '', $week_format ); ?></li>
-							<li><?php mc_settings_field( 'mc_date_format', __( 'Date Format in other views', 'my-calendar' ), '', $date_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_multidate_format', __( 'Date Format for multi-day events', 'my-calendar' ), 'F j-%d, Y', $multi_format . ' (' . __( 'Use <code>&#37;d</code> to represent the end date.', 'my-calendar' ) . ')' ); ?></li>
 						</ul>
 					</fieldset>
