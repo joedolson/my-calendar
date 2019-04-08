@@ -577,7 +577,6 @@ function mc_remote_db() {
 								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'remigrate', __( 'Re-generate event occurrences table.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-								
 								<?php
 								if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() != my_calendar_table( 'global' ) ) {
 									mc_settings_field(
