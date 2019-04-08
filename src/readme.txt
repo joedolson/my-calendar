@@ -87,6 +87,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: 'event_begin' is not always a string, so 'mc_event_date' not always registered correctly.
 * Update 'sortable' code to be prepared for My Calendar Pro 1.9.0.
+* Add 'mc_date_format()' function to get appropriate date format
+* Minor settings design changes.
 
 = 3.1.7 =
 

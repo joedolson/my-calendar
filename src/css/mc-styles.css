@@ -398,7 +398,7 @@ strong.label {
 	display: none;
 }
 
-.my-calendar-admin .ui-accordion-header, .mc-settings-page #mc-sortable li {
+.my-calendar-admin .ui-accordion-header, #mc-sortable li {
 	border: 1px solid #ddd;
 	background: rgba(0, 0, 0, .10);
 	padding: .5em 1em;
@@ -465,8 +465,8 @@ input[name="mc_uri"] {
 }
 
 #mc-sortable .mc-ui-state-highlight {
-	background: #ffa;
-	padding: .5em;
+	background: #ffa !important;
+	height: 1.6em;
 }
 
 #mc-sortable li.mc-stop.mc-updated {
