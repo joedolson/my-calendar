@@ -54,6 +54,7 @@ function mc_date_format() {
  */
 function mc_time_html( $e, $type ) {
 	$date_format = mc_date_format();
+	$orig_format = $date_format;
 	$time_format = get_option( 'mc_time_format' );
 	$start       = date( 'Y-m-d', strtotime( $e->occur_begin ) );
 	$end         = date( 'Y-m-d', strtotime( $e->occur_end ) );
