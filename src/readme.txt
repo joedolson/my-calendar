@@ -86,6 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.1.9 =
 
 * Undefined variable notice.
+* Disable Yoast canonical URL output on single events
 
 = 3.1.8 =
 

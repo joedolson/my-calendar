@@ -148,7 +148,17 @@ function mc_custom_canonical() {
 	if ( isset( $_GET['mc_id'] ) ) {
 		add_action( 'wp_head', 'mc_canonical' );
 		remove_action( 'wp_head', 'rel_canonical' );
+		add_filter( 'wpseo_canonical', 'mc_disable_yoast_canonical' );
 	}
+}
+
+/**
+ * When Yoast is enabled with canonical URLs, it returns an invalid URL for single events. Disable on single events.
+ *
+ * @return boolean
+ */
+function mc_disable_yoast_canonical() {
+	return false;
 }
 
 if ( isset( $_REQUEST['mcs'] ) ) {
