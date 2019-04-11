@@ -3141,13 +3141,15 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	if ( $has_data ) {
 		$event_begin = esc_attr( $data->event_begin );
 		$event_end   = esc_attr( $data->event_end );
+
 		if ( isset( $_GET['date'] ) ) {
 			$event       = mc_get_event( (int) $_GET['date'] );
 			$event_begin = date( 'Y-m-d', mc_strtotime( $event->occur_begin ) );
 			$event_end   = date( 'Y-m-d', mc_strtotime( $event->occur_end ) );
-			if ( $event_begin == $event_end ) {
-				$event_end = '';
-			}
+		}
+		// Set event end to empty if matches begin. Makes input and changes easier.
+		if ( $event_begin == $event_end ) {
+			$event_end = '';
 		}
 		$starttime = ( mc_is_all_day( $data ) ) ? '' : date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_time ) );
 		$endtime   = ( mc_is_all_day( $data ) ) ? '' : date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_endtime ) );
