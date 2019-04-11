@@ -365,7 +365,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
  */
 function my_calendar_menu() {
 	if ( function_exists( 'add_menu_page' ) ) {
-		if ( 'true' !== get_option( 'mc_remote' ) ) {
+		if ( 'true' != get_option( 'mc_remote' ) ) {
 			add_menu_page( __( 'My Calendar', 'my-calendar' ), __( 'My Calendar', 'my-calendar' ), 'mc_add_events', apply_filters( 'mc_modify_default', 'my-calendar' ), apply_filters( 'mc_modify_default_cb', 'my_calendar_edit' ), 'dashicons-calendar' );
 		} else {
 			add_menu_page( __( 'My Calendar', 'my-calendar' ), __( 'My Calendar', 'my-calendar' ), 'mc_edit_settings', 'my-calendar', 'my_calendar_settings', 'dashicons-calendar' );
@@ -374,7 +374,7 @@ function my_calendar_menu() {
 	if ( function_exists( 'add_submenu_page' ) ) {
 		add_action( 'admin_head', 'my_calendar_write_js' );
 		add_action( 'admin_enqueue_scripts', 'my_calendar_add_styles' );
-		if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 			// If we're accessing a remote site, remove these pages.
 		} else {
 			if ( isset( $_GET['event_id'] ) ) {
@@ -406,7 +406,7 @@ function my_calendar_menu() {
 		add_action( 'admin_head', 'my_calendar_sub_styles' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Pro Settings', 'my-calendar' ), __( 'My Calendar Pro', 'my-calendar' ), $permission, 'my-calendar-submissions', 'mcs_settings' );
 		// Only show payments screen if enabled.
-		if ( 'true' === get_option( 'mcs_payments' ) ) {
+		if ( 'true' == get_option( 'mcs_payments' ) ) {
 			add_submenu_page( 'my-calendar', __( 'Payments Received', 'my-calendar' ), __( 'Payments', 'my-calendar' ), $permission, 'my-calendar-payments', 'mcs_sales_page' );
 		}
 	}
