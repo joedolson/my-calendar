@@ -400,7 +400,7 @@ function mc_footer_js() {
 </script>';
 			}
 			$inner = apply_filters( 'mc_filter_javascript_footer', $inner );
-			echo ( '' !== $inner ) ? $script . $mcjs : '';
+			echo ( '' != $inner ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
 			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || false === get_option( 'mc_show_js' ) ) {
@@ -416,7 +416,7 @@ function mc_footer_js() {
 					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.list', 'mclist', 'true' );
 				}
-				if ( 1 !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
+				if ( 1 !== get_option( 'mc_mini_javascript' ) && 'true' != get_option( 'mc_open_day_uri' ) ) {
 					$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
