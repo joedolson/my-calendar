@@ -1606,7 +1606,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 </div>
 	<?php
 	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
-	if ( '' != $custom_fields ) {
+	if ( '' !== $custom_fields ) {
 		?>
 <div class="ui-sortable meta-box-sortables">
 	<div class="postbox">
