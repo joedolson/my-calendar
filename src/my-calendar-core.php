@@ -168,7 +168,7 @@ function mc_register_styles() {
 	}
 	// True means styles are disabled.
 	if ( 'true' !== get_option( 'mc_use_styles' ) ) {
-		if ( ( $default && ! $id ) || ( ( is_array( $css_array ) && in_array( $id, $css_array, true ) ) || get_option( 'mc_show_css' ) === false ) ) {
+		if ( ( $default && ! $id ) || ( is_array( $css_array ) && in_array( $id, $css_array, true ) || get_option( 'mc_show_css' ) === '' ) ) {
 			wp_enqueue_style( 'my-calendar-style' );
 		}
 	}
