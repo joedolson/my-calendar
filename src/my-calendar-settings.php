@@ -644,12 +644,12 @@ function mc_remote_db() {
 						<div><input type='hidden' name='mc_dates' value='true'/></div>
 						<ul>
 							<?php
-							$month_format = ( '' === get_option( 'mc_month_format' ) ) ? date_i18n( 'F Y' ) : date_i18n( get_option( 'mc_month_format' ) );
-							$time_format  = ( '' === get_option( 'mc_time_format' ) ) ? date_i18n( get_option( 'time_format' ) ) : date_i18n( get_option( 'mc_time_format' ) );
-							$week_format  = ( '' === get_option( 'mc_week_format' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
-							$date_format  = ( '' === get_option( 'mc_date_format' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
+							$month_format = ( false === get_option( 'mc_month_format' ) ) ? date_i18n( 'F Y' ) : date_i18n( get_option( 'mc_month_format' ) );
+							$time_format  = ( false === get_option( 'mc_time_format' ) ) ? date_i18n( get_option( 'time_format' ) ) : date_i18n( get_option( 'mc_time_format' ) );
+							$week_format  = ( false === get_option( 'mc_week_format' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
+							$date_format  = ( false === get_option( 'mc_date_format' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
 							$tomorrow     = date( 'j' ) + 1;
-							$multi_format = ( '' === get_option( 'mc_multidate_format' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
+							$multi_format = ( false === get_option( 'mc_multidate_format' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
 							?>
 							<li><?php mc_settings_field( 'mc_date_format', __( 'Primary Date Format', 'my-calendar' ), '', $date_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_time_format', __( 'Time format', 'my-calendar' ), '', $time_format ); ?></li>

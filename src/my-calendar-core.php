@@ -155,7 +155,7 @@ function mc_register_styles() {
 
 	// check whether any scripts are actually enabled.
 	if ( get_option( 'mc_calendar_javascript' ) !== 1 || get_option( 'mc_list_javascript' ) !== 1 || get_option( 'mc_mini_javascript' ) !== 1 || get_option( 'mc_ajax_javascript' ) !== 1 ) {
-		if ( is_array( $js_array ) && in_array( $id, $js_array, true ) || '' === get_option( 'mc_show_js' ) || is_singular( 'mc-events' ) ) {
+		if ( is_array( $js_array ) && in_array( $id, $js_array, true ) || false === get_option( 'mc_show_js' ) || is_singular( 'mc-events' ) ) {
 			wp_enqueue_script( 'jquery' );
 			if ( 'true' === get_option( 'mc_gmap' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
@@ -380,7 +380,7 @@ function mc_footer_js() {
 			}
 			$ajax_js = stripcslashes( get_option( 'mc_ajaxjs' ) );
 
-			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === get_option( 'mc_show_js' ) ) {
+			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || false === get_option( 'mc_show_js' ) ) {
 				$inner = '';
 				if ( get_option( 'mc_calendar_javascript' ) !== 1 ) {
 					$inner .= "\n" . $cal_js;
@@ -403,7 +403,7 @@ function mc_footer_js() {
 			echo ( '' != $inner ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
-			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === get_option( 'mc_show_js' ) ) {
+			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || false === get_option( 'mc_show_js' ) ) {
 				if ( 1 !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
