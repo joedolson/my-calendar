@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Check whether the My Calendar database is up to date
  */
 function my_calendar_check_db() {
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		return;
 	}
 
@@ -25,11 +25,11 @@ function my_calendar_check_db() {
 	$cols         = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$needs_update = false;
 
-	if ( ! in_array( 'event_tickets', $cols, true ) ) {
+	if ( ! in_array( 'event_tickets', $cols ) ) {
 		$needs_update = true;
 	}
 
-	if ( isset( $_POST['upgrade'] ) && 'true' === $_POST['upgrade'] ) {
+	if ( isset( $_POST['upgrade'] ) && 'true' == $_POST['upgrade'] ) {
 		mc_upgrade_db();
 		?>
 		<div class='upgrade-db updated'>
@@ -37,7 +37,7 @@ function my_calendar_check_db() {
 		</div>
 		<?php
 	} elseif ( $needs_update ) {
-		if ( 'my-calendar-config' === $_GET['page'] ) {
+		if ( 'my-calendar-config' == $_GET['page'] ) {
 			?>
 			<div class='upgrade-db error'>
 				<p>
