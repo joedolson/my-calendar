@@ -262,7 +262,7 @@ function my_calendar_settings() {
 		$permalinks      = get_option( 'mc_use_permalinks' );
 		$mc_open_day_uri = ( ! empty( $_POST['mc_open_day_uri'] ) ) ? $_POST['mc_open_day_uri'] : '';
 		update_option( 'mc_use_permalinks', ( ! empty( $_POST['mc_use_permalinks'] ) ) ? 'true' : 'false' );
-		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' === $_POST['mc_open_uri'] && '' != get_option( 'mc_uri' ) ) ? 'true' : 'false' );
+		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' === $_POST['mc_open_uri'] && '' !== get_option( 'mc_uri' ) ) ? 'true' : 'false' );
 		update_option( 'mc_no_link', ( ! empty( $_POST['mc_no_link'] ) && 'on' === $_POST['mc_no_link'] ) ? 'true' : 'false' );
 		update_option( 'mc_mini_uri', $_POST['mc_mini_uri'] );
 		update_option( 'mc_open_day_uri', $mc_open_day_uri );
