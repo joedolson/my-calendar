@@ -41,7 +41,7 @@ function my_calendar_behaviors_edit() {
 			update_option( 'mc_ajaxjs', $mc_ajaxjs );
 		}
 
-		$mc_show_js = ( '' == $_POST['mc_show_js'] ) ? '' : $_POST['mc_show_js'];
+		$mc_show_js = ( '' === trim( $_POST['mc_show_js'] ) ) ? '' : $_POST['mc_show_js'];
 		update_option( 'mc_show_js', $mc_show_js );
 		mc_show_notice( __( 'Behavior Settings saved', 'my-calendar' ) );
 	}
@@ -97,7 +97,7 @@ function my_calendar_behaviors_edit() {
 											<label for="ajax_js"><?php _e( 'Disable AJAX', 'my-calendar' ); ?></label></li>
 									</ul>
 								</div>
-								<?php if ( get_option( 'mc_use_custom_js' ) == 1 ) { ?>
+								<?php if ( get_option( 'mc_use_custom_js' ) === '1' ) { ?>
 									<p>
 										<label for="calendar-js"><?php _e( 'Calendar Behaviors: Grid View', 'my-calendar' ); ?></label><br/><textarea id="calendar-js" name="mc_caljs" rows="12" cols="80"><?php echo esc_textarea( $mc_caljs ); ?></textarea>
 									</p>
