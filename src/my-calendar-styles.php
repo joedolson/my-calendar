@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function my_calendar_style_edit() {
 	$edit_files = true;
-	if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT == true ) {
+	if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT === true ) {
 		$edit_files = false;
 		mc_show_error( __( 'File editing is disallowed in your WordPress installation. Edit your stylesheets offline.', 'my-calendar' ) );
 	}
@@ -40,7 +40,7 @@ function my_calendar_style_edit() {
 		if ( 'disabled' === $wrote_styles ) {
 			$message = '<p>' . __( 'Styles are disabled, and were not edited.', 'my-calendar' ) . '</p>';
 		} else {
-			$message = ( true == $wrote_styles ) ? '<p>' . __( 'The stylesheet has been updated.', 'my-calendar' ) . '</p>' : '<p><strong>' . __( 'Write Error! Please verify write permissions on the style file.', 'my-calendar' ) . '</strong></p>';
+			$message = ( true === $wrote_styles ) ? '<p>' . __( 'The stylesheet has been updated.', 'my-calendar' ) . '</p>' : '<p><strong>' . __( 'Write Error! Please verify write permissions on the style file.', 'my-calendar' ) . '</strong></p>';
 		}
 
 		$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : stripcslashes( $_POST['mc_show_css'] );
@@ -70,7 +70,7 @@ function my_calendar_style_edit() {
 				}
 			}
 			foreach ( $_POST['style_vars'] as $key => $value ) {
-				if ( '' != $value ) {
+				if ( '' !== $value ) {
 					$styles[ $key ] = $value;
 				}
 			}
@@ -139,7 +139,7 @@ function my_calendar_style_edit() {
 								if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {
 									_e( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' );
 								} else {
-									$disabled = ( $edit_files || get_option( 'mc_use_styles' ) == 'true' ) ? '' : ' disabled="disabled"';
+									$disabled = ( $edit_files || get_option( 'mc_use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 									?>
 									<label for="style"><?php _e( 'Edit the stylesheet for My Calendar', 'my-calendar' ); ?></label><br/><textarea <?php echo $disabled; ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo $my_calendar_style; ?></textarea>
 									<?php
@@ -153,7 +153,7 @@ function my_calendar_style_edit() {
 								$styles = get_option( 'mc_style_vars' );
 								foreach ( $styles as $var => $style ) {
 									$var_id = 'mc' . sanitize_key( $var );
-									if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light' ) ) ) {
+									if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light' ), true ) ) {
 										$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . __( 'Delete', 'my-calendar' ) . '</label>';
 									} else {
 										$delete = '';
@@ -191,7 +191,7 @@ function my_calendar_style_edit() {
 									)
 								);
 								echo '</div>';
-							} elseif ( trim( $left_string ) != trim( $right_string ) ) {
+							} elseif ( trim( $left_string ) !== trim( $right_string ) ) {
 								echo '<div class="wrap my-calendar-admin">';
 								mc_show_notice( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-styles&amp;diff#diff' ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
 								echo '</div>';
@@ -238,8 +238,8 @@ function mc_stylesheet_selector() {
 			$test     = 'mc_custom_' . $value;
 			$filepath = mc_get_style_path( $test );
 			$path     = pathinfo( $filepath );
-			if ( 'css' == $path['extension'] ) {
-				$selected = ( get_option( 'mc_css_file' ) == $test ) ? ' selected="selected"' : '';
+			if ( 'css' === $path['extension'] ) {
+				$selected = ( get_option( 'mc_css_file' ) === $test ) ? ' selected="selected"' : '';
 				$options .= "<option value='mc_custom_$value'$selected>$value</option>\n";
 			}
 		}
@@ -250,8 +250,8 @@ function mc_stylesheet_selector() {
 	foreach ( $files as $value ) {
 		$filepath = mc_get_style_path( $value );
 		$path     = pathinfo( $filepath );
-		if ( 'css' == $path['extension'] ) {
-			$selected = ( get_option( 'mc_css_file' ) == $value ) ? ' selected="selected"' : '';
+		if ( 'css' === $path['extension'] ) {
+			$selected = ( get_option( 'mc_css_file' ) === $value ) ? ' selected="selected"' : '';
 			$options .= "<option value='$value'$selected>$value</option>\n";
 		}
 	}
@@ -287,11 +287,11 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 	}
 	if ( 0 === strpos( $filename, 'mc_custom_' ) ) {
 		$filename  = str_replace( 'mc_custom_', '', $filename );
-		$stylefile = ( 'path' == $type ) ? str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/' . $filename : str_replace( '/my-calendar/', '', $url ) . '/my-calendar-custom/styles/' . $filename;
+		$stylefile = ( 'path' === $type ) ? str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/' . $filename : str_replace( '/my-calendar/', '', $url ) . '/my-calendar-custom/styles/' . $filename;
 	} else {
-		$stylefile = ( 'path' == $type ) ? dirname( __FILE__ ) . '/styles/' . $filename : plugins_url( 'styles', __FILE__ ) . '/' . $filename;
+		$stylefile = ( 'path' === $type ) ? dirname( __FILE__ ) . '/styles/' . $filename : plugins_url( 'styles', __FILE__ ) . '/' . $filename;
 	}
-	if ( 'path' == $type ) {
+	if ( 'path' === $type ) {
 		if ( is_file( $stylefile ) ) {
 			return $stylefile;
 		} else {
@@ -369,7 +369,7 @@ function mc_css_list( $directory ) {
 	// Keep going until all files in directory have been read.
 	while ( $file = readdir( $handler ) ) {
 		// If $file isn't this directory or parent, add it to the results array.
-		if ( '.' != $file && '..' != $file ) {
+		if ( '.' !== $file && '..' !== $file ) {
 			$results[] = $file;
 		}
 	}
@@ -388,7 +388,7 @@ function mc_css_list( $directory ) {
  * @return boolean;
  */
 function mc_write_styles( $file, $style ) {
-	if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT == true ) {
+	if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT === true ) {
 		return false;
 	}
 
@@ -397,12 +397,12 @@ function mc_write_styles( $file, $style ) {
 	foreach ( $files as $f ) {
 		$filepath = mc_get_style_path( $f );
 		$path     = pathinfo( $filepath );
-		if ( 'css' == $path['extension'] ) {
+		if ( 'css' === $path['extension'] ) {
 			$styles_whitelist[] = $filepath;
 		}
 	}
 
-	if ( in_array( $file, $styles_whitelist ) ) {
+	if ( in_array( $file, $styles_whitelist, true ) ) {
 		if ( function_exists( 'wp_is_writable' ) ) {
 			$is_writable = wp_is_writable( $file );
 		} else {
