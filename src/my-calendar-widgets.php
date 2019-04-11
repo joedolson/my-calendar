@@ -110,7 +110,7 @@ function my_calendar_upcoming_events( $args ) {
 			$from = date( 'Y-m-1', strtotime( '+4 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+4 month' ) );
 		}
-		if ( 'month+5' == $display_type ) {
+		if ( 'month+5' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+5 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+5 month' ) );
 		}
@@ -130,7 +130,7 @@ function my_calendar_upcoming_events( $args ) {
 			$from = date( 'Y-m-1', strtotime( '+9 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+9 month' ) );
 		}
-		if ( 'month+10' == $display_type ) {
+		if ( 'month+10' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+10 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+10 month' ) );
 		}
@@ -502,13 +502,13 @@ function my_calendar_todays_events( $args ) {
 		$template = file_get_contents( mc_get_file( $template ) );
 	}
 	$defaults = mc_widget_defaults();
-	$template = ( ! $template || 'default' == $template ) ? $defaults['today']['template'] : $template;
+	$template = ( ! $template || 'default' === $template ) ? $defaults['today']['template'] : $template;
 
 	if ( mc_key_exists( $template ) ) {
 		$template = mc_get_custom_template( $template );
 	}
 
-	$category      = ( 'default' == $category ) ? $defaults['today']['category'] : $category;
+	$category      = ( 'default' === $category ) ? $defaults['today']['category'] : $category;
 	$no_event_text = ( '' === $substitute ) ? $defaults['today']['text'] : $substitute;
 	if ( $date ) {
 		$from = date( 'Y-m-d', strtotime( $date ) );
