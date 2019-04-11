@@ -97,25 +97,21 @@ function my_calendar_behaviors_edit() {
 											<label for="ajax_js"><?php _e( 'Disable AJAX', 'my-calendar' ); ?></label></li>
 									</ul>
 								</div>
-								<?php
-								if ( get_option( 'mc_use_custom_js' ) === '1' ) {
-								?>
-								<p>
-									<label for="calendar-js"><?php _e( 'Calendar Behaviors: Grid View', 'my-calendar' ); ?></label><br/><textarea id="calendar-js" name="mc_caljs" rows="12" cols="80"><?php echo esc_textarea( $mc_caljs ); ?></textarea>
-								</p>
-								<p>
-									<label for="list-js"><?php _e( 'Calendar Behaviors: List View', 'my-calendar' ); ?></label><br/><textarea id="list-js" name="mc_listjs" rows="12" cols="80"><?php echo esc_textarea( $mc_listjs ); ?></textarea>
-								</p>
-								<p>
-									<label for="mini-js"><?php _e( 'Calendar Behaviors: Mini Calendar View', 'my-calendar' ); ?></label><br/><textarea id="mini-js" name="mc_minijs" rows="12" cols="80"><?php echo esc_textarea( $mc_minijs ); ?></textarea>
-								</p>
-								<p>
-									<label for="ajax-js"><?php _e( 'Calendar Behaviors: AJAX', 'my-calendar' ); ?></label><br/>
-									<textarea id="ajax-js" name="mc_ajaxjs" rows="12" cols="80"><?php echo esc_textarea( $mc_ajaxjs ); ?></textarea>
-								</p>
-								<?php
-								}
-								?>
+								<?php if ( get_option( 'mc_use_custom_js' ) === '1' ) { ?>
+									<p>
+										<label for="calendar-js"><?php _e( 'Calendar Behaviors: Grid View', 'my-calendar' ); ?></label><br/><textarea id="calendar-js" name="mc_caljs" rows="12" cols="80"><?php echo esc_textarea( $mc_caljs ); ?></textarea>
+									</p>
+									<p>
+										<label for="list-js"><?php _e( 'Calendar Behaviors: List View', 'my-calendar' ); ?></label><br/><textarea id="list-js" name="mc_listjs" rows="12" cols="80"><?php echo esc_textarea( $mc_listjs ); ?></textarea>
+									</p>
+									<p>
+										<label for="mini-js"><?php _e( 'Calendar Behaviors: Mini Calendar View', 'my-calendar' ); ?></label><br/><textarea id="mini-js" name="mc_minijs" rows="12" cols="80"><?php echo esc_textarea( $mc_minijs ); ?></textarea>
+									</p>
+									<p>
+										<label for="ajax-js"><?php _e( 'Calendar Behaviors: AJAX', 'my-calendar' ); ?></label><br/>
+										<textarea id="ajax-js" name="mc_ajaxjs" rows="12" cols="80"><?php echo esc_textarea( $mc_ajaxjs ); ?></textarea>
+									</p>
+								<?php } ?>
 								<p>
 									<input type="submit" name="mc-js-save" class="button-primary" value="<?php _e( 'Save', 'my-calendar' ); ?>"/>
 								</p>
