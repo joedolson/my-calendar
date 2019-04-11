@@ -150,11 +150,11 @@ function mc_register_styles() {
 
 	$default   = apply_filters( 'mc_display_css_on_archives', true, $wp_query );
 	$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
-	$js_array  = ( '' !== get_option( 'mc_show_js' ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
-	$css_array = ( '' !== get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
+	$js_array  = ( false !== get_option( 'mc_show_js' ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
+	$css_array = ( false !== get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
 
 	// check whether any scripts are actually enabled.
-	if ( get_option( 'mc_calendar_javascript' ) !== 1 || get_option( 'mc_list_javascript' ) !== 1 || get_option( 'mc_mini_javascript' ) !== 1 || get_option( 'mc_ajax_javascript' ) !== 1 ) {
+	if ( get_option( 'mc_calendar_javascript' ) !== '1' || get_option( 'mc_list_javascript' ) !== '1' || get_option( 'mc_mini_javascript' ) !== '1' || get_option( 'mc_ajax_javascript' ) !== '1' ) {
 		if ( is_array( $js_array ) && in_array( $id, $js_array, true ) || false === get_option( 'mc_show_js' ) || is_singular( 'mc-events' ) ) {
 			wp_enqueue_script( 'jquery' );
 			if ( 'true' === get_option( 'mc_gmap' ) ) {
@@ -200,8 +200,8 @@ function my_calendar_head() {
 	if ( get_option( 'mc_use_styles' ) !== 'true' ) {
 		$this_post = $wp_query->get_queried_object();
 		$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
-		$array     = ( '' !== get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
-		if ( is_array( $array ) && in_array( $id, $array, true ) || get_option( 'mc_show_css' ) === '' ) {
+		$array     = ( false !== get_option( 'mc_show_css' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
+		if ( is_array( $array ) && in_array( $id, $array, true ) || get_option( 'mc_show_css' ) === false ) {
 			// generate category colors.
 			$category_styles = '';
 			$inv             = '';
@@ -404,25 +404,25 @@ function mc_footer_js() {
 		} else {
 			$enqueue_mcjs = false;
 			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || false === get_option( 'mc_show_js' ) ) {
-				if ( 1 !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
+				if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.grid', 'mcgrid', 'true' );
 				}
-				if ( 1 !== get_option( 'mc_list_javascript' ) ) {
+				if ( '1' !== get_option( 'mc_list_javascript' ) ) {
 					$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.list', 'mclist', 'true' );
 				}
-				if ( 1 !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
+				if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
 					$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.mini', 'mcmini', 'true' );
 				}
-				if ( 1 !== get_option( 'mc_ajax_javascript' ) ) {
+				if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
 					$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ) );
@@ -1356,7 +1356,7 @@ function mc_get_support_form() {
 	$mc_css        = get_option( 'mc_css_file' );
 
 	// Pro license status.
-	$license       = ( '' !== get_option( 'mcs_license_key' ) ) ? get_option( 'mcs_license_key' ) : '';
+	$license       = ( false !== get_option( 'mcs_license_key' ) ) ? get_option( 'mcs_license_key' ) : '';
 	$license_valid = get_option( 'mcs_license_key_valid' );
 	$checked       = ( 'valid' === $license_valid ) ? true : false;
 
@@ -1530,7 +1530,7 @@ function mc_load_permalinks() {
  * Custom field callback for permalinks settings
  */
 function mc_field_callback() {
-	$value = ( '' !== get_option( 'mc_cpt_base' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
+	$value = ( false !== get_option( 'mc_cpt_base' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
 	echo '<input type="text" value="' . esc_attr( $value ) . '" name="mc_cpt_base" id="mc_cpt_base" class="regular-text" />';
 }
 
@@ -1565,7 +1565,7 @@ function mc_post_type() {
 function mc_posttypes() {
 	$types   = mc_post_type();
 	$enabled = array( 'mc-events' );
-	$slug    = ( '' !== get_option( 'mc_cpt_base' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
+	$slug    = ( false !== get_option( 'mc_cpt_base' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
 			$value  =& $types[ $key ];
