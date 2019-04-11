@@ -24,7 +24,7 @@ function my_calendar_group_edit() {
 	$group_id = ! empty( $_POST['group_id'] ) ? $_POST['group_id'] : '';
 
 	if ( isset( $_GET['mode'] ) ) {
-		if ( 'edit' == $_GET['mode'] ) {
+		if ( 'edit' === $_GET['mode'] ) {
 			$action   = 'edit';
 			$event_id = (int) $_GET['event_id'];
 			$group_id = (int) $_GET['group_id'];
@@ -91,7 +91,7 @@ function my_calendar_group_edit() {
 	<div class="wrap my-calendar-admin" id="my-calendar">
 	<?php
 	my_calendar_check_db();
-	if ( 'edit' == $action ) {
+	if ( 'edit' === $action ) {
 		echo '<h1>' . __( 'Edit Event Group', 'my-calendar' ) . '</h1>';
 		if ( empty( $event_id ) || empty( $group_id ) ) {
 			mc_show_error( __( 'You must provide an event group id in order to edit it', 'my-calendar' ) );
@@ -146,7 +146,7 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 	$proceed = $output[0];
 	$message = '';
 
-	if ( 'edit' == $action && true == $proceed ) {
+	if ( 'edit' === $action && true === $proceed ) {
 		$event_author = (int) ( $_POST['event_author'] );
 		if ( mc_can_edit_event( $event_id ) ) {
 			$update = $output[2];
@@ -189,7 +189,7 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 function mc_group_data( $event_id = false ) {
 	global $wpdb, $submission;
 	if ( false !== $event_id ) {
-		if ( intval( $event_id ) != $event_id ) {
+		if ( intval( $event_id ) !== $event_id ) {
 			return mc_show_error( __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ), false );
 		} else {
 			$data = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -230,7 +230,7 @@ function mc_compare_group_members( $group_id, $field = false ) {
 	$count   = count( $results );
 	for ( $i = 0; $i < $count; $i ++ ) {
 		$n = ( ( $i + 1 ) > $count - 1 ) ? 0 : $i + 1;
-		if ( md5( implode( '', $results[ $i ] ) ) != md5( implode( '', $results[ $n ] ) ) ) {
+		if ( md5( implode( '', $results[ $i ] ) ) !== md5( implode( '', $results[ $n ] ) ) ) {
 			return false;
 		}
 	}
@@ -251,28 +251,28 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	$event_id = (int) $_GET['event_id'];
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
 	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	if ( 'apply' == $type ) {
+	if ( 'apply' === $type ) {
 		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>NOTE:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p class="matched">' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
 	} else {
 		$warning = '';
 	}
-	$class   = ( 'break' == $type ) ? 'break' : 'apply';
+	$class   = ( 'break' === $type ) ? 'break' : 'apply';
 	$group   = "<div class='group $class'>";
 	$group  .= $warning;
-	$group  .= ( 'apply' == $type ) ? '<fieldset><legend>' . __( 'Apply these changes to:', 'my-calendar' ) . '</legend>' : '';
-	$group  .= ( 'break' == $type ) ? "<form method='post' action='" . admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) . "'>
+	$group  .= ( 'apply' === $type ) ? '<fieldset><legend>' . __( 'Apply these changes to:', 'my-calendar' ) . '</legend>' : '';
+	$group  .= ( 'break' === $type ) ? "<form method='post' action='" . admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) . "'>
 	<div><input type='hidden' value='" . esc_attr( $group_id ) . "' name='group_id' /><input type='hidden' value='" . esc_attr( $type ) . "' name='event_action' /><input type='hidden' name='_wpnonce' value='$nonce' />
 	</div>" : '';
 	$group  .= "<ul class='checkboxes'>";
-	$checked = ( 'apply' == $type ) ? ' checked="checked"' : '';
+	$checked = ( 'apply' === $type ) ? ' checked="checked"' : '';
 	foreach ( $results as $result ) {
 		$date   = date_i18n( 'D, j M, Y', strtotime( $result->event_begin ) );
 		$time   = date_i18n( 'g:i a', strtotime( $result->event_time ) );
 		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$result->event_id' id='$type$result->event_id'$checked /> <label for='break$result->event_id'><a href='#event$result->event_id'>#$result->event_id</a>: $date; $time</label></li>\n";
 	}
 	$group .= "<li><input type='checkbox' class='selectall' id='$type'$checked /> <label for='$type'><b>" . __( 'Check/Uncheck all', 'my-calendar' ) . "</b></label></li>\n</ul>";
-	$group .= ( 'apply' == $type ) ? '</fieldset>' : '';
-	$group .= ( 'break' == $type ) ? "<p><input type='submit' class='button' value='" . __( 'Remove checked events from this group', 'my-calendar' ) . "' /></p></form>" : '';
+	$group .= ( 'apply' === $type ) ? '</fieldset>' : '';
+	$group .= ( 'break' === $type ) ? "<p><input type='submit' class='button' value='" . __( 'Remove checked events from this group', 'my-calendar' ) . "' /></p></form>" : '';
 	$group .= '</div>';
 
 	return $group;
@@ -289,12 +289,12 @@ function mc_edit_groups( $mode = 'edit', $event_id = false, $group_id = false ) 
 	global $submission;
 	$message = '';
 	$group   = '';
-	if ( false != $event_id ) {
+	if ( false !== $event_id ) {
 		$data = mc_group_data( $event_id );
 	} else {
 		$data = $submission;
 	}
-	if ( false != $group_id ) {
+	if ( false !== $group_id ) {
 		$group = mc_group_form( $group_id, 'break' );
 	} else {
 		$message .= __( 'You must provide a group ID to edit groups', 'my-calendar' );
@@ -318,7 +318,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	$current_user = wp_get_current_user();
 	$has_data     = ( empty( $data ) ) ? false : true;
 	$user         = get_userdata( $user_ID );
-	$input_all    = ( get_option( 'mc_input_options_administrators' ) == 'true' && current_user_can( 'manage_options' ) ) ? true : false;
+	$input_all    = ( get_option( 'mc_input_options_administrators' ) === 'true' && current_user_can( 'manage_options' ) ) ? true : false;
 	$mc_input     = get_option( 'mc_input_options' );
 	$group_id     = ( ! empty( $data->event_group_id ) ) ? $data->event_group_id : mc_group_id();
 	$title        = '';
@@ -368,11 +368,11 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 				<?php
 				$apply = mc_group_form( $group_id, 'apply' );
 				echo $apply;
-				if ( 0 == $data->event_repeats && ( 'S1' == $data->event_recur || 'S' == $data->event_recur ) ) {
+				if ( 0 === $data->event_repeats && ( 'S1' === $data->event_recur || 'S' === $data->event_recur ) ) {
 					$span_checked = '';
-					if ( ! empty( $data ) && 1 == $data->event_span ) {
+					if ( ! empty( $data ) && 1 === $data->event_span ) {
 						$span_checked = ' checked="checked"';
-					} elseif ( ! empty( $data ) && 0 == $data->event_span ) {
+					} elseif ( ! empty( $data ) && 0 === $data->event_span ) {
 						$span_checked = '';
 					}
 					?>
@@ -393,7 +393,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<div><input type='hidden' name='event_span' value='<?php echo esc_attr( $data->event_span ); ?>'/></div>
 					<?php
 				}
-				if ( 'on' == $mc_input['event_desc'] || $input_all ) {
+				if ( 'on' === $mc_input['event_desc'] || $input_all ) {
 					?>
 					<div id="group_description">
 						<label for="content">
@@ -408,7 +408,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					</div>
 					<?php
 				}
-				if ( 'on' == $mc_input['event_short'] || $input_all ) {
+				if ( 'on' === $mc_input['event_short'] || $input_all ) {
 					?>
 					<p>
 						<label for="e_short">
@@ -473,25 +473,25 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						$user_list = mc_get_users( 'hosts' );
 						foreach ( $user_list as $u ) {
 							echo '<option value="' . $u->ID . '"';
-							if ( is_object( $data ) && $data->event_host == $u->ID ) {
+							if ( is_object( $data ) && $data->event_host === $u->ID ) {
 								echo ' selected="selected"';
-							} elseif ( is_object( $u ) && $u->ID == $user->ID && empty( $data->event_host ) ) {
+							} elseif ( is_object( $u ) && $u->ID === $user->ID && empty( $data->event_host ) ) {
 								echo ' selected="selected"';
 							}
-							$display_name = ( '' == $u->display_name ) ? $u->user_nicename : $u->display_name;
+							$display_name = ( '' === $u->display_name ) ? $u->user_nicename : $u->display_name;
 							echo ">$display_name</option>\n";
 						}
 						?>
 					</select>
 				</p>
 				<?php
-				if ( 'on' == $mc_input['event_category'] || $input_all ) {
+				if ( 'on' === $mc_input['event_category'] || $input_all ) {
 					$match = '';
 					if ( ! mc_compare_group_members( $group_id, 'event_category' ) ) {
 						$match = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
 					}
 
-					if ( 'true' != get_option( 'mc_multiple_categories' ) ) {
+					if ( 'true' !== get_option( 'mc_multiple_categories' ) ) {
 						$select = mc_category_select( $data, true, false );
 						$return = '<p class="mc_category"><label for="event_category">' . __( 'Category', 'my-calendar-submissions' ) . $match . '</label><select class="widefat" name="event_category" id="e_category">' . $select . '</select></p>';
 					} else {
@@ -506,12 +506,12 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					</div>
 					<?php
 				}
-				if ( 'on' == $mc_input['event_link'] || $input_all ) {
-					if ( ! empty( $data ) && 1 == $data->event_link_expires ) {
+				if ( 'on' === $mc_input['event_link'] || $input_all ) {
+					if ( ! empty( $data ) && 1 === $data->event_link_expires ) {
 						$exp_checked = ' checked="checked"';
-					} elseif ( ! empty( $data ) && 0 == $data->event_link_expires ) {
+					} elseif ( ! empty( $data ) && 0 === $data->event_link_expires ) {
 						$exp_checked = '';
-					} elseif ( 'true' == get_option( 'mc_event_link_expires' ) ) {
+					} elseif ( 'true' === get_option( 'mc_event_link_expires' ) ) {
 						$exp_checked = ' checked="checked"';
 					}
 					?>
@@ -535,7 +535,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 		</div>
 	</div>
 	<?php
-	if ( 'on' == $mc_input['event_open'] || $input_all ) { // Add a "don't change" option here. JCD TODO.
+	if ( 'on' === $mc_input['event_open'] || $input_all ) { // Add a "don't change" option here. JCD TODO.
 		?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
@@ -558,7 +558,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	</div>
 		<?php
 	}
-	if ( ( 'on' == $mc_input['event_location'] || 'on' == $mc_input['event_location_dropdown'] ) || $input_all ) {
+	if ( ( 'on' === $mc_input['event_location'] || 'on' === $mc_input['event_location_dropdown'] ) || $input_all ) {
 		?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
@@ -569,7 +569,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<legend><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 		<?php
 	}
-	if ( 'on' == $mc_input['event_location_dropdown'] || $input_all ) {
+	if ( 'on' === $mc_input['event_location_dropdown'] || $input_all ) {
 		$locations = mc_get_locations( 'group-manager' );
 		if ( ! empty( $locations ) ) {
 			?>
@@ -596,7 +596,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	} else {
 		echo '<input type="hidden" name="location_preset" value="none"/>';
 	}
-	if ( 'on' == $mc_input['event_location'] || $input_all ) {
+	if ( 'on' === $mc_input['event_location'] || $input_all ) {
 		?>
 	<p>
 		<label for="e_label">
@@ -758,7 +758,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 				$label   = $a;
 				$checked = '';
 				if ( is_array( $location_access ) ) {
-					$checked = ( in_array( $k, $location_access ) ) ? " checked='checked'" : '';
+					$checked = ( in_array( $k, $location_access, true ) ) ? " checked='checked'" : '';
 				}
 				$item         = sprintf( '<li><input type="checkbox" id="%1$s" name="event_access[]" value="%4$s" class="checkbox" %2$s /> <label for="%1$s">%3$s</label></li>', esc_attr( $id ), $checked, esc_html( $label ), esc_attr( $k ) );
 				$access_list .= $item;
@@ -769,7 +769,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	</fieldset>
 		<?php
 	}
-	if ( ( 'on' == $mc_input['event_location'] || 'on' == $mc_input['event_location_dropdown'] ) || $input_all ) {
+	if ( ( 'on' === $mc_input['event_location'] || 'on' === $mc_input['event_location_dropdown'] ) || $input_all ) {
 		?>
 				</fieldset>
 			</div>
@@ -806,7 +806,7 @@ function mc_check_group_data( $action, $post ) {
 		return '';
 	}
 	$errors = '';
-	if ( 'add' == $action || 'edit' == $action || 'copy' == $action ) {
+	if ( 'add' === $action || 'edit' === $action || 'copy' === $action ) {
 		$title = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
 		$desc  = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
 		$short = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
@@ -819,7 +819,7 @@ function mc_check_group_data( $action, $post ) {
 				foreach ( $cats as $cat ) {
 					$private = mc_get_category_detail( $cat, 'category_private' );
 					// If a selected category is private, set that category as primary instead.
-					if ( 1 == $private ) {
+					if ( 1 === $private ) {
 						$primary = $cat;
 					}
 				}
@@ -837,7 +837,7 @@ function mc_check_group_data( $action, $post ) {
 		$event_image        = esc_url_raw( $post['event_image'] );
 		$event_span         = ! empty( $post['event_span'] ) ? 1 : 0;
 		// Set location.
-		if ( 'none' != $location_preset ) {
+		if ( 'none' !== $location_preset ) {
 			$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$event_label     = $location->location_label;
 			$event_street    = $location->location_street;
@@ -871,7 +871,7 @@ function mc_check_group_data( $action, $post ) {
 			$event_access    = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
 		}
 		// We check to make sure the URL is acceptable (blank or starting with http://).
-		if ( ! ( '' == $event_link || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
+		if ( ! ( '' === $event_link || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
 			$event_link = 'http://' . $event_link;
 		}
 	}
@@ -916,7 +916,7 @@ function mc_check_group_data( $action, $post ) {
 
 	$submit = array_map( 'mc_kses_post', $submit );
 
-	if ( 'edit' == $action ) {
+	if ( 'edit' === $action ) {
 		unset( $submit['event_author'] );
 	}
 	$data = array( $proceed, false, $submit, $errors );
@@ -935,7 +935,7 @@ function mc_list_groups() {
 
 	$sortby = ( isset( $_GET['sort'] ) ) ? (int) $_GET['sort'] : get_option( 'mc_default_sort' );
 	if ( isset( $_GET['order'] ) ) {
-		$sortdir = ( isset( $_GET['order'] ) && 'ASC' == $_GET['order'] ) ? 'ASC' : 'default';
+		$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
 	} else {
 		$sortdir = 'default';
 	}
@@ -971,8 +971,8 @@ function mc_list_groups() {
 				$sortbyvalue = 'event_begin';
 		}
 	}
-	$sortbydirection = ( 'default' == $sortdir ) ? 'DESC' : $sortdir;
-	$sorting         = ( 'DESC' == $sortbydirection ) ? '&amp;order=ASC' : '';
+	$sortbydirection = ( 'default' === $sortdir ) ? 'DESC' : $sortdir;
+	$sorting         = ( 'DESC' === $sortbydirection ) ? '&amp;order=ASC' : '';
 
 	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 	$screen         = get_current_screen();
@@ -1003,13 +1003,13 @@ function mc_list_groups() {
 	<div class='inside'>
 		<ul class="links">
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' == $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php _e( 'Grouped Events', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php _e( 'Grouped Events', 'my-calendar' ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' == $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups&amp;limit=ungrouped#my-calendar-admin-table' ); ?>"><?php _e( 'Ungrouped Events', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups&amp;limit=ungrouped#my-calendar-admin-table' ); ?>"><?php _e( 'Ungrouped Events', 'my-calendar' ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'all' == $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups#my-calendar-admin-table' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups#my-calendar-admin-table' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
 			</li>
 		</ul>
 	<p><?php _e( 'Check a set of events to group them for mass editing.', 'my-calendar' ); ?></p>
@@ -1069,12 +1069,12 @@ function mc_list_groups() {
 				$class      = '';
 				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				foreach ( $events as $event ) {
-					$class      = ( 'alternate' == $class ) ? '' : 'alternate';
-					$spam       = ( 1 == $event->event_flagged ) ? ' spam' : '';
-					$spam_label = ( 1 == $event->event_flagged ) ? '<strong>Possible spam:</strong> ' : '';
-					$author     = ( 0 != $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
+					$class      = ( 'alternate' === $class ) ? '' : 'alternate';
+					$spam       = ( 1 === $event->event_flagged ) ? ' spam' : '';
+					$spam_label = ( 1 === $event->event_flagged ) ? '<strong>Possible spam:</strong> ' : '';
+					$author     = ( 0 !== $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
 					$can_edit   = mc_can_edit_event( $event );
-					if ( '' != $event->event_link ) {
+					if ( '' !== $event->event_link ) {
 						$title = "<a href='" . esc_attr( $event->event_link ) . "'>" . strip_tags( $event->event_title, mc_strip_tags() ) . '</a>';
 					} else {
 						$title = $event->event_title;
@@ -1086,7 +1086,7 @@ function mc_list_groups() {
 						<label for="mc<?php echo $event->event_id; ?>"><?php echo $event->event_id; ?></label>
 					</th>
 					<th scope="row">
-						<?php echo ( 0 == $event->event_group_id ) ? '-' : $event->event_group_id; ?>
+						<?php echo ( 0 === $event->event_group_id ) ? '-' : $event->event_group_id; ?>
 					</th>
 					<td>
 						<strong>
@@ -1130,7 +1130,7 @@ function mc_list_groups() {
 					</td>
 					<td><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></td>
 					<?php
-					if ( '23:59:59' != $event->event_endtime ) {
+					if ( '23:59:59' !== $event->event_endtime ) {
 						$event_time = date_i18n( get_option( 'mc_time_format' ), strtotime( $event->event_time ) );
 					} else {
 						$event_time = mc_notime_label( $event );
@@ -1149,7 +1149,7 @@ function mc_list_groups() {
 					<?php
 					$this_category = $event->event_category;
 					foreach ( $categories as $key => $value ) {
-						if ( $value->category_id == $this_category ) {
+						if ( $value->category_id === $this_category ) {
 							$this_cat = $categories[ $key ];
 						}
 					}
