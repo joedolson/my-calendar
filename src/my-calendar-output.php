@@ -80,7 +80,7 @@ function mc_time_html( $e, $type ) {
 		$time_content .= "\n
 		<span class='event-time dtstart'>
 			<time class='value-title' datetime='" . $start . 'T' . $e->event_time . "' title='" . $start . 'T' . $e->event_time . "'>" .
-				date_i18n( $time_format, strtotime( $e->event_time ) ) . '
+				date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '
 			</time>
 		</span>';
 		if ( 0 == $e->event_hide_end ) {
@@ -88,7 +88,7 @@ function mc_time_html( $e, $type ) {
 				$time_content .= "
 					<span class='time-separator'> &ndash; </span>$final
 					<span class='end-time dtend'>
-						<time class='value-title' datetime='" . $end . 'T' . $e->event_endtime . "' title='" . $end . 'T' . $e->event_endtime . "'>" . date_i18n( $time_format, strtotime( $e->event_endtime ) ) . '
+						<time class='value-title' datetime='" . $end . 'T' . $e->event_endtime . "' title='" . $end . 'T' . $e->event_endtime . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '
 						</time>
 					</span>';
 			}
