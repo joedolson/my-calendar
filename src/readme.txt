@@ -87,6 +87,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Undefined variable notice.
 * Disable Yoast canonical URL output on single events
+* Use same time variable in templates & in main layout.
+* Using default title template and empty time text, don't display unneeded colon.
 
 = 3.1.8 =
 

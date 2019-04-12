@@ -308,6 +308,10 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	}
 
 	$event_title = mc_draw_template( $data, $title_template );
+	if ( 0 === strpos( $event_title, ': ' ) ) {
+		// If the first two characters of the title are ": ", this is the default templates but no time.
+		$event_title = str_replace( ': ', '', $event_title );
+	}
 	$event_title = ( '' == $event_title ) ? $data['title'] : strip_tags( $event_title, mc_strip_tags() );
 	$no_link     = apply_filters( 'mc_disable_link', false, $data );
 
