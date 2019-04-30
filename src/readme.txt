@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 3.1.9
+Stable tag: 3.1.10
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -82,6 +82,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.1.10 =
+
+* SECURITY FIX: XSS scripting vulnerability. Update immediately.
+* Support for defining individual categories as having no category icon. 
 
 = 3.1.9 =
 
@@ -388,4 +393,4 @@ The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](
 
 == Upgrade Notice ==
 
-* 3.1.0 Bug fixes; couple minor new features.
+* 3.1.10 IMPORTANT SECURITY UPDATE: XSS Scripting Vulnerability
