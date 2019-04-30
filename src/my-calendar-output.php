@@ -2969,7 +2969,7 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 	unset( $variables['page_id'] );
 	$home = add_query_arg( $variables, $home );
 
-	return $home;
+	return esc_url( $home );
 }
 
 /**
