@@ -328,7 +328,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$date_format   = mc_date_format();
 	$e             = apply_filters( 'mc_insert_author_data', $e, $event );
 	$e             = apply_filters( 'mc_filter_image_data', $e, $event );
-	$sitelink_html = "<div class='url link'><a href='$event->event_url' class='location-link external'>";
+	$sitelink_html = "<div class='url link'><a href='" . esc_url( $event->event_url ) . "' class='location-link external'>";
 
 	// Translators: Location name.
 	$sitelink_html     .= sprintf( __( 'Visit web site<span class="screen-reader-text">: %s</span>', 'my-calendar' ), $event->event_label );
@@ -433,17 +433,17 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e_link    = mc_get_details_link( $event );
 	$e['link'] = mc_event_link( $event );
 	if ( $e['link'] ) {
-		$e['link_image'] = str_replace( "alt=''", "alt='" . esc_attr( $e['title'] ) . "'", "<a href='" . $e['link'] . "'>" . $e['image'] . '</a>' );
-		$e['link_title'] = "<a href='" . $event->event_link . "'>" . $e['title'] . '</a>';
+		$e['link_image'] = str_replace( "alt=''", "alt='" . esc_attr( $e['title'] ) . "'", "<a href='" . esc_url( $e['link'] ) . "'>" . $e['image'] . '</a>' );
+		$e['link_title'] = "<a href='" . esc_url( $event->event_link ) . "'>" . $e['title'] . '</a>';
 	} else {
 		$e['link_image'] = $e['image'];
 		$e['link_title'] = $e['title'];
 	}
 
 	$e['details_link']  = $e_link;
-	$e['details']       = "<a href='$e_link' class='mc-details'>$e_label</a>";
+	$e['details']       = "<a href='" . esc_url( $e_link ) . "' class='mc-details'>$e_label</a>";
 	$e['linking']       = ( '' != $e['link'] ) ? $event->event_link : $e_link;
-	$e['linking_title'] = ( '' != $e['linking'] ) ? "<a href='" . $e['linking'] . "'>" . $e['title'] . '</a>' : $e['title'];
+	$e['linking_title'] = ( '' != $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "'>" . $e['title'] . '</a>' : $e['title'];
 
 	if ( 'related' != $context && ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
@@ -499,7 +499,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
 	$e['gcal']      = mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $event->event_title ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "<a href='" . $e['gcal'] . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
+	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
@@ -508,7 +508,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['event_span'] = $event->event_span;
 
 	// RSS guid.
-	$e['guid'] = "<guid isPermaLink='true'>$e_link</guid>";
+	$e['guid'] = "<guid isPermaLink='true'>" . esc_url( $e_link ) . "</guid>";
 
 	// ICAL.
 	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
@@ -530,7 +530,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		mc_get_uri( $event )
 	);
 	$e['ical']             = $ical_link;
-	$e['ical_html']        = "<a class='ical' rel='nofollow' href='$ical_link' aria-describedby='mc_$event->occur_id-title'>" . __( 'iCal', 'my-calendar' ) . '</a>';
+	$e['ical_html']        = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title'>" . __( 'iCal', 'my-calendar' ) . '</a>';
 	$e                     = apply_filters( 'mc_filter_shortcodes', $e, $event );
 
 	return $e;
