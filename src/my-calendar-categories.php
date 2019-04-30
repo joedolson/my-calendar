@@ -394,6 +394,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 							<li>
 							<label for="cat_icon"><?php _e( 'Category Icon', 'my-calendar' ); ?></label>
 							<select name="category_icon" id="cat_icon">
+								<option value=''><?php _e( 'None', 'my-calendar' ); ?></option>
 								<?php
 								foreach ( $iconlist as $value ) {
 									$selected = ( ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) && $cur_cat->category_icon == $value ) ? ' selected="selected"' : '';
