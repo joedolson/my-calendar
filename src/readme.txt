@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 3.1.11
+Stable tag: 3.1.12
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -83,13 +83,18 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.12 =
+
+* Bug fix: User-specific category permissions didn't handle unset (default) values.
+* Bug fix: missing row closure element when weekends not displayed.
+
 = 3.1.11 =
 
 * New filter on mc_user_permissions operated on wrong variable.
 
 = 3.1.10 =
 
-* SECURITY FIX: XSS scripting vulnerability. Update immediately.
+* SECURITY FIX: Unauthenticated XSS scripting vulnerability. Update immediately. Thanks to Andreas Hell.
 * Support for defining individual categories as having no category icon. 
 
 = 3.1.9 =
