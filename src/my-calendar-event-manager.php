@@ -3457,9 +3457,9 @@ function mc_related_events( $id ) {
  */
 function mc_can_edit_category( $category, $user ) {
 	$permissions = get_user_meta( $user, 'mc_user_permissions', true );
-	$permissions = (array) apply_filters( 'mc_user_permissions', $permissions, $category, $user );
+	$permissions = apply_filters( 'mc_user_permissions', $permissions, $category, $user );
 
-	if ( empty( $permissions ) || in_array( 'all', $permissions ) || in_array( $category, $permissions ) || current_user_can( 'manage_options' ) ) {
+	if ( ( ! $permissions || empty( $permissions ) ) || in_array( 'all', $permissions ) || in_array( $category, $permissions ) || current_user_can( 'manage_options' ) ) {
 		return true;
 	}
 
