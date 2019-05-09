@@ -1614,7 +1614,8 @@ function my_calendar( $args ) {
 	$show_weekends = ( get_option( 'mc_show_weekends' ) == 'true' ) ? true : false;
 	$skip_holidays = get_option( 'mc_skip_holidays_category' );
 	$month_format  = ( get_option( 'mc_month_format' ) == '' ) ? 'F Y' : get_option( 'mc_month_format' );
-	$show_months   = apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args );
+	$show_months   = absint( apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args ) );
+	$show_months   = ( 0 === $show_months ) ? 1 : $show_months;
 	$caption_text  = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
 	$week_format   = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
 	$week_template = ( get_option( 'mc_week_caption' ) != '' ) ? get_option( 'mc_week_caption' ) : 'Week of {date format="M jS"}';
