@@ -2015,6 +2015,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	// Fallback values.
 	$mc_toporder    = array( 'nav', 'toggle', 'jump', 'print', 'timeframe' );
 	$mc_bottomorder = array( 'key', 'feeds' );
+	$available      = array( 'nav', 'toggle', 'jump', 'print', 'timeframe', 'key', 'feeds', 'exports' );
 
 	if ( 'none' == $above ) {
 		$mc_toporder = array();
@@ -2130,14 +2131,14 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	}
 
 	foreach ( $mc_toporder as $value ) {
-		if ( 'none' != $value && in_array( $value, $used ) ) {
+		if ( 'none' != $value && in_array( $value, $used ) && in_array( $value, $available ) ) {
 			$value      = trim( $value );
 			$mc_topnav .= ${$value};
 		}
 	}
 
 	foreach ( $mc_bottomorder as $value ) {
-		if ( 'none' != $value && 'stop' != $value && in_array( $value, $used ) ) {
+		if ( 'none' != $value && 'stop' != $value && in_array( $value, $used ) && in_array( $value, $available )  ) {
 			$value         = trim( $value );
 			$mc_bottomnav .= ${$value};
 		}
