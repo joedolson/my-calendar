@@ -977,19 +977,20 @@ add_action( 'admin_enqueue_scripts', 'mc_scripts' );
  */
 function mc_scripts() {
 	global $current_screen;
-	$id = $current_screen->id;
-
+	$id   = $current_screen->id;
+	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
+	
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable' ) );
 		wp_localize_script( 'mc.admin', 'thumbHeight', get_option( 'thumbnail_size_h' ) );
 		wp_localize_script( 'mc.admin', 'draftText', __( 'Save Draft', 'my-calendar' ) );
 	}
 
-	if ( 'toplevel_page_my-calendar' == $id || 'my-calendar_page_my-calendar-groups' == $id || 'my-calendar_page_my-calendar-locations' == $id ) {
+	if ( 'toplevel_page_my-calendar' == $id || $slug . '_my-calendar-groups' == $id || $slug . '_page_my-calendar-locations' == $id ) {
 		wp_enqueue_script( 'jquery-ui-accordion' );
 	}
 
-	if ( 'toplevel_page_my-calendar' == $id || 'my-calendar_page_my-calendar-groups' == $id ) {
+	if ( 'toplevel_page_my-calendar' == $id || $slug . '_page_my-calendar-groups' == $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' ); // required for character counting.
 		wp_enqueue_script( 'pickadate', plugins_url( 'js/pickadate/picker.js', __FILE__ ), array( 'jquery' ) );
 		wp_enqueue_script( 'pickadate.date', plugins_url( 'js/pickadate/picker.date.js', __FILE__ ), array( 'pickadate' ) );
@@ -1047,7 +1048,7 @@ function mc_scripts() {
 			wp_enqueue_media();
 		}
 	}
-	if ( 'my-calendar_page_my-calendar-locations' == $id || 'toplevel_page_my-calendar' == $id ) {
+	if ( $slug . '_page_my-calendar-locations' == $id || 'toplevel_page_my-calendar' == $id ) {
 		$api_key = get_option( 'mc_gmap_api_key' );
 		if ( $api_key ) {
 			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
@@ -1073,7 +1074,7 @@ function mc_scripts() {
 		}
 	}
 
-	if ( 'my-calendar_page_my-calendar-config' == $id ) {
+	if ( $slug . '_page_my-calendar-config' == $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
 		wp_enqueue_script(
 			'mc.suggest',
@@ -1086,7 +1087,7 @@ function mc_scripts() {
 		wp_localize_script( 'mc.suggest', 'mc_ajax_action', 'mc_post_lookup' );
 	}
 
-	if ( 'my-calendar_page_my-calendar-categories' == $id ) {
+	if ( $slug . '_page_my-calendar-categories' == $id ) {
 		wp_enqueue_style( 'wp-color-picker' );
 		// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
 		wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );

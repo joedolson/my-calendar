@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.13 =
+
+* Bug fix: If plug-in name is translated, script references were broken. 
+* 
+
 = 3.1.12 =
 
 * Bug fix: User-specific category permissions didn't handle unset (default) values.

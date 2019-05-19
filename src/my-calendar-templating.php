@@ -458,7 +458,7 @@ add_action(
 			return;
 		}
 
-		if ( 'my-calendar_page_my-calendar-templates' !== get_current_screen()->id ) {
+		if ( sanitize_title( __( 'My Calendar', 'my-calendar' ) ) . '_page_my-calendar-templates' !== get_current_screen()->id ) {
 			return;
 		}
 
