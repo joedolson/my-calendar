@@ -713,7 +713,7 @@ function mc_profile() {
 
 	if ( user_can( $user_edit, 'mc_manage_events' ) && current_user_can( 'manage_options' ) ) {
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
-		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions ) ) ? ' checked="checked"' : '';
+		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions ) || user_can(  $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
 		?>
 		<h3><?php _e( 'My Calendar Editor Permissions', 'my-calendar' ); ?></h3>
 		<table class="form-table">
