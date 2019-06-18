@@ -1542,7 +1542,7 @@ function mc_post_type() {
 	$arguments = array(
 		'public'              => apply_filters( 'mc_event_posts_public', true ),
 		'publicly_queryable'  => true,
-		'exclude_from_search' => true,
+		'exclude_from_search' => apply_filters( 'mc_event_exclude_from_search', true ),
 		'show_ui'             => true,
 		'show_in_menu'        => apply_filters( 'mc_show_custom_posts_in_menu', false ),
 		'menu_icon'           => null,
