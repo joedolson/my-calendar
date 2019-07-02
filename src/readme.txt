@@ -86,7 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.1.13 =
 
 * Bug fix: If plug-in name is translated, script references were broken. 
-* 
+* New filter: allow events post type to be made searchable.
 
 = 3.1.12 =
 
