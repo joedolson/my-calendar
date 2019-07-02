@@ -979,7 +979,7 @@ function mc_scripts() {
 	global $current_screen;
 	$id   = $current_screen->id;
 	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
-	
+
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable' ) );
 		wp_localize_script( 'mc.admin', 'thumbHeight', get_option( 'thumbnail_size_h' ) );
@@ -1542,9 +1542,9 @@ function mc_post_type() {
 	$arguments = array(
 		'public'              => apply_filters( 'mc_event_posts_public', true ),
 		'publicly_queryable'  => true,
-		// WARNING: Allowing the post type to be searchable will not provide a true event search, especially with respect to recurring events. 
-		// It will not search recurring events by date, only the post content from each event. Enable only if requirements for search 
-		// are limited to post content. Details: https://github.com/joedolson/my-calendar/issues/23 
+		// WARNING: Allowing the post type to be searchable will not provide a true event search, especially with respect to recurring events.
+		// It will not search recurring events by date, only the post content from each event. Enable only if requirements for search are limited to post content.
+		// Details: https://github.com/joedolson/my-calendar/issues/23.
 		'exclude_from_search' => apply_filters( 'mc_event_exclude_from_search', true ),
 		'show_ui'             => true,
 		'show_in_menu'        => apply_filters( 'mc_show_custom_posts_in_menu', false ),
