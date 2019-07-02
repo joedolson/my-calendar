@@ -41,6 +41,7 @@ function my_calendar_insert( $atts, $content = null ) {
 			'day'      => false,
 			'site'     => false,
 			'months'   => false,
+			'search'   => '',
 		),
 		$atts,
 		'my_calendar'
@@ -51,6 +52,11 @@ function my_calendar_insert( $atts, $content = null ) {
 			$args['format'] = $_GET['format'];
 		}
 	}
+
+	if ( isset( $_GET['search'] ) ) {
+		$args['search'] = $_GET['search'];
+	}
+
 	global $user_ID;
 	if ( 'current' == $args['author'] ) {
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'main' );

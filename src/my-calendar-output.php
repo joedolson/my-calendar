@@ -1526,6 +1526,7 @@ function mc_calendar_params( $args ) {
 	$smonth   = isset( $args['month'] ) ? $args['month'] : false;
 	$sday     = isset( $args['day'] ) ? $args['day'] : false;
 	$source   = isset( $args['source'] ) ? $args['source'] : 'shortcode';
+	$search   = isset( $args['search'] ) ? $args['search'] : '';
 	$site     = ( isset( $args['site'] ) && '' != trim( $args['site'] ) ) ? $args['site'] : false;
 	$months   = isset( $args['months'] ) ? $args['months'] : false;
 
@@ -1575,6 +1576,7 @@ function mc_calendar_params( $args ) {
 		'syear'    => $syear,
 		'smonth'   => $smonth,
 		'sday'     => $sday,
+		'search'   => $search,
 	);
 
 	// Hash cannot include 'time', 'category', or 'format', since those can be changed by navigation.
@@ -1680,7 +1682,7 @@ function my_calendar( $args ) {
 			'lvalue'   => $params['lvalue'],
 			'author'   => $params['author'],
 			'host'     => $params['host'],
-			'search'   => '',
+			'search'   => $params['search'],
 			'source'   => 'calendar',
 			'site'     => $site,
 		);

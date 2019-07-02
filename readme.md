@@ -34,4 +34,4 @@ Bugs or feature development contributions should be made through the [GitHub rep
 Contributors listed only since moving development to GitHub. [Github Contributors](https://github.com/joedolson/my-calendar/graphs/contributors)
 
 * [Josef Fallmann](https://github.com/joseffallman)
-* [shankj3](https://github.com/shankj3)
+* [Jessi Shank](https://github.com/shankj3)
