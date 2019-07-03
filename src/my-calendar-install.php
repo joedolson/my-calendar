@@ -394,7 +394,7 @@ function mc_migrate_db() {
 	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	foreach ( $events as $event ) {
 		// assign endtimes to all events.
-		if ( '00:00:00' == $event->event_endtime && '00:00:00' != $event->event_time ) {
+		if ( '00:00:00' === $event->event_endtime && '00:00:00' !== $event->event_time ) {
 			$event->event_endtime = date( 'H:i:s', strtotime( "$event->event_time +1 hour" ) );
 			mc_flag_event( $event->event_id, $event->event_endtime );
 		}
@@ -470,7 +470,7 @@ function mc_check_location_table( $event, $locations ) {
  * @since 2.3.0
  */
 function mc_transition_db() {
-	if ( 'true' != get_option( 'mc_remote' ) ) {
+	if ( 'true' !== get_option( 'mc_remote' ) ) {
 		global $wpdb;
 		$results   = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_locations_table(), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$locations = array();
@@ -502,7 +502,7 @@ function mc_transition_db() {
 			if ( $location ) {
 				mc_update_event( 'event_location', $location, $event['event_id'] );
 			} else {
-				if ( '' == $event['event_label'] && '' == $event['event_street'] && '' == $event['event_url'] && '' == $event['event_city'] && '' == $event['event_state'] && '' == $event['event_country'] ) {
+				if ( '' === $event['event_label'] && '' === $event['event_street'] && '' === $event['event_url'] && '' === $event['event_city'] && '' === $event['event_state'] && '' === $event['event_country'] ) {
 					// don't insert the row if location does not have basic data.
 				} else {
 					$add = array(
@@ -534,7 +534,7 @@ function mc_transition_db() {
  */
 function mc_check_imports() {
 	$output = '';
-	if ( 'true' != get_option( 'ko_calendar_imported' ) ) {
+	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		if ( function_exists( 'check_calendar' ) ) {
 			$output .= "
 			<div id='message' class='updated'>
@@ -640,7 +640,7 @@ function my_calendar_rmdirr( $dirname ) {
  * @param array  $plugin Current plugin.
  */
 function my_calendar_backup( $process, $plugin ) {
-	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
+	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' === $plugin['plugin'] ) {
 		$to   = dirname( __FILE__ ) . '/../styles_backup/';
 		$from = dirname( __FILE__ ) . '/styles/';
 		my_calendar_copyr( $from, $to );
@@ -658,7 +658,7 @@ function my_calendar_backup( $process, $plugin ) {
  * @param array  $plugin Current plugin.
  */
 function my_calendar_recover( $process, $plugin ) {
-	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' == $plugin['plugin'] ) {
+	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' === $plugin['plugin'] ) {
 		$from = dirname( __FILE__ ) . '/../styles_backup/';
 		$to   = dirname( __FILE__ ) . '/styles/';
 		my_calendar_copyr( $from, $to );
