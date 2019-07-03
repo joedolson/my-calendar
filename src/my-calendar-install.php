@@ -116,7 +116,7 @@ function mc_globals() {
 	);
 
 	$charset_collate  = $wpdb->get_charset_collate();
-	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) == 'true' ) ? 1 : 0;
+	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) === 'true' ) ? 1 : 0;
 
 	$initial_db = 'CREATE TABLE ' . my_calendar_table() . " (
  event_id INT(11) NOT NULL AUTO_INCREMENT,

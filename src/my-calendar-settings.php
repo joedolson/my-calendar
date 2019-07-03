@@ -338,7 +338,7 @@ function my_calendar_settings() {
 		update_option( 'mc_input_options', $mc_input_options );
 		update_option( 'mc_input_options_administrators', $mc_input_options_administrators );
 		update_option( 'mc_skip_holidays', ( ! empty( $_POST['mc_skip_holidays'] ) && 'on' == $_POST['mc_skip_holidays'] ) ? 'true' : 'false' );
-		update_option( 'mc_no_fifth_week', ( ! empty( $_POST['mc_no_fifth_week'] ) && 'on' == $_POST['mc_no_fifth_week'] ) ? 'true' : 'false' );
+		update_option( 'mc_no_fifth_week', ( ! empty( $_POST['mc_no_fifth_week'] ) && 'on' === $_POST['mc_no_fifth_week'] ) ? 'true' : 'false' );
 		update_option( 'mc_event_link_expires', ( ! empty( $_POST['mc_event_link_expires'] ) && 'on' == $_POST['mc_event_link_expires'] ) ? 'true' : 'false' );
 		mc_show_notice( __( 'Input Settings saved', 'my-calendar' ) );
 	}

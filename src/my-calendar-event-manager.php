@@ -1690,7 +1690,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	}
 	if ( mc_show_edit_block( 'event_specials' ) ) {
 		$hol_checked   = ( 'true' == get_option( 'mc_skip_holidays' ) ) ? ' checked="checked"' : '';
-		$fifth_checked = ( 'true' == get_option( 'mc_no_fifth_week' ) ) ? ' checked="checked"' : '';
+		$fifth_checked = ( 'true' === get_option( 'mc_no_fifth_week' ) ) ? ' checked="checked"' : '';
 		if ( $has_data ) {
 			$hol_checked   = ( '1' == $data->event_holiday ) ? ' checked="checked"' : '';
 			$fifth_checked = ( '1' == $data->event_fifth_week ) ? ' checked="checked"' : '';
