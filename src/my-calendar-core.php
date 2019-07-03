@@ -1288,9 +1288,13 @@ function mc_is_tablet() {
 /**
  * As of version 3.0.0, this only checks for 'my-calendar', to see if this plug-in already exists.
  *
- * @return mixed int/boolean
+ * @return array
  */
 function mc_guess_calendar() {
+	$return = array(
+		'response' => false,
+		'message'  => __( 'Calendar query was not able to run.', 'my-calendar' ),
+	);
 	global $wpdb;
 	$has_uri = mc_get_uri( 'boolean' );
 	$current = mc_get_uri();
@@ -1341,7 +1345,7 @@ function mc_guess_calendar() {
 		}
 	}
 
-	return;
+	return $return;
 }
 
 /**

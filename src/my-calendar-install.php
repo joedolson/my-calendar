@@ -324,7 +324,7 @@ function mc_default_settings() {
 	update_option( 'mc_update_notice', 1 );
 	mc_add_roles();
 	$has_uri = mc_guess_calendar();
-	if ( false == $has_uri['response'] ) {
+	if ( false === $has_uri['response'] ) {
 		// if mc_guess_calendar returns a string, no valid URI was found.
 		$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 		mc_generate_calendar_page( $slug );
