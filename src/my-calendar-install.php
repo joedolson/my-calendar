@@ -383,13 +383,13 @@ function mc_migrate_db() {
 	// Step 1) check if early escapement is needed.
 	$count  = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_event_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$count2 = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	// If both tables have rows, the drop failed and this should exit.
 	if ( $count2 > 0 && $count > 0 ) {
 		return;
 	}
-	if ( 0 == $count2 && 0 == $count ) {
+	if ( 0 === $count2 && 0 === $count ) {
 		return; // No events, migration unnecessary.
 	}
-
 	// Step 2) migrate events.
 	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	foreach ( $events as $event ) {
