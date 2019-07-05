@@ -241,6 +241,10 @@ function mc_generator( $type ) {
 					<label for="months" id='lmonths'><?php _e( 'Months to show in list view', 'my-calendar' ); ?></label>
 					<input type="number" min="1" max="12" step="1" name="months" id="lmonths" value="" /><br/>
 				</p>
+				<p>
+					<label for="search" id='sterm'><?php _e( 'Search keyword', 'my-calendar' ); ?></label>
+					<input type="text" name="search" id="sterm" value="" /><br/>
+				</p>
 				<?php
 			}
 			if ( 'upcoming' == $type || 'today' == $type ) {
