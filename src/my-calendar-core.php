@@ -221,10 +221,8 @@ function my_calendar_head() {
 						$type = 'background';
 						$alt  = 'color';
 					}
-					if ( 'true' == get_option( 'mc_inverse_color' ) ) {
-						$inverse = mc_inverse_color( $color );
-						$inv     = "$alt: $inverse;";
-					}
+					$inverse = mc_inverse_color( $color );
+					$inv     = "$alt: $inverse;";
 					if ( 'font' == get_option( 'mc_apply_color' ) || 'background' == get_option( 'mc_apply_color' ) ) {
 						// always an anchor as of 1.11.0, apply also to title.
 						$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
@@ -700,6 +698,9 @@ function mc_do_upgrades( $upgrade_path ) {
 
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.1.12':
+				delete_option( 'mc_inverse_color' );
+				mc_upgrade_db();
 			case '3.0.0':
 				delete_option( 'mc_event_open' );
 				delete_option( 'mc_widget_defaults' );
@@ -721,7 +722,6 @@ function mc_do_upgrades( $upgrade_path ) {
 						'--highlight-light' => '#efefef',
 					)
 				);
-				mc_upgrade_db();
 				mc_transition_categories();
 				break;
 			case '2.4.4': // 8-11-2015 (2.4.0).
@@ -759,7 +759,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_show_rss' );
 				delete_option( 'mc_draggable' );
 				delete_option( 'mc_caching_enabled' ); // remove caching support via options. Filter only.
-				add_option( 'mc_inverse_color', 'true' );
 				break;
 			case '2.0.0': // 11/20/2012 (2.0.12).
 				mc_migrate_db();

@@ -88,6 +88,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: If plug-in name is translated, script references were broken. 
 * New filter: allow events post type to be made searchable.
 * New: Support 'search' parameter in shortcode & URL parameters for main view.
+* Remove option to disable max contrast category names. 
 
 = 3.1.12 =
 

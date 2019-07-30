@@ -255,7 +255,6 @@ function mc_default_settings() {
 	add_option( 'mc_multiple_categories', 'true' );
 	add_option( 'mc_event_link_expires', 'false' );
 	add_option( 'mc_apply_color', 'background' );
-	add_option( 'mc_inverse_color', 'true' );
 	add_option(
 		'mc_input_options',
 		array(
