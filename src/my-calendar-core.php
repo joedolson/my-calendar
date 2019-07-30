@@ -652,7 +652,7 @@ function my_calendar_check() {
 		} else {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '2.0.0', '2.2.10', '2.3.0', '2.3.11', '2.3.15', '2.4.4', '3.0.0' );
+			$valid_upgrades = array( '2.2.10', '2.3.0', '2.3.11', '2.3.15', '2.4.4', '3.0.0', '3.1.13' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $current_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -698,7 +698,7 @@ function mc_do_upgrades( $upgrade_path ) {
 
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
-			case '3.1.12':
+			case '3.1.13':
 				delete_option( 'mc_inverse_color' );
 				mc_upgrade_db();
 			case '3.0.0':
@@ -759,14 +759,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_show_rss' );
 				delete_option( 'mc_draggable' );
 				delete_option( 'mc_caching_enabled' ); // remove caching support via options. Filter only.
-				break;
-			case '2.0.0': // 11/20/2012 (2.0.12).
-				mc_migrate_db();
-				$mc_input = get_option( 'mc_input_options' );
-				if ( ! isset( $mc_input['event_specials'] ) ) {
-					$mc_input['event_specials'] = 'on';
-					update_option( 'mc_input_options', $mc_input );
-				}
 				break;
 			default:
 				break;
