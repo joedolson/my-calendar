@@ -18,7 +18,7 @@ add_action( 'template_redirect', 'my_calendar_print_view' );
  * Redirect to print view if query set.
  */
 function my_calendar_print_view() {
-	if ( isset( $_GET['cid'] ) && 'mc-print-view' == $_GET['cid'] ) {
+	if ( isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid'] ) {
 		echo my_calendar_print();
 		exit;
 	}
