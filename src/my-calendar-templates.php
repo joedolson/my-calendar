@@ -508,7 +508,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['event_span'] = $event->event_span;
 
 	// RSS guid.
-	$e['guid'] = "<guid isPermaLink='true'>" . esc_url( $e_link ) . "</guid>";
+	$e['guid'] = "<guid isPermaLink='true'>" . esc_url( $e_link ) . '</guid>';
 
 	// ICAL.
 	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );

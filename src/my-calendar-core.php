@@ -701,6 +701,7 @@ function mc_do_upgrades( $upgrade_path ) {
 			case '3.1.13':
 				delete_option( 'mc_inverse_color' );
 				mc_upgrade_db();
+				break;
 			case '3.0.0':
 				delete_option( 'mc_event_open' );
 				delete_option( 'mc_widget_defaults' );
