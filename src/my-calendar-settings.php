@@ -107,7 +107,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			break;
 	}
 
-	if ( true == $echo ) {
+	if ( true === $echo ) {
 		echo $return;
 	} else {
 		return $return;
@@ -118,13 +118,13 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
  * Display the admin configuration page
  */
 function my_calendar_import() {
-	if ( 'true' != get_option( 'ko_calendar_imported' ) ) {
+	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		global $wpdb;
 		$events         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar', 'ARRAY_A' );
 		$event_ids      = array();
 		$events_results = false;
 		foreach ( $events as $key ) {
-			$endtime        = ( '00:00:00' == $key['event_time'] ) ? '00:00:00' : date( 'H:i:s', strtotime( "$key[event_time] +1 hour" ) );
+			$endtime        = ( '00:00:00' === $key['event_time'] ) ? '00:00:00' : date( 'H:i:s', strtotime( "$key[event_time] +1 hour" ) );
 			$data           = array(
 				'event_title'    => $key['event_title'],
 				'event_desc'     => $key['event_desc'],
@@ -200,9 +200,9 @@ function my_calendar_settings() {
 	if ( isset( $_POST['mc_manage'] ) ) {
 		// Management.
 		$clear          = '';
-		$mc_api_enabled = ( ! empty( $_POST['mc_api_enabled'] ) && 'on' == $_POST['mc_api_enabled'] ) ? 'true' : 'false';
-		$mc_remote      = ( ! empty( $_POST['mc_remote'] ) && 'on' == $_POST['mc_remote'] ) ? 'true' : 'false';
-		$mc_drop_tables = ( ! empty( $_POST['mc_drop_tables'] ) && 'on' == $_POST['mc_drop_tables'] ) ? 'true' : 'false';
+		$mc_api_enabled = ( ! empty( $_POST['mc_api_enabled'] ) && 'on' === $_POST['mc_api_enabled'] ) ? 'true' : 'false';
+		$mc_remote      = ( ! empty( $_POST['mc_remote'] ) && 'on' === $_POST['mc_remote'] ) ? 'true' : 'false';
+		$mc_drop_tables = ( ! empty( $_POST['mc_drop_tables'] ) && 'on' === $_POST['mc_drop_tables'] ) ? 'true' : 'false';
 		// Handle My Calendar primary URL.
 		$mc_uri = get_option( 'mc_uri' );
 		if ( isset( $_POST['mc_uri'] ) && ! isset( $_POST['mc_uri_id'] ) ) {
@@ -262,15 +262,15 @@ function my_calendar_settings() {
 		$permalinks      = get_option( 'mc_use_permalinks' );
 		$mc_open_day_uri = ( ! empty( $_POST['mc_open_day_uri'] ) ) ? $_POST['mc_open_day_uri'] : '';
 		update_option( 'mc_use_permalinks', ( ! empty( $_POST['mc_use_permalinks'] ) ) ? 'true' : 'false' );
-		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' == $_POST['mc_open_uri'] && '' != get_option( 'mc_uri' ) ) ? 'true' : 'false' );
-		update_option( 'mc_no_link', ( ! empty( $_POST['mc_no_link'] ) && 'on' == $_POST['mc_no_link'] ) ? 'true' : 'false' );
+		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' === $_POST['mc_open_uri'] && '' != get_option( 'mc_uri' ) ) ? 'true' : 'false' );
+		update_option( 'mc_no_link', ( ! empty( $_POST['mc_no_link'] ) && 'on' === $_POST['mc_no_link'] ) ? 'true' : 'false' );
 		update_option( 'mc_mini_uri', $_POST['mc_mini_uri'] );
 		update_option( 'mc_open_day_uri', $mc_open_day_uri );
-		update_option( 'mc_display_author', ( ! empty( $_POST['mc_display_author'] ) && 'on' == $_POST['mc_display_author'] ) ? 'true' : 'false' );
-		update_option( 'mc_show_event_vcal', ( ! empty( $_POST['mc_show_event_vcal'] ) && 'on' == $_POST['mc_show_event_vcal'] ) ? 'true' : 'false' );
-		update_option( 'mc_show_gcal', ( ! empty( $_POST['mc_show_gcal'] ) && 'on' == $_POST['mc_show_gcal'] ) ? 'true' : 'false' );
-		update_option( 'mc_show_list_info', ( ! empty( $_POST['mc_show_list_info'] ) && 'on' == $_POST['mc_show_list_info'] ) ? 'true' : 'false' );
-		update_option( 'mc_show_list_events', ( ! empty( $_POST['mc_show_list_events'] ) && 'on' == $_POST['mc_show_list_events'] ) ? 'true' : 'false' );
+		update_option( 'mc_display_author', ( ! empty( $_POST['mc_display_author'] ) && 'on' === $_POST['mc_display_author'] ) ? 'true' : 'false' );
+		update_option( 'mc_show_event_vcal', ( ! empty( $_POST['mc_show_event_vcal'] ) && 'on' === $_POST['mc_show_event_vcal'] ) ? 'true' : 'false' );
+		update_option( 'mc_show_gcal', ( ! empty( $_POST['mc_show_gcal'] ) && 'on' === $_POST['mc_show_gcal'] ) ? 'true' : 'false' );
+		update_option( 'mc_show_list_info', ( ! empty( $_POST['mc_show_list_info'] ) && 'on' === $_POST['mc_show_list_info'] ) ? 'true' : 'false' );
+		update_option( 'mc_show_list_events', ( ! empty( $_POST['mc_show_list_events'] ) && 'on' === $_POST['mc_show_list_events'] ) ? 'true' : 'false' );
 		update_option( 'mc_show_months', (int) $_POST['mc_show_months'] );
 		// Calculate sequence for navigation elements.
 		$top    = array();
@@ -278,16 +278,16 @@ function my_calendar_settings() {
 		$nav    = $_POST['mc_nav'];
 		$set    = 'top';
 		foreach ( $nav as $n ) {
-			if ( 'calendar' == $n ) {
+			if ( 'calendar' === $n ) {
 				$set = 'bottom';
 			} else {
-				if ( 'top' == $set ) {
+				if ( 'top' === $set ) {
 					$top[] = $n;
 				} else {
 					$bottom[] = $n;
 				}
 			}
-			if ( 'stop' == $n ) {
+			if ( 'stop' === $n ) {
 				break;
 			}
 		}
@@ -295,21 +295,21 @@ function my_calendar_settings() {
 		$bottom = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
 		update_option( 'mc_bottomnav', $bottom );
 		update_option( 'mc_topnav', $top );
-		update_option( 'mc_show_map', ( ! empty( $_POST['mc_show_map'] ) && 'on' == $_POST['mc_show_map'] ) ? 'true' : 'false' );
-		update_option( 'mc_gmap', ( ! empty( $_POST['mc_gmap'] ) && 'on' == $_POST['mc_gmap'] ) ? 'true' : 'false' );
+		update_option( 'mc_show_map', ( ! empty( $_POST['mc_show_map'] ) && 'on' === $_POST['mc_show_map'] ) ? 'true' : 'false' );
+		update_option( 'mc_gmap', ( ! empty( $_POST['mc_gmap'] ) && 'on' === $_POST['mc_gmap'] ) ? 'true' : 'false' );
 		update_option( 'mc_gmap_api_key', ( ! empty( $_POST['mc_gmap_api_key'] ) ) ? strip_tags( $_POST['mc_gmap_api_key'] ) : '' );
-		update_option( 'mc_show_address', ( ! empty( $_POST['mc_show_address'] ) && 'on' == $_POST['mc_show_address'] ) ? 'true' : 'false' );
-		update_option( 'mc_display_more', ( ! empty( $_POST['mc_display_more'] ) && 'on' == $_POST['mc_display_more'] ) ? 'true' : 'false' );
-		update_option( 'mc_event_registration', ( ! empty( $_POST['mc_event_registration'] ) && 'on' == $_POST['mc_event_registration'] ) ? 'true' : 'false' );
-		update_option( 'mc_short', ( ! empty( $_POST['mc_short'] ) && 'on' == $_POST['mc_short'] ) ? 'true' : 'false' );
-		update_option( 'mc_desc', ( ! empty( $_POST['mc_desc'] ) && 'on' == $_POST['mc_desc'] ) ? 'true' : 'false' );
-		update_option( 'mc_process_shortcodes', ( ! empty( $_POST['mc_process_shortcodes'] ) && 'on' == $_POST['mc_process_shortcodes'] ) ? 'true' : 'false' );
-		update_option( 'mc_event_link', ( ! empty( $_POST['mc_event_link'] ) && 'on' == $_POST['mc_event_link'] ) ? 'true' : 'false' );
-		update_option( 'mc_image', ( ! empty( $_POST['mc_image'] ) && 'on' == $_POST['mc_image'] ) ? 'true' : 'false' );
-		update_option( 'mc_show_weekends', ( ! empty( $_POST['mc_show_weekends'] ) && 'on' == $_POST['mc_show_weekends'] ) ? 'true' : 'false' );
-		update_option( 'mc_title', ( ! empty( $_POST['mc_title'] ) && 'on' == $_POST['mc_title'] ) ? 'true' : 'false' );
+		update_option( 'mc_show_address', ( ! empty( $_POST['mc_show_address'] ) && 'on' === $_POST['mc_show_address'] ) ? 'true' : 'false' );
+		update_option( 'mc_display_more', ( ! empty( $_POST['mc_display_more'] ) && 'on' === $_POST['mc_display_more'] ) ? 'true' : 'false' );
+		update_option( 'mc_event_registration', ( ! empty( $_POST['mc_event_registration'] ) && 'on' === $_POST['mc_event_registration'] ) ? 'true' : 'false' );
+		update_option( 'mc_short', ( ! empty( $_POST['mc_short'] ) && 'on' === $_POST['mc_short'] ) ? 'true' : 'false' );
+		update_option( 'mc_desc', ( ! empty( $_POST['mc_desc'] ) && 'on' === $_POST['mc_desc'] ) ? 'true' : 'false' );
+		update_option( 'mc_process_shortcodes', ( ! empty( $_POST['mc_process_shortcodes'] ) && 'on' === $_POST['mc_process_shortcodes'] ) ? 'true' : 'false' );
+		update_option( 'mc_event_link', ( ! empty( $_POST['mc_event_link'] ) && 'on' === $_POST['mc_event_link'] ) ? 'true' : 'false' );
+		update_option( 'mc_image', ( ! empty( $_POST['mc_image'] ) && 'on' === $_POST['mc_image'] ) ? 'true' : 'false' );
+		update_option( 'mc_show_weekends', ( ! empty( $_POST['mc_show_weekends'] ) && 'on' === $_POST['mc_show_weekends'] ) ? 'true' : 'false' );
+		update_option( 'mc_title', ( ! empty( $_POST['mc_title'] ) && 'on' === $_POST['mc_title'] ) ? 'true' : 'false' );
 		update_option( 'mc_convert', ( ! empty( $_POST['mc_convert'] ) ) ? $_POST['mc_convert'] : 'false' );
-		if ( ( isset( $_POST['mc_use_permalinks'] ) && 'true' == get_option( 'mc_use_permalinks' ) ) && 'true' != $permalinks ) {
+		if ( ( isset( $_POST['mc_use_permalinks'] ) && 'true' === get_option( 'mc_use_permalinks' ) ) && 'true' !== $permalinks ) {
 			$url = admin_url( 'options-permalink.php#mc_cpt_base' );
 			// Translators: URL to permalink settings page.
 			$note = ' ' . sprintf( __( 'You activated My Calendar permalinks. Go to <a href="%s">permalink settings</a> to set the base URL for My Calendar Events.', 'my-calendar' ), $url );
@@ -320,7 +320,7 @@ function my_calendar_settings() {
 	}
 	// INPUT.
 	if ( isset( $_POST['mc_input'] ) ) {
-		$mc_input_options_administrators = ( ! empty( $_POST['mc_input_options_administrators'] ) && 'on' == $_POST['mc_input_options_administrators'] ) ? 'true' : 'false';
+		$mc_input_options_administrators = ( ! empty( $_POST['mc_input_options_administrators'] ) && 'on' === $_POST['mc_input_options_administrators'] ) ? 'true' : 'false';
 		$mc_input_options                = array(
 			'event_short'             => ( ! empty( $_POST['mci_event_short'] ) && $_POST['mci_event_short'] ) ? 'on' : 'off',
 			'event_desc'              => ( ! empty( $_POST['mci_event_desc'] ) && $_POST['mci_event_desc'] ) ? 'on' : 'off',
@@ -337,9 +337,9 @@ function my_calendar_settings() {
 		);
 		update_option( 'mc_input_options', $mc_input_options );
 		update_option( 'mc_input_options_administrators', $mc_input_options_administrators );
-		update_option( 'mc_skip_holidays', ( ! empty( $_POST['mc_skip_holidays'] ) && 'on' == $_POST['mc_skip_holidays'] ) ? 'true' : 'false' );
+		update_option( 'mc_skip_holidays', ( ! empty( $_POST['mc_skip_holidays'] ) && 'on' === $_POST['mc_skip_holidays'] ) ? 'true' : 'false' );
 		update_option( 'mc_no_fifth_week', ( ! empty( $_POST['mc_no_fifth_week'] ) && 'on' === $_POST['mc_no_fifth_week'] ) ? 'true' : 'false' );
-		update_option( 'mc_event_link_expires', ( ! empty( $_POST['mc_event_link_expires'] ) && 'on' == $_POST['mc_event_link_expires'] ) ? 'true' : 'false' );
+		update_option( 'mc_event_link_expires', ( ! empty( $_POST['mc_event_link_expires'] ) && 'on' === $_POST['mc_event_link_expires'] ) ? 'true' : 'false' );
 		mc_show_notice( __( 'Input Settings saved', 'my-calendar' ) );
 	}
 	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
@@ -387,8 +387,8 @@ function my_calendar_settings() {
 	}
 	// Mail function by Roland.
 	if ( isset( $_POST['mc_email'] ) ) {
-		$mc_event_mail         = ( ! empty( $_POST['mc_event_mail'] ) && 'on' == $_POST['mc_event_mail'] ) ? 'true' : 'false';
-		$mc_html_email         = ( ! empty( $_POST['mc_html_email'] ) && 'on' == $_POST['mc_html_email'] ) ? 'true' : 'false';
+		$mc_event_mail         = ( ! empty( $_POST['mc_event_mail'] ) && 'on' === $_POST['mc_event_mail'] ) ? 'true' : 'false';
+		$mc_html_email         = ( ! empty( $_POST['mc_html_email'] ) && 'on' === $_POST['mc_html_email'] ) ? 'true' : 'false';
 		$mc_event_mail_to      = $_POST['mc_event_mail_to'];
 		$mc_event_mail_from    = $_POST['mc_event_mail_from'];
 		$mc_event_mail_subject = $_POST['mc_event_mail_subject'];
@@ -422,14 +422,14 @@ function my_calendar_settings() {
 	<div class="mc-tabs settings postbox-container jcd-wide">
 	<div class="metabox-holder">
 	<?php
-	if ( isset( $_POST['import'] ) && 'true' == $_POST['import'] ) {
+	if ( isset( $_POST['import'] ) && 'true' === $_POST['import'] ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
 		my_calendar_import();
 	}
-	if ( 'true' != get_option( 'ko_calendar_imported' ) ) {
+	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		if ( function_exists( 'check_calendar' ) ) {
 			?>
 			<div class='import upgrade-db'>
@@ -559,7 +559,7 @@ function my_calendar_settings() {
 								</li>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
-								if ( 'true' == get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
+								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
 									?>
 								<li><?php _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ); ?>
 <pre>
@@ -578,7 +578,7 @@ function mc_remote_db() {
 								<li><?php mc_settings_field( 'remigrate', __( 'Re-generate event occurrences table.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
-								if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() != my_calendar_table( 'global' ) ) {
+								if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
 									mc_settings_field(
 										'mc_current_table',
 										array(
@@ -591,7 +591,7 @@ function mc_remote_db() {
 										'radio'
 									);
 								} else {
-									if ( get_option( 'mc_remote' ) != 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
+									if ( get_option( 'mc_remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
 										?>
 										<li><?php _e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
 										<?php
@@ -748,7 +748,7 @@ function mc_remote_db() {
 							$v = ( isset( $nav_elements[ $k ] ) ) ? $nav_elements[ $k ] : false;
 							if ( false !== $v ) {
 								$inserted[ $k ] = $v;
-								if ( 'stop' == $k ) {
+								if ( 'stop' === $k ) {
 									$label = 'hide';
 								} else {
 									$label = $k;
@@ -885,7 +885,7 @@ function mc_remote_db() {
 								$input_options = get_option( 'mc_input_options' );
 							}
 							foreach ( $input_options as $key => $value ) {
-								$checked = ( 'on' == $value ) ? "checked='checked'" : '';
+								$checked = ( 'on' === $value ) ? "checked='checked'" : '';
 								if ( isset( $input_labels[ $key ] ) ) {
 									$output .= "<li><input type='checkbox' id='mci_$key' name='mci_$key' $checked /> <label for='mci_$key'>$input_labels[$key]</label></li>";
 								}
@@ -989,7 +989,7 @@ function mc_remote_db() {
 			'mc_view_help'      => __( 'View Help', 'my-calendar' ),
 		);
 		foreach ( $roles as $role => $rolename ) {
-			if ( 'administrator' == $role ) {
+			if ( 'administrator' === $role ) {
 				continue;
 			}
 			$role_container .= "<div class='mc_$role mc_permissions' id='container_mc_$role'><fieldset id='mc_$role' class='roles'><legend>$rolename</legend>";
