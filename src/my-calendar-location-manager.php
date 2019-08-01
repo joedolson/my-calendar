@@ -118,8 +118,8 @@ function mc_manage_locations() {
 	if ( isset( $_POST['mcl'] ) ) {
 		$query   = $_POST['mcl'];
 		$db_type = mc_get_db_type();
-		if ( '' != $query ) {
-			if ( 'MyISAM' == $db_type ) {
+		if ( '' !== $query ) {
+			if ( 'MyISAM' === $db_type ) {
 				$query  = esc_sql( $query ); // Prepare query.
 				$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label,location_city,location_state,location_region,location_street,location_street2,location_phone' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 			} else {
@@ -225,7 +225,7 @@ function mc_manage_locations() {
 			<?php
 			$class = '';
 			foreach ( $locations as $location ) {
-				$class = ( 'alternate' == $class ) ? '' : 'alternate';
+				$class = ( 'alternate' === $class ) ? '' : 'alternate';
 				?>
 				<tr class="<?php echo $class; ?>">
 					<th scope="row">
