@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) ) {
-		if ( 'true' == get_option( 'mc_api_enabled' ) ) {
+		if ( 'true' === get_option( 'mc_api_enabled' ) ) {
 			// use this filter to add custom scripting handling API keys.
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
@@ -273,7 +273,7 @@ function mc_format_rss( $events ) {
 			{guid}
 		  </item>' . PHP_EOL;
 
-		if ( get_option( 'mc_use_rss_template' ) == 1 ) {
+		if ( get_option( 'mc_use_rss_template' ) === '1' ) {
 			$template = mc_get_template( 'rss' );
 		}
 
@@ -453,7 +453,7 @@ function mc_api_format_ical( $data ) {
 		}
 	}
 	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
-	if ( ! ( isset( $_GET['sync'] ) && 'true' == $_GET['sync'] ) ) {
+	if ( ! ( isset( $_GET['sync'] ) && 'true' === $_GET['sync'] ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
 		header( 'Pragma: no-cache' );
@@ -531,8 +531,8 @@ function mc_generate_alert_ical( $alarm ) {
 	$values = array_merge( $defaults, $alarm );
 	$alert  = PHP_EOL . 'BEGIN:VALARM' . PHP_EOL;
 	$alert .= "TRIGGER:$values[TRIGGER]\n";
-	$alert .= ( 0 != $values['REPEAT'] ) ? "REPEAT:$values[REPEAT]\n" : '';
-	$alert .= ( '' != $values['DURATION'] ) ? "REPEAT:$values[DURATION]\n" : '';
+	$alert .= ( '0' !== $values['REPEAT'] ) ? "REPEAT:$values[REPEAT]\n" : '';
+	$alert .= ( '' !== $values['DURATION'] ) ? "REPEAT:$values[DURATION]\n" : '';
 	$alert .= "ACTION:$values[ACTION]\n";
 	$alert .= "DESCRIPTION:$values[DESCRIPTION]\n";
 	$alert .= 'END:VALARM';

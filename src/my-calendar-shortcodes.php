@@ -47,7 +47,7 @@ function my_calendar_insert( $atts, $content = null ) {
 		'my_calendar'
 	);
 
-	if ( 'mini' != $args['format'] ) {
+	if ( 'mini' !== $args['format'] ) {
 		if ( isset( $_GET['format'] ) ) {
 			$args['format'] = $_GET['format'];
 		}
@@ -58,10 +58,10 @@ function my_calendar_insert( $atts, $content = null ) {
 	}
 
 	global $user_ID;
-	if ( 'current' == $args['author'] ) {
+	if ( 'current' === $args['author'] ) {
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'main' );
 	}
-	if ( 'current' == $args['host'] ) {
+	if ( 'current' === $args['host'] ) {
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'main' );
 	}
 
@@ -100,10 +100,10 @@ function my_calendar_insert_upcoming( $atts ) {
 	);
 
 	global $user_ID;
-	if ( 'current' == $args['author'] ) {
+	if ( 'current' === $args['author'] ) {
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'upcoming' );
 	}
-	if ( 'current' == $args['host'] ) {
+	if ( 'current' === $args['host'] ) {
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'upcoming' );
 	}
 
@@ -133,10 +133,10 @@ function my_calendar_insert_today( $atts ) {
 	);
 
 	global $user_ID;
-	if ( 'current' == $args['author'] ) {
+	if ( 'current' === $args['author'] ) {
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'today' );
 	}
-	if ( 'current' == $args['host'] ) {
+	if ( 'current' === $args['host'] ) {
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'today' );
 	}
 
