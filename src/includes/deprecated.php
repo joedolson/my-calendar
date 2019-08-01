@@ -12,7 +12,7 @@
 
 // Define the table constants used in My Calendar in case anybody is still using them.
 // These were eliminated some time ago.
-if ( is_multisite() && get_site_option( 'mc_multisite_show' ) == 1 ) {
+if ( is_multisite() && get_site_option( 'mc_multisite_show' ) === '1' ) {
 	define( 'MY_CALENDAR_TABLE', $wpdb->base_prefix . 'my_calendar' );
 	define( 'MY_CALENDAR_EVENTS_TABLE', $wpdb->base_prefix . 'my_calendar_events' );
 	define( 'MY_CALENDAR_CATEGORIES_TABLE', $wpdb->base_prefix . 'my_calendar_categories' );
@@ -165,7 +165,8 @@ function my_calendar_is_odd( $int ) {
  * @return string label
  */
 function mc_event_repeats_forever( $recur, $repeats ) {
-	if ( 'S' != $recur && 0 == $repeats ) {
+	$repeats = absint( $repeats );
+	if ( 'S' !== $recur && 0 === $repeats ) {
 		return true;
 	}
 	switch ( $recur ) {
@@ -173,20 +174,20 @@ function mc_event_repeats_forever( $recur, $repeats ) {
 			return false;
 			break;
 		case 'D': // daily.
-			return ( 500 == $repeats ) ? true : false;
+			return ( 500 === $repeats ) ? true : false;
 			break;
 		case 'W': // weekly.
-			return ( 240 == $repeats ) ? true : false;
+			return ( 240 === $repeats ) ? true : false;
 			break;
 		case 'B': // biweekly.
-			return ( 120 == $repeats ) ? true : false;
+			return ( 120 === $repeats ) ? true : false;
 			break;
 		case 'M': // monthly.
 		case 'U':
-			return ( 60 == $repeats ) ? true : false;
+			return ( 60 === $repeats ) ? true : false;
 			break;
 		case 'Y':
-			return ( 5 == $repeats ) ? true : false;
+			return ( 5 === $repeats ) ? true : false;
 			break;
 		default:
 			return false;
@@ -201,10 +202,10 @@ if ( ! function_exists( 'is_ssl' ) ) {
 	 */
 	function is_ssl() {
 		if ( isset( $_SERVER['HTTPS'] ) ) {
-			if ( 'on' == strtolower( $_SERVER['HTTPS'] ) ) {
+			if ( 'on' === strtolower( $_SERVER['HTTPS'] ) ) {
 				return true;
 			}
-			if ( '1' == $_SERVER['HTTPS'] ) {
+			if ( '1' === $_SERVER['HTTPS'] ) {
 				return true;
 			}
 		} elseif ( isset( $_SERVER['SERVER_PORT'] ) && ( '443' == $_SERVER['SERVER_PORT'] ) ) {
@@ -241,7 +242,7 @@ function jd_draw_template( $array, $template, $type = 'list' ) {
  * @return boolean
  */
 function mc_dates_consecutive( $current, $last_date ) {
-	if ( strtotime( $last_date . '+ 1 day' ) == strtotime( $current ) ) {
+	if ( strtotime( $last_date . '+ 1 day' ) === strtotime( $current ) ) {
 
 		return true;
 	} else {
@@ -260,7 +261,7 @@ function mc_dates_consecutive( $current, $last_date ) {
 function my_calendar_reverse_datetime_cmp( $b, $a ) {
 	$event_dt_a = strtotime( $a->occur_begin );
 	$event_dt_b = strtotime( $b->occur_begin );
-	if ( $event_dt_a == $event_dt_b ) {
+	if ( $event_dt_a === $event_dt_b ) {
 		return 0;
 	}
 
@@ -302,7 +303,7 @@ function jd_date_diff( $start, $end = 'NOW' ) {
  */
 function get_week_date( $week, $year ) {
 	// Get the target week of the year with reference to the starting day of the year.
-	$start_of_week = ( get_option( 'start_of_week' ) == 1 || get_option( 'start_of_week' ) == 0 ) ? get_option( 'start_of_week' ) : 0;
+	$start_of_week = ( get_option( 'start_of_week' ) === '1' || get_option( 'start_of_week' ) === '0' ) ? get_option( 'start_of_week' ) : 0;
 	$target_week   = strtotime( "$week week", strtotime( "1 January $year" ) );
 	$date_info     = getdate( $target_week );
 	$day_of_week   = $date_info['wday'];

@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_dateclass( $current ) {
 	$now      = current_time( 'timestamp' );
 	$dayclass = sanitize_html_class( strtolower( date_i18n( 'l', $current ) ) ) . ' ' . sanitize_html_class( strtolower( date_i18n( 'D', $current ) ) );
-	if ( date( 'Ymd', $now ) == date( 'Ymd', $current ) ) {
+	if ( date( 'Ymd', $now ) === date( 'Ymd', $current ) ) {
 		$dateclass = 'current-day';
 	} elseif ( my_calendar_date_comp( date( 'Y-m-d', $now ), date( 'Y-m-d', $current ) ) ) {
 		$dateclass = 'future-day';
@@ -103,7 +103,7 @@ function my_calendar_date_equal( $early, $late ) {
 	// convert full datetime to date only.
 	$firstdate = strtotime( date( 'Y-m-d', strtotime( $early ) ) );
 	$lastdate  = strtotime( date( 'Y-m-d', strtotime( $late ) ) );
-	if ( $firstdate == $lastdate ) {
+	if ( $firstdate === $lastdate ) {
 
 		return true;
 	} else {
@@ -121,7 +121,7 @@ function my_calendar_date_equal( $early, $late ) {
  * @return int (ternary value)
  */
 function mc_time_cmp( $a, $b ) {
-	if ( $a->occur_begin == $b->occur_begin ) {
+	if ( $a->occur_begin === $b->occur_begin ) {
 
 		return 0;
 	}
@@ -140,7 +140,7 @@ function mc_time_cmp( $a, $b ) {
 function mc_datetime_cmp( $a, $b ) {
 	$event_dt_a = strtotime( $a->occur_begin );
 	$event_dt_b = strtotime( $b->occur_begin );
-	if ( $event_dt_a == $event_dt_b ) {
+	if ( $event_dt_a === $event_dt_b ) {
 		// this should sub-sort by title if date is the same. But it doesn't seem to.
 		$ta = $a->event_title;
 		$tb = $b->event_title;
@@ -167,7 +167,7 @@ function mc_timediff_cmp( $a, $b ) {
 	$diff_a     = mc_date_diff_precise( $event_dt_a );
 	$diff_b     = mc_date_diff_precise( $event_dt_b );
 
-	if ( $diff_a == $diff_b ) {
+	if ( $diff_a === $diff_b ) {
 		return 0;
 	}
 
@@ -183,7 +183,7 @@ function mc_timediff_cmp( $a, $b ) {
  * @return absolute time diff
  */
 function mc_date_diff_precise( $start, $end = 'NOW' ) {
-	if ( 'NOW' == $end ) {
+	if ( 'NOW' === $end ) {
 		$end = strtotime( 'NOW' );
 	}
 	$sdate = $start;
@@ -248,7 +248,7 @@ function mc_checkdate( $date ) {
  * @return array day and month
  */
 function mc_first_day_of_week( $date = false ) {
-	$start_of_week = ( get_option( 'start_of_week' ) == 1 || get_option( 'start_of_week' ) == 0 ) ? get_option( 'start_of_week' ) : 0;
+	$start_of_week = ( get_option( 'start_of_week' ) === '1' || get_option( 'start_of_week' ) === '0' ) ? absint( get_option( 'start_of_week' ) ) : 0;
 	if ( $date ) {
 		$today = date( 'w', $date );
 		$now   = date( 'Y-m-d', $date );
@@ -260,30 +260,30 @@ function mc_first_day_of_week( $date = false ) {
 	$sub   = 0; // don't change month.
 	switch ( $today ) {
 		case 1:
-			$sub = ( 1 == $start_of_week ) ? 0 : 1;
+			$sub = ( 1 === $start_of_week ) ? 0 : 1;
 			break; // mon.
 		case 2:
-			$sub = ( 1 == $start_of_week ) ? 1 : 2;
+			$sub = ( 1 === $start_of_week ) ? 1 : 2;
 			break; // tues.
 		case 3:
-			$sub = ( 1 == $start_of_week ) ? 2 : 3;
+			$sub = ( 1 === $start_of_week ) ? 2 : 3;
 			break; // wed.
 		case 4:
-			$sub = ( 1 == $start_of_week ) ? 3 : 4;
+			$sub = ( 1 === $start_of_week ) ? 3 : 4;
 			break; // thu.
 		case 5:
-			$sub = ( 1 == $start_of_week ) ? 4 : 5;
+			$sub = ( 1 === $start_of_week ) ? 4 : 5;
 			break; // fri.
 		case 6:
-			$sub = ( 1 == $start_of_week ) ? 5 : 6;
+			$sub = ( 1 === $start_of_week ) ? 5 : 6;
 			break; // sat.
 		case 0:
-			$sub = ( 1 == $start_of_week ) ? 6 : 0;
+			$sub = ( 1 === $start_of_week ) ? 6 : 0;
 			break; // sun.
 	}
 	$day = date( 'j', strtotime( $now . ' -' . $sub . ' day' ) );
-	if ( 0 != $sub ) {
-		if ( date( 'n', strtotime( $now . ' -' . $sub . ' day' ) ) != date( 'n', strtotime( $now ) ) ) {
+	if ( 0 !== $sub ) {
+		if ( date( 'n', strtotime( $now . ' -' . $sub . ' day' ) ) !== date( 'n', strtotime( $now ) ) ) {
 			$month = - 1;
 		} else {
 			$month = 0;
@@ -344,7 +344,7 @@ function mc_name_days( $format ) {
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Friday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Friday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>',
 	);
-	if ( 'mini' == $format ) {
+	if ( 'mini' === $format ) {
 		// PHP doesn't have a single letter abbreviation, so this has to be a translatable.
 		$name_days = array(
 			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
@@ -380,10 +380,10 @@ function mc_exit_early( $event, $process_date ) {
 	$end       = date( 'Y-m-d', strtotime( $event->occur_end ) );
 	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing.
 	// or if event started yesterday & has event_hide_end checked.
-	$ends_at_midnight = ( '00:00:00' == $event->event_endtime && $end == $process_date && $current != $today ) ? true : false;
+	$ends_at_midnight = ( '00:00:00' === $event->event_endtime && $end === $process_date && $current !== $today ) ? true : false;
 
 	// hides events if hiding end time & not first day.
-	$hide_day_two = ( $hide_days && ( $today != $current ) ) ? true : false;
+	$hide_day_two = ( $hide_days && ( $today !== $current ) ) ? true : false;
 
 	if ( $ends_at_midnight || $hide_day_two ) {
 		return true;
@@ -404,7 +404,7 @@ function mc_exit_early( $event, $process_date ) {
  * @return boolean
  */
 function mc_private_event( $event ) {
-	$status = ( 1 == $event->category_private && ! is_user_logged_in() ) ? true : false;
+	$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
 	// custom filter to grant custom reasons for exiting.
 	// $event may not be an event object; in some cases it's a category object.
 	$status = apply_filters( 'mc_private_event', $status, $event );
