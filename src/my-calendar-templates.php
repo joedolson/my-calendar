@@ -764,8 +764,9 @@ function mc_duration( $event ) {
  * @return string
  */
 function mc_event_link( $event ) {
+	$link = '';
 	if ( ! is_object( $event ) ) {
-		return;
+		return $link;
 	}
 	$expired = mc_event_expired( $event );
 	if ( 0 == $event->event_link_expires ) {
