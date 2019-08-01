@@ -673,7 +673,7 @@ function mc_category_class( $object, $prefix ) {
 function mc_show_details( $time, $type ) {
 	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
-	return ( ( 'calendar' == $type && 'true' == get_option( 'mc_open_uri' ) && 'day' != $time ) || $no_link ) ? false : true;
+	return ( ( 'calendar' === $type && 'true' === get_option( 'mc_open_uri' ) && 'day' !== $time ) || $no_link ) ? false : true;
 }
 
 add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
@@ -690,14 +690,14 @@ add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
 function mc_edit_panel( $html, $event, $type, $time ) {
 	// Create edit links.
 	$edit = '';
-	if ( mc_can_edit_event( $event ) && get_option( 'mc_remote' ) != 'true' ) {
+	if ( mc_can_edit_event( $event ) && get_option( 'mc_remote' ) !== 'true' ) {
 		$mc_id     = $event->occur_id;
 		$groupedit = ( 0 != $event->event_group_id ) ? " &bull; <a href='" . admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . "</a>\n" : '';
 		$recurs    = str_split( $event->event_recur, 1 );
 		$recur     = $recurs[0];
 		$referer   = urlencode( mc_get_current_url() );
 		$edit      = "<div class='mc_edit_links'><p>";
-		if ( 'S' == $recur ) {
+		if ( 'S' === $recur ) {
 			$edit .= "<a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . "</a>$groupedit";
 		} else {
 			$edit .= "<a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;date=$mc_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit All', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;date=$mc_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete All', 'my-calendar' ) . "</a>
@@ -723,7 +723,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
  * @return string HTML output.
  */
 function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $date = array() ) {
-	if ( 'week' == $time ) {
+	if ( 'week' === $time ) {
 		return '';
 	}
 	global $wpdb;
@@ -731,7 +731,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$c_month = isset( $date['month'] ) ? $date['month'] : date( 'n', current_time( 'timestamp' ) );
 	$c_year  = isset( $date['year'] ) ? $date['year'] : date( 'Y', current_time( 'timestamp' ) );
 	$c_day   = isset( $date['day'] ) ? $date['day'] : date( 'j', current_time( 'timestamp' ) );
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$current_url    = mc_get_current_url();
@@ -751,12 +751,12 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		} else {
 			$argument = esc_attr( strip_tags( $argument ) );
 		}
-		if ( 'month' != $name && 'yr' != $name && 'dy' != $name ) {
+		if ( 'month' !== $name && 'yr' !== $name && 'dy' !== $name ) {
 			$date_switcher .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />';
 		}
 	}
 	$day_switcher = '';
-	if ( 'day' == $time ) {
+	if ( 'day' === $time ) {
 		$day_switcher = ' <label class="maybe-hide" for="' . $cid . '-day">' . __( 'Day', 'my-calendar' ) . '</label> <select id="' . $cid . '-day" name="dy">' . "\n";
 		for ( $i = 1; $i <= 31; $i++ ) {
 			$day_switcher .= "<option value='$i'" . selected( $i, $c_day, false ) . '>' . $i . '</option>' . "\n";
@@ -816,7 +816,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
  * @return string HTML output
  */
 function mc_format_toggle( $format, $toggle, $time ) {
-	if ( 'mini' != $format && 'yes' == $toggle ) {
+	if ( 'mini' !== $format && 'yes' === $toggle ) {
 		$toggle = "<div class='mc-format'>";
 		switch ( $format ) {
 			case 'list':
@@ -833,11 +833,11 @@ function mc_format_toggle( $format, $toggle, $time ) {
 		$toggle = '';
 	}
 
-	if ( 'day' == $time ) {
+	if ( 'day' === $time ) {
 		$toggle = "<div class='mc-format'><span class='mc-active list'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</span></div>';
 	}
 
-	if ( ( 'true' == get_option( 'mc_convert' ) || 'mini' == get_option( 'mc_convert' ) ) && mc_is_mobile() ) {
+	if ( ( 'true' === get_option( 'mc_convert' ) || 'mini' === get_option( 'mc_convert' ) ) && mc_is_mobile() ) {
 		$toggle = '';
 	}
 
@@ -862,7 +862,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( isset( $_GET['dy'] ) ) {
 		$current_day = absint( $_GET['dy'] );
 		$current_set = mktime( 0, 0, 0, $month, $current_day, $year );
-		if ( date( 'N', $current_set ) == $start_of_week ) {
+		if ( date( 'N', $current_set ) === $start_of_week ) {
 			$weeks_day = mc_first_day_of_week( $current_set );
 		} else {
 			$weeks_day = mc_first_day_of_week( $current );
@@ -871,7 +871,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		$weeks_day = mc_first_day_of_week( current_time( 'timestamp' ) );
 	}
 	$day = $weeks_day[0];
-	if ( isset( $_GET['time'] ) && 'day' == $_GET['time'] ) {
+	if ( isset( $_GET['time'] ) && 'day' === $_GET['time'] ) {
 		// don't adjust day if viewing day format.
 	} else {
 		// if the current date is displayed and the week beginning day is greater than 20 in the month.
@@ -882,7 +882,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
 	$toggle = '';
 
-	if ( 'mini' != $format ) {
+	if ( 'mini' !== $format ) {
 		$toggle      = "<div class='mc-time'>";
 		$current_url = mc_get_current_url();
 		if ( -1 == $adjust ) {
@@ -954,7 +954,7 @@ function mc_date_array( $timestamp, $period ) {
 	switch ( $period ) {
 		case 'month':
 		case 'month+1':
-			if ( 'month+1' == $period ) {
+			if ( 'month+1' === $period ) {
 				$timestamp = strtotime( '+1 month', $timestamp );
 			}
 			$start_of_week = get_option( 'start_of_week' );
@@ -962,7 +962,7 @@ function mc_date_array( $timestamp, $period ) {
 			$sub           = date( 'w', $timestamp ); // numeric (how WordPress option is stored).
 			$n             = ( 1 == $start_of_week ) ? $first - 1 : $first;
 
-			if ( $sub == $start_of_week ) {
+			if ( $sub === $start_of_week ) {
 				$from = date( 'Y-m-d', $timestamp );
 			} else {
 				$start = strtotime( "-$n days", $timestamp );
@@ -1017,7 +1017,7 @@ function mc_events_class( $events, $date = false ) {
 	} else {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
-			if ( '00:00:00' == $event->event_endtime && date( 'Y-m-d', strtotime( $event->occur_end ) ) == $date && date( 'Y-m-d', strtotime( $event->occur_begin ) ) != $date ) {
+			if ( '00:00:00' === $event->event_endtime && date( 'Y-m-d', strtotime( $event->occur_end ) ) === $date && date( 'Y-m-d', strtotime( $event->occur_begin ) ) !== $date ) {
 				continue;
 			}
 			$author = ' author' . $event->event_author;
@@ -1084,7 +1084,7 @@ function mc_list_titles( $events ) {
 
 	$result = apply_filters( 'mc_titles_format', '', $titles );
 
-	if ( '' == $result ) {
+	if ( '' === $result ) {
 		$result = implode( apply_filters( 'mc_list_titles_separator', ', ' ), $titles );
 	}
 
@@ -1201,16 +1201,16 @@ function mc_search_exportlinks() {
 	$print        = "<div class='mc-print'><a href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 
 	// Set up exports.
-	if ( '' != get_option( 'mc_topnav' ) ) {
+	if ( '' !== get_option( 'mc_topnav', '' ) ) {
 		$above = array_map( 'trim', explode( ',', get_option( 'mc_topnav' ) ) );
 	}
 
-	if ( '' != get_option( 'mc_bottomnav' ) ) {
+	if ( '' !== get_option( 'mc_bottomnav', '' ) ) {
 		$below = array_map( 'trim', explode( ',', get_option( 'mc_bottomnav' ) ) );
 	}
 	$used = array_merge( $above, $below );
 
-	if ( in_array( 'exports', $used ) ) {
+	if ( in_array( 'exports', $used, true ) ) {
 		$ics_add = array( 'searched' => true );
 		$exports = mc_export_links( 1, 1, 1, $ics_add, $subtract );
 	} else {
@@ -1283,7 +1283,7 @@ function mc_hidden_event() {
 		if ( ! $post ) {
 			return;
 		}
-		if ( is_object( $post ) && 'mc-events' == $post->post_type ) {
+		if ( is_object( $post ) && 'mc-events' === $post->post_type ) {
 			$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 			if ( ! $event_id ) {
 				return;
@@ -1327,10 +1327,10 @@ function mc_event_filter( $title, $sep = ' | ', $seplocation = 'right' ) {
 			return $title;
 		}
 		$array     = mc_create_tags( $event );
-		$left_sep  = ( 'right' != $seplocation ? ' ' . $sep . ' ' : '' );
-		$right_sep = ( 'right' != $seplocation ? '' : ' ' . $sep . ' ' );
-		$template  = get_option( 'mc_event_title_template' );
-		$template  = ( '' != $template ) ? stripslashes( $template ) : "$left_sep {title} $sep {date} $right_sep ";
+		$left_sep  = ( 'right' !== $seplocation ? ' ' . $sep . ' ' : '' );
+		$right_sep = ( 'right' !== $seplocation ? '' : ' ' . $sep . ' ' );
+		$template  = get_option( 'mc_event_title_template', '' );
+		$template  = ( '' !== $template ) ? stripslashes( $template ) : "$left_sep {title} $sep {date} $right_sep ";
 
 		return strip_tags( mc_draw_template( $array, $template ) );
 	} else {
@@ -1348,7 +1348,7 @@ function mc_event_filter( $title, $sep = ' | ', $seplocation = 'right' ) {
 function mc_valid_id( $mc_id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -1374,7 +1374,7 @@ function mc_show_event_template( $content ) {
 	if ( is_single() && in_the_loop() && is_main_query() ) {
 		// Some early versions of this placed the shortcode into the post content. Strip that out.
 		$new_content = $content;
-		if ( 'mc-events' == $post->post_type ) {
+		if ( 'mc-events' === $post->post_type ) {
 			if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
 				$mc_id    = intval( $_GET['mc_id'] );
 				$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
