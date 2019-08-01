@@ -1886,7 +1886,7 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 		// for deletion, if *author*, delete; if *host*, change host.
 		$calendar = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_host, event_author FROM ' . my_calendar_table() . ' WHERE event_host = %d OR event_author = %d', $user_ID, $user_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $calendar as $obj ) {
-			if ( $user_ID === absint( $obj->event_host ) && absint( $obj->event_host ) !== absint( $obj->event_author ) ) {
+			if ( absint( $user_ID ) === absint( $obj->event_host ) && absint( $obj->event_host ) !== absint( $obj->event_author ) ) {
 				$updates[] = array( $obj->event_id, $obj->event_author );
 			} else {
 				$deletions[] = $obj->event_id;

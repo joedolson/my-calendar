@@ -45,7 +45,7 @@ function my_calendar_upcoming_events( $args ) {
 	$site       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 
 	if ( $site ) {
-		$site = ( 'global' == $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
 	}
 
@@ -482,7 +482,7 @@ function my_calendar_todays_events( $args ) {
 	$site       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 
 	if ( $site ) {
-		$site = ( 'global' == $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
 	}
 

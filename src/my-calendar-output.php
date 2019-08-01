@@ -1626,7 +1626,7 @@ function my_calendar( $args ) {
 	$list_events   = get_option( 'mc_show_list_events' );
 
 	if ( $site ) {
-		$site = ( 'global' == $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
 	}
 	my_calendar_check();

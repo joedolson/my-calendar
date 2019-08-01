@@ -585,7 +585,7 @@ function my_calendar_events( $args ) {
  */
 function my_calendar_events_now( $category = 'default', $template = '<strong>{link_title}</strong> {timerange}', $site = false ) {
 	if ( $site ) {
-		$site = ( 'global' == $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
 	}
 

@@ -86,7 +86,7 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 		$option = (int) get_site_option( 'mc_multisite' );
 		$choice = (int) get_option( 'mc_current_table' );
 		$show   = (int) get_site_option( 'mc_multisite_show' ); // 1 == use global instead of local.
-		if ( 'global' == $site ) {
+		if ( 'global' === $site ) {
 			return $wpdb->base_prefix . $table;
 		}
 		if ( false != $site && $site ) {
