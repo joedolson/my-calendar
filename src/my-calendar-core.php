@@ -357,7 +357,7 @@ function mc_footer_js() {
 		} else {
 			$id = false;
 		}
-		if ( 1 == get_option( 'mc_use_custom_js' ) ) {
+		if ( '1' === get_option( 'mc_use_custom_js' ) ) {
 			$top     = '';
 			$bottom  = '';
 			$inner   = '';

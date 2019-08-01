@@ -124,7 +124,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	delete_option( 'mc_update_notice' );
 	delete_option( 'mc_default_direction' );
 
-	if ( get_option( 'mc_drop_tables' ) == 'true' ) {
+	if ( get_option( 'mc_drop_tables' ) === 'true' ) {
 		global $wpdb;
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar' );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_events' );

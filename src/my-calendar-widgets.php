@@ -52,24 +52,24 @@ function my_calendar_upcoming_events( $args ) {
 	$hash         = md5( implode( ',', $args ) );
 	$output       = '';
 	$defaults     = mc_widget_defaults();
-	$display_type = ( 'default' == $type ) ? $defaults['upcoming']['type'] : $type;
+	$display_type = ( 'default' === $type ) ? $defaults['upcoming']['type'] : $type;
 	$display_type = ( '' == $display_type ) ? 'events' : $display_type;
 
 	// Get number of units we should go into the future.
-	$after = ( 'default' == $after ) ? $defaults['upcoming']['after'] : $after;
+	$after = ( 'default' === $after ) ? $defaults['upcoming']['after'] : $after;
 	$after = ( '' == $after ) ? 10 : $after;
 
 	// Get number of units we should go into the past.
-	$before   = ( 'default' == $before ) ? $defaults['upcoming']['before'] : $before;
+	$before   = ( 'default' === $before ) ? $defaults['upcoming']['before'] : $before;
 	$before   = ( '' == $before ) ? 0 : $before;
-	$category = ( 'default' == $category ) ? '' : $category;
+	$category = ( 'default' === $category ) ? '' : $category;
 
 	// allow reference by file to external template.
 	if ( '' != $template && mc_file_exists( $template ) ) {
 		$template = file_get_contents( mc_get_file( $template ) );
 	}
 
-	$template = ( ! $template || 'default' == $template ) ? $defaults['upcoming']['template'] : $template;
+	$template = ( ! $template || 'default' === $template ) ? $defaults['upcoming']['template'] : $template;
 	if ( mc_key_exists( $template ) ) {
 		$template = mc_get_custom_template( $template );
 	}
@@ -78,71 +78,71 @@ function my_calendar_upcoming_events( $args ) {
 	$no_event_text  = ( '' == $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events'>";
 	$footer         = '</ul>';
-	$display_events = ( 'events' == $display_type || 'event' == $display_type ) ? true : false;
+	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
-		if ( 'days' == $display_type ) {
+		if ( 'days' === $display_type ) {
 			$from = date( 'Y-m-d', strtotime( "-$before days" ) );
 			$to   = date( 'Y-m-d', strtotime( "+$after days" ) );
 		}
-		if ( 'month' == $display_type ) {
+		if ( 'month' === $display_type ) {
 			$from = date( 'Y-m-1' );
 			$to   = date( 'Y-m-t' );
 		}
-		if ( 'custom' == $display_type && '' != $from && '' != $to ) {
+		if ( 'custom' === $display_type && '' != $from && '' != $to ) {
 			$from = date( 'Y-m-d', strtotime( $from ) );
-			$to   = ( 'today' == $to ) ? date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d', strtotime( $to ) );
+			$to   = ( 'today' === $to ) ? date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d', strtotime( $to ) );
 		}
 		/* Yes, this is crude. But sometimes simplicity works best. There are only 12 possibilities, after all. */
-		if ( 'month+1' == $display_type ) {
+		if ( 'month+1' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+1 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+1 month' ) );
 		}
-		if ( 'month+2' == $display_type ) {
+		if ( 'month+2' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+2 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+2 month' ) );
 		}
-		if ( 'month+3' == $display_type ) {
+		if ( 'month+3' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+3 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+3 month' ) );
 		}
-		if ( 'month+4' == $display_type ) {
+		if ( 'month+4' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+4 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+4 month' ) );
 		}
-		if ( 'month+5' == $display_type ) {
+		if ( 'month+5' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+5 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+5 month' ) );
 		}
-		if ( 'month+6' == $display_type ) {
+		if ( 'month+6' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+6 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+6 month' ) );
 		}
-		if ( 'month+7' == $display_type ) {
+		if ( 'month+7' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+7 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+7 month' ) );
 		}
-		if ( 'month+8' == $display_type ) {
+		if ( 'month+8' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+8 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+8 month' ) );
 		}
-		if ( 'month+9' == $display_type ) {
+		if ( 'month+9' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+9 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+9 month' ) );
 		}
-		if ( 'month+10' == $display_type ) {
+		if ( 'month+10' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+10 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+10 month' ) );
 		}
-		if ( 'month+11' == $display_type ) {
+		if ( 'month+11' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+11 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+11 month' ) );
 		}
-		if ( 'month+12' == $display_type ) {
+		if ( 'month+12' === $display_type ) {
 			$from = date( 'Y-m-1', strtotime( '+12 month' ) );
 			$to   = date( 'Y-m-t', strtotime( '+12 month' ) );
 		}
-		if ( 'year' == $display_type ) {
+		if ( 'year' === $display_type ) {
 			$from = date( 'Y-1-1' );
 			$to   = date( 'Y-12-31' );
 		}
@@ -240,7 +240,7 @@ function my_calendar_upcoming_events( $args ) {
 			$output = '';
 		}
 	}
-	if ( '' != $output ) {
+	if ( '' !== $output ) {
 		$output = apply_filters( 'mc_upcoming_events_header', $header ) . $output . apply_filters( 'mc_upcoming_events_footer', $footer );
 		$return = mc_run_shortcodes( $output );
 	} else {
@@ -264,7 +264,7 @@ function my_calendar_upcoming_events( $args ) {
 function mc_span_time( $group_id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$group_id = (int) $group_id;
@@ -419,7 +419,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 				if ( 1 == $details['event_span'] ) {
 					$class = 'multiday';
 				}
-				if ( 'list' == $type ) {
+				if ( 'list' === $type ) {
 					$prepend = "\n<li class=\"$class $category $classes\">";
 					$append  = "</li>\n";
 				} else {
@@ -435,7 +435,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 					if ( ! in_array( $details['dateid'], $skips ) ) {
 
 						$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $type );
-						if ( '' == $item ) {
+						if ( '' === $item ) {
 							$item = mc_draw_template( $details, $template, $type );
 						}
 
@@ -502,13 +502,13 @@ function my_calendar_todays_events( $args ) {
 		$template = file_get_contents( mc_get_file( $template ) );
 	}
 	$defaults = mc_widget_defaults();
-	$template = ( ! $template || 'default' == $template ) ? $defaults['today']['template'] : $template;
+	$template = ( ! $template || 'default' === $template ) ? $defaults['today']['template'] : $template;
 
 	if ( mc_key_exists( $template ) ) {
 		$template = mc_get_custom_template( $template );
 	}
 
-	$category      = ( 'default' == $category ) ? $defaults['today']['category'] : $category;
+	$category      = ( 'default' === $category ) ? $defaults['today']['category'] : $category;
 	$no_event_text = ( '' == $substitute ) ? $defaults['today']['text'] : $substitute;
 	if ( $date ) {
 		$from = date( 'Y-m-d', strtotime( $date ) );
@@ -559,7 +559,7 @@ function my_calendar_todays_events( $args ) {
 				$append  = apply_filters( 'mc_todays_events_after', '</li>' );
 
 				$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $template );
-				if ( '' == $item ) {
+				if ( '' === $item ) {
 					$item = mc_draw_template( $event_details, $template );
 				}
 				$todays_events[ $ts ][] = $prepend . $item . $append;
