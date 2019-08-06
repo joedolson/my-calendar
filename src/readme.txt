@@ -85,7 +85,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 = 3.1.13 =
 
-* Bug fix: If plug-in name is translated, script references were broken. 
+* Bug fix: If plug-in name is translated, script references were broken.
+* Bug fix: If no holiday category assigned, Today's Events widget will return empty when category limits set.
 * New filter: allow events post type to be made searchable. (Not recommended.)
 * New: Support 'search' parameter in shortcode & URL parameters for main view.
 * Remove option to disable max contrast category names. 

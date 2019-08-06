@@ -554,15 +554,18 @@ function mc_get_data( $field, $id ) {
  * @return array Array of event objects with dates as keys.
  */
 function my_calendar_events( $args ) {
-	$args        = apply_filters( 'my_calendar_events_args', $args );
-	$events      = my_calendar_get_events( $args );
-	$event_array = array();
-
+	$args          = apply_filters( 'my_calendar_events_args', $args );
+	$events        = my_calendar_get_events( $args );
+	$event_array   = array();
+	$holiday_array = array();
+	$holidays      = array();
 	// Get holidays to filter out.
-	$args['category'] = get_option( 'mc_skip_holidays_category' );
-	$args['holidays'] = 'holidays';
-	$holidays         = my_calendar_get_events( $args );
-	$holiday_array    = mc_set_date_array( $holidays );
+	if ( get_option( 'mc_skip_holidays_category' ) ) {
+		$args['category'] = get_option( 'mc_skip_holidays_category' );
+		$args['holidays'] = 'holidays';
+		$holidays         = my_calendar_get_events( $args );
+		$holiday_array    = mc_set_date_array( $holidays );
+	}
 	// Get events into an easily parseable set, keyed by date.
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		$event_array = mc_set_date_array( $events );
