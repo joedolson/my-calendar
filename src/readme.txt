@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.2
 Requires PHP: 5.3
-Stable tag: 3.1.12
+Stable tag: 3.1.13
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -89,7 +89,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: If no holiday category assigned, Today's Events widget will return empty when category limits set.
 * New filter: allow events post type to be made searchable. (Not recommended.)
 * New: Support 'search' parameter in shortcode & URL parameters for main view.
-* Remove option to disable max contrast category names. 
+* Remove option to disable max contrast category names.
 
 = 3.1.12 =
 
