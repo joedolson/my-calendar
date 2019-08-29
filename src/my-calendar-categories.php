@@ -828,7 +828,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			$category_name = strip_tags( stripslashes( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
-				$c = '<li><input type="checkbox" name="' . esc_attr( $name ) . '" id="mc_cat_' . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /><label for="mc_cat_' . $cat->category_id . '">' . $category_name . '</label></li>';
+				$c = '<li><input type="checkbox" name="' . esc_attr( $name ) . '" id="mc_cat_' . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="mc_cat_' . $cat->category_id . '">' . $category_name . '</label></li>';
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
 			}
