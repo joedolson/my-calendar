@@ -390,7 +390,7 @@ function mc_migrate_db() {
 		return; // No events, migration unnecessary.
 	}
 	// Step 2) migrate events.
-	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime, event_category FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	foreach ( $events as $event ) {
 		// assign endtimes to all events.
 		if ( '00:00:00' === $event->event_endtime && '00:00:00' !== $event->event_time ) {
@@ -398,10 +398,10 @@ function mc_migrate_db() {
 			mc_flag_event( $event->event_id, $event->event_endtime );
 		}
 		// Set up category relationships if missing.
-		$cats = $wpdb->get_results( $wpdb->prepare( 'SELECT category_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d', $event->id )
-		if ( empty( $cats ) ) {
+		$cats = $wpdb->get_results( $wpdb->prepare( 'SELECT category_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d', $event->event_id ) );
+		if ( ! $cats ) {
 			$cats = array( $event->event_category );
-			mc_set_category_relationships( $cats, $event->id );
+			mc_set_category_relationships( $cats, $event->event_id );
 		}
 		$dates = array(
 			'event_begin'   => $event->event_begin,
