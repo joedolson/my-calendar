@@ -124,6 +124,9 @@ function mc_map_string( $event, $source = 'event' ) {
  * @return object $event
  */
 function mc_clean_location( $event, $source = 'event' ) {
+	if ( ! is_object( $event ) ) {
+		return $event;
+	}
 	if ( 'event' === $source ) {
 		if ( 'none' === strtolower( $event->event_city ) ) {
 			$event->event_city = '';
@@ -454,27 +457,30 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// location fields.
 	$e['location_source'] = $event->event_location;
+	$map_gcal             = '';
 	if ( property_exists( $event, 'location' ) ) {
 		$location             = $event->location;
-		$map                  = mc_maplink( $location, 'map', 'location' );
-		$map_url              = mc_maplink( $location, 'url', 'location' );
-		$map_gcal             = mc_maplink( $location, 'gcal', 'location' );
-		$e['location']        = stripslashes( $location->location_label );
-		$e['street']          = stripslashes( $location->location_street );
-		$e['street2']         = stripslashes( $location->location_street2 );
-		$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ) );
-		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ) );
-		$e['city']            = stripslashes( $location->location_city );
-		$e['state']           = stripslashes( $location->location_state );
-		$e['postcode']        = stripslashes( $location->location_postcode );
-		$e['country']         = stripslashes( $location->location_country );
-		$e['region']          = $location->location_region;
-		$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
-		$e['link_map']        = $map;
-		$e['map_url']         = $map_url;
-		$e['map']             = mc_generate_map( $location, 'location' );
-		$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
-		$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
+		if ( is_object( $location ) ) {
+			$map                  = mc_maplink( $location, 'map', 'location' );
+			$map_url              = mc_maplink( $location, 'url', 'location' );
+			$map_gcal             = mc_maplink( $location, 'gcal', 'location' );
+			$e['location']        = stripslashes( $location->location_label );
+			$e['street']          = stripslashes( $location->location_street );
+			$e['street2']         = stripslashes( $location->location_street2 );
+			$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ) );
+			$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ) );
+			$e['city']            = stripslashes( $location->location_city );
+			$e['state']           = stripslashes( $location->location_state );
+			$e['postcode']        = stripslashes( $location->location_postcode );
+			$e['country']         = stripslashes( $location->location_country );
+			$e['region']          = $location->location_region;
+			$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
+			$e['link_map']        = $map;
+			$e['map_url']         = $map_url;
+			$e['map']             = mc_generate_map( $location, 'location' );
+			$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
+			$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
+		}
 	} else {
 		$map                  = mc_maplink( $event );
 		$map_url              = mc_maplink( $event, 'url' );

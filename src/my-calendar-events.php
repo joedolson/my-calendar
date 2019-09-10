@@ -25,7 +25,7 @@ function mc_event_object( $object ) {
 		if ( ! property_exists( $object, 'categories' ) ) {
 			$object->categories = mc_get_categories( $object, false );
 		}
-		if ( ! property_exists( $object, 'location' ) && is_numeric( $object->event_location ) && 0 !== $object->event_location ) {
+		if ( ! property_exists( $object, 'location' ) && is_numeric( $object->event_location ) && 0 !== (int) $object->event_location ) {
 			$object->location = mc_get_location( $object->event_location );
 		}
 		if ( ! property_exists( $object, 'uid' ) ) {
@@ -151,7 +151,7 @@ ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_fi
 			} else {
 				$event->categories = $cats[ $object_id ];
 			}
-			if ( 0 !== $location_id ) {
+			if ( 0 !== (int) $location_id ) {
 				if ( ! isset( $locs[ $object_id ] ) ) {
 					$location           = mc_get_location( $location_id );
 					$event->location    = $location;
