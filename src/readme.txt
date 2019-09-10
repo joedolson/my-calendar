@@ -83,6 +83,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.14 =
+
+* Bug fix: Unescaped event title in HTML output.
+
 = 3.1.13 =
 
 * Bug fix: If plug-in name is translated, script references were broken.
