@@ -423,3 +423,4 @@ add_shortcode( 'my_calendar_show_locations', 'my_calendar_show_locations_list' )
 add_shortcode( 'my_calendar_event', 'my_calendar_show_event' );
 add_shortcode( 'my_calendar_search', 'my_calendar_search' );
 add_shortcode( 'my_calendar_now', 'my_calendar_now' );
+add_shortcode( 'my_calendar_next', 'my_calendar_next' );

@@ -309,3 +309,26 @@ function my_calendar_now( $atts ) {
 
 	return my_calendar_events_now( $args['category'], $args['template'], $args['site'] );
 }
+
+/**
+ * Next Event My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string event.
+ */
+function my_calendar_next( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'category' => '',
+			'template' => '<strong>{link_title}</strong> {timerange}',
+			'skip'     => 0,
+			'site'     => false,
+		),
+		$atts,
+		'my_calendar_next'
+	);
+
+	return my_calendar_events_next( $args['category'], $args['template'], $args['skip'], $args['site'] );
+}
+

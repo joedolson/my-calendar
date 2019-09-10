@@ -649,6 +649,79 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	return $return;
 }
 
+
+/**
+ * Get the next scheduled event, not currently happening.
+ *
+ * @param mixed   $category string/integer category ID or 'default'.
+ * @param string  $template display Template.
+ * @param integer $site Site ID if fetching events from a different multisite instance.
+ *
+ * @return string output HTML
+ */
+function my_calendar_events_next( $category = 'default', $template = '<strong>{link_title}</strong> {timerange}', $skip = 0, $site = false ) {
+	if ( $site ) {
+		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		switch_to_blog( $site );
+	}
+
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$arr_events         = array();
+	$select_published   = mc_select_published();
+	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
+	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
+	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
+	$exclude_categories = mc_private_categories();
+
+	// May add support for location/author/host later.
+	$select_location = '';
+	$select_author   = '';
+	$select_host     = '';
+	$now             = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+	$event_query     = 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+			FROM ' . my_calendar_event_table( $site ) . '
+			JOIN ' . my_calendar_table( $site ) . " AS e
+			ON (event_id=occur_event_id)
+			$join
+			JOIN " . my_calendar_categories_table( $site ) . " as c
+			ON (e.event_category=c.category_id)
+			WHERE $select_published $select_category $select_location $select_author $select_host
+					$exclude_categories
+			AND DATE(occur_begin) > CAST('$now' as DATETIME) ORDER BY occur_begin LIMIT $skip,1";
+
+	$events = $mcdb->get_results( $event_query );
+	if ( ! empty( $events ) ) {
+		foreach ( array_keys( $events ) as $key ) {
+			$event        =& $events[ $key ];
+			$arr_events[] = $event;
+		}
+	}
+	if ( ! empty( $arr_events ) ) {
+		$event = mc_create_tags( $arr_events[0] );
+
+		if ( mc_key_exists( $template ) ) {
+			$template = mc_get_custom_template( $template );
+		}
+
+		$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
+		$return = mc_run_shortcodes( $output );
+	} else {
+		$return = '';
+	}
+
+	if ( $site ) {
+		restore_current_blog();
+	}
+
+	return $return;
+}
+
+
 /**
  *  Get all occurrences associated with an event.
  *
