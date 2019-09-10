@@ -24,8 +24,8 @@ function mc_widget_defaults() {
 	$defaults = array(
 		'upcoming' => array(
 			'type'     => 'event',
-			'before'   => 3,
-			'after'    => 3,
+			'before'   => 0,
+			'after'    => 5,
 			'template' => $default_template,
 			'category' => '',
 			'text'     => '',
