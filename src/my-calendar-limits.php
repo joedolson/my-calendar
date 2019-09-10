@@ -86,7 +86,7 @@ function mc_category_select_ids( $category ) {
 	$mcdb   = $wpdb;
 	$select = array();
 
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 

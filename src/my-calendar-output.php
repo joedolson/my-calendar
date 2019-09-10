@@ -499,26 +499,26 @@ function mc_get_details( $data, $template, $type ) {
 		switch ( $type ) {
 			case 'mini':
 				$template = mc_get_template( 'mini' );
-				if ( 1 == get_option( 'mc_use_mini_template' ) ) {
+				if ( '1' === get_option( 'mc_use_mini_template' ) ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'list':
 				$template = mc_get_template( 'list' );
-				if ( 1 == get_option( 'mc_use_list_template' ) ) {
+				if ( '1' === get_option( 'mc_use_list_template' ) ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'single':
 				$template = mc_get_template( 'details' );
-				if ( 1 == get_option( 'mc_use_details_template' ) ) {
+				if ( '1' === get_option( 'mc_use_details_template' ) ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'calendar':
 			default:
 				$template = mc_get_template( 'grid' );
-				if ( 1 == get_option( 'mc_use_grid_template' ) ) {
+				if ( '1' === get_option( 'mc_use_grid_template' ) ) {
 					$details = mc_draw_template( $data, $template );
 				}
 		}
@@ -972,9 +972,9 @@ function mc_date_array( $timestamp, $period ) {
 
 			// This allows multiple months displayed. Will figure out splitting tables...
 			// To handle: $endtime = strtotime( "+$months months",$endtime ); JCD TODO.
-			$last = date( 'N', $endtime );
-			$n    = ( 1 == get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
-			if ( '-1' == $n && '7' == date( 'N', $endtime ) ) {
+			$last = (int) date( 'N', $endtime );
+			$n    = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
+			if ( -1 === $n && '7' === date( 'N', $endtime ) ) {
 				$n = 6;
 			}
 			$to = date( 'Y-m-d', strtotime( "+$n days", $endtime ) );
@@ -1396,7 +1396,7 @@ function mc_show_event_template( $content ) {
 
 				return $content;
 			}
-			if ( 1 == get_option( 'mc_use_details_template' ) ) {
+			if ( '1' === get_option( 'mc_use_details_template' ) ) {
 				$new_content = apply_filters( 'mc_before_event', '', $event, 'single', $time );
 				if ( isset( $_GET['mc_id'] ) ) {
 					$shortcode = str_replace( "event='$event_id'", "event='$mc_id' instance='1'", get_post_meta( $post->ID, '_mc_event_shortcode', true ) );
@@ -1609,20 +1609,20 @@ function my_calendar( $args ) {
 	$months   = isset( $args['months'] ) ? $args['months'] : false;
 
 	// Get options before switching sites in multisite environments.
-	$list_js_class = ( 0 == get_option( 'mc_list_javascript' ) ) ? 'listjs' : '';
-	$grid_js_class = ( 0 == get_option( 'mc_calendar_javascript' ) ) ? 'gridjs' : '';
-	$mini_js_class = ( 0 == get_option( 'mc_mini_javascript' ) ) ? 'minijs' : '';
-	$ajax_js_class = ( 0 == get_option( 'mc_ajax_javascript' ) ) ? 'ajaxjs' : '';
+	$list_js_class = ( '0' === get_option( 'mc_list_javascript' ) ) ? 'listjs' : '';
+	$grid_js_class = ( '0' === get_option( 'mc_calendar_javascript' ) ) ? 'gridjs' : '';
+	$mini_js_class = ( '0' === get_option( 'mc_mini_javascript' ) ) ? 'minijs' : '';
+	$ajax_js_class = ( '0' === get_option( 'mc_ajax_javascript' ) ) ? 'ajaxjs' : '';
 	$date_format   = mc_date_format();
-	$start_of_week = ( get_option( 'start_of_week' ) == 1 ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
-	$show_weekends = ( get_option( 'mc_show_weekends' ) == 'true' ) ? true : false;
+	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
+	$show_weekends = ( get_option( 'mc_show_weekends' ) === 'true' ) ? true : false;
 	$skip_holidays = get_option( 'mc_skip_holidays_category' );
-	$month_format  = ( get_option( 'mc_month_format' ) == '' ) ? 'F Y' : get_option( 'mc_month_format' );
+	$month_format  = ( get_option( 'mc_month_format', '' ) === '' ) ? 'F Y' : get_option( 'mc_month_format' );
 	$show_months   = absint( apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args ) );
-	$show_months   = ( 0 === $show_months ) ? 1 : $show_months;
+	$show_months   = ( '0' === $show_months ) ? 1 : $show_months;
 	$caption_text  = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
 	$week_format   = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
-	$week_template = ( get_option( 'mc_week_caption' ) != '' ) ? get_option( 'mc_week_caption' ) : 'Week of {date format="M jS"}';
+	$week_template = ( get_option( 'mc_week_caption', '' ) !== '' ) ? get_option( 'mc_week_caption' ) : 'Week of {date format="M jS"}';
 	$day_uri       = ( ! get_option( 'mc_open_day_uri' ) ) ? 'false' : get_option( 'mc_open_day_uri' ); // This is not a URL. It's a behavior reference.
 	$list_info     = get_option( 'mc_show_list_info' );
 	$list_events   = get_option( 'mc_show_list_events' );
@@ -2244,9 +2244,9 @@ add_filter( 'mc_display_format', 'mc_convert_format', 10, 2 );
  * @return string new format.
  */
 function mc_convert_format( $format, $params ) {
-	if ( 'true' == get_option( 'mc_convert' ) ) {
-		$format = ( mc_is_mobile() && 'calendar' == $format ) ? 'list' : $format;
-	} elseif ( 'mini' == get_option( 'mc_convert' ) ) {
+	if ( 'true' === get_option( 'mc_convert' ) ) {
+		$format = ( mc_is_mobile() && 'calendar' === $format ) ? 'list' : $format;
+	} elseif ( 'mini' === get_option( 'mc_convert' ) ) {
 		$format = ( mc_is_mobile() ) ? 'mini' : $format;
 	}
 
@@ -2395,7 +2395,7 @@ add_filter( 'my_calendar_body', 'mc_run_shortcodes', 10, 1 );
  * @return string Calendar body with shortcodes processed
  */
 function mc_run_shortcodes( $content ) {
-	$content = ( 'true' == get_option( 'mc_process_shortcodes' ) ) ? do_shortcode( $content ) : $content;
+	$content = ( 'true' === get_option( 'mc_process_shortcodes' ) ) ? do_shortcode( $content ) : $content;
 
 	return $content;
 }
@@ -2430,7 +2430,7 @@ function mc_category_key( $category ) {
 	global $wpdb;
 	$url  = plugin_dir_url( __FILE__ );
 	$mcdb = $wpdb;
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$key             = '';
@@ -2788,7 +2788,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 	global $wpdb;
 	$mcdb = $wpdb;
 
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -3019,7 +3019,7 @@ function my_calendar_searchform( $type, $url ) {
 function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
