@@ -708,7 +708,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			$template = mc_get_custom_template( $template );
 		}
 
-		$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
+		$output = mc_draw_template( $event, apply_filters( 'mc_happening_next_template', $template, $event ) );
 		$return = mc_run_shortcodes( $output );
 	} else {
 		$return = '';
