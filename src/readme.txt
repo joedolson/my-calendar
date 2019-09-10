@@ -86,6 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.1.14 =
 
 * Bug fix: Unescaped event title in HTML output.
+* New: [my_calendar_next] shortcode. 
 
 = 3.1.13 =
 
