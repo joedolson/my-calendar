@@ -32,7 +32,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			$attributes .= " $key='$value'";
 		}
 	}
-	$value = ( '' != get_option( $name ) ) ? esc_attr( stripslashes( get_option( $name ) ) ) : $default;
+	$value = ( '' !== get_option( $name, '' ) ) ? esc_attr( stripslashes( get_option( $name ) ) ) : $default;
 	switch ( $type ) {
 		case 'text':
 		case 'url':
@@ -222,7 +222,7 @@ function my_calendar_settings() {
 		update_option( 'mc_drop_tables', $mc_drop_tables );
 		update_option( 'mc_default_sort', $_POST['mc_default_sort'] );
 		update_option( 'mc_default_direction', $_POST['mc_default_direction'] );
-		if ( 2 == get_site_option( 'mc_multisite' ) ) {
+		if ( 2 === (int) get_site_option( 'mc_multisite' ) ) {
 			$mc_current_table = (int) $_POST['mc_current_table'];
 			update_option( 'mc_current_table', $mc_current_table );
 		}
@@ -262,7 +262,7 @@ function my_calendar_settings() {
 		$permalinks      = get_option( 'mc_use_permalinks' );
 		$mc_open_day_uri = ( ! empty( $_POST['mc_open_day_uri'] ) ) ? $_POST['mc_open_day_uri'] : '';
 		update_option( 'mc_use_permalinks', ( ! empty( $_POST['mc_use_permalinks'] ) ) ? 'true' : 'false' );
-		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' === $_POST['mc_open_uri'] && '' != get_option( 'mc_uri' ) ) ? 'true' : 'false' );
+		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' === $_POST['mc_open_uri'] && '' !== get_option( 'mc_uri', '' ) ) ? 'true' : 'false' );
 		update_option( 'mc_no_link', ( ! empty( $_POST['mc_no_link'] ) && 'on' === $_POST['mc_no_link'] ) ? 'true' : 'false' );
 		update_option( 'mc_mini_uri', $_POST['mc_mini_uri'] );
 		update_option( 'mc_open_day_uri', $mc_open_day_uri );
@@ -487,7 +487,7 @@ function my_calendar_settings() {
 									$page_title = get_post( absint( get_option( 'mc_uri_id' ) ) )->post_title;
 									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
 								}
-								if ( '' != get_option( 'mc_uri' ) && ( get_option( 'mc_uri' ) != $permalink ) ) {
+								if ( '' !== get_option( 'mc_uri', '' ) && ( get_option( 'mc_uri' ) !== $permalink ) ) {
 									?>
 								<li><?php mc_settings_field( 'mc_uri', __( 'Where is your main calendar page?', 'my-calendar' ), '', "$guess[message]", array( 'size' => '60' ), 'url' ); ?></li>
 								<li>
@@ -578,7 +578,7 @@ function mc_remote_db() {
 								<li><?php mc_settings_field( 'remigrate', __( 'Re-generate event occurrences table.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
-								if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
+								if ( (int) get_site_option( 'mc_multisite' ) === 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
 									mc_settings_field(
 										'mc_current_table',
 										array(
@@ -644,12 +644,12 @@ function mc_remote_db() {
 						<div><input type='hidden' name='mc_dates' value='true'/></div>
 						<ul>
 							<?php
-							$month_format = ( '' == get_option( 'mc_month_format' ) ) ? date_i18n( 'F Y' ) : date_i18n( get_option( 'mc_month_format' ) );
-							$time_format  = ( '' == get_option( 'mc_time_format' ) ) ? date_i18n( get_option( 'time_format' ) ) : date_i18n( get_option( 'mc_time_format' ) );
-							$week_format  = ( '' == get_option( 'mc_week_format' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
-							$date_format  = ( '' == get_option( 'mc_date_format' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
+							$month_format = ( '' === get_option( 'mc_month_format', '' ) ) ? date_i18n( 'F Y' ) : date_i18n( get_option( 'mc_month_format' ) );
+							$time_format  = ( '' === get_option( 'mc_time_format', '' ) ) ? date_i18n( get_option( 'time_format' ) ) : date_i18n( get_option( 'mc_time_format' ) );
+							$week_format  = ( '' === get_option( 'mc_week_format', '' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
+							$date_format  = ( '' == get_option( 'mc_date_format', '' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
 							$tomorrow     = date( 'j' ) + 1;
-							$multi_format = ( '' == get_option( 'mc_multidate_format' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
+							$multi_format = ( '' === get_option( 'mc_multidate_format', '' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
 							?>
 							<li><?php mc_settings_field( 'mc_date_format', __( 'Primary Date Format', 'my-calendar' ), '', $date_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_time_format', __( 'Time format', 'my-calendar' ), '', $time_format ); ?></li>
@@ -679,7 +679,7 @@ function mc_remote_db() {
 						<legend><?php _e( 'Calendar Link Targets', 'my-calendar' ); ?></legend>
 						<ul>
 							<?php
-							if ( isset( $_POST['mc_use_permalinks'] ) && '' != $note ) {
+							if ( isset( $_POST['mc_use_permalinks'] ) && '' !== $note ) {
 								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
 								// Translators: URL for WordPress Settings > Permalinks.
 								$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
@@ -763,7 +763,7 @@ function mc_remote_db() {
 						$i      = 1;
 						$count  = count( $missed );
 						foreach ( $missed as $k => $v ) {
-							if ( $i != $count ) {
+							if ( $i !== $count ) {
 								$buttons = "<button class='up'><i class='dashicons dashicons-arrow-up'></i><span class='screen-reader-text'>Up</span></button> <button class='down'><i class='dashicons dashicons-arrow-down'></i><span class='screen-reader-text'>Down</span></button>";
 							} else {
 								$buttons = "<button class='up'><i class='dashicons dashicons-arrow-up'></i><span class='screen-reader-text'>Up</span></button>";

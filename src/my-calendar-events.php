@@ -25,12 +25,12 @@ function mc_event_object( $object ) {
 		if ( ! property_exists( $object, 'categories' ) ) {
 			$object->categories = mc_get_categories( $object, false );
 		}
-		if ( ! property_exists( $object, 'location' ) && is_numeric( $object->event_location ) && 0 != $object->event_location ) {
+		if ( ! property_exists( $object, 'location' ) && is_numeric( $object->event_location ) && 0 !== $object->event_location ) {
 			$object->location = mc_get_location( $object->event_location );
 		}
 		if ( ! property_exists( $object, 'uid' ) ) {
-			$guid = get_post_meta( $object->event_post, '_mc_guid', true );
-			if ( '' == $guid ) {
+			$guid = (string) get_post_meta( $object->event_post, '_mc_guid', true );
+			if ( '' === $guid ) {
 				$guid = mc_create_guid( $object );
 			}
 			$object->uid = $guid;
@@ -151,7 +151,7 @@ ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_fi
 			} else {
 				$event->categories = $cats[ $object_id ];
 			}
-			if ( 0 != $location_id ) {
+			if ( 0 !== $location_id ) {
 				if ( ! isset( $locs[ $object_id ] ) ) {
 					$location           = mc_get_location( $location_id );
 					$event->location    = $location;
@@ -350,10 +350,10 @@ function mc_get_rss_events( $cat_id = false ) {
 	$output = array();
 	foreach ( array_keys( $events ) as $key ) {
 		$event =& $events[ $key ];
-		if ( ! in_array( $event->occur_group_id, $groups ) ) {
+		if ( ! in_array( $event->occur_group_id, $groups, true ) ) {
 			$output[ $event->event_begin ][] = $event;
 		}
-		if ( 1 == $event->event_span ) {
+		if ( 1 === (int) $event->event_span ) {
 			$groups[] = $event->occur_group_id;
 		}
 	}
@@ -655,6 +655,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
  *
  * @param mixed   $category string/integer category ID or 'default'.
  * @param string  $template display Template.
+ * @param integer $skip Number of events to skip.
  * @param integer $site Site ID if fetching events from a different multisite instance.
  *
  * @return string output HTML
@@ -783,7 +784,7 @@ function mc_holiday_limit( $events, $holidays ) {
 	foreach ( array_keys( $events ) as $key ) {
 		if ( ! empty( $holidays[ $key ] ) ) {
 			foreach ( $events[ $key ] as $k => $event ) {
-				if ( get_option( 'mc_skip_holidays_category' ) != $event->event_category && 1 == $event->event_holiday ) {
+				if ( (int) get_option( 'mc_skip_holidays_category' ) !== (int) $event->event_category && 1 === (int) $event->event_holiday ) {
 					unset( $events[ $key ][ $k ] );
 				}
 			}

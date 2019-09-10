@@ -398,7 +398,7 @@ function mc_migrate_db() {
 			mc_flag_event( $event->event_id, $event->event_endtime );
 		}
 		// Set up category relationships if missing.
-		$cats = $wpdb->get_results( $wpdb->prepare( 'SELECT category_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d', $event->event_id ) );
+		$cats = $wpdb->get_results( $wpdb->prepare( 'SELECT category_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d', $event->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( ! $cats ) {
 			$cats = array( $event->event_category );
 			mc_set_category_relationships( $cats, $event->event_id );
