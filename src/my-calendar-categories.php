@@ -721,7 +721,7 @@ function mc_profile() {
 				</th>
 				<td>
 					<ul class='checkboxes'>
-						<li><input type="checkbox" name="mc_user_permisions[]" value="all" id="mc_edit_all" <?php echo $selected; ?>> <label for="mc_edit_all"><?php _e( 'Edit All Categories', 'my-calendar' ); ?></li>
+						<li><input type="checkbox" name="mc_user_permissions[]" value="all" id="mc_edit_all" <?php echo $selected; ?>> <label for="mc_edit_all"><?php _e( 'Edit All Categories', 'my-calendar' ); ?></li>
 						<?php echo mc_category_select( $permissions, true, true, 'mc_user_permissions[]' ); ?>
 					</ul>
 				</td>
