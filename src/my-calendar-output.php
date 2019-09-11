@@ -2135,7 +2135,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	}
 
 	foreach ( $mc_toporder as $value ) {
-		if ( 'none' !== $value && in_array( $value, $used, true ) && in_array( $value, $available , true) ) {
+		if ( 'none' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true) ) {
 			$value      = trim( $value );
 			$mc_topnav .= ${$value};
 		}
