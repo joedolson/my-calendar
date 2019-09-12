@@ -85,7 +85,7 @@ function mc_templates_edit() {
 							</p>
 							<?php echo ( '' != $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
 							<?php
-							if ( 'add-new' == $key ) {
+							if ( 'add-new' === $key ) {
 								?>
 								<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 								<div>
@@ -353,7 +353,7 @@ function mc_update_template( $key, $template ) {
  * @return Description
  */
 function mc_template_description( $key ) {
-	if ( 'add-new' == $key ) {
+	if ( 'add-new' === $key ) {
 		return '';
 	}
 

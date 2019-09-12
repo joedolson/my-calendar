@@ -349,7 +349,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									// check if this event instance or this event group has already been displayed.
 									$same_event = ( in_array( $e->occur_id, $last_events ) ) ? true : false;
 									$same_group = ( in_array( $e->occur_group_id, $last_group ) ) ? true : false;
-									if ( 'yes' == $show_today && my_calendar_date_equal( $beginning, $current ) ) {
+									if ( 'yes' === $show_today && my_calendar_date_equal( $beginning, $current ) ) {
 										$in_total = apply_filters( 'mc_include_today_in_total', 'yes' ); // count todays events in total.
 										if ( 'no' != $in_total ) {
 											$near_events[] = $e;
@@ -372,7 +372,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									if ( my_calendar_date_comp( $beginning, $current ) ) {
 										$past ++;
 									} elseif ( my_calendar_date_equal( $beginning, $current ) ) {
-										if ( 'yes' == $show_today ) {
+										if ( 'yes' === $show_today ) {
 											$extra ++;
 										}
 									} elseif ( ! my_calendar_date_comp( $end, $current ) ) {
@@ -509,7 +509,7 @@ function my_calendar_todays_events( $args ) {
 	}
 
 	$category      = ( 'default' === $category ) ? $defaults['today']['category'] : $category;
-	$no_event_text = ( '' == $substitute ) ? $defaults['today']['text'] : $substitute;
+	$no_event_text = ( '' === $substitute ) ? $defaults['today']['text'] : $substitute;
 	if ( $date ) {
 		$from = date( 'Y-m-d', strtotime( $date ) );
 		$to   = date( 'Y-m-d', strtotime( $date ) );

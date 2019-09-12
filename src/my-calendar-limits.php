@@ -25,7 +25,7 @@ function mc_prepare_search_query( $query ) {
 	$db_type = mc_get_db_type();
 	$search  = '';
 	if ( '' != $query ) {
-		if ( 'MyISAM' == $db_type ) {
+		if ( 'MyISAM' === $db_type ) {
 			$query  = esc_sql( $query );
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
@@ -139,11 +139,11 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
 		return '';
 	}
 	$author = urldecode( $author );
-	if ( '' == $author || 'all' == $author || 'default' == $author || null == $author ) {
+	if ( '' == $author || 'all' === $author || 'default' === $author || null === $author ) {
 		return '';
 	}
 	$select_author = '';
-	$data          = ( 'author' == $context ) ? 'event_author' : 'event_host';
+	$data          = ( 'author' === $context ) ? 'event_author' : 'event_host';
 
 	if ( preg_match( '/^all$|^all,|,all$|,all,/i', $author ) > 0 ) {
 		return '';

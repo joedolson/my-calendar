@@ -238,7 +238,7 @@ function mc_stylesheet_selector() {
 			$test     = 'mc_custom_' . $value;
 			$filepath = mc_get_style_path( $test );
 			$path     = pathinfo( $filepath );
-			if ( 'css' == $path['extension'] ) {
+			if ( 'css' === $path['extension'] ) {
 				$selected = ( get_option( 'mc_css_file' ) == $test ) ? ' selected="selected"' : '';
 				$options .= "<option value='mc_custom_$value'$selected>$value</option>\n";
 			}
@@ -250,7 +250,7 @@ function mc_stylesheet_selector() {
 	foreach ( $files as $value ) {
 		$filepath = mc_get_style_path( $value );
 		$path     = pathinfo( $filepath );
-		if ( 'css' == $path['extension'] ) {
+		if ( 'css' === $path['extension'] ) {
 			$selected = ( get_option( 'mc_css_file' ) == $value ) ? ' selected="selected"' : '';
 			$options .= "<option value='$value'$selected>$value</option>\n";
 		}
@@ -287,11 +287,11 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 	}
 	if ( 0 === strpos( $filename, 'mc_custom_' ) ) {
 		$filename  = str_replace( 'mc_custom_', '', $filename );
-		$stylefile = ( 'path' == $type ) ? str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/' . $filename : str_replace( '/my-calendar/', '', $url ) . '/my-calendar-custom/styles/' . $filename;
+		$stylefile = ( 'path' === $type ) ? str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/' . $filename : str_replace( '/my-calendar/', '', $url ) . '/my-calendar-custom/styles/' . $filename;
 	} else {
-		$stylefile = ( 'path' == $type ) ? dirname( __FILE__ ) . '/styles/' . $filename : plugins_url( 'styles', __FILE__ ) . '/' . $filename;
+		$stylefile = ( 'path' === $type ) ? dirname( __FILE__ ) . '/styles/' . $filename : plugins_url( 'styles', __FILE__ ) . '/' . $filename;
 	}
-	if ( 'path' == $type ) {
+	if ( 'path' === $type ) {
 		if ( is_file( $stylefile ) ) {
 			return $stylefile;
 		} else {
@@ -397,7 +397,7 @@ function mc_write_styles( $file, $style ) {
 	foreach ( $files as $f ) {
 		$filepath = mc_get_style_path( $f );
 		$path     = pathinfo( $filepath );
-		if ( 'css' == $path['extension'] ) {
+		if ( 'css' === $path['extension'] ) {
 			$styles_whitelist[] = $filepath;
 		}
 	}

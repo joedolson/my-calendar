@@ -2180,7 +2180,7 @@ function mc_show_week_number( $events, $args, $format, $td, $start ) {
 		if ( 'list' != $format ) {
 			$body = "<$td class='week_number'>$weeknumber</$td>";
 		}
-		if ( 'list' == $format && ! empty( $events ) ) {
+		if ( 'list' === $format && ! empty( $events ) ) {
 			$body = "<li class='mc-week-number'><span class='week-number-text'>" . __( 'Week', 'my-calendar' ) . "</span> <span class='week-number-number'>$weeknumber</span></li>";
 		}
 	}
@@ -2201,7 +2201,7 @@ function mc_show_week_number( $events, $args, $format, $td, $start ) {
  */
 function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	$open_day_uri = get_option( 'mc_open_day_uri' );
-	if ( 'true' == $open_day_uri || 'false' == $open_day_uri ) {
+	if ( 'true' === $open_day_uri || 'false' === $open_day_uri ) {
 		// Yes, this is weird. it's from some old settings...
 		$target = array(
 			'yr'    => date( 'Y', $start ),
@@ -2322,7 +2322,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 			$dm    = mc_first_day_of_week();
 			$c_day = $dm[0];
 			$c_m   = $dm[1];
-		} elseif ( 'day' == $time ) {
+		} elseif ( 'day' === $time ) {
 			$c_day = date( 'd', $timestamp );
 		} else {
 			$c_day = 1;
@@ -2674,7 +2674,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	}
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
 	$day  = '';
-	if ( 'week' == $time ) {
+	if ( 'week' === $time ) {
 		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 7 days' );
 		$day      = date( 'd', $prevdate );
 		$yr       = date( 'Y', $prevdate );
@@ -2686,7 +2686,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		}
 		$date = __( 'Week of ', 'my-calendar' ) . date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) );
 	}
-	if ( 'day' == $time ) {
+	if ( 'day' === $time ) {
 		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 1 days' );
 		$day      = date( 'd', $prevdate );
 		$yr       = date( 'Y', $prevdate );

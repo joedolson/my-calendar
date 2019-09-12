@@ -44,7 +44,7 @@ function mc_generate() {
 			}
 			foreach ( $_POST as $key => $value ) {
 				if ( 'generator' != $key && 'shortcode' != $key && '_wpnonce' != $key ) {
-					if ( 'template' == $key ) {
+					if ( 'template' === $key ) {
 						$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
 						$v        = $template;
 						$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>" . __( 'Edit this Template', 'my-calendar' ) . ' &rarr;</a>';
@@ -142,7 +142,7 @@ function mc_generator( $type ) {
 			</p>
 			<?php
 			// Main shortcode only.
-			if ( 'main' == $type ) {
+			if ( 'main' === $type ) {
 				?>
 				<p>
 					<label for="format"><?php _e( 'Format', 'my-calendar' ); ?></label>
@@ -247,7 +247,7 @@ function mc_generator( $type ) {
 				</p>
 				<?php
 			}
-			if ( 'upcoming' == $type || 'today' == $type ) {
+			if ( 'upcoming' === $type || 'today' === $type ) {
 				// Upcoming Events & Today's Events shortcodes.
 				?>
 				<p>
@@ -260,7 +260,7 @@ function mc_generator( $type ) {
 				</p>
 				<?php
 			}
-			if ( 'upcoming' == $type ) {
+			if ( 'upcoming' === $type ) {
 				// Upcoming events only.
 				?>
 				<p>
