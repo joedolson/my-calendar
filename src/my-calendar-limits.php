@@ -53,7 +53,7 @@ function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 	}
 	$category      = urldecode( $category );
 	$select_clause = '';
-	$data          = ( 'category' == $group ) ? 'category_id' : 'r.category_id';
+	$data          = ( 'category' === $group ) ? 'category_id' : 'r.category_id';
 	if ( preg_match( '/^all$|^all,|,all$|,all,/i', $category ) > 0 ) {
 
 		return '';
