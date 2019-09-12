@@ -62,7 +62,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$author         = ( ! isset( $instance['my_calendar_today_author'] ) || '' == $instance['my_calendar_today_author'] ) ? 'all' : esc_attr( $instance['my_calendar_today_author'] );
 		$host           = ( ! isset( $instance['mc_host'] ) || '' == $instance['mc_host'] ) ? 'all' : esc_attr( $instance['mc_host'] );
 		$default_link   = mc_get_uri( false, $args );
-		$widget_link    = ( ! empty( $instance['my_calendar_today_linked'] ) && 'yes' == $instance['my_calendar_today_linked'] ) ? $default_link : '';
+		$widget_link    = ( ! empty( $instance['my_calendar_today_linked'] ) && 'yes' === $instance['my_calendar_today_linked'] ) ? $default_link : '';
 		$widget_link    = ( ! empty( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : $widget_link;
 		$widget_title   = empty( $the_title ) ? '' : $the_title;
 		$date           = ( ! empty( $instance['mc_date'] ) ) ? $instance['mc_date'] : false;
@@ -109,7 +109,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$widget_category = ( isset( $instance['my_calendar_today_category'] ) ) ? esc_attr( $instance['my_calendar_today_category'] ) : '';
 		$widget_linked   = ( isset( $instance['my_calendar_today_linked'] ) ) ? esc_attr( $instance['my_calendar_today_linked'] ) : '';
 		$date            = ( isset( $instance['mc_date'] ) ) ? esc_attr( $instance['mc_date'] ) : '';
-		if ( 'yes' == $widget_linked ) {
+		if ( 'yes' === $widget_linked ) {
 			$default_link = mc_get_uri( false, $instance );
 		} else {
 			$default_link = '';

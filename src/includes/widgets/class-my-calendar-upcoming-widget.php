@@ -66,7 +66,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$before         = ( '' != $before ) ? esc_attr( $instance['my_calendar_upcoming_before'] ) : 3;
 		$after          = ( '' != $after ) ? esc_attr( $instance['my_calendar_upcoming_after'] ) : 3;
 		$skip           = ( '' != $skip ) ? esc_attr( $instance['my_calendar_upcoming_skip'] ) : 0;
-		$show_today     = ( 'no' == $show ) ? 'no' : 'yes';
+		$show_today     = ( 'no' === $show ) ? 'no' : 'yes';
 		$type           = esc_attr( $type );
 		$order          = esc_attr( $order );
 		$the_category   = ( '' == $cat ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_category'] );
@@ -74,7 +74,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$host           = ( ! isset( $instance['mc_host'] ) || '' == $instance['mc_host'] ) ? 'default' : esc_attr( $instance['mc_host'] );
 		$ltype          = ( ! isset( $instance['ltype'] ) || '' == $instance['ltype'] ) ? '' : esc_attr( $instance['ltype'] );
 		$lvalue         = ( ! isset( $instance['lvalue'] ) || '' == $instance['lvalue'] ) ? '' : esc_attr( $instance['lvalue'] );
-		$widget_link    = ( isset( $instance['my_calendar_upcoming_linked'] ) && 'yes' == $instance['my_calendar_upcoming_linked'] ) ? mc_get_uri( false, $instance ) : '';
+		$widget_link    = ( isset( $instance['my_calendar_upcoming_linked'] ) && 'yes' === $instance['my_calendar_upcoming_linked'] ) ? mc_get_uri( false, $instance ) : '';
 		$widget_link    = ( ! empty( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : $widget_link;
 		$widget_title   = empty( $the_title ) ? '' : $the_title;
 		$widget_title   = ( '' == $widget_link ) ? $widget_title : "<a href='$widget_link'>$widget_title</a>";
@@ -141,7 +141,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$to         = ( isset( $instance['mc_to'] ) ) ? esc_attr( $instance['mc_to'] ) : '';
 		$site       = ( isset( $instance['mc_site'] ) ) ? esc_attr( $instance['mc_site'] ) : false;
 
-		if ( 'yes' == $linked ) {
+		if ( 'yes' === $linked ) {
 			$default_link = mc_get_uri( false, $instance );
 		} else {
 			$default_link = '';
@@ -174,27 +174,27 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_type' ); ?>"><?php _e( 'Display upcoming events by:', 'my-calendar' ); ?></label>
 			<select id="<?php echo $this->get_field_id( 'my_calendar_upcoming_type' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_type' ); ?>">
-				<option value="events" <?php echo ( 'events' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Events (e.g. 2 past, 3 future)', 'my-calendar' ); ?></option>
-				<option value="days" <?php echo ( 'days' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Dates (e.g. 4 days past, 5 forward)', 'my-calendar' ); ?></option>
-				<option value="month" <?php echo ( 'month' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current month', 'my-calendar' ); ?></option>
-				<option value="month+1" <?php echo ( 'month+1' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show next month', 'my-calendar' ); ?></option>
-				<option value="month+2" <?php echo ( 'month+2' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 2nd month out', 'my-calendar' ); ?></option>
-				<option value="month+3" <?php echo ( 'month+3' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 3rd month out', 'my-calendar' ); ?></option>
-				<option value="month+4" <?php echo ( 'month+4' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 4th month out', 'my-calendar' ); ?></option>
-				<option value="month+5" <?php echo ( 'month+5' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 5th month out', 'my-calendar' ); ?></option>
-				<option value="month+6" <?php echo ( 'month+6' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 6th month out', 'my-calendar' ); ?></option>
-				<option value="month+7" <?php echo ( 'month+7' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 7th month out', 'my-calendar' ); ?></option>
-				<option value="month+8" <?php echo ( 'month+8' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 8th month out', 'my-calendar' ); ?></option>
-				<option value="month+9" <?php echo ( 'month+9' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 9th month out', 'my-calendar' ); ?></option>
-				<option value="month+10" <?php echo ( 'month+10' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 10th month out', 'my-calendar' ); ?></option>
-				<option value="month+11" <?php echo ( 'month+11' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 11th month out', 'my-calendar' ); ?></option>
-				<option value="month+12" <?php echo ( 'month+12' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 12th month out', 'my-calendar' ); ?></option>
-				<option value="year" <?php echo ( 'year' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current year', 'my-calendar' ); ?></option>
-				<option value="custom" <?php echo ( 'custom' == $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Custom Dates', 'my-calendar' ); ?></option>
+				<option value="events" <?php echo ( 'events' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Events (e.g. 2 past, 3 future)', 'my-calendar' ); ?></option>
+				<option value="days" <?php echo ( 'days' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Dates (e.g. 4 days past, 5 forward)', 'my-calendar' ); ?></option>
+				<option value="month" <?php echo ( 'month' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current month', 'my-calendar' ); ?></option>
+				<option value="month+1" <?php echo ( 'month+1' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show next month', 'my-calendar' ); ?></option>
+				<option value="month+2" <?php echo ( 'month+2' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 2nd month out', 'my-calendar' ); ?></option>
+				<option value="month+3" <?php echo ( 'month+3' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 3rd month out', 'my-calendar' ); ?></option>
+				<option value="month+4" <?php echo ( 'month+4' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 4th month out', 'my-calendar' ); ?></option>
+				<option value="month+5" <?php echo ( 'month+5' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 5th month out', 'my-calendar' ); ?></option>
+				<option value="month+6" <?php echo ( 'month+6' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 6th month out', 'my-calendar' ); ?></option>
+				<option value="month+7" <?php echo ( 'month+7' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 7th month out', 'my-calendar' ); ?></option>
+				<option value="month+8" <?php echo ( 'month+8' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 8th month out', 'my-calendar' ); ?></option>
+				<option value="month+9" <?php echo ( 'month+9' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 9th month out', 'my-calendar' ); ?></option>
+				<option value="month+10" <?php echo ( 'month+10' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 10th month out', 'my-calendar' ); ?></option>
+				<option value="month+11" <?php echo ( 'month+11' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 11th month out', 'my-calendar' ); ?></option>
+				<option value="month+12" <?php echo ( 'month+12' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show 12th month out', 'my-calendar' ); ?></option>
+				<option value="year" <?php echo ( 'year' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Show current year', 'my-calendar' ); ?></option>
+				<option value="custom" <?php echo ( 'custom' === $type ) ? 'selected="selected"' : ''; ?>><?php _e( 'Custom Dates', 'my-calendar' ); ?></option>
 			</select>
 		</p>
 		<?php
-		if ( 'custom' == $type ) {
+		if ( 'custom' === $type ) {
 			?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mc_from' ); ?>"><?php _e( 'Start date', 'my-calendar' ); ?>:</label>
@@ -214,12 +214,12 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_order' ); ?>"><?php _e( 'Events sort order:', 'my-calendar' ); ?></label>
 			<select id="<?php echo $this->get_field_id( 'my_calendar_upcoming_order' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_order' ); ?>">
-				<option value="asc" <?php echo ( 'asc' == $order ) ? 'selected="selected"' : ''; ?>><?php _e( 'Ascending (near to far)', 'my-calendar' ); ?></option>
-				<option value="desc" <?php echo ( 'desc' == $order ) ? 'selected="selected"' : ''; ?>><?php _e( 'Descending (far to near)', 'my-calendar' ); ?></option>
+				<option value="asc" <?php echo ( 'asc' === $order ) ? 'selected="selected"' : ''; ?>><?php _e( 'Ascending (near to far)', 'my-calendar' ); ?></option>
+				<option value="desc" <?php echo ( 'desc' === $order ) ? 'selected="selected"' : ''; ?>><?php _e( 'Descending (far to near)', 'my-calendar' ); ?></option>
 			</select>
 		</p>
 		<?php
-		if ( ! ( 'month' == $type || 'month+1' == $type || 'year' == $type ) ) {
+		if ( ! ( 'month' === $type || 'month+1' === $type || 'year' === $type ) ) {
 			?>
 			<p>
 				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_after' ); ?>" value="<?php echo $after; ?>" size="1" maxlength="3"/>
@@ -240,7 +240,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		}
 		?>
 		<p>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_show_today' ); ?>" value="yes"<?php echo ( 'yes' == $show_today ) ? ' checked="checked"' : ''; ?> />
+			<input type="checkbox" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_show_today' ); ?>" value="yes"<?php echo ( 'yes' === $show_today ) ? ' checked="checked"' : ''; ?> />
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>"><?php _e( "Include today's events", 'my-calendar' ); ?></label>
 		</p>
 		<p>

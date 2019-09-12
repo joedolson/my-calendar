@@ -37,7 +37,7 @@ add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );
  */
 function mc_show_event_editing( $status, $args ) {
 	$return = $status;
-	if ( 'toplevel_page_my-calendar' == $args->base ) {
+	if ( 'toplevel_page_my-calendar' === $args->base ) {
 		$input_options    = get_user_meta( get_current_user_id(), 'mc_show_on_page', true );
 		$settings_options = get_option( 'mc_input_options' );
 		if ( ! is_array( $input_options ) ) {
@@ -62,9 +62,9 @@ function mc_show_event_editing( $status, $args ) {
 
 		$output = '';
 		foreach ( $input_options as $key => $value ) {
-			$checked = ( 'on' == $value ) ? "checked='checked'" : '';
-			$allowed = ( isset( $settings_options[ $key ] ) && 'on' == $settings_options[ $key ] ) ? true : false;
-			if ( ! ( current_user_can( 'manage_options' ) && 'true' == get_option( 'mc_input_options_administrators' ) ) && ! $allowed ) {
+			$checked = ( 'on' === $value ) ? "checked='checked'" : '';
+			$allowed = ( isset( $settings_options[ $key ] ) && 'on' === $settings_options[ $key ] ) ? true : false;
+			if ( ! ( current_user_can( 'manage_options' ) && 'true' === get_option( 'mc_input_options_administrators' ) ) && ! $allowed ) {
 				// don't display options if this user can't use them.
 				$output .= "<input type='hidden' name='mc_show_on_page[$key]' value='off' />";
 			} else {
@@ -102,7 +102,7 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
  * @return value
  */
 function mc_set_event_editing( $status, $option, $value ) {
-	if ( 'mc_show_on_page' == $option ) {
+	if ( 'mc_show_on_page' === $option ) {
 		$orig  = get_option( 'mc_input_options' );
 		$value = array();
 		foreach ( $orig as $k => $v ) {

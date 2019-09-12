@@ -383,7 +383,7 @@ function mc_newline_replace( $string ) {
  * @return array
  */
 function reverse_array( $array, $boolean, $order ) {
-	if ( 'desc' == $order ) {
+	if ( 'desc' === $order ) {
 
 		return array_reverse( $array, $boolean );
 	} else {
@@ -400,11 +400,11 @@ function reverse_array( $array, $boolean, $order ) {
  * @param string $email target email (if sending via email).
  */
 function mc_debug( $subject, $body, $email = false ) {
-	if ( defined( 'MC_DEBUG' ) && true == MC_DEBUG ) {
+	if ( defined( 'MC_DEBUG' ) && true === MC_DEBUG ) {
 		if ( ! $email ) {
 			$email = get_option( 'admin_email' );
 		}
-		if ( defined( 'MC_DEBUG_METHOD' ) && 'email' == MC_DEBUG_METHOD ) {
+		if ( defined( 'MC_DEBUG_METHOD' ) && 'email' === MC_DEBUG_METHOD ) {
 			wp_mail( get_option( 'admin_email' ), $subject, print_r( $body ) );
 		} else {
 			do_action( 'mc_debug', $subject, $body );

@@ -39,7 +39,7 @@ add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
  * @return return array tags
  */
 function mc_allowed_tags( $tags, $context ) {
-	if ( 'mycalendar' == $context ) {
+	if ( 'mycalendar' === $context ) {
 		global $allowedposttags;
 		$tags = $allowedposttags;
 
