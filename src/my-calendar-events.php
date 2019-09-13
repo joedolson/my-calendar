@@ -117,24 +117,48 @@ function my_calendar_get_events( $args ) {
 	$search             = mc_prepare_search_query( $search );
 	$exclude_categories = mc_private_categories();
 	$arr_events         = array();
+	$events             = array();
 
-	$event_query = '
-SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
-FROM ' . my_calendar_event_table( $site ) . '
-JOIN ' . my_calendar_table( $site ) . ' AS e
-ON (event_id=occur_event_id)
-JOIN ' . my_calendar_categories_table( $site ) . " AS c 
-ON (event_category=category_id)
-$join
-WHERE $select_published $select_category $select_location $select_author $select_host $select_access $search
-AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
-	OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
-	OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
-	OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
-$exclude_categories
-ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+	if ( is_array( $site ) ) {
+		foreach( $site as $s ) {
+			$event_query = '
+		SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		FROM ' . my_calendar_event_table( $s ) . '
+		JOIN ' . my_calendar_table( $s ) . ' AS e
+		ON (event_id=occur_event_id)
+		JOIN ' . my_calendar_categories_table( $s ) . " AS c 
+		ON (event_category=category_id)
+		$join
+		WHERE $select_published $select_category $select_location $select_author $select_host $select_access $search
+		AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
+			OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
+			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
+			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
+		$exclude_categories
+		ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
 
-	$events = $mcdb->get_results( $event_query );
+			$sites  = $mcdb->get_results( $event_query );
+			$events = array_merge( $events, $sites );
+		}
+	} else {
+		$event_query = '
+		SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		FROM ' . my_calendar_event_table( $site ) . '
+		JOIN ' . my_calendar_table( $site ) . ' AS e
+		ON (event_id=occur_event_id)
+		JOIN ' . my_calendar_categories_table( $site ) . " AS c 
+		ON (event_category=category_id)
+		$join
+		WHERE $select_published $select_category $select_location $select_author $select_host $select_access $search
+		AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
+			OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
+			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
+			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
+		$exclude_categories
+		ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+
+		$events = $mcdb->get_results( $event_query );
+	}
 
 	if ( ! empty( $events ) ) {
 		$cats = array();
