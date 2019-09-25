@@ -1831,10 +1831,10 @@ function mc_event_access() {
 function mc_event_accessibility( $form, $data, $label ) {
 	$note_value    = '';
 	$events_access = array();
-	$class         = ( is_admin() ) ? ' class="screen-reader-text"' : '';
+	$class         = ( is_admin() ) ? 'screen-reader-text' : 'mc-event-access';
 	$form         .= "
 		<fieldset>
-			<legend$class>$label</legend>
+			<legend class='$class'>$label</legend>
 			<ul class='accessibility-features checkboxes'>";
 	$access        = apply_filters( 'mc_event_accessibility', mc_event_access() );
 	if ( ! empty( $data ) ) {
