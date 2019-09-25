@@ -83,6 +83,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.15 =
+
+* Bug fix: List of access features produced empty UL if no results.
+* Bug fix: Always produce a class on event accessibility selection list.
+* 
+
 = 3.1.14 =
 
 * Bug fix: Unescaped event title in HTML output.
