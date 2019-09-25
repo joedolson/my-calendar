@@ -919,7 +919,7 @@ function mc_expand( $data ) {
 			}
 			$output .= "<li class='$class'><span>$label</span></li>\n";
 		}
-		$output = "<ul class='mc-access'>" . $output . '</ul>';
+		$output = ( $output ) ? "<ul class='mc-access'>" . $output . '</ul>' : '';
 	}
 
 	return $output;
