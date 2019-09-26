@@ -223,7 +223,7 @@ function my_calendar_settings() {
 		update_option( 'mc_default_sort', $_POST['mc_default_sort'] );
 		update_option( 'mc_default_direction', $_POST['mc_default_direction'] );
 		if ( 2 === (int) get_site_option( 'mc_multisite' ) ) {
-			$mc_current_table = ( isset( $_POST['mc_current_table'] ) ? (int) $_POST['mc_current_table'] : 0;
+			$mc_current_table = ( isset( $_POST['mc_current_table'] ) ) ? (int) $_POST['mc_current_table'] : 0;
 			update_option( 'mc_current_table', $mc_current_table );
 		}
 		mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) . ". $clear" );
