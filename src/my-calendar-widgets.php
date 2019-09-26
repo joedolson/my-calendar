@@ -53,19 +53,19 @@ function my_calendar_upcoming_events( $args ) {
 	$output       = '';
 	$defaults     = mc_widget_defaults();
 	$display_type = ( 'default' === $type ) ? $defaults['upcoming']['type'] : $type;
-	$display_type = ( '' == $display_type ) ? 'events' : $display_type;
+	$display_type = ( '' === $display_type ) ? 'events' : $display_type;
 
 	// Get number of units we should go into the future.
 	$after = ( 'default' === $after ) ? $defaults['upcoming']['after'] : $after;
-	$after = ( '' == $after ) ? 10 : $after;
+	$after = ( '' === $after ) ? 10 : $after;
 
 	// Get number of units we should go into the past.
 	$before   = ( 'default' === $before ) ? $defaults['upcoming']['before'] : $before;
-	$before   = ( '' == $before ) ? 0 : $before;
+	$before   = ( '' === $before ) ? 0 : $before;
 	$category = ( 'default' === $category ) ? '' : $category;
 
 	// allow reference by file to external template.
-	if ( '' != $template && mc_file_exists( $template ) ) {
+	if ( '' !== $template && mc_file_exists( $template ) ) {
 		$template = file_get_contents( mc_get_file( $template ) );
 	}
 
@@ -75,7 +75,7 @@ function my_calendar_upcoming_events( $args ) {
 	}
 
 	$template       = apply_filters( 'mc_upcoming_events_template', $template );
-	$no_event_text  = ( '' == $substitute ) ? $defaults['upcoming']['text'] : $substitute;
+	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events'>";
 	$footer         = '</ul>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
@@ -89,7 +89,7 @@ function my_calendar_upcoming_events( $args ) {
 			$from = date( 'Y-m-1' );
 			$to   = date( 'Y-m-t' );
 		}
-		if ( 'custom' === $display_type && '' != $from && '' != $to ) {
+		if ( 'custom' === $display_type && '' !== $from && '' !== $to ) {
 			$from = date( 'Y-m-d', strtotime( $from ) );
 			$to   = ( 'today' === $to ) ? date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d', strtotime( $to ) );
 		}
@@ -164,7 +164,7 @@ function my_calendar_upcoming_events( $args ) {
 		$query       = apply_filters( 'mc_upcoming_attributes', $query, $args );
 		$event_array = my_calendar_events( $query );
 
-		if ( 0 != count( $event_array ) ) {
+		if ( 0 !== count( $event_array ) ) {
 			foreach ( $event_array as $key => $value ) {
 				if ( is_array( $value ) ) {
 					foreach ( $value as $k => $v ) {
@@ -185,10 +185,10 @@ function my_calendar_upcoming_events( $args ) {
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event );
 			$item    = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $args );
-			if ( '' == $item ) {
+			if ( '' === $item ) {
 				$item = mc_draw_template( $details, $template );
 			}
-			if ( $i < $skip && 0 != $skip ) {
+			if ( $i < $skip && 0 !== $skip ) {
 				$i ++;
 			} else {
 				$today    = date( 'Y-m-d H:i', current_time( 'timestamp' ) );
@@ -200,9 +200,9 @@ function my_calendar_upcoming_events( $args ) {
 				$prepend = apply_filters( 'mc_event_upcoming_before', "<li class='$class $category $classes'>", $class, $category );
 				$append  = apply_filters( 'mc_event_upcoming_after', '</li>', $class, $category );
 				// If same group, and same date, use it.
-				if ( ( $details['group'] !== $last_id || $details['date'] == $last_date ) || '0' == $details['group'] ) {
-					if ( ! in_array( $details['dateid'], $skips ) ) {
-						$output .= ( $item == $last_item ) ? '' : $prepend . $item . $append;
+				if ( ( $details['group'] !== $last_id || $details['date'] === $last_date ) || '0' === $details['group'] ) {
+					if ( ! in_array( $details['dateid'], $skips, true ) ) {
+						$output .= ( $item === $last_item ) ? '' : $prepend . $item . $append;
 					}
 				}
 			}
@@ -323,13 +323,13 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 							$beginning = $e->occur_begin;
 							$end       = $e->occur_end;
 							// Store span time in an array to avoid repeating database query.
-							if ( 1 == $e->event_span && ( ! isset( $spans[ $e->occur_group_id ] ) ) ) {
+							if ( '1' === $e->event_span && ( ! isset( $spans[ $e->occur_group_id ] ) ) ) {
 								// This is a multi-day event: treat each event as if it spanned the entire range of the group.
 								$span_time                   = mc_span_time( $e->occur_group_id );
 								$beginning                   = $span_time[0];
 								$end                         = $span_time[1];
 								$spans[ $e->occur_group_id ] = $span_time;
-							} elseif ( 1 == $e->event_span && ( isset( $spans[ $e->occur_group_id ] ) ) ) {
+							} elseif ( '1' === $e->event_span && ( isset( $spans[ $e->occur_group_id ] ) ) ) {
 								$span_time = $spans[ $e->occur_group_id ];
 								$beginning = $span_time[0];
 								$end       = $span_time[1];
@@ -337,7 +337,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 							$current = date( 'Y-m-d H:i:00', current_time( 'timestamp' ) );
 							if ( $e ) {
 								// If a multi-day event, show only once.
-								if ( 0 != $e->occur_group_id && 1 == $e->event_span && in_array( $e->occur_group_id, $group ) || in_array( $e->occur_id, $occur ) ) {
+								if ( '0' !== $e->occur_group_id && '1' === $e->event_span && in_array( $e->occur_group_id, $group, true ) || in_array( $e->occur_id, $occur, true ) ) {
 									$md = true;
 								} else {
 									$group[] = $e->occur_group_id;
@@ -347,11 +347,11 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 								// end multi-day reduction.
 								if ( ! $md ) {
 									// check if this event instance or this event group has already been displayed.
-									$same_event = ( in_array( $e->occur_id, $last_events ) ) ? true : false;
-									$same_group = ( in_array( $e->occur_group_id, $last_group ) ) ? true : false;
+									$same_event = ( in_array( $e->occur_id, $last_events, true ) ) ? true : false;
+									$same_group = ( in_array( $e->occur_group_id, $last_group, true ) ) ? true : false;
 									if ( 'yes' === $show_today && my_calendar_date_equal( $beginning, $current ) ) {
 										$in_total = apply_filters( 'mc_include_today_in_total', 'yes' ); // count todays events in total.
-										if ( 'no' != $in_total ) {
+										if ( 'no' !== $in_total ) {
 											$near_events[] = $e;
 											if ( $before > $after ) {
 												$future ++;
@@ -383,7 +383,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									$last_group[]  = $e->occur_group_id;
 									$last_date     = $beginning;
 								}
-								if ( $past > $before && $future > $after && 'yes' != $show_today ) {
+								if ( $past > $before && $future > $after && 'yes' !== $show_today ) {
 									break;
 								}
 							}
@@ -407,7 +407,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event, $context );
-			if ( ! in_array( $details['group'], $groups ) ) {
+			if ( ! in_array( $details['group'], $groups, true ) ) {
 				$date     = date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ) );
 				$class    = ( true === my_calendar_date_comp( $date, $today . ' ' . date( 'H:i', current_time( 'timestamp' ) ) ) ) ? 'past-event' : 'future-event';
 				$category = mc_category_class( $details, 'mc_' );
@@ -416,7 +416,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 				if ( my_calendar_date_equal( $date, $today ) ) {
 					$class = 'today';
 				}
-				if ( 1 == $details['event_span'] ) {
+				if ( '1' === $details['event_span'] ) {
 					$class = 'multiday';
 				}
 				if ( 'list' === $type ) {
@@ -429,10 +429,10 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $class, $category, $date );
 				$append  = apply_filters( 'mc_event_upcoming_after', $append, $class, $category, $date );
 
-				if ( $i < $skip && 0 != $skip ) {
+				if ( $i < $skip && 0 !== $skip ) {
 					$i ++;
 				} else {
-					if ( ! in_array( $details['dateid'], $skips ) ) {
+					if ( ! in_array( $details['dateid'], $skips, true ) ) {
 
 						$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $type );
 						if ( '' === $item ) {
@@ -443,7 +443,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 						$skips[]  = $details['dateid'];
 					}
 				}
-				if ( 1 == $details['event_span'] ) {
+				if ( '1' === $details['event_span'] ) {
 					$groups[] = $details['group'];
 				}
 			}
@@ -498,7 +498,7 @@ function my_calendar_todays_events( $args ) {
 	$output = '';
 
 	// allow reference by file to external template.
-	if ( '' != $template && mc_file_exists( $template ) ) {
+	if ( '' !== $template && mc_file_exists( $template ) ) {
 		$template = file_get_contents( mc_get_file( $template ) );
 	}
 	$defaults = mc_widget_defaults();
@@ -541,7 +541,7 @@ function my_calendar_todays_events( $args ) {
 	// quick loop through all events today to check for holidays.
 	if ( is_array( $today ) ) {
 		foreach ( $today as $e ) {
-			if ( ! mc_private_event( $e ) && ! in_array( $e->event_group_id, $groups ) ) {
+			if ( ! mc_private_event( $e ) && ! in_array( $e->event_group_id, $groups, true ) ) {
 				$event_details = mc_create_tags( $e );
 				$ts            = strtotime( get_date_from_gmt( date( 'Y-m-d H:i:s', $e->ts_occur_begin ) ) );
 				$end           = strtotime( get_date_from_gmt( date( 'Y-m-d H:i:s', $e->ts_occur_end ) ) );
@@ -571,7 +571,7 @@ function my_calendar_todays_events( $args ) {
 				$output .= $now;
 			}
 		}
-		if ( 0 != count( $events ) ) {
+		if ( 0 !== count( $events ) ) {
 			$return = apply_filters( 'mc_todays_events_header', $header ) . $output . apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
 			$return = stripcslashes( $no_event_text );
