@@ -154,8 +154,8 @@ function mc_register_styles() {
 	$css_array = ( '' !== get_option( 'mc_show_css', '' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
 
 	// check whether any scripts are actually enabled.
-	if ( get_option( 'mc_calendar_javascript' ) != 1 || get_option( 'mc_list_javascript' ) != 1 || get_option( 'mc_mini_javascript' ) != 1 || get_option( 'mc_ajax_javascript' ) != 1 ) {
-		if ( is_array( $js_array ) && in_array( $id, $js_array ) || '' == get_option( 'mc_show_js' ) || is_singular( 'mc-events' ) ) {
+	if ( get_option( 'mc_calendar_javascript' ) !== '1' || get_option( 'mc_list_javascript' ) !== '1' || get_option( 'mc_mini_javascript' ) !== '1' || get_option( 'mc_ajax_javascript' ) !== '1' ) {
+		if ( is_array( $js_array ) && in_array( $id, $js_array, true ) || '' === get_option( 'mc_show_js', '' ) || is_singular( 'mc-events' ) ) {
 			wp_enqueue_script( 'jquery' );
 			if ( 'true' === get_option( 'mc_gmap' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
@@ -168,7 +168,7 @@ function mc_register_styles() {
 	}
 	// True means styles are disabled.
 	if ( 'true' !== get_option( 'mc_use_styles' ) ) {
-		if ( ( $default && ! $id ) || ( is_array( $css_array ) && in_array( $id, $css_array ) || get_option( 'mc_show_css', '' ) === '' ) ) {
+		if ( ( $default && ! $id ) || ( is_array( $css_array ) && in_array( $id, $css_array, true ) || get_option( 'mc_show_css', '' ) === '' ) ) {
 			wp_enqueue_style( 'my-calendar-style' );
 		}
 	}
@@ -201,7 +201,7 @@ function my_calendar_head() {
 		$this_post = $wp_query->get_queried_object();
 		$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
 		$array     = ( '' !== get_option( 'mc_show_css', '' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
-		if ( is_array( $array ) && in_array( $id, $array ) || get_option( 'mc_show_css', '' ) === '' ) {
+		if ( is_array( $array ) && in_array( $id, $array, true ) || get_option( 'mc_show_css', '' ) === '' ) {
 			// generate category colors.
 			$category_styles = '';
 			$inv             = '';
@@ -378,17 +378,17 @@ function mc_footer_js() {
 			}
 			$ajax_js = stripcslashes( get_option( 'mc_ajaxjs' ) );
 			$inner   = '';
-			if ( ( is_array( $pages ) && in_array( $id, $pages ) ) || '' === get_option( 'mc_show_js', '' ) ) {
-				if ( get_option( 'mc_calendar_javascript' ) != 1 ) {
+			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === get_option( 'mc_show_js', '' ) ) {
+				if ( get_option( 'mc_calendar_javascript' ) !== '1' ) {
 					$inner .= "\n" . $cal_js;
 				}
-				if ( get_option( 'mc_list_javascript' ) != 1 ) {
+				if ( get_option( 'mc_list_javascript' ) !== '1' ) {
 					$inner .= "\n" . $list_js;
 				}
-				if ( get_option( 'mc_mini_javascript' ) != 1 ) {
+				if ( get_option( 'mc_mini_javascript' ) !== '1' ) {
 					$inner .= "\n" . $mini_js;
 				}
-				if ( get_option( 'mc_ajax_javascript' ) != 1 ) {
+				if ( get_option( 'mc_ajax_javascript' ) !== '1' ) {
 					$inner .= "\n" . $ajax_js;
 				}
 				$script = '
@@ -400,26 +400,26 @@ function mc_footer_js() {
 			echo ( '' !== $inner ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
-			if ( ( is_array( $pages ) && in_array( $id, $pages ) ) || '' === get_option( 'mc_show_js', '' ) ) {
-				if ( 1 != get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
+			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === get_option( 'mc_show_js', '' ) ) {
+				if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.grid', 'mcgrid', 'true' );
 				}
-				if ( 1 != get_option( 'mc_list_javascript' ) ) {
+				if ( '1' !== get_option( 'mc_list_javascript' ) ) {
 					$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.list', 'mclist', 'true' );
 				}
-				if ( 1 != get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
+				if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
 					$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
 					wp_localize_script( 'mc.mini', 'mcmini', 'true' );
 				}
-				if ( 1 != get_option( 'mc_ajax_javascript' ) ) {
+				if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
 					$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ) );
@@ -917,7 +917,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		$ignore = array( 'HTTP_COOKIE' );
 
 		foreach ( $_SERVER as $key => $value ) {
-			if ( ! in_array( $key, (array) $ignore ) ) {
+			if ( ! in_array( $key, (array) $ignore, true ) ) {
 				$c[ "$key" ] = $value;
 			}
 		}
@@ -1589,7 +1589,7 @@ function mc_posttypes() {
 				'exclude_from_search' => $raw['exclude_from_search'],
 				'show_ui'             => $raw['show_ui'],
 				'show_in_menu'        => $raw['show_in_menu'],
-				'menu_icon'           => ( null == $raw['menu_icon'] ) ? plugins_url( 'images', __FILE__ ) . '/icon.png' : $raw['menu_icon'],
+				'menu_icon'           => ( null === $raw['menu_icon'] ) ? plugins_url( 'images', __FILE__ ) . '/icon.png' : $raw['menu_icon'],
 				'query_var'           => true,
 				'rewrite'             => array(
 					'with_front' => false,
@@ -1728,7 +1728,7 @@ add_action( 'admin_notices', 'mc_update_notice' );
  */
 function mc_update_notice() {
 	// Deprecate this notice when 2.3 no longer in upgrade cycles.
-	if ( current_user_can( 'activate_plugins' ) && 0 == get_option( 'mc_update_notice' ) || ! get_option( 'mc_update_notice' ) ) {
+	if ( current_user_can( 'activate_plugins' ) && '0' === get_option( 'mc_update_notice' ) || ! get_option( 'mc_update_notice' ) ) {
 		$dismiss = admin_url( 'admin.php?page=my-calendar-behaviors&dismiss=update' );
 		// Translators: URL to scripts manager.
 		echo "<div class='updated'><p>" . sprintf( __( "<strong>Update notice:</strong> if you use custom JS with My Calendar, you need to activate your custom scripts following this update. <a href='%s'>Dismiss Notice</a>", 'my-calendar' ), $dismiss ) . '</p></div>';
