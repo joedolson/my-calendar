@@ -331,7 +331,7 @@ function mc_strip_to_xml( $value ) {
 	$length = strlen( $value );
 	for ( $i = 0; $i < $length; $i ++ ) {
 		$current = ord( $value{$i} );
-		if ( ( 0x9 == $current ) || ( 0xA == $current ) || ( 0xD == $current ) || ( ( $current >= 0x20 ) && ( $current <= 0xD7FF ) ) || ( ( $current >= 0xE000 ) && ( $current <= 0xFFFD ) ) || ( ( $current >= 0x10000 ) && ( $current <= 0x10FFFF ) ) ) {
+		if ( ( 0x9 === $current ) || ( 0xA === $current ) || ( 0xD === $current ) || ( ( $current >= 0x20 ) && ( $current <= 0xD7FF ) ) || ( ( $current >= 0xE000 ) && ( $current <= 0xFFFD ) ) || ( ( $current >= 0x10000 ) && ( $current <= 0x10FFFF ) ) ) {
 			$ret .= chr( $current );
 		} else {
 			$ret .= ' ';
