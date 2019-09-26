@@ -41,7 +41,7 @@ function mc_templates_edit() {
 			mc_show_notice( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
 		} else {
 			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-				$template          = $_POST['mc_template'];
+				$template          = ( ! empty( $_POST['mc_template'] ) ? $_POST['mc_template'] : '';
 				$templates[ $key ] = $template;
 				update_option( 'mc_templates', $templates );
 				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
@@ -60,11 +60,11 @@ function mc_templates_edit() {
 	}
 
 	$globals             = mc_globals();
-	$mc_grid_template    = ( '' != $templates['grid'] ) ? $templates['grid'] : $globals['grid_template'];
-	$mc_rss_template     = ( '' != $templates['rss'] ) ? $templates['rss'] : $globals['rss_template'];
-	$mc_list_template    = ( '' != $templates['list'] ) ? $templates['list'] : $globals['list_template'];
-	$mc_mini_template    = ( '' != $templates['mini'] ) ? $templates['mini'] : $globals['mini_template'];
-	$mc_details_template = ( '' != $templates['details'] ) ? $templates['details'] : $globals['single_template'];
+	$mc_grid_template    = ( '' !== trim( $templates['grid'] ) ) ? $templates['grid'] : $globals['grid_template'];
+	$mc_rss_template     = ( '' !== trim( $templates['rss'] ) ) ? $templates['rss'] : $globals['rss_template'];
+	$mc_list_template    = ( '' !== trim( $templates['list'] ) ) ? $templates['list'] : $globals['list_template'];
+	$mc_mini_template    = ( '' !== trim( $templates['mini'] ) ) ? $templates['mini'] : $globals['mini_template'];
+	$mc_details_template = ( '' !== trim( $templates['details'] ) ) ? $templates['details'] : $globals['single_template'];
 
 	$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
 	$template = stripslashes( $template );
@@ -83,7 +83,7 @@ function mc_templates_edit() {
 							<p>
 								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-help#templates' ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a> &raquo;
 							</p>
-							<?php echo ( '' != $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
+							<?php echo ( '' !== $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
 							<?php
 							if ( 'add-new' === $key ) {
 								?>
@@ -303,11 +303,11 @@ function mc_get_custom_template( $key ) {
  */
 function mc_key_exists( $key ) {
 	// Keys are md5 hashed, so should always be 32 chars.
-	if ( 32 != strlen( $key ) ) {
+	if ( 32 !== strlen( $key ) ) {
 		return false;
 	}
 
-	if ( 'missing' != get_option( "mc_ctemplate_$key", 'missing' ) ) {
+	if ( 'missing' !== get_option( "mc_ctemplate_$key", 'missing' ) ) {
 		return true;
 	}
 
@@ -382,7 +382,7 @@ function mc_template_description( $key ) {
 		$description = strip_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
 	}
 
-	$br = ( '' != $description ) ? '<br />' : '';
+	$br = ( '' !== $description ) ? '<br />' : '';
 
 	return $description . $br . $return;
 }
@@ -393,11 +393,11 @@ function mc_template_description( $key ) {
 function mc_list_templates() {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
-	$grid_enabled    = ( get_option( 'mc_use_grid_template' ) == 1 ) ? $check : $uncheck;
-	$list_enabled    = ( get_option( 'mc_use_list_template' ) == 1 ) ? $check : $uncheck;
-	$mini_enabled    = ( get_option( 'mc_use_mini_template' ) == 1 ) ? $check : $uncheck;
-	$details_enabled = ( get_option( 'mc_use_details_template' ) == 1 ) ? $check : $uncheck;
-	$rss_enabled     = ( get_option( 'mc_use_rss_template' ) == 1 ) ? $check : $uncheck;
+	$grid_enabled    = ( get_option( 'mc_use_grid_template' ) === '1' ) ? $check : $uncheck;
+	$list_enabled    = ( get_option( 'mc_use_list_template' ) === '1' ) ? $check : $uncheck;
+	$mini_enabled    = ( get_option( 'mc_use_mini_template' ) === '1' ) ? $check : $uncheck;
+	$details_enabled = ( get_option( 'mc_use_details_template' ) === '1' ) ? $check : $uncheck;
+	$rss_enabled     = ( get_option( 'mc_use_rss_template' ) === '1' ) ? $check : $uncheck;
 
 	$list = "<table class='widefat'>
 				<thead>
