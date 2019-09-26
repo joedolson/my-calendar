@@ -78,7 +78,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 				$aria = '';
 			}
 			foreach ( $label as $k => $v ) {
-				$checked  = ( $k == $value ) ? ' checked="checked"' : '';
+				$checked  = ( $k === $value ) ? ' checked="checked"' : '';
 				$options .= "<li><input type='radio' id='$name-$k' value='" . esc_attr( $k ) . "' name='$name'$aria$attributes$checked /> <label for='$name-$k'>$v</label></li>";
 			}
 			$return = "$options $note";
@@ -94,7 +94,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			}
 			if ( is_array( $default ) ) {
 				foreach ( $default as $k => $v ) {
-					$checked  = ( $k == $value ) ? ' selected="selected"' : '';
+					$checked  = ( $k === $value ) ? ' selected="selected"' : '';
 					$options .= "<option value='" . esc_attr( $k ) . "'$checked>$v</option>";
 				}
 			}
@@ -647,7 +647,7 @@ function mc_remote_db() {
 							$month_format = ( '' === get_option( 'mc_month_format', '' ) ) ? date_i18n( 'F Y' ) : date_i18n( get_option( 'mc_month_format' ) );
 							$time_format  = ( '' === get_option( 'mc_time_format', '' ) ) ? date_i18n( get_option( 'time_format' ) ) : date_i18n( get_option( 'mc_time_format' ) );
 							$week_format  = ( '' === get_option( 'mc_week_format', '' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
-							$date_format  = ( '' == get_option( 'mc_date_format', '' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
+							$date_format  = ( '' === get_option( 'mc_date_format', '' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
 							$tomorrow     = date( 'j' ) + 1;
 							$multi_format = ( '' === get_option( 'mc_multidate_format', '' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
 							?>

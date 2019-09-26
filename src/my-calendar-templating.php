@@ -41,7 +41,7 @@ function mc_templates_edit() {
 			mc_show_notice( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
 		} else {
 			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-				$template          = ( ! empty( $_POST['mc_template'] ) ? $_POST['mc_template'] : '';
+				$template          = ( ! empty( $_POST['mc_template'] ) ) ? $_POST['mc_template'] : '';
 				$templates[ $key ] = $template;
 				update_option( 'mc_templates', $templates );
 				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
