@@ -161,7 +161,7 @@ function my_calendar_add_locations() {
 		do_action( 'mc_modify_location', $where, $update );
 		if ( false === $results ) {
 			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
-		} elseif ( 0 == $results ) {
+		} elseif ( 0 === $results ) {
 			mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
 		} else {
 			mc_show_notice( __( 'Location edited successfully', 'my-calendar' ) );
