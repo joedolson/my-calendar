@@ -242,7 +242,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $time, $template = '' ) {
 	$exit_early = mc_exit_early( $event, $process_date );
 	if ( $exit_early ) {
-		return;
+		return '';
 	}
 
 	// assign empty values to template sections.
