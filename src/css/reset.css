@@ -84,6 +84,7 @@ div.site-content {
 	position: absolute !important;
 	width: 1px;
 	word-wrap: normal !important;
+	color: inherit;
 }
 
 button.mc-toggle {
