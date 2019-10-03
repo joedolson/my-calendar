@@ -2471,6 +2471,7 @@ function mc_category_key( $category ) {
 			$class .= ' private';
 		}
 		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
+		$cat_name = ( '' === $cat_name ) ? '<span class="screen-reader-text">' . __( 'Untitled Category', 'my-calendar' ) . '</span>' : $cat_name;
 		$cat_key  = '';
 		if ( '' !== $cat->category_icon && 'true' !== get_option( 'mc_hide_icons' ) ) {
 			$cat_key .= '<span class="category-color-sample"><img src="' . $path . $cat->category_icon . '" alt="" style="background:' . $hex . $cat->category_color . ';" /></span>' . $cat_name;
