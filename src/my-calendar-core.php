@@ -67,8 +67,8 @@ function mc_plugin_action( $links, $file ) {
 function mc_custom_dirs( $type = 'path' ) {
 	$dirs = array();
 
-	$dirs[] = ( 'path' === $type ) ? plugin_dir_path( __FILE__ ) . 'my-calendar-custom/styles/' : plugin_dir_url( __FILE__ ) . 'my-calendar-custom/styles/';
-	$dirs[] = ( 'path' === $type ) ? plugin_dir_path( __FILE__ ) . 'my-calendar-custom/' : plugin_dir_url( __FILE__ ) . 'my-calendar-custom/';
+	$dirs[] = ( 'path' === $type ) ? plugin_dir_path( __DIR__ ) . 'my-calendar-custom/styles/' : plugin_dir_url( __DIR__ ) . 'my-calendar-custom/styles/';
+	$dirs[] = ( 'path' === $type ) ? plugin_dir_path( __DIR__ ) . 'my-calendar-custom/' : plugin_dir_url( __DIR__ ) . 'my-calendar-custom/';
 	$dirs[] = ( 'path' === $type ) ? get_stylesheet_directory() . '/css/' : get_stylesheet_directory_uri() . '/css/';
 	$dirs[] = ( 'path' === $type ) ? get_stylesheet_directory() . '/' : get_stylesheet_directory_uri() . '/';
 
