@@ -373,7 +373,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	$e['date']      = ( 1 != $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
 	$e['enddate']   = $date_end;
-	$e['daterange'] = ( $date === $date_end ) ? $date : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
+	$e['daterange'] = ( $date === $date_end ) ? "<span class='mc_db'>$date</span>" : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
 	$e['timerange'] = ( ( $e['time'] === $e['endtime'] ) || 1 == $event->event_hide_end || '23:59:59' === date( 'H:i:s', strtotime( $real_end_date ) ) ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . '</span>';
 	$e['datespan']  = ( 1 == $event->event_span || ( $e['date'] != $e['enddate'] ) ) ? mc_format_date_span( $dates ) : $date;
 	$e['multidate'] = mc_format_date_span( $dates, 'complex', "<span class='fallback-date'>$date</span><span class='separator'>,</span> <span class='fallback-time'>$e[time]</span>&ndash;<span class='fallback-endtime'>$e[endtime]</span>" );
