@@ -24,7 +24,7 @@ function mc_prepare_search_query( $query ) {
 	global $wpdb;
 	$db_type = mc_get_db_type();
 	$search  = '';
-	if ( '' != $query ) {
+	if ( '' !== trim( $query ) ) {
 		if ( 'MyISAM' === $db_type ) {
 			$query  = esc_sql( $query );
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
@@ -48,7 +48,7 @@ function mc_prepare_search_query( $query ) {
  * @return string SQL modifiers.
  */
 function mc_select_category( $category, $type = 'event', $group = 'events' ) {
-	if ( '' == $category ) {
+	if ( '' === trim( $category ) ) {
 		return '';
 	}
 	$category      = urldecode( $category );
@@ -66,7 +66,7 @@ function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 		}
 
 		$join = '';
-		if ( '' != $select_clause ) {
+		if ( '' !== $select_clause ) {
 			$join = ' JOIN ' . my_calendar_category_relationships_table() . ' AS r ON r.event_id = e.event_id ';
 		}
 
@@ -135,11 +135,11 @@ function mc_category_select_ids( $category ) {
  * @return string WHERE limits
  */
 function mc_select_author( $author, $type = 'event', $context = 'author' ) {
-	if ( '' == $author ) {
+	if ( '' === trim( (string) $author ) ) {
 		return '';
 	}
 	$author = urldecode( $author );
-	if ( '' == $author || 'all' === $author || 'default' === $author || null === $author ) {
+	if ( '' === $author || 'all' === $author || 'default' === $author || null === $author ) {
 		return '';
 	}
 	$select_author = '';
@@ -229,11 +229,9 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 	$limit_string     = '';
 	$location         = '';
 	$current_location = '';
-	if ( '' != $ltype && '' != $lvalue ) {
-		if ( '' != $ltype && '' != $lvalue ) {
-			$location         = $ltype;
-			$current_location = $lvalue;
-		}
+	if ( '' !== $ltype && '' !== $lvalue ) {
+		$location         = $ltype;
+		$current_location = $lvalue;
 		switch ( $location ) {
 			case 'name':
 				$location_type = 'event_label';
@@ -256,8 +254,8 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 			default:
 				$location_type = $location;
 		}
-		if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2' ) ) ) {
-			if ( 'all' != $current_location && '' != $current_location ) {
+		if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2' ), true ) ) {
+			if ( 'all' !== $current_location && '' !== $current_location ) {
 				$current_location = trim( $current_location );
 				if ( is_numeric( $current_location ) ) {
 					$limit_string = 'AND ' . $location_type . ' = ' . absint( $current_location );
@@ -267,7 +265,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 			}
 		}
 	}
-	if ( '' != $limit_string ) {
+	if ( '' !== $limit_string ) {
 		if ( isset( $_GET['loc2'] ) && isset( $_GET['ltype2'] ) ) {
 			$limit_string .= mc_secondary_limit( $_GET['ltype2'], $_GET['loc2'] );
 		}
@@ -341,7 +339,7 @@ function mc_secondary_limit( $ltype = '', $lvalue = '' ) {
 		default:
 			$location_type = 'event_label';
 	}
-	if ( 'all' != $current_location && 'all' != $current_location ) {
+	if ( 'all' !== $current_location && '' !== $current_location ) {
 		$limit_string = "OR $location_type='$current_location'";
 	}
 
