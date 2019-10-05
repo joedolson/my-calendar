@@ -117,10 +117,10 @@ function my_calendar_get_events( $args ) {
 	$search             = mc_prepare_search_query( $search );
 	$exclude_categories = mc_private_categories();
 	$arr_events         = array();
-	$events             = array();
 
+	$site = apply_filters( 'mc_get_events_sites', $site, $args );
 	if ( is_array( $site ) ) {
-		foreach( $site as $s ) {
+		foreach ( $site as $s ) {
 			$event_query = '
 		SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
 		FROM ' . my_calendar_event_table( $s ) . '
@@ -137,8 +137,35 @@ function my_calendar_get_events( $args ) {
 		$exclude_categories
 		ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
 
-			$sites  = $mcdb->get_results( $event_query );
-			$events = array_merge( $events, $sites );
+			$events  = $mcdb->get_results( $event_query );
+
+			if ( ! empty( $events ) ) {
+				$cats = array();
+				$locs = array();
+				foreach ( array_keys( $events ) as $key ) {
+					$event          =& $events[ $key ];
+					$event->site_id = $s;
+					$object_id      = $event->event_id;
+					$location_id    = $event->event_location;
+					if ( ! isset( $cats[ $object_id ] ) ) {
+						$categories         = mc_get_categories( $event, false );
+						$event->categories  = $categories;
+						$cats[ $object_id ] = $categories;
+					} else {
+						$event->categories = $cats[ $object_id ];
+					}
+					if ( 0 !== (int) $location_id ) {
+						if ( ! isset( $locs[ $object_id ] ) ) {
+							$location           = mc_get_location( $location_id );
+							$event->location    = $location;
+							$locs[ $object_id ] = $location;
+						} else {
+							$event->location = $locs[ $object_id ];
+						}
+					}
+					$arr_events[] = mc_event_object( $event );
+				}
+			}
 		}
 	} else {
 		$event_query = '
@@ -158,33 +185,33 @@ function my_calendar_get_events( $args ) {
 		ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
 
 		$events = $mcdb->get_results( $event_query );
-	}
 
-	if ( ! empty( $events ) ) {
-		$cats = array();
-		$locs = array();
-		foreach ( array_keys( $events ) as $key ) {
-			$event          =& $events[ $key ];
-			$event->site_id = $site;
-			$object_id      = $event->event_id;
-			$location_id    = $event->event_location;
-			if ( ! isset( $cats[ $object_id ] ) ) {
-				$categories         = mc_get_categories( $event, false );
-				$event->categories  = $categories;
-				$cats[ $object_id ] = $categories;
-			} else {
-				$event->categories = $cats[ $object_id ];
-			}
-			if ( 0 !== (int) $location_id ) {
-				if ( ! isset( $locs[ $object_id ] ) ) {
-					$location           = mc_get_location( $location_id );
-					$event->location    = $location;
-					$locs[ $object_id ] = $location;
+		if ( ! empty( $events ) ) {
+			$cats = array();
+			$locs = array();
+			foreach ( array_keys( $events ) as $key ) {
+				$event          =& $events[ $key ];
+				$event->site_id = $site;
+				$object_id      = $event->event_id;
+				$location_id    = $event->event_location;
+				if ( ! isset( $cats[ $object_id ] ) ) {
+					$categories         = mc_get_categories( $event, false );
+					$event->categories  = $categories;
+					$cats[ $object_id ] = $categories;
 				} else {
-					$event->location = $locs[ $object_id ];
+					$event->categories = $cats[ $object_id ];
 				}
+				if ( 0 !== (int) $location_id ) {
+					if ( ! isset( $locs[ $object_id ] ) ) {
+						$location           = mc_get_location( $location_id );
+						$event->location    = $location;
+						$locs[ $object_id ] = $location;
+					} else {
+						$event->location = $locs[ $object_id ];
+					}
+				}
+				$arr_events[] = mc_event_object( $event );
 			}
-			$arr_events[] = mc_event_object( $event );
 		}
 	}
 

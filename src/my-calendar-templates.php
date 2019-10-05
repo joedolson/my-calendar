@@ -574,6 +574,11 @@ function mc_get_details_link( $event ) {
 	if ( ! is_object( $event ) ) {
 		return;
 	}
+	$restore = false;
+	if ( property_exists( $event, 'site_id' ) && $event->site_id !== get_current_blog_id() ) {
+		switch_to_blog( $event->site_id );
+		$restore = true;
+	}
 	$uri = mc_get_uri( $event );
 
 	// If available, and not querying remotely, use permalink.
@@ -607,8 +612,13 @@ function mc_get_details_link( $event ) {
 			);
 		}
 	}
+	$details_link = apply_filters( 'mc_customize_details_link', $details_link, $event );
 
-	return apply_filters( 'mc_customize_details_link', $details_link, $event );
+	if ( $restore ) {
+		restore_current_blog();
+	}
+
+	return $details_link;
 }
 
 /**
