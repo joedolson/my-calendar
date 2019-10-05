@@ -87,7 +87,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: List of access features produced empty UL if no results.
 * Bug fix: Always produce a class on event accessibility selection list.
-* 
+* Add: support passing multiple site IDs into the calendar shortcode in multisite.
 
 = 3.1.14 =
 

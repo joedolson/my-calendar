@@ -575,7 +575,7 @@ function mc_get_details_link( $event ) {
 		return;
 	}
 	$restore = false;
-	if ( property_exists( $event, 'site_id' ) && $event->site_id !== get_current_blog_id() ) {
+	if ( property_exists( $event, 'site_id' ) && get_current_blog_id() !== $event->site_id ) {
 		switch_to_blog( $event->site_id );
 		$restore = true;
 	}
