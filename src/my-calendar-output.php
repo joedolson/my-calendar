@@ -464,7 +464,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		}
 
 		$img_class  = ( '' !== $img ) ? ' has-image' : ' no-image';
-		$container  = "<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title' itemscope itemtype='http://schema.org/Event'>\n";
+		$container  = "<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "' itemscope itemtype='http://schema.org/Event'>\n";
 		$container .= "<meta itemprop='name' content='" . esc_attr( strip_tags( $event->event_title ) ) . "' />";
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
