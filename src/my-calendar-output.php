@@ -174,6 +174,7 @@ function mc_category_icon_title( $title, $post_id = null ) {
  * @param array  $params calendar parameters.
  * @param string $process_date String formatted date being displayed.
  * @param string $template Template to use for drawing individual events.
+ * @param string $id ID for the calendar calling this function.
  *
  * @return string Generated HTML.
  */
@@ -236,6 +237,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
  * @param string $process_date Current date being displayed.
  * @param string $time Time view being drawn.
  * @param string $template Template to use to draw event.
+ * @param string $id ID for the calendar calling this function.
  *
  * @return string Generated HTML.
  */
