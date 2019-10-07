@@ -365,13 +365,13 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		'occur_end'   => $real_end_date,
 	);
 	$date_obj          = (object) $date_arr;
-	if ( 1 == $event->event_span ) {
+	if ( '1' === $event->event_span ) {
 		$dates = mc_event_date_span( $event->event_group_id, $event->event_span, array( 0 => $date_obj ) );
 	} else {
 		$dates = array();
 	}
 
-	$e['date']      = ( 1 != $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
+	$e['date']      = ( '1' !== $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
 	$e['enddate']   = $date_end;
 	$e['daterange'] = ( $date === $date_end ) ? "<span class='mc_db'>$date</span>" : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
 	$e['timerange'] = ( ( $e['time'] === $e['endtime'] ) || 1 == $event->event_hide_end || '23:59:59' === date( 'H:i:s', strtotime( $real_end_date ) ) ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . '</span>';
@@ -575,7 +575,7 @@ function mc_get_details_link( $event ) {
 		return;
 	}
 	$restore = false;
-	if ( property_exists( $event, 'site_id' ) && get_current_blog_id() !== $event->site_id ) {
+	if ( is_multisite() && property_exists( $event, 'site_id' ) && get_current_blog_id() !== $event->site_id ) {
 		switch_to_blog( $event->site_id );
 		$restore = true;
 	}
