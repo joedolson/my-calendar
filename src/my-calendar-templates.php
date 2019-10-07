@@ -185,9 +185,9 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		if ( 'gcal' === $request ) {
 			return $map_string;
 		}
-		$zoom       = ( 0 != $event->event_zoom ) ? $event->event_zoom : '15';
+		$zoom       = ( '0' !== $event->event_zoom ) ? $event->event_zoom : '15';
 		$url        = $event->event_url;
-		$map_label  = strip_tags( stripslashes( ( '' != $event->event_label ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
+		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->event_label ) ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
 		$map_string = str_replace( ' ', '+', $map_string );
 		if ( '0.000000' !== $event->event_longitude && '0.000000' !== $event->event_latitude ) {
 			$dir_lat    = ( $event->event_latitude > 0 ) ? 'N' : 'S';
@@ -198,8 +198,8 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		}
 	} else {
 		$url        = $event->location_url;
-		$map_label  = strip_tags( stripslashes( ( '' != $event->location_label ) ? $event->location_label : '' ), mc_strip_tags() );
-		$zoom       = ( 0 != $event->location_zoom ) ? $event->location_zoom : '15';
+		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
+		$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
 		$map_string = str_replace( ' ', '+', $map_string );
 		if ( '0.000000' !== $event->location_longitude && '0.000000' !== $event->location_latitude ) {
 			$dir_lat    = ( $event->location_latitude > 0 ) ? 'N' : 'S';
@@ -282,32 +282,32 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( ! $url && ! $label && ! $street && ! $street2 && ! $city && ! $state && ! $zip && ! $country && ! $phone ) {
 		return '';
 	}
-	$link  = ( '' != $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
+	$link  = ( '' !== $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
 	$hcard = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
 	if ( 'true' === $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
-		$hcard .= ( '' != $label ) ? '<strong class="org fn" itemprop="name">' . $link . '</strong>' : '';
-		$hcard .= ( '' == $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
-		$hcard .= ( '' != $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
-		$hcard .= ( '' != $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
-		$hcard .= ( '' != $city . $state . $zip ) ? '<div>' : '';
-		$hcard .= ( '' != $city ) ? '<span class="locality" itemprop="addressLocality">' . $city . '</span><span class="mc-sep">, </span>' : '';
-		$hcard .= ( '' != $state ) ? '<span class="region" itemprop="addressRegion">' . $state . '</span> ' : '';
-		$hcard .= ( '' != $zip ) ? ' <span class="postal-code" itemprop="postalCode">' . $zip . '</span>' : '';
-		$hcard .= ( '' != $city . $state . $zip ) ? '</div>' : '';
-		$hcard .= ( '' != $country ) ? '<div class="country-name" itemprop="addressCountry">' . $country . '</div>' : '';
-		$hcard .= ( '' != $phone ) ? '<div class="tel" itemprop="telephone">' . $phone . '</div>' : '';
+		$hcard .= ( '' !== $label ) ? '<strong class="org fn" itemprop="name">' . $link . '</strong>' : '';
+		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
+		$hcard .= ( '' !== $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
+		$hcard .= ( '' !== $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
+		$hcard .= ( '' !== $city . $state . $zip ) ? '<div>' : '';
+		$hcard .= ( '' !== $city ) ? '<span class="locality" itemprop="addressLocality">' . $city . '</span><span class="mc-sep">, </span>' : '';
+		$hcard .= ( '' !== $state ) ? '<span class="region" itemprop="addressRegion">' . $state . '</span> ' : '';
+		$hcard .= ( '' !== $zip ) ? ' <span class="postal-code" itemprop="postalCode">' . $zip . '</span>' : '';
+		$hcard .= ( '' !== $city . $state . $zip ) ? '</div>' : '';
+		$hcard .= ( '' !== $country ) ? '<div class="country-name" itemprop="addressCountry">' . $country . '</div>' : '';
+		$hcard .= ( '' !== $phone ) ? '<div class="tel" itemprop="telephone">' . $phone . '</div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : '</div>';
 		$hcard .= '</div>';
 	}
-	if ( 'true' === $map && false != $the_map ) {
+	if ( 'true' === $map && false !== $the_map ) {
 		$hcard  .= '<meta itemprop="name" content="' . esc_attr( $label ) . '"/>';
 		$hcard  .= '<meta itemprop="address" content="' . esc_attr( mc_map_string( $event, $source ) ) . '"/>';
 		$the_map = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
-		$hcard  .= ( '' != $the_map ) ? "<div class='map'>$the_map</div>" : '';
+		$hcard  .= ( '' !== $the_map ) ? "<div class='map'>$the_map</div>" : '';
 	}
 	$hcard .= '</div>';
-	$hcard  = ( ( false != $the_map && 'true' === $map ) || ( '' != $link && 'true' === $address ) ) ? $hcard : '';
+	$hcard  = ( ( false !== $the_map && 'true' === $map ) || ( '' !== $link && 'true' === $address ) ) ? $hcard : '';
 
 	return apply_filters( 'mc_hcard', $hcard, $event, $address, $map, $source );
 }
@@ -352,7 +352,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['time']         = ( '00:00:00' === date( 'H:i:s', strtotime( $real_begin_date ) ) ) ? $notime : date( get_option( 'mc_time_format' ), strtotime( $real_begin_date ) );
 	$e['time24']       = ( '00:00' === date( 'G:i', strtotime( $real_begin_date ) ) ) ? $notime : date( get_option( 'mc_time_format' ), strtotime( $real_begin_date ) );
 	$endtime           = ( '23:59:59' === $event->event_end ) ? '00:00:00' : date( 'H:i:s', strtotime( $real_end_date ) );
-	$e['endtime']      = ( $real_end_date === $real_begin_date || 1 == $event->event_hide_end || '23:59:59' === date( 'H:i:s', strtotime( $real_end_date ) ) ) ? '' : date_i18n( get_option( 'mc_time_format' ), strtotime( $endtime ) );
+	$e['endtime']      = ( $real_end_date === $real_begin_date || '1' === $event->event_hide_end || '23:59:59' === date( 'H:i:s', strtotime( $real_end_date ) ) ) ? '' : date_i18n( get_option( 'mc_time_format' ), strtotime( $endtime ) );
 	$e['runtime']      = mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event );
 	$e['duration']     = mc_duration( $event );
 	$e['dtstart']      = date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ) );  // Date: hcal formatted.
