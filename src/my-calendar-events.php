@@ -137,7 +137,7 @@ function my_calendar_get_events( $args ) {
 		$exclude_categories
 		ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
 
-			$events  = $mcdb->get_results( $event_query );
+			$events = $mcdb->get_results( $event_query );
 
 			if ( ! empty( $events ) ) {
 				$cats = array();

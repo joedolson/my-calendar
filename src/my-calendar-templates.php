@@ -459,7 +459,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['location_source'] = $event->event_location;
 	$map_gcal             = '';
 	if ( property_exists( $event, 'location' ) ) {
-		$location             = $event->location;
+		$location = $event->location;
 		if ( is_object( $location ) ) {
 			$map                  = mc_maplink( $location, 'map', 'location' );
 			$map_url              = mc_maplink( $location, 'url', 'location' );
