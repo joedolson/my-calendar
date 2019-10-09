@@ -1053,7 +1053,7 @@ function mc_list_title( $events ) {
 	usort( $events, 'mc_time_cmp' );
 	$now         = $events[0];
 	$count       = count( $events ) - 1;
-	$event_title = strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() );
+	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags(), $now ) );
 	if ( 0 === $count ) {
 		$cstate = $event_title;
 	} elseif ( 1 == $count ) {

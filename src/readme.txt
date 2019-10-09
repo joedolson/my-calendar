@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.16 =
+
+* Bug fix: restricting styles & JS to specific pages broken by strict type checks.
+* 
+
 = 3.1.15 =
 
 * Bug fix: List of access features produced empty UL if no results.
