@@ -148,14 +148,17 @@ function mc_register_styles() {
 		wp_enqueue_style( 'my-calendar-admin-style' );
 	}
 
-	$default   = apply_filters( 'mc_display_css_on_archives', true, $wp_query );
-	$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
-	$js_array  = ( '' !== get_option( 'mc_show_js', '' ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
-	$css_array = ( '' !== get_option( 'mc_show_css', '' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
+	$default     = apply_filters( 'mc_display_css_on_archives', true, $wp_query );
+	$id          = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
+	$js_array    = ( '' !== trim( get_option( 'mc_show_js', '' ) ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
+	$css_array   = ( '' !== trim( get_option( 'mc_show_css', '' ) ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
+	$use_default = ( $default && ! $id ) ? true : false;
+	$js_usage    = ( ( empty( $js_array ) ) || ( $id && in_array( $id, $js_array ) ) ) ? true : false;
+	$css_usage   = ( ( empty( $css_array ) ) || ( $id && in_array( $id, $css_array ) ) ) ? true : false;
 
 	// check whether any scripts are actually enabled.
 	if ( get_option( 'mc_calendar_javascript' ) !== '1' || get_option( 'mc_list_javascript' ) !== '1' || get_option( 'mc_mini_javascript' ) !== '1' || get_option( 'mc_ajax_javascript' ) !== '1' ) {
-		if ( is_array( $js_array ) && in_array( $id, $js_array, true ) || '' === get_option( 'mc_show_js', '' ) || is_singular( 'mc-events' ) ) {
+		if ( $use_default || $js_usage || is_singular( 'mc-events' ) ) {
 			wp_enqueue_script( 'jquery' );
 			if ( 'true' === get_option( 'mc_gmap' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
@@ -168,7 +171,7 @@ function mc_register_styles() {
 	}
 	// True means styles are disabled.
 	if ( 'true' !== get_option( 'mc_use_styles' ) ) {
-		if ( ( $default && ! $id ) || ( is_array( $css_array ) && in_array( $id, $css_array, true ) || get_option( 'mc_show_css', '' ) === '' ) ) {
+		if ( $use_default || $css_usage ) {
 			wp_enqueue_style( 'my-calendar-style' );
 		}
 	}
@@ -199,9 +202,9 @@ function my_calendar_head() {
 
 	if ( get_option( 'mc_use_styles' ) !== 'true' ) {
 		$this_post = $wp_query->get_queried_object();
-		$id        = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
+		$id        = (string) ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
 		$array     = ( '' !== get_option( 'mc_show_css', '' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
-		if ( is_array( $array ) && in_array( $id, $array, true ) || get_option( 'mc_show_css', '' ) === '' ) {
+		if ( ( is_array( $array ) && ! empty( $array ) ) || in_array( $id, $array, true ) || get_option( 'mc_show_css', '' ) === '' ) {
 			// generate category colors.
 			$category_styles = '';
 			$inv             = '';
@@ -348,12 +351,13 @@ function mc_footer_js() {
 
 		return;
 	} else {
-		$pages = array();
-		if ( get_option( 'mc_show_js', '' ) !== '' ) {
-			$pages = explode( ',', get_option( 'mc_show_js' ) );
+		$pages   = array();
+		$show_js = get_option( 'mc_show_js', '' );
+		if ( '' !== $show_js ) {
+			$pages = explode( ',', $show_js );
 		}
 		if ( is_object( $wp_query ) && isset( $wp_query->post ) ) {
-			$id = $wp_query->post->ID;
+			$id = (string) $wp_query->post->ID;
 		} else {
 			$id = false;
 		}
@@ -378,7 +382,8 @@ function mc_footer_js() {
 			}
 			$ajax_js = stripcslashes( get_option( 'mc_ajaxjs' ) );
 			$inner   = '';
-			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === get_option( 'mc_show_js', '' ) ) {
+
+			if ( ! $id || ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) ) || '' === $show_js ) {
 				if ( get_option( 'mc_calendar_javascript' ) !== '1' ) {
 					$inner .= "\n" . $cal_js;
 				}
@@ -400,7 +405,7 @@ function mc_footer_js() {
 			echo ( '' !== $inner ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
-			if ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === get_option( 'mc_show_js', '' ) ) {
+			if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
 				if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
