@@ -86,7 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.1.16 =
 
 * Bug fix: restricting styles & JS to specific pages broken by strict type checks.
-* 
+* New filter: mc_list_title_title
 
 = 3.1.15 =
 
