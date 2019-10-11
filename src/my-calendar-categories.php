@@ -814,6 +814,8 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 				if ( $multiple ) {
 					if ( is_array( $category ) && in_array( $cat->category_id, $category ) ) {
 						$selected = ' checked="checked"';
+					} else if ( $category == $cat->category_id ) {
+						$selected = ' checked="checked"';
 					}
 				} else {
 					if ( $category == $cat->category_id ) {
