@@ -1303,7 +1303,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 		default:
 			return;
 	}
-	$return = apply_filters( 'mc_show_block', $return, $data, $field );
+	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
 	if ( true == $echo ) {
 		echo $return;
 	} else {
@@ -2751,58 +2751,61 @@ function mc_check_data( $action, $post, $i ) {
 		die;
 	}
 
+	$current_user = wp_get_current_user();
+	$event_author = ( $event_author == $current_user->ID || current_user_can( 'mc_manage_events' ) ) ? $event_author : $current_user->ID;
+	$primary      = ( ! $primary ) ? 1 : $primary;
+	$cats         = ( isset( $cats ) && is_array( $cats ) ) ? $cats : array( 1 );
+
+	$submit       = array(
+		// Begin strings.
+		'event_begin'        => $begin,
+		'event_end'          => $end,
+		'event_title'        => $title,
+		'event_desc'         => force_balance_tags( $desc ),
+		'event_short'        => force_balance_tags( $short ),
+		'event_time'         => $time,
+		'event_endtime'      => $endtime,
+		'event_link'         => $event_link,
+		'event_label'        => $event_label,
+		'event_street'       => $event_street,
+		'event_street2'      => $event_street2,
+		'event_city'         => $event_city,
+		'event_state'        => $event_state,
+		'event_postcode'     => $event_postcode,
+		'event_region'       => $event_region,
+		'event_country'      => $event_country,
+		'event_url'          => $event_url,
+		'event_recur'        => $recur,
+		'event_image'        => $event_image,
+		'event_phone'        => $event_phone,
+		'event_phone2'       => $event_phone2,
+		'event_access'       => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
+		'event_tickets'      => $event_tickets,
+		'event_registration' => $event_registration,
+		// Begin integers.
+		'event_repeats'      => $repeats,
+		'event_author'       => $event_author,
+		'event_category'     => $primary,
+		'event_link_expires' => $expires,
+		'event_zoom'         => $event_zoom,
+		'event_approved'     => $approved,
+		'event_host'         => $host,
+		'event_flagged'      => $spam,
+		'event_fifth_week'   => $event_fifth_week,
+		'event_holiday'      => $event_holiday,
+		'event_group_id'     => $event_group_id,
+		'event_span'         => $event_span,
+		'event_hide_end'     => $event_hide_end,
+		// Begin floats.
+		'event_longitude'    => $event_longitude,
+		'event_latitude'     => $event_latitude,
+		// Array: removed before DB insertion.
+		'event_categories'   => $cats,
+	);
+	$errors = apply_filters( 'mc_fields_required', '', $submit );
+
 	if ( '' == $errors ) {
-		$current_user = wp_get_current_user();
-		$event_author = ( $event_author == $current_user->ID || current_user_can( 'mc_manage_events' ) ) ? $event_author : $current_user->ID;
-		$primary      = ( ! $primary ) ? 1 : $primary;
-		$cats         = ( isset( $cats ) && is_array( $cats ) ) ? $cats : array( 1 );
-		$ok           = true;
-		$submit       = array(
-			// Begin strings.
-			'event_begin'        => $begin,
-			'event_end'          => $end,
-			'event_title'        => $title,
-			'event_desc'         => force_balance_tags( $desc ),
-			'event_short'        => force_balance_tags( $short ),
-			'event_time'         => $time,
-			'event_endtime'      => $endtime,
-			'event_link'         => $event_link,
-			'event_label'        => $event_label,
-			'event_street'       => $event_street,
-			'event_street2'      => $event_street2,
-			'event_city'         => $event_city,
-			'event_state'        => $event_state,
-			'event_postcode'     => $event_postcode,
-			'event_region'       => $event_region,
-			'event_country'      => $event_country,
-			'event_url'          => $event_url,
-			'event_recur'        => $recur,
-			'event_image'        => $event_image,
-			'event_phone'        => $event_phone,
-			'event_phone2'       => $event_phone2,
-			'event_access'       => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
-			'event_tickets'      => $event_tickets,
-			'event_registration' => $event_registration,
-			// Begin integers.
-			'event_repeats'      => $repeats,
-			'event_author'       => $event_author,
-			'event_category'     => $primary,
-			'event_link_expires' => $expires,
-			'event_zoom'         => $event_zoom,
-			'event_approved'     => $approved,
-			'event_host'         => $host,
-			'event_flagged'      => $spam,
-			'event_fifth_week'   => $event_fifth_week,
-			'event_holiday'      => $event_holiday,
-			'event_group_id'     => $event_group_id,
-			'event_span'         => $event_span,
-			'event_hide_end'     => $event_hide_end,
-			// Begin floats.
-			'event_longitude'    => $event_longitude,
-			'event_latitude'     => $event_latitude,
-			// Array: removed before DB insertion.
-			'event_categories'   => $cats,
-		);
+		$ok = true;
 
 		$submit = array_map( 'mc_kses_post', $submit );
 	} else {
