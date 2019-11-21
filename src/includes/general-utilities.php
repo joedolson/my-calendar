@@ -87,6 +87,10 @@ function mc_add_inner_box() {
 		$url     = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id );
 		$event   = mc_get_first_event( $event_id );
 		$content = '<p><strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '</strong><br />' . $event->event_begin . ' @ ' . $event->event_time . '</p>';
+		if ( $event->event_recur != 'S' ) {
+			$recur    = mc_event_recur_string( $event, $event->event_begin );
+			$content .= wpautop( $recur );
+		}
 		if ( '' != $event->event_label ) {
 			// Translators: Name of event location.
 			$content .= '<p>' . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . '</p>';
