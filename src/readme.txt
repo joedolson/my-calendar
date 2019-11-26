@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.18 =
+
+* Add filters to 'Add to Google Calendar' link: mc_gcal_location & mc_gcal_description
+* 
+
 = 3.1.17 =
 
 * Bug fix: comma misplaced in mc_list_title_title. 

@@ -245,9 +245,9 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	$base   = "&dates=$dtstart/$dtend";
 	$base  .= '&sprop=website:' . $url;
 	$base  .= '&text=' . urlencode( $title );
-	$base  .= '&location=' . urlencode( trim( $location ) );
+	$base  .= apply_filters( 'mc_gcal_location', '&location=' . urlencode( trim( $location ) ), $location );
 	$base  .= '&sprop=name:' . urlencode( get_bloginfo( 'name' ) );
-	$base  .= '&details=' . urlencode( stripcslashes( trim( $description ) ) );
+	$base  .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( stripcslashes( trim( $description ) ) ), $description );
 	$base  .= '&sf=true&output=xml';
 
 	return $source . $base;
