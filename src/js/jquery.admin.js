@@ -9,8 +9,8 @@ jQuery(document).ready(function ($) {
 		$('#event' + num).after(newElem);
 		// enable the "remove" button.
 		$('#del_field').removeAttr('disabled');
-		// business rule: you can only add 10 occurrences.
-		if ( newNum == 20 ) {
+		// business rule: you can only add 40 occurrences.
+		if ( newNum == 40 ) {
 			$('#add_field').attr('disabled', 'disabled');
 		}
 	});

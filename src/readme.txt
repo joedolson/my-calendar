@@ -86,7 +86,9 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.1.18 =
 
 * Add filters to 'Add to Google Calendar' link: mc_gcal_location & mc_gcal_description
-* 
+* Add 'nofollow' to links to past events.
+* Include recurrence info in post meta box.
+* Minor code refactoring.
 
 = 3.1.17 =
 
