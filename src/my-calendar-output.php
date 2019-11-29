@@ -295,6 +295,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$img             = '';
 	$has_image       = ( '' !== $image ) ? ' has-image' : '';
 	$event_classes   = mc_event_classes( $event, $day_id, $type );
+	$nofollow        = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
 	$header         .= "<div id='$uid-$type-$id' class='$event_classes'>\n";
 
 	switch ( $type ) {
@@ -322,7 +323,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type ) && ! $no_link ) {
 		if ( 'true' === $open_uri ) {
 			$details_link = esc_url( mc_get_details_link( $event ) );
-			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image'>" : '<span class="no-link">';
+			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 			$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 		} else {
 			$wrap    = "<a href='#$uid-$type-details' class='et_smooth_scroll_disabled url summary$has_image'>";

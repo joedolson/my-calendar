@@ -432,21 +432,24 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['time'],
 	);
 
+	$classes  = mc_event_classes( $event, $event->occur_id, 'template' );
+	$nofollow = ( stripos( $classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
+
 	$e_label   = str_replace( $tags, $replacements, $e_template );
 	$e_link    = mc_get_details_link( $event );
 	$e['link'] = mc_event_link( $event );
 	if ( $e['link'] ) {
-		$e['link_image'] = str_replace( "alt=''", "alt='" . esc_attr( $e['title'] ) . "'", "<a href='" . esc_url( $e['link'] ) . "'>" . $e['image'] . '</a>' );
-		$e['link_title'] = "<a href='" . esc_url( $event->event_link ) . "'>" . $e['title'] . '</a>';
+		$e['link_image'] = str_replace( "alt=''", "alt='" . esc_attr( $e['title'] ) . "'", "<a href='" . esc_url( $e['link'] ) . "' $nofollow>" . $e['image'] . '</a>' );
+		$e['link_title'] = "<a href='" . esc_url( $event->event_link ) . "' $nofollow>" . $e['title'] . '</a>';
 	} else {
 		$e['link_image'] = $e['image'];
 		$e['link_title'] = $e['title'];
 	}
 
 	$e['details_link']  = $e_link;
-	$e['details']       = "<a href='" . esc_url( $e_link ) . "' class='mc-details'>$e_label</a>";
+	$e['details']       = "<a href='" . esc_url( $e_link ) . "' class='mc-details' $nofollow>$e_label</a>";
 	$e['linking']       = ( '' != $e['link'] ) ? $event->event_link : $e_link;
-	$e['linking_title'] = ( '' != $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "'>" . $e['title'] . '</a>' : $e['title'];
+	$e['linking_title'] = ( '' != $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $nofollow>" . $e['title'] . '</a>' : $e['title'];
 
 	if ( 'related' != $context && ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
