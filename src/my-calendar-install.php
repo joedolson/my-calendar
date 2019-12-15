@@ -395,7 +395,7 @@ function mc_migrate_db() {
 		// assign endtimes to all events.
 		if ( '00:00:00' === $event->event_endtime && '00:00:00' !== $event->event_time ) {
 			$event->event_endtime = date( 'H:i:s', strtotime( "$event->event_time +1 hour" ) );
-			mc_flag_event( $event->event_id, $event->event_endtime );
+			mc_flag_event( $event->event_id, $event->event_endtime ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		}
 		// Set up category relationships if missing.
 		$cats = $wpdb->get_results( $wpdb->prepare( 'SELECT category_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d', $event->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
