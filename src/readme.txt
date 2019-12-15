@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.1.17
+Stable tag: 3.1.18
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -88,7 +88,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add filters to 'Add to Google Calendar' link: mc_gcal_location & mc_gcal_description
 * Add 'nofollow' to links to past events.
 * Include recurrence info in post meta box.
-* Change limit on occurrences from 20 to 40.
+* Change limit on adding occurrences from 20 to 40.
 * Minor code refactoring.
 
 = 3.1.17 =
