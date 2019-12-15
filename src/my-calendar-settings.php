@@ -124,7 +124,7 @@ function my_calendar_import() {
 		$event_ids      = array();
 		$events_results = false;
 		foreach ( $events as $key ) {
-			$endtime        = ( '00:00:00' === $key['event_time'] ) ? '00:00:00' : date( 'H:i:s', strtotime( "$key[event_time] +1 hour" ) );
+			$endtime        = ( '00:00:00' === $key['event_time'] ) ? '00:00:00' : date( 'H:i:s', strtotime( "$key[event_time] +1 hour" ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 			$data           = array(
 				'event_title'    => $key['event_title'],
 				'event_desc'     => $key['event_desc'],
@@ -648,7 +648,7 @@ function mc_remote_db() {
 							$time_format  = ( '' === get_option( 'mc_time_format', '' ) ) ? date_i18n( get_option( 'time_format' ) ) : date_i18n( get_option( 'mc_time_format' ) );
 							$week_format  = ( '' === get_option( 'mc_week_format', '' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
 							$date_format  = ( '' === get_option( 'mc_date_format', '' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
-							$tomorrow     = date( 'j' ) + 1;
+							$tomorrow     = date( 'j' ) + 1; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 							$multi_format = ( '' === get_option( 'mc_multidate_format', '' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%j', $tomorrow, get_option( 'mc_multidate_format' ) ) );
 							?>
 							<li><?php mc_settings_field( 'mc_date_format', __( 'Primary Date Format', 'my-calendar' ), '', $date_format ); ?></li>
