@@ -199,7 +199,7 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 			$result = '';
 			break;
 	}
-	if ( $field == $value ) {
+	if ( $field === $value ) {
 		$output = $result;
 	} else {
 		$output = '';
@@ -248,7 +248,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
  */
 function mc_inverse_color( $color ) {
 	$color = str_replace( '#', '', $color );
-	if ( strlen( $color ) != 6 ) {
+	if ( strlen( $color ) !== 6 ) {
 		return '#000000';
 	}
 	$rgb       = '';
@@ -274,7 +274,7 @@ function mc_inverse_color( $color ) {
 function mc_shift_color( $color ) {
 	$color   = str_replace( '#', '', $color );
 	$rgb     = '';
-	$percent = ( mc_inverse_color( $color ) == '#ffffff' ) ? - 20 : 20;
+	$percent = ( mc_inverse_color( $color ) === '#ffffff' ) ? - 20 : 20;
 	$per     = $percent / 100 * 255;
 	// Percentage to work with. Change middle figure to control color temperature.
 	if ( $per < 0 ) {

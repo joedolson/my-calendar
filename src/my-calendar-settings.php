@@ -575,6 +575,28 @@ function mc_remote_db() {
 								}
 								?>
 								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+								<?php
+								if ( 'true' === get_option( 'mc_api_enabled' ) ) {
+									?>
+								<li>
+									<?php
+									$url = add_query_arg( 
+										array(
+											'my-calendar-api' => 'json',
+											'to'              => current_time( 'Y-m-d' ),
+											'from'            => date( 'Y-m-d', time() - MONTH_IN_SECONDS ),
+										),
+										home_url()
+									);
+									// Translators: Linked URL to API endpoint.
+									printf(
+										__( 'API URL: %s', 'my-calendar' ), '<a href="' . $url . '">' . $url . '</a>'
+									);
+									?>
+								</li>
+									<?php
+								}
+								?>
 								<li><?php mc_settings_field( 'remigrate', __( 'Re-generate event occurrences table.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php

@@ -89,11 +89,11 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 		if ( 'global' === $site ) {
 			return $wpdb->base_prefix . $table;
 		}
-		if ( false != $site && $site ) {
+		if ( false !== $site && $site ) {
 			$site = absint( $site );
 			$wpdb->set_blog_id( $site );
 		}
-		$local  = ( 1 == $show ) ? $wpdb->base_prefix . $table : $wpdb->prefix . $table;
+		$local  = ( 1 === $show ) ? $wpdb->base_prefix . $table : $wpdb->prefix . $table;
 		$global = $wpdb->base_prefix . $table;
 
 		switch ( $option ) {
@@ -104,7 +104,7 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 				return $global;
 				break;
 			case 2:
-				return ( 1 == $choice ) ? $global : $local;
+				return ( 1 === $choice ) ? $global : $local;
 				break;
 			default:
 				return $local;

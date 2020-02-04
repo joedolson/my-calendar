@@ -86,6 +86,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.1.19 =
 
 * Auto-toggle admin time format if display time format set to European format.
+* Show API endpoint when API enabled.
 
 = 3.1.18 =
 
