@@ -1091,6 +1091,23 @@ function mc_scripts() {
 }
 
 
+add_filter( 'mc_time_format', 'mc_time_format', 10, 1 );
+/**
+ * Default time format is 'h:i A' (standard US time format).
+ * Pass a string using pickadate.time rules: http://amsul.ca/pickadate.js/time/#formatting-rules.
+ * 
+ * @param string $format Default time format string.
+ *
+ * @return string new format.
+ */
+function mc_time_format( $format ) {
+	if ( 'G:i' === get_option( 'mc_time_format' ) || 'H:i' === get_option( 'mc_time_format' ) ) {
+		return 'H:i'; // European 24-hour format.
+	}
+
+	return $format;
+}
+
 add_action( 'wp_ajax_mc_post_lookup', 'mc_post_lookup' );
 /**
  * Add post lookup for assigning My Calendar main page

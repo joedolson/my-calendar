@@ -83,6 +83,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.1.19 =
+
+* Auto-toggle admin time format if display time format set to European format.
+
 = 3.1.18 =
 
 * Add filters to 'Add to Google Calendar' link: mc_gcal_location & mc_gcal_description
