@@ -411,3 +411,18 @@ function mc_private_event( $event ) {
 
 	return $status;
 }
+
+/**
+ * Wrapper for date()
+ *
+ * @param string $format Format to use.
+ * @param int    $timestamp Timestamp.
+ *
+ * @return string Formatted date.
+ */
+function mc_date( $format, $timestamp = false ) {
+	if ( ! $timestamp ) {
+		$timestamp = time();
+	}
+	return date( $format, $timestamp );
+}

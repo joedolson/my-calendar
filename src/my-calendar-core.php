@@ -1095,7 +1095,7 @@ add_filter( 'mc_time_format', 'mc_time_format', 10, 1 );
 /**
  * Default time format is 'h:i A' (standard US time format).
  * Pass a string using pickadate.time rules: http://amsul.ca/pickadate.js/time/#formatting-rules.
- * 
+ *
  * @param string $format Default time format string.
  *
  * @return string new format.
