@@ -47,10 +47,10 @@ function mc_directory_list( $directory ) {
 	while ( $file = readdir( $handler ) ) {
 		// if $file isn't this directory or its parent add it to the results array.
 		if ( filesize( $directory . '/' . $file ) > 11 ) {
-			if ( '.' != $file && '..' != $file && ! is_dir( $directory . '/' . $file ) && (
-					exif_imagetype( $directory . '/' . $file ) == IMAGETYPE_GIF ||
-					exif_imagetype( $directory . '/' . $file ) == IMAGETYPE_PNG ||
-					exif_imagetype( $directory . '/' . $file ) == IMAGETYPE_JPEG )
+			if ( '.' !== $file && '..' !== $file && ! is_dir( $directory . '/' . $file ) && (
+					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_GIF ||
+					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_PNG ||
+					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_JPEG )
 			) {
 				$results[] = $file;
 			}
@@ -174,7 +174,7 @@ function my_calendar_manage_categories() {
 			} else {
 				$cal_results = false;
 			}
-			if ( get_option( 'mc_default_category' ) == $cat_id ) {
+			if ( get_option( 'mc_default_category' ) === (string) $cat_id ) {
 				update_option( 'mc_default_category', 1 );
 			}
 			if ( $results && ( $cal_results || $rel_results ) ) {
@@ -193,7 +193,7 @@ function my_calendar_manage_categories() {
 				update_option( 'mc_default_category', (int) $_POST['category_id'] );
 				$append .= __( 'Default category changed.', 'my-calendar' );
 			} else {
-				if ( get_option( 'mc_default_category' ) == (int) $_POST['category_id'] ) {
+				if ( get_option( 'mc_default_category' ) === (string) $_POST['category_id'] ) {
 					delete_option( 'mc_default_category' );
 				}
 			}
@@ -201,7 +201,7 @@ function my_calendar_manage_categories() {
 				update_option( 'mc_skip_holidays_category', (int) $_POST['category_id'] );
 				$append .= __( 'Holiday category changed.', 'my-calendar' );
 			} else {
-				if ( get_option( 'mc_skip_holidays_category' ) == (int) $_POST['category_id'] ) {
+				if ( get_option( 'mc_skip_holidays_category' ) === (string) $_POST['category_id'] ) {
 					delete_option( 'mc_skip_holidays_category' );
 				}
 			}
@@ -222,7 +222,7 @@ function my_calendar_manage_categories() {
 			mc_edit_category_form( 'edit', $cur_cat );
 		}
 
-		if ( isset( $_GET['mode'] ) && 'edit' != $_GET['mode'] || isset( $_POST['mode'] ) && 'edit' != $_POST['mode'] || ! isset( $_GET['mode'] ) && ! isset( $_POST['mode'] ) ) {
+		if ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] || isset( $_POST['mode'] ) && 'edit' !== $_POST['mode'] || ! isset( $_GET['mode'] ) && ! isset( $_POST['mode'] ) ) {
 			mc_edit_category_form( 'add' );
 		}
 		?>
@@ -291,7 +291,7 @@ function mc_create_category( $category ) {
 		'category_name'    => $category['category_name'],
 		'category_color'   => $category['category_color'],
 		'category_icon'    => $category['category_icon'],
-		'category_private' => ( ( isset( $category['category_private'] ) && ( 'on' === $category['category_private'] || 1 == $category['category_private'] ) ) ? 1 : 0 ),
+		'category_private' => ( ( isset( $category['category_private'] ) && ( 'on' === $category['category_private'] || '1' === (string) $category['category_private'] ) ) ? 1 : 0 ),
 		'category_term'    => $term,
 	);
 
@@ -315,7 +315,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 	$dir     = plugin_dir_path( __FILE__ );
 	$url     = plugin_dir_url( __FILE__ );
 	$cur_cat = false;
-	if ( '' != $cat_id ) {
+	if ( ! $cat_id ) {
 		$cat_id  = (int) $cat_id;
 		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
@@ -384,7 +384,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								<label for="cat_name"><?php _e( 'Category Name', 'my-calendar' ); ?></label>
 								<input type="text" id="cat_name" name="category_name" class="input" size="30" value="<?php echo esc_attr( $cat_name ); ?>"/>
 								<label for="cat_color"><?php _e( 'Color', 'my-calendar' ); ?></label>
-								<input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="<?php echo ( '#' != $color ) ? esc_attr( $color ) : ''; ?>"/>
+								<input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="<?php echo ( '#' !== $color ) ? esc_attr( $color ) : ''; ?>"/>
 							</li>
 							<?php
 							if ( 'true' === get_option( 'mc_hide_icons' ) ) {
@@ -411,7 +411,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								if ( 'add' === $view ) {
 									$private_checked = '';
 								} else {
-									if ( ! empty( $cur_cat ) && is_object( $cur_cat ) && 1 == $cur_cat->category_private ) {
+									if ( ! empty( $cur_cat ) && is_object( $cur_cat ) && '1' === (string) $cur_cat->category_private ) {
 										$private_checked = ' checked="checked"';
 									} else {
 										$private_checked = '';
@@ -552,7 +552,7 @@ function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 	$category = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
 
 	if ( $category ) {
-		if ( false == $field ) {
+		if ( ! $field ) {
 			return $category;
 		}
 
@@ -596,7 +596,7 @@ function mc_manage_categories() {
 	?>
 	</h1>
 	<?php
-	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co'];
+	$co = ( ! isset( $_GET['co'] ) ) ? '1' : (int) $_GET['co'];
 	switch ( $co ) {
 		case 1:
 			$cat_order = 'category_id';
@@ -616,16 +616,16 @@ function mc_manage_categories() {
 		<tr>
 			<th scope="col">
 				<?php
-				echo ( 2 == $co ) ? '<a href="' . admin_url( 'admin.php?page=my-calendar-categories&amp;co=1' ) . '">' : '';
+				echo ( '2' === $co ) ? '<a href="' . admin_url( 'admin.php?page=my-calendar-categories&amp;co=1' ) . '">' : '';
 				_e( 'ID', 'my-calendar' );
-				echo ( 2 == $co ) ? '</a>' : '';
+				echo ( '2' === $co ) ? '</a>' : '';
 				?>
 			</th>
 			<th scope="col">
 				<?php
-					echo ( 1 == $co ) ? '<a href="' . admin_url( 'admin.php?page=my-calendar-categories&amp;co=2' ) . '">' : '';
+					echo ( '1' === $co ) ? '<a href="' . admin_url( 'admin.php?page=my-calendar-categories&amp;co=2' ) . '">' : '';
 					_e( 'Category Name', 'my-calendar' );
-					echo ( 1 == $co ) ? '</a>' : '';
+					echo ( '1' === $co ) ? '</a>' : '';
 				?>
 			</th>
 			<th scope="col"><?php _e( 'Color/Icon', 'my-calendar' ); ?></th>
@@ -638,7 +638,7 @@ function mc_manage_categories() {
 		$class = '';
 		foreach ( $categories as $cat ) {
 			$class = ( 'alternate' === $class ) ? '' : 'alternate';
-			if ( '' != $cat->category_icon && 'true' != get_option( 'mc_hide_icons' ) ) {
+			if ( ! $cat->category_icon && 'true' !== get_option( 'mc_hide_icons' ) ) {
 				$icon_src = ( mc_file_exists( $cat->category_icon ) ) ? mc_get_file( $cat->category_icon, 'url' ) : plugins_url( 'my-calendar/images/icons/' . $cat->category_icon );
 			} else {
 				$icon_src = false;
@@ -652,16 +652,16 @@ function mc_manage_categories() {
 			<td>
 			<?php
 			echo $cat_name;
-			if ( get_option( 'mc_default_category' ) == $cat->category_id ) {
+			if ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) {
 				echo ' <strong>' . __( '(Default)' ) . '</strong>';
 			}
-			if ( get_option( 'mc_skip_holidays_category' ) == $cat->category_id ) {
+			if ( get_option( 'mc_skip_holidays_category' ) === (string) $cat->category_id ) {
 				echo ' <strong>' . __( '(Holiday)' ) . '</strong>';
 			}
 			?>
 			</td>
-			<td style="background-color:<?php echo $background; ?>;color: <?php echo $foreground; ?>"><?php echo ( $icon_src ) ? "<img src='$icon_src' alt='' />" : ''; ?> <?php echo ( '#' != $background ) ? $background : ''; ?></td>
-			<td><?php echo ( 1 == $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
+			<td style="background-color:<?php echo $background; ?>;color: <?php echo $foreground; ?>"><?php echo ( $icon_src ) ? "<img src='$icon_src' alt='' />" : ''; ?> <?php echo ( '#' !== $background ) ? $background : ''; ?></td>
+			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 			<td>
 				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"
 				class='edit'>
@@ -672,7 +672,7 @@ function mc_manage_categories() {
 				</a>
 			</td>
 			<?php
-			if ( 1 == $cat->category_id ) {
+			if ( '1' === (string) $cat->category_id ) {
 				echo '<td>' . __( 'N/A', 'my-calendar' ) . '</td>';
 			} else {
 				?>
@@ -711,7 +711,7 @@ function mc_profile() {
 
 	if ( user_can( $user_edit, 'mc_manage_events' ) && current_user_can( 'manage_options' ) ) {
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
-		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
+		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions, true ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
 		?>
 		<h3><?php _e( 'My Calendar Editor Permissions', 'my-calendar' ); ?></h3>
 		<table class="form-table">
@@ -796,7 +796,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 		foreach ( $cats as $cat ) {
 			$selected = '';
 			// if category is private, don't show if user is not logged in.
-			if ( '1' == $cat->category_private && ! is_user_logged_in() ) {
+			if ( '1' === (string) $cat->category_private && ! is_user_logged_in() ) {
 				continue;
 			}
 			if ( ! empty( $data ) ) {
@@ -814,16 +814,16 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 				if ( $multiple ) {
 					if ( is_array( $category ) && in_array( $cat->category_id, $category ) ) {
 						$selected = ' checked="checked"';
-					} else if ( $category == $cat->category_id ) {
+					} elseif ( (int) $category === (int) $cat->category_id ) {
 						$selected = ' checked="checked"';
 					}
 				} else {
-					if ( $category == $cat->category_id ) {
+					if ( (int) $category === (int) $cat->category_id ) {
 						$selected = ' selected="selected"';
 					}
 				}
 			} else {
-				if ( get_option( 'mc_default_category' ) == $cat->category_id ) {
+				if ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) {
 					$selected = ' checked="checked"';
 				}
 			}
@@ -834,7 +834,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
 			}
-			if ( get_option( 'mc_default_category' ) != $cat->category_id ) {
+			if ( get_option( 'mc_default_category' ) !== (string) $cat->category_id ) {
 				$list .= $c;
 			} else {
 				$default = $c;

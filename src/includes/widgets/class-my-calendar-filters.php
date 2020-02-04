@@ -52,14 +52,14 @@ class My_Calendar_Filters extends WP_Widget {
 		$after_title   = $args['after_title'];
 
 		$widget_title = apply_filters( 'widget_title', $instance['title'], $instance, $args );
-		$widget_title = ( '' != $widget_title ) ? $before_title . $widget_title . $after_title : '';
+		$widget_title = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : mc_get_uri();
 		$ltype        = ( isset( $instance['ltype'] ) ) ? $instance['ltype'] : false;
 		$show         = ( isset( $instance['show'] ) ) ? $instance['show'] : array();
 		$show         = implode( $show, ',' );
 
 		echo $before_widget;
-		echo ( '' != $instance['title'] ) ? $widget_title : '';
+		echo ( '' !== $instance['title'] ) ? $widget_title : '';
 
 		echo mc_filters( $show, $widget_url, $ltype );
 		echo $after_widget;
@@ -86,15 +86,15 @@ class My_Calendar_Filters extends WP_Widget {
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'url' ); ?>" name="<?php echo $this->get_field_name( 'url' ); ?>" value="<?php echo esc_url( $widget_url ); ?>"/>
 		</p>
 		<ul>
-			<?php $locations = in_array( 'locations', $show ) ? 'checked="checked"' : ''; ?>
+			<?php $locations = in_array( 'locations', $show, true ) ? 'checked="checked"' : ''; ?>
 			<li>
 				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_locations" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="locations" <?php echo $locations; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_locations"><?php _e( 'Locations', 'my-calendar' ); ?></label>
 			</li>
-			<?php $categories = in_array( 'categories', $show ) ? 'checked="checked"' : ''; ?>
+			<?php $categories = in_array( 'categories', $show, true ) ? 'checked="checked"' : ''; ?>
 			<li>
 				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_categories" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="categories" <?php echo $categories; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_categories"><?php _e( 'Categories', 'my-calendar' ); ?></label>
 			</li>
-			<?php $access = in_array( 'access', $show ) ? 'checked="checked"' : ''; ?>
+			<?php $access = in_array( 'access', $show, true ) ? 'checked="checked"' : ''; ?>
 			<li>
 				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_access" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="access" <?php echo $access; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_access"><?php _e( 'Accessibility Features', 'my-calendar' ); ?></label>
 			</li>

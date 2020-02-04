@@ -58,9 +58,9 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$the_title      = apply_filters( 'widget_title', $today_title, $instance, $args );
 		$the_template   = $template;
 		$the_substitute = $no_events;
-		$the_category   = ( '' == $category ) ? 'default' : esc_attr( $instance['my_calendar_today_category'] );
-		$author         = ( ! isset( $instance['my_calendar_today_author'] ) || '' == $instance['my_calendar_today_author'] ) ? 'all' : esc_attr( $instance['my_calendar_today_author'] );
-		$host           = ( ! isset( $instance['mc_host'] ) || '' == $instance['mc_host'] ) ? 'all' : esc_attr( $instance['mc_host'] );
+		$the_category   = ( '' === $category ) ? 'default' : esc_attr( $instance['my_calendar_today_category'] );
+		$author         = ( ! isset( $instance['my_calendar_today_author'] ) || '' === $instance['my_calendar_today_author'] ) ? 'all' : esc_attr( $instance['my_calendar_today_author'] );
+		$host           = ( ! isset( $instance['mc_host'] ) || '' === $instance['mc_host'] ) ? 'all' : esc_attr( $instance['mc_host'] );
 		$default_link   = mc_get_uri( false, $args );
 		$widget_link    = ( ! empty( $instance['my_calendar_today_linked'] ) && 'yes' === $instance['my_calendar_today_linked'] ) ? $default_link : '';
 		$widget_link    = ( ! empty( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : $widget_link;
@@ -71,8 +71,8 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		if ( false !== strpos( $widget_title, '{date}' ) ) {
 			$widget_title = str_replace( '{date}', date_i18n( mc_date_format(), current_time( 'timestamp' ) ), $widget_title );
 		}
-		$widget_title = ( '' == $widget_link ) ? $widget_title : "<a href='$widget_link'>$widget_title</a>";
-		$widget_title = ( '' != $widget_title ) ? $before_title . $widget_title . $after_title : '';
+		$widget_title = ( '' === $widget_link ) ? $widget_title : "<a href='$widget_link'>$widget_title</a>";
+		$widget_title = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
 
 		$args = array(
 			'category' => $the_category,
@@ -85,7 +85,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		);
 
 		$the_events = my_calendar_todays_events( $args );
-		if ( '' != $the_events ) {
+		if ( '' !== $the_events ) {
 			echo $before_widget;
 			echo $widget_title;
 			echo $the_events;

@@ -53,17 +53,17 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 
 		if ( ! empty( $instance ) ) {
 			$the_title   = apply_filters( 'widget_title', $instance['my_calendar_mini_title'], $instance, $args );
-			$category    = ( '' == $instance['my_calendar_mini_category'] ) ? 'all' : $instance['my_calendar_mini_category'];
-			$time        = ( '' == $instance['my_calendar_mini_time'] ) ? 'month' : $instance['my_calendar_mini_time'];
-			$widget_link = ( ! isset( $instance['mc_link'] ) || '' == $instance['mc_link'] ) ? '' : esc_url( $instance['mc_link'] );
+			$category    = ( '' === $instance['my_calendar_mini_category'] ) ? 'all' : $instance['my_calendar_mini_category'];
+			$time        = ( '' === $instance['my_calendar_mini_time'] ) ? 'month' : $instance['my_calendar_mini_time'];
+			$widget_link = ( ! isset( $instance['mc_link'] ) || '' === $instance['mc_link'] ) ? '' : esc_url( $instance['mc_link'] );
 			$above       = ( empty( $instance['above'] ) ) ? 'none' : $instance['above'];
 			$below       = ( empty( $instance['below'] ) ) ? 'none' : $instance['below'];
-			$author      = ( ! isset( $instance['author'] ) || '' == $instance['author'] ) ? null : $instance['author'];
-			$host        = ( ! isset( $instance['host'] ) || '' == $instance['host'] ) ? null : $instance['host'];
-			$ltype       = ( ! isset( $instance['ltype'] ) || '' == $instance['ltype'] ) ? '' : $instance['ltype'];
-			$lvalue      = ( ! isset( $instance['lvalue'] ) || '' == $instance['lvalue'] ) ? '' : $instance['lvalue'];
-			$site        = ( ! isset( $instance['site'] ) || '' == $instance['site'] ) ? false : $instance['site'];
-			$months      = ( ! isset( $instance['months'] ) || '' == $instance['months'] ) ? false : $instance['months'];
+			$author      = ( ! isset( $instance['author'] ) || '' === $instance['author'] ) ? null : $instance['author'];
+			$host        = ( ! isset( $instance['host'] ) || '' === $instance['host'] ) ? null : $instance['host'];
+			$ltype       = ( ! isset( $instance['ltype'] ) || '' === $instance['ltype'] ) ? '' : $instance['ltype'];
+			$lvalue      = ( ! isset( $instance['lvalue'] ) || '' === $instance['lvalue'] ) ? '' : $instance['lvalue'];
+			$site        = ( ! isset( $instance['site'] ) || '' === $instance['site'] ) ? false : $instance['site'];
+			$months      = ( ! isset( $instance['months'] ) || '' === $instance['months'] ) ? false : $instance['months'];
 		} else {
 			$the_title   = '';
 			$category    = '';
@@ -80,8 +80,8 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		}
 
 		if ( '' != $the_title ) {
-			$title = ( '' != $widget_link ) ? "<a href='$widget_link'>$the_title</a>" : $the_title;
-			$title = ( '' != $title ) ? $before_title . $title . $after_title : '';
+			$title = ( '' !== $widget_link ) ? "<a href='$widget_link'>$the_title</a>" : $the_title;
+			$title = ( '' !== $title ) ? $before_title . $title . $after_title : '';
 		} else {
 			$title = '';
 		}
@@ -104,7 +104,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		);
 
 		$the_events = my_calendar( $calendar );
-		if ( '' != $the_events ) {
+		if ( '' !== $the_events ) {
 			echo $before_widget . $title . $the_events . $after_widget;
 		}
 	}
@@ -152,11 +152,11 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'above' ); ?>"><?php _e( 'Navigation above calendar', 'my-calendar' ); ?></label>
-			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'above' ); ?>" id="<?php echo $this->get_field_id( 'above' ); ?>" value="<?php echo ( '' == $above ) ? 'nav,jump,print' : esc_attr( $above ); ?>" aria-describedby='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields' />
+			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'above' ); ?>" id="<?php echo $this->get_field_id( 'above' ); ?>" value="<?php echo ( '' === $above ) ? 'nav,jump,print' : esc_attr( $above ); ?>" aria-describedby='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields' />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'below' ); ?>"><?php _e( 'Navigation below calendar', 'my-calendar' ); ?></label>
-			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'below' ); ?>" id="<?php echo $this->get_field_id( 'below' ); ?>" value="<?php echo ( '' == $below ) ? 'key' : esc_attr( $below ); ?>" aria-describedby='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields' />
+			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'below' ); ?>" id="<?php echo $this->get_field_id( 'below' ); ?>" value="<?php echo ( '' === $below ) ? 'key' : esc_attr( $below ); ?>" aria-describedby='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields' />
 		</p>
 		<p id='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields'>
 			<?php _e( 'Navigation options:', 'my-calendar' ); ?> <code>nav,jump,print,key,feeds,exports,none</code>
@@ -208,7 +208,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		<p>
 			<label
 				for="<?php echo $this->get_field_id( 'months' ); ?>"><?php _e( 'Months to show in list view', 'my-calendar' ); ?></label>
-			<input type="number" max="12" step="1" min="1" class="widefat" name="<?php echo $this->get_field_name( 'months' ); ?>" id="<?php echo $this->get_field_id( 'months' ); ?>" value="<?php echo ( '' == $months ) ? '' : esc_attr( $months ); ?>" />
+			<input type="number" max="12" step="1" min="1" class="widefat" name="<?php echo $this->get_field_name( 'months' ); ?>" id="<?php echo $this->get_field_id( 'months' ); ?>" value="<?php echo ( '' === $months ) ? '' : esc_attr( $months ); ?>" />
 		</p>
 		<?php
 	}
@@ -225,9 +225,9 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$instance['my_calendar_mini_title']    = mc_kses_post( $new['my_calendar_mini_title'] );
 		$instance['my_calendar_mini_time']     = mc_kses_post( $new['my_calendar_mini_time'] );
 		$instance['my_calendar_mini_category'] = mc_kses_post( $new['my_calendar_mini_category'] );
-		$instance['above']                     = ( isset( $new['above'] ) && '' != $new['above'] ) ? $new['above'] : 'none';
+		$instance['above']                     = ( isset( $new['above'] ) && '' !== $new['above'] ) ? $new['above'] : 'none';
 		$instance['mc_link']                   = $new['mc_link'];
-		$instance['below']                     = ( isset( $new['below'] ) && '' != $new['below'] ) ? $new['below'] : 'none';
+		$instance['below']                     = ( isset( $new['below'] ) && '' !== $new['below'] ) ? $new['below'] : 'none';
 		$author                                = '';
 		$host                                  = '';
 		if ( isset( $new['author'] ) ) {
@@ -238,8 +238,8 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		}
 		$instance['author'] = $author;
 		$instance['host']   = $host;
-		$instance['ltype']  = ( '' != $new['ltype'] && '' != $new['lvalue'] ) ? $new['ltype'] : '';
-		$instance['lvalue'] = ( '' != $new['ltype'] && '' != $new['lvalue'] ) ? $new['lvalue'] : '';
+		$instance['ltype']  = ( '' != $new['ltype'] && '' !== $new['lvalue'] ) ? $new['ltype'] : '';
+		$instance['lvalue'] = ( '' != $new['ltype'] && '' !== $new['lvalue'] ) ? $new['lvalue'] : '';
 		$instance['site']   = $new['site'];
 		$instance['months'] = $new['months'];
 

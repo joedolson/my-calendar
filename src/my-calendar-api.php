@@ -23,8 +23,8 @@ function my_calendar_api() {
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
 				$format = ( isset( $_REQUEST['my-calendar-api'] ) ) ? $_REQUEST['my-calendar-api'] : 'json';
-				$from   = ( isset( $_REQUEST['from'] ) ) ? $_REQUEST['from'] : date( 'Y-m-d', current_time( 'timestamp' ) );
-				$to     = ( isset( $_REQUEST['to'] ) ) ? $_REQUEST['to'] : date( 'Y-m-d', strtotime( apply_filters( 'mc_api_auto_date', '+ 7 days' ) ) );
+				$from   = ( isset( $_REQUEST['from'] ) ) ? $_REQUEST['from'] : mc_date( 'Y-m-d', current_time( 'timestamp' ) );
+				$to     = ( isset( $_REQUEST['to'] ) ) ? $_REQUEST['to'] : mc_date( 'Y-m-d', strtotime( apply_filters( 'mc_api_auto_date', '+ 7 days' ) ) );
 				// sanitization is handled elsewhere.
 				$category = ( isset( $_REQUEST['mcat'] ) ) ? $_REQUEST['mcat'] : '';
 				$ltype    = ( isset( $_REQUEST['ltype'] ) ) ? $_REQUEST['ltype'] : '';
@@ -378,8 +378,8 @@ function mc_ics_subscribe_outlook() {
  */
 function my_calendar_ical() {
 	$p   = ( isset( $_GET['span'] ) ) ? 'year' : false;
-	$y   = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : date( 'Y' );
-	$m   = ( isset( $_GET['month'] ) ) ? $_GET['month'] : date( 'n' );
+	$y   = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : mc_date( 'Y' );
+	$m   = ( isset( $_GET['month'] ) ) ? $_GET['month'] : mc_date( 'n' );
 	$ny  = ( isset( $_GET['nyr'] ) ) ? $_GET['nyr'] : $y;
 	$nm  = ( isset( $_GET['nmonth'] ) ) ? $_GET['nmonth'] : $m;
 	$cat = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : '';
@@ -388,7 +388,7 @@ function my_calendar_ical() {
 		$from = "$y-1-1";
 		$to   = "$y-12-31";
 	} else {
-		$d    = date( 't', mktime( 0, 0, 0, $m, 1, $y ) );
+		$d    = mc_date( 't', mktime( 0, 0, 0, $m, 1, $y ) );
 		$from = "$y-$m-1";
 		$to   = "$ny-$nm-$d";
 	}

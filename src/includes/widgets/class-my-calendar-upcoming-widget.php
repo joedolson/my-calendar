@@ -63,22 +63,22 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$the_title      = apply_filters( 'widget_title', $title, $instance, $args );
 		$the_template   = ( isset( $instance['my_calendar_upcoming_template'] ) ) ? $instance['my_calendar_upcoming_template'] : '';
 		$the_substitute = ( isset( $instance['my_calendar_no_events_text'] ) ) ? $instance['my_calendar_no_events_text'] : '';
-		$before         = ( '' != $before ) ? esc_attr( $instance['my_calendar_upcoming_before'] ) : 3;
-		$after          = ( '' != $after ) ? esc_attr( $instance['my_calendar_upcoming_after'] ) : 3;
-		$skip           = ( '' != $skip ) ? esc_attr( $instance['my_calendar_upcoming_skip'] ) : 0;
+		$before         = ( '' !== $before ) ? esc_attr( $instance['my_calendar_upcoming_before'] ) : 3;
+		$after          = ( '' !== $after ) ? esc_attr( $instance['my_calendar_upcoming_after'] ) : 3;
+		$skip           = ( '' !== $skip ) ? esc_attr( $instance['my_calendar_upcoming_skip'] ) : 0;
 		$show_today     = ( 'no' === $show ) ? 'no' : 'yes';
 		$type           = esc_attr( $type );
 		$order          = esc_attr( $order );
-		$the_category   = ( '' == $cat ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_category'] );
-		$author         = ( ! isset( $instance['my_calendar_upcoming_author'] ) || '' == $instance['my_calendar_upcoming_author'] ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_author'] );
-		$host           = ( ! isset( $instance['mc_host'] ) || '' == $instance['mc_host'] ) ? 'default' : esc_attr( $instance['mc_host'] );
-		$ltype          = ( ! isset( $instance['ltype'] ) || '' == $instance['ltype'] ) ? '' : esc_attr( $instance['ltype'] );
-		$lvalue         = ( ! isset( $instance['lvalue'] ) || '' == $instance['lvalue'] ) ? '' : esc_attr( $instance['lvalue'] );
+		$the_category   = ( '' === $cat ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_category'] );
+		$author         = ( ! isset( $instance['my_calendar_upcoming_author'] ) || '' === $instance['my_calendar_upcoming_author'] ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_author'] );
+		$host           = ( ! isset( $instance['mc_host'] ) || '' === $instance['mc_host'] ) ? 'default' : esc_attr( $instance['mc_host'] );
+		$ltype          = ( ! isset( $instance['ltype'] ) || '' === $instance['ltype'] ) ? '' : esc_attr( $instance['ltype'] );
+		$lvalue         = ( ! isset( $instance['lvalue'] ) || '' === $instance['lvalue'] ) ? '' : esc_attr( $instance['lvalue'] );
 		$widget_link    = ( isset( $instance['my_calendar_upcoming_linked'] ) && 'yes' === $instance['my_calendar_upcoming_linked'] ) ? mc_get_uri( false, $instance ) : '';
 		$widget_link    = ( ! empty( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : $widget_link;
 		$widget_title   = empty( $the_title ) ? '' : $the_title;
-		$widget_title   = ( '' == $widget_link ) ? $widget_title : "<a href='$widget_link'>$widget_title</a>";
-		$widget_title   = ( '' != $widget_title ) ? $before_title . $widget_title . $after_title : '';
+		$widget_title   = ( '' === $widget_link ) ? $widget_title : "<a href='$widget_link'>$widget_title</a>";
+		$widget_title   = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
 		$month          = ( 0 === strpos( $type, 'month+' ) ) ? date_i18n( 'F', strtotime( $type ) ) : date_i18n( 'F', current_time( 'timestamp' ) );
 		$widget_title   = str_replace( '{month}', $month, $widget_title );
 		$from           = ( isset( $instance['mc_from'] ) ) ? $instance['mc_from'] : false;
@@ -105,7 +105,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		);
 
 		$the_events = my_calendar_upcoming_events( $args );
-		if ( '' != $the_events ) {
+		if ( '' !== $the_events ) {
 			echo $before_widget;
 			echo $widget_title;
 			echo $the_events;

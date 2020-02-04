@@ -252,7 +252,7 @@ function mc_get_all_events( $args ) {
 	$select_published   = mc_select_published();
 	$select_author      = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host        = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
-	$date               = date( 'Y-m-d', current_time( 'timestamp' ) );
+	$date               = mc_date( 'Y-m-d', current_time( 'timestamp' ) );
 
 	$limit   = "$select_published $select_category $select_author $select_host $select_location $select_access $search";
 	$events1 = array();
@@ -565,8 +565,8 @@ function mc_get_event( $id, $type = 'object' ) {
 		$event = mc_event_object( $event );
 		return $event;
 	} else {
-		$date  = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-		$time  = date( 'H:i:s', strtotime( $event->occur_begin ) );
+		$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
+		$time  = mc_date( 'H:i:s', strtotime( $event->occur_begin ) );
 		$value = '<div id="mc_event">' . my_calendar_draw_event( $event, 'single', $date, $time, 'single' ) . '</div>';
 
 		return $value;
@@ -660,7 +660,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	$select_location = '';
 	$select_author   = '';
 	$select_host     = '';
-	$now             = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+	$now             = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 	$event_query     = 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
 					FROM ' . my_calendar_event_table( $site ) . ' AS o
 					JOIN ' . my_calendar_table( $site ) . " AS e
@@ -734,7 +734,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 	$select_location = '';
 	$select_author   = '';
 	$select_host     = '';
-	$now             = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+	$now             = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 	$event_query     = 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
 			FROM ' . my_calendar_event_table( $site ) . '
 			JOIN ' . my_calendar_table( $site ) . " AS e
@@ -856,13 +856,13 @@ function mc_set_date_array( $events ) {
 	$event_array = array();
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( $events as $event ) {
-			$date = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-			$end  = date( 'Y-m-d', strtotime( $event->occur_end ) );
+			$date = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
+			$end  = mc_date( 'Y-m-d', strtotime( $event->occur_end ) );
 			if ( $date !== $end ) {
 				$start = strtotime( $date );
 				$end   = strtotime( $end );
 				do {
-					$date                   = date( 'Y-m-d', $start );
+					$date                   = mc_date( 'Y-m-d', $start );
 					$event_array[ $date ][] = $event;
 					$start                  = strtotime( '+1 day', $start );
 				} while ( $start <= $end );
