@@ -91,7 +91,7 @@ function my_calendar_upcoming_events( $args ) {
 		}
 		if ( 'custom' === $display_type && '' !== $from && '' !== $to ) {
 			$from = mc_date( 'Y-m-d', strtotime( $from ) );
-			$to   = ( 'today' === $to ) ? mc_date( 'Y-m-d', current_time( 'timestamp' ) ) : mc_date( 'Y-m-d', strtotime( $to ) );
+			$to   = ( 'today' === $to ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $to ) );
 		}
 		/* Yes, this is crude. But sometimes simplicity works best. There are only 12 possibilities, after all. */
 		if ( 'month+1' === $display_type ) {
@@ -191,7 +191,7 @@ function my_calendar_upcoming_events( $args ) {
 			if ( $i < $skip && 0 !== $skip ) {
 				$i ++;
 			} else {
-				$today    = mc_date( 'Y-m-d H:i', current_time( 'timestamp' ) );
+				$today    = current_time( 'Y-m-d H:i' );
 				$date     = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'] ) );
 				$class    = ( true === my_calendar_date_comp( $date, $today ) ) ? 'past-event' : 'future-event';
 				$category = mc_category_class( $details, 'mc_' );
@@ -334,7 +334,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 								$beginning = $span_time[0];
 								$end       = $span_time[1];
 							}
-							$current = mc_date( 'Y-m-d H:i:00', current_time( 'timestamp' ) );
+							$current = current_time( 'Y-m-d H:i:00' );
 							if ( $e ) {
 								// If a multi-day event, show only once.
 								if ( '0' !== $e->occur_group_id && '1' === $e->event_span && in_array( $e->occur_group_id, $group, true ) || in_array( $e->occur_id, $occur, true ) ) {
@@ -409,7 +409,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			$details = mc_create_tags( $event, $context );
 			if ( ! in_array( $details['group'], $groups, true ) ) {
 				$date     = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ) );
-				$class    = ( true === my_calendar_date_comp( $date, $today . ' ' . mc_date( 'H:i', current_time( 'timestamp' ) ) ) ) ? 'past-event' : 'future-event';
+				$class    = ( true === my_calendar_date_comp( $date, $today . ' ' . current_time( 'H:i' ) ) ) ? 'past-event' : 'future-event';
 				$category = mc_category_class( $details, 'mc_' );
 				$classes  = mc_event_classes( $event, $event->occur_id, 'upcoming' );
 
@@ -514,8 +514,8 @@ function my_calendar_todays_events( $args ) {
 		$from = mc_date( 'Y-m-d', strtotime( $date ) );
 		$to   = mc_date( 'Y-m-d', strtotime( $date ) );
 	} else {
-		$from = mc_date( 'Y-m-d', current_time( 'timestamp' ) );
-		$to   = mc_date( 'Y-m-d', current_time( 'timestamp' ) );
+		$from = current_time( 'Y-m-d' );
+		$to   = current_time( 'Y-m-d' );
 	}
 
 	$args   = array(

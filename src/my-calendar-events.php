@@ -252,7 +252,7 @@ function mc_get_all_events( $args ) {
 	$select_published   = mc_select_published();
 	$select_author      = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host        = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
-	$date               = mc_date( 'Y-m-d', current_time( 'timestamp' ) );
+	$date               = current_time( 'Y-m-d' );
 
 	$limit   = "$select_published $select_category $select_author $select_host $select_location $select_access $search";
 	$events1 = array();
@@ -660,7 +660,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	$select_location = '';
 	$select_author   = '';
 	$select_host     = '';
-	$now             = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+	$now             = current_time( 'Y-m-d H:i:s' );
 	$event_query     = 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
 					FROM ' . my_calendar_event_table( $site ) . ' AS o
 					JOIN ' . my_calendar_table( $site ) . " AS e
@@ -734,7 +734,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 	$select_location = '';
 	$select_author   = '';
 	$select_host     = '';
-	$now             = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+	$now             = current_time( 'Y-m-d H:i:s' );
 	$event_query     = 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
 			FROM ' . my_calendar_event_table( $site ) . '
 			JOIN ' . my_calendar_table( $site ) . " AS e

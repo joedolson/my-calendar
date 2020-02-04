@@ -160,8 +160,8 @@ function mc_datetime_cmp( $a, $b ) {
  * @return integer (ternary value)
  */
 function mc_timediff_cmp( $a, $b ) {
-	$a          = $a . mc_date( ' H:i:s', current_time( 'timestamp' ) );
-	$b          = $b . mc_date( ' H:i:s', current_time( 'timestamp' ) );
+	$a          = $a . current_time( ' H:i:s' );
+	$b          = $b . current_time( ' H:i:s' );
 	$event_dt_a = strtotime( $a );
 	$event_dt_b = strtotime( $b );
 	$diff_a     = mc_date_diff_precise( $event_dt_a );
@@ -253,8 +253,8 @@ function mc_first_day_of_week( $date = false ) {
 		$today = mc_date( 'w', $date );
 		$now   = mc_date( 'Y-m-d', $date );
 	} else {
-		$today = mc_date( 'w', current_time( 'timestamp' ) );
-		$now   = mc_date( 'Y-m-d', current_time( 'timestamp' ) );
+		$today = current_time( 'w' );
+		$now   = current_time( 'Y-m-d' );
 	}
 	$month = 0;
 	$sub   = 0; // don't change month.

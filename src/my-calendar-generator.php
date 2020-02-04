@@ -181,19 +181,19 @@ function mc_generator( $type ) {
 						$p      = '';
 						while ( $past > 0 ) {
 							$p   .= '<option value="';
-							$p   .= mc_date( 'Y', current_time( 'timestamp' ) ) - $past;
+							$p   .= current_time( 'Y' ) - $past;
 							$p   .= '">';
-							$p   .= mc_date( 'Y', current_time( 'timestamp' ) ) - $past . "</option>\n";
+							$p   .= current_time( 'Y' ) - $past . "</option>\n";
 							$past = $past - 1;
 						}
 						while ( $fut < $future ) {
 							$f  .= '<option value="';
-							$f  .= mc_date( 'Y', current_time( 'timestamp' ) ) + $fut;
+							$f  .= current_time( 'Y' ) + $fut;
 							$f  .= '">';
-							$f  .= mc_date( 'Y', current_time( 'timestamp' ) ) + $fut . "</option>\n";
+							$f  .= current_time( 'Y' ) + $fut . "</option>\n";
 							$fut = $fut + 1;
 						}
-						echo $p . '<option value="' . mc_date( 'Y' ) . '">' . mc_date( 'Y' ) . "</option>\n" . $f;
+						echo $p . '<option value="' . current_time( 'Y' ) . '">' . current_time( 'Y' ) . "</option>\n" . $f;
 						?>
 					</select>
 				</p>

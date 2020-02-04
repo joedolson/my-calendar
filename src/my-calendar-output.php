@@ -731,9 +731,9 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	global $wpdb;
 	$mcdb    = $wpdb;
-	$c_month = isset( $date['month'] ) ? $date['month'] : mc_date( 'n', current_time( 'timestamp' ) );
-	$c_year  = isset( $date['year'] ) ? $date['year'] : mc_date( 'Y', current_time( 'timestamp' ) );
-	$c_day   = isset( $date['day'] ) ? $date['day'] : mc_date( 'j', current_time( 'timestamp' ) );
+	$c_month = isset( $date['month'] ) ? $date['month'] : current_time( 'n' );
+	$c_year  = isset( $date['year'] ) ? $date['year'] : current_time( 'Y' );
+	$c_day   = isset( $date['day'] ) ? $date['day'] : current_time( 'j' );
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
@@ -2347,16 +2347,16 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	} else {
 		if ( 'week' === $time && ! isset( $_GET['dy'] ) ) {
 			if ( $is_start_of_week ) {
-				$c_year = ( mc_date( 'Y', current_time( 'timestamp' ) ) );
+				$c_year = ( current_time( 'Y' ) );
 			} else {
-				$current_year = mc_date( 'Y', current_time( 'timestamp' ) );
+				$current_year = current_time( 'Y' );
 				$c_year       = ( 0 == $dm[1] ) ? $current_year : false;
 				if ( ! $c_year ) {
 					$c_year = ( mc_date( 'Y', strtotime( '-1 month' ) ) == $current_year ) ? $current_year : $current_year - 1;
 				}
 			}
 		} else {
-			$c_year = ( mc_date( 'Y', current_time( 'timestamp' ) ) );
+			$c_year = ( current_time( 'Y' ) );
 		}
 	}
 	// Years get funny if we exceed 3000, so we use this check.

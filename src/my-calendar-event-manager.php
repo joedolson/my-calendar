@@ -174,7 +174,7 @@ function mc_create_event_post( $data, $event_id ) {
 			'post_status'  => $post_status,
 			'post_author'  => $auth,
 			'post_name'    => sanitize_title( $title ),
-			'post_date'    => mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
+			'post_date'    => current_time( 'Y-m-d H:i:s' ),
 			'post_type'    => $type,
 			'post_excerpt' => $excerpt,
 		);
