@@ -285,6 +285,10 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 	if ( ! $filename ) {
 		$filename = get_option( 'mc_css_file' );
 	}
+	if ( ! $filename ) {
+		// If no value is saved, return default.
+		$filename = 'twentyeighteen.css';
+	}
 	if ( 0 === strpos( $filename, 'mc_custom_' ) ) {
 		$filename  = str_replace( 'mc_custom_', '', $filename );
 		$stylefile = ( 'path' === $type ) ? str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/' . $filename : str_replace( '/my-calendar/', '', $url ) . '/my-calendar-custom/styles/' . $filename;
