@@ -23,9 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_dateclass( $current ) {
 	$now      = current_time( 'timestamp' );
 	$dayclass = sanitize_html_class( strtolower( date_i18n( 'l', $current ) ) ) . ' ' . sanitize_html_class( strtolower( date_i18n( 'D', $current ) ) );
-	if ( date( 'Ymd', $now ) === date( 'Ymd', $current ) ) {
+	if ( mc_date( 'Ymd', $now ) === mc_date( 'Ymd', $current ) ) {
 		$dateclass = 'current-day';
-	} elseif ( my_calendar_date_comp( date( 'Y-m-d', $now ), date( 'Y-m-d', $current ) ) ) {
+	} elseif ( my_calendar_date_comp( mc_date( 'Y-m-d', $now ), mc_date( 'Y-m-d', $current ) ) ) {
 		$dateclass = 'future-day';
 	} else {
 		$dateclass = 'past-day past-date'; // stupid legacy classes.
@@ -46,7 +46,7 @@ function mc_dateclass( $current ) {
  */
 function my_calendar_add_date( $givendate, $day = 0, $mth = 0, $yr = 0 ) {
 	$cd      = strtotime( $givendate );
-	$newdate = mktime( date( 'H', $cd ), date( 'i', $cd ), date( 's', $cd ), date( 'm', $cd ) + $mth, date( 'd', $cd ) + $day, date( 'Y', $cd ) + $yr );
+	$newdate = mktime( mc_date( 'H', $cd ), mc_date( 'i', $cd ), mc_date( 's', $cd ), mc_date( 'm', $cd ) + $mth, mc_date( 'd', $cd ) + $day, mc_date( 'Y', $cd ) + $yr );
 
 	return $newdate;
 }
@@ -101,8 +101,8 @@ function my_calendar_date_xcomp( $early, $late ) {
  */
 function my_calendar_date_equal( $early, $late ) {
 	// convert full datetime to date only.
-	$firstdate = strtotime( date( 'Y-m-d', strtotime( $early ) ) );
-	$lastdate  = strtotime( date( 'Y-m-d', strtotime( $late ) ) );
+	$firstdate = strtotime( mc_date( 'Y-m-d', strtotime( $early ) ) );
+	$lastdate  = strtotime( mc_date( 'Y-m-d', strtotime( $late ) ) );
 	if ( $firstdate === $lastdate ) {
 
 		return true;
@@ -160,8 +160,8 @@ function mc_datetime_cmp( $a, $b ) {
  * @return integer (ternary value)
  */
 function mc_timediff_cmp( $a, $b ) {
-	$a          = $a . date( ' H:i:s', current_time( 'timestamp' ) );
-	$b          = $b . date( ' H:i:s', current_time( 'timestamp' ) );
+	$a          = $a . mc_date( ' H:i:s', current_time( 'timestamp' ) );
+	$b          = $b . mc_date( ' H:i:s', current_time( 'timestamp' ) );
 	$event_dt_a = strtotime( $a );
 	$event_dt_b = strtotime( $b );
 	$diff_a     = mc_date_diff_precise( $event_dt_a );
@@ -233,9 +233,9 @@ function week_of_month( $date_of_event ) {
  */
 function mc_checkdate( $date ) {
 	$time = strtotime( $date );
-	$m    = date( 'n', $time );
-	$d    = date( 'j', $time );
-	$y    = date( 'Y', $time );
+	$m    = mc_date( 'n', $time );
+	$d    = mc_date( 'j', $time );
+	$y    = mc_date( 'Y', $time );
 
 	return checkdate( $m, $d, $y );
 }
@@ -250,11 +250,11 @@ function mc_checkdate( $date ) {
 function mc_first_day_of_week( $date = false ) {
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' || get_option( 'start_of_week' ) === '0' ) ? absint( get_option( 'start_of_week' ) ) : 0;
 	if ( $date ) {
-		$today = date( 'w', $date );
-		$now   = date( 'Y-m-d', $date );
+		$today = mc_date( 'w', $date );
+		$now   = mc_date( 'Y-m-d', $date );
 	} else {
-		$today = date( 'w', current_time( 'timestamp' ) );
-		$now   = date( 'Y-m-d', current_time( 'timestamp' ) );
+		$today = mc_date( 'w', current_time( 'timestamp' ) );
+		$now   = mc_date( 'Y-m-d', current_time( 'timestamp' ) );
 	}
 	$month = 0;
 	$sub   = 0; // don't change month.
@@ -281,9 +281,9 @@ function mc_first_day_of_week( $date = false ) {
 			$sub = ( 1 === $start_of_week ) ? 6 : 0;
 			break; // sun.
 	}
-	$day = date( 'j', strtotime( $now . ' -' . $sub . ' day' ) );
+	$day = mc_date( 'j', strtotime( $now . ' -' . $sub . ' day' ) );
 	if ( 0 !== $sub ) {
-		if ( date( 'n', strtotime( $now . ' -' . $sub . ' day' ) ) !== date( 'n', strtotime( $now ) ) ) {
+		if ( mc_date( 'n', strtotime( $now . ' -' . $sub . ' day' ) ) !== mc_date( 'n', strtotime( $now ) ) ) {
 			$month = - 1;
 		} else {
 			$month = 0;
@@ -375,9 +375,9 @@ function mc_exit_early( $event, $process_date ) {
 	}
 
 	$hide_days = apply_filters( 'mc_hide_additional_days', false, $event );
-	$today     = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-	$current   = date( 'Y-m-d', strtotime( $process_date ) );
-	$end       = date( 'Y-m-d', strtotime( $event->occur_end ) );
+	$today     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
+	$current   = mc_date( 'Y-m-d', strtotime( $process_date ) );
+	$end       = mc_date( 'Y-m-d', strtotime( $event->occur_end ) );
 	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing.
 	// or if event started yesterday & has event_hide_end checked.
 	$ends_at_midnight = ( '00:00:00' === $event->event_endtime && $end === $process_date && $current !== $today ) ? true : false;
@@ -413,7 +413,7 @@ function mc_private_event( $event ) {
 }
 
 /**
- * Wrapper for date()
+ * Wrapper for mc_date()
  *
  * @param string $format Format to use.
  * @param int    $timestamp Timestamp.

@@ -43,14 +43,14 @@ function mc_generate() {
 					$shortcode = 'my_calendar';
 			}
 			foreach ( $_POST as $key => $value ) {
-				if ( 'generator' != $key && 'shortcode' != $key && '_wpnonce' != $key ) {
+				if ( 'generator' !== $key && 'shortcode' !== $key && '_wpnonce' !== $key ) {
 					if ( 'template' === $key ) {
 						$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
 						$v        = $template;
 						$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>" . __( 'Edit this Template', 'my-calendar' ) . ' &rarr;</a>';
 					} else {
 						if ( is_array( $value ) ) {
-							if ( in_array( 'all', $value ) ) {
+							if ( in_array( 'all', $value, true ) ) {
 								unset( $value[0] );
 							}
 							$v = implode( ',', $value );
@@ -58,7 +58,7 @@ function mc_generate() {
 							$v = $value;
 						}
 					}
-					if ( '' != $v ) {
+					if ( '' !== $v ) {
 						$string .= " $key=&quot;$v&quot;";
 					}
 				}
@@ -172,8 +172,8 @@ function mc_generator( $type ) {
 							$mcdb = mc_remote_db();
 						}
 						$query  = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
-						$year1  = date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
-						$diff1  = date( 'Y' ) - $year1;
+						$year1  = mc_date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
+						$diff1  = mc_date( 'Y' ) - $year1;
 						$past   = $diff1;
 						$future = apply_filters( 'mc_jumpbox_future_years', 5, false );
 						$fut    = 1;
@@ -181,19 +181,19 @@ function mc_generator( $type ) {
 						$p      = '';
 						while ( $past > 0 ) {
 							$p   .= '<option value="';
-							$p   .= date( 'Y', current_time( 'timestamp' ) ) - $past;
+							$p   .= mc_date( 'Y', current_time( 'timestamp' ) ) - $past;
 							$p   .= '">';
-							$p   .= date( 'Y', current_time( 'timestamp' ) ) - $past . "</option>\n";
+							$p   .= mc_date( 'Y', current_time( 'timestamp' ) ) - $past . "</option>\n";
 							$past = $past - 1;
 						}
 						while ( $fut < $future ) {
 							$f  .= '<option value="';
-							$f  .= date( 'Y', current_time( 'timestamp' ) ) + $fut;
+							$f  .= mc_date( 'Y', current_time( 'timestamp' ) ) + $fut;
 							$f  .= '">';
-							$f  .= date( 'Y', current_time( 'timestamp' ) ) + $fut . "</option>\n";
+							$f  .= mc_date( 'Y', current_time( 'timestamp' ) ) + $fut . "</option>\n";
 							$fut = $fut + 1;
 						}
-						echo $p . '<option value="' . date( 'Y' ) . '">' . date( 'Y' ) . "</option>\n" . $f;
+						echo $p . '<option value="' . mc_date( 'Y' ) . '">' . mc_date( 'Y' ) . "</option>\n" . $f;
 						?>
 					</select>
 				</p>

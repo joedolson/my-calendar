@@ -27,7 +27,7 @@ function mc_event_post( $action, $data, $event_id ) {
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
-		if ( isset( $_POST['event_post'] ) && ( 0 == $_POST['event_post'] || '' == $_POST['event_post'] ) ) {
+		if ( isset( $_POST['event_post'] ) && ( 0 === (int) $_POST['event_post'] || '' === $_POST['event_post'] ) ) {
 			$post_id = mc_create_event_post( $data, $event_id );
 		} else {
 			$post_id = ( isset( $_POST['event_post'] ) ) ? absint( $_POST['event_post'] ) : false;
@@ -50,8 +50,8 @@ function mc_event_post( $action, $data, $event_id ) {
 				}
 			}
 			// if any selected category is private, make private.
-			if ( 'private' != $privacy ) {
-				$privacy = ( 1 == mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
+			if ( 'private' !== $privacy ) {
+				$privacy = ( '1' === mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
 			}
 			$terms[] = (int) $term;
 		}
@@ -79,7 +79,7 @@ function mc_event_post( $action, $data, $event_id ) {
 		}
 		$post_id = wp_update_post( $my_post );
 		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
-		if ( '' == $data['event_image'] ) {
+		if ( '' === $data['event_image'] ) {
 			delete_post_thumbnail( $post_id );
 		} else {
 			// check POST data.
@@ -114,7 +114,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	$description = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 	$image       = isset( $data['event_image'] ) ? esc_url_raw( $data['event_image'] ) : '';
 	$guid        = get_post_meta( $post_id, '_mc_guid', true );
-	if ( '' == $guid ) {
+	if ( '' === $guid ) {
 		$guid = md5( $post_id . $event_id . $data['event_title'] );
 		update_post_meta( $post_id, '_mc_guid', $guid );
 	}
@@ -153,8 +153,8 @@ function mc_create_event_post( $data, $event_id ) {
 		foreach ( $categories as $category ) {
 			$term = mc_get_category_detail( $category, 'category_term' );
 			// if any selected category is private, make private.
-			if ( 'private' != $privacy ) {
-				$privacy = ( 1 == mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
+			if ( 'private' !== $privacy ) {
+				$privacy = ( '1' === mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
 			}
 			$terms[] = (int) $term;
 		}
@@ -174,7 +174,7 @@ function mc_create_event_post( $data, $event_id ) {
 			'post_status'  => $post_status,
 			'post_author'  => $auth,
 			'post_name'    => sanitize_title( $title ),
-			'post_date'    => date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
+			'post_date'    => mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
 			'post_type'    => $type,
 			'post_excerpt' => $excerpt,
 		);
@@ -268,7 +268,7 @@ function mc_bulk_action( $action ) {
 	foreach ( $events as $value ) {
 		$value = (int) $value;
 		$total = count( $events );
-		if ( 'delete' == $action ) {
+		if ( 'delete' === $action ) {
 			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			if ( mc_can_edit_event( $value ) ) {
 				$occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
@@ -278,7 +278,7 @@ function mc_bulk_action( $action ) {
 				$i ++;
 			}
 		}
-		if ( 'delete' != $action && current_user_can( 'mc_approve_events' ) ) {
+		if ( 'delete' !== $action && current_user_can( 'mc_approve_events' ) ) {
 			$ids[]     = (int) $value;
 			$prepare[] = '%d';
 			$i ++;
@@ -397,7 +397,7 @@ function mc_bulk_message( $results, $action ) {
  * @return string
  */
 function mc_show_error( $message, $echo = true ) {
-	if ( trim( $message ) == '' ) {
+	if ( trim( $message ) === '' ) {
 		return '';
 	}
 	$message = strip_tags( $message, mc_admin_strip_tags() );
@@ -419,7 +419,7 @@ function mc_show_error( $message, $echo = true ) {
  * @return string
  */
 function mc_show_notice( $message, $echo = true ) {
-	if ( trim( $message ) == '' ) {
+	if ( trim( $message ) === '' ) {
 		return '';
 	}
 	$message = strip_tags( $message, mc_admin_strip_tags() );
@@ -444,7 +444,7 @@ function my_calendar_manage() {
 			if ( isset( $_GET['date'] ) ) {
 				$event_instance = (int) $_GET['date'];
 				$inst           = $wpdb->get_var( $wpdb->prepare( 'SELECT occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_instance ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$instance_date  = '(' . date( 'Y-m-d', mc_strtotime( $inst ) ) . ')';
+				$instance_date  = '(' . mc_date( 'Y-m-d', mc_strtotime( $inst ) ) . ')';
 			} else {
 				$instance_date = '';
 			} ?>
@@ -615,8 +615,8 @@ function my_calendar_edit() {
 	<div class="wrap my-calendar-admin">
 	<?php
 	my_calendar_check_db();
-	if ( 2 == get_site_option( 'mc_multisite' ) ) {
-		if ( 0 == get_option( 'mc_current_table' ) ) {
+	if ( '2' === get_site_option( 'mc_multisite' ) ) {
+		if ( '0' === get_option( 'mc_current_table' ) ) {
 			$message = __( 'Currently editing your local calendar', 'my-calendar' );
 		} else {
 			$message = __( 'Currently editing your central calendar', 'my-calendar' );
@@ -691,11 +691,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$event = mc_get_first_event( $event_id );
 				my_calendar_send_email( $event );
 			}
-			if ( 0 == $add['event_approved'] ) {
+			if ( '0' === (string) $add['event_approved'] ) {
 				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ), false );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
-				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' != trim( $_POST['mc_twitter'] ) ) {
+				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' !== trim( $_POST['mc_twitter'] ) ) {
 					wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
 				}
 				if ( mc_get_uri( 'boolean' ) ) {
@@ -705,7 +705,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				} else {
 					$event_link = false;
 				}
-				if ( '' != $event_error ) {
+				if ( '' !== trim( $event_error ) ) {
 					$message = $event_error;
 				} else {
 					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
@@ -719,7 +719,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		}
 	}
 
-	if ( 'edit' === $action && true == $proceed ) {
+	if ( 'edit' === $action && true === $proceed ) {
 		$result = true;
 		// Translators: URL to view calendar.
 		$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
@@ -730,12 +730,12 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			mc_update_category_relationships( $cats, $event_id );
 
 			$update       = apply_filters( 'mc_before_save_update', $update, $event_id );
-			$endtime      = date( 'H:i:00', mc_strtotime( $update['event_endtime'] ) );
+			$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ) );
 			$prev_eb      = ( isset( $_POST['prev_event_begin'] ) ) ? $_POST['prev_event_begin'] : '';
 			$prev_et      = ( isset( $_POST['prev_event_time'] ) ) ? $_POST['prev_event_time'] : '';
 			$prev_ee      = ( isset( $_POST['prev_event_end'] ) ) ? $_POST['prev_event_end'] : '';
 			$prev_eet     = ( isset( $_POST['prev_event_endtime'] ) ) ? $_POST['prev_event_endtime'] : '';
-			$update_time  = date( 'H:i:00', mc_strtotime( $update['event_time'] ) );
+			$update_time  = mc_date( 'H:i:00', mc_strtotime( $update['event_time'] ) );
 			$date_changed = ( $update['event_begin'] != $prev_eb || $update_time != $prev_et || $update['event_end'] != $prev_ee || ( $endtime != $prev_eet && ( '' != $prev_eet && '23:59:59' != $endtime ) ) ) ? true : false;
 			if ( isset( $_POST['event_instance'] ) ) {
 				// compares the information sent to the information saved for a given event.

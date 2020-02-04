@@ -20,12 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_switch_sites() {
 	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-		if ( get_site_option( 'mc_multisite' ) == 2 && my_calendar_table() != my_calendar_table( 'global' ) ) {
-			if ( get_option( 'mc_current_table' ) == '1' ) {
+		if ( get_site_option( 'mc_multisite' ) === '2' && my_calendar_table() !== my_calendar_table( 'global' ) ) {
+			if ( get_option( 'mc_current_table' ) === '1' ) {
 				// can post to either, but is currently set to post to central table.
 				return true;
 			}
-		} elseif ( get_site_option( 'mc_multisite' ) == 1 && my_calendar_table() != my_calendar_table( 'global' ) ) {
+		} elseif ( get_site_option( 'mc_multisite' ) === '1' && my_calendar_table() !== my_calendar_table( 'global' ) ) {
 			// can only post to central table.
 			return true;
 		}
@@ -41,8 +41,8 @@ function mc_switch_sites() {
  * @param string $new New status.
  */
 function mc_tweet_approval( $prev, $new ) {
-	if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) != '' ) {
-		if ( ( 0 == $prev || 2 == $prev ) && 1 == $new ) {
+	if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) !== '' ) {
+		if ( ( 0 === (int) $prev || 2 === (int) $prev ) && 1 === (int) $new ) {
 			wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
 		}
 	}
@@ -87,11 +87,11 @@ function mc_add_inner_box() {
 		$url     = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id );
 		$event   = mc_get_first_event( $event_id );
 		$content = '<p><strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '</strong><br />' . $event->event_begin . ' @ ' . $event->event_time . '</p>';
-		if ( $event->event_recur != 'S' ) {
+		if ( $event->event_recur !== 'S' ) {
 			$recur    = mc_event_recur_string( $event, $event->event_begin );
 			$content .= wpautop( $recur );
 		}
-		if ( '' != $event->event_label ) {
+		if ( '' !== $event->event_label ) {
 			// Translators: Name of event location.
 			$content .= '<p>' . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . '</p>';
 		}
@@ -134,7 +134,7 @@ function mc_admin_strip_tags() {
  */
 function mc_is_checked( $field, $value, $array = '', $return = false ) {
 	if ( ! is_array( get_option( $field ) ) ) {
-		if ( get_option( $field ) == $value ) {
+		if ( get_option( $field ) === (string) $value ) {
 			if ( $return ) {
 				return 'checked="checked"';
 			} else {
@@ -143,7 +143,7 @@ function mc_is_checked( $field, $value, $array = '', $return = false ) {
 		}
 	} else {
 		$setting = get_option( $field );
-		if ( ! empty( $setting[ $array ]['enabled'] ) && $setting[ $array ]['enabled'] == $value ) {
+		if ( ! empty( $setting[ $array ]['enabled'] ) && (string) $setting[ $array ]['enabled'] === (string) $value ) {
 			if ( $return ) {
 				return 'checked="checked"';
 			} else {
@@ -164,12 +164,12 @@ function mc_is_checked( $field, $value, $array = '', $return = false ) {
  */
 function mc_is_selected( $field, $value, $array = '' ) {
 	if ( ! is_array( get_option( $field ) ) ) {
-		if ( get_option( $field ) == $value ) {
+		if ( get_option( $field ) === (string) $value ) {
 			return 'selected="selected"';
 		}
 	} else {
 		$setting = get_option( $field );
-		if ( $setting[ $array ]['enabled'] == $value ) {
+		if ( (string) $setting[ $array ]['enabled'] === (string) $value ) {
 			return 'selected="selected"';
 		}
 	}

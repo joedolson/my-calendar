@@ -556,7 +556,7 @@ function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 			return $category;
 		}
 
-		return $category->$field;
+		return (string) $category->$field;
 	}
 }
 
