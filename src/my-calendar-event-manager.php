@@ -2538,15 +2538,15 @@ function mc_check_data( $action, $post, $i ) {
 		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
 		$begin = trim( $post['event_begin'][ $i ] );
 		$end   = ( ! empty( $post['event_end'] ) ) ? trim( $post['event_end'][ $i ] ) : $post['event_begin'][ $i ];
-		if ( 'E' === $recur && 0 == ( date( 'w', mc_strtotime( $begin ) ) || 6 == date( 'w', mc_strtotime( $begin ) ) ) ) {
-			if ( 0 == date( 'w', mc_strtotime( $begin ) ) ) {
+		if ( 'E' === $recur && 0 == ( mc_date( 'w', mc_strtotime( $begin ) ) || 6 == mc_date( 'w', mc_strtotime( $begin ) ) ) ) {
+			if ( 0 == mc_date( 'w', mc_strtotime( $begin ) ) ) {
 				$newbegin = my_calendar_add_date( $begin, 1 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
 					$newend = my_calendar_add_date( $end, 1 );
 				} else {
 					$newend = $newbegin;
 				}
-			} elseif ( 6 == date( 'w', mc_strtotime( $begin ) ) ) {
+			} elseif ( 6 == mc_date( 'w', mc_strtotime( $begin ) ) ) {
 				$newbegin = my_calendar_add_date( $begin, 2 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
 					$newend = my_calendar_add_date( $end, 2 );
@@ -2561,12 +2561,12 @@ function mc_check_data( $action, $post, $i ) {
 			$end   = ! empty( $post['event_end'][ $i ] ) ? trim( $post['event_end'][ $i ] ) : $begin;
 		}
 
-		$begin = date( 'Y-m-d', mc_strtotime( $begin ) );// regardless of entry format, convert.
+		$begin = mc_date( 'Y-m-d', mc_strtotime( $begin ) );// regardless of entry format, convert.
 		$time  = ! empty( $post['event_time'][ $i ] ) ? trim( $post['event_time'][ $i ] ) : '';
 		if ( '' != $time ) {
 			$default_modifier = apply_filters( 'mc_default_event_length', '1 hour' );
-			$endtime          = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : date( 'H:i:s', mc_strtotime( $time . ' +' . $default_modifier ) );
-			if ( empty( $post['event_endtime'][ $i ] ) && date( 'H', mc_strtotime( $endtime ) ) == '00' ) {
+			$endtime          = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : mc_date( 'H:i:s', mc_strtotime( $time . ' +' . $default_modifier ) );
+			if ( empty( $post['event_endtime'][ $i ] ) && mc_date( 'H', mc_strtotime( $endtime ) ) == '00' ) {
 				// If one hour pushes event into next day, reset to 11:59pm.
 				$endtime = '23:59:00';
 			}
@@ -2578,7 +2578,7 @@ function mc_check_data( $action, $post, $i ) {
 
 		// Prevent setting enddate to incorrect value on copy.
 		if ( mc_strtotime( $end ) < mc_strtotime( $begin ) && 'copy' === $action ) {
-			$end = date( 'Y-m-d', ( mc_strtotime( $begin ) + ( mc_strtotime( $post['prev_event_end'] ) - mc_strtotime( $post['prev_event_begin'] ) ) ) );
+			$end = mc_date( 'Y-m-d', ( mc_strtotime( $begin ) + ( mc_strtotime( $post['prev_event_end'] ) - mc_strtotime( $post['prev_event_begin'] ) ) ) );
 		}
 		if ( isset( $post['event_allday'] ) && 0 !== (int) $post['event_allday'] ) {
 			$time    = '00:00:00';
@@ -2586,9 +2586,9 @@ function mc_check_data( $action, $post, $i ) {
 		}
 
 		// Verify formats.
-		$time    = date( 'H:i:s', mc_strtotime( $time ) );
-		$endtime = date( 'H:i:s', mc_strtotime( $endtime ) );
-		$end     = date( 'Y-m-d', mc_strtotime( $end ) ); // regardless of entry format, convert.
+		$time    = mc_date( 'H:i:s', mc_strtotime( $time ) );
+		$endtime = mc_date( 'H:i:s', mc_strtotime( $endtime ) );
+		$end     = mc_date( 'Y-m-d', mc_strtotime( $end ) ); // regardless of entry format, convert.
 		$repeats = ( isset( $post['event_repeats'] ) ) ? trim( $post['event_repeats'] ) : 0;
 		$host    = ! empty( $post['event_host'] ) ? $post['event_host'] : $user->ID;
 		$primary = false;
@@ -2702,7 +2702,7 @@ function mc_check_data( $action, $post, $i ) {
 		}
 
 		// Check for a valid or empty time.
-		$time            = ( '' == $time ) ? '23:59:59' : date( 'H:i:00', mc_strtotime( $time ) );
+		$time            = ( '' == $time ) ? '23:59:59' : mc_date( 'H:i:00', mc_strtotime( $time ) );
 		$time_format_one = '/^([0-1][0-9]):([0-5][0-9]):([0-5][0-9])$/';
 		$time_format_two = '/^([2][0-3]):([0-5][0-9]):([0-5][0-9])$/';
 		if ( preg_match( $time_format_one, $time ) || preg_match( $time_format_two, $time ) ) {
@@ -3079,7 +3079,7 @@ function mc_admin_instances( $id, $occur = false ) {
 	$deleted    = get_post_meta( $event_post, '_mc_deleted_instances', true );
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
-			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( mc_date_format(), mc_strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ) ) . '</span>';
+			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( mc_date_format(), mc_strtotime( $result->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ) ) . '</span>';
 			if ( $result->occur_id == $occur ) {
 				$control = '';
 				$edit    = '<em>' . __( 'Editing Now', 'my-calendar' ) . '</em>';
@@ -3147,17 +3147,17 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 
 		if ( isset( $_GET['date'] ) ) {
 			$event       = mc_get_event( (int) $_GET['date'] );
-			$event_begin = date( 'Y-m-d', mc_strtotime( $event->occur_begin ) );
-			$event_end   = date( 'Y-m-d', mc_strtotime( $event->occur_end ) );
+			$event_begin = mc_date( 'Y-m-d', mc_strtotime( $event->occur_begin ) );
+			$event_end   = mc_date( 'Y-m-d', mc_strtotime( $event->occur_end ) );
 		}
 		// Set event end to empty if matches begin. Makes input and changes easier.
 		if ( $event_begin == $event_end ) {
 			$event_end = '';
 		}
-		$starttime = ( mc_is_all_day( $data ) ) ? '' : date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_time ) );
-		$endtime   = ( mc_is_all_day( $data ) ) ? '' : date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_endtime ) );
+		$starttime = ( mc_is_all_day( $data ) ) ? '' : mc_date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_time ) );
+		$endtime   = ( mc_is_all_day( $data ) ) ? '' : mc_date( apply_filters( 'mc_time_format', 'h:i A' ), mc_strtotime( $data->event_endtime ) );
 	} else {
-		$event_begin = date( 'Y-m-d' );
+		$event_begin = mc_date( 'Y-m-d' );
 		$event_end   = '';
 		$starttime   = '';
 		$endtime     = '';
@@ -3191,7 +3191,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
  * @return string form HTML
  */
 function mc_recur_datetime_input() {
-	$event_begin = date( 'Y-m-d' );
+	$event_begin = mc_date( 'Y-m-d' );
 	$event_end   = '';
 	$starttime   = '';
 	$endtime     = '';
@@ -3439,7 +3439,7 @@ function mc_related_events( $id ) {
 			$event    = $result->occur_event_id;
 			$current  = '<a href="' . admin_url( 'admin.php?page=my-calendar' ) . '&amp;mode=edit&amp;event_id=' . $event . '">';
 			$end      = '</a>';
-			$begin    = date_i18n( mc_date_format(), strtotime( $result->occur_begin ) ) . ', ' . date( get_option( 'mc_time_format' ), strtotime( $result->occur_begin ) );
+			$begin    = date_i18n( mc_date_format(), strtotime( $result->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), strtotime( $result->occur_begin ) );
 			$template = $current . $begin . $end;
 			$output  .= "<li>$template</li>";
 		}
@@ -3655,7 +3655,7 @@ function mc_get_instances( $id ) {
 	$return  = array();
 
 	foreach ( $results as $result ) {
-		$key            = sanitize_key( date( 'Y-m-d', strtotime( $result->occur_begin ) ) );
+		$key            = sanitize_key( mc_date( 'Y-m-d', strtotime( $result->occur_begin ) ) );
 		$return[ $key ] = $result->occur_id;
 	}
 
@@ -3686,7 +3686,7 @@ add_filter( 'mc_instance_data', 'mc_reuse_id', 10, 3 );
  * @return array new data to insert
  */
 function mc_reuse_id( $data, $begin, $instances ) {
-	$begin = sanitize_key( date( 'Y-m-d', $begin ) );
+	$begin = sanitize_key( mc_date( 'Y-m-d', $begin ) );
 	$keys  = array_keys( $instances );
 	if ( ! empty( $instances ) && in_array( $begin, $keys ) ) {
 		$restore_id       = $instances[ $begin ];
@@ -3707,7 +3707,7 @@ add_filter( 'mc_instance_format', 'mc_reuse_id_format', 10, 3 );
  * @return array new formats for data
  */
 function mc_reuse_id_format( $format, $begin, $instances ) {
-	$begin = sanitize_key( date( 'Y-m-d', $begin ) );
+	$begin = sanitize_key( mc_date( 'Y-m-d', $begin ) );
 	$keys  = array_keys( $instances );
 	if ( ! empty( $instances ) && in_array( $begin, $keys ) ) {
 		$format = array( '%d', '%s', '%s', '%d', '%d' );
@@ -3762,8 +3762,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 
 						$data = array(
 							'occur_event_id' => $id,
-							'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-							'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 							'occur_group_id' => $group_id,
 						);
 						if ( 'test' === $test && $i > 0 ) {
@@ -3789,11 +3789,11 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						for ( $i = 0; $i <= $numforward; $i ++ ) {
 							$begin = my_calendar_add_date( $orig_begin, $i * $every, 0, 0 );
 							$end   = my_calendar_add_date( $orig_end, $i * $every, 0, 0 );
-							if ( 0 != ( date( 'w', $begin ) && 6 != date( 'w', $begin ) ) ) {
+							if ( 0 != ( mc_date( 'w', $begin ) && 6 != mc_date( 'w', $begin ) ) ) {
 								$data = array(
 									'occur_event_id' => $id,
-									'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-									'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+									'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+									'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 									'occur_group_id' => $group_id,
 								);
 								if ( 'test' === $test && $i > 0 ) {
@@ -3819,8 +3819,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 							$end   = strtotime( $orig_end . ' ' . ( $every * $i ) . ' weekdays' );
 							$data  = array(
 								'occur_event_id' => $id,
-								'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-								'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+								'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+								'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 								'occur_group_id' => $group_id,
 							);
 							if ( 'test' === $test && $i > 0 ) {
@@ -3844,8 +3844,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						$end   = my_calendar_add_date( $orig_end, ( $i * 7 ) * $every, 0, 0 );
 						$data  = array(
 							'occur_event_id' => $id,
-							'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-							'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 							'occur_group_id' => $group_id,
 						);
 						if ( 'test' === $test && $i > 0 ) {
@@ -3868,8 +3868,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						$end   = my_calendar_add_date( $orig_end, ( $i * 14 ), 0, 0 );
 						$data  = array(
 							'occur_event_id' => $id,
-							'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-							'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 							'occur_group_id' => $group_id,
 						);
 						if ( 'test' === $test && $i > 0 ) {
@@ -3892,8 +3892,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						$end   = my_calendar_add_date( $orig_end, 0, $i * $every, 0 );
 						$data  = array(
 							'occur_event_id' => $id,
-							'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-							'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 							'occur_group_id' => $group_id,
 						);
 						if ( 'test' === $test && $i > 0 ) {
@@ -3912,14 +3912,14 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					break;
 				case 'U':
 					// Important to keep track of which date variables are strings and which are timestamps.
-					$week_of_event = week_of_month( date( 'd', strtotime( $event->event_begin ) ) );
+					$week_of_event = week_of_month( mc_date( 'd', strtotime( $event->event_begin ) ) );
 					$newbegin      = my_calendar_add_date( $orig_begin, 28, 0, 0 );
 					$newend        = my_calendar_add_date( $orig_end, 28, 0, 0 );
 					$fifth_week    = $event->event_fifth_week;
 					$data          = array(
 						'occur_event_id' => $id,
-						'occur_begin'    => date( 'Y-m-d  H:i:s', strtotime( $orig_begin ) ),
-						'occur_end'      => date( 'Y-m-d  H:i:s', strtotime( $orig_end ) ),
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_begin ) ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_end ) ),
 						'occur_group_id' => $group_id,
 					);
 
@@ -3933,23 +3933,23 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 					$numforward = ( $numforward - 1 );
 					for ( $i = 0; $i <= $numforward; $i ++ ) {
-						$next_week_diff = ( date( 'm', $newbegin ) == date( 'm', my_calendar_add_date( date( 'Y-m-d', $newbegin ), 7, 0, 0 ) ) ) ? false : true;
-						$move_event     = ( ( 1 == $fifth_week ) && ( ( week_of_month( date( 'd', $newbegin ) ) + 1 ) == $week_of_event ) && true == $next_week_diff ) ? true : false;
-						if ( week_of_month( date( 'd', $newbegin ) ) == $week_of_event || true == $move_event ) {
+						$next_week_diff = ( mc_date( 'm', $newbegin ) == mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin ), 7, 0, 0 ) ) ) ? false : true;
+						$move_event     = ( ( 1 == $fifth_week ) && ( ( week_of_month( mc_date( 'd', $newbegin ) ) + 1 ) == $week_of_event ) && true == $next_week_diff ) ? true : false;
+						if ( week_of_month( mc_date( 'd', $newbegin ) ) == $week_of_event || true == $move_event ) {
 						} else {
-							$newbegin   = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newbegin ), 7, 0, 0 );
-							$newend     = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newend ), 7, 0, 0 );
-							$move_event = ( 1 == $fifth_week && week_of_month( date( 'd', $newbegin ) ) + 1 == $week_of_event ) ? true : false;
-							if ( week_of_month( date( 'd', $newbegin ) ) == $week_of_event || true == $move_event ) {
+							$newbegin   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin ), 7, 0, 0 );
+							$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend ), 7, 0, 0 );
+							$move_event = ( 1 == $fifth_week && week_of_month( mc_date( 'd', $newbegin ) ) + 1 == $week_of_event ) ? true : false;
+							if ( week_of_month( mc_date( 'd', $newbegin ) ) == $week_of_event || true == $move_event ) {
 							} else {
-								$newbegin = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newbegin ), 14, 0, 0 );
-								$newend   = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newend ), 14, 0, 0 );
+								$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin ), 14, 0, 0 );
+								$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend ), 14, 0, 0 );
 							}
 						}
 						$data = array(
 							'occur_event_id' => $id,
-							'occur_begin'    => date( 'Y-m-d  H:i:s', $newbegin ),
-							'occur_end'      => date( 'Y-m-d  H:i:s', $newend ),
+							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $newbegin ),
+							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend ),
 							'occur_group_id' => $group_id,
 						);
 						if ( 'test' == $test && $i > 0 ) {
@@ -3964,8 +3964,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 								$wpdb->insert( my_calendar_event_table(), $data, $format );
 							}
 						}
-						$newbegin = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newbegin ), 28, 0, 0 );
-						$newend   = my_calendar_add_date( date( 'Y-m-d  H:i:s', $newend ), 28, 0, 0 );
+						$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin ), 28, 0, 0 );
+						$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend ), 28, 0, 0 );
 					}
 					break;
 				case 'Y':
@@ -3974,8 +3974,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						$end   = my_calendar_add_date( $orig_end, 0, 0, $i * $every );
 						$data  = array(
 							'occur_event_id' => $id,
-							'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-							'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 							'occur_group_id' => $group_id,
 						);
 						if ( 'test' === $test && $i > 0 ) {
@@ -3999,8 +3999,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 		$end   = strtotime( $orig_end );
 		$data  = array(
 			'occur_event_id' => $id,
-			'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ),
-			'occur_end'      => date( 'Y-m-d  H:i:s', $end ),
+			'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin ),
+			'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end ),
 			'occur_group_id' => $group_id,
 		);
 		if ( ! $test ) {

@@ -56,18 +56,18 @@ function mc_time_html( $e, $type ) {
 	$date_format = mc_date_format();
 	$orig_format = $date_format;
 	$time_format = get_option( 'mc_time_format' );
-	$start       = date( 'Y-m-d', strtotime( $e->occur_begin ) );
-	$end         = date( 'Y-m-d', strtotime( $e->occur_end ) );
+	$start       = mc_date( 'Y-m-d', strtotime( $e->occur_begin ) );
+	$end         = mc_date( 'Y-m-d', strtotime( $e->occur_end ) );
 	$has_time    = ( '00:00:00' !== $e->event_time && '' !== $e->event_time ) ? true : false;
 	$final       = '';
 	// Manipulate date_format based on event data.
 	if ( $e->event_end !== $e->event_begin && ! $has_time ) {
 		$mult_format = get_option( 'mc_multidate_format', '' );
 		$mult_format = ( '' !== $mult_format ) ? $mult_format : 'F j-%d, Y';
-		$date_format = str_replace( '%d', date( 'j', strtotime( $e->occur_end ) ), $mult_format );
+		$date_format = str_replace( '%d', mc_date( 'j', strtotime( $e->occur_end ) ), $mult_format );
 	}
 	// If this event crosses years or months, use original date format & show both dates.
-	if ( date( 'Y', strtotime( $e->occur_end ) ) !== date( 'Y', strtotime( $e->occur_begin ) ) || date( 'm', strtotime( $e->occur_end ) ) !== date( 'm', strtotime( $e->occur_begin ) ) ) {
+	if ( mc_date( 'Y', strtotime( $e->occur_end ) ) !== mc_date( 'Y', strtotime( $e->occur_begin ) ) || mc_date( 'm', strtotime( $e->occur_end ) ) !== mc_date( 'm', strtotime( $e->occur_begin ) ) ) {
 		$current = date_i18n( $orig_format, strtotime( $e->occur_begin ) ) . ' &ndash; ' . date_i18n( $orig_format, strtotime( $e->occur_end ) );
 	} else {
 		$current = date_i18n( $date_format, strtotime( $e->occur_begin ) );
@@ -289,7 +289,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$display_image   = get_option( 'mc_image' );
 	$display_title   = get_option( 'mc_title' );
 	$display_reg     = get_option( 'mc_event_registration' );
-	$day_id          = date( 'd', strtotime( $process_date ) );
+	$day_id          = mc_date( 'd', strtotime( $process_date ) );
 	$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
 	$image           = mc_category_icon( $event );
 	$img             = '';
@@ -592,8 +592,8 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
  */
 function mc_event_classes( $event, $uid, $type ) {
 	$uid = 'mc_' . $type . '_' . $event->occur_id;
-	$ts  = strtotime( get_date_from_gmt( date( 'Y-m-d H:i:s', $event->ts_occur_begin ) ) );
-	$end = strtotime( get_date_from_gmt( date( 'Y-m-d H:i:s', $event->ts_occur_end ) ) );
+	$ts  = strtotime( get_date_from_gmt( mc_date( 'Y-m-d H:i:s', $event->ts_occur_begin ) ) );
+	$end = strtotime( get_date_from_gmt( mc_date( 'Y-m-d H:i:s', $event->ts_occur_end ) ) );
 	$now = current_time( 'timestamp' );
 	if ( $ts < $now && $end > $now ) {
 		$date_relation = 'on-now';
@@ -731,9 +731,9 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	global $wpdb;
 	$mcdb    = $wpdb;
-	$c_month = isset( $date['month'] ) ? $date['month'] : date( 'n', current_time( 'timestamp' ) );
-	$c_year  = isset( $date['year'] ) ? $date['year'] : date( 'Y', current_time( 'timestamp' ) );
-	$c_day   = isset( $date['day'] ) ? $date['day'] : date( 'j', current_time( 'timestamp' ) );
+	$c_month = isset( $date['month'] ) ? $date['month'] : mc_date( 'n', current_time( 'timestamp' ) );
+	$c_year  = isset( $date['year'] ) ? $date['year'] : mc_date( 'Y', current_time( 'timestamp' ) );
+	$c_day   = isset( $date['day'] ) ? $date['day'] : mc_date( 'j', current_time( 'timestamp' ) );
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
@@ -775,8 +775,8 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	$date_switcher .= '</select>' . "\n" . $day_switcher . ' <label class="maybe-hide" for="' . $cid . '-year">' . __( 'Year', 'my-calendar' ) . '</label> <select id="' . $cid . '-year" name="yr">' . "\n";
 	// Query to identify oldest start date in the database.
-	$year1  = date( 'Y', strtotime( $mcdb->get_var( 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1' ) ) );
-	$diff1  = date( 'Y' ) - $year1;
+	$year1  = mc_date( 'Y', strtotime( $mcdb->get_var( 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1' ) ) );
+	$diff1  = mc_date( 'Y' ) - $year1;
 	$past   = $diff1;
 	$future = apply_filters( 'mc_jumpbox_future_years', 5, $cid );
 	$fut    = 1;
@@ -786,22 +786,22 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 
 	while ( $past > 0 ) {
 		$p   .= '<option value="';
-		$p   .= date( 'Y', $time ) - $past;
-		$p   .= '"' . selected( date( 'Y', $time ) - $past, $c_year, false ) . '>';
-		$p   .= date( 'Y', $time ) - $past . "</option>\n";
+		$p   .= mc_date( 'Y', $time ) - $past;
+		$p   .= '"' . selected( mc_date( 'Y', $time ) - $past, $c_year, false ) . '>';
+		$p   .= mc_date( 'Y', $time ) - $past . "</option>\n";
 		$past = $past - 1;
 	}
 
 	while ( $fut < $future ) {
 		$f  .= '<option value="';
-		$f  .= date( 'Y', $time ) + $fut;
-		$f  .= '"' . selected( date( 'Y', $time ) + $fut, $c_year, false ) . '>';
-		$f  .= date( 'Y', $time ) + $fut . "</option>\n";
+		$f  .= mc_date( 'Y', $time ) + $fut;
+		$f  .= '"' . selected( mc_date( 'Y', $time ) + $fut, $c_year, false ) . '>';
+		$f  .= mc_date( 'Y', $time ) + $fut . "</option>\n";
 		$fut = $fut + 1;
 	}
 
 	$date_switcher .= $p;
-	$date_switcher .= '<option value="' . date( 'Y', $time ) . '"' . selected( date( 'Y', $time ), $c_year, false ) . '>' . date( 'Y', $time ) . "</option>\n";
+	$date_switcher .= '<option value="' . mc_date( 'Y', $time ) . '"' . selected( mc_date( 'Y', $time ), $c_year, false ) . '>' . mc_date( 'Y', $time ) . "</option>\n";
 	$date_switcher .= $f;
 	$date_switcher .= '</select> <input type="submit" class="button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
 	$date_switcher  = apply_filters( 'mc_jumpbox', $date_switcher );
@@ -865,7 +865,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( isset( $_GET['dy'] ) ) {
 		$current_day = absint( $_GET['dy'] );
 		$current_set = mktime( 0, 0, 0, $month, $current_day, $year );
-		if ( date( 'N', $current_set ) === $start_of_week ) {
+		if ( mc_date( 'N', $current_set ) === $start_of_week ) {
 			$weeks_day = mc_first_day_of_week( $current_set );
 		} else {
 			$weeks_day = mc_first_day_of_week( $current );
@@ -879,7 +879,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	} else {
 		// if the current date is displayed and the week beginning day is greater than 20 in the month.
 		if ( ! isset( $_GET['dy'] ) && $day > 20 ) {
-			$day = date( 'j', strtotime( "$from + 1 week" ) );
+			$day = mc_date( 'j', strtotime( "$from + 1 week" ) );
 		}
 	}
 	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
@@ -961,26 +961,26 @@ function mc_date_array( $timestamp, $period ) {
 				$timestamp = strtotime( '+1 month', $timestamp );
 			}
 			$start_of_week = get_option( 'start_of_week' );
-			$first         = date( 'N', $timestamp ); // ISO-8601.
-			$sub           = date( 'w', $timestamp ); // numeric (how WordPress option is stored).
+			$first         = mc_date( 'N', $timestamp ); // ISO-8601.
+			$sub           = mc_date( 'w', $timestamp ); // numeric (how WordPress option is stored).
 			$n             = ( 1 == $start_of_week ) ? $first - 1 : $first;
 
 			if ( $sub === $start_of_week ) {
-				$from = date( 'Y-m-d', $timestamp );
+				$from = mc_date( 'Y-m-d', $timestamp );
 			} else {
 				$start = strtotime( "-$n days", $timestamp );
-				$from  = date( 'Y-m-d', $start );
+				$from  = mc_date( 'Y-m-d', $start );
 			}
-			$endtime = mktime( 0, 0, 0, date( 'm', $timestamp ), date( 't', $timestamp ), date( 'Y', $timestamp ) );
+			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp ), mc_date( 't', $timestamp ), mc_date( 'Y', $timestamp ) );
 
 			// This allows multiple months displayed. Will figure out splitting tables...
 			// To handle: $endtime = strtotime( "+$months months",$endtime ); JCD TODO.
-			$last = (int) date( 'N', $endtime );
+			$last = (int) mc_date( 'N', $endtime );
 			$n    = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
-			if ( -1 === $n && '7' === date( 'N', $endtime ) ) {
+			if ( -1 === $n && '7' === mc_date( 'N', $endtime ) ) {
 				$n = 6;
 			}
-			$to = date( 'Y-m-d', strtotime( "+$n days", $endtime ) );
+			$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ) );
 
 			$return = array(
 				'from' => $from,
@@ -989,8 +989,8 @@ function mc_date_array( $timestamp, $period ) {
 			break;
 		case 'week':
 			// First day of the week is calculated prior to this function. Argument received is the first day of the week.
-			$from = date( 'Y-m-d', $timestamp );
-			$to   = date( 'Y-m-d', strtotime( '+6 days', $timestamp ) );
+			$from = mc_date( 'Y-m-d', $timestamp );
+			$to   = mc_date( 'Y-m-d', strtotime( '+6 days', $timestamp ) );
 
 			$return = array(
 				'from' => $from,
@@ -1020,7 +1020,7 @@ function mc_events_class( $events, $date = false ) {
 	} else {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
-			if ( '00:00:00' === $event->event_endtime && date( 'Y-m-d', strtotime( $event->occur_end ) ) === $date && date( 'Y-m-d', strtotime( $event->occur_begin ) ) !== $date ) {
+			if ( '00:00:00' === $event->event_endtime && mc_date( 'Y-m-d', strtotime( $event->occur_end ) ) === $date && mc_date( 'Y-m-d', strtotime( $event->occur_begin ) ) !== $date ) {
 				continue;
 			}
 			$author = ' author' . $event->event_author;
@@ -1382,14 +1382,14 @@ function mc_show_event_template( $content ) {
 				$mc_id    = intval( $_GET['mc_id'] );
 				$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 				$event    = mc_get_event( $mc_id, 'object' );
-				$date     = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-				$time     = date( 'H:i:00', strtotime( $event->occur_begin ) );
+				$date     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
+				$time     = mc_date( 'H:i:00', strtotime( $event->occur_begin ) );
 			} else {
 				$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 				if ( is_numeric( $event_id ) ) {
 					$event = mc_get_nearest_event( $event_id );
-					$date  = date( 'Y-m-d', strtotime( $event->occur_begin ) );
-					$time  = date( 'H:i:s', strtotime( $event->occur_begin ) );
+					$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
+					$time  = mc_date( 'H:i:s', strtotime( $event->occur_begin ) );
 				} else {
 
 					return $content;
@@ -1711,8 +1711,8 @@ function my_calendar( $args ) {
 
 		if ( 'day' === $params['time'] ) {
 			$body .= "<div class='mcjs " . esc_attr( $params['format'] . ' ' . $params['time'] ) . "'>" . $top;
-			$from  = date( 'Y-m-d', $current );
-			$to    = date( 'Y-m-d', $current );
+			$from  = mc_date( 'Y-m-d', $current );
+			$to    = mc_date( 'Y-m-d', $current );
 
 			$query  = array(
 				'from'     => $from,
@@ -1765,9 +1765,9 @@ function my_calendar( $args ) {
 			} else {
 				$current_header = date_i18n( $month_format, $current );
 			}
-			$current_month_header = ( date( 'Y', $current ) === date( 'Y', $through_date ) ) ? date_i18n( 'F', $current ) : date_i18n( 'F Y', $current );
+			$current_month_header = ( mc_date( 'Y', $current ) === mc_date( 'Y', $through_date ) ) ? date_i18n( 'F', $current ) : date_i18n( 'F Y', $current );
 			$through_month_header = date_i18n( $month_format, $through_date );
-			$values               = array( 'date' => date( 'Y-m-d', $current ) );
+			$values               = array( 'date' => mc_date( 'Y-m-d', $current ) );
 
 			// Add the calendar table and heading.
 			$body .= $top;
@@ -1835,19 +1835,19 @@ function my_calendar( $args ) {
 				$end               = strtotime( $to );
 				$week_number_shown = false;
 				do {
-					$date_is    = date( 'Y-m-d', $start );
-					$is_weekend = ( date( 'N', $start ) < 6 ) ? false : true;
+					$date_is    = mc_date( 'Y-m-d', $start );
+					$is_weekend = ( mc_date( 'N', $start ) < 6 ) ? false : true;
 					if ( $show_weekends || ( ! $show_weekends && ! $is_weekend ) ) {
-						if ( date( 'N', $start ) == $start_of_week && 'list' !== $params['format'] ) {
+						if ( mc_date( 'N', $start ) == $start_of_week && 'list' !== $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
 						}
 						$events          = ( isset( $event_array[ $date_is ] ) ) ? $event_array[ $date_is ] : array();
 						$week_header     = date_i18n( $week_format, $start );
-						$thisday_heading = ( 'week' === $params['time'] ) ? "<small>$week_header</small>" : date( 'j', $start );
+						$thisday_heading = ( 'week' === $params['time'] ) ? "<small>$week_header</small>" : mc_date( 'j', $start );
 
 						// Generate event classes & attributes.
 						$events_class = mc_events_class( $events, $date_is );
-						$monthclass   = ( date( 'n', $start ) == $date['month'] || 'month' != $params['time'] ) ? '' : 'nextmonth';
+						$monthclass   = ( mc_date( 'n', $start ) == $date['month'] || 'month' != $params['time'] ) ? '' : 'nextmonth';
 						$dateclass    = mc_dateclass( $start );
 						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
@@ -1916,7 +1916,7 @@ function my_calendar( $args ) {
 							}
 						}
 
-						if ( date( 'N', $start ) == $end_of_week || ( date( 'N', $start ) == 5 && ! $show_weekends ) ) {
+						if ( mc_date( 'N', $start ) == $end_of_week || ( mc_date( 'N', $start ) == 5 && ! $show_weekends ) ) {
 							if ( 'list' !== $params['format'] ) {
 								$body .= "\n</$tr>\n"; // End of 'is beginning of week'.
 							}
@@ -1966,17 +1966,17 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	if ( 'list' === $format && 'week' !== $time ) {
 		if ( $num > 0 && 'day' != $time && 'week' != $time ) {
 			if ( 'month+1' === $time ) {
-				$from = date( 'Y-m-d', strtotime( '+1 month', mktime( 0, 0, 0, $c_month, 1, $c_year ) ) );
+				$from = mc_date( 'Y-m-d', strtotime( '+1 month', mktime( 0, 0, 0, $c_month, 1, $c_year ) ) );
 				$next = strtotime( "+$num months", strtotime( '+1 month', mktime( 0, 0, 0, $c_month, 1, $c_year ) ) );
 			} else {
-				$from = date( 'Y-m-d', mktime( 0, 0, 0, $c_month, 1, $c_year ) );
+				$from = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, 1, $c_year ) );
 				$next = strtotime( "+$num months", mktime( 0, 0, 0, $c_month, 1, $c_year ) );
 			}
-			$last = date( 't', $next );
-			$to   = date( 'Y-m', $next ) . '-' . $last;
+			$last = mc_date( 't', $next );
+			$to   = mc_date( 'Y-m', $next ) . '-' . $last;
 		} else {
-			$from = date( 'Y-m-d', mktime( 0, 0, 0, $c_month, 1, $c_year ) );
-			$to   = date( 'Y-m-d', mktime( 0, 0, 0, $c_month, date( 't', mktime( 0, 0, 0, $c_month, 1, $c_year ) ), $c_year ) );
+			$from = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, 1, $c_year ) );
+			$to   = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, mc_date( 't', mktime( 0, 0, 0, $c_month, 1, $c_year ) ), $c_year ) );
 		}
 		$dates = array(
 			'from' => $from,
@@ -2126,8 +2126,8 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up exports.
 	if ( in_array( 'exports', $used, true ) ) {
-		$ical_m    = ( isset( $_GET['month'] ) ) ? (int) $_GET['month'] : date( 'n' );
-		$ical_y    = ( isset( $_GET['yr'] ) ) ? (int) $_GET['yr'] : date( 'Y' );
+		$ical_m    = ( isset( $_GET['month'] ) ) ? (int) $_GET['month'] : mc_date( 'n' );
+		$ical_y    = ( isset( $_GET['yr'] ) ) ? (int) $_GET['yr'] : mc_date( 'Y' );
 		$next_link = my_calendar_next_link( $date, $format, $time, $show_months );
 		$exports   = mc_export_links( $ical_y, $ical_m, $next_link, $add, $subtract );
 	}
@@ -2179,7 +2179,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	$body = '';
 	if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
-		$weeknumber = date( 'W', $start );
+		$weeknumber = mc_date( 'W', $start );
 		if ( 'list' != $format ) {
 			$body = "<$td class='week_number'>$weeknumber</$td>";
 		}
@@ -2207,9 +2207,9 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	if ( 'true' === $open_day_uri || 'false' === $open_day_uri ) {
 		// Yes, this is weird. it's from some old settings...
 		$target = array(
-			'yr'    => date( 'Y', $start ),
-			'month' => date( 'm', $start ),
-			'dy'    => date( 'j', $start ),
+			'yr'    => mc_date( 'Y', $start ),
+			'month' => mc_date( 'm', $start ),
+			'dy'    => mc_date( 'j', $start ),
 			'time'  => 'day',
 		);
 		if ( '' != $category ) {
@@ -2220,13 +2220,13 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	} else {
 		$mini_uri = get_option( 'mc_mini_uri' );
 		$atype    = str_replace( 'anchor', '', $open_day_uri ); // List or grid.
-		$ad       = str_pad( date( 'j', $start ), 2, '0', STR_PAD_LEFT ); // Need to match format in ID.
+		$ad       = str_pad( mc_date( 'j', $start ), 2, '0', STR_PAD_LEFT ); // Need to match format in ID.
 		$am       = str_pad( $date['month'], 2, '0', STR_PAD_LEFT );
 		$date_url = mc_build_url(
 			array(
 				'yr'    => $date['year'],
 				'month' => $date['month'],
-				'dy'    => date( 'j', $start ),
+				'dy'    => mc_date( 'j', $start ),
 			),
 			array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ),
 			$mini_uri
@@ -2326,7 +2326,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 			$c_day = $dm[0];
 			$c_m   = $dm[1];
 		} elseif ( 'day' === $time ) {
-			$c_day = date( 'd', $timestamp );
+			$c_day = mc_date( 'd', $timestamp );
 		} else {
 			$c_day = 1;
 		}
@@ -2337,34 +2337,34 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 			$c_day = 1;
 		}
 	} else {
-		$xnow    = date( 'Y-m-d', $timestamp );
-		$c_month = ( 0 == $c_m ) ? date( 'm', $timestamp ) : date( 'm', strtotime( $xnow . ' -1 month' ) );
+		$xnow    = mc_date( 'Y-m-d', $timestamp );
+		$c_month = ( 0 == $c_m ) ? mc_date( 'm', $timestamp ) : mc_date( 'm', strtotime( $xnow . ' -1 month' ) );
 	}
 
-	$is_start_of_week = ( get_option( 'start_of_week' ) === date( 'N', $timestamp ) ) ? true : false;
+	$is_start_of_week = ( get_option( 'start_of_week' ) === mc_date( 'N', $timestamp ) ) ? true : false;
 	if ( isset( $_GET['yr'] ) && $main_class == $cid ) {
 		$c_year = (int) $_GET['yr'];
 	} else {
 		if ( 'week' === $time && ! isset( $_GET['dy'] ) ) {
 			if ( $is_start_of_week ) {
-				$c_year = ( date( 'Y', current_time( 'timestamp' ) ) );
+				$c_year = ( mc_date( 'Y', current_time( 'timestamp' ) ) );
 			} else {
-				$current_year = date( 'Y', current_time( 'timestamp' ) );
+				$current_year = mc_date( 'Y', current_time( 'timestamp' ) );
 				$c_year       = ( 0 == $dm[1] ) ? $current_year : false;
 				if ( ! $c_year ) {
-					$c_year = ( date( 'Y', strtotime( '-1 month' ) ) == $current_year ) ? $current_year : $current_year - 1;
+					$c_year = ( mc_date( 'Y', strtotime( '-1 month' ) ) == $current_year ) ? $current_year : $current_year - 1;
 				}
 			}
 		} else {
-			$c_year = ( date( 'Y', current_time( 'timestamp' ) ) );
+			$c_year = ( mc_date( 'Y', current_time( 'timestamp' ) ) );
 		}
 	}
 	// Years get funny if we exceed 3000, so we use this check.
 	if ( ! ( $c_year <= 3000 && $c_year >= 0 ) ) {
 		// No valid year causes the calendar to default to today.
-		$c_year  = date( 'Y', $timestamp );
-		$c_month = date( 'm', $timestamp );
-		$c_day   = date( 'd', $timestamp );
+		$c_year  = mc_date( 'Y', $timestamp );
+		$c_month = mc_date( 'm', $timestamp );
+		$c_day   = mc_date( 'd', $timestamp );
 	}
 	if ( ! ( isset( $_GET['yr'] ) || isset( $_GET['month'] ) || isset( $_GET['dy'] ) ) ) {
 		// Month/year based on shortcode.
@@ -2600,9 +2600,9 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
 	if ( 'week' === $time ) {
 		$nextdate = strtotime( "$cur_year-$cur_month-$cur_day" . '+ 7 days' );
-		$day      = date( 'd', $nextdate );
-		$yr       = date( 'Y', $nextdate );
-		$month    = date( 'm', $nextdate );
+		$day      = mc_date( 'd', $nextdate );
+		$yr       = mc_date( 'Y', $nextdate );
+		$month    = mc_date( 'm', $nextdate );
 		if ( $yr != $cur_year ) {
 			$format = 'F j, Y';
 		} else {
@@ -2613,9 +2613,9 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	}
 	if ( 'day' === $time ) {
 		$nextdate = strtotime( "$cur_year-$cur_month-$cur_day" . '+ 1 days' );
-		$day      = date( 'd', $nextdate );
-		$yr       = date( 'Y', $nextdate );
-		$month    = date( 'm', $nextdate );
+		$day      = mc_date( 'd', $nextdate );
+		$yr       = mc_date( 'Y', $nextdate );
+		$month    = mc_date( 'm', $nextdate );
 		if ( $yr != $cur_year ) {
 			$format = 'F j, Y';
 		} else {
@@ -2680,9 +2680,9 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	$day  = '';
 	if ( 'week' === $time ) {
 		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 7 days' );
-		$day      = date( 'd', $prevdate );
-		$yr       = date( 'Y', $prevdate );
-		$month    = date( 'm', $prevdate );
+		$day      = mc_date( 'd', $prevdate );
+		$yr       = mc_date( 'Y', $prevdate );
+		$month    = mc_date( 'm', $prevdate );
 		if ( $yr != $cur_year ) {
 			$format = 'F j, Y';
 		} else {
@@ -2692,9 +2692,9 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	}
 	if ( 'day' === $time ) {
 		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 1 days' );
-		$day      = date( 'd', $prevdate );
-		$yr       = date( 'Y', $prevdate );
-		$month    = date( 'm', $prevdate );
+		$day      = mc_date( 'd', $prevdate );
+		$yr       = mc_date( 'Y', $prevdate );
+		$month    = mc_date( 'm', $prevdate );
 		if ( $yr != $cur_year ) {
 			$format = 'F j, Y';
 		} else {
