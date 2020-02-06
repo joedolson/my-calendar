@@ -582,9 +582,9 @@ function mc_remote_db() {
 									<?php
 									$url = add_query_arg(
 										array(
-											'my-calendar-api' => 'json',
 											'to'              => current_time( 'Y-m-d' ),
 											'from'            => mc_date( 'Y-m-d', time() - MONTH_IN_SECONDS ),
+											'my-calendar-api' => 'json',
 										),
 										home_url()
 									);

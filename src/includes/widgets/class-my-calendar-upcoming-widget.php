@@ -79,7 +79,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$widget_title   = empty( $the_title ) ? '' : $the_title;
 		$widget_title   = ( '' === $widget_link ) ? $widget_title : "<a href='$widget_link'>$widget_title</a>";
 		$widget_title   = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
-		$month          = ( 0 === strpos( $type, 'month+' ) ) ? date_i18n( 'F', strtotime( $type ) ) : date_i18n( 'F', current_time( 'timestamp' ) );
+		$month          = ( 0 === strpos( $type, 'month+' ) ) ? date_i18n( 'F', strtotime( $type ) ) : date_i18n( 'F' );
 		$widget_title   = str_replace( '{month}', $month, $widget_title );
 		$from           = ( isset( $instance['mc_from'] ) ) ? $instance['mc_from'] : false;
 		$to             = ( isset( $instance['mc_to'] ) ) ? $instance['mc_to'] : false;

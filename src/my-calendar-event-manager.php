@@ -2538,7 +2538,7 @@ function mc_check_data( $action, $post, $i ) {
 		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
 		$begin = trim( $post['event_begin'][ $i ] );
 		$end   = ( ! empty( $post['event_end'] ) ) ? trim( $post['event_end'][ $i ] ) : $post['event_begin'][ $i ];
-		if ( 'E' === $recur && 0 === (int) ( mc_date( 'w', mc_strtotime( $begin ) ) || 6 == mc_date( 'w', mc_strtotime( $begin ) ) ) ) {
+		if ( 'E' === $recur && '0' === ( mc_date( 'w', mc_strtotime( $begin ) ) || '6' === mc_date( 'w', mc_strtotime( $begin ) ) ) ) {
 			if ( 0 === (int) mc_date( 'w', mc_strtotime( $begin ) ) ) {
 				$newbegin = my_calendar_add_date( $begin, 1 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
@@ -2726,7 +2726,7 @@ function mc_check_data( $action, $post, $i ) {
 	}
 	// Run checks on recurrence profile.
 	$valid_recur = array( 'W', 'B', 'M', 'U', 'Y', 'D', 'E' );
-	if ( ( 0 === (int) $repeats && 'S' === $recur ) || ( ( $repeats >= 0 ) && in_array( $recur, $valid_recur ) ) ) {
+	if ( ( 0 === (int) $repeats && 'S' === $recur ) || ( ( $repeats >= 0 ) && in_array( $recur, $valid_recur, true ) ) ) {
 		$recur = $recur . $every;
 	} else {
 		// if it's not valid, assign a default value.
@@ -2801,7 +2801,7 @@ function mc_check_data( $action, $post, $i ) {
 		// Array: removed before DB insertion.
 		'event_categories'   => $cats,
 	);
-	$errors = apply_filters( 'mc_fields_required', '', $submit );
+	$errors       = apply_filters( 'mc_fields_required', '', $submit );
 
 	if ( '' === $errors ) {
 		$ok = true;
@@ -3589,7 +3589,7 @@ function mc_recur_options( $value ) {
 	$s = ( 'S' === $value ) ? ' selected="selected"' : '';
 	$d = ( 'D' === $value ) ? ' selected="selected"' : '';
 	$e = ( 'E' === $value ) ? ' selected="selected"' : '';
-	$w = ( 'W' === $value || 'B' == $value ) ? ' selected="selected"' : '';
+	$w = ( 'W' === $value || 'B' === $value ) ? ' selected="selected"' : '';
 	$m = ( 'M' === $value ) ? ' selected="selected"' : '';
 	$u = ( 'U' === $value ) ? ' selected="selected"' : '';
 	$y = ( 'Y' === $value ) ? ' selected="selected"' : '';
@@ -3687,7 +3687,7 @@ add_filter( 'mc_instance_data', 'mc_reuse_id', 10, 3 );
 function mc_reuse_id( $data, $begin, $instances ) {
 	$begin = sanitize_key( mc_date( 'Y-m-d', $begin ) );
 	$keys  = array_keys( $instances );
-	if ( ! empty( $instances ) && in_array( $begin, $keys ) ) {
+	if ( ! empty( $instances ) && in_array( $begin, $keys, true ) ) {
 		$restore_id       = $instances[ $begin ];
 		$data['occur_id'] = $restore_id;
 	}
@@ -3939,7 +3939,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 							$newbegin   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin ), 7, 0, 0 );
 							$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend ), 7, 0, 0 );
 							$move_event = ( 1 === (int) $fifth_week && week_of_month( mc_date( 'd', $newbegin ) ) + 1 === (int) $week_of_event ) ? true : false;
-							if ( week_of_month( mc_date( 'd', $newbegin ) ) == $week_of_event || true == $move_event ) {
+							if ( week_of_month( mc_date( 'd', $newbegin ) ) === $week_of_event || true === $move_event ) {
 							} else {
 								$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin ), 14, 0, 0 );
 								$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend ), 14, 0, 0 );

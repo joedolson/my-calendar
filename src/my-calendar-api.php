@@ -294,7 +294,7 @@ function mc_format_rss( $events ) {
 		  <language>' . get_bloginfo( 'language' ) . '</language>
 		  <managingEditor>' . get_bloginfo( 'admin_email' ) . ' (' . get_bloginfo( 'name' ) . ' Admin)</managingEditor>
 		  <generator>My Calendar WordPress Plugin http://www.joedolson.com/my-calendar/</generator>
-		  <lastBuildDate>' . mysql2date( 'D, d M Y H:i:s +0000', current_time( 'timestamp' ) ) . '</lastBuildDate>
+		  <lastBuildDate>' . mysql2date( 'D, d M Y H:i:s +0000', time() ) . '</lastBuildDate>
 		  <atom:link href="' . htmlentities( esc_url( add_query_arg( $_GET, get_feed_link( 'my-calendar-rss' ) ) ) ) . '" rel="self" type="application/rss+xml" />' . PHP_EOL;
 		foreach ( $events as $date ) {
 			foreach ( array_keys( $date ) as $key ) {

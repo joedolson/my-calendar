@@ -79,7 +79,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			$months      = '';
 		}
 
-		if ( '' != $the_title ) {
+		if ( '' !== $the_title ) {
 			$title = ( '' !== $widget_link ) ? "<a href='$widget_link'>$the_title</a>" : $the_title;
 			$title = ( '' !== $title ) ? $before_title . $title . $after_title : '';
 		} else {
@@ -238,8 +238,8 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		}
 		$instance['author'] = $author;
 		$instance['host']   = $host;
-		$instance['ltype']  = ( '' != $new['ltype'] && '' !== $new['lvalue'] ) ? $new['ltype'] : '';
-		$instance['lvalue'] = ( '' != $new['ltype'] && '' !== $new['lvalue'] ) ? $new['lvalue'] : '';
+		$instance['ltype']  = ( '' !== $new['ltype'] && '' !== $new['lvalue'] ) ? $new['ltype'] : '';
+		$instance['lvalue'] = ( '' !== $new['ltype'] && '' !== $new['lvalue'] ) ? $new['lvalue'] : '';
 		$instance['site']   = $new['site'];
 		$instance['months'] = $new['months'];
 

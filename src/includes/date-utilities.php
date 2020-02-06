@@ -21,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string classes
  */
 function mc_dateclass( $current ) {
-	$now      = current_time( 'timestamp' );
 	$dayclass = sanitize_html_class( strtolower( date_i18n( 'l', $current ) ) ) . ' ' . sanitize_html_class( strtolower( date_i18n( 'D', $current ) ) );
-	if ( mc_date( 'Ymd', $now ) === mc_date( 'Ymd', $current ) ) {
+	if ( current_time( 'Ymd' ) === mc_date( 'Ymd', $current ) ) {
 		$dateclass = 'current-day';
-	} elseif ( my_calendar_date_comp( mc_date( 'Y-m-d', $now ), mc_date( 'Y-m-d', $current ) ) ) {
+	} elseif ( my_calendar_date_comp( current_time( 'Y-m-d' ), mc_date( 'Y-m-d', $current ) ) ) {
 		$dateclass = 'future-day';
 	} else {
 		$dateclass = 'past-day past-date'; // stupid legacy classes.

@@ -542,9 +542,9 @@ function my_calendar_todays_events( $args ) {
 		foreach ( $today as $e ) {
 			if ( ! mc_private_event( $e ) && ! in_array( $e->event_group_id, $groups, true ) ) {
 				$event_details = mc_create_tags( $e );
-				$ts            = strtotime( get_date_from_gmt( mc_date( 'Y-m-d H:i:s', $e->ts_occur_begin ) ) );
-				$end           = strtotime( get_date_from_gmt( mc_date( 'Y-m-d H:i:s', $e->ts_occur_end ) ) );
-				$now           = current_time( 'timestamp' );
+				$ts            = $e->ts_occur_begin;
+				$end           = $e->ts_occur_end;
+				$now           = time();
 				$category      = mc_category_class( $e, 'mc_' );
 				if ( $ts < $now && $end > $now ) {
 					$class = 'on-now';
