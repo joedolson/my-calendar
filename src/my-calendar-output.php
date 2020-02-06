@@ -1838,7 +1838,7 @@ function my_calendar( $args ) {
 					$date_is    = mc_date( 'Y-m-d', $start );
 					$is_weekend = ( mc_date( 'N', $start ) < 6 ) ? false : true;
 					if ( $show_weekends || ( ! $show_weekends && ! $is_weekend ) ) {
-						if ( mc_date( 'N', $start ) === (string) s$start_of_week && 'list' !== $params['format'] ) {
+						if ( mc_date( 'N', $start ) === (string) $start_of_week && 'list' !== $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
 						}
 						$events          = ( isset( $event_array[ $date_is ] ) ) ? $event_array[ $date_is ] : array();
