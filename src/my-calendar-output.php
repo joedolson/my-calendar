@@ -83,7 +83,7 @@ function mc_time_html( $e, $type ) {
 				date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '
 			</time>
 		</span>';
-		if ( 0 == $e->event_hide_end ) {
+		if ( 0 === (int) $e->event_hide_end ) {
 			if ( '' !== $e->event_endtime && $e->event_endtime !== $e->event_time ) {
 				$time_content .= "
 					<span class='time-separator'> &ndash; </span>$final
@@ -101,7 +101,7 @@ function mc_time_html( $e, $type ) {
 	}
 	$time_content .= apply_filters( 'mcs_end_time_block', '', $e );
 	// Generate date/time meta data.
-	$meta  = ( 0 == $e->event_hide_end ) ? "<meta itemprop='endDate' content='" . $start . 'T' . $e->event_endtime . "'/>" : '';
+	$meta  = ( 0 === (int) $e->event_hide_end ) ? "<meta itemprop='endDate' content='" . $start . 'T' . $e->event_endtime . "'/>" : '';
 	$meta .= '<meta itemprop="duration" content="' . mc_duration( $e ) . '"/>';
 
 	$time = "<div class='time-block'><p>$time_content</p>$meta</div>";
@@ -122,7 +122,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 		$url   = plugin_dir_url( __FILE__ );
 		$image = '';
 		if ( 'true' !== get_option( 'mc_hide_icons' ) ) {
-			if ( '' != $event->category_icon ) {
+			if ( '' !== $event->category_icon ) {
 				$path = ( mc_is_custom_icon() ) ? str_replace( 'my-calendar', 'my-calendar-custom', $url ) : plugins_url( 'images/icons', __FILE__ ) . '/';
 				$hex  = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
 				if ( 'html' === $type ) {
@@ -334,7 +334,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		$balance = '';
 	}
 
-	$group_class   = ( 1 == $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
+	$group_class   = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
 	$hlevel        = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
 	$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
 	$header       .= ( 'single' !== $type && 'list' !== $type ) ? "<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n" : '';
@@ -359,7 +359,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$list_title = "<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 			}
 			if ( 'true' === $display_author ) {
-				if ( 0 != $event->event_author ) {
+				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
 					$e      = get_userdata( $event->event_author );
 					$author = '<p class="event-author">' . __( 'Posted by', 'my-calendar' ) . ' <span class="author-name">' . $e->display_name . "</span></p>\n";
 				}
@@ -548,7 +548,7 @@ function mc_get_event_image( $event, $data ) {
 	}
 	$default_size = apply_filters( 'mc_default_image_size', $default_size );
 
-	if ( is_numeric( $event->event_post ) && 0 != $event->event_post && ( isset( $data[ $default_size ] ) && '' != $data[ $default_size ] ) ) {
+	if ( is_numeric( $event->event_post ) && 0 !== (int) $event->event_post && ( isset( $data[ $default_size ] ) && '' !== $data[ $default_size ] ) ) {
 		$atts      = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ) );
 		$image_url = get_the_post_thumbnail_url( $event->event_post, $default_size );
 		$image     = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
@@ -592,9 +592,9 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
  */
 function mc_event_classes( $event, $uid, $type ) {
 	$uid = 'mc_' . $type . '_' . $event->occur_id;
-	$ts  = strtotime( get_date_from_gmt( mc_date( 'Y-m-d H:i:s', $event->ts_occur_begin ) ) );
-	$end = strtotime( get_date_from_gmt( mc_date( 'Y-m-d H:i:s', $event->ts_occur_end ) ) );
-	$now = current_time( 'timestamp' );
+	$ts  = $event->ts_occur_begin;
+	$end = $event->ts_occur_end;
+	$now = time();
 	if ( $ts < $now && $end > $now ) {
 		$date_relation = 'on-now';
 	} elseif ( $now < $ts ) {

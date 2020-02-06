@@ -56,6 +56,25 @@ function mc_create_guid( $event ) {
 }
 
 /**
+ * Function for extracting event timestamps from MySQL.
+ *
+ * @return string
+ */
+function mc_ts() {
+	global $wpdb;
+	$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
+	$offset = substr( $offset, 0, -3 );
+	if ( strpos( $offset, '-' ) !== 0 ) {
+		$offset = '+' . $offset;
+	}
+	$wp_time  = get_option( 'gmt_offset', '0' );
+	$wp_time  = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ): '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
+	$wp_time .= ':00';
+	//return 'UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end'
+	return "UNIX_TIMESTAMP( CONVERT_TZ( `occur_begin`, '$wp_time', '$offset' ) ) AS ts_occur_begin, UNIX_TIMESTAMP( CONVERT_TZ( `occur_end`, '$wp_time', '$offset' ) ) AS ts_occur_end";
+}
+
+/**
  * Grab all events for the requested dates from calendar
  *
  * This function needs to be able to react to URL parameters for most factors, with the arguments being the default shown.
@@ -117,12 +136,13 @@ function my_calendar_get_events( $args ) {
 	$search             = mc_prepare_search_query( $search );
 	$exclude_categories = mc_private_categories();
 	$arr_events         = array();
+	$ts_string          = mc_ts();
 
 	$site = apply_filters( 'mc_get_events_sites', $site, $args );
 	if ( is_array( $site ) ) {
 		foreach ( $site as $s ) {
 			$event_query = '
-		SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table( $s ) . '
 		JOIN ' . my_calendar_table( $s ) . ' AS e
 		ON (event_id=occur_event_id)
@@ -169,7 +189,7 @@ function my_calendar_get_events( $args ) {
 		}
 	} else {
 		$event_query = '
-		SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table( $site ) . '
 		JOIN ' . my_calendar_table( $site ) . ' AS e
 		ON (event_id=occur_event_id)
@@ -253,6 +273,7 @@ function mc_get_all_events( $args ) {
 	$select_author      = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host        = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$date               = current_time( 'Y-m-d' );
+	$ts_string          = mc_ts();
 
 	$limit   = "$select_published $select_category $select_author $select_host $select_location $select_access $search";
 	$events1 = array();
@@ -263,7 +284,7 @@ function mc_get_all_events( $args ) {
 	if ( $before > 0 ) {
 		$before  = $before + 15;
 		$events1 = $mcdb->get_results(
-			'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+			'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table( $site ) . '
 			JOIN ' . my_calendar_table( $site ) . " AS e
 			ON (event_id=occur_event_id)
@@ -279,7 +300,7 @@ function mc_get_all_events( $args ) {
 	// Events happening today.
 	if ( 'yes' === $today ) {
 		$events3 = $mcdb->get_results(
-			'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+			'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table( $site ) . '
 			JOIN ' . my_calendar_table( $site ) . " AS e
 			ON (event_id=occur_event_id)
@@ -295,7 +316,7 @@ function mc_get_all_events( $args ) {
 	if ( $after > 0 ) {
 		$after   = $after + 15;
 		$events2 = $mcdb->get_results(
-			'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+			'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table( $site ) . '
 			JOIN ' . my_calendar_table( $site ) . " AS e
 			ON (event_id=occur_event_id)
@@ -369,6 +390,7 @@ function mc_get_rss_events( $cat_id = false ) {
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
+	$ts_string = mc_ts();
 	if ( $cat_id ) {
 		$cat = "WHERE event_category = $cat_id AND event_approved = 1 AND event_flagged <> 1";
 	} else {
@@ -378,7 +400,7 @@ function mc_get_rss_events( $cat_id = false ) {
 	$limit              = apply_filters( 'mc_rss_feed_date_range', 2 );
 
 	$events = $mcdb->get_results(
-		'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table() . '
 		JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
 		JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
@@ -389,7 +411,7 @@ function mc_get_rss_events( $cat_id = false ) {
 
 	if ( empty( $events ) ) {
 		$events = $mcdb->get_results(
-			'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+			'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table() . '
 			JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
 			JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
@@ -489,7 +511,8 @@ function mc_get_event_core( $id, $rebuild = false ) {
 	}
 
 	global $wpdb;
-	$mcdb = $wpdb;
+	$mcdb      = $wpdb;
+	$ts_string = mc_ts();
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
@@ -497,7 +520,7 @@ function mc_get_event_core( $id, $rebuild = false ) {
 	if ( $rebuild ) {
 		$event = $mcdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	} else {
-		$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE event_id = %d ORDER BY occur_id ASC LIMIT 1', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE event_id = %d ORDER BY occur_id ASC LIMIT 1', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$event = mc_event_object( $event );
 	}
 
@@ -513,11 +536,12 @@ function mc_get_event_core( $id, $rebuild = false ) {
  */
 function mc_get_first_event( $id ) {
 	global $wpdb;
-	$mcdb = $wpdb;
+	$mcdb      = $wpdb;
+	$ts_string = mc_ts();
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$event = mc_event_object( $event );
 
 	return $event;
@@ -532,11 +556,12 @@ function mc_get_first_event( $id ) {
  */
 function mc_get_nearest_event( $id ) {
 	global $wpdb;
-	$mcdb = $wpdb;
+	$mcdb      = $wpdb;
+	$ts_string = mc_ts();
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$event = mc_event_object( $event );
 
 	return $event;
@@ -554,13 +579,14 @@ function mc_get_event( $id, $type = 'object' ) {
 	if ( ! is_numeric( $id ) ) {
 		return false;
 	}
+	$ts_string = mc_ts();
 
 	global $wpdb;
 	$mcdb = $wpdb;
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( 'object' === $type ) {
 		$event = mc_event_object( $event );
 		return $event;
@@ -655,13 +681,14 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
 	$exclude_categories = mc_private_categories();
+	$ts_string          = mc_ts();
 
 	// May add support for location/author/host later.
 	$select_location = '';
 	$select_author   = '';
 	$select_host     = '';
 	$now             = current_time( 'Y-m-d H:i:s' );
-	$event_query     = 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+	$event_query     = 'SELECT *, ' . $ts_string . '
 					FROM ' . my_calendar_event_table( $site ) . ' AS o
 					JOIN ' . my_calendar_table( $site ) . " AS e
 					ON (event_id=occur_event_id)
@@ -729,13 +756,14 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
 	$exclude_categories = mc_private_categories();
+	$ts_string          = mc_ts();
 
 	// May add support for location/author/host later.
 	$select_location = '';
 	$select_author   = '';
 	$select_host     = '';
 	$now             = current_time( 'Y-m-d H:i:s' );
-	$event_query     = 'SELECT *, UNIX_TIMESTAMP(occur_begin) AS ts_occur_begin, UNIX_TIMESTAMP(occur_end) AS ts_occur_end
+	$event_query     = 'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table( $site ) . '
 			JOIN ' . my_calendar_table( $site ) . " AS e
 			ON (event_id=occur_event_id)
