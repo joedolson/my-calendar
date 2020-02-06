@@ -374,8 +374,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['date']      = ( '1' !== $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
 	$e['enddate']   = $date_end;
 	$e['daterange'] = ( $date === $date_end ) ? "<span class='mc_db'>$date</span>" : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
-	$e['timerange'] = ( ( $e['time'] === $e['endtime'] ) || 1 == $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ) ) ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . '</span>';
-	$e['datespan']  = ( 1 == $event->event_span || ( $e['date'] != $e['enddate'] ) ) ? mc_format_date_span( $dates ) : $date;
+	$e['timerange'] = ( ( $e['time'] === $e['endtime'] ) || 1 == (int) $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ) ) ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . '</span>';
+	$e['datespan']  = ( 1 == (int) $event->event_span || ( $e['date'] != $e['enddate'] ) ) ? mc_format_date_span( $dates ) : $date;
 	$e['multidate'] = mc_format_date_span( $dates, 'complex', "<span class='fallback-date'>$date</span><span class='separator'>,</span> <span class='fallback-time'>$e[time]</span>&ndash;<span class='fallback-endtime'>$e[endtime]</span>" );
 	$e['began']     = $event->event_begin; // returns date of first occurrence of an event.
 	$e['recurs']    = mc_event_recur_string( $event, $real_begin_date );
@@ -390,7 +390,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['ical_categories'] = strip_tags( ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' ) );
 	$e['term']            = intval( $event->category_term );
 	$e['icon']            = mc_category_icon( $event, 'img' );
-	$e['icon_html']       = ( '' != $e['icon'] ) ? "<img src='$e[icon]' class='mc-category-icon' alt='" . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . "' />" : '';
+	$e['icon_html']       = ( '' !== $e['icon'] ) ? "<img src='$e[icon]' class='mc-category-icon' alt='" . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . "' />" : '';
 	$e['color']           = $event->category_color;
 
 	$hex     = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
@@ -402,8 +402,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['close_color_css'] = '</span>';
 
 	// Special.
-	$e['skip_holiday'] = ( 0 == $event->event_holiday ) ? 'false' : 'true';
-	$e['event_status'] = ( 1 == $event->event_approved ) ? __( 'Published', 'my-calendar' ) : __( 'Draft', 'my-calendar' );
+	$e['skip_holiday'] = ( 0 === (int) $event->event_holiday ) ? 'false' : 'true';
+	$e['event_status'] = ( 1 === (int) $event->event_approved ) ? __( 'Published', 'my-calendar' ) : __( 'Draft', 'my-calendar' );
 
 	// General text fields.
 	$e['title']                = stripslashes( $event->event_title );
@@ -448,10 +448,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	$e['details_link']  = $e_link;
 	$e['details']       = "<a href='" . esc_url( $e_link ) . "' class='mc-details' $nofollow>$e_label</a>";
-	$e['linking']       = ( '' != $e['link'] ) ? $event->event_link : $e_link;
-	$e['linking_title'] = ( '' != $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $nofollow>" . $e['title'] . '</a>' : $e['title'];
+	$e['linking']       = ( '' !== $e['link'] ) ? $event->event_link : $e_link;
+	$e['linking_title'] = ( '' !== $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $nofollow>" . $e['title'] . '</a>' : $e['title'];
 
-	if ( 'related' != $context && ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
+	if ( 'related' !== $context && ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
 		$e['related']     = '<ul class="related-events">' . mc_list_related( $event->event_group_id, $event->event_id, $related_template ) . '</ul>';
 	} else {
@@ -588,7 +588,7 @@ function mc_get_details_link( $event ) {
 	$permalinks   = apply_filters( 'mc_use_permalinks', get_option( 'mc_use_permalinks' ) );
 	$permalinks   = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
 	$details_link = mc_event_link( $event );
-	if ( 0 != $event->event_post && 'true' !== get_option( 'mc_remote' ) && $permalinks ) {
+	if ( 0 !== (int) $event->event_post && 'true' !== get_option( 'mc_remote' ) && $permalinks ) {
 		$details_link = add_query_arg( 'mc_id', $event->occur_id, get_permalink( $event->event_post ) );
 	} else {
 		if ( mc_get_uri( 'boolean' ) ) {
@@ -736,7 +736,7 @@ function mc_format_timestamp( $os, $source ) {
  */
 function mc_runtime( $start, $end, $event ) {
 	$return = '';
-	if ( ! ( $event->event_hide_end || $start == $end || '23:59:59' === mc_date( 'H:i:s', strtotime( $end ) ) ) ) {
+	if ( ! ( $event->event_hide_end || $start === $end || '23:59:59' === mc_date( 'H:i:s', strtotime( $end ) ) ) ) {
 		$return = human_time_diff( $start, $end );
 	}
 
@@ -759,16 +759,16 @@ function mc_duration( $event ) {
 	$interval  = $datetime1->diff( $datetime2 );
 
 	$duration  = '';
-	$duration .= ( 0 != $interval->y ) ? $interval->y . 'Y' : '';
-	$duration .= ( 0 != $interval->m ) ? $interval->m . 'M' : '';
-	if ( '23' == $interval->h && '59' == $interval->i ) {
-		$d         = ( 0 == $interval->d ) ? 1 : $interval->d + 1;
+	$duration .= ( 0 !== (int) $interval->y ) ? $interval->y . 'Y' : '';
+	$duration .= ( 0 !== (int) $interval->m ) ? $interval->m . 'M' : '';
+	if ( '23' === (string) $interval->h && '59' === (string) $interval->i ) {
+		$d         = ( 0 === (int) $interval->d ) ? 1 : $interval->d + 1;
 		$duration .= 'D' . $d;
 		$duration .= 'TH0M0';
 	} else {
-		$duration .= ( 0 != $interval->d ) ? $interval->d . 'D' : '';
-		$duration .= ( 0 != $interval->h ) ? 'T' . $interval->h . 'H' : '';
-		$duration .= ( 0 != $interval->i ) ? $interval->i . 'M' : '';
+		$duration .= ( 0 !== (int) $interval->d ) ? $interval->d . 'D' : '';
+		$duration .= ( 0 !== (int) $interval->h ) ? 'T' . $interval->h . 'H' : '';
+		$duration .= ( 0 !== (int) $interval->i ) ? $interval->i . 'M' : '';
 	}
 	$duration = 'P' . $duration;
 
@@ -788,7 +788,7 @@ function mc_event_link( $event ) {
 		return $link;
 	}
 	$expired = mc_event_expired( $event );
-	if ( 0 == $event->event_link_expires ) {
+	if ( 0 === (int) $event->event_link_expires ) {
 		$link = esc_url( $event->event_link );
 	} else {
 		if ( $expired ) {
@@ -837,7 +837,7 @@ function mc_generate_map( $event, $source = 'event' ) {
 	if ( $api_key ) {
 		$id            = rand();
 		$source        = ( 'event' === $source ) ? 'event' : 'location';
-		$zoom          = ( 0 != $event->{$source . '_zoom'} ) ? $event->{$source . '_zoom'} : '15';
+		$zoom          = ( 0 !== (int) $event->{$source . '_zoom'} ) ? $event->{$source . '_zoom'} : '15';
 		$category_icon = mc_category_icon( $event, 'img' );
 		if ( ! $category_icon ) {
 			$category_icon = '//maps.google.com/mapfiles/marker_green.png';
@@ -958,7 +958,7 @@ function mc_event_date_span( $group_id, $event_span, $dates = array() ) {
 		$mcdb = mc_remote_db();
 	}
 	$group_id = (int) $group_id;
-	if ( 0 == $group_id && 1 != $event_span ) {
+	if ( 0 === (int) $group_id && 1 !== (int) $event_span ) {
 
 		return $dates;
 	} else {
@@ -1020,7 +1020,7 @@ add_filter( 'mc_insert_author_data', 'mc_author_data', 10, 2 );
  * @return array $e
  */
 function mc_author_data( $e, $event ) {
-	if ( 0 != $event->event_author ) {
+	if ( 0 !== (int) $event->event_author ) {
 		$author = get_userdata( $event->event_author );
 		$host   = get_userdata( $event->event_host );
 		if ( $author ) {
@@ -1136,7 +1136,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = __( 'Does not recur', 'my-calendar' );
 			break;
 		case 'D':
-			if ( 1 == $every ) {
+			if ( 1 === (int) $every ) {
 				$event_recur = __( 'Daily', 'my-calendar' );
 			} else {
 				// Translators: Number of days between recurrences.
@@ -1147,7 +1147,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = __( 'Daily, weekdays only', 'my-calendar' );
 			break;
 		case 'W':
-			if ( 1 == $every ) {
+			if ( 1 === (int) $every ) {
 				$event_recur = __( 'Weekly', 'my-calendar' );
 			} else {
 				// Translators: Number of weeks between recurrences.
@@ -1158,7 +1158,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = __( 'Bi-weekly', 'my-calendar' );
 			break;
 		case 'M':
-			if ( 1 == $every ) {
+			if ( 1 === (int) $every ) {
 				// Translators: The ordinal number of the month for the recurrence.
 				$event_recur = sprintf( __( 'the %s of each month', 'my-calendar' ), $month_date );
 			} else {
@@ -1171,7 +1171,7 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = sprintf( __( 'the %1$s %2$s of each month', 'my-calendar' ), $week_number, $day_name );
 			break;
 		case 'Y':
-			if ( 1 == $every ) {
+			if ( 1 === (int) $every ) {
 				$event_recur = __( 'Annually', 'my-calendar' );
 			} else {
 				// Translators: Number of years.

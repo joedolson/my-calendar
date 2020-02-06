@@ -72,7 +72,7 @@ function mc_private_categories() {
 	if ( ! is_user_logged_in() ) {
 		$categories = mc_get_private_categories();
 		$cats       = implode( ',', $categories );
-		if ( '' != $cats ) {
+		if ( '' !== $cats ) {
 			$cats = " AND c.category_id NOT IN ($cats)";
 		}
 	}
@@ -397,7 +397,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								<option value=''><?php _e( 'None', 'my-calendar' ); ?></option>
 								<?php
 								foreach ( $iconlist as $value ) {
-									$selected = ( ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) && $cur_cat->category_icon == $value ) ? ' selected="selected"' : '';
+									$selected = ( ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) && $cur_cat->category_icon === $value ) ? ' selected="selected"' : '';
 									echo "<option value='" . esc_attr( $value ) . "'$selected style='background: url(" . esc_url( str_replace( 'my-calendar/', '', $url ) . "$path/$value" ) . ") left 50% no-repeat;'>$value</option>";
 								}
 								?>

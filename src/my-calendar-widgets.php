@@ -300,8 +300,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 	$temp_array  = array();
 	$past        = 1;
 	$future      = 1;
-	$now         = current_time( 'timestamp' );
-	$today       = mc_date( 'Y-m-d', $now );
+	$today       = current_time( 'Y-m-d' );
 	uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
 	$count = count( $events );
 	$group = array();
