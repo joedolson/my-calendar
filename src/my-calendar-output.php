@@ -871,7 +871,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			$weeks_day = mc_first_day_of_week( $current );
 		}
 	} else {
-		$weeks_day = mc_first_day_of_week( current_time( 'timestamp' ) );
+		$weeks_day = mc_first_day_of_week();
 	}
 	$day = $weeks_day[0];
 	if ( isset( $_GET['time'] ) && 'day' === $_GET['time'] ) {
@@ -1476,7 +1476,7 @@ function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
  * @return boolean
  */
 function mc_event_published( $event ) {
-	if ( 1 == $event->event_approved ) {
+	if ( 1 === (int) $event->event_approved ) {
 		return true;
 	}
 
@@ -1847,7 +1847,7 @@ function my_calendar( $args ) {
 
 						// Generate event classes & attributes.
 						$events_class = mc_events_class( $events, $date_is );
-						$monthclass   = ( mc_date( 'n', $start ) === (string) $date['month'] || 'month' != $params['time'] ) ? '' : 'nextmonth';
+						$monthclass   = ( mc_date( 'n', $start ) === (string) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
 						$dateclass    = mc_dateclass( $start );
 						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
@@ -2312,11 +2312,11 @@ function mc_nav( $date, $format, $time, $show_months, $class ) {
  * @return array
  */
 function mc_get_current_date( $main_class, $cid, $params ) {
-	$time      = $params['time'];
-	$smonth    = $params['smonth'];
-	$syear     = $params['syear'];
-	$sday      = $params['sday'];
-	$c_m       = 0;
+	$time   = $params['time'];
+	$smonth = $params['smonth'];
+	$syear  = $params['syear'];
+	$sday   = $params['sday'];
+	$c_m    = 0;
 	if ( isset( $_GET['dy'] ) && $main_class === $cid && ( 'day' === $time || 'week' === $time ) ) {
 		$c_day = (int) $_GET['dy'];
 	} else {
@@ -2337,11 +2337,11 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		}
 	} else {
 		$xnow    = current_time( 'Y-m-d' );
-		$c_month = ( 0 == $c_m ) ? current_time( 'm' ) : mc_date( 'm', strtotime( $xnow . ' -1 month' ) );
+		$c_month = ( 0 === (int) $c_m ) ? current_time( 'm' ) : mc_date( 'm', strtotime( $xnow . ' -1 month' ) );
 	}
 
 	$is_start_of_week = ( get_option( 'start_of_week' ) === current_time( 'N' ) ) ? true : false;
-	if ( isset( $_GET['yr'] ) && $main_class == $cid ) {
+	if ( isset( $_GET['yr'] ) && $main_class === $cid ) {
 		$c_year = (int) $_GET['yr'];
 	} else {
 		if ( 'week' === $time && ! isset( $_GET['dy'] ) ) {
@@ -2349,9 +2349,9 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 				$c_year = ( current_time( 'Y' ) );
 			} else {
 				$current_year = current_time( 'Y' );
-				$c_year       = ( 0 == $dm[1] ) ? $current_year : false;
+				$c_year       = ( 0 === (int) $dm[1] ) ? $current_year : false;
 				if ( ! $c_year ) {
-					$c_year = ( mc_date( 'Y', strtotime( '-1 month' ) ) == $current_year ) ? $current_year : $current_year - 1;
+					$c_year = ( mc_date( 'Y', strtotime( '-1 month' ) ) === $current_year ) ? $current_year : $current_year - 1;
 				}
 			}
 		} else {
@@ -2367,15 +2367,15 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	}
 	if ( ! ( isset( $_GET['yr'] ) || isset( $_GET['month'] ) || isset( $_GET['dy'] ) ) ) {
 		// Month/year based on shortcode.
-		$shortcode_month = ( false != $smonth ) ? $smonth : $c_month;
-		$shortcode_year  = ( false != $syear ) ? $syear : $c_year;
-		$shortcode_day   = ( false != $sday ) ? $sday : $c_day;
+		$shortcode_month = ( false !== $smonth ) ? $smonth : $c_month;
+		$shortcode_year  = ( false !== $syear ) ? $syear : $c_year;
+		$shortcode_day   = ( false !== $sday ) ? $sday : $c_day;
 		// Override with filters.
 		$c_year  = apply_filters( 'mc_filter_year', $shortcode_year, $params );
 		$c_month = apply_filters( 'mc_filter_month', $shortcode_month, $params );
 		$c_day   = apply_filters( 'mc_filter_day', $shortcode_day, $params );
 	}
-	$c_day   = ( 0 == $c_day ) ? 1 : $c_day; // c_day can't equal 0.
+	$c_day   = ( 0 === (int) $c_day ) ? 1 : $c_day; // c_day can't equal 0.
 	$current = mktime( 0, 0, 0, $c_month, $c_day, $c_year );
 	$c_month = str_pad( $c_month, 2, '0', STR_PAD_LEFT );
 
@@ -2469,7 +2469,7 @@ function mc_category_key( $category ) {
 		} else {
 			$url = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
 		}
-		if ( 1 == $cat->category_private ) {
+		if ( 1 === (int) $cat->category_private ) {
 			$class .= ' private';
 		}
 		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
@@ -2572,7 +2572,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	$mc_next     = get_option( 'mc_next_events', '' );
 	$next_events = ( '' === $mc_next ) ? '<span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . '</span>' : stripslashes( $mc_next );
 	if ( $months <= 1 || 'list' !== $format ) {
-		if ( 12 == $cur_month ) {
+		if ( 12 === (int) $cur_month ) {
 			$month = 1;
 			$yr    = $next_year;
 		} else {
@@ -2591,7 +2591,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 		}
 	}
 	$day = '';
-	if ( $yr != $cur_year ) {
+	if ( (int) $yr !== (int) $cur_year ) {
 		$format = 'F, Y';
 	} else {
 		$format = 'F';
@@ -2602,7 +2602,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 		$day      = mc_date( 'd', $nextdate );
 		$yr       = mc_date( 'Y', $nextdate );
 		$month    = mc_date( 'm', $nextdate );
-		if ( $yr != $cur_year ) {
+		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
 			$format = 'F j';
@@ -2615,7 +2615,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 		$day      = mc_date( 'd', $nextdate );
 		$yr       = mc_date( 'Y', $nextdate );
 		$month    = mc_date( 'm', $nextdate );
-		if ( $yr != $cur_year ) {
+		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
 			$format = 'F j';
@@ -2649,10 +2649,10 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	$cur_day   = $date['day'];
 
 	$last_year       = $cur_year - 1;
-	$mc_previous     = get_option( 'mc_previous_events' );
-	$previous_events = ( '' == $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . '</span>' : stripslashes( $mc_previous );
-	if ( $months <= 1 || 'list' != $format ) {
-		if ( 1 == $cur_month ) {
+	$mc_previous     = get_option( 'mc_previous_events', '' );
+	$previous_events = ( '' === $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . '</span>' : stripslashes( $mc_previous );
+	if ( $months <= 1 || 'list' !== $format ) {
+		if ( 1 === (int) $cur_month ) {
 			$month = 12;
 			$yr    = $last_year;
 		} else {
@@ -2670,7 +2670,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 			$yr    = $cur_year;
 		}
 	}
-	if ( $yr != $cur_year ) {
+	if ( (int) $yr !== (int) $cur_year ) {
 		$format = 'F, Y';
 	} else {
 		$format = 'F';
@@ -2682,7 +2682,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		$day      = mc_date( 'd', $prevdate );
 		$yr       = mc_date( 'Y', $prevdate );
 		$month    = mc_date( 'm', $prevdate );
-		if ( $yr != $cur_year ) {
+		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
 			$format = 'F j';
@@ -2694,7 +2694,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		$day      = mc_date( 'd', $prevdate );
 		$yr       = mc_date( 'Y', $prevdate );
 		$month    = mc_date( 'm', $prevdate );
-		if ( $yr != $cur_year ) {
+		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
 			$format = 'F j';
