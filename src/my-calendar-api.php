@@ -17,12 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Main API function
  */
 function my_calendar_api() {
-	if ( isset( $_REQUEST['my-calendar-api'] ) ) {
+	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) {
 		if ( 'true' === get_option( 'mc_api_enabled' ) ) {
 			// use this filter to add custom scripting handling API keys.
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
 				$format = ( isset( $_REQUEST['my-calendar-api'] ) ) ? $_REQUEST['my-calendar-api'] : 'json';
+				$format = ( isset( $_REQUEST['mc-api'] ) ) ? $_REQUEST['mc-api'] : $format;
 				$from   = ( isset( $_REQUEST['from'] ) ) ? $_REQUEST['from'] : current_time( 'Y-m-d' );
 				$to     = ( isset( $_REQUEST['to'] ) ) ? $_REQUEST['to'] : mc_date( 'Y-m-d', strtotime( apply_filters( 'mc_api_auto_date', '+ 7 days' ) ) );
 				// sanitization is handled elsewhere.

@@ -87,6 +87,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Auto-toggle admin time format if display time format set to European format.
 * Show API endpoint when API enabled.
+* Add alternate alias for API endpoint.
+* Change event timestamps to use a real UTC timestamp for reference.
 
 = 3.1.18 =
 
