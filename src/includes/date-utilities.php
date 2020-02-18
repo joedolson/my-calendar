@@ -423,6 +423,8 @@ function mc_date( $format, $timestamp = false ) {
 	if ( ! $timestamp ) {
 		$timestamp = time();
 	}
+	$offset    = intval( get_option( 'gmt_offset', 0 ) );
+	$timestamp = $timestamp + $offset;
 
-	return date( $format, $timestamp );
+	return gmdate( $format, $timestamp );
 }
