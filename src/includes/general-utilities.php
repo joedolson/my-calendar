@@ -231,7 +231,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 	 * @return string type of file.
 	 */
 	function exif_imagetype( $filename ) {
-		if ( ! is_dir( $filename ) && ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) {
+		if ( ! is_dir( $filename ) && ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.NonVariableAssignmentFound
 			return $type;
 		}
 
