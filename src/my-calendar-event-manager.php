@@ -1782,7 +1782,7 @@ function mc_selected_users( $selected = '', $group = 'authors' ) {
 	$users    = mc_get_users( $group );
 	$options  = '';
 	foreach ( $users as $u ) {
-		if ( in_array( $u->ID, $selected ) ) {
+		if ( in_array( $u->ID, $selected, true ) ) {
 			$checked = ' selected="selected"';
 		} else {
 			$checked = '';
