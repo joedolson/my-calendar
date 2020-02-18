@@ -812,7 +812,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					}
 				}
 				if ( $multiple ) {
-					if ( is_array( $category ) && in_array( $cat->category_id, $category ) ) {
+					if ( is_array( $category ) && in_array( $cat->category_id, $category, true ) ) {
 						$selected = ' checked="checked"';
 					} elseif ( (int) $category === (int) $cat->category_id ) {
 						$selected = ' checked="checked"';
