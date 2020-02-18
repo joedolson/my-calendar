@@ -1101,7 +1101,7 @@ add_filter( 'mc_time_format', 'mc_time_format', 10, 1 );
  * @return string new format.
  */
 function mc_time_format( $format ) {
-	if ( 'G:i' === get_option( 'mc_time_format' ) || 'H:i' === get_option( 'mc_time_format' ) || 'G:i' == get_option( 'time_format' ) || 'H:i' === get_option( 'time_format' ) ) {
+	if ( 'G:i' === get_option( 'mc_time_format' ) || 'H:i' === get_option( 'mc_time_format' ) || 'G:i' === get_option( 'time_format' ) || 'H:i' === get_option( 'time_format' ) ) {
 		return 'H:i'; // European 24-hour format.
 	}
 
