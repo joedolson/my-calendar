@@ -371,7 +371,7 @@ function mc_css_list( $directory ) {
 	$results = array();
 	$handler = opendir( $directory );
 	// Keep going until all files in directory have been read.
-	while ( $file = readdir( $handler ) ) {
+	while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		// If $file isn't this directory or parent, add it to the results array.
 		if ( '.' !== $file && '..' !== $file ) {
 			$results[] = $file;
