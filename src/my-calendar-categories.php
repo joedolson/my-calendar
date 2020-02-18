@@ -44,7 +44,7 @@ function mc_directory_list( $directory ) {
 	$results = array();
 	$handler = opendir( $directory );
 	// keep going until all files in directory have been read.
-	while ( $file = readdir( $handler ) ) {
+	while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		// if $file isn't this directory or its parent add it to the results array.
 		if ( filesize( $directory . '/' . $file ) > 11 ) {
 			if ( '.' !== $file && '..' !== $file && ! is_dir( $directory . '/' . $file ) && (
