@@ -208,7 +208,7 @@ if ( ! function_exists( 'is_ssl' ) ) {
 			if ( '1' === $_SERVER['HTTPS'] ) {
 				return true;
 			}
-		} elseif ( isset( $_SERVER['SERVER_PORT'] ) && ( '443' == $_SERVER['SERVER_PORT'] ) ) {
+		} elseif ( isset( $_SERVER['SERVER_PORT'] ) && ( '443' === (string) $_SERVER['SERVER_PORT'] ) ) {
 			return true;
 		}
 
