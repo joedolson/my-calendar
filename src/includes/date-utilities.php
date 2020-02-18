@@ -423,5 +423,6 @@ function mc_date( $format, $timestamp = false ) {
 	if ( ! $timestamp ) {
 		$timestamp = time();
 	}
+
 	return date( $format, $timestamp );
 }
