@@ -9,8 +9,8 @@
 }
 
 /* Override overflow:hidden */
-div.site-content {
-	overflow: visible; 
+div.site-content, table {
+	overflow: visible !important; 
 }
 
 .mc-main {
