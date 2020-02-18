@@ -3,9 +3,9 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
 Requires at least: 4.4
-Tested up to: 5.3
+Tested up to: 5.4
 Requires PHP: 5.3
-Stable tag: 3.1.18
+Stable tag: 3.2.0-beta
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -83,12 +83,14 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
-= 3.1.19 =
+= 3.2.0 =
 
 * Auto-toggle admin time format if display time format set to European format.
 * Show API endpoint when API enabled.
 * Add alternate alias for API endpoint.
 * Change event timestamps to use a real UTC timestamp for reference.
+* Switch from using date() to gmdate().
+* Conformance with latest WordPress PHPCS ruleset.
 
 = 3.1.18 =
 
