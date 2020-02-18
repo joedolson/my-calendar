@@ -153,8 +153,8 @@ function mc_register_styles() {
 	$js_array    = ( '' !== trim( get_option( 'mc_show_js', '' ) ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
 	$css_array   = ( '' !== trim( get_option( 'mc_show_css', '' ) ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
 	$use_default = ( $default && ! $id ) ? true : false;
-	$js_usage    = ( ( empty( $js_array ) ) || ( $id && in_array( $id, $js_array ) ) ) ? true : false;
-	$css_usage   = ( ( empty( $css_array ) ) || ( $id && in_array( $id, $css_array ) ) ) ? true : false;
+	$js_usage    = ( ( empty( $js_array ) ) || ( $id && in_array( (string) $id, $js_array, true ) ) ) ? true : false;
+	$css_usage   = ( ( empty( $css_array ) ) || ( $id && in_array( (string) $id, $css_array, true ) ) ) ? true : false;
 
 	// check whether any scripts are actually enabled.
 	if ( get_option( 'mc_calendar_javascript' ) !== '1' || get_option( 'mc_list_javascript' ) !== '1' || get_option( 'mc_mini_javascript' ) !== '1' || get_option( 'mc_ajax_javascript' ) !== '1' ) {
@@ -1101,7 +1101,7 @@ add_filter( 'mc_time_format', 'mc_time_format', 10, 1 );
  * @return string new format.
  */
 function mc_time_format( $format ) {
-	if ( 'G:i' === get_option( 'mc_time_format' ) || 'H:i' === get_option( 'mc_time_format' ) ) {
+	if ( 'G:i' === get_option( 'mc_time_format' ) || 'H:i' === get_option( 'mc_time_format' ) || 'G:i' == get_option( 'time_format' ) || 'H:i' === get_option( 'time_format' ) ) {
 		return 'H:i'; // European 24-hour format.
 	}
 
