@@ -91,6 +91,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Change event timestamps to use a real UTC timestamp for reference.
 * Switch from using date() to gmdate().
 * Conformance with latest WordPress PHPCS ruleset.
+* Bug fix: Misc. ARIA/id relationships broken.
 
 = 3.1.18 =
 
@@ -450,4 +451,4 @@ The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](
 
 == Upgrade Notice ==
 
-* 3.1.10 IMPORTANT SECURITY UPDATE: XSS Scripting Vulnerability
+* 3.2.0 Major release to conform with new WordPress PHP standards.

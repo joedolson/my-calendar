@@ -264,7 +264,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$gcal        = '';
 	$image       = '';
 	$tickets     = '';
-	$data        = mc_create_tags( $event );
+	$data        = mc_create_tags( $event, $id );
 	$details     = '';
 	if ( mc_show_details( $time, $type ) ) {
 		$details  = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
@@ -326,7 +326,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 			$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 		} else {
-			$wrap    = "<a href='#$uid-$type-details' class='et_smooth_scroll_disabled url summary$has_image'>";
+			$wrap    = "<a href='#$uid-$type-details-$id' class='et_smooth_scroll_disabled url summary$has_image'>";
 			$balance = '</a>';
 		}
 	} else {
@@ -344,7 +344,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$header       .= '<span class="summary">' . $title . '</span>';
 
 	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
-	$close_button = "<button type='button' aria-controls='$uid-$type-details' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
+	$close_button = "<button type='button' aria-controls='$uid-$type-details-$id' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
 
 	if ( mc_show_details( $time, $type ) ) {
 		$close = ( 'calendar' === $type || 'mini' === $type ) ? $close_button : '';
@@ -437,7 +437,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$link_text      = mc_draw_template( $data, $link_template );
 				$link           = "
 				<p>
-					<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_$event->occur_id-title'>" . $link_text . '</a>
+					<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_$event->occur_id-title-$id'>" . $link_text . '</a>
 				</p>';
 			}
 

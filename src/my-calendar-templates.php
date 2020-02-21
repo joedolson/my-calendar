@@ -324,6 +324,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( ! is_object( $event ) ) {
 		return;
 	}
+	$calendar_id = '';
+	if ( $context != 'filters' && $context != 'related' ) {
+		$calendar_id = $context;
+	}
 	$site          = ( isset( $event->site_id ) ) ? $event->site_id : false;
 	$event         = mc_clean_location( $event, 'event' );
 	$e             = array();
@@ -508,7 +512,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
 	$e['gcal']      = mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $event->event_title ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
+	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
@@ -539,7 +543,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		mc_get_uri( $event )
 	);
 	$e['ical']             = $ical_link;
-	$e['ical_html']        = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title'>" . __( 'iCal', 'my-calendar' ) . '</a>';
+	$e['ical_html']        = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'iCal', 'my-calendar' ) . '</a>';
 	$e                     = apply_filters( 'mc_filter_shortcodes', $e, $event );
 
 	return $e;
