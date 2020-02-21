@@ -325,7 +325,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		return;
 	}
 	$calendar_id = '';
-	if ( $context != 'filters' && $context != 'related' ) {
+	if ( 'filters' !== $context && 'related' !== $context) {
 		$calendar_id = $context;
 	}
 	$site          = ( isset( $event->site_id ) ) ? $event->site_id : false;
