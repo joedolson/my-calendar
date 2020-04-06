@@ -249,8 +249,8 @@ function mc_checkdate( $date ) {
 function mc_first_day_of_week( $date = false ) {
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' || get_option( 'start_of_week' ) === '0' ) ? absint( get_option( 'start_of_week' ) ) : 0;
 	if ( $date ) {
-		$today = mc_date( 'w', $date );
-		$now   = mc_date( 'Y-m-d', $date );
+		$today = mc_date( 'w', $date, false );
+		$now   = mc_date( 'Y-m-d', $date, false );
 	} else {
 		$today = current_time( 'w' );
 		$now   = current_time( 'Y-m-d' );
@@ -282,7 +282,7 @@ function mc_first_day_of_week( $date = false ) {
 	}
 	$day = mc_date( 'j', strtotime( $now . ' -' . $sub . ' day' ), false );
 	if ( 0 !== $sub ) {
-		if ( mc_date( 'n', strtotime( $now . ' -' . $sub . ' day' ) ) !== mc_date( 'n', strtotime( $now ) ) ) {
+		if ( mc_date( 'n', strtotime( $now . ' -' . $sub . ' day' ), false ) !== mc_date( 'n', strtotime( $now ), false ) ) {
 			$month = - 1;
 		} else {
 			$month = 0;

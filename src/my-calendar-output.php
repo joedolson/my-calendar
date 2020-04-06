@@ -862,13 +862,19 @@ function mc_format_toggle( $format, $toggle, $time ) {
  */
 function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week, $from ) {
 	// if dy parameter not set, use today's date instead of first day of month.
+	$weeks_day = mc_first_day_of_week( $current );
 	if ( isset( $_GET['dy'] ) ) {
-		$current_day = absint( $_GET['dy'] );
+		if ( '' === $_GET['dy'] ) {
+			$current_day = $weeks_day[0];
+			if ( 0 === $weeks_day[1] ) {
+				
+			}
+		} else {
+			$current_day = absint( $_GET['dy'] );
+		}
 		$current_set = mktime( 0, 0, 0, $month, $current_day, $year );
 		if ( mc_date( 'N', $current_set, false ) === $start_of_week ) {
 			$weeks_day = mc_first_day_of_week( $current_set );
-		} else {
-			$weeks_day = mc_first_day_of_week( $current );
 		}
 	} else {
 		$weeks_day = mc_first_day_of_week();
@@ -2601,9 +2607,9 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
 	if ( 'week' === $time ) {
 		$nextdate = strtotime( "$cur_year-$cur_month-$cur_day" . '+ 7 days' );
-		$day      = mc_date( 'd', $nextdate );
-		$yr       = mc_date( 'Y', $nextdate );
-		$month    = mc_date( 'm', $nextdate );
+		$day      = mc_date( 'd', $nextdate, false );
+		$yr       = mc_date( 'Y', $nextdate, false );
+		$month    = mc_date( 'm', $nextdate, false );
 		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
@@ -2614,9 +2620,9 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	}
 	if ( 'day' === $time ) {
 		$nextdate = strtotime( "$cur_year-$cur_month-$cur_day" . '+ 1 days' );
-		$day      = mc_date( 'd', $nextdate );
-		$yr       = mc_date( 'Y', $nextdate );
-		$month    = mc_date( 'm', $nextdate );
+		$day      = mc_date( 'd', $nextdate, false );
+		$yr       = mc_date( 'Y', $nextdate, false );
+		$month    = mc_date( 'm', $nextdate, false );
 		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
@@ -2681,9 +2687,9 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	$day  = '';
 	if ( 'week' === $time ) {
 		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 7 days' );
-		$day      = mc_date( 'd', $prevdate );
-		$yr       = mc_date( 'Y', $prevdate );
-		$month    = mc_date( 'm', $prevdate );
+		$day      = mc_date( 'd', $prevdate, false );
+		$yr       = mc_date( 'Y', $prevdate, false );
+		$month    = mc_date( 'm', $prevdate, false );
 		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
@@ -2693,9 +2699,9 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	}
 	if ( 'day' === $time ) {
 		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 1 days' );
-		$day      = mc_date( 'd', $prevdate );
-		$yr       = mc_date( 'Y', $prevdate );
-		$month    = mc_date( 'm', $prevdate );
+		$day      = mc_date( 'd', $prevdate, false );
+		$yr       = mc_date( 'Y', $prevdate, false );
+		$month    = mc_date( 'm', $prevdate, false );
 		if ( (int) $yr !== (int) $cur_year ) {
 			$format = 'F j, Y';
 		} else {
