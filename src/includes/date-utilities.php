@@ -416,14 +416,19 @@ function mc_private_event( $event ) {
  *
  * @param string $format Format to use.
  * @param int    $timestamp Timestamp.
+ * @param bool   $offset false to not add offset; if already a true timestamp.
  *
  * @return string Formatted date.
  */
-function mc_date( $format, $timestamp = false ) {
+function mc_date( $format, $timestamp = false, $offset = true ) {
 	if ( ! $timestamp ) {
 		$timestamp = time();
 	}
-	$offset    = intval( get_option( 'gmt_offset', 0 ) );
+	if ( $offset ) {
+		$offset = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
+	} else {
+		$offset = 0;
+	}
 	$timestamp = $timestamp + $offset;
 
 	return gmdate( $format, $timestamp );

@@ -971,16 +971,16 @@ function mc_date_array( $timestamp, $period ) {
 				$start = strtotime( "-$n days", $timestamp );
 				$from  = mc_date( 'Y-m-d', $start );
 			}
-			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp ), mc_date( 't', $timestamp ), mc_date( 'Y', $timestamp ) );
+			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp, false ), mc_date( 't', $timestamp, false ), mc_date( 'Y', $timestamp, false ) );
 
 			// This allows multiple months displayed. Will figure out splitting tables...
 			// To handle: $endtime = strtotime( "+$months months",$endtime ); JCD TODO.
-			$last = (int) mc_date( 'N', $endtime );
+			$last = (int) mc_date( 'N', $endtime, false );
 			$n    = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
-			if ( -1 === $n && '7' === mc_date( 'N', $endtime ) ) {
+			if ( -1 === $n && '7' === mc_date( 'N', $endtime, false ) ) {
 				$n = 6;
 			}
-			$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ) );
+			$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ), false );
 
 			$return = array(
 				'from' => $from,
@@ -1835,19 +1835,19 @@ function my_calendar( $args ) {
 				$end               = strtotime( $to );
 				$week_number_shown = false;
 				do {
-					$date_is    = mc_date( 'Y-m-d', $start );
-					$is_weekend = ( mc_date( 'N', $start ) < 6 ) ? false : true;
+					$date_is    = mc_date( 'Y-m-d', $start, false );
+					$is_weekend = ( mc_date( 'N', $start, false ) < 6 ) ? false : true;
 					if ( $show_weekends || ( ! $show_weekends && ! $is_weekend ) ) {
-						if ( mc_date( 'N', $start ) === (string) $start_of_week && 'list' !== $params['format'] ) {
+						if ( mc_date( 'N', $start, false ) === (string) $start_of_week && 'list' !== $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
 						}
 						$events          = ( isset( $event_array[ $date_is ] ) ) ? $event_array[ $date_is ] : array();
 						$week_header     = date_i18n( $week_format, $start );
-						$thisday_heading = ( 'week' === $params['time'] ) ? "<small>$week_header</small>" : mc_date( 'j', $start );
+						$thisday_heading = ( 'week' === $params['time'] ) ? "<small>$week_header</small>" : mc_date( 'j', $start, false );
 
 						// Generate event classes & attributes.
 						$events_class = mc_events_class( $events, $date_is );
-						$monthclass   = ( mc_date( 'n', $start ) === (string) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
+						$monthclass   = ( mc_date( 'n', $start, false ) === (string) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
 						$dateclass    = mc_dateclass( $start );
 						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
@@ -1916,7 +1916,7 @@ function my_calendar( $args ) {
 							}
 						}
 
-						if ( mc_date( 'N', $start ) === (string) $end_of_week || ( mc_date( 'N', $start ) === '5' && ! $show_weekends ) ) {
+						if ( mc_date( 'N', $start, false ) === (string) $end_of_week || ( mc_date( 'N', $start, false ) === '5' && ! $show_weekends ) ) {
 							if ( 'list' !== $params['format'] ) {
 								$body .= "\n</$tr>\n"; // End of 'is beginning of week'.
 							}
