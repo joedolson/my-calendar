@@ -1,3 +1,191 @@
+= 3.0.19 =
+
+* Bug fix: Fatal error in export API when location object included.
+* BUg fix: my calendar categories queried private categories instead of public.
+
+= 3.0.18 =
+
+* Bug fix: Invalid setting in bottom nav defaults.
+* Bug fix: Generate feeds by date added rather than fixed number. If empty, get most recent regardless.
+* Bug fix: Legitimate HTML escaped in visual editor in group event editor.
+
+= 3.0.17 =
+
+* Bug fix: Group event editing was broken.
+* Bug fix: Eliminate four PHP notices in the Today's Events widget.
+* Added: Filter to control whether CSS should be loaded on archives.
+
+= 3.0.16 =
+
+* Changed display UID to avoid duplicate IDs when multiple calendars shown.
+* Add option to display heading in details pop-up.
+* Unify position and size of close button in Twentyeighteen mini calendar.
+* Eliminate multi category parameter from CSV output (doesn't support multidimensional data)
+* Add GUID to export data.
+
+= 3.0.15 =
+
+* Bug fix: prevent some PHP notices when running Pro importer.
+* Bug fix: Display of multidate time string when crossing months or years.
+* Bug fix: Variable written as constant prevented event_span from saving correctly.
+* Bug fix: Trash counter updated with incorrect values.
+* Bug fix: Two cases where status counter not updated.
+* Change: Add DB version to debugging info
+
+= 3.0.14 =
+
+* Bug fix: incorrect value passed for instance parameter on single event shortcode.
+* Bug fix: hide HTML wrapper for category color when colors disabled.
+* Bug fix: Remove transparent background in Twenty eighteen; blocks category colors
+* Bug fix: Invalid ordering parameter for location lists
+* Feature: Ability to select multiple categories (props Josef Fällman)
+* Moved changelogs for 2.5 & earlier to changelog.txt
+
+= 3.0.13 =
+
+* Bug fix: missing function call when accessing custom mini templates
+* Bug fix: Syntax error in SQL query checking for conflicts
+* Change: pass short description to Akismet if long desc absent
+
+= 3.0.12 =
+
+* Bug fix: My Calendar could prevent canonical link from displaying if canonical link being filtered by another application.
+* Modernize & improve Akismet integration.
+* Add filter to disable Akismet checks.
+
+= 3.0.11 =
+
+* SECURITY: XSS - Canonical URL not properly sanitized. Affects 3.0.0 and up. 
+
+= 3.0.10 =
+
+* Bug fix: invalid method used to sort location lists.
+* Bug fix: shortcode generator missing input value
+* Bug fix: datepicker did not reflect start of week settings
+* Stylesheet CSS change
+
+= 3.0.9 =
+
+* Bug fix: Error thrown if Akismet had previously been configured, then deleted.
+* Bug fix: location type was added to params if category key was set.
+* Bug fix: remove a couple notices
+* Bug fix: category relationships not carried over when recurring events split
+
+= 3.0.8 =
+
+* Bug fix: need to allow <a> elements in mc_strip_tags so calendar linkscan point to non-calendar URLs
+
+= 3.0.7 =
+
+* Bug fix: Case where events ending at midnight (AM) of current day were displayed
+* Bug fix: trim spaces from values earlier when parsing filter elements
+* Change: don't declare font-family in older stylesheets. 
+
+= 3.0.6 =
+
+* Bug fix: Shortcode for locations forms always rendered as if in a group filter.
+* Bug fix: If the default length 1 hr event pushes into next day, adjust length.
+* Bug fix: Incorrectly nested parentheses caused math error in months-by-day recurrence
+
+= 3.0.5 =
+
+* Bug fix: If only one event on a day, event title did not show in list view with show title option.
+* Bug fix: Incorrect array key for fallback parameter in widget
+* Bug fix: custom template query expected 25 chars instead of 32
+* Re-allow <br> in event titles.
+
+= 3.0.4 =
+
+* Bug fix: aria-current test was broken for current date
+* Bug fix: Private categories not disambiguated in MySQL query when excluded
+* Improve: Rewrite my_calendar_copyr backup functions to use WP core functions.
+
+= 3.0.3 =
+
+* Bug fix: Category key needed to use a 'WHERE' not an 'AND'; broke output if limiting by category
+* Bug fix: Error thrown in style editor & category editor if custom directory did not exist
+
+= 3.0.2 =
+
+* 3.0.1 did not correct the right error. Correct fix.
+
+= 3.0.1 =
+
+* Bug fix: install error on update.
+
+= 3.0.0 =
+
+* Bug fix: If category deleted, set events with that category to default cat, not cat ID 1.
+* Bug fix: Date/time comparison used front-end date value instead of dtstamp in upcoming events.
+* Bug fix: Navigation issue if beginning of week is in previous month
+* Bug fix: Event conflict didn't catch events 100% contained inside other events.
+* Bug fix: Private categories should not be visible to public users in submission forms or category lists
+* Bug fix: aria-current key term value was translatable
+* Bug fix: If editing single instance, location is removed
+* Bug fix: don't show location control notices on front-end
+* Bug fix: correcting event recurrence did not always remove meta flag
+* Bug fix: Only output map HTML if API key provided
+* Bug fix: character set and collation determination on install & update
+* Bug fix: When changing recurring events, only change instance IDs if the date of the instance has changed.
+* Bug fix: Event post should not change post date on update
+* Bug fix: All day events should export correctly to Outlook & Apple Calendar
+* Bug fix: Location control accordion was not accessible.
+* Bug fix: Term ID was not set in category manager if term already existed.
+* Bug fix: Make sure that the 's' query var is not automatically added to My Calendar URLs
+
+* Add: several new filters
+* Add: notice to alert users if their calendar configured for remote event source.
+* Add: map display to back-end location manager.
+* Add: location search in location manager
+* Add: ability to filter location lists used to submit data 'mc_get_locations'
+* Add: Support for multiple categories on events.
+* Add: stylesheet (Twenty Eighteen)
+* Add: CSS variables support
+* Add: list of problem events in Manage Events sidebar
+* Add: add months shown in list view to shortcode parameters
+* Add: support for auto-refresh of cache for a variety of caching plug-ins.
+* Add: Option to remove event data on uninstall
+* Add: filter to define events as private via custom methods
+* Add: event preview
+* Add: location support to mini calendar widget
+* Add: CSS code editor available in Style editing
+* Add: HTML code editor available in Template editing
+* Add: Schema.org address markup
+* Add: Schema.org event markup
+* Add: Include event link in 'Add to Google Cal' content.
+* Add: date format for multi-day dates in grid view.
+
+* Removed: event open & event closed text settings
+* Removed: event_open event status (little used and confusing; replaced by My Tickets)
+* Removed: guessing calendar install location
+* Removed: event cache code
+* Removed: upgrade routines from 1.11.x
+* Removed: mc_widget_defaults option
+* Removed: user's guide references
+
+* Change: default image sizes from 'medium' to 'large'
+* Change: Remove ability to disable event approval; remap "approval" to "draft"
+* Change: default number of results to show in advanced event search.
+* Change: Switched from image to icon font for close button
+* Change: Major changes to event fetching
+* Change: Major changes to code organization
+* Change: Added caching on database engine query
+* Change: if event location set in dropdown, event will always display location as shown in location manager
+* Change: changed argument style for major functions to arrays of arguments
+* Change: move Location Manager to separate page; add location sorting.
+* Change: Move exif_ fallback function into utilities include
+* Change: Moved location & category specific settings
+* Change: Simplified texts in several locations
+* Change: Clearer UI on location input limits
+* Change: autotoggle end date minimum input when start date set
+* Change: Reorganized input fields
+* Change: Generate separate iCal exports for Google Calendar or Outlook
+* Change: Constrain tabbing within details pop-up
+* Change: Close details pop-up with Esc key
+* Change: Audited options to remove unused or unneeded options
+* Change: Create a referential template when shortcode generated
+* Change: Feeds nav panel now shows subscription links; exports are available in 'exports' panel.
+
 = 2.5.17 =
 
 * Security: Authenticated XSS vulnerability resolved.
