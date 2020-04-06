@@ -280,7 +280,7 @@ function mc_first_day_of_week( $date = false ) {
 			$sub = ( 1 === $start_of_week ) ? 6 : 0;
 			break; // sun.
 	}
-	$day = mc_date( 'j', strtotime( $now . ' -' . $sub . ' day' ) );
+	$day = mc_date( 'j', strtotime( $now . ' -' . $sub . ' day' ), false );
 	if ( 0 !== $sub ) {
 		if ( mc_date( 'n', strtotime( $now . ' -' . $sub . ' day' ) ) !== mc_date( 'n', strtotime( $now ) ) ) {
 			$month = - 1;

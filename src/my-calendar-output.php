@@ -865,7 +865,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( isset( $_GET['dy'] ) ) {
 		$current_day = absint( $_GET['dy'] );
 		$current_set = mktime( 0, 0, 0, $month, $current_day, $year );
-		if ( mc_date( 'N', $current_set ) === $start_of_week ) {
+		if ( mc_date( 'N', $current_set, false ) === $start_of_week ) {
 			$weeks_day = mc_first_day_of_week( $current_set );
 		} else {
 			$weeks_day = mc_first_day_of_week( $current );
@@ -879,7 +879,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	} else {
 		// if the current date is displayed and the week beginning day is greater than 20 in the month.
 		if ( ! isset( $_GET['dy'] ) && $day > 20 ) {
-			$day = mc_date( 'j', strtotime( "$from + 1 week" ) );
+			$day = mc_date( 'j', strtotime( "$from + 1 week" ), false );
 		}
 	}
 	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
@@ -961,15 +961,15 @@ function mc_date_array( $timestamp, $period ) {
 				$timestamp = strtotime( '+1 month', $timestamp );
 			}
 			$start_of_week = get_option( 'start_of_week' );
-			$first         = mc_date( 'N', $timestamp ); // ISO-8601.
-			$sub           = mc_date( 'w', $timestamp ); // numeric (how WordPress option is stored).
+			$first         = mc_date( 'N', $timestamp, false ); // ISO-8601.
+			$sub           = mc_date( 'w', $timestamp, false ); // numeric (how WordPress option is stored).
 			$n             = ( 1 === (int) $start_of_week ) ? $first - 1 : $first;
 
 			if ( $sub === $start_of_week ) {
-				$from = mc_date( 'Y-m-d', $timestamp );
+				$from = mc_date( 'Y-m-d', $timestamp, false );
 			} else {
 				$start = strtotime( "-$n days", $timestamp );
-				$from  = mc_date( 'Y-m-d', $start );
+				$from  = mc_date( 'Y-m-d', $start, false );
 			}
 			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp, false ), mc_date( 't', $timestamp, false ), mc_date( 'Y', $timestamp, false ) );
 
@@ -989,8 +989,8 @@ function mc_date_array( $timestamp, $period ) {
 			break;
 		case 'week':
 			// First day of the week is calculated prior to this function. Argument received is the first day of the week.
-			$from = mc_date( 'Y-m-d', $timestamp );
-			$to   = mc_date( 'Y-m-d', strtotime( '+6 days', $timestamp ) );
+			$from = mc_date( 'Y-m-d', $timestamp, false );
+			$to   = mc_date( 'Y-m-d', strtotime( '+6 days', $timestamp ), false );
 
 			$return = array(
 				'from' => $from,
@@ -1962,21 +1962,23 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	$c_month = $date['month'];
 	$c_year  = $date['year'];
 
+	// The first day of the current month.
+	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
 	// Grid calendar can't show multiple months.
 	if ( 'list' === $format && 'week' !== $time ) {
 		if ( $num > 0 && 'day' !== $time && 'week' !== $time ) {
 			if ( 'month+1' === $time ) {
-				$from = mc_date( 'Y-m-d', strtotime( '+1 month', mktime( 0, 0, 0, $c_month, 1, $c_year ) ) );
-				$next = strtotime( "+$num months", strtotime( '+1 month', mktime( 0, 0, 0, $c_month, 1, $c_year ) ) );
+				$from = mc_date( 'Y-m-d', strtotime( '+1 month', $month_first ), false );
+				$next = strtotime( "+$num months", strtotime( '+1 month', $month_first ) );
 			} else {
-				$from = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, 1, $c_year ) );
-				$next = strtotime( "+$num months", mktime( 0, 0, 0, $c_month, 1, $c_year ) );
+				$from = mc_date( 'Y-m-d', $month_first, false );
+				$next = strtotime( "+$num months", $month_first );
 			}
-			$last = mc_date( 't', $next );
-			$to   = mc_date( 'Y-m', $next ) . '-' . $last;
+			$last = mc_date( 't', $next, false );
+			$to   = mc_date( 'Y-m', $next, false ) . '-' . $last;
 		} else {
-			$from = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, 1, $c_year ) );
-			$to   = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, mc_date( 't', mktime( 0, 0, 0, $c_month, 1, $c_year ) ), $c_year ) );
+			$from = mc_date( 'Y-m-d', $month_first, false );
+			$to   = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, mc_date( 't', $month_first, false ), $c_year ), false );
 		}
 		$dates = array(
 			'from' => $from,
