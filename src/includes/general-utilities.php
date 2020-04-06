@@ -119,7 +119,7 @@ function mc_strip_tags() {
  */
 function mc_admin_strip_tags() {
 
-	return '<strong><em><i><b><span><a><code><pre>';
+	return '<strong><em><i><b><span><a><code><pre><br>';
 }
 
 /**
