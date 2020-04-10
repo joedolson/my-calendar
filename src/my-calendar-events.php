@@ -309,7 +309,7 @@ function mc_get_all_events( $args ) {
 			ON (e.event_category=c.category_id)
 			WHERE $limit
 			$exclude_categories
-			AND ( ( DATE(occur_begin) < '$date' AND DATE(occur_end) > '$date' ) OR DATE(occur_begin) = '$date' )"
+			AND ( ( DATE(occur_begin) < '$date' AND DATE(occur_end) >= '$date' ) OR DATE(occur_begin) = '$date' )"
 		);
 	}
 	// Upcoming Events.
