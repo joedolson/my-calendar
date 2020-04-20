@@ -777,15 +777,6 @@ add_action( 'admin_bar_menu', 'my_calendar_admin_bar', 200 );
  */
 function my_calendar_admin_bar() {
 	global $wp_admin_bar;
-	if ( current_user_can( 'mc_add_events' ) && 'true' !== get_option( 'mc_remote' ) ) {
-		$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
-		$args = array(
-			'id'    => 'mc-add-event',
-			'title' => __( 'Add Event', 'my-calendar' ),
-			'href'  => $url,
-		);
-		$wp_admin_bar->add_node( $args );
-	}
 	if ( mc_get_uri( 'boolean' ) ) {
 		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
 		$args = array(
@@ -803,13 +794,23 @@ function my_calendar_admin_bar() {
 		);
 		$wp_admin_bar->add_node( $args );
 	}
+	if ( current_user_can( 'mc_add_events' ) && 'true' !== get_option( 'mc_remote' ) ) {
+		$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
+		$args = array(
+			'id'     => 'mc-add-event',
+			'title'  => __( 'Add Event', 'my-calendar' ),
+			'href'   => $url,
+			'parent' => 'mc-my-calendar',
+		);
+		$wp_admin_bar->add_node( $args );
+	}
 	if ( current_user_can( 'mc_manage_events' ) && current_user_can( 'mc_add_events' ) ) {
 		$url  = admin_url( 'admin.php?page=my-calendar-manage' );
 		$args = array(
 			'id'     => 'mc-manage-events',
 			'title'  => __( 'Events', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event',
+			'parent' => 'mc-my-calendar',
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -819,7 +820,7 @@ function my_calendar_admin_bar() {
 			'id'     => 'mc-manage-categories',
 			'title'  => __( 'Categories', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event',
+			'parent' => 'mc-my-calendar',
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -829,7 +830,7 @@ function my_calendar_admin_bar() {
 			'id'     => 'mc-manage-locations',
 			'title'  => __( 'Locations', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event',
+			'parent' => 'mc-my-calendar',
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -839,7 +840,7 @@ function my_calendar_admin_bar() {
 			'id'     => 'mc-submit-events',
 			'title'  => __( 'Public Submissions', 'my-calendar' ),
 			'href'   => $url,
-			'parent' => 'mc-add-event',
+			'parent' => 'mc-my-calendar',
 		);
 		$wp_admin_bar->add_node( $args );
 	}
