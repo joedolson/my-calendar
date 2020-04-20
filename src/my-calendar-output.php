@@ -866,8 +866,8 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( isset( $_GET['dy'] ) ) {
 		if ( '' === $_GET['dy'] ) {
 			$current_day = $weeks_day[0];
-			if ( 0 === $weeks_day[1] ) {
-				
+			if ( -1 == $weeks_day[1] ) {
+				$month = $month - 1;
 			}
 		} else {
 			$current_day = absint( $_GET['dy'] );
@@ -1967,7 +1967,6 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	$num     = $show_months - 1;
 	$c_month = $date['month'];
 	$c_year  = $date['year'];
-
 	// The first day of the current month.
 	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
 	// Grid calendar can't show multiple months.
@@ -2326,7 +2325,17 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	$sday   = $params['sday'];
 	$c_m    = 0;
 	if ( isset( $_GET['dy'] ) && $main_class === $cid && ( 'day' === $time || 'week' === $time ) ) {
-		$c_day = (int) $_GET['dy'];
+		if ( '' === $_GET['dy'] ) {
+			$today = current_time( 'j' );
+			$month = ( isset( $_GET['month'] ) ) ? $_GET['month'] : current_time( 'n' );
+			$year  = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : current_time( 'Y' );
+			$time  = strtotime( "$year-$month-$today" );
+			$dm    = mc_first_day_of_week( $time );
+			$c_day = $dm[0];
+			$c_m   = $dm[1];
+		} else {
+			$c_day = (int) $_GET['dy'];
+		}
 	} else {
 		if ( 'week' === $time ) {
 			$dm    = mc_first_day_of_week();
