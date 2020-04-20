@@ -866,7 +866,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( isset( $_GET['dy'] ) ) {
 		if ( '' === $_GET['dy'] ) {
 			$current_day = $weeks_day[0];
-			if ( -1 == $weeks_day[1] ) {
+			if ( -1 === (int) $weeks_day[1] ) {
 				$month = $month - 1;
 			}
 		} else {
