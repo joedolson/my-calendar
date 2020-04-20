@@ -781,7 +781,7 @@ function my_calendar_admin_bar() {
 		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
 		$args = array(
 			'id'    => 'mc-my-calendar',
-			'title' => __( 'View Calendar', 'my-calendar' ),
+			'title' => __( 'My Calendar', 'my-calendar' ),
 			'href'  => $url,
 		);
 		$wp_admin_bar->add_node( $args );
