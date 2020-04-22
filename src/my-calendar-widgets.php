@@ -208,7 +208,7 @@ function my_calendar_upcoming_events( $args ) {
 			}
 			$skips[]   = $details['dateid']; // Prevent the same event from showing more than once.
 			$last_id   = $details['group']; // Prevent group events from displaying in a row. Not if there are intervening events.
-			$last_item = $item;upcom
+			$last_item = $item;
 			$last_date = $details['date'];
 		}
 	} else {
