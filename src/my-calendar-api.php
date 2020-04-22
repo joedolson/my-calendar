@@ -389,7 +389,7 @@ function my_calendar_ical() {
 		$from = "$y-1-1";
 		$to   = "$y-12-31";
 	} else {
-		$d    = mc_date( 't', mktime( 0, 0, 0, $m, 1, $y ) );
+		$d    = mc_date( 't', mktime( 0, 0, 0, $m, 1, $y ), false );
 		$from = "$y-$m-1";
 		$to   = "$ny-$nm-$d";
 	}

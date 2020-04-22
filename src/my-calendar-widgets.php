@@ -82,65 +82,65 @@ function my_calendar_upcoming_events( $args ) {
 	if ( ! $display_events ) {
 		$temp_array = array();
 		if ( 'days' === $display_type ) {
-			$from = mc_date( 'Y-m-d', strtotime( "-$before days" ) );
-			$to   = mc_date( 'Y-m-d', strtotime( "+$after days" ) );
+			$from = mc_date( 'Y-m-d', strtotime( "-$before days" ), false );
+			$to   = mc_date( 'Y-m-d', strtotime( "+$after days" ), false );
 		}
 		if ( 'month' === $display_type ) {
 			$from = mc_date( 'Y-m-1' );
 			$to   = mc_date( 'Y-m-t' );
 		}
 		if ( 'custom' === $display_type && '' !== $from && '' !== $to ) {
-			$from = mc_date( 'Y-m-d', strtotime( $from ) );
-			$to   = ( 'today' === $to ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $to ) );
+			$from = mc_date( 'Y-m-d', strtotime( $from ), false );
+			$to   = ( 'today' === $to ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $to ),false );
 		}
 		/* Yes, this is crude. But sometimes simplicity works best. There are only 12 possibilities, after all. */
 		if ( 'month+1' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+1 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+1 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+1 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+1 month' ), false );
 		}
 		if ( 'month+2' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+2 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+2 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+2 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+2 month' ), false );
 		}
 		if ( 'month+3' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+3 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+3 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+3 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+3 month' ), false );
 		}
 		if ( 'month+4' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+4 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+4 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+4 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+4 month' ), false );
 		}
 		if ( 'month+5' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+5 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+5 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+5 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+5 month' ), false );
 		}
 		if ( 'month+6' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+6 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+6 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+6 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+6 month' ), false );
 		}
 		if ( 'month+7' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+7 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+7 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+7 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+7 month' ), false );
 		}
 		if ( 'month+8' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+8 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+8 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+8 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+8 month' ), false );
 		}
 		if ( 'month+9' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+9 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+9 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+9 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+9 month' ), false );
 		}
 		if ( 'month+10' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+10 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+10 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+10 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+10 month' ), false );
 		}
 		if ( 'month+11' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+11 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+11 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+11 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+11 month' ), false );
 		}
 		if ( 'month+12' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+12 month' ) );
-			$to   = mc_date( 'Y-m-t', strtotime( '+12 month' ) );
+			$from = mc_date( 'Y-m-1', strtotime( '+12 month' ), false );
+			$to   = mc_date( 'Y-m-t', strtotime( '+12 month' ), false );
 		}
 		if ( 'year' === $display_type ) {
 			$from = mc_date( 'Y-1-1' );
@@ -192,7 +192,7 @@ function my_calendar_upcoming_events( $args ) {
 				$i ++;
 			} else {
 				$today    = current_time( 'Y-m-d H:i' );
-				$date     = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'] ) );
+				$date     = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
 				$class    = ( true === my_calendar_date_comp( $date, $today ) ) ? 'past-event' : 'future-event';
 				$category = mc_category_class( $details, 'mc_' );
 				$classes  = mc_event_classes( $event, $event->occur_id, 'upcoming' );
@@ -208,7 +208,7 @@ function my_calendar_upcoming_events( $args ) {
 			}
 			$skips[]   = $details['dateid']; // Prevent the same event from showing more than once.
 			$last_id   = $details['group']; // Prevent group events from displaying in a row. Not if there are intervening events.
-			$last_item = $item;
+			$last_item = $item;upcom
 			$last_date = $details['date'];
 		}
 	} else {
@@ -407,7 +407,8 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event, $context );
 			if ( ! in_array( $details['group'], $groups, true ) ) {
-				$date     = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ) );
+				// dtstart is already in current time zone.
+				$date     = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ), false );
 				$class    = ( true === my_calendar_date_comp( $date, $today . ' ' . current_time( 'H:i' ) ) ) ? 'past-event' : 'future-event';
 				$category = mc_category_class( $details, 'mc_' );
 				$classes  = mc_event_classes( $event, $event->occur_id, 'upcoming' );
@@ -510,8 +511,8 @@ function my_calendar_todays_events( $args ) {
 	$category      = ( 'default' === $category ) ? $defaults['today']['category'] : $category;
 	$no_event_text = ( '' === $substitute ) ? $defaults['today']['text'] : $substitute;
 	if ( $date ) {
-		$from = mc_date( 'Y-m-d', strtotime( $date ) );
-		$to   = mc_date( 'Y-m-d', strtotime( $date ) );
+		$from = mc_date( 'Y-m-d', strtotime( $date ), false );
+		$to   = mc_date( 'Y-m-d', strtotime( $date ), false );
 	} else {
 		$from = current_time( 'Y-m-d' );
 		$to   = current_time( 'Y-m-d' );

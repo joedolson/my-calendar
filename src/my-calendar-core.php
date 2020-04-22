@@ -1238,8 +1238,8 @@ function mc_ajax_add_date() {
 		$format      = array( '%d', '%s', '%s', '%d' );
 		$data        = array(
 			'occur_event_id' => $event_id,
-			'occur_begin'    => date( 'Y-m-d  H:i:s', $begin ), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-			'occur_end'      => date( 'Y-m-d  H:i:s', $end ), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+			'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ), 
+			'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 			'occur_group_id' => $group_id,
 		);
 		$result      = $wpdb->insert( my_calendar_event_table(), $data, $format );

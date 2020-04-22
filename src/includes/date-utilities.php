@@ -45,7 +45,7 @@ function mc_dateclass( $current ) {
  */
 function my_calendar_add_date( $givendate, $day = 0, $mth = 0, $yr = 0 ) {
 	$cd      = strtotime( $givendate );
-	$newdate = mktime( mc_date( 'H', $cd ), mc_date( 'i', $cd ), mc_date( 's', $cd ), mc_date( 'm', $cd ) + $mth, mc_date( 'd', $cd ) + $day, mc_date( 'Y', $cd ) + $yr );
+	$newdate = mktime( mc_date( 'H', $cd, false ), mc_date( 'i', $cd, false ), mc_date( 's', $cd, false ), mc_date( 'm', $cd, false ) + $mth, mc_date( 'd', $cd, false ) + $day, mc_date( 'Y', $cd, false ) + $yr );
 
 	return $newdate;
 }
@@ -93,15 +93,15 @@ function my_calendar_date_xcomp( $early, $late ) {
 /**
  *  Test if dates are the same with day precision
  *
- * @param string $early date string.
- * @param string $late date string.
+ * @param string $early date string in current time zone.
+ * @param string $late date string in current time zone.
  *
  * @return boolean true if first date equal to second
  */
 function my_calendar_date_equal( $early, $late ) {
 	// convert full datetime to date only.
-	$firstdate = strtotime( mc_date( 'Y-m-d', strtotime( $early ) ) );
-	$lastdate  = strtotime( mc_date( 'Y-m-d', strtotime( $late ) ) );
+	$firstdate = strtotime( mc_date( 'Y-m-d', strtotime( $early ), false ) );
+	$lastdate  = strtotime( mc_date( 'Y-m-d', strtotime( $late ), false ) );
 	if ( $firstdate === $lastdate ) {
 
 		return true;
@@ -242,15 +242,15 @@ function mc_checkdate( $date ) {
 /**
  * Get the first day value of the current week.
  *
- * @param mixed int/boolean $date timestamp or false if now.
+ * @param mixed int/boolean $timestamp timestamp + offset or false if now.
  *
  * @return array day and month
  */
-function mc_first_day_of_week( $date = false ) {
+function mc_first_day_of_week( $timestamp = false ) {
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' || get_option( 'start_of_week' ) === '0' ) ? absint( get_option( 'start_of_week' ) ) : 0;
-	if ( $date ) {
-		$today = mc_date( 'w', $date, false );
-		$now   = mc_date( 'Y-m-d', $date, false );
+	if ( $timestamp ) {
+		$today = mc_date( 'w', $timestamp, false );
+		$now   = mc_date( 'Y-m-d', $timestamp, false );
 	} else {
 		$today = current_time( 'w' );
 		$now   = current_time( 'Y-m-d' );
@@ -422,6 +422,7 @@ function mc_private_event( $event ) {
  */
 function mc_date( $format, $timestamp = false, $offset = true ) {
 	if ( ! $timestamp ) {
+		// Timestamp is UTC.
 		$timestamp = time();
 	}
 	if ( $offset ) {

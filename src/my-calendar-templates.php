@@ -353,15 +353,15 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['date_utc']     = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
 	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
 	$notime            = esc_html( mc_notime_label( $event ) );
-	$e['time']         = ( '00:00:00' === mc_date( 'H:i:s', strtotime( $real_begin_date ) ) ) ? $notime : mc_date( get_option( 'mc_time_format' ), strtotime( $real_begin_date ) );
-	$e['time24']       = ( '00:00' === mc_date( 'G:i', strtotime( $real_begin_date ) ) ) ? $notime : mc_date( get_option( 'mc_time_format' ), strtotime( $real_begin_date ) );
-	$endtime           = ( '23:59:59' === $event->event_end ) ? '00:00:00' : mc_date( 'H:i:s', strtotime( $real_end_date ) );
-	$e['endtime']      = ( $real_end_date === $real_begin_date || '1' === $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ) ) ) ? '' : date_i18n( get_option( 'mc_time_format' ), strtotime( $endtime ) );
+	$e['time']         = ( '00:00:00' === mc_date( 'H:i:s', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( get_option( 'mc_time_format' ), strtotime( $real_begin_date ), false );
+	$e['time24']       = ( '00:00' === mc_date( 'G:i', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( get_option( 'mc_time_format' ), strtotime( $real_begin_date ), false );
+	$endtime           = ( '23:59:59' === $event->event_end ) ? '00:00:00' : mc_date( 'H:i:s', strtotime( $real_end_date ), false );
+	$e['endtime']      = ( $real_end_date === $real_begin_date || '1' === $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ), false ) ) ? '' : date_i18n( get_option( 'mc_time_format' ), strtotime( $endtime ) );
 	$e['runtime']      = mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event );
 	$e['duration']     = mc_duration( $event );
-	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ) );  // Date: hcal formatted.
-	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ) );    // Date: hcal formatted end.
-	$e['rssdate']      = mc_date( 'D, d M Y H:i:s +0000', strtotime( $event->event_added ) );
+	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ), false );  // Date: hcal formatted.
+	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ), false );    // Date: hcal formatted end.
+	$e['rssdate']      = mc_date( 'D, d M Y H:i:s +0000', strtotime( $event->event_added ), false );
 	$date              = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
 	$date_end          = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
 	$date_arr          = array(
@@ -378,7 +378,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['date']      = ( '1' !== $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
 	$e['enddate']   = $date_end;
 	$e['daterange'] = ( $date === $date_end ) ? "<span class='mc_db'>$date</span>" : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
-	$e['timerange'] = ( ( $e['time'] === $e['endtime'] ) || 1 === (int) $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ) ) ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . '</span>';
+	$e['timerange'] = ( ( $e['time'] === $e['endtime'] ) || 1 === (int) $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ), false ) ) ? $e['time'] : "<span class='mc_tb'>" . $e['time'] . "</span> <span>&ndash;</span> <span class='mc_te'>" . $e['endtime'] . '</span>';
 	$e['datespan']  = ( 1 === (int) $event->event_span || ( $e['date'] !== $e['enddate'] ) ) ? mc_format_date_span( $dates ) : $date;
 	$e['multidate'] = mc_format_date_span( $dates, 'complex', "<span class='fallback-date'>$date</span><span class='separator'>,</span> <span class='fallback-time'>$e[time]</span>&ndash;<span class='fallback-endtime'>$e[endtime]</span>" );
 	$e['began']     = $event->event_begin; // returns date of first occurrence of an event.
@@ -527,7 +527,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
 	$e['ical_desc']        = $strip_desc;
 	$e['ical_start']       = $dtstart;
-	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd\THi00', strtotime( $dtend ) + 60 ) : $dtend;
+	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd\THi00', strtotime( $dtend ) + 60, false ) : $dtend;
 	$ical_link             = mc_build_url(
 		array( 'vcal' => $event->occur_id ),
 		array(
@@ -715,15 +715,15 @@ function mc_format_timestamp( $os, $source ) {
 		$timezone_object = timezone_open( $timezone_string );
 		$date_object     = date_create( null, $timezone_object );
 
-		$date_object->setTime( mc_date( 'H', $os ), mc_date( 'i', $os ) );
-		$date_object->setDate( mc_date( 'Y', $os ), mc_date( 'm', $os ), mc_date( 'd', $os ) );
+		$date_object->setTime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ) );
+		$date_object->setDate( mc_date( 'Y', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ) );
 
 		$timestamp = $date_object->getTimestamp();
 		$time      = gmdate( 'Ymd\THi00', $timestamp ) . 'Z';
 
 	} else {
-		$os_time = mktime( mc_date( 'H', $os ), mc_date( 'i', $os ), mc_date( 's', $os ), mc_date( 'm', $os ), mc_date( 'd', $os ), mc_date( 'Y', $os ) );
-		$time    = mc_date( 'Ymd\THi00', $os_time );
+		$os_time = mktime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ), mc_date( 's', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ), mc_date( 'Y', $os, false ) );
+		$time    = mc_date( 'Ymd\THi00', $os_time, false );
 	}
 
 	return $time;
@@ -740,7 +740,7 @@ function mc_format_timestamp( $os, $source ) {
  */
 function mc_runtime( $start, $end, $event ) {
 	$return = '';
-	if ( ! ( $event->event_hide_end || $start === $end || '23:59:59' === mc_date( 'H:i:s', strtotime( $end ) ) ) ) {
+	if ( ! ( $event->event_hide_end || $start === $end || '23:59:59' === mc_date( 'H:i:s', strtotime( $end ), false ) ) ) {
 		$return = human_time_diff( $start, $end );
 	}
 
@@ -999,8 +999,8 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 		foreach ( $dates as $date ) {
 			$begin         = $date->occur_begin;
 			$end           = $date->occur_end;
-			$day_begin     = mc_date( 'Y-m-d', strtotime( $begin ) );
-			$day_end       = mc_date( 'Y-m-d', strtotime( $end ) );
+			$day_begin     = mc_date( 'Y-m-d', strtotime( $begin ), false );
+			$day_end       = mc_date( 'Y-m-d', strtotime( $end ), false );
 			$bformat       = '<span class="multidate-date">' . date_i18n( mc_date_format(), strtotime( $begin ) ) . "</span> <span class='multidate-time'>" . date_i18n( get_option( 'mc_time_format' ), strtotime( $begin ) ) . '</span>';
 			$endtimeformat = ( '00:00:00' === $date->occur_end ) ? '' : ' ' . get_option( 'mc_time_format' );
 			$eformat       = ( $day_begin !== $day_end ) ? mc_date_format() . $endtimeformat : $endtimeformat;
@@ -1132,9 +1132,9 @@ function mc_event_recur_string( $event, $begin ) {
 	$recurs      = str_split( $event->event_recur, 1 );
 	$recur       = $recurs[0];
 	$every       = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
-	$month_date  = mc_date( 'dS', strtotime( $begin ) );
+	$month_date  = mc_date( 'dS', strtotime( $begin ), false );
 	$day_name    = date_i18n( 'l', strtotime( $begin ) );
-	$week_number = mc_ordinal( week_of_month( mc_date( 'j', strtotime( $begin ) ) ) + 1 );
+	$week_number = mc_ordinal( week_of_month( mc_date( 'j', strtotime( $begin ), false ) ) + 1 );
 	switch ( $recur ) {
 		case 'S':
 			$event_recur = __( 'Does not recur', 'my-calendar' );

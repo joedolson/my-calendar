@@ -591,8 +591,8 @@ function mc_get_event( $id, $type = 'object' ) {
 		$event = mc_event_object( $event );
 		return $event;
 	} else {
-		$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
-		$time  = mc_date( 'H:i:s', strtotime( $event->occur_begin ) );
+		$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
+		$time  = mc_date( 'H:i:s', strtotime( $event->occur_begin ), false );
 		$value = '<div id="mc_event">' . my_calendar_draw_event( $event, 'single', $date, $time, 'single' ) . '</div>';
 
 		return $value;
@@ -884,13 +884,13 @@ function mc_set_date_array( $events ) {
 	$event_array = array();
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( $events as $event ) {
-			$date = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
-			$end  = mc_date( 'Y-m-d', strtotime( $event->occur_end ) );
+			$date = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
+			$end  = mc_date( 'Y-m-d', strtotime( $event->occur_end ), false );
 			if ( $date !== $end ) {
 				$start = strtotime( $date );
 				$end   = strtotime( $end );
 				do {
-					$date                   = mc_date( 'Y-m-d', $start );
+					$date                   = mc_date( 'Y-m-d', $start, false );
 					$event_array[ $date ][] = $event;
 					$start                  = strtotime( '+1 day', $start );
 				} while ( $start <= $end );
