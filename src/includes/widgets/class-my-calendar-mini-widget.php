@@ -240,7 +240,9 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$instance['host']   = $host;
 		$instance['ltype']  = ( '' !== $new['ltype'] && '' !== $new['lvalue'] ) ? $new['ltype'] : '';
 		$instance['lvalue'] = ( '' !== $new['ltype'] && '' !== $new['lvalue'] ) ? $new['lvalue'] : '';
-		$instance['site']   = $new['site'];
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+			$instance['site'] = $new['site'];
+		}
 		$instance['months'] = $new['months'];
 
 		return $instance;
