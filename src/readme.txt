@@ -92,6 +92,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Switch from using date() to gmdate().
 * Conformance with latest WordPress PHPCS ruleset.
 * Bug fix: Misc. ARIA/id relationships broken.
+* Bug fix: remote locations sometimes pulled from local database.
 * Collapse 'View Calendar' and 'Add Event' adminbar menus into a single menu
 
 = 3.1.18 =
