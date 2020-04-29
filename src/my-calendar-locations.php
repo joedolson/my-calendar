@@ -263,7 +263,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
  */
 function mc_get_location( $location_id ) {
 	global $wpdb;
-	$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$mcdb = $wpdb;
+	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $location;
 }
