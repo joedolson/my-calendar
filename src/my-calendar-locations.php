@@ -264,7 +264,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 function mc_get_location( $location_id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' == get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
