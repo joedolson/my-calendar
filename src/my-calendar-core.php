@@ -1554,7 +1554,7 @@ function mc_load_permalinks() {
  * @param string  $format Link anchor format.
  * @param string  $link Link permalink format.
  * @param WP_Post $post The adjacent post.
- * @param string  next or previous.
+ * @param string  $adj next or previous.
  *
  * @return string
  */
@@ -1580,7 +1580,7 @@ function mc_previous_post_link( $output, $format, $link, $post, $adj ) {
  * @param string  $format Link anchor format.
  * @param string  $link Link permalink format.
  * @param WP_Post $post The adjacent post.
- * @param string  next or previous.
+ * @param string  $adj next or previous.
  *
  * @return string
  */

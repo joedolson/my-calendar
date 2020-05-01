@@ -839,7 +839,7 @@ function mc_get_related( $id ) {
 
 
 /**
- * Get the events adjacent to the currently displayed event. 
+ * Get the events adjacent to the currently displayed event.
  *
  * @param integer $mc_id ID of current event.
  * @param string  $adjacent Next/Previous.
@@ -852,8 +852,8 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$adjacence = ( 'next' === $adjacent ) ? '>' : '<';
-	$order     = ( 'next' === $adjacent ) ? 'ASC' : 'DESC';
+	$adjacence          = ( 'next' === $adjacent ) ? '>' : '<';
+	$order              = ( 'next' === $adjacent ) ? 'ASC' : 'DESC';
 	$site               = false;
 	$arr_events         = array();
 	$select_published   = mc_select_published();
@@ -862,12 +862,12 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 	$source             = mc_get_event( $mc_id );
 	$date               = mc_date( 'Y-m-d H:i:s', strtotime( $source->occur_begin ), false );
 	$now                = $date;
-	
+
 	$event_query = 'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table( $site ) . '
-			JOIN ' . my_calendar_table( $site ) . " AS e
+			JOIN ' . my_calendar_table( $site ) . ' AS e
 			ON (event_id=occur_event_id)
-			JOIN " . my_calendar_categories_table( $site ) . " as c
+			JOIN ' . my_calendar_categories_table( $site ) . " as c
 			ON (e.event_category=c.category_id)
 			WHERE $select_published $exclude_categories
 			AND occur_begin $adjacence CAST('$now' as DATETIME) ORDER BY occur_begin $order LIMIT 0,1";
