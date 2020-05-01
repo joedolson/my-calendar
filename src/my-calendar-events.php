@@ -852,19 +852,16 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$adjacence = '<';
-	if ( 'next' == $adjacent ) {
-		$adjacence = '>';
-	}
+	$adjacence = ( 'next' === $adjacent ) ? '>' : '<';
+	$order     = ( 'next' === $adjacent ) ? 'ASC' : 'DESC';
 	$site               = false;
 	$arr_events         = array();
 	$select_published   = mc_select_published();
 	$exclude_categories = mc_private_categories();
 	$ts_string          = mc_ts();
 	$source             = mc_get_event( $mc_id );
-	$date               = mc_date( 'Y-m-d', strtotime( $source->occur_begin ), false );
-	$time               = mc_date( 'H:i:s', strtotime( $source->occur_begin ), false );
-	$now                = $date . ' ' . $time;
+	$date               = mc_date( 'Y-m-d H:i:s', strtotime( $source->occur_begin ), false );
+	$now                = $date;
 	
 	$event_query = 'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table( $site ) . '
@@ -873,7 +870,7 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 			JOIN " . my_calendar_categories_table( $site ) . " as c
 			ON (e.event_category=c.category_id)
 			WHERE $select_published $exclude_categories
-			AND DATE(occur_begin) $adjacence CAST('$now' as DATETIME) ORDER BY occur_begin LIMIT 0,1";
+			AND occur_begin $adjacence CAST('$now' as DATETIME) ORDER BY occur_begin $order LIMIT 0,1";
 
 	$events = $mcdb->get_results( $event_query );
 	if ( ! empty( $events ) ) {
