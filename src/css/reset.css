@@ -87,6 +87,11 @@ div.site-content, table {
 	color: inherit;
 }
 
+.mc-adjacent .mc-event-date {
+	display: block;
+	font-size: 80%;
+}
+
 button.mc-toggle {
 	border: 0;
 	padding: 4px;

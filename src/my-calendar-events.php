@@ -727,7 +727,6 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	return $return;
 }
 
-
 /**
  * Get the next scheduled event, not currently happening.
  *
@@ -838,6 +837,61 @@ function mc_get_related( $id ) {
 	return $results;
 }
 
+
+/**
+ * Get the events adjacent to the currently displayed event. 
+ *
+ * @param integer $mc_id ID of current event.
+ * @param string  $adjacent Next/Previous.
+ *
+ * @return array Event template array.
+ */
+function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$adjacence = '<';
+	if ( 'next' == $adjacent ) {
+		$adjacence = '>';
+	}
+	$site               = false;
+	$arr_events         = array();
+	$select_published   = mc_select_published();
+	$exclude_categories = mc_private_categories();
+	$ts_string          = mc_ts();
+	$source             = mc_get_event( $mc_id );
+	$date               = mc_date( 'Y-m-d', strtotime( $source->occur_begin ), false );
+	$time               = mc_date( 'H:i:s', strtotime( $source->occur_begin ), false );
+	$now                = $date . ' ' . $time;
+	
+	$event_query = 'SELECT *, ' . $ts_string . '
+			FROM ' . my_calendar_event_table( $site ) . '
+			JOIN ' . my_calendar_table( $site ) . " AS e
+			ON (event_id=occur_event_id)
+			JOIN " . my_calendar_categories_table( $site ) . " as c
+			ON (e.event_category=c.category_id)
+			WHERE $select_published $exclude_categories
+			AND DATE(occur_begin) $adjacence CAST('$now' as DATETIME) ORDER BY occur_begin LIMIT 0,1";
+
+	$events = $mcdb->get_results( $event_query );
+	if ( ! empty( $events ) ) {
+		foreach ( array_keys( $events ) as $key ) {
+			$event        =& $events[ $key ];
+			$arr_events[] = $event;
+		}
+	}
+	if ( ! empty( $arr_events ) ) {
+		$return = mc_create_tags( $arr_events[0] );
+	} else {
+		$return = array();
+	}
+
+	return $return;
+}
+
+
 /**
  * Check whether this is a valid preview scenario.
  *
@@ -920,7 +974,6 @@ function mc_get_event_post( $event_id ) {
 
 	return false;
 }
-
 
 /**
  * Check the type of database, so handling of search queries is correct.

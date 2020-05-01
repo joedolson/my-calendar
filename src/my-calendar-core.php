@@ -1527,6 +1527,8 @@ function mc_register_actions() {
 // Filters.
 add_filter( 'post_updated_messages', 'mc_posttypes_messages' );
 add_filter( 'tmp_grunion_allow_editor_view', '__return_false' );
+add_filter( 'next_post_link', 'mc_next_post_link', 10, 5 );
+add_filter( 'previous_post_link', 'mc_previous_post_link', 10, 5 );
 
 // Actions.
 add_action( 'init', 'mc_taxonomies', 0 );
@@ -1544,6 +1546,59 @@ function mc_load_permalinks() {
 	// Add a settings field to the permalink page.
 	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base' ), 'mc_field_callback', 'permalink', 'optional', $opts );
 }
+
+/**
+ * Change out previous post link for previous event.
+ *
+ * @param string  $output Original link.
+ * @param string  $format Link anchor format.
+ * @param string  $link Link permalink format.
+ * @param WP_Post $post The adjacent post.
+ * @param string  next or previous.
+ *
+ * @return string
+ */
+function mc_previous_post_link( $output, $format, $link, $post, $adj ) {
+	$output = '';
+	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
+		$mc_id = (int) $_GET['mc_id'];
+		$event = mc_adjacent_event( $mc_id, 'previous' );
+		$title = $event['title'];
+		$link  = $event['details_link'];
+		$date  = ' <span class="mc-event-date">' . $event['date'] . '</span>';
+
+		$output = str_replace( '%link', '<a href="' . $link . '" rel="next" class="mc-adjacent">' . $title . $date . '</a>', $format );
+	}
+
+	return $output;
+}
+
+/**
+ * Change out previous post link for previous event.
+ *
+ * @param string  $output Original link.
+ * @param string  $format Link anchor format.
+ * @param string  $link Link permalink format.
+ * @param WP_Post $post The adjacent post.
+ * @param string  next or previous.
+ *
+ * @return string
+ */
+function mc_next_post_link( $output, $format, $link, $post, $adj ) {
+	$output = '';
+	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
+		$mc_id = (int) $_GET['mc_id'];
+		$event = mc_adjacent_event( $mc_id, 'next' );
+		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
+		$link  = $event['details_link'];
+		$date  = ' <span class="mc-event-date">' . $event['date'] . '</span>';
+
+		$output = str_replace( '%link', '<a href="' . $link . '" rel="next" class="mc-adjacent">' . $title . $date . '</a>', $format );
+	}
+
+	return $output;
+}
+
 
 /**
  * Custom field callback for permalinks settings
