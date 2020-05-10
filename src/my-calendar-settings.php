@@ -884,26 +884,30 @@ function mc_remote_db() {
 							);
 
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
+							// Array of all options in off position.
+							$defaults = array(
+								'event_location_dropdown' => 'on',
+								'event_short'    => 'on',
+								'event_desc'     => 'on',
+								'event_category' => 'on',
+								'event_image'    => 'on',
+								'event_link'     => 'on',
+								'event_recurs'   => 'on',
+								'event_open'     => 'on',
+								'event_location' => 'off',
+								'event_specials' => 'on',
+								'event_access'   => 'on',
+								'event_host'     => 'on',
+							);
 							if ( ! is_array( $input_options ) ) {
 								update_option(
 									'mc_input_options',
-									array(
-										'event_location_dropdown' => 'on',
-										'event_short'    => 'on',
-										'event_desc'     => 'on',
-										'event_category' => 'on',
-										'event_image'    => 'on',
-										'event_link'     => 'on',
-										'event_recurs'   => 'on',
-										'event_open'     => 'on',
-										'event_location' => 'off',
-										'event_specials' => 'on',
-										'event_access'   => 'on',
-										'event_host'     => 'on',
-									)
+									$defaults
 								);
 								$input_options = get_option( 'mc_input_options' );
 							}
+							// Merge saved input options with default off, so all are displayed.
+							$input_options = array_merge( $defaults, $input_options );
 							foreach ( $input_options as $key => $value ) {
 								$checked = ( 'on' === $value ) ? "checked='checked'" : '';
 								if ( isset( $input_labels[ $key ] ) ) {

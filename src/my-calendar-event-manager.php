@@ -1031,10 +1031,27 @@ function mc_get_instance_data( $instance_id ) {
 function mc_show_edit_block( $field ) {
 	$admin  = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
 	$input  = get_option( 'mc_input_options' );
-	$user   = get_current_user_id();
-	$screen = get_current_screen();
-	$option = $screen->get_option( 'mc_show_on_page', 'option' );
-	$show   = get_user_meta( $user, $option, true );
+	// Array of all options in off position.
+	$defaults = array(
+		'event_location_dropdown' => 'on',
+		'event_short'    => 'on',
+		'event_desc'     => 'on',
+		'event_category' => 'on',
+		'event_image'    => 'on',
+		'event_link'     => 'on',
+		'event_recurs'   => 'on',
+		'event_open'     => 'on',
+		'event_location' => 'off',
+		'event_specials' => 'on',
+		'event_access'   => 'on',
+		'event_host'     => 'on',
+	);
+
+	$input        = array_merge( $defaults, $input );
+	$user         = get_current_user_id();
+	$screen       = get_current_screen();
+	$option       = $screen->get_option( 'mc_show_on_page', 'option' );
+	$show         = get_user_meta( $user, $option, true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = $screen->get_option( 'mc_show_on_page', 'default' );
 	}
