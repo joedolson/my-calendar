@@ -45,17 +45,17 @@ function mc_show_event_editing( $status, $args ) {
 		}
 		$defaults = array(
 			'event_location_dropdown' => 'on',
-			'event_short'    => 'on',
-			'event_desc'     => 'on',
-			'event_category' => 'on',
-			'event_image'    => 'on',
-			'event_link'     => 'on',
-			'event_recurs'   => 'on',
-			'event_open'     => 'on',
-			'event_location' => 'off',
-			'event_specials' => 'on',
-			'event_access'   => 'on',
-			'event_host'     => 'on',
+			'event_short'             => 'on',
+			'event_desc'              => 'on',
+			'event_category'          => 'on',
+			'event_image'             => 'on',
+			'event_link'              => 'on',
+			'event_recurs'            => 'on',
+			'event_open'              => 'on',
+			'event_location'          => 'off',
+			'event_specials'          => 'on',
+			'event_access'            => 'on',
+			'event_host'              => 'on',
 		);
 
 		$input_options = array_merge( $defaults, $input_options );
