@@ -1029,8 +1029,8 @@ function mc_get_instance_data( $instance_id ) {
  * @return string.
  */
 function mc_show_edit_block( $field ) {
-	$admin  = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
-	$input  = get_option( 'mc_input_options' );
+	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	$input = get_option( 'mc_input_options' );
 	// Array of all options in off position.
 	$defaults = array(
 		'event_location_dropdown' => 'on',
