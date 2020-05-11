@@ -91,6 +91,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Change event timestamps to use a real UTC timestamp for reference.
 * Switch from using date() to gmdate().
 * Conformance with latest WordPress PHPCS ruleset.
+* New filter: mc_get_users. Use custom arguments to get users.
 * Bug fix: Misc. ARIA/id relationships broken.
 * Bug fix: remote locations sometimes pulled from local database.
 * Bug fix: Long-standing issues in user input settings.

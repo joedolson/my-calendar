@@ -1774,6 +1774,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
  */
 function mc_get_users( $group = 'authors' ) {
 	global $blog_id;
+	$users = apply_filters( 'mc_get_users', false, $group, $blog_id );
+	if ( $users ) {
+		return $users;
+	}
 	$count = count_users( 'time' );
 	$args  = array(
 		'blog_id' => $blog_id,
