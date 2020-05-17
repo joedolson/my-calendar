@@ -201,9 +201,10 @@ function my_calendar_head() {
 	$array = array();
 
 	if ( get_option( 'mc_use_styles' ) !== 'true' ) {
-		$this_post = $wp_query->get_queried_object();
-		$id        = (string) ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
-		$array     = ( '' !== get_option( 'mc_show_css', '' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
+		$this_post     = $wp_query->get_queried_object();
+		$id            = (string) ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
+		$array         = ( '' !== get_option( 'mc_show_css', '' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
+		$category_vars = '';
 		if ( ( is_array( $array ) && ! empty( $array ) ) || in_array( $id, $array, true ) || get_option( 'mc_show_css', '' ) === '' ) {
 			// generate category colors.
 			$category_styles = '';
@@ -230,6 +231,7 @@ function my_calendar_head() {
 						// always an anchor as of 1.11.0, apply also to title.
 						$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
 						$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor;}";
+						$category_vars   .= '--category-' . $class . ': ' . $color . '; ';
 					}
 				}
 			}
@@ -242,13 +244,13 @@ function my_calendar_head() {
 				}
 			}
 			if ( '' !== $style_vars ) {
-				$style_vars = '.mc-main {' . $style_vars . '}';
+				$style_vars = '.mc-main {' . $style_vars . $category_vars . '}';
 			}
 
 			$all_styles = "
 <style type=\"text/css\">
 <!--
-/* Styles by My Calendar - Joseph C Dolson http://www.joedolson.com/ */
+/* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
 $category_styles
 .mc-event-visible {
 	display: block!important;
