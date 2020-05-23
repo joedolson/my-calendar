@@ -223,9 +223,6 @@ function my_calendar_head() {
 <!--
 /* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
 $category_styles
-.mc-event-visible {
-	display: block!important;
-}
 $style_vars
 -->
 </style>";
