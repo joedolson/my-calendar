@@ -273,7 +273,7 @@ function mc_generate_category_styles() {
 		}
 	}
 
-	return array( 
+	return array(
 		'styles' => $category_styles,
 		'vars'   => $category_vars,
 	);
