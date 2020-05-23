@@ -1,7 +1,7 @@
 (function ($) {
 	'use strict';
 	$(function () {
-		$('.calendar-event').children().not('.event-title').hide();
+		$('.calendar-event').children().not('.event-title,.screen-reader-text').hide();
 
 		$(document).on('click', '.calendar-event .event-title a',
 			function (e) {
@@ -17,7 +17,7 @@
 				var firstFocus = focusable.first();
 				lastFocus.attr( 'data-action', 'shiftback' );
 
-				$('.calendar-event').children().not('.event-title').not( current_date ).hide();
+				$('.calendar-event').children().not('.event-title,.screen-reader-text').not( current_date ).hide();
 			});
 
 		$(document).on('click', '.calendar-event .close',
