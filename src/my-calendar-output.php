@@ -341,7 +341,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$event_title   = ( 'single' === $type ) ? apply_filters( 'mc_single_event_title', $event_title, $event ) : $event_title;
 	$title         = ( 'single' === $type && ! is_singular( 'mc-events' ) ) ? "<h2 class='event-title summary'>$image $event_title</h2>\n" : '<span class="summary screen-reader-text">' . $event_title . '</span>';
 	$title         = apply_filters( 'mc_event_title', $title, $event, $event_title, $image );
-	$header       .= '<span class="summary">' . $title . '</span>';
+	$header       .= ( false === stripos( $title,  'summary' ) ) ? '<span class="summary screen-reader-text">' . strip_tags( $title ) . '</span>' : $title;
 
 	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
 	$close_button = "<button type='button' aria-controls='$uid-$type-details-$id' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
