@@ -193,11 +193,7 @@ function mc_register_styles() {
  * Publically written head styles & scripts
  */
 function my_calendar_head() {
-	global $wpdb, $wp_query;
-	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	global $wp_query;
 	$array = array();
 
 	if ( get_option( 'mc_use_styles' ) !== 'true' ) {
@@ -207,34 +203,9 @@ function my_calendar_head() {
 		$category_vars = '';
 		if ( ( is_array( $array ) && ! empty( $array ) ) || in_array( $id, $array, true ) || get_option( 'mc_show_css', '' ) === '' ) {
 			// generate category colors.
-			$category_styles = '';
-			$inv             = '';
-			$type            = '';
-			$alt             = '';
-			$categories      = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table( get_current_blog_id() ) . ' ORDER BY category_id ASC' );
-			foreach ( $categories as $category ) {
-				$class = mc_category_class( $category, 'mc_' );
-				$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
-				$color = $hex . $category->category_color;
-				if ( '#' !== $color ) {
-					$hcolor = mc_shift_color( $category->category_color );
-					if ( 'font' === get_option( 'mc_apply_color' ) ) {
-						$type = 'color';
-						$alt  = 'background';
-					} elseif ( 'background' === get_option( 'mc_apply_color' ) ) {
-						$type = 'background';
-						$alt  = 'color';
-					}
-					$inverse = mc_inverse_color( $color );
-					$inv     = "$alt: $inverse;";
-					if ( 'font' === get_option( 'mc_apply_color' ) || 'background' === get_option( 'mc_apply_color' ) ) {
-						// always an anchor as of 1.11.0, apply also to title.
-						$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
-						$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor;}";
-						$category_vars   .= '--category-' . $class . ': ' . $color . '; ';
-					}
-				}
-			}
+			$category_css    = mc_generate_category_styles();
+			$category_styles = $category_css['styles'];
+			$category_vars   = $category_css['vars'];
 
 			$styles     = (array) get_option( 'mc_style_vars' );
 			$style_vars = '';
@@ -261,6 +232,54 @@ $style_vars
 			echo $all_styles;
 		}
 	}
+}
+
+/**
+ * Generate category styles for use by My Calendar core.
+ *
+ * @return array Variable styles & category styles.
+ */
+function mc_generate_category_styles() {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$category_styles = '';
+	$category_vars   = '';
+	$inv             = '';
+	$type            = '';
+	$alt             = '';
+	$categories      = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table( get_current_blog_id() ) . ' ORDER BY category_id ASC' );
+	foreach ( $categories as $category ) {
+		$class = mc_category_class( $category, 'mc_' );
+		$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
+		$color = $hex . $category->category_color;
+		if ( '#' !== $color ) {
+			$hcolor = mc_shift_color( $category->category_color );
+			if ( 'font' === get_option( 'mc_apply_color' ) ) {
+				$type = 'color';
+				$alt  = 'background';
+			} elseif ( 'background' === get_option( 'mc_apply_color' ) ) {
+				$type = 'background';
+				$alt  = 'color';
+			}
+			$inverse = mc_inverse_color( $color );
+			$inv     = "$alt: $inverse;";
+			if ( 'font' === get_option( 'mc_apply_color' ) || 'background' === get_option( 'mc_apply_color' ) ) {
+				// always an anchor as of 1.11.0, apply also to title.
+				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
+				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor;}";
+			}
+			// Variables aren't dependent on options.
+			$category_vars .= '--category-' . $class . ': ' . $color . '; ';
+		}
+	}
+
+	return array( 
+		'styles' => $category_styles,
+		'vars'   => $category_vars,
+	);
 }
 
 /**
