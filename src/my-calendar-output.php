@@ -1853,7 +1853,7 @@ function my_calendar( $args ) {
 
 						// Generate event classes & attributes.
 						$events_class = mc_events_class( $events, $date_is );
-						$monthclass   = ( mc_date( 'n', $start, false ) === (string) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
+						$monthclass   = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
 						$dateclass    = mc_dateclass( $start );
 						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
