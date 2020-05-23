@@ -10,7 +10,7 @@
 			$( '.mini .has-events' ).children().not( '.trigger, .mc-date, .event-date' ).not( current_date ).hide();
 			$( this ).addClass( 'active-toggle' );
 		} );
-		$( document ).on( "click", ".mini-event .close", function (e) {
+		$( document ).on( "click", ".calendar-events .close", function (e) {
 			e.preventDefault();
 			$(this).closest( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
 			$(this).closest( 'div.calendar-events' ).toggle();

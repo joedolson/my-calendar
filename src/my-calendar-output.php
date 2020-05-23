@@ -194,6 +194,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		$end          = '';
 		if ( 'mini' === $type && count( $events ) > 0 ) {
 			$begin .= "<div id='date-$process_date' class='calendar-events'>";
+			$begin .= mc_close_button( "date-$process_date" );
 		}
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
@@ -343,11 +344,11 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$title         = apply_filters( 'mc_event_title', $title, $event, $event_title, $image );
 	$header       .= ( false === stripos( $title,  'summary' ) ) ? '<span class="summary screen-reader-text">' . strip_tags( $title ) . '</span>' : $title;
 
-	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
-	$close_button = "<button type='button' aria-controls='$uid-$type-details-$id' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
+	$close_button = mc_close_button( "$uid-$type-details-$id" );
 
 	if ( mc_show_details( $time, $type ) ) {
-		$close = ( 'calendar' === $type || 'mini' === $type ) ? $close_button : '';
+		// Since 3.2.0, close button is added to event container in mini calendar.
+		$close = ( 'calendar' === $type ) ? $close_button : '';
 
 		if ( false === $details ) {
 			if ( ( 'true' === $display_address || 'true' === $display_map ) ) {
@@ -462,7 +463,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 						. $return;
 		} else {
 			// If a custom template is in use.
-			$toggle  = ( 'calendar' === $type || 'mini' === $type ) ? $close_button : '';
+			$toggle  = ( 'calendar' === $type ) ? $close_button : '';
 			$details = $toggle . $details . "\n";
 		}
 
@@ -479,6 +480,20 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	}
 
 	return $details;
+}
+
+/**
+ * Generate close button.
+ *
+ * @param $controls ID for object this controls.
+ *
+ * @return string
+ */
+function mc_close_button( $controls ) {
+	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
+	$close_button = "<button type='button' aria-controls='$controls' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
+
+	return $close_button;
 }
 
 /**
