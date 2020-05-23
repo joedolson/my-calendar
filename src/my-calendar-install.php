@@ -299,7 +299,7 @@ function mc_default_settings() {
 		)
 	);
 	add_option( 'mc_skip_holidays', 'false' );
-	add_option( 'mc_css_file', 'twentyeighteen.css' );
+	add_option( 'mc_css_file', 'twentytwenty.css' );
 	add_option(
 		'mc_style_vars',
 		array(

@@ -287,7 +287,7 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 	}
 	if ( ! $filename ) {
 		// If no value is saved, return default.
-		$filename = 'twentyeighteen.css';
+		$filename = 'twentytwenty.css';
 	}
 	if ( 0 === strpos( $filename, 'mc_custom_' ) ) {
 		$filename  = str_replace( 'mc_custom_', '', $filename );

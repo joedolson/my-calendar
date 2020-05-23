@@ -89,6 +89,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Show API endpoint when API enabled.
 * Add alternate alias for API endpoint.
 * Add style variables with category colors to style output.
+* Add new default styles: Twentytwenty.css
 * Change event timestamps to use a real UTC timestamp for reference.
 * Switch from using date() to gmdate().
 * Conformance with latest WordPress PHPCS ruleset.
@@ -96,8 +97,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: Misc. ARIA/id relationships broken.
 * Bug fix: remote locations sometimes pulled from local database.
 * Bug fix: Long-standing issues in user input settings.
+* Bug fix: Don't duplicate .summary values.
+* Bug fix: Only render one close button in mini calendar.
 * Collapse 'View Calendar' and 'Add Event' adminbar menus into a single menu.
 * Remove upgrade path from 2.2.10.
+* Remove .mc-event-visible from style output. Unused since 2011.
 
 = 3.1.18 =
 
