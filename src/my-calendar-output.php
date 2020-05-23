@@ -342,7 +342,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$event_title   = ( 'single' === $type ) ? apply_filters( 'mc_single_event_title', $event_title, $event ) : $event_title;
 	$title         = ( 'single' === $type && ! is_singular( 'mc-events' ) ) ? "<h2 class='event-title summary'>$image $event_title</h2>\n" : '<span class="summary screen-reader-text">' . $event_title . '</span>';
 	$title         = apply_filters( 'mc_event_title', $title, $event, $event_title, $image );
-	$header       .= ( false === stripos( $title,  'summary' ) ) ? '<span class="summary screen-reader-text">' . strip_tags( $title ) . '</span>' : $title;
+	$header       .= ( false === stripos( $title, 'summary' ) ) ? '<span class="summary screen-reader-text">' . strip_tags( $title ) . '</span>' : $title;
 
 	$close_button = mc_close_button( "$uid-$type-details-$id" );
 
@@ -485,7 +485,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 /**
  * Generate close button.
  *
- * @param $controls ID for object this controls.
+ * @param string $controls ID for object this controls.
  *
  * @return string
  */
