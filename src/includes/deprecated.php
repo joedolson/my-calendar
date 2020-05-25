@@ -142,11 +142,11 @@ function jd_show_support_box() {
 }
 
 /**
- * Odd toggle. Unknown when last used.
+ * Odd toggle. Last used in 1.9.8.
  *
  * @param int $int Any integer.
  *
- * @deprecated
+ * @deprecated. 
  *
  * @return boolean
  */
@@ -160,7 +160,7 @@ function my_calendar_is_odd( $int ) {
  * @param string $recur Recurrence string (single character).
  * @param int    $repeats Number of occurrences to repeat.
  *
- * @deprecated 2.5.16
+ * @deprecated 2.5.16. Last used 2.4.21.
  *
  * @return string label
  */
