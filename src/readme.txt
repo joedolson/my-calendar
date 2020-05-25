@@ -89,8 +89,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Show API endpoint when API enabled.
 * Add alternate alias for API endpoint.
 * Add style variables with category colors to style output.
-* Add new default styles: Twentytwenty.css
+* Add new default stylesheet: Twentytwenty.css
 * Change event timestamps to use a real UTC timestamp for reference.
+* Improvements to output code layout.
+* Eliminate empty HTML wrappers in content.
 * Switch from using date() to gmdate().
 * Conformance with latest WordPress PHPCS ruleset.
 * New filter: mc_get_users. Use custom arguments to get users.
@@ -102,6 +104,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Collapse 'View Calendar' and 'Add Event' adminbar menus into a single menu.
 * Remove upgrade path from 2.2.10.
 * Remove .mc-event-visible from style output. Unused since 2011.
+* Remove numerous deprecated functions.
 
 = 3.1.18 =
 

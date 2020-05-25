@@ -58,8 +58,9 @@
 	border-radius: 5px;
 	padding: 4px 6px !important;
 	font-size: 16px;
-	font-size: 1rem;
+	line-height: 1.5;
 	font-weight: 400;
+	text-decoration: none;
 }
 
 .mc-main .my-calendar-header select,
@@ -102,7 +103,6 @@
 
 .mc-main caption, .mc-main.list .my-calendar-month, .mc-main .heading  {
 	font-size: 24px;
-	font-size: 1.5rem;
 	color: #666;
 	color: var(--highlight-dark);
 	text-align: right;
@@ -111,7 +111,6 @@
 
 .mc-main.mini caption {
 	font-size: 16px;
-	font-size: 1rem;
 }
 
 .mc-main th {
@@ -142,7 +141,6 @@
 
 .mc-main td .event-title {
 	font-size: 12px;
-	font-size: .75rem;
 }
 
 .mc-main {
@@ -152,7 +150,6 @@
 .mc-main .event-title {
 	margin: 0 !important;
 	font-size: 24px;
-	font-size: 1.5rem;
 }
 
 .mc-main .event-title a {
@@ -168,7 +165,6 @@
 .my-calendar-next a:after,
 .mc-export a:before,
 .mc-main .time-block:before,
-.mc-list .current-day .event-date:before,
 .mc-main .sharing .ical a:before,
 .mc-main .sharing .gcal a:before,
 .mc-main .sharing .mc_details a:before,
@@ -233,8 +229,8 @@
 
 .mc-main .calendar-event .details, .mc-main .calendar-events {
 	position: absolute;
-	left: 5%;
-	width: 90%;
+	left: 3%;
+	width: 94%;
 	z-index: 3;
 	background: #fff;
 	background: var(--primary-light);
@@ -248,8 +244,16 @@
 	left: -5%;
 }
 
+.mc-main .vevent {
+	word-break: normal;
+}
+
+.mc-main .calendar-events .vevent:nth-of-type(1n+1) {
+	border-top: 1px solid var(--highlight-dark);
+}
+
 .mc-main .details {
-	padding: 40px 20px;
+	padding: 10px 40px;
 }
 
 .mc-main .single-event .details {
@@ -280,6 +284,8 @@
 	display: block;
 	width: 100%;
 	text-align: left;
+	color: #000;
+	color: var(--primary-dark);
 }
 
 .mc-main .mc-list .event-date button:hover,
@@ -324,7 +330,6 @@
 	left: auto;
 	right: 0;
 	font-size: 18px;
-	font-size: 1.25rem;
 }
 
 .mc-main .close:hover, .mc-main .close:focus {
@@ -366,7 +371,6 @@
 .mc-main.mini .time-block {
 	float: none;
 	font-size: 14px;
-	font-size: .875rem;
 }
 
 .mc-main .time-block p {
@@ -376,7 +380,7 @@
 	margin: 0 !important;
 	background: #fff;
 	background: var(--primary-light);
-	padding: 0 10px !important;
+	padding: 0 !important;
 }
 
 .mc-main .time-block:before {
@@ -399,7 +403,6 @@
 	display: block;
 	padding: 0 8px;
 	font-size: 16px;
-	font-size: 1rem;
 	background: #fff;
 	background: var(--primary-light);
 	color: #000;
@@ -409,6 +412,24 @@
 
 .mc-main.mini .mc-date {
 	text-align: center;
+	padding: 0;
+	font-size: 14px;
+}
+
+.mc-main.mini .has-events.current-day a.mc-date {
+	color: #000;
+	color: var(--primary-dark);
+	background: #eee;
+	background: var(--highlight-light);
+	border-top: 0px solid;
+}
+
+.mc-main.mini .has-events.current-day a.mc-date:hover,
+.mc-main.mini .has-events.current-day a.mc-date:focus {
+	background: #000;
+	background: var(--primary-dark);
+	color: #eee;
+	color: var(--highlight-light);
 }
 
 .mc-main .nextmonth {
@@ -455,7 +476,6 @@
 
 .mc-main .mc-single {
 	font-size: 24px;
-	font-size: 1.5rem;
 	margin: 0 0 .5em;
 }
 
@@ -551,7 +571,6 @@
 	width: 250px;
 	max-width: 50%;
 	font-size: 14px;
-	font-size: .875rem;
 	background: rgba( 0, 0, 0, .05 );
 }
 
@@ -587,10 +606,13 @@
 	position: relative;
 }
 
-.mc-list .current-day .event-date:before {
-	content: "\f345";
-	margin-right: 5px;
-	margin-left: -5px;
+.mc-main li.current-day {
+	border-left: 5px solid;
+}
+
+.mc-main li.current-day button {
+	position: relative;
+	left: -5px;
 }
 
 .mc-main .mc-list .mc-events {
@@ -621,7 +643,6 @@
 
 .mc-main.mini .sharing p {
 	font-size: 14px;
-	font-size: .875rem;
 	padding: 0 .25em 0 0;
 	margin-bottom: 10px;
 }
@@ -636,7 +657,6 @@
 
 .mc-main .mc-list .event-date {
 	font-size: 16px;
-	font-size: 1rem;
 	font-weight: 600;
 }
 
@@ -652,7 +672,6 @@
 
 .mc-main .mc-list-extended {
 	font-size: 14px;
-	font-size: .875rem;
 	font-style: italic;
 }
 
