@@ -441,26 +441,24 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 					<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_$event->occur_id-title-$id'>" . $link_text . '</a>
 				</p>';
 			}
+			$location = ( '' === trim( $map . $address ) ) ? '' : '<div class="location">' . $map . $address . '</div>';
+			$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
 			$details = "\n"
-						. $close
-						. $inner_title
-						. $time_html
-						. $list_title
-						. $img
-						. "<div class='location'>"
-						. $map . $address
-						. '</div>'
-						. $description
-						. $short
-						. $link
-						. $status
-						. $tickets
-						. $author
-						. "<div class='sharing'>"
-						. $vcal . $gcal . $more
-						. '</div>'
-						. $return;
+						. PHP_EOL . $close
+						. PHP_EOL . $inner_title
+						. PHP_EOL . $time_html
+						. PHP_EOL . $list_title
+						. PHP_EOL . $img
+						. PHP_EOL . $location
+						. PHP_EOL . $description
+						. PHP_EOL . $short
+						. PHP_EOL . $link
+						. PHP_EOL . $status
+						. PHP_EOL . $tickets
+						. PHP_EOL . $author
+						. PHP_EOL . $sharing
+						. PHP_EOL . $return;
 		} else {
 			// If a custom template is in use.
 			$toggle  = ( 'calendar' === $type ) ? $close_button : '';
