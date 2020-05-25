@@ -233,25 +233,6 @@ function jd_draw_template( $array, $template, $type = 'list' ) {
 }
 
 /**
- * Test whether two dates are day-consecutive
- * not used per audit 3/1/2018
- *
- * @param string $current date string.
- * @param string $last_date previous date.
- *
- * @return boolean
- */
-function mc_dates_consecutive( $current, $last_date ) {
-	if ( strtotime( $last_date . '+ 1 day' ) === strtotime( $current ) ) {
-
-		return true;
-	} else {
-
-		return false;
-	}
-}
-
-/**
  * Compare two dates for diff
  *
  * @param string $start date string.
