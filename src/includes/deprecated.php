@@ -142,19 +142,6 @@ function jd_show_support_box() {
 }
 
 /**
- * Odd toggle. Last used in 1.9.8.
- *
- * @param int $int Any integer.
- *
- * @deprecated. 
- *
- * @return boolean
- */
-function my_calendar_is_odd( $int ) {
-	return ( $int & 1 );
-}
-
-/**
  * Get label for "forever" events (no longer exist.)
  *
  * @param string $recur Recurrence string (single character).
