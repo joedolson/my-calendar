@@ -290,7 +290,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$has_image       = ( '' !== $image ) ? ' has-image' : '';
 	$event_classes   = mc_event_classes( $event, $day_id, $type );
 	$nofollow        = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
-	$header         .= "<div id='$uid-$type-$id' class='$event_classes'>\n";
+	$header         .= "\n\n	<div id='$uid-$type-$id' class='$event_classes'>\n";
 
 	switch ( $type ) {
 		case 'calendar':
@@ -472,7 +472,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
 		$details   .= apply_filters( 'mc_after_event', '', $event, $type, $time );
-		$details   .= '\n	</div><!--end .details--></div>';
+		$details   .= "\n" . '	</div><!--end .details-->' . "\n" . '	</div>' . "\n";
 		$details    = apply_filters( 'mc_event_content', $details, $event, $type, $time );
 	} else {
 		$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) . $header . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
