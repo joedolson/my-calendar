@@ -225,28 +225,6 @@ function jd_draw_template( $array, $template, $type = 'list' ) {
 }
 
 /**
- * Function to find the start date of a week in a year
- *
- * @param integer $week The week number of the year.
- * @param integer $year The year of the week we need to calculate on.
- *
- * @return integer The unix timestamp of the date is returned
- */
-function get_week_date( $week, $year ) {
-	// Get the target week of the year with reference to the starting day of the year.
-	$start_of_week = ( get_option( 'start_of_week' ) === '1' || get_option( 'start_of_week' ) === '0' ) ? get_option( 'start_of_week' ) : 0;
-	$target_week   = strtotime( "$week week", strtotime( "1 January $year" ) );
-	$date_info     = getdate( $target_week );
-	$day_of_week   = $date_info['wday'];
-	// normal start day of the week is Monday.
-	$adjusted_date = $day_of_week - $start_of_week;
-	// Get the timestamp of that day.
-	$first_day = strtotime( "-$adjusted_date day", $target_week );
-
-	return $first_day;
-}
-
-/**
  * Add days to a given date
  *
  * @param string $givendate original date.
