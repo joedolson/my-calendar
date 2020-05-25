@@ -409,12 +409,18 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$url      = esc_url( $event->event_tickets );
 				$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
 				$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'>" . __( 'Buy Tickets', 'my-calendar' ) . '</a>' : '';
-				$tickets  = $info . $tickets;
+				if ( '' !== trim( $info . $tickets ) ) {
+					$tickets = $info . $tickets;
+				} else {
+					$tickets = '';
+				}
 			}
 
 			if ( 'true' === $display_short && 'single' !== $type ) {
-				$short = wpautop( stripcslashes( mc_kses_post( $event->event_short ) ), 1 );
-				$short = "<div class='shortdesc description'>$short</div>";
+				if ( '' !== trim( $event->event_short ) ) {
+					$short = wpautop( stripcslashes( mc_kses_post( $event->event_short ) ), 1 );
+					$short = "<div class='shortdesc description'>$short</div>";
+				}
 			}
 
 			$status     = apply_filters( 'mc_registration_state', '', $event );
