@@ -77,20 +77,10 @@ function mc_time_html( $e, $type ) {
 	$time_content = ( 'list' === $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $start . 'T' . $e->event_time . "' content='" . $start . 'T' . $e->event_time . "'>$current</span>";
 	// Handle cases.
 	if ( $has_time ) {
-		$time_content .= "\n
-		<span class='event-time dtstart'>
-			<time class='value-title' datetime='" . $start . 'T' . $e->event_time . "' title='" . $start . 'T' . $e->event_time . "'>" .
-				date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '
-			</time>
-		</span>';
+		$time_content .= "<span class='event-time dtstart'><time class='value-title' datetime='" . $start . 'T' . $e->event_time . "' title='" . $start . 'T' . $e->event_time . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>';
 		if ( 0 === (int) $e->event_hide_end ) {
 			if ( '' !== $e->event_endtime && $e->event_endtime !== $e->event_time ) {
-				$time_content .= "
-					<span class='time-separator'> &ndash; </span>$final
-					<span class='end-time dtend'>
-						<time class='value-title' datetime='" . $end . 'T' . $e->event_endtime . "' title='" . $end . 'T' . $e->event_endtime . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '
-						</time>
-					</span>';
+				$time_content .= "<span class='time-separator'> &ndash; </span>$final<span class='end-time dtend'><time class='value-title' datetime='" . $end . 'T' . $e->event_endtime . "' title='" . $end . 'T' . $e->event_endtime . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>';
 			}
 		}
 	} else {
@@ -104,7 +94,10 @@ function mc_time_html( $e, $type ) {
 	$meta  = ( 0 === (int) $e->event_hide_end ) ? "<meta itemprop='endDate' content='" . $start . 'T' . $e->event_endtime . "'/>" : '';
 	$meta .= '<meta itemprop="duration" content="' . mc_duration( $e ) . '"/>';
 
-	$time = "<div class='time-block'><p>$time_content</p>$meta</div>";
+	$time = "
+	<div class='time-block'>
+		<p>$time_content</p>$meta
+	</div>";
 
 	return apply_filters( 'mcs_time_block', $time, $e );
 }
@@ -338,11 +331,11 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$group_class   = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
 	$hlevel        = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
 	$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
-	$header       .= ( 'single' !== $type && 'list' !== $type ) ? "<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n" : '';
+	$header       .= ( 'single' !== $type && 'list' !== $type ) ? "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n" : '';
 	$event_title   = ( 'single' === $type ) ? apply_filters( 'mc_single_event_title', $event_title, $event ) : $event_title;
-	$title         = ( 'single' === $type && ! is_singular( 'mc-events' ) ) ? "<h2 class='event-title summary'>$image $event_title</h2>\n" : '<span class="summary screen-reader-text">' . $event_title . '</span>';
+	$title         = ( 'single' === $type && ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image $event_title</h2>\n" : '	<span class="summary screen-reader-text">' . $event_title . '</span>';
 	$title         = apply_filters( 'mc_event_title', $title, $event, $event_title, $image );
-	$header       .= ( false === stripos( $title, 'summary' ) ) ? '<span class="summary screen-reader-text">' . strip_tags( $title ) . '</span>' : $title;
+	$header       .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $title ) . '</span>' : $title;
 
 	$close_button = mc_close_button( "$uid-$type-details-$id" );
 
@@ -357,12 +350,12 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$time_html = mc_time_html( $event, $type );
 			if ( 'list' === $type ) {
 				$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
-				$list_title = "<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
+				$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 			}
 			if ( 'true' === $display_author ) {
 				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
 					$e      = get_userdata( $event->event_author );
-					$author = '<p class="event-author">' . __( 'Posted by', 'my-calendar' ) . ' <span class="author-name">' . $e->display_name . "</span></p>\n";
+					$author = '	<p class="event-author">' . __( 'Posted by', 'my-calendar' ) . ' <span class="author-name">' . $e->display_name . "</span></p>\n";
 				}
 			}
 
@@ -372,7 +365,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				// Translators: Event title.
 				$aria = " aria-label='" . esc_attr( sprintf( __( 'Details about %s', 'my-calendar' ), strip_tags( $event_title ) ) ) . "'";
 				if ( _mc_is_url( $details_link ) ) {
-					$more = "<p class='mc_details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
+					$more = "	<p class='mc_details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
 				} else {
 					$more = '';
 				}
@@ -380,11 +373,11 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
 			if ( 'true' === $display_gcal ) {
-				$gcal = "<p class='gcal'>" . mc_draw_template( $data, '{gcal_link}' ) . '</p>';
+				$gcal = "	<p class='gcal'>" . mc_draw_template( $data, '{gcal_link}' ) . '</p>';
 			}
 
 			if ( 'true' === $display_vcal ) {
-				$vcal = "<p class='ical'>" . mc_draw_template( $data, '{ical_html}' ) . '</p>';
+				$vcal = "	<p class='ical'>" . mc_draw_template( $data, '{ical_html}' ) . '</p>';
 			}
 
 			if ( 'true' === $display_image ) {
@@ -394,13 +387,13 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			if ( 'calendar' === $type && 'true' === $display_title ) {
 				// In all cases, this is semantically a duplicate of the title, but can be beneficial for sighted users.
 				$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
-				$inner_title = '<h4 class="mc-title" aria-hidden="true">' . $event_title . '</h4>';
+				$inner_title = '	<h4 class="mc-title" aria-hidden="true">' . $event_title . '</h4>';
 			}
 
 			if ( 'true' === $display_desc || 'single' === $type ) {
 				if ( '' !== trim( $event->event_desc ) ) {
 					$description = wpautop( stripcslashes( mc_kses_post( $event->event_desc ) ), 1 );
-					$description = "<div class='longdesc description' itemprop='description'>$description</div>";
+					$description = "	<div class='longdesc description' itemprop='description'>$description</div>";
 				}
 			}
 
@@ -419,13 +412,13 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			if ( 'true' === $display_short && 'single' !== $type ) {
 				if ( '' !== trim( $event->event_short ) ) {
 					$short = wpautop( stripcslashes( mc_kses_post( $event->event_short ) ), 1 );
-					$short = "<div class='shortdesc description'>$short</div>";
+					$short = "	<div class='shortdesc description'>$short</div>";
 				}
 			}
 
 			$status     = apply_filters( 'mc_registration_state', '', $event );
 			$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ) );
-			$return     = ( 'single' === $type ) ? "<p class='view-full'><a href='$return_url'>" . __( 'View full calendar', 'my-calendar' ) . '</a></p>' : '';
+			$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . __( 'View full calendar', 'my-calendar' ) . '</a></p>' : '';
 
 			if ( ! mc_show_details( $time, $type ) ) {
 				$description = '';
@@ -445,28 +438,28 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$link_template  = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
 				$link_text      = mc_draw_template( $data, $link_template );
 				$link           = "
-				<p>
-					<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_$event->occur_id-title-$id'>" . $link_text . '</a>
-				</p>';
+	<p>
+		<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_$event->occur_id-title-$id'>" . $link_text . '</a>
+	</p>';
 			}
-			$location = ( '' === trim( $map . $address ) ) ? '' : '<div class="location">' . $map . $address . '</div>';
-			$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '<div class="sharing">' . $vcal . $gcal . $more . '</div>';
+			$location = ( '' === trim( $map . $address ) ) ? '' : '	<div class="location">' . $map . $address . '</div>';
+			$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
 			$details = "\n"
-						. PHP_EOL . $close
-						. PHP_EOL . $inner_title
-						. PHP_EOL . $time_html
-						. PHP_EOL . $list_title
-						. PHP_EOL . $img
-						. PHP_EOL . $location
-						. PHP_EOL . $description
-						. PHP_EOL . $short
-						. PHP_EOL . $link
-						. PHP_EOL . $status
-						. PHP_EOL . $tickets
-						. PHP_EOL . $author
-						. PHP_EOL . $sharing
-						. PHP_EOL . $return;
+						. $close
+						. $inner_title
+						. $time_html
+						. $list_title
+						. $img
+						. $location
+						. $description
+						. $short
+						. $link
+						. $status
+						. $tickets
+						. $author
+						. $sharing
+						. $return;
 		} else {
 			// If a custom template is in use.
 			$toggle  = ( 'calendar' === $type ) ? $close_button : '';
@@ -474,12 +467,12 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		}
 
 		$img_class  = ( '' !== $img ) ? ' has-image' : ' no-image';
-		$container  = "<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "' itemscope itemtype='http://schema.org/Event'>\n";
-		$container .= "<meta itemprop='name' content='" . esc_attr( strip_tags( $event->event_title ) ) . "' />";
+		$container  = "	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "' itemscope itemtype='http://schema.org/Event'>\n";
+		$container .= "	<meta itemprop='name' content='" . esc_attr( strip_tags( $event->event_title ) ) . "' />";
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
 		$details   .= apply_filters( 'mc_after_event', '', $event, $type, $time );
-		$details   .= '</div><!--end .details--></div>';
+		$details   .= '	</div><!--end .details--></div>';
 		$details    = apply_filters( 'mc_event_content', $details, $event, $type, $time );
 	} else {
 		$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) . $header . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
@@ -720,7 +713,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 		$recurs    = str_split( $event->event_recur, 1 );
 		$recur     = $recurs[0];
 		$referer   = urlencode( mc_get_current_url() );
-		$edit      = "<div class='mc_edit_links'><p>";
+		$edit      = "	<div class='mc_edit_links'><p>";
 		if ( 'S' === $recur ) {
 			$edit .= "<a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . "</a>$groupedit";
 		} else {
