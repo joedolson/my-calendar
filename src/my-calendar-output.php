@@ -445,21 +445,36 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$location = ( '' === trim( $map . $address ) ) ? '' : '	<div class="location">' . $map . $address . '</div>';
 			$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
+			$close       = ( '' !== $close ) ? PHP_EOL . '	' . $close : '';
+			$inner_title = ( $inner_title ) ? PHP_EOL . '	' . $inner_title : '';
+			$time_html   = ( $time_html ) ? PHP_EOL . '	' . $time_html : '';
+			$list_title  = ( $list_title ) ? PHP_EOL . '	' . $list_title : '';
+			$img         = ( $img ) ? PHP_EOL . '	' . $img : '';
+			$location    = ( $location ) ? PHP_EOL . '	' . $location : '';
+			$description = ( $description ) ? PHP_EOL . '	' . $description : '';
+			$short       = ( $short ) ? PHP_EOL . '	' . $short : '';
+			$link        = ( $link ) ? PHP_EOL . '	' . $link : '';
+			$status      = ( $status ) ? PHP_EOL . '	' . $status : '';
+			$tickets     = ( $tickets ) ? PHP_EOL . '	' . $tickets : '';
+			$author      = ( $author ) ? PHP_EOL . '	' . $author : '';
+			$sharing     = ( $sharing ) ? PHP_EOL . '	' . $sharing : '';
+			$return      = ( $return ) ? PHP_EOL . '	' . $return : '';
+
 			$details = "\n"
-						. ( $close ) ? PHP_EOL . '	' . $close : ''
-						. ( $inner_title ) ? PHP_EOL . '	' . $inner_title : ''
-						. ( $time_html ) ? PHP_EOL . '	' . $time_html : ''
-						. ( $list_title ) ? PHP_EOL . '	' . $list_title : ''
-						. ( $img ) ? PHP_EOL . '	' . $img : ''
-						. ( $location ) ? PHP_EOL . '	' . $location : ''
-						. ( $description ) ? PHP_EOL . '	' . $description : ''
-						. ( $short ) ? PHP_EOL . '	' . $short : ''
-						. ( $link ) ? PHP_EOL . '	' . $link : ''
-						. ( $status ) ? PHP_EOL . '	' . $status : ''
-						. ( $tickets ) ? PHP_EOL . '	' . $tickets : ''
-						. ( $author ) ? PHP_EOL . '	' . $author : ''
-						. ( $sharing ) ? PHP_EOL . '	' . $sharing : ''
-						. ( $return ) ? PHP_EOL . '	' . $return : '';
+						. $close
+						. $inner_title
+						. $time_html
+						. $list_title
+						. $img
+						. $location
+						. $description
+						. $short
+						. $link
+						. $status
+						. $tickets
+						. $author
+						. $sharing
+						. $return;
 		} else {
 			// If a custom template is in use.
 			$toggle  = ( 'calendar' === $type ) ? $close_button : '';
