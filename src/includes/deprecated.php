@@ -225,31 +225,6 @@ function jd_draw_template( $array, $template, $type = 'list' ) {
 }
 
 /**
- * Compare two dates for diff
- *
- * @param string $start date string.
- * @param string $end datee string.
- *
- * @deprecated since 2.5.0
- *
- * @return diff
- */
-function jd_date_diff( $start, $end = 'NOW' ) {
-	$sdate = strtotime( $start );
-	$edate = strtotime( $end );
-
-	$time = $edate - $sdate;
-	if ( $time < 86400 && $time > - 86400 ) {
-		return false;
-	} else {
-		$pday   = ( $edate - $sdate ) / 86400;
-		$preday = explode( '.', $pday );
-
-		return $preday[0];
-	}
-}
-
-/**
  * Function to find the start date of a week in a year
  *
  * @param integer $week The week number of the year.
