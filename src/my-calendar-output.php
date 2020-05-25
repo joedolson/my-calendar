@@ -446,20 +446,20 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
 			$details = "\n"
-						. $close
-						. $inner_title
-						. $time_html
-						. $list_title
-						. $img
-						. $location
-						. $description
-						. $short
-						. $link
-						. $status
-						. $tickets
-						. $author
-						. $sharing
-						. $return;
+						. ( $close ) ? PHP_EOL . '	' . $close : ''
+						. ( $inner_title ) ? PHP_EOL . '	' . $inner_title : ''
+						. ( $time_html ) ? PHP_EOL . '	' . $time_html : ''
+						. ( $list_title ) ? PHP_EOL . '	' . $list_title : ''
+						. ( $img ) ? PHP_EOL . '	' . $img : ''
+						. ( $location ) ? PHP_EOL . '	' . $location : ''
+						. ( $description ) ? PHP_EOL . '	' . $description : ''
+						. ( $short ) ? PHP_EOL . '	' . $short : ''
+						. ( $link ) ? PHP_EOL . '	' . $link : ''
+						. ( $status ) ? PHP_EOL . '	' . $status : ''
+						. ( $tickets ) ? PHP_EOL . '	' . $tickets : ''
+						. ( $author ) ? PHP_EOL . '	' . $author : ''
+						. ( $sharing ) ? PHP_EOL . '	' . $sharing : ''
+						. ( $return ) ? PHP_EOL . '	' . $return : '';
 		} else {
 			// If a custom template is in use.
 			$toggle  = ( 'calendar' === $type ) ? $close_button : '';
@@ -467,12 +467,12 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		}
 
 		$img_class  = ( '' !== $img ) ? ' has-image' : ' no-image';
-		$container  = "	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "' itemscope itemtype='http://schema.org/Event'>\n";
+		$container  = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "' itemscope itemtype='http://schema.org/Event'>\n";
 		$container .= "	<meta itemprop='name' content='" . esc_attr( strip_tags( $event->event_title ) ) . "' />";
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
 		$details   .= apply_filters( 'mc_after_event', '', $event, $type, $time );
-		$details   .= '	</div><!--end .details--></div>';
+		$details   .= '\n	</div><!--end .details--></div>';
 		$details    = apply_filters( 'mc_event_content', $details, $event, $type, $time );
 	} else {
 		$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) . $header . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
@@ -490,7 +490,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
  */
 function mc_close_button( $controls ) {
 	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
-	$close_button = "<button type='button' aria-controls='$controls' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
+	$close_button = "	<button type='button' aria-controls='$controls' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
 
 	return $close_button;
 }
@@ -1824,10 +1824,10 @@ function my_calendar( $args ) {
 			if ( 'list' === $params['format'] ) {
 				$body .= "<ul id='list-$id' class='mc-list'>";
 			} else {
-				$body .= ( 'tr' === $tr ) ? "<thead>\n" : '<div class="mc-table-body">';
-				$body .= "<$tr class='mc-row'>\n";
+				$body .= ( 'tr' === $tr ) ? "<thead>" : '<div class="mc-table-body">';
+				$body .= "\n	<$tr class='mc-row'>\n";
 				if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
-					$body .= "<th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . '</th>';
+					$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
 				}
 				for ( $i = 0; $i <= 6; $i ++ ) {
 					if ( 0 === (int) $start_of_week ) {
@@ -1837,11 +1837,11 @@ function my_calendar( $args ) {
 					}
 					$dayclass = sanitize_html_class( $abbrevs[ $i ] );
 					if ( ( 'weekend-heading' === $class && $show_weekends ) || 'weekend-heading' !== $class ) {
-						$body .= "<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
+						$body .= "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
 					}
 				}
-				$body .= "\n</$tr>\n";
-				$body .= ( 'tr' === $tr ) ? "</thead>\n<tbody>" : '';
+				$body .= "	</$tr>\n";
+				$body .= ( 'tr' === $tr ) ? "</thead>\n<tbody>\n" : '';
 			}
 			$odd = 'odd';
 
@@ -1898,7 +1898,7 @@ function my_calendar( $args ) {
 								$link    = mc_build_mini_url( $start, $params['category'], $events, $args, $date );
 								$element = "a href='$link'";
 								$close   = 'a';
-								$trigger = 'trigger';
+								$trigger = ' trigger';
 							} else {
 								$element = 'span';
 								$close   = 'span';
@@ -1916,18 +1916,18 @@ function my_calendar( $args ) {
 										$title = '';
 									}
 									if ( '' !== $event_output ) {
-										$body .= "<li id='$params[format]-$date_is' $ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( date_i18n( $date_format, $start ) ) . "$title</strong>" . $event_output . '</li>';
+										$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( date_i18n( $date_format, $start ) ) . "$title</strong>" . $event_output . '</li>';
 										$odd   = ( 'odd' === $odd ) ? 'even' : 'odd';
 									}
 								} else {
-									$body .= "<$td id='$params[format]-$date_is' $ariacurrent class='$dateclass $weekend_class $monthclass $events_class day-with-date'>" . "<$element class='mc-date $trigger'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></$close>" . $event_output . "</$td>\n";
+									$body .= "<$td id='$params[format]-$date_is'$ariacurrent class='$dateclass $weekend_class $monthclass $events_class day-with-date'>" . "\n	<$element class='mc-date$trigger'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></$close>" . $event_output . "\n</$td>\n";
 								}
 							}
 						} else {
 							// If there are no events on this date within current params.
 							if ( 'list' !== $params['format'] ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
-								$body         .= "<$td $ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></$td>\n";
+								$body         .= "<$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span>\n</$td>\n";
 							} else {
 								if ( true === $show_all ) {
 									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( date_i18n( $date_format, $start ) ) . '</strong></li>';
@@ -1938,7 +1938,7 @@ function my_calendar( $args ) {
 
 						if ( mc_date( 'N', $start, false ) === (string) $end_of_week || ( mc_date( 'N', $start, false ) === '5' && ! $show_weekends ) ) {
 							if ( 'list' !== $params['format'] ) {
-								$body .= "\n</$tr>\n"; // End of 'is beginning of week'.
+								$body .= "</$tr>\n<!-- End Event Row -->\n"; // End of 'is beginning of week'.
 							}
 							$week_number_shown = false;
 						}
