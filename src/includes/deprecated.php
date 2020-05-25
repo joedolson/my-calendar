@@ -250,23 +250,6 @@ function mc_dates_consecutive( $current, $last_date ) {
 		return false;
 	}
 }
-/**
- * Reverse Function to compare datetime in event objects
- *
- * @param object $b Event object.
- * @param object $a Event object.
- *
- * @return int (ternary value)
- */
-function my_calendar_reverse_datetime_cmp( $b, $a ) {
-	$event_dt_a = strtotime( $a->occur_begin );
-	$event_dt_b = strtotime( $b->occur_begin );
-	if ( $event_dt_a === $event_dt_b ) {
-		return 0;
-	}
-
-	return ( $event_dt_a < $event_dt_b ) ? - 1 : 1;
-}
 
 /**
  * Compare two dates for diff
@@ -274,7 +257,7 @@ function my_calendar_reverse_datetime_cmp( $b, $a ) {
  * @param string $start date string.
  * @param string $end datee string.
  *
- * @deprecated
+ * @deprecated since 2.5.0
  *
  * @return diff
  */
