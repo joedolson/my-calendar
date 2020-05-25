@@ -73,8 +73,6 @@ function mc_globals() {
 	$mini_template = addslashes(
 		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time value-title\' title=\'{dtend}\'>" after="</span>"}</span>
 
-		<h3 class="event-title">{title}</h3>
-
 		<div class="sub-details">
 		{excerpt before="<div class=\'excerpt\'>" after="</div>"}
 		{hcard}
