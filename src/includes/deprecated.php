@@ -223,19 +223,3 @@ function jd_draw_template( $array, $template, $type = 'list' ) {
 
 	return mc_draw_template( $array, $template, $type );
 }
-
-/**
- * Add days to a given date
- *
- * @param string $givendate original date.
- * @param int    $day days to add.
- *
- * @return new date
- */
-function add_days_to_date( $givendate, $day = 0 ) {
-	$cd      = strtotime( $givendate );
-	$time    = mktime( mc_date( 'h', $cd ), mc_date( 'i', $cd ), mc_date( 's', $cd ), mc_date( 'm', $cd ), mc_date( 'd', $cd ) + $day, mc_date( 'Y', $cd ) );
-	$newdate = mc_date( 'Y-m-d h:i:s', $time );
-
-	return $newdate;
-}
