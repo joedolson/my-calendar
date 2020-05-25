@@ -398,8 +398,10 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			}
 
 			if ( 'true' === $display_desc || 'single' === $type ) {
-				$description = wpautop( stripcslashes( mc_kses_post( $event->event_desc ) ), 1 );
-				$description = "<div class='longdesc description' itemprop='description'>$description</div>";
+				if ( '' !== trim( $event->event_desc ) ) {
+					$description = wpautop( stripcslashes( mc_kses_post( $event->event_desc ) ), 1 );
+					$description = "<div class='longdesc description' itemprop='description'>$description</div>";
+				}
 			}
 
 			if ( 'true' === $display_reg ) {
