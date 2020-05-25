@@ -1839,7 +1839,7 @@ function my_calendar( $args ) {
 			if ( 'list' === $params['format'] ) {
 				$body .= "<ul id='list-$id' class='mc-list'>";
 			} else {
-				$body .= ( 'tr' === $tr ) ? "<thead>" : '<div class="mc-table-body">';
+				$body .= ( 'tr' === $tr ) ? '<thead>' : '<div class="mc-table-body">';
 				$body .= "\n	<$tr class='mc-row'>\n";
 				if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
 					$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";

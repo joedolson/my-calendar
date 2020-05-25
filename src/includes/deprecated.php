@@ -42,7 +42,8 @@ function jd_show_support_box() {
 	$purchase_url = 'https://www.joedolson.com/awesome/my-calendar-pro/';
 	$check_url    = 'https://www.joedolson.com/login/';
 	$add          = array(
-		'My Calendar Pro out of date!' => '<p>' . __( 'The version of My Calendar Pro (or My Calendar Submissions) you have installed is very out of date!', 'my-calendar' ) . '</p><p>' . __( 'The latest version of My Calendar Pro is the only version recommended for compatibility with My Calendar. Please <a href="$1%s">purchase an upgrade</a> or <a href="$2%s">login to check your license status</a>!', 'my-calendar' ) . '</p>',
+		// Translators: Purchase URL, account URL.
+		'My Calendar Pro out of date!' => '<p>' . __( 'The version of My Calendar Pro (or My Calendar Submissions) you have installed is very out of date!', 'my-calendar' ) . '</p><p>' . __( 'The latest version of My Calendar Pro is the only version recommended for compatibility with My Calendar. Please <a href="%1$s">purchase an upgrade</a> or <a href="%2$s">login to check your license status</a>!', 'my-calendar' ) . '</p>',
 	);
 	mc_show_sidebar( '', $add, true );
 }
