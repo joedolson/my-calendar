@@ -57,6 +57,7 @@ div.site-content, table {
 .mc-main input[type=submit], .mc-main input[type=button], .mc-main button {
 	margin: 0 !important;
 	padding: 0 !important;
+	text-transform: none;
 }
 
 .mc-main input, .mc-main select, .mc-main a img {
