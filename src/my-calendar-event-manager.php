@@ -1578,7 +1578,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 									</ul>
 									<p><button type='button' class='add-occurrence' aria-expanded="false"><span class='dashicons' aria-hidden='true'> </span><?php _e( 'Add another date', 'my-calendar' ); ?></button></p>
 									<div class='mc_add_new'>
-									<?php echo mc_recur_datetime_input(); ?>
+									<?php echo mc_recur_datetime_input( $data ); ?>
 									<button type='button' class='save-occurrence'><?php _e( 'Add Date', 'my-calendar' ); ?></button>
 									</div>
 								</div>
@@ -3208,13 +3208,15 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 /**
  * Date time inputs to add a single instance to recurring event info
  *
+ * @param object $data Source event data.
+ *
  * @return string form HTML
  */
-function mc_recur_datetime_input() {
-	$event_begin = mc_date( 'Y-m-d' );
-	$event_end   = '';
-	$starttime   = '';
-	$endtime     = '';
+function mc_recur_datetime_input( $data ) {
+	$event_begin = ( $data->event_begin ) ? $data->event_begin : mc_date( 'Y-m-d' );
+	$event_end   = ( $data->event_end ) ? $data->event_end : '';
+	$starttime   = ( $data->event_time ) ? $data->event_time : '';
+	$endtime     = ( $data->event_endtime ) ? $data->event_endtime : '';
 
 	$form = '<p>
 		<label for="r_begin">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <input type="text" id="r_begin" class="mc-datepicker" name="recur_begin[]" size="10" value="" data-value="' . esc_attr( $event_begin ) . '" />
