@@ -719,9 +719,10 @@ select[name="event_recur"] {
 }
 
 .mc_response {
-	padding: .25em;
+	padding: .5em;
 	background: #ffa;
 	color: #000;
+	border: 1px solid burlywood;
 }
 
 tr.problem {
