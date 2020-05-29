@@ -942,6 +942,12 @@ TimePicker.prototype.nodes = function( isOpen ) {
                 settings.clear,
                 settings.klass.buttonClear,
                 'type=button data-clear=1' + ( isOpen ? '' : ' disabled' ) + ' ' +
+                _.ariaAttr({ controls: clock.$node[0].id }) ) +
+            _.node(
+                'button',
+                'Close',
+                'picker__button--close',
+                'type=button data-close=1' + ( isOpen ? '' : ' disabled' ) + ' ' +
                 _.ariaAttr({ controls: clock.$node[0].id })
             ),
             '', _.ariaAttr({ role: 'presentation' })

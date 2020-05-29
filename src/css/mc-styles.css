@@ -328,13 +328,16 @@ strong.label {
 	margin: 0;
 }
 
-.picker__day:focus {
-	background: #b1dcfb;
+.picker-container #mc_event_endtime_root .picker__holder .picker__button--clear,
+.picker-container #mc_event_time_root .picker__holder .picker__button--clear,
+.picker-container #mc_event_endtime_root .picker__holder .picker__button--close,
+.picker-container #mc_event_time_root .picker__holder .picker__button--close {
+	width: 50% !important;
 }
 
 .picker-container #mc_event_endtime_root .picker__holder .picker__button--clear,
 .picker-container #mc_event_time_root .picker__holder .picker__button--clear {
-	width: 100% !important;
+	float: left;
 	text-transform: none;
 }
 
