@@ -309,6 +309,35 @@ strong.label {
 	height: auto;
 }
 
+.picker-container .picker__list {
+	padding: .75em 0 0;
+}
+
+.picker-container .picker__weekday {
+	font-size: .9em;
+	color: #333;
+}
+
+.picker-container .picker__holder .picker__button--today,
+.picker-container .picker__holder .picker__button--close,
+.picker-container .picker__holder .picker__button--clear {
+	font-size: 1.1em;
+	font-weight: 400;
+	color: #444;
+	padding: .5em 1em;
+	margin: 0;
+}
+
+.picker__day:focus {
+	background: #b1dcfb;
+}
+
+.picker-container #mc_event_endtime_root .picker__holder .picker__button--clear,
+.picker-container #mc_event_time_root .picker__holder .picker__button--clear {
+	width: 100% !important;
+	text-transform: none;
+}
+
 .my-calendar-admin .counter {
 	padding-right: 6px;
 	border-right: 16px solid green;
