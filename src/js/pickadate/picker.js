@@ -852,7 +852,8 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
         }
         else {
             setTimeout(function() {
-                P.$holder.eq(0).focus()
+               // Mod by JCD. Prevent focus from moving to calendar input, which is not accessible.
+               // P.$holder.eq(0).focus()
             }, 0)
         }
     }
