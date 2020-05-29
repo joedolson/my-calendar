@@ -332,13 +332,6 @@ strong.label {
 	background: #b1dcfb;
 }
 
-.picker__list-item:focus {
-	background: #b1dcfb;
-	border-color: #0098ec;
-	z-index: 10;
-	color: #000;
-}
-
 .picker-container #mc_event_endtime_root .picker__holder .picker__button--clear,
 .picker-container #mc_event_time_root .picker__holder .picker__button--clear {
 	width: 100% !important;
