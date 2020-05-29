@@ -125,6 +125,7 @@ span.mc-notice {
 
 .clonedInput {
 	margin-bottom: 10px;
+	padding-bottom: 10px;
 	border-bottom: 1px solid #ddd
 }
 
@@ -288,6 +289,15 @@ strong.label {
 
 .wp-picker-container {
 	display: inline-block;
+}
+
+.picker-container {
+	position: relative;
+	display: inline-block;
+}
+
+.picker {
+	min-width: 400px;
 }
 
 .wp-picker-holder {

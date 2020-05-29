@@ -473,9 +473,9 @@ function my_calendar_add_styles() {
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ) );
 
 		if ( 'toplevel_page_my-calendar' === $id ) {
-			wp_enqueue_style( 'mc-pickadate-default', plugins_url( 'js/pickadate/themes/default.css', __FILE__ ) );
-			wp_enqueue_style( 'mc-pickadate-date', plugins_url( 'js/pickadate/themes/default.date.css', __FILE__ ) );
-			wp_enqueue_style( 'mc-pickadate-time', plugins_url( 'js/pickadate/themes/default.time.css', __FILE__ ) );
+			wp_enqueue_style( 'mc-pickadate-default', plugins_url( 'js/pickadate/themes/classic.css', __FILE__ ) );
+			wp_enqueue_style( 'mc-pickadate-date', plugins_url( 'js/pickadate/themes/classic.date.css', __FILE__ ) );
+			wp_enqueue_style( 'mc-pickadate-time', plugins_url( 'js/pickadate/themes/classic.time.css', __FILE__ ) );
 		}
 	}
 }

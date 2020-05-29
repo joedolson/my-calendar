@@ -3187,20 +3187,20 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	$hide         = ( $has_data && '1' === $data->event_hide_end ) ? ' checked="checked"' : '';
 	$allday_label = ( $has_data ) ? mc_notime_label( $data ) : get_option( 'mc_notime_text' );
 
-	$form .= '<p>
-		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <input type="text" id="mc_event_date" class="mc-datepicker" name="event_begin[]" size="10" value="" data-value="' . esc_attr( $event_begin ) . '" />
+	$form .= '<div>
+		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <div class="picker-container"><input type="text" id="mc_event_date" class="mc-datepicker" name="event_begin[]" size="10" value="" data-value="' . esc_attr( $event_begin ) . '" /></div>
 		<label for="mc_event_time">' . __( 'From', 'my-calendar' ) . '</label>
-		<input type="text" id="mc_event_time" class="mc-timepicker" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
+		<div class="picker-container"><input type="text" id="mc_event_time" class="mc-timepicker" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" /></div>
 		<label for="mc_event_endtime">' . __( 'To', 'my-calendar' ) . '</label>
-		<input type="text" id="mc_event_endtime" class="mc-timepicker" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
-	</p>
+		<div class="picker-container"><input type="text" id="mc_event_endtime" class="mc-timepicker" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" /></div>
+	</div>
 	<ul>
 		<li><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
 		<li><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
 	</ul>
-	<p>
-		<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <input type="text" name="event_end[]" id="mc_event_enddate" class="mc-datepicker" size="10" value="" data-value="' . esc_attr( $event_end ) . '" />
-	</p>';
+	<div>
+		<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <div class="picker-container"><input type="text" name="event_end[]" id="mc_event_enddate" class="mc-datepicker" size="10" value="" data-value="' . esc_attr( $event_end ) . '" /></div>
+	</div>';
 
 	return $form;
 }
@@ -3214,7 +3214,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
  */
 function mc_recur_datetime_input( $data ) {
 	$event_begin = ( $data->event_begin ) ? $data->event_begin : mc_date( 'Y-m-d' );
-	$event_end   = ( $data->event_end ) ? $data->event_end : '';
+	$event_end   = ( $data->event_end && $data->event_end !== $data->event_begin ) ? $data->event_end : '';
 	$starttime   = ( $data->event_time ) ? $data->event_time : '';
 	$endtime     = ( $data->event_endtime ) ? $data->event_endtime : '';
 
