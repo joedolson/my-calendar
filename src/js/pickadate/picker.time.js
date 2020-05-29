@@ -923,7 +923,7 @@ TimePicker.prototype.nodes = function( isOpen ) {
 
                         return klasses.join( ' ' )
                     })( [ settings.klass.listItem ] ),
-                    'data-pick=' + loopedTime.pick + ' ' + _.ariaAttr({
+                    'data-pick=' + loopedTime.pick + ' tabindex="0"' + _.ariaAttr({
                         role: 'option',
                         label: formattedTime,
                         selected: isSelected && clock.$node.val() === formattedTime ? true : null,
