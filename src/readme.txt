@@ -91,6 +91,9 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add style variables with category colors to style output.
 * Add new default stylesheet: Twentytwenty.css
 * Change event timestamps to use a real UTC timestamp for reference.
+* Update Pickadate to 3.6.4. Resolves some data bugs, but introduces a major accessibility bug.
+* Customizations to Pickadate 3.6.4 to repair accessibility: don't move focus to picker, add 'close' button to time picker.
+* Switch Pickadate to classic theme with customizations.
 * Improvements to output code layout.
 * Eliminate empty HTML wrappers in content.
 * Switch from using date() to gmdate().
