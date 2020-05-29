@@ -95,7 +95,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
                 // and set as readonly to prevent keyboard popup.
                 ELEMENT.autofocus = ELEMENT == getActiveElement()
                 ELEMENT.readOnly = !SETTINGS.editable
-                SETTINGS.id = ELEMENT.id = ELEMENT.id || STATE.id
+                ELEMENT.id = ELEMENT.id || STATE.id
                 if ( ELEMENT.type != 'text' ) {
                     ELEMENT.type = 'text'
                 }
@@ -237,6 +237,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                 // Add the “active” class.
                 $ELEMENT.addClass( CLASSES.active )
+                aria( ELEMENT, 'expanded', true )
 
                 // * A Firefox bug, when `html` has `overflow:hidden`, results in
                 //   killing transitions :(. So add the “opened” state on the next tick.
@@ -374,6 +375,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
 
                 // Remove the “active” class.
                 $ELEMENT.removeClass( CLASSES.active )
+                aria( ELEMENT, 'expanded', false )
 
                 // * A Firefox bug, when `html` has `overflow:hidden`, results in
                 //   killing transitions :(. So remove the “opened” state on the next tick.
@@ -677,6 +679,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
         // Update the aria attributes.
         aria(ELEMENT, {
             haspopup: true,
+            expanded: false,
             readonly: false,
             owns: ELEMENT.id + '_root'
         })
