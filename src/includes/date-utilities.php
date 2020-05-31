@@ -22,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_dateclass( $current ) {
 	$dayclass = sanitize_html_class( strtolower( date_i18n( 'l', $current ) ) ) . ' ' . sanitize_html_class( strtolower( date_i18n( 'D', $current ) ) );
-	if ( current_time( 'Ymd' ) === mc_date( 'Ymd', $current ) ) {
+	if ( current_time( 'Ymd' ) === mc_date( 'Ymd', $current, false ) ) {
 		$dateclass = 'current-day';
-	} elseif ( my_calendar_date_comp( current_time( 'Y-m-d' ), mc_date( 'Y-m-d', $current ) ) ) {
+	} elseif ( my_calendar_date_comp( current_time( 'Y-m-d' ), mc_date( 'Y-m-d', $current, false ) ) ) {
 		$dateclass = 'future-day';
 	} else {
 		$dateclass = 'past-day past-date'; // stupid legacy classes.
