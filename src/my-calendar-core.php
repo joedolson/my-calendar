@@ -782,11 +782,11 @@ function mc_do_upgrades( $upgrade_path ) {
 	}
 }
 
-add_action( 'admin_bar_menu', 'my_calendar_admin_bar', 200 );
+add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
 /**
  * Set up adminbar links
  */
-function my_calendar_admin_bar() {
+function mc_admin_bar() {
 	global $wp_admin_bar;
 	if ( mc_get_uri( 'boolean' ) ) {
 		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
