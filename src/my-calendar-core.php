@@ -313,7 +313,7 @@ function mc_admin_body_class( $classes ) {
 /**
  * Write custom JS in admin head.
  */
-function my_calendar_write_js() {
+function mc_write_js() {
 	if ( isset( $_GET['page'] ) && ( 'my-calendar' === $_GET['page'] || 'my-calendar-locations' === $_GET['page'] ) ) {
 		?>
 		<script>
