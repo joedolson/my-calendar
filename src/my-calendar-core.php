@@ -466,7 +466,7 @@ function mc_footer_js() {
 /**
  * Add stylesheets to My Calendar admin screens
  */
-function my_calendar_add_styles() {
+function mc_add_styles() {
 	global $current_screen;
 	$id = $current_screen->id;
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
