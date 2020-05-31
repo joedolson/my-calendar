@@ -192,7 +192,7 @@ function mc_register_styles() {
 /**
  * Publically written head styles & scripts
  */
-function my_calendar_head() {
+function mc_head() {
 	global $wp_query;
 	$array = array();
 
