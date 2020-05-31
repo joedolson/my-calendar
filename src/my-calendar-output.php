@@ -74,12 +74,12 @@ function mc_time_html( $e, $type ) {
 		$final   = ( $e->event_end !== $e->event_begin ) ? date_i18n( $date_format, strtotime( $e->occur_end ) ) : $final;
 	}
 	// Do not show info in list view.
-	$offset  = get_option( 'gmt_offset' );
-	$hours   = (int) $offset;
-	$minutes = abs( ( $offset - (int) $offset ) * 60 );
-	$offset  = sprintf( '%+03d:%02d', $hours, $minutes );
-	$dtstart = $start . 'T' . $e->event_time . $offset;
-	$dtend   = $end . 'T' . $e->event_endtime . $offset;
+	$offset       = get_option( 'gmt_offset' );
+	$hours        = (int) $offset;
+	$minutes      = abs( ( $offset - (int) $offset ) * 60 );
+	$offset       = sprintf( '%+03d:%02d', $hours, $minutes );
+	$dtstart      = $start . 'T' . $e->event_time . $offset;
+	$dtend        = $end . 'T' . $e->event_endtime . $offset;
 	$time_content = ( 'list' === $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $dtstart . "' content='" . $dtstart . "'>$current</span>";
 	// Handle cases.
 	if ( $has_time ) {
