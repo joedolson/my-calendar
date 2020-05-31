@@ -74,13 +74,19 @@ function mc_time_html( $e, $type ) {
 		$final   = ( $e->event_end !== $e->event_begin ) ? date_i18n( $date_format, strtotime( $e->occur_end ) ) : $final;
 	}
 	// Do not show info in list view.
-	$time_content = ( 'list' === $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $start . 'T' . $e->event_time . "' content='" . $start . 'T' . $e->event_time . "'>$current</span>";
+	$offset  = get_option( 'gmt_offset' );
+	$hours   = (int) $offset;
+	$minutes = abs( ( $offset - (int) $offset ) * 60 );
+	$offset  = sprintf( '%+03d:%02d', $hours, $minutes );
+	$dtstart = $start . 'T' . $e->event_time . $offset;
+	$dtend   = $end . 'T' . $e->event_endtime . $offset;
+	$time_content = ( 'list' === $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $dtstart . "' content='" . $dtstart . "'>$current</span>";
 	// Handle cases.
 	if ( $has_time ) {
-		$time_content .= "<span class='event-time dtstart'><time class='value-title' datetime='" . $start . 'T' . $e->event_time . "' title='" . $start . 'T' . $e->event_time . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>';
+		$time_content .= "<span class='event-time dtstart'><time class='value-title' datetime='" . $dtstart . "' title='" . $dtstart . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>';
 		if ( 0 === (int) $e->event_hide_end ) {
 			if ( '' !== $e->event_endtime && $e->event_endtime !== $e->event_time ) {
-				$time_content .= "<span class='time-separator'> &ndash; </span>$final<span class='end-time dtend'><time class='value-title' datetime='" . $end . 'T' . $e->event_endtime . "' title='" . $end . 'T' . $e->event_endtime . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>';
+				$time_content .= "<span class='time-separator'> &ndash; </span>$final<span class='end-time dtend'><time class='value-title' datetime='" . $dtend . "' title='" . $dtend . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>';
 			}
 		}
 	} else {
