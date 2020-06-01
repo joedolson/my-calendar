@@ -449,8 +449,8 @@
 }
 
 .mc-main .current-day {
-	border: 1px solid #313233;
-	border: 1px solid var(--highlight-dark);
+	border-top: 1px solid #313233;
+	border-top: 1px solid var(--highlight-dark);
 	background: linear-gradient(to bottom, #fff 0%, var(--secondary-light) 30%, var(--highlight-light) 100%)
 }
 
@@ -499,6 +499,10 @@
 .my-calendar-nav .my-calendar-next a {
 	border-radius: 0 5px 5px 0;
 	border-left: 1px solid #fff;
+}
+
+.mc-main .mc-time span {
+	background: var(--primary-light);
 }
 
 .mc-main .mc-time .month {
