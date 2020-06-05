@@ -637,12 +637,14 @@ function mc_event_classes( $event, $uid, $type ) {
 	} elseif ( $now > $ts ) {
 		$date_relation = 'past-event';
 	}
+	$primary = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
 
 	$classes = array(
 		'mc-' . $uid,
 		$type . '-event',
 		mc_category_class( $event, 'mc_' ),
 		$date_relation,
+		$primary,
 	);
 
 	if ( $event->event_begin !== $event->event_end ) {
