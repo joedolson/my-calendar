@@ -304,7 +304,6 @@ function mc_bulk_action( $action ) {
 			break;
 		case 'unspam':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
-			// send ham report to Akismet.
 			// send notifications.
 			foreach ( $ids as $id ) {
 				$post_ID   = mc_get_event_post( $id );
@@ -808,7 +807,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 				if ( isset( $_POST['prev_event_status'] ) ) {
 					// Don't execute transition actions if prev status not known.
-					do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $event_approved );
+					do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $event_approved, $action, $data, $event_id );
 				}
 				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
 			}
