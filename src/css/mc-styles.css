@@ -664,6 +664,15 @@ select[name="event_recur"] {
 	display: inline;
 }
 
+.checkboxes li .variable-color {
+	height: 1.75em;
+	width: 1.75em;
+	margin: 0 .25em;
+	border-radius: 1.75em;
+	vertical-align: middle;
+	display: inline-block;
+}
+
 .locations-container {
 	position: relative;
 }

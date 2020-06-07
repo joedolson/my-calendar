@@ -158,7 +158,7 @@ function my_calendar_style_edit() {
 									} else {
 										$delete = '';
 									}
-									$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label><input type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
+									$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' /><span aria-hidden='true' class='variable-color' style='background-color: " . esc_attr( $style ) . "'></span>$delete</li>";
 								}
 								if ( $output ) {
 									echo "<ul class='checkboxes'>$output</ul>";
