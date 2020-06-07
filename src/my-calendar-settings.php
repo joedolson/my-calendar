@@ -214,6 +214,8 @@ function my_calendar_settings() {
 				$mc_uri = isset( $_POST['mc_uri'] ) ? $_POST['mc_uri'] : get_option( 'mc_uri' );
 			}
 		}
+		$permalinks = get_option( 'mc_use_permalinks' );
+		update_option( 'mc_use_permalinks', ( ! empty( $_POST['mc_use_permalinks'] ) ) ? 'true' : 'false' );
 		update_option( 'mc_uri', $mc_uri );
 		update_option( 'mc_uri_id', absint( $_POST['mc_uri_id'] ) );
 		// End handling of primary URL.
@@ -226,7 +228,14 @@ function my_calendar_settings() {
 			$mc_current_table = ( isset( $_POST['mc_current_table'] ) ) ? (int) $_POST['mc_current_table'] : 0;
 			update_option( 'mc_current_table', $mc_current_table );
 		}
-		mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) . ". $clear" );
+		if ( ( isset( $_POST['mc_use_permalinks'] ) && 'true' === get_option( 'mc_use_permalinks' ) ) && 'true' !== $permalinks ) {
+			$url = admin_url( 'options-permalink.php#mc_cpt_base' );
+			// Translators: URL to permalink settings page.
+			$note = ' ' . sprintf( __( 'You activated My Calendar permalinks. Go to <a href="%s">permalink settings</a> to set the base URL for My Calendar Events.', 'my-calendar' ), $url );
+		} else {
+			$note = '';
+		}
+		mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) . ". $clear" . $note );
 	}
 	if ( isset( $_POST['mc_permissions'] ) ) {
 		$perms = $_POST['mc_caps'];
@@ -259,9 +268,7 @@ function my_calendar_settings() {
 	}
 	// Output.
 	if ( isset( $_POST['mc_show_months'] ) ) {
-		$permalinks      = get_option( 'mc_use_permalinks' );
 		$mc_open_day_uri = ( ! empty( $_POST['mc_open_day_uri'] ) ) ? $_POST['mc_open_day_uri'] : '';
-		update_option( 'mc_use_permalinks', ( ! empty( $_POST['mc_use_permalinks'] ) ) ? 'true' : 'false' );
 		update_option( 'mc_open_uri', ( ! empty( $_POST['mc_open_uri'] ) && 'on' === $_POST['mc_open_uri'] && '' !== get_option( 'mc_uri', '' ) ) ? 'true' : 'false' );
 		update_option( 'mc_no_link', ( ! empty( $_POST['mc_no_link'] ) && 'on' === $_POST['mc_no_link'] ) ? 'true' : 'false' );
 		update_option( 'mc_mini_uri', $_POST['mc_mini_uri'] );
@@ -309,14 +316,8 @@ function my_calendar_settings() {
 		update_option( 'mc_show_weekends', ( ! empty( $_POST['mc_show_weekends'] ) && 'on' === $_POST['mc_show_weekends'] ) ? 'true' : 'false' );
 		update_option( 'mc_title', ( ! empty( $_POST['mc_title'] ) && 'on' === $_POST['mc_title'] ) ? 'true' : 'false' );
 		update_option( 'mc_convert', ( ! empty( $_POST['mc_convert'] ) ) ? $_POST['mc_convert'] : 'false' );
-		if ( ( isset( $_POST['mc_use_permalinks'] ) && 'true' === get_option( 'mc_use_permalinks' ) ) && 'true' !== $permalinks ) {
-			$url = admin_url( 'options-permalink.php#mc_cpt_base' );
-			// Translators: URL to permalink settings page.
-			$note = ' ' . sprintf( __( 'You activated My Calendar permalinks. Go to <a href="%s">permalink settings</a> to set the base URL for My Calendar Events.', 'my-calendar' ), $url );
-		} else {
-			$note = '';
-		}
-		mc_show_notice( __( 'Output Settings saved', 'my-calendar' ) . $note );
+
+		mc_show_notice( __( 'Output Settings saved', 'my-calendar' ) );
 	}
 	// INPUT.
 	if ( isset( $_POST['mc_input'] ) ) {
@@ -557,6 +558,16 @@ function my_calendar_settings() {
 								);
 								?>
 								</li>
+							<?php
+							if ( isset( $_POST['mc_use_permalinks'] ) && '' !== $note ) {
+								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
+								// Translators: URL for WordPress Settings > Permalinks.
+								$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
+							} else {
+								$note = '';
+							}
+							?>
+							<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
@@ -698,16 +709,6 @@ function mc_remote_db() {
 					<fieldset>
 						<legend><?php _e( 'Calendar Link Targets', 'my-calendar' ); ?></legend>
 						<ul>
-							<?php
-							if ( isset( $_POST['mc_use_permalinks'] ) && '' !== $note ) {
-								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
-								// Translators: URL for WordPress Settings > Permalinks.
-								$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
-							} else {
-								$note = '';
-							}
-							?>
-							<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open calendar links to event details', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_no_link', __( 'Disable calendar links', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>

@@ -91,6 +91,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add style variables with category colors to style output.
 * Add color output icon with CSS variables in style editor.
 * Add new default stylesheet: Twentytwenty.css
+* Move permalink setting to general settings panel.
 * Change event timestamps to use a real UTC timestamp for reference.
 * Switch from using date() to gmdate().
 * Update Pickadate to 3.6.4. Resolves some bugs, but introduces an accessibility issue.
