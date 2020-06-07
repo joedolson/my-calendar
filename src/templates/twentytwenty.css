@@ -41,6 +41,7 @@
 .mc-main .mc_bottomnav select, .mc-main .mc_bottomnav input,
 .mc-main .my-calendar-header input[type=submit], .mc-main .mc_bottomnav input[type=submit] {
 	padding: 4px 6px !important;
+	margin: 1px;
 	font-size: 16px;
 	line-height: 1.5;
 	font-weight: 400;
@@ -88,6 +89,7 @@
 
 .mc-main th {
 	font-size: 16px;
+	line-height: 1.5;
 	text-align: center;
 	padding: 4px 0;
 	background: #fff !important;
@@ -124,6 +126,8 @@
 .mc-main .event-title {
 	margin: 0 !important;
 	font-size: 24px;
+	text-transform: none;
+	letter-spacing: normal;
 }
 
 .mc-main .event-title a {
