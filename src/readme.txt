@@ -89,15 +89,17 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Show API endpoint when API enabled.
 * Add alternate alias for API endpoint.
 * Add style variables with category colors to style output.
+* Add color output icon with CSS variables in style editor.
 * Add new default stylesheet: Twentytwenty.css
 * Change event timestamps to use a real UTC timestamp for reference.
-* Update Pickadate to 3.6.4. Resolves some data bugs, but introduces a major accessibility bug.
-* Customizations to Pickadate 3.6.4 to repair accessibility: don't move focus to picker, add 'close' button to time picker.
-* Switch Pickadate to classic theme with customizations.
+* Switch from using date() to gmdate().
+* Update Pickadate to 3.6.4. Resolves some bugs, but introduces an accessibility issue.
+** Customizations to Pickadate 3.6.4 to repair accessibility
+** don't move focus to picker
+** add 'close' button to time picker.
+** Switch Pickadate to classic theme (modified).
 * Improvements to output code layout.
 * Eliminate empty HTML wrappers in content.
-* Switch from using date() to gmdate().
-* Conformance with latest WordPress PHPCS ruleset.
 * New filter: mc_get_users. Use custom arguments to get users.
 * Bug fix: Misc. ARIA/id relationships broken.
 * Bug fix: remote locations sometimes pulled from local database.
@@ -108,6 +110,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Remove upgrade path from 2.2.10.
 * Remove .mc-event-visible from style output. Unused since 2011.
 * Remove numerous deprecated functions.
+* Conformance with latest WordPress PHPCS ruleset.
 
 = 3.1.18 =
 
