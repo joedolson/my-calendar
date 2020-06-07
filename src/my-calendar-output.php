@@ -2188,7 +2188,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			$mc_topnav .= ${$value};
 		}
 	}
-	
+
 	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
 	foreach ( $mc_bottomorder as $value ) {
 		if ( 'none' !== $value && 'stop' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
