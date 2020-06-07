@@ -75,9 +75,9 @@
 }
 
 .mc-main caption, .mc-main.list .my-calendar-month, .mc-main .heading  {
-	font-size: 24px;
-	color: #666;
-	color: var(--highlight-dark);
+	font-size: 20px;
+	color: #313233;
+	color: var(--primary-dark);
 	text-align: right;
 	margin: 0;
 }
@@ -87,13 +87,14 @@
 }
 
 .mc-main th {
+	font-size: 16px;
 	text-align: center;
-	text-transform: uppercase;
 	padding: 4px 0;
-	background: #313233 !important;
-	background: var(--primary-dark) !important;
-	color: #fff !important;
-	color: var(--primary-light) !important;
+	background: #fff !important;
+	background: var(--primary-light) !important;
+	color: #313233 !important;
+	color: var(--primary-dark) !important;
+	border-bottom: 1px solid var(--primary-dark);
 }
 
 .mc-main th abbr, .mc-main .event-time abbr {
@@ -128,7 +129,7 @@
 .mc-main .event-title a {
 	display: block;
 	line-height: 1.5;
-	padding: 6px;
+	padding: 4px 6px;
 	position: relative;
 	border-bottom: none;
 	box-shadow: none;
@@ -383,10 +384,6 @@
 	display: block;
 	padding: 0 8px;
 	font-size: 16px;
-	background: #fff;
-	background: var(--primary-light);
-	color: #000;
-	color: var(--secondary-dark);
 	text-align: right;
 }
 
@@ -477,10 +474,6 @@
 
 .my-calendar-nav .my-calendar-next a {
 	border-left: 1px solid #fff;
-}
-
-.mc-main .mc-time span {
-	background: var(--primary-light);
 }
 
 .mc-main .mc-time .month {
