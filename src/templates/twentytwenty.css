@@ -284,6 +284,7 @@
 	display: block;
 	width: 100%;
 	text-align: left;
+	background-color: transparent;
 	color: #000;
 	color: var(--primary-dark);
 }
