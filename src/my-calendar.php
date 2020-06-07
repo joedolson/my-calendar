@@ -118,10 +118,10 @@ function mc_load_textdomain() {
 
 // Add actions.
 add_action( 'admin_menu', 'my_calendar_menu' );
-add_action( 'wp_head', 'my_calendar_head' );
+add_action( 'wp_head', 'mc_head' );
 add_action( 'delete_user', 'mc_deal_with_deleted_user' );
 add_action( 'widgets_init', 'mc_register_widgets' );
-add_action( 'init', 'my_calendar_add_feed' );
+add_action( 'init', 'mc_add_feed' );
 add_action( 'wp_footer', 'mc_footer_js' );
 add_action( 'init', 'mc_export_vcal', 200 );
 // Add filters.
@@ -372,8 +372,8 @@ function my_calendar_menu() {
 		}
 	}
 	if ( function_exists( 'add_submenu_page' ) ) {
-		add_action( 'admin_head', 'my_calendar_write_js' );
-		add_action( 'admin_enqueue_scripts', 'my_calendar_add_styles' );
+		add_action( 'admin_head', 'mc_write_js' );
+		add_action( 'admin_enqueue_scripts', 'mc_add_styles' );
 		if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 			// If we're accessing a remote site, remove these pages.
 		} else {
