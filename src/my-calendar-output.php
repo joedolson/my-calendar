@@ -2181,13 +2181,15 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		$jump = mc_date_switcher( $format, $main_class, $time, $date );
 	}
 
+	$mc_toporder = apply_filters( 'mc_header_navigation', $mc_toporder, $used, $params );
 	foreach ( $mc_toporder as $value ) {
 		if ( 'none' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
 			$value      = trim( $value );
 			$mc_topnav .= ${$value};
 		}
 	}
-
+	
+	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
 	foreach ( $mc_bottomorder as $value ) {
 		if ( 'none' !== $value && 'stop' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
 			$value         = trim( $value );
