@@ -17,7 +17,6 @@
 
 .my-calendar-header > div, .mc_bottomnav > div {
 	display: inline-block;
-	margin-right: 4px;
 }
 
 .mc-main .maybe-hide {
@@ -36,26 +35,11 @@
 	margin-right: 0;
 }
 
-.mc-main .my-calendar-header input,
-.mc-main .my-calendar-header span, .mc-main .my-calendar-header a,
-.mc-main .mc_bottomnav span, .mc-main .mc_bottomnav a {
-	text-decoration: none;
-	-webkit-box-shadow: inset 0 -1px 0 rgba(15, 15, 15, 1);
-	box-shadow: inset 0 -1px 0 rgba(15, 15, 15, 1);
-	-webkit-transition: color 80ms ease-in, -webkit-box-shadow 130ms ease-in-out;
-	transition: color 80ms ease-in, -webkit-box-shadow 130ms ease-in-out;
-	transition: color 80ms ease-in, box-shadow 130ms ease-in-out;
-	transition: color 80ms ease-in, box-shadow 130ms ease-in-out, -webkit-box-shadow 130ms ease-in-out;
-}
-
 .mc-main .my-calendar-header span, .mc-main .my-calendar-header a,
 .mc-main .mc_bottomnav span, .mc-main .mc_bottomnav a,
 .mc-main .my-calendar-header select, .mc-main .my-calendar-header input,
 .mc-main .mc_bottomnav select, .mc-main .mc_bottomnav input,
 .mc-main .my-calendar-header input[type=submit], .mc-main .mc_bottomnav input[type=submit] {
-	border: 1px solid #efefef;
-	border: 1px solid var(--highlight-light);
-	border-radius: 5px;
 	padding: 4px 6px !important;
 	font-size: 16px;
 	line-height: 1.5;
@@ -73,21 +57,10 @@
 	box-shadow: none !important;
 }
 
-.mc-main .my-calendar-header input,
-.mc-main .my-calendar-header a,
-.mc-main .mc_bottomnav a {
-	color: #323233;
-	color: var(--primary-dark);
-	background: linear-gradient(to top, rgba( 210, 210, 210, .95 ) 0%, rgba( 230, 230, 230, .95 ) 70%);
-}
-
 .mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
 .mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover,
 .mc-main .my-calendar-header a:focus, .mc-main .mc_bottomnav a:focus {
-	color: #fff;
-	color: var(--primary-light);
-	text-decoration: none;
-	background: linear-gradient(to bottom, rgba(125, 125, 125, .95) 0%, rgba( 60, 60, 60, .95) 70%);
+	text-decoration: underline;
 }
 
 .mc-main.calendar, .mc-main table {
@@ -170,11 +143,13 @@
 .mc-main .sharing .mc_details a:before,
 .mc-main .mc-format a:before,
 .mc-main .mc-format span:before,
+.mc-main .mc-print a:before,
 .mc-main .mc-list .event-date button:before {
 	font-family: 'dashicons';
 	vertical-align: middle;
 	position: relative;
 	top: -2px;
+	margin-right: 2px;
 }
 
 .mc-main .event-title .has-image {
@@ -197,6 +172,10 @@
 	margin-right: 4px;
 	top: 0;
 	left: 0;
+}
+
+.mc-main .mc-print a:before {
+	content: "\f497";
 }
 
 .mc-main .mc-format .list:before {
@@ -493,12 +472,10 @@
 }
 
 .my-calendar-nav .my-calendar-prev a {
-	border-radius: 5px 0 0 5px;
 	border-right: 1px solid #bbb;
 }
 
 .my-calendar-nav .my-calendar-next a {
-	border-radius: 0 5px 5px 0;
 	border-left: 1px solid #fff;
 }
 
@@ -507,17 +484,11 @@
 }
 
 .mc-main .mc-time .month {
-	border-radius: 5px 0 0 5px;
 	border-right: 1px solid #bbb;
 }
 
 .mc-main .mc-time .week {
-	border-radius: 0;
 	border-right: 1px solid #bbb;
-}
-
-.mc-main .mc-time .day {
-	border-radius: 0 5px 5px 0;
 }
 
 .mc-export a:before {
@@ -554,11 +525,11 @@
 .mc-main .my-calendar-header .no-icon,
 .mc-main .mc_bottomnav .no-icon {
 	display: inline-block;
-	width: 12px;
-	height: 12px;
+	width: 16px;
+	height: 16px;
 	vertical-align: middle;
-	margin-right: .25em;
-	border-radius: 12px;
+	margin: 0 .25em;
+	border-radius: 16px;
 	position: relative;
 	top: -2px;
 	border: 1px solid #fff;
