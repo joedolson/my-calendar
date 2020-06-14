@@ -123,7 +123,7 @@ function mc_manage_locations() {
 				$query  = esc_sql( $query ); // Prepare query.
 				$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label,location_city,location_state,location_region,location_street,location_street2,location_phone' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 			} else {
-				$query  = $wpdb->esc_like( $query ); // Prepare query.
+				$query  = esc_sql( $query ); // Prepare query.
 				$search = " WHERE location_label LIKE '%$query%' OR location_city LIKE '%$query%' OR location_state LIKE '%$query%' OR location_region LIKE '%$query%' OR location_street LIKE '%$query%' OR location_street2 LIKE '%$query%' OR location_phone LIKE '%$query%' ";
 			}
 		} else {

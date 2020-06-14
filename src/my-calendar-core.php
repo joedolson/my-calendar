@@ -1867,7 +1867,7 @@ function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	}
 
 	// Need to get all events with this email address as host, author, or meta data.
-	$posts = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE %s", '%' . $wpdb->esc_like( $email_address ) . '%s' ) );
+	$posts = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE %s", '%' . esc_sql( $email_address ) . '%s' ) );
 	foreach ( $posts as $post ) {
 		$events[] = get_post_meta( $post, '_mc_event_id', true );
 	}
@@ -1964,7 +1964,7 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 	}
 
 	// Need to get all events with this email address as host, author, or meta data.
-	$posts = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE %s", '%' . $wpdb->esc_like( $email_address ) . '%s' ) );
+	$posts = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE %s", '%' . esc_sql( $email_address ) . '%s' ) );
 	foreach ( $posts as $post ) {
 		$deletions[] = get_post_meta( $post, '_mc_event_id', true );
 	}
