@@ -95,10 +95,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Change event timestamps to use a real UTC timestamp for reference.
 * Switch from using date() to gmdate().
 * Update Pickadate to 3.6.4. Resolves some bugs, but introduces an accessibility issue.
-** Customizations to Pickadate 3.6.4 to repair accessibility
-** don't move focus to picker
-** add 'close' button to time picker.
-** Switch Pickadate to classic theme (modified).
+    * Customizations to Pickadate 3.6.4 to repair accessibility
+    * don't move focus to picker
+    * add 'close' button to time picker.
+    * Switch Pickadate to classic theme (modified).
 * Improvements to output code layout.
 * Eliminate empty HTML wrappers in content.
 * New filter: mc_get_users. Use custom arguments to get users.
