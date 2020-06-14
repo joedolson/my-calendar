@@ -606,13 +606,13 @@ function mc_location_select( $location = false ) {
 
 	foreach ( $locs as $loc ) {
 		// If label is empty, display street.
-		if ( '' === $loc->location_label ) {
+		if ( '' === (string) $loc->location_label ) {
 			$label = $loc->location_street;
 		} else {
 			$label = $loc->location_label;
 		}
 		// If neither label nor street, skip.
-		if ( '' === $label ) {
+		if ( '' === (string) $label ) {
 			continue;
 		}
 		$l = '<option value="' . $loc->location_id . '"';
