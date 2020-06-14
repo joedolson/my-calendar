@@ -605,13 +605,23 @@ function mc_location_select( $location = false ) {
 	$locs = mc_get_locations( 'select-locations' );
 
 	foreach ( $locs as $loc ) {
+		// If label is empty, display street.
+		if ( '' === $loc->location_label ) {
+			$label = $loc->location_street;
+		} else {
+			$label = $loc->location_label;
+		}
+		// If neither label nor street, skip.
+		if ( '' === $label ) {
+			continue;
+		}
 		$l = '<option value="' . $loc->location_id . '"';
 		if ( $location ) {
 			if ( (int) $location === (int) $loc->location_id ) {
 				$l .= ' selected="selected"';
 			}
 		}
-		$l    .= '>' . mc_kses_post( stripslashes( $loc->location_label ) ) . '</option>';
+		$l    .= '>' . mc_kses_post( stripslashes( $label ) ) . '</option>';
 		$list .= $l;
 	}
 
