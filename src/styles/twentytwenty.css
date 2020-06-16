@@ -20,11 +20,17 @@
 }
 
 .mc-main .maybe-hide {
+	border: 0;
 	clip: rect(1px, 1px, 1px, 1px);
-	position: absolute !important;
+	clip-path: inset(50%);
 	height: 1px;
-	width: 1px;
+	margin: -1px;
 	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+	color: inherit;
 }
 
 .my-calendar-header > div:nth-of-type(1), .mc_bottomnav > div:nth-of-type(1) {
@@ -41,7 +47,6 @@
 .mc-main .mc_bottomnav select, .mc-main .mc_bottomnav input,
 .mc-main .my-calendar-header input[type=submit], .mc-main .mc_bottomnav input[type=submit] {
 	padding: 4px 6px !important;
-	margin: 1px;
 	font-size: 16px;
 	line-height: 1.5;
 	font-weight: 400;
@@ -498,6 +503,11 @@
 
 .mc-export .ics a:before {
 	content: '\f508';
+}
+
+.mc-download .google a:before,
+.mc-download .outlook a:before {
+	content: "\f316";
 }
 
 .my-calendar-prev a:before {
