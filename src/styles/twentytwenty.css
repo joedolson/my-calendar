@@ -154,7 +154,7 @@
 .mc-main .mc-format a:before,
 .mc-main .mc-format span:before,
 .mc-main .mc-print a:before,
-.mc-main .mc-list .event-date button:before {
+.mc-main .mc-list .event-date button:nth-of-type(1):before {
 	font-family: 'dashicons';
 	vertical-align: middle;
 	position: relative;
@@ -270,8 +270,8 @@
 }
 
 .mc-main .mc-list .event-date button {
-	display: block;
-	width: 100%;
+	display: inline-block;
+	width: auto;
 	text-align: left;
 	background-color: transparent;
 	color: #000;
@@ -283,7 +283,7 @@
 	background: transparent;
 }
 
-.mc-main .mc-list .event-date button:before {
+.mc-main .mc-list .event-date button:nth-of-type(1):before {
 	content: "\f132";
 	top: 0;
 	margin-right: 3px;
@@ -370,7 +370,7 @@
 	margin: 0 !important;
 	background: #fff;
 	background: var(--primary-light);
-	padding: 0 !important;
+	padding: 0 .25em !important;
 }
 
 .mc-main .time-block:before {
@@ -593,7 +593,7 @@
 	border-left: 5px solid;
 }
 
-.mc-main li.current-day button {
+.mc-main li.current-day button:nth-of-type(1) {
 	position: relative;
 	left: -5px;
 }
