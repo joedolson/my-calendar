@@ -315,9 +315,12 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 	$dir     = plugin_dir_path( __FILE__ );
 	$url     = plugin_dir_url( __FILE__ );
 	$cur_cat = false;
-	if ( ! $cat_id ) {
+	if ( $cat_id ) {
 		$cat_id  = (int) $cat_id;
 		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	} else {
+		// If no category ID, change view.
+		$view = 'add';
 	}
 	if ( mc_is_custom_icon() ) {
 		$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
