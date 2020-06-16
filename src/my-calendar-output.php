@@ -2564,10 +2564,10 @@ function mc_sub_links( $subtract ) {
 	$outlook = get_feed_link( 'my-calendar-outlook' );
 
 	$rss         = "<li class='rss'><a href='" . esc_url( $feed ) . "'>" . __( 'RSS', 'my-calendar' ) . '</a></li>';
-	$sub_google  = "<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( 'Google', 'my-calendar' ) . '</a></li>';
-	$sub_outlook = "<li class='ics outlook'><a href='" . esc_url( $outlook ) . "'>" . __( 'Outlook', 'my-calendar' ) . '</a></li>';
+	$sub_google  = "<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
+	$sub_outlook = "<li class='ics outlook'><a href='" . esc_url( $outlook ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Outlook', 'my-calendar' ) . '</a></li>';
 
-	$output = "<div class='mc-export'>
+	$output = "<div class='mc-export mc-subscribe'>
 	<ul>$rss$sub_google$sub_outlook</ul>
 </div>";
 
@@ -2597,10 +2597,10 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	$add['export'] = 'outlook';
 	$ics2          = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
 
-	$google  = "<li class='ics google'><a href='" . $ics . "'>" . __( 'Google', 'my-calendar' ) . '</a></li>';
-	$outlook = "<li class='ics outlook'><a href='" . $ics2 . "'>" . __( 'Outlook', 'my-calendar' ) . '</a></li>';
+	$google  = "<li class='ics google'><a href='" . $ics . "'>" . __( '<span class="maybe-hide">Export for </span>Google', 'my-calendar' ) . '</a></li>';
+	$outlook = "<li class='ics outlook'><a href='" . $ics2 . "'>" . __( '<span class="maybe-hide">Export for </span>Outlook', 'my-calendar' ) . '</a></li>';
 
-	$output = "<div class='mc-export'>
+	$output = "<div class='mc-export mc-download'>
 	<ul>$google$outlook</ul>
 </div>";
 
