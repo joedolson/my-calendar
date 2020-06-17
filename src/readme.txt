@@ -103,6 +103,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Eliminate empty HTML wrappers in content.
 * New filter: mc_get_users. Use custom arguments to get users.
 * New filters: mc_header_navigation, mc_footer_navigation
+* New template tags: {userstart}, {userend} - date/time in local users timezone.
 * Bug fix: Misc. ARIA/id relationships broken.
 * Bug fix: remote locations sometimes pulled from local database.
 * Bug fix: Long-standing issues in user input settings.
