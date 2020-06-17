@@ -1,6 +1,7 @@
 (function ($) {
 	'use strict';
 	$(function () {
+		mc_display_usertime();
 		$(document).on('click', ".my-calendar-header a.mcajax, .my-calendar-footer a.mcajax", function (e) {
 			e.preventDefault();
 			var calendar = $( this ).closest( '.mc-main' );
@@ -29,8 +30,20 @@
 				}
 				// All views.
 				$( '#' + ref ).attr('tabindex', '-1').focus();
+				mc_display_usertime();
 				// Your Custom ajax load changes if needed.
 			});
 		});
 	});
+
+	function mc_display_usertime() {
+		var utime = $( '.mc-user-time' );
+		utime.each(function() {
+			var time   = $( this ).text();
+			var label  = $( this ).attr( 'data-label' );
+			var utime  = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
+			var udate  = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
+			$( this ).html( '<span class="mc-local-time-label">' + label + '</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
+		});
+	}
 }(jQuery));

@@ -361,6 +361,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['duration']     = mc_duration( $event );
 	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ), false );  // Date: hcal formatted.
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ), false );    // Date: hcal formatted end.
+	$e['userstart']    = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
+	$e['userend']      = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
 	$e['rssdate']      = mc_date( 'D, d M Y H:i:s +0000', strtotime( $event->event_added ), false );
 	$date              = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
 	$date_end          = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
