@@ -430,7 +430,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e_template   = apply_filters( 'mc_details_template', $e_template );
 	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
 	$replacements = array(
-		stripslashes( $event->event_title ),
+		stripslashes( $e['title'] ),
 		stripslashes( $event->event_label ),
 		$event->category_color,
 		$event->category_icon,
@@ -513,7 +513,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	}
 
 	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
-	$e['gcal']      = mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $event->event_title ), $map_gcal, $strip_desc );
+	$e['gcal']      = mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
 	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
 
 	// IDs.
