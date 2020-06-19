@@ -788,13 +788,23 @@ add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
  */
 function mc_admin_bar() {
 	global $wp_admin_bar;
+	$mc_id = get_option( 'mc_uri_id' );
 	if ( mc_get_uri( 'boolean' ) ) {
-		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
-		$args = array(
-			'id'    => 'mc-my-calendar',
-			'title' => __( 'My Calendar', 'my-calendar' ),
-			'href'  => $url,
-		);
+		if ( is_page( $mc_id ) ) {
+			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
+			$args = array(
+				'id'     => 'mc-my-calendar',
+				'title'  => __( 'Add Event', 'my-calendar' ),
+				'href'   => $url
+			);
+		} else {
+			$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
+			$args = array(
+				'id'    => 'mc-my-calendar',
+				'title' => __( 'My Calendar', 'my-calendar' ),
+				'href'  => $url,
+			);
+		}
 		$wp_admin_bar->add_node( $args );
 	} else {
 		$url  = admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' );
@@ -806,14 +816,16 @@ function mc_admin_bar() {
 		$wp_admin_bar->add_node( $args );
 	}
 	if ( current_user_can( 'mc_add_events' ) && 'true' !== get_option( 'mc_remote' ) ) {
-		$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
-		$args = array(
-			'id'     => 'mc-add-event',
-			'title'  => __( 'Add Event', 'my-calendar' ),
-			'href'   => $url,
-			'parent' => 'mc-my-calendar',
-		);
-		$wp_admin_bar->add_node( $args );
+		if ( ! is_page( $mc_id ) ) {
+			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
+			$args = array(
+				'id'     => 'mc-add-event',
+				'title'  => __( 'Add Event', 'my-calendar' ),
+				'href'   => $url,
+				'parent' => 'mc-my-calendar',
+			);
+			$wp_admin_bar->add_node( $args );
+		}
 	}
 	if ( current_user_can( 'mc_manage_events' ) && current_user_can( 'mc_add_events' ) ) {
 		$url  = admin_url( 'admin.php?page=my-calendar-manage' );
