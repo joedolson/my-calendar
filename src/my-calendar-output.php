@@ -1096,8 +1096,9 @@ function mc_events_class( $events, $date = false ) {
 function mc_list_title( $events ) {
 	usort( $events, 'mc_time_cmp' );
 	$now         = $events[0];
+	$event       = mc_create_tags( $now );
 	$count       = count( $events ) - 1;
-	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now );
+	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $event['title'] ), mc_strip_tags() ), $now );
 	if ( 0 === $count ) {
 		$cstate = $event_title;
 	} elseif ( 1 === $count ) {
@@ -1123,8 +1124,9 @@ function mc_list_titles( $events ) {
 	usort( $events, 'mc_time_cmp' );
 	$titles = array();
 
-	foreach ( $events as $event ) {
-		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $event->event_title ), mc_strip_tags() ), $event, $events );
+	foreach ( $events as $now ) {
+		$event    = mc_create_tags( $now );
+		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $event['title'] ), mc_strip_tags() ), $now, $events );
 		$titles[] = $title;
 	}
 
