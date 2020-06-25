@@ -112,7 +112,7 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
  *
  * @param string $status string.
  * @param string $option option name.
- * @param string $value rows to use
+ * @param string $value rows to use.
  *
  * @return value
  */
@@ -132,7 +132,7 @@ function mc_set_event_editing( $status, $option, $value ) {
 			'event_access'            => 'on',
 			'event_host'              => 'on',
 		);
-		$value = array();
+		$value    = array();
 		foreach ( $defaults as $k => $v ) {
 			if ( isset( $_POST['mc_show_on_page'][ $k ] ) ) {
 				$value[ $k ] = 'on';
