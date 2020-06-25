@@ -62,11 +62,11 @@ function mc_show_event_editing( $status, $args ) {
 		// cannot change these keys.
 		$input_labels = array(
 			'event_location_dropdown' => __( 'Event Location Dropdown Menu', 'my-calendar' ),
-			'event_short'             => __( 'Event Short Description field', 'my-calendar' ),
-			'event_desc'              => __( 'Event Description Field', 'my-calendar' ),
-			'event_category'          => __( 'Event Category field', 'my-calendar' ),
-			'event_image'             => __( 'Event Image field', 'my-calendar' ),
-			'event_link'              => __( 'Event Link field', 'my-calendar' ),
+			'event_short'             => __( 'Event Short Description', 'my-calendar' ),
+			'event_desc'              => __( 'Event Description', 'my-calendar' ),
+			'event_category'          => __( 'Event Category', 'my-calendar' ),
+			'event_image'             => __( 'Event Image', 'my-calendar' ),
+			'event_link'              => __( 'Event Link', 'my-calendar' ),
 			'event_recurs'            => __( 'Event Recurrence Options', 'my-calendar' ),
 			'event_open'              => __( 'Event Registration options', 'my-calendar' ),
 			'event_location'          => __( 'Event Location fields', 'my-calendar' ),
@@ -112,21 +112,35 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
  *
  * @param string $status string.
  * @param string $option option name.
- * @param string $value new value.
+ * @param string $value rows to use
  *
  * @return value
  */
 function mc_set_event_editing( $status, $option, $value ) {
 	if ( 'mc_show_on_page' === $option ) {
-		$orig  = get_option( 'mc_input_options' );
+		$defaults = array(
+			'event_location_dropdown' => 'on',
+			'event_short'             => 'on',
+			'event_desc'              => 'on',
+			'event_category'          => 'on',
+			'event_image'             => 'on',
+			'event_link'              => 'on',
+			'event_recurs'            => 'on',
+			'event_open'              => 'on',
+			'event_location'          => 'off',
+			'event_specials'          => 'on',
+			'event_access'            => 'on',
+			'event_host'              => 'on',
+		);
 		$value = array();
-		foreach ( $orig as $k => $v ) {
+		foreach ( $defaults as $k => $v ) {
 			if ( isset( $_POST['mc_show_on_page'][ $k ] ) ) {
 				$value[ $k ] = 'on';
 			} else {
 				$value[ $k ] = 'off';
 			}
 		}
+		update_user_meta( get_current_user_ID(), 'mc_show_on_page', $value );
 	}
 
 	return $value;
