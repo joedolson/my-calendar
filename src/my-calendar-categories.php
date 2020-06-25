@@ -420,8 +420,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 										$private_checked = '';
 									}
 								}
-								$checked         = ( 'add' === $view ) ? '' : mc_is_checked( 'mc_default_category', $cur_cat->category_id, '', true );
-								$holiday_checked = ( 'add' === $view ) ? '' : mc_is_checked( 'mc_skip_holidays_category', $cur_cat->category_id, '', true );
+								$checked         = ( 'add' === $view ) ? '' : checked( get_option( 'mc_default_category' ), $cur_cat->category_id, false );
+								$holiday_checked = ( 'add' === $view ) ? '' : checked( get_option( 'mc_skip_holidays_category' ), $cur_cat->category_id, false );
 								?>
 								<ul class='checkboxes'>
 								<li>
