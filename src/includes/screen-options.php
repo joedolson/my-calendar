@@ -171,6 +171,9 @@ add_filter( 'set-screen-option', 'mc_set_screen_option', 10, 3 );
  * @return string $value
  */
 function mc_set_screen_option( $status, $option, $value ) {
+	if ( 'mc_num_per_page' === $option ) {
+		update_user_meta( get_current_user_ID(), 'mc_num_per_page', $value );
+	}
 
 	return $value;
 }
