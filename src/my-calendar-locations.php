@@ -14,6 +14,109 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Handle updating location posts
+ *
+ * @param array $where Array with where query.
+ * @param array $data saved location data.
+ * @param int   $post POST data.
+ *
+ * @return int post ID
+ */
+function mc_update_location( $where, $data, $post ) {
+	// if the location save was successful.
+	$location_id = $where['location_id'];
+	$post_id     = mc_get_location_post( $location_id );
+	// If, after all that, the post doesn't exist, create it.
+	if ( ! get_post_status( $post_id ) ) {
+		mc_create_location_post( $location_id, $data, $post );
+	}
+
+	$title             = $data['location_label'];
+	$post_status       = 'publish';
+	$auth              = get_current_user_id();
+	$type              = 'mc-locations';
+	$my_post           = array(
+		'ID'           => $post_id,
+		'post_title'   => $title,
+		'post_status'  => $post_status,
+		'post_author'  => $auth,
+		'post_name'    => sanitize_title( $title ),
+		'post_type'    => $type,
+	);
+	if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) ) {
+		switch_to_blog( BLOG_ID_CURRENT_SITE );
+	}
+	$post_id = wp_update_post( $my_post );
+
+	do_action( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
+	if ( mc_switch_sites() ) {
+		restore_current_blog();
+	}
+
+	return $post_id;
+}
+
+/**
+ * Create a post for My Calendar location data on save
+ *
+ * @param bool|int $location Result of save action (location ID or false.)
+ * @param array    $data Saved event data.
+ * @param array    $post POST data
+ *
+ * @return int newly created post ID
+ */
+function mc_create_location_post( $location, $data, $post ) {
+	if ( ! $location ) {
+		return;
+	}
+	$post_id = mc_get_location_post( $location );
+	if ( ! $post_id ) {
+		$title             = $data['location_label'];
+		$post_status       = 'publish';
+		$auth              = get_current_user_id();
+		$type              = 'mc-locations';
+		$my_post           = array(
+			'post_title'   => $title,
+			'post_status'  => $post_status,
+			'post_author'  => $auth,
+			'post_name'    => sanitize_title( $title ),
+			'post_date'    => current_time( 'Y-m-d H:i:s' ),
+			'post_type'    => $type,
+		);
+		$post_id           = wp_insert_post( $my_post );
+		update_post_meta( $post_id, '_mc_location_id', $location );
+
+		do_action( 'mc_update_location_post', $post_id, $_POST, $data, $event_id );
+		wp_publish_post( $post_id );
+	}
+
+	return $post_id;
+}
+add_action( 'mc_save_location', 'mc_create_location_post', 10, 3 );
+
+/**
+ * Delete custom post type associated with event
+ *
+ * @param int $result   Result of delete action.
+ * @param int $location_id Location ID.
+ */
+function mc_location_delete_post( $result, $location_id ) {
+	$posts = get_posts(
+		array(
+			'post_type'  => 'mc-locations',
+			'meta_key'   => '_mc_location_id',
+			'meta_value' => $location_id,
+		)
+	);
+	if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
+		$post_id = $posts[0]->ID;
+		wp_delete_post( $post_id, true );
+		do_action( 'mc_delete_location_posts', $location_id, $posts );
+	}
+}
+add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
+
+/**
  * Update a single field in a location.
  *
  * @param string $field field name.
