@@ -119,7 +119,7 @@ function my_calendar_add_locations() {
 		);
 
 		$results = mc_insert_location( $add );
-		do_action( 'mc_save_location', $results, $add );
+		do_action( 'mc_save_location', $results, $add, $_POST );
 		if ( $results ) {
 			mc_show_notice( __( 'Location added successfully', 'my-calendar' ) );
 		} else {
@@ -158,7 +158,7 @@ function my_calendar_add_locations() {
 		$where   = array( 'location_id' => (int) $_POST['location_id'] );
 		$results = mc_modify_location( $update, $where );
 
-		do_action( 'mc_modify_location', $where, $update );
+		do_action( 'mc_modify_location', $where, $update, $_POST );
 		if ( false === $results ) {
 			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
 		} elseif ( 0 === $results ) {
