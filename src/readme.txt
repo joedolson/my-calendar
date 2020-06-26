@@ -87,7 +87,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * PHP Notice: undefined variable.
 * Bug fix: screen options not saving.
-* 
+* Bug fix: Accidental auto-assigning of first category to events when editing.
 
 = 3.2.0 =
 
