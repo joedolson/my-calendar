@@ -31,17 +31,17 @@ function mc_update_location( $where, $data, $post ) {
 		mc_create_location_post( $location_id, $data, $post );
 	}
 
-	$title             = $data['location_label'];
-	$post_status       = 'publish';
-	$auth              = get_current_user_id();
-	$type              = 'mc-locations';
-	$my_post           = array(
-		'ID'           => $post_id,
-		'post_title'   => $title,
-		'post_status'  => $post_status,
-		'post_author'  => $auth,
-		'post_name'    => sanitize_title( $title ),
-		'post_type'    => $type,
+	$title       = $data['location_label'];
+	$post_status = 'publish';
+	$auth        = get_current_user_id();
+	$type        = 'mc-locations';
+	$my_post     = array(
+		'ID'          => $post_id,
+		'post_title'  => $title,
+		'post_status' => $post_status,
+		'post_author' => $auth,
+		'post_name'   => sanitize_title( $title ),
+		'post_type'   => $type,
 	);
 	if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) ) {
 		switch_to_blog( BLOG_ID_CURRENT_SITE );
@@ -59,9 +59,9 @@ function mc_update_location( $where, $data, $post ) {
 /**
  * Create a post for My Calendar location data on save
  *
- * @param bool|int $location Result of save action (location ID or false.)
+ * @param bool|int $location Result of save action; location ID or false.
  * @param array    $data Saved event data.
- * @param array    $post POST data
+ * @param array    $post POST data.
  *
  * @return int newly created post ID
  */
@@ -71,19 +71,19 @@ function mc_create_location_post( $location, $data, $post ) {
 	}
 	$post_id = mc_get_location_post( $location );
 	if ( ! $post_id ) {
-		$title             = $data['location_label'];
-		$post_status       = 'publish';
-		$auth              = get_current_user_id();
-		$type              = 'mc-locations';
-		$my_post           = array(
-			'post_title'   => $title,
-			'post_status'  => $post_status,
-			'post_author'  => $auth,
-			'post_name'    => sanitize_title( $title ),
-			'post_date'    => current_time( 'Y-m-d H:i:s' ),
-			'post_type'    => $type,
+		$title       = $data['location_label'];
+		$post_status = 'publish';
+		$auth        = get_current_user_id();
+		$type        = 'mc-locations';
+		$my_post     = array(
+			'post_title'  => $title,
+			'post_status' => $post_status,
+			'post_author' => $auth,
+			'post_name'   => sanitize_title( $title ),
+			'post_date'   => current_time( 'Y-m-d H:i:s' ),
+			'post_type'   => $type,
 		);
-		$post_id           = wp_insert_post( $my_post );
+		$post_id     = wp_insert_post( $my_post );
 		update_post_meta( $post_id, '_mc_location_id', $location );
 
 		do_action( 'mc_update_location_post', $post_id, $_POST, $data, $event_id );
