@@ -215,6 +215,17 @@ function mc_event_delete_posts( $deleted ) {
 }
 
 /**
+ * Delete custom post type associated with event
+ *
+ * @param int $event_id Event ID.
+ * @param int $post_id Post ID.
+ */
+function mc_event_delete_post( $event_id, $post_id ) {
+	do_action( 'mc_deleted_post', $event_id, $post_id );
+	wp_delete_post( $post_id, true );
+}
+
+/**
  * Update a single field in an event.
  *
  * @param string               $field database column.
@@ -237,17 +248,6 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
 	$result = $wpdb->query( $wpdb->prepare( $sql, $data, $event ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $result;
-}
-
-/**
- * Delete custom post type associated with event
- *
- * @param int $event_id Event ID.
- * @param int $post_id Post ID.
- */
-function mc_event_delete_post( $event_id, $post_id ) {
-	do_action( 'mc_deleted_post', $event_id, $post_id );
-	wp_delete_post( $post_id, true );
 }
 
 /**
