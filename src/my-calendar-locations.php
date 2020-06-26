@@ -58,9 +58,9 @@ function mc_update_location_controls() {
  */
 function mc_insert_location( $add ) {
 	global $wpdb;
-	$add       = array_map( 'mc_kses_post', $add );
-	$formats   = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
-	$results   = $wpdb->insert( my_calendar_locations_table(), $add, $formats );
+	$add     = array_map( 'mc_kses_post', $add );
+	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
+	$results = $wpdb->insert( my_calendar_locations_table(), $add, $formats );
 	if ( $results ) {
 		$insert_id = $wpdb->insert_id;
 	} else {

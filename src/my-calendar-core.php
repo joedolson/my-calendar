@@ -1652,8 +1652,8 @@ function mc_post_type() {
 	$loc_arguments['supports']            = array( 'title', 'custom-fields', 'thumbnail' );
 	$loc_arguments['exclude_from_search'] = apply_filters( 'mc_location_exclude_from_search', true );
 
-	$types     = array(
-		'mc-events' => array(
+	$types = array(
+		'mc-events'    => array(
 			__( 'event', 'my-calendar' ),
 			__( 'events', 'my-calendar' ),
 			__( 'Event', 'my-calendar' ),
