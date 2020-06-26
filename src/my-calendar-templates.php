@@ -213,7 +213,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	$label = sprintf( apply_filters( 'mc_map_label', __( 'Map<span> to %s</span>', 'my-calendar' ), $event ), $map_label );
 	if ( strlen( trim( $map_string ) ) > 6 ) {
 		$map_url = apply_filters( 'mc_map_url', "http://maps.google.com/maps?z=$zoom&amp;daddr=$map_string", $event );
-		$map   = '<a href="' . esc_url( $map_url ) . '" class="map-link external">' . $label . '</a>';
+		$map     = '<a href="' . esc_url( $map_url ) . '" class="map-link external">' . $label . '</a>';
 	} elseif ( esc_url( $url ) ) {
 		$map_url = $url;
 		$map     = "<a href=\"$map_url\" class='map-link external map-url'>" . $label . '</a>';

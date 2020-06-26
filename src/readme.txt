@@ -83,6 +83,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.2.1 =
+
+* PHP Notice: undefined variable.
+* Bug fix: screen options not saving.
+* 
+
 = 3.2.0 =
 
 * Auto-toggle admin time format if display time format set to European format.
