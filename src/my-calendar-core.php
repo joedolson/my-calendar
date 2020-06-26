@@ -1647,6 +1647,11 @@ function mc_post_type() {
 		'menu_icon'           => null,
 		'supports'            => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields' ),
 	);
+
+	$loc_arguments                        = $arguments;
+	$loc_arguments['supports']            = array( 'title', 'custom-fields', 'thumbnail' );
+	$loc_arguments['exclude_from_search'] = apply_filters( 'mc_location_exclude_from_search', true );
+
 	$types     = array(
 		'mc-events' => array(
 			__( 'event', 'my-calendar' ),
@@ -1654,6 +1659,13 @@ function mc_post_type() {
 			__( 'Event', 'my-calendar' ),
 			__( 'Events', 'my-calendar' ),
 			$arguments,
+		),
+		'mc-locations' => array(
+			__( 'location', 'my-calendar' ),
+			__( 'locations', 'my-calendar' ),
+			__( 'Location', 'my-calendar' ),
+			__( 'Locations', 'my-calendar' ),
+			$loc_arguments,
 		),
 	);
 
@@ -1664,7 +1676,7 @@ function mc_post_type() {
  */
 function mc_posttypes() {
 	$types   = mc_post_type();
-	$enabled = array( 'mc-events' );
+	$enabled = array( 'mc-events', 'mc-locations' );
 	$slug    = ( '' !== get_option( 'mc_cpt_base', '' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
@@ -1784,7 +1796,7 @@ function mc_taxonomies() {
 function mc_posttypes_messages( $messages ) {
 	global $post, $post_ID;
 	$types   = mc_post_type();
-	$enabled = array( 'mc-events' );
+	$enabled = array( 'mc-events', 'mc-locations' );
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
 			$value            = $types[ $key ];
