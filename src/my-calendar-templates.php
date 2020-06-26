@@ -209,10 +209,10 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 			$map_string = $latitude . $dir_lat . ',' . $longitude . $dir_long;
 		}
 	}
+	// Translators: Name of location.
+	$label = sprintf( apply_filters( 'mc_map_label', __( 'Map<span> to %s</span>', 'my-calendar' ), $event ), $map_label );
 	if ( strlen( trim( $map_string ) ) > 6 ) {
 		$map_url = apply_filters( 'mc_map_url', "http://maps.google.com/maps?z=$zoom&amp;daddr=$map_string", $event );
-		// Translators: Name of location.
-		$label = sprintf( apply_filters( 'mc_map_label', __( 'Map<span> to %s</span>', 'my-calendar' ), $event ), $map_label );
 		$map   = '<a href="' . esc_url( $map_url ) . '" class="map-link external">' . $label . '</a>';
 	} elseif ( esc_url( $url ) ) {
 		$map_url = $url;
