@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_update_location( $where, $data, $post ) {
 	// if the location save was successful.
 	$location_id = $where['location_id'];
-	$post_id     = mc_get_location_post( $location_id );
+	$post_id     = mc_get_location_post( $location_id, false );
 	// If, after all that, the post doesn't exist, create it.
 	if ( ! get_post_status( $post_id ) ) {
 		mc_create_location_post( $location_id, $data, $post );
@@ -69,7 +69,7 @@ function mc_create_location_post( $location, $data, $post ) {
 	if ( ! $location ) {
 		return;
 	}
-	$post_id = mc_get_location_post( $location );
+	$post_id = mc_get_location_post( $location, false );
 	if ( ! $post_id ) {
 		$title       = $data['location_label'];
 		$post_status = 'publish';
@@ -115,6 +115,30 @@ function mc_location_delete_post( $result, $location_id ) {
 	}
 }
 add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
+
+/**
+ * Get the location post for a location.
+ *
+ * @param int  $location_id Location ID.
+ * @param bool $type True for full post object.
+ *
+ * @return object $post
+ */
+function mc_get_location_post( $location_id, $type = true ) {
+	$post  = false;
+	$posts = get_posts(
+		array(
+			'post_type'  => 'mc-locations',
+			'meta_key'   => '_mc_location_id',
+			'meta_value' => $location_id,
+		)
+	);
+	if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
+		$post = $posts[0];
+	}
+
+	return ( $type ) ? $post : $post->ID;
+}
 
 /**
  * Update a single field in a location.
