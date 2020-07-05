@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return int post ID
  */
-function mc_update_location_post( $post_ID, $where, $data, $post ) {
+function mc_update_location_post( $where, $data, $post ) {
 	// if the location save was successful.
 	$location_id = $where['location_id'];
 	$post_id     = mc_get_location_post( $location_id, false );
@@ -55,7 +55,7 @@ function mc_update_location_post( $post_ID, $where, $data, $post ) {
 
 	return $post_id;
 }
-add_action( 'mc_update_location_post', 'mc_update_location_post', 10, 4 );
+add_action( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
 
 /**
  * Create a post for My Calendar location data on save
@@ -94,6 +94,22 @@ function mc_create_location_post( $location_id, $data, $post ) {
 	return $post_id;
 }
 add_action( 'mc_save_location', 'mc_create_location_post', 10, 3 );
+
+function mc_update_location_custom_fields( $post_id, $post, $data, $location_id ) {
+	$fields = mc_location_fields();
+	foreach( $fields as $name => $field ) {
+		if ( isset( $post[ $name ] ) ) {
+			if ( ! isset( $field['sanitize_callback'] ) || ( isset( $field['sanitize_callback'] ) && ! function_exists( $field['sanitize_callback'] ) ) ) {
+				// if no sanitization is provided, we'll prep it for SQL and strip tags.
+				$sanitized = esc_html( strip_tags( urldecode( $post[ $name ] ) ) );
+			} else {
+				$sanitized = call_user_func( $field['sanitize_callback'], urldecode( $post[ $name ] ) );
+			}
+			update_post_meta( $post_id, $name, $sanitized );
+		}
+	}
+}
+add_action( 'mc_update_location_post', 'mc_update_location_custom_fields', 10, 4 );
 
 /**
  * Delete custom post type associated with event
@@ -341,7 +357,16 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 					<h2><?php _e( 'Location Editor', 'my-calendar' ); ?></h2>
 
 					<div class="inside location_form">
-						<form id="my-calendar" method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>">
+						<?php
+						$params = array();
+						if ( isset( $_GET['location_id'] ) ) {
+							$params = array(
+								'mode'        => $_GET['mode'],
+								'location_id' => $_GET['location_id'],
+							);
+						}
+						?>
+						<form id="my-calendar" method="post" action="<?php echo add_query_arg( $params, admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>">
 							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 							<?php
 							if ( 'add' === $view ) {
@@ -659,10 +684,9 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	}
 	$return .= $access_list;
 	$return .= '</ul>
-	</fieldset>'
-	$custom  = apply_filters( 'mc_custom_location_fields', array(), $data, $context );
-	$fields  = mc_expand_custom_location_fields( $custom );
-	$return .= ( ! empty( $custom ) ) ? '<div class="mc-custom-fields mc-locations">' . $fields . '</div>';
+	</fieldset>';
+	$fields  = mc_display_location_fields( mc_location_fields(), $data, $context );
+	$return .= ( '' !== $fields ) ? '<div class="mc-custom-fields mc-locations">' . $fields . '</div>' : '';
 	$return .= '</div>
 	</div>
 	</div>';
@@ -682,6 +706,39 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 }
 
 /**
+ * Return a set of location fields.
+ *
+ * @return array
+ */
+function mc_location_fields() {
+	$fields = apply_filters( 'mc_location_fields', array() );
+
+	return $fields;
+}
+
+/**
+ * Get custom data for a location.
+ *
+ * @param object $data Location data.
+ * @param string $field Custom field name.
+ *
+ * @return mixed
+ */
+function mc_location_custom_data( $data, $field ) {
+	$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : false;
+	$field       = '';
+	if ( ! $location_id ) {
+		$location_id = ( isset( $_POST['location_id'] ) ) ? (int) $_POST['location_id'] : false;
+	}
+	if ( $location_id ) {
+		$post_id = mc_get_location_post( $location_id, false );
+		$field   = get_post_meta( $post_id, $field, true );
+	}
+
+	return $field;
+}
+
+/**
  * Expand custom fields from array to field output
  *
  * @param array  $fields Array of field data.
@@ -689,18 +746,64 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
  *
  * @return string
  */
-function mc_expand_location_fields( $fields, $context ) {
-	if ( empty( $fields ) {
+function mc_display_location_fields( $fields, $data, $context ) {
+	if ( empty( $fields ) ) {
 		return '';
 	}
 	$output = '';
+	$return = '';
 
-	apply_filters( 'mc_order_location_fields', $fields, $context );
-	foreach ( $fields as $field ) {
-		$output .= apply_filters( 'mc_output_location_field', $field, $context );
+	$custom_fields = apply_filters( 'mc_order_location_fields', $fields, $context );
+	foreach ( $custom_fields as $name => $field ) {
+		$user_value = mc_location_custom_data( $data, $name );
+		$required   = isset( $field['required'] ) ? ' required' : '';
+		$req_label  = isset( $field['required'] ) ? ' <span class="required">' . __( 'Required', 'my-calendar' ) . '</span>' : '';
+		switch ( $field['input_type'] ) {
+			case 'text':
+			case 'number':
+			case 'email':
+			case 'url':
+			case 'date':
+			case 'tel':
+				$output = "<input type='" . $field['input_type'] . "' name='$name' id='$name' value='$user_value'$required />";
+				break;
+			case 'textarea':
+				$output = "<textarea rows='6' cols='60' name='$name' id='$name'$required>$user_value</textarea>";
+				break;
+			case 'select':
+				if ( isset( $field['input_values'] ) ) {
+					$output = "<select name='$name' id='$name'$required>";
+					foreach ( $field['input_values'] as $value ) {
+						$value = esc_attr( stripslashes( $value ) );
+						if ( $value === $user_value ) {
+							$selected = " selected='selected'";
+						} else {
+							$selected = '';
+						}
+						$output .= "<option value='" . esc_attr( stripslashes( $value ) ) . "'$selected>" . $value . "</option>\n";
+					}
+					$output .= '</select>';
+				}
+				break;
+			case 'checkbox':
+			case 'radio':
+				if ( isset( $field['input_values'] ) ) {
+					$value = $field['input_values'];
+					if ( '' !== $user_value ) {
+						$checked = ' checked="checked"';
+					} else {
+						$checked = '';
+					}
+					$output = "<input type='" . $field['input_type'] . "' name='$name' id='$name' value='" . esc_attr( stripslashes( $value ) ) . "'$checked $required />";
+				}
+				break;
+			default:
+				$output = "<input type='text' name='$name' id='$name' value='$user_value' $required />";
+		}
+		$return .= "<p><label for='$name'>" . $field['title'] . $req_label . '</label> ' . $output . '</p>';
 	}
 
-	return $output;
+	return $return;
 }
 
 /**
