@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return int post ID
  */
-function mc_update_location( $where, $data, $post ) {
+function mc_update_location_post( $post_ID, $where, $data, $post ) {
 	// if the location save was successful.
 	$location_id = $where['location_id'];
 	$post_id     = mc_get_location_post( $location_id, false );
@@ -55,6 +55,7 @@ function mc_update_location( $where, $data, $post ) {
 
 	return $post_id;
 }
+add_action( 'mc_update_location_post', 'mc_update_location_post', 10, 4 );
 
 /**
  * Create a post for My Calendar location data on save
@@ -65,11 +66,11 @@ function mc_update_location( $where, $data, $post ) {
  *
  * @return int newly created post ID
  */
-function mc_create_location_post( $location, $data, $post ) {
-	if ( ! $location ) {
+function mc_create_location_post( $location_id, $data, $post ) {
+	if ( ! $location_id ) {
 		return;
 	}
-	$post_id = mc_get_location_post( $location, false );
+	$post_id = mc_get_location_post( $location_id, false );
 	if ( ! $post_id ) {
 		$title       = $data['location_label'];
 		$post_status = 'publish';
@@ -84,9 +85,9 @@ function mc_create_location_post( $location, $data, $post ) {
 			'post_type'   => $type,
 		);
 		$post_id     = wp_insert_post( $my_post );
-		update_post_meta( $post_id, '_mc_location_id', $location );
+		update_post_meta( $post_id, '_mc_location_id', $location_id );
 
-		do_action( 'mc_update_location_post', $post_id, $_POST, $data, $event_id );
+		do_action( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
 		wp_publish_post( $post_id );
 	}
 
@@ -658,7 +659,11 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	}
 	$return .= $access_list;
 	$return .= '</ul>
-	</fieldset></div>
+	</fieldset>'
+	$custom  = apply_filters( 'mc_custom_location_fields', array(), $data, $context );
+	$fields  = mc_expand_custom_location_fields( $custom );
+	$return .= ( ! empty( $custom ) ) ? '<div class="mc-custom-fields mc-locations">' . $fields . '</div>';
+	$return .= '</div>
 	</div>
 	</div>';
 
@@ -674,6 +679,28 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	}
 
 	return $return;
+}
+
+/**
+ * Expand custom fields from array to field output
+ *
+ * @param array  $fields Array of field data.
+ * @param string $context Location or event.
+ *
+ * @return string
+ */
+function mc_expand_location_fields( $fields, $context ) {
+	if ( empty( $fields ) {
+		return '';
+	}
+	$output = '';
+
+	apply_filters( 'mc_order_location_fields', $fields, $context );
+	foreach ( $fields as $field ) {
+		$output .= apply_filters( 'mc_output_location_field', $field, $context );
+	}
+
+	return $output;
 }
 
 /**
