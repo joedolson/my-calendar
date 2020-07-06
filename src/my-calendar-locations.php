@@ -726,16 +726,16 @@ function mc_location_fields() {
  */
 function mc_location_custom_data( $data, $field ) {
 	$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : false;
-	$field       = '';
+	$value       = '';
 	if ( ! $location_id ) {
 		$location_id = ( isset( $_POST['location_id'] ) ) ? (int) $_POST['location_id'] : false;
 	}
 	if ( $location_id ) {
 		$post_id = mc_get_location_post( $location_id, false );
-		$field   = get_post_meta( $post_id, $field, true );
+		$value   = get_post_meta( $post_id, $field, true );
 	}
 
-	return $field;
+	return $value;
 }
 
 /**
