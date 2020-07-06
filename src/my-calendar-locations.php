@@ -756,7 +756,7 @@ function mc_location_custom_data( $location_id = false, $field ) {
  */
 function mc_template_location_fields( $e, $event ) {
 	$fields = mc_location_fields();
-	foreach( $fields as $name => $field ) {
+	foreach ( $fields as $name => $field ) {
 		$value = mc_location_custom_data( $event->event_location, $name );
 		if ( ! isset( $field['display_callback'] ) || ( isset( $field['display_callback'] ) && ! function_exists( $field['display_callback'] ) ) ) {
 			// if no display callback is provided.
@@ -764,7 +764,8 @@ function mc_template_location_fields( $e, $event ) {
 		} else {
 			$display = call_user_func( $field['display_callback'], $value, $field );
 		}
-		$e['location_' . $name] = $display;
+		$key = 'location_' . $name;
+		$e[ $key ] = $display;
 	}
 
 	return $e;
