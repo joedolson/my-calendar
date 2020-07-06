@@ -764,7 +764,7 @@ function mc_template_location_fields( $e, $event ) {
 		} else {
 			$display = call_user_func( $field['display_callback'], $value, $field );
 		}
-		$key = 'location_' . $name;
+		$key       = 'location_' . $name;
 		$e[ $key ] = $display;
 	}
 
