@@ -60,7 +60,7 @@ add_action( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
 /**
  * Create a post for My Calendar location data on save
  *
- * @param bool|int $location Result of save action; location ID or false.
+ * @param bool|int $location_id Result of save action; location ID or false.
  * @param array    $data Saved event data.
  * @param array    $post POST data.
  *
@@ -95,9 +95,17 @@ function mc_create_location_post( $location_id, $data, $post ) {
 }
 add_action( 'mc_save_location', 'mc_create_location_post', 10, 3 );
 
+/**
+ * Update custom fields for a location.
+ *
+ * @param int   $post_id Post ID associated with location.
+ * @param array $post POST data.
+ * @param array $data Saved location data.
+ * @param int   $location_id Location ID in table.
+ */
 function mc_update_location_custom_fields( $post_id, $post, $data, $location_id ) {
 	$fields = mc_location_fields();
-	foreach( $fields as $name => $field ) {
+	foreach ( $fields as $name => $field ) {
 		if ( isset( $post[ $name ] ) ) {
 			if ( ! isset( $field['sanitize_callback'] ) || ( isset( $field['sanitize_callback'] ) && ! function_exists( $field['sanitize_callback'] ) ) ) {
 				// if no sanitization is provided, we'll prep it for SQL and strip tags.
@@ -741,6 +749,9 @@ function mc_location_custom_data( $location_id = false, $field ) {
 /**
  * Add custom fields to event data output.
  *
+ * @param array  $e Event tag data.
+ * @param object $event Event object.
+ *
  * @return array
  */
 function mc_template_location_fields( $e, $event ) {
@@ -753,7 +764,7 @@ function mc_template_location_fields( $e, $event ) {
 		} else {
 			$display = call_user_func( $field['display_callback'], $value, $field );
 		}
-		$e['location_' . $name ] = $display;
+		$e['location_' . $name] = $display;
 	}
 
 	return $e;

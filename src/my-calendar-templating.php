@@ -301,7 +301,7 @@ function mc_display_template_tags() {
 	if ( empty( $data ) ) {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
 	}
-	foreach( $data as $key => $value ) {
+	foreach ( $data as $key => $value ) {
 		$output .= '<dt><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div></dt>';
 		if ( '' === $value ) {
 			$value = __( 'No output for this event.', 'my-calendar' );
