@@ -719,13 +719,13 @@ function mc_location_fields() {
 /**
  * Get custom data for a location.
  *
- * @param object $data Location data.
+ * @param int    $location_id Location ID.
  * @param string $field Custom field name.
  *
  * @return mixed
  */
-function mc_location_custom_data( $data, $field ) {
-	$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : false;
+function mc_location_custom_data( $location_id = false, $field ) {
+	$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : $location_id;
 	$value       = '';
 	if ( ! $location_id ) {
 		$location_id = ( isset( $_POST['location_id'] ) ) ? (int) $_POST['location_id'] : false;
@@ -739,9 +739,32 @@ function mc_location_custom_data( $data, $field ) {
 }
 
 /**
+ * Add custom fields to event data output.
+ *
+ * @return array
+ */
+function mc_template_location_fields( $e, $event ) {
+	$fields = mc_location_fields();
+	foreach( $fields as $name => $field ) {
+		$value = mc_location_custom_data( $event->event_location, $name );
+		if ( ! isset( $field['display_callback'] ) || ( isset( $field['display_callback'] ) && ! function_exists( $field['display_callback'] ) ) ) {
+			// if no display callback is provided.
+			$display = stripslashes( $value );
+		} else {
+			$display = call_user_func( $field['display_callback'], $value, $field );
+		}
+		$e['location_' . $name ] = $display;
+	}
+
+	return $e;
+}
+add_filter( 'mc_filter_shortcodes', 'mc_template_location_fields', 10, 2 );
+
+/**
  * Expand custom fields from array to field output
  *
  * @param array  $fields Array of field data.
+ * @param array  $data Location data.
  * @param string $context Location or event.
  *
  * @return string

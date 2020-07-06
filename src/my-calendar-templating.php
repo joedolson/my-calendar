@@ -154,7 +154,7 @@ function mc_templates_edit() {
 
 						<div class='mc_template_tags inside'>
 							<p>
-								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-help#templates' ); ?>"><?php _e( 'All Template Tags &raquo;', 'my-calendar' ); ?></a>
+								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-templates#templates' ); ?>"><?php _e( 'All Template Tags &raquo;', 'my-calendar' ); ?></a>
 							</p>
 							<dl>
 								<dt><code>{title}</code></dt>
@@ -254,12 +254,63 @@ function mc_templates_edit() {
 					</div>
 				</div>
 			</div>
+			<div id="templates" class="metabox-holder">
+				<div class="ui-sortable meta-box-sortables">
+					<div class="postbox">
+						<h2 class='hndle'><?php _e( 'All Event Template Tags (alphabetical)', 'my-calendar' ); ?></h2>
+
+						<div class='mc_template_tags inside'>
+							<?php echo mc_display_template_tags(); ?>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<?php
 	mc_show_sidebar();
 }
 
+/**
+ * Display a list of all available template tags.
+ *
+ * @return string
+ */
+function mc_display_template_tags() {
+	$event  = false;
+	$data   = array();
+	$output = '';
+	if ( ! isset( $_GET['mc-event'] ) ) {
+		$args   = array(
+			'before' => 1,
+			'after'  => 1,
+			'today'  => 'yes',
+		);
+		$events = mc_get_all_events( $args );
+		if ( isset( $events[0] ) ) {
+			$event = $events[0];
+		}
+	} else {
+		$mc_id = absint( $_GET['mc-event'] );
+		$event = mc_get_event( $mc_id );
+	}
+	if ( isset( $events[0] ) ) {
+		$data = mc_create_tags( $event );
+	}
+	ksort( $data );
+	if ( empty( $data ) ) {
+		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
+	}
+	foreach( $data as $key => $value ) {
+		$output .= '<dt><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div></dt>';
+		if ( '' === $value ) {
+			$value = __( 'No output for this event.', 'my-calendar' );
+		}
+		$output .= '<dd><div class="mc-output-' . $key . '"><pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre></div></dd>';
+	}
+
+	return '<dl>' . $output . '</dl>';
+}
 /**
  * Check whether the current key refers to a core template
  *
