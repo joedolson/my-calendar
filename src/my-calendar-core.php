@@ -1581,8 +1581,7 @@ function mc_load_permalinks() {
  *
  * @return string
  */
-function mc_previous_post_link( $output, $format, $link, $post, $adj ) {
-	$output = '';
+function mc_previous_post_link( $output = '', $format = '', $link = '', $post = false, $adj = false ) {
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'previous' );
