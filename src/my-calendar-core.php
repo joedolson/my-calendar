@@ -1606,7 +1606,7 @@ function mc_previous_post_link( $output = '', $format = '', $link = '', $post = 
  *
  * @return string
  */
-function mc_next_post_link( $output, $format, $link, $post, $adj ) {
+function mc_next_post_link( $output = '', $format = '', $link = '', $post = false, $adj = false ) {
 	$output = '';
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
