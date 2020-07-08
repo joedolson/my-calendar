@@ -1940,7 +1940,7 @@ function mc_list_events() {
 		}
 		$sorting       = ( 'DESC' === $sortbydirection ) ? '&amp;order=ASC' : '&amp;order=DESC';
 		$allow_filters = true;
-		$status        = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : 'all';
+		$status        = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : '';
 		$restrict      = ( isset( $_GET['restrict'] ) ) ? $_GET['restrict'] : 'all';
 		switch ( $status ) {
 			case 'all':
@@ -1956,7 +1956,7 @@ function mc_list_events() {
 				$limit = 'WHERE event_approved = 2';
 				break;
 			default:
-				$limit = '';
+				$limit = 'WHERE event_approved != 2';
 		}
 		switch ( $restrict ) {
 			case 'all':
