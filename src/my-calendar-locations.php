@@ -802,6 +802,9 @@ function mc_display_location_fields( $fields, $data, $context ) {
 			case 'tel':
 				$output = "<input type='" . $field['input_type'] . "' name='$name' id='$name' value='$user_value'$required />";
 				break;
+			case 'hidden':
+				$output = "<input type='hidden' name='$name' value='$user_value' />";
+				break;
 			case 'textarea':
 				$output = "<textarea rows='6' cols='60' name='$name' id='$name'$required>$user_value</textarea>";
 				break;
@@ -835,7 +838,11 @@ function mc_display_location_fields( $fields, $data, $context ) {
 			default:
 				$output = "<input type='text' name='$name' id='$name' value='$user_value' $required />";
 		}
-		$return .= "<p><label for='$name'>" . $field['title'] . $req_label . '</label> ' . $output . '</p>';
+		if ( 'hidden' !== $field['input_type'] ) {
+			$return .= ( 'checkbox' === $field['input_type'] || 'radio' === $field['input_type'] ) ? '<p class="' . $field['input_type'] . '">' . $output . " <label for='$name'>" . $field['title'] . $req_label . '</label></p>' : "<p><label for='$name'>" . $field['title'] . $req_label . '</label> ' . $output . '</p>';
+		} else {
+			$return .= $output;
+		}
 	}
 
 	return $return;
