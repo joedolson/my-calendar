@@ -674,24 +674,14 @@ select[name="event_recur"] {
 
 .locations-container {
 	position: relative;
-}
-
-.mc-locations .location-primary {
-	width: 47%;
-	margin-right: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 }
 
 .mc-locations:after {
 	content: ' ';
 	display: table;
 	clear: both;
-}
-
-.mc-locations .location-secondary {
-	position: absolute;
-	left: 50%;
-	top: 0;
-	width: 47%;
 }
 
 .mc-locations .locations-container input {
