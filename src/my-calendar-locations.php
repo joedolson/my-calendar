@@ -87,7 +87,7 @@ function mc_create_location_post( $location_id, $data, $post ) {
 		$post_id     = wp_insert_post( $my_post );
 		update_post_meta( $post_id, '_mc_location_id', $location_id );
 
-		do_action( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
+		do_action( 'mc_update_location_post', $post_id, $post, $data, $location_id );
 		wp_publish_post( $post_id );
 	}
 
@@ -102,9 +102,12 @@ add_action( 'mc_save_location', 'mc_create_location_post', 10, 3 );
  * @param array $post POST data.
  * @param array $data Saved location data.
  * @param int   $location_id Location ID in table.
+ *
+ * @return array Errors.
  */
 function mc_update_location_custom_fields( $post_id, $post, $data, $location_id ) {
-	$fields = mc_location_fields();
+	$fields       = mc_location_fields();
+	$field_errors = array();
 	foreach ( $fields as $name => $field ) {
 		if ( isset( $post[ $name ] ) ) {
 			if ( ! isset( $field['sanitize_callback'] ) || ( isset( $field['sanitize_callback'] ) && ! function_exists( $field['sanitize_callback'] ) ) ) {
@@ -113,9 +116,14 @@ function mc_update_location_custom_fields( $post_id, $post, $data, $location_id 
 			} else {
 				$sanitized = call_user_func( $field['sanitize_callback'], urldecode( $post[ $name ] ) );
 			}
-			update_post_meta( $post_id, $name, $sanitized );
+			$success = update_post_meta( $post_id, $name, $sanitized );
+			if ( ! $success ) {
+				$field_errors[] = $name;
+			}
 		}
 	}
+
+	return $field_errors;
 }
 add_action( 'mc_update_location_post', 'mc_update_location_custom_fields', 10, 4 );
 
@@ -150,8 +158,9 @@ add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
  * @return object $post
  */
 function mc_get_location_post( $location_id, $type = true ) {
-	$post  = false;
-	$posts = get_posts(
+	$post_ID = false;
+	$post    = false;
+	$posts   = get_posts(
 		array(
 			'post_type'  => 'mc-locations',
 			'meta_key'   => '_mc_location_id',
@@ -159,10 +168,11 @@ function mc_get_location_post( $location_id, $type = true ) {
 		)
 	);
 	if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
-		$post = $posts[0];
+		$post    = $posts[0];
+		$post_ID = $post->ID;
 	}
 
-	return ( $type ) ? $post : $post->ID;
+	return ( $type ) ? $post : $post_ID;
 }
 
 /**
@@ -827,7 +837,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 			case 'radio':
 				if ( isset( $field['input_values'] ) ) {
 					$value = $field['input_values'];
-					if ( '' !== $user_value ) {
+					if ( $value !== $user_value ) {
 						$checked = ' checked="checked"';
 					} else {
 						$checked = '';
