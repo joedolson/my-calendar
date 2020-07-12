@@ -704,7 +704,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	$return .= '</ul>
 	</fieldset>';
 	$fields  = mc_display_location_fields( mc_location_fields(), $data, $context );
-	$return .= ( '' !== $fields ) ? '<div class="mc-custom-fields mc-locations">' . $fields . '</div>' : '';
+	$return .= ( '' !== $fields ) ? '<div class="mc-custom-fields mc-locations"><fieldset><legend>' . __( 'Custom Fields', 'my-calendar' ) . '</legend>' . $fields . '</fieldset></div>' : '';
 	$return .= '</div>
 	</div>
 	</div>';
