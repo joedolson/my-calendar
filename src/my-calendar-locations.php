@@ -233,6 +233,18 @@ function mc_insert_location( $add ) {
 }
 
 /**
+ * Get count of locations.
+ *
+ * @return int
+ */
+function mc_count_locations() {
+	global $wpdb;
+	$count = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+
+	return $count;
+}
+
+/**
  * Update a location.
  *
  * @param array $update Array of location details to modify.
@@ -656,7 +668,9 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	<p>
 	<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" /> <label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
 	</p>
-	</fieldset>
+	</fieldset>';
+	$return .= apply_filters( 'mc_location_container_primary', '', $data, $context );
+	$return .= '
 	</div>
 	<div class="location-secondary">
 	<fieldset>
@@ -705,6 +719,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</fieldset>';
 	$fields  = mc_display_location_fields( mc_location_fields(), $data, $context );
 	$return .= ( '' !== $fields ) ? '<div class="mc-custom-fields mc-locations"><fieldset><legend>' . __( 'Custom Fields', 'my-calendar' ) . '</legend>' . $fields . '</fieldset></div>' : '';
+	$return .= apply_filters( 'mc_location_container_secondary', '', $data, $context );
 	$return .= '</div>
 	</div>
 	</div>';
@@ -837,7 +852,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 			case 'radio':
 				if ( isset( $field['input_values'] ) ) {
 					$value = $field['input_values'];
-					if ( $value !== $user_value ) {
+					if ( (string) $value === (string) $user_value ) {
 						$checked = ' checked="checked"';
 					} else {
 						$checked = '';

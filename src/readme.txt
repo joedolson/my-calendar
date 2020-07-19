@@ -83,6 +83,16 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.3.0 =
+
+* New feature: Add support for custom fields.
+
+= 3.2.2 =
+
+* Bug fix: Curly brace offset access deprecated
+* Bug fix: Make next/prev post link arguments optional.
+* Change: Remove trashed events from default events list.
+
 = 3.2.1 =
 
 * PHP Notice: undefined variable.
