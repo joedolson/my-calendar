@@ -669,8 +669,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" /> <label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
 	</p>
 	</fieldset>';
-	$return .= apply_filters( 'mc_location_container_primary', '', $data, $context );
-	$return .= '
+	$return      .= apply_filters( 'mc_location_container_primary', '', $data, $context );
+	$return      .= '
 	</div>
 	<div class="location-secondary">
 	<fieldset>
