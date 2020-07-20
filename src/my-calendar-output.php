@@ -22,12 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_get_template( $template ) {
 	$templates = get_option( 'mc_templates' );
-	$template  = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : $template;
+	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'rss', 'grid' );
 
-	$keys = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'rss', 'grid' );
-
-	if ( in_array( $template, $keys, true ) ) {
+	if ( ! in_array( $template, $keys, true ) ) {
 		$template = '';
+	} else {
+		$template  = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : $template;
 	}
 
 	return trim( $template );
@@ -537,26 +537,26 @@ function mc_get_details( $data, $template, $type ) {
 		switch ( $type ) {
 			case 'mini':
 				$template = mc_get_template( 'mini' );
-				if ( '1' === get_option( 'mc_use_mini_template' ) ) {
+				if ( '1' === get_option( 'mc_use_mini_template' ) && '' !== $template  ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'list':
 				$template = mc_get_template( 'list' );
-				if ( '1' === get_option( 'mc_use_list_template' ) ) {
+				if ( '1' === get_option( 'mc_use_list_template' ) && '' !== $template  ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'single':
 				$template = mc_get_template( 'details' );
-				if ( '1' === get_option( 'mc_use_details_template' ) ) {
+				if ( '1' === get_option( 'mc_use_details_template' ) && '' !== $template  ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'calendar':
 			default:
 				$template = mc_get_template( 'grid' );
-				if ( '1' === get_option( 'mc_use_grid_template' ) ) {
+				if ( '1' === get_option( 'mc_use_grid_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 		}
