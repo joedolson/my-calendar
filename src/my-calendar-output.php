@@ -27,7 +27,7 @@ function mc_get_template( $template ) {
 	if ( ! in_array( $template, $keys, true ) ) {
 		$template = '';
 	} else {
-		$template  = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : $template;
+		$template = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : $template;
 	}
 
 	return trim( $template );
@@ -537,19 +537,19 @@ function mc_get_details( $data, $template, $type ) {
 		switch ( $type ) {
 			case 'mini':
 				$template = mc_get_template( 'mini' );
-				if ( '1' === get_option( 'mc_use_mini_template' ) && '' !== $template  ) {
+				if ( '1' === get_option( 'mc_use_mini_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'list':
 				$template = mc_get_template( 'list' );
-				if ( '1' === get_option( 'mc_use_list_template' ) && '' !== $template  ) {
+				if ( '1' === get_option( 'mc_use_list_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'single':
 				$template = mc_get_template( 'details' );
-				if ( '1' === get_option( 'mc_use_details_template' ) && '' !== $template  ) {
+				if ( '1' === get_option( 'mc_use_details_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;

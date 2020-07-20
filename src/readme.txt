@@ -91,6 +91,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: Curly brace offset access deprecated
 * Bug fix: Make next/prev post link arguments optional.
+* Bug fix: Template queries could return an empty template.
 * Change: Remove trashed events from default events list.
 
 = 3.2.1 =
