@@ -27,7 +27,7 @@ function mc_get_template( $template ) {
 	if ( ! in_array( $template, $keys, true ) ) {
 		$template = '';
 	} else {
-		$template = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : $template;
+		$template = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : '';
 	}
 
 	return trim( $template );
