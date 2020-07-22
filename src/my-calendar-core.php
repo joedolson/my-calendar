@@ -1676,7 +1676,6 @@ function mc_post_type() {
 function mc_posttypes() {
 	$types   = mc_post_type();
 	$enabled = array( 'mc-events', 'mc-locations' );
-	$slug    = ( '' !== get_option( 'mc_cpt_base', '' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
 			$value  =& $types[ $key ];
@@ -1705,7 +1704,7 @@ function mc_posttypes() {
 				'query_var'           => true,
 				'rewrite'             => array(
 					'with_front' => false,
-					'slug'       => apply_filters( 'mc_event_slug', $slug ),
+					'slug'       => apply_filters( 'mc_event_slug', $key ),
 				),
 				'hierarchical'        => false,
 				'menu_position'       => 20,
@@ -1715,6 +1714,20 @@ function mc_posttypes() {
 		}
 	}
 }
+
+/**
+ * Replace the slug with saved option.
+ *
+ * @param string $slug Base post type name.
+ *
+ * @return string New permalink base.
+ */
+function mc_filter_posttype_slug( $slug ) {
+	$slug = ( '' !== get_option( 'mc_cpt_base', '' ) ) ? get_option( 'mc_cpt_base' ) : $slug;
+
+	return $slug;
+}
+add_filter( 'mc_event_slug', 'mc_filter_posttype_slug' );
 
 add_filter( 'the_posts', 'mc_close_comments' );
 /**
