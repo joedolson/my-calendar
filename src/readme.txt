@@ -83,6 +83,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.2.3 =
+
+* Bug fix: 3.2.2 created multiple post types with the same slug, triggering 404 errors.
+* Bug fix: Templates could return the name of the template if template empty/missing.
+
 = 3.2.2 =
 
 * Bug fix: Curly brace offset access deprecated
