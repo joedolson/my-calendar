@@ -1723,7 +1723,7 @@ function mc_posttypes() {
  * @return string New permalink base.
  */
 function mc_filter_posttype_slug( $slug ) {
-	$slug = ( '' !== get_option( 'mc_cpt_base', '' ) ) ? get_option( 'mc_cpt_base' ) : $slug;
+	$slug = ( '' !== get_option( 'mc_cpt_base', '' ) && 'mc-events' === $slug ) ? get_option( 'mc_cpt_base' ) : $slug;
 
 	return $slug;
 }
