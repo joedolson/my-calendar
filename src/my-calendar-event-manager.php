@@ -3500,15 +3500,18 @@ function mc_can_edit_category( $category, $user ) {
  */
 function mc_can_edit_event( $event = false ) {
 	if ( ! $event ) {
+
 		return false;
 	}
 
 	$api = apply_filters( 'mc_api_can_edit_event', false, $event );
 	if ( $api ) {
+
 		return $api;
 	}
 
 	if ( ! is_user_logged_in() ) {
+
 		return false;
 	}
 
@@ -3524,6 +3527,7 @@ function mc_can_edit_event( $event = false ) {
 		$event_author = wp_get_current_user()->ID;
 		$event_id     = $event;
 	}
+
 	$current_user    = wp_get_current_user();
 	$user            = $current_user->ID;
 	$categories      = mc_get_categories( $event_id );
@@ -3539,7 +3543,8 @@ function mc_can_edit_event( $event = false ) {
 	}
 	$return = false;
 
-	if ( ( current_user_can( 'mc_manage_events' ) && $has_permissions ) || ( $user === $event_author ) ) {
+	if ( ( current_user_can( 'mc_manage_events' ) && $has_permissions ) || ( $user === (int) $event_author ) ) {
+
 		$return = true;
 	}
 
