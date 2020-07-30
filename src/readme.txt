@@ -83,6 +83,10 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.2.5 =
+
+* Bug fix: CSV exported text fields contained newline characters.
+
 = 3.2.4 =
 
 * Bug fix: Permissions issue caused by variable type mismatch.

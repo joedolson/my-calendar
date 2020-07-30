@@ -103,6 +103,10 @@ function mc_api_format_csv( $data ) {
 			$values = get_object_vars( $v );
 			unset( $values['categories'] );
 			unset( $values['location'] );
+			$values['UID'] = $values['uid'];
+			foreach( $values as $key => $text ) {
+				$values[ $key ] = str_replace( array( "\r\n", "\r", "\n" ), '<br class="mc-export" />', trim( $text ) );
+			}
 			if ( ! $keyed ) {
 				$keys = array_keys( $values );
 				fputcsv( $stream, $keys );
