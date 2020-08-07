@@ -1798,9 +1798,12 @@ function mc_get_users( $group = 'authors' ) {
  * @return string select options.
  */
 function mc_selected_users( $selected = '', $group = 'authors' ) {
+	$options  = apply_filters( 'mc_custom_user_select', '', $selected, $group );
+	if ( '' !== $options ) {
+		return $options;
+	}
 	$selected = explode( ',', $selected );
 	$users    = mc_get_users( $group );
-	$options  = '';
 	foreach ( $users as $u ) {
 		if ( in_array( $u->ID, $selected, true ) ) {
 			$checked = ' selected="selected"';
