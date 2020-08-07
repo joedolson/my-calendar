@@ -1888,7 +1888,7 @@ function my_calendar( $args ) {
 						}
 						$events          = ( isset( $event_array[ $date_is ] ) ) ? $event_array[ $date_is ] : array();
 						$week_header     = date_i18n( $week_format, $start );
-						$thisday_heading = ( 'week' === $params['time'] ) ? "<small>$week_header</small>" : mc_date( 'j', $start, false );
+						$thisday_heading = ( 'week' === $params['time'] ) ? "<small>$week_header</small>" : mc_date( apply_filters( 'mc_grid_date', 'j', $params ), $start, false );
 
 						// Generate event classes & attributes.
 						$events_class = mc_events_class( $events, $date_is );
