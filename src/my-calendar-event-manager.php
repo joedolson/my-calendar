@@ -2541,7 +2541,7 @@ function mc_check_data( $action, $post, $i ) {
 	$event_longitude    = '';
 	$event_latitude     = '';
 
-	if ( get_magic_quotes_gpc() ) {
+	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) {
 		$post = array_map( 'stripslashes_deep', $post );
 	}
 	if ( ! wp_verify_nonce( $post['event_nonce_name'], 'event_nonce' ) ) {
