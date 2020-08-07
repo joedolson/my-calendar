@@ -588,6 +588,29 @@ function mc_category_by_name( $string ) {
 }
 
 /**
+ * Fetch category object by ID or name.
+ *
+ * @param int|string Category name/id.
+ *
+ * @return object
+ */
+function mc_get_category( $category ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	if ( is_int( $category ) ) {
+		$sql = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id = %d';
+		$cat = $mcdb->get_row( $mcdb->prepare( $sql, $category ) );
+	} else {
+		$cat = mc_category_by_name( $category );
+	}
+
+	return $cat;
+}
+
+/**
  * Generate list of categories to edit.
  */
 function mc_manage_categories() {
