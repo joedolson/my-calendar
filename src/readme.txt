@@ -83,6 +83,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.2.6 =
+
+* Added filter to change date format on calendar grid.
+* New filter for modifying user selection output.
+* Bug fix: only check for get_magic_quotes_gpc() if below PHP 7.4
+
 = 3.2.5 =
 
 * Bug fix: CSV exported text fields contained newline characters.
