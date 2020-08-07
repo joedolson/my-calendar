@@ -1150,10 +1150,14 @@ function mc_list_groups() {
 					<td><?php echo ( is_object( $author ) ) ? $author->display_name : $author; ?></td>
 					<?php
 					$this_category = $event->event_category;
+					$this_cat      = false;
 					foreach ( $categories as $key => $value ) {
 						if ( $value->category_id === $this_category ) {
 							$this_cat = $categories[ $key ];
 						}
+					}
+					if ( ! $this_cat ) {
+						$this_cat = mc_get_category( $event->event_category );
 					}
 					$background = strip_tags( ( strpos( $this_cat->category_color, '#' ) !== 0 ) ? '#' : '' ) . $this_cat->category_color;
 					?>
