@@ -94,6 +94,8 @@ function mc_api_format_json( $data ) {
  * @param array $data array of event objects.
  */
 function mc_api_format_csv( $data ) {
+	ob_clean();
+	ob_start();
 	$keyed = false;
 	// Create a stream opening it with read / write mode.
 	$stream = fopen( 'data://text/plain,' . '', 'w+' );
