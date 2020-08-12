@@ -590,7 +590,7 @@ function mc_category_by_name( $string ) {
 /**
  * Fetch category object by ID or name.
  *
- * @param int|string Category name/id.
+ * @param int|string $category Category name/id.
  *
  * @return object
  */
