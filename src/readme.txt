@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 3.2.5
+Stable tag: 3.2.6
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -88,6 +88,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Added filter to change date format on calendar grid.
 * New filter for modifying user selection output.
 * Bug fix: only check for get_magic_quotes_gpc() if below PHP 7.4
+* Bug fix: invalid query in mc_get_locations() if arguments passed as array.
 
 = 3.2.5 =
 
