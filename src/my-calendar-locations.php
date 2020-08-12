@@ -988,7 +988,7 @@ function mc_get_locations( $args ) {
 		// Prevent invalid order columns.
 		$orderby = 'location_label';
 	}
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE %s = %s ORDER BY ' . $orderby . ' ' . $order, $where, $is ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label FROM ' . my_calendar_locations_table() . ' WHERE ' . esc_sql( $where ) . ' = %s ORDER BY ' . esc_sql( $orderby ) . ' ' . esc_sql( $order ), $is ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return apply_filters( 'mc_filter_results', $results, $args );
 }
