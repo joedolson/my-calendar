@@ -765,7 +765,8 @@ select[name="event_recur"] {
 	border: 1px solid burlywood;
 }
 
-tr.problem {
+tr.problem,
+tr.invalid {
 	background-color: #ffa;
 }
 
