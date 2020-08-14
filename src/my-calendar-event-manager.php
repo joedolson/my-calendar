@@ -2030,7 +2030,6 @@ function mc_list_events() {
 			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
 			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS events.event_id FROM ' . my_calendar_table() . ' AS events JOIN ' . my_calendar_categories_table() . " AS categories WHERE events.event_category = categories.category_id $limit ORDER BY categories.category_name $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 		}
-
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 		$items      = $found_rows[0];
 		$counts     = get_option( 'mc_count_cache' );
@@ -2177,12 +2176,16 @@ function mc_list_events() {
 				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				foreach ( array_keys( $events ) as $key ) {
-					$e     =& $events[ $key ];
-					$event = mc_get_first_event( $e->event_id );
+					$e       =& $events[ $key ];
+					$event   = mc_get_first_event( $e->event_id );
+					$invalid = false;
 					if ( ! is_object( $event ) ) {
-						continue;
+						$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) );
+						$invalid = true;
+						// continue;
 					}
 					$class   = ( 'alternate' === $class ) ? 'even' : 'alternate';
+					$class   = ( $invalid ) ? $class . ' invalid' : $class;
 					$pending = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
 					$trashed = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
 					$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
@@ -2196,13 +2199,18 @@ function mc_list_events() {
 						$spam_label = '';
 					}
 
-					$trash      = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
-					$draft      = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : $trash;
-					$check      = mc_test_occurrence_overlap( $event, true );
-					$problem    = ( '' !== $check ) ? 'problem' : '';
-					$edit_url   = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
-					$copy_url   = admin_url( "admin.php?page=my-calendar&amp;mode=copy&amp;event_id=$event->event_id" );
-					$view_url   = mc_get_details_link( $event );
+					$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
+					$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : $trash;
+					$invalid  = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : $trash;
+					$check    = mc_test_occurrence_overlap( $event, true );
+					$problem  = ( '' !== $check ) ? 'problem' : '';
+					$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
+					$copy_url = admin_url( "admin.php?page=my-calendar&amp;mode=copy&amp;event_id=$event->event_id" );
+					if ( ! $invalid ) {
+						$view_url = mc_get_details_link( $event );
+					} else {
+						$view_url = '';
+					}
 					$group_url  = admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
 					$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" );
 					$can_edit   = mc_can_edit_event( $event );
@@ -2236,6 +2244,7 @@ function mc_list_events() {
 									}
 								}
 								echo $draft;
+								echo $invalid;
 								?>
 								</strong>
 
@@ -2336,7 +2345,14 @@ function mc_list_events() {
 								mc_update_event( 'event_category', 1, $event->event_id, '%d' );
 							}
 							$cat        = mc_get_category_detail( $event->event_category, false );
-							$color      = strip_tags( $cat->category_color );
+							if ( ! is_object( $cat ) ) {
+								$cat = (object) array(
+									'category_color' => '',
+									'category_id'    => '',
+									'category_name'  => '',
+								);
+							}
+							$color      = $cat->category_color;
 							$color      = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
 							$categories = mc_get_categories( $event );
 							$cats       = array();
@@ -3502,6 +3518,7 @@ function mc_can_edit_category( $category, $user ) {
  * @return boolean
  */
 function mc_can_edit_event( $event = false ) {
+	global $wpdb;
 	if ( ! $event ) {
 
 		return false;
@@ -3524,6 +3541,9 @@ function mc_can_edit_event( $event = false ) {
 	} elseif ( is_int( $event ) ) {
 		$event_id     = $event;
 		$event        = mc_get_first_event( $event );
+		if ( ! is_object( $event ) ) {
+			$event = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) );
+		}
 		$event_author = $event->event_author;
 	} else {
 		// What is the case where the event is neither an object, int, or falsey? Hmm.
