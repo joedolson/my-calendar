@@ -914,12 +914,16 @@ function mc_delete_event( $event_id ) {
 		$instance = false;
 		$post_id  = mc_get_data( 'event_post', $event_id );
 		if ( empty( $_POST['event_instance'] ) ) {
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id =%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// Delete from instance table.
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// Delete from event table.
 			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// Delete category relationship records.
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$event_in = absint( $_POST['event_instance'] );
-			$result   = $wpdb->get_results( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $event_in ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$result   = $wpdb->get_results( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_in ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$instance = true;
 		}
 		if ( empty( $result ) || empty( $result[0]->event_id ) ) {
