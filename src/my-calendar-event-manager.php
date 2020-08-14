@@ -2184,9 +2184,8 @@ function mc_list_events() {
 					$event   = mc_get_first_event( $e->event_id );
 					$invalid = false;
 					if ( ! is_object( $event ) ) {
-						$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) );
+						$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 						$invalid = true;
-						// continue;
 					}
 					$class   = ( 'alternate' === $class ) ? 'even' : 'alternate';
 					$class   = ( $invalid ) ? $class . ' invalid' : $class;
@@ -2348,7 +2347,7 @@ function mc_list_events() {
 								// Events *must* have a category.
 								mc_update_event( 'event_category', 1, $event->event_id, '%d' );
 							}
-							$cat        = mc_get_category_detail( $event->event_category, false );
+							$cat = mc_get_category_detail( $event->event_category, false );
 							if ( ! is_object( $cat ) ) {
 								$cat = (object) array(
 									'category_color' => '',
@@ -3543,10 +3542,10 @@ function mc_can_edit_event( $event = false ) {
 		$event_id     = $event->event_id;
 		$event_author = $event->event_author;
 	} elseif ( is_int( $event ) ) {
-		$event_id     = $event;
-		$event        = mc_get_first_event( $event );
+		$event_id = $event;
+		$event    = mc_get_first_event( $event );
 		if ( ! is_object( $event ) ) {
-			$event = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) );
+			$event = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 		$event_author = $event->event_author;
 	} else {
