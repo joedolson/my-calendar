@@ -2652,6 +2652,11 @@ function mc_check_data( $action, $post, $i ) {
 				$primary = $cats;
 				$cats    = array( $cats );
 			}
+		} else {
+			$default = get_option( 'mc_default_category' );
+			$default = ( ! $default ) ? mc_no_category_default( true ) : $default;
+			$cats    = array( $default );
+			$primary = $default;
 		}
 		$event_author = ( isset( $post['event_author'] ) && is_numeric( $post['event_author'] ) ) ? $post['event_author'] : 0;
 		$event_link   = ! empty( $post['event_link'] ) ? trim( $post['event_link'] ) : '';
