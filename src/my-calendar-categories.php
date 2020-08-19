@@ -588,6 +588,38 @@ function mc_category_by_name( $string ) {
 }
 
 /**
+ * Get or create a category if no default set.
+ *
+ * @return int
+ */
+function mc_no_category_default( $single = false ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$cats    = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+	if ( empty( $cats ) ) {
+		// need to have categories. Try to create again.
+		$cat_id = mc_create_category(
+			array(
+				'category_name'  => 'General',
+				'category_color' => '#ffffcc',
+				'category_icon'  => 'event.png',
+			)
+		);
+
+		$cats = $mcdb->get_results( $sql );
+	}
+	if ( $single ) {
+		return $cat_id;
+	}
+
+	return $cats;
+}
+
+/**
  * Fetch category object by ID or name.
  *
  * @param int|string $category Category name/id.
@@ -793,30 +825,13 @@ function mc_save_profile() {
  * @return string HTML fields.
  */
 function mc_category_select( $data = false, $option = true, $multiple = false, $name = false ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
 	if ( ! $name ) {
 		$name = 'event_category[]';
 	}
 	// Grab all the categories and list them.
 	$list    = '';
 	$default = '';
-	$cats    = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
-	if ( empty( $cats ) ) {
-		// need to have categories. Try to create again.
-		mc_create_category(
-			array(
-				'category_name'  => 'General',
-				'category_color' => '#ffffcc',
-				'category_icon'  => 'event.png',
-			)
-		);
-
-		$cats = $mcdb->get_results( $sql );
-	}
+	$cats    = mc_no_category_default();
 	if ( ! empty( $cats ) ) {
 		$cats = apply_filters( 'mc_category_list', $cats, $data, $option, $name );
 		foreach ( $cats as $cat ) {
