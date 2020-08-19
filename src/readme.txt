@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -82,6 +82,13 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.2.7 =
+
+* Bug fix: Prevent events from being created without categories.
+* Bug fix: Ensure category relationships are deleted when related events are deleted.
+* Add handling for seeing & managing events that are invalid.
+* Add styles for invalid rows.
 
 = 3.2.6 =
 
