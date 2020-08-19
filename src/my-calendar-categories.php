@@ -590,6 +590,8 @@ function mc_category_by_name( $string ) {
 /**
  * Get or create a category if no default set.
  *
+ * @param bool $single False for all categories; true for individual category.
+ *
  * @return int
  */
 function mc_no_category_default( $single = false ) {
@@ -599,7 +601,8 @@ function mc_no_category_default( $single = false ) {
 		$mcdb = mc_remote_db();
 	}
 
-	$cats    = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+	$cats   = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+	$cat_id = $cats[0]->category_id;
 	if ( empty( $cats ) ) {
 		// need to have categories. Try to create again.
 		$cat_id = mc_create_category(
@@ -610,7 +613,7 @@ function mc_no_category_default( $single = false ) {
 			)
 		);
 
-		$cats = $mcdb->get_results( $sql );
+		$cats = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
 	}
 	if ( $single ) {
 		return $cat_id;
