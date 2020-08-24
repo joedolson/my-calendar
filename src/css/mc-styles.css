@@ -774,6 +774,15 @@ tr.problem .error {
 	color: #a00;
 }
 
+.mc_default {
+	padding: 2px 8px 2px 2px;
+	border-radius: 3px;
+	background: #ffa;
+	color: #333;
+	border: 1px solid #888;
+	float: right;
+}
+
 .problem-icon {
 	font-size: 64px;
 	float: left; 

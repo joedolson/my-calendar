@@ -267,6 +267,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$tickets     = '';
 	$data        = mc_create_tags( $event, $id );
 	$details     = '';
+
 	if ( mc_show_details( $time, $type ) ) {
 		$details  = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
 		$template = apply_filters( 'mc_use_custom_template', $template, $data, $event, $type, $process_date, $time );
@@ -324,7 +325,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	} else {
 		$event_title = apply_filters( 'mc_event_title', $event_title, $event, $data['title'], $image );
 	}
-	$no_link     = apply_filters( 'mc_disable_link', false, $data );
+	$no_link = apply_filters( 'mc_disable_link', false, $data );
 
 	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type ) && ! $no_link ) {
 		if ( 'true' === $open_uri ) {
@@ -351,7 +352,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	} else {
 		$title = '';
 	}
-	$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
+	$header      .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
 	$close_button = mc_close_button( "$uid-$type-details-$id" );
 
 	if ( mc_show_details( $time, $type ) ) {

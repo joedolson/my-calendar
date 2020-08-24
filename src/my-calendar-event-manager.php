@@ -1665,8 +1665,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				foreach ( $locs as $loc ) {
 					if ( is_object( $loc ) ) {
 						$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
-						$selected = '';
+						$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) $loc->location_id === (int) get_option( 'mc_default_location' ) ) ? ' selected="selected"' : '';
 						if ( is_object( $data ) ) {
+							$selected = '';
 							if ( property_exists( $data, 'event_location' ) ) {
 								$event_location = $data->event_location;
 							} else {

@@ -46,9 +46,31 @@ function my_calendar_manage_locations() {
 			</div>
 		</div>
 	</div>
-		<?php mc_show_sidebar(); ?>
+		<?php
+		$default = array( __( 'Default Location', 'my-calendar' ) => mc_default_location() );
+		mc_show_sidebar( '', $default );
+		?>
 	</div>
 	<?php
+}
+
+/**
+ * Fetch default location data.
+ *
+ * @return string
+ */
+function mc_default_location() {
+	$default = get_option( 'mc_default_location' );
+	if ( $default ) {
+		$location = mc_get_location( $default );
+		$output   = mc_hcard( $location, 'true', false, 'location' );
+		$output  .= '<p><a href="' . admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$default" ) . '">' . __( 'Edit Default Location', 'my-calendar' ) . '</a></p>';
+	}
+	if ( ! $output ) {
+		$output = '<p>' . __( 'No default location selected.', 'my-calendar' ) . '</p>';
+	}
+
+	return $output;
 }
 
 /**
@@ -232,7 +254,18 @@ function mc_manage_locations() {
 						<input type="checkbox" value="<?php echo $location->location_id; ?>" name="mass_edit[]" id="mc<?php echo $location->location_id; ?>"/>
 						<label for="mc<?php echo $location->location_id; ?>"><?php echo $location->location_id; ?></label>
 					</th>
-					<td><?php echo mc_hcard( $location, 'true', 'false', 'location' ); ?></td>
+					<?php
+					$default = '';
+					if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
+						$default = '<span class="mc_default"><span class="dashicons dashicons-location" aria-hidden="true"></span>' . __( 'Default Location', 'my-calendar' ) . '</span>';
+					}
+					?>
+					<td>
+					<?php
+						echo $default;
+						echo mc_hcard( $location, 'true', 'false', 'location' );
+					?>
+					</td>
 					<td><?php echo esc_html( $location->location_city ); ?></td>
 					<td><?php echo esc_html( $location->location_state ); ?></td>
 					<td>

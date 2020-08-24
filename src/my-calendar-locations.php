@@ -298,6 +298,9 @@ function my_calendar_add_locations() {
 		);
 
 		$results = mc_insert_location( $add );
+		if ( isset( $_POST['mc_default_location'] ) && $results ) {
+			update_option( 'mc_default_location', (int) $results );
+		}
 		do_action( 'mc_save_location', $results, $add, $_POST );
 		if ( $results ) {
 			mc_show_notice( __( 'Location added successfully', 'my-calendar' ) );
@@ -309,6 +312,10 @@ function my_calendar_add_locations() {
 		do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
 		if ( $results ) {
 			mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ) );
+			$default_location = get_option( 'mc_default_location', false );
+			if ( (int) $default_location === (int) $_GET['location_id'] ) {
+				delete_option( 'mc_default_location' );
+			}
 		} else {
 			mc_show_error( __( 'Location could not be deleted', 'my-calendar' ) );
 		}
@@ -335,6 +342,9 @@ function my_calendar_add_locations() {
 		);
 
 		$where   = array( 'location_id' => (int) $_POST['location_id'] );
+		if ( isset( $_POST['mc_default_location'] ) ) {
+			update_option( 'mc_default_location', (int) $_POST['location_id'] );
+		}
 		$results = mc_modify_location( $update, $where );
 
 		do_action( 'mc_modify_location', $where, $update, $_POST );
@@ -580,8 +590,14 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	if ( current_user_can( 'mc_edit_locations' ) && 'event' === $context ) {
 		$return .= '<p class="checkboxes"><input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location" /> <label for="mc_copy_location">' . __( 'Copy this location into the locations table', 'my-calendar' ) . '</label></p>';
 	}
+	if ( current_user_can( 'mc_edit_settings' ) && isset( $_GET['page'] ) && 'my-calendar-locations' === $_GET['page'] ) {
+		$checked = ( isset( $_GET['location_id'] ) && $_GET['location_id'] == get_option( 'mc_default_location' ) ) ? 'checked="checked"' : '';
+		$return .= '<p class="checkbox">';
+		$return .= '<input type="checkbox" name="mc_default_location" id="mc_default_location"' . $checked . ' /> <label for="mc_default_location">' . __( 'Default Location', 'my-calendar' ) . '</label>';
+		$return .= '</p>';
+	}
 	$return   .= '
-	<p class="checkbox">
+	<p>
 	<label for="e_label">' . __( 'Name of Location (e.g. <em>Joe\'s Bar and Grill</em>)', 'my-calendar' ) . '</label>';
 	$cur_label = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_label'} ) ) : '';
 	if ( mc_controlled_field( 'label' ) ) {
