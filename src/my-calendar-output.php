@@ -97,7 +97,8 @@ function mc_time_html( $e, $type ) {
 	}
 	$time_content .= apply_filters( 'mcs_end_time_block', '', $e );
 	// Generate date/time meta data.
-	$meta  = ( 0 === (int) $e->event_hide_end ) ? "<meta itemprop='endDate' content='" . $start . 'T' . $e->event_endtime . "'/>" : '';
+	$meta  = "<meta itemprop='startDate' content='" . $start . 'T' . $e->event_time . "' />";
+	$meta .= ( 0 === (int) $e->event_hide_end ) ? "<meta itemprop='endDate' content='" . $end . 'T' . $e->event_endtime . "'/>" : '';
 	$meta .= '<meta itemprop="duration" content="' . mc_duration( $e ) . '"/>';
 
 	$time = "
@@ -318,6 +319,11 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		$event_title = str_replace( ': ', '', $event_title );
 	}
 	$event_title = ( '' === $event_title ) ? $data['title'] : strip_tags( $event_title, mc_strip_tags() );
+	if ( 'single' === $type ) {
+		$event_title = apply_filters( 'mc_single_event_title', $event_title, $event );
+	} else {
+		$event_title = apply_filters( 'mc_event_title', $event_title, $event, $data['title'], $image );
+	}
 	$no_link     = apply_filters( 'mc_disable_link', false, $data );
 
 	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type ) && ! $no_link ) {
@@ -334,15 +340,18 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 		$balance = '';
 	}
 
-	$group_class   = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
-	$hlevel        = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
-	$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
-	$header       .= ( 'single' !== $type && 'list' !== $type ) ? "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n" : '';
-	$event_title   = ( 'single' === $type ) ? apply_filters( 'mc_single_event_title', $event_title, $event ) : $event_title;
-	$title         = ( 'single' === $type && ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image $event_title</h2>\n" : '	<span class="summary screen-reader-text">' . $event_title . '</span>';
-	$title         = apply_filters( 'mc_event_title', $title, $event, $event_title, $image );
-	$header       .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $title ) . '</span>' : $title;
-
+	$group_class = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
+	$hlevel      = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
+	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
+	if ( 'single' === $type ) {
+		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image $event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
+	} elseif ( 'list' !== $type ) {
+		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
+		$title         = "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n";
+	} else {
+		$title = '';
+	}
+	$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
 	$close_button = mc_close_button( "$uid-$type-details-$id" );
 
 	if ( mc_show_details( $time, $type ) ) {

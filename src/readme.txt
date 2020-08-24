@@ -83,6 +83,12 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.2.8 =
+
+* Bug fix: Extraneous screen-reader-text summary generated in event views.
+* Bug fix: Fixes to missing parameters in Schema.org microdata.
+* 
+
 = 3.2.7 =
 
 * Bug fix: Prevent events from being created without categories.
