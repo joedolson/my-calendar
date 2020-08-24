@@ -341,7 +341,7 @@ function my_calendar_add_locations() {
 			'location_access'    => isset( $_POST['location_access'] ) ? serialize( $_POST['location_access'] ) : '',
 		);
 
-		$where   = array( 'location_id' => (int) $_POST['location_id'] );
+		$where = array( 'location_id' => (int) $_POST['location_id'] );
 		if ( isset( $_POST['mc_default_location'] ) ) {
 			update_option( 'mc_default_location', (int) $_POST['location_id'] );
 		}
@@ -591,7 +591,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 		$return .= '<p class="checkboxes"><input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location" /> <label for="mc_copy_location">' . __( 'Copy this location into the locations table', 'my-calendar' ) . '</label></p>';
 	}
 	if ( current_user_can( 'mc_edit_settings' ) && isset( $_GET['page'] ) && 'my-calendar-locations' === $_GET['page'] ) {
-		$checked = ( isset( $_GET['location_id'] ) && $_GET['location_id'] == get_option( 'mc_default_location' ) ) ? 'checked="checked"' : '';
+		$checked = ( isset( $_GET['location_id'] ) && (int) get_option( 'mc_default_location' ) === (int) $_GET['location_id'] ) ? 'checked="checked"' : '';
 		$return .= '<p class="checkbox">';
 		$return .= '<input type="checkbox" name="mc_default_location" id="mc_default_location"' . $checked . ' /> <label for="mc_default_location">' . __( 'Default Location', 'my-calendar' ) . '</label>';
 		$return .= '</p>';

@@ -87,7 +87,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: Extraneous screen-reader-text summary generated in event views.
 * Bug fix: Fixes to missing parameters in Schema.org microdata.
-* 
+* New feature: Default location.
 
 = 3.2.7 =
 
