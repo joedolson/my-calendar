@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.2.7
+Stable tag: 3.2.8
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -87,6 +87,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: Extraneous screen-reader-text summary generated in event views.
 * Bug fix: Fixes to missing parameters in Schema.org microdata.
+* Bug fix: Incorrect type comparison caused custom templates not to render in single event view.
 * New feature: Default location.
 
 = 3.2.7 =
