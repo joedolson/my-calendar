@@ -3073,7 +3073,7 @@ function mc_instance_list( $args ) {
 
 	global $wpdb;
 	$output = '';
-	if ( true === $instance ) {
+	if ( true === $instance || '1' === $instance ) {
 		$sql = 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d ORDER BY occur_begin ASC';
 	} else {
 		$sql = 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC';
