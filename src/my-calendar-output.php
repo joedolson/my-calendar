@@ -2444,7 +2444,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		$c_day   = apply_filters( 'mc_filter_day', $shortcode_day, $params );
 	}
 	$c_day   = ( 0 === (int) $c_day ) ? 1 : $c_day; // c_day can't equal 0.
-	$current = mktime( 0, 0, 0, $c_month, $c_day, $c_year );
+	$current = mktime( 0, 0, 0, (int) $c_month, (int) $c_day, (int) $c_year );
 	$c_month = str_pad( $c_month, 2, '0', STR_PAD_LEFT );
 
 	return array(
