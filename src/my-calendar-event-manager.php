@@ -2849,7 +2849,7 @@ function mc_check_data( $action, $post, $i ) {
 		// Array: removed before DB insertion.
 		'event_categories'   => $cats,
 	);
-	$errors       = apply_filters( 'mc_fields_required', '', $submit );
+	$errors       = apply_filters( 'mc_fields_required', $errors, $submit );
 
 	if ( '' === $errors ) {
 		$ok = true;
