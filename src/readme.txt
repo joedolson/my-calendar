@@ -83,6 +83,13 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.2.9 =
+
+* Bug fix: Additional of required fields testing erased error messages generated prior to required fields testing.
+* Bug fix: If an individual occurrence title is edited, event permalinks show the single change on all events.
+* Bug fix: Prev/next event links don't include unique event IDs.
+* Bug fix: Remove irrelevant arguments from prev/next event link generation.
+
 = 3.2.8 =
 
 * Bug fix: Extraneous screen-reader-text summary generated in event views.
