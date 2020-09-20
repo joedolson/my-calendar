@@ -153,7 +153,15 @@ function mc_category_icon_title( $title, $post_id = null ) {
 		if ( $post_id ) {
 			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : get_post_meta( $post_id, '_mc_event_id', true );
 			if ( is_numeric( $event_id ) ) {
-				$event = mc_get_first_event( $event_id );
+				$event       = mc_get_event( $event_id );
+				if ( ! is_object( $event ) ) {
+					$event = mc_get_first_event( $event_id );
+				} else {
+					$event_title = $event->event_title;
+					if ( $event_title != $title ) {
+						$title = $event_title;
+					}
+				}
 				if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
 					$icon = mc_category_icon( $event );
 				} else {
