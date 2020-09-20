@@ -1581,13 +1581,15 @@ function mc_load_permalinks() {
  *
  * @return string
  */
-function mc_previous_post_link( $output = '', $format = '', $link = '', $post = false, $adj = false ) {
+function mc_previous_post_link( $output, $format, $link, $post, $adj ) {
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'previous' );
-		$title = $event['title'];
-		$link  = $event['details_link'];
-		$date  = ' <span class="mc-event-date">' . $event['date'] . '</span>';
+		remove_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
+		add_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
+		$date = ' <span class="mc-event-date">' . $event['date'] . '</span>';
 
 		$output = str_replace( '%link', '<a href="' . $link . '" rel="next" class="mc-adjacent">' . $title . $date . '</a>', $format );
 	}
@@ -1596,7 +1598,7 @@ function mc_previous_post_link( $output = '', $format = '', $link = '', $post = 
 }
 
 /**
- * Change out previous post link for previous event.
+ * Change out next post link for next event.
  *
  * @param string  $output Original link.
  * @param string  $format Link anchor format.
@@ -1606,14 +1608,16 @@ function mc_previous_post_link( $output = '', $format = '', $link = '', $post = 
  *
  * @return string
  */
-function mc_next_post_link( $output = '', $format = '', $link = '', $post = false, $adj = false ) {
+function mc_next_post_link( $output, $format, $link, $post, $adj ) {
 	$output = '';
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'next' );
+		remove_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
-		$link  = $event['details_link'];
-		$date  = ' <span class="mc-event-date">' . $event['date'] . '</span>';
+		add_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
+		$date = ' <span class="mc-event-date">' . $event['date'] . '</span>';
 
 		$output = str_replace( '%link', '<a href="' . $link . '" rel="next" class="mc-adjacent">' . $title . $date . '</a>', $format );
 	}
