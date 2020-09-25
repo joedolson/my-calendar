@@ -28,7 +28,10 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 	if ( strpos( $template, '{' ) === false ) {
 		return trim( $template );
 	}
-
+	// If the data passed is not an array or is empty, return empty string.
+	if ( ! is_array( $array ) || empty( $array ) ) {
+		return '';
+	}
 	foreach ( $array as $key => $value ) {
 		/**
 		 * I implemented this section due to a *previous* security issue.
