@@ -5,7 +5,7 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.2.8
+Stable tag: 3.2.9
 Text domain: my-calendar
 License: GPLv2 or later
 
@@ -52,6 +52,7 @@ Do you need to sell tickets for events? [Use My Tickets](https://wordpress.org/p
 > * Advanced search features
 > * Responsive mode
 > * Import events from .ics or .csv formats via file or URL.
+> * REST API support for sharing events between multiple sites.
 
 = Translations =
 
@@ -89,6 +90,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: If an individual occurrence title is edited, event permalinks show the single change on all events.
 * Bug fix: Prev/next event links don't include unique event IDs.
 * Bug fix: Remove irrelevant arguments from prev/next event link generation.
+* Bug fix: Ignore templates if no data passed.
 
 = 3.2.8 =
 
