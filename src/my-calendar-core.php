@@ -1573,8 +1573,8 @@ function mc_load_permalinks() {
 /**
  * Change out previous post link for previous event.
  *
- * @param string  $output Original link.
- * @param string  $format Link anchor format.
+ * @param string $output Original link.
+ * @param string $format Link anchor format.
  *
  * @return string
  */
@@ -1597,8 +1597,8 @@ function mc_previous_post_link( $output, $format ) {
 /**
  * Change out next post link for next event.
  *
- * @param string  $output Original link.
- * @param string  $format Link anchor format.
+ * @param string $output Original link.
+ * @param string $format Link anchor format.
  *
  * @return string
  */
