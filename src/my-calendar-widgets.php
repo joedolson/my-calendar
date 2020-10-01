@@ -244,7 +244,7 @@ function my_calendar_upcoming_events( $args ) {
 		$output = apply_filters( 'mc_upcoming_events_header', $header ) . $output . apply_filters( 'mc_upcoming_events_footer', $footer );
 		$return = mc_run_shortcodes( $output );
 	} else {
-		$return = stripcslashes( $no_event_text );
+		$return = '<div class="no-events-fallback upcoming-events">' . stripcslashes( $no_event_text ) . '</div>';
 	}
 
 	if ( $site ) {
@@ -574,10 +574,10 @@ function my_calendar_todays_events( $args ) {
 		if ( 0 !== count( $events ) ) {
 			$return = apply_filters( 'mc_todays_events_header', $header ) . $output . apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
-			$return = stripcslashes( $no_event_text );
+			$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '</div>';
 		}
 	} else {
-		$return = stripcslashes( $no_event_text );
+		$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '</div>';
 	}
 
 	if ( $site ) {
