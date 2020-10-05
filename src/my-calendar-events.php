@@ -155,7 +155,7 @@ function my_calendar_get_events( $args ) {
 			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
 			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
 		$exclude_categories
-		ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+		GROUP BY o.occur_id ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
 
 			$events = $mcdb->get_results( $event_query );
 
@@ -190,7 +190,7 @@ function my_calendar_get_events( $args ) {
 	} else {
 		$event_query = '
 		SELECT *, ' . $ts_string . '
-		FROM ' . my_calendar_event_table( $site ) . '
+		FROM ' . my_calendar_event_table( $site ) . ' AS o
 		JOIN ' . my_calendar_table( $site ) . ' AS e
 		ON (event_id=occur_event_id)
 		JOIN ' . my_calendar_categories_table( $site ) . " AS c 
@@ -202,7 +202,7 @@ function my_calendar_get_events( $args ) {
 			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
 			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
 		$exclude_categories
-		ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+		GROUP BY o.occur_id ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
 
 		$events = $mcdb->get_results( $event_query );
 
