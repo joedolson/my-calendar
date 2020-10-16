@@ -89,6 +89,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Change: Fallback text should have a stylable wrapper.
 * Bug fix: Missing translatable string.
 * Bug fix: When multiple categories selected, events in more than one category would appear multiple times.
+* Bug fix: Missing space in MySQL filters in event manager.
+* Layout fix: Ensure there's always a space between date & time.
 
 = 3.2.9 =
 
