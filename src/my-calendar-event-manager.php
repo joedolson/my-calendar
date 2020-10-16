@@ -2001,7 +2001,7 @@ function mc_list_events() {
 		if ( '' === $limit && '' !== $filter ) {
 			$limit = "WHERE $restrict = $filter";
 		} elseif ( '' !== $limit && '' !== $filter ) {
-			$limit .= "AND $restrict = $filter";
+			$limit .= " AND $restrict = $filter";
 		}
 		if ( '' === $filter || ! $allow_filters ) {
 			$filtered = '';
