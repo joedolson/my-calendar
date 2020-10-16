@@ -83,15 +83,15 @@ function mc_time_html( $e, $type ) {
 	$time_content = ( 'list' === $type ) ? '' : "<span class='mc-event-date dtstart' itemprop='startDate' title='" . $dtstart . "' content='" . $dtstart . "'>$current</span>";
 	// Handle cases.
 	if ( $has_time ) {
-		$time_content .= "<span class='event-time dtstart'><time class='value-title' datetime='" . $dtstart . "' title='" . $dtstart . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>';
+		$time_content .= " <span class='event-time dtstart'><time class='value-title' datetime='" . $dtstart . "' title='" . $dtstart . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>';
 		if ( 0 === (int) $e->event_hide_end ) {
 			if ( '' !== $e->event_endtime && $e->event_endtime !== $e->event_time ) {
-				$time_content .= "<span class='time-separator'> &ndash; </span>$final<span class='end-time dtend'><time class='value-title' datetime='" . $dtend . "' title='" . $dtend . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>';
+				$time_content .= " <span class='time-separator'> &ndash; </span>$final<span class='end-time dtend'><time class='value-title' datetime='" . $dtend . "' title='" . $dtend . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>';
 			}
 		}
 	} else {
 		$notime        = mc_notime_label( $e );
-		$time_content .= "<span class='event-time'>";
+		$time_content .= " <span class='event-time'>";
 		$time_content .= ( 'N/A' === $notime ) ? "<abbr title='" . __( 'Not Applicable', 'my-calendar' ) . "'>" . __( 'N/A', 'my-calendar' ) . "</abbr>\n" : esc_html( $notime );
 		$time_content .= '</span>';
 	}
