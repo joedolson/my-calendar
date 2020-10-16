@@ -1619,6 +1619,42 @@ function mc_next_post_link( $output, $format ) {
 }
 
 
+add_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+/**
+ * Add category icon into title on individual event pages.
+ *
+ * @param string $title Original title.
+ * @param int    $post_id Post ID.
+ *
+ * @return string new title string
+ */
+function mc_category_icon_title( $title, $post_id = null ) {
+	if ( is_singular( 'mc-events' ) && in_the_loop() ) {
+		if ( $post_id ) {
+			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : get_post_meta( $post_id, '_mc_event_id', true );
+			if ( is_numeric( $event_id ) ) {
+				$event = mc_get_event( $event_id );
+				if ( ! is_object( $event ) ) {
+					$event = mc_get_first_event( $event_id );
+				} else {
+					$event_title = $event->event_title;
+					if ( $event_title !== $title ) {
+						$title = $event_title;
+					}
+				}
+				if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
+					$icon = mc_category_icon( $event );
+				} else {
+					$icon = '';
+				}
+				$title = $icon . ' ' . strip_tags( $title, mc_strip_tags() );
+			}
+		}
+	}
+
+	return $title;
+}
+
 /**
  * Custom field callback for permalinks settings
  */
