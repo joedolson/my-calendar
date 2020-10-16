@@ -1418,7 +1418,7 @@ function mc_valid_id( $mc_id ) {
 		$mcdb = mc_remote_db();
 	}
 
-	$result = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $mc_id ) );
+	$result = $mcdb->get_row( $mcdb->prepare( 'SELECT occur_id FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $mc_id ) );
 
 	if ( is_object( $result ) ) {
 		return true;
