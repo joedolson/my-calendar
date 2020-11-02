@@ -2631,9 +2631,9 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	}
 	$day = '';
 	if ( (int) $yr !== (int) $cur_year ) {
-		$format = 'F, Y';
+		$format = apply_filters( 'mc_month_year_format', 'F, Y', $date, $format, $time, $month );
 	} else {
-		$format = 'F';
+		$format = apply_filters( 'mc_month_format', 'F, Y', $date, $format, $time, $month );
 	}
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
 	if ( 'week' === $time ) {
@@ -2710,9 +2710,9 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		}
 	}
 	if ( (int) $yr !== (int) $cur_year ) {
-		$format = 'F, Y';
+		$format = apply_filters( 'mc_month_year_format', 'F, Y', $date, $format, $time, $month );
 	} else {
-		$format = 'F';
+		$format = apply_filters( 'mc_month_format', 'F, Y', $date, $format, $time, $month );
 	}
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
 	$day  = '';
