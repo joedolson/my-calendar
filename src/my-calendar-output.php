@@ -1405,14 +1405,13 @@ function mc_show_event_template( $content ) {
 		// Some early versions of this placed the shortcode into the post content. Strip that out.
 		$new_content = $content;
 		if ( 'mc-events' === $post->post_type ) {
+			$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 			if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
 				$mc_id    = intval( $_GET['mc_id'] );
-				$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 				$event    = mc_get_event( $mc_id, 'object' );
 				$date     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
 				$time     = mc_date( 'H:i:00', strtotime( $event->occur_begin ), false );
 			} else {
-				$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 				if ( is_numeric( $event_id ) ) {
 					$event = mc_get_nearest_event( $event_id );
 					$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
