@@ -120,7 +120,10 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	}
 	update_post_meta( $post_id, '_mc_event_shortcode', $data['shortcode'] );
 	update_post_meta( $post_id, '_mc_event_access', ( isset( $_POST['events_access'] ) ) ? $_POST['events_access'] : '' );
-	update_post_meta( $post_id, '_mc_event_id', $event_id );
+	$mc_event_id = get_post_meta( $post_id, '_mc_event_id', true );
+	if ( ! $mc_event_id ) {
+		update_post_meta( $post_id, '_mc_event_id', $event_id );
+	}
 	update_post_meta( $post_id, '_mc_event_desc', $description );
 	update_post_meta( $post_id, '_mc_event_image', $image );
 	// This is only used by My Tickets, so only the first date occurrence is required.
