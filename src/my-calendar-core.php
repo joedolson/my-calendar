@@ -1552,6 +1552,7 @@ add_filter( 'post_updated_messages', 'mc_posttypes_messages' );
 add_filter( 'tmp_grunion_allow_editor_view', '__return_false' );
 add_filter( 'next_post_link', 'mc_next_post_link', 10, 2 );
 add_filter( 'previous_post_link', 'mc_previous_post_link', 10, 2 );
+add_filter( 'the_title', 'mc_the_title', 10, 2 );
 
 // Actions.
 add_action( 'init', 'mc_taxonomies', 0 );
@@ -1582,9 +1583,9 @@ function mc_previous_post_link( $output, $format ) {
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'previous' );
-		remove_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+		remove_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
-		add_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+		add_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
 		$date = ' <span class="mc-event-date">' . $event['date'] . '</span>';
 
@@ -1606,9 +1607,9 @@ function mc_next_post_link( $output, $format ) {
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'next' );
-		remove_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+		remove_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
-		add_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
+		add_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
 		$date = ' <span class="mc-event-date">' . $event['date'] . '</span>';
 
@@ -1618,8 +1619,6 @@ function mc_next_post_link( $output, $format ) {
 	return $output;
 }
 
-
-add_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
 /**
  * Add category icon into title on individual event pages.
  *
@@ -1628,7 +1627,7 @@ add_filter( 'the_title', 'mc_category_icon_title', 10, 2 );
  *
  * @return string new title string
  */
-function mc_category_icon_title( $title, $post_id = null ) {
+function mc_the_title( $title, $post_id = null ) {
 	if ( is_singular( 'mc-events' ) && in_the_loop() ) {
 		if ( $post_id ) {
 			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : get_post_meta( $post_id, '_mc_event_id', true );
