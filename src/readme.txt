@@ -21,7 +21,7 @@ Easy to use for anybody, My Calendar provides enormous flexibility for designers
 Looking for more? [Buy My Calendar Pro](https://www.joedolson.com/my-calendar/pro/), the premium extension for My Calendar to add support for user-submitted events, integration between posting and event creation, and import events from outside sources.
 
 = Selling event tickets? =
-Do you need to sell tickets for events? [Use My Tickets](https://wordpress.org/plugins/my-tickets/) and sell tickets for your My Calendar events. Set prices, ticket availability, and sell multiple events at the same time using My Tickets.
+Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plugins/my-tickets/) and sell tickets for My Calendar events. Set prices, ticket availability, and sell multiple events at the same time using My Tickets.
 
 = Features: =
 
