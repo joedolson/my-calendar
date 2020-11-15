@@ -709,7 +709,15 @@ function mc_remote_db() {
 					<fieldset>
 						<legend><?php _e( 'Calendar Link Targets', 'my-calendar' ); ?></legend>
 						<ul>
-							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open calendar links to event details', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<?php 
+								$atts = array();
+								$note = '';
+								if ( '' === get_option( 'mc_uri_id', '' ) || '0' === get_option( 'mc_uri_id' ) ) {
+									$atts = array( 'disabled' => 'disabled' );
+									$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')'; 
+								}
+							?>
+							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open calendar links to event details', 'my-calendar' ), '', $note, $atts, 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_no_link', __( 'Disable calendar links', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
