@@ -61,6 +61,7 @@ function my_calendar_manage_locations() {
  */
 function mc_default_location() {
 	$default = get_option( 'mc_default_location' );
+	$output  = '';
 	if ( $default ) {
 		$location = mc_get_location( $default );
 		$output   = mc_hcard( $location, 'true', false, 'location' );

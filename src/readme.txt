@@ -91,6 +91,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: When multiple categories selected, events in more than one category would appear multiple times.
 * Bug fix: Missing space in MySQL filters in event manager.
 * Layout fix: Ensure there's always a space between date & time.
+* Bug fix: PHP Notice thrown in location manager.
 
 = 3.2.9 =
 
