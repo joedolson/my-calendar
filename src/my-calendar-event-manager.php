@@ -424,7 +424,7 @@ function mc_show_notice( $message, $echo = true ) {
 	if ( trim( $message ) === '' ) {
 		return '';
 	}
-	$message = strip_tags( $message, mc_admin_strip_tags() );
+	$message = strip_tags( apply_filters( 'mc_filter_notice', $message ), mc_admin_strip_tags() );
 	$message = "<div class='updated'><p>$message</p></div>";
 	if ( $echo ) {
 		echo $message;
