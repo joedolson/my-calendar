@@ -420,11 +420,11 @@ function mc_show_error( $message, $echo = true ) {
  *
  * @return string
  */
-function mc_show_notice( $message, $echo = true ) {
+function mc_show_notice( $message, $echo = true, $code = false ) {
 	if ( trim( $message ) === '' ) {
 		return '';
 	}
-	$message = strip_tags( apply_filters( 'mc_filter_notice', $message ), mc_admin_strip_tags() );
+	$message = strip_tags( apply_filters( 'mc_filter_notice', $message, $code ), mc_admin_strip_tags() );
 	$message = "<div class='updated'><p>$message</p></div>";
 	if ( $echo ) {
 		echo $message;
@@ -694,7 +694,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				my_calendar_send_email( $event );
 			}
 			if ( '0' === (string) $add['event_approved'] ) {
-				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ), false );
+				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar', 'draft-saved' ), false );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
 				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' !== trim( $_POST['mc_twitter'] ) ) {
@@ -713,9 +713,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
 					if ( false !== $event_link ) {
 						// Translators: URL to view event in calendar.
-						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
+						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar', 'new-event' ), $event_link );
 					}
-					$message = mc_show_notice( $message, false );
+					$message = mc_show_notice( $message, false, 'new-event' );
 				}
 			}
 		}
@@ -768,7 +768,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					} else {
 						// Only dates were changed.
 						$result  = mc_update_instance( $event_instance, $event_id, $update );
-						$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url", false );
+						$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar', 'date-updated' ) . " $url", false );
 					}
 				}
 			} else {
@@ -812,7 +812,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					// Don't execute transition actions if prev status not known.
 					do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $event_approved, $action, $data, $event_id );
 				}
-				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
+				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar', 'event-updated' ) . ". $url", false );
 			}
 		} else {
 			$message = mc_show_error( __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
@@ -936,7 +936,7 @@ function mc_delete_event( $event_id ) {
 			} else {
 				do_action( 'mc_delete_event', $event_id, $post_id );
 			}
-			$message = mc_show_notice( __( 'Event deleted successfully', 'my-calendar' ), false );
+			$message = mc_show_notice( __( 'Event deleted successfully', 'my-calendar', 'event-deleted' ), false );
 		} else {
 			$message = mc_show_error( __( 'Despite issuing a request to delete, the event still remains in the database. Please investigate.', 'my-calendar' ), false );
 		}
