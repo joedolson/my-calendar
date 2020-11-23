@@ -652,16 +652,16 @@ function mc_remote_db() {
 					<fieldset>
 						<legend class="screen-reader-text"><?php _e( 'Customize Text Fields', 'my-calendar' ); ?></legend>
 						<ul>
-							<li><?php mc_settings_field( 'mc_title_template', __( 'Event title (Grid)', 'my-calendar' ), $mc_title_template, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
-							<li><?php mc_settings_field( 'mc_title_template_solo', __( 'Event title (Single)', 'my-calendar' ), $mc_title_template_solo, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
-							<li><?php mc_settings_field( 'mc_title_template_list', __( 'Event title (List)', 'my-calendar' ), $mc_title_template_list, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_title_template', __( 'Event title (Grid)', 'my-calendar' ), $mc_title_template, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_title_template_solo', __( 'Event title (Single)', 'my-calendar' ), $mc_title_template_solo, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_title_template_list', __( 'Event title (List)', 'my-calendar' ), $mc_title_template_list, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li><?php mc_settings_field( 'mc_notime_text', __( 'Label for all-day events', 'my-calendar' ), 'All Day' ); ?></li>
 							<li><?php mc_settings_field( 'mc_previous_events', __( 'Previous events link', 'my-calendar' ), __( 'Previous', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_next_events', __( 'Next events link', 'my-calendar' ), __( 'Next', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_week_caption', __( 'Week view caption:', 'my-calendar' ), '', __( 'Available tag: <code>{date format=""}</code>', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in list views.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_details_label', __( 'Event details link text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
-							<li><?php mc_settings_field( 'mc_link_label', __( 'Event URL link text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_link_label', __( 'Event URL link text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li>
 							<?php
 							// Translators: Current title template (code).
@@ -1082,7 +1082,7 @@ function mc_remote_db() {
 		'mc_event_mail_message',
 		__( 'Message Body', 'my-calendar' ),
 		__( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}",
-		"<br /><a href='" . admin_url( 'admin.php?page=my-calendar-help#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+		"<br /><a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
 		array(
 			'cols' => 60,
 			'rows' => 6,
