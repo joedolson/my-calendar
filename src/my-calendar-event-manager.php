@@ -2790,9 +2790,20 @@ function mc_check_data( $action, $post, $i ) {
 		if ( $conflicts ) {
 			$conflict_id = $conflicts[0]->occur_id;
 			$conflict_ev = mc_get_event( $conflict_id );
-			$conflict    = mc_get_details_link( $conflict_ev );
-			// Translators: URL to event details.
-			$errors .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false );
+			if ( '1' === $conflict_ev->event_approved ) {
+				$conflict    = mc_get_details_link( $conflict_ev );
+				// Translators: URL to event details.
+				$errors .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false, 'conflict' );
+			} else {
+				if ( mc_can_edit_event( $conflict_ev->event_id ) ) {
+					$referer = urlencode( mc_get_current_url() );
+					$link    = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
+					$error   = sprintf( __( 'That event conflicts with a <a href="%s">previously submitted draft</a>.', 'my-calendar' ), $link );
+				} else {
+					$error = __( 'That event conflicts with an unpublished draft event.', 'my-calendar' );
+				}
+				$errors .= mc_show_error( $error, false, 'draft-conflict' );
+			}
 		}
 	}
 	$spam_content = ( '' !== $desc ) ? $desc : $short;
@@ -2942,9 +2953,7 @@ function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
 	$results = $wpdb->get_results( $wpdb->prepare( $event_query, $begin_time, $end_time, $begin_time, $end_time ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	if ( empty( $results ) ) {
-		// Alternate: where "begin time" between occur_begin & occur_end OR "end time" between occur_begin & occur_end.
-		// Finds events that conflict because they either start or end during the event.
-		// This query might actually find *all* conflicts; check this. JCD TODO.
+		// Finds events that conflict if they either start or end during another event.
 		$event_query2 = 'SELECT occur_id
 						FROM ' . my_calendar_event_table() . '
 						JOIN ' . my_calendar_table() . "
