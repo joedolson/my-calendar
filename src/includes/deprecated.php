@@ -88,28 +88,6 @@ function mc_event_repeats_forever( $recur, $repeats ) {
 	}
 }
 
-if ( ! function_exists( 'is_ssl' ) ) {
-	/**
-	 * Try to check whether site is running in an HTTPS environment.
-	 *
-	 * Currently used only in My Calendar PRO; exists in both for back compat
-	 */
-	function is_ssl() {
-		if ( isset( $_SERVER['HTTPS'] ) ) {
-			if ( 'on' === strtolower( $_SERVER['HTTPS'] ) ) {
-				return true;
-			}
-			if ( '1' === $_SERVER['HTTPS'] ) {
-				return true;
-			}
-		} elseif ( isset( $_SERVER['SERVER_PORT'] ) && ( '443' === (string) $_SERVER['SERVER_PORT'] ) ) {
-			return true;
-		}
-
-		return false;
-	}
-}
-
 /**
  * Old name of template drawing function. Deprecated 6/14/2018. Removed in Pro 3/31/2019.
  *
