@@ -6,8 +6,10 @@
 			e.preventDefault();
 			var calendar = $( this ).closest( '.mc-main' );
 			var ref      = calendar.attr('id');
-			var link     = $(this).attr('href');
-			var height   = $('.mc-main' ).height();
+			var link     = new URL( $(this).attr('href') );
+			link.searchParams.set('embed','true');
+			link.toString();
+			var height   = calendar.height();
 			$('#' + ref).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
 			$('#' + ref).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
 
