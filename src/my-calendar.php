@@ -106,6 +106,7 @@ include( dirname( __FILE__ ) . '/my-calendar-templating.php' );
 include( dirname( __FILE__ ) . '/my-calendar-group-manager.php' );
 include( dirname( __FILE__ ) . '/my-calendar-api.php' );
 include( dirname( __FILE__ ) . '/my-calendar-generator.php' );
+include( dirname( __FILE__ ) . '/my-calendar-call-template.php' );
 
 add_action( 'plugins_loaded', 'mc_load_textdomain' );
 /**
