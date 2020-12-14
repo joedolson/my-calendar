@@ -3,7 +3,7 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
 Requires at least: 4.4
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6
 Stable tag: 3.2.10
 Text domain: my-calendar
@@ -83,6 +83,14 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.2.11 =
+
+* Bug fix: switching to week view display broken.
+* Bug fix: links to template help pointed to old location for help.
+* Change: filter to pass custom notices for front end submissions and editing.
+* Remove fallback function for is_ssl()
+* Improve conflicting event errors when the conflicting event is still unpublished.
 
 = 3.2.10 =
 
