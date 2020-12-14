@@ -828,6 +828,14 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	return $date_switcher;
 }
 
+function mc_url_in_loop( $url ) {
+	if ( is_singular() && in_the_loop() && is_main_query() ) {
+		$url = add_query_arg( 'embed', 'true' );
+	}
+
+	return $url;
+}
+
 /**
  * Generate toggle between list and grid views
  *
@@ -843,10 +851,12 @@ function mc_format_toggle( $format, $toggle, $time ) {
 		switch ( $format ) {
 			case 'list':
 				$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='grid mcajax'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a>';
 				break;
 			default:
 				$url     = mc_build_url( array( 'format' => 'list' ), array() );
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='list mcajax'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a>';
 				break;
 		}
@@ -923,6 +933,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		switch ( $time ) {
 			case 'week':
 				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . '</span>';
 				$url     = mc_build_url(
@@ -932,10 +943,12 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 					),
 					array( 'dy', 'mc_id' )
 				);
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
 				break;
 			case 'day':
 				$url     = mc_build_url( array( 'time' => 'month' ), array() );
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$url     = mc_build_url(
 					array(
@@ -946,6 +959,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 					),
 					array( 'dy', 'month', 'mc_id' )
 				);
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active day'>" . __( 'Day', 'my-calendar' ) . '</span>';
 				break;
@@ -959,8 +973,10 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 					),
 					array( 'dy', 'month', 'mc_id' )
 				);
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$url     = mc_build_url( array( 'time' => 'day' ), array() );
+				$url     = mc_url_in_loop( $url );
 				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
 				break;
 		}
@@ -2311,6 +2327,7 @@ function mc_nav( $date, $format, $time, $show_months, $class ) {
 		),
 		array()
 	);
+	$prev_link = mc_url_in_loop( $prev_link );
 	$next_link = mc_build_url(
 		array(
 			'yr'    => $next['yr'],
@@ -2320,6 +2337,7 @@ function mc_nav( $date, $format, $time, $show_months, $class ) {
 		),
 		array()
 	);
+	$next_link = mc_url_in_loop( $next_link );
 
 	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a href="' . $prev_link . '" rel="nofollow" class="mcajax">' . $prev['label'] . '</a></li>', $prev );
 	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a href="' . $next_link . '" rel="nofollow" class="mcajax">' . $next['label'] . '</a></li>', $next );
@@ -2511,6 +2529,7 @@ function mc_category_key( $category ) {
 		} else {
 			$url = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
 		}
+		$url = mc_url_in_loop( $url );
 		if ( 1 === (int) $cat->category_private ) {
 			$class .= ' private';
 		}
@@ -2528,7 +2547,7 @@ function mc_category_key( $category ) {
 		$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"' . $aria_current . '>' . $cat_key . '</a></li>';
 	}
 	if ( isset( $_GET['mcat'] ) ) {
-		$key .= "<li class='all-categories'><a href='" . esc_url( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) . "' class='mcajax'>" . apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) ) . '</a></li>';
+		$key .= "<li class='all-categories'><a href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "' class='mcajax'>" . apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) ) . '</a></li>';
 	}
 	$key .= '</ul></div>';
 	$key  = apply_filters( 'mc_category_key', $key, $categories );
