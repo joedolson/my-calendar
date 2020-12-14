@@ -150,7 +150,7 @@ function mc_templates_edit() {
 			<div class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2 class='hndle'><?php _e( 'Event Template Tags', 'my-calendar' ); ?></h2>
+						<h2><?php _e( 'Event Template Tags', 'my-calendar' ); ?></h2>
 
 						<div class='mc_template_tags inside'>
 							<p>
@@ -257,7 +257,7 @@ function mc_templates_edit() {
 			<div id="templates" class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2 class='hndle'><?php _e( 'All Event Template Tags (alphabetical)', 'my-calendar' ); ?></h2>
+						<h2><?php _e( 'All Event Template Tags (alphabetical)', 'my-calendar' ); ?></h2>
 
 						<div class='mc_template_tags inside'>
 							<?php echo mc_display_template_tags(); ?>

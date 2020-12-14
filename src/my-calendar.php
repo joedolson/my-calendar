@@ -236,7 +236,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2 class='hndle'><?php echo $key; ?></h2>
+						<h2><?php echo $key; ?></h2>
 
 						<div class='<?php echo sanitize_title( $key ); ?> inside'>
 							<?php echo $value; ?>
@@ -251,7 +251,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell support">
-						<h2 class='sales hndle'><strong><?php _e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
+						<h2 class='sales'><strong><?php _e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
 
 						<div class="inside resources">
 							<p class="mcbuy">
@@ -269,7 +269,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell my-tickets">
-						<h2 class='sales hndle'><strong><?php _e( 'My Tickets', 'my-calendar' ); ?></strong></h2>
+						<h2 class='sales'><strong><?php _e( 'My Tickets', 'my-calendar' ); ?></strong></h2>
 
 						<div class="inside resources">
 							<p class="mcbuy">
@@ -288,7 +288,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox support">
-					<h2 class='hndle'><strong><?php _e( 'Support This Plug-in', 'my-calendar' ); ?></strong></h2>
+					<h2><strong><?php _e( 'Support This Plug-in', 'my-calendar' ); ?></strong></h2>
 
 					<div class="inside resources">
 						<p class="follow-me">
@@ -321,7 +321,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
-				<h2 class='hndle'><?php _e( 'Get Help', 'my-calendar' ); ?></h2>
+				<h2><?php _e( 'Get Help', 'my-calendar' ); ?></h2>
 
 				<div class="inside">
 					<ul>
