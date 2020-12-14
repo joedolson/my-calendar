@@ -2072,3 +2072,24 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 		'done'           => true,
 	);
 }
+
+/**
+ * Allow CORS from subsites in multisite networks in subdomain setups.
+ */
+function mc_setup_cors_access() {
+	$origin  = get_http_origin();
+	$sites   = ( function_exists( 'get_sites' ) ) ? get_sites() : array();
+	$allowed = apply_filters( 'mc_setup_allowed_sites', array(), $origin );
+	if ( ! empty( $sites ) ) {
+		foreach( $sites as $site ) {
+			$allowed[] = str_replace( array( 'http://', 'https://' ), '', get_home_url( $site->blog_id ) );
+		}
+	}
+	if ( $origin && in_array( $origin, $allowed ) ) {
+		mail( 'joe@joedolson.com', 'Test of site allowing', "Origins:\n\n" . print_r( $allowed, 1 ) );
+		header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
+		header( 'Access-Control-Allow-Methods: GET' );
+		header( 'Access-Control-Allow-Credentials: true' );
+	}
+}
+add_action( 'send_headers', 'mc_setup_cors_access' );

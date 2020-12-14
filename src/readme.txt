@@ -5,8 +5,8 @@ Tags: calendar, dates, times, event, events, scheduling, schedule, event manager
 Requires at least: 4.4
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 3.2.10
 Text domain: my-calendar
+Stable tag: 3.2.10
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -88,9 +88,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Bug fix: switching to week view display broken.
 * Bug fix: links to template help pointed to old location for help.
+* Bug fix: AJAX nav pulled height from first rendered calendar, not current navigating calendar.
 * Change: filter to pass custom notices for front end submissions and editing.
 * Remove fallback function for is_ssl()
 * Improve conflicting event errors when the conflicting event is still unpublished.
+* Add custom template to pass a calendar that's embeddable via iframe.
 
 = 3.2.10 =
 
