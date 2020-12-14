@@ -882,11 +882,13 @@ function mc_format_toggle( $format, $toggle, $time ) {
 function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week, $from ) {
 	// if dy parameter not set, use today's date instead of first day of month.
 	$weeks_day = mc_first_day_of_week( $current );
+	$adjusted  = false;
 	if ( isset( $_GET['dy'] ) ) {
 		if ( '' === $_GET['dy'] ) {
 			$current_day = $weeks_day[0];
 			if ( -1 === (int) $weeks_day[1] ) {
-				$month = $month - 1;
+				$adjusted = true;
+				$month    = $month - 1;
 			}
 		} else {
 			$current_day = absint( $_GET['dy'] );
@@ -913,7 +915,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	if ( 'mini' !== $format ) {
 		$toggle      = "<div class='mc-time'>";
 		$current_url = mc_get_current_url();
-		if ( -1 === (int) $adjust ) {
+		if ( -1 === (int) $adjust && ! $adjusted ) {
 			$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
 		} else {
 			$wmonth = $month;
