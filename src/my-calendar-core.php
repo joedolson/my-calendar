@@ -2077,7 +2077,7 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
  * Allow CORS from subsites in multisite networks in subdomain setups.
  */
 function mc_setup_cors_access() {
-	$origin  = get_http_origin();
+	$origin  = str_replace( array( 'http://', 'https://' ), '', get_http_origin() );
 	$sites   = ( function_exists( 'get_sites' ) ) ? get_sites() : array();
 	$allowed = apply_filters( 'mc_setup_allowed_sites', array(), $origin );
 	if ( ! empty( $sites ) ) {
@@ -2086,7 +2086,6 @@ function mc_setup_cors_access() {
 		}
 	}
 	if ( $origin && in_array( $origin, $allowed ) ) {
-		mail( 'joe@joedolson.com', 'Test of site allowing', "Origins:\n\n" . print_r( $allowed, 1 ) );
 		header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
 		header( 'Access-Control-Allow-Methods: GET' );
 		header( 'Access-Control-Allow-Credentials: true' );
