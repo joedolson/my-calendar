@@ -2050,6 +2050,11 @@ function mc_get_from_to( $show_months, $params, $date ) {
  * @return array of calendar nav for top & bottom
  */
 function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, $main_class, $site, $date, $from ) {
+	if ( $site ) {
+		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$restore = $site;
+		restore_current_blog();
+	}
 	$format   = $params['format'];
 	$category = $params['category'];
 	$above    = $params['above'];
@@ -2205,6 +2210,10 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	if ( '' !== $mc_bottomnav ) {
 		$mc_bottomnav = "<div class='mc_bottomnav my-calendar-footer'>$mc_bottomnav</div>";
+	}
+
+	if ( $site ) {
+		switch_to_blog( $restore );
 	}
 
 	return array(
@@ -2994,6 +3003,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
  * @param array  $add keys and values to add to URL.
  * @param array  $subtract keys to subtract from URL.
  * @param string $root Root URL, optional.
+ * @param int    $site Site ID in multisite.
  *
  * @return string URL.
  */
