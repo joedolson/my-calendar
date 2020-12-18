@@ -831,7 +831,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 /**
  * Is this URL being queried while in the primary content.
  *
- * @param $url string.
+ * @param string $url URL to attach query to.
  *
  * @return string
  */
