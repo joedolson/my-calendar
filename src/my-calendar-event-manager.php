@@ -415,8 +415,9 @@ function mc_show_error( $message, $echo = true ) {
 /**
  * Display an update message.
  *
- * @param string  $message Update message.
- * @param boolean $echo Echo or return. Default true (echo).
+ * @param string         $message Update message.
+ * @param boolean        $echo Echo or return. Default true (echo).
+ * @param boolean|string $code Message code.
  *
  * @return string
  */
@@ -713,7 +714,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
 					if ( false !== $event_link ) {
 						// Translators: URL to view event in calendar.
-						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar', 'new-event' ), $event_link );
+						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
 					}
 					$message = mc_show_notice( $message, false, 'new-event' );
 				}
@@ -2791,14 +2792,15 @@ function mc_check_data( $action, $post, $i ) {
 			$conflict_id = $conflicts[0]->occur_id;
 			$conflict_ev = mc_get_event( $conflict_id );
 			if ( '1' === $conflict_ev->event_approved ) {
-				$conflict    = mc_get_details_link( $conflict_ev );
+				$conflict = mc_get_details_link( $conflict_ev );
 				// Translators: URL to event details.
 				$errors .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false, 'conflict' );
 			} else {
 				if ( mc_can_edit_event( $conflict_ev->event_id ) ) {
 					$referer = urlencode( mc_get_current_url() );
 					$link    = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
-					$error   = sprintf( __( 'That event conflicts with a <a href="%s">previously submitted draft</a>.', 'my-calendar' ), $link );
+					// Translators: Link to edit event draft.
+					$error = sprintf( __( 'That event conflicts with a <a href="%s">previously submitted draft</a>.', 'my-calendar' ), $link );
 				} else {
 					$error = __( 'That event conflicts with an unpublished draft event.', 'my-calendar' );
 				}

@@ -17,7 +17,7 @@
 <?php wp_head(); ?>
 </head>
 <body>
-<?php 
+<?php
 	the_content();
 	wp_footer();
 ?>
