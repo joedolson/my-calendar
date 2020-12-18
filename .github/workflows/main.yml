@@ -1,6 +1,9 @@
 name: PHP tests
 
-on: [push]
+on:
+    push:
+        paths:
+        - '**.php'
 
 jobs:
   run:
