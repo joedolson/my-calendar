@@ -33,6 +33,11 @@ jobs:
     
     - name: Install WP Tests
       run: bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1
-      
+
+    - name: PHPCS check
+      uses: chekalsky/phpcs-action@v1
+      with:
+        phpcs_bin_path: './vendor/bin/phpcs .'
+
     - name: phpunit tests
       run: ./vendor/bin/phpunit
