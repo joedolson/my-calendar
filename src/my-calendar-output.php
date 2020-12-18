@@ -828,6 +828,13 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	return $date_switcher;
 }
 
+/**
+ * Is this URL being queried while in the primary content.
+ *
+ * @param $url string.
+ *
+ * @return string
+ */
 function mc_url_in_loop( $url ) {
 	if ( is_singular() && in_the_loop() && is_main_query() ) {
 		$url = add_query_arg( 'embed', 'true' );
@@ -1425,10 +1432,10 @@ function mc_show_event_template( $content ) {
 		if ( 'mc-events' === $post->post_type ) {
 			$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 			if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
-				$mc_id    = intval( $_GET['mc_id'] );
-				$event    = mc_get_event( $mc_id, 'object' );
-				$date     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
-				$time     = mc_date( 'H:i:00', strtotime( $event->occur_begin ), false );
+				$mc_id = intval( $_GET['mc_id'] );
+				$event = mc_get_event( $mc_id, 'object' );
+				$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
+				$time  = mc_date( 'H:i:00', strtotime( $event->occur_begin ), false );
 			} else {
 				if ( is_numeric( $event_id ) ) {
 					$event = mc_get_nearest_event( $event_id );
@@ -3003,7 +3010,6 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
  * @param array  $add keys and values to add to URL.
  * @param array  $subtract keys to subtract from URL.
  * @param string $root Root URL, optional.
- * @param int    $site Site ID in multisite.
  *
  * @return string URL.
  */

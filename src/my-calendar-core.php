@@ -2081,11 +2081,11 @@ function mc_setup_cors_access() {
 	$sites   = ( function_exists( 'get_sites' ) ) ? get_sites() : array();
 	$allowed = apply_filters( 'mc_setup_allowed_sites', array(), $origin );
 	if ( ! empty( $sites ) ) {
-		foreach( $sites as $site ) {
+		foreach ( $sites as $site ) {
 			$allowed[] = str_replace( array( 'http://', 'https://' ), '', get_home_url( $site->blog_id ) );
 		}
 	}
-	if ( $origin && in_array( $origin, $allowed ) ) {
+	if ( $origin && in_array( $origin, $allowed, true ) ) {
 		header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
 		header( 'Access-Control-Allow-Methods: GET' );
 		header( 'Access-Control-Allow-Credentials: true' );
