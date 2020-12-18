@@ -200,7 +200,7 @@ function mc_date_diff_precise( $start, $end = 'NOW' ) {
  *
  * @return integer $week_of_event The week of the month this date falls in;
  */
-function week_of_month( $date_of_event ) {
+function mc_week_of_month( $date_of_event ) {
 	$week_of_event = 0;
 	switch ( $date_of_event ) {
 		case ( $date_of_event >= 1 && $date_of_event < 8 ):

@@ -3984,7 +3984,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					break;
 				case 'U':
 					// Important to keep track of which date variables are strings and which are timestamps.
-					$week_of_event = week_of_month( mc_date( 'd', strtotime( $event->event_begin ), false ) );
+					$week_of_event = mc_week_of_month( mc_date( 'd', strtotime( $event->event_begin ), false ) );
 					$newbegin      = my_calendar_add_date( $orig_begin, 28, 0, 0 );
 					$newend        = my_calendar_add_date( $orig_end, 28, 0, 0 );
 					$fifth_week    = $event->event_fifth_week;
@@ -4006,13 +4006,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					$numforward = ( $numforward - 1 );
 					for ( $i = 0; $i <= $numforward; $i ++ ) {
 						$next_week_diff = ( mc_date( 'm', $newbegin, false ) === mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin, false ), 7, 0, 0 ) ) ) ? false : true;
-						$move_event     = ( ( 1 === (int) $fifth_week ) && ( ( week_of_month( mc_date( 'd', $newbegin ), false ) + 1 ) === (int) $week_of_event ) && true === $next_week_diff ) ? true : false;
-						if ( week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
+						$move_event     = ( ( 1 === (int) $fifth_week ) && ( ( mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 ) === (int) $week_of_event ) && true === $next_week_diff ) ? true : false;
+						if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
 						} else {
 							$newbegin   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 7, 0, 0 );
 							$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 7, 0, 0 );
-							$move_event = ( 1 === (int) $fifth_week && week_of_month( mc_date( 'd', $newbegin ), false ) + 1 === (int) $week_of_event ) ? true : false;
-							if ( week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
+							$move_event = ( 1 === (int) $fifth_week && mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 === (int) $week_of_event ) ? true : false;
+							if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
 							} else {
 								$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 14, 0, 0 );
 								$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 14, 0, 0 );

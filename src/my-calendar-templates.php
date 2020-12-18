@@ -1139,7 +1139,7 @@ function mc_event_recur_string( $event, $begin ) {
 	$every       = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
 	$month_date  = mc_date( 'dS', strtotime( $begin ), false );
 	$day_name    = date_i18n( 'l', strtotime( $begin ) );
-	$week_number = mc_ordinal( week_of_month( mc_date( 'j', strtotime( $begin ), false ) ) + 1 );
+	$week_number = mc_ordinal( mc_week_of_month( mc_date( 'j', strtotime( $begin ), false ) ) + 1 );
 	switch ( $recur ) {
 		case 'S':
 			$event_recur = __( 'Does not recur', 'my-calendar' );
