@@ -3,16 +3,18 @@ name: PHP tests
 on: [push]
 
 jobs:
-  run:    
+  run:
     runs-on: ${{ matrix.operating-system }}
-    strategy:      
+    strategy:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: ['7.2', '7.3', '7.4']
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
+
+      uses: getong/mariadb-action@v1.1
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -21,7 +23,7 @@ jobs:
         extensions: mbstring, intl #optional, setup extensions
         ini-values: post_max_size=256M, short_open_tag=On #optional, setup php.ini configuration
         coverage: xdebug #optional, setup coverage driver
-        tools: pecl
+        tools: composer:v1
 
     - name: Check PHP Version
       run: php -v
