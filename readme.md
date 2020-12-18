@@ -2,7 +2,7 @@
 
 Accessible Event Manager for WordPress
 
-[![Build Status](https://travis-ci.org/joedolson/my-calendar.svg)](https://travis-ci.org/joedolson/my-calendar) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/license/gpl-2.0.html)
+![PHP tests](https://github.com/joedolson/my-calendar/workflows/PHP%20tests/badge.svg) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/license/gpl-2.0.html)
 
 ## My Calendar Build Environment
 
