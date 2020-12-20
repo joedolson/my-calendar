@@ -2085,7 +2085,7 @@ function mc_setup_cors_access() {
 			$allowed[] = str_replace( array( 'http://', 'https://' ), '', get_home_url( $site->blog_id ) );
 		}
 	}
-	if ( $origin && in_array( $origin, $allowed, true ) ) {
+	if ( $origin && is_array( $allowed ) && in_array( $origin, $allowed, true ) ) {
 		header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
 		header( 'Access-Control-Allow-Methods: GET' );
 		header( 'Access-Control-Allow-Credentials: true' );

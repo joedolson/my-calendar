@@ -93,6 +93,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Remove fallback function for is_ssl()
 * Improve conflicting event errors when the conflicting event is still unpublished.
 * Add custom template to pass a calendar that's embeddable via iframe.
+* Bug fix: Multisite environments need to use navigation on current site, not from remote site.
 
 = 3.2.10 =
 
