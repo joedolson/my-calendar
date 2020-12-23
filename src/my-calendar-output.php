@@ -836,8 +836,11 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
  * @return string
  */
 function mc_url_in_loop( $url ) {
-	if ( is_singular() && in_the_loop() && is_main_query() ) {
-		$url = add_query_arg( 'embed', 'true' );
+	// Only if AJAX is enabled.
+	if ( ( '1' !== get_option( 'mc_ajax_javascript' ) ) ) {
+		if ( is_singular() && in_the_loop() && is_main_query() ) {
+			$url = esc_url( add_query_arg( 'embed', 'true', html_entity_decode( $url ) ) );
+		}
 	}
 
 	return $url;
