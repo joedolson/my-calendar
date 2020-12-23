@@ -7,6 +7,10 @@
 			var calendar = $( this ).closest( '.mc-main' );
 			var ref      = calendar.attr('id');
 			var link     = $(this).attr('href');
+			var url      = new URL(link);
+			url.searchParams.delete('embed');
+
+			window.history.pushState({}, '', url );
 			var height   = calendar.height();
 			$('#' + ref).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
 			$('#' + ref).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
