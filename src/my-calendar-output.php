@@ -3045,7 +3045,7 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 	}
 
 	$variables = $_GET;
-	$subtract  = array_merge( (array) $subtract, array( 'from', 'to', 'my-calendar-api', 's' ) );
+	$subtract  = array_merge( (array) $subtract, array( 'from', 'to', 'my-calendar-api', 's', 'embed' ) );
 	foreach ( $subtract as $value ) {
 		unset( $variables[ $value ] );
 	}
