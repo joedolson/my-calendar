@@ -667,7 +667,7 @@ function my_calendar_edit() {
  */
 function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
-	$proceed = $output[0];
+	$proceed = (bool) $output[0];
 	$message = '';
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f' );
 
