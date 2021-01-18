@@ -494,7 +494,7 @@ function mc_get_search_results( $search ) {
 		}
 	}
 
-	return apply_filters( 'mc_searched_events', $event_array );
+	return apply_filters( 'mc_searched_events', $event_array, $args );
 }
 
 /**
