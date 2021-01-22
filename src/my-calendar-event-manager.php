@@ -120,7 +120,27 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		update_post_meta( $post_id, '_mc_guid', $guid );
 	}
 	update_post_meta( $post_id, '_mc_event_shortcode', $data['shortcode'] );
-	update_post_meta( $post_id, '_mc_event_access', ( isset( $_POST['events_access'] ) ) ? $_POST['events_access'] : '' );
+	$events_access = '';
+	if ( isset( $_POST['events_access'] ) ) {
+		$events_access = $_POST['events_access'];
+	} else {
+		// My Calendar Rest API.
+		if ( isset( $data['data'] ) && isset( $data['data']['events_access'] ) ) {
+			$events_access = $data['data']['events_access'];
+		}
+	}
+	$time_label = '';
+	if ( isset( $_POST['event_time_label'] ) ) {
+		$time_label = $_POST['event_time_label'];
+	} else {
+		// My Calendar Rest API.
+		if ( isset( $data['data'] ) && isset( $data['data']['event_time_label'] ) ) {
+			$time_label = $data['data']['event_time_label'];
+		}
+	}
+	update_post_meta( $post_id, '_mc_event_access', $events_access );
+	update_post_meta( $post_id, '_event_time_label', $time_label );
+
 	$mc_event_id = get_post_meta( $post_id, '_mc_event_id', true );
 	if ( ! $mc_event_id ) {
 		update_post_meta( $post_id, '_mc_event_id', $event_id );
@@ -130,7 +150,6 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	// This is only used by My Tickets, so only the first date occurrence is required.
 	$event_date = ( is_array( $data['event_begin'] ) ) ? $data['event_begin'][0] : $data['event_begin'];
 	update_post_meta( $post_id, '_mc_event_date', strtotime( $event_date ) );
-	update_post_meta( $post_id, '_event_time_label', ( isset( $_POST['event_time_label'] ) ) ? $_POST['event_time_label'] : '' );
 	$location_id = ( isset( $post['location_preset'] ) ) ? (int) $post['location_preset'] : false;
 	if ( $location_id ) { // only change location ID if dropdown set.
 		update_post_meta( $post_id, '_mc_event_location', $location_id );
