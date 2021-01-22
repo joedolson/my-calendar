@@ -16,13 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Handle post generation, updating, and processing after event is saved
  *
- * @param string $action edit, copy, add.
- * @param array  $data saved event data.
- * @param int    $event_id My Calendar event ID.
+ * @param string   $action edit, copy, add.
+ * @param array    $data saved event data.
+ * @param int      $event_id My Calendar event ID.
+ * @param bool|int $result Results of DB query.
  *
  * @return int post ID
  */
-function mc_event_post( $action, $data, $event_id ) {
+function mc_event_post( $action, $data, $event_id, $result ) {
 	// if the event save was successful.
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
@@ -688,6 +689,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			// do an action using the $action and processed event data.
 			$data        = $add;
 			$event_error = '';
+			mc_event_post( $action, $data, $event_id, $result );
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 
 			if ( 'true' === get_option( 'mc_event_mail' ) ) {
@@ -800,6 +802,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 			}
 			$data = $update;
+			mc_event_post( $action, $data, $event_id, $result );
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 			if ( false === $result ) {
 				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );

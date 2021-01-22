@@ -161,6 +161,7 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 			// Translators: Calendar URL.
 			$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
 			// Same as action on basic save.
+			mc_event_post( 'edit', $update, $event_id, $result );
 			do_action( 'mc_save_event', 'edit', $update, $event_id, $result );
 			do_action( 'mc_save_grouped_events', $result, $event_id, $update );
 			if ( false === $result ) {
