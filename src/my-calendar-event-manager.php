@@ -91,6 +91,7 @@ function mc_event_post( $action, $data, $event_id ) {
 		$access       = ( isset( $_POST['events_access'] ) ) ? $_POST['events_access'] : array();
 		$access_terms = implode( ',', array_values( $access ) );
 		mc_update_event( 'event_access', $access_terms, $event_id, '%s' );
+		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
 		do_action( 'mc_update_event_post', $post_id, $_POST, $data, $event_id );
 		if ( mc_switch_sites() ) {
 			restore_current_blog();
@@ -100,7 +101,6 @@ function mc_event_post( $action, $data, $event_id ) {
 	return $post_id;
 }
 
-add_action( 'mc_update_event_post', 'mc_add_post_meta_data', 10, 4 );
 /**
  * Add post meta data to an event post.
  *
@@ -189,6 +189,7 @@ function mc_create_event_post( $data, $event_id ) {
 		}
 		mc_update_event( 'event_post', $post_id, $event_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
+		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
 		do_action( 'mc_update_event_post', $post_id, $_POST, $data, $event_id );
 		wp_publish_post( $post_id );
 	}
