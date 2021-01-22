@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_event_post( $action, $data, $event_id, $result = false ) {
 	// if the event save was successful.
-	if ( 'add' === $action || 'copy' ===  $action ) {
+	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
 		if ( isset( $_POST['event_post'] ) && ( 0 === (int) $_POST['event_post'] || '' === $_POST['event_post'] ) ) {
