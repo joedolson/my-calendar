@@ -158,21 +158,16 @@ add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
  * @return object $post
  */
 function mc_get_location_post( $location_id, $type = true ) {
+	global $wpdb;
 	$post_ID = false;
 	$post    = false;
-	$posts   = get_posts(
-		array(
-			'post_type'  => 'mc-locations',
-			'meta_key'   => '_mc_location_id',
-			'meta_value' => $location_id,
-		)
-	);
-	if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
-		$post    = $posts[0];
-		$post_ID = $post->ID;
+	$query   = $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta where meta_key ='_mc_location_id' and meta_value = %d", $location_id );
+	$posts   = $wpdb->get_col( $query );
+	if ( isset( $posts[0] ) ) {
+		$post_ID = $posts[0];
 	}
 
-	return ( $type ) ? $post : $post_ID;
+	return ( $type ) ? get_post( $post_ID ) : $post_ID;
 }
 
 /**
@@ -467,6 +462,7 @@ function mc_get_location( $location_id ) {
 	}
 
 	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$location->location_post = mc_get_location_post( $location_id, false );
 
 	return $location;
 }
@@ -769,13 +765,18 @@ function mc_location_fields() {
  * Get custom data for a location.
  *
  * @param int    $location_id Location ID.
+ * @param int    $location_post Location Post ID.
  * @param string $field Custom field name.
  *
  * @return mixed
  */
-function mc_location_custom_data( $location_id = false, $field ) {
+function mc_location_custom_data( $location_id = false, $location_post = false, $field ) {
 	$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : $location_id;
 	$value       = '';
+	// Quick exit when location post is known.
+	if ( $location_post ) {
+		return get_post_meta( $post_id, $field, true );
+	}
 	if ( ! $location_id ) {
 		$location_id = ( isset( $_POST['location_id'] ) ) ? (int) $_POST['location_id'] : false;
 	}
@@ -798,7 +799,7 @@ function mc_location_custom_data( $location_id = false, $field ) {
 function mc_template_location_fields( $e, $event ) {
 	$fields = mc_location_fields();
 	foreach ( $fields as $name => $field ) {
-		$value = mc_location_custom_data( $event->event_location, $name );
+		$value = mc_location_custom_data( $event->event_location, $event->location->location_post, $name );
 		if ( ! isset( $field['display_callback'] ) || ( isset( $field['display_callback'] ) && ! function_exists( $field['display_callback'] ) ) ) {
 			// if no display callback is provided.
 			$display = stripslashes( $value );
@@ -831,7 +832,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 
 	$custom_fields = apply_filters( 'mc_order_location_fields', $fields, $context );
 	foreach ( $custom_fields as $name => $field ) {
-		$user_value = mc_location_custom_data( $data, $name );
+		$user_value = mc_location_custom_data( $data, false, $name );
 		$required   = isset( $field['required'] ) ? ' required' : '';
 		$req_label  = isset( $field['required'] ) ? ' <span class="required">' . __( 'Required', 'my-calendar' ) . '</span>' : '';
 		switch ( $field['input_type'] ) {
