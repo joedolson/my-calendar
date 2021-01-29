@@ -235,7 +235,7 @@ function my_calendar_get_events( $args ) {
 		}
 	}
 
-	return apply_filters( 'mc_filter_events', $arr_events, $args );
+	return apply_filters( 'mc_filter_events', $arr_events, $args, 'my_calendar_get_events' );
 }
 
 /**
@@ -349,7 +349,7 @@ function mc_get_all_events( $args ) {
 		$arr_events[ $key ] = mc_event_object( $event );
 	}
 
-	return apply_filters( 'mc_filter_events', $arr_events, $args );
+	return apply_filters( 'mc_filter_events', $arr_events, $args, 'mc_get_all_events' );
 }
 
 /**
