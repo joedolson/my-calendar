@@ -775,7 +775,7 @@ function mc_location_custom_data( $location_id = false, $location_post = false, 
 	$value       = '';
 	// Quick exit when location post is known.
 	if ( $location_post ) {
-		return get_post_meta( $post_id, $field, true );
+		return get_post_meta( $location_post, $field, true );
 	}
 	if ( ! $location_id ) {
 		$location_id = ( isset( $_POST['location_id'] ) ) ? (int) $_POST['location_id'] : false;
@@ -799,7 +799,11 @@ function mc_location_custom_data( $location_id = false, $location_post = false, 
 function mc_template_location_fields( $e, $event ) {
 	$fields = mc_location_fields();
 	foreach ( $fields as $name => $field ) {
-		$value = mc_location_custom_data( $event->event_location, $event->location->location_post, $name );
+		$location_post = false;
+		if ( is_object( $event ) && property_exists( $event, 'location' ) ) {
+			$location_post = $event->location->location_post;
+		}
+		$value = mc_location_custom_data( $event->event_location, $location_post, $name );
 		if ( ! isset( $field['display_callback'] ) || ( isset( $field['display_callback'] ) && ! function_exists( $field['display_callback'] ) ) ) {
 			// if no display callback is provided.
 			$display = stripslashes( $value );
