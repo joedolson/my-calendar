@@ -94,6 +94,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * [Performance] Move custom location query into object creation to reduce DB calls.
 * Use try/catch in mc-ajax.js to handle case where href does not contain a full URL.
 * Autocomplete support for locations in admin.
+* Reset select elements in My Calendar nav to inline.
 
 = 3.2.13 =
 

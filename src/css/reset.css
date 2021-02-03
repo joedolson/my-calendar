@@ -21,6 +21,11 @@ div.site-content, table {
 	display: block;
 }
 
+.mc-main .my-calendar-header select,
+.mc-main .mc-footer select {
+	display: inline;
+}
+
 .mc-main h2:before {
 	display: none;
 }
