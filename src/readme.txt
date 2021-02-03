@@ -93,6 +93,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * When using REST API, variables are not submitted in a POST query.
 * [Performance] Move custom location query into object creation to reduce DB calls.
 * Use try/catch in mc-ajax.js to handle case where href does not contain a full URL.
+* Autocomplete support for locations in admin.
 
 = 3.2.13 =
 
