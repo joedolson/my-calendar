@@ -84,6 +84,16 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.2.14 =
+
+* Bug fixes: Misc. type casting issues.
+* Add filters `mc_filter_events` to filter results of main event queries.
+* Add $args array to `mc_searched_events` filter parameters.
+* Avoid running My Calendar core functionality through My Calendar's own hooks.
+* When using REST API, variables are not submitted in a POST query.
+* [Performance] Move custom location query into object creation to reduce DB calls.
+* Use try/catch in mc-ajax.js to handle case where href does not contain a full URL.
+
 = 3.2.13 =
 
 * Bug fix: Using embed targets is more complicated than expected; disable by default. Enable with 'mc_use_embed_targets' filter.
