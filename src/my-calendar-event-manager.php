@@ -1680,48 +1680,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<?php
 	}
 	if ( mc_show_edit_block( 'event_location_dropdown' ) ) {
-		$current_location = '';
-		$locs             = mc_get_locations( 'select-locations' );
-		if ( ! empty( $locs ) ) {
-			?>
-			<p>
-			<label for="l_preset"><?php _e( 'Choose location:', 'my-calendar' ); ?></label> <select
-				name="location_preset" id="l_preset" aria-describedby='mc-current-location'>
-				<option value="none">--</option>
-				<?php
-				foreach ( $locs as $loc ) {
-					if ( is_object( $loc ) ) {
-						$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
-						$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
-						if ( is_object( $data ) ) {
-							$selected = '';
-							if ( property_exists( $data, 'event_location' ) ) {
-								$event_location = $data->event_location;
-							} else {
-								$event_location = false;
-							}
-							if ( (int) $loc->location_id === (int) $event_location ) {
-								// Translators: label for current location.
-								$current_location  = "<span id='mc-current-location'>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</span>';
-								$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
-							}
-						}
-						echo "<option value='" . $loc->location_id . "'$selected />" . $loc_name . '</option>';
-					}
-				}
-				?>
-			</select>
-			<?php echo $current_location; ?>
-			</p>
-			<?php
-		} else {
-			?>
-		<input type="hidden" name="location_preset" value="none" />
-		<p>
-			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add recurring locations for later use.', 'my-calendar' ); ?></a>
-		</p>
-			<?php
-		}
+		echo mc_event_location_dropdown_block( $data );
 	} else {
 		?>
 		<input type="hidden" name="location_preset" value="none" />
@@ -1795,6 +1754,53 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	<?php
 }
 
+/**
+ * Produce Event location dropdown.
+ *
+ * @param object $data Current event data.
+ *
+ * @return string
+ */
+function mc_event_location_dropdown_block( $data ) {
+	$current_location = '';
+	$output           = '';
+	$locs             = mc_get_locations( 'select-locations' );
+	if ( ! empty( $locs ) ) {
+		$output .= '
+		<p>
+		<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label> <select
+			name="location_preset" id="l_preset" aria-describedby="mc-current-location">
+			<option value="none">--</option>';
+			foreach ( $locs as $loc ) {
+				if ( is_object( $loc ) ) {
+					$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
+					$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
+					if ( is_object( $data ) ) {
+						$selected = '';
+						if ( property_exists( $data, 'event_location' ) ) {
+							$event_location = $data->event_location;
+						} else {
+							$event_location = false;
+						}
+						if ( (int) $loc->location_id === (int) $event_location ) {
+							// Translators: label for current location.
+							$current_location  = "<span id='mc-current-location'>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</span>';
+							$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
+						}
+					}
+					$output .= "<option value='" . $loc->location_id . "'$selected />" . $loc_name . '</option>';
+				}
+			}
+		$ouput .= '</select>' . $current_location . '</p>';
+	} else {
+		$output .= '<input type="hidden" name="location_preset" value="none" />
+		<p>
+		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '>">' . __( 'Add recurring locations for later use.', 'my-calendar' ) . '</a>
+		</p>';
+	}
+
+	return $output;
+}
 
 /**
  * Get users.
