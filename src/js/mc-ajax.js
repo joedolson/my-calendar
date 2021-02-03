@@ -22,7 +22,7 @@
 			$('#' + ref).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
 
 				if ( status == 'error' ) {
-					$( '#' + ref ).html( msg + xhr.status + " " + xhr.statusText );
+					$( '#' + ref ).html( xhr.status + " " + xhr.statusText );
 				}
 				// functions to execute when new view loads.
 				// List view.
