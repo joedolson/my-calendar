@@ -860,6 +860,8 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 						$selected = ' checked="checked"';
 					} elseif ( is_numeric( $category ) && ( (int) $category === (int) $cat->category_id ) ) {
 						$selected = ' checked="checked"';
+					} elseif ( ! $category ) {
+						$selected = ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) ? ' checked="checked"' : '';
 					}
 				} else {
 					if ( (int) $category === (int) $cat->category_id ) {
@@ -874,7 +876,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			$category_name = strip_tags( stripslashes( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
-				$c = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox" name="' . esc_attr( $name ) . '" id="mc_cat_' . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="mc_cat_' . $cat->category_id . '">' . $category_name . '</label></li>';
+				$c = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="mc_cat_' . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="mc_cat_' . $cat->category_id . '">' . $category_name . '</label></li>';
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
 			}
