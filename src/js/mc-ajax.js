@@ -19,7 +19,7 @@
 
 			var height   = calendar.height();
 			$('#' + ref).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-			$('#' + ref).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
+			$( '#' + ref ).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
 
 				if ( status == 'error' ) {
 					$( '#' + ref ).html( xhr.status + " " + xhr.statusText );

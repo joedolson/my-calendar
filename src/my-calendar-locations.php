@@ -1018,3 +1018,39 @@ function mc_get_locations( $args ) {
 
 	return apply_filters( 'mc_filter_results', $results, $args );
 }
+
+
+/**
+ * Get information about locations.
+ */
+function mc_autocomplete_search_locations() {
+	if ( isset( $_REQUEST['action'] ) && 'mc_autocomplete_search_locations' === $_REQUEST['action'] ) {
+		$security = $_REQUEST['security'];
+		if ( ! wp_verify_nonce( $security, 'mc-search-locations' ) ) {
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => array( 'error' => 'Invalid security value.' ),
+				)
+			);
+		}
+		$query = $_REQUEST['data'];
+
+		$locations = mc_search_locations( $query, array( 'location_id', 'location_label' ) );
+		$response  = array();
+		foreach ( $locations as $location ) {
+			$response[] = array(
+				'location_id'    => $location->location_id,
+				'location_label' => html_entity_decode( strip_tags( $location->location_label ) ),
+			);
+		}
+		wp_send_json(
+			array(
+				'success'  => 1,
+				'response' => $response,
+			)
+		);
+	}
+}
+add_action( 'wp_ajax_mc_autocomplete_search_locations', 'mc_autocomplete_search_locations' );
+add_action( 'wp_ajax_nopriv_mc_autocomplete_search_locations', 'mc_autocomplete_search_locations' );

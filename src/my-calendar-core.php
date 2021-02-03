@@ -1092,6 +1092,20 @@ function mc_scripts() {
 				)
 			);
 		}
+		$count = mc_count_locations();
+		if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 25 ) ) {
+			wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
+			wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/locations-autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
+			wp_localize_script(
+				'mc-autocomplete',
+				'mclocations',
+				array(
+					'ajaxurl'  => admin_url( 'admin-ajax.php' ),
+					'security' => wp_create_nonce( 'mc-search-locations' ),
+					'action'   => 'mc_autocomplete_search_locations',
+				)
+			);
+		}
 	}
 
 	if ( $slug . '_page_my-calendar-config' === $id ) {

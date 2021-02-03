@@ -830,6 +830,12 @@ tr.problem .error {
 	clear: both;
 }
 
+
+/**
+ * Autocomplete CSS
+ */
+.autocomplete-input{position:relative;flex:1; width: 100%;font-size:1.1em}.autocomplete-input:focus,.autocomplete-input[aria-expanded=true]{border-color:rgba(0,0,0,.12);background-color:#fff;outline:none;box-shadow:0 2px 2px rgba(0,0,0,.16)}[data-position=below] .autocomplete-input[aria-expanded=true]{border-bottom-color:transparent;}[data-position=above] .autocomplete-input[aria-expanded=true]{border-top-color:transparent;z-index:2}.autocomplete[data-loading=true]:after{content:"";border:3px solid rgba(0,0,0,.12);border-right-color:rgba(0,0,0,.48);border-radius:100%;width:20px;height:20px;position:absolute;right:12px;top:50%;transform:translateY(-50%);animation:rotate 1s linear infinite}.autocomplete-result-list{margin:0;border:1px solid rgba(0,0,0,.12);padding:0;box-sizing:border-box;max-height:296px;overflow-y:auto;background:#fff;list-style:none;}[data-position=below] .autocomplete-result-list{margin-top:-1px;border-top-color:transparent}[data-position=above] .autocomplete-result-list{margin-bottom:-1px;border-bottom-color:transparent}.autocomplete-result-list li{margin:0}.autocomplete-result{cursor:default;padding:12px;background-repeat:no-repeat;background-position:12px}.autocomplete-result:hover,.autocomplete-result[aria-selected=true]{background-color:rgba(0,0,0,.06)}@keyframes rotate{0%{transform:translateY(-50%) rotate(0deg)}to{transform:translateY(-50%) rotate(359deg)}}
+
 @media (max-width: 1140px) {
 	.mc-locations .locations-container input {
 		max-width: 70%;

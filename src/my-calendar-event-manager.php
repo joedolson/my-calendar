@@ -1763,41 +1763,54 @@ function mc_form_fields( $data, $mode, $event_id ) {
  */
 function mc_event_location_dropdown_block( $data ) {
 	$current_location = '';
-	$output           = '';
-	$locs             = mc_get_locations( 'select-locations' );
-	if ( ! empty( $locs ) ) {
-		$output .= '
-		<p>
-		<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label> <select
-			name="location_preset" id="l_preset" aria-describedby="mc-current-location">
-			<option value="none">--</option>';
+	$event_location   = false;
+	$output           = '<div class="mc-event-location-dropdown">';
+	$autocomplete     = false;
+	$count            = mc_count_locations();
+	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 25 ) ) {
+		$autocomplete = true;
+	}
+	if ( 0 !== $count ) {
+		$output .= '<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label>';
+		if ( is_object( $data ) ) {
+			$selected = '';
+			if ( property_exists( $data, 'event_location' ) ) {
+				$event_location = $data->event_location;
+			}
+		}
+		if ( ! $autocomplete ) {
+			$locs    = mc_get_locations( 'select-locations' );
+			$output .= '
+			 <select name="location_preset" id="l_preset" aria-describedby="mc-current-location">
+				<option value="none">--</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
 					$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
 					$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
-					if ( is_object( $data ) ) {
-						$selected = '';
-						if ( property_exists( $data, 'event_location' ) ) {
-							$event_location = $data->event_location;
-						} else {
-							$event_location = false;
-						}
-						if ( (int) $loc->location_id === (int) $event_location ) {
-							// Translators: label for current location.
-							$current_location  = "<span id='mc-current-location'>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</span>';
-							$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
-						}
+					if ( (int) $loc->location_id === (int) $event_location ) {
+						// Translators: label for current location.
+						$current_location  = "<span id='mc-current-location'>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</span>';
+						$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
 					}
 					$output .= "<option value='" . $loc->location_id . "'$selected />" . $loc_name . '</option>';
 				}
 			}
-		$ouput .= '</select>' . $current_location . '</p>';
+			$output .= '</select>' . $current_location . '</p>';
+		} else {
+			$location_label = ( $event_location && is_numeric( $event_location ) ) ? mc_get_location( $event_location )->location_label : '';
+			$output        .= '<div id="mc-locations-autocomplete" class="autocomplete">
+				<input class="autocomplete-input" type="text" id="l_preset" value="' . esc_attr( $location_label ) . '" />
+				<ul class="autocomplete-result-list"></ul>
+				<input type="hidden" name="location_preset" id="mc_event_location_value" value="' . esc_attr( $event_location ) . '" />
+			</div>';
+		}
 	} else {
 		$output .= '<input type="hidden" name="location_preset" value="none" />
 		<p>
 		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '>">' . __( 'Add recurring locations for later use.', 'my-calendar' ) . '</a>
 		</p>';
 	}
+	$output .= '</div>';
 
 	return $output;
 }
