@@ -268,7 +268,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$image           = mc_category_icon( $event );
 	$img             = '';
 	$has_image       = ( '' !== $image ) ? ' has-image' : '';
-	$event_classes   = mc_event_classes( $event, $day_id, $type );
+	$event_classes   = mc_event_classes( $event, $type );
 	$nofollow        = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
 	$header         .= "\n\n	<div id='$uid-$type-$id' class='$event_classes'>\n";
 
@@ -602,12 +602,11 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
  * Generate classes for a given event
  *
  * @param object $event Event Object.
- * @param string $uid Unique ID for event.
  * @param string $type Type of view being shown.
  *
  * @return string classes
  */
-function mc_event_classes( $event, $uid, $type ) {
+function mc_event_classes( $event, $type ) {
 	$uid = 'mc_' . $type . '_' . $event->occur_id;
 	$ts  = $event->ts_occur_begin;
 	$end = $event->ts_occur_end;
@@ -618,6 +617,9 @@ function mc_event_classes( $event, $uid, $type ) {
 		$date_relation = 'future-event';
 	} elseif ( $now > $ts ) {
 		$date_relation = 'past-event';
+	}
+	if ( $now > $end ) {
+		do_action( 'mc_after_event_instance', $event, $uid );
 	}
 	$primary = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
 
@@ -1510,7 +1512,7 @@ function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
 					$template = mc_get_custom_template( $template );
 				}
 				$html     = mc_draw_template( $array, $template );
-				$classes  = mc_event_classes( $event, '', 'related' );
+				$classes  = mc_event_classes( $event, 'related' );
 				$classes .= ( (int) $event_id === (int) $this_id ) ? ' current-event' : '';
 				$output  .= "<li class='$classes'>$html</li>";
 			}

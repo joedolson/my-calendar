@@ -441,7 +441,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['time'],
 	);
 
-	$classes  = mc_event_classes( $event, $event->occur_id, 'template' );
+	$classes  = mc_event_classes( $event, 'template' );
 	$nofollow = ( stripos( $classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
 
 	$e_label   = str_replace( $tags, $replacements, $e_template );

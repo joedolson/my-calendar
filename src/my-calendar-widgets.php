@@ -195,7 +195,7 @@ function my_calendar_upcoming_events( $args ) {
 				$date     = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
 				$class    = ( true === my_calendar_date_comp( $date, $today ) ) ? 'past-event' : 'future-event';
 				$category = mc_category_class( $details, 'mc_' );
-				$classes  = mc_event_classes( $event, $event->occur_id, 'upcoming' );
+				$classes  = mc_event_classes( $event, 'upcoming' );
 
 				$prepend = apply_filters( 'mc_event_upcoming_before', "<li class='$class $category $classes'>", $class, $category );
 				$append  = apply_filters( 'mc_event_upcoming_after', '</li>', $class, $category );
@@ -411,7 +411,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 				$date     = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ), false );
 				$class    = ( true === my_calendar_date_comp( $date, $today . ' ' . current_time( 'H:i' ) ) ) ? 'past-event' : 'future-event';
 				$category = mc_category_class( $details, 'mc_' );
-				$classes  = mc_event_classes( $event, $event->occur_id, 'upcoming' );
+				$classes  = mc_event_classes( $event, 'upcoming' );
 
 				if ( my_calendar_date_equal( $date, $today ) ) {
 					$class = 'today';
