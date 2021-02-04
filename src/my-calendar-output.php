@@ -618,9 +618,6 @@ function mc_event_classes( $event, $type ) {
 	} elseif ( $now > $ts ) {
 		$date_relation = 'past-event';
 	}
-	if ( $now > $end ) {
-		do_action( 'mc_after_event_instance', $event, $uid );
-	}
 	$primary = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
 
 	$classes = array(

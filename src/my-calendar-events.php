@@ -35,6 +35,7 @@ function mc_event_object( $object ) {
 			}
 			$object->uid = $guid;
 		}
+		do_action( 'mc_event_object', $object );
 	}
 
 	return $object;
