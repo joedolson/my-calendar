@@ -435,7 +435,7 @@ strong.label {
 	padding: 12px;
 }
 
-.js .wptab[aria-hidden=true] {
+.js .wptab[aria-hidden=true], .wptab.initial-hidden {
 	display: none;
 }
 

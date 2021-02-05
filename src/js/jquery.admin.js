@@ -70,6 +70,7 @@ jQuery(document).ready(function ($) {
 		$('.mc-tabs .tabs a[href="' + firstItem + '"]').addClass('active').attr( 'aria-selected', 'true' );
 		if ( tabs > 1 ) {
 			$( '.mc-tabs .wptab' ).not( firstItem ).attr( 'aria-hidden', 'true' );
+			$( '.mc-tabs .wptab' ).removeClass( 'initial-hidden' );
 			$( firstItem ).show();
 			$( '.mc-tabs .tabs a' ).on( 'click', function (e) {
 				e.preventDefault();

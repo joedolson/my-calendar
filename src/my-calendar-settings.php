@@ -626,12 +626,9 @@ function mc_remote_db() {
 									<?php
 								}
 								?>
-								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>
 								<?php
 								if ( 'true' === get_option( 'mc_api_enabled' ) ) {
-									?>
-								<li>
-									<?php
 									$url = add_query_arg(
 										array(
 											'to'     => current_time( 'Y-m-d' ),
@@ -641,12 +638,10 @@ function mc_remote_db() {
 										home_url()
 									);
 									// Translators: Linked URL to API endpoint.
-									printf( __( 'API URL: %s', 'my-calendar' ), '<a href="' . $url . '">' . $url . '</a>' );
-									?>
-								</li>
-									<?php
+									printf( ' <code>' . __( 'API URL: %s', 'my-calendar' ) . '</code>', '<a href="' . esc_html( $url ) . '">' . esc_url( $url ) . '</a>' );
 								}
 								?>
+								</li>
 								<li><?php mc_settings_field( 'remigrate', __( 'Re-generate event occurrences table.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
@@ -684,7 +679,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox" aria-hidden="true" tabindex="-1" aria-labelledby="tab_text" role="tabpanel" id="my-calendar-text">
+		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_text" role="tabpanel" id="my-calendar-text">
 			<h2><?php _e( 'Text Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -740,7 +735,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox" aria-hidden="true" tabindex="-1" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
+		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
 			<h2><?php _e( 'Output Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -905,7 +900,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox" aria-hidden="true" tabindex="-1" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
+		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
 			<h2><?php _e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -987,7 +982,7 @@ function mc_remote_db() {
 	<?php
 	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 		?>
-		<div class="wptab postbox" aria-hidden="true" tabindex="-1" aria-labelledby="tab_multi" role="tabpanel" id="my-calendar-multisite">
+		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_multi" role="tabpanel" id="my-calendar-multisite">
 			<h2><?php _e( 'Multisite Settings (Network Administrators only)', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -1035,7 +1030,7 @@ function mc_remote_db() {
 	}
 	?>
 
-		<div class="wptab postbox" aria-hidden="true" tabindex="-1" aria-labelledby="tab_permissions" role="tabpanel" id="my-calendar-permissions">
+		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_permissions" role="tabpanel" id="my-calendar-permissions">
 			<h2><?php _e( 'My Calendar Permissions', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -1087,7 +1082,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox" aria-hidden="true" tabindex="-1" aria-labelledby="tab_email" role="tabpanel" id="my-calendar-email">
+		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_email" role="tabpanel" id="my-calendar-email">
 			<h2><?php _e( 'Calendar Email Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
