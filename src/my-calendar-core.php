@@ -1102,7 +1102,7 @@ function mc_scripts() {
 				array(
 					'ajaxurl'  => admin_url( 'admin-ajax.php' ),
 					'security' => wp_create_nonce( 'mc-search-locations' ),
-					'action'   => 'mc_autocomplete_search_locations',
+					'action'   => 'mc_core_autocomplete_search_locations',
 				)
 			);
 		}

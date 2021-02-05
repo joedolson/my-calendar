@@ -1023,8 +1023,8 @@ function mc_get_locations( $args ) {
 /**
  * Get information about locations.
  */
-function mc_autocomplete_search_locations() {
-	if ( isset( $_REQUEST['action'] ) && 'mc_autocomplete_search_locations' === $_REQUEST['action'] ) {
+function mc_core_autocomplete_search_locations() {
+	if ( isset( $_REQUEST['action'] ) && 'mc_core_autocomplete_search_locations' === $_REQUEST['action'] ) {
 		$security = $_REQUEST['security'];
 		if ( ! wp_verify_nonce( $security, 'mc-search-locations' ) ) {
 			wp_send_json(
@@ -1052,5 +1052,5 @@ function mc_autocomplete_search_locations() {
 		);
 	}
 }
-add_action( 'wp_ajax_mc_autocomplete_search_locations', 'mc_autocomplete_search_locations' );
-add_action( 'wp_ajax_nopriv_mc_autocomplete_search_locations', 'mc_autocomplete_search_locations' );
+add_action( 'wp_ajax_mc_core_autocomplete_search_locations', 'mc_core_autocomplete_search_locations' );
+add_action( 'wp_ajax_nopriv_mc_core_autocomplete_search_locations', 'mc_core_autocomplete_search_locations' );
