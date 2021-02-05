@@ -4,7 +4,7 @@
  *
  * @package     MyCalendar
  * @author      Joe Dolson
- * @copyright   2009-2020 Joe Dolson
+ * @copyright   2009-2021 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,11 +17,11 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.2.13
+ * Version:     3.2.14
  */
 
 /*
-	Copyright 2009-2020  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2009-2021  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $mc_version, $wpdb;
-$mc_version = '3.2.13';
+$mc_version = '3.2.14';
 
 define( 'MC_DEBUG', false );
 
