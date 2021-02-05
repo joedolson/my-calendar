@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$('#del_field').on('click', function () {
+	$('#del_field').on( 'click', function () {
 		var num = $('.clonedInput').length; // how many "duplicatable" input fields we currently have.
 		$('#event' + num).remove();	 // remove the last element.
 		// enable the "add" button.

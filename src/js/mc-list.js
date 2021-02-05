@@ -8,7 +8,7 @@
 				e.preventDefault();
 				var vevent = $( this ).closest( '.mc-events' ).find( '.vevent:first' );
 				$( this ).closest( '.mc-events' ).find( '.vevent' ).toggle();
-				vevent.attr('tabindex', '-1').focus();
+				vevent.attr('tabindex', '-1').trigger( 'focus' );
 				var visible = $(this).closest( '.mc-events' ).find('.vevent').is(':visible');
 				if ( visible ) {
 					$(this).attr('aria-expanded', 'true');

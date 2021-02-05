@@ -10,7 +10,7 @@
 
 				$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
 				$(this).parents( '.vevent' ).children().not('.event-title').toggle().attr('tabindex', '-1');
-				$(this).parents( '.vevent' ).focus();
+				$(this).parents( '.vevent' ).trigger( 'focus' );
 
 				var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
 				var lastFocus  = focusable.last();
@@ -24,7 +24,7 @@
 			function (e) {
 				e.preventDefault();
 				$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
-				$(this).closest('.vevent').find('.event-title a').focus();
+				$(this).closest('.vevent').find('.event-title a').trigger( 'focus' );
 				$(this).closest('div.details').toggle();
 			});
 
@@ -42,11 +42,11 @@
 				var action = $( ':focus' ).attr( 'data-action' );
 				if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
 					e.preventDefault();
-					$( '.mc-toggle.close' ).focus();
+					$( '.mc-toggle.close' ).trigger( 'focus' );
 				}
 				if ( ( e.shiftKey && keycode == 9 ) && action == 'shiftforward' ) {
 					e.preventDefault();
-					$( '[data-action=shiftback]' ).focus();
+					$( '[data-action=shiftback]' ).trigger( 'focus' );
 				}
 			});
 	});

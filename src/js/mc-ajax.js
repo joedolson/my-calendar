@@ -39,7 +39,7 @@
 					$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
 				}
 				// All views.
-				$( '#' + ref ).attr('tabindex', '-1').focus();
+				$( '#' + ref ).attr('tabindex', '-1').trigger( 'focus' );
 				mc_display_usertime();
 				// Your Custom ajax load changes if needed.
 			});
