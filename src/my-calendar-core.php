@@ -1633,7 +1633,7 @@ function mc_next_post_link( $output, $format ) {
 }
 
 /**
- * Add category icon into title on individual event pages.
+ * Replace title on individual event pages with viewed event value & config.
  *
  * @param string $title Original title.
  * @param int    $post_id Post ID.
@@ -1649,7 +1649,7 @@ function mc_the_title( $title, $post_id = null ) {
 				if ( ! is_object( $event ) ) {
 					$event = mc_get_first_event( $event_id );
 				} else {
-					$event_title = $event->event_title;
+					$event_title = stripslashes( $event->event_title );
 					if ( $event_title !== $title ) {
 						$title = $event_title;
 					}
