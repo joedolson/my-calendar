@@ -184,7 +184,10 @@ function my_calendar_get_events( $args ) {
 							$event->location = $locs[ $object_id ];
 						}
 					}
-					$arr_events[] = mc_event_object( $event );
+					$object = mc_event_object( $event );
+					if ( false !== $object ) {
+						$arr_events[] = $object;
+					}
 				}
 			}
 		}
@@ -231,7 +234,10 @@ function my_calendar_get_events( $args ) {
 						$event->location = $locs[ $object_id ];
 					}
 				}
-				$arr_events[] = mc_event_object( $event );
+				$object = mc_event_object( $event );
+				if ( false !== $object ) {
+					$arr_events[] = $object;
+				}
 			}
 		}
 	}
@@ -347,7 +353,10 @@ function mc_get_all_events( $args ) {
 		} else {
 			$event->categories = $fetched[ $object_id ];
 		}
-		$arr_events[ $key ] = mc_event_object( $event );
+		$object = mc_event_object( $event );
+		if ( false !== $object ) {
+			$arr_events[ $key ] = $object;
+		}
 	}
 
 	return apply_filters( 'mc_filter_events', $arr_events, $args, 'mc_get_all_events' );
