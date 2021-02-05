@@ -69,7 +69,7 @@ jQuery(document).ready(function ($) {
 		}
 		$('.mc-tabs .tabs a[href="' + firstItem + '"]').addClass('active').attr( 'aria-selected', 'true' );
 		if ( tabs > 1 ) {
-			$( '.mc-tabs .wptab' ).not( firstItem ).hide();
+			$( '.mc-tabs .wptab' ).not( firstItem ).attr( 'aria-hidden', 'true' );
 			$( firstItem ).show();
 			$( '.mc-tabs .tabs a' ).on( 'click', function (e) {
 				e.preventDefault();
@@ -77,8 +77,8 @@ jQuery(document).ready(function ($) {
 				$(this).addClass('active').attr( 'aria-selected', 'true' );
 				var target = $(this).attr('href');
 				window.location.hash = target;
-				$('.mc-tabs .wptab').not(target).hide();
-				$(target).show().attr('tabindex','-1').focus();
+				$('.mc-tabs .wptab').not(target).attr( 'aria-hidden', 'true' );
+				$(target).removeAttr( 'aria-hidden' ).focus();
 			});
 		}
 	});
