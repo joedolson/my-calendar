@@ -30,7 +30,7 @@ jQuery(document).ready(function ($) {
 	$( '#del_field' ).attr('disabled', 'disabled');
 	$( '#event_span' ).hide();
 
-	$(".selectall").click(function () {
+	$(".selectall").on( 'click', function () {
 		var checked_status = $(this).prop('checked');
 		var checkbox_name  = $(this).attr('id');
 		$('input[name="' + checkbox_name + '[]"]').each(function () {
@@ -79,7 +79,7 @@ jQuery(document).ready(function ($) {
 				var target = $(this).attr('href');
 				window.location.hash = target;
 				$('.mc-tabs .wptab').not(target).attr( 'aria-hidden', 'true' );
-				$(target).removeAttr( 'aria-hidden' ).focus();
+				$(target).removeAttr( 'aria-hidden' ).trigger( 'focus' );
 			});
 		}
 	});
