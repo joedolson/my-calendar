@@ -1169,7 +1169,7 @@ function mc_edit_block_is_visible( $field ) {
  * @return bool
  */
 function mc_show_edit_blocks( $fields ) {
-	foreach( $fields as $field ) {
+	foreach ( $fields as $field ) {
 		if ( mc_edit_block_is_visible( $field ) ) {
 			return true;
 		}
@@ -1711,12 +1711,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	<?php
 	mc_show_block( 'event_recurs', $has_data, $data );
 	if ( mc_show_edit_blocks( array( 'event_short', 'event_image', 'event_host', 'event_author', 'event_link' ) ) ) {
-	?>
-	<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
-			<h2><?php _e( 'Event Details', 'my-calendar' ); ?></h2>
-			<div class="inside">
-	<?php
+		?>
+		<div class="ui-sortable meta-box-sortables">
+			<div class="postbox">
+				<h2><?php _e( 'Event Details', 'my-calendar' ); ?></h2>
+				<div class="inside">
+		<?php
 	}
 	mc_show_block( 'event_short', $has_data, $data );
 	mc_show_block( 'event_image', $has_data, $data );
@@ -1724,11 +1724,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	mc_show_block( 'event_author', $has_data, $data, true, $event_author );
 	mc_show_block( 'event_link', $has_data, $data );
 	if ( mc_show_edit_blocks( array( 'event_short', 'event_image', 'event_host', 'event_author', 'event_link' ) ) ) {
-	?>
+		?>
+				</div>
 			</div>
 		</div>
-	</div>
-	<?php
+		<?php
 	}
 	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
 	if ( '' !== $custom_fields ) {
