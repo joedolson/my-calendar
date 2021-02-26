@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
 	$( '#e_approved' ).on( 'change', function (e) {
 		var event_status = $(this).val();
 		if ( event_status == 0 ) {
-			$( 'input[name=save]' ).val( draftText );
+			$( 'input[name=save]' ).val( mcAdmin.draftText );
 		} else {
 			$( 'input[name=save]' ).val( publishText );
 		}
@@ -170,8 +170,8 @@ var mediaPopup = '';
 						width = '';
 					if (selection) {
 						id = selection.first().attributes.id;
-						height = thumbHeight;
-						width = ( ( selection.first().attributes.width ) / ( selection.first().attributes.height ) ) * thumbHeight;
+						height = mcAdmin.thumbHeight;
+						width = ( ( selection.first().attributes.width ) / ( selection.first().attributes.height ) ) * height;
 						img = "<img src='" + selection.first().attributes.url + "' width='" + width + "' height='" + height + "' />";
 						$inpField.val(selection.first().attributes.url);
 						$idField.val(id);

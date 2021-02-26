@@ -1002,8 +1002,14 @@ function mc_scripts() {
 
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable' ) );
-		wp_localize_script( 'mc.admin', 'thumbHeight', get_option( 'thumbnail_size_h' ) );
-		wp_localize_script( 'mc.admin', 'draftText', __( 'Save Draft', 'my-calendar' ) );
+		wp_localize_script(
+			'mc.admin',
+			'mcAdmin',
+			array(
+				'thumbHeight' => get_option( 'thumbnail_size_h' ),
+				'draftText'   => __( 'Save Draft', 'my-calendar' ),
+			)
+		);
 	}
 
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_my-calendar-groups' === $id || $slug . '_page_my-calendar-locations' === $id ) {
@@ -1060,8 +1066,14 @@ function mc_scripts() {
 				),
 			)
 		);
-		wp_localize_script( 'pickadate.time', 'mc_time_format', apply_filters( 'mc_time_format', 'h:i A' ) );
-		wp_localize_script( 'pickadate.time', 'mc_interval', apply_filters( 'mc_interval', '15' ) );
+		wp_localize_script(
+			'pickadate.time',
+			'mcTime',
+			array(
+				'time_format' => apply_filters( 'mc_time_format', 'h:i A' ),
+				'interval'    => apply_filters( 'mc_interval', '15' ),
+			)
+		);
 		wp_enqueue_script( 'mc.pickadate', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'jquery', 'pickadate.date', 'pickadate.time' ) );
 
 		if ( function_exists( 'wp_enqueue_media' ) && ! did_action( 'wp_enqueue_media' ) ) {

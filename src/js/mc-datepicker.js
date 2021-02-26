@@ -17,8 +17,8 @@ if ( typeof(mc_months) !== "undefined" ) {
 		}
 	});
 	$( '.mc-timepicker' ).pickatime({
-		interval: parseInt( mc_interval ),
-		format: mc_time_format,
+		interval: parseInt( mcTime.interval ),
+		format: mcTime.time_format,
 		editable: true
 	});
 
