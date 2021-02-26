@@ -1019,6 +1019,37 @@ function mc_get_locations( $args ) {
 	return apply_filters( 'mc_filter_results', $results, $args );
 }
 
+/**
+ * Search location titles.
+ *
+ * @param string $query Location query.
+ *
+ * @return array locations
+ */
+function mc_core_search_locations( $query = '' ) {
+	global $wpdb;
+	$search  = '';
+	$results = array();
+	$current = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
+	$db_type = mc_get_db_type();
+	$query   = esc_sql( $query );
+
+	if ( '' !== $query ) {
+		// Fulltext is supported in InnoDB since MySQL 5.6; minimum required by WP is 5.0 as of WP 5.5.
+		// 37% of installs still below 5.6 as of 11/30/2020.
+		if ( 'MyISAM' === $db_type ) {
+			$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
+		} else {
+			$search = " WHERE location_label LIKE '%$query%' ";
+		}
+	} else {
+		$search = '';
+	}
+
+	$locations = $wpdb->get_results( 'SELECT SQL_CALC_FOUND_ROWS location_id, location_label FROM ' . my_calendar_locations_table() . " $search ORDER BY location_label ASC" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+
+	return $locations;
+}
 
 /**
  * Get information about locations.
@@ -1036,7 +1067,7 @@ function mc_core_autocomplete_search_locations() {
 		}
 		$query = $_REQUEST['data'];
 
-		$locations = mc_search_locations( $query, array( 'location_id', 'location_label' ) );
+		$locations = mc_core_search_locations( $query, array( 'location_id', 'location_label' ) );
 		$response  = array();
 		foreach ( $locations as $location ) {
 			$response[] = array(
