@@ -1107,6 +1107,78 @@ function mc_show_edit_block( $field ) {
 }
 
 /**
+ * Does an editing block contain visible fields.
+ *
+ * @param string $field Name of field group.
+ *
+ * @return bool
+ */
+function mc_edit_block_is_visible( $field ) {
+	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	$input = get_option( 'mc_input_options' );
+	// Array of all options in off position.
+	$defaults = array(
+		'event_location_dropdown' => 'on',
+		'event_short'             => 'on',
+		'event_desc'              => 'on',
+		'event_category'          => 'on',
+		'event_image'             => 'on',
+		'event_link'              => 'on',
+		'event_recurs'            => 'on',
+		'event_open'              => 'on',
+		'event_location'          => 'off',
+		'event_specials'          => 'on',
+		'event_access'            => 'on',
+		'event_host'              => 'on',
+	);
+
+	$input  = array_merge( $defaults, $input );
+	$user   = get_current_user_id();
+	$screen = get_current_screen();
+	$option = $screen->get_option( 'mc_show_on_page', 'option' );
+	$show   = get_user_meta( $user, $option, true );
+	if ( empty( $show ) || $show < 1 ) {
+		$show = $screen->get_option( 'mc_show_on_page', 'default' );
+	}
+	// if this doesn't exist in array, return false. Field is hidden.
+	if ( ! isset( $input[ $field ] ) || ! isset( $show[ $field ] ) ) {
+		return false;
+	}
+	if ( $admin ) {
+		if ( isset( $show[ $field ] ) && 'on' === $show[ $field ] ) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		if ( 'off' === $input[ $field ] || '' === $input[ $field ] ) {
+			return false;
+		} elseif ( 'off' === $show[ $field ] ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
+
+/**
+ * Determine whether any of a set of fields are enabled.
+ *
+ * @param array $fields Array of field keys.
+ *
+ * @return bool
+ */
+function mc_show_edit_blocks( $fields ) {
+	foreach( $fields as $field ) {
+		if ( mc_edit_block_is_visible( $field ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Show a block of enabled fields.
  *
  * @param string             $field name of field group.
@@ -1636,22 +1708,28 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		</div>
 	</div>
 </div>
-	<?php mc_show_block( 'event_recurs', $has_data, $data ); ?>
-<div class="ui-sortable meta-box-sortables">
-	<div class="postbox">
-		<h2><?php _e( 'Event Details', 'my-calendar' ); ?></h2>
-		<div class="inside">
 	<?php
-		mc_show_block( 'event_short', $has_data, $data );
-		mc_show_block( 'event_image', $has_data, $data );
-		mc_show_block( 'event_host', $has_data, $data );
-		mc_show_block( 'event_author', $has_data, $data, true, $event_author );
-		mc_show_block( 'event_link', $has_data, $data );
+	mc_show_block( 'event_recurs', $has_data, $data );
+	if ( mc_show_edit_blocks( array( 'event_short', 'event_image', 'event_host', 'event_author', 'event_link' ) ) ) {
 	?>
+	<div class="ui-sortable meta-box-sortables">
+		<div class="postbox">
+			<h2><?php _e( 'Event Details', 'my-calendar' ); ?></h2>
+			<div class="inside">
+	<?php
+	}
+	mc_show_block( 'event_short', $has_data, $data );
+	mc_show_block( 'event_image', $has_data, $data );
+	mc_show_block( 'event_host', $has_data, $data );
+	mc_show_block( 'event_author', $has_data, $data, true, $event_author );
+	mc_show_block( 'event_link', $has_data, $data );
+	if ( mc_show_edit_blocks( array( 'event_short', 'event_image', 'event_host', 'event_author', 'event_link' ) ) ) {
+	?>
+			</div>
 		</div>
 	</div>
-</div>
 	<?php
+	}
 	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
 	if ( '' !== $custom_fields ) {
 		?>
