@@ -467,7 +467,7 @@ function mc_footer_js() {
 					wp_localize_script(
 						'mc.ajax',
 						'mcAjax',
-						array( 
+						array(
 							'ajax' => 'true',
 						)
 					);
