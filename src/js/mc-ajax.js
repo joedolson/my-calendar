@@ -26,16 +26,16 @@
 				}
 				// functions to execute when new view loads.
 				// List view.
-				if ( typeof( mclist ) !== "undefined" && mclist == 'true' ) {
+				if ( typeof( mclist.list ) !== "undefined" && mclist.list == 'true' ) {
 					$('li.mc-events').children().not('.event-date').hide();
 					$('li.current-day').children().show();
 				}
 				// Grid view.
-				if ( typeof( mcgrid ) !== "undefined" && mcgrid == 'true' ) {
+				if ( typeof( mcgrid.grid ) !== "undefined" && mcgrid.grid == 'true' ) {
 					$('.calendar-event').children().not('.event-title').hide();
 				}
 				// Mini view.
-				if  ( typeof( mcmini ) !== "undefined" && mcmini  == 'true' ) {
+				if  ( typeof( mcmini.mini ) !== "undefined" && mcmini.mini == 'true' ) {
 					$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
 				}
 				// All views.

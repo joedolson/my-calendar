@@ -428,25 +428,49 @@ function mc_footer_js() {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ) );
-					wp_localize_script( 'mc.grid', 'mcgrid', 'true' );
+					wp_localize_script(
+						'mc.grid',
+						'mcgrid',
+						array(
+							'grid' => 'true',
+						)
+					);
 				}
 				if ( '1' !== get_option( 'mc_list_javascript' ) ) {
 					$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
-					wp_localize_script( 'mc.list', 'mclist', 'true' );
+					wp_localize_script(
+						'mc.list',
+						'mclist',
+						array(
+							'list' => 'true',
+						)
+					);
 				}
 				if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
 					$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
-					wp_localize_script( 'mc.mini', 'mcmini', 'true' );
+					wp_localize_script(
+						'mc.mini',
+						'mcmini',
+						array(
+							'mini' => 'true',
+						)
+					);
 				}
 				if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
 					$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
 					$enqueue_mcjs = true;
 					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ) );
-					wp_localize_script( 'mc.ajax', 'mcAjax', 'true' );
+					wp_localize_script(
+						'mc.ajax',
+						'mcAjax',
+						array( 
+							'ajax' => 'true',
+						)
+					);
 				}
 				if ( $enqueue_mcjs ) {
 					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ) );
@@ -1130,7 +1154,13 @@ function mc_scripts() {
 				'jquery-ui-autocomplete',
 			)
 		);
-		wp_localize_script( 'mc.suggest', 'mc_ajax_action', 'mc_post_lookup' );
+		wp_localize_script(
+			'mc.suggest',
+			'mc_ajax_action',
+			array(
+				'action' => 'mc_post_lookup',
+			)
+		);
 	}
 
 	if ( $slug . '_page_my-calendar-categories' === $id ) {
