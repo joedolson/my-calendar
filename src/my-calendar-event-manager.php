@@ -1845,7 +1845,7 @@ function mc_event_location_dropdown_block( $data ) {
 	$output           = '<div class="mc-event-location-dropdown">';
 	$autocomplete     = false;
 	$count            = mc_count_locations();
-	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 25 ) ) {
+	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 50 ) ) {
 		$autocomplete = true;
 	}
 	if ( 0 !== $count ) {
