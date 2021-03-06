@@ -1129,7 +1129,7 @@ function mc_scripts() {
 			);
 		}
 		$count = mc_count_locations();
-		if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 25 ) ) {
+		if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 50 ) ) {
 			wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
 			wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/locations-autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
 			wp_localize_script(
