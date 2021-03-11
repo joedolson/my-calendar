@@ -615,6 +615,10 @@ function my_calendar_copyr( $source, $dest ) {
  */
 function my_calendar_rmdirr( $dirname ) {
 	// Sanity check.
+	if ( empty( $dirname ) ) {
+		return false;
+	}
+	// Another sanity check.
 	if ( ! file_exists( $dirname ) ) {
 		return false;
 	}
@@ -624,15 +628,16 @@ function my_calendar_rmdirr( $dirname ) {
 	}
 	// List files for deletion.
 	$files = list_files( $dirname, 2 );
+	// Make sure we wait to remove directories until after everything is removed.
 	foreach ( $files as $file ) {
 		if ( is_dir( $file ) ) {
-			rmdir( $file );
+			my_calendar_rmdirr( $file );
 		} elseif ( is_file( $file ) ) {
 			unlink( $file );
 		}
 	}
 
-	return rmdir( $dirname );
+	return @rmdir( $dirname );
 }
 
 /**
