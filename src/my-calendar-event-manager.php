@@ -2642,10 +2642,11 @@ function mc_list_events() {
  * @param string $action Type of action being performed.
  * @param array  $post Post data.
  * @param int    $i If multiple events submitted, which index this is.
+ * @param bool   $ignore_required Pass 'true' to ignore required fields.
  *
  * @return array Modified data and information about approval.
  */
-function mc_check_data( $action, $post, $i ) {
+function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	global $wpdb, $submission;
 	$user               = wp_get_current_user();
 	$post               = apply_filters( 'mc_pre_checkdata', $post, $action, $i );
@@ -2985,7 +2986,7 @@ function mc_check_data( $action, $post, $i ) {
 		// Array: removed before DB insertion.
 		'event_categories'   => $cats,
 	);
-	$errors       = apply_filters( 'mc_fields_required', $errors, $submit );
+	$errors       = ( $ignore_required ) ? $errors : apply_filters( 'mc_fields_required', $errors, $submit );
 
 	if ( '' === $errors ) {
 		$ok = true;
