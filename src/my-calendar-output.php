@@ -3077,7 +3077,7 @@ function mc_translate_url( $url ) {
 	// WPML support.
 	if ( function_exists( 'wpml_current_language' ) ) {
 		$home_url   = apply_filters( 'wpml_home_url', home_url() );
-		$is_default = ( apply_filters( 'wpml_current_language', NULL ) === apply_filters( 'wpml_default_language', NULL ) ) ? true : false;
+		$is_default = ( apply_filters( 'wpml_current_language', null ) === apply_filters( 'wpml_default_language', null ) ) ? true : false;
 	}
 	if ( ! $is_default ) {
 		$url = str_replace( home_url(), $home_url, $url );
