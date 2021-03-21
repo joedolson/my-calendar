@@ -3055,9 +3055,37 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 
 	unset( $variables['page_id'] );
 	$home = add_query_arg( $variables, $home );
+	$home = apply_filters( 'mc_build_url', $home, $add, $subtract, $root );
 
 	return esc_url( $home );
 }
+
+/**
+ * Re-parse URL for translation plug-ins.
+ *
+ * @param string $url Original URL.
+ *
+ * @return string
+ */
+function mc_translate_url( $url ) {
+	$is_default = true;
+	// Polylang support.
+	if ( function_exists( 'pll_home_url' ) ) {
+		$home_url   = pll_home_url();
+		$is_default = ( pll_current_language() === pll_default_language() ) ? true : false;
+	}
+	// WPML support.
+	if ( function_exists( 'wpml_current_language' ) ) {
+		$home_url   = apply_filters( 'wpml_home_url', home_url() );
+		$is_default = ( apply_filters( 'wpml_current_language', NULL ) === apply_filters( 'wpml_default_language', NULL ) ) ? true : false;
+	}
+	if ( ! $is_default ) {
+		$url = str_replace( home_url(), $home_url, $url );
+	}
+
+	return $url;
+}
+add_filter( 'mc_build_url', 'mc_translate_url' );
 
 /**
  * Default My Calendar search form.
