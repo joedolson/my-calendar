@@ -1,28 +1,46 @@
 jQuery(document).ready(function ($) {
-	$('#add_field').on('click', function () {
+	$('#e_schedule').on( 'click', '.add_field', function() {
 		$('#event_span').show();
-		var num = $('.clonedInput').length; // how many "duplicatable" input fields we currently have.
+		var num = $('.datetime-template').length; // how many sets of input fields we have.
 		var newNum = new Number(num + 1);   // the numeric ID of the new input field being added.
 		// create the new element via clone(), and manipulate it's ID using newNum value.
-		var newElem = $('#event' + num).clone().attr('id', 'event' + newNum);
+		var newElem = $('#event' + num ).clone().attr('id', 'event' + newNum);
+		var oldElem = $('#event' + num );
+		oldElem.find( '.buttons' ).hide();
 		// insert the new element after the last "duplicatable" input field.
-		$('#event' + num).after(newElem);
+		$( '#event' + num ).after(newElem);
+		// Update id & for relationships.
+		var inputs = newElem.find( 'input' );
+		var firstInput = newElem.find( '.event-begin' ).trigger( 'focus' );
+		var labels = newElem.find( 'label' );
+		inputs.each(function() {
+			var id = $(this).attr('id');
+			newId = id + newNum;
+			$(this).attr( 'id', newId );
+		});
+		labels.each(function() {
+			var forVal = $(this).attr('for');
+			newFor = forVal + newNum;
+			$(this).attr( 'for', newFor );
+		});
 		// enable the "remove" button.
 		$('#del_field').removeAttr('disabled');
 		// business rule: you can only add 40 occurrences.
 		if ( newNum == 40 ) {
-			$('#add_field').attr('disabled', 'disabled');
+			$('.add_field').attr('disabled', 'disabled');
 		}
 	});
 
-	$('#del_field').on( 'click', function () {
-		var num = $('.clonedInput').length; // how many "duplicatable" input fields we currently have.
-		$('#event' + num).remove();	 // remove the last element.
+	$('#e_schedule').on( 'click', '.del_field', function() {
+		var num = $('.datetime-template').length; // how many "duplicatable" input fields we currently have.
+		$('#event' + num).remove(); // remove the last element.
+		$('#event' + (num - 1) ).find( '.buttons' ).show();
+		$('#event' + (num - 1) ).find( 'input' ).trigger( 'focus' );
 		// enable the "add" button.
 		$('#add_field').removeAttr('disabled');
 		// if only one element remains, disable the "remove" button.
 		if ( num - 1 == 1 ) {
-			$('#del_field').attr('disabled', 'disabled');
+			$('.del_field').attr('disabled', 'disabled');
 		}
 		$('#event_span').hide();
 	});
