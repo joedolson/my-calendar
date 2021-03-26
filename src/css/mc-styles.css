@@ -122,10 +122,25 @@ span.mc-notice {
 	clear: right
 }
 
-.clonedInput {
+.datetime-template {
 	margin-bottom: 10px;
 	padding-bottom: 10px;
 	border-bottom: 1px solid #ddd
+}
+
+#event1 .new-field {
+	display: none;
+}
+
+.datetime-template .buttons {
+	padding: 12px;
+	margin-top: 12px;
+	background: #f3f3f3;
+}
+
+ol.mc-repeat-events {
+	margin: 0;
+	list-style-type: none;
 }
 
 #my-calendar .apply {
