@@ -495,12 +495,6 @@ function mc_add_styles() {
 	$id = $current_screen->id;
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ) );
-
-		if ( 'toplevel_page_my-calendar' === $id ) {
-			wp_enqueue_style( 'mc-pickadate-default', plugins_url( 'js/pickadate/themes/classic.css', __FILE__ ) );
-			wp_enqueue_style( 'mc-pickadate-date', plugins_url( 'js/pickadate/themes/classic.date.css', __FILE__ ) );
-			wp_enqueue_style( 'mc-pickadate-time', plugins_url( 'js/pickadate/themes/classic.time.css', __FILE__ ) );
-		}
 	}
 }
 
@@ -1015,6 +1009,100 @@ function mc_update_count_cache() {
 	return $counts;
 }
 
+add_action( 'admin_enqueue_scripts', 'mc_datepicker' );
+/**
+ * Enqueue datepickers.
+ */
+function mc_datepicker() {
+	global $current_screen;
+	$id   = $current_screen->id;
+	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
+
+	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-groups' === $id ) {
+		if ( isset( $_GET['pickadate'] ) ) {
+			mc_enqueue_pickadate();
+		} else {
+			mc_enqueue_duet();
+		}
+	}
+}
+
+/**
+ * Enqueue Duet Date Picker.
+ */
+function mc_enqueue_duet() {
+	wp_enqueue_script( 'duet.esm', plugins_url( 'js/duet/duet.esm.js', __FILE__ ) );
+	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ) );
+	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ) );
+}
+
+/**
+ * Enqueue pickadate.
+ */
+function mc_enqueue_pickadate() {
+	wp_enqueue_script( 'pickadate', plugins_url( 'js/pickadate/picker.js', __FILE__ ), array( 'jquery' ) );
+	wp_enqueue_script( 'pickadate.date', plugins_url( 'js/pickadate/picker.date.js', __FILE__ ), array( 'pickadate' ) );
+	wp_enqueue_script( 'pickadate.time', plugins_url( 'js/pickadate/picker.time.js', __FILE__ ), array( 'pickadate' ) );
+	wp_localize_script(
+		'pickadate.date',
+		'mc_months',
+		array(
+			date_i18n( 'F', strtotime( 'January 1' ) ),
+			date_i18n( 'F', strtotime( 'February 1' ) ),
+			date_i18n( 'F', strtotime( 'March 1' ) ),
+			date_i18n( 'F', strtotime( 'April 1' ) ),
+			date_i18n( 'F', strtotime( 'May 1' ) ),
+			date_i18n( 'F', strtotime( 'June 1' ) ),
+			date_i18n( 'F', strtotime( 'July 1' ) ),
+			date_i18n( 'F', strtotime( 'August 1' ) ),
+			date_i18n( 'F', strtotime( 'September 1' ) ),
+			date_i18n( 'F', strtotime( 'October 1' ) ),
+			date_i18n( 'F', strtotime( 'November 1' ) ),
+			date_i18n( 'F', strtotime( 'December 1' ) ),
+		)
+	);
+	wp_localize_script(
+		'pickadate.date',
+		'mc_days',
+		array(
+			date_i18n( 'D', strtotime( 'Sunday' ) ),
+			date_i18n( 'D', strtotime( 'Monday' ) ),
+			date_i18n( 'D', strtotime( 'Tuesday' ) ),
+			date_i18n( 'D', strtotime( 'Wednesday' ) ),
+			date_i18n( 'D', strtotime( 'Thursday' ) ),
+			date_i18n( 'D', strtotime( 'Friday' ) ),
+			date_i18n( 'D', strtotime( 'Saturday' ) ),
+		)
+	);
+	$sweek = absint( get_option( 'start_of_week' ) );
+	wp_localize_script(
+		'pickadate.date',
+		'mc_text',
+		array(
+			'vals' => array(
+				'today' => addslashes( __( 'Today', 'my-calendar' ) ),
+				'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
+				'close' => addslashes( __( 'Close', 'my-calendar' ) ),
+				// False-y values = Sunday, truth-y = Monday.
+				'start' => ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0,
+			),
+		)
+	);
+	wp_localize_script(
+		'pickadate.time',
+		'mcTime',
+		array(
+			'time_format' => apply_filters( 'mc_time_format', 'h:i A' ),
+			'interval'    => apply_filters( 'mc_interval', '15' ),
+		)
+	);
+	wp_enqueue_script( 'mc.pickadate', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'jquery', 'pickadate.date', 'pickadate.time' ) );
+	// Enqueue pickadate stylesheets.
+	wp_enqueue_style( 'mc-pickadate-default', plugins_url( 'js/pickadate/themes/classic.css', __FILE__ ) );
+	wp_enqueue_style( 'mc-pickadate-date', plugins_url( 'js/pickadate/themes/classic.date.css', __FILE__ ) );
+	wp_enqueue_style( 'mc-pickadate-time', plugins_url( 'js/pickadate/themes/classic.time.css', __FILE__ ) );
+}
+
 add_action( 'admin_enqueue_scripts', 'mc_scripts' );
 /**
  * Enqueue My Calendar admin scripts
@@ -1042,64 +1130,6 @@ function mc_scripts() {
 
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-groups' === $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' ); // required for character counting.
-		wp_enqueue_script( 'pickadate', plugins_url( 'js/pickadate/picker.js', __FILE__ ), array( 'jquery' ) );
-		wp_enqueue_script( 'pickadate.date', plugins_url( 'js/pickadate/picker.date.js', __FILE__ ), array( 'pickadate' ) );
-		wp_enqueue_script( 'pickadate.time', plugins_url( 'js/pickadate/picker.time.js', __FILE__ ), array( 'pickadate' ) );
-		wp_localize_script(
-			'pickadate.date',
-			'mc_months',
-			array(
-				date_i18n( 'F', strtotime( 'January 1' ) ),
-				date_i18n( 'F', strtotime( 'February 1' ) ),
-				date_i18n( 'F', strtotime( 'March 1' ) ),
-				date_i18n( 'F', strtotime( 'April 1' ) ),
-				date_i18n( 'F', strtotime( 'May 1' ) ),
-				date_i18n( 'F', strtotime( 'June 1' ) ),
-				date_i18n( 'F', strtotime( 'July 1' ) ),
-				date_i18n( 'F', strtotime( 'August 1' ) ),
-				date_i18n( 'F', strtotime( 'September 1' ) ),
-				date_i18n( 'F', strtotime( 'October 1' ) ),
-				date_i18n( 'F', strtotime( 'November 1' ) ),
-				date_i18n( 'F', strtotime( 'December 1' ) ),
-			)
-		);
-		wp_localize_script(
-			'pickadate.date',
-			'mc_days',
-			array(
-				date_i18n( 'D', strtotime( 'Sunday' ) ),
-				date_i18n( 'D', strtotime( 'Monday' ) ),
-				date_i18n( 'D', strtotime( 'Tuesday' ) ),
-				date_i18n( 'D', strtotime( 'Wednesday' ) ),
-				date_i18n( 'D', strtotime( 'Thursday' ) ),
-				date_i18n( 'D', strtotime( 'Friday' ) ),
-				date_i18n( 'D', strtotime( 'Saturday' ) ),
-			)
-		);
-		$sweek = absint( get_option( 'start_of_week' ) );
-		wp_localize_script(
-			'pickadate.date',
-			'mc_text',
-			array(
-				'vals' => array(
-					'today' => addslashes( __( 'Today', 'my-calendar' ) ),
-					'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
-					'close' => addslashes( __( 'Close', 'my-calendar' ) ),
-					// False-y values = Sunday, truth-y = Monday.
-					'start' => ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0,
-				),
-			)
-		);
-		wp_localize_script(
-			'pickadate.time',
-			'mcTime',
-			array(
-				'time_format' => apply_filters( 'mc_time_format', 'h:i A' ),
-				'interval'    => apply_filters( 'mc_interval', '15' ),
-			)
-		);
-		wp_enqueue_script( 'mc.pickadate', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'jquery', 'pickadate.date', 'pickadate.time' ) );
-
 		if ( function_exists( 'wp_enqueue_media' ) && ! did_action( 'wp_enqueue_media' ) ) {
 			wp_enqueue_media();
 		}
