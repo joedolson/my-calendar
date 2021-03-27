@@ -1298,7 +1298,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 							<select class="widefat" name="event_category" id="e_category">' . $select . '</select>
 						</p>';
 				} else {
-					$return = '<fieldset><legend>' . __( 'Categories', 'my-calendar' ) . '</legend><ul class="checkboxes">' .
+					$return = '<fieldset class="categories"><legend>' . __( 'Categories', 'my-calendar' ) . '</legend><ul class="checkboxes">' .
 						mc_category_select( $data, true, true ) . '
 					</ul></fieldset>';
 				}
@@ -1326,7 +1326,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 					$checked = ' checked="checked"';
 				}
 				$return = '
-					<p>
+					<p class="checkbox">
 						<label for="e_link">' . __( 'URL', 'my-calendar' ) . '</label> <input type="text" id="e_link" name="event_link" size="40" value="' . $value . '" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
 					</p>';
 			}
@@ -1354,8 +1354,8 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			if ( $show_block && empty( $_GET['date'] ) ) {
 				$return = $pre . '
 	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . '</h2>
-	<div class="inside">' . $prev . '
-		<fieldset>
+	<div class="inside recurrences">' . $prev . '
+		<fieldset class="recurring">
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
 			<p>
 				<label for="e_repeats">' . __( 'Repeats', 'my-calendar' ) . ' <input type="text" name="event_repeats" aria-labelledby="e_repeats_label" aria-describedby="e_repeats_desc" id="e_repeats" size="2" value="' . esc_attr( $repeats ) . '" /> <span id="e_repeats_label">' . __( 'times', 'my-calendar' ) . '</span>, </label>
@@ -1571,7 +1571,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				mc_show_notice( __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) );
 			}
 			?>
-			<fieldset>
+			<fieldset class="details">
 				<legend class="screen-reader-text"><?php _e( 'Event Details', 'my-calendar' ); ?></legend>
 				<p>
 					<label for="e_title"><?php _e( 'Event Title', 'my-calendar' ); ?></label><br/>
@@ -1629,7 +1629,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<?php
 			}
 			?>
-			<fieldset>
+			<fieldset class="datetime">
 				<legend class="screen-reader-text"><?php _e( 'Event Date and Time', 'my-calendar' ); ?></legend>
 				<div id="e_schedule">
 					<?php
@@ -1766,7 +1766,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<h2><?php _e( 'Event Location', 'my-calendar' ); ?></h2>
 
 		<div class="inside location_form">
-			<fieldset>
+			<fieldset class="locations">
 				<legend class='screen-reader-text'><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 		<?php
 	}
@@ -1799,7 +1799,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			<h2><?php _e( 'Special scheduling options', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<fieldset>
+				<fieldset class="options">
 					<legend class="screen-reader-text"><?php _e( 'Special Options', 'my-calendar' ); ?></legend>
 					<p>
 						<label for="e_holiday"><?php _e( 'Cancel this event if it occurs on a date with an event in the Holidays category', 'my-calendar' ); ?></label>
@@ -1998,7 +1998,7 @@ function mc_event_accessibility( $form, $data, $label ) {
 	$events_access = array();
 	$class         = ( is_admin() ) ? 'screen-reader-text' : 'mc-event-access';
 	$form         .= "
-		<fieldset>
+		<fieldset class='accessibility'>
 			<legend class='$class'>$label</legend>
 			<ul class='accessibility-features checkboxes'>";
 	$access        = apply_filters( 'mc_event_accessibility', mc_event_access() );
@@ -3366,16 +3366,20 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 
 	$form .= '<div>
 		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="mc_event_date" first-day-of-week="' . $firstday . '" name="event_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
+		<div class="columns">
 		<p>
 		<label for="mc_event_time">' . __( 'From', 'my-calendar' ) . '</label>
 		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
+		</p>
+		<p>
 		<label for="mc_event_endtime">' . __( 'To', 'my-calendar' ) . '</label>
 		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
 		</p>
+		</div>
 	</div>
 	<ul>
-		<li><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
-		<li><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
+		<li class="checkbox"><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
+		<li class="checkbox"><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
 	</ul>
 	<div>
 		<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <duet-date-picker  first-day-of-week="' . $firstday . '" identifier="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '"></duet-date-picker>
