@@ -84,6 +84,13 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 == Changelog ==
 
+= 3.3.0 =
+
+* Replace date picker with the Duet Design Systems accessible date picker.
+* Accessibility & usability improvements to adding additional occurrences to an event.
+* Add support for custom fields on locations. See demo at [post example to Github]
+* 
+
 = 3.2.17 =
 
 * Bug fix: Add parameter for required fields handling to ignore during imports.

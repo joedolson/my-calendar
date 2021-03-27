@@ -1652,7 +1652,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					<ol class="mc-repeat-events">
 						<li id="event1" class="datetime-template">
 							<fieldset class="new-field">
-							<legend><?php printf( __( 'Event Occurrence %1$s', 'my-calendar' ), '<span class="number_of">2</span>' ); ?></legend>
+							<legend><?php
+							// Translators: placeholder for number of occurrences added.
+							printf( __( 'Event Occurrence %1$s', 'my-calendar' ), '<span class="number_of">2</span>' );
+							?></legend>
 							<?php
 							echo mc_repeatable_datetime_input( '', $has_data, $data );
 							?>
