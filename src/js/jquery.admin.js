@@ -7,6 +7,7 @@ jQuery(document).ready(function ($) {
 		var newElem = $('#event' + num ).clone().attr('id', 'event' + newNum);
 		var oldElem = $('#event' + num );
 		oldElem.find( '.buttons' ).hide();
+		newElem.find( '.number_of' ).text( num );
 		// insert the new element after the last "duplicatable" input field.
 		$( '#event' + num ).after(newElem);
 		// Update id & for relationships.
