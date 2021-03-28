@@ -824,7 +824,7 @@ function mc_get_occurrences( $id ) {
 	if ( 0 === $id ) {
 		return array();
 	}
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT occur_id, occur_event_id FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT occur_id, occur_event_id FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $results;
 }

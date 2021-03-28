@@ -1354,7 +1354,13 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			if ( is_object( $data ) && null !== $data->event_repeats ) {
 				$repeats = $data->event_repeats;
 			} else {
-				$repeats = 0;
+				$repeats = '';
+			}
+			if ( is_numeric( $repeats ) ) {
+				$occurrences = mc_get_occurrences( $data->event_id );
+				$last        = array_pop( $occurrences );
+				$event       = mc_get_instance_data( $last->occur_id );
+				$repeats     = gmdate( 'Y-m-d', strtotime( $event->occur_begin ) );
 			}
 			if ( $show_block && empty( $_GET['date'] ) ) {
 				$return = $pre . '
@@ -3871,7 +3877,11 @@ function mc_recur_string( $event ) {
 	$eternity = _mc_increment_values( $recur );
 	if ( $event->event_repeats > 0 && 'S' !== $recur ) {
 		// Translators: number of repeats.
-		$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $event->event_repeats );
+		if ( is_numeric( $event->event_repeats ) ) {
+			$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $event->event_repeats );
+		} else {
+			$string .= ' ' . sprintf( __( ' until %s', 'my-calendar' ), $event->event_repeats );
+		}
 	} elseif ( $eternity ) {
 		// Translators: number of repeats.
 		$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $eternity );
@@ -3899,12 +3909,12 @@ function mc_recur_options( $value ) {
 
 	$return = "
 				<option class='input' value='S' $s>" . __( 'Does not recur', 'my-calendar' ) . "</option>
-				<option class='input' value='D' $d>" . __( 'Days', 'my-calendar' ) . "</option>
-				<option class='input' value='E' $e>" . __( 'Days, weekdays only', 'my-calendar' ) . "</option>
-				<option class='input' value='W' $w>" . __( 'Weeks', 'my-calendar' ) . "</option>
-				<option class='input' value='M' $m>" . __( 'Months by date (the 24th of each month)', 'my-calendar' ) . "</option>
-				<option class='input' value='U' $u>" . __( 'Month by day (the 3rd Monday of each month)', 'my-calendar' ) . "</option>
-				<option class='input' value='Y' $y>" . __( 'Year', 'my-calendar' ) . '</option>';
+				<option class='input' value='D' $d>" . __( 'Daily', 'my-calendar' ) . "</option>
+				<option class='input' value='E' $e>" . __( 'Daily, weekdays only', 'my-calendar' ) . "</option>
+				<option class='input' value='W' $w>" . __( 'Weekly', 'my-calendar' ) . "</option>
+				<option class='input' value='M' $m>" . __( 'Monthly by date (the 24th of each month)', 'my-calendar' ) . "</option>
+				<option class='input' value='U' $u>" . __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ) . "</option>
+				<option class='input' value='Y' $y>" . __( 'Yearly', 'my-calendar' ) . '</option>';
 
 	return $return;
 }
