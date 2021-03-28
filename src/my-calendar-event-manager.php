@@ -1893,7 +1893,7 @@ function mc_event_location_dropdown_block( $data ) {
 						$location_link = ( current_user_can( 'mc_edit_locations' ) ) ? add_query_arg(
 							array(
 								'mode'        => 'edit',
-								'location_id' => $event_location
+								'location_id' => $event_location,
 							),
 							admin_url( 'admin.php?page=my-calendar-locations' )
 						) : false;
