@@ -1370,10 +1370,10 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
 			<div class="columns">
 			<p>
-				<label for="e_every">' . __( 'Repeat frequency', 'my-calendar' ) . '</label> <input type="number" name="event_every" id="e_every" size="4" min="1" max="99" maxlength="2" value="' . esc_attr( $every ) . '" />
+				<label for="e_every">' . __( 'Frequency', 'my-calendar' ) . '</label> <input type="number" name="event_every" id="e_every" size="4" min="1" max="99" maxlength="2" value="' . esc_attr( $every ) . '" />
 			</p>
 			<p>
-				<label for="e_recur">' . __( 'Repeat period', 'my-calendar' ) . '</label>
+				<label for="e_recur">' . __( 'Period', 'my-calendar' ) . '</label>
 				<select name="event_recur" id="e_recur">
 					' . mc_recur_options( $recur ) . '
 				</select>
