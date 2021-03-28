@@ -690,7 +690,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
 	$proceed = (bool) $output[0];
 	$message = '';
-	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f' );
+	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f' );
 
 	if ( ( 'add' === $action || 'copy' === $action ) && true === $proceed ) {
 		$add  = $output[2]; // add format here.
@@ -708,6 +708,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			// do an action using the $action and processed event data.
 			$data        = $add;
 			$event_error = '';
+			$event_link  = '';
 			mc_event_post( $action, $data, $event_id, $result );
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 
@@ -725,8 +726,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 				if ( mc_get_uri( 'boolean' ) ) {
 					$event_ids   = mc_get_occurrences( $event_id );
-					$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
-					$event_error = mc_error_check( $event_ids[0]->occur_event_id );
+					if ( ! empty( $event_ids ) ) {
+						$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
+						$event_error = mc_error_check( $event_ids[0]->occur_event_id );
+					}
 				} else {
 					$event_link = false;
 				}
@@ -734,9 +737,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$message = $event_error;
 				} else {
 					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
-					if ( false !== $event_link ) {
+					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
+					} else {
+						$message .= __( ' No link was generated for this event. There may be an unknown error.', 'my-calendar' );
 					}
 					$message = mc_show_notice( $message, false, 'new-event' );
 				}
@@ -1342,9 +1347,9 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				}
 				$prev = '<input type="hidden" name="prev_event_repeats" value="' . $data->event_repeats . '" /><input type="hidden" name="prev_event_recur" value="' . $data->event_recur . '" />';
 			} else {
-				$recur = false;
-				$every = 1;
-				$prev  = '';
+				$recur       = false;
+				$every       = 1;
+				$prev        = '';
 			}
 			if ( is_object( $data ) && null !== $data->event_repeats ) {
 				$repeats = $data->event_repeats;
@@ -1357,17 +1362,21 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 	<div class="inside recurrences">' . $prev . '
 		<fieldset class="recurring">
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
+			<div class="columns">
 			<p>
-				<label for="e_repeats">' . __( 'Repeats', 'my-calendar' ) . ' <input type="text" name="event_repeats" aria-labelledby="e_repeats_label" aria-describedby="e_repeats_desc" id="e_repeats" size="2" value="' . esc_attr( $repeats ) . '" /> <span id="e_repeats_label">' . __( 'times', 'my-calendar' ) . '</span>, </label>
-				<label for="e_every">' . __( 'every', 'my-calendar' ) . '</label> <input type="number" name="event_every" id="e_every" size="2" min="1" max="99" maxlength="2" value="' . esc_attr( $every ) . '" />
-				<label for="e_recur" class="screen-reader-text">' . __( 'units', 'my-calendar' ) . '</label>
+				<label for="e_every">' . __( 'Repeat frequency', 'my-calendar' ) . '</label> <input type="number" name="event_every" id="e_every" size="4" min="1" max="99" maxlength="2" value="' . esc_attr( $every ) . '" />
+			</p>
+			<p>
+				<label for="e_recur">' . __( 'Repeat period', 'my-calendar' ) . '</label>
 				<select name="event_recur" id="e_recur">
 					' . mc_recur_options( $recur ) . '
 				</select>
 			</p>
-			<p id="e_repeats_desc">
-				' . __( 'Your entry is the number of events after the first occurrence of the event: a recurrence of <em>2</em> means the event will happen three times.', 'my-calendar' ) . '
+			<p>
+				<label for="e_repeats">Repeat Until</label>
+				<duet-date-picker identifier="e_repeats" name="event_repeats" value="' . esc_attr( $repeats ) . '"></duet-date-picker>
 			</p>
+			</div>
 		</fieldset>
 	</div>
 							' . $post;
@@ -1691,10 +1700,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 										echo mc_admin_instances( $data->event_id, $date );
 										?>
 									</ul>
-									<p><button type='button' class='add-occurrence' aria-expanded="false"><span class='dashicons' aria-hidden='true'> </span><?php _e( 'Add another date', 'my-calendar' ); ?></button></p>
+									<p><button type='button' class='add-occurrence button-secondary' aria-expanded="false"><span class='dashicons dashicons-plus' aria-hidden='true'> </span><?php _e( 'Add another date', 'my-calendar' ); ?></button></p>
 									<div class='mc_add_new'>
 									<?php echo mc_recur_datetime_input( $data ); ?>
-									<button type='button' class='save-occurrence'><?php _e( 'Add Date', 'my-calendar' ); ?></button>
+									<p>
+									<button type='button' class='save-occurrence button-primary clear'><?php _e( 'Add Date', 'my-calendar' ); ?></button>
+									</p>
 									</div>
 								</div>
 								<?php
@@ -1876,11 +1887,19 @@ function mc_event_location_dropdown_block( $data ) {
 				<option value="none">--</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
-					$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
+					$loc_name       = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
 					$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					if ( (int) $loc->location_id === (int) $event_location ) {
 						// Translators: label for current location.
-						$current_location  = "<span id='mc-current-location'>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</span>';
+						$location_link  = ( current_user_can( 'mc_edit_locations' ) ) ? add_query_arg(
+							array(
+								'mode' => 'edit',
+								'location_id' => $event_location
+							),
+							admin_url( 'admin.php?page=my-calendar-locations' )
+						) : false;
+						$loc_name       = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . $loc_name . ' (' . __( 'Opens in new tab', 'my-calendar' ) . ')</a>' : $loc_name;
+						$current_location  = "<div id='mc-current-location'><span class='dashicons dashicons-location' aria-hidden='true'></span>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</div>';
 						$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
 					}
 					$output .= "<option value='" . $loc->location_id . "'$selected />" . $loc_name . '</option>';
@@ -2979,8 +2998,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_access'       => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
 		'event_tickets'      => $event_tickets,
 		'event_registration' => $event_registration,
-		// Begin integers.
 		'event_repeats'      => $repeats,
+		// Begin integers.
 		'event_author'       => $event_author,
 		'event_category'     => $primary,
 		'event_link_expires' => $expires,
@@ -3364,18 +3383,18 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	$sweek        = absint( get_option( 'start_of_week' ) );
 	$firstday     = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 
-	$form .= '<div>
-		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="mc_event_date" first-day-of-week="' . $firstday . '" name="event_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
-		<div class="columns">
+	$form .= '<div class="columns">
 		<p>
-		<label for="mc_event_time">' . __( 'From', 'my-calendar' ) . '</label>
+		<label for="mc_event_time">' . __( 'Start Time', 'my-calendar' ) . '</label>
 		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
 		</p>
 		<p>
-		<label for="mc_event_endtime">' . __( 'To', 'my-calendar' ) . '</label>
+		<label for="mc_event_endtime">' . __( 'End Time', 'my-calendar' ) . '</label>
 		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
 		</p>
-		</div>
+		<p>
+		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="mc_event_date" first-day-of-week="' . $firstday . '" name="event_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
+		</p>
 	</div>
 	<ul>
 		<li class="checkbox"><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
@@ -3428,20 +3447,20 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
 	$firstday     = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 
 	$form .= '<div>
-		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <input type="text" class="event-begin" id="mc_event_date" name="event_begin[]" value="' . esc_attr( $event_begin ) . '" />
+		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <input type="text" class="event-begin" id="mc_event_date" name="event_begin[]" value="' . esc_attr( $event_begin ) . '" disabled />
 		<p>
 		<label for="mc_event_time">' . __( 'From', 'my-calendar' ) . '</label>
-		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
+		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" disabled />
 		<label for="mc_event_endtime">' . __( 'To', 'my-calendar' ) . '</label>
-		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
+		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" disabled />
 		</p>
 	</div>
 	<ul>
-		<li><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
-		<li><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
+		<li><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' disabled /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
+		<li><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' disabled /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
 	</ul>
 	<div>
-		<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <input type="text" id="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '" />
+		<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <input type="text" id="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
 	</div>';
 
 	return $form;
@@ -3462,13 +3481,20 @@ function mc_recur_datetime_input( $data ) {
 	$sweek       = absint( get_option( 'start_of_week' ) );
 	$firstday    = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 
-	$form = '<p>
-		<label for="r_begin">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="r_begin" first-day-of-week="' . $firstday . '" name="recur_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
-		<label for="r_time">' . __( 'From', 'my-calendar' ) . '</label>
-		<input type="time" id="r_time" name="recur_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
-		<label for="r_endtime">' . __( 'To', 'my-calendar' ) . '</label>
-		<input type="time" id="r_endtime" name="recur_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
-	</p>
+	$form = '
+	<div class="columns">
+		<p>
+			<label for="r_time">' . __( 'Start Time', 'my-calendar' ) . '</label>
+			<input type="time" id="r_time" name="recur_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
+		</p>
+		<p>
+			<label for="r_endtime">' . __( 'End Time', 'my-calendar' ) . '</label>
+			<input type="time" id="r_endtime" name="recur_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
+		</p>
+		<p>
+			<label for="r_begin">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="r_begin" first-day-of-week="' . $firstday . '" name="recur_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
+		</p>
+	</div>
 	<p>
 		<label for="r_end"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label>
 		<duet-date-picker identifier="r_end" name="recur_end[]"  first-day-of-week="' . $firstday . '" value="' . esc_attr( $event_end ) . '"></duet-date-picker>
@@ -3876,8 +3902,8 @@ function mc_recur_options( $value ) {
 				<option class='input' value='D' $d>" . __( 'Days', 'my-calendar' ) . "</option>
 				<option class='input' value='E' $e>" . __( 'Days, weekdays only', 'my-calendar' ) . "</option>
 				<option class='input' value='W' $w>" . __( 'Weeks', 'my-calendar' ) . "</option>
-				<option class='input' value='M' $m>" . __( 'Months by date (e.g., the 24th of each month)', 'my-calendar' ) . "</option>
-				<option class='input' value='U' $u>" . __( 'Month by day (e.g., the 3rd Monday of each month)', 'my-calendar' ) . "</option>
+				<option class='input' value='M' $m>" . __( 'Months by date (the 24th of each month)', 'my-calendar' ) . "</option>
+				<option class='input' value='U' $u>" . __( 'Month by day (the 3rd Monday of each month)', 'my-calendar' ) . "</option>
 				<option class='input' value='Y' $y>" . __( 'Year', 'my-calendar' ) . '</option>';
 
 	return $return;
@@ -4004,9 +4030,9 @@ function mc_reuse_id_format( $format, $begin, $instances ) {
  */
 function mc_increment_event( $id, $post = array(), $test = false, $instances = array() ) {
 	global $wpdb;
-	$event  = mc_get_event_core( $id, true );
-	$data   = array();
-	$return = array();
+	$event      = mc_get_event_core( $id, true );
+	$data       = array();
+	$return     = array();
 	if ( empty( $post ) ) {
 		$orig_begin = $event->event_begin . ' ' . $event->event_time;
 		$orig_end   = $event->event_end . ' ' . $event->event_endtime;
@@ -4027,21 +4053,103 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 	$every = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
 	if ( 'S' !== $recur ) {
 		// If this event had a rep of 0, translate that.
-		$event_repetition = ( 0 !== (int) $event->event_repeats ) ? $event->event_repeats : _mc_increment_values( $recur );
-		$numforward       = (int) $event_repetition;
-		if ( 'S' !== $recur ) {
-			switch ( $recur ) {
-				case 'D':
+		if ( is_numeric( $event->event_repeats ) ) {
+			// Backwards compatibility.
+			$event_repetition = ( 0 !== (int) $event->event_repeats ) ? $event->event_repeats : _mc_increment_values( $recur );
+			$post_until       = false;
+		} else {
+			$post_until = $event->event_repeats;
+			// Set event repetition to 1. Autoincrement up as needed.
+			$event_repetition = ( $post_until > $orig_end ) ? 1 : false;
+		}
+		// Toggle recurrence type to single if invalid repeat target passed.
+		$recur      = ( ! $event_repetition ) ? 'S' : $recur;
+		$numforward = (int) $event_repetition;
+		switch ( $recur ) {
+			case 'D':
+				for ( $i = 0; $i <= $numforward; $i ++ ) {
+					$begin = my_calendar_add_date( $orig_begin, $i * $every, 0, 0 );
+					$end   = my_calendar_add_date( $orig_end, $i * $every, 0, 0 );
+
+					$data = array(
+						'occur_event_id' => $id,
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
+						'occur_group_id' => $group_id,
+					);
+					if ( $begin <= strtotime( $post_until ) ) {
+						$numforward ++;
+					} else {
+
+						return $data;
+					}
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
+					$return[] = $data;
+					if ( ! $test ) {
+						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
+						if ( ! $insert ) {
+							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
+							$wpdb->insert( my_calendar_event_table(), $data, $format );
+						}
+					}
+				}
+				break;
+			case 'E':
+				// This doesn't work for weekdays unless the period is less than one week, as it doesn't account for day repetitions.
+				// Need to set up two nested loops to ID the number of days forward for x week days.
+				// Every = $every = e.g. every 14 weekdays.
+				// Num forward = $numforward = e.g. 7 times.
+				if ( $every < 7 ) {
 					for ( $i = 0; $i <= $numforward; $i ++ ) {
 						$begin = my_calendar_add_date( $orig_begin, $i * $every, 0, 0 );
 						$end   = my_calendar_add_date( $orig_end, $i * $every, 0, 0 );
-
-						$data = array(
+						if ( 0 !== (int) ( mc_date( 'w', $begin, false ) && 6 !== (int) mc_date( 'w', $begin, false ) ) ) {
+							$data = array(
+								'occur_event_id' => $id,
+								'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+								'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
+								'occur_group_id' => $group_id,
+							);
+							if ( $begin <= strtotime( $post_until ) ) {
+								$numforward ++;
+							} else {
+								return $data;
+							}
+							if ( 'test' === $test && $i > 0 ) {
+								return $data;
+							}
+							$return[] = $data;
+							if ( ! $test ) {
+								$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
+								if ( ! $insert ) {
+									$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+									$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
+									$wpdb->insert( my_calendar_event_table(), $data, $format );
+								}
+							}
+						} else {
+							$numforward ++;
+						}
+					}
+				} else {
+					// Get number of weeks included in data.
+					for ( $i = 0; $i <= $event_repetition; $i ++ ) {
+						$begin = strtotime( $orig_begin . ' ' . ( $every * $i ) . ' weekdays' );
+						$end   = strtotime( $orig_end . ' ' . ( $every * $i ) . ' weekdays' );
+						$data  = array(
 							'occur_event_id' => $id,
 							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
 							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 							'occur_group_id' => $group_id,
 						);
+						if ( $begin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							return $data;
+						}
 						if ( 'test' === $test && $i > 0 ) {
 							return $data;
 						}
@@ -4055,220 +4163,187 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 							}
 						}
 					}
-					break;
-				case 'E':
-					// This doesn't work for weekdays unless the period is less than one week, as it doesn't account for day repetitions.
-					// Need to set up two nested loops to ID the number of days forward for x week days.
-					// Every = $every = e.g. every 14 weekdays.
-					// Num forward = $numforward = e.g. 7 times.
-					if ( $every < 7 ) {
-						for ( $i = 0; $i <= $numforward; $i ++ ) {
-							$begin = my_calendar_add_date( $orig_begin, $i * $every, 0, 0 );
-							$end   = my_calendar_add_date( $orig_end, $i * $every, 0, 0 );
-							if ( 0 !== (int) ( mc_date( 'w', $begin, false ) && 6 !== (int) mc_date( 'w', $begin, false ) ) ) {
-								$data = array(
-									'occur_event_id' => $id,
-									'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-									'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-									'occur_group_id' => $group_id,
-								);
-								if ( 'test' === $test && $i > 0 ) {
-									return $data;
-								}
-								$return[] = $data;
-								if ( ! $test ) {
-									$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
-									if ( ! $insert ) {
-										$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-										$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-										$wpdb->insert( my_calendar_event_table(), $data, $format );
-									}
-								}
-							} else {
-								$numforward ++;
-							}
-						}
-					} else {
-						// Get number of weeks included in data.
-						for ( $i = 0; $i <= $event_repetition; $i ++ ) {
-							$begin = strtotime( $orig_begin . ' ' . ( $every * $i ) . ' weekdays' );
-							$end   = strtotime( $orig_end . ' ' . ( $every * $i ) . ' weekdays' );
-							$data  = array(
-								'occur_event_id' => $id,
-								'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-								'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-								'occur_group_id' => $group_id,
-							);
-							if ( 'test' === $test && $i > 0 ) {
-								return $data;
-							}
-							$return[] = $data;
-							if ( ! $test ) {
-								$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
-								if ( ! $insert ) {
-									$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-									$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-									$wpdb->insert( my_calendar_event_table(), $data, $format );
-								}
-							}
-						}
-					}
-					break;
-				case 'W':
-					for ( $i = 0; $i <= $numforward; $i ++ ) {
-						$begin = my_calendar_add_date( $orig_begin, ( $i * 7 ) * $every, 0, 0 );
-						$end   = my_calendar_add_date( $orig_end, ( $i * 7 ) * $every, 0, 0 );
-						$data  = array(
-							'occur_event_id' => $id,
-							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-							'occur_group_id' => $group_id,
-						);
-						if ( 'test' === $test && $i > 0 ) {
-							return $data;
-						}
-						$return[] = $data;
-						if ( ! $test ) {
-							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'weekly' );
-							if ( ! $insert ) {
-								$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-								$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-								$wpdb->insert( my_calendar_event_table(), $data, $format );
-							}
-						}
-					}
-					break;
-				case 'B':
-					for ( $i = 0; $i <= $numforward; $i ++ ) {
-						$begin = my_calendar_add_date( $orig_begin, ( $i * 14 ), 0, 0 );
-						$end   = my_calendar_add_date( $orig_end, ( $i * 14 ), 0, 0 );
-						$data  = array(
-							'occur_event_id' => $id,
-							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-							'occur_group_id' => $group_id,
-						);
-						if ( 'test' === $test && $i > 0 ) {
-							return $data;
-						}
-						$return[] = $data;
-						if ( ! $test ) {
-							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'biweekly' );
-							if ( ! $insert ) {
-								$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-								$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-								$wpdb->insert( my_calendar_event_table(), $data, $format );
-							}
-						}
-					}
-					break;
-				case 'M':
-					for ( $i = 0; $i <= $numforward; $i ++ ) {
-						$begin = my_calendar_add_date( $orig_begin, 0, $i * $every, 0 );
-						$end   = my_calendar_add_date( $orig_end, 0, $i * $every, 0 );
-						$data  = array(
-							'occur_event_id' => $id,
-							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-							'occur_group_id' => $group_id,
-						);
-						if ( 'test' === $test && $i > 0 ) {
-							return $data;
-						}
-						$return[] = $data;
-						if ( ! $test ) {
-							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'monthly' );
-							if ( ! $insert ) {
-								$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-								$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-								$wpdb->insert( my_calendar_event_table(), $data, $format );
-							}
-						}
-					}
-					break;
-				case 'U':
-					// Important to keep track of which date variables are strings and which are timestamps.
-					$week_of_event = mc_week_of_month( mc_date( 'd', strtotime( $event->event_begin ), false ) );
-					$newbegin      = my_calendar_add_date( $orig_begin, 28, 0, 0 );
-					$newend        = my_calendar_add_date( $orig_end, 28, 0, 0 );
-					$fifth_week    = $event->event_fifth_week;
-					$data          = array(
+				}
+				break;
+			case 'W':
+				for ( $i = 0; $i <= $numforward; $i ++ ) {
+					$begin = my_calendar_add_date( $orig_begin, ( $i * 7 ) * $every, 0, 0 );
+					$end   = my_calendar_add_date( $orig_end, ( $i * 7 ) * $every, 0, 0 );
+					$data  = array(
 						'occur_event_id' => $id,
-						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_begin ), false ),
-						'occur_end'      => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_end ), false ),
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
-
+					if ( $begin <= strtotime( $post_until ) ) {
+						$numforward ++;
+					} else {
+						return $data;
+					}
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
+					$return[] = $data;
 					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'month-by-day' );
+						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'weekly' );
 						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, strtotime( $orig_begin ), $instances );
-							$format = apply_filters( 'mc_instance_format', $format, strtotime( $orig_begin ), $instances );
+							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
 							$wpdb->insert( my_calendar_event_table(), $data, $format );
 						}
 					}
-					$numforward = ( $numforward - 1 );
-					for ( $i = 0; $i <= $numforward; $i ++ ) {
-						$next_week_diff = ( mc_date( 'm', $newbegin, false ) === mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin, false ), 7, 0, 0 ) ) ) ? false : true;
-						$move_event     = ( ( 1 === (int) $fifth_week ) && ( ( mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 ) === (int) $week_of_event ) && true === $next_week_diff ) ? true : false;
+				}
+				break;
+			case 'B':
+				for ( $i = 0; $i <= $numforward; $i ++ ) {
+					$begin = my_calendar_add_date( $orig_begin, ( $i * 14 ), 0, 0 );
+					$end   = my_calendar_add_date( $orig_end, ( $i * 14 ), 0, 0 );
+					$data  = array(
+						'occur_event_id' => $id,
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
+						'occur_group_id' => $group_id,
+					);
+					if ( $begin <= strtotime( $post_until ) ) {
+						$numforward ++;
+					} else {
+						return $data;
+					}
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
+					$return[] = $data;
+					if ( ! $test ) {
+						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'biweekly' );
+						if ( ! $insert ) {
+							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
+							$wpdb->insert( my_calendar_event_table(), $data, $format );
+						}
+					}
+				}
+				break;
+			case 'M':
+				for ( $i = 0; $i <= $numforward; $i ++ ) {
+					$begin = my_calendar_add_date( $orig_begin, 0, $i * $every, 0 );
+					$end   = my_calendar_add_date( $orig_end, 0, $i * $every, 0 );
+					$data  = array(
+						'occur_event_id' => $id,
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
+						'occur_group_id' => $group_id,
+					);
+					if ( $begin <= strtotime( $post_until ) ) {
+						$numforward ++;
+					} else {
+						return $data;
+					}
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
+					$return[] = $data;
+					if ( ! $test ) {
+						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'monthly' );
+						if ( ! $insert ) {
+							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
+							$wpdb->insert( my_calendar_event_table(), $data, $format );
+						}
+					}
+				}
+				break;
+			case 'U':
+				// Important to keep track of which date variables are strings and which are timestamps.
+				$week_of_event = mc_week_of_month( mc_date( 'd', strtotime( $event->event_begin ), false ) );
+				$newbegin      = my_calendar_add_date( $orig_begin, 28, 0, 0 );
+				$newend        = my_calendar_add_date( $orig_end, 28, 0, 0 );
+				$fifth_week    = $event->event_fifth_week;
+				$data          = array(
+					'occur_event_id' => $id,
+					'occur_begin'    => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_begin ), false ),
+					'occur_end'      => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_end ), false ),
+					'occur_group_id' => $group_id,
+				);
+
+				if ( ! $test ) {
+					$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'month-by-day' );
+					if ( ! $insert ) {
+						$data   = apply_filters( 'mc_instance_data', $data, strtotime( $orig_begin ), $instances );
+						$format = apply_filters( 'mc_instance_format', $format, strtotime( $orig_begin ), $instances );
+						$wpdb->insert( my_calendar_event_table(), $data, $format );
+					}
+				}
+				$numforward = ( $numforward - 1 );
+				for ( $i = 0; $i <= $numforward; $i ++ ) {
+					$next_week_diff = ( mc_date( 'm', $newbegin, false ) === mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin, false ), 7, 0, 0 ) ) ) ? false : true;
+					$move_event     = ( ( 1 === (int) $fifth_week ) && ( ( mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 ) === (int) $week_of_event ) && true === $next_week_diff ) ? true : false;
+					if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
+					} else {
+						$newbegin   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 7, 0, 0 );
+						$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 7, 0, 0 );
+						$move_event = ( 1 === (int) $fifth_week && mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 === (int) $week_of_event ) ? true : false;
 						if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
 						} else {
-							$newbegin   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 7, 0, 0 );
-							$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 7, 0, 0 );
-							$move_event = ( 1 === (int) $fifth_week && mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 === (int) $week_of_event ) ? true : false;
-							if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
-							} else {
-								$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 14, 0, 0 );
-								$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 14, 0, 0 );
-							}
-						}
-						$data = array(
-							'occur_event_id' => $id,
-							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $newbegin, false ),
-							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend, false ),
-							'occur_group_id' => $group_id,
-						);
-						if ( 'test' === $test && $i > 0 ) {
-							return $data;
-						}
-						$return[] = $data;
-						if ( ! $test ) {
-							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'month-by-day' );
-							if ( ! $insert ) {
-								$data   = apply_filters( 'mc_instance_data', $data, $newbegin, $instances );
-								$format = apply_filters( 'mc_instance_format', $format, $newbegin, $instances );
-								$wpdb->insert( my_calendar_event_table(), $data, $format );
-							}
-						}
-						$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 28, 0, 0 );
-						$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 28, 0, 0 );
-					}
-					break;
-				case 'Y':
-					for ( $i = 0; $i <= $numforward; $i ++ ) {
-						$begin = my_calendar_add_date( $orig_begin, 0, 0, $i * $every );
-						$end   = my_calendar_add_date( $orig_end, 0, 0, $i * $every );
-						$data  = array(
-							'occur_event_id' => $id,
-							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-							'occur_group_id' => $group_id,
-						);
-						if ( 'test' === $test && $i > 0 ) {
-							return $data;
-						}
-						$return[] = $data;
-						if ( ! $test ) {
-							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'annual' );
-							if ( ! $insert ) {
-								$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-								$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-								$wpdb->insert( my_calendar_event_table(), $data, $format );
-							}
+							$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 14, 0, 0 );
+							$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 14, 0, 0 );
 						}
 					}
-					break;
-			}
+					$data = array(
+						'occur_event_id' => $id,
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $newbegin, false ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend, false ),
+						'occur_group_id' => $group_id,
+					);
+					if ( $begin <= strtotime( $post_until ) ) {
+						$numforward ++;
+					} else {
+						return $data;
+					}
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
+					$return[] = $data;
+					if ( ! $test ) {
+						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'month-by-day' );
+						if ( ! $insert ) {
+							$data   = apply_filters( 'mc_instance_data', $data, $newbegin, $instances );
+							$format = apply_filters( 'mc_instance_format', $format, $newbegin, $instances );
+							$wpdb->insert( my_calendar_event_table(), $data, $format );
+						}
+					}
+					$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 28, 0, 0 );
+					$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 28, 0, 0 );
+				}
+				break;
+			case 'Y':
+				for ( $i = 0; $i <= $numforward; $i ++ ) {
+					$begin = my_calendar_add_date( $orig_begin, 0, 0, $i * $every );
+					$end   = my_calendar_add_date( $orig_end, 0, 0, $i * $every );
+					$data  = array(
+						'occur_event_id' => $id,
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
+						'occur_group_id' => $group_id,
+					);
+					if ( $begin <= strtotime( $post_until ) ) {
+						$numforward ++;
+					} else {
+						return $data;
+					}
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
+					$return[] = $data;
+					if ( ! $test ) {
+						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'annual' );
+						if ( ! $insert ) {
+							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
+							$wpdb->insert( my_calendar_event_table(), $data, $format );
+						}
+					}
+				}
+				break;
 		}
 	} else {
 		$begin = strtotime( $orig_begin );
