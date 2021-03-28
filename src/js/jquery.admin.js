@@ -17,7 +17,7 @@ jQuery(document).ready(function ($) {
 		inputs.each(function() {
 			var id = $(this).attr('id');
 			newId = id + newNum;
-			$(this).attr( 'id', newId );
+			$(this).attr( 'id', newId ).prop( 'disabled', false );
 		});
 		labels.each(function() {
 			var forVal = $(this).attr('for');
