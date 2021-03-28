@@ -692,7 +692,7 @@ function my_calendar_check() {
 		} else {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '2.3.0', '2.3.11', '2.3.15', '2.4.4', '3.0.0', '3.1.13' );
+			$valid_upgrades = array( '2.3.0', '2.3.11', '2.3.15', '2.4.4', '3.0.0', '3.1.13', '3.3.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $current_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -738,6 +738,9 @@ function mc_do_upgrades( $upgrade_path ) {
 
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.3.0':
+				mc_upgrade_db();
+				break;
 			case '3.1.13':
 				delete_option( 'mc_inverse_color' );
 				mc_upgrade_db();

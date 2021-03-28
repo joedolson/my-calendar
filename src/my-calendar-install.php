@@ -128,7 +128,7 @@ function mc_globals() {
  event_time TIME,
  event_endtime TIME,
  event_recur CHAR(3),
- event_repeats INT(3),
+ event_repeats TEXT,
  event_status INT(1) NOT NULL DEFAULT '1',
  event_author BIGINT(20) UNSIGNED,
  event_host BIGINT(20) UNSIGNED,
