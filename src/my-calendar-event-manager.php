@@ -725,7 +725,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
 				}
 				if ( mc_get_uri( 'boolean' ) ) {
-					$event_ids   = mc_get_occurrences( $event_id );
+					$event_ids = mc_get_occurrences( $event_id );
 					if ( ! empty( $event_ids ) ) {
 						$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
 						$event_error = mc_error_check( $event_ids[0]->occur_event_id );
@@ -1347,9 +1347,9 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				}
 				$prev = '<input type="hidden" name="prev_event_repeats" value="' . $data->event_repeats . '" /><input type="hidden" name="prev_event_recur" value="' . $data->event_recur . '" />';
 			} else {
-				$recur       = false;
-				$every       = 1;
-				$prev        = '';
+				$recur = false;
+				$every = 1;
+				$prev  = '';
 			}
 			if ( is_object( $data ) && null !== $data->event_repeats ) {
 				$repeats = $data->event_repeats;
@@ -1887,18 +1887,18 @@ function mc_event_location_dropdown_block( $data ) {
 				<option value="none">--</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
-					$loc_name       = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
+					$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
 					$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					if ( (int) $loc->location_id === (int) $event_location ) {
-						// Translators: label for current location.
-						$location_link  = ( current_user_can( 'mc_edit_locations' ) ) ? add_query_arg(
+						$location_link = ( current_user_can( 'mc_edit_locations' ) ) ? add_query_arg(
 							array(
-								'mode' => 'edit',
+								'mode'        => 'edit',
 								'location_id' => $event_location
 							),
 							admin_url( 'admin.php?page=my-calendar-locations' )
 						) : false;
-						$loc_name       = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . $loc_name . ' (' . __( 'Opens in new tab', 'my-calendar' ) . ')</a>' : $loc_name;
+						$loc_name      = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . $loc_name . ' (' . __( 'Opens in new tab', 'my-calendar' ) . ')</a>' : $loc_name;
+						// Translators: label for current location.
 						$current_location  = "<div id='mc-current-location'><span class='dashicons dashicons-location' aria-hidden='true'></span>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</div>';
 						$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
 					}
@@ -4030,9 +4030,9 @@ function mc_reuse_id_format( $format, $begin, $instances ) {
  */
 function mc_increment_event( $id, $post = array(), $test = false, $instances = array() ) {
 	global $wpdb;
-	$event      = mc_get_event_core( $id, true );
-	$data       = array();
-	$return     = array();
+	$event  = mc_get_event_core( $id, true );
+	$data   = array();
+	$return = array();
 	if ( empty( $post ) ) {
 		$orig_begin = $event->event_begin . ' ' . $event->event_time;
 		$orig_end   = $event->event_end . ' ' . $event->event_endtime;
