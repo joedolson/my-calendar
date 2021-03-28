@@ -1360,7 +1360,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			<p>
 				<label for="e_repeats">' . __( 'Repeats', 'my-calendar' ) . ' <input type="text" name="event_repeats" aria-labelledby="e_repeats_label" aria-describedby="e_repeats_desc" id="e_repeats" size="2" value="' . esc_attr( $repeats ) . '" /> <span id="e_repeats_label">' . __( 'times', 'my-calendar' ) . '</span>, </label>
 				<label for="e_every">' . __( 'every', 'my-calendar' ) . '</label> <input type="number" name="event_every" id="e_every" size="2" min="1" max="99" maxlength="2" value="' . esc_attr( $every ) . '" />
-				<label for="e_recur" class="screen-reader-text">' . __( 'Units', 'my-calendar' ) . '</label>
+				<label for="e_recur" class="screen-reader-text">' . __( 'units', 'my-calendar' ) . '</label>
 				<select name="event_recur" id="e_recur">
 					' . mc_recur_options( $recur ) . '
 				</select>
