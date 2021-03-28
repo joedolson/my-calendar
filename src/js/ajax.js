@@ -28,9 +28,9 @@
 		$( 'button.add-occurrence').on( 'click', function() {
 			var expanded = $( this ).attr( 'aria-expanded' );
 			if ( expanded == 'true' ) {
-				$( this ).attr( 'aria-expanded', 'false' );
+				$( this ).attr( 'aria-expanded', 'false' ).addClass( 'dashicons-minus' ).removeClass( 'dashicons-plus' );
 			} else {
-				$( this ).attr( 'aria-expanded', 'true' );
+				$( this ).attr( 'aria-expanded', 'true' ).addClass( 'dashicons-plus' ).removeClass( 'dashicons-minus' );
 			}
 			$( '.mc_add_new' ).toggle();
 		});
