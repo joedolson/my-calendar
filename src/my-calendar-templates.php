@@ -285,7 +285,12 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( ! $url && ! $label && ! $street && ! $street2 && ! $city && ! $state && ! $zip && ! $country && ! $phone ) {
 		return '';
 	}
-	$link  = ( '' !== $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
+	if ( is_admin() && isset( $_GET['page'] ) && 'my-calendar-location-manager' === $_GET['page'] ) {
+		$loc_id = absint( $event->location_id );
+		$link = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link edit'><span class='dashicons dashicons-edit' aria-hidden='true'></span> $label</a>";
+	} else {
+		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
+	}
 	$hcard = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
 	if ( 'true' === $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';

@@ -241,7 +241,6 @@ function mc_manage_locations() {
 				);
 				?>
 				'><?php _e( 'State/Province', 'my-calendar' ); ?></a></th>
-				<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>
 				<th scope="col"><?php _e( 'Delete', 'my-calendar' ); ?></th>
 			</tr>
 			</thead>
@@ -269,9 +268,6 @@ function mc_manage_locations() {
 					</td>
 					<td><?php echo esc_html( $location->location_city ); ?></td>
 					<td><?php echo esc_html( $location->location_state ); ?></td>
-					<td>
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" ); ?>" class='edit'><?php _e( 'Edit', 'my-calendar' ); ?></a>
-					</td>
 					<td>
 						<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations&amp;mode=delete&amp;location_id=$location->location_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
 					</td>
