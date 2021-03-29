@@ -248,7 +248,7 @@ function mc_manage_locations() {
 				);
 				?>
 				'><?php _e( 'State/Province', 'my-calendar' ); ?></a></th>
-				<th scope="col"><?php _e( 'Delete', 'my-calendar' ); ?></th>
+				<?php echo apply_filters( 'mc_location_manager_headers', '' ); ?>
 			</tr>
 			</thead>
 			<?php
@@ -271,13 +271,19 @@ function mc_manage_locations() {
 					<?php
 						echo $default;
 						echo mc_hcard( $location, 'true', 'false', 'location' );
+						$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );
+						$view_url   = get_the_permalink();
+						$edit_url   =  admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
 					?>
+						<div class='row-actions'>
+							<a href="<?php echo $view_url; ?>" class='view' aria-describedby='location<?php echo $location->location_id; ?>'><?php _e( 'View', 'my-calendar' ); ?></a> |
+							<a href="<?php echo $edit_url; ?>" class='edit' aria-describedby='location<?php echo $location->location_id; ?>'><?php _e( 'Edit', 'my-calendar' ); ?></a> |
+							<a href="<?php echo $delete_url; ?>" class="delete" aria-describedby='location<?php echo $location->location_id; ?>' onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
+						</div>
 					</td>
 					<td><?php echo esc_html( $location->location_city ); ?></td>
 					<td><?php echo esc_html( $location->location_state ); ?></td>
-					<td>
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
-					</td>
+					<?php echo apply_filters( 'mc_location_manager_cells', '', $location ); ?>
 				</tr>
 				<?php
 			}
