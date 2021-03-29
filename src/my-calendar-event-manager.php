@@ -3876,10 +3876,11 @@ function mc_recur_string( $event ) {
 	}
 	$eternity = _mc_increment_values( $recur );
 	if ( $event->event_repeats > 0 && 'S' !== $recur ) {
-		// Translators: number of repeats.
 		if ( is_numeric( $event->event_repeats ) ) {
+			// Translators: number of repeats.
 			$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $event->event_repeats );
 		} else {
+		// Translators: date repeating until.
 			$string .= ' ' . sprintf( __( ' until %s', 'my-calendar' ), $event->event_repeats );
 		}
 	} elseif ( $eternity ) {
