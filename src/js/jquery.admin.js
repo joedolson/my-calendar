@@ -58,6 +58,15 @@ jQuery(document).ready(function ($) {
 	});
 
 	$( '.mc-actions input' ).attr( 'disabled', 'disabled' );
+
+	$( '.row-actions' ).on( 'focus', 'a', function() {
+		$( this ).parent( '.row-actions' ).css( { 'left' : 'auto' } );
+	});
+
+	$( '.row-actions' ).on( 'blur', 'a', function() {
+		$( this ).parent( '.row-actions' ).css( { 'left' : '-999em' } );
+	});
+
 	$( '#my-calendar-admin-table input' ).on( 'change', function (e) {
 		var checked_status = $(this).prop('checked');
 		if ( checked_status ) {
