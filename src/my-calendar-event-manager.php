@@ -3880,7 +3880,7 @@ function mc_recur_string( $event ) {
 			// Translators: number of repeats.
 			$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $event->event_repeats );
 		} else {
-		// Translators: date repeating until.
+			// Translators: date repeating until.
 			$string .= ' ' . sprintf( __( ' until %s', 'my-calendar' ), $event->event_repeats );
 		}
 	} elseif ( $eternity ) {
