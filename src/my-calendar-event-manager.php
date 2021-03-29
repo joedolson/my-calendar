@@ -2384,7 +2384,7 @@ function mc_list_events() {
 						?>
 						<tr class="<?php echo "$class $spam $pending $trashed $problem"; ?>">
 							<th scope="row">
-								<input type="checkbox" value="<?php echo $event->event_id; ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( 1 === (int) $event->event_flagged ) ? 'checked="checked"' : ''; ?> />
+								<input type="checkbox" value="<?php echo $event->event_id; ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( 1 === (int) $event->event_flagged ) ? 'checked="checked"' : ''; ?> aria-describedby='event<?php echo $event->event_id; ?>' />
 								<label for="mc<?php echo $event->event_id; ?>">
 								<?php
 								// Translators: Event ID.
@@ -2401,7 +2401,7 @@ function mc_list_events() {
 									<?php
 								}
 								echo $spam_label;
-								echo strip_tags( stripslashes( $event->event_title ) );
+								echo '<span id="event' . $event->event_id . '">' . strip_tags( stripslashes( $event->event_title ) ) . '</span>';
 								if ( $can_edit ) {
 									echo '</a>';
 									if ( '' !== $check ) {
@@ -2418,26 +2418,26 @@ function mc_list_events() {
 									<?php
 									if ( mc_event_published( $event ) ) {
 										?>
-										<a href="<?php echo $view_url; ?>" class='view'><?php _e( 'View', 'my-calendar' ); ?></a> |
+										<a href="<?php echo $view_url; ?>" class='view' aria-describedby='event<?php echo $event->event_id; ?>'><?php _e( 'View', 'my-calendar' ); ?></a> |
 										<?php
 									} elseif ( current_user_can( 'mc_manage_events' ) ) {
 										?>
-										<a href="<?php echo add_query_arg( 'preview', 'true', $view_url ); ?>" class='view'><?php _e( 'Preview', 'my-calendar' ); ?></a> |
+										<a href="<?php echo add_query_arg( 'preview', 'true', $view_url ); ?>" class='view' aria-describedby='event<?php echo $event->event_id; ?>'><?php _e( 'Preview', 'my-calendar' ); ?></a> |
 										<?php
 									}
 									if ( $can_edit ) {
 										?>
-										<a href="<?php echo $copy_url; ?>" class='copy'><?php _e( 'Copy', 'my-calendar' ); ?></a>
+										<a href="<?php echo $copy_url; ?>" class='copy' aria-describedby='event<?php echo $event->event_id; ?>'><?php _e( 'Copy', 'my-calendar' ); ?></a>
 										<?php
 									}
 									if ( $can_edit ) {
 										if ( mc_event_is_grouped( $event->event_group_id ) ) {
 											?>
-											| <a href="<?php echo $group_url; ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
+											| <a href="<?php echo $group_url; ?>" class='edit group' aria-describedby='event<?php echo $event->event_id; ?>'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
 											<?php
 										}
 										?>
-										| <a href="<?php echo $delete_url; ?>" class="delete"><?php _e( 'Delete', 'my-calendar' ); ?></a>
+										| <a href="<?php echo $delete_url; ?>" class="delete" aria-describedby='event<?php echo $event->event_id; ?>'><?php _e( 'Delete', 'my-calendar' ); ?></a>
 										<?php
 									} else {
 										_e( 'Not editable.', 'my-calendar' );
@@ -2454,7 +2454,7 @@ function mc_list_events() {
 											$te = __( 'Publish', 'my-calendar' );
 										}
 										?>
-										<a href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;event_id=$event->event_id" ); ?>" class='<?php echo $mo; ?>'><?php echo $te; ?></a>
+										<a href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;event_id=$event->event_id" ); ?>" class='<?php echo $mo; ?>' aria-describedby='event<?php echo $event->event_id; ?>'><?php echo $te; ?></a>
 										<?php
 									} else {
 										switch ( $event->event_approved ) {
