@@ -274,7 +274,7 @@ function mc_manage_locations() {
 						echo mc_hcard( $location, 'true', 'false', 'location' );
 						$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );
 						$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
-						$edit_url   =  admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
+						$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
 					?>
 						<div class='row-actions'>
 							<?php

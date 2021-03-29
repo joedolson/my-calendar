@@ -567,7 +567,7 @@ function mc_location_controls() {
 			$locations = '';
 			$class     = '';
 			$active    = '';
-			$holder    = "saved_value,Displayed Value";
+			$holder    = __( 'saved_value,Displayed Value', 'my-calendar' );
 			if ( is_array( $mc_location_controls ) && isset( $mc_location_controls[ $field ] ) ) {
 				foreach ( $mc_location_controls[ $field ] as $key => $value ) {
 					$key        = esc_html( trim( $key ) );
