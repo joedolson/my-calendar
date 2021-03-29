@@ -162,7 +162,7 @@ function mc_manage_locations() {
 	}
 
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
-	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS location_id FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 	$items       = $found_rows[0];
 
@@ -253,8 +253,9 @@ function mc_manage_locations() {
 			</thead>
 			<?php
 			$class = '';
-			foreach ( $locations as $location ) {
-				$class = ( 'alternate' === $class ) ? '' : 'alternate';
+			foreach ( $locations as $loc ) {
+				$location = mc_get_location( $loc->location_id );
+				$class    = ( 'alternate' === $class ) ? '' : 'alternate';
 				?>
 				<tr class="<?php echo $class; ?>">
 					<th scope="row">
@@ -272,11 +273,17 @@ function mc_manage_locations() {
 						echo $default;
 						echo mc_hcard( $location, 'true', 'false', 'location' );
 						$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );
-						$view_url   = get_the_permalink();
+						$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
 						$edit_url   =  admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
 					?>
 						<div class='row-actions'>
+							<?php
+							if ( esc_url( $view_url ) ) {
+								?>
 							<a href="<?php echo $view_url; ?>" class='view' aria-describedby='location<?php echo $location->location_id; ?>'><?php _e( 'View', 'my-calendar' ); ?></a> |
+								<?php
+							}
+							?>
 							<a href="<?php echo $edit_url; ?>" class='edit' aria-describedby='location<?php echo $location->location_id; ?>'><?php _e( 'Edit', 'my-calendar' ); ?></a> |
 							<a href="<?php echo $delete_url; ?>" class="delete" aria-describedby='location<?php echo $location->location_id; ?>' onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
 						</div>

@@ -66,7 +66,7 @@ add_action( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
  *
  * @return int newly created post ID
  */
-function mc_create_location_post( $location_id, $data, $post ) {
+function mc_create_location_post( $location_id, $data, $post = array() ) {
 	if ( ! $location_id ) {
 		return;
 	}
@@ -567,6 +567,7 @@ function mc_location_controls() {
 			$locations = '';
 			$class     = '';
 			$active    = '';
+			$holder    = "saved_value,Displayed Value";
 			if ( is_array( $mc_location_controls ) && isset( $mc_location_controls[ $field ] ) ) {
 				foreach ( $mc_location_controls[ $field ] as $key => $value ) {
 					$key        = esc_html( trim( $key ) );
@@ -580,7 +581,7 @@ function mc_location_controls() {
 			}
 			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span><button type="button" class="button-link">' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</button></h4>';
 			// Translators: Name of field being restricted, e.g. "Location Controls for State".
-			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6">' . trim( $locations ) . '</textarea></div>';
+			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( str_replace( 'event_', '', $field ) ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '</textarea></div>';
 		}
 		$output .= "
 			</div>
