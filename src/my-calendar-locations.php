@@ -610,7 +610,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	$street_address2 = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_street2'} ) ) : '';
 	$return         .= '
 	</p>
-	<div class="locations-container">
+	<div class="locations-container columns">
 	<div class="location-primary">
 	<fieldset>
 	<legend>' . __( 'Location Address', 'my-calendar' ) . '</legend>
@@ -682,9 +682,14 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	<p>
 	' . __( 'If you supply GPS coordinates for your location, they will be used in place of any other address information to provide your map link.', 'my-calendar' ) . '
 	</p>
+	<div class="columns-flex">
 	<p>
-	<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" /> <label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
+		<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" />
 	</p>
+	<p>
+		<label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
+	</p>
+	</div>
 	</fieldset>';
 	$return      .= apply_filters( 'mc_location_container_primary', '', $data, $context );
 	$return      .= '

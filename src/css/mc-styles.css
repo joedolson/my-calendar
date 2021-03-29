@@ -104,6 +104,10 @@ span.mc-notice {
 	padding-top: 2px
 }
 
+.my-calendar-admin fieldset.categories {
+	margin-top: 20px;
+}
+
 #mceditor {
 	border: 1px solid #ddd;
 	margin: 0 0 5px
@@ -128,11 +132,25 @@ span.mc-notice {
 	border-bottom: 1px solid #ddd
 }
 
+#my-calendar .columns-flex {
+	display: flex;
+}
+
+#my-calendar .columns,
 #e_schedule .columns,
 .recurring .columns {
 	display: grid;
+	column-gap: 16px;
+	grid-template-columns: repeat(2, 1fr );
+}
+
+#e_schedule .columns {
+	grid-template-columns: 8em 8em 1fr 1fr;
+	align-items: end;
+}
+
+.recurring .columns {
 	grid-template-columns: 10em 10em 1fr;
-	column-gap: 30px;
 }
 
 #e_schedule .columns label,
@@ -167,10 +185,9 @@ ol.mc-repeat-events {
 
 #my-calendar .apply {
 	padding: 1px 5px 0;
-	margin: 0 -5px;
 	border-radius: 3px;
-	box-shadow: 2px 2px 3px #aaa;
-	background: #ffe
+	background: #ffe;
+	border: 1px solid #999;
 }
 
 #my-calendar .apply legend {
@@ -196,15 +213,6 @@ ol.mc-repeat-events {
 #my-calendar .break ul {
 	padding: 10px 10px 0;
 	margin-right: 180px
-}
-
-#my-calendar .two-columns {
-	-moz-column-count: 2;
-	-moz-column-gap: 30px;
-	-webkit-column-count: 2;
-	-webkit-column-gap: 30px;
-	column-count: 2;
-	column-gap: 30px
 }
 
 .my-calendar-admin .event_image {
@@ -664,12 +672,6 @@ select[name="event_recur"] {
 	border-radius: 1.75em;
 	vertical-align: middle;
 	display: inline-block;
-}
-
-.locations-container {
-	position: relative;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
 }
 
 .mc-locations:after {
