@@ -158,7 +158,7 @@ function mc_register_styles() {
 
 	// check whether any scripts are actually enabled.
 	if ( get_option( 'mc_calendar_javascript' ) !== '1' || get_option( 'mc_list_javascript' ) !== '1' || get_option( 'mc_mini_javascript' ) !== '1' || get_option( 'mc_ajax_javascript' ) !== '1' ) {
-		if ( $use_default || $js_usage || is_singular( 'mc-events' ) ) {
+		if ( $use_default || $js_usage || is_singular( 'mc-events' ) || is_singular( 'mc-locations' ) ) {
 			wp_enqueue_script( 'jquery' );
 			if ( 'true' === get_option( 'mc_gmap' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
