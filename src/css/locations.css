@@ -1,0 +1,9 @@
+.mc-location-hcard .vcard {
+	padding: 1em;
+	background: rgba( 0,0,0,.04 );
+	line-height: 1.5;
+}
+
+.mc-location-gmap {
+	margin: 1em 0;
+}

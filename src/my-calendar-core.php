@@ -140,7 +140,11 @@ function mc_register_styles() {
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ) );
+	wp_register_style( 'my-calendar-locations', plugins_url( 'css/locations.css', __FILE__ ), array( 'dashicons' ) );
 
+	if ( is_singular( 'mc-locations' ) ) {
+		wp_enqueue_style( 'my-calendar-locations' );
+	}
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
 	wp_register_style( 'my-calendar-admin-style', $admin_stylesheet );
 
