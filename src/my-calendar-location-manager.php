@@ -29,6 +29,10 @@ function my_calendar_manage_locations() {
 			die( 'Security check failed' );
 		}
 	}
+	if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
+		$loc = absint( $_GET['location_id'] );
+		echo mc_delete_location( $loc );
+	}
 	?>
 		<h1 class="wp-heading-inline"><?php _e( 'Manage Locations', 'my-calendar' ); ?></h1>
 		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
@@ -269,7 +273,7 @@ function mc_manage_locations() {
 					<td><?php echo esc_html( $location->location_city ); ?></td>
 					<td><?php echo esc_html( $location->location_state ); ?></td>
 					<td>
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-locations&amp;mode=delete&amp;location_id=$location->location_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
 					</td>
 				</tr>
 				<?php

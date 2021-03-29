@@ -262,6 +262,30 @@ function mc_modify_location( $update, $where ) {
 }
 
 /**
+ * Delete a single location.
+ *
+ * @param int $location Location ID.
+ *
+ * @return string
+ */
+function mc_delete_location( $location ) {
+	global $wpdb;
+	$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
+	if ( $results ) {
+		$return           = mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ), false );
+		$default_location = get_option( 'mc_default_location', false );
+		if ( (int) $default_location === (int) $_GET['location_id'] ) {
+			delete_option( 'mc_default_location' );
+		}
+	} else {
+		$return = mc_show_error( __( 'Location could not be deleted', 'my-calendar' ), false );
+	}
+
+	return $return;
+}
+
+/**
  * Handle results of form submit & display form.
  */
 function my_calendar_add_locations() {
@@ -308,17 +332,8 @@ function my_calendar_add_locations() {
 			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
-		$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
-		if ( $results ) {
-			mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ) );
-			$default_location = get_option( 'mc_default_location', false );
-			if ( (int) $default_location === (int) $_GET['location_id'] ) {
-				delete_option( 'mc_default_location' );
-			}
-		} else {
-			mc_show_error( __( 'Location could not be deleted', 'my-calendar' ) );
-		}
+		$loc = absint( $_GET['location_id'] );
+		echo mc_delete_location( $loc );
 	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && 'edit' === $_GET['mode'] && ! isset( $_POST['mode'] ) ) {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
