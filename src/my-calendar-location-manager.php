@@ -74,6 +74,9 @@ function mc_default_location() {
 	if ( ! $output ) {
 		$output = '<p>' . __( 'No default location selected.', 'my-calendar' ) . '</p>';
 	}
+	if ( '' === get_option( 'mc_location_cpt_base', '' ) ) {
+		$output .= '<p><a href="' . admin_url( 'options-permalink.php#mc_location_cpt_base' ) . '">' . __( 'Update your location permalink slug', 'my-calendar' ) . '</a></p>';
+	}
 
 	return $output;
 }
