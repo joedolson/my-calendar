@@ -1,58 +1,32 @@
-if ( typeof(mc_months) !== "undefined" ) {
+const pickers = Array.prototype.slice.apply( document.querySelectorAll( 'duet-date-picker' ) );
 
-	jQuery(document).ready(function ($) {
-	$( '.mc-datepicker' ).pickadate({
-		monthsFull: mc_months,
-		weekdaysShort: mc_days,
-		format: 'yyyy-mm-dd',
-		selectYears: true,
-		selectMonths: true,
-		editable: true,
-		firstDay: mc_text.vals.start,
-		today: mc_text.vals.today,
-		clear: mc_text.vals.clear,
-		close: mc_text.vals.close,
-		onClose: function() {
-			mc_update_date();
-		}
-	});
-	$( '.mc-timepicker' ).pickatime({
-		interval: parseInt( mcTime.interval ),
-		format: mcTime.time_format,
-		editable: true
-	});
+pickers.forEach((picker) => {
+	picker.localization = duetLocalization;
+});
 
-	var begin = $( '#mc_event_date' ).pickadate( 'picker' );
-	var end   = $( '#mc_event_enddate' ).pickadate( 'picker' );
-	var time  = $( '#mc_event_time' ).pickatime( 'picker' );
-	var ends  = $( '#mc_event_endtime' ).pickatime( 'picker' );
+const eventBegin = document.querySelector( 'duet-date-picker[identifier=mc_event_date]' );
+const eventEnd = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
 
-	function mc_update_date() {
-		var startdate = new Date( $( '#mc_event_date' ).val() );
-		end.set( 'min', convertDateToUTC( startdate ) );
+var startDate = false;
+var endDate = false;
 
-		if ( $( '#mc_event_enddate' ).val() != '' ) {
-			var enddate   = new Date( $( '#mc_event_enddate' ).val() );
-			if ( enddate < startdate ) {
-				$( '#mc_event_enddate' ).val( '' );
-			} else {
-				begin.set( 'max', enddate );
-			}
-		}
+eventBegin.addEventListener( 'duetChange', function(e) {
+	startDate = e.detail.valueAsDate;
+	endDate   = document.querySelector( 'input[name="event_end[]"]' ).value;
+	console.log( 'start date', e.detail.value + ' ' + endDate );
+
+	if ( new Date( endDate ) < startDate ) {
+		console.log( 'Your end date is before your start date: ', endDate + ' ' + startDate );
 	}
+});
 
-	/**
-	 * In admin, date needs to be converted to UTC
-	 */
-	function convertDateToUTC(date) {
-		return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+eventEnd.addEventListener( 'duetChange', function(e) {
+	endDate   = e.detail.valueAsDate;
+	startDate = document.querySelector( 'input[name="event_begin[]"]' ).value;
+
+	console.log( 'end date', e.detail.value + ' ' + startDate );
+
+	if ( new Date( startDate ) > endDate ) {
+		console.log( 'Your end date is before your start date: ', endDate + ' ' + startDate );
 	}
-
-	});
-
-} else {
-	jQuery(document).ready(function ($) {
-		var datepicked = $( '.mc-datepicker' ).attr( 'data-value' );
-		$( '.mc-datepicker' ).val( datepicked );
-	});
-}
+});

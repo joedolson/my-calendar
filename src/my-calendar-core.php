@@ -1038,76 +1038,66 @@ function mc_datepicker() {
  * Enqueue Duet Date Picker.
  */
 function mc_enqueue_duet() {
-	wp_enqueue_script( 'duet.esm', plugins_url( 'js/duet/duet.esm.js', __FILE__ ) );
+	global $mc_version;
+	//wp_enqueue_script( 'duet.esm', plugins_url( 'js/duet/duet.esm.js', __FILE__ ) );
 	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ) );
 	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ) );
-}
-
-/**
- * Enqueue pickadate.
- */
-function mc_enqueue_pickadate() {
-	wp_enqueue_script( 'pickadate', plugins_url( 'js/pickadate/picker.js', __FILE__ ), array( 'jquery' ) );
-	wp_enqueue_script( 'pickadate.date', plugins_url( 'js/pickadate/picker.date.js', __FILE__ ), array( 'pickadate' ) );
-	wp_enqueue_script( 'pickadate.time', plugins_url( 'js/pickadate/picker.time.js', __FILE__ ), array( 'pickadate' ) );
+	// Enqueue datepicker options.
+	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), $mc_version, true );
 	wp_localize_script(
-		'pickadate.date',
-		'mc_months',
+		'mc.duet',
+		'duetLocalization',
 		array(
-			date_i18n( 'F', strtotime( 'January 1' ) ),
-			date_i18n( 'F', strtotime( 'February 1' ) ),
-			date_i18n( 'F', strtotime( 'March 1' ) ),
-			date_i18n( 'F', strtotime( 'April 1' ) ),
-			date_i18n( 'F', strtotime( 'May 1' ) ),
-			date_i18n( 'F', strtotime( 'June 1' ) ),
-			date_i18n( 'F', strtotime( 'July 1' ) ),
-			date_i18n( 'F', strtotime( 'August 1' ) ),
-			date_i18n( 'F', strtotime( 'September 1' ) ),
-			date_i18n( 'F', strtotime( 'October 1' ) ),
-			date_i18n( 'F', strtotime( 'November 1' ) ),
-			date_i18n( 'F', strtotime( 'December 1' ) ),
-		)
-	);
-	wp_localize_script(
-		'pickadate.date',
-		'mc_days',
-		array(
-			date_i18n( 'D', strtotime( 'Sunday' ) ),
-			date_i18n( 'D', strtotime( 'Monday' ) ),
-			date_i18n( 'D', strtotime( 'Tuesday' ) ),
-			date_i18n( 'D', strtotime( 'Wednesday' ) ),
-			date_i18n( 'D', strtotime( 'Thursday' ) ),
-			date_i18n( 'D', strtotime( 'Friday' ) ),
-			date_i18n( 'D', strtotime( 'Saturday' ) ),
-		)
-	);
-	$sweek = absint( get_option( 'start_of_week' ) );
-	wp_localize_script(
-		'pickadate.date',
-		'mc_text',
-		array(
-			'vals' => array(
-				'today' => addslashes( __( 'Today', 'my-calendar' ) ),
-				'clear' => addslashes( __( 'Clear', 'my-calendar' ) ),
-				'close' => addslashes( __( 'Close', 'my-calendar' ) ),
-				// False-y values = Sunday, truth-y = Monday.
-				'start' => ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0,
+			'buttonLabel'         => __( 'Choose date', 'my-calendar' ),
+			'placeholder'         => __( 'yyyy-mm-dd', 'my-calendar' ),
+			'selectedDateMessage' => __( 'Selected date is', 'my-calendar' ),
+			'prevMonthLabel'      => __( 'Previous month', 'my-calendar' ),
+			'nextMonthLabel'      => __( 'Next month', 'my-calendar' ),
+			'monthSelectLabel'    => __( 'Month', 'my-calendar' ),
+			'yearSelectLabel'     => __( 'Year', 'my-calendar' ),
+			'closeLabel'          => __( 'Close window', 'my-calendar' ),
+			'keyboardInstruction' => __( 'You can use arrow keys to navigate dates', 'my-calendar' ),
+			'calendarHeading'     => __( 'Choose a date', 'my-calendar' ),
+			'dayNames'            => array(
+				date_i18n( 'D', strtotime( 'Sunday' ) ),
+				date_i18n( 'D', strtotime( 'Monday' ) ),
+				date_i18n( 'D', strtotime( 'Tuesday' ) ),
+				date_i18n( 'D', strtotime( 'Wednesday' ) ),
+				date_i18n( 'D', strtotime( 'Thursday' ) ),
+				date_i18n( 'D', strtotime( 'Friday' ) ),
+				date_i18n( 'D', strtotime( 'Saturday' ) ),
 			),
+			'monthNames'          => array(
+				date_i18n( 'F', strtotime( 'January 1' ) ),
+				date_i18n( 'F', strtotime( 'February 1' ) ),
+				date_i18n( 'F', strtotime( 'March 1' ) ),
+				date_i18n( 'F', strtotime( 'April 1' ) ),
+				date_i18n( 'F', strtotime( 'May 1' ) ),
+				date_i18n( 'F', strtotime( 'June 1' ) ),
+				date_i18n( 'F', strtotime( 'July 1' ) ),
+				date_i18n( 'F', strtotime( 'August 1' ) ),
+				date_i18n( 'F', strtotime( 'September 1' ) ),
+				date_i18n( 'F', strtotime( 'October 1' ) ),
+				date_i18n( 'F', strtotime( 'November 1' ) ),
+				date_i18n( 'F', strtotime( 'December 1' ) ),
+			),
+			'monthNamesShort'     => array(
+				date_i18n( 'M', strtotime( 'January 1' ) ),
+				date_i18n( 'M', strtotime( 'February 1' ) ),
+				date_i18n( 'M', strtotime( 'March 1' ) ),
+				date_i18n( 'M', strtotime( 'April 1' ) ),
+				date_i18n( 'M', strtotime( 'May 1' ) ),
+				date_i18n( 'M', strtotime( 'June 1' ) ),
+				date_i18n( 'M', strtotime( 'July 1' ) ),
+				date_i18n( 'M', strtotime( 'August 1' ) ),
+				date_i18n( 'M', strtotime( 'September 1' ) ),
+				date_i18n( 'M', strtotime( 'October 1' ) ),
+				date_i18n( 'M', strtotime( 'November 1' ) ),
+				date_i18n( 'M', strtotime( 'December 1' ) ),
+			),
+			'locale'              => str_replace( '_', '-', get_locale() ),
 		)
 	);
-	wp_localize_script(
-		'pickadate.time',
-		'mcTime',
-		array(
-			'time_format' => apply_filters( 'mc_time_format', 'h:i A' ),
-			'interval'    => apply_filters( 'mc_interval', '15' ),
-		)
-	);
-	wp_enqueue_script( 'mc.pickadate', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'jquery', 'pickadate.date', 'pickadate.time' ) );
-	// Enqueue pickadate stylesheets.
-	wp_enqueue_style( 'mc-pickadate-default', plugins_url( 'js/pickadate/themes/classic.css', __FILE__ ) );
-	wp_enqueue_style( 'mc-pickadate-date', plugins_url( 'js/pickadate/themes/classic.date.css', __FILE__ ) );
-	wp_enqueue_style( 'mc-pickadate-time', plugins_url( 'js/pickadate/themes/classic.time.css', __FILE__ ) );
 }
 
 add_action( 'admin_enqueue_scripts', 'mc_scripts' );
