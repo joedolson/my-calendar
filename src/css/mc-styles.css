@@ -437,6 +437,11 @@ strong.label {
 	margin: 10px 0 0;
 }
 
+#mc-sortable li {
+	margin: 0;
+	border-bottom: none;
+}
+
 #mc-current-location {
 	padding: 6px;
 	background: rgba( 0, 0, 0, .04 );
