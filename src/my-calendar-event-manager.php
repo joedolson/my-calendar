@@ -3402,7 +3402,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="mc_event_date" first-day-of-week="' . $firstday . '" name="event_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
 		</p>
 		<p>
-			<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <duet-date-picker  first-day-of-week="' . $firstday . '" identifier="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '"></duet-date-picker>
+			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <duet-date-picker  first-day-of-week="' . $firstday . '" identifier="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '"></duet-date-picker><span id="event_date_error" aria-live="assertive"></span>
 		</p>
 	</div>
 	<ul>

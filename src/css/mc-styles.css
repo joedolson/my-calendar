@@ -146,7 +146,7 @@ span.mc-notice {
 
 #e_schedule .columns {
 	grid-template-columns: 8em 8em 1fr 1fr;
-	align-items: end;
+	align-items: start;
 }
 
 .recurring .columns {

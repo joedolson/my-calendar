@@ -822,8 +822,8 @@ function mc_remote_db() {
 								$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $label );
 								// Translators: control to move up.
 								$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $label );
-								$buttons  = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . "</span></button>";
-								$buttons = "<div class='mc-buttons'>$buttons</div>";
+								$buttons  = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . '</span></button>';
+								$buttons  = "<div class='mc-buttons'>$buttons</div>";
 								echo "<li class='ui-state-default mc-$k mc-$class'>$buttons <code>$label</code> $v <input type='hidden' name='mc_nav[]' value='$k' /></li>";
 								$i ++;
 							}

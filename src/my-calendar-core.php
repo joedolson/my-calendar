@@ -1039,7 +1039,6 @@ function mc_datepicker() {
  */
 function mc_enqueue_duet() {
 	global $mc_version;
-	//wp_enqueue_script( 'duet.esm', plugins_url( 'js/duet/duet.esm.js', __FILE__ ) );
 	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ) );
 	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ) );
 	// Enqueue datepicker options.
