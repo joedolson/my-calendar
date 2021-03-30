@@ -3402,12 +3402,12 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="mc_event_date" first-day-of-week="' . $firstday . '" name="event_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
 		</p>
 		<p>
-			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <duet-date-picker  first-day-of-week="' . $firstday . '" identifier="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '"></duet-date-picker><span id="event_date_error" aria-live="assertive"></span>
+			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <duet-date-picker  first-day-of-week="' . $firstday . '" identifier="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '"></duet-date-picker><span id="event_date_error" aria-live="assertive"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Your selected end date is before your start date.', 'my-calendar' ) . '</span>
 		</p>
 	</div>
-	<ul>
-		<li class="checkbox"><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
-		<li class="checkbox"><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
+	<ul class="checkboxes">
+		<li><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
+		<li><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
 	</ul>';
 
 	return $form;
@@ -3452,22 +3452,26 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
 	$sweek        = absint( get_option( 'start_of_week' ) );
 	$firstday     = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 
-	$form .= '<div>
-		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <input type="text" class="event-begin" id="mc_event_date" name="event_begin[]" value="' . esc_attr( $event_begin ) . '" disabled />
+	$form .= '<div class="columns">
 		<p>
-		<label for="mc_event_time">' . __( 'From', 'my-calendar' ) . '</label>
+			<label for="mc_event_time">' . __( 'Start Time', 'my-calendar' ) . '</label>
 		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" disabled />
-		<label for="mc_event_endtime">' . __( 'To', 'my-calendar' ) . '</label>
+		</p>
+		<p>
+			<label for="mc_event_endtime">' . __( 'End Time', 'my-calendar' ) . '</label>
 		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" disabled />
 		</p>
+		<p>
+			<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <input type="date" class="event-begin" id="mc_event_date" name="event_begin[]" value="' . esc_attr( $event_begin ) . '" disabled />
+		</p>
+		<p>
+			<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <input type="date" id="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
+		</p>
 	</div>
-	<ul>
+	<ul class="checkboxes">
 		<li><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' disabled /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
 		<li><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' disabled /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
-	</ul>
-	<div>
-		<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <input type="text" id="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
-	</div>';
+	</ul>';
 
 	return $form;
 }

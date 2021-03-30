@@ -25,7 +25,7 @@ jQuery(document).ready(function ($) {
 			$(this).attr( 'for', newFor );
 		});
 		// enable the "remove" button.
-		$('#del_field').removeAttr('disabled');
+		$('.del_field').removeAttr('disabled');
 		// business rule: you can only add 40 occurrences.
 		if ( newNum == 40 ) {
 			$('.add_field').attr('disabled', 'disabled');
@@ -38,7 +38,7 @@ jQuery(document).ready(function ($) {
 		$('#event' + (num - 1) ).find( '.buttons' ).show();
 		$('#event' + (num - 1) ).find( 'input' ).trigger( 'focus' );
 		// enable the "add" button.
-		$('#add_field').removeAttr('disabled');
+		$('.add_field').removeAttr('disabled');
 		// if only one element remains, disable the "remove" button.
 		if ( num - 1 == 1 ) {
 			$('.del_field').attr('disabled', 'disabled');

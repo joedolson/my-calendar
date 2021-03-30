@@ -8,7 +8,6 @@ const eventBegin = document.querySelector( 'duet-date-picker[identifier=mc_event
 const eventEnd = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
 const eventDateError = document.querySelector( '#event_date_error' );
 const submitButton   = document.querySelector( '#my-calendar .button-primary' );
-const eventEndInput  = document.querySelector( '#mc_event_enddate' );
 
 var startDate = false;
 var endDate = false;
@@ -34,15 +33,11 @@ function myCalendarTestDates( endDate, startDate ) {
 	endDate = new Date( endDate );
 	startDate = new Date( startDate );
 	if ( new Date( endDate ) < startDate ) {
-		eventDateError.innerHTML = 'Your selected end date is before your start date.';
 		eventDateError.classList.add( 'visible' );
 		submitButton.disabled = true;
-		eventEndInput.classList.add( 'error' );
 		console.log( 'Your end date is before your start date: ', endDate + ' ' + startDate );
 	} else {
 		eventDateError.classList.remove( 'visible' );
-		eventDateError.innerHTML = '';
-		eventEndInput.classList.remove( 'error' );
 		submitButton.disabled = false;
 	}
 }

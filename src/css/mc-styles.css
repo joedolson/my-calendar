@@ -140,7 +140,10 @@ span.mc-notice {
 #e_schedule .columns,
 .recurring .columns {
 	display: grid;
-	column-gap: 16px;
+	column-gap: 16px
+}
+
+#my-calendar .columns {
 	grid-template-columns: repeat(2, 1fr );
 }
 
@@ -149,8 +152,20 @@ span.mc-notice {
 	align-items: start;
 }
 
-.recurring .columns {
+#my-calendar .recurring .columns {
 	grid-template-columns: 10em 10em 1fr;
+}
+
+#event_date_error.visible {
+	opacity: 1;
+}
+
+#event_date_error .dashicons {
+	color: #a00;
+}
+
+#event_date_error {
+	opacity: 0;
 }
 
 #e_schedule .columns label,
@@ -163,6 +178,7 @@ span.mc-notice {
 }
 
 #e_schedule input[type=time],
+.new-field input[type=date],
 .recurring input[type=number],
 .recurring select {
 	padding: 8px;
