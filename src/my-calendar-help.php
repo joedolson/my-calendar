@@ -68,12 +68,12 @@ function my_calendar_help() {
 
 			<div class="inside mc-tabs">
 				<?php mc_generate(); ?>
-				<ul class='tabs' role="tablist">
-					<li><a href='#mc_main' role="tab" id='tab_mc_main' aria-controls='mc_main'><?php _e( 'Main', 'my-calendar' ); ?></a></li>
-					<li><a href='#mc_upcoming' role="tab" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php _e( 'Upcoming', 'my-calendar' ); ?></a></li>
-					<li><a href='#mc_today' role="tab" id='tab_mc_today' aria-controls='mc_today'><?php _e( 'Today', 'my-calendar' ); ?></a></li>
+				<div class='tabs' role="tablist">
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'><?php _e( 'Main', 'my-calendar' ); ?></button>
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php _e( 'Upcoming', 'my-calendar' ); ?></a></button>
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_today' aria-controls='mc_today'><?php _e( 'Today', 'my-calendar' ); ?></button>
 					<?php echo apply_filters( 'mc_generator_tabs', '' ); ?>
-				</ul>
+				</div>
 				<div class='wptab mc_main' id='mc_main' aria-live='assertive' aria-labelledby='tab_mc_main' role="tabpanel">
 					<?php mc_generator( 'main' ); ?>
 				</div>

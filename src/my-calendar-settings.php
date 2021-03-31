@@ -461,22 +461,22 @@ function my_calendar_settings() {
 	<?php my_calendar_check_db(); ?>
 	<h1><?php _e( 'My Calendar Settings', 'my-calendar' ); ?></h1>
 	<div class="mc-tabs">
-		<ul class="tabs" role="tablist">
-			<li role="tab" id="tab_manage" aria-controls="my-calendar-manage"><a href="#my-calendar-manage"><?php _e( 'General', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_text" aria-controls="my-calendar-text"><a href="#my-calendar-text"><?php _e( 'Text', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_output" aria-controls="mc-output"><a href="#mc-output"><?php _e( 'Output', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_input" aria-controls="my-calendar-input"><a href="#my-calendar-input"><?php _e( 'Input', 'my-calendar' ); ?></a></li>
+		<div class="tabs" role="tablist">
+			<button type="button" role="tab" aria-selected="false"  id="tab_manage" aria-controls="my-calendar-manage"><?php _e( 'General', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_text" aria-controls="my-calendar-text"><?php _e( 'Text', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_output" aria-controls="mc-output"><?php _e( 'Output', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_input" aria-controls="my-calendar-input"><?php _e( 'Input', 'my-calendar' ); ?></button>
 			<?php
 			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 				?>
-				<li role="tab" id="tab_multi" aria-controls="my-calendar-multisite"><a href="#my-calendar-multisite"><?php _e( 'Multi-site', 'my-calendar' ); ?></a></li>
+				<li><button type="button" role="tab" aria-selected="false"  id="tab_multi" aria-controls="my-calendar-multisite"><?php _e( 'Multi-site', 'my-calendar' ); ?></button>
 				<?php
 			}
 			?>
-			<li role="tab" id="tab_permissions" aria-controls="my-calendar-permissions"><a href="#my-calendar-permissions"><?php _e( 'Permissions', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_email" aria-controls="my-calendar-email"><a href="#my-calendar-email"><?php _e( 'Notifications', 'my-calendar' ); ?></a></li>
+			<button type="button" role="tab" aria-selected="false"  id="tab_permissions" aria-controls="my-calendar-permissions"><?php _e( 'Permissions', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" id="tab_email" aria-selected="false" aria-controls="my-calendar-email"><?php _e( 'Notifications', 'my-calendar' ); ?></button>
 			<?php echo apply_filters( 'mc_settings_section_links', '' ); ?>
-		</ul>
+		</div>
 		<div class="settings postbox-container jcd-wide">
 		<div class="metabox-holder">
 	<?php
@@ -508,7 +508,7 @@ function my_calendar_settings() {
 	}
 	?>
 	<div class="ui-sortable meta-box-sortables">
-		<div class="wptab postbox" tabindex="-1" aria-labelledby="tab_manage" role="tabpanel" id="my-calendar-manage">
+		<div class="wptab postbox" aria-labelledby="tab_manage" role="tabpanel" id="my-calendar-manage">
 			<h2><?php _e( 'My Calendar Management', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -678,7 +678,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_text" role="tabpanel" id="my-calendar-text">
+		<div class="wptab postbox initial-hidden" aria-labelledby="tab_text" role="tabpanel" id="my-calendar-text">
 			<h2><?php _e( 'Text Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -734,7 +734,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
+		<div class="wptab postbox initial-hidden" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
 			<h2><?php _e( 'Output Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -903,7 +903,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
+		<div class="wptab postbox initial-hidden" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
 			<h2><?php _e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -985,7 +985,7 @@ function mc_remote_db() {
 	<?php
 	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 		?>
-		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_multi" role="tabpanel" id="my-calendar-multisite">
+		<div class="wptab postbox initial-hidden" aria-labelledby="tab_multi" role="tabpanel" id="my-calendar-multisite">
 			<h2><?php _e( 'Multisite Settings (Network Administrators only)', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -1033,7 +1033,7 @@ function mc_remote_db() {
 	}
 	?>
 
-		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_permissions" role="tabpanel" id="my-calendar-permissions">
+		<div class="wptab postbox initial-hidden" aria-labelledby="tab_permissions" role="tabpanel" id="my-calendar-permissions">
 			<h2><?php _e( 'My Calendar Permissions', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -1085,7 +1085,7 @@ function mc_remote_db() {
 			</div>
 		</div>
 
-		<div class="wptab postbox initial-hidden" tabindex="-1" aria-labelledby="tab_email" role="tabpanel" id="my-calendar-email">
+		<div class="wptab postbox initial-hidden" aria-labelledby="tab_email" role="tabpanel" id="my-calendar-email">
 			<h2><?php _e( 'Calendar Email Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">

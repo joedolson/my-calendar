@@ -388,10 +388,9 @@ strong.label {
 }
 
 .mc-tabs .tabs {
-	margin: 0 !important;
-	padding: 0 4px;
 	position: relative;
 	border-bottom: 1px solid #ccc;
+	margin-bottom: 0;
 }
 
 .mc-tabs .tabs li {
@@ -401,35 +400,50 @@ strong.label {
 	float: none;
 }
 
-.mc-tabs .tabs a {
+.mc-tabs .tabs button {
 	display: inline-block;
 	padding: 4px 8px;
 	border-radius: 4px 4px 0 0;
 	border: 1px solid #ccc;
 	border-bottom: none;
 	background: #f3f3f3;
+	position: relative;
+	border-bottom: 2px solid transparent;
 }
 
-.mc-tabs.settings .tabs a {
-	padding: 8px;
-	font-size: 1.2em;
+.mc-tabs .tabs button[aria-selected=true]:after {
+	content: '';
+	position: absolute;
+	left: calc( 50% - 10px );
+	top: 100%;
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #fff;
+	clear: both;
 }
 
-.mc-tabs .tabs a.active {
-	border-bottom: 1px solid #fefefe;
-	background: #fefefe;
-	text-decoration: none;
-	cursor: text;
+.mc-tabs .tabs button:hover,
+.mc-tabs .tabs button:focus {
+	border-bottom: 2px solid;
 }
 
-.mc-tabs .wptab {
+.mc-tabs .tabs button[aria-selected=true] {
 	background: #fff;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
 }
 
-#mc-generator .mc-tabs .tabs a {
+#mc-generator .mc-tabs .tabs button {
 	padding: 8px 16px;
+	background: #fff;
+}
+
+#mc-generator .mc-tabs .tabs button[aria-selected=true]:after {
+	border-top: 10px solid #f3f3f3;
+}
+
+#mc-generator .mc-tabs .tabs button[aria-selected=true] {
+	background: #f3f3f3;
 }
 
 #mc-generator .mc-tabs .wptab {

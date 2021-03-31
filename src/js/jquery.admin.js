@@ -89,26 +89,72 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$( '.mc-tabs' ).each( function ( index ) {
-		var tabs = $('.mc-tabs .wptab').length;
-		var firstItem = window.location.hash;
-		if ( ! firstItem ) {
-			var firstItem = '#' + $( '.mc-tabs .wptab:nth-of-type(1)' ).attr( 'id' );
+	var firstItem = window.location.hash;
+	if ( firstItem ) {
+		showPanel(firstItem);
+	}
+	var tabs = document.querySelectorAll('.mc-tabs [role=tab]'); //get all role=tab elements as a variable
+	for (i = 0; i < tabs.length; i++) {
+		tabs[i].addEventListener("click", showTabPanel);
+	} //add click event to each tab to run the showTabPanel function
+	/**
+	 * Activate a panel from the click event.
+	 *
+	 * @param event Click event.
+	 */
+	function showTabPanel(e) { //runs when tab is clicked
+		var tabs2 = document.querySelectorAll('.mc-tabs [role=tab]'); //get tabs
+		for (i = 0; i < tabs2.length; i++) {
+			tabs2[i].setAttribute('aria-selected', 'false');
+			tabs2[i].setAttribute('style', 'font-weight:normal');
+		} //reset all tabs to aria-selected=false and normal font weight
+		e.target.setAttribute('aria-selected', 'true'); //set aria-selected=true for clicked tab
+		var tabPanelToOpen = e.target.getAttribute('aria-controls');
+		var tabPanels = document.querySelectorAll('[role=tabpanel]'); //get all tabpanels
+		for (i = 0; i < tabPanels.length; i++) {
+			tabPanels[i].style.display = "none";
+		} // hide all tabpanels
+		window.location.hash = tabPanelToOpen;
+		document.getElementById(tabPanelToOpen).style.display = "block"; //show tabpanel
+	}
+
+	/**
+	 * Activate a panel from panel ID.
+	 *
+	 * @param string hash Item ID.
+	 */
+	function showPanel(hash) {
+		var id = hash.replace( '#', '' );
+		var control = $( 'button[aria-controls=' + id + ']' );
+		var tabs2 = document.querySelectorAll('.mc-tabs [role=tab]'); //get tabs
+		for (i = 0; i < tabs2.length; i++) {
+			tabs2[i].setAttribute('aria-selected', 'false');
+			tabs2[i].setAttribute('style', 'font-weight:normal');
+		} //reset all tabs to aria-selected=false and normal font weight
+		control.attr('aria-selected', 'true'); //set aria-selected=true for clicked tab
+		var tabPanels = document.querySelectorAll('[role=tabpanel]'); //get all tabpanels
+		for (i = 0; i < tabPanels.length; i++) {
+			tabPanels[i].style.display = "none";
 		}
-		$('.mc-tabs .tabs a[href="' + firstItem + '"]').addClass('active').attr( 'aria-selected', 'true' );
-		if ( tabs > 1 ) {
-			$( '.mc-tabs .wptab' ).not( firstItem ).attr( 'aria-hidden', 'true' );
-			$( '.mc-tabs .wptab' ).removeClass( 'initial-hidden' );
-			$( firstItem ).show();
-			$( '.mc-tabs .tabs a' ).on( 'click', function (e) {
-				e.preventDefault();
-				$('.mc-tabs .tabs a').removeClass('active').attr( 'aria-selected', 'false' );
-				$(this).addClass('active').attr( 'aria-selected', 'true' );
-				var target = $(this).attr('href');
-				window.location.hash = target;
-				$('.mc-tabs .wptab').not(target).attr( 'aria-hidden', 'true' );
-				$(target).removeAttr( 'aria-hidden' ).trigger( 'focus' );
-			});
+		document.getElementById(id).style.display = "block"; //show tabpanel
+	}
+	// Arrow key handlers.
+	$('.mc-tabs [role=tablist]').keydown(function(e) {
+		if (e.keyCode == 37) {
+			$("[aria-selected=true]").prev().trigger('click').trigger('focus');
+			e.preventDefault();
+		}
+		if (e.keyCode == 38) {
+			$("[aria-selected=true]").prev().trigger('click').trigger('focus');
+			e.preventDefault();
+		}
+		if (e.keyCode == 39) {
+			$("[aria-selected=true]").next().trigger('click').trigger('focus');
+			e.preventDefault();
+		}
+		if (e.keyCode == 40) {
+			$("[aria-selected=true]").next().trigger('click').trigger('focus');
+			e.preventDefault();
 		}
 	});
 
