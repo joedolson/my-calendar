@@ -1026,11 +1026,7 @@ function mc_datepicker() {
 	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-groups' === $id ) {
-		if ( isset( $_GET['pickadate'] ) ) {
-			mc_enqueue_pickadate();
-		} else {
-			mc_enqueue_duet();
-		}
+		mc_enqueue_duet();
 	}
 }
 
