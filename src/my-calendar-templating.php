@@ -266,9 +266,11 @@ function mc_templates_edit() {
 				</div>
 			</div>
 		</div>
-	</div>
 	<?php
 	mc_show_sidebar();
+	?>
+	</div>
+	<?php
 }
 
 /**
