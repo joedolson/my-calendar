@@ -1118,11 +1118,21 @@ function mc_display_location_details( $content ) {
 	if ( is_singular( 'mc-locations' ) ) {
 		$location = get_post_meta( get_the_ID(), '_mc_location_id', true );
 		$location = mc_get_location( $location );
+		$args     = array(
+			'ltype'    => 'name',
+			'lvalue'   => $location->location_label,
+			'type'     => 'events',
+			'after'    => 5,
+			'before'   => 0,
+			'fallback' => __( 'No events currently scheduled at this location.', 'my-calendar' ),
+		);
+		$events   = my_calendar_upcoming_events( $args );
 		$content  = '
 <div class="mc-view-location">
 	<div class="mc-location-content">' . $content . '</div>
 	<div class="mc-location-gmap">' . mc_generate_map( $location, 'location' ) . '</div>
 	<div class="mc-location-hcard">' . mc_hcard( $location, 'true', 'true', 'location' ) . '</div>
+	<div class="mc-location-upcoming"><h2>' . __( 'Upcoming Events', 'my-calendar' ) . '</h2>' . $events . '</div>
 </div>';
 		$content  = apply_filters( 'mc_location_output', $content, $location );
 	}
