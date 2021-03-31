@@ -1023,9 +1023,8 @@ add_action( 'admin_enqueue_scripts', 'mc_datepicker' );
 function mc_datepicker() {
 	global $current_screen;
 	$id   = $current_screen->id;
-	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
-	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-groups' === $id ) {
+	if ( 'toplevel_page_my-calendar' === $id ) {
 		mc_enqueue_duet();
 	}
 }
@@ -1116,7 +1115,7 @@ function mc_scripts() {
 		);
 	}
 
-	if ( 'toplevel_page_my-calendar' === $id || $slug . '_my-calendar-groups' === $id || $slug . '_page_my-calendar-locations' === $id ) {
+	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-locations' === $id ) {
 		wp_enqueue_script( 'jquery-ui-accordion' );
 	}
 
