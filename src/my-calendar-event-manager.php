@@ -1203,7 +1203,7 @@ function mc_datepicker_html( $args ) {
 	$name     = isset( $args['name'] ) ? esc_attr( $args['name'] ) : 'name_arg_missing';
 	$value    = isset( $args['value'] ) ? esc_attr( $args['value'] ) : '';
 	$required = isset( $args['required'] ) ? 'required' : '';
-	$output   = "<duet-date-picker first-day-of-week='$firstday' identifier='$id' name='$name' value='$value' $required></duet-date-picker>";
+	$output   = "<duet-date-picker first-day-of-week='$firstday' identifier='$id' name='$name' value='$value' $required></duet-date-picker><input type='date' id='$id' name='$name' value='$value' $required class='duet-fallback' />";
 	$output   = apply_filters( 'mc_datepicker_html', $output, $args );
 
 	return $output;
