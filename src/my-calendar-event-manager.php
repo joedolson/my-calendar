@@ -1184,6 +1184,32 @@ function mc_show_edit_blocks( $fields ) {
 }
 
 /**
+ * Generate date picker output.
+ *
+ * @param array $args Array of field arguments.
+ *
+ * @return string
+ */
+function mc_datepicker_html( $args ) {
+	if ( isset( $args['first-day-of-week'] ) ) {
+		$firstday = (int) $args['first-day-of-week'];
+	} else {
+		$sweek                     = absint( get_option( 'start_of_week' ) );
+		$firstday                  = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
+		$args['first-day-of-week'] = (int) $firstday;
+	}
+
+	$id       = isset( $args['id'] ) ? esc_attr( $args['id'] ) : 'id_arg_missing';
+	$name     = isset( $args['name'] ) ? esc_attr( $args['name'] ) : 'name_arg_missing';
+	$value    = isset( $args['value'] ) ? esc_attr( $args['value'] ) : '';
+	$required = isset( $args['required'] ) ? 'required' : '';
+	$output   = "<duet-date-picker first-day-of-week='$firstday' identifier='$id' name='$name' value='$value' $required></duet-date-picker>";
+	$output   = apply_filters( 'mc_datepicker_html', $output, $args );
+
+	return $output;
+}
+
+/**
  * Show a block of enabled fields.
  *
  * @param string             $field name of field group.
@@ -1363,7 +1389,13 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				$repeats     = gmdate( 'Y-m-d', strtotime( $event->occur_begin ) );
 			}
 			if ( $show_block && empty( $_GET['date'] ) ) {
-				$return = $pre . '
+				$args        = array(
+					'value' => $repeats,
+					'id'    => 'e_repeats',
+					'name'  => 'event_repeats',
+				);
+				$date_picker = mc_datepicker_html( $args );
+				$return      = $pre . '
 	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . '</h2>
 	<div class="inside recurrences">' . $prev . '
 		<fieldset class="recurring">
@@ -1380,7 +1412,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			</p>
 			<p>
 				<label for="e_repeats">Repeat Until</label>
-				<duet-date-picker identifier="e_repeats" name="event_repeats" value="' . esc_attr( $repeats ) . '"></duet-date-picker>
+				' . $date_picker . '
 			</p>
 			</div>
 		</fieldset>
@@ -3386,8 +3418,18 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	$allday       = ( $has_data && ( mc_is_all_day( $data ) ) ) ? ' checked="checked"' : '';
 	$hide         = ( $has_data && '1' === $data->event_hide_end ) ? ' checked="checked"' : '';
 	$allday_label = ( $has_data ) ? mc_notime_label( $data ) : get_option( 'mc_notime_text' );
-	$sweek        = absint( get_option( 'start_of_week' ) );
-	$firstday     = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
+	$args         = array(
+		'value' => $event_begin,
+		'id'    => 'mc_event_date',
+		'name'  => 'event_begin[]',
+	);
+	$picker_begin = mc_datepicker_html( $args );
+	$args         = array(
+		'value' => $event_end,
+		'id'    => 'mc_event_enddate',
+		'name'  => 'event_end[]',
+	);
+	$picker_end   = mc_datepicker_html( $args );
 
 	$form .= '<div class="columns">
 		<p>
@@ -3399,10 +3441,10 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
 		</p>
 		<p>
-		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="mc_event_date" first-day-of-week="' . $firstday . '" name="event_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
+		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> ' . $picker_begin . '
 		</p>
 		<p>
-			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <duet-date-picker  first-day-of-week="' . $firstday . '" identifier="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '"></duet-date-picker><span id="event_date_error" aria-live="assertive"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Your selected end date is before your start date.', 'my-calendar' ) . '</span>
+			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> ' . $picker_end . '<span id="event_date_error" aria-live="assertive"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Your selected end date is before your start date.', 'my-calendar' ) . '</span>
 		</p>
 	</div>
 	<ul class="checkboxes">
@@ -3484,12 +3526,22 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
  * @return string form HTML
  */
 function mc_recur_datetime_input( $data ) {
-	$event_begin = ( $data->event_begin ) ? $data->event_begin : mc_date( 'Y-m-d' );
-	$event_end   = ( $data->event_end && $data->event_end !== $data->event_begin ) ? $data->event_end : '';
-	$starttime   = ( $data->event_time ) ? $data->event_time : '';
-	$endtime     = ( $data->event_endtime ) ? $data->event_endtime : '';
-	$sweek       = absint( get_option( 'start_of_week' ) );
-	$firstday    = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
+	$event_begin  = ( $data->event_begin ) ? $data->event_begin : mc_date( 'Y-m-d' );
+	$event_end    = ( $data->event_end && $data->event_end !== $data->event_begin ) ? $data->event_end : '';
+	$starttime    = ( $data->event_time ) ? $data->event_time : '';
+	$endtime      = ( $data->event_endtime ) ? $data->event_endtime : '';
+	$args         = array(
+		'value' => $event_begin,
+		'id'    => 'r_begin',
+		'name'  => 'recur_begin[]',
+	);
+	$picker_begin = mc_datepicker_html( $args );
+	$args         = array(
+		'value' => $event_end,
+		'id'    => 'r_end',
+		'name'  => 'recur_end[]',
+	);
+	$picker_end   = mc_datepicker_html( $args );
 
 	$form = '
 	<div class="columns">
@@ -3502,12 +3554,12 @@ function mc_recur_datetime_input( $data ) {
 			<input type="time" id="r_endtime" name="recur_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
 		</p>
 		<p>
-			<label for="r_begin">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <duet-date-picker identifier="r_begin" first-day-of-week="' . $firstday . '" name="recur_begin[]" value="' . esc_attr( $event_begin ) . '"></duet-date-picker>
+			<label for="r_begin">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> ' . $picker_begin . '
 		</p>
 	</div>
 	<p>
 		<label for="r_end"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label>
-		<duet-date-picker identifier="r_end" name="recur_end[]"  first-day-of-week="' . $firstday . '" value="' . esc_attr( $event_end ) . '"></duet-date-picker>
+		 ' . $picker_end . '
 	</p>';
 
 	return $form;
