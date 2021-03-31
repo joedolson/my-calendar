@@ -1022,7 +1022,7 @@ add_action( 'admin_enqueue_scripts', 'mc_datepicker' );
  */
 function mc_datepicker() {
 	global $current_screen;
-	$id   = $current_screen->id;
+	$id = $current_screen->id;
 
 	if ( 'toplevel_page_my-calendar' === $id ) {
 		mc_enqueue_duet();
