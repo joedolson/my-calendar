@@ -696,7 +696,7 @@ function my_calendar_check() {
 		} else {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '2.3.0', '2.3.11', '2.3.15', '2.4.4', '3.0.0', '3.1.13', '3.3.0' );
+			$valid_upgrades = array( '2.4.4', '3.0.0', '3.1.13', '3.3.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $current_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -778,28 +778,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				$input_options['event_host'] = 'on';
 				update_option( 'mc_input_options', $input_options );
 				add_option( 'mc_default_direction', 'DESC' );
-				break;
-			case '2.3.15': // 6/8/2015 (2.3.32).
-				delete_option( 'mc_event_groups' );
-				delete_option( 'mc_details' );
-				break;
-			case '2.3.11':
-				// delete notice when this goes away.
-				add_option( 'mc_use_custom_js', 0 );
-				add_option( 'mc_update_notice', 0 );
-				break;
-			case '2.3.0': // 4/10/2014.
-				delete_option( 'mc_location_control' );
-				$user_data              = get_option( 'mc_user_settings' );
-				$loc_type               = ( get_option( 'mc_location_type', '' ) === '' ) ? 'event_state' : get_option( 'mc_location_type' );
-				$locations[ $loc_type ] = $user_data['my_calendar_location_default']['values'];
-				add_option( 'mc_use_permalinks', false );
-				delete_option( 'mc_modified_feeds' );
-				add_option( 'mc_location_controls', $locations );
-				$mc_input_options                 = get_option( 'mc_input_options' );
-				$mc_input_options['event_access'] = 'on';
-				update_option( 'mc_input_options', $mc_input_options );
-				mc_transition_db();
 				break;
 			default:
 				break;
