@@ -460,8 +460,24 @@ function my_calendar_settings() {
 	<div class="wrap my-calendar-admin mc-settings-page" id="mc_settings">
 	<?php my_calendar_check_db(); ?>
 	<h1><?php _e( 'My Calendar Settings', 'my-calendar' ); ?></h1>
-
-	<div class="mc-tabs settings postbox-container jcd-wide">
+	<div class="mc-tabs">
+		<ul class="tabs" role="tablist">
+			<li role="tab" id="tab_manage" aria-controls="my-calendar-manage"><a href="#my-calendar-manage"><?php _e( 'General', 'my-calendar' ); ?></a></li>
+			<li role="tab" id="tab_text" aria-controls="my-calendar-text"><a href="#my-calendar-text"><?php _e( 'Text', 'my-calendar' ); ?></a></li>
+			<li role="tab" id="tab_output" aria-controls="mc-output"><a href="#mc-output"><?php _e( 'Output', 'my-calendar' ); ?></a></li>
+			<li role="tab" id="tab_input" aria-controls="my-calendar-input"><a href="#my-calendar-input"><?php _e( 'Input', 'my-calendar' ); ?></a></li>
+			<?php
+			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
+				?>
+				<li role="tab" id="tab_multi" aria-controls="my-calendar-multisite"><a href="#my-calendar-multisite"><?php _e( 'Multi-site', 'my-calendar' ); ?></a></li>
+				<?php
+			}
+			?>
+			<li role="tab" id="tab_permissions" aria-controls="my-calendar-permissions"><a href="#my-calendar-permissions"><?php _e( 'Permissions', 'my-calendar' ); ?></a></li>
+			<li role="tab" id="tab_email" aria-controls="my-calendar-email"><a href="#my-calendar-email"><?php _e( 'Notifications', 'my-calendar' ); ?></a></li>
+			<?php echo apply_filters( 'mc_settings_section_links', '' ); ?>
+		</ul>
+		<div class="settings postbox-container jcd-wide">
 		<div class="metabox-holder">
 	<?php
 	if ( isset( $_POST['import'] ) && 'true' === $_POST['import'] ) {
@@ -491,23 +507,6 @@ function my_calendar_settings() {
 		}
 	}
 	?>
-		<ul class="tabs" role="tablist">
-			<li role="tab" id="tab_manage" aria-controls="my-calendar-manage"><a href="#my-calendar-manage"><?php _e( 'General', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_text" aria-controls="my-calendar-text"><a href="#my-calendar-text"><?php _e( 'Text', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_output" aria-controls="mc-output"><a href="#mc-output"><?php _e( 'Output', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_input" aria-controls="my-calendar-input"><a href="#my-calendar-input"><?php _e( 'Input', 'my-calendar' ); ?></a></li>
-			<?php
-			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
-				?>
-				<li role="tab" id="tab_multi" aria-controls="my-calendar-multisite"><a href="#my-calendar-multisite"><?php _e( 'Multi-site', 'my-calendar' ); ?></a></li>
-				<?php
-			}
-			?>
-			<li role="tab" id="tab_permissions" aria-controls="my-calendar-permissions"><a href="#my-calendar-permissions"><?php _e( 'Permissions', 'my-calendar' ); ?></a></li>
-			<li role="tab" id="tab_email" aria-controls="my-calendar-email"><a href="#my-calendar-email"><?php _e( 'Notifications', 'my-calendar' ); ?></a></li>
-			<?php echo apply_filters( 'mc_settings_section_links', '' ); ?>
-		</ul>
-
 	<div class="ui-sortable meta-box-sortables">
 		<div class="wptab postbox" tabindex="-1" aria-labelledby="tab_manage" role="tabpanel" id="my-calendar-manage">
 			<h2><?php _e( 'My Calendar Management', 'my-calendar' ); ?></h2>
@@ -1147,7 +1146,7 @@ function mc_remote_db() {
 	</div>
 
 	<?php mc_show_sidebar(); ?>
-
+	</div>
 	</div>
 	<?php
 }

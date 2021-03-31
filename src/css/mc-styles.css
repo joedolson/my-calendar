@@ -257,16 +257,9 @@ ol.mc-repeat-events {
 	margin: 10px 10px 0 0
 }
 
-.my-calendar-admin .postbox.wptab {
-	margin: 0 10px 0 0!important;
-	border: 1px solid #e5e5e5;
-}
-
 .my-calendar-admin .postbox .inside {
 	overflow: visible !important
 }
-
-
 
 /* some plugins change this, but I need it at WP default. */
 .my-calendar-admin .meta-box-sortables {
@@ -398,7 +391,7 @@ strong.label {
 	margin: 0 !important;
 	padding: 0 4px;
 	position: relative;
-	top: 1px;
+	border-bottom: 1px solid #ccc;
 }
 
 .mc-tabs .tabs li {
@@ -413,6 +406,7 @@ strong.label {
 	padding: 4px 8px;
 	border-radius: 4px 4px 0 0;
 	border: 1px solid #ccc;
+	border-bottom: none;
 	background: #f3f3f3;
 }
 
