@@ -101,6 +101,9 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Add support for custom columns in location manager.
 * Bug fix: use aria tab panels properly in settings.
 * Removed upgrade cycles & associated code for upgrading from version 2.3.x (last release in 2015.)
+* Support aria-sort on sortable tables.
+* Bug fix: pagination when sorting in event manager.
+* Locations support both descending & ascending sort.
 
 - TODO: https://github.com/joedolson/my-calendar/issues/17
 - TODO: https://github.com/joedolson/my-calendar/issues/14

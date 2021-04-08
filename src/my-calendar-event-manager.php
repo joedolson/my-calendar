@@ -2348,6 +2348,7 @@ function mc_list_events() {
 				</div>
 
 			<table class="widefat wp-list-table" id="my-calendar-admin-table">
+				<caption class="screen-reader-text"><?php _e( 'Event list. Use column headers to sort.', 'my-calendar' ); ?></caption>
 				<thead>
 					<tr>
 					<?php

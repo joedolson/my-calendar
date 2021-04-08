@@ -936,7 +936,7 @@ function mc_list_groups() {
 	$current_user = wp_get_current_user();
 	$user         = $current_user->ID;
 
-	$sortby = ( isset( $_GET['sort'] ) ) ? (int) $_GET['sort'] : get_option( 'mc_default_sort' );
+	$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : get_option( 'mc_default_sort' );
 	if ( isset( $_GET['order'] ) ) {
 		$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
 	} else {
@@ -946,28 +946,28 @@ function mc_list_groups() {
 		$sortbyvalue = 'event_begin';
 	} else {
 		switch ( $sortby ) {
-			case 1:
+			case '1':
 				$sortbyvalue = 'event_ID';
 				break;
-			case 2:
+			case '2':
 				$sortbyvalue = 'event_title';
 				break;
-			case 3:
+			case '3':
 				$sortbyvalue = 'event_desc';
 				break;
-			case 4:
+			case '4':
 				$sortbyvalue = 'event_begin';
 				break;
-			case 5:
+			case '5':
 				$sortbyvalue = 'event_author';
 				break;
-			case 6:
+			case '6':
 				$sortbyvalue = 'event_category';
 				break;
-			case 7:
+			case '7':
 				$sortbyvalue = 'event_label';
 				break;
-			case 8:
+			case '8':
 				$sortbyvalue = 'group_id';
 				break;
 			default:
@@ -975,7 +975,7 @@ function mc_list_groups() {
 		}
 	}
 	$sortbydirection = ( 'default' === $sortdir ) ? 'DESC' : $sortdir;
-	$sorting         = ( 'DESC' === $sortbydirection ) ? '&amp;order=ASC' : '';
+	$sort            = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
 
 	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 	$screen         = get_current_screen();
@@ -1043,30 +1043,28 @@ function mc_list_groups() {
 				<input type="submit" class="button-primary group" value="<?php _e( 'Group checked events for mass editing', 'my-calendar' ); ?>" />
 			</p>
 			<table class="widefat wp-list-table" id="my-calendar-admin-table">
+				<caption class="screen-reader-text"><?php _e( 'Grouped Events list. Use column headers to sort.', 'my-calendar' ); ?></caption>
 				<thead>
-				<tr>
-					<th scope="col" style="width: 50px;">
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=1$sorting" ); ?>"><?php _e( 'ID', 'my-calendar' ); ?></a>
-					</th>
-					<th scope="col">
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=8$sorting" ); ?>"><?php _e( 'Group', 'my-calendar' ); ?></a>
-					</th>
-					<th scope="col">
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=2$sorting" ); ?>"><?php _e( 'Title', 'my-calendar' ); ?></a>
-					</th>
-					<th scope="col">
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=7$sorting" ); ?>"><?php _e( 'Where', 'my-calendar' ); ?></a>
-					</th>
-					<th scope="col">
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=4$sorting" ); ?>"><?php _e( 'Date/Time', 'my-calendar' ); ?></a>
-					</th>
-					<th scope="col">
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=5$sorting" ); ?>"><?php _e( 'Author', 'my-calendar' ); ?></a>
-					</th>
-					<th scope="col">
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;sort=6$sorting" ); ?>"><?php _e( 'Category', 'my-calendar' ); ?></a>
-					</th>
-				</tr>
+					<tr>
+						<?php
+						$admin_url = admin_url( "admin.php?page=my-calendar-groups&order=$sort&paged=$current" );
+						$url       = add_query_arg( 'sort', '1', $admin_url );
+						$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
+						$url       = add_query_arg( 'sort', '8', $admin_url );
+						$col_head .= mc_table_header( __( 'Group', 'my-calendar' ), $sort, $sortby, '8', $url );
+						$url       = add_query_arg( 'sort', '2', $admin_url );
+						$col_head .= mc_table_header( __( 'Title', 'my-calendar' ), $sort, $sortby, '2', $url );
+						$url       = add_query_arg( 'sort', '7', $admin_url );
+						$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sort, $sortby, '7', $url );
+						$url       = add_query_arg( 'sort', '4', $admin_url );
+						$col_head .= mc_table_header( __( 'Date/Time', 'my-calendar' ), $sort, $sortby, '4', $url );
+						$url       = add_query_arg( 'sort', '5', $admin_url );
+						$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sort, $sortby, '5', $url );
+						$url       = add_query_arg( 'sort', '6', $admin_url );
+						$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sort, $sortby, '6', $url );
+						echo $col_head;
+						?>
+					</tr>
 				</thead>
 				<?php
 				$class      = '';

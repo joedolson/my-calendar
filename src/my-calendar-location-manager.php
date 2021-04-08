@@ -222,6 +222,7 @@ function mc_manage_locations() {
 			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php _e( 'Check all', 'my-calendar' ); ?></label></div>
 		</div>
 		<table class="widefat page" id="my-calendar-admin-table">
+			<caption class="screen-reader-text"><?php _e( 'Location list. Use column headers to sort.', 'my-calendar' ); ?></caption>
 			<thead>
 			<tr>
 				<?php
