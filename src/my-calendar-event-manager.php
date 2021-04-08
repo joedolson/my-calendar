@@ -2351,7 +2351,7 @@ function mc_list_events() {
 				<thead>
 					<tr>
 					<?php
-					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sort" );
+					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sort&paged=$current" );
 					$url       = add_query_arg( 'sort', '1', $admin_url );
 					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
 					$url       = add_query_arg( 'sort', '2', $admin_url );
