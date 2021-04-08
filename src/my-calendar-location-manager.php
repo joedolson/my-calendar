@@ -125,8 +125,10 @@ function mc_mass_delete_locations() {
 function mc_manage_locations() {
 	global $wpdb;
 	$orderby = 'location_label';
+	$sortby  = 'location';
 
 	if ( isset( $_GET['orderby'] ) ) {
+		$sortby = $_GET['orderby'];
 		switch ( $_GET['orderby'] ) {
 			case 'city':
 				$orderby = 'location_city';
@@ -139,6 +141,23 @@ function mc_manage_locations() {
 				break;
 			default:
 				$orderby = 'location_label';
+		}
+	}
+	$order       = 'ASC';
+	$query_order = 'DESC';
+	if ( isset( $_GET['order'] ) ) {
+		switch( $_GET['order'] ) {
+			case 'asc':
+				$order       = 'DESC';
+				$query_order = 'ASC';
+				break;
+			case 'desc':
+				$order       = 'ASC';
+				$query_order = 'DESC';
+				break;
+			default:
+				$order       = 'ASC';
+				$query_order = 'DESC';
 		}
 	}
 	// Pull the locations from the database.
@@ -162,7 +181,7 @@ function mc_manage_locations() {
 	}
 
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
-	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS location_id FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby ASC LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS location_id FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby $query_order LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 	$items       = $found_rows[0];
 
@@ -199,55 +218,24 @@ function mc_manage_locations() {
 	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 		<div class='mc-actions'>
-			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete locations', 'my-calendar' ); ?>"/>
+			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete locations', 'my-calendar' ); ?>" />
+			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php _e( 'Check all', 'my-calendar' ); ?></label></div>
 		</div>
 		<table class="widefat page" id="my-calendar-admin-table">
 			<thead>
 			<tr>
-				<th scope="col"><a href='
 				<?php
-				echo add_query_arg(
-					array(
-						'paged'   => $current,
-						'orderby' => 'id',
-					),
-					admin_url( 'admin.php?page=my-calendar-location-manager' )
-				);
+				$admin_url = admin_url( "admin.php?page=my-calendar-location-manager&paged=$current&order=" . strtolower( $order ) );
+				$url       = add_query_arg( 'orderby', 'id', $admin_url );
+				$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $order, $sortby, 'id', $url );
+				$url       = add_query_arg( 'orderby', 'location', $admin_url );
+				$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $order, $sortby, 'location', $url );
+				$url       = add_query_arg( 'orderby', 'city', $admin_url );
+				$col_head .= mc_table_header( __( 'City', 'my-calendar' ), $order, $sortby, 'city', $url );
+				$url       = add_query_arg( 'orderby', 'state', $admin_url );
+				$col_head .= mc_table_header( __( 'State/Province', 'my-calendar' ), $order, $sortby, 'state', $url );
+				echo $col_head;
 				?>
-				'><?php _e( 'ID', 'my-calendar' ); ?></a></th>
-				<th scope="col"><a href='
-				<?php
-				echo add_query_arg(
-					array(
-						'paged'   => $current,
-						'orderby' => 'location',
-					),
-					admin_url( 'admin.php?page=my-calendar-location-manager' )
-				);
-				?>
-				'><?php _e( 'Location', 'my-calendar' ); ?></a></th>
-				<th scope="col"><a href='
-				<?php
-				echo add_query_arg(
-					array(
-						'paged'   => $current,
-						'orderby' => 'city',
-					),
-					admin_url( 'admin.php?page=my-calendar-location-manager' )
-				);
-				?>
-				'><?php _e( 'City', 'my-calendar' ); ?></a></th>
-				<th scope="col"><a href='
-				<?php
-				echo add_query_arg(
-					array(
-						'paged'   => $current,
-						'orderby' => 'state',
-					),
-					admin_url( 'admin.php?page=my-calendar-location-manager' )
-				);
-				?>
-				'><?php _e( 'State/Province', 'my-calendar' ); ?></a></th>
 				<?php echo apply_filters( 'mc_location_manager_headers', '' ); ?>
 			</tr>
 			</thead>
