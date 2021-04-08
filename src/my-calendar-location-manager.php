@@ -146,7 +146,7 @@ function mc_manage_locations() {
 	$order       = 'ASC';
 	$query_order = 'DESC';
 	if ( isset( $_GET['order'] ) ) {
-		switch( $_GET['order'] ) {
+		switch ( $_GET['order'] ) {
 			case 'asc':
 				$order       = 'DESC';
 				$query_order = 'ASC';

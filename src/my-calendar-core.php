@@ -1355,7 +1355,7 @@ function mc_ajax_add_date() {
 /**
  * Return a table header with sortability.
  *
- * @param string $label Column label.
+ * @param string      $label Column label.
  * @param bool|string $sort ascending or descending.
  * @param string      $sortby Column currently sorted.
  * @param string      $sorted This sort column.
