@@ -49,15 +49,15 @@ jQuery(document).ready(function ($) {
 	$( '#del_field' ).attr('disabled', 'disabled');
 	$( '#event_span' ).hide();
 
-	$(".selectall").on( 'click', function () {
+	$(".selectall").on( 'click', function() {
 		var checked_status = $(this).prop('checked');
-		var checkbox_name  = $(this).attr('id');
-		$('input[name="' + checkbox_name + '[]"]').each(function () {
+		var checkbox_name  = $(this).attr('data-action');
+		$('input[name="' + checkbox_name + '[]"]').each( function() {
 			$(this).prop('checked', checked_status);
 		});
 	});
 
-	$( '.mc-actions input' ).attr( 'disabled', 'disabled' );
+	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 
 	$( '.row-actions' ).on( 'focus', 'a', function() {
 		$( this ).parent( '.row-actions' ).css( { 'left' : 'auto' } );

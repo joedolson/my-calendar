@@ -2087,6 +2087,28 @@ function mc_event_accessibility( $form, $data, $label ) {
 }
 
 /**
+ * Return a table header with sortability.
+ *
+ * @param string $label Column label.
+ * @param bool|string $sort ascending or descending.
+ * @param string      $sortby Column currently sorted.
+ * @param string      $sorted This sort column.
+ * @param bool|string $url URL to sort column.
+ *
+ * @return string
+ */
+function mc_table_header( $label, $sort = false, $sortby, $sorted, $url = false ) {
+	$id    = sanitize_title( $label ) . ( ( $url ) ? md5( remove_query_arg( 'order', $url ) ) : '' );
+	$inner = ( $url ) ? '<a id="' . $id . '" href="' . $url . '#' . $id . '">' . $label . '</a>' : $label;
+	$sort  = ( ! $sort ) ? false : ( ( 'ASC' === $sort ) ? 'descending' : 'ascending' );
+	$th    = ( $sort && ( $sortby === $sorted ) ) ? '<th scope="col" aria-sort="' . $sort . '">' : '<th scope="col">';
+
+	$return = $th . $inner . '</th>';
+
+	return $return;
+}
+
+/**
  * Used on the manage events admin page to display a list of events
  */
 function mc_list_events() {
@@ -2140,7 +2162,7 @@ function mc_list_events() {
 					$sortbyvalue = "event_begin $sortbydirection, event_time";
 			}
 		}
-		$sorting       = ( 'DESC' === $sortbydirection ) ? '&amp;order=ASC' : '&amp;order=DESC';
+		$sort          = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
 		$allow_filters = true;
 		$status        = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : '';
 		$restrict      = ( isset( $_GET['restrict'] ) ) ? $_GET['restrict'] : 'all';
@@ -2344,30 +2366,28 @@ function mc_list_events() {
 						echo '<input type="submit" class="button-secondary mc-archive" name="mass_not_spam" value="' . __( 'Not spam', 'my-calendar' ) . '" /> ';
 					}
 					?>
+					<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php _e( 'Check all', 'my-calendar' ); ?></label></div>
 				</div>
 
 			<table class="widefat wp-list-table" id="my-calendar-admin-table">
 				<thead>
 					<tr>
-						<th scope="col" style="width: 50px;"><input type='checkbox' class='selectall' id='mass_edit' />
-							<label for='mass_edit' class="screen-reader-text"><?php _e( 'Check/Uncheck all', 'my-calendar' ); ?></label>
-							<a class="<?php echo ( 1 === (int) $sortby ) ? 'active' : ''; ?>" href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;sort=1$sorting" ); ?>"><?php _e( 'ID', 'my-calendar' ); ?></a>
-						</th>
-						<th scope="col">
-							<a class="<?php echo ( 2 === (int) $sortby ) ? 'active' : ''; ?>" href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;sort=2$sorting" ); ?>"><?php _e( 'Title', 'my-calendar' ); ?></a>
-						</th>
-						<th scope="col">
-							<a class="<?php echo ( 7 === (int) $sortby ) ? 'active' : ''; ?>" href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;sort=7$sorting" ); ?>"><?php _e( 'Location', 'my-calendar' ); ?></a>
-						</th>
-						<th scope="col">
-							<a class="<?php echo ( 4 === (int) $sortby ) ? 'active' : ''; ?>" href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;sort=4$sorting" ); ?>"><?php _e( 'Date/Time', 'my-calendar' ); ?></a>
-						</th>
-						<th scope="col">
-							<a class="<?php echo ( 5 === (int) $sortby ) ? 'active' : ''; ?>" href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;sort=5$sorting" ); ?>"><?php _e( 'Author', 'my-calendar' ); ?></a>
-						</th>
-						<th scope="col">
-							<a class="<?php echo ( 6 === (int) $sortby ) ? 'active' : ''; ?>" href="<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;sort=6$sorting" ); ?>"><?php _e( 'Category', 'my-calendar' ); ?></a>
-						</th>
+					<?php
+					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sort" );
+					$url       = add_query_arg( 'sort', '1', $admin_url );
+					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
+					$url       = add_query_arg( 'sort', '2', $admin_url );
+					$col_head .= mc_table_header( __( 'Title', 'my-calendar' ), $sort, $sortby, '2', $url );
+					$url       = add_query_arg( 'sort', '7', $admin_url );
+					$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sort, $sortby, '7', $url );
+					$url       = add_query_arg( 'sort', '4', $admin_url );
+					$col_head .= mc_table_header( __( 'Date/Time', 'my-calendar' ), $sort, $sortby, '4', $url );
+					$url       = add_query_arg( 'sort', '5', $admin_url );
+					$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sort, $sortby, '5', $url );
+					$url       = add_query_arg( 'sort', '6', $admin_url );
+					$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sort, $sortby, '6', $url );
+					echo $col_head;
+					?>
 					</tr>
 				</thead>
 				<?php
@@ -2669,6 +2689,7 @@ function mc_list_events() {
 					<?php
 				}
 				?>
+				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php _e( 'Check all', 'my-calendar' ); ?></label>
 			</div>
 
 			<p>

@@ -87,9 +87,23 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 = 3.3.0 =
 
 * Replace date picker with the Duet Design Systems accessible date picker.
-* Accessibility & usability improvements to adding additional occurrences to an event.
+* Accessibility & usability improvements to adding additional occurrences to an event. (DB change)
 * Add support for custom fields on locations. See demo at [post example to Github]
-* 
+* Numerous minor back-end UX changes.
+* Bug fix: Deleting a location from the location manager should not send user to the location editor.
+* Link location title to edit screen in location manager
+* Add front-end venue view.
+* Bug fix: row action links not properly labeled.
+* Bug fix: row action links not becoming visible on focus.
+* Improve checkbox labeling in event manager.
+* Improve button labeling in nav ordering.
+* Add row actions to Location manager.
+* Add support for custom columns in location manager.
+* Bug fix: use aria tab panels properly in settings.
+* Removed upgrade cycles & associated code for upgrading from version 2.3.x (last release in 2015.)
+
+- TODO: https://github.com/joedolson/my-calendar/issues/17
+- TODO: https://github.com/joedolson/my-calendar/issues/14
 
 = 3.2.17 =
 
