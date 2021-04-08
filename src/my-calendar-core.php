@@ -1352,6 +1352,27 @@ function mc_ajax_add_date() {
 	}
 }
 
+/**
+ * Return a table header with sortability.
+ *
+ * @param string $label Column label.
+ * @param bool|string $sort ascending or descending.
+ * @param string      $sortby Column currently sorted.
+ * @param string      $sorted This sort column.
+ * @param bool|string $url URL to sort column.
+ *
+ * @return string
+ */
+function mc_table_header( $label, $sort = false, $sortby, $sorted, $url = false ) {
+	$id    = sanitize_title( $label ) . ( ( $url ) ? md5( remove_query_arg( 'order', $url ) ) : '' );
+	$inner = ( $url ) ? '<a id="' . $id . '" href="' . $url . '#' . $id . '">' . $label . '</a>' : $label;
+	$sort  = ( ! $sort ) ? false : ( ( 'ASC' === $sort ) ? 'descending' : 'ascending' );
+	$th    = ( $sort && ( $sortby === $sorted ) ) ? '<th scope="col" aria-sort="' . $sort . '">' : '<th scope="col">';
+
+	$return = $th . $inner . '</th>';
+
+	return $return;
+}
 
 /**
  * Test whether currently mobile using wp_is_mobile() with custom filter
