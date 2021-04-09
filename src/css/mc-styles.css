@@ -113,13 +113,21 @@ span.mc-notice {
 	margin: 0 0 5px
 }
 
-.mc_template_tags dt {
-	font-weight: 700
+.mc-template-cards {
+	display: grid;
+	grid-template-columns: repeat(3, 33.333333%);
 }
 
-.mc_template_tags dd {
-	margin-left: 0;
-	padding: 2px 1px
+.mc-template-card div:first-of-type {
+	font-weight: 700;
+}
+
+.mc-template-card {
+	padding: 10px;
+}
+
+.mc-template-card:nth-of-type(even) {
+	background: #f4f6f8;
 }
 
 .mc_template_tags {
@@ -251,6 +259,10 @@ ol.mc-repeat-events {
 
 .template-editor, .style-editor {
 	width: 98%
+}
+
+.my-calendar-admin .CodeMirror-wrap {
+	border: 1px solid #999;
 }
 
 .my-calendar-admin .postbox {

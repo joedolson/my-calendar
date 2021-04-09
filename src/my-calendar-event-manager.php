@@ -3720,6 +3720,8 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( 'preview', 'true', $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';
 		}
+		$tag_url          = admin_url( "admin.php?page=my-calendar-templates&mc-event=$first->occur_id#templates" );
+		$controls['tags'] = "<span class='dashicons dashicons-tagcloud' aria-hidden='true'></span><a href='" . esc_url( $tag_url ) . "' class='tags'>" . __( 'Template', 'my-calendar' ) . '</a>';
 	}
 
 	$manage_text         = ( current_user_can( 'mc_manage_events' ) ) ? __( 'Manage events', 'my-calendar' ) : __( 'Manage your events', 'my-calendar' );
