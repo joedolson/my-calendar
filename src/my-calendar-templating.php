@@ -96,7 +96,7 @@ function mc_templates_edit() {
 									<input type="text" class="widefat" name="mc_template_key" id="mc_template_key" value="" required />
 								</p>
 								<p>
-									<label for="mc_template"><?php _e( 'Custom Template (%s)', 'my-calendar' ); ?></label><br/>
+									<label for="mc_template"><?php _e( 'Custom Template', 'my-calendar' ); ?></label><br/>
 									<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="32" cols="76"></textarea>
 								</p>
 
@@ -118,7 +118,12 @@ function mc_templates_edit() {
 								</p>
 								<?php } ?>
 								<p>
-									<label for="mc_template"><?php printf( __( 'Custom Template (%s)', 'my-calendar' ), $key ); ?></label><br/>
+									<label for="mc_template">
+									<?php
+									// Translators: template type.
+									printf( __( 'Custom Template (%s)', 'my-calendar' ), $key );
+									?>
+									</label><br/>
 									<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="32" cols="76"><?php echo $template; ?></textarea>
 								</p>
 								<p>
@@ -305,7 +310,6 @@ function mc_display_template_tags() {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
 	}
 	foreach ( $data as $key => $value ) {
-		// reorg - empty at end
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$empty .= '<div class="mc-output-' . $key . '"><pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre></div></section>';
