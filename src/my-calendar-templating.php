@@ -282,6 +282,7 @@ function mc_display_template_tags() {
 	$event  = false;
 	$data   = array();
 	$output = '';
+	$empty  = '';
 	if ( ! isset( $_GET['mc-event'] ) ) {
 		$args   = array(
 			'before' => 1,
@@ -304,15 +305,19 @@ function mc_display_template_tags() {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
 	}
 	foreach ( $data as $key => $value ) {
+		// reorg - empty at end
 		if ( '' === $value ) {
-			$value = __( 'No output for this event.', 'my-calendar' );
+			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
+			$empty .= '<div class="mc-output-' . $key . '"><pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre></div></section>';
+		} else {
+			$output .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
+			$output .= '<div class="mc-output-' . $key . '"><pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre></div></section>';
 		}
-		$output .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
-		$output .= '<div class="mc-output-' . $key . '"><pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre></div></section>';
 	}
 
-	return '<div class="mc-template-cards">' . $output . '</div>';
+	return '<div class="mc-template-cards">' . $output . '</div><h3>' . __( 'Template tags without values for this event', 'my-calendar' ) . '</h3><div class="mc-template-cards">' . $empty . '</div>';
 }
+
 /**
  * Check whether the current key refers to a core template
  *

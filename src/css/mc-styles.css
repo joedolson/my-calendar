@@ -116,6 +116,7 @@ span.mc-notice {
 .mc-template-cards {
 	display: grid;
 	grid-template-columns: repeat(3, 33.333333%);
+	column-gap: 1px;
 }
 
 .mc-template-card div:first-of-type {
@@ -124,6 +125,11 @@ span.mc-notice {
 
 .mc-template-card {
 	padding: 10px;
+}
+
+.mc-template-card code {
+	display: block;
+	margin: -10px -10px 0;
 }
 
 .mc-template-card:nth-of-type(even) {
