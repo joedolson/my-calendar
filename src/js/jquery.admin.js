@@ -91,7 +91,10 @@ jQuery(document).ready(function ($) {
 
 	var firstItem = window.location.hash;
 	if ( firstItem ) {
-		showPanel(firstItem);
+		showPanel( firstItem );
+	} else {
+		firstItem = $( '.mc-tabs .tabs' ).attr( 'data-default' );
+		showPanel( firstItem );
 	}
 	var tabs = document.querySelectorAll('.mc-tabs [role=tab]'); //get all role=tab elements as a variable
 	for (i = 0; i < tabs.length; i++) {

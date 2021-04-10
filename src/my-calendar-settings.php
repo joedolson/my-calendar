@@ -461,7 +461,7 @@ function my_calendar_settings() {
 	<?php my_calendar_check_db(); ?>
 	<h1><?php _e( 'My Calendar Settings', 'my-calendar' ); ?></h1>
 	<div class="mc-tabs">
-		<div class="tabs" role="tablist">
+		<div class="tabs" role="tablist" data-default="my-calendar-manage">
 			<button type="button" role="tab" aria-selected="false"  id="tab_manage" aria-controls="my-calendar-manage"><?php _e( 'General', 'my-calendar' ); ?></button>
 			<button type="button" role="tab" aria-selected="false"  id="tab_text" aria-controls="my-calendar-text"><?php _e( 'Text', 'my-calendar' ); ?></button>
 			<button type="button" role="tab" aria-selected="false"  id="tab_output" aria-controls="mc-output"><?php _e( 'Output', 'my-calendar' ); ?></button>

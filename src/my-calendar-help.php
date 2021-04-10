@@ -68,7 +68,7 @@ function my_calendar_help() {
 
 			<div class="inside mc-tabs">
 				<?php mc_generate(); ?>
-				<div class='tabs' role="tablist">
+				<div class='tabs' role="tablist" data-default="tab_mc_main">
 					<button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'><?php _e( 'Main', 'my-calendar' ); ?></button>
 					<button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php _e( 'Upcoming', 'my-calendar' ); ?></a></button>
 					<button type="button" role="tab" aria-selected="false" id='tab_mc_today' aria-controls='mc_today'><?php _e( 'Today', 'my-calendar' ); ?></button>
