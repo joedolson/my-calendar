@@ -98,19 +98,19 @@ jQuery(document).ready(function ($) {
 	}
 	var tabs = document.querySelectorAll('.mc-tabs [role=tab]'); //get all role=tab elements as a variable
 	for (i = 0; i < tabs.length; i++) {
-		tabs[i].addEventListener("click", showTabPanel);
+		tabs[i].addEventListener('click', showTabPanel);
 	} //add click event to each tab to run the showTabPanel function
 	/**
 	 * Activate a panel from the click event.
 	 *
 	 * @param event Click event.
 	 */
-	function showTabPanel(e) { //runs when tab is clicked
+	function showTabPanel(e) {
 		var tabs2 = document.querySelectorAll('.mc-tabs [role=tab]'); //get tabs
 		for (i = 0; i < tabs2.length; i++) {
 			tabs2[i].setAttribute('aria-selected', 'false');
 			tabs2[i].setAttribute('style', 'font-weight:normal');
-		} //reset all tabs to aria-selected=false and normal font weight
+		} // reset all tabs to aria-selected=false and normal font weight
 		e.target.setAttribute('aria-selected', 'true'); //set aria-selected=true for clicked tab
 		var tabPanelToOpen = e.target.getAttribute('aria-controls');
 		var tabPanels = document.querySelectorAll('[role=tabpanel]'); //get all tabpanels

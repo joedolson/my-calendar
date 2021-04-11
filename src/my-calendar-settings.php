@@ -47,6 +47,9 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			}
 			$return = "<label for='$name'>$label</label> <input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes /> $note";
 			break;
+		case 'hidden':
+			$return = "<input type='hidden' id='$name' name='$name' value='" . esc_attr( $value ) . "' />";
+			break;
 		case 'textarea':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
@@ -521,53 +524,34 @@ function my_calendar_settings() {
 							<legend class="screen-reader-text"><?php _e( 'Management', 'my-calendar' ); ?></legend>
 							<ul>
 								<?php
-								$guess      = mc_guess_calendar();
+								$has_uri    = mc_get_uri( 'boolean' );
 								$page_title = '';
 								$permalink  = '';
 								if ( get_option( 'mc_uri_id' ) ) {
 									$page_title = get_post( absint( get_option( 'mc_uri_id' ) ) )->post_title;
 									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
 								}
-								if ( '' !== get_option( 'mc_uri', '' ) && ( get_option( 'mc_uri' ) !== $permalink ) ) {
-									?>
-								<li><?php mc_settings_field( 'mc_uri', __( 'Where is your main calendar page?', 'my-calendar' ), '', "$guess[message]", array( 'size' => '60' ), 'url' ); ?></li>
-								<li>
-									<?php
-									mc_settings_field(
-										'mc_uri_id',
-										__( 'Calendar Page ID?', 'my-calendar' ),
-										'',
-										"($page_title)",
-										array(
-											'size'  => '20',
-											'class' => 'suggest',
-										),
-										'text'
-									);
-									?>
-								</li>
-									<?php
-								} else {
-									?>
-								<li>
-									<?php
-									mc_settings_field(
-										'mc_uri_id',
-										__( 'Where is your main calendar page?', 'my-calendar' ),
-										'',
-										"(<a href='$permalink'>$page_title</a>)",
-										array(
-											'size'  => '20',
-											'class' => 'suggest',
-										),
-										'text'
-									);
-									?>
-								</li>
-									<?php
-								}
 								?>
-<li>
+								<li id="mc-pages-autocomplete" class="autocomplete">
+									<?php
+									mc_settings_field(
+										'mc_uri_query',
+										__( 'Calendar Page Location', 'my-calendar' ),
+										$page_title,
+										'',
+										array(
+											'size'  => '20',
+											'class' => 'autocomplete-input',
+										),
+										'text'
+									);
+									?>
+									<ul class="autocomplete-result-list"></ul>
+									<?php
+									mc_settings_field( 'mc_uri_id', '', '', '', '', 'hidden' );
+									?>
+								</li>
+								<li>
 								<?php
 								mc_settings_field(
 									'mc_default_sort',
