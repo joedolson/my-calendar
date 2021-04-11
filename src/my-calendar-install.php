@@ -51,49 +51,49 @@ function mc_globals() {
 	global $wpdb;
 
 	$grid_template = addslashes(
-		'<span class="event-time value-title">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time\'>" after="</span>"}</span>
-		{image before="<div class=\'mc-event-image\'>" after="</div>";
-		<div class="sub-details">
-			{hcard before="<div class=\'mc-location\'>" after="</div>"}
-			{excerpt before="<div class=\'mc-excerpt\'>" after="</div>"}
-		</div>'
+'<span class="event-time value-title">{time}{endtime before="<span class='time-separator'> - </span><span class=\'end-time\'>" after="</span>"}</span>
+{image before="<div class=\'mc-event-image\'>" after="</div>"}
+<div class="sub-details">
+	{hcard before="<div class=\'mc-location\'>" after="</div>"}
+	{excerpt before="<div class=\'mc-excerpt\'>" after="</div>"}
+</div>'
 	);
 
 	$single_template = addslashes(
-		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span><span class="end-time value-title" title="{dtend}">{endtime}</span></span>
-		{image before="<div class=\'mc-event-image\'>" after="</div>";
-		<div class="event-data">
-			{runtime before="<p class=\'mc-runtime\'>" after="</p>"}
-			{categories before="<p class=\'mc-categories\'>" after="</p>"}
-		</div>
-		<div class="sub-details">
-			{hcard before="<div class=\'mc-location\'>" after="</div>"}
-			{description before="<div class=\'mc-description\'>" after="</div>"}
-			{map before="<div class=\'mc-map\'" after="</div>"}
-		</div>'
+'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span><span class="end-time value-title" title="{dtend}">{endtime}</span></span>
+{image before="<div class=\'mc-event-image\'>" after="</div>";
+<div class="event-data">
+	{runtime before="<p class=\'mc-runtime\'>" after="</p>"}
+	{categories before="<p class=\'mc-categories\'>" after="</p>"}
+</div>
+<div class="sub-details">
+	{hcard before="<div class=\'mc-location\'>" after="</div>"}
+	{description before="<div class=\'mc-description\'>" after="</div>"}
+	{map before="<div class=\'mc-map\'" after="</div>"}
+</div>'
 	);
 
 	$rss_template = addslashes(
-		"\n<item>
-			<title>{rss_title}: {date}, {time}</title>
-			<link>{link}</link>
-			<pubDate>{rssdate}</pubDate>
-			<dc:creator>{author}</dc:creator>
-			<description><![CDATA[{rss_description}]]></description>
-			<content:encoded><![CDATA[<div class='vevent'>
-			<h1 class='summary'>{rss_title}</h1>
-			<div class='description'>{rss_description}</div>
-			<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
-			<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
-			<p>Recurrence: {recurs}</p>
-			<p>Repetition: {repeats} times</p>
-			<div class='location'>{rss_hcard}</div>
-			{link_title}
-			</div>]]></content:encoded>
-			<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
-			<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
-			{guid}
-		</item>' . PHP_EOL
+"\n<item>
+	<title>{rss_title}: {date}, {time}</title>
+	<link>{link}</link>
+	<pubDate>{rssdate}</pubDate>
+	<dc:creator>{author}</dc:creator>
+	<description><![CDATA[{rss_description}]]></description>
+	<content:encoded><![CDATA[<div class='vevent'>
+	<h1 class='summary'>{rss_title}</h1>
+	<div class='description'>{rss_description}</div>
+	<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
+	<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
+	<p>Recurrence: {recurs}</p>
+	<p>Repetition: {repeats} times</p>
+	<div class='location'>{rss_hcard}</div>
+	{link_title}
+	</div>]]></content:encoded>
+	<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
+	<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
+	{guid}
+</item>' . PHP_EOL
 	);
 
 	$charset_collate  = $wpdb->get_charset_collate();
