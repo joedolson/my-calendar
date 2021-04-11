@@ -267,6 +267,15 @@ ol.mc-repeat-events {
 	width: 98%
 }
 
+.templates.inside li a {
+	text-decoration: none;
+}
+
+.templates.inside li a:hover,
+.templates.inside li a:focus {
+	border-bottom: 1px solid;
+}
+
 .my-calendar-admin .CodeMirror-wrap {
 	border: 1px solid #ccc;
 }
