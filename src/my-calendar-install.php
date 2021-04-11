@@ -51,43 +51,26 @@ function mc_globals() {
 	global $wpdb;
 
 	$grid_template = addslashes(
-		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time\' title=\'{dtend}\'>" after="</span>"}</span>
-
+		'<span class="event-time value-title">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time\'>" after="</span>"}</span>
+		{image before="<div class=\'mc-event-image\'>" after="</div>";
 		<div class="sub-details">
-		{hcard}
-		{details before="<p class=\'mc_details\'>" after="</p>"}
-		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
-	);
-
-	$list_template = addslashes(
-		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time value-title\' title=\'{dtend}\'>" after="</span>"}</span>
-
-		<h3 class="event-title">{title}</h3>
-
-		<div class="sub-details">
-		{hcard}
-		{details before="<p class=\'mc_details\'>" after="</p>"}
-		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
-	);
-
-	$mini_template = addslashes(
-		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span>{endtime before="<span class=\'end-time value-title\' title=\'{dtend}\'>" after="</span>"}</span>
-
-		<div class="sub-details">
-		{excerpt before="<div class=\'excerpt\'>" after="</div>"}
-		{hcard}
-		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
+			{hcard before="<div class=\'mc-location\'>" after="</div>"}
+			{excerpt before="<div class=\'mc-excerpt\'>" after="</div>"}
+		</div>'
 	);
 
 	$single_template = addslashes(
 		'<span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span><span class="end-time value-title" title="{dtend}">{endtime}</span></span>
-
+		{image before="<div class=\'mc-event-image\'>" after="</div>";
+		<div class="event-data">
+			{runtime before="<p class=\'mc-runtime\'>" after="</p>"}
+			{categories before="<p class=\'mc-categories\'>" after="</p>"}
+		</div>
 		<div class="sub-details">
-		{hcard}
-		<div class="mc-description">{image}{description}</div>
-		<p>{ical_html} &bull; {gcal_link}</p>
-		{map}
-		<p><a href="{linking}" class="event-link external"><span class="screen-reader-text">More information about </span>{title}</a></p></div>'
+			{hcard before="<div class=\'mc-location\'>" after="</div>"}
+			{description before="<div class=\'mc-description\'>" after="</div>"}
+			{map before="<div class=\'mc-map\'" after="</div>"}
+		</div>'
 	);
 
 	$rss_template = addslashes(
@@ -220,9 +203,9 @@ function mc_globals() {
 		'initial_loc_db'   => $initial_loc_db,
 		'initial_cat_db'   => $initial_cat_db,
 		'grid_template'    => $grid_template,
-		'list_template'    => $list_template,
+		'list_template'    => $grid_template,
 		'rss_template'     => $rss_template,
-		'mini_template'    => $mini_template,
+		'mini_template'    => $grid_template,
 		'single_template'  => $single_template,
 	);
 
