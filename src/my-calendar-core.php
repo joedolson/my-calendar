@@ -1197,7 +1197,7 @@ function mc_core_autocomplete_search_pages() {
 				)
 			);
 		}
-		$query = $_REQUEST['data'];
+		$query    = $_REQUEST['data'];
 		$args     = array(
 			's'         => $query,
 			'post_type' => 'any',
