@@ -50,16 +50,15 @@ function mc_widget_defaults() {
 function mc_globals() {
 	global $wpdb;
 
-	$grid_template = addslashes( '
+	$grid_template = '
 <span class="event-time value-title">{time}{endtime before="<span class=\'time-separator\'> - </span><span class=\'end-time\'>" after="</span>"}</span>
 {image before="<div class=\'mc-event-image\'>" after="</div>"}
 <div class="sub-details">
 	{hcard before="<div class=\'mc-location\'>" after="</div>"}
 	{excerpt before="<div class=\'mc-excerpt\'>" after="</div>"}
-</div>'
-	);
+</div>';
 
-	$single_template = addslashes( '
+	$single_template = '
 <span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span><span class="end-time value-title" title="{dtend}">{endtime}</span></span>
 {image before="<div class=\'mc-event-image\'>" after="</div>";
 <div class="event-data">
@@ -70,10 +69,9 @@ function mc_globals() {
 	{hcard before="<div class=\'mc-location\'>" after="</div>"}
 	{description before="<div class=\'mc-description\'>" after="</div>"}
 	{map before="<div class=\'mc-map\'" after="</div>"}
-</div>'
-	);
+</div>';
 
-	$rss_template = addslashes( "
+	$rss_template = "
 \n<item>
 	<title>{rss_title}: {date}, {time}</title>
 	<link>{link}</link>
@@ -93,8 +91,7 @@ function mc_globals() {
 	<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
 	<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
 	{guid}
-</item>' . PHP_EOL
-	);
+</item>' . PHP_EOL;
 
 	$charset_collate  = $wpdb->get_charset_collate();
 	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) === 'true' ) ? 1 : 0;
@@ -202,11 +199,11 @@ function mc_globals() {
 		'initial_rel_db'   => $initial_rel_db,
 		'initial_loc_db'   => $initial_loc_db,
 		'initial_cat_db'   => $initial_cat_db,
-		'grid_template'    => $grid_template,
-		'list_template'    => $grid_template,
-		'rss_template'     => $rss_template,
-		'mini_template'    => $grid_template,
-		'single_template'  => $single_template,
+		'grid_template'    => addslashes( $grid_template ),
+		'list_template'    => addslashes( $grid_template ),
+		'rss_template'     => addslashes( $rss_template ),
+		'mini_template'    => addslashes( $grid_template ),
+		'single_template'  => addslashes( $single_template ),
 	);
 
 	return $globals;
