@@ -533,29 +533,29 @@ function my_calendar_settings() {
 								}
 								?>
 								<li id="mc-pages-autocomplete" class="autocomplete">
-									<?php
-									mc_settings_field(
-										'mc_uri_query',
-										__( 'Calendar Page Location', 'my-calendar' ),
-										$page_title,
-										'',
-										array(
-											'size'  => '20',
-											'class' => 'autocomplete-input',
-										),
-										'text'
-									);
-									?>
-									<ul class="autocomplete-result-list"></ul>
-									<?php
-									mc_settings_field( 'mc_uri_id', '', '', '', '', 'hidden' );
-									?>
+								<?php
+								mc_settings_field(
+									'mc_uri_query',
+									__( 'Calendar Page Location', 'my-calendar' ),
+									$page_title,
+									'',
+									array(
+										'size'  => '20',
+										'class' => 'autocomplete-input',
+									),
+									'text'
+								);
+								?>
+								<ul class="autocomplete-result-list"></ul>
+								<?php
+								mc_settings_field( 'mc_uri_id', '', '', '', '', 'hidden' );
+								?>
 								</li>
 								<li>
 								<?php
 								mc_settings_field(
 									'mc_default_sort',
-									__( 'Default Sort order for Admin Events List', 'my-calendar' ),
+									__( 'Default sort order for Admin Events List', 'my-calendar' ),
 									array(
 										'1' => __( 'Event ID', 'my-calendar' ),
 										'2' => __( 'Title', 'my-calendar' ),
@@ -569,9 +569,13 @@ function my_calendar_settings() {
 									array(),
 									'select'
 								);
+								?>
+								</li>
+								<li>
+								<?php
 								mc_settings_field(
 									'mc_default_direction',
-									__( 'Sort direction', 'my-calendar' ),
+									__( 'Default sort direction', 'my-calendar' ),
 									array(
 										'ASC'  => __( 'Ascending', 'my-calendar' ),
 										'DESC' => __( 'Descending', 'my-calendar' ),
@@ -582,16 +586,16 @@ function my_calendar_settings() {
 								);
 								?>
 								</li>
-							<?php
-							if ( isset( $_POST['mc_use_permalinks'] ) && '' !== $note ) {
-								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
-								// Translators: URL for WordPress Settings > Permalinks.
-								$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
-							} else {
-								$note = '';
-							}
-							?>
-							<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
+								<?php
+								if ( isset( $_POST['mc_use_permalinks'] ) && '' !== $note ) {
+									$url = admin_url( 'options-permalink.php#mc_cpt_base' );
+									// Translators: URL for WordPress Settings > Permalinks.
+									$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
+								} else {
+									$note = '';
+								}
+								?>
+								<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
