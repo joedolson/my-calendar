@@ -305,6 +305,8 @@ function mc_display_template_tags() {
 	if ( $event ) {
 		$data = mc_create_tags( $event );
 	}
+	// Translators: Event title being shown.
+	$post_title = sprintf( __( 'Template tags for &ldquo;%1$s&rdquo;, on %2$s', 'my-calendar' ), $data['title'], $data['date'] );
 	ksort( $data );
 	if ( empty( $data ) ) {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
@@ -319,7 +321,7 @@ function mc_display_template_tags() {
 		}
 	}
 
-	return '<div class="mc-template-cards">' . $output . '</div><h3>' . __( 'Template tags without values for this event', 'my-calendar' ) . '</h3><div class="mc-template-cards">' . $empty . '</div>';
+	return '<h3>' . $post_title . '</h3><div class="mc-template-cards">' . $output . '</div><h3>' . __( 'Template tags without values for this event', 'my-calendar' ) . '</h3><div class="mc-template-cards">' . $empty . '</div>';
 }
 
 /**

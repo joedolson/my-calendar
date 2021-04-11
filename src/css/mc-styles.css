@@ -268,7 +268,11 @@ ol.mc-repeat-events {
 }
 
 .my-calendar-admin .CodeMirror-wrap {
-	border: 1px solid #999;
+	border: 1px solid #ccc;
+}
+
+.my-calendar-admin .CodeMirror-wrap.CodeMirror-focused {
+	border: 1px solid #888;
 }
 
 .my-calendar-admin .postbox {
