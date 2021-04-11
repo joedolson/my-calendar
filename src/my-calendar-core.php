@@ -793,7 +793,7 @@ function mc_admin_bar() {
 	global $wp_admin_bar;
 	$mc_id = get_option( 'mc_uri_id' );
 	if ( mc_get_uri( 'boolean' ) ) {
-		if ( is_page( $mc_id ) ) {
+		if ( is_page( $mc_id ) && current_user_can( 'mc_add_events' ) ) {
 			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
 			$args = array(
 				'id'    => 'mc-my-calendar',
@@ -1130,7 +1130,7 @@ function mc_scripts() {
 		$count = mc_count_locations();
 		if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 50 ) ) {
 			wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
-			wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/locations-autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
+			wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
 			wp_localize_script(
 				'mc-autocomplete',
 				'mclocations',
@@ -1144,20 +1144,15 @@ function mc_scripts() {
 	}
 
 	if ( $slug . '_page_my-calendar-config' === $id ) {
-		wp_enqueue_script( 'jquery-ui-autocomplete' );
-		wp_enqueue_script(
-			'mc.suggest',
-			plugins_url( 'js/jquery.suggest.js', __FILE__ ),
-			array(
-				'jquery',
-				'jquery-ui-autocomplete',
-			)
-		);
+		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
+		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
 		wp_localize_script(
-			'mc.suggest',
-			'mc_ajax_action',
+			'mc-autocomplete',
+			'mcpages',
 			array(
-				'action' => 'mc_post_lookup',
+				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
+				'security' => wp_create_nonce( 'mc-search-pages' ),
+				'action'   => 'mc_core_autocomplete_search_pages',
 			)
 		);
 	}
@@ -1187,30 +1182,40 @@ function mc_time_format( $format ) {
 	return $format;
 }
 
-add_action( 'wp_ajax_mc_post_lookup', 'mc_post_lookup' );
+add_action( 'wp_ajax_mc_core_autocomplete_search_pages', 'mc_core_autocomplete_search_pages' );
 /**
  * Add post lookup for assigning My Calendar main page
  */
-function mc_post_lookup() {
-	if ( isset( $_REQUEST['term'] ) ) {
-		$posts       = get_posts(
+function mc_core_autocomplete_search_pages() {
+	if ( isset( $_REQUEST['action'] ) && 'mc_core_autocomplete_search_pages' === $_REQUEST['action'] ) {
+		$security = $_REQUEST['security'];
+		if ( ! wp_verify_nonce( $security, 'mc-search-pages' ) ) {
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => array( 'error' => 'Invalid security value.' ),
+				)
+			);
+		}
+		$query = $_REQUEST['data'];
+		$args     = array(
+			's'         => $query,
+			'post_type' => 'any',
+		);
+		$posts    = get_posts( $args );
+		$response = array();
+		foreach ( $posts as $post ) {
+			$response[] = array(
+				'post_id'    => $post->ID,
+				'post_title' => html_entity_decode( strip_tags( $post->post_title ) ),
+			);
+		}
+		wp_send_json(
 			array(
-				's'         => $_REQUEST['term'],
-				'post_type' => array( 'post', 'page' ),
+				'success'  => 1,
+				'response' => $response,
 			)
 		);
-		$suggestions = array();
-		global $post;
-		foreach ( $posts as $post ) {
-			setup_postdata( $post );
-			$suggestion          = array();
-			$suggestion['value'] = esc_html( $post->post_title );
-			$suggestion['id']    = $post->ID;
-			$suggestions[]       = $suggestion;
-		}
-
-		echo $_GET['callback'] . '(' . json_encode( $suggestions ) . ')';
-		exit;
 	}
 }
 
@@ -1456,6 +1461,11 @@ function mc_guess_calendar() {
 
 			return $return;
 		}
+	} else {
+		$return = array(
+			'response' => true,
+			'message'  => __( 'Calendar installed.', 'my-calendar' ),
+		);
 	}
 
 	return $return;
