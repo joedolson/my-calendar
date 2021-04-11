@@ -460,7 +460,7 @@ function mc_list_templates() {
 				</li>
 				<li><a href='" . add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>details ($details_enabled)</a>" . mc_template_description( 'details' ) . "
 				</li>
-				<li><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>rss ($rss_enabled)</a>" . mc_template_description( 'rss' ) . "</li>";
+				<li><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>rss ($rss_enabled)</a>" . mc_template_description( 'rss' ) . '</li>';
 	global $wpdb;
 	$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
 	foreach ( $results as $result ) {
