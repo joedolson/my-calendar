@@ -481,8 +481,10 @@ function mc_get_location( $location_id ) {
 		$mcdb = mc_remote_db();
 	}
 
-	$location                = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$location->location_post = mc_get_location_post( $location_id, false );
+	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( is_object( $location ) ) {
+		$location->location_post = mc_get_location_post( $location_id, false );
+	}
 
 	return $location;
 }
