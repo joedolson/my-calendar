@@ -104,9 +104,14 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Support aria-sort on sortable tables.
 * Bug fix: pagination when sorting in event manager.
 * Locations support both descending & ascending sort.
+* Update default custom templates.
+* Bug fix: PHP warning on installations without saved locations.
+* Update settings configuration for default calendar URL.
 
 - TODO: https://github.com/joedolson/my-calendar/issues/17
 - TODO: https://github.com/joedolson/my-calendar/issues/14
+- TODO: update default templates to better represent the capabilities of custom templating
+- TODO: Are there settings I can eliminate?
 
 = 3.2.17 =
 
