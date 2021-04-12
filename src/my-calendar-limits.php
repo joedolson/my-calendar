@@ -243,7 +243,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 	}
 	foreach ( $lvalue as $lval ) {
 		if ( '' !== $ltype && '' !== $lval ) {
-			$location         = $ltype;
+			$location = $ltype;
 			switch ( $location ) {
 				case 'name':
 					$location_type = 'event_label';
