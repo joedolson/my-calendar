@@ -171,6 +171,16 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	$( '#my-calendar-generate select[name=ltype]' ).on( 'change', function(e) {
+		var ltype = $( this ).val();
+		if ( ltype != '' ) {
+			$( '#mc-generator input[name=lvalue]' ).prop( 'disabled', false ).prop( 'required', true );
+		} else {
+			$( '#mc-generator input[name=lvalue]' ).prop( 'disabled', true ).prop( 'required', false );
+		}
+	});
+
+
 	$('#mc-sortable').sortable({
 		placeholder: 'mc-ui-state-highlight',
 		update: function (event, ui) {

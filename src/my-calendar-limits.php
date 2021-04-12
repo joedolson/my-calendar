@@ -220,56 +220,65 @@ function mc_select_host( $host, $type = 'event' ) {
  * Function to limit event query by location.
  *
  * @param string               $ltype {location type}.
- * @param mixed string/integer $lvalue {location value}.
+ * @param mixed string|integer $lvalue {location value}.
  *
  * @return string
  */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
-	global $user_ID;
-	$limit_string     = '';
-	$location         = '';
-	$current_location = '';
-	if ( '' !== $ltype && '' !== $lvalue ) {
-		$location         = $ltype;
-		$current_location = $lvalue;
-		switch ( $location ) {
-			case 'name':
-				$location_type = 'event_label';
-				break;
-			case 'city':
-				$location_type = 'event_city';
-				break;
-			case 'state':
-				$location_type = 'event_state';
-				break;
-			case 'zip':
-				$location_type = 'event_postcode';
-				break;
-			case 'country':
-				$location_type = 'event_country';
-				break;
-			case 'region':
-				$location_type = 'event_region';
-				break;
-			default:
-				$location_type = $location;
+	$limit_string  = '';
+	$limit_strings = array();
+	$location      = '';
+	$ltype         = apply_filters( 'mc_select_ltype', $ltype );
+	$lvalue        = apply_filters( 'mc_select_lvalue', $lvalue );
+	if ( ! $ltype || ! $lvalue ) {
+		return '';
+	} else {
+		// If value passed is a string of comma separated values, turn into array.
+		if ( is_string( $lvalue ) && false !== stripos( $lvalue, ',' ) ) {
+			$lvalue = array_map( 'trim', explode( ',', $lvalue ) );
 		}
-		if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2' ), true ) ) {
-			if ( 'all' !== $current_location && '' !== $current_location ) {
-				$current_location = trim( $current_location );
-				if ( is_numeric( $current_location ) ) {
-					$limit_string = 'AND ' . $location_type . ' = ' . absint( $current_location );
-				} else {
-					$limit_string = 'AND ' . $location_type . " = '" . esc_sql( $current_location ) . "'";
+	}
+	if ( ! is_array( $lvalue ) ) {
+		$lvalue = array( $lvalue );
+	}
+	foreach ( $lvalue as $lval ) {
+		if ( '' !== $ltype && '' !== $lval ) {
+			$location         = $ltype;
+			switch ( $location ) {
+				case 'name':
+					$location_type = 'event_label';
+					break;
+				case 'city':
+					$location_type = 'event_city';
+					break;
+				case 'state':
+					$location_type = 'event_state';
+					break;
+				case 'zip':
+					$location_type = 'event_postcode';
+					break;
+				case 'country':
+					$location_type = 'event_country';
+					break;
+				case 'region':
+					$location_type = 'event_region';
+					break;
+				default:
+					$location_type = $location;
+			}
+			if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2' ), true ) ) {
+				if ( 'all' !== $lval && '' !== $lval ) {
+					$lval = trim( $lval );
+					if ( is_numeric( $lval ) ) {
+						$limit_strings[] = $location_type . ' = ' . absint( $lval );
+					} else {
+						$limit_strings[] = $location_type . " = '" . esc_sql( $lval ) . "'";
+					}
 				}
 			}
 		}
 	}
-	if ( '' !== $limit_string ) {
-		if ( isset( $_GET['loc2'] ) && isset( $_GET['ltype2'] ) ) {
-			$limit_string .= mc_secondary_limit( $_GET['ltype2'], $_GET['loc2'] );
-		}
-	}
+	$limit_string = 'AND (' . implode( ' OR ', $limit_strings ) . ')';
 
 	return apply_filters( 'mc_location_limit_sql', $limit_string, $ltype, $lvalue );
 }
@@ -303,45 +312,4 @@ function mc_select_published() {
 	}
 
 	return $published;
-}
-
-/**
- * Set up a secondary limit on location
- *
- * @param string $ltype type of limit.
- * @param string $lvalue value.
- *
- * @return string SQL.
- */
-function mc_secondary_limit( $ltype = '', $lvalue = '' ) {
-	$limit_string     = '';
-	$current_location = urldecode( $lvalue );
-	$location         = urldecode( $ltype );
-	switch ( $location ) {
-		case 'name':
-			$location_type = 'event_label';
-			break;
-		case 'city':
-			$location_type = 'event_city';
-			break;
-		case 'state':
-			$location_type = 'event_state';
-			break;
-		case 'zip':
-			$location_type = 'event_postcode';
-			break;
-		case 'country':
-			$location_type = 'event_country';
-			break;
-		case 'region':
-			$location_type = 'event_region';
-			break;
-		default:
-			$location_type = 'event_label';
-	}
-	if ( 'all' !== $current_location && '' !== $current_location ) {
-		$limit_string = "OR $location_type='$current_location'";
-	}
-
-	return $limit_string;
 }

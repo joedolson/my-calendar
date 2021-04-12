@@ -101,8 +101,8 @@ function mc_generator( $type ) {
 				</select>
 			</p>
 			<p>
-				<label for="lvalue" id='lval'><?php _e( 'Location filter value:', 'my-calendar' ); ?></label>
-				<input type="text" name="lvalue" id="lvalue" aria-labelledby='lval location-info' />
+				<label for="lvalue" id='lval'><?php _e( 'Location filter values (comma-separated)', 'my-calendar' ); ?></label>
+				<input type="text" name="lvalue" id="lvalue" aria-labelledby='lval location-info' disabled />
 			</p>
 
 			<p id='location-info'>
