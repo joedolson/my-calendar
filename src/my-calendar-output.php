@@ -598,6 +598,32 @@ function mc_disable_link( $status, $event ) {
 }
 add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
 
+
+/**
+ * Test whether an event is in the past, currently happening, or in the future.
+ *
+ * @param $event Event object.
+ *
+ * @return int
+ */
+function mc_date_relation( $event ) {
+	$ts  = $event->ts_occur_begin;
+	$end = $event->ts_occur_end;
+	$now = time();
+	if ( $ts < $now && $end > $now ) {
+		do_action( 'mc_event_happening', true, $event );
+		$date_relation = 1;
+	} elseif ( $now < $ts ) {
+		do_action( 'mc_event_future', true, $event );
+		$date_relation = 2;
+	} elseif ( $now > $ts ) {
+		do_action( 'mc_event_over', true, $event );
+		$date_relation = 0;
+	}
+
+	return $date_relation;
+}
+
 /**
  * Generate classes for a given event
  *
@@ -607,16 +633,18 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
  * @return string classes
  */
 function mc_event_classes( $event, $type ) {
-	$uid = 'mc_' . $type . '_' . $event->occur_id;
-	$ts  = $event->ts_occur_begin;
-	$end = $event->ts_occur_end;
-	$now = time();
-	if ( $ts < $now && $end > $now ) {
-		$date_relation = 'on-now';
-	} elseif ( $now < $ts ) {
-		$date_relation = 'future-event';
-	} elseif ( $now > $ts ) {
-		$date_relation = 'past-event';
+	$uid      = 'mc_' . $type . '_' . $event->occur_id;
+	$relation = mc_date_relation( $event );
+	switch ( $relation ) {
+		case 0:
+			$date_relation = 'past-event';
+			break;
+		case 1:
+			$date_relation = 'on-now';
+			break;
+		case 2:
+			$date_relation = 'future-event';
+			break;
 	}
 	$primary = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
 
@@ -3086,6 +3114,22 @@ function mc_translate_url( $url ) {
 	return $url;
 }
 add_filter( 'mc_build_url', 'mc_translate_url' );
+
+
+/**
+ * Filter Polylang translation URL in translation menu.
+ *
+ * @param string $url Translation URL.
+ * @param string $lang Language of translation.
+ *
+ * @return string
+ */
+function mc_pll_translation_url( $url, $lang ) {
+	if ( is_singular( 'mc-events' ) ) {
+		$url = add_query_arg( 'mc_id', '', $url );
+	}
+}
+add_filter( 'pll_translation_url', 'mc_pll_translation_url', 10, 2 );
 
 /**
  * Default My Calendar search form.
