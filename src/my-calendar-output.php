@@ -602,7 +602,7 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
 /**
  * Test whether an event is in the past, currently happening, or in the future.
  *
- * @param $event Event object.
+ * @param object $event Event object.
  *
  * @return int
  */
@@ -3128,6 +3128,8 @@ function mc_pll_translation_url( $url, $lang ) {
 	if ( is_singular( 'mc-events' ) ) {
 		$url = add_query_arg( 'mc_id', '', $url );
 	}
+
+	return $url;
 }
 add_filter( 'pll_translation_url', 'mc_pll_translation_url', 10, 2 );
 
