@@ -1792,9 +1792,12 @@ function my_calendar( $args ) {
 		$bottom = $nav['bottom'];
 
 		if ( 'day' === $params['time'] ) {
-			$body .= "<div class='mcjs " . esc_attr( $params['format'] . ' ' . $params['time'] ) . "'>" . $top;
-			$from  = mc_date( 'Y-m-d', $current, false );
-			$to    = mc_date( 'Y-m-d', $current, false );
+			$hl       = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
+			$datetime = date_i18n( $date_format, $current );
+			$heading  = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'>" . apply_filters( 'mc_heading', $datetime, $params['format'], $params['time'] ) . "</$hl>";
+			$body    .= "<div class='mcjs " . esc_attr( $params['format'] . ' ' . $params['time'] ) . "'>" . $heading . $top;
+			$from     = mc_date( 'Y-m-d', $current, false );
+			$to       = mc_date( 'Y-m-d', $current, false );
 
 			$query  = array(
 				'from'     => $from,
@@ -1831,12 +1834,7 @@ function my_calendar( $args ) {
 			} else {
 				$mc_events .= __( 'No events scheduled for today!', 'my-calendar' );
 			}
-
-			$hl       = apply_filters( 'mc_heading_level', 'h3', $params['format'], $params['time'], $template );
-			$datetime = date_i18n( $date_format, $current );
-			$body    .= "
-				<$hl class='mc-single'>" . apply_filters( 'mc_heading', $datetime, $params['format'], $params['time'] ) . "</$hl>" . '
-				<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
+			$body    .= '<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
 			</div>";
 		} else {
 			// If showing multiple months, figure out how far we're going.
@@ -1851,30 +1849,26 @@ function my_calendar( $args ) {
 			$through_month_header = date_i18n( $month_format, $through_date );
 			$values               = array( 'date' => mc_date( 'Y-m-d', $current, false ) );
 
+			// Determine which header text to show depending on format & time period displayed.
+			if ( 'week' !== $params['time'] && 'day' !== $params['time'] ) {
+				$heading = ( $months <= 1 ) ? $current_header . $caption_text . "\n" : $current_month_header . '&ndash;' . $through_month_header . $caption_text;
+				// Translators: time period displayed.
+				$heading = sprintf( __( 'Events in %s', 'my-calendar' ), $heading );
+				if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
+					$heading = __( 'Search Results', 'my-calendar' );
+				}
+			} else {
+				$heading = mc_draw_template( $values, stripslashes( $week_template ) );
+			}
+			$h2      = apply_filters( 'mc_heading_level', 'h2' );
+			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'] );
+			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\">$heading</$h2>\n";
+
 			// Add the calendar table and heading.
 			$body .= $top;
 			if ( 'calendar' === $params['format'] || 'mini' === $params['format'] ) {
 				$table           = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
-				$body           .= "\n<$table class=\"my-calendar-table\">\n";
-				$week_caption    = mc_draw_template( $values, stripslashes( $week_template ) );
-				$caption_heading = ( 'week' !== $params['time'] ) ? $current_header . $caption_text : $week_caption . $caption_text;
-				$caption         = apply_filters( 'mc_grid_caption', 'caption', $params['format'] );
-				$body           .= "<$caption class=\"heading my-calendar-$params[time]\">" . $caption_heading . "</$caption>\n";
-			} else {
-				// Determine which header text to show depending on number of months displayed.
-				if ( 'week' !== $params['time'] && 'day' !== $params['time'] ) {
-					$list_heading = ( $months <= 1 ) ? $current_header . $caption_text . "\n" : $current_month_header . '&ndash;' . $through_month_header . $caption_text;
-					// Translators: time period displayed.
-					$list_heading = sprintf( __( 'Events in %s', 'my-calendar' ), $list_heading );
-					if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
-						$list_heading = __( 'Search Results', 'my-calendar' );
-					}
-				} else {
-					$list_heading = mc_draw_template( $values, stripslashes( $week_template ) );
-				}
-				$h2           = apply_filters( 'mc_list_header_level', 'h2' );
-				$list_heading = apply_filters( 'mc_list_heading', $list_heading, $current_month_header, $through_month_header, $caption_text );
-				$body        .= "<$h2 class=\"heading my-calendar-$params[time]\">$list_heading</$h2>\n";
+				$body           .= "\n<$table class=\"my-calendar-table\" aria-labelledby='mc_head_$id'>\n";
 			}
 
 			$tr       = apply_filters( 'mc_grid_week_wrapper', 'tr', $params['format'] );
