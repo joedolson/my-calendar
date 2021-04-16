@@ -793,6 +793,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	if ( ! isset( $_GET['cid'] ) ) {
 		$date_switcher .= '<input type="hidden" name="cid" value="' . esc_attr( $cid ) . '" />';
 	}
+	$data_href = $current_url;
 	foreach ( $qsa as $name => $argument ) {
 		$name = esc_attr( strip_tags( $name ) );
 		if ( is_array( $argument ) ) {
@@ -802,6 +803,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		}
 		if ( 'month' !== $name && 'yr' !== $name && 'dy' !== $name ) {
 			$date_switcher .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />';
+			$data_href      = add_query_arg( $name, $argument, $data_href );
 		}
 	}
 	$day_switcher = '';
@@ -849,7 +851,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$date_switcher .= $p;
 	$date_switcher .= '<option value="' . $time . '"' . selected( $time, $c_year, false ) . '>' . $time . "</option>\n";
 	$date_switcher .= $f;
-	$date_switcher .= '</select> <input type="submit" class="button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
+	$date_switcher .= '</select> <input type="submit" class="button" data-href="' . esc_attr( $data_href ) . '" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
 	$date_switcher  = apply_filters( 'mc_jumpbox', $date_switcher );
 
 	return $date_switcher;

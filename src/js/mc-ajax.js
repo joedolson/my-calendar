@@ -2,15 +2,35 @@
 	'use strict';
 	$(function () {
 		mc_display_usertime();
-		$(document).on('click', ".my-calendar-header a.mcajax, .my-calendar-footer a.mcajax", function (e) {
+		$(document).on('click', ".my-calendar-header a.mcajax, .my-calendar-footer a.mcajax, .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
 			e.preventDefault();
 			var calendar = $( this ).closest( '.mc-main' );
 			var ref      = calendar.attr('id');
-			var link     = $(this).attr('href');
+			if ( 'INPUT' === this.nodeName ) {
+				var month = $( this ).parents( 'form' ).find( 'select[name=month]' ).val();
+				var day   = $( this ).parents( 'form' ).find( 'select[name=dy]' ).val();
+				var year  = $( this ).parents( 'form' ).find( 'select[name=yr]' ).val();
+				var link  = $( this ).attr( 'data-href' );
+			} else {
+				var link = $(this).attr('href');
+			}
 			let url;
 			try {
 				url = new URL(link);
 				url.searchParams.delete('embed');
+				if ( 'INPUT' === this.nodeName ) {
+					url.searchParams.delete( 'month' );
+					url.searchParams.delete( 'dy' );
+					url.searchParams.delete( 'yr' );
+
+					url.searchParams.append( 'month', month );
+					if ( 'undefined' !== typeof( day ) ) {
+						url.searchParams.append( 'dy', day );
+					}
+					url.searchParams.append( 'yr', year );
+
+					link = url.toString();
+				}
 
 				window.history.pushState({}, '', url );
 			} catch(_) {
