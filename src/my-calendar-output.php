@@ -1834,7 +1834,7 @@ function my_calendar( $args ) {
 			} else {
 				$mc_events .= __( 'No events scheduled for today!', 'my-calendar' );
 			}
-			$body    .= '<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
+			$body .= '<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
 			</div>";
 		} else {
 			// If showing multiple months, figure out how far we're going.
@@ -1860,15 +1860,15 @@ function my_calendar( $args ) {
 			} else {
 				$heading = mc_draw_template( $values, stripslashes( $week_template ) );
 			}
-			$h2      = apply_filters( 'mc_heading_level', 'h2' );
+			$h2      = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'] );
 			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\">$heading</$h2>\n";
 
 			// Add the calendar table and heading.
 			$body .= $top;
 			if ( 'calendar' === $params['format'] || 'mini' === $params['format'] ) {
-				$table           = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
-				$body           .= "\n<$table class=\"my-calendar-table\" aria-labelledby='mc_head_$id'>\n";
+				$table = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
+				$body .= "\n<$table class=\"my-calendar-table\" aria-labelledby='mc_head_$id'>\n";
 			}
 
 			$tr       = apply_filters( 'mc_grid_week_wrapper', 'tr', $params['format'] );
