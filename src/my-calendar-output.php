@@ -179,7 +179,7 @@ function mc_generate_category_icon( $source ) {
 	$label_id = 'cat_' . $occur_id;
 	$svg      = wp_remote_get( $src );
 	$image    = wp_remote_retrieve_body( $svg );
-	$image    = str_replace( '<svg ', '<svg role="img" aria-labelledby="' . $label_id . '" class="category-icon" style="color: ' . $color . '" ', $image );
+	$image    = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" style="color: ' . $color . '" ', $image );
 	$image    = str_replace( '<path ', "<title id='" . $label_id . "'>$cat_name</title><path ", $image );
 
 	update_option( 'mc_category_icon_' . $context . '_' . $source->category_id, $image );
