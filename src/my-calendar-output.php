@@ -2543,13 +2543,15 @@ function mc_category_key( $category ) {
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
+	$has_icons       = ( 'true' === get_option( 'mc_hide_icons' ) ) ? false : true;
+	$class           = ( $has_icons ) ? 'has-icons' : 'no-icons';
 	$key             = '';
 	$cat_limit       = mc_select_category( $category, 'all', 'category' );
 	$select_category = str_replace( 'AND', 'WHERE', ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '' );
 
 	$sql        = 'SELECT * FROM ' . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
 	$categories = $mcdb->get_results( $sql );
-	$key       .= '<div class="category-key"><h3>' . __( 'Categories', 'my-calendar' ) . "</h3>\n<ul>\n";
+	$key       .= '<div class="category-key ' . $class . '"><h3>' . __( 'Categories', 'my-calendar' ) . "</h3>\n<ul>\n";
 	$path       = ( mc_is_custom_icon() ) ? str_replace( 'my-calendar', 'my-calendar-custom', $url ) : plugins_url( 'images/icons', __FILE__ ) . '/';
 
 	foreach ( $categories as $cat ) {
@@ -2584,8 +2586,11 @@ function mc_category_key( $category ) {
 		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
 		$cat_name = ( '' === $cat_name ) ? '<span class="screen-reader-text">' . __( 'Untitled Category', 'my-calendar' ) . '</span>' : $cat_name;
 		$cat_key  = '';
-		if ( '' !== $cat->category_icon && 'true' !== get_option( 'mc_hide_icons' ) ) {
-			$cat_key .= '<span class="category-color-sample"><img src="' . $path . $cat->category_icon . '" alt="" style="background:' . $hex . $cat->category_color . ';" /></span>' . $cat_name;
+		if ( '' !== $cat->category_icon && $has_icons ) {
+			$file     = ( mc_is_custom_icon() ) ? str_replace( '.png', '.svg', $cat->category_icon ) : $cat->category_icon;
+			$type     = ( false !== stripos( $file, '.svg' ) ) ? 'svg' : 'png';
+			$style    = ( 'svg' === $type ) ? 'color:' . $hex . $cat->category_color : 'background:' . $hex . $cat->category_color;
+			$cat_key .= '<span class="category-color-sample ' . $type . '"><img src="' . $path . $file . '" alt="" style="' . $style . ';" /></span>' . $cat_name;
 		} elseif ( 'default' !== get_option( 'mc_apply_color' ) ) {
 			$cat_key .= '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' . $cat_name;
 		} else {

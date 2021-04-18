@@ -48,6 +48,8 @@ function mc_directory_list( $directory ) {
 		// if $file isn't this directory or its parent add it to the results array.
 		if ( filesize( $directory . '/' . $file ) > 11 ) {
 			if ( '.' !== $file && '..' !== $file && ! is_dir( $directory . '/' . $file ) && (
+					'image/svg_xml' === mime_content_type( $directory . '/' . $file ) ||
+					'image/svg' === mime_content_type( $directory . '/' . $file ) ||
 					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_GIF ||
 					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_PNG ||
 					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_JPEG )
@@ -609,7 +611,7 @@ function mc_no_category_default( $single = false ) {
 			array(
 				'category_name'  => 'General',
 				'category_color' => '#ffffcc',
-				'category_icon'  => 'event.png',
+				'category_icon'  => 'event.svg',
 			)
 		);
 

@@ -93,9 +93,19 @@ div.site-content, table {
 	color: inherit;
 }
 
+.category-icon,
+.category-color-sample.svg img {
+	max-width: 16px;
+	height: auto;
+}
+
 .mc-adjacent .mc-event-date {
 	display: block;
 	font-size: 80%;
+}
+
+.mc-main .category-key.has-icons ul li {
+	display: inline;
 }
 
 button.mc-toggle {

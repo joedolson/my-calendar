@@ -714,7 +714,7 @@ function my_calendar_check() {
 				array(
 					'category_name'  => 'General',
 					'category_color' => '#ffffcc',
-					'category_icon'  => 'event.png',
+					'category_icon'  => 'event.svg',
 				)
 			);
 		}
