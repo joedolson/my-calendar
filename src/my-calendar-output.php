@@ -123,10 +123,16 @@ function mc_category_icon( $event, $type = 'html' ) {
 		$image = '';
 		if ( 'true' !== get_option( 'mc_hide_icons' ) ) {
 			if ( '' !== $event->category_icon ) {
-				$path = ( mc_is_custom_icon() ) ? str_replace( 'my-calendar', 'my-calendar-custom', $url ) : plugins_url( 'images/icons', __FILE__ ) . '/';
+				if ( mc_is_custom_icon() ) {
+					$path = str_replace( 'my-calendar', 'my-calendar-custom', $url );
+					$src  = $path . $event->category_icon;
+				} else {
+					$path = plugins_url( 'images/icons', __FILE__ ) . '/';
+					$src  = $path . str_replace( '.png', '.svg', $event->category_icon );
+				}
 				$hex  = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
 				if ( 'html' === $type ) {
-					$image = '<img src="' . $path . $event->category_icon . '" alt="' . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . '" class="category-icon" style="background:' . $hex . $event->category_color . '" />';
+					$image = '<img src="' . esc_url( $src ) . '" alt="' . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . '" class="category-icon" style="background:' . $hex . $event->category_color . '" />';
 				} else {
 					$image = $path . $event->category_icon;
 				}

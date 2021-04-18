@@ -127,6 +127,7 @@ function mc_get_file( $file, $type = 'path' ) {
 		}
 	}
 	$path = apply_filters( 'mc_get_file', $path, $file );
+
 	return $path;
 }
 

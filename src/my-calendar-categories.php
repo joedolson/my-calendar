@@ -700,7 +700,7 @@ function mc_manage_categories() {
 		foreach ( $categories as $cat ) {
 			$class = ( 'alternate' === $class ) ? '' : 'alternate';
 			if ( ! $cat->category_icon && 'true' !== get_option( 'mc_hide_icons' ) ) {
-				$icon_src = ( mc_file_exists( $cat->category_icon ) ) ? mc_get_file( $cat->category_icon, 'url' ) : plugins_url( 'my-calendar/images/icons/' . $cat->category_icon );
+				$icon_src = ( mc_file_exists( $cat->category_icon ) ) ? mc_get_file( $cat->category_icon, 'url' ) : plugins_url( 'my-calendar/images/icons/' . str_replace( '.png', '.svg', $cat->category_icon ) );
 			} else {
 				$icon_src = false;
 			}
