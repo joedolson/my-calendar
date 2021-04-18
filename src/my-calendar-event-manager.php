@@ -1306,8 +1306,10 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			if ( $show_block ) {
 				$return = '
 				<div class="mc-image-upload field-holder">
-					<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />
-					<label for="e_image">' . __( 'Add an image:', 'my-calendar' ) . '</label><br /><input type="text" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button textfield-field">' . __( 'Upload', 'my-calendar' ) . '</button>';
+					<div class="image_fields">
+						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />
+						<label for="e_image">' . __( 'Add an image:', 'my-calendar' ) . '</label><br /><input type="text" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button textfield-field">' . __( 'Upload', 'my-calendar' ) . '</button>
+					</div>';
 				if ( '' !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
 					$return .= '<div class="event_image"><img src="' . esc_attr( $image ) . '" alt="" /></div>';
@@ -1358,7 +1360,8 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				}
 				$return = '
 					<p class="checkbox">
-						<label for="e_link">' . __( 'URL', 'my-calendar' ) . '</label> <input type="text" id="e_link" name="event_link" size="40" value="' . $value . '" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
+						<label for="e_link">' . __( 'Event Link', 'my-calendar' ) . '</label> <input type="text" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label><br />
+						<span id="event_link_description">' . __( 'Link for additional event information', 'my-calendar' ) . '</span>
 					</p>';
 			}
 			break;

@@ -245,13 +245,14 @@ ol.mc-repeat-events {
 	margin-right: 180px
 }
 
-.my-calendar-admin .event_image {
-	float: right;
-	margin-left: 10px;
+.my-calendar-admin .mc-image-upload {
+	display: grid;
+	grid-template-columns: 70% 1fr;
+	column-gap: 20px;
 }
 
 .my-calendar-admin .event_image img {
-	width: 150px;
+	width: 100%;
 	height: auto;
 	margin: 2px 0;
 	border-radius: 3px;
