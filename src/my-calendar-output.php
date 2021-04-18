@@ -1710,7 +1710,7 @@ function my_calendar( $args ) {
 	$week_format   = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
 	// Translators: Template tag with date format.
 	$week_template = ( get_option( 'mc_week_caption', '' ) !== '' ) ? get_option( 'mc_week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
-	$day_uri       = ( ! get_option( 'mc_open_day_uri' ) ) ? 'false' : get_option( 'mc_open_day_uri' ); // This is not a URL. It's a behavior reference.
+	$open_day_uri  = ( ! get_option( 'mc_open_day_uri' ) ) ? 'false' : get_option( 'mc_open_day_uri' ); // This is not a URL. It's a behavior reference.
 	$list_info     = get_option( 'mc_show_list_info' );
 	$list_events   = get_option( 'mc_show_list_events' );
 
@@ -1943,7 +1943,7 @@ function my_calendar( $args ) {
 							if ( true === $hide_nextmonth && 'nextmonth' === $monthclass ) {
 								$event_output = ' ';
 							} else {
-								if ( 'mini' === $params['format'] && 'false' !== $day_uri ) {
+								if ( 'mini' === $params['format'] && 'false' !== $open_day_uri ) {
 									$event_output = ' ';
 								} else {
 									$event_output = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
