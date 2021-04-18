@@ -94,9 +94,11 @@ div.site-content, table {
 }
 
 .category-icon,
-.category-color-sample.svg img {
-	max-width: 16px;
+.category-color-sample.svg * {
+	max-width: 18px;
 	height: auto;
+	padding: 1px;
+	border-radius: 2px; 
 }
 
 .mc-adjacent .mc-event-date {

@@ -404,7 +404,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['ical_categories'] = strip_tags( ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' ) );
 	$e['term']            = intval( $event->category_term );
 	$e['icon']            = mc_category_icon( $event, 'img' );
-	$e['icon_html']       = ( '' !== $e['icon'] ) ? "<img src='$e[icon]' class='mc-category-icon' alt='" . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . "' />" : '';
+	$e['icon_html']       = mc_category_icon( $event );
 	$e['color']           = $event->category_color;
 
 	$hex     = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';

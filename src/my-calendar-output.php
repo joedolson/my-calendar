@@ -130,9 +130,18 @@ function mc_category_icon( $event, $type = 'html' ) {
 					$path = plugins_url( 'images/icons', __FILE__ ) . '/';
 					$src  = $path . str_replace( '.png', '.svg', $event->category_icon );
 				}
-				$hex  = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
+				$hex      = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
+				$color    = $hex . $event->category_color;
+				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name );
 				if ( 'html' === $type ) {
-					$image = '<img src="' . esc_url( $src ) . '" alt="' . __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name ) . '" class="category-icon" style="background:' . $hex . $event->category_color . '" />';
+					if ( false !== stripos( $src, '.svg' ) ) {
+						$image = get_option( 'mc_category_icon_' . $event->category_id, '' );
+						if ( '' === $image ) {
+							$image = mc_generate_category_icon( $event );
+						}
+					} else {
+						$image = '<img src="' . esc_url( $src ) . '" alt="' . $cat_name . '" class="category-icon" style="background:' . $color . '" />';
+					}
 				} else {
 					$image = $path . $event->category_icon;
 				}
@@ -143,6 +152,39 @@ function mc_category_icon( $event, $type = 'html' ) {
 	}
 
 	return '';
+}
+
+/**
+ * Generate SVG output from category icon information. Passed object must include category_color, category_name, category_icon, category_id|occur_id
+ *
+ * @param object $source Either an event or a category object.
+ *
+ * @return string
+ */
+function mc_generate_category_icon( $source ) {
+	$path  = plugins_url( 'images/icons', __FILE__ ) . '/';
+	$src   = $path . str_replace( '.png', '.svg', $source->category_icon );
+	$hex   = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
+	$color = $hex . $source->category_color;
+	// Is this an event context or a category context?
+	if ( property_exists( $source, 'occur_id' ) ) {
+		$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $source->category_name );
+		$occur_id = $source->occur_id;
+		$context  = 'event';
+	} else {
+		$cat_name = esc_attr( $source->category_name );
+		$occur_id = $source->category_id;
+		$context  = 'category';
+	}
+	$label_id = 'cat_' . $occur_id;
+	$svg      = wp_remote_get( $src );
+	$image    = wp_remote_retrieve_body( $svg );
+	$image    = str_replace( '<svg ', '<svg role="img" aria-labelledby="' . $label_id . '" class="category-icon" style="color: ' . $color . '" ', $image );
+	$image    = str_replace( '<path ', "<title id='" . $label_id . "'>$cat_name</title><path ", $image );
+
+	update_option( 'mc_category_icon_' . $context . '_' . $source->category_id, $image );
+
+	return $image;
 }
 
 /**
@@ -2587,10 +2629,9 @@ function mc_category_key( $category ) {
 		$cat_name = ( '' === $cat_name ) ? '<span class="screen-reader-text">' . __( 'Untitled Category', 'my-calendar' ) . '</span>' : $cat_name;
 		$cat_key  = '';
 		if ( '' !== $cat->category_icon && $has_icons ) {
-			$file     = ( mc_is_custom_icon() ) ? str_replace( '.png', '.svg', $cat->category_icon ) : $cat->category_icon;
-			$type     = ( false !== stripos( $file, '.svg' ) ) ? 'svg' : 'png';
-			$style    = ( 'svg' === $type ) ? 'color:' . $hex . $cat->category_color : 'background:' . $hex . $cat->category_color;
-			$cat_key .= '<span class="category-color-sample ' . $type . '"><img src="' . $path . $file . '" alt="" style="' . $style . ';" /></span>' . $cat_name;
+			$image    = mc_category_icon( $cat );
+			$type     = ( stripos( $image, 'svg' ) ) ? 'svg' : 'img';
+			$cat_key .= '<span class="category-color-sample ' . $type . '">' . $image . '</span>' . $cat_name;
 		} elseif ( 'default' !== get_option( 'mc_apply_color' ) ) {
 			$cat_key .= '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' . $cat_name;
 		} else {
