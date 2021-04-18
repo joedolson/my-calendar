@@ -159,21 +159,3 @@ function mc_add_screen_option() {
 	);
 	add_screen_option( $option, $args );
 }
-
-add_filter( 'set-screen-option', 'mc_set_screen_option', 10, 3 );
-/**
- * Set the num per page value
- *
- * @param string $status Status.
- * @param string $option Option name.
- * @param string $value New value.
- *
- * @return string $value
- */
-function mc_set_screen_option( $status, $option, $value ) {
-	if ( 'mc_num_per_page' === $option ) {
-		update_user_meta( get_current_user_ID(), 'mc_num_per_page', $value );
-	}
-
-	return $value;
-}
