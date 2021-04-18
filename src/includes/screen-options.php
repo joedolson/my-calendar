@@ -150,7 +150,7 @@ function mc_set_event_editing( $status, $option, $value ) {
  * Add the screen option for num per page
  */
 function mc_add_screen_option() {
-	$items_per_page = ( get_option( 'mc_num_per_page' ) ) ? get_option( 'mc_num_per_page' ) : 50;
+	$items_per_page = apply_filters( 'mc_num_per_page_default', 50 );
 	$option         = 'per_page';
 	$args           = array(
 		'label'   => 'Events',
