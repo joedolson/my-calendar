@@ -352,47 +352,6 @@ function mc_generate_calendar_page( $slug ) {
 }
 
 /**
- * Recreates event occurrences if event occurrences being recreated
- */
-function mc_migrate_db() {
-	global $wpdb;
-
-	// Step 1) check if early escapement is needed.
-	$count  = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_event_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$count2 = $wpdb->get_var( 'SELECT count(1) from ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	// If both tables have rows, the drop failed and this should exit.
-	if ( $count2 > 0 && $count > 0 ) {
-		return;
-	}
-	if ( 0 === $count2 && 0 === $count ) {
-		return; // No events, migration unnecessary.
-	}
-	// Step 2) migrate events.
-	$events = $wpdb->get_results( 'SELECT event_id, event_begin, event_time, event_end, event_endtime, event_category FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	foreach ( $events as $event ) {
-		// assign endtimes to all events.
-		if ( '00:00:00' === $event->event_endtime && '00:00:00' !== $event->event_time ) {
-			$event->event_endtime = date( 'H:i:s', strtotime( "$event->event_time +1 hour" ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-			mc_flag_event( $event->event_id, $event->event_endtime );
-		}
-		// Set up category relationships if missing.
-		$cats = $wpdb->get_results( $wpdb->prepare( 'SELECT category_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d', $event->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		if ( ! $cats ) {
-			$cats = array( $event->event_category );
-			mc_set_category_relationships( $cats, $event->event_id );
-		}
-		$dates = array(
-			'event_begin'   => $event->event_begin,
-			'event_end'     => $event->event_end,
-			'event_time'    => $event->event_time,
-			'event_endtime' => $event->event_endtime,
-		);
-
-		mc_increment_event( $event->event_id, $dates );
-	}
-}
-
-/**
  * If an event has time values that are no longer valid in current versions of My Calendar, modify to usable values.
  *
  * @param int    $id event ID.

@@ -380,17 +380,6 @@ function my_calendar_settings() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		if ( isset( $_POST['remigrate'] ) ) {
-			echo "<div class='updated fade'><ol>";
-			echo '<li>' . __( 'Dropping occurrences database table', 'my-calendar' ) . '</li>';
-			mc_drop_table( 'my_calendar_event_table' );
-			echo '<li>' . __( 'Reinstalling occurrences database table.', 'my-calendar' ) . '</li>';
-			mc_upgrade_db();
-			echo '<li>' . __( 'Generating event occurrences.', 'my-calendar' ) . '</li>';
-			mc_migrate_db();
-			echo '<li>' . __( 'Event generation completed.', 'my-calendar' ) . '</li>';
-			echo '</ol></div>';
-		}
 		if ( isset( $_POST['mc_manage'] ) ) {
 			mc_update_management_settings( $_POST );
 			$permalinks = get_option( 'mc_use_permalinks' );
@@ -629,7 +618,6 @@ function mc_remote_db() {
 								}
 								?>
 								</li>
-								<li><?php mc_settings_field( 'remigrate', __( 'Re-generate event occurrences table.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( (int) get_site_option( 'mc_multisite' ) === 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
