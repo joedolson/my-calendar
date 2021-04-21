@@ -850,8 +850,7 @@ tr.problem .error {
 
 .event_time_label {
 	display: inline-block;
-	padding: .25em;
-	background: #ffc;
+	margin-left: 1em;
 }
 
 #my-calendar .inside div iframe {
