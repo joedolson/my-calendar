@@ -1361,7 +1361,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				$return = '
 					<p class="checkbox">
 						<label for="e_link">' . __( 'Event Link', 'my-calendar' ) . '</label> <input type="text" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label><br />
-						<span id="event_link_description">' . __( 'Link for additional event information', 'my-calendar' ) . '</span>
+						<span id="event_link_description">' . __( 'Link to event information outside of the calendar', 'my-calendar' ) . '</span>
 					</p>';
 			}
 			break;
