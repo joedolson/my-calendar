@@ -34,3 +34,5 @@ Contributors listed only since moving development to GitHub. [Github Contributor
 * [Josef Fallmann](https://github.com/joseffallman)
 * [Jessi Shank](https://github.com/shankj3)
 * [timlah](https://github.com/timlah)
+* [paaljoachim](https://github.com/paaljoachim)
+* [jongund](https://github.com/jongund)
