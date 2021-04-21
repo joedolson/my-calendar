@@ -166,7 +166,7 @@ function mc_generate_category_icon( $source ) {
 	$src   = $path . str_replace( '.png', '.svg', $source->category_icon );
 	$hex   = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color = $hex . $source->category_color;
-	// Is this an event context or a category context?
+	// Is this an event context or a category context.
 	if ( property_exists( $source, 'occur_id' ) ) {
 		$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $source->category_name );
 		$occur_id = $source->occur_id;
@@ -1624,6 +1624,10 @@ function mc_event_published( $event ) {
 function mc_event_is_hidden( $event ) {
 	if ( ! is_object( $event ) ) {
 		return false;
+	}
+	// Also hide events that are unpublished if the current user does not have permission to edit.
+	if ( ! mc_event_published( $event ) && ! mc_can_edit_event( $event->event_id ) ) {
+		return true;
 	}
 
 	$category = $event->event_category;
