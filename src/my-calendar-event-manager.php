@@ -3559,11 +3559,11 @@ function mc_recur_datetime_input( $data ) {
 		<p>
 			<label for="r_begin">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> ' . $picker_begin . '
 		</p>
-	</div>
-	<p>
-		<label for="r_end"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label>
-		 ' . $picker_end . '
-	</p>';
+		<p>
+			<label for="r_end"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label>
+			 ' . $picker_end . '
+		</p>
+	</div>';
 
 	return $form;
 }

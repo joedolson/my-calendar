@@ -28,9 +28,9 @@
 		$( 'button.add-occurrence').on( 'click', function() {
 			var expanded = $( this ).attr( 'aria-expanded' );
 			if ( expanded == 'true' ) {
-				$( this ).attr( 'aria-expanded', 'false' ).addClass( 'dashicons-minus' ).removeClass( 'dashicons-plus' );
+				$( this ).attr( 'aria-expanded', 'false' ).find( '.dashicons' ).addClass( 'dashicons-plus' ).removeClass( 'dashicons-minus' );
 			} else {
-				$( this ).attr( 'aria-expanded', 'true' ).addClass( 'dashicons-plus' ).removeClass( 'dashicons-minus' );
+				$( this ).attr( 'aria-expanded', 'true' ).find( '.dashicons' ).addClass( 'dashicons-minus' ).removeClass( 'dashicons-plus' );
 			}
 			$( '.mc_add_new' ).toggle();
 		});
