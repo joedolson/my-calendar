@@ -385,15 +385,13 @@ function my_calendar_menu() {
 			} else {
 				$page_title = __( 'Add New Event', 'my-calendar' );
 			}
-			$edit = add_submenu_page( apply_filters( 'mc_locate_events_page', 'my-calendar' ), $page_title, __( 'Add New Event', 'my-calendar' ), 'mc_add_events', 'my-calendar', 'my_calendar_edit' );
 			add_action( "load-$edit", 'mc_event_editing' );
-			$manage = add_submenu_page( 'my-calendar', __( 'Manage Events', 'my-calendar' ), __( '&rarr; Manage Events', 'my-calendar' ), 'mc_add_events', 'my-calendar-manage', 'my_calendar_manage' );
+			$manage = add_submenu_page( 'my-calendar', __( 'Events', 'my-calendar' ), __( 'Events', 'my-calendar' ), 'mc_add_events', 'my-calendar-manage', 'my_calendar_manage' );
 			add_action( "load-$manage", 'mc_add_screen_option' );
-			$groups = add_submenu_page( 'my-calendar', __( 'Event Groups', 'my-calendar' ), __( '&rarr; Event Groups', 'my-calendar' ), 'mc_manage_events', 'my-calendar-groups', 'my_calendar_group_edit' );
+			$groups = add_submenu_page( 'my-calendar', __( 'Event Groups', 'my-calendar' ), __( 'Event Groups', 'my-calendar' ), 'mc_manage_events', 'my-calendar-groups', 'my_calendar_group_edit' );
 			add_action( "load-$groups", 'mc_add_screen_option' );
-			add_submenu_page( 'my-calendar', __( 'Add Event Locations', 'my-calendar' ), __( 'Add New Location', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-locations', 'my_calendar_add_locations' );
-			add_submenu_page( 'my-calendar', __( 'Manage Event Locations', 'my-calendar' ), __( '&rarr; Manage Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
-			add_submenu_page( 'my-calendar', __( 'Event Categories', 'my-calendar' ), __( 'Manage Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
+			add_submenu_page( 'my-calendar', __( 'Locations', 'my-calendar' ), __( 'Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
+			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
 		}
 		add_submenu_page( 'my-calendar', __( 'Style Editor', 'my-calendar' ), __( 'Style Editor', 'my-calendar' ), 'mc_edit_styles', 'my-calendar-styles', 'my_calendar_style_edit' );
 		add_submenu_page( 'my-calendar', __( 'Script Manager', 'my-calendar' ), __( 'Script Manager', 'my-calendar' ), 'mc_edit_behaviors', 'my-calendar-behaviors', 'my_calendar_behaviors_edit' );
