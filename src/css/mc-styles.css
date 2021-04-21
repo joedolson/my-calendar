@@ -706,15 +706,9 @@ select[name="event_recur"] {
 .mc-controls {
 	text-align: right;
 	margin: -10px 0 0;
-	padding: .5em;
-	background: rgba( 0,0,0,.05 );
-	border-radius: 5px;
 }
 
 .mc-controls.footer {
-	background: transparent;
-	border-radius: 0;
-	padding: 0;
 	margin: 20px 0 0;
 }
 
@@ -725,8 +719,12 @@ select[name="event_recur"] {
 
 .mc-controls li {
 	display: inline-block;
-	padding: 0 10px 0 0;
+	padding: 0 15px 0 0;
 	margin: 0;
+}
+
+.mc-controls li:last-of-type {
+	padding-right: 0;
 }
 
 .mc-controls .dashicons {
