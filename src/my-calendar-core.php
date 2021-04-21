@@ -1259,11 +1259,14 @@ function mc_core_autocomplete_search_icons() {
 			$path      = '/' . dirname( plugin_basename( __FILE__ ) ) . '/images/icons';
 			$iconlist  = mc_directory_list( $directory );
 		}
-		$results  = array_filter( $iconlist, function( $el ) use ( $query ) {
-			return ( false !== stripos( $el, $query ) );
-		});
+		$results  = array_filter(
+			$iconlist,
+			function( $el ) use ( $query ) {
+				return ( false !== stripos( $el, $query ) );
+			}
+		);
 		$response = array();
-		foreach( $results as $result ) {
+		foreach ( $results as $result ) {
 			$response[] = array(
 				'filename' => $result,
 				'svg'      => mc_get_svg( $result ),
