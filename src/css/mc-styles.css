@@ -99,15 +99,6 @@ span.mc-notice {
 	background: #ffa
 }
 
-.my-calendar-admin fieldset fieldset {
-	margin: 0 0 20px 0;
-	padding-top: 2px
-}
-
-.my-calendar-admin fieldset.categories {
-	margin-top: 20px;
-}
-
 #mceditor {
 	border: 1px solid #ddd;
 	margin: 0 0 5px
@@ -243,6 +234,10 @@ ol.mc-repeat-events {
 #my-calendar .break ul {
 	padding: 10px 10px 0;
 	margin-right: 180px
+}
+
+.my-calendar-admin .event_description {
+	margin-bottom: 1em;
 }
 
 .my-calendar-admin .mc-image-upload {
@@ -613,6 +608,7 @@ input[name="mc_uri"] {
 .my-calendar-admin .checkboxes {
 	margin: 0;
 }
+
 .my-calendar-admin .checkboxes:after {
 	content: '';
 	display: table;
