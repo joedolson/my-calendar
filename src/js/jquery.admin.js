@@ -94,7 +94,9 @@ jQuery(document).ready(function ($) {
 		showPanel( firstItem );
 	} else {
 		firstItem = $( '.mc-tabs .tabs' ).attr( 'data-default' );
-		showPanel( firstItem );
+		if ( 'undefined' !== typeof( firstItem ) ) {
+			showPanel( firstItem );
+		}
 	}
 	var tabs = document.querySelectorAll('.mc-tabs [role=tab]'); //get all role=tab elements as a variable
 	for (i = 0; i < tabs.length; i++) {
