@@ -179,10 +179,29 @@ function mc_generate_category_icon( $source ) {
 	$label_id = 'cat_' . $occur_id;
 	$svg      = wp_remote_get( $src );
 	$image    = wp_remote_retrieve_body( $svg );
-	$image    = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" style="color: ' . $color . '" ', $image );
+	$image    = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
 	$image    = str_replace( '<path ', "<title id='" . $label_id . "'>$cat_name</title><path ", $image );
 
 	update_option( 'mc_category_icon_' . $context . '_' . $source->category_id, $image );
+
+	return $image;
+}
+
+/**
+ * Get SVG icon by filename.
+ *
+ * @param string $file File name.
+ *
+ * @return string
+ */
+function mc_get_svg( $file ) {
+	$path     = plugins_url( 'images/icons', __FILE__ ) . '/';
+	$src      = $path . str_replace( '.png', '.svg', $file );
+	$label_id = sanitize_title( $file );
+	$svg      = wp_remote_get( $src );
+	$image    = wp_remote_retrieve_body( $svg );
+	$image    = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
+	$image    = str_replace( '<path ', "<title id='" . $label_id . "'>$file</title><path ", $image );
 
 	return $image;
 }
@@ -1629,7 +1648,6 @@ function mc_event_is_hidden( $event ) {
 	if ( ! mc_event_published( $event ) && ! mc_can_edit_event( $event->event_id ) ) {
 		return true;
 	}
-
 	$category = $event->event_category;
 	$private  = mc_get_private_categories();
 	$can_see  = apply_filters( 'mc_user_can_see_private_events', is_user_logged_in(), $event );

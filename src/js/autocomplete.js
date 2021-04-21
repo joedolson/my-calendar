@@ -67,4 +67,41 @@
 		});
 	}
 
+	if ( typeof( mcicons ) !== 'undefined' ) {
+		/* https://autocomplete.trevoreyre.com/#/javascript-component?id=getresultvalue */
+		new Autocomplete( '#mc-icons-autocomplete', {
+			search: input => {
+				const url = mcicons.ajaxurl;
+				return new Promise( resolve => {
+					if (input.length < 3) {
+						return resolve([])
+					}
+
+					var data = new FormData();
+					data.append( 'action', mcicons.action );
+					data.append( 'security', mcicons.security );
+					data.append( 'data', input );
+					const response = fetch(url, {
+						method: 'POST',
+						credentials: 'same-origin',
+						body: data
+					}).then(response => response.json())
+					.then(data => {
+						resolve(data.response)
+					})
+				})
+			},
+			onSubmit: result => {
+				var icon_field = document.getElementById( 'mc_category_icon' );
+
+				icon_field.value = result.filename;
+				$( icon_field ).trigger( 'change' );
+			},
+			renderResult: (result, props) => `
+				<li ${props}>${result.svg} ${result.filename}</li>
+			`,
+			getResultValue: result => result.filename
+		});
+	}
+
 }(jQuery));

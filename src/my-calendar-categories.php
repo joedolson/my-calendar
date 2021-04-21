@@ -374,8 +374,10 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 							if ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) {
 								$color  = ( strpos( $cur_cat->category_color, '#' ) !== 0 ) ? '#' : '';
 								$color .= $cur_cat->category_color;
+								$icon   = $cur_cat->category_icon;
 							} else {
 								$color = '';
+								$icon  = '';
 							}
 							$color = strip_tags( $color );
 							if ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) {
@@ -398,15 +400,10 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								?>
 							<li>
 							<label for="cat_icon"><?php _e( 'Category Icon', 'my-calendar' ); ?></label>
-							<select name="category_icon" id="cat_icon">
-								<option value=''><?php _e( 'None', 'my-calendar' ); ?></option>
-								<?php
-								foreach ( $iconlist as $value ) {
-									$selected = ( ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) && $cur_cat->category_icon === $value ) ? ' selected="selected"' : '';
-									echo "<option value='" . esc_attr( $value ) . "'$selected style='background: url(" . esc_url( str_replace( 'my-calendar/', '', $url ) . "$path/$value" ) . ") left 50% no-repeat;'>$value</option>";
-								}
-								?>
-							</select>
+							<div class="autocomplete" id="mc-icons-autocomplete">
+								<input class="autocomplete-input" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
+								<ul class="autocomplete-result-list"></ul>
+							</div>
 							</li>
 								<?php
 							}
@@ -700,12 +697,8 @@ function mc_manage_categories() {
 		<?php
 		$class = '';
 		foreach ( $categories as $cat ) {
-			$class = ( 'alternate' === $class ) ? '' : 'alternate';
-			if ( ! $cat->category_icon && 'true' !== get_option( 'mc_hide_icons' ) ) {
-				$icon_src = ( mc_file_exists( $cat->category_icon ) ) ? mc_get_file( $cat->category_icon, 'url' ) : plugins_url( 'my-calendar/images/icons/' . str_replace( '.png', '.svg', $cat->category_icon ) );
-			} else {
-				$icon_src = false;
-			}
+			$class      = ( 'alternate' === $class ) ? '' : 'alternate';
+			$icon       = mc_category_icon( $cat );
 			$background = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '' . $cat->category_color;
 			$foreground = mc_inverse_color( $background );
 			$cat_name   = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
@@ -723,7 +716,7 @@ function mc_manage_categories() {
 			}
 			?>
 			</td>
-			<td style="background-color:<?php echo $background; ?>;color: <?php echo $foreground; ?>"><?php echo ( $icon_src ) ? "<img src='$icon_src' alt='' />" : ''; ?> <?php echo ( '#' !== $background ) ? $background : ''; ?></td>
+			<td style="background-color:<?php echo $background; ?>;color: <?php echo $foreground; ?>;fill: <?php echo $foreground; ?>"><?php echo ( $icon ) ? $icon : ''; ?> <?php echo ( '#' !== $background ) ? $background : ''; ?></td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 			<td>
 				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"

@@ -385,12 +385,20 @@ strong.label {
 	vertical-align: baseline;
 }
 
+#mc-icons-autocomplete .autocomplete-result-list svg {
+	max-width: 40px;
+	vertical-align: middle;
+}
+
 .mc-categories th:nth-of-type(5), .mc-categories th:nth-of-type(6), .mc-categories th:nth-of-type(7) {
 	width: 50px;
 }
 
-.mc-categories td img {
-	vertical-align: bottom;
+.mc-categories td img,
+.mc-categories td svg {
+	max-width: 40px;
+	vertical-align: middle;
+	margin-right: 10px;
 }
 
 .jcd-wide {

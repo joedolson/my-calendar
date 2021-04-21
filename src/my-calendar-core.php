@@ -272,7 +272,7 @@ function mc_generate_category_styles() {
 				// always an anchor as of 1.11.0, apply also to title.
 				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
 				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor;}";
-				$category_styles .= "\n.mc-main .$class svg.category-icon { background: $inverse; }";
+				$category_styles .= "\n.mc-main .$class svg.category-icon { fill: $color; background: $inverse; }";
 			}
 			// Variables aren't dependent on options.
 			$category_vars .= '--category-' . $class . ': ' . $color . '; ';
@@ -1163,6 +1163,17 @@ function mc_scripts() {
 		wp_enqueue_style( 'wp-color-picker' );
 		// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
 		wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
+		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
+		wp_localize_script(
+			'mc-autocomplete',
+			'mcicons',
+			array(
+				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
+				'security' => wp_create_nonce( 'mc-search-icons' ),
+				'action'   => 'mc_core_autocomplete_search_icons',
+			)
+		);
 	}
 }
 
@@ -1221,6 +1232,51 @@ function mc_core_autocomplete_search_pages() {
 	}
 }
 
+add_action( 'wp_ajax_mc_core_autocomplete_search_icons', 'mc_core_autocomplete_search_icons' );
+/**
+ * Add SVG icon lookup for category pages.
+ */
+function mc_core_autocomplete_search_icons() {
+	if ( isset( $_REQUEST['action'] ) && 'mc_core_autocomplete_search_icons' === $_REQUEST['action'] ) {
+		$security = $_REQUEST['security'];
+		if ( ! wp_verify_nonce( $security, 'mc-search-icons' ) ) {
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => array( 'error' => 'Invalid security value.' ),
+				)
+			);
+		}
+
+		$query = $_REQUEST['data'];
+		$dir   = plugin_dir_path( __FILE__ );
+		if ( mc_is_custom_icon() ) {
+			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
+			$path      = '/my-calendar-custom';
+			$iconlist  = mc_directory_list( $directory );
+		} else {
+			$directory = dirname( __FILE__ ) . '/images/icons/';
+			$path      = '/' . dirname( plugin_basename( __FILE__ ) ) . '/images/icons';
+			$iconlist  = mc_directory_list( $directory );
+		}
+		$results  = array_filter( $iconlist, function( $el ) use ( $query ) {
+			return ( false !== stripos( $el, $query ) );
+		});
+		$response = array();
+		foreach( $results as $result ) {
+			$response[] = array(
+				'filename' => $result,
+				'svg'      => mc_get_svg( $result ),
+			);
+		}
+		wp_send_json(
+			array(
+				'success'  => 1,
+				'response' => $response,
+			)
+		);
+	}
+}
 
 add_action( 'wp_ajax_delete_occurrence', 'mc_ajax_delete_occurrence' );
 /**
