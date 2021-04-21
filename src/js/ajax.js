@@ -84,5 +84,19 @@
 				$( '.event_time_label' ).hide();
 			}
 		});
+
+		var hide_end_checked = $( 'input[id="e_hide_end"]' ).prop( "checked" );
+		if ( hide_end_checked ) {
+			$( 'label[for=mc_event_endtime] span' ).show();
+		}
+
+		$( 'input[id="e_hide_end"]' ).change( function() {
+			var checked = $(this).prop( "checked" );
+			if ( checked ) {
+				$( 'label[for=mc_event_endtime] span' ).show();
+			} else {
+				$( 'label[for=mc_event_endtime] span' ).hide();
+			}
+		});
 	});
 }(jQuery));

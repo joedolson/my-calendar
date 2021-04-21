@@ -3440,7 +3440,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
 		</p>
 		<p>
-		<label for="mc_event_endtime">' . __( 'End Time', 'my-calendar' ) . '</label>
+		<label for="mc_event_endtime">' . __( 'End Time', 'my-calendar' ) . '<span class="hidden">' . __( ' (hidden)', 'my-calendar' ) . '</span></label>
 		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
 		</p>
 		<p>

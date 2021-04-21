@@ -153,7 +153,7 @@ span.mc-notice {
 }
 
 #e_schedule .columns {
-	grid-template-columns: 8em 8em 1fr 1fr;
+	grid-template-columns: 10em 10em 1fr 1fr;
 	align-items: start;
 }
 
@@ -851,6 +851,10 @@ tr.problem .error {
 .event_time_label {
 	display: inline-block;
 	margin-left: 1em;
+}
+
+.my-calendar-admin .hidden {
+	display: none;
 }
 
 #my-calendar .inside div iframe {
