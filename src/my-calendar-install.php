@@ -487,10 +487,6 @@ function my_calendar_backup( $process, $plugin ) {
 		$to   = dirname( __FILE__ ) . '/../styles_backup/';
 		$from = dirname( __FILE__ ) . '/styles/';
 		my_calendar_copyr( $from, $to );
-
-		$to   = dirname( __FILE__ ) . '/../icons_backup/';
-		$from = dirname( __FILE__ ) . '/images/icons/';
-		my_calendar_copyr( $from, $to );
 	}
 }
 
@@ -504,12 +500,6 @@ function my_calendar_recover( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) && 'my-calendar/my-calendar.php' === $plugin['plugin'] ) {
 		$from = dirname( __FILE__ ) . '/../styles_backup/';
 		$to   = dirname( __FILE__ ) . '/styles/';
-		my_calendar_copyr( $from, $to );
-		if ( is_dir( $from ) ) {
-			my_calendar_rmdirr( $from );
-		}
-		$from = dirname( __FILE__ ) . '/../icons_backup/';
-		$to   = dirname( __FILE__ ) . '/images/icons/';
 		my_calendar_copyr( $from, $to );
 		if ( is_dir( $from ) ) {
 			my_calendar_rmdirr( $from );
