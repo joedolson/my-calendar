@@ -29,7 +29,7 @@
 			});
 
 		$(document).on( 'keydown', function(e) {
-			var keycode   = ( e.keyCode ? e.keyCode : e.which );
+			var keycode = ( e.keyCode ? e.keyCode : e.which );
 			if ( keycode == 27 ) {
 				$( '.mc-main ').removeClass( 'grid-open' );
 				$( '.calendar-event div.details' ).hide();
@@ -38,8 +38,8 @@
 
 		$(document).on( 'keydown', '.details a, .details object, .details :input, .details iframe, .details [tabindex]',
 			function(e) {
-				var keycode   = ( e.keyCode ? e.keyCode : e.which );
-				var action = $( ':focus' ).attr( 'data-action' );
+				var keycode = ( e.keyCode ? e.keyCode : e.which );
+				var action  = $( ':focus' ).attr( 'data-action' );
 				if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
 					e.preventDefault();
 					$( '.mc-toggle.close' ).trigger( 'focus' );
