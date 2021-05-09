@@ -107,10 +107,13 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Update default custom templates.
 * Bug fix: PHP warning on installations without saved locations.
 * Update settings configuration for default calendar URL.
+* Support filtering by multiple locations in calendar shortcodes or by filter.
+* Change: use a stateful heading for all calendar views.
+* Change: Support AJAX navigation on date select form.
+* Change: Replace decade-old category icons with SVG.
+* Bug fix: Override custom select styles from Twenty Twenty One
+* Three new actions: 'mc_event_happening', 'mc_event_future', 'mc_event_over' executed whenever an event is compared to the current time, usable for automatic transitions and notifications.
 
-- TODO: https://github.com/joedolson/my-calendar/issues/17
-- TODO: https://github.com/joedolson/my-calendar/issues/14
-- TODO: update default templates to better represent the capabilities of custom templating
 - TODO: Are there settings I can eliminate?
 
 = 3.2.17 =
