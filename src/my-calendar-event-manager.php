@@ -715,7 +715,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			if ( 'true' === get_option( 'mc_event_mail' ) ) {
 				// insert_id is last occurrence inserted in the db.
 				$event = mc_get_first_event( $event_id );
-				my_calendar_send_email( $event );
+				if ( 1 === (int) $event->event_flagged ) {
+					do_action( 'mc_notify_event_spam', $event );
+				} else {
+					my_calendar_send_email( $event );
+				}
 			}
 			if ( '0' === (string) $add['event_approved'] ) {
 				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ), false, 'draft-saved' );
