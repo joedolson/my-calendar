@@ -17,13 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Implement show on page selection fields
  */
 function mc_event_editing() {
-	$option = 'mc_show_on_page';
-	$args   = array(
+	$args = array(
 		'label'   => 'Show these fields',
 		'default' => get_option( 'mc_input_options' ),
 		'option'  => 'mc_show_on_page',
 	);
-	add_screen_option( $option, $args );
+	add_screen_option( 'mc_show_on_page', $args );
 }
 
 add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );

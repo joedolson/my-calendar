@@ -1089,8 +1089,7 @@ function mc_show_edit_block( $field ) {
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
 	$screen = get_current_screen();
-	$option = $screen->get_option( 'mc_show_on_page', 'option' );
-	$show   = get_user_meta( $user, $option, true );
+	$show   = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = $screen->get_option( 'mc_show_on_page', 'default' );
 	}
@@ -1125,7 +1124,7 @@ function mc_show_edit_block( $field ) {
 function mc_edit_block_is_visible( $field ) {
 	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
 	$input = get_option( 'mc_input_options' );
-	// Array of all options in off position.
+	// Array of all options in default position.
 	$defaults = array(
 		'event_location_dropdown' => 'on',
 		'event_short'             => 'on',
@@ -1144,16 +1143,17 @@ function mc_edit_block_is_visible( $field ) {
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
 	$screen = get_current_screen();
-	$option = $screen->get_option( 'mc_show_on_page', 'option' );
-	$show   = get_user_meta( $user, $option, true );
+	$show   = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = $screen->get_option( 'mc_show_on_page', 'default' );
 	}
+
 	// if this doesn't exist in array, return false. Field is hidden.
-	if ( ! isset( $input[ $field ] ) || ! isset( $show[ $field ] ) ) {
+	if ( ! isset( $input[ $field ] ) && ! isset( $show[ $field ] ) ) {
 		return false;
 	}
 	if ( $admin ) {
+		// Why is $show empty? I'm not getting the user option? May not exist?
 		if ( isset( $show[ $field ] ) && 'on' === $show[ $field ] ) {
 			return true;
 		} else {
@@ -2212,8 +2212,7 @@ function mc_list_events() {
 		$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 		$user           = get_current_user_id();
 		$screen         = get_current_screen();
-		$option         = $screen->get_option( 'per_page', 'option' );
-		$items_per_page = get_user_meta( $user, $option, true );
+		$items_per_page = get_user_meta( $user, 'per_page', true );
 		if ( empty( $items_per_page ) || $items_per_page < 1 ) {
 			$items_per_page = $screen->get_option( 'per_page', 'default' );
 		}
