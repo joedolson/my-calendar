@@ -947,7 +947,7 @@ function mc_remote_db() {
 						<legend><?php _e( 'Event Scheduling Defaults', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_event_link_expires', __( 'Event links expire after event passes.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_no_fifth_week', __( 'If a recurring event falls on a date that doesn\'t exist (like the 5th Wednesday in February), move it back one week.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_no_fifth_week', __( 'If a recurring event falls on a date that does not exist, move it back one week.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_skip_holidays', __( 'If an event coincides with an event in the designated "Holiday" category, do not show the event.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 						</ul>
 					</fieldset>
