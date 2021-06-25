@@ -727,7 +727,7 @@ function mc_remote_db() {
 								$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
 							}
 							?>
-							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open calendar links to event details', 'my-calendar' ), '', $note, $atts, 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open event links in single event view', 'my-calendar' ), '', $note, $atts, 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_no_link', __( 'Disable calendar links', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
