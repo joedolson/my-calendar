@@ -88,7 +88,7 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 
 * Replace date picker with the Duet Design Systems accessible date picker.
 * Accessibility & usability improvements to adding additional occurrences to an event. (DB change)
-* Add support for custom fields on locations. See demo at [post example to Github]
+* Add support for custom fields on locations. See demo at [TODO: post example to Github]
 * Numerous minor back-end UX changes.
 * Bug fix: Deleting a location from the location manager should not send user to the location editor.
 * Link location title to edit screen in location manager
@@ -113,8 +113,11 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Change: Replace decade-old category icons with SVG.
 * Bug fix: Override custom select styles from Twenty Twenty One
 * Three new actions: 'mc_event_happening', 'mc_event_future', 'mc_event_over' executed whenever an event is compared to the current time, usable for automatic transitions and notifications.
-
-- TODO: Are there settings I can eliminate?
+* Disable sending email notifications for Spam events. Add action to optionally handle spam notifications.
+* New setting to control whether plugin settings are removed on uninstall.
+* Text changes for clarity
+* Remove the process shortcodes option. Shortcodes can be disabled using 'mc_process_shortcodes' filter.
+* Bug fix: Screen options weren't able to retrieve user settings correctly.
 
 = 3.2.17 =
 
