@@ -747,6 +747,7 @@ function mc_do_upgrades( $upgrade_path ) {
 		switch ( $upgrade ) {
 			case '3.3.0':
 				mc_upgrade_db();
+				add_option( 'mc_drop_settings', 'true' );
 				delete_option( 'mc_process_shortcodes' );
 				break;
 			case '3.1.13':

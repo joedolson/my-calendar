@@ -185,9 +185,10 @@ function my_calendar_import() {
  */
 function mc_update_management_settings( $post ) {
 	// Management settings.
-	$mc_api_enabled = ( ! empty( $post['mc_api_enabled'] ) && 'on' === $post['mc_api_enabled'] ) ? 'true' : 'false';
-	$mc_remote      = ( ! empty( $post['mc_remote'] ) && 'on' === $post['mc_remote'] ) ? 'true' : 'false';
-	$mc_drop_tables = ( ! empty( $post['mc_drop_tables'] ) && 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
+	$mc_api_enabled   = ( ! empty( $post['mc_api_enabled'] ) && 'on' === $post['mc_api_enabled'] ) ? 'true' : 'false';
+	$mc_remote        = ( ! empty( $post['mc_remote'] ) && 'on' === $post['mc_remote'] ) ? 'true' : 'false';
+	$mc_drop_tables   = ( ! empty( $post['mc_drop_tables'] ) && 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
+	$mc_drop_settings = ( ! empty( $post['mc_drop_settings'] ) && 'on' === $post['mc_drop_settings'] ) ? 'true' : 'false';
 	// Handle My Calendar primary URL.
 	$mc_uri = get_option( 'mc_uri' );
 	if ( isset( $post['mc_uri'] ) && ! isset( $post['mc_uri_id'] ) ) {
@@ -206,6 +207,7 @@ function mc_update_management_settings( $post ) {
 	update_option( 'mc_api_enabled', $mc_api_enabled );
 	update_option( 'mc_remote', $mc_remote );
 	update_option( 'mc_drop_tables', $mc_drop_tables );
+	update_option( 'mc_drop_settings', $mc_drop_settings );
 	update_option( 'mc_default_sort', $post['mc_default_sort'] );
 	update_option( 'mc_default_direction', $post['mc_default_direction'] );
 	if ( 2 === (int) get_site_option( 'mc_multisite' ) ) {
@@ -618,6 +620,7 @@ function mc_remote_db() {
 								?>
 								</li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+								<li><?php mc_settings_field( 'mc_drop_settings', __( 'Delete plugin settings on uninstall', 'my-calendar' ), 'true', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( (int) get_site_option( 'mc_multisite' ) === 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
 									mc_settings_field(
