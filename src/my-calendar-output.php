@@ -2227,7 +2227,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		'yr'     => $date['year'],
 		'month'  => $date['month'],
 		'dy'     => $date['day'],
-		'href'   => urlencode( mc_get_current_url() ),
+		'href'   => ( isset( $params['self'] ) && esc_url( $params['self'] ) ) ? urlencode( $params['self'] ) : urlencode( mc_get_current_url() ),
 	);
 
 	if ( 'list' === $format ) {
@@ -2569,7 +2569,7 @@ add_filter( 'my_calendar_body', 'mc_run_shortcodes', 10, 1 );
  * @return string Calendar body with shortcodes processed
  */
 function mc_run_shortcodes( $content ) {
-	$content = ( 'true' === get_option( 'mc_process_shortcodes' ) ) ? do_shortcode( $content ) : $content;
+	$content = ( 'true' === apply_filters( 'mc_process_shortcodes', 'true' ) ) ? do_shortcode( $content ) : $content;
 
 	return $content;
 }
@@ -3115,6 +3115,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
  */
 function mc_build_url( $add, $subtract, $root = '' ) {
 	$home = '';
+	$root = apply_filters( 'mc_build_url_root', $root );
 
 	if ( '' !== $root ) {
 		$home = $root;
@@ -3482,6 +3483,10 @@ function mc_refresh_cache( $action, $data, $event_id, $result ) {
 		// Cache Enabler.
 		if ( class_exists( 'Cache_Enabler' ) ) {
 			Cache_Enabler::clear_page_cache_by_post_id( $calendar );
+		}
+
+		if ( class_exists( 'WPO_Page_Cache' ) ) {
+			WPO_Page_Cache::delete_single_post_cache( $calendar );
 		}
 	}
 }

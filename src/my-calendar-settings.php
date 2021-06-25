@@ -296,7 +296,6 @@ function mc_update_output_settings( $post ) {
 	update_option( 'mc_event_registration', ( ! empty( $post['mc_event_registration'] ) && 'on' === $post['mc_event_registration'] ) ? 'true' : 'false' );
 	update_option( 'mc_short', ( ! empty( $post['mc_short'] ) && 'on' === $post['mc_short'] ) ? 'true' : 'false' );
 	update_option( 'mc_desc', ( ! empty( $post['mc_desc'] ) && 'on' === $post['mc_desc'] ) ? 'true' : 'false' );
-	update_option( 'mc_process_shortcodes', ( ! empty( $post['mc_process_shortcodes'] ) && 'on' === $post['mc_process_shortcodes'] ) ? 'true' : 'false' );
 	update_option( 'mc_event_link', ( ! empty( $post['mc_event_link'] ) && 'on' === $post['mc_event_link'] ) ? 'true' : 'false' );
 	update_option( 'mc_image', ( ! empty( $post['mc_image'] ) && 'on' === $post['mc_image'] ) ? 'true' : 'false' );
 	update_option( 'mc_show_weekends', ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false' );
@@ -835,7 +834,6 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_short', __( 'Short description', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_desc', __( 'Full description', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_image', __( 'Image', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_process_shortcodes', __( 'Process WordPress shortcodes in descriptions', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_event_link', __( 'External link', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_display_more', __( 'More details link', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_event_registration', __( 'Registration info', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
