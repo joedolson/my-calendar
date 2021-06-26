@@ -1914,7 +1914,7 @@ function mc_event_location_dropdown_block( $data ) {
 	$output           = '<div class="mc-event-location-dropdown">';
 	$autocomplete     = false;
 	$count            = mc_count_locations();
-	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 50 ) ) {
+	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 		$autocomplete = true;
 	}
 	if ( 0 !== $count ) {
@@ -1954,7 +1954,7 @@ function mc_event_location_dropdown_block( $data ) {
 		} else {
 			$location_label = ( $event_location && is_numeric( $event_location ) ) ? mc_get_location( $event_location )->location_label : '';
 			$output        .= '<div id="mc-locations-autocomplete" class="autocomplete">
-				<input class="autocomplete-input" type="text" id="l_preset" value="' . esc_attr( $location_label ) . '" />
+				<input class="autocomplete-input" type="text" placeholder="' . __( 'Search locations...', 'my-calendar' ) . '" id="l_preset" value="' . esc_attr( $location_label ) . '" />
 				<ul class="autocomplete-result-list"></ul>
 				<input type="hidden" name="location_preset" id="mc_event_location_value" value="' . esc_attr( $event_location ) . '" />
 			</div>';
