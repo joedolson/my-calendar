@@ -143,7 +143,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_link' ); ?>" name="<?php echo $this->get_field_name( 'mc_link' ); ?>" value="<?php echo $widget_link; ?>"/>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>"><?php _e( 'Show this text if there are no events today:', 'my-calendar' ); ?></label><br/>
+			<label for="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>"><?php _e( 'No events text', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_no_events_text' ); ?>" value="<?php echo $widget_text; ?>"/>
 		</p>
 		<p>
