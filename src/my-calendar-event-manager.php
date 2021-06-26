@@ -1615,7 +1615,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			?>
 		</div>
 			<?php
-			if ( ! empty( $_GET['date'] ) && 'S' !== $data->event_recur ) {
+			if ( ! empty( $_GET['date'] ) && ! ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ) {
 				$event = mc_get_event( $instance );
 				$date  = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
 				// Translators: Date of a specific event occurrence.
@@ -1727,7 +1727,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						?>
 						<div id='mc-accordion'>
 							<?php
-							if ( 'S' !== $data->event_recur ) {
+							if ( ! ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ) {
 								?>
 								<h4><span class='dashicons' aria-hidden='true'> </span><button type="button" class="button-link"><?php _e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
 								<div>
