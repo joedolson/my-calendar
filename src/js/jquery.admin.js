@@ -46,18 +46,25 @@ jQuery(document).ready(function ($) {
 		$('#event_span').hide();
 	});
 
+	// Set default conditions.
 	$( '#del_field' ).attr('disabled', 'disabled');
 	$( '#event_span' ).hide();
+	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 
 	$(".selectall").on( 'click', function() {
 		var checked_status = $(this).prop('checked');
+		if ( checked_status ) {
+			// Activate actions on bulk checked.
+			$( '.mc-actions input[type="submit"]' ).removeAttr( 'disabled' );
+		} else {
+			$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
+		}
 		var checkbox_name  = $(this).attr('data-action');
 		$('input[name="' + checkbox_name + '[]"]').each( function() {
 			$(this).prop('checked', checked_status);
 		});
 	});
 
-	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 
 	$( '.row-actions' ).on( 'focus', 'a', function() {
 		$( this ).parent( '.row-actions' ).css( { 'left' : 'auto' } );
@@ -70,11 +77,11 @@ jQuery(document).ready(function ($) {
 	$( '#my-calendar-admin-table input' ).on( 'change', function (e) {
 		var checked_status = $(this).prop('checked');
 		if ( checked_status ) {
-			$( '.mc-actions input' ).removeAttr( 'disabled' );
+			$( '.mc-actions input[type="submit"]' ).removeAttr( 'disabled' );
 		} else {
 			checkboxes = $( '#my-calendar-admin-table input:checked' );
 			if ( checkboxes.length == 0 ) {
-				$( '.mc-actions input' ).attr( 'disabled', 'disabled' );
+				$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 			}
 		}
 	});
