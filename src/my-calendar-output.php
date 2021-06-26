@@ -715,12 +715,15 @@ function mc_event_classes( $event, $type ) {
 	}
 	$primary = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
 
+	$is_recurring = ( !( 'S' === $event->event_recur || 'S1' === $event->event_recur ) ) ? 'recurring-event' : 'single-event';
+
 	$classes = array(
 		'mc-' . $uid,
 		$type . '-event',
 		mc_category_class( $event, 'mc_' ),
 		$date_relation,
 		$primary,
+		$is_recurring,
 	);
 
 	if ( $event->event_begin !== $event->event_end ) {
