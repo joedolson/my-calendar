@@ -1953,7 +1953,7 @@ function mc_event_location_dropdown_block( $data ) {
 			$output .= '</select>' . $current_location . '</p>';
 		} else {
 			$location_label = ( $event_location && is_numeric( $event_location ) ) ? mc_get_location( $event_location )->location_label : '';
-			$output        .= '<div id="mc-locations-autocomplete" class="autocomplete">
+			$output        .= '<div id="mc-locations-autocomplete" class="mc-autocomplete autocomplete">
 				<input class="autocomplete-input" type="text" placeholder="' . __( 'Search locations...', 'my-calendar' ) . '" id="l_preset" value="' . esc_attr( $location_label ) . '" />
 				<ul class="autocomplete-result-list"></ul>
 				<input type="hidden" name="location_preset" id="mc_event_location_value" value="' . esc_attr( $event_location ) . '" />

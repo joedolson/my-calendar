@@ -400,7 +400,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								?>
 							<li>
 							<label for="cat_icon"><?php _e( 'Category Icon', 'my-calendar' ); ?></label>
-							<div class="autocomplete" id="mc-icons-autocomplete">
+							<div class="mc-autocomplete autocomplete" id="mc-icons-autocomplete">
 								<input class="autocomplete-input" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
 								<ul class="autocomplete-result-list"></ul>
 							</div>

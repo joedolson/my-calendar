@@ -390,6 +390,14 @@ strong.label {
 	vertical-align: middle;
 }
 
+.autocomplete.mc-autocomplete {
+	max-width: 600px;
+}
+
+.autocomplete.mc-autocomplete > input {
+	padding: 4px;
+}
+
 .mc-categories th:nth-of-type(5), .mc-categories th:nth-of-type(6), .mc-categories th:nth-of-type(7) {
 	width: 50px;
 }

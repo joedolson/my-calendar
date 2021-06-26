@@ -522,7 +522,7 @@ function my_calendar_settings() {
 									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
 								}
 								?>
-								<li id="mc-pages-autocomplete" class="autocomplete">
+								<li id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
 								<?php
 								mc_settings_field(
 									'mc_uri_query',
