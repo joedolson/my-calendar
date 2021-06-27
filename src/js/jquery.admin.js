@@ -246,13 +246,13 @@ var mediaPopup = '';
 			.on('click', '.textfield-field', function (e) {
 				e.preventDefault();
 				var $self = $(this),
-					$inpField = $self.parent('.field-holder').find('#e_image'),
-					$idField = $self.parent('.field-holder').find('#e_image_id'),
-					$displayField = $self.parent('.field-holder').find('.event_image');
+					$inpField = document.querySelector('#e_image'),
+					$idField = document.querySelector('#e_image_id'),
+					$displayField = document.querySelector('.event_image');
 				clear_existing();
 				mediaPopup = wp.media({
 					multiple: false, // add, reset, false.
-					title: 'Choose an Uploaded Document',
+					title: 'Choose an Image',
 					button: {
 						text: 'Select'
 					}
@@ -267,11 +267,11 @@ var mediaPopup = '';
 					if (selection) {
 						id = selection.first().attributes.id;
 						height = mcAdmin.thumbHeight;
-						width = ( ( selection.first().attributes.width ) / ( selection.first().attributes.height ) ) * height;
+						width = Math.round( ( ( selection.first().attributes.width ) / ( selection.first().attributes.height ) ) * height );
 						img = "<img src='" + selection.first().attributes.url + "' width='" + width + "' height='" + height + "' />";
-						$inpField.val(selection.first().attributes.url);
-						$idField.val(id);
-						$displayField.html(img);
+						$inpField.value = selection.first().attributes.url;
+						$idField.value = id;
+						$displayField.innerHTML = img;
 					}
 				});
 				mediaPopup.open();
