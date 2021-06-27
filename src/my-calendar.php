@@ -385,6 +385,7 @@ function my_calendar_menu() {
 			} else {
 				$page_title = __( 'Add New Event', 'my-calendar' );
 			}
+			add_submenu_page( 'my-calendar', $page_title, __( 'Add Event', 'my-calendar' ), 'mc_add_events', 'my-calendar', 'my_calendar_edit' );
 			$manage = add_submenu_page( 'my-calendar', __( 'Events', 'my-calendar' ), __( 'Events', 'my-calendar' ), 'mc_add_events', 'my-calendar-manage', 'my_calendar_manage' );
 			add_action( "load-$manage", 'mc_add_screen_option' );
 			$groups = add_submenu_page( 'my-calendar', __( 'Event Groups', 'my-calendar' ), __( 'Event Groups', 'my-calendar' ), 'mc_manage_events', 'my-calendar-groups', 'my_calendar_group_edit' );
