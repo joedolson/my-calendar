@@ -732,6 +732,13 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$event_ids = mc_get_occurrences( $event_id );
 					if ( ! empty( $event_ids ) ) {
 						$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
+						$edit_link   = add_query_arg(
+							array(
+								'event_id' => $event_id,
+								'mode'     => 'edit',
+							),
+							admin_url( 'admin.php?page=my-calendar' )
+						);
 						$event_error = mc_error_check( $event_ids[0]->occur_event_id );
 					}
 				} else {
@@ -744,6 +751,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
+						$message .= sprintf( __( ' <a href="%s">Edit Event</a>', 'my-calendar' ), $edit_link );
 					} else {
 						$message .= __( ' No link was generated for this event. There may be an unknown error.', 'my-calendar' );
 					}
@@ -3699,7 +3707,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	$controls  = array();
 
 	if ( 'edit' === $mode ) {
-		$publish_text = __( 'Save', 'my-calendar' );
+		$publish_text = __( 'Update', 'my-calendar' );
 		$event_id     = $event->event_id;
 		$args         = '';
 		if ( isset( $_GET['date'] ) ) {
