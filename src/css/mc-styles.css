@@ -632,10 +632,9 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
-.mc_permissions {
-	float: left;
-	width: 33%;
-	margin-bottom: 1em;
+.mc-permissions-wrapper {
+	display: grid;
+	grid-template-columns: repeat( 3, 33.3333333% );
 }
 
 .my-calendar-admin .mc_permissions .checkboxes li {
@@ -921,9 +920,9 @@ tr.problem .error {
 	.my-calendar-admin .tablenav {
 		float: none;
 	}
-	
-	.mc_permissions {
-		width: 50%;
+
+	.mc-permissions-wrapper {
+		grid-template-columns: repeat( 2, 50% );
 	}
 
 	.jcd-narrow {

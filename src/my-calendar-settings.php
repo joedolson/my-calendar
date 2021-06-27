@@ -1020,6 +1020,7 @@ function mc_remote_db() {
 
 					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-permissions' ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+						<div class="mc-permissions-wrapper">
 		<?php
 		global $wp_roles;
 		$role_container = '';
@@ -1050,6 +1051,7 @@ function mc_remote_db() {
 		}
 		echo $role_container;
 		?>
+						</div>
 						<p>
 							<input type="submit" name="mc_permissions" class="button-primary" value="<?php _e( 'Save Permissions', 'my-calendar' ); ?>"/>
 						</p>
