@@ -751,6 +751,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
+						// Translators: URL to edit event.
 						$message .= sprintf( __( ' <a href="%s">Edit Event</a>', 'my-calendar' ), $edit_link );
 					} else {
 						$message .= __( ' No link was generated for this event. There may be an unknown error.', 'my-calendar' );
