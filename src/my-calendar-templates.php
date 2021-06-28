@@ -294,7 +294,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$hcard = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
 	if ( 'true' === $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
-		$hcard .= ( '' !== $label ) ? '<strong class="org fn" itemprop="name">' . $link . '</strong>' : '';
+		$hcard .= ( '' !== $label ) ? '<div><strong class="org fn" itemprop="name">' . $link . '</strong></div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' !== $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
 		$hcard .= ( '' !== $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
@@ -868,7 +868,17 @@ function mc_generate_map( $event, $source = 'event' ) {
 			return '';
 		}
 		$hcard    = mc_hcard( $event, 'true', false, $source );
-		$hcard    = wp_kses( str_replace( array( '</div>', '<br />', '<br><br>' ), '<br>', $hcard ), array( 'br' => array() ) );
+		$hcard    = wp_kses(
+			str_replace(
+				array( '</div>', '<br />', '<br><br>' ),
+				'<br>',
+				$hcard
+			),
+			array(
+				'br' => array(),
+				'strong' => array(),
+			)
+		);
 		$html     = addslashes( apply_filters( 'mc_map_html', $hcard, $event ) );
 		$width    = apply_filters( 'mc_map_height', '100%', $event );
 		$height   = apply_filters( 'mc_map_height', '300px', $event );
