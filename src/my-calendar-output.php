@@ -3309,7 +3309,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 				$url     = mc_maplink( $value, 'url', 'location' );
 				$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
 			} elseif ( 'hcard' === $datatype ) {
-				$label   = mc_hcard( $value, true, true, 'location' );
+				$label   = mc_hcard( $value, 'true', 'true', 'location' );
 				$output .= "<li>$label</li>";
 			} elseif ( '' !== $template ) {
 				if ( mc_key_exists( $template ) ) {

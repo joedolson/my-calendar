@@ -867,7 +867,7 @@ function mc_generate_map( $event, $source = 'event' ) {
 		if ( strlen( $address ) < 10 && ! $latlng ) {
 			return '';
 		}
-		$hcard    = mc_hcard( $event, true, false, $source );
+		$hcard    = mc_hcard( $event, 'true', false, $source );
 		$hcard    = wp_kses( str_replace( array( '</div>', '<br />', '<br><br>' ), '<br>', $hcard ), array( 'br' => array() ) );
 		$html     = addslashes( apply_filters( 'mc_map_html', $hcard, $event ) );
 		$width    = apply_filters( 'mc_map_height', '100%', $event );
