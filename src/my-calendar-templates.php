@@ -875,7 +875,7 @@ function mc_generate_map( $event, $source = 'event' ) {
 				$hcard
 			),
 			array(
-				'br' => array(),
+				'br'     => array(),
 				'strong' => array(),
 			)
 		);
