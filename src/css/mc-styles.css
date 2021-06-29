@@ -346,10 +346,19 @@ ol.mc-repeat-events {
 	float: right
 }
 
+label[for=l_preset] {
+	display: block;
+}
+
 input[id=e_label], input[id=e_title], input[id=location_label], textarea[id=mc_twitter] {
 	font-size: 1.4em;
 	padding: 9px;
 	width: 100%;
+	margin-bottom: .5em;
+}
+
+input[id=e_link], input[id=e_image] {
+	max-width: 100%;
 	margin-bottom: .5em;
 }
 
@@ -931,6 +940,14 @@ tr.problem .error {
 
 	.jcd-wide {
 		width: 100%;
+	}
+
+	#l_preset {
+		width: 100%;
+	}
+
+	#my-calendar .columns {
+		grid-template-columns: repeat( 1, 1fr );
 	}
 
 	#e_schedule .columns,
