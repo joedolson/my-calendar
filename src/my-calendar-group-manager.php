@@ -104,7 +104,10 @@ function my_calendar_group_edit() {
 		<p>
 			<?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you started from. You will also see a set of checkboxes to choose which events you want to apply these changes to.', 'my-calendar' ); ?>
 		</p>
-
+		<div class="mc-tablinks">
+			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>">My Events</strong>
+			<a href="#my-calendar-admin-table" aria-current="page">Event Groups</a>
+		</div>
 		<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
 			<div class="ui-sortable meta-box-sortables">
@@ -261,7 +264,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	$group   = "<div class='group $class'>";
 	$group  .= $warning;
 	$group  .= ( 'apply' === $type ) ? '<fieldset><legend>' . __( 'Apply these changes to:', 'my-calendar' ) . '</legend>' : '';
-	$group  .= ( 'break' === $type ) ? "<form method='post' action='" . admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) . "'>
+	$group  .= ( 'break' === $type ) ? "<form method='post' action='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) . "'>
 	<div><input type='hidden' value='" . esc_attr( $group_id ) . "' name='group_id' /><input type='hidden' value='" . esc_attr( $type ) . "' name='event_action' /><input type='hidden' name='_wpnonce' value='$nonce' />
 	</div>" : '';
 	$group  .= "<ul class='checkboxes'>";
@@ -338,7 +341,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	?>
 	<div class="postbox-container jcd-wide">
 	<div class="metabox-holder">
-	<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ); ?>">
+	<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ); ?>">
 	<div>
 		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 		<input type="hidden" name="group_id" value="<?php echo absint( $group_id ); ?>"/>
@@ -802,7 +805,7 @@ function mc_check_group_data( $action, $post ) {
 	$url_ok   = 0;
 	$title_ok = 0;
 	$submit   = array();
-	if ( get_magic_quotes_gpc() ) {
+	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) {
 		$post = array_map( 'stripslashes_deep', $post );
 	}
 	if ( ! wp_verify_nonce( $post['event_nonce_name'], 'event_nonce' ) ) {
@@ -1005,13 +1008,13 @@ function mc_list_groups() {
 	<div class='inside'>
 		<ul class="links">
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php _e( 'Grouped Events', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php _e( 'Grouped Events', 'my-calendar' ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups&amp;limit=ungrouped#my-calendar-admin-table' ); ?>"><?php _e( 'Ungrouped Events', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ); ?>"><?php _e( 'Ungrouped Events', 'my-calendar' ); ?></a>
 			</li>
 			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-groups#my-calendar-admin-table' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
 			</li>
 		</ul>
 	<p><?php _e( 'Check a set of events to group them for mass editing.', 'my-calendar' ); ?></p>
@@ -1033,7 +1036,7 @@ function mc_list_groups() {
 	}
 	if ( ! empty( $events ) ) {
 		?>
-		<form action="<?php echo admin_url( 'admin.php?page=my-calendar-groups' ); ?>" method="post">
+		<form action="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true' ); ?>" method="post">
 			<div>
 				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				<input type="hidden" name="event_action" value="group"/>
@@ -1046,7 +1049,7 @@ function mc_list_groups() {
 				<thead>
 					<tr>
 						<?php
-						$admin_url = admin_url( "admin.php?page=my-calendar-groups&order=$sort&paged=$current" );
+						$admin_url = admin_url( "admin.php?page=my-calendar-manage&groups=true&order=$sort&paged=$current" );
 						$url       = add_query_arg( 'sort', '1', $admin_url );
 						$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
 						$url       = add_query_arg( 'sort', '8', $admin_url );
@@ -1093,7 +1096,7 @@ function mc_list_groups() {
 						<?php
 						if ( $can_edit ) {
 							if ( mc_event_is_grouped( $event->event_group_id ) ) {
-								$edit_link = admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
+								$edit_link = admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
 							} else {
 								$edit_link = '';
 							}
@@ -1117,7 +1120,7 @@ function mc_list_groups() {
 								<?php
 								if ( mc_event_is_grouped( $event->event_group_id ) ) {
 									?>
-									<a href="<?php echo admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ); ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
+									<a href="<?php echo admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ); ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
 									<?php
 								} else {
 									echo '<em>' . __( 'Ungrouped', 'my-calendar' ) . '</em>';

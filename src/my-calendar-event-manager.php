@@ -460,6 +460,9 @@ function mc_show_notice( $message, $echo = true, $code = false ) {
  */
 function my_calendar_manage() {
 	my_calendar_check();
+	if ( isset( $_GET['groups'] ) && 'true' === $_GET['groups'] ) {
+		my_calendar_group_edit();
+	}
 	global $wpdb;
 	if ( isset( $_GET['mode'] ) && 'delete' === $_GET['mode'] ) {
 		$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
@@ -566,7 +569,10 @@ function my_calendar_manage() {
 		<h1 id="mc-manage" class="wp-heading-inline"><?php _e( 'Manage Events', 'my-calendar' ); ?></h1>
 		<a href="<?php echo admin_url( 'admin.php?page=my-calendar' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
-
+		<div class="mc-tablinks">
+			<a href="#my-calendar-admin-table" aria-current="page">My Events</strong>
+			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true' ); ?>">Event Groups</a>
+		</div>
 		<div class="postbox-container jcd-wide">
 			<div class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
@@ -1762,7 +1768,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 								<?php
 							}
 							if ( 0 !== (int) $data->event_group_id ) {
-								$edit_group_url = admin_url( 'admin.php?page=my-calendar-groups&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
+								$edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
 								?>
 								<h4><span class='dashicons' aria-hidden='true'> </span><button type="button" class="button-link"><?php _e( 'Related Events:', 'my-calendar' ); ?></button> (<a href='<?php echo $edit_group_url; ?>'><?php _e( 'Edit group', 'my-calendar' ); ?></a>)
 								</h4>
@@ -2420,7 +2426,7 @@ function mc_list_events() {
 					} else {
 						$view_url = '';
 					}
-					$group_url  = admin_url( "admin.php?page=my-calendar-groups&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
+					$group_url  = admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
 					$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" );
 					$can_edit   = mc_can_edit_event( $event );
 					if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {

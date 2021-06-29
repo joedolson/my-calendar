@@ -439,7 +439,7 @@ strong.label {
 	width: 100%;
 }
 
-.mc-tabs .tabs {
+.mc-tabs .tabs, .mc-tablinks {
 	position: relative;
 	border-bottom: 1px solid #ccc;
 	margin-bottom: 0;
@@ -452,7 +452,7 @@ strong.label {
 	float: none;
 }
 
-.mc-tabs .tabs button {
+.mc-tabs .tabs button, .mc-tablinks a {
 	display: inline-block;
 	padding: 4px 8px;
 	border-radius: 4px 4px 0 0;
@@ -463,7 +463,8 @@ strong.label {
 	border-bottom: 2px solid transparent;
 }
 
-.mc-tabs .tabs button[aria-selected=true]:after {
+.mc-tabs .tabs button[aria-selected=true]:after,
+.mc-tablinks a[aria-current=page]:after {
 	content: '';
 	position: absolute;
 	left: calc( 50% - 10px );
@@ -477,11 +478,14 @@ strong.label {
 }
 
 .mc-tabs .tabs button:hover,
-.mc-tabs .tabs button:focus {
-	border-bottom: 2px solid;
+.mc-tabs .tabs button:focus,
+.mc-tablinks a:hover,
+.mc-tablinks a:focus {
+	border-bottom: 2px solid #000;
 }
 
-.mc-tabs .tabs button[aria-selected=true] {
+.mc-tabs .tabs button[aria-selected=true],
+.mc-tablinks a[aria-current=page] {
 	background: #fff;
 }
 

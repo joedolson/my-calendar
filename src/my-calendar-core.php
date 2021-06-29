@@ -1102,7 +1102,7 @@ function mc_scripts() {
 		wp_enqueue_script( 'jquery-ui-accordion' );
 	}
 
-	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-groups' === $id ) {
+	if ( 'toplevel_page_my-calendar' === $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' ); // required for character counting.
 		if ( function_exists( 'wp_enqueue_media' ) && ! did_action( 'wp_enqueue_media' ) ) {
 			wp_enqueue_media();
