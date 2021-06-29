@@ -432,6 +432,18 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 				if ( mc_show_edit_block( 'event_image' ) ) {
 					?>
 					<div class='mc-image-upload field-holder'>
+						<div class="image_fields">
+						<input type="hidden" name="event_image_id" value="" class="textfield" id="e_image_id"/>
+						<label for="e_image">
+						<?php
+						_e( 'Featured Image', 'my-calendar' );
+						if ( ! mc_compare_group_members( $group_id, 'event_image' ) ) {
+							echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+						}
+						?>
+						</label>
+						<input type="text" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" placeholder="http://yourdomain.com/image.jpg"/> <button type='button' class="button textfield-field"><?php _e( 'Select', 'my-calendar' ); ?></button>
+						</div>
 						<?php
 						if ( ! empty( $data->event_image ) ) {
 							echo '<div class="event_image"><img src="' . esc_url( $image ) . '" alt="" /></div>';
@@ -439,16 +451,6 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 							echo '<div class="event_image"></div>';
 						}
 						?>
-						<input type="hidden" name="event_image_id" value="" class="textfield" id="e_image_id"/>
-						<label for="e_image">
-						<?php
-						_e( 'Add an image:', 'my-calendar' );
-						if ( ! mc_compare_group_members( $group_id, 'event_image' ) ) {
-							echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-						}
-						?>
-						</label>
-						<input type="text" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" placeholder="http://yourdomain.com/image.jpg"/> <button type='button' class="button textfield-field"><?php _e( 'Upload', 'my-calendar' ); ?></button>
 					</div>
 					<?php
 				} else {

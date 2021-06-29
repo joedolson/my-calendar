@@ -1327,7 +1327,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				<div class="mc-image-upload field-holder">
 					<div class="image_fields">
 						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />
-						<label for="e_image">' . __( 'Add an image:', 'my-calendar' ) . '</label><br /><input type="text" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button textfield-field">' . __( 'Upload', 'my-calendar' ) . '</button>
+						<label for="e_image">' . __( 'Featured Image', 'my-calendar' ) . '</label><br /><input type="text" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button textfield-field">' . __( 'Select', 'my-calendar' ) . '</button>
 					</div>';
 				if ( '' !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
