@@ -443,6 +443,7 @@ strong.label {
 	position: relative;
 	border-bottom: 1px solid #ccc;
 	margin-bottom: 0;
+	margin-top: 20px;
 }
 
 .mc-tabs .tabs li {
