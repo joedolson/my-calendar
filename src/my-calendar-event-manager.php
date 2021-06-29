@@ -1705,12 +1705,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							$span_checked = '';
 						}
 						?>
-					<p id="event_span">
+					<p id="event_span" class="checkboxes">
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
-					</p>
-					<p class="note">
-						<em><?php _e( 'Enter start and end dates/times for each occurrence of the event.', 'my-calendar' ); ?></em>
 					</p>
 					<ol class="mc-repeat-events">
 						<li id="event1" class="datetime-template">
