@@ -186,7 +186,7 @@ span.mc-notice {
 #my-calendar input[type=date],
 .recurring input[type=number],
 .recurring select {
-	padding: 8px;
+	padding: 8px 24px 8px 8px;
 }
 
 #event1 .new-field {
