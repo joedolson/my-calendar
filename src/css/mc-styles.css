@@ -184,9 +184,13 @@ span.mc-notice {
 
 #e_schedule input[type=time],
 #my-calendar input[type=date],
-.recurring input[type=number],
 .recurring select {
 	padding: 8px 24px 8px 8px;
+}
+
+.recurring input[type=number] {
+	padding: 8px;
+	width: 5em;
 }
 
 #event1 .new-field {
