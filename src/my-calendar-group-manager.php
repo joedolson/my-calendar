@@ -419,7 +419,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<p>
 						<label for="e_short">
 						<?php
-						_e( 'Event Short Description (<abbr title="hypertext markup language">HTML</abbr> allowed)', 'my-calendar' );
+						_e( 'Excerpt (<abbr title="hypertext markup language">HTML</abbr> allowed)', 'my-calendar' );
 						if ( ! mc_compare_group_members( $group_id, 'event_short' ) ) {
 							echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
 						}

@@ -834,7 +834,7 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_gmap', __( 'Google Map (single view only)', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li class="mc_gmap_api_key"><?php mc_settings_field( 'mc_gmap_api_key', __( 'Google Maps API Key', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_show_address', __( 'Event Address', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_short', __( 'Short description', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_short', __( 'Excerpt', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_desc', __( 'Full description', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_image', __( 'Image', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_event_link', __( 'External link', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
@@ -894,18 +894,18 @@ function mc_remote_db() {
 							$output        = '';
 							$input_options = get_option( 'mc_input_options' );
 							$input_labels  = array(
-								'event_location_dropdown' => __( 'Event Location Dropdown Menu', 'my-calendar' ),
-								'event_short'             => __( 'Event Short Description', 'my-calendar' ),
-								'event_desc'              => __( 'Event Description', 'my-calendar' ),
-								'event_category'          => __( 'Event Category', 'my-calendar' ),
-								'event_image'             => __( 'Event Image', 'my-calendar' ),
-								'event_link'              => __( 'Event Link', 'my-calendar' ),
-								'event_recurs'            => __( 'Event Recurrence Options', 'my-calendar' ),
-								'event_open'              => __( 'Event Registration options', 'my-calendar' ),
-								'event_location'          => __( 'Event Location fields', 'my-calendar' ),
+								'event_location_dropdown' => __( 'Location Dropdown Menu', 'my-calendar' ),
+								'event_short'             => __( 'Excerpt', 'my-calendar' ),
+								'event_desc'              => __( 'Description', 'my-calendar' ),
+								'event_category'          => __( 'Category', 'my-calendar' ),
+								'event_image'             => __( 'Image', 'my-calendar' ),
+								'event_link'              => __( 'Link', 'my-calendar' ),
+								'event_recurs'            => __( 'Recurrence Options', 'my-calendar' ),
+								'event_open'              => __( 'Registration options', 'my-calendar' ),
+								'event_location'          => __( 'Location fields', 'my-calendar' ),
 								'event_specials'          => __( 'Set Special Scheduling options', 'my-calendar' ),
-								'event_access'            => __( 'Event Accessibility', 'my-calendar' ),
-								'event_host'              => __( 'Event Host', 'my-calendar' ),
+								'event_access'            => __( 'Accessibility', 'my-calendar' ),
+								'event_host'              => __( 'Host', 'my-calendar' ),
 							);
 
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.

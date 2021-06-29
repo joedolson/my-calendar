@@ -1310,7 +1310,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				$value  = ( $has_data ) ? stripslashes( esc_attr( $data->event_short ) ) : '';
 				$return = '
 				<p>
-					<label for="e_short">' . __( 'Short Description', 'my-calendar' ) . '</label><br /><textarea id="e_short" name="event_short" rows="2" cols="80">' . $value . '</textarea>
+					<label for="e_short">' . __( 'Excerpt', 'my-calendar' ) . '</label><br /><textarea id="e_short" name="event_short" rows="2" cols="80">' . $value . '</textarea>
 				</p>';
 			}
 			break;

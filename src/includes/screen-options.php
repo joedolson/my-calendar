@@ -60,18 +60,18 @@ function mc_show_event_editing( $status, $args ) {
 		$input_options = array_merge( $defaults, $input_options );
 		// cannot change these keys.
 		$input_labels = array(
-			'event_location_dropdown' => __( 'Event Location Dropdown Menu', 'my-calendar' ),
-			'event_short'             => __( 'Event Short Description', 'my-calendar' ),
-			'event_desc'              => __( 'Event Description', 'my-calendar' ),
-			'event_category'          => __( 'Event Category', 'my-calendar' ),
-			'event_image'             => __( 'Event Image', 'my-calendar' ),
-			'event_link'              => __( 'Event Link', 'my-calendar' ),
-			'event_recurs'            => __( 'Event Recurrence Options', 'my-calendar' ),
-			'event_open'              => __( 'Event Registration options', 'my-calendar' ),
-			'event_location'          => __( 'Event Location fields', 'my-calendar' ),
+			'event_location_dropdown' => __( 'Location Dropdown Menu', 'my-calendar' ),
+			'event_short'             => __( 'Excerpt', 'my-calendar' ),
+			'event_desc'              => __( 'Description', 'my-calendar' ),
+			'event_category'          => __( 'Category', 'my-calendar' ),
+			'event_image'             => __( 'Image', 'my-calendar' ),
+			'event_link'              => __( 'Link', 'my-calendar' ),
+			'event_recurs'            => __( 'Recurrence Options', 'my-calendar' ),
+			'event_open'              => __( 'Registration options', 'my-calendar' ),
+			'event_location'          => __( 'Location fields', 'my-calendar' ),
 			'event_specials'          => __( 'Set Special Scheduling options', 'my-calendar' ),
-			'event_access'            => __( 'Event Accessibility', 'my-calendar' ),
-			'event_host'              => __( 'Event Host', 'my-calendar' ),
+			'event_access'            => __( 'Accessibility', 'my-calendar' ),
+			'event_host'              => __( 'Host', 'my-calendar' ),
 		);
 
 		$output = '';
