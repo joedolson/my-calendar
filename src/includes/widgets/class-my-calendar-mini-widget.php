@@ -50,7 +50,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$after_widget  = $args['after_widget'];
 		$before_title  = $args['before_title'];
 		$after_title   = $args['after_title'];
-
+		$widget_id     = isset( $args['widget_id'] ) ? $args['widget_id'] : 'my-calendar-mini-widget';
 		if ( ! empty( $instance ) ) {
 			$the_title   = apply_filters( 'widget_title', $instance['my_calendar_mini_title'], $instance, $args );
 			$category    = ( '' === $instance['my_calendar_mini_category'] ) ? 'all' : $instance['my_calendar_mini_category'];
@@ -93,7 +93,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			'time'     => $time,
 			'ltype'    => $ltype,
 			'lvalue'   => $lvalue,
-			'id'       => str_replace( 'my_calendar', 'mc', $args['widget_id'] ),
+			'id'       => str_replace( 'my_calendar', 'mc', $widget_id ),
 			'author'   => $author,
 			'host'     => $host,
 			'above'    => $above,
