@@ -53,37 +53,11 @@ function my_calendar_help() {
 				</ul>
 				<?php do_action( 'mc_before_help' ); ?>
 				<ul class="mc-settings checkboxes">
-					<li><a href="#mc-generator"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></li>
+					<li><a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>#mc-generator"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></li>
 					<li><a href="#files"><?php _e( 'Custom Files', 'my-calendar' ); ?></a></li>
 					<li><a href="#privacy"><?php _e( 'Privacy', 'my-calendar' ); ?></a></li>
 					<li><a href="#get-support"><?php _e( 'Get Support', 'my-calendar' ); ?></a></li>
 				</ul>
-			</div>
-		</div>
-	</div>
-
-	<div class="ui-sortable meta-box-sortables" id="mc-generator">
-		<div class="postbox">
-			<h2 id="generator"><?php _e( 'My Calendar Shortcode Generator', 'my-calendar' ); ?></h2>
-
-			<div class="inside mc-tabs">
-				<?php mc_generate(); ?>
-				<div class='tabs' role="tablist" data-default="tab_mc_main">
-					<button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'><?php _e( 'Main', 'my-calendar' ); ?></button>
-					<button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php _e( 'Upcoming', 'my-calendar' ); ?></a></button>
-					<button type="button" role="tab" aria-selected="false" id='tab_mc_today' aria-controls='mc_today'><?php _e( 'Today', 'my-calendar' ); ?></button>
-					<?php echo apply_filters( 'mc_generator_tabs', '' ); ?>
-				</div>
-				<div class='wptab mc_main' id='mc_main' aria-live='assertive' aria-labelledby='tab_mc_main' role="tabpanel">
-					<?php mc_generator( 'main' ); ?>
-				</div>
-				<div class='wptab mc_upcoming' id='mc_upcoming' aria-live='assertive' aria-labelledby='tab_mc_upcoming' role="tabpanel">
-					<?php mc_generator( 'upcoming' ); ?>
-				</div>
-				<div class='wptab mc_today' id='mc_today' aria-live='assertive' aria-labelledby='tab_mc_today' role="tabpanel">
-					<?php mc_generator( 'today' ); ?>
-				</div>
-				<?php echo apply_filters( 'mc_generator_tab_content', '' ); ?>
 			</div>
 		</div>
 	</div>

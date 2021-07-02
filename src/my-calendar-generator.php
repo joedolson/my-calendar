@@ -77,7 +77,7 @@ function mc_generate() {
  */
 function mc_generator( $type ) {
 	?>
-<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-help' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
+<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-shortcodes' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
 	<fieldset>
 		<legend><strong><?php echo ucfirst( $type ); ?></strong>: <?php _e( 'Shortcode Attributes', 'my-calendar' ); ?></legend>
 		<div id="mc-generator" class="generator">
@@ -325,5 +325,52 @@ function mc_generator( $type ) {
 		<input type="submit" class="button-primary" name="generator" value="<?php _e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
 	</p>
 	</form>
+	<?php
+}
+
+
+/**
+ * Display Shortcode Generator screen.
+ */
+function my_calendar_shortcodes() {
+	?>
+
+	<div class="wrap my-calendar-admin">
+	<h1><?php _e( 'Generate Shortcodes', 'my-calendar' ); ?></h1>
+
+	<div class="postbox-container jcd-wide">
+	<div class="metabox-holder">
+
+	<div class="ui-sortable meta-box-sortables" id="mc-generator">
+		<div class="postbox">
+			<h2 id="generator"><?php _e( 'My Calendar Shortcode Generator', 'my-calendar' ); ?></h2>
+
+			<div class="inside mc-tabs">
+				<?php mc_generate(); ?>
+				<div class='tabs' role="tablist" data-default="mc_main">
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'><?php _e( 'Main', 'my-calendar' ); ?></button>
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php _e( 'Upcoming', 'my-calendar' ); ?></a></button>
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_today' aria-controls='mc_today'><?php _e( 'Today', 'my-calendar' ); ?></button>
+					<?php echo apply_filters( 'mc_generator_tabs', '' ); ?>
+				</div>
+				<div class='wptab mc_main' id='mc_main' aria-live='assertive' aria-labelledby='tab_mc_main' role="tabpanel">
+					<?php mc_generator( 'main' ); ?>
+				</div>
+				<div class='wptab mc_upcoming' id='mc_upcoming' aria-live='assertive' aria-labelledby='tab_mc_upcoming' role="tabpanel">
+					<?php mc_generator( 'upcoming' ); ?>
+				</div>
+				<div class='wptab mc_today' id='mc_today' aria-live='assertive' aria-labelledby='tab_mc_today' role="tabpanel">
+					<?php mc_generator( 'today' ); ?>
+				</div>
+				<?php echo apply_filters( 'mc_generator_tab_content', '' ); ?>
+			</div>
+		</div>
+	</div>
+
+	</div>
+	</div>
+	<?php mc_show_sidebar(); ?>
+
+	</div>
 	<?php
 }
