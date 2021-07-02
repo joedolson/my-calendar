@@ -715,7 +715,7 @@ function mc_event_classes( $event, $type ) {
 	}
 	$primary = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
 
-	$is_recurring = ( ! ( 'S' === $event->event_recur || 'S1' === $event->event_recur ) ) ? 'recurring-event' : 'single-event';
+	$is_recurring = ( ! ( 'S' === $event->event_recur || 'S1' === $event->event_recur ) ) ? 'recurring' : 'nonrecurring';
 
 	$classes = array(
 		'mc-' . $uid,
