@@ -68,7 +68,7 @@ function mc_globals() {
 <div class="sub-details">
 	{hcard before="<div class=\'mc-location\'>" after="</div>"}
 	{description before="<div class=\'mc-description\'>" after="</div>"}
-	{map before="<div class=\'mc-map\'" after="</div>"}
+	{map before="<div class=\'mc-map\'>" after="</div>"}
 </div>';
 
 	$rss_template = "
