@@ -208,6 +208,8 @@ jQuery(document).ready(function ($) {
 			$( '#mc-sortable tr' ).removeClass( 'mc-updated' );
 			$(this).parents('tr').addClass( 'mc-updated' );
 		}
+		$( this ).trigger( 'focus' );
+		wp.a11y.speak( 'Item moved up' );
 	});
 	$('#mc-sortable .down').on('click', function (e) {
 		var parentEls = $( this ).parents().map(function() { return this.tagName; } ).get();
@@ -221,6 +223,8 @@ jQuery(document).ready(function ($) {
 			$( '#mc-sortable tr' ).removeClass( 'mc-updated' );
 			$(this).parents('tr').addClass( 'mc-updated' );
 		}
+		$( this ).trigger( 'focus' );
+		wp.a11y.speak( 'Item moved down' );
 	});
 });
 

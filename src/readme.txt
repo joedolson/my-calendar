@@ -115,9 +115,21 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Three new actions: 'mc_event_happening', 'mc_event_future', 'mc_event_over' executed whenever an event is compared to the current time, usable for automatic transitions and notifications.
 * Disable sending email notifications for Spam events. Add action to optionally handle spam notifications.
 * New setting to control whether plugin settings are removed on uninstall.
-* Text changes for clarity
+* Text changes for clarity & simplification
 * Remove the process shortcodes option. Shortcodes can be disabled using 'mc_process_shortcodes' filter.
 * Bug fix: Screen options weren't able to retrieve user settings correctly.
+* New: recurring-event classes in event lists.
+* Bug fix: Event manager displayed recurring event options on single event editing screens.
+* Bug fix: Incorrect variable type broke location labeling output on Google Map output. 
+* Change 'Short Description' to 'Excerpt' for clarity
+* Collapse 'Event Groups' and 'Events List' into a single screen.
+* Bug fix: Form overflows in responsive views.
+* Bug fix: Need breaking container in map bubble after location name.
+* Bug fix [a11y]: Ensure focus isn't loss in sortable lists; announce change via wp.a11y.speak.
+
+TODO: Combine locations pages onto single WP screen
+TODO: New stylesheet by Paal
+TODO: 
 
 = 3.2.17 =
 

@@ -1087,7 +1087,7 @@ function mc_scripts() {
 	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
-		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable' ) );
+		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ) );
 		wp_localize_script(
 			'mc.admin',
 			'mcAdmin',
