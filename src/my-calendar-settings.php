@@ -577,7 +577,7 @@ function my_calendar_settings() {
 								?>
 								</li>
 								<?php
-								if ( isset( $_POST['mc_use_permalinks'] ) && '' !== $note ) {
+								if ( isset( $_POST['mc_use_permalinks'] ) ) {
 									$url = admin_url( 'options-permalink.php#mc_cpt_base' );
 									// Translators: URL for WordPress Settings > Permalinks.
 									$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );

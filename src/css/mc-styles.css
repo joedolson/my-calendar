@@ -91,8 +91,9 @@ ul.links li {
 
 span.mc-notice {
 	padding: 5px;
-	background: #ffc;
-	border: 1px solid #900;
+	background: #fcf9e8;
+	border: 1px solid #b32d2e;
+	border-radius: 5px;
 }
 
 .my-calendar-admin .spam {
