@@ -352,7 +352,7 @@ function mc_strip_to_xml( $value ) {
 /**
  * Generate an iCal subscription export with most recently added events by category.
  *
- * @param string $source Google or outlook.
+ * @param string $source Google or outlook export format.
  */
 function mc_ics_subscribe( $source ) {
 	// get event category.
@@ -363,7 +363,7 @@ function mc_ics_subscribe( $source ) {
 	}
 	$events = mc_get_rss_events( $cat_id );
 
-	mc_api_format_ical( $events );
+	mc_api_format_ical( $events, $source );
 }
 
 /**
@@ -390,6 +390,7 @@ function my_calendar_ical() {
 	$ny  = ( isset( $_GET['nyr'] ) ) ? $_GET['nyr'] : $y;
 	$nm  = ( isset( $_GET['nmonth'] ) ) ? $_GET['nmonth'] : $m;
 	$cat = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : '';
+	$con = ( isset( $_GET['context'] ) ) ? $_GET['context'] : 'google';
 
 	if ( $p ) {
 		$from = "$y-1-1";
@@ -424,15 +425,16 @@ function my_calendar_ical() {
 		$data = my_calendar_events( $args );
 	}
 
-	mc_api_format_ical( $data );
+	mc_api_format_ical( $data, $con );
 }
 
 /**
  * Output iCal formatted events
  *
  * @param array $data array of event objects.
+ * @param string $context iCal or Google export format.
  */
-function mc_api_format_ical( $data ) {
+function mc_api_format_ical( $data, $context ) {
 	$templates = mc_ical_template();
 	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
 	$events    = mc_flatten_array( $data );
@@ -442,7 +444,7 @@ function mc_api_format_ical( $data ) {
 			$event =& $events[ $key ];
 			if ( is_object( $event ) ) {
 				if ( ! mc_private_event( $event ) ) {
-					$array = mc_create_tags( $event );
+					$array = mc_create_tags( $event, $context );
 					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
 					$alert = '';
 					if ( ! empty( $alarm ) ) {

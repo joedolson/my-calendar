@@ -42,6 +42,7 @@ function my_calendar_insert( $atts, $content = null ) {
 			'site'     => false,
 			'months'   => false,
 			'search'   => '',
+			'self'     => '',
 		),
 		$atts,
 		'my_calendar'
