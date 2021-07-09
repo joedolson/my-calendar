@@ -566,7 +566,7 @@ strong.label {
 	width: 7em;
 }
 
-#mc-sortable li:nth-of-type(1) .mc-buttons .up, #mc-sortable li:nth-of-type(9) .mc-buttons .down {
+#mc-sortable li:nth-of-type(1) .mc-buttons .up, #mc-sortable li:nth-of-type(10) .mc-buttons .down {
 	background: none;
 	border: 1px solid transparent;
 	color: rgba( 0,0,0,.4 );
