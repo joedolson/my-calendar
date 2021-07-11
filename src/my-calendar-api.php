@@ -432,7 +432,7 @@ function my_calendar_ical() {
 /**
  * Output iCal formatted events
  *
- * @param array $data array of event objects.
+ * @param array  $data array of event objects.
  * @param string $context iCal or Google export format.
  */
 function mc_api_format_ical( $data, $context ) {
