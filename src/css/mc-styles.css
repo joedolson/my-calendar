@@ -533,7 +533,7 @@ strong.label {
 	display: none;
 }
 
-.my-calendar-admin .ui-accordion-header, #mc-sortable li {
+#mc-sortable li {
 	border: 1px solid #ddd;
 	background: rgba(0, 0, 0, .06);
 	padding: .5em 1em;
@@ -592,16 +592,16 @@ input[name="mc_uri"] {
 	padding: 1em;
 }
 
-.my-calendar-admin .ui-accordion-header-active {
-	background: rgba(0, 0, 0, .04);
+.my-calendar-admin .ui-accordion-header .dashicons {
+	line-height: 1.5;
 }
 
 .my-calendar-admin .ui-accordion-header .dashicons:before {
-	content: "\f132";
+	content: "\f139";
 }
 
 .my-calendar-admin .ui-accordion-header-active .dashicons:before {
-	content: "\f460";
+	content: "\f140";
 }
 
 #mc-sortable .mc-calendar {

@@ -1741,7 +1741,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							<?php
 							if ( ! ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ) {
 								?>
-								<h4><span class='dashicons' aria-hidden='true'> </span><button type="button" class="button-link"><?php _e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
+								<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php _e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
 								<div>
 									<p>
 									<?php _e( 'Editing a single date of an event changes only that date. Editing the root event changes all events in the series.', 'my-calendar' ); ?>
@@ -1770,9 +1770,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							if ( 0 !== (int) $data->event_group_id ) {
 								$edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
 								?>
-								<h4><span class='dashicons' aria-hidden='true'> </span><button type="button" class="button-link"><?php _e( 'Related Events:', 'my-calendar' ); ?></button> (<a href='<?php echo $edit_group_url; ?>'><?php _e( 'Edit group', 'my-calendar' ); ?></a>)
+								<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php _e( 'Related Events', 'my-calendar' ); ?></button>
 								</h4>
 								<div>
+									<a href='<?php echo $edit_group_url; ?>'><?php _e( 'Edit group', 'my-calendar' ); ?></a>
 									<ul class="columns">
 										<?php mc_related_events( $data->event_group_id ); ?>
 									</ul>
