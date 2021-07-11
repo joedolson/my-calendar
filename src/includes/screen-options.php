@@ -60,7 +60,7 @@ function mc_show_event_editing( $status, $args ) {
 		$input_options = array_merge( $defaults, $input_options );
 		// cannot change these keys.
 		$input_labels = array(
-			'event_location_dropdown' => __( 'Location Dropdown Menu', 'my-calendar' ),
+			'event_location_dropdown' => __( 'Location Selector', 'my-calendar' ),
 			'event_short'             => __( 'Excerpt', 'my-calendar' ),
 			'event_desc'              => __( 'Description', 'my-calendar' ),
 			'event_category'          => __( 'Category', 'my-calendar' ),
@@ -69,7 +69,7 @@ function mc_show_event_editing( $status, $args ) {
 			'event_recurs'            => __( 'Recurrence Options', 'my-calendar' ),
 			'event_open'              => __( 'Registration options', 'my-calendar' ),
 			'event_location'          => __( 'Location fields', 'my-calendar' ),
-			'event_specials'          => __( 'Set Special Scheduling options', 'my-calendar' ),
+			'event_specials'          => __( 'Special Scheduling options', 'my-calendar' ),
 			'event_access'            => __( 'Accessibility', 'my-calendar' ),
 			'event_host'              => __( 'Host', 'my-calendar' ),
 		);
