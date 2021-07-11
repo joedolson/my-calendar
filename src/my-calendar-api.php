@@ -74,7 +74,8 @@ function mc_format_api( $data, $format ) {
 			mc_api_format_csv( $data );
 			break;
 		case 'ical':
-			mc_api_format_ical( $data );
+			$context = ( isset( $_GET['context'] ) ) ? $_GET['context'] : 'google';
+			mc_api_format_ical( $data, $context );
 			break;
 	}
 }
