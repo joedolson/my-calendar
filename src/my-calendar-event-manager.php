@@ -3460,10 +3460,10 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
 		</p>
 		<p>
-		<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> ' . $picker_begin . '
+		<label for="mc_event_date" id="eblabel">' . __( 'Date', 'my-calendar' ) . '</label> ' . $picker_begin . '
 		</p>
 		<p>
-			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> ' . $picker_end . '<span id="event_date_error" aria-live="assertive"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Your selected end date is before your start date.', 'my-calendar' ) . '</span>
+			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label> ' . $picker_end . '<span id="event_date_error" aria-live="assertive"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Your selected end date is before your start date.', 'my-calendar' ) . '</span>
 		</p>
 	</div>
 	<ul class="checkboxes">
@@ -3523,10 +3523,10 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
 		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" disabled />
 		</p>
 		<p>
-			<label for="mc_event_date" id="eblabel">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> <input type="date" class="event-begin" id="mc_event_date" name="event_begin[]" value="' . esc_attr( $event_begin ) . '" disabled />
+			<label for="mc_event_date" id="eblabel">' . __( 'Date', 'my-calendar' ) . '</label> <input type="date" class="event-begin" id="mc_event_date" name="event_begin[]" value="' . esc_attr( $event_begin ) . '" disabled />
 		</p>
 		<p>
-			<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label> <input type="date" id="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
+			<label for="mc_event_enddate" id="eelabel"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label> <input type="date" id="mc_event_enddate" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
 		</p>
 	</div>
 	<ul class="checkboxes">
@@ -3573,10 +3573,10 @@ function mc_recur_datetime_input( $data ) {
 			<input type="time" id="r_endtime" name="recur_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
 		</p>
 		<p>
-			<label for="r_begin">' . __( 'Date (YYYY-MM-DD)', 'my-calendar' ) . '</label> ' . $picker_begin . '
+			<label for="r_begin">' . __( 'Date', 'my-calendar' ) . '</label> ' . $picker_begin . '
 		</p>
 		<p>
-			<label for="r_end"><em>' . __( 'End Date (YYYY-MM-DD, optional)', 'my-calendar' ) . '</em></label>
+			<label for="r_end"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label>
 			 ' . $picker_end . '
 		</p>
 	</div>';
