@@ -47,11 +47,14 @@
 }
 
 .category-color {
-	width: 1.2em;
-	height: 1.2em;
+	width: 1em;
+	height: 1em;
 	display: inline-block;
 	border-radius: 3px;
-	border: 1px solid #000
+	border: 1px solid #000;
+	vertical-align: middle;
+	position: relative;
+	top: -1px;
 }
 
 .active-link {

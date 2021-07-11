@@ -2570,23 +2570,31 @@ function mc_list_events() {
 							}
 							$color      = $cat->category_color;
 							$color      = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
+							$color      = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
 							$categories = mc_get_categories( $event );
 							$cats       = array();
 							?>
 							<td>
-								<div class="category-color" style="background-color:<?php echo $color; ?>;"></div>
+								<?php echo $color; ?>
 								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ); ?>' title="<?php _e( 'Filter by category', 'my-calendar' ); ?>"><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( $cat->category_name ); ?>
 								</a>
 								<?php
 								$string = '';
 								if ( is_array( $categories ) ) {
 									foreach ( $categories as $category ) {
-										if ( (int) $category !== (int) $event->event_category ) {
-											$cats[] = mc_get_category_detail( $category, 'category_name' );
+										$category = (int) $category;
+										if ( $category !== (int) $event->event_category ) {
+											$filter = admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
+											$color  = mc_get_category_detail( $category, 'category_color' );
+											$color  = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
+											$color  = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
+											$cats[] = $color . ' <a href="' . $filter . '">' . mc_get_category_detail( $category, 'category_name' ) . '</a>';
 										}
-										$string = implode( ', ', $cats );
+										if ( count( $cats ) > 0 ) {
+											$string = ', ' . implode( ', ', $cats );
+										}
 									}
-									echo ( '' !== $string ) ? '(' . $string . ')' : '';
+									echo ( '' !== $string ) ? $string : '';
 								}
 								?>
 							</td>
