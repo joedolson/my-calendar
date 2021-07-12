@@ -46,6 +46,10 @@
 	width: 42px
 }
 
+#my-calendar .wp-picker-container {
+	line-height: 2;
+}
+
 .category-color {
 	width: 1em;
 	height: 1em;
