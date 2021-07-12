@@ -393,10 +393,10 @@ function my_calendar_menu() {
 			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
 		}
 		add_submenu_page( 'my-calendar', __( 'Style Editor', 'my-calendar' ), __( 'Style Editor', 'my-calendar' ), 'mc_edit_styles', 'my-calendar-styles', 'my_calendar_style_edit' );
-		add_submenu_page( 'my-calendar', __( 'My Calendar Shortcode Generator', 'my-calendar' ), __( 'Shortcodes', 'my-calendar' ), 'mc_view_help', 'my-calendar-shortcodes', 'my_calendar_shortcodes' );
 		add_submenu_page( 'my-calendar', __( 'Script Manager', 'my-calendar' ), __( 'Script Manager', 'my-calendar' ), 'mc_edit_behaviors', 'my-calendar-behaviors', 'my_calendar_behaviors_edit' );
 		add_submenu_page( 'my-calendar', __( 'Template Editor', 'my-calendar' ), __( 'Template Editor', 'my-calendar' ), 'mc_edit_templates', 'my-calendar-templates', 'mc_templates_edit' );
 		add_submenu_page( 'my-calendar', __( 'Settings', 'my-calendar' ), __( 'Settings', 'my-calendar' ), 'mc_edit_settings', 'my-calendar-config', 'my_calendar_settings' );
+		add_submenu_page( 'my-calendar', __( 'My Calendar Shortcode Generator', 'my-calendar' ), __( 'Shortcodes', 'my-calendar' ), 'mc_view_help', 'my-calendar-shortcodes', 'my_calendar_shortcodes' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Help', 'my-calendar' ), __( 'Help', 'my-calendar' ), 'mc_view_help', 'my-calendar-help', 'my_calendar_help' );
 	}
 	if ( function_exists( 'mcs_submissions' ) ) {
