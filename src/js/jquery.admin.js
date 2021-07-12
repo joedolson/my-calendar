@@ -202,6 +202,22 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	$('#mc-sortable .hide').on('click', function (e) {
+		var disabled = $( this ).find( '.dashicons' ).hasClass( 'dashicons-hidden' );
+		var current  = $( this ).parents( 'li' );
+		if ( disabled ) {
+			current.removeClass( 'mc-hidden' ).addClass( 'mc-visible' );
+			current.find( 'input[type=hidden]' ).prop( 'disabled', false );
+			$( this ).find( '.dashicons' ).removeClass( 'dashicons-hidden' ).addClass( 'dashicons-visibility' );
+			wp.a11y.speak( 'Item shown' );
+		} else {
+			current.addClass( 'mc-hidden' ).removeClass( 'mc-visible' );
+			current.find( 'input[type=hidden]' ).prop( 'disabled', true );
+			$( this ).find( '.dashicons' ).removeClass( 'dashicons-visibility' ).addClass( 'dashicons-hidden' );
+			wp.a11y.speak( 'Item hidden' );
+		}
+	});
+
 	$('#mc-sortable .up').on('click', function (e) {
 		var parentEls = $( this ).parents().map(function() { return this.tagName; } ).get();
 		var parentLi  = $.inArray( 'LI', parentEls );
