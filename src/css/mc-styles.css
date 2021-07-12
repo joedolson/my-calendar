@@ -139,6 +139,7 @@ span.mc-notice {
 	clear: right
 }
 
+.mc_permissions .mc-settings,
 #my-calendar .columns,
 .recurring .columns {
 	display: grid;
@@ -182,6 +183,7 @@ li.datetime-template:nth-of-type(even) {
 	background: rgba( 0, 0, 0, .02 );
 }
 
+.mc_permissions .mc-settings,
 #my-calendar .columns {
 	grid-template-columns: repeat(2, 1fr );
 }
@@ -970,6 +972,10 @@ tr.problem .error {
 @media (max-width: 782px) {
 	.my-calendar-admin .tablenav {
 		float: none;
+	}
+
+	.mc_permissions .mc-settings {
+		grid-template-columns: repeat( 1, 1fr );
 	}
 
 	.mc-permissions-wrapper {
