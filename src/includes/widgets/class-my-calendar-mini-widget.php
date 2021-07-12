@@ -165,6 +165,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'author' ); ?>"><?php _e( 'Limit by Author', 'my-calendar' ); ?></label><br/>
 			<select name="<?php echo $this->get_field_name( 'author' ); ?>" id="<?php echo $this->get_field_id( 'author' ); ?>" multiple="multiple" class="widefat">
 				<option value="all"><?php _e( 'All authors', 'my-calendar' ); ?></option>
+				<option value="current"><?php _e( 'Active User', 'my-calendar' ); ?></option>
 				<?php echo mc_selected_users( $author ); ?>
 			</select>
 		</p>
@@ -173,6 +174,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 				for="<?php echo $this->get_field_id( 'host' ); ?>"><?php _e( 'Limit by Host', 'my-calendar' ); ?></label><br/>
 			<select name="<?php echo $this->get_field_name( 'host' ); ?>" id="<?php echo $this->get_field_id( 'host' ); ?>" multiple="multiple" class="widefat">
 				<option value="all"><?php _e( 'All hosts', 'my-calendar' ); ?></option>
+				<option value="current"><?php _e( 'Active User', 'my-calendar' ); ?></option>
 				<?php echo mc_selected_users( $host ); ?>
 			</select>
 		</p>
