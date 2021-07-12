@@ -274,14 +274,16 @@ var mediaPopup = '';
 						id = '',
 						img = '',
 						height = '',
-						width = '';
+						width = '',
+						alt = '';
 					if (selection) {
-						id = selection.first().attributes.id;
-						height = mcAdmin.thumbHeight;
-						width = Math.round( ( ( selection.first().attributes.width ) / ( selection.first().attributes.height ) ) * height );
-						img = "<img src='" + selection.first().attributes.url + "' width='" + width + "' height='" + height + "' />";
-						$inpField.value = selection.first().attributes.url;
-						$idField.value = id;
+						id                      = selection.first().attributes.id;
+						height                  = mcAdmin.thumbHeight;
+						width                   = Math.round( ( ( selection.first().attributes.width ) / ( selection.first().attributes.height ) ) * height );
+						alt                     = selection.first().attributes.alt;
+						img                     = "<img id='event_image' src='" + selection.first().attributes.url + "' width='" + width + "' height='" + height + "' alt='" + alt + "' />";
+						$inpField.value         = selection.first().attributes.url;
+						$idField.value          = id;
 						$displayField.innerHTML = img;
 					}
 				});

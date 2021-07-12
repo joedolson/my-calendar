@@ -279,17 +279,9 @@ ol.mc-repeat-events {
 	margin-bottom: 1em;
 }
 
-.my-calendar-admin .mc-image-upload {
-	display: grid;
-	grid-template-columns: 70% 1fr;
-	column-gap: 20px;
-}
-
 .my-calendar-admin .event_image img {
-	width: 100%;
-	height: auto;
-	margin: 2px 0;
-	border-radius: 3px;
+	max-width: 400px;
+	margin-top: 8px;
 }
 
 .mc_support {

@@ -1323,15 +1323,20 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				$image_id = '';
 			}
 			if ( $show_block ) {
+				$button_text = __( 'Select Featured Image' );
+				if ( '' !== $image ) {
+					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
+					$button_text = __( 'Change Featured Image', 'my-calendar' );
+					$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
+				}
 				$return = '
 				<div class="mc-image-upload field-holder">
 					<div class="image_fields">
-						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />
-						<label for="e_image">' . __( 'Featured Image', 'my-calendar' ) . '</label><br /><input type="text" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button textfield-field">' . __( 'Select', 'my-calendar' ) . '</button>
+						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button textfield-field" aria-describedby="event_image">' . $button_text . '</button>
 					</div>';
 				if ( '' !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
-					$return .= '<div class="event_image"><img src="' . esc_attr( $image ) . '" alt="" /></div>';
+					$return .= '<div class="event_image"><img id="event_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 				} else {
 					$return .= '<div class="event_image"></div>';
 				}
