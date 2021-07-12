@@ -1092,8 +1092,10 @@ function mc_scripts() {
 			'mc.admin',
 			'mcAdmin',
 			array(
-				'thumbHeight' => get_option( 'thumbnail_size_h' ),
-				'draftText'   => __( 'Save Draft', 'my-calendar' ),
+				'thumbHeight'   => get_option( 'thumbnail_size_h' ),
+				'draftText'     => __( 'Save Draft', 'my-calendar' ),
+				'deleteButton'  => __( 'Delete', 'my-calendar' ),
+				'restoreButton' => __( 'Restore', 'my-calendar' ),
 			)
 		);
 	}

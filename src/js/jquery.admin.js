@@ -1,57 +1,63 @@
 jQuery(document).ready(function ($) {
 	$('#e_schedule').on( 'click', '.add_field', function() {
 		$('#event_span').show();
-		var num = $('.datetime-template').length; // how many sets of input fields we have.
+		var num    = $('.datetime-template').length; // how many sets of input fields we have.
 		var newNum = new Number(num + 1);   // the numeric ID of the new input field being added.
 		// create the new element via clone(), and manipulate it's ID using newNum value.
 		var newElem = $('#event' + num ).clone().attr('id', 'event' + newNum);
+		$( newElem ).find( 'input' ).prop( 'disabled', false );
+		$( newElem ).find( 'button.restore_field' ).removeClass( 'restore_field' ).addClass( 'del_field' ).text( mcAdmin.deleteButton );
 		var oldElem = $('#event' + num );
 		oldElem.find( '.buttons' ).hide();
+		$( '#event1' ).hide();
 		newElem.find( '.number_of' ).text( num );
 		// insert the new element after the last "duplicatable" input field.
 		$( '#event' + num ).after(newElem);
 		// Update id & for relationships.
-		var inputs = newElem.find( 'input' );
-		var firstInput = newElem.find( '.event-begin' ).trigger( 'focus' );
-		var labels = newElem.find( 'label' );
+		var inputs     = newElem.find( 'input' );
+		var firstInput = newElem.find( '.event-time' ).trigger( 'focus' );
+		var labels     = newElem.find( 'label' );
 		inputs.each(function() {
 			var id = $(this).attr('id');
-			newId = id + newNum;
+			newId  = id + newNum;
 			$(this).attr( 'id', newId ).prop( 'disabled', false );
 		});
 		labels.each(function() {
 			var forVal = $(this).attr('for');
-			newFor = forVal + newNum;
+			newFor     = forVal + newNum;
 			$(this).attr( 'for', newFor );
 		});
-		// enable the "remove" button.
-		$('.del_field').removeAttr('disabled');
-		// business rule: you can only add 40 occurrences.
+		// business rule: you can only add 40 occurrences at a time.
 		if ( newNum == 40 ) {
 			$('.add_field').attr('disabled', 'disabled');
 		}
 	});
 
 	$('#e_schedule').on( 'click', '.del_field', function() {
-		var num = $('.datetime-template').length; // how many "duplicatable" input fields we currently have.
-		$('#event' + num).remove(); // remove the last element.
-		$('#event' + (num - 1) ).find( '.buttons' ).show();
-		$('#event' + (num - 1) ).find( 'input' ).trigger( 'focus' );
-		// enable the "add" button.
-		$('.add_field').removeAttr('disabled');
-		// if only one element remains, disable the "remove" button.
-		if ( num - 1 == 1 ) {
-			$('.del_field').attr('disabled', 'disabled');
+		var id  = $( this ).parents( 'li' ).attr( 'id' );
+		var num = $('.datetime-template.enabled').length;
+		$( '#' + id + ' input' ).prop( 'disabled', true ).removeClass( 'enabled' ).addClass( 'disabled' );
+		$('.add_field').prop( 'disabled', false );
+		$( this ).removeClass( 'del_field' ).addClass( 'restore_field' ).text( mcAdmin.restoreButton );
+		// if only one element left, hide event span checkbox & show original add occurrence button.
+		if ( num - 1 <= 1 ) {
+			$('#event_span').hide();
+			$('#event1, #event1 .buttons' ).show();
 		}
-		$('#event_span').hide();
+	});
+
+	$('#e_schedule').on( 'click', '.restore_field', function() {
+		var id  = $( this ).parents( 'li' ).attr( 'id' );
+		var num = $('.datetime-template.enabled').length;
+		$( this ).removeClass( 'restore_field' ).addClass( 'del_field' ).text( mcAdmin.deleteButton );
+		$( '#' + id + ' input' ).prop( 'disabled', false ).removeClass( 'disabled' ).addClass( 'emabled' );
 	});
 
 	// Set default conditions.
-	$( '#del_field' ).attr('disabled', 'disabled');
 	$( '#event_span' ).hide();
 	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 
-	$(".selectall").on( 'click', function() {
+	$( '.selectall' ).on( 'click', function() {
 		var checked_status = $(this).prop('checked');
 		if ( checked_status ) {
 			// Activate actions on bulk checked.
@@ -189,13 +195,13 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-
 	$('#mc-sortable').sortable({
 		placeholder: 'mc-ui-state-highlight',
 		update: function (event, ui) {
 			$('#mc-sortable-update').html( 'Submit form to save changes' );
 		}
 	});
+
 	$('#mc-sortable .up').on('click', function (e) {
 		var parentEls = $( this ).parents().map(function() { return this.tagName; } ).get();
 		var parentLi  = $.inArray( 'LI', parentEls );
@@ -211,6 +217,7 @@ jQuery(document).ready(function ($) {
 		$( this ).trigger( 'focus' );
 		wp.a11y.speak( 'Item moved up' );
 	});
+
 	$('#mc-sortable .down').on('click', function (e) {
 		var parentEls = $( this ).parents().map(function() { return this.tagName; } ).get();
 		var parentLi  = $.inArray( 'LI', parentEls );

@@ -135,21 +135,47 @@ span.mc-notice {
 	clear: right
 }
 
-.datetime-template {
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #ddd
+#my-calendar .columns,
+.recurring .columns {
+	display: grid;
+	column-gap: 8px
 }
 
+#e_schedule .columns,
 #my-calendar .columns-flex {
 	display: flex;
 }
 
-#my-calendar .columns,
-#e_schedule .columns,
-.recurring .columns {
-	display: grid;
-	column-gap: 16px
+#e_schedule .mc-repeat-events.columns {
+	display:grid;
+	grid-template-columns: repeat( 3, 1fr );
+}
+
+#e_schedule .new-field {
+	position: relative;
+}
+
+#e_schedule .new-field .button {
+	position: absolute;
+	top: -1.5em;
+	right: 0;
+}
+
+#e_schedule .new-field .del_field {
+	border-color: #b32d2e;
+	color: #b32d23;
+}
+
+li.datetime-template:not( #event1 ) {
+	padding: 1em;
+}
+
+li.datetime-template.disabled {
+	opacity: .5;
+}
+
+li.datetime-template:nth-of-type(even) {
+	background: rgba( 0, 0, 0, .02 );
 }
 
 #my-calendar .columns {
@@ -157,12 +183,13 @@ span.mc-notice {
 }
 
 #e_schedule .columns {
-	grid-template-columns: 10em 10em 1fr 1fr;
 	align-items: start;
+	flex-wrap: wrap;
 }
 
 #my-calendar .recurring .columns {
-	grid-template-columns: 10em 10em 1fr;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 #event_date_error.visible {
@@ -182,6 +209,10 @@ span.mc-notice {
 	display: block;
 }
 
+#e_schedule .columns .checkboxes label {
+	display: inline;
+}
+
 #e_schedule .columns.instance-list {
 	grid-template-columns: repeat( 3, 1fr )
 }
@@ -199,12 +230,6 @@ span.mc-notice {
 
 #event1 .new-field {
 	display: none;
-}
-
-.datetime-template .buttons {
-	padding: 12px;
-	margin-top: 12px;
-	background: #f3f3f3;
 }
 
 ol.mc-repeat-events {

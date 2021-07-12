@@ -1715,8 +1715,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
 					</p>
-					<ol class="mc-repeat-events">
-						<li id="event1" class="datetime-template">
+					<ol class="mc-repeat-events columns">
+						<li id="event1" class="datetime-template enabled">
 							<fieldset class="new-field">
 							<legend>
 							<?php
@@ -1730,7 +1730,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							</fieldset>
 							<div class="buttons">
 								<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button>
-								<button type="button" class="del_field button button-secondary"><?php _e( 'Remove last occurrence', 'my-calendar' ); ?></button>
 							</div>
 						</li>
 					</ol>
@@ -3528,10 +3527,11 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
 	$sweek        = absint( get_option( 'start_of_week' ) );
 	$firstday     = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 
-	$form .= '<div class="columns">
+	$form .= '<button type="button" class="del_field button button-delete">' . __( 'Delete', 'my-calendar' ) . '</button>
+	<div class="columns">
 		<p>
 			<label for="mc_event_time">' . __( 'Start Time', 'my-calendar' ) . '</label>
-		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" disabled />
+		<input type="time" class="event-time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" disabled />
 		</p>
 		<p>
 			<label for="mc_event_endtime">' . __( 'End Time', 'my-calendar' ) . '</label>
