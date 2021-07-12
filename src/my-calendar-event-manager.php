@@ -1379,8 +1379,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				}
 				$return = '
 					<p>
-						<label for="e_link">' . __( 'Event Link', 'my-calendar' ) . '</label> <input type="text" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label><br />
-						<span id="event_link_description">' . __( 'Link to event information outside of the calendar', 'my-calendar' ) . '</span>
+						<label for="e_link">' . __( 'External Link', 'my-calendar' ) . '</label> <input type="text" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
 					</p>';
 			}
 			break;
@@ -1676,6 +1675,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					}
 				}
 				mc_show_block( 'event_desc', $has_data, $data );
+				mc_show_block( 'event_short', $has_data, $data );
 				mc_show_block( 'event_category', $has_data, $data );
 				?>
 			</fieldset>
@@ -1791,7 +1791,21 @@ function mc_form_fields( $data, $mode, $event_id ) {
 </div>
 	<?php
 	mc_show_block( 'event_recurs', $has_data, $data );
-	if ( mc_show_edit_blocks( array( 'event_short', 'event_image', 'event_host', 'event_author', 'event_link' ) ) ) {
+	if ( mc_show_edit_block( 'event_image' ) ) {
+		?>
+		<div class="ui-sortable meta-box-sortables">
+			<div class="postbox">
+				<h2><?php _e( 'Featured Image', 'my-calendar' ); ?></h2>
+				<div class="inside">
+		<?php
+		mc_show_block( 'event_image', $has_data, $data );
+		?>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+	if ( mc_show_edit_blocks( array( 'event_host', 'event_author', 'event_link' ) ) ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
@@ -1799,12 +1813,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<div class="inside">
 		<?php
 	}
-	mc_show_block( 'event_short', $has_data, $data );
-	mc_show_block( 'event_image', $has_data, $data );
 	mc_show_block( 'event_host', $has_data, $data );
 	mc_show_block( 'event_author', $has_data, $data, true, $event_author );
 	mc_show_block( 'event_link', $has_data, $data );
-	if ( mc_show_edit_blocks( array( 'event_short', 'event_image', 'event_host', 'event_author', 'event_link' ) ) ) {
+	if ( mc_show_edit_blocks( array( 'event_host', 'event_author', 'event_link' ) ) ) {
 		?>
 				</div>
 			</div>

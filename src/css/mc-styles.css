@@ -485,13 +485,6 @@ strong.label {
 	margin-top: 20px;
 }
 
-.mc-tabs .tabs li {
-	display: inline;
-	margin: 0 auto;
-	line-height: 1;
-	float: none;
-}
-
 .mc-tabs .tabs button, .mc-tablinks a {
 	display: inline-block;
 	padding: 4px 8px;
