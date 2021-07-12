@@ -2212,9 +2212,16 @@ function mc_list_events() {
 		if ( 'event_label' === $restrict ) {
 			$filter = "'$filter'";
 		}
+		$join = '';
+		if ( 'event_category' === $restrict ) {
+			$cat_limit       = mc_select_category( $filter );
+			$join            = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
+			$select_category = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
+			$limit          .= ' ' . $select_category;
+		}
 		if ( '' === $limit && '' !== $filter ) {
 			$limit = "WHERE $restrict = $filter";
-		} elseif ( '' !== $limit && '' !== $filter ) {
+		} elseif ( '' !== $limit && '' !== $filter && 'event_category' !== $restrict ) {
 			$limit .= " AND $restrict = $filter";
 		}
 		if ( '' === $filter || ! $allow_filters ) {
@@ -2240,13 +2247,13 @@ function mc_list_events() {
 			$limit .= mc_prepare_search_query( $query );
 		}
 		$query_limit = ( ( $current - 1 ) * $items_per_page );
-		$limit      .= ( 'archived' !== $restrict ) ? ' AND event_status = 1' : ' AND event_status = 0';
+		$limit      .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
 		if ( 'event_category' !== $sortbyvalue ) {
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS event_id FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
 			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS events.event_id FROM ' . my_calendar_table() . ' AS events JOIN ' . my_calendar_categories_table() . " AS categories WHERE events.event_category = categories.category_id $limit ORDER BY categories.category_name $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . ' AS e ' . $join  . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 		}
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 		$items      = $found_rows[0];
