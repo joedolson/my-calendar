@@ -1719,6 +1719,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					<p id="event_span" class="checkboxes">
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
+						<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button>
 					</p>
 					<ol class="mc-repeat-events columns">
 						<li id="event1" class="datetime-template enabled">
