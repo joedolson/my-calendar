@@ -240,7 +240,8 @@ li.datetime-template:nth-of-type(even) {
 }
 
 #event_span {
-	border: 1px solid;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
 	padding: 1em 1em .5em;
 	background: #f0f0f1;
 	margin-bottom: 1em;
