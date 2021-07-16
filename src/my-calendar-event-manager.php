@@ -1635,10 +1635,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		</div>
 			<?php
 			if ( ! empty( $_GET['date'] ) && ! ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ) {
-				$event = mc_get_event( $instance );
-				$date  = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
+				$event      = mc_get_event( $instance );
+				$date       = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
+				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id ) );
+				$edit_event = sprintf( ' <a href="%s">' . __( 'Edit the root event.', 'my-calendar' ) . '</a>', $edit_url );
 				// Translators: Date of a specific event occurrence.
-				$message = sprintf( __( 'You are editing the <strong>%s</strong> instance of this event. Other instances of this event will not be changed.', 'my-calendar' ), $date );
+				$message   = sprintf( __( 'You are editing the <strong>%s</strong> instance of this event. Other instances of this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
 				mc_show_notice( $message );
 			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
 				mc_show_notice( __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) );
@@ -1748,9 +1750,14 @@ function mc_form_fields( $data, $mode, $event_id ) {
 								?>
 								<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php _e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
 								<div>
-									<p>
-									<?php _e( 'Editing a single date of an event changes only that date. Editing the root event changes all events in the series.', 'my-calendar' ); ?>
-									</p>
+									<?php
+									if ( isset( $_GET['date'] ) ) {
+										echo '<p>';
+										$edit_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id );
+										printf( __( 'Editing a single date of an event changes only that date. <a href="%s">Edit the root event</a> to change the event series.', 'my-calendar' ), $edit_url );
+										echo '</p>';
+									}
+									?>
 									<div class='mc_response' aria-live='assertive'></div>
 									<ul class="columns instance-list">
 										<?php
