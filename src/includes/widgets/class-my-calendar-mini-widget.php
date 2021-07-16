@@ -128,6 +128,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$months          = ( isset( $instance['months'] ) ) ? $instance['months'] : '';
 		$author          = ( isset( $instance['author'] ) ) ? $instance['author'] : '';
 		?>
+		<div class="my-calendar-widget-wrapper my-calendar-mini-widget">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_mini_title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_mini_title' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_mini_title' ); ?>" value="<?php echo esc_attr( $title ); ?>"/>
@@ -212,6 +213,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 				for="<?php echo $this->get_field_id( 'months' ); ?>"><?php _e( 'Months to show in list view', 'my-calendar' ); ?></label>
 			<input type="number" max="12" step="1" min="1" class="widefat" name="<?php echo $this->get_field_name( 'months' ); ?>" id="<?php echo $this->get_field_id( 'months' ); ?>" value="<?php echo ( '' === $months ) ? '' : esc_attr( $months ); ?>" />
 		</p>
+		</div>
 		<?php
 	}
 

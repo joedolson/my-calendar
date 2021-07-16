@@ -149,6 +149,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$link = ( ! empty( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : $default_link;
 		$skip = ( isset( $instance['my_calendar_upcoming_skip'] ) ) ? esc_attr( $instance['my_calendar_upcoming_skip'] ) : 0;
 		?>
+		<div class="my-calendar-widget-wrapper my-calendar-upcoming-widget">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_title' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_title' ); ?>" value="<?php echo esc_attr( $title ); ?>"/>
@@ -222,19 +223,22 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		if ( ! ( 'month' === $type || 'month+1' === $type || 'year' === $type ) ) {
 			?>
 			<p>
-				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_after' ); ?>" value="<?php echo $after; ?>" size="1" maxlength="3"/>
 				<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>">
 				<?php
 				// Translators: "days" or "events".
-				printf( __( '%s into the future;', 'my-calendar' ), $type );
-				?>
-				</label><br/>
-				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_before' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_before' ); ?>" value="<?php echo $before; ?>" size="1" maxlength="3"/> <label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_before' ); ?>">
-				<?php
-				// Translators: "days" or "events".
-				printf( __( '%s from the past', 'my-calendar' ), $type );
+				printf( __( '%s into the future', 'my-calendar' ), ucfirst( $type ) );
 				?>
 				</label>
+				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_after' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_after' ); ?>" value="<?php echo $after; ?>" size="1" maxlength="3"/>
+			</p>
+			<p>
+				<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_before' ); ?>">
+				<?php
+				// Translators: "days" or "events".
+				printf( __( '%s from the past', 'my-calendar' ), ucfirst( $type ) );
+				?>
+				</label>
+				<input type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_before' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_before' ); ?>" value="<?php echo $before; ?>" size="1" maxlength="3"/> 
 			</p>
 			<?php
 		}
@@ -242,10 +246,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		<p>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_show_today' ); ?>" value="yes"<?php echo ( 'yes' === $show_today ) ? ' checked="checked"' : ''; ?> />
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>"><?php _e( "Include today's events", 'my-calendar' ); ?></label>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>"><?php _e( 'No events text', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_no_events_text' ); ?>" value="<?php echo $text; ?>"/>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_category' ); ?>"><?php _e( 'Category or categories to display:', 'my-calendar' ); ?></label><br/>
@@ -275,6 +275,11 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'lvalue' ); ?>"><?php _e( 'Location (Value)', 'my-calendar' ); ?></label><br/>
 			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'lvalue' ); ?>" id="<?php echo $this->get_field_id( 'lvalue' ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" />
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>"><?php _e( 'No events text', 'my-calendar' ); ?></label><br/>
+			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_no_events_text' ); ?>" value="<?php echo $text; ?>"/>
+		</p>
+		</div>
 		<?php
 	}
 

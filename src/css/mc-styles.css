@@ -843,6 +843,10 @@ select[name="event_recur"] {
 	font-size: 1.1em;
 }
 
+.my-calendar-widget-wrapper p {
+	font-size: 13px;
+}
+
 .my-calendar-admin .postbox .hndle {
 	cursor: auto;
 }

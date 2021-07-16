@@ -70,6 +70,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 		$widget_title = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : '';
 		?>
+		<div class="my-calendar-widget-wrapper my-calendar-search-widget">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
@@ -78,6 +79,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Search Results Page', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'url' ); ?>" name="<?php echo $this->get_field_name( 'url' ); ?>" value="<?php echo esc_url( $widget_url ); ?>"/>
 		</p>
+		</div>
 		<?php
 	}
 

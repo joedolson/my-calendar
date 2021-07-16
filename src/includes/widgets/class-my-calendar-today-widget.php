@@ -120,6 +120,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$site          = ( isset( $instance['mc_site'] ) ) ? esc_attr( $instance['mc_site'] ) : '';
 
 		?>
+		<div class="my-calendar-widget-wrapper my-calendar-today-widget">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_today_title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_today_title' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_today_title' ); ?>" value="<?php echo $widget_title; ?>"/>
@@ -162,6 +163,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'mc_host' ); ?>"><?php _e( 'Host or hosts to show:', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_host' ); ?>" name="<?php echo $this->get_field_name( 'mc_host' ); ?>" value="<?php echo $widget_host; ?>"/>
 		</p>
+		</div>
 		<?php
 	}
 

@@ -77,6 +77,7 @@ class My_Calendar_Filters extends WP_Widget {
 		$show         = ( isset( $instance['show'] ) ) ? $instance['show'] : array();
 
 		?>
+		<div class="my-calendar-widget-wrapper my-calendar-filters-widget">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
@@ -110,6 +111,7 @@ class My_Calendar_Filters extends WP_Widget {
 				<option value="country" <?php selected( $ltype, 'country' ); ?>><?php _e( 'Country', 'my-calendar' ); ?></option>
 			</select>
 		</p>
+		</div>
 		<?php
 	}
 
