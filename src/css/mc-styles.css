@@ -25,6 +25,7 @@
 	padding: 5px 0 5px 24px
 }
 
+#my-calendar .delete_occurrence,
 #my-calendar-admin-table .delete {
 	color: #b32d2e;
 	background: #fff;
@@ -222,6 +223,15 @@ li.datetime-template:nth-of-type(even) {
 
 #e_schedule .columns.instance-list {
 	grid-template-columns: repeat( 3, 1fr )
+}
+
+#e_schedule .columns.instance-list li:nth-of-type(odd) {
+	background: rgba( 0,0,0,.05 );
+}
+
+
+#e_schedule .columns.instance-list li {
+	padding: 10px;
 }
 
 #e_schedule input[type=time],
