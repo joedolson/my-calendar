@@ -1416,9 +1416,9 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			}
 			if ( $show_block && empty( $_GET['date'] ) ) {
 				$args        = array(
-					'value' => $repeats,
-					'id'    => 'e_repeats',
-					'name'  => 'event_repeats',
+					'value'    => $repeats,
+					'id'       => 'e_repeats',
+					'name'     => 'event_repeats',
 				);
 				$date_picker = mc_datepicker_html( $args );
 				$return      = $pre . '

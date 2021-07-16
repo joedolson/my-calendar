@@ -64,6 +64,11 @@
 		// display notice informing users of lack of support for recur month by day.
 		$( '#e_recur' ).on( 'change', function (e) {
 			var recur = $(this).val();
+			if ( recur != 'S' ) {
+				$( 'duet-date-picker[identifier=e_repeats]' ).attr( 'required', 'true' );
+			} else {
+				$( 'duet-date-picker[identifier=e_repeats]' ).removeAttr( 'required' );
+			}
 			if ( recur == 'U' ) {
 				$( '#e_every' ).attr( 'max', 1 ).val( 1 );
 			} else {
