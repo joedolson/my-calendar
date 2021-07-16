@@ -728,7 +728,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 			}
 			if ( '0' === (string) $add['event_approved'] ) {
-				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ), false, 'draft-saved' );
+				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id ) );
+				$edit_event = sprintf( ' <a href="%s">' . __( 'Continue editing event.', 'my-calendar' ) . '</a>', $edit_url );
+				$message    = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved' );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
 				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' !== trim( $_POST['mc_twitter'] ) ) {
