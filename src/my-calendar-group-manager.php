@@ -991,16 +991,16 @@ function mc_list_groups() {
 	if ( empty( $items_per_page ) || $items_per_page < 1 ) {
 		$items_per_page = $screen->get_option( 'per_page', 'default' );
 	}
-	$limit = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : 'all';
+	$limit = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : 'published';
 	switch ( $limit ) {
-		case 'all':
-			$limit = '';
+		case 'published':
+			$limit = 'WHERE event_approved != 2';
 			break;
 		case 'grouped':
-			$limit = 'WHERE event_group_id <> 0';
+			$limit = 'WHERE event_group_id <> 0 AND event_approved != 2';
 			break;
 		case 'ungrouped':
-			$limit = 'WHERE event_group_id = 0';
+			$limit = 'WHERE event_group_id = 0 AND event_approved != 2';
 			break;
 		default:
 			$limit = '';
