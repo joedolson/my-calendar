@@ -2739,19 +2739,6 @@ function mc_list_events() {
 				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php _e( 'Check all', 'my-calendar' ); ?></label>
 			</div>
 
-			<p>
-				<?php
-				if ( ! ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) ) {
-					?>
-					<a class='mc_filter' href='<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ); ?>'><?php _e( 'View Archived Events', 'my-calendar' ); ?></a>
-					<?php
-				} else {
-					?>
-					<a class='mc_filter' href='<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>'><?php _e( 'Return to Manage Events', 'my-calendar' ); ?></a>
-					<?php
-				}
-				?>
-			</p>
 			</form>
 			<div class='mc-search'>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
