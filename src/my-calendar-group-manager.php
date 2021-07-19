@@ -264,7 +264,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 		$warning = '';
 	}
 	$class   = ( 'break' === $type ) ? 'break' : 'apply';
-	$group   = "<div class='group $class'>";
+	$group   = "<div class='group mc-actions $class'>";
 	$group  .= $warning;
 	$group  .= ( 'apply' === $type ) ? '<fieldset><legend>' . __( 'Apply these changes to:', 'my-calendar' ) . '</legend>' : '';
 	$group  .= ( 'break' === $type ) ? "<form method='post' action='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) . "'>
@@ -277,7 +277,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 		$time   = date_i18n( 'g:i a', strtotime( $result->event_time ) );
 		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$result->event_id' id='$type$result->event_id'$checked /> <label for='break$result->event_id'><a href='#event$result->event_id'>#$result->event_id</a>: $date; $time</label></li>\n";
 	}
-	$group .= "<li><input type='checkbox' class='selectall' id='$type'$checked /> <label for='$type'><b>" . __( 'Check/Uncheck all', 'my-calendar' ) . "</b></label></li>\n</ul>";
+	$group .= "<li><input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> <label for='$type'><b>" . __( 'Check/Uncheck all', 'my-calendar' ) . "</b></label></li>\n</ul>";
 	$group .= ( 'apply' === $type ) ? '</fieldset>' : '';
 	$group .= ( 'break' === $type ) ? "<p><input type='submit' class='button' value='" . __( 'Remove checked events from this group', 'my-calendar' ) . "' /></p></form>" : '';
 	$group .= '</div>';
