@@ -80,6 +80,7 @@ function my_calendar_group_edit() {
 						} elseif ( 0 === $result ) {
 							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false );
 						} else {
+							// Translators: Event group ID.
 							$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false );
 						}
 					}

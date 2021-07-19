@@ -1650,7 +1650,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id ) );
 				$edit_event = sprintf( ' <a href="%s">' . __( 'Edit the root event.', 'my-calendar' ) . '</a>', $edit_url );
 				// Translators: Date of a specific event occurrence.
-				$message   = sprintf( __( 'You are editing the <strong>%s</strong> instance of this event. Other instances of this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
+				$message = sprintf( __( 'You are editing the <strong>%s</strong> instance of this event. Other instances of this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
 				mc_show_notice( $message );
 			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
 				mc_show_notice( __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) );
@@ -1764,6 +1764,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 									if ( isset( $_GET['date'] ) ) {
 										echo '<p>';
 										$edit_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id );
+										// Translators: event editing URL.
 										printf( __( 'Editing a single date of an event changes only that date. <a href="%s">Edit the root event</a> to change the event series.', 'my-calendar' ), $edit_url );
 										echo '</p>';
 									}
