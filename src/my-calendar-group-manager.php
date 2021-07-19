@@ -37,6 +37,7 @@ function my_calendar_group_edit() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'Security check failed' );
 		}
+		$message = '';
 		switch ( $_POST['event_action'] ) {
 			case 'edit':
 				if ( isset( $_POST['apply'] ) && is_array( $_POST['apply'] ) ) {
@@ -79,12 +80,13 @@ function my_calendar_group_edit() {
 						} elseif ( 0 === $result ) {
 							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false );
 						} else {
-							$message = mc_show_notice( "#$event_id: " . __( 'Event grouped successfully', 'my-calendar' ), false );
+							$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false );
 						}
 					}
 				}
 				break;
 		}
+		echo $message;
 	}
 	?>
 

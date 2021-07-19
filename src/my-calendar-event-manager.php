@@ -460,9 +460,6 @@ function mc_show_notice( $message, $echo = true, $code = false ) {
  */
 function my_calendar_manage() {
 	my_calendar_check();
-	if ( isset( $_GET['groups'] ) && 'true' === $_GET['groups'] ) {
-		my_calendar_group_edit();
-	}
 	global $wpdb;
 	if ( isset( $_GET['mode'] ) && 'delete' === $_GET['mode'] ) {
 		$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
@@ -681,6 +678,17 @@ function my_calendar_edit() {
 	?>
 	</div>
 	<?php
+}
+
+/**
+ * Generate screens for editing and managing events & event groups.
+ */
+function my_calendar_manage_screen() {
+	if ( ! isset( $_GET['groups'] ) ) {
+		my_calendar_manage();
+	} else {
+		my_calendar_group_edit();
+	}
 }
 
 /**
