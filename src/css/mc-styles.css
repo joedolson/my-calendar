@@ -25,6 +25,21 @@
 	padding: 5px 0 5px 24px
 }
 
+.mc-template-tag-preview {
+	position: relative;
+	padding-bottom: 75%;
+	height: 0;
+	overflow: hidden;
+}
+
+.mc-template-tag-preview iframe {
+	position: absolute;
+	top:0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
 #my-calendar .delete_occurrence,
 #my-calendar-admin-table .delete {
 	color: #b32d2e;

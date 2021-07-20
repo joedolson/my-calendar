@@ -270,14 +270,16 @@ function mc_templates_edit() {
 /**
  * Display a list of all available template tags.
  *
+ * @param int|bool $mc_id Event occurence ID.
+ *
  * @return string
  */
-function mc_display_template_tags() {
+function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 	$event  = false;
 	$data   = array();
 	$output = '';
 	$empty  = '';
-	if ( ! isset( $_GET['mc-event'] ) ) {
+	if ( ! isset( $_GET['mc-event'] ) && ! $mc_id ) {
 		$args   = array(
 			'before' => 1,
 			'after'  => 1,
@@ -288,7 +290,7 @@ function mc_display_template_tags() {
 			$event = $events[0];
 		}
 	} else {
-		$mc_id = absint( $_GET['mc-event'] );
+		$mc_id = ( $mc_id ) ? $mc_id : absint( $_GET['mc-event'] );
 		$event = mc_get_event( $mc_id );
 	}
 	if ( $event ) {
@@ -301,12 +303,13 @@ function mc_display_template_tags() {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
 	}
 	foreach ( $data as $key => $value ) {
+		$tag_output = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre>' : $value;
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
-			$empty .= '<div class="mc-output-' . $key . '"><pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre></div></section>';
+			$empty .= '<div class="mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		} else {
-			$output .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
-			$output .= '<div class="mc-output-' . $key . '"><pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre></div></section>';
+			$output .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
+			$output .= '<div class="mc-output mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		}
 	}
 

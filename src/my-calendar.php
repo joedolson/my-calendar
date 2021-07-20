@@ -99,6 +99,7 @@ include( dirname( __FILE__ ) . '/my-calendar-widgets.php' );
 include( dirname( __FILE__ ) . '/my-calendar-upgrade-db.php' );
 include( dirname( __FILE__ ) . '/my-calendar-output.php' );
 include( dirname( __FILE__ ) . '/my-calendar-print.php' );
+include( dirname( __FILE__ ) . '/my-calendar-iframe.php' );
 include( dirname( __FILE__ ) . '/my-calendar-templates.php' );
 include( dirname( __FILE__ ) . '/my-calendar-limits.php' );
 include( dirname( __FILE__ ) . '/my-calendar-shortcodes.php' );

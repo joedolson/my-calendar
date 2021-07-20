@@ -1935,13 +1935,46 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	}
 	?>
 	<div class="ui-sortable meta-box-sortables">
-	<div class="postbox">
-		<div class="inside">
-			<div class='mc-controls footer'>
-				<?php echo mc_controls( $mode, $has_data, $data, 'footer' ); ?>
+		<div class="postbox">
+			<div class="inside">
+				<div class='mc-controls footer'>
+					<?php echo mc_controls( $mode, $has_data, $data, 'footer' ); ?>
+				</div>
 			</div>
 		</div>
-	</div>
+		<?php
+		if ( $has_data ) {
+			?>
+		<div class="postbox">
+			<h2><?php _e( 'Preview Template Output', 'my-calendar' ); ?></h2>
+			<div class="inside">
+				<div class="mc-preview">
+					<?php
+						$first    = mc_get_first_event( $data->event_id );
+						$view_url = mc_get_details_link( $first );
+						if ( ! mc_event_published( $data ) ) {
+							$view_url = add_query_arg( 'preview', 'true', mc_get_details_link( $data ) );
+						}
+						$tag_url     = admin_url( "admin.php?page=my-calendar-templates&mc-event=$first->occur_id" );
+						$tag_preview = add_query_arg(
+							array(
+								'iframe'   => 'true',
+								'showtags' => 'true',
+							),
+							$view_url
+						);
+						$tags        = "<span class='dashicons dashicons-tagcloud' aria-hidden='true'></span><a href='" . esc_url( $tag_url ) . "#templates' class='tags'>" . __( 'All Template Tags', 'my-calendar' ) . '</a>';
+					?>
+					<div class="mc-template-tag-preview">
+						<iframe title="<?php _e( 'Event Template Tag Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
+					</div>
+					<p><?php echo $tags; ?></p>
+				</div>
+			</div>
+		</div>
+			<?php
+		}
+		?>
 	</div>
 </form>
 </div>
@@ -2458,8 +2491,8 @@ function mc_list_events() {
 					}
 
 					$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
-					$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : $trash;
-					$invalid  = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : $trash;
+					$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
+					$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
 					$check    = mc_test_occurrence_overlap( $event, true );
 					$problem  = ( '' !== $check ) ? 'problem' : '';
 					$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
@@ -2501,8 +2534,9 @@ function mc_list_events() {
 										echo '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), $edit_url ) . '</strong>';
 									}
 								}
+								echo $trash;
 								echo $draft;
-								echo $invalid;
+								echo $inv;
 								?>
 								</strong>
 
@@ -3779,8 +3813,6 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( 'preview', 'true', $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';
 		}
-		$tag_url          = admin_url( "admin.php?page=my-calendar-templates&mc-event=$first->occur_id#templates" );
-		$controls['tags'] = "<span class='dashicons dashicons-tagcloud' aria-hidden='true'></span><a href='" . esc_url( $tag_url ) . "' class='tags'>" . __( 'Template', 'my-calendar' ) . '</a>';
 	}
 
 	$manage_text         = ( current_user_can( 'mc_manage_events' ) ) ? __( 'Manage events', 'my-calendar' ) : __( 'Manage your events', 'my-calendar' );

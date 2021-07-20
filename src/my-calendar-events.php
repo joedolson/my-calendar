@@ -913,6 +913,32 @@ function mc_is_preview() {
 }
 
 /**
+ * Check whether this event is targeted for an iFrame.
+ *
+ * @return boolean
+ */
+function mc_is_iframe() {
+	if ( isset( $_GET['iframe'] ) && 'true' === $_GET['iframe'] && isset( $_GET['mc_id'] ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Check whether this event is supposed to show template output.
+ *
+ * @return boolean
+ */
+function mc_is_tag_view() {
+	if ( isset( $_GET['showtags'] ) && 'true' === $_GET['showtags'] && current_user_can( 'mc_add_events' ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Remove non-holiday events from data if a holiday is present.
  *
  * @param array $events Array of event objects.
