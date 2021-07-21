@@ -1950,20 +1950,20 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			<div class="inside">
 				<div class="mc-preview">
 					<?php
-						$first    = mc_get_first_event( $data->event_id );
-						$view_url = mc_get_details_link( $first );
-						if ( ! mc_event_published( $data ) ) {
-							$view_url = add_query_arg( 'preview', 'true', mc_get_details_link( $data ) );
-						}
-						$tag_url     = admin_url( "admin.php?page=my-calendar-templates&mc-event=$first->occur_id" );
-						$tag_preview = add_query_arg(
-							array(
-								'iframe'   => 'true',
-								'showtags' => 'true',
-							),
-							$view_url
-						);
-						$tags        = "<span class='dashicons dashicons-tagcloud' aria-hidden='true'></span><a href='" . esc_url( $tag_url ) . "#templates' class='tags'>" . __( 'All Template Tags', 'my-calendar' ) . '</a>';
+					$first    = mc_get_first_event( $data->event_id );
+					$view_url = mc_get_details_link( $first );
+					if ( ! mc_event_published( $data ) ) {
+						$view_url = add_query_arg( 'preview', 'true', mc_get_details_link( $data ) );
+					}
+					$tag_url     = admin_url( "admin.php?page=my-calendar-templates&mc-event=$first->occur_id" );
+					$tag_preview = add_query_arg(
+						array(
+							'iframe'   => 'true',
+							'showtags' => 'true',
+						),
+						$view_url
+					);
+					$tags        = "<span class='dashicons dashicons-tagcloud' aria-hidden='true'></span><a href='" . esc_url( $tag_url ) . "#templates' class='tags'>" . __( 'All Template Tags', 'my-calendar' ) . '</a>';
 					?>
 					<div class="mc-template-tag-preview">
 						<iframe title="<?php _e( 'Event Template Tag Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>

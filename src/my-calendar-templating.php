@@ -271,6 +271,7 @@ function mc_templates_edit() {
  * Display a list of all available template tags.
  *
  * @param int|bool $mc_id Event occurence ID.
+ * @param string   $render 'code' or 'html'.
  *
  * @return string
  */

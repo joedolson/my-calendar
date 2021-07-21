@@ -28,7 +28,7 @@ function my_calendar_iframe_view() {
  * Produce print view output.
  */
 function my_calendar_iframe() {
-	$rtl  = ( is_rtl() ) ? 'rtl' : 'ltr';
+	$rtl = ( is_rtl() ) ? 'rtl' : 'ltr';
 	header( 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) );
 	if ( mc_is_tag_view() ) {
 		$tag_styles = '<style>.mc-template-cards { display: grid; grid-template-columns: repeat( 2, 1fr ); max-width: 100%; column-gap: 16px; }.mc-template-card {padding: 10px;}.mc-tag{background:#e9eaea;color:#000;padding:3px;}.mc-template-card .mc-output {line-break: anywhere;}</style>';
@@ -39,9 +39,9 @@ function my_calendar_iframe() {
 	echo '<!DOCTYPE html>
 <html dir="' . $rtl . '" lang="' . get_bloginfo( 'language' ) . '">
 <head>';
-echo $tag_styles;
-wp_head();
-echo '</head>
+	echo $tag_styles;
+	wp_head();
+	echo '</head>
 <body>';
 	$mc_id = ( is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 	if ( $mc_id ) {
