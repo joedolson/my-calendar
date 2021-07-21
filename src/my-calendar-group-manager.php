@@ -497,20 +497,20 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					</div>
 				</div>
 			</div>
-					<?php
-				} else {
-					?>
-					<div>
-						<input type="hidden" name="event_image" value="<?php echo ( $has_data ) ? esc_attr( $data->event_image ) : ''; ?>" />
 						<?php
-						if ( ! empty( $data->event_image ) ) {
-							echo '<div class="event_image"><img src="' . esc_attr( $data->event_image ) . '" alt="" /></div>';
-						}
+					} else {
 						?>
-					</div>
-					<?php
-				}
-				?>
+						<div>
+							<input type="hidden" name="event_image" value="<?php echo ( $has_data ) ? esc_attr( $data->event_image ) : ''; ?>" />
+							<?php
+							if ( ! empty( $data->event_image ) ) {
+								echo '<div class="event_image"><img src="' . esc_attr( $data->event_image ) . '" alt="" /></div>';
+							}
+							?>
+						</div>
+						<?php
+					}
+					?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
 					<h2><?php _e( 'Event Details', 'my-calendar' ); ?></h2>
@@ -1102,7 +1102,7 @@ function mc_list_groups() {
 				$class      = '';
 				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				foreach ( $events as $event ) {
-					$class      = ( 'alternate' === $class ) ? '' : 'alternate';
+					$class      = ( 'alternate' === $class ) ? 'even' : 'alternate';
 					$spam       = ( '1' === $event->event_flagged ) ? ' spam' : '';
 					$spam_label = ( '1' === $event->event_flagged ) ? '<strong>Possible spam:</strong> ' : '';
 					$author     = ( '0' !== $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
