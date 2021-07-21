@@ -282,6 +282,7 @@ ol.mc-repeat-events {
 	border-radius: 3px;
 	background: #fcf9e8;
 	border: 1px solid #8c8f94;
+	display: block;
 }
 
 #my-calendar .apply legend {
