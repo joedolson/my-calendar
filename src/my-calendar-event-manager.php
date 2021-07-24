@@ -999,6 +999,7 @@ function mc_delete_event( $event_id ) {
 			$message = mc_show_error( __( 'Despite issuing a request to delete, the event still remains in the database. Please investigate.', 'my-calendar' ), false );
 		}
 	}
+	mc_update_count_cache();
 
 	return $message;
 }
