@@ -14,8 +14,13 @@ jQuery(document).ready(function ($) {
 		// insert the new element after the last "duplicatable" input field.
 		$( '#event' + num ).after(newElem);
 		// Update id & for relationships.
-		var inputs     = newElem.find( 'input' );
-		var firstInput = newElem.find( '.event-time' ).trigger( 'focus' );
+		var inputs      = newElem.find( 'input' );
+		var timeControl = newElem.find( '.event-time' );
+		var endControl  = newElem.find( '.event-end' );
+		var initialTime = $( '#mc_event_time' ).val();
+		var initialEnd  = $( '#mc_event_endtime' ).val();
+		endControl.val( initialEnd );
+		timeControl.val( initialTime ).trigger( 'focus' );
 		var labels     = newElem.find( 'label' );
 		inputs.each(function() {
 			var id = $(this).attr('id');

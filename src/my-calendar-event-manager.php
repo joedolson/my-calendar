@@ -3626,7 +3626,7 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
 		</p>
 		<p>
 			<label for="mc_event_endtime">' . __( 'End Time', 'my-calendar' ) . '</label>
-		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" disabled />
+		<input type="time" class="event-end" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" disabled />
 		</p>
 		<p>
 			<label for="mc_event_date" id="eblabel">' . __( 'Date', 'my-calendar' ) . '</label> <input type="date" class="event-begin" id="mc_event_date" name="event_begin[]" value="' . esc_attr( $event_begin ) . '" disabled />
