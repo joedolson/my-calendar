@@ -3301,8 +3301,8 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
  */
 function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 	$locations = mc_get_list_locations( $datatype );
+	$output    = '';
 	if ( $locations ) {
-		$output = '<ul class="mc-locations">';
 		foreach ( $locations as $key => $value ) {
 			if ( 'hcard' !== $datatype && '' !== $template ) {
 				$label   = stripslashes( $value->{$datatype} );
@@ -3332,11 +3332,11 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 					'phone'     => $value->location_phone,
 				);
 				$label   = mc_draw_template( $values, $template );
-				$output .= "<li>$label</li>";
+				$output .= ( '' !== $label ) ? "<li>$label</li>" : '';
 			}
 		}
 
-		$output .= '</ul>';
+		$output .= '<ul class="mc-locations">' . $output . '</ul>';
 		$output  = apply_filters( 'mc_location_list', $output, $locations );
 
 		return $output;
