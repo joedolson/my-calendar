@@ -1794,8 +1794,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 								</h4>
 								<div>
 									<a href='<?php echo $edit_group_url; ?>'><?php _e( 'Edit group', 'my-calendar' ); ?></a>
-									<ul class="columns">
-										<?php mc_related_events( $data->event_group_id ); ?>
+									<ul class="columns instance-list">
+										<?php mc_related_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
 									</ul>
 								</div>
 								<?php
@@ -3867,9 +3867,10 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 /**
  * Get a list of related events and list admin editing links
  *
- * @param int $id group ID.
+ * @param int    $id group ID.
+ * @param string $template Template format.
  */
-function mc_related_events( $id ) {
+function mc_related_events( $id, $template = '' ) {
 	global $wpdb;
 	$id     = (int) $id;
 	$output = '';
@@ -3877,16 +3878,21 @@ function mc_related_events( $id ) {
 	$results = mc_get_related( $id );
 	if ( is_array( $results ) && ! empty( $results ) ) {
 		foreach ( $results as $result ) {
-			$result = mc_get_first_event( $result->event_id );
-			if ( ! is_object( $result ) ) {
+			$first = mc_get_first_event( $result->event_id );
+			if ( ! is_object( $first ) ) {
 				continue;
 			}
-			$event    = $result->occur_event_id;
+			$event    = $first->occur_event_id;
 			$current  = '<a href="' . admin_url( 'admin.php?page=my-calendar' ) . '&amp;mode=edit&amp;event_id=' . $event . '">';
-			$end      = '</a>';
-			$begin    = date_i18n( mc_date_format(), strtotime( $result->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), strtotime( $result->occur_begin ), false );
-			$template = $current . $begin . $end;
-			$output  .= "<li>$template</li>";
+			$close    = '</a>';
+			$begin    = date_i18n( mc_date_format(), strtotime( $first->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), strtotime( $first->occur_begin ), false );
+			$array    = array(
+				'current' => $current,
+				'begin'   => $begin,
+				'end'     => $close,
+			);
+			$current_output = ( '' === $template ) ? $current . $begin . $end : mc_draw_template( $array, $template );
+			$output  .= "<li>$current_output</li>";
 		}
 	} else {
 		$output = '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
