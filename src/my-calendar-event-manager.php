@@ -838,20 +838,26 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$formats,
 					'%d'
 				);
-				if ( isset( $_POST['prev_event_repeats'] ) && isset( $_POST['prev_event_recur'] ) ) {
-					$recur_changed = ( $update['event_repeats'] !== $_POST['prev_event_repeats'] || $update['event_recur'] !== $_POST['prev_event_recur'] ) ? true : false;
-				} else {
-					$recur_changed = false;
+				if ( ! isset( $_POST['event_recur'] ) && isset( $_POST['event_repeats'] ) ) {
+					unset( $_POST['event_repeats'] );
 				}
-				if ( $date_changed || $recur_changed ) {
-					// Function mc_increment_event uses previous events and re-uses same ID if new has same date as old event.
-					$instances = mc_get_instances( $event_id );
-					mc_delete_instances( $event_id );
-					// Delete previously created custom & deleted instance records.
-					$post_ID = mc_get_data( 'event_post', $event_id );
-					delete_post_meta( $post_ID, '_mc_custom_instances' );
-					delete_post_meta( $post_ID, '_mc_deleted_instances' );
-					mc_increment_event( $event_id, array(), false, $instances );
+				// Only execute new increments if 'event_repeats' is present.
+				if ( isset( $_POST['event_repeats'] ) ) {
+					if ( isset( $_POST['prev_event_repeats'] ) && isset( $_POST['prev_event_recur'] ) ) {
+						$recur_changed = ( $update['event_repeats'] !== $_POST['prev_event_repeats'] || $update['event_recur'] !== $_POST['prev_event_recur'] ) ? true : false;
+					} else {
+						$recur_changed = false;
+					}
+					if ( $date_changed || $recur_changed ) {
+						// Function mc_increment_event uses previous events and re-uses same ID if new has same date as old event.
+						$instances = mc_get_instances( $event_id );
+						mc_delete_instances( $event_id );
+						// Delete previously created custom & deleted instance records.
+						$post_ID = mc_get_data( 'event_post', $event_id );
+						delete_post_meta( $post_ID, '_mc_custom_instances' );
+						delete_post_meta( $post_ID, '_mc_deleted_instances' );
+						mc_increment_event( $event_id, array(), false, $instances );
+					}
 				}
 			}
 			$data = $update;
@@ -1426,6 +1432,12 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				$repeats     = gmdate( 'Y-m-d', strtotime( $event->occur_begin ) );
 			}
 			if ( $show_block && empty( $_GET['date'] ) ) {
+				$warning = '';
+				$class   = '';
+				if ( false !== mc_admin_instances( $data->event_id ) ) {
+					$class   = 'disable-recurrences';
+					$warning = '<div class="recurrences-disabled"><p>' . __( 'Editing the repetition pattern will remove and recreate all scheduled dates for this  event.', 'my-calendar' ) . '<button type="button" class="button enable-repetition" aria-expanded="false"><span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '</button></p></div>';
+				}
 				$args        = array(
 					'value' => $repeats,
 					'id'    => 'e_repeats',
@@ -1434,7 +1446,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 				$date_picker = mc_datepicker_html( $args );
 				$return      = $pre . '
 	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . '</h2>
-	<div class="inside recurrences">' . $prev . '
+	<div class="inside recurrences ' . $class . '">' . $prev . $warning . '
 		<fieldset class="recurring">
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
 			<div class="columns">
@@ -2854,11 +2866,15 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	}
 
 	if ( 'add' === $action || 'edit' === $action || 'copy' === $action ) {
-		$title = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
-		$desc  = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
-		$short = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
-		$recur = ! empty( $post['event_recur'] ) ? trim( $post['event_recur'] ) : '';
-		$every = ! empty( $post['event_every'] ) ? (int) $post['event_every'] : 1;
+		$title  = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
+		$desc   = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
+		$short  = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
+		$recurs = ( isset( $post['prev_event_recur'] ) ) ? $post['prev_event_recur'] : '';
+		$recur  = ! empty( $post['event_recur'] ) ? trim( $post['event_recur'] ) : $recur;
+		if ( ! isset( $post['event_recur'] ) && isset( $post['event_repeats'] ) ) {
+			unset( $post['event_repeats'] );
+		}
+		$every  = ! empty( $post['event_every'] ) ? (int) $post['event_every'] : 1;
 		// if this is an all weekdays event, and it's been scheduled to start on a weekend, the math gets nasty.
 		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
 		$begin = trim( $post['event_begin'][ $i ] );
@@ -2914,7 +2930,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$time    = mc_date( 'H:i:s', mc_strtotime( $time ), false );
 		$endtime = mc_date( 'H:i:s', mc_strtotime( $endtime ), false );
 		$end     = mc_date( 'Y-m-d', mc_strtotime( $end ), false ); // regardless of entry format, convert.
-		$repeats = ( isset( $post['event_repeats'] ) ) ? trim( $post['event_repeats'] ) : 0;
+		$repeat  = ( isset( $post['prev_event_repeats'] ) ) ? $post['prev_event_repeats'] : 0;
+		$repeats = ( isset( $post['event_repeats'] ) ) ? trim( $post['event_repeats'] ) : $repeat;
 		$host    = ! empty( $post['event_host'] ) ? $post['event_host'] : $user->ID;
 		$primary = false;
 
@@ -3408,7 +3425,7 @@ function mc_instance_list( $args ) {
  * @param int $id Event ID.
  * @param int $occur Specific occurrence ID.
  *
- * @return string list of event dates
+ * @return bool|string list of event dates
  */
 function mc_admin_instances( $id, $occur = false ) {
 	global $wpdb;
@@ -3416,6 +3433,9 @@ function mc_admin_instances( $id, $occur = false ) {
 	$results    = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$event_post = mc_get_event_post( $id );
 	$deleted    = get_post_meta( $event_post, '_mc_deleted_instances', true );
+	if ( empty( $results ) ) {
+		return false;
+	}
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
 			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( mc_date_format(), mc_strtotime( $result->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ), false ) . '</span>';

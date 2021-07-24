@@ -61,6 +61,24 @@ jQuery(document).ready(function ($) {
 		$( '#' + id + ' input' ).prop( 'disabled', false ).removeClass( 'disabled' ).addClass( 'emabled' );
 	});
 
+	var recurrences = $( '.disable-recurrences' );
+	recurrences.find( 'fieldset' ).hide();
+	recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', true );
+	$( '.enable-repetition' ).on( 'click', function() {
+		var expanded = $( this ).attr( 'aria-expanded' );
+		if ( 'false' !== expanded ) {
+			$( this ).attr( 'aria-expanded', 'false' );
+			$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-right' );
+			recurrences.find( 'fieldset' ).hide();
+			recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', true );
+		} else {
+			$( this ).attr( 'aria-expanded', 'true' );
+			$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-right' ).addClass( 'dashicons-arrow-down' );
+			recurrences.find( 'fieldset' ).show();
+			recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', false );
+		}
+	});
+
 	// Set default conditions.
 	$( '#event_span' ).hide();
 	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );

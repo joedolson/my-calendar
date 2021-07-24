@@ -864,6 +864,15 @@ select[name="event_recur"] {
 	float: none;
 }
 
+.recurrences-disabled p {
+	display: grid;
+	grid-template-columns: 80% 1fr;
+}
+
+.enable-repetition .dashicons:before {
+	vertical-align: middle;
+}
+
 .mc_add_new {
 	position: relative;
 	z-index: 200;
