@@ -1307,7 +1307,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 						<div class="event_description">
 						<label for="content" class="screen-reader-text">' . __( 'Event Description', 'my-calendar' ) . '</label>';
 						if ( user_can_richedit() ) {
-							wp_editor( $value, 'content', array( 'textarea_rows' => 10 ) );
+							wp_editor( $value, 'content', array( 'textarea_rows' => 20 ) );
 						} else {
 							echo '<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . stripslashes( esc_attr( $value ) ) . '</textarea>';
 						}
