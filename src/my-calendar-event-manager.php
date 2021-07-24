@@ -1756,41 +1756,37 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					} else {
 						?>
 						<div id='mc-accordion'>
-							<?php
-							if ( ! ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ) {
+							<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php _e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
+							<div>
+								<?php
+								if ( isset( $_GET['date'] ) ) {
+									echo '<p>';
+									$edit_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id );
+									// Translators: event editing URL.
+									printf( __( 'Editing a single date of an event changes only that date. <a href="%s">Edit the root event</a> to change the event series.', 'my-calendar' ), $edit_url );
+									echo '</p>';
+								}
 								?>
-								<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php _e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
-								<div>
+								<div class='mc_response' aria-live='assertive'></div>
+								<ul class="columns instance-list">
 									<?php
 									if ( isset( $_GET['date'] ) ) {
-										echo '<p>';
-										$edit_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id );
-										// Translators: event editing URL.
-										printf( __( 'Editing a single date of an event changes only that date. <a href="%s">Edit the root event</a> to change the event series.', 'my-calendar' ), $edit_url );
-										echo '</p>';
+										$date = (int) $_GET['date'];
+									} else {
+										$date = false;
 									}
+									echo mc_admin_instances( $data->event_id, $date );
 									?>
-									<div class='mc_response' aria-live='assertive'></div>
-									<ul class="columns instance-list">
-										<?php
-										if ( isset( $_GET['date'] ) ) {
-											$date = (int) $_GET['date'];
-										} else {
-											$date = false;
-										}
-										echo mc_admin_instances( $data->event_id, $date );
-										?>
-									</ul>
-									<p><button type='button' class='add-occurrence button-secondary' aria-expanded="false"><span class='dashicons dashicons-plus' aria-hidden='true'> </span><?php _e( 'Add another date', 'my-calendar' ); ?></button></p>
-									<div class='mc_add_new'>
-									<?php echo mc_recur_datetime_input( $data ); ?>
-									<p>
-									<button type='button' class='save-occurrence button-primary clear'><?php _e( 'Add Date', 'my-calendar' ); ?></button>
-									</p>
-									</div>
+								</ul>
+								<p><button type='button' class='add-occurrence button-secondary' aria-expanded="false"><span class='dashicons dashicons-plus' aria-hidden='true'> </span><?php _e( 'Add another date', 'my-calendar' ); ?></button></p>
+								<div class='mc_add_new'>
+								<?php echo mc_recur_datetime_input( $data ); ?>
+								<p>
+								<button type='button' class='save-occurrence button-primary clear'><?php _e( 'Add Date', 'my-calendar' ); ?></button>
+								</p>
 								</div>
+							</div>
 								<?php
-							}
 							if ( 0 !== (int) $data->event_group_id ) {
 								$edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
 								?>
