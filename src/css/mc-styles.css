@@ -750,6 +750,10 @@ input[name="mc_uri"] {
 	font-size: 1.1em;
 }
 
+.my-calendar-admin fieldset.categories {
+	margin-top: 1em;
+}
+
 .generator fieldset {
 	border: 1px solid #c3c4c7;
 	margin: 10px 0;
