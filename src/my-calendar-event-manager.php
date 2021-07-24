@@ -3430,7 +3430,8 @@ function mc_instance_list( $args ) {
 function mc_admin_instances( $id, $occur = false ) {
 	global $wpdb;
 	$output     = '';
-	$results    = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$ts_string  = mc_ts();
+	$results    = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$event_post = mc_get_event_post( $id );
 	$deleted    = get_post_meta( $event_post, '_mc_deleted_instances', true );
 	if ( empty( $results ) ) {
@@ -3438,14 +3439,28 @@ function mc_admin_instances( $id, $occur = false ) {
 	}
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
-			$begin = "<span id='occur_date_$result->occur_id'>" . date_i18n( mc_date_format(), mc_strtotime( $result->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), mc_strtotime( $result->occur_begin ), false ) . '</span>';
+			$start = $result->ts_occur_begin;
+			$end   = $result->ts_occur_end;
+			if ( ( ( $end + 1 ) - $start ) == DAY_IN_SECONDS || ( $end - $start ) === DAY_IN_SECONDS ) {
+				$time = '';
+			} elseif ( ( $end - $start ) <= HOUR_IN_SECONDS ) {
+				$time = mc_date( get_option( 'mc_time_format' ), $start ); 
+			} else {
+				$time = mc_date( get_option( 'mc_time_format' ), $start ) . '-' . mc_date( get_option( 'mc_time_format' ), $end );
+			}
+			if ( date( 'Y-m-d', $start ) !== date( 'Y-m-d', $end ) ) {
+				$date = date_i18n( mc_date_format(), $start ) . '-' . date_i18n( mc_date_format(), $end );
+			} else {
+				$date = date_i18n( mc_date_format(), $start );
+			}
+			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
 			$class = '';
 			if ( (int) $result->occur_id === (int) $occur ) {
 				$control = '';
-				$edit    = "<p>$begin</p><p><em>" . __( 'Editing Now', 'my-calendar' ) . '</em></p>';
+				$edit    = "<p>$date</p><p><em>" . __( 'Editing Now', 'my-calendar' ) . '</em></p>';
 				$class   = 'current-event';
 			} else {
-				$control = "<p>$begin</p><p><button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
+				$control = "<p>$date</p><p><button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
 				$edit    = "<a href='" . admin_url( 'admin.php?page=my-calendar' ) . "&amp;mode=edit&amp;event_id=$id&amp;date=$result->occur_id' class='button' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit', 'my-calendar' ) . '</a></p>';
 			}
 			$output .= "<li class='$class'>$control$edit</li>";

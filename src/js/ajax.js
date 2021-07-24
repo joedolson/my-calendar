@@ -17,7 +17,7 @@
 			};
 			$.post( ajaxurl, data, function (response) {
 				if ( response.success == 1 ) {
-					$( "button[data-value='"+value+"']" ).parent( 'li' ).hide();
+					$( "button[data-value='"+value+"']" ).parents( 'li' ).hide();
 				}
 				$('.mc_response').text( response.response ).show( 300 );
 			}, "json" );
