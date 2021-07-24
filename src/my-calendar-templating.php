@@ -303,7 +303,44 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 	if ( empty( $data ) ) {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
 	}
+	$skippin = array();
+	if ( 'preview' === $render ) {
+		// In preview, don't show all items.
+		$skipping = array(
+			'author_id',
+			'cat_id',
+			'category_id',
+			'dateid',
+			'duration',
+			'event_span',
+			'dtend',
+			'dtstart',
+			'group',
+			'guid',
+			'host_id',
+			'ical_categories',
+			'ical_category',
+			'ical_desc',
+			'ical_end',
+			'ical_location',
+			'ical_start',
+			'id',
+			'location_source',
+			'post',
+			'repeats',
+			'rssdate',
+			'skip_holiday',
+			'term',
+			'description_raw',
+			'description_stripped',
+			'shortdesc_raw',
+			'shortdesc_stripped',
+		);
+	}
 	foreach ( $data as $key => $value ) {
+		if ( in_array( $key, $skipping, true ) ) {
+			continue;
+		}
 		$tag_output = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre>' : $value;
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
