@@ -27,18 +27,25 @@ jQuery(document).ready(function ($) {
 			newFor     = forVal + newNum;
 			$(this).attr( 'for', newFor );
 		});
-		// business rule: you can only add 40 occurrences at a time.
+		// You can only add up to 40 occurrences at a time.
 		if ( newNum == 40 ) {
 			$('.add_field').attr('disabled', 'disabled');
 		}
 	});
 
 	$('#e_schedule').on( 'click', '.del_field', function() {
-		var id  = $( this ).parents( 'li' ).attr( 'id' );
-		var num = $('.datetime-template.enabled').length;
+		var id = $( this ).parents( 'li' ).attr( 'id' );
 		$( '#' + id + ' input' ).prop( 'disabled', true ).removeClass( 'enabled' ).addClass( 'disabled' );
 		$('.add_field').prop( 'disabled', false );
-		$( this ).removeClass( 'del_field' ).addClass( 'restore_field' ).text( mcAdmin.restoreButton );
+		$( this ).removeClass( 'del_field' ).addClass( 'restore_field' ).removeClass( 'button-delete' ).text( mcAdmin.restoreButton );
+		$( '#' + id ).find( '.remove_field' ).removeClass( 'hidden' );
+		$( this ).parents( 'div' ).addClass( 'multiple' );
+	});
+
+	$( '#e_schedule' ).on( 'click', '.remove_field', function() {
+		var num = $('.datetime-template.enabled').length;
+		$( this ).parents( 'div' ).removeClass( 'multiple' );
+		$( this ).parents( 'li' ).remove();
 		// if only one element left, hide event span checkbox & show original add occurrence button.
 		if ( num - 1 <= 1 ) {
 			$('#event_span').hide();
@@ -48,8 +55,9 @@ jQuery(document).ready(function ($) {
 
 	$('#e_schedule').on( 'click', '.restore_field', function() {
 		var id  = $( this ).parents( 'li' ).attr( 'id' );
-		var num = $('.datetime-template.enabled').length;
-		$( this ).removeClass( 'restore_field' ).addClass( 'del_field' ).text( mcAdmin.deleteButton );
+		$( this ).parents( 'div' ).removeClass( 'multiple' );
+		$( this ).removeClass( 'restore_field' ).addClass( 'del_field button-delete' ).text( mcAdmin.deleteButton );
+		$( '#' + id ).find( '.remove_field' ).addClass( 'hidden' );
 		$( '#' + id + ' input' ).prop( 'disabled', false ).removeClass( 'disabled' ).addClass( 'emabled' );
 	});
 

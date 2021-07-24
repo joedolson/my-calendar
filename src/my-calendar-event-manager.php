@@ -3587,7 +3587,7 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
 	$sweek        = absint( get_option( 'start_of_week' ) );
 	$firstday     = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 
-	$form .= '<button type="button" class="del_field button button-delete">' . __( 'Delete', 'my-calendar' ) . '</button>
+	$form .= '<div class="mc-buttons"><button type="button" class="del_field button button-delete">' . __( 'Delete', 'my-calendar' ) . '</button><button type="button" class="remove_field button button-delete hidden">' . __( 'Remove', 'my-calendar' ) . '</button></div>
 	<div class="columns">
 		<p>
 			<label for="mc_event_time">' . __( 'Start Time', 'my-calendar' ) . '</label>
