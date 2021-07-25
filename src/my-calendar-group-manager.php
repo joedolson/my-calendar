@@ -105,7 +105,7 @@ function my_calendar_group_edit() {
 		?>
 		<h1><?php _e( 'Manage Event Groups', 'my-calendar' ); ?></h1>
 		<p>
-			<?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you started from. You will also see a set of checkboxes to choose which events you want to apply these changes to.', 'my-calendar' ); ?>
+			<?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you choose.', 'my-calendar' ); ?>
 		</p>
 		<div class="mc-tablinks">
 			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>">My Events</strong>
