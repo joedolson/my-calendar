@@ -247,7 +247,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	global $wpdb;
 	$event_id = (int) $_GET['event_id'];
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
-	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time, event_title FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$results  = mc_get_related( $group_id );
 	if ( 'apply' === $type ) {
 		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>Warning:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p class="matched">' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
 	} else {
@@ -263,9 +263,13 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	$group  .= "<ul class='checkboxes'>";
 	$checked = ( 'apply' === $type ) ? ' checked="checked"' : '';
 	foreach ( $results as $result ) {
-		$date   = date_i18n( 'D, j M, Y', strtotime( $result->event_begin ) );
-		$time   = date_i18n( 'g:i a', strtotime( $result->event_time ) );
-		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$result->event_id' id='$type$result->event_id'$checked /> <label for='break$result->event_id'>$result->event_title<br />$date, $time</label></li>\n";
+		$first = mc_get_first_event( $result->event_id );
+		if ( ! is_object( $first ) ) {
+			continue;
+		}
+		$date   = date_i18n( 'D, j M, Y', $first->ts_occur_begin );
+		$time   = date_i18n( 'g:i a', $first->ts_occur_begin );
+		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$first->event_id' id='$type$first->event_id'$checked /> <label for='break$first->event_id'>$first->event_title<br />$date, $time</label></li>\n";
 	}
 	$group .= "<li><input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> <label for='$type'><b>" . __( 'Check/Uncheck all', 'my-calendar' ) . "</b></label></li>\n</ul>";
 	$group .= ( 'apply' === $type ) ? '</fieldset>' : '';
