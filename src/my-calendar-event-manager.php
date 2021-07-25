@@ -1644,9 +1644,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 <div class="ui-sortable meta-box-sortables">
 	<div class="postbox">
 		<?php
-			$text = ( 'edit' === $mode ) ? __( 'Edit Event', 'my-calendar' ) : __( 'Add Event', 'my-calendar' );
+			// Translators: Event title.
+			$text = ( 'edit' === $mode ) ? sprintf( __( 'Editing "%s"', 'my-calendar' ), $data->event_title ) : __( 'Add Event', 'my-calendar' );
 		?>
-		<h2><?php esc_html( $text ); ?></h2>
+		<h2><?php echo esc_html( $text ); ?></h2>
 		<div class="inside">
 		<div class='mc-controls'>
 			<?php
