@@ -259,7 +259,7 @@ function mc_templates_edit() {
 		</div>
 	<?php
 	$add = array(
-		__( 'Templates', 'my-calendar' ) => mc_list_templates() . '<p><a href="' . add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates' ) ) . '">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>',
+		__( 'Templates', 'my-calendar' ) => mc_list_templates() . '<p><a class="button" href="' . add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates' ) ) . '">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>',
 	);
 	mc_show_sidebar( '', $add );
 	?>
