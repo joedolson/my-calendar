@@ -507,6 +507,10 @@ strong.label {
 	color: #646970;
 }
 
+.mc-group-buttons {
+	float: right;
+}
+
 .mc-sidebar-footer .jcd-wide {
 	width: 100%;
 }
@@ -525,7 +529,8 @@ strong.label {
 
 .mc-tabs .tabs button, .mc-tablinks a {
 	display: inline-block;
-	padding: 4px 8px;
+	padding: 6px 12px;
+	font-size: 14px;
 	border-radius: 4px 4px 0 0;
 	border: 1px solid #c3c4c7;
 	border-bottom: none;
