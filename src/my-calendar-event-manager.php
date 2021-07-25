@@ -2798,9 +2798,15 @@ function mc_list_events() {
 		</div>
 			<?php
 		} else {
-			?>
-			<p class='mc-none'><?php _e( 'There are no events in the database meeting your current criteria.', 'my-calendar' ); ?></p>
-			<?php
+			if ( ! isset( $_GET['restrict'] ) && ( ! isset( $_GET['limit'] ) || isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ) {
+				?>
+				<p class='mc-create-event'><a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="button button-hero"><?php _e( 'Create an event', 'my-calendar' ); ?></a></p>
+				<?php
+			} else {
+				?>
+				<p class='mc-none'><?php _e( 'There are no events in the database meeting the current limits.', 'my-calendar' ); ?></p>
+				<?php
+			}
 		}
 	}
 }

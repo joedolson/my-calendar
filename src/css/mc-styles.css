@@ -1005,6 +1005,12 @@ tr.problem .error {
 	clear: both;
 }
 
+.mc-create-event {
+	text-align: center;
+	margin: 1em 0;
+	clear: both;
+}
+
 
 /**
  * Autocomplete CSS
