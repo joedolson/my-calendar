@@ -115,16 +115,7 @@ function my_calendar_group_edit() {
 			<div class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2><?php _e( 'Manage Event Groups', 'my-calendar' ); ?></h2>
-
-						<div class="inside">
-							<p><?php _e( 'Select an event group to edit.', 'my-calendar' ); ?></p>
-						</div>
-					</div>
-				</div>
-				<div class="ui-sortable meta-box-sortables">
-					<div class="postbox">
-						<h2><?php _e( 'Create/Modify Groups', 'my-calendar' ); ?></h2>
+						<h2><?php _e( 'Event Groups', 'my-calendar' ); ?></h2>
 						<?php mc_list_groups(); ?>
 					</div>
 				</div>
