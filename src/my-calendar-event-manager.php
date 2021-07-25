@@ -2616,7 +2616,7 @@ function mc_list_events() {
 								if ( '' !== $event->event_label ) {
 									$elabel = urlencode( $event->event_label );
 									?>
-								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ); ?>' title="<?php _e( 'Filter by location', 'my-calendar' ); ?>"><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></a>
+								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ); ?>'><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></a>
 									<?php
 								}
 								?>
@@ -2641,7 +2641,7 @@ function mc_list_events() {
 							$author = ( is_object( $author ) ? $author->display_name : $author );
 							?>
 							<td>
-								<a class='mc_filter' href="<?php echo $filter; ?>" title="<?php _e( 'Filter by author', 'my-calendar' ); ?>">
+								<a class='mc_filter' href="<?php echo $filter; ?>">
 									<span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo $author; ?>
 								</a>
 							</td>
@@ -2666,7 +2666,7 @@ function mc_list_events() {
 							?>
 							<td>
 								<?php echo $color; ?>
-								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ); ?>' title="<?php _e( 'Filter by category', 'my-calendar' ); ?>"><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( $cat->category_name ); ?>
+								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ); ?>'><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( $cat->category_name ); ?>
 								</a>
 								<?php
 								$string = '';
