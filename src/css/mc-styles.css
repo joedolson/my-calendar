@@ -304,16 +304,16 @@ ol.mc-repeat-events {
 	background: #fcf9e8;
 	color: #2c3338;
 	padding: 10px;
-	border-bottom: 1px solid #b32d2e;
+	border-bottom: 2px solid transparent;
 	margin: 0 -5px 10px;
 }
 
 #my-calendar .apply .warning {
-	border-bottom: 1px solid #b32d2e;
+	border-bottom: 2px solid #b32d2e;
 }
 
 #my-calendar .apply .matched {
-	border-bottom: 1px solid #007017;
+	border-bottom: 2px solid #007017;
 }
 
 #my-calendar .break ul {
@@ -748,6 +748,10 @@ input[name="mc_uri"] {
 	column-gap: 6px;
 	margin: 6px 0 4px;
 	clear: both;
+}
+
+.group.mc-actions .checkboxes label {
+	display: inline-block;
 }
 
 .my-calendar-admin fieldset legend {

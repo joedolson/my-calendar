@@ -247,16 +247,16 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	global $wpdb;
 	$event_id = (int) $_GET['event_id'];
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
-	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$results  = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id, event_begin, event_time, event_title FROM  ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( 'apply' === $type ) {
-		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>NOTE:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p class="matched">' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
+		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="warning">' . __( '<strong>Warning:</strong> The group editable fields for the events in this group do not match', 'my-calendar' ) . '</p>' : '<p class="matched">' . __( 'The group editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
 	} else {
 		$warning = '';
 	}
 	$class   = ( 'break' === $type ) ? 'break' : 'apply';
 	$group   = "<div class='group mc-actions $class'>";
 	$group  .= $warning;
-	$group  .= ( 'apply' === $type ) ? '<fieldset><legend>' . __( 'Apply these changes to:', 'my-calendar' ) . '</legend>' : '';
+	$group  .= ( 'apply' === $type ) ? '<fieldset><legend>' . __( 'Apply changes to:', 'my-calendar' ) . '</legend>' : '';
 	$group  .= ( 'break' === $type ) ? "<form method='post' action='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) . "'>
 	<div><input type='hidden' value='" . esc_attr( $group_id ) . "' name='group_id' /><input type='hidden' value='" . esc_attr( $type ) . "' name='event_action' /><input type='hidden' name='_wpnonce' value='$nonce' />
 	</div>" : '';
@@ -265,7 +265,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	foreach ( $results as $result ) {
 		$date   = date_i18n( 'D, j M, Y', strtotime( $result->event_begin ) );
 		$time   = date_i18n( 'g:i a', strtotime( $result->event_time ) );
-		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$result->event_id' id='$type$result->event_id'$checked /> <label for='break$result->event_id'><a href='#event$result->event_id'>#$result->event_id</a>: $date; $time</label></li>\n";
+		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$result->event_id' id='$type$result->event_id'$checked /> <label for='break$result->event_id'>$result->event_title<br />$date, $time</label></li>\n";
 	}
 	$group .= "<li><input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> <label for='$type'><b>" . __( 'Check/Uncheck all', 'my-calendar' ) . "</b></label></li>\n</ul>";
 	$group .= ( 'apply' === $type ) ? '</fieldset>' : '';
