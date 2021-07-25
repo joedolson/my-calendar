@@ -1816,7 +1816,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 									</div>
 									<?php
 								}
-							?>
+								?>
 						</div>
 						<?php
 					}

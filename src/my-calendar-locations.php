@@ -787,7 +787,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	<fieldset>
 	<legend>' . __( 'Location Contact Information', 'my-calendar' ) . '</legend>
 	<p>
-	<label for="e_phone">' . __( 'Phone', 'my-calendar' ) . $compare_phone .  '</label> <input type="text" id="e_phone" name="' . $context . '_phone" size="32" value="' . $event_phone . '" />
+	<label for="e_phone">' . __( 'Phone', 'my-calendar' ) . $compare_phone . '</label> <input type="text" id="e_phone" name="' . $context . '_phone" size="32" value="' . $event_phone . '" />
 	</p>
 	<p>
 	<label for="e_phone2">' . __( 'Secondary Phone', 'my-calendar' ) . $compare_phone2 . '</label> <input type="text" id="e_phone2" name="' . $context . '_phone2" size="32" value="' . $event_phone2 . '" />
