@@ -898,6 +898,7 @@ function mc_list_groups() {
 				$class      = '';
 				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				foreach ( $events as $event ) {
+					$is_grouped = mc_event_is_grouped( $event->event_group_id );
 					$class      = ( 'alternate' === $class ) ? 'even' : 'alternate';
 					$spam       = ( '1' === $event->event_flagged ) ? ' spam' : '';
 					$spam_label = ( '1' === $event->event_flagged ) ? '<strong>Possible spam:</strong> ' : '';
@@ -911,7 +912,7 @@ function mc_list_groups() {
 					?>
 				<tr class="<?php echo "$class $spam"; ?>" id="event<?php echo $event->event_id; ?>">
 					<th scope="row">
-						<input type="checkbox" aria-describedby="event_<?php echo $event->event_id; ?>" value="<?php echo $event->event_id; ?>" name="group[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( mc_event_is_grouped( $event->event_group_id ) ) ? ' disabled="disabled"' : ''; ?> />
+						<input type="checkbox" aria-describedby="event_<?php echo $event->event_id; ?>" value="<?php echo $event->event_id; ?>" name="group[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( $is_grouped ) ? ' disabled="disabled"' : ''; ?> />
 						<label for="mc<?php echo $event->event_id; ?>"><span class="screen-reader-text"><?php _e( 'Group event', 'my-calendar' ); ?></span><?php echo $event->event_id; ?></label>
 					</th>
 					<th scope="row">
@@ -922,7 +923,7 @@ function mc_list_groups() {
 						<?php
 						if ( $can_edit ) {
 							$edit_link = '';
-							if ( mc_event_is_grouped( $event->event_group_id ) ) {
+							if ( $is_grouped ) {
 								$edit_link = admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
 							}
 							if ( $edit_link ) {
@@ -934,6 +935,10 @@ function mc_list_groups() {
 						if ( $can_edit && $edit_link ) {
 							echo '</a>';
 						}
+						if ( ! $is_grouped ) {
+							echo ' - <em>' . __( 'Ungrouped', 'my-calendar' ) . '</em>';
+
+						}
 						?>
 						</strong>
 
@@ -941,14 +946,12 @@ function mc_list_groups() {
 							<?php
 							if ( $can_edit ) {
 								?>
-								<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit' aria-describedby='event_<?php echo $event->event_id; ?>'><?php _e( 'Edit Event', 'my-calendar' ); ?></a> |
+								<a href="<?php echo admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ); ?>" class='edit' aria-describedby='event_<?php echo $event->event_id; ?>'><?php _e( 'Edit Event', 'my-calendar' ); ?></a>
 								<?php
-								if ( mc_event_is_grouped( $event->event_group_id ) ) {
+								if ( $is_grouped ) {
 									?>
-									<a href="<?php echo admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ); ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
+									| <a href="<?php echo admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ); ?>" class='edit group'><?php _e( 'Edit Group', 'my-calendar' ); ?></a>
 									<?php
-								} else {
-									echo '<em>' . __( 'Ungrouped', 'my-calendar' ) . '</em>';
 								}
 							} else {
 								_e( 'Not editable.', 'my-calendar' );
