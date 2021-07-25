@@ -353,7 +353,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<ul>
 						<li>
 						<?php
-						$manage_text         = __( 'Manage groups', 'my-calendar' );
+						$manage_text = __( 'Manage groups', 'my-calendar' );
 						echo "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage&groups=true' ) . '">' . $manage_text . '</a>';
 						?>
 						</li>
