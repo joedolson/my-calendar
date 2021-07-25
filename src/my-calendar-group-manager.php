@@ -873,7 +873,7 @@ function mc_list_groups() {
 				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				<input type="hidden" name="event_action" value="group"/>
 			</div>
-			<p style="position:relative;display:inline-block;">
+			<p class="mc-group-buttons">
 				<input type="submit" class="button-primary group" value="<?php _e( 'Group checked events for mass editing', 'my-calendar' ); ?>" />
 			</p>
 			<table class="widefat wp-list-table" id="my-calendar-admin-table">
