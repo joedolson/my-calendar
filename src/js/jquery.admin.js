@@ -185,7 +185,10 @@ jQuery(document).ready(function ($) {
 		for (i = 0; i < tabPanels.length; i++) {
 			tabPanels[i].style.display = "none";
 		}
-		document.getElementById(id).style.display = "block"; //show tabpanel
+		var currentPanel = document.getElementById(id);
+		if ( null !== currentPanel ) {
+			currentPanel.style.display = "block"; //show tabpanel
+		}
 	}
 	// Arrow key handlers.
 	$('.mc-tabs [role=tablist]').keydown(function(e) {
