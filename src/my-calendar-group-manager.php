@@ -854,7 +854,6 @@ function mc_list_groups() {
 				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
 			</li>
 		</ul>
-	<p><?php _e( 'Check a set of events to group them for mass editing.', 'my-calendar' ); ?></p>
 	<?php
 	$num_pages = ceil( $items / $items_per_page );
 	if ( $num_pages > 1 ) {
