@@ -2645,48 +2645,8 @@ function mc_list_events() {
 									<span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo $author; ?>
 								</a>
 							</td>
-							<?php
-							if ( ! $event->event_category ) {
-								// Events *must* have a category.
-								mc_update_event( 'event_category', 1, $event->event_id, '%d' );
-							}
-							$cat = mc_get_category_detail( $event->event_category, false );
-							if ( ! is_object( $cat ) ) {
-								$cat = (object) array(
-									'category_color' => '',
-									'category_id'    => '',
-									'category_name'  => '',
-								);
-							}
-							$color      = $cat->category_color;
-							$color      = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
-							$color      = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
-							$categories = mc_get_categories( $event );
-							$cats       = array();
-							?>
 							<td>
-								<?php echo $color; ?>
-								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ); ?>'><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( $cat->category_name ); ?>
-								</a>
-								<?php
-								$string = '';
-								if ( is_array( $categories ) ) {
-									foreach ( $categories as $category ) {
-										$category = (int) $category;
-										if ( $category !== (int) $event->event_category ) {
-											$filter = admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
-											$color  = mc_get_category_detail( $category, 'category_color' );
-											$color  = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
-											$color  = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
-											$cats[] = $color . ' <a href="' . $filter . '">' . mc_get_category_detail( $category, 'category_name' ) . '</a>';
-										}
-										if ( count( $cats ) > 0 ) {
-											$string = ', ' . implode( ', ', $cats );
-										}
-									}
-									echo ( '' !== $string ) ? $string : '';
-								}
-								?>
+							<?php echo mc_admin_category_list( $event ); ?>
 							</td>
 						</tr>
 						<?php

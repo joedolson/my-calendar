@@ -244,7 +244,6 @@ function mc_compare_group_members( $group_id, $field = false ) {
  * @return string form
  */
 function mc_group_form( $group_id, $type = 'break' ) {
-	global $wpdb;
 	$event_id = (int) $_GET['event_id'];
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
 	$results  = mc_get_related( $group_id );
@@ -976,23 +975,9 @@ function mc_list_groups() {
 						</div>
 					</td>
 					<td><?php echo ( is_object( $author ) ) ? $author->display_name : $author; ?></td>
-					<?php
-					$this_category = $event->event_category;
-					$this_cat      = false;
-					foreach ( $categories as $key => $value ) {
-						if ( $value->category_id === $this_category ) {
-							$this_cat = $categories[ $key ];
-						}
-					}
-					if ( ! $this_cat ) {
-						$this_cat = mc_get_category( $event->event_category );
-					}
-					$background = strip_tags( ( strpos( $this_cat->category_color, '#' ) !== 0 ) ? '#' : '' ) . $this_cat->category_color;
-					?>
 					<td>
-						<div class="category-color" style="background-color:<?php echo $background; ?>"></div> <?php echo mc_kses_post( stripslashes( $this_cat->category_name ) ); ?>
+					<?php echo mc_admin_category_list( $event ); ?>
 					</td>
-					<?php unset( $this_cat ); ?>
 					</tr>
 					<?php
 				}

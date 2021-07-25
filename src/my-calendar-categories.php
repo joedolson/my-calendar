@@ -896,6 +896,61 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 }
 
 /**
+ * Show category output for editing lists.
+ *
+ * @param object $event Event object.
+ *
+ * @return string
+ */
+function mc_admin_category_list( $event ) {
+	if ( ! $event->event_category ) {
+		// Events *must* have a category.
+		mc_update_event( 'event_category', 1, $event->event_id, '%d' );
+	}
+	$cat = mc_get_category_detail( $event->event_category, false );
+	if ( ! is_object( $cat ) ) {
+		$cat = (object) array(
+			'category_color' => '',
+			'category_id'    => '',
+			'category_name'  => '',
+		);
+	}
+	$color      = $cat->category_color;
+	$color      = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
+	$color      = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
+	$categories = mc_get_categories( $event );
+	$cats       = array();
+	$string  = $color;
+	if ( isset( $_GET['groups'] ) ) {
+		$string .= ' ' . strip_tags( $cat->category_name );
+	} else {
+		$string .= " <a class='mc_filter' href='" . admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ) . "'><span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '</span>' . strip_tags( $cat->category_name ) . '</a>';
+	}
+
+	if ( is_array( $categories ) ) {
+		foreach ( $categories as $category ) {
+			$category = (int) $category;
+			if ( $category !== (int) $event->event_category ) {
+				$filter = admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
+				$color  = mc_get_category_detail( $category, 'category_color' );
+				$color  = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
+				$color  = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
+				if ( isset( $_GET['groups'] ) ) {
+					$cats[] = $color . ' ' . mc_get_category_detail( $category, 'category_name' );
+				} else {
+					$cats[] = $color . ' <a href="' . $filter . '">' . mc_get_category_detail( $category, 'category_name' ) . '</a>';
+				}
+			}
+			if ( count( $cats ) > 0 ) {
+				$string .= ', ' . implode( ', ', $cats );
+			}
+		}
+	}
+
+	return $string;
+}
+
+/**
  * Get all categories for given event
  *
  * @param object  $event Event object.
