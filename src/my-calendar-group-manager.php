@@ -199,11 +199,10 @@ function mc_group_data( $event_id = false ) {
 		if ( intval( $event_id ) !== $event_id ) {
 			return mc_show_error( __( 'Sorry! That\'s an invalid event key.', 'my-calendar' ), false );
 		} else {
-			$data = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$data = mc_get_event( $event_id );
 			if ( empty( $data ) ) {
 				return mc_show_error( __( "Sorry! We couldn't find an event with that ID.", 'my-calendar' ), false );
 			}
-			$data = $data[0];
 		}
 		// Recover users entries if they exist; in other words if editing an event went wrong.
 		if ( ! empty( $submission ) ) {
@@ -594,7 +593,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	</div>
 		<?php
 	}
-	if ( ( 'on' === $mc_input['event_location'] || 'on' === $mc_input['event_location_dropdown'] ) || $input_all ) {
+	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
 		?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
@@ -602,210 +601,18 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 
 			<div class="inside location_form">
 				<fieldset>
-					<legend><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
+					<legend class="screen-reader-text"><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 		<?php
 	}
-	if ( 'on' === $mc_input['event_location_dropdown'] || $input_all ) {
-		$locations = mc_get_locations( 'group-manager' );
-		if ( ! empty( $locations ) ) {
-			?>
-		<p>
-			<label for="location_preset"><?php _e( 'Choose a preset location:', 'my-calendar' ); ?></label>
-			<select name="location_preset" id="location_preset">
-				<option value="none">--</option>
-				<?php
-				foreach ( $locations as $location ) {
-					echo '<option value="' . $location->location_id . '">' . esc_html( stripslashes( $location->location_label ) ) . '</option>';
-				}
-				?>
-			</select>
-		</p>
-			<?php
-		} else {
-			?>
-		<input type="hidden" name="location_preset" value="none"/>
-		<p>
-			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add recurring locations for later use.', 'my-calendar' ); ?></a>
-		</p>
-			<?php
-		}
+	if ( mc_show_edit_block( 'event_location_dropdown' ) ) {
+		echo mc_event_location_dropdown_block( $data );
 	} else {
-		echo '<input type="hidden" name="location_preset" value="none"/>';
-	}
-	if ( 'on' === $mc_input['event_location'] || $input_all ) {
 		?>
-	<p>
-		<label for="e_label">
-		<?php
-		_e( 'Name of Location (e.g. <em>Joe\'s Bar and Grill</em>)', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_label' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label><br/>
-		<input type="text" id="e_label" name="event_label" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_label ) ) : ''; ?>" />
-	</p>
-	<p>
-		<label for="e_street">
-		<?php
-		_e( 'Street Address', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_street' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_street" name="event_street" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_street ) ) : ''; ?>" />
-	</p>
-	<p>
-		<label for="e_street2">
-		<?php
-		_e( 'Street Address (2)', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_street2' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_street2" name="event_street2" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_street2 ) ) : ''; ?>"/>
-	</p>
-	<p>
-		<label for="e_city">
-		<?php
-		_e( 'City', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_city' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_city" name="event_city" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_city ) ) : ''; ?>" />
-		<label for="e_state">
-		<?php
-		_e( 'State/Province', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_state' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_state" name="event_state" size="10" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_state ) ) : ''; ?>"/>
-	</p>
-	<p>
-		<label for="e_postcode">
-		<?php
-		_e( 'Postal Code', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_postcode' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_postcode" name="event_postcode" size="10" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_postcode ) ) : ''; ?>" />
-		<label for="e_region">
-		<?php
-		_e( 'Region', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_region' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_region" name="event_region" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_region ) ) : ''; ?>" />
-	</p>
-	<p>
-		<label for="e_country">
-		<?php
-		_e( 'Country', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_country' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_country" name="event_country" size="10" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_country ) ) : ''; ?>" />
-	</p>
-	<p>
-		<label for="e_zoom">
-		<?php
-		_e( 'Initial Zoom', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_zoom' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		$zoom = ( ! empty( $data ) ) ? $data->event_zoom : '';
-		?>
-		</label>
-		<select name="event_zoom" id="e_zoom">
-			<option value="16"<?php selected( $zoom, 16 ); ?>><?php _e( 'Neighborhood', 'my-calendar' ); ?></option>
-			<option value="14"<?php selected( $zoom, 14 ); ?>><?php _e( 'Small City', 'my-calendar' ); ?></option>
-			<option value="12"<?php selected( $zoom, 12 ); ?>><?php _e( 'Large City', 'my-calendar' ); ?></option>
-			<option value="10"<?php selected( $zoom, 10 ); ?>><?php _e( 'Greater Metro Area', 'my-calendar' ); ?></option>
-			<option value="8"<?php selected( $zoom, 8 ); ?>><?php _e( 'State', 'my-calendar' ); ?></option>
-			<option value="6"<?php selected( $zoom, 6 ); ?>><?php _e( 'Region', 'my-calendar' ); ?></option>
-		</select>
-	</p>
-	<p>
-		<label for="e_phone">
-		<?php
-		_e( 'Phone', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_phone' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_phone" name="event_phone" size="32" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_phone ) ) : ''; ?>" />
-	</p>
-	<p>
-		<label for="e_url">
-		<?php
-		_e( 'Location URL', 'my-calendar' );
-		if ( ! mc_compare_group_members( $group_id, 'event_url' ) ) {
-			echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-		}
-		?>
-		</label>
-		<input type="text" id="e_url" name="event_url" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_url ) ) : ''; ?>" />
-	</p>
-	<fieldset>
-		<legend><?php _e( 'GPS Coordinates (optional)', 'my-calendar' ); ?></legend>
-		<p>
-			<label for="e_latitude">
-			<?php
-			_e( 'Latitude', 'my-calendar' );
-			if ( ! mc_compare_group_members( $group_id, 'event_latitude' ) ) {
-				echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-			}
-			if ( ! mc_compare_group_members( $group_id, 'event_longitude' ) ) {
-				echo ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
-			}
-			?>
-			</label>
-			<input type="text" id="e_latitude" name="event_latitude" size="10" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_latitude ) ) : ''; ?>" />
-			<label for="e_longitude"><?php _e( 'Longitude', 'my-calendar' ); ?></label>
-			<input type="text" id="e_longitude" name="event_longitude" size="10" value="<?php echo ( ! empty( $data ) ) ? esc_attr( stripslashes( $data->event_longitude ) ) : ''; ?>" />
-		</p>
-	</fieldset>
-	<fieldset>
-		<legend><?php _e( 'Location Accessibility', 'my-calendar' ); ?></legend>
-		<ul class='checkboxes'>
-			<?php
-			$access      = apply_filters( 'mc_venue_accessibility', mc_location_access() );
-			$access_list = '';
-			if ( ! empty( $data ) ) {
-				$location_access = unserialize( $data->event_access );
-			} else {
-				$location_access = array();
-			}
-			foreach ( $access as $k => $a ) {
-				$id      = "loc_access_$k";
-				$label   = $a;
-				$checked = '';
-				if ( is_array( $location_access ) ) {
-					$checked = ( in_array( $k, $location_access, true ) ) ? " checked='checked'" : '';
-				}
-				$item         = sprintf( '<li><input type="checkbox" id="%1$s" name="event_access[]" value="%4$s" class="checkbox" %2$s /> <label for="%1$s">%3$s</label></li>', esc_attr( $id ), $checked, esc_html( $label ), esc_attr( $k ) );
-				$access_list .= $item;
-			}
-			echo $access_list;
-			?>
-		</ul>
-	</fieldset>
+		<input type="hidden" name="location_preset" value="none" />
 		<?php
 	}
-	if ( ( 'on' === $mc_input['event_location'] || 'on' === $mc_input['event_location_dropdown'] ) || $input_all ) {
+	mc_show_block( 'event_location', $has_data, $data, true, '', $group_id );
+	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
 		?>
 				</fieldset>
 			</div>

@@ -1179,6 +1179,9 @@ function mc_edit_block_is_visible( $field ) {
 	if ( empty( $show ) || $show < 1 ) {
 		$show = $screen->get_option( 'mc_show_on_page', 'default' );
 	}
+	if ( empty( $show ) ) {
+		$show = $defaults;
+	}
 
 	// if this doesn't exist in array, return false. Field is hidden.
 	if ( ! isset( $input[ $field ] ) && ! isset( $show[ $field ] ) ) {
@@ -1253,10 +1256,11 @@ function mc_datepicker_html( $args ) {
  * @param mixed array/object $data Current data.
  * @param boolean            $echo whether to return or echo.
  * @param string             $default Default string value.
+ * @param int                $group_id If in group editing, group ID.
  *
  * @return string.
  */
-function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) {
+function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $group_id = false ) {
 	global $user_ID;
 	$return     = '';
 	$checked    = '';
@@ -1434,7 +1438,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			if ( $show_block && empty( $_GET['date'] ) ) {
 				$warning = '';
 				$class   = '';
-				if ( false !== mc_admin_instances( $data->event_id ) ) {
+				if ( $has_data && false !== mc_admin_instances( $data->event_id ) ) {
 					$class   = 'disable-recurrences';
 					$warning = '<div class="recurrences-disabled"><p>' . __( 'Editing the repetition pattern will remove and recreate all scheduled dates for this  event.', 'my-calendar' ) . '<button type="button" class="button enable-repetition" aria-expanded="false"><span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '</button></p></div>';
 				}
@@ -1494,7 +1498,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '' ) 
 			break;
 		case 'event_location':
 			if ( $show_block ) {
-				$return = mc_locations_fields( $has_data, $data, 'event' );
+				$return = mc_locations_fields( $has_data, $data, 'event', $group_id );
 			} else {
 				if ( $has_data ) {
 					$return = "<div>

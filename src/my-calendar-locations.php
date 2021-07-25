@@ -601,10 +601,11 @@ function mc_location_controls() {
  * @param boolean $has_data Whether currently have data.
  * @param object  $data event or location data.
  * @param string  $context whether currently in an event or a location context.
+ * @param int     $group_id Group ID if in group editing.
  *
  * @return string HTML form fields
  */
-function mc_locations_fields( $has_data, $data, $context = 'location' ) {
+function mc_locations_fields( $has_data, $data, $context = 'location', $group_id = false ) {
 	$return = '<div class="mc-locations">';
 	if ( current_user_can( 'mc_edit_locations' ) && 'event' === $context ) {
 		$return .= '<p class="checkboxes"><input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location" /> <label for="mc_copy_location">' . __( 'Copy this location into the locations table', 'my-calendar' ) . '</label></p>';
@@ -615,14 +616,34 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 		$return .= '<input type="checkbox" name="mc_default_location" id="mc_default_location"' . $checked . ' /> <label for="mc_default_location">' . __( 'Default Location', 'my-calendar' ) . '</label>';
 		$return .= '</p>';
 	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_label' ) ) {
+		$compare = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare = '';
+	}
 	$return   .= '
 	<p>
-	<label for="e_label">' . __( 'Name of Location (e.g. <em>Joe\'s Bar and Grill</em>)', 'my-calendar' ) . '</label>';
+	<label for="e_label">' . __( 'Name of Location (e.g. <em>Joe\'s Bar and Grill</em>)', 'my-calendar' ) . $compare . '</label>';
 	$cur_label = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_label'} ) ) : '';
 	if ( mc_controlled_field( 'label' ) ) {
 		$return .= mc_location_controller( 'label', $cur_label, $context );
 	} else {
 		$return .= '<input type="text" id="e_label" name="' . $context . '_label" size="40" value="' . esc_attr( $cur_label ) . '" />';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_street' ) ) {
+		$compare1 = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare1 = '';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_street2' ) ) {
+		$compare2 = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare2 = '';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_city' ) ) {
+		$compare = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare = '';
 	}
 	$street_address  = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_street'} ) ) : '';
 	$street_address2 = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_street2'} ) ) : '';
@@ -633,48 +654,98 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	<fieldset>
 	<legend>' . __( 'Location Address', 'my-calendar' ) . '</legend>
 	<p>
-		<label for="e_street">' . __( 'Street Address', 'my-calendar' ) . '</label> <input type="text" id="e_street" name="' . $context . '_street" size="40" value="' . $street_address . '" />
+		<label for="e_street">' . __( 'Street Address', 'my-calendar' ) . $compare1 . '</label> <input type="text" id="e_street" name="' . $context . '_street" size="40" value="' . $street_address . '" />
 	</p>
 	<p>
-		<label for="e_street2">' . __( 'Street Address (2)', 'my-calendar' ) . '</label> <input type="text" id="e_street2" name="' . $context . '_street2" size="40" value="' . $street_address2 . '" />
+		<label for="e_street2">' . __( 'Street Address (2)', 'my-calendar' ) . $compare2 . '</label> <input type="text" id="e_street2" name="' . $context . '_street2" size="40" value="' . $street_address2 . '" />
 	</p>
 	<p>
-		<label for="e_city">' . __( 'City', 'my-calendar' ) . '</label> ';
+		<label for="e_city">' . __( 'City', 'my-calendar' ) . $compare . '</label> ';
 	$cur_city        = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_city'} ) ) : '';
 	if ( mc_controlled_field( 'city' ) ) {
 		$return .= mc_location_controller( 'city', $cur_city, $context );
 	} else {
 		$return .= '<input type="text" id="e_city" name="' . $context . '_city" size="40" value="' . esc_attr( $cur_city ) . '" />';
 	}
-	$return   .= '</p><p>';
-	$return   .= '<label for="e_state">' . __( 'State/Province', 'my-calendar' ) . '</label> ';
+	$return .= '</p><p>';
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_state' ) ) {
+		$compare = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare = '';
+	}
+	$return   .= '<label for="e_state">' . __( 'State/Province', 'my-calendar' ) . $compare . '</label> ';
 	$cur_state = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_state'} ) ) : '';
 	if ( mc_controlled_field( 'state' ) ) {
 		$return .= mc_location_controller( 'state', $cur_state, $context );
 	} else {
 		$return .= '<input type="text" id="e_state" name="' . $context . '_state" size="10" value="' . esc_attr( $cur_state ) . '" />';
 	}
-	$return      .= '</p><p><label for="e_postcode">' . __( 'Postal Code', 'my-calendar' ) . '</label> ';
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_postcode' ) ) {
+		$compare = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare = '';
+	}
+	$return      .= '</p><p><label for="e_postcode">' . __( 'Postal Code', 'my-calendar' ) . $compare . '</label> ';
 	$cur_postcode = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_postcode'} ) ) : '';
 	if ( mc_controlled_field( 'postcode' ) ) {
 		$return .= mc_location_controller( 'postcode', $cur_postcode, $context );
 	} else {
 		$return .= '<input type="text" id="e_postcode" name="' . $context . '_postcode" size="40" value="' . esc_attr( $cur_postcode ) . '" />';
 	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_region' ) ) {
+		$compare = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare = '';
+	}
 	$return    .= '</p><p>';
-	$return    .= '<label for="e_region">' . __( 'Region', 'my-calendar' ) . '</label> ';
+	$return    .= '<label for="e_region">' . __( 'Region', 'my-calendar' ) . $compare . '</label> ';
 	$cur_region = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_region'} ) ) : '';
 	if ( mc_controlled_field( 'region' ) ) {
 		$return .= mc_location_controller( 'region', $cur_region, $context );
 	} else {
 		$return .= '<input type="text" id="e_region" name="' . $context . '_region" size="40" value="' . esc_attr( $cur_region ) . '" />';
 	}
-	$return     .= '</p><p><label for="e_country">' . __( 'Country', 'my-calendar' ) . '</label> ';
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_country' ) ) {
+		$compare = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare = '';
+	}
+	$return     .= '</p><p><label for="e_country">' . __( 'Country', 'my-calendar' ) . $compare . '</label> ';
 	$cur_country = ( $has_data ) ? ( stripslashes( $data->{$context . '_country'} ) ) : '';
 	if ( mc_controlled_field( 'country' ) ) {
 		$return .= mc_location_controller( 'country', $cur_country, $context );
 	} else {
 		$return .= '<input type="text" id="e_country" name="' . $context . '_country" size="10" value="' . esc_attr( $cur_country ) . '" />';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_zoom' ) ) {
+		$compare_zoom = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare_zoom = '';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_phone' ) ) {
+		$compare_phone = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare_phone = '';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_phone2' ) ) {
+		$compare_phone2 = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare_phone2 = '';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_url' ) ) {
+		$compare_url = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare_url = '';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_latitude' ) ) {
+		$compare_lat = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare_lat = '';
+	}
+	if ( $group_id && ! mc_compare_group_members( $group_id, 'event_longitude' ) ) {
+		$compare_lon = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
+	} else {
+		$compare_lon = '';
 	}
 	$zoom         = ( $has_data ) ? $data->{$context . '_zoom'} : '16';
 	$event_phone  = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_phone'} ) ) : '';
@@ -684,7 +755,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	$event_lon    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_longitude'} ) ) : '';
 	$return      .= '</p>
 	<p>
-	<label for="e_zoom">' . __( 'Initial Zoom', 'my-calendar' ) . '</label>
+	<label for="e_zoom">' . __( 'Initial Zoom', 'my-calendar' ) . $compare_zoom . '</label>
 		<select name="' . $context . '_zoom" id="e_zoom">
 			<option value="16"' . mc_option_selected( $zoom, '16', 'option' ) . '>' . __( 'Neighborhood', 'my-calendar' ) . '</option>
 			<option value="14"' . mc_option_selected( $zoom, '14', 'option' ) . '>' . __( 'Small City', 'my-calendar' ) . '</option>
@@ -702,10 +773,10 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	</p>
 	<div class="columns-flex">
 	<p>
-		<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" />
+		<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . $compare_lat . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" />
 	</p>
 	<p>
-		<label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
+		<label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
 	</p>
 	</div>
 	</fieldset>';
@@ -716,13 +787,13 @@ function mc_locations_fields( $has_data, $data, $context = 'location' ) {
 	<fieldset>
 	<legend>' . __( 'Location Contact Information', 'my-calendar' ) . '</legend>
 	<p>
-	<label for="e_phone">' . __( 'Phone', 'my-calendar' ) . '</label> <input type="text" id="e_phone" name="' . $context . '_phone" size="32" value="' . $event_phone . '" />
+	<label for="e_phone">' . __( 'Phone', 'my-calendar' ) . $compare_phone .  '</label> <input type="text" id="e_phone" name="' . $context . '_phone" size="32" value="' . $event_phone . '" />
 	</p>
 	<p>
-	<label for="e_phone2">' . __( 'Secondary Phone', 'my-calendar' ) . '</label> <input type="text" id="e_phone2" name="' . $context . '_phone2" size="32" value="' . $event_phone2 . '" />
+	<label for="e_phone2">' . __( 'Secondary Phone', 'my-calendar' ) . $compare_phone2 . '</label> <input type="text" id="e_phone2" name="' . $context . '_phone2" size="32" value="' . $event_phone2 . '" />
 	</p>
 	<p>
-	<label for="e_url">' . __( 'Location URL', 'my-calendar' ) . '</label> <input type="text" id="e_url" name="' . $context . '_url" size="40" value="' . $event_url . '" />
+	<label for="e_url">' . __( 'Location URL', 'my-calendar' ) . $compare_url . '</label> <input type="text" id="e_url" name="' . $context . '_url" size="40" value="' . $event_url . '" />
 	</p>
 	</fieldset>
 	<fieldset>
