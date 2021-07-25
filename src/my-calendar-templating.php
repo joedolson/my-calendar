@@ -341,7 +341,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		if ( in_array( $key, $skipping, true ) ) {
 			continue;
 		}
-		$tag_output = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap">' . esc_html( $value ) . '</pre>' : $value;
+		$tag_output = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap;line-break:anywhere">' . esc_html( $value ) . '</pre>' : $value;
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$empty .= '<div class="mc-output-' . $key . '">' . $tag_output . '</div></section>';
