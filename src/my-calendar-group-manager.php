@@ -112,23 +112,23 @@ function my_calendar_group_edit() {
 			<a href="#my-calendar-admin-table" aria-current="page">Event Groups</a>
 		</div>
 		<div class="postbox-container jcd-wide">
-		<div class="metabox-holder">
-			<div class="ui-sortable meta-box-sortables">
-				<div class="postbox">
-					<h2><?php _e( 'Manage Event Groups', 'my-calendar' ); ?></h2>
+			<div class="metabox-holder">
+				<div class="ui-sortable meta-box-sortables">
+					<div class="postbox">
+						<h2><?php _e( 'Manage Event Groups', 'my-calendar' ); ?></h2>
 
-					<div class="inside">
-						<p><?php _e( 'Select an event group to edit.', 'my-calendar' ); ?></p>
+						<div class="inside">
+							<p><?php _e( 'Select an event group to edit.', 'my-calendar' ); ?></p>
+						</div>
+					</div>
+				</div>
+				<div class="ui-sortable meta-box-sortables">
+					<div class="postbox">
+						<h2><?php _e( 'Create/Modify Groups', 'my-calendar' ); ?></h2>
+						<?php mc_list_groups(); ?>
 					</div>
 				</div>
 			</div>
-			<div class="ui-sortable meta-box-sortables">
-				<div class="postbox">
-					<h2><?php _e( 'Create/Modify Groups', 'my-calendar' ); ?></h2>
-					<?php mc_list_groups(); ?>
-				</div>
-			</div>
-		</div>
 		</div>
 		<?php
 	}
@@ -323,16 +323,13 @@ function mc_edit_groups( $mode = 'edit', $event_id = false, $group_id = false ) 
  */
 function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = '' ) {
 	global $user_ID;
-	$current_user = wp_get_current_user();
-	$has_data     = ( empty( $data ) ) ? false : true;
-	$user         = get_userdata( $user_ID );
-	$input_all    = ( get_option( 'mc_input_options_administrators' ) === 'true' && current_user_can( 'manage_options' ) ) ? true : false;
-	$mc_input     = get_option( 'mc_input_options' );
-	$group_id     = ( ! empty( $data->event_group_id ) ) ? $data->event_group_id : mc_group_id();
-	$title        = '';
-	$description  = '';
-	$short        = '';
-	$image        = '';
+	$has_data    = ( empty( $data ) ) ? false : true;
+	$user        = get_userdata( $user_ID );
+	$group_id    = ( ! empty( $data->event_group_id ) ) ? $data->event_group_id : mc_group_id();
+	$title       = '';
+	$description = '';
+	$short       = '';
+	$image       = '';
 
 	if ( ! empty( $data ) ) {
 		$title       = stripslashes( $data->event_title );
@@ -374,8 +371,8 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<input type="text" id="e_title" name="event_title" size="60" value="<?php echo esc_attr( $title ); ?>" />
 				</p>
 				<?php
-				$apply = mc_group_form( $group_id, 'apply' );
-				echo $apply;
+				echo mc_group_form( $group_id, 'apply' );
+
 				if ( '0' === $data->event_repeats && ( 'S1' === $data->event_recur || 'S' === $data->event_recur ) ) {
 					$span_checked = '';
 					if ( ! empty( $data ) && '1' === $data->event_span ) {
@@ -401,7 +398,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<div><input type='hidden' name='event_span' value='<?php echo esc_attr( $data->event_span ); ?>'/></div>
 					<?php
 				}
-				if ( 'on' === $mc_input['event_desc'] || $input_all ) {
+				if ( mc_show_edit_block( 'event_desc' ) ) {
 					?>
 					<div id="group_description">
 						<label for="content">
@@ -416,7 +413,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					</div>
 					<?php
 				}
-				if ( 'on' === $mc_input['event_short'] || $input_all ) {
+				if ( mc_show_edit_block( 'event_short' ) ) {
 					?>
 					<p>
 						<label for="e_short">
@@ -431,7 +428,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					</p>
 					<?php
 				}
-				if ( 'on' === $mc_input['event_category'] || $input_all ) {
+				if ( mc_show_edit_block( 'event_category' ) ) {
 					$match = '';
 					if ( ! mc_compare_group_members( $group_id, 'event_category' ) ) {
 						$match = ' <span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '</span>';
@@ -541,7 +538,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 						</select>
 					</p>
 					<?php
-					if ( 'on' === $mc_input['event_link'] || $input_all ) {
+					if ( mc_show_edit_block( 'event_link' ) ) {
 						if ( ! empty( $data ) && '1' === $data->event_link_expires ) {
 							$exp_checked = ' checked="checked"';
 						} elseif ( ! empty( $data ) && '0' === $data->event_link_expires ) {
@@ -570,7 +567,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 			</div>
 		</div>
 	<?php
-	if ( 'on' === $mc_input['event_open'] || $input_all ) { // Add a "don't change" option here. JCD TODO.
+	if ( mc_show_edit_block( 'event_open' ) ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
@@ -773,8 +770,7 @@ function mc_check_group_data( $action, $post ) {
  */
 function mc_list_groups() {
 	global $wpdb;
-	$current_user = wp_get_current_user();
-	$user         = $current_user->ID;
+	$user = wp_get_current_user()->ID;
 
 	$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : get_option( 'mc_default_sort' );
 	if ( isset( $_GET['order'] ) ) {
@@ -1013,7 +1009,6 @@ function mc_list_groups() {
 			</p>
 		</div>
 		</form>
-	</div>
 		<?php
 	} else {
 		?>
