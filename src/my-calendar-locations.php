@@ -612,7 +612,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	}
 	if ( current_user_can( 'mc_edit_settings' ) && isset( $_GET['page'] ) && 'my-calendar-locations' === $_GET['page'] ) {
 		$checked = ( isset( $_GET['location_id'] ) && (int) get_option( 'mc_default_location' ) === (int) $_GET['location_id'] ) ? 'checked="checked"' : '';
-		$return .= '<p>';
+		$return .= '<p class="checkbox">';
 		$return .= '<input type="checkbox" name="mc_default_location" id="mc_default_location"' . $checked . ' /> <label for="mc_default_location">' . __( 'Default Location', 'my-calendar' ) . '</label>';
 		$return .= '</p>';
 	}
