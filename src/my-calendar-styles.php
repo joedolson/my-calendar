@@ -181,7 +181,7 @@ function my_calendar_style_edit() {
 						if ( $right_string ) { // If right string is blank, there is no default.
 							if ( isset( $_GET['diff'] ) ) {
 								echo '<div class="wrap my-calendar-admin" id="diff">';
-								echo mc_text_diff(
+								echo wp_text_diff(
 									$left_string,
 									$right_string,
 									array(
@@ -423,66 +423,6 @@ function mc_write_styles( $file, $style ) {
 		}
 	}
 	return false;
-}
-
-/**
- * Check diff between current styles and shipped styles
- *
- * @param string           $left_string Currently installed.
- * @param string           $right_string Shipped.
- * @param mixed array/null $args Function table rendered arguments.
- *
- * @return string
- */
-function mc_text_diff( $left_string, $right_string, $args = null ) {
-	$defaults = array(
-		'title'       => '',
-		'title_left'  => '',
-		'title_right' => '',
-	);
-	$args     = wp_parse_args( $args, $defaults );
-
-	if ( ! class_exists( 'WP_Text_Diff_Renderer_Table' ) ) {
-		require( ABSPATH . WPINC . '/wp-diff.php' );
-	}
-	$left_string  = normalize_whitespace( $left_string );
-	$right_string = normalize_whitespace( $right_string );
-
-	$left_lines  = explode( "\n", $left_string );
-	$right_lines = explode( "\n", $right_string );
-	$text_diff   = new Text_Diff( $left_lines, $right_lines );
-	$renderer    = new WP_Text_Diff_Renderer_Table( $args );
-	$diff        = $renderer->render( $text_diff );
-	$r           = '';
-
-	if ( ! $diff ) {
-		return '';
-	}
-	if ( $args['title'] ) {
-		$r .= "<h2>$args[title]</h2>\n";
-	}
-
-	$r .= "<table class='diff'>\n";
-	$r .= "<col class='content diffsplit left' /><col class='content diffsplit middle' /><col class='content diffsplit right' />";
-
-	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
-		$r .= '<thead>';
-	}
-
-	if ( $args['title_left'] || $args['title_right'] ) {
-		$r .= "<tr class='diff-sub-title'>\n";
-		$r .= "\t<th scope='col'>$args[title_left]</th><td></td>\n";
-		$r .= "\t<th scope='col'>$args[title_right]</th>\n";
-		$r .= "</tr>\n";
-	}
-	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
-		$r .= "</thead>\n";
-	}
-
-	$r .= "<tbody>\n$diff\n</tbody>\n";
-	$r .= '</table>';
-
-	return $r;
 }
 
 add_action(
