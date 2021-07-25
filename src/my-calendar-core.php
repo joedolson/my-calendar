@@ -1396,7 +1396,7 @@ function mc_ajax_add_date() {
 		$instances   = get_post_meta( $event_post, '_mc_custom_instances', true );
 		$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
 		$instances[] = $data;
-		update_post_meta( $event_id, '_mc_custom_instances', $instances );
+		update_post_meta( $event_post, '_mc_custom_instances', $instances );
 
 		if ( $result ) {
 			wp_send_json(
