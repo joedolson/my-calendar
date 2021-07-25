@@ -873,7 +873,7 @@ function mc_list_groups() {
 				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				<input type="hidden" name="event_action" value="group"/>
 			</div>
-			<p class="mc-group-buttons">
+			<p class="mc-group-buttons mc-actions">
 				<input type="submit" class="button-primary group" value="<?php _e( 'Group checked events for bulk editing', 'my-calendar' ); ?>" />
 			</p>
 			<table class="widefat wp-list-table" id="my-calendar-admin-table">
@@ -1004,8 +1004,8 @@ function mc_list_groups() {
 				?>
 			</table>
 		<div class="mc-controls footer">
-			<p>
-				<input type="submit" class="button-secondary group" value="<?php _e( 'Group checked events for bulk editing', 'my-calendar' ); ?>"/>
+			<p class="mc-actions mc-group-buttons">
+				<input type="submit" class="button-primary group" value="<?php _e( 'Group checked events for bulk editing', 'my-calendar' ); ?>"/>
 			</p>
 		</div>
 		</form>
