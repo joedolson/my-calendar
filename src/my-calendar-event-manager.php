@@ -1655,7 +1655,14 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
 				$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
 				if ( $deleted || $custom ) {
-					mc_show_notice( __( 'Some repetitions of this recurring event have been deleted or modified. Update the date or recurring pattern for the event to reset its repeat events.', 'my-calendar' ) );
+					if ( $deleted ) {
+						$notice = __( 'Some occurrences of this event have been deleted.', 'my-calendar' );
+					}
+					if ( $custom ) {
+						$notice = __( 'Extra occurrences of this event have been added or modified.', 'my-calendar' );
+					}
+					$notice .= ' ' . __( 'Updating the date or repetition pattern will reset its occurrences.', 'my-calendar' );
+					mc_show_notice( $notice );
 				}
 			}
 			echo mc_controls( $mode, $has_data, $data );
