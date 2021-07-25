@@ -941,7 +941,8 @@ select[name="event_recur"] {
 	padding: .5em;
 	background: #fcf9e8;
 	color: #000;
-	border: 1px solid burlywood;
+	border: 1px solid #bd8600;
+	margin-top: 1em;
 }
 
 tr.problem,
