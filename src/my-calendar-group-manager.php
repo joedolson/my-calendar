@@ -351,6 +351,12 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 			<div class="inside">
 				<div class="mc-controls">
 					<ul>
+						<li>
+						<?php
+						$manage_text         = __( 'Manage groups', 'my-calendar' );
+						echo "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage&groups=true' ) . '">' . $manage_text . '</a>';
+						?>
+						</li>
 						<li><input type="submit" name="save" class="button-primary" value="<?php _e( 'Update Event Group', 'my-calendar' ); ?>"/></li>
 					</ul>
 				</div>
