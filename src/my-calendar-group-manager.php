@@ -874,7 +874,7 @@ function mc_list_groups() {
 				<input type="hidden" name="event_action" value="group"/>
 			</div>
 			<p class="mc-group-buttons">
-				<input type="submit" class="button-primary group" value="<?php _e( 'Group checked events for mass editing', 'my-calendar' ); ?>" />
+				<input type="submit" class="button-primary group" value="<?php _e( 'Group checked events for bulk editing', 'my-calendar' ); ?>" />
 			</p>
 			<table class="widefat wp-list-table" id="my-calendar-admin-table">
 				<caption class="screen-reader-text"><?php _e( 'Grouped Events list. Use column headers to sort.', 'my-calendar' ); ?></caption>
@@ -1005,7 +1005,7 @@ function mc_list_groups() {
 			</table>
 		<div class="mc-controls footer">
 			<p>
-				<input type="submit" class="button-secondary group" value="<?php _e( 'Group checked events for mass editing', 'my-calendar' ); ?>"/>
+				<input type="submit" class="button-secondary group" value="<?php _e( 'Group checked events for bulk editing', 'my-calendar' ); ?>"/>
 			</p>
 		</div>
 		</form>
