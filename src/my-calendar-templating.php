@@ -303,7 +303,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 	if ( empty( $data ) ) {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
 	}
-	$skippin = array();
+	$skipping = array();
 	if ( 'preview' === $render ) {
 		// In preview, don't show all items.
 		$skipping = array(
