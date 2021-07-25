@@ -869,10 +869,12 @@ select[name="event_recur"] {
 	float: none;
 }
 
-.recurrences-disabled p {
-	display: grid;
-	grid-template-columns: 80% 1fr;
+.recurrences-disabled button {
+	float: right;
+	margin-left: 12px;
+	margin-bottom: 12px;
 }
+
 
 .enable-repetition .dashicons:before {
 	vertical-align: middle;

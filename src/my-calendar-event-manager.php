@@ -1440,7 +1440,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				$class   = '';
 				if ( $has_data && false !== mc_admin_instances( $data->event_id ) ) {
 					$class   = 'disable-recurrences';
-					$warning = '<div class="recurrences-disabled"><p>' . __( 'Editing the repetition pattern will remove and recreate all scheduled dates for this  event.', 'my-calendar' ) . '<button type="button" class="button enable-repetition" aria-expanded="false"><span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '</button></p></div>';
+					$warning = '<div class="recurrences-disabled"><p><span>' . __( 'Editing the repetition pattern will remove and recreate all scheduled dates for this  event.', 'my-calendar' ) . '</span><button type="button" class="button enable-repetition" aria-expanded="false"><span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '</button></p></div>';
 				}
 				$args        = array(
 					'value' => $repeats,
