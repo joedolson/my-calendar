@@ -291,6 +291,6 @@ function mc_manage_locations() {
 		</form>
 		<?php
 	} else {
-		echo '<p>' . __( 'There are no locations in the database yet!', 'my-calendar' ) . '</p>';
+		echo '<p><a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . __( 'Create a new location', 'my-calendar' ) . '</a></p>';
 	}
 }
