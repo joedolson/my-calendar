@@ -911,8 +911,8 @@ function mc_list_groups() {
 					?>
 				<tr class="<?php echo "$class $spam"; ?>" id="event<?php echo $event->event_id; ?>">
 					<th scope="row">
-						<input type="checkbox" value="<?php echo $event->event_id; ?>" name="group[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( mc_event_is_grouped( $event->event_group_id ) ) ? ' disabled="disabled"' : ''; ?> />
-						<label for="mc<?php echo $event->event_id; ?>"><?php echo $event->event_id; ?></label>
+						<input type="checkbox" aria-describedby="event_<?php echo $event->event_id; ?>" value="<?php echo $event->event_id; ?>" name="group[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( mc_event_is_grouped( $event->event_group_id ) ) ? ' disabled="disabled"' : ''; ?> />
+						<label for="mc<?php echo $event->event_id; ?>"><span class="screen-reader-text"><?php _e( 'Group event', 'my-calendar' ); ?></span><?php echo $event->event_id; ?></label>
 					</th>
 					<th scope="row">
 						<?php echo ( '0' === $event->event_group_id ) ? '-' : $event->event_group_id; ?>
@@ -921,13 +921,12 @@ function mc_list_groups() {
 						<strong>
 						<?php
 						if ( $can_edit ) {
+							$edit_link = '';
 							if ( mc_event_is_grouped( $event->event_group_id ) ) {
 								$edit_link = admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
-							} else {
-								$edit_link = '';
 							}
 							if ( $edit_link ) {
-								echo '<a href="' . $edit_link . '" class="edit">';
+								echo '<a href="' . esc_url( $edit_link ) . '" class="edit">';
 							}
 						}
 						echo $spam_label;
