@@ -920,7 +920,7 @@ function mc_admin_category_list( $event ) {
 	$color      = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
 	$categories = mc_get_categories( $event );
 	$cats       = array();
-	$string  = $color;
+	$string     = $color;
 	if ( isset( $_GET['groups'] ) ) {
 		$string .= ' ' . strip_tags( $cat->category_name );
 	} else {
