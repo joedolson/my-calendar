@@ -938,7 +938,7 @@ function mc_list_groups() {
 						?>
 						</strong>
 
-						<div class='row-actions' style="visibility:visible;">
+						<div class='row-actions'>
 							<?php
 							if ( $can_edit ) {
 								?>
