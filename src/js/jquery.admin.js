@@ -111,7 +111,7 @@ jQuery(document).ready(function ($) {
 		$( this ).parent( '.row-actions' ).css( { 'left' : '-999em' } );
 	});
 
-	$( '#my-calendar-admin-table input' ).on( 'change', function (e) {
+	$( '#my-calendar-admin-table input, .mc-actions input' ).on( 'change', function (e) {
 		var checked_status = $(this).prop('checked');
 		if ( checked_status ) {
 			$( '.mc-actions input[type="submit"]' ).removeAttr( 'disabled' );
