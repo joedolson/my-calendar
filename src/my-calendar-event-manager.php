@@ -1799,19 +1799,19 @@ function mc_form_fields( $data, $mode, $event_id ) {
 								</div>
 							</div>
 								<?php
-							if ( 0 !== (int) $data->event_group_id ) {
-								$edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
-								?>
-								<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php _e( 'Related Events', 'my-calendar' ); ?></button>
-								</h4>
-								<div>
-									<a href='<?php echo $edit_group_url; ?>'><?php _e( 'Edit group', 'my-calendar' ); ?></a>
-									<ul class="columns instance-list">
-										<?php mc_related_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
-									</ul>
-								</div>
-								<?php
-							}
+								if ( 0 !== (int) $data->event_group_id ) {
+									$edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
+									?>
+									<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php _e( 'Related Events', 'my-calendar' ); ?></button>
+									</h4>
+									<div>
+										<a href='<?php echo $edit_group_url; ?>'><?php _e( 'Edit group', 'my-calendar' ); ?></a>
+										<ul class="columns instance-list">
+											<?php mc_related_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
+										</ul>
+									</div>
+									<?php
+								}
 							?>
 						</div>
 						<?php
@@ -2880,8 +2880,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		if ( ! isset( $post['event_recur'] ) && isset( $post['event_repeats'] ) ) {
 			unset( $post['event_repeats'] );
 		}
-		$every  = ! empty( $post['event_every'] ) ? (int) $post['event_every'] : 1;
-		// if this is an all weekdays event, and it's been scheduled to start on a weekend, the math gets nasty.
+		$every = ! empty( $post['event_every'] ) ? (int) $post['event_every'] : 1;
+		// if this is an all weekdays event, and it's scheduled to start on a weekend, the math gets nasty.
 		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
 		$begin = trim( $post['event_begin'][ $i ] );
 		$end   = ( ! empty( $post['event_end'] ) ) ? trim( $post['event_end'][ $i ] ) : $post['event_begin'][ $i ];
@@ -3447,14 +3447,14 @@ function mc_admin_instances( $id, $occur = false ) {
 		foreach ( $results as $result ) {
 			$start = $result->ts_occur_begin;
 			$end   = $result->ts_occur_end;
-			if ( ( ( $end + 1 ) - $start ) == DAY_IN_SECONDS || ( $end - $start ) === DAY_IN_SECONDS ) {
+			if ( ( ( $end + 1 ) - $start ) === DAY_IN_SECONDS || ( $end - $start ) === DAY_IN_SECONDS ) {
 				$time = '';
 			} elseif ( ( $end - $start ) <= HOUR_IN_SECONDS ) {
-				$time = mc_date( get_option( 'mc_time_format' ), $start ); 
+				$time = mc_date( get_option( 'mc_time_format' ), $start );
 			} else {
 				$time = mc_date( get_option( 'mc_time_format' ), $start ) . '-' . mc_date( get_option( 'mc_time_format' ), $end );
 			}
-			if ( date( 'Y-m-d', $start ) !== date( 'Y-m-d', $end ) ) {
+			if ( date( 'Y-m-d', $start ) !== date( 'Y-m-d', $end ) ) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 				$date = date_i18n( mc_date_format(), $start ) . '-' . date_i18n( mc_date_format(), $end );
 			} else {
 				$date = date_i18n( mc_date_format(), $start );
@@ -3923,17 +3923,18 @@ function mc_related_events( $id, $template = '' ) {
 			if ( ! is_object( $first ) ) {
 				continue;
 			}
-			$event    = $first->occur_event_id;
-			$current  = '<a href="' . admin_url( 'admin.php?page=my-calendar' ) . '&amp;mode=edit&amp;event_id=' . $event . '">';
-			$close    = '</a>';
-			$begin    = date_i18n( mc_date_format(), strtotime( $first->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), strtotime( $first->occur_begin ), false );
-			$array    = array(
+			$event   = $first->occur_event_id;
+			$current = '<a href="' . admin_url( 'admin.php?page=my-calendar' ) . '&amp;mode=edit&amp;event_id=' . $event . '">';
+			$close   = '</a>';
+			$begin   = date_i18n( mc_date_format(), strtotime( $first->occur_begin ) ) . ', ' . mc_date( get_option( 'mc_time_format' ), strtotime( $first->occur_begin ), false );
+			$array   = array(
 				'current' => $current,
 				'begin'   => $begin,
 				'end'     => $close,
 			);
+
 			$current_output = ( '' === $template ) ? $current . $begin . $end : mc_draw_template( $array, $template );
-			$output  .= "<li>$current_output</li>";
+			$output        .= "<li>$current_output</li>";
 		}
 	} else {
 		$output = '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
