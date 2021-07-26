@@ -2352,6 +2352,7 @@ function mc_list_events() {
 			$counts = mc_update_count_cache();
 		}
 		?>
+		<div class="mc-admin-header">
 		<ul class="links">
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
@@ -2440,6 +2441,9 @@ function mc_list_events() {
 			);
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 		}
+		?>
+		</div>
+		<?php
 		if ( ! empty( $events ) ) {
 			?>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">

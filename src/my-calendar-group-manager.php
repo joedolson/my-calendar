@@ -839,6 +839,7 @@ function mc_list_groups() {
 	$items       = $found_rows[0];
 	?>
 	<div class='inside'>
+		<div class="mc-admin-header">
 		<ul class="links">
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php _e( 'Grouped Events', 'my-calendar' ); ?></a>
@@ -866,6 +867,9 @@ function mc_list_groups() {
 		);
 		printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 	}
+	?>
+		<div>
+	<?php
 	if ( ! empty( $events ) ) {
 		?>
 		<form action="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true' ); ?>" method="post">

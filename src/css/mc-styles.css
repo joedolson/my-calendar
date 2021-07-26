@@ -875,12 +875,15 @@ select[name="event_recur"] {
 	max-width: 90%;
 }
 
-.mc-search {
-	float: right;
+.mc-admin-header {
+	display: grid;
+	grid-template-columns: 1fr 22em;
+	align-items: center;
+	margin-bottom: 1em;
 }
 
-.mc-admin-footer .mc-search {
-	float: none;
+.mc-search {
+	text-align: right;
 }
 
 .recurrences-disabled button {
@@ -888,7 +891,6 @@ select[name="event_recur"] {
 	margin-left: 12px;
 	margin-bottom: 12px;
 }
-
 
 .enable-repetition .dashicons:before {
 	vertical-align: middle;
@@ -1021,13 +1023,6 @@ tr.problem .error {
 .my-calendar-admin .mc-none {
 	clear: both;
 }
-
-.mc-create-event {
-	text-align: center;
-	margin: 1em 0;
-	clear: both;
-}
-
 
 /**
  * Autocomplete CSS
