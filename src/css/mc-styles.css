@@ -104,6 +104,16 @@ ul.links li {
 	margin-bottom: 1em;
 }
 
+#my-calendar-admin-table input[type=checkbox] {
+	margin: 0;
+	vertical-align: middle;
+}
+
+#my-calendar-admin-table tr > th:nth-of-type(1) {
+	min-width: 60px;
+	max-width: 80px;
+}
+
 #toggle {
 	height: 2em
 }
