@@ -113,11 +113,15 @@ jQuery(document).ready(function ($) {
 
 	$( '#my-calendar-admin-table input, .mc-actions input' ).on( 'change', function (e) {
 		var checked_status = $(this).prop('checked');
+		var groups_table   = $(this).parents( 'table' ).hasClass( 'mc-groups-table' );
+		var checkboxes     = $( '#my-calendar-admin-table input:checked' );
+		var checked        = checkboxes.length;
 		if ( checked_status ) {
-			$( '.mc-actions input[type="submit"]' ).removeAttr( 'disabled' );
+			if ( ( groups_table && checked > 1 ) || ! groups_table ) {
+				$( '.mc-actions input[type="submit"]' ).removeAttr( 'disabled' );
+			}
 		} else {
-			checkboxes = $( '#my-calendar-admin-table input:checked' );
-			if ( checkboxes.length == 0 ) {
+			if ( ( groups_table && checked < 2 ) || ( ! groups_table && checked == 0 ) ) {
 				$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 			}
 		}

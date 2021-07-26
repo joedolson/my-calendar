@@ -876,7 +876,7 @@ function mc_list_groups() {
 			<p class="mc-group-buttons mc-actions">
 				<input type="submit" class="button-primary group" value="<?php _e( 'Group events', 'my-calendar' ); ?>" />
 			</p>
-			<table class="widefat wp-list-table" id="my-calendar-admin-table">
+			<table class="widefat wp-list-table mc-groups-table" id="my-calendar-admin-table">
 				<caption class="screen-reader-text"><?php _e( 'Grouped Events list. Use column headers to sort.', 'my-calendar' ); ?></caption>
 				<thead>
 					<tr>
