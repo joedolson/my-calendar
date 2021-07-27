@@ -263,6 +263,9 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 				case 'region':
 					$location_type = 'event_region';
 					break;
+				case 'id':
+					$location_type = 'event_location';
+					break;
 				default:
 					$location_type = $location;
 			}
