@@ -285,9 +285,11 @@ function mc_manage_locations() {
 			}
 			?>
 		</table>
+		<div class="mc-actions">
 		<p>
 			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete locations', 'my-calendar' ); ?>" />
 		</p>
+		</div>
 		</form>
 		<?php
 	} else {
