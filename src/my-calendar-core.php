@@ -131,6 +131,25 @@ function mc_get_file( $file, $type = 'path' ) {
 	return $path;
 }
 
+add_filter( 'mc_registered_stylesheet', 'mc_preview_stylesheet', 10, 1 );
+/**
+ * Allow users with 'mc_edit_styles' permissions to preview stylesheets.
+ *
+ * @param string $file CSS filename.
+ *
+ * @return string
+ */
+function mc_preview_stylesheet( $file ) {
+	if ( isset( $_GET['mcpreview'] ) && current_user_can( 'mc_edit_styles' ) ) {
+		$file = mc_get_style_path( $_GET['mcpreview'], 'url' );
+		if ( $file ) {
+			return $file;
+		}
+	}
+
+	return $file;
+}
+
 add_action( 'wp_enqueue_scripts', 'mc_register_styles' );
 /**
  * Publically enqueued styles & scripts

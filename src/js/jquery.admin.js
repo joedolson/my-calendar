@@ -1,4 +1,16 @@
 jQuery(document).ready(function ($) {
+	$( '.preview-link' ).hide();
+	var active = $( '.preview-link' ).attr( 'data-css' );
+	$( '#mc_css_file' ).on( 'change', function(e) {
+		var current = $( this ).val();
+		if ( current !== active ) {
+			var current_url = $( '.preview-link' ).prop( 'href' );
+			var current_css = $( '.preview-link' ).attr( 'data-css' );
+			var new_url     = current_url.replace( current_css, current );
+			$( '.preview-link' ).prop( 'href', new_url ).attr( 'data-css', current ).show();
+		}
+	});
+
 	$('#e_schedule').on( 'click', '.add_field', function() {
 		$('#event_span').show();
 		var num    = $('.datetime-template').length; // how many sets of input fields we have.

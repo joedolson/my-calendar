@@ -3824,7 +3824,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		$first    = mc_get_first_event( $event->event_id );
 		$view_url = mc_get_details_link( $first );
 		if ( mc_event_published( $event ) ) {
-			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . $view_url . "' class='view'>" . __( 'View', 'my-calendar' ) . '</a>';
+			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . esc_url( $view_url ) . "' class='view'>" . __( 'View', 'my-calendar' ) . '</a>';
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( 'preview', 'true', $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';
 		}

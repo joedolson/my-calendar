@@ -267,6 +267,8 @@ function mc_stylesheet_selector() {
 			</p>
 		</fieldset>
 	</form>';
+	$link    = add_query_arg( 'mcpreview', get_option( 'mc_css_file' ), mc_get_uri() );
+	$return .= '<a href="' . esc_url( $link ) . '" class="preview-link" data-css="' . esc_attr( get_option( 'mc_css_file' ) ) . '">' . __( 'Preview Stylesheet', 'my-calendar' ) . '</a>';
 
 	return array( __( 'Select Stylesheet', 'my-calendar' ) => $return );
 }
