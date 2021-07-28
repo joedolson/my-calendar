@@ -21,7 +21,11 @@ var endDate = false;
 
 eventBegin.addEventListener( 'duetChange', function(e) {
 	startDate = e.detail.value;
-	endDate   = document.querySelector( 'input[name="event_end[]"]' ).value;
+	endValue  = document.querySelector( 'input[name="event_end[]"]' ).value;
+	endDate   = document.querySelector( '[identifier="mc_event_enddate"]' );
+	if ( '' == endValue ) {
+		endDate.value = e.detail.value;
+	}
 
 	myCalendarTestDates( endDate, startDate );
 });
