@@ -127,7 +127,7 @@ class My_Calendar_Filters extends WP_Widget {
 		$instance['title'] = mc_kses_post( $new['title'] );
 		$instance['url']   = esc_url_raw( $new['url'] );
 		$instance['ltype'] = sanitize_title( $new['ltype'] );
-		$instance['show']  = array_map( 'sanitize_title', $new['show'] );
+		$instance['show']  = array_map( 'sanitize_title', (array) $new['show'] );
 
 		return $instance;
 	}
