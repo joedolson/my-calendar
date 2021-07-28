@@ -868,7 +868,7 @@ function mc_list_groups() {
 		printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 	}
 	?>
-		<div>
+		</div>
 	<?php
 	if ( ! empty( $events ) ) {
 		?>
