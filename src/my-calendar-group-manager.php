@@ -1004,7 +1004,7 @@ function mc_list_groups() {
 		<?php
 	} else {
 		?>
-		<p class="mc-none"><?php _e( 'There are no events in the database meeting the current limits.', 'my-calendar' ); ?></p>
+		<p class="mc-none"><?php _e( 'No events found.', 'my-calendar' ); ?></p>
 		<?php
 	}
 	echo '</div>';
