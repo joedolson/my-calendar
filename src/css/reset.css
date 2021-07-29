@@ -164,6 +164,12 @@ button.mc-text-button:hover, button .mc-text-button:focus {
 	animation: animation-rotate 1250ms linear infinite;
 }
 
+.mc-author-card, .mc-host-card {
+	display: grid;
+	grid-template-columns: 2.5em 1fr;
+	column-gap: 12px;
+}
+
 @-webkit-keyframes animation-rotate {
 	100% {
 	-webkit-transform: rotate(360deg);

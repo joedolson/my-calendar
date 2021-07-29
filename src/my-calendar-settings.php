@@ -262,6 +262,7 @@ function mc_update_output_settings( $post ) {
 	update_option( 'mc_mini_uri', $post['mc_mini_uri'] );
 	update_option( 'mc_open_day_uri', $mc_open_day_uri );
 	update_option( 'mc_display_author', ( ! empty( $post['mc_display_author'] ) && 'on' === $post['mc_display_author'] ) ? 'true' : 'false' );
+	update_option( 'mc_display_host', ( ! empty( $post['mc_display_host'] ) && 'on' === $post['mc_display_host'] ) ? 'true' : 'false' );
 	update_option( 'mc_show_event_vcal', ( ! empty( $post['mc_show_event_vcal'] ) && 'on' === $post['mc_show_event_vcal'] ) ? 'true' : 'false' );
 	update_option( 'mc_show_gcal', ( ! empty( $post['mc_show_gcal'] ) && 'on' === $post['mc_show_gcal'] ) ? 'true' : 'false' );
 	update_option( 'mc_show_list_info', ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false' );
@@ -827,7 +828,8 @@ function mc_remote_db() {
 						<legend><?php _e( 'Single Event Details', 'my-calendar' ); ?></legend>
 						<p><?php _e( 'Custom templates override these settings.', 'my-calendar' ); ?>
 						<ul class="checkboxes">
-							<li><?php mc_settings_field( 'mc_display_author', __( 'Author\'s name', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_display_author', __( 'Author', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_display_host', __( 'Host', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_show_event_vcal', __( 'Link to single event iCal download', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_show_gcal', __( 'Link to submit event to Google Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_show_map', __( 'Link to Google Map', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>

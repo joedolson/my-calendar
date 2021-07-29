@@ -292,6 +292,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$address     = '';
 	$more        = '';
 	$author      = '';
+	$host        = '';
 	$list_title  = '';
 	$title       = '';
 	$output      = '';
@@ -322,6 +323,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 	$display_vcal    = get_option( 'mc_show_event_vcal' );
 	$open_uri        = get_option( 'mc_open_uri' );
 	$display_author  = get_option( 'mc_display_author' );
+	$display_host    = get_option( 'mc_display_host' );
 	$display_more    = get_option( 'mc_display_more' );
 	$display_desc    = get_option( 'mc_desc' );
 	$display_short   = get_option( 'mc_short' );
@@ -407,10 +409,19 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 				$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 			}
+			$avatars = apply_filters( 'mc_use_avatars', true, $event );
 			if ( 'true' === $display_author ) {
 				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
-					$e      = get_userdata( $event->event_author );
-					$author = '	<p class="event-author">' . __( 'Posted by', 'my-calendar' ) . ' <span class="author-name">' . $e->display_name . "</span></p>\n";
+					$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
+					$a      = get_userdata( $event->event_author );
+					$author = '	<div class="mc-author-card">' . $avatar . '<p class="event-author"><span class="posted">' . __( 'Posted by', 'my-calendar' ) . '</span> <span class="author-name">' . $a->display_name . "</span></p></div>\n";
+				}
+			}
+			if ( 'true' === $display_host ) {
+				if ( 0 !== (int) $event->event_host && is_numeric( $event->event_host ) ) {
+					$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
+					$h       = get_userdata( $event->event_host );
+					$host    = '	<div class="mc-host-card">' . $havatar . '<p class="event-host"><span class="hosted">' . __( 'Hosted by', 'my-calendar' ) . '</span> <span class="host-name">' . $h->display_name . "</span></p></div>\n";
 				}
 			}
 
@@ -512,24 +523,34 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$status      = ( $status ) ? PHP_EOL . '	' . $status : '';
 			$tickets     = ( $tickets ) ? PHP_EOL . '	' . $tickets : '';
 			$author      = ( $author ) ? PHP_EOL . '	' . $author : '';
+			$host        = ( $host ) ? PHP_EOL . '	' . $host : '';
 			$sharing     = ( $sharing ) ? PHP_EOL . '	' . $sharing : '';
 			$return      = ( $return ) ? PHP_EOL . '	' . $return : '';
 
-			$details = "\n"
-						. $close
-						. $inner_title
-						. $time_html
-						. $list_title
-						. $img
-						. $location
-						. $description
-						. $short
-						. $link
-						. $status
-						. $tickets
-						. $author
-						. $sharing
-						. $return;
+			$order        = array( 'close', 'inner_title', 'time_html', 'list_title', 'img', 'location', 'description', 'short', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );
+			$output_order = apply_filters( 'mc_default_output_order', $order, $event );
+			$details      = $close;
+			if ( ! empty( $output_order ) ) {
+				foreach( $output_order as $value ) {
+					$details .= ${$value};
+				}
+			} else {
+				$details .= "\n"
+							. $inner_title
+							. $time_html
+							. $list_title
+							. $img
+							. $location
+							. $description
+							. $short
+							. $link
+							. $status
+							. $tickets
+							. $author
+							. $host
+							. $sharing
+							. $return;
+			}
 		} else {
 			// If a custom template is in use.
 			$toggle  = ( 'calendar' === $type ) ? $close_button : '';
