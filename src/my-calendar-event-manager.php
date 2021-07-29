@@ -1968,8 +1968,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			?>
 		<div class="postbox">
 			<h2><?php _e( 'Preview Template Output', 'my-calendar' ); ?></h2>
-			<p><?php _e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?></p>
 			<div class="inside">
+				<p><?php _e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?></p>
 				<div class="mc-preview">
 					<?php
 					$first    = mc_get_first_event( $data->event_id );
@@ -1982,6 +1982,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						array(
 							'iframe'   => 'true',
 							'showtags' => 'true',
+							'mc_id'    => $first->occur_id,
 						),
 						$view_url
 					);
