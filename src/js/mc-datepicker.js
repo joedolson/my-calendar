@@ -12,6 +12,7 @@ pickers.forEach((picker) => {
 });
 
 const eventBegin = document.querySelector( 'duet-date-picker[identifier=mc_event_date]' );
+const eventRecur = document.querySelector( 'duet-date-picker[identifier=r_begin]' );
 const eventEnd = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
 const eventDateError = document.querySelector( '#event_date_error' );
 const submitButton   = document.querySelector( '#my-calendar .button-primary' );
@@ -19,11 +20,26 @@ const submitButton   = document.querySelector( '#my-calendar .button-primary' );
 var startDate = false;
 var endDate = false;
 
+eventRecur.addEventListener( 'duetChange', function(e) {
+	startDate = e.detail.value;
+	recurValue = document.querySelector( 'input[name="recur_end[]"' ).value;
+	recurEnd   = document.querySelector( '[identifier="r_end"]' );
+	/* Handle adding occurrences */
+	if ( ( '' !== recurValue ) && startDate > recurValue ) {
+		recurEnd.value = e.detail.value;
+	}
+
+	myCalendarTestDates( endDate, startDate );
+});
+
+
 eventBegin.addEventListener( 'duetChange', function(e) {
 	startDate = e.detail.value;
 	endValue  = document.querySelector( 'input[name="event_end[]"]' ).value;
 	endDate   = document.querySelector( '[identifier="mc_event_enddate"]' );
-	if ( '' == endValue ) {
+
+	/* Handle main date picker. */
+	if ( '' == endValue || startDate > endValue ) {
 		endDate.value = e.detail.value;
 	}
 
