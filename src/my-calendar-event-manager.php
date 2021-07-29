@@ -2045,8 +2045,9 @@ function mc_event_location_dropdown_block( $data ) {
 							),
 							admin_url( 'admin.php?page=my-calendar-locations' )
 						) : false;
-						$loc_name      = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . $loc_name . ' (' . __( 'Opens in new tab', 'my-calendar' ) . ')</a>' : $loc_name;
-						// Translators: label for current location.
+						// Translators: name of currently selected location.
+						$loc_name      = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . sprintf( __( 'Edit %s', 'my-calendar' ), $loc_name ) . ' (' . __( 'Opens in new tab', 'my-calendar' ) . ')</a>' : $loc_name;
+						// Translators: Link to edit current location, e.g. 'Edit %s'.
 						$current_location  = "<div id='mc-current-location'><span class='dashicons dashicons-location' aria-hidden='true'></span>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</div>';
 						$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
 					}
