@@ -532,7 +532,7 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 			$details      = $close;
 			if ( ! empty( $output_order ) ) {
 				foreach( $output_order as $value ) {
-					$details .= ${$value};
+					$details .= apply_filters( 'mc_event_detail_' . sanitize_title( $value ), ${$value}, $event );
 				}
 			} else {
 				$details .= "\n"
