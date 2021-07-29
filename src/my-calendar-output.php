@@ -409,19 +409,25 @@ function my_calendar_draw_event( $event, $type = 'calendar', $process_date, $tim
 				$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 				$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 			}
-			$avatars = apply_filters( 'mc_use_avatars', true, $event );
+			$avatars = apply_filters( 'mc_use_avatars', false, $event );
 			if ( 'true' === $display_author ) {
 				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
 					$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
 					$a      = get_userdata( $event->event_author );
-					$author = '	<div class="mc-author-card">' . $avatar . '<p class="event-author"><span class="posted">' . __( 'Posted by', 'my-calendar' ) . '</span> <span class="author-name">' . $a->display_name . "</span></p></div>\n";
+					$author = $avatar . '<p class="event-author"><span class="posted">' . __( 'Posted by', 'my-calendar' ) . '</span> <span class="author-name">' . $a->display_name . "</span></p>\n";
+					if ( $avatars ) {
+						$author = '	<div class="mc-author-card">' . $author . '</div>';
+					}
 				}
 			}
 			if ( 'true' === $display_host ) {
 				if ( 0 !== (int) $event->event_host && is_numeric( $event->event_host ) ) {
 					$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
 					$h       = get_userdata( $event->event_host );
-					$host    = '	<div class="mc-host-card">' . $havatar . '<p class="event-host"><span class="hosted">' . __( 'Hosted by', 'my-calendar' ) . '</span> <span class="host-name">' . $h->display_name . "</span></p></div>\n";
+					$host    = $havatar . '<p class="event-host"><span class="hosted">' . __( 'Hosted by', 'my-calendar' ) . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
+					if ( $avatars ) {
+						$host = '	<div class="mc-host-card">' . $host . '</div>';
+					}
 				}
 			}
 
