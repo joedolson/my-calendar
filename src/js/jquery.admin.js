@@ -28,10 +28,16 @@ jQuery(document).ready(function ($) {
 		// Update id & for relationships.
 		var inputs      = newElem.find( 'input' );
 		var timeControl = newElem.find( '.event-time' );
+		var startControl = newElem.find( '.event-begin' );
 		var endControl  = newElem.find( '.event-end' );
 		var initialTime = $( '#mc_event_time' ).val();
 		var initialEnd  = $( '#mc_event_endtime' ).val();
+		var initialStart = oldElem.find( '.event-begin' ).val();
+		if ( ! initialStart ) {
+			initialStart = document.querySelector( '[identifier="mc_event_enddate"]' ).value;
+		}
 		endControl.val( initialEnd );
+		startControl.val( initialStart );
 		timeControl.val( initialTime ).trigger( 'focus' );
 		var labels     = newElem.find( 'label' );
 		inputs.each(function() {
