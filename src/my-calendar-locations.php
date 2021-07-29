@@ -559,12 +559,13 @@ function mc_location_controls() {
 		$mc_location_controls = get_option( 'mc_location_controls' );
 
 		$output = $response . '
+		<p>' . __( 'Add values to change location text inputs into select inputs.', 'my-calendar' ) . '</p>
 		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '">
 		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
 		<div><input type="hidden" name="mc_locations" value="true" /></div>
 		<fieldset>
-			<legend>' . __( 'Limit Input Options', 'my-calendar' ) . '</legend>
-			<div id="mc-accordion">';
+			<legend class="screen-reader-text">' . __( 'Restrict Location Input', 'my-calendar' ) . '</legend>
+			<div id="mc-accordion" class="mc-locations-control">';
 		foreach ( $location_fields as $field ) {
 			$locations = '';
 			$class     = '';

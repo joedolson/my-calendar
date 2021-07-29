@@ -674,6 +674,10 @@ input[name="mc_uri"] {
 	line-height: 1.5;
 }
 
+.my-calendar-admin .mc-locations-control .ui-accordion-header .dashicons {
+	line-height: 1;
+}
+
 .my-calendar-admin .ui-accordion-header .dashicons:before {
 	content: "\f139";
 }
@@ -685,6 +689,11 @@ input[name="mc_uri"] {
 .my-calendar-admin .ui-accordion-content {
 	padding: 0 1em;
 	border: 1px solid #c3c4c7;
+}
+
+.my-calendar-admin .mc-locations-control .ui-accordion-content {
+	padding: 0;
+	border: none;
 }
 
 #mc-sortable .mc-calendar {
