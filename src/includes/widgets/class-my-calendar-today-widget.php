@@ -58,7 +58,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$the_title      = apply_filters( 'widget_title', $today_title, $instance, $args );
 		$the_template   = $template;
 		$the_substitute = $no_events;
-		$the_category   = ( '' === $category ) ? 'default' : esc_attr( $instance['my_calendar_today_category'] );
+		$the_category   = ( '' === $category ) ? array() : (array) $instance['my_calendar_today_category'];
 		$author         = ( ! isset( $instance['my_calendar_today_author'] ) || '' === $instance['my_calendar_today_author'] ) ? 'all' : esc_attr( $instance['my_calendar_today_author'] );
 		$host           = ( ! isset( $instance['mc_host'] ) || '' === $instance['mc_host'] ) ? 'all' : esc_attr( $instance['mc_host'] );
 		$default_link   = mc_get_uri( false, $args );
@@ -75,7 +75,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		$widget_title = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
 
 		$args = array(
-			'category' => $the_category,
+			'category' => implode( ',', $the_category ),
 			'template' => $the_template,
 			'fallback' => $the_substitute,
 			'author'   => $author,
@@ -106,7 +106,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			$widget_template = $defaults['today']['template'];
 		}
 		$widget_text     = ( isset( $instance['my_calendar_no_events_text'] ) ) ? esc_attr( $instance['my_calendar_no_events_text'] ) : '';
-		$widget_category = ( isset( $instance['my_calendar_today_category'] ) ) ? esc_attr( $instance['my_calendar_today_category'] ) : '';
+		$widget_category = ( isset( $instance['my_calendar_today_category'] ) ) ? (array) $instance['my_calendar_today_category'] : array();
 		$widget_linked   = ( isset( $instance['my_calendar_today_linked'] ) ) ? esc_attr( $instance['my_calendar_today_linked'] ) : '';
 		$date            = ( isset( $instance['mc_date'] ) ) ? esc_attr( $instance['mc_date'] ) : '';
 		if ( 'yes' === $widget_linked ) {
@@ -151,10 +151,24 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'mc_date' ); ?>"><?php _e( 'Custom date', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_date' ); ?>" name="<?php echo $this->get_field_name( 'mc_date' ); ?>" value="<?php echo $date; ?>"/>
 		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_today_category' ); ?>"><?php _e( 'Category or categories to display:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_today_category' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_today_category' ); ?>" value="<?php echo $widget_category; ?>"/>
-		</p>
+		<?php
+			$all_checked = '';
+			if ( empty( $widget_category ) ) {
+				$all_checked = ' checked="checked"';
+			}
+		?>
+		<fieldset>
+			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
+			<ul style="padding:0;margin:0;list-style-type: none;">
+				<li>
+					<input type="checkbox" value="all" <?php echo $all_checked; ?> name="<?php echo $this->get_field_name( 'my_calendar_today_category' ) . '[]'; ?>" id="<?php echo $this->get_field_id( 'my_calendar_today_category' ); ?>"> <label for="<?php echo $this->get_field_id( 'my_calendar_today_category' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
+				</li>
+			<?php
+			$select = mc_category_select( $widget_category, true, true, $this->get_field_name( 'my_calendar_today_category' ) . '[]', $this->get_field_id( 'my_calendar_today_category' ) );
+			echo $select;
+			?>
+			</ul>
+		</fieldset>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_today_author' ); ?>"><?php _e( 'Author or authors to show:', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_today_author' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_today_author' ); ?>" value="<?php echo $widget_author; ?>"/>
@@ -177,6 +191,9 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	 */
 	function update( $new, $instance ) {
 		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
+		// Set special value for category.
+		$instance['my_calendar_today_category'] = ( in_array( 'all', (array) $new['my_calendar_today_category'] ) ) ? array() : $new['my_calendar_today_category'];
+
 
 		return $instance;
 	}

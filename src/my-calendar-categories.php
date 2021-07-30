@@ -822,9 +822,12 @@ function mc_save_profile() {
  *
  * @return string HTML fields.
  */
-function mc_category_select( $data = false, $option = true, $multiple = false, $name = false ) {
+function mc_category_select( $data = false, $option = true, $multiple = false, $name = false, $id = false ) {
 	if ( ! $name ) {
 		$name = 'event_category[]';
+	}
+	if ( ! $id ) {
+		$id = 'mc_cat_';
 	}
 	// Grab all the categories and list them.
 	$list    = '';
@@ -842,6 +845,9 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 				if ( ! is_object( $data ) ) {
 					$category = $data;
 				} elseif ( is_array( $data ) && $multiple && 'mc_user_permissions[]' === $name ) {
+					$category = $data;
+				} elseif ( is_array( $data ) && $multiple && $id ) {
+					// This is coming from a widget.
 					$category = $data;
 				} else {
 					if ( $multiple ) {
@@ -871,7 +877,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			$category_name = strip_tags( stripslashes( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
-				$c = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="mc_cat_' . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="mc_cat_' . $cat->category_id . '">' . $category_name . '</label></li>';
+				$c = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="' . $id . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="' . $id . $cat->category_id . '">' . $category_name . '</label></li>';
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
 			}

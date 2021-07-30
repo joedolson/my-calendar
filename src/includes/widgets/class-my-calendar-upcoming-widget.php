@@ -58,7 +58,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$show   = ( isset( $instance['my_calendar_upcoming_show_today'] ) ) ? $instance['my_calendar_upcoming_show_today'] : '';
 		$type   = ( isset( $instance['my_calendar_upcoming_type'] ) ) ? $instance['my_calendar_upcoming_type'] : '';
 		$order  = ( isset( $instance['my_calendar_upcoming_order'] ) ) ? $instance['my_calendar_upcoming_order'] : '';
-		$cat    = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? $instance['my_calendar_upcoming_category'] : '';
+		$cat    = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : array();
 
 		$the_title      = apply_filters( 'widget_title', $title, $instance, $args );
 		$the_template   = ( isset( $instance['my_calendar_upcoming_template'] ) ) ? $instance['my_calendar_upcoming_template'] : '';
@@ -69,7 +69,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$show_today     = ( 'no' === $show ) ? 'no' : 'yes';
 		$type           = esc_attr( $type );
 		$order          = esc_attr( $order );
-		$the_category   = ( '' === $cat ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_category'] );
+		$the_category   = ( empty( $cat ) ) ? array() : (array) $instance['my_calendar_upcoming_category'];
 		$author         = ( ! isset( $instance['my_calendar_upcoming_author'] ) || '' === $instance['my_calendar_upcoming_author'] ) ? 'default' : esc_attr( $instance['my_calendar_upcoming_author'] );
 		$host           = ( ! isset( $instance['mc_host'] ) || '' === $instance['mc_host'] ) ? 'default' : esc_attr( $instance['mc_host'] );
 		$ltype          = ( ! isset( $instance['ltype'] ) || '' === $instance['ltype'] ) ? '' : esc_attr( $instance['ltype'] );
@@ -89,7 +89,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			'before'     => $before,
 			'after'      => $after,
 			'type'       => $type,
-			'category'   => $the_category,
+			'category'   => implode( ',', $the_category ),
 			'template'   => $the_template,
 			'fallback'   => $the_substitute,
 			'order'      => $order,
@@ -126,7 +126,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			$template = $defaults['upcoming']['template'];
 		}
 		$text       = ( isset( $instance['my_calendar_no_events_text'] ) ) ? esc_attr( $instance['my_calendar_no_events_text'] ) : '';
-		$category   = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? esc_attr( $instance['my_calendar_upcoming_category'] ) : '';
+		$category   = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : array();
 		$author     = ( isset( $instance['my_calendar_upcoming_author'] ) ) ? esc_attr( $instance['my_calendar_upcoming_author'] ) : '';
 		$host       = ( isset( $instance['mc_host'] ) ) ? esc_attr( $instance['mc_host'] ) : '';
 		$ltype      = ( isset( $instance['ltype'] ) ) ? esc_attr( $instance['ltype'] ) : '';
@@ -247,10 +247,24 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_show_today' ); ?>" value="yes"<?php echo ( 'yes' === $show_today ) ? ' checked="checked"' : ''; ?> />
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>"><?php _e( "Include today's events", 'my-calendar' ); ?></label>
 		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_category' ); ?>"><?php _e( 'Category or categories to display:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_category' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_category' ); ?>" value="<?php echo $category; ?>"/>
-		</p>
+		<?php
+			$all_checked = '';
+			if ( empty( $category ) ) {
+				$all_checked = ' checked="checked"';
+			}
+		?>
+		<fieldset>
+			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
+			<ul style="padding:0;margin:0;list-style-type: none;">
+				<li>
+					<input type="checkbox" value="all" <?php echo $all_checked; ?> name="<?php echo $this->get_field_name( 'my_calendar_upcoming_category' ) . '[]'; ?>" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_category' ); ?>"> <label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_category' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
+				</li>
+			<?php
+			$select = mc_category_select( $category, true, true, $this->get_field_name( 'my_calendar_upcoming_category' ) . '[]', $this->get_field_id( 'my_calendar_upcoming_category' ) );
+			echo $select;
+			?>
+			</ul>
+		</fieldset>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_author' ); ?>"><?php _e( 'Author or authors to show:', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_author' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_author' ); ?>" value="<?php echo $author; ?>"/>
@@ -296,6 +310,8 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		if ( ! isset( $new['my_calendar_upcoming_show_today'] ) ) {
 			$instance['my_calendar_upcoming_show_today'] = 'no';
 		}
+		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new['my_calendar_upcoming_category'] ) ) ? array() : $new['my_calendar_upcoming_category'];
+
 
 		return $instance;
 	}

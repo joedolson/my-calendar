@@ -53,7 +53,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$widget_id     = isset( $args['widget_id'] ) ? $args['widget_id'] : 'my-calendar-mini-widget';
 		if ( ! empty( $instance ) ) {
 			$the_title   = apply_filters( 'widget_title', $instance['my_calendar_mini_title'], $instance, $args );
-			$category    = ( '' === $instance['my_calendar_mini_category'] ) ? 'all' : $instance['my_calendar_mini_category'];
+			$category    = ( '' === $instance['my_calendar_mini_category'] ) ? array() : (array) $instance['my_calendar_mini_category'];
 			$time        = ( '' === $instance['my_calendar_mini_time'] ) ? 'month' : $instance['my_calendar_mini_time'];
 			$widget_link = ( ! isset( $instance['mc_link'] ) || '' === $instance['mc_link'] ) ? '' : esc_url( $instance['mc_link'] );
 			$above       = ( empty( $instance['above'] ) ) ? 'none' : $instance['above'];
@@ -66,7 +66,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			$months      = ( ! isset( $instance['months'] ) || '' === $instance['months'] ) ? false : $instance['months'];
 		} else {
 			$the_title   = '';
-			$category    = '';
+			$category    = array();
 			$time        = '';
 			$widget_link = '';
 			$above       = '';
@@ -89,7 +89,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$calendar = array(
 			'name'     => 'mini',
 			'format'   => 'mini',
-			'category' => $category,
+			'category' => implode( ',', $category ),
 			'time'     => $time,
 			'ltype'    => $ltype,
 			'lvalue'   => $lvalue,
@@ -117,7 +117,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	function form( $instance ) {
 		$title           = empty( $instance['my_calendar_mini_title'] ) ? '' : $instance['my_calendar_mini_title'];
 		$widget_time     = empty( $instance['my_calendar_mini_time'] ) ? '' : $instance['my_calendar_mini_time'];
-		$widget_category = empty( $instance['my_calendar_mini_category'] ) ? '' : $instance['my_calendar_mini_category'];
+		$widget_category = empty( $instance['my_calendar_mini_category'] ) ? array() : $instance['my_calendar_mini_category'];
 		$above           = ( isset( $instance['above'] ) ) ? $instance['above'] : 'none';
 		$below           = ( isset( $instance['below'] ) ) ? $instance['below'] : 'none';
 		$widget_link     = ( isset( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : '';
@@ -147,10 +147,24 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'mc_link' ); ?>"><?php _e( 'Widget Title Link', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_link' ); ?>" name="<?php echo $this->get_field_name( 'mc_link' ); ?>" value="<?php echo esc_url( $widget_link ); ?>"/>
 		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>"><?php _e( 'Category or categories to display:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_mini_category' ); ?>" value="<?php echo esc_attr( $widget_category ); ?>"/>
-		</p>
+		<?php
+			$all_checked = '';
+			if ( empty( $widget_category ) ) {
+				$all_checked = ' checked="checked"';
+			}
+		?>
+		<fieldset>
+			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
+			<ul style="padding:0;margin:0;list-style-type: none;">
+				<li>
+					<input type="checkbox" value="all" <?php echo $all_checked; ?> name="<?php echo $this->get_field_name( 'my_calendar_mini_category' ) . '[]'; ?>" id="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>"> <label for="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
+				</li>
+			<?php
+			$select = mc_category_select( $widget_category, true, true, $this->get_field_name( 'my_calendar_mini_category' ) . '[]', $this->get_field_id( 'my_calendar_mini_category' ) );
+			echo $select;
+			?>
+			</ul>
+		</fieldset>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'above' ); ?>"><?php _e( 'Navigation above calendar', 'my-calendar' ); ?></label>
 			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'above' ); ?>" id="<?php echo $this->get_field_id( 'above' ); ?>" value="<?php echo ( '' === $above ) ? 'nav,jump,print' : esc_attr( $above ); ?>" aria-describedby='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields' />
@@ -228,7 +242,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	function update( $new, $instance ) {
 		$instance['my_calendar_mini_title']    = mc_kses_post( $new['my_calendar_mini_title'] );
 		$instance['my_calendar_mini_time']     = mc_kses_post( $new['my_calendar_mini_time'] );
-		$instance['my_calendar_mini_category'] = mc_kses_post( $new['my_calendar_mini_category'] );
+		$instance['my_calendar_mini_category'] = ( in_array( 'all', (array) $new['my_calendar_mini_category'] ) ) ? array() : $new['my_calendar_mini_category'];
 		$instance['above']                     = ( isset( $new['above'] ) && '' !== $new['above'] ) ? $new['above'] : 'none';
 		$instance['mc_link']                   = $new['mc_link'];
 		$instance['below']                     = ( isset( $new['below'] ) && '' !== $new['below'] ) ? $new['below'] : 'none';
