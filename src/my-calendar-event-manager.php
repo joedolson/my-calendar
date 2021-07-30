@@ -2453,9 +2453,13 @@ function mc_list_events() {
 				<div class='mc-actions'>
 					<?php
 					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/> ';
-					echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . __( 'Trash events', 'my-calendar' ) . '"/> ';
-					if ( current_user_can( 'mc_approve_events' ) ) {
-						echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" /> ';
+					if ( ! ( isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) ) {
+						echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . 	__( 'Trash events', 'my-calendar' ) . '"/> ';
+					}
+					if ( ! ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ) {
+						if ( current_user_can( 'mc_approve_events' ) ) {
+							echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" /> ';
+						}
 					}
 					if ( ! ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) ) {
 						echo '<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="' . __( 'Archive events', 'my-calendar' ) . '" /> ';

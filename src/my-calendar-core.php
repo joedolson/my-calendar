@@ -765,9 +765,13 @@ function mc_do_upgrades( $upgrade_path ) {
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
 			case '3.3.0':
+				// Event repeats is now a string, and prefers a date-like value.
 				mc_upgrade_db();
-				add_option( 'mc_drop_settings', 'true' );
+				// Count cache no longer counts 'archived' events as published.
+				mc_update_count_cache();
+				// Shortcodes now deleted by default.
 				delete_option( 'mc_process_shortcodes' );
+				add_option( 'mc_drop_settings', 'true' );
 				break;
 			case '3.1.13':
 				delete_option( 'mc_inverse_color' );
@@ -1001,7 +1005,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
  */
 function mc_update_count_cache() {
 	global $wpdb;
-	$published = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$published = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$draft     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$trash     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 2' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$archive   = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_status = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared

@@ -11,14 +11,14 @@ pickers.forEach((picker) => {
 	picker.localization = duetLocalization;
 });
 
-const eventBegin = document.querySelector( 'duet-date-picker[identifier=mc_event_date]' );
-const eventRecur = document.querySelector( 'duet-date-picker[identifier=r_begin]' );
-const eventEnd = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
+const eventBegin     = document.querySelector( 'duet-date-picker[identifier=mc_event_date]' );
+const eventRecur     = document.querySelector( 'duet-date-picker[identifier=r_begin]' );
+const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
 const eventDateError = document.querySelector( '#event_date_error' );
 const submitButton   = document.querySelector( '#my-calendar .button-primary' );
 
 var startDate = false;
-var endDate = false;
+var endDate   = false;
 
 eventRecur.addEventListener( 'duetChange', function(e) {
 	startDate = e.detail.value;
