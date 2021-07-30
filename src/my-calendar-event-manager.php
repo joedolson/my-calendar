@@ -2454,7 +2454,7 @@ function mc_list_events() {
 					<?php
 					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/> ';
 					if ( ! ( isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) ) {
-						echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . 	__( 'Trash events', 'my-calendar' ) . '"/> ';
+						echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . __( 'Trash events', 'my-calendar' ) . '"/> ';
 					}
 					if ( ! ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ) {
 						if ( current_user_can( 'mc_approve_events' ) ) {
@@ -3834,8 +3834,8 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( 'preview', 'true', $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';
 		}
-		$manage_text         = ( current_user_can( 'mc_manage_events' ) ) ? __( 'Manage events', 'my-calendar' ) : __( 'Manage your events', 'my-calendar' );
-		$controls['manage']  = "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage' ) . '">' . $manage_text . '</a>';
+		$manage_text        = ( current_user_can( 'mc_manage_events' ) ) ? __( 'Manage events', 'my-calendar' ) : __( 'Manage your events', 'my-calendar' );
+		$controls['manage'] = "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage' ) . '">' . $manage_text . '</a>';
 	}
 
 	$controls['publish'] = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';

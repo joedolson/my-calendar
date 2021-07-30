@@ -248,10 +248,10 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>"><?php _e( "Include today's events", 'my-calendar' ); ?></label>
 		</p>
 		<?php
-			$all_checked = '';
-			if ( empty( $category ) ) {
-				$all_checked = ' checked="checked"';
-			}
+		$all_checked = '';
+		if ( empty( $category ) ) {
+			$all_checked = ' checked="checked"';
+		}
 		?>
 		<fieldset>
 			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
@@ -310,7 +310,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		if ( ! isset( $new['my_calendar_upcoming_show_today'] ) ) {
 			$instance['my_calendar_upcoming_show_today'] = 'no';
 		}
-		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new['my_calendar_upcoming_category'] ) ) ? array() : $new['my_calendar_upcoming_category'];
+		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new['my_calendar_upcoming_category'], true ) ) ? array() : $new['my_calendar_upcoming_category'];
 
 
 		return $instance;

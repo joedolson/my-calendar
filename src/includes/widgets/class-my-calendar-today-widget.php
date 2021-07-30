@@ -152,10 +152,10 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_date' ); ?>" name="<?php echo $this->get_field_name( 'mc_date' ); ?>" value="<?php echo $date; ?>"/>
 		</p>
 		<?php
-			$all_checked = '';
-			if ( empty( $widget_category ) ) {
-				$all_checked = ' checked="checked"';
-			}
+		$all_checked = '';
+		if ( empty( $widget_category ) ) {
+			$all_checked = ' checked="checked"';
+		}
 		?>
 		<fieldset>
 			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
@@ -192,7 +192,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	function update( $new, $instance ) {
 		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
 		// Set special value for category.
-		$instance['my_calendar_today_category'] = ( in_array( 'all', (array) $new['my_calendar_today_category'] ) ) ? array() : $new['my_calendar_today_category'];
+		$instance['my_calendar_today_category'] = ( in_array( 'all', (array) $new['my_calendar_today_category'], true ) ) ? array() : $new['my_calendar_today_category'];
 
 
 		return $instance;

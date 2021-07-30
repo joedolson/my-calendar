@@ -818,7 +818,8 @@ function mc_save_profile() {
  * @param object               $data object with event_category value.
  * @param boolean              $option Type of form.
  * @param boolean              $multiple Allow multiple categories to be entered.
- * @param mixed boolean/string $name Field name for input.
+ * @param mixed boolean|string $name Field name for input.
+ * @param mixed boolean|string $id ID for label/input.
  *
  * @return string HTML fields.
  */
