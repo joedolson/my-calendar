@@ -412,6 +412,10 @@ ol.mc-repeat-events {
 	background: #fff
 }
 
+.default-location a .dashicons {
+	text-decoration: none;
+}
+
 .my-calendar-admin .button-adjust {
 	top: 10px;
 	right: 0
