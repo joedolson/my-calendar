@@ -688,10 +688,9 @@ function mc_manage_categories() {
 					echo ( '1' === $co ) ? '</a>' : '';
 				?>
 			</th>
-			<th scope="col"><?php _e( 'Color/Icon', 'my-calendar' ); ?></th>
+			<th scope="col"><?php _e( 'Icon', 'my-calendar' ); ?></th>
+			<th scope="col"><?php _e( 'Color', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Private', 'my-calendar' ); ?></th>
-			<th scope="col"><?php _e( 'Edit', 'my-calendar' ); ?></th>
-			<th scope="col"><?php _e( 'Delete', 'my-calendar' ); ?></th>
 		</tr>
 		</thead>
 		<?php
@@ -715,34 +714,32 @@ function mc_manage_categories() {
 				echo ' <strong>' . __( '(Holiday)' ) . '</strong>';
 			}
 			?>
+				<div class="row-actions">
+					<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"
+					class='edit'>
+					<?php
+					// Translators: Name of category being edited.
+					printf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
+					?>
+					</a>
+					<?php
+					// Cannot delete the default category.
+					if ( '1' !== (string) $cat->category_id ) {
+						?>
+					 | <a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')">
+					<?php
+					// Translators: Category name.
+					printf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
+					?>
+					</a>
+						<?php
+					}
+					?>
+				</div>
 			</td>
-			<td style="background-color:<?php echo $background; ?>;color: <?php echo $foreground; ?>;fill: <?php echo $foreground; ?>"><?php echo ( $icon ) ? $icon : ''; ?> <?php echo ( '#' !== $background ) ? $background : ''; ?></td>
+			<td><?php echo ( $icon ) ? $icon : ''; ?></td>
+			<td style="background-color:<?php echo $background; ?>;color: <?php echo $foreground; ?>;"><?php echo ( '#' !== $background ) ? $background : ''; ?></td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
-			<td>
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"
-				class='edit'>
-				<?php
-				// Translators: Name of category being edited.
-				printf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
-				?>
-				</a>
-			</td>
-			<?php
-			if ( '1' === (string) $cat->category_id ) {
-				echo '<td>' . __( 'N/A', 'my-calendar' ) . '</td>';
-			} else {
-				?>
-			<td>
-				<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')">
-				<?php
-				// Translators: Category name.
-				printf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
-				?>
-				</a>
-			</td>
-				<?php
-			}
-			?>
 		</tr>
 			<?php
 		}
@@ -878,7 +875,8 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			$category_name = strip_tags( stripslashes( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
-				$c = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="' . $id . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="' . $id . $cat->category_id . '">' . $category_name . '</label></li>';
+				$icon = '<span style="display:inline-block;max-width: 1em;margin-left:6px;vertical-align:middle;">' .  mc_category_icon( $cat ) . '</span>';
+				$c    = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="' . $id . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="' . $id . $cat->category_id . '">' . $category_name . $icon . '</label></li>';
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
 			}
