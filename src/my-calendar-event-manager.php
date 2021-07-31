@@ -2356,6 +2356,11 @@ function mc_list_events() {
 		?>
 		<div class="mc-admin-header">
 		<ul class="links">
+			<?php $all = $counts['published'] + $counts['draft'] + $counts['trash']; ?>
+			<li>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php printf( __( 'All (%d)', 'my-calendar' ), $all ); ?></a>
+			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>">
@@ -2407,10 +2412,6 @@ function mc_list_events() {
 				<?php
 			}
 			?>
-			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
-			</li>
 		</ul>
 		<?php
 		$search_text = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
@@ -2525,6 +2526,7 @@ function mc_list_events() {
 					$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
 					$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
 					$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
+					$private  = ( mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
 					$check    = mc_test_occurrence_overlap( $event, true );
 					$problem  = ( '' !== $check ) ? 'problem' : '';
 					$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
@@ -2566,6 +2568,7 @@ function mc_list_events() {
 										echo '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), $edit_url ) . '</strong>';
 									}
 								}
+								echo $private;
 								echo $trash;
 								echo $draft;
 								echo $inv;
@@ -2673,6 +2676,11 @@ function mc_list_events() {
 				?>
 			</table>
 		<ul class="links">
+			<?php $all = $counts['published'] + $counts['draft'] + $counts['trash']; ?>
+			<li>
+				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php printf( __( 'All (%d)', 'my-calendar' ), $all ); ?></a>
+			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
 					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ); ?>">
@@ -2724,10 +2732,6 @@ function mc_list_events() {
 				<?php
 			}
 			?>
-			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ( ! isset( $_GET['limit'] ) && ! isset( $_GET['restrict'] ) ) ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></a>
-			</li>
 		</ul>
 			<?php
 			echo $filtered;
