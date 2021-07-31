@@ -1036,3 +1036,68 @@ function mc_get_db_type() {
 
 	return $db_type;
 }
+
+/**
+ * Produce list of statuses & counts for events manager.
+ *
+ * @param bool $allow_filters Whether current user can see spam filters.
+ *
+ * @return string
+ */
+function mc_status_links( $allow_filters ) {
+	$counts = get_option( 'mc_count_cache' );
+	if ( empty( $counts ) ) {
+		$counts = mc_update_count_cache();
+	}
+	$all            = $counts['published'] + $counts['draft'] + $counts['trash']; 
+	$all_attributes = ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	// Translators: Number of total events.
+	$all_text = sprintf( __( 'All (%d)', 'my-calendar' ), $all );
+
+	$pub_attributes = ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	// Translators: Number of total events.
+	$pub_text = sprintf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] );
+
+	$dra_attributes = ( isset( $_GET['limit'] ) && 'draft' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	// Translators: Number of total events.
+	$dra_text = sprintf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] );
+
+	$tra_attributes = ( isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	// Translators: Number of total events.
+	$tra_text = sprintf( __( 'Trashed (%d)', 'my-calendar' ), $counts['trash'] );
+
+	$arc_attributes = ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
+	// Translators: Number of total events.
+	$arc_text = sprintf( __( 'Archived (%d)', 'my-calendar' ), $counts['trash'] );
+
+	$spa_attributes = ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
+	// Translators: Number of total events.
+	$spa_text = sprintf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] );
+
+	$output = '
+	<ul class="links">
+		<li>
+			<a ' . $all_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ) . '">' . $all_text . '</a>
+		</li>
+		<li>
+			<a ' . $pub_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ). '">' . $pub_text . '</a>
+		</li>
+		<li>
+			<a ' . $dra_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ) . '">' . $dra_text . '</a>
+		</li>
+		<li>
+			<a ' . $tra_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ) . '">' . $tra_text . '</a>
+		</li>
+		<li>
+			<a ' . $arc_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ) . '">' . $arc_text . '</a>
+		</li>';
+	if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
+		$output .= '
+		<li>
+			<a ' . $arc_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ) . '">' . $arc_text . '</a>
+		</li>';
+	}
+	$output .= '</ul>';
+
+	return $output;
+}

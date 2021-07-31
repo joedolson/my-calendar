@@ -78,9 +78,8 @@
 	top: -1px;
 }
 
-.active-link {
+.my-calendar-admin a[aria-current=true] {
 	font-weight: 700;
-	text-decoration: underline;
 }
 
 ul.links li {
