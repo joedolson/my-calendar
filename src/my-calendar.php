@@ -389,6 +389,7 @@ function my_calendar_menu() {
 			add_submenu_page( 'my-calendar', $page_title, __( 'Add Event', 'my-calendar' ), 'mc_add_events', 'my-calendar', 'my_calendar_edit' );
 			$manage = add_submenu_page( 'my-calendar', __( 'Events', 'my-calendar' ), __( 'Events', 'my-calendar' ), 'mc_add_events', 'my-calendar-manage', 'my_calendar_manage_screen' );
 			add_action( "load-$manage", 'mc_add_screen_option' );
+			add_action( "load-$manage", 'mc_add_help_tab' );
 			add_submenu_page( 'my-calendar', __( 'Add New Location', 'my-calendar' ), __( 'Add New Location', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-locations', 'my_calendar_add_locations' );
 			add_submenu_page( 'my-calendar', __( 'Locations', 'my-calendar' ), __( 'Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
 			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );

@@ -158,3 +158,27 @@ function mc_add_screen_option() {
 	);
 	add_screen_option( $option, $args );
 }
+
+/**
+ * Add help tab on events.
+ */
+function mc_add_help_tab() {
+	$screen  = get_current_screen();
+	$content = '<ul>
+			<li>' . __( '<strong>Published</strong>: Events are live and visible.', 'my-calendar' ) . '</li>
+			<li>' . __( '<strong>Draft</strong>: Events in progress, not visible.', 'my-calendar' ) . '</li>
+			<li>' . __( '<strong>Trash</strong>: Events intended for deletion, not visible.', 'my-calendar' ) . '</li>
+			<li>' . __( '<strong>Archive</strong>: Events still visible, but removed from "Published" list.', 'my-calendar' ) . '</li>
+			<li>' . __( '<strong>Spam</strong>: Events identified as potential spam, not visible.', 'my-calendar' ) . '</li>
+			<li>' . __( '<strong>Private</strong>: In a private category, only visible to logged-in users.', 'my-calendar' ) . '</li>
+			<li>' . __( '<strong>Invalid</strong>: There is something wrong with the dates assigned for this event, and it should be checked.', 'my-calendar' ) . '</li>
+		</ul>';
+	// Add my_help_tab if current screen is My Admin Page
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mc_help_tab',
+			'title'   => __( 'Event Statuses', 'my-calendar' ),
+			'content' => $content,
+		)
+	);
+}
