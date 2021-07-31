@@ -2036,7 +2036,7 @@ function mc_event_location_dropdown_block( $data ) {
 				<option value="none">--</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
-					$loc_name = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
+					$base_loc = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
 					$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					if ( (int) $loc->location_id === (int) $event_location ) {
 						$location_link = ( current_user_can( 'mc_edit_locations' ) ) ? add_query_arg(
@@ -2047,12 +2047,12 @@ function mc_event_location_dropdown_block( $data ) {
 							admin_url( 'admin.php?page=my-calendar-locations' )
 						) : false;
 						// Translators: name of currently selected location.
-						$loc_name = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . sprintf( __( 'Edit %s', 'my-calendar' ), $loc_name ) . ' (' . __( 'Opens in new tab', 'my-calendar' ) . ')</a>' : $loc_name;
+						$loc_name = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . sprintf( __( 'Edit %s', 'my-calendar' ), $base_loc ) . ' (' . __( 'Opens in new tab', 'my-calendar' ) . ')</a>' : $base_loc;
 						// Translators: Link to edit current location, e.g. 'Edit %s'.
 						$current_location  = "<div id='mc-current-location'><span class='dashicons dashicons-location' aria-hidden='true'></span>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</div>';
 						$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
 					}
-					$output .= "<option value='" . $loc->location_id . "'$selected />" . $loc_name . '</option>';
+					$output .= "<option value='" . $loc->location_id . "'$selected />" . $base_loc . '</option>';
 				}
 			}
 			$output .= '</select>' . $current_location . '</p>';
