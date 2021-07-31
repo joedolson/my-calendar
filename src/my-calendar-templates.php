@@ -823,7 +823,7 @@ function mc_event_link( $event ) {
  * @return boolean
  */
 function mc_event_expired( $event ) {
-	if ( is_object( $event ) ) {
+	if ( is_object( $event ) && property_exists( $event, 'occur_end' ) ) {
 		if ( my_calendar_date_xcomp( $event->occur_end, current_time( 'Y-m-d' ) ) ) {
 			do_action( 'mc_event_expired', $event );
 
