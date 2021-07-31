@@ -1049,7 +1049,7 @@ function mc_status_links( $allow_filters ) {
 	if ( empty( $counts ) ) {
 		$counts = mc_update_count_cache();
 	}
-	$all            = $counts['published'] + $counts['draft'] + $counts['trash']; 
+	$all            = $counts['published'] + $counts['draft'] + $counts['trash'];
 	$all_attributes = ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$all_text = sprintf( __( 'All (%d)', 'my-calendar' ), $all );
@@ -1080,7 +1080,7 @@ function mc_status_links( $allow_filters ) {
 			<a ' . $all_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ) . '">' . $all_text . '</a>
 		</li>
 		<li>
-			<a ' . $pub_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ). '">' . $pub_text . '</a>
+			<a ' . $pub_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ) . '">' . $pub_text . '</a>
 		</li>
 		<li>
 			<a ' . $dra_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ) . '">' . $dra_text . '</a>

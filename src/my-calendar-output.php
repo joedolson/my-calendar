@@ -166,11 +166,11 @@ function mc_generate_category_icon( $source ) {
 	$src   = $path . str_replace( '.png', '.svg', $source->category_icon );
 	$hex   = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color = $hex . $source->category_color;
-	$application = get_option( 'mc_apply_color' );
-	if ( 'background' === $application ) {
+	$apply = get_option( 'mc_apply_color' );
+	if ( 'background' === $apply ) {
 		$color = mc_inverse_color( $color );
 	}
-	if ( 'default' === $application ) {
+	if ( 'default' === $apply ) {
 		$color = '';
 	}
 	// Is this an event context or a category context.
