@@ -396,14 +396,21 @@ function mc_exit_early( $event, $process_date ) {
 }
 
 /**
- * Check whether an object with a category_private property is private
+ * Check whether an object with a category_private property is private &or hidden.
  *
  * @param object $event [can be a category object].
+ * @param bool   $type true to check whether an object is hidden; false to check the object configuration.
  *
  * @return boolean
  */
-function mc_private_event( $event ) {
-	$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
+function mc_private_event( $event, $type = true ) {
+	if( $type ) {
+		// Checking whether this should currently be hidden.
+		$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
+	} else {
+		// Checking whether this is supposed to be private.
+		$status = ( 1 === absint( $event->category_private ) ) ? true : false;
+	}
 	// custom filter to grant custom reasons for exiting.
 	// $event may not be an event object; in some cases it's a category object.
 	$status = apply_filters( 'mc_private_event', $status, $event );
