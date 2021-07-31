@@ -173,7 +173,7 @@ function mc_add_help_tab() {
 			<li>' . __( '<strong>Private</strong>: In a private category, only visible to logged-in users.', 'my-calendar' ) . '</li>
 			<li>' . __( '<strong>Invalid</strong>: There is something wrong with the dates assigned for this event, and it should be checked.', 'my-calendar' ) . '</li>
 		</ul>';
-	// Add my_help_tab if current screen is My Admin Page
+
 	$screen->add_help_tab(
 		array(
 			'id'      => 'mc_help_tab',

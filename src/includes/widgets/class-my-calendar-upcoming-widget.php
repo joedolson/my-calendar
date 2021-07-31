@@ -312,7 +312,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		}
 		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new['my_calendar_upcoming_category'], true ) ) ? array() : $new['my_calendar_upcoming_category'];
 
-
 		return $instance;
 	}
 }

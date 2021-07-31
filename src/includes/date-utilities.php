@@ -404,7 +404,7 @@ function mc_exit_early( $event, $process_date ) {
  * @return boolean
  */
 function mc_private_event( $event, $type = true ) {
-	if( $type ) {
+	if ( $type ) {
 		// Checking whether this should currently be hidden.
 		$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
 	} else {

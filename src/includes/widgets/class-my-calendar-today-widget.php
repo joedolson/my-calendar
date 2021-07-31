@@ -194,7 +194,6 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		// Set special value for category.
 		$instance['my_calendar_today_category'] = ( in_array( 'all', (array) $new['my_calendar_today_category'], true ) ) ? array() : $new['my_calendar_today_category'];
 
-
 		return $instance;
 	}
 }

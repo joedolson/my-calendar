@@ -2359,7 +2359,12 @@ function mc_list_events() {
 			<?php $all = $counts['published'] + $counts['draft'] + $counts['trash']; ?>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php printf( __( 'All (%d)', 'my-calendar' ), $all ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>">
+				<?php
+					// Translators: Number of total events.
+					printf( __( 'All (%d)', 'my-calendar' ), $all );
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
@@ -2679,7 +2684,12 @@ function mc_list_events() {
 			<?php $all = $counts['published'] + $counts['draft'] + $counts['trash']; ?>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
-					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>"><?php printf( __( 'All (%d)', 'my-calendar' ), $all ); ?></a>
+					href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ); ?>">
+				<?php
+					// Translators: Number of total events.
+					printf( __( 'All (%d)', 'my-calendar' ), $all );
+				?>
+				</a>
 			</li>
 			<li>
 				<a <?php echo ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? 'class="active-link" aria-current="true"' : ''; ?>
