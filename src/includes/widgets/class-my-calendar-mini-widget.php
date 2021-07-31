@@ -152,10 +152,11 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		if ( empty( $widget_category ) ) {
 			$all_checked = ' checked="checked"';
 		}
+
 		?>
 		<fieldset>
 			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
-			<ul style="padding:0;margin:0;list-style-type: none;">
+			<ul style="padding:0;margin:0;list-style-type: none;columns:3">
 				<li>
 					<input type="checkbox" value="all" <?php echo $all_checked; ?> name="<?php echo $this->get_field_name( 'my_calendar_mini_category' ) . '[]'; ?>" id="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>"> <label for="<?php echo $this->get_field_id( 'my_calendar_mini_category' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
 				</li>
