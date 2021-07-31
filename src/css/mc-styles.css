@@ -108,8 +108,8 @@ ul.links li {
 }
 
 #my-calendar-admin-table tr > th:nth-of-type(1) {
-	min-width: 60px;
-	max-width: 80px;
+	width: 5em;
+	vertical-align: top;
 }
 
 #toggle {
@@ -494,10 +494,6 @@ strong.label {
 
 .autocomplete.mc-autocomplete > input {
 	padding: 4px;
-}
-
-.mc-categories th:nth-of-type(5), .mc-categories th:nth-of-type(6), .mc-categories th:nth-of-type(7) {
-	width: 50px;
 }
 
 .mc-categories td img,

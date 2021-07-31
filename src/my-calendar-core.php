@@ -291,7 +291,6 @@ function mc_generate_category_styles() {
 				// always an anchor as of 1.11.0, apply also to title.
 				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
 				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor;}";
-				$category_styles .= "\n.mc-main .$class svg.category-icon { background: $color; fill: $inverse; }";
 			}
 			// Variables aren't dependent on options.
 			$category_vars .= '--category-' . $class . ': ' . $color . '; ';

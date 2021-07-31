@@ -688,9 +688,9 @@ function mc_manage_categories() {
 					echo ( '1' === $co ) ? '</a>' : '';
 				?>
 			</th>
+			<th scope="col"><?php _e( 'Private', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Icon', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Color', 'my-calendar' ); ?></th>
-			<th scope="col"><?php _e( 'Private', 'my-calendar' ); ?></th>
 		</tr>
 		</thead>
 		<?php
@@ -713,33 +713,28 @@ function mc_manage_categories() {
 			if ( get_option( 'mc_skip_holidays_category' ) === (string) $cat->category_id ) {
 				echo ' <strong>' . __( '(Holiday)' ) . '</strong>';
 			}
+			// Translators: Name of category being edited.
+			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
+			// Translators: Category name.
+			$delete_cat = sprintf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			?>
 				<div class="row-actions">
 					<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"
-					class='edit'>
-					<?php
-					// Translators: Name of category being edited.
-					printf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
-					?>
-					</a>
+					class='edit'><?php echo $edit_cat; ?></a>
 					<?php
 					// Cannot delete the default category.
 					if ( '1' !== (string) $cat->category_id ) {
+						echo ' | ';
 						?>
-					 | <a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')">
-					<?php
-					// Translators: Category name.
-					printf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
-					?>
-					</a>
+						<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')"><?php echo $delete_cat; ?></a>
 						<?php
 					}
 					?>
 				</div>
 			</td>
+			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 			<td><?php echo ( $icon ) ? $icon : ''; ?></td>
 			<td style="background-color:<?php echo $background; ?>;color: <?php echo $foreground; ?>;"><?php echo ( '#' !== $background ) ? $background : ''; ?></td>
-			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 		</tr>
 			<?php
 		}
