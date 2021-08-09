@@ -2438,7 +2438,6 @@ function mc_list_events() {
 				<tbody>
 				<?php
 				$class      = '';
-				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				foreach ( array_keys( $events ) as $key ) {
 					$e       =& $events[ $key ];
