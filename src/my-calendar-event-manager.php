@@ -4136,7 +4136,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 		} else {
 			$post_until = $event->event_repeats;
 			// Set event repetition to 1. Autoincrement up as needed.
-			$event_repetition = ( $post_until > $orig_end ) ? 1 : false;
+			$event_repetition = ( my_calendar_date_xcomp( $orig_end, $post_until ) ) ? 1 : false;
 		}
 		// Toggle recurrence type to single if invalid repeat target passed.
 		$recur      = ( ! $event_repetition ) ? 'S' : $recur;
@@ -4370,7 +4370,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( $begin <= strtotime( $post_until ) ) {
+					if ( $newbegin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
 						return $data;
