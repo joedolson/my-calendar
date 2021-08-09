@@ -2437,7 +2437,7 @@ function mc_list_events() {
 				</thead>
 				<tbody>
 				<?php
-				$class      = '';
+				$class = '';
 
 				foreach ( array_keys( $events ) as $key ) {
 					$e       =& $events[ $key ];
