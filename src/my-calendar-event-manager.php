@@ -2435,6 +2435,7 @@ function mc_list_events() {
 					?>
 					</tr>
 				</thead>
+				<tbody>
 				<?php
 				$class      = '';
 				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -2613,6 +2614,7 @@ function mc_list_events() {
 					}
 				}
 				?>
+				</tbody>
 			</table>
 			<?php
 			$status_links = mc_status_links( $allow_filters );
