@@ -552,7 +552,11 @@ function mc_get_first_event( $id ) {
 		$mcdb = mc_remote_db();
 	}
 	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$event = mc_event_object( $event );
+	if ( $event ) {
+		$event = mc_event_object( $event );
+	} else {
+		$event = false;
+	}
 
 	return $event;
 }
