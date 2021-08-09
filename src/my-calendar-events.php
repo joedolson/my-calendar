@@ -1094,7 +1094,7 @@ function mc_status_links( $allow_filters ) {
 	if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
 		$output .= '
 		<li>
-			<a ' . $arc_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ) . '">' . $arc_text . '</a>
+			<a ' . $spa_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ) . '">' . $spa_text . '</a>
 		</li>';
 	}
 	$output .= '</ul>';
