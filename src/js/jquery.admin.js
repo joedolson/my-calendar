@@ -157,6 +157,61 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	$( '.new-event-category' ).hide();
+	$( '#event_category_new' ).on( 'click', function() {
+		var checked_status = $(this).prop('checked');
+		if ( checked_status ) {
+			$( '.new-event-category' ).show();
+			$( '#event_category_name' ).prop( 'disabled', false );
+		} else {
+			$( '.new-event-category' ).hide();
+			$( '#event_category_name' ).prop( 'disabled', true );
+		}
+	});
+
+	// display notice informing users of lack of support for recur month by day.
+	$( '#e_recur' ).on( 'change', function (e) {
+		var recur = $(this).val();
+		if ( recur != 'S' ) {
+			$( 'duet-date-picker[identifier=e_repeats]' ).attr( 'required', 'true' );
+		} else {
+			$( 'duet-date-picker[identifier=e_repeats]' ).removeAttr( 'required' );
+		}
+		if ( recur == 'U' ) {
+			$( '#e_every' ).attr( 'max', 1 ).val( 1 );
+		} else {
+			$( '#e_every' ).attr( 'max', 99 );
+		}
+	});
+
+	var is_checked = $( 'input[id="e_allday"]' ).prop( "checked" );
+	if ( ! is_checked ) {
+		$( '.event_time_label' ).hide();
+	}
+
+	$( 'input[id="e_allday"]' ).change( function() {
+		var checked = $(this).prop( "checked" );
+		if ( checked ) {
+			$( '.event_time_label' ).show();
+		} else {
+			$( '.event_time_label' ).hide();
+		}
+	});
+
+	var hide_end_checked = $( 'input[id="e_hide_end"]' ).prop( "checked" );
+	if ( hide_end_checked ) {
+		$( 'label[for=mc_event_endtime] span' ).show();
+	}
+
+	$( 'input[id="e_hide_end"]' ).change( function() {
+		var checked = $(this).prop( "checked" );
+		if ( checked ) {
+			$( 'label[for=mc_event_endtime] span' ).show();
+		} else {
+			$( 'label[for=mc_event_endtime] span' ).hide();
+		}
+	});
+
 	var firstItem = window.location.hash;
 	if ( firstItem ) {
 		showPanel( firstItem );
