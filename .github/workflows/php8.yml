@@ -1,4 +1,4 @@
-name: PHP tests
+name: PHP 8 tests
 
 on:
     push:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['7.2', '7.3', '7.4']
+        php-versions: ['8.0']
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
     - name: Checkout
@@ -25,7 +25,7 @@ jobs:
         php-version: ${{ matrix.php-versions }}
         extensions: mbstring, intl #optional, setup extensions
         coverage: xdebug #optional, setup coverage driver
-        tools: composer:v1
+        tools: composer
 
     - name: Check PHP Version
       run: php -v
