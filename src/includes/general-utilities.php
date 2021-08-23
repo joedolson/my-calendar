@@ -265,7 +265,7 @@ function mc_inverse_color( $color ) {
 }
 
 /**
- * Shift color to an acceptable alternate color.
+ * Shift color to an acceptable alternate color. Shifts dark colors darker and light colors lighter.
  *
  * @param string $color Color hex.
  *
