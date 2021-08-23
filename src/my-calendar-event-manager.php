@@ -1368,18 +1368,23 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			break;
 		case 'event_category':
 			if ( $show_block ) {
+				$add_category = current_user_can( 'mc_edit_cats' ) ? '<input type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new">' . __( 'Add new category', 'my-calendar' ) . '</label>' : '';
 				if ( 'true' !== get_option( 'mc_multiple_categories' ) ) {
 					$select = mc_category_select( $data, true, false );
 					$return = '
 						<p class="mc_category">
 							<label for="event_category">' . __( 'Category', 'my-calendar-submissions' ) . '</label>
-							<select class="widefat" name="event_category" id="e_category">' . $select . '</select>
+							<select class="widefat" name="event_category" id="e_category">' . $select . '</select>' . $add_category . '
 						</p>';
 				} else {
 					$return = '<fieldset class="categories"><legend>' . __( 'Categories', 'my-calendar' ) . '</legend><ul class="checkboxes">' .
-						mc_category_select( $data, true, true ) . '
+						mc_category_select( $data, true, true ) . 
+						'<li> ' . $add_category . '</li>
 					</ul></fieldset>';
 				}
+				$return .= '<div class="new-event-category">
+					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" id="event_category_name" name="event_category_name" disabled /> <button type="button">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
+				</div>';
 			} else {
 				$categories = mc_get_categories( $data );
 				$return     = '<div>';

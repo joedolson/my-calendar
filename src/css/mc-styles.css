@@ -734,6 +734,12 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
+.new-event-category {
+	background: #0000000a;
+	padding: .5em 1em;
+	margin-top: -1em;
+}
+
 .mc-permissions-wrapper {
 	display: grid;
 	grid-template-columns: repeat( 3, 33.3333333% );

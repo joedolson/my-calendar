@@ -1156,6 +1156,15 @@ function mc_scripts() {
 					'security' => wp_create_nonce( 'mc-delete-nonce' ),
 				)
 			);
+			wp_enqueue_script( 'mc.ajaxcats', plugins_url( 'js/ajax-cats.js', __FILE__ ), array( 'jquery' ) );
+			wp_localize_script(
+				'mc.ajaxcats',
+				'mc_cats',
+				array(
+					'action'   => 'add_category',
+					'security' => wp_create_nonce( 'mc-add-category-nonce' ),
+				)
+			);
 		}
 		$count = mc_count_locations();
 		if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
@@ -1304,6 +1313,58 @@ function mc_core_autocomplete_search_icons() {
 			array(
 				'success'  => 1,
 				'response' => $response,
+			)
+		);
+	}
+}
+
+add_action( 'wp_ajax_add_category', 'mc_ajax_add_category' );
+/**
+ * Delete a single occurrence of an event from the event manager.
+ */
+function mc_ajax_add_category() {
+	if ( ! check_ajax_referer( 'mc-add-category-nonce', 'security', false ) ) {
+		wp_send_json(
+			array(
+				'success'  => 0,
+				'response' => __( 'Invalid Security Check', 'my-calendar' ),
+			)
+		);
+	}
+
+	if ( current_user_can( 'mc_edit_cats' ) ) {
+		global $wpdb;
+		$event_category = $_REQUEST['event_category'];
+		$category_id    = mc_create_category(
+			array(
+				'category_name'  => $event_category,
+				'category_color' => '',
+				'category_icon'  => '',
+			)
+		);
+
+		if ( $category_id ) {
+			wp_send_json(
+				array(
+					'success'     => 1,
+					'response'    => __( 'New Category Created.', 'my-calendar' ),
+					'category_id' => $category_id,
+				)
+			);
+		} else {
+			wp_send_json(
+				array(
+					'success'     => 0,
+					'response'    => __( 'Category not created.', 'my-calendar' ),
+					'category_id' => $category_id,
+				)
+			);
+		}
+	} else {
+		wp_send_json(
+			array(
+				'success'  => 0,
+				'response' => __( 'You are not authorized to perform this action', 'my-calendar' ),
 			)
 		);
 	}
