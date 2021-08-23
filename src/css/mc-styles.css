@@ -740,6 +740,13 @@ input[name="mc_uri"] {
 	margin-top: -1em;
 }
 
+.new-event-category p {
+	display: flex;
+	align-items: center;
+	column-gap: 4px;
+	flex-wrap: wrap;
+}
+
 .mc-permissions-wrapper {
 	display: grid;
 	grid-template-columns: repeat( 3, 33.3333333% );

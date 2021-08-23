@@ -1334,10 +1334,18 @@ function mc_ajax_add_category() {
 
 	if ( current_user_can( 'mc_edit_cats' ) ) {
 		global $wpdb;
-		$event_category = $_REQUEST['event_category'];
+		$category_name = $_REQUEST['category_name'];
+		if ( '' === trim( $category_name ) ) {
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => __( 'Empty category name.', 'my-calendar' ),
+				)
+			);
+		}
 		$category_id    = mc_create_category(
 			array(
-				'category_name'  => $event_category,
+				'category_name'  => $category_name,
 				'category_color' => '',
 				'category_icon'  => '',
 			)
