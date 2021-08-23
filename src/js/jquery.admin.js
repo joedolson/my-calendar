@@ -148,10 +148,12 @@ jQuery(document).ready(function ($) {
 	var publishText = $( 'input[name=save]' ).val();
 	$( '#e_approved' ).on( 'change', function (e) {
 		var event_status = $(this).val();
-		if ( event_status == 0 ) {
-			$( 'input[name=save]' ).val( mcAdmin.draftText );
-		} else {
-			$( 'input[name=save]' ).val( publishText );
+		if ( publishText == mcAdmin.publishText ) {
+			if ( event_status == 0 ) {
+				$( 'input[name=save]' ).val( mcAdmin.draftText );
+			} else {
+				$( 'input[name=save]' ).val( publishText );
+			}
 		}
 	});
 

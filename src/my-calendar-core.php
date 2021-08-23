@@ -1115,6 +1115,7 @@ function mc_scripts() {
 			'mcAdmin',
 			array(
 				'thumbHeight'   => get_option( 'thumbnail_size_h' ),
+				'publishText'   => __( 'Publish', 'my-calendar' ),
 				'draftText'     => __( 'Save Draft', 'my-calendar' ),
 				'deleteButton'  => __( 'Delete', 'my-calendar' ),
 				'restoreButton' => __( 'Restore', 'my-calendar' ),
