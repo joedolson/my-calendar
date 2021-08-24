@@ -1343,7 +1343,7 @@ function mc_ajax_add_category() {
 				)
 			);
 		}
-		$category_id    = mc_create_category(
+		$category_id = mc_create_category(
 			array(
 				'category_name'  => $category_name,
 				'category_color' => '',

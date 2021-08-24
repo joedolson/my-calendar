@@ -1378,7 +1378,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 						</p>';
 				} else {
 					$return = '<fieldset class="categories"><legend>' . __( 'Categories', 'my-calendar' ) . '</legend><ul class="checkboxes">' .
-						mc_category_select( $data, true, true ) . 
+						mc_category_select( $data, true, true ) .
 						'<li> ' . $add_category . '</li>
 					</ul></fieldset>';
 				}
