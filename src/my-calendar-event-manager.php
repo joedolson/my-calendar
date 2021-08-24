@@ -766,9 +766,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
-						$message .= sprintf( __( ' <a href="%s">View Event</a>', 'my-calendar' ), $event_link );
+						$message .= sprintf( __( ' <a href="%s" class="button">View Event</a>', 'my-calendar' ), $event_link );
 						// Translators: URL to edit event.
-						$message .= sprintf( __( ' <a href="%s">Edit Event</a>', 'my-calendar' ), $edit_link );
+						$message .= sprintf( __( ' <a href="%s" class="button">Edit Event</a>', 'my-calendar' ), $edit_link );
 					} else {
 						$message .= __( ' No link was generated for this event. There may be an unknown error.', 'my-calendar' );
 					}
