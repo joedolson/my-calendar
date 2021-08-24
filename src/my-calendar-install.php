@@ -218,6 +218,7 @@ function mc_default_settings() {
 		${$key} = $global;
 	}
 
+	add_option( 'mc_use_permalinks', 'true' );
 	add_option( 'mc_display_author', 'false' );
 	add_option( 'mc_use_styles', 'false' );
 	add_option( 'mc_show_months', 1 );

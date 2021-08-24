@@ -62,7 +62,7 @@ function mc_plugin_activated() {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		exit;
 	}
-
+	mc_posttypes();
 	flush_rewrite_rules();
 	if ( my_calendar_exists() ) {
 		mc_upgrade_db();
