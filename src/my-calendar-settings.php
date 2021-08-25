@@ -718,7 +718,7 @@ function mc_remote_db() {
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Output Settings', 'my-calendar' ); ?>" /></p>
 					<fieldset>
-						<legend><?php _e( 'Calendar Link Targets', 'my-calendar' ); ?></legend>
+						<legend><?php _e( 'Calendar Links', 'my-calendar' ); ?></legend>
 						<ul>
 							<?php
 							$atts = array();
@@ -730,31 +730,6 @@ function mc_remote_db() {
 							?>
 							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open event links in single event view', 'my-calendar' ), '', $note, $atts, 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_no_link', __( 'Disable calendar links', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
-							<?php
-							$disabled = ( ! get_option( 'mc_uri' ) && ! get_option( 'mc_mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
-							if ( ! empty( $disabled ) ) {
-								// Ensure that this option is set to a valid value if no URI configured.
-								update_option( 'mc_open_day_uri', 'false' );
-							}
-							?>
-							<li>
-							<?php
-							mc_settings_field(
-								'mc_open_day_uri',
-								__( 'Mini calendar widget date links to:', 'my-calendar' ),
-								array(
-									'false'          => __( 'jQuery pop-up view', 'my-calendar' ),
-									'true'           => __( 'daily view page (above)', 'my-calendar' ),
-									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
-									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
-								),
-								'',
-								$disabled,
-								'select'
-							);
-							?>
-							</li>
 						</ul>
 					</fieldset>
 
@@ -868,6 +843,38 @@ function mc_remote_db() {
 							</li>
 						</ul>
 					</fieldset>
+
+					<fieldset>
+						<legend><?php _e( 'Mini Calendar Options', 'my-calendar' ); ?></legend>
+						<ul>
+							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
+							<?php
+							$disabled = ( ! get_option( 'mc_uri' ) && ! get_option( 'mc_mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
+							if ( ! empty( $disabled ) ) {
+								// Ensure that this option is set to a valid value if no URI configured.
+								update_option( 'mc_open_day_uri', 'false' );
+							}
+							?>
+							<li>
+							<?php
+							mc_settings_field(
+								'mc_open_day_uri',
+								__( 'Mini calendar widget date links to:', 'my-calendar' ),
+								array(
+									'false'          => __( 'jQuery pop-up view', 'my-calendar' ),
+									'true'           => __( 'daily view page (above)', 'my-calendar' ),
+									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
+									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
+								),
+								'',
+								$disabled,
+								'select'
+							);
+							?>
+							</li>
+						</ul>
+					</fieldset>
+
 					<fieldset>
 						<legend><?php _e( 'List Options', 'my-calendar' ); ?></legend>
 						<ul>
