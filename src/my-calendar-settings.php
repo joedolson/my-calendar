@@ -847,7 +847,7 @@ function mc_remote_db() {
 					<fieldset>
 						<legend><?php _e( 'Mini Calendar Options', 'my-calendar' ); ?></legend>
 						<ul>
-							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target <abbr title="Uniform resource locator">URL</abbr> for mini calendar date links:', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
+							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target link for mini calendar dates', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
 							$disabled = ( ! get_option( 'mc_uri' ) && ! get_option( 'mc_mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
 							if ( ! empty( $disabled ) ) {
@@ -859,7 +859,7 @@ function mc_remote_db() {
 							<?php
 							mc_settings_field(
 								'mc_open_day_uri',
-								__( 'Mini calendar widget date links to:', 'my-calendar' ),
+								__( 'Link action for mini calendar', 'my-calendar' ),
 								array(
 									'false'          => __( 'jQuery pop-up view', 'my-calendar' ),
 									'true'           => __( 'daily view page (above)', 'my-calendar' ),
