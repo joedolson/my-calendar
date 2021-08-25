@@ -2324,7 +2324,7 @@ function mc_list_events() {
 		if ( '' === $filter || ! $allow_filters ) {
 			$filtered = '';
 		} else {
-			$filtered = "<span class='dashicons dashicons-no' aria-hidden='true'></span><a href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'>" . __( 'Clear filters', 'my-calendar' ) . '</a>';
+			$filtered = "<a href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
 		}
 		$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 		$user           = get_current_user_id();
