@@ -2996,7 +2996,16 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_author = ( $event_author === $current_user->ID || current_user_can( 'mc_manage_events' ) ) ? $event_author : $current_user->ID;
 	$primary      = ( ! $primary ) ? 1 : $primary;
 	$cats         = ( isset( $cats ) && is_array( $cats ) ) ? $cats : array( 1 );
-	$submit       = array(
+	// Set transient with start date/time of this event for 15 minutes. 
+	set_transient(
+		'mc_last_event', 
+		array(
+			'begin' => $begin,
+			'time'  => $time,
+		),
+		60 * 15
+	);
+	$submit = array(
 		// Begin strings.
 		'event_begin'        => $begin,
 		'event_end'          => $end,
@@ -3042,7 +3051,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		// Array: removed before DB insertion.
 		'event_categories'   => $cats,
 	);
-	$errors       = ( $ignore_required ) ? $errors : apply_filters( 'mc_fields_required', $errors, $submit );
+	$errors = ( $ignore_required ) ? $errors : apply_filters( 'mc_fields_required', $errors, $submit );
 
 	if ( '' === $errors ) {
 		$ok = true;
@@ -3415,10 +3424,17 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		$starttime = ( mc_is_all_day( $data ) ) ? '' : mc_date( 'H:i', mc_strtotime( $data->event_time ), false );
 		$endtime   = ( mc_is_all_day( $data ) ) ? '' : mc_date( 'H:i', mc_strtotime( $data->event_endtime ), false );
 	} else {
-		$event_begin = mc_date( 'Y-m-d' );
-		$event_end   = '';
-		$starttime   = '';
-		$endtime     = '';
+		// Set start date/time to last event.
+		$transient_start = get_transient( 'mc_last_event' );
+		if ( is_array( $transient_start ) ) {
+			$event_begin = $transient_start['begin'];
+			$starttime   = $transient_start['time'];
+		} else {
+			$event_begin = mc_date( 'Y-m-d' );
+			$starttime   = '';
+		}
+		$event_end = '';
+		$endtime   = '';
 	}
 
 	$allday       = ( $has_data && ( mc_is_all_day( $data ) ) ) ? ' checked="checked"' : '';
