@@ -2996,9 +2996,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_author = ( $event_author === $current_user->ID || current_user_can( 'mc_manage_events' ) ) ? $event_author : $current_user->ID;
 	$primary      = ( ! $primary ) ? 1 : $primary;
 	$cats         = ( isset( $cats ) && is_array( $cats ) ) ? $cats : array( 1 );
-	// Set transient with start date/time of this event for 15 minutes. 
+	// Set transient with start date/time of this event for 15 minutes.
 	set_transient(
-		'mc_last_event', 
+		'mc_last_event',
 		array(
 			'begin' => $begin,
 			'time'  => $time,
