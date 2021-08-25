@@ -1405,7 +1405,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 					$checked = ' checked="checked"';
 				} elseif ( $has_data && '0' === $data->event_link_expires ) {
 					$checked = '';
-				} elseif ( 'true' === get_option( 'mc_event_link_expires' ) ) {
+				} elseif ( mc_event_link_expires() ) {
 					$checked = ' checked="checked"';
 				}
 				$return = '
@@ -1917,8 +1917,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<?php
 	}
 	if ( mc_show_edit_block( 'event_specials' ) ) {
-		$hol_checked   = ( 'true' === get_option( 'mc_skip_holidays' ) ) ? ' checked="checked"' : '';
-		$fifth_checked = ( 'true' === get_option( 'mc_no_fifth_week' ) ) ? ' checked="checked"' : '';
+		$hol_checked   = ( mc_skip_holidays() ) ? ' checked="checked"' : '';
+		$fifth_checked = ( mc_no_fifth_week() ) ? ' checked="checked"' : '';
 		if ( $has_data ) {
 			$hol_checked   = ( '1' === $data->event_holiday ) ? ' checked="checked"' : '';
 			$fifth_checked = ( '1' === $data->event_fifth_week ) ? ' checked="checked"' : '';
@@ -1949,8 +1949,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			$event_holiday = ( '1' === $data->event_holiday ) ? 'true' : 'false';
 			$event_fifth   = ( '1' === $data->event_fifth_week ) ? 'true' : 'false';
 		} else {
-			$event_holiday = get_option( 'mc_skip_holidays' );
-			$event_fifth   = get_option( 'mc_no_fifth_week' );
+			$event_holiday = mc_skip_holidays();
+			$event_fifth   = mc_no_fifth_week();
 		}
 		?>
 		<div>

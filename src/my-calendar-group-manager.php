@@ -543,7 +543,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 							$exp_checked = ' checked="checked"';
 						} elseif ( ! empty( $data ) && '0' === $data->event_link_expires ) {
 							$exp_checked = '';
-						} elseif ( 'true' === get_option( 'mc_event_link_expires' ) ) {
+						} elseif ( mc_event_link_expires() ) {
 							$exp_checked = ' checked="checked"';
 						}
 						?>

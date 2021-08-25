@@ -94,7 +94,7 @@ function mc_globals() {
 </item>' . PHP_EOL;
 
 	$charset_collate  = $wpdb->get_charset_collate();
-	$event_fifth_week = ( get_option( 'mc_no_fifth_week' ) === 'true' ) ? 1 : 0;
+	$event_fifth_week = ( mc_no_fifth_week() ) ? 1 : 0;
 
 	$initial_db = 'CREATE TABLE ' . my_calendar_table() . " (
  event_id INT(11) NOT NULL AUTO_INCREMENT,
@@ -258,7 +258,6 @@ function mc_default_settings() {
 	add_option( 'mc_image', 'true' );
 	add_option( 'mc_process_shortcodes', 'false' );
 	add_option( 'mc_short', 'false' );
-	add_option( 'mc_no_fifth_week', 'true' );
 	add_option( 'mc_week_format', "M j, 'y" );
 	add_option( 'mc_date_format', get_option( 'date_format' ) );
 	// This option *must* be complete, if it's partial we get errors. So use update instead of add.
@@ -277,7 +276,6 @@ function mc_default_settings() {
 			'label'      => __( 'Read more', 'my-calendar' ),
 		)
 	);
-	add_option( 'mc_skip_holidays', 'false' );
 	add_option( 'mc_css_file', 'twentytwenty.css' );
 	add_option(
 		'mc_style_vars',

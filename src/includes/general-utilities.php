@@ -240,6 +240,51 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 }
 
 /**
+ * Return default state of link expiration checkbox. Replaces option.
+ *
+ * @return bool Default false.
+ */
+function mc_event_link_expires() {
+	$return  = false;
+	$default = get_option( 'mc_event_link_expires' );
+	if ( 'true' === $default ) {
+		$return = true;
+	}
+
+	return apply_filters( 'mc_event_link_expires', $return );
+}
+
+/**
+ * Return default state of fifth week checkbox. Replaces option.
+ *
+ * @return bool Default true.
+ */
+function mc_no_fifth_week() {
+	$return  = true;
+	$default = get_option( 'mc_no_fifth_week' );
+	if ( 'false' === $default ) {
+		$return = false;
+	}
+
+	return apply_filters( 'mc_no_fifth_week', $return );
+}
+
+/**
+ * Return default state of skip holidays checkbox. Replaces option.
+ *
+ * @return bool Default false.
+ */
+function mc_skip_holidays() {
+	$return  = false;
+	$default = get_option( 'mc_skip_holidays' );
+	if ( 'true' === $default ) {
+		$return = true;
+	}
+
+	return $return;
+}
+
+/**
  * Checks the contrast ratio of color & returns the optimal color to use with it.
  *
  * @param string $color hex value.

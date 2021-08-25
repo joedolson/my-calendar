@@ -326,9 +326,6 @@ function mc_update_input_settings( $post ) {
 	);
 	update_option( 'mc_input_options', $mc_input_options );
 	update_option( 'mc_input_options_administrators', $mc_input_options_administrators );
-	update_option( 'mc_skip_holidays', ( ! empty( $post['mc_skip_holidays'] ) && 'on' === $post['mc_skip_holidays'] ) ? 'true' : 'false' );
-	update_option( 'mc_no_fifth_week', ( ! empty( $post['mc_no_fifth_week'] ) && 'on' === $post['mc_no_fifth_week'] ) ? 'true' : 'false' );
-	update_option( 'mc_event_link_expires', ( ! empty( $post['mc_event_link_expires'] ) && 'on' === $post['mc_event_link_expires'] ) ? 'true' : 'false' );
 }
 
 /**
@@ -942,6 +939,7 @@ function mc_remote_db() {
 							}
 							// Merge saved input options with default off, so all are displayed.
 							$input_options = array_merge( $defaults, $input_options );
+							ksort( $input_options );
 							foreach ( $input_options as $key => $value ) {
 								$checked = ( 'on' === $value ) ? "checked='checked'" : '';
 								if ( isset( $input_labels[ $key ] ) ) {
@@ -951,14 +949,6 @@ function mc_remote_db() {
 							echo $output;
 							?>
 							<li><?php mc_settings_field( 'mc_input_options_administrators', __( 'Administrators see all input options', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-						</ul>
-					</fieldset>
-					<fieldset>
-						<legend><?php _e( 'Event Scheduling Defaults', 'my-calendar' ); ?></legend>
-						<ul>
-							<li><?php mc_settings_field( 'mc_event_link_expires', __( 'Event links expire after event passes.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_no_fifth_week', __( 'If a recurring event falls on a date that does not exist, move it back one week.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_skip_holidays', __( 'If an event coincides with an event in the designated "Holiday" category, do not show the event.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 						</ul>
 					</fieldset>
 					<p>
