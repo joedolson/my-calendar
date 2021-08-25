@@ -2074,9 +2074,9 @@ function my_calendar( $args ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
 								if ( 'list' === $params['format'] ) {
 									if ( 'true' === $list_info ) {
-										$title = '<span class="mc-list-details-separator"> - </span>' . mc_wrap_title( "<span class='mc-list-details select-event'>" . mc_list_title( $events ) . '</span>' );
+										$title = '<span class="mc-list-details-separator"> - </span>' . "<span class='mc-list-details select-event'>" . mc_list_title( $events ) . '</span>';
 									} elseif ( 'true' === $list_events ) {
-										$title = '<span class="mc-list-details-separator"> - </span>' . mc_wrap_title( "<span class='mc-list-details all-events'>" . mc_list_titles( $events ) . '</span>' );
+										$title = '<span class="mc-list-details-separator"> - </span>' . "<span class='mc-list-details all-events'>" . mc_list_titles( $events ) . '</span>';
 									} else {
 										$title = '';
 									}

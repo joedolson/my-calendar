@@ -133,14 +133,15 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	outline: 1px solid #766;
 }
 
-button.mc-text-button {
+.mc-main.my-calendar ul button.mc-text-button {
 	border: 0;
 	color: inherit;
 	background-color: transparent;
 	text-decoration: none;
 }
 
-button.mc-text-button:hover, button .mc-text-button:focus {
+.mc-main.my-calendar ul button.mc-text-button:hover,
+.mc-main.my-calendar ul button .mc-text-button:focus {
 	text-decoration: underline;
 	background-color: transparent;
 }
