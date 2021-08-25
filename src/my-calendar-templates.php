@@ -309,10 +309,10 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= '</div>';
 	}
 	if ( 'true' === $map && false !== $the_map ) {
-		$hcard  .= '<meta itemprop="name" content="' . esc_attr( $label ) . '"/>';
-		$hcard  .= '<meta itemprop="address" content="' . esc_attr( mc_map_string( $event, $source ) ) . '"/>';
-		$the_map = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
-		$hcard  .= ( '' !== $the_map ) ? "<div class='map'>$the_map</div>" : '';
+		$hcard   .= '<meta itemprop="name" content="' . esc_attr( $label ) . '"/>';
+		$hcard   .= '<meta itemprop="address" content="' . esc_attr( mc_map_string( $event, $source ) ) . '"/>';
+		$the_link = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
+		$hcard  .= ( '' !== $the_map ) ? "<div class='map'>$the_link</div>" : '';
 	}
 	$hcard .= '</div>';
 	$hcard  = ( ( false !== $the_map && 'true' === $map ) || ( '' !== $link && 'true' === $address ) ) ? $hcard : '';
