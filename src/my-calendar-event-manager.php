@@ -2487,7 +2487,7 @@ function mc_list_events() {
 						?>
 						<tr class="<?php echo "$class $spam $pending $trashed $problem"; ?>">
 							<th scope="row">
-								<input type="checkbox" value="<?php echo $event->event_id; ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" <?php echo ( 1 === (int) $event->event_flagged ) ? 'checked="checked"' : ''; ?> aria-describedby='event<?php echo $event->event_id; ?>' />
+								<input type="checkbox" value="<?php echo $event->event_id; ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" aria-describedby='event<?php echo $event->event_id; ?>' />
 								<label for="mc<?php echo $event->event_id; ?>">
 								<?php
 								// Translators: Event ID.
