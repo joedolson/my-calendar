@@ -723,6 +723,16 @@ input[name="mc_uri"] {
 	text-align: center;
 }
 
+.my-calendar-admin .mc-clear-filters {
+	position: absolute;
+	top: -3em;
+	right: 1em;
+}
+
+.my-calendar-admin .mc-clear-filters .dashicons {
+	text-decoration: none;
+}
+
 .my-calendar-admin .checkboxes {
 	margin: 0;
 }

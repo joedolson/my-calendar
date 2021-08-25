@@ -2324,7 +2324,7 @@ function mc_list_events() {
 		if ( '' === $filter || ! $allow_filters ) {
 			$filtered = '';
 		} else {
-			$filtered = "<a href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
+			$filtered = "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
 		}
 		$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 		$user           = get_current_user_id();
@@ -2357,6 +2357,7 @@ function mc_list_events() {
 
 		$status_links = mc_status_links( $allow_filters );
 		$search_text  = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
+		echo $filtered;
 		?>
 		<div class="mc-admin-header">
 		<?php echo $status_links; ?>
@@ -2372,7 +2373,6 @@ function mc_list_events() {
 			</form>
 		</div>
 		<?php
-		echo $filtered;
 		$num_pages = ceil( $items / $items_per_page );
 		if ( $num_pages > 1 ) {
 			$page_links = paginate_links(
