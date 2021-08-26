@@ -78,6 +78,27 @@ function mc_templates_edit() {
 			<div class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
+						<h2><?php _e( 'Core Templates', 'my-calendar' ); ?></h2>
+						<div class="inside">
+						<?php
+						echo mc_list_core_templates();
+						?>
+						</div>
+					</div>
+				</div>
+				<div class="ui-sortable meta-box-sortables">
+					<div class="postbox">
+						<h2><?php _e( 'Custom Templates', 'my-calendar' ); ?></h2>
+						<div class="inside">
+						<?php
+						echo mc_list_custom_templates();
+						echo '<p><a class="button" href="' . add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates#mc-edit-template' ) ) . '">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>';
+						?>
+						</div>
+					</div>
+				</div>
+				<div class="ui-sortable meta-box-sortables">
+					<div class="postbox" id="mc-edit-template">
 						<h2><?php _e( 'Edit Template', 'my-calendar' ); ?></h2>
 						<div class="inside">
 							<p>
@@ -258,10 +279,7 @@ function mc_templates_edit() {
 			</div>
 		</div>
 	<?php
-	$add = array(
-		__( 'Templates', 'my-calendar' ) => mc_list_templates() . '<p><a class="button" href="' . add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates' ) ) . '">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>',
-	);
-	mc_show_sidebar( '', $add );
+	mc_show_sidebar( '' );
 	?>
 	</div>
 	<?php
@@ -451,8 +469,6 @@ function mc_template_description( $key ) {
 		return '';
 	}
 
-	// Translators: unique template key. Non-language string.
-	$return      = sprintf( __( 'Custom template, keyword %s', 'my-calendar' ), "<code>$key</code>" );
 	$description = '';
 	switch ( $key ) {
 		case 'grid':
@@ -476,15 +492,13 @@ function mc_template_description( $key ) {
 		$description = strip_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
 	}
 
-	$br = ( '' !== $description ) ? '<br />' : '';
-
-	return wpautop( $description . $br . $return );
+	return wpautop( $description );
 }
 
 /**
- * List of templates available
+ * List of core templates available
  */
-function mc_list_templates() {
+function mc_list_core_templates() {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
 	$grid_enabled    = ( get_option( 'mc_use_grid_template' ) === '1' ) ? $check : $uncheck;
@@ -493,21 +507,46 @@ function mc_list_templates() {
 	$details_enabled = ( get_option( 'mc_use_details_template' ) === '1' ) ? $check : $uncheck;
 	$rss_enabled     = ( get_option( 'mc_use_rss_template' ) === '1' ) ? $check : $uncheck;
 
-	$list = "<ul>
-				<li><a href='" . add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>grid ($grid_enabled)</a>" . mc_template_description( 'grid' ) . "</li>
-				<li><a href='" . add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>list ($list_enabled)</a>" . mc_template_description( 'list' ) . "
-				</li>
-				<li><a href='" . add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>mini ($mini_enabled)</a>" . mc_template_description( 'mini' ) . "
-				</li>
-				<li><a href='" . add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>details ($details_enabled)</a>" . mc_template_description( 'details' ) . "
-				</li>
-				<li><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>rss ($rss_enabled)</a>" . mc_template_description( 'rss' ) . '</li>';
+	$list = "
+	<table class='widefat'>
+		<thead>
+			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . "</th>
+		</thead>
+		<tbody>
+			<tr class='alternate'><td><a href='" . add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>grid</a></td><td>$grid_enabled</td><td>" . mc_template_description( 'grid' ) . "</td>
+			</tr>
+			<tr><td><a href='" . add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
+			</tr>
+			<tr class='alternate'><td><a href='" . add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
+			</tr>
+			<tr><td><a href='" . add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . "</td>
+			</tr>
+			<tr class='alternate'><td><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>rss</a></td><td>$rss_enabled</td><td>" . mc_template_description( 'rss' ) . '</td>
+			</tr>
+		</tbody>
+	</table>';
+
+	return $list;
+}
+
+
+/**
+ * List of templates available
+ */
+function mc_list_custom_templates() {
+	$list = "<table class='widefat'>
+				<thead>
+					<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th>
+				</thead>
+				<tbody>';
 	global $wpdb;
 	$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
+	$class = 'normal';
 	foreach ( $results as $result ) {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_template_description( $key );
-		$list .= "<li><a href='" . add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>$key</a>$desc</li>";
+		$class = ( 'alternate' === $class ) ? 'normal' : 'alternate';
+		$list .= "<tr class='$class'><td><a href='" . add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>$key</a></td><td>$desc</td></tr>";
 	}
 
 	$list .= '</tbody>
