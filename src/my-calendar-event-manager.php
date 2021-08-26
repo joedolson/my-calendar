@@ -894,56 +894,6 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 }
 
 /**
- * Set up new category relationships for assigned cats to an event
- *
- * @param array $cats array of category IDs.
- * @param int   $event_id My Calendar event ID.
- */
-function mc_set_category_relationships( $cats, $event_id ) {
-	global $wpdb;
-	if ( is_array( $cats ) ) {
-		foreach ( $cats as $cat ) {
-			$wpdb->insert(
-				my_calendar_category_relationships_table(),
-				array(
-					'event_id'    => $event_id,
-					'category_id' => $cat,
-				),
-				array( '%d', '%d' )
-			);
-		}
-	}
-}
-
-/**
- * Update existing category relationships for an event
- *
- * @param array $cats array of category IDs.
- * @param int   $event_id My Calendar event ID.
- */
-function mc_update_category_relationships( $cats, $event_id ) {
-	global $wpdb;
-	$old_cats = mc_get_categories( $event_id, 'testing' );
-	if ( $old_cats === $cats ) {
-		return;
-	}
-	$wpdb->delete( my_calendar_category_relationships_table(), array( 'event_id' => $event_id ), '%d' );
-
-	if ( is_array( $cats ) && ! empty( $cats ) ) {
-		foreach ( $cats as $cat ) {
-			$wpdb->insert(
-				my_calendar_category_relationships_table(),
-				array(
-					'event_id'    => $event_id,
-					'category_id' => $cat,
-				),
-				array( '%d', '%d' )
-			);
-		}
-	}
-}
-
-/**
  * Check an event for any occurrence overlap problems. Used in admin only.
  *
  * @param integer $event_id Event ID.

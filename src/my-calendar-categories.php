@@ -233,6 +233,56 @@ function my_calendar_manage_categories() {
 }
 
 /**
+ * Set up new category relationships for assigned cats to an event
+ *
+ * @param array $cats array of category IDs.
+ * @param int   $event_id My Calendar event ID.
+ */
+function mc_set_category_relationships( $cats, $event_id ) {
+	global $wpdb;
+	if ( is_array( $cats ) ) {
+		foreach ( $cats as $cat ) {
+			$wpdb->insert(
+				my_calendar_category_relationships_table(),
+				array(
+					'event_id'    => $event_id,
+					'category_id' => $cat,
+				),
+				array( '%d', '%d' )
+			);
+		}
+	}
+}
+
+/**
+ * Update existing category relationships for an event
+ *
+ * @param array $cats array of category IDs.
+ * @param int   $event_id My Calendar event ID.
+ */
+function mc_update_category_relationships( $cats, $event_id ) {
+	global $wpdb;
+	$old_cats = mc_get_categories( $event_id, 'testing' );
+	if ( $old_cats === $cats ) {
+		return;
+	}
+	$wpdb->delete( my_calendar_category_relationships_table(), array( 'event_id' => $event_id ), '%d' );
+
+	if ( is_array( $cats ) && ! empty( $cats ) ) {
+		foreach ( $cats as $cat ) {
+			$wpdb->insert(
+				my_calendar_category_relationships_table(),
+				array(
+					'event_id'    => $event_id,
+					'category_id' => $cat,
+				),
+				array( '%d', '%d' )
+			);
+		}
+	}
+}
+
+/**
  * Update a category.
  *
  * @param array $category Array of params to update.
