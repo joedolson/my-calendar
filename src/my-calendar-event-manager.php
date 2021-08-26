@@ -841,8 +841,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				if ( ! isset( $_POST['event_recur'] ) && isset( $_POST['event_repeats'] ) ) {
 					unset( $_POST['event_repeats'] );
 				}
-				// Only execute new increments if 'event_repeats' is present.
-				if ( isset( $_POST['event_repeats'] ) ) {
+				// Only execute new increments if 'event_repeats' is present or date/time has changed.
+				if ( isset( $_POST['event_repeats'] ) || $date_changed ) {
 					if ( isset( $_POST['prev_event_repeats'] ) && isset( $_POST['prev_event_recur'] ) ) {
 						$recur_changed = ( $update['event_repeats'] !== $_POST['prev_event_repeats'] || $update['event_recur'] !== $_POST['prev_event_recur'] ) ? true : false;
 					} else {
@@ -3106,6 +3106,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$submission->event_registration = $event_registration;
 		$submission->event_categories   = $cats;
 		$submission->user_error         = true;
+		$submission->event_post         = ( isset( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) ? mc_get_event_post( $_GET['event_id'] ) : false;
 	}
 
 	$data = array( $ok, $submission, $submit, $errors );
@@ -3313,10 +3314,10 @@ function mc_instance_list( $args ) {
 /**
  * Generate a list of instances for the currently edited event
  *
- * @param int $id Event ID.
- * @param int $occur Specific occurrence ID.
+ * @param int  $id Event ID.
+ * @param int  $occur Specific occurrence ID.
  *
- * @return bool|string list of event dates
+ * @return bool|string
  */
 function mc_admin_instances( $id, $occur = false ) {
 	global $wpdb;
@@ -3328,6 +3329,7 @@ function mc_admin_instances( $id, $occur = false ) {
 	if ( empty( $results ) ) {
 		return false;
 	}
+	$count = count( $results );
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
 			$start = $result->ts_occur_begin;
@@ -3346,7 +3348,7 @@ function mc_admin_instances( $id, $occur = false ) {
 			}
 			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
 			$class = '';
-			if ( (int) $result->occur_id === (int) $occur ) {
+			if ( (int) $result->occur_id === (int) $occur || 1 === $count ) {
 				$control = '';
 				$edit    = "<p>$date</p><p><em>" . __( 'Editing Now', 'my-calendar' ) . '</em></p>';
 				$class   = 'current-event';
