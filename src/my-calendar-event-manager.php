@@ -3314,8 +3314,8 @@ function mc_instance_list( $args ) {
 /**
  * Generate a list of instances for the currently edited event
  *
- * @param int  $id Event ID.
- * @param int  $occur Specific occurrence ID.
+ * @param int $id Event ID.
+ * @param int $occur Specific occurrence ID.
  *
  * @return bool|string
  */
