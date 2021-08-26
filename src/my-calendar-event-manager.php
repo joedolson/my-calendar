@@ -1025,24 +1025,6 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 }
 
 /**
- * Get the instance-specific information about a single event instance.
- *
- * @param int $instance_id Event instance ID.
- *
- * @return query result
- */
-function mc_get_instance_data( $instance_id ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
-	$result = $mcdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $instance_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-	return $result;
-}
-
-/**
  * Whether we should show the edit fields for an enabled block of fields.
  *
  * @param string $field Name of field group.
