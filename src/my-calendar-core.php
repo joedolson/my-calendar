@@ -189,6 +189,7 @@ function mc_register_styles() {
 				if ( $api_key ) {
 					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
 					wp_enqueue_script( 'gmap3', plugins_url( 'js/gmap3.min.js', __FILE__ ), array( 'jquery' ) );
+					wp_enqueue_script( 'gmaps', plugins_url( 'js/gmaps.js', __FILE__ ) );
 				}
 			}
 		}
@@ -1833,6 +1834,9 @@ function mc_previous_post_link( $output, $format ) {
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'previous' );
+		if ( empty( $event ) ) {
+			return '';
+		}
 		remove_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
 		add_filter( 'the_title', 'mc_the_title', 10, 2 );
@@ -1857,6 +1861,9 @@ function mc_next_post_link( $output, $format ) {
 	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'next' );
+		if ( empty( $event ) ) {
+			return '';
+		}
 		remove_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
 		add_filter( 'the_title', 'mc_the_title', 10, 2 );
