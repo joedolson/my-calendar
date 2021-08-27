@@ -101,9 +101,6 @@ function mc_templates_edit() {
 					<div class="postbox" id="mc-edit-template">
 						<h2><?php _e( 'Edit Template', 'my-calendar' ); ?></h2>
 						<div class="inside">
-							<p>
-								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-templates#templates' ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a> &raquo;
-							</p>
 							<?php echo ( '' !== $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
 							<?php
 							if ( 'add-new' === $key ) {
@@ -155,6 +152,9 @@ function mc_templates_edit() {
 								</p>
 							</form>
 							<?php } ?>
+							<p>
+								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-templates#templates' ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a>
+							</p>
 						</div>
 					</div>
 				</div>
