@@ -18,47 +18,49 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_templates_edit() {
 	$templates = get_option( 'mc_templates' );
-
+	$requery   = false;
 	if ( ! empty( $_POST ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-	}
+		$requery = true;
 
-	if ( isset( $_POST['mc_template_key'] ) ) {
-		$key = $_POST['mc_template_key'];
-	} else {
-		$key = ( isset( $_GET['mc_template'] ) ) ? $_GET['mc_template'] : 'grid';
-	}
-
-	if ( isset( $_POST['delete'] ) ) {
-		delete_option( 'mc_ctemplate_' . $key );
-		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ) );
-		$key = 'grid';
-	} else {
-		if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
-			mc_show_notice( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
+		if ( isset( $_POST['mc_template_key'] ) ) {
+			$key = $_POST['mc_template_key'];
 		} else {
-			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-				$template          = ( ! empty( $_POST['mc_template'] ) ) ? $_POST['mc_template'] : '';
-				$templates[ $key ] = $template;
-				update_option( 'mc_templates', $templates );
-				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
-				// Translators: unique key for template.
-				mc_show_notice( sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) );
-			} elseif ( isset( $_POST['mc_template'] ) ) {
-				$template = $_POST['mc_template'];
-				if ( mc_key_exists( $key ) ) {
-					$key = mc_update_template( $key, $template );
-				} else {
-					$key = mc_create_template( $template, $_POST );
+			$key = ( isset( $_GET['mc_template'] ) ) ? $_GET['mc_template'] : 'grid';
+		}
+
+		if ( isset( $_POST['delete'] ) ) {
+			delete_option( 'mc_ctemplate_' . $key );
+			mc_show_notice( __( 'Custom template deleted', 'my-calendar' ) );
+			$key = 'grid';
+		} else {
+			if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
+				mc_show_notice( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
+			} else {
+				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
+					$template          = ( ! empty( $_POST['mc_template'] ) ) ? $_POST['mc_template'] : '';
+					$templates[ $key ] = $template;
+					update_option( 'mc_templates', $templates );
+					update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
+					// Translators: unique key for template.
+					mc_show_notice( sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) );
+				} elseif ( isset( $_POST['mc_template'] ) ) {
+					$template = $_POST['mc_template'];
+					if ( mc_key_exists( $key ) ) {
+						$key = mc_update_template( $key, $template );
+					} else {
+						$key = mc_create_template( $template, $_POST );
+					}
+					mc_show_notice( __( 'Custom Template saved', 'my-calendar' ) );
 				}
-				mc_show_notice( __( 'Custom Template saved', 'my-calendar' ) );
 			}
 		}
 	}
-
+	// Re-fetch templates option after changes have been made.
+	$templates           = ( $requery ) ? get_option( 'mc_templates' ) : $templates;
 	$globals             = mc_globals();
 	$mc_grid_template    = ( '' !== trim( $templates['grid'] ) ) ? $templates['grid'] : $globals['grid_template'];
 	$mc_rss_template     = ( '' !== trim( $templates['rss'] ) ) ? $templates['rss'] : $globals['rss_template'];
@@ -66,8 +68,12 @@ function mc_templates_edit() {
 	$mc_mini_template    = ( '' !== trim( $templates['mini'] ) ) ? $templates['mini'] : $globals['mini_template'];
 	$mc_details_template = ( '' !== trim( $templates['details'] ) ) ? $templates['details'] : $globals['single_template'];
 
-	$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
-	$template = stripslashes( $template );
+	if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
+		$template = stripslashes( $_POST['mc_template'] );
+	} else {
+		$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
+		$template = stripslashes( $template );
+	}
 	$core     = mc_template_description( $key );
 	?>
 	<div class="wrap my-calendar-admin">
@@ -102,10 +108,10 @@ function mc_templates_edit() {
 						<h2><?php _e( 'Edit Template', 'my-calendar' ); ?></h2>
 						<div class="inside">
 							<?php echo ( '' !== $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
+							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 							<?php
 							if ( 'add-new' === $key ) {
 								?>
-								<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 								</div>
@@ -121,18 +127,16 @@ function mc_templates_edit() {
 								<p>
 									<input type="submit" name="save" class="button-primary" value="<?php _e( 'Add Template', 'my-calendar' ); ?>" />
 								</p>
-							</form>
 								<?php
 							} else {
 								?>
-							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 									<input type="hidden" name="mc_template_key" value="<?php echo esc_attr( $key ); ?>"/>
 								</div>
 								<?php if ( mc_is_core_template( $key ) ) { ?>
 								<p>
-									<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php mc_is_checked( 'mc_use_' . $key . '_template', 1 ); ?> /> <label for="mc_use_template"><?php _e( 'Use this template', 'my-calendar' ); ?></label>
+									<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php checked( get_option( 'mc_use_' . $key . '_template' ), '1' ); ?> /> <label for="mc_use_template"><?php _e( 'Use this template', 'my-calendar' ); ?></label>
 								</p>
 								<?php } ?>
 								<p>
@@ -150,7 +154,6 @@ function mc_templates_edit() {
 									<input type="submit" name="delete" class="button-secondary" value=<?php _e( 'Delete Template', 'my-calendar' ); ?>" />
 								<?php } ?>
 								</p>
-							</form>
 							<?php } ?>
 							<p>
 								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-templates#templates' ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a>
