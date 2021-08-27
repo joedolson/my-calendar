@@ -541,7 +541,7 @@ function mc_list_custom_templates() {
 				<tbody>';
 	global $wpdb;
 	$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
-	$class = 'normal';
+	$class   = 'normal';
 	foreach ( $results as $result ) {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_template_description( $key );
