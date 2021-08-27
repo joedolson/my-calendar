@@ -494,7 +494,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 						}
 						?>
 							<p>
-								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> &raquo;"/>
+								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
 							</p>
 							<?php do_action( 'mc_post_category_form', $cur_cat, $view ); ?>
 						</form>
@@ -515,11 +515,19 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 					</div>
 				</div>
 			</div>
+			<div class="ui-sortable meta-box-sortables">
+				<div class="postbox">
+					<h2><?php _e( 'Category Settings', 'my-calendar' ); ?></h2>
+
+					<div class="inside">
+						<?php echo mc_category_settings(); ?>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<?php
-		$category_settings = mc_category_settings();
-		mc_show_sidebar( '', $category_settings );
+		mc_show_sidebar( '' );
 }
 
 /**
@@ -551,38 +559,39 @@ function mc_category_settings() {
 		$response = mc_category_settings_update();
 		$settings = $response . '
 		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-categories' ) . '">
-		<div>
-			<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" />
-		</div>
-
-			<fieldset>
-			<legend>' . __( 'Category Colors', 'my-calendar' ) . '</legend>
-				<ul>' .
-				mc_settings_field(
-					'mc_apply_color',
-					array(
-						'default'    => __( 'Ignore colors', 'my-calendar' ),
-						'font'       => __( 'Titles are in colors.', 'my-calendar' ),
-						'background' => __( 'Titles use colors as background.', 'my-calendar' ),
-					),
-					'default',
-					'',
-					array(),
-					'radio',
-					false
-				) . '
+			<div>
+				<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" />
+			</div>
+			<div class="mc-category-settings">
+				<fieldset>
+				<legend>' . __( 'Category Colors', 'my-calendar' ) . '</legend>
+					<ul>' .
+					mc_settings_field(
+						'mc_apply_color',
+						array(
+							'default'    => __( 'Ignore colors', 'my-calendar' ),
+							'font'       => __( 'Titles are in colors.', 'my-calendar' ),
+							'background' => __( 'Titles use colors as background.', 'my-calendar' ),
+						),
+						'default',
+						'',
+						array(),
+						'radio',
+						false
+					) . '
+					</ul>
+				</fieldset>
+				<ul>
+					<li>' . mc_settings_field( 'mc_hide_icons', __( 'Hide Category icons', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '</li>
+					<li>' . mc_settings_field( 'mc_multiple_categories', __( 'Use multiple categories on events', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '</li>
 				</ul>
-			</fieldset>
-			<ul>
-				<li>' . mc_settings_field( 'mc_hide_icons', __( 'Hide Category icons', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '</li>
-				<li>' . mc_settings_field( 'mc_multiple_categories', __( 'Use multiple categories on events', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '</li>
-			</ul>
+			</div>
 			<p>
 				<input type="submit" name="mc_category_settings" class="button-primary" value="' . __( 'Save Settings', 'my-calendar' ) . '" />
 			</p>
 		</form>';
 
-		return array( __( 'Category Settings', 'my-calendar' ) => $settings );
+		return $settings;
 	}
 }
 
@@ -699,13 +708,6 @@ function mc_get_category( $category ) {
  */
 function mc_manage_categories() {
 	global $wpdb;
-	?>
-	<h1>
-	<?php
-	_e( 'Manage Categories', 'my-calendar' );
-	?>
-	</h1>
-	<?php
 	$co = ( ! isset( $_GET['co'] ) ) ? '1' : (int) $_GET['co'];
 	switch ( $co ) {
 		case 1:
