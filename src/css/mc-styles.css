@@ -695,6 +695,17 @@ input[name="mc_uri"] {
 	border: none;
 }
 
+.my-calendar-admin .mc-locations-control h4 {
+	margin: 0;
+	padding: .5em 0;
+	background: #0000000a;
+	border: 1px solid #fff;
+}
+
+.my-calendar-admin .mc-locations-control h4:hover {
+	border: 1px solid #000;
+}
+
 #mc-sortable .mc-calendar {
 	background-color: #fff !important;
 	border: 1px solid #787c82 !important;

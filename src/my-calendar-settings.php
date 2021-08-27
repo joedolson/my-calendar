@@ -955,6 +955,9 @@ function mc_remote_db() {
 						<input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Input Settings', 'my-calendar' ); ?>"/>
 					</p>
 				</form>
+				<h3><?php _e( 'Location Controls', 'my-calendar' ); ?></h3>
+
+				<?php echo mc_location_controls(); ?>
 			</div>
 		</div>
 
@@ -1127,6 +1130,82 @@ function mc_remote_db() {
 	</div>
 	</div>
 	<?php
+}
+
+/**
+ * Update settings for how location inputs are limited.
+ */
+function mc_update_location_controls() {
+	if ( isset( $_POST['mc_locations'] ) && 'true' === $_POST['mc_locations'] ) {
+		$nonce = $_POST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			wp_die( 'Invalid nonce' );
+		}
+		$locations            = $_POST['mc_location_controls'];
+		$mc_location_controls = array();
+		foreach ( $locations as $key => $value ) {
+			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
+		}
+		update_option( 'mc_location_controls', $mc_location_controls );
+		mc_show_notice( __( 'Location Controls Updated', 'my-calendar' ) );
+	}
+}
+
+/**
+ * Location controls for limiting location submission options.
+ *
+ * @return string HTML controls.
+ */
+function mc_location_controls() {
+	if ( current_user_can( 'mc_edit_settings' ) ) {
+		$response             = mc_update_location_controls();
+		$location_fields      = array(
+			'event_label',
+			'event_city',
+			'event_state',
+			'event_country',
+			'event_postcode',
+			'event_region',
+		);
+		$mc_location_controls = get_option( 'mc_location_controls' );
+
+		$output = $response . '
+		<p>' . __( 'Save custom values to change location text fields into dropdowns. One field per line.  Format: <code>saved_value,Displayed Value</code>', 'my-calendar' ) . '</p>
+		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ) . '">
+		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
+		<div><input type="hidden" name="mc_locations" value="true" /></div>
+		<fieldset>
+			<legend class="screen-reader-text">' . __( 'Restrict Location Input', 'my-calendar' ) . '</legend>
+			<div id="mc-accordion" class="mc-locations-control">';
+		foreach ( $location_fields as $field ) {
+			$locations = '';
+			$class     = '';
+			$active    = '';
+			if ( is_array( $mc_location_controls ) && isset( $mc_location_controls[ $field ] ) ) {
+				foreach ( $mc_location_controls[ $field ] as $key => $value ) {
+					$key        = esc_html( trim( $key ) );
+					$value      = esc_html( trim( $value ) );
+					$locations .= stripslashes( "$key,$value" ) . PHP_EOL;
+				}
+			}
+			if ( '' !== trim( $locations ) ) {
+				$class  = ' class="active-limit"';
+				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
+			}
+			$display = str_replace( 'event_', '', $field );
+			$holder  = strtolower( $display ) . ',' . ucfirst( $display );
+			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span><button type="button" class="button-link">' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</button></h4>';
+			// Translators: Name of field being restricted, e.g. "Location Controls for State".
+			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( $display ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '</textarea></div>';
+		}
+		$output .= "
+			</div>
+			<p><input type='submit' class='button secondary' value='" . __( 'Update Location Controls', 'my-calendar' ) . "'/></p>
+		</fieldset>
+		</form>";
+
+		return $output;
+	}
 }
 
 /**

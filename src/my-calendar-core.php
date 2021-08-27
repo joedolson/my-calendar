@@ -338,7 +338,7 @@ function mc_admin_body_class( $classes ) {
  * Write custom JS in admin head.
  */
 function mc_write_js() {
-	if ( isset( $_GET['page'] ) && ( 'my-calendar' === $_GET['page'] || 'my-calendar-locations' === $_GET['page'] ) ) {
+	if ( isset( $_GET['page'] ) && ( 'my-calendar' === $_GET['page'] || 'my-calendar-config' === $_GET['page'] ) ) {
 		?>
 		<script>
 			//<![CDATA[
@@ -1123,7 +1123,7 @@ function mc_scripts() {
 		);
 	}
 
-	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-locations' === $id ) {
+	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-config' === $id ) {
 		wp_enqueue_script( 'jquery-ui-accordion' );
 	}
 
