@@ -506,11 +506,13 @@ function mc_template_description( $key ) {
 function mc_list_core_templates() {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
-	$grid_enabled    = ( get_option( 'mc_use_grid_template' ) === '1' ) ? $check : $uncheck;
-	$list_enabled    = ( get_option( 'mc_use_list_template' ) === '1' ) ? $check : $uncheck;
-	$mini_enabled    = ( get_option( 'mc_use_mini_template' ) === '1' ) ? $check : $uncheck;
-	$details_enabled = ( get_option( 'mc_use_details_template' ) === '1' ) ? $check : $uncheck;
-	$rss_enabled     = ( get_option( 'mc_use_rss_template' ) === '1' ) ? $check : $uncheck;
+	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false;
+	$type            = ( isset( $_GET['mc_template'] ) ) ? $_GET['mc_template'] : '';
+	$grid_enabled    = ( ( 'grid' === $type && $switched ) || get_option( 'mc_use_grid_template' ) === '1' ) ? $check : $uncheck;
+	$list_enabled    = ( ( 'list' === $type && $switched ) || get_option( 'mc_use_list_template' ) === '1' ) ? $check : $uncheck;
+	$mini_enabled    = ( ( 'mini' === $type && $switched ) || get_option( 'mc_use_mini_template' ) === '1' ) ? $check : $uncheck;
+	$details_enabled = ( ( 'details' === $type && $switched ) || get_option( 'mc_use_details_template' ) === '1' ) ? $check : $uncheck;
+	$rss_enabled     = ( ( 'rss' === $type && $switched ) || get_option( 'mc_use_rss_template' ) === '1' ) ? $check : $uncheck;
 
 	$list = "
 	<table class='widefat'>
