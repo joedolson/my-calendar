@@ -518,14 +518,129 @@ function mc_add_styles() {
 	global $current_screen;
 	$id = $current_screen->id;
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
+		if ( isset( $_GET['calendar-view'] ) ) {
+			$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
+			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ) );
+			wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ) );
+			wp_enqueue_style( 'my-calendar-style' );
+			if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
+				$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
+				$enqueue_mcjs = true;
+				wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ) );
+				wp_localize_script(
+					'mc.grid',
+					'mcgrid',
+					array(
+						'grid' => 'true',
+					)
+				);
+			}
+			if ( '1' !== get_option( 'mc_list_javascript' ) ) {
+				$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
+				$enqueue_mcjs = true;
+				wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
+				wp_localize_script(
+					'mc.list',
+					'mclist',
+					array(
+						'list' => 'true',
+					)
+				);
+			}
+			if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
+				$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
+				$enqueue_mcjs = true;
+				wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
+				wp_localize_script(
+					'mc.mini',
+					'mcmini',
+					array(
+						'mini' => 'true',
+					)
+				);
+			}
+			if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
+				$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
+				$enqueue_mcjs = true;
+				wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ) );
+				wp_localize_script(
+					'mc.ajax',
+					'mcAjax',
+					array(
+						'ajax' => 'true',
+					)
+				);
+			}
+			if ( $enqueue_mcjs ) {
+				wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ) );
+				wp_localize_script(
+					'mc.mcjs',
+					'my_calendar',
+					array(
+						'newWindow' => __( 'Opens in new tab', 'my-calendar' ),
+					)
+				);
+			}
+		}
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ) );
 	}
+}
+
+/**
+ * Add custom CSS variables in admin head.
+ */
+function mc_admin_head() {
+	// generate category colors.
+	$category_css    = mc_generate_category_styles();
+	$category_styles = $category_css['styles'];
+	$category_vars   = $category_css['vars'];
+
+	$styles     = (array) get_option( 'mc_style_vars' );
+	$style_vars = '';
+	foreach ( $styles as $key => $var ) {
+		if ( $var ) {
+			$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
+		}
+	}
+	if ( '' !== $style_vars ) {
+		$style_vars = '.mc-main {' . $style_vars . $category_vars . '}';
+	}
+
+	$all_styles = "
+<style type=\"text/css\">
+<!--
+/* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
+$category_styles
+$style_vars
+-->
+</style>";
+	echo $all_styles;
+}
+add_action( 'admin_head', 'mc_admin_head' );
+
+/**
+ * Get current admin URL.
+ *
+ * @return string
+ */
+function mc_get_current_admin_url() {
+	$uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+	$uri = preg_replace( '|^.*/wp-admin/|i', '', $uri );
+
+	if ( ! $uri ) {
+		return '';
+	}
+
+	return remove_query_arg( array( '_wpnonce' ), admin_url( $uri ) );
 }
 
 /**
  * Attempts to correctly identify the current URL.
  */
 function mc_get_current_url() {
+	if ( is_admin() ) {
+		return mc_get_current_admin_url();
+	}
 	global $wp, $wp_rewrite;
 	$args = array();
 	if ( isset( $_GET['page_id'] ) ) {

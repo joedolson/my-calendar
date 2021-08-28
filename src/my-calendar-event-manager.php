@@ -577,7 +577,22 @@ function my_calendar_manage() {
 						<h2><?php _e( 'My Events', 'my-calendar' ); ?></h2>
 
 						<div class="inside">
-							<?php mc_list_events(); ?>
+							<?php 
+							if ( isset( $_GET['calendar-view'] ) ) {
+								$calendar = array(
+									'name'     => 'admin',
+									'format'   => 'calendar',
+									'category' => 'all',
+									'time'     => 'month',
+									'id'       => 'mc-admin-view',
+									'below'    => 'key',
+									'above'    => 'nav,jump',
+								);
+								echo my_calendar( $calendar );
+							} else {
+								mc_list_events();
+							}
+							?>
 						</div>
 					</div>
 				</div>

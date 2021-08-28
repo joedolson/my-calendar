@@ -2213,7 +2213,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	// Fallback values.
 	$mc_toporder    = array( 'nav', 'toggle', 'jump', 'print', 'timeframe' );
 	$mc_bottomorder = array( 'key', 'feeds' );
-	$available      = array( 'nav', 'toggle', 'jump', 'print', 'timeframe', 'key', 'feeds', 'exports' );
+	$available      = array( 'nav', 'toggle', 'jump', 'print', 'timeframe', 'key', 'feeds', 'exports', 'locations', 'access' );
 
 	if ( 'none' === $above ) {
 		$mc_toporder = array();
@@ -2304,6 +2304,12 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up category key.
 	$key = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat ) : '';
+
+	// Set up location filter.
+	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( array( 'locations' ), mc_get_current_url(), 'name' ) : '';
+
+	// Set up access filter.
+	$access = ( in_array( 'access', $used, true ) ) ? mc_filters( array( 'access' ), mc_get_current_url() ) : '';
 
 	// Set up navigation links.
 	if ( in_array( 'nav', $used, true ) ) {
@@ -2933,7 +2939,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
  *
  * @return string HTML output of form
  */
-function mc_filters( $args, $target_url, $ltype ) {
+function mc_filters( $args, $target_url, $ltype = 'name' ) {
 	if ( ! is_array( $args ) ) {
 		$fields = explode( ',', $args );
 	} else {
