@@ -871,9 +871,9 @@ function mc_generate_map( $event, $source = 'event' ) {
 		if ( strlen( $address ) < 10 && ! $latlng ) {
 			return '';
 		}
-		$hcard    = mc_hcard( $event, 'true', false, $source );
-		$title    = esc_attr( $event->{$source . '_label'} );
-		$hcard    = wp_kses(
+		$hcard  = mc_hcard( $event, 'true', false, $source );
+		$title  = esc_attr( $event->{$source . '_label'} );
+		$hcard  = wp_kses(
 			str_replace(
 				array( '</div>', '<br />', '<br><br>' ),
 				'<br>',
@@ -884,11 +884,11 @@ function mc_generate_map( $event, $source = 'event' ) {
 				'strong' => array(),
 			)
 		);
-		$html     = apply_filters( 'mc_map_html', $hcard, $event );
-		$width    = apply_filters( 'mc_map_height', '100%', $event );
-		$height   = apply_filters( 'mc_map_height', '300px', $event );
-		$styles   = " style='width: $width;height: $height'";
-		$value    = "<div id='mc_gmap_$id' class='mc-gmap-fupup'$styles data-zoom='$zoom' ><div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div></div>";
+		$html   = apply_filters( 'mc_map_html', $hcard, $event );
+		$width  = apply_filters( 'mc_map_height', '100%', $event );
+		$height = apply_filters( 'mc_map_height', '300px', $event );
+		$styles = " style='width: $width;height: $height'";
+		$value  = "<div id='mc_gmap_$id' class='mc-gmap-fupup'$styles data-zoom='$zoom' ><div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div></div>";
 	}
 
 	return apply_filters( 'mc_gmap_html', $value, $event );
