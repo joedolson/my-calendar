@@ -246,8 +246,8 @@ li.datetime-template:nth-of-type(even) {
 	opacity: 0;
 }
 
-#e_schedule .columns label,
-.recurring .columns label {
+#e_schedule .columns label:not(.duet-date__mobile-heading),
+.recurring .columns label:not(.duet-date__mobile-heading) {
 	display: block;
 }
 

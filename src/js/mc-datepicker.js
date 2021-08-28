@@ -20,17 +20,19 @@ const submitButton   = document.querySelector( '#my-calendar .button-primary' );
 var startDate = false;
 var endDate   = false;
 
-eventRecur.addEventListener( 'duetChange', function(e) {
-	startDate = e.detail.value;
-	recurValue = document.querySelector( 'input[name="recur_end[]"' ).value;
-	recurEnd   = document.querySelector( '[identifier="r_end"]' );
-	/* Handle adding occurrences */
-	if ( ( '' !== recurValue ) && startDate > recurValue ) {
-		recurEnd.value = e.detail.value;
-	}
+if ( null !== eventRecur ) {
+	eventRecur.addEventListener( 'duetChange', function(e) {
+		startDate = e.detail.value;
+		recurValue = document.querySelector( 'input[name="recur_end[]"' ).value;
+		recurEnd   = document.querySelector( '[identifier="r_end"]' );
+		/* Handle adding occurrences */
+		if ( ( '' !== recurValue ) && startDate > recurValue ) {
+			recurEnd.value = e.detail.value;
+		}
 
-	myCalendarTestDates( endDate, startDate );
-});
+		myCalendarTestDates( endDate, startDate );
+	});
+}
 
 
 eventBegin.addEventListener( 'duetChange', function(e) {
