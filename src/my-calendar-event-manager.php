@@ -577,7 +577,7 @@ function my_calendar_manage() {
 						<h2><?php _e( 'My Events', 'my-calendar' ); ?></h2>
 
 						<div class="inside">
-							<?php 
+							<?php
 							if ( isset( $_GET['calendar-view'] ) ) {
 								$calendar = array(
 									'name'     => 'admin',
