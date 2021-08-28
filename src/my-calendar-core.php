@@ -187,9 +187,8 @@ function mc_register_styles() {
 			if ( 'true' === get_option( 'mc_gmap' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
 				if ( $api_key ) {
-					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
-					wp_enqueue_script( 'gmap3', plugins_url( 'js/gmap3.min.js', __FILE__ ), array( 'jquery' ) );
-					wp_enqueue_script( 'gmaps', plugins_url( 'js/gmaps.js', __FILE__ ) );
+					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key" );
+					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ) );
 				}
 			}
 		}
@@ -1137,8 +1136,8 @@ function mc_scripts() {
 	if ( $slug . '_page_my-calendar-locations' === $id || 'toplevel_page_my-calendar' === $id ) {
 		$api_key = get_option( 'mc_gmap_api_key' );
 		if ( $api_key ) {
-			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?key=$api_key" );
-			wp_enqueue_script( 'gmap3', plugins_url( 'js/gmap3.min.js', __FILE__ ), array( 'jquery' ) );
+			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key" );
+			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ) );
 		}
 	}
 

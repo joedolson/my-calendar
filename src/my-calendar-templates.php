@@ -859,8 +859,12 @@ function mc_generate_map( $event, $source = 'event' ) {
 		$address = addslashes( mc_map_string( $event, $source ) );
 
 		if ( '0.000000' !== $event->{$source . '_longitude'} && '0.000000' !== $event->{$source . '_latitude'} ) {
-			$latlng = 'latLng: [' . $event->{$source . '_latitude'} . ', ' . $event->{$source . '_longitude'} . '],';
+			$lat    = $event->{$source . '_latitude'};
+			$lng    = $event->{$source . '_longitude'};
+			$latlng = true;
 		} else {
+			$lat    = '';
+			$lng    = '';
 			$latlng = false;
 		}
 
@@ -868,6 +872,7 @@ function mc_generate_map( $event, $source = 'event' ) {
 			return '';
 		}
 		$hcard    = mc_hcard( $event, 'true', false, $source );
+		$title    = esc_attr( $event->{$source . '_label'} );
 		$hcard    = wp_kses(
 			str_replace(
 				array( '</div>', '<br />', '<br><br>' ),
@@ -879,57 +884,11 @@ function mc_generate_map( $event, $source = 'event' ) {
 				'strong' => array(),
 			)
 		);
-		$html     = addslashes( apply_filters( 'mc_map_html', $hcard, $event ) );
+		$html     = apply_filters( 'mc_map_html', $hcard, $event );
 		$width    = apply_filters( 'mc_map_height', '100%', $event );
 		$height   = apply_filters( 'mc_map_height', '300px', $event );
 		$styles   = " style='width: $width;height: $height'";
-		$location = ( ! $latlng ) ? "address: '$address'," : $latlng;
-		$value    = "
-<script type='text/javascript'>
-	(function ($) { 'use strict';
-		$(function () {
-			$('#mc_gmap_$id').gmap3({
-					marker:{
-						values:[{
-							$location
-							options: { icon: new google.maps.MarkerImage( '$category_icon', new google.maps.Size(32,32,'px','px') ) },
-							data: \"$html\"
-						}],
-						events:{
-						  click: function( marker, event, context ){
-							var map        = $(this).gmap3('get');
-							var infowindow = $(this).gmap3( { get:{name:'infowindow'} } );
-							if ( infowindow ){
-							  infowindow.open(map, marker);
-							  infowindow.setContent(context.data);
-							} else {
-							  $(this).gmap3({
-								infowindow:{
-								  anchor:marker,
-								  options:{content: context.data}
-								}
-							  });
-							}
-						  }
-						}
-					},
-					map:{
-						options:{
-						  zoom: $zoom,
-						  mapTypeControl: true,
-						  mapTypeControlOptions: {
-							style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-						  },
-						  navigationControl: true,
-						  scrollwheel: true,
-						  streetViewControl: false
-						}
-					}
-			});
-		});
-	})(jQuery);
-</script>
-<div id='mc_gmap_$id' class='mc-gmap-fupup'$styles></div>";
+		$value    = "<div id='mc_gmap_$id' class='mc-gmap-fupup'$styles data-zoom='$zoom' ><div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div></div>";
 	}
 
 	return apply_filters( 'mc_gmap_html', $value, $event );

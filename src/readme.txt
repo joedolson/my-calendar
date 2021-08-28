@@ -126,6 +126,8 @@ Translating my plug-ins is always appreciated. Visit <a href="https://translate.
 * Bug fix: Form overflows in responsive views.
 * Bug fix: Need breaking container in map bubble after location name.
 * Bug fix [a11y]: Ensure focus isn't loss in sortable lists; announce change via wp.a11y.speak.
+* Bug fix: If no previous or next event, generated numerous PHP errors.
+* Removed Gmap3 dependency.
 
 TODO: Combine locations pages onto single WP screen
 TODO: New stylesheet by Paal
