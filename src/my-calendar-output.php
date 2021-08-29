@@ -2317,18 +2317,18 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( $cat_args, mc_get_current_url() ) : '';
 
 	// Set up location filter.
-	$loc_args   = array(
+	$loc_args  = array(
 		'locations',
 		'id' => $main_class . '-locations',
 	);
 	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( $loc_args, mc_get_current_url(), 'name' ) : '';
 
 	// Set up access filter.
-	$acc_args   = array(
+	$acc_args = array(
 		'access',
 		'id' => $main_class . '-access',
 	);
-	$access = ( in_array( 'access', $used, true ) ) ? mc_filters( $acc_args, mc_get_current_url() ) : '';
+	$access   = ( in_array( 'access', $used, true ) ) ? mc_filters( $acc_args, mc_get_current_url() ) : '';
 
 	// Set up search.
 	$search = ( in_array( 'access', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url() ) : '';
@@ -3492,7 +3492,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 					);
 					$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$value</a></li>\n";
 				} else {
-					$selected = ( $vt === $loc || $vt === urlencode( $loc ) ) ? ' selected="selected"' : '';
+					$selected = ( $vt === $loc || urlencode( $loc ) === $vt ) ? ' selected="selected"' : '';
 					$output  .= " <option value='" . esc_attr( $vt ) . "'$selected>$value</option>\n";
 				}
 			}
