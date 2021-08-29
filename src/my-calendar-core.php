@@ -519,10 +519,9 @@ function mc_add_styles() {
 	$id = $current_screen->id;
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		if ( isset( $_GET['calendar-view'] ) ) {
-			$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
 			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ) );
-			wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ) );
-			wp_enqueue_style( 'my-calendar-style' );
+			wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ) );
+			wp_enqueue_style( 'my-calendar-admin-style' );
 			if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 				$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 				$enqueue_mcjs = true;

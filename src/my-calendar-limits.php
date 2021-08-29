@@ -25,11 +25,10 @@ function mc_prepare_search_query( $query ) {
 	$db_type = mc_get_db_type();
 	$search  = '';
 	if ( '' !== trim( $query ) ) {
+		$query  = esc_sql( urldecode( urldecode( $query ) ) );
 		if ( 'MyISAM' === $db_type ) {
-			$query  = esc_sql( $query );
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
-			$query  = esc_sql( $query );
 			$search = " AND ( event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_label LIKE '%$query%' OR event_city LIKE '%$query%' OR event_postcode LIKE '%$query%' OR event_registration LIKE '%$query%' ) ";
 		}
 	}
@@ -275,13 +274,15 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 					if ( is_numeric( $lval ) ) {
 						$limit_strings[] = $location_type . ' = ' . absint( $lval );
 					} else {
-						$limit_strings[] = $location_type . " = '" . esc_sql( $lval ) . "'";
+						$limit_strings[] = $location_type . " = '" . esc_sql( urldecode( urldecode( $lval ) ) ) . "'";
 					}
 				}
 			}
 		}
 	}
-	$limit_string = 'AND (' . implode( ' OR ', $limit_strings ) . ')';
+	if ( ! empty( $limit_strings ) ) {
+		$limit_string = 'AND (' . implode( ' OR ', $limit_strings ) . ')';
+	}
 
 	return apply_filters( 'mc_location_limit_sql', $limit_string, $ltype, $lvalue );
 }

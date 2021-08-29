@@ -6,10 +6,30 @@
 			e.preventDefault();
 			var calendar = $( this ).closest( '.mc-main' );
 			var ref      = calendar.attr('id');
+			var month    = '';
+			var day      = '';
+			var year     = '';
+			var mcat     = '';
+			var loc      = '';
+			var access   = '';
+			var mcs      = '';
 			if ( 'INPUT' === this.nodeName ) {
-				var month = $( this ).parents( 'form' ).find( 'select[name=month]' ).val();
-				var day   = $( this ).parents( 'form' ).find( 'select[name=dy]' ).val();
-				var year  = $( this ).parents( 'form' ).find( 'select[name=yr]' ).val();
+				var inputForm = $( this ).parents( 'form' );
+				if ( inputForm.hasClass( 'mc-date-switcher' ) ) {
+					var month = inputForm.find( 'select[name=month]' ).val();
+					var day   = inputForm.find( 'select[name=dy]' ).val();
+					var year  = inputForm.find( 'select[name=yr]' ).val();
+				}
+				if ( inputForm.hasClass( 'mc-categories-switcher' ) ) {
+					var mcat = inputForm.find( 'select[name=mcat]' ).val();
+				}
+				if ( inputForm.hasClass( 'mc-locations-switcher' ) ) {
+					var loc = inputForm.find( 'select[name=loc]' ).val();
+				}
+				if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
+					var access = inputForm.find( 'select[name=access]' ).val();
+				}
+				var mcs   = calendar.find( '#mcs' ).val();
 				var link  = $( this ).attr( 'data-href' );
 			} else {
 				var link = $(this).attr('href');
@@ -19,15 +39,33 @@
 				url = new URL(link);
 				url.searchParams.delete('embed');
 				if ( 'INPUT' === this.nodeName ) {
-					url.searchParams.delete( 'month' );
-					url.searchParams.delete( 'dy' );
-					url.searchParams.delete( 'yr' );
+					if ( '' !== month ) {
+						url.searchParams.delete( 'month' );
+						url.searchParams.delete( 'dy' );
+						url.searchParams.delete( 'yr' );
 
-					url.searchParams.append( 'month', month );
-					if ( 'undefined' !== typeof( day ) ) {
-						url.searchParams.append( 'dy', day );
+						url.searchParams.append( 'month', parseInt( month ) );
+						if ( 'undefined' !== typeof( day ) ) {
+							url.searchParams.append( 'dy', parseInt( day ) );
+						}
+						url.searchParams.append( 'yr', parseInt( year ) );
 					}
-					url.searchParams.append( 'yr', year );
+					if ( '' !== mcat ) {
+						url.searchParams.delete( 'mcat' );
+						url.searchParams.append( 'mcat', mcat );
+					}
+					if ( '' !== loc ) {
+						url.searchParams.delete( 'loc' );
+						url.searchParams.delete( 'ltype' );
+						url.searchParams.append( 'ltype', 'name' );
+						url.searchParams.append( 'loc', loc );
+					}
+					if ( '' !== access ) {
+						url.searchParams.delete( 'access' );
+						url.searchParams.append( 'access', parseInt( access ) );
+					}
+					url.searchParams.delete( 'mcs' );
+					url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
 
 					link = url.toString();
 				}

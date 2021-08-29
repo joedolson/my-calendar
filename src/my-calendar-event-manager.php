@@ -585,8 +585,8 @@ function my_calendar_manage() {
 									'category' => 'all',
 									'time'     => 'month',
 									'id'       => 'mc-admin-view',
-									'below'    => 'key',
-									'above'    => 'nav,jump',
+									'below'    => 'categories,locations,access',
+									'above'    => 'nav,jump,search',
 								);
 								echo my_calendar( $calendar );
 							} else {
@@ -2286,8 +2286,8 @@ function mc_list_events() {
 		} else {
 			$limit .= ( 'event_flagged' !== $restrict ) ? ' AND event_flagged = 0' : '';
 		}
-		if ( isset( $_POST['mcs'] ) ) {
-			$query  = $_POST['mcs'];
+		if ( isset( $_POST['mcs'] ) || isset( $_GET['mcs'] ) ) {
+			$query  = $_REQUEST['mcs'];
 			$limit .= mc_prepare_search_query( $query );
 		}
 		$query_limit = ( ( $current - 1 ) * $items_per_page );

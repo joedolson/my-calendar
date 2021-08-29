@@ -889,7 +889,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	$current_url    = mc_get_current_url();
 	$date_switcher  = '';
-	$date_switcher .= '<div class="my-calendar-date-switcher"><form action="' . $current_url . '" method="get"><div>';
+	$date_switcher .= '<div class="my-calendar-date-switcher"><form class="mc-date-switcher" action="' . $current_url . '" method="get"><div>';
 	$qsa            = array();
 	if ( isset( $_SERVER['QUERY_STRING'] ) ) {
 		parse_str( $_SERVER['QUERY_STRING'], $qsa );
@@ -1755,6 +1755,10 @@ function mc_calendar_params( $args ) {
 		$format = 'list';
 	}
 
+	if ( isset( $_GET['mcs'] ) ) {
+		$search = $_GET['mcs'];
+	}
+
 	$format = apply_filters( 'mc_display_format', $format, $args );
 	$params = array(
 		'name'     => $name, // Not used in my_calendar(); what is/was it for.
@@ -2213,7 +2217,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	// Fallback values.
 	$mc_toporder    = array( 'nav', 'toggle', 'jump', 'print', 'timeframe' );
 	$mc_bottomorder = array( 'key', 'feeds' );
-	$available      = array( 'nav', 'toggle', 'jump', 'print', 'timeframe', 'key', 'feeds', 'exports', 'locations', 'access' );
+	$available      = array( 'nav', 'toggle', 'jump', 'print', 'timeframe', 'key', 'feeds', 'exports', 'categories', 'locations', 'access', 'search' );
 
 	if ( 'none' === $above ) {
 		$mc_toporder = array();
@@ -2305,11 +2309,17 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	// Set up category key.
 	$key = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat ) : '';
 
+	// Set up category filter.
+	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( array( 'categories', 'id' => $main_class . '-categories' ), mc_get_current_url() ) : '';
+
 	// Set up location filter.
-	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( array( 'locations' ), mc_get_current_url(), 'name' ) : '';
+	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( array( 'locations', 'id' => $main_class . '-locations' ), mc_get_current_url(), 'name' ) : '';
 
 	// Set up access filter.
-	$access = ( in_array( 'access', $used, true ) ) ? mc_filters( array( 'access' ), mc_get_current_url() ) : '';
+	$access = ( in_array( 'access', $used, true ) ) ? mc_filters( array( 'access', 'id' => $main_class . '-access' ), mc_get_current_url() ) : '';
+
+	// Set up search.
+	$search = ( in_array( 'access', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url() ) : '';
 
 	// Set up navigation links.
 	if ( in_array( 'nav', $used, true ) ) {
@@ -2940,6 +2950,10 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
  * @return string HTML output of form
  */
 function mc_filters( $args, $target_url, $ltype = 'name' ) {
+	$id = ( isset( $args['id'] ) ) ? esc_attr( $args['id'] ) : 'mc_filters';
+	if ( isset( $args['id'] ) ) {
+		unset( $args['id'] );
+	}
 	if ( ! is_array( $args ) ) {
 		$fields = explode( ',', $args );
 	} else {
@@ -2948,13 +2962,15 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
 	if ( empty( $fields ) ) {
 		return;
 	}
-	$return = false;
+	$has_multiple = ( count( $fields ) > 1 ) ? true : false;
+	$return       = false;
 
 	$current_url = mc_get_uri();
-	$current_url = ( '' !== $target_url && _mc_is_url( $target_url ) ) ? $target_url : $current_url;
+	$current_url = ( '' !== $target_url && esc_url( $target_url ) ) ? $target_url : $current_url;
+	$class       = ( $has_multiple ) ? 'mc-filters-form' : 'mc-' . esc_attr( $fields[0] ) . '-switcher';
 	$form        = "
-	<div id='mc_filters'>
-		<form action='" . $current_url . "' method='get'>\n";
+	<div id='$id' class='mc_filters'>
+		<form action='" . esc_url( $current_url ) . "' method='get' class='$class'>\n";
 	$qsa         = array();
 	if ( isset( $_SERVER['QUERY_STRING'] ) ) {
 		parse_str( $_SERVER['QUERY_STRING'], $qsa );
@@ -2973,20 +2989,27 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
 		$show = trim( $show );
 		switch ( $show ) {
 			case 'categories':
-				$form  .= my_calendar_categories_list( 'form', 'public', 'group' );
-				$return = true;
+				$cats   = my_calendar_categories_list( 'form', 'public', 'group' );
+				$form  .= $cats;
+				$return = ( $cats || $return ) ? true : false;
+				$key    = __( 'Categories', 'my-calendar' );
 				break;
 			case 'locations':
-				$form  .= my_calendar_locations_list( 'form', $ltype, 'group' );
-				$return = true;
+				$locs   = my_calendar_locations_list( 'form', $ltype, 'group' );
+				$form  .= $locs;
+				$return = ( $locs || $return ) ? true : false;
+				$key    = __( 'Locations', 'my-calendar' );
 				break;
 			case 'access':
-				$form  .= mc_access_list( 'form', 'group' );
-				$return = true;
+				$access = mc_access_list( 'form', 'group' );
+				$form  .= $access;
+				$return = ( $access || $return ) ? true : false;
+				$key    = __( 'Accessibility Services', 'my-calendar' );
 				break;
 		}
 	}
-	$form .= '<p><input type="submit" value="' . esc_attr( __( 'Filter Events', 'my-calendar' ) ) . '" /></p>
+	$label = ( $has_multiple ) ? __( 'Filter Events', 'my-calendar' ) : $key;
+	$form .= '<p><input type="submit" class="button" data-href="' . esc_url( $current_url ) . '" value="' . esc_attr( $label ) . '" /></p>
 	</form></div>';
 	if ( $return ) {
 		return $form;
@@ -3000,7 +3023,7 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
  *
  * @param string $show type of view.
  * @param string $context Public or admin.
- * @param string $group single or multiple.
+ * @param string $group single form or part of a field group.
  * @param string $target_url Where to post form to.
  *
  * @return string HTML
@@ -3015,12 +3038,12 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 
 	$output      = '';
 	$current_url = mc_get_uri();
-	$current_url = ( '' !== $target_url && _mc_is_url( $target_url ) ) ? $target_url : $current_url;
+	$current_url = ( '' !== $target_url && esc_url( $target_url ) ) ? $target_url : $current_url;
 
 	$name         = ( 'public' === $context ) ? 'mcat' : 'category';
 	$admin_fields = ( 'public' === $context ) ? ' name="' . $name . '"' : ' multiple="multiple" size="5" name="' . $name . '[]"  ';
 	$admin_label  = ( 'public' === $context ) ? '' : __( '(select to include)', 'my-calendar' );
-	$form         = ( 'single' === $group ) ? '<form action="' . $current_url . '" method="get">
+	$form         = ( 'single' === $group ) ? '<form action="' . esc_url( $current_url ) . '" method="get">
 				<div>' : '';
 	if ( 'single' === $group ) {
 		$qsa = array();
@@ -3047,7 +3070,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
 	}
 	if ( ! empty( $categories ) && count( $categories ) >= 1 ) {
-		$output  = "<div id='mc_categories'>\n";
+		$output  = ( 'single' === $group ) ? "<div id='mc_categories'>\n" : '';
 		$url     = mc_build_url( array( 'mcat' => 'all' ), array() );
 		$output .= ( 'list' === $show ) ? "
 		<ul>
@@ -3072,10 +3095,10 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		$output .= ( 'list' === $show ) ? '</ul>' : '</select>';
 		if ( 'admin' !== $context && 'list' !== $show ) {
 			if ( 'single' === $group ) {
-				$output .= '<input type="submit" value="' . __( 'Submit', 'my-calendar' ) . '" /></p></form>';
+				$output .= '<input type="submit" class="button" value="' . __( 'Submit', 'my-calendar' ) . '" /></p></form>';
 			}
 		}
-		$output .= '</div>';
+		$output .= ( 'single' === $group ) ? '</div>' : '';
 	}
 	$output = apply_filters( 'mc_category_selector', $output, $categories );
 
@@ -3094,8 +3117,8 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 	$output      = '';
 	$current_url = mc_get_uri();
-	$current_url = ( '' !== $target_url && _mc_is_url( $target_url ) ) ? $target_url : $current_url;
-	$form        = ( 'single' === $group ) ? "<form action='" . $current_url . "' method='get'><div>" : '';
+	$current_url = ( '' !== $target_url && esc_url( $target_url ) ) ? $target_url : $current_url;
+	$form        = ( 'single' === $group ) ? "<form action='" . esc_url( $current_url ) . "' method='get'><div>" : '';
 	if ( 'single' === $group ) {
 		$qsa = array();
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
@@ -3116,7 +3139,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 
 	$access_options = mc_event_access();
 	if ( ! empty( $access_options ) && count( $access_options ) >= 1 ) {
-		$output       = "<div id='mc_access'>\n";
+		$output       = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';
 		$url          = mc_build_url( array( 'access' => 'all' ), array() );
 		$not_selected = ( ! isset( $_GET['access'] ) ) ? 'selected="selected"' : '';
 		$output      .= ( 'list' === $show ) ? "
@@ -3124,7 +3147,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
 		<label for="access">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
 			<select name="access" id="access">
-			<option value="all"' . $not_selected . '>' . __( 'No Limit', 'my-calendar' ) . '</option>' . "\n";
+			<option value="all"' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $access_options as $key => $access ) {
 			$access_name = $access;
@@ -3139,8 +3162,8 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			}
 		}
 		$output .= ( 'list' === $show ) ? '</ul>' : '</select>';
-		$output .= ( 'list' !== $show && 'single' === $group ) ? '<p><input type="submit" value="' . __( 'Limit by Access', 'my-calendar' ) . '" /></p></form>' : '';
-		$output .= "\n</div>";
+		$output .= ( 'list' !== $show && 'single' === $group ) ? '<p><input type="submit" class="button" value="' . __( 'Limit by Access', 'my-calendar' ) . '" /></p></form>' : '';
+		$output .= ( 'single' === $group ) ? "\n</div>" : '';
 	}
 	$output = apply_filters( 'mc_access_selector', $output, $access_options );
 
@@ -3263,11 +3286,9 @@ function my_calendar_searchform( $type, $url ) {
 		}
 		return '
 		<div class="mc-search-container" role="search">
-			<form method="get" action="' . apply_filters( 'mc_search_page', esc_url( $url ) ) . '" >
+			<form class="mc-search-form" method="get" action="' . apply_filters( 'mc_search_page', esc_url( $url ) ) . '" >
 				<div class="mc-search">
-					<label class="screen-reader-text" for="mcs">' . __( 'Search Events', 'my-calendar' ) . '</label>
-					<input type="text" value="' . esc_attr( stripslashes( $query ) ) . '" name="mcs" id="mcs" />
-					<input type="submit" id="searchsubmit" value="' . __( 'Search Events', 'my-calendar' ) . '" />
+					<label class="screen-reader-text" for="mcs">' . __( 'Search Events', 'my-calendar' ) . '</label><input type="text" value="' . esc_attr( stripslashes( urldecode( $query ) ) ) . '" name="mcs" id="mcs" /><input type="submit" data-href="' . esc_url( $url ) . '" class="button" id="searchsubmit" value="' . __( 'Search Events', 'my-calendar' ) . '" />
 				</div>
 			</form>
 		</div>';
@@ -3319,9 +3340,9 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
 			$data = 'location_label';
 	}
 
-	$where = apply_filters( 'mc_filter_location_list', '', $datatype );
+	$where = esc_sql( apply_filters( 'mc_filter_location_list', '', $datatype ) );
 	if ( true !== $full ) {
-		$select = $data;
+		$select = esc_sql( $data );
 	} else {
 		$select = '*';
 	}
@@ -3399,7 +3420,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 	$output      = '';
 	$locations   = mc_get_list_locations( $datatype, $datatype, ARRAY_A );
 	$current_url = mc_get_uri();
-	$current_url = ( '' !== $target_url && _mc_is_url( $target_url ) ) ? $target_url : $current_url;
+	$current_url = ( '' !== $target_url && esc_url( $target_url ) ) ? $target_url : $current_url;
 
 	if ( count( $locations ) > 1 ) {
 		if ( 'list' === $show ) {
@@ -3414,8 +3435,8 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			<li class="mc-show-all"><a href="' . $url . '">' . __( 'Show all', 'my-calendar' ) . '</a></li>';
 		} else {
 			$ltype   = ( ! isset( $_GET['ltype'] ) ) ? $datatype : $_GET['ltype'];
-			$output .= '<div id="mc_locations">';
-			$output .= ( 'single' === $group ) ? "<form action='" . $current_url . "' method='get'><div>" : '';
+			$output .= ( 'single' === $group ) ? '<div id="mc_locations">' : '';
+			$output .= ( 'single' === $group ) ? "<form action='" . esc_url( $current_url ) . "' method='get'><div>" : '';
 			$output .= "<input type='hidden' name='ltype' value='" . esc_attr( $ltype ) . "' />";
 			if ( 'single' === $group ) {
 				$qsa = array();
@@ -3436,7 +3457,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			$output .= "
 			<label for='mc-locations-list'>" . __( 'Location', 'my-calendar' ) . "</label>
 			<select name='loc' id='mc-locations-list'>
-			<option value='all'>" . __( 'Show all', 'my-calendar' ) . "</option>\n";
+			<option value='all'>" . __( 'All Locations', 'my-calendar' ) . "</option>\n";
 		}
 		foreach ( $locations as $key => $location ) {
 			foreach ( $location as $k => $value ) {
@@ -3459,7 +3480,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 					);
 					$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$value</a></li>\n";
 				} else {
-					$selected = ( $vt === $loc ) ? ' class="selected"' : '';
+					$selected = ( $vt === $loc || $vt === urlencode( $loc ) ) ? ' selected="selected"' : '';
 					$output  .= " <option value='" . esc_attr( $vt ) . "'$selected>$value</option>\n";
 				}
 			}
@@ -3468,10 +3489,10 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			$output .= '</ul>';
 		} else {
 			$output .= '</select>';
-			$output .= ( 'single' === $group ) ? '<input type="submit" value="' . __( 'Submit', 'my-calendar' ) . '" />
+			$output .= ( 'single' === $group ) ? '<input type="submit" class="button" value="' . __( 'Submit', 'my-calendar' ) . '" />
 					</div>
 				</form>' : '';
-			$output .= '</div>';
+			$output .= ( 'single' === $group ) ? '</div>' : '';
 		}
 		$output = apply_filters( 'mc_location_selector', $output, $locations );
 

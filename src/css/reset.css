@@ -21,8 +21,16 @@ div.site-content, table {
 	display: block;
 }
 
+.mc-main .my-calendar-header,
+.mc-main .my-calendar-footer {
+	display: flex;
+	align-items: center;
+	column-gap: 10px;
+	padding: .5em 0;
+}
+
 .mc-main .my-calendar-header select,
-.mc-main .mc-footer select {
+.mc-main .my-calendar-footer select {
 	display: inline;
 }
 
@@ -59,12 +67,6 @@ div.site-content, table {
 	border-spacing: 0;
 }
 
-.mc-main input[type=submit], .mc-main input[type=button], .mc-main button {
-	margin: 0 !important;
-	padding: 0 !important;
-	text-transform: none;
-}
-
 .mc-main input, .mc-main select, .mc-main a img {
 	vertical-align: middle;
 }
@@ -73,7 +75,7 @@ div.site-content, table {
 	height: auto;
 }
 
-.mc-main select {
+.mc-main select:not(.my-calendar-admin .mc-main select) {
 	background: inherit;
 	-webkit-appearance: auto;
 	appearance: auto;
@@ -85,6 +87,7 @@ div.site-content, table {
 	box-sizing: border-box;
 }
 
+.mc-main .mc_filters label,
 .mc-main .screen-reader-text {
 	border: 0;
 	clip: rect(1px, 1px, 1px, 1px);
@@ -132,6 +135,38 @@ button .mc-toggle:before {
 button.mc-toggle:hover, button.mc-toggle:focus {
 	outline: 1px solid #766;
 }
+
+.mc-main .mc_filters p {
+	margin: 0;
+	padding: 0;
+}
+
+.mc-main .mc-date-switcher div,
+.mc-main .mc-search-form,
+.mc-main .mc_filters form {
+	display: flex;
+	align-items: center;
+}
+
+.mc-main .mc-date-switcher .button,
+.mc-main .mc-search-form .button,
+.mc-main .mc_filters .button {
+	border-radius: 0 3px 3px 0;
+	position: relative;
+	left: -1px;
+	border-left: 0;
+}
+
+.mc-main .mc-date-switcher select:last-of-type,
+.mc-main .mc-search-form input[type=text],
+.mc-main .mc_filters select {
+	border-radius: 3px 0 0 3px;
+}
+
+.mc-main .mc-date-switcher select:not(:first-of-type) {
+	margin-left: 5px;
+}
+
 
 .mc-main.my-calendar ul button.mc-text-button {
 	border: 0;
