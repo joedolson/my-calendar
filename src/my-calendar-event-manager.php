@@ -2181,8 +2181,8 @@ function mc_list_events() {
 			$sortdir = 'default';
 		}
 
-		$default_direction     = ( '' === get_option( 'mc_default_direction', '' ) ) ? 'ASC' : get_option( 'mc_default_direction' );
-		$sortbydirection       = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
+		$default_direction = ( '' === get_option( 'mc_default_direction', '' ) ) ? 'ASC' : get_option( 'mc_default_direction' );
+		$sortbydirection   = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
 
 		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : get_option( 'mc_default_sort' );
 		if ( empty( $sortby ) ) {

@@ -2310,13 +2310,25 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	$key = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat ) : '';
 
 	// Set up category filter.
-	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( array( 'categories', 'id' => $main_class . '-categories' ), mc_get_current_url() ) : '';
+	$cat_args   = array(
+		'categories',
+		'id' => $main_class . '-categories',
+	);
+	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( $cat_args, mc_get_current_url() ) : '';
 
 	// Set up location filter.
-	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( array( 'locations', 'id' => $main_class . '-locations' ), mc_get_current_url(), 'name' ) : '';
+	$loc_args   = array(
+		'locations',
+		'id' => $main_class . '-locations',
+	);
+	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( $loc_args, mc_get_current_url(), 'name' ) : '';
 
 	// Set up access filter.
-	$access = ( in_array( 'access', $used, true ) ) ? mc_filters( array( 'access', 'id' => $main_class . '-access' ), mc_get_current_url() ) : '';
+	$acc_args   = array(
+		'access',
+		'id' => $main_class . '-access',
+	);
+	$access = ( in_array( 'access', $used, true ) ) ? mc_filters( $acc_args, mc_get_current_url() ) : '';
 
 	// Set up search.
 	$search = ( in_array( 'access', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url() ) : '';

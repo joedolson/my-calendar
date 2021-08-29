@@ -25,7 +25,7 @@ function mc_prepare_search_query( $query ) {
 	$db_type = mc_get_db_type();
 	$search  = '';
 	if ( '' !== trim( $query ) ) {
-		$query  = esc_sql( urldecode( urldecode( $query ) ) );
+		$query = esc_sql( urldecode( urldecode( $query ) ) );
 		if ( 'MyISAM' === $db_type ) {
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
