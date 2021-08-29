@@ -43,6 +43,10 @@
 	table-layout: fixed;
 }
 
+.mc-main table tr:nth-of-type(even) {
+	background: #00000003;
+}
+
 .mc-main caption, .mc-main.list .my-calendar-month, .mc-main .heading  {
 	font-size: 20px;
 	color: #313233;
@@ -100,11 +104,9 @@
 
 .mc-main .event-title a {
 	display: block;
-	line-height: 1.5;
 	padding: 4px 6px;
 	position: relative;
 	border-bottom: none;
-	box-shadow: none;
 }
 
 .my-calendar-prev a:before,

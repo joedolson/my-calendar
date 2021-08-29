@@ -518,7 +518,18 @@ function mc_add_styles() {
 	global $current_screen;
 	$id = $current_screen->id;
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
-		if ( isset( $_GET['calendar-view'] ) ) {
+		// Toggle CSS & Scripts based on current mode.
+		$mode = get_option( 'mc_default_admin_view' );
+		if ( isset( $_GET['view'] ) && 'grid' === $_GET['view'] && 'grid' !== $mode ) {
+			update_option( 'mc_default_admin_view', 'grid' );
+			$mode = 'grid';
+		}
+		if ( isset( $_GET['view'] ) && 'list' === $_GET['view'] && 'list' !== $mode ) {
+			update_option( 'mc_default_admin_view', 'list' );
+			$mode = 'list';
+		}
+		$grid = ( 'grid' === $mode );
+		if ( $grid ) {
 			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ) );
 			wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ) );
 			wp_enqueue_style( 'my-calendar-admin-style' );
@@ -583,6 +594,24 @@ function mc_add_styles() {
 		}
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ) );
 	}
+}
+
+/**
+ * Toggle admin URL values based on default admin view setting.
+ *
+ * @param string $url Admin URL location.
+ *
+ * @return string
+ */
+function mc_admin_url( $url ) {
+	$mode = get_option( 'mc_default_admin_view' );
+	if ( 'grid' === $mode ) {
+		$url = add_query_arg( 'view', 'grid', $url );
+	} else {
+		$url = add_query_arg( 'view', 'list', $url );
+	}
+
+	return admin_url( $url );
 }
 
 /**

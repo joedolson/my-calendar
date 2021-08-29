@@ -976,14 +976,14 @@ function mc_admin_category_list( $event ) {
 	if ( isset( $_GET['groups'] ) ) {
 		$string .= ' ' . strip_tags( $cat->category_name );
 	} else {
-		$string .= " <a class='mc_filter' href='" . admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ) . "'><span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '</span>' . strip_tags( $cat->category_name ) . '</a>';
+		$string .= " <a class='mc_filter' href='" . mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ) . "'><span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '</span>' . strip_tags( $cat->category_name ) . '</a>';
 	}
 
 	if ( is_array( $categories ) ) {
 		foreach ( $categories as $category ) {
 			$category = (int) $category;
 			if ( $category !== (int) $event->event_category ) {
-				$filter = admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
+				$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
 				$color  = mc_get_category_detail( $category, 'category_color' );
 				$color  = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
 				$color  = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';

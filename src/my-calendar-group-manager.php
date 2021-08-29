@@ -108,8 +108,8 @@ function my_calendar_group_edit() {
 			<?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you choose.', 'my-calendar' ); ?>
 		</p>
 		<div class="mc-tablinks">
-			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>">My Events</strong>
-			<a href="#my-calendar-admin-table" aria-current="page">Event Groups</a>
+			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>"><?php _e( 'My Events', 'my-calendar' ); ?></strong>
+			<a href="#my-calendar-admin-table" aria-current="page"><?php _e( 'Event Groups', 'my-calendar' ); ?></a>
 		</div>
 		<div class="postbox-container jcd-wide">
 			<div class="metabox-holder">

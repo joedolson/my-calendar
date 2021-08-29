@@ -774,6 +774,28 @@ input[name="mc_uri"] {
 	flex-wrap: wrap;
 }
 
+.my-calendar-admin .mc-heading-inline {
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.mc-admin-mode li,
+.mc-admin-mode {
+	display: inline-block;
+}
+
+.mc-admin-mode li {
+	margin-right: 5px;
+}
+
+.mc-admin-mode a {
+	padding: 5px;
+}
+
+.mc-admin-mode .dashicons {
+	font-size: 16px;
+}
+
 .mc-permissions-wrapper {
 	display: grid;
 	grid-template-columns: repeat( 3, 33.3333333% );

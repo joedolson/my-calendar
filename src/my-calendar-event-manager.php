@@ -567,18 +567,28 @@ function my_calendar_manage() {
 		<a href="<?php echo admin_url( 'admin.php?page=my-calendar' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 		<div class="mc-tablinks">
-			<a href="#my-calendar-admin-table" aria-current="page">My Events</strong>
-			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true' ); ?>">Event Groups</a>
+			<a href="#my-calendar-admin-table" aria-current="page"><?php _e( 'My Events', 'my-calendar' ); ?></strong>
+			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true' ); ?>"><?php _e( 'Event Groups', 'my-calendar' ); ?></a>
 		</div>
 		<div class="postbox-container jcd-wide">
 			<div class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2><?php _e( 'My Events', 'my-calendar' ); ?></h2>
+						<h2 class="mc-heading-inline"><?php _e( 'My Events', 'my-calendar' ); ?></h2>
+							<?php
+								$grid     = ( 'grid' === get_option( 'mc_default_admin_view' ) ) ? true : false;
+								$grid_url = admin_url( 'admin.php?page=my-calendar-manage&view=grid' );
+								$list_url = admin_url( 'admin.php?page=my-calendar-manage&view=list' );
+							?>
+						<ul class="mc-admin-mode">
+							<li><span class="dashicons dashicons-calendar" aria-hidden="true"></span><a <?php echo ( $grid ) ? 'aria-current="true"' : ''; ?> href="<?php echo esc_url( $grid_url ); ?>"><?php _e( 'Grid View', 'my-calendar' ); ?></a></li>
+							<li><span class="dashicons dashicons-list-view" aria-hidden="true"></span><a <?php echo ( $grid ) ? '' : 'aria-current="true"'; ?>  href="<?php echo esc_url( $list_url ); ?>"><?php _e( 'List View', 'my-calendar' ); ?></a></li>
+						</ul>
 
 						<div class="inside">
 							<?php
-							if ( isset( $_GET['calendar-view'] ) ) {
+
+							if ( $grid ) {
 								$calendar = array(
 									'name'     => 'admin',
 									'format'   => 'calendar',
@@ -2171,8 +2181,8 @@ function mc_list_events() {
 			$sortdir = 'default';
 		}
 
-		$default_direction = ( '' === get_option( 'mc_default_direction', '' ) ) ? 'ASC' : get_option( 'mc_default_direction' );
-		$sortbydirection   = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
+		$default_direction     = ( '' === get_option( 'mc_default_direction', '' ) ) ? 'ASC' : get_option( 'mc_default_direction' );
+		$sortbydirection       = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
 
 		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : get_option( 'mc_default_sort' );
 		if ( empty( $sortby ) ) {
@@ -2528,7 +2538,7 @@ function mc_list_events() {
 								if ( '' !== $event->event_label ) {
 									$elabel = urlencode( $event->event_label );
 									?>
-								<a class='mc_filter' href='<?php echo admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ); ?>'><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></a>
+								<a class='mc_filter' href='<?php echo mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ); ?>'><span class="screen-reader-text"><?php _e( 'Show only: ', 'my-calendar' ); ?></span><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></a>
 									<?php
 								}
 								?>
@@ -2549,7 +2559,7 @@ function mc_list_events() {
 							</td>
 							<?php
 							$auth   = ( is_object( $author ) ) ? $author->ID : 0;
-							$filter = admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
+							$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
 							$author = ( is_object( $author ) ? $author->display_name : $author );
 							?>
 							<td>

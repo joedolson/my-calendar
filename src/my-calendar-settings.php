@@ -378,14 +378,7 @@ function my_calendar_settings() {
 		}
 		if ( isset( $_POST['mc_manage'] ) ) {
 			mc_update_management_settings( $_POST );
-			$permalinks = get_option( 'mc_use_permalinks' );
-			$note       = '';
-			if ( ( isset( $_POST['mc_use_permalinks'] ) && 'true' === get_option( 'mc_use_permalinks' ) ) && 'true' !== $permalinks ) {
-				$url = admin_url( 'options-permalink.php#mc_cpt_base' );
-				// Translators: URL to permalink settings page.
-				$note = ' ' . sprintf( __( 'You activated My Calendar permalinks. Go to <a href="%s">permalink settings</a> to set the base URL for My Calendar Events.', 'my-calendar' ), $url );
-			}
-			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) . $note );
+			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) );
 		}
 		if ( isset( $_POST['mc_permissions'] ) ) {
 			mc_update_permissions_settings( $_POST );

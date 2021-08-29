@@ -1099,24 +1099,24 @@ function mc_status_links( $allow_filters ) {
 	$output = '
 	<ul class="links">
 		<li>
-			<a ' . $all_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ) . '">' . $all_text . '</a>
+			<a ' . $all_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;limit=all' ) . '">' . $all_text . '</a>
 		</li>
 		<li>
-			<a ' . $pub_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ) . '">' . $pub_text . '</a>
+			<a ' . $pub_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;limit=published' ) . '">' . $pub_text . '</a>
 		</li>
 		<li>
-			<a ' . $dra_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ) . '">' . $dra_text . '</a>
+			<a ' . $dra_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;limit=draft' ) . '">' . $dra_text . '</a>
 		</li>
 		<li>
 			<a ' . $tra_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=trashed' ) . '">' . $tra_text . '</a>
 		</li>
 		<li>
-			<a ' . $arc_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ) . '">' . $arc_text . '</a>
+			<a ' . $arc_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ) . '">' . $arc_text . '</a>
 		</li>';
 	if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
 		$output .= '
 		<li>
-			<a ' . $spa_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ) . '">' . $spa_text . '</a>
+			<a ' . $spa_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ) . '">' . $spa_text . '</a>
 		</li>';
 	}
 	$output .= '</ul>';
