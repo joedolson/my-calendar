@@ -24,6 +24,7 @@ div.site-content, table {
 .mc-main .my-calendar-header,
 .mc-main .my-calendar-footer {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	column-gap: 10px;
 	padding: .5em 0;

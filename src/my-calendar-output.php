@@ -1810,6 +1810,7 @@ function my_calendar( $args ) {
 	$grid_js_class = ( '0' === get_option( 'mc_calendar_javascript' ) ) ? 'gridjs' : '';
 	$mini_js_class = ( '0' === get_option( 'mc_mini_javascript' ) ) ? 'minijs' : '';
 	$ajax_js_class = ( '0' === get_option( 'mc_ajax_javascript' ) ) ? 'ajaxjs' : '';
+	$style_class   = sanitize_html_class( str_replace( '.css', '', get_option( 'mc_css_file' ) ) );
 	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
 	$show_weekends = ( get_option( 'mc_show_weekends' ) === 'true' ) ? true : false;
@@ -1838,7 +1839,7 @@ function my_calendar( $args ) {
 	$main_class = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
 	$cid        = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
 	$mc_wrapper = "
-<div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $params[format] $params[time] $main_class\" aria-live='assertive' aria-atomic='true' aria-relevant='additions'>";
+<div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class\" aria-live='assertive' aria-atomic='true' aria-relevant='additions'>";
 	$mc_closer  = '
 </div>';
 
