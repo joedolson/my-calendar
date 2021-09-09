@@ -639,11 +639,11 @@ function mc_remote_db() {
 					<h3><?php _e( 'Settings on other screens', 'my-calendar' ); ?></h3>
 					<?php
 						$current_location_slug = ( '' === get_option( 'mc_location_cpt_base', '' ) ) ? __( 'mc-locations', 'my-calendar' ) : get_option( 'mc_location_cpt_base' );
-						$current_event_slug    = ( '' === get_option( 'mc_events_cpt_base', '' ) ) ? __( 'mc-events', 'my-calendar' ) : get_option( 'mc_events_cpt_base' );
+						$current_event_slug    = ( '' === get_option( 'mc_cpt_base', '' ) ) ? __( 'mc-events', 'my-calendar' ) : get_option( 'mc_cpt_base' );
 					?>
 					<ul>
 						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-location-slug' href="<?php echo admin_url( 'options-permalink.php#mc_location_cpt_base' ); ?>"><?php _e( 'Location permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-location-slug">(<?php echo $current_location_slug; ?>)</span></li>
-						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo admin_url( 'options-permalink.php#mc_events_cpt_base' ); ?>"><?php _e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
+						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo admin_url( 'options-permalink.php#mc_cpt_base' ); ?>"><?php _e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
 						<li><?php _e( 'Options > General', 'my-calendar' ); ?>: <a href="<?php echo admin_url( 'options-general.php#start_of_week' ); ?>"><?php _e( 'First day of the week', 'my-calendar' ); ?></a></li>
 					</ul>
 					<?php
