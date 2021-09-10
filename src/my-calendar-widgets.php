@@ -191,9 +191,9 @@ function my_calendar_upcoming_events( $args ) {
 			if ( $i < $skip && 0 !== $skip ) {
 				$i ++;
 			} else {
-				$today    = current_time( 'Y-m-d H:i' );
-				$date     = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
-				$classes  = mc_event_classes( $event, 'upcoming' );
+				$today   = current_time( 'Y-m-d H:i' );
+				$date    = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
+				$classes = mc_event_classes( $event, 'upcoming' );
 
 				$prepend = apply_filters( 'mc_event_upcoming_before', "<li class='$classes'>", $classes );
 				$append  = apply_filters( 'mc_event_upcoming_after', '</li>', $classes );
@@ -406,8 +406,8 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			$details = mc_create_tags( $event, $context );
 			if ( ! in_array( $details['group'], $groups, true ) ) {
 				// dtstart is already in current time zone.
-				$date     = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ), false );
-				$classes  = mc_event_classes( $event, 'upcoming' );
+				$date    = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ), false );
+				$classes = mc_event_classes( $event, 'upcoming' );
 
 				if ( my_calendar_date_equal( $date, $today ) ) {
 					$classes .= ' today';
