@@ -65,7 +65,10 @@
 						url.searchParams.append( 'access', parseInt( access ) );
 					}
 					url.searchParams.delete( 'mcs' );
-					url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
+					if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
+						console.log( 'mcs', mcs );
+						url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
+					}
 
 					link = url.toString();
 				}
