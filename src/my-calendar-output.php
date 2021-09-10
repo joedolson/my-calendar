@@ -676,7 +676,28 @@ function mc_get_event_image( $event, $data ) {
 		$image     = ( '' !== $event->event_image ) ? "<img src='$event->event_image' alt='$alt' class='mc-image photo' />" : '';
 	}
 
-	$meta = ( $image ) ? "<meta itemprop='image' content='$image_url' />" : '';
+	$meta   = ( $image ) ? "<meta itemprop='image' content='$image_url' />" : '';
+	$return = true;
+
+	global $template;
+	$template_file_name = basename( $template );
+	/**
+	 * Fires when displaying an event image in the default template.
+	 *
+	 * Return false to show the template image rather than the theme's featured image.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param bool   $return True to return thumbnail in templates.
+	 * @param object $event Event object.
+	 * @param array  $data Event template tags.
+	 *
+	 * @return bool
+	 */
+	$override = apply_filters( 'mc_override_featured_image', $return, $event, $data );
+	if ( $override && is_singular( 'mc-events' ) && has_post_thumbnail( $event->event_post ) && current_theme_supports( 'post-thumbnails' ) && ( 'single-mc-events.php' !== $template_file_name ) ) {
+		return $meta;
+	}
 
 	return $meta . $image;
 }
