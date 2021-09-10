@@ -193,12 +193,10 @@ function my_calendar_upcoming_events( $args ) {
 			} else {
 				$today    = current_time( 'Y-m-d H:i' );
 				$date     = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
-				$class    = ( true === my_calendar_date_comp( $date, $today ) ) ? 'past-event' : 'future-event';
-				$category = mc_category_class( $details, 'mc_' );
 				$classes  = mc_event_classes( $event, 'upcoming' );
 
-				$prepend = apply_filters( 'mc_event_upcoming_before', "<li class='$class $category $classes'>", $class, $category );
-				$append  = apply_filters( 'mc_event_upcoming_after', '</li>', $class, $category );
+				$prepend = apply_filters( 'mc_event_upcoming_before', "<li class='$classes'>", $classes );
+				$append  = apply_filters( 'mc_event_upcoming_after', '</li>', $classes );
 				// If same group, and same date, use it.
 				if ( ( $details['group'] !== $last_id || $details['date'] === $last_date ) || '0' === $details['group'] ) {
 					if ( ! in_array( $details['dateid'], $skips, true ) ) {
@@ -409,25 +407,23 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			if ( ! in_array( $details['group'], $groups, true ) ) {
 				// dtstart is already in current time zone.
 				$date     = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ), false );
-				$class    = ( true === my_calendar_date_comp( $date, $today . ' ' . current_time( 'H:i' ) ) ) ? 'past-event' : 'future-event';
-				$category = mc_category_class( $details, 'mc_' );
 				$classes  = mc_event_classes( $event, 'upcoming' );
 
 				if ( my_calendar_date_equal( $date, $today ) ) {
-					$class = 'today';
+					$classes .= ' today';
 				}
 				if ( '1' === $details['event_span'] ) {
-					$class = 'multiday';
+					$classes .= ' multiday';
 				}
 				if ( 'list' === $type ) {
-					$prepend = "\n<li class=\"$class $category $classes\">";
+					$prepend = "\n<li class=\"$classes\">";
 					$append  = "</li>\n";
 				} else {
 					$prepend = '';
 					$append  = '';
 				}
-				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $class, $category, $date );
-				$append  = apply_filters( 'mc_event_upcoming_after', $append, $class, $category, $date );
+				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $classes, '', $date );
+				$append  = apply_filters( 'mc_event_upcoming_after', $append, $classes, '', $date );
 
 				if ( $i < $skip && 0 !== $skip ) {
 					$i ++;
@@ -544,18 +540,9 @@ function my_calendar_todays_events( $args ) {
 			if ( ! mc_private_event( $e ) && ! in_array( $e->event_group_id, $groups, true ) ) {
 				$event_details = mc_create_tags( $e );
 				$ts            = $e->ts_occur_begin;
-				$end           = $e->ts_occur_end;
-				$now           = time();
-				$category      = mc_category_class( $e, 'mc_' );
-				if ( $ts < $now && $end > $now ) {
-					$class = 'on-now';
-				} elseif ( $now < $ts ) {
-					$class = 'future-event';
-				} elseif ( $now > $ts ) {
-					$class = 'past-event';
-				}
+				$classes       = mc_event_classes( $e, 'today' );
 
-				$prepend = apply_filters( 'mc_todays_events_before', "<li class='$class $category'>", $class, $category );
+				$prepend = apply_filters( 'mc_todays_events_before', "<li class='$classes'>", $classes, $category );
 				$append  = apply_filters( 'mc_todays_events_after', '</li>' );
 
 				$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $template );

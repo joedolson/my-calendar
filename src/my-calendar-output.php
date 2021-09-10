@@ -781,7 +781,7 @@ function mc_event_classes( $event, $type ) {
 		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
 	}
 
-	$classes    = apply_filters( 'mc_event_classes', $classes, $event, $uid, $type );
+	$classes    = apply_filters( 'mc_event_classes', array_unique( $classes ), $event, $uid, $type );
 	$class_html = strtolower( implode( ' ', $classes ) );
 
 	return esc_attr( $class_html );
