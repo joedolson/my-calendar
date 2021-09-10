@@ -1350,7 +1350,7 @@ add_filter( 'the_content', 'mc_show_search_results' );
  */
 function mc_show_search_results( $content ) {
 	global $post;
-	if ( is_object( $post ) && in_the_loop() ) {
+	if ( is_object( $post ) && in_the_loop() && ! is_page( get_option( 'mc_uri_id' ) ) ) {
 		// if this is the result of a search, show search output.
 		$ret   = false;
 		$query = false;

@@ -30,6 +30,27 @@ div.site-content, table {
 	padding: .5em 0;
 }
 
+.mc-main .my-calendar-footer select,
+.mc-main .my-calendar-footer input[type=search],
+.mc-main .my-calendar-footer input[type=submit],
+.mc-main .my-calendar-header select,
+.mc-main .my-calendar-header input[type=search],
+.mc-main .my-calendar-header input[type=submit] {
+	line-height: 1.5;
+	font-size: 1rem;
+	padding: 4px 6px;
+}
+
+.mc-main .my-calendar-header select,
+.mc-main .my-calendar-footer select {
+	padding: 6px 6px 7px;
+}
+
+.my-calendar-header .mc-date-switcher > *,
+.my-calendar-header .mc-time > * {
+	margin: 0 2px;
+}
+
 .mc-main .my-calendar-header select,
 .mc-main .my-calendar-footer select {
 	display: inline;
