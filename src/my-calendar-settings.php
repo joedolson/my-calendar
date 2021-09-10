@@ -750,6 +750,10 @@ function mc_remote_db() {
 							'key'       => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories', 'my-calendar' ) . '</span>',
 							'feeds'     => '<div class="dashicons dashicons-rss" aria-hidden="true"></div> <span>' . __( 'RSS and iCal Subscription Links', 'my-calendar' ) . '</span>',
 							'exports'   => '<div class="dashicons dashicons-calendar-alt" aria-hidden="true"></div> <span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '</span>',
+							'locations'   => '<div class="dashicons dashicons-location" aria-hidden="true"></div> <span>' . __( 'Location (dropdown)', 'my-calendar' ) . '</span>',
+							'categories'   => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '</span>',
+							'access'   => '<div class="dashicons dashicons-universal-access" aria-hidden="true"></div> <span>' . __( 'Access (dropdown)', 'my-calendar' ) . '</span>',
+							'search'   => '<div class="dashicons dashicons-search" aria-hidden="true"></div> <span>' . __( 'Search', 'my-calendar' ) . '</span>',
 						);
 						echo "<div id='mc-sortable-update' aria-live='assertive'></div>";
 						echo "<ul id='mc-sortable'>";

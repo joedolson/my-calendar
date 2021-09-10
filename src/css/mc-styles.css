@@ -952,7 +952,7 @@ select[name="event_recur"] {
 	margin-bottom: 1em;
 }
 
-.mc-search {
+div.mc-search {
 	text-align: right;
 }
 
