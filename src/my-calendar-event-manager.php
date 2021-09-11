@@ -326,6 +326,9 @@ function mc_bulk_action( $action ) {
 		case 'trash':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id IN (' . $prepared . ')';
 			break;
+		case 'spam':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 1 WHERE event_id IN (' . $prepared . ')';
+			break;
 		case 'unspam':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
 			// send notifications.
@@ -526,39 +529,47 @@ function my_calendar_manage() {
 		}
 	}
 
-	if ( ! empty( $_POST['mass_edit'] ) ) {
+	if ( ! empty( $_POST['mc_bulk_actions'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			die( 'Security check failed' );
 		}
-		if ( isset( $_POST['mass_delete'] ) ) {
-			$results = mc_bulk_action( 'delete' );
-			echo $results;
-		}
+		if ( isset( $_POST['mc_bulk_actions'] ) ) {
+			$action = $_POST['mc_bulk_actions'];
+			if ( 'mass_delete' === $action ) {
+				$results = mc_bulk_action( 'delete' );
+				echo $results;
+			}
 
-		if ( isset( $_POST['mass_trash'] ) ) {
-			$results = mc_bulk_action( 'trash' );
-			echo $results;
-		}
+			if ( 'mass_trash' === $action ) {
+				$results = mc_bulk_action( 'trash' );
+				echo $results;
+			}
 
-		if ( isset( $_POST['mass_approve'] ) ) {
-			$results = mc_bulk_action( 'approve' );
-			echo $results;
-		}
+			if ( 'mass_approve' === $action || 'mass_publish' === $action ) {
+				$results = mc_bulk_action( 'approve' );
+				echo $results;
+			}
 
-		if ( isset( $_POST['mass_archive'] ) ) {
-			$results = mc_bulk_action( 'archive' );
-			echo $results;
-		}
+			if ( 'mass_archive' === $action ) {
+				$results = mc_bulk_action( 'archive' );
+				echo $results;
+			}
 
-		if ( isset( $_POST['mass_undo_archive'] ) ) {
-			$results = mc_bulk_action( 'unarchive' );
-			echo $results;
-		}
+			if ( 'mass_undo_archive' === $action ) {
+				$results = mc_bulk_action( 'unarchive' );
+				echo $results;
+			}
 
-		if ( isset( $_POST['mass_not_spam'] ) ) {
-			$results = mc_bulk_action( 'unspam' );
-			echo $results;
+			if ( 'mass_not_spam' === $action ) {
+				$results = mc_bulk_action( 'unspam' );
+				echo $results;
+			}
+
+			if ( 'mass_spam' === $action ) {
+				$results = mc_bulk_action( 'spam' );
+				echo $results;
+			}
 		}
 	}
 	?>
@@ -2161,6 +2172,57 @@ function mc_event_accessibility( $form, $data, $label ) {
 }
 
 /**
+ * Show bulk actions dropdown in event manager.
+ *
+ * @return string
+ */
+function mc_show_bulk_actions() {
+	$bulk_actions = array(
+		'mass_publish'      => __( 'Publish', 'my-calendar' ),
+		'mass_delete'       => __( 'Delete', 'my-calendar' ),
+		'mass_trash'        => __( 'Trash', 'my-calendar' ),
+		'mass_approve'      => __( 'Approve', 'my-calendar' ),
+		'mass_archive'      => __( 'Archive', 'my-calendar' ),
+		'mass_undo_archive' => __( 'Remove from Archive', 'my-calendar' ),
+		'mass_not_spam'     => __( 'Not spam', 'my-calendar' ),
+		'mass_spam'         => __( 'Spam', 'my-calendar' ),
+	);
+
+	if ( ! current_user_can( 'mc_approve_events' ) || isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) {
+		unset( $bulk_actions['mass_publish'] );
+		unset( $bulk_actions['mass_approve'] );
+	}
+	if ( ! current_user_can( 'mc_manage_events' ) || isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) {
+		unset( $bulk_actions['mass_trash'] );
+	}
+	if ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) {
+		unset( $bulk_actions['mass_archive'] );
+	} else {
+		unset( $bulk_actions['mass_undo_archive'] );
+	}
+	if ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) {
+		unset( $bulk_actions['mass_spam'] );
+	} else {
+		unset( $bulk_actions['mass_not_spam'] );
+	}
+
+	/**
+	 * Filter bulk actions. 
+	 *
+	 * @param array $bulk_actions Array of bulk actions currently available.
+	 *
+	 * @return array
+	 */
+	$bulk_actions = apply_filters( 'mc_bulk_actions', $bulk_actions );
+	$options      = '';
+	foreach( $bulk_actions as $action => $label ) {
+		$options .= '<option value="' . $action . '">' . $label . '</option>';
+	}
+
+	return $options;
+}
+
+/**
  * Used on the manage events admin page to display a list of events
  */
 function mc_list_events() {
@@ -2353,25 +2415,12 @@ function mc_list_events() {
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" /></div>
 				<div class='mc-actions'>
-					<?php
-					echo '<input type="submit" class="button-secondary delete" name="mass_delete" value="' . __( 'Delete events', 'my-calendar' ) . '"/> ';
-					if ( ! ( isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) ) {
-						echo '<input type="submit" class="button-secondary trash" name="mass_trash" value="' . __( 'Trash events', 'my-calendar' ) . '"/> ';
-					}
-					if ( ! ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ) {
-						if ( current_user_can( 'mc_approve_events' ) ) {
-							echo '<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="' . __( 'Publish events', 'my-calendar' ) . '" /> ';
-						}
-					}
-					if ( ! ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) ) {
-						echo '<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="' . __( 'Archive events', 'my-calendar' ) . '" /> ';
-					} else {
-						echo '<input type="submit" class="button-secondary mc-archive" name="mass_undo_archive" value="' . __( 'Remove from archive', 'my-calendar' ) . '" /> ';
-					}
-					if ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) {
-						echo '<input type="submit" class="button-secondary mc-archive" name="mass_not_spam" value="' . __( 'Not spam', 'my-calendar' ) . '" /> ';
-					}
-					?>
+					<label for="mc_bulk_actions" class="screen-reader-text"><?php _e( 'Bulk actions', 'my-calendar' ); ?></label>
+					<select name="mc_bulk_actions" id="mc_bulk_actions">
+						<option value=""><?php _e( 'Bulk actions', 'my-calendar' ); ?></option>
+						<?php echo mc_show_bulk_actions(); ?>
+					</select>
+					<input type="submit" class="button-secondary" value="<?php _e( 'Apply', 'my-calendar' ); ?>" />
 					<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php _e( 'Check all', 'my-calendar' ); ?></label></div>
 				</div>
 
@@ -2577,6 +2626,7 @@ function mc_list_events() {
 				?>
 				</tbody>
 			</table>
+		<div class='mc-admin-footer'>
 			<?php
 			$status_links = mc_status_links( $allow_filters );
 			echo $status_links;
@@ -2597,26 +2647,6 @@ function mc_list_events() {
 				printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 			}
 			?>
-		<div class='mc-admin-footer'>
-			<div class="mc-actions">
-				<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete events', 'my-calendar' ); ?>"/>
-				<input type="submit" class="button-secondary trash" name="mass_trash" value="<?php _e( 'Trash events', 'my-calendar' ); ?>"/>
-				<?php
-				if ( current_user_can( 'mc_approve_events' ) ) {
-					?>
-					<input type="submit" class="button-secondary mc-approve" name="mass_approve" value="<?php _e( 'Publish events', 'my-calendar' ); ?>"/>
-					<?php
-				}
-				if ( ! ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) ) {
-					?>
-					<input type="submit" class="button-secondary mc-archive" name="mass_archive" value="<?php _e( 'Archive events', 'my-calendar' ); ?>"/>
-					<?php
-				}
-				?>
-				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php _e( 'Check all', 'my-calendar' ); ?></label>
-			</div>
-
-			</form>
 			<div class='mc-search'>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
@@ -2628,6 +2658,16 @@ function mc_list_events() {
 				</div>
 			</form>
 			</div>
+			<div class="mc-actions">
+				<label for="mc_bulk_actions_footer" class="screen-reader-text"><?php _e( 'Bulk actions', 'my-calendar' ); ?></label>
+				<select name="mc_bulk_actions" id="mc_bulk_actions_footer">
+					<option value=""><?php _e( 'Bulk actions', 'my-calendar' ); ?></option>
+					<?php echo mc_show_bulk_actions(); ?>
+				</select>
+				<input type="submit" class="button-secondary" value="<?php _e( 'Apply', 'my-calendar' ); ?>" />
+				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php _e( 'Check all', 'my-calendar' ); ?></label>
+			</div>
+			</form>
 		</div>
 			<?php
 		} else {
