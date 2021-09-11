@@ -1090,7 +1090,7 @@ function mc_status_links( $allow_filters ) {
 
 	$arc_attributes = ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
-	$arc_text = sprintf( __( 'Archived (%d)', 'my-calendar' ), $counts['trash'] );
+	$arc_text = sprintf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] );
 
 	$spa_attributes = ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
