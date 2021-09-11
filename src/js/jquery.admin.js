@@ -129,6 +129,16 @@ jQuery(document).ready(function ($) {
 		$( this ).parent( '.row-actions' ).css( { 'left' : '-999em' } );
 	});
 
+	$( '#mc_bulk_actions' ).on( 'change', function (e) {
+		var value = $( this ).val();
+		$( '#mc_bulk_actions_footer' ).val( value );
+	});
+
+	$( '#mc_bulk_actions_footer' ).on( 'change', function (e) {
+		var value = $( this ).val();
+		$( '#mc_bulk_actions' ).val( value );
+	});
+
 	$( '#my-calendar-admin-table input, .mc-actions input' ).on( 'change', function (e) {
 		var checked_status = $(this).prop('checked');
 		var groups_table   = $(this).parents( 'table' ).hasClass( 'mc-groups-table' );
