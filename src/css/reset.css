@@ -17,6 +17,10 @@ div.site-content, table {
 	line-height: 1;
 }
 
+.my-calendar-nav ul {
+	display: flex;
+}
+
 .mc-main article, .mc-main aside, .mc-main dialog, .mc-main figure, .mc-main footer, .mc-main header, .mc-main nav, .mc-main section, .mc-main blockquote {
 	display: block;
 }
@@ -27,23 +31,38 @@ div.site-content, table {
 	flex-wrap: wrap;
 	align-items: center;
 	column-gap: 10px;
-	padding: .5em 0;
+	row-gap: 10px;
+	padding: .25rem 0;
+	font-size: .9rem;
 }
 
 .mc-main .my-calendar-footer select:not(.my-calendar-admin select),
-.mc-main .my-calendar-footer input[type=search]:not(.my-calendar-admin input[type=search]),
+.mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-footer input[type=submit]:not(.my-calendar-admin input[type=submit]),
 .mc-main .my-calendar-header select:not(.my-calendar-admin select),
-.mc-main .my-calendar-header input[type=search]:not(.my-calendar-admin input[type=search]),
+.mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
-	line-height: 1.5;
-	font-size: 1rem;
-	padding: 4px 6px;
+	line-height: 1;
+	font-size: .9rem;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
+.mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]) {
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 .mc-main .my-calendar-header select:not(.my-calendar-admin select),
 .mc-main .my-calendar-footer select:not(.my-calendar-admin select) {
-	padding: 6px 6px 7px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.mc-main .my-calendar-header input[type=submit],
+.mc-main .my-calendar-footer input[type=submit] {
+	min-width: 44px;
 }
 
 .my-calendar-header .mc-date-switcher > *,

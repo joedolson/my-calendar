@@ -105,8 +105,9 @@
 }
 
 .mc-main .details .close {
-    float: right;
-    width: 16px !important;
+    position: absolute;
+    top: 8px;
+    right: 8px;
     padding: 2px 2px 7px 7px;
 }
 

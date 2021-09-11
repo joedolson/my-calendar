@@ -180,8 +180,9 @@
 }
 
 .mc-main .details .close {
-    float: right;
-    width: 16px !important;
+    position: absolute;
+    top: 8px;
+    right: 8px;
     padding: 2px 2px 7px 7px;
 }
 
@@ -398,18 +399,6 @@
 
 .mc-main .my-calendar-nav {
     position: relative;
-}
-
-.mc-main .my-calendar-prev {
-    position: absolute;
-    left: 0;
-    top: 0;
-}
-
-.mc-main .my-calendar-next {
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 
 .mc-main .nextmonth .event-title {

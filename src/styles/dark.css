@@ -219,12 +219,11 @@
     box-shadow: 3px 3px 10px #000;
 }
 
-.mc-main .details .close img {
-    float: right;
-    background: #aaa;
-    text-align: center;
-    padding: 2px;
-    border-radius: 3px;
+.mc-main .details .close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 2px 7px 7px;
 }
 
 .mc-main.mini .details .close {
