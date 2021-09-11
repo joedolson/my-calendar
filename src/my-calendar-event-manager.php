@@ -343,6 +343,13 @@ function mc_bulk_action( $action ) {
 			}
 			break;
 	}
+	/**
+	 * Add custom bulk actions.
+	 *
+	 * @param string $action Declared action.
+	 * @param array  $ids Array of event IDs being requested.
+	 */
+	do_action( 'mc_bulk_actions', $action, $ids );
 
 	$result = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -2207,7 +2214,7 @@ function mc_show_bulk_actions() {
 	}
 
 	/**
-	 * Filter bulk actions.
+	 * Filter Event manager bulk actions.
 	 *
 	 * @param array $bulk_actions Array of bulk actions currently available.
 	 *
