@@ -2207,7 +2207,7 @@ function mc_show_bulk_actions() {
 	}
 
 	/**
-	 * Filter bulk actions. 
+	 * Filter bulk actions.
 	 *
 	 * @param array $bulk_actions Array of bulk actions currently available.
 	 *
@@ -2215,7 +2215,7 @@ function mc_show_bulk_actions() {
 	 */
 	$bulk_actions = apply_filters( 'mc_bulk_actions', $bulk_actions );
 	$options      = '';
-	foreach( $bulk_actions as $action => $label ) {
+	foreach ( $bulk_actions as $action => $label ) {
 		$options .= '<option value="' . $action . '">' . $label . '</option>';
 	}
 
