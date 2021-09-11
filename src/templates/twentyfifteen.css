@@ -23,11 +23,11 @@
 }
 
 .mc-main .maybe-hide {
-    clip: rect(1px, 1px, 1px, 1px);
-    position: absolute !important;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;	
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;	
 }
 
 .my-calendar-header > div:nth-of-type(1), .mc_bottomnav > div:nth-of-type(1) {
@@ -39,22 +39,22 @@
 }
 
 .mc-main .my-calendar-header a, .mc-main .mc_bottomnav a {
-    color: #333;
-    text-decoration: none;
+	color: #333;
+	text-decoration: none;
 	border-radius: 5px;
 	padding: 4px 6px;
 	font-size: .8em;
-    background: linear-gradient(to top, rgba(230, 230, 230, .95) 0%, rgba(250, 250, 250, .95) 70%);
+	background: linear-gradient(to top, rgba(230, 230, 230, .95) 0%, rgba(250, 250, 250, .95) 70%);
 }
 
 .mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover, .mc-main .my-calendar-header a:focus, .mc-main .mc_bottomnav a:focus {
-    color: #fff;
-    text-decoration: underline;
-    background: linear-gradient(to bottom, rgba(125, 125, 125, .95) 0%, rgba( 90, 90, 90, .95) 70%);
+	color: #fff;
+	text-decoration: underline;
+	background: linear-gradient(to bottom, rgba(125, 125, 125, .95) 0%, rgba( 90, 90, 90, .95) 70%);
 }
 
 .mc-main.calendar {
-    width: 100% !important;
+	width: 100% !important;
 }
 
 .mc-main .heading {
@@ -62,36 +62,36 @@
 }
 
 .mc-main table {
-    width: 100%;
-    border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
 
 .mc-main tr td {
-    width: 14.285714%;
-    border: 1px solid #f6f6f6;
-    padding: 0 !important;
-    height: 5em;
+	width: 14.285714%;
+	border: 1px solid #f6f6f6;
+	padding: 0 !important;
+	height: 5em;
 }
 
 .mc-main th {
-    text-align: center;
-    text-transform: uppercase;
-    padding: 8px 0;
-    background: rgba(0, 0, 0, .8);
-    color: #fff !important;
+	text-align: center;
+	text-transform: uppercase;
+	padding: 8px 0;
+	background: rgba(0, 0, 0, .8);
+	color: #fff !important;
 }
 
 .mc-main {
-    position: relative;
+	position: relative;
 }
 
 .mc-main table .current-day .mc-date {
-    background: rgba(0, 0, 0, .8) !important;
-    color: #fff;
+	background: rgba(0, 0, 0, .8) !important;
+	color: #fff;
 }
 
 .mc-main caption {
-    font-size: 2em;
+	font-size: 2em;
 	color: #fff;
 	background: #333; 
 	padding: 5px;
@@ -100,19 +100,19 @@
 }
 
 .mc-main.mini caption {
-    font-size: 1.2em;
+	font-size: 1.2em;
 }
 
 .mc-main .event-title {
-    margin: 0 !important;
+	margin: 0 !important;
 	font-size: .8em;
 }
 
 .mc-main .event-title a {
-    display: block;
-    line-height: 1.5;
-    padding: 6px;
-    font-size: .9em;
+	display: block;
+	line-height: 1.5;
+	padding: 6px;
+	font-size: .9em;
 	position: relative;
 	border-bottom: none;
 }
@@ -153,13 +153,13 @@
 }
 
 .mc-main .calendar-event .details, .mc-main .calendar-events {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    z-index: 3;
-    background: rgba(255, 255, 255, .98);
-    box-shadow: 0 0 4px;
-    color: #333;
+	position: absolute;
+	left: 0;
+	width: 100%;
+	z-index: 3;
+	background: rgba(255, 255, 255, .98);
+	box-shadow: 0 0 4px;
+	color: #333;
 }
 
 .mc-main.calendar .details.no-image {
@@ -172,6 +172,7 @@
 
 .mc-main .details {
 	padding: 10px;
+	position: relative;
 }
 
 .mc-main .mc-list .details {
@@ -179,11 +180,11 @@
 }
 
 .mc-main .close {
-    position: absolute;
-    left: .5em;
-    top: .5em;
+	position: absolute;
+	left: -1em;
+	top: -1em;
 	padding: 4px;
-	line-height: 2;
+	line-height: 1;
 	border-bottom: none;
 }
 .mc-main.mini .close {
@@ -197,81 +198,74 @@
 }
 
 .mc-main .details img {
-    width: 100%;
-    height: auto;
+	width: 100%;
+	height: auto;
+}
+
+.mc-main .details .category-icon {
+	width: auto;
 }
 
 .mc-main .details img.alignleft {
-    width: auto;
-    float: left;
-    margin: 0 20px 10px 0;
+	width: auto;
+	float: left;
+	margin: 0 20px 10px 0;
 }
 
 .mc-main .details img.alignright {
-    width: auto;
-    float: left;
-    margin: 0 0 10px 20px;
+	width: auto;
+	float: left;
+	margin: 0 0 10px 20px;
 }
 
 .mc-main .details img.aligncenter {
-    width: auto;
-    display: block;
-    margin: 0 auto 10px;
+	width: auto;
+	display: block;
+	margin: 0 auto 10px;
 }
 
 .mc-main .details p {
-    margin: 0 0 20px;
-    line-height: 1.6;
+	margin: 0 0 20px;
+	line-height: 1.6;
 	font-size: 1em;
 }
 
 .mc-main .details h2, .mc-main .details h3 {
-    font-weight: 700;
-    font-size: 1.3em;
-    line-height: 1.3;
+	font-weight: 700;
+	font-size: 1.3em;
+	line-height: 1.3;
 }
 
 .mc-main .details h4, .mc-main .details h5, .mc-main .details h6 {
-    font-weight: 400;
-    font-size: 1.1em;
-    line-height: 1.5;
+	font-weight: 400;
+	font-size: 1.1em;
+	line-height: 1.5;
 }
 
 .mc-main .details li {
-    line-height: 1.5;
+	line-height: 1.5;
 }
 
 /* Sharing */
 .mc-main .details .sharing {
-    clear: both;
+	clear: both;
 }
 
 /* Date/times */
-
-#mc-day .time-block p {
-	top: -1.5em;
-}
 
 .mc-main.mini .time-block p {
 	position: relative;
 	display: block; 
 	text-align: center;
-	top: 0;
+	top: 10px;
 	right: 0;
 }
-.mc-main .time-block p{
-    color: #000;
+.mc-main .time-block p {
+	color: #000;
 	display: inline-block;
-    margin: 0 !important;
-	position: absolute;
-	top: .5em;
-	right: .5em;
+	margin: 0 !important;
 	background: rgba( 255, 255, 255, .7 );
 	padding: 0 10px !important;
-}
-.mc-main .single-event .time-block p, .mc-main.list .time-block p {
-	position: static;
-	padding: 0!important;
 }
 
 .mc-main .time-block p:before {
@@ -282,8 +276,8 @@
 }
 
 .mc-main .mc-event-date {
-    font-weight: 700;
-    color: #333;
+	font-weight: 700;
+	color: #333;
 }
 
 .mc-main .has-events .mc-date {
@@ -297,11 +291,11 @@
 }
 
 .mc-main .mc-date {
-    display: block;
-    padding: 4px;
-    font-size: 1.2em;
-    background: rgba(240, 240, 240, .9);
-    color: #111;
+	display: block;
+	padding: 4px;
+	font-size: 1.2em;
+	background: rgba(240, 240, 240, .9);
+	color: #111;
 }
 
 .mc-main.mini .mc-date {
@@ -309,20 +303,20 @@
 }
 
 .mc-main .mc-single {
-    font-size: 1.4em;
+	font-size: 1.4em;
 	margin: 0;
 }
 
 /* Navigation */
 .my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
-    margin: 0 !important;
-    padding: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 .my-calendar-nav ul li, .mc-main .category-key ul li, .mc-main .mc-export ul li {
-    display: inline-block;
-    list-style-type: none;
-    margin: 0 0 6px;
+	display: inline-block;
+	list-style-type: none;
+	margin: 0 0 6px;
 }
 
 .my-calendar-nav .my-calendar-prev a {
@@ -336,11 +330,11 @@
 }
 
 .my-calendar-prev a:before {
-    content: '\25C0 ';
+	content: '\25C0 ';
 }
 
 .my-calendar-next a:after {
-    content: ' \25b6';
+	content: ' \25b6';
 }
 
 /* Category Key */
@@ -349,45 +343,45 @@
 }
 
 .mc-main .no-icon {
-    display: inline-block;
-    width: 1.25em;
-    margin-right: .25em;
-    border-radius: 12px;
+	display: inline-block;
+	width: 1.25em;
+	margin-right: .25em;
+	border-radius: 12px;
 }
 
 .mc-main .category-color-sample img {
-    padding: 2px;
+	padding: 2px;
 	display: inline;
-    vertical-align: text-top;
-    margin-right: .25em;
+	vertical-align: text-top;
+	margin-right: .25em;
 }
 
 /* hCard */
 .mc-main .vcard {
-    margin: 0 0 15px 15px;
-    float: right;
-    padding: 20px;
-    max-width: 50%;
+	margin: 0 0 15px 15px;
+	float: right;
+	padding: 20px;
+	max-width: 50%;
 	background: rgba( 0, 0, 0, .1 );
 }
 
 .mc-main .vcard .street-address {
-    display: inline;
+	display: inline;
 }
 
 .mc-main .vcard .street-address:nth-of-type(2):before {
-    content: ', ';
+	content: ', ';
 }
 
 /* Jumpbox */
 .mc-main .my-calendar-date-switcher select {
-    padding: 0;
-    width: auto;
-    margin: 0;
+	padding: 0;
+	width: auto;
+	margin: 0;
 }
 
 .mc-main .my-calendar-date-switcher input[type=submit] {
-    min-width: 2em;
+	min-width: 2em;
 	font-size: 1em;
 }
 
@@ -397,39 +391,39 @@
 }
 
 .mc-list .current-day .event-date:before {
-    content: "\f139 ";
+	content: "\f139 ";
 	font-family: dashicons;
 	vertical-align: middle;
 }
 
 .mc-main .mc-list .mc-events {
-    list-style-type: none !important;
-    padding: 10px;
-    background: rgba(0, 0, 0, .05);
-    margin: 0;
+	list-style-type: none !important;
+	padding: 10px;
+	background: rgba(0, 0, 0, .05);
+	margin: 0;
 }
 
 .mc-main .mc-list .mc-events.odd {
-    padding: 10px;
-    background: none;
+	padding: 10px;
+	background: none;
 }
 
 .mc-main.list .my-calendar-month {
-    font-size: 1.4em;
-    background: #000;
-    color: #fff;
-    padding: 5px;
-    text-align: right;
+	font-size: 1.4em;
+	background: #000;
+	color: #fff;
+	padding: 5px;
+	text-align: right;
 }
 
 .mc-main .list-event .event-title {
 	margin-top: 10px !important;;
-    padding: 5px;
+	padding: 5px;
 }
 
 .mc-main .mc-list .event-date {
-    font-size: 1.1em;
-    font-weight: 600;
+	font-size: 1.1em;
+	font-weight: 600;
 }
 
 .mc-main .list-event {
@@ -442,44 +436,51 @@
 }
 
 .mc-main .list-event .details img {
-    width: auto;
-    max-width: 100%;
+	width: auto;
+	max-width: 100%;
 }
 
 .mc-main .list-event .event-title img {
-    margin-right: .5em;
-    position: relative;
-    top: -1px;
+	margin-right: .5em;
+	position: relative;
+	top: -1px;
 }
 
 .mc-main .nextmonth .event-title {
-    opacity: .7;
+	opacity: .7;
 }
 
 /* Single view */
 .single-event .event-title {
-    padding: 10px;
-    font-size: 1.4em;
+	padding: 10px;
+	font-size: 1.4em;
 }
 
 .single-event .event-title img {
-    margin-right: 10px;
+	margin-right: 10px;
 	position: static;
 }
 
 /* Mini */
 .mc-main.mini table {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .mc-main.mini tr td {
-    height: auto;
+	height: auto;
 }
 
 .mc-main.mini .vcard {
-    line-height: 1.5;
-    margin: 0 0 15px;
-    float: none;
-    padding: 10px;
-    max-width: 100%;
+	line-height: 1.5;
+	margin: 0 0 15px;
+	float: none;
+	padding: 10px;
+	max-width: 100%;
+}
+
+.mc-list-details.all-events {
+	text-align: left;
+	display: inline-block;
+	text-transform: none;
+	padding-left: 2em;
 }

@@ -110,6 +110,10 @@
     height: auto;
 }
 
+.mc-main .details .category-icon {
+	width: auto;
+}
+
 .mc-main .details img.alignleft {
     width: auto;
     float: left;
@@ -202,12 +206,6 @@
 }
 
 /* Navigation */
-.my-calendar-nav {
-    position: absolute;
-    top: .5em;
-    right: 0;
-}
-
 .my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
     margin: 0 !important;
     padding: 0 !important;
@@ -232,12 +230,6 @@
 }
 
 /* Time frame */
-.mc-time {
-    position: absolute;
-    bottom: .75em;
-    font-size: 1.2em;
-}
-
 .mc-time a {
     margin-right: 1px;
     padding: .5em;
@@ -295,12 +287,6 @@
     overflow: hidden;
     position: absolute;
     max-height: 1px;
-}
-
-.mc-main .my-calendar-date-switcher {
-    position: absolute;
-    bottom: .5em;
-    right: 0;
 }
 
 .mc-main .my-calendar-date-switcher select {
@@ -420,7 +406,6 @@
 }
 
 .mc-main.mini .my-calendar-nav, .mc-main.mini .mc-time, .mc-main.mini .my-calendar-date-switcher {
-    position: static !important;
     width: 100% !important;
     margin: .5em 0 !important;
 }

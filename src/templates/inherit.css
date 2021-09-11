@@ -105,8 +105,9 @@
 }
 
 .mc-main .details .close {
-    float: right;
-    width: 16px !important;
+    position: absolute;
+    top: 8px;
+    right: 8px;
     padding: 2px 2px 7px 7px;
 }
 
@@ -182,9 +183,7 @@
 }
 
 .mc-main .calendar-event .event-time, .mc-main .list-event .event-time {
-    display: block;
     height: 100%;
-    margin-right: 10px;
     margin-bottom: 10px;
     font-weight: 700;
     font-size: .9em;
@@ -274,7 +273,7 @@
 }
 
 .mc-main.mini .day-with-date span, .mc-main.mini .day-with-date a {
-    font: .9em Arial, Verdana, sans-serif;
+    font-size: .9em;
     padding: 1px;
     text-align: center;
 }
@@ -323,9 +322,4 @@
     font-size: .9em;
     padding: 10px;
     float: right;
-}
-
-.screen-reader-text {
-    position: absolute;
-    left: -999em;
 }
