@@ -3864,11 +3864,12 @@ function mc_can_edit_category( $category, $user ) {
 /**
  * Unless an admin, authors can only edit their own events if they don't have mc_manage_events capabilities.
  *
- * @param mixed object/boolean $event Event object.
+ * @param object|boolean $event Event object.
+ * @param string         $datatype 'event' or 'instance'.
  *
  * @return boolean
  */
-function mc_can_edit_event( $event = false ) {
+function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 	global $wpdb;
 	if ( ! $event ) {
 
@@ -3891,9 +3892,13 @@ function mc_can_edit_event( $event = false ) {
 		$event_author = $event->event_author;
 	} elseif ( is_int( $event ) ) {
 		$event_id = $event;
-		$event    = mc_get_first_event( $event );
-		if ( ! is_object( $event ) ) {
-			$event = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( 'event' === $datatype ) {
+			$event    = mc_get_first_event( $event );
+			if ( ! is_object( $event ) ) {
+				$event = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			}
+		} else {
+			$event = mc_get_event( $event_id );
 		}
 		$event_author = $event->event_author;
 	} else {

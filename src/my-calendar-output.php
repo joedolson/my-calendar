@@ -1550,29 +1550,6 @@ function mc_event_filter( $title, $sep = ' | ', $seplocation = 'right' ) {
 	}
 }
 
-/**
- * Verify that a given occurrence ID is valid.
- *
- * @param int $mc_id Occurrence ID.
- *
- * @return boolean
- */
-function mc_valid_id( $mc_id ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
-
-	$result = $mcdb->get_row( $mcdb->prepare( 'SELECT occur_id FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $mc_id ) );
-
-	if ( is_object( $result ) ) {
-		return true;
-	}
-
-	return false;
-}
-
 add_filter( 'the_content', 'mc_show_event_template', 100, 1 );
 /**
  * Filter post content to process event templates

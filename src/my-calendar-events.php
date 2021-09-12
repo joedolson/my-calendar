@@ -1013,6 +1013,29 @@ function mc_set_date_array( $events ) {
 }
 
 /**
+ * Verify that a given occurrence ID is valid.
+ *
+ * @param int $mc_id Occurrence ID.
+ *
+ * @return boolean|int Returns event ID on valid value.
+ */
+function mc_valid_id( $mc_id ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$result = $mcdb->get_var( $mcdb->prepare( 'SELECT occur_event_id FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $mc_id ) );
+
+	if ( null !== $result ) {
+		return $result;
+	}
+
+	return false;
+}
+
+/**
  * Get post associated with a given My Calendar event
  *
  * @param int $event_id Event ID.
