@@ -1000,6 +1000,21 @@ function mc_admin_bar() {
 			$wp_admin_bar->add_node( $args );
 		}
 	}
+	if ( isset( $_GET['mc_id'] ) && mc_can_edit_event( $_GET['mc_id'] ) ) {
+		$event_id = mc_valid_id( $_GET['mc_id'] );
+		$query    = array(
+			'event_id' => $event_id,
+			'ref'      => urlencode( mc_get_current_url() ),
+		);
+		$url      = add_query_arg( $query, admin_url( 'admin.php?page=my-calendar&mode=edit' ) );
+		$args     = array(
+			'id'     => 'mc-edit-event',
+			'title'  => __( 'Edit Event', 'my-calendar' ),
+			'href'   => $url,
+			'parent' => 'mc-my-calendar',
+		);
+		$wp_admin_bar->add_node( $args );
+	}
 	if ( current_user_can( 'mc_manage_events' ) && current_user_can( 'mc_add_events' ) ) {
 		$url  = admin_url( 'admin.php?page=my-calendar-manage' );
 		$args = array(
