@@ -548,12 +548,26 @@ strong.label {
 	content: '';
 	position: absolute;
 	left: calc( 50% - 10px );
-	top: 100%;
+	top: calc( 100% + 1px );
 	width: 0;
 	height: 0;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-top: 10px solid #fff;
+	clear: both;
+}
+
+.mc-tabs .tabs button[aria-selected=true]:before,
+.mc-tablinks a[aria-current=page]:before {
+	content: '';
+	position: absolute;
+	left: calc( 50% - 10px );
+	top: calc( 100% + 2px );
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #c3c4c7;
 	clear: both;
 }
 
