@@ -33,6 +33,10 @@ function my_calendar_manage_locations() {
 		$loc = absint( $_GET['location_id'] );
 		echo mc_delete_location( $loc );
 	}
+	if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
+		update_option( 'mc_default_location', (int) $_GET['default'] );
+		mc_show_notice( __( 'Default Location Changed', 'my-calendar' ) );
+	}
 	?>
 		<h1 class="wp-heading-inline"><?php _e( 'Manage Locations', 'my-calendar' ); ?></h1>
 		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
@@ -251,19 +255,20 @@ function mc_manage_locations() {
 						<input type="checkbox" value="<?php echo $location->location_id; ?>" name="mass_edit[]" id="mc<?php echo $location->location_id; ?>"/>
 						<label for="mc<?php echo $location->location_id; ?>"><?php echo $location->location_id; ?></label>
 					</th>
-					<?php
-					$default = '';
-					if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
-						$default = '<span class="mc_default"><span class="dashicons dashicons-location" aria-hidden="true"></span>' . __( 'Default Location', 'my-calendar' ) . '</span>';
-					}
-					?>
 					<td>
 					<?php
-						echo $default;
-						echo mc_hcard( $location, 'true', 'false', 'location' );
+						$card       = mc_hcard( $location, 'true', 'false', 'location' );
 						$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );
 						$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
 						$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
+						if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
+							$card = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
+							$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';
+						} else {
+							$url     = admin_url( "admin.php?page=my-calendar-location-manager&amp;default=$location->location_id" );
+							$default = '<a href="' . esc_url( $url ) . '">' . __( 'Set as Default', 'my-calendar' ) . '</a>';
+						}
+						echo $card;
 					?>
 						<div class='row-actions'>
 							<?php
@@ -274,6 +279,7 @@ function mc_manage_locations() {
 							}
 							?>
 							<a href="<?php echo $edit_url; ?>" class='edit' aria-describedby='location<?php echo $location->location_id; ?>'><?php _e( 'Edit', 'my-calendar' ); ?></a> |
+							<?php echo $default; ?> | 
 							<a href="<?php echo $delete_url; ?>" class="delete" aria-describedby='location<?php echo $location->location_id; ?>' onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
 						</div>
 					</td>

@@ -1035,15 +1035,6 @@ tr.problem .error {
 	color: #8a2424;
 }
 
-.mc_default {
-	padding: 2px 8px 2px 2px;
-	border-radius: 3px;
-	background: #ffa;
-	color: #2c3338;
-	border: 1px solid #787c82;
-	float: right;
-}
-
 .problem-icon {
 	font-size: 64px;
 	float: left; 

@@ -135,7 +135,9 @@ function my_calendar_manage_categories() {
 	<div class="wrap my-calendar-admin">
 		<?php
 		my_calendar_check_db();
-		$append = '';
+		$append           = array();
+		$default_category = get_option( 'mc_default_category' );
+		$holiday_category = get_option( 'mc_skip_holidays_category' );
 		// We do some checking to see what we're doing.
 		if ( ! empty( $_POST ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
@@ -144,20 +146,27 @@ function my_calendar_manage_categories() {
 			}
 		}
 
+		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
+			update_option( 'mc_default_category', (int) $_GET['default'] );
+			$default_category = (int) $_GET['default'];
+			mc_show_notice( __( 'Default Category Changed', 'my-calendar' ) );
+		}
+
 		if ( isset( $_POST['mode'] ) && 'add' === $_POST['mode'] ) {
 			$cat_id = mc_create_category( $_POST );
 
 			if ( isset( $_POST['mc_default_category'] ) ) {
 				update_option( 'mc_default_category', $cat_id );
-				$append .= __( 'Default category changed.', 'my-calendar' );
+				$append[] = __( 'Default category changed.', 'my-calendar' );
 			}
 
 			if ( isset( $_POST['mc_skip_holidays_category'] ) ) {
 				update_option( 'mc_skip_holidays_category', $cat_id );
-				$append .= __( 'Holiday category changed.', 'my-calendar' );
+				$append[] = __( 'Holiday category changed.', 'my-calendar' );
 			}
 
 			if ( $cat_id ) {
+				$append = implode( ' ', $append );
 				mc_show_notice( __( 'Category added successfully', 'my-calendar' ) . ". $append" );
 			} else {
 				mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
@@ -170,14 +179,14 @@ function my_calendar_manage_categories() {
 			$rel_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			if ( $results ) {
-				$default_category = get_option( 'mc_default_category' );
-				$default_category = ( is_numeric( $default_category ) ) ? absint( $default_category ) : 1;
-				$cal_results      = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $default_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				// Set events with deleted category as primary to default category as primary.
+				$set_category = ( is_numeric( $default_category ) ) ? absint( $default_category ) : 1;
+				$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			} else {
 				$cal_results = false;
 			}
-			if ( get_option( 'mc_default_category' ) === (string) $cat_id ) {
-				update_option( 'mc_default_category', 1 );
+			if ( $default_category === (string) $cat_id ) {
+				delete_option( 'mc_default_category' );
 			}
 			if ( $results && ( $cal_results || $rel_results ) ) {
 				mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) );
@@ -190,21 +199,23 @@ function my_calendar_manage_categories() {
 			$cur_cat = (int) $_GET['category_id'];
 			mc_edit_category_form( 'edit', $cur_cat );
 		} elseif ( isset( $_POST['mode'] ) && isset( $_POST['category_id'] ) && isset( $_POST['category_name'] ) && isset( $_POST['category_color'] ) && 'edit' === $_POST['mode'] ) {
-			$append = '';
-			if ( isset( $_POST['mc_default_category'] ) ) {
+			$append = array();
+			if ( isset( $_POST['mc_default_category'] ) && $default_category !== $_POST['category_id'] ) {
 				update_option( 'mc_default_category', (int) $_POST['category_id'] );
-				$append .= __( 'Default category changed.', 'my-calendar' );
+				$append[] = __( 'Default category changed.', 'my-calendar' );
 			} else {
-				if ( get_option( 'mc_default_category' ) === (string) $_POST['category_id'] ) {
+				if ( $default_category === $_POST['category_id'] ) {
 					delete_option( 'mc_default_category' );
+					$append[] = __( 'Default category removed.', 'my-calendar' );
 				}
 			}
-			if ( isset( $_POST['mc_skip_holidays_category'] ) ) {
+			if ( isset( $_POST['mc_skip_holidays_category'] ) && $holiday_category !== $_POST['category_id'] ) {
 				update_option( 'mc_skip_holidays_category', (int) $_POST['category_id'] );
-				$append .= __( 'Holiday category changed.', 'my-calendar' );
+				$append[] = __( 'Holiday category changed.', 'my-calendar' );
 			} else {
-				if ( get_option( 'mc_skip_holidays_category' ) === (string) $_POST['category_id'] ) {
+				if ( $holiday_category === (string) $_POST['category_id'] ) {
 					delete_option( 'mc_skip_holidays_category' );
+					$append[] = __( 'Holiday category removed.', 'my-calendar' );
 				}
 			}
 
@@ -215,6 +226,7 @@ function my_calendar_manage_categories() {
 				'category_private' => ( ( isset( $_POST['category_private'] ) ) ? 1 : 0 ),
 			);
 			$results = mc_update_cat( $update );
+			$append  = implode( ' ', $append );
 			if ( $results ) {
 				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append" );
 			} else {
@@ -719,6 +731,7 @@ function mc_manage_categories() {
 		default:
 			$cat_order = 'category_id';
 	}
+	$default_category = (string) get_option( 'mc_default_category' );
 	// We pull the categories from the database.
 	$categories = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY %s ASC', $cat_order ) );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( ! empty( $categories ) ) {
@@ -759,21 +772,28 @@ function mc_manage_categories() {
 			<td>
 			<?php
 			echo $cat_name;
-			if ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) {
-				echo ' <strong>' . __( '(Default)' ) . '</strong>';
-			}
-			if ( get_option( 'mc_skip_holidays_category' ) === (string) $cat->category_id ) {
-				echo ' <strong>' . __( '(Holiday)' ) . '</strong>';
-			}
 			// Translators: Name of category being edited.
 			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			// Translators: Category name.
 			$delete_cat = sprintf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
+			// Translators: Category name.
+			$default_text = sprintf( __( 'Set %s as Default', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
+			if ( $default_category === (string) $cat->category_id ) {
+				echo ' <strong>' . __( '(Default)' ) . '</strong>';
+				$default = '<span class="mc_default">' . __( 'Default Category', 'my-calendar' ) . '</span>';
+			} else {
+				$url     = admin_url( "admin.php?page=my-calendar-categories&amp;default=$cat->category_id" );
+				$default = '<a href="' . esc_url( $url ) . '">' . $default_text . '</a>';
+			}
+			if ( get_option( 'mc_skip_holidays_category' ) === (string) $cat->category_id ) {
+				echo ' <strong>' . __( '(Holiday)' ) . '</strong>';
+			}
 			?>
 				<div class="row-actions">
 					<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ); ?>"
-					class='edit'><?php echo $edit_cat; ?></a>
+					class='edit'><?php echo $edit_cat; ?></a> | 
 					<?php
+					echo $default;
 					// Cannot delete the default category.
 					if ( '1' !== (string) $cat->category_id ) {
 						echo ' | ';
