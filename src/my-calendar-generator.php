@@ -87,7 +87,6 @@ function mc_generator( $type ) {
 			// Common Elements to all Shortcodes.
 			?>
 			<p><?php echo my_calendar_categories_list( 'select', 'admin' ); ?></p>
-
 			<p>
 				<label for="ltype"><?php _e( 'Location filter type:', 'my-calendar' ); ?></label>
 				<select name="ltype" id="ltype">
