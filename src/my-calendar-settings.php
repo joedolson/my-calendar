@@ -1031,6 +1031,7 @@ function mc_remote_db() {
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<div class="mc-permissions-wrapper">
 		<?php
+		$tabs = '<div class="tabs" role="tablist" data-default="container_mc_editor">';
 		global $wp_roles;
 		$role_container = '';
 		$roles          = $wp_roles->get_names();
@@ -1051,14 +1052,19 @@ function mc_remote_db() {
 			if ( 'administrator' === $role ) {
 				continue;
 			}
-			$role_container .= "<div class='mc_$role mc_permissions' id='container_mc_$role'><fieldset id='mc_$role' class='roles'><legend>$rolename</legend>";
+			$tabs           .= '<button type="button" role="tab" aria-selected="false" id="tab_' . $role . '" aria-controls="container_mc_' . $role . '">' . $rolename . '</button>';
+			$role_container .= "<div role='tabpanel' aria-labelledby='tab_$role' class='wptab mc_$role mc_permissions' id='container_mc_$role'><fieldset id='mc_$role' class='roles'><legend>$rolename</legend>";
 			$role_container .= "<input type='hidden' value='none' name='mc_caps[" . $role . "][none]' /><ul class='mc-settings checkboxes'>";
 			foreach ( $caps as $cap => $name ) {
 				$role_container .= mc_cap_checkbox( $role, $cap, $name );
 			}
 			$role_container .= '</ul></fieldset></div>';
 		}
+		$tabs .= '</div>';
+		echo '<div class="mc-tabs vertical">';
+		echo $tabs;
 		echo $role_container;
+		echo '</div>';
 		?>
 						</div>
 						<p>
