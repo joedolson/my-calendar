@@ -3893,7 +3893,7 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 	} elseif ( is_int( $event ) ) {
 		$event_id = $event;
 		if ( 'event' === $datatype ) {
-			$event    = mc_get_first_event( $event );
+			$event = mc_get_first_event( $event );
 			if ( ! is_object( $event ) ) {
 				$event = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
