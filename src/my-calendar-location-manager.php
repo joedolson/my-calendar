@@ -257,18 +257,18 @@ function mc_manage_locations() {
 					</th>
 					<td>
 					<?php
-						$card       = mc_hcard( $location, 'true', 'false', 'location' );
-						$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );
-						$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
-						$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
-						if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
-							$card = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
-							$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';
-						} else {
-							$url     = admin_url( "admin.php?page=my-calendar-location-manager&amp;default=$location->location_id" );
-							$default = '<a href="' . esc_url( $url ) . '">' . __( 'Set as Default', 'my-calendar' ) . '</a>';
-						}
-						echo $card;
+					$card       = mc_hcard( $location, 'true', 'false', 'location' );
+					$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );
+					$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
+					$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
+					if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
+						$card    = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
+						$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';
+					} else {
+						$url     = admin_url( "admin.php?page=my-calendar-location-manager&amp;default=$location->location_id" );
+						$default = '<a href="' . esc_url( $url ) . '">' . __( 'Set as Default', 'my-calendar' ) . '</a>';
+					}
+					echo $card;
 					?>
 						<div class='row-actions'>
 							<?php
