@@ -1473,13 +1473,13 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			break;
 		case 'event_access':
 			if ( $show_block ) {
-				$label  = __( 'Event Access', 'my-calendar' );
+				$label  = __( 'Accessibility', 'my-calendar' );
 				$return = $pre . '<h2>' . $label . '</h2><div class="inside">' . mc_event_accessibility( '', $data, $label ) . apply_filters( 'mc_event_access_fields', '', $has_data, $data ) . '</div>' . $post;
 			}
 			break;
 		case 'event_open':
 			if ( $show_block ) {
-				$return = $pre . '<h2>' . __( 'Event Registration Settings', 'my-calendar' ) . '</h2><div class="inside"><fieldset><legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '</legend>' . apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ) . '</fieldset></div>' . $post;
+				$return = $pre . '<h2>' . __( 'Registration Settings', 'my-calendar' ) . '</h2><div class="inside"><fieldset><legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '</legend>' . apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ) . '</fieldset></div>' . $post;
 			} else {
 				$tickets      = ( $has_data ) ? esc_url( $data->event_tickets ) : '';
 				$registration = ( $has_data ) ? esc_attr( $data->event_registration ) : '';

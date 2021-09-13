@@ -571,7 +571,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
-				<h2><?php _e( 'Event Registration Options', 'my-calendar' ); ?></h2>
+				<h2><?php _e( 'Registration Settings', 'my-calendar' ); ?></h2>
 
 				<div class="inside">
 					<fieldset>
