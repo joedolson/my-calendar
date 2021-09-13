@@ -341,6 +341,10 @@ function mc_update_text_settings( $post ) {
 	$mc_link_label           = $post['mc_link_label'];
 	$mc_event_title_template = $post['mc_event_title_template'];
 	$mc_notime_text          = $post['mc_notime_text'];
+	$mc_hosted_by            = $post['mc_hosted_by'];
+	$mc_posted_by            = $post['mc_posted_by'];
+	$mc_buy_tickets          = $post['mc_buy_tickets'];
+	$mc_view_full            = $post['mc_view_full'];
 	$mc_previous_events      = $post['mc_previous_events'];
 	$mc_next_events          = $post['mc_next_events'];
 	$mc_week_caption         = $post['mc_week_caption'];
@@ -354,6 +358,10 @@ function mc_update_text_settings( $post ) {
 	update_option( 'mc_templates', $templates );
 	update_option( 'mc_event_title_template', $mc_event_title_template );
 	update_option( 'mc_notime_text', $mc_notime_text );
+	update_option( 'mc_hosted_by', $mc_hosted_by );
+	update_option( 'mc_posted_by', $mc_posted_by );
+	update_option( 'mc_buy_tickets', $mc_buy_tickets );
+	update_option( 'mc_view_full', $mc_view_full );
 	update_option( 'mc_week_caption', $mc_week_caption );
 	update_option( 'mc_next_events', $mc_next_events );
 	update_option( 'mc_previous_events', $mc_previous_events );
@@ -667,12 +675,16 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_title_template_solo', __( 'Event title (Single)', 'my-calendar' ), $mc_title_template_solo, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li><?php mc_settings_field( 'mc_title_template_list', __( 'Event title (List)', 'my-calendar' ), $mc_title_template_list, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li><?php mc_settings_field( 'mc_notime_text', __( 'Label for all-day events', 'my-calendar' ), 'All Day' ); ?></li>
+							<li><?php mc_settings_field( 'mc_hosted_by', __( 'Hosted by', 'my-calendar' ), 'Hosted by' ); ?></li>
+							<li><?php mc_settings_field( 'mc_posted_by', __( 'Posted by', 'my-calendar' ), 'Posted by' ); ?></li>
+							<li><?php mc_settings_field( 'mc_buy_tickets', __( 'Buy tickets', 'my-calendar' ), 'Buy tickets' ); ?></li>
+							<li><?php mc_settings_field( 'mc_view_full', __( 'View full calendar', 'my-calendar' ), 'View full calendar' ); ?></li>
 							<li><?php mc_settings_field( 'mc_previous_events', __( 'Previous events link', 'my-calendar' ), __( 'Previous', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_next_events', __( 'Next events link', 'my-calendar' ), __( 'Next', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_week_caption', __( 'Week view caption:', 'my-calendar' ), '', __( 'Available tag: <code>{date format=""}</code>', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in list views.', 'my-calendar' ) ); ?></li>
-							<li><?php mc_settings_field( 'mc_details_label', __( 'Event details link text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
-							<li><?php mc_settings_field( 'mc_link_label', __( 'Event URL link text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_details_label', __( 'Read more text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
+							<li><?php mc_settings_field( 'mc_link_label', __( 'More information text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li>
 							<?php
 							// Translators: Current title template (code).

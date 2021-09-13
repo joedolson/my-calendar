@@ -37,6 +37,8 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_minijs' );
 		delete_option( 'mc_mini_javascript' );
 		delete_option( 'mc_notime_text' );
+		delete_option( 'mc_hosted_by' );
+		delete_option( 'mc_posted_by' );
 		delete_option( 'mc_hide_icons' );
 		delete_option( 'mc_caption' );
 		delete_option( 'mc_event_link_expires' );

@@ -421,7 +421,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
 					$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
 					$a      = get_userdata( $event->event_author );
-					$author = $avatar . '<p class="event-author"><span class="posted">' . __( 'Posted by', 'my-calendar' ) . '</span> <span class="author-name">' . $a->display_name . "</span></p>\n";
+					$text   = ( '' !== get_option( 'mc_posted_by', '' ) ) ? get_option( 'mc_posted_by' ) : __( 'Posted by', 'my-calendar' );
+					$author = $avatar . '<p class="event-author"><span class="posted">' . $text . '</span> <span class="author-name">' . $a->display_name . "</span></p>\n";
 					if ( $avatars ) {
 						$author = '	<div class="mc-author-card">' . $author . '</div>';
 					}
@@ -431,7 +432,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				if ( 0 !== (int) $event->event_host && is_numeric( $event->event_host ) ) {
 					$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
 					$h       = get_userdata( $event->event_host );
-					$host    = $havatar . '<p class="event-host"><span class="hosted">' . __( 'Hosted by', 'my-calendar' ) . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
+					$text    = ( '' !== get_option( 'mc_hosted_by', '' ) ) ? get_option( 'mc_hosted_by' ) : __( 'Hosted by', 'my-calendar' );
+					$host    = $havatar . '<p class="event-host"><span class="hosted">' . $text . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
 					if ( $avatars ) {
 						$host = '	<div class="mc-host-card">' . $host . '</div>';
 					}
@@ -480,7 +482,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$info     = wpautop( $event->event_registration );
 				$url      = esc_url( $event->event_tickets );
 				$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
-				$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'>" . __( 'Buy Tickets', 'my-calendar' ) . '</a>' : '';
+				$text     = ( '' !== get_option( 'mc_buy_tickets' ) ) ? get_option( 'mc_buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
+				$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'>" . $text . '</a>' : '';
 				if ( '' !== trim( $info . $tickets ) ) {
 					$tickets = $info . $tickets;
 				} else {
@@ -497,7 +500,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 
 			$status     = apply_filters( 'mc_registration_state', '', $event );
 			$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ) );
-			$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . __( 'View full calendar', 'my-calendar' ) . '</a></p>' : '';
+			$text       = ( '' !== get_option( 'mc_view_full' ) ) ? get_option( 'mc_view_full' ) : __( 'View full calendar', 'my-calendar' );
+			$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
 
 			if ( ! mc_show_details( $time, $type ) ) {
 				$description = '';
