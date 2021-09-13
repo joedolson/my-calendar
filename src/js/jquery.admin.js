@@ -247,7 +247,12 @@ jQuery(document).ready(function ($) {
 		var tabContainer = $( e.currentTarget ).closest( '.tabs' );
 		var tabs         = tabContainer.find( '[role=tab]' );
 		var container    = $( e.currentTarget ).closest( '.mc-tabs' );
-		var tabPanels    = container.find( '[role=tabpanel]' );
+		var inside       = $( e.currentTarget ).parents( '.inside' );
+		if ( inside.length == 0 ) {
+			var tabPanels = container.find( '.ui-sortable > [role=tabpanel]' );
+		} else {
+			var tabPanels = container.find( '[role=tabpanel]' );
+		}
 		for ( var i = 0; i < tabs.length; i++) {
 			tabs[i].setAttribute('aria-selected', 'false');
 		} // reset all tabs to aria-selected=false and normal font weight
@@ -257,7 +262,6 @@ jQuery(document).ready(function ($) {
 			tabPanels[i].style.display = "none";
 		} // hide all tabpanels
 		// If this is an inner tab panel, don't set the window location.
-		var inside = $( e.currentTarget ).parents( '.inside' );
 		if ( inside.length == 0 ) {
 			window.location.hash = tabPanelToOpen;
 		}
