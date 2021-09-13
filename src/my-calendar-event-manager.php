@@ -320,7 +320,7 @@ function mc_bulk_action( $action ) {
 		case 'archive':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
 			break;
-		case 'approve':
+		case 'approve': // Synonymous with publish.
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id IN (' . $prepared . ')';
 			break;
 		case 'draft':
@@ -328,9 +328,6 @@ function mc_bulk_action( $action ) {
 			break;
 		case 'trash':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id IN (' . $prepared . ')';
-			break;
-		case 'spam':
-			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 1 WHERE event_id IN (' . $prepared . ')';
 			break;
 		case 'unspam':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
@@ -393,9 +390,9 @@ function mc_bulk_message( $results, $action ) {
 			$error   = __( 'Your events have not been trashed. Please investigate.', 'my-calendar' );
 			break;
 		case 'approve':
-			// Translators: Number of events approved, number of events selected.
-			$success = __( '%1$d events approved out of %2$d selected.', 'my-calendar' );
-			$error   = __( 'Your events have not been approved. Were these events already published? Please investigate.', 'my-calendar' );
+			// Translators: Number of events published, number of events selected.
+			$success = __( '%1$d events published out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been published. Were these events already published? Please investigate.', 'my-calendar' );
 			break;
 		case 'draft':
 			// Translators: Number of events converted to draft, number of events selected.
@@ -567,7 +564,7 @@ function my_calendar_manage() {
 				echo $results;
 			}
 
-			if ( 'mass_approve' === $action || 'mass_publish' === $action ) {
+			if ( 'mass_publish' === $action ) {
 				$results = mc_bulk_action( 'approve' );
 				echo $results;
 			}
@@ -589,11 +586,6 @@ function my_calendar_manage() {
 
 			if ( 'mass_not_spam' === $action ) {
 				$results = mc_bulk_action( 'unspam' );
-				echo $results;
-			}
-
-			if ( 'mass_spam' === $action ) {
-				$results = mc_bulk_action( 'spam' );
 				echo $results;
 			}
 		}
@@ -2207,17 +2199,14 @@ function mc_show_bulk_actions() {
 		'mass_publish'      => __( 'Publish', 'my-calendar' ),
 		'mass_delete'       => __( 'Delete', 'my-calendar' ),
 		'mass_trash'        => __( 'Trash', 'my-calendar' ),
-		'mass_approve'      => __( 'Approve', 'my-calendar' ),
 		'mass_draft'        => __( 'Switch to Draft', 'my-calendar' ),
 		'mass_archive'      => __( 'Archive', 'my-calendar' ),
 		'mass_undo_archive' => __( 'Remove from Archive', 'my-calendar' ),
 		'mass_not_spam'     => __( 'Not spam', 'my-calendar' ),
-		'mass_spam'         => __( 'Spam', 'my-calendar' ),
 	);
 
 	if ( ! current_user_can( 'mc_approve_events' ) || isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) {
 		unset( $bulk_actions['mass_publish'] );
-		unset( $bulk_actions['mass_approve'] );
 	}
 	if ( ! current_user_can( 'mc_manage_events' ) || isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) {
 		unset( $bulk_actions['mass_trash'] );
@@ -2230,9 +2219,7 @@ function mc_show_bulk_actions() {
 	} else {
 		unset( $bulk_actions['mass_undo_archive'] );
 	}
-	if ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) {
-		unset( $bulk_actions['mass_spam'] );
-	} else {
+	if ( !( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
 		unset( $bulk_actions['mass_not_spam'] );
 	}
 
