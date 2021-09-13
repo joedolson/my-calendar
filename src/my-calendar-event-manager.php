@@ -2197,12 +2197,12 @@ function mc_event_accessibility( $form, $data, $label ) {
 function mc_show_bulk_actions() {
 	$bulk_actions = array(
 		'mass_publish'      => __( 'Publish', 'my-calendar' ),
-		'mass_delete'       => __( 'Delete', 'my-calendar' ),
-		'mass_trash'        => __( 'Trash', 'my-calendar' ),
+		'mass_not_spam'     => __( 'Not spam', 'my-calendar' ),
 		'mass_draft'        => __( 'Switch to Draft', 'my-calendar' ),
+		'mass_trash'        => __( 'Trash', 'my-calendar' ),
 		'mass_archive'      => __( 'Archive', 'my-calendar' ),
 		'mass_undo_archive' => __( 'Remove from Archive', 'my-calendar' ),
-		'mass_not_spam'     => __( 'Not spam', 'my-calendar' ),
+		'mass_delete'       => __( 'Delete', 'my-calendar' ),
 	);
 
 	if ( ! current_user_can( 'mc_approve_events' ) || isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) {
