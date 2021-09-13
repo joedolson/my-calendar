@@ -2219,7 +2219,7 @@ function mc_show_bulk_actions() {
 	} else {
 		unset( $bulk_actions['mass_undo_archive'] );
 	}
-	if ( !( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
+	if ( ! ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
 		unset( $bulk_actions['mass_not_spam'] );
 	}
 
