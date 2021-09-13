@@ -323,6 +323,9 @@ function mc_bulk_action( $action ) {
 		case 'approve':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id IN (' . $prepared . ')';
 			break;
+		case 'draft':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 0 WHERE event_id IN (' . $prepared . ')';
+			break;
 		case 'trash':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id IN (' . $prepared . ')';
 			break;
@@ -381,39 +384,50 @@ function mc_bulk_message( $results, $action ) {
 	switch ( $action ) {
 		case 'delete':
 			// Translators: Number of events deleted, number selected.
-			$success = __( '%1$d events deleted successfully out of %2$d selected', 'my-calendar' );
+			$success = __( '%1$d events deleted successfully out of %2$d selected.', 'my-calendar' );
 			$error   = __( 'Your events have not been deleted. Please investigate.', 'my-calendar' );
 			break;
 		case 'trash':
 			// Translators: Number of events trashed, number of events selected.
-			$success = __( '%1$d events trashed successfully out of %2$d selected', 'my-calendar' );
+			$success = __( '%1$d events trashed successfully out of %2$d selected.', 'my-calendar' );
 			$error   = __( 'Your events have not been trashed. Please investigate.', 'my-calendar' );
 			break;
 		case 'approve':
 			// Translators: Number of events approved, number of events selected.
-			$success = __( '%1$d events approved out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Your events have not been approved. Please investigate.', 'my-calendar' );
+			$success = __( '%1$d events approved out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been approved. Were these events already published? Please investigate.', 'my-calendar' );
+			break;
+		case 'draft':
+			// Translators: Number of events converted to draft, number of events selected.
+			$success = __( '%1$d events switched to drafts out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been switched to drafts. Were these events already drafts? Please investigate.', 'my-calendar' );
 			break;
 		case 'archive':
-			// Translators: Number of events arcnived, number of events selected.
-			$success = __( '%1$d events archived successfully out of %2$d selected', 'my-calendar' );
+			// Translators: Number of events archived, number of events selected.
+			$success = __( '%1$d events archived successfully out of %2$d selected.', 'my-calendar' );
 			$error   = __( 'Your events have not been archived. Please investigate.', 'my-calendar' );
 			break;
 		case 'unarchive':
 			// Translators: Number of events removed from archive, number of events selected.
-			$success = __( '%1$d events removed from archive successfully out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Your events have not been removed from the archive. Please investigate.', 'my-calendar' );
+			$success = __( '%1$d events removed from archive successfully out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been removed from the archive. Were these events already archived? Please investigate.', 'my-calendar' );
 			break;
 		case 'unspam':
 			// Translators: Number of events removed from archive, number of events selected.
-			$success = __( '%1$d events successfully unmarked as spam out of %2$d selected', 'my-calendar' );
-			$error   = __( 'Your events have not unmarked as spam. Please investigate.', 'my-calendar' );
+			$success = __( '%1$d events successfully unmarked as spam out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events were not removed from spam. Please investigate.', 'my-calendar' );
 			break;
 	}
 
 	if ( 0 !== $result && false !== $result ) {
+		$diff = 0;
+		if ( $result < $count ) {
+			$diff = ( $count - $result );
+			// Translators: Sprintf as a 3rd argument if this string is appended to prior error. # of unchanged events.
+			$success .= ' ' . _n( '%3$d event was not changed in that update.', '%3$d events were not changed in that update.', $diff, 'my-calendar' );
+		}
 		do_action( 'mc_mass_' . $action . '_events', $ids );
-		$message = mc_show_notice( sprintf( $success, $count, $total ) );
+		$message = mc_show_notice( sprintf( $success, $result, $total, $diff ) );
 	} else {
 		$message = mc_show_error( $error, false );
 	}
@@ -555,6 +569,11 @@ function my_calendar_manage() {
 
 			if ( 'mass_approve' === $action || 'mass_publish' === $action ) {
 				$results = mc_bulk_action( 'approve' );
+				echo $results;
+			}
+
+			if ( 'mass_draft' === $action ) {
+				$results = mc_bulk_action( 'draft' );
 				echo $results;
 			}
 
@@ -2189,6 +2208,7 @@ function mc_show_bulk_actions() {
 		'mass_delete'       => __( 'Delete', 'my-calendar' ),
 		'mass_trash'        => __( 'Trash', 'my-calendar' ),
 		'mass_approve'      => __( 'Approve', 'my-calendar' ),
+		'mass_draft'        => __( 'Switch to Draft', 'my-calendar' ),
 		'mass_archive'      => __( 'Archive', 'my-calendar' ),
 		'mass_undo_archive' => __( 'Remove from Archive', 'my-calendar' ),
 		'mass_not_spam'     => __( 'Not spam', 'my-calendar' ),
@@ -2201,6 +2221,9 @@ function mc_show_bulk_actions() {
 	}
 	if ( ! current_user_can( 'mc_manage_events' ) || isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) {
 		unset( $bulk_actions['mass_trash'] );
+	}
+	if ( isset( $_GET['limit'] ) && 'draft' === $_GET['limit'] ) {
+		unset( $bulk_actions['mass_draft'] );
 	}
 	if ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) {
 		unset( $bulk_actions['mass_archive'] );
