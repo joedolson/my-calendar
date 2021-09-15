@@ -134,10 +134,9 @@ function my_calendar_style_edit() {
 									<input type="checkbox" id="use_styles" name="use_styles" <?php mc_is_checked( 'mc_use_styles', 'true' ); ?> />
 									<label for="use_styles"><?php _e( 'Disable My Calendar Stylesheet', 'my-calendar' ); ?></label>
 								</p>
-								<p>
 								<?php
 								if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {
-									_e( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' );
+									echo '<div class="notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>';
 								} else {
 									$disabled = ( $edit_files || get_option( 'mc_use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 									?>
@@ -145,7 +144,6 @@ function my_calendar_style_edit() {
 									<?php
 								}
 								?>
-								</p>
 								<fieldset>
 									<legend><?php _e( 'CSS Variables', 'my-calendar' ); ?></legend>
 								<?php
