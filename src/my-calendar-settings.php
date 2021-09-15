@@ -912,7 +912,7 @@ function mc_remote_db() {
 				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
-						<legend><?php _e( 'Show in event manager', 'my-calendar' ); ?></legend>
+						<legend><?php _e( 'Event editing fields to show', 'my-calendar' ); ?></legend>
 						<div><input type='hidden' name='mc_input' value='true'/></div>
 						<ul class="checkboxes">
 							<?php
@@ -923,8 +923,8 @@ function mc_remote_db() {
 								'event_short'             => __( 'Excerpt', 'my-calendar' ),
 								'event_desc'              => __( 'Description', 'my-calendar' ),
 								'event_category'          => __( 'Categories', 'my-calendar' ),
-								'event_image'             => __( 'Image', 'my-calendar' ),
-								'event_link'              => __( 'Link', 'my-calendar' ),
+								'event_image'             => __( 'Featured Image', 'my-calendar' ),
+								'event_link'              => __( 'External Link', 'my-calendar' ),
 								'event_recurs'            => __( 'Repetition Pattern', 'my-calendar' ),
 								'event_open'              => __( 'Registration Settings', 'my-calendar' ),
 								'event_location'          => __( 'Location Fields', 'my-calendar' ),
@@ -958,12 +958,11 @@ function mc_remote_db() {
 							}
 							// Merge saved input options with default off, so all are displayed.
 							$input_options = array_merge( $defaults, $input_options );
-							ksort( $input_options );
-							foreach ( $input_options as $key => $value ) {
-								$checked = ( 'on' === $value ) ? "checked='checked'" : '';
-								if ( isset( $input_labels[ $key ] ) ) {
-									$output .= "<li><input type='checkbox' id='mci_$key' name='mci_$key' $checked /> <label for='mci_$key'>$input_labels[$key]</label></li>";
-								}
+							asort( $input_labels );
+							foreach ( $input_labels as $key => $value ) {
+								$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
+								$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
+								$output .= "<li><input type='checkbox' id='mci_$key' name='mci_$key' $checked /> <label for='mci_$key'>$value</label></li>";
 							}
 							echo $output;
 							?>

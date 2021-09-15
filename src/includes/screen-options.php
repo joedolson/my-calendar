@@ -64,8 +64,8 @@ function mc_show_event_editing( $status, $args ) {
 			'event_short'             => __( 'Excerpt', 'my-calendar' ),
 			'event_desc'              => __( 'Description', 'my-calendar' ),
 			'event_category'          => __( 'Categories', 'my-calendar' ),
-			'event_image'             => __( 'Image', 'my-calendar' ),
-			'event_link'              => __( 'Link', 'my-calendar' ),
+			'event_image'             => __( 'Featured Image', 'my-calendar' ),
+			'event_link'              => __( 'External Link', 'my-calendar' ),
 			'event_recurs'            => __( 'Repetition Pattern', 'my-calendar' ),
 			'event_open'              => __( 'Registration Settings', 'my-calendar' ),
 			'event_location'          => __( 'Location Fields', 'my-calendar' ),
@@ -75,17 +75,16 @@ function mc_show_event_editing( $status, $args ) {
 		);
 
 		$output = '';
-		foreach ( $input_options as $key => $value ) {
-			$checked = ( 'on' === $value ) ? "checked='checked'" : '';
+		asort( $input_labels );
+		foreach ( $input_labels as $key => $value ) {
+			$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
+			$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
 			$allowed = ( isset( $settings_options[ $key ] ) && 'on' === $settings_options[ $key ] ) ? true : false;
 			if ( ! ( current_user_can( 'manage_options' ) && 'true' === get_option( 'mc_input_options_administrators' ) ) && ! $allowed ) {
 				// don't display options if this user can't use them.
 				$output .= "<input type='hidden' name='mc_show_on_page[$key]' value='off' />";
 			} else {
-				if ( isset( $input_labels[ $key ] ) ) {
-					// don't show if label doesn't exist. That means I removed the option.
-					$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_show_on_page[$key]' value='on' $checked /> $input_labels[$key]</label>";
-				}
+				$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_show_on_page[$key]' value='on' $checked /> $value</label>";
 			}
 		}
 		$button  = get_submit_button( __( 'Apply' ), 'button', 'screen-options-apply', false );
