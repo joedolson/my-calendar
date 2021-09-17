@@ -196,7 +196,7 @@ function mc_print_contextual_help() {
  * Add custom CSS for contextual help modal.
  */
 function mc_contextual_help_css() {
-	// Check that we are on the right screen
+	// Check that we are on the right screen.
 	if ( sanitize_title( __( 'My Calendar', 'my-calendar' ) ) . '_page_mc-contextual-help' === get_current_screen()->id ) {
 		wp_enqueue_style( 'mc-contextual-help', plugins_url( 'css/help.css', __FILE__ ) );
 	}
