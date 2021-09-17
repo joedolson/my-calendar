@@ -1912,7 +1912,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
-			<h2><?php _e( 'Special scheduling options', 'my-calendar' ); ?></h2>
+			<h2><?php _e( 'Special Scheduling Options', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<fieldset class="options">
