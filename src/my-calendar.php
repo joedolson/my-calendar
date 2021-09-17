@@ -326,33 +326,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				<h2><?php _e( 'Get Help', 'my-calendar' ); ?></h2>
 
 				<div class="inside">
-					<ul>
-						<li>
-							<strong><a href="https://docs.joedolson.com/my-calendar/quick-start/"><?php _e( 'Documentation', 'my-calendar' ); ?></a></strong>
-						</li>
-						<li>
-							<strong><a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>#mc-generator"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></strong>
-						</li>
-						<li>
-							<a href="<?php echo admin_url( 'admin.php?page=my-calendar-help' ); ?>#get-support"><?php _e( 'Get Support', 'my-calendar' ); ?></a>
-						</li>
-						<li>
-							<div class="dashicons dashicons-editor-help" aria-hidden='true'></div>
-							<a href="<?php echo admin_url( 'admin.php?page=my-calendar-help' ); ?>"><?php _e( 'My Calendar Help', 'my-calendar' ); ?></a>
-						</li>
-						<li>
-							<div class="dashicons dashicons-yes" aria-hidden='true'></div>
-							<a href="http://profiles.wordpress.org/joedolson/"><?php _e( 'Check out my other plug-ins', 'my-calendar' ); ?></a>
-						</li>
-						<li>
-							<div class="dashicons dashicons-star-filled" aria-hidden='true'></div>
-							<a href="http://wordpress.org/support/plugin/my-calendar/reviews/?filter=5"><?php _e( 'Rate this plug-in 5 stars!', 'my-calendar' ); ?></a>
-						</li>
-						<li>
-							<div class="dashicons dashicons-translation" aria-hidden='true'></div>
-							<a href="http://translate.joedolson.com/projects/my-calendar"><?php _e( 'Help translate this plug-in!', 'my-calendar' ); ?></a>
-						</li>
-					</ul>
+					<?php echo mc_get_help_footer(); ?>
 				</div>
 			</div>
 		</div>
@@ -400,6 +374,7 @@ function my_calendar_menu() {
 		add_submenu_page( 'my-calendar', __( 'Settings', 'my-calendar' ), __( 'Settings', 'my-calendar' ), 'mc_edit_settings', 'my-calendar-config', 'my_calendar_settings' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Shortcode Generator', 'my-calendar' ), __( 'Shortcodes', 'my-calendar' ), 'mc_view_help', 'my-calendar-shortcodes', 'my_calendar_shortcodes' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Help', 'my-calendar' ), __( 'Help', 'my-calendar' ), 'mc_view_help', 'my-calendar-help', 'my_calendar_help' );
+		add_submenu_page( 'my-calendar', __( 'My Calendar Contextual Help', 'my-calendar' ), __( 'My Calendar Contextua-l Help', 'my-calendar' ), 'manage_options', 'mc-contextual-help', 'mc_print_contextual_help' ); 
 	}
 	if ( function_exists( 'mcs_submissions' ) ) {
 		$permission = apply_filters( 'mcs_submission_permissions', 'manage_options' );

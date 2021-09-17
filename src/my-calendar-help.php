@@ -146,3 +146,123 @@ function my_calendar_help() {
 	</div>
 	<?php
 }
+
+/**
+ * Generate link for contextual help.
+ *
+ * @param string $link_text Link text.
+ * @param string $modal_title Modal iframe title.
+ * @param int    $id Help text ID.
+ *
+ * @return string
+ */
+function mc_help_link( $link_text, $modal_title, $id ) {
+	$url  = admin_url( 'admin.php?help=' . (int) $id . '&page=mc-contextual-help&TB_iframe=true&width=600&height=550&modal_window=true' );
+	$link = sprintf(
+		'<a href="%s" class="thickbox my-calendar-contextual-help" data-title="%s"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span><span class="screen-reader-text">%s</span></a>',
+		$url,
+		$modal_title,
+		$link_text
+	);
+
+	return $link;
+}
+
+/**
+ * Load modal for contextual help.
+ */
+function mc_enqueue_modal_assets() {
+	// Load only for My Calendar admin pages.
+	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) ) {
+		// Enqueue assets from WordPress.
+		wp_enqueue_style( 'thickbox' );
+		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), '1.0.0', true );
+	}
+}
+add_action( 'admin_enqueue_scripts', 'mc_enqueue_modal_assets' );
+
+/**
+ * Print the contents displayed within the modal window
+ */
+function mc_print_contextual_help() {
+	$id = isset( $_REQUEST['help'] ) ? (int) $_REQUEST['help'] : false;
+	echo '<div class="modal-window-container">';
+	echo mc_get_help_text( $id );
+	echo mc_get_help_footer();
+	echo '</div>';
+}
+
+/**
+ * Add custom CSS for contextual help modal.
+ */
+function mc_contextual_help_css() {
+	// Check that we are on the right screen
+	if ( sanitize_title( __( 'My Calendar', 'my-calendar' ) ) . '_page_mc-contextual-help' === get_current_screen()->id ) {
+		wp_enqueue_style( 'mc-contextual-help', plugins_url( 'css/help.css', __FILE__ ) );
+	}
+}
+add_action( 'admin_enqueue_scripts', 'mc_contextual_help_css' );
+
+/**
+ * Footer for contextual help modal.
+ */
+function mc_get_help_footer() {
+	$return = '<div class="mc-help-links">
+		<ul class="help">
+			<li>
+				<a href="https://docs.joedolson.com/my-calendar/quick-start/">' . __( 'Documentation', 'my-calendar' ) . '</a>
+			</li>
+			<li>
+				<a href="' . admin_url( 'admin.php?page=my-calendar-shortcodes' ) . '#mc-generator">' . __( 'Shortcode Generator', 'my-calendar' ) . '</a>
+			</li>
+			<li>
+				<a href="' . admin_url( 'admin.php?page=my-calendar-help' ) . '#get-support">' . __( 'Get Support', 'my-calendar' ) . '</a>
+			</li>
+		</ul>
+		<ul class="help">
+			<li>
+				<div class="dashicons dashicons-editor-help" aria-hidden="true"></div>
+				<a href="' . admin_url( 'admin.php?page=my-calendar-help' ) . '">' . __( 'My Calendar Help', 'my-calendar' ) . '</a>
+			</li>
+			<li>
+				<div class="dashicons dashicons-yes" aria-hidden="true"></div>
+				<a href="http://profiles.wordpress.org/joedolson/">' . __( 'Check out my other plug-ins', 'my-calendar' ) . '</a>
+			</li>
+			<li>
+				<div class="dashicons dashicons-star-filled" aria-hidden="true"></div>
+				<a href="http://wordpress.org/support/plugin/my-calendar/reviews/?filter=5">' . __( 'Rate this plug-in 5 stars!', 'my-calendar' ) . '</a>
+			</li>
+			<li>
+				<div class="dashicons dashicons-translation" aria-hidden="true"></div>
+				<a href="http://translate.joedolson.com/projects/my-calendar">' . __( 'Help translate this plug-in!', 'my-calendar' ) . '</a>
+			</li>
+		</ul>
+	</div>';
+
+	return $return;
+}
+
+/**
+ * Get contextual help by ID.
+ *
+ * @param int $id Help ID.
+ *
+ * @return string
+ */
+function mc_get_help_text( $id ) {
+	$help = array(
+		'1' => array(
+			'title' => __( 'Add Another Occurrence', 'my-calendar' ),
+			'text'  => __( 'Create a duplicate copy of this event for another date. After creation, you can manage each event separately in the event manager.', 'my-calendar' ),
+		),
+		'2' => array(
+			'title' => __( 'Repetition Pattern', 'my-calendar' ),
+			'text'  => __( 'Recurring events repeat on a specific pattern. The individual dates of recurring events are references to the main event, and only the main event will show in the event manager.', 'my-calendar' ),
+		),
+	);
+
+	$title = $help[ $id ]['title'];
+	$text  = $help[ $id ]['text'];
+
+	return sprintf( '<h2>%1$s</h2><div class="mc-help-text">%2$s</div>', $title, wpautop( $text ) );
+}

@@ -1,0 +1,40 @@
+#adminmenumain,
+#wpadminbar {
+	display: none;
+}
+
+html.wp-toolbar {
+	padding-top: 0;
+}
+
+#wpcontent {
+	padding: 0 !important;
+}
+
+.modal-window-container {
+	margin: 10px;
+}
+
+.modal-window-container img {
+	max-width: 100%;
+	width: auto;
+	height: auto;
+}
+
+#TB_title {
+	height: 0;
+}
+
+.modal-window-container .mc-help-links {
+	padding: 1em 0;
+	border-top: 2px solid;
+	position: fixed;
+	bottom: 0;
+	width: calc( 100% - 20px );
+}
+
+.modal-window-container ul.help {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 10px;
+}
