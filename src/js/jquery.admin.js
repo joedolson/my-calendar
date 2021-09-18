@@ -1,4 +1,40 @@
 jQuery(document).ready(function ($) {
+	$( '#my-calendar' ).on( 'submit', function(e) {
+		var unsubmitted = $( '#mc_unsubmitted' );
+		unsubmitted.remove();
+	});
+	var form  = document.getElementById( 'my-calendar' );
+	if ( form ) {
+		var clean = [];
+		var dirty = [];
+		var elems = form.querySelectorAll( 'input, select' );
+		elems.forEach((el) => {
+			var val = el.value;
+			el.addEventListener( 'keydown', function(e) {
+				elems.forEach((el) => {
+					var val = el.value;
+					dirty.push(val);
+				});
+				var cleanSorted = clean.slice().sort();
+				var dirtySorted = dirty.slice().sort();
+				var equal = compareArrays( cleanSorted, dirtySorted );
+				var unsubmitted = document.getElementById( 'mc_unsubmitted' );
+				if ( ! equal && ! unsubmitted ) {
+					unsubmitted = document.createElement( 'div' );
+					unsubmitted.id = 'mc_unsubmitted';
+					form.appendChild( unsubmitted );
+				}
+			});
+			clean.push(val);
+		});
+	}
+
+	function compareArrays( clean, dirty ) {
+		clean.length === dirty.length && clean.every( function(value, index) {
+			return value === dirty[index];
+		});
+	}
+
 	$( '.preview-link' ).hide();
 	var active = $( '.preview-link' ).attr( 'data-css' );
 	$( '#mc_css_file' ).on( 'change', function(e) {
@@ -445,3 +481,15 @@ var mediaPopup = '';
 			})
 	});
 })(jQuery);
+
+window.addEventListener( 'beforeunload', function(e) {
+	var unsubmitted = document.getElementById( 'mc_unsubmitted' );
+	var hold        = ( typeof( unsubmitted ) != 'undefined' && unsubmitted != null ) ? true : false;
+	if ( hold ) {
+		// following two lines will cause the browser to ask the user if they
+		// want to leave. The text of this dialog is controlled by the browser.
+		e.preventDefault(); //per the standard
+		e.returnValue = ''; //required for Chrome
+	}
+	//else: user is allowed to leave without a warning dialog
+});
