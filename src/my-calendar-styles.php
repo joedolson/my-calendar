@@ -203,7 +203,7 @@ function my_calendar_style_edit() {
 						?>
 					</div>
 				</div>
-				<p><?php _e( 'Resetting your stylesheet will set your stylesheet to the version currently distributed with the plug-in.', 'my-calendar' ); ?></p>
+				<p><?php _e( 'Resetting your stylesheet will set your stylesheet to the version currently distributed with the plugin.', 'my-calendar' ); ?></p>
 			</div>
 		</div>
 	</div>

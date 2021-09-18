@@ -1897,9 +1897,9 @@ $plugins_string
 				$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
 				if ( $sent ) {
 					if ( 'Donor' === $has_donated || 'Purchaser' === $has_purchased ) {
-						mc_show_notice( __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'my-calendar' ) );
+						mc_show_notice( __( 'Thank you for supporting the continuing development of this plugin! I\'ll get back to you as soon as I can.', 'my-calendar' ) );
 					} else {
-						mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plug-in supporters.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
+						mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plugin supporters.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
 					}
 				} else {
 					// Translators: Support form URL.
@@ -1915,10 +1915,10 @@ $plugins_string
 			<code>' . __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;</code>
 			</p>
 			<p>
-				<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>" . __( 'I have read <a href="http://www.joedolson.com/my-calendar/faq/">the FAQ for this plug-in</a>.', 'my-calendar' ) . " <span>(required)</span></label>
+				<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>" . __( 'I have read <a href="http://www.joedolson.com/my-calendar/faq/">the FAQ for this plugin</a>.', 'my-calendar' ) . " <span>(required)</span></label>
 			</p>
 			<p>
-				<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . __( 'I made a donation to help support this plug-in.', 'my-calendar' ) . "</label>
+				<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . __( 'I made a donation to help support this plugin.', 'my-calendar' ) . "</label>
 			</p>
 			<p>
 				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'>" . stripslashes( $request ) . "</textarea>

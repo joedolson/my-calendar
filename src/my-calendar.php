@@ -290,7 +290,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox support">
-					<h2><strong><?php _e( 'Support This Plug-in', 'my-calendar' ); ?></strong></h2>
+					<h2><strong><?php _e( 'Support This Plugin', 'my-calendar' ); ?></strong></h2>
 
 					<div class="inside resources">
 						<p class="follow-me">

@@ -13,7 +13,7 @@ Accessible WordPress event calendar plugin. Show events from multiple calendars 
 
 == Description ==
 
-My Calendar does WordPress event management with richly customizable ways to display events. The plug-in supports individual event calendars within WordPress Multisite, multiple calendars displayed by categories, locations or author, or simple lists of upcoming events.
+My Calendar does WordPress event management with richly customizable ways to display events. The plugin supports individual event calendars within WordPress Multisite, multiple calendars displayed by categories, locations or author, or simple lists of upcoming events.
 
 Easy to use for anybody, My Calendar provides enormous flexibility for designers and developers needing a custom calendar. My Calendar is built with accessibility in mind, so all your users can get equal access and experience in your calendar.
 
@@ -58,7 +58,7 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 
 Visit [Wordpress Translations](https://translate.wordpress.org/projects/wp-plugins/my-calendar) to check progress or contribute to your language.
 
-Translating my plug-ins is always appreciated. Visit <a href="https://translate.wordpress.org/projects/wp-plugins/my-calendar">WordPress translations</a> to help get your language to 100%!
+Translating my plugins is always appreciated. Visit <a href="https://translate.wordpress.org/projects/wp-plugins/my-calendar">WordPress translations</a> to help get your language to 100%!
 
 == Installation ==
 
@@ -314,7 +314,7 @@ TODO:
 
 = 3.1.13 =
 
-* Bug fix: If plug-in name is translated, script references were broken.
+* Bug fix: If plugin name is translated, script references were broken.
 * Bug fix: If no holiday category assigned, Today's Events widget will return empty when category limits set.
 * New filter: allow events post type to be made searchable. (Not recommended.)
 * New: Support 'search' parameter in shortcode & URL parameters for main view.
@@ -426,13 +426,13 @@ TODO:
 
 Because the majority of users end up on my web site asking for help anyway -- and it's simply more work to maintain two copies. Please visit [my web site FAQ](http://www.joedolson.com/my-calendar/faq/) to read my Frequently Asked Questions!
 
-= This plug-in is complicated. Why won't you help me figure out how to use it? =
+= This plugin is complicated. Why won't you help me figure out how to use it? =
 
 I will! But not in person. Take a look at my [documentation website for My Calendar](http://docs.joedolson.com/my-calendar/) or [buy the User's Guide](https://www.joedolson.com/my-calendar/users-guide/) before making your request, and consider [making a donation](https://www.joedolson.com/donate/)!
 
 = Can my visitors or members submit events? =
 
-I've written a premium plug-in that adds this feature: My Calendar Pro. [Buy it today](https://www.joedolson.com/my-calendar/pro/)!
+I've written a premium plugin that adds this feature: My Calendar Pro. [Buy it today](https://www.joedolson.com/my-calendar/pro/)!
 
 = Is there an advanced search feature? =
 

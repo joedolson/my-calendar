@@ -117,7 +117,7 @@ function my_calendar_help() {
 
 	<div class="ui-sortable meta-box-sortables" id="get-support">
 		<div class="postbox">
-			<h2 id="support"><?php _e( 'Get Plug-in Support', 'my-calendar' ); ?></h2>
+			<h2 id="support"><?php _e( 'Get Support', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<div class='mc-support-me'>
@@ -226,15 +226,15 @@ function mc_get_help_footer() {
 			</li>
 			<li>
 				<div class="dashicons dashicons-yes" aria-hidden="true"></div>
-				<a href="http://profiles.wordpress.org/joedolson/">' . __( 'Check out my other plug-ins', 'my-calendar' ) . '</a>
+				<a href="http://profiles.wordpress.org/joedolson/">' . __( 'Check out my other plugins', 'my-calendar' ) . '</a>
 			</li>
 			<li>
 				<div class="dashicons dashicons-star-filled" aria-hidden="true"></div>
-				<a href="http://wordpress.org/support/plugin/my-calendar/reviews/?filter=5">' . __( 'Rate this plug-in 5 stars!', 'my-calendar' ) . '</a>
+				<a href="http://wordpress.org/support/plugin/my-calendar/reviews/?filter=5">' . __( 'Rate this plugin 5 stars!', 'my-calendar' ) . '</a>
 			</li>
 			<li>
 				<div class="dashicons dashicons-translation" aria-hidden="true"></div>
-				<a href="http://translate.joedolson.com/projects/my-calendar">' . __( 'Help translate this plug-in!', 'my-calendar' ) . '</a>
+				<a href="http://translate.joedolson.com/projects/my-calendar">' . __( 'Help translate this plugin!', 'my-calendar' ) . '</a>
 			</li>
 		</ul>
 	</div>';
