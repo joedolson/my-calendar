@@ -188,7 +188,9 @@ function mc_print_contextual_help() {
 	$id = isset( $_REQUEST['help'] ) ? (int) $_REQUEST['help'] : false;
 	echo '<div class="modal-window-container">';
 	echo mc_get_help_text( $id );
-	echo mc_get_help_footer();
+	$return_url = add_query_arg( 'help_id', (int) $id, 'https://docs.joedolson.com/my-calendar/' );
+	$return     = '<p class="docs-link"><a href="' . esc_url( $return_url ) . '">' . __( 'Documentation', 'my-calendar' ) . '</a></p>';
+	echo mc_get_help_footer( $return );
 	echo '</div>';
 }
 
@@ -206,8 +208,9 @@ add_action( 'admin_enqueue_scripts', 'mc_contextual_help_css' );
 /**
  * Footer for contextual help modal.
  */
-function mc_get_help_footer() {
-	$return = '<div class="mc-help-links">
+function mc_get_help_footer( $return = '' ) {
+	if ( '' === $return ) {
+		$return = '
 		<ul class="help">
 			<li>
 				<a href="https://docs.joedolson.com/my-calendar/quick-start/">' . __( 'Documentation', 'my-calendar' ) . '</a>
@@ -236,10 +239,10 @@ function mc_get_help_footer() {
 				<div class="dashicons dashicons-translation" aria-hidden="true"></div>
 				<a href="http://translate.joedolson.com/projects/my-calendar">' . __( 'Help translate this plugin!', 'my-calendar' ) . '</a>
 			</li>
-		</ul>
-	</div>';
+		</ul>';
+	}
 
-	return $return;
+	return '<div class="mc-help-links">' . $return . '</div>';
 }
 
 /**
