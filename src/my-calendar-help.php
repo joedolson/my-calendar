@@ -35,7 +35,7 @@ function my_calendar_help() {
 					if ( ! mc_get_uri( 'boolean' ) ) {
 						echo '<li>' . __( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ) . '</li>';
 					}
-					echo '<li>' . __( 'Add events by clicking on the Add/Edit Events link in the admin or on "Add Events" in the toolbar.', 'my-calendar' ) . '</li>';
+					echo '<li>' . __( 'Add events by clicking on the Add Events link in the admin or on "Add Events" in the toolbar.', 'my-calendar' ) . '</li>';
 					echo '<li>' . __( 'Select your preferred stylesheet in the Styles Editor', 'my-calendar' ) . '</li>';
 					if ( mc_get_uri( 'boolean' ) ) {
 						// Translators: Calendar URL.

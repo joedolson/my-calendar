@@ -1334,7 +1334,7 @@ function mc_search_results( $query ) {
 		$template = '<strong>{date}</strong> {title} {details}';
 		$template = apply_filters( 'mc_search_template', $template );
 		// No filters parameter prevents infinite looping on the_content filters.
-		$output  = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', 0, $before, $after, 'yes', 'nofilters' );
+		$output  = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', 0, $before, $after, 'yes', 'yes', 'nofilters' );
 		$exports = apply_filters( 'mc_search_exportlinks', '', $output );
 	} else {
 		$output = apply_filters( 'mc_search_no_results', "<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . '</li>' );

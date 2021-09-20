@@ -27,22 +27,23 @@ include( dirname( __FILE__ ) . '/includes/widgets/class-my-calendar-mini-widget.
  * @return String HTML output list.
  */
 function my_calendar_upcoming_events( $args ) {
-	$before     = ( isset( $args['before'] ) ) ? $args['before'] : 'default';
-	$after      = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
-	$type       = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
-	$category   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
-	$template   = ( isset( $args['template'] ) ) ? $args['template'] : 'default';
-	$substitute = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
-	$order      = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
-	$skip       = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
-	$show_today = ( isset( $args['show_today'] ) ) ? $args['show_today'] : 'yes';
-	$author     = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
-	$host       = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
-	$ltype      = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
-	$lvalue     = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
-	$from       = ( isset( $args['from'] ) ) ? $args['from'] : '';
-	$to         = ( isset( $args['to'] ) ) ? $args['to'] : '';
-	$site       = ( isset( $args['site'] ) ) ? $args['site'] : false;
+	$before         = ( isset( $args['before'] ) ) ? $args['before'] : 'default';
+	$after          = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
+	$type           = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
+	$category       = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
+	$template       = ( isset( $args['template'] ) ) ? $args['template'] : 'default';
+	$substitute     = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
+	$order          = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
+	$skip           = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
+	$show_today     = ( isset( $args['show_today'] ) ) ? $args['show_today'] : 'yes';
+	$show_recurring = ( isset( $args['show_recurring'] ) ) ? $args['show_recurring'] : 'yes';
+	$author         = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
+	$host           = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
+	$ltype          = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
+	$lvalue         = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
+	$from           = ( isset( $args['from'] ) ) ? $args['from'] : '';
+	$to             = ( isset( $args['to'] ) ) ? $args['to'] : '';
+	$site           = ( isset( $args['site'] ) ) ? $args['site'] : false;
 
 	if ( $site ) {
 		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
@@ -233,7 +234,7 @@ function my_calendar_upcoming_events( $args ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			$output .= mc_produce_upcoming_events( $event_array, $template, 'list', $order, $skip, $before, $after, $show_today );
+			$output .= mc_produce_upcoming_events( $event_array, $template, 'list', $order, $skip, $before, $after, $show_today, $show_recurring );
 		} else {
 			$output = '';
 		}
@@ -286,11 +287,12 @@ function mc_span_time( $group_id ) {
  * @param int    $before How many past events to show.
  * @param int    $after How many future events to show.
  * @param string $show_today 'yes' (anything else is false); whether to include events happening today.
+ * @param string $show_recurring 'yes', show all recurring events. Else, first only.
  * @param string $context Display context.
  *
  * @return string; HTML output of list
  */
-function mc_produce_upcoming_events( $events, $template, $type = 'list', $order = 'asc', $skip = 0, $before, $after, $show_today = 'yes', $context = 'filters' ) {
+function mc_produce_upcoming_events( $events, $template, $type = 'list', $order = 'asc', $skip = 0, $before = 0, $after = 3, $show_today = 'yes', $context = 'filters', $show_recurring = 'yes' ) {
 	// $events has +5 before and +5 after if those values are non-zero.
 	// $events equals array of events based on before/after queries. Nothing skipped, order is not set, holiday conflicts removed.
 	$output      = array();
@@ -307,16 +309,15 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 	$extra = 0;
 	$i     = 0;
 	// Create near_events array.
-	$last_events = array();
-	$last_group  = array();
+	$recurring_events = array();
+	$last_events      = array();
+	$last_group       = array();
 	if ( is_array( $events ) ) {
 		foreach ( $events as $k => $event ) {
 			if ( $i < $count ) {
 				if ( is_array( $event ) ) {
 					foreach ( $event as $e ) {
-						if ( mc_private_event( $e ) ) {
-
-						} else {
+						if ( ! mc_private_event( $e ) ) {
 							$beginning = $e->occur_begin;
 							$end       = $e->occur_end;
 							// Store span time in an array to avoid repeating database query.
@@ -343,9 +344,19 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 								}
 								// end multi-day reduction.
 								if ( ! $md ) {
-									// check if this event instance or this event group has already been displayed.
-									$same_event = ( in_array( $e->occur_id, $last_events, true ) ) ? true : false;
-									$same_group = ( in_array( $e->occur_group_id, $last_group, true ) ) ? true : false;
+									if ( in_array( $e->occur_event_id, $recurring_events, true ) ) {
+										$is_recurring = true;
+									} else {
+										$is_recurring = false;
+										$instances = mc_get_occurrences( $e->occur_event_id );
+										if ( count( $instances ) > 1 ) {
+											$recurring_events[] = $e->occur_event_id;
+										}
+									}
+									if ( ( 'yes' !== $show_recurring ) && $is_recurring ) {
+										continue;
+									}
+
 									if ( 'yes' === $show_today && my_calendar_date_equal( $beginning, $current ) ) {
 										$in_total = apply_filters( 'mc_include_today_in_total', 'yes' ); // count todays events in total.
 										if ( 'no' !== $in_total ) {
