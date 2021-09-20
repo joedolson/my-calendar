@@ -663,7 +663,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<option value="desc"><?php _e( 'Descending', 'my-calendar' ); ?></option>
 					</select>
 				</p>
-			<?php
+				<?php
 			}
 			?>
 		</div>

@@ -30,14 +30,6 @@ function my_calendar_help() {
 			<h2 id="help"><?php _e( 'Getting Started', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<div class='mc-support-me'>
-					<p>
-						<?php
-							// Translators: Donate URL, Upgrade URL.
-							printf( __( 'Please, consider a <a href="%1$s">donation</a> or a <a href="%2$s">purchase</a> to support My Calendar!', 'my-calendar' ), 'https://www.joedolson.com/donate/', 'https://www.joedolson.com/my-calendar/pro/' );
-						?>
-					</p>
-				</div>
 				<ul class='list'>
 					<?php
 					if ( ! mc_get_uri( 'boolean' ) ) {
@@ -53,7 +45,7 @@ function my_calendar_help() {
 				</ul>
 				<?php do_action( 'mc_before_help' ); ?>
 				<ul class="mc-settings checkboxes">
-					<li><a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>#mc-generator"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></li>
+					<li><a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></li>
 					<li><a href="#files"><?php _e( 'Custom Files', 'my-calendar' ); ?></a></li>
 					<li><a href="#privacy"><?php _e( 'Privacy', 'my-calendar' ); ?></a></li>
 					<li><a href="#get-support"><?php _e( 'Get Support', 'my-calendar' ); ?></a></li>
@@ -207,6 +199,8 @@ add_action( 'admin_enqueue_scripts', 'mc_contextual_help_css' );
 
 /**
  * Footer for contextual help modal.
+ *
+ * @param string $return Return text if not using default.
  */
 function mc_get_help_footer( $return = '' ) {
 	if ( '' === $return ) {
