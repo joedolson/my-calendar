@@ -266,7 +266,7 @@ jQuery(document).ready(function ($) {
 			showPanel( firstItem );
 		} else {
 			firstItem = $( tabGroups[i] ).find( '[role=tablist]' ).attr( 'data-default' );
-			showPanel( firstItem );
+			showPanel( '#' + firstItem );
 		}
 	}
 	var tabs = document.querySelectorAll('.mc-tabs [role=tab]'); //get all role=tab elements as a variable
