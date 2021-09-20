@@ -516,8 +516,10 @@ function mc_footer_js() {
  */
 function mc_add_styles() {
 	global $current_screen;
-	$id = $current_screen->id;
-	if ( false !== strpos( $id, 'my-calendar' ) ) {
+	$id         = $current_screen->id;
+	$is_mc_page = isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'];
+
+	if ( false !== strpos( $id, 'my-calendar' ) || $is_mc_page ) {
 		// Toggle CSS & Scripts based on current mode.
 		$mode = get_option( 'mc_default_admin_view' );
 		if ( isset( $_GET['view'] ) && 'grid' === $_GET['view'] && 'grid' !== $mode ) {
@@ -2519,3 +2521,34 @@ function mc_setup_cors_access() {
 	}
 }
 add_action( 'send_headers', 'mc_setup_cors_access' );
+
+/**
+ * Register post meta field used by calendar page manager metabox.
+ */
+function mc_register_meta() {
+	register_post_meta(
+		'page',
+		'_mc_calendar',
+		array(
+			'show_in_rest' => array(
+				'schema' => array(
+					'type'                 => 'object',
+					'properties'           => array(
+						'shortcode' => array(
+							'type' => 'string',
+						),
+					),
+					'additionalProperties' => array(
+						'type' => 'string',
+					),
+					'items'                => array(
+						'type' => 'string',
+					),
+				),
+			),
+			'single'       => true,
+			'type'         => 'array',
+		)
+	);
+}
+add_action( 'init', 'mc_register_meta' );

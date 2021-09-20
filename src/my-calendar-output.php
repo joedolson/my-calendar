@@ -3093,7 +3093,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 			<li><a href='$url'>" . __( 'All Categories', 'my-calendar' ) . '</a></li>' : $public_form . '
 			<label for="category">' . __( 'Categories', 'my-calendar' ) . ' ' . $admin_label . '</label>
 			<select' . $admin_fields . ' id="category">
-			<option value="all" selected="selected">' . __( 'All Categories', 'my-calendar' ) . '</option>' . "\n";
+			<option value="all">' . __( 'All Categories', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $categories as $category ) {
 			$category_name = strip_tags( stripcslashes( $category->category_name ), mc_strip_tags() );
