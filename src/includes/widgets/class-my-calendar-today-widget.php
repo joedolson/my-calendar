@@ -106,7 +106,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			$widget_template = $defaults['today']['template'];
 		}
 		$widget_text     = ( isset( $instance['my_calendar_no_events_text'] ) ) ? esc_attr( $instance['my_calendar_no_events_text'] ) : '';
-		$widget_category = ( isset( $instance['my_calendar_today_category'] ) ) ? (array) $instance['my_calendar_today_category'] : array();
+		$widget_category = ( isset( $instance['my_calendar_today_category'] ) ) ? (array) $instance['my_calendar_today_category'] : null;
 		$widget_linked   = ( isset( $instance['my_calendar_today_linked'] ) ) ? esc_attr( $instance['my_calendar_today_linked'] ) : '';
 		$date            = ( isset( $instance['mc_date'] ) ) ? esc_attr( $instance['mc_date'] ) : '';
 		if ( 'yes' === $widget_linked ) {

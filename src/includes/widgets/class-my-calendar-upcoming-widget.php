@@ -126,7 +126,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			$template = $defaults['upcoming']['template'];
 		}
 		$text       = ( isset( $instance['my_calendar_no_events_text'] ) ) ? esc_attr( $instance['my_calendar_no_events_text'] ) : '';
-		$category   = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : array();
+		$category   = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : null;
 		$author     = ( isset( $instance['my_calendar_upcoming_author'] ) ) ? esc_attr( $instance['my_calendar_upcoming_author'] ) : '';
 		$host       = ( isset( $instance['mc_host'] ) ) ? esc_attr( $instance['mc_host'] ) : '';
 		$ltype      = ( isset( $instance['ltype'] ) ) ? esc_attr( $instance['ltype'] ) : '';

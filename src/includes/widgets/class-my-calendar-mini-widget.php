@@ -117,7 +117,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	function form( $instance ) {
 		$title           = empty( $instance['my_calendar_mini_title'] ) ? '' : $instance['my_calendar_mini_title'];
 		$widget_time     = empty( $instance['my_calendar_mini_time'] ) ? '' : $instance['my_calendar_mini_time'];
-		$widget_category = empty( $instance['my_calendar_mini_category'] ) ? array() : $instance['my_calendar_mini_category'];
+		$widget_category = empty( $instance['my_calendar_mini_category'] ) ? null : $instance['my_calendar_mini_category'];
 		$above           = ( isset( $instance['above'] ) ) ? $instance['above'] : 'none';
 		$below           = ( isset( $instance['below'] ) ) ? $instance['below'] : 'none';
 		$widget_link     = ( isset( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : '';

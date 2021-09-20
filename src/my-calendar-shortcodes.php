@@ -363,7 +363,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 		$params = get_post_meta( $post->ID, '_mc_calendar', true );
 	}
 	$type       = ( is_array( $callback_args ) ) ? $callback_args['args'] : $callback_args;
-	$category   = ( isset( $params['category'] ) ) ? $params['category'] : '';
+	$category   = ( isset( $params['category'] ) ) ? $params['category'] : null;
 	$ltype      = ( isset( $params['ltype'] ) ) ? $params['ltype'] : '';
 	$lvalue     = ( isset( $params['lvalue'] ) ) ? $params['lvalue'] : '';
 	$disabled   = ( '' === $lvalue ) ? '' : 'disabled';

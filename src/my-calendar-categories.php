@@ -936,7 +936,8 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 				}
 			} else {
 				if ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) {
-					$selected = ' checked="checked"';
+					// Pass null value to prevent default from being selected.
+					$selected = ( null === $data ) ? '' : ' checked="checked"';
 				}
 			}
 			$category_name = strip_tags( stripslashes( trim( $cat->category_name ) ) );
