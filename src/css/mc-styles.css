@@ -926,8 +926,14 @@ input[name="mc_uri"] {
 	margin-left: .25em;
 }
 
+.my-calendar-contextual-help {
+	display: inline-block;
+}
+
 .my-calendar-contextual-help .dashicons:not( h2 .dashicons ) {
 	line-height: inherit;
+	height: auto;
+	width: auto;
 }
 
 .generator td input[type=text] {
