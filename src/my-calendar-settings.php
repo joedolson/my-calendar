@@ -582,7 +582,7 @@ function my_calendar_settings() {
 								}
 								?>
 								<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
-								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
 									?>
@@ -599,7 +599,7 @@ function mc_remote_db() {
 									<?php
 								}
 								?>
-								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>
+								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>
 								<?php
 								if ( 'true' === get_option( 'mc_api_enabled' ) ) {
 									$url = add_query_arg(
