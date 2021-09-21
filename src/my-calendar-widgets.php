@@ -292,7 +292,7 @@ function mc_span_time( $group_id ) {
  *
  * @return string; HTML output of list
  */
-function mc_produce_upcoming_events( $events, $template, $type = 'list', $order = 'asc', $skip = 0, $before = 0, $after = 3, $show_today = 'yes', $context = 'filters', $show_recurring = 'yes' ) {
+function mc_produce_upcoming_events( $events, $template, $type = 'list', $order = 'asc', $skip = 0, $before = 0, $after = 3, $show_today = 'yes', $show_recurring = 'yes', $context = 'filters' ) {
 	// $events has +5 before and +5 after if those values are non-zero.
 	// $events equals array of events based on before/after queries. Nothing skipped, order is not set, holiday conflicts removed.
 	$output      = array();
@@ -348,7 +348,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										$is_recurring = true;
 									} else {
 										$is_recurring = false;
-										$instances = mc_get_occurrences( $e->occur_event_id );
+										$instances    = mc_get_occurrences( $e->occur_event_id );
 										if ( count( $instances ) > 1 ) {
 											$recurring_events[] = $e->occur_event_id;
 										}

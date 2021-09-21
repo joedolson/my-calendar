@@ -165,7 +165,7 @@ function mc_help_link( $link_text, $modal_title, $id ) {
  */
 function mc_enqueue_modal_assets() {
 	// Load only for My Calendar admin pages.
-	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) && $_GET['post'] === get_option( 'mc_uri_id' ) ) {
+	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'] ) {
 		// Enqueue assets from WordPress.
 		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), '1.0.0', true );
@@ -258,7 +258,8 @@ function mc_get_help_text( $id ) {
 		),
 		'3' => array(
 			'title' => __( 'Navigation Keywords', 'my-calendar' ),
-			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Output settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
+			// Translators: Settings URL.
+			'text' => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Output settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
 		),
 	);
 
