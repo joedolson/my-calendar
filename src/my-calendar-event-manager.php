@@ -1440,7 +1440,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				);
 				$date_picker = mc_datepicker_html( $args );
 				$return      = $pre . '
-	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( 'Help', 'My Calendar: Repetition patterns', '2' ) . '</h2>
+	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( 'Help', __( 'My Calendar: Repetition patterns', 'my-calendar' ), '2' ) . '</h2>
 	<div class="inside recurrences ' . $class . '">' . $prev . $warning . '
 		<fieldset class="recurring">
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
@@ -1747,7 +1747,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					<p id="event_span" class="checkboxes">
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
-						<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', 'My Calendar: add another occurrence', '1' ); ?>
+						<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', __( 'My Calendar: add another occurrence', 'my-calendar' ), '1' ); ?>
 					</p>
 					<ol class="mc-repeat-events columns">
 						<li id="event1" class="datetime-template enabled">
@@ -1763,7 +1763,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							?>
 							</fieldset>
 							<div class="buttons">
-								<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', 'My Calendar: add another occurrence', '1' ); ?>
+								<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', __( 'My Calendar: add another occurrence', 'my-calendar' ), '1' ); ?>
 							</div>
 						</li>
 					</ol>

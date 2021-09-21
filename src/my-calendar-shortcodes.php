@@ -443,6 +443,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<?php
 					// Translators: Settings page URL.
 					printf( __( "Navigation above and below the calendar: your <a href='%s'>settings</a> if this is left blank. Use <code>none</code> to hide all navigation.", 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
+					echo mc_help_link( 'Help', __( 'My Calendar: Navigation Keywords', 'my-calendar' ), 3 );
 					?>
 				</p>
 				<p>
