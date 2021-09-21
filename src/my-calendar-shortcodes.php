@@ -85,22 +85,23 @@ function my_calendar_insert( $atts, $content = null ) {
 function my_calendar_insert_upcoming( $atts ) {
 	$args = shortcode_atts(
 		array(
-			'before'     => 'default',
-			'after'      => 'default',
-			'type'       => 'default',
-			'category'   => 'default',
-			'template'   => 'default',
-			'fallback'   => '',
-			'order'      => 'asc',
-			'skip'       => '0',
-			'show_today' => 'yes',
-			'author'     => 'default',
-			'host'       => 'default',
-			'ltype'      => '',
-			'lvalue'     => '',
-			'from'       => false,
-			'to'         => false,
-			'site'       => false,
+			'before'         => 'default',
+			'after'          => 'default',
+			'type'           => 'default',
+			'category'       => 'default',
+			'template'       => 'default',
+			'fallback'       => '',
+			'order'          => 'asc',
+			'skip'           => '0',
+			'show_today'     => 'yes',
+			'show_recurring' => 'yes',
+			'author'         => 'default',
+			'host'           => 'default',
+			'ltype'          => '',
+			'lvalue'         => '',
+			'from'           => false,
+			'to'             => false,
+			'site'           => false,
 		),
 		$atts,
 		'my_calendar_upcoming'
@@ -626,6 +627,10 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				<p>
 					<label for="show_today"><?php _e( "Show Today's Events", 'my-calendar' ); ?></label>
 					<input type="checkbox" name="show_today" id="show_today" value="yes"/>
+				</p>
+				<p>
+					<label for="show_recurring"><?php _e( 'Show only the first recurring event in a series', 'my-calendar' ); ?></label>
+					<input type="checkbox" name="show_recurring" id="show_recurring" value="no" />
 				</p>
 				<p>
 					<label for="type"><?php _e( 'Type of Upcoming Events List', 'my-calendar' ); ?></label>
