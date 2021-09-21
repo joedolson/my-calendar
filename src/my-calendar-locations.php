@@ -794,7 +794,10 @@ function mc_location_fields() {
  *
  * @return mixed
  */
-function mc_location_custom_data( $location_id = false, $location_post = false, $field ) {
+function mc_location_custom_data( $location_id = false, $location_post = false, $field = false ) {
+	if ( ! $field ) {
+		return;
+	}
 	$fields = mc_location_fields();
 	if ( $field && ! in_array( $field, array_keys( $fields ), true ) ) {
 		return '';
