@@ -259,7 +259,7 @@ function mc_get_help_text( $id ) {
 		'3' => array(
 			'title' => __( 'Navigation Keywords', 'my-calendar' ),
 			// Translators: Settings URL.
-			'text' => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Output settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
+			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Output settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
 		),
 	);
 
