@@ -2683,7 +2683,7 @@ function mc_category_key( $category ) {
 
 	$sql        = 'SELECT * FROM ' . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
 	$categories = $mcdb->get_results( $sql );
-	$key       .= '<div class="category-key ' . $class . '"><h3>' . __( 'Categories', 'my-calendar' ) . "</h3>\n<ul>\n";
+	$key       .= '<div class="category-key ' . $class . '"><h3 class="maybe-hide">' . __( 'Categories', 'my-calendar' ) . "</h3>\n<ul>\n";
 	$path       = ( mc_is_custom_icon() ) ? str_replace( 'my-calendar', 'my-calendar-custom', $url ) : plugins_url( 'images/icons', __FILE__ ) . '/';
 
 	foreach ( $categories as $cat ) {
