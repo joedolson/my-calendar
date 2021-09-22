@@ -2263,7 +2263,7 @@ function mc_list_events() {
 		$default_direction = ( '' === get_option( 'mc_default_direction', '' ) ) ? 'ASC' : get_option( 'mc_default_direction' );
 		$sortbydirection   = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
 
-		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : get_option( 'mc_default_sort' );
+		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : (int) get_option( 'mc_default_sort' );
 		if ( empty( $sortby ) ) {
 			$sortbyvalue = 'event_begin';
 		} else {
@@ -2272,10 +2272,8 @@ function mc_list_events() {
 					$sortbyvalue = 'event_ID';
 					break;
 				case 2:
-					$sortbyvalue = 'event_title';
-					break;
 				case 3:
-					$sortbyvalue = 'event_desc';
+					$sortbyvalue = 'event_title';
 					break;
 				case 4:
 					$sortbyvalue = "event_begin $sortbydirection, event_time";
@@ -2391,7 +2389,7 @@ function mc_list_events() {
 		}
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 		$items      = $found_rows[0];
-		$num_pages = ceil( $items / $items_per_page );
+		$num_pages  = ceil( $items / $items_per_page );
 		if ( $num_pages > 1 ) {
 			$page_links = paginate_links(
 				array(
