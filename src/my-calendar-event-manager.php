@@ -2392,25 +2392,6 @@ function mc_list_events() {
 		}
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 		$items      = $found_rows[0];
-
-		$status_links = mc_status_links( $allow_filters );
-		$search_text  = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
-		echo $filtered;
-		?>
-		<div class="mc-admin-header">
-		<?php echo $status_links; ?>
-		<div class='mc-search'>
-			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-				</div>
-				<div>
-					<label for="mc_search" class='screen-reader-text'><?php _e( 'Search', 'my-calendar' ); ?></label>
-					<input type='text' role='search' name='mcs' id='mc_search' value='<?php echo esc_attr( $search_text ); ?>' />
-					<input type='submit' value='<?php _e( 'Search Events', 'my-calendar' ); ?>' class='button-secondary' />
-				</div>
-			</form>
-		</div>
-		<?php
 		$num_pages = ceil( $items / $items_per_page );
 		if ( $num_pages > 1 ) {
 			$page_links = paginate_links(
@@ -2426,13 +2407,29 @@ function mc_list_events() {
 			);
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 		}
+		$status_links = mc_status_links( $allow_filters );
+		$search_text  = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
+		echo $filtered;
 		?>
+		<div class="mc-admin-header">
+			<?php echo $status_links; ?>
+			<div class='mc-search'>
+				<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
+					<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					</div>
+					<div>
+						<label for="mc_search" class='screen-reader-text'><?php _e( 'Search', 'my-calendar' ); ?></label>
+						<input type='text' role='search' name='mcs' id='mc_search' value='<?php echo esc_attr( $search_text ); ?>' />
+						<input type='submit' value='<?php _e( 'Search Events', 'my-calendar' ); ?>' class='button-secondary' />
+					</div>
+				</form>
+			</div>
 		</div>
 		<?php
 		if ( ! empty( $events ) ) {
 			?>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" /></div>
+				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 				<div class='mc-actions'>
 					<label for="mc_bulk_actions" class="screen-reader-text"><?php _e( 'Bulk actions', 'my-calendar' ); ?></label>
 					<select name="mc_bulk_actions" id="mc_bulk_actions">
@@ -2645,26 +2642,21 @@ function mc_list_events() {
 				?>
 				</tbody>
 			</table>
+			<div class="mc-actions">
+				<label for="mc_bulk_actions_footer" class="screen-reader-text"><?php _e( 'Bulk actions', 'my-calendar' ); ?></label>
+				<select name="mc_bulk_actions" id="mc_bulk_actions_footer">
+					<option value=""><?php _e( 'Bulk actions', 'my-calendar' ); ?></option>
+					<?php echo mc_show_bulk_actions(); ?>
+				</select>
+				<input type="submit" class="button-secondary" value="<?php _e( 'Apply', 'my-calendar' ); ?>" />
+				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php _e( 'Check all', 'my-calendar' ); ?></label>
+			</div>
+		</form>
 		<div class='mc-admin-footer'>
 			<?php
 			$status_links = mc_status_links( $allow_filters );
 			echo $status_links;
 			echo $filtered;
-			$num_pages = ceil( $items / $items_per_page );
-			if ( $num_pages > 1 ) {
-				$page_links = paginate_links(
-					array(
-						'base'      => add_query_arg( 'paged', '%#%' ),
-						'format'    => '',
-						'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
-						'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
-						'total'     => $num_pages,
-						'current'   => $current,
-						'mid_size'  => 1,
-					)
-				);
-				printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
-			}
 			?>
 			<div class='mc-search'>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
@@ -2677,16 +2669,6 @@ function mc_list_events() {
 				</div>
 			</form>
 			</div>
-			<div class="mc-actions">
-				<label for="mc_bulk_actions_footer" class="screen-reader-text"><?php _e( 'Bulk actions', 'my-calendar' ); ?></label>
-				<select name="mc_bulk_actions" id="mc_bulk_actions_footer">
-					<option value=""><?php _e( 'Bulk actions', 'my-calendar' ); ?></option>
-					<?php echo mc_show_bulk_actions(); ?>
-				</select>
-				<input type="submit" class="button-secondary" value="<?php _e( 'Apply', 'my-calendar' ); ?>" />
-				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php _e( 'Check all', 'my-calendar' ); ?></label>
-			</div>
-			</form>
 		</div>
 			<?php
 		} else {

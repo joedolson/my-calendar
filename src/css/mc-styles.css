@@ -432,7 +432,7 @@ ol.mc-repeat-events {
 }
 
 .my-calendar-admin .tablenav {
-	float: right
+	margin-top: -4em;
 }
 
 label[for=l_preset] {
@@ -1028,6 +1028,7 @@ select[name="event_recur"] {
 	max-width: 90%;
 }
 
+.mc-admin-footer,
 .mc-admin-header {
 	display: grid;
 	grid-template-columns: 1fr 22em;
@@ -1184,10 +1185,6 @@ tr.problem .error {
 }
 
 @media (max-width: 782px) {
-	.my-calendar-admin .tablenav {
-		float: none;
-	}
-
 	.mc-generator-inputs,
 	.mc_permissions .mc-settings {
 		grid-template-columns: repeat( 1, 1fr );
