@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_event_editing() {
 	$args = array(
-		'label'   => 'Show these fields',
+		'label'   => __( 'Event editing fields to show', 'my-calendar' ),
 		'default' => get_option( 'mc_input_options' ),
 		'option'  => 'mc_show_on_page',
 	);
