@@ -531,13 +531,16 @@ strong.label {
 	margin-top: 20px;
 }
 
+.mc-tabs.vertical .tabs {
+	border-bottom: none;
+}
+
 .mc-tabs .tabs button, .mc-tablinks a {
 	display: inline-block;
 	padding: 6px 12px;
 	font-size: 14px;
 	border-radius: 4px 4px 0 0;
 	border: 1px solid #c3c4c7;
-	border-bottom: none;
 	background: #f6f7f7;
 	position: relative;
 	border-bottom: 2px solid transparent;
@@ -619,6 +622,10 @@ strong.label {
 	border-radius: 0;
 	width: 100%;
 	text-align: left;
+}
+
+.mc-tabs.vertical .tabs button:last-of-type {
+	border-bottom: 1px solid #c3c4c7;
 }
 
 .mc-tabs.vertical .wptab {
