@@ -1107,8 +1107,7 @@ function mc_show_edit_block( $field ) {
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
 	$screen = get_current_screen();
-	$option = $screen->get_option( 'mc_show_on_page', 'option' );
-	$show   = get_user_meta( $user, $option, true );
+	$show   = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = $screen->get_option( 'mc_show_on_page', 'default' );
 	}
