@@ -426,16 +426,19 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</select>
 			</p>
 			<p>
-				<label for="lvalue" id='lval'><?php _e( 'Location filter values (comma-separated)', 'my-calendar' ); ?></label>
+				<label for="lvalue" id='lval'><?php _e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
 				<input type="text" name="lvalue" id="lvalue" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' <?php echo $disabled; ?> />
 			</p>
 
 			<p id='location-info'>
-				<?php _e( '<strong>Note:</strong> If you provide a location filter value, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
+				<?php _e( 'If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
 			</p>
 			<p>
 				<label for="search" id='sterm'><?php _e( 'Search keyword', 'my-calendar' ); ?></label>
-				<input type="text" name="search" id="sterm" value="<?php echo esc_attr( $search ); ?>" /><br/>
+				<input type="text" name="search" id="sterm" aria-describedby="search-info" value="<?php echo esc_attr( $search ); ?>" /><br/>
+			</p>
+			<p id='search-info'>
+				<?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
 			</p>
 		</fieldset>
 		<fieldset>
