@@ -458,7 +458,7 @@ function my_calendar_settings() {
 			<?php
 			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 				?>
-				<li><button type="button" role="tab" aria-selected="false"  id="tab_multi" aria-controls="my-calendar-multisite"><?php _e( 'Multi-site', 'my-calendar' ); ?></button>
+				<button type="button" role="tab" aria-selected="false"  id="tab_multi" aria-controls="my-calendar-multisite"><?php _e( 'Multisite', 'my-calendar' ); ?></button>
 				<?php
 			}
 			?>
