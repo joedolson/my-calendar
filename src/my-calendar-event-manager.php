@@ -1107,7 +1107,8 @@ function mc_show_edit_block( $field ) {
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
 	$screen = get_current_screen();
-	$show   = get_user_meta( $user, 'mc_show_on_page', true );
+	$option = $screen->get_option( 'mc_show_on_page', 'option' );
+	$show   = get_user_meta( $user, $option, true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = $screen->get_option( 'mc_show_on_page', 'default' );
 	}
@@ -2365,7 +2366,8 @@ function mc_list_events() {
 		$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 		$user           = get_current_user_id();
 		$screen         = get_current_screen();
-		$items_per_page = get_user_meta( $user, 'per_page', true );
+		$option         = $screen->get_option( 'per_page', 'option' );
+		$items_per_page = get_user_meta( $user, $option, true );
 		if ( empty( $items_per_page ) || $items_per_page < 1 ) {
 			$items_per_page = $screen->get_option( 'per_page', 'default' );
 		}
@@ -2419,7 +2421,7 @@ function mc_list_events() {
 					'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
 					'total'     => $num_pages,
 					'current'   => $current,
-					'mid_size'  => 1,
+					'mid_size'  => 2,
 				)
 			);
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );

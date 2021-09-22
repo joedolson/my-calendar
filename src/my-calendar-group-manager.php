@@ -815,7 +815,8 @@ function mc_list_groups() {
 
 	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 	$screen         = get_current_screen();
-	$items_per_page = get_user_meta( $user, 'per_page', true );
+	$option         = $screen->get_option( 'per_page', 'option' );
+	$items_per_page = get_user_meta( $user, $option, true );
 	if ( empty( $items_per_page ) || $items_per_page < 1 ) {
 		$items_per_page = $screen->get_option( 'per_page', 'default' );
 	}
