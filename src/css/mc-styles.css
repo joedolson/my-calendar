@@ -488,12 +488,12 @@ strong.label {
 	vertical-align: middle;
 }
 
-.autocomplete.mc-autocomplete {
-	max-width: 600px;
+.my-calendar-admin ul {
+	line-height: 1.6;
 }
 
-.autocomplete.mc-autocomplete > input {
-	padding: 4px;
+.autocomplete.mc-autocomplete {
+	max-width: 600px;
 }
 
 .mc-categories td img,

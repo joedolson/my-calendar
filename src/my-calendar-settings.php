@@ -385,6 +385,7 @@ function my_calendar_settings() {
 			die( 'Security check failed' );
 		}
 		if ( isset( $_POST['mc_manage'] ) ) {
+			$before_permalinks = get_option( 'mc_use_permalinks' );
 			mc_update_management_settings( $_POST );
 			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) );
 		}
@@ -572,7 +573,7 @@ function my_calendar_settings() {
 								?>
 								</li>
 								<?php
-								if ( isset( $_POST['mc_use_permalinks'] ) ) {
+								if ( isset( $_POST['mc_use_permalinks'] ) && ( ! ( 'on' === $_POST['mc_use_permalinks'] && 'true' === $before_permalinks ) ) ) {
 									$url = admin_url( 'options-permalink.php#mc_cpt_base' );
 									// Translators: URL for WordPress Settings > Permalinks.
 									$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
@@ -581,7 +582,33 @@ function my_calendar_settings() {
 								}
 								?>
 								<li><?php mc_settings_field( 'mc_use_permalinks', __( 'Use Pretty Permalinks for Events', 'my-calendar' ), '', $note, array(), 'checkbox-single' ); ?></li>
-								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+								<?php
+								if ( (int) get_site_option( 'mc_multisite' ) === 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
+									mc_settings_field(
+										'mc_current_table',
+										array(
+											'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
+											'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
+										),
+										'0',
+										'',
+										array(),
+										'radio'
+									);
+								} else {
+									if ( get_option( 'mc_remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
+										?>
+										<li><?php _e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
+										<?php
+									}
+								}
+								?>
+							</ul>
+						</fieldset>
+						<fieldset>
+							<legend><?php _e( 'Advanced', 'my-calendar' ); ?></legend>
+							<ul>
+	<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
 									?>
@@ -616,27 +643,6 @@ function mc_remote_db() {
 								</li>
 								<li><?php mc_settings_field( 'mc_drop_tables', __( 'Drop MySQL tables on uninstall', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_drop_settings', __( 'Delete plugin settings on uninstall', 'my-calendar' ), 'true', '', array(), 'checkbox-single' ); ?></li>
-								<?php
-								if ( (int) get_site_option( 'mc_multisite' ) === 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
-									mc_settings_field(
-										'mc_current_table',
-										array(
-											'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
-											'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
-										),
-										'0',
-										'',
-										array(),
-										'radio'
-									);
-								} else {
-									if ( get_option( 'mc_remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
-										?>
-										<li><?php _e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
-										<?php
-									}
-								}
-								?>
 							</ul>
 						</fieldset>
 						<p>
