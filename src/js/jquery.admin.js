@@ -506,6 +506,10 @@ var mediaPopup = '';
 	});
 })(jQuery);
 
+function resizeIframe(iframe) {
+	iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+}
+
 window.addEventListener( 'beforeunload', function(e) {
 	var unsubmitted = document.getElementById( 'mc_unsubmitted' );
 	var hold        = ( typeof( unsubmitted ) != 'undefined' && unsubmitted != null ) ? true : false;

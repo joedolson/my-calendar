@@ -40,6 +40,10 @@
 	height: 100%;
 }
 
+.mc-template-preview iframe {
+	width: 100%;
+}
+
 #my-calendar .delete_occurrence,
 #my-calendar-admin-table .delete {
 	color: #b32d2e;

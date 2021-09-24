@@ -271,13 +271,52 @@ function mc_templates_edit() {
 					</div>
 				</div>
 			</div>
+			<?php
+			$templates = get_option( 'mc_templates' );
+			ksort( $templates );
+			foreach( $templates as $key => $template ) {
+				if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'link' === $key || 'label' === $key ) {
+					continue;
+				}
+				?>
 			<div id="templates" class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2><?php _e( 'All Event Template Tags (alphabetical)', 'my-calendar' ); ?></h2>
+						<h2><?php printf( __( 'Template Preview: %s', 'my-calendar' ), ucfirst( $key ) ); ?></h2>
+				<?php
+				echo '<div class="template-preview inside">';
+				echo mc_template_description( $key );
+				$mc_id       = mc_get_template_tag_preview( false, 'int' );
+				$view_url    = mc_get_details_link( $mc_id );
+				$tag_preview = add_query_arg(
+					array(
+						'iframe'   => 'true',
+						'showtags' => 'true',
+						'template' => $key,
+						'mc_id'    => $mc_id,
+					),
+					$view_url
+				);
+				?>
+				<div class="mc-template-preview">
+					<iframe onload="resizeIframe(this)" title="<?php _e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
+				</div>
+					</div>
+				</div>
+			</div>
+				<?php
+			}
+			?>
+			<div id="templates" class="metabox-holder">
+				<div class="ui-sortable meta-box-sortables">
+					<div class="postbox">
+						<h2><?php _e( 'Template Tag Previews', 'my-calendar' ); ?></h2>
 
 						<div class='mc_template_tags inside'>
-							<?php echo mc_display_template_tags(); ?>
+							<?php
+							echo '<h3>' . __( 'All Template Tags (alphabetical)', 'my-calendar' ) . '</h3>'; 
+							echo mc_display_template_tags();
+							?>
 						</div>
 					</div>
 				</div>
@@ -291,18 +330,14 @@ function mc_templates_edit() {
 }
 
 /**
- * Display a list of all available template tags.
+ * Get template tags for use in previews.
  *
- * @param int|bool $mc_id Event occurence ID.
- * @param string   $render 'code' or 'html'.
+ * @param int|bool $mc_id Event occurrence id.
+ * @param string   $return Type of data to return.
  *
- * @return string
+ * @return array
  */
-function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
-	$event  = false;
-	$data   = array();
-	$output = '';
-	$empty  = '';
+function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
 	if ( ! isset( $_GET['mc-event'] ) && ! $mc_id ) {
 		$args   = array(
 			'before' => 1,
@@ -312,6 +347,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		$events = mc_get_all_events( $args );
 		if ( isset( $events[0] ) ) {
 			$event = $events[0];
+			$mc_id = $event->occur_id;
 		}
 	} else {
 		$mc_id = ( $mc_id ) ? $mc_id : absint( $_GET['mc-event'] );
@@ -320,6 +356,46 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 	if ( $event ) {
 		$data = mc_create_tags( $event );
 	}
+
+	return ( 'array' === $return ) ? $data : $mc_id;
+}
+
+/**
+ * Display a specific template rendered.
+ *
+ * @param string   $template Template identifier.
+ * @param int|bool $mc_id Event occurrence ID.
+ *
+ * @return string
+ */
+function mc_display_template_preview( $template, $mc_id = false ) {
+	$event  = false;
+	$data   = mc_get_template_tag_preview( $mc_id );
+	$temp   = mc_get_template( $template );
+	$type   = ( 'rss' === $template ) ? 'rss' : '';
+	$output = mc_draw_template( $data, $temp, $type );
+	$output = ( 'rss' === $template ) ? '<pre>' . htmlentities( $output ) . '</pre>' : html_entity_decode( $output );
+	$class  = ( 'list' === $template ) ? 'list-event' : 'calendar-event';
+	$class  = ( 'mini' === $template ) ? 'mini-event' : $class;
+	$class  = ( 'details' === $template ) ? 'single-event' : $class;
+
+	return '<div class="mc-main ' . $template . '">' . $output . '</div>';
+}
+
+/**
+ * Display a list of all available template tags.
+ *
+ * @param int|bool $mc_id Event occurence ID.
+ * @param string   $render 'code' or 'html'.
+ *
+ * @return string
+ */
+function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
+	$event  = false;
+	$data   = mc_get_template_tag_preview( $mc_id );
+	$output = '';
+	$empty  = '';
+
 	// Translators: Event title being shown.
 	$post_title = sprintf( __( 'Template tags for &ldquo;%1$s&rdquo;, on %2$s', 'my-calendar' ), $data['title'], $data['date'] );
 	ksort( $data );
