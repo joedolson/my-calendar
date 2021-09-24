@@ -47,7 +47,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 		case 'email':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note'>$note</span>";
+				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -61,7 +61,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 		case 'textarea':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note'>$note</span>";
+				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -82,7 +82,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 		case 'radio':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note'>$note</span>";
+				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -97,7 +97,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 		case 'select':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note'>$note</span>";
+				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -730,7 +730,7 @@ function mc_remote_db() {
 						</ul>
 					</fieldset>
 					<fieldset>
-						<legend><?php _e( 'Date/Time formats', 'my-calendar' ); ?></legend>
+						<legend><?php _e( 'Date/Time Formats', 'my-calendar' ); ?></legend>
 						<div><input type='hidden' name='mc_dates' value='true'/></div>
 						<ul>
 							<?php
@@ -742,8 +742,8 @@ function mc_remote_db() {
 							$multi_format = ( '' === get_option( 'mc_multidate_format', '' ) ) ? date_i18n( str_replace( '%d', $tomorrow, 'F j-%d, Y' ) ) : date_i18n( str_replace( '%d', $tomorrow, get_option( 'mc_multidate_format' ) ) );
 							?>
 							<li><?php mc_settings_field( 'mc_date_format', __( 'Primary Date Format', 'my-calendar' ), '', $date_format ); ?></li>
-							<li><?php mc_settings_field( 'mc_time_format', __( 'Time format', 'my-calendar' ), '', $time_format ); ?></li>
-							<li><?php mc_settings_field( 'mc_month_format', __( 'Month format (calendar headings)', 'my-calendar' ), '', $month_format ); ?></li>
+							<li><?php mc_settings_field( 'mc_time_format', __( 'Time Format', 'my-calendar' ), '', $time_format ); ?></li>
+							<li><?php mc_settings_field( 'mc_month_format', __( 'Month Format (calendar headings)', 'my-calendar' ), '', $month_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_week_format', __( 'Date in grid mode, week view', 'my-calendar' ), '', $week_format ); ?></li>
 							<li><?php mc_settings_field( 'mc_multidate_format', __( 'Date Format for multi-day events', 'my-calendar' ), 'F j-%d, Y', $multi_format . ' (' . __( 'Use <code>&#37;d</code> to represent the end date.', 'my-calendar' ) . ')' ); ?></li>
 						</ul>
