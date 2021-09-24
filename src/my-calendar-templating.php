@@ -467,14 +467,14 @@ function mc_update_template( $key, $template ) {
  *
  * @param string $key Template unique key.
  *
- * @return Description
+ * @return string
  */
 function mc_template_description( $key ) {
 	if ( 'add-new' === $key ) {
 		return '';
 	}
 
-	$description = '';
+	$return = '';
 	switch ( $key ) {
 		case 'grid':
 			$return = __( '<strong>Core Template:</strong> used in the details pop-up in the main calendar view.', 'my-calendar' );
@@ -494,10 +494,10 @@ function mc_template_description( $key ) {
 	}
 
 	if ( ! mc_is_core_template( $key ) ) {
-		$description = strip_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
+		$return = strip_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
 	}
 
-	return wpautop( $description );
+	return wpautop( $return );
 }
 
 /**
