@@ -311,17 +311,17 @@ function mc_update_output_settings( $post ) {
 function mc_update_input_settings( $post ) {
 	$mc_input_options_administrators = ( ! empty( $post['mc_input_options_administrators'] ) && 'on' === $post['mc_input_options_administrators'] ) ? 'true' : 'false';
 	$mc_input_options                = array(
-		'event_short'             => ( ! empty( $post['mci_event_short'] ) && $post['mci_event_short'] ) ? 'on' : 'off',
-		'event_desc'              => ( ! empty( $post['mci_event_desc'] ) && $post['mci_event_desc'] ) ? 'on' : 'off',
-		'event_category'          => ( ! empty( $post['mci_event_category'] ) && $post['mci_event_category'] ) ? 'on' : 'off',
-		'event_image'             => ( ! empty( $post['mci_event_image'] ) && $post['mci_event_image'] ) ? 'on' : 'off',
-		'event_link'              => ( ! empty( $post['mci_event_link'] ) && $post['mci_event_link'] ) ? 'on' : 'off',
-		'event_recurs'            => ( ! empty( $post['mci_event_recurs'] ) && $post['mci_event_recurs'] ) ? 'on' : 'off',
-		'event_open'              => ( ! empty( $post['mci_event_open'] ) && $post['mci_event_open'] ) ? 'on' : 'off',
-		'event_location'          => ( ! empty( $post['mci_event_location'] ) && $post['mci_event_location'] ) ? 'on' : 'off',
-		'event_specials'          => ( ! empty( $post['mci_event_specials'] ) && $post['mci_event_specials'] ) ? 'on' : 'off',
-		'event_access'            => ( ! empty( $post['mci_event_access'] ) && $post['mci_event_access'] ) ? 'on' : 'off',
-		'event_host'              => ( ! empty( $post['mci_event_host'] ) && $post['mci_event_host'] ) ? 'on' : 'off',
+		'event_short'    => ( ! empty( $post['mci_event_short'] ) && $post['mci_event_short'] ) ? 'on' : 'off',
+		'event_desc'     => ( ! empty( $post['mci_event_desc'] ) && $post['mci_event_desc'] ) ? 'on' : 'off',
+		'event_category' => ( ! empty( $post['mci_event_category'] ) && $post['mci_event_category'] ) ? 'on' : 'off',
+		'event_image'    => ( ! empty( $post['mci_event_image'] ) && $post['mci_event_image'] ) ? 'on' : 'off',
+		'event_link'     => ( ! empty( $post['mci_event_link'] ) && $post['mci_event_link'] ) ? 'on' : 'off',
+		'event_recurs'   => ( ! empty( $post['mci_event_recurs'] ) && $post['mci_event_recurs'] ) ? 'on' : 'off',
+		'event_open'     => ( ! empty( $post['mci_event_open'] ) && $post['mci_event_open'] ) ? 'on' : 'off',
+		'event_location' => ( ! empty( $post['mci_event_location'] ) && $post['mci_event_location'] ) ? 'on' : 'off',
+		'event_specials' => ( ! empty( $post['mci_event_specials'] ) && $post['mci_event_specials'] ) ? 'on' : 'off',
+		'event_access'   => ( ! empty( $post['mci_event_access'] ) && $post['mci_event_access'] ) ? 'on' : 'off',
+		'event_host'     => ( ! empty( $post['mci_event_host'] ) && $post['mci_event_host'] ) ? 'on' : 'off',
 	);
 	update_option( 'mc_input_options', $mc_input_options );
 	update_option( 'mc_input_options_administrators', $mc_input_options_administrators );
@@ -923,33 +923,33 @@ function mc_remote_db() {
 							$output        = '';
 							$input_options = get_option( 'mc_input_options' );
 							$input_labels  = array(
-								'event_short'             => __( 'Excerpt', 'my-calendar' ),
-								'event_desc'              => __( 'Description', 'my-calendar' ),
-								'event_category'          => __( 'Categories', 'my-calendar' ),
-								'event_image'             => __( 'Featured Image', 'my-calendar' ),
-								'event_link'              => __( 'External Link', 'my-calendar' ),
-								'event_recurs'            => __( 'Repetition Pattern', 'my-calendar' ),
-								'event_open'              => __( 'Registration Settings', 'my-calendar' ),
-								'event_location'          => __( 'Location Fields', 'my-calendar' ),
-								'event_specials'          => __( 'Special Scheduling Options', 'my-calendar' ),
-								'event_access'            => __( 'Accessibility', 'my-calendar' ),
-								'event_host'              => __( 'Host', 'my-calendar' ),
+								'event_short'    => __( 'Excerpt', 'my-calendar' ),
+								'event_desc'     => __( 'Description', 'my-calendar' ),
+								'event_category' => __( 'Categories', 'my-calendar' ),
+								'event_image'    => __( 'Featured Image', 'my-calendar' ),
+								'event_link'     => __( 'External Link', 'my-calendar' ),
+								'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
+								'event_open'     => __( 'Registration Settings', 'my-calendar' ),
+								'event_location' => __( 'Location Fields', 'my-calendar' ),
+								'event_specials' => __( 'Special Scheduling Options', 'my-calendar' ),
+								'event_access'   => __( 'Accessibility', 'my-calendar' ),
+								'event_host'     => __( 'Host', 'my-calendar' ),
 							);
 
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
-							// Array of all options in off position.
+							// Array of all options in default position.
 							$defaults = array(
-								'event_short'             => 'on',
-								'event_desc'              => 'on',
-								'event_category'          => 'on',
-								'event_image'             => 'on',
-								'event_link'              => 'on',
-								'event_recurs'            => 'on',
-								'event_open'              => 'on',
-								'event_location'          => 'off',
-								'event_specials'          => 'on',
-								'event_access'            => 'on',
-								'event_host'              => 'on',
+								'event_short'    => 'on',
+								'event_desc'     => 'on',
+								'event_category' => 'on',
+								'event_image'    => 'on',
+								'event_link'     => 'on',
+								'event_recurs'   => 'on',
+								'event_open'     => 'on',
+								'event_location' => 'on',
+								'event_specials' => 'on',
+								'event_access'   => 'on',
+								'event_host'     => 'on',
 							);
 							if ( ! is_array( $input_options ) ) {
 								update_option(

@@ -237,17 +237,17 @@ function mc_default_settings() {
 	add_option(
 		'mc_input_options',
 		array(
-			'event_short'             => 'off',
-			'event_desc'              => 'on',
-			'event_category'          => 'on',
-			'event_image'             => 'on',
-			'event_link'              => 'on',
-			'event_recurs'            => 'on',
-			'event_open'              => 'off',
-			'event_location'          => 'on',
-			'event_specials'          => 'off',
-			'event_access'            => 'on',
-			'event_host'              => 'off',
+			'event_short'    => 'off',
+			'event_desc'     => 'on',
+			'event_category' => 'on',
+			'event_image'    => 'on',
+			'event_link'     => 'on',
+			'event_recurs'   => 'on',
+			'event_open'     => 'off',
+			'event_location' => 'on',
+			'event_specials' => 'off',
+			'event_access'   => 'on',
+			'event_host'     => 'off',
 		)
 	);
 	add_option( 'mc_input_options_administrators', 'false' );

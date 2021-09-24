@@ -1090,19 +1090,19 @@ function mc_show_edit_block( $field ) {
 	// Backwards compatibility. Collapsed location field settings into a single setting in 3.3.0.
 	$field = ( 'event_location_dropdown' === $field ) ? 'event_location' : $field;
 	$input = get_option( 'mc_input_options' );
-	// Array of all options in off position.
+	// Array of all options in default position.
 	$defaults = array(
-		'event_short'             => 'on',
-		'event_desc'              => 'on',
-		'event_category'          => 'on',
-		'event_image'             => 'on',
-		'event_link'              => 'on',
-		'event_recurs'            => 'on',
-		'event_open'              => 'on',
-		'event_location'          => 'off',
-		'event_specials'          => 'on',
-		'event_access'            => 'on',
-		'event_host'              => 'on',
+		'event_short'    => 'on',
+		'event_desc'     => 'on',
+		'event_category' => 'on',
+		'event_image'    => 'on',
+		'event_link'     => 'on',
+		'event_recurs'   => 'on',
+		'event_open'     => 'on',
+		'event_location' => 'on',
+		'event_specials' => 'on',
+		'event_access'   => 'on',
+		'event_host'     => 'on',
 	);
 
 	$input  = array_merge( $defaults, $input );
@@ -1145,17 +1145,17 @@ function mc_edit_block_is_visible( $field ) {
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in default position.
 	$defaults = array(
-		'event_short'             => 'on',
-		'event_desc'              => 'on',
-		'event_category'          => 'on',
-		'event_image'             => 'on',
-		'event_link'              => 'on',
-		'event_recurs'            => 'on',
-		'event_open'              => 'on',
-		'event_location'          => 'off',
-		'event_specials'          => 'on',
-		'event_access'            => 'on',
-		'event_host'              => 'on',
+		'event_short'    => 'on',
+		'event_desc'     => 'on',
+		'event_category' => 'on',
+		'event_image'    => 'on',
+		'event_link'     => 'on',
+		'event_recurs'   => 'on',
+		'event_open'     => 'on',
+		'event_location' => 'on',
+		'event_specials' => 'on',
+		'event_access'   => 'on',
+		'event_host'     => 'on',
 	);
 
 	$input  = array_merge( $defaults, $input );
@@ -1872,8 +1872,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 </div>
 		<?php
 	}
-	mc_show_block( 'event_access', $has_data, $data );
-	mc_show_block( 'event_open', $has_data, $data );
 	if ( mc_show_edit_block( 'event_location' ) ) {
 		?>
 
@@ -1895,6 +1893,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 </div>
 		<?php
 	}
+	mc_show_block( 'event_access', $has_data, $data );
+	mc_show_block( 'event_open', $has_data, $data );
 	if ( mc_show_edit_block( 'event_specials' ) ) {
 		$hol_checked   = ( mc_skip_holidays() ) ? ' checked="checked"' : '';
 		$fifth_checked = ( mc_no_fifth_week() ) ? ' checked="checked"' : '';
