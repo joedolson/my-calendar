@@ -522,7 +522,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$link_text      = mc_draw_template( $data, $link_template );
 				$link           = "
 	<p>
-		<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_$event->occur_id-title-$id'>" . $link_text . '</a>
+		<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$id'>" . $link_text . '</a>
 	</p>';
 			}
 			$location = ( '' === trim( $map . $address ) ) ? '' : '	<div class="location">' . $map . $address . '</div>';
