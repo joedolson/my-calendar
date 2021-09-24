@@ -138,6 +138,25 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	var addLocations = document.querySelector( '.add-location' );
+	console.log( addLocations );
+	if ( null !== addLocations ) {
+		var controls = addLocations.getAttribute( 'aria-controls' );
+		var target   = document.getElementById( controls );
+		console.log( target );
+		target.classList.add( 'hidden' );
+		addLocations.addEventListener( 'click', function(e) {
+			var expanded = this.getAttribute( 'aria-expanded' );
+			if ( 'true' === expanded ) {
+				target.classList.add( 'hidden' );
+				this.setAttribute( 'aria-expanded', 'false' );
+			} else {
+				target.classList.remove( 'hidden' );
+				this.setAttribute( 'aria-expanded', 'true' );
+			}
+		});
+	}
+
 	// Set default conditions.
 	$( '#event_span' ).hide();
 	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );

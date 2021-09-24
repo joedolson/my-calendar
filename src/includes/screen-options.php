@@ -43,7 +43,6 @@ function mc_show_event_editing( $status, $args ) {
 			$input_options = $settings_options;
 		}
 		$defaults = array(
-			'event_location_dropdown' => 'on',
 			'event_short'             => 'on',
 			'event_desc'              => 'on',
 			'event_category'          => 'on',
@@ -51,7 +50,7 @@ function mc_show_event_editing( $status, $args ) {
 			'event_link'              => 'on',
 			'event_recurs'            => 'on',
 			'event_open'              => 'on',
-			'event_location'          => 'off',
+			'event_location'          => 'on',
 			'event_specials'          => 'on',
 			'event_access'            => 'on',
 			'event_host'              => 'on',
@@ -60,7 +59,6 @@ function mc_show_event_editing( $status, $args ) {
 		$input_options = array_merge( $defaults, $input_options );
 		// cannot change these keys.
 		$input_labels = array(
-			'event_location_dropdown' => __( 'Location Selector', 'my-calendar' ),
 			'event_short'             => __( 'Excerpt', 'my-calendar' ),
 			'event_desc'              => __( 'Description', 'my-calendar' ),
 			'event_category'          => __( 'Categories', 'my-calendar' ),
@@ -68,7 +66,7 @@ function mc_show_event_editing( $status, $args ) {
 			'event_link'              => __( 'External Link', 'my-calendar' ),
 			'event_recurs'            => __( 'Repetition Pattern', 'my-calendar' ),
 			'event_open'              => __( 'Registration Settings', 'my-calendar' ),
-			'event_location'          => __( 'Location Fields', 'my-calendar' ),
+			'event_location'          => __( 'Event Location', 'my-calendar' ),
 			'event_specials'          => __( 'Special Scheduling Options', 'my-calendar' ),
 			'event_access'            => __( 'Accessibility', 'my-calendar' ),
 			'event_host'              => __( 'Host', 'my-calendar' ),
@@ -117,7 +115,6 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
 function mc_set_event_editing( $status, $option, $value ) {
 	if ( 'mc_show_on_page' === $option ) {
 		$defaults = array(
-			'event_location_dropdown' => 'on',
 			'event_short'             => 'on',
 			'event_desc'              => 'on',
 			'event_category'          => 'on',
@@ -125,7 +122,7 @@ function mc_set_event_editing( $status, $option, $value ) {
 			'event_link'              => 'on',
 			'event_recurs'            => 'on',
 			'event_open'              => 'on',
-			'event_location'          => 'off',
+			'event_location'          => 'on',
 			'event_specials'          => 'on',
 			'event_access'            => 'on',
 			'event_host'              => 'on',

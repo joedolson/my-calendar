@@ -590,7 +590,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	</div>
 		<?php
 	}
-	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
+	if ( mc_show_edit_block( 'event_location' ) ) {
 		?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
@@ -600,16 +600,9 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 				<fieldset>
 					<legend class="screen-reader-text"><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 		<?php
-	}
-	if ( mc_show_edit_block( 'event_location_dropdown' ) ) {
 		echo mc_event_location_dropdown_block( $data );
-	} else {
-		?>
-		<input type="hidden" name="location_preset" value="none" />
-		<?php
-	}
-	mc_show_block( 'event_location', $has_data, $data, true, '', $group_id );
-	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
+		echo '<button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a location', 'my-calendar' ) . '</span></button>';
+		mc_show_block( 'event_location', $has_data, $data, true, '', $group_id );
 		?>
 				</fieldset>
 			</div>

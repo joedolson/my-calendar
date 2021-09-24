@@ -319,7 +319,6 @@ function mc_update_input_settings( $post ) {
 		'event_recurs'            => ( ! empty( $post['mci_event_recurs'] ) && $post['mci_event_recurs'] ) ? 'on' : 'off',
 		'event_open'              => ( ! empty( $post['mci_event_open'] ) && $post['mci_event_open'] ) ? 'on' : 'off',
 		'event_location'          => ( ! empty( $post['mci_event_location'] ) && $post['mci_event_location'] ) ? 'on' : 'off',
-		'event_location_dropdown' => ( ! empty( $post['mci_event_location_dropdown'] ) && $post['mci_event_location_dropdown'] ) ? 'on' : 'off',
 		'event_specials'          => ( ! empty( $post['mci_event_specials'] ) && $post['mci_event_specials'] ) ? 'on' : 'off',
 		'event_access'            => ( ! empty( $post['mci_event_access'] ) && $post['mci_event_access'] ) ? 'on' : 'off',
 		'event_host'              => ( ! empty( $post['mci_event_host'] ) && $post['mci_event_host'] ) ? 'on' : 'off',
@@ -924,7 +923,6 @@ function mc_remote_db() {
 							$output        = '';
 							$input_options = get_option( 'mc_input_options' );
 							$input_labels  = array(
-								'event_location_dropdown' => __( 'Location Selector', 'my-calendar' ),
 								'event_short'             => __( 'Excerpt', 'my-calendar' ),
 								'event_desc'              => __( 'Description', 'my-calendar' ),
 								'event_category'          => __( 'Categories', 'my-calendar' ),
@@ -941,7 +939,6 @@ function mc_remote_db() {
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
 							// Array of all options in off position.
 							$defaults = array(
-								'event_location_dropdown' => 'on',
 								'event_short'             => 'on',
 								'event_desc'              => 'on',
 								'event_category'          => 'on',

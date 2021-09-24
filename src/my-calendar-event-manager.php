@@ -1087,10 +1087,11 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
  */
 function mc_show_edit_block( $field ) {
 	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	// Backwards compatibility. Collapsed location field settings into a single setting in 3.3.0.
+	$field = ( 'event_location_dropdown' === $field ) ? 'event_location' : $field;
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in off position.
 	$defaults = array(
-		'event_location_dropdown' => 'on',
 		'event_short'             => 'on',
 		'event_desc'              => 'on',
 		'event_category'          => 'on',
@@ -1144,7 +1145,6 @@ function mc_edit_block_is_visible( $field ) {
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in default position.
 	$defaults = array(
-		'event_location_dropdown' => 'on',
 		'event_short'             => 'on',
 		'event_desc'              => 'on',
 		'event_category'          => 'on',
@@ -1874,7 +1874,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	}
 	mc_show_block( 'event_access', $has_data, $data );
 	mc_show_block( 'event_open', $has_data, $data );
-	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
+	if ( mc_show_edit_block( 'event_location' ) ) {
 		?>
 
 <div class="ui-sortable meta-box-sortables">
@@ -1885,16 +1885,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			<fieldset class="locations">
 				<legend class='screen-reader-text'><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 		<?php
-	}
-	if ( mc_show_edit_block( 'event_location_dropdown' ) ) {
 		echo mc_event_location_dropdown_block( $data );
-	} else {
-		?>
-		<input type="hidden" name="location_preset" value="none" />
-		<?php
-	}
-	mc_show_block( 'event_location', $has_data, $data );
-	if ( mc_show_edit_block( 'event_location' ) || mc_show_edit_block( 'event_location_dropdown' ) ) {
+		echo '<button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a location', 'my-calendar' ) . '</span></button>';
+		mc_show_block( 'event_location', $has_data, $data );
 		?>
 			</fieldset>
 		</div>

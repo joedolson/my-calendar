@@ -706,6 +706,7 @@ strong.label {
 	margin-top: 6px;
 }
 
+.add-location .dashicons,
 .add-occurrence .dashicons {
 	vertical-align: middle;
 }

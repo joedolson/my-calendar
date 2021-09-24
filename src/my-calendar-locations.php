@@ -531,9 +531,9 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
  * @return string HTML form fields
  */
 function mc_locations_fields( $has_data, $data, $context = 'location', $group_id = false ) {
-	$return = '<div class="mc-locations">';
+	$return = '<div class="mc-locations" id="location-fields">';
 	if ( current_user_can( 'mc_edit_locations' ) && 'event' === $context ) {
-		$return .= '<p class="checkboxes"><input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location" /> <label for="mc_copy_location">' . __( 'Copy this location into the locations table', 'my-calendar' ) . '</label></p>';
+		$return .= '<p class="checkboxes"><input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location" checked="checked" /> <label for="mc_copy_location">' . __( 'Copy new location into the locations table', 'my-calendar' ) . '</label></p>';
 	}
 	if ( current_user_can( 'mc_edit_settings' ) && isset( $_GET['page'] ) && 'my-calendar-locations' === $_GET['page'] ) {
 		$checked = ( isset( $_GET['location_id'] ) && (int) get_option( 'mc_default_location' ) === (int) $_GET['location_id'] ) ? 'checked="checked"' : '';
