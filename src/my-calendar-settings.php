@@ -693,7 +693,7 @@ function mc_remote_db() {
 							<li>
 							<?php
 							// Translators: Current title template (code).
-							mc_settings_field( 'mc_event_title_template', __( 'Title element template', 'my-calendar' ), '{title} &raquo; {date}', __( 'Current: %s', 'my-calendar' ) );
+							mc_settings_field( 'mc_event_title_template', __( 'Browser tab title element template', 'my-calendar' ), '{title} &raquo; {date}', __( 'Current: %s', 'my-calendar' ) );
 							?>
 							</li>
 						</ul>
