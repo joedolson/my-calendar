@@ -274,7 +274,7 @@ function mc_templates_edit() {
 			<?php
 			$templates = get_option( 'mc_templates' );
 			ksort( $templates );
-			foreach( $templates as $key => $template ) {
+			foreach ( $templates as $key => $template ) {
 				if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'link' === $key || 'label' === $key ) {
 					continue;
 				}
@@ -282,7 +282,12 @@ function mc_templates_edit() {
 			<div id="templates" class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2><?php printf( __( 'Template Preview: %s', 'my-calendar' ), ucfirst( $key ) ); ?></h2>
+						<h2>
+				<?php
+				// Translators: name of template being previewed.
+				printf( __( 'Template Preview: %s', 'my-calendar' ), ucfirst( $key ) );
+				?>
+						</h2>
 				<?php
 				echo '<div class="template-preview inside">';
 				echo mc_template_description( $key );
@@ -314,7 +319,7 @@ function mc_templates_edit() {
 
 						<div class='mc_template_tags inside'>
 							<?php
-							echo '<h3>' . __( 'All Template Tags (alphabetical)', 'my-calendar' ) . '</h3>'; 
+							echo '<h3>' . __( 'All Template Tags (alphabetical)', 'my-calendar' ) . '</h3>';
 							echo mc_display_template_tags();
 							?>
 						</div>

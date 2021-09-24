@@ -28,13 +28,13 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 	$options    = '';
 	$attributes = '';
 	if ( 'text' === $type || 'url' === $type || 'email' === $type ) {
-		$base_atts  = array(
+		$base_atts = array(
 			'size' => '30',
 		);
 	} else {
 		$base_atts = $atts;
 	}
-	$atts       = array_merge( $base_atts, $atts );
+	$atts = array_merge( $base_atts, $atts );
 	if ( is_array( $atts ) && ! empty( $atts ) ) {
 		foreach ( $atts as $key => $val ) {
 			$attributes .= " $key='$val'";
