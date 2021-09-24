@@ -24,12 +24,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string  $type Field type for option.
  * @param boolean $echo True to echo, false to return.
  */
-function mc_settings_field( $name, $label, $default = '', $note = '', $atts = array( 'size' => '30' ), $type = 'text', $echo = true ) {
+function mc_settings_field( $name, $label, $default = '', $note = '', $atts = array(), $type = 'text', $echo = true ) {
 	$options    = '';
 	$attributes = '';
+	if ( 'text' === $type || 'url' === $type || 'email' === $type ) {
+		$base_atts  = array(
+			'size' => '30',
+		);
+	} else {
+		$base_atts = $atts;
+	}
+	$atts       = array_merge( $base_atts, $atts );
 	if ( is_array( $atts ) && ! empty( $atts ) ) {
-		foreach ( $atts as $key => $value ) {
-			$attributes .= " $key='$value'";
+		foreach ( $atts as $key => $val ) {
+			$attributes .= " $key='$val'";
 		}
 	}
 	$value = ( '' !== get_option( $name, '' ) ) ? esc_attr( stripslashes( get_option( $name ) ) ) : $default;
@@ -535,7 +543,7 @@ function my_calendar_settings() {
 								?>
 								<ul class="autocomplete-result-list"></ul>
 								<?php
-								mc_settings_field( 'mc_uri_id', '', '', '', '', 'hidden' );
+								mc_settings_field( 'mc_uri_id', '', '', '', array(), 'hidden' );
 								?>
 								</li>
 								<li>
@@ -686,7 +694,19 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_view_full', __( 'View full calendar', 'my-calendar' ), 'View full calendar' ); ?></li>
 							<li><?php mc_settings_field( 'mc_previous_events', __( 'Previous events link', 'my-calendar' ), __( 'Previous', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_next_events', __( 'Next events link', 'my-calendar' ), __( 'Next', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
-							<li><?php mc_settings_field( 'mc_week_caption', __( 'Week view caption:', 'my-calendar' ), '', __( 'Available tag: <code>{date format=""}</code>', 'my-calendar' ) ); ?></li>
+							<li>
+							<?php
+							mc_settings_field(
+								'mc_week_caption',
+								__( 'Week view caption:', 'my-calendar' ),
+								'',
+								__( 'Available tag: <code>{date format=""}</code>', 'my-calendar' ),
+								array(
+									// Translators: date template tag.
+									'placeholder' => sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' ),
+								)
+							);
+							?></li>
 							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in list views.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_details_label', __( 'Read more text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_link_label', __( 'More information text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
