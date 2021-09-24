@@ -1528,12 +1528,10 @@ function mc_hidden_event() {
  * Filter titles on event pages
  *
  * @param string $title Event title.
- * @param string $sep Defined separator.
- * @param string $seplocation Location of separator in relation to title.
  *
  * @return string New event title
  */
-function mc_event_filter( $title, $sep = ' | ', $seplocation = 'right' ) {
+function mc_event_filter( $title ) {
 	if ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) {
 		$id    = (int) $_GET['mc_id'];
 		$event = mc_get_event( $id );
@@ -1544,10 +1542,8 @@ function mc_event_filter( $title, $sep = ' | ', $seplocation = 'right' ) {
 			return $title;
 		}
 		$array     = mc_create_tags( $event );
-		$left_sep  = ( 'right' !== $seplocation ? ' ' . $sep . ' ' : '' );
-		$right_sep = ( 'right' !== $seplocation ? '' : ' ' . $sep . ' ' );
 		$template  = get_option( 'mc_event_title_template', '' );
-		$template  = ( '' !== $template ) ? stripslashes( $template ) : "$left_sep {title} $sep {date} $right_sep ";
+		$template  = ( '' !== $template ) ? stripslashes( $template ) : " {title} / {date}";
 
 		return strip_tags( mc_draw_template( $array, $template ) );
 	} else {
