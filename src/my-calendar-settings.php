@@ -831,7 +831,12 @@ function mc_remote_db() {
 
 					<fieldset>
 						<legend><?php _e( 'Single Event Details', 'my-calendar' ); ?></legend>
-						<p><?php _e( 'Custom templates override these settings.', 'my-calendar' ); ?>
+						<p>
+						<?php
+						_e( 'Choose fields to show in the frontend popup or single event views.', 'my-calendar' );
+						echo ' ';
+						_e( 'Custom templates override these settings.', 'my-calendar' );
+						?>
 						<ul class="checkboxes">
 							<li><?php mc_settings_field( 'mc_display_author', __( 'Author', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_display_host', __( 'Host', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>

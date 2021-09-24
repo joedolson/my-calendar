@@ -1541,9 +1541,9 @@ function mc_event_filter( $title ) {
 		if ( mc_event_is_hidden( $event ) ) {
 			return $title;
 		}
-		$array     = mc_create_tags( $event );
-		$template  = get_option( 'mc_event_title_template', '' );
-		$template  = ( '' !== $template ) ? stripslashes( $template ) : " {title} / {date}";
+		$array    = mc_create_tags( $event );
+		$template = get_option( 'mc_event_title_template', '' );
+		$template = ( '' !== $template ) ? stripslashes( $template ) : '{title} / {date}';
 
 		return strip_tags( mc_draw_template( $array, $template ) );
 	} else {

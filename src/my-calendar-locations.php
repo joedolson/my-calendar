@@ -767,7 +767,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 
 		$return .= ( '' === $map ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
 	} else {
-		if ( ! $api_key )  {
+		if ( ! $api_key ) {
 			// Translators: URL to settings page to add key.
 			$return .= sprintf( __( 'Add a <a href="%s">Google Maps API Key</a> to generate a location map.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
 		}
