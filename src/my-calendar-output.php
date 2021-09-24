@@ -715,8 +715,9 @@ function mc_get_event_image( $event, $data ) {
  * @return boolean
  */
 function mc_disable_link( $status, $event ) {
-	$option = get_option( 'mc_no_link' );
-	if ( 'true' === $option ) {
+	$option     = get_option( 'mc_no_link' );
+	$new_option = get_option( 'mc_open_uri' );
+	if ( 'true' === $option || 'none' === $new_option ) {
 		$status = true;
 	}
 

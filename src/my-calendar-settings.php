@@ -257,7 +257,8 @@ function mc_update_permissions_settings( $post ) {
  */
 function mc_update_output_settings( $post ) {
 	$mc_open_day_uri = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
-	update_option( 'mc_open_uri', ( ! empty( $post['mc_open_uri'] ) && 'on' === $post['mc_open_uri'] && '' !== get_option( 'mc_uri', '' ) ) ? 'true' : 'false' );
+	$mc_open_uri     = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
+	update_option( 'mc_open_uri', $mc_open_uri );
 	update_option( 'mc_no_link', ( ! empty( $post['mc_no_link'] ) && 'on' === $post['mc_no_link'] ) ? 'true' : 'false' );
 	update_option( 'mc_mini_uri', $post['mc_mini_uri'] );
 	update_option( 'mc_open_day_uri', $mc_open_day_uri );
@@ -733,9 +734,8 @@ function mc_remote_db() {
 				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#mc-output' ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Output Settings', 'my-calendar' ); ?>" /></p>
-					<fieldset>
-						<legend><?php _e( 'Calendar Links', 'my-calendar' ); ?></legend>
 						<ul>
+							<li>
 							<?php
 							$atts = array();
 							$note = '';
@@ -743,11 +743,21 @@ function mc_remote_db() {
 								$atts = array( 'disabled' => 'disabled' );
 								$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
 							}
+							mc_settings_field(
+								'mc_open_uri',
+								__( 'Calendar Links', 'my-calendar' ),
+								array(
+									'false' => __( 'Open links as a pop-up', 'my-calendar' ),
+									'true'  => __( 'Open event links in single event view', 'my-calendar' ),
+									'none'  => __( 'Disable event links', 'my-calendar' ),
+								),
+								$note,
+								$atts,
+								'select'
+							);
 							?>
-							<li><?php mc_settings_field( 'mc_open_uri', __( 'Open event links in single event view', 'my-calendar' ), '', $note, $atts, 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_no_link', __( 'Disable calendar links', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							</li>
 						</ul>
-					</fieldset>
 
 					<fieldset>
 						<legend><?php _e( 'Re-order calendar layout', 'my-calendar' ); ?></legend>
