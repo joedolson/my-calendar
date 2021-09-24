@@ -141,6 +141,9 @@ jQuery(document).ready(function ($) {
 	var addLocations = document.querySelector( '.add-location' );
 	console.log( addLocations );
 	if ( null !== addLocations ) {
+		var locationSelector = document.getElementById( 'l_preset' );
+		var locationValue    = locationSelector.value;
+
 		var controls = addLocations.getAttribute( 'aria-controls' );
 		var target   = document.getElementById( controls );
 		console.log( target );
@@ -148,9 +151,11 @@ jQuery(document).ready(function ($) {
 		addLocations.addEventListener( 'click', function(e) {
 			var expanded = this.getAttribute( 'aria-expanded' );
 			if ( 'true' === expanded ) {
+				locationSelector.value = locationValue;
 				target.classList.add( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'false' );
 			} else {
+				locationSelector.value = 'none';
 				target.classList.remove( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'true' );
 			}

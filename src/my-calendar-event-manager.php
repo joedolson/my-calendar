@@ -1091,19 +1091,7 @@ function mc_show_edit_block( $field ) {
 	$field = ( 'event_location_dropdown' === $field ) ? 'event_location' : $field;
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in default position.
-	$defaults = array(
-		'event_short'    => 'on',
-		'event_desc'     => 'on',
-		'event_category' => 'on',
-		'event_image'    => 'on',
-		'event_link'     => 'on',
-		'event_recurs'   => 'on',
-		'event_open'     => 'on',
-		'event_location' => 'on',
-		'event_specials' => 'on',
-		'event_access'   => 'on',
-		'event_host'     => 'on',
-	);
+	$defaults = mc_input_defaults();
 
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
@@ -1144,19 +1132,7 @@ function mc_edit_block_is_visible( $field ) {
 	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in default position.
-	$defaults = array(
-		'event_short'    => 'on',
-		'event_desc'     => 'on',
-		'event_category' => 'on',
-		'event_image'    => 'on',
-		'event_link'     => 'on',
-		'event_recurs'   => 'on',
-		'event_open'     => 'on',
-		'event_location' => 'on',
-		'event_specials' => 'on',
-		'event_access'   => 'on',
-		'event_host'     => 'on',
-	);
+	$defaults = mc_input_defaults();
 
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
@@ -1884,7 +1860,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<legend class='screen-reader-text'><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 		<?php
 		echo mc_event_location_dropdown_block( $data );
-		echo '<button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a location', 'my-calendar' ) . '</span></button>';
 		mc_show_block( 'event_location', $has_data, $data );
 		?>
 			</fieldset>
@@ -1999,14 +1974,14 @@ function mc_form_fields( $data, $mode, $event_id ) {
 function mc_event_location_dropdown_block( $data ) {
 	$current_location = '';
 	$event_location   = false;
-	$output           = '<div class="mc-event-location-dropdown">';
+	$fields           = '';
 	$autocomplete     = false;
 	$count            = mc_count_locations();
 	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 		$autocomplete = true;
 	}
 	if ( 0 !== $count ) {
-		$output .= '<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label>';
+		$fields .= '<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label>';
 		if ( is_object( $data ) ) {
 			$selected = '';
 			if ( property_exists( $data, 'event_location' ) ) {
@@ -2015,7 +1990,7 @@ function mc_event_location_dropdown_block( $data ) {
 		}
 		if ( ! $autocomplete ) {
 			$locs    = mc_get_locations( 'select-locations' );
-			$output .= '
+			$fields .= '
 			 <select name="location_preset" id="l_preset" aria-describedby="mc-current-location">
 				<option value="none">--</option>';
 			foreach ( $locs as $loc ) {
@@ -2036,24 +2011,26 @@ function mc_event_location_dropdown_block( $data ) {
 						$current_location  = "<div id='mc-current-location'><span class='dashicons dashicons-location' aria-hidden='true'></span>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</div>';
 						$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
 					}
-					$output .= "<option value='" . $loc->location_id . "'$selected />" . $base_loc . '</option>';
+					$fields .= "<option value='" . $loc->location_id . "'$selected />" . $base_loc . '</option>';
 				}
 			}
-			$output .= '</select>' . $current_location . '</p>';
+			$fields .= '</select>';
 		} else {
 			$location_label = ( $event_location && is_numeric( $event_location ) ) ? mc_get_location( $event_location )->location_label : '';
-			$output        .= '<div id="mc-locations-autocomplete" class="mc-autocomplete autocomplete">
+			$fields        .= '<div id="mc-locations-autocomplete" class="mc-autocomplete autocomplete">
 				<input class="autocomplete-input" type="text" placeholder="' . __( 'Search locations...', 'my-calendar' ) . '" id="l_preset" value="' . esc_attr( $location_label ) . '" />
 				<ul class="autocomplete-result-list"></ul>
 				<input type="hidden" name="location_preset" id="mc_event_location_value" value="' . esc_attr( $event_location ) . '" />
 			</div>';
 		}
 	} else {
-		$output .= '<input type="hidden" name="location_preset" value="none" />
+		$fields .= '<input type="hidden" name="location_preset" value="none" />
 		<p>
 		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '>">' . __( 'Add recurring locations for later use.', 'my-calendar' ) . '</a>
 		</p>';
 	}
+	$output  = $current_location . '<div class="mc-event-location-dropdown">' . '<div class="location-input">' . $fields . '</div>';
+	$output .= ( current_user_can( 'mc_edit_locations' ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
 	$output .= '</div>';
 
 	return $output;

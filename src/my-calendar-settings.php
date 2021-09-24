@@ -930,7 +930,7 @@ function mc_remote_db() {
 								'event_link'     => __( 'External Link', 'my-calendar' ),
 								'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
 								'event_open'     => __( 'Registration Settings', 'my-calendar' ),
-								'event_location' => __( 'Location Fields', 'my-calendar' ),
+								'event_location' => __( 'Event Location', 'my-calendar' ),
 								'event_specials' => __( 'Special Scheduling Options', 'my-calendar' ),
 								'event_access'   => __( 'Accessibility', 'my-calendar' ),
 								'event_host'     => __( 'Host', 'my-calendar' ),
@@ -938,19 +938,7 @@ function mc_remote_db() {
 
 							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
 							// Array of all options in default position.
-							$defaults = array(
-								'event_short'    => 'on',
-								'event_desc'     => 'on',
-								'event_category' => 'on',
-								'event_image'    => 'on',
-								'event_link'     => 'on',
-								'event_recurs'   => 'on',
-								'event_open'     => 'on',
-								'event_location' => 'on',
-								'event_specials' => 'on',
-								'event_access'   => 'on',
-								'event_host'     => 'on',
-							);
+							$defaults = mc_input_defaults();
 							if ( ! is_array( $input_options ) ) {
 								update_option(
 									'mc_input_options',
@@ -958,7 +946,7 @@ function mc_remote_db() {
 								);
 								$input_options = get_option( 'mc_input_options' );
 							}
-							// Merge saved input options with default off, so all are displayed.
+							// Merge saved input options with default on, so all are displayed.
 							$input_options = array_merge( $defaults, $input_options );
 							asort( $input_labels );
 							foreach ( $input_labels as $key => $value ) {

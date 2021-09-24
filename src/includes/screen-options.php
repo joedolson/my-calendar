@@ -25,6 +25,30 @@ function mc_event_editing() {
 	add_screen_option( 'mc_show_on_page', $args );
 }
 
+/**
+ * Get event input default values.
+ *
+ * @return array
+ */
+function mc_input_defaults() {
+	return apply_filters(
+		'mc_input_defaults',
+		array(
+			'event_short'    => 'on',
+			'event_desc'     => 'on',
+			'event_category' => 'on',
+			'event_image'    => 'on',
+			'event_link'     => 'on',
+			'event_recurs'   => 'on',
+			'event_open'     => 'on',
+			'event_location' => 'on',
+			'event_specials' => 'on',
+			'event_access'   => 'on',
+			'event_host'     => 'on',
+		)
+	);
+}
+
 add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );
 /**
  * Show event editing options for user
@@ -42,19 +66,7 @@ function mc_show_event_editing( $status, $args ) {
 		if ( ! is_array( $input_options ) ) {
 			$input_options = $settings_options;
 		}
-		$defaults = array(
-			'event_short'    => 'on',
-			'event_desc'     => 'on',
-			'event_category' => 'on',
-			'event_image'    => 'on',
-			'event_link'     => 'on',
-			'event_recurs'   => 'on',
-			'event_open'     => 'on',
-			'event_location' => 'on',
-			'event_specials' => 'on',
-			'event_access'   => 'on',
-			'event_host'     => 'on',
-		);
+		$defaults = mc_input_defaults();
 
 		$input_options = array_merge( $defaults, $input_options );
 		// cannot change these keys.
@@ -114,19 +126,7 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
  */
 function mc_set_event_editing( $status, $option, $value ) {
 	if ( 'mc_show_on_page' === $option ) {
-		$defaults = array(
-			'event_short'    => 'on',
-			'event_desc'     => 'on',
-			'event_category' => 'on',
-			'event_image'    => 'on',
-			'event_link'     => 'on',
-			'event_recurs'   => 'on',
-			'event_open'     => 'on',
-			'event_location' => 'on',
-			'event_specials' => 'on',
-			'event_access'   => 'on',
-			'event_host'     => 'on',
-		);
+		$defaults = mc_input_defaults();
 		$value    = array();
 		foreach ( $defaults as $k => $v ) {
 			if ( isset( $_POST['mc_show_on_page'][ $k ] ) ) {

@@ -703,7 +703,15 @@ strong.label {
 	padding: 6px;
 	background: rgba( 0, 0, 0, .05 );
 	border-radius: 6px;
-	margin-top: 6px;
+	margin-bottom: 10px;
+}
+
+.mc-event-location-dropdown {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 10px;
+	align-items: end;
+	margin-bottom: 10px;
 }
 
 .add-location .dashicons,

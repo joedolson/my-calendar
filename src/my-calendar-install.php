@@ -234,22 +234,7 @@ function mc_default_settings() {
 	add_option( 'mc_multiple_categories', 'true' );
 	add_option( 'mc_event_link_expires', 'false' );
 	add_option( 'mc_apply_color', 'background' );
-	add_option(
-		'mc_input_options',
-		array(
-			'event_short'    => 'off',
-			'event_desc'     => 'on',
-			'event_category' => 'on',
-			'event_image'    => 'on',
-			'event_link'     => 'on',
-			'event_recurs'   => 'on',
-			'event_open'     => 'off',
-			'event_location' => 'on',
-			'event_specials' => 'off',
-			'event_access'   => 'on',
-			'event_host'     => 'off',
-		)
-	);
+	add_option( 'mc_input_options', mc_input_defaults() );
 	add_option( 'mc_input_options_administrators', 'false' );
 	add_site_option( 'mc_multisite', '0' );
 	add_option( 'mc_event_mail', 'false' );

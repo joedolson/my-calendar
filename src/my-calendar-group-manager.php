@@ -601,7 +601,6 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<legend class="screen-reader-text"><?php _e( 'Event Location', 'my-calendar' ); ?></legend>
 		<?php
 		echo mc_event_location_dropdown_block( $data );
-		echo '<button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a location', 'my-calendar' ) . '</span></button>';
 		mc_show_block( 'event_location', $has_data, $data, true, '', $group_id );
 		?>
 				</fieldset>
