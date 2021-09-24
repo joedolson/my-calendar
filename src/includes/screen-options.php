@@ -43,17 +43,17 @@ function mc_show_event_editing( $status, $args ) {
 			$input_options = $settings_options;
 		}
 		$defaults = array(
-			'event_short'             => 'on',
-			'event_desc'              => 'on',
-			'event_category'          => 'on',
-			'event_image'             => 'on',
-			'event_link'              => 'on',
-			'event_recurs'            => 'on',
-			'event_open'              => 'on',
-			'event_location'          => 'on',
-			'event_specials'          => 'on',
-			'event_access'            => 'on',
-			'event_host'              => 'on',
+			'event_short'    => 'on',
+			'event_desc'     => 'on',
+			'event_category' => 'on',
+			'event_image'    => 'on',
+			'event_link'     => 'on',
+			'event_recurs'   => 'on',
+			'event_open'     => 'on',
+			'event_location' => 'on',
+			'event_specials' => 'on',
+			'event_access'   => 'on',
+			'event_host'     => 'on',
 		);
 
 		$input_options = array_merge( $defaults, $input_options );
