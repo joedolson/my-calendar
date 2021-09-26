@@ -724,8 +724,9 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	<fieldset>
 	<legend>' . __( 'Location Accessibility', 'my-calendar' ) . '</legend>
 	<ul class="accessibility-features checkboxes">';
-	$access       = apply_filters( 'mc_venue_accessibility', mc_location_access() );
-	$access_list  = '';
+
+	$access      = apply_filters( 'mc_venue_accessibility', mc_location_access() );
+	$access_list = '';
 	if ( $has_data ) {
 		if ( 'location' === $context ) {
 			$location_access = unserialize( $data->{$context . '_access'} );
@@ -760,8 +761,9 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</div>
 	</div>';
 
-	$api_key = get_option( 'mc_gmap_api_key' );
-	if ( $api_key && ! ( 'event' === $context && false === (bool) $event_location ) ) {
+	$api_key  = get_option( 'mc_gmap_api_key' );
+	$location = ( $has_data ) ? $data->event_location : false;
+	if ( $api_key && ! ( 'event' === $context && false === (bool) $location ) ) {
 		$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
 		$map     = mc_generate_map( $data, $context );
 
