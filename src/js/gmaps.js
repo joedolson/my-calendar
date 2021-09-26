@@ -111,7 +111,6 @@
 			if ( status === 'OK' ) {
 				plot.setCenter( results[0].geometry.location );
 				plot.setZoom( zoom );
-				console.log( 'zoom', zoom );
 				marker = new google.maps.Marker({
 					map : plot,
 					position : results[0].geometry.location,
