@@ -60,7 +60,7 @@ function mc_globals() {
 
 	$single_template = '
 <span class="event-time value-title" title="{dtstart}">{time}<span class="time-separator"> - </span><span class="end-time value-title" title="{dtend}">{endtime}</span></span>
-{image before="<div class=\'mc-event-image\'>" after="</div>";
+{image before="<div class=\'mc-event-image\'>" after="</div>"}
 <div class="event-data">
 	{runtime before="<p class=\'mc-runtime\'>" after="</p>"}
 	{categories before="<p class=\'mc-categories\'>" after="</p>"}
