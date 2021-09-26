@@ -215,18 +215,6 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	var publishText = $( 'input[name=save]' ).val();
-	$( '#e_approved' ).on( 'change', function (e) {
-		var event_status = $(this).val();
-		if ( publishText == mcAdmin.publishText ) {
-			if ( event_status == 0 ) {
-				$( 'input[name=save]' ).val( mcAdmin.draftText );
-			} else {
-				$( 'input[name=save]' ).val( publishText );
-			}
-		}
-	});
-
 	$( '.new-event-category' ).hide();
 	$( '#event_category_new' ).on( 'click', function() {
 		var checked_status = $(this).prop('checked');

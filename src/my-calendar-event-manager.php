@@ -3713,12 +3713,22 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		$manage_text        = ( current_user_can( 'mc_manage_events' ) ) ? __( 'Manage events', 'my-calendar' ) : __( 'Manage your events', 'my-calendar' );
 		$controls['manage'] = "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage' ) . '">' . $manage_text . '</a>';
 	}
-
-	$controls['publish'] = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
+	if ( 'footer' === $position ) {
+		if ( 'edit' === $mode ) {
+			$controls['publish'] = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
+		} else {
+			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
+				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
+			} else {
+				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
+			}
+		}
+	}
 	// Event Status settings: draft, published, trash, (custom).
 	// Switch to select status.
 	if ( 'header' === $position ) {
 		if ( 'edit' === $mode ) {
+			$controls['publish'] = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) { // Added by Roland P.
 				if ( $has_data && '1' === $event->event_approved ) {
@@ -3736,26 +3746,24 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 						<option value='2'" . selected( $event->event_approved, '2', false ) . '>' . __( 'Trash', 'my-calendar' ) . '</option>';
 			}
 		} else { // Case: adding new event (if user can, then 1, else 0).
+			$status_control = '';
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
-				$status_control = "
-						<option value='1'>" . __( 'Published', 'my-calendar' ) . "</option>
-						<option value='0'>" . __( 'Draft', 'my-calendar' ) . '</option>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
 			} else {
-				$status_control = "
-						<option value='0'>" . __( 'Draft', 'my-calendar' ) . '</option>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
 			}
 		}
-		$controls['status'] = "
+		$controls['status'] = ( '' !== $status_control ) ? "
 					<label for='e_approved' class='screen-reader-text'>" . __( 'Status', 'my-calendar' ) . "</label>
 					<select name='event_approved' id='e_approved'>
 						$status_control
-					</select>";
+					</select>" : '';
 	}
 
 	$controls_output = '';
 	foreach ( $controls as $key => $control ) {
 		if ( 'prev_status' !== $key ) {
-			$control = '<li>' . $control . '</li>';
+			$control = ( '' !== $control ) ? '<li>' . $control . '</li>' : '';
 		}
 
 		$controls_output .= $control;
