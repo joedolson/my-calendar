@@ -875,7 +875,6 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_show_gcal', __( 'Link to submit event to Google Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_show_map', __( 'Link to Google Map', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_gmap', __( 'Google Map (single view only)', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li class="mc_gmap_api_key"><?php mc_settings_field( 'mc_gmap_api_key', __( 'Google Maps API Key', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_show_address', __( 'Event Address', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_short', __( 'Excerpt', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_desc', __( 'Full description', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
@@ -884,6 +883,7 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_display_more', __( 'More details link', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li><?php mc_settings_field( 'mc_event_registration', __( 'Registration info', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 						</ul>
+						<p class="mc_gmap_api_key"><?php mc_settings_field( 'mc_gmap_api_key', __( 'Google Maps API Key', 'my-calendar' ), '', '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '</a>', array( 'id' => 'mc_gmap_id' ) ); ?></p>
 					</fieldset>
 
 					<fieldset>
@@ -907,6 +907,15 @@ function mc_remote_db() {
 							);
 							?>
 							</li>
+						</ul>
+					</fieldset>
+
+					<fieldset>
+						<legend><?php _e( 'List Options', 'my-calendar' ); ?></legend>
+						<ul>
+							<li><?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?></li>
+							<li><?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							<li><?php mc_settings_field( 'mc_show_list_events', __( 'Show all event titles next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 						</ul>
 					</fieldset>
 
@@ -938,15 +947,6 @@ function mc_remote_db() {
 							);
 							?>
 							</li>
-						</ul>
-					</fieldset>
-
-					<fieldset>
-						<legend><?php _e( 'List Options', 'my-calendar' ); ?></legend>
-						<ul>
-							<li><?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?></li>
-							<li><?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_show_list_events', __( 'Show all event titles next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 						</ul>
 					</fieldset>
 

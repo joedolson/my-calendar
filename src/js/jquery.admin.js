@@ -268,6 +268,20 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	var gapi_checked = $( 'input[id="mc_gmap"]' ).prop( "checked" );
+	if ( gapi_checked ) {
+		$( '#mc_gmap_api_key' ).attr( 'required', 'true' );
+	}
+
+	$( 'input[id="mc_gmap"]' ).change( function() {
+		var checked = $(this).prop( "checked" );
+		if ( checked ) {
+			$( '#mc_gmap_api_key' ).attr( 'required', 'true' );
+		} else {
+			$( '#mc_gmap_api_key' ).removeAttr( 'required' );
+		}
+	});
+
 	var hide_end_checked = $( 'input[id="e_hide_end"]' ).prop( "checked" );
 	if ( hide_end_checked ) {
 		$( 'label[for=mc_event_endtime] span' ).show();
