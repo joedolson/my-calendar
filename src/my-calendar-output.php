@@ -2720,7 +2720,7 @@ function mc_category_key( $category ) {
 			$type     = ( stripos( $image, 'svg' ) ) ? 'svg' : 'img';
 			$cat_key .= '<span class="category-color-sample ' . $type . '">' . $image . '</span>' . $cat_name;
 		} elseif ( 'default' !== get_option( 'mc_apply_color' ) ) {
-			$cat_key .= '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' . $cat_name;
+			$cat_key .= ( ( '' !== $cat->category_color ) ? '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' : '' ) . $cat_name;
 		} else {
 			// If category colors are ignored, don't render HTML for them.
 			$cat_key .= $cat_name;
