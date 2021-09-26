@@ -708,7 +708,7 @@ function mc_remote_db() {
 							);
 							?>
 							</li>
-							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in list views.', 'my-calendar' ) ); ?></li>
+							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in calendar heading.', 'my-calendar' ) ); ?></li>
 						</ul>
 					</fieldset>
 					<fieldset>
@@ -927,7 +927,7 @@ function mc_remote_db() {
 								'mc_open_day_uri',
 								__( 'Link action for mini calendar', 'my-calendar' ),
 								array(
-									'false'          => __( 'jQuery pop-up view', 'my-calendar' ),
+									'false'          => __( 'Event pop-up ', 'my-calendar' ),
 									'true'           => __( 'daily view page (above)', 'my-calendar' ),
 									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
 									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
