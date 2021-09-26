@@ -1220,12 +1220,12 @@ function mc_location_controls() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
 		$response             = mc_update_location_controls();
 		$location_fields      = array(
-			'event_label',
-			'event_city',
-			'event_state',
-			'event_country',
-			'event_postcode',
-			'event_region',
+			'event_label'    => __( 'Name of Location', 'my-calendar' ),
+			'event_city'     => __( 'City', 'my-calendar' ),
+			'event_state'    => __( 'State/Province', 'my-calendar' ),
+			'event_postcode' => __( 'Postal code', 'my-calendar' ),
+			'event_region'   => __( 'Region', 'my-calendar' ),
+			'event_country'  => __( 'Country', 'my-calendar' ),
 		);
 		$mc_location_controls = get_option( 'mc_location_controls' );
 
@@ -1237,7 +1237,7 @@ function mc_location_controls() {
 		<fieldset>
 			<legend class="screen-reader-text">' . __( 'Restrict Location Input', 'my-calendar' ) . '</legend>
 			<div id="mc-accordion" class="mc-locations-control">';
-		foreach ( $location_fields as $field ) {
+		foreach ( $location_fields as $field => $label ) {
 			$locations = '';
 			$class     = '';
 			$active    = '';
@@ -1252,11 +1252,10 @@ function mc_location_controls() {
 				$class  = ' class="active-limit"';
 				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
 			}
-			$display = str_replace( 'event_', '', $field );
-			$holder  = strtolower( $display ) . ',' . ucfirst( $display );
-			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span><button type="button" class="button-link">' . ucfirst( str_replace( 'event_', '', $field ) ) . $active . '</button></h4>';
-			// Translators: Name of field being restricted, e.g. "Location Controls for State".
-			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Location Controls for %s', 'my-calendar' ), ucfirst( $display ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '</textarea></div>';
+			$holder  = strtolower( $label ) . ',' . ucfirst( $label );
+			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span><button type="button" class="button-link">' . $label . $active . '</button></h4>';
+			// Translators: Name of field being restricted.
+			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Controls for %s', 'my-calendar' ), ucfirst( $label ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '</textarea></div>';
 		}
 		$output .= "
 			</div>
