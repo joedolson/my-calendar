@@ -240,6 +240,29 @@ function mc_checkdate( $date ) {
 }
 
 /**
+ * Determine where a date lies in a month in terms of week/day. 
+ *
+ * @param string $timestamp Timestamp.
+ *
+ * @return array
+ */
+function mc_recur_date( $timestamp ) {
+	$timestamp = is_numeric( $timestamp ) ? $timestamp : strtotime( $timestamp );
+	$weekday   = date( 'l', $timestamp );
+	$month     = date( 'M', $timestamp );   
+	$ord       = 0;
+
+	while ( date( 'M', ( $timestamp = strtotime( '-1 week', $timestamp ) ) ) == $month ) {
+		$ord++;
+	}
+
+	return array(
+		'num' => $ord,
+		'day' => $weekday,
+	);
+}
+
+/**
  * Get the first day value of the current week.
  *
  * @param mixed int/boolean $timestamp timestamp + offset or false if now.

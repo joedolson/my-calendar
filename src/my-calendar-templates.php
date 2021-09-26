@@ -538,6 +538,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['ical_desc']        = $strip_desc;
 	$e['ical_start']       = $dtstart;
 	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd\THi00', strtotime( $dtend ) + 60, false ) : $dtend;
+	$e['ical_recur']       = mc_generate_rrule( $event );
 	$ical_link             = mc_build_url(
 		array( 'vcal' => $event->occur_id ),
 		array(

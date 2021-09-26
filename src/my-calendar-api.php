@@ -485,7 +485,6 @@ function mc_ical_template() {
 	$off   = ( get_option( 'gmt_offset' ) * -1 );
 	$etc   = 'Etc/GMT' . ( ( 0 > $off ) ? $off : '+' . $off );
 	$tz_id = ( $tz_id ) ? $tz_id : $etc;
-
 	// Translators: Blogname.
 	$events_from = sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
 	$ttl         = apply_filters( 'ical_x_published_ttl', 'PT24H' );
@@ -498,7 +497,7 @@ SUMMARY:{title}
 DTSTAMP:{ical_start}
 ORGANIZER;CN={host}:MAILTO:{host_email}
 DTSTART;TZID=$tz_id:{ical_start}
-DTEND;TZID=$tz_id:{ical_end}
+DTEND;TZID=$tz_id:{ical_end}{ical_recur}
 URL;VALUE=URI:{link}
 DESCRIPTION:{ical_desc}
 CATEGORIES:{ical_categories}{alert}{all_day}
@@ -520,6 +519,68 @@ X-WR-CALDESC:' . $events_from;
 		'head'     => $head,
 		'foot'     => $foot,
 	);
+}
+
+/**
+ * Translate a My Calendar recurrence pattern into an ical RRULE.
+ *
+ * @param object $event Event object.
+ *
+ * @return string
+ */
+function mc_generate_rrule( $event ) {
+	$rrule  = '';
+	$by     = '';
+	$repeat = $event->event_repeats;
+	$month  = mc_date( 'm', strtotime( $event->event_begin ) );
+	$day    = mc_date( 'd', strtotime( $event->event_begin ) );
+	$numday = mc_recur_date( $event->event_begin );
+	$recurs = str_split( $event->event_recur, 1 );
+	$recur  = $recurs[0];
+	$every  = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
+
+	switch ( $recur ) {
+		case 'S':
+			$rrule = '';
+			break;
+		case 'D':
+			$rrule = 'FREQ=DAILY';
+			break;
+		case 'E':
+			$rrule = 'FREQ=DAILY;BYDAY=MO,TU,WE,TH,FR';
+			break;
+		case 'W':
+			$rrule = 'FREQ=WEEKLY';
+			break;
+		case 'B':
+			$rrule = 'FREQ=WEEKLY'; // interval = 2
+			break;
+		case 'M':
+			$by    = 'BYMONTHDAY=' . $day;
+			$rrule = 'FREQ=MONTHLY';
+			break;
+		case 'U':
+			$by    = 'BYDAY=' . $numday['num'] . strtoupper( substr( $numday['day'], 0, 2 ) );
+			$rrule = 'FREQ=MONTHLY'; // Calculate which day/week the first date is for BYDAY= pattern.
+			break;
+		case 'Y':
+			$by    = 'BYMONTH=' . $month . ';BYDAY=' . $day;
+			$rrule = 'FREQ=YEARLY';
+			break;
+	}
+
+	$interval = ( '1' !== $every ) ? 'INTERVAL=' . $every : '';
+
+	if ( is_numeric( $repeat ) ) {
+		$until = 'COUNT=' . $repeat;
+	} else {
+		$until = 'UNTIL=' . mc_date( 'Ymd\THis', strtotime( $repeat ), false ) . 'Z';
+	}
+
+	$rrule = ( '' !== $rrule ) ? PHP_EOL . "$rrule;$by;$interval;$until" . PHP_EOL : '';
+	$rrule = str_replace( array( ';;;', ';;' ), ';', $rrule );
+
+	return $rrule;
 }
 
 /**

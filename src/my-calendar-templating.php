@@ -198,7 +198,7 @@ function mc_templates_edit() {
 								<dt><code>{host}</code></dt>
 								<dd><?php _e( 'Name of the assigned host for the event.', 'my-calendar' ); ?></dd>
 
-								<dt><code>{shortdesc}</code></dt>
+								<dt><code>{excerpt}</code></dt>
 								<dd><?php _e( 'Short event description.', 'my-calendar' ); ?></dd>
 
 								<dt><code>{description}</code></dt>
@@ -212,9 +212,6 @@ function mc_templates_edit() {
 
 								<dt><code>{details}</code></dt>
 								<dd><?php _e( 'Link to an auto-generated page containing information about the event.', 'my-calendar' ); ?>
-
-								<dt><code>{event_status}</code></dt>
-								<dd><?php _e( 'Current status of event: either "Published" or "Reserved."', 'my-calendar' ); ?></dd>
 							</dl>
 
 							<h3><?php _e( 'Location Template Tags', 'my-calendar' ); ?></h3>
@@ -428,9 +425,13 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 			'ical_end',
 			'ical_location',
 			'ical_start',
+			'ical_recur',
+			'ical_description',
+			'event_status',
 			'id',
 			'location_source',
 			'post',
+			'shortdesc',
 			'repeats',
 			'rssdate',
 			'skip_holiday',
