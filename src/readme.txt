@@ -414,11 +414,6 @@ TODO:
 = Future Changes =
 
 * Refactor options storage
-* Revise month by day input & calculation methods
-* Bug: if save generates error, creates ton of notices. [eliminate $submission object and use single object model]
-* Add ability to limit by multiple locations (e.g., view all events in Location 1 & Location 2; only on lvalue)
-* JS to delete events from front-end when logged-in
-* TODO: delete this instance and all subsequent instances
 
 == Frequently Asked Questions ==
 
