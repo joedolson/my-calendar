@@ -658,6 +658,13 @@ strong.label {
 	content: "\f342";
 }
 
+#mc-generator .shortcode-preview {
+	display: grid;
+	grid-template-columns: 1fr 13em;
+	column-gap: 10px;
+	align-items: center;
+}
+
 #mc-generator .mc-tabs .tabs button {
 	padding: 8px 16px;
 	background: #fff;

@@ -151,4 +151,30 @@ jQuery( function( $ ) {
 		tbWindow.find( '#TB_iframeContent' ).attr( 'title', title );
 	});
 
+	var reset = document.querySelector( '.reset-my-calendar' );
+	if ( null !== reset ) {
+		reset.addEventListener( 'click', resetShortcode );
+		function resetShortcode( e ) {
+			var controls = document.querySelectorAll( '#mc-generator input, #mc-generator select' );
+			for (i = 0; i < controls.length; i++) {
+				switch ( controls[i].type ) {
+					case 'password':
+					case 'select-multiple':
+					case 'select-one':
+					case 'text':
+					case 'email':
+					case 'date':
+					case 'url':
+					case 'search':
+					case 'textarea':
+						controls[i].value = '';
+						break;
+					case 'checkbox':
+					case 'radio':
+						controls[i].checked = false;
+						break;
+				}
+			}
+		}
+	}
 });

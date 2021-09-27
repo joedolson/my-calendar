@@ -389,7 +389,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 		<?php
 		// Common Elements to all Shortcodes.
 		if ( $shortcode ) {
-			echo '<p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly" id="mc_shortcode">' . $shortcode . '</textarea></p>';
+			echo '<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly" id="mc_shortcode">' . $shortcode . '</textarea></p><p><button type="button" class="button button-hero reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>';
 		}
 		?>
 		<div class="mc-generator-inputs">
