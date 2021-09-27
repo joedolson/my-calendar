@@ -1878,7 +1878,6 @@ $plugins_string
 				wp_die( 'Security check failed' );
 			}
 			$request      = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
-			$has_read_faq = ( 'on' === $_POST['has_read_faq'] ) ? 'Read FAQ' : false;
 			$subject      = 'My Calendar Pro support request.';
 			$message      = $request . "\n\n" . $data;
 			// Get the site domain and get rid of www. from pluggable.php.
@@ -1889,21 +1888,15 @@ $plugins_string
 			$from_email = 'wordpress@' . $sitename;
 			$from       = "From: $current_user->username <$from_email>\r\nReply-to: $current_user->username <$current_user->user_email>\r\n";
 
-			if ( ! $has_read_faq ) {
-				echo '<div class="message error"><p>' . __( 'Please read the FAQ and other Help documents before making a support request.', 'my-calendar' ) . '</p></div>';
-			} elseif ( ! $request ) {
+			if ( ! $request ) {
 				echo '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>';
 			} else {
 				$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
 				if ( $sent ) {
-					if ( 'Donor' === $has_donated || 'Purchaser' === $has_purchased ) {
-						mc_show_notice( __( 'Thank you for supporting the continuing development of this plugin! I\'ll get back to you as soon as I can.', 'my-calendar' ) );
-					} else {
-						mc_show_notice( __( 'I\'ll get back to you as soon as I can, after dealing with any support requests from plugin supporters.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
-					}
+					mc_show_notice( __( 'I\'ll get back to you as soon as I can.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
 				} else {
 					// Translators: Support form URL.
-					echo '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
+					echo '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/' ) . "</p><pre>$request</pre></div>";
 				}
 			}
 		}
@@ -1913,12 +1906,6 @@ $plugins_string
 			<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
 			<div>
 			<code>' . __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;</code>
-			</p>
-			<p>
-				<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>" . __( 'I have read <a href="http://www.joedolson.com/my-calendar/faq/">the FAQ for this plugin</a>.', 'my-calendar' ) . " <span>(required)</span></label>
-			</p>
-			<p>
-				<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . __( 'I made a donation to help support this plugin.', 'my-calendar' ) . "</label>
 			</p>
 			<p>
 				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'>" . stripslashes( $request ) . "</textarea>
