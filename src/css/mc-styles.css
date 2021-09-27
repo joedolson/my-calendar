@@ -263,12 +263,9 @@ li.datetime-template:nth-of-type(even) {
 	grid-template-columns: repeat( 3, 1fr )
 }
 
-#e_schedule .columns.instance-list li:nth-of-type(odd) {
-	background: rgba( 0,0,0,.05 );
-}
-
-
 #e_schedule .columns.instance-list li {
+	min-height: 80px;
+	background: rgba( 0,0,0,.05 );
 	padding: 10px;
 }
 
@@ -635,6 +632,13 @@ strong.label {
 .mc-tabs.vertical .wptab {
 	border-left: 1px solid #c3c4c7;
 	padding: 10px;
+}
+
+.my-calendar-admin fieldset .wptab {
+	border: 1px solid #c3c4c7;
+	border-top: none;
+	padding: 1em;
+	margin-bottom: 1em;
 }
 
 #my-calendar-admin-table th[aria-sort] a:after {
