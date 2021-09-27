@@ -211,7 +211,7 @@ function mc_templates_edit() {
 								<dd><?php _e( 'URL provided for the event.', 'my-calendar' ); ?></dd>
 
 								<dt><code>{details}</code></dt>
-								<dd><?php _e( 'Link to an auto-generated page containing information about the event.', 'my-calendar' ); ?>
+								<dd><?php _e( 'Link to a page containing information about the event.', 'my-calendar' ); ?>
 							</dl>
 
 							<h3><?php _e( 'Location Template Tags', 'my-calendar' ); ?></h3>
