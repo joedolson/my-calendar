@@ -3728,7 +3728,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	// Switch to select status.
 	if ( 'header' === $position ) {
 		if ( 'edit' === $mode ) {
-			$controls['publish'] = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
+			$controls['publish']     = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) { // Added by Roland P.
 				if ( $has_data && '1' === $event->event_approved ) {
