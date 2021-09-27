@@ -553,7 +553,7 @@ function mc_generate_rrule( $event ) {
 			$rrule = 'FREQ=WEEKLY';
 			break;
 		case 'B':
-			$rrule = 'FREQ=WEEKLY'; // interval = 2
+			$rrule = 'FREQ=WEEKLY'; // interval = 2.
 			break;
 		case 'M':
 			$by    = 'BYMONTHDAY=' . $day;

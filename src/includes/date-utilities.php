@@ -240,7 +240,7 @@ function mc_checkdate( $date ) {
 }
 
 /**
- * Determine where a date lies in a month in terms of week/day. 
+ * Determine where a date lies in a month in terms of week/day.
  *
  * @param string $timestamp Timestamp.
  *
@@ -248,11 +248,11 @@ function mc_checkdate( $date ) {
  */
 function mc_recur_date( $timestamp ) {
 	$timestamp = is_numeric( $timestamp ) ? $timestamp : strtotime( $timestamp );
-	$weekday   = date( 'l', $timestamp );
-	$month     = date( 'M', $timestamp );   
+	$weekday   = mc_date( 'l', $timestamp );
+	$month     = mc_date( 'M', $timestamp );
 	$ord       = 0;
 
-	while ( date( 'M', ( $timestamp = strtotime( '-1 week', $timestamp ) ) ) == $month ) {
+	while ( mc_date( 'M', ( $timestamp = strtotime( '-1 week', $timestamp ) ) ) === $month ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		$ord++;
 	}
 

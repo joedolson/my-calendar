@@ -1877,9 +1877,9 @@ $plugins_string
 			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 				wp_die( 'Security check failed' );
 			}
-			$request      = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
-			$subject      = 'My Calendar Pro support request.';
-			$message      = $request . "\n\n" . $data;
+			$request = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
+			$subject = 'My Calendar Pro support request.';
+			$message = $request . "\n\n" . $data;
 			// Get the site domain and get rid of www. from pluggable.php.
 			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
 			if ( 'www.' === substr( $sitename, 0, 4 ) ) {
