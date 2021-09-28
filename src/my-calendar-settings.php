@@ -98,7 +98,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			}
 			foreach ( $label as $k => $v ) {
 				if ( 'radio' === $type ) {
-					$checked  = ( $k === $value ) ? ' checked="checked"' : '';
+					$checked = ( $k === $value ) ? ' checked="checked"' : '';
 				} else {
 					$checked = ( in_array( $k, $value, true ) ) ? ' checked="checked"' : '';
 				}

@@ -412,7 +412,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			if ( ( 'true' === $display_address || 'true' === $display_map ) || ( mc_output_is_visible( 'address', $type ) || mc_output_is_visible( 'gmap_link', $type ) ) ) {
 				$show_add = ( 'true' === $display_address || mc_output_is_visible( 'address', $type ) ) ? 'true' : 'false';
 				$show_map = ( 'true' === $display_map || mc_output_is_visible( 'gmap_link', $type ) ) ? 'true' : 'false';
-				$address = mc_hcard( $event, $show_add, $show_map );
+				$address  = mc_hcard( $event, $show_add, $show_map );
 			}
 			$time_html = mc_time_html( $event, $type );
 			if ( 'list' === $type ) {
@@ -464,7 +464,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$vcal = "	<p class='ical'>" . mc_draw_template( $data, '{ical_html}' ) . '</p>';
 			}
 
-			if ( 'true' === $display_image ||mc_output_is_visible( 'image', $type ) ) {
+			if ( 'true' === $display_image || mc_output_is_visible( 'image', $type ) ) {
 				$img = mc_get_event_image( $event, $data );
 			}
 
