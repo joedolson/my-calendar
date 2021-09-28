@@ -217,14 +217,13 @@ function mc_default_settings() {
 	foreach ( $globals as $key => $global ) {
 		${$key} = $global;
 	}
-
+	add_option( 'mc_display_single', array( 'author', 'host', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ) );
+	add_option( 'mc_display_grid', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
+	add_option( 'mc_display_list', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
+	add_option( 'mc_display_mini', array( 'excerpt', 'image', 'more' ) );
 	add_option( 'mc_use_permalinks', 'true' );
-	add_option( 'mc_display_author', 'false' );
 	add_option( 'mc_use_styles', 'false' );
 	add_option( 'mc_show_months', 1 );
-	add_option( 'mc_show_map', 'false' );
-	add_option( 'mc_show_address', 'true' );
-	add_option( 'mc_display_more', 'true' );
 	add_option( 'mc_calendar_javascript', 0 );
 	add_option( 'mc_list_javascript', 0 );
 	add_option( 'mc_mini_javascript', 0 );
@@ -238,10 +237,6 @@ function mc_default_settings() {
 	add_option( 'mc_input_options_administrators', 'false' );
 	add_site_option( 'mc_multisite', '0' );
 	add_option( 'mc_event_mail', 'false' );
-	add_option( 'mc_desc', 'true' );
-	add_option( 'mc_image', 'true' );
-	add_option( 'mc_process_shortcodes', 'false' );
-	add_option( 'mc_short', 'false' );
 	add_option( 'mc_week_format', "M j, 'y" );
 	add_option( 'mc_date_format', get_option( 'date_format' ) );
 	// This option *must* be complete, if it's partial we get errors. So use update instead of add.
@@ -277,7 +272,6 @@ function mc_default_settings() {
 	add_option( 'mc_convert', 'true' );
 	add_option( 'mc_show_event_vcal', 'false' );
 	add_option( 'mc_multisite_show', 0 );
-	add_option( 'mc_event_link', 'true' );
 	add_option( 'mc_topnav', 'toggle,timeframe,jump,nav' );
 	add_option( 'mc_bottomnav', 'key,print' );
 	add_option( 'mc_default_direction', 'DESC' );

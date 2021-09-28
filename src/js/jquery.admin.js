@@ -256,12 +256,12 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	var gapi_checked = $( 'input[id="mc_gmap"]' ).prop( "checked" );
+	var gapi_checked = $( 'input[id="mc_display_single-gmap"]' ).prop( "checked" );
 	if ( gapi_checked ) {
 		$( '#mc_gmap_api_key' ).attr( 'required', 'true' );
 	}
 
-	$( 'input[id="mc_gmap"]' ).change( function() {
+	$( 'input[id="mc_display_single-gmap"]' ).change( function() {
 		var checked = $(this).prop( "checked" );
 		if ( checked ) {
 			$( '#mc_gmap_api_key' ).attr( 'required', 'true' );

@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_style' );
 		delete_option( 'mc_display_author' );
 		delete_option( 'mc_display_host' );
-		delete_option( 'mc_display_jump' );
 		delete_option( 'mc_version' );
 		delete_option( 'mc_use_styles' );
 		delete_option( 'mc_show_months' );

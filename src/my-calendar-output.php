@@ -314,6 +314,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	$tickets     = '';
 	$data        = mc_create_tags( $event, $id );
 	$details     = '';
+	$otype       = ( 'calendar' === $type ) ? 'grid' : $type;
 
 	if ( mc_show_details( $time, $type ) ) {
 		$details  = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
@@ -323,22 +324,22 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 	}
 
-	// Display options.
-	$display_map     = get_option( 'mc_show_map' );
-	$display_address = get_option( 'mc_show_address' );
-	$display_gcal    = get_option( 'mc_show_gcal' );
-	$display_vcal    = get_option( 'mc_show_event_vcal' );
+	// Fallback display options. Changed in 3.3.0; fallback to old settings if new don't exist.
+	$display_map     = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_map' ) : '';
+	$display_address = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_address' ) : '';
+	$display_gcal    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_gcal' ) : '';
+	$display_vcal    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_event_vcal' ) : '';
 	$open_uri        = get_option( 'mc_open_uri' );
-	$display_author  = get_option( 'mc_display_author' );
-	$display_host    = get_option( 'mc_display_host' );
-	$display_more    = get_option( 'mc_display_more' );
-	$display_desc    = get_option( 'mc_desc' );
-	$display_short   = get_option( 'mc_short' );
-	$display_gmap    = get_option( 'mc_gmap' );
-	$display_link    = get_option( 'mc_event_link' );
-	$display_image   = get_option( 'mc_image' );
+	$display_author  = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_display_author' ) : '';
+	$display_host    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_display_host' ) : '';
+	$display_more    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_display_more' ) : '';
+	$display_desc    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_desc' ) : '';
+	$display_short   = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_short' ) : '';
+	$display_gmap    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_gmap' ) : '';
+	$display_link    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_event_link' ) : '';
+	$display_image   = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_image' ) : '';
 	$display_title   = get_option( 'mc_title' );
-	$display_reg     = get_option( 'mc_event_registration' );
+	$display_reg     = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_event_registration' ) : '';
 	$day_id          = mc_date( 'd', strtotime( $process_date ), false );
 	$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
 	$image           = mc_category_icon( $event );
@@ -408,8 +409,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$close = ( 'calendar' === $type ) ? $close_button : '';
 
 		if ( false === $details ) {
-			if ( ( 'true' === $display_address || 'true' === $display_map ) ) {
-				$address = mc_hcard( $event, $display_address, $display_map );
+			if ( ( 'true' === $display_address || 'true' === $display_map ) || ( mc_output_is_visible( 'address', $type ) || mc_output_is_visible( 'gmap_link', $type ) ) ) {
+				$show_add = ( 'true' === $display_address || mc_output_is_visible( 'address', $type ) ) ? 'true' : 'false';
+				$show_map = ( 'true' === $display_map || mc_output_is_visible( 'gmap_link', $type ) ) ? 'true' : 'false';
+				$address = mc_hcard( $event, $show_add, $show_map );
 			}
 			$time_html = mc_time_html( $event, $type );
 			if ( 'list' === $type ) {
@@ -417,7 +420,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 			}
 			$avatars = apply_filters( 'mc_use_avatars', false, $event );
-			if ( 'true' === $display_author ) {
+			if ( 'true' === $display_author || mc_output_is_visible( 'author', $type ) ) {
 				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
 					$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
 					$a      = get_userdata( $event->event_author );
@@ -428,7 +431,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					}
 				}
 			}
-			if ( 'true' === $display_host ) {
+			if ( 'true' === $display_host || mc_output_is_visible( 'host', $type ) ) {
 				if ( 0 !== (int) $event->event_host && is_numeric( $event->event_host ) ) {
 					$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
 					$h       = get_userdata( $event->event_host );
@@ -440,7 +443,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				}
 			}
 
-			if ( 'false' !== $display_more && ! isset( $_GET['mc_id'] ) ) {
+			if ( ( 'false' !== $display_more && ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type ) ) {
 				$details_label = mc_get_details_label( $event, $data );
 				$details_link  = mc_get_details_link( $event );
 				// Translators: Event title.
@@ -453,32 +456,32 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 			$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
-			if ( 'true' === $display_gcal ) {
+			if ( 'true' === $display_gcal || mc_output_is_visible( 'gcal', $type ) ) {
 				$gcal = "	<p class='gcal'>" . mc_draw_template( $data, '{gcal_link}' ) . '</p>';
 			}
 
-			if ( 'true' === $display_vcal ) {
+			if ( 'true' === $display_vcal || mc_output_is_visible( 'ical', $type ) ) {
 				$vcal = "	<p class='ical'>" . mc_draw_template( $data, '{ical_html}' ) . '</p>';
 			}
 
-			if ( 'true' === $display_image ) {
+			if ( 'true' === $display_image ||mc_output_is_visible( 'image', $type ) ) {
 				$img = mc_get_event_image( $event, $data );
 			}
 
 			if ( 'calendar' === $type && 'true' === $display_title ) {
-				// In all cases, this is semantically a duplicate of the title, but can be beneficial for sighted users.
+				// This is semantically a duplicate of the title, but can be beneficial for sighted users.
 				$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
 				$inner_title = '	<h4 class="mc-title" aria-hidden="true">' . $event_title . '</h4>';
 			}
 
-			if ( 'true' === $display_desc || 'single' === $type ) {
+			if ( 'true' === $display_desc || mc_output_is_visible( 'description', $type ) ) {
 				if ( '' !== trim( $event->event_desc ) ) {
 					$description = wpautop( stripcslashes( mc_kses_post( $event->event_desc ) ), 1 );
 					$description = "	<div class='longdesc description' itemprop='description'>$description</div>";
 				}
 			}
 
-			if ( 'true' === $display_reg ) {
+			if ( 'true' === $display_reg || mc_output_is_visible( 'tickets', $type ) ) {
 				$info     = wpautop( $event->event_registration );
 				$url      = esc_url( $event->event_tickets );
 				$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
@@ -491,7 +494,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				}
 			}
 
-			if ( 'true' === $display_short && 'single' !== $type ) {
+			if ( 'true' === $display_short || mc_output_is_visible( 'excerpt', $type ) ) {
 				if ( '' !== trim( $event->event_short ) ) {
 					$short = wpautop( stripcslashes( mc_kses_post( $event->event_short ) ), 1 );
 					$short = "	<div class='shortdesc description'>$short</div>";
@@ -509,14 +512,14 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$status      = '';
 			}
 
-			if ( 'true' === $display_gmap ) {
+			if ( 'true' === $display_gmap || mc_output_is_visible( 'gmap', $type ) ) {
 				$map = ( is_singular( 'mc-events' ) || 'single' === $type ) ? mc_generate_map( $event ) : '';
 			} else {
 				$map = '';
 			}
 			$event_link = mc_event_link( $event );
 
-			if ( '' !== $event_link && 'false' !== $display_link ) {
+			if ( '' !== $event_link && ( 'false' !== $display_link || mc_output_is_visible( 'link', $type ) ) ) {
 				$external_class = ( mc_external_link( $event_link ) ) ? "$type-link external url" : "$type-link url";
 				$link_template  = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
 				$link_text      = mc_draw_template( $data, $link_template );
@@ -1522,6 +1525,24 @@ function mc_hidden_event() {
 			status_header( 404 );
 		}
 	}
+}
+
+/**
+ * Check whether a given output field should be displayed.
+ *
+ * @param string $feature Feature key.
+ * @param string $type Display type.
+ *
+ * @return bool
+ */
+function mc_output_is_visible( $feature, $type ) {
+	$type   = ( 'calendar' === $type ) ? 'grid' : $type;
+	$option = get_option( 'mc_display_' . $type, array() );
+	if ( in_array( $feature, $option, true ) ) {
+		return true;
+	}
+
+	return false;
 }
 
 /**

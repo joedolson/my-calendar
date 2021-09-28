@@ -913,8 +913,32 @@ function mc_do_upgrades( $upgrade_path ) {
 				mc_upgrade_db();
 				// Count cache no longer counts 'archived' events as published.
 				mc_update_count_cache();
-				// Shortcodes now deleted by default.
+				// Shortcodes now executed by default.
 				delete_option( 'mc_process_shortcodes' );
+				// Remap display settings.
+				$settings   = array();
+				$settings[] = ( 'true' === get_option( 'mc_display_author' ) ) ? 'author' : '';
+				$settings[] = ( 'true' === get_option( 'mc_display_host' ) ) ? 'host' : '';
+				$settings[] = ( 'true' === get_option( 'mc_show_event_vcal' ) ) ? 'ical' : '';
+				$settings[] = ( 'true' === get_option( 'mc_show_gcal' ) ) ? 'gcal' : '';
+				$settings[] = ( 'true' === get_option( 'mc_show_map' ) ) ? 'gmap_link' : '';
+				$settings[] = ( 'true' === get_option( 'mc_gmap' ) ) ? 'gmap' : '';
+				$settings[] = ( 'true' === get_option( 'mc_show_address' ) ) ? 'address' : '';
+				$settings[] = ( 'true' === get_option( 'mc_short' ) ) ? 'excerpt' : '';
+				$settings[] = ( 'true' === get_option( 'mc_desc' ) ) ? 'description' : '';
+				$settings[] = ( 'true' === get_option( 'mc_image' ) ) ? 'image' : '';
+				$settings[] = ( 'true' === get_option( 'mc_event_registration' ) ) ? 'tickets' : '';
+				$settings[] = ( 'true' === get_option( 'mc_event_link' ) ) ? 'link' : '';
+				$settings[] = ( 'true' === get_option( 'mc_display_more' ) ) ? 'more' : '';
+				foreach ( $settings as $key => $value ) {
+					if ( '' === $value ) {
+						unset( $settings[ $key ] );
+					}
+				}
+				add_option( 'mc_display_single', $settings );
+				add_option( 'mc_display_grid', $settings );
+				add_option( 'mc_display_list', $settings );
+				add_option( 'mc_display_mini', $settings );
 				add_option( 'mc_drop_settings', 'true' );
 				break;
 			case '3.1.13':
