@@ -1560,7 +1560,7 @@ function mc_output_is_visible( $feature, $type, $event ) {
 	 *
 	 * @return bool
 	 */
-	$return = apply_filters( 'mc_output_is_visible', $return, $feature, $type, $event );
+	return apply_filters( 'mc_output_is_visible', $return, $feature, $type, $event );
 }
 
 /**
