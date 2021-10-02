@@ -16,7 +16,7 @@
 		"brain/monkey": "^2.6.0"
 	},
 		"require-dev": {
-		"wp-coding-standards/wpcs": "^2.1",
+		"wp-coding-standards/wpcs": "^2.1"
 	},
 	"scripts": {
 		"lint": [
