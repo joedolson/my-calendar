@@ -1330,7 +1330,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			break;
 		case 'event_category':
 			if ( $show_block ) {
-				$add_category = current_user_can( 'mc_edit_cats' ) ? '<input type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new">' . __( 'Add new category', 'my-calendar' ) . '</label>' : '';
+				$add_category = current_user_can( 'mc_edit_cats' ) ? '<input type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new"><span class="dashicons dashicons-plus" aria-hidden="true"></span>' . __( 'Add a new category', 'my-calendar' ) . '</label>' : '';
 				if ( 'true' !== get_option( 'mc_multiple_categories' ) ) {
 					$select = mc_category_select( $data, true, false );
 					$return = '
@@ -1723,7 +1723,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					<p id="event_span" class="checkboxes">
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
-						<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', __( 'My Calendar: add another occurrence', 'my-calendar' ), '1' ); ?>
+						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php _e( 'Add occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', __( 'My Calendar: add an occurrence', 'my-calendar' ), '1' ); ?>
 					</p>
 					<ol class="mc-repeat-events columns">
 						<li id="event1" class="datetime-template enabled">
@@ -1739,7 +1739,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							?>
 							</fieldset>
 							<div class="buttons">
-								<button type="button" class="add_field button button-secondary"><?php _e( 'Add another occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', __( 'My Calendar: add another occurrence', 'my-calendar' ), '1' ); ?>
+								<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php _e( 'Add occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', __( 'My Calendar: add an occurrence', 'my-calendar' ), '1' ); ?>
 							</div>
 						</li>
 					</ol>

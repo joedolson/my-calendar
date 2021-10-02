@@ -729,6 +729,7 @@ strong.label {
 	margin-bottom: 10px;
 }
 
+.add_field .dashicons,
 .add-location .dashicons,
 .add-occurrence .dashicons {
 	vertical-align: middle;
