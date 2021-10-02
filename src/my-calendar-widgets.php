@@ -230,7 +230,7 @@ function my_calendar_upcoming_events( $args ) {
 		if ( is_array( $events ) && ! empty( $events ) ) {
 			$event_array = mc_set_date_array( $events );
 			if ( is_array( $holidays ) && count( $holidays ) > 0 ) {
-				$event_array = mc_holiday_limit( $event_array, $holiday_array ); // if there are holidays, rejigger.
+				$event_array = mc_holiday_limit( $event_array, $holiday_array ); // if there are holidays, filter results.
 			}
 		}
 		if ( ! empty( $event_array ) ) {
