@@ -109,7 +109,7 @@ function mc_templates_edit() {
 					<div class="postbox" id="mc-edit-template">
 						<h2><?php _e( 'Edit Template', 'my-calendar' ); ?></h2>
 						<div class="inside">
-							<?php echo ( '' !== $core ) ? "<p class='template-description'>$core</p>" : ''; ?>
+							<?php echo ( '' !== $core ) ? "<div class='template-description'>$core</div>" : ''; ?>
 							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
 							<?php
 							if ( 'add-new' === $key ) {
@@ -157,6 +157,7 @@ function mc_templates_edit() {
 								<?php } ?>
 								</p>
 							<?php } ?>
+							</form>
 							<p>
 								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-templates#templates' ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a>
 							</p>
@@ -276,7 +277,7 @@ function mc_templates_edit() {
 					continue;
 				}
 				?>
-			<div id="templates" class="metabox-holder">
+			<div class="metabox-holder">
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
 						<h2>
@@ -285,8 +286,8 @@ function mc_templates_edit() {
 				printf( __( 'Template Preview: %s', 'my-calendar' ), ucfirst( $key ) );
 				?>
 						</h2>
+						<div class="template-preview inside">
 				<?php
-				echo '<div class="template-preview inside">';
 				echo mc_template_description( $key );
 				$mc_id       = mc_get_template_tag_preview( false, 'int' );
 				$view_url    = mc_get_details_link( $mc_id );
@@ -300,12 +301,13 @@ function mc_templates_edit() {
 					$view_url
 				);
 				?>
-				<div class="mc-template-preview">
-					<iframe onload="resizeIframe(this)" title="<?php _e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
-				</div>
+						<div class="mc-template-preview">
+							<iframe onload="resizeIframe(this)" title="<?php _e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
+						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 				<?php
 			}
 			?>
@@ -316,7 +318,6 @@ function mc_templates_edit() {
 
 						<div class='mc_template_tags inside'>
 							<?php
-							echo '<h3>' . __( 'All Template Tags (alphabetical)', 'my-calendar' ) . '</h3>';
 							echo mc_display_template_tags();
 							?>
 						</div>
@@ -393,10 +394,11 @@ function mc_display_template_preview( $template, $mc_id = false ) {
  * @return string
  */
 function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
-	$event  = false;
-	$data   = mc_get_template_tag_preview( $mc_id );
-	$output = '';
-	$empty  = '';
+	$event   = false;
+	$data    = mc_get_template_tag_preview( $mc_id );
+	$output  = '';
+	$empty   = '';
+	$oddball = '';
 
 	// Translators: Event title being shown.
 	$post_title = sprintf( __( 'Template tags for &ldquo;%1$s&rdquo;, on %2$s', 'my-calendar' ), $data['title'], $data['date'] );
@@ -404,59 +406,67 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 	if ( empty( $data ) ) {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
 	}
-	$skipping = array();
-	if ( 'preview' === $render ) {
-		// In preview, don't show all items.
-		$skipping = array(
-			'author_id',
-			'cat_id',
-			'category_id',
-			'dateid',
-			'duration',
-			'event_span',
-			'dtend',
-			'dtstart',
-			'group',
-			'guid',
-			'host_id',
-			'ical_categories',
-			'ical_category',
-			'ical_desc',
-			'ical_end',
-			'ical_location',
-			'ical_start',
-			'ical_recur',
-			'ical_description',
-			'event_status',
-			'id',
-			'location_source',
-			'post',
-			'shortdesc',
-			'repeats',
-			'rssdate',
-			'skip_holiday',
-			'term',
-			'description_raw',
-			'description_stripped',
-			'shortdesc_raw',
-			'shortdesc_stripped',
-		);
-	}
+	// In preview, don't show all items.
+	$skipping = array(
+		'author_id',
+		'cat_id',
+		'category_id',
+		'dateid',
+		'duration',
+		'event_span',
+		'dtend',
+		'dtstart',
+		'group',
+		'guid',
+		'host_id',
+		'ical_categories',
+		'ical_category',
+		'ical_desc',
+		'ical_end',
+		'ical_location',
+		'ical_start',
+		'ical_recur',
+		'ical_description',
+		'event_status',
+		'id',
+		'location_source',
+		'post',
+		'shortdesc',
+		'repeats',
+		'rssdate',
+		'skip_holiday',
+		'term',
+		'description_raw',
+		'description_stripped',
+		'shortdesc_raw',
+		'shortdesc_stripped',
+	);
 	foreach ( $data as $key => $value ) {
+		$uncommon = false;
 		if ( in_array( $key, $skipping, true ) ) {
-			continue;
+			if ( 'preview' === $render ) {
+				continue;
+			} else {
+				$uncommon = true;
+			}
 		}
-		$tag_output = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap;line-break:anywhere">' . esc_html( $value ) . '</pre>' : $value;
+		$tag_output    = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap;line-break:anywhere">' . esc_html( $value ) . '</pre>' : $value;
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$empty .= '<div class="mc-output-' . $key . '">' . $tag_output . '</div></section>';
+		} else if ( true === $uncommon ) {
+			$oddball .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
+			$oddball .= '<div class="mc-output mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		} else {
 			$output .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$output .= '<div class="mc-output mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		}
 	}
+	if ( '' !== $oddball ) {
+		$output_uncommon = '<h3>' . __( 'Uncommon Template Tags', 'my-calendar' ) . '</h3><div class="mc-template-cards">' . $oddball . '</div>';
+	}
 
-	return '<h3>' . $post_title . '</h3><div class="mc-template-cards">' . $output . '</div><h3>' . __( 'Template tags without values for this event', 'my-calendar' ) . '</h3><div class="mc-template-cards">' . $empty . '</div>';
+	return '<h3>' . $post_title . '</h3><div class="mc-template-cards">' . $output . '</div><h3>' . __( 'Template tags without values for this event', 'my-calendar' ) . '</h3><div class="mc-template-cards">' . $empty . '</div>' . $output_uncommon;
 }
 
 /**
