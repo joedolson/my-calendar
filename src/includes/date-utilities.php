@@ -242,17 +242,17 @@ function mc_checkdate( $date ) {
 /**
  * Determine where a date lies in a month in terms of week/day.
  *
- * @param string $timestamp Timestamp.
+ * @param string $ts Timestamp.
  *
  * @return array
  */
-function mc_recur_date( $timestamp ) {
-	$timestamp = is_numeric( $timestamp ) ? $timestamp : strtotime( $timestamp );
-	$weekday   = mc_date( 'l', $timestamp );
-	$month     = mc_date( 'M', $timestamp );
-	$ord       = 0;
+function mc_recur_date( $ts ) {
+	$ts      = is_numeric( $ts ) ? $ts : strtotime( $ts );
+	$weekday = mc_date( 'l', $ts );
+	$month   = mc_date( 'M', $ts );
+	$ord     = 0;
 
-	while ( mc_date( 'M', ( $timestamp = strtotime( '-1 week', $timestamp ) ) ) === $month ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+	while ( mc_date( 'M', ( $ts = strtotime( '-1 week', $ts ) ) ) === $month ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		$ord++;
 	}
 
