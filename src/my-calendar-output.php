@@ -1545,7 +1545,8 @@ function mc_hidden_event() {
  * @return bool
  */
 function mc_output_is_visible( $feature, $type, $event ) {
-	$type   = ( 'calendar' === $type ) ? 'grid' : $type;
+	// Map either calendar popup or list to main settings.
+	$type   = ( 'calendar' === $type || 'list' === $type ) ? 'main' : $type;
 	$option = get_option( 'mc_display_' . $type, array() );
 	$return = false;
 	if ( in_array( $feature, $option, true ) ) {

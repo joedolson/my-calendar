@@ -307,8 +307,7 @@ function mc_update_output_settings( $post ) {
 	update_option( 'mc_topnav', $top );
 
 	update_option( 'mc_display_single', array_map( 'sanitize_text_field', $post['mc_display_single'] ) );
-	update_option( 'mc_display_grid', array_map( 'sanitize_text_field', $post['mc_display_grid'] ) );
-	update_option( 'mc_display_list', array_map( 'sanitize_text_field', $post['mc_display_list'] ) );
+	update_option( 'mc_display_main', array_map( 'sanitize_text_field', $post['mc_display_main'] ) );
 	update_option( 'mc_display_mini', array_map( 'sanitize_text_field', $post['mc_display_mini'] ) );
 
 	update_option( 'mc_gmap_api_key', ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '' );
@@ -870,8 +869,7 @@ function mc_remote_db() {
 						<div class="mc-tabs">
 							<div class="tabs" role="tablist" data-default="single-event-output">
 								<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php _e( 'Single Event', 'my-calendar' ); ?></button>
-								<button type="button" role="tab" aria-selected="false" id="tab_popup_output" aria-controls="calendar-popup-output"><?php _e( 'Calendar Popup', 'my-calendar' ); ?></button>
-								<button type="button" role="tab" aria-selected="false" id="tab_list_output" aria-controls="list-view"><?php _e( 'List View', 'my-calendar' ); ?></button>
+								<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php _e( 'Main View (Popup or List)', 'my-calendar' ); ?></button>
 								<button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup"><?php _e( 'Mini Calendar Popup', 'my-calendar' ); ?></button>
 							</div>
 							<div role='tabpanel' aria-labelledby='tab_single_output' class='wptab' id='single-event-output'>
@@ -911,19 +909,19 @@ function mc_remote_db() {
 								</ul>
 								<p class="mc_gmap_api_key"><?php mc_settings_field( 'mc_gmap_api_key', __( 'Google Maps API Key', 'my-calendar' ), '', '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '</a>', array( 'id' => 'mc_gmap_id' ) ); ?></p>
 							</div>
-							<div role='tabpanel' aria-labelledby='tab_popup_output' class='wptab' id='calendar-popup-output'>
+							<div role='tabpanel' aria-labelledby='tab_main_output' class='wptab' id='calendar-main-output'>
 								<p>
 								<?php
-								_e( 'Choose fields to show in the calendar popup.', 'my-calendar' );
+								_e( 'Choose fields to show in the calendar popup and list views.', 'my-calendar' );
 								echo ' ';
 								// Translators: URL to single event view template editing screen.
-								printf( __( 'The <a href="%s">grid view template</a> overrides these settings.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=grid' ) );
+								printf( __( 'The <a href="%1$s">grid view template</a> overrides these settings for the calendar popup, and the <a href="%2$s">list view template</a> overrides these settings in list view.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=grid' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=list' ) );
 								?>
 								</p>
 								<ul class="checkboxes">
 								<?php
 									mc_settings_field(
-										'mc_display_grid',
+										'mc_display_main',
 										array(
 											'author'      => __( 'Author', 'my-calendar' ),
 											'host'        => __( 'Host', 'my-calendar' ),
@@ -940,42 +938,6 @@ function mc_remote_db() {
 											'access'      => __( 'Accessibility information', 'my-calendar' ),
 										),
 										array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
-										'',
-										array(),
-										'checkbox'
-									);
-								?>
-								</ul>
-							</div>
-							<div role='tabpanel' aria-labelledby='tab_list_output' class='wptab' id='list-view'>
-								<p>
-								<?php
-								_e( 'Choose fields to show in the list view.', 'my-calendar' );
-								echo ' ';
-								// Translators: URL to single event view template editing screen.
-								printf( __( 'The <a href="%s">list view template</a> overrides these settings.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=list' ) );
-								?>
-								</p>
-								<ul class="checkboxes">
-								<?php
-									mc_settings_field(
-										'mc_display_list',
-										array(
-											'author'      => __( 'Author', 'my-calendar' ),
-											'host'        => __( 'Host', 'my-calendar' ),
-											'ical'        => __( 'iCal Download', 'my-calendar' ),
-											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-											'address'     => __( 'Location Address', 'my-calendar' ),
-											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-											'description' => __( 'Description', 'my-calendar' ),
-											'image'       => __( 'Featured Image', 'my-calendar' ),
-											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-											'link'        => __( 'External link', 'my-calendar' ),
-											'more'        => __( 'More details link', 'my-calendar' ),
-											'access'      => __( 'Accessibility information', 'my-calendar' ),
-										),
-										array( 'author', 'host', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'gmap_link' ),
 										'',
 										array(),
 										'checkbox'

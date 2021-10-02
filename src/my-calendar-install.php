@@ -218,8 +218,7 @@ function mc_default_settings() {
 		${$key} = $global;
 	}
 	add_option( 'mc_display_single', array( 'author', 'host', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ) );
-	add_option( 'mc_display_grid', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
-	add_option( 'mc_display_list', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
+	add_option( 'mc_display_main', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
 	add_option( 'mc_display_mini', array( 'excerpt', 'image', 'more' ) );
 	add_option( 'mc_use_permalinks', 'true' );
 	add_option( 'mc_use_styles', 'false' );

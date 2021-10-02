@@ -936,8 +936,7 @@ function mc_do_upgrades( $upgrade_path ) {
 					}
 				}
 				add_option( 'mc_display_single', $settings );
-				add_option( 'mc_display_grid', $settings );
-				add_option( 'mc_display_list', $settings );
+				add_option( 'mc_display_main', $settings );
 				add_option( 'mc_display_mini', $settings );
 				add_option( 'mc_drop_settings', 'true' );
 				break;
