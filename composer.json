@@ -16,7 +16,7 @@
 		"brain/monkey": "^2.6.0"
 	},
 		"require-dev": {
-		"yoast/yoastcs": "^2.2.0"
+		"wp-coding-standards/wpcs": "^2.1",
 	},
 	"scripts": {
 		"lint": [
