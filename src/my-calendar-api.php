@@ -121,8 +121,11 @@ function mc_api_format_csv( $data ) {
 	// Rewind the stream.
 	rewind( $stream );
 	// You can now echo its content.
-	header( 'Content-type: text/csv' );
-	header( 'Content-Disposition: attachment; filename=my-calendar.csv' );
+	if ( ! ( isset( $_GET['file'] ) && 'false' === $_GET['file'] ) ) {
+		// If accessing remotely as content.
+		header( 'Content-type: text/csv' );
+		header( 'Content-Disposition: attachment; filename=my-calendar.csv' );
+	}
 	header( 'Pragma: no-cache' );
 	header( 'Expires: 0' );
 
