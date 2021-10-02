@@ -107,6 +107,25 @@ function mc_api_format_csv( $data ) {
 			unset( $values['categories'] );
 			unset( $values['location'] );
 			$values['UID'] = $values['uid'];
+			// If this is an import from Pro, insert locations into DB.
+			if ( ! ( isset( $_GET['file'] ) && 'false' === $_GET['file'] ) ) {
+				$values['mc_copy_location'] = 1;
+				$values['event_category']   = $values['category_name'];
+				unset( $values['uid'] );
+				unset( $values['site_id'] );
+				unset( $values['ts_occur_end'] );
+				unset( $values['ts_occur_begin'] );
+				unset( $values['category_term'] );
+				unset( $values['category_id'] );
+				unset( $values['category_name'] );
+				unset( $values['event_group'] );
+				unset( $values['event_location'] );
+				unset( $values['event_post'] );
+				unset( $values['occur_event_id'] );
+				unset( $values['occur_group_id'] );
+				unset( $values['event_id'] );
+			}
+
 			foreach ( $values as $key => $text ) {
 				$values[ $key ] = str_replace( array( "\r\n", "\r", "\n" ), '<br class="mc-export" />', trim( $text ) );
 			}
