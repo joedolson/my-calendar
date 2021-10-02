@@ -49,46 +49,6 @@ function jd_show_support_box() {
 }
 
 /**
- * Get label for "forever" events (no longer exist.)
- *
- * @param string $recur Recurrence string (single character).
- * @param int    $repeats Number of occurrences to repeat.
- *
- * @deprecated 2.5.16. Last used 2.4.21.
- *
- * @return string label
- */
-function mc_event_repeats_forever( $recur, $repeats ) {
-	$repeats = absint( $repeats );
-	if ( 'S' !== $recur && 0 === $repeats ) {
-		return true;
-	}
-	switch ( $recur ) {
-		case 'S': // single.
-			return false;
-			break;
-		case 'D': // daily.
-			return ( 500 === $repeats ) ? true : false;
-			break;
-		case 'W': // weekly.
-			return ( 240 === $repeats ) ? true : false;
-			break;
-		case 'B': // biweekly.
-			return ( 120 === $repeats ) ? true : false;
-			break;
-		case 'M': // monthly.
-		case 'U':
-			return ( 60 === $repeats ) ? true : false;
-			break;
-		case 'Y':
-			return ( 5 === $repeats ) ? true : false;
-			break;
-		default:
-			return false;
-	}
-}
-
-/**
  * Old name of template drawing function. Deprecated 6/14/2018. Removed in Pro 3/31/2019.
  *
  * @see mc_draw_template()
