@@ -22,10 +22,10 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-versions }}
+        php-version: '8.0'
+        tools: phpunit-polyfills, composer
         extensions: mbstring, intl #optional, setup extensions
         coverage: xdebug #optional, setup coverage driver
-        tools: composer
 
     - name: Check PHP Version
       run: php -v
