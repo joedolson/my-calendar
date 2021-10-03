@@ -450,11 +450,11 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 				$uncommon = true;
 			}
 		}
-		$tag_output    = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap;line-break:anywhere">' . esc_html( $value ) . '</pre>' : $value;
+		$tag_output = ( 'code' === $render ) ? '<pre style="white-space:pre-wrap;line-break:anywhere">' . esc_html( $value ) . '</pre>' : $value;
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$empty .= '<div class="mc-output-' . $key . '">' . $tag_output . '</div></section>';
-		} else if ( true === $uncommon ) {
+		} elseif ( true === $uncommon ) {
 			$oddball .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$oddball .= '<div class="mc-output mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		} else {
