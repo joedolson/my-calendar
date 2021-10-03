@@ -476,7 +476,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			if ( 'calendar' === $type && 'true' === $display_title ) {
 				// This is semantically a duplicate of the title, but can be beneficial for sighted users.
 				$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
-				$inner_title = '	<' . $headingtype . '> class="mc-title" aria-hidden="true">' . $event_title . '</' . $headingtype . '>';
+				$inner_title = '	<' . $headingtype . ' class="mc-title" aria-hidden="true">' . $event_title . '</' . $headingtype . '>';
 			}
 
 			if ( 'true' === $display_desc || mc_output_is_visible( 'description', $type, $event ) ) {
