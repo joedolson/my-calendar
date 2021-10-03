@@ -420,7 +420,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 				$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 			}
-			$avatars = apply_filters( 'mc_use_avatars', false, $event );
+			$avatars = apply_filters( 'mc_use_avatars', true, $event );
 			if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
 				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
 					$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
@@ -450,7 +450,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				// Translators: Event title.
 				$aria = " aria-label='" . esc_attr( sprintf( __( 'Details about %s', 'my-calendar' ), strip_tags( $event_title ) ) ) . "'";
 				if ( _mc_is_url( $details_link ) ) {
-					$more = "	<p class='mc_details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
+					$more = "	<div class='mc-details'><p class='mc_details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p></div>\n";
 				} else {
 					$more = '';
 				}
@@ -476,7 +476,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			if ( 'calendar' === $type && 'true' === $display_title ) {
 				// This is semantically a duplicate of the title, but can be beneficial for sighted users.
 				$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
-				$inner_title = '	<h4 class="mc-title" aria-hidden="true">' . $event_title . '</h4>';
+				$inner_title = '	<' . $headingtype . '> class="mc-title" aria-hidden="true">' . $event_title . '</' . $headingtype . '>';
 			}
 
 			if ( 'true' === $display_desc || mc_output_is_visible( 'description', $type, $event ) ) {
@@ -487,7 +487,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 
 			if ( 'true' === $display_reg || mc_output_is_visible( 'tickets', $type, $event ) ) {
-				$info     = wpautop( $event->event_registration );
+				$info     = wpautop( stripcslashes( mc_kses_post( $event->event_registration ) ) );
 				$url      = esc_url( $event->event_tickets );
 				$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
 				$text     = ( '' !== get_option( 'mc_buy_tickets', '' ) ) ? get_option( 'mc_buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
