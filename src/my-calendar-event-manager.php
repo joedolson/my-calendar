@@ -3429,6 +3429,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	$range        = '';
 	$aria         = '';
 	if ( '00:00' !== $max || '00:00' !== $min ) {
+		// Translators: starting time, ending time.
 		$range  = '<p id="mc_time_range_allowed">' . sprintf( __( 'Times must be between %1$s and %2$s', 'my-calendar' ), mc_date( get_option( 'mc_time_format' ), strtotime( $min ) ), mc_date( get_option( 'mc_time_format' ), strtotime( $max ) ) ) . '</p>';
 		$aria   = ' aria-describedby="mc_time_range_allowed"';
 		$append = '<span class="validity"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Invalid time', 'my-calendar' ) . '</span>';
