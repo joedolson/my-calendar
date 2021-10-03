@@ -21,12 +21,18 @@ function my_calendar_help() {
 
 	<div class="wrap my-calendar-admin">
 	<h1><?php _e( 'How to use My Calendar', 'my-calendar' ); ?></h1>
-
+	<div class="mc-tabs">
+		<div class="tabs" role="tablist" data-default="my-calendar-start">
+			<button type="button" role="tab" aria-selected="false"  id="tab_start" aria-controls="my-calendar-start"><?php _e( 'Getting Started', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_files" aria-controls="my-calendar-files"><?php _e( 'Custom Files', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_privacy" aria-controls="my-calendar-privacy"><?php _e( 'Privacy', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_support" aria-controls="my-calendar-support"><?php _e( 'Get Support', 'my-calendar' ); ?></button>
+		</div>
 	<div class="postbox-container jcd-wide">
 	<div class="metabox-holder">
 
 	<div class="ui-sortable meta-box-sortables" id="get-started">
-		<div class="postbox">
+		<div class="wptab postbox" aria-labelledby="tab_start" role="tabpanel" id="my-calendar-start">
 			<h2 id="help"><?php _e( 'Getting Started', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -44,18 +50,13 @@ function my_calendar_help() {
 					?>
 				</ul>
 				<?php do_action( 'mc_before_help' ); ?>
-				<ul class="mc-settings checkboxes">
-					<li><a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></li>
-					<li><a href="#files"><?php _e( 'Custom Files', 'my-calendar' ); ?></a></li>
-					<li><a href="#privacy"><?php _e( 'Privacy', 'my-calendar' ); ?></a></li>
-					<li><a href="#get-support"><?php _e( 'Get Support', 'my-calendar' ); ?></a></li>
-				</ul>
+				<p><?php _e( 'Build a custom shortcode:', 'my-calendar' ); ?> <a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></p>
 			</div>
 		</div>
 	</div>
 
 	<div class="ui-sortable meta-box-sortables" id="files">
-		<div class="postbox">
+		<div class="wptab postbox" aria-labelledby="tab_files" role="tabpanel" id="my-calendar-files">
 			<h2><?php _e( 'Custom Files', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -79,7 +80,7 @@ function my_calendar_help() {
 	</div>
 
 	<div class="ui-sortable meta-box-sortables" id="privacy">
-		<div class="postbox">
+		<div class="wptab postbox" aria-labelledby="tab_privacy" role="tabpanel" id="my-calendar-privacy">
 			<h2><?php _e( 'Privacy', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
@@ -108,7 +109,7 @@ function my_calendar_help() {
 	<?php do_action( 'mc_after_help' ); ?>
 
 	<div class="ui-sortable meta-box-sortables" id="get-support">
-		<div class="postbox">
+		<div class="wptab postbox" aria-labelledby="tab_support" role="tabpanel" id="my-calendar-support">
 			<h2 id="support"><?php _e( 'Get Support', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
