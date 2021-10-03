@@ -139,7 +139,6 @@ jQuery(document).ready(function ($) {
 	});
 
 	var addLocations = document.querySelector( '.add-location' );
-	console.log( addLocations );
 	if ( null !== addLocations ) {
 		var locationSelector = document.getElementById( 'l_preset' );
 		var locationValue    = locationSelector.value;
@@ -310,7 +309,7 @@ jQuery(document).ready(function ($) {
 		var tabs         = tabContainer.find( '[role=tab]' );
 		var container    = $( e.currentTarget ).closest( '.mc-tabs' );
 		var inside       = $( e.currentTarget ).parents( '.inside' );
-		if ( inside.length == 0 ) {
+		if ( inside.length == 0 && ! container.hasClass( 'mcs-tabs' ) ) {
 			var tabPanels = container.find( '.ui-sortable > [role=tabpanel]' );
 		} else {
 			var tabPanels = container.find( '[role=tabpanel]' );
