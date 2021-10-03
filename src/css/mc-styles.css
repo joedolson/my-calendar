@@ -1213,6 +1213,10 @@ tr.problem .error {
 	width: 80%;
 }
 
+.follow-me {
+	overflow: hidden;
+}
+
 /**
  * Autocomplete CSS
  */
