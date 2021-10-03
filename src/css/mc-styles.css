@@ -1068,16 +1068,6 @@ select[name="event_recur"] {
 	display: inline-block;
 }
 
-.mc-locations:after {
-	content: ' ';
-	display: table;
-	clear: both;
-}
-
-.mc-locations .locations-container input {
-	max-width: 90%;
-}
-
 .mc-admin-footer,
 .mc-admin-header {
 	display: grid;
@@ -1219,6 +1209,10 @@ tr.problem .error {
 	clear: both;
 }
 
+.mc-locations .locations-container input:not([type=checkbox]) {
+	width: 80%;
+}
+
 /**
  * Autocomplete CSS
  */
@@ -1227,10 +1221,6 @@ tr.problem .error {
 @media (max-width: 1140px) {
 	.mc-generator-inputs {
 		grid-template-columns: repeat( 2, 1fr );
-	}
-
-	.mc-locations .locations-container input {
-		max-width: 70%;
 	}
 }
 
