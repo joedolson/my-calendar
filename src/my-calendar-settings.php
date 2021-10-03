@@ -312,7 +312,6 @@ function mc_update_output_settings( $post ) {
 
 	update_option( 'mc_gmap_api_key', ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '' );
 	update_option( 'mc_show_weekends', ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false' );
-	update_option( 'mc_title', ( ! empty( $post['mc_title'] ) && 'on' === $post['mc_title'] ) ? 'true' : 'false' );
 	update_option( 'mc_convert', ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false' );
 }
 
@@ -987,7 +986,6 @@ function mc_remote_db() {
 						<legend><?php _e( 'Grid Options', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_show_weekends', __( 'Show Weekends on Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-							<li><?php mc_settings_field( 'mc_title', __( 'Include event title in details pop-up', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li>
 							<?php
 							mc_settings_field(

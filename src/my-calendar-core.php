@@ -939,6 +939,7 @@ function mc_do_upgrades( $upgrade_path ) {
 				add_option( 'mc_display_main', $settings );
 				add_option( 'mc_display_mini', $settings );
 				add_option( 'mc_drop_settings', 'true' );
+				delete_option( 'mc_title' );
 				break;
 			case '3.1.13':
 				delete_option( 'mc_inverse_color' );

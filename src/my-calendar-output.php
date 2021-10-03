@@ -339,7 +339,6 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	$display_gmap    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_gmap' ) : '';
 	$display_link    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_event_link' ) : '';
 	$display_image   = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_image' ) : '';
-	$display_title   = get_option( 'mc_title' );
 	$display_reg     = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_event_registration' ) : '';
 	$day_id          = mc_date( 'd', strtotime( $process_date ), false );
 	$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
@@ -473,7 +472,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$img = mc_get_event_image( $event, $data );
 			}
 
-			if ( 'calendar' === $type && 'true' === $display_title ) {
+			if ( 'calendar' === $type ) {
 				// This is semantically a duplicate of the title, but can be beneficial for sighted users.
 				$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
 				$inner_title = '	<' . $headingtype . ' class="mc-title" aria-hidden="true">' . $event_title . '</' . $headingtype . '>';
