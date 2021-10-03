@@ -370,6 +370,11 @@ ol.mc-repeat-events {
 	margin: 10px 10px 0 0
 }
 
+.my-calendar-admin .jcd-narrow .postbox {
+	margin-right: 0;
+	min-width: auto;
+}
+
 .my-calendar-admin .postbox .inside {
 	overflow: visible !important
 }
@@ -508,8 +513,8 @@ strong.label {
 	width: 75%;
 }
 
-.jcd-narrow {
-	width: 20%;
+.my-calendar-admin .jcd-narrow {
+	width: 25%;
 }
 
 #my-calendar-admin-table .row-actions {
@@ -1239,7 +1244,11 @@ tr.problem .error {
 		grid-template-columns: repeat( 2, 50% );
 	}
 
-	.jcd-narrow {
+	.my-calendar-admin .postbox {
+		margin-right: 0 !important;
+	}
+
+	.my-calendar-admin .jcd-narrow {
 		width: 100%;
 	}
 
