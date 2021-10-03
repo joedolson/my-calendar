@@ -1538,13 +1538,13 @@ function mc_hidden_event() {
 /**
  * Check whether a given output field should be displayed.
  *
- * @param string $feature Feature key.
- * @param string $type Display type.
- * @param object $event Event.
+ * @param string         $feature Feature key.
+ * @param string         $type Display type.
+ * @param object|boolean $event Event if in event context.
  *
  * @return bool
  */
-function mc_output_is_visible( $feature, $type, $event ) {
+function mc_output_is_visible( $feature, $type, $event = false ) {
 	// Map either calendar popup or list to main settings.
 	$type   = ( 'calendar' === $type || 'list' === $type ) ? 'main' : $type;
 	$option = get_option( 'mc_display_' . $type, array() );
@@ -1555,9 +1555,9 @@ function mc_output_is_visible( $feature, $type, $event ) {
 	/**
 	 * Filter whether any given piece of information should be output.
 	 *
-	 * @param string $feature Feature key.
-	 * @param string $type Type of view.
-	 * @param object $event Event object.
+	 * @param string         $feature Feature key.
+	 * @param string         $type Type of view.
+	 * @param object|boolean $event Event object if in event context.
 	 *
 	 * @return bool
 	 */
