@@ -303,7 +303,7 @@ function my_calendar_add_locations() {
 		);
 
 		$results = mc_insert_location( $add );
-		if ( isset( $_POST['mc_default_location'] ) && $results ) {
+		if ( isset( $_POST['mc_default_location'] ) ) {
 			update_option( 'mc_default_location', (int) $results );
 		}
 		do_action( 'mc_save_location', $results, $add, $_POST );
@@ -340,6 +340,10 @@ function my_calendar_add_locations() {
 		$where = array( 'location_id' => (int) $_POST['location_id'] );
 		if ( isset( $_POST['mc_default_location'] ) ) {
 			update_option( 'mc_default_location', (int) $_POST['location_id'] );
+		}
+		$default_location = get_option( 'mc_default_location' );
+		if ( (int) $_POST['location_id'] === (int) $default_location && ! isset( $_POST['mc_default_location'] ) ) {
+			delete_option( 'mc_default_location' );
 		}
 		$results = mc_modify_location( $update, $where );
 
@@ -423,7 +427,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 							echo mc_locations_fields( $has_data, $cur_loc, 'location' );
 							?>
 							<p>
-								<input type="submit" name="save" class="button-primary" value="<?php echo ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ); ?> &raquo;"/>
+								<input type="submit" name="save" class="button-primary" value="<?php echo ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ); ?> "/>
 							</p>
 						</form>
 					</div>
@@ -433,7 +437,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 			if ( 'edit' === $view ) {
 				?>
 				<p>
-					<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add a New Location', 'my-calendar' ); ?> &raquo;</a>
+					<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add a New Location', 'my-calendar' ); ?></a>
 				</p>
 				<?php
 			}
@@ -548,7 +552,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	}
 	$return   .= '
 	<p>
-	<label for="e_label">' . __( 'Name of Location (e.g. <em>Joe\'s Bar and Grill</em>)', 'my-calendar' ) . $compare . '</label>';
+	<label for="e_label">' . __( 'Name of Location (required)', 'my-calendar' ) . $compare . '</label>';
 	$cur_label = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_label'} ) ) : '';
 	if ( mc_controlled_field( 'label' ) ) {
 		$return .= mc_location_controller( 'label', $cur_label, $context );
@@ -762,7 +766,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</div>';
 
 	$api_key  = get_option( 'mc_gmap_api_key' );
-	$location = ( $has_data ) ? $data->event_location : false;
+	$location = ( $has_data && 'event' === $context ) ? $data->event_location : false;
 	if ( $api_key && ! ( 'event' === $context && false === (bool) $location ) ) {
 		$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
 		$map     = mc_generate_map( $data, $context );

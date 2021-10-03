@@ -2826,63 +2826,67 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_hide_end     = ( ! empty( $post['event_hide_end'] ) ) ? (int) $post['event_hide_end'] : 0;
 		$event_hide_end     = ( '' === $time || '23:59:59' === $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		// Set location.
-		if ( 'none' !== $location_preset && is_numeric( $location_preset ) ) {
-			$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$event_label     = $location->location_label;
-			$event_street    = $location->location_street;
-			$event_street2   = $location->location_street2;
-			$event_city      = $location->location_city;
-			$event_state     = $location->location_state;
-			$event_postcode  = $location->location_postcode;
-			$event_region    = $location->location_region;
-			$event_country   = $location->location_country;
-			$event_url       = $location->location_url;
-			$event_longitude = $location->location_longitude;
-			$event_latitude  = $location->location_latitude;
-			$event_zoom      = $location->location_zoom;
-			$event_phone     = $location->location_phone;
-			$event_phone2    = $location->location_phone2;
-			$event_access    = $location->location_access;
+		if ( 'none' === $location_preset && empty( $post['event_label'] ) ) {
+			// event location name is required to copy over.
 		} else {
-			$event_label     = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
-			$event_street    = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
-			$event_street2   = ! empty( $post['event_street2'] ) ? $post['event_street2'] : '';
-			$event_city      = ! empty( $post['event_city'] ) ? $post['event_city'] : '';
-			$event_state     = ! empty( $post['event_state'] ) ? $post['event_state'] : '';
-			$event_postcode  = ! empty( $post['event_postcode'] ) ? $post['event_postcode'] : '';
-			$event_region    = ! empty( $post['event_region'] ) ? $post['event_region'] : '';
-			$event_country   = ! empty( $post['event_country'] ) ? $post['event_country'] : '';
-			$event_url       = ! empty( $post['event_url'] ) ? $post['event_url'] : '';
-			$event_longitude = ! empty( $post['event_longitude'] ) ? $post['event_longitude'] : '';
-			$event_latitude  = ! empty( $post['event_latitude'] ) ? $post['event_latitude'] : '';
-			$event_zoom      = ! empty( $post['event_zoom'] ) ? $post['event_zoom'] : '';
-			$event_phone     = ! empty( $post['event_phone'] ) ? $post['event_phone'] : '';
-			$event_phone2    = ! empty( $post['event_phone2'] ) ? $post['event_phone2'] : '';
-			$event_access    = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
-			$event_access    = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
-			if ( isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
-				// Only the first event, if adding multiples.
-				$add_loc = array(
-					'location_label'     => $event_label,
-					'location_street'    => $event_street,
-					'location_street2'   => $event_street2,
-					'location_city'      => $event_city,
-					'location_state'     => $event_state,
-					'location_postcode'  => $event_postcode,
-					'location_region'    => $event_region,
-					'location_country'   => $event_country,
-					'location_url'       => $event_url,
-					'location_longitude' => $event_longitude,
-					'location_latitude'  => $event_latitude,
-					'location_zoom'      => $event_zoom,
-					'location_phone'     => $event_phone,
-					'location_phone2'    => $event_phone2,
-					'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
-				);
+			if ( 'none' !== $location_preset && is_numeric( $location_preset ) ) {
+				$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$event_label     = $location->location_label;
+				$event_street    = $location->location_street;
+				$event_street2   = $location->location_street2;
+				$event_city      = $location->location_city;
+				$event_state     = $location->location_state;
+				$event_postcode  = $location->location_postcode;
+				$event_region    = $location->location_region;
+				$event_country   = $location->location_country;
+				$event_url       = $location->location_url;
+				$event_longitude = $location->location_longitude;
+				$event_latitude  = $location->location_latitude;
+				$event_zoom      = $location->location_zoom;
+				$event_phone     = $location->location_phone;
+				$event_phone2    = $location->location_phone2;
+				$event_access    = $location->location_access;
+			} else {
+				$event_label     = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
+				$event_street    = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
+				$event_street2   = ! empty( $post['event_street2'] ) ? $post['event_street2'] : '';
+				$event_city      = ! empty( $post['event_city'] ) ? $post['event_city'] : '';
+				$event_state     = ! empty( $post['event_state'] ) ? $post['event_state'] : '';
+				$event_postcode  = ! empty( $post['event_postcode'] ) ? $post['event_postcode'] : '';
+				$event_region    = ! empty( $post['event_region'] ) ? $post['event_region'] : '';
+				$event_country   = ! empty( $post['event_country'] ) ? $post['event_country'] : '';
+				$event_url       = ! empty( $post['event_url'] ) ? $post['event_url'] : '';
+				$event_longitude = ! empty( $post['event_longitude'] ) ? $post['event_longitude'] : '';
+				$event_latitude  = ! empty( $post['event_latitude'] ) ? $post['event_latitude'] : '';
+				$event_zoom      = ! empty( $post['event_zoom'] ) ? $post['event_zoom'] : '';
+				$event_phone     = ! empty( $post['event_phone'] ) ? $post['event_phone'] : '';
+				$event_phone2    = ! empty( $post['event_phone2'] ) ? $post['event_phone2'] : '';
+				$event_access    = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
+				$event_access    = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
+				if ( isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
+					// Only the first event, if adding multiples.
+					$add_loc = array(
+						'location_label'     => $event_label,
+						'location_street'    => $event_street,
+						'location_street2'   => $event_street2,
+						'location_city'      => $event_city,
+						'location_state'     => $event_state,
+						'location_postcode'  => $event_postcode,
+						'location_region'    => $event_region,
+						'location_country'   => $event_country,
+						'location_url'       => $event_url,
+						'location_longitude' => $event_longitude,
+						'location_latitude'  => $event_latitude,
+						'location_zoom'      => $event_zoom,
+						'location_phone'     => $event_phone,
+						'location_phone2'    => $event_phone2,
+						'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
+					);
 
-				$add_loc     = array_map( 'mc_kses_post', $add_loc );
-				$loc_formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
-				$wpdb->insert( my_calendar_locations_table(), $add_loc, $loc_formats );
+					$add_loc     = array_map( 'mc_kses_post', $add_loc );
+					$loc_formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
+					$wpdb->insert( my_calendar_locations_table(), $add_loc, $loc_formats );
+				}
 			}
 		}
 		// Perform validation on the submitted dates - checks for valid years and months.

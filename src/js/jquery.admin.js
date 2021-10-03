@@ -145,7 +145,6 @@ jQuery(document).ready(function ($) {
 
 		var controls = addLocations.getAttribute( 'aria-controls' );
 		var target   = document.getElementById( controls );
-		console.log( target );
 		target.classList.add( 'hidden' );
 		addLocations.addEventListener( 'click', function(e) {
 			var expanded = this.getAttribute( 'aria-expanded' );
