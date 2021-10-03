@@ -3426,6 +3426,8 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	$max          = apply_filters( 'mc_time_max', '00:00' );
 	$min          = apply_filters( 'mc_time_min', '00:00' );
 	$append       = '';
+	$range        = '';
+	$aria         = '';
 	if ( '00:00' !== $max || '00:00' !== $min ) {
 		$range  = '<p id="mc_time_range_allowed">' . sprintf( __( 'Times must be between %1$s and %2$s', 'my-calendar' ), mc_date( get_option( 'mc_time_format' ), strtotime( $min ) ), mc_date( get_option( 'mc_time_format' ), strtotime( $max ) ) ) . '</p>';
 		$aria   = ' aria-describedby="mc_time_range_allowed"';
