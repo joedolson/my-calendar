@@ -490,10 +490,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$info     = wpautop( $event->event_registration );
 				$url      = esc_url( $event->event_tickets );
 				$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
-				$text     = ( '' !== get_option( 'mc_buy_tickets' ) ) ? get_option( 'mc_buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
+				$text     = ( '' !== get_option( 'mc_buy_tickets', '' ) ) ? get_option( 'mc_buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
 				$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'>" . $text . '</a>' : '';
 				if ( '' !== trim( $info . $tickets ) ) {
-					$tickets = $info . $tickets;
+					$tickets = '<div class="mc-registration">' . $info . $tickets . '</div>';
 				} else {
 					$tickets = '';
 				}
