@@ -3423,15 +3423,23 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		'name'  => 'event_end[]',
 	);
 	$picker_end   = mc_datepicker_html( $args );
+	$max          = apply_filters( 'mc_time_max', '00:00' );
+	$min          = apply_filters( 'mc_time_min', '00:00' );
+	$append       = '';
+	if ( '00:00' !== $max || '00:00' !== $min ) {
+		$range  = '<p id="mc_time_range_allowed">' . sprintf( __( 'Times must be between %1$s and %2$s', 'my-calendar' ), mc_date( get_option( 'mc_time_format' ), strtotime( $min ) ), mc_date( get_option( 'mc_time_format' ), strtotime( $max ) ) ) . '</p>';
+		$aria   = ' aria-describedby="mc_time_range_allowed"';
+		$append = '<span class="validity"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Invalid time', 'my-calendar' ) . '</span>';
+	}
 
-	$form .= '<div class="columns">
+	$form .= $range . '<div class="columns">
 		<p>
 		<label for="mc_event_time">' . __( 'Start Time', 'my-calendar' ) . '</label>
-		<input type="time" id="mc_event_time" name="event_time[]" size="8" value="' . esc_attr( $starttime ) . '" />
+		<input type="time" id="mc_event_time" name="event_time[]" ' . $aria . ' max="' . $max . '" min="' . $min . '" size="8" value="' . esc_attr( $starttime ) . '" />' . $append . '
 		</p>
 		<p>
 		<label for="mc_event_endtime">' . __( 'End Time', 'my-calendar' ) . '<span class="hidden">' . __( ' (hidden)', 'my-calendar' ) . '</span></label>
-		<input type="time" id="mc_event_endtime" name="event_endtime[]" size="8" value="' . esc_attr( $endtime ) . '" />
+		<input type="time" id="mc_event_endtime" name="event_endtime[]" ' . $aria . ' max="' . $max . '" min="' . $min . '"  size="8" value="' . esc_attr( $endtime ) . '" />' . $append . '
 		</p>
 		<p>
 		<label for="mc_event_date" id="eblabel">' . __( 'Date', 'my-calendar' ) . '</label> ' . $picker_begin . '

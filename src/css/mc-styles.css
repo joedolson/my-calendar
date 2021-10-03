@@ -1217,6 +1217,21 @@ tr.problem .error {
 	overflow: hidden;
 }
 
+#e_schedule p:nth-of-type(1),
+#e_schedule p:nth-of-type(2) {
+	display: grid;
+}
+
+input#mc_event_endtime:invalid+span,
+input#mc_event_time:invalid+span {
+	display: block;
+}
+
+input#mc_event_endtime:valid+span,
+input#mc_event_time:valid+span {
+	display: none;
+}
+
 /**
  * Autocomplete CSS
  */
