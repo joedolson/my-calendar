@@ -972,7 +972,6 @@ function mc_location_data( $field, $id ) {
 		if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 			$mcdb = mc_remote_db();
 		}
-		$field  = $field;
 		$sql    = $mcdb->prepare( "SELECT $field FROM " . my_calendar_locations_table() . ' WHERE location_id = %d', $id );
 		$result = $mcdb->get_var( $sql );
 
