@@ -364,7 +364,14 @@ function my_calendar_menu() {
 			$manage = add_submenu_page( 'my-calendar', __( 'Events', 'my-calendar' ), __( 'Events', 'my-calendar' ), 'mc_add_events', 'my-calendar-manage', 'my_calendar_manage_screen' );
 			add_action( "load-$manage", 'mc_add_screen_option' );
 			add_action( "load-$manage", 'mc_add_help_tab' );
-			add_submenu_page( 'my-calendar', __( 'Add New Location', 'my-calendar' ), __( 'Add New Location', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-locations', 'my_calendar_add_locations' );
+			if ( isset( $_GET['location_id'] ) ) {
+				$loc_id = absint( $_GET['location_id'] );
+				// Translators: Title of event.
+				$page_title = sprintf( __( 'Editing Location: %s', 'my-calendar' ), mc_location_data( 'location_label', $loc_id ) );
+			} else {
+				$page_title = __( 'Add New Location', 'my-calendar' );
+			}
+			add_submenu_page( 'my-calendar', $page_title, __( 'Add New Location', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-locations', 'my_calendar_add_locations' );
 			add_submenu_page( 'my-calendar', __( 'Locations', 'my-calendar' ), __( 'Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
 			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
 		}
