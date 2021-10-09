@@ -89,7 +89,7 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 			// Secondary search for RSS output.
 			$rss_search = "{rss_$key}";
 			if ( strpos( $template, $rss_search ) !== false ) {
-				$value = ent2ncr( $value );
+				$value = esc_xml( $value );
 				// WP core function.
 				$template = stripcslashes( str_replace( $rss_search, $value, $template ) );
 			}

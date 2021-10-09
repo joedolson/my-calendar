@@ -47,7 +47,7 @@ function my_calendar_api() {
 				$args     = apply_filters( 'mc_filter_api_args', $args, $_REQUEST );
 				$data     = my_calendar_events( $args );
 				$output   = mc_format_api( $data, $format );
-				echo $output;
+				echo wp_kses_post( $output );
 			}
 			die;
 		} else {
@@ -86,7 +86,7 @@ function mc_format_api( $data, $format ) {
  * @param array $data array of event objects.
  */
 function mc_api_format_json( $data ) {
-	echo json_encode( $data );
+	wp_send_json( $data );
 }
 
 /**
@@ -95,11 +95,13 @@ function mc_api_format_json( $data ) {
  * @param array $data array of event objects.
  */
 function mc_api_format_csv( $data ) {
-	ob_clean();
+	if ( ob_get_contents() ) {
+		ob_clean();
+	}
 	ob_start();
 	$keyed = false;
 	// Create a stream opening it with read / write mode.
-	$stream = fopen( 'data://text/plain,' . '', 'w+' );
+	$stream = fopen( 'php://output', 'w' );
 	// Iterate over the data, writing each line to the text stream.
 	foreach ( $data as $key => $val ) {
 		foreach ( $val as $v ) {
@@ -151,6 +153,7 @@ function mc_api_format_csv( $data ) {
 	echo stream_get_contents( $stream );
 	// Close the stream.
 	fclose( $stream );
+	ob_end_flush();
 	die;
 }
 
@@ -173,7 +176,7 @@ function mc_api_format_rss( $data ) {
 function mc_export_vcal() {
 	if ( isset( $_GET['vcal'] ) ) {
 		$vcal = $_GET['vcal'];
-		print my_calendar_send_vcal( $vcal );
+		print wp_kses_post( my_calendar_send_vcal( $vcal ) );
 		die;
 	}
 }
@@ -318,14 +321,14 @@ function mc_format_rss( $events ) {
 			xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
 			>
 		<channel>
-		  <title>' . get_bloginfo( 'name' ) . ' Calendar</title>
-		  <link>' . home_url() . '</link>
-		  <description>' . get_bloginfo( 'description' ) . ': My Calendar Events</description>
-		  <language>' . get_bloginfo( 'language' ) . '</language>
-		  <managingEditor>' . get_bloginfo( 'admin_email' ) . ' (' . get_bloginfo( 'name' ) . ' Admin)</managingEditor>
+		  <title>' . esc_xml( get_bloginfo( 'name' ) ) . ' Calendar</title>
+		  <link>' . esc_xml( home_url() ) . '</link>
+		  <description>' . esc_xml( get_bloginfo( 'description' ) ) . ': My Calendar Events</description>
+		  <language>' . esc_xml( get_bloginfo( 'language' ) ) . '</language>
+		  <managingEditor>' . esc_xml( get_bloginfo( 'admin_email' ) ) . ' (' . esc_xml( get_bloginfo( 'name' ) ) . ' Admin)</managingEditor>
 		  <generator>My Calendar WordPress Plugin http://www.joedolson.com/my-calendar/</generator>
-		  <lastBuildDate>' . mysql2date( 'D, d M Y H:i:s +0000', time() ) . '</lastBuildDate>
-		  <atom:link href="' . htmlentities( esc_url( add_query_arg( $_GET, get_feed_link( 'my-calendar-rss' ) ) ) ) . '" rel="self" type="application/rss+xml" />' . PHP_EOL;
+		  <lastBuildDate>' . esc_xml( mysql2date( 'D, d M Y H:i:s +0000', time() ) ) . '</lastBuildDate>
+		  <atom:link href="' . esc_xml( esc_url( add_query_arg( $_GET, get_feed_link( 'my-calendar-rss' ) ) ) ) . '" rel="self" type="application/rss+xml" />' . PHP_EOL;
 		foreach ( $events as $date ) {
 			foreach ( array_keys( $date ) as $key ) {
 				$event   =& $date[ $key ];
@@ -493,7 +496,7 @@ function mc_api_format_ical( $data, $context ) {
 		header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
 	}
 
-	echo $output;
+	echo wp_kses_post( $output );
 }
 
 /**
