@@ -3448,8 +3448,8 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
  */
 function mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = 'admin' ) {
 	if ( $has_data ) {
-		$event_begin = esc_attr( $data->event_begin );
-		$event_end   = esc_attr( $data->event_end );
+		$event_begin = $data->event_begin;
+		$event_end   = $data->event_end;
 
 		if ( isset( $_GET['date'] ) ) {
 			$event       = mc_get_event( (int) $_GET['date'] );
@@ -3463,17 +3463,10 @@ function mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = '
 		$starttime = ( mc_is_all_day( $data ) ) ? '' : mc_date( 'H:i', mc_strtotime( $data->event_time ), false );
 		$endtime   = ( mc_is_all_day( $data ) ) ? '' : mc_date( 'H:i', mc_strtotime( $data->event_endtime ), false );
 	} else {
-		$event_begin = mc_date( 'Y-m-d' );
 		$event_end   = '';
 		$starttime   = '';
 		$endtime     = '';
 	}
-
-	$allday       = ( $has_data && ( mc_is_all_day( $data ) ) ) ? ' checked="checked"' : '';
-	$hide         = ( $has_data && '1' === $data->event_hide_end ) ? ' checked="checked"' : '';
-	$allday_label = ( $has_data ) ? mc_notime_label( $data ) : get_option( 'mc_notime_text' );
-	$sweek        = absint( get_option( 'start_of_week' ) );
-	$firstday     = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 
 	$form .= '<div class="mc-buttons"><button type="button" class="del_field button button-delete">' . __( 'Delete', 'my-calendar' ) . '</button><button type="button" class="remove_field button button-delete hidden">' . __( 'Remove', 'my-calendar' ) . '</button></div>
 	<div class="columns">
@@ -3491,11 +3484,7 @@ function mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = '
 		<p>
 			<label for="mc_event_enddate_" id="eelabel"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label> <input type="date" id="mc_event_enddate_" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
 		</p>
-	</div>
-	<ul class="checkboxes">
-		<li><input type="checkbox" value="1" id="e_allday_" name="event_allday"' . $allday . ' disabled /> <label for="e_allday_">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label_">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label_" value="' . esc_attr( $allday_label ) . '" /> </li>
-		<li><input type="checkbox" value="1" id="e_hide_end_" name="event_hide_end"' . $hide . ' disabled /> <label for="e_hide_end_">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
-	</ul>';
+	</div>';
 
 	return $form;
 }
