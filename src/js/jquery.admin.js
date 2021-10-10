@@ -151,10 +151,14 @@ jQuery(document).ready(function ($) {
 				locationSelector.value = locationValue;
 				target.classList.add( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'false' );
+				this.firstChild.classList.add( 'dashicons-plus' );
+				this.firstChild.classList.remove( 'dashicons-minus' );
 			} else {
 				locationSelector.value = 'none';
 				target.classList.remove( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'true' );
+				this.firstChild.classList.add( 'dashicons-minus' );
+				this.firstChild.classList.remove( 'dashicons-plus' );
 			}
 		});
 	}
@@ -222,13 +226,11 @@ jQuery(document).ready(function ($) {
 		if ( checked_status ) {
 			add_category.show();
 			$( '#event_category_name' ).prop( 'disabled', false );
-			add_cat_label.find( '.dashicons-minus' ).show();
-			add_cat_label.find( '.dashicons-plus' ).hide();
+			add_cat_label.find( '.dashicons' ).addClass( 'dashicons-minus' ).removeClass( 'dashicons-plus' );
 		} else {
 			add_category.hide();
 			$( '#event_category_name' ).prop( 'disabled', true );
-			add_cat_label.find( '.dashicons-minus' ).hide();
-			add_cat_label.find( '.dashicons-plus' ).show();
+			add_cat_label.find( '.dashicons' ).addClass( 'dashicons-plus' ).removeClass( 'dashicons-minus' );
 		}
 	});
 
