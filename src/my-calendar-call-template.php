@@ -1,12 +1,12 @@
 <?php
 /**
- * Load template for Twitter player cards
+ * Load template for My Calendar embedding templates.
  *
  * @category Core
- * @package  WP Tweets Pro
+ * @package  My Calendar
  * @author   Joe Dolson
  * @license  GPLv2 or later
- * @link     https://www.joedolson.com/wp-tweets-pro/
+ * @link     https://www.joedolson.com/my-calendar/
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
