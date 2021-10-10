@@ -212,15 +212,23 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$( '.new-event-category' ).hide();
+	var add_category = $( '.new-event-category' );
+	add_category.hide();
+	$( '#event_category_new' ).prop( 'checked', false );
+	var add_cat_label = $( 'label[for=event_category_new]' );
+	add_cat_label.find( '.dashicons-minus' ).hide();
 	$( '#event_category_new' ).on( 'click', function() {
 		var checked_status = $(this).prop('checked');
 		if ( checked_status ) {
-			$( '.new-event-category' ).show();
+			add_category.show();
 			$( '#event_category_name' ).prop( 'disabled', false );
+			add_cat_label.find( '.dashicons-minus' ).show();
+			add_cat_label.find( '.dashicons-plus' ).hide();
 		} else {
-			$( '.new-event-category' ).hide();
+			add_category.hide();
 			$( '#event_category_name' ).prop( 'disabled', true );
+			add_cat_label.find( '.dashicons-minus' ).hide();
+			add_cat_label.find( '.dashicons-plus' ).show();
 		}
 	});
 

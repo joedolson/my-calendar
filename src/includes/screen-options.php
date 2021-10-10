@@ -42,7 +42,6 @@ function mc_input_defaults() {
 			'event_recurs'   => 'on',
 			'event_open'     => 'on',
 			'event_location' => 'on',
-			'event_specials' => 'on',
 			'event_access'   => 'on',
 			'event_host'     => 'on',
 		)
@@ -79,7 +78,6 @@ function mc_show_event_editing( $status, $args ) {
 			'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
 			'event_open'     => __( 'Registration Settings', 'my-calendar' ),
 			'event_location' => __( 'Event Location', 'my-calendar' ),
-			'event_specials' => __( 'Special Scheduling Options', 'my-calendar' ),
 			'event_access'   => __( 'Accessibility', 'my-calendar' ),
 			'event_host'     => __( 'Host', 'my-calendar' ),
 		);

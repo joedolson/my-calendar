@@ -888,6 +888,19 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
+.my-calendar-admin .checkboxes .event-new-category {
+	background: transparent;
+	padding: 0;
+}
+
+.checkboxes .event-new-category .button {
+	margin-top: -3px;
+}
+
+.event-new-category .button .dashicons {
+	vertical-align: middle;
+}
+
 .new-event-category {
 	background: #0000000a;
 	padding: .5em 1em;
