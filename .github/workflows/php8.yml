@@ -38,6 +38,3 @@ jobs:
 
     - name: PHPCS check
       run: ./vendor/bin/phpcs
-
-    - name: phpunit tests
-      run: ./vendor/bin/phpunit
