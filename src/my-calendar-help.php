@@ -146,6 +146,7 @@ function my_calendar_help() {
  * @param string $link_text Link text.
  * @param string $modal_title Modal iframe title.
  * @param int    $id Help text ID.
+ * @param bool   $echo true to echo.
  *
  * @return string
  */

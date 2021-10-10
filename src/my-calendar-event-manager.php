@@ -1676,7 +1676,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					?>
 					<div class="error">
 						<p>
-							<input type="checkbox" value="0" id="e_flagged" name="event_flagged"<?php checked( $flagged, true ) ?> />
+							<input type="checkbox" value="0" id="e_flagged" name="event_flagged"<?php checked( $flagged, true ); ?> />
 							<label for="e_flagged"><?php _e( 'This event is not spam', 'my-calendar' ); ?></label>
 						</p>
 					</div>
@@ -3389,7 +3389,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	$picker_end   = mc_datepicker_html( $args );
 	$max          = apply_filters( 'mc_time_max', '00:00' );
 	$min          = apply_filters( 'mc_time_min', '00:00' );
-	$attrs        = ( '00:00' != $min || '00:00' != $max ) ? ' max="' . $max . '" min="' . $min . '"' : '';
+	$attrs        = ( '00:00' !== $min || '00:00' !== $max ) ? ' max="' . $max . '" min="' . $min . '"' : '';
 	$append       = '';
 	$range        = '';
 	$aria         = '';
@@ -3463,9 +3463,9 @@ function mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = '
 		$starttime = ( mc_is_all_day( $data ) ) ? '' : mc_date( 'H:i', mc_strtotime( $data->event_time ), false );
 		$endtime   = ( mc_is_all_day( $data ) ) ? '' : mc_date( 'H:i', mc_strtotime( $data->event_endtime ), false );
 	} else {
-		$event_end   = '';
-		$starttime   = '';
-		$endtime     = '';
+		$event_end = '';
+		$starttime = '';
+		$endtime   = '';
 	}
 
 	$form .= '<div class="mc-buttons"><button type="button" class="del_field button button-delete">' . __( 'Delete', 'my-calendar' ) . '</button><button type="button" class="remove_field button button-delete hidden">' . __( 'Remove', 'my-calendar' ) . '</button></div>
