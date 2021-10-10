@@ -134,6 +134,11 @@ function mc_allowed_tags( $tags, $context ) {
 			'height'      => true,
 			'src'         => true,
 			'frameborder' => true,
+			'title'       => true,
+		);
+
+		$tags['th'] = array(
+			'aria-sort' => true,
 		);
 
 		$tags['a'] = array(

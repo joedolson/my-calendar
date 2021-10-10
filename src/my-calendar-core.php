@@ -1913,36 +1913,37 @@ $plugins_string
 			$from       = "From: $current_user->username <$from_email>\r\nReply-to: $current_user->username <$current_user->user_email>\r\n";
 
 			if ( ! $request ) {
-				echo '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>';
+				echo wp_kses_post( '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>' );
 			} else {
 				$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
 				if ( $sent ) {
 					mc_show_notice( __( 'I\'ll get back to you as soon as I can.', 'my-calendar' ) . __( 'You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address.', 'my-calendar' ) );
 				} else {
 					// Translators: Support form URL.
-					echo '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/' ) . "</p><pre>$request</pre></div>";
+					echo wp_kses_post( '<div class="message error"><p>' . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'my-calendar' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead', 'my-calendar' ), 'https://www.joedolson.com/contact/' ) . "</p><pre>$request</pre></div>" );
 				}
 			}
 		}
 
-		echo '
-		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-help' ) . '">
-			<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" /></div>
+		?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-help' ) ); ?>">
+			<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" /></div>
 			<div>
-			<code>' . __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;</code>
+			<code><?php echo esc_html( __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;" ); ?></code>
 			</p>
 			<p>
-				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'>" . stripslashes( $request ) . "</textarea>
+				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'><?php echo esc_textarea( stripslashes( $request ) ); ?></textarea>
 			</p>
 			<p>
-				<input type='submit' value='" . __( 'Send Support Request', 'my-calendar' ) . "' name='mc_support' class='button-primary' />
+				<input type='submit' value='<?php _e( 'Send Support Request', 'my-calendar' ); ?>' name='mc_support' class='button-primary' />
 			</p>
-			<p>" . __( 'The following additional information will be sent with your support request:', 'my-calendar' ) . '</p>
-			<div class="mc_support">' . wpautop( $data ) . '</div>
+			<p><?php _e( 'The following additional information will be sent with your support request:', 'my-calendar' ); ?></p>
+			<div class="mc_support"><?php wp_kses_post( wpautop( $data ) ); ?></div>
 			</div>
-		</form>';
+		</form>
+		<?php
 	} else {
-		echo '<p><a href="https://wordpress.org/support/plugin/my-calendar/">' . __( 'Request support at the WordPress.org Support Forums', 'my-calendar' ) . '</a> &bull; <a href="https://www.joedolson.com/my-calendar/pro/">' . __( 'Upgrade to Pro for direct plugin support!', 'my-calendar' ) . '</a></p><div class="mc_support">' . wpautop( $data ) . '</div>';
+		echo wp_kses_post( '<p><a href="https://wordpress.org/support/plugin/my-calendar/">' . __( 'Request support at the WordPress.org Support Forums', 'my-calendar' ) . '</a> &bull; <a href="https://www.joedolson.com/my-calendar/pro/">' . __( 'Upgrade to Pro for direct plugin support!', 'my-calendar' ) . '</a></p><div class="mc_support">' . wpautop( $data ) . '</div>' );
 	}
 }
 

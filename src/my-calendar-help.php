@@ -149,7 +149,7 @@ function my_calendar_help() {
  *
  * @return string
  */
-function mc_help_link( $link_text, $modal_title, $id ) {
+function mc_help_link( $link_text, $modal_title, $id, $echo = true ) {
 	$url  = admin_url( 'admin.php?help=' . (int) $id . '&page=mc-contextual-help&TB_iframe=true&width=600&height=550&modal_window=true' );
 	$link = sprintf(
 		'<a href="%s" class="thickbox my-calendar-contextual-help" data-title="%s"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span><span class="screen-reader-text">%s</span></a>',
@@ -157,6 +157,10 @@ function mc_help_link( $link_text, $modal_title, $id ) {
 		$modal_title,
 		$link_text
 	);
+
+	if ( $echo ) {
+		echo wp_kses_post( $link );
+	}
 
 	return $link;
 }

@@ -769,7 +769,7 @@ function mc_manage_categories() {
 			<th scope="row"><?php echo absint( $cat->category_id ); ?></th>
 			<td>
 			<?php
-			$title = $cat_name;
+			echo esc_html( $cat_name );
 			// Translators: Name of category being edited.
 			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			// Translators: Category name.
@@ -777,14 +777,14 @@ function mc_manage_categories() {
 			// Translators: Category name.
 			$default_text = sprintf( __( 'Set %s as Default', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			if ( $default_category === (string) $cat->category_id ) {
-				$title .= ' <strong>' . __( '(Default)' ) . '</strong>';
+				echo ' <strong>' . __( '(Default)' ) . '</strong>';
 				$default = '<span class="mc_default">' . __( 'Default Category', 'my-calendar' ) . '</span>';
 			} else {
 				$url     = admin_url( "admin.php?page=my-calendar-categories&amp;default=$cat->category_id" );
 				$default = '<a href="' . esc_url( $url ) . '">' . $default_text . '</a>';
 			}
 			if ( get_option( 'mc_skip_holidays_category' ) === (string) $cat->category_id ) {
-				$title ' <strong>' . __( '(Holiday)' ) . '</strong>';
+				echo ' <strong>' . __( '(Holiday)' ) . '</strong>';
 			}
 			?>
 				<div class="row-actions">

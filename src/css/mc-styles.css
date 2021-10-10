@@ -442,6 +442,7 @@ ol.mc-repeat-events li:last-of-type .buttons {
 }
 
 .my-calendar-admin .tablenav {
+	display: inline;
 	margin-top: -4em;
 }
 
@@ -1091,6 +1092,7 @@ select[name="event_recur"] {
 	grid-template-columns: 1fr 22em;
 	align-items: center;
 	margin-bottom: 1em;
+	clear: both;
 }
 
 div.mc-search {
