@@ -114,8 +114,8 @@ add_action( 'plugins_loaded', 'mc_load_textdomain' );
  * Load internationalization.
  */
 function mc_load_textdomain() {
-	// Don't change this; remove shipped translations as .org trans become complete(r).
-	load_plugin_textdomain( 'my-calendar', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
+	// Shipped translations removed @v3.3.0.
+	load_plugin_textdomain( 'my-calendar' );
 }
 
 // Add actions.
