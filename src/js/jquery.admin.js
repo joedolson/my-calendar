@@ -56,18 +56,17 @@ jQuery(document).ready(function ($) {
 		$( newElem ).find( 'input' ).prop( 'disabled', false );
 		$( newElem ).find( 'button.restore_field' ).removeClass( 'restore_field' ).addClass( 'del_field' ).text( mcAdmin.deleteButton );
 		var oldElem = $('#event' + num );
-		oldElem.find( '.buttons' ).hide();
 		$( '#event1' ).hide();
 		newElem.find( '.number_of' ).text( num );
 		// insert the new element after the last "duplicatable" input field.
 		$( '#event' + num ).after(newElem);
 		// Update id & for relationships.
-		var inputs      = newElem.find( 'input' );
-		var timeControl = newElem.find( '.event-time' );
+		var inputs       = newElem.find( 'input' );
+		var timeControl  = newElem.find( '.event-time' );
 		var startControl = newElem.find( '.event-begin' );
-		var endControl  = newElem.find( '.event-end' );
-		var initialTime = $( '#mc_event_time' ).val();
-		var initialEnd  = $( '#mc_event_endtime' ).val();
+		var endControl   = newElem.find( '.event-end' );
+		var initialTime  = $( '#mc_event_time' ).val();
+		var initialEnd   = $( '#mc_event_endtime' ).val();
 		var initialStart = oldElem.find( '.event-begin' ).val();
 		if ( ! initialStart ) {
 			initialStart = document.querySelector( '[identifier="mc_event_enddate"]' ).value;

@@ -288,8 +288,17 @@ li.datetime-template:nth-of-type(even) {
 }
 
 ol.mc-repeat-events {
+	display: grid;
 	margin: 0;
 	list-style-type: none;
+}
+
+ol.mc-repeat-events .buttons {
+	display: none;
+}
+
+ol.mc-repeat-events li:last-of-type .buttons {
+	display: block;
 }
 
 #my-calendar .apply {
