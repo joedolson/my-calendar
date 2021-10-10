@@ -93,7 +93,7 @@ function my_calendar_help() {
 				</p>
 				<h3><?php _e( 'Data Sharing by My Calendar', 'my-calendar' ); ?></h3>
 				<p>
-					<?php _e( 'The names and email addresses of people who author or host events are shared by My Calendar as part of the API output, RSS feeds, and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information.', 'my-calendar' ); ?>
+					<?php _e( 'The names and email addresses of people who author or host events are shared by My Calendar as part of the API output and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information.', 'my-calendar' ); ?>
 				</p>
 				<p>
 					<?php _e( 'Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted.', 'my-calendar' ); ?>

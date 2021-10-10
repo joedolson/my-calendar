@@ -67,9 +67,6 @@ function mc_format_api( $data, $format ) {
 		case 'json':
 			mc_api_format_json( $data );
 			break;
-		case 'rss':
-			mc_api_format_rss( $data );
-			break;
 		case 'csv':
 			mc_api_format_csv( $data );
 			break;
@@ -158,19 +155,6 @@ function mc_api_format_csv( $data ) {
 }
 
 /**
- * RSS formatted events
- *
- * @param array $data array of event objects.
- */
-function mc_api_format_rss( $data ) {
-	$output = mc_format_rss( $data );
-	header( 'Content-type: application/rss+xml' );
-	header( 'Pragma: no-cache' );
-	header( 'Expires: 0' );
-	echo $output;
-}
-
-/**
  * Export single event as iCal file
  */
 function mc_export_vcal() {
@@ -250,132 +234,6 @@ END:VCALENDAR";
 }
 
 /**
- * Fetch events & create RSS feed output.
- *
- * @param array $events Array of event objects.
- */
-function my_calendar_rss( $events = array() ) {
-	// establish template.
-	if ( isset( $_GET['mcat'] ) ) {
-		$cat_id = (int) $_GET['mcat'];
-	} else {
-		$cat_id = false;
-	}
-	// add RSS headers.
-	if ( empty( $events ) ) {
-		$events = mc_get_rss_events( $cat_id );
-	}
-	$output = mc_format_rss( $events );
-	if ( $output ) {
-		header( 'Content-type: application/rss+xml' );
-		header( 'Pragma: no-cache' );
-		header( 'Expires: 0' );
-		echo $output;
-	}
-}
-
-/**
- * Format RSS for feed.
- *
- * @param array $events group of event objects.
- *
- * @return string RSS/XML.
- */
-function mc_format_rss( $events ) {
-	if ( is_array( $events ) && ! empty( $events ) ) {
-		$template = PHP_EOL . "<item>
-			<title>{rss_title}</title>
-			<link>{details_link}</link>
-			<pubDate>{rssdate}</pubDate>
-			<dc:creator>{author}</dc:creator>
-			<description><![CDATA[{rss_description}]]></description>
-			<ev:startdate>{dtstart}</ev:startdate>
-			<ev:enddate>{dtend}</ev:enddate>
-			<content:encoded><![CDATA[<div class='vevent'>
-			<h1 class='summary'>{rss_title}</h1>
-			<div class='description'>{rss_description}</div>
-			<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
-			<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
-			<p>Recurrance: {recurs}</p>
-			<p>Repetition: {repeats} times</p>
-			<div class='location'>{rss_hcard}</div>
-			{rss_link_title}
-			</div>]]></content:encoded>
-			<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
-			<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
-			{guid}
-		  </item>' . PHP_EOL;
-
-		if ( get_option( 'mc_use_rss_template' ) === '1' ) {
-			$template = mc_get_template( 'rss' );
-		}
-
-		$charset = get_bloginfo( 'charset' );
-		$output  = '<?xml version="1.0" encoding="' . $charset . '"?>
-		<rss version="2.0"
-			xmlns:content="http://purl.org/rss/1.0/modules/content/"
-			xmlns:dc="http://purl.org/dc/elements/1.1/"
-			xmlns:ev="http://purl.org/rss/1.0/modules/event/"
-			xmlns:atom="http://www.w3.org/2005/Atom"
-			xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
-			xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
-			>
-		<channel>
-		  <title>' . esc_xml( get_bloginfo( 'name' ) ) . ' Calendar</title>
-		  <link>' . esc_xml( home_url() ) . '</link>
-		  <description>' . esc_xml( get_bloginfo( 'description' ) ) . ': My Calendar Events</description>
-		  <language>' . esc_xml( get_bloginfo( 'language' ) ) . '</language>
-		  <managingEditor>' . esc_xml( get_bloginfo( 'admin_email' ) ) . ' (' . esc_xml( get_bloginfo( 'name' ) ) . ' Admin)</managingEditor>
-		  <generator>My Calendar WordPress Plugin http://www.joedolson.com/my-calendar/</generator>
-		  <lastBuildDate>' . esc_xml( mysql2date( 'D, d M Y H:i:s +0000', time() ) ) . '</lastBuildDate>
-		  <atom:link href="' . esc_xml( esc_url( add_query_arg( $_GET, get_feed_link( 'my-calendar-rss' ) ) ) ) . '" rel="self" type="application/rss+xml" />' . PHP_EOL;
-		foreach ( $events as $date ) {
-			foreach ( array_keys( $date ) as $key ) {
-				$event   =& $date[ $key ];
-				$array   = mc_create_tags( $event );
-				$output .= mc_draw_template( $array, $template, 'rss' );
-			}
-		}
-		$output .= '</channel>
-		</rss>';
-
-		return mc_strip_to_xml( $output );
-	} else {
-
-		return false;
-	}
-}
-
-/**
- * Double check to try to ensure that the XML feed can be rendered.
- *
- * @param string $value Any string value.
- *
- * @return string unsupported characters stripped
- */
-function mc_strip_to_xml( $value ) {
-	// if there's still an ampersand surrounded by whitespace, kill it.
-	$value   = str_replace( ' & ', ' &amp; ', $value );
-	$ret     = '';
-	$current = '';
-	if ( empty( $value ) ) {
-		return $ret;
-	}
-	$length = strlen( $value );
-	for ( $i = 0; $i < $length; $i ++ ) {
-		$current = ord( $value[ $i ] );
-		if ( ( 0x9 === $current ) || ( 0xA === $current ) || ( 0xD === $current ) || ( ( $current >= 0x20 ) && ( $current <= 0xD7FF ) ) || ( ( $current >= 0xE000 ) && ( $current <= 0xFFFD ) ) || ( ( $current >= 0x10000 ) && ( $current <= 0x10FFFF ) ) ) {
-			$ret .= chr( $current );
-		} else {
-			$ret .= ' ';
-		}
-	}
-	$ret = iconv( 'UTF-8', 'UTF-8//IGNORE', $ret );
-
-	return $ret;
-}
-
-/**
  * Generate an iCal subscription export with most recently added events by category.
  *
  * @param string $source Google or outlook export format.
@@ -387,7 +245,7 @@ function mc_ics_subscribe( $source ) {
 	} else {
 		$cat_id = false;
 	}
-	$events = mc_get_rss_events( $cat_id );
+	$events = mc_get_new_events( $cat_id );
 
 	mc_api_format_ical( $events, $source );
 }

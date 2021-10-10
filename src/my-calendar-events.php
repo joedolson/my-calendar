@@ -388,13 +388,13 @@ function mc_get_all_holidays( $before, $after, $today ) {
 }
 
 /**
- * Get events for use in RSS feeds. Fetches most recently added events.
+ * Get most recently added events.
  *
  * @param integer $cat_id Category ID.
  *
  * @return array of event objects
  */
-function mc_get_rss_events( $cat_id = false ) {
+function mc_get_new_events( $cat_id = false ) {
 	global $wpdb;
 	$mcdb = $wpdb;
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {

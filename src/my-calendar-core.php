@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Add feeds to WordPress feed handler.
  */
 function mc_add_feed() {
-	add_feed( 'my-calendar-rss', 'my_calendar_rss' );
 	add_feed( 'my-calendar-ics', 'my_calendar_ical' );
 	add_feed( 'my-calendar-google', 'mc_ics_subscribe_google' );
 	add_feed( 'my-calendar-outlook', 'mc_ics_subscribe_outlook' );

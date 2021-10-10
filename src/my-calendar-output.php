@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_get_template( $template ) {
 	$templates = get_option( 'mc_templates' );
-	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'rss', 'grid' );
+	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'grid' );
 
 	if ( ! in_array( $template, $keys, true ) ) {
 		$template = '';
@@ -2377,7 +2377,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		$nav = mc_nav( $date, $format, $time, $show_months, $main_class );
 	}
 
-	// Set up rss feeds.
+	// Set up subscription feeds.
 	if ( in_array( 'feeds', $used, true ) ) {
 		$feeds = mc_sub_links( $subtract );
 	}
@@ -2776,24 +2776,22 @@ function mc_category_key( $category ) {
 }
 
 /**
- * Set up RSS links for calendar
+ * Set up subscription links for calendar
  *
  * @param array $subtract Array of data to remove.
  *
- * @return string HTML output for RSS links
+ * @return string HTML output for subscription links
  */
 function mc_sub_links( $subtract ) {
 
-	$feed    = get_feed_link( 'my-calendar-rss' );
 	$google  = get_feed_link( 'my-calendar-google' );
 	$outlook = get_feed_link( 'my-calendar-outlook' );
 
-	$rss         = "<li class='rss'><a href='" . esc_url( $feed ) . "'>" . __( 'RSS', 'my-calendar' ) . '</a></li>';
 	$sub_google  = "<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
 	$sub_outlook = "<li class='ics outlook'><a href='" . esc_url( $outlook ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Outlook', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-subscribe'>
-	<ul>$rss$sub_google$sub_outlook</ul>
+	<ul>$sub_google$sub_outlook</ul>
 </div>";
 
 	return $output;

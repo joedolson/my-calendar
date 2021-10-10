@@ -65,7 +65,6 @@ function mc_templates_edit() {
 	$templates           = ( $requery ) ? get_option( 'mc_templates' ) : $templates;
 	$globals             = mc_globals();
 	$mc_grid_template    = ( '' !== trim( $templates['grid'] ) ) ? $templates['grid'] : $globals['grid_template'];
-	$mc_rss_template     = ( '' !== trim( $templates['rss'] ) ) ? $templates['rss'] : $globals['rss_template'];
 	$mc_list_template    = ( '' !== trim( $templates['list'] ) ) ? $templates['list'] : $globals['list_template'];
 	$mc_mini_template    = ( '' !== trim( $templates['mini'] ) ) ? $templates['mini'] : $globals['mini_template'];
 	$mc_details_template = ( '' !== trim( $templates['details'] ) ) ? $templates['details'] : $globals['single_template'];
@@ -273,7 +272,7 @@ function mc_templates_edit() {
 			$templates = get_option( 'mc_templates' );
 			ksort( $templates );
 			foreach ( $templates as $key => $template ) {
-				if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'link' === $key || 'label' === $key ) {
+				if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'link' === $key || 'label' === $key || 'rss' === $key ) {
 					continue;
 				}
 				?>
@@ -375,9 +374,8 @@ function mc_display_template_preview( $template, $mc_id = false ) {
 	$event  = false;
 	$data   = mc_get_template_tag_preview( $mc_id );
 	$temp   = mc_get_template( $template );
-	$type   = ( 'rss' === $template ) ? 'rss' : '';
-	$output = mc_draw_template( $data, $temp, $type );
-	$output = ( 'rss' === $template ) ? '<pre>' . htmlentities( $output ) . '</pre>' : html_entity_decode( $output );
+	$output = mc_draw_template( $data, $temp );
+	$output = html_entity_decode( $output );
 	$class  = ( 'list' === $template ) ? 'list-event' : 'calendar-event';
 	$class  = ( 'mini' === $template ) ? 'mini-event' : $class;
 	$class  = ( 'details' === $template ) ? 'single-event' : $class;
@@ -433,7 +431,6 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		'post',
 		'shortdesc',
 		'repeats',
-		'rssdate',
 		'skip_holiday',
 		'term',
 		'description_raw',
@@ -481,7 +478,6 @@ function mc_is_core_template( $key ) {
 		case 'grid':
 		case 'details':
 		case 'list':
-		case 'rss':
 		case 'mini':
 			return true;
 			break;
@@ -577,9 +573,6 @@ function mc_template_description( $key ) {
 		case 'list':
 			$return = __( '<strong>Core Template:</strong> used when viewing events in the main calendar list view.', 'my-calendar' );
 			break;
-		case 'rss':
-			$return = __( '<strong>Core Template:</strong> used for RSS feeds.', 'my-calendar' );
-			break;
 		case 'mini':
 			$return = __( '<strong>Core Template:</strong> used in pop-ups for the mini calendar.', 'my-calendar' );
 			break;
@@ -604,7 +597,6 @@ function mc_list_core_templates() {
 	$list_enabled    = ( ( 'list' === $type && $switched ) || get_option( 'mc_use_list_template' ) === '1' ) ? $check : $uncheck;
 	$mini_enabled    = ( ( 'mini' === $type && $switched ) || get_option( 'mc_use_mini_template' ) === '1' ) ? $check : $uncheck;
 	$details_enabled = ( ( 'details' === $type && $switched ) || get_option( 'mc_use_details_template' ) === '1' ) ? $check : $uncheck;
-	$rss_enabled     = ( ( 'rss' === $type && $switched ) || get_option( 'mc_use_rss_template' ) === '1' ) ? $check : $uncheck;
 
 	$list = "
 	<table class='widefat'>
@@ -618,9 +610,7 @@ function mc_list_core_templates() {
 			</tr>
 			<tr class='alternate'><td><a href='" . add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
 			</tr>
-			<tr><td><a href='" . add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . "</td>
-			</tr>
-			<tr class='alternate'><td><a href='" . add_query_arg( 'mc_template', 'rss', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>rss</a></td><td>$rss_enabled</td><td>" . mc_template_description( 'rss' ) . '</td>
+			<tr><td><a href='" . add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-templates' ) ) . "'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
 			</tr>
 		</tbody>
 	</table>';

@@ -71,28 +71,6 @@ function mc_globals() {
 	{map before="<div class=\'mc-map\'>" after="</div>"}
 </div>';
 
-	$rss_template = "
-\n<item>
-	<title>{rss_title}: {date}, {time}</title>
-	<link>{link}</link>
-	<pubDate>{rssdate}</pubDate>
-	<dc:creator>{author}</dc:creator>
-	<description><![CDATA[{rss_description}]]></description>
-	<content:encoded><![CDATA[<div class='vevent'>
-	<h1 class='summary'>{rss_title}</h1>
-	<div class='description'>{rss_description}</div>
-	<p class='dtstart' title='{ical_start}'>Begins: {time} on {date}</p>
-	<p class='dtend' title='{ical_end}'>Ends: {endtime} on {enddate}</p>
-	<p>Recurrence: {recurs}</p>
-	<p>Repetition: {repeats} times</p>
-	<div class='location'>{rss_hcard}</div>
-	{link_title}
-	</div>]]></content:encoded>
-	<dc:format xmlns:dc='http://purl.org/dc/elements/1.1/'>text/html</dc:format>
-	<dc:source xmlns:dc='http://purl.org/dc/elements/1.1/'>" . home_url() . '</dc:source>
-	{guid}
-</item>' . PHP_EOL;
-
 	$charset_collate  = $wpdb->get_charset_collate();
 	$event_fifth_week = ( mc_no_fifth_week() ) ? 1 : 0;
 
@@ -201,7 +179,6 @@ function mc_globals() {
 		'initial_cat_db'   => $initial_cat_db,
 		'grid_template'    => addslashes( $grid_template ),
 		'list_template'    => addslashes( $grid_template ),
-		'rss_template'     => addslashes( $rss_template ),
 		'mini_template'    => addslashes( $grid_template ),
 		'single_template'  => addslashes( $single_template ),
 	);
@@ -249,7 +226,6 @@ function mc_default_settings() {
 			'grid'       => $grid_template,
 			'list'       => $list_template,
 			'mini'       => $mini_template,
-			'rss'        => $rss_template,
 			'details'    => $single_template,
 			'label'      => __( 'Read more', 'my-calendar' ),
 		)

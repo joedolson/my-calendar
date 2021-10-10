@@ -807,7 +807,7 @@ function mc_remote_db() {
 							'timeframe'  => '<div class="dashicons dashicons-clock" aria-hidden="true"></div> <span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '</span>',
 							'calendar'   => '<div class="dashicons dashicons-calendar" aria-hidden="true"></div> <span>' . __( 'The calendar', 'my-calendar' ) . '</span>',
 							'key'        => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories', 'my-calendar' ) . '</span>',
-							'feeds'      => '<div class="dashicons dashicons-rss" aria-hidden="true"></div> <span>' . __( 'RSS and iCal Subscription Links', 'my-calendar' ) . '</span>',
+							'feeds'      => '<div class="dashicons dashicons-rss" aria-hidden="true"></div> <span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '</span>',
 							'exports'    => '<div class="dashicons dashicons-calendar-alt" aria-hidden="true"></div> <span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '</span>',
 							'locations'  => '<div class="dashicons dashicons-location" aria-hidden="true"></div> <span>' . __( 'Location (dropdown)', 'my-calendar' ) . '</span>',
 							'categories' => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '</span>',

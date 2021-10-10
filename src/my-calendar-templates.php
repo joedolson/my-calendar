@@ -81,18 +81,11 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 						}
 					}
 				} else {
-					// don't do preg match (never required for RSS).
+					// don't do preg match for simple templates.
 					$template = stripcslashes( str_replace( '{' . $key . '}', $value, $template ) );
 				}
 			}
 			// End {$key check.
-			// Secondary search for RSS output.
-			$rss_search = "{rss_$key}";
-			if ( strpos( $template, $rss_search ) !== false ) {
-				$value = esc_xml( $value );
-				// WP core function.
-				$template = stripcslashes( str_replace( $rss_search, $value, $template ) );
-			}
 		}
 	}
 
@@ -371,7 +364,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ), false );    // Date: hcal formatted end.
 	$e['userstart']    = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
 	$e['userend']      = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
-	$e['rssdate']      = mc_date( 'D, d M Y H:i:s +0000', strtotime( $event->event_added ), false );
 	$date              = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
 	$date_end          = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
 	$date_arr          = array(
@@ -529,9 +521,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['id']         = $event->event_id;
 	$e['group']      = $event->event_group_id;
 	$e['event_span'] = $event->event_span;
-
-	// RSS guid.
-	$e['guid'] = "<guid isPermaLink='true'>" . esc_url( $e_link ) . '</guid>';
 
 	// ICAL.
 	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
