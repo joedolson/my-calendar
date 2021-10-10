@@ -397,6 +397,21 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 					<h2><?php _e( 'Location Editor', 'my-calendar' ); ?></h2>
 
 					<div class="inside location_form">
+					<div class="mc-controls">
+						<ul>
+							<?php
+							if ( 'edit' === $view ) {
+								$delete_url = add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete' ) );
+								$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
+								?>
+							<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php _e( 'Delete', 'my-calendar' ); ?></a></li>
+							<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php _e( 'View', 'my-calendar' ); ?></a></li>
+								<?php
+							}
+							?>
+							<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
+						</ul>
+					</div>
 						<?php
 						$params = array();
 						if ( isset( $_GET['location_id'] ) ) {
@@ -426,9 +441,21 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 							}
 							echo mc_locations_fields( $has_data, $cur_loc, 'location' );
 							?>
-							<p>
-								<input type="submit" name="save" class="button-primary" value="<?php echo ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ); ?> "/>
-							</p>
+							<div class="mc-controls footer">
+								<ul>
+									<?php
+									if ( 'edit' === $view ) {
+										$delete_url = add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete' ) );
+										$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
+										?>
+									<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php _e( 'Delete', 'my-calendar' ); ?></a></li>
+									<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php _e( 'View', 'my-calendar' ); ?></a></li>
+										<?php
+									}
+									?>
+									<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
+								</ul>
+							</div>
 						</form>
 					</div>
 				</div>
