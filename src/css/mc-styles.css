@@ -983,7 +983,7 @@ input[name="mc_uri"] {
 	margin-left: .25em;
 }
 
-.my-calendar-contextual-help {
+.widget-content .my-calendar-contextual-help {
 	display: inline-block;
 }
 
