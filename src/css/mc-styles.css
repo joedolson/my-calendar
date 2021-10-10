@@ -380,7 +380,8 @@ ol.mc-repeat-events li:last-of-type .buttons {
 }
 
 .my-calendar-admin .postbox .inside {
-	overflow: visible !important
+	overflow: visible !important;
+	margin: 0;
 }
 
 /* some plugins change this, but I need it at WP default. */
@@ -900,6 +901,12 @@ input[name="mc_uri"] {
 
 .event-new-category .button .dashicons {
 	vertical-align: middle;
+}
+
+label[for=e_link],
+label[for=e_author],
+label[for=e_host] {
+	display: block;
 }
 
 .my-calendar-admin .button .dashicons-minus {

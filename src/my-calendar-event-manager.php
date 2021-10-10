@@ -1368,7 +1368,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				}
 				$return = '
 					<p>
-						<label for="e_link">' . __( 'External Link', 'my-calendar' ) . '</label> <input type="text" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
+						<label for="e_link">' . __( 'More information', 'my-calendar' ) . '</label> <input type="url" placeholder="https://example.org" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
 					</p>';
 			}
 			break;
@@ -1624,7 +1624,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	<input type="hidden" name="event_nonce_name" value="<?php echo wp_create_nonce( 'event_nonce' ); ?>" />
 </div>
 
-<div class="ui-sortable meta-box-sortables">
+<div class="ui-sortable meta-box-sortables event-primary">
 	<div class="postbox">
 		<?php
 			// Translators: Event title.
@@ -1665,7 +1665,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			}
 			?>
 			<fieldset class="details">
-				<legend class="screen-reader-text"><?php _e( 'Event Details', 'my-calendar' ); ?></legend>
+				<legend class="screen-reader-text"><?php _e( 'Event', 'my-calendar' ); ?></legend>
 				<p>
 					<label for="e_title"><?php _e( 'Event Title', 'my-calendar' ); ?></label><br/>
 					<input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="<?php echo ( $has_data ) ? apply_filters( 'mc_manage_event_title', stripslashes( esc_attr( $data->event_title ) ), $data ) : ''; ?>" />
@@ -1704,7 +1704,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	</div>
 </div>
 
-<div class="ui-sortable meta-box-sortables">
+<div class="ui-sortable meta-box-sortables event-date-time">
 	<div class="postbox">
 		<h2><?php _e( 'Date and Time', 'my-calendar' ); ?></h2>
 
@@ -1815,7 +1815,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	mc_show_block( 'event_recurs', $has_data, $data );
 	if ( mc_show_edit_block( 'event_image' ) ) {
 		?>
-		<div class="ui-sortable meta-box-sortables">
+		<div class="ui-sortable meta-box-sortables event-image">
 			<div class="postbox">
 				<h2><?php _e( 'Featured Image', 'my-calendar' ); ?></h2>
 				<div class="inside">
@@ -1829,7 +1829,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	}
 	if ( mc_show_edit_blocks( array( 'event_host', 'event_author', 'event_link' ) ) ) {
 		?>
-		<div class="ui-sortable meta-box-sortables">
+		<div class="ui-sortable meta-box-sortables event-details">
 			<div class="postbox">
 				<h2><?php _e( 'Event Details', 'my-calendar' ); ?></h2>
 				<div class="inside">
@@ -1848,7 +1848,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
 	if ( '' !== $custom_fields ) {
 		?>
-<div class="ui-sortable meta-box-sortables">
+<div class="ui-sortable meta-box-sortables event-custom-fields">
 	<div class="postbox">
 		<h2><?php _e( 'Event Custom Fields', 'my-calendar' ); ?></h2>
 		<div class="inside">
@@ -1861,7 +1861,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	if ( mc_show_edit_block( 'event_location' ) ) {
 		?>
 
-<div class="ui-sortable meta-box-sortables">
+<div class="ui-sortable meta-box-sortables event-location">
 	<div class="postbox">
 		<h2><?php _e( 'Event Location', 'my-calendar' ); ?></h2>
 
@@ -1881,7 +1881,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	mc_show_block( 'event_access', $has_data, $data );
 	mc_show_block( 'event_open', $has_data, $data );
 	?>
-	<div class="ui-sortable meta-box-sortables">
+	<div class="ui-sortable meta-box-sortables event-ui-footer">
 		<div class="postbox">
 			<div class="inside">
 				<div class='mc-controls footer'>
