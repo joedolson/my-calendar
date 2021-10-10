@@ -1410,11 +1410,9 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			}
 			$holiday_category = get_option( 'mc_skip_holidays_category', '' );
 			if ( $holiday_category ) {
-				$category_name  = ( $holiday_category ) ? mc_get_category_detail( $holiday_category ) : '';
+				$category_name = ( $holiday_category ) ? mc_get_category_detail( $holiday_category ) : '';
 				// Translators: name of category designated for holidays.
-				$holiday_option = '<p class="holiday-schedule">
-					<label for="e_holiday">' . sprintf( __( 'Cancel event if it occurs on a date with an event in the category %s', 'my-calendar' ), '&ldquo;' . $category_name . '&rdquo;' ) . '</label>
-					<input type="checkbox" value="true" id="e_holiday" name="event_holiday"' . checked( true, $hol_checked, false ) . ' />
+				$holiday_option = '<p class="holiday-schedule"><label for="e_holiday">' . sprintf( __( 'Cancel event if it occurs on a date with an event in the category %s', 'my-calendar' ), '&ldquo;' . $category_name . '&rdquo;' ) . '</label> <input type="checkbox" value="true" id="e_holiday" name="event_holiday"' . checked( true, $hol_checked, false ) . ' />
 				</p>';
 			} else {
 				$holiday_option = '<input type="hidden" name="event_holiday" value="' . esc_attr( mc_skip_holidays() ) . '" />';
