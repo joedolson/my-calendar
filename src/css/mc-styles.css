@@ -1217,8 +1217,8 @@ tr.problem .error {
 	overflow: hidden;
 }
 
-#e_schedule p:nth-of-type(1),
-#e_schedule p:nth-of-type(2) {
+#e_schedule .columns p:nth-of-type(1),
+#e_schedule .columns p:nth-of-type(2) {
 	display: grid;
 }
 
