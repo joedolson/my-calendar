@@ -1725,7 +1725,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						<label for="e_span"><?php _e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
 						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php _e( 'Add occurrence', 'my-calendar' ); ?></button> <?php echo mc_help_link( 'Help', __( 'My Calendar: add an occurrence', 'my-calendar' ), '1' ); ?>
 					</p>
-					<ol class="mc-repeat-events columns">
+					<ol class="mc-repeat-events">
 						<li id="event1" class="datetime-template enabled">
 							<fieldset class="new-field">
 							<legend>

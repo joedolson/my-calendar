@@ -180,11 +180,6 @@ span.mc-notice {
 	display: flex;
 }
 
-#e_schedule .mc-repeat-events.columns {
-	display:grid;
-	grid-template-columns: repeat( 3, 1fr );
-}
-
 #e_schedule .new-field {
 	position: relative;
 }
