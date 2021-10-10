@@ -64,7 +64,7 @@ function my_calendar_behaviors_edit() {
 						<h2><?php _e( 'My Calendar Script Manager', 'my-calendar' ); ?></h2>
 
 						<div class="inside">
-							<form id="my-calendar" method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-behaviors' ); ?>">
+							<form id="my-calendar" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-behaviors' ) ); ?>">
 								<div>
 									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 								</div>
