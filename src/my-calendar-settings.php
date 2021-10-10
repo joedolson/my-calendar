@@ -331,7 +331,6 @@ function mc_update_input_settings( $post ) {
 		'event_recurs'   => ( ! empty( $post['mci_event_recurs'] ) && $post['mci_event_recurs'] ) ? 'on' : 'off',
 		'event_open'     => ( ! empty( $post['mci_event_open'] ) && $post['mci_event_open'] ) ? 'on' : 'off',
 		'event_location' => ( ! empty( $post['mci_event_location'] ) && $post['mci_event_location'] ) ? 'on' : 'off',
-		'event_specials' => ( ! empty( $post['mci_event_specials'] ) && $post['mci_event_specials'] ) ? 'on' : 'off',
 		'event_access'   => ( ! empty( $post['mci_event_access'] ) && $post['mci_event_access'] ) ? 'on' : 'off',
 		'event_host'     => ( ! empty( $post['mci_event_host'] ) && $post['mci_event_host'] ) ? 'on' : 'off',
 	);
@@ -1072,7 +1071,6 @@ function mc_remote_db() {
 								'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
 								'event_open'     => __( 'Registration Settings', 'my-calendar' ),
 								'event_location' => __( 'Event Location', 'my-calendar' ),
-								'event_specials' => __( 'Special Scheduling Options', 'my-calendar' ),
 								'event_access'   => __( 'Accessibility', 'my-calendar' ),
 								'event_host'     => __( 'Host', 'my-calendar' ),
 							);

@@ -224,6 +224,7 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	$( '.fifth-week-schedule' ).hide();
 	// display notice informing users of lack of support for recur month by day.
 	$( '#e_recur' ).on( 'change', function (e) {
 		var recur = $(this).val();
@@ -234,8 +235,10 @@ jQuery(document).ready(function ($) {
 		}
 		if ( recur == 'U' ) {
 			$( '#e_every' ).attr( 'max', 1 ).val( 1 );
+			$( '.fifth-week-schedule' ).show();
 		} else {
 			$( '#e_every' ).attr( 'max', 99 );
+			$( '.fifth-week-schedule' ).hide();
 		}
 	});
 

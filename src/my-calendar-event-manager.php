@@ -1402,6 +1402,23 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				$event       = mc_get_instance_data( $last->occur_id );
 				$repeats     = gmdate( 'Y-m-d', strtotime( $event->occur_begin ) );
 			}
+			$hol_checked   = ( mc_skip_holidays() ) ? true : false;
+			$fifth_checked = ( mc_no_fifth_week() ) ? true : false;
+			if ( $has_data ) {
+				$hol_checked   = ( '1' === $data->event_holiday ) ? true : $hol_checked;
+				$fifth_checked = ( '1' === $data->event_fifth_week ) ? true : $fifth_checked;
+			}
+			$holiday_category = get_option( 'mc_skip_holidays_category', '' );
+			if ( $holiday_category ) {
+				$category_name  = ( $holiday_category ) ? mc_get_category_detail( $holiday_category ) : '';
+				// Translators: name of category designated for holidays.
+				$holiday_option = '<p class="holiday-schedule">
+					<label for="e_holiday">' . sprintf( __( 'Cancel event if it occurs on a date with an event in the category %s', 'my-calendar' ), '&ldquo;' . $category_name . '&rdquo;' ) . '</label>
+					<input type="checkbox" value="true" id="e_holiday" name="event_holiday"' . checked( true, $hol_checked, false ) . ' />
+				</p>';
+			} else {
+				$holiday_option = '<input type="hidden" name="event_holiday" value="' . esc_attr( mc_skip_holidays() ) . '" />';
+			}
 			if ( $show_block && empty( $_GET['date'] ) ) {
 				$warning = '';
 				$class   = '';
@@ -1436,6 +1453,11 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			</p>
 			</div>
 		</fieldset>
+		' . $holiday_option . '
+		<p class="fifth-week-schedule">
+			<label for="e_fifth_week">' . __( 'If event falls on the 5th week of the month in a month with four weeks, move it one week earlier.', 'my-calendar' ) . '</label>
+			<input type="checkbox" value="true" id="e_fifth_week" name="event_fifth_week"' . checked( true, $fifth_checked, false ) . ' />
+		</p>
 	</div>
 							' . $post;
 			} else {
@@ -1870,49 +1892,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	}
 	mc_show_block( 'event_access', $has_data, $data );
 	mc_show_block( 'event_open', $has_data, $data );
-	if ( mc_show_edit_block( 'event_specials' ) ) {
-		$hol_checked   = ( mc_skip_holidays() ) ? ' checked="checked"' : '';
-		$fifth_checked = ( mc_no_fifth_week() ) ? ' checked="checked"' : '';
-		if ( $has_data ) {
-			$hol_checked   = ( '1' === $data->event_holiday ) ? ' checked="checked"' : '';
-			$fifth_checked = ( '1' === $data->event_fifth_week ) ? ' checked="checked"' : '';
-		}
-		?>
-		<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
-			<h2><?php _e( 'Special Scheduling Options', 'my-calendar' ); ?></h2>
-
-			<div class="inside">
-				<fieldset class="options">
-					<legend class="screen-reader-text"><?php _e( 'Special Options', 'my-calendar' ); ?></legend>
-					<p>
-						<label for="e_holiday"><?php _e( 'Cancel this event if it occurs on a date with an event in the Holidays category', 'my-calendar' ); ?></label>
-						<input type="checkbox" value="true" id="e_holiday" name="event_holiday"<?php echo $hol_checked; ?> />
-					</p>
-					<p>
-						<label for="e_fifth_week"><?php _e( 'If this event recurs, and falls on the 5th week of the month in a month with only four weeks, move it back one week.', 'my-calendar' ); ?></label>
-						<input type="checkbox" value="true" id="e_fifth_week" name="event_fifth_week"<?php echo $fifth_checked; ?> />
-					</p>
-				</fieldset>
-			</div>
-		</div>
-		</div>
-		<?php
-	} else {
-		if ( $has_data ) {
-			$event_holiday = ( '1' === $data->event_holiday ) ? 'true' : 'false';
-			$event_fifth   = ( '1' === $data->event_fifth_week ) ? 'true' : 'false';
-		} else {
-			$event_holiday = mc_skip_holidays();
-			$event_fifth   = mc_no_fifth_week();
-		}
-		?>
-		<div>
-		<input type="hidden" name="event_holiday" value="<?php echo esc_attr( $event_holiday ); ?>" />
-		<input type="hidden" name="event_fifth_week" value="<?php echo esc_attr( $event_fifth ); ?>" />
-		</div>
-		<?php
-	}
 	?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
