@@ -902,6 +902,10 @@ input[name="mc_uri"] {
 	vertical-align: middle;
 }
 
+.my-calendar-admin .button .dashicons-minus {
+	font-size: 16px;
+}
+
 .new-event-category {
 	background: #0000000a;
 	padding: .5em 1em;
