@@ -79,7 +79,7 @@ function mc_templates_edit() {
 	?>
 	<div class="wrap my-calendar-admin">
 		<h1 class="wp-heading-inline"><?php _e( 'My Calendar Templates', 'my-calendar' ); ?></h1>
-		<a href="<?php echo add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<a href="<?php echo esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates' ) ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 		<div class="postbox-container jcd-wide">
 			<div class="metabox-holder">
@@ -88,7 +88,7 @@ function mc_templates_edit() {
 						<h2><?php _e( 'Core Templates', 'my-calendar' ); ?></h2>
 						<div class="inside">
 						<?php
-						echo mc_list_core_templates();
+						echo wp_kses_post( mc_list_core_templates() );
 						?>
 						</div>
 					</div>
@@ -98,8 +98,8 @@ function mc_templates_edit() {
 						<h2><?php _e( 'Custom Templates', 'my-calendar' ); ?></h2>
 						<div class="inside">
 						<?php
-						echo mc_list_custom_templates();
-						echo '<p><a class="button" href="' . add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates#mc-edit-template' ) ) . '">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>';
+						echo wp_kses_post( mc_list_custom_templates() );
+						echo wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-templates#mc-edit-template' ) ) ) . '">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
 						?>
 						</div>
 					</div>
@@ -108,8 +108,8 @@ function mc_templates_edit() {
 					<div class="postbox" id="mc-edit-template">
 						<h2><?php _e( 'Edit Template', 'my-calendar' ); ?></h2>
 						<div class="inside">
-							<?php echo ( '' !== $core ) ? "<div class='template-description'>$core</div>" : ''; ?>
-							<form method="post" action="<?php echo add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ); ?>">
+							<?php echo ( '' !== $core ) ? wp_kses_post( "<div class='template-description'>$core</div>" ) : ''; ?>
+							<form method="post" action="<?php echo esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-templates' ) ) ); ?>">
 							<?php
 							if ( 'add-new' === $key ) {
 								?>
@@ -147,7 +147,7 @@ function mc_templates_edit() {
 									printf( __( 'Custom Template (%s)', 'my-calendar' ), $key );
 									?>
 									</label><br/>
-									<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="32" cols="76"><?php echo $template; ?></textarea>
+									<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="32" cols="76"><?php echo esc_textarea( stripslashes( $template ) ); ?></textarea>
 								</p>
 								<p>
 									<input type="submit" name="save" class="button-primary" value="<?php _e( 'Update Template', 'my-calendar' ); ?>" />
@@ -158,7 +158,7 @@ function mc_templates_edit() {
 							<?php } ?>
 							</form>
 							<p>
-								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-templates#templates' ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-templates#templates' ) ); ?>"><?php _e( 'Templates Help', 'my-calendar' ); ?></a>
 							</p>
 						</div>
 					</div>
@@ -171,7 +171,7 @@ function mc_templates_edit() {
 
 						<div class='mc_template_tags inside'>
 							<p>
-								<a href="<?php echo admin_url( 'admin.php?page=my-calendar-templates#templates' ); ?>"><?php _e( 'All Template Tags &raquo;', 'my-calendar' ); ?></a>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-templates#templates' ) ); ?>"><?php _e( 'All Template Tags &raquo;', 'my-calendar' ); ?></a>
 							</p>
 							<dl>
 								<dt><code>{title}</code></dt>
@@ -287,7 +287,7 @@ function mc_templates_edit() {
 						</h2>
 						<div class="template-preview inside">
 				<?php
-				echo mc_template_description( $key );
+				echo wp_kses_post( mc_template_description( $key ) );
 				$mc_id       = mc_get_template_tag_preview( false, 'int' );
 				$view_url    = mc_get_details_link( $mc_id );
 				$tag_preview = add_query_arg(
@@ -317,7 +317,7 @@ function mc_templates_edit() {
 
 						<div class='mc_template_tags inside'>
 							<?php
-							echo mc_display_template_tags();
+							echo wp_kses_post( mc_display_template_tags() );
 							?>
 						</div>
 					</div>
