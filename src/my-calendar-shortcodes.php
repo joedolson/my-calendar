@@ -389,27 +389,21 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 		<?php
 		// Common Elements to all Shortcodes.
 		if ( $shortcode ) {
-			echo '<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly" id="mc_shortcode">' . $shortcode . '</textarea></p><p><button type="button" class="button button-hero reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>';
+			echo wp_kses( '<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly" id="mc_shortcode">' . $shortcode . '</textarea></p><p><button type="button" class="button button-hero reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>', mc_kses_elements() );
 		}
 		?>
 		<div class="mc-generator-inputs">
 		<fieldset>
 			<legend><?php _e( 'Content Filters', 'my-calendar' ); ?></legend>
-			<?php
-			$all_checked = '';
-			if ( empty( $category ) ) {
-				$all_checked = ' checked="checked"';
-			}
-			?>
 			<fieldset>
 				<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
 				<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
 					<li>
-						<input type="checkbox" value="all" <?php echo $all_checked; ?> name="category[]" id="category"> <label for="category"><?php _e( 'All', 'my-calendar' ); ?></label>
+						<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category"> <label for="category"><?php _e( 'All', 'my-calendar' ); ?></label>
 					</li>
 					<?php
 					$select = mc_category_select( $category, true, true, 'category[]', 'category' );
-					echo $select;
+					echo wp_kses( $select, mc_kses_elements() );
 					?>
 				</ul>
 			</fieldset>
@@ -427,7 +421,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			</p>
 			<p>
 				<label for="lvalue" id='lval'><?php _e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
-				<input type="text" name="lvalue" id="lvalue" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' <?php echo $disabled; ?> />
+				<input type="text" name="lvalue" id="lvalue" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' <?php echo esc_attr( $disabled ); ?> />
 			</p>
 
 			<p id='location-info'>
@@ -447,7 +441,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<?php
 					// Translators: Settings page URL.
 					printf( __( "Navigation above and below the calendar: your <a href='%s'>settings</a> if this is left blank. Use <code>none</code> to hide all navigation.", 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
-					echo mc_help_link( 'Help', __( 'My Calendar: Navigation Keywords', 'my-calendar' ), 3 );
+					echo wp_kses_post( mc_help_link( 'Help', __( 'My Calendar: Navigation Keywords', 'my-calendar' ), 3 ) );
 					?>
 				</p>
 				<p>
@@ -508,7 +502,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<select name="author[]" id="author" multiple="multiple">
 						<option value="all"><?php _e( 'All authors', 'my-calendar' ); ?></option>
 						<option value="current"><?php _e( 'Currently logged-in user', 'my-calendar' ); ?></option>
-						<?php echo $options; ?>
+						<?php echo wp_kses( $options, mc_kses_elements() ); ?>
 					</select>
 				</p>
 				<?php
@@ -528,7 +522,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<select name="host[]" id="host" multiple="multiple">
 						<option value="all"><?php _e( 'All hosts', 'my-calendar' ); ?></option>
 						<option value="current"><?php _e( 'Currently logged-in user', 'my-calendar' ); ?></option>
-						<?php echo $options; ?>
+						<?php echo wp_kses( $options, mc_kses_elements() ); ?>
 					</select>
 				</p>
 			</fieldset>
@@ -566,7 +560,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							$f  .= current_time( 'Y' ) + $fut . "</option>\n";
 							$fut = $fut + 1;
 						}
-						echo $p . '<option value="' . current_time( 'Y' ) . '"' . selected( current_time( 'Y' ), $year ) . '>' . current_time( 'Y' ) . "</option>\n" . $f;
+						echo wp_kses( $p . '<option value="' . current_time( 'Y' ) . '"' . selected( current_time( 'Y' ), $year ) . '>' . current_time( 'Y' ) . "</option>\n" . $f, mc_kses_elements() );
 						?>
 					</select>
 				</p>
@@ -579,7 +573,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						for ( $i = 1; $i <= 12; $i ++ ) {
 							$list_months .= "<option value='$i'" . selected( $i, $month ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '</option>' . "\n";
 						}
-						echo $list_months;
+						echo wp_kses( $list_months, mc_kses_elements() );
 						?>
 					</select>
 				</p>
@@ -592,7 +586,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						for ( $i = 1; $i <= 31; $i++ ) {
 							$days .= "<option value='$i'" . selected( $i, $day ) . '>' . $i . '</option>' . "\n";
 						}
-						echo $days;
+						echo wp_kses( $days, mc_kses_elements() );
 						?>
 					</select>
 				</p>
@@ -608,7 +602,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</p>
 				<p>
 					<label for="template"><?php _e( 'Template', 'my-calendar' ); ?></label>
-					<textarea cols="40" rows="4" name="template" id="template"><?php echo htmlentities( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
+					<textarea cols="40" rows="4" name="template" id="template"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
 				</p>
 				<?php
 			}
