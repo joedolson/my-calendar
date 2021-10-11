@@ -131,7 +131,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 	}
 
 	if ( true === $echo ) {
-		echo $return;
+		echo wp_kses( $return, mc_kses_elements() );
 	} else {
 		return $return;
 	}

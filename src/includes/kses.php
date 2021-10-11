@@ -152,3 +152,150 @@ function mc_allowed_tags( $tags, $context ) {
 
 	return apply_filters( 'mc_kses_post', $tags );
 }
+
+/**
+ * Array of allowed elements for using KSES on forms.
+ *
+ * @return array
+ */
+function mc_kses_elements() {
+	$elements = array(
+		'h2'       => array(),
+		'h3'       => array(),
+		'h4'       => array(),
+		'label'    => array(
+			'for' => array(),
+		),
+		'option'   => array(
+			'value'    => array(),
+			'selected' => array(),
+		),
+		'select'   => array(
+			'id'               => array(),
+			'aria-describedby' => array(),
+			'aria-labelledby'  => array(),
+			'name'             => array(),
+			'disabled'         => array(),
+			'min'              => array(),
+			'max'              => array(),
+			'required'         => array(),
+			'readonly'         => array(),
+			'autocomplete'     => array(),
+		),
+		'input'    => array(
+			'id'               => array(),
+			'class'            => array(),
+			'aria-describedby' => array(),
+			'aria-labelledby'  => array(),
+			'value'            => array(),
+			'type'             => array(),
+			'name'             => array(),
+			'size'             => array(),
+			'checked'          => array(),
+			'disabled'         => array(),
+			'min'              => array(),
+			'max'              => array(),
+			'required'         => array(),
+			'readonly'         => array(),
+			'autocomplete'     => array(),
+		),
+		'textarea' => array(
+			'id'               => array(),
+			'class'            => array(),
+			'cols'             => array(),
+			'rows'             => array(),
+			'aria-describedby' => array(),
+			'aria-labelledby'  => array(),
+			'disabled'         => array(),
+			'required'         => array(),
+			'readonly'         => array(),
+		),
+		'form'     => array(
+			'id'     => array(),
+			'name'   => array(),
+			'action' => array(),
+			'method' => array(),
+			'class'  => array(),
+		),
+		'button'   => array(
+			'name'             => array(),
+			'disabled'         => array(),
+			'type'             => array(),
+			'class'            => array(),
+			'aria-expanded'    => array(),
+			'aria-describedby' => array(),
+			'role'             => array(),
+			'aria-selected'    => array(),
+			'aria-controls'    => array(),
+		),
+		'ul'       => array(
+			'class' => array(),
+		),
+		'fieldset' => array(),
+		'legend'   => array(),
+		'li'       => array(
+			'class' => array(),
+		),
+		'span'     => array(
+			'id'          => array(),
+			'class'       => array(),
+			'itemprop'    => array(),
+			'itemscope'   => array(),
+			'itemtype'    => array(),
+			'aria-live'   => array(),
+			'aria-hidden' => array(),
+		),
+		'p'        => array(
+			'class' => array(),
+		),
+		'div'      => array(
+			'class'           => array(),
+			'aria-live'       => array(),
+			'id'              => array(),
+			'role'            => array(),
+			'data-default'    => array(),
+			'aria-labelledby' => array(),
+		),
+		'img'      => array(
+			'class'    => true,
+			'src'      => true,
+			'alt'      => true,
+			'width'    => true,
+			'height'   => true,
+			'id'       => true,
+			'longdesc' => true,
+			'tabindex' => true,
+		),
+		'br'       => array(),
+		'table'    => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'caption'  => array(),
+		'thead'    => array(),
+		'tfoot'    => array(),
+		'tbody'    => array(),
+		'tr'       => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'th'       => array(
+			'scope' => array(),
+			'class' => array(),
+			'id'    => array(),
+		),
+		'td'       => array(
+			'class'     => array(),
+			'id'        => array(),
+			'aria-live' => array(),
+		),
+		'a'        => array(
+			'aria-labelledby'  => true,
+			'aria-describedby' => true,
+			'href'             => true,
+			'class'            => true,
+		),
+	);
+
+	return $elements;
+}

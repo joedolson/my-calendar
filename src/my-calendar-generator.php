@@ -72,7 +72,7 @@ function mc_generate( $format = 'shortcode' ) {
 		}
 		$return = "<div class='updated'><p><textarea readonly='readonly' class='large-text readonly'>[$output]</textarea>$append</p></div>";
 		if ( 'shortcode' === $format ) {
-			echo $return;
+			echo wp_kses( $return, mc_kses_elements() );
 		} else {
 			$array['shortcode'] = "[$output]";
 
@@ -88,7 +88,7 @@ function mc_generate( $format = 'shortcode' ) {
  */
 function mc_generator( $type ) {
 	?>
-<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-shortcodes' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
+	<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-shortcodes' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
 	<?php mc_calendar_generator_fields( false, $type ); ?>
 	<p>
 		<input type="submit" class="button-primary" name="generator" value="<?php _e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
