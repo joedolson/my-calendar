@@ -245,6 +245,15 @@ function mc_kses_elements() {
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
 		),
+		'i'        => array(
+			'id'          => array(),
+			'class'       => array(),
+			'itemprop'    => array(),
+			'itemscope'   => array(),
+			'itemtype'    => array(),
+			'aria-live'   => array(),
+			'aria-hidden' => array(),
+		),
 		'p'        => array(
 			'class' => array(),
 		),

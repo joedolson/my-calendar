@@ -191,7 +191,7 @@ function my_calendar_import() {
 		$message   = ( false !== $cats_results ) ? __( 'Categories imported successfully.', 'my-calendar' ) : __( 'Categories not imported.', 'my-calendar' );
 		$e_message = ( false !== $events_results ) ? __( 'Events imported successfully.', 'my-calendar' ) : __( 'Events not imported.', 'my-calendar' );
 		$return    = "<div id='message' class='updated fade'><ul><li>$message</li><li>$e_message</li></ul></div>";
-		echo $return;
+		echo wp_kses_post( $return );
 		if ( false !== $cats_results && false !== $events_results ) {
 			update_option( 'ko_calendar_imported', 'true' );
 		}
@@ -495,7 +495,7 @@ function my_calendar_settings() {
 					<?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
 				</p>
 
-				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
 					<div>
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 						<input type="hidden" name="import" value="true" />
@@ -515,7 +515,7 @@ function my_calendar_settings() {
 				<?php
 				if ( current_user_can( 'administrator' ) ) {
 					?>
-					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ); ?>">
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<fieldset>
 							<legend class="screen-reader-text"><?php _e( 'Management', 'my-calendar' ); ?></legend>
@@ -665,9 +665,9 @@ function mc_remote_db() {
 						$current_event_slug    = ( '' === get_option( 'mc_cpt_base', '' ) ) ? __( 'mc-events', 'my-calendar' ) : get_option( 'mc_cpt_base' );
 					?>
 					<ul>
-						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-location-slug' href="<?php echo admin_url( 'options-permalink.php#mc_location_cpt_base' ); ?>"><?php _e( 'Location permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-location-slug">(<?php echo $current_location_slug; ?>)</span></li>
-						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo admin_url( 'options-permalink.php#mc_cpt_base' ); ?>"><?php _e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
-						<li><?php _e( 'Options > General', 'my-calendar' ); ?>: <a href="<?php echo admin_url( 'options-general.php#start_of_week' ); ?>"><?php _e( 'First day of the week', 'my-calendar' ); ?></a></li>
+						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-location-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>"><?php _e( 'Location permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-location-slug">(<?php echo $current_location_slug; ?>)</span></li>
+						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>"><?php _e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
+						<li><?php _e( 'Options > General', 'my-calendar' ); ?>: <a href="<?php echo esc_url( admin_url( 'options-general.php#start_of_week' ) ); ?>"><?php _e( 'First day of the week', 'my-calendar' ); ?></a></li>
 					</ul>
 					<?php
 				} else {
@@ -681,7 +681,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Text Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-text' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-text' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
 						<legend><?php _e( 'Templating', 'my-calendar' ); ?></legend>
@@ -764,7 +764,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Output Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#mc-output' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Output Settings', 'my-calendar' ); ?>" /></p>
 						<ul>
@@ -814,8 +814,10 @@ function mc_remote_db() {
 							'access'     => '<div class="dashicons dashicons-universal-access" aria-hidden="true"></div> <span>' . __( 'Access (dropdown)', 'my-calendar' ) . '</span>',
 							'search'     => '<div class="dashicons dashicons-search" aria-hidden="true"></div> <span>' . __( 'Search', 'my-calendar' ) . '</span>',
 						);
-						echo "<div id='mc-sortable-update' aria-live='assertive'></div>";
-						echo "<ul id='mc-sortable'>";
+						?>
+						<div id='mc-sortable-update' aria-live='assertive'></div>
+						<ul id='mc-sortable'>
+						<?php
 						$inserted = array();
 						$class    = 'visible';
 						$count    = count( $nav_elements );
@@ -835,7 +837,7 @@ function mc_remote_db() {
 								$disabled   = ( 'calendar' === $k ) ? ' disabled="disabled"' : '';
 								$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . '</span></button> ' . "<button class='hide' type='button'$disabled><i class='dashicons dashicons-visibility' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
 								$buttons    = "<div class='mc-buttons'>$buttons</div>";
-								echo "<li class='ui-state-default mc-$k mc-$class'>$buttons <code>$label</code> $v <input type='hidden' name='mc_nav[]' value='$k' /></li>";
+								echo wp_kses( "<li class='ui-state-default mc-$k mc-$class'>$buttons <code>$label</code> $v <input type='hidden' name='mc_nav[]' value='$k' /></li>", mc_kses_elements() );
 								$i ++;
 							}
 						}
@@ -855,12 +857,11 @@ function mc_remote_db() {
 								$buttons = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='hide' type='button'><i class='dashicons dashicons-hidden' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
 							}
 							$buttons = "<div class='mc-buttons'>$buttons</div>";
-							echo "<li class='ui-state-default mc-$k mc-hidden'>$buttons <code>$k</code> $v <input type='hidden' name='mc_nav[]' value='$k' disabled /></li>";
+							echo wp_kses( "<li class='ui-state-default mc-$k mc-hidden'>$buttons <code>$k</code> $v <input type='hidden' name='mc_nav[]' value='$k' disabled /></li>", mc_kses_elements() );
 							$i ++;
 						}
-
-						echo '</ul>';
 						?>
+						</ul>
 					</fieldset>
 					<fieldset id='calendar-output' class='mc-output-tabs'>
 						<legend><?php _e( 'Event Display Fields', 'my-calendar' ); ?></legend>
@@ -876,7 +877,7 @@ function mc_remote_db() {
 								_e( 'Choose fields to show in the single event view.', 'my-calendar' );
 								echo ' ';
 								// Translators: URL to single event view template editing screen.
-								printf( __( 'The <a href="%s">single event view template</a> overrides these settings.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=details' ) );
+								printf( __( 'The <a href="%s">single event view template</a> overrides these settings.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-templates&mc_template=details' ) ) );
 								?>
 								</p>
 								<ul class="checkboxes">
@@ -913,7 +914,7 @@ function mc_remote_db() {
 								_e( 'Choose fields to show in the calendar popup and list views.', 'my-calendar' );
 								echo ' ';
 								// Translators: URL to single event view template editing screen.
-								printf( __( 'The <a href="%1$s">grid view template</a> overrides these settings for the calendar popup, and the <a href="%2$s">list view template</a> overrides these settings in list view.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=grid' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=list' ) );
+								printf( __( 'The <a href="%1$s">grid view template</a> overrides these settings for the calendar popup, and the <a href="%2$s">list view template</a> overrides these settings in list view.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-templates&mc_template=grid' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-templates&mc_template=list' ) ) );
 								?>
 								</p>
 								<ul class="checkboxes">
@@ -949,7 +950,7 @@ function mc_remote_db() {
 								_e( 'Choose fields to show in the mini calendar popup.', 'my-calendar' );
 								echo ' ';
 								// Translators: URL to single event view template editing screen.
-								printf( __( 'The <a href="%s">mini view template</a> overrides these settings.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-templates&mc_template=mini' ) );
+								printf( __( 'The <a href="%s">mini view template</a> overrides these settings.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-templates&mc_template=mini' ) ) );
 								?>
 								</p>
 								<ul class="checkboxes">
@@ -1053,7 +1054,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
 						<legend><?php _e( 'Event editing fields to show', 'my-calendar' ); ?></legend>
@@ -1093,7 +1094,7 @@ function mc_remote_db() {
 								$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
 								$output .= "<li><input type='checkbox' id='mci_$key' name='mci_$key' $checked /> <label for='mci_$key'>$value</label></li>";
 							}
-							echo $output;
+							echo wp_kses( $output, mc_kses_elements() );
 							?>
 							<li><?php mc_settings_field( 'mc_input_options_administrators', __( 'Administrators see all input options', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 						</ul>
@@ -1104,7 +1105,7 @@ function mc_remote_db() {
 				</form>
 				<h3><?php _e( 'Location Controls', 'my-calendar' ); ?></h3>
 
-				<?php echo mc_location_controls(); ?>
+				<?php echo wp_kses( mc_location_controls(), mc_kses_elements() ); ?>
 			</div>
 		</div>
 
@@ -1116,20 +1117,20 @@ function mc_remote_db() {
 
 			<div class="inside">
 				<p><?php _e( 'The central calendar is the calendar associated with the primary site in your WordPress Multisite network.', 'my-calendar' ); ?></p>
-				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-multisite' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-multisite' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 					<input type='hidden' name='mc_network' value='true'/>
 					<fieldset>
 						<legend><?php _e( 'Multisite configuration - input', 'my-calendar' ); ?></legend>
 						<ul>
 							<li>
-								<input type="radio" value="0" id="ms0" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php _e( 'Site owners may only post to their local calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="0" id="ms0" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php _e( 'Site owners may only post to their local calendar', 'my-calendar' ); ?></label>
 							</li>
 							<li>
-								<input type="radio" value="1" id="ms1" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php _e( 'Site owners may only post to the central calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="1" id="ms1" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php _e( 'Site owners may only post to the central calendar', 'my-calendar' ); ?></label>
 							</li>
 							<li>
-								<input type="radio" value="2" id="ms2" name="mc_multisite"<?php echo mc_option_selected( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php _e( 'Site owners may manage either calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="2" id="ms2" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php _e( 'Site owners may manage either calendar', 'my-calendar' ); ?></label>
 							</li>
 						</ul>
 						<p>

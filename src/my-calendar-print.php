@@ -39,20 +39,22 @@ function my_calendar_print() {
 	} else {
 		$stylesheet = $url . 'css/mc-print.css';
 	}
-	$rtl  = ( is_rtl() ) ? 'rtl' : 'ltr';
-	$head = '<!DOCTYPE html>
-<html dir="' . $rtl . '" lang="' . get_bloginfo( 'language' ) . '">
+	?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
 <!--<![endif]-->
 <head>
-<meta charset="' . get_bloginfo( 'charset' ) . '" />
+<meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>" />
 <meta name="viewport" content="width=device-width" />
-<title>' . get_bloginfo( 'name' ) . ' - ' . __( 'Calendar: Print View', 'my-calendar' ) . '</title>
+<title><?php echo esc_html( get_bloginfo( 'name' ) ) . ' - ' . __( 'Calendar: Print View', 'my-calendar' ); ?></title>
 <meta name="generator" content="My Calendar for WordPress" />
 <meta name="robots" content="noindex,nofollow" />
 <!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
-<link rel="stylesheet" href="' . $stylesheet . '" type="text/css" media="screen,print" />' . do_action( 'mc_print_view_head', '' ) . '
+<link rel="stylesheet" href="<?php echo esc_url( $stylesheet ); ?>" type="text/css" media="screen,print" />
+<?php do_action( 'mc_print_view_head', '' ); ?>
 </head>
-<body>';
+<body>
+<?php
 	echo $head;
 	$args = array(
 		'type'     => 'print',
@@ -74,7 +76,7 @@ function my_calendar_print() {
 		'above'    => 'none',
 	);
 
-	echo my_calendar( $calendar );
+	echo mc_kses_post( my_calendar( $calendar ) );
 	$return_url = mc_get_uri( false, $args );
 	$return_url = apply_filters( 'mc_print_return_url', $return_url, $category, $time, $ltype, $lvalue );
 
@@ -91,9 +93,10 @@ function my_calendar_print() {
 	unset( $add['href'] );
 	$return_url = apply_filters( 'mc_return_to_calendar', mc_build_url( $add, array( 'feed', 'cid', 'href', 'searched' ), $return_url ), $add );
 	if ( $return_url ) {
-		echo "<p class='return'>&larr; <a href='$return_url'>" . __( 'Return to calendar', 'my-calendar' ) . '</a></p>';
+		echo wp_kses_post( "<p class='return'>&larr; <a href='" . esc_url( $return_url ) . "'>" . __( 'Return to calendar', 'my-calendar' ) . '</a></p>' );
 	}
-	echo '
+	?>
 </body>
-</html>';
+</html>
+<?php
 }
