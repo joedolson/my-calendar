@@ -1141,11 +1141,11 @@ function mc_remote_db() {
 						<legend><?php _e( 'Multisite configuration - output', 'my-calendar' ); ?></legend>
 						<ul>
 							<li>
-								<input type="radio" value="0" id="mss0" name="mc_multisite_show"<?php echo mc_option_selected( get_site_option( 'mc_multisite_show' ), '0' ); ?> />
+								<input type="radio" value="0" id="mss0" name="mc_multisite_show"<?php checked( get_site_option( 'mc_multisite_show' ), '0' ); ?> />
 								<label for="mss0"><?php _e( 'Sub-site calendars show events from their local calendar.', 'my-calendar' ); ?></label>
 							</li>
 							<li>
-								<input type="radio" value="1" id="mss1" name="mc_multisite_show"<?php echo mc_option_selected( get_site_option( 'mc_multisite_show' ), '1' ); ?> />
+								<input type="radio" value="1" id="mss1" name="mc_multisite_show"<?php checked( get_site_option( 'mc_multisite_show' ), '1' ); ?> />
 								<label for="mss1"><?php _e( 'Sub-site calendars show events from the central calendar.', 'my-calendar' ); ?></label>
 							</li>
 						</ul>
@@ -1168,7 +1168,7 @@ function mc_remote_db() {
 	if ( current_user_can( 'administrator' ) ) {
 		?>
 
-					<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-permissions' ); ?>">
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-permissions' ) ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<div class="mc-permissions-wrapper">
 		<?php
@@ -1203,8 +1203,7 @@ function mc_remote_db() {
 		}
 		$tabs .= '</div>';
 		echo '<div class="mc-tabs vertical">';
-		echo $tabs;
-		echo $role_container;
+		echo wp_kses( $tabs . $role_container, mc_kses_elements() );
 		echo '</div>';
 		?>
 						</div>
@@ -1224,7 +1223,7 @@ function mc_remote_db() {
 			<h2><?php _e( 'Calendar Email Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config#my-calendar-email' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-email' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
 						<legend><?php _e( 'Email Notifications', 'my-calendar' ); ?></legend>
