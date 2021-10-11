@@ -51,10 +51,10 @@ function my_calendar_print() {
 <meta name="robots" content="noindex,nofollow" />
 <!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
 <link rel="stylesheet" href="<?php echo esc_url( $stylesheet ); ?>" type="text/css" media="screen,print" />
-<?php do_action( 'mc_print_view_head', '' ); ?>
+	<?php do_action( 'mc_print_view_head', '' ); ?>
 </head>
 <body>
-<?php
+	<?php
 	echo $head;
 	$args = array(
 		'type'     => 'print',
@@ -98,5 +98,5 @@ function my_calendar_print() {
 	?>
 </body>
 </html>
-<?php
+	<?php
 }
