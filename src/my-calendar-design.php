@@ -1,0 +1,73 @@
+<?php
+/**
+ * Design settings page.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Display help.
+ */
+function my_calendar_design() {
+	?>
+
+	<div class="wrap my-calendar-admin">
+	<h1><?php _e( 'Design', 'my-calendar' ); ?></h1>
+	<div class="mc-tabs">
+		<div class="tabs" role="tablist" data-default="my-calendar-style">
+			<button type="button" role="tab" aria-selected="false"  id="tab_style" aria-controls="my-calendar-style"><?php _e( 'Style Editor', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_templates" aria-controls="my-calendar-templates"><?php _e( 'Templates', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_scripts" aria-controls="my-calendar-scripts"><?php _e( 'Scripts', 'my-calendar' ); ?></button>
+		</div>
+	<div class="postbox-container jcd-wide">
+	<div class="metabox-holder">
+
+	<div class="ui-sortable meta-box-sortables" id="my-calendar-styles">
+		<div class="wptab postbox" aria-labelledby="tab_start" role="tabpanel" id="my-calendar-style">
+			<h2 id="styles"><?php _e( 'Style Editor', 'my-calendar' ); ?></h2>
+			<div class="inside">
+			<?php my_calendar_style_edit(); ?>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui-sortable meta-box-sortables" id="templates">
+		<div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
+			<h2>
+			<?php
+			_e( 'Template Editor', 'my-calendar' );
+			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'My Calendar: Template Tags', 'my-calendar' ), 5 );
+			?>
+			</h2>
+
+			<div class="inside">
+			<?php mc_templates_edit(); ?>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui-sortable meta-box-sortables" id="scripts">
+		<div class="wptab postbox" aria-labelledby="tab_scripts" role="tabpanel" id="my-calendar-scripts">
+			<h2><?php _e( 'Script Manager', 'my-calendar' ); ?></h2>
+
+			<div class="inside">
+			<?php my_calendar_behaviors_edit(); ?>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	<?php mc_show_sidebar(); ?>
+
+	</div>
+	<?php
+}

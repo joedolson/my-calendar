@@ -90,7 +90,6 @@ include( dirname( __FILE__ ) . '/my-calendar-settings.php' );
 include( dirname( __FILE__ ) . '/my-calendar-categories.php' );
 include( dirname( __FILE__ ) . '/my-calendar-locations.php' );
 include( dirname( __FILE__ ) . '/my-calendar-location-manager.php' );
-include( dirname( __FILE__ ) . '/my-calendar-help.php' );
 include( dirname( __FILE__ ) . '/my-calendar-event-manager.php' );
 include( dirname( __FILE__ ) . '/my-calendar-styles.php' );
 include( dirname( __FILE__ ) . '/my-calendar-behaviors.php' );
@@ -101,6 +100,7 @@ include( dirname( __FILE__ ) . '/my-calendar-output.php' );
 include( dirname( __FILE__ ) . '/my-calendar-print.php' );
 include( dirname( __FILE__ ) . '/my-calendar-iframe.php' );
 include( dirname( __FILE__ ) . '/my-calendar-templates.php' );
+include( dirname( __FILE__ ) . '/my-calendar-design.php' );
 include( dirname( __FILE__ ) . '/my-calendar-limits.php' );
 include( dirname( __FILE__ ) . '/my-calendar-shortcodes.php' );
 include( dirname( __FILE__ ) . '/my-calendar-templating.php' );
@@ -108,6 +108,7 @@ include( dirname( __FILE__ ) . '/my-calendar-group-manager.php' );
 include( dirname( __FILE__ ) . '/my-calendar-api.php' );
 include( dirname( __FILE__ ) . '/my-calendar-generator.php' );
 include( dirname( __FILE__ ) . '/my-calendar-call-template.php' );
+include( dirname( __FILE__ ) . '/my-calendar-help.php' );
 
 add_action( 'plugins_loaded', 'mc_load_textdomain' );
 /**
@@ -375,9 +376,17 @@ function my_calendar_menu() {
 			add_submenu_page( 'my-calendar', __( 'Locations', 'my-calendar' ), __( 'Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
 			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
 		}
-		add_submenu_page( 'my-calendar', __( 'Style Editor', 'my-calendar' ), __( 'Style Editor', 'my-calendar' ), 'mc_edit_styles', 'my-calendar-styles', 'my_calendar_style_edit' );
-		add_submenu_page( 'my-calendar', __( 'Script Manager', 'my-calendar' ), __( 'Script Manager', 'my-calendar' ), 'mc_edit_behaviors', 'my-calendar-behaviors', 'my_calendar_behaviors_edit' );
-		add_submenu_page( 'my-calendar', __( 'Template Editor', 'my-calendar' ), __( 'Template Editor', 'my-calendar' ), 'mc_edit_templates', 'my-calendar-templates', 'mc_templates_edit' );
+		$permission = 'manage_options';
+		if ( current_user_can( 'mc_edit_styles' ) ) {
+			$permission = 'mc_edit_styles';
+		}
+		if ( current_user_can( 'mc_edit_templates' ) ) {
+			$permission = 'mc_edit_templates';
+		}
+		if ( current_user_can( 'mc_edit_scripts' ) ) {
+			$permission = 'mc_edit_scripts';
+		}
+		add_submenu_page( 'my-calendar', __( 'Design', 'my-calendar' ), __( 'Design', 'my-calendar' ), $permission, 'my-calendar-design', 'my_calendar_design' );
 		add_submenu_page( 'my-calendar', __( 'Settings', 'my-calendar' ), __( 'Settings', 'my-calendar' ), 'mc_edit_settings', 'my-calendar-config', 'my_calendar_settings' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Shortcode Generator', 'my-calendar' ), __( 'Shortcodes', 'my-calendar' ), 'mc_view_help', 'my-calendar-shortcodes', 'my_calendar_shortcodes' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Help', 'my-calendar' ), __( 'Help', 'my-calendar' ), 'mc_view_help', 'my-calendar-help', 'my_calendar_help' );

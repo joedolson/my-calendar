@@ -26,15 +26,49 @@ html.wp-toolbar {
 }
 
 .modal-window-container .mc-help-links {
-	padding: 1em 0;
+	padding: .5em;
 	border-top: 2px solid;
 	position: fixed;
 	bottom: 0;
 	width: calc( 100% - 20px );
+	background: #fff;
 }
 
 .modal-window-container ul.help {
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: 10px;
+}
+
+
+.mc-template-cards {
+	display: grid;
+	grid-template-columns: repeat(3, 33.333333%);
+	column-gap: 1px;
+}
+
+.mc-template-card div:first-of-type {
+	font-weight: 700;
+}
+
+.mc-template-card {
+	padding: 10px;
+}
+
+.mc-template-card pre {
+	white-space:pre-wrap;
+	line-break:anywhere
+}
+
+.mc-template-card code {
+	display: block;
+	margin: -10px -10px 0;
+}
+
+.mc-template-card:nth-of-type(even) {
+	background: #f6f7f7;
+}
+
+.mc_template_tags {
+	clear: right
 }

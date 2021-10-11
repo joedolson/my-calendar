@@ -155,6 +155,11 @@ span.mc-notice {
 	padding: 10px;
 }
 
+.mc-template-card pre {
+	white-space:pre-wrap;
+	line-break:anywhere
+}
+
 .mc-template-card code {
 	display: block;
 	margin: -10px -10px 0;
@@ -506,6 +511,16 @@ strong.label {
 
 .autocomplete.mc-autocomplete {
 	max-width: 600px;
+}
+
+.jcd-wide .style-selector {
+	margin-bottom: 1em;
+}
+
+.jcd-wide .style-selector fieldset {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
 }
 
 .mc-categories td img,

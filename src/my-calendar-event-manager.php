@@ -1912,12 +1912,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						),
 						$view_url
 					);
-					$tags        = "<span class='dashicons dashicons-tagcloud' aria-hidden='true'></span><a href='" . esc_url( $tag_url ) . "#templates' class='tags'>" . __( 'All Template Tags', 'my-calendar' ) . '</a>';
 					?>
 					<div class="mc-template-tag-preview">
 						<iframe title="<?php _e( 'Event Template Tag Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
 					</div>
-					<p><?php echo wp_kses_post( $tags ); ?></p>
 				</div>
 			</div>
 		</div>
