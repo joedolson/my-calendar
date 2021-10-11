@@ -74,7 +74,7 @@ function mc_show_event_editing( $status, $args ) {
 			'event_desc'     => __( 'Description', 'my-calendar' ),
 			'event_category' => __( 'Categories', 'my-calendar' ),
 			'event_image'    => __( 'Featured Image', 'my-calendar' ),
-			'event_link'     => __( 'External Link', 'my-calendar' ),
+			'event_link'     => __( 'More Information', 'my-calendar' ),
 			'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
 			'event_open'     => __( 'Registration Settings', 'my-calendar' ),
 			'event_location' => __( 'Event Location', 'my-calendar' ),

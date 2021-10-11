@@ -722,7 +722,7 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_buy_tickets', __( 'Buy tickets', 'my-calendar' ), 'Buy tickets' ); ?></li>
 							<li><?php mc_settings_field( 'mc_view_full', __( 'View full calendar', 'my-calendar' ), 'View full calendar' ); ?></li>
 							<li><?php mc_settings_field( 'mc_details_label', __( 'Read more text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
-							<li><?php mc_settings_field( 'mc_link_label', __( 'More information text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
+							<li><?php mc_settings_field( 'mc_link_label', __( 'More Information text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li>
 							<?php
 							// Translators: Current title template (code).
@@ -896,8 +896,8 @@ function mc_remote_db() {
 											'description' => __( 'Description', 'my-calendar' ),
 											'image'       => __( 'Featured Image', 'my-calendar' ),
 											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-											'link'        => __( 'External link', 'my-calendar' ),
-											'access'      => __( 'Accessibility information', 'my-calendar' ),
+											'link'        => __( 'More Information', 'my-calendar' ),
+											'access'      => __( 'Accessibility Information', 'my-calendar' ),
 										),
 										array( 'author', 'host', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
 										'',
@@ -932,9 +932,9 @@ function mc_remote_db() {
 											'description' => __( 'Description', 'my-calendar' ),
 											'image'       => __( 'Featured Image', 'my-calendar' ),
 											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-											'link'        => __( 'External link', 'my-calendar' ),
-											'more'        => __( 'More details link', 'my-calendar' ),
-											'access'      => __( 'Accessibility information', 'my-calendar' ),
+											'link'        => __( 'More Information', 'my-calendar' ),
+											'more'        => __( 'More Details Link', 'my-calendar' ),
+											'access'      => __( 'Accessibility Information', 'my-calendar' ),
 										),
 										array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
 										'',
@@ -968,9 +968,9 @@ function mc_remote_db() {
 											'description' => __( 'Description', 'my-calendar' ),
 											'image'       => __( 'Featured Image', 'my-calendar' ),
 											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-											'link'        => __( 'External link', 'my-calendar' ),
+											'link'        => __( 'More Information', 'my-calendar' ),
 											'more'        => __( 'More details link', 'my-calendar' ),
-											'access'      => __( 'Accessibility information', 'my-calendar' ),
+											'access'      => __( 'Accessibility Information', 'my-calendar' ),
 										),
 										array( 'excerpt', 'image', 'more' ),
 										'',
@@ -1068,7 +1068,7 @@ function mc_remote_db() {
 								'event_desc'     => __( 'Description', 'my-calendar' ),
 								'event_category' => __( 'Categories', 'my-calendar' ),
 								'event_image'    => __( 'Featured Image', 'my-calendar' ),
-								'event_link'     => __( 'External Link', 'my-calendar' ),
+								'event_link'     => __( 'More Information', 'my-calendar' ),
 								'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
 								'event_open'     => __( 'Registration Settings', 'my-calendar' ),
 								'event_location' => __( 'Event Location', 'my-calendar' ),
