@@ -178,7 +178,9 @@ function mc_is_selected( $field, $value, $array = '' ) {
 }
 
 /**
- * Old function for checking value of an option field
+ * Old function for checking value of an option field.
+ *
+ * @deprecated 3.3.0
  *
  * @param string                   $field Name of the field.
  * @param mixed string/int/boolean $value Current value.
