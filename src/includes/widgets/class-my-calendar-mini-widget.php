@@ -105,7 +105,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 
 		$the_events = my_calendar( $calendar );
 		if ( '' !== $the_events ) {
-			echo $before_widget . $title . $the_events . $after_widget;
+			echo mc_kses_post( $before_widget . $title . $the_events . $after_widget );
 		}
 	}
 

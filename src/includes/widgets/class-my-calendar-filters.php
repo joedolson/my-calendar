@@ -58,11 +58,7 @@ class My_Calendar_Filters extends WP_Widget {
 		$show         = ( isset( $instance['show'] ) ) ? $instance['show'] : array();
 		$show         = implode( $show, ',' );
 
-		echo $before_widget;
-		echo ( '' !== $instance['title'] ) ? $widget_title : '';
-
-		echo mc_filters( $show, $widget_url, $ltype );
-		echo $after_widget;
+		echo wp_kses( $before_widget . $widget_title . mc_filters( $show, $widget_url, $ltype ) . $after_widget, mc_kses_elements() );
 	}
 
 	/**

@@ -304,6 +304,14 @@ function mc_kses_elements() {
 			'href'             => true,
 			'class'            => true,
 		),
+		'section'  => array(
+			'id'    => array(),
+			'class' => array(),
+		),
+		'aside'    => array(
+			'id'    => array(),
+			'class' => array(),
+		),
 	);
 
 	return $elements;

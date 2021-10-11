@@ -86,10 +86,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 
 		$the_events = my_calendar_todays_events( $args );
 		if ( '' !== $the_events ) {
-			echo $before_widget;
-			echo $widget_title;
-			echo $the_events;
-			echo $after_widget;
+			echo wp_kses( $before_widget . $widget_title . $the_events . $after_widget, mc_kses_elements() );
 		}
 	}
 

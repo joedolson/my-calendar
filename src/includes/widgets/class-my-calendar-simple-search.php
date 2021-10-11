@@ -54,11 +54,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 		$widget_title = apply_filters( 'widget_title', $instance['title'], $instance, $args );
 		$widget_title = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : false;
-		echo $before_widget;
-		echo ( '' !== $instance['title'] ) ? $widget_title : '';
-
-		echo my_calendar_searchform( 'simple', $widget_url );
-		echo $after_widget;
+		echo wp_kses( $before_widget . $widget_title . my_calendar_searchform( 'simple', $widget_url ) . $after_widget, mc_kses_elements() );
 	}
 
 	/**
