@@ -78,9 +78,11 @@ function my_calendar_behaviors_edit() {
 					<label for="ajax_js"><?php _e( 'Disable AJAX', 'my-calendar' ); ?></label></li>
 			</ul>
 		</div>
-		<?php if ( get_option( 'mc_use_custom_js' ) === '1' ) {
-			echo wp_kses_post( '<p>' . __( 'The mechanisms for adding custom JS were removed in My Calendar 3.3.0. The output for these scripts will be disabled in My Calendar 3.4.0.', 'my-calendar' ) . '</p>' ); 
-		} ?>
+		<?php
+		if ( get_option( 'mc_use_custom_js' ) === '1' ) {
+			echo wp_kses_post( '<p>' . __( 'The mechanisms for adding custom JS were removed in My Calendar 3.3.0. The output for these scripts will be disabled in My Calendar 3.4.0.', 'my-calendar' ) . '</p>' );
+		}
+		?>
 		<p>
 			<input type="submit" name="mc-js-save" class="button-primary" value="<?php _e( 'Save', 'my-calendar' ); ?>"/>
 		</p>
