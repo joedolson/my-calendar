@@ -397,32 +397,32 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 					<h2><?php _e( 'Location Editor', 'my-calendar' ); ?></h2>
 
 					<div class="inside location_form">
-					<div class="mc-controls">
-						<ul>
-							<?php
-							if ( 'edit' === $view ) {
-								$delete_url = add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete' ) );
-								$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
-								?>
-							<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php _e( 'Delete', 'my-calendar' ); ?></a></li>
-							<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php _e( 'View', 'my-calendar' ); ?></a></li>
+					<?php
+					$params = array();
+					if ( isset( $_GET['location_id'] ) ) {
+						$params = array(
+							'mode'        => $_GET['mode'],
+							'location_id' => $_GET['location_id'],
+						);
+					}
+					?>
+					<form id="my-calendar" method="post" action="<?php echo add_query_arg( $params, admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>">
+						<div class="mc-controls">
+							<ul>
 								<?php
-							}
-							?>
-							<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
-						</ul>
-					</div>
-						<?php
-						$params = array();
-						if ( isset( $_GET['location_id'] ) ) {
-							$params = array(
-								'mode'        => $_GET['mode'],
-								'location_id' => $_GET['location_id'],
-							);
-						}
-						?>
-						<form id="my-calendar" method="post" action="<?php echo add_query_arg( $params, admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>">
-							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
+								if ( 'edit' === $view ) {
+									$delete_url = add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete' ) );
+									$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
+									?>
+								<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php _e( 'Delete', 'my-calendar' ); ?></a></li>
+								<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php _e( 'View', 'my-calendar' ); ?></a></li>
+									<?php
+								}
+								?>
+								<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
+							</ul>
+						</div>
+						<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 							<?php
 							if ( 'add' === $view ) {
 								?>
@@ -713,12 +713,12 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	<p>
 	<label for="e_zoom">' . __( 'Initial Zoom', 'my-calendar' ) . $compare_zoom . '</label>
 		<select name="' . $context . '_zoom" id="e_zoom">
-			<option value="16"' . mc_option_selected( $zoom, '16', 'option' ) . '>' . __( 'Neighborhood', 'my-calendar' ) . '</option>
-			<option value="14"' . mc_option_selected( $zoom, '14', 'option' ) . '>' . __( 'Small City', 'my-calendar' ) . '</option>
-			<option value="12"' . mc_option_selected( $zoom, '12', 'option' ) . '>' . __( 'Large City', 'my-calendar' ) . '</option>
-			<option value="10"' . mc_option_selected( $zoom, '10', 'option' ) . '>' . __( 'Greater Metro Area', 'my-calendar' ) . '</option>
-			<option value="8"' . mc_option_selected( $zoom, '8', 'option' ) . '>' . __( 'State', 'my-calendar' ) . '</option>
-			<option value="6"' . mc_option_selected( $zoom, '6', 'option' ) . '>' . __( 'Region', 'my-calendar' ) . '</option>
+			<option value="16"' . selected( $zoom, '16', false ) . '>' . __( 'Neighborhood', 'my-calendar' ) . '</option>
+			<option value="14"' . selected( $zoom, '14', false ) . '>' . __( 'Small City', 'my-calendar' ) . '</option>
+			<option value="12"' . selected( $zoom, '12', false ) . '>' . __( 'Large City', 'my-calendar' ) . '</option>
+			<option value="10"' . selected( $zoom, '10', false ) . '>' . __( 'Greater Metro Area', 'my-calendar' ) . '</option>
+			<option value="8"' . selected( $zoom, '8', false ) . '>' . __( 'State', 'my-calendar' ) . '</option>
+			<option value="6"' . selected( $zoom, '6', false ) . '>' . __( 'Region', 'my-calendar' ) . '</option>
 		</select>
 	</p>
 	</fieldset>
