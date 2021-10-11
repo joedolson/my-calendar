@@ -31,7 +31,7 @@ function my_calendar_manage_locations() {
 	}
 	if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
 		$loc = absint( $_GET['location_id'] );
-		echo mc_delete_location( $loc );
+		echo wp_kses_post( mc_delete_location( $loc ) );
 	}
 	if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
 		update_option( 'mc_default_location', (int) $_GET['default'] );
@@ -39,7 +39,7 @@ function my_calendar_manage_locations() {
 	}
 	?>
 		<h1 class="wp-heading-inline"><?php _e( 'Manage Locations', 'my-calendar' ); ?></h1>
-		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
@@ -119,7 +119,7 @@ function mc_mass_delete_locations() {
 		} else {
 			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
 		}
-		echo $message;
+		echo wp_kses_post( $message );
 	}
 }
 
@@ -239,7 +239,7 @@ function mc_manage_locations() {
 				$col_head .= mc_table_header( __( 'City', 'my-calendar' ), $order, $sortby, 'city', $url );
 				$url       = add_query_arg( 'orderby', 'state', $admin_url );
 				$col_head .= mc_table_header( __( 'State/Province', 'my-calendar' ), $order, $sortby, 'state', $url );
-				echo $col_head;
+				echo wp_kses( $col_head, mc_kses_elements() );
 				?>
 				<?php echo apply_filters( 'mc_location_manager_headers', '' ); ?>
 			</tr>
@@ -250,10 +250,10 @@ function mc_manage_locations() {
 				$location = mc_get_location( $loc->location_id );
 				$class    = ( 'alternate' === $class ) ? '' : 'alternate';
 				?>
-				<tr class="<?php echo $class; ?>">
+				<tr class="<?php echo sanitize_html_class( $class ); ?>">
 					<th scope="row">
-						<input type="checkbox" value="<?php echo $location->location_id; ?>" name="mass_edit[]" id="mc<?php echo $location->location_id; ?>"/>
-						<label for="mc<?php echo $location->location_id; ?>"><?php echo $location->location_id; ?></label>
+						<input type="checkbox" value="<?php echo absint( $location->location_id ); ?>" name="mass_edit[]" id="mc<?php echo absint( $location->location_id ); ?>"/>
+						<label for="mc<?php echo absint( $location->location_id ); ?>"><?php echo $location->location_id; ?></label>
 					</th>
 					<td>
 					<?php
@@ -274,13 +274,13 @@ function mc_manage_locations() {
 							<?php
 							if ( esc_url( $view_url ) ) {
 								?>
-							<a href="<?php echo $view_url; ?>" class='view' aria-describedby='location<?php echo $location->location_id; ?>'><?php _e( 'View', 'my-calendar' ); ?></a> |
+							<a href="<?php echo esc_url( $view_url ); ?>" class='view' aria-describedby='location<?php echo absint( $location->location_id ); ?>'><?php _e( 'View', 'my-calendar' ); ?></a> |
 								<?php
 							}
 							?>
-							<a href="<?php echo $edit_url; ?>" class='edit' aria-describedby='location<?php echo $location->location_id; ?>'><?php _e( 'Edit', 'my-calendar' ); ?></a> |
+							<a href="<?php echo esc_url( $edit_url ); ?>" class='edit' aria-describedby='location<?php echo absint( $location->location_id ); ?>'><?php _e( 'Edit', 'my-calendar' ); ?></a> |
 							<?php echo $default; ?> | 
-							<a href="<?php echo $delete_url; ?>" class="delete" aria-describedby='location<?php echo $location->location_id; ?>' onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
+							<a href="<?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='location<?php echo absint( $location->location_id ); ?>' onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
 						</div>
 					</td>
 					<td><?php echo esc_html( $location->location_city ); ?></td>
