@@ -82,7 +82,7 @@ function my_calendar_style_edit() {
 		}
 
 		$message .= '<p><strong>' . __( 'Style Settings Saved', 'my-calendar' ) . '.</strong></p>';
-		echo "<div id='message' class='updated fade'>$message</div>";
+		echo wp_kses_post( "<div id='message' class='updated fade'>$message</div>" );
 	}
 	if ( isset( $_POST['mc_choose_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
@@ -93,7 +93,7 @@ function my_calendar_style_edit() {
 
 		update_option( 'mc_css_file', $mc_css_file );
 		$message = '<p><strong>' . __( 'New theme selected.', 'my-calendar' ) . '</strong></p>';
-		echo "<div id='message' class='updated fade'>$message</div>";
+		echo wp_kses_post( "<div id='message' class='updated fade'>$message</div>" );
 	}
 
 	$mc_show_css = get_option( 'mc_show_css' );
@@ -119,7 +119,7 @@ function my_calendar_style_edit() {
 					<h2><?php _e( 'Calendar Style Settings', 'my-calendar' ); ?></h2>
 
 					<div class="inside">
-						<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-styles' ); ?>">
+						<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-styles' ) ); ?>">
 							<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 							<input type="hidden" value="true" name="mc_edit_style"/>
 							<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
@@ -130,17 +130,17 @@ function my_calendar_style_edit() {
 									<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" />
 								</p>
 								<p>
-									<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? "disabled='disabled'" : ''; ?> /> <label for="reset_styles"><?php _e( 'Reset to default', 'my-calendar' ); ?></label>
+									<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php _e( 'Reset to default', 'my-calendar' ); ?></label>
 									<input type="checkbox" id="use_styles" name="use_styles" <?php mc_is_checked( 'mc_use_styles', 'true' ); ?> />
 									<label for="use_styles"><?php _e( 'Disable My Calendar Stylesheet', 'my-calendar' ); ?></label>
 								</p>
 								<?php
 								if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {
-									echo '<div class="notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>';
+									echo wp_kses_post( '<div class="notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
 								} else {
 									$disabled = ( $edit_files || get_option( 'mc_use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 									?>
-									<label for="style"><?php _e( 'Edit the stylesheet for My Calendar', 'my-calendar' ); ?></label><br/><textarea <?php echo $disabled; ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo $my_calendar_style; ?></textarea>
+									<label for="style"><?php _e( 'Edit the stylesheet for My Calendar', 'my-calendar' ); ?></label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
 									<?php
 								}
 								?>
@@ -159,7 +159,7 @@ function my_calendar_style_edit() {
 									$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' /><span aria-hidden='true' class='variable-color' style='background-color: " . esc_attr( $style ) . "'></span>$delete</li>";
 								}
 								if ( $output ) {
-									echo "<ul class='checkboxes'>$output</ul>";
+									echo wp_kses( "<ul class='checkboxes'>$output</ul>", mc_kses_elements() );
 								}
 								?>
 									<p>
@@ -178,8 +178,10 @@ function my_calendar_style_edit() {
 						$right_string = normalize_whitespace( $mc_current_style );
 						if ( $right_string ) { // If right string is blank, there is no default.
 							if ( isset( $_GET['diff'] ) ) {
-								echo '<div class="wrap my-calendar-admin" id="diff">';
-								echo wp_text_diff(
+								?>
+								<div class="wrap my-calendar-admin" id="diff">
+								<?php
+								$diff = wp_text_diff(
 									$left_string,
 									$right_string,
 									array(
@@ -188,16 +190,23 @@ function my_calendar_style_edit() {
 										'title_left'  => __( 'Current (in use)', 'my-calendar' ),
 									)
 								);
-								echo '</div>';
+								echo wp_kses_post( $diff );
+								?>
+								</div>
+								<?php
 							} elseif ( trim( $left_string ) !== trim( $right_string ) ) {
-								echo '<div class="wrap my-calendar-admin">';
+								?>
+								<div class="wrap my-calendar-admin">
+								<?php
 								mc_show_notice( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-styles&amp;diff#diff' ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
-								echo '</div>';
+								?>
+								</div>
+								<?php
 							} else {
-								echo '
+								echo wp_kses_post( '
 						<div class="wrap my-calendar-admin">
 							<p>' . __( 'Your stylesheet matches that included with My Calendar.', 'my-calendar' ) . '</p>
-						</div>';
+						</div>' );
 							}
 						}
 						?>
@@ -224,7 +233,7 @@ function mc_stylesheet_selector() {
 	$dir              = plugin_dir_path( __FILE__ );
 	$options          = '';
 	$return           = '
-	<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-styles' ) . '">
+	<form method="post" action="' . esc_url( admin_url( 'admin.php?page=my-calendar-styles' ) ) . '">
 		<div><input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '"/></div>
 		<div><input type="hidden" value="true" name="mc_choose_style"/></div>';
 	$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
