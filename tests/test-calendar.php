@@ -16,8 +16,8 @@ class Tests_My_Calendar_General extends WP_UnitTestCase {
 	 */
 	function test_my_calendar_sanitized_output() {
 		$output    = my_calendar( array() );
-		$sanitized = wp_kses( $output, mc_kses_elements() );
-		
+		$sanitized = wp_kses( $output . '-', mc_kses_elements() );
+
 		$this->assertSame( $output, $sanitized );
 	}
 }
