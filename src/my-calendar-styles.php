@@ -199,11 +199,7 @@ function my_calendar_style_edit() {
 			</div>
 			<?php
 		} else {
-			echo wp_kses_post(
-			'<div class="wrap my-calendar-admin">
-				<p>' . __( 'Your stylesheet matches that included with My Calendar.', 'my-calendar' ) . '</p>
-			</div>'
-			);
+			echo wp_kses_post( '<div class="wrap my-calendar-admin"><p>' . __( 'Your stylesheet matches that included with My Calendar.', 'my-calendar' ) . '</p></div>' );
 		}
 	}
 	?>
