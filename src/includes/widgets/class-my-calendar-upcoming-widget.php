@@ -109,7 +109,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 
 		$the_events = my_calendar_upcoming_events( $args );
 		if ( '' !== $the_events ) {
-			echo wp_kses( $before_widget. $widget_title . $the_events . $after_widget, mc_kses_elements() );
+			echo wp_kses( $before_widget . $widget_title . $the_events . $after_widget, mc_kses_elements() );
 		}
 	}
 
