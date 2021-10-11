@@ -25,7 +25,7 @@ jobs:
         php-version: ${{ matrix.php-versions }}
         extensions: mbstring, intl #optional, setup extensions
         coverage: xdebug #optional, setup coverage driver
-        tools: composer:v1
+        tools: php-cs-fixer, phpdoc, composer:v1
 
     - name: Check PHP Version
       run: php -v
@@ -41,3 +41,6 @@ jobs:
 
     - name: phpunit tests
       run: ./vendor/bin/phpunit
+
+    - name: PhpDocumentor
+      run: phpdoc -d ./src -t ./docs
