@@ -2767,6 +2767,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$cats    = array( $default );
 			$primary = $default;
 		}
+		$primary      = apply_filters( 'mc_set_primary_category', $primary, $cats, $post );
 		$event_author = ( isset( $post['event_author'] ) && is_numeric( $post['event_author'] ) ) ? $post['event_author'] : 0;
 		$event_link   = ! empty( $post['event_link'] ) ? trim( $post['event_link'] ) : '';
 		$expires      = ! empty( $post['event_link_expires'] ) ? $post['event_link_expires'] : '0';
