@@ -335,13 +335,13 @@ jQuery(document).ready(function ($) {
 		e.target.setAttribute('aria-selected', 'true'); //set aria-selected=true for clicked tab
 		var tabPanelToOpen = e.target.getAttribute('aria-controls');
 		for ( var i = 0; i < tabPanels.length; i++) {
-			tabPanels[i].style.display = "none";
+			tabPanels[i].setAttribute( 'aria-hidden', 'true' );
 		} // hide all tabpanels
 		// If this is an inner tab panel, don't set the window location.
 		if ( inside.length == 0 ) {
 			window.location.hash = tabPanelToOpen;
 		}
-		document.getElementById(tabPanelToOpen).style.display = "block"; //show tabpanel
+		document.getElementById(tabPanelToOpen).setAttribute( 'aria-hidden', 'false' ); //show tabpanel
 		iframes = $( 'iframe' );
 		for ( var i = 0; i < iframes.length; i++ ) {
 			iframe = iframes[i];
@@ -367,11 +367,11 @@ jQuery(document).ready(function ($) {
 		} //reset all tabs to aria-selected=false and normal font weight
 		control.attr('aria-selected', 'true'); //set aria-selected=true for clicked tab
 		for ( var i = 0; i < tabPanels.length; i++) {
-			tabPanels[i].style.display = "none";
+			tabPanels[i].setAttribute( 'aria-hidden', 'true' );
 		}
 		var currentPanel = document.getElementById(id);
 		if ( null !== currentPanel ) {
-			currentPanel.style.display = "block"; //show tabpanel
+			currentPanel.setAttribute( 'aria-hidden', 'false' ); //show tabpanel
 		}
 	}
 

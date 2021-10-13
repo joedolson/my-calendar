@@ -555,6 +555,14 @@ strong.label {
 	width: 100%;
 }
 
+.wp-admin.js .wptab {
+	display: none;
+}
+
+.wp-admin.js .wptab[aria-hidden=false] {
+	display: block;
+}
+
 .mc-tabs .tabs, .mc-tablinks {
 	position: relative;
 	border-bottom: 1px solid #c3c4c7;
@@ -726,10 +734,6 @@ strong.label {
 
 .mc-generator-inputs li label {
 	display: inline-block;
-}
-
-.js .wptab[aria-hidden=true], .wptab.initial-hidden {
-	display: none;
 }
 
 #mc-sortable li {
