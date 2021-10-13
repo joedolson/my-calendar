@@ -137,7 +137,7 @@ function mc_templates_edit() {
 				<p>
 					<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php checked( get_option( 'mc_use_' . $key . '_template' ), '1' ); ?> /> <label for="mc_use_template"><?php _e( 'Use this template', 'my-calendar' ); ?></label>
 				</p>
-				<?php
+					<?php
 				}
 				?>
 				<p>
