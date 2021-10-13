@@ -54,7 +54,7 @@ function mc_templates_edit() {
 				// Translators: unique key for template.
 				mc_show_notice( sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) );
 			} elseif ( isset( $_POST['mc_template'] ) ) {
-				$template = $_POST['mc_template'];
+				$template = sanitize_textarea_field( $_POST['mc_template'] );
 				if ( mc_key_exists( $key ) ) {
 					$key = mc_update_template( $key, $template );
 				} else {
@@ -103,23 +103,28 @@ function mc_templates_edit() {
 		</div>
 	</div>
 	<div class="postbox" id="mc-edit-template">
-		<h2><?php _e( 'Edit Template', 'my-calendar' ); ?></h2>
+		<h2>
+		<?php
+		$heading = ( 'add-new' === $key ) ? __( 'Add New Template', 'my-calendar' ) : __( 'Edit Template', 'my-calendar' );
+		echo esc_html( $heading );
+		?>
+		</h2>
 		<div class="inside">
 			<?php echo ( '' !== $core ) ? wp_kses_post( "<div class='template-description'>$core</div>" ) : ''; ?>
 			<form method="post" action="<?php echo esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ); ?>#my-calendar-templates">
-			<?php
-			if ( 'add-new' === $key ) {
-				?>
 				<div>
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				</div>
+			<?php
+			if ( 'add-new' === $key ) {
+				?>
 				<p>
 					<label for="mc_template_key"><?php _e( 'Template Description (required)', 'my-calendar' ); ?></label><br />
 					<input type="text" class="widefat" name="mc_template_key" id="mc_template_key" value="" required />
 				</p>
 				<p>
 					<label for="mc_template"><?php _e( 'Custom Template', 'my-calendar' ); ?></label><br/>
-					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="32" cols="76"></textarea>
+					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="16" cols="76"></textarea>
 				</p>
 
 				<p>
@@ -127,16 +132,14 @@ function mc_templates_edit() {
 				</p>
 				<?php
 			} else {
-				?>
-				<div>
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					<input type="hidden" name="mc_template_key" value="<?php echo esc_attr( $key ); ?>"/>
-				</div>
-				<?php if ( mc_is_core_template( $key ) ) { ?>
+				if ( mc_is_core_template( $key ) ) {
+					?>
 				<p>
 					<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php checked( get_option( 'mc_use_' . $key . '_template' ), '1' ); ?> /> <label for="mc_use_template"><?php _e( 'Use this template', 'my-calendar' ); ?></label>
 				</p>
-				<?php } ?>
+				<?php
+				}
+				?>
 				<p>
 					<label for="mc_template">
 					<?php
@@ -144,12 +147,12 @@ function mc_templates_edit() {
 					printf( __( 'Custom Template (%s)', 'my-calendar' ), $key );
 					?>
 					</label><br/>
-					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="32" cols="76"><?php echo esc_textarea( stripslashes( $template ) ); ?></textarea>
+					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="16" cols="76"><?php echo esc_textarea( $template ); ?></textarea>
 				</p>
 				<p>
-					<input type="submit" name="save" class="button-primary" value="<?php _e( 'Update Template', 'my-calendar' ); ?>" />
+					<input type="submit" name="save" class="button-primary" value="<?php esc_attr_e( 'Update Template', 'my-calendar' ); ?>" />
 				<?php if ( ! mc_is_core_template( $key ) ) { ?>
-					<input type="submit" name="delete" class="button-secondary" value=<?php _e( 'Delete Template', 'my-calendar' ); ?>" />
+					<input type="submit" name="delete" class="button-secondary" value=<?php esc_attr_e( 'Delete Template', 'my-calendar' ); ?>" />
 				<?php } ?>
 				</p>
 			<?php } ?>

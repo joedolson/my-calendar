@@ -102,6 +102,10 @@ ul.links li {
 	height: 600px;
 }
 
+.my-calendar-admin #mc-edit-template .CodeMirror {
+	height: 400px;
+}
+
 #my-calendar-admin-table {
 	margin-bottom: 1em;
 }
