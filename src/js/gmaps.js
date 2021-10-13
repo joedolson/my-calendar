@@ -35,15 +35,15 @@
 		var plot = new google.maps.Map( $el[0], args );
 		
 		// add a markers reference
-		plot.markers = [];
+		plot.locations = [];
 
 		// add markers
 		$markers.each(function(){
-			add_marker( $(this), plot, zoom );
+			add_marker( $(this), plot );
 		});
-		
+
 		// center map
-		center_map( plot );
+		center_map( plot, zoom );
 
 		// return
 		return plot;
@@ -60,20 +60,18 @@
 	*
 	*  @param	$marker (jQuery element)
 	*  @param	map (Google Map object)
-	*  @param   zoom Zoom int.
 	*  @return	n/a
 	*/
 
-	function add_marker( $marker, plot, zoom ) {
-		var latlng = new google.maps.LatLng( $marker.attr('data-lat'), $marker.attr('data-lng') );
-		var marker = null;
+	function add_marker( $marker, plot ) {
+		var latlng  = new google.maps.LatLng( $marker.attr('data-lat'), $marker.attr('data-lng') );
+		var marker  = null;
 		// Geocoder
 		if ( '' == $marker.attr( 'data-lat' ) || '' == $marker.attr( 'data-lng' ) ) {
 			var geocoder = new google.maps.Geocoder();
-			marker = getAddress( geocoder, $marker, plot, zoom );
+			marker = new getAddress( geocoder, $marker, plot );
 		} else {
 			plot.setCenter( latlng );
-			plot.setZoom( zoom );
 			// create marker
 			marker = new google.maps.Marker({
 				position	: latlng,
@@ -83,7 +81,7 @@
 			});
 
 			// add to array
-			plot.markers.push( marker );
+			plot.locations.push( marker );
 
 			// if marker contains HTML, add it to an infoWindow
 			if ( $marker.html() ) {
@@ -98,19 +96,22 @@
 				});
 			}
 		}
-
 	}
 
 	/*
 	 * Geocode an address.
+	 *
+	 * @param geocoder
+	 * @param $marker
+	 * @param plot Google map object.
+	 * @param zoom Zoom level
 	 */
-	function getAddress( geocoder, $marker, plot, zoom ) {
+	function getAddress( geocoder, $marker, plot ) {
 		var address = $marker.attr( 'data-address' );
 		var marker = null;
 		marker = geocoder.geocode({'address': address}, function(results, status) {
 			if ( status === 'OK' ) {
 				plot.setCenter( results[0].geometry.location );
-				plot.setZoom( zoom );
 				marker = new google.maps.Marker({
 					map : plot,
 					position : results[0].geometry.location,
@@ -118,7 +119,7 @@
 					title : $marker.attr( 'data-title' ),
 				});
 				// add to array
-				plot.markers.push( marker );
+				plot.locations.push( marker );
 
 				// if marker contains HTML, add it to an infoWindow
 				if ( $marker.html() ) {
@@ -144,35 +145,29 @@
 	*
 	*  This function will re-center the map if multiple markers set.
 	*
-	*  @type	function
-	*  @date	8/11/2013
-	*  @since	4.3.0
-	*
-	*  @param	map (Google Map object)
+	*  @param	plot (Google Map object)
+	*  @param   zoom zoom level.
 	*  @return	n/a
 	*/
-	function center_map( plot ) {
-		if ( plot.markers.length == 1 ) {
-			return;
+	function center_map( plot, zoom ) {
+		// set bounds.
+		var bounds = new google.maps.LatLngBounds();
+
+		// loop through all markers and create bounds
+		$.each( plot.locations, function( i, marker ) {
+			console.log( marker );
+			var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			bounds.extend( latlng );
+		});
+
+		// only 1 marker?
+		if ( plot.locations.length == 1 ) {
+			// set center of map
+			plot.setCenter( bounds.getCenter() );
+			plot.setZoom( zoom );
 		} else {
-			// set bounds.
-			var bounds = new google.maps.LatLngBounds();
-
-			// loop through all markers and create bounds
-			$.each( plot.markers, function( i, marker ) {
-				var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
-				bounds.extend( latlng );
-			});
-
-			// only 1 marker?
-			if ( plot.markers.length == 1 ) {
-				// set center of map
-				plot.setCenter( bounds.getCenter() );
-				plot.setZoom( 7 );
-			} else {
-				// fit to bounds
-				plot.fitBounds( bounds );
-			}
+			// fit to bounds
+			plot.fitBounds( bounds );
 		}
 	}
 

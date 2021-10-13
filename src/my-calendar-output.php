@@ -3414,41 +3414,45 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 	$locations = mc_get_list_locations( $datatype );
 	$output    = '';
 	if ( $locations ) {
-		foreach ( $locations as $key => $value ) {
-			if ( 'hcard' !== $datatype && '' !== $template ) {
-				$label   = stripslashes( $value->{$datatype} );
-				$url     = mc_maplink( $value, 'url', 'location' );
-				$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
-			} elseif ( 'hcard' === $datatype ) {
-				$label   = mc_hcard( $value, 'true', 'true', 'location' );
-				$output .= "<li>$label</li>";
-			} elseif ( '' !== $template ) {
-				if ( mc_key_exists( $template ) ) {
-					$template = mc_get_custom_template( $template );
+		if ( 'map' === $template ) {
+			$output = mc_generate_map( $locations, 'location', true );
+		} else {
+			foreach ( $locations as $key => $value ) {
+				if ( 'hcard' !== $datatype && '' !== $template ) {
+					$label   = stripslashes( $value->{$datatype} );
+					$url     = mc_maplink( $value, 'url', 'location' );
+					$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
+				} elseif ( 'hcard' === $datatype ) {
+					$label   = mc_hcard( $value, 'true', 'true', 'location' );
+					$output .= "<li>$label</li>";
+				} elseif ( '' !== $template ) {
+					if ( mc_key_exists( $template ) ) {
+						$template = mc_get_custom_template( $template );
+					}
+					$values  = array(
+						'id'        => $value->location_id,
+						'label'     => $value->location_label,
+						'street'    => $value->location_street,
+						'street2'   => $value->location_street2,
+						'city'      => $value->location_city,
+						'state'     => $value->location_state,
+						'postcode'  => $value->location_postcode,
+						'region'    => $value->location_region,
+						'url'       => $value->location_url,
+						'country'   => $value->location_country,
+						'longitude' => $value->location_longitude,
+						'latitude'  => $value->location_latitude,
+						'zoom'      => $value->location_zoom,
+						'phone'     => $value->location_phone,
+					);
+					$label   = mc_draw_template( $values, $template );
+					$output .= ( '' !== $label ) ? "<li>$label</li>" : '';
 				}
-				$values  = array(
-					'id'        => $value->location_id,
-					'label'     => $value->location_label,
-					'street'    => $value->location_street,
-					'street2'   => $value->location_street2,
-					'city'      => $value->location_city,
-					'state'     => $value->location_state,
-					'postcode'  => $value->location_postcode,
-					'region'    => $value->location_region,
-					'url'       => $value->location_url,
-					'country'   => $value->location_country,
-					'longitude' => $value->location_longitude,
-					'latitude'  => $value->location_latitude,
-					'zoom'      => $value->location_zoom,
-					'phone'     => $value->location_phone,
-				);
-				$label   = mc_draw_template( $values, $template );
-				$output .= ( '' !== $label ) ? "<li>$label</li>" : '';
 			}
+			$output .= '<ul class="mc-locations">' . $output . '</ul>';
 		}
 
-		$output .= '<ul class="mc-locations">' . $output . '</ul>';
-		$output  = apply_filters( 'mc_location_list', $output, $locations );
+		$output = apply_filters( 'mc_location_list', $output, $locations );
 
 		return $output;
 	}
