@@ -1,3 +1,7 @@
+function resizeIframe(iframe) {
+	iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+}
+
 jQuery(document).ready(function ($) {
 	$( '#my-calendar' ).on( 'submit', function(e) {
 		var unsubmitted = $( '#mc_unsubmitted' );
@@ -338,6 +342,11 @@ jQuery(document).ready(function ($) {
 			window.location.hash = tabPanelToOpen;
 		}
 		document.getElementById(tabPanelToOpen).style.display = "block"; //show tabpanel
+		iframes = $( 'iframe' );
+		for ( var i = 0; i < iframes.length; i++ ) {
+			iframe = iframes[i];
+			resizeIframe(iframe);
+		}
 		$( '#' + tabPanelToOpen ).attr( 'tabindex', '-1' ).trigger( 'focus' );
 	}
 
@@ -517,10 +526,6 @@ var mediaPopup = '';
 			})
 	});
 })(jQuery);
-
-function resizeIframe(iframe) {
-	iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
-}
 
 window.addEventListener( 'beforeunload', function(e) {
 	var unsubmitted = document.getElementById( 'mc_unsubmitted' );

@@ -827,61 +827,68 @@ function mc_event_expired( $event ) {
 /**
  * Generate script and HTML for Google Maps embed if API key present
  *
- * @param object $event Object containing location parameters.
- * @param string $source event or location.
+ * @param object|array $event Object containing location parameters or array of objects.
+ * @param string       $source event or location.
+ * @param bool         $multiple True if event contains multiple locations.
  *
  * @return string HTML
  */
-function mc_generate_map( $event, $source = 'event' ) {
-	if ( ! is_object( $event ) ) {
+function mc_generate_map( $event, $source = 'event', $multiple = false ) {
+	if ( ! is_object( $event ) && ! $multiple ) {
+		return '';
+	}
+	if ( ! is_array( $event ) && $multiple ) {
 		return '';
 	}
 	$api_key = get_option( 'mc_gmap_api_key' );
-	$value   = '';
+	$markers = '';
 	if ( $api_key ) {
-		$id            = rand();
-		$source        = ( 'event' === $source ) ? 'event' : 'location';
-		$zoom          = ( 0 !== (int) $event->{$source . '_zoom'} ) ? $event->{$source . '_zoom'} : '15';
-		$category_icon = mc_category_icon( $event, 'img' );
-		if ( ! $category_icon ) {
-			$category_icon = '//maps.google.com/mapfiles/marker_green.png';
-		}
-		$address = addslashes( mc_map_string( $event, $source ) );
+		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
+		foreach ( $locations as $event ) {
+			$id            = rand();
+			$source        = ( 'event' === $source ) ? 'event' : 'location';
+			$zoom          = ( 0 !== (int) $event->{$source . '_zoom'} ) ? $event->{$source . '_zoom'} : '15';
+			$category_icon = mc_category_icon( $event, 'img' );
+			if ( ! $category_icon ) {
+				$category_icon = '//maps.google.com/mapfiles/marker_green.png';
+			}
+			$address = addslashes( mc_map_string( $event, $source ) );
 
-		if ( '0.000000' !== $event->{$source . '_longitude'} && '0.000000' !== $event->{$source . '_latitude'} ) {
-			$lat    = $event->{$source . '_latitude'};
-			$lng    = $event->{$source . '_longitude'};
-			$latlng = true;
-		} else {
-			$lat    = '';
-			$lng    = '';
-			$latlng = false;
-		}
+			if ( '0.000000' !== $event->{$source . '_longitude'} && '0.000000' !== $event->{$source . '_latitude'} ) {
+				$lat    = $event->{$source . '_latitude'};
+				$lng    = $event->{$source . '_longitude'};
+				$latlng = true;
+			} else {
+				$lat    = '';
+				$lng    = '';
+				$latlng = false;
+			}
 
-		if ( strlen( $address ) < 10 && ! $latlng ) {
-			return '';
+			if ( strlen( $address ) < 10 && ! $latlng ) {
+				return '';
+			}
+			$hcard    = mc_hcard( $event, 'true', false, $source );
+			$title    = esc_attr( $event->{$source . '_label'} );
+			$hcard    = wp_kses(
+				str_replace(
+					array( '</div>', '<br />', '<br><br>' ),
+					'<br>',
+					$hcard
+				),
+				array(
+					'br'     => array(),
+					'strong' => array(),
+				)
+			);
+			$html     = apply_filters( 'mc_map_html', $hcard, $event );
+			$width    = apply_filters( 'mc_map_height', '100%', $event );
+			$height   = apply_filters( 'mc_map_height', '300px', $event );
+			$styles   = " style='width: $width;height: $height'";
+			$markers .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
 		}
-		$hcard  = mc_hcard( $event, 'true', false, $source );
-		$title  = esc_attr( $event->{$source . '_label'} );
-		$hcard  = wp_kses(
-			str_replace(
-				array( '</div>', '<br />', '<br><br>' ),
-				'<br>',
-				$hcard
-			),
-			array(
-				'br'     => array(),
-				'strong' => array(),
-			)
-		);
-		$html   = apply_filters( 'mc_map_html', $hcard, $event );
-		$width  = apply_filters( 'mc_map_height', '100%', $event );
-		$height = apply_filters( 'mc_map_height', '300px', $event );
-		$styles = " style='width: $width;height: $height'";
-		$value  = "<div id='mc_gmap_$id' class='mc-gmap-fupup'$styles data-zoom='$zoom' ><div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div></div>";
 	}
 
-	return apply_filters( 'mc_gmap_html', $value, $event );
+	return "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles data-zoom='$zoom'>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
 }
 
 /**
