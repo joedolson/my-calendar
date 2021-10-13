@@ -488,13 +488,13 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								?>
 								<ul class='checkboxes'>
 								<li>
-									<input type="checkbox" value="on" name="category_private" id="cat_private"<?php checked( $private_checked, true ); ?> /> <label for="cat_private"><?php _e( 'Private category (logged-in users only)', 'my-calendar' ); ?></label>
+									<input type="checkbox" value="on" name="category_private" id="cat_private"<?php checked( $private_checked, true ); ?> /> <label for="cat_private"><?php _e( 'Private (logged-in users only)', 'my-calendar' ); ?></label>
 								</li>
 								<li>
-									<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( get_option( 'mc_default_category' ), $default ); ?> /> <label for="mc_default_category"><?php _e( 'Default category', 'my-calendar' ); ?></label>
+									<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( get_option( 'mc_default_category' ), $default ); ?> /> <label for="mc_default_category"><?php _e( 'Default', 'my-calendar' ); ?></label>
 								</li>
 								<li>
-									<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category' ), $holiday ); ?> /> <label for="mc_shc"><?php _e( 'Holiday Category', 'my-calendar' ); ?></label>
+									<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category' ), $holiday ); ?> /> <label for="mc_shc"><?php _e( 'Holiday', 'my-calendar' ); ?></label>
 								</li>
 								</ul>
 							</li>
