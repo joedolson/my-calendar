@@ -1326,7 +1326,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			break;
 		case 'event_category':
 			if ( $show_block ) {
-				$add_category = current_user_can( 'mc_edit_cats' ) ? '<input class="screen-reader-text" type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new" class="button"><span class="dashicons dashicons-plus" aria-hidden="true"></span>' . __( 'Add categories', 'my-calendar' ) . '</label>' : '';
+				$add_category = current_user_can( 'mc_edit_cats' ) ? '<input class="screen-reader-text" type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new" class="button"><span class="dashicons dashicons-plus" aria-hidden="true"></span>' . __( 'Add Categories', 'my-calendar' ) . '</label>' : '';
 				if ( 'true' !== get_option( 'mc_multiple_categories' ) ) {
 					$select = mc_category_select( $data, true, false );
 					$return = '
