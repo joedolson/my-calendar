@@ -35,7 +35,7 @@ function mc_templates_edit() {
 	if ( isset( $_POST['mc_template_key'] ) ) {
 		$key = $_POST['mc_template_key'];
 	} else {
-		$key = ( isset( $_GET['mc_template'] ) ) ? $_GET['mc_template'] : 'grid';
+		$key = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : 'grid';
 	}
 
 	if ( isset( $_POST['delete'] ) ) {
@@ -550,13 +550,13 @@ function mc_list_core_templates() {
 			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . "</th>
 		</thead>
 		<tbody>
-			<tr class='alternate'><td><a href='" . add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) . "'>grid</a></td><td>$grid_enabled</td><td>" . mc_template_description( 'grid' ) . "</td>
+			<tr class='alternate'><td><a href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_template_description( 'grid' ) . "</td>
 			</tr>
-			<tr><td><a href='" . add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) . "'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
+			<tr><td><a href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
 			</tr>
-			<tr class='alternate'><td><a href='" . add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) . "'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
+			<tr class='alternate'><td><a href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
 			</tr>
-			<tr><td><a href='" . add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) . "'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
+			<tr><td><a href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
 			</tr>
 		</tbody>
 	</table>';
@@ -581,7 +581,7 @@ function mc_list_custom_templates() {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_template_description( $key );
 		$class = ( 'alternate' === $class ) ? 'normal' : 'alternate';
-		$list .= "<tr class='$class'><td><a href='" . add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) . "'>$key</a></td><td>$desc</td></tr>";
+		$list .= "<tr class='$class'><td><a href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
 	}
 
 	$list .= '</tbody>
