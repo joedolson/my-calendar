@@ -1294,7 +1294,7 @@ function mc_update_location_controls() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'Invalid nonce' );
 		}
-		$locations            = $_POST['mc_location_controls'];
+		$locations            = isset( $_POST['mc_location_controls'] ) ? sanitize_textare_field( $_POST['mc_location_controls'] : array();
 		$mc_location_controls = array();
 		foreach ( $locations as $key => $value ) {
 			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
