@@ -299,10 +299,11 @@ function mc_kses_elements() {
 			'aria-live' => array(),
 		),
 		'a'        => array(
-			'aria-labelledby'  => true,
-			'aria-describedby' => true,
-			'href'             => true,
-			'class'            => true,
+			'aria-labelledby'  => array(),
+			'aria-describedby' => array(),
+			'href'             => array(),
+			'class'            => array(),
+			'aria-current'     => array(),
 		),
 		'section'  => array(
 			'id'    => array(),

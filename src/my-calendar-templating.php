@@ -35,7 +35,7 @@ function mc_templates_edit() {
 	if ( isset( $_POST['mc_template_key'] ) ) {
 		$key = $_POST['mc_template_key'];
 	} else {
-		$key = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : 'grid';
+		$key = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
 	}
 
 	if ( isset( $_POST['delete'] ) ) {
@@ -80,28 +80,8 @@ function mc_templates_edit() {
 		$template = stripslashes( $template );
 	}
 	$core = mc_template_description( $key );
+	if ( $key ) {
 	?>
-	<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
-			<h2><?php _e( 'Core Templates', 'my-calendar' ); ?></h2>
-			<div class="inside">
-			<?php
-			echo wp_kses_post( mc_list_core_templates() );
-			?>
-			</div>
-		</div>
-	</div>
-	<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
-			<h2><?php _e( 'Custom Templates', 'my-calendar' ); ?></h2>
-			<div class="inside">
-			<?php
-			echo wp_kses_post( mc_list_custom_templates() );
-			echo wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
-			?>
-			</div>
-		</div>
-	</div>
 	<div class="postbox" id="mc-edit-template">
 		<h2>
 		<?php
@@ -126,9 +106,8 @@ function mc_templates_edit() {
 					<label for="mc_template"><?php _e( 'Custom Template', 'my-calendar' ); ?></label><br/>
 					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="16" cols="76"></textarea>
 				</p>
-
 				<p>
-					<input type="submit" name="save" class="button-primary" value="<?php _e( 'Add Template', 'my-calendar' ); ?>" />
+					<input type="submit" name="save" class="button-primary" value="<?php _e( 'Add Template', 'my-calendar' ); ?>" /> <a class="button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-templates"><?php esc_html_e( 'Cancel', 'my-calendar' ); ?></a>
 				</p>
 				<?php
 			} else {
@@ -157,6 +136,30 @@ function mc_templates_edit() {
 				</p>
 			<?php } ?>
 			</form>
+		</div>
+	</div>
+	<?php
+	}
+	?>
+	<div class="ui-sortable meta-box-sortables">
+		<div class="postbox">
+			<h2><?php _e( 'Core Templates', 'my-calendar' ); ?></h2>
+			<div class="inside">
+			<?php
+			echo wp_kses( mc_list_core_templates( $key ), mc_kses_elements() );
+			?>
+			</div>
+		</div>
+	</div>
+	<div class="ui-sortable meta-box-sortables">
+		<div class="postbox">
+			<h2><?php _e( 'Custom Templates', 'my-calendar' ); ?></h2>
+			<div class="inside">
+			<?php
+			echo wp_kses( mc_list_custom_templates( $key ), mc_kses_elements() );
+			echo wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
+			?>
+			</div>
 		</div>
 	</div>
 	<div class="ui-sortable meta-box-sortables">
@@ -533,8 +536,12 @@ function mc_template_description( $key ) {
 
 /**
  * List of core templates available
+ *
+ * @param string $current Currently visible.
+ *
+ * @return string
  */
-function mc_list_core_templates() {
+function mc_list_core_templates( $current = '' ) {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
 	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false;
@@ -550,13 +557,13 @@ function mc_list_core_templates() {
 			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . "</th>
 		</thead>
 		<tbody>
-			<tr class='alternate'><td><a href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_template_description( 'grid' ) . "</td>
+			<tr class='alternate'><td><a " . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_template_description( 'grid' ) . "</td>
 			</tr>
-			<tr><td><a href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
+			<tr><td><a " . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
 			</tr>
-			<tr class='alternate'><td><a href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
+			<tr class='alternate'><td><a " . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
 			</tr>
-			<tr><td><a href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
+			<tr><td><a " . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
 			</tr>
 		</tbody>
 	</table>';
@@ -567,8 +574,12 @@ function mc_list_core_templates() {
 
 /**
  * List of templates available
+ *
+ * @param string $current Currently visible template.
+ *
+ * @return string
  */
-function mc_list_custom_templates() {
+function mc_list_custom_templates( $current = '' ) {
 	$list = "<table class='widefat'>
 				<thead>
 					<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th>
@@ -581,7 +592,8 @@ function mc_list_custom_templates() {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_template_description( $key );
 		$class = ( 'alternate' === $class ) ? 'normal' : 'alternate';
-		$list .= "<tr class='$class'><td><a href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
+		$curr  = ( $current === $key ) ? ' aria-current="true"' : '';
+		$list .= "<tr class='$class'><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
 	}
 
 	$list .= '</tbody>

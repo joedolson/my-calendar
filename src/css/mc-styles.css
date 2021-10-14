@@ -362,6 +362,11 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	width: 98%
 }
 
+#my-calendar-templates h2,
+#my-calendar-templates h2 + p {
+	display: inline-block;
+}
+
 .templates.inside li a {
 	text-decoration: none;
 }

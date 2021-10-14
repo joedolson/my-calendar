@@ -47,7 +47,9 @@ function my_calendar_design() {
 			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'My Calendar: Template Tags', 'my-calendar' ), 5 );
 			?>
 			</h2>
-
+			<?php
+			echo wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
+			?>
 			<div class="inside">
 			<?php mc_templates_edit(); ?>
 			</div>
