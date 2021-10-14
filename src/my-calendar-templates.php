@@ -901,11 +901,8 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 function mc_expand( $data ) {
 	$output = '';
 	if ( is_array( $data ) ) {
-		if ( isset( $data['notes'] ) ) {
-			unset( $data['notes'] );
-		}
 		foreach ( $data as $key => $value ) {
-			$class = ( isset( $value ) ) ? sanitize_title( $value ) : '';
+			$class = ( isset( $value ) ) ? sanitize_html_class( $value ) : '';
 			$label = ( isset( $value ) ) ? $value : false;
 			if ( ! $label ) {
 				continue;
@@ -915,7 +912,7 @@ function mc_expand( $data ) {
 		$output = ( $output ) ? "<ul class='mc-access'>" . $output . '</ul>' : '';
 	}
 
-	return $output;
+	return apply_filters( 'mc_expand', $output, $data );
 }
 
 /**
