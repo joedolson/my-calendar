@@ -22,28 +22,21 @@
 	function mc_map( $el ) {
 		// var
 		var $markers = $el.find('.marker');
-		var zoom     = parseInt( $el.attr( 'data-zoom' ) );
 
 		// vars
 		var args = {
-			zoom		: zoom,
 			center		: {lng: 0.0000, lat: 0.0000},
 			mapTypeId	: google.maps.MapTypeId.roadmap
 		};
 		
 		// create map
 		var plot = new google.maps.Map( $el[0], args );
-		
-		// add a markers reference
-		plot.locations = [];
+		var bounds = new google.maps.LatLngBounds();
 
 		// add markers
 		$markers.each(function(){
-			add_marker( $(this), plot );
+			add_marker( $(this), plot, bounds );
 		});
-
-		// center map
-		center_map( plot, zoom );
 
 		// return
 		return plot;
@@ -63,13 +56,13 @@
 	*  @return	n/a
 	*/
 
-	function add_marker( $marker, plot ) {
+	function add_marker( $marker, plot, bounds ) {
 		var latlng  = new google.maps.LatLng( $marker.attr('data-lat'), $marker.attr('data-lng') );
 		var marker  = null;
 		// Geocoder
 		if ( '' == $marker.attr( 'data-lat' ) || '' == $marker.attr( 'data-lng' ) ) {
 			var geocoder = new google.maps.Geocoder();
-			marker = new getAddress( geocoder, $marker, plot );
+			marker = new getAddress( geocoder, $marker, plot, bounds );
 		} else {
 			plot.setCenter( latlng );
 			// create marker
@@ -80,8 +73,15 @@
 				title		: $marker.attr( 'data-title' ),
 			});
 
-			// add to array
-			plot.locations.push( marker );
+			var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			bounds.extend( latlng );
+			// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
+			if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
+				var extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
+				bounds.extend( extendPoint );
+			}
+			plot.fitBounds(bounds);
+
 
 			// if marker contains HTML, add it to an infoWindow
 			if ( $marker.html() ) {
@@ -104,9 +104,9 @@
 	 * @param geocoder
 	 * @param $marker
 	 * @param plot Google map object.
-	 * @param zoom Zoom level
+	 * @param bounds Google boundary object.
 	 */
-	function getAddress( geocoder, $marker, plot ) {
+	function getAddress( geocoder, $marker, plot, bounds ) {
 		var address = $marker.attr( 'data-address' );
 		var marker = null;
 		marker = geocoder.geocode({'address': address}, function(results, status) {
@@ -118,8 +118,15 @@
 					clickable : true,
 					title : $marker.attr( 'data-title' ),
 				});
-				// add to array
-				plot.locations.push( marker );
+
+				var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+				bounds.extend( latlng );
+				// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
+				if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
+					var extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
+					bounds.extend( extendPoint );
+				}
+				plot.fitBounds(bounds);
 
 				// if marker contains HTML, add it to an infoWindow
 				if ( $marker.html() ) {
@@ -138,37 +145,6 @@
 				console.log( 'Address used to Geocode: ' + address );
 			}
 		});
-	}
-
-	/*
-	*  center_map
-	*
-	*  This function will re-center the map if multiple markers set.
-	*
-	*  @param	plot (Google Map object)
-	*  @param   zoom zoom level.
-	*  @return	n/a
-	*/
-	function center_map( plot, zoom ) {
-		// set bounds.
-		var bounds = new google.maps.LatLngBounds();
-
-		// loop through all markers and create bounds
-		$.each( plot.locations, function( i, marker ) {
-			console.log( marker );
-			var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
-			bounds.extend( latlng );
-		});
-
-		// only 1 marker?
-		if ( plot.locations.length == 1 ) {
-			// set center of map
-			plot.setCenter( bounds.getCenter() );
-			plot.setZoom( zoom );
-		} else {
-			// fit to bounds
-			plot.fitBounds( bounds );
-		}
 	}
 
 })(jQuery);

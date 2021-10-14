@@ -847,7 +847,6 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 		foreach ( $locations as $event ) {
 			$id            = rand();
 			$source        = ( 'event' === $source ) ? 'event' : 'location';
-			$zoom          = ( 0 !== (int) $event->{$source . '_zoom'} ) ? $event->{$source . '_zoom'} : '15';
 			$category_icon = mc_category_icon( $event, 'img' );
 			if ( ! $category_icon ) {
 				$category_icon = '//maps.google.com/mapfiles/marker_green.png';
@@ -888,7 +887,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 		}
 	}
 
-	return "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles data-zoom='$zoom'>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
+	return "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
 }
 
 /**
