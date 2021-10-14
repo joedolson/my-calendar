@@ -1010,9 +1010,9 @@ function mc_admin_category_list( $event ) {
 	$cats       = array();
 	$string     = $color;
 	if ( isset( $_GET['groups'] ) ) {
-		$string .= ' ' . strip_tags( $cat->category_name );
+		$string .= ' ' . esc_html( $cat->category_name );
 	} else {
-		$string .= " <a class='mc_filter' href='" . mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ) . "'><span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '</span>' . strip_tags( $cat->category_name ) . '</a>';
+		$string .= " <a class='mc_filter primary-category' href='" . esc_url( mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ) ) . "'><span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '</span>' . esc_html( $cat->category_name ) . '</a>';
 	}
 
 	if ( is_array( $categories ) ) {
@@ -1026,12 +1026,12 @@ function mc_admin_category_list( $event ) {
 				if ( isset( $_GET['groups'] ) ) {
 					$cats[] = $color . ' ' . mc_get_category_detail( $category, 'category_name' );
 				} else {
-					$cats[] = $color . ' <a href="' . $filter . '">' . mc_get_category_detail( $category, 'category_name' ) . '</a>';
+					$cats[] = $color . ' <a href="' . $filter . '" class="secondary-category">' . mc_get_category_detail( $category, 'category_name' ) . '</a>';
 				}
 			}
-			if ( count( $cats ) > 0 ) {
-				$string .= ', ' . implode( ', ', $cats );
-			}
+		}
+		if ( count( $cats ) > 0 ) {
+			$string .= ', ' . implode( ', ', $cats );
 		}
 	}
 
