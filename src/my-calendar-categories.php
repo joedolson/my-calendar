@@ -750,6 +750,17 @@ function mc_manage_categories() {
 	$default_category = (string) get_option( 'mc_default_category' );
 	// We pull the categories from the database.
 	$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( empty( $categories ) ) {
+		// If no categories are found, create the default category and re-fetch.
+		mc_create_category(
+			array(
+				'category_name'  => 'General',
+				'category_color' => '#ffffcc',
+				'category_icon'  => 'event.svg',
+			)
+		);
+		$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
 	if ( ! empty( $categories ) ) {
 		?>
 		<table class="widefat page fixed mc-categories" id="my-calendar-admin-table">
