@@ -784,8 +784,8 @@ function mc_manage_categories() {
 			<td>
 			<?php
 			$category_event_url = add_query_arg( 'filter', $cat->category_id, admin_url( 'admin.php?page=my-calendar-manage&restrict=category&view=list&limit=all' ) );
-			$count = mc_get_category_count( $cat->category_id );
-			$count = ( $count ) ? ' (' . $count . ')' : '';
+			$count              = mc_get_category_count( $cat->category_id );
+			$count              = ( $count ) ? ' (' . $count . ')' : '';
 			echo ( ! $count ) ? esc_html( $cat_name ) : wp_kses_post( '<a href="' . esc_url( $category_event_url ) . '">' . $cat_name . $count . '</a>' );
 			// Translators: Name of category being edited.
 			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
