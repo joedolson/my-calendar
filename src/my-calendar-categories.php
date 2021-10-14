@@ -369,6 +369,20 @@ function mc_create_category( $category ) {
 }
 
 /**
+ * Count occurrences of this category.
+ *
+ * @param int $category_id Category ID.
+ *
+ * @return int
+ */
+function mc_get_category_count( $category_id ) {
+	global $wpdb;
+	$result = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(DISTINCT event_id) FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $category_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	return $result;
+}
+
+/**
  * Form to edit a category
  *
  * @param string $view Edit or create.
@@ -769,7 +783,10 @@ function mc_manage_categories() {
 			<th scope="row"><?php echo absint( $cat->category_id ); ?></th>
 			<td>
 			<?php
-			echo esc_html( $cat_name );
+			$category_event_url = add_query_arg( 'filter', $cat->category_id, admin_url( 'admin.php?page=my-calendar-manage&restrict=category&view=list&limit=all' ) );
+			$count = mc_get_category_count( $cat->category_id );
+			$count = ( $count ) ? ' (' . $count . ')' : '';
+			echo ( ! $count ) ? esc_html( $cat_name ) : wp_kses_post( '<a href="' . esc_url( $category_event_url ) . '">' . $cat_name . $count . '</a>' );
 			// Translators: Name of category being edited.
 			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			// Translators: Category name.
