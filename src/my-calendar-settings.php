@@ -755,7 +755,7 @@ function mc_remote_db() {
 					</p>
 				</form>
 				<p>
-				<?php _e( 'Date formats use syntax from the <a href="http://php.net/date">PHP <code>date()</code> function</a>. Save to update sample output.', 'my-calendar' ); ?>
+				<?php _e( 'Date formats use syntax from the <a href="https://www.php.net/manual/en/datetime.format.php#refsect1-datetime.format-parameters">PHP <code>date()</code> function</a>. Save to update sample output.', 'my-calendar' ); ?>
 				</p>
 			</div>
 		</div>
