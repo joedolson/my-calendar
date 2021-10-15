@@ -548,7 +548,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 					<h2><?php _e( 'Category Settings', 'my-calendar' ); ?></h2>
 
 					<div class="inside">
-						<?php echo mc_category_settings(); ?>
+						<?php echo wp_kses( mc_category_settings(), mc_kses_elements() ); ?>
 					</div>
 				</div>
 			</div>
@@ -592,14 +592,14 @@ function mc_category_settings() {
 			</div>
 			<div class="mc-category-settings">
 				<fieldset>
-				<legend>' . __( 'Category Colors', 'my-calendar' ) . '</legend>
+				<legend class="screen-reader-text">' . __( 'Color Coding', 'my-calendar' ) . '</legend>
 					<ul>' .
 					mc_settings_field(
 						'mc_apply_color',
 						array(
-							'default'    => __( 'Ignore colors', 'my-calendar' ),
-							'font'       => __( 'Titles are in colors.', 'my-calendar' ),
-							'background' => __( 'Titles use colors as background.', 'my-calendar' ),
+							'default'    => __( 'Hide category colors', 'my-calendar' ),
+							'font'       => __( 'Title text color.', 'my-calendar' ),
+							'background' => __( 'Title background color.', 'my-calendar' ),
 						),
 						'default',
 						'',

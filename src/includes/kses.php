@@ -231,8 +231,14 @@ function mc_kses_elements() {
 		'ul'       => array(
 			'class' => array(),
 		),
-		'fieldset' => array(),
-		'legend'   => array(),
+		'fieldset' => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'legend'   => array(
+			'class' => array(),
+			'id'    => array(),
+		),
 		'li'       => array(
 			'class' => array(),
 		),
