@@ -459,7 +459,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			if ( mc_output_is_visible( 'access', $type, $event ) ) {
 				$access_heading = ( '' !== get_option( 'mc_event_accessibility', '' ) ) ? get_option( 'mc_event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
 				$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
-				$sublevel         = apply_filters( 'mc_subheading_level', 'h4', $type, $time, $template );
+				$sublevel       = apply_filters( 'mc_subheading_level', 'h4', $type, $time, $template );
 				if ( $access_content ) {
 					$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
 				}
