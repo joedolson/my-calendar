@@ -157,7 +157,7 @@ function mc_templates_edit() {
 			<div class="inside">
 			<?php
 			echo wp_kses( mc_list_custom_templates( $key ), mc_kses_elements() );
-			echo wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
+			echo ( 'add-new' !== $key ) ? wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' ) : '';
 			?>
 			</div>
 		</div>
