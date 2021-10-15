@@ -354,6 +354,7 @@ function mc_update_text_settings( $post ) {
 	$mc_hosted_by            = $post['mc_hosted_by'];
 	$mc_posted_by            = $post['mc_posted_by'];
 	$mc_buy_tickets          = $post['mc_buy_tickets'];
+	$mc_event_accessibility  = $post['mc_event_accessibility'];
 	$mc_view_full            = $post['mc_view_full'];
 	$mc_previous_events      = $post['mc_previous_events'];
 	$mc_next_events          = $post['mc_next_events'];
@@ -371,6 +372,7 @@ function mc_update_text_settings( $post ) {
 	update_option( 'mc_hosted_by', $mc_hosted_by );
 	update_option( 'mc_posted_by', $mc_posted_by );
 	update_option( 'mc_buy_tickets', $mc_buy_tickets );
+	update_option( 'mc_event_accessibility', $mc_event_accessibility );
 	update_option( 'mc_view_full', $mc_view_full );
 	update_option( 'mc_week_caption', $mc_week_caption );
 	update_option( 'mc_next_events', $mc_next_events );
@@ -720,6 +722,7 @@ function mc_remote_db() {
 							<li><?php mc_settings_field( 'mc_hosted_by', __( 'Hosted by', 'my-calendar' ), 'Hosted by' ); ?></li>
 							<li><?php mc_settings_field( 'mc_posted_by', __( 'Posted by', 'my-calendar' ), 'Posted by' ); ?></li>
 							<li><?php mc_settings_field( 'mc_buy_tickets', __( 'Buy tickets', 'my-calendar' ), 'Buy tickets' ); ?></li>
+							<li><?php mc_settings_field( 'mc_event_accessibility', __( 'Event Accessibility Heading', 'my-calendar' ), 'Event Accessibility' ); ?></li>
 							<li><?php mc_settings_field( 'mc_view_full', __( 'View full calendar', 'my-calendar' ), 'View full calendar' ); ?></li>
 							<li><?php mc_settings_field( 'mc_details_label', __( 'Read more text', 'my-calendar' ), $mc_details_label, __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_link_label', __( 'More Information text', 'my-calendar' ), $mc_link_label, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
