@@ -348,6 +348,7 @@ jQuery(document).ready(function ($) {
 			resizeIframe(iframe);
 		}
 		$( '#' + tabPanelToOpen ).attr( 'tabindex', '-1' ).trigger( 'focus' );
+		window.scrollTo( 0,0 );
 	}
 
 	/**
