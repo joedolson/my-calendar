@@ -1952,7 +1952,6 @@ function my_calendar( $args ) {
 			$hl       = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 			$datetime = date_i18n( $date_format, $current );
 			$heading  = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'>" . apply_filters( 'mc_heading', $datetime, $params['format'], $params['time'] ) . "</$hl>";
-			$body    .= "<div class='mcjs " . esc_attr( $params['format'] . ' ' . $params['time'] ) . "'>" . $heading . $top;
 			$from     = mc_date( 'Y-m-d', $current, false );
 			$to       = mc_date( 'Y-m-d', $current, false );
 
@@ -1991,8 +1990,10 @@ function my_calendar( $args ) {
 			} else {
 				$mc_events .= __( 'No events scheduled for today!', 'my-calendar' );
 			}
-			$body .= '<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
-			</div>";
+			$body .= "
+				<div class='mcjs " . esc_attr( $params['format'] . ' ' . $params['time'] ) . "'>" . $heading . $top . '
+					<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
+				</div>";
 		} else {
 			// If showing multiple months, figure out how far we're going.
 			$months       = ( 'week' === $params['time'] ) ? 1 : $show_months;
