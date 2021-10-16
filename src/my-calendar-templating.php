@@ -602,6 +602,19 @@ function mc_list_custom_templates( $current = '' ) {
 	return $list;
 }
 
+/**
+ * Delete all custom templates.
+ */
+function mc_delete_templates() {
+	global $wpdb;
+	$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
+	foreach ( $results as $result ) {
+		$key = str_replace( 'mc_ctemplate_', '', $result->option_name );
+		delete_option( "mc_template_desc_$key" );
+		delete_option( "mc_ctemplate_$key" );
+	}
+}
+
 add_action(
 	'admin_enqueue_scripts',
 	function() {

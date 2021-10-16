@@ -130,6 +130,8 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_default_direction' );
 		delete_option( 'mc_default_admin_view' );
 		delete_option( 'mc_count_cache' );
+		// Deletes custom template options.
+		mc_delete_templates();
 	}
 	if ( get_option( 'mc_drop_tables' ) === 'true' ) {
 		global $wpdb;
