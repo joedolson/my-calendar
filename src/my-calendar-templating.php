@@ -43,7 +43,7 @@ function mc_templates_do_edit() {
 					} else {
 						$key = mc_create_template( $template, $_POST );
 					}
-					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=custom&mc_template='. $key . '#my-calendar-templates' ) ) );
+					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=custom&mc_template=' . $key . '#my-calendar-templates' ) ) );
 				}
 			}
 		}
@@ -76,7 +76,7 @@ function mc_templates_edit() {
 		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ) );
 		$key = '';
 	} else {
-		if ( mc_is_core_template( $key ) &&  isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) {
+		if ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) {
 			mc_show_notice( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
 		} else {
 			if ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'core' === $_GET['action'] ) {
