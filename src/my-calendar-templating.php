@@ -30,7 +30,6 @@ function mc_templates_do_edit() {
 			$key = isset( $_GET['mc_template'] ) ? sanitize_text_field( $_GET['mc_template'] ) : '';
 		}
 		if ( isset( $_POST['delete'] ) ) {
-			echo 'Key: ' . $key;
 			delete_option( 'mc_ctemplate_' . $key );
 			wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=deleted#my-calendar-templates' ) );
 		} else {
