@@ -164,7 +164,8 @@ function mc_kses_elements() {
 		'h3'       => array(),
 		'h4'       => array(),
 		'label'    => array(
-			'for' => array(),
+			'for'   => array(),
+			'class' => array(),
 		),
 		'option'   => array(
 			'value'    => array(),

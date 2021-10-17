@@ -396,15 +396,13 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<?php
 				}
 				if ( mc_show_edit_block( 'event_category' ) ) {
-					$match = mc_compare_group_members( $group_id, 'event_category', false );
-
-					if ( 'true' !== get_option( 'mc_multiple_categories' ) ) {
-						$select = mc_category_select( $data, true, false );
-						$return = '<p class="mc_category"><label for="event_category">' . __( 'Category', 'my-calendar-submissions' ) . $match . '</label><select class="widefat" name="event_category" id="e_category">' . $select . '</select></p>';
-					} else {
-						$return = '<fieldset><legend>' . __( 'Categories', 'my-calendar' ) . $match . '</legend><ul class="checkboxes">' . mc_category_select( $data, true, true ) . '</ul></fieldset>';
-					}
-
+					$match        = mc_compare_group_members( $group_id, 'event_category', false );
+					$select       = mc_category_select( $data, true, false );
+					$add_category = current_user_can( 'mc_edit_cats' ) ? '<input class="screen-reader-text" type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new" class="button"><span class="dashicons dashicons-plus" aria-hidden="true"></span>' . __( 'Add Categories', 'my-calendar' ) . '</label>' : '';
+					$addnew       = '<div class="new-event-category">
+					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" id="event_category_name" name="event_category_name" disabled /> <button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
+				</div>';
+					$return = '<fieldset class="categories"><legend>' . __( 'Categories', 'my-calendar' ) . $match . '</legend><ul class="checkboxes">' . mc_category_select( $data, true, true ) . '<li class="event-new-category"> ' . $add_category . '</li></ul></fieldset>' . $addnew . '<p class="mc-primary-category"><label for="event_category">' . __( 'Primary Category', 'my-calendar-submissions' ) . '</label><select name="primary_category" id="e_category">' . $select . '</select></p>';
 					echo wp_kses( $return, mc_kses_elements() );
 				} else {
 					?>

@@ -569,7 +569,6 @@ function mc_category_settings_update() {
 	if ( isset( $_POST['mc_category_settings'] ) && wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 		update_option( 'mc_hide_icons', ( ! empty( $_POST['mc_hide_icons'] ) && 'on' === $_POST['mc_hide_icons'] ) ? 'true' : 'false' );
 		update_option( 'mc_apply_color', $_POST['mc_apply_color'] );
-		update_option( 'mc_multiple_categories', ( ! empty( $_POST['mc_multiple_categories'] ) && 'on' === $_POST['mc_multiple_categories'] ) ? 'true' : 'false' );
 
 		$message = mc_show_notice( __( 'My Calendar Category Configuration Updated', 'my-calendar' ), false );
 	}
@@ -611,7 +610,6 @@ function mc_category_settings() {
 				</fieldset>
 				<ul>
 					<li>' . mc_settings_field( 'mc_hide_icons', __( 'Hide Category icons', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '</li>
-					<li>' . mc_settings_field( 'mc_multiple_categories', __( 'Use multiple categories on events', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '</li>
 				</ul>
 			</div>
 			<p>

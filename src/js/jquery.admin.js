@@ -238,6 +238,36 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	var primary_category = $( '.mc-primary-category' );
+	var categories       = $( '.categories input:checked' );
+	if ( categories.length <= 1 ) {
+		primary_category.hide();
+	}
+	categories.each( function() {
+		var value = $( this ).val();
+		var selector = primary_category.find( 'select' );
+		selector.find( 'option[value=' + value + ']' ).show();
+	});
+	$( '.categories input' ).on( 'change', function(e) {
+		var category_count = $( '.categories input:checked' );
+		var categories     = $( '.categories input' );
+		if ( category_count.length > 1 ) {
+			primary_category.show().prop( 'disabled', false );
+		} else {
+			primary_category.hide().prop( 'disabled', true );
+		}
+		categories.each( function() {
+			var value = $( this ).val();
+			var checked = $( this ).prop( 'checked' );
+			var selector = primary_category.find( 'select' );
+			if ( checked ) {
+				selector.find( 'option[value=' + value + ']' ).show().prop( 'disabled', false );
+			} else {
+				selector.find( 'option[value=' + value + ']' ).hide().prop( 'disabled', true );
+			}
+		});
+	});
+
 	$( '.fifth-week-schedule' ).hide();
 	// display notice informing users of lack of support for recur month by day.
 	$( '#e_recur' ).on( 'change', function (e) {

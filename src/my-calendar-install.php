@@ -206,7 +206,6 @@ function mc_default_settings() {
 	add_option( 'mc_ajax_javascript', 0 );
 	add_option( 'mc_notime_text', 'All day' );
 	add_option( 'mc_hide_icons', 'true' );
-	add_option( 'mc_multiple_categories', 'true' );
 	add_option( 'mc_event_link_expires', 'false' );
 	add_option( 'mc_apply_color', 'background' );
 	add_option( 'mc_input_options', mc_input_defaults() );

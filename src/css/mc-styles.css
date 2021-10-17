@@ -106,7 +106,7 @@ ul.links li {
 }
 
 #core-templates h2,
-#mc-add-template h2 {
+#mc-edit-template h2 {
 	margin-top: 0;
 }
 
@@ -879,6 +879,17 @@ input[name="mc_uri"] {
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: 50px;
+}
+
+.mc-primary-category {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: .5em;
+	align-items: center;
+}
+
+.mc-primary-category option {
+	display: none;
 }
 
 #mc-sortable .mc-calendar {

@@ -1327,22 +1327,19 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 		case 'event_category':
 			if ( $show_block ) {
 				$add_category = current_user_can( 'mc_edit_cats' ) ? '<input class="screen-reader-text" type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new" class="button"><span class="dashicons dashicons-plus" aria-hidden="true"></span>' . __( 'Add Categories', 'my-calendar' ) . '</label>' : '';
-				if ( 'true' !== get_option( 'mc_multiple_categories' ) ) {
-					$select = mc_category_select( $data, true, false );
-					$return = '
-						<p class="mc_category">
-							<label for="event_category">' . __( 'Category', 'my-calendar-submissions' ) . '</label>
-							<select class="widefat" name="event_category" id="e_category">' . $select . '</select>' . $add_category . '
-						</p>';
-				} else {
-					$return = '<fieldset class="categories"><legend>' . __( 'Categories', 'my-calendar' ) . '</legend><ul class="checkboxes">' .
-						mc_category_select( $data, true, true ) .
-						'<li class="event-new-category"> ' . $add_category . '</li>
-					</ul></fieldset>';
-				}
-				$return .= '<div class="new-event-category">
+				$select       = mc_category_select( $data, true, false );
+				$return       = '<fieldset class="categories"><legend>' . __( 'Categories', 'my-calendar' ) . '</legend><ul class="checkboxes">' .
+					mc_category_select( $data, true, true ) .
+					'<li class="event-new-category"> ' . $add_category . '</li>
+				</ul></fieldset>';
+				$return      .= '<div class="new-event-category">
 					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" id="event_category_name" name="event_category_name" disabled /> <button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
 				</div>';
+				$return      .= '
+					<p class="mc-primary-category">
+						<label for="e_category">' . __( 'Primary Category', 'my-calendar-submissions' ) . '</label>
+						<select name="primary_category" id="e_category">' . $select . '</select>
+					</p>';
 			} else {
 				$categories = mc_get_categories( $data );
 				$return     = '<div>';
@@ -2745,10 +2742,12 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$primary = false;
 
 		if ( isset( $post['event_category'] ) ) {
-			$cats = $post['event_category'];
+			$cats = map_deep( $post['event_category'], 'absint' );
 			if ( is_array( $cats ) ) {
 				// Set first category as primary.
 				$primary = ( is_numeric( $cats[0] ) ) ? $cats[0] : 1;
+				// If passed, set primary_category as primary.
+				$primary = isset( $post['primary_category'] ) ? absint( $post['primary_category'] ) : $primary;
 				foreach ( $cats as $cat ) {
 					$private = mc_get_category_detail( $cat, 'category_private' );
 					// If a selected category is private, set that category as primary instead.
