@@ -13,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Save template changes.
+ */
 function mc_templates_do_edit() {
 	if ( isset( $_GET['page'] ) && 'my-calendar-design' === $_GET['page'] ) {
 		if ( isset( $_POST['mc_template'] ) ) {
