@@ -91,11 +91,23 @@ ul.links li {
 	margin: 0 5px 10px;
 }
 
+.my-calendar-admin .metabox-holder .mc-postbox > h2,
 .my-calendar-admin .metabox-holder .postbox > h2 {
 	font-size: 14px;
 	padding: 8px 12px;
 	margin: 0;
 	line-height: 1.4;
+}
+
+.my-calendar-admin .metabox-holder .mc-postbox > h2 {
+	padding: 8px 0;
+	margin-top: 24px;
+	font-weight: 700;
+}
+
+#core-templates h2,
+#mc-add-template h2 {
+	margin-top: 0;
 }
 
 .my-calendar-admin .CodeMirror {

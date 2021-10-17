@@ -82,14 +82,14 @@ function mc_templates_edit() {
 	$core = mc_template_description( $key );
 	if ( $key ) {
 		?>
-	<div class="postbox" id="mc-edit-template">
+	<div class="mc-postbox" id="mc-edit-template">
 		<h2>
 		<?php
 		$heading = ( 'add-new' === $key ) ? __( 'Add New Template', 'my-calendar' ) : __( 'Edit Template', 'my-calendar' );
 		echo esc_html( $heading );
 		?>
 		</h2>
-		<div class="inside">
+		<div class="mc-inside">
 			<?php echo ( '' !== $core ) ? wp_kses_post( "<div class='template-description'>$core</div>" ) : ''; ?>
 			<form method="post" action="<?php echo esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ); ?>#my-calendar-templates">
 				<div>
@@ -141,10 +141,10 @@ function mc_templates_edit() {
 		<?php
 	}
 	?>
-	<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
+	<div class="ui-sortable meta-box-sortables" id="core-templates">
+		<div class="mc-postbox">
 			<h2><?php _e( 'Core Templates', 'my-calendar' ); ?></h2>
-			<div class="inside">
+			<div class="mc-inside">
 			<?php
 			echo wp_kses( mc_list_core_templates( $key ), mc_kses_elements() );
 			?>
@@ -152,9 +152,9 @@ function mc_templates_edit() {
 		</div>
 	</div>
 	<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
+		<div class="mc-postbox">
 			<h2><?php _e( 'Custom Templates', 'my-calendar' ); ?></h2>
-			<div class="inside">
+			<div class="mc-inside">
 			<?php
 			echo wp_kses( mc_list_custom_templates( $key ), mc_kses_elements() );
 			echo ( 'add-new' !== $key ) ? wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' ) : '';
@@ -163,7 +163,7 @@ function mc_templates_edit() {
 		</div>
 	</div>
 	<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
+		<div class="mc-postbox">
 			<h2>
 			<?php
 			_e( 'Event Template Tags', 'my-calendar' );
@@ -171,7 +171,7 @@ function mc_templates_edit() {
 			?>
 			</h2>
 
-			<div class='mc_template_tags inside'>
+			<div class='mc_template_tags mc-inside'>
 				<dl>
 					<dt><code>{title}</code></dt>
 					<dd><?php _e( 'Title of the event.', 'my-calendar' ); ?></dd>
@@ -248,14 +248,14 @@ function mc_templates_edit() {
 		}
 		?>
 	<div class="ui-sortable meta-box-sortables">
-		<div class="postbox">
+		<div class="mc-postbox">
 				<h2>
 		<?php
 		// Translators: name of template being previewed.
 		printf( __( 'Template Preview: %s', 'my-calendar' ), ucfirst( $key ) );
 		?>
 				</h2>
-				<div class="template-preview inside">
+				<div class="template-preview mc-inside">
 		<?php
 		echo wp_kses_post( mc_template_description( $key ) );
 		$mc_id       = mc_get_template_tag_preview( false, 'int' );
