@@ -18,12 +18,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_templates_do_edit() {
 	if ( isset( $_GET['page'] ) && 'my-calendar-design' === $_GET['page'] ) {
-		if ( isset( $_POST['mc_template'] ) ) {
-			$key = sanitize_text_field( $_POST['mc_template'] );
+		if ( ! empty( $_POST ) ) {
+			$nonce = $_REQUEST['_wpnonce'];
+			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+				die( 'Security check failed' );
+			}
+		}
+		if ( isset( $_POST['mc_template_key'] ) ) {
+			$key = sanitize_text_field( $_POST['mc_template_key'] );
 		} else {
 			$key = isset( $_GET['mc_template'] ) ? sanitize_text_field( $_GET['mc_template'] ) : '';
 		}
 		if ( isset( $_POST['delete'] ) ) {
+			echo 'Key: ' . $key;
 			delete_option( 'mc_ctemplate_' . $key );
 			wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=deleted#my-calendar-templates' ) );
 		} else {
@@ -60,19 +67,9 @@ function mc_templates_edit() {
 		return;
 	}
 	$templates = get_option( 'mc_templates' );
-	$requery   = false;
-
-	if ( ! empty( $_POST ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
-		}
-		$requery = true;
-	}
-	$key = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
+	$key       = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
 
 	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
-		delete_option( 'mc_ctemplate_' . $key );
 		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ) );
 		$key = '';
 	} else {
@@ -88,21 +85,15 @@ function mc_templates_edit() {
 		}
 	}
 
-	// Re-fetch templates option after changes have been made.
-	$templates           = ( $requery ) ? get_option( 'mc_templates' ) : $templates;
 	$globals             = mc_globals();
 	$mc_grid_template    = ( '' !== trim( $templates['grid'] ) ) ? $templates['grid'] : $globals['grid_template'];
 	$mc_list_template    = ( '' !== trim( $templates['list'] ) ) ? $templates['list'] : $globals['list_template'];
 	$mc_mini_template    = ( '' !== trim( $templates['mini'] ) ) ? $templates['mini'] : $globals['mini_template'];
 	$mc_details_template = ( '' !== trim( $templates['details'] ) ) ? $templates['details'] : $globals['single_template'];
 
-	if ( isset( $_POST['add-new'] ) && mc_is_core_template( $key ) ) {
-		$template = stripslashes( $_POST['mc_template'] );
-	} else {
-		$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
-		$template = stripslashes( $template );
-	}
-	$core = mc_template_description( $key );
+	$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
+	$template = stripslashes( $template );
+	$core     = mc_template_description( $key );
 	if ( $key ) {
 		?>
 	<div class="mc-postbox" id="mc-edit-template">
