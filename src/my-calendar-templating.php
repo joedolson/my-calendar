@@ -13,6 +13,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+function mc_templates_do_edit() {
+	if ( isset( $_GET['page'] ) && 'my-calendar-design' === $_GET['page'] ) {
+		if ( isset( $_POST['mc_template'] ) ) {
+			$key = sanitize_text_field( $_POST['mc_template'] );
+		} else {
+			$key = isset( $_GET['mc_template'] ) ? sanitize_text_field( $_GET['mc_template'] ) : '';
+		}
+		if ( isset( $_POST['delete'] ) ) {
+			delete_option( 'mc_ctemplate_' . $key );
+			wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=deleted#my-calendar-templates' ) );
+		} else {
+			if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=duplicate#my-calendar-templates' ) );
+			} else {
+				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
+					$template          = ( ! empty( $_POST['mc_template'] ) ) ? $_POST['mc_template'] : '';
+					$templates[ $key ] = $template;
+					update_option( 'mc_templates', $templates );
+					update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
+					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=core&mc_template=' . $key . '#my-calendar-templates' ) ) );
+				} elseif ( isset( $_POST['mc_template'] ) ) {
+					$template = sanitize_textarea_field( $_POST['mc_template'] );
+					if ( mc_key_exists( $key ) ) {
+						$key = mc_update_template( $key, $template );
+					} else {
+						$key = mc_create_template( $template, $_POST );
+					}
+					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=custom&mc_template='. $key . '#my-calendar-templates' ) ) );
+				}
+			}
+		}
+	}
+}
+add_action( 'admin_init', 'mc_templates_do_edit' );
+
 /**
  * Template editing page.
  */
@@ -31,35 +66,20 @@ function mc_templates_edit() {
 		}
 		$requery = true;
 	}
+	$key = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
 
-	if ( isset( $_POST['mc_template_key'] ) ) {
-		$key = $_POST['mc_template_key'];
-	} else {
-		$key = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
-	}
-
-	if ( isset( $_POST['delete'] ) ) {
+	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
 		delete_option( 'mc_ctemplate_' . $key );
 		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ) );
-		$key = 'grid';
+		$key = '';
 	} else {
-		if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
+		if ( mc_is_core_template( $key ) &&  isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) {
 			mc_show_notice( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
 		} else {
-			if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-				$template          = ( ! empty( $_POST['mc_template'] ) ) ? $_POST['mc_template'] : '';
-				$templates[ $key ] = $template;
-				update_option( 'mc_templates', $templates );
-				update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
+			if ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'core' === $_GET['action'] ) {
 				// Translators: unique key for template.
 				mc_show_notice( sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ) );
-			} elseif ( isset( $_POST['mc_template'] ) ) {
-				$template = sanitize_textarea_field( $_POST['mc_template'] );
-				if ( mc_key_exists( $key ) ) {
-					$key = mc_update_template( $key, $template );
-				} else {
-					$key = mc_create_template( $template, $_POST );
-				}
+			} elseif ( isset( $_GET['action'] ) && 'custom' === $_GET['action'] ) {
 				mc_show_notice( __( 'Custom Template saved', 'my-calendar' ) );
 			}
 		}
