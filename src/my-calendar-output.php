@@ -194,6 +194,11 @@ function mc_generate_category_icon( $source ) {
 	return $image;
 }
 
+add_filter( 'safe_style_css', function( $styles ) {
+	$styles[] = 'fill';
+	return $styles;
+} );
+
 /**
  * Get SVG icon by filename.
  *
@@ -1835,6 +1840,79 @@ function mc_calendar_params( $args ) {
 }
 
 /**
+ * Generate calendar header if required.
+ *
+ * @param array  $params Calendar parameters.
+ * @param string $id Calendar ID.
+ * @param string $tr Table row element.
+ * @param int    $start_of_week Starting day of the week.
+ *
+ * @return string
+ */
+function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
+	$days      = mc_get_week_days( $params, $start_of_week );
+	$name_days = $days['name_days'];
+	$abbrevs   = $days['abbrevs'];
+
+	$th       = apply_filters( 'mc_grid_header_wrapper', 'th', $params['format'] );
+	$close_th = ( 'th' === $th ) ? 'th' : $th;
+	$th      .= ( 'th' === $th ) ? ' scope="col"' : '';
+	$body     = '';
+	if ( 'calendar' === $params['format'] || 'mini' === $params['format'] ) {
+		$table = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
+		$body .= "\n<$table class='my-calendar-table' aria-labelledby='mc_head_$id'>\n";
+	}
+	// If in a calendar format, print the headings of the days of the week.
+	if ( 'list' === $params['format'] ) {
+		$body .= "<ul id='list-$id' class='mc-list'>";
+	} else {
+		$body .= ( 'tr' === $tr ) ? '<thead>' : '<div class="mc-table-body">';
+		$body .= "\n	<$tr class='mc-row'>\n";
+		if ( apply_filters( 'mc_show_week_number', false, $params ) ) {
+			$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
+		}
+		for ( $i = 0; $i <= 6; $i ++ ) {
+			if ( 0 === (int) $start_of_week ) {
+				$class = ( $i < 6 && $i > 0 ) ? 'day-heading' : 'weekend-heading';
+			} else {
+				$class = ( $i < 5 ) ? 'day-heading' : 'weekend-heading';
+			}
+			$dayclass = sanitize_html_class( $abbrevs[ $i ] );
+			if ( ( 'weekend-heading' === $class && ( get_option( 'mc_show_weekends' ) === 'true' ) ) || 'weekend-heading' !== $class ) {
+				$body .= "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
+			}
+		}
+		$body .= "	</$tr>\n";
+		$body .= ( 'tr' === $tr ) ? "</thead>\n<tbody>\n" : '';
+	}
+
+	return '<div class="mc-content">' . $body;
+}
+
+/**
+ * Get the days of the week for calendar layout.
+ *
+ * @param array $param Calendar parameters.
+ * @param int   $start_of_week First day of this week.
+ *
+ * @return array
+ */
+function mc_get_week_days( $params, $start_of_week ) {
+	$name_days     = mc_name_days( $params['format'] );
+	$abbrevs       = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
+	if ( 1 === (int) $start_of_week ) {
+		$first       = array_shift( $name_days );
+		$afirst      = array_shift( $abbrevs );
+		$name_days[] = $first;
+		$abbrevs[]   = $afirst;
+	}
+	return array(
+		'name_days' => $name_days,
+		'abbrevs' => $abbrevs,
+	);
+}
+
+/**
  * Create calendar output and return.
  *
  * @param array $args Lots of arguments; all shortcode parameters, etc.
@@ -1887,6 +1965,7 @@ function my_calendar( $args ) {
 </div>';
 
 	$date_format = apply_filters( 'mc_date_format', $date_format, $params['format'], $params['time'] );
+	$hl          = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 
 	if ( isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
 		// single event, main calendar only.
@@ -1897,18 +1976,8 @@ function my_calendar( $args ) {
 	} else {
 		$end_of_week   = ( 1 === (int) $start_of_week ) ? 7 : 6;
 		$start_of_week = ( $show_weekends ) ? $start_of_week : 1;
-		$name_days     = mc_name_days( $params['format'] );
-		$abbrevs       = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
-
-		if ( 1 === (int) $start_of_week ) {
-			$first       = array_shift( $name_days );
-			$afirst      = array_shift( $abbrevs );
-			$name_days[] = $first;
-			$abbrevs[]   = $afirst;
-		}
-
-		$date    = mc_get_current_date( $main_class, $cid, $params );
-		$current = $date['current_date'];
+		$date          = mc_get_current_date( $main_class, $cid, $params );
+		$current       = $date['current_date'];
 
 		if ( is_numeric( $months ) && $months < 12 && $months > 0 ) {
 			$show_months = absint( $months );
@@ -1917,6 +1986,9 @@ function my_calendar( $args ) {
 		$dates = mc_get_from_to( $show_months, $params, $date );
 		$from  = apply_filters( 'mc_from_date', $dates['from'] );
 		$to    = apply_filters( 'mc_to_date', $dates['to'] );
+		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $from;
+		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $to;
+
 
 		$query = array(
 			'from'     => $from,
@@ -1949,51 +2021,22 @@ function my_calendar( $args ) {
 		$bottom = $nav['bottom'];
 
 		if ( 'day' === $params['time'] ) {
-			$hl       = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
-			$datetime = date_i18n( $date_format, $current );
-			$heading  = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'>" . apply_filters( 'mc_heading', $datetime, $params['format'], $params['time'] ) . "</$hl>";
-			$from     = mc_date( 'Y-m-d', $current, false );
-			$to       = mc_date( 'Y-m-d', $current, false );
-
-			$query  = array(
-				'from'     => $from,
-				'to'       => $to,
-				'category' => $params['category'],
-				'ltype'    => $params['ltype'],
-				'lvalue'   => $params['lvalue'],
-				'author'   => $params['author'],
-				'host'     => $params['host'],
-				'search'   => '',
-				'source'   => 'calendar',
-				'site'     => $site,
-			);
-			$query  = apply_filters( 'mc_grab_events_attributes', $query, $params );
-			$events = my_calendar_get_events( $query );
-			if ( ! $skip_holidays ) {
-				$holidays = array();
-			} else {
-				$query['category'] = $skip_holidays;
-				$query['holidays'] = 'holidays';
-				$holidays          = my_calendar_get_events( $query );
-			}
-
-			$events_class = mc_events_class( $events, $from );
+			$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'>" . apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] ) . "</$hl>";
 			$dateclass    = mc_dateclass( $current );
 			$mc_events    = '';
+			$events       = my_calendar_events( $query );
+			$events_class = '';
 
-			if ( is_array( $events ) && count( $events ) > 0 ) {
-				if ( is_array( $holidays ) && count( $holidays ) > 0 ) {
-					$mc_events .= my_calendar_draw_events( $holidays, $params, $from, $template, $id );
-				} else {
-					$mc_events .= my_calendar_draw_events( $events, $params, $from, $template, $id );
-				}
-			} else {
-				$mc_events .= __( 'No events scheduled for today!', 'my-calendar' );
+			foreach ( $events as $day ) {
+				$events_class = mc_events_class( $day, $from );
+				$mc_events   .= my_calendar_draw_events( $day, $params, $from, $template, $id );
 			}
-			$body .= "
-				<div class='mcjs " . esc_attr( $params['format'] . ' ' . $params['time'] ) . "'>" . $heading . $top . '
-					<div id="mc-day" class="' . $dateclass . ' ' . $events_class . '">' . "$mc_events\n</div>
-				</div>";
+			$body .= $heading . $top . '
+			<div class="mc-content">
+				<div id="mc-day-' . $id . '" class="mc-day ' . $dateclass . ' ' . $events_class . '">
+					' . "$mc_events
+				</div>
+			</div>";
 		} else {
 			// If showing multiple months, figure out how far we're going.
 			$months       = ( 'week' === $params['time'] ) ? 1 : $show_months;
@@ -2021,48 +2064,18 @@ function my_calendar( $args ) {
 			$h2      = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'] );
 			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\">$heading</$h2>\n";
+			$body   .= $top;
 
 			// Add the calendar table and heading.
-			$body .= $top;
-			if ( 'calendar' === $params['format'] || 'mini' === $params['format'] ) {
-				$table = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
-				$body .= "\n<$table class=\"my-calendar-table\" aria-labelledby='mc_head_$id'>\n";
-			}
-
-			$tr       = apply_filters( 'mc_grid_week_wrapper', 'tr', $params['format'] );
-			$th       = apply_filters( 'mc_grid_header_wrapper', 'th', $params['format'] );
-			$close_th = ( 'th' === $th ) ? 'th' : $th;
-			$th      .= ( 'th' === $th ) ? ' scope="col"' : '';
-
-			// If in a calendar format, print the headings of the days of the week.
-			if ( 'list' === $params['format'] ) {
-				$body .= "<ul id='list-$id' class='mc-list'>";
-			} else {
-				$body .= ( 'tr' === $tr ) ? '<thead>' : '<div class="mc-table-body">';
-				$body .= "\n	<$tr class='mc-row'>\n";
-				if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
-					$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
-				}
-				for ( $i = 0; $i <= 6; $i ++ ) {
-					if ( 0 === (int) $start_of_week ) {
-						$class = ( $i < 6 && $i > 0 ) ? 'day-heading' : 'weekend-heading';
-					} else {
-						$class = ( $i < 5 ) ? 'day-heading' : 'weekend-heading';
-					}
-					$dayclass = sanitize_html_class( $abbrevs[ $i ] );
-					if ( ( 'weekend-heading' === $class && $show_weekends ) || 'weekend-heading' !== $class ) {
-						$body .= "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
-					}
-				}
-				$body .= "	</$tr>\n";
-				$body .= ( 'tr' === $tr ) ? "</thead>\n<tbody>\n" : '';
-			}
-			$odd = 'odd';
+			$table = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
+			$tr    = apply_filters( 'mc_grid_week_wrapper', 'tr', $params['format'] );
+			$body .= mc_get_calendar_header( $params, $id, $tr, $start_of_week );
+			$odd   = 'odd';
 
 			$show_all = apply_filters( 'mc_all_list_dates', false, $args );
 			if ( $no_events && 'list' === $params['format'] && false === $show_all ) {
 				// If there are no events in list format, just display that info.
-				$no_events = ( '' === $content ) ? __( 'There are no events scheduled during this period.', 'my-calendar' ) : $content;
+				$no_events = ( '' === $content ) ? __( 'There are no events scheduled during these dates.', 'my-calendar' ) : $content;
 				$body     .= "<li class='mc-events no-events'>$no_events</li>";
 			} else {
 				$start             = strtotime( $from );
@@ -2166,7 +2179,7 @@ function my_calendar( $args ) {
 			$end   = ( 'table' === $table ) ? "\n</tbody>\n</table>" : "</div></$table>";
 			$body .= ( 'list' === $params['format'] ) ? "\n</ul>" : $end;
 		}
-		$body .= $bottom;
+		$body .= '</div>' . $bottom;
 	}
 	// The actual printing is done by the shortcode function.
 	$body .= apply_filters( 'mc_after_calendar', '', $args );

@@ -493,7 +493,7 @@
 }
 
 /* List View */
-.mc-main .mc-list li, #mc-day {
+.mc-main .mc-list li, .mc-day {
 	position: relative;
 }
 
@@ -554,6 +554,10 @@
 .mc-main .list-event {
 	border-top: 1px solid #d1d1d1;
 	margin: .5em -10px;
+}
+
+.mc-main .mc-day .list-event {
+	margin: 0;
 }
 
 .mc-main .day .list-event, .mc-main .day .details {

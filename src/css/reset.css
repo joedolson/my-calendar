@@ -156,6 +156,10 @@ div.site-content, table {
 	font-size: 80%;
 }
 
+.mc-main .mc-list li, .mc-day {
+	position: relative;
+}
+
 .mc-main .category-key.has-icons ul li {
 	display: inline;
 }
@@ -271,6 +275,10 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	}
 }
 
+.mc-main .mc-day .list-event {
+	margin: 0;
+}
+
 /**
  * This is focus passed to a div for the purpose of navigation; visible focus not required.
  */
@@ -284,5 +292,5 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 }
 
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }
-.mcjs.mc-main .single-event .details, .mcjs.mc-main .list.day .details { display: block; }
+.mcjs.mc-main .single-event .details, .mcjs.mc-main.list.day .details { display: block; }
 
