@@ -50,6 +50,7 @@ function mc_directory_list( $directory ) {
 			if ( '.' !== $file && '..' !== $file && ! is_dir( $directory . '/' . $file ) && (
 					'image/svg_xml' === mime_content_type( $directory . '/' . $file ) ||
 					'image/svg' === mime_content_type( $directory . '/' . $file ) ||
+					'image/svg+xml' === mime_content_type( $directory . '/' . $file ) ||
 					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_GIF ||
 					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_PNG ||
 					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_JPEG )
@@ -462,59 +463,44 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								$cat_name = '';
 							}
 							?>
-							<ul>
-							<li>
+							<p>
 								<label for="cat_name"><?php _e( 'Category Name', 'my-calendar' ); ?></label>
 								<input type="text" id="cat_name" name="category_name" class="input" size="30" value="<?php echo esc_attr( $cat_name ); ?>"/>
 								<label for="cat_color"><?php _e( 'Color', 'my-calendar' ); ?></label>
 								<input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="<?php echo ( '#' !== $color ) ? esc_attr( $color ) : ''; ?>"/>
-							</li>
-							<?php
-							if ( 'true' === get_option( 'mc_hide_icons' ) ) {
-								?>
-								<input type='hidden' name='category_icon' value='' />
-								<?php
-							} else {
-								?>
-							<li>
+							</p>
+							<input type='hidden' name='category_icon' id="mc_category_icon" value='<?php echo esc_attr( $icon ); ?>' />
+							<p>
 							<label for="cat_icon"><?php _e( 'Category Icon', 'my-calendar' ); ?></label>
 							<div class="mc-autocomplete autocomplete" id="mc-icons-autocomplete">
-								<input class="autocomplete-input" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
+								<input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
 								<ul class="autocomplete-result-list"></ul>
 							</div>
-							</li>
-								<?php
-							}
-							?>
-							<li>
-								<?php
-								if ( 'add' === $view ) {
-									$private_checked = false;
+							<?php
+							if ( 'add' === $view ) {
+								$private_checked = false;
+							} else {
+								if ( ! empty( $cur_cat ) && is_object( $cur_cat ) && '1' === (string) $cur_cat->category_private ) {
+									$private_checked = true;
 								} else {
-									if ( ! empty( $cur_cat ) && is_object( $cur_cat ) && '1' === (string) $cur_cat->category_private ) {
-										$private_checked = true;
-									} else {
-										$private_checked = false;
-									}
+									$private_checked = false;
 								}
-								$default = ( 'add' === $view ) ? false : $cur_cat->category_id;
-								$holiday = ( 'add' === $view ) ? false : $cur_cat->category_id;
-								?>
-								<ul class='checkboxes'>
-								<li>
-									<input type="checkbox" value="on" name="category_private" id="cat_private"<?php checked( $private_checked, true ); ?> /> <label for="cat_private"><?php _e( 'Private (logged-in users only)', 'my-calendar' ); ?></label>
-								</li>
-								<li>
-									<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( get_option( 'mc_default_category' ), $default ); ?> /> <label for="mc_default_category"><?php _e( 'Default', 'my-calendar' ); ?></label>
-								</li>
-								<li>
-									<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category' ), $holiday ); ?> /> <label for="mc_shc"><?php _e( 'Holiday', 'my-calendar' ); ?></label>
-								</li>
-								</ul>
+							}
+							$current = ( 'add' === $view ) ? false : $cur_cat->category_id;
+							?>
+							<ul class='checkboxes'>
+							<li>
+								<input type="checkbox" value="on" name="category_private" id="cat_private"<?php checked( $private_checked, true ); ?> /> <label for="cat_private"><?php _e( 'Private (logged-in users only)', 'my-calendar' ); ?></label>
 							</li>
-							<?php echo apply_filters( 'mc_category_fields', '', $cur_cat ); ?>
-						</ul>
-						<?php
+							<li>
+								<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( get_option( 'mc_default_category' ), $current ); ?> /> <label for="mc_default_category"><?php _e( 'Default', 'my-calendar' ); ?></label>
+							</li>
+							<li>
+								<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category' ), $current ); ?> /> <label for="mc_shc"><?php _e( 'Holiday', 'my-calendar' ); ?></label>
+							</li>
+							</ul>
+							<?php
+						echo apply_filters( 'mc_category_fields', '', $cur_cat );
 						if ( 'add' === $view ) {
 							$save_text = __( 'Add Category', 'my-calendar' );
 						} else {
@@ -829,7 +815,7 @@ function mc_manage_categories() {
 				</div>
 			</td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
-			<td><?php echo ( $icon ) ? wp_kses_post( $icon ) : ''; ?></td>
+			<td><?php echo ( $icon ) ? $icon . wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 			<td style="background-color:<?php echo esc_attr( $background ); ?>;color: <?php echo esc_attr( $foreground ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : ''; ?></td>
 		</tr>
 			<?php

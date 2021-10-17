@@ -160,6 +160,26 @@ function mc_allowed_tags( $tags, $context ) {
  */
 function mc_kses_elements() {
 	$elements = array(
+		'svg'      => array(
+			'class'           => array(),
+			'style'           => array(),
+			'focusable'       => array(),
+			'role'            => array(),
+			'aria-labelledby' => array(),
+			'xmlns'           => array(),
+			'viewbox'         => array(),
+		),
+		'g'        => array(
+			'fill' => array(),
+		),
+		'title'    => array(
+			'id'    => array(),
+			'title' => array(),
+		),
+		'path'   => array(
+			'd'    => array(),
+			'fill' => array(),
+		),
 		'h2'       => array(),
 		'h3'       => array(),
 		'h4'       => array(),

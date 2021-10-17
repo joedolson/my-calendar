@@ -840,22 +840,24 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 	if ( ! is_array( $event ) && $multiple ) {
 		return '';
 	}
-	$api_key = get_option( 'mc_gmap_api_key' );
-	$markers = '';
+	$api_key  = get_option( 'mc_gmap_api_key' );
+	$markers  = '';
+	$loc_list = '';
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
-		foreach ( $locations as $event ) {
+		$multiple  = ( count( $locations ) > 1 ) ? true : false;
+		foreach ( $locations as $location ) {
 			$id            = rand();
 			$source        = ( 'event' === $source ) ? 'event' : 'location';
-			$category_icon = mc_category_icon( $event, 'img' );
+			$category_icon = mc_category_icon( $location, 'img' );
 			if ( ! $category_icon ) {
 				$category_icon = '//maps.google.com/mapfiles/marker_green.png';
 			}
-			$address = addslashes( mc_map_string( $event, $source ) );
+			$address = addslashes( mc_map_string( $location, $source ) );
 
-			if ( '0.000000' !== $event->{$source . '_longitude'} && '0.000000' !== $event->{$source . '_latitude'} ) {
-				$lat    = $event->{$source . '_latitude'};
-				$lng    = $event->{$source . '_longitude'};
+			if ( '0.000000' !== $location->{$source . '_longitude'} && '0.000000' !== $location->{$source . '_latitude'} ) {
+				$lat    = $location->{$source . '_latitude'};
+				$lng    = $location->{$source . '_longitude'};
 				$latlng = true;
 			} else {
 				$lat    = '';
@@ -866,9 +868,9 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 			if ( strlen( $address ) < 10 && ! $latlng ) {
 				return '';
 			}
-			$hcard    = mc_hcard( $event, 'true', false, $source );
-			$title    = esc_attr( $event->{$source . '_label'} );
-			$hcard    = wp_kses(
+			$hcard     = mc_hcard( $location, 'true', false, $source );
+			$title     = esc_attr( $location->{$source . '_label'} );
+			$hcard     = wp_kses(
 				str_replace(
 					array( '</div>', '<br />', '<br><br>' ),
 					'<br>',
@@ -879,15 +881,19 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 					'strong' => array(),
 				)
 			);
-			$html     = apply_filters( 'mc_map_html', $hcard, $event );
-			$width    = apply_filters( 'mc_map_height', '100%', $event );
-			$height   = apply_filters( 'mc_map_height', '300px', $event );
-			$styles   = " style='width: $width;height: $height'";
-			$markers .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
+			$html      = apply_filters( 'mc_map_html', $hcard, $location );
+			$width     = apply_filters( 'mc_map_height', '100%', $location );
+			$height    = apply_filters( 'mc_map_height', '300px', $location );
+			$styles    = " style='width: $width;height: $height'";
+			$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
+			$loc_list .= ( $multiple ) ? '<div class="mc-location-details">' . $hcard . '</div>' : '';
 		}
 	}
 
-	return "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
+	$map  = "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
+	$locs = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2>' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
+
+	return '<div class="mc-maps">' . $map . $locs . '</div>';
 }
 
 /**
