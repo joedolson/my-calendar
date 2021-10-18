@@ -40,7 +40,7 @@ function my_calendar_behaviors_edit() {
 	}
 	$mc_show_js = get_option( 'mc_show_js' );
 	?>
-	<form id="my-calendar" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
+	<form id="my-calendar" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-scripts">
 		<div>
 			<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 		</div>
