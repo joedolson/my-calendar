@@ -272,20 +272,24 @@ function mc_templates_edit() {
 		<?php
 		echo wp_kses_post( mc_template_description( $key ) );
 		$mc_id       = mc_get_template_tag_preview( false, 'int' );
-		$view_url    = mc_get_details_link( $mc_id );
-		$tag_preview = add_query_arg(
-			array(
-				'iframe'   => 'true',
-				'showtags' => 'true',
-				'template' => $key,
-				'mc_id'    => $mc_id,
-			),
-			$view_url
-		);
-		?>
+		if ( $mc_id ) {
+			$view_url    = mc_get_details_link( $mc_id );
+			$tag_preview = add_query_arg(
+				array(
+					'iframe'   => 'true',
+					'showtags' => 'true',
+					'template' => $key,
+					'mc_id'    => $mc_id,
+				),
+				$view_url
+			);
+			?>
 				<div class="mc-template-preview">
 					<iframe onload="resizeIframe(this)" title="<?php _e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
 				</div>
+			<?php
+		}
+		?>
 			</div>
 		</div>
 	</div>
@@ -299,10 +303,10 @@ function mc_templates_edit() {
  * @param int|bool $mc_id Event occurrence id.
  * @param string   $return Type of data to return.
  *
- * @return array
+ * @return array|int
  */
 function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
-	$event = false;
+	$event = ( 'array' === $return ) ? array() : 0;
 	if ( ! isset( $_GET['mc-event'] ) && ! $mc_id ) {
 		$args   = array(
 			'before' => 1,
@@ -334,8 +338,10 @@ function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
  * @return string
  */
 function mc_display_template_preview( $template, $mc_id = false ) {
-	$event  = false;
 	$data   = mc_get_template_tag_preview( $mc_id );
+	if ( empty( $data ) ) {
+		return '';
+	}
 	$temp   = mc_get_template( $template );
 	$output = mc_draw_template( $data, $temp );
 	$output = html_entity_decode( $output );
