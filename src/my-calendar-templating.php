@@ -302,6 +302,7 @@ function mc_templates_edit() {
  * @return array
  */
 function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
+	$event = false;
 	if ( ! isset( $_GET['mc-event'] ) && ! $mc_id ) {
 		$args   = array(
 			'before' => 1,
