@@ -75,8 +75,8 @@ function mc_default_location() {
 		if ( ! $location ) {
 			return '';
 		}
-		$output   = mc_hcard( $location, 'true', false, 'location' );
-		$output  .= '<p><a href="' . admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$default" ) . '">' . __( 'Edit Default Location', 'my-calendar' ) . '</a></p>';
+		$output  = mc_hcard( $location, 'true', false, 'location' );
+		$output .= '<p><a href="' . admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$default" ) . '">' . __( 'Edit Default Location', 'my-calendar' ) . '</a></p>';
 	}
 	if ( ! $output ) {
 		$output = '<p>' . __( 'No default location selected.', 'my-calendar' ) . '</p>';

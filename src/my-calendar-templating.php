@@ -271,7 +271,7 @@ function mc_templates_edit() {
 				<div class="template-preview mc-inside">
 		<?php
 		echo wp_kses_post( mc_template_description( $key ) );
-		$mc_id       = mc_get_template_tag_preview( false, 'int' );
+		$mc_id = mc_get_template_tag_preview( false, 'int' );
 		if ( $mc_id ) {
 			$view_url    = mc_get_details_link( $mc_id );
 			$tag_preview = add_query_arg(
@@ -338,7 +338,7 @@ function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
  * @return string
  */
 function mc_display_template_preview( $template, $mc_id = false ) {
-	$data   = mc_get_template_tag_preview( $mc_id );
+	$data = mc_get_template_tag_preview( $mc_id );
 	if ( empty( $data ) ) {
 		return '';
 	}
