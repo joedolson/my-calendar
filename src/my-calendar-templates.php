@@ -180,6 +180,10 @@ function mc_clean_location( $event, $source = 'event' ) {
  */
 function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	$map_string = mc_map_string( $event, $source );
+	// If the string is empty, then exit.
+	if ( '' === $map_string ) {
+		return '';
+	}
 	if ( 'event' === $source ) {
 		if ( 'gcal' === $request ) {
 			return $map_string;
