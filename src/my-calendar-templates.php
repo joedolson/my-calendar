@@ -267,6 +267,9 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
  * @return string hcard
  */
 function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' ) {
+	if ( ! is_object( $event ) ) {
+		return '';
+	}
 	$the_map = mc_maplink( $event, 'url', $source );
 	$event   = mc_clean_location( $event, $source );
 	$url     = ( 'event' === $source ) ? $event->event_url : $event->location_url;

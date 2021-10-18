@@ -72,6 +72,9 @@ function mc_default_location() {
 	$output  = '';
 	if ( $default ) {
 		$location = mc_get_location( $default );
+		if ( ! $location ) {
+			return '';
+		}
 		$output   = mc_hcard( $location, 'true', false, 'location' );
 		$output  .= '<p><a href="' . admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$default" ) . '">' . __( 'Edit Default Location', 'my-calendar' ) . '</a></p>';
 	}
