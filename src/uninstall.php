@@ -13,6 +13,19 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 } else {
 
+	/**
+	 * Delete all custom templates.
+	 */
+	function mc_delete_templates() {
+		global $wpdb;
+		$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
+		foreach ( $results as $result ) {
+			$key = str_replace( 'mc_ctemplate_', '', $result->option_name );
+			delete_option( "mc_template_desc_$key" );
+			delete_option( "mc_ctemplate_$key" );
+		}
+	}
+
 	if ( get_option( 'mc_drop_settings' ) === 'true' ) {
 		delete_option( 'mc_can_manage_events' );
 		delete_option( 'mc_style' );
@@ -143,6 +156,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	}
 	if ( get_option( 'mc_drop_settings' ) === 'true' ) {
 		delete_option( 'mc_drop_tables' );
+		delete_option( 'mc_drop_settings' );
 	}
 
 	add_option( 'mc_uninstalled', 'true' );

@@ -535,7 +535,7 @@
 }
 
 /* List View */
-.mc-main .mc-list li, #mc-day {
+.mc-main .mc-list li, .mc-day {
 	position: relative;
 }
 

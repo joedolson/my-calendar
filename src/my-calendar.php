@@ -63,7 +63,9 @@ function mc_plugin_activated() {
 		exit;
 	}
 	mc_posttypes();
+	mc_taxonomies();
 	flush_rewrite_rules();
+
 	if ( my_calendar_exists() ) {
 		mc_upgrade_db();
 	}
@@ -71,11 +73,52 @@ function mc_plugin_activated() {
 	my_calendar_check();
 }
 
+register_uninstall_hook( __FILE__, 'mc_uninstall' );
+
 /**
  * Actions to execute on plugin deactivation.
  */
 function mc_plugin_deactivated() {
 	flush_rewrite_rules();
+}
+
+/**
+ * Bulk delete posts.
+ *
+ * @param string $type Post type.
+ */
+function mc_delete_posts( $type ) {
+	$posts = get_posts(
+		array(
+			'post_type'   => $type,
+			'numberposts' => -1,
+		)
+	);
+	foreach ( $posts as $post ) {
+		wp_delete_post( $post->ID, true );
+	}
+}
+
+/**
+ * Uninstall function for removing terms and posts.
+ */
+function mc_uninstall() {
+	wp_mail( 'joe@joedolson.com', 'Before deleting Data', 'test of content' );
+	if ( get_option( 'mc_drop_tables' ) === 'true' ) {
+		wp_mail( 'joe@joedolson.com', 'Deleting Data', 'test of content' );
+		mc_delete_posts( 'mc-events' );
+		mc_delete_posts( 'mc-locations' );
+		$terms = get_terms(
+			'mc-event-category',
+			array(
+				'fields'     => 'ids',
+				'hide_empty' => false,
+			)
+		);
+		foreach ( $terms as $term ) {
+			wp_delete_term( $term, 'mc-event-category' );
+		}
+	}
 }
 
 include( dirname( __FILE__ ) . '/includes/date-utilities.php' );

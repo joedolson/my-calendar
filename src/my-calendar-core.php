@@ -2322,12 +2322,6 @@ add_action( 'admin_notices', 'mc_update_notice' );
  * Admin notices
  */
 function mc_update_notice() {
-	// Deprecate this notice when 2.3 no longer in upgrade cycles.
-	if ( current_user_can( 'activate_plugins' ) && '0' === get_option( 'mc_update_notice' ) || ! get_option( 'mc_update_notice' ) ) {
-		$dismiss = admin_url( 'admin.php?page=my-calendar-behaviors&dismiss=update' );
-		// Translators: URL to scripts manager.
-		echo "<div class='updated'><p>" . sprintf( __( "<strong>Update notice:</strong> if you use custom JS with My Calendar, you need to activate your custom scripts following this update. <a href='%s'>Dismiss Notice</a>", 'my-calendar' ), $dismiss ) . '</p></div>';
-	}
 	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
 		if ( 'true' === get_option( 'mc_remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' );

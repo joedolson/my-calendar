@@ -344,6 +344,7 @@ function mc_check_imports() {
 
 	echo $output;
 }
+
 /**
  * Transition event categories to category relationships
  *
