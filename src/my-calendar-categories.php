@@ -760,6 +760,7 @@ function mc_manage_categories() {
 				echo ( '1' === (string) $co ) ? wp_kses_post( '<a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-categories&amp;co=2' ) ) . '">' . __( 'Category Name', 'my-calendar' ) . '</a>' ) : __( 'Category Name', 'my-calendar' );
 				?>
 			</th>
+			<th scope="col"><?php _e( 'Events', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Private', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Icon', 'my-calendar' ); ?></th>
 			<th scope="col"><?php _e( 'Color', 'my-calendar' ); ?></th>
@@ -780,8 +781,8 @@ function mc_manage_categories() {
 			<?php
 			$category_event_url = add_query_arg( 'filter', $cat->category_id, admin_url( 'admin.php?page=my-calendar-manage&restrict=category&view=list&limit=all' ) );
 			$count              = mc_get_category_count( $cat->category_id );
-			$count              = ( $count ) ? ' (' . $count . ')' : '';
-			echo ( ! $count ) ? esc_html( $cat_name ) : wp_kses_post( '<a href="' . esc_url( $category_event_url ) . '">' . $cat_name . $count . '</a>' );
+			$count              = ( $count ) ? '<a href="' . esc_url( $category_event_url ) . '">' . $count . '</a>' : '0';
+			echo esc_html( $cat_name );
 			// Translators: Name of category being edited.
 			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			// Translators: Category name.
@@ -814,6 +815,7 @@ function mc_manage_categories() {
 					?>
 				</div>
 			</td>
+			<td><?php echo wp_kses_post( $count ); ?></td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 			<td><?php echo ( $icon ) ? $icon . wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 			<td style="background-color:<?php echo esc_attr( $background ); ?>;color: <?php echo esc_attr( $foreground ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : ''; ?></td>
