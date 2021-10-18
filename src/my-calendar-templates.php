@@ -101,6 +101,9 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
  * @return stringified address info
  */
 function mc_map_string( $event, $source = 'event' ) {
+	if ( ! is_object( $event ) ) {
+		return '';
+	}
 	$event = mc_clean_location( $event, $source );
 	if ( 'event' === $source ) {
 		$map_string = $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode . ' ' . $event->event_country;
