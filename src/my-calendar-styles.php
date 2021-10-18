@@ -57,7 +57,7 @@ function my_calendar_style_edit() {
 			$styles           = mc_default_style();
 			$wrote_old_styles = mc_write_styles( $stylefile, $styles );
 			if ( $wrote_old_styles ) {
-				$message .= '<p>' . __( 'Stylesheet reset to default.', 'my-calendar' ) . '</p>';
+				$message .= '<p>' . __( 'Stylesheet updated to match core version.', 'my-calendar' ) . '</p>';
 			}
 		}
 
@@ -122,13 +122,13 @@ function my_calendar_style_edit() {
 		<fieldset style="position:relative;">
 			<legend><?php _e( 'CSS Style Options', 'my-calendar' ); ?></legend>
 			<p>
-				<label for="mc_show_css"><?php _e( 'Apply CSS on these pages (comma separated IDs)', 'my-calendar' ); ?></label>
-				<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" />
+				<label for="mc_show_css"><?php _e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label>
+				<input type="text" id="mc_show_css" name="mc_show_css" placeholder="Post IDs: 3,19,27" value="<?php echo esc_attr( $mc_show_css ); ?>" />
 			</p>
 			<p>
-				<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php _e( 'Reset to default', 'my-calendar' ); ?></label>
+				<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php _e( 'Update stylesheet to match core version', 'my-calendar' ); ?></label>
 				<input type="checkbox" id="use_styles" name="use_styles" <?php mc_is_checked( 'mc_use_styles', 'true' ); ?> />
-				<label for="use_styles"><?php _e( 'Disable My Calendar Stylesheet', 'my-calendar' ); ?></label>
+				<label for="use_styles"><?php _e( 'Use your own styles', 'my-calendar' ); ?></label>
 			</p>
 			<?php
 			if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {
@@ -198,8 +198,6 @@ function my_calendar_style_edit() {
 			?>
 			</div>
 			<?php
-		} else {
-			echo wp_kses_post( '<div class="wrap my-calendar-admin"><p>' . __( 'Your stylesheet matches that included with My Calendar.', 'my-calendar' ) . '</p></div>' );
 		}
 	}
 	?>
