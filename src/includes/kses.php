@@ -176,7 +176,7 @@ function mc_kses_elements() {
 			'id'    => array(),
 			'title' => array(),
 		),
-		'path'   => array(
+		'path'     => array(
 			'd'    => array(),
 			'fill' => array(),
 		),

@@ -499,14 +499,14 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category' ), $current ); ?> /> <label for="mc_shc"><?php _e( 'Holiday', 'my-calendar' ); ?></label>
 							</li>
 							</ul>
-							<?php
-						echo apply_filters( 'mc_category_fields', '', $cur_cat );
-						if ( 'add' === $view ) {
-							$save_text = __( 'Add Category', 'my-calendar' );
-						} else {
-							$save_text = __( 'Save Changes', 'my-calendar' );
-						}
-						?>
+								<?php
+								echo apply_filters( 'mc_category_fields', '', $cur_cat );
+								if ( 'add' === $view ) {
+									$save_text = __( 'Add Category', 'my-calendar' );
+								} else {
+									$save_text = __( 'Save Changes', 'my-calendar' );
+								}
+								?>
 							<p>
 								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
 							</p>

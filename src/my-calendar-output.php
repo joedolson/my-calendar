@@ -194,10 +194,13 @@ function mc_generate_category_icon( $source ) {
 	return $image;
 }
 
-add_filter( 'safe_style_css', function( $styles ) {
-	$styles[] = 'fill';
-	return $styles;
-} );
+add_filter(
+	'safe_style_css',
+	function( $styles ) {
+		$styles[] = 'fill';
+		return $styles;
+	}
+);
 
 /**
  * Get SVG icon by filename.
@@ -1892,14 +1895,14 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 /**
  * Get the days of the week for calendar layout.
  *
- * @param array $param Calendar parameters.
+ * @param array $params Calendar parameters.
  * @param int   $start_of_week First day of this week.
  *
  * @return array
  */
 function mc_get_week_days( $params, $start_of_week ) {
-	$name_days     = mc_name_days( $params['format'] );
-	$abbrevs       = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
+	$name_days = mc_name_days( $params['format'] );
+	$abbrevs   = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
 	if ( 1 === (int) $start_of_week ) {
 		$first       = array_shift( $name_days );
 		$afirst      = array_shift( $abbrevs );
@@ -1908,7 +1911,7 @@ function mc_get_week_days( $params, $start_of_week ) {
 	}
 	return array(
 		'name_days' => $name_days,
-		'abbrevs' => $abbrevs,
+		'abbrevs'   => $abbrevs,
 	);
 }
 
@@ -1988,8 +1991,6 @@ function my_calendar( $args ) {
 		$to    = apply_filters( 'mc_to_date', $dates['to'] );
 		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $from;
 		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $to;
-
-
 		$query = array(
 			'from'     => $from,
 			'to'       => $to,
