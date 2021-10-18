@@ -470,11 +470,12 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								<input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="<?php echo ( '#' !== $color ) ? esc_attr( $color ) : ''; ?>"/>
 							</p>
 							<input type='hidden' name='category_icon' id="mc_category_icon" value='<?php echo esc_attr( $icon ); ?>' />
-							<p>
-							<label for="cat_icon"><?php _e( 'Category Icon', 'my-calendar' ); ?></label>
-							<div class="mc-autocomplete autocomplete" id="mc-icons-autocomplete">
-								<input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
-								<ul class="autocomplete-result-list"></ul>
+							<div class="category-icon-selector">
+								<label for="cat_icon"><?php _e( 'Category Icon', 'my-calendar' ); ?></label>
+								<div class="mc-autocomplete autocomplete" id="mc-icons-autocomplete">
+									<input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
+									<ul class="autocomplete-result-list"></ul>
+								</div>
 							</div>
 							<?php
 							if ( 'add' === $view ) {
@@ -488,17 +489,19 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 							}
 							$current = ( 'add' === $view ) ? false : $cur_cat->category_id;
 							?>
-							<ul class='checkboxes'>
-							<li>
-								<input type="checkbox" value="on" name="category_private" id="cat_private"<?php checked( $private_checked, true ); ?> /> <label for="cat_private"><?php _e( 'Private (logged-in users only)', 'my-calendar' ); ?></label>
-							</li>
-							<li>
-								<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( get_option( 'mc_default_category' ), $current ); ?> /> <label for="mc_default_category"><?php _e( 'Default', 'my-calendar' ); ?></label>
-							</li>
-							<li>
-								<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category' ), $current ); ?> /> <label for="mc_shc"><?php _e( 'Holiday', 'my-calendar' ); ?></label>
-							</li>
-							</ul>
+							<fieldset>
+								<legend class="screen-reader-text"><?php esc_html_e( 'Category Meta', 'my-calendar' ); ?></legend>
+								<ul class='checkboxes'>
+								<li>
+									<input type="checkbox" value="on" name="category_private" id="cat_private"<?php checked( $private_checked, true ); ?> /> <label for="cat_private"><?php _e( 'Private (logged-in users only)', 'my-calendar' ); ?></label>
+								</li>
+								<li>
+									<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( get_option( 'mc_default_category' ), $current ); ?> /> <label for="mc_default_category"><?php _e( 'Default', 'my-calendar' ); ?></label>
+								</li>
+								<li>
+									<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category' ), $current ); ?> /> <label for="mc_shc"><?php _e( 'Holiday', 'my-calendar' ); ?></label>
+								</li>
+								</ul>
 								<?php
 								echo apply_filters( 'mc_category_fields', '', $cur_cat );
 								if ( 'add' === $view ) {
@@ -507,6 +510,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 									$save_text = __( 'Save Changes', 'my-calendar' );
 								}
 								?>
+							</fieldset>
 							<p>
 								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
 							</p>
@@ -515,11 +519,6 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 					</div>
 				</div>
 			</div>
-			<?php if ( 'edit' === $view ) { ?>
-				<p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-categories' ) ); ?>"><?php _e( 'Add a New Category', 'my-calendar' ); ?> &raquo;</a>
-				</p>
-			<?php } ?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
 					<h2><?php _e( 'Category List', 'my-calendar' ); ?></h2>
@@ -817,7 +816,7 @@ function mc_manage_categories() {
 			</td>
 			<td><?php echo wp_kses_post( $count ); ?></td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
-			<td><?php echo ( $icon ) ? $icon . wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
+			<td><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 			<td style="background-color:<?php echo esc_attr( $background ); ?>;color: <?php echo esc_attr( $foreground ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : ''; ?></td>
 		</tr>
 			<?php

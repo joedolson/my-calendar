@@ -881,11 +881,16 @@ input[name="mc_uri"] {
 	column-gap: 50px;
 }
 
+.category-icon-selector,
 .mc-primary-category {
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: .5em;
 	align-items: center;
+}
+
+.category-icon-selector {
+	margin-bottom: 1em;
 }
 
 .mc-primary-category option {
