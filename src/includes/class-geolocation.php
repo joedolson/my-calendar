@@ -43,7 +43,7 @@ class Geolocation {
 			$key   = sanitize_text_field( $key );
 			$url   = add_query_arg( $key, $value, $url );
 		}
-		$api_key = ( '' !== get_option( 'mc_gmap_api_key' ) ) ? get_option( 'mc_gmap_api_key' ) : false;
+		$api_key = ( '' !== get_option( 'mc_gmap_api_key', '' ) ) ? get_option( 'mc_gmap_api_key' ) : false;
 		if ( ! $api_key ) {
 			return '';
 		}
