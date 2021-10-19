@@ -500,8 +500,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
 		if ( $update_location ) {
-			$latitude  = ( (float) 0 ) === $location->location_latitude;
-			$longitude = ( (float) 0 ) === $location->location_longitude;
+			$latitude  = ( ( (float) 0 ) === $location->location_latitude ) ? false : true;
+			$longitude = ( ( (float) 0 ) === $location->location_longitude ) ? false : true;
 			if ( ! $latitude || ! $longitude ) {
 				$loc = mc_get_location_coordinates( $location_id );
 				$lat = $loc['latitude'];
