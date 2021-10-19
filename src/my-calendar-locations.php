@@ -186,12 +186,12 @@ function mc_get_location_post( $location_id, $type = true ) {
  */
 function mc_update_location( $field, $data, $location ) {
 	global $wpdb;
-	$field  = sanitize_key( $field );
-	$type   = '%d';
+	$field = sanitize_key( $field );
 	if ( 'location_latitude' === $field || 'location_longitude' === $field ) {
-		$type = '%f';
+		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %f WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	} else {
+		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	}
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = $type WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 	return $result;
 }
@@ -500,8 +500,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
 		if ( $update_location ) {
-			$latitude                = ( (float) 0 ) === $location->location_latitude;
-			$longitude               = ( (float) 0 ) === $location->location_longitude;
+			$latitude  = ( (float) 0 ) === $location->location_latitude;
+			$longitude = ( (float) 0 ) === $location->location_longitude;
 			if ( ! $latitude || ! $longitude ) {
 				$loc = mc_get_location_coordinates( $location_id );
 				$lat = $loc['latitude'];
@@ -555,7 +555,7 @@ function mc_get_location_coordinates( $location_id ) {
 	$zip      = $location->location_postcode;
 	$country  = $location->location_country;
 
-	$coordinates = Geolocation::getCoordinates( $street, $street2, $city, $zip, $country );
+	$coordinates = Geolocation::get_coordinates( $street, $street2, $city, $zip, $country );
 
 	return $coordinates;
 }

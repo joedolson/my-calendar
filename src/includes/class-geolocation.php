@@ -28,16 +28,16 @@ class Geolocation {
 	/**
 	 * Do call
 	 *
-	 * @param  array  $parameters
+	 * @param array $parameters Query array.
 	 *
 	 * @return object
 	 */
-	protected static function doCall( $parameters = array() ) {
+	protected static function call( $parameters = array() ) {
 
-		// define url
+		// define url.
 		$url = self::API_URL;
 
-		// add every parameter to the url
+		// add every parameter to the url.
 		foreach ( $parameters as $key => $value ) {
 			$value = sanitize_text_field( urlencode( $value ) );
 			$key   = sanitize_text_field( $key );
@@ -47,67 +47,67 @@ class Geolocation {
 		if ( ! $api_key ) {
 			return '';
 		}
-		$url     = add_query_arg( 'key', sanitize_text_field( $api_key ), $url );
-
+		$url      = add_query_arg( 'key', sanitize_text_field( $api_key ), $url );
 		$response = wp_remote_get( $url );
 		$data     = $response['body'];
 
-		// redefine response as json decoded
+		// redefine response as json decoded.
 		$response = json_decode( $data );
 
-		// return the content
+		// return the content.
 		return $response->results;
 	}
 
 	/**
 	 * Get address using latitude/longitude
 	 *
-	 * @return array(label, components)
-	 * @param  float        $latitude
-	 * @param  float        $longitude
+	 * @param float $latitude Latitude.
+	 * @param float $longitude Longitude.
+	 *
+	 * @return array (label, components)
 	 */
-	public static function getAddress( $latitude, $longitude ) {
-		$addressSuggestions = self::getAddresses( $latitude, $longitude );
+	public static function get_address( $latitude, $longitude ) {
+		$address_suggestions = self::get_addresses( $latitude, $longitude );
 
-		return $addressSuggestions[0];
+		return $address_suggestions[0];
 	}
 
 	/**
 	 * Get possible addresses using latitude/longitude
 	 *
-	 * @param  float        $latitude
-	 * @param  float        $longitude
+	 * @param float $latitude Latitude.
+	 * @param float $longitude Longitude.
 	 *
 	 * @return array(label, street, streetNumber, city, cityLocal, zip, country, countryLabel)
 	 */
-	public static function getAddresses( $latitude, $longitude ) {
+	public static function get_addresses( $latitude, $longitude ) {
 		// init results.
 		$addresses = array();
 
 		// define result.
-		$addressSuggestions = self::doCall(
+		$address_suggestions = self::call(
 			array(
 				'latlng' => $latitude . ',' . $longitude,
 				'sensor' => 'false',
 			)
 		);
 
-		// loop addresses
-		foreach ( $addressSuggestions as $key => $addressSuggestion ) {
+		// loop addresses.
+		foreach ( $address_suggestions as $key => $address_suggestion ) {
 			// init address.
 			$address = array();
 
 			// define label.
-			$address['label'] = isset( $addressSuggestion->formatted_address ) ?
-				$addressSuggestion->formatted_address : null;
+			$address['label'] = isset( $address_suggestion->formatted_address ) ?
+				$address_suggestion->formatted_address : null;
 
 			// define address components by looping all address components.
-			foreach ( $addressSuggestion->address_components as $component ) {
-				$type = $component->types[0];
+			foreach ( $address_suggestion->address_components as $component ) {
+				$type                           = $component->types[0];
 				$address['components'][ $type ] = array(
 					'long_name'  => $component->long_name,
 					'short_name' => $component->short_name,
-					'types'      => $component->types
+					'types'      => $component->types,
 				);
 			}
 
@@ -120,15 +120,15 @@ class Geolocation {
 	/**
 	 * Get coordinates latitude/longitude
 	 *
-	 * @param  string $street
-	 * @param  string $street_number
-	 * @param  string $city
-	 * @param  string $zip
-	 * @param  string $country
+	 * @param  string $street Street address.
+	 * @param  string $street_number Additional street address.
+	 * @param  string $city City.
+	 * @param  string $zip Zip.
+	 * @param  string $country Country.
 	 *
 	 * @return array  The latitude/longitude coordinates
 	 */
-	public static function getCoordinates(
+	public static function get_coordinates(
 		$street = null,
 		$street_number = null,
 		$city = null,
@@ -162,18 +162,18 @@ class Geolocation {
 		// define value.
 		$address = implode( ' ', $item );
 
-		// define result
-		$results = self::doCall(
+		// define result.
+		$results = self::call(
 			array(
 				'address' => $address,
 				'sensor'  => 'false',
 			)
 		);
 
-		// return coordinates latitude/longitude
+		// return coordinates latitude/longitude.
 		return array(
 			'latitude'  => array_key_exists( 0, $results ) ? (float) $results[0]->geometry->location->lat : null,
-			'longitude' => array_key_exists( 0, $results ) ? (float) $results[0]->geometry->location->lng : null
+			'longitude' => array_key_exists( 0, $results ) ? (float) $results[0]->geometry->location->lng : null,
 		);
 	}
 }
