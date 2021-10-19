@@ -1061,7 +1061,7 @@ function mc_admin_bar() {
 		$wp_admin_bar->add_node( $args );
 	}
 	if ( current_user_can( 'mc_edit_locations' ) && current_user_can( 'mc_add_events' ) ) {
-		$url  = admin_url( 'admin.php?page=my-calendar-locations' );
+		$url  = admin_url( 'admin.php?page=my-calendar-location-manager' );
 		$args = array(
 			'id'     => 'mc-manage-locations',
 			'title'  => __( 'Locations', 'my-calendar' ),
