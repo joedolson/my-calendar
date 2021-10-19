@@ -145,6 +145,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_count_cache' );
 		delete_option( 'mc_default_location' );
 		delete_option( 'mc_gmap_api_key' );
+		delete_option( 'mc_locations_transitioned' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
@@ -155,6 +156,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_categories' );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_category_relationships' );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_locations' );
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_location_relationships' );
 	}
 	if ( get_option( 'mc_drop_settings' ) === 'true' ) {
 		delete_option( 'mc_drop_tables' );

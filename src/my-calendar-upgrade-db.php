@@ -83,5 +83,6 @@ function mc_upgrade_db() {
 	dbDelta( $initial_cat_db );
 	dbDelta( $initial_rel_db );
 	dbDelta( $initial_loc_db );
+	dbDelta( $initial_loc_rel_db );
 	update_option( 'mc_db_version', $mc_version );
 }

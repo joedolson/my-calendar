@@ -65,11 +65,7 @@ function mc_plugin_activated() {
 	mc_posttypes();
 	mc_taxonomies();
 	flush_rewrite_rules();
-
-	if ( my_calendar_exists() ) {
-		mc_upgrade_db();
-	}
-
+	mc_upgrade_db();
 	my_calendar_check();
 }
 

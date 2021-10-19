@@ -163,16 +163,20 @@ function mc_get_location_post( $location_id, $type = true ) {
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-
-	$post_ID = false;
-	$post    = false;
-	$query   = $mcdb->prepare( "SELECT post_id FROM $wpdb->postmeta where meta_key ='_mc_location_id' and meta_value = %d", $location_id );
-	$posts   = $mcdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	if ( isset( $posts[0] ) ) {
-		$post_ID = $posts[0];
+	$post_id = $mcdb->get_var( $mcdb->prepare( 'SELECT post_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( ! $post_id ) {
+		// Copy location into relationships table.
+		$post_id = false;
+		$post    = false;
+		$query   = $mcdb->prepare( "SELECT post_id FROM $wpdb->postmeta where meta_key ='_mc_location_id' and meta_value = %d", $location_id );
+		$posts   = $mcdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( isset( $posts[0] ) ) {
+			$post_id = $posts[0];
+		}
+		mc_transition_location( $location_id, $post_id );
 	}
 
-	return ( $type ) ? get_post( $post_ID ) : $post_ID;
+	return ( $type ) ? get_post( $post_id ) : $post_id;
 }
 
 /**
@@ -500,8 +504,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
 		if ( $update_location ) {
-			$latitude  = ( ( (float) 0 ) === $location->location_latitude ) ? false : true;
-			$longitude = ( ( (float) 0 ) === $location->location_longitude ) ? false : true;
+			$latitude  = ( '0.000000' === (string) $location->location_latitude ) ? false : true;
+			$longitude = ( '0.000000' === (string) $location->location_longitude ) ? false : true;
 			if ( ! $latitude || ! $longitude ) {
 				$loc = mc_get_location_coordinates( $location_id );
 				$lat = $loc['latitude'];

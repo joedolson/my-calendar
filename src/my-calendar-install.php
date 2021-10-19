@@ -143,6 +143,14 @@ function mc_globals() {
  PRIMARY KEY  (category_id)
  ) $charset_collate;";
 
+	$initial_loc_rel_db = 'CREATE TABLE ' . my_calendar_location_relationships_table() . " (
+ relationship_id INT(11) NOT NULL AUTO_INCREMENT,
+ location_id INT(11) NOT NULL,
+ post_id INT(11) NOT NULL DEFAULT '1',
+ PRIMARY KEY  (relationship_id),
+ KEY location_id (location_id)
+ ) $charset_collate;";
+
 	$initial_rel_db = 'CREATE TABLE ' . my_calendar_category_relationships_table() . " (
  relationship_id INT(11) NOT NULL AUTO_INCREMENT,
  event_id INT(11) NOT NULL,
@@ -172,15 +180,16 @@ function mc_globals() {
  ) $charset_collate;";
 
 	$globals = array(
-		'initial_db'       => $initial_db,
-		'initial_occur_db' => $initial_occur_db,
-		'initial_rel_db'   => $initial_rel_db,
-		'initial_loc_db'   => $initial_loc_db,
-		'initial_cat_db'   => $initial_cat_db,
-		'grid_template'    => addslashes( $grid_template ),
-		'list_template'    => addslashes( $grid_template ),
-		'mini_template'    => addslashes( $grid_template ),
-		'single_template'  => addslashes( $single_template ),
+		'initial_db'         => $initial_db,
+		'initial_occur_db'   => $initial_occur_db,
+		'initial_rel_db'     => $initial_rel_db,
+		'initial_loc_db'     => $initial_loc_db,
+		'initial_loc_rel_db' => $initial_loc_rel_db,
+		'initial_cat_db'     => $initial_cat_db,
+		'grid_template'      => addslashes( $grid_template ),
+		'list_template'      => addslashes( $grid_template ),
+		'mini_template'      => addslashes( $grid_template ),
+		'single_template'    => addslashes( $single_template ),
 	);
 
 	return $globals;
@@ -263,6 +272,7 @@ function mc_default_settings() {
 	dbDelta( $initial_cat_db );
 	dbDelta( $initial_rel_db );
 	dbDelta( $initial_loc_db );
+	dbDelta( $initial_loc_rel_db );
 }
 
 /**
@@ -362,6 +372,29 @@ function mc_transition_categories() {
 			array(
 				'event_id'    => $event_id,
 				'category_id' => $category,
+			),
+			array( '%d', '%d' )
+		);
+	}
+}
+
+/**
+ * Transition location relationships into own table.
+ *
+ * @param int $location_id Location ID from location table.
+ * @param int $location_post Post ID from posts table.
+ *
+ * @since 3.3.0
+ */
+function mc_transition_location( $location_id, $location_post ) {
+	global $wpdb;
+
+	if ( $location_post ) {
+		$insert = $wpdb->insert(
+			my_calendar_location_relationships_table(),
+			array(
+				'location_id' => $location_id,
+				'post_id'     => $location_post,
 			),
 			array( '%d', '%d' )
 		);

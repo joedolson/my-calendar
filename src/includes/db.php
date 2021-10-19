@@ -58,6 +58,17 @@ function my_calendar_category_relationships_table( $site = false ) {
 }
 
 /**
+ * My Calendar location relationships table
+ *
+ * @param mixed int/boolean $site Site ID in multisite.
+ *
+ * @return string table name
+ */
+function my_calendar_location_relationships_table( $site = false ) {
+	return my_calendar_select_table( 'my_calendar_location_relationships', $site );
+}
+
+/**
  * My Calendar locations table
  *
  * @param mixed int/boolean $site Site ID in multisite.
