@@ -187,7 +187,11 @@ function mc_get_location_post( $location_id, $type = true ) {
 function mc_update_location( $field, $data, $location ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	$type   = '%d';
+	if ( 'location_latitude' === $field || 'location_longitude' === $field ) {
+		$type = '%f';
+	}
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = $type WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 	return $result;
 }
@@ -391,7 +395,6 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 	?>
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
-
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
 					<h2><?php _e( 'Location Editor', 'my-calendar' ); ?></h2>
@@ -481,11 +484,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 /**
  * Get details about one location.
  *
- * @param int $location_id Location ID.
+ * @param int  $location_id Location ID.
+ * @param bool $update_location Whether to update location on fetch.
  *
  * @return object location
  */
-function mc_get_location( $location_id ) {
+function mc_get_location( $location_id, $update_location = true ) {
 	global $wpdb;
 	$mcdb = $wpdb;
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
@@ -495,6 +499,18 @@ function mc_get_location( $location_id ) {
 	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
+		if ( $update_location ) {
+			$latitude                = ( (float) 0 ) === $location->location_latitude;
+			$longitude               = ( (float) 0 ) === $location->location_longitude;
+			if ( ! $latitude || ! $longitude ) {
+				$loc = mc_get_location_coordinates( $location_id );
+				$lat = $loc['latitude'];
+				$lng = $loc['longitude'];
+
+				mc_update_location( 'location_longitude', $lng, $location_id );
+				mc_update_location( 'location_latitude', $lat, $location_id );
+			}
+		}
 	}
 
 	return $location;
@@ -519,6 +535,29 @@ function mc_controlled_field( $this_field ) {
 	} else {
 		return false;
 	}
+}
+
+/**
+ * Geolocate latitude and longitude of location.
+ *
+ * @param int $location_id Location ID.
+ *
+ * @return array
+ */
+function mc_get_location_coordinates( $location_id ) {
+	require_once( 'includes/class-geolocation.php' );
+
+	new Geolocation;
+	$location = mc_get_location( $location_id, false );
+	$street   = $location->location_street;
+	$street2  = $location->location_street2;
+	$city     = $location->location_city;
+	$zip      = $location->location_postcode;
+	$country  = $location->location_country;
+
+	$coordinates = Geolocation::getCoordinates( $street, $street2, $city, $zip, $country );
+
+	return $coordinates;
 }
 
 /**
