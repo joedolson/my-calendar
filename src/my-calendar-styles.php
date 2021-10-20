@@ -123,7 +123,7 @@ function my_calendar_style_edit() {
 			<legend><?php _e( 'CSS Style Options', 'my-calendar' ); ?></legend>
 			<p>
 				<label for="mc_show_css"><?php _e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label>
-				<input type="text" id="mc_show_css" name="mc_show_css" placeholder="Post IDs: 3,19,27" value="<?php echo esc_attr( $mc_show_css ); ?>" />
+				<input type="text" id="mc_show_css" name="mc_show_css" placeholder="3,19,27" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" /> <span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
 			</p>
 			<p>
 				<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php _e( 'Update stylesheet to match core version', 'my-calendar' ); ?></label>
