@@ -428,6 +428,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 			$output .= '<div class="mc-output mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		}
 	}
+	$output_uncommon = '';
 	if ( '' !== $oddball ) {
 		$output_uncommon = '<h3>' . __( 'Uncommon Template Tags', 'my-calendar' ) . '</h3><div class="mc-template-cards">' . $oddball . '</div>';
 	}

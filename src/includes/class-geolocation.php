@@ -49,6 +49,9 @@ class Geolocation {
 		}
 		$url      = add_query_arg( 'key', sanitize_text_field( $api_key ), $url );
 		$response = wp_remote_get( $url );
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
 		$data     = $response['body'];
 
 		// redefine response as json decoded.
@@ -91,6 +94,9 @@ class Geolocation {
 				'sensor' => 'false',
 			)
 		);
+		if ( ! $address_suggestions ) {
+			return $addresses;
+		}
 
 		// loop addresses.
 		foreach ( $address_suggestions as $key => $address_suggestion ) {
@@ -169,7 +175,9 @@ class Geolocation {
 				'sensor'  => 'false',
 			)
 		);
-
+		if ( ! $results ) {
+			return array();
+		}
 		// return coordinates latitude/longitude.
 		return array(
 			'latitude'  => array_key_exists( 0, $results ) ? (float) $results[0]->geometry->location->lat : null,

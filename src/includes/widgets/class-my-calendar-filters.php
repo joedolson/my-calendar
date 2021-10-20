@@ -50,13 +50,13 @@ class My_Calendar_Filters extends WP_Widget {
 		$after_widget  = $args['after_widget'];
 		$before_title  = $args['before_title'];
 		$after_title   = $args['after_title'];
-		$widget_title = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
-		$widget_title = apply_filters( 'widget_title', $widget_title, $instance, $args );
-		$widget_title = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
-		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : mc_get_uri();
-		$ltype        = ( isset( $instance['ltype'] ) ) ? $instance['ltype'] : false;
-		$show         = ( isset( $instance['show'] ) ) ? $instance['show'] : array();
-		$show         = implode( ',', $show );
+		$widget_title  = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
+		$widget_title  = apply_filters( 'widget_title', $widget_title, $instance, $args );
+		$widget_title  = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
+		$widget_url    = ( isset( $instance['url'] ) ) ? $instance['url'] : mc_get_uri();
+		$ltype         = ( isset( $instance['ltype'] ) ) ? $instance['ltype'] : false;
+		$show          = ( isset( $instance['show'] ) ) ? $instance['show'] : array();
+		$show          = implode( ',', $show );
 
 		$output = $before_widget . $widget_title . mc_filters( $show, $widget_url, $ltype ) . $after_widget;
 		echo wp_kses( $output, mc_kses_elements() );
