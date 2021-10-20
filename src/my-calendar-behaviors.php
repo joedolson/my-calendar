@@ -14,13 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Edit or configure scripts used with My Calendar
+ * Save changes to script configuration.
  */
-function my_calendar_behaviors_edit() {
-	if ( ! current_user_can( 'mc_edit_behaviors' ) ) {
-		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize scripts on this site.', 'my-calendar' ) . '</p>' );
-		return;
-	}
+function my_calendar_behaviors_save() {
 	if ( isset( $_POST['mc-js-save'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -36,6 +32,21 @@ function my_calendar_behaviors_edit() {
 
 		$mc_show_js = ( '' === $_POST['mc_show_js'] ) ? '' : $_POST['mc_show_js'];
 		update_option( 'mc_show_js', $mc_show_js );
+
+		wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&scriptaction=saved#my-calendar-scripts' ) ) );
+	}
+}
+add_action( 'admin_init', 'my_calendar_behaviors_save' );
+
+/**
+ * Edit or configure scripts used with My Calendar
+ */
+function my_calendar_behaviors_edit() {
+	if ( ! current_user_can( 'mc_edit_behaviors' ) ) {
+		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize scripts on this site.', 'my-calendar' ) . '</p>' );
+		return;
+	}
+	if ( isset( $_GET['scriptaction'] ) && 'saved' === $_GET['scriptaction'] ) {
 		mc_show_notice( __( 'Behavior Settings saved', 'my-calendar' ) );
 	}
 	$mc_show_js = get_option( 'mc_show_js' );

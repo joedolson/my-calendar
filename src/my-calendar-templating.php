@@ -634,20 +634,22 @@ add_action(
 			return;
 		}
 
-		// Enqueue code editor and settings for manipulating HTML.
-		$settings = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
+		if ( isset( $_GET['mc_template'] ) ) {
+			// Enqueue code editor and settings for manipulating HTML.
+			$settings = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
 
-		// Bail if user disabled CodeMirror.
-		if ( false === $settings ) {
-			return;
+			// Bail if user disabled CodeMirror.
+			if ( false === $settings ) {
+				return;
+			}
+
+			wp_add_inline_script(
+				'code-editor',
+				sprintf(
+					'jQuery( function() { wp.codeEditor.initialize( "mc_template", %s ); } );',
+					wp_json_encode( $settings )
+				)
+			);
 		}
-
-		wp_add_inline_script(
-			'code-editor',
-			sprintf(
-				'jQuery( function() { wp.codeEditor.initialize( "mc_template", %s ); } );',
-				wp_json_encode( $settings )
-			)
-		);
 	}
 );
