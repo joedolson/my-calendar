@@ -50,15 +50,16 @@ class My_Calendar_Filters extends WP_Widget {
 		$after_widget  = $args['after_widget'];
 		$before_title  = $args['before_title'];
 		$after_title   = $args['after_title'];
-
-		$widget_title = apply_filters( 'widget_title', $instance['title'], $instance, $args );
+		$widget_title = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
+		$widget_title = apply_filters( 'widget_title', $widget_title, $instance, $args );
 		$widget_title = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : mc_get_uri();
 		$ltype        = ( isset( $instance['ltype'] ) ) ? $instance['ltype'] : false;
 		$show         = ( isset( $instance['show'] ) ) ? $instance['show'] : array();
-		$show         = implode( $show, ',' );
+		$show         = implode( ',', $show );
 
-		echo wp_kses( $before_widget . $widget_title . mc_filters( $show, $widget_url, $ltype ) . $after_widget, mc_kses_elements() );
+		$output = $before_widget . $widget_title . mc_filters( $show, $widget_url, $ltype ) . $after_widget;
+		echo wp_kses( $output, mc_kses_elements() );
 	}
 
 	/**
@@ -71,7 +72,6 @@ class My_Calendar_Filters extends WP_Widget {
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : mc_get_uri();
 		$ltype        = ( isset( $instance['ltype'] ) ) ? $instance['ltype'] : false;
 		$show         = ( isset( $instance['show'] ) ) ? $instance['show'] : array();
-
 		?>
 		<div class="my-calendar-widget-wrapper my-calendar-filters-widget">
 		<p>
@@ -120,10 +120,11 @@ class My_Calendar_Filters extends WP_Widget {
 	 * @return $instance Updated instance.
 	 */
 	function update( $new, $instance ) {
-		$instance['title'] = mc_kses_post( $new['title'] );
+		$instance['title'] = esc_html( $new['title'] );
 		$instance['url']   = esc_url_raw( $new['url'] );
-		$instance['ltype'] = sanitize_title( $new['ltype'] );
-		$instance['show']  = array_map( 'sanitize_title', (array) $new['show'] );
+		$instance['ltype'] = sanitize_text_field( $new['ltype'] );
+		$show              = ( isset( $new['show'] ) ) ? (array) $new['show'] : array();
+		$instance['show']  = array_map( 'sanitize_text_field', $show );
 
 		return $instance;
 	}

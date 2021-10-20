@@ -3049,12 +3049,13 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
 	}
 	foreach ( $qsa as $name => $argument ) {
 		$name     = esc_attr( strip_tags( $name ) );
-		$argument = ( ! is_string( $argument ) ) ? (string) $argument : $argument;
-		$argument = esc_attr( strip_tags( $argument ) );
-		if ( ! ( 'access' === $name || 'mcat' === $name || 'loc' === $name || 'ltype' === $name || 'mc_id' === $name ) ) {
+		if ( ! ( 'access' === $name || 'mcat' === $name || 'loc' === $name || 'ltype' === $name || 'mc_id' === $name || 'legacy-widget-preview' === $name ) ) {
+			$argument = ( ! is_string( $argument ) ) ? (string) $argument : $argument;
+			$argument = esc_attr( strip_tags( $argument ) );
 			$form .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
 		}
 	}
+	$key = __( 'Choose Filters', 'my-calendar' );
 	foreach ( $fields as $show ) {
 		$show = trim( $show );
 		switch ( $show ) {
