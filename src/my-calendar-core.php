@@ -1937,7 +1937,7 @@ $plugins_string
 				<input type='submit' value='<?php _e( 'Send Support Request', 'my-calendar' ); ?>' name='mc_support' class='button-primary' />
 			</p>
 			<p><?php _e( 'The following additional information will be sent with your support request:', 'my-calendar' ); ?></p>
-			<div class="mc_support"><?php wp_kses_post( wpautop( $data ) ); ?></div>
+			<div class="mc_support"><?php echo wp_kses_post( wpautop( $data ) ); ?></div>
 			</div>
 		</form>
 		<?php
