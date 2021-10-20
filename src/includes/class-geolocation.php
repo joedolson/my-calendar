@@ -52,7 +52,7 @@ class Geolocation {
 		if ( is_wp_error( $response ) ) {
 			return false;
 		}
-		$data     = $response['body'];
+		$data = $response['body'];
 
 		// redefine response as json decoded.
 		$response = json_decode( $data );
