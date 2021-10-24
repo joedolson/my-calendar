@@ -293,7 +293,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell support">
-						<h2 class='sales'><strong><?php _e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
+						<h2 class='sales'><strong><?php esc_html_e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
 
 						<div class="inside resources">
 							<p class="mcbuy">
@@ -311,7 +311,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox sell my-tickets">
-						<h2 class='sales'><strong><?php _e( 'My Tickets', 'my-calendar' ); ?></strong></h2>
+						<h2 class='sales'><strong><?php esc_html_e( 'My Tickets', 'my-calendar' ); ?></strong></h2>
 
 						<div class="inside resources">
 							<p class="mcbuy">
@@ -330,7 +330,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox support">
-					<h2><strong><?php _e( 'Support This Plugin', 'my-calendar' ); ?></strong></h2>
+					<h2><strong><?php esc_html_e( 'Support This Plugin', 'my-calendar' ); ?></strong></h2>
 
 					<div class="inside resources">
 						<p class="follow-me">
@@ -351,7 +351,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 							<p class="mcd">
 								<input type="hidden" name="cmd" value="_s-xclick" />
 								<input type="hidden" name="hosted_button_id" value="UZBQUG2LKKMRW" />
-								<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" alt="<?php _e( 'Make a Donation', 'my-calendar' ); ?>" />
+								<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" alt="<?php esc_attr_e( 'Make a Donation', 'my-calendar' ); ?>" />
 							</p>
 						</form>
 					</div>
@@ -363,7 +363,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
-				<h2><?php _e( 'Get Help', 'my-calendar' ); ?></h2>
+				<h2><?php esc_html_e( 'Get Help', 'my-calendar' ); ?></h2>
 
 				<div class="inside">
 					<?php echo mc_get_help_footer(); ?>

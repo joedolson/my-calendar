@@ -394,12 +394,12 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 		?>
 		<div class="mc-generator-inputs">
 		<fieldset>
-			<legend><?php _e( 'Content Filters', 'my-calendar' ); ?></legend>
+			<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>
 			<fieldset>
-				<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?></legend>
 				<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
 					<li>
-						<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
+						<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
 					</li>
 					<?php
 					$select = mc_category_select( $category, true, true, 'category[]', 'category_' . $type );
@@ -408,19 +408,19 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</ul>
 			</fieldset>
 			<p>
-				<label for="ltype"><?php _e( 'Location filter type:', 'my-calendar' ); ?></label>
+				<label for="ltype"><?php esc_html_e( 'Location filter type:', 'my-calendar' ); ?></label>
 				<select name="ltype" id="ltype">
-					<option value=''><?php _e( 'All locations', 'my-calendar' ); ?></option>
-					<option value='event_label'<?php selected( $ltype, 'event_label' ); ?>><?php _e( 'Location Name', 'my-calendar' ); ?></option>
-					<option value='event_city'<?php selected( $ltype, 'event_city' ); ?>><?php _e( 'City', 'my-calendar' ); ?></option>
-					<option value='event_state'<?php selected( $ltype, 'event_state' ); ?>><?php _e( 'State', 'my-calendar' ); ?></option>
-					<option value='event_postcode'<?php selected( $ltype, 'event_postcode' ); ?>><?php _e( 'Postal Code', 'my-calendar' ); ?></option>
-					<option value='event_country'<?php selected( $ltype, 'event_country' ); ?>><?php _e( 'Country', 'my-calendar' ); ?></option>
-					<option value='event_region'<?php selected( $ltype, 'event_region' ); ?>><?php _e( 'Region', 'my-calendar' ); ?></option>
+					<option value=''><?php esc_html_e( 'All locations', 'my-calendar' ); ?></option>
+					<option value='event_label'<?php selected( $ltype, 'event_label' ); ?>><?php esc_html_e( 'Location Name', 'my-calendar' ); ?></option>
+					<option value='event_city'<?php selected( $ltype, 'event_city' ); ?>><?php esc_html_e( 'City', 'my-calendar' ); ?></option>
+					<option value='event_state'<?php selected( $ltype, 'event_state' ); ?>><?php esc_html_e( 'State', 'my-calendar' ); ?></option>
+					<option value='event_postcode'<?php selected( $ltype, 'event_postcode' ); ?>><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></option>
+					<option value='event_country'<?php selected( $ltype, 'event_country' ); ?>><?php esc_html_e( 'Country', 'my-calendar' ); ?></option>
+					<option value='event_region'<?php selected( $ltype, 'event_region' ); ?>><?php esc_html_e( 'Region', 'my-calendar' ); ?></option>
 				</select>
 			</p>
 			<p>
-				<label for="lvalue" id='lval'><?php _e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
+				<label for="lvalue" id='lval'><?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
 				<input type="text" name="lvalue" id="lvalue" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' <?php echo esc_attr( $disabled ); ?> />
 			</p>
 
@@ -428,7 +428,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				<?php _e( 'If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
 			</p>
 			<p>
-				<label for="search" id='sterm'><?php _e( 'Search keyword', 'my-calendar' ); ?></label>
+				<label for="search" id='sterm'><?php esc_html_e( 'Search keyword', 'my-calendar' ); ?></label>
 				<input type="text" name="search" id="sterm" aria-describedby="search-info" value="<?php echo esc_attr( $search ); ?>" /><br/>
 			</p>
 			<p id='search-info'>
@@ -439,7 +439,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			if ( 'main' === $type ) {
 				?>
 		<fieldset>
-				<legend><?php _e( 'Navigation', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'Navigation', 'my-calendar' ); ?></legend>
 				<p id='navigation-info'>
 					<?php
 					// Translators: Settings page URL.
@@ -448,11 +448,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					?>
 				</p>
 				<p>
-					<label for="above" id='labove'><?php _e( 'Navigation above calendar', 'my-calendar' ); ?></label>
+					<label for="above" id='labove'><?php esc_html_e( 'Navigation above calendar', 'my-calendar' ); ?></label>
 					<input type="text" name="above" id="above" placeholder="nav,toggle,jump,print,timeframe" aria-labelledby='labove navigation-info' value="<?php echo esc_attr( $above ); ?>" /><br/>
 				</p>
 				<p>
-					<label for="below" id='lbelow'><?php _e( 'Navigation below calendar', 'my-calendar' ); ?></label>
+					<label for="below" id='lbelow'><?php esc_html_e( 'Navigation below calendar', 'my-calendar' ); ?></label>
 					<input type="text" name="below" id="below" placeholder="key,feeds" aria-labelledby='lbelow navigation-info' value="<?php echo esc_attr( $below ); ?>" /><br/>
 				</p>
 		</fieldset>
@@ -460,37 +460,37 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			}
 			?>
 		<fieldset>
-			<legend><?php _e( 'Formatting & Timeframe', 'my-calendar' ); ?></legend>
+			<legend><?php esc_html_e( 'Formatting & Timeframe', 'my-calendar' ); ?></legend>
 			<?php
 			// Main shortcode only.
 			if ( 'main' === $type ) {
 				?>
 				<p>
-					<label for="format"><?php _e( 'Format', 'my-calendar' ); ?></label>
+					<label for="format"><?php esc_html_e( 'Format', 'my-calendar' ); ?></label>
 					<select name="format" id="format">
-						<option value=""><?php _e( 'Default', 'my-calendar' ); ?></option>
-						<option value="calendar"<?php selected( 'calendar', $format ); ?>><?php _e( 'Grid', 'my-calendar' ); ?></option>
-						<option value='list'<?php selected( 'list', $format ); ?>><?php _e( 'List', 'my-calendar' ); ?></option>
-						<option value="mini"<?php selected( 'mini', $format ); ?>><?php _e( 'Mini', 'my-calendar' ); ?></option>
+						<option value=""><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
+						<option value="calendar"<?php selected( 'calendar', $format ); ?>><?php esc_html_e( 'Grid', 'my-calendar' ); ?></option>
+						<option value='list'<?php selected( 'list', $format ); ?>><?php esc_html_e( 'List', 'my-calendar' ); ?></option>
+						<option value="mini"<?php selected( 'mini', $format ); ?>><?php esc_html_e( 'Mini', 'my-calendar' ); ?></option>
 					</select>
 				</p>
 				<p>
-					<label for="time"><?php _e( 'Time Segment', 'my-calendar' ); ?></label>
+					<label for="time"><?php esc_html_e( 'Time Segment', 'my-calendar' ); ?></label>
 					<select name="time" id="time">
-						<option value=""><?php _e( 'Default', 'my-calendar' ); ?></option>
-						<option value="month"<?php selected( 'month', $time ); ?>><?php _e( 'Month', 'my-calendar' ); ?></option>
-						<option value="month+1"<?php selected( 'month+1', $time ); ?>><?php _e( 'Next Month', 'my-calendar' ); ?></option>
-						<option value="week"<?php selected( 'week', $time ); ?>><?php _e( 'Week', 'my-calendar' ); ?></option>
-						<option value="day"<?php selected( 'day', $time ); ?>><?php _e( 'Day', 'my-calendar' ); ?></option>
+						<option value=""><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
+						<option value="month"<?php selected( 'month', $time ); ?>><?php esc_html_e( 'Month', 'my-calendar' ); ?></option>
+						<option value="month+1"<?php selected( 'month+1', $time ); ?>><?php esc_html_e( 'Next Month', 'my-calendar' ); ?></option>
+						<option value="week"<?php selected( 'week', $time ); ?>><?php esc_html_e( 'Week', 'my-calendar' ); ?></option>
+						<option value="day"<?php selected( 'day', $time ); ?>><?php esc_html_e( 'Day', 'my-calendar' ); ?></option>
 					</select>
 				</p>
 				<p>
-					<label for="months" id='lmonths'><?php _e( 'Months to show in list view', 'my-calendar' ); ?></label>
+					<label for="months" id='lmonths'><?php esc_html_e( 'Months to show in list view', 'my-calendar' ); ?></label>
 					<input type="number" min="1" max="12" step="1" name="months" id="lmonths" value="<?php echo esc_attr( $months ); ?>" /><br/>
 				</p>
 			</fieldset>
 			<fieldset>
-				<legend><?php _e( 'Author & Host Filters', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'Author & Host Filters', 'my-calendar' ); ?></legend>
 				<?php
 				// Grab authors and list them.
 				$users   = mc_get_users( 'authors' );
@@ -504,10 +504,10 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				}
 				?>
 				<p>
-					<label for="author"><?php _e( 'Limit by Author', 'my-calendar' ); ?></label>
+					<label for="author"><?php esc_html_e( 'Limit by Author', 'my-calendar' ); ?></label>
 					<select name="author[]" id="author" multiple="multiple">
-						<option value="all"><?php _e( 'All authors', 'my-calendar' ); ?></option>
-						<option value="current"><?php _e( 'Currently logged-in user', 'my-calendar' ); ?></option>
+						<option value="all"><?php esc_html_e( 'All authors', 'my-calendar' ); ?></option>
+						<option value="current"><?php esc_html_e( 'Currently logged-in user', 'my-calendar' ); ?></option>
 						<?php echo wp_kses( $options, mc_kses_elements() ); ?>
 					</select>
 				</p>
@@ -524,20 +524,20 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				}
 				?>
 				<p>
-					<label for="host"><?php _e( 'Limit by Host', 'my-calendar' ); ?></label>
+					<label for="host"><?php esc_html_e( 'Limit by Host', 'my-calendar' ); ?></label>
 					<select name="host[]" id="host" multiple="multiple">
-						<option value="all"><?php _e( 'All hosts', 'my-calendar' ); ?></option>
-						<option value="current"><?php _e( 'Currently logged-in user', 'my-calendar' ); ?></option>
+						<option value="all"><?php esc_html_e( 'All hosts', 'my-calendar' ); ?></option>
+						<option value="current"><?php esc_html_e( 'Currently logged-in user', 'my-calendar' ); ?></option>
 						<?php echo wp_kses( $options, mc_kses_elements() ); ?>
 					</select>
 				</p>
 			</fieldset>
 			<fieldset>
-				<legend><?php _e( 'Initial Date Shown', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'Initial Date Shown', 'my-calendar' ); ?></legend>
 				<p>
-					<label for="year"><?php _e( 'Year', 'my-calendar' ); ?></label>
+					<label for="year"><?php esc_html_e( 'Year', 'my-calendar' ); ?></label>
 					<select name="year" id="year">
-						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
+						<option value=''><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
 						<?php
 						global $wpdb;
 						$mcdb = $wpdb;
@@ -571,9 +571,9 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					</select>
 				</p>
 				<p>
-					<label for="month"><?php _e( 'Month', 'my-calendar' ); ?></label>
+					<label for="month"><?php esc_html_e( 'Month', 'my-calendar' ); ?></label>
 					<select name="month" id="month">
-						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
+						<option value=''><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
 						<?php
 						$list_months = '';
 						for ( $i = 1; $i <= 12; $i ++ ) {
@@ -584,9 +584,9 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					</select>
 				</p>
 				<p>
-					<label for="day"><?php _e( 'Day', 'my-calendar' ); ?></label>
+					<label for="day"><?php esc_html_e( 'Day', 'my-calendar' ); ?></label>
 					<select name="day" id="day">
-						<option value=''><?php _e( 'Default', 'my-calendar' ); ?></option>
+						<option value=''><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
 						<?php
 						$days = '';
 						for ( $i = 1; $i <= 31; $i++ ) {
@@ -603,11 +603,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				// Upcoming Events & Today's Events shortcodes.
 				?>
 				<p>
-					<label for="fallback"><?php _e( 'Fallback Text', 'my-calendar' ); ?></label>
+					<label for="fallback"><?php esc_html_e( 'Fallback Text', 'my-calendar' ); ?></label>
 					<input type="text" name="fallback" id="fallback" value="" />
 				</p>
 				<p>
-					<label for="template"><?php _e( 'Template', 'my-calendar' ); ?></label>
+					<label for="template"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label>
 					<textarea cols="40" rows="4" name="template" id="template"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
 				</p>
 				<?php
@@ -616,60 +616,60 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				// Upcoming events only.
 				?>
 				<p>
-					<label for="before"><?php _e( 'Events/Days Before Current Day', 'my-calendar' ); ?></label>
+					<label for="before"><?php esc_html_e( 'Events/Days Before Current Day', 'my-calendar' ); ?></label>
 					<input type="number" name="before" id="before" value="" />
 				</p>
 				<p>
-					<label for="after"><?php _e( 'Events/Days After Current Day', 'my-calendar' ); ?></label>
+					<label for="after"><?php esc_html_e( 'Events/Days After Current Day', 'my-calendar' ); ?></label>
 					<input type="number" name="after" id="after" value="" />
 				</p>
 				<p>
-					<label for="skip"><?php _e( 'Events/Days to Skip', 'my-calendar' ); ?></label>
+					<label for="skip"><?php esc_html_e( 'Events/Days to Skip', 'my-calendar' ); ?></label>
 					<input type="number" name="skip" id="skip" value="" />
 				</p>
 				<p>
-					<label for="show_today"><?php _e( "Show Today's Events", 'my-calendar' ); ?></label>
+					<label for="show_today"><?php esc_html_e( "Show Today's Events", 'my-calendar' ); ?></label>
 					<input type="checkbox" name="show_today" id="show_today" value="yes"/>
 				</p>
 				<p>
-					<label for="show_recurring"><?php _e( 'Show only the first recurring event in a series', 'my-calendar' ); ?></label>
+					<label for="show_recurring"><?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?></label>
 					<input type="checkbox" name="show_recurring" id="show_recurring" value="no" />
 				</p>
 				<p>
-					<label for="type"><?php _e( 'Type of Upcoming Events List', 'my-calendar' ); ?></label>
+					<label for="type"><?php esc_html_e( 'Type of Upcoming Events List', 'my-calendar' ); ?></label>
 					<select name="type" id="type">
-						<option value="event" selected="selected"><?php _e( 'Events', 'my-calendar' ); ?></option>
-						<option value="year"><?php _e( 'Current Year', 'my-calendar' ); ?></option>
-						<option value="days"><?php _e( 'Days', 'my-calendar' ); ?></option>
-						<option value="custom"><?php _e( 'Custom Dates', 'my-calendar' ); ?></option>
-						<option value="month"><?php _e( 'Current Month', 'my-calendar' ); ?></option>
-						<option value="month+1"><?php _e( 'Next Month', 'my-calendar' ); ?></option>
-						<option value="month+2"><?php _e( '2nd Month Out', 'my-calendar' ); ?></option>
-						<option value="month+3"><?php _e( '3rd Month Out', 'my-calendar' ); ?></option>
-						<option value="month+4"><?php _e( '4th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+5"><?php _e( '5th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+6"><?php _e( '6th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+7"><?php _e( '7th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+8"><?php _e( '8th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+9"><?php _e( '9th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+10"><?php _e( '10th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+11"><?php _e( '11th Month Out', 'my-calendar' ); ?></option>
-						<option value="month+12"><?php _e( '12th Month Out', 'my-calendar' ); ?></option>
+						<option value="event" selected="selected"><?php esc_html_e( 'Events', 'my-calendar' ); ?></option>
+						<option value="year"><?php esc_html_e( 'Current Year', 'my-calendar' ); ?></option>
+						<option value="days"><?php esc_html_e( 'Days', 'my-calendar' ); ?></option>
+						<option value="custom"><?php esc_html_e( 'Custom Dates', 'my-calendar' ); ?></option>
+						<option value="month"><?php esc_html_e( 'Current Month', 'my-calendar' ); ?></option>
+						<option value="month+1"><?php esc_html_e( 'Next Month', 'my-calendar' ); ?></option>
+						<option value="month+2"><?php esc_html_e( '2nd Month Out', 'my-calendar' ); ?></option>
+						<option value="month+3"><?php esc_html_e( '3rd Month Out', 'my-calendar' ); ?></option>
+						<option value="month+4"><?php esc_html_e( '4th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+5"><?php esc_html_e( '5th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+6"><?php esc_html_e( '6th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+7"><?php esc_html_e( '7th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+8"><?php esc_html_e( '8th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+9"><?php esc_html_e( '9th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+10"><?php esc_html_e( '10th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+11"><?php esc_html_e( '11th Month Out', 'my-calendar' ); ?></option>
+						<option value="month+12"><?php esc_html_e( '12th Month Out', 'my-calendar' ); ?></option>
 					</select>
 				</p>
 				<div class='custom'>
 					<p>
-						<label for='from'><?php _e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='from' id='from' placeholder="YYYY-MM-DD" />
+						<label for='from'><?php esc_html_e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='from' id='from' placeholder="YYYY-MM-DD" />
 					</p>
 					<p>
-						<label for='to'><?php _e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='to' id='to' placeholder="YYYY-MM-DD" />
+						<label for='to'><?php esc_html_e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='to' id='to' placeholder="YYYY-MM-DD" />
 					</p>
 				</div>
 				<p>
-					<label for="order"><?php _e( 'Event Order', 'my-calendar' ); ?></label>
+					<label for="order"><?php esc_html_e( 'Event Order', 'my-calendar' ); ?></label>
 					<select name="order" id="order">
-						<option value="asc" selected="selected"><?php _e( 'Ascending', 'my-calendar' ); ?></option>
-						<option value="desc"><?php _e( 'Descending', 'my-calendar' ); ?></option>
+						<option value="asc" selected="selected"><?php esc_html_e( 'Ascending', 'my-calendar' ); ?></option>
+						<option value="desc"><?php esc_html_e( 'Descending', 'my-calendar' ); ?></option>
 					</select>
 				</p>
 				<?php

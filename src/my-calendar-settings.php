@@ -461,22 +461,22 @@ function my_calendar_settings() {
 
 	<div class="wrap my-calendar-admin mc-settings-page" id="mc_settings">
 	<?php my_calendar_check_db(); ?>
-	<h1><?php _e( 'My Calendar Settings', 'my-calendar' ); ?></h1>
+	<h1><?php esc_html_e( 'My Calendar Settings', 'my-calendar' ); ?></h1>
 	<div class="mc-tabs">
 		<div class="tabs" role="tablist" data-default="my-calendar-manage">
-			<button type="button" role="tab" aria-selected="false"  id="tab_manage" aria-controls="my-calendar-manage"><?php _e( 'General', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_text" aria-controls="my-calendar-text"><?php _e( 'Text', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_output" aria-controls="mc-output"><?php _e( 'Output', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_input" aria-controls="my-calendar-input"><?php _e( 'Input', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_manage" aria-controls="my-calendar-manage"><?php esc_html_e( 'General', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_text" aria-controls="my-calendar-text"><?php esc_html_e( 'Text', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_output" aria-controls="mc-output"><?php esc_html_e( 'Output', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_input" aria-controls="my-calendar-input"><?php esc_html_e( 'Input', 'my-calendar' ); ?></button>
 			<?php
 			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 				?>
-				<button type="button" role="tab" aria-selected="false"  id="tab_multi" aria-controls="my-calendar-multisite"><?php _e( 'Multisite', 'my-calendar' ); ?></button>
+				<button type="button" role="tab" aria-selected="false"  id="tab_multi" aria-controls="my-calendar-multisite"><?php esc_html_e( 'Multisite', 'my-calendar' ); ?></button>
 				<?php
 			}
 			?>
-			<button type="button" role="tab" aria-selected="false"  id="tab_permissions" aria-controls="my-calendar-permissions"><?php _e( 'Permissions', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" id="tab_email" aria-selected="false" aria-controls="my-calendar-email"><?php _e( 'Notifications', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_permissions" aria-controls="my-calendar-permissions"><?php esc_html_e( 'Permissions', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" id="tab_email" aria-selected="false" aria-controls="my-calendar-email"><?php esc_html_e( 'Notifications', 'my-calendar' ); ?></button>
 			<?php echo apply_filters( 'mc_settings_section_links', '' ); ?>
 		</div>
 		<div class="settings postbox-container jcd-wide">
@@ -511,7 +511,7 @@ function my_calendar_settings() {
 	?>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="wptab postbox" aria-labelledby="tab_manage" role="tabpanel" id="my-calendar-manage">
-			<h2><?php _e( 'My Calendar Management', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'My Calendar Management', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<?php
@@ -520,7 +520,7 @@ function my_calendar_settings() {
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<fieldset>
-							<legend class="screen-reader-text"><?php _e( 'Management', 'my-calendar' ); ?></legend>
+							<legend class="screen-reader-text"><?php esc_html_e( 'Management', 'my-calendar' ); ?></legend>
 							<ul>
 								<?php
 								$has_uri    = mc_get_uri( 'boolean' );
@@ -610,7 +610,7 @@ function my_calendar_settings() {
 								} else {
 									if ( get_option( 'mc_remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
 										?>
-										<li><?php _e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
+										<li><?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
 										<?php
 									}
 								}
@@ -618,13 +618,13 @@ function my_calendar_settings() {
 							</ul>
 						</fieldset>
 						<fieldset>
-							<legend><?php _e( 'Advanced', 'my-calendar' ); ?></legend>
+							<legend><?php esc_html_e( 'Advanced', 'my-calendar' ); ?></legend>
 							<ul>
 	<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
 									?>
-								<li><?php _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ); ?>
+								<li><?php wp_kses_post( _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ) ); ?>
 <pre>
 function mc_remote_db() {
 	$mcdb = new wpdb('DB_USER','DB_PASSWORD','DB_NAME','DB_ADDRESS');
@@ -661,15 +661,15 @@ function mc_remote_db() {
 							<input type="submit" name="mc_manage" class="button-primary" value="<?php _e( 'Save Management Settings', 'my-calendar' ); ?>"/>
 						</p>
 					</form>
-					<h3><?php _e( 'Settings on other screens', 'my-calendar' ); ?></h3>
+					<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
 					<?php
 						$current_location_slug = ( '' === get_option( 'mc_location_cpt_base', '' ) ) ? __( 'mc-locations', 'my-calendar' ) : get_option( 'mc_location_cpt_base' );
 						$current_event_slug    = ( '' === get_option( 'mc_cpt_base', '' ) ) ? __( 'mc-events', 'my-calendar' ) : get_option( 'mc_cpt_base' );
 					?>
 					<ul>
-						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-location-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>"><?php _e( 'Location permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-location-slug">(<?php echo $current_location_slug; ?>)</span></li>
-						<li><?php _e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>"><?php _e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
-						<li><?php _e( 'Options > General', 'my-calendar' ); ?>: <a href="<?php echo esc_url( admin_url( 'options-general.php#start_of_week' ) ); ?>"><?php _e( 'First day of the week', 'my-calendar' ); ?></a></li>
+						<li><?php esc_html_e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-location-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>"><?php esc_html_e( 'Location permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-location-slug">(<?php echo $current_location_slug; ?>)</span></li>
+						<li><?php esc_html_e( 'Options > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>"><?php esc_html_e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
+						<li><?php esc_html_e( 'Options > General', 'my-calendar' ); ?>: <a href="<?php echo esc_url( admin_url( 'options-general.php#start_of_week' ) ); ?>"><?php esc_html_e( 'First day of the week', 'my-calendar' ); ?></a></li>
 					</ul>
 					<?php
 				} else {
@@ -680,13 +680,13 @@ function mc_remote_db() {
 		</div>
 
 		<div class="wptab postbox initial-hidden" aria-labelledby="tab_text" role="tabpanel" id="my-calendar-text">
-			<h2><?php _e( 'Text Settings', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Text Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-text' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
-						<legend><?php _e( 'Templating', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Templating', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_title_template', __( 'Event title (Grid)', 'my-calendar' ), $mc_title_template, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
 							<li><?php mc_settings_field( 'mc_title_template_solo', __( 'Event title (Single)', 'my-calendar' ), $mc_title_template_solo, "<a href='" . admin_url( 'admin.php?page=my-calendar-templates#templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>' ); ?></li>
@@ -694,7 +694,7 @@ function mc_remote_db() {
 						</ul>
 					</fieldset>
 					<fieldset>
-						<legend><?php _e( 'Main Calendar View', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Main Calendar View', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_previous_events', __( 'Previous events link', 'my-calendar' ), __( 'Previous', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_next_events', __( 'Next events link', 'my-calendar' ), __( 'Next', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
@@ -716,7 +716,7 @@ function mc_remote_db() {
 						</ul>
 					</fieldset>
 					<fieldset>
-						<legend><?php _e( 'Single Event View', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Single Event View', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_notime_text', __( 'Label for all-day events', 'my-calendar' ), 'All Day' ); ?></li>
 							<li><?php mc_settings_field( 'mc_hosted_by', __( 'Hosted by', 'my-calendar' ), 'Hosted by' ); ?></li>
@@ -735,7 +735,7 @@ function mc_remote_db() {
 						</ul>
 					</fieldset>
 					<fieldset>
-						<legend><?php _e( 'Date/Time Formats', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Date/Time Formats', 'my-calendar' ); ?></legend>
 						<div><input type='hidden' name='mc_dates' value='true'/></div>
 						<ul>
 							<?php
@@ -764,7 +764,7 @@ function mc_remote_db() {
 		</div>
 
 		<div class="wptab postbox initial-hidden" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
-			<h2><?php _e( 'Output Settings', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Output Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>">
@@ -796,7 +796,7 @@ function mc_remote_db() {
 						</ul>
 
 					<fieldset>
-						<legend><?php _e( 'Re-order calendar layout', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Re-order calendar layout', 'my-calendar' ); ?></legend>
 						<?php
 						$topnav       = explode( ',', get_option( 'mc_topnav' ) );
 						$calendar     = array( 'calendar' );
@@ -867,12 +867,12 @@ function mc_remote_db() {
 						</ul>
 					</fieldset>
 					<fieldset id='calendar-output' class='mc-output-tabs'>
-						<legend><?php _e( 'Event Display Fields', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?></legend>
 						<div class="mc-tabs">
 							<div class="tabs" role="tablist" data-default="single-event-output">
-								<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php _e( 'Single Event', 'my-calendar' ); ?></button>
-								<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php _e( 'Main View (Popup or List)', 'my-calendar' ); ?></button>
-								<button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup"><?php _e( 'Mini Calendar Popup', 'my-calendar' ); ?></button>
+								<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php esc_html_e( 'Single Event', 'my-calendar' ); ?></button>
+								<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Main View (Popup or List)', 'my-calendar' ); ?></button>
+								<button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup"><?php esc_html_e( 'Mini Calendar Popup', 'my-calendar' ); ?></button>
 							</div>
 							<div role='tabpanel' aria-labelledby='tab_single_output' class='wptab' id='single-event-output'>
 								<p>
@@ -986,7 +986,7 @@ function mc_remote_db() {
 						</div>
 					</fieldset>
 					<fieldset>
-						<legend><?php _e( 'Grid Options', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Grid Options', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_show_weekends', __( 'Show Weekends on Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							<li>
@@ -1009,7 +1009,7 @@ function mc_remote_db() {
 					</fieldset>
 
 					<fieldset>
-						<legend><?php _e( 'List Options', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'List Options', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?></li>
 							<li><?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
@@ -1018,7 +1018,7 @@ function mc_remote_db() {
 					</fieldset>
 
 					<fieldset>
-						<legend><?php _e( 'Mini Calendar Options', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Mini Calendar Options', 'my-calendar' ); ?></legend>
 						<ul>
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target link for mini calendar dates', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
@@ -1054,13 +1054,13 @@ function mc_remote_db() {
 		</div>
 
 		<div class="wptab postbox initial-hidden" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
-			<h2><?php _e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
-						<legend><?php _e( 'Event editing fields to show', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Event editing fields to show', 'my-calendar' ); ?></legend>
 						<div><input type='hidden' name='mc_input' value='true'/></div>
 						<ul class="checkboxes">
 							<?php
@@ -1106,7 +1106,7 @@ function mc_remote_db() {
 						<input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Input Settings', 'my-calendar' ); ?>"/>
 					</p>
 				</form>
-				<h3><?php _e( 'Location Controls', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Location Controls', 'my-calendar' ); ?></h3>
 
 				<?php echo wp_kses( mc_location_controls(), mc_kses_elements() ); ?>
 			</div>
@@ -1116,40 +1116,40 @@ function mc_remote_db() {
 	if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 		?>
 		<div class="wptab postbox initial-hidden" aria-labelledby="tab_multi" role="tabpanel" id="my-calendar-multisite">
-			<h2><?php _e( 'Multisite Settings (Network Administrators only)', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Multisite Settings (Network Administrators only)', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<p><?php _e( 'The central calendar is the calendar associated with the primary site in your WordPress Multisite network.', 'my-calendar' ); ?></p>
+				<p><?php esc_html_e( 'The central calendar is the calendar associated with the primary site in your WordPress Multisite network.', 'my-calendar' ); ?></p>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-multisite' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 					<input type='hidden' name='mc_network' value='true'/>
 					<fieldset>
-						<legend><?php _e( 'Multisite configuration - input', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Multisite configuration - input', 'my-calendar' ); ?></legend>
 						<ul>
 							<li>
-								<input type="radio" value="0" id="ms0" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php _e( 'Site owners may only post to their local calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="0" id="ms0" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php esc_html_e( 'Site owners may only post to their local calendar', 'my-calendar' ); ?></label>
 							</li>
 							<li>
-								<input type="radio" value="1" id="ms1" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php _e( 'Site owners may only post to the central calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="1" id="ms1" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php esc_html_e( 'Site owners may only post to the central calendar', 'my-calendar' ); ?></label>
 							</li>
 							<li>
-								<input type="radio" value="2" id="ms2" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php _e( 'Site owners may manage either calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="2" id="ms2" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php esc_html_e( 'Site owners may manage either calendar', 'my-calendar' ); ?></label>
 							</li>
 						</ul>
 						<p>
-							<em><?php _e( 'Changes only effect input permissions. Public-facing calendars will be unchanged.', 'my-calendar' ); ?></em>
+							<em><?php esc_html_e( 'Changes only effect input permissions. Public-facing calendars will be unchanged.', 'my-calendar' ); ?></em>
 						</p>
 					</fieldset>
 					<fieldset>
-						<legend><?php _e( 'Multisite configuration - output', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Multisite configuration - output', 'my-calendar' ); ?></legend>
 						<ul>
 							<li>
 								<input type="radio" value="0" id="mss0" name="mc_multisite_show"<?php checked( get_site_option( 'mc_multisite_show' ), '0' ); ?> />
-								<label for="mss0"><?php _e( 'Sub-site calendars show events from their local calendar.', 'my-calendar' ); ?></label>
+								<label for="mss0"><?php esc_html_e( 'Sub-site calendars show events from their local calendar.', 'my-calendar' ); ?></label>
 							</li>
 							<li>
 								<input type="radio" value="1" id="mss1" name="mc_multisite_show"<?php checked( get_site_option( 'mc_multisite_show' ), '1' ); ?> />
-								<label for="mss1"><?php _e( 'Sub-site calendars show events from the central calendar.', 'my-calendar' ); ?></label>
+								<label for="mss1"><?php esc_html_e( 'Sub-site calendars show events from the central calendar.', 'my-calendar' ); ?></label>
 							</li>
 						</ul>
 					</fieldset>
@@ -1164,7 +1164,7 @@ function mc_remote_db() {
 	?>
 
 		<div class="wptab postbox initial-hidden" aria-labelledby="tab_permissions" role="tabpanel" id="my-calendar-permissions">
-			<h2><?php _e( 'My Calendar Permissions', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'My Calendar Permissions', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 	<?php
@@ -1223,13 +1223,13 @@ function mc_remote_db() {
 		</div>
 
 		<div class="wptab postbox initial-hidden" aria-labelledby="tab_email" role="tabpanel" id="my-calendar-email">
-			<h2><?php _e( 'Calendar Email Settings', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Calendar Email Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-email' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
-						<legend><?php _e( 'Email Notifications', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Email Notifications', 'my-calendar' ); ?></legend>
 						<div><input type='hidden' name='mc_email' value='true'/></div>
 						<ul>
 							<li><?php mc_settings_field( 'mc_event_mail', __( 'Send Email Notifications when new events are added.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>

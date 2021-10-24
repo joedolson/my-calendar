@@ -112,22 +112,22 @@ function mc_templates_edit() {
 			if ( 'add-new' === $key ) {
 				?>
 				<p>
-					<label for="mc_template_key"><?php _e( 'Template Description (required)', 'my-calendar' ); ?></label><br />
+					<label for="mc_template_key"><?php esc_html_e( 'Template Description (required)', 'my-calendar' ); ?></label><br />
 					<input type="text" class="widefat" name="mc_template_key" id="mc_template_key" value="" required />
 				</p>
 				<p>
-					<label for="mc_template"><?php _e( 'Custom Template', 'my-calendar' ); ?></label><br/>
+					<label for="mc_template"><?php esc_html_e( 'Custom Template', 'my-calendar' ); ?></label><br/>
 					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="16" cols="76"></textarea>
 				</p>
 				<p>
-					<input type="submit" name="save" class="button-primary" value="<?php _e( 'Add Template', 'my-calendar' ); ?>" /> <a class="button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-templates"><?php esc_html_e( 'Cancel', 'my-calendar' ); ?></a>
+					<input type="submit" name="save" class="button-primary" value="<?php esc_attr_e( 'Add Template', 'my-calendar' ); ?>" /> <a class="button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-templates"><?php esc_html_e( 'Cancel', 'my-calendar' ); ?></a>
 				</p>
 				<?php
 			} else {
 				if ( mc_is_core_template( $key ) ) {
 					?>
 				<p>
-					<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php checked( get_option( 'mc_use_' . $key . '_template' ), '1' ); ?> /> <label for="mc_use_template"><?php _e( 'Use this template', 'my-calendar' ); ?></label>
+					<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php checked( get_option( 'mc_use_' . $key . '_template' ), '1' ); ?> /> <label for="mc_use_template"><?php esc_html_e( 'Use this template', 'my-calendar' ); ?></label>
 				</p>
 					<?php
 				}
@@ -156,7 +156,7 @@ function mc_templates_edit() {
 	?>
 	<div class="ui-sortable meta-box-sortables" id="core-templates">
 		<div class="mc-postbox">
-			<h2><?php _e( 'Core Templates', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Core Templates', 'my-calendar' ); ?></h2>
 			<div class="mc-inside">
 			<?php
 			echo wp_kses( mc_list_core_templates( $key ), mc_kses_elements() );
@@ -166,7 +166,7 @@ function mc_templates_edit() {
 	</div>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="mc-postbox">
-			<h2><?php _e( 'Custom Templates', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Custom Templates', 'my-calendar' ); ?></h2>
 			<div class="mc-inside">
 			<?php
 			echo wp_kses( mc_list_custom_templates( $key ), mc_kses_elements() );
@@ -179,7 +179,7 @@ function mc_templates_edit() {
 		<div class="mc-postbox">
 			<h2>
 			<?php
-			_e( 'Event Template Tags', 'my-calendar' );
+			esc_html_e( 'Event Template Tags', 'my-calendar' );
 			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'My Calendar: Template Tags', 'my-calendar' ), 5 );
 			?>
 			</h2>
@@ -187,67 +187,67 @@ function mc_templates_edit() {
 			<div class='mc_template_tags mc-inside'>
 				<dl>
 					<dt><code>{title}</code></dt>
-					<dd><?php _e( 'Title of the event.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Title of the event.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{link_title}</code></dt>
-					<dd><?php _e( 'Title of the event as a link if a URL is present, or the title alone if not.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Title of the event as a link if a URL is present, or the title alone if not.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{time}</code></dt>
-					<dd><?php _e( 'Start time for the event.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Start time for the event.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{date}</code></dt>
-					<dd><?php _e( 'Date on which the event begins.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Date on which the event begins.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{daterange}</code></dt>
-					<dd><?php _e( 'Beginning date to end date; excludes end date if same as beginning.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Beginning date to end date; excludes end date if same as beginning.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{excerpt}</code></dt>
-					<dd><?php _e( 'Short event description.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Short event description.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{description}</code></dt>
-					<dd><?php _e( 'Description of the event.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Description of the event.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{image}</code></dt>
-					<dd><?php _e( 'Featured image with the event.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Featured image with the event.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{link}</code></dt>
-					<dd><?php _e( 'URL provided for the event.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'URL provided for the event.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{details}</code></dt>
-					<dd><?php _e( 'Link to a page containing information about the event.', 'my-calendar' ); ?>
+					<dd><?php esc_html_e( 'Link to a page containing information about the event.', 'my-calendar' ); ?>
 				</dl>
 
-				<h3><?php _e( 'Location Template Tags', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Location Template Tags', 'my-calendar' ); ?></h3>
 				<dl>
 					<dt><code>{location}</code></dt>
-					<dd><?php _e( 'Name of the location of the event.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Name of the location of the event.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{street}</code></dt>
-					<dd><?php _e( 'First line of the site address.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'First line of the site address.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{street2}</code></dt>
-					<dd><?php _e( 'Second line of the site address.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Second line of the site address.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{city}</code></dt>
-					<dd><?php _e( 'City', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'City', 'my-calendar' ); ?></dd>
 
 					<dt><code>{state}</code></dt>
-					<dd><?php _e( 'State', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'State', 'my-calendar' ); ?></dd>
 
 					<dt><code>{postcode}</code></dt>
-					<dd><?php _e( 'Postal Code', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></dd>
 
 					<dt><code>{country}</code></dt>
-					<dd><?php _e( 'Country for the event location.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Country for the event location.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{sitelink}</code></dt>
-					<dd><?php _e( 'Output the URL for the location.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Output the URL for the location.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{hcard}</code></dt>
-					<dd><?php _e( 'Event address in <a href="http://microformats.org/wiki/hcard">hcard</a> format.', 'my-calendar' ); ?></dd>
+					<dd><?php wp_kses_post( _e( 'Event address in <a href="http://microformats.org/wiki/hcard">hcard</a> format.', 'my-calendar' ) ); ?></dd>
 
 					<dt><code>{link_map}</code></dt>
-					<dd><?php _e( 'Link to Google Map to the event, if address information is available.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Link to Google Map to the event, if address information is available.', 'my-calendar' ); ?></dd>
 				</dl>
 			</div>
 		</div>
@@ -285,7 +285,7 @@ function mc_templates_edit() {
 			);
 			?>
 				<div class="mc-template-preview">
-					<iframe onload="resizeIframe(this)" title="<?php _e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
+					<iframe onload="resizeIframe(this)" title="<?php esc_attr_e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
 				</div>
 			<?php
 		}

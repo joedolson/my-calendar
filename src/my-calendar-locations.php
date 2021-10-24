@@ -387,12 +387,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 	$has_data = ( empty( $cur_loc ) ) ? false : true;
 	if ( 'add' === $view ) {
 		?>
-		<h1><?php _e( 'Add New Location', 'my-calendar' ); ?></h1>
+		<h1><?php esc_html_e( 'Add New Location', 'my-calendar' ); ?></h1>
 		<?php
 	} else {
 		?>
-		<h1 class="wp-heading-inline"><?php _e( 'Edit Location', 'my-calendar' ); ?></h1>
-		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<h1 class="wp-heading-inline"><?php esc_html_e( 'Edit Location', 'my-calendar' ); ?></h1>
+		<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 		<?php
 	}
@@ -401,7 +401,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 		<div class="metabox-holder">
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
-					<h2><?php _e( 'Location Editor', 'my-calendar' ); ?></h2>
+					<h2><?php esc_html_e( 'Location Editor', 'my-calendar' ); ?></h2>
 
 					<div class="inside location_form">
 					<?php
@@ -421,8 +421,8 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 									$delete_url = add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete' ) );
 									$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
 									?>
-								<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php _e( 'Delete', 'my-calendar' ); ?></a></li>
-								<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php _e( 'View', 'my-calendar' ); ?></a></li>
+								<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a></li>
+								<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php esc_html_e( 'View', 'my-calendar' ); ?></a></li>
 									<?php
 								}
 								?>
@@ -455,8 +455,8 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 										$delete_url = add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete' ) );
 										$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
 										?>
-									<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php _e( 'Delete', 'my-calendar' ); ?></a></li>
-									<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php _e( 'View', 'my-calendar' ); ?></a></li>
+									<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a></li>
+									<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php esc_html_e( 'View', 'my-calendar' ); ?></a></li>
 										<?php
 									}
 									?>
@@ -471,7 +471,7 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 			if ( 'edit' === $view ) {
 				?>
 				<p>
-					<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php _e( 'Add a New Location', 'my-calendar' ); ?></a>
+					<a href="<?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>"><?php esc_html_e( 'Add a New Location', 'my-calendar' ); ?></a>
 				</p>
 				<?php
 			}

@@ -38,14 +38,14 @@ function my_calendar_manage_locations() {
 		mc_show_notice( __( 'Default Location Changed', 'my-calendar' ) );
 	}
 	?>
-		<h1 class="wp-heading-inline"><?php _e( 'Manage Locations', 'my-calendar' ); ?></h1>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'my-calendar' ); ?></a>
+		<h1 class="wp-heading-inline"><?php esc_html_e( 'Manage Locations', 'my-calendar' ); ?></h1>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
-					<h2><?php _e( 'Manage Locations', 'my-calendar' ); ?></h2>
+					<h2><?php esc_html_e( 'Manage Locations', 'my-calendar' ); ?></h2>
 
 					<div class="inside">
 						<?php mc_manage_locations(); ?>
@@ -216,7 +216,7 @@ function mc_manage_locations() {
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				</div>
 				<div>
-					<label for="mc_search" class='screen-reader-text'><?php _e( 'Search', 'my-calendar' ); ?></label>
+					<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search', 'my-calendar' ); ?></label>
 					<input type='text' role='search' name='mcl' id='mc_search' value='<?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
 					<input type='submit' value='<?php _e( 'Search Locations', 'my-calendar' ); ?>' class='button-secondary' />
 				</div>
@@ -226,10 +226,10 @@ function mc_manage_locations() {
 		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 		<div class='mc-actions'>
 			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete locations', 'my-calendar' ); ?>" />
-			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php _e( 'Check all', 'my-calendar' ); ?></label></div>
+			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
 		</div>
 		<table class="widefat page" id="my-calendar-admin-table">
-			<caption class="screen-reader-text"><?php _e( 'Location list. Use column headers to sort.', 'my-calendar' ); ?></caption>
+			<caption class="screen-reader-text"><?php esc_html_e( 'Location list. Use column headers to sort.', 'my-calendar' ); ?></caption>
 			<thead>
 			<tr>
 				<?php
@@ -277,13 +277,13 @@ function mc_manage_locations() {
 							<?php
 							if ( esc_url( $view_url ) ) {
 								?>
-							<a href="<?php echo esc_url( $view_url ); ?>" class='view' aria-describedby='location<?php echo absint( $location->location_id ); ?>'><?php _e( 'View', 'my-calendar' ); ?></a> |
+							<a href="<?php echo esc_url( $view_url ); ?>" class='view' aria-describedby='location<?php echo absint( $location->location_id ); ?>'><?php esc_html_e( 'View', 'my-calendar' ); ?></a> |
 								<?php
 							}
 							?>
-							<a href="<?php echo esc_url( $edit_url ); ?>" class='edit' aria-describedby='location<?php echo absint( $location->location_id ); ?>'><?php _e( 'Edit', 'my-calendar' ); ?></a> |
+							<a href="<?php echo esc_url( $edit_url ); ?>" class='edit' aria-describedby='location<?php echo absint( $location->location_id ); ?>'><?php esc_html_e( 'Edit', 'my-calendar' ); ?></a> |
 							<?php echo $default; ?> | 
-							<a href="<?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='location<?php echo absint( $location->location_id ); ?>' onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php _e( 'Delete', 'my-calendar' ); ?></a>
+							<a href="<?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='location<?php echo absint( $location->location_id ); ?>' onclick="return confirm('<?php _e( 'Are you sure you want to delete this location?', 'my-calendar' ); ?>')"><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a>
 						</div>
 					</td>
 					<td><?php echo esc_html( $location->location_city ); ?></td>

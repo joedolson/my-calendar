@@ -51,7 +51,7 @@ function my_calendar_api() {
 			}
 			die;
 		} else {
-			_e( 'The My Calendar API is not enabled.', 'my-calendar' );
+			esc_html_e( 'The My Calendar API is not enabled.', 'my-calendar' );
 		}
 	}
 }

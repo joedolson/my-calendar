@@ -46,7 +46,7 @@ function my_calendar_print() {
 <head>
 <meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>" />
 <meta name="viewport" content="width=device-width" />
-<title><?php echo esc_html( get_bloginfo( 'name' ) ) . ' - ' . __( 'Calendar: Print View', 'my-calendar' ); ?></title>
+<title><?php echo esc_html( get_bloginfo( 'name' ) ) . ' - ' . esc_html__( 'Calendar: Print View', 'my-calendar' ); ?></title>
 <meta name="generator" content="My Calendar for WordPress" />
 <meta name="robots" content="noindex,nofollow" />
 <!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
@@ -93,7 +93,7 @@ function my_calendar_print() {
 	unset( $add['href'] );
 	$return_url = apply_filters( 'mc_return_to_calendar', mc_build_url( $add, array( 'feed', 'cid', 'href', 'searched' ), $return_url ), $add );
 	if ( $return_url ) {
-		echo wp_kses_post( "<p class='return'>&larr; <a href='" . esc_url( $return_url ) . "'>" . __( 'Return to calendar', 'my-calendar' ) . '</a></p>' );
+		echo wp_kses_post( "<p class='return'>&larr; <a href='" . esc_url( $return_url ) . "'>" . esc_html__( 'Return to calendar', 'my-calendar' ) . '</a></p>' );
 	}
 	?>
 </body>

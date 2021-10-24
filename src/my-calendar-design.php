@@ -20,19 +20,19 @@ function my_calendar_design() {
 	?>
 
 	<div class="wrap my-calendar-admin">
-	<h1><?php _e( 'Design', 'my-calendar' ); ?></h1>
+	<h1><?php esc_html_e( 'Design', 'my-calendar' ); ?></h1>
 	<div class="mc-tabs">
 		<div class="tabs" role="tablist" data-default="my-calendar-style">
-			<button type="button" role="tab" aria-selected="false"  id="tab_style" aria-controls="my-calendar-style"><?php _e( 'Style Editor', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_templates" aria-controls="my-calendar-templates"><?php _e( 'Templates', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_scripts" aria-controls="my-calendar-scripts"><?php _e( 'Scripts', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_style" aria-controls="my-calendar-style"><?php esc_html_e( 'Style Editor', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_templates" aria-controls="my-calendar-templates"><?php esc_html_e( 'Templates', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_scripts" aria-controls="my-calendar-scripts"><?php esc_html_e( 'Scripts', 'my-calendar' ); ?></button>
 		</div>
 	<div class="postbox-container jcd-wide">
 	<div class="metabox-holder">
 
 	<div class="ui-sortable meta-box-sortables" id="my-calendar-styles">
 		<div class="wptab postbox" aria-labelledby="tab_start" role="tabpanel" id="my-calendar-style">
-			<h2 id="styles"><?php _e( 'Style Editor', 'my-calendar' ); ?></h2>
+			<h2 id="styles"><?php esc_html_e( 'Style Editor', 'my-calendar' ); ?></h2>
 			<div class="inside">
 			<?php my_calendar_style_edit(); ?>
 			</div>
@@ -58,7 +58,7 @@ function my_calendar_design() {
 
 	<div class="ui-sortable meta-box-sortables" id="scripts">
 		<div class="wptab postbox" aria-labelledby="tab_scripts" role="tabpanel" id="my-calendar-scripts">
-			<h2><?php _e( 'Script Manager', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Script Manager', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 			<?php my_calendar_behaviors_edit(); ?>

@@ -20,20 +20,20 @@ function my_calendar_help() {
 	?>
 
 	<div class="wrap my-calendar-admin">
-	<h1><?php _e( 'How to use My Calendar', 'my-calendar' ); ?></h1>
+	<h1><?php esc_html_e( 'How to use My Calendar', 'my-calendar' ); ?></h1>
 	<div class="mc-tabs">
 		<div class="tabs" role="tablist" data-default="my-calendar-start">
-			<button type="button" role="tab" aria-selected="false"  id="tab_start" aria-controls="my-calendar-start"><?php _e( 'Getting Started', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_files" aria-controls="my-calendar-files"><?php _e( 'Custom Files', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_privacy" aria-controls="my-calendar-privacy"><?php _e( 'Privacy', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_support" aria-controls="my-calendar-support"><?php _e( 'Get Support', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_start" aria-controls="my-calendar-start"><?php esc_html_e( 'Getting Started', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_files" aria-controls="my-calendar-files"><?php esc_html_e( 'Custom Files', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_privacy" aria-controls="my-calendar-privacy"><?php esc_html_e( 'Privacy', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_support" aria-controls="my-calendar-support"><?php esc_html_e( 'Get Support', 'my-calendar' ); ?></button>
 		</div>
 	<div class="postbox-container jcd-wide">
 	<div class="metabox-holder">
 
 	<div class="ui-sortable meta-box-sortables" id="get-started">
 		<div class="wptab postbox" aria-labelledby="tab_start" role="tabpanel" id="my-calendar-start">
-			<h2 id="help"><?php _e( 'Getting Started', 'my-calendar' ); ?></h2>
+			<h2 id="help"><?php esc_html_e( 'Getting Started', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<ul class='list'>
@@ -50,21 +50,21 @@ function my_calendar_help() {
 					?>
 				</ul>
 				<?php do_action( 'mc_before_help' ); ?>
-				<p><?php _e( 'Build a custom shortcode:', 'my-calendar' ); ?> <a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>"><?php _e( 'Shortcode Generator', 'my-calendar' ); ?></a></p>
+				<p><?php esc_html_e( 'Build a custom shortcode:', 'my-calendar' ); ?> <a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>"><?php esc_html_e( 'Shortcode Generator', 'my-calendar' ); ?></a></p>
 			</div>
 		</div>
 	</div>
 
 	<div class="ui-sortable meta-box-sortables" id="files">
 		<div class="wptab postbox" aria-labelledby="tab_files" role="tabpanel" id="my-calendar-files">
-			<h2><?php _e( 'Custom Files', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Custom Files', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<h3><?php _e( 'Custom Icons Location', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Custom Icons Location', 'my-calendar' ); ?></h3>
 				<ul>
 					<li><code><?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/'; ?></code></li>
 				</ul>
-				<h3><?php _e( 'Custom Styles Locations', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Custom Styles Locations', 'my-calendar' ); ?></h3>
 				<ul>
 					<?php
 					foreach ( mc_custom_dirs() as $dir ) {
@@ -73,7 +73,7 @@ function my_calendar_help() {
 					?>
 				</ul>
 				<p>
-					<?php _e( 'Custom print, mobile, and tablet stylesheet file names: <code>mc-print.css</code>, <code>mc-mobile.css</code>, and <code>mc-tablet.css</code>.', 'my-calendar' ); ?>
+					<?php wp_kses_post( _e( 'Custom print, mobile, and tablet stylesheet file names: <code>mc-print.css</code>, <code>mc-mobile.css</code>, and <code>mc-tablet.css</code>.', 'my-calendar' ) ); ?>
 				</p>
 			</div>
 		</div>
@@ -81,24 +81,24 @@ function my_calendar_help() {
 
 	<div class="ui-sortable meta-box-sortables" id="privacy">
 		<div class="wptab postbox" aria-labelledby="tab_privacy" role="tabpanel" id="my-calendar-privacy">
-			<h2><?php _e( 'Privacy', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Privacy', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
-				<h3><?php _e( 'Data Collection by My Calendar', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Data Collection by My Calendar', 'my-calendar' ); ?></h3>
 				<p>
 					<?php _e( 'My Calendar collects no personally identifying data.', 'my-calendar' ); ?>
 				</p>
 				<p>
 					<?php _e( 'My Calendar Pro, when installed, collects submitter names and email addresses when a public user submits an event from any public event submission form.', 'my-calendar' ); ?>
 				</p>
-				<h3><?php _e( 'Data Sharing by My Calendar', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Data Sharing by My Calendar', 'my-calendar' ); ?></h3>
 				<p>
 					<?php _e( 'The names and email addresses of people who author or host events are shared by My Calendar as part of the API output and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information.', 'my-calendar' ); ?>
 				</p>
 				<p>
 					<?php _e( 'Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted.', 'my-calendar' ); ?>
 				</p>
-				<h3><?php _e( 'Data Removal in My Calendar', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Data Removal in My Calendar', 'my-calendar' ); ?></h3>
 				<p>
 					<?php _e( 'My Calendar supports the data export and removal features in WordPress 4.9.6 and later. When a data removal is requested, all events authored using the requested email address will be deleted. All events with that user assigned only as the host will remain, but the host will be changed.', 'my-calendar' ); ?>
 				</p>
@@ -110,7 +110,7 @@ function my_calendar_help() {
 
 	<div class="ui-sortable meta-box-sortables" id="get-support">
 		<div class="wptab postbox" aria-labelledby="tab_support" role="tabpanel" id="my-calendar-support">
-			<h2 id="support"><?php _e( 'Get Support', 'my-calendar' ); ?></h2>
+			<h2 id="support"><?php esc_html_e( 'Get Support', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<div class='mc-support-me'>

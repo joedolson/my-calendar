@@ -349,7 +349,7 @@ function mc_write_js() {
 				var mc_allowed = $( '#mc_twitter' ).attr( 'data-allowed' );
 				$('#mc_twitter').charCount({
 					allowed: mc_allowed,
-					counterText: '<?php _e( 'Characters left: ', 'my-calendar' ); ?>'
+					counterText: '<?php esc_html_e( 'Characters left: ', 'my-calendar' ); ?>'
 				});
 					<?php
 				}
@@ -1934,9 +1934,9 @@ $plugins_string
 				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'><?php echo esc_textarea( stripslashes( $request ) ); ?></textarea>
 			</p>
 			<p>
-				<input type='submit' value='<?php _e( 'Send Support Request', 'my-calendar' ); ?>' name='mc_support' class='button-primary' />
+				<input type='submit' value='<?php echo esc_attr( __( 'Send Support Request', 'my-calendar' ) ); ?>' name='mc_support' class='button-primary' />
 			</p>
-			<p><?php _e( 'The following additional information will be sent with your support request:', 'my-calendar' ); ?></p>
+			<p><?php esc_html_e( 'The following additional information will be sent with your support request:', 'my-calendar' ); ?></p>
 			<div class="mc_support"><?php echo wp_kses_post( wpautop( $data ) ); ?></div>
 			</div>
 		</form>

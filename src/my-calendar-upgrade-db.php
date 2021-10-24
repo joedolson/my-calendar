@@ -33,7 +33,7 @@ function my_calendar_check_db() {
 		mc_upgrade_db();
 		?>
 		<div class='upgrade-db updated'>
-			<p><?php _e( 'My Calendar Database is updated.', 'my-calendar' ); ?></p>
+			<p><?php esc_html_e( 'My Calendar Database is updated.', 'my-calendar' ); ?></p>
 		</div>
 		<?php
 	} elseif ( $needs_update ) {
@@ -41,15 +41,15 @@ function my_calendar_check_db() {
 			?>
 			<div class='upgrade-db error'>
 				<p>
-					<?php _e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
+					<?php esc_html_e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
 				</p>
-				<form method="post" action="<?php echo admin_url( 'admin.php?page=my-calendar-config' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
 					<div>
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<input type="hidden" name="upgrade" value="true" />
 					</div>
 					<p>
-						<input type="submit" value="<?php _e( 'Update now', 'my-calendar' ); ?>" name="update-calendar" class="button-primary"/>
+						<input type="submit" value="<?php esc_attr_e( 'Update now', 'my-calendar' ); ?>" name="update-calendar" class="button-primary"/>
 					</p>
 				</form>
 			</div>
@@ -58,8 +58,8 @@ function my_calendar_check_db() {
 			?>
 			<div class='upgrade-db error'>
 			<p>
-				<?php _e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
-				<a href="<?php echo admin_url( 'admin.php?page=my-calendar-config' ); ?>"><?php _e( 'Update now', 'my-calendar' ); ?></a>
+				<?php esc_html_e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>"><?php esc_html_e( 'Update now', 'my-calendar' ); ?></a>
 			</p>
 			</div>
 			<?php

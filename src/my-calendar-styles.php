@@ -120,15 +120,15 @@ function my_calendar_style_edit() {
 		<input type="hidden" value="true" name="mc_edit_style"/>
 		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
 		<fieldset style="position:relative;">
-			<legend><?php _e( 'CSS Style Options', 'my-calendar' ); ?></legend>
+			<legend><?php esc_html_e( 'CSS Style Options', 'my-calendar' ); ?></legend>
 			<p>
-				<label for="mc_show_css"><?php _e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label>
+				<label for="mc_show_css"><?php esc_html_e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label>
 				<input type="text" id="mc_show_css" name="mc_show_css" placeholder="3,19,27" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" /> <span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
 			</p>
 			<p>
-				<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php _e( 'Update stylesheet to match core version', 'my-calendar' ); ?></label>
+				<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php esc_html_e( 'Update stylesheet to match core version', 'my-calendar' ); ?></label>
 				<input type="checkbox" id="use_styles" name="use_styles" <?php mc_is_checked( 'mc_use_styles', 'true' ); ?> />
-				<label for="use_styles"><?php _e( 'Use your own styles', 'my-calendar' ); ?></label>
+				<label for="use_styles"><?php esc_html_e( 'Use your own styles', 'my-calendar' ); ?></label>
 			</p>
 			<?php
 			if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {
@@ -136,12 +136,12 @@ function my_calendar_style_edit() {
 			} else {
 				$disabled = ( $edit_files || get_option( 'mc_use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 				?>
-				<label for="style"><?php _e( 'Edit the stylesheet for My Calendar', 'my-calendar' ); ?></label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
+				<label for="style"><?php esc_html_e( 'Edit the stylesheet for My Calendar', 'my-calendar' ); ?></label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
 				<?php
 			}
 			?>
 			<fieldset>
-				<legend><?php _e( 'CSS Variables', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
 			<?php
 			$output = '';
 			$styles = get_option( 'mc_style_vars' );
@@ -159,13 +159,13 @@ function my_calendar_style_edit() {
 			}
 			?>
 				<p>
-					<label for='new_style_var_key'><?php _e( 'New variable:', 'my-calendar' ); ?></label>
-					<input type='text' name='new_style_var[key]' id='new_style_var_key' /> <label for='new_style_var_val'><?php _e( 'Value:', 'my-calendar' ); ?></label>
+					<label for='new_style_var_key'><?php esc_html_e( 'New variable:', 'my-calendar' ); ?></label>
+					<input type='text' name='new_style_var[key]' id='new_style_var_key' /> <label for='new_style_var_val'><?php esc_html_e( 'Value:', 'my-calendar' ); ?></label>
 					<input type='text' name='new_style_var[val]' id='new_style_var_val' />
 				</p>
 			</fieldset>
 			<p>
-				<input type="submit" name="save" class="button-primary button-adjust" value="<?php _e( 'Save Changes', 'my-calendar' ); ?>" />
+				<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
 			</p>
 		</fieldset>
 	</form>
@@ -201,7 +201,7 @@ function my_calendar_style_edit() {
 		}
 	}
 	?>
-	<p><?php _e( 'Resetting your stylesheet will set your stylesheet to the version currently distributed with the plugin.', 'my-calendar' ); ?></p>
+	<p><?php esc_html_e( 'Resetting your stylesheet will set your stylesheet to the version currently distributed with the plugin.', 'my-calendar' ); ?></p>
 	<?php
 }
 
