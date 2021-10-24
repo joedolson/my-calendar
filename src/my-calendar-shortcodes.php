@@ -399,10 +399,10 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
 				<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
 					<li>
-						<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category"> <label for="category"><?php _e( 'All', 'my-calendar' ); ?></label>
+						<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
 					</li>
 					<?php
-					$select = mc_category_select( $category, true, true, 'category[]', 'category' );
+					$select = mc_category_select( $category, true, true, 'category[]', 'category_' . $type );
 					echo wp_kses( $select, mc_kses_elements() );
 					?>
 				</ul>
