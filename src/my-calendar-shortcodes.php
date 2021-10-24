@@ -353,7 +353,7 @@ function mc_calendar_view() {
 add_action( 'add_meta_boxes', 'mc_calendar_view' );
 
 /**
- * Settings to configure My Calendar view, overriding shortcode.
+ * Settings to configure My Calendar view or build shortcode.
  *
  * @param object       $post Post object.
  * @param array|string $callback_args Post callback args or selected type.
@@ -435,6 +435,9 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				<?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
 			</p>
 		</fieldset>
+			<?php
+			if ( 'main' === $type ) {
+				?>
 		<fieldset>
 				<legend><?php _e( 'Navigation', 'my-calendar' ); ?></legend>
 				<p id='navigation-info'>
@@ -453,6 +456,9 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<input type="text" name="below" id="below" placeholder="key,feeds" aria-labelledby='lbelow navigation-info' value="<?php echo esc_attr( $below ); ?>" /><br/>
 				</p>
 		</fieldset>
+				<?php
+			}
+			?>
 		<fieldset>
 			<legend><?php _e( 'Formatting & Timeframe', 'my-calendar' ); ?></legend>
 			<?php

@@ -91,7 +91,7 @@ function mc_generator( $type ) {
 	<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-shortcodes' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
 	<?php mc_calendar_generator_fields( false, $type ); ?>
 	<p>
-		<input type="submit" class="button-primary" name="generator" value="<?php _e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
+		<input type="submit" class="button-primary" name="generator" value="<?php esc_html_e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
 	</p>
 	</form>
 	<?php
@@ -105,21 +105,21 @@ function my_calendar_shortcodes() {
 	?>
 
 	<div class="wrap my-calendar-admin">
-	<h1><?php _e( 'Generate Shortcodes', 'my-calendar' ); ?></h1>
+	<h1><?php esc_html_e( 'Generate Shortcodes', 'my-calendar' ); ?></h1>
 
 	<div class="postbox-container jcd-wide">
 	<div class="metabox-holder">
 
 	<div class="ui-sortable meta-box-sortables" id="mc-generator">
 		<div class="postbox">
-			<h2 id="generator"><?php _e( 'My Calendar Shortcode Generator', 'my-calendar' ); ?></h2>
+			<h2 id="generator"><?php esc_html_e( 'My Calendar Shortcode Generator', 'my-calendar' ); ?></h2>
 
 			<div class="inside mc-tabs">
 				<?php mc_generate(); ?>
 				<div class='tabs' role="tablist" data-default="mc_main">
-					<button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'><?php _e( 'Main', 'my-calendar' ); ?></button>
-					<button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php _e( 'Upcoming', 'my-calendar' ); ?></a></button>
-					<button type="button" role="tab" aria-selected="false" id='tab_mc_today' aria-controls='mc_today'><?php _e( 'Today', 'my-calendar' ); ?></button>
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'><?php esc_html_e( 'Main', 'my-calendar' ); ?></button>
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php esc_html_e( 'Upcoming', 'my-calendar' ); ?></a></button>
+					<button type="button" role="tab" aria-selected="false" id='tab_mc_today' aria-controls='mc_today'><?php esc_html_e( 'Today', 'my-calendar' ); ?></button>
 					<?php echo apply_filters( 'mc_generator_tabs', '' ); ?>
 				</div>
 				<div class='wptab mc_main' id='mc_main' aria-live='assertive' aria-labelledby='tab_mc_main' role="tabpanel">
