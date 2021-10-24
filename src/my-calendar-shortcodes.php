@@ -659,10 +659,10 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</p>
 				<div class='custom'>
 					<p>
-						<label for='from'><?php _e( 'Starting Date', 'my-calendar' ); ?></label> <input type='text' name='from' id='from' />
+						<label for='from'><?php _e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='from' id='from' placeholder="YYYY-MM-DD" />
 					</p>
 					<p>
-						<label for='to'><?php _e( 'End Date', 'my-calendar' ); ?></label> <input type='text' name='to' id='to' />
+						<label for='to'><?php _e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='to' id='to' placeholder="YYYY-MM-DD" />
 					</p>
 				</div>
 				<p>
