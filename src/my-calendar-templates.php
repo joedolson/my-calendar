@@ -850,6 +850,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 	if ( ! is_array( $event ) && $multiple ) {
 		return '';
 	}
+	$id       = '0';
 	$api_key  = get_option( 'mc_gmap_api_key' );
 	$markers  = '';
 	$loc_list = '';
