@@ -293,6 +293,14 @@
 	padding: 0 .5em;
 }
 
+.mc-main .mc-list .details .location {
+	padding-right: 0;
+}
+
+.mc-main .mc-list .details > p {
+	padding: .5em;
+}
+
 .mc-main .close img {
 	width: auto !important;
 	height: auto !important;
@@ -585,7 +593,7 @@
 }
 
 /* List View */
-.mc-main .mc-list li, #mc-day {
+.mc-main .mc-list li, .mc-day {
 	position: relative;
 }
 
@@ -611,7 +619,6 @@
 }
 
 .mc-main .list-event .event-title {
-	margin: 0 0 1em!important;
 	display: inline-block;
 }
 
@@ -659,6 +666,7 @@
 }
 
 .mc-main .details .mc-image {
+	width: 100%;
 	max-width: 100%;
 	height: auto;
 }
