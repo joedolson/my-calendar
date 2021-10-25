@@ -854,8 +854,8 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 	$api_key  = get_option( 'mc_gmap_api_key' );
 	$markers  = '';
 	$loc_list = '';
-	$width    = apply_filters( 'mc_map_height', '100%', $location );
-	$height   = apply_filters( 'mc_map_height', '300px', $location );
+	$width    = apply_filters( 'mc_map_height', '100%', $event );
+	$height   = apply_filters( 'mc_map_height', '300px', $event );
 	$styles   = " style='width: $width;height: $height'";
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
