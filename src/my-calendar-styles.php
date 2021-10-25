@@ -140,8 +140,11 @@ function my_calendar_style_edit() {
 				<?php
 			}
 			?>
-			<fieldset>
+			<fieldset class="mc-css-variables">
 				<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
+				<p>
+			<?php esc_html_e( 'Change the primary, secondary, and highlight colors.', 'my-calendar' ); ?>
+				</p>
 			<?php
 			$output = '';
 			$styles = get_option( 'mc_style_vars' );
@@ -152,7 +155,7 @@ function my_calendar_style_edit() {
 				} else {
 					$delete = '';
 				}
-				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' /><span aria-hidden='true' class='variable-color' style='background-color: " . esc_attr( $style ) . "'></span>$delete</li>";
+				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' /><span aria-hidden='true' class='variable-color' style='background-color: " . esc_attr( $style ) . "'></span>$delete</li>";
 			}
 			if ( $output ) {
 				echo wp_kses( "<ul class='checkboxes'>$output</ul>", mc_kses_elements() );

@@ -1304,6 +1304,10 @@ function mc_scripts() {
 		);
 	}
 
+	wp_enqueue_style( 'wp-color-picker' );
+	// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
+	wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-config' === $id ) {
 		wp_enqueue_script( 'jquery-ui-accordion' );
 	}
@@ -1378,9 +1382,6 @@ function mc_scripts() {
 	}
 
 	if ( $slug . '_page_my-calendar-categories' === $id ) {
-		wp_enqueue_style( 'wp-color-picker' );
-		// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
-		wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
 		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
 		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
 		wp_localize_script(
