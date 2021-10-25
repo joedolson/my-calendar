@@ -854,6 +854,9 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 	$api_key  = get_option( 'mc_gmap_api_key' );
 	$markers  = '';
 	$loc_list = '';
+	$width    = apply_filters( 'mc_map_height', '100%', $location );
+	$height   = apply_filters( 'mc_map_height', '300px', $location );
+	$styles   = " style='width: $width;height: $height'";
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
 		$multiple  = ( count( $locations ) > 1 ) ? true : false;
@@ -893,9 +896,6 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 				)
 			);
 			$html      = apply_filters( 'mc_map_html', $hcard, $location );
-			$width     = apply_filters( 'mc_map_height', '100%', $location );
-			$height    = apply_filters( 'mc_map_height', '300px', $location );
-			$styles    = " style='width: $width;height: $height'";
 			$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
 			$loc_list .= ( $multiple ) ? '<div class="mc-location-details">' . $hcard . '</div>' : '';
 		}
