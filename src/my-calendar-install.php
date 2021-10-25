@@ -313,22 +313,6 @@ function mc_generate_calendar_page( $slug ) {
 }
 
 /**
- * If an event has time values that are no longer valid in current versions of My Calendar, modify to usable values.
- *
- * @param int    $id event ID.
- * @param string $time New end time.
- */
-function mc_flag_event( $id, $time ) {
-	global $wpdb;
-	$data    = array(
-		'event_hide_end' => 1,
-		'event_endtime'  => $time,
-	);
-	$formats = array( '%d', '%s' );
-	$result  = $wpdb->update( my_calendar_table(), $data, array( 'event_id' => $id ), $formats, '%d' );
-}
-
-/**
  * See whether there are importable calendars present.
  */
 function mc_check_imports() {
