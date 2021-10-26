@@ -270,6 +270,10 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( ! is_object( $event ) ) {
 		return '';
 	}
+	if ( 'event' === $source && is_object( $event->location ) ) {
+		$event  = $event->location;
+		$source = 'location';
+	}
 	$the_map = mc_maplink( $event, 'url', $source );
 	$event   = mc_clean_location( $event, $source );
 	$url     = ( 'event' === $source ) ? $event->event_url : $event->location_url;
@@ -854,6 +858,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 	$api_key  = get_option( 'mc_gmap_api_key' );
 	$markers  = '';
 	$loc_list = '';
+	$out      = '';
 	$width    = apply_filters( 'mc_map_height', '100%', $event );
 	$height   = apply_filters( 'mc_map_height', '300px', $event );
 	$styles   = " style='width: $width;height: $height'";
@@ -899,12 +904,13 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 			$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
 			$loc_list .= ( $multiple ) ? '<div class="mc-location-details">' . $hcard . '</div>' : '';
 		}
+
+		$map  = "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
+		$locs = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2>' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
+		$out  = '<div class="mc-maps">' . $map . $locs . '</div>';
 	}
 
-	$map  = "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
-	$locs = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2>' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
-
-	return '<div class="mc-maps">' . $map . $locs . '</div>';
+	return $out;
 }
 
 /**
