@@ -67,6 +67,7 @@ function mc_plugin_activated() {
 	flush_rewrite_rules();
 	mc_upgrade_db();
 	my_calendar_check();
+	mc_create_demo_content();
 }
 
 register_uninstall_hook( __FILE__, 'mc_uninstall' );

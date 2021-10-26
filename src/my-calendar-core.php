@@ -874,13 +874,6 @@ function my_calendar_check() {
 		if ( true === $new_install ) {
 			// Add default settings.
 			mc_default_settings();
-			mc_create_category(
-				array(
-					'category_name'  => 'General',
-					'category_color' => '#ffffcc',
-					'category_icon'  => 'event.svg',
-				)
-			);
 		}
 
 		mc_do_upgrades( $upgrade_path );

@@ -196,6 +196,104 @@ function mc_globals() {
 }
 
 /**
+ * Create demo content for new installs.
+ */
+function mc_create_demo_content() {
+	global $wpdb;
+	// If site has no categories, this is a new install.
+	$categories = $wpdb->get_results( 'SELECT category_id FROM ' . my_calendar_categories_table() );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( empty( $categories ) ) {
+		// Insert a category.
+		mc_create_category(
+			array(
+				'category_name'  => 'General',
+				'category_color' => '#ffffcc',
+				'category_icon'  => 'event.svg',
+			)
+		);
+		// Insert a location.
+		$access  = array( 1, 2, 3, 4, 6, 8, 9 );
+		$add     = array(
+			'location_label'     => 'Minnesota Orchestra',
+			'location_street'    => '1111 Nicollet Mall',
+			'location_street2'   => '',
+			'location_city'      => 'Minneapolis',
+			'location_state'     => 'MN',
+			'location_postcode'  => '55403',
+			'location_region'    => '',
+			'location_country'   => 'United States',
+			'location_url'       => 'https://www.minnesotaorchestra.org',
+			'location_latitude'  => '44.9722',
+			'location_longitude' => '93.2749',
+			'location_zoom'      => 16,
+			'location_phone'     => '612-371-5600',
+			'location_phone2'    => '',
+			'location_access'    => serialize( $access ),
+		);
+		$results = mc_insert_location( $add );
+		do_action( 'mc_save_location', $results, $add, $add );
+		// Insert an event.
+		$submit = array(
+			// Begin strings.
+			'event_begin'        => date( 'Y-m-d', '+1 day' ), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+			'event_end'          => date( 'Y-m-d', '+1 day' ), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+			'event_title'        => 'Florence Price: Symphony No. 3 in c minor',
+			'event_desc'         => "<p>Florence Price's <a href='https://en.wikipedia.org/wiki/Symphony_No._3_(Price)'>Symphony No. 3</a> was commissioned by the Works Progress Administration's <a href='https://en.wikipedia.org/wiki/Federal_Music_Project'>Federal Music Project</a> during the height of the Great Depression. It was first performed at the Detroit Institute of Arts on November 6, 1940, by the Detroit Civic Orchestra under the conductor Valter Poole.</p><p>The composition is Price's third symphony, following her Symphony in E minor—the first symphony by a black woman to be performed by a major American orchestra—and her lost Symphony No. 2.</p>",
+			'event_short'        => "Florence Price's Symphony No.3 was first performed on November 6th, 1940. It was Ms. Price's third symphony, following her lost Symphony No. 2",
+			'event_time'         => '19:30:00',
+			'event_endtime'      => '21:00:00',
+			'event_link'         => 'https://www.youtube.com/watch?v=1jgJ1OkjnaI&list=OLAK5uy_lKldgbFTYBDa7WN6jf2ubB595wncDU7yc&index=2',
+			'event_label'        => '',
+			'event_street'       => '',
+			'event_street2'      => '',
+			'event_city'         => '',
+			'event_state'        => '',
+			'event_postcode'     => '',
+			'event_region'       => '',
+			'event_country'      => '',
+			'event_url'          => '',
+			'event_recur'        => 'S1',
+			'event_image'        => plugins_url( '/images/demo/event.jpg', __FILE__ ),
+			'event_phone'        => '',
+			'event_phone2'       => '',
+			'event_access'       => '',
+			'event_tickets'      => '',
+			'event_registration' => '',
+			'event_repeats'      => '',
+			// Begin integers.
+			'event_author'       => wp_get_current_user()->ID,
+			'event_category'     => 1,
+			'event_link_expires' => 0,
+			'event_zoom'         => 16,
+			'event_approved'     => 1,
+			'event_host'         => wp_get_current_user()->ID,
+			'event_flagged'      => 0,
+			'event_fifth_week'   => 0,
+			'event_holiday'      => 0,
+			'event_group_id'     => 1,
+			'event_span'         => 0,
+			'event_hide_end'     => 0,
+			// Begin floats.
+			'event_longitude'    => '',
+			'event_latitude'     => '',
+			// Array: removed before DB insertion.
+			'event_categories'   => array( 1 ),
+		);
+
+		$event    = array( true, false, $submit, false );
+		$response = my_calendar_save( 'add', $event );
+		$event_id = $response['event_id'];
+		mc_update_event( 'event_location', (int) $results, $event_id );
+
+		$e       = mc_get_first_event( $event_id );
+		$post_id = $e->event_post;
+		$image   = media_sideload_image( plugins_url( '/images/demo/event.jpg', __FILE__ ), $post_id, null, 'id' );
+
+		set_post_thumbnail( $post_id, $image );
+	}
+}
+
+/**
  * Save default settings.
  */
 function mc_default_settings() {

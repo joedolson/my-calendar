@@ -512,7 +512,6 @@ function my_calendar_settings() {
 	<div class="ui-sortable meta-box-sortables">
 		<div class="wptab postbox" aria-labelledby="tab_manage" role="tabpanel" id="my-calendar-manage">
 			<h2><?php esc_html_e( 'My Calendar Management', 'my-calendar' ); ?></h2>
-
 			<div class="inside">
 				<?php
 				if ( current_user_can( 'administrator' ) ) {
