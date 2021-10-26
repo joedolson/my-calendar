@@ -862,6 +862,10 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 	$width    = apply_filters( 'mc_map_height', '100%', $event );
 	$height   = apply_filters( 'mc_map_height', '300px', $event );
 	$styles   = " style='width: $width;height: $height'";
+	if ( 'event' === $source && is_object( $event->location ) ) {
+		$event  = $event->location;
+		$source = 'location';
+	}
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
 		$multiple  = ( count( $locations ) > 1 ) ? true : false;
