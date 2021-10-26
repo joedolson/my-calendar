@@ -224,7 +224,7 @@ function mc_create_demo_content() {
 			'location_country'   => 'United States',
 			'location_url'       => 'https://www.minnesotaorchestra.org',
 			'location_latitude'  => '44.9722',
-			'location_longitude' => '93.2749',
+			'location_longitude' => '-93.2749',
 			'location_zoom'      => 16,
 			'location_phone'     => '612-371-5600',
 			'location_phone2'    => '',
