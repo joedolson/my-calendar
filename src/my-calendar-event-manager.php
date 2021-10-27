@@ -2347,9 +2347,9 @@ function mc_list_events() {
 					<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 					</div>
 					<div>
-						<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search', 'my-calendar' ); ?></label>
+						<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
 						<input type='text' role='search' name='mcs' id='mc_search' value='<?php echo esc_attr( $search_text ); ?>' />
-						<input type='submit' value='<?php echo esc_attr( __( 'Search Events', 'my-calendar' ) ); ?>' class='button-secondary' />
+						<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary' />
 					</div>
 				</form>
 			</div>
@@ -2589,9 +2589,9 @@ function mc_list_events() {
 				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				</div>
 				<div>
-					<label for="mc_search_footer" class='screen-reader-text'><?php esc_html_e( 'Search', 'my-calendar' ); ?></label>
+					<label for="mc_search_footer" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
 					<input type='text' role='search' name='mcs' id='mc_search_footer' value='<?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
-					<input type='submit' value='<?php echo esc_attr( __( 'Search Events', 'my-calendar' ) ); ?>' class='button-secondary'/>
+					<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
 				</div>
 			</form>
 			</div>

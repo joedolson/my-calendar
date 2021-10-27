@@ -191,6 +191,7 @@ function mc_manage_locations() {
 	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS location_id FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby $query_order LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 	$items       = $found_rows[0];
+	$pagination  = '';
 
 	$num_pages = ceil( $items / $items_per_page );
 	if ( $num_pages > 1 ) {
@@ -205,27 +206,30 @@ function mc_manage_locations() {
 				'mid_size'  => 1,
 			)
 		);
-		printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
+		$pagination = sprintf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 	}
 
 	if ( ! empty( $locations ) ) {
 		?>
+	<div class="mc-admin-header locations">
+		<?php echo wp_kses_post( $pagination ); ?>
 		<div class='mc-search'>
 			<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post">
 				<div>
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				</div>
 				<div>
-					<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search', 'my-calendar' ); ?></label>
+					<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search Locations', 'my-calendar' ); ?></label>
 					<input type='text' role='search' name='mcl' id='mc_search' value='<?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
-					<input type='submit' value='<?php _e( 'Search Locations', 'my-calendar' ); ?>' class='button-secondary' />
+					<input type='submit' value='<?php esc_attr_e( 'Search', 'my-calendar' ); ?>' class='button-secondary' />
 				</div>
 			</form>
 		</div>
+	</div>
 	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 		<div class='mc-actions'>
-			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete locations', 'my-calendar' ); ?>" />
+			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php esc_attr_e( 'Delete locations', 'my-calendar' ); ?>" />
 			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
 		</div>
 		<table class="widefat page" id="my-calendar-admin-table">

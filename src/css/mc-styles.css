@@ -1166,6 +1166,11 @@ select[name="event_recur"] {
 	clear: both;
 }
 
+.mc-admin-header.locations {
+	display: block;
+	float: right;
+}
+
 div.mc-search {
 	text-align: right;
 }
