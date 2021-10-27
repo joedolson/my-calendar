@@ -270,7 +270,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( ! is_object( $event ) ) {
 		return '';
 	}
-	if ( 'event' === $source && is_object( $event->location ) ) {
+	if ( 'event' === $source && property_exists( $event, 'location' ) && is_object( $event->location ) ) {
 		$event  = $event->location;
 		$source = 'location';
 	}
@@ -862,7 +862,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 	$width    = apply_filters( 'mc_map_height', '100%', $event );
 	$height   = apply_filters( 'mc_map_height', '300px', $event );
 	$styles   = " style='width: $width;height: $height'";
-	if ( 'event' === $source && is_object( $event->location ) ) {
+	if ( 'event' === $source && property_exists( $event, 'location' ) && is_object( $event->location ) ) {
 		$event  = $event->location;
 		$source = 'location';
 	}
