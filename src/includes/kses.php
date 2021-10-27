@@ -230,6 +230,7 @@ function mc_kses_elements() {
 			'disabled'         => array(),
 			'required'         => array(),
 			'readonly'         => array(),
+			'name'             => array(),
 		),
 		'form'     => array(
 			'id'     => array(),
