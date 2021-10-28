@@ -1,10 +1,10 @@
-(function ($) { 'use strict';
-	$(function() {
-		$( 'div.mc-gmap-fupup' ).each( function() {
-			var mcmap = $( this );
-			mc_map( mcmap );
+(function () {
+	(function() {
+		var containers = document.querySelectorAll( 'div.mc-gmap-fupup' );
+		containers.forEach((el) => {
+			mc_map( el );
 		});
-	});
+	})();
 
 	/*
 	*  mc_map
@@ -19,9 +19,10 @@
 	*  @return	n/a
 	*/
 
-	function mc_map( $el ) {
+	function mc_map( el ) {
 		// var
-		var $markers = $el.find('.marker');
+		var $markers = el.querySelectorAll( '.marker' );
+		//var $markers = $el.find('.marker');
 
 		// vars
 		var args = {
@@ -30,12 +31,13 @@
 		};
 		
 		// create map
-		var plot = new google.maps.Map( $el[0], args );
+		var plot = new google.maps.Map( el, args );
 		var bounds = new google.maps.LatLngBounds();
 
+		console.log( el );
 		// add markers
-		$markers.each(function(){
-			add_marker( $(this), plot, bounds );
+		$markers.forEach((marker) => {
+			add_marker( marker, plot, bounds );
 		});
 
 		// return
@@ -57,10 +59,10 @@
 	*/
 
 	function add_marker( $marker, plot, bounds ) {
-		var latlng  = new google.maps.LatLng( $marker.attr('data-lat'), $marker.attr('data-lng') );
+		var latlng  = new google.maps.LatLng( $marker.getAttribute('data-lat'), $marker.getAttribute('data-lng') );
 		var marker  = null;
 		// Geocoder
-		if ( '' == $marker.attr( 'data-lat' ) || '' == $marker.attr( 'data-lng' ) ) {
+		if ( '' == $marker.getAttribute( 'data-lat' ) || '' == $marker.getAttribute( 'data-lng' ) ) {
 			var geocoder = new google.maps.Geocoder();
 			marker = new getAddress( geocoder, $marker, plot, bounds );
 		} else {
@@ -70,7 +72,7 @@
 				position	: latlng,
 				map			: plot,
 				clickable	: true,
-				title		: $marker.attr( 'data-title' ),
+				title		: $marker.getAttribute( 'data-title' ),
 			});
 
 			var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
@@ -82,12 +84,12 @@
 			}
 			plot.fitBounds(bounds);
 
-
 			// if marker contains HTML, add it to an infoWindow
-			if ( $marker.html() ) {
+			var content = $marker.innerHTML;
+			if ( content ) {
 				// create info window
 				var infowindow = new google.maps.InfoWindow({
-					content		: $marker.html()
+					content		: content
 				});
 
 				// show info window when marker is clicked
@@ -107,7 +109,7 @@
 	 * @param bounds Google boundary object.
 	 */
 	function getAddress( geocoder, $marker, plot, bounds ) {
-		var address = $marker.attr( 'data-address' );
+		var address = $marker.getAttribute( 'data-address' );
 		var marker = null;
 		marker = geocoder.geocode({'address': address}, function(results, status) {
 			if ( status === 'OK' ) {
@@ -116,7 +118,7 @@
 					map : plot,
 					position : results[0].geometry.location,
 					clickable : true,
-					title : $marker.attr( 'data-title' ),
+					title : $marker.getAttribute( 'data-title' ),
 				});
 
 				var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
@@ -129,10 +131,11 @@
 				plot.fitBounds(bounds);
 
 				// if marker contains HTML, add it to an infoWindow
-				if ( $marker.html() ) {
+				var content = $marker.innerHTML;
+				if ( content ) {
 					// create info window
 					var infowindow = new google.maps.InfoWindow({
-						content		: $marker.html()
+						content		: content
 					});
 
 					// show info window when marker is clicked
@@ -146,5 +149,4 @@
 			}
 		});
 	}
-
-})(jQuery);
+})();
