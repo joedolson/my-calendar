@@ -179,12 +179,13 @@ function mc_templates_edit() {
 		<div class="mc-postbox">
 			<h2>
 			<?php
-			esc_html_e( 'Event Template Tags', 'my-calendar' );
+			esc_html_e( 'Template Tags', 'my-calendar' );
 			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'My Calendar: Template Tags', 'my-calendar' ), 5 );
 			?>
 			</h2>
 
 			<div class='mc_template_tags mc-inside'>
+				<h3><?php esc_html_e( 'Event Tags', 'my-calendar' ); ?></h3>
 				<dl>
 					<dt><code>{title}</code></dt>
 					<dd><?php esc_html_e( 'Title of the event.', 'my-calendar' ); ?></dd>
@@ -217,7 +218,7 @@ function mc_templates_edit() {
 					<dd><?php esc_html_e( 'Link to a page containing information about the event.', 'my-calendar' ); ?>
 				</dl>
 
-				<h3><?php esc_html_e( 'Location Template Tags', 'my-calendar' ); ?></h3>
+				<h3><?php esc_html_e( 'Location Tags', 'my-calendar' ); ?></h3>
 				<dl>
 					<dt><code>{location}</code></dt>
 					<dd><?php esc_html_e( 'Name of the location of the event.', 'my-calendar' ); ?></dd>
