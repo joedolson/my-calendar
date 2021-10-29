@@ -568,8 +568,7 @@ function mc_category_settings_update() {
  */
 function mc_category_settings() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
-		$response = mc_category_settings_update();
-		$settings = $response . '
+		$settings = '
 		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-categories' ) . '">
 			<div>
 				<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" />
@@ -718,6 +717,10 @@ function mc_get_category( $category ) {
  * Generate list of categories to edit.
  */
 function mc_manage_categories() {
+	if ( current_user_can( 'mc_edit_settings' ) ) {
+		$response = mc_category_settings_update();
+		echo wp_kses_post( $response );
+	}
 	global $wpdb;
 	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co'];
 	switch ( $co ) {
@@ -731,6 +734,7 @@ function mc_manage_categories() {
 			$cat_order = 'category_id';
 	}
 	$default_category = (string) get_option( 'mc_default_category' );
+	$hide_icon        = ( 'true' === get_option( 'mc_hide_icons' ) ) ? true : false;
 	// We pull the categories from the database.
 	$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( empty( $categories ) ) {
@@ -761,7 +765,13 @@ function mc_manage_categories() {
 			</th>
 			<th scope="col"><?php esc_html_e( 'Events', 'my-calendar' ); ?></th>
 			<th scope="col"><?php esc_html_e( 'Private', 'my-calendar' ); ?></th>
+			<?php
+			if ( ! $hide_icon ) {
+				?>
 			<th scope="col"><?php esc_html_e( 'Icon', 'my-calendar' ); ?></th>
+				<?php
+			}
+			?>
 			<th scope="col"><?php esc_html_e( 'Color', 'my-calendar' ); ?></th>
 		</tr>
 		</thead>
@@ -769,7 +779,7 @@ function mc_manage_categories() {
 		$class = '';
 		foreach ( $categories as $cat ) {
 			$class      = ( 'alternate' === $class ) ? '' : 'alternate';
-			$icon       = mc_category_icon( $cat );
+			$icon       = ( ! $hide_icon ) ? mc_category_icon( $cat ) : '';
 			$background = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '' . $cat->category_color;
 			$foreground = mc_inverse_color( $background );
 			$cat_name   = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
@@ -816,7 +826,18 @@ function mc_manage_categories() {
 			</td>
 			<td><?php echo wp_kses_post( $count ); ?></td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
-			<td><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
+			<?php
+			if ( ! $hide_icon ) {
+				if ( 'background' === get_option( 'mc_apply_color' ) ) {
+					$icon_bg = $background;
+				} else {
+					$icon_bg = $foreground;
+				}
+				?>
+			<td style="background-color:<?php echo esc_attr( $icon_bg ); ?>;"><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
+				<?php
+			}
+			?>
 			<td style="background-color:<?php echo esc_attr( $background ); ?>;color: <?php echo esc_attr( $foreground ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : ''; ?></td>
 		</tr>
 			<?php
