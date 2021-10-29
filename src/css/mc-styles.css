@@ -1114,7 +1114,7 @@ select[name="event_recur"] {
 
 .mc-controls {
 	text-align: right;
-	margin: -10px 0 0;
+	margin: 0;
 }
 
 .mc-controls.footer {
