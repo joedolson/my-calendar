@@ -412,7 +412,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 	}
 	if ( 'add' === $view ) {
 		?>
-		<h1><?php esc_html_e( 'Add Category', 'my-calendar' ); ?></h1>
+		<h1><?php esc_html_e( 'Categories', 'my-calendar' ); ?></h1>
 		<?php
 	} else {
 		?>
