@@ -2455,7 +2455,7 @@ function mc_list_events() {
 									<?php
 								}
 								echo wp_kses_post( $spam_label );
-								echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( $event->event_title ) . '</span>';
+								echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '</span>';
 								if ( $can_edit ) {
 									echo '</a>';
 									if ( '' !== $check ) {
