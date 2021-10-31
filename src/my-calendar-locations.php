@@ -504,15 +504,19 @@ function mc_get_location( $location_id, $update_location = true ) {
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
 		if ( $update_location ) {
-			$latitude  = ( '0.000000' === (string) $location->location_latitude ) ? false : true;
-			$longitude = ( '0.000000' === (string) $location->location_longitude ) ? false : true;
-			if ( ! $latitude || ! $longitude ) {
-				$loc = mc_get_location_coordinates( $location_id );
-				$lat = $loc['latitude'];
-				$lng = $loc['longitude'];
+			if ( get_option( 'mc_gmap_api_key' ) ) {
+				$latitude  = ( '0.000000' === (string) $location->location_latitude ) ? false : true;
+				$longitude = ( '0.000000' === (string) $location->location_longitude ) ? false : true;
+				if ( ! $latitude || ! $longitude ) {
+					$loc = mc_get_location_coordinates( $location_id );
+					$lat = isset( $loc['latitude'] ) ? $loc['latitude'] : '';
+					$lng = isset( $loc['longitude'] ) ? $loc['longitude'] : '';
 
-				mc_update_location( 'location_longitude', $lng, $location_id );
-				mc_update_location( 'location_latitude', $lat, $location_id );
+					if ( $lat && $lng ) {
+						mc_update_location( 'location_longitude', $lng, $location_id );
+						mc_update_location( 'location_latitude', $lat, $location_id );
+					}
+				}
 			}
 		}
 	}
