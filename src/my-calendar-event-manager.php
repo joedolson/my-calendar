@@ -2370,7 +2370,7 @@ function mc_list_events() {
 					<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
 				</div>
 
-			<table class="widefat wp-list-table" id="my-calendar-admin-table">
+			<table class="widefat striped wp-list-table" id="my-calendar-admin-table">
 				<caption class="screen-reader-text"><?php esc_html_e( 'Event list. Use column headers to sort.', 'my-calendar' ); ?></caption>
 				<thead>
 					<tr>
@@ -2404,8 +2404,7 @@ function mc_list_events() {
 						$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 						$invalid = true;
 					}
-					$class   = ( 'alternate' === $class ) ? 'even' : 'alternate';
-					$class   = ( $invalid ) ? $class . ' invalid' : $class;
+					$class   = ( $invalid ) ? 'invalid' : $class;
 					$pending = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
 					$trashed = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
 					$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';

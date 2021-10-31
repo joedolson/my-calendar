@@ -750,7 +750,7 @@ function mc_manage_categories() {
 	}
 	if ( ! empty( $categories ) ) {
 		?>
-		<table class="widefat page fixed mc-categories" id="my-calendar-admin-table">
+		<table class="widefat striped page fixed mc-categories" id="my-calendar-admin-table">
 		<thead>
 		<tr>
 			<th scope="col">
@@ -776,15 +776,13 @@ function mc_manage_categories() {
 		</tr>
 		</thead>
 		<?php
-		$class = '';
 		foreach ( $categories as $cat ) {
-			$class      = ( 'alternate' === $class ) ? '' : 'alternate';
 			$icon       = ( ! $hide_icon ) ? mc_category_icon( $cat ) : '';
 			$background = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '' . $cat->category_color;
 			$foreground = mc_inverse_color( $background );
 			$cat_name   = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
 			?>
-		<tr class="<?php echo sanitize_html_class( $class ); ?>">
+		<tr>
 			<th scope="row"><?php echo absint( $cat->category_id ); ?></th>
 			<td>
 			<?php
