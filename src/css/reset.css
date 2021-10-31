@@ -287,7 +287,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 }
 
 /* Prevent missing background image on google maps */
-.mc-gmap-fupup img {
+.mc-gmap-markers img {
 	max-width: none ! important; 
 }
 

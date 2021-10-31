@@ -289,16 +289,28 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$country = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_country : $event->location_country ), mc_strip_tags() );
 	$country = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_country : $event->location_country ), mc_strip_tags() );
 	$phone   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_phone : $event->location_phone ), mc_strip_tags() );
+	$loc_id  = absint( ( 'event' === $source ) ? false : $event->location_id );
 	if ( ! $url && ! $label && ! $street && ! $street2 && ! $city && ! $state && ! $zip && ! $country && ! $phone ) {
 		return '';
 	}
 	if ( is_admin() && isset( $_GET['page'] ) && 'my-calendar-location-manager' === $_GET['page'] ) {
-		$loc_id = absint( $event->location_id );
-		$link   = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link edit'><span class='dashicons dashicons-edit' aria-hidden='true'></span> <span id='location$event->location_id'>$label</span></a>";
+		$link = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link edit'><span class='dashicons dashicons-edit' aria-hidden='true'></span> <span id='location$event->location_id'>$label</span></a>";
 	} else {
 		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
 	}
-	$hcard = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
+	$post   = mc_get_location_post( $loc_id );
+	$events = ( ! is_single( $post ) ) ? '<a class="location-link" href="' . esc_url( get_the_permalink( $post ) ) . '">' . __( 'View Location', 'my-calendar' ) . '</a>' : '';
+	/**
+	 * Filter link to location-specific events in hcard.
+	 *
+	 * @param string $events HTML link to location permalink.
+	 * @param int    $post Location post ID.
+	 * @param object $event Object being mapped.
+	 *
+	 * @return string
+	 */
+	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
+	$hcard  = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
 	if ( 'true' === $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 		$hcard .= ( '' !== $label ) ? '<div><strong class="org fn" itemprop="name">' . $link . '</strong></div>' : '';
@@ -312,7 +324,8 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= ( '' !== $city . $state . $zip ) ? '</div>' : '';
 		$hcard .= ( '' !== $country ) ? '<div class="country-name" itemprop="addressCountry">' . $country . '</div>' : '';
 		$hcard .= ( '' !== $phone ) ? '<div class="tel" itemprop="telephone">' . $phone . '</div>' : '';
-		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : '</div>';
+		$hcard .= ( '' !== $events ) ? '<div class="mc-events-link" itemprop="url">' . $events . '</div>' : '';
+		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : '</div>';
 		$hcard .= '</div>';
 	}
 	if ( 'true' === $map && false !== $the_map ) {
@@ -893,7 +906,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 			}
 			$hcard     = mc_hcard( $location, 'true', false, $source );
 			$title     = esc_attr( $location->{$source . '_label'} );
-			$hcard     = wp_kses(
+			$marker    = wp_kses(
 				str_replace(
 					array( '</div>', '<br />', '<br><br>' ),
 					'<br>',
@@ -904,12 +917,12 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 					'strong' => array(),
 				)
 			);
-			$html      = apply_filters( 'mc_map_html', $hcard, $location );
+			$html      = apply_filters( 'mc_map_html', $marker, $location );
 			$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
 			$loc_list .= ( $multiple ) ? '<div class="mc-location-details">' . $hcard . '</div>' : '';
 		}
 
-		$map  = "<div class='mc-gmap-fupup' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
+		$map  = "<div class='mc-gmap-markers' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
 		$locs = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2>' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
 		$out  = '<div class="mc-maps">' . $map . $locs . '</div>';
 	}

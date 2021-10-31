@@ -1,6 +1,6 @@
 (function () {
 	(function() {
-		var containers = document.querySelectorAll( 'div.mc-gmap-fupup' );
+		var containers = document.querySelectorAll( 'div.mc-gmap-markers' );
 		containers.forEach((el) => {
 			mc_map( el );
 		});
@@ -15,7 +15,7 @@
 	*  @date	8/11/2013
 	*  @since	4.3.0
 	*
-	*  @param	$el (jQuery element)
+	*  @param	el DOM element containing marker references.
 	*  @return	n/a
 	*/
 
