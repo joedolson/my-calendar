@@ -34,16 +34,17 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 	} else {
 		$base_atts = $atts;
 	}
-	$atts = array_merge( $base_atts, $atts );
+	$value = get_option( $name, '' );
+	$atts  = array_merge( $base_atts, $atts );
 	if ( is_array( $atts ) && ! empty( $atts ) ) {
 		foreach ( $atts as $key => $val ) {
 			$attributes .= " $key='$val'";
 		}
 	}
 	if ( 'checkbox' !== $type ) {
-		$value = ( '' !== get_option( $name, '' ) ) ? esc_attr( stripslashes( get_option( $name ) ) ) : $default;
+		$value = ( '' !== $value ) ? esc_attr( stripslashes( $value ) ) : $default;
 	} else {
-		$value = ( ! empty( get_option( $name ) ) ) ? (array) get_option( $name ) : $default;
+		$value = ( ! empty( $value ) ) ? (array) $value : $default;
 	}
 	switch ( $type ) {
 		case 'text':

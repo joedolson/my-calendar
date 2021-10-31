@@ -1733,7 +1733,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					<p id="event_span" class="checkboxes">
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php esc_html_e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
-						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add occurrence', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'My Calendar: add an occurrence', 'my-calendar' ), 4 ); ?>
+						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Occurrence', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'My Calendar: add an occurrence', 'my-calendar' ), 4 ); ?>
 					</p>
 					<ol class="mc-repeat-events">
 						<li id="event1" class="datetime-template enabled">
@@ -2412,7 +2412,7 @@ function mc_list_events() {
 					if ( 1 === (int) $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
 						$spam       = 'spam';
 						$pending    = '';
-						$spam_label = '<strong>' . __( 'Possible spam', 'my-calendar' ) . ':</strong> ';
+						$spam_label = '<strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':</strong> ';
 					} else {
 						$spam       = '';
 						$spam_label = '';
@@ -2454,7 +2454,7 @@ function mc_list_events() {
 									<a href="<?php echo esc_url( $edit_url ); ?>" class='edit'><span class="dashicons dashicons-edit" aria-hidden="true"></span>
 									<?php
 								}
-								echo wp_kses_post( $spam_label );
+								echo $spam_label;
 								echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '</span>';
 								if ( $can_edit ) {
 									echo '</a>';
