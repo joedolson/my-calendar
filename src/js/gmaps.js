@@ -4,6 +4,43 @@
 		containers.forEach((el) => {
 			mc_map( el );
 		});
+
+		var location_list = document.querySelectorAll( 'div.mc-gmap-location-list .mc-location-details' );
+		location_list.forEach((el) => {
+			var address = el.querySelector( '.sub-address' );
+			var heading = el.querySelector( '.adr .org' );
+			var id      = el.getAttribute( 'id' );
+			address.style.display = 'none';
+			address.setAttribute( 'id', 'control-' + id );
+
+			var button = document.createElement( 'button' );
+			button.type = 'button';
+			button.innerHTML = gmaps.toggle;
+			button.className =  'toggle-locations';
+			button.setAttribute( 'aria-controls', 'control-' + id );
+			button.setAttribute( 'aria-expanded', false );
+			heading.appendChild( button );
+		});
+
+		var toggles = document.querySelectorAll( 'button.toggle-locations' );
+		toggles.forEach((el) => {
+			el.addEventListener( 'click', function() {
+				var target  = el.getAttribute( 'aria-controls' );
+				var address = document.getElementById( target );
+				var visible = ( address.style['display'] == 'none' ) ? false : true;
+				if ( ! visible ) {
+					address.style.display = 'block';
+					this.setAttribute( 'aria-expanded', true );
+					this.querySelector( '.dashicons' ).classList.add( 'dashicons-arrow-down' );
+					this.querySelector( '.dashicons' ).classList.remove( 'dashicons-arrow-right' );
+				} else {
+					address.style.display = 'none';
+					this.setAttribute( 'aria-expanded', false );
+					this.querySelector( '.dashicons' ).classList.remove( 'dashicons-arrow-down' );
+					this.querySelector( '.dashicons' ).classList.add( 'dashicons-arrow-right' );
+				}
+			});
+		});
 	})();
 
 	/*
@@ -22,7 +59,7 @@
 	function mc_map( el ) {
 		// var
 		var $markers = el.querySelectorAll( '.marker' );
-		//var $markers = $el.find('.marker');
+		var count    = $markers.length;
 
 		// vars
 		var args = {
@@ -34,11 +71,16 @@
 		var plot = new google.maps.Map( el, args );
 		var bounds = new google.maps.LatLngBounds();
 
-		console.log( el );
 		// add markers
 		$markers.forEach((marker) => {
 			add_marker( marker, plot, bounds );
 		});
+
+		if ( count > 25 ) {
+			// If there's a large number of locations, allow the bounds to extend outside the minimum area.
+			var extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() - 0.01, bounds.getNorthEast().lng() - 0.01 );
+			bounds.extend( extendPoint );
+		}
 
 		// return
 		return plot;

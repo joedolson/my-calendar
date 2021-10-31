@@ -187,7 +187,14 @@ function mc_register_styles() {
 				$api_key = get_option( 'mc_gmap_api_key' );
 				if ( $api_key ) {
 					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key" );
-					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), '1.0.0', array(), true );
+					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), '1.0.2', array(), true );
+					wp_localize_script(
+						'mc-maps',
+						'gmaps',
+						array(
+							'toggle' => '<span class="dashicons dashicons-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Location Details', 'my-calendar' ) . '</span>',
+						),
+					);
 				}
 			}
 		}
@@ -1315,7 +1322,14 @@ function mc_scripts() {
 		$api_key = get_option( 'mc_gmap_api_key' );
 		if ( $api_key ) {
 			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key" );
-			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ) );
+			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), '1.0.2', array(), true );
+			wp_localize_script(
+				'mc-maps',
+				'gmaps',
+				array(
+					'toggle' => '<span class="dashicons dashicons-arrow-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Toggle Address', 'my-calendar' ) . '</span>',
+				),
+			);
 		}
 	}
 

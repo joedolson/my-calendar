@@ -293,10 +293,18 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( ! $url && ! $label && ! $street && ! $street2 && ! $city && ! $state && ! $zip && ! $country && ! $phone ) {
 		return '';
 	}
+	$distance = '';
+	if ( property_exists( $event, 'distance_in_miles' ) ) {
+		$dist     = ( 'en_US' === get_locale() ) ? $event->distance_in_miles : ( 1.60934 * $event->distance_in_miles );
+		$unit     = ( 'en_US' === get_locale() ) ? ' miles' : ' km';
+		$dist     = round( $dist, 1 ) . $unit;
+		$distance = ' (' . $dist . ')';
+	}
 	if ( is_admin() && isset( $_GET['page'] ) && 'my-calendar-location-manager' === $_GET['page'] ) {
 		$link = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link edit'><span class='dashicons dashicons-edit' aria-hidden='true'></span> <span id='location$event->location_id'>$label</span></a>";
 	} else {
 		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external'>$label</a>" : $label;
+		$link = $link . $distance;
 	}
 	$post   = mc_get_location_post( $loc_id );
 	$events = ( ! is_single( $post ) ) ? '<a class="location-link" href="' . esc_url( get_the_permalink( $post ) ) . '">' . __( 'View Location', 'my-calendar' ) . '</a>' : '';
@@ -857,10 +865,11 @@ function mc_event_expired( $event ) {
  * @param object|array $event Object containing location parameters or array of objects.
  * @param string       $source event or location.
  * @param bool         $multiple True if event contains multiple locations.
+ * @param bool         $geolocate True if map is generated from geolocation data.
  *
  * @return string HTML
  */
-function mc_generate_map( $event, $source = 'event', $multiple = false ) {
+function mc_generate_map( $event, $source = 'event', $multiple = false, $geolocate = false ) {
 	if ( ! is_object( $event ) && ! $multiple ) {
 		return '';
 	}
@@ -884,6 +893,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 		$multiple  = ( count( $locations ) > 1 ) ? true : false;
 		foreach ( $locations as $location ) {
 			$id            = rand();
+			$loc_id        = $location->{$source . '_id'};
 			$source        = ( 'event' === $source ) ? 'event' : 'location';
 			$category_icon = mc_category_icon( $location, 'img' );
 			if ( ! $category_icon ) {
@@ -919,12 +929,12 @@ function mc_generate_map( $event, $source = 'event', $multiple = false ) {
 			);
 			$html      = apply_filters( 'mc_map_html', $marker, $location );
 			$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
-			$loc_list .= ( $multiple ) ? '<div class="mc-location-details">' . $hcard . '</div>' : '';
+			$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 		}
-
-		$map  = "<div class='mc-gmap-markers' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
-		$locs = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2>' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
-		$out  = '<div class="mc-maps">' . $map . $locs . '</div>';
+		$class = ( $geolocate ) ? 'geolocated' : '';
+		$map   = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
+		$locs  = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
+		$out   = '<div class="mc-maps">' . $map . $locs . '</div>';
 	}
 
 	return $out;
