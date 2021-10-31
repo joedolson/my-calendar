@@ -34,6 +34,7 @@ function my_calendar_manage_locations() {
 		if ( isset( $_GET['confirm'] ) ) {
 			echo wp_kses_post( mc_delete_location( $loc ) );
 		} else {
+			// Translators: Delete link.
 			$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button delete" href="' . esc_url( add_query_arg( 'location_id', $loc, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
 			mc_show_notice( $notice );
 		}
