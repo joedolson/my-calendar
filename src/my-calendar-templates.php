@@ -312,7 +312,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	 * Filter link to location-specific events in hcard.
 	 *
 	 * @param string $events HTML link to location permalink.
-	 * @param int    $post Location post ID.
+	 * @param object $post Location post object.
 	 * @param object $event Object being mapped.
 	 *
 	 * @return string
