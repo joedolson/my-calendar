@@ -1670,7 +1670,7 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 	if ( ! $id ) {
 		return;
 	}
-	$results = mc_get_related( $id );
+	$results = mc_get_grouped_events( $id );
 	$count   = count( $results );
 	$output  = '';
 	$classes = '';
