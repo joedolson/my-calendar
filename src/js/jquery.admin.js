@@ -89,7 +89,7 @@ jQuery(document).ready(function ($) {
 			newFor     = forVal + newNum;
 			$(this).attr( 'for', newFor );
 		});
-		// You can only add up to 40 occurrences at a time.
+		// You can only add up to 40 copies at a time.
 		if ( newNum == 40 ) {
 			$('.add_field').attr('disabled', 'disabled');
 		}

@@ -1298,7 +1298,7 @@ function mc_scripts() {
 			'mcAdmin',
 			array(
 				'thumbHeight'   => get_option( 'thumbnail_size_h' ),
-				'deleteButton'  => __( 'Delete', 'my-calendar' ),
+				'deleteButton'  => __( 'Cancel', 'my-calendar' ),
 				'restoreButton' => __( 'Restore', 'my-calendar' ),
 			)
 		);

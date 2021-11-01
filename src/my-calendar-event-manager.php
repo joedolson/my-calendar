@@ -1638,12 +1638,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
 				if ( $deleted || $custom ) {
 					if ( $deleted ) {
-						$notice = __( 'Some occurrences of this event have been deleted.', 'my-calendar' );
+						$notice = __( 'Some dates in this event have been deleted.', 'my-calendar' );
 					}
 					if ( $custom ) {
-						$notice = __( 'Extra occurrences of this event have been added or modified.', 'my-calendar' );
+						$notice = __( 'The dates for this event have been added or modified.', 'my-calendar' );
 					}
-					$notice .= ' ' . __( 'Updating the date or repetition pattern will reset its occurrences.', 'my-calendar' );
+					$notice .= ' ' . __( 'Changing the date or repetition pattern will reset its scheduled dates.', 'my-calendar' );
 					mc_show_notice( $notice );
 				}
 			}
@@ -1657,10 +1657,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id ) );
 				$edit_event = sprintf( ' <a href="%s">' . __( 'Edit the root event.', 'my-calendar' ) . '</a>', $edit_url );
 				// Translators: Date of a specific event occurrence.
-				$message = sprintf( __( 'You are editing the <strong>%s</strong> instance of this event. Other instances of this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
+				$message = sprintf( __( 'You are editing the <strong>%s</strong> date of this event. Other dates for this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
 				mc_show_notice( $message );
 			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
-				mc_show_notice( __( 'The ID for this event instance was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) );
+				mc_show_notice( __( 'The ID for an event date was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) );
 			}
 			?>
 			<fieldset class="details">
@@ -1734,7 +1734,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					<p id="event_span" class="checkboxes">
 						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
 						<label for="e_span"><?php esc_html_e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
-						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Occurrence', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'My Calendar: add an occurrence', 'my-calendar' ), 4 ); ?>
+						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Copy', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'My Calendar: copy an event', 'my-calendar' ), 4 ); ?>
 					</p>
 					<ol class="mc-repeat-events">
 						<li id="event1" class="datetime-template enabled">
@@ -1742,7 +1742,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							<legend>
 							<?php
 							// Translators: placeholder for number of occurrences added.
-							printf( __( 'Event Occurrence %1$s', 'my-calendar' ), '<span class="number_of">2</span>' );
+							printf( __( 'Event Copy %1$s', 'my-calendar' ), '<span class="number_of">2</span>' );
 							?>
 							</legend>
 							<?php
@@ -1750,7 +1750,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							?>
 							</fieldset>
 							<div class="buttons">
-								<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add occurrence', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'My Calendar: add an occurrence', 'my-calendar' ), '1' ); ?>
+								<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Copy', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'My Calendar: copy an event', 'my-calendar' ), '1' ); ?>
 							</div>
 						</li>
 					</ol>
@@ -1758,7 +1758,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					} else {
 						?>
 						<div id='mc-accordion'>
-							<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php esc_html_e( 'Scheduled dates for this event', 'my-calendar' ); ?></button></h4>
+							<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php esc_html_e( 'View scheduled dates', 'my-calendar' ); ?></button></h4>
 							<div>
 								<?php
 								if ( isset( $_GET['date'] ) ) {
@@ -3469,7 +3469,7 @@ function mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = '
 		$endtime   = '';
 	}
 
-	$form .= '<div class="mc-buttons"><button type="button" class="del_field button button-delete">' . __( 'Delete', 'my-calendar' ) . '</button><button type="button" class="remove_field button button-delete hidden">' . __( 'Remove', 'my-calendar' ) . '</button></div>
+	$form .= '<div class="mc-buttons"><button type="button" class="del_field button button-delete">' . __( 'Cancel', 'my-calendar' ) . '</button><button type="button" class="remove_field button button-delete hidden">' . __( 'Remove', 'my-calendar' ) . '</button></div>
 	<div class="columns">
 		<p>
 			<label for="mc_event_time_">' . __( 'Start Time', 'my-calendar' ) . '</label>
