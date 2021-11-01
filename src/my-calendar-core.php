@@ -1328,7 +1328,7 @@ function mc_scripts() {
 				'gmaps',
 				array(
 					'toggle' => '<span class="dashicons dashicons-arrow-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Toggle Address', 'my-calendar' ) . '</span>',
-				),
+				)
 			);
 		}
 	}
