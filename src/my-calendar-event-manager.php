@@ -2794,21 +2794,23 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		} else {
 			if ( 'none' !== $location_preset && is_numeric( $location_preset ) ) {
 				$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$event_label     = $location->location_label;
-				$event_street    = $location->location_street;
-				$event_street2   = $location->location_street2;
-				$event_city      = $location->location_city;
-				$event_state     = $location->location_state;
-				$event_postcode  = $location->location_postcode;
-				$event_region    = $location->location_region;
-				$event_country   = $location->location_country;
-				$event_url       = $location->location_url;
-				$event_longitude = $location->location_longitude;
-				$event_latitude  = $location->location_latitude;
-				$event_zoom      = $location->location_zoom;
-				$event_phone     = $location->location_phone;
-				$event_phone2    = $location->location_phone2;
-				$event_access    = $location->location_access;
+				if ( is_object( $location ) ) {
+					$event_label     = $location->location_label;
+					$event_street    = $location->location_street;
+					$event_street2   = $location->location_street2;
+					$event_city      = $location->location_city;
+					$event_state     = $location->location_state;
+					$event_postcode  = $location->location_postcode;
+					$event_region    = $location->location_region;
+					$event_country   = $location->location_country;
+					$event_url       = $location->location_url;
+					$event_longitude = $location->location_longitude;
+					$event_latitude  = $location->location_latitude;
+					$event_zoom      = $location->location_zoom;
+					$event_phone     = $location->location_phone;
+					$event_phone2    = $location->location_phone2;
+					$event_access    = $location->location_access;
+				}
 			} else {
 				$event_label     = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
 				$event_street    = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
