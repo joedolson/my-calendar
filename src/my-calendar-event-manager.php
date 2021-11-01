@@ -1267,13 +1267,13 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				} else {
 					if ( 'post' === $current_screen->base ) {
 						$return = '<div class="event_description">
-										<label for="content" class="screen-reader-text">' . __( 'Event Description', 'my-calendar' ) . '</label>
+										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
 										<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . stripslashes( esc_attr( $value ) ) . '</textarea>
 									</div>';
 					} else {
 						echo '
 						<div class="event_description">
-						<label for="content" class="screen-reader-text">' . __( 'Event Description', 'my-calendar' ) . '</label>';
+						<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>';
 						if ( user_can_richedit() ) {
 							wp_editor( $value, 'content', array( 'textarea_rows' => 20 ) );
 						} else {
