@@ -103,7 +103,7 @@ function my_calendar_group_edit() {
 		}
 	} else {
 		?>
-		<h1><?php esc_html_e( 'Manage Event Groups', 'my-calendar' ); ?></h1>
+		<h1><?php esc_html_e( 'Event Groups', 'my-calendar' ); ?></h1>
 		<p>
 			<?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you choose.', 'my-calendar' ); ?>
 		</p>

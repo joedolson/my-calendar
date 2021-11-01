@@ -588,7 +588,7 @@ function my_calendar_manage() {
 	}
 	?>
 	<div class='wrap my-calendar-admin'>
-		<h1 id="mc-manage" class="wp-heading-inline"><?php esc_html_e( 'Manage Events', 'my-calendar' ); ?></h1>
+		<h1 id="mc-manage" class="wp-heading-inline"><?php esc_html_e( 'Events', 'my-calendar' ); ?></h1>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 		<div class="mc-tablinks">
