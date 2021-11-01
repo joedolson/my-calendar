@@ -1268,6 +1268,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 					if ( 'post' === $current_screen->base ) {
 						$return = '<div class="event_description">
 										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
+										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
 										<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . stripslashes( esc_attr( $value ) ) . '</textarea>
 									</div>';
 					} else {
@@ -3689,7 +3690,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( 'preview', 'true', $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';
 		}
-		$manage_text        = ( current_user_can( 'mc_manage_events' ) ) ? __( 'Manage events', 'my-calendar' ) : __( 'Manage your events', 'my-calendar' );
+		$manage_text        = __( 'Events', 'my-calendar' );
 		$controls['manage'] = "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage' ) . '">' . $manage_text . '</a>';
 	}
 	if ( 'footer' === $position ) {

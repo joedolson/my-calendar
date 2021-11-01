@@ -193,7 +193,7 @@ function mc_register_styles() {
 						'gmaps',
 						array(
 							'toggle' => '<span class="dashicons dashicons-arrow-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Location Details', 'my-calendar' ) . '</span>',
-						),
+						)
 					);
 				}
 			}
