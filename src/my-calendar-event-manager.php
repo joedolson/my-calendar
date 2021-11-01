@@ -2793,7 +2793,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			// event location name is required to copy over.
 		} else {
 			if ( 'none' !== $location_preset && is_numeric( $location_preset ) ) {
-				$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				if ( is_object( $location ) ) {
 					$event_label     = $location->location_label;
 					$event_street    = $location->location_street;
