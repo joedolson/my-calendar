@@ -294,3 +294,16 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }
 .mcjs.mc-main .single-event .details, .mcjs.mc-main.list.day .details { display: block; }
 
+.mc-gmap-location-list {
+	margin: 1em 0;
+}
+
+.mc-location-details {
+	margin-bottom: .5em;
+}
+
+.mc-maps .mc-gmap-location-list .mc-location-details button {
+	padding: .33rem;
+	border-radius: 3px;
+	margin: 0 5px 0 0;
+}

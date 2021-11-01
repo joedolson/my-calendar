@@ -19,7 +19,7 @@
 			button.className =  'toggle-locations';
 			button.setAttribute( 'aria-controls', 'control-' + id );
 			button.setAttribute( 'aria-expanded', false );
-			heading.appendChild( button );
+			heading.insertAdjacentElement( 'afterbegin', button );
 		});
 
 		var toggles = document.querySelectorAll( 'button.toggle-locations' );
