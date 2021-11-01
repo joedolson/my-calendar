@@ -1789,12 +1789,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 								if ( 0 !== (int) $data->event_group_id ) {
 									$edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
 									?>
-									<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php esc_html_e( 'Related Events', 'my-calendar' ); ?></button>
+									<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php esc_html_e( 'Event Group', 'my-calendar' ); ?></button>
 									</h4>
 									<div>
 										<a href='<?php echo esc_url( $edit_group_url ); ?>'><?php esc_html_e( 'Edit group', 'my-calendar' ); ?></a>
 										<ul class="columns instance-list">
-											<?php mc_related_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
+											<?php mc_grouped_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
 										</ul>
 									</div>
 									<?php
@@ -3752,17 +3752,17 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 }
 
 /**
- * Get a list of related events and list admin editing links
+ * Get a list of event in a group and list admin editing links
  *
  * @param int    $id group ID.
  * @param string $template Template format.
  */
-function mc_related_events( $id, $template = '' ) {
+function mc_grouped_events( $id, $template = '' ) {
 	global $wpdb;
 	$id     = (int) $id;
 	$output = '';
 
-	$results = mc_get_related( $id );
+	$results = mc_get_grouped_events( $id );
 	if ( is_array( $results ) && ! empty( $results ) ) {
 		foreach ( $results as $result ) {
 			$first = mc_get_first_event( $result->event_id );
@@ -3783,7 +3783,7 @@ function mc_related_events( $id, $template = '' ) {
 			$output        .= "<li>$current_output</li>";
 		}
 	} else {
-		$output = '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
+		$output = '<li>' . __( 'No grouped events', 'my-calendar' ) . '</li>';
 	}
 
 	echo wp_kses_post( $output );

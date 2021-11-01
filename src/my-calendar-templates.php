@@ -494,7 +494,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	if ( 'related' !== $context && ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
-		$e['related']     = '<ul class="related-events">' . mc_list_related( $event->event_group_id, $event->event_id, $related_template ) . '</ul>';
+		$e['related']     = '<ul class="related-events">' . mc_list_group( $event->event_group_id, $event->event_id, $related_template ) . '</ul>';
 	} else {
 		$e['related'] = '';
 	}

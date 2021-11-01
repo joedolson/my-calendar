@@ -856,9 +856,9 @@ function mc_get_occurrences( $id ) {
  *
  * @param int $id Group ID.
  *
- * @return array Array event IDs of related events
+ * @return array Array event IDs of grouped events
  */
-function mc_get_related( $id ) {
+function mc_get_grouped_events( $id ) {
 	global $wpdb;
 	$id = (int) $id;
 	if ( 0 === $id ) {

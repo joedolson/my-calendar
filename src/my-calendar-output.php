@@ -1666,7 +1666,7 @@ function mc_show_event_template( $content ) {
  *
  * @return string list of related events
  */
-function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
+function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 	if ( ! $id ) {
 		return;
 	}
@@ -1676,8 +1676,8 @@ function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
 	$classes = '';
 	// If a large number of events, skip this.
 	if ( $count > apply_filters( 'mc_related_event_limit', 50 ) ) {
-		// filter to return an subset of related events.
-		return apply_filters( 'mc_related_events', '', $results );
+		// filter to return an subset of grouped events.
+		return apply_filters( 'mc_grouped_events', '', $results );
 	}
 
 	if ( is_array( $results ) && ! empty( $results ) ) {
@@ -1700,7 +1700,7 @@ function mc_list_related( $id, $this_id, $template = '{date}, {time}' ) {
 			}
 		}
 	} else {
-		$output = '<li>' . __( 'No related events', 'my-calendar' ) . '</li>';
+		$output = '<li>' . __( 'No grouped events', 'my-calendar' ) . '</li>';
 	}
 
 	return $output;
