@@ -3483,7 +3483,7 @@ function mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = '
 			<label for="mc_event_date_" id="eblabel">' . __( 'Date', 'my-calendar' ) . '</label> <input type="date" class="event-begin" id="mc_event_date_" name="event_begin[]" value="" disabled />
 		</p>
 		<p>
-			<label for="mc_event_enddate_" id="eelabel"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label> <input type="date" id="mc_event_enddate_" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
+			<label for="mc_event_enddate_" id="eelabel"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label> <input type="date" class="event-end" id="mc_event_enddate_" name="event_end[]" value="' . esc_attr( $event_end ) . '" disabled />
 		</p>
 	</div>';
 

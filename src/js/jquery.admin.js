@@ -73,7 +73,10 @@ jQuery(document).ready(function ($) {
 		var initialEnd   = $( '#mc_event_endtime' ).val();
 		var initialStart = oldElem.find( '.event-begin' ).val();
 		if ( ! initialStart ) {
-			initialStart = document.querySelector( '[identifier="mc_event_enddate"]' ).value;
+			initialStart = document.querySelector( '[identifier="mc_event_date"]' ).value;
+		}
+		if ( ! initialEnd ) {
+			initialEnd = document.querySelector( '[identifier="mc_event_enddate"]' ).value;
 		}
 		endControl.val( initialEnd );
 		startControl.val( initialStart );
