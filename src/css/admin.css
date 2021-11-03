@@ -297,10 +297,6 @@
 }
 
 /* Date/times */
-.mc-main .time-block {
-	float: right;
-}
-
 .mc-main.mini .time-block {
 	float: none;
 	font-size: 14px;

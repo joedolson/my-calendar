@@ -411,7 +411,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	} else {
 		$dates = array();
 	}
-
+	$e['datetime']  = mc_time_html( $event, 'grid' );
 	$e['date']      = ( '1' !== $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
 	$e['enddate']   = $date_end;
 	$e['daterange'] = ( $date === $date_end ) ? "<span class='mc_db'>$date</span>" : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
