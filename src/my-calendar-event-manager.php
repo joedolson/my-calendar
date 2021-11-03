@@ -1786,21 +1786,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 								</p>
 								</div>
 							</div>
-								<?php
-								if ( 0 !== (int) $data->event_group_id ) {
-									$edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id );
-									?>
-									<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php esc_html_e( 'Event Group', 'my-calendar' ); ?></button>
-									</h4>
-									<div>
-										<a href='<?php echo esc_url( $edit_group_url ); ?>'><?php esc_html_e( 'Edit group', 'my-calendar' ); ?></a>
-										<ul class="columns instance-list">
-											<?php mc_grouped_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
-										</ul>
-									</div>
-									<?php
-								}
-								?>
 						</div>
 						<?php
 					}
@@ -1888,8 +1873,25 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				</div>
 			</div>
 		</div>
+								<?php
+
+								?>
 		<?php
 		if ( $has_data ) {
+			if ( 0 !== (int) $data->event_group_id ) {
+			?>
+		<div class="postbox">
+			<h2><?php esc_html_e( 'Event Group', 'my-calendar' ); ?></h2>
+			<div class="inside">
+			<?php $edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id ); ?>
+				<p><a href='<?php echo esc_url( $edit_group_url ); ?>'><?php esc_html_e( 'Edit other events in the same event group.', 'my-calendar' ); ?></a></p>
+				<ul class="bullets instance-list">
+					<?php mc_grouped_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
+				</ul>
+			</div>
+		</div>
+				<?php
+			}
 			?>
 		<div class="postbox">
 			<h2><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></h2>
@@ -3287,7 +3289,7 @@ function mc_admin_instances( $id, $occur = false ) {
 				$edit    = "<p>$date</p><p><em>" . __( 'Editing Now', 'my-calendar' ) . '</em></p>';
 				$class   = 'current-event';
 			} else {
-				$control = "<p>$date</p><p><button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
+				$control = "<p>$date</p><p class='instance-buttons'><button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
 				$edit    = "<a href='" . admin_url( 'admin.php?page=my-calendar' ) . "&amp;mode=edit&amp;event_id=$id&amp;date=$result->occur_id' class='button' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit', 'my-calendar' ) . '</a></p>';
 			}
 			$output .= "<li class='$class'>$control$edit</li>";

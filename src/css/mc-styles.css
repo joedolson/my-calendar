@@ -939,6 +939,11 @@ input[name="mc_uri"] {
 	margin: 0;
 }
 
+.my-calendar-admin .bullets {
+	list-style: disc;
+	margin-left: 1em;
+}
+
 .my-calendar-admin .checkboxes:after {
 	content: '';
 	display: table;
@@ -1312,9 +1317,14 @@ tr.problem .error {
 	overflow: hidden;
 }
 
+
 #e_schedule .columns p:nth-of-type(1),
 #e_schedule .columns p:nth-of-type(2) {
 	display: grid;
+}
+
+#e_schedule .columns p.instance-buttons {
+	display: block;
 }
 
 input#mc_event_endtime:invalid+span,
