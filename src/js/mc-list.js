@@ -3,6 +3,7 @@
 	$(function () {
 		$('li.mc-events').children().not('.event-date').hide();
 		$('li.current-day').children().show();
+		$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
 		$(document).on( 'click', '.event-date button',
 			function (e) {
 				e.preventDefault();
