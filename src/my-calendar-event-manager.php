@@ -1627,7 +1627,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	<div class="postbox">
 		<?php
 			// Translators: Event title.
-			$text = ( 'edit' === $mode ) ? sprintf( __( 'Editing "%s"', 'my-calendar' ), $data->event_title ) : __( 'Add Event', 'my-calendar' );
+			$text = ( 'edit' === $mode ) ? sprintf( __( 'Editing Event: "%s"', 'my-calendar' ), stripslashes( $data->event_title ) ) : __( 'Add Event', 'my-calendar' );
 		?>
 		<h2><?php echo esc_html( $text ); ?></h2>
 		<div class="inside">

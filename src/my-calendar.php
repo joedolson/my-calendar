@@ -397,7 +397,7 @@ function my_calendar_menu() {
 			if ( isset( $_GET['event_id'] ) ) {
 				$event_id = absint( $_GET['event_id'] );
 				// Translators: Title of event.
-				$page_title = sprintf( __( 'Editing Event: %s', 'my-calendar' ), mc_get_data( 'event_title', $event_id ) );
+				$page_title = sprintf( __( 'Editing Event: %s', 'my-calendar' ), esc_html( strip_tags( stripslashes( mc_get_data( 'event_title', $event_id ) ) ) ) );
 			} else {
 				$page_title = __( 'Add New Event', 'my-calendar' );
 			}

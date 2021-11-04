@@ -1582,7 +1582,7 @@ function mc_event_filter( $title ) {
 		$template = get_option( 'mc_event_title_template', '' );
 		$template = ( '' !== $template ) ? stripslashes( $template ) : '{title} / {date}';
 
-		return strip_tags( mc_draw_template( $array, $template ) );
+		return esc_html( strip_tags( stripslashes( mc_draw_template( $array, $template ) ) ) );
 	} else {
 		return $title;
 	}
