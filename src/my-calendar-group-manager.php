@@ -226,7 +226,7 @@ function mc_compare_group_members( $group_id, $field = false, $echo = true ) {
 function mc_group_form( $group_id, $type = 'break' ) {
 	$event_id = (int) $_GET['event_id'];
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
-	$results  = mc_get_related( $group_id );
+	$results  = mc_get_grouped_events( $group_id );
 	if ( 'apply' === $type ) {
 		$warning = ( ! mc_compare_group_members( $group_id ) ) ? '<p class="unmatched warning">' . __( '<strong>Warning:</strong> Editable fields for the events in this group do not match.', 'my-calendar' ) . '</p>' : '<p class="matched">' . __( 'Editable fields for the events in this group match.', 'my-calendar' ) . '</p>';
 	} else {
