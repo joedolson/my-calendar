@@ -2,7 +2,7 @@
 	$(function () {
 		// Delete single instances of recurring events.
 		$( '.mc_response' ).hide();
-		$('button.delete_occurrence').on( 'click', function () {
+		$('.instance-list').on( 'click', 'button.delete_occurrence', function () {
 			var value = $(this).attr( 'data-value' );
 			var id    = $(this).attr( 'data-event' );
 			var begin = $(this).attr( 'data-begin' );
@@ -18,6 +18,8 @@
 			$.post( ajaxurl, data, function (response) {
 				if ( response.success == 1 ) {
 					$( "button[data-value='"+value+"']" ).parents( 'li' ).hide();
+				} else {
+					console.log( response );
 				}
 				$('.mc_response').text( response.response ).show( 300 );
 			}, "json" );
@@ -55,7 +57,11 @@
 			};
 			$.post( ajaxurl, data, function (response) {
 				if ( response.success == 1 ) {
-					$( '.instance-list' ).append( '<li class="new"><strong>+</strong> ' + date + ' ' + begin + '</li>' );
+					var time     = begin.split( ':' );
+					var display  = time[0] + ':' + time[1];
+					var edit_url = mc_data.url + response.id;
+					var dateEnd  = ( typeof( enddate ) === 'undefined' ) ? date : enddate;
+					$( '.instance-list' ).append( '<li class="new"><p><span id="occur_date_' + response.id + '"><strong>Added:</strong> ' + date + ' @ ' + display + '</span></p><p class="instance-buttons"><button class="button delete_occurrence" type="button" data-event="' + event_id + '" data-begin="' + date + ' ' + begin + '" data-end="' + dateEnd + ' ' + end + '" data-value="' + response.id + '" aria-describedby="occur_date_' + response.id + '">Delete</button> <a href="' + edit_url + '" class="button">Edit</a></p></li>' );
 				}
 				$('.mc_response').text( response.response ).show( 300 );
 			}, "json" );

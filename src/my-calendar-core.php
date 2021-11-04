@@ -1339,6 +1339,7 @@ function mc_scripts() {
 	if ( 'toplevel_page_my-calendar' === $id ) {
 		if ( current_user_can( 'mc_manage_events' ) ) {
 			wp_enqueue_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ) );
+			$event_id = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : '';
 			wp_localize_script(
 				'mc.ajax',
 				'mc_data',
@@ -1346,6 +1347,7 @@ function mc_scripts() {
 					'action'   => 'delete_occurrence',
 					'recur'    => 'add_date',
 					'security' => wp_create_nonce( 'mc-delete-nonce' ),
+					'url'      => esc_url( add_query_arg( 'event_id', $event_id, admin_url( 'admin.php?page=my-calendar&mode=edit' ) ) ),
 				)
 			);
 			wp_enqueue_script( 'mc.ajaxcats', plugins_url( 'js/ajax-cats.js', __FILE__ ), array( 'jquery' ) );
@@ -1673,6 +1675,7 @@ function mc_ajax_add_date() {
 			'occur_group_id' => $group_id,
 		);
 		$result      = $wpdb->insert( my_calendar_event_table(), $data, $format );
+		$id          = $wpdb->insert_id;
 		$event_post  = mc_get_event_post( $event_id );
 		$instances   = get_post_meta( $event_post, '_mc_custom_instances', true );
 		$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
@@ -1683,14 +1686,15 @@ function mc_ajax_add_date() {
 			wp_send_json(
 				array(
 					'success'  => 1,
-					'response' => esc_html__( 'Thanks! Your new date is saved to your calendar.', 'my-calendar' ),
+					'id'       => (int) $id,
+					'response' => esc_html__( 'Thanks! A new date has been added to this event.', 'my-calendar' ),
 				)
 			);
 		} else {
 			wp_send_json(
 				array(
 					'success'  => 0,
-					'response' => esc_html__( 'Sorry! I failed to add that date.', 'my-calendar' ),
+					'response' => esc_html__( 'Sorry! I failed to add that date to your event.', 'my-calendar' ),
 				)
 			);
 		}
