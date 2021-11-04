@@ -1883,9 +1883,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				</div>
 			</div>
 		</div>
-								<?php
-
-								?>
 		<?php
 		if ( $has_data ) {
 			if ( 0 !== (int) $data->event_group_id ) {
