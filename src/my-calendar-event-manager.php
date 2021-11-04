@@ -1516,6 +1516,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 /**
  * Generate editing panel for adding additional dates.
  *
+ * @param object $data Event data object for editing.
  *
  * @return string
  */
@@ -1535,7 +1536,7 @@ function mc_additional_dates( $data ) {
 		$input     = mc_recur_datetime_input( $data );
 		$output    = "
 		<div id='mc-accordion'>
-			<h4><button type='button' class='button'><span class='dashicons' aria-hidden='true'></span>" .  esc_html__( 'View scheduled dates', 'my-calendar' ) . '</button></h4>
+			<h4><button type='button' class='button'><span class='dashicons' aria-hidden='true'></span>" . esc_html__( 'View scheduled dates', 'my-calendar' ) . '</button></h4>
 			<div>' . $edit_desc . "
 				<div class='mc_response' aria-live='assertive'></div>
 				<ul class='columns instance-list'>
@@ -1886,11 +1887,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<?php
 		if ( $has_data ) {
 			if ( 0 !== (int) $data->event_group_id ) {
-			?>
+				?>
 		<div class="postbox">
 			<h2><?php esc_html_e( 'Event Group', 'my-calendar' ); ?></h2>
 			<div class="inside">
-			<?php $edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id ); ?>
+				<?php $edit_group_url = admin_url( 'admin.php?page=my-calendar-manage&groups=true&mode=edit&event_id=' . $data->event_id . '&group_id=' . $data->event_group_id ); ?>
 				<p><a href='<?php echo esc_url( $edit_group_url ); ?>'><?php esc_html_e( 'Edit other events in the same event group.', 'my-calendar' ); ?></a></p>
 				<ul class="bullets instance-list">
 					<?php mc_grouped_events( $data->event_group_id, '<p>{current}{begin}{end}</p>' ); ?>
