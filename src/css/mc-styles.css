@@ -190,14 +190,15 @@ span.mc-notice {
 }
 
 .mc_permissions .mc-settings,
-#my-calendar .columns,
+.my-calendar-admin .columns,
 .recurring .columns {
 	display: grid;
 	column-gap: 8px
 }
 
+.recurrences .columns,
 #e_schedule .columns,
-#my-calendar .columns-flex {
+.my-calendar-admin .columns-flex {
 	display: flex;
 }
 
@@ -240,16 +241,17 @@ li.datetime-template:nth-of-type(even) {
 }
 
 .mc_permissions .mc-settings,
-#my-calendar .columns {
+.my-calendar-admin .columns {
 	grid-template-columns: repeat(2, 1fr );
 }
 
+.recurrences .columns,
 #e_schedule .columns {
 	align-items: start;
 	flex-wrap: wrap;
 }
 
-#my-calendar .recurring .columns {
+.my-calendar-admin .recurring .columns {
 	display: flex;
 	flex-wrap: wrap;
 }
@@ -266,7 +268,9 @@ li.datetime-template:nth-of-type(even) {
 	opacity: 0;
 }
 
+
 #e_schedule .columns label:not(.duet-date__mobile-heading),
+.recurrences .columns label:not(.duet-date__mobile-heading),
 .recurring .columns label:not(.duet-date__mobile-heading) {
 	display: block;
 }
@@ -275,18 +279,21 @@ li.datetime-template:nth-of-type(even) {
 	display: inline;
 }
 
+.recurrences .columns.instance-list,
 #e_schedule .columns.instance-list {
 	grid-template-columns: repeat( 3, 1fr )
 }
 
+.recurrences .columns.instance-list li,
 #e_schedule .columns.instance-list li {
 	min-height: 80px;
 	background: rgba( 0,0,0,.05 );
 	padding: 10px;
 }
 
+.recurrences input[type=time],
 #e_schedule input[type=time],
-#my-calendar input[type=date],
+.my-calendar-admin input[type=date],
 .recurring select {
 	padding: 8px 24px 8px 8px;
 }
@@ -1195,7 +1202,8 @@ div.mc-search {
 	z-index: 200;
 	padding: 1em;
 	background: #fff;
-	box-shadow: 0 0 3px #787c82;
+	box-shadow: 0 0 2px #787c82;
+	margin-bottom: 1em;
 }
 
 .mc_add_new .clonedInput {
@@ -1318,12 +1326,12 @@ tr.problem .error {
 }
 
 
-#e_schedule .columns p:nth-of-type(1),
-#e_schedule .columns p:nth-of-type(2) {
+.recurrences .columns p:nth-of-type(1),
+.recurrences .columns p:nth-of-type(2) {
 	display: grid;
 }
 
-#e_schedule .columns p.instance-buttons {
+.recurrences .columns p.instance-buttons {
 	display: block;
 }
 
@@ -1374,15 +1382,18 @@ input#mc_event_time:valid+span {
 		width: 100%;
 	}
 
-	#my-calendar .columns {
+	.my-calendar-admin .columns {
 		grid-template-columns: repeat( 1, 1fr );
 	}
 
+	.recurrences .columns,
 	#e_schedule .columns,
 	.recurring .columns {
 		display: block;
 	}
 
+	.recurrences .columns p:first-of-type,
+	.recurrences .columns p:nth-of-type(2),
 	#e_schedule .columns p:first-of-type,
 	#e_schedule .columns p:nth-of-type(2),
 	.recurring .columns p:first-of-type,

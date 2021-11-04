@@ -1451,6 +1451,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			<label for="e_fifth_week">' . __( 'If event falls on the 5th week of the month in a month with four weeks, move it one week earlier.', 'my-calendar' ) . '</label>
 			<input type="checkbox" value="true" id="e_fifth_week" name="event_fifth_week"' . checked( true, $fifth_checked, false ) . ' />
 		</p>
+		' . mc_additional_dates( $data ) . '
 	</div>
 							' . $post;
 			} else {
@@ -1510,6 +1511,48 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 	} else {
 		return $return;
 	}
+}
+
+/**
+ * Generate editing panel for adding additional dates.
+ *
+ *
+ * @return string
+ */
+function mc_additional_dates( $data ) {
+	$output = '';
+	if ( isset( $_GET['mode'] ) && 'edit' === $_GET['mode'] ) {
+		$edit_url  = '';
+		$edit_desc = '';
+		$date      = false;
+		if ( isset( $_GET['date'] ) ) {
+			$date     = (int) $_GET['date'];
+			$edit_url = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id ) );
+			// Translators: event editing URL.
+			$edit_desc = sprintf( '<p>' . __( 'Editing a single date of an event changes only that date. <a href="%s">Edit the root event</a> to change the event series.', 'my-calendar' ) . '</p>', $edit_url );
+		}
+		$instances = mc_admin_instances( $data->event_id, $date );
+		$input     = mc_recur_datetime_input( $data );
+		$output    = "
+		<div id='mc-accordion'>
+			<h4><button type='button' class='button'><span class='dashicons' aria-hidden='true'></span>" .  esc_html__( 'View scheduled dates', 'my-calendar' ) . '</button></h4>
+			<div>' . $edit_desc . "
+				<div class='mc_response' aria-live='assertive'></div>
+				<ul class='columns instance-list'>
+					$instances
+				</ul>
+				<p><button type='button' class='add-occurrence button-secondary' aria-expanded='false'><span class='dashicons dashicons-plus' aria-hidden='true'> </span>" . esc_html__( 'Add another date', 'my-calendar' ) . "</button></p>
+				<div class='mc_add_new'>
+					$input
+					<p>
+					<button type='button' class='save-occurrence button-primary clear'>" . esc_html__( 'Add Date', 'my-calendar' ) . '</button>
+					</p>
+				</div>
+			</div>
+		</div>';
+	}
+
+	return $output;
 }
 
 
@@ -1754,39 +1797,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							</div>
 						</li>
 					</ol>
-						<?php
-					} else {
-						?>
-						<div id='mc-accordion'>
-							<h4><button type="button" class="button"><span class='dashicons' aria-hidden='true'></span><?php esc_html_e( 'View scheduled dates', 'my-calendar' ); ?></button></h4>
-							<div>
-								<?php
-								if ( isset( $_GET['date'] ) ) {
-									$edit_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id );
-									// Translators: event editing URL.
-									echo wp_kses_post( sprintf( '<p>' . __( 'Editing a single date of an event changes only that date. <a href="%s">Edit the root event</a> to change the event series.', 'my-calendar' ) . '</p>', $edit_url ) );
-								}
-								?>
-								<div class='mc_response' aria-live='assertive'></div>
-								<ul class="columns instance-list">
-									<?php
-									if ( isset( $_GET['date'] ) ) {
-										$date = (int) $_GET['date'];
-									} else {
-										$date = false;
-									}
-									echo mc_admin_instances( $data->event_id, $date );
-									?>
-								</ul>
-								<p><button type='button' class='add-occurrence button-secondary' aria-expanded="false"><span class='dashicons dashicons-plus' aria-hidden='true'> </span><?php esc_html_e( 'Add another date', 'my-calendar' ); ?></button></p>
-								<div class='mc_add_new'>
-								<?php echo mc_recur_datetime_input( $data ); ?>
-								<p>
-								<button type='button' class='save-occurrence button-primary clear'><?php esc_html_e( 'Add Date', 'my-calendar' ); ?></button>
-								</p>
-								</div>
-							</div>
-						</div>
 						<?php
 					}
 					?>
