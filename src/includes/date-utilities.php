@@ -446,6 +446,70 @@ function mc_private_event( $event, $type = true ) {
 }
 
 /**
+ * Parse a string and replace internationalized months with English so strtotime() will parse correctly
+ *
+ * @param string $string Date information.
+ *
+ * @return string de-internationalized change
+ */
+function mc_strtotime( $string ) {
+	$months  = array(
+		date_i18n( 'F', strtotime( 'January 1' ) ),
+		date_i18n( 'F', strtotime( 'February 1' ) ),
+		date_i18n( 'F', strtotime( 'March 1' ) ),
+		date_i18n( 'F', strtotime( 'April 1' ) ),
+		date_i18n( 'F', strtotime( 'May 1' ) ),
+		date_i18n( 'F', strtotime( 'June 1' ) ),
+		date_i18n( 'F', strtotime( 'July 1' ) ),
+		date_i18n( 'F', strtotime( 'August 1' ) ),
+		date_i18n( 'F', strtotime( 'September 1' ) ),
+		date_i18n( 'F', strtotime( 'October 1' ) ),
+		date_i18n( 'F', strtotime( 'November 1' ) ),
+		date_i18n( 'F', strtotime( 'December 1' ) ),
+		date_i18n( 'M', strtotime( 'January 1' ) ),
+		date_i18n( 'M', strtotime( 'February 1' ) ),
+		date_i18n( 'M', strtotime( 'March 1' ) ),
+		date_i18n( 'M', strtotime( 'April 1' ) ),
+		date_i18n( 'M', strtotime( 'May 1' ) ),
+		date_i18n( 'M', strtotime( 'June 1' ) ),
+		date_i18n( 'M', strtotime( 'July 1' ) ),
+		date_i18n( 'M', strtotime( 'August 1' ) ),
+		date_i18n( 'M', strtotime( 'September 1' ) ),
+		date_i18n( 'M', strtotime( 'October 1' ) ),
+		date_i18n( 'M', strtotime( 'November 1' ) ),
+		date_i18n( 'M', strtotime( 'December 1' ) ),
+	);
+	$english = array(
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec',
+	);
+
+	return strtotime( str_replace( $months, $english, $string ) );
+}
+
+/**
  * Wrapper for mc_date()
  *
  * @param string $format Format to use.
