@@ -3833,6 +3833,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 				}
 				break;
+			// Weekly.
 			case 'W':
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
 					$begin = my_calendar_add_date( $orig_begin, ( $i * 7 ) * $every, 0, 0 );
@@ -3862,6 +3863,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 				}
 				break;
+			// Biweekly.
 			case 'B':
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
 					$begin = my_calendar_add_date( $orig_begin, ( $i * 14 ), 0, 0 );
@@ -3891,6 +3893,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 				}
 				break;
+			// Monthly by date.
 			case 'M':
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
 					$begin = my_calendar_add_date( $orig_begin, 0, $i * $every, 0 );
@@ -3920,6 +3923,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 				}
 				break;
+			// Monthly by day.
 			case 'U':
 				// Important to keep track of which date variables are strings and which are timestamps.
 				$week_of_event = mc_week_of_month( mc_date( 'd', strtotime( $event->event_begin ), false ) );
@@ -3983,6 +3987,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 28, 0, 0 );
 				}
 				break;
+			// Annual.
 			case 'Y':
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
 					$begin = my_calendar_add_date( $orig_begin, 0, 0, $i * $every );
