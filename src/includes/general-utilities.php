@@ -464,12 +464,29 @@ function mc_debug( $subject, $body, $email = false ) {
 }
 
 /**
- * Drop a table
+ * Get users as options in a select
  *
- * @param string $table name of function used to call table name.
+ * @param string $selected Group of selected users. Comma-separated IDs.
+ * @param string $group Type of roles to fetch.
+ *
+ * @return string select options.
  */
-function mc_drop_table( $table ) {
-	global $wpdb;
-	$sql = 'DROP TABLE ' . $table();
-	$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+function mc_selected_users( $selected = '', $group = 'authors' ) {
+	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group );
+	if ( '' !== $options ) {
+		return $options;
+	}
+	$selected = explode( ',', $selected );
+	$users    = mc_get_users( $group );
+	foreach ( $users as $u ) {
+		if ( in_array( $u->ID, $selected, true ) ) {
+			$checked = ' selected="selected"';
+		} else {
+			$checked = '';
+		}
+		$display_name = ( '' === $u->display_name ) ? $u->user_nicename : $u->display_name;
+		$options     .= '<option value="' . $u->ID . '"' . $checked . ">$display_name</option>\n";
+	}
+
+	return $options;
 }
