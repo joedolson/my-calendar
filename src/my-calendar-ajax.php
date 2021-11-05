@@ -173,7 +173,7 @@ function mc_ajax_display_recurrence() {
 		);
 	}
 
-	$recur  = sanitize_text_field( $_REQUEST['recur'] );
+	$recur  = sanitize_text_field( $_REQUEST['recur'] ); 
 	$every  = (int) $_REQUEST['every'];
 	$until  = sanitize_text_field( $_REQUEST['until'] );
 	$args   = array(
@@ -345,7 +345,7 @@ function mc_core_autocomplete_search_locations() {
 				)
 			);
 		}
-		$query = $_REQUEST['data'];
+		$query = sanitize_text_field( $_REQUEST['data'] );
 
 		$locations = mc_core_search_locations( $query, array( 'location_id', 'location_label' ) );
 		$response  = array();
