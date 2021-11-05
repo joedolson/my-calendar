@@ -1810,19 +1810,24 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<div class="mc-preview">
 					<?php
 					$first    = mc_get_first_event( $data->event_id );
-					$view_url = mc_get_details_link( $first );
-					if ( ! mc_event_published( $data ) ) {
-						$view_url = add_query_arg( 'preview', 'true', mc_get_details_link( $first ) );
+					if ( ! $first ) {
+						esc_html_e( 'Unable to retrieve template tags for this event.', 'my-calendar' );
+						$tag_preview = '';
+					} else {
+						$view_url = mc_get_details_link( $first );
+						if ( ! mc_event_published( $data ) ) {
+							$view_url = add_query_arg( 'preview', 'true', mc_get_details_link( $first ) );
+						}
+						$tag_url     = admin_url( "admin.php?page=my-calendar-design&mc-event=$first->occur_id#my-calendar-templates" );
+						$tag_preview = add_query_arg(
+							array(
+								'iframe'   => 'true',
+								'showtags' => 'true',
+								'mc_id'    => $first->occur_id,
+							),
+							$view_url
+						);
 					}
-					$tag_url     = admin_url( "admin.php?page=my-calendar-design&mc-event=$first->occur_id#my-calendar-templates" );
-					$tag_preview = add_query_arg(
-						array(
-							'iframe'   => 'true',
-							'showtags' => 'true',
-							'mc_id'    => $first->occur_id,
-						),
-						$view_url
-					);
 					?>
 					<div class="mc-template-tag-preview">
 						<iframe title="<?php echo esc_attr( __( 'Event Template Tag Preview', 'my-calendar' ) ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
@@ -3764,6 +3769,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 		$recur      = ( ! $event_repetition ) ? 'S' : $recur;
 		$numforward = (int) $event_repetition;
 		switch ( $recur ) {
+			// Daily.
 			case 'D':
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
 					$begin = my_calendar_add_date( $orig_begin, $i * $every, 0, 0 );
@@ -3795,70 +3801,34 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 				}
 				break;
+			// Weekdays only.
 			case 'E':
-				// This doesn't work for weekdays unless the period is less than one week, as it doesn't account for day repetitions.
-				// Need to set up two nested loops to ID the number of days forward for x week days.
 				// Every = $every = e.g. every 14 weekdays.
 				// Num forward = $numforward = e.g. 7 times.
-				if ( $every < 7 ) {
-					for ( $i = 0; $i <= $numforward; $i ++ ) {
-						$begin = my_calendar_add_date( $orig_begin, $i * $every, 0, 0 );
-						$end   = my_calendar_add_date( $orig_end, $i * $every, 0, 0 );
-						if ( 0 !== (int) ( mc_date( 'w', $begin, false ) && 6 !== (int) mc_date( 'w', $begin, false ) ) ) {
-							$data = array(
-								'occur_event_id' => $id,
-								'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-								'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-								'occur_group_id' => $group_id,
-							);
-							if ( $begin <= strtotime( $post_until ) ) {
-								$numforward ++;
-							} else {
-								return $data;
-							}
-							if ( 'test' === $test && $i > 0 ) {
-								return $data;
-							}
-							$return[] = $data;
-							if ( ! $test ) {
-								$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
-								if ( ! $insert ) {
-									$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-									$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-									$wpdb->insert( my_calendar_event_table(), $data, $format );
-								}
-							}
-						} else {
-							$numforward ++;
-						}
+				for ( $i = 0; $i <= $numforward; $i ++ ) {
+					$begin = strtotime( $orig_begin . ' ' . ( $every * $i ) . ' weekdays' );
+					$end   = strtotime( $orig_end . ' ' . ( $every * $i ) . ' weekdays' );
+					$data  = array(
+						'occur_event_id' => $id,
+						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
+						'occur_group_id' => $group_id,
+					);
+					if ( $begin <= strtotime( $post_until ) ) {
+						$numforward ++;
+					} else {
+						return $data;
 					}
-				} else {
-					// Get number of weeks included in data.
-					for ( $i = 0; $i <= $event_repetition; $i ++ ) {
-						$begin = strtotime( $orig_begin . ' ' . ( $every * $i ) . ' weekdays' );
-						$end   = strtotime( $orig_end . ' ' . ( $every * $i ) . ' weekdays' );
-						$data  = array(
-							'occur_event_id' => $id,
-							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-							'occur_group_id' => $group_id,
-						);
-						if ( $begin <= strtotime( $post_until ) ) {
-							$numforward ++;
-						} else {
-							return $data;
-						}
-						if ( 'test' === $test && $i > 0 ) {
-							return $data;
-						}
-						$return[] = $data;
-						if ( ! $test ) {
-							$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
-							if ( ! $insert ) {
-								$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-								$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-								$wpdb->insert( my_calendar_event_table(), $data, $format );
-							}
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
+					$return[] = $data;
+					if ( ! $test ) {
+						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
+						if ( ! $insert ) {
+							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
+							$wpdb->insert( my_calendar_event_table(), $data, $format );
 						}
 					}
 				}
