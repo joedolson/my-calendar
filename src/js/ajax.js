@@ -18,8 +18,6 @@
 			$.post( ajaxurl, data, function (response) {
 				if ( response.success == 1 ) {
 					$( "button[data-value='"+value+"']" ).parents( 'li' ).hide();
-				} else {
-					console.log( response );
 				}
 				$('.mc_response').text( response.response ).show( 300 );
 			}, "json" );
@@ -37,6 +35,9 @@
 			$( '.mc_add_new' ).toggle();
 		});
 
+		/**
+		 * Save additional date.
+		 */
 		$( 'button.save-occurrence').on( 'click', function() {
 			var date    = $( '#r_begin' ).val();
 			var begin   = $( '#r_time' ).val();
@@ -66,5 +67,52 @@
 				$('.mc_response').text( response.response ).show( 300 );
 			}, "json" );
 		});
+
+		/**
+		 * Display human-readable event repetition pattern when making changes.
+		 */
+		$( '#e_recur, #e_every' ).on( 'change', function() {
+			var recur = $( '#e_recur' ).val();
+			var every = $( '#e_every' ).val();
+			var until = $( 'duet-date-picker[identifier=e_repeats]' ).val();
+
+			var data  = {
+				'action': mc_recur.action,
+				'until' : until,
+				'every' : every,
+				'recur' : recur,
+				'security' : mc_recur.security
+			};
+
+			$.post( ajaxurl, data, function (response) {
+				$( '.mc_recur_string' ).addClass( 'active' );
+				$('.mc_recur_string p').text( response.response ).show( 300 );
+			}, "json" );
+		});
+
+		/**
+		 * Human-readable event repetition for duet date picker.
+		 */
+		const repeats = document.querySelector( 'duet-date-picker[identifier=e_repeats]' );
+		if ( null !== repeats ) {
+			repeats.addEventListener( 'duetChange', function(e) {
+				var until = e.detail.value;
+				var recur = $( '#e_recur' ).val();
+				var every = $( '#e_every' ).val();
+
+				var data  = {
+					'action': mc_recur.action,
+					'until' : until,
+					'every' : every,
+					'recur' : recur,
+					'security' : mc_recur.security
+				};
+
+				$.post( ajaxurl, data, function (response) {
+					$( '.mc_recur_string' ).addClass( 'active' );
+					$('.mc_recur_string p').text( response.response ).show( 300 );
+				}, "json" );
+			});
+		}
 	});
 }(jQuery));

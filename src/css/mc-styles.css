@@ -1250,12 +1250,22 @@ div.mc-search {
 	vertical-align: baseline;
 }
 
+.mc_recur_string p {
+	padding: 0;
+	margin: 0;
+}
+
+.mc_recur_string.active p,
 .mc_response {
 	padding: .5em;
 	background: #fcf9e8;
 	color: #000;
 	border: 1px solid #bd8600;
 	margin-top: 1em;
+}
+
+.mc_recur_string p {
+	margin-top: 0;
 }
 
 tr.problem,

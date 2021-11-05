@@ -1106,41 +1106,6 @@ function mc_core_search_locations( $query = '' ) {
 }
 
 /**
- * Get information about locations.
- */
-function mc_core_autocomplete_search_locations() {
-	if ( isset( $_REQUEST['action'] ) && 'mc_core_autocomplete_search_locations' === $_REQUEST['action'] ) {
-		$security = $_REQUEST['security'];
-		if ( ! wp_verify_nonce( $security, 'mc-search-locations' ) ) {
-			wp_send_json(
-				array(
-					'success'  => 0,
-					'response' => array( 'error' => 'Invalid security value.' ),
-				)
-			);
-		}
-		$query = $_REQUEST['data'];
-
-		$locations = mc_core_search_locations( $query, array( 'location_id', 'location_label' ) );
-		$response  = array();
-		foreach ( $locations as $location ) {
-			$response[] = array(
-				'location_id'    => $location->location_id,
-				'location_label' => html_entity_decode( strip_tags( $location->location_label ) ),
-			);
-		}
-		wp_send_json(
-			array(
-				'success'  => 1,
-				'response' => $response,
-			)
-		);
-	}
-}
-add_action( 'wp_ajax_mc_core_autocomplete_search_locations', 'mc_core_autocomplete_search_locations' );
-add_action( 'wp_ajax_nopriv_mc_core_autocomplete_search_locations', 'mc_core_autocomplete_search_locations' );
-
-/**
  * Filter theme content to display My Calendar location data.
  *
  * @param string $content Post content.

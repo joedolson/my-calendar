@@ -1425,9 +1425,12 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 					'name'  => 'event_repeats',
 				);
 				$date_picker = mc_datepicker_html( $args );
+				$recur_data  = ( $has_data ) ? mc_recur_string( $data ) : '';
+				$active      = ( $has_data ) ? ' active' : '';
+				$display     = '<div class="mc_recur_string ' . $active . '" aria-live="polite"><p>' . $recur_data . '</p></div>';
 				$return      = $pre . '
 	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( 'Help', __( 'My Calendar: Repetition patterns', 'my-calendar' ), '2', false ) . '</h2>
-	<div class="inside recurrences ' . $class . '">' . $prev . $warning . '
+	<div class="inside recurrences ' . $class . '">' . $prev . $display . $warning . '
 		<fieldset class="recurring">
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
 			<div class="columns">
@@ -3895,13 +3898,21 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
  * Produce the human-readable string for recurrence.
  *
  * @param object $event Event object.
+ * @param array  $args Recurrence settings.
  *
  * @return string Type of recurrence
  */
-function mc_recur_string( $event ) {
-	$recurs = str_split( $event->event_recur, 1 );
-	$recur  = $recurs[0];
-	$every  = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
+function mc_recur_string( $event, $args = array() ) {
+	if ( ! $event ) {
+		$recur = $args['recur'];
+		$every = (int) $args['every'];
+		$until = $args['until'];
+	} else {
+		$recurs = str_split( $event->event_recur, 1 );
+		$recur  = $recurs[0];
+		$every  = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
+		$until  = $event->event_repeats;
+	}
 	$string = '';
 	// Interpret the DB values into something human readable.
 	switch ( $recur ) {
@@ -3933,17 +3944,17 @@ function mc_recur_string( $event ) {
 			break;
 	}
 	$eternity = _mc_increment_values( $recur );
-	if ( $event->event_repeats > 0 && 'S' !== $recur ) {
-		if ( is_numeric( $event->event_repeats ) ) {
+	if ( $until && 'S' !== $recur ) {
+		if ( is_numeric( $until ) ) {
 			// Translators: number of repeats.
-			$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $event->event_repeats );
+			$string .= ' ' . sprintf( __( '- %d Times', 'my-calendar' ), $until );
 		} else {
 			// Translators: date repeating until.
-			$string .= ' ' . sprintf( __( ' until %s', 'my-calendar' ), $event->event_repeats );
+			$string .= ' ' . sprintf( __( ' until %s', 'my-calendar' ), $until );
 		}
 	} elseif ( $eternity ) {
 		// Translators: number of repeats.
-		$string .= ' ' . sprintf( __( '&ndash; %d Times', 'my-calendar' ), $eternity );
+		$string .= ' ' . sprintf( __( '- %d Times', 'my-calendar' ), $eternity );
 	}
 
 	return $string;
