@@ -1426,7 +1426,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				);
 				$date_picker = mc_datepicker_html( $args );
 				$recur_data  = ( $has_data ) ? mc_recur_string( $data ) : '';
-				$active      = ( $has_data ) ? ' active' : '';
+				$active      = ( $has_data && '' !== $recur_data ) ? ' active' : '';
 				$display     = '<div class="mc_recur_string ' . $active . '" aria-live="polite"><p>' . $recur_data . '</p></div>';
 				$return      = $pre . '
 	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( 'Help', __( 'My Calendar: Repetition patterns', 'my-calendar' ), '2', false ) . '</h2>

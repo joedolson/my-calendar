@@ -85,8 +85,13 @@
 			};
 
 			$.post( ajaxurl, data, function (response) {
-				$( '.mc_recur_string' ).addClass( 'active' );
-				$('.mc_recur_string p').text( response.response ).show( 300 );
+				if ( '' === response.response ) {
+					$( '.mc_recur_string' ).removeClass( 'active' );
+					$('.mc_recur_string p').text( '' );
+				} else {
+					$( '.mc_recur_string' ).addClass( 'active' );
+					$('.mc_recur_string p').text( response.response ).show( 300 );
+				}
 			}, "json" );
 		});
 

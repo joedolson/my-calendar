@@ -1253,10 +1253,12 @@ div.mc-search {
 .mc_recur_string p {
 	padding: 0;
 	margin: 0;
+	display: none;
 }
 
 .mc_recur_string.active p,
 .mc_response {
+	display: block;
 	padding: .5em;
 	background: #fcf9e8;
 	color: #000;
