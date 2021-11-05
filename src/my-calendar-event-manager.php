@@ -433,50 +433,6 @@ function mc_bulk_message( $results, $action ) {
 }
 
 /**
- * Display an error message.
- *
- * @param string  $message Error message.
- * @param boolean $echo Echo or return. Default true (echo).
- *
- * @return string
- */
-function mc_show_error( $message, $echo = true ) {
-	if ( trim( $message ) === '' ) {
-		return '';
-	}
-	$message = strip_tags( $message, mc_admin_strip_tags() );
-	$message = "<div class='error'><p>$message</p></div>";
-	if ( $echo ) {
-		echo $message;
-	} else {
-		return $message;
-	}
-}
-
-
-/**
- * Display an update message.
- *
- * @param string         $message Update message.
- * @param boolean        $echo Echo or return. Default true (echo).
- * @param boolean|string $code Message code.
- *
- * @return string
- */
-function mc_show_notice( $message, $echo = true, $code = false ) {
-	if ( trim( $message ) === '' ) {
-		return '';
-	}
-	$message = strip_tags( apply_filters( 'mc_filter_notice', $message, $code ), mc_admin_strip_tags() );
-	$message = "<div class='updated'><p>$message</p></div>";
-	if ( $echo ) {
-		echo wp_kses_post( $message );
-	} else {
-		return $message;
-	}
-}
-
-/**
  * Generate form for listing events that are editable by current user
  */
 function my_calendar_manage() {
@@ -941,26 +897,6 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	mc_update_count_cache();
 
 	return apply_filters( 'mc_event_saved_message', $saved_response );
-}
-
-/**
- * Check an event for any occurrence overlap problems. Used in admin only.
- *
- * @param integer $event_id Event ID.
- *
- * @return string with edit link to go to event.
- */
-function mc_error_check( $event_id ) {
-	$data      = mc_form_data( $event_id );
-	$test      = ( $data ) ? mc_test_occurrence_overlap( $data, true ) : '';
-	$args      = array(
-		'mode'     => 'edit',
-		'event_id' => $event_id,
-	);
-	$edit_link = ' <a href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar' ) ) ) . '">' . __( 'Edit Event', 'my-calendar' ) . '</a>';
-	$test      = ( '' !== $test ) ? str_replace( '</p></div>', "$edit_link</p></div>", $test ) : $test;
-
-	return $test;
 }
 
 /**
@@ -1557,43 +1493,6 @@ function mc_additional_dates( $data ) {
 	}
 
 	return $output;
-}
-
-
-/**
- * Test whether an event has an invalid overlap.
- *
- * @param object  $data Event object.
- * @param boolean $return Return or echo.
- *
- * @return string Warning text about problem with event.
- */
-function mc_test_occurrence_overlap( $data, $return = false ) {
-	$warning = '';
-	// If this event is single, skip query.
-	$single_recur = ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ? true : false;
-	// If event starts and ends on same day, skip query.
-	$start_end = ( $data->event_begin === $data->event_end ) ? true : false;
-	// Only run test when an event is set up to recur & starts/ends on different days.
-	if ( ! $single_recur && ! $start_end ) {
-		$check = mc_increment_event( $data->event_id, array(), 'test' );
-		if ( my_calendar_date_xcomp( $check['occur_begin'], $data->event_end . '' . $data->event_endtime ) ) {
-			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . '</strong> ' . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . '</p><p>';
-			// Translators: End date, end time, beginning of next event.
-			$warning .= sprintf( __( 'Event end date: <strong>%1$s %2$s</strong>. Next occurrence starts: <strong>%3$s</strong>', 'my-calendar' ), $data->event_end, $data->event_endtime, $check['occur_begin'] ) . '</p></div>';
-			update_post_meta( $data->event_post, '_occurrence_overlap', 'false' );
-		} else {
-			delete_post_meta( $data->event_post, '_occurrence_overlap' );
-		}
-	} else {
-		// If event has been changed to same date, still delete meta.
-		delete_post_meta( $data->event_post, '_occurrence_overlap' );
-	}
-	if ( $return ) {
-		return $warning;
-	} else {
-		echo wp_kses_post( $warning );
-	}
 }
 
 /**
@@ -3009,49 +2908,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 }
 
 /**
- * Find event that conflicts with newly scheduled events based on time and location.
- *
- * @param string $begin date of event.
- * @param string $time time of event.
- * @param string $end date of event.
- * @param string $endtime time of event.
- * @param string $event_label location of event.
- *
- * @return mixed results array or false
- */
-function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
-	global $wpdb;
-	$select_location = ( '' !== $event_label ) ? "event_label = '" . esc_sql( $event_label ) . "' AND" : '';
-	$begin_time      = $begin . ' ' . $time;
-	$end_time        = $end . ' ' . $endtime;
-	// Need two queries; one to find outer events, one to find inner events.
-	$event_query = 'SELECT occur_id
-					FROM ' . my_calendar_event_table() . '
-					JOIN ' . my_calendar_table() . "
-					ON (event_id=occur_event_id)
-					WHERE $select_location " . '
-					( occur_begin BETWEEN cast( \'%1$s\' AS DATETIME ) AND cast( \'%2$s\' AS DATETIME )
-					OR occur_end BETWEEN cast( \'%3$s\' AS DATETIME ) AND cast( \'%4$s\' AS DATETIME ) )';
-
-	$results = $wpdb->get_results( $wpdb->prepare( $event_query, $begin_time, $end_time, $begin_time, $end_time ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-	if ( empty( $results ) ) {
-		// Finds events that conflict if they either start or end during another event.
-		$event_query2 = 'SELECT occur_id
-						FROM ' . my_calendar_event_table() . '
-						JOIN ' . my_calendar_table() . "
-						ON (event_id=occur_event_id)
-						WHERE $select_location " . '
-						( cast( \'%1$s\' AS DATETIME ) BETWEEN occur_begin AND occur_end
-						OR cast( \'%2$s\' AS DATETIME ) BETWEEN occur_begin AND occur_end )';
-
-		$results = $wpdb->get_results( $wpdb->prepare( $event_query2, $begin_time, $end_time ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	}
-
-	return ( ! empty( $results ) ) ? $results : false;
-}
-
-/**
  * Compare whether event date or recurrence characteristics have changed.
  *
  * @param array $update data being saved in update.
@@ -3169,18 +3025,6 @@ function mc_event_is_grouped( $group_id ) {
 			return false;
 		}
 	}
-}
-
-/**
- * Test an event and see if it's an all day event.
- *
- * @param object $event Event object.
- *
- * @return boolean
- */
-function mc_is_all_day( $event ) {
-
-	return ( '00:00:00' === $event->event_time && '23:59:59' === $event->event_endtime ) ? true : false;
 }
 
 /**
