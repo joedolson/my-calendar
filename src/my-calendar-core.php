@@ -1687,7 +1687,7 @@ function mc_ajax_add_date() {
 				array(
 					'success'  => 1,
 					'id'       => (int) $id,
-					'response' => esc_html__( 'Thanks! A new date has been added to this event.', 'my-calendar' ),
+					'response' => esc_html__( 'A new date has been added to this event.', 'my-calendar' ),
 				)
 			);
 		} else {
