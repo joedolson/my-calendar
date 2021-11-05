@@ -490,3 +490,28 @@ function mc_selected_users( $selected = '', $group = 'authors' ) {
 
 	return $options;
 }
+
+/**
+ * Get users.
+ *
+ * @param string $group Not used except in filters.
+ *
+ * @return array of users
+ */
+function mc_get_users( $group = 'authors' ) {
+	global $blog_id;
+	$users = apply_filters( 'mc_get_users', false, $group, $blog_id );
+	if ( $users ) {
+		return $users;
+	}
+	$count = count_users( 'time' );
+	$args  = array(
+		'blog_id' => $blog_id,
+		'orderby' => 'display_name',
+		'fields'  => array( 'ID', 'user_nicename', 'display_name' ),
+	);
+	$args  = apply_filters( 'mc_filter_user_arguments', $args, $count, $group );
+	$users = new WP_User_Query( $args );
+
+	return $users->get_results();
+}

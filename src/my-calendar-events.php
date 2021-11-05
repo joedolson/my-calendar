@@ -852,6 +852,115 @@ function mc_get_occurrences( $id ) {
 }
 
 /**
+ * Return all instances of a given event.
+ *
+ * @param array $args Arguments describing the output type.
+ *
+ * @return string HTML list of instance data & single event view
+ */
+function mc_instance_list( $args ) {
+	$id = isset( $args['event'] ) ? $args['event'] : false;
+	if ( ! $id ) {
+		return;
+	}
+	$template = isset( $args['template'] ) ? $args['template'] : '<h3>{title}</h3>{description}';
+	$list     = isset( $args['list'] ) ? $args['list'] : '<li>{date}, {time}</li>';
+	$before   = isset( $args['before'] ) ? $args['before'] : '<ul>';
+	$after    = isset( $args['after'] ) ? $args['after'] : '</ul>';
+	$instance = isset( $args['instance'] ) ? $args['instance'] : false;
+
+	global $wpdb;
+	$output = '';
+	if ( true === $instance || '1' === $instance ) {
+		$sql = 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d ORDER BY occur_begin ASC';
+	} else {
+		$sql = 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC';
+	}
+	$results = $wpdb->get_results( $wpdb->prepare( $sql, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( is_array( $results ) ) {
+		$details = '';
+		foreach ( $results as $result ) {
+			$event_id = $result->occur_id;
+			$event    = mc_get_event( $event_id );
+			$array    = mc_create_tags( $event );
+			if ( in_array( $template, array( 'details', 'grid', 'list', 'mini' ), true ) || mc_key_exists( $template ) ) {
+				if ( 1 === (int) get_option( 'mc_use_' . $template . '_template' ) ) {
+					$template = mc_get_template( $template );
+				} elseif ( mc_key_exists( $template ) ) {
+					$template = mc_get_custom_template( $template );
+				} else {
+					$details = my_calendar_draw_event( $event, 'single', $event->event_begin, $event->event_time, '' );
+				}
+			}
+			$item = ( '' !== $list ) ? mc_draw_template( $array, $list ) : '';
+			if ( '' === $details ) {
+				$details = ( '' !== $template ) ? mc_draw_template( $array, $template ) : '';
+			}
+			$output .= $item;
+			if ( '' === $list ) {
+				break;
+			}
+		}
+		$output = $details . $before . $output . $after;
+
+	}
+
+	return mc_run_shortcodes( $output );
+}
+
+/**
+ * Generate a list of instances for the currently edited event
+ *
+ * @param int $id Event ID.
+ * @param int $occur Specific occurrence ID.
+ *
+ * @return bool|string
+ */
+function mc_admin_instances( $id, $occur = false ) {
+	global $wpdb;
+	$output     = '';
+	$ts_string  = mc_ts();
+	$results    = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event_post = mc_get_event_post( $id );
+	$deleted    = get_post_meta( $event_post, '_mc_deleted_instances', true );
+	if ( empty( $results ) ) {
+		return false;
+	}
+	$count = count( $results );
+	if ( is_array( $results ) && is_admin() ) {
+		foreach ( $results as $result ) {
+			$start = $result->ts_occur_begin;
+			$end   = $result->ts_occur_end;
+			if ( ( ( $end + 1 ) - $start ) === DAY_IN_SECONDS || ( $end - $start ) === DAY_IN_SECONDS ) {
+				$time = '';
+			} elseif ( ( $end - $start ) <= HOUR_IN_SECONDS ) {
+				$time = mc_date( get_option( 'mc_time_format' ), $start );
+			} else {
+				$time = mc_date( get_option( 'mc_time_format' ), $start ) . '-' . mc_date( get_option( 'mc_time_format' ), $end );
+			}
+			if ( date( 'Y-m-d', $start ) !== date( 'Y-m-d', $end ) ) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+				$date = date_i18n( mc_date_format(), $start ) . '-' . date_i18n( mc_date_format(), $end );
+			} else {
+				$date = date_i18n( mc_date_format(), $start );
+			}
+			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
+			$class = '';
+			if ( (int) $result->occur_id === (int) $occur || 1 === $count ) {
+				$control = '';
+				$edit    = "<p>$date</p><p><em>" . __( 'Editing Now', 'my-calendar' ) . '</em></p>';
+				$class   = 'current-event';
+			} else {
+				$control = "<p>$date</p><p class='instance-buttons'><button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
+				$edit    = "<a href='" . admin_url( 'admin.php?page=my-calendar' ) . "&amp;mode=edit&amp;event_id=$id&amp;date=$result->occur_id' class='button' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit', 'my-calendar' ) . '</a></p>';
+			}
+			$output .= "<li class='$class'>$control$edit</li>";
+		}
+	}
+
+	return $output;
+}
+
+/**
  * Get all events with a grouped relationship with the current event.
  *
  * @param int $id Group ID.
