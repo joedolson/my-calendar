@@ -173,10 +173,10 @@ function mc_ajax_display_recurrence() {
 		);
 	}
 
-	$recur = sanitize_text_field( $_REQUEST['recur'] );
-	$every = (int) $_REQUEST['every'];
-	$until = sanitize_text_field( $_REQUEST['until'] );
-	$args  = array(
+	$recur  = sanitize_text_field( $_REQUEST['recur'] );
+	$every  = (int) $_REQUEST['every'];
+	$until  = sanitize_text_field( $_REQUEST['until'] );
+	$args   = array(
 		'recur' => $recur,
 		'every' => $every,
 		'until' => $until,
