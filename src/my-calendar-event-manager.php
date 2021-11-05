@@ -1809,7 +1809,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<p><?php esc_html_e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?></p>
 				<div class="mc-preview">
 					<?php
-					$first    = mc_get_first_event( $data->event_id );
+					$first = mc_get_first_event( $data->event_id );
 					if ( ! $first ) {
 						esc_html_e( 'Unable to retrieve template tags for this event.', 'my-calendar' );
 						$tag_preview = '';
