@@ -144,6 +144,13 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	$( '#e_schedule' ).on( 'change', 'input', function() {
+		recurrences.find( 'fieldset' ).show();
+		recurrences.find( '.enable-repetition' ).attr( 'aria-expanded', 'true' );
+		recurrences.find( '.enable-repetition .dashicons' ).addClass( 'dashicons-arrow-down' ).removeClass( 'dashicons-arrow-right' );
+		recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', false );
+	});
+
 	var addLocations = document.querySelector( '.add-location' );
 	if ( null !== addLocations ) {
 		var locationSelector = document.getElementById( 'l_preset' );

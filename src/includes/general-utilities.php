@@ -87,7 +87,7 @@ function mc_add_inner_box() {
 		$url     = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id );
 		$event   = mc_get_first_event( $event_id );
 		$content = '<p><strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '</strong><br />' . $event->event_begin . ' @ ' . $event->event_time . '</p>';
-		if ( ! ( 'S' === $event->event_recur || 'S1' === $event->event_recur ) ) {
+		if ( ! mc_is_recurring( $event ) ) {
 			$recur    = mc_event_recur_string( $event, $event->event_begin );
 			$content .= wpautop( $recur );
 		}

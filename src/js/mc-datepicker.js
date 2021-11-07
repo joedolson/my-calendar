@@ -17,8 +17,9 @@ const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_e
 const eventDateError = document.querySelector( '#event_date_error' );
 const submitButton   = document.querySelector( '#my-calendar .button-primary' );
 
-var startDate = false;
-var endDate   = false;
+var startDate   = false;
+var endDate     = false;
+var recurrences = document.querySelector( '.disable-recurrences' );
 
 if ( null !== eventRecur ) {
 	eventRecur.addEventListener( 'duetChange', function(e) {
@@ -34,7 +35,6 @@ if ( null !== eventRecur ) {
 	});
 }
 
-
 eventBegin.addEventListener( 'duetChange', function(e) {
 	startDate = e.detail.value;
 	endValue  = document.querySelector( 'input[name="event_end[]"]' ).value;
@@ -45,12 +45,38 @@ eventBegin.addEventListener( 'duetChange', function(e) {
 		endDate.value = e.detail.value;
 	}
 
+	if ( null !== recurrences ) {
+		var fieldset = recurrences.querySelector( 'fieldset' );
+		fieldset.setAttribute( 'style', '' );
+		recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
+		var icon = recurrences.querySelector( '.dashicons' );
+		icon.classList.add( 'dashicons-arrow-down' );
+		icon.classList.remove( 'dashicons-arrow-right' );
+		var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+		inputs.forEach((input) => {
+			input.disabled = false;
+		});
+	}
+
 	myCalendarTestDates( endDate, startDate );
 });
 
 eventEnd.addEventListener( 'duetChange', function(e) {
 	endDate   = e.detail.value;
 	startDate = document.querySelector( 'input[name="event_begin[]"]' ).value;
+
+	if ( null !== recurrences ) {
+		var fieldset = recurrences.querySelector( 'fieldset' );
+		fieldset.setAttribute( 'style', '' );
+		recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
+		var icon = recurrences.querySelector( '.dashicons' );
+		icon.classList.add( 'dashicons-arrow-down' );
+		icon.classList.remove( 'dashicons-arrow-right' );
+		var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+		inputs.forEach((input) => {
+			input.disabled = false;
+		});
+	}
 
 	myCalendarTestDates( endDate, startDate );
 });
