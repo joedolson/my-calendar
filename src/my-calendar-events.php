@@ -929,8 +929,8 @@ function mc_admin_instances( $id, $occur = false ) {
 	$count = count( $results );
 	if ( is_array( $results ) && is_admin() ) {
 		foreach ( $results as $result ) {
-			$start = $result->ts_occur_begin;
-			$end   = $result->ts_occur_end;
+			$start = strtotime( $result->occur_begin );
+			$end   = strtotime( $result->occur_end );
 			if ( ( ( $end + 1 ) - $start ) === DAY_IN_SECONDS || ( $end - $start ) === DAY_IN_SECONDS ) {
 				$time = '';
 			} elseif ( ( $end - $start ) <= HOUR_IN_SECONDS ) {
@@ -938,11 +938,7 @@ function mc_admin_instances( $id, $occur = false ) {
 			} else {
 				$time = mc_date( get_option( 'mc_time_format' ), $start ) . '-' . mc_date( get_option( 'mc_time_format' ), $end );
 			}
-			if ( date( 'Y-m-d', $start ) !== date( 'Y-m-d', $end ) ) { // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-				$date = date_i18n( mc_date_format(), $start ) . '-' . date_i18n( mc_date_format(), $end );
-			} else {
-				$date = date_i18n( mc_date_format(), $start );
-			}
+			$date  = date_i18n( mc_date_format(), $start );
 			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
 			$class = '';
 			if ( (int) $result->occur_id === (int) $occur || 1 === $count ) {
