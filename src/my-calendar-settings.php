@@ -899,7 +899,7 @@ function mc_remote_db() {
 											'link'        => __( 'Read More Link', 'my-calendar' ),
 											'access'      => __( 'Accessibility', 'my-calendar' ),
 										),
-										array( 'author', 'host', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
+										array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
 										'',
 										array(),
 										'checkbox'

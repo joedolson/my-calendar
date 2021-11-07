@@ -301,7 +301,7 @@ function mc_default_settings() {
 	foreach ( $globals as $key => $global ) {
 		${$key} = $global;
 	}
-	add_option( 'mc_display_single', array( 'author', 'host', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ) );
+	add_option( 'mc_display_single', array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ) );
 	add_option( 'mc_display_main', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
 	add_option( 'mc_display_mini', array( 'excerpt', 'image', 'more' ) );
 	add_option( 'mc_use_permalinks', 'true' );
