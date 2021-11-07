@@ -72,14 +72,15 @@ function mc_time_html( $e, $type ) {
 		$notime .= ( 'N/A' === $label ) ? "<abbr title='" . esc_html__( 'Not Applicable', 'my-calendar' ) . "'>" . esc_html__( 'N/A', 'my-calendar' ) . '</abbr>' : esc_html( $label );
 		$notime .= '</span>';
 	}
-	$date_start = "<span class='mc-start-date dtstart' itemprop='startDate' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $e->occur_begin ) ) . '</span>';
-	$time_start = ( $has_time ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>' : $notime;
-	$date_end   = ( 0 === (int) $e->event_hide_end && ( $e->event_begin !== $e->event_end ) ) ? '<span class="event-time dtend">' . date_i18n( $date_format, strtotime( $e->occur_end ) ) . '</span>' : '';
-	$time_end   = ( $has_time && 0 === (int) $e->event_hide_end ) ? "<span class='end-time dtend'> <time class='value-title' datetime='" . esc_attr( $dtend ) . "' title='" . esc_attr( $dtend ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>' : '';
-	$separator  = ( $time_end || $date_end ) ? "<span class='time-separator'> &ndash; </span>" : '';
-	$br         = ( $time_end || $time_start ) ? '<br />' : '';
+	$date_start  = "<span class='mc-start-date dtstart' itemprop='startDate' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $e->occur_begin ) ) . '</span>';
+	$time_start  = ( $has_time ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>' : $notime;
+	$date_end    = ( 0 === (int) $e->event_hide_end && ( $e->event_begin !== $e->event_end ) ) ? '<span class="event-time dtend">' . date_i18n( $date_format, strtotime( $e->occur_end ) ) . '</span>' : '';
+	$time_end    = ( $has_time && 0 === (int) $e->event_hide_end ) ? "<span class='end-time dtend'> <time class='value-title' datetime='" . esc_attr( $dtend ) . "' title='" . esc_attr( $dtend ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>' : '';
+	$t_separator = ( $time_end ) ? "<span class='time-separator'> &ndash; </span>" : '';
+	$d_separator = ( $date_end ) ? "<span class='date-separator'> &ndash; </span>" : '';
+	$br          = ( $time_end || $time_start ) ? '<br />' : '';
 
-	$time_content  = '<span class="time-wrapper">' . $time_start . ' ' . $separator . ' ' . $time_end . '</span>' . $br . '<span class="date-wrapper">' . $date_start . ' ' . $separator . ' ' . $date_end . '</span>';
+	$time_content  = '<span class="time-wrapper">' . $time_start . ' ' . $t_separator . ' ' . $time_end . '</span>' . $br . '<span class="date-wrapper">' . $date_start . ' ' . $d_separator . ' ' . $date_end . '</span>';
 	$time_content .= apply_filters( 'mcs_end_time_block', '', $e );
 	// Generate date/time meta data.
 	$meta  = "<meta itemprop='startDate' content='" . $start . 'T' . $e->event_time . "' />";

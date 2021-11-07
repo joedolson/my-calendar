@@ -289,6 +289,10 @@
 	margin-right: 3px;
 }
 
+.mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true]:before {
+	content: "\f460";
+}
+
 .mc-main .mc-list .details > div {
 	padding: 0 .5em;
 }
