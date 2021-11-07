@@ -55,7 +55,6 @@ function my_calendar_print() {
 </head>
 <body>
 	<?php
-	echo $head;
 	$args = array(
 		'type'     => 'print',
 		'category' => $category,
