@@ -8,6 +8,10 @@
 	display: none;
 }
 
+h2 {
+	text-align: center;
+}
+
 table {
 	border: 1px solid #ddd;
 	border-collapse: collapse;
