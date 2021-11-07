@@ -1677,9 +1677,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							$span_checked = '';
 						}
 						?>
-					<p id="event_span" class="checkboxes">
-						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
-						<label for="e_span"><?php esc_html_e( 'This is a multi-day event.', 'my-calendar' ); ?></label>
+					<p class="event_span">
 						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Copy', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'My Calendar: copy an event', 'my-calendar' ), 4 ); ?>
 					</p>
 					<ol class="mc-repeat-events">
@@ -1700,6 +1698,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							</div>
 						</li>
 					</ol>
+					<p class="event_span checkboxes">
+						<input type="checkbox" value="1" id="e_span" name="event_span"<?php echo $span_checked; ?> />
+						<label for="e_span"><?php esc_html_e( 'These are one multi-day event.', 'my-calendar' ); ?></label>
+					</p>
 						<?php
 					}
 					?>

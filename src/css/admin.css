@@ -302,20 +302,18 @@
 	font-size: 14px;
 }
 
-.mc-main .time-block p {
+.mc-main .time-block {
 	color: #000;
 	color: var(--secondary-dark);
-	display: inline-block;
-	margin: 0 !important;
+	display: block;
+	margin: .5rem 0 !important;
 	background: #fff;
 	background: var(--primary-light);
-	padding: 0 .25em !important;
+	padding: 0 .25rem !important;
 }
 
-.mc-main .time-block:before {
-	content: "\f469";
-	vertical-align: top;
-	margin-right: 4px;
+h4.mc-title {
+	padding: .25rem;
 }
 
 .mc-main .time-block .mc-event-date {

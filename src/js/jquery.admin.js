@@ -52,7 +52,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	$('#e_schedule').on( 'click', '.add_field', function() {
-		$('#event_span').show();
+		$('.event_span').show();
 		var num    = $('.datetime-template').length; // how many sets of input fields we have.
 		var newNum = new Number(num + 1);   // the numeric ID of the new input field being added.
 		// create the new element via clone(), and manipulate it's ID using newNum value.
@@ -113,7 +113,7 @@ jQuery(document).ready(function ($) {
 		$( this ).parents( 'li' ).remove();
 		// if only one element left, hide event span checkbox & show original add occurrence button.
 		if ( num - 1 <= 1 ) {
-			$('#event_span').hide();
+			$('.event_span').hide();
 			$('#event1, #event1 .buttons' ).show();
 		}
 	});
@@ -171,7 +171,7 @@ jQuery(document).ready(function ($) {
 	}
 
 	// Set default conditions.
-	$( '#event_span' ).hide();
+	$( '.event_span' ).hide();
 	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 
 	$( '.selectall' ).on( 'click', function() {
