@@ -307,3 +307,14 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	border-radius: 3px;
 	margin: 0 5px 0 0;
 }
+
+.mc-geolocate-form .mc-gl-fields {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 10px;
+	align-items: self-end;
+}
+
+.mc-geolocate-form .mc-gl-fields label {
+	display: block;
+}

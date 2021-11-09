@@ -548,20 +548,29 @@ function mc_controlled_field( $this_field ) {
 /**
  * Geolocate latitude and longitude of location.
  *
- * @param int $location_id Location ID.
+ * @param int   $location_id Location ID.
+ * @param array $address Array of address parameters.
  *
  * @return array
  */
-function mc_get_location_coordinates( $location_id ) {
+function mc_get_location_coordinates( $location_id = false, $address = array() ) {
 	require_once( 'includes/class-geolocation.php' );
 
 	new Geolocation;
-	$location = mc_get_location( $location_id, false );
-	$street   = $location->location_street;
-	$street2  = $location->location_street2;
-	$city     = $location->location_city;
-	$zip      = $location->location_postcode;
-	$country  = $location->location_country;
+	if ( $location_id ) {
+		$location = mc_get_location( $location_id, false );
+		$street   = $location->location_street;
+		$street2  = $location->location_street2;
+		$city     = $location->location_city;
+		$zip      = $location->location_postcode;
+		$country  = $location->location_country;
+	} elseif ( ! empty( $address ) ) {
+		$street   = ( isset( $address['street'] ) ) ? $address['street'] : '';
+		$street2  = ( isset( $address['street2'] ) ) ? $address['street2'] : '';
+		$city     = ( isset( $address['city'] ) ) ? $address['city'] : '';
+		$zip      = ( isset( $address['zip'] ) ) ? $address['zip'] : '';
+		$country  = ( isset( $address['country'] ) ) ? $address['country'] : '';
+	}
 
 	$coordinates = Geolocation::get_coordinates( $street, $street2, $city, $zip, $country );
 
