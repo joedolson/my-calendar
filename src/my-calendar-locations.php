@@ -565,11 +565,11 @@ function mc_get_location_coordinates( $location_id = false, $address = array() )
 		$zip      = $location->location_postcode;
 		$country  = $location->location_country;
 	} elseif ( ! empty( $address ) ) {
-		$street   = ( isset( $address['street'] ) ) ? $address['street'] : '';
-		$street2  = ( isset( $address['street2'] ) ) ? $address['street2'] : '';
-		$city     = ( isset( $address['city'] ) ) ? $address['city'] : '';
-		$zip      = ( isset( $address['zip'] ) ) ? $address['zip'] : '';
-		$country  = ( isset( $address['country'] ) ) ? $address['country'] : '';
+		$street  = ( isset( $address['street'] ) ) ? $address['street'] : '';
+		$street2 = ( isset( $address['street2'] ) ) ? $address['street2'] : '';
+		$city    = ( isset( $address['city'] ) ) ? $address['city'] : '';
+		$zip     = ( isset( $address['zip'] ) ) ? $address['zip'] : '';
+		$country = ( isset( $address['country'] ) ) ? $address['country'] : '';
 	}
 
 	$coordinates = Geolocation::get_coordinates( $street, $street2, $city, $zip, $country );
