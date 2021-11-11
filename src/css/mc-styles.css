@@ -1062,6 +1062,12 @@ label[for=e_host] {
 	margin-top: 1em;
 }
 
+.my-calendar-admin .categories label span {
+	max-width: 1em;
+	display: inline-block;
+	margin-left: 6px;
+}
+
 .generator fieldset {
 	border: 1px solid #c3c4c7;
 	margin: 10px 0;
