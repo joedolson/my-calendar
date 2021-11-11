@@ -107,6 +107,12 @@ function mc_category_icon( $event, $type = 'html' ) {
 	if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
 		$url   = plugin_dir_url( __FILE__ );
 		$image = '';
+		// Is this an event context or a category context.
+		if ( property_exists( $event, 'occur_id' ) ) {
+			$context = 'event';
+		} else {
+			$context = 'category';
+		}
 		if ( 'true' !== get_option( 'mc_hide_icons' ) ) {
 			if ( '' !== $event->category_icon ) {
 				if ( mc_is_custom_icon() ) {
@@ -121,7 +127,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name );
 				if ( 'html' === $type ) {
 					if ( false !== stripos( $src, '.svg' ) ) {
-						$image = get_option( 'mc_category_icon_' . $event->category_id, '' );
+						$image = get_option( 'mc_category_icon_' . $context . '_' . $event->category_id, '' );
 						if ( '' === $image ) {
 							$image = mc_generate_category_icon( $event );
 						}
