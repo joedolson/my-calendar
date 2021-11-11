@@ -180,8 +180,6 @@ function my_calendar_upcoming_events( $args ) {
 		}
 		$i         = 0;
 		$last_item = '';
-		$last_id   = '';
-		$last_date = '';
 		$skips     = array();
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event );
@@ -198,17 +196,12 @@ function my_calendar_upcoming_events( $args ) {
 
 				$prepend = apply_filters( 'mc_event_upcoming_before', "<li class='$classes'>", $classes );
 				$append  = apply_filters( 'mc_event_upcoming_after', '</li>', $classes );
-				// If same group, and same date, use it.
-				if ( ( $details['group'] !== $last_id || $details['date'] === $last_date ) || '0' === $details['group'] ) {
-					if ( ! in_array( $details['dateid'], $skips, true ) ) {
-						$output .= ( $item === $last_item ) ? '' : $prepend . $item . $append;
-					}
+				if ( ! in_array( $details['dateid'], $skips, true ) ) {
+					$output .= ( $item === $last_item ) ? '' : $prepend . $item . $append;
 				}
 			}
 			$skips[]   = $details['dateid']; // Prevent the same event from showing more than once.
-			$last_id   = $details['group']; // Prevent group events from displaying in a row. Not if there are intervening events.
 			$last_item = $item;
-			$last_date = $details['date'];
 		}
 	} else {
 		$query  = array(
