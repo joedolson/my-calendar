@@ -1124,13 +1124,13 @@ function mc_remote_db() {
 						<legend><?php esc_html_e( 'Multisite configuration - input', 'my-calendar' ); ?></legend>
 						<ul>
 							<li>
-								<input type="radio" value="0" id="ms0" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php esc_html_e( 'Site owners may only post to their local calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="0" id="ms0" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '0' ); ?> /> <label for="ms0"><?php esc_html_e( 'Site owners may only post to their local calendar.', 'my-calendar' ); ?></label>
 							</li>
 							<li>
-								<input type="radio" value="1" id="ms1" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php esc_html_e( 'Site owners may only post to the central calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="1" id="ms1" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), '1' ); ?> /> <label for="ms1"><?php esc_html_e( 'Site owners may only post to the central calendar.', 'my-calendar' ); ?></label>
 							</li>
 							<li>
-								<input type="radio" value="2" id="ms2" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php esc_html_e( 'Site owners may manage either calendar', 'my-calendar' ); ?></label>
+								<input type="radio" value="2" id="ms2" name="mc_multisite"<?php checked( get_site_option( 'mc_multisite' ), 2 ); ?> /> <label for="ms2"><?php esc_html_e( 'Site owners may manage either calendar', 'my-calendar.' ); ?></label>
 							</li>
 						</ul>
 						<p>
