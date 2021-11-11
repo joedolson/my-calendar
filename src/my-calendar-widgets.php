@@ -181,9 +181,17 @@ function my_calendar_upcoming_events( $args ) {
 		$i         = 0;
 		$last_item = '';
 		$skips     = array();
+		$omit      = array();
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event );
 			$item    = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $args );
+			// if an event is a multidate group, only display first found.
+			if ( in_array( $event->event_group_id, $omit, true ) ) {
+				continue;
+			}
+			if ( '1' === $event->event_span ) {
+				$omit[] = $event->event_group_id;
+			}
 			if ( '' === $item ) {
 				$item = mc_draw_template( $details, $template );
 			}
@@ -196,6 +204,7 @@ function my_calendar_upcoming_events( $args ) {
 
 				$prepend = apply_filters( 'mc_event_upcoming_before', "<li class='$classes'>", $classes );
 				$append  = apply_filters( 'mc_event_upcoming_after', '</li>', $classes );
+				// Recurring events should only appear once.
 				if ( ! in_array( $details['dateid'], $skips, true ) ) {
 					$output .= ( $item === $last_item ) ? '' : $prepend . $item . $append;
 				}
