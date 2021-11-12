@@ -94,7 +94,7 @@ function my_calendar_upcoming_events( $args ) {
 			$from = mc_date( 'Y-m-d', strtotime( $from ), false );
 			$to   = ( 'today' === $to ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $to ), false );
 		}
-		/* Yes, this is crude. But sometimes simplicity works best. There are only 12 possibilities, after all. */
+		/* Yes, this is crude. But there are only 12 possibilities, after all. */
 		if ( 'month+1' === $display_type ) {
 			$from = mc_date( 'Y-m-1', strtotime( '+1 month' ), false );
 			$to   = mc_date( 'Y-m-t', strtotime( '+1 month' ), false );
