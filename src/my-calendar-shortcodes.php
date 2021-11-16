@@ -393,52 +393,52 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 		}
 		?>
 		<div class="mc-generator-inputs">
-		<fieldset>
-			<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>
 			<fieldset>
-				<legend><?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?></legend>
-				<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
-					<li>
-						<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
-					</li>
-					<?php
-					$select = mc_category_select( $category, true, true, 'category[]', 'category_' . $type );
-					echo wp_kses( $select, mc_kses_elements() );
-					?>
-				</ul>
-			</fieldset>
-			<p>
-				<label for="ltype"><?php esc_html_e( 'Location filter type:', 'my-calendar' ); ?></label>
-				<select name="ltype" id="ltype">
-					<option value=''><?php esc_html_e( 'All locations', 'my-calendar' ); ?></option>
-					<option value='event_label'<?php selected( $ltype, 'event_label' ); ?>><?php esc_html_e( 'Location Name', 'my-calendar' ); ?></option>
-					<option value='event_city'<?php selected( $ltype, 'event_city' ); ?>><?php esc_html_e( 'City', 'my-calendar' ); ?></option>
-					<option value='event_state'<?php selected( $ltype, 'event_state' ); ?>><?php esc_html_e( 'State', 'my-calendar' ); ?></option>
-					<option value='event_postcode'<?php selected( $ltype, 'event_postcode' ); ?>><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></option>
-					<option value='event_country'<?php selected( $ltype, 'event_country' ); ?>><?php esc_html_e( 'Country', 'my-calendar' ); ?></option>
-					<option value='event_region'<?php selected( $ltype, 'event_region' ); ?>><?php esc_html_e( 'Region', 'my-calendar' ); ?></option>
-				</select>
-			</p>
-			<p>
-				<label for="lvalue" id='lval'><?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
-				<input type="text" name="lvalue" id="lvalue" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' <?php echo esc_attr( $disabled ); ?> />
-			</p>
+				<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>
+				<fieldset class="categories">
+					<legend><?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?></legend>
+					<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
+						<li>
+							<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
+						</li>
+						<?php
+						$select = mc_category_select( $category, true, true, 'category[]', 'category_' . $type );
+						echo wp_kses( $select, mc_kses_elements() );
+						?>
+					</ul>
+				</fieldset>
+				<p>
+					<label for="ltype"><?php esc_html_e( 'Location filter type:', 'my-calendar' ); ?></label>
+					<select name="ltype" id="ltype">
+						<option value=''><?php esc_html_e( 'All locations', 'my-calendar' ); ?></option>
+						<option value='event_label'<?php selected( $ltype, 'event_label' ); ?>><?php esc_html_e( 'Location Name', 'my-calendar' ); ?></option>
+						<option value='event_city'<?php selected( $ltype, 'event_city' ); ?>><?php esc_html_e( 'City', 'my-calendar' ); ?></option>
+						<option value='event_state'<?php selected( $ltype, 'event_state' ); ?>><?php esc_html_e( 'State', 'my-calendar' ); ?></option>
+						<option value='event_postcode'<?php selected( $ltype, 'event_postcode' ); ?>><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></option>
+						<option value='event_country'<?php selected( $ltype, 'event_country' ); ?>><?php esc_html_e( 'Country', 'my-calendar' ); ?></option>
+						<option value='event_region'<?php selected( $ltype, 'event_region' ); ?>><?php esc_html_e( 'Region', 'my-calendar' ); ?></option>
+					</select>
+				</p>
+				<p>
+					<label for="lvalue" id='lval'><?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
+					<input type="text" name="lvalue" id="lvalue" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' <?php echo esc_attr( $disabled ); ?> />
+				</p>
 
-			<p id='location-info'>
-				<?php _e( 'If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
-			</p>
-			<p>
-				<label for="search" id='sterm'><?php esc_html_e( 'Search keyword', 'my-calendar' ); ?></label>
-				<input type="text" name="search" id="sterm" aria-describedby="search-info" value="<?php echo esc_attr( $search ); ?>" /><br/>
-			</p>
-			<p id='search-info'>
-				<?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
-			</p>
-		</fieldset>
+				<p id='location-info'>
+					<?php _e( 'If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
+				</p>
+				<p>
+					<label for="search" id='sterm'><?php esc_html_e( 'Search keyword', 'my-calendar' ); ?></label>
+					<input type="text" name="search" id="sterm" aria-describedby="search-info" value="<?php echo esc_attr( $search ); ?>" /><br/>
+				</p>
+				<p id='search-info'>
+					<?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
+				</p>
+			</fieldset>
 			<?php
 			if ( 'main' === $type ) {
 				?>
-		<fieldset>
+			<fieldset>
 				<legend><?php esc_html_e( 'Navigation', 'my-calendar' ); ?></legend>
 				<p id='navigation-info'>
 					<?php
@@ -455,16 +455,14 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<label for="below" id='lbelow'><?php esc_html_e( 'Navigation below calendar', 'my-calendar' ); ?></label>
 					<input type="text" name="below" id="below" placeholder="key,feeds" aria-labelledby='lbelow navigation-info' value="<?php echo esc_attr( $below ); ?>" /><br/>
 				</p>
-		</fieldset>
+			</fieldset>
 				<?php
 			}
-			?>
-		<fieldset>
-			<legend><?php esc_html_e( 'Formatting & Timeframe', 'my-calendar' ); ?></legend>
-			<?php
 			// Main shortcode only.
 			if ( 'main' === $type ) {
 				?>
+			<fieldset>
+				<legend><?php esc_html_e( 'Formatting & Timeframe', 'my-calendar' ); ?></legend>
 				<p>
 					<label for="format"><?php esc_html_e( 'Format', 'my-calendar' ); ?></label>
 					<select name="format" id="format">
@@ -489,6 +487,9 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<input type="number" min="1" max="12" step="1" name="months" id="lmonths" value="<?php echo esc_attr( $months ); ?>" /><br/>
 				</p>
 			</fieldset>
+				<?php
+			}
+			?>
 			<fieldset>
 				<legend><?php esc_html_e( 'Author & Host Filters', 'my-calendar' ); ?></legend>
 				<?php
@@ -532,8 +533,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					</select>
 				</p>
 			</fieldset>
+			<?php
+			if ( 'main' === $type ) {
+				?>
 			<fieldset>
-				<legend><?php esc_html_e( 'Initial Date Shown', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'Start Date', 'my-calendar' ); ?></legend>
 				<p>
 					<label for="year"><?php esc_html_e( 'Year', 'my-calendar' ); ?></label>
 					<select name="year" id="year">
@@ -599,22 +603,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			</fieldset>
 				<?php
 			}
-			if ( 'upcoming' === $type || 'today' === $type ) {
-				// Upcoming Events & Today's Events shortcodes.
-				?>
-				<p>
-					<label for="fallback"><?php esc_html_e( 'Fallback Text', 'my-calendar' ); ?></label>
-					<input type="text" name="fallback" id="fallback" value="" />
-				</p>
-				<p>
-					<label for="template"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label>
-					<textarea cols="40" rows="4" name="template" id="template"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
-				</p>
-				<?php
-			}
 			if ( 'upcoming' === $type ) {
 				// Upcoming events only.
 				?>
+			<fieldset>
+				<legend><?php esc_html_e( 'Event Range', 'my-calendar' ); ?></legend>
 				<p>
 					<label for="before"><?php esc_html_e( 'Events/Days Before Current Day', 'my-calendar' ); ?></label>
 					<input type="number" name="before" id="before" value="" />
@@ -672,6 +665,23 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<option value="desc"><?php esc_html_e( 'Descending', 'my-calendar' ); ?></option>
 					</select>
 				</p>
+			</fieldset>
+				<?php
+			}
+			if ( 'upcoming' === $type || 'today' === $type ) {
+				// Upcoming Events & Today's Events shortcodes.
+				?>
+			<fieldset>
+				<legend><?php esc_html_e( 'Templating', 'my-calendar' ); ?></legend>
+				<p>
+					<label for="fallback"><?php esc_html_e( 'Fallback Text', 'my-calendar' ); ?></label>
+					<input type="text" name="fallback" id="fallback" value="" />
+				</p>
+				<p>
+					<label for="template"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label>
+					<textarea cols="40" rows="4" name="template" id="template"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
+				</p>
+			</fieldset>
 				<?php
 			}
 			?>

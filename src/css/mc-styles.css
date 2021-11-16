@@ -1062,6 +1062,7 @@ label[for=e_host] {
 	margin-top: 1em;
 }
 
+.generator .categories label span,
 .my-calendar-admin .categories label span {
 	max-width: 1em;
 	display: inline-block;
@@ -1112,10 +1113,6 @@ label[for=e_host] {
 
 .generator input {
 	line-height: normal;
-}
-
-.generator input[type=text], .generator select {
-	width: 60%;
 }
 
 select[name="event_recur"] {
