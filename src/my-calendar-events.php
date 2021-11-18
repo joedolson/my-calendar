@@ -59,11 +59,16 @@ function mc_create_guid( $event ) {
 /**
  * Function for extracting event timestamps from MySQL.
  *
+ * @param bool $test Test offset time.
+ *
  * @return string
  */
-function mc_ts() {
+function mc_ts( $test = false ) {
 	global $wpdb;
 	$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
+	if ( $test ) {
+		return $offset;
+	}
 	$offset = substr( $offset, 0, -3 );
 	if ( strpos( $offset, '-' ) !== 0 ) {
 		$offset = '+' . $offset;

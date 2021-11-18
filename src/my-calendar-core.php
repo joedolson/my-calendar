@@ -1575,6 +1575,7 @@ function mc_get_support_form() {
 	$php_version = phpversion();
 	$db_version  = $wpdb->db_version();
 	$admin_email = get_option( 'admin_email' );
+	$db_time     = mc_ts( true );
 	// theme data.
 	$theme         = wp_get_theme();
 	$theme_name    = $theme->get( 'Name' );
@@ -1615,6 +1616,7 @@ Charset: $charset
 ==Extra info:==
 PHP Version: $php_version
 DB Version: $db_version
+DB UTC Offset: $db_time
 Server Software: $_SERVER[SERVER_SOFTWARE]
 User Agent: $_SERVER[HTTP_USER_AGENT]
 
