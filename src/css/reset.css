@@ -294,8 +294,32 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }
 .mcjs.mc-main .single-event .details, .mcjs.mc-main.list.day .details { display: block; }
 
+.details .location,
 .mc-gmap-location-list {
 	margin: 1em 0;
+}
+
+.details .mc-access,
+.details .sharing {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: .5em;
+}
+
+.mc-main .details .mc-image {
+	width: 100%;
+	height: auto;
+}
+
+.details .mc-access {
+	list-style: none;
+	margin: 1em 0;
+}
+
+.details .mc-access li {
+	background: #00000007;
+	padding: 3px;
+	border-radius: 3px;
 }
 
 .mc-location-details {
@@ -317,4 +341,11 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 
 .mc-geolocate-form .mc-gl-fields label {
 	display: block;
+}
+
+.entry-title .category-icon {
+	fill: #000;
+	fill: var(--primary-dark) !important;
+	max-width: 1em;
+	padding: 0;
 }

@@ -578,9 +578,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 							. $link
 							. $status
 							. $tickets
+							. $sharing
 							. $author
 							. $host
-							. $sharing
 							. $return;
 			}
 		} else {
