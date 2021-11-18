@@ -66,6 +66,14 @@ function mc_create_guid( $event ) {
 function mc_ts( $test = false ) {
 	global $wpdb;
 	$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
+	/**
+	 * Filter timezone offset applied when displaying events.
+	 *
+	 * @param string $offset Timezone offset format -HH:MM:SS.
+	 *
+	 * @return string
+	 */
+	$offset = apply_filters( 'mc_filter_offset', $offset );
 	if ( $test ) {
 		return $offset;
 	}
