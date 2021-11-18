@@ -619,11 +619,15 @@ function my_calendar_settings() {
 						<fieldset>
 							<legend><?php esc_html_e( 'Advanced', 'my-calendar' ); ?></legend>
 							<ul>
-	<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
 								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
-									?>
-								<li><?php wp_kses_post( _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ) ); ?>
+									$class = 'visible';
+								} else {
+									$class = 'hidden';
+								}
+								?>
+								<li class="mc_remote_info <?php echo $class; ?>"><?php wp_kses_post( _e( 'Add this code to your theme\'s <code>functions.php</code> file:', 'my-calendar' ) ); ?>
 <pre>
 function mc_remote_db() {
 	$mcdb = new wpdb('DB_USER','DB_PASSWORD','DB_NAME','DB_ADDRESS');
@@ -633,9 +637,6 @@ function mc_remote_db() {
 </pre>
 									<?php _e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
 								</li>
-									<?php
-								}
-								?>
 								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>
 								<?php
 								if ( 'true' === get_option( 'mc_api_enabled' ) ) {

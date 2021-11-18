@@ -310,6 +310,20 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	var is_checked = $( 'input[id="mc_remote"]' ).prop( "checked" );
+	if ( ! is_checked ) {
+		$( '.mc_remote_info' ).hide();
+	}
+
+	$( 'input[id="mc_remote"]' ).change( function() {
+		var checked = $(this).prop( "checked" );
+		if ( checked ) {
+			$( '.mc_remote_info' ).show();
+		} else {
+			$( '.mc_remote_info' ).hide();
+		}
+	});
+
 	var gapi_checked = $( 'input[id="mc_display_single-gmap"]' ).prop( "checked" );
 	if ( gapi_checked ) {
 		$( '#mc_gmap_api_key' ).attr( 'required', 'true' );
