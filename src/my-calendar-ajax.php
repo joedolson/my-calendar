@@ -69,10 +69,12 @@ function mc_core_autocomplete_search_icons() {
 		$query = sanitize_text_field( $_REQUEST['data'] );
 		$dir   = plugin_dir_path( __FILE__ );
 		if ( mc_is_custom_icon() ) {
+			$is_custom = true;
 			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
 			$path      = '/my-calendar-custom';
 			$iconlist  = mc_directory_list( $directory );
 		} else {
+			$is_custom = false;
 			$directory = dirname( __FILE__ ) . '/images/icons/';
 			$path      = '/' . dirname( plugin_basename( __FILE__ ) ) . '/images/icons';
 			$iconlist  = mc_directory_list( $directory );
@@ -87,7 +89,7 @@ function mc_core_autocomplete_search_icons() {
 		foreach ( $results as $result ) {
 			$response[] = array(
 				'filename' => esc_attr( $result ),
-				'svg'      => mc_get_svgmc_get_svg( $result ),
+				'svg'      => mc_get_img( $result, $is_custom ),
 			);
 		}
 		wp_send_json(

@@ -195,15 +195,27 @@ add_filter(
 );
 
 /**
- * Get SVG icon by filename.
+ * Get category icon by filename.
  *
  * @param string $file File name.
+ * @param bool   $is_custom Querying a custom icon.
  *
  * @return string
  */
-function mc_get_svg( $file ) {
-	$path     = plugins_url( 'images/icons', __FILE__ ) . '/';
-	$src      = $path . str_replace( '.png', '.svg', $file );
+function mc_get_img( $file, $is_custom = false ) {
+	if ( $is_custom ) {
+		$url  = plugin_dir_url( __FILE__ );
+		$dir  = plugin_dir_path( __FILE__ );
+		$base = basename( $dir );
+		$path = str_replace( $base, 'my-calendar-custom', $url ) . '/';
+	} else {
+		$path = plugins_url( 'images/icons', __FILE__ ) . '/';
+	}
+	$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
+	$src  = $path . $file;
+	if ( false !== stripos( $file, '.png' ) ) {
+		return '<img src="' . esc_url( $src ) . '" alt="" />';
+	}
 	$label_id = sanitize_title( $file );
 	$svg      = wp_remote_get( $src );
 	$image    = wp_remote_retrieve_body( $svg );
