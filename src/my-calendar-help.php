@@ -187,7 +187,7 @@ function mc_print_contextual_help() {
 	?>
 	<div class="modal-window-container">
 	<?php
-	echo wp_kses_post( mc_get_help_text( $id ) );
+	echo wp_kses( mc_get_help_text( $id ), mc_kses_elements() );
 	$return_url = add_query_arg( 'help_id', (int) $id, 'https://docs.joedolson.com/my-calendar/' );
 	$return     = wp_kses_post( '<p class="docs-link"><a href="' . esc_url( $return_url ) . '">' . __( 'Documentation', 'my-calendar' ) . '</a></p>' );
 	echo wp_kses_post( mc_get_help_footer( $return ) );
@@ -279,10 +279,40 @@ function mc_get_help_text( $id ) {
 			'title' => '',
 			'text'  => mc_display_template_tags(),
 		),
+		'6' => array(
+			'title' => __( 'Icon List', 'my-calendar' ),
+			'text'  => mc_display_icons(),
+		),
 	);
 
 	$title = ( '' !== $help[ $id ]['title'] ) ? '<h2>' . $help[ $id ]['title'] . '</h2>' : '';
 	$text  = $help[ $id ]['text'];
 
 	return sprintf( '%1$s<div class="mc-help-text">%2$s</div>', $title, wpautop( $text ) );
+}
+
+/**
+ * Generate a list of icons.
+ *
+ * @return string
+ */
+function mc_display_icons() {
+	$is_custom = mc_is_custom_icon();
+	if ( $is_custom ) {
+		$dir       = plugin_dir_path( __FILE__ );
+		$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
+	} else {
+		$directory = dirname( __FILE__ ) . '/images/icons/';
+	}
+	$iconlist  = mc_directory_list( $directory );
+	if ( ! empty( $iconlist ) ) {
+		$output = '<ul class="checkboxes icon-list">';
+	}
+	foreach ( $iconlist as $icon ) {
+		$img     = mc_get_img( $icon, $is_custom );
+		$output .= '<li class="category-icon"><code>' . $icon . '</code>' . $img . '</li>';
+	}
+	$output .= '</ul>';
+
+	return $output;
 }

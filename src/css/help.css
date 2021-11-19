@@ -72,3 +72,26 @@ html.wp-toolbar {
 .mc_template_tags {
 	clear: right
 }
+
+.icon-list {
+	display: grid;
+	grid-template-columns: repeat( 6, 1fr );
+}
+
+.icon-list li {
+	display: inline-block;
+	padding: 5px;
+	background: rgba(0, 0, 0, .05);
+	margin: 2px;
+	text-align: center;
+}
+
+.icon-list li code {
+	background: none;
+	display: block;
+}
+
+.icon-list svg {
+	max-width: 1.5em;
+	height: auto;
+}

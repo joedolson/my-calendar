@@ -401,15 +401,6 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 		// If no category ID, change view.
 		$view = 'add';
 	}
-	if ( mc_is_custom_icon() ) {
-		$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
-		$path      = '/my-calendar-custom';
-		$iconlist  = mc_directory_list( $directory );
-	} else {
-		$directory = dirname( __FILE__ ) . '/images/icons/';
-		$path      = '/' . dirname( plugin_basename( __FILE__ ) ) . '/images/icons';
-		$iconlist  = mc_directory_list( $directory );
-	}
 	if ( 'add' === $view ) {
 		?>
 		<h1><?php esc_html_e( 'Categories', 'my-calendar' ); ?></h1>
@@ -476,6 +467,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 									<input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
 									<ul class="autocomplete-result-list"></ul>
 								</div>
+								<?php mc_help_link( __( 'Show Category Icons', 'my-calendar' ), __( 'Category Icons', 'my-calendar' ), 6 ); ?>
 							</div>
 							<?php
 							if ( 'add' === $view ) {
@@ -537,6 +529,32 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 					</div>
 				</div>
 			</div>
+		<?php
+		if ( mc_is_custom_icon() ) {
+			?>
+			<div class="ui-sortable meta-box-sortables" id="custom-icons">
+				<div class="postbox">
+					<h2><?php esc_html_e( 'Custom Icons', 'my-calendar' ); ?></h2>
+
+					<div class="inside">
+					<ul class="checkboxes icon-list">
+			<?php
+			$dir       = plugin_dir_path( __FILE__ );
+			$url       = plugin_dir_url( __FILE__ );
+			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
+			$path      = str_replace( '/my-calendar', '/my-calendar-custom', $url );
+			$iconlist  = mc_directory_list( $directory );
+			foreach ( $iconlist as $icon ) {
+				echo '<li class="category-icon"><code>' . $icon . '</code><img src="' . $path . '/' . esc_html( $icon ) . '" alt="" aria-hidden="true"></li>';
+			}
+			?>
+					</ul>
+					</div>
+				</div>
+			</div>
+			<?php
+		}
+		?>
 		</div>
 	</div>
 	<?php
