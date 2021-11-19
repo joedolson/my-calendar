@@ -554,6 +554,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 			</div>
 			<?php
 		} else {
+			// Preload icon cache.
 			$icons = mc_display_icons();
 		}
 		?>

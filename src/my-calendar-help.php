@@ -298,7 +298,7 @@ function mc_get_help_text( $id ) {
  */
 function mc_display_icons() {
 	$is_custom = mc_is_custom_icon();
-	$output    = get_transient( 'my_calendar_svg_list' );
+	$output    = false; // get_transient( 'my_calendar_svg_list' );
 	if ( ! $output ) {
 		if ( $is_custom ) {
 			$dir       = plugin_dir_path( __FILE__ );
@@ -314,7 +314,7 @@ function mc_display_icons() {
 			$img     = mc_get_img( $icon, $is_custom );
 			$output .= '<li class="category-icon"><code>' . $icon . '</code>' . $img . '</li>';
 		}
-		$output .= '</ul>';
+		$output .= '</ul><p><a href="https://fontawesome.com/license">' . __( 'Icons by Font Awesome', 'my-calendar' ) . '</a></p>';
 		set_transient( 'my_calendar_svg_list', $output, MONTH_IN_SECONDS );
 	}
 
