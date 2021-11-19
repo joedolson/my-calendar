@@ -553,6 +553,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 				</div>
 			</div>
 			<?php
+		} else {
+			$icons = mc_display_icons();
 		}
 		?>
 		</div>

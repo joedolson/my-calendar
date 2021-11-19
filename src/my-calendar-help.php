@@ -298,21 +298,25 @@ function mc_get_help_text( $id ) {
  */
 function mc_display_icons() {
 	$is_custom = mc_is_custom_icon();
-	if ( $is_custom ) {
-		$dir       = plugin_dir_path( __FILE__ );
-		$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
-	} else {
-		$directory = dirname( __FILE__ ) . '/images/icons/';
+	$output    = get_transient( 'my_calendar_svg_list' );
+	if ( ! $output ) {
+		if ( $is_custom ) {
+			$dir       = plugin_dir_path( __FILE__ );
+			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
+		} else {
+			$directory = dirname( __FILE__ ) . '/images/icons/';
+		}
+		$iconlist  = mc_directory_list( $directory );
+		if ( ! empty( $iconlist ) ) {
+			$output = '<ul class="checkboxes icon-list">';
+		}
+		foreach ( $iconlist as $icon ) {
+			$img     = mc_get_img( $icon, $is_custom );
+			$output .= '<li class="category-icon"><code>' . $icon . '</code>' . $img . '</li>';
+		}
+		$output .= '</ul>';
+		set_transient( 'my_calendar_svg_list', $output, MONTH_IN_SECONDS );
 	}
-	$iconlist  = mc_directory_list( $directory );
-	if ( ! empty( $iconlist ) ) {
-		$output = '<ul class="checkboxes icon-list">';
-	}
-	foreach ( $iconlist as $icon ) {
-		$img     = mc_get_img( $icon, $is_custom );
-		$output .= '<li class="category-icon"><code>' . $icon . '</code>' . $img . '</li>';
-	}
-	$output .= '</ul>';
 
 	return $output;
 }

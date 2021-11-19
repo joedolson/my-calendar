@@ -342,6 +342,12 @@ function mc_kses_elements() {
 			'id'    => array(),
 			'class' => array(),
 		),
+		'code'     => array(
+			'class' => array(),
+		),
+		'pre'      => array(
+			'class' => array(),
+		),
 	);
 
 	return $elements;
