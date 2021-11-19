@@ -218,9 +218,13 @@ function mc_get_img( $file, $is_custom = false ) {
 	}
 	$label_id = sanitize_title( $file );
 	$svg      = wp_remote_get( $src );
-	$image    = wp_remote_retrieve_body( $svg );
-	$image    = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
-	$image    = str_replace( '<path ', "<title id='" . $label_id . "'>$file</title><path ", $image );
+	if ( ! is_wp_error( $svg ) ) {
+		$image    = wp_remote_retrieve_body( $svg );
+		$image    = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
+		$image    = str_replace( '<path ', "<title id='" . $label_id . "'>$file</title><path ", $image );
+	} else {
+		$image = 'error.png';
+	}
 
 	return $image;
 }
