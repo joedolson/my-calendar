@@ -298,7 +298,7 @@ function mc_get_help_text( $id ) {
  */
 function mc_display_icons() {
 	$is_custom = mc_is_custom_icon();
-	$output    = false; // get_transient( 'my_calendar_svg_list' );
+	$output    = get_transient( 'my_calendar_svg_list' );
 	if ( ! $output ) {
 		if ( $is_custom ) {
 			$dir       = plugin_dir_path( __FILE__ );
