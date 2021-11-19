@@ -73,7 +73,7 @@
 			search: input => {
 				const url = mcicons.ajaxurl;
 				return new Promise( resolve => {
-					if (input.length < 3) {
+					if (input.length < 2) {
 						return resolve([])
 					}
 
