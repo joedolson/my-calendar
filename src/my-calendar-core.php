@@ -1300,6 +1300,7 @@ function mc_scripts() {
 				'thumbHeight'   => get_option( 'thumbnail_size_h' ),
 				'deleteButton'  => __( 'Cancel', 'my-calendar' ),
 				'restoreButton' => __( 'Restore', 'my-calendar' ),
+				'imageRemoved'  => __( 'Featured image removed', 'my-calendar' ),
 			)
 		);
 	}

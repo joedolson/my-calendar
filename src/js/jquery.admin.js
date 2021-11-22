@@ -547,6 +547,7 @@ var mediaPopup = '';
 			$( '#e_image_id' ).val( '' );
 			$( '#e_image' ).val( '' );
 			$( '#event_image' ).attr( 'src', '' ).attr( 'alt', '' );
+			$( '.event_image' ).text( mcAdmin.imageRemoved );
 		});
 
 		$('.mc-image-upload')

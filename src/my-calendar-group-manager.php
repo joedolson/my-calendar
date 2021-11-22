@@ -435,17 +435,19 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 								$image_id = '';
 							}
 							$button_text = __( 'Select Featured Image' );
+							$remove      = '';
 							if ( '' !== $image ) {
 								$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
+								$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 								$button_text = __( 'Change Featured Image', 'my-calendar' );
 								$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
 							}
 							?>
-							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button select-image"><?php echo $button_text; ?></button>
+							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button select-image"><?php echo $button_text; ?></button> <?php echo $remove; ?>
 							</div>
 							<?php
 							if ( ! empty( $data->event_image ) ) {
-								echo '<div class="event_image"><img src="' . esc_url( $image ) . '" alt="" /></div>';
+								echo '<div class="event_image" aria-live="assertive"><img id="event_image" src="' . esc_url( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 							} else {
 								echo '<div class="event_image"></div>';
 							}

@@ -1246,7 +1246,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				if ( '' !== $image ) {
 					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 					$button_text = __( 'Change Featured Image', 'my-calendar' );
-					$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . __( 'Remove Featured Image', 'my-calendar' ) . '</button>';
+					$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 					$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
 				}
 				$return = '
@@ -1256,7 +1256,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 					</div>';
 				if ( '' !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
-					$return .= '<div class="event_image"><img id="event_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
+					$return .= '<div class="event_image" aria-live="assertive"><img id="event_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 				} else {
 					$return .= '<div class="event_image"></div>';
 				}
