@@ -543,8 +543,14 @@ var mediaPopup = '';
 			}
 		}
 
+		$('.mc-image-upload').on( 'click', '.remove-image', function (e) {
+			$( '#e_image_id' ).val( '' );
+			$( '#e_image' ).val( '' );
+			$( '#event_image' ).attr( 'src', '' ).attr( 'alt', '' );
+		});
+
 		$('.mc-image-upload')
-			.on('click', '.textfield-field', function (e) {
+			.on('click', '.select-image', function (e) {
 				e.preventDefault();
 				var $self = $(this),
 					$inpField = document.querySelector('#e_image'),

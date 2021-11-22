@@ -1242,15 +1242,17 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			}
 			if ( $show_block ) {
 				$button_text = __( 'Select Featured Image' );
+				$remove      = '';
 				if ( '' !== $image ) {
 					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 					$button_text = __( 'Change Featured Image', 'my-calendar' );
+					$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . __( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 					$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
 				}
 				$return = '
 				<div class="mc-image-upload field-holder">
 					<div class="image_fields">
-						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button textfield-field" aria-describedby="event_image">' . $button_text . '</button>
+						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button select-image" aria-describedby="event_image">' . $button_text . '</button> ' . $remove . '
 					</div>';
 				if ( '' !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
@@ -3283,6 +3285,10 @@ add_action( 'save_post', 'mc_post_update_event' );
  */
 function mc_post_update_event( $id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $id ) || ! ( get_post_type( $id ) === 'mc-events' ) ) {
+		return $id;
+	}
+	// If event image fields are empty, don't image that's being removed back to the event.
+	if ( isset( $_POST['event_image'] ) && '' === $_POST['event_image'] || isset( $_POST['event_image_id'] ) && '' === $_POST['event_image_id'] ) {
 		return $id;
 	}
 	$post           = get_post( $id );

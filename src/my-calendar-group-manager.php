@@ -441,7 +441,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 								$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
 							}
 							?>
-							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button textfield-field"><?php echo $button_text; ?></button>
+							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button select-image"><?php echo $button_text; ?></button>
 							</div>
 							<?php
 							if ( ! empty( $data->event_image ) ) {
