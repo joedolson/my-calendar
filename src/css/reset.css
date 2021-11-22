@@ -212,6 +212,13 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	margin-left: 5px;
 }
 
+.mc-main .event-icon {
+	display: none;
+}
+
+.mc-main.mini .event-icon {
+	display: block;
+}
 
 .mc-main.my-calendar ul button.mc-text-button {
 	border: 0;

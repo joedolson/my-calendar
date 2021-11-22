@@ -200,6 +200,7 @@
 
 .mc-main .list-event .details {
 	padding: 0;
+	margin-top: 1em;
 }
 
 .mc-main .list-event .event-title {
@@ -335,7 +336,7 @@ h4.mc-title {
 
 .mc-main.mini .mc-date {
 	text-align: center;
-	padding: 0;
+	padding: 6px;
 	font-size: 14px;
 }
 
