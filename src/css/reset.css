@@ -79,6 +79,11 @@ div.site-content, table {
 	display: none;
 }
 
+.mc-main h4.mc-title {
+	margin-top: 0;
+	margin-bottom: .5em;
+}
+
 .mc-main nav ul {
 	list-style: none;
 }
