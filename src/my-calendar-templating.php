@@ -170,7 +170,7 @@ function mc_templates_edit() {
 			<div class="mc-inside">
 			<?php
 			echo wp_kses( mc_list_custom_templates( $key ), mc_kses_elements() );
-			echo ( 'add-new' !== $key ) ? wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' ) : '';
+			echo ( 'add-new' !== $key ) ? wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add Custom Template', 'my-calendar' ) . '</a></p>' ) : '';
 			?>
 			</div>
 		</div>
@@ -602,11 +602,12 @@ function mc_list_core_templates( $current = '' ) {
  * @return string
  */
 function mc_list_custom_templates( $current = '' ) {
-	$list = "<table class='widefat'>
+	$header = "<table class='widefat'>
 				<thead>
 					<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th>
 				</thead>
 				<tbody>';
+	$body   = '';
 	global $wpdb;
 	$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
 	$class   = 'normal';
@@ -615,13 +616,13 @@ function mc_list_custom_templates( $current = '' ) {
 		$desc  = mc_template_description( $key );
 		$class = ( 'alternate' === $class ) ? 'normal' : 'alternate';
 		$curr  = ( $current === $key ) ? ' aria-current="true"' : '';
-		$list .= "<tr class='$class'><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
+		$body .= "<tr class='$class'><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
 	}
 
-	$list .= '</tbody>
+	$list = $header . $body . '</tbody>
 	</table>';
 
-	return $list;
+	return ( '' !== $body ) ? $list : '';
 }
 
 add_action(
