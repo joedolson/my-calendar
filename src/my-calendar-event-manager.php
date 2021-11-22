@@ -2403,7 +2403,7 @@ function mc_list_events() {
 								if ( '' !== $event->event_label ) {
 									$elabel = urlencode( $event->event_label );
 									?>
-								<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( $event->event_label ); ?></a>
+								<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $event->event_label ) ); ?></a>
 									<?php
 								}
 								?>
