@@ -690,7 +690,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</p>
 				<p>
 					<label for="template"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label>
-					<textarea cols="40" rows="4" name="template" id="template"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea>
+					<textarea cols="40" rows="4" name="template" id="template" aria-describedby="mc_template-note"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea><span id="mc_template-note"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php printf( __( 'Creates a new <a href="%s">custom template</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?></span>
 				</p>
 			</fieldset>
 				<?php
