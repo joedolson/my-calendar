@@ -28,9 +28,8 @@ function mc_update_location_post( $where, $data, $post ) {
 	$post_id     = mc_get_location_post( $location_id, false );
 	// If, after all that, the post doesn't exist, create it.
 	if ( ! get_post_status( $post_id ) ) {
-		mc_create_location_post( $location_id, $data, $post );
+		$post_id = mc_create_location_post( $location_id, $data, $post );
 	}
-
 	$title       = $data['location_label'];
 	$post_status = 'publish';
 	$auth        = get_current_user_id();
@@ -71,7 +70,8 @@ function mc_create_location_post( $location_id, $data, $post = array() ) {
 		return;
 	}
 	$post_id = mc_get_location_post( $location_id, false );
-	if ( ! $post_id ) {
+	// If not post ID or the post ID has no status.
+	if ( ! $post_id || ! get_post_status( $post_id ) ) {
 		$title       = $data['location_label'];
 		$post_status = 'publish';
 		$auth        = get_current_user_id();
@@ -85,7 +85,7 @@ function mc_create_location_post( $location_id, $data, $post = array() ) {
 			'post_type'   => $type,
 		);
 		$post_id     = wp_insert_post( $my_post );
-		update_post_meta( $post_id, '_mc_location_id', $location_id );
+		mc_update_location_post_relationship( $location_id, $post_id );
 
 		do_action( 'mc_update_location_post', $post_id, $post, $data, $location_id );
 		wp_publish_post( $post_id );
@@ -180,6 +180,27 @@ function mc_get_location_post( $location_id, $type = true ) {
 }
 
 /**
+ * Get location ID from post.
+ *
+ * @param int $post_ID Post ID.
+ *
+ * @return int
+ */
+function mc_get_location_id( $post_ID ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$location_id = $mcdb->get_var( $mcdb->prepare( 'SELECT location_id FROM ' . my_calendar_location_relationships_table() . ' WHERE post_id = %d', $post_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( ! $location_id ) {
+		$location_id = get_post_meta( $post_ID, '_mc_location_id', true );
+	}
+
+	return $location_id;
+}
+
+/**
  * Update a single field in a location.
  *
  * @param string $field field name.
@@ -198,6 +219,33 @@ function mc_update_location( $field, $data, $location ) {
 	}
 
 	return $result;
+}
+
+/**
+ * Update a location relationship value.
+ *
+ * @param int $location_id Location ID from location table.
+ * @param int $location_post Post ID from posts table.
+ *
+ * @since 3.3.0
+ */
+function mc_update_location_post_relationship( $location_id, $location_post ) {
+	global $wpdb;
+	$location_relationship = $wpdb->get_var( $wpdb->prepare( 'SELECT relationship_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) );
+	$where                 = array( 'relationship_id' => (int) $location_relationship );
+
+	$update = $wpdb->update(
+		my_calendar_location_relationships_table(),
+		array(
+			'post_id' => $location_post,
+		),
+		$where,
+		array( '%d' ),
+		'%d'
+	);
+	print_r( $update );
+
+	return $update;
 }
 
 /**
@@ -422,8 +470,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 									$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
 									?>
 								<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a></li>
-								<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php esc_html_e( 'View', 'my-calendar' ); ?></a></li>
 									<?php
+									if ( $view_url && esc_url( $view_url ) ) {
+										?>
+								<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php esc_html_e( 'View', 'my-calendar' ); ?></a></li>
+										<?php
+									}
 								}
 								?>
 								<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
@@ -456,8 +508,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 										$view_url   = get_the_permalink( mc_get_location_post( $loc_id, false ) );
 										?>
 									<li><span class="dashicons dashicons-no" aria-hidden="true"></span><a class="delete" href="<?php echo esc_url( $delete_url ); ?>"><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a></li>
-									<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php esc_html_e( 'View', 'my-calendar' ); ?></a></li>
 										<?php
+										if ( $view_url && esc_url( $view_url ) ) {
+											?>
+								<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php esc_html_e( 'View', 'my-calendar' ); ?></a></li>
+											<?php
+										}
 									}
 									?>
 									<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
@@ -1123,7 +1179,7 @@ function mc_core_search_locations( $query = '' ) {
  */
 function mc_display_location_details( $content ) {
 	if ( is_singular( 'mc-locations' ) ) {
-		$location = get_post_meta( get_the_ID(), '_mc_location_id', true );
+		$location = mc_get_location_id( get_the_ID() );
 		$location = mc_get_location( $location );
 		$args     = array(
 			'ltype'    => 'name',

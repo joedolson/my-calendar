@@ -307,7 +307,7 @@ function mc_location_manager_row( $location ) {
 	$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
 	$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
 	$view_link  = '';
-	if ( esc_url( $view_url ) ) {
+	if ( $view_url && esc_url( $view_url ) ) {
 		$view_link = "<a href='" . esc_url( $view_url ) . "' class='view' aria-describedby='location" . absint( $location->location_id ) . "'>" . esc_html__( 'View', 'my-calendar' ) . '</a> | ';
 	}
 
