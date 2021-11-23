@@ -223,6 +223,9 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 
 .mc-main.mini .event-icon {
 	display: block;
+	font-size: .6rem;
+	padding-bottom: 6px;
+	line-height: 1;
 }
 
 .mc-main.my-calendar ul button.mc-text-button {
