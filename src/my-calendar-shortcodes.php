@@ -384,6 +384,17 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 
 	?>
 	<div id="mc-generator" class="generator">
+		<?php
+		switch ( $type ) {
+			case 'main' : $message = __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
+			break;
+			case 'upcoming' : $message = __( 'Generate the <code>[my_calendar_upcoming]</code> shortcode. Generates lists of upcoming events.', 'my-calendar' );
+			break;
+			case 'today' : $message = __( 'Generate the <code>[my_calendar_today]</code> shortcode. Generates lists of events happening today.', 'my-calendar' );
+			break;
+		}
+		echo wp_kses_post( wpautop( $message ) );
+		?>
 		<div><input type="hidden" name="_mc_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
 		<input type='hidden' name='shortcode' value='<?php echo esc_attr( $type ); ?>'/>
 		<?php
