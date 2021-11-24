@@ -3,7 +3,7 @@
 	$(function () {
 		$('.calendar-event').children().not('.event-title,.screen-reader-text').hide();
 
-		$(document).on('click', '.calendar-event .event-title a',
+		$(document).on('click', '.calendar-event .event-title .open',
 			function (e) {
 				e.preventDefault();
 				var current_date = $(this).parents( '.vevent' ).children();
@@ -18,6 +18,7 @@
 				lastFocus.attr( 'data-action', 'shiftback' );
 
 				$('.calendar-event').children().not('.event-title,.screen-reader-text').not( current_date ).hide();
+				return false;
 			});
 
 		$(document).on('click', '.calendar-event .close',

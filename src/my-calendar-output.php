@@ -398,7 +398,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 			$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 		} else {
-			$wrap    = "<a href='#$uid-$type-details-$id' class='et_smooth_scroll_disabled opl-link url summary$has_image'>";
+			$wrap    = "<a href='#$uid-$type-details-$id' class='open et_smooth_scroll_disabled opl-link url summary$has_image'>";
 			$balance = '</a>';
 		}
 	} else {
