@@ -853,7 +853,7 @@ function mc_remote_db() {
 							// Translators: control to hide.
 							$hide_label = sprintf( __( 'Show %s', 'my-calendar' ), $k );
 							$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . "</span></button> <button class='hide' type='button'><i class='dashicons dashicons-hidden' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
-							$buttons = "<div class='mc-buttons'>$buttons</div>";
+							$buttons    = "<div class='mc-buttons'>$buttons</div>";
 							echo wp_kses( "<li class='ui-state-default mc-$k mc-hidden'>$buttons <code>$k</code> $v <input type='hidden' name='mc_nav[]' value='$k' disabled /></li>", mc_kses_elements() );
 							$i ++;
 						}
