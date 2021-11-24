@@ -408,7 +408,7 @@ function my_calendar_settings() {
 		// Output.
 		if ( isset( $_POST['mc_show_months'] ) ) {
 			mc_update_output_settings( $_POST );
-			mc_show_notice( __( 'Output Settings saved', 'my-calendar' ) );
+			mc_show_notice( __( 'Display Settings saved', 'my-calendar' ) );
 		}
 		// INPUT.
 		if ( isset( $_POST['mc_input'] ) ) {
@@ -466,7 +466,7 @@ function my_calendar_settings() {
 		<div class="tabs" role="tablist" data-default="my-calendar-manage">
 			<button type="button" role="tab" aria-selected="false"  id="tab_manage" aria-controls="my-calendar-manage"><?php esc_html_e( 'General', 'my-calendar' ); ?></button>
 			<button type="button" role="tab" aria-selected="false"  id="tab_text" aria-controls="my-calendar-text"><?php esc_html_e( 'Text', 'my-calendar' ); ?></button>
-			<button type="button" role="tab" aria-selected="false"  id="tab_output" aria-controls="mc-output"><?php esc_html_e( 'Output', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false"  id="tab_output" aria-controls="mc-output"><?php esc_html_e( 'Display', 'my-calendar' ); ?></button>
 			<button type="button" role="tab" aria-selected="false"  id="tab_input" aria-controls="my-calendar-input"><?php esc_html_e( 'Input', 'my-calendar' ); ?></button>
 			<?php
 			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
@@ -762,7 +762,7 @@ function mc_remote_db() {
 		</div>
 
 		<div class="wptab postbox initial-hidden" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
-			<h2><?php esc_html_e( 'Output Settings', 'my-calendar' ); ?></h2>
+			<h2><?php esc_html_e( 'Display Settings', 'my-calendar' ); ?></h2>
 
 			<div class="inside">
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>">
@@ -794,7 +794,7 @@ function mc_remote_db() {
 						</ul>
 
 					<fieldset>
-						<legend><?php esc_html_e( 'Re-order calendar layout', 'my-calendar' ); ?></legend>
+						<legend><?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?></legend>
 						<?php
 						$topnav       = explode( ',', get_option( 'mc_topnav' ) );
 						$calendar     = array( 'calendar' );
