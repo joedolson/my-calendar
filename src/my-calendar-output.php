@@ -1244,7 +1244,16 @@ function mc_date_array( $timestamp, $period ) {
 			);
 			break;
 		case 'week':
-			// First day of the week is calculated prior to this function. Argument received is the first day of the week.
+			$day_of_week   = (int) mc_date( 'N', $timestamp );
+			$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
+			if ( $day_of_week !== $start_of_week ) {
+				if ( $start_of_week > $day_of_week ) {
+					$diff = $start_of_week - $day_of_week;
+				} else {
+					$diff = $day_of_week - $start_of_week;
+				}
+				$timestamp = strtotime( "-$diff days", $timestamp );
+			}
 			$from = mc_date( 'Y-m-d', $timestamp, false );
 			$to   = mc_date( 'Y-m-d', strtotime( '+6 days', $timestamp ), false );
 
@@ -2260,6 +2269,7 @@ function mc_get_from_to( $show_months, $params, $date ) {
 			'to'   => $to,
 		);
 	} else {
+		// Get a view based on current date.
 		$dates = mc_date_array( $date['current_date'], $time );
 	}
 
