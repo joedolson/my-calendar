@@ -1810,7 +1810,13 @@ function mc_the_title( $title, $post_id = null ) {
 				} else {
 					$icon = '';
 				}
-				$title = $icon . ' ' . strip_tags( $title, mc_strip_tags() );
+				$template = mc_get_template( 'title_solo' );
+				if ( '' === $template || '{title}' === $template ) {
+					$title = $icon . ' ' . strip_tags( $title, mc_strip_tags() );
+				} else {
+					$data  = mc_create_tags( $event, $event_id );
+					$title = mc_draw_template( $data, $template );
+				}
 			}
 		}
 	}
