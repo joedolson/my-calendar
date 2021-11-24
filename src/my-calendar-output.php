@@ -3362,7 +3362,11 @@ add_filter( 'mc_build_url', 'mc_translate_url' );
  */
 function mc_pll_translation_url( $url, $lang ) {
 	if ( is_singular( 'mc-events' ) ) {
-		$url = add_query_arg( 'mc_id', '', $url );
+		$mc_id = '';
+		if ( isset( $_GET['mc_id'] ) ) {
+			$mc_id = (int) $_GET['mc_id'];
+		}
+		$url = add_query_arg( 'mc_id', $mc_id, $url );
 	}
 
 	return $url;
