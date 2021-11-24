@@ -33,22 +33,6 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 		return '';
 	}
 	foreach ( $array as $key => $value ) {
-		/**
-		 * I implemented this section due to a *previous* security issue.
-		 * It only has any impact on sites that have already been compromised,
-		 * preventing the compromised code from being executed.
-		 *
-		 * I have no reports or evidence that security issue was ever taken advantage of.
-		 *
-		 * Since this is a very expensive operation (potentially doubling rendering time), I'm removing it from execution.
-		 *
-		 * This does not decrease the security of My Calendar, but it does mean that if
-		 * your site was compromised prior to version 2.4.19, those events will no longer be cleaned
-		 * unless you edit them or otherwise remove the compromised data.
-		 *
-		 * Based on my information, this is very unlikely.
-		 */
-
 		if ( is_object( $value ) && ! empty( $value ) ) {
 			// If a value is an object, ignore it.
 		} else {
