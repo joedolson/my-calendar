@@ -907,16 +907,11 @@ input[name="mc_uri"] {
 #mc-sortable .mc-calendar {
 	background-color: #fff !important;
 	border: 1px solid #787c82 !important;
-	padding: 1em;
+	padding: 3em 1em;
 }
 
 #mc-sortable .mc-calendar .mc-buttons {
 	margin-right: 2.7em;
-}
-
-#mc-sortable .mc-calendar .dashicons-calendar {
-	font-size: 5em;
-	width: 1em;
 }
 
 #mc-sortable li.mc-stop {
