@@ -1301,7 +1301,8 @@ function mc_scripts() {
 				'deleteButton'  => __( 'Cancel', 'my-calendar' ),
 				'restoreButton' => __( 'Restore', 'my-calendar' ),
 				'imageRemoved'  => __( 'Featured image removed', 'my-calendar' ),
-				'buttonName'    => __( 'Choose an Image', 'my-calendar' ),
+				'modalTitle'    => __( 'Choose an Image', 'my-calendar' ),
+				'buttonName'    => __( 'Select', 'my-calendar' ),
 			)
 		);
 	}

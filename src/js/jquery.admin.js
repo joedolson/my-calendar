@@ -560,9 +560,9 @@ var mediaPopup = '';
 				clear_existing();
 				mediaPopup = wp.media({
 					multiple: false, // add, reset, false.
-					title: mcAdmin.buttonName,
+					title: mcAdmin.modalTitle,
 					button: {
-						text: 'Select'
+						text: mcAdmin.buttonName,
 					}
 				});
 
