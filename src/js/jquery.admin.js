@@ -560,7 +560,7 @@ var mediaPopup = '';
 				clear_existing();
 				mediaPopup = wp.media({
 					multiple: false, // add, reset, false.
-					title: 'Choose an Image',
+					title: mcAdmin.buttonName,
 					button: {
 						text: 'Select'
 					}
