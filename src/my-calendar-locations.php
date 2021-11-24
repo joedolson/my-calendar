@@ -231,7 +231,7 @@ function mc_update_location( $field, $data, $location ) {
  */
 function mc_update_location_post_relationship( $location_id, $location_post ) {
 	global $wpdb;
-	$location_relationship = $wpdb->get_var( $wpdb->prepare( 'SELECT relationship_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) );
+	$location_relationship = $wpdb->get_var( $wpdb->prepare( 'SELECT relationship_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$where                 = array( 'relationship_id' => (int) $location_relationship );
 
 	$update = $wpdb->update(

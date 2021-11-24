@@ -306,7 +306,7 @@ function mc_display_icons() {
 		} else {
 			$directory = dirname( __FILE__ ) . '/images/icons/';
 		}
-		$iconlist  = mc_directory_list( $directory );
+		$iconlist = mc_directory_list( $directory );
 		if ( ! empty( $iconlist ) ) {
 			$output = '<ul class="checkboxes icon-list">';
 		}

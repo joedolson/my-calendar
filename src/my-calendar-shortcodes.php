@@ -386,12 +386,15 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	<div id="mc-generator" class="generator">
 		<?php
 		switch ( $type ) {
-			case 'main' : $message = __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
-			break;
-			case 'upcoming' : $message = __( 'Generate the <code>[my_calendar_upcoming]</code> shortcode. Generates lists of upcoming events.', 'my-calendar' );
-			break;
-			case 'today' : $message = __( 'Generate the <code>[my_calendar_today]</code> shortcode. Generates lists of events happening today.', 'my-calendar' );
-			break;
+			case 'main':
+				$message = __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
+				break;
+			case 'upcoming':
+				$message = __( 'Generate the <code>[my_calendar_upcoming]</code> shortcode. Generates lists of upcoming events.', 'my-calendar' );
+				break;
+			case 'today':
+				$message = __( 'Generate the <code>[my_calendar_today]</code> shortcode. Generates lists of events happening today.', 'my-calendar' );
+				break;
 		}
 		echo wp_kses_post( wpautop( $message ) );
 		?>
@@ -690,7 +693,12 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</p>
 				<p>
 					<label for="template"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label>
-					<textarea cols="40" rows="4" name="template" id="template" aria-describedby="mc_template-note"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea><span id="mc_template-note"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php printf( __( 'Creates a new <a href="%s">custom template</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?></span>
+					<textarea cols="40" rows="4" name="template" id="template" aria-describedby="mc_template-note"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea><span id="mc_template-note"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i>
+					<?php
+					// Translators: Link to custom template UI.
+					printf( __( 'Creates a new <a href="%s">custom template</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) );
+					?>
+					</span>
 				</p>
 			</fieldset>
 				<?php
