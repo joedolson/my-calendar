@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Draw array of information into a template with {$key} formatted tags
  *
  * @param array  $array associative array of information intended to be parsed.
- * @param string $template template containing braced tags using keys of passed array.
+ * @param string $template template containing braced tags (e.g. `{title}`) using keys of passed array.
  * @param string $type my calendar needs to render a different link for list versions and other views.
  *
  * @return string HTML output of template.
