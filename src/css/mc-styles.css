@@ -918,13 +918,12 @@ input[name="mc_uri"] {
 	border-radius: none;
 	background-color: #2c3338;
 	color: #f0f0f1;
-}
+} 
 
 #mc-sortable .mc-ui-state-highlight {
 	background: #fcf9e8 !important;
 	height: 1.6em;
 }
-
 
 #mc-sortable div.dashicons {
 	vertical-align: middle;
