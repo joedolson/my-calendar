@@ -189,7 +189,12 @@ function mc_create_event_post( $data, $event_id ) {
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
 		$description       = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 		$excerpt           = isset( $data['event_short'] ) ? $data['event_short'] : '';
-		$location_id       = ( isset( $_POST['location_preset'] ) ) ? (int) $_POST['location_preset'] : 0;
+		$location_id       = 0;
+		if ( isset( $_POST['location_preset'] ) ) {
+			$location_id       = (int) $_POST['location_preset'];
+		} elseif ( isset( $data['location_preset'] ) ) {
+			$location_id = $data['location_preset'];
+		}
 		$post_status       = $privacy;
 		$auth              = $data['event_author'];
 		$type              = 'mc-events';
@@ -205,7 +210,12 @@ function mc_create_event_post( $data, $event_id ) {
 		);
 		$post_id           = wp_insert_post( $my_post );
 		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
-		$attachment_id = ( isset( $_POST['event_image_id'] ) && is_numeric( $_POST['event_image_id'] ) ) ? $_POST['event_image_id'] : false;
+		$attachment_id = false;
+		if ( isset( $_POST['event_image_id'] ) ) {
+			$attachment_id = (int) $_POST['event_image_id'];
+		} elseif ( isset( $data['event_image_id'] ) ) {
+			$attachment_id = (int) $data['event_image_id'];
+		}
 		if ( $attachment_id ) {
 			set_post_thumbnail( $post_id, $attachment_id );
 		}
