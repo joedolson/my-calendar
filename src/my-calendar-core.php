@@ -54,7 +54,6 @@ function mc_plugin_action( $links, $file ) {
 	return $links;
 }
 
-
 /**
  * Get custom styles dir locations, with trailing slash,
  * or get custom styles url locations, with trailing slash.
@@ -75,7 +74,6 @@ function mc_custom_dirs( $type = 'path' ) {
 
 	return ( is_array( $directories ) && ! empty( $directories ) ) ? $directories : $dirs;
 }
-
 
 /**
  * Check whether requested file exists in calendar custom directory.
