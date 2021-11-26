@@ -678,7 +678,7 @@ function mc_get_current_url() {
 	global $wp, $wp_rewrite;
 	$args = array();
 	if ( isset( $_GET['page_id'] ) ) {
-		$args = array( 'page_id' => $_GET['page_id'] );
+		$args = array( 'page_id' => absint( $_GET['page_id'] ) );
 	}
 	$current_url = home_url( add_query_arg( $args, $wp->request ) );
 
