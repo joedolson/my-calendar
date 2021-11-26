@@ -2472,6 +2472,9 @@ function mc_list_events() {
 		</div>
 			<?php
 		} else {
+			if ( isset( $_POST['mcs'] ) ) {
+				echo '<p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '</p>';
+			}
 			if ( ! isset( $_GET['restrict'] ) && ( ! isset( $_GET['limit'] ) || isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ) {
 				?>
 				<p class='mc-create-event'><a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="button button-hero"><?php esc_html_e( 'Create an event', 'my-calendar' ); ?></a></p>

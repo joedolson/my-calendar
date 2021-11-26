@@ -283,6 +283,9 @@ function mc_manage_locations() {
 		</form>
 		<?php
 	} else {
+		if ( isset( $_POST['mcl'] ) ) {
+			echo '<p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '</p>';
+		}
 		echo '<p><a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . __( 'Create a new location', 'my-calendar' ) . '</a></p>';
 	}
 }
