@@ -138,7 +138,7 @@ add_filter( 'mc_registered_stylesheet', 'mc_preview_stylesheet', 10, 1 );
  */
 function mc_preview_stylesheet( $file ) {
 	if ( isset( $_GET['mcpreview'] ) && current_user_can( 'mc_edit_styles' ) ) {
-		$file = mc_get_style_path( $_GET['mcpreview'], 'url' );
+		$file = mc_get_style_path( sanitize_text_field( $_GET['mcpreview'] ), 'url' );
 		if ( $file ) {
 			return $file;
 		}
