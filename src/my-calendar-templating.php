@@ -85,10 +85,10 @@ function mc_templates_edit() {
 	}
 
 	$globals             = mc_globals();
-	$mc_grid_template    = ( '' !== trim( $templates['grid'] ) ) ? $templates['grid'] : $globals['grid_template'];
-	$mc_list_template    = ( '' !== trim( $templates['list'] ) ) ? $templates['list'] : $globals['list_template'];
-	$mc_mini_template    = ( '' !== trim( $templates['mini'] ) ) ? $templates['mini'] : $globals['mini_template'];
-	$mc_details_template = ( '' !== trim( $templates['details'] ) ) ? $templates['details'] : $globals['single_template'];
+	$mc_grid_template    = ( isset( $templates['grid'] ) && ! empty( $templates['grid'] ) ) ? $templates['grid'] : $globals['grid_template'];
+	$mc_list_template    = ( isset( $templates['list'] ) && ! empty( $templates['list'] ) ) ? $templates['list'] : $globals['list_template'];
+	$mc_mini_template    = ( isset( $templates['mini'] ) && ! empty( $templates['mini'] ) ) ? $templates['mini'] : $globals['mini_template'];
+	$mc_details_template = ( isset( $templates['details'] ) && ! empty( $templates['details'] ) ) ? $templates['details'] : $globals['single_template'];
 
 	$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
 	$template = stripslashes( $template );
