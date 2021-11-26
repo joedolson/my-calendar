@@ -767,7 +767,7 @@ function mc_remote_db() {
 			<div class="inside">
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-					<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Output Settings', 'my-calendar' ); ?>" /></p>
+					<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Display Settings', 'my-calendar' ); ?>" /></p>
 						<ul>
 							<li>
 							<?php
@@ -1042,7 +1042,7 @@ function mc_remote_db() {
 						</ul>
 					</fieldset>
 
-					<p><input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Output Settings', 'my-calendar' ); ?>"/></p>
+					<p><input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Display Settings', 'my-calendar' ); ?>"/></p>
 				</form>
 			</div>
 		</div>
