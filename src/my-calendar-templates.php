@@ -306,7 +306,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( 'true' === $address ) {
 		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
 		$hcard .= ( '' !== $label ) ? '<div><strong class="org fn" itemprop="name">' . $link . '</strong></div>' : '';
-		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone ) ? '' : "<div class='sub-address'>";
+		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' !== $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
 		$hcard .= ( '' !== $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
 		$hcard .= ( '' !== $city . $state . $zip ) ? '<div>' : '';
