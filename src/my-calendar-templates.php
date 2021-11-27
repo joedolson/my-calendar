@@ -860,6 +860,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	if ( ! is_array( $event ) && $multiple ) {
 		return '';
 	}
+
 	$id       = '0';
 	$api_key  = get_option( 'mc_gmap_api_key' );
 	$markers  = '';
@@ -868,8 +869,14 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	$width    = apply_filters( 'mc_map_height', '100%', $event );
 	$height   = apply_filters( 'mc_map_height', '300px', $event );
 	$styles   = " style='width: $width;height: $height'";
+	// This is an event with a location object property.
 	if ( 'event' === $source && property_exists( $event, 'location' ) && is_object( $event->location ) ) {
 		$event  = $event->location;
+		$source = 'location';
+	}
+	// This is an event with a location ID, but no attached object.
+	if ( 'event' === $source && $event->event_location ) {
+		$event  = mc_get_location( $event->event_location );
 		$source = 'location';
 	}
 	if ( $api_key ) {
