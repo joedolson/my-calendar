@@ -669,3 +669,39 @@ function mc_get_from_to( $show_months, $params, $date ) {
 
 	return $dates;
 }
+
+/**
+ * Test whether an event is in the past, currently happening, or in the future.
+ *
+ * @param object $event Event object.
+ *
+ * @return int
+ */
+function mc_date_relation( $event ) {
+	$ts  = $event->ts_occur_begin;
+	$end = $event->ts_occur_end;
+	$now = time();
+	if ( $ts < $now && $end > $now ) {
+		do_action( 'mc_event_happening', true, $event );
+		$date_relation = 1;
+	} elseif ( $now < $ts ) {
+		do_action( 'mc_event_future', true, $event );
+		$date_relation = 2;
+	} elseif ( $now > $ts ) {
+		do_action( 'mc_event_over', true, $event );
+		$date_relation = 0;
+	}
+
+	return $date_relation;
+}
+
+/**
+ * Get the date format for My Calendar primary views.
+ *
+ * @return string
+ */
+function mc_date_format() {
+	$date_format = ( '' === get_option( 'mc_date_format', '' ) ) ? get_option( 'date_format' ) : get_option( 'mc_date_format' );
+
+	return $date_format;
+}

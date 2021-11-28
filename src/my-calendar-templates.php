@@ -1091,6 +1091,26 @@ function mc_auto_excerpt( $e, $event ) {
 	return $e;
 }
 
+/**
+ * Get template for a specific usage.
+ *
+ * @param string $template name of template.
+ *
+ * @return string Template HTML/tags
+ */
+function mc_get_template( $template ) {
+	$templates = get_option( 'mc_templates' );
+	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'grid' );
+
+	if ( ! in_array( $template, $keys, true ) ) {
+		$template = '';
+	} else {
+		$template = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : '';
+	}
+
+	return trim( $template );
+}
+
 add_filter( 'mc_filter_image_data', 'mc_image_data', 10, 2 );
 /**
  * Event image data.
