@@ -4098,3 +4098,56 @@ function mc_list_problems() {
 
 	return $problems;
 }
+
+add_action( 'mc_save_event', 'mc_refresh_cache', 10, 4 );
+/**
+ * Execute a refresh of the My Calendar primary URL cache if caching plug-in installed.
+ *
+ * @param string $action Type of action performed.
+ * @param array  $data Data passed to filter.
+ * @param int    $event_id Event ID being affected.
+ * @param int    $result Result of calendar save query.
+ */
+function mc_refresh_cache( $action, $data, $event_id, $result ) {
+	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
+	$to_refresh = apply_filters( 'mc_cached_pages_to_refresh', array( $mc_uri_id ), $action, $data, $event_id, $result );
+
+	foreach ( $to_refresh as $calendar ) {
+		if ( ! $calendar || ! get_post( $calendar ) ) {
+			continue;
+		}
+		// W3 Total Cache.
+		if ( function_exists( 'w3tc_pgcache_flush_post' ) ) {
+			w3tc_pgcache_flush_post( $calendar );
+		}
+
+		// WP Super Cache.
+		if ( function_exists( 'wp_cache_post_change' ) ) {
+			wp_cache_post_change( $calendar );
+		}
+
+		// WP Rocket.
+		if ( function_exists( 'rocket_clean_post' ) ) {
+			rocket_clean_post( $calendar );
+		}
+
+		// WP Fastest Cache.
+		if ( isset( $GLOBALS['wp_fastest_cache'] ) && method_exists( $GLOBALS['wp_fastest_cache'], 'singleDeleteCache' ) ) {
+			$GLOBALS['wp_fastest_cache']->singleDeleteCache( false, $calendar );
+		}
+
+		// Comet Cache.
+		if ( class_exists( 'comet_cache' ) ) {
+			comet_cache::clearPost( $calendar );
+		}
+
+		// Cache Enabler.
+		if ( class_exists( 'Cache_Enabler' ) ) {
+			Cache_Enabler::clear_page_cache_by_post_id( $calendar );
+		}
+
+		if ( class_exists( 'WPO_Page_Cache' ) ) {
+			WPO_Page_Cache::delete_single_post_cache( $calendar );
+		}
+	}
+}

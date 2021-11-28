@@ -1202,74 +1202,6 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 }
 
 /**
- * Calculate dates that should be used to calculate start and end dates for current view.
- *
- * @param string $timestamp Time stamp for first date of current period.
- * @param string $period base type of span being displayed.
- *
- * @return array from and to dates
- */
-function mc_date_array( $timestamp, $period ) {
-	switch ( $period ) {
-		case 'month':
-		case 'month+1':
-			if ( 'month+1' === $period ) {
-				$timestamp = strtotime( '+1 month', $timestamp );
-			}
-			$start_of_week = get_option( 'start_of_week' );
-			$first         = mc_date( 'N', $timestamp, false ); // ISO-8601.
-			$sub           = mc_date( 'w', $timestamp, false ); // numeric (how WordPress option is stored).
-			$n             = ( 1 === (int) $start_of_week ) ? $first - 1 : $first;
-
-			if ( $sub === $start_of_week ) {
-				$from = mc_date( 'Y-m-d', $timestamp, false );
-			} else {
-				$start = strtotime( "-$n days", $timestamp );
-				$from  = mc_date( 'Y-m-d', $start, false );
-			}
-			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp, false ), mc_date( 't', $timestamp, false ), mc_date( 'Y', $timestamp, false ) );
-
-			// This allows multiple months displayed. Will figure out splitting tables...
-			// To handle: $endtime = strtotime( "+$months months",$endtime ); JCD TODO.
-			$last = (int) mc_date( 'N', $endtime, false );
-			$n    = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
-			if ( -1 === $n && '7' === mc_date( 'N', $endtime, false ) ) {
-				$n = 6;
-			}
-			$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ), false );
-
-			$return = array(
-				'from' => $from,
-				'to'   => $to,
-			);
-			break;
-		case 'week':
-			$day_of_week   = (int) mc_date( 'N', $timestamp );
-			$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
-			if ( $day_of_week !== $start_of_week ) {
-				if ( $start_of_week > $day_of_week ) {
-					$diff = $start_of_week - $day_of_week;
-				} else {
-					$diff = $day_of_week - $start_of_week;
-				}
-				$timestamp = strtotime( "-$diff days", $timestamp );
-			}
-			$from = mc_date( 'Y-m-d', $timestamp, false );
-			$to   = mc_date( 'Y-m-d', strtotime( '+6 days', $timestamp ), false );
-
-			$return = array(
-				'from' => $from,
-				'to'   => $to,
-			);
-			break;
-		default:
-			$return = false;
-	}
-
-	return $return;
-}
-
-/**
  * Create list of classes for a given date.
  *
  * @param array                $events array of event objects.
@@ -1923,29 +1855,6 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 }
 
 /**
- * Get the days of the week for calendar layout.
- *
- * @param array $params Calendar parameters.
- * @param int   $start_of_week First day of this week.
- *
- * @return array
- */
-function mc_get_week_days( $params, $start_of_week ) {
-	$name_days = mc_name_days( $params['format'] );
-	$abbrevs   = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
-	if ( 1 === (int) $start_of_week ) {
-		$first       = array_shift( $name_days );
-		$afirst      = array_shift( $abbrevs );
-		$name_days[] = $first;
-		$abbrevs[]   = $afirst;
-	}
-	return array(
-		'name_days' => $name_days,
-		'abbrevs'   => $abbrevs,
-	);
-}
-
-/**
  * Create calendar output and return.
  *
  * @param array $args Lots of arguments; all shortcode parameters, etc.
@@ -2227,53 +2136,6 @@ function my_calendar( $args ) {
 	}
 
 	return $mc_wrapper . apply_filters( 'my_calendar_body', $body ) . $mc_closer;
-}
-
-
-/**
- * Get from and to values for current view
- *
- * @param int   $show_months List view parameter.
- * @param array $params Calendar view parameters.
- * @param array $date Current date viewed.
- *
- * @return array from & to dates
- */
-function mc_get_from_to( $show_months, $params, $date ) {
-	$format = $params['format'];
-	$time   = $params['time'];
-	// The value is total months to show; need additional months to show.
-	$num     = $show_months - 1;
-	$c_month = $date['month'];
-	$c_year  = $date['year'];
-	// The first day of the current month.
-	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
-	// Grid calendar can't show multiple months.
-	if ( 'list' === $format && 'week' !== $time ) {
-		if ( $num > 0 && 'day' !== $time && 'week' !== $time ) {
-			if ( 'month+1' === $time ) {
-				$from = mc_date( 'Y-m-d', strtotime( '+1 month', $month_first ), false );
-				$next = strtotime( "+$num months", strtotime( '+1 month', $month_first ) );
-			} else {
-				$from = mc_date( 'Y-m-d', $month_first, false );
-				$next = strtotime( "+$num months", $month_first );
-			}
-			$last = mc_date( 't', $next, false );
-			$to   = mc_date( 'Y-m', $next, false ) . '-' . $last;
-		} else {
-			$from = mc_date( 'Y-m-d', $month_first, false );
-			$to   = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, mc_date( 't', $month_first, false ), $c_year ), false );
-		}
-		$dates = array(
-			'from' => $from,
-			'to'   => $to,
-		);
-	} else {
-		// Get a view based on current date.
-		$dates = mc_date_array( $date['current_date'], $time );
-	}
-
-	return $dates;
 }
 
 /**
@@ -3616,58 +3478,5 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 		return $output;
 	} else {
 		return '';
-	}
-}
-
-add_action( 'mc_save_event', 'mc_refresh_cache', 10, 4 );
-/**
- * Execute a refresh of the My Calendar primary URL cache if caching plug-in installed.
- *
- * @param string $action Type of action performed.
- * @param array  $data Data passed to filter.
- * @param int    $event_id Event ID being affected.
- * @param int    $result Result of calendar save query.
- */
-function mc_refresh_cache( $action, $data, $event_id, $result ) {
-	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
-	$to_refresh = apply_filters( 'mc_cached_pages_to_refresh', array( $mc_uri_id ), $action, $data, $event_id, $result );
-
-	foreach ( $to_refresh as $calendar ) {
-		if ( ! $calendar || ! get_post( $calendar ) ) {
-			continue;
-		}
-		// W3 Total Cache.
-		if ( function_exists( 'w3tc_pgcache_flush_post' ) ) {
-			w3tc_pgcache_flush_post( $calendar );
-		}
-
-		// WP Super Cache.
-		if ( function_exists( 'wp_cache_post_change' ) ) {
-			wp_cache_post_change( $calendar );
-		}
-
-		// WP Rocket.
-		if ( function_exists( 'rocket_clean_post' ) ) {
-			rocket_clean_post( $calendar );
-		}
-
-		// WP Fastest Cache.
-		if ( isset( $GLOBALS['wp_fastest_cache'] ) && method_exists( $GLOBALS['wp_fastest_cache'], 'singleDeleteCache' ) ) {
-			$GLOBALS['wp_fastest_cache']->singleDeleteCache( false, $calendar );
-		}
-
-		// Comet Cache.
-		if ( class_exists( 'comet_cache' ) ) {
-			comet_cache::clearPost( $calendar );
-		}
-
-		// Cache Enabler.
-		if ( class_exists( 'Cache_Enabler' ) ) {
-			Cache_Enabler::clear_page_cache_by_post_id( $calendar );
-		}
-
-		if ( class_exists( 'WPO_Page_Cache' ) ) {
-			WPO_Page_Cache::delete_single_post_cache( $calendar );
-		}
 	}
 }

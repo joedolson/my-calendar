@@ -350,39 +350,6 @@ function mc_ordinal( $number ) {
 }
 
 /**
- * Generate abbreviations & code used for HTML output of calendar headings.
- *
- * @param string $format 'mini', 'list', 'grid'.
- *
- * @return array HTML for each day in an array.
- */
-function mc_name_days( $format ) {
-	$name_days = array(
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Sunday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Tuesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Wednesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Thursday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Friday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Friday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>',
-	);
-	if ( 'mini' === $format ) {
-		// PHP doesn't have a single letter abbreviation, so this has to be a translatable.
-		$name_days = array(
-			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
-			'<span aria-hidden="true">' . __( '<abbr title="Monday">M</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
-			'<span aria-hidden="true">' . __( '<abbr title="Tuesday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
-			'<span aria-hidden="true">' . __( '<abbr title="Wednesday">W</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
-			'<span aria-hidden="true">' . __( '<abbr title="Thursday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
-			'<span aria-hidden="true">' . __( '<abbr title="Friday">F</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
-			'<span aria-hidden="true">' . __( '<abbr title="Saturday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
-		);
-	}
-
-	return $name_days;
-}
-
-/**
  * Handles all cases for exiting processing early: private events, drafts, etc.
  *
  * @param object $event Event object.
@@ -531,4 +498,174 @@ function mc_date( $format, $timestamp = false, $offset = true ) {
 	$timestamp = $timestamp + $offset;
 
 	return gmdate( $format, $timestamp );
+}
+
+/**
+ * Get the days of the week for calendar layout.
+ *
+ * @param array $params Calendar parameters.
+ * @param int   $start_of_week First day of this week.
+ *
+ * @return array
+ */
+function mc_get_week_days( $params, $start_of_week ) {
+	$name_days = mc_name_days( $params['format'] );
+	$abbrevs   = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
+	if ( 1 === (int) $start_of_week ) {
+		$first       = array_shift( $name_days );
+		$afirst      = array_shift( $abbrevs );
+		$name_days[] = $first;
+		$abbrevs[]   = $afirst;
+	}
+	return array(
+		'name_days' => $name_days,
+		'abbrevs'   => $abbrevs,
+	);
+}
+
+/**
+ * Generate abbreviations & code used for HTML output of calendar headings.
+ *
+ * @param string $format 'mini', 'list', 'grid'.
+ *
+ * @return array HTML for each day in an array.
+ */
+function mc_name_days( $format ) {
+	$name_days = array(
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Sunday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Tuesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Wednesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Thursday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Friday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Friday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>',
+	);
+	if ( 'mini' === $format ) {
+		// PHP doesn't have a single letter abbreviation, so this has to be a translatable.
+		$name_days = array(
+			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+			'<span aria-hidden="true">' . __( '<abbr title="Monday">M</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+			'<span aria-hidden="true">' . __( '<abbr title="Tuesday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+			'<span aria-hidden="true">' . __( '<abbr title="Wednesday">W</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+			'<span aria-hidden="true">' . __( '<abbr title="Thursday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+			'<span aria-hidden="true">' . __( '<abbr title="Friday">F</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+			'<span aria-hidden="true">' . __( '<abbr title="Saturday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+		);
+	}
+
+	return $name_days;
+}
+
+/**
+ * Calculate dates that should be used to set start and end dates for current view.
+ *
+ * @param string $timestamp Time stamp for first date of current period.
+ * @param string $period base type of date span displayed.
+ *
+ * @return array from and to dates
+ */
+function mc_date_array( $timestamp, $period ) {
+	switch ( $period ) {
+		case 'month':
+		case 'month+1':
+			if ( 'month+1' === $period ) {
+				$timestamp = strtotime( '+1 month', $timestamp );
+			}
+			$start_of_week = get_option( 'start_of_week' );
+			$first         = mc_date( 'N', $timestamp, false ); // ISO-8601.
+			$sub           = mc_date( 'w', $timestamp, false ); // numeric (how WordPress option is stored).
+			$n             = ( 1 === (int) $start_of_week ) ? $first - 1 : $first;
+
+			if ( $sub === $start_of_week ) {
+				$from = mc_date( 'Y-m-d', $timestamp, false );
+			} else {
+				$start = strtotime( "-$n days", $timestamp );
+				$from  = mc_date( 'Y-m-d', $start, false );
+			}
+			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp, false ), mc_date( 't', $timestamp, false ), mc_date( 'Y', $timestamp, false ) );
+
+			// This allows multiple months displayed. Will figure out splitting tables...
+			// To handle: $endtime = strtotime( "+$months months",$endtime ); JCD TODO.
+			$last = (int) mc_date( 'N', $endtime, false );
+			$n    = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
+			if ( -1 === $n && '7' === mc_date( 'N', $endtime, false ) ) {
+				$n = 6;
+			}
+			$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ), false );
+
+			$return = array(
+				'from' => $from,
+				'to'   => $to,
+			);
+			break;
+		case 'week':
+			$day_of_week   = (int) mc_date( 'N', $timestamp );
+			$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
+			if ( $day_of_week !== $start_of_week ) {
+				if ( $start_of_week > $day_of_week ) {
+					$diff = $start_of_week - $day_of_week;
+				} else {
+					$diff = $day_of_week - $start_of_week;
+				}
+				$timestamp = strtotime( "-$diff days", $timestamp );
+			}
+			$from = mc_date( 'Y-m-d', $timestamp, false );
+			$to   = mc_date( 'Y-m-d', strtotime( '+6 days', $timestamp ), false );
+
+			$return = array(
+				'from' => $from,
+				'to'   => $to,
+			);
+			break;
+		default:
+			$return = false;
+	}
+
+	return $return;
+}
+
+/**
+ * Get from and to values for current view
+ *
+ * @param int   $show_months List view parameter.
+ * @param array $params Calendar view parameters.
+ * @param array $date Current date viewed.
+ *
+ * @return array from & to dates
+ */
+function mc_get_from_to( $show_months, $params, $date ) {
+	$format = $params['format'];
+	$time   = $params['time'];
+	// The value is total months to show; need additional months to show.
+	$num     = $show_months - 1;
+	$c_month = $date['month'];
+	$c_year  = $date['year'];
+	// The first day of the current month.
+	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
+	// Grid calendar can't show multiple months.
+	if ( 'list' === $format && 'week' !== $time ) {
+		if ( $num > 0 && 'day' !== $time && 'week' !== $time ) {
+			if ( 'month+1' === $time ) {
+				$from = mc_date( 'Y-m-d', strtotime( '+1 month', $month_first ), false );
+				$next = strtotime( "+$num months", strtotime( '+1 month', $month_first ) );
+			} else {
+				$from = mc_date( 'Y-m-d', $month_first, false );
+				$next = strtotime( "+$num months", $month_first );
+			}
+			$last = mc_date( 't', $next, false );
+			$to   = mc_date( 'Y-m', $next, false ) . '-' . $last;
+		} else {
+			$from = mc_date( 'Y-m-d', $month_first, false );
+			$to   = mc_date( 'Y-m-d', mktime( 0, 0, 0, $c_month, mc_date( 't', $month_first, false ), $c_year ), false );
+		}
+		$dates = array(
+			'from' => $from,
+			'to'   => $to,
+		);
+	} else {
+		// Get a view based on current date.
+		$dates = mc_date_array( $date['current_date'], $time );
+	}
+
+	return $dates;
 }
