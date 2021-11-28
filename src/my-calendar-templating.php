@@ -536,7 +536,7 @@ function mc_template_description( $key ) {
 	$return = '';
 	switch ( $key ) {
 		case 'grid':
-			$return = __( '<strong>Core Template:</strong> used in the details pop-up in the main calendar view.', 'my-calendar' );
+			$return = __( '<strong>Core Template:</strong> used in the details popup in the main calendar view.', 'my-calendar' );
 			break;
 		case 'details':
 			$return = __( '<strong>Core Template:</strong> used on the single event view.', 'my-calendar' );
@@ -545,7 +545,7 @@ function mc_template_description( $key ) {
 			$return = __( '<strong>Core Template:</strong> used when viewing events in the main calendar list view.', 'my-calendar' );
 			break;
 		case 'mini':
-			$return = __( '<strong>Core Template:</strong> used in pop-ups for the mini calendar.', 'my-calendar' );
+			$return = __( '<strong>Core Template:</strong> used in popups for the mini calendar.', 'my-calendar' );
 			break;
 	}
 

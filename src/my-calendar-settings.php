@@ -1028,7 +1028,7 @@ function mc_remote_db() {
 								'mc_open_day_uri',
 								__( 'Link action for mini calendar', 'my-calendar' ),
 								array(
-									'false'          => __( 'Event pop-up ', 'my-calendar' ),
+									'false'          => __( 'Event popup ', 'my-calendar' ),
 									'true'           => __( 'daily view page (above)', 'my-calendar' ),
 									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
 									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
