@@ -75,7 +75,7 @@ class My_Calendar_Filters extends WP_Widget {
 		?>
 		<div class="my-calendar-widget-wrapper my-calendar-filters-widget">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>:</label><br/>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
 		</p>
 		<p>
@@ -93,18 +93,18 @@ class My_Calendar_Filters extends WP_Widget {
 			</li>
 			<?php $access = in_array( 'access', $show, true ) ? 'checked="checked"' : ''; ?>
 			<li>
-				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_access" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="access" <?php echo $access; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_access"><?php _e( 'Accessibility Features', 'my-calendar' ); ?></label>
+				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_access" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="access" <?php echo $access; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_access"><?php esc_html_e( 'Accessibility Features', 'my-calendar' ); ?></label>
 			</li>
 		</ul>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'ltype' ); ?>"><?php _e( 'Filter locations by', 'my-calendar' ); ?></label>
-			<select id="<?php echo $this->get_field_id( 'ltype' ); ?>" name="<?php echo $this->get_field_name( 'ltype' ); ?>">
-				<option value="name" <?php selected( $ltype, 'name' ); ?>><?php _e( 'Location Name', 'my-calendar' ); ?></option>
-				<option value="state" <?php selected( $ltype, 'state' ); ?>><?php _e( 'State/Province', 'my-calendar' ); ?></option>
-				<option value="city" <?php selected( $ltype, 'city' ); ?>><?php _e( 'City', 'my-calendar' ); ?></option>
-				<option value="region" <?php selected( $ltype, 'region' ); ?>><?php _e( 'Region', 'my-calendar' ); ?></option>
-				<option value="zip" <?php selected( $ltype, 'zip' ); ?>><?php _e( 'Postal Code', 'my-calendar' ); ?></option>
-				<option value="country" <?php selected( $ltype, 'country' ); ?>><?php _e( 'Country', 'my-calendar' ); ?></option>
+			<label for="<?php echo $this->get_field_id( 'ltype' ); ?>"><?php esc_html_e( 'Filter locations by', 'my-calendar' ); ?></label>
+			<select id="<?php echo $this->get_field_id( 'ltype' ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ltype' ) ); ?>">
+				<option value="name" <?php selected( $ltype, 'name' ); ?>><?php esc_html_e( 'Location Name', 'my-calendar' ); ?></option>
+				<option value="state" <?php selected( $ltype, 'state' ); ?>><?php esc_html_e( 'State/Province', 'my-calendar' ); ?></option>
+				<option value="city" <?php selected( $ltype, 'city' ); ?>><?php esc_html_e( 'City', 'my-calendar' ); ?></option>
+				<option value="region" <?php selected( $ltype, 'region' ); ?>><?php esc_html_e( 'Region', 'my-calendar' ); ?></option>
+				<option value="zip" <?php selected( $ltype, 'zip' ); ?>><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></option>
+				<option value="country" <?php selected( $ltype, 'country' ); ?>><?php esc_html_e( 'Country', 'my-calendar' ); ?></option>
 			</select>
 		</p>
 		</div>
