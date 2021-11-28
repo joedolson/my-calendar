@@ -635,7 +635,7 @@ function mc_get_event( $id, $type = 'object' ) {
 	if ( 'object' === $type ) {
 		$event = mc_event_object( $event );
 		return $event;
-	} else if ( 'bool' === $type ) {
+	} elseif ( 'bool' === $type ) {
 		return $event;
 	} else {
 		$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
