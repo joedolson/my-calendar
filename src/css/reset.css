@@ -363,4 +363,5 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	fill: var(--primary-dark) !important;
 	max-width: 1em;
 	padding: 0;
+	display: inline-block;
 }
