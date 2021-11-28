@@ -296,7 +296,7 @@ function mc_manage_locations() {
  * @return string
  */
 function mc_location_manager_row( $location ) {
-	$card       = mc_hcard( $location, 'true', 'false', 'location' );
+	$card = mc_hcard( $location, 'true', 'false', 'location' );
 	if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
 		$card    = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
 		$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';

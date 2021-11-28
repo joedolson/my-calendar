@@ -531,7 +531,7 @@ function my_calendar_settings() {
 									$page_title = get_post( absint( get_option( 'mc_uri_id' ) ) )->post_title;
 									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
 									$edit_link  = esc_url( get_edit_post_link( absint( get_option( 'mc_uri_id' ) ) ) );
-									// Editing URL for calendar page.
+									// Translators: Editing URL for calendar page.
 									$note = sprintf( __( 'Search for a different page or <a href="%s">edit the current calendar page</a>.', 'my-calendar' ), $edit_link );
 								}
 								?>

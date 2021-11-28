@@ -1250,7 +1250,7 @@ function mc_event_schema( $e ) {
  */
 function mc_location_schema( $location ) {
 	$schema = array(
-		'@type' => 'Place',
+		'@type'       => 'Place',
 		'name'        => $location->location_label,
 		'description' => '',
 		'url'         => get_permalink( mc_get_location_post( $location->location_id ) ),
@@ -1262,10 +1262,10 @@ function mc_location_schema( $location ) {
 			'postalCode'      => $location->location_postcode,
 			'addressCountry'  => $location->location_country,
 		),
-		'telephone' => $location->location_phone,
-		'sameAs'    => $location->location_url,
+		'telephone'   => $location->location_phone,
+		'sameAs'      => $location->location_url,
 	);
-	if ( ! empty( $location->location_latitude ) && 0 != (int) $location->location_latitude ) {
+	if ( ! empty( $location->location_latitude ) && 0 !== (int) $location->location_latitude ) {
 		$schema['geo'] = array(
 			'@type'     => 'GeoCoordinates',
 			'latitude'  => $location->location_latitude,
