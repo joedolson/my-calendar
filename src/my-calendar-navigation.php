@@ -231,11 +231,11 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
  * @param string $format Current format.
  * @param string $time Current time view.
  * @param int    $show_months Num months to show.
- * @param string $class view ID.
+ * @param string $id view ID.
  *
  * @return string prev/next nav.
  */
-function mc_nav( $date, $format, $time, $show_months, $class ) {
+function mc_nav( $date, $format, $time, $show_months, $id ) {
 	$prev      = my_calendar_prev_link( $date, $format, $time, $show_months );
 	$next      = my_calendar_next_link( $date, $format, $time, $show_months );
 	$prev_link = mc_build_url(
@@ -243,7 +243,7 @@ function mc_nav( $date, $format, $time, $show_months, $class ) {
 			'yr'    => $prev['yr'],
 			'month' => $prev['month'],
 			'dy'    => $prev['day'],
-			'cid'   => $class,
+			'cid'   => $id,
 		),
 		array()
 	);
@@ -253,7 +253,7 @@ function mc_nav( $date, $format, $time, $show_months, $class ) {
 			'yr'    => $next['yr'],
 			'month' => $next['month'],
 			'dy'    => $next['day'],
-			'cid'   => $class,
+			'cid'   => $id,
 		),
 		array()
 	);
