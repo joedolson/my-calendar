@@ -157,6 +157,7 @@ function mc_searched_events( $event_array ) {
 	if ( session_id() ) {
 		$_SESSION['MC_SEARCH_RESULT'] = json_encode( $event_array );
 	}
+
 	return $event_array;
 }
 
@@ -177,5 +178,6 @@ function mc_get_searched_events() {
 		}
 		$event_array[ $key ] = $daily_events;
 	}
+
 	return $event_array;
 }
