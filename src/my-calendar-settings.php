@@ -525,9 +525,14 @@ function my_calendar_settings() {
 								$has_uri    = mc_get_uri( 'boolean' );
 								$page_title = '';
 								$permalink  = '';
+								$edit_link  = '';
+								$note       = __( 'Search to set a calendar page.', 'my-calendar' );
 								if ( get_option( 'mc_uri_id' ) ) {
 									$page_title = get_post( absint( get_option( 'mc_uri_id' ) ) )->post_title;
 									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
+									$edit_link  = esc_url( get_edit_post_link( absint( get_option( 'mc_uri_id' ) ) ) );
+									// Editing URL for calendar page.
+									$note = sprintf( __( 'Search for a different page or <a href="%s">edit the current calendar page</a>.', 'my-calendar' ), $edit_link );
 								}
 								?>
 								<li id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
@@ -536,7 +541,7 @@ function my_calendar_settings() {
 									'mc_uri_query',
 									__( 'Calendar Page Location', 'my-calendar' ),
 									$page_title,
-									'',
+									$note,
 									array(
 										'size'  => '20',
 										'class' => 'autocomplete-input',
