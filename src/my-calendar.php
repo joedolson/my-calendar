@@ -122,6 +122,7 @@ include( dirname( __FILE__ ) . '/includes/date-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/general-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/event-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/kses.php' );
+include( dirname( __FILE__ ) . '/includes/privacy.php' );
 include( dirname( __FILE__ ) . '/includes/screen-options.php' );
 include( dirname( __FILE__ ) . '/includes/db.php' );
 include( dirname( __FILE__ ) . '/includes/deprecated.php' );
