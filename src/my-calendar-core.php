@@ -257,6 +257,15 @@ $style_vars
 			echo $all_styles;
 		}
 	}
+	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
+		$mc_id = absint( $_GET['mc_id'] );
+		if ( $mc_id ) {
+			$event  = mc_get_event( $mc_id );
+			$schema = mc_event_schema( $event );
+
+			echo '<script type="application/ld+json">[' . json_encode( map_deep( $schema, 'esc_html' ) ) . ']</script>';
+		}
+	}
 }
 
 /**

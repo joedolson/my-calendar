@@ -1201,3 +1201,70 @@ function mc_event_recur_string( $event, $begin ) {
 
 	return apply_filters( 'mc_event_recur_string', $event_recur, $event );
 }
+
+/**
+ * Generate JSON/LD Schema for event.
+ *
+ * @param object $e Event object.
+ *
+ * @return array
+ */
+function mc_event_schema( $e ) {
+	$event   = mc_create_tags( $e );
+	$wp_time = get_option( 'gmt_offset', '0' );
+	$wp_time = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ) : '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
+	$format  = array(
+		'@context'    => 'http://schema.org',
+		'@type'       => 'Event',
+		'name'        => $event['title'],
+		'description' => $event['excerpt'],
+		'image'       => $event['image_url'],
+		'url'         => $event['linking'],
+		'startDate'   => $event['dtstart'] . $wp_time,
+		'endDate'     => $event['dtend'] . $wp_time,
+		'duration'    => $event['duration'],
+	);
+	if ( property_exists( $e, 'location' ) && is_object( $e->location ) ) {
+		$location = $e->location;
+		$schema   = mc_location_schema( $location );
+
+		$format['location'] = $schema;
+	}
+
+	return $format;
+}
+
+/**
+ * Generate JSON/LD Schema for location.
+ *
+ * @param object $location Location object.
+ *
+ * @return array
+ */
+function mc_location_schema( $location ) {
+	$schema = array(
+		'@type' => 'Place',
+		'name'        => $location->location_label,
+		'description' => '',
+		'url'         => get_permalink( mc_get_location_post( $location->location_id ) ),
+		'address'     => array(
+			'@type'           => 'PostalAddress',
+			'streetAddress'   => $location->location_street,
+			'addressLocality' => $location->location_city,
+			'addressRegion'   => $location->location_state,
+			'postalCode'      => $location->location_postcode,
+			'addressCountry'  => $location->location_country,
+		),
+		'telephone' => $location->location_phone,
+		'sameAs'    => $location->location_url,
+	);
+	if ( ! empty( $location->location_latitude ) && 0 != (int) $location->location_latitude ) {
+		$schema['geo'] = array(
+			'@type'     => 'GeoCoordinates',
+			'latitude'  => $location->location_latitude,
+			'longitude' => $location->location_longitude,
+		);
+	}
+
+	return $schema;
+}
