@@ -724,34 +724,6 @@ function mc_event_classes( $event, $type ) {
 }
 
 /**
- * Generate category classes for a given date
- *
- * @param object $object Usually an event, can be category.
- * @param string $prefix Prefix to append to category; varies on context.
- *
- * @return string classes
- */
-function mc_category_class( $object, $prefix ) {
-	if ( is_array( $object ) ) {
-		$term = $object['term'];
-		$name = $object['category'];
-		$id   = $object['category_id'];
-	} else {
-		$term = $object->category_term;
-		$name = $object->category_name;
-		$id   = $object->category_id;
-	}
-	$fallback = get_term_by( 'id', $term, 'mc-event-category' );
-	if ( is_object( $fallback ) ) {
-		$fallback = $fallback->slug;
-	} else {
-		$fallback = 'category_slug_missing';
-	}
-
-	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback ) );
-}
-
-/**
  * Whether to show details on this event.
  *
  * @param string $time Current time span.
