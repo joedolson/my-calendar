@@ -257,7 +257,7 @@ $style_vars
 			echo $all_styles;
 		}
 	}
-	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
+	if ( mc_is_single_event() ) {
 		$mc_id = absint( $_GET['mc_id'] );
 		if ( $mc_id ) {
 			$event  = mc_get_event( $mc_id );
@@ -1460,30 +1460,6 @@ function mc_table_header( $label, $sort, $sortby, $sorted, $url = false ) {
 }
 
 /**
- * Test whether currently mobile using wp_is_mobile() with custom filter
- *
- * @return boolean
- */
-function mc_is_mobile() {
-	$mobile = false;
-	if ( function_exists( 'wp_is_mobile' ) ) {
-		$mobile = wp_is_mobile();
-	}
-
-	return apply_filters( 'mc_is_mobile', $mobile );
-}
-
-/**
- * Provides a filter for custom dev. Not used in core.
- *
- * @return boolean
- */
-function mc_is_tablet() {
-
-	return apply_filters( 'mc_is_tablet', false );
-}
-
-/**
  * As of version 3.0.0, this only checks for 'my-calendar', to see if this plug-in already exists.
  *
  * @return array
@@ -1742,7 +1718,7 @@ function mc_load_permalinks() {
  * @return string
  */
 function mc_previous_post_link( $output, $format ) {
-	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
+	if ( mc_is_single_event() ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'previous' );
 		if ( empty( $event ) ) {
@@ -1769,7 +1745,7 @@ function mc_previous_post_link( $output, $format ) {
  * @return string
  */
 function mc_next_post_link( $output, $format ) {
-	if ( is_singular( 'mc-events' ) && isset( $_GET['mc_id'] ) ) {
+	if ( mc_is_single_event() ) {
 		$mc_id = (int) $_GET['mc_id'];
 		$event = mc_adjacent_event( $mc_id, 'next' );
 		if ( empty( $event ) ) {

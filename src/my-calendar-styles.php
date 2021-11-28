@@ -300,21 +300,6 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 }
 
 /**
- * Identify whether a given file is a custom style or a core style
- *
- * @param string $filename File name..
- *
- * @return boolean
- */
-function mc_is_custom_style( $filename ) {
-	if ( 0 === strpos( $filename, 'mc_custom_' ) ) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
  * Fetch the styles for the current selected style
  *
  * @param string $filename File name.

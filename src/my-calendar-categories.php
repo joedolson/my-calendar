@@ -108,26 +108,6 @@ function mc_get_private_categories() {
 }
 
 /**
- * Check whether a given icon is a custom or stock icon
- *
- * @return boolean
- */
-function mc_is_custom_icon() {
-	$dir  = plugin_dir_path( __FILE__ );
-	$base = basename( $dir );
-	if ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) ) {
-		$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
-		if ( empty( $results ) ) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-/**
  * Generate form to manage categories
  */
 function my_calendar_manage_categories() {

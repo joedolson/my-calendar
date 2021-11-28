@@ -649,19 +649,6 @@ function mc_date_relation( $event ) {
 }
 
 /**
- * Determine whether an event is recurring.
- *
- * @param object $event Event object.
- *
- * @return bool
- */
-function mc_is_recurring( $event ) {
-	$is_recurring = ( ! ( 'S' === $event->event_recur || 'S1' === $event->event_recur ) ) ? true : false;
-
-	return $is_recurring;
-}
-
-/**
  * Generate classes for a given event
  *
  * @param object $event Event Object.

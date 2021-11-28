@@ -438,26 +438,6 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 }
 
 /**
- * Check whether the current key refers to a core template
- *
- * @param string $key Template unique key.
- *
- * @return boolean
- */
-function mc_is_core_template( $key ) {
-	switch ( $key ) {
-		case 'grid':
-		case 'details':
-		case 'list':
-		case 'mini':
-			return true;
-			break;
-		default:
-			return false;
-	}
-}
-
-/**
  * Get stored data for custom template
  *
  * @param string $key Template unique key.

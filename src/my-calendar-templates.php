@@ -476,7 +476,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['linking']       = ( '' !== $e['link'] ) ? $event->event_link : $e_link;
 	$e['linking_title'] = ( '' !== $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $nofollow>" . $e['title'] . '</a>' : $e['title'];
 
-	if ( 'related' !== $context && ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
+	if ( 'related' !== $context && ( mc_is_single_event() ) ) {
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
 		$e['related']     = '<ul class="related-events">' . mc_list_group( $event->event_group_id, $event->event_id, $related_template ) . '</ul>';
 	} else {

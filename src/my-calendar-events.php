@@ -635,6 +635,8 @@ function mc_get_event( $id, $type = 'object' ) {
 	if ( 'object' === $type ) {
 		$event = mc_event_object( $event );
 		return $event;
+	} else if ( 'bool' === $type ) {
+		return $event;
 	} else {
 		$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
 		$time  = mc_date( 'H:i:s', strtotime( $event->occur_begin ), false );
@@ -1036,46 +1038,6 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 	}
 
 	return $return;
-}
-
-
-/**
- * Check whether this is a valid preview scenario.
- *
- * @return boolean
- */
-function mc_is_preview() {
-	if ( isset( $_GET['preview'] ) && 'true' === $_GET['preview'] && current_user_can( 'mc_manage_events' ) ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Check whether this event is targeted for an iFrame.
- *
- * @return boolean
- */
-function mc_is_iframe() {
-	if ( isset( $_GET['iframe'] ) && 'true' === $_GET['iframe'] && isset( $_GET['mc_id'] ) ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Check whether this event is supposed to show template output.
- *
- * @return boolean
- */
-function mc_is_tag_view() {
-	if ( isset( $_GET['showtags'] ) && 'true' === $_GET['showtags'] && current_user_can( 'mc_add_events' ) ) {
-		return true;
-	}
-
-	return false;
 }
 
 /**

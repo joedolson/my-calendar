@@ -111,15 +111,3 @@ function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
 
 	return ( ! empty( $results ) ) ? $results : false;
 }
-
-/**
- * Test an event and see if it's an all day event.
- *
- * @param object $event Event object.
- *
- * @return boolean
- */
-function mc_is_all_day( $event ) {
-
-	return ( '00:00:00' === $event->event_time && '23:59:59' === $event->event_endtime ) ? true : false;
-}
