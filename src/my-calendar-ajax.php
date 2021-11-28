@@ -32,6 +32,7 @@ function mc_core_autocomplete_search_pages() {
 		$args     = array(
 			's'         => $query,
 			'post_type' => 'any',
+			'orderby'   => 'relevance',
 		);
 		$posts    = get_posts( $args );
 		$response = array();
