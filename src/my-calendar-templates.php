@@ -1213,7 +1213,7 @@ function mc_event_schema( $e ) {
 	$event   = mc_create_tags( $e );
 	$wp_time = get_option( 'gmt_offset', '0' );
 	$wp_time = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ) : '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
-	$format  = array(
+	$schema  = array(
 		'@context'    => 'http://schema.org',
 		'@type'       => 'Event',
 		'name'        => $event['title'],
@@ -1226,12 +1226,19 @@ function mc_event_schema( $e ) {
 	);
 	if ( property_exists( $e, 'location' ) && is_object( $e->location ) ) {
 		$location = $e->location;
-		$schema   = mc_location_schema( $location );
+		$loc      = mc_location_schema( $location );
 
-		$format['location'] = $schema;
+		$schema['location'] = $loc;
 	}
-
-	return $format;
+	/**
+	 * Filter event schema data.
+	 *
+	 * @param array  $schema Schema data.
+	 * @param object $e Event data.
+	 *
+	 * @return array
+	 */
+	return apply_filters( 'mc_event_schema', $schema, $e );
 }
 
 /**
@@ -1265,6 +1272,13 @@ function mc_location_schema( $location ) {
 			'longitude' => $location->location_longitude,
 		);
 	}
-
-	return $schema;
+	/**
+	 * Filter location schema data.
+	 *
+	 * @param array  $schema Schema data.
+	 * @param object $location Location data.
+	 *
+	 * @return array
+	 */
+	return apply_filters( 'mc_location_schema', $schema, $location );
 }
