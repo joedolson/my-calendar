@@ -51,14 +51,9 @@ function mc_time_html( $e, $type ) {
 
 	$time_content  = '<span class="time-wrapper">' . $time_start . ' ' . $t_separator . ' ' . $time_end . '</span>' . $br . '<span class="date-wrapper">' . $date_start . ' ' . $d_separator . ' ' . $date_end . '</span>';
 	$time_content .= apply_filters( 'mcs_end_time_block', '', $e );
-	// Generate date/time meta data.
-	$meta  = "<meta itemprop='startDate' content='" . $start . 'T' . $e->event_time . "' />";
-	$meta .= ( 0 === (int) $e->event_hide_end ) ? "<meta itemprop='endDate' content='" . $end . 'T' . $e->event_endtime . "'/>" : '';
-	$meta .= '<meta itemprop="duration" content="' . mc_duration( $e ) . '"/>';
-
-	$time = "
+	$time          = "
 	<div class='time-block'>
-		<p>$time_content</p>$meta
+		<p>$time_content</p>
 	</div>";
 
 	return apply_filters( 'mcs_time_block', $time, $e );
@@ -445,13 +440,13 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			$details = $toggle . $details . "\n";
 		}
 
-		$img_class  = ( '' !== $img ) ? ' has-image' : ' no-image';
-		$container  = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
-		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
-		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
-		$details   .= apply_filters( 'mc_after_event', '', $event, $type, $time );
-		$details   .= "\n" . '	</div><!--end .details-->' . "\n" . '	</div>' . "\n";
-		$details    = apply_filters( 'mc_event_content', $details, $event, $type, $time );
+		$img_class = ( '' !== $img ) ? ' has-image' : ' no-image';
+		$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+		$container = apply_filters( 'mc_before_event', $container, $event, $type, $time );
+		$details   = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+		$details  .= apply_filters( 'mc_after_event', '', $event, $type, $time );
+		$details  .= "\n" . '	</div><!--end .details-->' . "\n" . '	</div>' . "\n";
+		$details   = apply_filters( 'mc_event_content', $details, $event, $type, $time );
 	} else {
 		$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) . $header . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
 	}
@@ -549,8 +544,6 @@ function mc_get_event_image( $event, $data ) {
 		$image_url = $event->event_image;
 		$image     = ( '' !== $event->event_image ) ? "<img src='$event->event_image' alt='$alt' class='mc-image photo' />" : '';
 	}
-
-	$meta   = ( $image ) ? "<meta itemprop='image' content='$image_url' />" : '';
 	$return = true;
 
 	global $template;
@@ -570,10 +563,10 @@ function mc_get_event_image( $event, $data ) {
 	 */
 	$override = apply_filters( 'mc_override_featured_image', $return, $event, $data );
 	if ( $override && is_singular( 'mc-events' ) && has_post_thumbnail( $event->event_post ) && current_theme_supports( 'post-thumbnails' ) && ( 'single-mc-events.php' !== $template_file_name ) ) {
-		return $meta;
+		return '';
 	}
 
-	return $meta . $image;
+	return $image;
 }
 
 /**
