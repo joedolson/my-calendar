@@ -40,17 +40,26 @@ function my_calendar_help() {
 					<?php
 					if ( ! mc_get_uri( 'boolean' ) ) {
 						echo '<li>' . __( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ) . '</li>';
+						echo '<li>' . __( 'Assign your Calendar Page Location at <code>My Calendar > Settings > General</code>', 'my-calendar' ) . '</li>';
+					} else {
+						$permalink = mc_get_uri();
+						$edit_url  = get_edit_post_link( absint( get_option( 'mc_uri_id' ) ) );
+						// Translators: Calendar link, calendar edit link.
+						echo '<li>' . sprintf( __( '<a href="%1$s">View your calendar</a> or <a href="%2$s">Edit the calendar page</a>' ), esc_url( $permalink ), esc_url( $edit_url ) ) . '</li>';
 					}
-					echo '<li>' . __( 'Add events by clicking on the Add Events link in the admin or on "Add Events" in the toolbar.', 'my-calendar' ) . '</li>';
-					echo '<li>' . __( 'Select your preferred stylesheet in the Styles Editor', 'my-calendar' ) . '</li>';
-					if ( mc_get_uri( 'boolean' ) ) {
-						// Translators: Calendar URL.
-						echo '<li>' . sprintf( __( 'View <a href="%s">your calendar</a>', 'my-calendar' ), mc_get_uri() ) . '</li>';
-					}
+					$add_categories = admin_url( 'admin.php?page=my-calendar-categories' );
+					$add_locations  = admin_url( 'admin.php?page=my-calendar-locations' );
+					$edit_events    = admin_url( 'admin.php?page=my-calendar-manage' );
+					$add_events     = admin_url( 'admin.php?page=my-calendar' );
+					// Translators: Add events link, manage events link.
+					echo '<li>' . sprintf( __( '<a href="%1$s">Add events</a> and <a href="%2$s">administer your events</a>.', 'my-calendar' ), esc_url( $add_events ), esc_url( $edit_events ) ) . '</li>';
+					// Translators: Add categories link, add locations link.
+					echo '<li>' . sprintf( __( '<a href="%1$s">Add categories</a> and <a href="%2$s">add locations</a>.', 'my-calendar' ), esc_url( $add_categories ), esc_url( $add_locations ) ) . '</li>';
+					// Translators: Documentation URL.
+					echo '<li>' . sprintf( __( 'When you\'re ready, <a href="%s">read the documentation</a>.', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' ) . '</li>';
 					?>
 				</ul>
 				<?php do_action( 'mc_before_help' ); ?>
-				<p><?php esc_html_e( 'Build a custom shortcode:', 'my-calendar' ); ?> <a href="<?php echo admin_url( 'admin.php?page=my-calendar-shortcodes' ); ?>"><?php esc_html_e( 'Shortcode Generator', 'my-calendar' ); ?></a></p>
 			</div>
 		</div>
 	</div>
