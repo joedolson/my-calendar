@@ -705,3 +705,69 @@ function mc_date_format() {
 
 	return $date_format;
 }
+
+/**
+ * Produce the human-readable string for recurrence.
+ *
+ * @param object $event Event object.
+ * @param array  $args Recurrence settings.
+ *
+ * @return string Type of recurrence
+ */
+function mc_recur_string( $event, $args = array() ) {
+	if ( ! $event ) {
+		$recur = $args['recur'];
+		$every = (int) $args['every'];
+		$until = $args['until'];
+	} else {
+		$recurs = str_split( $event->event_recur, 1 );
+		$recur  = $recurs[0];
+		$every  = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
+		$until  = $event->event_repeats;
+	}
+	$string = '';
+	// Interpret the DB values into something human readable.
+	switch ( $recur ) {
+		case 'D':
+			// Translators: number of days between repetitions.
+			$string = ( 1 === (int) $every ) ? __( 'Daily', 'my-calendar' ) : sprintf( __( 'Every %d days', 'my-calendar' ), $every );
+			break;
+		case 'E':
+			// Translators: number of days between repetitions.
+			$string = ( 1 === (int) $every ) ? __( 'Weekdays', 'my-calendar' ) : sprintf( __( 'Every %d weekdays', 'my-calendar' ), $every );
+			break;
+		case 'W':
+			// Translators: number of weeks between repetitions.
+			$string = ( 1 === (int) $every ) ? __( 'Weekly', 'my-calendar' ) : sprintf( __( 'Every %d weeks', 'my-calendar' ), $every );
+			break;
+		case 'B':
+			$string = __( 'Bi-Weekly', 'my-calendar' );
+			break;
+		case 'M':
+			// Translators: number of months between repetitions.
+			$string = ( 1 === (int) $every ) ? __( 'Monthly (by date)', 'my-calendar' ) : sprintf( __( 'Every %d months (by date)', 'my-calendar' ), $every );
+			break;
+		case 'U':
+			$string = __( 'Monthly (by day)', 'my-calendar' );
+			break;
+		case 'Y':
+			// Translators: number of years between repetitions.
+			$string = ( 1 === (int) $every ) ? __( 'Yearly', 'my-calendar' ) : sprintf( __( 'Every %d years', 'my-calendar' ), $every );
+			break;
+	}
+	$eternity = _mc_increment_values( $recur );
+	if ( $until && 'S' !== $recur ) {
+		if ( is_numeric( $until ) ) {
+			// Translators: number of repeats.
+			$string .= ' ' . sprintf( __( '- %d Times', 'my-calendar' ), $until );
+		} else {
+			// Translators: date repeating until.
+			$string .= ' ' . sprintf( __( ' until %s', 'my-calendar' ), $until );
+		}
+	} elseif ( $eternity ) {
+		// Translators: number of repeats.
+		$string .= ' ' . sprintf( __( '- %d Times', 'my-calendar' ), $eternity );
+	}
+
+	return $string;
+}

@@ -134,6 +134,7 @@ include( dirname( __FILE__ ) . '/my-calendar-settings.php' );
 include( dirname( __FILE__ ) . '/my-calendar-categories.php' );
 include( dirname( __FILE__ ) . '/my-calendar-locations.php' );
 include( dirname( __FILE__ ) . '/my-calendar-location-manager.php' );
+include( dirname( __FILE__ ) . '/my-calendar-event-editor.php' );
 include( dirname( __FILE__ ) . '/my-calendar-event-manager.php' );
 include( dirname( __FILE__ ) . '/my-calendar-styles.php' );
 include( dirname( __FILE__ ) . '/my-calendar-behaviors.php' );
