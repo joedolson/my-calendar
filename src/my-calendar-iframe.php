@@ -56,7 +56,7 @@ function my_calendar_iframe() {
 				$template = $_GET['template'];
 				$body    .= mc_display_template_preview( $template, $mc_id );
 			} else {
-				$body .= '<div id="mc_event"><div class="single-event vevent">' . mc_display_template_tags( $mc_id, 'preview' ) . '</div></div>';
+				$body .= '<div id="mc_event"><div class="single-event mc-event">' . mc_display_template_tags( $mc_id, 'preview' ) . '</div></div>';
 			}
 		} else {
 			$body .= mc_get_event( $mc_id, 'html' );

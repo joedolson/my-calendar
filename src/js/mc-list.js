@@ -7,10 +7,10 @@
 		$(document).on( 'click', '.event-date button',
 			function (e) {
 				e.preventDefault();
-				var vevent = $( this ).closest( '.mc-events' ).find( '.vevent:first' );
-				$( this ).closest( '.mc-events' ).find( '.vevent' ).toggle();
-				vevent.attr('tabindex', '-1').trigger( 'focus' );
-				var visible = $(this).closest( '.mc-events' ).find('.vevent').is(':visible');
+				var mcEvent = $( this ).closest( '.mc-events' ).find( '.mc-event:first' );
+				$( this ).closest( '.mc-events' ).find( '.mc-event' ).toggle();
+				mcEvent.attr('tabindex', '-1').trigger( 'focus' );
+				var visible = $(this).closest( '.mc-events' ).find('.mc-event').is(':visible');
 				if ( visible ) {
 					$(this).attr('aria-expanded', 'true');
 				} else {

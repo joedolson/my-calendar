@@ -233,11 +233,11 @@
 	left: -5%;
 }
 
-.mc-main .vevent {
+.mc-main .mc-event {
 	word-break: normal;
 }
 
-.mc-main .calendar-events .vevent:nth-of-type(1n+1) {
+.mc-main .calendar-events .mc-event:nth-of-type(1n+1) {
 	border-top: 1px solid var(--highlight-dark);
 }
 

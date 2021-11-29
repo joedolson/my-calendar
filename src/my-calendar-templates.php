@@ -302,9 +302,9 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	 * @return string
 	 */
 	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
-	$hcard  = '<div class="address location vcard" itemprop="location" itemscope itemtype="http://schema.org/Place">';
+	$hcard  = '<div class="address location vcard">';
 	if ( 'true' === $address ) {
-		$hcard .= '<div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
+		$hcard .= '<div class="adr" itemprop="address">';
 		$hcard .= ( '' !== $label ) ? '<div><strong class="org fn" itemprop="name">' . $link . '</strong></div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' !== $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
@@ -1231,14 +1231,15 @@ function mc_event_recur_string( $event, $begin ) {
  */
 function mc_event_schema( $e ) {
 	$event   = mc_create_tags( $e );
-	$wp_time = get_option( 'gmt_offset', '0' );
-	$wp_time = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ) : '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
+	$wp_time = mc_ts( true );
+	$wp_time = str_replace( array( ':30:00', ':00:00' ), array( ':30', ':00' ), $wp_time );
+	$image   = ( $event['image_url'] ) ? $event['image_url'] : get_site_icon_url();
 	$schema  = array(
-		'@context'    => 'http://schema.org',
+		'@context'    => 'https://schema.org',
 		'@type'       => 'Event',
 		'name'        => $event['title'],
 		'description' => $event['excerpt'],
-		'image'       => $event['image_url'],
+		'image'       => $image,
 		'url'         => $event['linking'],
 		'startDate'   => $event['dtstart'] . $wp_time,
 		'endDate'     => $event['dtend'] . $wp_time,
@@ -1247,18 +1248,24 @@ function mc_event_schema( $e ) {
 	if ( property_exists( $e, 'location' ) && is_object( $e->location ) ) {
 		$location = $e->location;
 		$loc      = mc_location_schema( $location );
-
-		$schema['location'] = $loc;
+	} else {
+		// Location is a mandatory field for Google.
+		$loc = array(
+			'@type' => 'VirtualLocation',
+			'url'   => $event['linking'],
+		);
 	}
+	$schema['location'] = $loc;
 	/**
 	 * Filter event schema data.
 	 *
 	 * @param array  $schema Schema data.
 	 * @param object $e Event data.
+	 * @param array  $event Event tag array.
 	 *
 	 * @return array
 	 */
-	return apply_filters( 'mc_event_schema', $schema, $e );
+	return apply_filters( 'mc_event_schema', $schema, $e, $event );
 }
 
 /**

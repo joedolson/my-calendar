@@ -446,8 +446,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 
 		$img_class  = ( '' !== $img ) ? ' has-image' : ' no-image';
-		$container  = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "' itemscope itemtype='http://schema.org/Event'>\n";
-		$container .= "	<meta itemprop='name' content='" . esc_attr( strip_tags( $event_title ) ) . "' />";
+		$container  = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
 		$container  = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		$details    = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
 		$details   .= apply_filters( 'mc_after_event', '', $event, $type, $time );
@@ -636,7 +635,7 @@ function mc_event_classes( $event, $type ) {
 	}
 
 	if ( 'upcoming' !== $type && 'related' !== $type ) {
-		$classes[] = 'vevent';
+		$classes[] = 'mc-event';
 	}
 
 	// Adds a number of extra queries; if they aren't needed, leave disabled.

@@ -40,7 +40,7 @@ td {
 	margin-bottom: 2px;
 }
 
-.vevent:not(:last-child) .details {
+.mc-event:not(:last-child) .details {
 	border-bottom: 1px solid #ddd;
 }
 
