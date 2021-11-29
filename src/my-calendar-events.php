@@ -458,6 +458,27 @@ function mc_get_new_events( $cat_id = false ) {
 }
 
 /**
+ * Get all existing instances of an ID. Assemble into array with dates as keys
+ *
+ * @param int $id Event ID.
+ *
+ * @return array of event dates & instance IDs
+ */
+function mc_get_instances( $id ) {
+	global $wpdb;
+	$id      = (int) $id;
+	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT occur_id, occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$return  = array();
+
+	foreach ( $results as $result ) {
+		$key            = sanitize_key( mc_date( 'Y-m-d', strtotime( $result->occur_begin ), false ) );
+		$return[ $key ] = $result->occur_id;
+	}
+
+	return $return;
+}
+
+/**
  * Fetch results of an event search.
  *
  * @param mixed array/string $search mixed array (PRO) or string (Simple).
@@ -634,8 +655,6 @@ function mc_get_event( $id, $type = 'object' ) {
 	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( 'object' === $type ) {
 		$event = mc_event_object( $event );
-		return $event;
-	} elseif ( 'bool' === $type ) {
 		return $event;
 	} else {
 		$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );

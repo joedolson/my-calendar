@@ -166,7 +166,7 @@ function mc_is_single_event() {
 	if ( is_singular( 'mc-events' ) ) {
 		return true;
 	}
-	if ( isset( $_GET['mc_id'] ) && mc_get_event( $_GET['mc_id'], 'bool' ) ) {
+	if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
 		return true;
 	}
 
