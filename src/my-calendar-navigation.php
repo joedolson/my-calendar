@@ -207,11 +207,11 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	}
 
 	if ( '' !== $mc_topnav ) {
-		$mc_topnav = '<nav aria-label="' . __( 'Calendar (top)', 'my-calendar' ) . '"><div class="my-calendar-header">' . $mc_topnav . '</div></nav>';
+		$mc_topnav = PHP_EOL . '<nav aria-label="' . __( 'Calendar (top)', 'my-calendar' ) . '"><div class="my-calendar-header">' . $mc_topnav . '</div></nav>' . PHP_EOL;
 	}
 
 	if ( '' !== $mc_bottomnav ) {
-		$mc_bottomnav = '<nav aria-label="' . __( 'Calendar (bottom)', 'my-calendar' ) . '"><div class="mc_bottomnav my-calendar-footer">' . $mc_bottomnav . '</div></nav>';
+		$mc_bottomnav = PHP_EOL . '<nav aria-label="' . __( 'Calendar (bottom)', 'my-calendar' ) . '"><div class="mc_bottomnav my-calendar-footer">' . $mc_bottomnav . '</div></nav>' . PHP_EOL;
 	}
 
 	if ( $site ) {
