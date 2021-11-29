@@ -73,7 +73,7 @@ function mc_time_html( $e, $type ) {
  * @param string $template Template to use for drawing individual events.
  * @param string $id ID for the calendar calling this function.
  *
- * @return string Generated HTML.
+ * @return array [html] Generated HTML & [json] array of schema.org data.
  */
 function my_calendar_draw_events( $events, $params, $process_date, $template = '', $id = '' ) {
 	$type = $params['format'];
@@ -86,6 +86,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 	// We need to sort arrays of objects by time.
 	if ( is_array( $events ) ) {
 		$output_array = array();
+		$json         = array();
 		$begin        = '';
 		$event_output = '';
 		$end          = '';
@@ -105,6 +106,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			}
 			if ( '' === $check ) {
 				$output_array[] = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id );
+				$json           = mc_event_schema( $event );
 			}
 		}
 		if ( is_array( $output_array ) ) {
@@ -120,10 +122,13 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			$end .= '</div>';
 		}
 
-		return $begin . $event_output . $end;
+		return array(
+			'html' => $begin . $event_output . $end,
+			'json' => $json,
+		);
 	}
 
-	return '';
+	return array();
 }
 
 
@@ -1304,7 +1309,9 @@ function my_calendar( $args ) {
 
 			foreach ( $events as $day ) {
 				$events_class = mc_events_class( $day, $from );
-				$mc_events   .= my_calendar_draw_events( $day, $params, $from, $template, $id );
+				$events       = my_calendar_draw_events( $day, $params, $from, $template, $id );
+				$mc_events   .= $events['html'];
+				$json         = array( $events['json'] );
 			}
 			$body .= $heading . $top . '
 			<div class="mc-content">
@@ -1356,6 +1363,7 @@ function my_calendar( $args ) {
 				$start             = strtotime( $from );
 				$end               = strtotime( $to );
 				$week_number_shown = false;
+				$json              = array();
 				do {
 					$date_is    = mc_date( 'Y-m-d', $start, false );
 					$is_weekend = ( mc_date( 'N', $start, false ) < 6 ) ? false : true;
@@ -1390,7 +1398,9 @@ function my_calendar( $args ) {
 								if ( 'mini' === $params['format'] && 'false' !== $open_day_uri ) {
 									$event_output = ' ';
 								} else {
-									$event_output = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
+									$events_array = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
+									$event_output = $events_array['html'];
+									$json[]       = $events_array['json'];
 								}
 							}
 							if ( true === $event_output ) {
@@ -1469,8 +1479,12 @@ function my_calendar( $args ) {
 	if ( $site ) {
 		restore_current_blog();
 	}
+	if ( ! empty( $json ) && is_array( $json ) ) {
+		$json_ld = json_encode( map_deep( $json, 'esc_html' ), JSON_UNESCAPED_SLASHES );
+		$json_ld = PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . $json_ld . PHP_EOL . '</script>' . PHP_EOL;
+	}
 
-	return $mc_wrapper . apply_filters( 'my_calendar_body', $body ) . $mc_closer;
+	return $mc_wrapper . $json_ld . apply_filters( 'my_calendar_body', $body ) . $mc_closer;
 }
 
 /**
