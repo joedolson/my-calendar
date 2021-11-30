@@ -1,11 +1,12 @@
 .mc-main .details .mc_edit_links {
-	font-size: 12px;
+	font-size: 16px;
 	font-family: sans-serif;
-	line-height: 1;
-	margin: 5px;
-	padding: 5px;
+	line-height: 1.62;
+	margin: .5em;
+	padding: .5em;
 	clear: both;
-	border-top: 1px solid #ddd;
+	background: var(--primary-light);
+	border-radius: 10px;
 }
 
 .mc-main .details .mc_edit_links p {
@@ -14,5 +15,6 @@
 }
 
 .mc-main .mc_edit_links a {
+	color: var(--primary-dark);
 	display: inline !important;
 }

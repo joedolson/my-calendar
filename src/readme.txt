@@ -129,6 +129,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: If no previous or next event, generated numerous PHP errors.
 * Removed Gmap3 dependency.
 * New category icons, sourced from Font Awesome (https://fontawesome.com/license)
+* New default stylesheet: twentytwentyone.css
 
 = 3.2.17 =
 

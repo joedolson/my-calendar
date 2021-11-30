@@ -65,8 +65,12 @@ div.site-content, table {
 	min-width: 44px;
 }
 
-.my-calendar-header .mc-date-switcher > *,
-.my-calendar-header .mc-time > * {
+.mc-time {
+	display: flex;
+	column-gap: 4px;
+}
+
+.my-calendar-header .mc-date-switcher > * {
 	margin: 0 2px;
 }
 

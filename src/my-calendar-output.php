@@ -389,7 +389,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	</p>';
 			}
 			$access   = ( '' !== $access ) ? '<div class="mc-access-information">' . $access . '</div>' : '';
-			$location = ( '' === trim( $map . $address ) ) ? '' : '	<div class="location">' . $map . $address . '</div>';
+			$location = ( '' === trim( $map . $address ) ) ? '' : '	<div class="mc-location">' . $map . $address . '</div>';
 			$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
 			$close       = ( '' !== $close ) ? PHP_EOL . '	' . $close : '';
@@ -409,7 +409,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			$access      = ( $access ) ? PHP_EOL . '	' . $access : '';
 			$return      = ( $return ) ? PHP_EOL . '	' . $return : '';
 
-			$order        = array( 'close', 'inner_title', 'time_html', 'list_title', 'img', 'location', 'description', 'short', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );
+			$order        = array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );
 			$output_order = apply_filters( 'mc_default_output_order', $order, $event );
 			$details      = $close;
 			if ( ! empty( $output_order ) ) {
@@ -419,12 +419,12 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			} else {
 				$details .= "\n"
 							. $inner_title
-							. $time_html
 							. $list_title
+							. $time_html
 							. $img
-							. $location
 							. $description
 							. $short
+							. $location
 							. $access
 							. $link
 							. $status
@@ -1293,7 +1293,7 @@ function my_calendar( $args ) {
 		$bottom = $nav['bottom'];
 
 		if ( 'day' === $params['time'] ) {
-			$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'>" . apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] ) . "</$hl>";
+			$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'><span>" . apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] ) . "</span></$hl>";
 			$dateclass    = mc_dateclass( $current );
 			$mc_events    = '';
 			$events       = my_calendar_events( $query );
@@ -1337,7 +1337,7 @@ function my_calendar( $args ) {
 			}
 			$h2      = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'] );
-			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\">$heading</$h2>\n";
+			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>$heading</span></$h2>\n";
 			$body   .= $top;
 
 			// Add the calendar table and heading.
