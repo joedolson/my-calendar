@@ -264,7 +264,7 @@ function mc_manage_locations() {
 				echo wp_kses_post( mc_location_manager_row( $default ) );
 			}
 			foreach ( $locations as $loc ) {
-				if ( $default_location === $loc->location_id ) {
+				if ( (int) $default_location === (int) $loc->location_id ) {
 					continue;
 				}
 				$location = mc_get_location( $loc->location_id );
