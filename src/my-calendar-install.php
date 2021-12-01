@@ -336,7 +336,7 @@ function mc_default_settings() {
 			'label'      => __( 'Read more', 'my-calendar' ),
 		)
 	);
-	add_option( 'mc_css_file', 'twentytwenty.css' );
+	add_option( 'mc_css_file', 'twentytwentyone.css' );
 	add_option(
 		'mc_style_vars',
 		array(
