@@ -456,12 +456,12 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 					$params = array();
 					if ( isset( $_GET['location_id'] ) ) {
 						$params = array(
-							'mode'        => $_GET['mode'],
-							'location_id' => $_GET['location_id'],
+							'mode'        => sanitize_text_field( $_GET['mode'] ),
+							'location_id' => absint( $_GET['location_id'] ),
 						);
 					}
 					?>
-					<form id="my-calendar" method="post" action="<?php echo add_query_arg( $params, admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>">
+					<form id="my-calendar" method="post" action="<?php echo esc_url( add_query_arg( $params, admin_url( 'admin.php?page=my-calendar-locations' ) ) ); ?>">
 						<div class="mc-controls">
 							<ul>
 								<?php
