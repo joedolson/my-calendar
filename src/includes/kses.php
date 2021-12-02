@@ -66,6 +66,10 @@ function mc_allowed_tags( $tags, $context ) {
 				'class' => true,
 			);
 
+			$tags['option'] = array(
+				'value' => true,
+			);
+
 			$formtags     = ( isset( $tags['form'] ) && is_array( $tags['form'] ) ) ? $tags['form'] : array();
 			$tags['form'] = array_merge(
 				$formtags,
@@ -147,6 +151,10 @@ function mc_allowed_tags( $tags, $context ) {
 			'href'             => true,
 			'class'            => true,
 			'target'           => true,
+		);
+
+		$tags['script'] = array(
+			'type' => 'application/ld+json',
 		);
 	}
 
