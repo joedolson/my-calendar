@@ -243,7 +243,6 @@ function mc_update_location_post_relationship( $location_id, $location_post ) {
 		array( '%d' ),
 		'%d'
 	);
-	print_r( $update );
 
 	return $update;
 }
@@ -413,7 +412,6 @@ function my_calendar_add_locations() {
 		}
 		$cur_loc = (int) $_POST['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
-
 	}
 
 	if ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] || isset( $_POST['mode'] ) && 'edit' !== $_POST['mode'] || ! isset( $_GET['mode'] ) && ! isset( $_POST['mode'] ) ) {
