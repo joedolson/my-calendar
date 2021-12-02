@@ -189,9 +189,26 @@ function mc_kses_elements() {
 			'd'    => array(),
 			'fill' => array(),
 		),
-		'h2'       => array(),
-		'h3'       => array(),
-		'h4'       => array(),
+		'h2'       => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'h3'       => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'h4'       => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'h5'       => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'h6'       => array(
+			'class' => array(),
+			'id'    => array(),
+		),
 		'label'    => array(
 			'for'   => array(),
 			'class' => array(),
@@ -228,6 +245,7 @@ function mc_kses_elements() {
 			'required'         => array(),
 			'readonly'         => array(),
 			'autocomplete'     => array(),
+			'data-href'        => array(),
 		),
 		'textarea' => array(
 			'id'               => array(),
@@ -258,6 +276,7 @@ function mc_kses_elements() {
 			'role'             => array(),
 			'aria-selected'    => array(),
 			'aria-controls'    => array(),
+			'data-href'        => array(),
 		),
 		'ul'       => array(
 			'class' => array(),
@@ -356,6 +375,9 @@ function mc_kses_elements() {
 		),
 		'pre'      => array(
 			'class' => array(),
+		),
+		'script'   => array(
+			'type' => 'application/ld+json',
 		),
 	);
 

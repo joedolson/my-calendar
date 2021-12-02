@@ -300,7 +300,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				// Translators: Event title.
 				$aria = " aria-label='" . esc_attr( sprintf( __( 'Details about %s', 'my-calendar' ), strip_tags( $event_title ) ) ) . "'";
 				if ( _mc_is_url( $details_link ) ) {
-					$more = "	<div class='mc-details'><p class='mc_details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p></div>\n";
+					$more = "	<p class='mc-details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
 				} else {
 					$more = '';
 				}
