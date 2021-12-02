@@ -257,6 +257,7 @@ function mc_update_permissions_settings( $post ) {
 		'mc_edit_settings'  => __( 'Edit Settings', 'my-calendar' ),
 		'mc_view_help'      => __( 'View Help', 'my-calendar' ),
 	);
+	$caps  = apply_filters( 'mc_capabilities', $caps );
 	foreach ( $perms as $key => $value ) {
 		$role = get_role( $key );
 		if ( is_object( $role ) ) {
@@ -1191,6 +1192,8 @@ function mc_remote_db() {
 			'mc_edit_settings'  => __( 'Edit Settings', 'my-calendar' ),
 			'mc_view_help'      => __( 'View Help', 'my-calendar' ),
 		);
+		$caps           = apply_filters( 'mc_capabilities', $caps );
+
 		foreach ( $roles as $role => $rolename ) {
 			if ( 'administrator' === $role ) {
 				continue;
