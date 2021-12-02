@@ -112,7 +112,7 @@ function mc_update_location_custom_fields( $post_id, $post, $data, $location_id 
 		if ( isset( $post[ $name ] ) ) {
 			if ( ! isset( $field['sanitize_callback'] ) || ( isset( $field['sanitize_callback'] ) && ! function_exists( $field['sanitize_callback'] ) ) ) {
 				// if no sanitization is provided, we'll prep it for SQL and strip tags.
-				$sanitized = esc_html( strip_tags( urldecode( $post[ $name ] ) ) );
+				$sanitized = sanitize_text_field( strip_tags( urldecode( $post[ $name ] ) ) );
 			} else {
 				$sanitized = call_user_func( $field['sanitize_callback'], urldecode( $post[ $name ] ) );
 			}
@@ -987,7 +987,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 						} else {
 							$selected = '';
 						}
-						$output .= "<option value='" . esc_attr( stripslashes( $value ) ) . "'$selected>" . $value . "</option>\n";
+						$output .= "<option value='" . esc_attr( stripslashes( $value ) ) . "'$selected>" . esc_html( stripslashes( $value ) ) . "</option>\n";
 					}
 					$output .= '</select>';
 				}
