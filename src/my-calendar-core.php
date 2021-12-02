@@ -950,6 +950,20 @@ function mc_do_upgrades( $upgrade_path ) {
 				add_option( 'mc_display_main', $settings );
 				add_option( 'mc_display_mini', $settings );
 				add_option( 'mc_drop_settings', 'true' );
+				delete_option( 'mc_display_author' );
+				delete_option( 'mc_display_host' );
+				delete_option( 'mc_show_event_vcal' );
+				delete_option( 'mc_show_gcal' );
+				delete_option( 'mc_show_map' );
+				delete_option( 'mc_gmap' );
+				delete_option( 'mc_show_address' );
+				delete_option( 'mc_short' );
+				delete_option( 'mc_desc' );
+				delete_option( 'mc_image' );
+				delete_option( 'mc_short' );
+				delete_option( 'mc_event_registration' );
+				delete_option( 'mc_event_link' );
+				delete_option( 'mc_display_more' );
 				delete_option( 'mc_title' );
 				break;
 			case '3.1.13':
