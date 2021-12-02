@@ -161,7 +161,7 @@
 .mc-main .time-block:before,
 .mc-main .sharing .ical a:before,
 .mc-main .sharing .gcal a:before,
-.mc-main .sharing .mc_details a:before,
+.mc-main .sharing .mc-details a:before,
 .mc-main .mc-format a:before,
 .mc-main .mc-format span:before,
 .mc-main .mc-print a:before,
@@ -178,7 +178,7 @@
 }
 
 .mc-main.mini .event-title {
-	padding: 10px 30px 10px 5px;
+	padding: 10px 30px 9px 5px;
 }
 
 .mc-main.mini .has-events .active-toggle {
@@ -639,6 +639,7 @@
 
 .mc-main .details .sharing {
 	clear: both;
+	margin: .5em 0;
 }
 
 .mc-main .sharing p {
@@ -656,7 +657,7 @@
 	content: "\f502";
 }
 
-.mc-main .sharing .mc_details a:before {
+.mc-main .sharing .mc-details a:before {
 	content: "\f242";
 }
 

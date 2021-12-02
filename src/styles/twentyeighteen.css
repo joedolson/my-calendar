@@ -586,7 +586,7 @@
 	vertical-align: middle;
 }
 
-.mc-main .sharing .mc_details a:before {
+.mc-main .sharing .mc-details a:before {
 	font-family: 'dashicons';
 	content: "\f242";
 	margin-right: 3px;

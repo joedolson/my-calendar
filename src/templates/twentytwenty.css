@@ -150,7 +150,7 @@
 .mc-main .time-block:before,
 .mc-main .sharing .ical a:before,
 .mc-main .sharing .gcal a:before,
-.mc-main .sharing .mc_details a:before,
+.mc-main .sharing .mc-details a:before,
 .mc-main .mc-format a:before,
 .mc-main .mc-format span:before,
 .mc-main .mc-print a:before,
@@ -645,7 +645,7 @@
 	content: "\f502";
 }
 
-.mc-main .sharing .mc_details a:before {
+.mc-main .sharing .mc-details a:before {
 	content: "\f242";
 }
 
