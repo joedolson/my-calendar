@@ -58,6 +58,7 @@ function mc_allowed_tags( $tags, $context ) {
 				'id'               => true,
 				'checked'          => true,
 				'required'         => true,
+				'data-href'        => true,
 			);
 
 			$tags['select'] = array(
