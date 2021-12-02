@@ -263,8 +263,16 @@ $style_vars
 			$event  = mc_get_event( $mc_id );
 			$schema = mc_event_schema( $event );
 
-			echo '<script type="application/ld+json">[' . json_encode( map_deep( $schema, 'esc_html' ) ) . ']</script>';
+			echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
 		}
+	}
+
+	if ( is_singular( 'mc-locations' ) ) {
+		$loc_id   = mc_get_location_id( get_the_ID() );
+		$location = mc_get_location( $loc_id );
+		$schema   = mc_location_schema( $location );
+
+		echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
 	}
 }
 

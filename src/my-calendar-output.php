@@ -41,7 +41,7 @@ function mc_time_html( $e, $type ) {
 		$notime .= ( 'N/A' === $label ) ? "<abbr title='" . esc_html__( 'Not Applicable', 'my-calendar' ) . "'>" . esc_html__( 'N/A', 'my-calendar' ) . '</abbr>' : esc_html( $label );
 		$notime .= '</span>';
 	}
-	$date_start  = "<span class='mc-start-date dtstart' itemprop='startDate' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $e->occur_begin ) ) . '</span>';
+	$date_start  = "<span class='mc-start-date dtstart' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $e->occur_begin ) ) . '</span>';
 	$time_start  = ( $has_time ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>' : $notime;
 	$date_end    = ( 0 === (int) $e->event_hide_end && ( $e->event_begin !== $e->event_end ) ) ? '<span class="event-time dtend">' . date_i18n( $date_format, strtotime( $e->occur_end ) ) . '</span>' : '';
 	$time_end    = ( $has_time && 0 === (int) $e->event_hide_end ) ? "<span class='end-time dtend'> <time class='value-title' datetime='" . esc_attr( $dtend ) . "' title='" . esc_attr( $dtend ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>' : '';
@@ -300,7 +300,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				// Translators: Event title.
 				$aria = " aria-label='" . esc_attr( sprintf( __( 'Details about %s', 'my-calendar' ), strip_tags( $event_title ) ) ) . "'";
 				if ( _mc_is_url( $details_link ) ) {
-					$more = "	<p class='mc-details'><a$aria itemprop='url' href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
+					$more = "	<p class='mc-details'><a$aria href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
 				} else {
 					$more = '';
 				}
@@ -337,7 +337,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			if ( 'true' === $display_desc || mc_output_is_visible( 'description', $type, $event ) ) {
 				if ( '' !== trim( $event->event_desc ) ) {
 					$description = wpautop( stripcslashes( mc_kses_post( $event->event_desc ) ), 1 );
-					$description = "	<div class='longdesc description' itemprop='description'>$description</div>";
+					$description = "	<div class='longdesc description'>$description</div>";
 				}
 			}
 

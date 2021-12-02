@@ -83,15 +83,6 @@ function mc_allowed_tags( $tags, $context ) {
 			);
 		}
 
-		$tags['span'] = array_merge(
-			$tags['span'],
-			array(
-				'itemprop'  => true,
-				'itemscope' => true,
-				'itemtype'  => true,
-			)
-		);
-
 		$tags['button'] = array_merge(
 			$tags['button'],
 			array(
@@ -295,9 +286,6 @@ function mc_kses_elements() {
 		'span'     => array(
 			'id'          => array(),
 			'class'       => array(),
-			'itemprop'    => array(),
-			'itemscope'   => array(),
-			'itemtype'    => array(),
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
 			'span'        => array(),
@@ -305,9 +293,6 @@ function mc_kses_elements() {
 		'i'        => array(
 			'id'          => array(),
 			'class'       => array(),
-			'itemprop'    => array(),
-			'itemscope'   => array(),
-			'itemtype'    => array(),
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
 		),

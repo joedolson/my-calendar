@@ -291,7 +291,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$link = $link . $distance;
 	}
 	$post   = mc_get_location_post( $loc_id );
-	$events = ( ! is_single( $post ) ) ? '<a class="location-link" href="' . esc_url( get_the_permalink( $post ) ) . '">' . __( 'View Location', 'my-calendar' ) . '</a>' : '';
+	$events = ( $post && ! is_single( $post ) ) ? '<a class="location-link" href="' . esc_url( get_the_permalink( $post ) ) . '">' . __( 'View Location', 'my-calendar' ) . '</a>' : '';
 	/**
 	 * Filter link to location-specific events in hcard.
 	 *
@@ -304,25 +304,23 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
 	$hcard  = '<div class="address location vcard">';
 	if ( 'true' === $address ) {
-		$hcard .= '<div class="adr" itemprop="address">';
-		$hcard .= ( '' !== $label ) ? '<div><strong class="org fn" itemprop="name">' . $link . '</strong></div>' : '';
+		$hcard .= '<div class="adr">';
+		$hcard .= ( '' !== $label ) ? '<div><strong class="org fn">' . $link . '</strong></div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "<div class='sub-address'>";
-		$hcard .= ( '' !== $street ) ? '<div class="street-address" itemprop="streetAddress">' . $street . '</div>' : '';
-		$hcard .= ( '' !== $street2 ) ? '<div class="street-address" itemprop="streetAddress">' . $street2 . '</div>' : '';
+		$hcard .= ( '' !== $street ) ? '<div class="street-address">' . $street . '</div>' : '';
+		$hcard .= ( '' !== $street2 ) ? '<div class="street-address">' . $street2 . '</div>' : '';
 		$hcard .= ( '' !== $city . $state . $zip ) ? '<div>' : '';
-		$hcard .= ( '' !== $city ) ? '<span class="locality" itemprop="addressLocality">' . $city . '</span><span class="mc-sep">, </span>' : '';
-		$hcard .= ( '' !== $state ) ? '<span class="region" itemprop="addressRegion">' . $state . '</span> ' : '';
-		$hcard .= ( '' !== $zip ) ? ' <span class="postal-code" itemprop="postalCode">' . $zip . '</span>' : '';
+		$hcard .= ( '' !== $city ) ? '<span class="locality">' . $city . '</span><span class="mc-sep">, </span>' : '';
+		$hcard .= ( '' !== $state ) ? '<span class="region">' . $state . '</span> ' : '';
+		$hcard .= ( '' !== $zip ) ? ' <span class="postal-code">' . $zip . '</span>' : '';
 		$hcard .= ( '' !== $city . $state . $zip ) ? '</div>' : '';
-		$hcard .= ( '' !== $country ) ? '<div class="country-name" itemprop="addressCountry">' . $country . '</div>' : '';
-		$hcard .= ( '' !== $phone ) ? '<div class="tel" itemprop="telephone">' . $phone . '</div>' : '';
-		$hcard .= ( '' !== $events ) ? '<div class="mc-events-link" itemprop="url">' . $events . '</div>' : '';
+		$hcard .= ( '' !== $country ) ? '<div class="country-name">' . $country . '</div>' : '';
+		$hcard .= ( '' !== $phone ) ? '<div class="tel">' . $phone . '</div>' : '';
+		$hcard .= ( '' !== $events ) ? '<div class="mc-events-link">' . $events . '</div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : '</div>';
 		$hcard .= '</div>';
 	}
 	if ( 'true' === $map && false !== $the_map ) {
-		$hcard   .= '<meta itemprop="name" content="' . esc_attr( $label ) . '"/>';
-		$hcard   .= '<meta itemprop="address" content="' . esc_attr( mc_map_string( $event, $source ) ) . '"/>';
 		$the_link = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
 		$hcard   .= ( '' !== $the_map ) ? "<div class='map'>$the_link</div>" : '';
 	}
@@ -1277,6 +1275,7 @@ function mc_event_schema( $e ) {
  */
 function mc_location_schema( $location ) {
 	$schema = array(
+		'@context'    => 'https://schema.org',
 		'@type'       => 'Place',
 		'name'        => $location->location_label,
 		'description' => '',
@@ -1289,7 +1288,7 @@ function mc_location_schema( $location ) {
 			'postalCode'      => $location->location_postcode,
 			'addressCountry'  => $location->location_country,
 		),
-		'telephone'   => $location->location_phone,
+		'telephone'   => ( $location->location_phone ) ? $location->location_phone : 'n/a',
 		'sameAs'      => $location->location_url,
 	);
 	if ( ! empty( $location->location_latitude ) && 0 !== (int) $location->location_latitude ) {
