@@ -1471,6 +1471,7 @@ function my_calendar( $args ) {
 	if ( $site ) {
 		restore_current_blog();
 	}
+	$json_ld = '';
 	if ( ! empty( $json ) && is_array( $json ) ) {
 		$json_ld = json_encode( map_deep( $json, 'esc_html' ), JSON_UNESCAPED_SLASHES );
 		$json_ld = PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . $json_ld . PHP_EOL . '</script>' . PHP_EOL;
