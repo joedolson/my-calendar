@@ -155,9 +155,15 @@ div.site-content, table {
 .category-icon,
 .category-color-sample.svg * {
 	max-width: 18px;
+	min-width: 16px;
 	height: auto;
 	padding: 1px;
 	border-radius: 2px; 
+}
+
+.category-key li a {
+	display: flex;
+	align-items: center;
 }
 
 .mc-adjacent .mc-event-date {
@@ -266,8 +272,13 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 
 .mc-author-card, .mc-host-card {
 	display: grid;
-	grid-template-columns: 2.5em 1fr;
+	grid-template-columns: 3.5em 1fr;
 	column-gap: 12px;
+}
+
+.mc-author-card p, .mc-host-card p {
+	margin: 0;
+	padding: .5em;
 }
 
 @-webkit-keyframes animation-rotate {
