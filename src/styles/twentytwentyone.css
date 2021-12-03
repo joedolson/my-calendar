@@ -66,7 +66,6 @@
 }
 
 .mc-main table {
-	width: 100%;
 	position: relative;
 	border-collapse: collapse;
 	table-layout: fixed;
@@ -218,7 +217,7 @@
 }
 
 .mc-main .category-key .category-color-sample {
-	padding: 4px 4px 4px 0;
+	padding-right: 4px;
 }
 
 .mc-main .category-color-sample .category-icon {
@@ -447,14 +446,8 @@
 }
 
 .mc-main .current-day {
-	border-top: 1px solid #313233;
-	border-top: 1px solid var(--highlight-dark);
-	background: linear-gradient(to bottom, #fff 0%, var(--secondary-light) 30%, var(--highlight-light) 100%)
-}
-
-.mc-main .current-day .mc-date {
-	border-top: 1px solid #313233;
-	border-top: 1px solid var(--highlight-dark);
+	border-bottom: 5px solid #313233;
+	border-bottom: 5px solid var(--highlight-dark);
 }
 
 .mc-main .has-events a.mc-date {
@@ -481,6 +474,13 @@
 .my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
 	margin: 0 !important;
 	padding: 0 !important;
+}
+
+.my-calendar-footer .category-key ul,
+.my-calendar-header .category-key ul {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: .5rem;
 }
 
 .my-calendar-nav ul {
@@ -520,14 +520,15 @@
 	margin-left: 3px;
 }
 
-/* Category Key */
-.mc-main .category-key h3 {
-	margin: 0 0 10px 0 !important;
+.mc-main .category-key li a {
+	padding: 2px 4px;
+	border: 1px solid transparent;
+	border-radius: 3px;
 }
 
 .mc-main .category-key li.current a {
-	border: 1px solid #000;
-	background: #fff;
+	border: 1px solid var(--highlight-dark);
+	background-color: var(--primary-light);
 }
 
 .mc-main .my-calendar-header .no-icon,
