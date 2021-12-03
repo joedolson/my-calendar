@@ -318,21 +318,18 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	margin: 1em 0;
 }
 
-.details .mc-access,
+.details .mc-accessibility ul.mc-access,
 .details .sharing {
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: .5em;
+	margin: .5em 0;
+	list-style: none;
 }
 
 .mc-main .details .mc-image {
 	width: 100%;
 	height: auto;
-}
-
-.details .mc-access {
-	list-style: none;
-	margin: 1em 0;
 }
 
 .details .mc-access li {

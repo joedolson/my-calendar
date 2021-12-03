@@ -7,6 +7,7 @@
 	clear: both;
 	background: var(--primary-light);
 	border-radius: 10px;
+	border: 1px solid var(--highlight-dark);
 }
 
 .mc-main .details .mc_edit_links p {

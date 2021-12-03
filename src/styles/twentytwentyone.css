@@ -5,7 +5,7 @@
 .mc-main .my-calendar-header, .mc-main .mc_bottomnav {
 	padding: .5em;
 	background: #e3e3e3;
-	background: var(--highlight-light);
+	background: var(--secondary-light);
 
 }
 
@@ -111,7 +111,7 @@
 	background: var(--primary-light) !important;
 	color: #313233 !important;
 	color: var(--primary-dark) !important;
-	border-bottom: 1px solid var(--primary-dark);
+	border-bottom: 1px solid var(--highlight-dark);
 }
 
 .mc-main th abbr, .mc-main .event-time abbr {
@@ -182,7 +182,7 @@
 
 .mc-main.mini .has-events .active-toggle {
 	background: #efefef;
-	background: var(--highlight-light);
+	background: var(--secondary-light);
 	color: #000;
 	color: var(--secondary-dark);
 }
@@ -266,11 +266,6 @@
 .mc-main .list-event .event-title {
 	padding: .25em;
 	border-radius: 0 10px 10px 0;
-}
-
-.mc-main .mc-list {
-	border-top: 1px solid var(--highlight-light);
-	border-left: 1px solid var(--highlight-light);
 }
 
 .mc-main .mc-list .event-date button {
@@ -415,9 +410,9 @@
 
 .mc-main.mini .has-events.current-day a.mc-date {
 	color: #000;
-	color: var(--primary-dark);
+	color: var(--secondary-dark);
 	background: #eee;
-	background: var(--highlight-light);
+	background: var(--secondary-light);
 	border-top: 0px solid;
 }
 
@@ -426,7 +421,7 @@
 	background: #000;
 	background: var(--primary-dark);
 	color: #eee;
-	color: var(--highlight-light);
+	color: var(--primary-light);
 }
 
 .mc-main .nextmonth {
@@ -544,6 +539,10 @@
 	border: 1px solid #fff;
 }
 
+.details .longdesc {
+	margin: 1em 0;
+}
+
 /* hCard */
 .mc-main .address {
 	clear: right;
@@ -625,7 +624,7 @@
 .mc-main .mc-list .mc-events {
 	list-style-type: none !important;
 	padding: 10px;
-	background: rgba(0, 0, 0, .05);
+	background: rgba(0, 0, 0, .03);
 	margin: 0;
 }
 
@@ -668,7 +667,8 @@
 }
 
 .mc-main .list-event {
-	border-top: 1px solid #d1d1d1;
+	border-top: 4px solid #d1d1d1;
+	border-top: 4px solid var(--highlight-light);
 	margin: .5em -10px;
 }
 
@@ -684,7 +684,7 @@
 
 .mc-main .details .mc-image {
 	width: 100%;
-	max-width: 100%;
+	max-width: 100% !important;
 	height: auto;
 }
 
