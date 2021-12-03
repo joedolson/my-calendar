@@ -156,7 +156,7 @@ function my_calendar_style_edit() {
 	}
 	echo mc_stylesheet_selector();
 	if ( ! isset( $_GET['diff'] ) ) {
-	?>
+		?>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
 		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 		<input type="hidden" value="true" name="mc_edit_style"/>
@@ -213,7 +213,7 @@ function my_calendar_style_edit() {
 			</p>
 		</fieldset>
 	</form>
-	<?php
+		<?php
 	}
 }
 
