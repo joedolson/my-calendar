@@ -86,15 +86,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.3.0 =
 
-* Replace date picker with the Duet Design Systems accessible date picker.
+Backend Changes:
+
+* Replaced date picker with the <a href="https://github.com/duetds/date-picker">Duet Design Systems accessible date picker</a>.
 * Accessibility & usability improvements to adding additional occurrences to an event. (DB change)
-* Add support for custom fields on locations. See demo at [TODO: post example to Github]
-* Numerous minor back-end UX changes.
-* Bug fix: Deleting a location from the location manager should not send user to the location editor.
+* Add support for custom fields on locations. <a href="https://github.com/joedolson/plugin-extensions/blob/master/my-calendar/mc-custom-location-fields.php">See demo at Github</a>
+* Extensive back-end user experience changes.
 * Link location title to edit screen in location manager
-* Add front-end venue view.
-* Bug fix: row action links not properly labeled.
-* Bug fix: row action links not becoming visible on focus.
 * Improve checkbox labeling in event manager.
 * Improve button labeling in nav ordering.
 * Add row actions to Location manager.
@@ -102,34 +100,92 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: use aria tab panels properly in settings.
 * Removed upgrade cycles & associated code for upgrading from version 2.3.x (last release in 2015.)
 * Support aria-sort on sortable tables.
-* Bug fix: pagination when sorting in event manager.
 * Locations support both descending & ascending sort.
-* Update default custom templates.
-* Bug fix: PHP warning on installations without saved locations.
+* Bug fix: pagination when sorting in event manager.
 * Update settings configuration for default calendar URL.
-* Support filtering by multiple locations in calendar shortcodes or by filter.
-* Change: use a stateful heading for all calendar views.
-* Change: Support AJAX navigation on date select form.
-* Change: Replace decade-old category icons with SVG.
-* Bug fix: Override custom select styles from Twenty Twenty One
-* Three new actions: 'mc_event_happening', 'mc_event_future', 'mc_event_over' executed whenever an event is compared to the current time, usable for automatic transitions and notifications.
-* Disable sending email notifications for Spam events. Add action to optionally handle spam notifications.
 * New setting to control whether plugin settings are removed on uninstall.
 * Text changes for clarity & simplification
-* Remove the process shortcodes option. Shortcodes can be disabled using 'mc_process_shortcodes' filter.
-* Bug fix: Screen options weren't able to retrieve user settings correctly.
-* New: recurring-event classes in event lists.
-* Bug fix: Event manager displayed recurring event options on single event editing screens.
-* Bug fix: Incorrect variable type broke location labeling output on Google Map output. 
 * Change 'Short Description' to 'Excerpt' for clarity
 * Collapse 'Event Groups' and 'Events List' into a single screen.
+* Inline help pop-ups
+* Show event count for category links.
+* Add settings manager to My Calendar primary view page.
+* Updated recurring events input method.
+* Add category during event creation.
+* Make event bulk actions a dropdown.
+* With Google Maps API, auto query lat/lon data for locations.
+* Add calendar view for navigating events in admin.
+* Simplify featured image support.
+* Use checkboxes to select categories in widgets & shortcode generator.
+* Show warning if screen has unsaved changes
+* Template tag & event template previews.
+
+Bug fixes:
+
+* Bug fix: Deleting a location from the location manager should not send user to the location editor.
+* Bug fix: row action links not properly labeled.
+* Bug fix: row action links not becoming visible on focus.
+* Bug fix: PHP warning on installations without saved locations.
+* Bug fix: Screen options weren't able to retrieve user settings correctly.
+* Bug fix: Event manager displayed recurring event options on single event editing screens.
 * Bug fix: Form overflows in responsive views.
 * Bug fix: Need breaking container in map bubble after location name.
 * Bug fix [a11y]: Ensure focus isn't loss in sortable lists; announce change via wp.a11y.speak.
 * Bug fix: If no previous or next event, generated numerous PHP errors.
-* Removed Gmap3 dependency.
-* New category icons, sourced from Font Awesome (https://fontawesome.com/license)
+* Stylesheet previewer in Design manager.
+* Only show "special scheduling options" when relevant.
+* Add Help tab to explain statuses.
+* Add color picker to CSS variable UI
+
+Frontend changes:
+
+* Add front-end location view.
+* Update default custom templates.
+* Support filtering by multiple locations in calendar shortcodes or by filter.
+* Change: use a stateful heading for all calendar views.
+* Change: Support AJAX navigation on date select form.
+* Bug fix: Override custom select styles from Twenty Twenty One
+* New: recurring-event classes in event lists.
+* Rewrote Google Maps scripting
+* New SVG category icons, sourced from Font Awesome (https://fontawesome.com/license)
 * New default stylesheet: twentytwentyone.css
+* Individual display settings for different calendar views
+* Creates demo content on initial installation.
+* Enable pretty permalinks by default on new installations
+* Add accessibility fields as a default event output.
+* Removed RSS feeds.
+* Always show event title in pop-up.
+* Update default date/time formatting.
+* Support search in calendar navigation.
+* Support category dropdown in calendar navigation.
+* Support location dropdown in calendar navigation.
+* Support accessibility feature dropdown in calendar navigation.
+* Support ld+json schema.org data for events and locations.
+* Changed heading structure for main calendar view.
+* Add event number to list view and event number hint in mini view.
+* 'Show recurring' flag in upcoming events list.
+* Upcoming events list should not wrap empty value in `ul`
+* New default stylesheet
+
+Developer Changes:
+
+* Three new actions: 'mc_event_happening', 'mc_event_future', 'mc_event_over' executed whenever an event is compared to the current time, usable for automatic transitions and notifications.
+* Filter: 'mc_output_is_visible' to determine whether a given display feature should be shown on calendar.
+* Disable sending email notifications for Spam events. Add action to optionally handle spam notifications.
+* Remove the process shortcodes option. Shortcodes can be disabled using 'mc_process_shortcodes' filter.
+* Published documentation to https://docs.joedolson.com/my-calendar/
+* New filter to add custom permissions. 'mc_capabilities'
+* New filter for event details `mc_event_detail_{value}`
+* Started work on documenting filters and actions.
+* Code reorganization.
+
+= 3.2.19 =
+
+* Resolve svn problem causing missing files.
+
+= 3.2.18 =
+
+* Security: Fixes reflected XSS flaw in admin. Props to @erwinr and WPScan.
 
 = 3.2.17 =
 
