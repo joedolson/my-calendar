@@ -15,6 +15,7 @@ div.site-content, table {
 
 .mc-main {
 	line-height: 1;
+	max-width: 980px !important;
 }
 
 .my-calendar-nav ul {
