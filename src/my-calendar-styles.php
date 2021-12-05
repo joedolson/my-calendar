@@ -627,8 +627,8 @@ function mc_contrast( $color1, $color2 ) {
 	} else {
 		$echo_hex_back = 'FFFFFF';
 	}
-	$color  = wpa_hex2rgb( $echo_hex_fore );
-	$color2 = wpa_hex2rgb( $echo_hex_back );
+	$color  = mc_hex2rgb( $echo_hex_fore );
+	$color2 = mc_hex2rgb( $echo_hex_back );
 	$rfore  = $color[0];
 	$gfore  = $color[1];
 	$bfore  = $color[2];
