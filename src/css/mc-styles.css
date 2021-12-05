@@ -1167,13 +1167,17 @@ select[name="event_recur"] {
 	display: inline;
 }
 
-.checkboxes li .variable-color {
-	height: 1.75em;
-	width: 1.75em;
-	margin: 0 .25em;
-	border-radius: 1.75em;
-	vertical-align: middle;
-	display: inline-block;
+.mc-css-variables .checkboxes {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.mc-css-variables .checkboxes button {
+	margin-bottom: 0;
+}
+
+.mc-css-variables .checkboxes .wp-picker-container {
+	display: block;
 }
 
 .mc-admin-footer,

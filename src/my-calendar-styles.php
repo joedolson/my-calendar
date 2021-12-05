@@ -82,7 +82,9 @@ function my_calendar_style_edit() {
 				}
 				if ( isset( $_POST['delete_var'] ) ) {
 					$delete = $_POST['delete_var'];
-					unset( $styles[ $delete ] );
+					foreach( $delete as $del ) {
+						unset( $styles[ $del ] );
+					}
 				}
 				update_option( 'mc_style_vars', $styles );
 			}
@@ -191,11 +193,11 @@ function my_calendar_style_edit() {
 			foreach ( $styles as $var => $style ) {
 				$var_id = 'mc' . sanitize_key( $var );
 				if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light' ), true ) ) {
-					$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . __( 'Delete', 'my-calendar' ) . '</label>';
+					$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
 				} else {
 					$delete = '';
 				}
-				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' /><span aria-hidden='true' class='variable-color' style='background-color: " . esc_attr( $style ) . "'></span>$delete</li>";
+				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
 			}
 			if ( $output ) {
 				echo wp_kses( "<ul class='checkboxes'>$output</ul>", mc_kses_elements() );
