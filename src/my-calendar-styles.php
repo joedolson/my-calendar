@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function my_calendar_style_edit() {
 	$edit_files = true;
+	$message    = '';
 	if ( ! current_user_can( 'mc_edit_styles' ) ) {
 		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize styles on this site.', 'my-calendar' ) . '</p>' );
 		return;
@@ -88,7 +89,7 @@ function my_calendar_style_edit() {
 
 			$message .= '<p><strong>' . __( 'Style Settings Saved', 'my-calendar' ) . '.</strong></p>';
 		}
-		echo wp_kses_post( "<div id='message' class='updated fade'>$message</div>" );
+		mc_show_notice( $message );
 	}
 	if ( isset( $_POST['mc_choose_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
@@ -121,20 +122,17 @@ function my_calendar_style_edit() {
 		if ( isset( $_GET['diff'] ) ) {
 			?>
 			<div id="diff">
+			<div class="reset-styles notice">
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 					<input type="hidden" value="true" name="mc_reset_style"/>
 					<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
-					<fieldset style="position:relative;">
-						<legend><?php esc_html_e( 'CSS Style Options', 'my-calendar' ); ?></legend>
-							<p>
-							<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php esc_html_e( 'Update stylesheet to match core version', 'my-calendar' ); ?></label>
-						</p>
 						<p>
-							<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Update Styles', 'my-calendar' ); ?>" />
+						<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php esc_html_e( 'Reset stylesheet to match core version', 'my-calendar' ); ?></label>
+						<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Reset Styles', 'my-calendar' ); ?>" />
 						</p>
-					</fieldset>
 				</form>
+			</div>
 			<?php
 			$diff = wp_text_diff(
 				$left_string,
@@ -151,7 +149,7 @@ function my_calendar_style_edit() {
 			<?php
 		}
 		if ( trim( $left_string ) !== trim( $right_string ) && ! isset( $_GET['diff'] ) ) {
-			mc_show_notice( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-design&diff' ) ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
+			mc_show_error( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-design&diff' ) ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
 		}
 	}
 	echo mc_stylesheet_selector();
