@@ -348,6 +348,12 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	list-style: none;
 }
 
+.details img.alignnone,
+.details img.alignleft,
+.details img.alignright {
+	max-width: 100%;
+}
+
 .mc-main .details .mc-image {
 	width: 100%;
 	height: auto;
