@@ -82,7 +82,7 @@ function my_calendar_style_edit() {
 				}
 				if ( isset( $_POST['delete_var'] ) ) {
 					$delete = $_POST['delete_var'];
-					foreach( $delete as $del ) {
+					foreach ( $delete as $del ) {
 						unset( $styles[ $del ] );
 					}
 				}
@@ -178,7 +178,12 @@ function my_calendar_style_edit() {
 			} else {
 				$disabled = ( $edit_files || get_option( 'mc_use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 				?>
-				<label for="style"><?php echo sprintf( esc_html__( 'Edit %s', 'my-calendar' ), '<code>' . $file . '</code>' ); ?></label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
+				<label for="style">
+				<?php
+				// Translators: file name being edited.
+				echo sprintf( esc_html__( 'Edit %s', 'my-calendar' ), '<code>' . $file . '</code>' );
+				?>
+				</label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
 				<?php
 			}
 			?>
@@ -193,6 +198,7 @@ function my_calendar_style_edit() {
 			foreach ( $styles as $var => $style ) {
 				$var_id = 'mc' . sanitize_key( $var );
 				if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light' ), true ) ) {
+					// Translators: CSS variable name
 					$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
 				} else {
 					$delete = '';
