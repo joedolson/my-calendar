@@ -1180,6 +1180,15 @@ select[name="event_recur"] {
 	display: block;
 }
 
+.faux-p {
+	padding: 2px;
+	margin: .5em 0;
+}
+
+.inline-form {
+	display: inline-block;
+}
+
 .mc-contrast-table {
 	width: 100%;
 	border-collapse: collapse;

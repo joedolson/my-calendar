@@ -18,6 +18,10 @@ div.site-content, table {
 	max-width: 980px !important;
 }
 
+.single-event {
+	max-width: 610px !important;
+}
+
 .my-calendar-nav ul {
 	display: flex;
 }
@@ -275,6 +279,11 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	display: grid;
 	grid-template-columns: 3.5em 1fr;
 	column-gap: 12px;
+}
+
+.mc-author-card img, .mc-host-card img {
+	max-width: 100%;
+	height: auto;
 }
 
 .mc-author-card p, .mc-host-card p {

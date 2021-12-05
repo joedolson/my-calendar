@@ -125,15 +125,16 @@ function my_calendar_style_edit() {
 			?>
 			<div id="diff">
 			<div class="reset-styles notice">
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					<input type="hidden" value="true" name="mc_reset_style"/>
-					<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
-						<p>
+				<div class="faux-p">
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>" class="inline-form">
+						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+						<input type="hidden" value="true" name="mc_reset_style"/>
+						<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
 						<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php esc_html_e( 'Reset stylesheet to match core version', 'my-calendar' ); ?></label>
 						<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Reset Styles', 'my-calendar' ); ?>" />
-						</p>
-				</form>
+					</form>
+					<a class="button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>"><?php esc_html_e( 'Return to editing', 'my-calendar' ); ?></a>
+				</div>
 			</div>
 			<?php
 			$diff = wp_text_diff(
