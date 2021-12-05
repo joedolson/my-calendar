@@ -154,11 +154,12 @@ function my_calendar_style_edit() {
 	}
 	echo mc_stylesheet_selector();
 	if ( ! isset( $_GET['diff'] ) ) {
+		$file = get_option( 'mc_css_file' );
 		?>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
-		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-		<input type="hidden" value="true" name="mc_edit_style"/>
-		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
+		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+		<input type="hidden" value="true" name="mc_edit_style" />
+		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( $file ); ?>" />
 		<fieldset style="position:relative;">
 			<legend><?php esc_html_e( 'CSS Style Options', 'my-calendar' ); ?></legend>
 			<p>
@@ -167,7 +168,7 @@ function my_calendar_style_edit() {
 			</p>
 			<p>
 				<input type="checkbox" id="use_styles" name="use_styles" <?php mc_is_checked( 'mc_use_styles', 'true' ); ?> />
-				<label for="use_styles"><?php esc_html_e( 'Use your own styles', 'my-calendar' ); ?></label>
+				<label for="use_styles"><?php esc_html_e( 'Disable My Calendar CSS', 'my-calendar' ); ?></label>
 			</p>
 			<?php
 			if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {
@@ -175,7 +176,7 @@ function my_calendar_style_edit() {
 			} else {
 				$disabled = ( $edit_files || get_option( 'mc_use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 				?>
-				<label for="style"><?php esc_html_e( 'Edit the stylesheet for My Calendar', 'my-calendar' ); ?></label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
+				<label for="style"><?php echo sprintf( esc_html__( 'Edit %s', 'my-calendar' ), '<code>' . $file . '</code>' ); ?></label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
 				<?php
 			}
 			?>
