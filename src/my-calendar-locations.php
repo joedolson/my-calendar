@@ -959,7 +959,13 @@ function mc_display_location_fields( $fields, $data, $context ) {
 
 	$custom_fields = apply_filters( 'mc_order_location_fields', $fields, $context );
 	foreach ( $custom_fields as $name => $field ) {
-		$user_value = mc_location_custom_data( $data, false, $name );
+		if ( is_object( $data ) && 'event' === $context ) {
+			$location_id = $data->event_location;
+		}
+		if ( is_object( $data ) && 'location' === $context ) {
+			$location_id = $data->location_id;
+		}
+		$user_value = mc_location_custom_data( $location_id, false, $name );
 		$required   = isset( $field['required'] ) ? ' required' : '';
 		$req_label  = isset( $field['required'] ) ? ' <span class="required">' . __( 'Required', 'my-calendar' ) . '</span>' : '';
 		switch ( $field['input_type'] ) {
