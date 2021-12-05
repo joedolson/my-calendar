@@ -2,11 +2,15 @@
 	line-height: 1.62;
 }
 
-.mc-main .my-calendar-header, .mc-main .mc_bottomnav {
+.mc-main .my-calendar-header, .mc-main .my-calendar-footer {
 	padding: .5em;
 	background: #e3e3e3;
 	background: var(--secondary-light);
+	color: var(--secondary-dark);
+}
 
+.mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
+	color: var(--secondary-dark);
 }
 
 .mc-main a {
@@ -330,8 +334,10 @@
 }
 
 .mc-main .close:hover, .mc-main .close:focus {
-	background: #fff;
-	background: var(--primary-light);
+	background: #fff !important;
+	background: var(--primary-light) !important;
+	color: #d00 !important;
+	outline: 1px solid var(--primary-dark);
 }
 
 .mc-main .details .category-icon {

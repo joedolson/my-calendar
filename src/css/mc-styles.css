@@ -1180,6 +1180,43 @@ select[name="event_recur"] {
 	display: block;
 }
 
+.mc-contrast-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.mc-contrast-table caption {
+	font-size: 1.2rem;
+	line-height: 1.5;
+}
+
+.mc-contrast-table th {
+	padding: 8px 10px;
+}
+
+.mc-contrast-table td {
+	text-align: center;
+	font-style: italic;
+}
+
+.mc-contrast-table div {
+	padding: 8px 10px;
+	font-weight: 700;
+	font-size: 1.2rem;
+	border-radius: 5px;
+	margin: 2px;
+	font-style: normal;
+}
+
+.mc-contrast-table .invalid-contrast {
+	opacity: .5;
+}
+
+.mc-contrast-table p {
+	font-size: .9rem;
+	font-weight: 400;
+}
+
 .mc-admin-footer,
 .mc-admin-header {
 	display: grid;

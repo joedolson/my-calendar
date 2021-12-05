@@ -36,6 +36,7 @@ function my_calendar_design() {
 			<div class="inside">
 			<?php my_calendar_style_edit(); ?>
 			</div>
+			<?php echo mc_display_contrast_variables(); ?>
 		</div>
 	</div>
 
