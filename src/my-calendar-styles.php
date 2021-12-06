@@ -236,11 +236,12 @@ function mc_display_contrast_variables() {
 	$body   = '';
 	$head   = '<th>' . __( 'Variable', 'my-calendar' ) . '</th>';
 	foreach ( $styles as $var => $color ) {
-		$head .= '<th scope="col">' . $var . '</th>';
-		$row   = '<tr><th scope="row">' . $var . '</th>';
+		$head .= '<th scope="col">' . str_replace( '--', '', $var ) . '</th>';
+		$row   = '<tr><th scope="row">' . str_replace( '--', '', $var ) . '</th>';
 		foreach ( $comp as $var => $c ) {
 			$compare = ( $color === $c ) ? '' : mc_test_contrast( $color, $c );
-			$row    .= '<td>' . $compare . '</td>';
+			// Translators: variable name.
+			$row    .= '<td><span class="comparison">' . sprintf( esc_html__( 'with %s:', 'my-calendar' ), str_replace( '--', '', $var ) ) . ' </span>' . $compare . '</td>';
 		}
 		$row  .= '</tr>';
 		$body .= $row;
@@ -248,7 +249,7 @@ function mc_display_contrast_variables() {
 	$header = '<thead><tr>' . $head . '</tr></thead>';
 	$body   = '<tbody>' . $body . '</tbody>';
 
-	$output = '<table class="mc-contrast-table striped"><caption>' . __( 'Accessible Color Combinations', 'my-calendar' ) . '</caption>' . $head . $body . '</table>';
+	$output = '<table class="mc-contrast-table striped"><caption>' . __( 'Accessible Color Combinations', 'my-calendar' ) . '</caption>' . $header . $body . '</table>';
 
 	return $output;
 }
@@ -267,7 +268,7 @@ function mc_test_contrast( $color1, $color2 ) {
 	$text     = '<p>' . __( 'Meets WCAG', 'my-calendar' ) . '</p>';
 	$class    = '';
 	if ( $contrast < 3.0 ) {
-		return 'invalid';
+		return '<span>invalid</span>';
 	}
 	if ( $contrast < 4.5 && $contrast > 3.0 ) {
 		$class = 'large-text';

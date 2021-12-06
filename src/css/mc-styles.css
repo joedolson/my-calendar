@@ -1192,11 +1192,20 @@ select[name="event_recur"] {
 .mc-contrast-table {
 	width: 100%;
 	border-collapse: collapse;
+	background: #fff;
 }
 
 .mc-contrast-table caption {
 	font-size: 1.2rem;
 	line-height: 1.5;
+}
+
+.mc-contrast-table thead {
+	border-bottom: 2px solid;
+}
+
+.mc-contrast-table th[scope=row] {
+	border-right: 2px solid;
 }
 
 .mc-contrast-table th {
@@ -1209,12 +1218,16 @@ select[name="event_recur"] {
 }
 
 .mc-contrast-table div {
-	padding: 8px 10px;
+	padding: 4px 6px;
 	font-weight: 700;
 	font-size: 1.2rem;
 	border-radius: 5px;
 	margin: 2px;
 	font-style: normal;
+}
+
+.mc-contrast-table .comparison {
+	display: none;
 }
 
 .mc-contrast-table .invalid-contrast {
@@ -1224,6 +1237,8 @@ select[name="event_recur"] {
 .mc-contrast-table p {
 	font-size: .9rem;
 	font-weight: 400;
+	padding: 4px 0 0;
+	margin: 0;
 }
 
 .mc-admin-footer,
@@ -1394,7 +1409,6 @@ tr.problem .error {
 	overflow: hidden;
 }
 
-
 .recurrences .columns p:nth-of-type(1),
 .recurrences .columns p:nth-of-type(2) {
 	display: grid;
@@ -1469,5 +1483,54 @@ input#mc_event_time:valid+span {
 	.recurring .columns p:nth-of-type(2) {
 		display: inline-block;
 		margin-right: 10px;
+	}
+}
+
+@media screen and ( max-width: 720px ) {
+	.mc-contrast-table,
+	.mc-contrast-table tbody,
+	.mc-contrast-table tr,
+	.mc-contrast-table td,
+	.mc-contrast-table th,
+	.mc-contrast-table caption {
+		display: block;
+		height: auto;
+		min-height: 0;
+	}
+
+	.mc-contrast-table .comparison {
+		display: inline;
+		font-style: normal;
+	}
+
+	.mc-contrast-table th {
+		border: 2px solid;
+	}
+
+	.mc-contrast-table,
+	.mc-contrast-table thead,
+	.mc-contrast-table tbody,
+	.mc-contrast-table caption  {
+		width: calc( 100% - 32px );
+		margin: 0 auto;
+		padding: 0;
+	}
+
+	.mc-contrast-table td {
+		padding: .5rem;
+		width: auto;
+		text-align: left;
+		display: grid;
+		grid-template-columns: 12em 1fr;
+		align-items: center;
+		column-gap: .5rem;
+	}
+	
+	.mc-contrast-table td:nth-of-type(odd) {
+		background: #fff;
+	}
+
+	.mc-contrast-table thead {
+		display: none;
 	}
 }
