@@ -89,7 +89,7 @@ function my_calendar_style_edit() {
 				update_option( 'mc_style_vars', $styles );
 			}
 
-			$message .= '<p><strong>' . __( 'Style Settings Saved', 'my-calendar' ) . '.</strong></p>';
+			$message .= ' <strong>' . __( 'Style Settings Saved', 'my-calendar' ) . '.</strong>';
 		}
 		mc_show_notice( $message );
 	}
