@@ -1244,6 +1244,36 @@ function mc_datepicker() {
 }
 
 /**
+ * Produce placeholders in a meaningful format.
+ *
+ * @return string
+ */
+function mc_parse_date_format() {
+	$format = get_option( 'mcs_date_format' );
+	switch( $format ) {
+		case 'Y-m-d':
+			$parsed = 'YYYY-MM-DD';
+			break;
+		case 'm/d/Y':
+			$parsed = 'MM/DD/YYYY';
+			break;
+		case 'd-m-Y':
+			$parsed = 'DD-MM-YYYY';
+			break;
+		case 'j F Y':
+			$parsed = 'DD MMMM YYYY';
+			break;
+		case 'M j, Y':
+			$parsed = 'MMM DD, YYYY';
+			break;
+		default:
+			$parsed = 'YYYY-MM-DD';
+	}
+
+	return $parsed;
+}
+
+/**
  * Enqueue Duet Date Picker.
  */
 function mc_enqueue_duet() {
@@ -1254,10 +1284,17 @@ function mc_enqueue_duet() {
 	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), $mc_version, true );
 	wp_localize_script(
 		'mc.duet',
+		'duetFormats',
+		array(
+			'date' => ( get_option( 'mcs_date_format', '' ) ) ? get_option( 'mcs_date_format' ) : 'Y-m-d',
+		)
+	);
+	wp_localize_script(
+		'mc.duet',
 		'duetLocalization',
 		array(
 			'buttonLabel'         => __( 'Choose date', 'my-calendar' ),
-			'placeholder'         => __( 'yyyy-mm-dd', 'my-calendar' ),
+			'placeholder'         => mc_parse_date_format(),
 			'selectedDateMessage' => __( 'Selected date is', 'my-calendar' ),
 			'prevMonthLabel'      => __( 'Previous month', 'my-calendar' ),
 			'nextMonthLabel'      => __( 'Next month', 'my-calendar' ),

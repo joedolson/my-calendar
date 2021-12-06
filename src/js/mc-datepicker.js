@@ -8,6 +8,38 @@ window.customElements.whenDefined( 'duet-date-picker' ).then(() => {
 const pickers = Array.prototype.slice.apply( document.querySelectorAll( 'duet-date-picker' ) );
 
 pickers.forEach((picker) => {
+	const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+	picker.dateAdapter = {
+		parse(value = "", createDate) {
+		const matches = value.match(DATE_FORMAT_US)
+			if (matches) {
+				return createDate(matches[3], matches[1], matches[2])
+			}
+		},
+		format(date) {
+			switch ( duetFormats.date ) {
+				case 'Y-m-d':
+					return `${date.getFullYear() + 1}-${date.getMonth()}-${date.getDate()}`
+					break;
+				case 'm/d/Y':
+					return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+					break;
+				case 'd-m-Y':
+					return `${date.getDate() + 1}-${date.getMonth()}-${date.getFullYear()}`
+					break;
+				case 'j F Y':
+					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'long' } ).format( date );
+					return `${date.getDate() + 1} ${fullMonth} ${date.getFullYear()}`
+					break;
+				case 'M j, Y':
+					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'short' } ).format( date );
+					return `${date.getDate() + 1} ${fullMonth}, ${date.getFullYear()}`
+					break;
+				default:
+					return `${date.getFullYear() + 1}/${date.getMonth()}/${date.getDate()}`
+			}
+		},
+	}
 	picker.localization = duetLocalization;
 });
 
