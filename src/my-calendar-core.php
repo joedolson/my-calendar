@@ -1250,7 +1250,7 @@ function mc_datepicker() {
  */
 function mc_parse_date_format() {
 	$format = get_option( 'mcs_date_format' );
-	switch( $format ) {
+	switch ( $format ) {
 		case 'Y-m-d':
 			$parsed = 'YYYY-MM-DD';
 			break;
