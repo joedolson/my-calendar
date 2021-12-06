@@ -241,7 +241,7 @@ function mc_display_contrast_variables() {
 		foreach ( $comp as $var => $c ) {
 			$compare = ( $color === $c ) ? '' : mc_test_contrast( $color, $c );
 			// Translators: variable name.
-			$row    .= '<td><span class="comparison">' . sprintf( esc_html__( 'with %s:', 'my-calendar' ), str_replace( '--', '', $var ) ) . ' </span>' . $compare . '</td>';
+			$row .= '<td><span class="comparison">' . sprintf( esc_html__( 'with %s:', 'my-calendar' ), str_replace( '--', '', $var ) ) . ' </span>' . $compare . '</td>';
 		}
 		$row  .= '</tr>';
 		$body .= $row;
