@@ -59,10 +59,17 @@
 	box-shadow: none !important;
 }
 
-.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
-.mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover,
-.mc-main .my-calendar-header a:focus, .mc-main .mc_bottomnav a:focus {
-	text-decoration: underline;
+.mc-main .my-calendar-header a:hover, .mc-main .my-calendar-footer a:hover,
+.mc-main .my-calendar-header a:focus, .mc-main .my-calendar-footer a:focus {
+	text-decoration: none;
+	outline: 1px solid;
+	outline-offset: 2px;
+	border-radius: 3px;
+}
+
+.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus {
+	outline-offset: 0;
+	border-radius: 0;
 }
 
 .mc-main.calendar, .mc-main table {

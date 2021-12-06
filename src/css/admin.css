@@ -31,8 +31,8 @@
 }
 
 .mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
-.mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover,
-.mc-main .my-calendar-header a:focus, .mc-main .mc_bottomnav a:focus {
+.mc-main .my-calendar-header a:hover, .mc-main .my-calendar-footer a:hover,
+.mc-main .my-calendar-header a:focus, .mc-main .my-calendar-footer a:focus {
 	text-decoration: underline;
 }
 
