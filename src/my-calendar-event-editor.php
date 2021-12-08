@@ -28,10 +28,15 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
-		if ( isset( $_POST['event_post'] ) && ( 0 === (int) $_POST['event_post'] || '' === $_POST['event_post'] ) ) {
-			$post_id = mc_create_event_post( $data, $event_id );
+		if ( isset( $data['event_post'] ) && 'group' === $data['event_post'] ) {
+			$post_id = mc_get_event_post( $event_id );
 		} else {
-			$post_id = ( isset( $_POST['event_post'] ) ) ? absint( $_POST['event_post'] ) : false;
+			if ( isset( $_POST['event_post'] ) && ( 0 === (int) $_POST['event_post'] || '' === $_POST['event_post'] ) ) {
+				$post_id = mc_create_event_post( $data, $event_id );
+			} else {
+				$post_id = ( isset( $_POST['event_post'] ) ) ? absint( $_POST['event_post'] ) : false;
+				$post_id = ( isset( $data['event_post'] ) ) ? absint( $data['event_post'] ) : $post_id;
+			}
 		}
 		// If, after all that, the post doesn't exist, create it.
 		if ( ! get_post_status( $post_id ) ) {
@@ -85,6 +90,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		} else {
 			// check POST data.
 			$attachment_id = ( isset( $_POST['event_image_id'] ) && is_numeric( $_POST['event_image_id'] ) ) ? $_POST['event_image_id'] : false;
+			$attachment_id = ( isset( $data['event_image_id'] ) && is_numeric( $data['event_image_id'] ) ) ? $data['event_image_id'] : $attachment_id;
 			if ( $attachment_id ) {
 				set_post_thumbnail( $post_id, $attachment_id );
 			}

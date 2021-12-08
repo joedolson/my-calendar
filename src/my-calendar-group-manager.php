@@ -19,9 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function my_calendar_group_edit() {
 	global $wpdb;
 	// First some quick cleaning up.
-	$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
-	$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
-	$group_id = ! empty( $_POST['group_id'] ) ? $_POST['group_id'] : '';
+	$action   = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
+	$event_id = ! empty( $_POST['event_id'] ) ? (int) $_POST['event_id'] : '';
+	$group_id = ! empty( $_POST['group_id'] ) ? (int) $_POST['group_id'] : '';
 
 	if ( isset( $_GET['mode'] ) ) {
 		if ( 'edit' === $_GET['mode'] ) {
@@ -44,7 +44,7 @@ function my_calendar_group_edit() {
 					$mc_output = mc_check_group_data( $action, $_POST );
 					foreach ( $_POST['apply'] as $event_id ) {
 						$event_id = absint( $event_id );
-						$response = my_calendar_save_group( $action, $mc_output, $event_id );
+						$response = my_calendar_save_group( $action, $mc_output, $event_id, $_POST );
 						echo $response;
 					}
 				}
@@ -135,10 +135,11 @@ function my_calendar_group_edit() {
  * @param string $action Type of action: add, edit.
  * @param array  $output Data and status of data check.
  * @param int    $event_id Event ID.
+ * @param array  $post POST data.
  *
  * @return message
  */
-function my_calendar_save_group( $action, $output, $event_id = false ) {
+function my_calendar_save_group( $action, $output, $event_id = false, $post = array() ) {
 	global $wpdb, $event_author;
 	$proceed = $output[0];
 	$message = '';
@@ -155,10 +156,12 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 			$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%f', '%f' );
 
 			$result = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
-			// Translators: Calendar URL.
+
 			$edit_url = '<a href="' . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event_id" ) . '" class="button-secondary">' . __( 'Edit Event', 'my-calendar' ) . '</a>';
-			$view_url = ' <a href="' . mc_get_details_link( $event_id ) . '" class="button-secondary">' . __( 'View Event', 'my-calendar' ) . '</a>';
+			$view_url = ' <a href="' . mc_get_details_link( mc_get_first_event( $event_id ) ) . '" class="button-secondary">' . __( 'View Event', 'my-calendar' ) . '</a>';
 			$url      = $edit_url . $view_url;
+			// Make sure POST data is available in update array.
+			$update = array_merge( $update, $post );
 			// Same as action on basic save.
 			mc_event_post( 'edit', $update, $event_id, $result );
 			do_action( 'mc_save_event', 'edit', $update, $event_id, $result );
@@ -316,13 +319,13 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	<div class="metabox-holder">
 	<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ); ?>">
 	<div>
-		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-		<input type="hidden" name="group_id" value="<?php echo absint( $group_id ); ?>"/>
-		<input type="hidden" name="event_action" value="<?php echo esc_attr( $mode ); ?>"/>
-		<input type="hidden" name="event_id" value="<?php echo absint( $event_id ); ?>"/>
-		<input type="hidden" name="event_author" value="<?php echo absint( $user_ID ); ?>"/>
-		<input type="hidden" name="event_post" value="<?php echo absint( $data->event_post ); ?>"/>
-		<input type="hidden" name="event_nonce_name" value="<?php echo wp_create_nonce( 'event_nonce' ); ?>"/>
+		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+		<input type="hidden" name="group_id" value="<?php echo absint( $group_id ); ?>" />
+		<input type="hidden" name="event_action" value="<?php echo esc_attr( $mode ); ?>" />
+		<input type="hidden" name="event_id" value="<?php echo absint( $event_id ); ?>" />
+		<input type="hidden" name="event_author" value="<?php echo absint( $user_ID ); ?>" />
+		<input type="hidden" name="event_post" value="group" />
+		<input type="hidden" name="event_nonce_name" value="<?php echo wp_create_nonce( 'event_nonce' ); ?>" />
 	</div>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
