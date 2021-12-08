@@ -1,3 +1,7 @@
+.mc-main {
+	line-height: 1.62;
+}
+
 .mc-main .my-calendar-header, .mc-main .my-calendar-footer {
 	padding: .5em 0;
 }
