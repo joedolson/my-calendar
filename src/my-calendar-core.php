@@ -1402,7 +1402,7 @@ function mc_scripts() {
 	if ( 'toplevel_page_my-calendar' === $id && function_exists( 'wpt_post_to_twitter' ) ) {
 		wp_enqueue_script( 'charCount', plugins_url( 'wp-to-twitter/js/jquery.charcount.js' ), array( 'jquery' ) );
 	}
-	if ( 'toplevel_page_my-calendar' === $id ) {
+	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {
 		if ( current_user_can( 'mc_manage_events' ) ) {
 			wp_enqueue_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ) );
 			$event_id = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : '';
