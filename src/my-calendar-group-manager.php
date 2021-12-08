@@ -156,7 +156,9 @@ function my_calendar_save_group( $action, $output, $event_id = false ) {
 
 			$result = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
 			// Translators: Calendar URL.
-			$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
+			$edit_url = '<a href="' . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event_id" ) . '" class="button-secondary">' . __( 'Edit Event', 'my-calendar' ) . '</a>';
+			$view_url = ' <a href="' . mc_get_details_link( $event_id ) . '" class="button-secondary">' . __( 'View Event', 'my-calendar' ) . '</a>';
+			$url      = $edit_url . $view_url;
 			// Same as action on basic save.
 			mc_event_post( 'edit', $update, $event_id, $result );
 			do_action( 'mc_save_event', 'edit', $update, $event_id, $result );
