@@ -59,6 +59,13 @@ function my_calendar_api() {
 					'search'   => $search,
 					'source'   => 'api',
 				);
+				/**
+				 * Filter arguments submitted to the API.
+				 *
+				 * @param array $args Keys: ['from', 'to', 'category', 'ltype', 'lvalue', 'author', 'host', 'search'].
+				 *
+				 * @return array
+				 */
 				$args     = apply_filters( 'mc_filter_api_args', $args, $_REQUEST );
 				$data     = my_calendar_events( $args );
 				$output   = mc_format_api( $data, $format );
