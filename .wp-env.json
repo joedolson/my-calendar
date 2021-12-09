@@ -3,7 +3,7 @@
 	"plugins": [ "." ],
 	"env": {
 		"mappings": {
-			"wp-content/plugins/my-calendar": "./src",
+			"wp-content/plugins/my-calendar": "./src"
 		}
 	}
 }
