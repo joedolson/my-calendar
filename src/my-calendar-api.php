@@ -381,6 +381,13 @@ function my_calendar_ical() {
  */
 function mc_api_format_ical( $data, $context ) {
 	$templates = mc_ical_template();
+	/**
+	 * Filter iCal template for multi-event output.
+	 *
+	 * @param string $templates['template'] Template string.
+	 *
+	 * @return string
+	 */
 	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
 	$events    = mc_flatten_array( $data );
 	$output    = '';
