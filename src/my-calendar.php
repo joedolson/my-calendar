@@ -449,7 +449,15 @@ function my_calendar_menu() {
 		add_submenu_page( null, __( 'My Calendar Contextual Help', 'my-calendar' ), __( 'My Calendar Contextual Help', 'my-calendar' ), 'manage_options', 'mc-contextual-help', 'mc_print_contextual_help' );
 	}
 	if ( function_exists( 'mcs_submissions' ) ) {
-		$permission = apply_filters( 'mcs_submission_permissions', 'manage_options' );
+		$capability = 'manage_options';
+		/**
+		 * Filter user capability required to use the My Calendar Pro front-end submissions.
+		 *
+		 * @param string $capability A capability string.
+		 *
+		 * @return string
+		 */
+		$permission = apply_filters( 'mcs_submission_permissions', $capability );
 		add_action( 'admin_head', 'my_calendar_sub_js' );
 		add_action( 'admin_head', 'my_calendar_sub_styles' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Pro Settings', 'my-calendar' ), __( 'My Calendar Pro', 'my-calendar' ), $permission, 'my-calendar-submissions', 'mcs_settings' );
