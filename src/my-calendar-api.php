@@ -257,6 +257,13 @@ URL;VALUE=URI:{link}
 DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_desc}$alert$all_day
 END:VEVENT
 END:VCALENDAR";
+		/**
+		 * Filter template for a single iCal event download.
+		 *
+		 * @param string $template iCal template.
+		 *
+		 * @return string
+		 */
 		$template = apply_filters( 'mc_single_ical_template', $template, $array );
 		$output   = mc_draw_template( $array, $template );
 	}
@@ -315,8 +322,23 @@ function my_calendar_ical() {
 		$from = "$y-$m-1";
 		$to   = "$ny-$nm-$d";
 	}
-
+	/**
+	 * Filter iCal download 'from' date.
+	 *
+	 * @param string $from Date string.
+	 * @param string $p Date span.
+	 *
+	 * @return string
+	 */
 	$from = apply_filters( 'mc_ical_download_from', $from, $p );
+	/**
+	 * Filter iCal download 'to' date.
+	 *
+	 * @param string $from Date string.
+	 * @param string $p Date span.
+	 *
+	 * @return string
+	 */
 	$to   = apply_filters( 'mc_ical_download_to', $to, $p );
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
 	$args = array(
@@ -332,6 +354,14 @@ function my_calendar_ical() {
 		'site'     => $site,
 	);
 
+	/**
+	 * Filter calendar arguments for iCal downloads.
+	 *
+	 * @param array $args Array of calendar query args.
+	 * @param array $get GET data.
+	 *
+	 * @return array
+	 */
 	$args = apply_filters( 'mc_ical_attributes', $args, $_GET );
 	// Load search result from $_SESSION array.
 	if ( isset( $_GET['searched'] ) && $_GET['searched'] && isset( $_SESSION['MC_SEARCH_RESULT'] ) ) {
