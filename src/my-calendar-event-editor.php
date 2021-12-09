@@ -1191,6 +1191,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	global $wpdb, $user_ID;
 	$has_data = ( empty( $data ) ) ? false : true;
 	if ( $data ) {
+		// This was previously only shown if $data was an object. Don't know why.
 		$test = mc_test_occurrence_overlap( $data );
 	}
 	$instance = ( isset( $_GET['date'] ) ) ? (int) $_GET['date'] : false;
