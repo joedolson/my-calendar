@@ -2,18 +2,12 @@ name: Unit Testing
 
 on:
   push:
-    branches:
-      - trunk
-    # Only run if PHP-related files changed.
     paths:
       - '.github/workflows/php-test.yml'
       - '**.php'
       - 'phpunit.xml.dist'
       - 'composer.json'
   pull_request:
-    branches:
-      - trunk
-    # Only run if PHP-related files changed.
     paths:
       - '.github/workflows/php-test.yml'
       - '**.php'
