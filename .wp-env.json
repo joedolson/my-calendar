@@ -2,8 +2,10 @@
 	"core": null,
 	"plugins": [ "." ],
 	"env": {
-		"mappings": {
-			"wp-content/plugins/my-calendar": "./src"
+		"tests": {
+			"mappings": {
+				"wp-content/plugins/my-calendar": "./src"
+			}
 		}
 	}
 }
