@@ -50,12 +50,20 @@ function mc_time_html( $e, $type ) {
 	$br          = ( $time_end || $time_start ) ? '<br />' : '';
 
 	$time_content  = '<span class="time-wrapper">' . $time_start . ' ' . $t_separator . ' ' . $time_end . '</span>' . $br . '<span class="date-wrapper">' . $date_start . ' ' . $d_separator . ' ' . $date_end . '</span>';
-	$time_content .= apply_filters( 'mcs_end_time_block', '', $e );
-	$time          = "
+
+	$time = "
 	<div class='time-block'>
 		<p>$time_content</p>
 	</div>";
 
+	/**
+	 * Filter time block output. 
+	 *
+	 * @param string $time HTML time block output.
+	 * @param object $e Event object.
+	 *
+	 * @return string
+	 */
 	return apply_filters( 'mcs_time_block', $time, $e );
 }
 
