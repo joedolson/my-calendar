@@ -2726,14 +2726,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
 					if ( $begin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
-
-						return $data;
-					}
-					if ( 'test' === $test && $i > 0 ) {
-						return $data;
+						continue;
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2759,13 +2758,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
 					if ( $begin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
-						return $data;
-					}
-					if ( 'test' === $test && $i > 0 ) {
-						return $data;
+						continue;
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2789,13 +2788,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
 					if ( $begin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
-						return $data;
-					}
-					if ( 'test' === $test && $i > 0 ) {
-						return $data;
+						continue;
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2819,13 +2818,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
 					if ( $begin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
-						return $data;
-					}
-					if ( 'test' === $test && $i > 0 ) {
-						return $data;
+						continue;
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2849,13 +2848,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
 					if ( $begin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
-						return $data;
-					}
-					if ( 'test' === $test && $i > 0 ) {
-						return $data;
+						continue;
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2911,13 +2910,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend, false ),
 						'occur_group_id' => $group_id,
 					);
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
 					if ( $newbegin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
-						return $data;
-					}
-					if ( 'test' === $test && $i > 0 ) {
-						return $data;
+						continue;
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2943,13 +2942,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
+					if ( 'test' === $test && $i > 0 ) {
+						return $data;
+					}
 					if ( $begin <= strtotime( $post_until ) ) {
 						$numforward ++;
 					} else {
-						return $data;
-					}
-					if ( 'test' === $test && $i > 0 ) {
-						return $data;
+						continue;
 					}
 					$return[] = $data;
 					if ( ! $test ) {
