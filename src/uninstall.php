@@ -146,6 +146,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_default_location' );
 		delete_option( 'mc_gmap_api_key' );
 		delete_option( 'mc_locations_transitioned' );
+		delete_option( 'mc_style_vars' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
