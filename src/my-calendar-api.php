@@ -221,6 +221,15 @@ function mc_generate_vcal( $event_id = false ) {
 		$event = mc_get_event( $mc_id );
 		// need to modify date values to match real values using date above.
 		$array = mc_create_tags( $event );
+		/**
+		 * Add an alarm to an event.
+		 *
+		 * @param array $array Empty array.
+		 * @param int   $event_id Event ID.
+		 * @param int   $post_id Post ID.
+		 *
+		 * @return array
+		 */
 		$alarm = apply_filters( 'mc_event_has_alarm', array(), $event_id, $array['post'] );
 		$alert = '';
 		if ( ! empty( $alarm ) ) {

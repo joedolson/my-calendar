@@ -26,5 +26,5 @@
         "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
         "lint": "phpcs --standard=phpcs.xml.dist",
         "test": "phpunit -c phpunit.xml.dist --verbose"
-  }
+    }
 }
