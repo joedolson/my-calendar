@@ -372,7 +372,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					<?php
 				} else {
 					?>
-					<div><input type='hidden' name='event_span' value='<?php echo esc_attr( $data->event_span ); ?>'/></div>
+					<div><input type='hidden' name='event_span' value='<?php echo esc_attr( $data->event_span ); ?>' /></div>
 					<?php
 				}
 				if ( mc_show_edit_block( 'event_desc' ) ) {
