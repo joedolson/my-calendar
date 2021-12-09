@@ -33,7 +33,7 @@ function my_calendar_api() {
 				$from   = ( isset( $_REQUEST['from'] ) ) ? $_REQUEST['from'] : current_time( 'Y-m-d' );
 				$range  = '+ 7 days';
 				/**
-				 * Default date for API 'to' parameter. 
+				 * Default date for API 'to' parameter.
 				 *
 				 * @param string $time time string convertable using strtotime.
 				 *
@@ -66,9 +66,9 @@ function my_calendar_api() {
 				 *
 				 * @return array
 				 */
-				$args     = apply_filters( 'mc_filter_api_args', $args, $_REQUEST );
-				$data     = my_calendar_events( $args );
-				$output   = mc_format_api( $data, $format );
+				$args   = apply_filters( 'mc_filter_api_args', $args, $_REQUEST );
+				$data   = my_calendar_events( $args );
+				$output = mc_format_api( $data, $format );
 				echo wp_kses_post( $output );
 			}
 			die;
