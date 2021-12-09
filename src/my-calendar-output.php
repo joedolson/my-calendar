@@ -49,7 +49,7 @@ function mc_time_html( $e, $type ) {
 	$d_separator = ( $date_end ) ? "<span class='date-separator'> &ndash; </span>" : '';
 	$br          = ( $time_end || $time_start ) ? '<br />' : '';
 
-	$time_content  = '<span class="time-wrapper">' . $time_start . ' ' . $t_separator . ' ' . $time_end . '</span>' . $br . '<span class="date-wrapper">' . $date_start . ' ' . $d_separator . ' ' . $date_end . '</span>';
+	$time_content = '<span class="time-wrapper">' . $time_start . ' ' . $t_separator . ' ' . $time_end . '</span>' . $br . '<span class="date-wrapper">' . $date_start . ' ' . $d_separator . ' ' . $date_end . '</span>';
 
 	$time = "
 	<div class='time-block'>
@@ -57,7 +57,7 @@ function mc_time_html( $e, $type ) {
 	</div>";
 
 	/**
-	 * Filter time block output. 
+	 * Filter time block output.
 	 *
 	 * @param string $time HTML time block output.
 	 * @param object $e Event object.
