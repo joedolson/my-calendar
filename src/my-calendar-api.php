@@ -19,7 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) {
 		if ( 'true' === get_option( 'mc_api_enabled' ) ) {
-			// use this filter to add custom scripting handling API keys.
+			/**
+			 * Filter to test access to the event API.
+			 *
+			 * @param bool true Allows all by default.
+			 *
+			 * @return bool
+			 */
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
 				$format = ( isset( $_REQUEST['my-calendar-api'] ) ) ? $_REQUEST['my-calendar-api'] : 'json';
