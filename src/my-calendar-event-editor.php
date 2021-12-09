@@ -1191,10 +1191,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	global $wpdb, $user_ID;
 	$has_data = ( empty( $data ) ) ? false : true;
 	if ( $data ) {
-		// Don't execute occurrence test if displaying pre-process error messages.
-		if ( ! is_object( $data ) ) {
-			$test = mc_test_occurrence_overlap( $data );
-		}
+		$test = mc_test_occurrence_overlap( $data );
 	}
 	$instance = ( isset( $_GET['date'] ) ) ? (int) $_GET['date'] : false;
 	if ( $instance ) {
