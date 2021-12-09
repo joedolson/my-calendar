@@ -275,6 +275,13 @@ function mc_canonical() {
  * @param boolean             $remove Hide commercial blocks.
  */
 function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
+	/**
+	 * Inject a sidebar panel in the My Calendar admin.
+	 *
+	 * @param array $add Array with headings as keys and content as values.
+	 *
+	 * @return array
+	 */
 	$add = apply_filters( 'mc_custom_sidebar_panels', $add );
 
 	if ( current_user_can( 'mc_view_help' ) ) {
