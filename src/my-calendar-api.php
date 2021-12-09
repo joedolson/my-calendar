@@ -388,9 +388,9 @@ function mc_api_format_ical( $data, $context ) {
 	 *
 	 * @return string
 	 */
-	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
-	$events    = mc_flatten_array( $data );
-	$output    = '';
+	$template = apply_filters( 'mc_filter_ical_template', $templates['template'] );
+	$events   = mc_flatten_array( $data );
+	$output   = '';
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
