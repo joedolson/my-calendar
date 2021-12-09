@@ -26,8 +26,7 @@
     "prelint-php": "wp-env run composer 'install --no-interaction'",
     "lint-php": "wp-env run composer run-script lint",
     "pretest-php": "wp-env run composer 'install --no-interaction'",
-    "test-php": "wp-env run phpunit 'phpunit -c /var/www/html/wp-content/plugins/my-calendar/src/phpunit.xml.dist --verbose'",
-    "pretest-php-multisite": "wp-env run composer 'install --no-interaction'",
+    "test-php": "wp-env run phpunit 'phpunit -c /var/www/html/wp-content/plugins/my-calendar/phpunit.xml.dist --verbose'",
     "wp-env": "wp-env"
   }
 }
