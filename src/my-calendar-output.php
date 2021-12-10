@@ -1311,8 +1311,8 @@ function my_calendar( $args ) {
 				$events_class = mc_events_class( $day, $from );
 				$event_output = my_calendar_draw_events( $day, $params, $from, $template, $id );
 				if ( ! empty( $event_output ) ) {
-					$mc_events   .= $event_output['html'];
-					$json         = array( $event_output['json'] );
+					$mc_events .= $event_output['html'];
+					$json       = array( $event_output['json'] );
 				}
 			}
 			$body .= $heading . $top . '
