@@ -119,7 +119,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			}
 		}
 		if ( '' === $event_output ) {
-			return '';
+			return array();
 		}
 		if ( 'mini' === $type && count( $events ) > 0 ) {
 			$end .= '</div>';
@@ -1306,12 +1306,14 @@ function my_calendar( $args ) {
 			$mc_events    = '';
 			$events       = my_calendar_events( $query );
 			$events_class = '';
-
+			$json         = '';
 			foreach ( $events as $day ) {
 				$events_class = mc_events_class( $day, $from );
-				$events       = my_calendar_draw_events( $day, $params, $from, $template, $id );
-				$mc_events   .= $events['html'];
-				$json         = array( $events['json'] );
+				$event_output = my_calendar_draw_events( $day, $params, $from, $template, $id );
+				if ( ! empty( $event_output ) ) {
+					$mc_events   .= $event_output['html'];
+					$json         = array( $event_output['json'] );
+				}
 			}
 			$body .= $heading . $top . '
 			<div class="mc-content">
@@ -1399,8 +1401,11 @@ function my_calendar( $args ) {
 									$event_output = ' ';
 								} else {
 									$events_array = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
-									$event_output = $events_array['html'];
-									$json[]       = $events_array['json'];
+									$event_output = ' ';
+									if ( ! empty( $events_array ) ) {
+										$event_output = $events_array['html'];
+										$json[]       = $events_array['json'];
+									}
 								}
 							}
 							if ( true === $event_output ) {
