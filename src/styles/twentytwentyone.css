@@ -733,3 +733,17 @@
 	display: inline-block;
 	text-transform: none;
 }
+
+.my-calendar-mask.mc-mask-active {
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
+	top: 0;
+	left: 0;
+	z-index: 10000;
+	background: #0003;
+}
+
+.mc-main .calendar-event .details {
+	z-index: 10001 !important;
+}
