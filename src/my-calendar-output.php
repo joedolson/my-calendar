@@ -1761,11 +1761,14 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
  */
 function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 	$locations = mc_get_list_locations( $datatype );
+	$datatype  = ( 'name' == $datatype ) ? 'location_label' : $datatype;
 	$output    = '';
 	if ( $locations ) {
 		if ( 'map' === $template ) {
 			$output = mc_generate_map( $locations, 'location', true );
 		} else {
+			// If no template provided, return hcard.
+			$datatype = ( '' === trim( $template ) ) ? 'hcard' : $datatype;
 			foreach ( $locations as $key => $value ) {
 				if ( 'hcard' !== $datatype && '' !== $template ) {
 					$label   = stripslashes( $value->{$datatype} );
@@ -1798,7 +1801,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 					$output .= ( '' !== $label ) ? "<li>$label</li>" : '';
 				}
 			}
-			$output .= '<ul class="mc-locations">' . $output . '</ul>';
+			$output = '<ul class="mc-locations">' . $output . '</ul>';
 		}
 
 		$output = apply_filters( 'mc_location_list', $output, $locations );
