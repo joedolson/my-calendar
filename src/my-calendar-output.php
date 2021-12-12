@@ -1761,7 +1761,7 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
  */
 function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 	$locations = mc_get_list_locations( $datatype );
-	$datatype  = ( 'name' == $datatype ) ? 'location_label' : $datatype;
+	$datatype  = ( 'name' === $datatype ) ? 'location_label' : $datatype;
 	$output    = '';
 	if ( $locations ) {
 		if ( 'map' === $template ) {
