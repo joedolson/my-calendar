@@ -1074,6 +1074,14 @@ label[for=e_host] {
 	margin-right: 6px;
 }
 
+.locations-container .columns-flex {
+	align-items: end;
+}
+
+.locations-container .columns-flex .checkboxes {
+	margin: 1em 0;
+}
+
 .generator fieldset {
 	border: 1px solid #c3c4c7;
 	margin: 10px 0;

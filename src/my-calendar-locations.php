@@ -428,7 +428,11 @@ function my_calendar_add_locations() {
 function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 	$cur_loc = false;
 	if ( '' !== $loc_id ) {
-		$cur_loc = mc_get_location( $loc_id );
+		$update_location = false;
+		if ( isset( $_POST['update_gps'] ) ) {
+			$update_location = 'force';
+		}
+		$cur_loc = mc_get_location( $loc_id, $update_location );
 	}
 	$has_data = ( empty( $cur_loc ) ) ? false : true;
 	if ( 'add' === $view ) {
@@ -542,8 +546,8 @@ function mc_show_location_form( $view = 'add', $loc_id = '' ) {
 /**
  * Get details about one location.
  *
- * @param int  $location_id Location ID.
- * @param bool $update_location Whether to update location on fetch.
+ * @param int         $location_id Location ID.
+ * @param bool|string $update_location Whether to update location on fetch. 'Force' to force update.
  *
  * @return object location
  */
@@ -559,8 +563,13 @@ function mc_get_location( $location_id, $update_location = true ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
 		if ( $update_location ) {
 			if ( get_option( 'mc_gmap_api_key' ) ) {
-				$latitude  = ( '0.000000' === (string) $location->location_latitude ) ? false : true;
-				$longitude = ( '0.000000' === (string) $location->location_longitude ) ? false : true;
+				if ( 'force' === $update_location ) {
+					$latitude  = false;
+					$longitude = false;
+				} else {
+					$latitude  = ( '0.000000' === (string) $location->location_latitude ) ? false : true;
+					$longitude = ( '0.000000' === (string) $location->location_longitude ) ? false : true;
+				}
 				if ( ! $latitude || ! $longitude ) {
 					$loc = mc_get_location_coordinates( $location_id );
 					$lat = isset( $loc['latitude'] ) ? $loc['latitude'] : '';
@@ -569,6 +578,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 					if ( $lat && $lng ) {
 						mc_update_location( 'location_longitude', $lng, $location_id );
 						mc_update_location( 'location_latitude', $lat, $location_id );
+						$location->location_longitude = $lng;
+						$location->location_latitude  = $lat;
 					}
 				}
 			}
@@ -766,6 +777,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$event_url    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_url'} ) ) : '';
 	$event_lat    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_latitude'} ) ) : '';
 	$event_lon    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_longitude'} ) ) : '';
+	$update_gps   = ( $has_data && get_option( 'mc_gmap_api_key', '' ) && 'location' === $context ) ? '<p class="checkboxes"><input type="checkbox" value="1" id="update_gps" name="update_gps" /> <label for="update_gps">' . __( 'Update GPS Coordinates', 'my-calendar' ) . '</label></p>' : '';
 	$return      .= '</p>
 	<p>
 	<label for="e_zoom">' . __( 'Initial Zoom', 'my-calendar' ) . $compare_zoom . '</label>
@@ -782,7 +794,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	<fieldset>
 	<legend>' . __( 'GPS Coordinates (optional)', 'my-calendar' ) . '</legend>
 	<p>
-	' . __( 'If you supply GPS coordinates for your location, they will be used in place of any other address information to provide your map link.', 'my-calendar' ) . '
+	' . __( 'Coordinates are used for placing the pin on your map when available.', 'my-calendar' ) . '
 	</p>
 	<div class="columns-flex">
 	<p>
@@ -790,7 +802,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</p>
 	<p>
 		<label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
-	</p>
+	</p>' . $update_gps . '
 	</div>
 	</fieldset>';
 	$return      .= apply_filters( 'mc_location_container_primary', '', $data, $context );
