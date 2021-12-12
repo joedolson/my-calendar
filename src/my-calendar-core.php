@@ -932,27 +932,38 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_process_shortcodes' );
 				// Remap display settings.
 				$settings   = array();
-				$settings[] = ( 'true' === get_option( 'mc_display_author' ) ) ? 'author' : '';
-				$settings[] = ( 'true' === get_option( 'mc_display_host' ) ) ? 'host' : '';
-				$settings[] = ( 'true' === get_option( 'mc_show_event_vcal' ) ) ? 'ical' : '';
-				$settings[] = ( 'true' === get_option( 'mc_show_gcal' ) ) ? 'gcal' : '';
-				$settings[] = ( 'true' === get_option( 'mc_show_map' ) ) ? 'gmap_link' : '';
-				$settings[] = ( 'true' === get_option( 'mc_gmap' ) ) ? 'gmap' : '';
-				$settings[] = ( 'true' === get_option( 'mc_show_address' ) ) ? 'address' : '';
-				$settings[] = ( 'true' === get_option( 'mc_short' ) ) ? 'excerpt' : '';
-				$settings[] = ( 'true' === get_option( 'mc_desc' ) ) ? 'description' : '';
-				$settings[] = ( 'true' === get_option( 'mc_image' ) ) ? 'image' : '';
-				$settings[] = ( 'true' === get_option( 'mc_event_registration' ) ) ? 'tickets' : '';
-				$settings[] = ( 'true' === get_option( 'mc_event_link' ) ) ? 'link' : '';
-				$settings[] = ( 'true' === get_option( 'mc_display_more' ) ) ? 'more' : '';
-				foreach ( $settings as $key => $value ) {
-					if ( '' === $value ) {
-						unset( $settings[ $key ] );
+				$single     = get_option( 'mc_display_single', array() );
+				$main       = get_option( 'mc_display_main', array() );
+				$mini       = get_option( 'mc_display_mini', array() );
+				if ( empty( $single ) || empty( $main ) || empty( $mini ) ) {
+					$settings[] = ( 'true' === get_option( 'mc_display_author' ) ) ? 'author' : '';
+					$settings[] = ( 'true' === get_option( 'mc_display_host' ) ) ? 'host' : '';
+					$settings[] = ( 'true' === get_option( 'mc_show_event_vcal' ) ) ? 'ical' : '';
+					$settings[] = ( 'true' === get_option( 'mc_show_gcal' ) ) ? 'gcal' : '';
+					$settings[] = ( 'true' === get_option( 'mc_show_map' ) ) ? 'gmap_link' : '';
+					$settings[] = ( 'true' === get_option( 'mc_gmap' ) ) ? 'gmap' : '';
+					$settings[] = ( 'true' === get_option( 'mc_show_address' ) ) ? 'address' : '';
+					$settings[] = ( 'true' === get_option( 'mc_short' ) ) ? 'excerpt' : '';
+					$settings[] = ( 'true' === get_option( 'mc_desc' ) ) ? 'description' : '';
+					$settings[] = ( 'true' === get_option( 'mc_image' ) ) ? 'image' : '';
+					$settings[] = ( 'true' === get_option( 'mc_event_registration' ) ) ? 'tickets' : '';
+					$settings[] = ( 'true' === get_option( 'mc_event_link' ) ) ? 'link' : '';
+					$settings[] = ( 'true' === get_option( 'mc_display_more' ) ) ? 'more' : '';
+					foreach ( $settings as $key => $value ) {
+						if ( '' === $value ) {
+							unset( $settings[ $key ] );
+						}
+					}
+					if ( empty( $single ) ) {
+						add_option( 'mc_display_single', $settings );
+					}
+					if ( empty( $main ) ) {
+						add_option( 'mc_display_main', $settings );
+					}
+					if ( empty( $mini ) ) {
+						add_option( 'mc_display_mini', $settings );
 					}
 				}
-				add_option( 'mc_display_single', $settings );
-				add_option( 'mc_display_main', $settings );
-				add_option( 'mc_display_mini', $settings );
 				add_option( 'mc_drop_settings', 'true' );
 				delete_option( 'mc_display_author' );
 				delete_option( 'mc_display_host' );
@@ -998,7 +1009,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				mc_transition_categories();
 				break;
 			case '2.4.4': // 8-11-2015 (2.4.0).
-				add_option( 'mc_display_more', 'true' );
 				$input_options               = get_option( 'mc_input_options' );
 				$input_options['event_host'] = 'on';
 				update_option( 'mc_input_options', $input_options );
