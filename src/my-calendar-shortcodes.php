@@ -162,11 +162,14 @@ function my_calendar_show_locations_list( $atts ) {
 	$args = shortcode_atts(
 		array(
 			'datatype' => 'name',
+			'sort'     => '',
 			'template' => '',
 		),
 		$atts,
 		'my_calendar_locations_list'
 	);
+	// Sort replaces 'datatype'.
+	$sort = ( '' !== $args['sort'] ) ? $args['sort'] : $args['datatype'];
 
 	return my_calendar_show_locations( $args['datatype'], $args['template'] );
 }
