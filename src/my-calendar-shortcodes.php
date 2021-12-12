@@ -171,7 +171,7 @@ function my_calendar_show_locations_list( $atts ) {
 	// Sort replaces 'datatype'.
 	$sort = ( '' !== $args['sort'] ) ? $args['sort'] : $args['datatype'];
 
-	return my_calendar_show_locations( $args['datatype'], $args['template'] );
+	return my_calendar_show_locations( $sort, $args['template'] );
 }
 
 /**
