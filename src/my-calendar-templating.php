@@ -286,7 +286,7 @@ function mc_templates_edit() {
 			);
 			?>
 				<div class="mc-template-preview">
-					<iframe onload="resizeIframe(this)" title="<?php esc_attr_e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
+					<iframe class="mc-iframe" onload="resizeIframe(this)" title="<?php esc_attr_e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
 				</div>
 			<?php
 		}

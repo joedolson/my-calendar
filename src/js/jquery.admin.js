@@ -396,7 +396,7 @@ jQuery(document).ready(function ($) {
 			window.location.hash = tabPanelToOpen;
 		}
 		document.getElementById(tabPanelToOpen).setAttribute( 'aria-hidden', 'false' ); //show tabpanel
-		iframes = $( 'iframe' );
+		var iframes = $( 'iframe.mc-iframe' );
 		for ( var i = 0; i < iframes.length; i++ ) {
 			iframe = iframes[i];
 			resizeIframe(iframe);

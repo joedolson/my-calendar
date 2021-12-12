@@ -1518,7 +1518,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					}
 					?>
 					<div class="mc-template-tag-preview">
-						<iframe title="<?php echo esc_attr( __( 'Event Template Tag Preview', 'my-calendar' ) ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
+						<iframe class="mc-iframe" title="<?php echo esc_attr( __( 'Event Template Tag Preview', 'my-calendar' ) ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
 					</div>
 				</div>
 			</div>
