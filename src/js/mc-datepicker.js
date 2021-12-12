@@ -19,24 +19,24 @@ pickers.forEach((picker) => {
 		format(date) {
 			switch ( duetFormats.date ) {
 				case 'Y-m-d':
-					return `${date.getFullYear() + 1}-${date.getMonth()}-${date.getDate()}`
+					return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 					break;
 				case 'm/d/Y':
 					return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
 					break;
 				case 'd-m-Y':
-					return `${date.getDate() + 1}-${date.getMonth()}-${date.getFullYear()}`
+					return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 					break;
 				case 'j F Y':
 					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'long' } ).format( date );
-					return `${date.getDate() + 1} ${fullMonth} ${date.getFullYear()}`
+					return `${date.getDate()} ${fullMonth} ${date.getFullYear()}`
 					break;
 				case 'M j, Y':
 					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'short' } ).format( date );
-					return `${date.getDate() + 1} ${fullMonth}, ${date.getFullYear()}`
+					return `${date.getDate()} ${fullMonth}, ${date.getFullYear()}`
 					break;
 				default:
-					return `${date.getFullYear() + 1}/${date.getMonth()}/${date.getDate()}`
+					return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
 			}
 		},
 	}
