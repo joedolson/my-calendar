@@ -28,7 +28,8 @@ function mc_update_location_post( $where, $data, $post ) {
 	$post_id     = mc_get_location_post( $location_id, false );
 	// If, after all that, the post doesn't exist, create it.
 	if ( ! get_post_status( $post_id ) ) {
-		$post_id = mc_create_location_post( $location_id, $data, $post );
+		$post['update'] = 'true';
+		$post_id        = mc_create_location_post( $location_id, $data, $post );
 	}
 	$title       = $data['location_label'];
 	$post_status = 'publish';
@@ -85,7 +86,11 @@ function mc_create_location_post( $location_id, $data, $post = array() ) {
 			'post_type'   => $type,
 		);
 		$post_id     = wp_insert_post( $my_post );
-		mc_update_location_post_relationship( $location_id, $post_id );
+		if ( isset( $post['update'] ) ) {
+			mc_update_location_post_relationship( $location_id, $post_id );
+		} else {
+			mc_transition_location( $location_id, $post_id );
+		}
 
 		do_action( 'mc_update_location_post', $post_id, $post, $data, $location_id );
 		wp_publish_post( $post_id );
