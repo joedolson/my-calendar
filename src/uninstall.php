@@ -24,6 +24,10 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 			delete_option( "mc_template_desc_$key" );
 			delete_option( "mc_ctemplate_$key" );
 		}
+		$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_category_icon_%'" );
+		foreach ( $results as $result ) {
+			delete_option( $result->option_name );
+		}
 	}
 
 	if ( get_option( 'mc_drop_settings' ) === 'true' ) {
@@ -150,6 +154,14 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_display_single' );
 		delete_option( 'mc_display_mini' );
 		delete_option( 'mc_display_main' );
+		delete_option( 'mc_multiple_categories' );
+		delete_option( 'mc_no_link' );
+		delete_option( 'mc_buy_tickets' );
+		delete_option( 'mc_view_full' );
+		delete_option( 'mc_month_format' );
+		delete_option( 'mc_multidate_format' );
+		delete_option( 'mc_cpt_base' );
+		delete_option( 'mc_location_cpt_base' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
