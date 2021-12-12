@@ -307,11 +307,12 @@ function mc_update_output_settings( $post ) {
 	$bottom = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
 	update_option( 'mc_bottomnav', $bottom );
 	update_option( 'mc_topnav', $top );
-
-	update_option( 'mc_display_single', array_map( 'sanitize_text_field', $post['mc_display_single'] ) );
-	update_option( 'mc_display_main', array_map( 'sanitize_text_field', $post['mc_display_main'] ) );
-	update_option( 'mc_display_mini', array_map( 'sanitize_text_field', $post['mc_display_mini'] ) );
-
+	$single = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
+	$main   = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
+	$mini   = ( empty( $post['mc_display_mini'] ) ) ? array() : $post['mc_display_mini'];
+	update_option( 'mc_display_single', array_map( 'sanitize_text_field', $single ) );
+	update_option( 'mc_display_main', array_map( 'sanitize_text_field', $main ) );
+	update_option( 'mc_display_mini', array_map( 'sanitize_text_field', $mini ) );
 	update_option( 'mc_gmap_api_key', ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '' );
 	update_option( 'mc_show_weekends', ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false' );
 	update_option( 'mc_convert', ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false' );
