@@ -1910,10 +1910,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 						'location_phone2'    => $event_phone2,
 						'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
 					);
-
-					$add_loc     = array_map( 'mc_kses_post', $add_loc );
-					$loc_formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
-					$wpdb->insert( my_calendar_locations_table(), $add_loc, $loc_formats );
+					$loc_id = mc_insert_location( $add_loc ) 
+					do_action( 'mc_save_location', $loc_id, $add_loc, $add_loc );
 				}
 			}
 		}
