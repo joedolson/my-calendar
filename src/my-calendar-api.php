@@ -388,14 +388,21 @@ function mc_api_format_ical( $data, $context ) {
 	 *
 	 * @return string
 	 */
-	$template = apply_filters( 'mc_filter_ical_template', $templates['template'] );
-	$events   = mc_flatten_array( $data );
-	$output   = '';
+	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
+	$events    = mc_flatten_array( $data );
+	$output    = '';
+	$processed = array();
 	if ( is_array( $events ) && ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
 			if ( is_object( $event ) ) {
 				if ( ! mc_private_event( $event ) ) {
+					// Only include one recurring instance in collection.
+					if ( mc_is_recurring( $event ) && in_array( $event->event_id, $processed, true ) ) {
+						continue;
+					} else {
+						$processed[] = $event->event_id;
+					}
 					$array = mc_create_tags( $event, $context );
 					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
 					$alert = '';
@@ -408,7 +415,7 @@ function mc_api_format_ical( $data, $context ) {
 					}
 					$parse = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
 
-					$output .= "\n" . mc_draw_template( $array, $parse, 'ical' );
+					$output .= PHP_EOL . mc_draw_template( $array, $parse, 'ical' );
 				}
 			}
 		}
@@ -528,7 +535,7 @@ function mc_generate_rrule( $event ) {
 		$until = 'UNTIL=' . mc_date( 'Ymd\THis', strtotime( $repeat ), false ) . 'Z';
 	}
 
-	$rrule = ( '' !== $rrule ) ? PHP_EOL . "$rrule;$by;$interval;$until" . PHP_EOL : '';
+	$rrule = ( '' !== $rrule ) ? PHP_EOL . "RRULE:$rrule;$by;$interval;$until" . PHP_EOL : '';
 	$rrule = str_replace( array( ';;;', ';;' ), ';', $rrule );
 
 	return $rrule;
