@@ -913,10 +913,14 @@ function my_calendar_check() {
  * Given a valid upgrade path, execute it.
  *
  * @param string $upgrade_path Specific path to execute.
+ *
+ * @return bool
  */
 function mc_do_upgrades( $upgrade_path ) {
 	global $mc_version;
-
+	if ( empty( $upgrade_path ) ) {
+		return false;
+	}
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
 			case '3.3.0':
@@ -1004,6 +1008,8 @@ function mc_do_upgrades( $upgrade_path ) {
 				break;
 		}
 	}
+
+	return true;
 }
 
 add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
