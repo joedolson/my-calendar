@@ -153,17 +153,18 @@ add_action( 'wp_enqueue_scripts', 'mc_register_styles' );
  */
 function mc_register_styles() {
 	global $wp_query;
+	$version    = get_option( 'mc_version' );
 	$this_post  = $wp_query->get_queried_object();
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
-	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ) );
-	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ) );
-	wp_register_style( 'my-calendar-locations', plugins_url( 'css/locations.css', __FILE__ ), array( 'dashicons' ) );
+	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
+	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version );
+	wp_register_style( 'my-calendar-locations', plugins_url( 'css/locations.css', __FILE__ ), array( 'dashicons' ), $version );
 
 	if ( is_singular( 'mc-locations' ) ) {
 		wp_enqueue_style( 'my-calendar-locations' );
 	}
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
-	wp_register_style( 'my-calendar-admin-style', $admin_stylesheet );
+	wp_register_style( 'my-calendar-admin-style', $admin_stylesheet, array(), $version );
 
 	if ( current_user_can( 'mc_manage_events' ) ) {
 		wp_enqueue_style( 'my-calendar-admin-style' );
@@ -184,8 +185,8 @@ function mc_register_styles() {
 			if ( 'true' === get_option( 'mc_gmap' ) || mc_output_is_visible( 'gmap', 'single' ) || is_singular( 'mc-locations' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
 				if ( $api_key ) {
-					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key" );
-					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), '1.0.3', array(), true );
+					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array(), $version );
+					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array(), $version );
 					wp_localize_script(
 						'mc-maps',
 						'gmaps',
@@ -408,7 +409,8 @@ function mc_plugin_update_message() {
  */
 function mc_footer_js() {
 	global $wp_query;
-	$mcjs = "<script>(function ($) { 'use strict'; $(function () { $( '.mc-main' ).removeClass( 'mcjs' ); });}(jQuery));</script>";
+	$version = get_option( 'mc_version' );
+	$mcjs    = "<script>(function ($) { 'use strict'; $(function () { $( '.mc-main' ).removeClass( 'mcjs' ); });}(jQuery));</script>";
 
 	if ( mc_is_mobile() && apply_filters( 'mc_disable_mobile_js', false ) ) {
 
@@ -472,7 +474,7 @@ function mc_footer_js() {
 				if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ) );
+					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
 					wp_localize_script(
 						'mc.grid',
 						'mcgrid',
@@ -484,7 +486,7 @@ function mc_footer_js() {
 				if ( '1' !== get_option( 'mc_list_javascript' ) ) {
 					$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
+					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
 					wp_localize_script(
 						'mc.list',
 						'mclist',
@@ -496,7 +498,7 @@ function mc_footer_js() {
 				if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
 					$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
+					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
 					wp_localize_script(
 						'mc.mini',
 						'mcmini',
@@ -508,7 +510,7 @@ function mc_footer_js() {
 				if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
 					$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ) );
+					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
 					wp_localize_script(
 						'mc.ajax',
 						'mcAjax',
@@ -518,7 +520,7 @@ function mc_footer_js() {
 					);
 				}
 				if ( $enqueue_mcjs ) {
-					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ) );
+					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), $version );
 					wp_localize_script(
 						'mc.mcjs',
 						'my_calendar',
@@ -535,8 +537,9 @@ function mc_footer_js() {
 /**
  * Add stylesheets to My Calendar admin screens
  */
-function mc_add_styles() {
+function mc_admin_styles() {
 	global $current_screen;
+	$version    = get_option( 'mc_version' );
 	$id         = $current_screen->id;
 	$is_mc_page = isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'];
 
@@ -553,13 +556,13 @@ function mc_add_styles() {
 		}
 		$grid = ( 'grid' === $mode );
 		if ( $grid ) {
-			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ) );
-			wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ) );
+			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
+			wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 			wp_enqueue_style( 'my-calendar-admin-style' );
 			if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 				$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ) );
+				wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
 				wp_localize_script(
 					'mc.grid',
 					'mcgrid',
@@ -571,7 +574,7 @@ function mc_add_styles() {
 			if ( '1' !== get_option( 'mc_list_javascript' ) ) {
 				$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.list', $url, array( 'jquery' ) );
+				wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
 				wp_localize_script(
 					'mc.list',
 					'mclist',
@@ -583,7 +586,7 @@ function mc_add_styles() {
 			if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
 				$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ) );
+				wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
 				wp_localize_script(
 					'mc.mini',
 					'mcmini',
@@ -595,7 +598,7 @@ function mc_add_styles() {
 			if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
 				$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ) );
+				wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
 				wp_localize_script(
 					'mc.ajax',
 					'mcAjax',
@@ -605,7 +608,7 @@ function mc_add_styles() {
 				);
 			}
 			if ( $enqueue_mcjs ) {
-				wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ) );
+				wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), $version );
 				wp_localize_script(
 					'mc.mcjs',
 					'my_calendar',
@@ -615,7 +618,7 @@ function mc_add_styles() {
 				);
 			}
 		}
-		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ) );
+		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), $version );
 	}
 }
 
@@ -1294,8 +1297,8 @@ function mc_parse_date_format() {
  */
 function mc_enqueue_duet() {
 	global $mc_version;
-	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ) );
-	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ) );
+	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ),array(), $mc_version );
+	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $mc_version );
 	// Enqueue datepicker options.
 	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), $mc_version, true );
 	wp_localize_script(
@@ -1367,11 +1370,12 @@ add_action( 'admin_enqueue_scripts', 'mc_scripts' );
  */
 function mc_scripts() {
 	global $current_screen;
-	$id   = $current_screen->id;
-	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
+	$version = get_option( 'mc_version' );
+	$id      = $current_screen->id;
+	$slug    = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
-		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ) );
+		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 		wp_localize_script(
 			'mc.admin',
 			'mcAdmin',
@@ -1388,7 +1392,7 @@ function mc_scripts() {
 
 	wp_enqueue_style( 'wp-color-picker' );
 	// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
-	wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+	wp_enqueue_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), $version, true );
 
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-config' === $id ) {
 		wp_enqueue_script( 'jquery-ui-accordion' );
@@ -1403,8 +1407,8 @@ function mc_scripts() {
 	if ( $slug . '_page_my-calendar-locations' === $id || 'toplevel_page_my-calendar' === $id ) {
 		$api_key = get_option( 'mc_gmap_api_key' );
 		if ( $api_key ) {
-			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key" );
-			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), '1.0.3', array(), true );
+			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array(), $version );
+			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), '1.0.3', array(), $version );
 			wp_localize_script(
 				'mc-maps',
 				'gmaps',
@@ -1416,11 +1420,11 @@ function mc_scripts() {
 	}
 
 	if ( 'toplevel_page_my-calendar' === $id && function_exists( 'wpt_post_to_twitter' ) ) {
-		wp_enqueue_script( 'charCount', plugins_url( 'wp-to-twitter/js/jquery.charcount.js' ), array( 'jquery' ) );
+		wp_enqueue_script( 'charCount', plugins_url( 'wp-to-twitter/js/jquery.charcount.js' ), array( 'jquery' ), $version );
 	}
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {
 		if ( current_user_can( 'mc_manage_events' ) ) {
-			wp_enqueue_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ) );
+			wp_enqueue_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ), $version );
 			$event_id = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : '';
 			wp_localize_script(
 				'mc.ajax',
@@ -1440,7 +1444,7 @@ function mc_scripts() {
 					'security' => wp_create_nonce( 'mc-recurrence-nonce' ),
 				)
 			);
-			wp_enqueue_script( 'mc.ajaxcats', plugins_url( 'js/ajax-cats.js', __FILE__ ), array( 'jquery' ) );
+			wp_enqueue_script( 'mc.ajaxcats', plugins_url( 'js/ajax-cats.js', __FILE__ ), array( 'jquery' ), $version );
 			wp_localize_script(
 				'mc.ajaxcats',
 				'mc_cats',
@@ -1451,8 +1455,8 @@ function mc_scripts() {
 			);
 		}
 		if ( mc_count_locations() > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
-			wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
-			wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
+			wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
+			wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
 			wp_localize_script(
 				'mc-autocomplete',
 				'mclocations',
@@ -1466,8 +1470,8 @@ function mc_scripts() {
 	}
 
 	if ( $slug . '_page_my-calendar-config' === $id ) {
-		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
-		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
+		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
+		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
 		wp_localize_script(
 			'mc-autocomplete',
 			'mcpages',
@@ -1480,8 +1484,8 @@ function mc_scripts() {
 	}
 
 	if ( $slug . '_page_my-calendar-categories' === $id ) {
-		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ) );
-		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), '1.0.0', true );
+		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
+		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
 		wp_localize_script(
 			'mc-autocomplete',
 			'mcicons',

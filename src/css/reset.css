@@ -95,6 +95,9 @@ div.site-content, table {
 
 .mc-main nav ul {
 	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: .5rem;
 }
 
 .mc-main ol {

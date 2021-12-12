@@ -179,11 +179,12 @@ function mc_help_link( $link_text, $modal_title, $id, $echo = true ) {
  * Load modal for contextual help.
  */
 function mc_enqueue_modal_assets() {
+	$version = get_option( 'mc_version' );
 	// Load only for My Calendar admin pages.
 	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'] ) {
 		// Enqueue assets from WordPress.
 		wp_enqueue_style( 'thickbox' );
-		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), '1.0.0', true );
+		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), $version, true );
 	}
 }
 add_action( 'admin_enqueue_scripts', 'mc_enqueue_modal_assets' );
