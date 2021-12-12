@@ -147,6 +147,9 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_gmap_api_key' );
 		delete_option( 'mc_locations_transitioned' );
 		delete_option( 'mc_style_vars' );
+		delete_option( 'mc_display_single' );
+		delete_option( 'mc_display_mini' );
+		delete_option( 'mc_display_main' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
