@@ -934,10 +934,10 @@ function mc_do_upgrades( $upgrade_path ) {
 				// Shortcodes now executed by default.
 				delete_option( 'mc_process_shortcodes' );
 				// Remap display settings.
-				$settings   = array();
-				$single     = get_option( 'mc_display_single', array() );
-				$main       = get_option( 'mc_display_main', array() );
-				$mini       = get_option( 'mc_display_mini', array() );
+				$settings = array();
+				$single   = get_option( 'mc_display_single', array() );
+				$main     = get_option( 'mc_display_main', array() );
+				$mini     = get_option( 'mc_display_mini', array() );
 				if ( empty( $single ) || empty( $main ) || empty( $mini ) ) {
 					$settings[] = ( 'true' === get_option( 'mc_display_author' ) ) ? 'author' : '';
 					$settings[] = ( 'true' === get_option( 'mc_display_host' ) ) ? 'host' : '';
@@ -1297,7 +1297,7 @@ function mc_parse_date_format() {
  */
 function mc_enqueue_duet() {
 	global $mc_version;
-	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ),array(), $mc_version );
+	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), $mc_version );
 	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $mc_version );
 	// Enqueue datepicker options.
 	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), $mc_version, true );
