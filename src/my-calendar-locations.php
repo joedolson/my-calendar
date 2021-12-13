@@ -144,7 +144,7 @@ function mc_location_delete_post( $result, $location_id ) {
 	if ( $post ) {
 		wp_delete_post( $post, true );
 		// Delete post relationship.
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_location_relationships_table() . ' 	WHERE post_id = %d', $post ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_location_relationships_table() . ' 	WHERE post_id = %d', $post ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		do_action( 'mc_delete_location_posts', $location_id, $post );
 	}
 }
@@ -166,8 +166,8 @@ function mc_get_location_post( $location_id, $type = true ) {
 	}
 	$post_ids = $mcdb->get_results( $mcdb->prepare( 'SELECT post_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	// If there are multiple records for this post, delete extras.
-	$post_id  = false;
-	foreach( $post_ids as $rid ) {
+	$post_id = false;
+	foreach ( $post_ids as $rid ) {
 		$id = $rid->post_id;
 		if ( ! 'mc-locations' === get_post_type( $id ) ) {
 			$mcdb->query( $mcdb->prepare( 'DELETE FROM ' . my_calendar_location_relationships_table() . ' WHERE post_id = %d', $id ) );
