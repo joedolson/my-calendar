@@ -1774,7 +1774,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 					$label   = stripslashes( $value->{$datatype} );
 					$url     = mc_maplink( $value, 'url', 'location' );
 					$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
-				} elseif ( 'hcard' === $datatype ) {
+				} elseif ( 'hcard' === $datatype && '' === $template ) {
 					$label   = mc_hcard( $value, 'true', 'true', 'location' );
 					$output .= "<li>$label</li>";
 				} elseif ( '' !== $template ) {
@@ -1796,6 +1796,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 						'latitude'  => $value->location_latitude,
 						'zoom'      => $value->location_zoom,
 						'phone'     => $value->location_phone,
+						'phone2'     => $value->location_phone2,
 					);
 					$label   = mc_draw_template( $values, $template );
 					$output .= ( '' !== $label ) ? "<li>$label</li>" : '';
