@@ -261,14 +261,14 @@ function mc_manage_locations() {
 			$default_location = get_option( 'mc_default_location', '' );
 			if ( $default_location ) {
 				$default = mc_get_location( $default_location );
-				echo wp_kses_post( mc_location_manager_row( $default ) );
+				echo wp_kses( mc_location_manager_row( $default ), mc_kses_elements() );
 			}
 			foreach ( $locations as $loc ) {
 				if ( (int) $default_location === (int) $loc->location_id ) {
 					continue;
 				}
 				$location = mc_get_location( $loc->location_id );
-				echo wp_kses_post( mc_location_manager_row( $location ) );
+				echo wp_kses( mc_location_manager_row( $location ), mc_kses_elements() );
 			}
 			?>
 			</tbody>
