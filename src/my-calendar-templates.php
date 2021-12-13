@@ -880,13 +880,13 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
 		if ( is_array( $locations ) ) {
-			$multiple  = ( count( $locations ) > 1 ) ? true : false;
+			$multiple = ( count( $locations ) > 1 ) ? true : false;
 			foreach ( $locations as $location ) {
 				$id            = rand();
 				$loc_id        = $location->{$source . '_id'};
 				$source        = ( 'event' === $source ) ? 'event' : 'location';
 				$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, $source );
-				$address = addslashes( mc_map_string( $location, $source ) );
+				$address       = addslashes( mc_map_string( $location, $source ) );
 
 				if ( '0.000000' !== $location->{$source . '_longitude'} && '0.000000' !== $location->{$source . '_latitude'} ) {
 					$lat    = $location->{$source . '_latitude'};
