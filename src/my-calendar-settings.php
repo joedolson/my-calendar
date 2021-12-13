@@ -894,7 +894,7 @@ function mc_remote_db() {
 											'ical'        => __( 'iCal Download', 'my-calendar' ),
 											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
 											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-											'gmap'        => __( 'Google Map (single view only)', 'my-calendar' ),
+											'gmap'        => __( 'Google Map', 'my-calendar' ),
 											'address'     => __( 'Location Address', 'my-calendar' ),
 											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
 											'description' => __( 'Description', 'my-calendar' ),
