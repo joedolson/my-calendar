@@ -185,8 +185,8 @@ function mc_register_styles() {
 			if ( 'true' === get_option( 'mc_gmap' ) || mc_output_is_visible( 'gmap', 'single' ) || is_singular( 'mc-locations' ) ) {
 				$api_key = get_option( 'mc_gmap_api_key' );
 				if ( $api_key ) {
-					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array(), $version );
-					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array(), $version );
+					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array() );
+					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array( 'gmaps' ), $version, true );
 					wp_localize_script(
 						'mc-maps',
 						'gmaps',
@@ -1407,8 +1407,8 @@ function mc_scripts() {
 	if ( $slug . '_page_my-calendar-locations' === $id || 'toplevel_page_my-calendar' === $id ) {
 		$api_key = get_option( 'mc_gmap_api_key' );
 		if ( $api_key ) {
-			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array(), $version );
-			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), '1.0.3', array(), $version );
+			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array() );
+			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array( 'gmaps' ), $version, true );
 			wp_localize_script(
 				'mc-maps',
 				'gmaps',

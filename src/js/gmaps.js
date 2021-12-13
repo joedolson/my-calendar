@@ -63,12 +63,12 @@
 
 		// vars
 		var args = {
-			center		: {lng: 0.0000, lat: 0.0000},
-			mapTypeId	: google.maps.MapTypeId.roadmap
+			center    : {lng: 0.0000, lat: 0.0000},
+			mapTypeId : google.maps.MapTypeId.roadmap
 		};
 		
 		// create map
-		var plot = new google.maps.Map( el, args );
+		var plot   = new google.maps.Map( el, args );
 		var bounds = new google.maps.LatLngBounds();
 
 		// add markers

@@ -884,10 +884,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			$id            = rand();
 			$loc_id        = $location->{$source . '_id'};
 			$source        = ( 'event' === $source ) ? 'event' : 'location';
-			$category_icon = mc_category_icon( $location, 'img' );
-			if ( ! $category_icon ) {
-				$category_icon = '//maps.google.com/mapfiles/marker_green.png';
-			}
+			$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, $source );
 			$address = addslashes( mc_map_string( $location, $source ) );
 
 			if ( '0.000000' !== $location->{$source . '_longitude'} && '0.000000' !== $location->{$source . '_latitude'} ) {
@@ -920,7 +917,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
 			$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 		}
-		$class = ( $geolocate ) ? 'geolocated' : '';
+		$class = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
 		$map   = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
 		$locs  = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
 		$out   = '<div class="mc-maps">' . $map . $locs . '</div>';
