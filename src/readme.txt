@@ -335,136 +335,6 @@ Developer Changes:
 * Remove numerous deprecated functions.
 * Conformance with latest WordPress PHPCS ruleset.
 
-= 3.1.18 =
-
-* Add filters to 'Add to Google Calendar' link: mc_gcal_location & mc_gcal_description
-* Add 'nofollow' to links to past events.
-* Include recurrence info in post meta box.
-* Change limit on adding occurrences from 20 to 40.
-* Minor code refactoring.
-
-= 3.1.17 =
-
-* Bug fix: comma misplaced in mc_list_title_title. 
-* Provide special handling in cases where multiple categories are enabled but selector is passed a non-array value.
-
-= 3.1.16 =
-
-* Bug fix: restricting styles & JS to specific pages broken by strict type checks.
-* New filter: mc_list_title_title
-
-= 3.1.15 =
-
-* Bug fix: List of access features produced empty UL if no results.
-* Bug fix: Always produce a class on event accessibility selection list.
-* Bug fix: Docs error in describing custom files directory.
-* Add: support passing multiple site IDs into the calendar shortcode in multisite.
-
-= 3.1.14 =
-
-* Bug fix: Unescaped event title in HTML output.
-* Bug fix: Improper saving of Edit All Categories permissions in user profile.
-* New: [my_calendar_next] shortcode. 
-
-= 3.1.13 =
-
-* Bug fix: If plugin name is translated, script references were broken.
-* Bug fix: If no holiday category assigned, Today's Events widget will return empty when category limits set.
-* New filter: allow events post type to be made searchable. (Not recommended.)
-* New: Support 'search' parameter in shortcode & URL parameters for main view.
-* Remove option to disable max contrast category names.
-
-= 3.1.12 =
-
-* Bug fix: User-specific category permissions didn't handle unset (default) values.
-* Bug fix: missing row closure element when weekends not displayed.
-
-= 3.1.11 =
-
-* New filter on mc_user_permissions operated on wrong variable.
-
-= 3.1.10 =
-
-* SECURITY FIX: Unauthenticated XSS scripting vulnerability. Update immediately. Thanks to Andreas Hell.
-* Support for defining individual categories as having no category icon. 
-
-= 3.1.9 =
-
-* Undefined variable notice.
-* Disable Yoast canonical URL output on single events
-* Use same time variable in templates & in main layout.
-* Using default title template and empty time text, don't display unneeded colon.
-
-= 3.1.8 =
-
-* Bug fix: 'event_begin' is not always a string, so 'mc_event_date' not always registered correctly.
-* Update 'sortable' code to be prepared for My Calendar Pro 1.9.0.
-* Add 'mc_date_format()' function to get appropriate date format
-* Minor settings design changes.
-
-= 3.1.7 =
-
-* Add meta field '_mc_event_date' for use in My Tickets
-* Add option to disable output link using an explicit option.
-* Change the JS so popups are only attached to links.
-* Better UI with custom & deleted occurrences in recurring events.
-* Bug fix: sessions should only be started if a search has been performed.
-
-= 3.1.6 =
-
-* Bug fix: If a category name was blank, it would automatically be filtered to by upcoming events lists.
-* Bug fix: Show print view as list if main view is list.
-* Bug fix: Strip HTML tags from aria-label attributes
-* Bug fix: .details needs position: relative in twentyfifteen stylesheet
-* Adjust tested to value to 5.1
-
-= 3.1.5 =
-
-* Bug fix: PHP error checking broken due to session creation
-
-= 3.1.4 =
-
-* Bug fix: typo in category string parameter for ical output
-
-= 3.1.3 =
-
-* New filter: 'mc_list_titles_separator'
-* Bug fix: Help support data not displayed.
-* Override content overflow in Twentynineteen
-* Add support for iCal format in API exports
-
-= 3.1.2 =
-
-* Bug fix: Twentyeighteen styles missing from template directory
-* Bug fix: Declare width on th as well as td
-* Bug fix: optgroup close element broken
-* Bug fix: Shortcode generator fixes.
-* Bug fix: Handle case where hidden categories are not an array in event manager.
-* Bug fix: If template tag value contains only whitespace, do not render before & after attributes.
-* Bug fix: Handle form restrictions in KSES introduced in WP 5.0.1.
-* Bug fix: check whether PHP sessions are enabled before attempting to start
-* Change: Only render export links in search results if enabled in main settings
-* Change: [UI] Move stylesheet selector into sidebar
-* Change: Allow target attribute on links.
-* Change: Add label to links that open in new tab.
-
-= 3.1.1 =
-
-* Bug fix: unspamming event_ID passed incorrect variable name
-* Bug fix: Don't run spam check on users with mc_add_event 
-* Bug fix: Users with mc_add_event should not be able to trash other's events.
-* Bug fix: Refine permissions; add mc_publish_events allowing users to publish own events without access to others
-* Bug fix: Refine permissions; don't display links that users can't use.
-
-= 3.1.0 =
-
-* Add feature (by Josef Fällman): Print & export view for search results.
-* New filter: mcs_check_conflicts (impacts Pro only)
-* Bug fix: Fix issue causing duplication in some views.
-* Bug fix: Time format should be filtered in initial edit view.
-* Bug fix: Category relationships not retained when Group editing applied.
-* Bug fix: aria-describedby ID mismatch.
-
 = Future Changes =
 
 * Refactor options storage
@@ -477,7 +347,7 @@ Because the majority of users end up on my web site asking for help anyway -- an
 
 = This plugin is complicated. Why won't you help me figure out how to use it? =
 
-I will! But not in person. Take a look at my [documentation website for My Calendar](http://docs.joedolson.com/my-calendar/) or [buy the User's Guide](https://www.joedolson.com/my-calendar/users-guide/) before making your request, and consider [making a donation](https://www.joedolson.com/donate/)!
+I will! But not in person. Take a look at my [documentation website for My Calendar](http://docs.joedolson.com/my-calendar/) before making your request, and consider [making a donation](https://www.joedolson.com/donate/) or [buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/)!
 
 = Can my visitors or members submit events? =
 
@@ -500,4 +370,4 @@ The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](
 
 == Upgrade Notice ==
 
-* 3.2.0 Major release to conform with new WordPress PHP standards.
+* 3.3.0 Major release: 
