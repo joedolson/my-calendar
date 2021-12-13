@@ -234,7 +234,7 @@ function mc_get_help_footer( $return = '' ) {
 				<a href="' . admin_url( 'admin.php?page=my-calendar-shortcodes' ) . '">' . __( 'Shortcode Generator', 'my-calendar' ) . '</a>
 			</li>
 			<li>
-				<a href="' . admin_url( 'admin.php?page=my-calendar-help' ) . '#get-support">' . __( 'Get Support', 'my-calendar' ) . '</a>
+				<a href="' . admin_url( 'admin.php?page=my-calendar-help' ) . '#my-calendar-support">' . __( 'Get Support', 'my-calendar' ) . '</a>
 			</li>
 		</ul>
 		<ul class="help">
