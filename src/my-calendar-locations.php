@@ -948,7 +948,12 @@ function mc_template_location_fields( $e, $event ) {
 	foreach ( $fields as $name => $field ) {
 		$location_post = false;
 		if ( is_object( $event ) && property_exists( $event, 'location' ) ) {
-			$location_post = $event->location->location_post;
+			if ( is_object( $event->location ) && property_exists( $event->location, 'location_post' ) ) {
+				$location_post = $event->location->location_post;
+			} else {
+				// If location data has no backing post, it cannot have custom fields.
+				return $e;
+			}
 		}
 		$value = mc_location_custom_data( $event->event_location, $location_post, $name );
 		if ( ! isset( $field['display_callback'] ) || ( isset( $field['display_callback'] ) && ! function_exists( $field['display_callback'] ) ) ) {

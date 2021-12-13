@@ -879,8 +879,8 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	}
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
-		$multiple  = ( count( $locations ) > 1 ) ? true : false;
 		if ( is_array( $locations ) ) {
+			$multiple  = ( count( $locations ) > 1 ) ? true : false;
 			foreach ( $locations as $location ) {
 				$id            = rand();
 				$loc_id        = $location->{$source . '_id'};
@@ -918,11 +918,13 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
 				$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 			}
+			$class = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
+			$map   = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
+			$locs  = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
+			$out   = '<div class="mc-maps">' . $map . $locs . '</div>';
+		} else {
+			$out = '';
 		}
-		$class = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
-		$map   = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
-		$locs  = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
-		$out   = '<div class="mc-maps">' . $map . $locs . '</div>';
 	}
 
 	return $out;
