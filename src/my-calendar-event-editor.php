@@ -1892,7 +1892,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				$event_access    = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
 				$event_access    = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
 				if ( isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
-					// Only the first event, if adding multiples.
+					// Only add this with the first event, if adding multiples.
 					$add_loc = array(
 						'location_label'     => $event_label,
 						'location_street'    => $event_street,
