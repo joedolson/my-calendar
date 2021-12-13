@@ -160,7 +160,7 @@ function my_calendar_help() {
  * @return string
  */
 function mc_help_link( $link_text, $modal_title, $id, $echo = true ) {
-	$url  = admin_url( 'admin.php?help=' . (int) $id . '&page=mc-contextual-help&TB_iframe=true&width=600&height=550&modal_window=true' );
+	$url  = esc_url( admin_url( 'admin.php?help=' . (int) $id . '&query=' . urlencode( $modal_title ) . '&page=mc-contextual-help&TB_iframe=true&width=600&height=550&modal_window=true' ) );
 	$link = sprintf(
 		'<a href="%s" class="thickbox my-calendar-contextual-help" data-title="%s"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span><span class="screen-reader-text">%s</span></a>',
 		$url,
@@ -194,11 +194,12 @@ add_action( 'admin_enqueue_scripts', 'mc_enqueue_modal_assets' );
  */
 function mc_print_contextual_help() {
 	$id = isset( $_REQUEST['help'] ) ? (int) $_REQUEST['help'] : false;
+	$query = isset( $_REQUEST['query'] ) ? sanitize_text_field( $_REQUEST['query'] ) : '';
 	?>
 	<div class="modal-window-container">
 	<?php
 	echo wp_kses( mc_get_help_text( $id ), mc_kses_elements() );
-	$return_url = add_query_arg( 'help_id', (int) $id, 'https://docs.joedolson.com/my-calendar/' );
+	$return_url = add_query_arg( 's', $query, 'https://docs.joedolson.com/my-calendar/' );
 	$return     = wp_kses_post( '<p class="docs-link"><a href="' . esc_url( $return_url ) . '">' . __( 'Documentation', 'my-calendar' ) . '</a></p>' );
 	echo wp_kses_post( mc_get_help_footer( $return ) );
 	?>
@@ -279,7 +280,7 @@ function mc_get_help_text( $id ) {
 		'3' => array(
 			'title' => __( 'Navigation Keywords', 'my-calendar' ),
 			// Translators: Settings URL.
-			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Output settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
+			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Display settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
 		),
 		'4' => array(
 			'title' => __( 'Pending', 'my-calendar' ),
