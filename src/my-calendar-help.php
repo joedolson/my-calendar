@@ -193,7 +193,7 @@ add_action( 'admin_enqueue_scripts', 'mc_enqueue_modal_assets' );
  * Print the contents displayed within the modal window
  */
 function mc_print_contextual_help() {
-	$id = isset( $_REQUEST['help'] ) ? (int) $_REQUEST['help'] : false;
+	$id    = isset( $_REQUEST['help'] ) ? (int) $_REQUEST['help'] : false;
 	$query = isset( $_REQUEST['query'] ) ? sanitize_text_field( $_REQUEST['query'] ) : '';
 	?>
 	<div class="modal-window-container">
