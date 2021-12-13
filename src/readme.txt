@@ -169,7 +169,7 @@ Frontend changes:
 
 Developer Changes:
 
-* Three new actions: 'mc_event_happening', 'mc_event_future', 'mc_event_over' executed whenever an event is compared to the current time, usable for automatic transitions and notifications.
+* New actions: 'mc_event_happening', 'mc_event_future', 'mc_event_over' executed whenever an event is compared to the current time, usable for automatic transitions and notifications.
 * Filter: 'mc_output_is_visible' to determine whether a given display feature should be shown on calendar.
 * Disable sending email notifications for Spam events. Add action to optionally handle spam notifications.
 * Remove the process shortcodes option. Shortcodes can be disabled using 'mc_process_shortcodes' filter.
@@ -178,6 +178,7 @@ Developer Changes:
 * New filter for event details `mc_event_detail_{value}`
 * Started work on documenting filters and actions.
 * Code reorganization.
+* PHP 8.0 compatibility.
 
 = 3.2.19 =
 
