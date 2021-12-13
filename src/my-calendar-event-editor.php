@@ -2696,6 +2696,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 	// Can't use 2nd value directly if it's two digits.
 	$every = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
 	if ( 'S' !== $recur ) {
+
 		// If this event had a rep of 0, translate that.
 		if ( is_numeric( $event->event_repeats ) ) {
 			// Backwards compatibility.
@@ -2725,10 +2726,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					if ( 'test' === $test && $i > 0 ) {
 						return $data;
 					}
-					if ( $begin <= strtotime( $post_until ) ) {
-						$numforward ++;
-					} else {
-						continue;
+					if ( $post_until ) {
+						if ( $begin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							continue;
+						}
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2757,10 +2760,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					if ( 'test' === $test && $i > 0 ) {
 						return $data;
 					}
-					if ( $begin <= strtotime( $post_until ) ) {
-						$numforward ++;
-					} else {
-						continue;
+					if ( $post_until ) {
+						if ( $begin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							continue;
+						}
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2787,10 +2792,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					if ( 'test' === $test && $i > 0 ) {
 						return $data;
 					}
-					if ( $begin <= strtotime( $post_until ) ) {
-						$numforward ++;
-					} else {
-						continue;
+					if ( $post_until ) {
+						if ( $begin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							continue;
+						}
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2817,10 +2824,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					if ( 'test' === $test && $i > 0 ) {
 						return $data;
 					}
-					if ( $begin <= strtotime( $post_until ) ) {
-						$numforward ++;
-					} else {
-						continue;
+					if ( $post_until ) {
+						if ( $begin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							continue;
+						}
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2847,10 +2856,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					if ( 'test' === $test && $i > 0 ) {
 						return $data;
 					}
-					if ( $begin <= strtotime( $post_until ) ) {
-						$numforward ++;
-					} else {
-						continue;
+					if ( $post_until ) {
+						if ( $begin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							continue;
+						}
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2909,10 +2920,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					if ( 'test' === $test && $i > 0 ) {
 						return $data;
 					}
-					if ( $newbegin <= strtotime( $post_until ) ) {
-						$numforward ++;
-					} else {
-						continue;
+					if ( $post_until ) {
+						if ( $newbegin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							continue;
+						}
 					}
 					$return[] = $data;
 					if ( ! $test ) {
@@ -2941,10 +2954,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					if ( 'test' === $test && $i > 0 ) {
 						return $data;
 					}
-					if ( $begin <= strtotime( $post_until ) ) {
-						$numforward ++;
-					} else {
-						continue;
+					if ( $post_until ) {
+						if ( $begin <= strtotime( $post_until ) ) {
+							$numforward ++;
+						} else {
+							continue;
+						}
 					}
 					$return[] = $data;
 					if ( ! $test ) {
