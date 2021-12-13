@@ -1796,7 +1796,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 						'latitude'  => $value->location_latitude,
 						'zoom'      => $value->location_zoom,
 						'phone'     => $value->location_phone,
-						'phone2'     => $value->location_phone2,
+						'phone2'    => $value->location_phone2,
 					);
 					$label   = mc_draw_template( $values, $template );
 					$output .= ( '' !== $label ) ? "<li>$label</li>" : '';
