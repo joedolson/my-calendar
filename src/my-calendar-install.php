@@ -214,7 +214,7 @@ function mc_create_demo_content() {
 		// Insert a location.
 		$access  = array( 1, 2, 3, 4, 6, 8, 9 );
 		$add     = array(
-			'location_label'     => 'Minnesota Orchestra',
+			'location_label'     => 'Demo: Minnesota Orchestra',
 			'location_street'    => '1111 Nicollet Mall',
 			'location_street2'   => '',
 			'location_city'      => 'Minneapolis',
@@ -237,7 +237,7 @@ function mc_create_demo_content() {
 			// Begin strings.
 			'event_begin'        => date( 'Y-m-d', strtotime( '+1 day' ) ), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 			'event_end'          => date( 'Y-m-d', strtotime( '+1 day' ) ), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-			'event_title'        => 'Florence Price: Symphony No. 3 in c minor',
+			'event_title'        => 'Demo: Florence Price: Symphony No. 3 in c minor',
 			'event_desc'         => "<p>Florence Price's <a href='https://en.wikipedia.org/wiki/Symphony_No._3_(Price)'>Symphony No. 3</a> was commissioned by the Works Progress Administration's <a href='https://en.wikipedia.org/wiki/Federal_Music_Project'>Federal Music Project</a> during the height of the Great Depression. It was first performed at the Detroit Institute of Arts on November 6, 1940, by the Detroit Civic Orchestra under the conductor Valter Poole.</p><p>The composition is Price's third symphony, following her Symphony in E minor—the first symphony by a black woman to be performed by a major American orchestra—and her lost Symphony No. 2.</p>",
 			'event_short'        => "Florence Price's Symphony No.3 was first performed on November 6th, 1940. It was Ms. Price's third symphony, following her lost Symphony No. 2",
 			'event_time'         => '19:30:00',
