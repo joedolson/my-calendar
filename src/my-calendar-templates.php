@@ -880,42 +880,44 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
 		$multiple  = ( count( $locations ) > 1 ) ? true : false;
-		foreach ( $locations as $location ) {
-			$id            = rand();
-			$loc_id        = $location->{$source . '_id'};
-			$source        = ( 'event' === $source ) ? 'event' : 'location';
-			$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, $source );
-			$address = addslashes( mc_map_string( $location, $source ) );
+		if ( is_array( $locations ) ) {
+			foreach ( $locations as $location ) {
+				$id            = rand();
+				$loc_id        = $location->{$source . '_id'};
+				$source        = ( 'event' === $source ) ? 'event' : 'location';
+				$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, $source );
+				$address = addslashes( mc_map_string( $location, $source ) );
 
-			if ( '0.000000' !== $location->{$source . '_longitude'} && '0.000000' !== $location->{$source . '_latitude'} ) {
-				$lat    = $location->{$source . '_latitude'};
-				$lng    = $location->{$source . '_longitude'};
-				$latlng = true;
-			} else {
-				$lat    = '';
-				$lng    = '';
-				$latlng = false;
-			}
+				if ( '0.000000' !== $location->{$source . '_longitude'} && '0.000000' !== $location->{$source . '_latitude'} ) {
+					$lat    = $location->{$source . '_latitude'};
+					$lng    = $location->{$source . '_longitude'};
+					$latlng = true;
+				} else {
+					$lat    = '';
+					$lng    = '';
+					$latlng = false;
+				}
 
-			if ( strlen( $address ) < 10 && ! $latlng ) {
-				return '';
+				if ( strlen( $address ) < 10 && ! $latlng ) {
+					return '';
+				}
+				$hcard     = mc_hcard( $location, 'true', false, $source );
+				$title     = esc_attr( $location->{$source . '_label'} );
+				$marker    = wp_kses(
+					str_replace(
+						array( '</div>', '<br />', '<br><br>' ),
+						'<br>',
+						$hcard
+					),
+					array(
+						'br'     => array(),
+						'strong' => array(),
+					)
+				);
+				$html      = apply_filters( 'mc_map_html', $marker, $location );
+				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
+				$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 			}
-			$hcard     = mc_hcard( $location, 'true', false, $source );
-			$title     = esc_attr( $location->{$source . '_label'} );
-			$marker    = wp_kses(
-				str_replace(
-					array( '</div>', '<br />', '<br><br>' ),
-					'<br>',
-					$hcard
-				),
-				array(
-					'br'     => array(),
-					'strong' => array(),
-				)
-			);
-			$html      = apply_filters( 'mc_map_html', $marker, $location );
-			$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
-			$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 		}
 		$class = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
 		$map   = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
