@@ -139,17 +139,13 @@ add_action( 'mc_update_location_post', 'mc_update_location_custom_fields', 10, 4
  * @param int $location_id Location ID.
  */
 function mc_location_delete_post( $result, $location_id ) {
-	$posts = get_posts(
-		array(
-			'post_type'  => 'mc-locations',
-			'meta_key'   => '_mc_location_id',
-			'meta_value' => $location_id,
-		)
-	);
-	if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
-		$post_id = $posts[0]->ID;
-		wp_delete_post( $post_id, true );
-		do_action( 'mc_delete_location_posts', $location_id, $posts );
+	global $wpdb;
+	$post = mc_get_location_post( $location_id, false );
+	if ( $post ) {
+		wp_delete_post( $post, true );
+		// Delete post relationship.
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_location_relationships_table() . ' 	WHERE post_id = %d', $post ) );
+		do_action( 'mc_delete_location_posts', $location_id, $post );
 	}
 }
 add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
@@ -168,7 +164,18 @@ function mc_get_location_post( $location_id, $type = true ) {
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$post_id = $mcdb->get_var( $mcdb->prepare( 'SELECT post_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$post_ids = $mcdb->get_results( $mcdb->prepare( 'SELECT post_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	// If there are multiple records for this post, delete extras.
+	$post_id  = false;
+	foreach( $post_ids as $rid ) {
+		$id = $rid->post_id;
+		if ( ! 'mc-locations' === get_post_type( $id ) ) {
+			$mcdb->query( $mcdb->prepare( 'DELETE FROM ' . my_calendar_location_relationships_table() . ' WHERE post_id = %d', $id ) );
+		} else {
+			$post_id = $id;
+			break;
+		}
+	}
 	if ( ! $post_id ) {
 		// Copy location into relationships table.
 		$post_id = false;

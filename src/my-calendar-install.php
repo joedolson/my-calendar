@@ -480,6 +480,7 @@ function mc_transition_location( $location_id, $location_post ) {
 			),
 			array( '%d', '%d' )
 		);
+		delete_post_meta( $location_post, '_mc_location_id' );
 	}
 }
 
