@@ -101,6 +101,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'mc_show_weekends' );
 		delete_option( 'mc_convert' );
 		delete_option( 'mc_uri' );
+		delete_post_meta( get_option( 'mc_uri_id' ), '_mc_calendar' );
 		delete_option( 'mc_uri_id' );
 		delete_option( 'mc_location_control' );
 		delete_option( 'mc_use_mini_template' );
@@ -167,6 +168,8 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	}
 	if ( get_option( 'mc_drop_tables' ) === 'true' ) {
 		global $wpdb;
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-events' ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-locations' ) );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar' );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_events' );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_categories' );
