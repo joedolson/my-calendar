@@ -599,15 +599,15 @@ function mc_date_array( $timestamp, $period ) {
 			);
 			break;
 		case 'week':
-			$day_of_week   = (int) mc_date( 'N', $timestamp );
+			$day_of_week   = (int) mc_date( 'N', $timestamp, false );
 			$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
 			if ( $day_of_week !== $start_of_week ) {
 				if ( $start_of_week > $day_of_week ) {
-					$diff = $start_of_week - $day_of_week;
+					$diff = 7 - ( ( $start_of_week - $day_of_week ) );
 				} else {
-					$diff = $day_of_week - $start_of_week;
+					$diff = ( $day_of_week - $start_of_week );
 				}
-				$timestamp = strtotime( "-$diff days", $timestamp );
+				$timestamp = ( 7 !== $diff ) ? strtotime( "-$diff days", $timestamp ) : $timestamp;
 			}
 			$from = mc_date( 'Y-m-d', $timestamp, false );
 			$to   = mc_date( 'Y-m-d', strtotime( '+6 days', $timestamp ), false );
