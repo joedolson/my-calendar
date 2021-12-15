@@ -387,7 +387,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 			$event_link = mc_event_link( $event );
 
-			if ( '' !== $event_link && ( 'false' !== $display_link || mc_output_is_visible( 'link', $type, $event ) ) ) {
+			if ( '' !== $event_link && ( 'true' === $display_link || mc_output_is_visible( 'link', $type, $event ) ) ) {
 				$external_class = ( mc_external_link( $event_link ) ) ? "$type-link external url" : "$type-link url";
 				$link_template  = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
 				$link_text      = mc_draw_template( $data, $link_template );
