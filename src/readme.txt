@@ -84,6 +84,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.1 =
+
+* Bug fix: Bulk removal of locations broken.
+* Bug fix: SVG category icons should not be queried remotely; use filesystem.
+* Bug fix: Fix tabs in older versions of My Calendar Pro
+* Layout: wider max-width by default, center calendar in container.
+* Bug fix: Display more link had inverted logic & wrong label.
+* Bug fix: Don't show location link if location is not post type mc-locations.
+
 = 3.3.0 =
 
 Backend Changes:
