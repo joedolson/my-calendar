@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.8
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.3.0
+Stable tag: 3.3.1
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -88,11 +88,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Bulk removal of locations broken.
 * Bug fix: SVG category icons should not be queried remotely; use filesystem.
-* Bug fix: Fix tabs in older versions of My Calendar Pro
 * Layout: wider max-width by default, center calendar in container.
 * Bug fix: Display more link had inverted logic & wrong label.
 * Bug fix: Don't show location link if location is not post type mc-locations.
 * Bug fix: Week view could end up offset incorrectly in some views due to dates getting double timezone offsets.
+* Bug fix: Provide back-compatibility for tabs in older versions of My Calendar Pro
 
 = 3.3.0 =
 
