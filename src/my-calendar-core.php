@@ -1375,6 +1375,7 @@ function mc_scripts() {
 	$slug    = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
+		$mcs_version = ( get_option( 'mcs_version', '' ) ) ? get_option( 'mcs_version' ) : 1.0;
 		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 		wp_localize_script(
 			'mc.admin',
@@ -1386,8 +1387,12 @@ function mc_scripts() {
 				'imageRemoved'  => __( 'Featured image removed', 'my-calendar' ),
 				'modalTitle'    => __( 'Choose an Image', 'my-calendar' ),
 				'buttonName'    => __( 'Select', 'my-calendar' ),
+				'mcs'           => $mcs_version,
 			)
 		);
+		if ( version_compare( $mcs_version, '2.1', '<' ) ) {
+			wp_enqueue_style( 'mcs-back-compat', plugins_url( 'css/backcompat.css', __FILE__ ), array(), $version );
+		}
 	}
 
 	wp_enqueue_style( 'wp-color-picker' );

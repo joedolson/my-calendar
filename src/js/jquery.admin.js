@@ -351,6 +351,7 @@ jQuery(document).ready(function ($) {
 			$( 'label[for=mc_event_endtime] span' ).hide();
 		}
 	});
+
 	var firstItem = window.location.hash;
 	var tabGroups = document.querySelectorAll( '.mc-tabs' );
 
@@ -587,6 +588,33 @@ var mediaPopup = '';
 				mediaPopup.open();
 			})
 	});
+
+	// Historic; for older My Calendar Pro only.
+	if ( mcAdmin.mcs < 2.1 ) {
+		$( '.mcs-tabs' ).each( function ( index ) {
+			var tabs = $('.mcs-tabs .wptab').length;
+			var firstItem = window.location.hash;
+			if ( ! firstItem ) {
+				var firstItem = '#' + $( '.mcs-tabs .wptab:nth-of-type(1)' ).attr( 'id' );
+			}
+			$('.mcs-tabs .tabs a[href="' + firstItem + '"]').addClass('active').attr( 'aria-selected', 'true' );
+			if ( tabs > 1 ) {
+				$( '.mcs-tabs .wptab' ).not( firstItem ).attr( 'aria-hidden', 'true' );
+				$( '.mcs-tabs .wptab' ).removeClass( 'initial-hidden' );
+				$( firstItem ).show();
+				$( '.mcs-tabs .tabs a' ).on( 'click', function (e) {
+					e.preventDefault();
+					$('.mcs-tabs .tabs a').removeClass('active').attr( 'aria-selected', 'false' );
+					$(this).addClass('active').attr( 'aria-selected', 'true' );
+					var target = $(this).attr('href');
+					window.location.hash = target;
+					$('.mcs-tabs .wptab').not(target).attr( 'aria-hidden', 'true' );
+					$(target).removeAttr( 'aria-hidden' ).show().trigger( 'focus' );
+				});
+			}
+		});
+	}
+
 })(jQuery);
 
 window.addEventListener( 'beforeunload', function(e) {

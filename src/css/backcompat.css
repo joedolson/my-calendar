@@ -1,0 +1,40 @@
+.mcs-tabs .tabs {
+	margin: 0 !important;
+	padding: 0 4px;
+	position: relative;
+	top: 1px;
+}
+
+.mcs-tabs .tabs li {
+	display: inline;
+	margin: 0 auto;
+	line-height: 1;
+	float: none;
+}
+
+.mcs-tabs .tabs a {
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 4px 4px 0 0;
+	border: 1px solid #ccc;
+	background: #f3f3f3;
+}
+
+.mcs-tabs.settings .tabs a {
+	padding: 8px;
+	font-size: 1.2em;
+}
+
+.mcs-tabs .tabs a.active {
+	border-bottom: 1px solid #fefefe;
+	background: #fefefe;
+	text-decoration: none;
+	cursor: text;
+}
+
+.mcs-tabs .wptab {
+	background: #fff;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	display: block !important;
+}

@@ -92,6 +92,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Layout: wider max-width by default, center calendar in container.
 * Bug fix: Display more link had inverted logic & wrong label.
 * Bug fix: Don't show location link if location is not post type mc-locations.
+* Bug fix: Week view could end up offset incorrectly in some views due to dates getting double timezone offsets.
 
 = 3.3.0 =
 
