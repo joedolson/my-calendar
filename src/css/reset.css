@@ -15,11 +15,13 @@ div.site-content, table {
 
 .mc-main {
 	line-height: 1;
-	max-width: 980px !important;
+	max-width: 1120px !important;
+	margin: 0 auto;
 }
 
 .single-event {
 	max-width: 610px !important;
+	margin: 0 auto;
 }
 
 .my-calendar-nav ul {
