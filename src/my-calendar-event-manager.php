@@ -752,10 +752,14 @@ function mc_list_events() {
 							</td>
 							<td>
 								<?php
-								if ( '' !== $event->event_label ) {
-									$elabel = urlencode( $event->event_label );
+								if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
+									$elabel = $event->location->location_label;
+								} else {
+									$elabel = $event->event_label;
+								}
+								if ( '' !== $elabel ) {
 									?>
-								<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$elabel&amp;restrict=where" ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $event->event_label ) ); ?></a>
+								<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $elabel ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $elabel ) ); ?></a>
 									<?php
 								}
 								?>
