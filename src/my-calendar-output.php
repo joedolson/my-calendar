@@ -618,8 +618,8 @@ function mc_event_classes( $event, $type ) {
 			$date_relation = 'future-event';
 			break;
 	}
-	$primary = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
-
+	$primary      = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
+	$length       = sanitize_title( 'mc-' . mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event ) );
 	$is_recurring = ( mc_is_recurring( $event ) ) ? 'recurring' : 'nonrecurring';
 
 	$classes = array(
@@ -629,6 +629,7 @@ function mc_event_classes( $event, $type ) {
 		$date_relation,
 		$primary,
 		$is_recurring,
+		$length,
 	);
 
 	if ( $event->event_begin !== $event->event_end ) {
