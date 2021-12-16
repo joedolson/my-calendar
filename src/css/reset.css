@@ -19,11 +19,6 @@ div.site-content, table {
 	margin: 0 auto;
 }
 
-.single-event {
-	max-width: 610px !important;
-	margin: 0 auto;
-}
-
 .my-calendar-nav ul {
 	display: flex;
 }
