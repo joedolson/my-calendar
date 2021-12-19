@@ -1280,7 +1280,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			?>
 		</div>
 			<?php
-			if ( ! empty( $_GET['date'] ) && ! ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ) {
+			if ( ! empty( $_GET['date'] ) ) {
 				$event      = mc_get_event( $instance );
 				$date       = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
 				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id ) );
