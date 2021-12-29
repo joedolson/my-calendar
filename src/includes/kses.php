@@ -160,7 +160,7 @@ function mc_allowed_tags( $tags, $context ) {
  */
 function mc_kses_elements() {
 	$elements = array(
-		'svg'      => array(
+		'svg'              => array(
 			'class'           => array(),
 			'style'           => array(),
 			'focusable'       => array(),
@@ -169,46 +169,46 @@ function mc_kses_elements() {
 			'xmlns'           => array(),
 			'viewbox'         => array(),
 		),
-		'g'        => array(
+		'g'                => array(
 			'fill' => array(),
 		),
-		'title'    => array(
+		'title'            => array(
 			'id'    => array(),
 			'title' => array(),
 		),
-		'path'     => array(
+		'path'             => array(
 			'd'    => array(),
 			'fill' => array(),
 		),
-		'h2'       => array(
+		'h2'               => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'h3'       => array(
+		'h3'               => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'h4'       => array(
+		'h4'               => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'h5'       => array(
+		'h5'               => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'h6'       => array(
+		'h6'               => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'label'    => array(
+		'label'            => array(
 			'for'   => array(),
 			'class' => array(),
 		),
-		'option'   => array(
+		'option'           => array(
 			'value'    => array(),
 			'selected' => array(),
 		),
-		'select'   => array(
+		'select'           => array(
 			'id'               => array(),
 			'aria-describedby' => array(),
 			'aria-labelledby'  => array(),
@@ -220,7 +220,7 @@ function mc_kses_elements() {
 			'readonly'         => array(),
 			'autocomplete'     => array(),
 		),
-		'input'    => array(
+		'input'            => array(
 			'id'               => array(),
 			'class'            => array(),
 			'aria-describedby' => array(),
@@ -238,7 +238,7 @@ function mc_kses_elements() {
 			'autocomplete'     => array(),
 			'data-href'        => array(),
 		),
-		'textarea' => array(
+		'textarea'         => array(
 			'id'               => array(),
 			'class'            => array(),
 			'cols'             => array(),
@@ -250,14 +250,14 @@ function mc_kses_elements() {
 			'readonly'         => array(),
 			'name'             => array(),
 		),
-		'form'     => array(
+		'form'             => array(
 			'id'     => array(),
 			'name'   => array(),
 			'action' => array(),
 			'method' => array(),
 			'class'  => array(),
 		),
-		'button'   => array(
+		'button'           => array(
 			'name'             => array(),
 			'disabled'         => array(),
 			'type'             => array(),
@@ -269,45 +269,46 @@ function mc_kses_elements() {
 			'aria-controls'    => array(),
 			'data-href'        => array(),
 		),
-		'ul'       => array(
+		'ul'               => array(
 			'class' => array(),
 		),
-		'fieldset' => array(
-			'class' => array(),
-			'id'    => array(),
-		),
-		'legend'   => array(
+		'fieldset'         => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'li'       => array(
+		'legend'           => array(
+			'class' => array(),
+			'id'    => array(),
+		),
+		'li'               => array(
 			'class' => array(),
 		),
-		'span'     => array(
+		'span'             => array(
 			'id'          => array(),
 			'class'       => array(),
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
 			'span'        => array(),
 		),
-		'i'        => array(
+		'i'                => array(
 			'id'          => array(),
 			'class'       => array(),
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
 		),
-		'p'        => array(
+		'p'                => array(
 			'class' => array(),
 		),
-		'div'      => array(
+		'div'              => array(
 			'class'           => array(),
 			'aria-live'       => array(),
 			'id'              => array(),
 			'role'            => array(),
 			'data-default'    => array(),
 			'aria-labelledby' => array(),
+			'style'           => array(),
 		),
-		'img'      => array(
+		'img'              => array(
 			'class'    => true,
 			'src'      => true,
 			'alt'      => true,
@@ -317,52 +318,59 @@ function mc_kses_elements() {
 			'longdesc' => true,
 			'tabindex' => true,
 		),
-		'br'       => array(),
-		'table'    => array(
+		'br'               => array(),
+		'table'            => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'caption'  => array(),
-		'thead'    => array(),
-		'tfoot'    => array(),
-		'tbody'    => array(),
-		'tr'       => array(
+		'caption'          => array(),
+		'thead'            => array(),
+		'tfoot'            => array(),
+		'tbody'            => array(),
+		'tr'               => array(
 			'class' => array(),
 			'id'    => array(),
 		),
-		'th'       => array(
+		'th'               => array(
 			'scope' => array(),
 			'class' => array(),
 			'id'    => array(),
 		),
-		'td'       => array(
+		'td'               => array(
 			'class'     => array(),
 			'id'        => array(),
 			'aria-live' => array(),
 		),
-		'a'        => array(
+		'a'                => array(
 			'aria-labelledby'  => array(),
 			'aria-describedby' => array(),
 			'href'             => array(),
 			'class'            => array(),
 			'aria-current'     => array(),
 		),
-		'section'  => array(
+		'section'          => array(
 			'id'    => array(),
 			'class' => array(),
 		),
-		'aside'    => array(
+		'aside'            => array(
 			'id'    => array(),
 			'class' => array(),
 		),
-		'code'     => array(
+		'code'             => array(
 			'class' => array(),
 		),
-		'pre'      => array(
+		'pre'              => array(
 			'class' => array(),
 		),
-		'script'   => array(
+		'script'           => array(
 			'type' => 'application/ld+json',
+		),
+		'duet-date-picker' => array(
+			'identifier'        => array(),
+			'first-day-of-week' => array(),
+			'name'              => array(),
+			'value'             => array(),
+			'required'          => array(),
 		),
 	);
 
