@@ -301,8 +301,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					}
 				}
 			}
-
-			if ( ( 'false' !== $display_more && ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
+			if ( ( 'true' === $display_more && ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
 				$details_label = mc_get_details_label( $event, $data );
 				$details_link  = mc_get_details_link( $event );
 				// Translators: Event title.
