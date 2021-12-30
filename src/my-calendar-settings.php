@@ -732,7 +732,8 @@ function mc_remote_db() {
 									'placeholder' => 'Events in {date}',
 								)
 							);
-							?></li>
+							?>
+							</li>
 							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in calendar heading.', 'my-calendar' ) ); ?></li>
 						</ul>
 					</fieldset>
