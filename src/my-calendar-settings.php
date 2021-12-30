@@ -353,6 +353,7 @@ function mc_update_text_settings( $post ) {
 	$mc_details_label        = $post['mc_details_label'];
 	$mc_link_label           = $post['mc_link_label'];
 	$mc_event_title_template = $post['mc_event_title_template'];
+	$mc_heading_text         = $post['mc_heading_text'];
 	$mc_notime_text          = $post['mc_notime_text'];
 	$mc_hosted_by            = $post['mc_hosted_by'];
 	$mc_posted_by            = $post['mc_posted_by'];
@@ -371,6 +372,7 @@ function mc_update_text_settings( $post ) {
 	$templates['link']       = $mc_link_label;
 	update_option( 'mc_templates', $templates );
 	update_option( 'mc_event_title_template', $mc_event_title_template );
+	update_option( 'mc_heading_text', $mc_heading_text );
 	update_option( 'mc_notime_text', $mc_notime_text );
 	update_option( 'mc_hosted_by', $mc_hosted_by );
 	update_option( 'mc_posted_by', $mc_posted_by );
@@ -719,6 +721,18 @@ function mc_remote_db() {
 							);
 							?>
 							</li>
+							<li>
+							<?php
+							mc_settings_field(
+								'mc_heading_text',
+								__( 'Calendar month heading', 'my-calendar' ),
+								'',
+								__( 'Use <code>{date}</code> to display month/year in heading.', 'my-calendar' ),
+								array(
+									'placeholder' => 'Events in {date}',
+								)
+							);
+							?></li>
 							<li><?php mc_settings_field( 'mc_caption', __( 'Extended caption:', 'my-calendar' ), '', __( 'Follows month/year in calendar heading.', 'my-calendar' ) ); ?></li>
 						</ul>
 					</fieldset>

@@ -1341,7 +1341,7 @@ function my_calendar( $args ) {
 			if ( 'week' !== $params['time'] && 'day' !== $params['time'] ) {
 				$heading = ( $months <= 1 ) ? $current_header . $caption_text . "\n" : $current_month_header . '&ndash;' . $through_month_header . $caption_text;
 				// Translators: time period displayed.
-				$header  = ( '' === get_option( 'mc_heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : get_option( 'mc_heading_text' );
+				$header  = ( '' === get_option( 'mc_heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : str_replace( '{date}', '%s', get_option( 'mc_heading_text' ) );
 				$heading = sprintf( $header, $heading );
 				if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
 					$heading = __( 'Search Results', 'my-calendar' );
