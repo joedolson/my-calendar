@@ -74,12 +74,12 @@ function mc_ts( $test = false ) {
 	 * @return string
 	 */
 	$offset = apply_filters( 'mc_filter_offset', $offset );
-	if ( $test ) {
-		return $offset;
-	}
 	$offset = substr( $offset, 0, -3 );
 	if ( strpos( $offset, '-' ) !== 0 ) {
 		$offset = '+' . $offset;
+	}
+	if ( $test ) {
+		return $offset;
 	}
 	$wp_time  = get_option( 'gmt_offset', '0' );
 	$wp_time  = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ) : '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
