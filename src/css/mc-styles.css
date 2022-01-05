@@ -787,6 +787,14 @@ strong.label {
 	margin-bottom: 10px;
 }
 
+.location-input {
+	width: 30em;
+}
+
+.wp-core-ui .location-toggle .button {
+	margin-bottom: 0;
+}
+
 .add_field .dashicons,
 .add-location .dashicons,
 .add-occurrence .dashicons {
