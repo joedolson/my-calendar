@@ -1773,11 +1773,11 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 			// If no template provided, return hcard.
 			$datatype = ( '' === trim( $template ) ) ? 'hcard' : $datatype;
 			foreach ( $locations as $key => $value ) {
-				if ( 'hcard' !== $datatype && '' !== $template ) {
+				if ( 'hcard' !== $datatype && '' === $template ) {
 					$label   = stripslashes( $value->{$datatype} );
 					$url     = mc_maplink( $value, 'url', 'location' );
 					$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
-				} elseif ( 'hcard' === $datatype && '' === $template ) {
+				} elseif ( 'hcard' === $datatype || 'hcard' === $template ) {
 					$label   = mc_hcard( $value, 'true', 'true', 'location' );
 					$output .= "<li>$label</li>";
 				} elseif ( '' !== $template ) {
