@@ -283,7 +283,7 @@ function mc_skip_holidays() {
 		$return = true;
 	}
 
-	return $return;
+	return apply_filters( 'mc_skip_holidays', $return );
 }
 
 /**
