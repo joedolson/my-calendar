@@ -2688,6 +2688,9 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 		$orig_begin   = $post_begin . ' ' . $post_time;
 		$orig_end     = $post_end . ' ' . $post_endtime;
 	}
+	// Calculate time offset for date and time.
+	$begin_diff = strtotime( date( 'Y-m-d H:i:s', strtotime( $orig_begin ) ) ) - strtotime( date( 'Y-m-d', strtotime( $orig_begin ) ) );
+	$end_diff   = strtotime( date( 'Y-m-d H:i:s', strtotime( $orig_end ) ) ) - strtotime( date( 'Y-m-d', strtotime( $orig_end ) ) );
 
 	$group_id = $event->event_group_id;
 	$format   = array( '%d', '%s', '%s', '%d' );
@@ -2749,9 +2752,9 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				// Every = $every = e.g. every 14 weekdays.
 				// Num forward = $numforward = e.g. 7 times.
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
-					$begin = strtotime( $orig_begin . ' ' . ( $every * $i ) . ' weekdays' );
-					$end   = strtotime( $orig_end . ' ' . ( $every * $i ) . ' weekdays' );
-					$data  = array(
+					$begin  = strtotime( $orig_begin . ' ' . ( $every * $i ) . ' weekdays' ) + $begin_diff;
+					$end    = strtotime( $orig_end . ' ' . ( $every * $i ) . ' weekdays' ) + $end_diff;
+					$data   = array(
 						'occur_event_id' => $id,
 						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
