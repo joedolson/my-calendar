@@ -1017,8 +1017,8 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				$event       = mc_get_instance_data( $last->occur_id );
 				$repeats     = gmdate( 'Y-m-d', strtotime( $event->occur_begin ) );
 			}
-			$hol_checked   = ( mc_skip_holidays() ) ? true : false;
-			$fifth_checked = ( mc_no_fifth_week() ) ? true : false;
+			$hol_checked   = ( mc_skip_holidays() && ! $has_data ) ? true : false;
+			$fifth_checked = ( mc_no_fifth_week() && ! $has_data ) ? true : false;
 			if ( $has_data ) {
 				$hol_checked   = ( '1' === $data->event_holiday ) ? true : $hol_checked;
 				$fifth_checked = ( '1' === $data->event_fifth_week ) ? true : $fifth_checked;
