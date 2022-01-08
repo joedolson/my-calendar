@@ -158,7 +158,7 @@ function my_calendar_manage_categories() {
 
 			if ( $results ) {
 				// Set events with deleted category as primary to default category as primary.
-				$set_category = ( is_numeric( $default_category ) ) ? absint( $default_category ) : 1;
+				$set_category = ( is_numeric( $default_category ) && $cat_id !== (int) $default_category ) ? absint( $default_category ) : 1;
 				$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				// Update existing relationships with this category.
 				$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_category_relationships_table() . '` SET category_id = %d WHERE category_id=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
