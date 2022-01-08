@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.8
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.3.2
+Stable tag: 3.3.3
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -83,6 +83,17 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.3.3 =
+
+* Bug fix: Timezone omits positive/negative signifier in JSON LD in UTC+ timezones.
+* Bug fix: Widen location autocomplete field.
+* Bug fix: Fix show location shortcode templating.
+* Bug fix: Recur daily by weekday did not produce valid times.
+* Bug fix: Skip holidays default state filter missing.
+* Bug fix: Only apply default state on special case recurrence fields on new events.
+* Bug fix: Category relationships not updated correctly if category deleted.
+* Bug fix: File path incorrectly referenced when finding custom icon directories.
 
 = 3.3.2 =
 
