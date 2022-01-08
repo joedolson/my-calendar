@@ -630,7 +630,7 @@ function mc_list_events() {
 						$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 						$invalid = true;
 					}
-					$class   = ( $invalid ) ? 'invalid' : $class;
+					$class   = ( $invalid ) ? 'invalid' : '';
 					$pending = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
 					$trashed = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
 					$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
