@@ -44,7 +44,7 @@ function mc_is_all_day( $event ) {
  * @return boolean
  */
 function mc_is_custom_icon() {
-	$dir  = plugin_dir_path( __FILE__ );
+	$dir  = trailingslashit( dirname( __FILE__, 2 ) );
 	$base = basename( $dir );
 	if ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) ) {
 		$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
