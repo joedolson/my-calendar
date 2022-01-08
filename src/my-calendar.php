@@ -100,9 +100,7 @@ function mc_delete_posts( $type ) {
  * Uninstall function for removing terms and posts.
  */
 function mc_uninstall() {
-	wp_mail( 'joe@joedolson.com', 'Before deleting Data', 'test of content' );
 	if ( get_option( 'mc_drop_tables' ) === 'true' ) {
-		wp_mail( 'joe@joedolson.com', 'Deleting Data', 'test of content' );
 		mc_delete_posts( 'mc-events' );
 		mc_delete_posts( 'mc-locations' );
 		$terms = get_terms(
