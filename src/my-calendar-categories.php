@@ -155,7 +155,6 @@ function my_calendar_manage_categories() {
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' === $_GET['mode'] ) {
 			$cat_id  = (int) $_GET['category_id'];
 			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			
 
 			if ( $results ) {
 				// Set events with deleted category as primary to default category as primary.
@@ -164,7 +163,7 @@ function my_calendar_manage_categories() {
 				// Update existing relationships with this category.
 				$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_category_relationships_table() . '` SET category_id = %d WHERE category_id=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				// clean out duplicates.
-				$remove_dups = $wpdb->query( 'DELETE cr1 FROM `' . my_calendar_category_relationships_table() . '` AS cr1 INNER JOIN `' . my_calendar_category_relationships_table() . '` AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id' );
+				$remove_dups = $wpdb->query( 'DELETE cr1 FROM `' . my_calendar_category_relationships_table() . '` AS cr1 INNER JOIN `' . my_calendar_category_relationships_table() . '` AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			} else {
 				$cal_results = false;
 			}
