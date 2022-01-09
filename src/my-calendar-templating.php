@@ -144,7 +144,7 @@ function mc_templates_edit() {
 				<p>
 					<input type="submit" name="save" class="button-primary" value="<?php esc_attr_e( 'Update Template', 'my-calendar' ); ?>" />
 				<?php if ( ! mc_is_core_template( $key ) ) { ?>
-					<input type="submit" name="delete" class="button-secondary" value=<?php esc_attr_e( 'Delete Template', 'my-calendar' ); ?>" />
+					<input type="submit" name="delete" class="button-secondary" value="<?php esc_attr_e( 'Delete Template', 'my-calendar' ); ?>" />
 				<?php } ?>
 				</p>
 			<?php } ?>
