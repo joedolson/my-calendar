@@ -252,7 +252,7 @@ function mc_get_help_footer( $return = '' ) {
 			</li>
 			<li>
 				<div class="dashicons dashicons-translation" aria-hidden="true"></div>
-				<a href="http://translate.joedolson.com/projects/my-calendar">' . __( 'Help translate this plugin!', 'my-calendar' ) . '</a>
+				<a href="https://translate.wordpress.org/projects/wp-plugins/my-calendar/">' . __( 'Help translate this plugin!', 'my-calendar' ) . '</a>
 			</li>
 		</ul>';
 	}
