@@ -46,6 +46,7 @@ div.site-content, table {
 	line-height: 1;
 	padding-top: 6px;
 	padding-bottom: 6px;
+	margin: 0;
 }
 
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
