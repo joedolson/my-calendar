@@ -288,7 +288,7 @@ function mc_kses_elements() {
 			'class'       => array(),
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
-			'span'        => array(),
+			'style'       => array(),
 		),
 		'i'                => array(
 			'id'          => array(),
