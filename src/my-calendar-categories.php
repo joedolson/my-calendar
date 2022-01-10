@@ -1001,6 +1001,26 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 }
 
 /**
+ * Verify that an event has a valid category relationship.
+ *
+ * @param object $event Event object.
+ */
+function mc_check_category_relationships( $event ) {
+	global $wpdb;
+	$relationship = $wpdb->get_var( $wpdb->prepare( 'SELECT relationship_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d AND category_id = %d', $event->event_id, $event->event_category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( ! $relationship ) {
+		$wpdb->insert(
+			my_calendar_category_relationships_table(),
+			array(
+				'event_id'    => $event->event_id,
+				'category_id' => $event->event_category,
+			),
+			array( '%d', '%d' )
+		);
+	}
+}
+
+/**
  * Show category output for editing lists.
  *
  * @param object $event Event object.
@@ -1012,6 +1032,8 @@ function mc_admin_category_list( $event ) {
 		// Events *must* have a category.
 		mc_update_event( 'event_category', 1, $event->event_id, '%d' );
 	}
+	// Verify valid category relationships. Corrects problems caused by deleting a category pre 3.3.3.
+	mc_check_category_relationships( $event );
 	$cat = mc_get_category_detail( $event->event_category, false );
 	if ( ! is_object( $cat ) ) {
 		$cat = (object) array(
