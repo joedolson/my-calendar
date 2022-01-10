@@ -1775,11 +1775,13 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 			foreach ( $locations as $key => $value ) {
 				if ( 'hcard' !== $datatype && '' === $template ) {
 					$label   = stripslashes( $value->{$datatype} );
-					$url     = mc_maplink( $value, 'url', 'location' );
-					$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
+					if ( $label ) {
+						$url     = mc_maplink( $value, 'url', 'location' );
+						$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
+					}
 				} elseif ( 'hcard' === $datatype || 'hcard' === $template ) {
 					$label   = mc_hcard( $value, 'true', 'true', 'location' );
-					$output .= "<li>$label</li>";
+					$output .= ( $label ) ? "<li>$label</li>" : '';
 				} elseif ( '' !== $template ) {
 					if ( mc_key_exists( $template ) ) {
 						$template = mc_get_custom_template( $template );
@@ -1802,7 +1804,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 						'phone2'    => $value->location_phone2,
 					);
 					$label   = mc_draw_template( $values, $template );
-					$output .= ( '' !== $label ) ? "<li>$label</li>" : '';
+					$output .= ( '' !== trim( $label ) ) ? "<li>$label</li>" : '';
 				}
 			}
 			$output = '<ul class="mc-locations">' . $output . '</ul>';
