@@ -302,8 +302,10 @@ function mc_verify_location( $location ) {
 	$location->location_post = '';
 	$json                    = json_encode( $location );
 	if ( '{"location_id":"","location_label":"","location_street":"","location_street2":"","location_city":"","location_state":"","location_postcode":"","location_region":"","location_url":"","location_country":"","location_longitude":"0.000000","location_latitude":"0.000000","location_zoom":"16","location_phone":"","location_phone2":"","location_access":"","location_post":""}' === $json ) {
-		mc_delete_location( $location_id );
-		mc_location_delete_post( true, $location_id );
+		if ( $location_id ) {
+			mc_delete_location( $location_id );
+			mc_location_delete_post( true, $location_id );
+		}
 
 		return false;
 	}

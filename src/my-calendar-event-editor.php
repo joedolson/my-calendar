@@ -1875,23 +1875,28 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 					$event_access    = $location->location_access;
 				}
 			} else {
-				$event_label     = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
-				$event_street    = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
-				$event_street2   = ! empty( $post['event_street2'] ) ? $post['event_street2'] : '';
-				$event_city      = ! empty( $post['event_city'] ) ? $post['event_city'] : '';
-				$event_state     = ! empty( $post['event_state'] ) ? $post['event_state'] : '';
-				$event_postcode  = ! empty( $post['event_postcode'] ) ? $post['event_postcode'] : '';
-				$event_region    = ! empty( $post['event_region'] ) ? $post['event_region'] : '';
-				$event_country   = ! empty( $post['event_country'] ) ? $post['event_country'] : '';
-				$event_url       = ! empty( $post['event_url'] ) ? $post['event_url'] : '';
-				$event_longitude = ! empty( $post['event_longitude'] ) ? $post['event_longitude'] : '';
-				$event_latitude  = ! empty( $post['event_latitude'] ) ? $post['event_latitude'] : '';
-				$event_zoom      = ! empty( $post['event_zoom'] ) ? $post['event_zoom'] : '';
-				$event_phone     = ! empty( $post['event_phone'] ) ? $post['event_phone'] : '';
-				$event_phone2    = ! empty( $post['event_phone2'] ) ? $post['event_phone2'] : '';
-				$event_access    = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
-				$event_access    = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
-				if ( isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
+				$event_label       = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
+				$event_street      = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
+				$event_street2     = ! empty( $post['event_street2'] ) ? $post['event_street2'] : '';
+				$event_city        = ! empty( $post['event_city'] ) ? $post['event_city'] : '';
+				$event_state       = ! empty( $post['event_state'] ) ? $post['event_state'] : '';
+				$event_postcode    = ! empty( $post['event_postcode'] ) ? $post['event_postcode'] : '';
+				$event_region      = ! empty( $post['event_region'] ) ? $post['event_region'] : '';
+				$event_country     = ! empty( $post['event_country'] ) ? $post['event_country'] : '';
+				$event_url         = ! empty( $post['event_url'] ) ? $post['event_url'] : '';
+				$event_longitude   = ! empty( $post['event_longitude'] ) ? $post['event_longitude'] : '';
+				$event_latitude    = ! empty( $post['event_latitude'] ) ? $post['event_latitude'] : '';
+				$event_zoom        = ! empty( $post['event_zoom'] ) ? $post['event_zoom'] : '';
+				$event_phone       = ! empty( $post['event_phone'] ) ? $post['event_phone'] : '';
+				$event_phone2      = ! empty( $post['event_phone2'] ) ? $post['event_phone2'] : '';
+				$event_access      = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
+				$event_access      = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
+				$has_location_data = false;
+
+				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_zoom . $event_phone . $event_phone2 . $event_access ) ) {
+					$has_location_data = true;
+				}
+				if ( $has_location_data && isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
 					// Only add this with the first event, if adding multiples.
 					$add_loc = array(
 						'location_label'     => $event_label,
