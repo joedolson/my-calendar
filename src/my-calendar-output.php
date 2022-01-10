@@ -1774,7 +1774,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 			$datatype = ( '' === trim( $template ) ) ? 'hcard' : $datatype;
 			foreach ( $locations as $key => $value ) {
 				if ( 'hcard' !== $datatype && '' === $template ) {
-					$label   = stripslashes( $value->{$datatype} );
+					$label = stripslashes( $value->{$datatype} );
 					if ( $label ) {
 						$url     = mc_maplink( $value, 'url', 'location' );
 						$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
