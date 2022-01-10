@@ -289,6 +289,29 @@ function mc_manage_locations() {
 }
 
 /**
+ * Verify that a location has valid fields. If a location has no valid data, delete it.
+ *
+ * @param object $location Location object.
+ *
+ * @return bool
+ */
+function mc_verify_location( $location ) {
+	$location_id = $location->location_id;
+	// Unset location ID and location Post, which will always exist.
+	$location->location_id   = '';
+	$location->location_post = '';
+	$json = json_encode( $location );
+	if ( '{"location_id":"","location_label":"","location_street":"","location_street2":"","location_city":"","location_state":"","location_postcode":"","location_region":"","location_url":"","location_country":"","location_longitude":"0.000000","location_latitude":"0.000000","location_zoom":"16","location_phone":"","location_phone2":"","location_access":"","location_post":""}' === $json ) {
+		mc_delete_location( $location_id );
+		mc_location_delete_post( true, $location_id );
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
  * Generate the location manager row for a location.
  *
  * @param object $location Location object.
@@ -297,6 +320,11 @@ function mc_manage_locations() {
  */
 function mc_location_manager_row( $location ) {
 	$card = mc_hcard( $location, 'true', 'false', 'location' );
+	$verify = mc_verify_location( $location );
+	if ( ! $verify ) {
+		return '';
+	}
+
 	if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
 		$card    = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
 		$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';
