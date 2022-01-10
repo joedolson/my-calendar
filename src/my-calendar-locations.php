@@ -318,12 +318,13 @@ function mc_modify_location( $update, $where ) {
  */
 function mc_delete_location( $location ) {
 	global $wpdb;
-	$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $_GET['location_id'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	do_action( 'mc_delete_location', $results, (int) $_GET['location_id'] );
+	$location = (int) ( isset( $_GET['location_id'] ) ) ? $_GET['location_id'] : $location;
+	$results  = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	do_action( 'mc_delete_location', $results, $location );
 	if ( $results ) {
 		$return           = mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ), false );
 		$default_location = get_option( 'mc_default_location', false );
-		if ( (int) $default_location === (int) $_GET['location_id'] ) {
+		if ( (int) $default_location === $location ) {
 			delete_option( 'mc_default_location' );
 		}
 	} else {
