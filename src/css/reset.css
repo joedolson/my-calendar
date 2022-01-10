@@ -35,7 +35,6 @@ div.site-content, table {
 	column-gap: 10px;
 	row-gap: 10px;
 	padding: .25rem 0;
-	font-size: .9rem;
 }
 
 .mc-main .my-calendar-footer select:not(.my-calendar-admin select),
@@ -45,7 +44,6 @@ div.site-content, table {
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
 	line-height: 1;
-	font-size: .9rem;
 	padding-top: 6px;
 	padding-bottom: 6px;
 }
