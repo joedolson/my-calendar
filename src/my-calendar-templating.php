@@ -38,6 +38,7 @@ function mc_templates_do_edit() {
 			} else {
 				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
 					$template          = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( $_POST['mc_template'] ) : '';
+					$templates         = get_option( 'mc_templates' );
 					$templates[ $key ] = $template;
 					update_option( 'mc_templates', $templates );
 					update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
