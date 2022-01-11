@@ -308,11 +308,11 @@ function mc_generate_category_styles() {
 				$alt  = 'color';
 			}
 			$inverse = mc_inverse_color( $color );
-			$inv     = "$alt: $inverse;";
+			$inv     = "$alt: $inverse !important;";
 			if ( 'font' === get_option( 'mc_apply_color' ) || 'background' === get_option( 'mc_apply_color' ) ) {
 				// always an anchor as of 1.11.0, apply also to title.
-				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color; $inv }";
-				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor;}";
+				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
+				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor !important;}";
 			}
 			// Variables aren't dependent on options.
 			$category_vars .= '--category-' . $class . ': ' . $color . '; ';
