@@ -1159,18 +1159,18 @@ function mc_additional_dates( $data ) {
 		$instances = mc_admin_instances( $data->event_id, $date );
 		$input     = mc_recur_datetime_input( $data );
 		$output    = "
-		<div id='mc-accordion'>
-			<h4><button type='button' class='button'><span class='dashicons' aria-hidden='true'></span>" . esc_html__( 'View scheduled dates', 'my-calendar' ) . '</button></h4>
-			<div>' . $edit_desc . "
+		<div id='mc-scheduled-dates'>
+			<button type='button' aria-expanded='false' class='toggle-dates button'><span class='dashicons dashicons-arrow-right' aria-hidden='true'></span>" . esc_html__( 'View scheduled dates', 'my-calendar' ) . '</button>
+			<div id="mc-view-scheduled-dates">' . $edit_desc . "
 				<div class='mc_response' aria-live='assertive'></div>
 				<ul class='columns instance-list'>
 					$instances
 				</ul>
-				<p><button type='button' class='add-occurrence button-secondary' aria-expanded='false'><span class='dashicons dashicons-plus' aria-hidden='true'> </span>" . esc_html__( 'Add another date', 'my-calendar' ) . "</button></p>
+				<p><button data-action='shiftback' type='button' class='add-occurrence button-secondary' aria-expanded='false'><span class='dashicons dashicons-plus' aria-hidden='true'> </span>" . esc_html__( 'Add another date', 'my-calendar' ) . "</button></p>
 				<div class='mc_add_new'>
 					$input
 					<p>
-					<button type='button' class='save-occurrence button-primary clear'>" . esc_html__( 'Add Date', 'my-calendar' ) . '</button>
+					<button type='button' data-action='shiftback' class='save-occurrence button-secondary clear'>" . esc_html__( 'Add Date', 'my-calendar' ) . '</button>
 					</p>
 				</div>
 			</div>

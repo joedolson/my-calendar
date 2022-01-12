@@ -177,6 +177,54 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
+	var viewDates = document.querySelector( '.toggle-dates' );
+	if ( null !== viewDates ) {
+		var addDates = document.getElementById( 'mc-view-scheduled-dates' );
+		var container = document.getElementById( 'my-calendar' );
+		var primary = document.querySelectorAll( '.button-primary' );
+
+		addDates.classList.add( 'hidden' );
+		viewDates.addEventListener( 'click', function(e) {
+			var expanded = this.getAttribute( 'aria-expanded' );
+			// If prior state is true, do these tasks.
+			if ( 'true' === expanded ) {
+				this.setAttribute( 'data-action', '' );
+				container.classList.remove( 'disabled' );
+				primary.forEach((el) => {
+					el.disabled = false;
+				});
+				addDates.classList.add( 'hidden' );
+				this.setAttribute( 'aria-expanded', 'false' );
+				this.firstChild.classList.add( 'dashicons-arrow-right' );
+				this.firstChild.classList.remove( 'dashicons-arrow-down' );
+			} else {
+				this.setAttribute( 'data-action', 'shiftforward' );
+				primary.forEach((el) => {
+					el.disabled = true;
+				});
+				container.classList.add( 'disabled' );
+				addDates.classList.remove( 'hidden' );
+				this.setAttribute( 'aria-expanded', 'true' );
+				this.firstChild.classList.add( 'dashicons-arrow-down' );
+				this.firstChild.classList.remove( 'dashicons-arrow-right' );
+			}
+		});
+	}
+
+	$(document).on( 'keydown', '#mc-scheduled-dates button',
+		function(e) {
+			var keycode = ( e.keyCode ? e.keyCode : e.which );
+			var action  = $( ':focus' ).attr( 'data-action' );
+			if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
+				e.preventDefault();
+				$( '.toggle-dates' ).trigger( 'focus' );
+			}
+			if ( ( e.shiftKey && keycode == 9 ) && action == 'shiftforward' ) {
+				e.preventDefault();
+				$( '[data-action=shiftback]' ).trigger( 'focus' );
+			}
+		});
+
 	// Set default conditions.
 	$( '.event_span' ).hide();
 	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );

@@ -29,8 +29,10 @@
 			var expanded = $( this ).attr( 'aria-expanded' );
 			if ( expanded == 'true' ) {
 				$( this ).attr( 'aria-expanded', 'false' ).find( '.dashicons' ).addClass( 'dashicons-plus' ).removeClass( 'dashicons-minus' );
+				$( this ).attr( 'data-action', 'shiftback' );
 			} else {
 				$( this ).attr( 'aria-expanded', 'true' ).find( '.dashicons' ).addClass( 'dashicons-minus' ).removeClass( 'dashicons-plus' );
+				$( this ).attr( 'data-action', '' );
 			}
 			$( '.mc_add_new' ).toggle();
 		});

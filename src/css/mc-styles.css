@@ -795,10 +795,22 @@ strong.label {
 	margin-bottom: 0;
 }
 
+#my-calendar.disabled .ui-sortable .postbox .inside > *:not(#mc-scheduled-dates) {
+	opacity: .3;
+}
+
+#my-calendar.disabled #mc-scheduled-dates {
+	padding: 1em .5em;
+	box-shadow: 3px 3px 3px #c3c4c7;
+	border: 1px solid #a7aaad;
+}
+
 .add_field .dashicons,
 .add-location .dashicons,
+.toggle-dates .dashicons,
 .add-occurrence .dashicons {
 	vertical-align: middle;
+	font-size: 1.1rem;
 }
 
 .mc-settings-page #mc-sortable .mc-updated,
