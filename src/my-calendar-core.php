@@ -2019,7 +2019,7 @@ add_filter( 'the_posts', 'mc_close_comments' );
  * @return array $posts
  */
 function mc_close_comments( $posts ) {
-	if ( ! is_single() || empty( $posts ) ) {
+	if ( is_admin() || ! is_single() || empty( $posts ) ) {
 		return $posts;
 	}
 
