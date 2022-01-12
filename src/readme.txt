@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.8
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.3.3
+Stable tag: 3.3.4
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -83,6 +83,27 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.3.4 =
+
+* Bug fix: is_single() shouldn't be called in admin
+* Bug fix: Prevent invalid events from breaking year dropdown.
+* Bug fix: Make sure category colors are important.
+* Bug fix: Set margins to 0 on input/button in nav.
+* Bug fix: Decreasing font sizes in nav caused too many problems in older themes.
+* Bug fix: Don't insert locations if no data passed to inserter.
+* Bug fix: Delete location argument was not used.
+* Bug fix: don't output empty locations.
+* Bug fix: 'span' is not an attribute on 'span'.
+* Bug fix: Verify validity of category relationships when parsing admin lists.
+* Bug fix: $templates was undefined and broke saving templates.
+* Bug fix: missing quote in 'delete template' button.
+* Bug fix: custom templates sanitized incorrectly.
+* Bug fix: translations link went to old translations site.
+* Bug fix: Handle what happens if default category is deleted.
+* Bug fix: Invalid class not reset in admin lists.
+* Change: If location without any unique data is listed in admin, auto delete.
+* Change: changes to add dates UI to clarify usage.
 
 = 3.3.3 =
 
