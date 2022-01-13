@@ -4,7 +4,7 @@
 	size: landscape;
 }
 
-.my-calendar-header, .mc_bottomnav, h3 img, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing {
+.my-calendar-header, .mc_bottomnav, h3 img, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing, .mc-date .event-icon {
 	display: none;
 }
 
