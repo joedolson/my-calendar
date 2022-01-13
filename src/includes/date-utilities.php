@@ -497,7 +497,7 @@ function mc_date( $format, $timestamp = false, $offset = true ) {
 	}
 	$timestamp = $timestamp + $offset;
 
-	return gmdate( $format, $timestamp );
+	return ( '' === $format ) ? $timestamp : gmdate( $format, $timestamp );
 }
 
 /**

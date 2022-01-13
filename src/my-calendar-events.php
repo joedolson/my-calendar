@@ -972,7 +972,7 @@ function mc_admin_instances( $id, $occur = false ) {
 			} else {
 				$time = mc_date( get_option( 'mc_time_format' ), $start ) . '-' . mc_date( get_option( 'mc_time_format' ), $end );
 			}
-			$date  = date_i18n( mc_date_format(), $start );
+			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
 			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
 			$class = '';
 			if ( (int) $result->occur_id === (int) $occur || 1 === $count ) {
