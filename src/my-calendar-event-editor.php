@@ -707,13 +707,13 @@ function mc_show_edit_block( $field ) {
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
-
+	
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
 	$screen = get_current_screen();
 	$show   = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
-		$show = $screen->get_option( 'mc_show_on_page', 'default' );
+		$show = get_option( 'mc_input_options' );
 	}
 	// if this doesn't exist in array, leave it on.
 	if ( ! isset( $input[ $field ] ) || ! isset( $show[ $field ] ) ) {
@@ -754,7 +754,7 @@ function mc_edit_block_is_visible( $field ) {
 	$screen = get_current_screen();
 	$show   = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
-		$show = $screen->get_option( 'mc_show_on_page', 'default' );
+		$show = get_option( 'mc_input_options' );
 	}
 	if ( empty( $show ) ) {
 		$show = $defaults;
@@ -780,6 +780,8 @@ function mc_edit_block_is_visible( $field ) {
 			return true;
 		}
 	}
+
+	return false;
 }
 
 /**
