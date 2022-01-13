@@ -102,6 +102,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: translations link went to old translations site.
 * Bug fix: Handle what happens if default category is deleted.
 * Bug fix: Invalid class not reset in admin lists.
+* Bug fix: date displayed in wrong timezone in admin recurring events list.
 * Change: If location without any unique data is listed in admin, auto delete.
 * Change: changes to add dates UI to clarify usage.
 
