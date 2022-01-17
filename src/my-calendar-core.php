@@ -259,7 +259,7 @@ $style_vars
 		}
 	}
 	if ( mc_is_single_event() ) {
-		$mc_id = absint( $_GET['mc_id'] );
+		$mc_id = ( isset( $_GET['mc_id'] ) ? absint( $_GET['mc_id'] ) : false;
 		if ( $mc_id ) {
 			$event  = mc_get_event( $mc_id );
 			$schema = mc_event_schema( $event );
