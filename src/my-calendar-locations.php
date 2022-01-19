@@ -1226,6 +1226,7 @@ function mc_display_location_details( $content ) {
 			'before'   => 0,
 			'fallback' => __( 'No events currently scheduled at this location.', 'my-calendar' ),
 		);
+		$args     = apply_filters( 'mc_display_location_events', $args, $location );
 		$events   = my_calendar_upcoming_events( $args );
 		$content  = '
 <div class="mc-view-location">
