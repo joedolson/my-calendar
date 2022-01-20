@@ -920,6 +920,10 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
+.icon-list .category-icon img {
+	max-width: 100%;
+}
+
 .mc-primary-category option {
 	display: none;
 }

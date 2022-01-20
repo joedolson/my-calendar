@@ -1137,7 +1137,7 @@ function mc_admin_bar() {
  */
 function mc_admin_state( $states, $post ) {
 	if ( is_admin() ) {
-		if ( $post->ID === absint( get_option( 'mc_uri_id' ) ) ) {
+		if ( absint( get_option( 'mc_uri_id' ) ) === $post->ID ) {
 			$states[] = __( 'My Calendar Page', 'my-calendar' );
 		}
 	}
