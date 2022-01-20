@@ -395,7 +395,7 @@ function mc_exit_early( $event, $process_date ) {
  */
 function mc_private_event( $event, $type = true ) {
 	// If this is an invalid event, consider it private.
-	if ( ! property_exists( $event, 'category_private' ) ) {
+	if ( ! is_object( $event ) || ! property_exists( $event, 'category_private' ) ) {
 		return true;
 	}
 	if ( $type ) {
