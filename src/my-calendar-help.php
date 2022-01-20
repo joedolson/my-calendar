@@ -154,6 +154,7 @@ function my_calendar_help() {
  *
  * @param string $link_text Link text.
  * @param string $modal_title Modal iframe title.
+ * @param string $query Non-translatable version of modal title for search query.
  * @param int    $id Help text ID.
  * @param bool   $echo true to echo.
  *

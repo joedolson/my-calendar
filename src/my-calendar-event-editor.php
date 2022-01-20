@@ -707,7 +707,7 @@ function mc_show_edit_block( $field ) {
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
-	
+
 	$input  = array_merge( $defaults, $input );
 	$user   = get_current_user_id();
 	$screen = get_current_screen();
