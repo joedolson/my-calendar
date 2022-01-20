@@ -181,7 +181,7 @@ function mc_templates_edit() {
 			<h2>
 			<?php
 			esc_html_e( 'Template Tags', 'my-calendar' );
-			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 5 );
+			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template-tags', 5 );
 			?>
 			</h2>
 

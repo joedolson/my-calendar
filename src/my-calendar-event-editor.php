@@ -1052,7 +1052,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				$active      = ( $has_data && '' !== $recur_data ) ? ' active' : '';
 				$display     = '<div class="mc_recur_string ' . $active . '" aria-live="polite"><p>' . $recur_data . '</p></div>';
 				$return      = $pre . '
-	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( 'Help', __( 'Repetition Pattern', 'my-calendar' ), '2', false ) . '</h2>
+	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( __( 'Help', 'my-calendar' ), __( 'Repetition Pattern', 'my-calendar' ), 'repetition pattern', '2', false ) . '</h2>
 	<div class="inside recurrences ' . $class . '">' . $prev . $display . $warning . '
 		<fieldset class="recurring">
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
@@ -1366,7 +1366,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						}
 						?>
 					<p class="event_span">
-						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Copy', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'Copy an event', 'my-calendar' ), 4 ); ?>
+						<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Copy', 'my-calendar' ); ?></button> <?php mc_help_link( __( 'Help', 'my-calendar' ), __( 'Copy an event', 'my-calendar' ), 'copy an event', 4 ); ?>
 					</p>
 					<ol class="mc-repeat-events">
 						<li id="event1" class="datetime-template enabled">
@@ -1382,7 +1382,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							?>
 							</fieldset>
 							<div class="buttons">
-								<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Copy', 'my-calendar' ); ?></button> <?php mc_help_link( 'Help', __( 'Copy an event', 'my-calendar' ), '1' ); ?>
+								<button type="button" class="add_field button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Add Copy', 'my-calendar' ); ?></button> <?php mc_help_link( __( 'Help', 'my-calendar' ), __( 'Copy an event', 'my-calendar' ), 'copy an event', '1' ); ?>
 							</div>
 						</li>
 					</ol>

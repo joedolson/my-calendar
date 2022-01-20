@@ -173,7 +173,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'below' ); ?>"><?php _e( 'Navigation below calendar', 'my-calendar' ); ?></label>
 			<input type="text" class="widefat" name="<?php echo $this->get_field_name( 'below' ); ?>" id="<?php echo $this->get_field_id( 'below' ); ?>" value="<?php echo ( '' === $below ) ? 'key' : esc_attr( $below ); ?>" aria-describedby='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields' /> <span id='<?php echo $this->get_field_id( 'below' ); ?>-navigation-fields' class="field-description" style="font-size: 13px;color:#555">
-			<?php _e( 'Navigation options:', 'my-calendar' ); ?> <code>nav,jump,print,key,feeds,exports,none</code><?php mc_help_link( 'Help', __( 'Navigation Keywords', 'my-calendar' ), 3 ); ?>
+			<?php _e( 'Navigation options:', 'my-calendar' ); ?> <code>nav,jump,print,key,feeds,exports,none</code><?php mc_help_link( __( 'Help', 'my-calendar' ), __( 'Navigation Keywords', 'my-calendar' ), 'navigation keywords', 3 ); ?>
 		</span>
 		</p>
 

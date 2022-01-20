@@ -45,7 +45,7 @@ function my_calendar_design() {
 							<h2>
 							<?php
 							_e( 'Template Editor', 'my-calendar' );
-							mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 5 );
+							mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
 							?>
 							</h2>
 							<?php
