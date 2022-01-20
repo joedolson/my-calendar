@@ -1128,6 +1128,25 @@ function mc_admin_bar() {
 }
 
 /**
+ * Label My Calendar pages in the admin.
+ *
+ * @param array $states States for post.
+ * @param int   $post_id The post ID.
+ *
+ * @return array
+ */
+function mc_admin_state( $states, $post ) {
+	if ( is_admin() ) {
+		if ( $post->ID === absint( get_option( 'mc_uri_id' ) ) ) {
+			$states[] .= __( 'My Calendar Page', 'my-calendar' );
+		}
+	}
+
+	return $states;
+}
+add_filter( 'display_post_states', 'mc_admin_state', 10, 2 );
+
+/**
  * Send email notification about an event.
  *
  * @param object $event Event object.
