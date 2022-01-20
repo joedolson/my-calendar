@@ -228,7 +228,7 @@ function mc_get_help_footer( $return = '' ) {
 		$return = '
 		<ul class="help">
 			<li>
-				<a href="https://docs.joedolson.com/my-calendar/quick-start/">' . __( 'Documentation', 'my-calendar' ) . '</a>
+				<a href="https://docs.joedolson.com/my-calendar/">' . __( 'Documentation', 'my-calendar' ) . '</a>
 			</li>
 			<li>
 				<a href="' . admin_url( 'admin.php?page=my-calendar-shortcodes' ) . '">' . __( 'Shortcode Generator', 'my-calendar' ) . '</a>
