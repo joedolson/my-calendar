@@ -1130,15 +1130,15 @@ function mc_admin_bar() {
 /**
  * Label My Calendar pages in the admin.
  *
- * @param array $states States for post.
- * @param int   $post_id The post ID.
+ * @param array  $states States for post.
+ * @param object $post The post object.
  *
  * @return array
  */
 function mc_admin_state( $states, $post ) {
 	if ( is_admin() ) {
 		if ( $post->ID === absint( get_option( 'mc_uri_id' ) ) ) {
-			$states[] .= __( 'My Calendar Page', 'my-calendar' );
+			$states[] = __( 'My Calendar Page', 'my-calendar' );
 		}
 	}
 
