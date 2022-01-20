@@ -1031,29 +1031,30 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 	$exclude_categories = mc_private_categories();
 	$ts_string          = mc_ts();
 	$source             = mc_get_event( $mc_id );
-	$date               = mc_date( 'Y-m-d H:i:s', strtotime( $source->occur_begin ), false );
-	$now                = $date;
+	$return             = array();
+	if ( is_object( $source ) ) {
+		$date        = mc_date( 'Y-m-d H:i:s', strtotime( $source->occur_begin ), false );
+		$event_query = 'SELECT *, ' . $ts_string . '
+				FROM ' . my_calendar_event_table( $site ) . '
+				JOIN ' . my_calendar_table( $site ) . ' AS e
+				ON (event_id=occur_event_id)
+				JOIN ' . my_calendar_categories_table( $site ) . " as c
+				ON (e.event_category=c.category_id)
+				WHERE $select_published $exclude_categories
+				AND occur_begin $adjacence CAST('$date' as DATETIME) ORDER BY occur_begin $order LIMIT 0,1";
 
-	$event_query = 'SELECT *, ' . $ts_string . '
-			FROM ' . my_calendar_event_table( $site ) . '
-			JOIN ' . my_calendar_table( $site ) . ' AS e
-			ON (event_id=occur_event_id)
-			JOIN ' . my_calendar_categories_table( $site ) . " as c
-			ON (e.event_category=c.category_id)
-			WHERE $select_published $exclude_categories
-			AND occur_begin $adjacence CAST('$now' as DATETIME) ORDER BY occur_begin $order LIMIT 0,1";
-
-	$events = $mcdb->get_results( $event_query );
-	if ( ! empty( $events ) ) {
-		foreach ( array_keys( $events ) as $key ) {
-			$event        =& $events[ $key ];
-			$arr_events[] = $event;
+		$events = $mcdb->get_results( $event_query );
+		if ( ! empty( $events ) ) {
+			foreach ( array_keys( $events ) as $key ) {
+				$event        =& $events[ $key ];
+				$arr_events[] = $event;
+			}
 		}
-	}
-	if ( ! empty( $arr_events ) ) {
-		$return = mc_create_tags( $arr_events[0] );
-	} else {
-		$return = array();
+		if ( ! empty( $arr_events ) ) {
+			$return = mc_create_tags( $arr_events[0] );
+		} else {
+			$return = array();
+		}
 	}
 
 	return $return;
