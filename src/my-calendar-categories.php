@@ -448,7 +448,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 									<input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
 									<ul class="autocomplete-result-list"></ul>
 								</div>
-								<?php mc_help_link( __( 'Show Category Icons', 'my-calendar' ), __( 'Category Icons', 'my-calendar' ), 6 ); ?>
+								<?php mc_help_link( __( 'Show Category Icons', 'my-calendar' ), __( 'Category Icons', 'my-calendar' ), 'Category Icons', 6 ); ?>
 							</div>
 							<?php
 							if ( 'add' === $view ) {
@@ -1179,7 +1179,7 @@ function mc_get_img( $file, $is_custom = false ) {
 	}
 	$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
 	$src  = $path . $file;
-	if ( false !== stripos( $file, '.png' ) ) {
+	if ( false === stripos( $file, '.svg' ) ) {
 		return '<img src="' . esc_url( $src ) . '" alt="" />';
 	}
 	$label_id = sanitize_title( $file );
