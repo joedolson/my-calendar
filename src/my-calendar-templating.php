@@ -37,14 +37,14 @@ function mc_templates_do_edit() {
 				wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=duplicate#my-calendar-templates' ) );
 			} else {
 				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-					$template          = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( $_POST['mc_template'] ) : '';
+					$template          = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( stripslashes( $_POST['mc_template'] ) ) : '';
 					$templates         = get_option( 'mc_templates' );
 					$templates[ $key ] = $template;
 					update_option( 'mc_templates', $templates );
 					update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
 					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=core&mc_template=' . $key . '#my-calendar-templates' ) ) );
 				} elseif ( isset( $_POST['mc_template'] ) ) {
-					$template = wp_kses_post( $_POST['mc_template'] );
+					$template = wp_kses_post( stripslashes( $_POST['mc_template'] ) );
 					if ( mc_key_exists( $key ) ) {
 						$key = mc_update_template( $key, $template );
 					} else {
