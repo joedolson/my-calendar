@@ -469,10 +469,19 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['link_title'] = $e['title'];
 	}
 
-	$e['details_link']  = $e_link;
-	$e['details']       = "<a href='" . esc_url( $e_link ) . "' class='mc-details' $nofollow>$e_label</a>";
-	$e['linking']       = ( '' !== $e['link'] ) ? $event->event_link : $e_link;
-	$e['linking_title'] = ( '' !== $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $nofollow>" . $e['title'] . '</a>' : $e['title'];
+	$e['details_link'] = $e_link;
+	$e['details']      = "<a href='" . esc_url( $e_link ) . "' class='mc-details' $nofollow>$e_label</a>";
+	$e['linking']      = ( '' !== $e['link'] ) ? $event->event_link : $e_link;
+
+	$rel = $nofollow;
+	if ( mc_external_link( $e['linking'] ) ) {
+		if ( $rel ) {
+			$rel = 'rel="external nofollow"';
+		} else {
+			$rel = 'rel="external"';
+		}
+	}
+	$e['linking_title'] = ( '' !== $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $rel>" . $e['title'] . '</a>' : $e['title'];
 
 	if ( 'related' !== $context && ( mc_is_single_event() ) ) {
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );

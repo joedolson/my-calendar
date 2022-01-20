@@ -201,7 +201,7 @@ function mc_print_contextual_help() {
 	<?php
 	echo wp_kses( mc_get_help_text( $id ), mc_kses_elements() );
 	$return_url = add_query_arg( 's', $query, 'https://docs.joedolson.com/my-calendar/' );
-	$return     = wp_kses_post( '<p class="docs-link"><a target="_parent" href="' . esc_url( $return_url ) . '">' . __( 'Documentation (opens in new tab)', 'my-calendar' ) . '</a></p>' );
+	$return     = wp_kses_post( '<p class="docs-link"><a target="_parent" href="' . esc_url( $return_url ) . '">' . __( 'Documentation', 'my-calendar' ) . '</a></p>' );
 	echo wp_kses_post( mc_get_help_footer( $return ) );
 	?>
 	</div>
@@ -326,7 +326,7 @@ function mc_display_icons() {
 			$img     = mc_get_img( $icon, $is_custom );
 			$output .= '<li class="category-icon"><code>' . $icon . '</code>' . $img . '</li>';
 		}
-		$output .= '</ul><p><a target="_parent" href="https://fontawesome.com/license">' . __( 'Icons by Font Awesome (opens in new tab)', 'my-calendar' ) . '</a></p>';
+		$output .= '</ul><p><a target="_parent" href="https://fontawesome.com/license">' . __( 'Icons by Font Awesome', 'my-calendar' ) . '</a></p>';
 		set_transient( 'my_calendar_svg_list', $output, MONTH_IN_SECONDS );
 	}
 
