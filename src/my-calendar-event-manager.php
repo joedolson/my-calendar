@@ -318,6 +318,10 @@ function my_calendar_manage() {
 									'below'    => 'categories,locations,access',
 									'above'    => 'nav,jump,search',
 								);
+								if ( mc_count_locations() > 200 ) {
+									$calendar['below'] = 'categories,access';
+								}
+								apply_filters( 'mc_filter_admin_grid_args', $calendar );
 								echo my_calendar( $calendar );
 							} else {
 								mc_list_events();
