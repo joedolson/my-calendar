@@ -108,8 +108,9 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 				$check = '';
 			}
 			if ( '' === $check ) {
-				$output_array[] = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id );
-				$json           = mc_event_schema( $event );
+				$tags           = mc_create_tags( $event, $id );
+				$output_array[] = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
+				$json           = mc_event_schema( $event, $tags );
 			}
 		}
 		if ( is_array( $output_array ) ) {
@@ -144,10 +145,11 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
  * @param string $time Time view being drawn.
  * @param string $template Template to use to draw event.
  * @param string $id ID for the calendar calling this function.
+ * @param array  $tags Event tags array.
  *
  * @return string Generated HTML.
  */
-function my_calendar_draw_event( $event, $type, $process_date, $time, $template = '', $id = '' ) {
+function my_calendar_draw_event( $event, $type, $process_date, $time, $template = '', $id = '', $tags = array() ) {
 	$exit_early = mc_exit_early( $event, $process_date );
 	if ( $exit_early ) {
 		return '';
@@ -172,8 +174,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	$access      = '';
 	$image       = '';
 	$tickets     = '';
-	$data        = mc_create_tags( $event, $id );
 	$details     = '';
+	$data        = ( empty( $tags ) ) ? mc_create_tags( $event, $id ) : $tags;
 	$otype       = ( 'calendar' === $type ) ? 'grid' : $type;
 
 	if ( mc_show_details( $time, $type ) ) {
@@ -759,9 +761,8 @@ function mc_events_class( $events, $date = false ) {
 function mc_list_title( $events ) {
 	usort( $events, 'mc_time_cmp' );
 	$now         = $events[0];
-	$event       = mc_create_tags( $now );
 	$count       = count( $events ) - 1;
-	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $event['title'] ), mc_strip_tags() ), $now );
+	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now );
 	if ( 0 === $count ) {
 		$cstate = $event_title;
 	} elseif ( 1 === $count ) {
@@ -788,8 +789,7 @@ function mc_list_titles( $events ) {
 	$titles = array();
 
 	foreach ( $events as $now ) {
-		$event    = mc_create_tags( $now );
-		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $event['title'] ), mc_strip_tags() ), $now, $events );
+		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now, $events );
 		$titles[] = $title;
 	}
 

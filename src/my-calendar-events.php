@@ -923,7 +923,7 @@ function mc_instance_list( $args ) {
 				} elseif ( mc_key_exists( $template ) ) {
 					$template = mc_get_custom_template( $template );
 				} else {
-					$details = my_calendar_draw_event( $event, 'single', $event->event_begin, $event->event_time, '' );
+					$details = my_calendar_draw_event( $event, 'single', $event->event_begin, $event->event_time, '', '', $array );
 				}
 			}
 			$item = ( '' !== $list ) ? mc_draw_template( $array, $list ) : '';

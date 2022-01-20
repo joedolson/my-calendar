@@ -88,7 +88,6 @@ function mc_map_string( $event, $source = 'event' ) {
 	if ( ! is_object( $event ) ) {
 		return '';
 	}
-	$event = mc_clean_location( $event, $source );
 	if ( 'event' === $source ) {
 		$map_string = $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode . ' ' . $event->event_country;
 	} else {
@@ -96,61 +95,6 @@ function mc_map_string( $event, $source = 'event' ) {
 	}
 
 	return $map_string;
-}
-
-/**
- * Clean up my errors from assigning location values as 'none'
- *
- * @param object $event Event Object or Location Object.
- * @param string $source (event,location).
- *
- * @return object $event
- */
-function mc_clean_location( $event, $source = 'event' ) {
-	if ( ! is_object( $event ) ) {
-		return $event;
-	}
-	if ( 'event' === $source ) {
-		if ( 'none' === strtolower( $event->event_city ) ) {
-			$event->event_city = '';
-		}
-		if ( 'none' === strtolower( $event->event_state ) ) {
-			$event->event_state = '';
-		}
-		if ( 'none' === strtolower( $event->event_country ) ) {
-			$event->event_country = '';
-		}
-		if ( 'none' === strtolower( $event->event_postcode ) ) {
-			$event->event_postcode = '';
-		}
-		if ( 'none' === strtolower( $event->event_region ) ) {
-			$event->event_region = '';
-		}
-		if ( 'none' === strtolower( $event->event_location ) ) {
-			$event->event_location = '';
-		}
-	} else {
-		if ( 'none' === strtolower( $event->location_city ) ) {
-			$event->location_city = '';
-		}
-		if ( 'none' === strtolower( $event->location_state ) ) {
-			$event->location_state = '';
-		}
-		if ( 'none' === strtolower( $event->location_country ) ) {
-			$event->location_country = '';
-		}
-		if ( 'none' === strtolower( $event->location_postcode ) ) {
-			$event->location_postcode = '';
-		}
-		if ( 'none' === strtolower( $event->location_region ) ) {
-			$event->location_region = '';
-		}
-		if ( 'none' === strtolower( $event->location_label ) ) {
-			$event->location_label = '';
-		}
-	}
-
-	return $event;
 }
 
 /**
@@ -259,7 +203,6 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$source = 'location';
 	}
 	$the_map = mc_maplink( $event, 'url', $source );
-	$event   = mc_clean_location( $event, $source );
 	$url     = ( 'event' === $source ) ? $event->event_url : $event->location_url;
 	$url     = esc_url( $url );
 	$label   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_label : $event->location_label ), mc_strip_tags() );
@@ -347,7 +290,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$calendar_id = $context;
 	}
 	$site          = ( isset( $event->site_id ) ) ? $event->site_id : false;
-	$event         = mc_clean_location( $event, 'event' );
 	$e             = array();
 	$e['post']     = $event->event_post;
 	$date_format   = mc_date_format();
@@ -1234,11 +1176,12 @@ function mc_event_recur_string( $event, $begin ) {
  * Generate JSON/LD Schema for event.
  *
  * @param object $e Event object.
+ * @param array  $tags Event tag array.
  *
  * @return array
  */
-function mc_event_schema( $e ) {
-	$event   = mc_create_tags( $e );
+function mc_event_schema( $e, $tags = array() ) {
+	$event   = ( empty( $tags ) ) ? mc_create_tags( $e ) : $tags;
 	$wp_time = mc_ts( true );
 	$wp_time = str_replace( array( ':30:00', ':00:00' ), array( ':30', ':00' ), $wp_time );
 	$image   = ( $event['image_url'] ) ? $event['image_url'] : get_site_icon_url();
