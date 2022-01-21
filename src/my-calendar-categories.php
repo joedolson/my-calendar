@@ -1170,18 +1170,22 @@ function mc_categories_html( $results, $primary ) {
  * @return string
  */
 function mc_get_img( $file, $is_custom = false ) {
-	$parent = plugin_dir_path( __DIR__ );
-	$self   = plugin_dir_path( __FILE__ );
+	$parent_path = plugin_dir_path( __DIR__ );
+	$parent_url  = plugin_dir_url( __DIR__ );
+	$url         = plugin_dir_url( __FILE__ );
+	$self        = plugin_dir_path( __FILE__ );
 	if ( $is_custom ) {
 		$path = $parent . 'my-calendar-custom/';
+		$link = $parent_url . 'my-calendar-custom/';
 	} else {
 		$path = $self . 'images/icons/';
+		$link = $url . 'images/icons/';
 	}
 	$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
-	$src  = $path . $file;
 	if ( false === stripos( $file, '.svg' ) ) {
-		return '<img src="' . esc_url( $src ) . '" alt="" />';
+		return '<img src="' . esc_url( $link . $file ) . '" alt="" />';
 	}
+	$src      = $path . $file;
 	$label_id = sanitize_title( $file );
 	global $wp_filesystem;
 	require_once( ABSPATH . '/wp-admin/includes/file.php' );
