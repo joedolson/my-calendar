@@ -39,23 +39,30 @@ function mc_is_all_day( $event ) {
 }
 
 /**
- * Check whether a given icon is a custom or stock icon
+ * Check whether using custom or stock icons.
  *
  * @return boolean
  */
 function mc_is_custom_icon() {
-	$dir  = trailingslashit( dirname( __FILE__, 2 ) );
-	$base = basename( $dir );
-	if ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) ) {
-		$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
-		if ( empty( $results ) ) {
-			return false;
-		} else {
-			return true;
+	$on     = get_transient( 'mc_custom_icons' );
+	$return = false;
+	if ( $on ) {
+		return true;
+	} else {
+		$dir  = trailingslashit( dirname( __FILE__, 2 ) );
+		$base = basename( $dir );
+		if ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) ) {
+			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
+			if ( empty( $results ) ) {
+				$return = false;
+			} else {
+				$return = true;
+			}
+			set_transient( 'mc_custom_icons', true, HOUR_IN_SECONDS );
 		}
 	}
 
-	return false;
+	return $return;
 }
 
 /**
