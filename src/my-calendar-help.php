@@ -329,6 +329,7 @@ function mc_display_icons() {
 		$output .= '</ul>';
 		set_transient( 'mc_svg_list', $output, MONTH_IN_SECONDS );
 	}
+	$append = ( $is_custom ) ? '' : '<p><a target="_parent" href="https://fontawesome.com/license">' . __( 'Icons by Font Awesome', 'my-calendar' ) . '</a></p>';
 
-	return $output . '<p><a target="_parent" href="https://fontawesome.com/license">' . __( 'Icons by Font Awesome', 'my-calendar' ) . '</a></p>';
+	return $output . $append;
 }

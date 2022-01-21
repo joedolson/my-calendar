@@ -347,6 +347,7 @@ function mc_kses_elements() {
 			'href'             => array(),
 			'class'            => array(),
 			'aria-current'     => array(),
+			'target'           => array(),
 		),
 		'section'          => array(
 			'id'    => array(),
