@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.8
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.3.4
+Stable tag: 3.3.5
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -83,6 +83,25 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.3.5 =
+
+* Bug fix: Default values for screen options were not called.
+* Bug fix: Event count dots should not show in print view.
+* Bug fix: PHP notice if mc_id not set on single event views.
+* Bug fix: Documentation link led to removed page.
+* Bug fix: Modal help links should open in parent window, not within modal.
+* Bug fix: Search query sent to docs site should not be translatable.
+* Bug fix: JPG or GIF custom icons should be accepted.
+* Bug fix: Template attributes containing HTML stripped attributes in template manager.
+* Bug fix: PHP Warning when checking for private category property and object not defined.
+* Bug fix: Don't show admin grid view location dropdown if more than 200 locations.
+* Bug fix: Prevent large icons from overflowing custom icon list.
+* Bug fix: Fix display of custom icons in icons modal.
+* Performance: only run mc_create_tags() once per event.
+* Performance: cache whether icons are custom rather than inspecting directory for every icon load.
+* New filter: `mc_display_location_events` on upcoming event arguments for location screen.
+* Change: label My Calendar page in pages list.
 
 = 3.3.4 =
 
