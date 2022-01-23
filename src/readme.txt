@@ -3,7 +3,7 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
 Requires at least: 4.4
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.0
 Text domain: my-calendar
 Stable tag: 3.3.5
