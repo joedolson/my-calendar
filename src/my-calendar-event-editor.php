@@ -1492,7 +1492,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		</div>
 				<?php
 			}
-			?>
+			if ( current_user_can( 'mc_edit_templates' ) || current_user_can( 'manage_options' ) ) {
+				?>
 		<div class="postbox">
 			<h2><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></h2>
 			<div class="inside">
@@ -1525,7 +1526,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				</div>
 			</div>
 		</div>
-			<?php
+				<?php
+			}
 		}
 		?>
 	</div>
