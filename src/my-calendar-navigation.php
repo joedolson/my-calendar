@@ -332,7 +332,8 @@ function mc_category_key( $category ) {
 		if ( '' !== $cat->category_icon && $has_icons ) {
 			$image    = mc_category_icon( $cat );
 			$type     = ( stripos( $image, 'svg' ) ) ? 'svg' : 'img';
-			$cat_key .= '<span class="category-color-sample ' . $type . '">' . $image . '</span>' . $cat_name;
+			$back     = ( 'default' !== get_option( 'mc_apply_color' ) ) ? ' style="background:' . $hex . $cat->category_color . ';"' : '';
+			$cat_key .= '<span class="category-color-sample ' . $type . '"' . $back . '>' . $image . '</span>' . $cat_name;
 		} elseif ( 'default' !== get_option( 'mc_apply_color' ) ) {
 			$cat_key .= ( ( '' !== $cat->category_color ) ? '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' : '' ) . $cat_name;
 		} else {
