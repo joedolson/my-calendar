@@ -318,7 +318,7 @@ function mc_modify_location( $update, $where ) {
  */
 function mc_delete_location( $location ) {
 	global $wpdb;
-	$location = (int) ( isset( $_GET['location_id'] ) ) ? $_GET['location_id'] : $location;
+	$location = (int) ( ( isset( $_GET['location_id'] ) ) ? $_GET['location_id'] : $location );
 	$results  = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	do_action( 'mc_delete_location', $results, $location );
 	if ( $results ) {

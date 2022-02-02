@@ -296,11 +296,15 @@ function mc_manage_locations() {
  * @return bool
  */
 function mc_verify_location( $location ) {
+	if ( ! is_object( $location ) ) {
+		return true;
+	}
 	$location_id = $location->location_id;
+	$copy        = clone $location;
 	// Unset location ID and location Post, which will always exist.
-	$location->location_id   = '';
-	$location->location_post = '';
-	$json                    = json_encode( $location );
+	$copy->location_id   = '';
+	$copy->location_post = '';
+	$json                    = json_encode( $copy );
 	if ( '{"location_id":"","location_label":"","location_street":"","location_street2":"","location_city":"","location_state":"","location_postcode":"","location_region":"","location_url":"","location_country":"","location_longitude":"0.000000","location_latitude":"0.000000","location_zoom":"16","location_phone":"","location_phone2":"","location_access":"","location_post":""}' === $json ) {
 		if ( $location_id ) {
 			mc_delete_location( $location_id );
