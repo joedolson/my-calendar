@@ -343,7 +343,6 @@ function my_calendar_next( $atts ) {
 	return my_calendar_events_next( $args['category'], $args['template'], $args['skip'], $args['site'] );
 }
 
-
 /**
  * Configure calendar view for primary calendar.
  */
