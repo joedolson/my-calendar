@@ -553,6 +553,7 @@ h4.mc-title {
 .mc-main .list-event {
 	border-top: 1px solid #d1d1d1;
 	margin: .5em -10px;
+	clear: both;
 }
 
 .mc-main .mc-day .list-event {

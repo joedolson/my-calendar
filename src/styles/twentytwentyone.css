@@ -683,6 +683,7 @@
 	border-top: 4px solid #d1d1d1;
 	border-top: 4px solid var(--highlight-light);
 	margin: .5em -10px;
+	clear: both;
 }
 
 .mc-main .day .list-event, .mc-main .day .details {
