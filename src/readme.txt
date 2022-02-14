@@ -84,6 +84,14 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.8 =
+
+* Bug fix: Generated a duplicate location if event with location unselected location.
+* Bug fix: Setting an event's all day label text to blank should not be overridden by defaults.
+* Bug fix: Delete single event from front-end pointed to wrong destination.
+* Change: Minor text change to empty location value.
+* Change: Clear list items in list view (CSS)
+
 = 3.3.7 =
 
 * Bug fix: Fixes location admin verification error in manage locations list.

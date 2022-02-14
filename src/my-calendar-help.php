@@ -284,8 +284,8 @@ function mc_get_help_text( $id ) {
 			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Display settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
 		),
 		'4' => array(
-			'title' => __( 'Pending', 'my-calendar' ),
-			'text'  => '',
+			'title' => __( 'Copying Events', 'my-calendar' ),
+			'text'  => __( 'Copying an event (formerly described as creating an additional occurrence) sets up an additional copy of the event with a new set of dates and times. The new event is a completely separate event, associated with the source event via event groups. Marking a set of copied events as a "multi-day event" will cause them to be grouped as a single event in calendar views.', 'my-calendar' ),
 		),
 		'5' => array(
 			'title' => '',
