@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.9
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.3.7
+Stable tag: 3.3.8
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -89,6 +89,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Generated a duplicate location if event with location unselected location.
 * Bug fix: Setting an event's all day label text to blank should not be overridden by defaults.
 * Bug fix: Delete single event from front-end pointed to wrong destination.
+* Bug fix: Missing help text for copying events.
 * Change: Minor text change to empty location value.
 * Change: Clear list items in list view (CSS)
 
