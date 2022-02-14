@@ -428,6 +428,7 @@
 
 .mc-main .list-event {
 	margin-top: 1em;
+	clear: both;
 }
 
 .mc-main .mc-list-extended {

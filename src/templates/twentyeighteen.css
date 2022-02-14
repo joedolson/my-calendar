@@ -602,6 +602,7 @@
 	border-top: 1px solid #d1d1d1;
 	margin: .5em -10px;
 	padding: 1em;
+	clear: both;
 }
 
 .mc-main .day .list-event, .mc-main .day .details {
