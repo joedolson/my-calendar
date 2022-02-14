@@ -525,12 +525,13 @@ function mc_create_tags( $event, $context = 'filters' ) {
  * @return string.
  */
 function mc_notime_label( $event ) {
+	$notime  = '';
+	$default = get_option( 'mc_notime_text' );
 	if ( is_object( $event ) && property_exists( $event, 'event_post' ) ) {
-		$notime = get_post_meta( $event->event_post, '_event_time_label', true );
-	} else {
-		$notime = '';
+		$notime  = get_post_meta( $event->event_post, '_event_time_label', true );
+		$default = ( metadata_exists( 'post', $event->event_post, '_event_time_label' ) ) ? '' : $default;
 	}
-	$notime = ( '' !== $notime ) ? $notime : get_option( 'mc_notime_text' );
+	$notime = ( '' !== $notime ) ? $notime : $default;
 
 	return apply_filters( 'mc_notime_label', $notime, $event );
 }
