@@ -307,7 +307,6 @@ function my_calendar_manage() {
 
 						<div class="inside">
 							<?php
-
 							if ( $grid ) {
 								$calendar = array(
 									'name'     => 'admin',
