@@ -1565,7 +1565,7 @@ function mc_event_location_dropdown_block( $data ) {
 			$locs    = mc_get_locations( 'select-locations' );
 			$fields .= '
 			 <select name="location_preset" id="l_preset" aria-describedby="mc-current-location">
-				<option value="none">--</option>';
+				<option value="none">' . __( 'No location', 'my-calendar' ) . '</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
 					$base_loc = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
