@@ -2190,7 +2190,7 @@ function mc_register_meta() {
 		'page',
 		'_mc_calendar',
 		array(
-			'show_in_rest' => array(
+			'show_in_rest'  => array(
 				'schema' => array(
 					'type'                 => 'object',
 					'properties'           => array(
@@ -2206,9 +2206,17 @@ function mc_register_meta() {
 					),
 				),
 			),
-			'single'       => true,
-			'type'         => 'array',
+			'single'        => true,
+			'type'          => 'array',
+			'auth_callback' => 'mc_can_update_meta',
 		)
 	);
 }
 add_action( 'init', 'mc_register_meta' );
+
+/**
+ * Verify if a user can edit meta fields.
+ */
+function mc_can_update_meta() {
+	return current_user_can( 'edit_posts' );
+}
