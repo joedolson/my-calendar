@@ -158,7 +158,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		$event_date = ( is_array( $data['event_begin'] ) ) ? $data['event_begin'][0] : $data['event_begin'];
 		update_post_meta( $post_id, '_mc_event_date', strtotime( $event_date ) );
 	}
-	$location_id = ( isset( $post['location_preset'] ) ) ? (int) $post['location_preset'] : false;
+	$location_id = ( isset( $post['location_preset'] ) && is_numeric( $post['location_preset'] ) ) ? (int) $post['location_preset'] : false;
 	if ( $location_id ) { // only change location ID if dropdown set.
 		update_post_meta( $post_id, '_mc_event_location', $location_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
@@ -189,16 +189,15 @@ function mc_create_event_post( $data, $event_id ) {
 			}
 			$terms[] = (int) $term;
 		}
-
 		$title             = $data['event_title'];
 		$template          = apply_filters( 'mc_post_template', 'details', $term );
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
 		$description       = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 		$excerpt           = isset( $data['event_short'] ) ? $data['event_short'] : '';
-		$location_id       = 0;
-		if ( isset( $_POST['location_preset'] ) ) {
+		$location_id       = isset( $data['event_location'] ) ? $data['event_location'] : 0;
+		if ( isset( $_POST['location_preset'] ) && is_numeric( $_POST['location_preset'] ) ) {
 			$location_id = (int) $_POST['location_preset'];
-		} elseif ( isset( $data['location_preset'] ) ) {
+		} elseif ( isset( $data['location_preset'] ) && is_numeric( $data['location_preset'] ) ) {
 			$location_id = $data['location_preset'];
 		}
 		$post_status = $privacy;
@@ -393,7 +392,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
 	$proceed = (bool) $output[0];
 	$message = '';
-	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f' );
+	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f' );
 
 	if ( ( 'add' === $action || 'copy' === $action ) && true === $proceed ) {
 		$add  = $output[2]; // add format here.
@@ -774,7 +773,7 @@ function mc_edit_block_is_visible( $field ) {
 	} else {
 		if ( 'off' === $input[ $field ] || '' === $input[ $field ] ) {
 			return false;
-		} elseif ( 'off' === $show[ $field ] ) {
+		} elseif ( isset( $show[ $field ] ) && 'off' === $show[ $field ] ) {
 			return false;
 		} else {
 			return true;
@@ -1731,6 +1730,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_hide_end     = '';
 	$event_longitude    = '';
 	$event_latitude     = '';
+	$event_location     = '';
 
 	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) {
 		$post = array_map( 'stripslashes_deep', $post );
@@ -1897,12 +1897,12 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				$event_access      = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
 				$has_location_data = false;
 
-				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_zoom . $event_phone . $event_phone2 . $event_access ) ) {
+				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_zoom . $event_phone . $event_phone2 ) ) {
 					$has_location_data = true;
 				}
 				if ( $has_location_data && isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
 					// Only add this with the first event, if adding multiples.
-					$add_loc = array(
+					$add_loc        = array(
 						'location_label'     => $event_label,
 						'location_street'    => $event_street,
 						'location_street2'   => $event_street2,
@@ -1919,7 +1919,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 						'location_phone2'    => $event_phone2,
 						'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
 					);
-					$loc_id  = mc_insert_location( $add_loc );
+					$loc_id         = mc_insert_location( $add_loc );
+					$event_location = $loc_id;
 					do_action( 'mc_save_location', $loc_id, $add_loc, $add_loc );
 				}
 			}
@@ -2049,6 +2050,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_group_id'     => $event_group_id,
 		'event_span'         => $event_span,
 		'event_hide_end'     => $event_hide_end,
+		'event_location'     => $event_location,
 		// Begin floats.
 		'event_longitude'    => $event_longitude,
 		'event_latitude'     => $event_latitude,
