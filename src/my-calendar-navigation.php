@@ -165,7 +165,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	$access   = ( in_array( 'access', $used, true ) ) ? mc_filters( $acc_args, mc_get_current_url() ) : '';
 
 	// Set up search.
-	$search = ( in_array( 'access', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url() ) : '';
+	$search = ( in_array( 'search', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url() ) : '';
 
 	// Set up navigation links.
 	if ( in_array( 'nav', $used, true ) ) {
