@@ -114,6 +114,7 @@ function mc_clean_duplicate_locations() {
 		$replace   = $_POST['mass_replace_id'];
 		$location  = mc_get_location( $replace );
 		if ( ! $location ) {
+			// If this isn't a valid location, don't continue.
 			echo mc_show_error( __( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
 			return;
 		}
@@ -141,7 +142,7 @@ function mc_clean_duplicate_locations() {
 			);
 			$i ++;
 		}
-		if ( empty( $deleted ) ) {
+		if ( ! empty( $deleted ) ) {
 			// Argument: array of event IDs.
 			do_action( 'mc_clean_duplicate_locations', $deleted );
 			// Translators: Number of locations deleted, number selected.
