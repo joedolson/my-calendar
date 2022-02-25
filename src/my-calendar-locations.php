@@ -1197,11 +1197,12 @@ function mc_core_search_locations( $query = '' ) {
 	$current = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 	$db_type = mc_get_db_type();
 	$query   = esc_sql( $query );
+	$length  = strlen( $query );
 
 	if ( '' !== $query ) {
 		// Fulltext is supported in InnoDB since MySQL 5.6; minimum required by WP is 5.0 as of WP 5.5.
 		// 37% of installs still below 5.6 as of 11/30/2020.
-		if ( 'MyISAM' === $db_type ) {
+		if ( 'MyISAM' === $db_type && $length > 3 ) {
 			$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
 			$search = " WHERE location_label LIKE '%$query%' ";
