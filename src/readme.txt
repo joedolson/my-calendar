@@ -84,6 +84,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.9 =
+
+* Bug fix: New locations created with events were not properly saved with the event, leading to possible location duplications.
+* Bug fix: Add location to table should not be checked when copying an event.
+* Bug fix: Possible fix to meta permissions.
+
 = 3.3.8 =
 
 * Bug fix: Generated a duplicate location if event with location unselected location.

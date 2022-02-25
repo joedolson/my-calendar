@@ -176,3 +176,19 @@ function mc_add_help_tab() {
 		)
 	);
 }
+
+/**
+ * Add help tab on events.
+ */
+function mc_location_help_tab() {
+	$screen  = get_current_screen();
+	$content = '<ul><li>' . __( 'Check the locations you wish to remove', 'my-calendar' ) . '</li><li>' . __( 'Check the "Merge Duplicates" option at the top of the table', 'my-calendar' ) . '</li><li>' . __( 'Enter the ID of the location you want to have replace these locations', 'my-calendar' ) . '</li><li>' . __( 'Submit the form', 'my-calendar' ) . '</li></ul><p>' . __( 'The checked locations will be deleted. Events using those locations will be updated to use the provided ID', 'my-calendar' ) . '</p>';
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mc_location_help_tab',
+			'title'   => __( 'Merging Duplicate Locations', 'my-calendar' ),
+			'content' => $content,
+		)
+	);
+}

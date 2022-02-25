@@ -23,6 +23,7 @@ function my_calendar_manage_locations() {
 	my_calendar_check_db();
 	// We do some checking to see what we're doing.
 	mc_mass_delete_locations();
+	mc_clean_duplicate_locations();
 	if ( ! empty( $_POST ) && ( ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -95,6 +96,63 @@ function mc_default_location() {
 	return $output;
 }
 
+
+/**
+ * Mass replace locations.
+ *
+ * @return mixed boolean/int query result.
+ */
+function mc_clean_duplicate_locations() {
+	global $wpdb;
+	// Mass delete locations.
+	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_replace'] ) ) {
+		$nonce = $_REQUEST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			die( 'Security check failed' );
+		}
+		$locations = $_POST['mass_edit'];
+		$replace   = $_POST['mass_replace_id'];
+		$location  = mc_get_location( $replace );
+		if ( ! $location ) {
+			echo mc_show_error( __( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
+			return;
+		}
+		$i       = 0;
+		$total   = 0;
+		$deleted = array();
+		foreach ( $locations as $value ) {
+			$total  = count( $locations );
+			$result = mc_delete_location( $value );
+			if ( ! $result ) {
+				$failed[] = absint( $value );
+			} else {
+				$deleted[] = absint( $value );
+			}
+			$change = $wpdb->update(
+				my_calendar_table(),
+				array(
+					'event_location' => $replace,
+				),
+				array(
+					'event_location' => $value,
+				),
+				'%d',
+				'%d'
+			);
+			$i ++;
+		}
+		if ( empty( $deleted ) ) {
+			// Argument: array of event IDs.
+			do_action( 'mc_clean_duplicate_locations', $deleted );
+			// Translators: Number of locations deleted, number selected.
+			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
+		} else {
+			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
+		}
+		echo wp_kses_post( $message );
+	}
+}
+
 /**
  * Mass delete locations.
  *
@@ -112,20 +170,21 @@ function mc_mass_delete_locations() {
 		$i         = 0;
 		$total     = 0;
 		$deleted   = array();
-		$prepare   = array();
 		foreach ( $locations as $value ) {
-			$total     = count( $locations );
-			$deleted[] = absint( $value );
-			$prepare[] = '%d';
+			$total  = count( $locations );
+			$result = mc_delete_location( $value );
+			if ( ! $result ) {
+				$failed[] = absint( $value );
+			} else {
+				$deleted[] = absint( $value );
+			}
 			$i ++;
 		}
-		$prepared = implode( ',', $prepare );
-		$result   = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . " WHERE location_id IN ($prepared)", $deleted ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-		if ( 0 !== $result && false !== $result ) {
+		if ( ! empty( $deleted ) ) {
 			// Argument: array of event IDs.
-			do_action( 'mc_mass_delete_locations', $deleted );
+			do_action( 'mc_mass_delete_locations', $deleted, $failed );
 			// Translators: Number of locations deleted, number selected.
-			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), $i, $total ), false );
+			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
 		} else {
 			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
 		}
@@ -235,6 +294,13 @@ function mc_manage_locations() {
 		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
 		<div class='mc-actions'>
 			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php esc_attr_e( 'Delete locations', 'my-calendar' ); ?>" />
+			<div class="mass-replace-wrap">
+				<input type="checkbox" name="mass_replace_on" disabled id="mass_replace_on" value="true"><label for="mass_replace_on"><?php esc_attr_e( 'Merge duplicates', 'my-calendar' ); ?></label>
+				<div class="mass-replace-container">
+					<label for="mass-replace"><?php _e( 'Replacement ID', 'my-calendar' ); ?></label><input type="text" size="4" id="mass-replace" name="mass_replace_id" class="mass-replace" value="" />
+					<input type="submit" class="button-secondary delete" name="mass_replace" value="<?php _e( 'Replace', 'my-calendar' ); ?>" />
+				</div>
+			</div>
 			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
 		</div>
 		<table class="widefat striped page" id="my-calendar-admin-table">

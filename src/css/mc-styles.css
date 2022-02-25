@@ -960,6 +960,26 @@ input[name="mc_uri"] {
 	text-align: center;
 }
 
+.my-calendar-admin .mass-replace-wrap {
+	position: relative;
+}
+
+.my-calendar-admin .mass-replace-container {
+	display: none;
+	position: absolute;
+	left: 1rem;
+	top: 2rem;
+	background: #fff;
+	padding: 1rem;
+	box-shadow: 3px 3px 3px #c3c4c7;
+	border: 1px solid #c3c4c7;
+	width: 13em;
+}
+
+.my-calendar-admin .mass-replace-container label {
+	display: block;
+}
+
 .my-calendar-admin .mc-clear-filters {
 	position: absolute;
 	top: -3em;

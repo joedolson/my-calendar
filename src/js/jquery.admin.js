@@ -229,6 +229,16 @@ jQuery(document).ready(function ($) {
 	$( '.event_span' ).hide();
 	$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
 
+	$( '#mass_replace_on' ).on( 'click', function() {
+		var checked_status = $(this).prop('checked');
+		if ( checked_status ) {
+			// Activate actions on bulk checked.
+			$( '.mass-replace-container' ).show();
+		} else {
+			$( '.mass-replace-container' ).hide();
+		}
+	});
+
 	$( '.selectall' ).on( 'click', function() {
 		var checked_status = $(this).prop('checked');
 		if ( checked_status ) {
@@ -262,7 +272,7 @@ jQuery(document).ready(function ($) {
 		$( '#mc_bulk_actions' ).val( value );
 	});
 
-	$( '#my-calendar-admin-table input, .mc-actions input' ).on( 'change', function (e) {
+	$( '#my-calendar-admin-table input, .mc-actions input:not(#mass_replace_on)' ).on( 'change', function (e) {
 		var checked_status = $(this).prop('checked');
 		var groups_table   = $(this).parents( 'table' ).hasClass( 'mc-groups-table' );
 		var checkboxes     = $( '#my-calendar-admin-table input:checked' );
@@ -270,10 +280,12 @@ jQuery(document).ready(function ($) {
 		if ( checked_status ) {
 			if ( ( groups_table && checked > 1 ) || ! groups_table ) {
 				$( '.mc-actions input[type="submit"]' ).removeAttr( 'disabled' );
+				$( '.mc-actions #mass_replace_on' ).removeAttr( 'disabled' );
 			}
 		} else {
 			if ( ( groups_table && checked < 2 ) || ( ! groups_table && checked == 0 ) ) {
 				$( '.mc-actions input[type="submit"]' ).attr( 'disabled', 'disabled' );
+				$( '.mc-actions #mass_replace_on' ).attr( 'disabled', 'disabled' );
 			}
 		}
 	});
