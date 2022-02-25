@@ -23,10 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_prepare_search_query( $query ) {
 	global $wpdb;
 	$db_type = mc_get_db_type();
+	$length  = strlen( $query );
 	$search  = '';
 	if ( '' !== trim( $query ) ) {
 		$query = esc_sql( urldecode( urldecode( $query ) ) );
-		if ( 'MyISAM' === $db_type ) {
+		if ( 'MyISAM' === $db_type && $length > 3 ) {
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
 			$search = " AND ( event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_label LIKE '%$query%' OR event_city LIKE '%$query%' OR event_postcode LIKE '%$query%' OR event_registration LIKE '%$query%' ) ";

@@ -240,9 +240,10 @@ function mc_manage_locations() {
 	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 	if ( isset( $_POST['mcl'] ) ) {
 		$query   = esc_sql( $_POST['mcl'] );
+		$length  = strlen( $query );
 		$db_type = mc_get_db_type();
 		if ( '' !== $query ) {
-			if ( 'MyISAM' === $db_type ) {
+			if ( 'MyISAM' === $db_type && $length > 3 ) {
 				$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label,location_city,location_state,location_region,location_country,location_street,location_street2,location_phone' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 			} else {
 				$search = " WHERE location_label LIKE '%$query%' OR location_city LIKE '%$query%' OR location_state LIKE '%$query%' OR location_region LIKE '%$query%' OR location_country LIKE '%$query%' OR location_street LIKE '%$query%' OR location_street2 LIKE '%$query%' OR location_phone LIKE '%$query%' ";
