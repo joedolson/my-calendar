@@ -90,6 +90,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: New locations created with events were not properly saved with the event, leading to possible location duplications.
 * Bug fix: Add location to table should not be checked when copying an event.
 * Bug fix: Possible fix to meta permissions.
+* Bug fix: Fall back to non-fulltext queries if search term below length limit.
 
 = 3.3.8 =
 
