@@ -122,7 +122,7 @@ function mc_clean_duplicate_locations() {
 		$deleted = array();
 		foreach ( $locations as $value ) {
 			$total  = count( $locations );
-			$result = mc_delete_location( $value );
+			$result = mc_delete_location( $value, 'bool' );
 			if ( ! $result ) {
 				$failed[] = absint( $value );
 			} else {
@@ -172,7 +172,7 @@ function mc_mass_delete_locations() {
 		$deleted   = array();
 		foreach ( $locations as $value ) {
 			$total  = count( $locations );
-			$result = mc_delete_location( $value );
+			$result = mc_delete_location( $value, 'bool' );
 			if ( ! $result ) {
 				$failed[] = absint( $value );
 			} else {
