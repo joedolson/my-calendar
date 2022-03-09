@@ -373,6 +373,9 @@ function mc_kses_elements() {
 			'value'             => array(),
 			'required'          => array(),
 		),
+		'time'             => array(
+			'data-label' => array(),
+		),
 	);
 
 	return $elements;
