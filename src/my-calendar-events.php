@@ -1199,7 +1199,7 @@ function mc_status_links( $allow_filters ) {
 	// Translators: Number of total events.
 	$all_text = sprintf( __( 'All (%d)', 'my-calendar' ), $all );
 
-	$pub_attributes = ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	$pub_attributes = ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$pub_text = sprintf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] );
 

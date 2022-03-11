@@ -568,10 +568,10 @@ function mc_list_events() {
 		}
 		$status_links = mc_status_links( $allow_filters );
 		$search_text  = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
-		echo wp_kses_post( $filtered );
+		echo wp_kses( $filtered, mc_kses_elements() );
 		?>
 		<div class="mc-admin-header">
-			<?php echo wp_kses_post( $status_links ); ?>
+			<?php echo wp_kses( $status_links, mc_kses_elements() ); ?>
 			<div class='mc-search'>
 				<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 					<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
@@ -814,8 +814,7 @@ function mc_list_events() {
 		<div class='mc-admin-footer'>
 			<?php
 			$status_links = mc_status_links( $allow_filters );
-			echo wp_kses_post( $status_links );
-			echo wp_kses_post( $filtered );
+			echo wp_kses( $status_links . $filtered, mc_kses_elements() );
 			?>
 			<div class='mc-search'>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">

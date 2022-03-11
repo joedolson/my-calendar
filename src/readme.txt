@@ -91,6 +91,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Add location to table should not be checked when copying an event.
 * Bug fix: Possible fix to meta permissions.
 * Bug fix: Fall back to non-fulltext queries if search term below length limit.
+* Bug fix: 'search' nav item not rendering.
 
 = 3.3.8 =
 
