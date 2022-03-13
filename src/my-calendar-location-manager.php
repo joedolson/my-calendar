@@ -111,7 +111,7 @@ function mc_clean_duplicate_locations() {
 			die( 'Security check failed' );
 		}
 		$locations = $_POST['mass_edit'];
-		$replace   = $_POST['mass_replace_id'];
+		$replace   = absint( $_POST['mass_replace_id'] );
 		$location  = mc_get_location( $replace );
 		if ( ! $location ) {
 			// If this isn't a valid location, don't continue.
@@ -122,6 +122,10 @@ function mc_clean_duplicate_locations() {
 		$total   = 0;
 		$deleted = array();
 		foreach ( $locations as $value ) {
+			// If the replacement location is checked, ignore it.
+			if ( (int) $replace === (int) $value ) {
+				continue;
+			}
 			$total  = count( $locations );
 			$result = mc_delete_location( $value, 'bool' );
 			if ( ! $result ) {
