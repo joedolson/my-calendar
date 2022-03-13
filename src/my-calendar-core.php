@@ -2166,13 +2166,20 @@ function mc_update_notice() {
  * Allow CORS from subsites in multisite networks in subdomain setups.
  */
 function mc_setup_cors_access() {
-	$origin  = str_replace( array( 'http://', 'https://' ), '', get_http_origin() );
-	$sites   = ( function_exists( 'get_sites' ) ) ? get_sites() : array();
-	$allowed = apply_filters( 'mc_setup_allowed_sites', array(), $origin );
-	if ( ! empty( $sites ) ) {
-		foreach ( $sites as $site ) {
-			$allowed[] = str_replace( array( 'http://', 'https://' ), '', get_home_url( $site->blog_id ) );
+	$cache  = get_transient( 'mc_allowed_origins' );
+	$origin = str_replace( array( 'http://', 'https://' ), '', get_http_origin() );
+
+	if ( $cache ) {
+		$allowed = $cache;
+	} else {
+		$sites   = ( function_exists( 'get_sites' ) ) ? get_sites() : array();
+		$allowed = apply_filters( 'mc_setup_allowed_sites', array(), $origin );
+		if ( ! empty( $sites ) ) {
+			foreach ( $sites as $site ) {
+				$allowed[] = str_replace( array( 'http://', 'https://' ), '', get_home_url( $site->blog_id ) );
+			}
 		}
+		set_transient( 'mc_allowed_origins', $allowed, MONTH_IN_SECONDS );
 	}
 	if ( $origin && is_array( $allowed ) && in_array( $origin, $allowed, true ) ) {
 		header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
