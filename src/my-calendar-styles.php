@@ -378,12 +378,12 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
  */
 function mc_default_style( $filename = false, $return = 'content' ) {
 	if ( ! $filename ) {
-		$mc_css_file = get_option( 'mc_css_file' );
+		$mc_css_file = get_option( 'mc_css_file', '' );
 	} else {
-		$mc_css_file = $filename;
+		$mc_css_file = trim( $filename );
 	}
 	$mc_current_file = dirname( __FILE__ ) . '/templates/' . $mc_css_file;
-	if ( file_exists( $mc_current_file ) ) {
+	if ( $mc_css_file && file_exists( $mc_current_file ) ) {
 		$f                = fopen( $mc_current_file, 'r' );
 		$file             = fread( $f, filesize( $mc_current_file ) );
 		$mc_current_style = $file;

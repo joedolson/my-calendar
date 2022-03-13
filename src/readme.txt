@@ -84,6 +84,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.10 =
+
+* Bug fix: aria-current not rendered on event manager filters.
+* Bug fix: published filter not marked as current by default.
+
 = 3.3.9 =
 
 * Feature: Ability to merge duplicate locations.
