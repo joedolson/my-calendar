@@ -1322,7 +1322,7 @@ function my_calendar( $args ) {
 				<div id="mc-day-' . $id . '" class="mc-day ' . $dateclass . ' ' . $events_class . '">
 					' . "$mc_events
 				</div>
-			</div>";
+			</div><!-- .mc-content -->";
 		} else {
 			// If showing multiple months, figure out how far we're going.
 			$months       = ( 'week' === $params['time'] ) ? 1 : $show_months;
@@ -1479,7 +1479,9 @@ function my_calendar( $args ) {
 			$end   = ( 'table' === $table ) ? "\n</tbody>\n</table>" : "</div></$table>";
 			$body .= ( 'list' === $params['format'] ) ? "\n</ul>" : $end;
 		}
-		$body .= '</div>' . $bottom;
+		// For clarity, day closer is appended above.
+		$body .= ( 'day' === $params['time'] ) ? '' : '</div><!-- .mc-content -->';
+		$body .= $bottom;
 	}
 	// The actual printing is done by the shortcode function.
 	$body .= apply_filters( 'mc_after_calendar', '', $args );
