@@ -88,6 +88,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: aria-current not rendered on event manager filters.
 * Bug fix: published filter not marked as current by default.
+* Bug fix: Cache allowed sites for CORS headers on multisite networks.
+* Bug fix: fread error if no stylesheet defined.
+* Bug fix: Extra closing div in single-day view.
 
 = 3.3.9 =
 
