@@ -1532,10 +1532,10 @@ function mc_time_format() {
 	$mc_time_format = get_option( 'mc_time_format', '' );
 	$time_format    = get_option( 'time_format', '' );
 	if ( '' === $mc_time_format ) {
-		$mc_time_format = $time_format
+		$mc_time_format = $time_format;
 	}
 	if ( '' === $mc_time_format ) {
-		$mc_time_format = 'H:i a';
+		$mc_time_format = 'h:i a';
 	}
 
 	return $mc_time_format;
