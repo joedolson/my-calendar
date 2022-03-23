@@ -929,7 +929,7 @@ function mc_list_groups() {
 					<td><?php echo strip_tags( stripslashes( $event->event_label ) ); ?></td>
 					<?php
 					if ( '23:59:59' !== $event->event_endtime ) {
-						$event_time = date_i18n( get_option( 'mc_time_format' ), strtotime( $event->event_time ) );
+						$event_time = date_i18n( mc_time_format(), strtotime( $event->event_time ) );
 					} else {
 						$event_time = mc_notime_label( $event );
 					}

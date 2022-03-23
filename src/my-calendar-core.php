@@ -1523,21 +1523,22 @@ function mc_scripts() {
 }
 
 
-add_filter( 'mc_time_format', 'mc_time_format', 10, 1 );
 /**
- * Default time format is 'h:i A' (standard US time format).
- * Pass a string using pickadate.time rules: http://amsul.ca/pickadate.js/time/#formatting-rules.
+ * Get the My Calendar time format.
  *
- * @param string $format Default time format string.
- *
- * @return string new format.
+ * @return string format.
  */
-function mc_time_format( $format ) {
-	if ( 'G:i' === get_option( 'mc_time_format' ) || 'H:i' === get_option( 'mc_time_format' ) || 'G:i' === get_option( 'time_format' ) || 'H:i' === get_option( 'time_format' ) ) {
-		return 'H:i'; // European 24-hour format.
+function mc_time_format() {
+	$mc_time_format = get_option( 'mc_time_format', '' );
+	$time_format    = get_option( 'time_format', '' );
+	if ( '' === $mc_time_format ) {
+		$mc_time_format = $time_format
+	}
+	if ( '' === $mc_time_format ) {
+		$mc_time_format = 'H:i a';
 	}
 
-	return $format;
+	return $mc_time_format;
 }
 
 /**

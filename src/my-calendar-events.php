@@ -968,9 +968,9 @@ function mc_admin_instances( $id, $occur = false ) {
 			if ( ( ( $end + 1 ) - $start ) === DAY_IN_SECONDS || ( $end - $start ) === DAY_IN_SECONDS ) {
 				$time = '';
 			} elseif ( ( $end - $start ) <= HOUR_IN_SECONDS ) {
-				$time = mc_date( get_option( 'mc_time_format' ), $start );
+				$time = mc_date( mc_time_format(), $start );
 			} else {
-				$time = mc_date( get_option( 'mc_time_format' ), $start ) . '-' . mc_date( get_option( 'mc_time_format' ), $end );
+				$time = mc_date( mc_time_format(), $start ) . '-' . mc_date( mc_time_format(), $end );
 			}
 			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
 			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';

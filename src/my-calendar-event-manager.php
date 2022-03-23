@@ -770,7 +770,7 @@ function mc_list_events() {
 							<td>
 							<?php
 							if ( '23:59:59' !== $event->event_endtime ) {
-								$event_time = date_i18n( get_option( 'mc_time_format' ), mc_strtotime( $event->event_time ) );
+								$event_time = date_i18n( mc_time_format(), mc_strtotime( $event->event_time ) );
 							} else {
 								$event_time = mc_notime_label( $event );
 							}

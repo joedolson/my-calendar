@@ -53,8 +53,8 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
 		if ( my_calendar_date_xcomp( $check['occur_begin'], $data->event_end . ' ' . $data->event_endtime ) ) {
 			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . '</strong> ' . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . '</p><p>';
 			$enddate = date_i18n( mc_date_format(), strtotime( $data->event_end ) );
-			$endtime = mc_date( get_option( 'mc_time_format' ), strtotime( $data->event_endtime ), false );
-			$begin   = date_i18n( mc_date_format(), strtotime( $check['occur_begin'] ) ) . ' ' . mc_date( get_option( 'mc_time_format' ), strtotime( $check['occur_begin'] ), false );
+			$endtime = mc_date( mc_time_format(), strtotime( $data->event_endtime ), false );
+			$begin   = date_i18n( mc_date_format(), strtotime( $check['occur_begin'] ) ) . ' ' . mc_date( mc_time_format(), strtotime( $check['occur_begin'] ), false );
 			// Translators: End date, end time, beginning of next event.
 			$warning .= sprintf( __( 'Event end date: <strong>%1$s %2$s</strong>. Next occurrence starts: <strong>%3$s</strong>', 'my-calendar' ), $enddate, $endtime, $begin ) . '</p></div>';
 			update_post_meta( $data->event_post, '_occurrence_overlap', 'false' );

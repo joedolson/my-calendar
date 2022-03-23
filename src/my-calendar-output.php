@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_time_html( $e, $type ) {
 	$date_format = mc_date_format();
-	$time_format = get_option( 'mc_time_format' );
+	$time_format = mc_time_format();
 	$start       = mc_date( 'Y-m-d', strtotime( $e->occur_begin ), false );
 	$end         = mc_date( 'Y-m-d', strtotime( $e->occur_end ), false );
 	$has_time    = ( '00:00:00' !== $e->event_time && '' !== $e->event_time ) ? true : false;
