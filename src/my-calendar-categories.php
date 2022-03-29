@@ -285,9 +285,10 @@ function mc_update_category_relationships( $cats, $event_id ) {
  */
 function mc_update_cat( $category ) {
 	global $wpdb;
+	$category_id = (int) $_POST['category_id'];
 	$formats     = array( '%s', '%s', '%s', '%d', '%d', '%d' );
 	$where       = array(
-		'category_id' => (int) $_POST['category_id'],
+		'category_id' => $category_id,
 	);
 	$cat_name    = strip_tags( $category['category_name'] );
 	$term_exists = term_exists( $cat_name, 'mc-event-category' );
@@ -303,6 +304,8 @@ function mc_update_cat( $category ) {
 		$term = $term->term_id;
 	}
 	$category['category_term'] = $term;
+	// Delete category icons from database so they will be updated.
+	mc_delete_category_icon( $category_id );
 
 	$result = $wpdb->update( my_calendar_categories_table(), $category, $where, $formats, '%d' );
 
@@ -1202,6 +1205,16 @@ function mc_get_img( $file, $is_custom = false ) {
 	}
 
 	return $image;
+}
+
+/**
+ * Delete category icon from storage. Enables replacement of stored icon if category is modified.
+ *
+ * @param $category Category ID.
+ */
+function mc_delete_category_icon( $category_id ) {
+	delete_option( 'mc_category_icon_category_' . $category_id );
+	delete_option( 'mc_category_icon_event_' . $category_id );
 }
 
 /**
