@@ -84,6 +84,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.11 =
+
+* Bug fix: Modifying a category didn't refresh the icon SVG for that category.
+* Change: allow mc_bulk_actions() to take a second argument with events to modify.
+
 = 3.3.10 =
 
 * Bug fix: aria-current not rendered on event manager filters.
