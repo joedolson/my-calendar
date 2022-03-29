@@ -17,12 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handle a bulk action.
  *
  * @param string $action type of action.
+ * @param array  $events Optional. Array of event IDs to act on.
  *
  * @return array bulk action details.
  */
-function mc_bulk_action( $action ) {
+function mc_bulk_action( $action, $events = array() ) {
 	global $wpdb;
-	$events  = $_POST['mass_edit'];
+	$events  = ( empty( $events ) ) ? $_POST['mass_edit'] : $events;
 	$i       = 0;
 	$total   = 0;
 	$ids     = array();
