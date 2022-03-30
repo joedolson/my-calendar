@@ -1210,7 +1210,7 @@ function mc_get_img( $file, $is_custom = false ) {
 /**
  * Delete category icon from storage. Enables replacement of stored icon if category is modified.
  *
- * @param $category_id Category ID.
+ * @param int $category_id Category ID.
  */
 function mc_delete_category_icon( $category_id ) {
 	delete_option( 'mc_category_icon_category_' . $category_id );
