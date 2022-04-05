@@ -89,6 +89,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Modifying a category didn't refresh the icon SVG for that category.
 * Bug fix: Contextual help should be viewable with 'view help' capability.
 * Bug fix: Allow img in event title templates.
+* Bug fix: 'all' category limit could be cast to an integer, breaking links.
+* Change: text changes to location select label for clarification of purpose.
 * Change: allow mc_bulk_actions() to take a second argument with events to modify.
 
 = 3.3.10 =
