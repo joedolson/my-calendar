@@ -48,7 +48,7 @@ function mc_prepare_search_query( $query ) {
  * @return string SQL modifiers.
  */
 function mc_select_category( $category, $type = 'event', $group = 'events' ) {
-	if ( '' === trim( $category ) ) {
+	if ( ! $category || 'all' === $category ) {
 		return '';
 	}
 	$category      = urldecode( $category );
