@@ -1552,19 +1552,20 @@ function mc_event_location_dropdown_block( $data ) {
 	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 		$autocomplete = true;
 	}
-	if ( 0 !== $count ) {
-		$fields .= '<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label>';
-		if ( is_object( $data ) ) {
-			$selected = '';
-			if ( property_exists( $data, 'event_location' ) ) {
-				$event_location = $data->event_location;
-			}
+	if ( is_object( $data ) ) {
+		$selected = '';
+		if ( property_exists( $data, 'event_location' ) ) {
+			$event_location = $data->event_location;
 		}
+	}
+	if ( 0 !== $count ) {
+		$fields .= ( $event_location ) ? '<label for="l_preset">' . __( 'Change location:', 'my-calendar' ) . '</label>' : '<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label>';
 		if ( ! $autocomplete ) {
 			$locs    = mc_get_locations( 'select-locations' );
+			$text    = ( $event_location ) ? __( 'No change', 'my-calendar' ) : __( 'No location', 'my-calendar' );
 			$fields .= '
 			 <select name="location_preset" id="l_preset" aria-describedby="mc-current-location">
-				<option value="none">' . __( 'No location', 'my-calendar' ) . '</option>';
+				<option value="none">' . $text . '</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
 					$base_loc = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
