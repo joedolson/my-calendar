@@ -1884,12 +1884,16 @@ function mc_the_title( $title, $post_id = null ) {
 			if ( is_numeric( $event_id ) ) {
 				$event = mc_get_event( $event_id );
 				if ( ! is_object( $event ) ) {
-					$event = mc_get_first_event( $event_id );
-				} else {
+					$event = mc_get_nearest_event( $event_id );
+				}
+				if ( is_object( $event ) ) {
 					$event_title = stripslashes( $event->event_title );
 					if ( $event_title !== $title ) {
 						$title = $event_title;
 					}
+				} else {
+					// If both queries fail to get title, return original.
+					return $title;
 				}
 				if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
 					$icon = mc_category_icon( $event );
