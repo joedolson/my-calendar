@@ -1880,25 +1880,26 @@ function mc_next_post_link( $output, $format ) {
 function mc_the_title( $title, $post_id = null ) {
 	if ( is_singular( 'mc-events' ) && in_the_loop() ) {
 		if ( $post_id ) {
-			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : get_post_meta( $post_id, '_mc_event_id', true );
+			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+			if ( ! $event_id ) {
+				$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
+				$event     = mc_get_nearest_event( $event_id );
+			}
 			if ( is_numeric( $event_id ) ) {
 				$event = mc_get_event( $event_id );
 				if ( ! is_object( $event ) ) {
 					$event = mc_get_nearest_event( $event_id );
 				}
-				if ( is_object( $event ) ) {
-					$event_title = stripslashes( $event->event_title );
-					if ( $event_title !== $title ) {
-						$title = $event_title;
-					}
-				} else {
-					// If both queries fail to get title, return original.
-					return $title;
-				}
-				if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
-					$icon = mc_category_icon( $event );
-				} else {
-					$icon = '';
+			}
+			if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
+				$icon = mc_category_icon( $event );
+			} else {
+				$icon = '';
+			}
+			if ( is_object( $event ) ) {
+				$event_title = stripslashes( $event->event_title );
+				if ( $event_title !== $title ) {
+					$title = $event_title;
 				}
 				$template = mc_get_template( 'title_solo' );
 				if ( '' === $template || '{title}' === $template ) {
@@ -1907,6 +1908,9 @@ function mc_the_title( $title, $post_id = null ) {
 					$data  = mc_create_tags( $event, $event_id );
 					$title = mc_draw_template( $data, $template );
 				}
+			} else {
+				// If both queries fail to get title, return original.
+				return $title;
 			}
 		}
 	}
