@@ -50,7 +50,7 @@ function mc_event_object( $object ) {
  * @return string GUID
  */
 function mc_create_guid( $event ) {
-	$guid = md5( $event->event_post . $event->event_id . $event->event_title );
+	$guid = md5( home_url() . $event->event_post . $event->event_id . $event->event_title );
 	update_post_meta( $event->event_post, '_mc_guid', $guid );
 
 	return $guid;
