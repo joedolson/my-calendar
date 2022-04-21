@@ -285,10 +285,12 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
 					$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
 					$a      = get_userdata( $event->event_author );
-					$text   = ( '' !== get_option( 'mc_posted_by', '' ) ) ? get_option( 'mc_posted_by' ) : __( 'Posted by', 'my-calendar' );
-					$author = $avatar . '<p class="event-author"><span class="posted">' . $text . '</span> <span class="author-name">' . $a->display_name . "</span></p>\n";
-					if ( $avatars ) {
-						$author = '	<div class="mc-author-card">' . $author . '</div>';
+					if ( $a ) {
+						$text   = ( '' !== get_option( 'mc_posted_by', '' ) ) ? get_option( 'mc_posted_by' ) : __( 'Posted by', 'my-calendar' );
+						$author = $avatar . '<p class="event-author"><span class="posted">' . $text . '</span> <span class="author-name">' . $a->display_name . "</span></p>\n";
+						if ( $avatars ) {
+							$author = '	<div class="mc-author-card">' . $author . '</div>';
+						}
 					}
 				}
 			}
@@ -296,10 +298,12 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				if ( 0 !== (int) $event->event_host && is_numeric( $event->event_host ) ) {
 					$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
 					$h       = get_userdata( $event->event_host );
-					$text    = ( '' !== get_option( 'mc_hosted_by', '' ) ) ? get_option( 'mc_hosted_by' ) : __( 'Hosted by', 'my-calendar' );
-					$host    = $havatar . '<p class="event-host"><span class="hosted">' . $text . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
-					if ( $avatars ) {
-						$host = '	<div class="mc-host-card">' . $host . '</div>';
+					if ( $h ) {
+						$text    = ( '' !== get_option( 'mc_hosted_by', '' ) ) ? get_option( 'mc_hosted_by' ) : __( 'Hosted by', 'my-calendar' );
+						$host    = $havatar . '<p class="event-host"><span class="hosted">' . $text . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
+						if ( $avatars ) {
+							$host = '	<div class="mc-host-card">' . $host . '</div>';
+						}
 					}
 				}
 			}
