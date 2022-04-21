@@ -1215,10 +1215,10 @@ function my_calendar( $args ) {
 	$months   = isset( $args['months'] ) ? $args['months'] : false;
 
 	// Get options before switching sites in multisite environments.
-	$list_js_class = ( '0' === get_option( 'mc_list_javascript' ) ) ? 'listjs' : '';
-	$grid_js_class = ( '0' === get_option( 'mc_calendar_javascript' ) ) ? 'gridjs' : '';
-	$mini_js_class = ( '0' === get_option( 'mc_mini_javascript' ) ) ? 'minijs' : '';
-	$ajax_js_class = ( '0' === get_option( 'mc_ajax_javascript' ) ) ? 'ajaxjs' : '';
+	$list_js_class = ( '1' !== get_option( 'mc_list_javascript' ) ) ? 'listjs' : '';
+	$grid_js_class = ( '1' !== get_option( 'mc_calendar_javascript' ) ) ? 'gridjs' : '';
+	$mini_js_class = ( '1' !== get_option( 'mc_mini_javascript' ) ) ? 'minijs' : '';
+	$ajax_js_class = ( '1' !== get_option( 'mc_ajax_javascript' ) ) ? 'ajaxjs' : '';
 	$style_class   = sanitize_html_class( str_replace( '.css', '', get_option( 'mc_css_file' ) ) );
 	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
