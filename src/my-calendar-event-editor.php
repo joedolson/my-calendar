@@ -1745,11 +1745,14 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$desc   = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
 		$short  = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
 		$recurs = ( isset( $post['prev_event_recur'] ) ) ? $post['prev_event_recur'] : '';
-		$recur  = ! empty( $post['event_recur'] ) ? trim( $post['event_recur'] ) : $recur;
+		$recur  = ! empty( $post['event_recur'] ) ? trim( $post['event_recur'] ) : $recurs;
 		if ( ! isset( $post['event_recur'] ) && isset( $post['event_repeats'] ) ) {
 			unset( $post['event_repeats'] );
 		}
 		$every = ! empty( $post['event_every'] ) ? (int) $post['event_every'] : 1;
+		if ( strlen( $recur > 1 ) ) {
+			$recur = substr( $recur, 0, 1 );
+		}
 		// if this is an all weekdays event, and it's scheduled to start on a weekend, the math gets nasty.
 		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
 		$begin = trim( $post['event_begin'][ $i ] );

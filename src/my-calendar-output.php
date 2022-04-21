@@ -299,8 +299,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
 					$h       = get_userdata( $event->event_host );
 					if ( $h ) {
-						$text    = ( '' !== get_option( 'mc_hosted_by', '' ) ) ? get_option( 'mc_hosted_by' ) : __( 'Hosted by', 'my-calendar' );
-						$host    = $havatar . '<p class="event-host"><span class="hosted">' . $text . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
+						$text = ( '' !== get_option( 'mc_hosted_by', '' ) ) ? get_option( 'mc_hosted_by' ) : __( 'Hosted by', 'my-calendar' );
+						$host = $havatar . '<p class="event-host"><span class="hosted">' . $text . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
 						if ( $avatars ) {
 							$host = '	<div class="mc-host-card">' . $host . '</div>';
 						}
