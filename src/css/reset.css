@@ -392,3 +392,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	padding: 0;
 	display: inline-block;
 }
+
+.my-calendar-mask.mc-mask-active {
+	position: static !important; /* Override styles from 2021 styles, sadly. */
+}
