@@ -304,7 +304,7 @@ function mc_kses_elements() {
 			'id'    => array(),
 			'class' => array(),
 		),
-		'hr'                => array(
+		'hr'               => array(
 			'class' => array(),
 		),
 		'p'                => array(
