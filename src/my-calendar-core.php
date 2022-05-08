@@ -1825,7 +1825,11 @@ function mc_load_permalinks() {
  */
 function mc_previous_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
-		$mc_id = (int) $_GET['mc_id'];
+		$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+		if ( ! $event_id ) {
+			$post_id = get_the_ID();
+			$mc_id   = get_post_meta( $post_id, '_mc_event_id', true );
+		}
 		$event = mc_adjacent_event( $mc_id, 'previous' );
 		if ( empty( $event ) ) {
 			return '';
@@ -1852,7 +1856,11 @@ function mc_previous_post_link( $output, $format ) {
  */
 function mc_next_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
-		$mc_id = (int) $_GET['mc_id'];
+		$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+		if ( ! $event_id ) {
+			$post_id = get_the_ID();
+			$mc_id   = get_post_meta( $post_id, '_mc_event_id', true );
+		}
 		$event = mc_adjacent_event( $mc_id, 'next' );
 		if ( empty( $event ) ) {
 			return '';
