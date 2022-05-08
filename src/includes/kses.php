@@ -296,16 +296,16 @@ function mc_kses_elements() {
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
 		),
-		'strong'                => array(
-			'id'          => array(),
-			'class'       => array(),
+		'strong'           => array(
+			'id'    => array(),
+			'class' => array(),
 		),
 		'b'                => array(
-			'id'          => array(),
-			'class'       => array(),
+			'id'    => array(),
+			'class' => array(),
 		),
 		'hr'                => array(
-			'class'       => array(),
+			'class' => array(),
 		),
 		'p'                => array(
 			'class' => array(),
