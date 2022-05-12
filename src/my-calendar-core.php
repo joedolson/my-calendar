@@ -618,7 +618,7 @@ function mc_admin_styles() {
 				);
 			}
 		}
-		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), $version );
+		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
 	}
 }
 
