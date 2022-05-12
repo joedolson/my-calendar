@@ -2167,6 +2167,10 @@ add_action( 'admin_notices', 'mc_update_notice' );
  */
 function mc_update_notice() {
 	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
+		if ( '1' === get_option( 'mc_use_custom_js' ) ) {
+			mc_show_notice( __( 'Stored custom JS will be removed from My Calendar in version 3.4.0. You should adapt your custom JS to a file-based replacement file or use the standard scripts.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-design#my-calendar-scripts' ) . '">' . __( 'Update Script Settings', 'my-calendar' ) . '</a>' );
+
+		}
 		if ( 'true' === get_option( 'mc_remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' );
 		}
