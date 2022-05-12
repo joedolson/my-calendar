@@ -513,8 +513,7 @@ function mc_footer_js() {
 					}
 				}
 				if ( $enqueue_mcjs ) {
-					//wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), $version );
-					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), mt_rand( 0, 20000 ) );
+					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), $version );
 					$args = array(
 						'grid'      => $grid,
 						'list'      => $list,
