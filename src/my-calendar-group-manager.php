@@ -531,7 +531,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 			</div>
 		</div>
 	<?php
-	if ( mc_show_edit_block( 'event_open' ) ) {
+	if ( mc_show_edit_block( 'event_open' ) && '' !== apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ) ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
