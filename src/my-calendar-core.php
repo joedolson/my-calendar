@@ -472,62 +472,57 @@ function mc_footer_js() {
 			$enqueue_mcjs = false;
 			if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
 				if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
-					$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
+					$url          = apply_filters( 'mc_grid_js', '' );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
-					wp_localize_script(
-						'mc.grid',
-						'mcgrid',
-						array(
-							'grid' => 'true',
-						)
-					);
+					if ( $url ) {
+						$grid = 'false';
+						wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
+					} else {
+						$grid = 'true';
+					}
 				}
 				if ( '1' !== get_option( 'mc_list_javascript' ) ) {
-					$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
+					$url          = apply_filters( 'mc_list_js', '' );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
-					wp_localize_script(
-						'mc.list',
-						'mclist',
-						array(
-							'list' => 'true',
-						)
-					);
+					if ( $url ) {
+						$list = 'false';
+						wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
+					} else {
+						$list = 'true';
+					}
 				}
 				if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
-					$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
+					$url          = apply_filters( 'mc_mini_js', '' );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
-					wp_localize_script(
-						'mc.mini',
-						'mcmini',
-						array(
-							'mini' => 'true',
-						)
-					);
+
+					if ( $url ) {
+						$mini = 'false';
+						wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
+					} else {
+						$mini = 'true';
+					}
 				}
 				if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
-					$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
+					$url          = apply_filters( 'mc_ajax_js', '' );
 					$enqueue_mcjs = true;
-					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
-					wp_localize_script(
-						'mc.ajax',
-						'mcAjax',
-						array(
-							'ajax' => 'true',
-						)
-					);
+					if ( $url ) {
+						$ajax = 'false';
+						wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
+					} else {
+						$ajax = 'true';
+					}
 				}
 				if ( $enqueue_mcjs ) {
-					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), $version );
-					wp_localize_script(
-						'mc.mcjs',
-						'my_calendar',
-						array(
-							'newWindow' => __( 'Opens in new tab', 'my-calendar' ),
-						)
+					//wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), $version );
+					wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), mt_rand( 0, 20000 ) );
+					$args = array(
+						'grid'      => $grid,
+						'list'      => $list,
+						'mini'      => $mini,
+						'ajax'      => $ajax,
+						'newWindow' => __( 'Opens in new tab', 'my-calendar' ),
 					);
+					wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
 				}
 			}
 		}
@@ -1825,8 +1820,8 @@ function mc_load_permalinks() {
  */
 function mc_previous_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
-		$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
-		if ( ! $event_id ) {
+		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+		if ( ! $mc_id ) {
 			$post_id = get_the_ID();
 			$mc_id   = get_post_meta( $post_id, '_mc_event_id', true );
 		}
@@ -1856,8 +1851,8 @@ function mc_previous_post_link( $output, $format ) {
  */
 function mc_next_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
-		$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
-		if ( ! $event_id ) {
+		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+		if ( ! $mc_id ) {
 			$post_id = get_the_ID();
 			$mc_id   = get_post_meta( $post_id, '_mc_event_id', true );
 		}
