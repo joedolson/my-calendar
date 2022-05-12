@@ -84,6 +84,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.13 =
+
+* Bug fix: Don't display empty field containers if field settings are empty.
+* Bug fix: Pass version number to core stylesheet.
+* Bug fix: Prevent warning from undefined GET variable in previous/next event links.
+* Bug fix: Allow strong, b, and hr in shortcode output.
+* Bug fix: Override masking; causing too many display problems.
+* Bug fix: JS classes in main output used inverted comparisons.
+
 = 3.3.12 =
 
 * Bug fix: Find title and find event should use nearest event, not first event.
