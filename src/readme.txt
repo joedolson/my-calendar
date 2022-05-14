@@ -92,7 +92,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Allow strong, b, and hr in shortcode output.
 * Bug fix: Override masking; causing too many display problems.
 * Bug fix: JS classes in main output used inverted comparisons.
+* Notice: Custom JS will be disabled and removed in 3.4.
 * Change: Collapsed view scripts from five files to one file.
+* Change: Load new combined file minified.
 
 = 3.3.12 =
 
