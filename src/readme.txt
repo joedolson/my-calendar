@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 5.9
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.3.12
+Stable tag: 3.3.13
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
