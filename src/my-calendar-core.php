@@ -470,12 +470,15 @@ function mc_footer_js() {
 			echo ( '' !== $inner ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
+			$grid         = 'false';
+			$list         = 'false';
+			$mini         = 'false';
+			$ajax         = 'false';
 			if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
 				if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 					$url          = apply_filters( 'mc_grid_js', '' );
 					$enqueue_mcjs = true;
 					if ( $url ) {
-						$grid = 'false';
 						wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
 					} else {
 						$grid = 'true';
@@ -485,7 +488,6 @@ function mc_footer_js() {
 					$url          = apply_filters( 'mc_list_js', '' );
 					$enqueue_mcjs = true;
 					if ( $url ) {
-						$list = 'false';
 						wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
 					} else {
 						$list = 'true';
@@ -496,7 +498,6 @@ function mc_footer_js() {
 					$enqueue_mcjs = true;
 
 					if ( $url ) {
-						$mini = 'false';
 						wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
 					} else {
 						$mini = 'true';
@@ -506,7 +507,6 @@ function mc_footer_js() {
 					$url          = apply_filters( 'mc_ajax_js', '' );
 					$enqueue_mcjs = true;
 					if ( $url ) {
-						$ajax = 'false';
 						wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
 					} else {
 						$ajax = 'true';
