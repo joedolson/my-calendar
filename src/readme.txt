@@ -84,6 +84,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.15 =
+
+* Bug fix: CPT base values shouldn't allow URL-invalid characters.
+* New filters: Filter event object.
+* New filter: Filter single event HTML.
+
 = 3.3.14 =
 
 * Bug fix: Variables undefined if scripts disabled.

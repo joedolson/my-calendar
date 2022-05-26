@@ -16,13 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Draw array of information into a template with {$key} formatted tags
  *
- * @param array  $array associative array of information intended to be parsed.
- * @param string $template template containing braced tags (e.g. `{title}`) using keys of passed array.
- * @param string $type my calendar needs to render a different link for list versions and other views.
+ * @param array       $array associative array of information intended to be parsed.
+ * @param string      $template template containing braced tags (e.g. `{title}`) using keys of passed array.
+ * @param string      $type my calendar needs to render a different link for list versions and other views.
+ * @param object|bool $event Event object. Optional.
  *
  * @return string HTML output of template.
  */
-function mc_draw_template( $array, $template, $type = 'list' ) {
+function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 	$template = stripcslashes( $template );
 	// If there are no brace characters, there is nothing to replace.
 	if ( strpos( $template, '{' ) === false ) {
@@ -72,6 +73,7 @@ function mc_draw_template( $array, $template, $type = 'list' ) {
 			// End {$key check.
 		}
 	}
+	$template = apply_filters( 'mc_template', $template, $details, $type, $event );
 
 	return stripslashes( trim( $template ) );
 }
