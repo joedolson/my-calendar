@@ -1796,14 +1796,14 @@ add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
  */
 function mc_load_permalinks() {
 	if ( isset( $_POST['mc_cpt_base'] ) ) {
-		update_option( 'mc_cpt_base', sanitize_text_field( $_POST['mc_cpt_base'] ) );
+		update_option( 'mc_cpt_base', sanitize_key( sanitize$_POST['mc_cpt_base'] ) );
 	}
 	$opts = array( 'label_for' => 'mc_cpt_base' );
 	// Add a settings field to the permalink page.
 	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base' ), 'mc_field_callback', 'permalink', 'optional', $opts );
 
 	if ( isset( $_POST['mc_location_cpt_base'] ) ) {
-		update_option( 'mc_location_cpt_base', sanitize_text_field( $_POST['mc_location_cpt_base'] ) );
+		update_option( 'mc_location_cpt_base', sanitize_key( $_POST['mc_location_cpt_base'] ) );
 	}
 	$opts = array( 'label_for' => 'mc_location_cpt_base' );
 	// Add a settings field to the permalink page.
