@@ -154,6 +154,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	if ( $exit_early ) {
 		return '';
 	}
+	do_action( 'my_calendar_drawing_event', $event );
 
 	// assign empty values to template sections.
 	$header      = '';
@@ -463,6 +464,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	} else {
 		$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) . $header . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
 	}
+	$details = apply_filters( 'mc_event_details_output', $details, $event );
+	do_action( 'my_calendar_event_drawn', $event );
 
 	return $details;
 }
