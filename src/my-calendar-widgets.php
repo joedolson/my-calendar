@@ -193,7 +193,7 @@ function my_calendar_upcoming_events( $args ) {
 				$omit[] = $event->event_group_id;
 			}
 			if ( '' === $item ) {
-				$item = mc_draw_template( $details, $template );
+				$item = mc_draw_template( $details, $template, 'upcoming', $event );
 			}
 			if ( $i < $skip && 0 !== $skip ) {
 				$i ++;
@@ -445,7 +445,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 
 						$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $type );
 						if ( '' === $item ) {
-							$item = mc_draw_template( $details, $template, $type );
+							$item = mc_draw_template( $details, $template, $type, $event );
 						}
 
 						$output[] = apply_filters( 'mc_event_upcoming', $prepend . $item . $append, $event );
@@ -560,7 +560,7 @@ function my_calendar_todays_events( $args ) {
 
 				$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $template );
 				if ( '' === $item ) {
-					$item = mc_draw_template( $event_details, $template );
+					$item = mc_draw_template( $event_details, $template, 'today', $e );
 				}
 				$todays_events[ $ts ][] = $prepend . $item . $append;
 			}

@@ -73,7 +73,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 			// End {$key check.
 		}
 	}
-	$template = apply_filters( 'mc_template', $template, $details, $type, $event );
+	$template = apply_filters( 'mc_template', $template, $array, $type, $event );
 
 	return stripslashes( trim( $template ) );
 }

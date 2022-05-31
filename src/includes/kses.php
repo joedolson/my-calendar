@@ -289,6 +289,7 @@ function mc_kses_elements() {
 			'aria-live'   => array(),
 			'aria-hidden' => array(),
 			'style'       => array(),
+			'lang'        => array(),
 		),
 		'i'                => array(
 			'id'          => array(),
@@ -318,6 +319,7 @@ function mc_kses_elements() {
 			'data-default'    => array(),
 			'aria-labelledby' => array(),
 			'style'           => array(),
+			'lang'            => array(),
 		),
 		'img'              => array(
 			'class'    => true,
