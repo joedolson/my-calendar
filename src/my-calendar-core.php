@@ -1796,7 +1796,7 @@ add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
  */
 function mc_load_permalinks() {
 	if ( isset( $_POST['mc_cpt_base'] ) ) {
-		update_option( 'mc_cpt_base', sanitize_key( sanitize$_POST['mc_cpt_base'] ) );
+		update_option( 'mc_cpt_base', sanitize_key( $_POST['mc_cpt_base'] ) );
 	}
 	$opts = array( 'label_for' => 'mc_cpt_base' );
 	// Add a settings field to the permalink page.
