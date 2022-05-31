@@ -1140,11 +1140,12 @@ function mc_calendar_params( $args ) {
 		'search'   => $search,
 	);
 
-	// Hash cannot include 'time', 'category', or 'format', since those can be changed by navigation.
+	// Hash cannot include 'time', 'category', 'search', or 'format', since those can be changed by navigation.
 	$hash_args = $params;
 	unset( $hash_args['time'] );
 	unset( $hash_args['category'] );
 	unset( $hash_args['format'] );
+	unset( $hash_args['search'] );
 
 	$hash         = md5( implode( ',', $hash_args ) );
 	$id           = ( ! $id ) ? "mc-$hash" : $id;
