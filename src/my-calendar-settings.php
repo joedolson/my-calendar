@@ -42,7 +42,12 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 		}
 	}
 	if ( 'checkbox' !== $type ) {
-		$value = ( '' !== $value ) ? esc_attr( stripslashes( $value ) ) : $default;
+		if ( is_array( $default ) ) {
+			$hold = '';
+		} else {
+			$hold = $default;
+		}
+		$value = ( '' !== $value ) ? esc_attr( stripslashes( $value ) ) : $hold;
 	} else {
 		$value = ( ! empty( $value ) ) ? (array) $value : $default;
 	}
@@ -118,7 +123,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			}
 			if ( is_array( $default ) ) {
 				foreach ( $default as $k => $v ) {
-					$checked  = ( $k === $value ) ? ' selected="selected"' : '';
+					$checked  = ( (string) $k === (string) $value ) ? ' selected="selected"' : '';
 					$options .= "<option value='" . esc_attr( $k ) . "'$checked>$v</option>";
 				}
 			}
@@ -229,8 +234,8 @@ function mc_update_management_settings( $post ) {
 	update_option( 'mc_remote', $mc_remote );
 	update_option( 'mc_drop_tables', $mc_drop_tables );
 	update_option( 'mc_drop_settings', $mc_drop_settings );
-	update_option( 'mc_default_sort', $post['mc_default_sort'] );
-	update_option( 'mc_default_direction', $post['mc_default_direction'] );
+	update_option( 'mc_default_sort', absint( $post['mc_default_sort'] ) );
+	update_option( 'mc_default_direction', sanitize_text_field( $post['mc_default_direction'] ) );
 	if ( 2 === (int) get_site_option( 'mc_multisite' ) ) {
 		$mc_current_table = ( isset( $post['mc_current_table'] ) ) ? (int) $post['mc_current_table'] : 0;
 		update_option( 'mc_current_table', $mc_current_table );
