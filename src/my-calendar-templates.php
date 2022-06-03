@@ -287,6 +287,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( ! is_object( $event ) ) {
 		return;
 	}
+	do_action( 'mc_create_tags', $event, $context );
 	$calendar_id = '';
 	if ( 'filters' !== $context && 'related' !== $context ) {
 		$calendar_id = $context;
@@ -515,6 +516,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['ical']             = $ical_link;
 	$e['ical_html']        = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'iCal', 'my-calendar' ) . '</a>';
 	$e                     = apply_filters( 'mc_filter_shortcodes', $e, $event );
+	do_action( 'mc_tags_created', $event, $context );
 
 	return $e;
 }
