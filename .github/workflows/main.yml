@@ -3,7 +3,7 @@ name: Code Linting
 on:
   push:
     paths:
-      - '.github/workflows/php-lint.yml'
+      - '.github/workflows/main.yml'
       - '**.php'
       - 'phpcs.xml.dist'
       - 'composer.json'
