@@ -923,7 +923,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				$image_id = '';
 			}
 			if ( $show_block ) {
-				$button_text = __( 'Select Featured Image' );
+				$button_text = __( 'Select Featured Image', 'my-calendar' );
 				$remove      = '';
 				if ( '' !== $image ) {
 					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
@@ -960,7 +960,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				</div>';
 				$return      .= '
 					<p class="mc-primary-category">
-						<label for="e_category">' . __( 'Primary Category', 'my-calendar-submissions' ) . '</label>
+						<label for="e_category">' . __( 'Primary Category', 'my-calendar' ) . '</label>
 						<select name="primary_category" id="e_category">' . $select . '</select>
 					</p>';
 			} else {
@@ -1733,7 +1733,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_latitude     = '';
 	$event_location     = '';
 
-	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) {
+	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) { //phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
 		$post = array_map( 'stripslashes_deep', $post );
 	}
 	if ( ! wp_verify_nonce( $post['event_nonce_name'], 'event_nonce' ) ) {

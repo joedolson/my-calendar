@@ -1800,14 +1800,14 @@ function mc_load_permalinks() {
 	}
 	$opts = array( 'label_for' => 'mc_cpt_base' );
 	// Add a settings field to the permalink page.
-	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base' ), 'mc_field_callback', 'permalink', 'optional', $opts );
+	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base', 'my-calendar' ), 'mc_field_callback', 'permalink', 'optional', $opts );
 
 	if ( isset( $_POST['mc_location_cpt_base'] ) ) {
 		update_option( 'mc_location_cpt_base', sanitize_key( $_POST['mc_location_cpt_base'] ) );
 	}
 	$opts = array( 'label_for' => 'mc_location_cpt_base' );
 	// Add a settings field to the permalink page.
-	add_settings_field( 'mc_location_cpt_base', __( 'My Calendar Locations base' ), 'mc_location_field_callback', 'permalink', 'optional', $opts );
+	add_settings_field( 'mc_location_cpt_base', __( 'My Calendar Locations base', 'my-calendar' ), 'mc_location_field_callback', 'permalink', 'optional', $opts );
 }
 
 /**
@@ -2127,21 +2127,21 @@ function mc_posttypes_messages( $messages ) {
 			$messages[ $key ] = array(
 				0  => '', // Unused. Messages start at index 1.
 				// Translators: URL to view event.
-				1  => sprintf( __( 'Event updated. <a href="%s">View Event</a>' ), esc_url( get_permalink( $post_ID ) ) ),
-				2  => __( 'Custom field updated.' ),
-				3  => __( 'Custom field deleted.' ),
+				1  => sprintf( __( 'Event updated. <a href="%s">View Event</a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
+				2  => __( 'Custom field updated.', 'my-calendar' ),
+				3  => __( 'Custom field deleted.', 'my-calendar' ),
 				4  => __( 'Event updated.' ),
 				// Translators: %s: date and time of the revision.
-				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Event restored to revision from %s' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Event restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
 				// Translators: URL to view event.
-				6  => sprintf( __( 'Event published. <a href="%s">View event</a>' ), esc_url( get_permalink( $post_ID ) ) ),
-				7  => sprintf( __( 'Event saved.' ) ),
+				6  => sprintf( __( 'Event published. <a href="%s">View event</a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
+				7  => sprintf( __( 'Event saved.', 'my-calendar' ) ),
 				// Translators: URL to preview event.
-				8  => sprintf( __( 'Event submitted. <a target="_blank" href="%s">Preview event</a>' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+				8  => sprintf( __( 'Event submitted. <a target="_blank" href="%s">Preview event</a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 				// Translators: Date event scheduled to be published, URL to preview event.
-				9  => sprintf( __( 'Event scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview event</a>' ), date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
+				9  => sprintf( __( 'Event scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview event</a>', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
 				// Translators: URL to preview event.
-				10 => sprintf( __( 'Event draft updated. <a target="_blank" href="%s">Preview event</a>' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+				10 => sprintf( __( 'Event draft updated. <a target="_blank" href="%s">Preview event</a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 			);
 		}
 	}

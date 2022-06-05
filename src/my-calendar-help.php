@@ -45,7 +45,7 @@ function my_calendar_help() {
 						$permalink = mc_get_uri();
 						$edit_url  = get_edit_post_link( absint( get_option( 'mc_uri_id' ) ) );
 						// Translators: Calendar link, calendar edit link.
-						echo '<li>' . sprintf( __( '<a href="%1$s">View your calendar</a> or <a href="%2$s">Edit the calendar page</a>' ), esc_url( $permalink ), esc_url( $edit_url ) ) . '</li>';
+						echo '<li>' . sprintf( __( '<a href="%1$s">View your calendar</a> or <a href="%2$s">Edit the calendar page</a>', 'my-calendar' ), esc_url( $permalink ), esc_url( $edit_url ) ) . '</li>';
 					}
 					$add_categories = admin_url( 'admin.php?page=my-calendar-categories' );
 					$add_locations  = admin_url( 'admin.php?page=my-calendar-locations' );

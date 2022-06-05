@@ -1445,7 +1445,7 @@ function my_calendar( $args ) {
 									} else {
 										$title = '';
 										// Translators: Number of events on this date.
-										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ) ), count( $events ) ) . ')</span>';
+										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 									}
 									if ( '' !== $event_output ) {
 										$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( date_i18n( $date_format, $start ) . $inner ) . "$title</strong>" . $event_output . '</li>';
@@ -1454,7 +1454,7 @@ function my_calendar( $args ) {
 								} else {
 									$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
 									// Translators: Number of events on this date.
-									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text"><span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ) ), count( $events ) ) . ')</span></span>' : '';
+									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text"><span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span></span>' : '';
 									$body .= "<$td id='$params[format]-$date_is'$ariacurrent class='$dateclass $weekend_class $monthclass $events_class day-with-date'>" . "\n	<$element class='mc-date$trigger'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span>$inner</$close>" . $event_output . "\n</$td>\n";
 								}
 							}

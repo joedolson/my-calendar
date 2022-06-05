@@ -95,7 +95,7 @@ function mc_show_event_editing( $status, $args ) {
 				$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_show_on_page[$key]' value='on' $checked /> $value</label>";
 			}
 		}
-		$button  = get_submit_button( __( 'Apply' ), 'button', 'screen-options-apply', false );
+		$button  = get_submit_button( __( 'Apply', 'my-calendar' ), 'button', 'screen-options-apply', false );
 		$return .= '
 	<fieldset>
 	<legend>' . __( 'Event editing fields to show', 'my-calendar' ) . "</legend>
