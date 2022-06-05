@@ -2130,7 +2130,7 @@ function mc_posttypes_messages( $messages ) {
 				1  => sprintf( __( 'Event updated. <a href="%s">View Event</a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
 				2  => __( 'Custom field updated.', 'my-calendar' ),
 				3  => __( 'Custom field deleted.', 'my-calendar' ),
-				4  => __( 'Event updated.' ),
+				4  => __( 'Event updated.', 'my-calendar' ),
 				// Translators: %s: date and time of the revision.
 				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Event restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
 				// Translators: URL to view event.
@@ -2139,7 +2139,7 @@ function mc_posttypes_messages( $messages ) {
 				// Translators: URL to preview event.
 				8  => sprintf( __( 'Event submitted. <a target="_blank" href="%s">Preview event</a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 				// Translators: Date event scheduled to be published, URL to preview event.
-				9  => sprintf( __( 'Event scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview event</a>', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
+				9  => sprintf( __( 'Event scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview event</a>', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i', 'my-calendar' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
 				// Translators: URL to preview event.
 				10 => sprintf( __( 'Event draft updated. <a target="_blank" href="%s">Preview event</a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 			);
