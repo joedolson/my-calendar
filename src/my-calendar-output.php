@@ -1205,6 +1205,27 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 }
 
 /**
+ * Handle switching languages in shortcodes.
+ *
+ * @param string $current Current language set.
+ * @param string $switch  Language to switch to.
+ *
+ * @return string HTML attribute.
+ */
+function mc_switch_language( $current, $switch ) {
+	$available = get_available_languages();
+	$lang      = '';
+	if ( in_array( $switch, $available, true ) ) {
+		if ( $switch && ( $current !== $switch ) ) {
+			switch_to_locale( $switch );
+		}
+		$lang = explode( '_', $switch )[0];
+	}
+
+	return $lang;
+}
+
+/**
  * Create calendar output and return.
  *
  * @param array $args Lots of arguments; all shortcode parameters, etc.
@@ -1212,6 +1233,12 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
  * @return string HTML output of calendar
  */
 function my_calendar( $args ) {
+	$language = isset( $args['language'] ) ? $args['language'] : '';
+	$switched = '';
+	if ( $language ) {
+		$locale   = get_locale();
+		$switched = mc_switch_language( $locale, $language );
+	}
 	$template = isset( $args['template'] ) ? $args['template'] : '';
 	$content  = isset( $args['content'] ) ? $args['content'] : '';
 	$source   = isset( $args['source'] ) ? $args['source'] : 'shortcode';
@@ -1251,8 +1278,9 @@ function my_calendar( $args ) {
 	$id         = $params['id'];
 	$main_class = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
 	$cid        = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
+	$lang       = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$mc_wrapper = "
-<div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class\" aria-live='assertive' aria-atomic='true' aria-relevant='additions'>";
+<div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class\" aria-live='assertive' aria-atomic='true' aria-relevant='additions'$lang>";
 	$mc_closer  = '
 </div>';
 
@@ -1505,7 +1533,11 @@ function my_calendar( $args ) {
 		}
 	}
 
-	return $mc_wrapper . $json_ld . apply_filters( 'my_calendar_body', $body ) . $mc_closer;
+	$output = $mc_wrapper . $json_ld . apply_filters( 'my_calendar_body', $body ) . $mc_closer;
+	if ( $language ) {
+		mc_switch_language( $language, $locale );
+	}
+	return $output;
 }
 
 /**

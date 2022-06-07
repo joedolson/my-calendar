@@ -27,6 +27,12 @@ include( dirname( __FILE__ ) . '/includes/widgets/class-my-calendar-mini-widget.
  * @return String HTML output list.
  */
 function my_calendar_upcoming_events( $args ) {
+	$language = isset( $args['language'] ) ? $args['language'] : '';
+	$switched = '';
+	if ( $language ) {
+		$locale   = get_locale();
+		$switched = mc_switch_language( $locale, $language );
+	}
 	$before         = ( isset( $args['before'] ) ) ? $args['before'] : 'default';
 	$after          = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
 	$type           = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
@@ -77,7 +83,8 @@ function my_calendar_upcoming_events( $args ) {
 
 	$template       = apply_filters( 'mc_upcoming_events_template', $template );
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
-	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events'>";
+	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
+	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events'$lang>";
 	$footer         = '</ul>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
@@ -250,6 +257,10 @@ function my_calendar_upcoming_events( $args ) {
 
 	if ( $site ) {
 		restore_current_blog();
+	}
+
+	if ( $language ) {
+		mc_switch_language( $language, $locale );
 	}
 
 	return $return;
@@ -482,6 +493,13 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
  * @return string HTML.
  */
 function my_calendar_todays_events( $args ) {
+	$language = isset( $args['language'] ) ? $args['language'] : '';
+	$switched = '';
+	if ( $language ) {
+		$locale   = get_locale();
+		$switched = mc_switch_language( $locale, $language );
+	}
+
 	$category   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
 	$template   = ( isset( $args['template'] ) ) ? $args['template'] : 'default';
 	$substitute = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
@@ -543,7 +561,8 @@ function my_calendar_todays_events( $args ) {
 	$events = my_calendar_events( $args );
 
 	$today         = ( isset( $events[ $from ] ) ) ? $events[ $from ] : false;
-	$header        = "<ul id='todays-events-$hash' class='todays-events'>";
+	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
+	$header        = "<ul id='todays-events-$hash' class='todays-events'$lang>";
 	$footer        = '</ul>';
 	$groups        = array();
 	$todays_events = array();
@@ -584,5 +603,11 @@ function my_calendar_todays_events( $args ) {
 		restore_current_blog();
 	}
 
-	return mc_run_shortcodes( $return );
+	$output = mc_run_shortcodes( $return );
+
+	if ( $language ) {
+		mc_switch_language( $language, $locale );
+	}
+
+	return $output;
 }

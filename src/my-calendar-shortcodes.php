@@ -43,6 +43,7 @@ function my_calendar_insert( $atts, $content = null ) {
 			'months'   => false,
 			'search'   => '',
 			'self'     => '',
+			'language' => '',
 		),
 		$atts,
 		'my_calendar'
@@ -102,6 +103,7 @@ function my_calendar_insert_upcoming( $atts ) {
 			'from'           => false,
 			'to'             => false,
 			'site'           => false,
+			'language'       => '',
 		),
 		$atts,
 		'my_calendar_upcoming'
@@ -135,6 +137,7 @@ function my_calendar_insert_today( $atts ) {
 			'fallback' => '',
 			'date'     => false,
 			'site'     => false,
+			'language' => '',
 		),
 		$atts,
 		'my_calendar_today'
