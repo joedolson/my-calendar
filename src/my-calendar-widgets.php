@@ -154,7 +154,27 @@ function my_calendar_upcoming_events( $args ) {
 			$from = mc_date( 'Y-1-1' );
 			$to   = mc_date( 'Y-12-31' );
 		}
+		/**
+		 * Custom upcoming events date start value for upcoming events lists using date parameters.
+		 *
+		 * @hook mc_upcoming_date_from
+		 *
+		 * @param {string} $from Starting date for this list of upcoming events in Y-m-d format.
+		 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+		 *
+		 * @return {string} List starting date.
+		 */
 		$from = apply_filters( 'mc_upcoming_date_from', $from, $args );
+		/**
+		 * Custom upcoming events date end value for upcoming events lists using date parameters.
+		 *
+		 * @hook mc_upcoming_date_to
+		 *
+		 * @param {string} $to Ending date for this list of upcoming events in Y-m-d format.
+		 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+		 *
+		 * @return {string} List ending date.
+		 */
 		$to   = apply_filters( 'mc_upcoming_date_to', $to, $args );
 
 		$query       = array(
@@ -191,6 +211,18 @@ function my_calendar_upcoming_events( $args ) {
 		$omit      = array();
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event );
+			/**
+			 * Draw a custom template for upcoming events. Returning any non-empty string short circuits other template settings.
+			 *
+			 * @hook mc_draw_upcoming_event
+			 *
+			 * @param {string} $item Empty string before event template is drawn.
+			 * @param {array}  $details Associative array of event template tags.
+			 * @param {string} $template Template string passed from widget or shortcode.
+			 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+			 *
+			 * @return {string} Event template details.
+			 */
 			$item    = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $args );
 			// if an event is a multidate group, only display first found.
 			if ( in_array( $event->event_group_id, $omit, true ) ) {
