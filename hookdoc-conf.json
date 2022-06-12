@@ -1,6 +1,6 @@
 {
   "opts": {
-    "destination": "hookdocs",
+    "destination": "docs",
     "template": "node_modules/wp-hookdoc/template",
     "recurse": true,
     "readme": "./.github/hookdoc-tmpl/README.md"
