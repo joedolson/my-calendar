@@ -623,6 +623,15 @@ function my_calendar_todays_events( $args ) {
 			}
 		}
 		if ( 0 !== count( $events ) ) {
+			/**
+			 * Replace the list header for today's events lists. Default value `<ul id='todays-events-$hash' class='todays-events'$lang>`.
+			 *
+			 * @hook mc_todays_events_header
+			 *
+			 * @param {string} $header Existing today's events header HTML.
+			 *
+			 * @return {string} List header HTML.
+			 */
 			$return = apply_filters( 'mc_todays_events_header', $header ) . $output . apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
 			$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '</div>';
