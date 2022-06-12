@@ -5,6 +5,7 @@ body {
 	font-weight: 300;
 	margin: 0;
 	border-top: 30px solid #243f82;
+	display: grid;
 }
 
 #main {
@@ -15,6 +16,14 @@ nav {
 	margin-top: 0;
 	padding-top: 28px;
 	border-top: 10px solid #9b5;
+}
+
+section {
+	margin-right: 0;
+}
+
+footer {
+	padding: 12px 24px;
 }
 
 h1, h2, h3 {
