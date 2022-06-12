@@ -656,6 +656,15 @@ function my_calendar_todays_events( $args ) {
 			}
 		}
 		if ( 0 !== count( $events ) ) {
+			/**
+			 * Replace the list header for today's events lists. Default value `&lt;ul id='todays-events-$hash' class='todays-events'$lang>`.
+			 *
+			 * @hook mc_todays_events_header
+			 *
+			 * @param {string} $header Existing today's events header HTML.
+			 *
+			 * @return {string} List header HTML.
+			 */
 			$return = apply_filters( 'mc_todays_events_header', $header ) . $output . apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
 			$return = '&lt;div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '&lt;/div>';
@@ -694,7 +703,7 @@ function my_calendar_todays_events( $args ) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="admin_enqueue_scripts.html">admin_enqueue_scripts</a></li></ul><h3>Filters</h3><ul><li><a href="admin_title.html">admin_title</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="admin_enqueue_scripts.html">admin_enqueue_scripts</a></li></ul><h3>Filters</h3><ul><li><a href="admin_title.html">admin_title</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
 </nav>
 
 <br class="clear">
