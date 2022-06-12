@@ -215,6 +215,16 @@ function my_calendar_upcoming_events( $args ) {
 			'source'   => 'upcoming',
 			'site'     => $site,
 		);
+		/**
+		 * Modify the arguments used to generate upcoming events.
+		 *
+		 * @hook mc_upcoming_attributes
+		 *
+		 * @param {array} $query All arguments used to generate this list.
+		 * @param {array} $args Subset of parameters used to generate this list's ID hash.
+		 *
+		 * @return {array} Array of event listing arguments.
+		 */
 		$query       = apply_filters( 'mc_upcoming_attributes', $query, $args );
 		$event_array = my_calendar_events( $query );
 
@@ -266,9 +276,32 @@ function my_calendar_upcoming_events( $args ) {
 				$today   = current_time( 'Y-m-d H:i' );
 				$date    = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
 				$classes = mc_event_classes( $event, 'upcoming' );
-
-				$prepend = apply_filters( 'mc_event_upcoming_before', "&lt;li class='$classes'>", $classes );
-				$append  = apply_filters( 'mc_event_upcoming_after', '&lt;/li>', $classes );
+				$prepend = "&lt;li class='$classes'>";
+				$append  = '&lt;/li>';
+				/**
+				 * Opening elements for today's events list items. Default `&lt;li class="$classes">`.
+				 *
+				 * @hook mc_event_upcoming_before
+				 *
+				 * @param {string} $append Template HTML closing tag.
+				 * @param {string} $classes Space-separated list of classes for the event.
+				 * @param {string} $date Event date in Y-m-d H:i:s format.
+				 *
+				 * @return {string} HTML following each event in upcoming events lists.
+				 */
+				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $classes, $date );
+				/**
+				 * Closing elements for today's events list items. Default `&lt;/li>`.
+				 *
+				 * @hook mc_event_upcoming_after
+				 *
+				 * @param {string} $append Template HTML closing tag.
+				 * @param {string} $classes Space-separated list of classes for the event.
+				 * @param {string} $date Event date in Y-m-d H:i:s format.
+				 *
+				 * @return {string} HTML following each event in upcoming events lists.
+				 */
+				$append = apply_filters( 'mc_event_upcoming_after', $append, $classes, $date );
 				// Recurring events should only appear once.
 				if ( ! in_array( $details['dateid'], $skips, true ) ) {
 					$output .= ( $item === $last_item ) ? '' : $prepend . $item . $append;
@@ -307,7 +340,28 @@ function my_calendar_upcoming_events( $args ) {
 		}
 	}
 	if ( '' !== $output ) {
-		$output = apply_filters( 'mc_upcoming_events_header', $header ) . $output . apply_filters( 'mc_upcoming_events_footer', $footer );
+		/**
+		 * Replace the list header for upcoming events lists. Default value `&lt;ul id='upcoming-events-$hash' class='upcoming-events'$lang>`.
+		 *
+		 * @hook mc_upcoming_events_header
+		 *
+		 * @param {string} $header Existing upcoming events header HTML.
+		 *
+		 * @return {string} List header HTML.
+		 */
+		$header = apply_filters( 'mc_upcoming_events_header', $header );
+		/**
+		 * Replace the list footer for upcoming events lists. Default value `&lt;/ul>`.
+		 *
+		 * @hook mc_upcoming_events_footer
+		 *
+		 * @param {string} $header Existing upcoming events footer HTML.
+		 *
+		 * @return {string} List header HTML.
+		 */
+
+		$footer = apply_filters( 'mc_upcoming_events_footer', $footer );
+		$output = $header . $output . $footer;
 		$return = mc_run_shortcodes( $output );
 	} else {
 		$return = '&lt;div class="no-events-fallback upcoming-events">' . stripcslashes( $no_event_text ) . '&lt;/div>';
@@ -429,6 +483,16 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									}
 
 									if ( 'yes' === $show_today &amp;&amp; my_calendar_date_equal( $beginning, $current ) ) {
+
+										/**
+										 * Should today's events be counted towards total number of upcoming events. Default `yes`. Any value other than 'no' will be interpreted as 'yes'.
+										 *
+										 * @hook mc_event_upcoming_after
+										 *
+										 * @param {string} $in_total Return 'no' to exclude today's events from event count.
+										 *
+										 * @return {string} 'yes' or 'no'.
+										 */
 										$in_total = apply_filters( 'mc_include_today_in_total', 'yes' ); // count todays events in total.
 										if ( 'no' !== $in_total ) {
 											$near_events[] = $e;
@@ -504,14 +568,48 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 					$prepend = '';
 					$append  = '';
 				}
-				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $classes, '', $date );
-				$append  = apply_filters( 'mc_event_upcoming_after', $append, $classes, '', $date );
+				/**
+				 * Opening elements for today's events list items. Default `&lt;li class="$classes">`.
+				 *
+				 * @hook mc_event_upcoming_before
+				 *
+				 * @param {string} $append Template HTML closing tag.
+				 * @param {string} $classes Space-separated list of classes for the event.
+				 * @param {string} $date Event date in Y-m-d H:i:s format.
+				 *
+				 * @return {string} HTML following each event in upcoming events lists.
+				 */
+				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $classes, $date );
+				/**
+				 * Closing elements for today's events list items. Default `&lt;/li>`.
+				 *
+				 * @hook mc_event_upcoming_after
+				 *
+				 * @param {string} $append Template HTML closing tag.
+				 * @param {string} $classes Space-separated list of classes for the event.
+				 * @param {string} $date Event date in Y-m-d H:i:s format.
+				 *
+				 * @return {string} HTML following each event in upcoming events lists.
+				 */
+				$append = apply_filters( 'mc_event_upcoming_after', $append, $classes, $date );
 
 				if ( $i &lt; $skip &amp;&amp; 0 !== $skip ) {
 					$i ++;
 				} else {
 					if ( ! in_array( $details['dateid'], $skips, true ) ) {
 
+						/**
+						 * Draw a custom template for upcoming events. Returning any non-empty string short circuits other template settings.
+						 *
+						 * @hook mc_draw_upcoming_event
+						 *
+						 * @param {string} $item Empty string before event template is drawn.
+						 * @param {array}  $details Associative array of event template tags.
+						 * @param {string} $template Template string passed from widget or shortcode.
+						 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+						 *
+						 * @return {string} Event template details.
+						 */
 						$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $type );
 						if ( '' === $item ) {
 							$item = mc_draw_template( $details, $template, $type, $event );
@@ -769,7 +867,7 @@ function my_calendar_todays_events( $args ) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="admin_enqueue_scripts.html">admin_enqueue_scripts</a></li></ul><h3>Filters</h3><ul><li><a href="admin_title.html">admin_title</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="admin_enqueue_scripts.html">admin_enqueue_scripts</a></li></ul><h3>Filters</h3><ul><li><a href="admin_title.html">admin_title</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
 </nav>
 
 <br class="clear">

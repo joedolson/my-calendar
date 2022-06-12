@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: node_modules/wp-hookdoc/example/src/example.php - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_upcoming_events_header - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,37 +15,180 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Source: node_modules/wp-hookdoc/example/src/example.php</h1></header>
+    <header><h1 class="page-title">Filter: mc_upcoming_events_header</h1></header>
 	<main>
     
 
 
 
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>&lt;?php
-/**
- * Enqueue scripts for all admin pages.
- *
- * @since 2.8.0
- * @hook admin_enqueue_scripts
- * @param {string} $hook_suffix The current admin page.
- */
-do_action( 'admin_enqueue_scripts', $hook_suffix );
 
-/**
- * Filters the title tag content for an admin page.
- *
- * @since 3.1.0
- * @hook admin_title
- * @param {string} $admin_title The page title, with extra context added.
- * @param {string} $title       The original page title.
- * @returns {string} The title
- */
-$admin_title = apply_filters( 'admin_title', $admin_title, $title );</code></pre>
-        </article>
-    </section>
+<section>
+
+<header>
+    <h2></h2>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="mc_upcoming_events_header">apply_filters( 'mc_upcoming_events_header', <span class="signature">$header )</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Replace the list header for upcoming events lists. Default value <code>&lt;ul id='upcoming-events-$hash' class='upcoming-events'$lang&gt;</code>.</p>
+</div>
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>$header</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Existing upcoming events header HTML.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_my-calendar-widgets.php.html">src/my-calendar-widgets.php</a>, <a href="src_my-calendar-widgets.php.html#line317">line 317</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>List header HTML.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+    
+    </div>
+
+    
+</article>
+
+</section>
 
 
 
