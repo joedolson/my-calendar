@@ -97,6 +97,17 @@ function my_calendar_upcoming_events( $args ) {
 	$before   = ( '' === $before ) ? 0 : $before;
 	$category = ( 'default' === $category ) ? '' : $category;
 
+	/**
+	 * Pass a custom template to the upcoming events list. Template can either be a template key referencing a stored template or a template pattern using {} template tags.
+	 *
+	 * @hook mc_upcoming_events_template
+	 *
+	 * @param {string} $template Un-parsed template.
+	 *
+	 * @return {string} Template string.
+	 */
+	$template = apply_filters( 'mc_upcoming_events_template', $template );
+
 	// allow reference by file to external template.
 	if ( '' !== $template &amp;&amp; mc_file_exists( $template ) ) {
 		$template = file_get_contents( mc_get_file( $template ) );
@@ -107,7 +118,6 @@ function my_calendar_upcoming_events( $args ) {
 		$template = mc_get_custom_template( $template );
 	}
 
-	$template       = apply_filters( 'mc_upcoming_events_template', $template );
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$header         = "&lt;ul id='upcoming-events-$hash' class='upcoming-events'$lang>";
@@ -203,7 +213,7 @@ function my_calendar_upcoming_events( $args ) {
 		 */
 		$to = apply_filters( 'mc_upcoming_date_to', $to, $args );
 
-		$query       = array(
+		$query = array(
 			'from'     => $from,
 			'to'       => $to,
 			'category' => $category,
@@ -487,7 +497,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										/**
 										 * Should today's events be counted towards total number of upcoming events. Default `yes`. Any value other than 'no' will be interpreted as 'yes'.
 										 *
-										 * @hook mc_event_upcoming_after
+										 * @hook mc_include_today_in_total
 										 *
 										 * @param {string} $in_total Return 'no' to exclude today's events from event count.
 										 *
@@ -867,7 +877,7 @@ function my_calendar_todays_events( $args ) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="admin_enqueue_scripts.html">admin_enqueue_scripts</a></li></ul><h3>Filters</h3><ul><li><a href="admin_title.html">admin_title</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="admin_enqueue_scripts.html">admin_enqueue_scripts</a></li></ul><h3>Filters</h3><ul><li><a href="admin_title.html">admin_title</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
 </nav>
 
 <br class="clear">
