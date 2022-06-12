@@ -14,7 +14,7 @@ body {
 nav {
 	margin-top: 0;
 	padding-top: 28px;
-	border-top: 10px solid #9bf;
+	border-top: 10px solid #9b5;
 }
 
 h1, h2, h3 {
@@ -93,7 +93,7 @@ footer {
 	font-style: normal;
 }
 
-.home #main > section:first-of-type,
+.home #main main > section:first-of-type,
 .home nav > h2 {
 	display: none;
 }
