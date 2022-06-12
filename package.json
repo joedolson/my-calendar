@@ -19,9 +19,12 @@
     "npm": ">=6.9.0"
   },
   "devDependencies": {
-    "@wordpress/env": "^4.1"
+    "@wordpress/env": "^4.1",
+    "jsdoc": "~3.6.3",
+    "wp-hookdoc": "^0.2.0"
   },
   "scripts": {
+    "build:docs": "rm -rf hookdocs/ && jsdoc -c hookdoc-conf.json",
     "format-php": "wp-env run composer run-script format",
     "prelint-php": "wp-env run composer 'install --no-interaction'",
     "lint-php": "wp-env run composer run-script lint",
