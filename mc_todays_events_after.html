@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mcs_submission_permissions - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_todays_events_after - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mcs_submission_permissions</h1></header>
+    <header><h1 class="page-title">Filter: mc_todays_events_after</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mcs_submission_permissions">apply_filters( 'mcs_submission_permissions', <span class="signature">$capability )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_todays_events_after">apply_filters( 'mc_todays_events_after', <span class="signature">$item )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter user capability required to use the My Calendar Pro front-end submissions.</p>
+    <p>Closing elements for today's events list items. Default <code>&lt;/li&gt;</code>.</p>
 </div>
 
 
@@ -77,7 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$capability</code></td>
+                <td class="name"><code>$item</code></td>
             
 
             <td class="type">
@@ -93,7 +93,7 @@
 
             
 
-            <td class="description last"><p>A string representing a WordPress capability.</p></td>
+            <td class="description last"><p>Template HTML closing tag.</p></td>
         </tr>
 
     
@@ -134,7 +134,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_my-calendar.php.html">src/my-calendar.php</a>, <a href="src_my-calendar.php.html#line454">line 454</a>
+        <a href="src_my-calendar-widgets.php.html">src/my-calendar-widgets.php</a>, <a href="src_my-calendar-widgets.php.html#line641">line 641</a>
     </li></ul></dd>
     
 
@@ -161,7 +161,7 @@
 
         
 <div class="param-desc">
-    <p>A string representing a WordPress capability.</p>
+    <p>HTML following each event in today's events lists.</p>
 </div>
 
 
