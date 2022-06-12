@@ -632,7 +632,18 @@ function my_calendar_todays_events( $args ) {
 			 *
 			 * @return {string} List header HTML.
 			 */
-			$return = apply_filters( 'mc_todays_events_header', $header ) . $output . apply_filters( 'mc_todays_events_footer', $footer );
+			$return  = apply_filters( 'mc_todays_events_header', $header );
+			$return .= $output;
+			/**
+			 * Replace the list footer for today's events lists. Default value `</ul>`.
+			 *
+			 * @hook mc_todays_events_header
+			 *
+			 * @param {string} $header Existing today's events header HTML.
+			 *
+			 * @return {string} List header HTML.
+			 */
+			$return .= apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
 			$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '</div>';
 		}
