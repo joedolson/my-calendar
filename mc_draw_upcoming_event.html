@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: admin_title - 10up Distributor Hook Docs</title>
+    <title>Filter: mc_draw_upcoming_event - 10up Distributor Hook Docs</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -21,7 +21,7 @@
 <div id="main">
 
 	
-    <h1 class="page-title">Filter: admin_title</h1>
+    <h1 class="page-title">Filter: mc_draw_upcoming_event</h1>
 	
 
     
@@ -43,14 +43,14 @@
 
     
 
-    <h4 class="name" id="admin_title">apply_filters( 'admin_title', <span class="signature">$admin_title, $title )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_draw_upcoming_event">apply_filters( 'mc_draw_upcoming_event', <span class="signature">$item, $details, $template, $args )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filters the title tag content for an admin page.</p>
+    <p>Draw a custom template for upcoming events. Returning any non-empty string short circuits other template settings.</p>
 </div>
 
 
@@ -84,7 +84,7 @@
 
         <tr>
             
-                <td class="name"><code>$admin_title</code></td>
+                <td class="name"><code>$item</code></td>
             
 
             <td class="type">
@@ -100,14 +100,37 @@
 
             
 
-            <td class="description last"><p>The page title, with extra context added.</p></td>
+            <td class="description last"><p>Empty string before event template is drawn.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$title</code></td>
+                <td class="name"><code>$details</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Associative array of event template tags.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$template</code></td>
             
 
             <td class="type">
@@ -123,7 +146,30 @@
 
             
 
-            <td class="description last"><p>The original page title.</p></td>
+            <td class="description last"><p>Template string passed from widget or shortcode.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Associative array holding the arguments used to generate this list of upcoming events.</p></td>
         </tr>
 
     
@@ -139,9 +185,6 @@
 
     
 
-    
-    <dt class="tag-since">Since:</dt>
-    <dd class="tag-since"><ul class="dummy"><li>3.1.0</li></ul></dd>
     
 
     
@@ -167,7 +210,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="node_modules_wp-hookdoc_example_src_example.php.html">node_modules/wp-hookdoc/example/src/example.php</a>, <a href="node_modules_wp-hookdoc_example_src_example.php.html#line11">line 11</a>
+        <a href="src_my-calendar-widgets.php.html">src/my-calendar-widgets.php</a>, <a href="src_my-calendar-widgets.php.html#line214">line 214</a>
     </li></ul></dd>
     
 
@@ -194,7 +237,7 @@
 
         
 <div class="param-desc">
-    <p>The title</p>
+    <p>Event template details.</p>
 </div>
 
 
