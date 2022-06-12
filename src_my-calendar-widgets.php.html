@@ -613,7 +613,7 @@ function my_calendar_todays_events( $args ) {
 		$to   = current_time( 'Y-m-d' );
 	}
 
-	$args   = array(
+	$args = array(
 		'from'     => $from,
 		'to'       => $to,
 		'category' => $category,
@@ -673,7 +673,7 @@ function my_calendar_todays_events( $args ) {
 				 *
 				 * @return {string} HTML following each event in today's events lists.
 				 */
-				$append  = apply_filters( 'mc_todays_events_after', '&lt;/li>' );
+				$append = apply_filters( 'mc_todays_events_after', '&lt;/li>' );
 
 				/**
 				 * Draw a custom template for today's events. Returning any non-empty string short circuits other template settings.
