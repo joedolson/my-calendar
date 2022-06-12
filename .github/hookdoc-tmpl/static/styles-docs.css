@@ -3,6 +3,18 @@ body {
 	color: #232323;
 	font-size: 1.3rem;
 	font-weight: 300;
+	margin: 0;
+	border-top: 30px solid #243f82;
+}
+
+#main {
+	border-top: 10px solid #79b3e1;
+}
+
+nav {
+	margin-top: 0;
+	padding-top: 28px;
+	border-top: 10px solid #9bf;
 }
 
 h1, h2, h3 {
@@ -44,14 +56,6 @@ nav li a {
 
 nav li a:hover {
 	text-decoration: underline;
-}
-
-code, pre,
-nav ul a, nav ul a:visited, nav ul a:active,
-.name, .signature,
-.params .name, .props .name,
-.name code {
-	font-family: 'IBM Plex Mono', monospace;
 }
 
 article h1 {

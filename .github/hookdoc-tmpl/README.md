@@ -1,4 +1,4 @@
-# Welcome to the My Calendar Plugin Hook Documentation
+# My Calendar Plugin Hook Documentation
 
 This resource is generated documentation on actions and filters found in My Calendar. Use the sidebar to browse and navigate.
 
