@@ -71,6 +71,17 @@ function my_calendar_upcoming_events( $args ) {
 	$before   = ( '' === $before ) ? 0 : $before;
 	$category = ( 'default' === $category ) ? '' : $category;
 
+	/**
+	 * Pass a custom template to the upcoming events list. Template can either be a template key referencing a stored template or a template pattern using {} template tags.
+	 *
+	 * @hook mc_upcoming_events_template
+	 *
+	 * @param {string} $template Un-parsed template.
+	 *
+	 * @return {string} Template string.
+	 */
+	$template = apply_filters( 'mc_upcoming_events_template', $template );
+
 	// allow reference by file to external template.
 	if ( '' !== $template && mc_file_exists( $template ) ) {
 		$template = file_get_contents( mc_get_file( $template ) );
@@ -81,7 +92,6 @@ function my_calendar_upcoming_events( $args ) {
 		$template = mc_get_custom_template( $template );
 	}
 
-	$template       = apply_filters( 'mc_upcoming_events_template', $template );
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events'$lang>";
@@ -177,7 +187,7 @@ function my_calendar_upcoming_events( $args ) {
 		 */
 		$to = apply_filters( 'mc_upcoming_date_to', $to, $args );
 
-		$query       = array(
+		$query = array(
 			'from'     => $from,
 			'to'       => $to,
 			'category' => $category,
@@ -461,7 +471,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										/**
 										 * Should today's events be counted towards total number of upcoming events. Default `yes`. Any value other than 'no' will be interpreted as 'yes'.
 										 *
-										 * @hook mc_event_upcoming_after
+										 * @hook mc_include_today_in_total
 										 *
 										 * @param {string} $in_total Return 'no' to exclude today's events from event count.
 										 *
