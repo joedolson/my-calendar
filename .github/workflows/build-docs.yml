@@ -21,5 +21,5 @@ jobs:
     - name: Deploy to GH Pages
       uses: maxheld83/ghpages@v0.2.1
       env:
-        BUILD_DIR: 'hookdocs/'
+        BUILD_DIR: 'docs/'
         GH_PAT: ${{ secrets.GH_PAT }}
