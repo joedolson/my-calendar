@@ -9,6 +9,14 @@
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
     <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+	<script>
+		var home = document.querySelector( 'nav h2 a' );
+		var parent = home.parentNode;
+		while ( home.firstChild) {
+			parent.insertBefore(el.firstChild, el);
+		}
+		parent.removeChild(el);
+	</script>
 </head>
 
 <body>

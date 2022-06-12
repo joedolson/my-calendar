@@ -9,6 +9,14 @@
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
     <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+	<script>
+		var home = document.querySelector( 'nav h2 a' );
+		var parent = home.parentNode;
+		while ( home.firstChild) {
+			parent.insertBefore(el.firstChild, el);
+		}
+		parent.removeChild(el);
+	</script>
 </head>
 
 <body class="home">
@@ -91,7 +99,7 @@
 
 
     <section>
-        <article><h1>My Calendar Plugin Hook Documentation</h1>
+        <article><h2>My Calendar Plugin Hook Documentation</h2>
 <p>This resource is generated documentation on actions and filters found in My Calendar. Use the sidebar to browse and navigate.</p>
 <p>For more information about using My Calendar, please see the <a href="https://docs.joedolson.com/my-calendar/">My Calendar docs website</a>.</p>
 <p>To report an issue with My Calendar or contribute back to the project, please visit the <a href="https://github.com/joedolson/my-calendar/">GitHub repository</a>.</p></article>
