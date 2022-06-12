@@ -274,11 +274,13 @@ function mc_canonical() {
  */
 function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 	/**
-	 * Inject a sidebar panel in the My Calendar admin.
+	 * Inject a sidebar panel in the My Calendar admin. Does not replace existing panels.
 	 *
-	 * @param array $add Array with headings as keys and content as values.
+	 * @hook mc_custom_sidebar_panels
 	 *
-	 * @return array
+	 * @param {array} $add Associative array with headings as keys and content as values.
+	 *
+	 * @return {array} Associative array with all extra sidebars.
 	 */
 	$add = apply_filters( 'mc_custom_sidebar_panels', $add );
 
@@ -452,9 +454,11 @@ function my_calendar_menu() {
 		/**
 		 * Filter user capability required to use the My Calendar Pro front-end submissions.
 		 *
-		 * @param string $capability A capability string.
+		 * @hook mcs_submission_permissions
 		 *
-		 * @return string
+		 * @param {string} $capability A string representing a WordPress capability.
+		 *
+		 * @return {string} A string representing a WordPress capability.
 		 */
 		$permission = apply_filters( 'mcs_submission_permissions', $capability );
 		add_action( 'admin_head', 'my_calendar_sub_js' );
