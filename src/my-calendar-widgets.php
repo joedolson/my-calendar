@@ -175,7 +175,7 @@ function my_calendar_upcoming_events( $args ) {
 		 *
 		 * @return {string} List ending date.
 		 */
-		$to   = apply_filters( 'mc_upcoming_date_to', $to, $args );
+		$to = apply_filters( 'mc_upcoming_date_to', $to, $args );
 
 		$query       = array(
 			'from'     => $from,
@@ -223,7 +223,7 @@ function my_calendar_upcoming_events( $args ) {
 			 *
 			 * @return {string} Event template details.
 			 */
-			$item    = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $args );
+			$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $args );
 			// if an event is a multidate group, only display first found.
 			if ( in_array( $event->event_group_id, $omit, true ) ) {
 				continue;
