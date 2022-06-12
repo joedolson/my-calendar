@@ -1,14 +1,13 @@
 body {
 	background: #fefefe;
 	color: #232323;
-	font-family: 'IBM Plex Sans', sans-serif;
 	font-size: 1.3rem;
 	font-weight: 300;
 }
 
 h1, h2, h3 {
 	line-height: 1.2;
-	font-family: 'Playfair Display', sans-serif;
+	font-family: Garamond, serif;
 	font-weight: 900;
 	letter-spacing: -.01em;
 }
@@ -16,6 +15,23 @@ h1, h2, h3 {
 h1.page-title {
 	font-size: 42px;
 	margin-top: .5em;
+}
+
+.type-signature {
+	color: #000;
+}
+
+dl.details {
+	background: #fafafa;
+	padding: 10px;
+}
+
+dl.details dt {
+	padding-top: 0;
+}
+
+dl.details li {
+	padding-top: 0;
 }
 
 nav ul {
@@ -43,13 +59,8 @@ article h1 {
 }
 
 a {
-	background-image: linear-gradient(transparent calc(100% - 7px), #f2dede 0),
-		linear-gradient(transparent calc(100% - 7px), #cef8f7 0);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	background-size: 0 100%, 100% 100%;
-	color: #232323;
-	text-decoration: none;
+	text-decoration: underline;
+	color: #243f82;
 	transition: all .1s;
 }
 
@@ -60,8 +71,7 @@ a:active {
 
 a:focus,
 a:hover {
-	background-size: 100% 100%, 100% 100%;
-	color: #232323;
+	color: #000;
 	text-decoration: none;
 }
 
@@ -76,10 +86,7 @@ a.banner img {
 }
 
 footer {
-	text-align: center;
-	font-size: .8em;
 	font-style: normal;
-	font-weight: 300;
 }
 
 .home #main > section:first-of-type,
@@ -88,7 +95,7 @@ footer {
 }
 
 .prettyprint.source {
-	font-size: 14px;
+	font-size: 1.1rem;
 }
 
 .prettyprint code {

@@ -18,7 +18,7 @@
 
 <body>
 
-<div id="main">
+<div id="main" role="main">
 
 	
     <h1 class="page-title">Source: src/my-calendar-widgets.php</h1>
@@ -665,7 +665,18 @@ function my_calendar_todays_events( $args ) {
 			 *
 			 * @return {string} List header HTML.
 			 */
-			$return = apply_filters( 'mc_todays_events_header', $header ) . $output . apply_filters( 'mc_todays_events_footer', $footer );
+			$return  = apply_filters( 'mc_todays_events_header', $header );
+			$return .= $output;
+			/**
+			 * Replace the list footer for today's events lists. Default value `&lt;/ul>`.
+			 *
+			 * @hook mc_todays_events_header
+			 *
+			 * @param {string} $header Existing today's events header HTML.
+			 *
+			 * @return {string} List header HTML.
+			 */
+			$return .= apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
 			$return = '&lt;div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '&lt;/div>';
 		}
