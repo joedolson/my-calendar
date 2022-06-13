@@ -263,7 +263,7 @@ function my_calendar_upcoming_events( $args ) {
 				$prepend = "<li class='$classes'>";
 				$append  = '</li>';
 				/**
-				 * Opening elements for today's events list items. Default `<li class="$classes">`.
+				 * Opening elements for upcoming events list items. Default `<li class="$classes">`.
 				 *
 				 * @hook mc_event_upcoming_before
 				 *
@@ -275,7 +275,7 @@ function my_calendar_upcoming_events( $args ) {
 				 */
 				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $classes, $date );
 				/**
-				 * Closing elements for today's events list items. Default `</li>`.
+				 * Closing elements for upcoming events list items. Default `</li>`.
 				 *
 				 * @hook mc_event_upcoming_after
 				 *
