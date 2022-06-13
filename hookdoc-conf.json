@@ -6,6 +6,7 @@
     "readme": "./.github/hookdoc-tmpl/README.md"
   },
   "source": {
+    "include": [ "./src" ],
     "includePattern": ".+\\.(php)?$"
   },
   "plugins": [
