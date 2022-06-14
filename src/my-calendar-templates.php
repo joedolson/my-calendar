@@ -73,6 +73,18 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 			// End {$key check.
 		}
 	}
+	/**
+	 * Filter a rendered My Calendar template after parsing.
+	 *
+	 * @hook mc_template
+	 *
+	 * @param {string} $template Formatted HTML output of a template.
+	 * @param {array}  $array Array of arguments passed to template.
+	 * @param {string} $type Type of view being rendered.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string} Formatted HTML.
+	 */
 	$template = apply_filters( 'mc_template', $template, $array, $type, $event );
 
 	return stripslashes( trim( $template ) );
@@ -143,8 +155,29 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		}
 	}
 	// Translators: Name of location.
-	$label = sprintf( apply_filters( 'mc_map_label', __( 'Map<span> to %s</span>', 'my-calendar' ), $event ), $map_label );
+	$label = sprintf( __( 'Map<span> to %s</span>', 'my-calendar' ), $event );
+	/**
+	 * Label for link to Google Maps for event.
+	 *
+	 * @hook mc_map_label
+	 *
+	 * @param {string} $label Map to {event name}.
+	 * @param {string} $map_label Location name.
+	 *
+	 * @return {string} Label used inside map link.
+	 */
+	$label = sprintf( apply_filters( 'mc_map_label', $label, $map_label );
 	if ( strlen( trim( $map_string ) ) > 6 ) {
+		/**
+		 * Google maps URL.
+		 *
+		 * @hook mc_map_url
+		 *
+		 * @param {string} $url Link to event location on Google Maps.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {string} Link.
+		 */
 		$map_url = apply_filters( 'mc_map_url', "http://maps.google.com/maps?z=$zoom&amp;daddr=$map_string", $event );
 		$map     = '<a href="' . esc_url( $map_url ) . '" class="map-link external">' . $label . '</a>';
 	} elseif ( esc_url( $url ) ) {
@@ -178,8 +211,28 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	$base   = "&dates=$dtstart/$dtend";
 	$base  .= '&sprop=website:' . $url;
 	$base  .= '&text=' . urlencode( $title );
+	/**
+	 * Filter `location` parameter added to Google Calendar link. Default `&location=$location`. Return value needs to be URL encoded.
+	 *
+	 * @hook mc_gcal_location
+	 *
+	 * @param {string} $param Encoded parameter.
+	 * @param {string} $location Unencoded original stringified location..
+	 *
+	 * @return {string} Encoded parameter.
+	 */
 	$base  .= apply_filters( 'mc_gcal_location', '&location=' . urlencode( trim( $location ) ), $location );
 	$base  .= '&sprop=name:' . urlencode( get_bloginfo( 'name' ) );
+	/**
+	 * Filter `details` parameter added to Google Calendar link. Default `&details=$description`. Return value needs to be URL encoded.
+	 *
+	 * @hook mc_gcal_description
+	 *
+	 * @param {string} $param Encoded parameter.
+	 * @param {string} $description Unencoded original description.
+	 *
+	 * @return {string} Encoded parameter.
+	 */
 	$base  .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( stripcslashes( trim( $description ) ) ), $description );
 	$base  .= '&sf=true&output=xml';
 
@@ -240,11 +293,13 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	/**
 	 * Filter link to location-specific events in hcard.
 	 *
-	 * @param string $events HTML link to location permalink.
-	 * @param object $post Location post object.
-	 * @param object $event Object being mapped.
+	 * @hook mc_location_events_link
 	 *
-	 * @return string
+	 * @param {string} $events HTML link to location permalink.
+	 * @param {object} $post Location post object.
+	 * @param {object} $event Event object being mapped.
+	 *
+	 * @return {string} Link.
 	 */
 	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
 	$hcard  = '<div class="address location vcard">';
@@ -272,6 +327,19 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$hcard .= '</div>';
 	$hcard  = ( ( false !== $the_map && 'true' === $map ) || ( '' !== $link && 'true' === $address ) ) ? $hcard : '';
 
+	/**
+	 * Filter location hcard HTML output.
+	 *
+	 * @hook mc_hcard
+	 *
+	 * @param {string} $hcard Formatted HTML output.
+	 * @param {object} $event Event or location object.
+	 * @param {string} $address 'true' to include the location address on the card.
+	 * @param {string} $map 'true' to include the map link on the card.
+	 * @param {string} $source 'event' or 'location'.
+	 *
+	 * @return {string} Formatted HTML hcard.
+	 */
 	return apply_filters( 'mc_hcard', $hcard, $event, $address, $map, $source );
 }
 
@@ -296,7 +364,27 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e             = array();
 	$e['post']     = $event->event_post;
 	$date_format   = mc_date_format();
+	/**
+	 * Filter template tag array and add author data. Runs before other template tags are created. Use `mc_filter_shortcodes` to modify existing template tags.
+	 *
+	 * @hook mc_insert_author_data
+	 *
+	 * @param {array}  $e Array to hold event template tags.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {array} Template tag array.
+	 */
 	$e             = apply_filters( 'mc_insert_author_data', $e, $event );
+	/**
+	 * Filter template tag array and add image data. Runs before other template tags are created. Use `mc_filter_shortcodes` to modify existing template tags.
+	 *
+	 * @hook mc_filter_image_data
+	 *
+	 * @param {array}  $e Array to hold event template tags.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {array} Template tag array.
+	 */
 	$e             = apply_filters( 'mc_filter_image_data', $e, $event );
 	$sitelink_html = "<div class='url link'><a href='" . esc_url( $event->event_url ) . "' class='location-link external'>";
 
@@ -312,8 +400,27 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$real_begin_date = ( isset( $event->occur_begin ) ) ? $event->occur_begin : $event->event_begin . ' ' . $event->event_time;
 	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ), $context );
 	$dtend           = mc_format_timestamp( strtotime( $real_end_date ), $context );
-
+	/**
+	 * Start date format used in 'date_utc'. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_begin_ts'.
+	 *
+	 * @return {string} Date format.
+	 */
 	$e['date_utc']     = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
+	/**
+	 * End date format used in 'date_end_utc'. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_end_ts'.
+	 *
+	 * @return {string} Date format.
+	 */
 	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
 	$notime            = esc_html( mc_notime_label( $event ) );
 	$e['time']         = ( '00:00:00' === mc_date( 'H:i:s', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
@@ -326,13 +433,33 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ), false );    // Date: hcal formatted end.
 	$e['userstart']    = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
 	$e['userend']      = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
-	$date              = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
-	$date_end          = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
-	$date_arr          = array(
+	/**
+	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_begin'.
+	 *
+	 * @return {string} Date format.
+	 */
+	$date = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
+	/**
+	 * End date format used in 'enddate' and 'daterange' template tags. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_end'.
+	 *
+	 * @return {string} Date format.
+	 */
+	$date_end = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
+	$date_arr = array(
 		'occur_begin' => $real_begin_date,
 		'occur_end'   => $real_end_date,
 	);
-	$date_obj          = (object) $date_arr;
+	$date_obj = (object) $date_arr;
 	if ( '1' === $event->event_span ) {
 		$dates = mc_event_date_span( $event->event_group_id, $event->event_span, array( 0 => $date_obj ) );
 	} else {
@@ -389,7 +516,17 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// Links.
 	$templates    = get_option( 'mc_templates' );
 	$e_template   = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
-	$e_template   = apply_filters( 'mc_details_template', $e_template );
+	/**
+	 * Filter template for the `{details}` output. Default: `Details about {title}`.
+	 *
+	 * @hook mc_details_template
+	 *
+	 * @param {string} $e_template String with template tags.
+	 * @param {object} $event Event object. 
+	 *
+	 * @return {string} Unparsed template.
+	 */
+	$e_template   = apply_filters( 'mc_details_template', $e_template, $event );
 	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
 	$replacements = array(
 		stripslashes( $e['title'] ),
@@ -429,6 +566,16 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['linking_title'] = ( '' !== $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $rel>" . $e['title'] . '</a>' : $e['title'];
 
 	if ( 'related' !== $context && ( mc_is_single_event() ) ) {
+		/**
+		 * HTML format for displaying related events on a single event view. Default `{date}, {time}`.
+		 *
+		 * @hook mc_related_template
+		 *
+		 * @param {string} $template Template to use to draw a related event.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {string} Unparsed template.
+		 */
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
 		$e['related']     = '<ul class="related-events">' . mc_list_group( $event->event_group_id, $event->event_id, $related_template ) . '</ul>';
 	} else {
@@ -447,7 +594,29 @@ function mc_create_tags( $event, $context = 'filters' ) {
 			$e['location']        = stripslashes( $location->location_label );
 			$e['street']          = stripslashes( $location->location_street );
 			$e['street2']         = stripslashes( $location->location_street2 );
-			$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ) );
+			/**
+			 * Format a phone number for display in template tags.
+			 *
+			 * @hook mc_phone_format
+			 *
+			 * @param {string} $number Phone number as saved in `$location->location_phone`.
+			 * @param {object} $location Location object.
+			 * @param {string} $context 'phone'.
+			 *
+			 * @return {string} Formatted number.
+			 */
+			$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
+			/**
+			 * Format a phone number for display in template tags.
+			 *
+			 * @hook mc_phone_format
+			 *
+			 * @param {string} $number Phone number as saved in `$location->location_phone`.
+			 * @param {object} $location Location object.
+			 * @param {string} $context 'phone2'.
+			 *
+			 * @return {string} Formatted number.
+			 */
 			$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ) );
 			$e['city']            = stripslashes( $location->location_city );
 			$e['state']           = stripslashes( $location->location_state );
@@ -462,14 +631,36 @@ function mc_create_tags( $event, $context = 'filters' ) {
 			$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
 		}
 	} else {
-		$map                  = mc_maplink( $event );
-		$map_url              = mc_maplink( $event, 'url' );
-		$map_gcal             = mc_maplink( $event, 'gcal' );
-		$e['location']        = stripslashes( $event->event_label );
-		$e['street']          = stripslashes( $event->event_street );
-		$e['street2']         = stripslashes( $event->event_street2 );
-		$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone ) );
-		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone2 ) );
+		$map           = mc_maplink( $event );
+		$map_url       = mc_maplink( $event, 'url' );
+		$map_gcal      = mc_maplink( $event, 'gcal' );
+		$e['location'] = stripslashes( $event->event_label );
+		$e['street']   = stripslashes( $event->event_street );
+		$e['street2']  = stripslashes( $event->event_street2 );
+		/**
+		 * Format a phone number for display in template tags.
+		 *
+		 * @hook mc_phone_format
+		 *
+		 * @param {string} $number Phone number as saved in `$event->event_phone`.
+		 * @param {object} $event Event object.
+		 * @param {stirng} $context 'phone'.
+		 *
+		 * @return {string} Formatted number.
+		 */
+		$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone ), 'phone' );
+		/**
+		 * Format a phone number for display in template tags.
+		 *
+		 * @hook mc_phone_format
+		 *
+		 * @param {string} $number Phone number as saved in `$event->event_phone2`.
+		 * @param {object} $event Event object.
+		 * @param {string} $context 'phone2'.
+		 *
+		 * @return {string} Formatted number.
+		 */
+		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone2 ), 'phone2' );
 		$e['city']            = stripslashes( $event->event_city );
 		$e['state']           = stripslashes( $event->event_state );
 		$e['postcode']        = stripslashes( $event->event_postcode );
@@ -515,7 +706,18 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	);
 	$e['ical']             = $ical_link;
 	$e['ical_html']        = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'iCal', 'my-calendar' ) . '</a>';
-	$e                     = apply_filters( 'mc_filter_shortcodes', $e, $event );
+
+	/**
+	 * Filter all template tags after generation.
+	 *
+	 * @hook mc_filter_shortcodes
+	 *
+	 * @param {array}  $e Array of values to be used in template tags.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {array} Array of template tags.
+	 */
+	$e = apply_filters( 'mc_filter_shortcodes', $e, $event );
 	do_action( 'mc_tags_created', $event, $context );
 
 	return $e;
@@ -537,6 +739,16 @@ function mc_notime_label( $event ) {
 	}
 	$notime = ( '' !== $notime ) ? $notime : $default;
 
+	/**
+	 * Label to use in place of time for an event with no fixed time. 
+	 *
+	 * @hook mc_notime_label
+	 *
+	 * @param {string} $notime Default value from settings or event post meta.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string} Text describing when the event occurs. E.g. 'all day' or 'to be determined'.
+	 */
 	return apply_filters( 'mc_notime_label', $notime, $event );
 }
 
@@ -561,7 +773,15 @@ function mc_get_details_link( $event ) {
 	}
 	$uri = mc_get_uri( $event );
 
-	// If available, and not querying remotely, use permalink.
+	/**
+	 * Check whether permalinks are enabled.
+	 *
+	 * @hook mc_use_permalinks
+	 *
+	 * @param {string} $option Value of mc_use_permalinks setting.
+	 *
+	 * @return {bool} True value if permalinks are enabled.
+	 */
 	$permalinks   = apply_filters( 'mc_use_permalinks', get_option( 'mc_use_permalinks' ) );
 	$permalinks   = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
 	$details_link = mc_event_link( $event );
@@ -592,6 +812,16 @@ function mc_get_details_link( $event ) {
 			);
 		}
 	}
+	/**
+	 * URL to an event's permalink page.
+	 *
+	 * @hook mc_customize_details_link
+	 *
+	 * @param {string} $details_link Link to event details page/permalink.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string} URL.
+	 */
 	$details_link = apply_filters( 'mc_customize_details_link', $details_link, $event );
 
 	if ( $restore ) {
@@ -636,7 +866,17 @@ function mc_get_uri( $event = false, $args = array() ) {
 	if ( ! $uri ) {
 		$uri = home_url();
 	}
-
+	/**
+	 * Link to the My Calendar main calendar view.
+	 *
+	 * @hook mc_get_uri
+	 *
+	 * @param {string} $link String to return if event link is expired.
+	 * @param {object} $event Event object.
+	 * @param {array}  $args Current view arguments. (Optional).
+	 *
+	 * @return {string} URL.
+	 */
 	return apply_filters( 'mc_get_uri', $uri, $event, $args );
 }
 
@@ -769,6 +1009,16 @@ function mc_event_link( $event ) {
 		$link = esc_url( $event->event_link );
 	} else {
 		if ( $expired ) {
+			/**
+			 * Link to return if an event's link has expired. Default empty string.
+			 *
+			 * @hook mc_event_expired_link
+			 *
+			 * @param {string} $link String to return if event link is expired.
+			 * @param {object} $event Event object.
+			 *
+			 * @return {string} Link or empty string.
+			 */
 			$link = apply_filters( 'mc_event_expired_link', '', $event );
 		} else {
 			$link = esc_url( $event->event_link );
@@ -820,9 +1070,29 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	$markers  = '';
 	$loc_list = '';
 	$out      = '';
-	$width    = apply_filters( 'mc_map_height', '100%', $event );
-	$height   = apply_filters( 'mc_map_height', '300px', $event );
-	$styles   = " style='width: $width;height: $height'";
+	/**
+	 * Default map width. Default value `100%`.
+	 *
+	 * @hook mc_map_width
+	 *
+	 * @param {string} $width Width parameter passed to map container style attribute.
+	 * @param {object} $event Event or location object containing location information.
+	 *
+	 * @return {string} Value.
+	 */
+	$width    = apply_filters( 'mc_map_width', '100%', $event );
+	/**
+	 * Default map height. Default value `300px`.
+	 *
+	 * @hook mc_map_height
+	 *
+	 * @param {string} $height Height parameter passed to map container style attribute.
+	 * @param {object} $event Event or location object containing location information.
+	 *
+	 * @return {string} Value.
+	 */
+	$height = apply_filters( 'mc_map_height', '300px', $event );
+	$styles = " style='width: $width;height: $height'";
 	// This is an event with a location object property.
 	if ( 'event' === $source && property_exists( $event, 'location' ) && is_object( $event->location ) ) {
 		$event  = $event->location;
@@ -841,6 +1111,17 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				$id            = rand();
 				$loc_id        = $location->{$source . '_id'};
 				$source        = ( 'event' === $source ) ? 'event' : 'location';
+				/**
+				 * URL to Google Map marker image.
+				 *
+				 * @hook mc_map_icon
+				 *
+				 * @param {string} $icon    Formatted HTML to be returned.
+				 * @param {object} $location Event or location object containing location information.
+				 * @param {string} $source Either 'event' or 'location' indicating type of object.
+				 *
+				 * @return {string} URL to icon.
+				 */
 				$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, $source );
 				$address       = addslashes( mc_map_string( $location, $source ) );
 
@@ -870,14 +1151,35 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 						'strong' => array(),
 					)
 				);
+				/**
+				 * Source HTML for a single location marker.
+				 *
+				 * @hook mc_map_html
+				 *
+				 * @param {string} $marker Formatted HTML to be returned.
+				 * @param {object} $location Event object containing location information.
+				 *
+				 * @return {string} Formatted HTML to be parsed by Google Maps JS.
+				 */
 				$html      = apply_filters( 'mc_map_html', $marker, $location );
 				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
 				$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 			}
-			$class = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
-			$map   = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . apply_filters( 'mc_gmap_html', $markers, $event ) . '</div>';
-			$locs  = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
-			$out   = '<div class="mc-maps">' . $map . $locs . '</div>';
+			/**
+			 * Source HTML for generating a map of calendar locations.
+			 *
+			 * @hook mc_gmap_html
+			 *
+			 * @param {string}       $output Formatted HTML to be returned.
+			 * @param {object|array} $event Object or array of objects containing one or more objects with location information.
+			 *
+			 * @return {string} Formatted HTML to be parsed by Google Maps JS.
+			 */
+			$markers = apply_filters( 'mc_gmap_html', $markers, $event );
+			$class   = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
+			$map     = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . $markers . '</div>';
+			$locs    = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
+			$out     = '<div class="mc-maps">' . $map . $locs . '</div>';
 		} else {
 			$out = '';
 		}
@@ -907,6 +1209,16 @@ function mc_expand( $data ) {
 		$output = ( $output ) ? "<ul class='mc-access'>" . $output . '</ul>' : '';
 	}
 
+	/**
+	 * HTML output from an internal data array, e.g. accessibility features.
+	 *
+	 * @hook mc_expand
+	 *
+	 * @param {string} $output Formatted HTML to be returned.
+	 * @param {array} $data Array of data being parsed.
+	 *
+	 * @return {string} Formatted HTML.
+	 */
 	return apply_filters( 'mc_expand', $output, $data );
 }
 
@@ -959,7 +1271,28 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 	if ( 'simple' === $display ) {
 		$begin  = $dates[0]->occur_begin;
 		$end    = $dates[ $last ]->occur_end;
+
+		/**
+		 * Starting date format used in 'date', 'datespan', and 'multidate' template tags. Default from My Calendar settings.
+		 *
+		 * @hook mc_date_format
+		 *
+		 * @param {string} $format Date Format in PHP date format.
+		 * @param {string} $context 'date_span_begin'.
+		 *
+		 * @return {string} Date format.
+		 */
 		$begin  = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_begin' ), strtotime( $begin ) );
+		/**
+		 * End date format used in 'date', 'datespan', and 'multidate' template tags. Default from My Calendar settings.
+		 *
+		 * @hook mc_date_format
+		 *
+		 * @param {string} $format Date Format in PHP date format.
+		 * @param {string} $context 'date_span_end'.
+		 *
+		 * @return {string} Date format.
+		 */
 		$end    = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_end' ), strtotime( $end ) );
 		$return = $begin . ' <span>&ndash;</span> ' . $end;
 	} else {
@@ -1035,6 +1368,15 @@ function mc_auto_excerpt( $e, $event ) {
 	$shortdesc   = $e['shortdesc'];
 	$excerpt     = '';
 	if ( '' !== $description && '' === $shortdesc ) { // if description is empty, this won't work, so skip it.
+		/**
+		 * Length of My Calendar generated excerpts in words. Default 55.
+		 *
+		 * @hook mc_excerpt_length
+		 *
+		 * @param {int} $num_words Number of words to use.
+		 *
+		 * @return {int}
+		 */
 		$num_words = apply_filters( 'mc_excerpt_length', 55 );
 		$excerpt   = wp_trim_words( $description, $num_words );
 	} else {
@@ -1076,6 +1418,15 @@ add_filter( 'mc_filter_image_data', 'mc_image_data', 10, 2 );
  * @return array $e
  */
 function mc_image_data( $e, $event ) {
+	/**
+	 * Attributes added to My Calendar event images. Default `array( 'class' => 'mc-image' )`. See `get_the_post_thumbnail()` docs at WordPress.org.
+	 *
+	 * @hook mc_post_thumbnail_atts
+	 *
+	 * @param {array} $atts Array of image attributes.
+	 *
+	 * @return {array} Array of image attributes.
+	 */
 	$atts = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image' ) );
 	if ( isset( $event->event_post ) && is_numeric( $event->event_post ) && get_post_status( $event->event_post ) && has_post_thumbnail( $event->event_post ) ) {
 		$e['full'] = get_the_post_thumbnail( $event->event_post );
@@ -1090,6 +1441,15 @@ function mc_image_data( $e, $event ) {
 			$e['image_url'] = strip_tags( $e['large'] );
 			$e['image']     = $e['large'];
 		} else {
+			/**
+			 * Default image size used for event listings when 'large' image not available. Default 'thumbnail'.
+			 *
+			 * @hook mc_default_image_size
+			 *
+			 * @param {string} $size Default image size
+			 *
+			 * @return {string} Image size description key.
+			 */
 			$image_size     = apply_filters( 'mc_default_image_size', 'thumbnail' );
 			$e['image_url'] = strip_tags( $e[ $image_size ] );
 			$e['image']     = $e[ $image_size ];
@@ -1174,6 +1534,16 @@ function mc_event_recur_string( $event, $begin ) {
 			$event_recur = '';
 	}
 
+	/**
+	 * Text representation of a recurring event pattern.
+	 *
+	 * @hook mc_event_recur_string
+	 *
+	 * @param {string} $event_recur Template HTML closing tag.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string}
+	 */
 	return apply_filters( 'mc_event_recur_string', $event_recur, $event );
 }
 
@@ -1213,11 +1583,13 @@ function mc_event_schema( $e, $tags = array() ) {
 	}
 	$schema['location'] = $loc;
 	/**
-	 * Filter event schema data.
+	 * Filter JSON/LD event schema data. https://schema.org/event.
 	 *
-	 * @param array  $schema Schema data.
-	 * @param object $e Event data.
-	 * @param array  $event Event tag array.
+	 * @hook mc_event_schema
+	 *
+	 * @param {array } $schema Schema data.
+	 * @param {object} $e Event data.
+	 * @param {array}  $event Event tag array.
 	 *
 	 * @return array
 	 */
@@ -1257,10 +1629,12 @@ function mc_location_schema( $location ) {
 		);
 	}
 	/**
-	 * Filter location schema data.
+	 * Filter array used to generate location schema. See https://schema.org/location.
 	 *
-	 * @param array  $schema Schema data.
-	 * @param object $location Location data.
+	 * @hook mc_location_schema
+	 *
+	 * @param {array}  $schema Schema data for an event venue.
+	 * @param {object} $location My Calendar location object.
 	 *
 	 * @return array
 	 */
