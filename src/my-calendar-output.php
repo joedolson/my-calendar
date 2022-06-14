@@ -141,7 +141,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
  * @return bool
  */
 function mc_legacy_templating() {
-	$enabled = apply_filters( 'mc_disable_legacy_templates', false );
+	$enabled = apply_filters( 'mc_enable_legacy_templates', true );
 	// New templates require at least WP 5.5.
 	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
 		$enabled = true;
