@@ -135,6 +135,20 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 	return array();
 }
 
+/**
+ * Check whether legacy templates are enabled.
+ *
+ * @return bool
+ */
+function mc_legacy_templating() {
+	$enabled = apply_filters( 'mc_disable_legacy_templates', false );
+	// New templates require at least WP 5.5.
+	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
+		$enabled = true;
+	}
+
+	return $enabled;
+}
 
 /**
  * Draw a single event
@@ -155,6 +169,22 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		return '';
 	}
 	do_action( 'my_calendar_drawing_event', $event );
+	$legacy_templates = mc_legacy_templating();
+	if ( ! $legacy_templates ) {
+		$templates = new Mc_Template_Loader();
+		ob_start();
+		$data = array(
+			'event'        => $event,
+			'process_date' => $process_date,
+			'time'         => $time,
+			'id'           => $id, 
+			'tags'         => $tags,
+		);
+		$templates->set_template_data( $data );
+		$templates->get_template_part( 'event', $type );
+
+		return ob_get_clean();
+	}
 
 	// assign empty values to template sections.
 	$header      = '';
