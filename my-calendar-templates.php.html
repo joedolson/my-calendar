@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-templates.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-templates.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Draw templates for My Calendar events.
+ *
+ * @category Calendar
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Draw array of information into a template with {$key} formatted tags
+ *
+ * @param array       $array associative array of information intended to be parsed.
+ * @param string      $template template containing braced tags (e.g. `{title}`) using keys of passed array.
+ * @param string      $type my calendar needs to render a different link for list versions and other views.
+ * @param object|bool $event Event object. Optional.
+ *
+ * @return string HTML output of template.
+ */
+function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
+	$template = stripcslashes( $template );
+	// If there are no brace characters, there is nothing to replace.
+	if ( strpos( $template, '{' ) === false ) {
+		return trim( $template );
+	}
+	// If the data passed is not an array or is empty, return empty string.
+	if ( ! is_array( $array ) || empty( $array ) ) {
+		return '';
+	}
+	foreach ( $array as $key => $value ) {
+		if ( is_object( $value ) &amp;&amp; ! empty( $value ) ) {
+			// If a value is an object, ignore it.
+		} else {
+			if ( strpos( $template, '{' . $key ) !== false ) {
+				if ( 'list' !== $type ) {
+					if ( 'link' === $key &amp;&amp; '' === $value ) {
+						$value = mc_get_uri( false, $array );
+					}
+					if ( 'guid' !== $key ) {
+						$value = htmlentities( $value );
+					}
+				}
+				if ( strpos( $template, '{' . $key . ' ' ) !== false ) {
+					// only do preg_match if appropriate.
+					preg_match_all( '/{' . $key . '\b(?>\s+(?:before="([^"]*)"|after="([^"]*)"|format="([^"]*)")|[^\s]+|\s+){0,3}}/', $template, $matches, PREG_PATTERN_ORDER );
+					if ( $matches ) {
+						$number = count( $matches[0] );
+						for ( $i = 0; $i &lt; $number; $i ++ ) {
+							$orig   = $value;
+							$before = $matches[1][ $i ];
+							$after  = $matches[2][ $i ];
+							$format = $matches[3][ $i ];
+							if ( '' !== $format ) {
+								$value = date_i18n( stripslashes( $format ), strtotime( stripslashes( $value ) ) );
+							}
+							$value    = ( '' === (string) trim( $value ) ) ? '' : $before . $value . $after;
+							$search   = $matches[0][ $i ];
+							$template = str_replace( $search, $value, $template );
+							$value    = $orig;
+						}
+					}
+				} else {
+					// don't do preg match for simple templates.
+					$template = stripcslashes( str_replace( '{' . $key . '}', $value, $template ) );
+				}
+			}
+			// End {$key check.
+		}
+	}
+	/**
+	 * Filter a rendered My Calendar template after parsing.
+	 *
+	 * @hook mc_template
+	 *
+	 * @param {string} $template Formatted HTML output of a template.
+	 * @param {array}  $array Array of arguments passed to template.
+	 * @param {string} $type Type of view being rendered.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string} Formatted HTML.
+	 */
+	$template = apply_filters( 'mc_template', $template, $array, $type, $event );
+
+	return stripslashes( trim( $template ) );
+}
+
+/**
+ * Setup string version of address data
+ *
+ * @param object $event object containing location properties.
+ * @param string $source event or location.
+ *
+ * @return stringified address info
+ */
+function mc_map_string( $event, $source = 'event' ) {
+	if ( ! is_object( $event ) ) {
+		return '';
+	}
+	if ( 'event' === $source ) {
+		$map_string = $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode . ' ' . $event->event_country;
+	} else {
+		$map_string = $event->location_street . ' ' . $event->location_street2 . ' ' . $event->location_city . ' ' . $event->location_state . ' ' . $event->location_postcode . ' ' . $event->location_country;
+	}
+
+	return $map_string;
+}
+
+/**
+ * Set up link to Google Maps
+ *
+ * @param object $event object containing location properties.
+ * @param string $request source of request.
+ * @param string $source event/location.
+ *
+ * @return string URL or link depending on request
+ */
+function mc_maplink( $event, $request = 'map', $source = 'event' ) {
+	$map_string = mc_map_string( $event, $source );
+	// If the string is empty, then exit.
+	if ( '' === $map_string ) {
+		return '';
+	}
+	if ( 'event' === $source ) {
+		if ( 'gcal' === $request ) {
+			return $map_string;
+		}
+		$zoom       = ( '0' !== $event->event_zoom ) ? $event->event_zoom : '15';
+		$url        = $event->event_url;
+		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->event_label ) ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
+		$map_string = str_replace( ' ', '+', $map_string );
+		if ( '0.000000' !== $event->event_longitude &amp;&amp; '0.000000' !== $event->event_latitude ) {
+			$dir_lat    = ( $event->event_latitude > 0 ) ? 'N' : 'S';
+			$latitude   = abs( $event->event_latitude );
+			$dir_long   = ( $event->event_longitude > 0 ) ? 'E' : 'W';
+			$longitude  = abs( $event->event_longitude );
+			$map_string = $latitude . $dir_lat . ',' . $longitude . $dir_long;
+		}
+	} else {
+		$url        = $event->location_url;
+		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
+		$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
+		$map_string = str_replace( ' ', '+', $map_string );
+		if ( '0.000000' !== $event->location_longitude &amp;&amp; '0.000000' !== $event->location_latitude ) {
+			$dir_lat    = ( $event->location_latitude > 0 ) ? 'N' : 'S';
+			$latitude   = abs( $event->location_latitude );
+			$dir_long   = ( $event->location_longitude > 0 ) ? 'E' : 'W';
+			$longitude  = abs( $event->location_longitude );
+			$map_string = $latitude . $dir_lat . ',' . $longitude . $dir_long;
+		}
+	}
+	// Translators: Name of location.
+	$label = sprintf( __( 'Map&lt;span> to %s&lt;/span>', 'my-calendar' ), $event );
+	/**
+	 * Label for link to Google Maps for event.
+	 *
+	 * @hook mc_map_label
+	 *
+	 * @param {string} $label Map to {event name}.
+	 * @param {string} $map_label Location name.
+	 *
+	 * @return {string} Label used inside map link.
+	 */
+	$label = sprintf( apply_filters( 'mc_map_label', $label, $map_label );
+	if ( strlen( trim( $map_string ) ) > 6 ) {
+		/**
+		 * Google maps URL.
+		 *
+		 * @hook mc_map_url
+		 *
+		 * @param {string} $url Link to event location on Google Maps.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {string} Link.
+		 */
+		$map_url = apply_filters( 'mc_map_url', "http://maps.google.com/maps?z=$zoom&amp;amp;daddr=$map_string", $event );
+		$map     = '&lt;a href="' . esc_url( $map_url ) . '" class="map-link external">' . $label . '&lt;/a>';
+	} elseif ( esc_url( $url ) ) {
+		$map_url = $url;
+		$map     = "&lt;a href=\"$map_url\" class='map-link external map-url'>" . $label . '&lt;/a>';
+	} else {
+		$map_url = '';
+		$map     = '';
+	}
+	if ( 'url' === $request || 'location' === $source ) {
+		return $map_url;
+	} else {
+		return $map;
+	}
+}
+
+/**
+ * Set up link to push events into Google Calendar.
+ *
+ * @param string $dtstart date begin.
+ * @param string $dtend date end.
+ * @param string $url link to event.
+ * @param string $title Title of event.
+ * @param string $location string version of location.
+ * @param string $description info about event.
+ *
+ * @return string Google add to cal url
+ */
+function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description ) {
+	$source = 'https://www.google.com/calendar/render?action=TEMPLATE';
+	$base   = "&amp;dates=$dtstart/$dtend";
+	$base  .= '&amp;sprop=website:' . $url;
+	$base  .= '&amp;text=' . urlencode( $title );
+	/**
+	 * Filter `location` parameter added to Google Calendar link. Default `&amp;location=$location`. Return value needs to be URL encoded.
+	 *
+	 * @hook mc_gcal_location
+	 *
+	 * @param {string} $param Encoded parameter.
+	 * @param {string} $location Unencoded original stringified location..
+	 *
+	 * @return {string} Encoded parameter.
+	 */
+	$base  .= apply_filters( 'mc_gcal_location', '&amp;location=' . urlencode( trim( $location ) ), $location );
+	$base  .= '&amp;sprop=name:' . urlencode( get_bloginfo( 'name' ) );
+	/**
+	 * Filter `details` parameter added to Google Calendar link. Default `&amp;details=$description`. Return value needs to be URL encoded.
+	 *
+	 * @hook mc_gcal_description
+	 *
+	 * @param {string} $param Encoded parameter.
+	 * @param {string} $description Unencoded original description.
+	 *
+	 * @return {string} Encoded parameter.
+	 */
+	$base  .= apply_filters( 'mc_gcal_description', '&amp;details=' . urlencode( stripcslashes( trim( $description ) ) ), $description );
+	$base  .= '&amp;sf=true&amp;output=xml';
+
+	return $source . $base;
+}
+
+/**
+ * Format an hcard for event location
+ *
+ * @param object $event object with location properties.
+ * @param string $address Whether to return the address.
+ * @param string $map Whether to return the map.
+ * @param string $source event/location.
+ *
+ * @return string hcard
+ */
+function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' ) {
+	if ( ! is_object( $event ) ) {
+		return '';
+	}
+	if ( 'event' === $source &amp;&amp; property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
+		$event  = $event->location;
+		$source = 'location';
+	}
+	$the_map = mc_maplink( $event, 'url', $source );
+	$url     = ( 'event' === $source ) ? $event->event_url : $event->location_url;
+	$url     = esc_url( $url );
+	$label   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_label : $event->location_label ), mc_strip_tags() );
+	$street  = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_street : $event->location_street ), mc_strip_tags() );
+	$street2 = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_street2 : $event->location_street2 ), mc_strip_tags() );
+	$city    = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_city : $event->location_city ), mc_strip_tags() );
+	$state   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_state : $event->location_state ), mc_strip_tags() );
+	$state   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_state : $event->location_state ), mc_strip_tags() );
+	$zip     = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_postcode : $event->location_postcode ), mc_strip_tags() );
+	$zip     = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_postcode : $event->location_postcode ), mc_strip_tags() );
+	$country = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_country : $event->location_country ), mc_strip_tags() );
+	$country = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_country : $event->location_country ), mc_strip_tags() );
+	$phone   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_phone : $event->location_phone ), mc_strip_tags() );
+	$loc_id  = absint( ( 'event' === $source ) ? false : $event->location_id );
+	if ( ! $url &amp;&amp; ! $label &amp;&amp; ! $street &amp;&amp; ! $street2 &amp;&amp; ! $city &amp;&amp; ! $state &amp;&amp; ! $zip &amp;&amp; ! $country &amp;&amp; ! $phone ) {
+		return '';
+	}
+	$distance = '';
+	if ( property_exists( $event, 'distance_in_miles' ) ) {
+		$dist     = ( 'en_US' === get_locale() ) ? $event->distance_in_miles : ( 1.60934 * $event->distance_in_miles );
+		$unit     = ( 'en_US' === get_locale() ) ? ' miles' : ' km';
+		$dist     = round( $dist, 1 ) . $unit;
+		$distance = ' (' . $dist . ')';
+	}
+	if ( is_admin() &amp;&amp; isset( $_GET['page'] ) &amp;&amp; 'my-calendar-location-manager' === $_GET['page'] ) {
+		$link = "&lt;a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&amp;mode=edit' ) ) . "' class='location-link edit'>&lt;span class='dashicons dashicons-edit' aria-hidden='true'>&lt;/span> &lt;span id='location$event->location_id'>$label&lt;/span>&lt;/a>";
+	} else {
+		$link = ( '' !== $url ) ? "&lt;a href='$url' class='location-link external'>$label&lt;/a>" : $label;
+		$link = $link . $distance;
+	}
+	$post   = mc_get_location_post( $loc_id );
+	$events = ( $post &amp;&amp; ! is_single( $post ) &amp;&amp; ! is_admin() &amp;&amp; 'mc-locations' === get_post_type( $post ) ) ? '&lt;a class="location-link" href="' . esc_url( get_the_permalink( $post ) ) . '">' . __( 'View Location', 'my-calendar' ) . '&lt;/a>' : '';
+	/**
+	 * Filter link to location-specific events in hcard.
+	 *
+	 * @hook mc_location_events_link
+	 *
+	 * @param {string} $events HTML link to location permalink.
+	 * @param {object} $post Location post object.
+	 * @param {object} $event Event object being mapped.
+	 *
+	 * @return {string} Link.
+	 */
+	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
+	$hcard  = '&lt;div class="address location vcard">';
+	if ( 'true' === $address ) {
+		$hcard .= '&lt;div class="adr">';
+		$hcard .= ( '' !== $label ) ? '&lt;div>&lt;strong class="org fn">' . $link . '&lt;/strong>&lt;/div>' : '';
+		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "&lt;div class='sub-address'>";
+		$hcard .= ( '' !== $street ) ? '&lt;div class="street-address">' . $street . '&lt;/div>' : '';
+		$hcard .= ( '' !== $street2 ) ? '&lt;div class="street-address">' . $street2 . '&lt;/div>' : '';
+		$hcard .= ( '' !== $city . $state . $zip ) ? '&lt;div>' : '';
+		$hcard .= ( '' !== $city ) ? '&lt;span class="locality">' . $city . '&lt;/span>&lt;span class="mc-sep">, &lt;/span>' : '';
+		$hcard .= ( '' !== $state ) ? '&lt;span class="region">' . $state . '&lt;/span> ' : '';
+		$hcard .= ( '' !== $zip ) ? ' &lt;span class="postal-code">' . $zip . '&lt;/span>' : '';
+		$hcard .= ( '' !== $city . $state . $zip ) ? '&lt;/div>' : '';
+		$hcard .= ( '' !== $country ) ? '&lt;div class="country-name">' . $country . '&lt;/div>' : '';
+		$hcard .= ( '' !== $phone ) ? '&lt;div class="tel">' . $phone . '&lt;/div>' : '';
+		$hcard .= ( '' !== $events ) ? '&lt;div class="mc-events-link">' . $events . '&lt;/div>' : '';
+		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : '&lt;/div>';
+		$hcard .= '&lt;/div>';
+	}
+	if ( 'true' === $map &amp;&amp; false !== $the_map ) {
+		$the_link = "&lt;a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "&lt;span class='screen-reader-text fn'> $label&lt;/span>&lt;/a>";
+		$hcard   .= ( '' !== $the_map ) ? "&lt;div class='map'>$the_link&lt;/div>" : '';
+	}
+	$hcard .= '&lt;/div>';
+	$hcard  = ( ( false !== $the_map &amp;&amp; 'true' === $map ) || ( '' !== $link &amp;&amp; 'true' === $address ) ) ? $hcard : '';
+
+	/**
+	 * Filter location hcard HTML output.
+	 *
+	 * @hook mc_hcard
+	 *
+	 * @param {string} $hcard Formatted HTML output.
+	 * @param {object} $event Event or location object.
+	 * @param {string} $address 'true' to include the location address on the card.
+	 * @param {string} $map 'true' to include the map link on the card.
+	 * @param {string} $source 'event' or 'location'.
+	 *
+	 * @return {string} Formatted HTML hcard.
+	 */
+	return apply_filters( 'mc_hcard', $hcard, $event, $address, $map, $source );
+}
+
+/**
+ * Produces the array of event details used for drawing templates
+ *
+ * @param object $event Event object.
+ * @param string $context Context being executed in.
+ *
+ * @return array event data
+ */
+function mc_create_tags( $event, $context = 'filters' ) {
+	if ( ! is_object( $event ) ) {
+		return;
+	}
+	do_action( 'mc_create_tags', $event, $context );
+	$calendar_id = '';
+	if ( 'filters' !== $context &amp;&amp; 'related' !== $context ) {
+		$calendar_id = $context;
+	}
+	$site          = ( isset( $event->site_id ) ) ? $event->site_id : false;
+	$e             = array();
+	$e['post']     = $event->event_post;
+	$date_format   = mc_date_format();
+	/**
+	 * Filter template tag array and add author data. Runs before other template tags are created. Use `mc_filter_shortcodes` to modify existing template tags.
+	 *
+	 * @hook mc_insert_author_data
+	 *
+	 * @param {array}  $e Array to hold event template tags.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {array} Template tag array.
+	 */
+	$e             = apply_filters( 'mc_insert_author_data', $e, $event );
+	/**
+	 * Filter template tag array and add image data. Runs before other template tags are created. Use `mc_filter_shortcodes` to modify existing template tags.
+	 *
+	 * @hook mc_filter_image_data
+	 *
+	 * @param {array}  $e Array to hold event template tags.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {array} Template tag array.
+	 */
+	$e             = apply_filters( 'mc_filter_image_data', $e, $event );
+	$sitelink_html = "&lt;div class='url link'>&lt;a href='" . esc_url( $event->event_url ) . "' class='location-link external'>";
+
+	// Translators: Location name.
+	$sitelink_html     .= sprintf( __( 'Visit web site&lt;span class="screen-reader-text">: %s&lt;/span>', 'my-calendar' ), $event->event_label );
+	$sitelink_html     .= '&lt;/a>&lt;/div>';
+	$e['sitelink_html'] = $sitelink_html;
+	$e['sitelink']      = $event->event_url;
+	$e['access']        = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+
+	// Date &amp; time fields.
+	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
+	$real_begin_date = ( isset( $event->occur_begin ) ) ? $event->occur_begin : $event->event_begin . ' ' . $event->event_time;
+	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ), $context );
+	$dtend           = mc_format_timestamp( strtotime( $real_end_date ), $context );
+	/**
+	 * Start date format used in 'date_utc'. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_begin_ts'.
+	 *
+	 * @return {string} Date format.
+	 */
+	$e['date_utc']     = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
+	/**
+	 * End date format used in 'date_end_utc'. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_end_ts'.
+	 *
+	 * @return {string} Date format.
+	 */
+	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
+	$notime            = esc_html( mc_notime_label( $event ) );
+	$e['time']         = ( '00:00:00' === mc_date( 'H:i:s', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
+	$e['time24']       = ( '00:00' === mc_date( 'G:i', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
+	$endtime           = ( '23:59:59' === $event->event_end ) ? '00:00:00' : mc_date( 'H:i:s', strtotime( $real_end_date ), false );
+	$e['endtime']      = ( $real_end_date === $real_begin_date || '1' === $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ), false ) ) ? '' : date_i18n( mc_time_format(), strtotime( $endtime ) );
+	$e['runtime']      = mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event );
+	$e['duration']     = mc_duration( $event );
+	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ), false );  // Date: hcal formatted.
+	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ), false );    // Date: hcal formatted end.
+	$e['userstart']    = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '&lt;/time>';
+	$e['userend']      = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '&lt;/time>';
+	/**
+	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_begin'.
+	 *
+	 * @return {string} Date format.
+	 */
+	$date = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
+	/**
+	 * End date format used in 'enddate' and 'daterange' template tags. Default from My Calendar settings.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $format Date Format in PHP date format.
+	 * @param {string} $context 'template_end'.
+	 *
+	 * @return {string} Date format.
+	 */
+	$date_end = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
+	$date_arr = array(
+		'occur_begin' => $real_begin_date,
+		'occur_end'   => $real_end_date,
+	);
+	$date_obj = (object) $date_arr;
+	if ( '1' === $event->event_span ) {
+		$dates = mc_event_date_span( $event->event_group_id, $event->event_span, array( 0 => $date_obj ) );
+	} else {
+		$dates = array();
+	}
+	$e['datetime']  = mc_time_html( $event, 'grid' );
+	$e['date']      = ( '1' !== $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
+	$e['enddate']   = $date_end;
+	$e['daterange'] = ( $date === $date_end ) ? "&lt;span class='mc_db'>$date&lt;/span>" : "&lt;span class='mc_db'>$date&lt;/span> &lt;span>&amp;ndash;&lt;/span> &lt;span class='mc_de'>$date_end&lt;/span>";
+	$e['timerange'] = ( ( $e['time'] === $e['endtime'] ) || 1 === (int) $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ), false ) ) ? $e['time'] : "&lt;span class='mc_tb'>" . $e['time'] . "&lt;/span> &lt;span>&amp;ndash;&lt;/span> &lt;span class='mc_te'>" . $e['endtime'] . '&lt;/span>';
+	$e['datespan']  = ( 1 === (int) $event->event_span || ( $e['date'] !== $e['enddate'] ) ) ? mc_format_date_span( $dates ) : $date;
+	$e['multidate'] = mc_format_date_span( $dates, 'complex', "&lt;span class='fallback-date'>$date&lt;/span>&lt;span class='separator'>,&lt;/span> &lt;span class='fallback-time'>$e[time]&lt;/span>&amp;ndash;&lt;span class='fallback-endtime'>$e[endtime]&lt;/span>" );
+	$e['began']     = $event->event_begin; // returns date of first occurrence of an event.
+	$e['recurs']    = mc_event_recur_string( $event, $real_begin_date );
+	$e['repeats']   = $event->event_repeats;
+
+	// Category fields.
+	$e['cat_id']          = $event->event_category;
+	$e['category_id']     = $event->event_category;
+	$e['category']        = stripslashes( $event->category_name );
+	$e['ical_category']   = strip_tags( stripslashes( $event->category_name ) );
+	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
+	$e['ical_categories'] = strip_tags( ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' ) );
+	$e['term']            = intval( $event->category_term );
+	$e['icon']            = mc_category_icon( $event, 'img' );
+	$e['icon_html']       = mc_category_icon( $event );
+	$e['color']           = $event->category_color;
+
+	$hex     = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
+	$color   = $hex . $event->category_color;
+	$inverse = mc_inverse_color( $color );
+
+	// This is because widgets now strip out style attributes.
+	$e['color_css']       = "&lt;span style='background-color: $event->category_color; color: $inverse'>";
+	$e['close_color_css'] = '&lt;/span>';
+
+	// Special.
+	$e['skip_holiday'] = ( 0 === (int) $event->event_holiday ) ? 'false' : 'true';
+	$e['event_status'] = ( 1 === (int) $event->event_approved ) ? __( 'Published', 'my-calendar' ) : __( 'Draft', 'my-calendar' );
+
+	// General text fields.
+	$e['title']                = stripslashes( $event->event_title );
+	$e['description']          = wpautop( stripslashes( $event->event_desc ) );
+	$e['description_raw']      = stripslashes( $event->event_desc );
+	$e['description_stripped'] = strip_tags( stripslashes( $event->event_desc ) );
+	$e['shortdesc']            = wpautop( stripslashes( $event->event_short ) );
+	$e['shortdesc_raw']        = stripslashes( $event->event_short );
+	$e['shortdesc_stripped']   = strip_tags( stripslashes( $event->event_short ) );
+
+	// Registration fields.
+	$e['event_tickets']      = $event->event_tickets;
+	$e['event_registration'] = stripslashes( wp_kses_data( $event->event_registration ) );
+
+	// Links.
+	$templates    = get_option( 'mc_templates' );
+	$e_template   = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
+	/**
+	 * Filter template for the `{details}` output. Default: `Details about {title}`.
+	 *
+	 * @hook mc_details_template
+	 *
+	 * @param {string} $e_template String with template tags.
+	 * @param {object} $event Event object. 
+	 *
+	 * @return {string} Unparsed template.
+	 */
+	$e_template   = apply_filters( 'mc_details_template', $e_template, $event );
+	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
+	$replacements = array(
+		stripslashes( $e['title'] ),
+		stripslashes( $event->event_label ),
+		$event->category_color,
+		$event->category_icon,
+		$e['date'],
+		$e['time'],
+	);
+
+	$classes  = mc_event_classes( $event, 'template' );
+	$nofollow = ( stripos( $classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
+
+	$e_label   = str_replace( $tags, $replacements, $e_template );
+	$e_link    = mc_get_details_link( $event );
+	$e['link'] = mc_event_link( $event );
+	if ( $e['link'] ) {
+		$e['link_image'] = str_replace( "alt=''", "alt='" . esc_attr( $e['title'] ) . "'", "&lt;a href='" . esc_url( $e['link'] ) . "' $nofollow>" . $e['image'] . '&lt;/a>' );
+		$e['link_title'] = "&lt;a href='" . esc_url( $event->event_link ) . "' $nofollow>" . $e['title'] . '&lt;/a>';
+	} else {
+		$e['link_image'] = $e['image'];
+		$e['link_title'] = $e['title'];
+	}
+
+	$e['details_link'] = $e_link;
+	$e['details']      = "&lt;a href='" . esc_url( $e_link ) . "' class='mc-details' $nofollow>$e_label&lt;/a>";
+	$e['linking']      = ( '' !== $e['link'] ) ? $event->event_link : $e_link;
+
+	$rel = $nofollow;
+	if ( mc_external_link( $e['linking'] ) ) {
+		if ( $rel ) {
+			$rel = 'rel="external nofollow"';
+		} else {
+			$rel = 'rel="external"';
+		}
+	}
+	$e['linking_title'] = ( '' !== $e['linking'] ) ? "&lt;a href='" . esc_url( $e['linking'] ) . "' $rel>" . $e['title'] . '&lt;/a>' : $e['title'];
+
+	if ( 'related' !== $context &amp;&amp; ( mc_is_single_event() ) ) {
+		/**
+		 * HTML format for displaying related events on a single event view. Default `{date}, {time}`.
+		 *
+		 * @hook mc_related_template
+		 *
+		 * @param {string} $template Template to use to draw a related event.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {string} Unparsed template.
+		 */
+		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
+		$e['related']     = '&lt;ul class="related-events">' . mc_list_group( $event->event_group_id, $event->event_id, $related_template ) . '&lt;/ul>';
+	} else {
+		$e['related'] = '';
+	}
+
+	// location fields.
+	$e['location_source'] = $event->event_location;
+	$map_gcal             = '';
+	if ( property_exists( $event, 'location' ) ) {
+		$location = $event->location;
+		if ( is_object( $location ) ) {
+			$map                  = mc_maplink( $location, 'map', 'location' );
+			$map_url              = mc_maplink( $location, 'url', 'location' );
+			$map_gcal             = mc_maplink( $location, 'gcal', 'location' );
+			$e['location']        = stripslashes( $location->location_label );
+			$e['street']          = stripslashes( $location->location_street );
+			$e['street2']         = stripslashes( $location->location_street2 );
+			/**
+			 * Format a phone number for display in template tags.
+			 *
+			 * @hook mc_phone_format
+			 *
+			 * @param {string} $number Phone number as saved in `$location->location_phone`.
+			 * @param {object} $location Location object.
+			 * @param {string} $context 'phone'.
+			 *
+			 * @return {string} Formatted number.
+			 */
+			$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
+			/**
+			 * Format a phone number for display in template tags.
+			 *
+			 * @hook mc_phone_format
+			 *
+			 * @param {string} $number Phone number as saved in `$location->location_phone`.
+			 * @param {object} $location Location object.
+			 * @param {string} $context 'phone2'.
+			 *
+			 * @return {string} Formatted number.
+			 */
+			$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ) );
+			$e['city']            = stripslashes( $location->location_city );
+			$e['state']           = stripslashes( $location->location_state );
+			$e['postcode']        = stripslashes( $location->location_postcode );
+			$e['country']         = stripslashes( $location->location_country );
+			$e['region']          = $location->location_region;
+			$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
+			$e['link_map']        = $map;
+			$e['map_url']         = $map_url;
+			$e['map']             = mc_generate_map( $location, 'location' );
+			$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
+			$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
+		}
+	} else {
+		$map           = mc_maplink( $event );
+		$map_url       = mc_maplink( $event, 'url' );
+		$map_gcal      = mc_maplink( $event, 'gcal' );
+		$e['location'] = stripslashes( $event->event_label );
+		$e['street']   = stripslashes( $event->event_street );
+		$e['street2']  = stripslashes( $event->event_street2 );
+		/**
+		 * Format a phone number for display in template tags.
+		 *
+		 * @hook mc_phone_format
+		 *
+		 * @param {string} $number Phone number as saved in `$event->event_phone`.
+		 * @param {object} $event Event object.
+		 * @param {stirng} $context 'phone'.
+		 *
+		 * @return {string} Formatted number.
+		 */
+		$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone ), 'phone' );
+		/**
+		 * Format a phone number for display in template tags.
+		 *
+		 * @hook mc_phone_format
+		 *
+		 * @param {string} $number Phone number as saved in `$event->event_phone2`.
+		 * @param {object} $event Event object.
+		 * @param {string} $context 'phone2'.
+		 *
+		 * @return {string} Formatted number.
+		 */
+		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone2 ), 'phone2' );
+		$e['city']            = stripslashes( $event->event_city );
+		$e['state']           = stripslashes( $event->event_state );
+		$e['postcode']        = stripslashes( $event->event_postcode );
+		$e['country']         = stripslashes( $event->event_country );
+		$e['region']          = $event->event_region;
+		$e['hcard']           = stripslashes( mc_hcard( $event ) );
+		$e['link_map']        = $map;
+		$e['map_url']         = $map_url;
+		$e['map']             = mc_generate_map( $event );
+		$e['location_access'] = mc_expand( unserialize( mc_location_data( 'location_access', $event->event_location ) ) );
+		$e['ical_location']   = trim( $event->event_label . ' ' . $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode );
+	}
+
+	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
+	$e['gcal']      = mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
+	$e['gcal_link'] = "&lt;a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'Google Calendar', 'my-calendar' ) . '&lt;/a>';
+
+	// IDs.
+	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
+	$e['id']         = $event->event_id;
+	$e['group']      = $event->event_group_id;
+	$e['event_span'] = $event->event_span;
+
+	// ICAL.
+	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
+	$e['ical_desc']        = $strip_desc;
+	$e['ical_start']       = $dtstart;
+	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd\THi00', strtotime( $dtend ) + 60, false ) : $dtend;
+	$e['ical_recur']       = mc_generate_rrule( $event );
+	$ical_link             = mc_build_url(
+		array( 'vcal' => $event->occur_id ),
+		array(
+			'month',
+			'dy',
+			'yr',
+			'ltype',
+			'loc',
+			'mcat',
+			'format',
+			'time',
+		),
+		mc_get_uri( $event )
+	);
+	$e['ical']             = $ical_link;
+	$e['ical_html']        = "&lt;a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'iCal', 'my-calendar' ) . '&lt;/a>';
+
+	/**
+	 * Filter all template tags after generation.
+	 *
+	 * @hook mc_filter_shortcodes
+	 *
+	 * @param {array}  $e Array of values to be used in template tags.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {array} Array of template tags.
+	 */
+	$e = apply_filters( 'mc_filter_shortcodes', $e, $event );
+	do_action( 'mc_tags_created', $event, $context );
+
+	return $e;
+}
+
+/**
+ * Get the label for all day events.
+ *
+ * @param object $event Event object.
+ *
+ * @return string.
+ */
+function mc_notime_label( $event ) {
+	$notime  = '';
+	$default = get_option( 'mc_notime_text' );
+	if ( is_object( $event ) &amp;&amp; property_exists( $event, 'event_post' ) ) {
+		$notime  = get_post_meta( $event->event_post, '_event_time_label', true );
+		$default = ( metadata_exists( 'post', $event->event_post, '_event_time_label' ) ) ? '' : $default;
+	}
+	$notime = ( '' !== $notime ) ? $notime : $default;
+
+	/**
+	 * Label to use in place of time for an event with no fixed time. 
+	 *
+	 * @hook mc_notime_label
+	 *
+	 * @param {string} $notime Default value from settings or event post meta.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string} Text describing when the event occurs. E.g. 'all day' or 'to be determined'.
+	 */
+	return apply_filters( 'mc_notime_label', $notime, $event );
+}
+
+/**
+ * Get link to event's details page.
+ *
+ * @param mixed object/int $event Full event object or event occurrence ID.
+ *
+ * @return string URL.
+ */
+function mc_get_details_link( $event ) {
+	if ( is_numeric( $event ) ) {
+		$event = mc_get_event( $event );
+	}
+	if ( ! is_object( $event ) ) {
+		return;
+	}
+	$restore = false;
+	if ( is_multisite() &amp;&amp; property_exists( $event, 'site_id' ) &amp;&amp; get_current_blog_id() !== $event->site_id ) {
+		switch_to_blog( $event->site_id );
+		$restore = true;
+	}
+	$uri = mc_get_uri( $event );
+
+	/**
+	 * Check whether permalinks are enabled.
+	 *
+	 * @hook mc_use_permalinks
+	 *
+	 * @param {string} $option Value of mc_use_permalinks setting.
+	 *
+	 * @return {bool} True value if permalinks are enabled.
+	 */
+	$permalinks   = apply_filters( 'mc_use_permalinks', get_option( 'mc_use_permalinks' ) );
+	$permalinks   = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
+	$details_link = mc_event_link( $event );
+	if ( 0 !== (int) $event->event_post &amp;&amp; 'true' !== get_option( 'mc_remote' ) &amp;&amp; $permalinks ) {
+		$details_link = add_query_arg( 'mc_id', $event->occur_id, get_permalink( $event->event_post ) );
+	} else {
+		if ( mc_get_uri( 'boolean' ) ) {
+			$details_link = mc_build_url(
+				array( 'mc_id' => $event->occur_id ),
+				array(
+					'month',
+					'dy',
+					'yr',
+					'ltype',
+					'loc',
+					'mcat',
+					'format',
+					'feed',
+					'page_id',
+					'p',
+					'mcs',
+					'time',
+					'page',
+					'mode',
+					'event_id',
+				),
+				$uri
+			);
+		}
+	}
+	/**
+	 * URL to an event's permalink page.
+	 *
+	 * @hook mc_customize_details_link
+	 *
+	 * @param {string} $details_link Link to event details page/permalink.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string} URL.
+	 */
+	$details_link = apply_filters( 'mc_customize_details_link', $details_link, $event );
+
+	if ( $restore ) {
+		restore_current_blog();
+	}
+
+	return $details_link;
+}
+
+/**
+ * Get URI from settings
+ *
+ * @param object/string $event Event object or string for boolean result.
+ * @param array         $args  Any arguments passed.
+ *
+ * @uses filter 'mc_get_uri'
+ *
+ * @return mixed string/boolean URL
+ */
+function mc_get_uri( $event = false, $args = array() ) {
+	// For a brief period of time, mc_uri was a post ID.
+	// Convert mc_uri to mc_uri_id.
+	$mc_uri = get_option( 'mc_uri' );
+	$mc_id  = get_option( 'mc_uri_id' );
+	if ( is_numeric( $mc_uri ) &amp;&amp; ! $mc_id ) {
+		update_option( 'mc_uri_id', $mc_uri );
+		update_option( 'mc_uri', get_permalink( $mc_id ) );
+	}
+	$mc_uri = get_option( 'mc_uri' );
+	$mc_id  = get_option( 'mc_uri_id' );
+
+	$uri = ( get_permalink( $mc_id ) !== get_option( 'mc_uri' ) ) ? get_option( 'mc_uri' ) : get_permalink( $mc_id );
+
+	if ( 'boolean' === $event ) {
+		if ( ! _mc_is_url( $uri ) ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	if ( ! $uri ) {
+		$uri = home_url();
+	}
+	/**
+	 * Link to the My Calendar main calendar view.
+	 *
+	 * @hook mc_get_uri
+	 *
+	 * @param {string} $link String to return if event link is expired.
+	 * @param {object} $event Event object.
+	 * @param {array}  $args Current view arguments. (Optional).
+	 *
+	 * @return {string} URL.
+	 */
+	return apply_filters( 'mc_get_uri', $uri, $event, $args );
+}
+
+/**
+ * Get the templated label for a details link
+ *
+ * @param object $event event.
+ * @param array  $e tags array.
+ *
+ * @return string label
+ */
+function mc_get_details_label( $event, $e ) {
+	$templates  = get_option( 'mc_templates' );
+	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Read more', 'my-calendar' );
+	$e_label    = wp_kses(
+		mc_draw_template( $e, $e_template ),
+		array(
+			'span' => array(
+				'class' => array(
+					'screen-reader-text',
+				),
+			),
+			'em',
+			'strong',
+		)
+	);
+
+	return $e_label;
+}
+
+/**
+ * Format a timestamp for use in ical
+ *
+ * @param integer $os timestamp.
+ * @param string  $source google or outlook.
+ *
+ * @return string formatted time
+ */
+function mc_format_timestamp( $os, $source ) {
+	if ( isset( $_GET['outlook'] ) || 'outlook' === $source ) {
+		// Should iCal be in UTC or in current timezone.
+		$timezone_string = get_option( 'timezone_string' );
+		if ( ! $timezone_string ) {
+			// Multiply gmt_offset by -1 because POSIX has it reversed.
+			// See: http://stackoverflow.com/questions/20228224/php-timezone-issue.
+			$timezone_string = sprintf( 'Etc/GMT%+d', -1 * get_option( 'gmt_offset' ) );
+		}
+
+		$timezone_object = timezone_open( $timezone_string );
+		$date_object     = date_create( null, $timezone_object );
+
+		$date_object->setTime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ) );
+		$date_object->setDate( mc_date( 'Y', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ) );
+
+		$timestamp = $date_object->getTimestamp();
+		$time      = gmdate( 'Ymd\THi00', $timestamp ) . 'Z';
+
+	} else {
+		$os_time = mktime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ), mc_date( 's', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ), mc_date( 'Y', $os, false ) );
+		$time    = mc_date( 'Ymd\THi00', $os_time, false );
+	}
+
+	return $time;
+}
+
+/**
+ * Get a human-readable version of the duration of an event
+ *
+ * @param string $start start date/time.
+ * @param string $end  end date/time.
+ * @param object $event event object.
+ *
+ * @return string human readable time
+ */
+function mc_runtime( $start, $end, $event ) {
+	$return = '';
+	if ( ! ( $event->event_hide_end || $start === $end || '23:59:59' === mc_date( 'H:i:s', strtotime( $end ), false ) ) ) {
+		$return = human_time_diff( $start, $end );
+	}
+
+	return $return;
+}
+
+/**
+ * Return ISO8601 duration marker
+ *
+ * @param object $event event object.
+ *
+ * @return string ISO8601 duration format
+ */
+function mc_duration( $event ) {
+	$start = $event->occur_begin;
+	$end   = $event->occur_end;
+
+	$datetime1 = new DateTime( $start );
+	$datetime2 = new DateTime( $end );
+	$interval  = $datetime1->diff( $datetime2 );
+
+	$duration  = '';
+	$duration .= ( 0 !== (int) $interval->y ) ? $interval->y . 'Y' : '';
+	$duration .= ( 0 !== (int) $interval->m ) ? $interval->m . 'M' : '';
+	if ( '23' === (string) $interval->h &amp;&amp; '59' === (string) $interval->i ) {
+		$d         = ( 0 === (int) $interval->d ) ? 1 : $interval->d + 1;
+		$duration .= 'D' . $d;
+		$duration .= 'TH0M0';
+	} else {
+		$duration .= ( 0 !== (int) $interval->d ) ? $interval->d . 'D' : '';
+		$duration .= ( 0 !== (int) $interval->h ) ? 'T' . $interval->h . 'H' : '';
+		$duration .= ( 0 !== (int) $interval->i ) ? $interval->i . 'M' : '';
+	}
+	$duration = 'P' . $duration;
+
+	return $duration;
+}
+
+/**
+ * Get event link if not designated to expire &amp; expired.
+ *
+ * @param object $event Event Object.
+ *
+ * @return string
+ */
+function mc_event_link( $event ) {
+	$link = '';
+	if ( ! is_object( $event ) ) {
+		return $link;
+	}
+	$expired = mc_event_expired( $event );
+	if ( 0 === (int) $event->event_link_expires ) {
+		$link = esc_url( $event->event_link );
+	} else {
+		if ( $expired ) {
+			/**
+			 * Link to return if an event's link has expired. Default empty string.
+			 *
+			 * @hook mc_event_expired_link
+			 *
+			 * @param {string} $link String to return if event link is expired.
+			 * @param {object} $event Event object.
+			 *
+			 * @return {string} Link or empty string.
+			 */
+			$link = apply_filters( 'mc_event_expired_link', '', $event );
+		} else {
+			$link = esc_url( $event->event_link );
+		}
+	}
+
+	return $link;
+}
+
+/**
+ * Test if event has already passed.
+ *
+ * @param object $event Event object.
+ *
+ * @return boolean
+ */
+function mc_event_expired( $event ) {
+	if ( is_object( $event ) &amp;&amp; property_exists( $event, 'occur_end' ) ) {
+		if ( my_calendar_date_xcomp( $event->occur_end, current_time( 'Y-m-d' ) ) ) {
+			do_action( 'mc_event_expired', $event );
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Generate script and HTML for Google Maps embed if API key present
+ *
+ * @param object|array $event Object containing location parameters or array of objects.
+ * @param string       $source event or location.
+ * @param bool         $multiple True if event contains multiple locations.
+ * @param bool         $geolocate True if map is generated from geolocation data.
+ *
+ * @return string HTML
+ */
+function mc_generate_map( $event, $source = 'event', $multiple = false, $geolocate = false ) {
+	if ( ! is_object( $event ) &amp;&amp; ! $multiple ) {
+		return '';
+	}
+	if ( ! is_array( $event ) &amp;&amp; $multiple ) {
+		return '';
+	}
+
+	$id       = '0';
+	$api_key  = get_option( 'mc_gmap_api_key' );
+	$markers  = '';
+	$loc_list = '';
+	$out      = '';
+	/**
+	 * Default map width. Default value `100%`.
+	 *
+	 * @hook mc_map_width
+	 *
+	 * @param {string} $width Width parameter passed to map container style attribute.
+	 * @param {object} $event Event or location object containing location information.
+	 *
+	 * @return {string} Value.
+	 */
+	$width    = apply_filters( 'mc_map_width', '100%', $event );
+	/**
+	 * Default map height. Default value `300px`.
+	 *
+	 * @hook mc_map_height
+	 *
+	 * @param {string} $height Height parameter passed to map container style attribute.
+	 * @param {object} $event Event or location object containing location information.
+	 *
+	 * @return {string} Value.
+	 */
+	$height = apply_filters( 'mc_map_height', '300px', $event );
+	$styles = " style='width: $width;height: $height'";
+	// This is an event with a location object property.
+	if ( 'event' === $source &amp;&amp; property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
+		$event  = $event->location;
+		$source = 'location';
+	}
+	// This is an event with a location ID, but no attached object.
+	if ( 'event' === $source &amp;&amp; $event->event_location ) {
+		$event  = mc_get_location( $event->event_location );
+		$source = 'location';
+	}
+	if ( $api_key ) {
+		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
+		if ( is_array( $locations ) ) {
+			$multiple = ( count( $locations ) > 1 ) ? true : false;
+			foreach ( $locations as $location ) {
+				$id            = rand();
+				$loc_id        = $location->{$source . '_id'};
+				$source        = ( 'event' === $source ) ? 'event' : 'location';
+				/**
+				 * URL to Google Map marker image.
+				 *
+				 * @hook mc_map_icon
+				 *
+				 * @param {string} $icon    Formatted HTML to be returned.
+				 * @param {object} $location Event or location object containing location information.
+				 * @param {string} $source Either 'event' or 'location' indicating type of object.
+				 *
+				 * @return {string} URL to icon.
+				 */
+				$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, $source );
+				$address       = addslashes( mc_map_string( $location, $source ) );
+
+				if ( '0.000000' !== $location->{$source . '_longitude'} &amp;&amp; '0.000000' !== $location->{$source . '_latitude'} ) {
+					$lat    = $location->{$source . '_latitude'};
+					$lng    = $location->{$source . '_longitude'};
+					$latlng = true;
+				} else {
+					$lat    = '';
+					$lng    = '';
+					$latlng = false;
+				}
+
+				if ( strlen( $address ) &lt; 10 &amp;&amp; ! $latlng ) {
+					return '';
+				}
+				$hcard     = mc_hcard( $location, 'true', false, $source );
+				$title     = esc_attr( $location->{$source . '_label'} );
+				$marker    = wp_kses(
+					str_replace(
+						array( '&lt;/div>', '&lt;br />', '&lt;br>&lt;br>' ),
+						'&lt;br>',
+						$hcard
+					),
+					array(
+						'br'     => array(),
+						'strong' => array(),
+					)
+				);
+				/**
+				 * Source HTML for a single location marker.
+				 *
+				 * @hook mc_map_html
+				 *
+				 * @param {string} $marker Formatted HTML to be returned.
+				 * @param {object} $location Event object containing location information.
+				 *
+				 * @return {string} Formatted HTML to be parsed by Google Maps JS.
+				 */
+				$html      = apply_filters( 'mc_map_html', $marker, $location );
+				$markers  .= PHP_EOL . "&lt;div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html&lt;/div>" . PHP_EOL;
+				$loc_list .= ( $multiple ) ? '&lt;div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '&lt;/div>' : '';
+			}
+			/**
+			 * Source HTML for generating a map of calendar locations.
+			 *
+			 * @hook mc_gmap_html
+			 *
+			 * @param {string}       $output Formatted HTML to be returned.
+			 * @param {object|array} $event Object or array of objects containing one or more objects with location information.
+			 *
+			 * @return {string} Formatted HTML to be parsed by Google Maps JS.
+			 */
+			$markers = apply_filters( 'mc_gmap_html', $markers, $event );
+			$class   = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
+			$map     = "&lt;div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . $markers . '&lt;/div>';
+			$locs    = ( $loc_list ) ? '&lt;div class="mc-gmap-location-list">&lt;h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '&lt;/h2>' . $loc_list . '&lt;/div>' : '';
+			$out     = '&lt;div class="mc-maps">' . $map . $locs . '&lt;/div>';
+		} else {
+			$out = '';
+		}
+	}
+
+	return $out;
+}
+
+/**
+ * Expand access data into a list of features.
+ *
+ * @param array $data Either event or location accessibility data.
+ *
+ * @return string list of features.
+ */
+function mc_expand( $data ) {
+	$output = '';
+	if ( is_array( $data ) ) {
+		foreach ( $data as $key => $value ) {
+			$class = ( isset( $value ) ) ? sanitize_html_class( $value ) : '';
+			$label = ( isset( $value ) ) ? $value : false;
+			if ( ! $label ) {
+				continue;
+			}
+			$output .= "&lt;li class='$class'>&lt;span>$label&lt;/span>&lt;/li>\n";
+		}
+		$output = ( $output ) ? "&lt;ul class='mc-access'>" . $output . '&lt;/ul>' : '';
+	}
+
+	/**
+	 * HTML output from an internal data array, e.g. accessibility features.
+	 *
+	 * @hook mc_expand
+	 *
+	 * @param {string} $output Formatted HTML to be returned.
+	 * @param {array} $data Array of data being parsed.
+	 *
+	 * @return {string} Formatted HTML.
+	 */
+	return apply_filters( 'mc_expand', $output, $data );
+}
+
+/**
+ * Get the full date span of a set of events for display.
+ *
+ * @param int   $group_id Group ID.
+ * @param int   $event_span Whether these events constitute one event.
+ * @param array $dates Start and end dates of current event.
+ *
+ * @return string
+ */
+function mc_event_date_span( $group_id, $event_span, $dates = array() ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	// Cache as transient to save db queries.
+	if ( get_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span ) ) {
+		return get_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span );
+	}
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$group_id = (int) $group_id;
+	if ( 0 === (int) $group_id &amp;&amp; 1 !== (int) $event_span ) {
+
+		return $dates;
+	} else {
+		$dates = $mcdb->get_results( $wpdb->prepare( 'SELECT occur_begin, occur_end FROM ' . my_calendar_event_table() . ' WHERE occur_group_id = %d ORDER BY occur_begin ASC', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		set_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span, $dates, HOUR_IN_SECONDS );
+
+		return $dates;
+	}
+}
+
+/**
+ * Format a date span.
+ *
+ * @param array  $dates to format.
+ * @param string $display type of display to use.
+ * @param string $default value if no dates passed.
+ *
+ * @return string
+ */
+function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
+	if ( ! $dates ) {
+		return $default;
+	}
+	$count = count( $dates );
+	$last  = $count - 1;
+	if ( 'simple' === $display ) {
+		$begin  = $dates[0]->occur_begin;
+		$end    = $dates[ $last ]->occur_end;
+
+		/**
+		 * Starting date format used in 'date', 'datespan', and 'multidate' template tags. Default from My Calendar settings.
+		 *
+		 * @hook mc_date_format
+		 *
+		 * @param {string} $format Date Format in PHP date format.
+		 * @param {string} $context 'date_span_begin'.
+		 *
+		 * @return {string} Date format.
+		 */
+		$begin  = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_begin' ), strtotime( $begin ) );
+		/**
+		 * End date format used in 'date', 'datespan', and 'multidate' template tags. Default from My Calendar settings.
+		 *
+		 * @hook mc_date_format
+		 *
+		 * @param {string} $format Date Format in PHP date format.
+		 * @param {string} $context 'date_span_end'.
+		 *
+		 * @return {string} Date format.
+		 */
+		$end    = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_end' ), strtotime( $end ) );
+		$return = $begin . ' &lt;span>&amp;ndash;&lt;/span> ' . $end;
+	} else {
+		$return = '&lt;ul class="multidate">';
+		foreach ( $dates as $date ) {
+			$begin         = $date->occur_begin;
+			$end           = $date->occur_end;
+			$day_begin     = mc_date( 'Y-m-d', strtotime( $begin ), false );
+			$day_end       = mc_date( 'Y-m-d', strtotime( $end ), false );
+			$bformat       = '&lt;span class="multidate-date">' . date_i18n( mc_date_format(), strtotime( $begin ) ) . "&lt;/span> &lt;span class='multidate-time'>" . date_i18n( mc_time_format(), strtotime( $begin ) ) . '&lt;/span>';
+			$endtimeformat = ( '00:00:00' === $date->occur_end ) ? '' : ' ' . mc_time_format();
+			$eformat       = ( $day_begin !== $day_end ) ? mc_date_format() . $endtimeformat : $endtimeformat;
+			$span          = ( '' !== $eformat ) ? " &lt;span>&amp;ndash;&lt;/span> &lt;span class='multidate-end'>" : '';
+			$endspan       = ( '' !== $eformat ) ? '&lt;/span>' : '';
+			$return       .= "&lt;li>$bformat" . $span . date_i18n( $eformat, strtotime( $end ) ) . "$endspan&lt;/li>";
+		}
+		$return .= '&lt;/ul>';
+	}
+
+	return $return;
+}
+
+add_filter( 'mc_insert_author_data', 'mc_author_data', 10, 2 );
+/**
+ * Include data about event author in event array.
+ *
+ * @param array  $e Array of event details.
+ * @param object $event Event object.
+ *
+ * @return array $e
+ */
+function mc_author_data( $e, $event ) {
+	if ( 0 !== (int) $event->event_author ) {
+		$author = get_userdata( $event->event_author );
+		$host   = get_userdata( $event->event_host );
+		if ( $author ) {
+			$e['author']       = $author->display_name;
+			$e['gravatar']     = get_avatar( $author->user_email );
+			$e['author_email'] = $author->user_email;
+			$e['author_id']    = $event->event_author;
+		}
+		if ( $host ) {
+			$e['host']          = ( ! $host || '' === $host->display_name ) ? $author->display_name : $host->display_name;
+			$e['host_id']       = $event->event_host;
+			$e['host_email']    = ( ! $host || '' === $host->user_email ) ? $author->user_email : $host->user_email;
+			$e['host_gravatar'] = ( ! $host || '' === $host->user_email ) ? $e['gravatar'] : get_avatar( $host->user_email );
+		}
+	} else {
+		$e['author']        = 'Public Submitter';
+		$e['host']          = 'Public Submitter';
+		$e['host_email']    = '';
+		$e['author_email']  = '';
+		$e['gravatar']      = '';
+		$e['host_gravatar'] = '';
+		$e['author_id']     = false;
+		$e['host_id']       = false;
+	}
+
+	return $e;
+}
+
+add_filter( 'mc_filter_shortcodes', 'mc_auto_excerpt', 10, 2 );
+/**
+ * Custom excerpt for use in templates.
+ *
+ * @param array  $e Array of event details.
+ * @param object $event Event object.
+ *
+ * @return array $e
+ */
+function mc_auto_excerpt( $e, $event ) {
+	$description = $e['description'];
+	$shortdesc   = $e['shortdesc'];
+	$excerpt     = '';
+	if ( '' !== $description &amp;&amp; '' === $shortdesc ) { // if description is empty, this won't work, so skip it.
+		/**
+		 * Length of My Calendar generated excerpts in words. Default 55.
+		 *
+		 * @hook mc_excerpt_length
+		 *
+		 * @param {int} $num_words Number of words to use.
+		 *
+		 * @return {int}
+		 */
+		$num_words = apply_filters( 'mc_excerpt_length', 55 );
+		$excerpt   = wp_trim_words( $description, $num_words );
+	} else {
+		$excerpt = $shortdesc;
+	}
+
+	$e['excerpt'] = $excerpt;
+
+	return $e;
+}
+
+/**
+ * Get template for a specific usage.
+ *
+ * @param string $template name of template.
+ *
+ * @return string Template HTML/tags
+ */
+function mc_get_template( $template ) {
+	$templates = get_option( 'mc_templates' );
+	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'grid' );
+
+	if ( ! in_array( $template, $keys, true ) ) {
+		$template = '';
+	} else {
+		$template = ( isset( $templates[ $template ] ) ) ? $templates[ $template ] : '';
+	}
+
+	return trim( $template );
+}
+
+add_filter( 'mc_filter_image_data', 'mc_image_data', 10, 2 );
+/**
+ * Event image data.
+ *
+ * @param array  $e Array of event details.
+ * @param object $event Event object.
+ *
+ * @return array $e
+ */
+function mc_image_data( $e, $event ) {
+	/**
+	 * Attributes added to My Calendar event images. Default `array( 'class' => 'mc-image' )`. See `get_the_post_thumbnail()` docs at WordPress.org.
+	 *
+	 * @hook mc_post_thumbnail_atts
+	 *
+	 * @param {array} $atts Array of image attributes.
+	 *
+	 * @return {array} Array of image attributes.
+	 */
+	$atts = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image' ) );
+	if ( isset( $event->event_post ) &amp;&amp; is_numeric( $event->event_post ) &amp;&amp; get_post_status( $event->event_post ) &amp;&amp; has_post_thumbnail( $event->event_post ) ) {
+		$e['full'] = get_the_post_thumbnail( $event->event_post );
+		$sizes     = get_intermediate_image_sizes();
+		$attach    = get_post_thumbnail_id( $event->event_post );
+		foreach ( $sizes as $size ) {
+			$src                 = wp_get_attachment_image_src( $attach, $size );
+			$e[ $size ]          = get_the_post_thumbnail( $event->event_post, $size, $atts );
+			$e[ $size . '_url' ] = $src[0];
+		}
+		if ( isset( $e['large'] ) &amp;&amp; '' !== $e['large'] ) {
+			$e['image_url'] = strip_tags( $e['large'] );
+			$e['image']     = $e['large'];
+		} else {
+			/**
+			 * Default image size used for event listings when 'large' image not available. Default 'thumbnail'.
+			 *
+			 * @hook mc_default_image_size
+			 *
+			 * @param {string} $size Default image size
+			 *
+			 * @return {string} Image size description key.
+			 */
+			$image_size     = apply_filters( 'mc_default_image_size', 'thumbnail' );
+			$e['image_url'] = strip_tags( $e[ $image_size ] );
+			$e['image']     = $e[ $image_size ];
+		}
+	} else {
+		$sizes = get_intermediate_image_sizes();
+		// create empty array values so that template tags will be removed even if post doesn't exist.
+		foreach ( $sizes as $size ) {
+			$e[ $size ]          = '';
+			$e[ $size . '_url' ] = '';
+		}
+		$e['image_url'] = ( '' !== $event->event_image ) ? $event->event_image : '';
+		$e['image']     = ( '' !== $event->event_image ) ? "&lt;img src='$event->event_image' alt='' class='mc-image' />" : '';
+	}
+
+	return $e;
+}
+
+/**
+ * Event recurrance string description.
+ *
+ * @param object $event Event Object.
+ * @param string $begin Date event begins.
+ *
+ * @return string
+ */
+function mc_event_recur_string( $event, $begin ) {
+	$recurs      = str_split( $event->event_recur, 1 );
+	$recur       = $recurs[0];
+	$every       = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
+	$month_date  = mc_date( 'dS', strtotime( $begin ), false );
+	$day_name    = date_i18n( 'l', strtotime( $begin ) );
+	$week_number = mc_ordinal( mc_week_of_month( mc_date( 'j', strtotime( $begin ), false ) ) + 1 );
+	switch ( $recur ) {
+		case 'S':
+			$event_recur = __( 'Does not recur', 'my-calendar' );
+			break;
+		case 'D':
+			if ( 1 === (int) $every ) {
+				$event_recur = __( 'Daily', 'my-calendar' );
+			} else {
+				// Translators: Number of days between recurrences.
+				$event_recur = sprintf( __( 'Every %d days', 'my-calendar' ), $every );
+			}
+			break;
+		case 'E':
+			$event_recur = __( 'Daily, weekdays only', 'my-calendar' );
+			break;
+		case 'W':
+			if ( 1 === (int) $every ) {
+				$event_recur = __( 'Weekly', 'my-calendar' );
+			} else {
+				// Translators: Number of weeks between recurrences.
+				$event_recur = sprintf( __( 'Every %d weeks', 'my-calendar' ), $every );
+			}
+			break;
+		case 'B':
+			$event_recur = __( 'Bi-weekly', 'my-calendar' );
+			break;
+		case 'M':
+			if ( 1 === (int) $every ) {
+				// Translators: The ordinal number of the month for the recurrence.
+				$event_recur = sprintf( __( 'the %s of each month', 'my-calendar' ), $month_date );
+			} else {
+				// Translators: Ordinal number of each n months.
+				$event_recur = sprintf( __( 'the %1$s of every %2$s months', 'my-calendar' ), $month_date, mc_ordinal( $every ) );
+			}
+			break;
+		case 'U':
+			// Translators: The {number} {day name} of each month.
+			$event_recur = sprintf( __( 'the %1$s %2$s of each month', 'my-calendar' ), $week_number, $day_name );
+			break;
+		case 'Y':
+			if ( 1 === (int) $every ) {
+				$event_recur = __( 'Annually', 'my-calendar' );
+			} else {
+				// Translators: Number of years.
+				$event_recur = sprintf( __( 'Every %d years', 'my-calendar' ), $every );
+			}
+			break;
+		default:
+			$event_recur = '';
+	}
+
+	/**
+	 * Text representation of a recurring event pattern.
+	 *
+	 * @hook mc_event_recur_string
+	 *
+	 * @param {string} $event_recur Template HTML closing tag.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {string}
+	 */
+	return apply_filters( 'mc_event_recur_string', $event_recur, $event );
+}
+
+/**
+ * Generate JSON/LD Schema for event.
+ *
+ * @param object $e Event object.
+ * @param array  $tags Event tag array.
+ *
+ * @return array
+ */
+function mc_event_schema( $e, $tags = array() ) {
+	$event   = ( empty( $tags ) ) ? mc_create_tags( $e ) : $tags;
+	$wp_time = mc_ts( true );
+	$wp_time = str_replace( array( ':30:00', ':00:00' ), array( ':30', ':00' ), $wp_time );
+	$image   = ( $event['image_url'] ) ? $event['image_url'] : get_site_icon_url();
+	$schema  = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => 'Event',
+		'name'        => $event['title'],
+		'description' => $event['excerpt'],
+		'image'       => $image,
+		'url'         => $event['linking'],
+		'startDate'   => $event['dtstart'] . $wp_time,
+		'endDate'     => $event['dtend'] . $wp_time,
+		'duration'    => $event['duration'],
+	);
+	if ( property_exists( $e, 'location' ) &amp;&amp; is_object( $e->location ) ) {
+		$location = $e->location;
+		$loc      = mc_location_schema( $location );
+	} else {
+		// Location is a mandatory field for Google.
+		$loc = array(
+			'@type' => 'VirtualLocation',
+			'url'   => $event['linking'],
+		);
+	}
+	$schema['location'] = $loc;
+	/**
+	 * Filter JSON/LD event schema data. https://schema.org/event.
+	 *
+	 * @hook mc_event_schema
+	 *
+	 * @param {array } $schema Schema data.
+	 * @param {object} $e Event data.
+	 * @param {array}  $event Event tag array.
+	 *
+	 * @return array
+	 */
+	return apply_filters( 'mc_event_schema', $schema, $e, $event );
+}
+
+/**
+ * Generate JSON/LD Schema for location.
+ *
+ * @param object $location Location object.
+ *
+ * @return array
+ */
+function mc_location_schema( $location ) {
+	$schema = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => 'Place',
+		'name'        => $location->location_label,
+		'description' => '',
+		'url'         => get_permalink( mc_get_location_post( $location->location_id ) ),
+		'address'     => array(
+			'@type'           => 'PostalAddress',
+			'streetAddress'   => $location->location_street,
+			'addressLocality' => $location->location_city,
+			'addressRegion'   => $location->location_state,
+			'postalCode'      => $location->location_postcode,
+			'addressCountry'  => $location->location_country,
+		),
+		'telephone'   => ( $location->location_phone ) ? $location->location_phone : 'n/a',
+		'sameAs'      => $location->location_url,
+	);
+	if ( ! empty( $location->location_latitude ) &amp;&amp; 0 !== (int) $location->location_latitude ) {
+		$schema['geo'] = array(
+			'@type'     => 'GeoCoordinates',
+			'latitude'  => $location->location_latitude,
+			'longitude' => $location->location_longitude,
+		);
+	}
+	/**
+	 * Filter array used to generate location schema. See https://schema.org/location.
+	 *
+	 * @hook mc_location_schema
+	 *
+	 * @param {array}  $schema Schema data for an event venue.
+	 * @param {object} $location My Calendar location object.
+	 *
+	 * @return array
+	 */
+	return apply_filters( 'mc_location_schema', $schema, $location );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Filters</h3><ul><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

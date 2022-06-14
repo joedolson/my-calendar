@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_event_today - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_gcal_location - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_event_today</h1></header>
+    <header><h1 class="page-title">Filter: mc_gcal_location</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_event_today">apply_filters( 'mc_event_today', <span class="signature">$todays_events, $events )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_gcal_location">apply_filters( 'mc_gcal_location', <span class="signature">$param, $location )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter the array of events listed in today's events lists.</p>
+    <p>Filter <code>location</code> parameter added to Google Calendar link. Default <code>&amp;location=$location</code>. Return value needs to be URL encoded.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$todays_events</code></td>
+                <td class="name"><code>$param</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>A multidimensional array of event items with today's date as a key with an array of formatted HTML on event templates on the current date.</p></td>
+            <td class="description last"><p>Encoded parameter.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$events</code></td>
+                <td class="name"><code>$location</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>Array of events without private events removed. Values are event objects.</p></td>
+            <td class="description last"><p>Unencoded original stringified location..</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-widgets.php.html">my-calendar-widgets.php</a>, <a href="my-calendar-widgets.php.html#line779">line 779</a>
+        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line214">line 214</a>
     </li></ul></dd>
     
 
@@ -184,7 +184,7 @@
 
         
 <div class="param-desc">
-    <p>A multidimensional array of event items with today's date as a key with an array of formatted HTML on event templates on the current date.</p>
+    <p>Encoded parameter.</p>
 </div>
 
 
@@ -195,7 +195,7 @@
     </dt>
     <dd>
         
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
     </dd>
