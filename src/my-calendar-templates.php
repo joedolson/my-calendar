@@ -221,8 +221,8 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	 *
 	 * @return {string} Encoded parameter.
 	 */
-	$base  .= apply_filters( 'mc_gcal_location', '&location=' . urlencode( trim( $location ) ), $location );
-	$base  .= '&sprop=name:' . urlencode( get_bloginfo( 'name' ) );
+	$base .= apply_filters( 'mc_gcal_location', '&location=' . urlencode( trim( $location ) ), $location );
+	$base .= '&sprop=name:' . urlencode( get_bloginfo( 'name' ) );
 	/**
 	 * Filter `details` parameter added to Google Calendar link. Default `&details=$description`. Return value needs to be URL encoded.
 	 *
@@ -233,8 +233,8 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	 *
 	 * @return {string} Encoded parameter.
 	 */
-	$base  .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( stripcslashes( trim( $description ) ) ), $description );
-	$base  .= '&sf=true&output=xml';
+	$base .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( stripcslashes( trim( $description ) ) ), $description );
+	$base .= '&sf=true&output=xml';
 
 	return $source . $base;
 }
@@ -360,10 +360,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( 'filters' !== $context && 'related' !== $context ) {
 		$calendar_id = $context;
 	}
-	$site          = ( isset( $event->site_id ) ) ? $event->site_id : false;
-	$e             = array();
-	$e['post']     = $event->event_post;
-	$date_format   = mc_date_format();
+	$site        = ( isset( $event->site_id ) ) ? $event->site_id : false;
+	$e           = array();
+	$e['post']   = $event->event_post;
+	$date_format = mc_date_format();
 	/**
 	 * Filter template tag array and add author data. Runs before other template tags are created. Use `mc_filter_shortcodes` to modify existing template tags.
 	 *
@@ -374,7 +374,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @return {array} Template tag array.
 	 */
-	$e             = apply_filters( 'mc_insert_author_data', $e, $event );
+	$e = apply_filters( 'mc_insert_author_data', $e, $event );
 	/**
 	 * Filter template tag array and add image data. Runs before other template tags are created. Use `mc_filter_shortcodes` to modify existing template tags.
 	 *
@@ -410,7 +410,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @return {string} Date format.
 	 */
-	$e['date_utc']     = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
+	$e['date_utc'] = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
 	/**
 	 * End date format used in 'date_end_utc'. Default from My Calendar settings.
 	 *
@@ -514,15 +514,15 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['event_registration'] = stripslashes( wp_kses_data( $event->event_registration ) );
 
 	// Links.
-	$templates    = get_option( 'mc_templates' );
-	$e_template   = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
+	$templates  = get_option( 'mc_templates' );
+	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
 	/**
 	 * Filter template for the `{details}` output. Default: `Details about {title}`.
 	 *
 	 * @hook mc_details_template
 	 *
 	 * @param {string} $e_template String with template tags.
-	 * @param {object} $event Event object. 
+	 * @param {object} $event Event object.
 	 *
 	 * @return {string} Unparsed template.
 	 */
@@ -588,12 +588,12 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( property_exists( $event, 'location' ) ) {
 		$location = $event->location;
 		if ( is_object( $location ) ) {
-			$map                  = mc_maplink( $location, 'map', 'location' );
-			$map_url              = mc_maplink( $location, 'url', 'location' );
-			$map_gcal             = mc_maplink( $location, 'gcal', 'location' );
-			$e['location']        = stripslashes( $location->location_label );
-			$e['street']          = stripslashes( $location->location_street );
-			$e['street2']         = stripslashes( $location->location_street2 );
+			$map           = mc_maplink( $location, 'map', 'location' );
+			$map_url       = mc_maplink( $location, 'url', 'location' );
+			$map_gcal      = mc_maplink( $location, 'gcal', 'location' );
+			$e['location'] = stripslashes( $location->location_label );
+			$e['street']   = stripslashes( $location->location_street );
+			$e['street2']  = stripslashes( $location->location_street2 );
 			/**
 			 * Format a phone number for display in template tags.
 			 *
@@ -605,7 +605,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 			 *
 			 * @return {string} Formatted number.
 			 */
-			$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
+			$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
 			/**
 			 * Format a phone number for display in template tags.
 			 *
@@ -648,7 +648,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone']           = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone ), 'phone' );
+		$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone ), 'phone' );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
@@ -740,7 +740,7 @@ function mc_notime_label( $event ) {
 	$notime = ( '' !== $notime ) ? $notime : $default;
 
 	/**
-	 * Label to use in place of time for an event with no fixed time. 
+	 * Label to use in place of time for an event with no fixed time.
 	 *
 	 * @hook mc_notime_label
 	 *
@@ -1080,7 +1080,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	 *
 	 * @return {string} Value.
 	 */
-	$width    = apply_filters( 'mc_map_width', '100%', $event );
+	$width = apply_filters( 'mc_map_width', '100%', $event );
 	/**
 	 * Default map height. Default value `300px`.
 	 *
@@ -1108,9 +1108,9 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 		if ( is_array( $locations ) ) {
 			$multiple = ( count( $locations ) > 1 ) ? true : false;
 			foreach ( $locations as $location ) {
-				$id            = rand();
-				$loc_id        = $location->{$source . '_id'};
-				$source        = ( 'event' === $source ) ? 'event' : 'location';
+				$id     = rand();
+				$loc_id = $location->{$source . '_id'};
+				$source = ( 'event' === $source ) ? 'event' : 'location';
 				/**
 				 * URL to Google Map marker image.
 				 *
@@ -1138,9 +1138,9 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				if ( strlen( $address ) < 10 && ! $latlng ) {
 					return '';
 				}
-				$hcard     = mc_hcard( $location, 'true', false, $source );
-				$title     = esc_attr( $location->{$source . '_label'} );
-				$marker    = wp_kses(
+				$hcard  = mc_hcard( $location, 'true', false, $source );
+				$title  = esc_attr( $location->{$source . '_label'} );
+				$marker = wp_kses(
 					str_replace(
 						array( '</div>', '<br />', '<br><br>' ),
 						'<br>',
@@ -1269,8 +1269,8 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 	$count = count( $dates );
 	$last  = $count - 1;
 	if ( 'simple' === $display ) {
-		$begin  = $dates[0]->occur_begin;
-		$end    = $dates[ $last ]->occur_end;
+		$begin = $dates[0]->occur_begin;
+		$end   = $dates[ $last ]->occur_end;
 
 		/**
 		 * Starting date format used in 'date', 'datespan', and 'multidate' template tags. Default from My Calendar settings.
@@ -1282,7 +1282,7 @@ function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
 		 *
 		 * @return {string} Date format.
 		 */
-		$begin  = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_begin' ), strtotime( $begin ) );
+		$begin = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_begin' ), strtotime( $begin ) );
 		/**
 		 * End date format used in 'date', 'datespan', and 'multidate' template tags. Default from My Calendar settings.
 		 *

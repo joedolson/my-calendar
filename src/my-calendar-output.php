@@ -177,7 +177,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			'event'        => $event,
 			'process_date' => $process_date,
 			'time'         => $time,
-			'id'           => $id, 
+			'id'           => $id,
 			'tags'         => $tags,
 		);
 		$templates->set_template_data( $data );

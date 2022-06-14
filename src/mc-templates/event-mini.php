@@ -8,5 +8,6 @@
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/my-calendar/
  */
+
 ?>
 <div class="event">Mini Event</div>
