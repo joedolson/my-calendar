@@ -388,6 +388,7 @@ function mc_kses_elements() {
 		),
 		'time'             => array(
 			'data-label' => array(),
+			'class'      => array(),
 		),
 	);
 
