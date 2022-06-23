@@ -27,7 +27,7 @@ function my_calendar_manage_locations() {
 	if ( ! empty( $_POST ) && ( ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 	}
 	if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
@@ -108,7 +108,7 @@ function mc_clean_duplicate_locations() {
 	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_replace'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 		$locations = $_POST['mass_edit'];
 		$replace   = absint( $_POST['mass_replace_id'] );
@@ -169,7 +169,7 @@ function mc_mass_delete_locations() {
 	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_delete'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 		$locations = $_POST['mass_edit'];
 		$i         = 0;

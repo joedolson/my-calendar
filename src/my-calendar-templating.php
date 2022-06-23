@@ -21,7 +21,7 @@ function mc_templates_do_edit() {
 		if ( ! empty( $_POST ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
 			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-				die( 'Security check failed' );
+				wp_die( 'My Calendar: Security check failed' );
 			}
 		}
 		if ( isset( $_POST['mc_template_key'] ) ) {

@@ -20,7 +20,7 @@ function my_calendar_behaviors_save() {
 	if ( isset( $_POST['mc-js-save'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 
 		$use_custom_js = ( isset( $_POST['mc_use_custom_js'] ) ) ? 1 : 0;

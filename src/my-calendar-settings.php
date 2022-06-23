@@ -403,7 +403,7 @@ function my_calendar_settings() {
 	if ( ! empty( $_POST ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 		if ( isset( $_POST['mc_manage'] ) ) {
 			$before_permalinks = get_option( 'mc_use_permalinks' );
@@ -494,7 +494,7 @@ function my_calendar_settings() {
 	if ( isset( $_POST['import'] ) && 'true' === $_POST['import'] ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 		my_calendar_import();
 	}

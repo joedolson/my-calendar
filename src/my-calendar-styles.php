@@ -30,7 +30,7 @@ function my_calendar_style_edit() {
 	if ( isset( $_POST['mc_edit_style'] ) || isset( $_POST['mc_reset_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 		if ( isset( $_POST['mc_reset_style'] ) ) {
 			if ( ! empty( $_POST['reset_styles'] ) ) {
@@ -96,7 +96,7 @@ function my_calendar_style_edit() {
 	if ( isset( $_POST['mc_choose_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 		$mc_css_file = stripcslashes( $_POST['mc_css_file'] );
 

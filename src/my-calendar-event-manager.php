@@ -246,7 +246,7 @@ function my_calendar_manage() {
 	if ( ! empty( $_POST['mc_bulk_actions'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 		if ( isset( $_POST['mc_bulk_actions'] ) ) {
 			$action  = $_POST['mc_bulk_actions'];

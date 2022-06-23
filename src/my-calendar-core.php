@@ -1718,7 +1718,7 @@ $plugins_string
 		if ( isset( $_POST['mc_support'] ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
 			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-				wp_die( 'Security check failed' );
+				wp_die( 'My Calendar: Security check failed' );
 			}
 			$request = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
 			$subject = 'My Calendar Pro support request.';

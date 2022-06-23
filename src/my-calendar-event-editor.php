@@ -310,7 +310,7 @@ function my_calendar_edit() {
 	if ( isset( $_POST['event_action'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			die( 'Security check failed' );
+			wp_die( 'My Calendar: Security check failed' );
 		}
 
 		global $mc_output;
