@@ -1245,16 +1245,16 @@ function mc_display_location_details( $content ) {
 		 *
 		 * @return {array}
 		 */
-		$args     = apply_filters( 'mc_display_location_events', $args, $location );
-		$events   = my_calendar_upcoming_events( $args );
-		$content  = '
+		$args    = apply_filters( 'mc_display_location_events', $args, $location );
+		$events  = my_calendar_upcoming_events( $args );
+		$content = '
 <div class="mc-view-location">
 	<div class="mc-location-content">' . $content . '</div>
 	<div class="mc-location-gmap">' . mc_generate_map( $location, 'location' ) . '</div>
 	<div class="mc-location-hcard">' . mc_hcard( $location, 'true', 'true', 'location' ) . '</div>
 	<div class="mc-location-upcoming"><h2>' . __( 'Upcoming Events', 'my-calendar' ) . '</h2>' . $events . '</div>
 </div>';
-		$content  = apply_filters( 'mc_location_output', $content, $location );
+		$content = apply_filters( 'mc_location_output', $content, $location );
 	}
 
 	return $content;
