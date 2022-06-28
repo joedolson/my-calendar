@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_todays_events_before - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_display_location_events - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_todays_events_before</h1></header>
+    <header><h1 class="page-title">Filter: mc_display_location_events</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_todays_events_before">apply_filters( 'mc_todays_events_before', <span class="signature">$item, $classes, $category )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_display_location_events">apply_filters( 'mc_display_location_events', <span class="signature">$args, $location )</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Modify the HTML preceding each list item in a list of today's events.</p>
+    <p>Filter the arguments used to generate upcoming events for a location. Default ['ltype' =&gt; 'name', 'lvalue' =&gt; {location_label}, 'type' =&gt; 'events', 'after' =&gt; 5, 'before' =&gt; 0, 'fallback' =&gt; 'No events currently scheduled at this location.'].</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$item</code></td>
+                <td class="name"><code>$args</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">array</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>HTML string before each event.</p></td>
+            <td class="description last"><p>Array of upcoming events arguments.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$classes</code></td>
+                <td class="name"><code>$location</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
             
@@ -116,30 +116,7 @@
 
             
 
-            <td class="description last"><p>Space separated list of classes for this event.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$category</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Category argument passed to this list.</p></td>
+            <td class="description last"><p>Location object.</p></td>
         </tr>
 
     
@@ -180,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-widgets.php.html">my-calendar-widgets.php</a>, <a href="my-calendar-widgets.php.html#line737">line 737</a>
+        <a href="my-calendar-locations.php.html">my-calendar-locations.php</a>, <a href="my-calendar-locations.php.html#line1238">line 1238</a>
     </li></ul></dd>
     
 
@@ -206,10 +183,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>HTML preceding each event in today's events lists.</p>
-</div>
-
 
 
 <dl>
@@ -218,7 +191,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">array</span>
 
 
     </dd>
