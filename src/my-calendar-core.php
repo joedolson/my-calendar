@@ -520,7 +520,7 @@ function mc_footer_js() {
 						'list'      => $list,
 						'mini'      => $mini,
 						'ajax'      => $ajax,
-						'newWindow' => __( 'Opens in new tab', 'my-calendar' ),
+						'newWindow' => __( 'New tab', 'my-calendar' ),
 					);
 					wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
 				}
@@ -608,7 +608,7 @@ function mc_admin_styles() {
 					'mc.mcjs',
 					'my_calendar',
 					array(
-						'newWindow' => __( 'Opens in new tab', 'my-calendar' ),
+						'newWindow' => __( 'New tab', 'my-calendar' ),
 					)
 				);
 			}
