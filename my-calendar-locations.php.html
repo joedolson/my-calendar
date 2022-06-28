@@ -1271,16 +1271,16 @@ function mc_display_location_details( $content ) {
 		 *
 		 * @return {array}
 		 */
-		$args     = apply_filters( 'mc_display_location_events', $args, $location );
-		$events   = my_calendar_upcoming_events( $args );
-		$content  = '
+		$args    = apply_filters( 'mc_display_location_events', $args, $location );
+		$events  = my_calendar_upcoming_events( $args );
+		$content = '
 &lt;div class="mc-view-location">
 	&lt;div class="mc-location-content">' . $content . '&lt;/div>
 	&lt;div class="mc-location-gmap">' . mc_generate_map( $location, 'location' ) . '&lt;/div>
 	&lt;div class="mc-location-hcard">' . mc_hcard( $location, 'true', 'true', 'location' ) . '&lt;/div>
 	&lt;div class="mc-location-upcoming">&lt;h2>' . __( 'Upcoming Events', 'my-calendar' ) . '&lt;/h2>' . $events . '&lt;/div>
 &lt;/div>';
-		$content  = apply_filters( 'mc_location_output', $content, $location );
+		$content = apply_filters( 'mc_location_output', $content, $location );
 	}
 
 	return $content;
