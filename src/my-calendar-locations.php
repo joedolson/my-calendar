@@ -1235,6 +1235,16 @@ function mc_display_location_details( $content ) {
 			'before'   => 0,
 			'fallback' => __( 'No events currently scheduled at this location.', 'my-calendar' ),
 		);
+		/**
+		 * Filter the arguments used to generate upcoming events for a location. Default ['ltype' => 'name', 'lvalue' => {location_label}, 'type' => 'events', 'after' => 5, 'before' => 0, 'fallback' => 'No events currently scheduled at this location.'].
+		 *
+		 * @hook mc_display_location_events
+		 *
+		 * @param {array}  $args Array of upcoming events arguments.
+		 * @param {object} $location Location object.
+		 *
+		 * @return {array}
+		 */
 		$args     = apply_filters( 'mc_display_location_events', $args, $location );
 		$events   = my_calendar_upcoming_events( $args );
 		$content  = '
