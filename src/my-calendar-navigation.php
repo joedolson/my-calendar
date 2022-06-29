@@ -359,9 +359,11 @@ function mc_category_key( $category ) {
  * @return string HTML output for subscription links
  */
 function mc_sub_links( $subtract ) {
+	$replace = 'webcal:';
+	$search  = array( 'http:', 'https:' );
 
-	$google  = get_feed_link( 'my-calendar-google' );
-	$outlook = get_feed_link( 'my-calendar-outlook' );
+	$google  = str_replace( $search, $replace, get_feed_link( 'my-calendar-google' ) );
+	$outlook = str_replace( $search, $replace, get_feed_link( 'my-calendar-outlook' ) );
 
 	$sub_google  = "<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
 	$sub_outlook = "<li class='ics outlook'><a href='" . esc_url( $outlook ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Outlook', 'my-calendar' ) . '</a></li>';
@@ -864,6 +866,16 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$year1  = mc_date( 'Y', strtotime( $first, false ) );
 	$diff1  = mc_date( 'Y' ) - $year1;
 	$past   = $diff1;
+	/**
+	 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
+	 *
+	 * @hook mc_jumpbox_future_years
+	 *
+	 * @param {int}   $future Number of years ahead.
+	 * @param {string} $cid Current calendar ID. '' when running in the shortcode generator.
+	 *
+	 * @return {int}
+	 */
 	$future = apply_filters( 'mc_jumpbox_future_years', 5, $cid );
 	$fut    = 1;
 	$f      = '';
