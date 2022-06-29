@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-shortcodes.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-shortcodes.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Shortcodes.
+ *
+ * @category Calendar
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Primary My Calendar shortcode.
+ *
+ * @param array  $atts Shortcode attributes.
+ * @param string $content Contained content.
+ *
+ * @return string Calendar.
+ */
+function my_calendar_insert( $atts, $content = null ) {
+	$args = shortcode_atts(
+		array(
+			'name'     => 'all',
+			'format'   => 'calendar',
+			'category' => 'all',
+			'time'     => 'month',
+			'ltype'    => '',
+			'lvalue'   => '',
+			'author'   => 'all',
+			'host'     => 'all',
+			'id'       => '',
+			'template' => '',
+			'above'    => '',
+			'below'    => '',
+			'year'     => false,
+			'month'    => false,
+			'day'      => false,
+			'site'     => false,
+			'months'   => false,
+			'search'   => '',
+			'self'     => '',
+			'language' => '',
+		),
+		$atts,
+		'my_calendar'
+	);
+
+	if ( (int) get_the_ID() === (int) get_option( 'mc_uri_id' ) ) {
+		$params = get_post_meta( get_the_ID(), '_mc_calendar', true );
+		$params = ( is_array( $params ) ) ? $params : array();
+		$args   = array_merge( $args, $params );
+	}
+
+	if ( 'mini' !== $args['format'] ) {
+		if ( isset( $_GET['format'] ) ) {
+			$args['format'] = $_GET['format'];
+		}
+	}
+
+	if ( isset( $_GET['search'] ) ) {
+		$args['search'] = $_GET['search'];
+	}
+
+	global $user_ID;
+	if ( 'current' === $args['author'] ) {
+		/**
+		 * Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_author
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'main' to indicate the `my_calendar` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
+		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'main' );
+	}
+	if ( 'current' === $args['host'] ) {
+		/**
+		 * Filter the host parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_host
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'main' to indicate the `my_calendar` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
+		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'main' );
+	}
+
+	return my_calendar( $args );
+}
+
+/**
+ * Upcoming Events My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string Calendar.
+ */
+function my_calendar_insert_upcoming( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'before'         => 'default',
+			'after'          => 'default',
+			'type'           => 'default',
+			'category'       => 'default',
+			'template'       => 'default',
+			'fallback'       => '',
+			'order'          => 'asc',
+			'skip'           => '0',
+			'show_today'     => 'yes',
+			'show_recurring' => 'yes',
+			'author'         => 'default',
+			'host'           => 'default',
+			'ltype'          => '',
+			'lvalue'         => '',
+			'from'           => false,
+			'to'             => false,
+			'site'           => false,
+			'language'       => '',
+		),
+		$atts,
+		'my_calendar_upcoming'
+	);
+
+	global $user_ID;
+	if ( 'current' === $args['author'] ) {
+		/**
+		 * Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_author
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
+		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'upcoming' );
+	}
+	if ( 'current' === $args['host'] ) {
+		/**
+		 * Filter the host parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_host
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
+		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'upcoming' );
+	}
+
+	return my_calendar_upcoming_events( $args );
+}
+
+/**
+ * Today's Events My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string Calendar.
+ */
+function my_calendar_insert_today( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'category' => 'default',
+			'author'   => 'default',
+			'host'     => 'default',
+			'template' => 'default',
+			'fallback' => '',
+			'date'     => false,
+			'site'     => false,
+			'language' => '',
+		),
+		$atts,
+		'my_calendar_today'
+	);
+
+	global $user_ID;
+	if ( 'current' === $args['author'] ) {
+		/**
+		 * Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_author
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'today' to indicate the `my_calendar_today` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
+		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'today' );
+	}
+	if ( 'current' === $args['host'] ) {
+		/**
+		 * Filter the host parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_host
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'today' to indicate the `my_calendar_today` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
+		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'today' );
+	}
+
+	return my_calendar_todays_events( $args );
+}
+
+/**
+ * Locations List My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string locations.
+ */
+function my_calendar_show_locations_list( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'datatype' => 'name',
+			'sort'     => '',
+			'template' => '',
+		),
+		$atts,
+		'my_calendar_locations_list'
+	);
+	// Sort replaces 'datatype'.
+	$sort = ( '' !== $args['sort'] ) ? $args['sort'] : $args['datatype'];
+
+	return my_calendar_show_locations( $sort, $args['template'] );
+}
+
+/**
+ * Location Filter My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string location filter.
+ */
+function my_calendar_locations( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'show'       => 'list',
+			'datatype'   => 'name',
+			'target_url' => '',
+		),
+		$atts,
+		'my_calendar_locations'
+	);
+
+	return my_calendar_locations_list( $args['show'], $args['datatype'], 'single', $args['target_url'] );
+}
+
+/**
+ * Category filter My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string category filter.
+ */
+function my_calendar_categories( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'show'       => 'list',
+			'target_url' => '',
+		),
+		$atts,
+		'my_calendar_categories'
+	);
+
+	return my_calendar_categories_list( $args['show'], 'public', 'single', $args['target_url'] );
+}
+
+/**
+ * Accessibility Filter My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string accessibility filters.
+ */
+function my_calendar_access( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'show'       => 'list',
+			'target_url' => '',
+		),
+		$atts,
+		'my_calendar_access'
+	);
+
+	return mc_access_list( $args['show'], 'single', $args['target_url'] );
+}
+
+/**
+ * All Filters My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string filters.
+ */
+function my_calendar_filters( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'show'       => 'categories,locations',
+			'target_url' => '',
+			'ltype'      => 'name',
+		),
+		$atts,
+		'my_calendar_filters'
+	);
+
+	return mc_filters( $args['show'], $args['target_url'], $args['ltype'] );
+}
+
+/**
+ * Single Event My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string event.
+ */
+function my_calendar_show_event( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'event'    => '',
+			'template' => '&lt;h3>{title}&lt;/h3>{description}',
+			'list'     => '&lt;li>{date}, {time}&lt;/li>',
+			'before'   => '&lt;ul>',
+			'after'    => '&lt;/ul>',
+			'instance' => false,
+		),
+		$atts,
+		'my_calendar_event'
+	);
+
+	return mc_instance_list( $args );
+}
+
+/**
+ * Search Form My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string search form.
+ */
+function my_calendar_search( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'type' => 'simple',
+			'url'  => '',
+		),
+		$atts,
+		'my_calendar_search'
+	);
+
+	return my_calendar_searchform( $args['type'], $args['url'] );
+}
+
+/**
+ * Current Event My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string event.
+ */
+function my_calendar_now( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'category' => '',
+			'template' => '&lt;strong>{link_title}&lt;/strong> {timerange}',
+			'site'     => false,
+		),
+		$atts,
+		'my_calendar_now'
+	);
+
+	return my_calendar_events_now( $args['category'], $args['template'], $args['site'] );
+}
+
+/**
+ * Next Event My Calendar shortcode.
+ *
+ * @param array $atts Shortcode attributes.
+ *
+ * @return string event.
+ */
+function my_calendar_next( $atts ) {
+	$args = shortcode_atts(
+		array(
+			'category' => '',
+			'template' => '&lt;strong>{link_title}&lt;/strong> {timerange}',
+			'skip'     => 0,
+			'site'     => false,
+		),
+		$atts,
+		'my_calendar_next'
+	);
+
+	return my_calendar_events_next( $args['category'], $args['template'], $args['skip'], $args['site'] );
+}
+
+/**
+ * Configure calendar view for primary calendar.
+ */
+function mc_calendar_view() {
+	$calendar_id = get_option( 'mc_uri_id' );
+	if ( isset( $_GET['post'] ) &amp;&amp; $calendar_id === $_GET['post'] ) {
+		add_meta_box( 'mc-calendar-view', __( 'My Calendar Display Options', 'my-calendar' ), 'mc_calendar_generator_fields', 'page', 'advanced', 'high', 'main' );
+	}
+}
+add_action( 'add_meta_boxes', 'mc_calendar_view' );
+
+/**
+ * Settings to configure My Calendar view or build shortcode.
+ *
+ * @param object       $post Post object.
+ * @param array|string $callback_args Post callback args or selected type.
+ */
+function mc_calendar_generator_fields( $post, $callback_args ) {
+	$params = array();
+	$script = '';
+	if ( $post ) {
+		$params = get_post_meta( $post->ID, '_mc_calendar', true );
+	}
+	$type       = ( is_array( $callback_args ) ) ? $callback_args['args'] : $callback_args;
+	$category   = ( isset( $params['category'] ) ) ? $params['category'] : null;
+	$ltype      = ( isset( $params['ltype'] ) ) ? $params['ltype'] : '';
+	$lvalue     = ( isset( $params['lvalue'] ) ) ? $params['lvalue'] : '';
+	$disabled   = ( '' === $lvalue ) ? '' : 'disabled';
+	$search     = ( isset( $params['search'] ) ) ? $params['search'] : '';
+	$show_hosts = ( isset( $params['host'] ) ) ? explode( ',', $params['host'] ) : array();
+	$show_users = ( isset( $params['author'] ) ) ? explode( ',', $params['author'] ) : array();
+	$format     = ( isset( $params['format'] ) ) ? $params['format'] : '';
+	$time       = ( isset( $params['time'] ) ) ? $params['time'] : '';
+	$year       = ( isset( $params['year'] ) ) ? $params['year'] : '';
+	$month      = ( isset( $params['month'] ) ) ? $params['month'] : '';
+	$day        = ( isset( $params['day'] ) ) ? $params['day'] : '';
+	$months     = ( isset( $params['months'] ) ) ? $params['months'] : '';
+	$above      = ( isset( $params['above'] ) ) ? $params['above'] : '';
+	$below      = ( isset( $params['below'] ) ) ? $params['below'] : '';
+	$shortcode  = ( isset( $params['shortcode'] ) ) ? $params['shortcode'] : '';
+
+	?>
+	&lt;div id="mc-generator" class="generator">
+		&lt;?php
+		switch ( $type ) {
+			case 'main':
+				$message = __( 'Generate the &lt;code>[my_calendar]&lt;/code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
+				break;
+			case 'upcoming':
+				$message = __( 'Generate the &lt;code>[my_calendar_upcoming]&lt;/code> shortcode. Generates lists of upcoming events.', 'my-calendar' );
+				break;
+			case 'today':
+				$message = __( 'Generate the &lt;code>[my_calendar_today]&lt;/code> shortcode. Generates lists of events happening today.', 'my-calendar' );
+				break;
+		}
+		echo wp_kses_post( wpautop( $message ) );
+		?>
+		&lt;div>&lt;input type="hidden" name="_mc_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/>&lt;/div>
+		&lt;input type='hidden' name='shortcode' value='&lt;?php echo esc_attr( $type ); ?>'/>
+		&lt;?php
+		// Common Elements to all Shortcodes.
+		if ( $shortcode ) {
+			echo wp_kses( '&lt;div class="shortcode-preview">&lt;p>&lt;label for="mc_shortcode">Shortcode&lt;/label>&lt;textarea readonly class="large-text readonly" id="mc_shortcode">' . $shortcode . '&lt;/textarea>&lt;/p>&lt;p>&lt;button type="button" class="button button-hero reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '&lt;/button>&lt;/p>&lt;/div>', mc_kses_elements() );
+		}
+		?>
+		&lt;div class="mc-generator-inputs">
+			&lt;fieldset>
+				&lt;legend>&lt;?php esc_html_e( 'Content Filters', 'my-calendar' ); ?>&lt;/legend>
+				&lt;fieldset class="categories">
+					&lt;legend>&lt;?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?>&lt;/legend>
+					&lt;ul style="padding:0;margin:0;list-style-type:none;columns:3;">
+						&lt;li>
+							&lt;input type="checkbox" value="all" &lt;?php checked( empty( $category ), true ); ?> name="category[]" id="category_&lt;?php echo esc_attr( $type ); ?>"> &lt;label for="category_&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/label>
+						&lt;/li>
+						&lt;?php
+						$select = mc_category_select( $category, true, true, 'category[]', 'category_' . $type );
+						echo wp_kses( $select, mc_kses_elements() );
+						?>
+					&lt;/ul>
+				&lt;/fieldset>
+				&lt;p>
+					&lt;label for="ltype">&lt;?php esc_html_e( 'Location filter type:', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="ltype" id="ltype">
+						&lt;option value=''>&lt;?php esc_html_e( 'All locations', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value='event_label'&lt;?php selected( $ltype, 'event_label' ); ?>>&lt;?php esc_html_e( 'Location Name', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value='event_city'&lt;?php selected( $ltype, 'event_city' ); ?>>&lt;?php esc_html_e( 'City', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value='event_state'&lt;?php selected( $ltype, 'event_state' ); ?>>&lt;?php esc_html_e( 'State', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value='event_postcode'&lt;?php selected( $ltype, 'event_postcode' ); ?>>&lt;?php esc_html_e( 'Postal Code', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value='event_country'&lt;?php selected( $ltype, 'event_country' ); ?>>&lt;?php esc_html_e( 'Country', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value='event_region'&lt;?php selected( $ltype, 'event_region' ); ?>>&lt;?php esc_html_e( 'Region', 'my-calendar' ); ?>&lt;/option>
+					&lt;/select>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="lvalue" id='lval'>&lt;?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="text" name="lvalue" id="lvalue" value="&lt;?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' &lt;?php echo esc_attr( $disabled ); ?> />
+				&lt;/p>
+
+				&lt;p id='location-info'>
+					&lt;?php _e( 'If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="search" id='sterm'>&lt;?php esc_html_e( 'Search keyword', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="text" name="search" id="sterm" aria-describedby="search-info" value="&lt;?php echo esc_attr( $search ); ?>" />&lt;br/>
+				&lt;/p>
+				&lt;p id='search-info'>
+					&lt;?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
+				&lt;/p>
+			&lt;/fieldset>
+			&lt;?php
+			if ( 'main' === $type ) {
+				?>
+			&lt;fieldset>
+				&lt;legend>&lt;?php esc_html_e( 'Navigation', 'my-calendar' ); ?>&lt;/legend>
+				&lt;p id='navigation-info'>
+					&lt;?php
+					// Translators: Settings page URL.
+					printf( __( "Navigation above and below the calendar: your &lt;a href='%s'>settings&lt;/a> if this is left blank. Use &lt;code>none&lt;/code> to hide all navigation.", 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
+					mc_help_link( __( 'Help', 'my-calendar' ), __( 'Navigation Keywords', 'my-calendar' ), 'navigation keywords', 3 );
+					?>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="above" id='labove'>&lt;?php esc_html_e( 'Navigation above calendar', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="text" name="above" id="above" placeholder="nav,toggle,jump,print,timeframe" aria-labelledby='labove navigation-info' value="&lt;?php echo esc_attr( $above ); ?>" />&lt;br/>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="below" id='lbelow'>&lt;?php esc_html_e( 'Navigation below calendar', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="text" name="below" id="below" placeholder="key,feeds" aria-labelledby='lbelow navigation-info' value="&lt;?php echo esc_attr( $below ); ?>" />&lt;br/>
+				&lt;/p>
+			&lt;/fieldset>
+				&lt;?php
+			}
+			// Main shortcode only.
+			if ( 'main' === $type ) {
+				?>
+			&lt;fieldset>
+				&lt;legend>&lt;?php esc_html_e( 'Formatting &amp; Timeframe', 'my-calendar' ); ?>&lt;/legend>
+				&lt;p>
+					&lt;label for="format">&lt;?php esc_html_e( 'Format', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="format" id="format">
+						&lt;option value="">&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="calendar"&lt;?php selected( 'calendar', $format ); ?>>&lt;?php esc_html_e( 'Grid', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value='list'&lt;?php selected( 'list', $format ); ?>>&lt;?php esc_html_e( 'List', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="mini"&lt;?php selected( 'mini', $format ); ?>>&lt;?php esc_html_e( 'Mini', 'my-calendar' ); ?>&lt;/option>
+					&lt;/select>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="time">&lt;?php esc_html_e( 'Time Segment', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="time" id="time">
+						&lt;option value="">&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month"&lt;?php selected( 'month', $time ); ?>>&lt;?php esc_html_e( 'Month', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+1"&lt;?php selected( 'month+1', $time ); ?>>&lt;?php esc_html_e( 'Next Month', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="week"&lt;?php selected( 'week', $time ); ?>>&lt;?php esc_html_e( 'Week', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="day"&lt;?php selected( 'day', $time ); ?>>&lt;?php esc_html_e( 'Day', 'my-calendar' ); ?>&lt;/option>
+					&lt;/select>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="months" id='lmonths'>&lt;?php esc_html_e( 'Months to show in list view', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="number" min="1" max="12" step="1" name="months" id="lmonths" value="&lt;?php echo esc_attr( $months ); ?>" />&lt;br/>
+				&lt;/p>
+			&lt;/fieldset>
+				&lt;?php
+			}
+			?>
+			&lt;fieldset>
+				&lt;legend>&lt;?php esc_html_e( 'Author &amp; Host Filters', 'my-calendar' ); ?>&lt;/legend>
+				&lt;?php
+				// Grab authors and list them.
+				$users   = mc_get_users( 'authors' );
+				$options = '';
+				foreach ( $users as $u ) {
+					$selected = '';
+					if ( in_array( $u->ID, $show_users, true ) ) {
+						$selected = ' selected="selected"';
+					}
+					$options .= '&lt;option value="' . $u->ID . '" ' . $selected . '>' . esc_html( $u->display_name ) . "&lt;/option>\n";
+				}
+				?>
+				&lt;p>
+					&lt;label for="author">&lt;?php esc_html_e( 'Limit by Author', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="author[]" id="author" multiple="multiple">
+						&lt;option value="all">&lt;?php esc_html_e( 'All authors', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="current">&lt;?php esc_html_e( 'Currently logged-in user', 'my-calendar' ); ?>&lt;/option>
+						&lt;?php echo wp_kses( $options, mc_kses_elements() ); ?>
+					&lt;/select>
+				&lt;/p>
+				&lt;?php
+				// Grab authors and list them.
+				$users   = mc_get_users( 'hosts' );
+				$options = '';
+				foreach ( $users as $u ) {
+					$selected = '';
+					if ( in_array( $u->ID, $show_hosts, true ) ) {
+						$selected = ' selected="selected"';
+					}
+					$options .= '&lt;option value="' . $u->ID . '" ' . $selected . '>' . esc_html( $u->display_name ) . "&lt;/option>\n";
+				}
+				?>
+				&lt;p>
+					&lt;label for="host">&lt;?php esc_html_e( 'Limit by Host', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="host[]" id="host" multiple="multiple">
+						&lt;option value="all">&lt;?php esc_html_e( 'All hosts', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="current">&lt;?php esc_html_e( 'Currently logged-in user', 'my-calendar' ); ?>&lt;/option>
+						&lt;?php echo wp_kses( $options, mc_kses_elements() ); ?>
+					&lt;/select>
+				&lt;/p>
+			&lt;/fieldset>
+			&lt;?php
+			if ( 'main' === $type ) {
+				?>
+			&lt;fieldset>
+				&lt;legend>&lt;?php esc_html_e( 'Start Date', 'my-calendar' ); ?>&lt;/legend>
+				&lt;p>
+					&lt;label for="year">&lt;?php esc_html_e( 'Year', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="year" id="year">
+						&lt;option value=''>&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/option>
+						&lt;?php
+						global $wpdb;
+						$mcdb = $wpdb;
+						if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+							$mcdb = mc_remote_db();
+						}
+						$query  = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged &lt;> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
+						$year1  = mc_date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
+						$diff1  = mc_date( 'Y' ) - $year1;
+						$past   = $diff1;
+						/**
+						 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
+						 *
+						 * @hook mc_jumpbox_future_years
+						 *
+						 * @param {int}    $future Number of years ahead.
+						 * @param {string} $cid Current calendar ID. '' when running in the shortcode generator.
+						 *
+						 * @return {int}
+						 */
+						$future = apply_filters( 'mc_jumpbox_future_years', 5, '' );
+						$fut    = 1;
+						$f      = '';
+						$p      = '';
+						while ( $past > 0 ) {
+							$p   .= '&lt;option value="';
+							$p   .= current_time( 'Y' ) - $past;
+							$p   .= '">';
+							$p   .= current_time( 'Y' ) - $past . "&lt;/option>\n";
+							$past = $past - 1;
+						}
+						while ( $fut &lt; $future ) {
+							$f  .= '&lt;option value="';
+							$f  .= current_time( 'Y' ) + $fut;
+							$f  .= '">';
+							$f  .= current_time( 'Y' ) + $fut . "&lt;/option>\n";
+							$fut = $fut + 1;
+						}
+						echo wp_kses( $p . '&lt;option value="' . current_time( 'Y' ) . '"' . selected( current_time( 'Y' ), $year ) . '>' . current_time( 'Y' ) . "&lt;/option>\n" . $f, mc_kses_elements() );
+						?>
+					&lt;/select>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="month">&lt;?php esc_html_e( 'Month', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="month" id="month">
+						&lt;option value=''>&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/option>
+						&lt;?php
+						$list_months = '';
+						for ( $i = 1; $i &lt;= 12; $i ++ ) {
+							$list_months .= "&lt;option value='$i'" . selected( $i, $month ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '&lt;/option>' . "\n";
+						}
+						echo wp_kses( $list_months, mc_kses_elements() );
+						?>
+					&lt;/select>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="day">&lt;?php esc_html_e( 'Day', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="day" id="day">
+						&lt;option value=''>&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/option>
+						&lt;?php
+						$days = '';
+						for ( $i = 1; $i &lt;= 31; $i++ ) {
+							$days .= "&lt;option value='$i'" . selected( $i, $day ) . '>' . $i . '&lt;/option>' . "\n";
+						}
+						echo wp_kses( $days, mc_kses_elements() );
+						?>
+					&lt;/select>
+				&lt;/p>
+			&lt;/fieldset>
+				&lt;?php
+			}
+			if ( 'upcoming' === $type ) {
+				// Upcoming events only.
+				?>
+			&lt;fieldset>
+				&lt;legend>&lt;?php esc_html_e( 'Event Range', 'my-calendar' ); ?>&lt;/legend>
+				&lt;p>
+					&lt;label for="before">&lt;?php esc_html_e( 'Events/Days Before Current Day', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="number" name="before" id="before" value="" />
+				&lt;/p>
+				&lt;p>
+					&lt;label for="after">&lt;?php esc_html_e( 'Events/Days After Current Day', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="number" name="after" id="after" value="" />
+				&lt;/p>
+				&lt;p>
+					&lt;label for="skip">&lt;?php esc_html_e( 'Events/Days to Skip', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="number" name="skip" id="skip" value="" />
+				&lt;/p>
+				&lt;p>
+					&lt;label for="show_today">&lt;?php esc_html_e( "Show Today's Events", 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="checkbox" name="show_today" id="show_today" value="yes"/>
+				&lt;/p>
+				&lt;p>
+					&lt;label for="show_recurring">&lt;?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="checkbox" name="show_recurring" id="show_recurring" value="no" />
+				&lt;/p>
+				&lt;p>
+					&lt;label for="type">&lt;?php esc_html_e( 'Type of Upcoming Events List', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="type" id="type">
+						&lt;option value="event" selected="selected">&lt;?php esc_html_e( 'Events', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="year">&lt;?php esc_html_e( 'Current Year', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="days">&lt;?php esc_html_e( 'Days', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="custom">&lt;?php esc_html_e( 'Custom Dates', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month">&lt;?php esc_html_e( 'Current Month', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+1">&lt;?php esc_html_e( 'Next Month', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+2">&lt;?php esc_html_e( '2nd Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+3">&lt;?php esc_html_e( '3rd Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+4">&lt;?php esc_html_e( '4th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+5">&lt;?php esc_html_e( '5th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+6">&lt;?php esc_html_e( '6th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+7">&lt;?php esc_html_e( '7th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+8">&lt;?php esc_html_e( '8th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+9">&lt;?php esc_html_e( '9th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+10">&lt;?php esc_html_e( '10th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+11">&lt;?php esc_html_e( '11th Month Out', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="month+12">&lt;?php esc_html_e( '12th Month Out', 'my-calendar' ); ?>&lt;/option>
+					&lt;/select>
+				&lt;/p>
+				&lt;div class='custom'>
+					&lt;p>
+						&lt;label for='from'>&lt;?php esc_html_e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?>&lt;/label> &lt;input type='text' name='from' id='from' placeholder="YYYY-MM-DD" />
+					&lt;/p>
+					&lt;p>
+						&lt;label for='to'>&lt;?php esc_html_e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?>&lt;/label> &lt;input type='text' name='to' id='to' placeholder="YYYY-MM-DD" />
+					&lt;/p>
+				&lt;/div>
+				&lt;p>
+					&lt;label for="order">&lt;?php esc_html_e( 'Event Order', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="order" id="order">
+						&lt;option value="asc" selected="selected">&lt;?php esc_html_e( 'Ascending', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="desc">&lt;?php esc_html_e( 'Descending', 'my-calendar' ); ?>&lt;/option>
+					&lt;/select>
+				&lt;/p>
+			&lt;/fieldset>
+				&lt;?php
+			}
+			if ( 'upcoming' === $type || 'today' === $type ) {
+				// Upcoming Events &amp; Today's Events shortcodes.
+				?>
+			&lt;fieldset>
+				&lt;legend>&lt;?php esc_html_e( 'Templating', 'my-calendar' ); ?>&lt;/legend>
+				&lt;p>
+					&lt;label for="fallback">&lt;?php esc_html_e( 'Fallback Text', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="text" name="fallback" id="fallback" value="" />
+				&lt;/p>
+				&lt;p>
+					&lt;label for="template">&lt;?php esc_html_e( 'Template', 'my-calendar' ); ?>&lt;/label>
+					&lt;textarea cols="40" rows="4" name="template" id="template" aria-describedby="mc_template-note">&lt;?php echo esc_textarea( '&lt;strong>{date}&lt;/strong>, {time}: {link_title}' ); ?>&lt;/textarea>&lt;span id="mc_template-note">&lt;i class="dashicons dashicons-editor-help" aria-hidden="true">&lt;/i>
+					&lt;?php
+					// Translators: Link to custom template UI.
+					printf( __( 'Creates a new &lt;a href="%s">custom template&lt;/a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) );
+					?>
+					&lt;/span>
+				&lt;/p>
+			&lt;/fieldset>
+				&lt;?php
+			}
+			?>
+		&lt;/div>
+	&lt;/div>
+		&lt;?php
+}
+
+/**
+ * Save My Calendar custom configuration data.
+ *
+ * @param int $post_id Post ID.
+ */
+function mc_update_calendar( $post_id ) {
+	if ( defined( 'DOING_AUTOSAVE' ) &amp;&amp; DOING_AUTOSAVE || wp_is_post_revision( $post_id ) || ! ( (int) get_option( 'mc_uri_id' ) === (int) $post_id ) ) {
+		return $post_id;
+	}
+	$options = mc_generate( 'array' );
+	update_post_meta( $post_id, '_mc_calendar', $options );
+}
+add_action( 'save_post', 'mc_update_calendar', 10, 1 );
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Filters</h3><ul><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

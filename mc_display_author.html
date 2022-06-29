@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_upcoming_date_from - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_display_author - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_upcoming_date_from</h1></header>
+    <header><h1 class="page-title">Filter: mc_display_author</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_upcoming_date_from">apply_filters( 'mc_upcoming_date_from', <span class="signature">$from, $args )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_display_author">apply_filters( 'mc_display_author', <span class="signature">$user_ID, $context )</span><span class="type-signature"> &rarr; {int}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Custom upcoming events date start value for upcoming events lists using date parameters.</p>
+    <p>Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.</p>
 </div>
 
 
@@ -77,7 +77,30 @@
 
         <tr>
             
-                <td class="name"><code>$from</code></td>
+                <td class="name"><code>$user_ID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Logged-in user ID.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$context</code></td>
             
 
             <td class="type">
@@ -93,30 +116,7 @@
 
             
 
-            <td class="description last"><p>Starting date for this list of upcoming events in Y-m-d format.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Associative array holding the arguments used to generate this list of upcoming events.</p></td>
+            <td class="description last"><p>'upcoming' to indicate the <code>my_calendar_upcoming</code> shortcode is running.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-widgets.php.html">my-calendar-widgets.php</a>, <a href="my-calendar-widgets.php.html#line167">line 167</a>
+        <a href="my-calendar-shortcodes.php.html">my-calendar-shortcodes.php</a>, <a href="my-calendar-shortcodes.php.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -184,7 +184,7 @@
 
         
 <div class="param-desc">
-    <p>List starting date.</p>
+    <p>Valid author ID.</p>
 </div>
 
 
@@ -195,7 +195,401 @@
     </dt>
     <dd>
         
+<span class="param-type">int</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+    
+    </div>
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    <h2></h2>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="mc_display_author">apply_filters( 'mc_display_author', <span class="signature">$user_ID, $context )</span><span class="type-signature"> &rarr; {int}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.</p>
+</div>
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>$user_ID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Logged-in user ID.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$context</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>'main' to indicate the <code>my_calendar</code> shortcode is running.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="my-calendar-shortcodes.php.html">my-calendar-shortcodes.php</a>, <a href="my-calendar-shortcodes.php.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Valid author ID.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+    
+    </div>
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    <h2></h2>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="mc_display_author">apply_filters( 'mc_display_author', <span class="signature">$user_ID, $context )</span><span class="type-signature"> &rarr; {int}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.</p>
+</div>
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>$user_ID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Logged-in user ID.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$context</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>'today' to indicate the <code>my_calendar_today</code> shortcode is running.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="my-calendar-shortcodes.php.html">my-calendar-shortcodes.php</a>, <a href="my-calendar-shortcodes.php.html#line188">line 188</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Valid author ID.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
 
 
     </dd>
