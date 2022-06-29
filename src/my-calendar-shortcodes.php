@@ -67,9 +67,29 @@ function my_calendar_insert( $atts, $content = null ) {
 
 	global $user_ID;
 	if ( 'current' === $args['author'] ) {
+		/**
+		 * Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_author
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'main' to indicate the `my_calendar` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'main' );
 	}
 	if ( 'current' === $args['host'] ) {
+		/**
+		 * Filter the host parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_host
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'main' to indicate the `my_calendar` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'main' );
 	}
 
@@ -111,9 +131,29 @@ function my_calendar_insert_upcoming( $atts ) {
 
 	global $user_ID;
 	if ( 'current' === $args['author'] ) {
+		/**
+		 * Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_author
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'upcoming' );
 	}
 	if ( 'current' === $args['host'] ) {
+		/**
+		 * Filter the host parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_host
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'upcoming' );
 	}
 
@@ -145,9 +185,29 @@ function my_calendar_insert_today( $atts ) {
 
 	global $user_ID;
 	if ( 'current' === $args['author'] ) {
+		/**
+		 * Filter the author parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_author
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'today' to indicate the `my_calendar_today` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'today' );
 	}
 	if ( 'current' === $args['host'] ) {
+		/**
+		 * Filter the host parameter for a My Calendar view if set as 'current'. Default current user ID.
+		 *
+		 * @hook mc_display_host
+		 *
+		 * @param {int} $user_ID Logged-in user ID.
+		 * @param {string} $context 'today' to indicate the `my_calendar_today` shortcode is running.
+		 *
+		 * @return {int} Valid author ID.
+		 */
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'today' );
 	}
 
@@ -571,7 +631,17 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						$year1  = mc_date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
 						$diff1  = mc_date( 'Y' ) - $year1;
 						$past   = $diff1;
-						$future = apply_filters( 'mc_jumpbox_future_years', 5, false );
+						/**
+						 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
+						 *
+						 * @hook mc_jumpbox_future_years
+						 *
+						 * @param {int}    $future Number of years ahead.
+						 * @param {string} $cid Current calendar ID. '' when running in the shortcode generator.
+						 *
+						 * @return {int}
+						 */
+						$future = apply_filters( 'mc_jumpbox_future_years', 5, '' );
 						$fut    = 1;
 						$f      = '';
 						$p      = '';
