@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-navigation.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-navigation.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Navigation Output. Functions that generate elements of the My Calendar navigation.
+ *
+ * @category Output
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Create navigation elements used in My Calendar main view
+ *
+ * @param array  $params Calendar parameters (modified).
+ * @param int    $cat Original category from calendar args.
+ * @param int    $start_of_week First day of week.
+ * @param int    $show_months num months to show (modified).
+ * @param string $main_class Class/ID.
+ * @param int    $site Which site in multisite.
+ * @param string $date current date.
+ * @param string $from date view started from.
+ *
+ * @return array of calendar nav for top &amp; bottom
+ */
+function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, $main_class, $site, $date, $from ) {
+	if ( $site ) {
+		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$restore = $site;
+		restore_current_blog();
+	}
+	$format   = $params['format'];
+	$category = $params['category'];
+	$above    = $params['above'];
+	$below    = $params['below'];
+	$time     = $params['time'];
+	$ltype    = $params['ltype'];
+	$lvalue   = $params['lvalue'];
+
+	if ( 'none' === $above &amp;&amp; 'none' === $below ) {
+		return array(
+			'bottom' => '',
+			'top'    => '',
+		);
+	}
+
+	// Fallback values.
+	$mc_toporder    = array( 'nav', 'toggle', 'jump', 'print', 'timeframe' );
+	$mc_bottomorder = array( 'key', 'feeds' );
+	$available      = array( 'nav', 'toggle', 'jump', 'print', 'timeframe', 'key', 'feeds', 'exports', 'categories', 'locations', 'access', 'search' );
+
+	if ( 'none' === $above ) {
+		$mc_toporder = array();
+	} else {
+		// Set up above-calendar order of fields.
+		if ( '' !== get_option( 'mc_topnav', '' ) ) {
+			$mc_toporder = array_map( 'trim', explode( ',', get_option( 'mc_topnav' ) ) );
+		}
+
+		if ( '' !== $above ) {
+			$mc_toporder = array_map( 'trim', explode( ',', $above ) );
+		}
+	}
+
+	if ( 'none' === $below ) {
+		$mc_bottomorder = array();
+	} else {
+		if ( '' !== get_option( 'mc_bottomnav', '' ) ) {
+			$mc_bottomorder = array_map( 'trim', explode( ',', get_option( 'mc_bottomnav' ) ) );
+		}
+
+		if ( '' !== $below ) {
+			$mc_bottomorder = array_map( 'trim', explode( ',', $below ) );
+		}
+	}
+
+	$aboves = $mc_toporder;
+	$belows = $mc_bottomorder;
+	$used   = array_merge( $aboves, $belows );
+
+	// Define navigation element strings.
+	$timeframe    = '';
+	$print        = '';
+	$toggle       = '';
+	$nav          = '';
+	$feeds        = '';
+	$exports      = '';
+	$jump         = '';
+	$mc_topnav    = '';
+	$mc_bottomnav = '';
+
+	// Setup link data.
+	$add = array(
+		'time'   => $time,
+		'ltype'  => $ltype,
+		'lvalue' => $lvalue,
+		'mcat'   => $category,
+		'yr'     => $date['year'],
+		'month'  => $date['month'],
+		'dy'     => $date['day'],
+		'href'   => ( isset( $params['self'] ) &amp;&amp; esc_url( $params['self'] ) ) ? urlencode( $params['self'] ) : urlencode( mc_get_current_url() ),
+	);
+
+	if ( 'list' === $format ) {
+		$add['format'] = 'list';
+	}
+
+	$subtract = array();
+	if ( '' === $ltype ) {
+		$subtract[] = 'ltype';
+		unset( $add['ltype'] );
+	}
+
+	if ( '' === $lvalue ) {
+		$subtract[] = 'lvalue';
+		unset( $add['lvalue'] );
+	}
+
+	if ( 'all' === $category ) {
+		$subtract[] = 'mcat';
+		unset( $add['mcat'] );
+	}
+
+	// Set up print link.
+	if ( in_array( 'print', $used, true ) ) {
+		$print_add    = array_merge( $add, array( 'cid' => 'mc-print-view' ) );
+		$mc_print_url = mc_build_url( $print_add, $subtract, home_url() );
+		$print        = "&lt;div class='mc-print'>&lt;a href='$mc_print_url'>" . __( 'Print&lt;span class="maybe-hide"> View&lt;/span>', 'my-calendar' ) . '&lt;/a>&lt;/div>';
+	}
+
+	// Set up format toggle.
+	$toggle = ( in_array( 'toggle', $used, true ) ) ? mc_format_toggle( $format, 'yes', $time ) : '';
+
+	// Set up time toggle.
+	if ( in_array( 'timeframe', $used, true ) ) {
+		$timeframe = mc_time_toggle( $format, $time, $date['month'], $date['year'], $date['current_date'], $start_of_week, $from );
+	}
+
+	// Set up category key.
+	$key = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat ) : '';
+
+	// Set up category filter.
+	$cat_args   = array(
+		'categories',
+		'id' => $main_class . '-categories',
+	);
+	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( $cat_args, mc_get_current_url() ) : '';
+
+	// Set up location filter.
+	$loc_args  = array(
+		'locations',
+		'id' => $main_class . '-locations',
+	);
+	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( $loc_args, mc_get_current_url(), 'name' ) : '';
+
+	// Set up access filter.
+	$acc_args = array(
+		'access',
+		'id' => $main_class . '-access',
+	);
+	$access   = ( in_array( 'access', $used, true ) ) ? mc_filters( $acc_args, mc_get_current_url() ) : '';
+
+	// Set up search.
+	$search = ( in_array( 'search', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url() ) : '';
+
+	// Set up navigation links.
+	if ( in_array( 'nav', $used, true ) ) {
+		$nav = mc_nav( $date, $format, $time, $show_months, $main_class );
+	}
+
+	// Set up subscription feeds.
+	if ( in_array( 'feeds', $used, true ) ) {
+		$feeds = mc_sub_links( $subtract );
+	}
+
+	// Set up exports.
+	if ( in_array( 'exports', $used, true ) ) {
+		$ical_m    = ( isset( $_GET['month'] ) ) ? (int) $_GET['month'] : mc_date( 'n' );
+		$ical_y    = ( isset( $_GET['yr'] ) ) ? (int) $_GET['yr'] : mc_date( 'Y' );
+		$next_link = my_calendar_next_link( $date, $format, $time, $show_months );
+		$exports   = mc_export_links( $ical_y, $ical_m, $next_link, $add, $subtract );
+	}
+
+	// Set up date switcher.
+	if ( in_array( 'jump', $used, true ) ) {
+		$jump = mc_date_switcher( $format, $main_class, $time, $date );
+	}
+
+	$mc_toporder = apply_filters( 'mc_header_navigation', $mc_toporder, $used, $params );
+	foreach ( $mc_toporder as $value ) {
+		if ( 'none' !== $value &amp;&amp; in_array( $value, $used, true ) &amp;&amp; in_array( $value, $available, true ) ) {
+			$value      = trim( $value );
+			$mc_topnav .= ${$value};
+		}
+	}
+
+	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
+	foreach ( $mc_bottomorder as $value ) {
+		if ( 'none' !== $value &amp;&amp; 'stop' !== $value &amp;&amp; in_array( $value, $used, true ) &amp;&amp; in_array( $value, $available, true ) ) {
+			$value         = trim( $value );
+			$mc_bottomnav .= ${$value};
+		}
+	}
+
+	if ( '' !== $mc_topnav ) {
+		$mc_topnav = PHP_EOL . '&lt;nav aria-label="' . __( 'Calendar (top)', 'my-calendar' ) . '">' . PHP_EOL . '&lt;div class="my-calendar-header">' . $mc_topnav . '&lt;/div>' . PHP_EOL . '&lt;/nav>' . PHP_EOL;
+	}
+
+	if ( '' !== $mc_bottomnav ) {
+		$mc_bottomnav = PHP_EOL . '&lt;nav aria-label="' . __( 'Calendar (bottom)', 'my-calendar' ) . '">' . PHP_EOL . '&lt;div class="mc_bottomnav my-calendar-footer">' . $mc_bottomnav . '&lt;/div>' . PHP_EOL . '&lt;/nav>' . PHP_EOL;
+	}
+
+	if ( $site ) {
+		switch_to_blog( $restore );
+	}
+
+	return array(
+		'bottom' => $mc_bottomnav,
+		'top'    => $mc_topnav,
+	);
+}
+
+/**
+ * Generate calendar navigation
+ *
+ * @param string $date Current date.
+ * @param string $format Current format.
+ * @param string $time Current time view.
+ * @param int    $show_months Num months to show.
+ * @param string $id view ID.
+ *
+ * @return string prev/next nav.
+ */
+function mc_nav( $date, $format, $time, $show_months, $id ) {
+	$prev      = my_calendar_prev_link( $date, $format, $time, $show_months );
+	$next      = my_calendar_next_link( $date, $format, $time, $show_months );
+	$prev_link = mc_build_url(
+		array(
+			'yr'    => $prev['yr'],
+			'month' => $prev['month'],
+			'dy'    => $prev['day'],
+			'cid'   => $id,
+		),
+		array()
+	);
+	$prev_link = mc_url_in_loop( $prev_link );
+	$next_link = mc_build_url(
+		array(
+			'yr'    => $next['yr'],
+			'month' => $next['month'],
+			'dy'    => $next['day'],
+			'cid'   => $id,
+		),
+		array()
+	);
+	$next_link = mc_url_in_loop( $next_link );
+
+	$prev_link = apply_filters( 'mc_previous_link', '&lt;li class="my-calendar-prev">&lt;a href="' . $prev_link . '" rel="nofollow" class="mcajax">' . $prev['label'] . '&lt;/a>&lt;/li>', $prev );
+	$next_link = apply_filters( 'mc_next_link', '&lt;li class="my-calendar-next">&lt;a href="' . $next_link . '" rel="nofollow" class="mcajax">' . $next['label'] . '&lt;/a>&lt;/li>', $next );
+
+	$nav = '
+		&lt;div class="my-calendar-nav">
+			&lt;ul>
+				' . $prev_link . $next_link . '
+			&lt;/ul>
+		&lt;/div>';
+
+	return $nav;
+}
+
+/**
+ * Show the list of categories on the calendar
+ *
+ * @param int $category the currently selected category.
+ *
+ * @return string HTML for category key
+ */
+function mc_category_key( $category ) {
+	global $wpdb;
+	$url  = plugin_dir_url( __FILE__ );
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$has_icons       = ( 'true' === get_option( 'mc_hide_icons' ) ) ? false : true;
+	$class           = ( $has_icons ) ? 'has-icons' : 'no-icons';
+	$key             = '';
+	$cat_limit       = mc_select_category( $category, 'all', 'category' );
+	$select_category = str_replace( 'AND', 'WHERE', ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '' );
+
+	$sql        = 'SELECT * FROM ' . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
+	$categories = $mcdb->get_results( $sql );
+	$key       .= '&lt;div class="category-key ' . $class . '">&lt;h3 class="maybe-hide">' . __( 'Categories', 'my-calendar' ) . "&lt;/h3>\n&lt;ul>\n";
+	$path       = ( mc_is_custom_icon() ) ? str_replace( 'my-calendar', 'my-calendar-custom', $url ) : plugins_url( 'images/icons', __FILE__ ) . '/';
+
+	foreach ( $categories as $cat ) {
+		$class = '';
+		// Don't display private categories to public users.
+		if ( mc_private_event( $cat ) ) {
+			continue;
+		}
+		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
+		$class = mc_category_class( $cat, '' );
+
+		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', $_GET['mcat'] );
+
+		if ( in_array( $cat->category_id, $selected_categories, true ) || $category === $cat->category_id ) {
+			$selected_categories = array_diff( $selected_categories, array( $cat->category_id ) );
+			$class              .= ' current';
+			$aria_current        = 'aria-current="true"';
+		} else {
+			$selected_categories[] = $cat->category_id;
+			$aria_current          = '';
+		}
+		$selectable_categories = implode( ',', $selected_categories );
+		if ( '' === $selectable_categories ) {
+			$url = remove_query_arg( 'mcat', mc_get_current_url() );
+		} else {
+			$url = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
+		}
+		$url = mc_url_in_loop( $url );
+		if ( 1 === (int) $cat->category_private ) {
+			$class .= ' private';
+		}
+		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
+		$cat_name = ( '' === $cat_name ) ? '&lt;span class="screen-reader-text">' . __( 'Untitled Category', 'my-calendar' ) . '&lt;/span>' : $cat_name;
+		$cat_key  = '';
+		if ( '' !== $cat->category_icon &amp;&amp; $has_icons ) {
+			$image    = mc_category_icon( $cat );
+			$type     = ( stripos( $image, 'svg' ) ) ? 'svg' : 'img';
+			$back     = ( 'default' !== get_option( 'mc_apply_color' ) ) ? ' style="background:' . $hex . $cat->category_color . ';"' : '';
+			$cat_key .= '&lt;span class="category-color-sample ' . $type . '"' . $back . '>' . $image . '&lt;/span>' . $cat_name;
+		} elseif ( 'default' !== get_option( 'mc_apply_color' ) ) {
+			$cat_key .= ( ( '' !== $cat->category_color ) ? '&lt;span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &amp;nbsp; &lt;/span>' : '' ) . $cat_name;
+		} else {
+			// If category colors are ignored, don't render HTML for them.
+			$cat_key .= $cat_name;
+		}
+		$key .= '&lt;li class="cat_' . $class . '">&lt;a href="' . esc_url( $url ) . '" class="mcajax"' . $aria_current . '>' . $cat_key . '&lt;/a>&lt;/li>';
+	}
+	if ( isset( $_GET['mcat'] ) ) {
+		$key .= "&lt;li class='all-categories'>&lt;a href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "' class='mcajax'>" . apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) ) . '&lt;/a>&lt;/li>';
+	}
+	$key .= '&lt;/ul>&lt;/div>';
+	$key  = apply_filters( 'mc_category_key', $key, $categories );
+
+	return $key;
+}
+
+/**
+ * Set up subscription links for calendar
+ *
+ * @param array $subtract Array of data to remove.
+ *
+ * @return string HTML output for subscription links
+ */
+function mc_sub_links( $subtract ) {
+	$replace = 'webcal:';
+	$search  = array( 'http:', 'https:' );
+
+	$google  = str_replace( $search, $replace, get_feed_link( 'my-calendar-google' ) );
+	$outlook = str_replace( $search, $replace, get_feed_link( 'my-calendar-outlook' ) );
+
+	$sub_google  = "&lt;li class='ics google'>&lt;a href='" . esc_url( $google ) . "'>" . __( '&lt;span class="maybe-hide">Subscribe in &lt;/span>Google', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+	$sub_outlook = "&lt;li class='ics outlook'>&lt;a href='" . esc_url( $outlook ) . "'>" . __( '&lt;span class="maybe-hide">Subscribe in &lt;/span>Outlook', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+
+	$output = "&lt;div class='mc-export mc-subscribe'>
+	&lt;ul>$sub_google$sub_outlook&lt;/ul>
+&lt;/div>";
+
+	return $output;
+}
+
+/**
+ * Generate links to export current view's dates.
+ *
+ * @param string $y year.
+ * @param string $m month.
+ * @param array  $next array of next view's dates.
+ * @param array  $add params to add to link.
+ * @param array  $subtract params to subtract from links.
+ *
+ * @return string HTML output for export links.
+ */
+function mc_export_links( $y, $m, $next, $add, $subtract ) {
+	$add['yr']     = $y;
+	$add['month']  = $m;
+	$add['nyr']    = $next['yr'];
+	$add['nmonth'] = $next['month'];
+	unset( $add['href'] );
+
+	$add['export'] = 'google';
+	$ics           = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
+	$add['export'] = 'outlook';
+	$ics2          = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
+
+	$google  = "&lt;li class='ics google'>&lt;a href='" . $ics . "'>" . __( '&lt;span class="maybe-hide">Export for &lt;/span>Google', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+	$outlook = "&lt;li class='ics outlook'>&lt;a href='" . $ics2 . "'>" . __( '&lt;span class="maybe-hide">Export for &lt;/span>Outlook', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+
+	$output = "&lt;div class='mc-export mc-download'>
+	&lt;ul>$google$outlook&lt;/ul>
+&lt;/div>";
+
+	return $output;
+}
+
+/**
+ * Set up next link based on current view
+ *
+ * @param array  $date Current date of view.
+ * @param string $format of calendar.
+ * @param string $time current time view.
+ * @param int    $months number of months shown in list views.
+ *
+ * @return string array of parameters for link
+ */
+function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
+	$cur_year  = $date['year'];
+	$cur_month = $date['month'];
+	$cur_day   = $date['day'];
+
+	$next_year   = $cur_year + 1;
+	$mc_next     = get_option( 'mc_next_events', '' );
+	$next_events = ( '' === $mc_next ) ? '&lt;span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . '&lt;/span>' : stripslashes( $mc_next );
+	if ( $months &lt;= 1 || 'list' !== $format ) {
+		if ( 12 === (int) $cur_month ) {
+			$month = 1;
+			$yr    = $next_year;
+		} else {
+			$next_month = $cur_month + 1;
+			$month      = $next_month;
+			$yr         = $cur_year;
+		}
+	} else {
+		$next_month = ( ( $cur_month + $months ) > 12 ) ? ( ( $cur_month + $months ) - 12 ) : ( $cur_month + $months );
+		if ( $cur_month >= ( 13 - $months ) ) {
+			$month = $next_month;
+			$yr    = $next_year;
+		} else {
+			$month = $next_month;
+			$yr    = $cur_year;
+		}
+	}
+	$day = '';
+	if ( (int) $yr !== (int) $cur_year ) {
+		$format = apply_filters( 'mc_month_year_format', 'F, Y', $date, $format, $time, $month );
+	} else {
+		$format = apply_filters( 'mc_month_format', 'F, Y', $date, $format, $time, $month );
+	}
+	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
+	if ( 'week' === $time ) {
+		$nextdate = strtotime( "$cur_year-$cur_month-$cur_day" . '+ 7 days' );
+		$day      = mc_date( 'd', $nextdate, false );
+		$yr       = mc_date( 'Y', $nextdate, false );
+		$month    = mc_date( 'm', $nextdate, false );
+		if ( (int) $yr !== (int) $cur_year ) {
+			$format = 'F j, Y';
+		} else {
+			$format = 'F j';
+		}
+		// Translators: Current formatted date.
+		$date = sprintf( __( 'Week of %s', 'my-calendar' ), date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) ) );
+	}
+	if ( 'day' === $time ) {
+		$nextdate = strtotime( "$cur_year-$cur_month-$cur_day" . '+ 1 days' );
+		$day      = mc_date( 'd', $nextdate, false );
+		$yr       = mc_date( 'Y', $nextdate, false );
+		$month    = mc_date( 'm', $nextdate, false );
+		if ( (int) $yr !== (int) $cur_year ) {
+			$format = 'F j, Y';
+		} else {
+			$format = 'F j';
+		}
+		$date = date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) );
+	}
+	$next_events = str_replace( '{date}', $date, $next_events );
+	$output      = array(
+		'month' => $month,
+		'yr'    => $yr,
+		'day'   => $day,
+		'label' => $next_events,
+	);
+
+	return $output;
+}
+
+/**
+ * Set up prev link based on current view
+ *
+ * @param array  $date Current date of view.
+ * @param string $format of calendar.
+ * @param string $time current time view.
+ * @param int    $months number of months shown in list views.
+ *
+ * @return string array of parameters for link
+ */
+function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
+	$cur_year  = $date['year'];
+	$cur_month = $date['month'];
+	$cur_day   = $date['day'];
+
+	$last_year       = $cur_year - 1;
+	$mc_previous     = get_option( 'mc_previous_events', '' );
+	$previous_events = ( '' === $mc_previous ) ? '&lt;span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . '&lt;/span>' : stripslashes( $mc_previous );
+	if ( $months &lt;= 1 || 'list' !== $format ) {
+		if ( 1 === (int) $cur_month ) {
+			$month = 12;
+			$yr    = $last_year;
+		} else {
+			$next_month = $cur_month - 1;
+			$month      = $next_month;
+			$yr         = $cur_year;
+		}
+	} else {
+		$next_month = ( $cur_month > $months ) ? ( $cur_month - $months ) : ( ( $cur_month - $months ) + 12 );
+		if ( $cur_month &lt;= $months ) {
+			$month = $next_month;
+			$yr    = $last_year;
+		} else {
+			$month = $next_month;
+			$yr    = $cur_year;
+		}
+	}
+	if ( (int) $yr !== (int) $cur_year ) {
+		$format = apply_filters( 'mc_month_year_format', 'F, Y', $date, $format, $time, $month );
+	} else {
+		$format = apply_filters( 'mc_month_format', 'F, Y', $date, $format, $time, $month );
+	}
+	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
+	$day  = '';
+	if ( 'week' === $time ) {
+		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 7 days' );
+		$day      = mc_date( 'd', $prevdate, false );
+		$yr       = mc_date( 'Y', $prevdate, false );
+		$month    = mc_date( 'm', $prevdate, false );
+		if ( (int) $yr !== (int) $cur_year ) {
+			$format = 'F j, Y';
+		} else {
+			$format = 'F j';
+		}
+		$date = __( 'Week of ', 'my-calendar' ) . date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) );
+	}
+	if ( 'day' === $time ) {
+		$prevdate = strtotime( "$cur_year-$cur_month-$cur_day" . '- 1 days' );
+		$day      = mc_date( 'd', $prevdate, false );
+		$yr       = mc_date( 'Y', $prevdate, false );
+		$month    = mc_date( 'm', $prevdate, false );
+		if ( (int) $yr !== (int) $cur_year ) {
+			$format = 'F j, Y';
+		} else {
+			$format = 'F j';
+		}
+		$date = date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) );
+	}
+	$previous_events = str_replace( '{date}', $date, $previous_events );
+	$output          = array(
+		'month' => $month,
+		'yr'    => $yr,
+		'day'   => $day,
+		'label' => $previous_events,
+	);
+
+	return $output;
+}
+
+/**
+ * Generate filters form to limit calendar events.
+ *
+ * @param array  $args can include 'categories', 'locations' and 'access' to define individual filters.
+ * @param string $target_url Where to send queries.
+ * @param string $ltype Which type of location data to show in form.
+ *
+ * @return string HTML output of form
+ */
+function mc_filters( $args, $target_url, $ltype = 'name' ) {
+	$id = ( isset( $args['id'] ) ) ? esc_attr( $args['id'] ) : 'mc_filters';
+	if ( isset( $args['id'] ) ) {
+		unset( $args['id'] );
+	}
+	if ( ! is_array( $args ) ) {
+		$fields = explode( ',', $args );
+	} else {
+		$fields = $args;
+	}
+	if ( empty( $fields ) ) {
+		return;
+	}
+	$has_multiple = ( count( $fields ) > 1 ) ? true : false;
+	$return       = false;
+
+	$current_url = mc_get_uri();
+	$current_url = ( '' !== $target_url &amp;&amp; esc_url( $target_url ) ) ? $target_url : $current_url;
+	$class       = ( $has_multiple ) ? 'mc-filters-form' : 'mc-' . esc_attr( $fields[0] ) . '-switcher';
+	$form        = "
+	&lt;div id='$id' class='mc_filters'>
+		&lt;form action='" . esc_url( $current_url ) . "' method='get' class='$class'>\n";
+	$qsa         = array();
+	if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+		parse_str( $_SERVER['QUERY_STRING'], $qsa );
+	}
+	if ( ! isset( $_GET['cid'] ) ) {
+		$form .= '&lt;input type="hidden" name="cid" value="all" />';
+	}
+	foreach ( $qsa as $name => $argument ) {
+		$name = esc_attr( strip_tags( $name ) );
+		if ( ! ( 'access' === $name || 'mcat' === $name || 'loc' === $name || 'ltype' === $name || 'mc_id' === $name || 'legacy-widget-preview' === $name ) ) {
+			$argument = ( ! is_string( $argument ) ) ? (string) $argument : $argument;
+			$argument = esc_attr( strip_tags( $argument ) );
+			$form    .= '&lt;input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
+		}
+	}
+	$key = __( 'Choose Filters', 'my-calendar' );
+	foreach ( $fields as $show ) {
+		$show = trim( $show );
+		switch ( $show ) {
+			case 'categories':
+				$cats   = my_calendar_categories_list( 'form', 'public', 'group' );
+				$form  .= $cats;
+				$return = ( $cats || $return ) ? true : false;
+				$key    = __( 'Categories', 'my-calendar' );
+				break;
+			case 'locations':
+				$locs   = my_calendar_locations_list( 'form', $ltype, 'group' );
+				$form  .= $locs;
+				$return = ( $locs || $return ) ? true : false;
+				$key    = __( 'Locations', 'my-calendar' );
+				break;
+			case 'access':
+				$access = mc_access_list( 'form', 'group' );
+				$form  .= $access;
+				$return = ( $access || $return ) ? true : false;
+				$key    = __( 'Accessibility Services', 'my-calendar' );
+				break;
+		}
+	}
+	$label = ( $has_multiple ) ? __( 'Filter Events', 'my-calendar' ) : $key;
+	$form .= '&lt;p>&lt;input type="submit" class="button" data-href="' . esc_url( $current_url ) . '" value="' . esc_attr( $label ) . '" />&lt;/p>
+	&lt;/form>&lt;/div>';
+	if ( $return ) {
+		return $form;
+	}
+
+	return '';
+}
+
+/**
+ * Generate select form of categories for filters.
+ *
+ * @param string $show type of view.
+ * @param string $context Public or admin.
+ * @param string $group single form or part of a field group.
+ * @param string $target_url Where to post form to.
+ *
+ * @return string HTML
+ */
+function my_calendar_categories_list( $show = 'list', $context = 'public', $group = 'single', $target_url = '' ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$output      = '';
+	$current_url = mc_get_uri();
+	$current_url = ( '' !== $target_url &amp;&amp; esc_url( $target_url ) ) ? $target_url : $current_url;
+
+	$name         = ( 'public' === $context ) ? 'mcat' : 'category';
+	$admin_fields = ( 'public' === $context ) ? ' name="' . $name . '"' : ' multiple="multiple" size="5" name="' . $name . '[]"  ';
+	$admin_label  = ( 'public' === $context ) ? '' : __( '(select to include)', 'my-calendar' );
+	$form         = ( 'single' === $group ) ? '&lt;form action="' . esc_url( $current_url ) . '" method="get">
+				&lt;div>' : '';
+	if ( 'single' === $group ) {
+		$qsa = array();
+		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+			parse_str( $_SERVER['QUERY_STRING'], $qsa );
+		}
+		if ( ! isset( $_GET['cid'] ) ) {
+			$form .= '&lt;input type="hidden" name="cid" value="all" />';
+		}
+		foreach ( $qsa as $name => $argument ) {
+			$name     = esc_attr( strip_tags( $name ) );
+			$argument = esc_attr( strip_tags( $argument ) );
+			if ( 'mcat' !== $name || 'mc_id' !== $name ) {
+				$form .= '		&lt;input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
+			}
+		}
+	}
+	$form       .= ( 'list' === $show || 'group' === $group ) ? '' : '
+		&lt;/div>&lt;p>';
+	$public_form = ( 'public' === $context ) ? $form : '';
+	if ( ! is_user_logged_in() ) {
+		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_private = 0 ORDER BY category_name ASC' );
+	} else {
+		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+	}
+	if ( ! empty( $categories ) &amp;&amp; count( $categories ) >= 1 ) {
+		$output  = ( 'single' === $group ) ? "&lt;div id='mc_categories'>\n" : '';
+		$url     = mc_build_url( array( 'mcat' => 'all' ), array() );
+		$output .= ( 'list' === $show ) ? "
+		&lt;ul>
+			&lt;li>&lt;a href='$url'>" . __( 'All Categories', 'my-calendar' ) . '&lt;/a>&lt;/li>' : $public_form . '
+			&lt;label for="category">' . __( 'Categories', 'my-calendar' ) . ' ' . $admin_label . '&lt;/label>
+			&lt;select' . $admin_fields . ' id="category">
+			&lt;option value="all">' . __( 'All Categories', 'my-calendar' ) . '&lt;/option>' . "\n";
+
+		foreach ( $categories as $category ) {
+			$category_name = strip_tags( stripcslashes( $category->category_name ), mc_strip_tags() );
+			$mcat          = ( empty( $_GET['mcat'] ) ) ? '' : (int) $_GET['mcat'];
+			$category_id   = (int) $category->category_id;
+			if ( 'list' === $show ) {
+				$this_url = mc_build_url( array( 'mcat' => $category->category_id ), array() );
+				$selected = ( $category_id === $mcat ) ? ' class="selected"' : '';
+				$output  .= " &lt;li$selected>&lt;a rel='nofollow' href='$this_url'>$category_name&lt;/a>&lt;/li>";
+			} else {
+				$selected = ( $category_id === $mcat ) ? ' selected="selected"' : '';
+				$output  .= " &lt;option$selected value='$category_id'>$category_name&lt;/option>\n";
+			}
+		}
+		$output .= ( 'list' === $show ) ? '&lt;/ul>' : '&lt;/select>';
+		if ( 'admin' !== $context &amp;&amp; 'list' !== $show ) {
+			if ( 'single' === $group ) {
+				$output .= '&lt;input type="submit" class="button" value="' . __( 'Submit', 'my-calendar' ) . '" />&lt;/p>&lt;/form>';
+			}
+		}
+		$output .= ( 'single' === $group ) ? '&lt;/div>' : '';
+	}
+	$output = apply_filters( 'mc_category_selector', $output, $categories );
+
+	return $output;
+}
+
+/**
+ * Show set of filters to limit by accessibility features.
+ *
+ * @param string $show type of view.
+ * @param string $group single or multiple.
+ * @param string $target_url Where to post form to.
+ *
+ * @return string HTML
+ */
+function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
+	$output      = '';
+	$current_url = mc_get_uri();
+	$current_url = ( '' !== $target_url &amp;&amp; esc_url( $target_url ) ) ? $target_url : $current_url;
+	$form        = ( 'single' === $group ) ? "&lt;form action='" . esc_url( $current_url ) . "' method='get'>&lt;div>" : '';
+	if ( 'single' === $group ) {
+		$qsa = array();
+		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+			parse_str( $_SERVER['QUERY_STRING'], $qsa );
+		}
+		if ( ! isset( $_GET['cid'] ) ) {
+			$form .= '&lt;input type="hidden" name="cid" value="all" />';
+		}
+		foreach ( $qsa as $name => $argument ) {
+			$name     = esc_attr( strip_tags( $name ) );
+			$argument = esc_attr( strip_tags( $argument ) );
+			if ( 'access' !== $name || 'mc_id' !== $name ) {
+				$form .= '&lt;input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
+			}
+		}
+	}
+	$form .= ( 'list' === $show || 'group' === $group ) ? '' : '&lt;/div>&lt;p>';
+
+	$access_options = mc_event_access();
+	if ( ! empty( $access_options ) &amp;&amp; count( $access_options ) >= 1 ) {
+		$output       = ( 'single' === $group ) ? "&lt;div id='mc_access'>\n" : '';
+		$url          = mc_build_url( array( 'access' => 'all' ), array() );
+		$not_selected = ( ! isset( $_GET['access'] ) ) ? 'selected="selected"' : '';
+		$output      .= ( 'list' === $show ) ? "
+		&lt;ul>
+			&lt;li>&lt;a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '&lt;/a>&lt;/li>' : $form . '
+		&lt;label for="access">' . __( 'Accessibility Services', 'my-calendar' ) . '&lt;/label>
+			&lt;select name="access" id="access">
+			&lt;option value="all"' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '&lt;/option>' . "\n";
+
+		foreach ( $access_options as $key => $access ) {
+			$access_name = $access;
+			$this_access = ( empty( $_GET['access'] ) ) ? '' : (int) $_GET['access'];
+			if ( 'list' === $show ) {
+				$this_url = mc_build_url( array( 'access' => $key ), array() );
+				$selected = ( $key === $this_access ) ? ' class="selected"' : '';
+				$output  .= " &lt;li$selected>&lt;a rel='nofollow' href='$this_url'>$access_name&lt;/a>&lt;/li>";
+			} else {
+				$selected = ( $this_access === $key ) ? ' selected="selected"' : '';
+				$output  .= " &lt;option$selected value='" . esc_attr( $key ) . "'>" . esc_html( $access_name ) . "&lt;/option>\n";
+			}
+		}
+		$output .= ( 'list' === $show ) ? '&lt;/ul>' : '&lt;/select>';
+		$output .= ( 'list' !== $show &amp;&amp; 'single' === $group ) ? '&lt;p>&lt;input type="submit" class="button" value="' . __( 'Limit by Access', 'my-calendar' ) . '" />&lt;/p>&lt;/form>' : '';
+		$output .= ( 'single' === $group ) ? "\n&lt;/div>" : '';
+	}
+	$output = apply_filters( 'mc_access_selector', $output, $access_options );
+
+	return $output;
+}
+
+/**
+ * Build date switcher
+ *
+ * @param string $type Current view being shown.
+ * @param string $cid ID of current view.
+ * @param string $time Current time view.
+ * @param array  $date current date array (month, year, day).
+ *
+ * @return string HTML output.
+ */
+function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $date = array() ) {
+	if ( 'week' === $time ) {
+		return '';
+	}
+	global $wpdb;
+	$mcdb    = $wpdb;
+	$c_month = isset( $date['month'] ) ? $date['month'] : current_time( 'n' );
+	$c_year  = isset( $date['year'] ) ? $date['year'] : current_time( 'Y' );
+	$c_day   = isset( $date['day'] ) ? $date['day'] : current_time( 'j' );
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$current_url    = mc_get_current_url();
+	$date_switcher  = '';
+	$date_switcher .= '&lt;div class="my-calendar-date-switcher">&lt;form class="mc-date-switcher" action="' . $current_url . '" method="get">&lt;div>';
+	$qsa            = array();
+	if ( isset( $_SERVER['QUERY_STRING'] ) ) {
+		parse_str( $_SERVER['QUERY_STRING'], $qsa );
+	}
+	if ( ! isset( $_GET['cid'] ) ) {
+		$date_switcher .= '&lt;input type="hidden" name="cid" value="' . esc_attr( $cid ) . '" />';
+	}
+	$data_href = $current_url;
+	foreach ( $qsa as $name => $argument ) {
+		$name = esc_attr( strip_tags( $name ) );
+		if ( is_array( $argument ) ) {
+			$argument = '';
+		} else {
+			$argument = esc_attr( strip_tags( $argument ) );
+		}
+		if ( 'month' !== $name &amp;&amp; 'yr' !== $name &amp;&amp; 'dy' !== $name ) {
+			$date_switcher .= '&lt;input type="hidden" name="' . $name . '" value="' . $argument . '" />';
+			$data_href      = add_query_arg( $name, $argument, $data_href );
+		}
+	}
+	$day_switcher = '';
+	if ( 'day' === $time ) {
+		$day_switcher = ' &lt;label class="maybe-hide" for="' . $cid . '-day">' . __( 'Day', 'my-calendar' ) . '&lt;/label> &lt;select id="' . $cid . '-day" name="dy">' . "\n";
+		for ( $i = 1; $i &lt;= 31; $i++ ) {
+			$day_switcher .= "&lt;option value='$i'" . selected( $i, $c_day, false ) . '>' . $i . '&lt;/option>' . "\n";
+		}
+		$day_switcher .= '&lt;/select>';
+	}
+	// We build the months in the switcher.
+	$date_switcher .= ' &lt;label class="maybe-hide" for="' . $cid . '-month">' . __( 'Month', 'my-calendar' ) . '&lt;/label> &lt;select id="' . $cid . '-month" name="month">' . "\n";
+	for ( $i = 1; $i &lt;= 12; $i ++ ) {
+		$test           = str_pad( $i, 2, '0', STR_PAD_LEFT );
+		$c_month        = str_pad( $c_month, 2, '0', STR_PAD_LEFT );
+		$date_switcher .= "&lt;option value='$i'" . selected( $test, $c_month, false ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '&lt;/option>' . "\n";
+	}
+	$date_switcher .= '&lt;/select>' . "\n" . $day_switcher . ' &lt;label class="maybe-hide" for="' . $cid . '-year">' . __( 'Year', 'my-calendar' ) . '&lt;/label> &lt;select id="' . $cid . '-year" name="yr">' . "\n";
+	// Query to identify oldest start date in the database.
+	$first  = $mcdb->get_var( 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged &lt;> 1 ORDER BY event_begin ASC LIMIT 0 , 1' );
+	$first  = ( '1970-01-01' === $first ) ? '2000-01-01' : $first;
+	$year1  = mc_date( 'Y', strtotime( $first, false ) );
+	$diff1  = mc_date( 'Y' ) - $year1;
+	$past   = $diff1;
+	/**
+	 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
+	 *
+	 * @hook mc_jumpbox_future_years
+	 *
+	 * @param {int}   $future Number of years ahead.
+	 * @param {string} $cid Current calendar ID. '' when running in the shortcode generator.
+	 *
+	 * @return {int}
+	 */
+	$future = apply_filters( 'mc_jumpbox_future_years', 5, $cid );
+	$fut    = 1;
+	$f      = '';
+	$p      = '';
+	$time   = current_time( 'Y' );
+
+	while ( $past > 0 ) {
+		$p   .= '&lt;option value="';
+		$p   .= $time - $past;
+		$p   .= '"' . selected( $time - $past, $c_year, false ) . '>';
+		$p   .= $time - $past . "&lt;/option>\n";
+		$past = $past - 1;
+	}
+
+	while ( $fut &lt; $future ) {
+		$f  .= '&lt;option value="';
+		$f  .= $time + $fut;
+		$f  .= '"' . selected( $time + $fut, $c_year, false ) . '>';
+		$f  .= $time + $fut . "&lt;/option>\n";
+		$fut = $fut + 1;
+	}
+
+	$date_switcher .= $p;
+	$date_switcher .= '&lt;option value="' . $time . '"' . selected( $time, $c_year, false ) . '>' . $time . "&lt;/option>\n";
+	$date_switcher .= $f;
+	$date_switcher .= '&lt;/select> &lt;input type="submit" class="button" data-href="' . esc_attr( $data_href ) . '" value="' . __( 'Go', 'my-calendar' ) . '" />&lt;/div>&lt;/form>&lt;/div>';
+	$date_switcher  = apply_filters( 'mc_jumpbox', $date_switcher );
+
+	return $date_switcher;
+}
+
+/**
+ * Generate toggle between list and grid views
+ *
+ * @param string $format currently shown.
+ * @param string $toggle whether to show.
+ * @param string $time Current time view.
+ *
+ * @return string HTML output
+ */
+function mc_format_toggle( $format, $toggle, $time ) {
+	if ( 'mini' !== $format &amp;&amp; 'yes' === $toggle ) {
+		$toggle = "&lt;div class='mc-format'>";
+		switch ( $format ) {
+			case 'list':
+				$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='grid mcajax'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Grid', 'my-calendar' ) . '&lt;/a>';
+				break;
+			default:
+				$url     = mc_build_url( array( 'format' => 'list' ), array() );
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='list mcajax'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>List', 'my-calendar' ) . '&lt;/a>';
+				break;
+		}
+		$toggle .= '&lt;/div>';
+	} else {
+		$toggle = '';
+	}
+
+	if ( 'day' === $time ) {
+		$toggle = "&lt;div class='mc-format'>&lt;span class='mc-active list'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>List', 'my-calendar' ) . '&lt;/span>&lt;/div>';
+	}
+
+	if ( ( 'true' === get_option( 'mc_convert' ) || 'mini' === get_option( 'mc_convert' ) ) &amp;&amp; mc_is_mobile() ) {
+		$toggle = '';
+	}
+
+	return apply_filters( 'mc_format_toggle_html', $toggle, $format, $time );
+}
+
+/**
+ * Generate toggle for time views between day month &amp; week
+ *
+ * @param string $format of current view.
+ * @param string $time timespan of current view.
+ * @param string $month current month.
+ * @param string $year current year.
+ * @param string $current Current date.
+ * @param int    $start_of_week Day week starts on.
+ * @param string $from Date started from.
+ *
+ * @return string HTML output
+ */
+function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week, $from ) {
+	// if dy parameter not set, use today's date instead of first day of month.
+	$weeks_day = mc_first_day_of_week( $current );
+	$adjusted  = false;
+	if ( isset( $_GET['dy'] ) ) {
+		if ( '' === $_GET['dy'] ) {
+			$current_day = $weeks_day[0];
+			if ( -1 === (int) $weeks_day[1] ) {
+				$adjusted = true;
+				$month    = $month - 1;
+			}
+		} else {
+			$current_day = absint( $_GET['dy'] );
+		}
+		$current_set = mktime( 0, 0, 0, $month, $current_day, $year );
+		if ( mc_date( 'N', $current_set, false ) === $start_of_week ) {
+			$weeks_day = mc_first_day_of_week( $current_set );
+		}
+	} else {
+		$weeks_day = mc_first_day_of_week();
+	}
+	$day = $weeks_day[0];
+	if ( isset( $_GET['time'] ) &amp;&amp; 'day' === $_GET['time'] ) {
+		// don't adjust day if viewing day format.
+	} else {
+		// if the current date is displayed and the week beginning day is greater than 20 in the month.
+		if ( ! isset( $_GET['dy'] ) &amp;&amp; $day > 20 ) {
+			$day = mc_date( 'j', strtotime( "$from + 1 week" ), false );
+		}
+	}
+	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
+	$toggle = '';
+
+	if ( 'mini' !== $format ) {
+		$toggle      = "&lt;div class='mc-time'>";
+		$current_url = mc_get_current_url();
+		if ( -1 === (int) $adjust &amp;&amp; ! $adjusted ) {
+			$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
+		} else {
+			$wmonth = $month;
+		}
+		switch ( $time ) {
+			case 'week':
+				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '&lt;/a>';
+				$toggle .= "&lt;span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . '&lt;/span>';
+				$url     = mc_build_url(
+					array(
+						'time' => 'day',
+						'dy'   => $day,
+					),
+					array( 'dy', 'mc_id' )
+				);
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '&lt;/a>';
+				break;
+			case 'day':
+				$url     = mc_build_url( array( 'time' => 'month' ), array() );
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '&lt;/a>';
+				$url     = mc_build_url(
+					array(
+						'time'  => 'week',
+						'dy'    => $day,
+						'month' => $wmonth,
+						'yr'    => $year,
+					),
+					array( 'dy', 'month', 'mc_id' )
+				);
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '&lt;/a>';
+				$toggle .= "&lt;span class='mc-active day'>" . __( 'Day', 'my-calendar' ) . '&lt;/span>';
+				break;
+			default:
+				$toggle .= "&lt;span class='mc-active month'>" . __( 'Month', 'my-calendar' ) . '&lt;/span>';
+				$url     = mc_build_url(
+					array(
+						'time'  => 'week',
+						'dy'    => $day,
+						'month' => $wmonth,
+					),
+					array( 'dy', 'month', 'mc_id' )
+				);
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '&lt;/a>';
+				$url     = mc_build_url( array( 'time' => 'day' ), array() );
+				$url     = mc_url_in_loop( $url );
+				$toggle .= "&lt;a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '&lt;/a>';
+				break;
+		}
+		$toggle .= '&lt;/div>';
+	} else {
+		$toggle = '';
+	}
+
+	return apply_filters( 'mc_time_toggle_html', $toggle, $format, $time );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Filters</h3><ul><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
