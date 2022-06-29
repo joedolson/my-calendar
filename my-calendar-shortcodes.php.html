@@ -653,10 +653,10 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
 							$mcdb = mc_remote_db();
 						}
-						$query  = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged &lt;> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
-						$year1  = mc_date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
-						$diff1  = mc_date( 'Y' ) - $year1;
-						$past   = $diff1;
+						$query = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged &lt;> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
+						$year1 = mc_date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
+						$diff1 = mc_date( 'Y' ) - $year1;
+						$past  = $diff1;
 						/**
 						 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
 						 *

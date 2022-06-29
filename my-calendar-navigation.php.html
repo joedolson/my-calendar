@@ -887,11 +887,11 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	$date_switcher .= '&lt;/select>' . "\n" . $day_switcher . ' &lt;label class="maybe-hide" for="' . $cid . '-year">' . __( 'Year', 'my-calendar' ) . '&lt;/label> &lt;select id="' . $cid . '-year" name="yr">' . "\n";
 	// Query to identify oldest start date in the database.
-	$first  = $mcdb->get_var( 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged &lt;> 1 ORDER BY event_begin ASC LIMIT 0 , 1' );
-	$first  = ( '1970-01-01' === $first ) ? '2000-01-01' : $first;
-	$year1  = mc_date( 'Y', strtotime( $first, false ) );
-	$diff1  = mc_date( 'Y' ) - $year1;
-	$past   = $diff1;
+	$first = $mcdb->get_var( 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged &lt;> 1 ORDER BY event_begin ASC LIMIT 0 , 1' );
+	$first = ( '1970-01-01' === $first ) ? '2000-01-01' : $first;
+	$year1 = mc_date( 'Y', strtotime( $first, false ) );
+	$diff1 = mc_date( 'Y' ) - $year1;
+	$past  = $diff1;
 	/**
 	 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
 	 *
