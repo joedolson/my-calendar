@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_gcal_description - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_save_settings - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_gcal_description</h1></header>
+    <header><h1 class="page-title">Filter: mc_save_settings</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_gcal_description">apply_filters( 'mc_gcal_description', <span class="signature">$param, $description )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_save_settings">apply_filters( 'mc_save_settings', <span class="signature">Message, $post )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter <code>details</code> parameter added to Google Calendar link. Default <code>&amp;details=$description</code>. Return value needs to be URL encoded.</p>
+    <p>Run when settings are saved. Default ''.</p>
 </div>
 
 
@@ -77,7 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$param</code></td>
+                <td class="name"><code>Message</code></td>
             
 
             <td class="type">
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Encoded parameter.</p></td>
+            <td class="description last"><p>after updating settings sent to <code>mc_show_notice()</code>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$description</code></td>
+                <td class="name"><code>$post</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">array</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>Unencoded original description.</p></td>
+            <td class="description last"><p>POST global.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line226">line 226</a>
+        <a href="my-calendar-settings.php.html">my-calendar-settings.php</a>, <a href="my-calendar-settings.php.html#line481">line 481</a>
     </li></ul></dd>
     
 
@@ -183,10 +183,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>Encoded parameter.</p>
-</div>
-
 
 
 <dl>
