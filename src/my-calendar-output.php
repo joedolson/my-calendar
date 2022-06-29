@@ -407,7 +407,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 
 			$status     = apply_filters( 'mc_registration_state', '', $event );
 			$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ) );
-			$text       = ( '' !== get_option( 'mc_view_full' ) ) ? get_option( 'mc_view_full' ) : __( 'View full calendar', 'my-calendar' );
+			$text       = ( '' !== get_option( 'mc_view_full', '' ) ) ? get_option( 'mc_view_full' ) : __( 'View full calendar', 'my-calendar' );
 			$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
 
 			if ( ! mc_show_details( $time, $type ) ) {

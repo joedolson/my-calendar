@@ -2,7 +2,7 @@
 
 Accessible Event Manager for WordPress
 
-[![Code Linting](https://github.com/joedolson/my-calendar/actions/workflows/main.yml/badge.svg)](https://github.com/joedolson/my-calendar/actions/workflows/main.yml) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/license/gpl-2.0.html)
+[![Code Linting](https://github.com/joedolson/my-calendar/actions/workflows/main.yml/badge.svg)](https://github.com/joedolson/my-calendar/actions/workflows/main.yml)  ![Docs Built](https://github.com/joedolson/my-calendar/actions/workflows/build-docs.yml/badge.svg)  [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/license/gpl-2.0.html)
 
 ## My Calendar Build Environment
 
