@@ -243,12 +243,11 @@ function mc_update_management_settings( $post ) {
 }
 
 /**
- * Update Permissions settings.
+ * Get array of My Calendar user capabilities.
  *
- * @param array $post POST data.
+ * @return array
  */
-function mc_update_permissions_settings( $post ) {
-	$perms = $post['mc_caps'];
+function mc_get_user_capabilities() {
 	$caps  = array(
 		'mc_add_events'     => __( 'Add Events', 'my-calendar' ),
 		'mc_publish_events' => __( 'Publish Events', 'my-calendar' ),
@@ -262,7 +261,29 @@ function mc_update_permissions_settings( $post ) {
 		'mc_edit_settings'  => __( 'Edit Settings', 'my-calendar' ),
 		'mc_view_help'      => __( 'View Help', 'my-calendar' ),
 	);
-	$caps  = apply_filters( 'mc_capabilities', $caps );
+	/**
+	 * Add custom capabilities to the array of My Calendar permissions. New capabilities can be assigned to roles in the My Calendar settings.
+	 *
+	 * @hook mc_capabilities
+	 *
+	 * @param {array} Array of My Calendar capabilities in format ['capability' => 'Visible Label'].
+	 *
+	 * @return {array}
+	 */
+	$caps = apply_filters( 'mc_capabilities', $caps );
+
+	return $caps;
+}
+
+/**
+ * Update Permissions settings.
+ *
+ * @param array $post POST data.
+ */
+function mc_update_permissions_settings( $post ) {
+	$perms = $post['mc_caps'];
+	$caps  = mc_get_user_capabilities();
+
 	foreach ( $perms as $key => $value ) {
 		$role = get_role( $key );
 		if ( is_object( $role ) ) {
@@ -457,7 +478,20 @@ function my_calendar_settings() {
 			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ) );
 		}
 
-		$settings = apply_filters( 'mc_save_settings', '', $_POST );
+		/**
+		 * Run when settings are saved. Default ''.
+		 *
+		 * @hook mc_save_settings
+		 *
+		 * @param {string} Message after updating settings sent to `mc_show_notice()`.
+		 * @param {array}  $post POST global.
+		 *
+		 * @return {string}
+		 */
+		$settings = do_action( 'mc_save_settings', '', $_POST );
+		if ( '' !== $settings ) {
+			mc_show_notice( $setings );
+		}
 	}
 	// Pull templates for passing into functions.
 	$templates              = get_option( 'mc_templates' );
@@ -486,7 +520,19 @@ function my_calendar_settings() {
 			?>
 			<button type="button" role="tab" aria-selected="false"  id="tab_permissions" aria-controls="my-calendar-permissions"><?php esc_html_e( 'Permissions', 'my-calendar' ); ?></button>
 			<button type="button" role="tab" id="tab_email" aria-selected="false" aria-controls="my-calendar-email"><?php esc_html_e( 'Notifications', 'my-calendar' ); ?></button>
-			<?php echo apply_filters( 'mc_settings_section_links', '' ); ?>
+			<?php
+			/**
+			 * Add additional buttons to collection of settings tabs.
+			 *
+			 * @hook mc_settings_section_links
+			 *
+			 * @param {string} HTML to output.
+			 *
+			 * @return {string}
+			 */
+			$links = apply_filters( 'mc_settings_section_links', '' );
+			echo $links;
+			?>
 		</div>
 		<div class="settings postbox-container jcd-wide">
 		<div class="metabox-holder">
@@ -1200,20 +1246,7 @@ function mc_remote_db() {
 		global $wp_roles;
 		$role_container = '';
 		$roles          = $wp_roles->get_names();
-		$caps           = array(
-			'mc_add_events'     => __( 'Add Events', 'my-calendar' ),
-			'mc_publish_events' => __( 'Publish Events', 'my-calendar' ),
-			'mc_approve_events' => __( 'Approve Events', 'my-calendar' ),
-			'mc_manage_events'  => __( 'Manage Events', 'my-calendar' ),
-			'mc_edit_locations' => __( 'Edit Locations', 'my-calendar' ),
-			'mc_edit_cats'      => __( 'Edit Categories', 'my-calendar' ),
-			'mc_edit_styles'    => __( 'Edit Styles', 'my-calendar' ),
-			'mc_edit_behaviors' => __( 'Manage Scripts', 'my-calendar' ),
-			'mc_edit_templates' => __( 'Edit Templates', 'my-calendar' ),
-			'mc_edit_settings'  => __( 'Edit Settings', 'my-calendar' ),
-			'mc_view_help'      => __( 'View Help', 'my-calendar' ),
-		);
-		$caps           = apply_filters( 'mc_capabilities', $caps );
+		$caps           = mc_get_user_capabilities();
 
 		foreach ( $roles as $role => $rolename ) {
 			if ( 'administrator' === $role ) {
@@ -1300,7 +1333,18 @@ function mc_remote_db() {
 		</div>
 	</div>
 
-	<?php echo apply_filters( 'mc_after_settings', '' ); ?>
+	<?php
+	/**
+	 * Render content after settings panels have displayed. Default ''.
+	 *
+	 * @hook mc_after_settings
+	 * @param {string} $after_settings Output content.
+	 *
+	 * @return {string}
+	 */
+	$after_settings = apply_filters( 'mc_after_settings', '' );
+	echo $after_settings;
+	?>
 
 	</div>
 	</div>
