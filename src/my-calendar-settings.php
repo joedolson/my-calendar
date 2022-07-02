@@ -493,7 +493,7 @@ function my_calendar_settings() {
 			mc_show_notice( $setings );
 		}
 	}
-	}
+
 	// Pull templates for passing into functions.
 	$templates              = get_option( 'mc_templates' );
 	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
