@@ -248,7 +248,7 @@ function mc_update_management_settings( $post ) {
  * @return array
  */
 function mc_get_user_capabilities() {
-	$caps  = array(
+	$caps = array(
 		'mc_add_events'     => __( 'Add Events', 'my-calendar' ),
 		'mc_publish_events' => __( 'Publish Events', 'my-calendar' ),
 		'mc_approve_events' => __( 'Approve Events', 'my-calendar' ),
