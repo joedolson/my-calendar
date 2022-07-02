@@ -519,6 +519,7 @@ function my_calendar_settings() {
 			mc_show_notice( $setings );
 		}
 	}
+	}
 	// Pull templates for passing into functions.
 	$templates              = get_option( 'mc_templates' );
 	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
@@ -822,7 +823,7 @@ function mc_remote_db() {
 							&lt;li>&lt;?php mc_settings_field( 'mc_posted_by', __( 'Posted by', 'my-calendar' ), 'Posted by' ); ?>&lt;/li>
 							&lt;li>&lt;?php mc_settings_field( 'mc_buy_tickets', __( 'Buy tickets', 'my-calendar' ), 'Buy tickets' ); ?>&lt;/li>
 							&lt;li>&lt;?php mc_settings_field( 'mc_event_accessibility', __( 'Event Accessibility Heading', 'my-calendar' ), 'Event Accessibility' ); ?>&lt;/li>
-							&lt;li>&lt;?php mc_settings_field( 'mc_view_full', __( 'View full calendar', 'my-calendar' ), 'View full calendar' ); ?>&lt;/li>
+							&lt;li>&lt;?php mc_settings_field( 'mc_view_full', __( 'View full calendar', 'my-calendar' ), __( 'View full calendar', 'my-calendar' ) ); ?>&lt;/li>
 							&lt;li>&lt;?php mc_settings_field( 'mc_details_label', __( 'Read more text', 'my-calendar' ), $mc_details_label, __( 'Tags: &lt;code>{title}&lt;/code>, &lt;code>{location}&lt;/code>, &lt;code>{color}&lt;/code>, &lt;code>{icon}&lt;/code>, &lt;code>{date}&lt;/code>, &lt;code>{time}&lt;/code>.', 'my-calendar' ) ); ?>&lt;/li>
 							&lt;li>&lt;?php mc_settings_field( 'mc_link_label', __( 'More Information text', 'my-calendar' ), $mc_link_label, "&lt;a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '&lt;/a>' ); ?>&lt;/li>
 							&lt;li>
