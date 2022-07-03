@@ -77,6 +77,19 @@ function my_calendar_print() {
 
 	echo mc_kses_post( my_calendar( $calendar ) );
 	$return_url = mc_get_uri( false, $args );
+	/**
+	 * Filter the root URL used to generate the return URL.
+	 *
+	 * @hook mc_print_return_url
+	 *
+	 * @param {string} $return_url Referer URL for calendar print view arrived from.
+	 * @param {string} $category Category argument.
+	 * @param {string} $time Time argument.
+	 * @param {string} $ltype Location type argument.
+	 * @param {string} $lvalue Location value argument.
+	 *
+	 * @return {string}
+	 */
 	$return_url = apply_filters( 'mc_print_return_url', $return_url, $category, $time, $ltype, $lvalue );
 
 	if ( isset( $_GET['href'] ) ) {
@@ -90,6 +103,16 @@ function my_calendar_print() {
 	unset( $add['cid'] );
 	unset( $add['feed'] );
 	unset( $add['href'] );
+	/**
+	 * Return to calendar URL from print view.
+	 *
+	 * @hook mc_return_to_calendar
+	 *
+	 * @param {string} $return_url URL to return to previous page.
+	 * @param {array}  $add Array of parameters added to this URL.
+	 *
+	 * @return {string}
+	 */
 	$return_url = apply_filters( 'mc_return_to_calendar', mc_build_url( $add, array( 'feed', 'cid', 'href', 'searched' ), $return_url ), $add );
 	if ( $return_url ) {
 		echo wp_kses_post( "<p class='return'>&larr; <a href='" . esc_url( $return_url ) . "'>" . esc_html__( 'Return to calendar', 'my-calendar' ) . '</a></p>' );
