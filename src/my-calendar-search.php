@@ -21,16 +21,66 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string HTML output
  */
 function mc_search_results( $query ) {
+	/**
+	 * Number of past results to show. Default `0`.
+	 *
+	 * @hook mc_past_search_results
+	 *
+	 * @param {int}    $before Number of past results to display.
+	 * @param {string} $context 'basic' for basic search results.
+	 *
+	 * @return {string}
+	 */
 	$before  = apply_filters( 'mc_past_search_results', 0, 'basic' );
+	/**
+	 * Number of future results to show. Default `20`.
+	 *
+	 * @hook mc_future_search_results
+	 *
+	 * @param {int}    $after Number of future results to display.
+	 * @param {string} $context 'basic' for basic search results.
+	 *
+	 * @return {string}
+	 */
 	$after   = apply_filters( 'mc_future_search_results', 10, 'basic' ); // Return only future events, nearest 10.
 	$exports = '';
 	if ( is_string( $query ) ) {
 		$search = mc_prepare_search_query( $query );
 		$term   = $query;
 	} else {
+		/**
+		 * Build the advanced search query. Default ''
+		 *
+		 * @hook mc_advanced_search
+		 *
+		 * @param {string}       $search Placeholder to create search results.
+		 * @param {array|string} $query User search query parameters.
+		 *
+		 * @return {array}
+		 */
 		$search = apply_filters( 'mc_advanced_search', '', $query );
 		$term   = $query['mcs'];
+		/**
+		 * Number of past results to show. Default `0`.
+		 *
+		 * @hook mc_past_search_results
+		 *
+		 * @param {int}    $before Number of past results to display.
+		 * @param {string} $context 'advanced' for advanced search results.
+		 *
+		 * @return {string}
+		 */
 		$before = apply_filters( 'mc_past_search_results', 0, 'advanced' );
+		/**
+		 * Number of future results to show. Default `20`.
+		 *
+		 * @hook mc_future_search_results
+		 *
+		 * @param {int}    $after Number of future results to display.
+		 * @param {string} $context 'advanced' for advanced search results.
+		 *
+		 * @return {string}
+		 */
 		$after  = apply_filters( 'mc_future_search_results', 20, 'advanced' );
 	}
 
@@ -38,15 +88,65 @@ function mc_search_results( $query ) {
 
 	if ( ! empty( $event_array ) ) {
 		$template = '<strong>{date}</strong> {title} {details}';
-		$template = apply_filters( 'mc_search_template', $template );
+		/**
+		 * Template for outputting search results. Default `<strong>{date}</strong> {title} {details}`.
+		 *
+		 * @hook mc_search_template
+		 *
+		 * @param {string}       $template String with HTML and template tags.
+		 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
+		 *
+		 * @return {string}
+		 */
+		$template = apply_filters( 'mc_search_template', $template, $term );
 		// No filters parameter prevents infinite looping on the_content filters.
 		$output  = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', 0, $before, $after, 'yes', 'yes', 'nofilters' );
+		/**
+		 * Filter that inserts search export links. Default empty string.
+		 *
+		 * @hook mc_search_exportlinks
+		 *
+		 * @param {string} $exports String.
+		 * @param {array}  $output Search results.
+		 *
+		 * @return {string}
+		 */
 		$exports = apply_filters( 'mc_search_exportlinks', '', $output );
 	} else {
-		$output = apply_filters( 'mc_search_no_results', "<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . '</li>' );
+		/**
+		 * HTML template if no search results. Default `<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . '</li>`.
+		 *
+		 * @hook mc_search_no_results
+		 *
+		 * @param {string}       $output HTML output.
+		 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
+		 *
+		 * @return {string}
+		 */
+		$output = apply_filters( 'mc_search_no_results', "<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . '</li>', $term );
 	}
 
+	/**
+	 * HTML template before the search results. Default `<ol class="mc-search-results">`.
+	 *
+	 * @hook mc_search_before
+	 *
+	 * @param {string}       $header HTML output.
+	 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
+	 *
+	 * @return {string}
+	 */
 	$header = apply_filters( 'mc_search_before', '<ol class="mc-search-results">', $term );
+	/**
+	 * HTML template after the search results. Default `</ol>`.
+	 *
+	 * @hook mc_search_after
+	 *
+	 * @param {string}       $footer HTML output.
+	 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
+	 *
+	 * @return {string}
+	 */
 	$footer = apply_filters( 'mc_search_after', '</ol>', $term );
 
 	return $header . $output . $footer . $exports;
