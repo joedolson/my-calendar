@@ -526,6 +526,15 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
  * @return string
  */
 function mc_close_button( $controls ) {
+	/**
+	 * Filter event modal close button label.
+	 *
+	 * @hook mc_close_button
+	 *
+	 * @param {string} $close HTML or text string to use as label of close button.
+	 *
+	 * @return {string}
+	 */ 
 	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
 	$close_button = "	<button type='button' aria-controls='$controls' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
 
@@ -597,13 +606,42 @@ function mc_get_event_image( $event, $data ) {
 	} else {
 		$default_size = 'medium';
 	}
+	/**
+	 * Customize default image size for event output. Default is 'large' if it exists, 'medium' if not. 
+	 *
+	 * @hook mc_default_image_size
+	 *
+	 * @param {string} $default_size Image size designator.
+	 *
+	 * @return {string}
+	 */ 
 	$default_size = apply_filters( 'mc_default_image_size', $default_size );
 
 	if ( is_numeric( $event->event_post ) && 0 !== (int) $event->event_post && ( isset( $data[ $default_size ] ) && '' !== $data[ $default_size ] ) ) {
-		$atts      = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ) );
+		/**
+		 * Customize featured image attributes.
+		 *
+		 * @hook mc_post_thumbnail_atts
+		 *
+		 * @param {array}  $atts Array of attributes passed to `get_the_post_thumbnail`
+		 * @param {object} $event Event object.
+		 *
+		 * @return {array}
+		 */ 
+		$atts      = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
 		$image_url = get_the_post_thumbnail_url( $event->event_post, $default_size );
 		$image     = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
 	} else {
+		/**
+		 * Customize alt attribute for an event featured image that is not attached to a post.
+		 *
+		 * @hook mc_event_image_alt
+		 *
+		 * @param {string} $alt Empty string.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {string}
+		 */ 
 		$alt       = esc_attr( apply_filters( 'mc_event_image_alt', '', $event ) );
 		$image_url = $event->event_image;
 		$image     = ( '' !== $event->event_image ) ? "<img src='$event->event_image' alt='$alt' class='mc-image photo' />" : '';
@@ -613,17 +651,16 @@ function mc_get_event_image( $event, $data ) {
 	global $template;
 	$template_file_name = basename( $template );
 	/**
-	 * Fires when displaying an event image in the default template.
+	 * Fires when displaying an event image in the default template. Return false to show the template image rather than the theme's featured image.
 	 *
-	 * Return false to show the template image rather than the theme's featured image.
-	 *
+	 * @hook mc_override_featured_image
 	 * @since 3.3.0
 	 *
-	 * @param bool   $return True to return thumbnail in templates.
-	 * @param object $event Event object.
-	 * @param array  $data Event template tags.
+	 * @param {bool}   $return True to return thumbnail in templates.
+	 * @param {object} $event Event object.
+	 * @param {array}  $data Event template tags.
 	 *
-	 * @return bool
+	 * @return {bool}
 	 */
 	$override = apply_filters( 'mc_override_featured_image', $return, $event, $data );
 	if ( $override && is_singular( 'mc-events' ) && has_post_thumbnail( $event->event_post ) && current_theme_supports( 'post-thumbnails' ) && ( 'single-mc-events.php' !== $template_file_name ) ) {
@@ -711,6 +748,18 @@ function mc_event_classes( $event, $type ) {
 		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
 	}
 
+	/**
+	 * Filter event classes.
+	 *
+	 * @hook mc_event_classes
+	 *
+	 * @param {array}  $classes Array of classes for event.
+	 * @param {object} $event Event object.
+	 * @param {string} $uid Unique ID for this event.
+	 * @param {string} $type View type.
+	 *
+	 * @return {array}
+	 */ 
 	$classes    = apply_filters( 'mc_event_classes', array_unique( $classes ), $event, $uid, $type );
 	$class_html = strtolower( implode( ' ', $classes ) );
 
@@ -726,6 +775,16 @@ function mc_event_classes( $event, $type ) {
  * @return boolean
  */
 function mc_show_details( $time, $type ) {
+	/**
+	 * Display details links globally from main calendar view.
+	 *
+	 * @hook mc_disable_link
+	 *
+	 * @param {bool}  $no_link true to disable link.
+	 * @param {array} $array Empty array. (deprecated).
+	 *
+	 * @return {bool}
+	 */ 
 	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
 	return ( ( 'calendar' === $type && 'true' === get_option( 'mc_open_uri' ) && 'day' !== $time ) || $no_link ) ? false : true;
@@ -817,6 +876,16 @@ function mc_list_title( $events ) {
 	usort( $events, 'mc_time_cmp' );
 	$now         = $events[0];
 	$count       = count( $events ) - 1;
+	/**
+	 * Format a single title for display in single titles on list view.
+	 *
+	 * @hook mc_list_event_title_hint
+	 *
+	 * @param {string} $title Event title.
+	 * @param {object} $now Event object.
+	 *
+	 * @return {string}
+	 */ 
 	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now );
 	if ( 0 === $count ) {
 		$cstate = $event_title;
@@ -827,6 +896,17 @@ function mc_list_title( $events ) {
 		// Translators: %s Title of event, %d number of other events.
 		$cstate = sprintf( __( '%1$s<span class="mc-list-extended"> and %2$d other events</span>', 'my-calendar' ), $event_title, $count );
 	}
+	/**
+	 * Format display output on a single titles on list view.
+	 *
+	 * @hook mc_list_event_title_hint
+	 *
+	 * @param {string} $title Event title.
+	 * @param {object} $now Event object.
+	 * @param {array}  $events Array of event objects.
+	 *
+	 * @return {string}
+	 */ 
 	$title = apply_filters( 'mc_list_event_title_hint', $cstate, $now, $events );
 
 	return $title;
@@ -844,13 +924,42 @@ function mc_list_titles( $events ) {
 	$titles = array();
 
 	foreach ( $events as $now ) {
+		/**
+		 * Format a single title for display in multiple titles on list view.
+		 *
+		 * @hook mc_list_event_title_hint
+		 *
+		 * @param {string} $title Event title.
+		 * @param {object} $now Event object.
+		 * @param {array}  $events Array of event objects.
+		 *
+		 * @return {string}
+		 */ 
 		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now, $events );
 		$titles[] = $title;
 	}
-
+	/**
+	 * Format titles displayed in multiple titles on list view. Default ''. Returning any value will shortcircuit standard formatting.
+	 *
+	 * @hook mc_titles_format
+	 *
+	 * @param {string} $result Custom format of data in results.
+	 * @param {array}  $titles Array of titles of events on this date.
+	 *
+	 * @return {string}
+	 */
 	$result = apply_filters( 'mc_titles_format', '', $titles );
 
 	if ( '' === $result ) {
+		/**
+		 * Filter separator used to separate a collection of event titles on the list view day while collapsed.
+		 *
+		 * @hook mc_list_titles_separator
+		 *
+		 * @param {string} $separator Separator between titles in list view titles.
+		 *
+		 * @return {string}
+		 */
 		$result = implode( apply_filters( 'mc_list_titles_separator', ', ' ), $titles );
 	}
 
@@ -926,9 +1035,10 @@ function mc_output_is_visible( $feature, $type, $event = false ) {
 	/**
 	 * Filter whether any given piece of information should be output.
 	 *
-	 * @param string         $feature Feature key.
-	 * @param string         $type Type of view.
-	 * @param object|boolean $event Event object if in event context.
+	 * @param {bool}           $return Should this piece of data be output.
+	 * @param {string}         $feature Feature key.
+	 * @param {string}         $type Type of view.
+	 * @param {object|boolean} $event Event object if in event context.
 	 *
 	 * @return bool
 	 */
@@ -997,18 +1107,61 @@ function mc_show_event_template( $content ) {
 				return $content;
 			}
 			if ( '1' === get_option( 'mc_use_details_template' ) ) {
+				/**
+				 * Prepend content before single event. Default empty string.
+				 *
+				 * @hook mc_before_event
+				 *
+				 * @param {string} $new_content Content to prepend before the event.
+				 * @param {object} $event Event object.
+				 * @param {string} $view View type.
+				 * @param {string} $time Time view.
+				 *
+				 * @return {string}
+				 */
 				$new_content = apply_filters( 'mc_before_event', '', $event, 'single', $time );
 				if ( isset( $_GET['mc_id'] ) ) {
 					$shortcode = str_replace( "event='$event_id'", "event='$mc_id' instance='1'", get_post_meta( $post->ID, '_mc_event_shortcode', true ) );
 				} else {
 					$shortcode = get_post_meta( $post->ID, '_mc_event_shortcode', true );
 				}
+				/**
+				 * Filter shortcode before appending to single event content.
+				 *
+				 * @hook mc_single_event_shortcode
+				 *
+				 * @param {string} $shortcode Shortcode for single event.
+				 *
+				 * @return {string}
+				 */
 				$new_content .= do_shortcode( apply_filters( 'mc_single_event_shortcode', $shortcode ) );
+				/**
+				 * Append content after single event. Default empty string.
+				 *
+				 * @hook mc_after_event
+				 *
+				 * @param {string} $new_content Content to append after the event.
+				 * @param {object} $event Event object.
+				 * @param {string} $view View type.
+				 * @param {string} $time Time view.
+				 *
+				 * @return {string}
+				 */
 				$new_content .= apply_filters( 'mc_after_event', '', $event, 'single', $time );
 			} else {
 				$new_content = my_calendar_draw_event( $event, 'single', $date, $time, '' );
 			}
-
+			/**
+			 * Filter single event content prior to running shortcodes.
+			 *
+			 * @hook mc_event_post_content
+			 *
+			 * @param {string} $new_content Event content with event shortcode appended.
+			 * @param {string} $content Original event content.
+			 * @param {WP_Post} $post Post object.
+			 *
+			 * @return {string}
+			 */
 			$content = do_shortcode( apply_filters( 'mc_event_post_content', $new_content, $content, $post ) );
 		}
 	}
@@ -1034,8 +1187,26 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 	$output  = '';
 	$classes = '';
 	// If a large number of events, skip this.
+	/**
+	 * How many related events should there be before they are not shown? Default `50`.
+	 *
+	 * @hook mc_related_event_limit
+	 *
+	 * @param {int} Number of events where the large limit triggers.
+	 *
+	 * @return {int}.
+	 */
 	if ( $count > apply_filters( 'mc_related_event_limit', 50 ) ) {
-		// filter to return an subset of grouped events.
+		/**
+		 * For large lists of related events, related events are not shown by default. Only runs if number of related events higher than `mc_related_event_limit`.
+		 *
+		 * @hook mc_grouped_events
+		 *
+		 * @param {string} $output HTML output of events to shown. Default empty string.
+		 * @param {array}  $results Array of related event objects.
+		 *
+		 * @return {bool}
+		 */
 		return apply_filters( 'mc_grouped_events', '', $results );
 	}
 
@@ -1097,7 +1268,17 @@ function mc_event_is_hidden( $event ) {
 	}
 	$category = $event->event_category;
 	$private  = mc_get_private_categories();
-	$can_see  = apply_filters( 'mc_user_can_see_private_events', is_user_logged_in(), $event );
+	/**
+	 * Filter whether an event is visible to the current user.
+	 *
+	 * @hook mc_user_can_see_private_events
+	 *
+	 * @param {bool}   $can_see 'true' if the event should be shown.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {bool}
+	 */
+	$can_see = apply_filters( 'mc_user_can_see_private_events', is_user_logged_in(), $event );
 	if ( in_array( $category, $private, true ) && ! $can_see ) {
 
 		return true;
@@ -1169,6 +1350,16 @@ function mc_calendar_params( $args ) {
 		$search = $_GET['mcs'];
 	}
 
+	/**
+	 * Filter the display format. 
+	 *
+	 * @hook mc_display_format
+	 *
+	 * @param {string} $format Current view format. E.g. 'grid', 'list'.
+	 * @param {array}  $args Calendar view arguments.
+	 *
+	 * @return {string}
+	 */
 	$format = apply_filters( 'mc_display_format', $format, $args );
 	$params = array(
 		'name'     => $name, // Not used in my_calendar(); what is/was it for.
@@ -1217,11 +1408,31 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 	$name_days = $days['name_days'];
 	$abbrevs   = $days['abbrevs'];
 
+	/**
+	 * Alter the HTML date header element for the grid view. Default `th`
+	 *
+	 * @hook mc_grid_header_wrapper
+	 *
+	 * @param {string} $th HTML element tag without `<>`.
+	 * @param {string} $format Viewed format.
+	 *
+	 * @return {string}
+	 */
 	$th       = apply_filters( 'mc_grid_header_wrapper', 'th', $params['format'] );
 	$close_th = ( 'th' === $th ) ? 'th' : $th;
 	$th      .= ( 'th' === $th ) ? ' scope="col"' : '';
 	$body     = '';
 	if ( 'calendar' === $params['format'] || 'mini' === $params['format'] ) {
+		/**
+		 * Alter the outer wrapper HTML element for the grid view. Default `table`.
+		 *
+		 * @hook mc_grid_wrapper
+		 *
+		 * @param {string} $table HTML element tag without `<>`.
+		 * @param {string} $format Viewed format.
+		 *
+		 * @return {string}
+		 */
 		$table = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
 		$body .= "\n<$table class='my-calendar-table' aria-labelledby='mc_head_$id'>\n";
 	}
@@ -1231,6 +1442,16 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 	} else {
 		$body .= ( 'tr' === $tr ) ? '<thead>' : '<div class="mc-table-body">';
 		$body .= "\n	<$tr class='mc-row'>\n";
+		/**
+		 * Should the number of the week (1-52) appear in the calendar grid.
+		 *
+		 * @hook mc_show_week_number
+		 *
+		 * @param {bool}  $show `true` to add a column with the week number.
+		 * @param {array} $params Calendar view arguments.
+		 *
+		 * @return {bool}
+		 */
 		if ( apply_filters( 'mc_show_week_number', false, $params ) ) {
 			$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
 		}
@@ -1304,6 +1525,16 @@ function my_calendar( $args ) {
 	$show_weekends = ( get_option( 'mc_show_weekends' ) === 'true' ) ? true : false;
 	$skip_holidays = get_option( 'mc_skip_holidays_category' );
 	$month_format  = ( get_option( 'mc_month_format', '' ) === '' ) ? 'F Y' : get_option( 'mc_month_format' );
+	/**
+	 * Filter how many months to show in list views.
+	 *
+	 * @hook mc_show_months
+	 *
+	 * @param {int}   $show_months Number of months to show at once.
+	 * @param {array} $args Current view arguments.
+	 *
+	 * @return {int}
+	 */
 	$show_months   = absint( apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args ) );
 	$show_months   = ( '0' === $show_months ) ? 1 : $show_months;
 	$caption_text  = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
@@ -1321,7 +1552,17 @@ function my_calendar( $args ) {
 	my_calendar_check();
 
 	$params = mc_calendar_params( $args );
-	$body   = apply_filters( 'mc_before_calendar', '', $params );
+	/**
+	 * Prepend content before the calendar.
+	 *
+	 * @hook mc_before_calendar
+	 *
+	 * @param {string} $before HTML content.
+	 * @param {array}  $params Current view arguments.
+	 *
+	 * @return {string}
+	 */
+	$body = apply_filters( 'mc_before_calendar', '', $params );
 
 	$id         = $params['id'];
 	$main_class = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
@@ -1332,8 +1573,31 @@ function my_calendar( $args ) {
 	$mc_closer  = '
 </div>';
 
+	/**
+	 * Filter date format in main calendar view.
+	 *
+	 * @hook mc_date_format
+	 *
+	 * @param {string} $date_format Date format in PHP date format structure.
+	 * @param {string} $format Current view format.
+	 * @param {string} $time Current view time frame.
+	 *
+	 * @return {string}
+	 */
 	$date_format = apply_filters( 'mc_date_format', $date_format, $params['format'], $params['time'] );
-	$hl          = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
+	/**
+	 * Main heading level. Default `h2`.
+	 *
+	 * @hook mc_heading_level
+	 *
+	 * @param {string} $h1 Main heading level.
+	 * @param {string} $format Current view format.
+	 * @param {string} $time Current view time frame.
+	 * @param {string} $template Current view template.
+	 *
+	 * @return {string}
+	 */
+	$hl = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 
 	if ( isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
 		// single event, main calendar only.
@@ -1352,7 +1616,25 @@ function my_calendar( $args ) {
 		}
 
 		$dates = mc_get_from_to( $show_months, $params, $date );
+		/**
+		 * Filter the calendar start date.
+		 *
+		 * @hook mc_from_date
+		 *
+		 * @param {string} $from Start date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+		 *
+		 * @return {string}
+		 */
 		$from  = apply_filters( 'mc_from_date', $dates['from'] );
+		/**
+		 * Filter the calendar end date.
+		 *
+		 * @hook mc_to_date
+		 *
+		 * @param {string} $to End date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+		 *
+		 * @return {string}
+		 */
 		$to    = apply_filters( 'mc_to_date', $dates['to'] );
 		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $from;
 		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $to;
@@ -1368,6 +1650,16 @@ function my_calendar( $args ) {
 			'source'   => 'calendar',
 			'site'     => $site,
 		);
+		/**
+		 * Filter calendar view attributes.
+		 *
+		 * @hook mc_calendar_attributes
+		 *
+		 * @param {array} $query Current view arguments.
+		 * @param {array} $params Shortcode parameters passed to view.
+		 *
+		 * @return {array}
+		 */
 		$query = apply_filters( 'mc_calendar_attributes', $query, $params );
 		if ( 'mc-print-view' === $id && isset( $_GET['searched'] ) && $_GET['searched'] ) {
 			$event_array = mc_get_searched_events();
@@ -1387,6 +1679,17 @@ function my_calendar( $args ) {
 		$bottom = $nav['bottom'];
 
 		if ( 'day' === $params['time'] ) {
+			/**
+			 * Filter the main calendar heading content in single day view.
+			 *
+			 * @hook mc_heading
+			 *
+			 * @param {string} $heading HTML heading for calendar.
+			 * @param {string} $format Viewed format.
+			 * @param {string} $time Time frame currently viewed.
+			 *
+			 * @return {string}
+			 */
 			$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'><span>" . apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] ) . "</span></$hl>";
 			$dateclass    = mc_dateclass( $current );
 			$mc_events    = '';
@@ -1432,17 +1735,70 @@ function my_calendar( $args ) {
 			} else {
 				$heading = mc_draw_template( $values, stripslashes( $week_template ) );
 			}
+			/**
+			 * Filter the main calendar heading level. Default `h2`.
+			 *
+			 * @hook mc_heading_level
+			 *
+			 * @param {string} $heading HTML heading element.
+			 * @param {string} $format Viewed format.
+			 * @param {string} $time Time frame currently viewed.
+			 * @param {string} $template Heading template.
+			 *
+			 * @return {string}
+			 */
 			$h2      = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
-			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'] );
+			/**
+			 * Filter the main calendar heading in multiday views.
+			 *
+			 * @hook mc_heading
+			 *
+			 * @param {string} $heading HTML heading for calendar.
+			 * @param {string} $format Viewed format.
+			 * @param {string} $time Time frame currently viewed.
+			 * @param {string} $template Heading template.
+			 *
+			 * @return {string}
+			 */
+			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'], $template );
 			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>$heading</span></$h2>\n";
 			$body   .= $top;
 
-			// Add the calendar table and heading.
+			/**
+			 * Alter the outer wrapper HTML element for the grid view. Default `table`.
+			 *
+			 * @hook mc_grid_wrapper
+			 *
+			 * @param {string} $table HTML element tag without `<>`.
+			 * @param {string} $format Viewed format.
+			 *
+			 * @return {string}
+			 */
 			$table = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
+			/**
+			 * Change the element wrapping a week of events in grid view. Default `tr`.
+			 *
+			 * @hook mc_grid_week_wrapper
+			 *
+			 * @param {string} $format Date format per PHP date formatting.
+			 * @param {string} $format Current view format.
+			 *
+			 * @return {string}
+			 */
 			$tr    = apply_filters( 'mc_grid_week_wrapper', 'tr', $params['format'] );
 			$body .= mc_get_calendar_header( $params, $id, $tr, $start_of_week );
 			$odd   = 'odd';
 
+			/**
+			 * Change whether list format removes dates with no events.
+			 *
+			 * @hook mc_all_list_dates
+			 *
+			 * @param {bool}  $show_all `true` to show all dates in list format.
+			 * @param {array} $args Array of view arguments.
+			 *
+			 * @return {bool}
+			 */
 			$show_all = apply_filters( 'mc_all_list_dates', false, $args );
 			if ( $no_events && 'list' === $params['format'] && false === $show_all ) {
 				// If there are no events in list format, just display that info.
@@ -1460,8 +1816,18 @@ function my_calendar( $args ) {
 						if ( mc_date( 'N', $start, false ) === (string) $start_of_week && 'list' !== $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
 						}
-						$events          = ( isset( $event_array[ $date_is ] ) ) ? $event_array[ $date_is ] : array();
-						$week_header     = date_i18n( $week_format, $start );
+						$events      = ( isset( $event_array[ $date_is ] ) ) ? $event_array[ $date_is ] : array();
+						$week_header = date_i18n( $week_format, $start );
+						/**
+						 * Alter the date format used to show the current day in grid view. Default 'j'.
+						 *
+						 * @hook mc_grid_date
+						 *
+						 * @param {string} $format Date format per PHP date formatting.
+						 * @param {array}  $params Array of view arguments.
+						 *
+						 * @return {string}
+						 */
 						$thisday_heading = ( 'week' === $params['time'] ) ? "<small>$week_header</small>" : mc_date( apply_filters( 'mc_grid_date', 'j', $params ), $start, false );
 
 						// Generate event classes & attributes.
@@ -1470,6 +1836,16 @@ function my_calendar( $args ) {
 						$dateclass    = mc_dateclass( $start );
 						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
+						/**
+						 * Alter the date wrapper HTML element for the grid view. Default `td`.
+						 *
+						 * @hook mc_grid_day_wrapper
+						 *
+						 * @param {string} $td HTML element tag without `<>`.
+						 * @param {string} $format Viewed format.
+						 *
+						 * @return {string}
+						 */
 						$td = apply_filters( 'mc_grid_day_wrapper', 'td', $params['format'] );
 						if ( ! $week_number_shown ) {
 							$weeknumber = mc_show_week_number( $events, $args, $params['format'], $td, $start );
@@ -1480,6 +1856,15 @@ function my_calendar( $args ) {
 						}
 
 						if ( ! empty( $events ) ) {
+							/**
+							 * Hide events in next or previous month in grid view.
+							 *
+							 * @hook mc_hide_nextmonth
+							 *
+							 * @param {bool} $hide true to hide events not in the currently viewed month.
+							 *
+							 * @return {bool}
+							 */
 							$hide_nextmonth = apply_filters( 'mc_hide_nextmonth', false );
 							if ( true === $hide_nextmonth && 'nextmonth' === $monthclass ) {
 								$event_output = ' ';
@@ -1559,7 +1944,6 @@ function my_calendar( $args ) {
 				} while ( $start <= $end );
 			}
 
-			$table = apply_filters( 'mc_grid_wrapper', 'table', $params['format'] );
 			$end   = ( 'table' === $table ) ? "\n</tbody>\n</table>" : "</div></$table>";
 			$body .= ( 'list' === $params['format'] ) ? "\n</ul>" : $end;
 		}
@@ -1567,7 +1951,16 @@ function my_calendar( $args ) {
 		$body .= ( 'day' === $params['time'] ) ? '' : '</div><!-- .mc-content -->';
 		$body .= $bottom;
 	}
-	// The actual printing is done by the shortcode function.
+	/**
+	 * Append content after the calendar.
+	 *
+	 * @hook mc_after_calendar
+	 *
+	 * @param {string} $after HTML content.
+	 * @param {array}  $args Current view arguments.
+	 *
+	 * @return {string}
+	 */
 	$body .= apply_filters( 'mc_after_calendar', '', $args );
 
 	if ( $site ) {
@@ -1581,6 +1974,15 @@ function my_calendar( $args ) {
 		}
 	}
 
+	/**
+	 * Filter the calendar shortcode main body output.
+	 *
+	 * @hook my_calendar_body
+	 *
+	 * @param {string} $body HTML output.
+	 *
+	 * @return {string}
+	 */
 	$output = $mc_wrapper . $json_ld . apply_filters( 'my_calendar_body', $body ) . $mc_closer;
 	if ( $language ) {
 		mc_switch_language( $language, $locale );
@@ -1601,6 +2003,16 @@ function my_calendar( $args ) {
  */
 function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	$body = '';
+	/**
+	 * Should the number of the week (1-52) appear in the calendar grid.
+	 *
+	 * @hook mc_show_week_number
+	 *
+	 * @param {bool} $show `true` to add a column with the week number.
+	 * @param {array} $args Calendar view arguments.
+	 *
+	 * @return {bool}
+	 */
 	if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
 		$weeknumber = mc_date( 'W', $start, false );
 		if ( 'list' !== $format ) {
@@ -1711,9 +2123,35 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		$shortcode_month = ( false !== $smonth ) ? $smonth : $c_month;
 		$shortcode_year  = ( false !== $syear ) ? $syear : $c_year;
 		$shortcode_day   = ( false !== $sday ) ? $sday : $c_day;
-		// Override with filters.
-		$c_year  = apply_filters( 'mc_filter_year', $shortcode_year, $params );
+		/**
+		 * Filter the starting year for the [my_calendar] shortcode.
+		 *
+		 * @hook mc_filter_year
+		 *
+		 * @param {int} $year An integer between 0 and 3000.
+		 *
+		 * @return {int}
+		 */
+		 $c_year  = apply_filters( 'mc_filter_year', $shortcode_year, $params );
+		/**
+		 * Filter the starting month for the [my_calendar] shortcode.
+		 *
+		 * @hook mc_filter_month
+		 *
+		 * @param {int} $month An integer between 1 and 12.
+		 *
+		 * @return {int}
+		 */
 		$c_month = apply_filters( 'mc_filter_month', $shortcode_month, $params );
+		/**
+		 * Filter the starting day for the [my_calendar] shortcode.
+		 *
+		 * @hook mc_filter_day
+		 *
+		 * @param {int} $day An integer between 1 and 31.
+		 *
+		 * @return {int}
+		 */
 		$c_day   = apply_filters( 'mc_filter_day', $shortcode_day, $params );
 	}
 	$c_day   = ( 0 === (int) $c_day ) ? 1 : $c_day; // c_day can't equal 0.
@@ -1738,6 +2176,15 @@ add_filter( 'my_calendar_body', 'mc_run_shortcodes', 10, 1 );
  * @return string Calendar body with shortcodes processed
  */
 function mc_run_shortcodes( $content ) {
+	/**
+	 * Disable shortcode parsing in content. Default 'true'. 
+	 *
+	 * @hook mc_process_shortcodes
+	 *
+	 * @param {string} $return String 'true' to run do_shortcode() on calendar content. 
+	 *
+	 * @return {string}
+	 */
 	$content = ( 'true' === apply_filters( 'mc_process_shortcodes', 'true' ) ) ? do_shortcode( $content ) : $content;
 
 	return $content;
@@ -1776,9 +2223,19 @@ function my_calendar_searchform( $type, $url ) {
 		if ( ! $url || '' === $url ) {
 			$url = mc_get_uri( false, array( 'type' => $type ) );
 		}
+		/**
+		 * Filter the target action URL for search query form. Should target a page with a [my_calendar} shortcode.
+		 *
+		 * @hook mc_search_page
+		 *
+		 * @param {string} $url Target URL.
+		 *
+		 * @return {string}
+		 */
+		$url = apply_filters( 'mc_search_page', $url );
 		return '
 		<div class="mc-search-container" role="search">
-			<form class="mc-search-form" method="get" action="' . apply_filters( 'mc_search_page', esc_url( $url ) ) . '" >
+			<form class="mc-search-form" method="get" action="' . esc_url( $url ) . '" >
 				<div class="mc-search">
 					<label class="screen-reader-text" for="mcs">' . __( 'Search Events', 'my-calendar' ) . '</label><input type="text" value="' . esc_attr( stripslashes( urldecode( $query ) ) ) . '" name="mcs" id="mcs" /><input type="submit" data-href="' . esc_url( $url ) . '" class="button" id="searchsubmit" value="' . __( 'Search Events', 'my-calendar' ) . '" />
 				</div>
@@ -1831,7 +2288,16 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT )
 		default:
 			$data = 'location_label';
 	}
-
+	/**
+	 * Filter the `where` clause of the location list SQL query. Default empty string.
+	 *
+	 * @hook mc_filter_location_list
+	 *
+	 * @param {string} $where WHERE portion of a SQL query.
+	 * @param {string} $datatype Type of data this list is ordered by.
+	 *
+	 * @return {string}
+	 */
 	$where = esc_sql( apply_filters( 'mc_filter_location_list', '', $datatype ) );
 	if ( true !== $full ) {
 		$select = esc_sql( $data );
@@ -1899,7 +2365,16 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 			}
 			$output = '<ul class="mc-locations">' . $output . '</ul>';
 		}
-
+		/**
+		 * Filter the output HTML of the location list.
+		 *
+		 * @hook mc_location_list
+		 *
+		 * @param {string} $output Output HTML for the form.
+		 * @param {array}  $add Array of locations represented in this list.
+		 *
+		 * @return {string}
+		 */
 		$output = apply_filters( 'mc_location_list', $output, $locations );
 
 		return $output;
@@ -1996,6 +2471,16 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 				</form>' : '';
 			$output .= ( 'single' === $group ) ? '</div>' : '';
 		}
+		/**
+		 * Filter the output HTML of the location selector.
+		 *
+		 * @hook mc_location_selector
+		 *
+		 * @param {string} $output Output HTML for the form.
+		 * @param {array}  $add Array of locations represented in this list.
+		 *
+		 * @return {string}
+		 */
 		$output = apply_filters( 'mc_location_selector', $output, $locations );
 
 		return $output;
