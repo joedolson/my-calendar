@@ -534,7 +534,7 @@ function mc_close_button( $controls ) {
 	 * @param {string} $close HTML or text string to use as label of close button.
 	 *
 	 * @return {string}
-	 */ 
+	 */
 	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
 	$close_button = "	<button type='button' aria-controls='$controls' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
 
@@ -607,14 +607,14 @@ function mc_get_event_image( $event, $data ) {
 		$default_size = 'medium';
 	}
 	/**
-	 * Customize default image size for event output. Default is 'large' if it exists, 'medium' if not. 
+	 * Customize default image size for event output. Default is 'large' if it exists, 'medium' if not.
 	 *
 	 * @hook mc_default_image_size
 	 *
 	 * @param {string} $default_size Image size designator.
 	 *
 	 * @return {string}
-	 */ 
+	 */
 	$default_size = apply_filters( 'mc_default_image_size', $default_size );
 
 	if ( is_numeric( $event->event_post ) && 0 !== (int) $event->event_post && ( isset( $data[ $default_size ] ) && '' !== $data[ $default_size ] ) ) {
@@ -627,7 +627,7 @@ function mc_get_event_image( $event, $data ) {
 		 * @param {object} $event Event object.
 		 *
 		 * @return {array}
-		 */ 
+		 */
 		$atts      = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
 		$image_url = get_the_post_thumbnail_url( $event->event_post, $default_size );
 		$image     = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
@@ -641,7 +641,7 @@ function mc_get_event_image( $event, $data ) {
 		 * @param {object} $event Event object.
 		 *
 		 * @return {string}
-		 */ 
+		 */
 		$alt       = esc_attr( apply_filters( 'mc_event_image_alt', '', $event ) );
 		$image_url = $event->event_image;
 		$image     = ( '' !== $event->event_image ) ? "<img src='$event->event_image' alt='$alt' class='mc-image photo' />" : '';
@@ -759,7 +759,7 @@ function mc_event_classes( $event, $type ) {
 	 * @param {string} $type View type.
 	 *
 	 * @return {array}
-	 */ 
+	 */
 	$classes    = apply_filters( 'mc_event_classes', array_unique( $classes ), $event, $uid, $type );
 	$class_html = strtolower( implode( ' ', $classes ) );
 
@@ -784,7 +784,7 @@ function mc_show_details( $time, $type ) {
 	 * @param {array} $array Empty array. (deprecated).
 	 *
 	 * @return {bool}
-	 */ 
+	 */
 	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
 	return ( ( 'calendar' === $type && 'true' === get_option( 'mc_open_uri' ) && 'day' !== $time ) || $no_link ) ? false : true;
@@ -874,8 +874,8 @@ function mc_events_class( $events, $date = false ) {
  */
 function mc_list_title( $events ) {
 	usort( $events, 'mc_time_cmp' );
-	$now         = $events[0];
-	$count       = count( $events ) - 1;
+	$now   = $events[0];
+	$count = count( $events ) - 1;
 	/**
 	 * Format a single title for display in single titles on list view.
 	 *
@@ -885,7 +885,7 @@ function mc_list_title( $events ) {
 	 * @param {object} $now Event object.
 	 *
 	 * @return {string}
-	 */ 
+	 */
 	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now );
 	if ( 0 === $count ) {
 		$cstate = $event_title;
@@ -906,7 +906,7 @@ function mc_list_title( $events ) {
 	 * @param {array}  $events Array of event objects.
 	 *
 	 * @return {string}
-	 */ 
+	 */
 	$title = apply_filters( 'mc_list_event_title_hint', $cstate, $now, $events );
 
 	return $title;
@@ -934,7 +934,7 @@ function mc_list_titles( $events ) {
 		 * @param {array}  $events Array of event objects.
 		 *
 		 * @return {string}
-		 */ 
+		 */
 		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now, $events );
 		$titles[] = $title;
 	}
@@ -1351,7 +1351,7 @@ function mc_calendar_params( $args ) {
 	}
 
 	/**
-	 * Filter the display format. 
+	 * Filter the display format.
 	 *
 	 * @hook mc_display_format
 	 *
@@ -1535,10 +1535,10 @@ function my_calendar( $args ) {
 	 *
 	 * @return {int}
 	 */
-	$show_months   = absint( apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args ) );
-	$show_months   = ( '0' === $show_months ) ? 1 : $show_months;
-	$caption_text  = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
-	$week_format   = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
+	$show_months  = absint( apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args ) );
+	$show_months  = ( '0' === $show_months ) ? 1 : $show_months;
+	$caption_text = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
+	$week_format  = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
 	// Translators: Template tag with date format.
 	$week_template = ( get_option( 'mc_week_caption', '' ) !== '' ) ? get_option( 'mc_week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
 	$open_day_uri  = ( ! get_option( 'mc_open_day_uri' ) ) ? 'false' : get_option( 'mc_open_day_uri' ); // This is not a URL. It's a behavior reference.
@@ -1625,7 +1625,7 @@ function my_calendar( $args ) {
 		 *
 		 * @return {string}
 		 */
-		$from  = apply_filters( 'mc_from_date', $dates['from'] );
+		$from = apply_filters( 'mc_from_date', $dates['from'] );
 		/**
 		 * Filter the calendar end date.
 		 *
@@ -1747,7 +1747,7 @@ function my_calendar( $args ) {
 			 *
 			 * @return {string}
 			 */
-			$h2      = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
+			$h2 = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 			/**
 			 * Filter the main calendar heading in multiday views.
 			 *
@@ -2132,7 +2132,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 *
 		 * @return {int}
 		 */
-		 $c_year  = apply_filters( 'mc_filter_year', $shortcode_year, $params );
+		$c_year = apply_filters( 'mc_filter_year', $shortcode_year, $params );
 		/**
 		 * Filter the starting month for the [my_calendar] shortcode.
 		 *
@@ -2152,7 +2152,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 *
 		 * @return {int}
 		 */
-		$c_day   = apply_filters( 'mc_filter_day', $shortcode_day, $params );
+		$c_day = apply_filters( 'mc_filter_day', $shortcode_day, $params );
 	}
 	$c_day   = ( 0 === (int) $c_day ) ? 1 : $c_day; // c_day can't equal 0.
 	$current = mktime( 0, 0, 0, (int) $c_month, (int) $c_day, (int) $c_year );
@@ -2177,11 +2177,11 @@ add_filter( 'my_calendar_body', 'mc_run_shortcodes', 10, 1 );
  */
 function mc_run_shortcodes( $content ) {
 	/**
-	 * Disable shortcode parsing in content. Default 'true'. 
+	 * Disable shortcode parsing in content. Default 'true'.
 	 *
 	 * @hook mc_process_shortcodes
 	 *
-	 * @param {string} $return String 'true' to run do_shortcode() on calendar content. 
+	 * @param {string} $return String 'true' to run do_shortcode() on calendar content.
 	 *
 	 * @return {string}
 	 */

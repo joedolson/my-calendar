@@ -84,6 +84,18 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.17 =
+
+* Bug fix: View full calendar could be empty if settings not edited.
+* Bug fix: View full calendar text default not translatable.
+* Bug fix: Allow class attribute on time element.
+* Change open in new tab text to 'new tab'.
+* Label error source in cases where wp_die() is used.
+* Switch subscription links to webcal: protocol.
+* Begin adding hook documentation at https://joedolson.github.io/my-calendar/
+* Begin adding framework for next version of template handling.
+
+
 = 3.3.16 =
 
 * Bug fix: Incorrectly passed list type caused templates to encode html entities.
