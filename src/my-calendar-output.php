@@ -244,7 +244,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			 *
 			 * @return {string}
 			 */
-			$details  = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
+			$details = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
 			/**
 			 * Filter My Calendar view template.
 			 *
@@ -618,8 +618,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$sharing     = ( $sharing ) ? PHP_EOL . '	' . $sharing : '';
 				$access      = ( $access ) ? PHP_EOL . '	' . $access : '';
 				$return      = ( $return ) ? PHP_EOL . '	' . $return : '';
-
-				$order        = array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );
+				$order       = array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );
 				/**
 				 * Filter the order in which event template display elements are appended.
 				 *
@@ -698,8 +697,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			 *
 			 * @return {string}
 			 */
-			$details  .= apply_filters( 'mc_after_event', '', $event, $type, $time );
-			$details  .= "\n" . '	</div><!--end .details-->' . "\n" . '	</div>' . "\n";
+			$details .= apply_filters( 'mc_after_event', '', $event, $type, $time );
+			$details .= "\n" . '	</div><!--end .details-->' . "\n" . '	</div>' . "\n";
 			/**
 			 * Filter details output.
 			 *
