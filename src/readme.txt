@@ -95,7 +95,6 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Begin adding hook documentation at https://joedolson.github.io/my-calendar/
 * Begin adding framework for next version of template handling.
 
-
 = 3.3.16 =
 
 * Bug fix: Incorrectly passed list type caused templates to encode html entities.

@@ -59,8 +59,10 @@ function mc_time_html( $e, $type ) {
 	/**
 	 * Filter time block output.
 	 *
-	 * @param string $time HTML time block output.
-	 * @param object $e Event object.
+	 * @hook mcs_time_block
+	 *
+	 * @param {string} $time HTML time block output.
+	 * @param {object} $e Event object.
 	 *
 	 * @return string
 	 */
@@ -141,6 +143,15 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
  * @return bool
  */
 function mc_legacy_templates_enabled() {
+	/**
+	 * Filter legacy templates status. New templates are intended for release with version 3.4.0 and will be in alpha at least through then.
+	 *
+	 * @hook mc_legacy_templates_enabled
+	 *
+	 * @param {bool} $enabled Return 'true' to use legacy templates.
+	 *
+	 * @return {bool}
+	 */
 	$enabled = apply_filters( 'mc_legacy_templates_enabled', true );
 	// New templates require at least WP 5.5.
 	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
@@ -219,7 +230,35 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$otype       = ( 'calendar' === $type ) ? 'grid' : $type;
 
 		if ( mc_show_details( $time, $type ) ) {
+			/**
+			 * Filter My Calendar view output. Returning any content will shortcircuit drawing event output.
+			 *
+			 * @hook mc_custom_template
+			 *
+			 * @param {string|bool} $details Output HTML for event. Default boolean false.
+			 * @param {array}       $data Event data array passed to template function.
+			 * @param {object}      $event My Calendar event object.
+			 * @param {string}      $type View type.
+			 * @param {string}      $process_date Current date being processed.
+			 * @param {string}      $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$details  = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
+			/**
+			 * Filter My Calendar view template.
+			 *
+			 * @hook mc_use_custom_template
+			 *
+			 * @param {string} $template HTML with template tags.
+			 * @param {array} $data Event data array passed to template function.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $process_date Current date being processed.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$template = apply_filters( 'mc_use_custom_template', $template, $data, $event, $type, $process_date, $time );
 			if ( false === $details ) {
 				$details = mc_get_details( $data, $template, $type );
@@ -271,10 +310,42 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 		$event_title = ( '' === $event_title ) ? $data['title'] : strip_tags( $event_title, mc_strip_tags() );
 		if ( 'single' === $type ) {
+			/**
+			 * Customize event title in single view.
+			 *
+			 * @hook mc_single_event_title
+			 *
+			 * @param {string} $event_title Event title.
+			 * @param {object} $event My Calendar event object.
+			 *
+			 * @return {string}
+			 */
 			$event_title = apply_filters( 'mc_single_event_title', $event_title, $event );
 		} else {
+			/**
+			 * Customize event title in group views.
+			 *
+			 * @hook mc_event_title
+			 *
+			 * @param {string} $event_title Event title.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $title Title in event template array.
+			 * @param {string} $image Category icon.
+			 *
+			 * @return {string}
+			 */
 			$event_title = apply_filters( 'mc_event_title', $event_title, $event, $data['title'], $image );
 		}
+		/**
+		 * Disable links on grid view.
+		 *
+		 * @hook mc_disable_link
+		 *
+		 * @param {bool} $no_link True to disable link.
+		 * @param {array} $data Event data array.
+		 *
+		 * @return {bool}
+		 */
 		$no_link = apply_filters( 'mc_disable_link', false, $data );
 
 		if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type ) && ! $no_link ) {
@@ -292,11 +363,34 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 
 		$group_class = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
-		$hlevel      = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
+		/**
+		 * Filter default event heading when in a table.
+		 *
+		 * @hook mc_heading_level_table
+		 *
+		 * @param {string} $hlevel HTML element. Default 'h3'.
+		 * @param {string} $type View type.
+		 * @param {string} $time View timeframe.
+		 * @param {string} $template Current template.
+		 *
+		 * @return {string}
+		 */
+		$hlevel = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
 		// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 		if ( 'single' === $type ) {
 			$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image $event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
 		} elseif ( 'list' !== $type ) {
+			/**
+			 * Filter event title inside event heading.
+			 *
+			 * @hook mc_heading_inner_title
+			 *
+			 * @param {string} $inner_heading Heading HTML and text.
+			 * @param {string} $event_title Title as passed.
+			 * @param {object} $event My Calendar event object.
+			 *
+			 * @return {string}
+			 */
 			$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
 			$title         = "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n";
 		} else {
@@ -317,9 +411,31 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				}
 				$time_html = mc_time_html( $event, $type );
 				if ( 'list' === $type ) {
+					/**
+					 * Filter list event heading level. Default 'h3'.
+					 *
+					 * @hook mc_heading_level_list
+					 *
+					 * @param {string} $hlevel Default heading level element.
+					 * @param {string} $type View type.
+					 * @param {string} $time View timeframe.
+					 * @param {string} $template Current template.
+					 *
+					 * @return {string}
+					 */
 					$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 					$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 				}
+				/**
+				 * Filter to enable or disable avatars.
+				 *
+				 * @hook mc_use_avatars
+				 *
+				 * @param {bool} $avatars false to disable avatars.
+				 * @param {object} $event My Calendar event object.
+				 *
+				 * @return {bool}
+				 */
 				$avatars = apply_filters( 'mc_use_avatars', true, $event );
 				if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
 					if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
@@ -358,12 +474,34 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 						$more = '';
 					}
 				}
+				/**
+				 * Filter link to event details in grid.
+				 *
+				 * @hook mc_details_grid_link
+				 *
+				 * @param {string} $more More link.
+				 * @param {object} $event My Calendar event object.
+				 *
+				 * @return {string}
+				 */
 				$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
 				if ( mc_output_is_visible( 'access', $type, $event ) ) {
 					$access_heading = ( '' !== get_option( 'mc_event_accessibility', '' ) ) ? get_option( 'mc_event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
 					$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
-					$sublevel       = apply_filters( 'mc_subheading_level', 'h4', $type, $time, $template );
+					/**
+					 * Filter subheading levels inside event content.
+					 *
+					 * @hook mc_subheading_level
+					 *
+					 * @param {string} $el Element name. Default 'h4'.
+					 * @param {string} $type View type.
+					 * @param {string} $time View timeframe.
+					 * @param {string} $template Current template.
+					 *
+					 * @return {string}
+					 */
+					$sublevel = apply_filters( 'mc_subheading_level', 'h4', $type, $time, $template );
 					if ( $access_content ) {
 						$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
 					}
@@ -414,7 +552,26 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					}
 				}
 
-				$status     = apply_filters( 'mc_registration_state', '', $event );
+				/**
+				 * Filter registration status of event. Default empty.
+				 *
+				 * @hook mc_registration_state
+				 *
+				 * @param {string} $status String.
+				 * @param {object} $event My Calendar object.
+				 *
+				 * @return {string}
+				 */
+				$status = apply_filters( 'mc_registration_state', '', $event );
+				/**
+				 * Filter URL appended on single event view to return to calendar.
+				 *
+				 * @hook mc_return_uri
+				 *
+				 * @param {string} $url Calendar URL.
+				 *
+				 * @return {string}
+				 */
 				$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ) );
 				$text       = ( '' !== get_option( 'mc_view_full', '' ) ) ? get_option( 'mc_view_full' ) : __( 'View full calendar', 'my-calendar' );
 				$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
@@ -463,10 +620,30 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$return      = ( $return ) ? PHP_EOL . '	' . $return : '';
 
 				$order        = array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );
+				/**
+				 * Filter the order in which event template display elements are appended.
+				 *
+				 * @hook mc_default_output_order
+				 *
+				 * @param {array}  $order Array of ordered keywords representing items in template.
+				 * @param {object} $event Event object.
+				 *
+				 * @return {array}
+				 */
 				$output_order = apply_filters( 'mc_default_output_order', $order, $event );
 				$details      = $close;
 				if ( ! empty( $output_order ) ) {
 					foreach ( $output_order as $value ) {
+						/**
+						 * Filter individual display output items. Variable filter name based on `array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );`
+						 *
+						 * @hook mc_event_detail_{name}
+						 *
+						 * @param {string} $details HTML content for section.
+						 * @param {object} $event My Calendar event object.
+						 *
+						 * @return {string}
+						 */
 						$details .= apply_filters( 'mc_event_detail_' . sanitize_title( $value ), ${$value}, $event );
 					}
 				} else {
@@ -495,13 +672,75 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 
 			$img_class = ( '' !== $img ) ? ' has-image' : ' no-image';
 			$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+			/**
+			 * Filter details before the event content..
+			 *
+			 * @hook mc_before_event
+			 *
+			 * @param {string} $details HTML content.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$container = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 			$details   = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+			/**
+			 * Filter details appended after the event content.
+			 *
+			 * @hook mc_after_event
+			 *
+			 * @param {string} $details HTML content. Default empty.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$details  .= apply_filters( 'mc_after_event', '', $event, $type, $time );
 			$details  .= "\n" . '	</div><!--end .details-->' . "\n" . '	</div>' . "\n";
-			$details   = apply_filters( 'mc_event_content', $details, $event, $type, $time );
+			/**
+			 * Filter details output.
+			 *
+			 * @hook mc_event_content
+			 *
+			 * @param {string} $details HTML content.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
+			$details = apply_filters( 'mc_event_content', $details, $event, $type, $time );
 		} else {
-			$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) . $header . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
+			/**
+			 * Filter container before event details when view details panel is disabled.
+			 *
+			 * @hook mc_before_event_no_details
+			 *
+			 * @param {string} $container HTML string.
+			 * @param {object} $event My Calendar event.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
+			$before = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time );
+			/**
+			 * Filter container after event details when view details panel is disabled.
+			 *
+			 * @hook mc_after_event_no_details
+			 *
+			 * @param {string} $container HTML string. Default empty.
+			 * @param {object} $event My Calendar event.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
+			$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
+			$details = $before . $header . $after;
 		}
 	}
 	$details = apply_filters( 'mc_event_details_output', $details, $event );
