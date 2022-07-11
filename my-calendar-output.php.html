@@ -85,8 +85,10 @@ function mc_time_html( $e, $type ) {
 	/**
 	 * Filter time block output.
 	 *
-	 * @param string $time HTML time block output.
-	 * @param object $e Event object.
+	 * @hook mcs_time_block
+	 *
+	 * @param {string} $time HTML time block output.
+	 * @param {object} $e Event object.
 	 *
 	 * @return string
 	 */
@@ -167,6 +169,15 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
  * @return bool
  */
 function mc_legacy_templates_enabled() {
+	/**
+	 * Filter legacy templates status. New templates are intended for release with version 3.4.0 and will be in alpha at least through then.
+	 *
+	 * @hook mc_legacy_templates_enabled
+	 *
+	 * @param {bool} $enabled Return 'true' to use legacy templates.
+	 *
+	 * @return {bool}
+	 */
 	$enabled = apply_filters( 'mc_legacy_templates_enabled', true );
 	// New templates require at least WP 5.5.
 	if ( version_compare( $GLOBALS['wp_version'], '5.5', '&lt;' ) ) {
@@ -245,7 +256,35 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$otype       = ( 'calendar' === $type ) ? 'grid' : $type;
 
 		if ( mc_show_details( $time, $type ) ) {
+			/**
+			 * Filter My Calendar view output. Returning any content will shortcircuit drawing event output.
+			 *
+			 * @hook mc_custom_template
+			 *
+			 * @param {string|bool} $details Output HTML for event. Default boolean false.
+			 * @param {array}       $data Event data array passed to template function.
+			 * @param {object}      $event My Calendar event object.
+			 * @param {string}      $type View type.
+			 * @param {string}      $process_date Current date being processed.
+			 * @param {string}      $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$details  = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
+			/**
+			 * Filter My Calendar view template.
+			 *
+			 * @hook mc_use_custom_template
+			 *
+			 * @param {string} $template HTML with template tags.
+			 * @param {array} $data Event data array passed to template function.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $process_date Current date being processed.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$template = apply_filters( 'mc_use_custom_template', $template, $data, $event, $type, $process_date, $time );
 			if ( false === $details ) {
 				$details = mc_get_details( $data, $template, $type );
@@ -297,10 +336,42 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 		$event_title = ( '' === $event_title ) ? $data['title'] : strip_tags( $event_title, mc_strip_tags() );
 		if ( 'single' === $type ) {
+			/**
+			 * Customize event title in single view.
+			 *
+			 * @hook mc_single_event_title
+			 *
+			 * @param {string} $event_title Event title.
+			 * @param {object} $event My Calendar event object.
+			 *
+			 * @return {string}
+			 */
 			$event_title = apply_filters( 'mc_single_event_title', $event_title, $event );
 		} else {
+			/**
+			 * Customize event title in group views.
+			 *
+			 * @hook mc_event_title
+			 *
+			 * @param {string} $event_title Event title.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $title Title in event template array.
+			 * @param {string} $image Category icon.
+			 *
+			 * @return {string}
+			 */
 			$event_title = apply_filters( 'mc_event_title', $event_title, $event, $data['title'], $image );
 		}
+		/**
+		 * Disable links on grid view.
+		 *
+		 * @hook mc_disable_link
+		 *
+		 * @param {bool} $no_link True to disable link.
+		 * @param {array} $data Event data array.
+		 *
+		 * @return {bool}
+		 */
 		$no_link = apply_filters( 'mc_disable_link', false, $data );
 
 		if ( ( ( strpos( $event_title, 'href' ) === false ) &amp;&amp; 'mini' !== $type &amp;&amp; 'list' !== $type ) &amp;&amp; ! $no_link ) {
@@ -318,11 +389,34 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 
 		$group_class = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
-		$hlevel      = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
+		/**
+		 * Filter default event heading when in a table.
+		 *
+		 * @hook mc_heading_level_table
+		 *
+		 * @param {string} $hlevel HTML element. Default 'h3'.
+		 * @param {string} $type View type.
+		 * @param {string} $time View timeframe.
+		 * @param {string} $template Current template.
+		 *
+		 * @return {string}
+		 */
+		$hlevel = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
 		// Set up .summary - required once per page for structured data. Should only be added in cases where heading &amp; anchor are removed.
 		if ( 'single' === $type ) {
 			$title = ( ! is_singular( 'mc-events' ) ) ? "	&lt;h2 class='event-title summary'>$image $event_title&lt;/h2>\n" : '	&lt;span class="summary screen-reader-text">' . strip_tags( $event_title ) . '&lt;/span>';
 		} elseif ( 'list' !== $type ) {
+			/**
+			 * Filter event title inside event heading.
+			 *
+			 * @hook mc_heading_inner_title
+			 *
+			 * @param {string} $inner_heading Heading HTML and text.
+			 * @param {string} $event_title Title as passed.
+			 * @param {object} $event My Calendar event object.
+			 *
+			 * @return {string}
+			 */
 			$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
 			$title         = "	&lt;$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading&lt;/$hlevel>\n";
 		} else {
@@ -343,9 +437,31 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				}
 				$time_html = mc_time_html( $event, $type );
 				if ( 'list' === $type ) {
+					/**
+					 * Filter list event heading level. Default 'h3'.
+					 *
+					 * @hook mc_heading_level_list
+					 *
+					 * @param {string} $hlevel Default heading level element.
+					 * @param {string} $type View type.
+					 * @param {string} $time View timeframe.
+					 * @param {string} $template Current template.
+					 *
+					 * @return {string}
+					 */
 					$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 					$list_title = "	&lt;$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "&lt;/$hlevel>\n";
 				}
+				/**
+				 * Filter to enable or disable avatars.
+				 *
+				 * @hook mc_use_avatars
+				 *
+				 * @param {bool} $avatars false to disable avatars.
+				 * @param {object} $event My Calendar event object.
+				 *
+				 * @return {bool}
+				 */
 				$avatars = apply_filters( 'mc_use_avatars', true, $event );
 				if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
 					if ( 0 !== (int) $event->event_author &amp;&amp; is_numeric( $event->event_author ) ) {
@@ -384,12 +500,34 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 						$more = '';
 					}
 				}
+				/**
+				 * Filter link to event details in grid.
+				 *
+				 * @hook mc_details_grid_link
+				 *
+				 * @param {string} $more More link.
+				 * @param {object} $event My Calendar event object.
+				 *
+				 * @return {string}
+				 */
 				$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
 				if ( mc_output_is_visible( 'access', $type, $event ) ) {
 					$access_heading = ( '' !== get_option( 'mc_event_accessibility', '' ) ) ? get_option( 'mc_event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
 					$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
-					$sublevel       = apply_filters( 'mc_subheading_level', 'h4', $type, $time, $template );
+					/**
+					 * Filter subheading levels inside event content.
+					 *
+					 * @hook mc_subheading_level
+					 *
+					 * @param {string} $el Element name. Default 'h4'.
+					 * @param {string} $type View type.
+					 * @param {string} $time View timeframe.
+					 * @param {string} $template Current template.
+					 *
+					 * @return {string}
+					 */
+					$sublevel = apply_filters( 'mc_subheading_level', 'h4', $type, $time, $template );
 					if ( $access_content ) {
 						$access = '&lt;div class="mc-accessibility">&lt;' . $sublevel . '>' . $access_heading . '&lt;/' . $sublevel . '>' . $access_content . '&lt;/div>';
 					}
@@ -440,7 +578,26 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					}
 				}
 
-				$status     = apply_filters( 'mc_registration_state', '', $event );
+				/**
+				 * Filter registration status of event. Default empty.
+				 *
+				 * @hook mc_registration_state
+				 *
+				 * @param {string} $status String.
+				 * @param {object} $event My Calendar object.
+				 *
+				 * @return {string}
+				 */
+				$status = apply_filters( 'mc_registration_state', '', $event );
+				/**
+				 * Filter URL appended on single event view to return to calendar.
+				 *
+				 * @hook mc_return_uri
+				 *
+				 * @param {string} $url Calendar URL.
+				 *
+				 * @return {string}
+				 */
 				$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ) );
 				$text       = ( '' !== get_option( 'mc_view_full', '' ) ) ? get_option( 'mc_view_full' ) : __( 'View full calendar', 'my-calendar' );
 				$return     = ( 'single' === $type ) ? "	&lt;p class='view-full'>&lt;a href='$return_url'>" . $text . '&lt;/a>&lt;/p>' : '';
@@ -489,10 +646,30 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$return      = ( $return ) ? PHP_EOL . '	' . $return : '';
 
 				$order        = array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );
+				/**
+				 * Filter the order in which event template display elements are appended.
+				 *
+				 * @hook mc_default_output_order
+				 *
+				 * @param {array}  $order Array of ordered keywords representing items in template.
+				 * @param {object} $event Event object.
+				 *
+				 * @return {array}
+				 */
 				$output_order = apply_filters( 'mc_default_output_order', $order, $event );
 				$details      = $close;
 				if ( ! empty( $output_order ) ) {
 					foreach ( $output_order as $value ) {
+						/**
+						 * Filter individual display output items. Variable filter name based on `array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );`
+						 *
+						 * @hook mc_event_detail_{name}
+						 *
+						 * @param {string} $details HTML content for section.
+						 * @param {object} $event My Calendar event object.
+						 *
+						 * @return {string}
+						 */
 						$details .= apply_filters( 'mc_event_detail_' . sanitize_title( $value ), ${$value}, $event );
 					}
 				} else {
@@ -521,13 +698,75 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 
 			$img_class = ( '' !== $img ) ? ' has-image' : ' no-image';
 			$container = "\n	&lt;div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+			/**
+			 * Filter details before the event content..
+			 *
+			 * @hook mc_before_event
+			 *
+			 * @param {string} $details HTML content.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$container = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 			$details   = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+			/**
+			 * Filter details appended after the event content.
+			 *
+			 * @hook mc_after_event
+			 *
+			 * @param {string} $details HTML content. Default empty.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$details  .= apply_filters( 'mc_after_event', '', $event, $type, $time );
 			$details  .= "\n" . '	&lt;/div>&lt;!--end .details-->' . "\n" . '	&lt;/div>' . "\n";
-			$details   = apply_filters( 'mc_event_content', $details, $event, $type, $time );
+			/**
+			 * Filter details output.
+			 *
+			 * @hook mc_event_content
+			 *
+			 * @param {string} $details HTML content.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
+			$details = apply_filters( 'mc_event_content', $details, $event, $type, $time );
 		} else {
-			$details = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time ) . $header . apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '&lt;/div>';
+			/**
+			 * Filter container before event details when view details panel is disabled.
+			 *
+			 * @hook mc_before_event_no_details
+			 *
+			 * @param {string} $container HTML string.
+			 * @param {object} $event My Calendar event.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
+			$before = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time );
+			/**
+			 * Filter container after event details when view details panel is disabled.
+			 *
+			 * @hook mc_after_event_no_details
+			 *
+			 * @param {string} $container HTML string. Default empty.
+			 * @param {object} $event My Calendar event.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
+			$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '&lt;/div>';
+			$details = $before . $header . $after;
 		}
 	}
 	$details = apply_filters( 'mc_event_details_output', $details, $event );
@@ -2532,7 +2771,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li></ul>
 </nav>
 
 <br class="clear">
