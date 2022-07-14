@@ -93,7 +93,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Label error source in cases where wp_die() is used.
 * Switch subscription links to webcal: protocol.
 * Begin adding hook documentation at https://joedolson.github.io/my-calendar/
-* Begin adding framework for next version of template handling.
+* Begin adding framework for future version of template handling.
 
 = 3.3.16 =
 
@@ -346,162 +346,6 @@ Developer Changes:
 * Code reorganization.
 * PHP 8.0 compatibility.
 
-= 3.2.19 =
-
-* Resolve svn problem causing missing files.
-
-= 3.2.18 =
-
-* Security: Fixes reflected XSS flaw in admin. Props to @erwinr and WPScan.
-
-= 3.2.17 =
-
-* Bug fix: Add parameter for required fields handling to ignore during imports.
-* Add filter handling calendar URLs when using Polylang or WPML.
-
-= 3.2.16 =
-
-* Bug fix: Check for undefined objects in localization, not for undefined object props.
-* Change: Set parameter for location autocomplete switchover to 50 instead of 25 locations.
-* Change: Tweak directory removal process slightly.
-
-= 3.2.15 =
-
-* Bug fix: Hide event details section if no fields are visible for section.
-* Bug fix: Update localization to correct usage of l10n parameter.
-* Bug fix: Location AJAX query executed function that only existed in Pro.
-
-= 3.2.14 =
-
-* Bug fixes: Misc. type casting issues.
-* Add filters `mc_filter_events` to filter results of main event queries.
-* Add $args array to `mc_searched_events` filter parameters.
-* Avoid running My Calendar core functionality through My Calendar's own hooks.
-* When using REST API, variables are not submitted in a POST query.
-* [Performance] Move custom location query into object creation to reduce DB calls.
-* Use try/catch in mc-ajax.js to handle case where href does not contain a full URL.
-* Autocomplete support for locations in admin.
-* Reset select elements in My Calendar nav to inline.
-* Minor refactoring in settings pages.
-
-= 3.2.13 =
-
-* Bug fix: Using embed targets is more complicated than expected; disable by default. Enable with 'mc_use_embed_targets' filter.
-* Bug fix: Strip embed from parameters when building links (when embed target enabled.)
-
-= 3.2.12 =
-
-* Bug fix: Don't use embed target link when AJAX disabled.
-* Improvement: Add AJAX navigation into browser history & address bar.
-
-= 3.2.11 =
-
-* Bug fix: switching to week view display broken.
-* Bug fix: links to template help pointed to old location for help.
-* Bug fix: AJAX nav pulled height from first rendered calendar, not current navigating calendar.
-* Change: filter to pass custom notices for front end submissions and editing.
-* Remove fallback function for is_ssl()
-* Improve conflicting event errors when the conflicting event is still unpublished.
-* Add custom template to pass a calendar that's embeddable via iframe.
-* Bug fix: Multisite environments need to use navigation on current site, not from remote site.
-
-= 3.2.10 =
-
-* Change: Fallback text should have a stylable wrapper.
-* Bug fix: Missing translatable string.
-* Bug fix: When multiple categories selected, events in more than one category would appear multiple times.
-* Bug fix: Missing space in MySQL filters in event manager.
-* Bug fix: PHP Notice thrown in location manager.
-* Bug fix: Add note to open events link field if no URI configured.
-* Layout fix: Ensure there's always a space between date & time.
-
-= 3.2.9 =
-
-* Bug fix: Additional of required fields testing erased error messages generated prior to required fields testing.
-* Bug fix: If an individual occurrence title is edited, event permalinks show the single change on all events.
-* Bug fix: Prev/next event links don't include unique event IDs.
-* Bug fix: Remove irrelevant arguments from prev/next event link generation.
-* Bug fix: Ignore templates if no data passed.
-
-= 3.2.8 =
-
-* Bug fix: Extraneous screen-reader-text summary generated in event views.
-* Bug fix: Fixes to missing parameters in Schema.org microdata.
-* Bug fix: Incorrect type comparison caused custom templates not to render in single event view.
-* New feature: Default location.
-
-= 3.2.7 =
-
-* Bug fix: Prevent events from being created without categories.
-* Bug fix: Ensure category relationships are deleted when related events are deleted.
-* Add handling for seeing & managing events that are invalid.
-* Add styles for invalid rows.
-
-= 3.2.6 =
-
-* Added filter to change date format on calendar grid.
-* New filter for modifying user selection output.
-* Bug fix: only check for get_magic_quotes_gpc() if below PHP 7.4
-* Bug fix: invalid query in mc_get_locations() if arguments passed as array.
-
-= 3.2.5 =
-
-* Bug fix: CSV exported text fields contained newline characters.
-
-= 3.2.4 =
-
-* Bug fix: Permissions issue caused by variable type mismatch.
-
-= 3.2.3 =
-
-* Bug fix: 3.2.2 created multiple post types with the same slug, triggering 404 errors.
-* Bug fix: Templates could return the name of the template if template empty/missing.
-
-= 3.2.2 =
-
-* Bug fix: Curly brace offset access deprecated
-* Bug fix: Make next/prev post link arguments optional.
-* Bug fix: Template queries could return an empty template.
-* Change: Remove trashed events from default events list.
-
-= 3.2.1 =
-
-* PHP Notice: undefined variable.
-* Bug fix: screen options not saving.
-* Bug fix: Accidental auto-assigning of first category to events when editing.
-
-= 3.2.0 =
-
-* Auto-toggle admin time format if display time format set to European format.
-* Show API endpoint when API enabled.
-* Add alternate alias for API endpoint.
-* Add style variables with category colors to style output.
-* Add color output icon with CSS variables in style editor.
-* Add new default stylesheet: Twentytwenty.css
-* Move permalink setting to general settings panel.
-* Change event timestamps to use a real UTC timestamp for reference.
-* Switch from using date() to gmdate().
-* Update Pickadate to 3.6.4. Resolves some bugs, but introduces an accessibility issue.
-    * Customizations to Pickadate 3.6.4 to repair accessibility
-    * don't move focus to picker
-    * add 'close' button to time picker.
-    * Switch Pickadate to classic theme (modified).
-* Improvements to output code layout.
-* Eliminate empty HTML wrappers in content.
-* New filter: mc_get_users. Use custom arguments to get users.
-* New filters: mc_header_navigation, mc_footer_navigation
-* New template tags: {userstart}, {userend} - date/time in local users timezone.
-* Bug fix: Misc. ARIA/id relationships broken.
-* Bug fix: remote locations sometimes pulled from local database.
-* Bug fix: Long-standing issues in user input settings.
-* Bug fix: Don't duplicate .summary values.
-* Bug fix: Only render one close button in mini calendar.
-* Collapse 'View Calendar' and 'Add Event' adminbar menus into a single menu.
-* Remove upgrade path from 2.2.10.
-* Remove .mc-event-visible from style output. Unused since 2011.
-* Remove numerous deprecated functions.
-* Conformance with latest WordPress PHPCS ruleset.
-
 = Future Changes =
 
 * Refactor options storage
@@ -510,11 +354,11 @@ Developer Changes:
 
 = Hey! Why don't you have any Frequently Asked Questions here! =
 
-Because the majority of users end up on my web site asking for help anyway -- and it's simply more work to maintain two copies. Please visit [my web site FAQ](http://www.joedolson.com/my-calendar/faq/) to read my Frequently Asked Questions!
+Because the majority of users end up on my web site asking for help anyway -- and it's simply more work to maintain two copies. Please visit [my web site FAQ](https://www.joedolson.com/my-calendar/faq/) to read my Frequently Asked Questions!
 
 = This plugin is complicated. Why won't you help me figure out how to use it? =
 
-I will! But not in person. Take a look at my [documentation website for My Calendar](http://docs.joedolson.com/my-calendar/) before making your request, and consider [making a donation](https://www.joedolson.com/donate/) or [buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/)!
+I will! But not in person. Take a look at my [documentation website for My Calendar](https://docs.joedolson.com/my-calendar/) or the [developer hook documentation](https://joedolson.github.io/my-calendar/) before making your request, and consider [making a donation](https://www.joedolson.com/donate/) or [buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/)!
 
 = Can my visitors or members submit events? =
 
