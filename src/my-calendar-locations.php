@@ -837,8 +837,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	 *
 	 * @return {string}
 	 */
-	$return      .= apply_filters( 'mc_location_container_primary', '', $data, $context );
-	$return      .= '
+	$return .= apply_filters( 'mc_location_container_primary', '', $data, $context );
+	$return .= '
 	</div>
 	<div class="location-secondary">
 	<fieldset>
@@ -941,11 +941,11 @@ function mc_location_fields() {
 	 * Return custom fields for use in My Calendar locations. Fields should format like:
 	 *
 	 * ```$fields['location_type']   = array(
-	 *	'title'             => 'Location Type',
-	 *	'sanitize_callback' => 'sanitize_text_field',
-	 *	'display_callback'  => 'esc_html',
-	 *	'input_type'        => 'select',
-	 *	'input_values'      => array( 'Virtual', 'Private Home', 'Concert Hall', 'Outdoor Venue' ),
+	 *    'title'             => 'Location Type',
+	 *    'sanitize_callback' => 'sanitize_text_field',
+	 *    'display_callback'  => 'esc_html',
+	 *    'input_type'        => 'select',
+	 *    'input_values'      => array( 'Virtual', 'Private Home', 'Concert Hall', 'Outdoor Venue' ),
 	 * );```
 	 *
 	 * @hook mc_location_fields

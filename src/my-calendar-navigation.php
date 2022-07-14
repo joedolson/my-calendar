@@ -408,7 +408,7 @@ function mc_category_key( $category ) {
 	 *
 	 * @return {string}
 	 */
-	$key  = apply_filters( 'mc_category_key', $key, $categories );
+	$key = apply_filters( 'mc_category_key', $key, $categories );
 
 	return $key;
 }
