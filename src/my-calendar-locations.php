@@ -669,19 +669,19 @@ function mc_get_location_coordinates( $location_id = false, $address = array() )
  */
 function mc_location_controller( $fieldname, $selected, $context = 'location' ) {
 	$field    = ( 'location' === $context ) ? 'location_' . $fieldname : 'event_' . $fieldname;
-	$selected = esc_attr( trim( $selected ) );
+	$selected = trim( $selected );
 	$options  = get_option( 'mc_location_controls' );
 	$regions  = $options[ 'event_' . $fieldname ];
 	$form     = "<select name='$field' id='e_$fieldname'>";
 	$form    .= "<option value=''>" . __( 'Select', 'my-calendar' ) . '</option>';
 	if ( is_admin() && '' !== $selected ) {
-		$form .= "<option value='$selected'>$selected :" . __( '(Not a controlled value)', 'my-calendar' ) . '</option>';
+		$form .= "<option value='" . esc_attr( $selected ) . "'>" . esc_html( $selected ) . ' :' . __( '(Not a controlled value)', 'my-calendar' ) . '</option>';
 	}
 	foreach ( $regions as $key => $value ) {
-		$key       = esc_attr( trim( $key ) );
-		$value     = esc_html( trim( $value ) );
+		$key       = trim( $key );
+		$value     = trim( $value );
 		$aselected = ( $selected === $key ) ? ' selected="selected"' : '';
-		$form     .= "<option value='$key'$aselected>$value</option>\n";
+		$form     .= "<option value='" . esc_attr( $key ) . "'$aselected>" . esc_html( $value ) . "</option>\n";
 	}
 	$form .= '</select>';
 
@@ -1087,7 +1087,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 				if ( isset( $field['input_values'] ) ) {
 					$output = "<select name='$name' id='$name'$required>";
 					foreach ( $field['input_values'] as $value ) {
-						$value = esc_attr( stripslashes( $value ) );
+						$value = stripslashes( $value );
 						if ( $value === $user_value ) {
 							$selected = " selected='selected'";
 						} else {
