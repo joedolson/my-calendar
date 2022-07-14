@@ -729,6 +729,17 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		}
 		$output .= ( 'single' === $group ) ? '</div>' : '';
 	}
+
+	/**
+	 * Filter the HTML for the category filter dropdown in navigation elements.
+	 *
+	 * @hook mc_category_selector
+	 *
+	 * @param {string} $toggle HTML output for control.
+	 * @param {array} $categories Available categories.
+	 *
+	 * @return {string}
+	 */
 	$output = apply_filters( 'mc_category_selector', $output, $categories );
 
 	return $output;
@@ -794,6 +805,16 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 		$output .= ( 'list' !== $show && 'single' === $group ) ? '<p><input type="submit" class="button" value="' . __( 'Limit by Access', 'my-calendar' ) . '" /></p></form>' : '';
 		$output .= ( 'single' === $group ) ? "\n</div>" : '';
 	}
+	/**
+	 * Filter the HTML for the accessibility feature filter in navigation elements.
+	 *
+	 * @hook mc_access_selector
+	 *
+	 * @param {string} $output HTML output for control.
+	 * @param {array}  $access_options Available accessibility options.
+	 *
+	 * @return {string}
+	 */
 	$output = apply_filters( 'mc_access_selector', $output, $access_options );
 
 	return $output;
@@ -902,7 +923,19 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$date_switcher .= '<option value="' . $time . '"' . selected( $time, $c_year, false ) . '>' . $time . "</option>\n";
 	$date_switcher .= $f;
 	$date_switcher .= '</select> <input type="submit" class="button" data-href="' . esc_attr( $data_href ) . '" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
-	$date_switcher  = apply_filters( 'mc_jumpbox', $date_switcher );
+
+	/**
+	 * Filter the HTML for the date jumpbox controls.
+	 *
+	 * @hook mc_jumpbox
+	 *
+	 * @param {string} $date_switcher HTML output for control.
+	 * @param {string} $type Current view format.
+	 * @param {string} $time Current time frame.
+	 *
+	 * @return {string}
+	 */
+	$date_switcher  = apply_filters( 'mc_jumpbox', $date_switcher, $type, $time );
 
 	return $date_switcher;
 }
@@ -944,6 +977,17 @@ function mc_format_toggle( $format, $toggle, $time ) {
 		$toggle = '';
 	}
 
+	/**
+	 * Filter the HTML for the list/grid format switcher in navigation elements.
+	 *
+	 * @hook mc_format_toggle_html
+	 *
+	 * @param {string} $toggle HTML output for control.
+	 * @param {string} $format Current view format.
+	 * @param {string} $time Current time frame.
+	 *
+	 * @return {string}
+	 */
 	return apply_filters( 'mc_format_toggle_html', $toggle, $format, $time );
 }
 
@@ -1056,5 +1100,16 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		$toggle = '';
 	}
 
+	/**
+	 * Filter the HTML for the time format switcher in navigation elements.
+	 *
+	 * @hook mc_time_toggle_html
+	 *
+	 * @param {string} $toggle HTML output for control.
+	 * @param {string} $format Current view format.
+	 * @param {string} $time Current time frame.
+	 *
+	 * @return {string}
+	 */
 	return apply_filters( 'mc_time_toggle_html', $toggle, $format, $time );
 }
