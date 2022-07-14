@@ -753,8 +753,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare1        = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_street', false ) : '';
 	$compare2        = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_street2', false ) : '';
 	$compare         = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_city', false ) : '';
-	$street_address  = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_street'} ) ) : '';
-	$street_address2 = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_street2'} ) ) : '';
+	$street_address  = ( $has_data ) ? stripslashes( $data->{$context . '_street'} ) : '';
+	$street_address2 = ( $has_data ) ? stripslashes( $data->{$context . '_street2'} ) : '';
 	$return         .= '
 	&lt;/p>
 	&lt;div class="locations-container columns">
@@ -762,10 +762,10 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	&lt;fieldset>
 	&lt;legend>' . __( 'Location Address', 'my-calendar' ) . '&lt;/legend>
 	&lt;p>
-		&lt;label for="e_street">' . __( 'Street Address', 'my-calendar' ) . $compare1 . '&lt;/label> &lt;input type="text" id="e_street" name="' . $context . '_street" value="' . $street_address . '" />
+		&lt;label for="e_street">' . __( 'Street Address', 'my-calendar' ) . $compare1 . '&lt;/label> &lt;input type="text" id="e_street" name="' . $context . '_street" value="' . esc_attr( $street_address ) . '" />
 	&lt;/p>
 	&lt;p>
-		&lt;label for="e_street2">' . __( 'Street Address (2)', 'my-calendar' ) . $compare2 . '&lt;/label> &lt;input type="text" id="e_street2" name="' . $context . '_street2" value="' . $street_address2 . '" />
+		&lt;label for="e_street2">' . __( 'Street Address (2)', 'my-calendar' ) . $compare2 . '&lt;/label> &lt;input type="text" id="e_street2" name="' . $context . '_street2" value="' . esc_attr( $street_address2 ) . '" />
 	&lt;/p>
 	&lt;p>
 		&lt;label for="e_city">' . __( 'City', 'my-calendar' ) . $compare . '&lt;/label> ';
@@ -819,11 +819,11 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare_lat  = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_latitude', false ) : '';
 	$compare_lon  = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_longitude', false ) : '';
 	$zoom         = ( $has_data ) ? $data->{$context . '_zoom'} : '16';
-	$event_phone  = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_phone'} ) ) : '';
-	$event_phone2 = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_phone2'} ) ) : '';
-	$event_url    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_url'} ) ) : '';
-	$event_lat    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_latitude'} ) ) : '';
-	$event_lon    = ( $has_data ) ? esc_attr( stripslashes( $data->{$context . '_longitude'} ) ) : '';
+	$event_phone  = ( $has_data ) ? stripslashes( $data->{$context . '_phone'} ) : '';
+	$event_phone2 = ( $has_data ) ? stripslashes( $data->{$context . '_phone2'} ) : '';
+	$event_url    = ( $has_data ) ? stripslashes( $data->{$context . '_url'} ) : '';
+	$event_lat    = ( $has_data ) ? stripslashes( $data->{$context . '_latitude'} ) : '';
+	$event_lon    = ( $has_data ) ? stripslashes( $data->{$context . '_longitude'} ) : '';
 	$update_gps   = ( $has_data &amp;&amp; get_option( 'mc_gmap_api_key', '' ) &amp;&amp; 'location' === $context ) ? '&lt;p class="checkboxes">&lt;input type="checkbox" value="1" id="update_gps" name="update_gps" /> &lt;label for="update_gps">' . __( 'Update GPS Coordinates', 'my-calendar' ) . '&lt;/label>&lt;/p>' : '';
 	$return      .= '&lt;/p>
 	&lt;p>
@@ -845,10 +845,10 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	&lt;/p>
 	&lt;div class="columns-flex">
 	&lt;p>
-		&lt;label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . $compare_lat . '&lt;/label> &lt;input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . $event_lat . '" />
+		&lt;label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . $compare_lat . '&lt;/label> &lt;input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . esc_attr( $event_lat ) . '" />
 	&lt;/p>
 	&lt;p>
-		&lt;label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '&lt;/label> &lt;input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . $event_lon . '" />
+		&lt;label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '&lt;/label> &lt;input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . esc_attr( $event_lon ) . '" />
 	&lt;/p>' . $update_gps . '
 	&lt;/div>
 	&lt;/fieldset>';
@@ -870,13 +870,13 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	&lt;fieldset>
 	&lt;legend>' . __( 'Location Contact Information', 'my-calendar' ) . '&lt;/legend>
 	&lt;p>
-	&lt;label for="e_phone">' . __( 'Phone', 'my-calendar' ) . $compare_phone . '&lt;/label> &lt;input type="text" id="e_phone" name="' . $context . '_phone" value="' . $event_phone . '" />
+	&lt;label for="e_phone">' . __( 'Phone', 'my-calendar' ) . $compare_phone . '&lt;/label> &lt;input type="text" id="e_phone" name="' . $context . '_phone" value="' . esc_attr( $event_phone ) . '" />
 	&lt;/p>
 	&lt;p>
-	&lt;label for="e_phone2">' . __( 'Secondary Phone', 'my-calendar' ) . $compare_phone2 . '&lt;/label> &lt;input type="text" id="e_phone2" name="' . $context . '_phone2" value="' . $event_phone2 . '" />
+	&lt;label for="e_phone2">' . __( 'Secondary Phone', 'my-calendar' ) . $compare_phone2 . '&lt;/label> &lt;input type="text" id="e_phone2" name="' . $context . '_phone2" value="' . esc_attr( $event_phone2 ) . '" />
 	&lt;/p>
 	&lt;p>
-	&lt;label for="e_url">' . __( 'Location URL', 'my-calendar' ) . $compare_url . '&lt;/label> &lt;input type="text" id="e_url" name="' . $context . '_url" value="' . $event_url . '" />
+	&lt;label for="e_url">' . __( 'Location URL', 'my-calendar' ) . $compare_url . '&lt;/label> &lt;input type="text" id="e_url" name="' . $context . '_url" value="' . esc_attr( $event_url ) . '" />
 	&lt;/p>
 	&lt;/fieldset>
 	&lt;fieldset>
