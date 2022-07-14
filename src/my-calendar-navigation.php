@@ -190,6 +190,17 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		$jump = mc_date_switcher( $format, $main_class, $time, $date );
 	}
 
+	/**
+	 * Filter the order in which navigation elements are shown on the top of the calendar.
+	 *
+	 * @hook mc_header_navigation
+	 *
+	 * @param {array} $mc_toporder Array of navigation elements.
+	 * @param {array} $used Array of all navigation elements in use for this view.
+	 * @param {array} $params Current calendar view parameters.
+	 *
+	 * @return {array}
+	 */
 	$mc_toporder = apply_filters( 'mc_header_navigation', $mc_toporder, $used, $params );
 	foreach ( $mc_toporder as $value ) {
 		if ( 'none' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
@@ -198,6 +209,17 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		}
 	}
 
+	/**
+	 * Filter the order in which navigation elements are shown on the bottom of the calendar.
+	 *
+	 * @hook mc_footer_navigation
+	 *
+	 * @param {array} $mc_bottomorder Array of navigation elements.
+	 * @param {array} $used Array of all navigation elements in use for this view.
+	 * @param {array} $params Current calendar view parameters.
+	 *
+	 * @return {array}
+	 */
 	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
 	foreach ( $mc_bottomorder as $value ) {
 		if ( 'none' !== $value && 'stop' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
@@ -258,8 +280,27 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 		array()
 	);
 	$next_link = mc_url_in_loop( $next_link );
-
+	/**
+	 * Filter HTML output for navigation 'prev' link.
+	 *
+	 * @hook mc_prev_link
+	 *
+	 * @param {string} $prev_link HTML output for link.
+	 * @param {array} $prev Previous link parameters.
+	 *
+	 * @return {string}
+	 */
 	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a href="' . $prev_link . '" rel="nofollow" class="mcajax">' . $prev['label'] . '</a></li>', $prev );
+	/**
+	 * Filter HTML output for navigation 'next' link.
+	 *
+	 * @hook mc_next_link
+	 *
+	 * @param {string} $next_link HTML output for link.
+	 * @param {array} $next Next link parameters.
+	 *
+	 * @return {string}
+	 */
 	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a href="' . $next_link . '" rel="nofollow" class="mcajax">' . $next['label'] . '</a></li>', $next );
 
 	$nav = '
@@ -343,9 +384,30 @@ function mc_category_key( $category ) {
 		$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"' . $aria_current . '>' . $cat_key . '</a></li>';
 	}
 	if ( isset( $_GET['mcat'] ) ) {
-		$key .= "<li class='all-categories'><a href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "' class='mcajax'>" . apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) ) . '</a></li>';
+		/**
+		 * Filter text label for 'All Categories'.
+		 *
+		 * @hook mc_text_all_categories
+		 *
+		 * @param {string} $all Text for link to show all categories.
+		 *
+		 * @return {string}
+		 */
+		$all  = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
+		$key .= "<li class='all-categories'><a href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "' class='mcajax'>" . $all . '</a></li>';
 	}
 	$key .= '</ul></div>';
+
+	/**
+	 * Filter the category key output in navigation.
+	 *
+	 * @hook mc_category_key
+	 *
+	 * @param {string} $key Key HTML output.
+	 * @param {array} $categories Categories in key.
+	 *
+	 * @return {string}
+	 */
 	$key  = apply_filters( 'mc_category_key', $key, $categories );
 
 	return $key;
@@ -447,8 +509,34 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	}
 	$day = '';
 	if ( (int) $yr !== (int) $cur_year ) {
+		/**
+		 * Filter the date format used for next link if the next link is in a different year.
+		 *
+		 * @hook mc_month_format
+		 *
+		 * @param {string} $format PHP Date format string.
+		 * @param {array} $date Current date array.
+		 * @param {string} $format View format.
+		 * @param {string} $time View time frame.
+		 * @param {string} $month month used in navigation reference (next month.)
+		 *
+		 * @return {string}
+		 */
 		$format = apply_filters( 'mc_month_year_format', 'F, Y', $date, $format, $time, $month );
 	} else {
+		/**
+		 * Filter the date format used for next link if the next link is in the same year.
+		 *
+		 * @hook mc_month_format
+		 *
+		 * @param {string} $format PHP Date format string.
+		 * @param {array} $date Current date array.
+		 * @param {string} $format View format.
+		 * @param {string} $time View time frame.
+		 * @param {string} $month month used in navigation reference (next month.)
+		 *
+		 * @return {string}
+		 */
 		$format = apply_filters( 'mc_month_format', 'F, Y', $date, $format, $time, $month );
 	}
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
@@ -526,8 +614,34 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		}
 	}
 	if ( (int) $yr !== (int) $cur_year ) {
+		/**
+		 * Filter the date format used for previous link if the prev link is in a different year.
+		 *
+		 * @hook mc_month_format
+		 *
+		 * @param {string} $format PHP Date format string.
+		 * @param {array} $date Current date array.
+		 * @param {string} $format View format.
+		 * @param {string} $time View time frame.
+		 * @param {string} $month month used in navigation reference (previous month.)
+		 *
+		 * @return {string}
+		 */
 		$format = apply_filters( 'mc_month_year_format', 'F, Y', $date, $format, $time, $month );
 	} else {
+		/**
+		 * Filter the date format used for previous link if the previous link is in the same year.
+		 *
+		 * @hook mc_month_format
+		 *
+		 * @param {string} $format PHP Date format string.
+		 * @param {array} $date Current date array.
+		 * @param {string} $format View format.
+		 * @param {string} $time View time frame.
+		 * @param {string} $month month used in navigation reference (previous month, generally.)
+		 *
+		 * @return {string}
+		 */
 		$format = apply_filters( 'mc_month_format', 'F, Y', $date, $format, $time, $month );
 	}
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
@@ -935,7 +1049,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	 *
 	 * @return {string}
 	 */
-	$date_switcher  = apply_filters( 'mc_jumpbox', $date_switcher, $type, $time );
+	$date_switcher = apply_filters( 'mc_jumpbox', $date_switcher, $type, $time );
 
 	return $date_switcher;
 }

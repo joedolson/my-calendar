@@ -826,6 +826,17 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</p>' . $update_gps . '
 	</div>
 	</fieldset>';
+	/**
+	 * Append content in the primary column of location fields.
+	 *
+	 * @hook mc_location_container_primary
+	 *
+	 * @param {string} HTML content. Default empty string.
+	 * @param {object} $data Current display object.
+	 * @param {string} $context Location or event. Tells us the structure of the $data object.
+	 *
+	 * @return {string}
+	 */
 	$return      .= apply_filters( 'mc_location_container_primary', '', $data, $context );
 	$return      .= '
 	</div>
@@ -846,7 +857,17 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	<legend>' . __( 'Location Accessibility', 'my-calendar' ) . '</legend>
 	<ul class="accessibility-features checkboxes">';
 
-	$access      = apply_filters( 'mc_venue_accessibility', mc_location_access() );
+	/**
+	 * Filter venue accessibility array.
+	 *
+	 * @hook mc_venue_accessibility
+	 *
+	 * @param {array} $access Access parameters.
+	 * @param {object} $data Current data object.
+	 *
+	 * @return {array}
+	 */
+	$access      = apply_filters( 'mc_venue_accessibility', mc_location_access(), $data );
 	$access_list = '';
 	if ( $has_data ) {
 		if ( 'location' === $context ) {
@@ -877,6 +898,17 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</fieldset>';
 	$fields  = mc_display_location_fields( mc_location_fields(), $data, $context );
 	$return .= ( '' !== $fields ) ? '<div class="mc-custom-fields mc-locations"><fieldset><legend>' . __( 'Custom Fields', 'my-calendar' ) . '</legend>' . $fields . '</fieldset></div>' : '';
+	/**
+	 * Append content in the secondary column of location fields.
+	 *
+	 * @hook mc_location_container_secondary
+	 *
+	 * @param {string} HTML content. Default empty string.
+	 * @param {object} $data Current display object.
+	 * @param {string} $context Location or event. Tells us the structure of the $data object.
+	 *
+	 * @return {string}
+	 */
 	$return .= apply_filters( 'mc_location_container_secondary', '', $data, $context );
 	$return .= '</div>
 	</div>
@@ -905,6 +937,23 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
  * @return array
  */
 function mc_location_fields() {
+	/**
+	 * Return custom fields for use in My Calendar locations. Fields should format like:
+	 *
+	 * ```$fields['location_type']   = array(
+	 *	'title'             => 'Location Type',
+	 *	'sanitize_callback' => 'sanitize_text_field',
+	 *	'display_callback'  => 'esc_html',
+	 *	'input_type'        => 'select',
+	 *	'input_values'      => array( 'Virtual', 'Private Home', 'Concert Hall', 'Outdoor Venue' ),
+	 * );```
+	 *
+	 * @hook mc_location_fields
+	 *
+	 * @param {array} Array of custom fields.
+	 *
+	 * @return {array}
+	 */
 	$fields = apply_filters( 'mc_location_fields', array() );
 
 	return $fields;
@@ -1004,6 +1053,16 @@ function mc_display_location_fields( $fields, $data, $context ) {
 	if ( ! $location_id ) {
 		return '';
 	}
+	/**
+	 * Filter available custom fields & set display order.
+	 *
+	 * @hook mc_order_location_fields
+	 *
+	 * @param {array} $fields Array of custom fields data.
+	 * @param {string} $context Whether we're currently editing a location or an event.
+	 *
+	 * @return {array}
+	 */
 	$custom_fields = apply_filters( 'mc_order_location_fields', $fields, $context );
 	foreach ( $custom_fields as $name => $field ) {
 		$user_value = mc_location_custom_data( $location_id, false, $name );
@@ -1085,6 +1144,15 @@ function mc_location_access() {
 		'12' => __( 'Other', 'my-calendar' ),
 	);
 
+	/**
+	 * Filter choices available for location accessibility services.
+	 *
+	 * @hook mc_location_access_choices
+	 *
+	 * @param {array} Array of location choices (numeric keys, string values.)
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_location_access_choices', $location_access );
 }
 
@@ -1180,7 +1248,17 @@ function mc_get_locations( $args ) {
 	}
 	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id,location_label,location_street FROM ' . my_calendar_locations_table() . ' WHERE ' . esc_sql( $where ) . ' = %s ORDER BY ' . esc_sql( $orderby ) . ' ' . esc_sql( $order ), $is ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-	return apply_filters( 'mc_filter_results', $results, $args );
+	/**
+	 * Filter returned results when searching locations.
+	 *
+	 * @hook mc_filter_location_results
+	 *
+	 * @param {array} $results Array of IDs or objects.
+	 * @param {array} $args Query arguments.
+	 *
+	 * @return {array}
+	 */
+	return apply_filters( 'mc_filter_location_results', $results, $args );
 }
 
 /**
@@ -1202,7 +1280,17 @@ function mc_core_search_locations( $query = '' ) {
 	if ( '' !== $query ) {
 		// Fulltext is supported in InnoDB since MySQL 5.6; minimum required by WP is 5.0 as of WP 5.5.
 		// 37% of installs still below 5.6 as of 11/30/2020.
+		// 2.4% of installs below 5.6 as of 7/14/2022.
 		if ( 'MyISAM' === $db_type && $length > 3 ) {
+			/**
+			 * Filter the fields used to handle MATCH queries in location searches on MyISAM dbs.
+			 *
+			 * @hook mc_search_fields
+			 *
+			 * @param {string} $fields Table columns in locations table.
+			 *
+			 * @return {string}
+			 */
 			$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
 			$search = " WHERE location_label LIKE '%$query%' ";
@@ -1254,6 +1342,16 @@ function mc_display_location_details( $content ) {
 	<div class="mc-location-hcard">' . mc_hcard( $location, 'true', 'true', 'location' ) . '</div>
 	<div class="mc-location-upcoming"><h2>' . __( 'Upcoming Events', 'my-calendar' ) . '</h2>' . $events . '</div>
 </div>';
+		/**
+		 * Filter the HTML output for single location details.
+		 *
+		 * @hook mc_location_output
+		 *
+		 * @param {string} $content Full HTML output.
+		 * @param {object} $location Calendar location object.
+		 *
+		 * @return {string}
+		 */
 		$content = apply_filters( 'mc_location_output', $content, $location );
 	}
 
