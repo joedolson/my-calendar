@@ -248,6 +248,15 @@ function mc_manage_locations() {
 		$db_type = mc_get_db_type();
 		if ( '' !== $query ) {
 			if ( 'MyISAM' === $db_type && $length > 3 ) {
+				/**
+				 * Customize admin search MATCH columns when db is MyISAM.
+				 *
+				 * @hook mc_search_fields
+				 *
+				 * @param {string} $fields Comma-separated list of column names.
+				 *
+				 * @return {string}
+				 */
 				$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label,location_city,location_state,location_region,location_country,location_street,location_street2,location_phone' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 			} else {
 				$search = " WHERE location_label LIKE '%$query%' OR location_city LIKE '%$query%' OR location_state LIKE '%$query%' OR location_region LIKE '%$query%' OR location_country LIKE '%$query%' OR location_street LIKE '%$query%' OR location_street2 LIKE '%$query%' OR location_phone LIKE '%$query%' ";
@@ -324,8 +333,18 @@ function mc_manage_locations() {
 				$url       = add_query_arg( 'orderby', 'state', $admin_url );
 				$col_head .= mc_table_header( __( 'State/Province', 'my-calendar' ), $order, $sortby, 'state', $url );
 				echo wp_kses( $col_head, mc_kses_elements() );
+				/**
+				 * Add custom column table headers to Location Manager.
+				 *
+				 * @hook mc_location_manager_headers
+				 *
+				 * @param {string} $headers HTML output. Appends HTML in the end column of the location manager table row.
+				 *
+				 * @return {string}
+				 */
+				$headers = apply_filters( 'mc_location_manager_headers', '' );
+				echo $headers;
 				?>
-				<?php echo apply_filters( 'mc_location_manager_headers', '' ); ?>
 			</tr>
 			</thead>
 			<tbody>
@@ -418,6 +437,17 @@ function mc_location_manager_row( $location ) {
 		$view_link = "<a href='" . esc_url( $view_url ) . "' class='view' aria-describedby='location" . absint( $location->location_id ) . "'>" . esc_html__( 'View', 'my-calendar' ) . '</a> | ';
 	}
 
+	/**
+	 * Add custom column table cells to Location Manager.
+	 *
+	 * @hook mc_location_manager_cells
+	 *
+	 * @param {string} $cells HTML output. Appends HTML in the end column of the location manager table row.
+	 * @param {object} $location Locatino object.
+	 * @return {string}
+	 */
+	$cells = apply_filters( 'mc_location_manager_cells', '', $location );
+
 	$row  = '';
 	$row .= '
 	<tr>
@@ -432,7 +462,7 @@ function mc_location_manager_row( $location ) {
 			</div>
 		</td>
 		<td>' . esc_html( $location->location_city ) . '</td>
-		<td>' . esc_html( $location->location_state ) . '</td>' . apply_filters( 'mc_location_manager_cells', '', $location ) . '
+		<td>' . esc_html( $location->location_state ) . '</td>' . $custom_location_cells . '
 	</tr>';
 
 	return $row;
