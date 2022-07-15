@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-location-manager.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-location-manager.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Manage Locations
+ *
+ * @category Locations
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * List of locations to edit.
+ */
+function my_calendar_manage_locations() {
+	?>
+	&lt;div class="wrap my-calendar-admin">
+	&lt;?php
+	my_calendar_check_db();
+	// We do some checking to see what we're doing.
+	mc_mass_delete_locations();
+	mc_clean_duplicate_locations();
+	if ( ! empty( $_POST ) &amp;&amp; ( ! isset( $_POST['mc_locations'] ) &amp;&amp; ! isset( $_POST['mass_delete'] ) ) ) {
+		$nonce = $_REQUEST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			wp_die( 'My Calendar: Security check failed' );
+		}
+	}
+	if ( isset( $_GET['location_id'] ) &amp;&amp; 'delete' === $_GET['mode'] ) {
+		$loc = absint( $_GET['location_id'] );
+		if ( isset( $_GET['confirm'] ) ) {
+			echo wp_kses_post( mc_delete_location( $loc ) );
+		} else {
+			// Translators: Delete link.
+			$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '&lt;a class="button delete" href="' . esc_url( add_query_arg( 'location_id', $loc, admin_url( 'admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '&lt;/a>' );
+			mc_show_notice( $notice );
+		}
+	}
+	if ( isset( $_GET['default'] ) &amp;&amp; is_numeric( $_GET['default'] ) ) {
+		update_option( 'mc_default_location', (int) $_GET['default'] );
+		mc_show_notice( __( 'Default Location Changed', 'my-calendar' ) );
+	}
+	?>
+		&lt;h1 class="wp-heading-inline">&lt;?php esc_html_e( 'Locations', 'my-calendar' ); ?>&lt;/h1>
+		&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>" class="page-title-action">&lt;?php esc_html_e( 'Add New', 'my-calendar' ); ?>&lt;/a>
+		&lt;?php
+		if ( '' === get_option( 'mc_location_cpt_base', '' ) ) {
+			?>
+			&lt;a class="page-title-action" href="&lt;?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>">&lt;?php esc_html_e( 'Update location permalinks', 'my-calendar' ); ?>&lt;/a>
+			&lt;?php
+		}
+		?>
+		&lt;hr class="wp-header-end">
+	&lt;div class="postbox-container jcd-wide">
+		&lt;div class="metabox-holder">
+			&lt;div class="ui-sortable meta-box-sortables">
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Manage Locations', 'my-calendar' ); ?>&lt;/h2>
+
+					&lt;div class="inside">
+						&lt;?php mc_manage_locations(); ?>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+		&lt;/div>
+	&lt;/div>
+		&lt;?php mc_show_sidebar(); ?>
+	&lt;/div>
+	&lt;?php
+}
+
+/**
+ * Fetch default location data.
+ *
+ * @return string
+ */
+function mc_default_location() {
+	$default = get_option( 'mc_default_location' );
+	$output  = '';
+	if ( $default ) {
+		$location = mc_get_location( $default );
+		if ( ! $location ) {
+			return '';
+		}
+		$output  = mc_hcard( $location, 'true', false, 'location' );
+		$output .= '&lt;p>&lt;a href="' . admin_url( "admin.php?page=my-calendar-locations&amp;amp;mode=edit&amp;amp;location_id=$default" ) . '">' . __( 'Edit Default Location', 'my-calendar' ) . '&lt;/a>&lt;/p>';
+	}
+	if ( ! $output ) {
+		$output = '&lt;p>' . __( 'No default location selected.', 'my-calendar' ) . '&lt;/p>';
+	}
+
+	return $output;
+}
+
+
+/**
+ * Mass replace locations.
+ *
+ * @return mixed boolean/int query result.
+ */
+function mc_clean_duplicate_locations() {
+	global $wpdb;
+	// Mass delete locations.
+	if ( ! empty( $_POST['mass_edit'] ) &amp;&amp; isset( $_POST['mass_replace'] ) ) {
+		$nonce = $_REQUEST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			wp_die( 'My Calendar: Security check failed' );
+		}
+		$locations = $_POST['mass_edit'];
+		$replace   = absint( $_POST['mass_replace_id'] );
+		$location  = mc_get_location( $replace );
+		if ( ! $location ) {
+			// If this isn't a valid location, don't continue.
+			echo mc_show_error( __( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
+			return;
+		}
+		$i       = 0;
+		$total   = 0;
+		$deleted = array();
+		foreach ( $locations as $value ) {
+			// If the replacement location is checked, ignore it.
+			if ( (int) $replace === (int) $value ) {
+				continue;
+			}
+			$total  = count( $locations );
+			$result = mc_delete_location( $value, 'bool' );
+			if ( ! $result ) {
+				$failed[] = absint( $value );
+			} else {
+				$deleted[] = absint( $value );
+			}
+			$change = $wpdb->update(
+				my_calendar_table(),
+				array(
+					'event_location' => $replace,
+				),
+				array(
+					'event_location' => $value,
+				),
+				'%d',
+				'%d'
+			);
+			$i ++;
+		}
+		if ( ! empty( $deleted ) ) {
+			// Argument: array of event IDs.
+			do_action( 'mc_clean_duplicate_locations', $deleted );
+			// Translators: Number of locations deleted, number selected.
+			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
+		} else {
+			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
+		}
+		echo wp_kses_post( $message );
+	}
+}
+
+/**
+ * Mass delete locations.
+ *
+ * @return mixed boolean/int query result.
+ */
+function mc_mass_delete_locations() {
+	global $wpdb;
+	// Mass delete locations.
+	if ( ! empty( $_POST['mass_edit'] ) &amp;&amp; isset( $_POST['mass_delete'] ) ) {
+		$nonce = $_REQUEST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			wp_die( 'My Calendar: Security check failed' );
+		}
+		$locations = $_POST['mass_edit'];
+		$i         = 0;
+		$total     = 0;
+		$deleted   = array();
+		foreach ( $locations as $value ) {
+			$total  = count( $locations );
+			$result = mc_delete_location( $value, 'bool' );
+			if ( ! $result ) {
+				$failed[] = absint( $value );
+			} else {
+				$deleted[] = absint( $value );
+			}
+			$i ++;
+		}
+		if ( ! empty( $deleted ) ) {
+			// Argument: array of event IDs.
+			do_action( 'mc_mass_delete_locations', $deleted, $failed );
+			// Translators: Number of locations deleted, number selected.
+			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
+		} else {
+			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
+		}
+		echo wp_kses_post( $message );
+	}
+}
+
+/**
+ * Generate list of locations.
+ */
+function mc_manage_locations() {
+	global $wpdb;
+	$orderby = 'location_label';
+	$sortby  = 'location';
+
+	if ( isset( $_GET['orderby'] ) ) {
+		$sortby = $_GET['orderby'];
+		switch ( $_GET['orderby'] ) {
+			case 'city':
+				$orderby = 'location_city';
+				break;
+			case 'state':
+				$orderby = 'location_state';
+				break;
+			case 'id':
+				$orderby = 'location_id';
+				break;
+			default:
+				$orderby = 'location_label';
+		}
+	}
+	$order       = 'ASC';
+	$query_order = 'DESC';
+	if ( isset( $_GET['order'] ) ) {
+		switch ( $_GET['order'] ) {
+			case 'asc':
+				$order       = 'DESC';
+				$query_order = 'ASC';
+				break;
+			case 'desc':
+				$order       = 'ASC';
+				$query_order = 'DESC';
+				break;
+			default:
+				$order       = 'ASC';
+				$query_order = 'DESC';
+		}
+	}
+	// Pull the locations from the database.
+	$items_per_page = 50;
+	$search         = '';
+	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
+	if ( isset( $_POST['mcl'] ) ) {
+		$query   = esc_sql( $_POST['mcl'] );
+		$length  = strlen( $query );
+		$db_type = mc_get_db_type();
+		if ( '' !== $query ) {
+			if ( 'MyISAM' === $db_type &amp;&amp; $length > 3 ) {
+				/**
+				 * Customize admin search MATCH columns when db is MyISAM.
+				 *
+				 * @hook mc_search_fields
+				 *
+				 * @param {string} $fields Comma-separated list of column names.
+				 *
+				 * @return {string}
+				 */
+				$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label,location_city,location_state,location_region,location_country,location_street,location_street2,location_phone' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
+			} else {
+				$search = " WHERE location_label LIKE '%$query%' OR location_city LIKE '%$query%' OR location_state LIKE '%$query%' OR location_region LIKE '%$query%' OR location_country LIKE '%$query%' OR location_street LIKE '%$query%' OR location_street2 LIKE '%$query%' OR location_phone LIKE '%$query%' ";
+			}
+		} else {
+			$search = '';
+		}
+	}
+
+	$query_limit = ( ( $current - 1 ) * $items_per_page );
+	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS location_id FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby $query_order LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
+	$items       = $found_rows[0];
+	$pagination  = '';
+
+	$num_pages = ceil( $items / $items_per_page );
+	if ( $num_pages > 1 ) {
+		$page_links = paginate_links(
+			array(
+				'base'      => add_query_arg( 'paged', '%#%' ),
+				'format'    => '',
+				'prev_text' => __( '&amp;laquo; Previous&lt;span class="screen-reader-text"> Locations&lt;/span>', 'my-calendar' ),
+				'next_text' => __( 'Next&lt;span class="screen-reader-text"> Locations&lt;/span> &amp;raquo;', 'my-calendar' ),
+				'total'     => $num_pages,
+				'current'   => $current,
+				'mid_size'  => 1,
+			)
+		);
+		$pagination = sprintf( "&lt;div class='tablenav'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/div>", $page_links );
+	}
+
+	if ( ! empty( $locations ) ) {
+		?>
+	&lt;div class="mc-admin-header locations">
+		&lt;?php echo wp_kses_post( $pagination ); ?>
+		&lt;div class='mc-search'>
+			&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post">
+				&lt;div>
+					&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+				&lt;/div>
+				&lt;div>
+					&lt;label for="mc_search" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Locations', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type='text' role='search' name='mcl' id='mc_search' value='&lt;?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
+					&lt;input type='submit' value='&lt;?php esc_attr_e( 'Search', 'my-calendar' ); ?>' class='button-secondary' />
+				&lt;/div>
+			&lt;/form>
+		&lt;/div>
+	&lt;/div>
+	&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
+		&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>&lt;/div>
+		&lt;div class='mc-actions'>
+			&lt;input type="submit" class="button-secondary delete" name="mass_delete" value="&lt;?php esc_attr_e( 'Delete locations', 'my-calendar' ); ?>" />
+			&lt;div class="mass-replace-wrap">
+				&lt;input type="checkbox" name="mass_replace_on" disabled id="mass_replace_on" value="true">&lt;label for="mass_replace_on">&lt;?php esc_attr_e( 'Merge duplicates', 'my-calendar' ); ?>&lt;/label>
+				&lt;div class="mass-replace-container">
+					&lt;label for="mass-replace">&lt;?php _e( 'Replacement ID', 'my-calendar' ); ?>&lt;/label>&lt;input type="text" size="4" id="mass-replace" name="mass_replace_id" class="mass-replace" value="" />
+					&lt;input type="submit" class="button-secondary delete" name="mass_replace" value="&lt;?php _e( 'Replace', 'my-calendar' ); ?>" />
+				&lt;/div>
+			&lt;/div>
+			&lt;div>&lt;input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> &lt;label for='mass_edit'>&lt;?php esc_html_e( 'Check all', 'my-calendar' ); ?>&lt;/label>&lt;/div>
+		&lt;/div>
+		&lt;table class="widefat striped page" id="my-calendar-admin-table">
+			&lt;caption class="screen-reader-text">&lt;?php esc_html_e( 'Location list. Use column headers to sort.', 'my-calendar' ); ?>&lt;/caption>
+			&lt;thead>
+			&lt;tr>
+				&lt;?php
+				$admin_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;paged=$current&amp;order=" . strtolower( $order ) );
+				$url       = add_query_arg( 'orderby', 'id', $admin_url );
+				$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $order, $sortby, 'id', $url );
+				$url       = add_query_arg( 'orderby', 'location', $admin_url );
+				$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $order, $sortby, 'location', $url );
+				$url       = add_query_arg( 'orderby', 'city', $admin_url );
+				$col_head .= mc_table_header( __( 'City', 'my-calendar' ), $order, $sortby, 'city', $url );
+				$url       = add_query_arg( 'orderby', 'state', $admin_url );
+				$col_head .= mc_table_header( __( 'State/Province', 'my-calendar' ), $order, $sortby, 'state', $url );
+				echo wp_kses( $col_head, mc_kses_elements() );
+				/**
+				 * Add custom column table headers to Location Manager.
+				 *
+				 * @hook mc_location_manager_headers
+				 *
+				 * @param {string} $headers HTML output. Appends HTML in the end column of the location manager table row.
+				 *
+				 * @return {string}
+				 */
+				$headers = apply_filters( 'mc_location_manager_headers', '' );
+				echo $headers;
+				?>
+			&lt;/tr>
+			&lt;/thead>
+			&lt;tbody>
+			&lt;?php
+			$default_location = get_option( 'mc_default_location', '' );
+			if ( $default_location ) {
+				$default = mc_get_location( $default_location );
+				echo wp_kses( mc_location_manager_row( $default ), mc_kses_elements() );
+			}
+			foreach ( $locations as $loc ) {
+				if ( (int) $default_location === (int) $loc->location_id ) {
+					continue;
+				}
+				$location = mc_get_location( $loc->location_id );
+				echo wp_kses( mc_location_manager_row( $location ), mc_kses_elements() );
+			}
+			?>
+			&lt;/tbody>
+		&lt;/table>
+		&lt;div class="mc-actions">
+		&lt;p>
+			&lt;input type="submit" class="button-secondary delete" name="mass_delete" value="&lt;?php _e( 'Delete locations', 'my-calendar' ); ?>" />
+		&lt;/p>
+		&lt;/div>
+		&lt;/form>
+		&lt;?php
+	} else {
+		if ( isset( $_POST['mcl'] ) ) {
+			echo '&lt;p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '&lt;/p>';
+		}
+		echo '&lt;p>&lt;a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . __( 'Create a new location', 'my-calendar' ) . '&lt;/a>&lt;/p>';
+	}
+}
+
+/**
+ * Verify that a location has valid fields. If a location has no valid data, delete it.
+ *
+ * @param object $location Location object.
+ *
+ * @return bool
+ */
+function mc_verify_location( $location ) {
+	if ( ! is_object( $location ) ) {
+		return true;
+	}
+	$location_id = $location->location_id;
+	$copy        = clone $location;
+	// Unset location ID and location Post, which will always exist.
+	$copy->location_id   = '';
+	$copy->location_post = '';
+	$json                = json_encode( $copy );
+	if ( '{"location_id":"","location_label":"","location_street":"","location_street2":"","location_city":"","location_state":"","location_postcode":"","location_region":"","location_url":"","location_country":"","location_longitude":"0.000000","location_latitude":"0.000000","location_zoom":"16","location_phone":"","location_phone2":"","location_access":"","location_post":""}' === $json ) {
+		if ( $location_id ) {
+			mc_delete_location( $location_id );
+			mc_location_delete_post( true, $location_id );
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Generate the location manager row for a location.
+ *
+ * @param object $location Location object.
+ *
+ * @return string
+ */
+function mc_location_manager_row( $location ) {
+	$card   = mc_hcard( $location, 'true', 'false', 'location' );
+	$verify = mc_verify_location( $location );
+	if ( ! $verify ) {
+		return '';
+	}
+
+	if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
+		$card    = str_replace( '&lt;/strong>', ' ' . __( '(Default)', 'my-calendar' ) . '&lt;/strong>', $card );
+		$default = '&lt;span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '&lt;/span>';
+	} else {
+		$url     = admin_url( "admin.php?page=my-calendar-location-manager&amp;amp;default=$location->location_id" );
+		$default = '&lt;a href="' . esc_url( $url ) . '">' . __( 'Set as Default', 'my-calendar' ) . '&lt;/a>';
+	}
+	$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;amp;mode=delete&amp;amp;location_id=$location->location_id" );
+	$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
+	$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;amp;mode=edit&amp;amp;location_id=$location->location_id" );
+	$view_link  = '';
+	if ( $view_url &amp;&amp; esc_url( $view_url ) ) {
+		$view_link = "&lt;a href='" . esc_url( $view_url ) . "' class='view' aria-describedby='location" . absint( $location->location_id ) . "'>" . esc_html__( 'View', 'my-calendar' ) . '&lt;/a> | ';
+	}
+
+	/**
+	 * Add custom column table cells to Location Manager.
+	 *
+	 * @hook mc_location_manager_cells
+	 *
+	 * @param {string} $cells HTML output. Appends HTML in the end column of the location manager table row.
+	 * @param {object} $location Locatino object.
+	 * @return {string}
+	 */
+	$cells = apply_filters( 'mc_location_manager_cells', '', $location );
+
+	$row  = '';
+	$row .= '
+	&lt;tr>
+		&lt;th scope="row">
+			&lt;input type="checkbox" value="' . absint( $location->location_id ) . '" name="mass_edit[]" id="mc' . absint( $location->location_id ) . '"/>
+			&lt;label for="mc' . absint( $location->location_id ) . '">' . $location->location_id . '&lt;/label>
+		&lt;/th>
+		&lt;td>' . $card . '
+			&lt;div class="row-actions">' . $view_link . '
+				&lt;a href="' . esc_url( $edit_url ) . '" class="edit" aria-describedby="location' . absint( $location->location_id ) . '">' . esc_html__( 'Edit', 'my-calendar' ) . '&lt;/a> | ' . $default . ' | 
+				&lt;a href="' . esc_url( $delete_url ) . '" class="delete" aria-describedby="location' . absint( $location->location_id ) . '">' . esc_html__( 'Delete', 'my-calendar' ) . '&lt;/a>
+			&lt;/div>
+		&lt;/td>
+		&lt;td>' . esc_html( $location->location_city ) . '&lt;/td>
+		&lt;td>' . esc_html( $location->location_state ) . '&lt;/td>' . $custom_location_cells . '
+	&lt;/tr>';
+
+	return $row;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

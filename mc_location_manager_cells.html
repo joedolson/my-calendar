@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_jumpbox_future_years - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_location_manager_cells - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_jumpbox_future_years</h1></header>
+    <header><h1 class="page-title">Filter: mc_location_manager_cells</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_jumpbox_future_years">apply_filters( 'mc_jumpbox_future_years', <span class="signature">$future, $cid )</span><span class="type-signature"> &rarr; {int}</span></h4>
+    <h4 class="name" id="mc_location_manager_cells">apply_filters( 'mc_location_manager_cells', <span class="signature">$cells, $location )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>How many years into the future should be shown in the navigation jumpbox. Default '5'.</p>
+    <p>Add custom column table cells to Location Manager.</p>
 </div>
 
 
@@ -77,30 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$future</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Number of years ahead.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$cid</code></td>
+                <td class="name"><code>$cells</code></td>
             
 
             <td class="type">
@@ -116,7 +93,30 @@
 
             
 
-            <td class="description last"><p>Current calendar ID. '' when running in the shortcode generator.</p></td>
+            <td class="description last"><p>HTML output. Appends HTML in the end column of the location manager table row.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Locatino object.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-shortcodes.php.html">my-calendar-shortcodes.php</a>, <a href="my-calendar-shortcodes.php.html#line634">line 634</a>
+        <a href="my-calendar-location-manager.php.html">my-calendar-location-manager.php</a>, <a href="my-calendar-location-manager.php.html#line440">line 440</a>
     </li></ul></dd>
     
 
@@ -191,200 +191,7 @@
     </dt>
     <dd>
         
-<span class="param-type">int</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-    
-    </div>
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    <h2></h2>
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    <h4 class="name" id="mc_jumpbox_future_years">apply_filters( 'mc_jumpbox_future_years', <span class="signature">$future, $cid )</span><span class="type-signature"> &rarr; {int}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>How many years into the future should be shown in the navigation jumpbox. Default '5'.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>$future</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Number of years ahead.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$cid</code></td>
-            
-
-            <td class="type">
-            
-                
 <span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current calendar ID. '' when running in the shortcode generator.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-navigation.php.html">my-calendar-navigation.php</a>, <a href="my-calendar-navigation.php.html#line1004">line 1004</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">int</span>
 
 
     </dd>
