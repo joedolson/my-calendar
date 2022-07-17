@@ -94,8 +94,10 @@ function my_calendar_print() {
 
 	if ( isset( $_GET['href'] ) ) {
 		// Only support URLs on the same home_url().
-		$ref_url = esc_url( urldecode( $_GET['href'] ) );
-		$local   = ( false !== stripos( home_url(), $ref_url ) ) ? true : false;
+		$ref_url  = esc_url( urldecode( $_GET['href'] ) );
+		$ref_root = parse_url( $ref_url )['host'];
+		$root     = parse_url( home_url() )['host'];
+		$local    = ( false !== stripos( home_url(), $ref_url ) && false !== stripos( $root, $ref_root ) ) ? true : false;
 		if ( $ref_url && $local ) {
 			$return_url = $ref_url;
 		}

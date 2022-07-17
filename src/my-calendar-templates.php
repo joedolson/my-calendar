@@ -155,7 +155,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		}
 	}
 	// Translators: Name of location.
-	$label = sprintf( __( 'Map<span> to %s</span>', 'my-calendar' ), $event );
+	$label = sprintf( __( 'Map<span> to %s</span>', 'my-calendar' ), $map_label );
 	/**
 	 * Label for link to Google Maps for event.
 	 *
@@ -166,7 +166,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	 *
 	 * @return {string} Label used inside map link.
 	 */
-	$label = sprintf( apply_filters( 'mc_map_label', $label, $map_label );
+	$label = sprintf( apply_filters( 'mc_map_label', $label, $map_label ) );
 	if ( strlen( trim( $map_string ) ) > 6 ) {
 		/**
 		 * Google maps URL.
