@@ -93,8 +93,10 @@ function my_calendar_print() {
 	$return_url = apply_filters( 'mc_print_return_url', $return_url, $category, $time, $ltype, $lvalue );
 
 	if ( isset( $_GET['href'] ) ) {
+		// Only support URLs on the same home_url().
 		$ref_url = esc_url( urldecode( $_GET['href'] ) );
-		if ( $ref_url ) {
+		$local   = ( false !== stripos( home_url(), $ref_url ) ) ? true : false;
+		if ( $ref_url && $local ) {
 			$return_url = $ref_url;
 		}
 	}
