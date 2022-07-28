@@ -2688,7 +2688,6 @@ function mc_reuse_id_format( $format, $begin, $instances ) {
  * @return null by default; data array if testing
  */
 function mc_increment_event( $id, $post = array(), $test = false, $instances = array() ) {
-	global $wpdb;
 	$event  = mc_get_event_core( $id, true );
 	$data   = array();
 	$return = array();
@@ -2708,7 +2707,6 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 	$end_diff   = strtotime( gmdate( 'Y-m-d H:i:s', strtotime( $orig_end ) ) ) - strtotime( gmdate( 'Y-m-d', strtotime( $orig_end ) ) );
 
 	$group_id = $event->event_group_id;
-	$format   = array( '%d', '%s', '%s', '%d' );
 	$recurs   = str_split( $event->event_recur, 1 );
 	$recur    = $recurs[0];
 	// Can't use 2nd value directly if it's two digits.
@@ -2752,14 +2750,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
-						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-							$wpdb->insert( my_calendar_event_table(), $data, $format );
-						}
-					}
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'daily' )
 				}
 				break;
 			// Weekdays only.
@@ -2786,14 +2777,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'daily' );
-						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-							$wpdb->insert( my_calendar_event_table(), $data, $format );
-						}
-					}
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'weekday' )
 				}
 				break;
 			// Weekly.
@@ -2818,14 +2802,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'weekly' );
-						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-							$wpdb->insert( my_calendar_event_table(), $data, $format );
-						}
-					}
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'weekly' )
 				}
 				break;
 			// Biweekly.
@@ -2850,14 +2827,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'biweekly' );
-						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-							$wpdb->insert( my_calendar_event_table(), $data, $format );
-						}
-					}
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'biweekly' )
 				}
 				break;
 			// Monthly by date.
@@ -2882,14 +2852,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'monthly' );
-						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-							$wpdb->insert( my_calendar_event_table(), $data, $format );
-						}
-					}
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'monthly' )
 				}
 				break;
 			// Monthly by day.
@@ -2905,15 +2868,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					'occur_end'      => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_end ), false ),
 					'occur_group_id' => $group_id,
 				);
+				mc_insert_recurring( $data, $id, strtotime( $orig_begin ), $instances, $test, 'month-by-day' )
 
-				if ( ! $test ) {
-					$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'month-by-day' );
-					if ( ! $insert ) {
-						$data   = apply_filters( 'mc_instance_data', $data, strtotime( $orig_begin ), $instances );
-						$format = apply_filters( 'mc_instance_format', $format, strtotime( $orig_begin ), $instances );
-						$wpdb->insert( my_calendar_event_table(), $data, $format );
-					}
-				}
 				$numforward = ( $numforward - 1 );
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
 					$next_week_diff = ( mc_date( 'm', $newbegin, false ) === mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin, false ), 7, 0, 0 ) ) ) ? false : true;
@@ -2946,14 +2902,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'month-by-day' );
-						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, $newbegin, $instances );
-							$format = apply_filters( 'mc_instance_format', $format, $newbegin, $instances );
-							$wpdb->insert( my_calendar_event_table(), $data, $format );
-						}
-					}
+					mc_insert_recurring( $data, $id, $newbegin, $instances, $test, 'month-by-day' )
+
 					$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 28, 0, 0 );
 					$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 28, 0, 0 );
 				}
@@ -2980,14 +2930,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					if ( ! $test ) {
-						$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'annual' );
-						if ( ! $insert ) {
-							$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-							$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-							$wpdb->insert( my_calendar_event_table(), $data, $format );
-						}
-					}
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'annual' )
 				}
 				break;
 		}
@@ -3000,14 +2943,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 			'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 			'occur_group_id' => $group_id,
 		);
-		if ( ! $test ) {
-			$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, 'single' );
-			if ( ! $insert ) {
-				$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
-				$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
-				$wpdb->insert( my_calendar_event_table(), $data, $format );
-			}
-		}
+		mc_insert_recurring( $data, $id, $begin, $instances, $test, 'single' )
 	}
 
 	if ( true === $test ) {
@@ -3015,6 +2951,29 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 	}
 
 	return $data;
+}
+
+/**
+ * Insert a recurring event instance.
+ *
+ * @param array       $data Instance data.
+ * @param int         $id Event ID.
+ * @param string      $begin Beginning date.
+ * @param array       $instances Array of existing dates used when rebuilding values.
+ * @param bool|string $test Whether we're testing values or generating dates.
+ * @param string      $context Type of recurring event.
+ */
+function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) {
+	global $wpdb;
+	$format = array( '%d', '%s', '%s', '%d' );
+	if ( ! $test ) {
+		$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, $context );
+		if ( ! $insert ) {
+			$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+			$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
+			$wpdb->insert( my_calendar_event_table(), $data, $format );
+		}
+	}
 }
 
 /**
