@@ -60,11 +60,11 @@ function mc_generate( $format = 'shortcode' ) {
 		 *
 		 * @param {string} $output Output from handling a POST request.
 		 * @param {string} $post   $_POST input.
-		 * 
+		 *
 		 * @return {string}
 		 */
-		$output      = apply_filters( 'mc_shortcode_generator', '', $_POST );
-		$array       = array();
+		$output = apply_filters( 'mc_shortcode_generator', '', $_POST );
+		$array  = array();
 		if ( ! $output ) {
 			switch ( $_POST['shortcode'] ) {
 				case 'main':
