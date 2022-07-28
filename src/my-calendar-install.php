@@ -39,6 +39,15 @@ function mc_widget_defaults() {
 		),
 	);
 
+	/**
+	 * Customize the default values used for Upcoming and Today's events widgets.
+	 *
+	 * @hook mc_widget_defaults
+	 *
+	 * @param {array} $defaults Array of values used to set up upcoming and today's events lists in widgets.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_widget_defaults', $defaults );
 }
 

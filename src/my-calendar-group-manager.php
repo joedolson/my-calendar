@@ -152,6 +152,18 @@ function my_calendar_save_group( $action, $output, $event_id = false, $post = ar
 			unset( $update['event_categories'] );
 			mc_update_category_relationships( $cats, $event_id );
 
+			/**
+			 * Filter calendar update data before saving an individual event when managing groups.
+			 *
+			 * @hook mc_update_group_data
+			 *
+			 * @param {array} $update Event update data for groups.
+			 * @param {string} $event_author Author for these events.
+			 * @param {string} $action Action performed.
+			 * @param {int}    $event_id Event ID being updated.
+			 *
+			 * @return {array}
+			 */
 			$update  = apply_filters( 'mc_update_group_data', $update, $event_author, $action, $event_id );
 			$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%f', '%f' );
 
@@ -531,7 +543,20 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 			</div>
 		</div>
 	<?php
-	if ( mc_show_edit_block( 'event_open' ) && '' !== apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ) ) {
+	/**
+	 * Filter event registration fields.
+	 *
+	 * @hook mc_event_registration
+	 *
+	 * @param {string} $output HTML output. Default empty.
+	 * @param {bool}   $has_data Whether this event has data.
+	 * @param {object} $data Event data object.
+	 * @param {string} $context Indicates this is running in the admin.
+	 *
+	 * @return {string}
+	 */
+	$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
+	if ( mc_show_edit_block( 'event_open' ) && '' !== $output ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
@@ -540,7 +565,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 				<div class="inside">
 					<fieldset>
 						<legend><?php esc_html_e( 'Event Registration Status', 'my-calendar' ); ?></legend>
-						<?php echo apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ); ?>
+						<?php echo $event_registration_output; ?>
 					</fieldset>
 				</div>
 			</div>
@@ -589,6 +614,16 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
  * @return mixed array/object $data checked array or object if error found
  */
 function mc_check_group_data( $action, $post ) {
+	/**
+	 * Filter posted event group data prior to running event data checks.
+	 *
+	 * @hook mc_groups_pre_checkdata
+	 *
+	 * @param {array}  $post POST data.
+	 * @param {string} $action Type of action running.(add, edit, or copy.)
+	 *
+	 * @return {array}
+	 */
 	$post = apply_filters( 'mc_groups_pre_checkdata', $post, $action );
 	global $wpdb, $current_user, $submission;
 

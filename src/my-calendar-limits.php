@@ -28,6 +28,15 @@ function mc_prepare_search_query( $query ) {
 	if ( '' !== trim( $query ) ) {
 		$query = esc_sql( urldecode( urldecode( $query ) ) );
 		if ( 'MyISAM' === $db_type && $length > 3 ) {
+			/**
+			 * Customize the MATCH fields for a MyISAM boolean search query.
+			 *
+			 * @hook mc_search_fields
+			 *
+			 * @param {string} $values Comma-separated list of columns.
+			 *
+			 * @return {string}
+			 */
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
 			$search = " AND ( event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_label LIKE '%$query%' OR event_city LIKE '%$query%' OR event_postcode LIKE '%$query%' OR event_registration LIKE '%$query%' ) ";
@@ -228,8 +237,6 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 	$limit_string  = '';
 	$limit_strings = array();
 	$location      = '';
-	$ltype         = apply_filters( 'mc_select_ltype', $ltype );
-	$lvalue        = apply_filters( 'mc_select_lvalue', $lvalue );
 	if ( ! $ltype || ! $lvalue ) {
 		return '';
 	} else {
@@ -285,6 +292,17 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 		$limit_string = 'AND (' . implode( ' OR ', $limit_strings ) . ')';
 	}
 
+	/**
+	 * Customize location limit SQL.
+	 *
+	 * @hook mc_location_limit_sql
+	 *
+	 * @param {string} $limit_string SQL limit for location query.
+	 * @param {string} $ltype Ltype value passed.
+	 * @param {string} $lvalue Lvalue passed.
+	 *
+	 * @return {string}
+	 */
 	return apply_filters( 'mc_location_limit_sql', $limit_string, $ltype, $lvalue );
 }
 
