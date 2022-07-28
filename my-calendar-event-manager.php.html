@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-event-manager.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-event-manager.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Event Manager. Listing and organization of events.
+ *
+ * @category Events
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Handle a bulk action.
+ *
+ * @param string $action type of action.
+ * @param array  $events Optional. Array of event IDs to act on.
+ *
+ * @return array bulk action details.
+ */
+function mc_bulk_action( $action, $events = array() ) {
+	global $wpdb;
+	$events  = ( empty( $events ) ) ? $_POST['mass_edit'] : $events;
+	$i       = 0;
+	$total   = 0;
+	$ids     = array();
+	$prepare = array();
+
+	foreach ( $events as $value ) {
+		$value = (int) $value;
+		$total = count( $events );
+		if ( 'delete' === $action ) {
+			$result = $wpdb->get_results( $wpdb->prepare( 'SELECT event_author FROM ' . my_calendar_table() . ' WHERE event_id = %d', $value ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			if ( mc_can_edit_event( $value ) ) {
+				$occurrences = 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d';
+				$wpdb->query( $wpdb->prepare( $occurrences, $value ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$ids[]     = (int) $value;
+				$prepare[] = '%d';
+				$i ++;
+			}
+		}
+		if ( 'delete' !== $action &amp;&amp; current_user_can( 'mc_approve_events' ) ) {
+			$ids[]     = (int) $value;
+			$prepare[] = '%d';
+			$i ++;
+		}
+	}
+	$prepared = implode( ',', $prepare );
+
+	switch ( $action ) {
+		case 'delete':
+			$sql = 'DELETE FROM ' . my_calendar_table() . ' WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'unarchive':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'archive':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'approve': // Synonymous with publish.
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'draft':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 0 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'trash':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'unspam':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id IN (' . $prepared . ')';
+			// send notifications.
+			foreach ( $ids as $id ) {
+				$post_ID   = mc_get_event_post( $id );
+				$submitter = get_post_meta( $post_ID, '_submitter_details', true );
+				if ( is_array( $submitter ) &amp;&amp; ! empty( $submitter ) ) {
+					$name  = $submitter['first_name'] . ' ' . $submitter['last_name'];
+					$email = $submitter['email'];
+					do_action( 'mcs_complete_submission', $name, $email, $id, 'edit' );
+				}
+			}
+			break;
+	}
+	/**
+	 * Add custom bulk actions.
+	 *
+	 * @param string $action Declared action.
+	 * @param array  $ids Array of event IDs being requested.
+	 */
+	do_action( 'mc_bulk_actions', $action, $ids );
+
+	$result = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	mc_update_count_cache();
+	$results = array(
+		'count'  => $i,
+		'total'  => $total,
+		'ids'    => $ids,
+		'result' => $result,
+	);
+
+	return mc_bulk_message( $results, $action );
+}
+
+/**
+ * Generate a notification for bulk actions.
+ *
+ * @param array  $results of bulk action.
+ * @param string $action Type of action.
+ *
+ * @return string message
+ */
+function mc_bulk_message( $results, $action ) {
+	$count  = $results['count'];
+	$total  = $results['total'];
+	$ids    = $results['ids'];
+	$result = $results['result'];
+
+	switch ( $action ) {
+		case 'delete':
+			// Translators: Number of events deleted, number selected.
+			$success = __( '%1$d events deleted successfully out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been deleted. Please investigate.', 'my-calendar' );
+			break;
+		case 'trash':
+			// Translators: Number of events trashed, number of events selected.
+			$success = __( '%1$d events trashed successfully out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been trashed. Please investigate.', 'my-calendar' );
+			break;
+		case 'approve':
+			// Translators: Number of events published, number of events selected.
+			$success = __( '%1$d events published out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been published. Were these events already published? Please investigate.', 'my-calendar' );
+			break;
+		case 'draft':
+			// Translators: Number of events converted to draft, number of events selected.
+			$success = __( '%1$d events switched to drafts out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been switched to drafts. Were these events already drafts? Please investigate.', 'my-calendar' );
+			break;
+		case 'archive':
+			// Translators: Number of events archived, number of events selected.
+			$success = __( '%1$d events archived successfully out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been archived. Please investigate.', 'my-calendar' );
+			break;
+		case 'unarchive':
+			// Translators: Number of events removed from archive, number of events selected.
+			$success = __( '%1$d events removed from archive successfully out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been removed from the archive. Were these events already archived? Please investigate.', 'my-calendar' );
+			break;
+		case 'unspam':
+			// Translators: Number of events removed from archive, number of events selected.
+			$success = __( '%1$d events successfully unmarked as spam out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events were not removed from spam. Please investigate.', 'my-calendar' );
+			break;
+	}
+
+	if ( 0 !== $result &amp;&amp; false !== $result ) {
+		$diff = 0;
+		if ( $result &lt; $count ) {
+			$diff = ( $count - $result );
+			// Translators: Sprintf as a 3rd argument if this string is appended to prior error. # of unchanged events.
+			$success .= ' ' . _n( '%3$d event was not changed in that update.', '%3$d events were not changed in that update.', $diff, 'my-calendar' );
+		}
+		do_action( 'mc_mass_' . $action . '_events', $ids );
+		$message = mc_show_notice( sprintf( $success, $result, $total, $diff ) );
+	} else {
+		$message = mc_show_error( $error, false );
+	}
+
+	return $message;
+}
+
+/**
+ * Generate form for listing events that are editable by current user
+ */
+function my_calendar_manage() {
+	my_calendar_check();
+	global $wpdb;
+	if ( isset( $_GET['mode'] ) &amp;&amp; 'delete' === $_GET['mode'] ) {
+		$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
+		$result   = $wpdb->get_results( $wpdb->prepare( 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( mc_can_edit_event( $event_id ) ) {
+			if ( isset( $_GET['date'] ) ) {
+				$event_instance = (int) $_GET['date'];
+				$inst           = $wpdb->get_var( $wpdb->prepare( 'SELECT occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_instance ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$instance_date  = '(' . mc_date( 'Y-m-d', mc_strtotime( $inst ), false ) . ')';
+			} else {
+				$instance_date = '';
+			} ?>
+			&lt;div class="error">
+				&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>" method="post">
+					&lt;p>&lt;strong>&lt;?php esc_html_e( 'Delete Event', 'my-calendar' ); ?>:&lt;/strong> &lt;?php esc_html_e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
+						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+						&lt;input type="hidden" value="delete" name="event_action" />
+						&lt;?php
+						if ( ! empty( $_GET['date'] ) ) {
+							?>
+						&lt;input type="hidden" name="event_instance" value="&lt;?php echo (int) $_GET['date']; ?>"/>
+							&lt;?php
+						}
+						if ( isset( $_GET['ref'] ) ) {
+							?>
+						&lt;input type="hidden" name="ref" value="&lt;?php echo esc_url( $_GET['ref'] ); ?>" />
+							&lt;?php
+						}
+						?>
+						&lt;input type="hidden" name="event_id" value="&lt;?php echo esc_attr( $event_id ); ?>"/>
+						&lt;?php
+							$event_info = ' &amp;quot;' . stripslashes( $result[0]['event_title'] ) . "&amp;quot; $instance_date";
+							// Translators: Title &amp; date of event to delete.
+							$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
+						?>
+						&lt;input type="submit" name="submit" class="button-secondary delete" value="&lt;?php echo esc_attr( $delete_text ); ?>"/>
+				&lt;/form>
+			&lt;/div>
+			&lt;?php
+		} else {
+			mc_show_error( __( 'You do not have permission to delete that event.', 'my-calendar' ) );
+		}
+	}
+
+	// Approve and show an Event ...originally by Roland.
+	if ( isset( $_GET['mode'] ) &amp;&amp; 'publish' === $_GET['mode'] ) {
+		if ( current_user_can( 'mc_approve_events' ) ) {
+			$event_id = absint( $_GET['event_id'] );
+			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			mc_update_count_cache();
+		} else {
+			mc_show_error( __( 'You do not have permission to approve that event.', 'my-calendar' ) );
+		}
+	}
+
+	// Reject and hide an Event ...by Roland.
+	if ( isset( $_GET['mode'] ) &amp;&amp; 'reject' === $_GET['mode'] ) {
+		if ( current_user_can( 'mc_approve_events' ) ) {
+			$event_id = absint( $_GET['event_id'] );
+			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			mc_update_count_cache();
+		} else {
+			mc_show_error( __( 'You do not have permission to trash that event.', 'my-calendar' ) );
+		}
+	}
+
+	if ( ! empty( $_POST['mc_bulk_actions'] ) ) {
+		$nonce = $_REQUEST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			wp_die( 'My Calendar: Security check failed' );
+		}
+		if ( isset( $_POST['mc_bulk_actions'] ) ) {
+			$action  = $_POST['mc_bulk_actions'];
+			$results = '';
+			if ( 'mass_delete' === $action ) {
+				$results = mc_bulk_action( 'delete' );
+			}
+
+			if ( 'mass_trash' === $action ) {
+				$results = mc_bulk_action( 'trash' );
+			}
+
+			if ( 'mass_publish' === $action ) {
+				$results = mc_bulk_action( 'approve' );
+			}
+
+			if ( 'mass_draft' === $action ) {
+				$results = mc_bulk_action( 'draft' );
+			}
+
+			if ( 'mass_archive' === $action ) {
+				$results = mc_bulk_action( 'archive' );
+			}
+
+			if ( 'mass_undo_archive' === $action ) {
+				$results = mc_bulk_action( 'unarchive' );
+			}
+
+			if ( 'mass_not_spam' === $action ) {
+				$results = mc_bulk_action( 'unspam' );
+			}
+
+			echo wp_kses_post( $results );
+		}
+	}
+	?>
+	&lt;div class='wrap my-calendar-admin'>
+		&lt;h1 id="mc-manage" class="wp-heading-inline">&lt;?php esc_html_e( 'Events', 'my-calendar' ); ?>&lt;/h1>
+		&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="page-title-action">&lt;?php esc_html_e( 'Add New', 'my-calendar' ); ?>&lt;/a>
+		&lt;hr class="wp-header-end">
+		&lt;div class="mc-tablinks">
+			&lt;a href="#my-calendar-admin-table" aria-current="page">&lt;?php esc_html_e( 'My Events', 'my-calendar' ); ?>&lt;/strong>
+			&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true' ) ); ?>">&lt;?php esc_html_e( 'Event Groups', 'my-calendar' ); ?>&lt;/a>
+		&lt;/div>
+		&lt;div class="postbox-container jcd-wide">
+			&lt;div class="metabox-holder">
+				&lt;div class="ui-sortable meta-box-sortables">
+					&lt;div class="postbox">
+						&lt;h2 class="mc-heading-inline">&lt;?php esc_html_e( 'My Events', 'my-calendar' ); ?>&lt;/h2>
+							&lt;?php
+								$grid     = ( 'grid' === get_option( 'mc_default_admin_view' ) ) ? true : false;
+								$grid_url = admin_url( 'admin.php?page=my-calendar-manage&amp;view=grid' );
+								$list_url = admin_url( 'admin.php?page=my-calendar-manage&amp;view=list' );
+							?>
+						&lt;ul class="mc-admin-mode">
+							&lt;li>&lt;span class="dashicons dashicons-calendar" aria-hidden="true">&lt;/span>&lt;a &lt;?php echo ( $grid ) ? 'aria-current="true"' : ''; ?> href="&lt;?php echo esc_url( $grid_url ); ?>">&lt;?php esc_html_e( 'Grid View', 'my-calendar' ); ?>&lt;/a>&lt;/li>
+							&lt;li>&lt;span class="dashicons dashicons-list-view" aria-hidden="true">&lt;/span>&lt;a &lt;?php echo ( $grid ) ? '' : 'aria-current="true"'; ?>  href="&lt;?php echo esc_url( $list_url ); ?>">&lt;?php esc_html_e( 'List View', 'my-calendar' ); ?>&lt;/a>&lt;/li>
+						&lt;/ul>
+
+						&lt;div class="inside">
+							&lt;?php
+							if ( $grid ) {
+								$calendar = array(
+									'name'     => 'admin',
+									'format'   => 'calendar',
+									'category' => 'all',
+									'time'     => 'month',
+									'id'       => 'mc-admin-view',
+									'below'    => 'categories,locations,access',
+									'above'    => 'nav,jump,search',
+								);
+								if ( mc_count_locations() > 200 ) {
+									$calendar['below'] = 'categories,access';
+								}
+								/**
+								 * Filter arguments used to display the calendar grid view for admins.
+								 *
+								 * @hook mc_filter_admin_grid_args
+								 *
+								 * @param {array} $calendar Calendar display arguments.
+								 *
+								 * @return {array}
+								 */
+								apply_filters( 'mc_filter_admin_grid_args', $calendar );
+								echo my_calendar( $calendar );
+							} else {
+								mc_list_events();
+							}
+							?>
+						&lt;/div>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+		&lt;/div>
+
+		&lt;?php
+		$problems = mc_list_problems();
+		mc_show_sidebar( '', $problems );
+		?>
+	&lt;/div>
+	&lt;?php
+}
+
+/**
+ * Generate screens for editing and managing events &amp; event groups.
+ */
+function my_calendar_manage_screen() {
+	if ( ! isset( $_GET['groups'] ) ) {
+		my_calendar_manage();
+	} else {
+		my_calendar_group_edit();
+	}
+}
+
+/**
+ * Show bulk actions dropdown in event manager.
+ *
+ * @return string
+ */
+function mc_show_bulk_actions() {
+	$bulk_actions = array(
+		'mass_publish'      => __( 'Publish', 'my-calendar' ),
+		'mass_not_spam'     => __( 'Not spam', 'my-calendar' ),
+		'mass_draft'        => __( 'Switch to Draft', 'my-calendar' ),
+		'mass_trash'        => __( 'Trash', 'my-calendar' ),
+		'mass_archive'      => __( 'Archive', 'my-calendar' ),
+		'mass_undo_archive' => __( 'Remove from Archive', 'my-calendar' ),
+		'mass_delete'       => __( 'Delete', 'my-calendar' ),
+	);
+
+	if ( ! current_user_can( 'mc_approve_events' ) || isset( $_GET['limit'] ) &amp;&amp; 'published' === $_GET['limit'] ) {
+		unset( $bulk_actions['mass_publish'] );
+	}
+	if ( ! current_user_can( 'mc_manage_events' ) || isset( $_GET['limit'] ) &amp;&amp; 'trashed' === $_GET['limit'] ) {
+		unset( $bulk_actions['mass_trash'] );
+	}
+	if ( isset( $_GET['limit'] ) &amp;&amp; 'draft' === $_GET['limit'] ) {
+		unset( $bulk_actions['mass_draft'] );
+	}
+	if ( isset( $_GET['restrict'] ) &amp;&amp; 'archived' === $_GET['restrict'] ) {
+		unset( $bulk_actions['mass_archive'] );
+	} else {
+		unset( $bulk_actions['mass_undo_archive'] );
+	}
+	if ( ! ( isset( $_GET['restrict'] ) &amp;&amp; 'flagged' === $_GET['restrict'] ) ) {
+		unset( $bulk_actions['mass_not_spam'] );
+	}
+
+	/**
+	 * Filter Event manager bulk actions.
+	 *
+	 * @hook mc_bulk_actions
+	 *
+	 * @param {array} $bulk_actions Array of bulk actions currently available.
+	 *
+	 * @return {array}
+	 */
+	$bulk_actions = apply_filters( 'mc_bulk_actions', $bulk_actions );
+	$options      = '';
+	foreach ( $bulk_actions as $action => $label ) {
+		$options .= '&lt;option value="' . $action . '">' . $label . '&lt;/option>';
+	}
+
+	return $options;
+}
+
+/**
+ * Used on the manage events admin page to display a list of events
+ */
+function mc_list_events() {
+	global $wpdb;
+	if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_add_events' ) ) {
+
+		$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
+		$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
+		if ( 'delete' === $action ) {
+			$message = mc_delete_event( $event_id );
+			echo wp_kses_post( $message );
+		}
+
+		if ( isset( $_GET['order'] ) ) {
+			$sortdir = ( isset( $_GET['order'] ) &amp;&amp; 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
+			$sortdir = ( isset( $_GET['order'] ) &amp;&amp; 'DESC' === $_GET['order'] ) ? 'DESC' : $sortdir;
+		} else {
+			$sortdir = 'default';
+		}
+
+		$default_direction = ( '' === get_option( 'mc_default_direction', '' ) ) ? 'ASC' : get_option( 'mc_default_direction' );
+		$sortbydirection   = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
+
+		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : (int) get_option( 'mc_default_sort' );
+		if ( empty( $sortby ) ) {
+			$sortbyvalue = 'event_begin';
+		} else {
+			switch ( $sortby ) {
+				case 1:
+					$sortbyvalue = 'event_ID';
+					break;
+				case 2:
+				case 3:
+					$sortbyvalue = 'event_title';
+					break;
+				case 4:
+					$sortbyvalue = "event_begin $sortbydirection, event_time";
+					break;
+				case 5:
+					$sortbyvalue = 'event_author';
+					break;
+				case 6:
+					$sortbyvalue = 'event_category';
+					break;
+				case 7:
+					$sortbyvalue = 'event_label';
+					break;
+				default:
+					$sortbyvalue = "event_begin $sortbydirection, event_time";
+			}
+		}
+		$sort          = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
+		$allow_filters = true;
+		$status        = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : '';
+		$restrict      = ( isset( $_GET['restrict'] ) ) ? $_GET['restrict'] : 'all';
+		switch ( $status ) {
+			case 'all':
+				$limit = '';
+				break;
+			case 'draft':
+				$limit = 'WHERE event_approved = 0';
+				break;
+			case 'published':
+				$limit = 'WHERE event_approved = 1';
+				break;
+			case 'trashed':
+				$limit = 'WHERE event_approved = 2';
+				break;
+			default:
+				$limit = 'WHERE event_approved != 2';
+		}
+		switch ( $restrict ) {
+			case 'all':
+				$filter = '';
+				break;
+			case 'where':
+				$filter   = ( isset( $_GET['filter'] ) ) ? $_GET['filter'] : '';
+				$restrict = 'event_label';
+				break;
+			case 'author':
+				$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+				$restrict = 'event_author';
+				break;
+			case 'category':
+				$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+				$restrict = 'event_category';
+				break;
+			case 'flagged':
+				$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+				$restrict = 'event_flagged';
+				break;
+			default:
+				$filter = '';
+		}
+		if ( ! current_user_can( 'mc_manage_events' ) &amp;&amp; ! current_user_can( 'mc_approve_events' ) ) {
+			$restrict      = 'event_author';
+			$filter        = get_current_user_id();
+			$allow_filters = false;
+		}
+		$filter = esc_sql( urldecode( $filter ) );
+		if ( 'event_label' === $restrict ) {
+			$filter = "'$filter'";
+		}
+		$join = '';
+		if ( 'event_category' === $restrict ) {
+			$cat_limit       = mc_select_category( $filter );
+			$join            = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
+			$select_category = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
+			$limit          .= ' ' . $select_category;
+		}
+		if ( '' === $limit &amp;&amp; '' !== $filter ) {
+			$limit = "WHERE $restrict = $filter";
+		} elseif ( '' !== $limit &amp;&amp; '' !== $filter &amp;&amp; 'event_category' !== $restrict ) {
+			$limit .= " AND $restrict = $filter";
+		}
+		if ( '' === $filter || ! $allow_filters ) {
+			$filtered = '';
+		} else {
+			$filtered = "&lt;a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'>&lt;span class='dashicons dashicons-no' aria-hidden='true'>&lt;/span> " . __( 'Clear filters', 'my-calendar' ) . '&lt;/a>';
+		}
+		$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
+		$user           = get_current_user_id();
+		$screen         = get_current_screen();
+		$option         = $screen->get_option( 'per_page', 'option' );
+		$items_per_page = get_user_meta( $user, $option, true );
+		if ( empty( $items_per_page ) || $items_per_page &lt; 1 ) {
+			$items_per_page = $screen->get_option( 'per_page', 'default' );
+		}
+		// Default limits.
+		if ( '' === $limit ) {
+			$limit .= ( 'event_flagged' !== $restrict ) ? ' WHERE event_flagged = 0' : '';
+		} else {
+			$limit .= ( 'event_flagged' !== $restrict ) ? ' AND event_flagged = 0' : '';
+		}
+		if ( isset( $_POST['mcs'] ) || isset( $_GET['mcs'] ) ) {
+			$query  = $_REQUEST['mcs'];
+			$limit .= mc_prepare_search_query( $query );
+		}
+		$query_limit = ( ( $current - 1 ) * $items_per_page );
+		$limit      .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
+		if ( 'event_category' !== $sortbyvalue ) {
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		} else {
+			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
+			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . ' AS e ' . $join . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		}
+		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
+		$items      = $found_rows[0];
+		$num_pages  = ceil( $items / $items_per_page );
+		if ( $num_pages > 1 ) {
+			$page_links = paginate_links(
+				array(
+					'base'      => add_query_arg( 'paged', '%#%' ),
+					'format'    => '',
+					'prev_text' => __( '&amp;laquo; Previous&lt;span class="screen-reader-text"> Events&lt;/span>', 'my-calendar' ),
+					'next_text' => __( 'Next&lt;span class="screen-reader-text"> Events&lt;/span> &amp;raquo;', 'my-calendar' ),
+					'total'     => $num_pages,
+					'current'   => $current,
+					'mid_size'  => 2,
+				)
+			);
+			printf( "&lt;div class='tablenav'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/div>", $page_links );
+		}
+		$status_links = mc_status_links( $allow_filters );
+		$search_text  = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
+		echo wp_kses( $filtered, mc_kses_elements() );
+		?>
+		&lt;div class="mc-admin-header">
+			&lt;?php echo wp_kses( $status_links, mc_kses_elements() ); ?>
+			&lt;div class='mc-search'>
+				&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
+					&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					&lt;/div>
+					&lt;div>
+						&lt;label for="mc_search" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Events', 'my-calendar' ); ?>&lt;/label>
+						&lt;input type='text' role='search' name='mcs' id='mc_search' value='&lt;?php echo esc_attr( $search_text ); ?>' />
+						&lt;input type='submit' value='&lt;?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary' />
+					&lt;/div>
+				&lt;/form>
+			&lt;/div>
+		&lt;/div>
+		&lt;?php
+		if ( ! empty( $events ) ) {
+			?>
+			&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
+				&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+				&lt;div class='mc-actions'>
+					&lt;label for="mc_bulk_actions" class="screen-reader-text">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/label>
+					&lt;select name="mc_bulk_actions" id="mc_bulk_actions">
+						&lt;option value="">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/option>
+						&lt;?php echo mc_show_bulk_actions(); ?>
+					&lt;/select>
+					&lt;input type="submit" class="button-secondary" value="&lt;?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
+					&lt;div>&lt;input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> &lt;label for='mass_edit'>&lt;?php esc_html_e( 'Check all', 'my-calendar' ); ?>&lt;/label>&lt;/div>
+				&lt;/div>
+
+			&lt;table class="widefat striped wp-list-table" id="my-calendar-admin-table">
+				&lt;caption class="screen-reader-text">&lt;?php esc_html_e( 'Event list. Use column headers to sort.', 'my-calendar' ); ?>&lt;/caption>
+				&lt;thead>
+					&lt;tr>
+					&lt;?php
+					$admin_url = admin_url( "admin.php?page=my-calendar-manage&amp;order=$sort&amp;paged=$current" );
+					$url       = add_query_arg( 'sort', '1', $admin_url );
+					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
+					$url       = add_query_arg( 'sort', '2', $admin_url );
+					$col_head .= mc_table_header( __( 'Title', 'my-calendar' ), $sort, $sortby, '2', $url );
+					$url       = add_query_arg( 'sort', '7', $admin_url );
+					$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sort, $sortby, '7', $url );
+					$url       = add_query_arg( 'sort', '4', $admin_url );
+					$col_head .= mc_table_header( __( 'Date/Time', 'my-calendar' ), $sort, $sortby, '4', $url );
+					$url       = add_query_arg( 'sort', '5', $admin_url );
+					$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sort, $sortby, '5', $url );
+					$url       = add_query_arg( 'sort', '6', $admin_url );
+					$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sort, $sortby, '6', $url );
+					echo mc_kses_post( $col_head );
+					?>
+					&lt;/tr>
+				&lt;/thead>
+				&lt;tbody>
+				&lt;?php
+				$class = '';
+
+				foreach ( array_keys( $events ) as $key ) {
+					$e       =&amp; $events[ $key ];
+					$event   = mc_get_first_event( $e->event_id );
+					$invalid = false;
+					if ( ! is_object( $event ) ) {
+						$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+						$invalid = true;
+					}
+					$class   = ( $invalid ) ? 'invalid' : '';
+					$pending = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
+					$trashed = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
+					$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
+
+					if ( 1 === (int) $event->event_flagged &amp;&amp; ( isset( $_GET['restrict'] ) &amp;&amp; 'flagged' === $_GET['restrict'] ) ) {
+						$spam       = 'spam';
+						$pending    = '';
+						$spam_label = '&lt;strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':&lt;/strong> ';
+					} else {
+						$spam       = '';
+						$spam_label = '';
+					}
+
+					$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
+					$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
+					$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
+					$private  = ( mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
+					$check    = mc_test_occurrence_overlap( $event, true );
+					$problem  = ( '' !== $check ) ? 'problem' : '';
+					$edit_url = admin_url( "admin.php?page=my-calendar&amp;amp;mode=edit&amp;amp;event_id=$event->event_id" );
+					$copy_url = admin_url( "admin.php?page=my-calendar&amp;amp;mode=copy&amp;amp;event_id=$event->event_id" );
+					if ( ! $invalid ) {
+						$view_url = mc_get_details_link( $event );
+					} else {
+						$view_url = '';
+					}
+					$group_url  = admin_url( "admin.php?page=my-calendar-manage&amp;amp;groups=true&amp;amp;mode=edit&amp;amp;event_id=$event->event_id&amp;amp;group_id=$event->event_group_id" );
+					$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;amp;mode=delete&amp;amp;event_id=$event->event_id" );
+					$can_edit   = mc_can_edit_event( $event );
+					if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
+						?>
+						&lt;tr class="&lt;?php echo sanitize_html_class( "$class $spam $pending $trashed $problem" ); ?>">
+							&lt;th scope="row">
+								&lt;input type="checkbox" value="&lt;?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc&lt;?php echo $event->event_id; ?>" aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>' />
+								&lt;label for="mc&lt;?php echo absint( $event->event_id ); ?>">
+								&lt;?php
+								// Translators: Event ID.
+								printf( __( "&lt;span class='screen-reader-text'>Select event &lt;/span>%d", 'my-calendar' ), absint( $event->event_id ) );
+								?>
+								&lt;/label>
+							&lt;/th>
+							&lt;td>
+								&lt;strong>
+								&lt;?php
+								if ( $can_edit ) {
+									?>
+									&lt;a href="&lt;?php echo esc_url( $edit_url ); ?>" class='edit'>&lt;span class="dashicons dashicons-edit" aria-hidden="true">&lt;/span>
+									&lt;?php
+								}
+								echo $spam_label;
+								echo '&lt;span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '&lt;/span>';
+								if ( $can_edit ) {
+									echo '&lt;/a>';
+									if ( '' !== $check ) {
+										// Translators: URL to edit event.
+										echo wp_kses_post( '&lt;br />&lt;strong class="error">' . sprintf( __( 'There is a problem with this event. &lt;a href="%s">Edit&lt;/a>', 'my-calendar' ), esc_url( $edit_url ) ) . '&lt;/strong>' );
+									}
+								}
+								echo wp_kses_post( $private . $trash . $draft . $inv );
+								?>
+								&lt;/strong>
+
+								&lt;div class='row-actions'>
+									&lt;?php
+									if ( mc_event_published( $event ) ) {
+										?>
+										&lt;a href="&lt;?php echo esc_url( $view_url ); ?>" class='view' aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>'>&lt;?php esc_html_e( 'View', 'my-calendar' ); ?>&lt;/a> |
+										&lt;?php
+									} elseif ( current_user_can( 'mc_manage_events' ) ) {
+										?>
+										&lt;a href="&lt;?php echo esc_url( add_query_arg( 'preview', 'true', $view_url ) ); ?>" class='view' aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>'>&lt;?php esc_html_e( 'Preview', 'my-calendar' ); ?>&lt;/a> |
+										&lt;?php
+									}
+									if ( $can_edit ) {
+										?>
+										&lt;a href="&lt;?php echo esc_url( $copy_url ); ?>" class='copy' aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>'>&lt;?php esc_html_e( 'Copy', 'my-calendar' ); ?>&lt;/a>
+										&lt;?php
+									}
+									if ( $can_edit ) {
+										if ( mc_event_is_grouped( $event->event_group_id ) ) {
+											?>
+											| &lt;a href="&lt;?php echo esc_url( $group_url ); ?>" class='edit group' aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>'>&lt;?php esc_html_e( 'Edit Group', 'my-calendar' ); ?>&lt;/a>
+											&lt;?php
+										}
+										?>
+										| &lt;a href="&lt;?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>'>&lt;?php esc_html_e( 'Delete', 'my-calendar' ); ?>&lt;/a>
+										&lt;?php
+									} else {
+										_e( 'Not editable.', 'my-calendar' );
+									}
+									?>
+									|
+									&lt;?php
+									if ( current_user_can( 'mc_approve_events' ) &amp;&amp; $can_edit ) {
+										if ( 1 === (int) $event->event_approved ) {
+											$mo = 'reject';
+											$te = __( 'Trash', 'my-calendar' );
+										} else {
+											$mo = 'publish';
+											$te = __( 'Publish', 'my-calendar' );
+										}
+										?>
+										&lt;a href="&lt;?php echo esc_url( admin_url( "admin.php?page=my-calendar-manage&amp;amp;mode=$mo&amp;amp;event_id=$event->event_id" ) ); ?>" class='&lt;?php echo esc_attr( $mo ); ?>' aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>'>&lt;?php echo esc_html( $te ); ?>&lt;/a>
+										&lt;?php
+									} else {
+										switch ( $event->event_approved ) {
+											case 1:
+												_e( 'Published', 'my-calendar' );
+												break;
+											case 2:
+												_e( 'Trashed', 'my-calendar' );
+												break;
+											default:
+												_e( 'Awaiting Approval', 'my-calendar' );
+										}
+									}
+									?>
+								&lt;/div>
+							&lt;/td>
+							&lt;td>
+								&lt;?php
+								if ( property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
+									$elabel = $event->location->location_label;
+								} else {
+									$elabel = $event->event_label;
+								}
+								if ( '' !== $elabel ) {
+									?>
+								&lt;a class='mc_filter' href='&lt;?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;amp;filter=' . urlencode( $elabel ) . '&amp;amp;restrict=where' ) ); ?>'>&lt;span class="screen-reader-text">&lt;?php esc_html_e( 'Show only: ', 'my-calendar' ); ?>&lt;/span>&lt;?php echo esc_html( stripslashes( $elabel ) ); ?>&lt;/a>
+									&lt;?php
+								}
+								?>
+							&lt;/td>
+							&lt;td>
+							&lt;?php
+							if ( '23:59:59' !== $event->event_endtime ) {
+								$event_time = date_i18n( mc_time_format(), mc_strtotime( $event->event_time ) );
+							} else {
+								$event_time = mc_notime_label( $event );
+							}
+							$begin = date_i18n( mc_date_format(), mc_strtotime( $event->event_begin ) );
+							echo esc_html( "$begin, $event_time" );
+							?>
+								&lt;div class="recurs">
+									&lt;?php echo wp_kses_post( mc_recur_string( $event ) ); ?>
+								&lt;/div>
+							&lt;/td>
+							&lt;?php
+							$auth   = ( is_object( $author ) ) ? $author->ID : 0;
+							$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;amp;filter=$auth&amp;amp;restrict=author" );
+							$author = ( is_object( $author ) ? $author->display_name : $author );
+							?>
+							&lt;td>
+								&lt;a class='mc_filter' href="&lt;?php echo esc_url( $filter ); ?>">
+									&lt;span class="screen-reader-text">&lt;?php esc_html_e( 'Show only: ', 'my-calendar' ); ?>&lt;/span>&lt;?php echo esc_html( $author ); ?>
+								&lt;/a>
+							&lt;/td>
+							&lt;td>
+							&lt;?php echo mc_admin_category_list( $event ); ?>
+							&lt;/td>
+						&lt;/tr>
+						&lt;?php
+					}
+				}
+				?>
+				&lt;/tbody>
+			&lt;/table>
+			&lt;div class="mc-actions">
+				&lt;label for="mc_bulk_actions_footer" class="screen-reader-text">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/label>
+				&lt;select name="mc_bulk_actions" id="mc_bulk_actions_footer">
+					&lt;option value="">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/option>
+					&lt;?php echo mc_show_bulk_actions(); ?>
+				&lt;/select>
+				&lt;input type="submit" class="button-secondary" value="&lt;?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
+				&lt;input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> &lt;label for='mass_edit_footer'>&lt;?php esc_html_e( 'Check all', 'my-calendar' ); ?>&lt;/label>
+			&lt;/div>
+		&lt;/form>
+		&lt;div class='mc-admin-footer'>
+			&lt;?php
+			$status_links = mc_status_links( $allow_filters );
+			echo wp_kses( $status_links . $filtered, mc_kses_elements() );
+			?>
+			&lt;div class='mc-search'>
+			&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
+				&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+				&lt;/div>
+				&lt;div>
+					&lt;label for="mc_search_footer" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Events', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type='text' role='search' name='mcs' id='mc_search_footer' value='&lt;?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
+					&lt;input type='submit' value='&lt;?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
+				&lt;/div>
+			&lt;/form>
+			&lt;/div>
+		&lt;/div>
+			&lt;?php
+		} else {
+			if ( isset( $_POST['mcs'] ) ) {
+				echo '&lt;p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '&lt;/p>';
+			}
+			if ( ! isset( $_GET['restrict'] ) &amp;&amp; ( ! isset( $_GET['limit'] ) || isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] ) ) {
+				?>
+				&lt;p class='mc-create-event'>&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="button button-hero">&lt;?php esc_html_e( 'Create an event', 'my-calendar' ); ?>&lt;/a>&lt;/p>
+				&lt;?php
+			} else {
+				?>
+				&lt;p class='mc-none'>&lt;?php esc_html_e( 'No events found.', 'my-calendar' ); ?>&lt;/p>
+				&lt;?php
+			}
+		}
+	}
+}
+
+/**
+ * Get next available group ID
+ *
+ * @return int
+ */
+function mc_group_id() {
+	global $wpdb;
+	$result = $wpdb->get_var( 'SELECT MAX(event_id) FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$next   = $result + 1;
+
+	return $next;
+}
+
+/**
+ * Check whether an event is a member of a group
+ *
+ * @param int $group_id Event Group ID.
+ *
+ * @return boolean
+ */
+function mc_event_is_grouped( $group_id ) {
+	global $wpdb;
+	if ( 0 === (int) $group_id ) {
+		return false;
+	} else {
+		$value = $wpdb->get_var( $wpdb->prepare( 'SELECT count( event_group_id ) FROM ' . my_calendar_table() . ' WHERE event_group_id = %d', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( $value > 1 ) {
+
+			return true;
+		} else {
+
+			return false;
+		}
+	}
+}
+
+/**
+ * Can the current user edit this category?
+ *
+ * @param int $category Category ID.
+ * @param int $user User ID.
+ *
+ * @return boolean
+ */
+function mc_can_edit_category( $category, $user ) {
+	$permissions = get_user_meta( $user, 'mc_user_permissions', true );
+	/**
+	 * Filter permissions for users editing a category.
+	 *
+	 * @hook mc_user_permissions
+	 *
+	 * @param {array} $permissions User meta data for this user's category permissions.
+	 * @param {int}   $user User ID.
+	 *
+	 * @return {array} Array of categories this user can edit.
+	 */
+	$permissions = apply_filters( 'mc_user_permissions', $permissions, $category, $user );
+
+	if ( ( ! $permissions || empty( $permissions ) ) || in_array( 'all', $permissions, true ) || in_array( $category, $permissions, true ) || current_user_can( 'manage_options' ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Unless an admin, authors can only edit their own events if they don't have mc_manage_events capabilities.
+ *
+ * @param object|boolean $event Event object.
+ * @param string         $datatype 'event' or 'instance'.
+ *
+ * @return boolean
+ */
+function mc_can_edit_event( $event = false, $datatype = 'event' ) {
+	global $wpdb;
+	if ( ! $event ) {
+
+		return false;
+	}
+
+	/**
+	 * Filter permissions to edit an event via the My Calendar Pro REST API..
+	 *
+	 * @hook mc_api_can_edit_event
+	 *
+	 * @param {bool} $return True if API user can edit this event.
+	 * @param {object|int}  $event The ID of the current event or an event object.
+	 *
+	 * @return {bool}
+	 */
+	$api = apply_filters( 'mc_api_can_edit_event', false, $event );
+	if ( $api ) {
+
+		return $api;
+	}
+
+	if ( ! is_user_logged_in() ) {
+
+		return false;
+	}
+
+	if ( is_object( $event ) ) {
+		$event_id     = $event->event_id;
+		$event_author = $event->event_author;
+	} elseif ( is_int( $event ) ) {
+		$event_id = $event;
+		if ( 'event' === $datatype ) {
+			$event = mc_get_first_event( $event );
+			if ( ! is_object( $event ) ) {
+				$event = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id=%d LIMIT 1', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			}
+		} else {
+			$event = mc_get_event( $event_id );
+		}
+		$event_author = $event->event_author;
+	} else {
+		// What is the case where the event is neither an object, int, or falsey? Hmm.
+		$event_author = wp_get_current_user()->ID;
+		$event_id     = $event;
+	}
+
+	$current_user    = wp_get_current_user();
+	$user            = $current_user->ID;
+	$categories      = mc_get_categories( $event_id );
+	$has_permissions = true;
+	if ( is_array( $categories ) ) {
+		foreach ( $categories as $cat ) {
+			// If user doesn't have access to all relevant categories, prevent editing.
+			if ( ! $has_permissions ) {
+				continue;
+			}
+			$has_permissions = mc_can_edit_category( $cat, $user );
+		}
+	}
+	$return = false;
+
+	if ( ( current_user_can( 'mc_manage_events' ) &amp;&amp; $has_permissions ) || ( $user === (int) $event_author ) ) {
+
+		$return = true;
+	}
+
+	/**
+	 * Filter permissions to edit an event.
+	 *
+	 * @hook mc_can_edit_event
+	 *
+	 * @param {bool} $return True if user can edit this event.
+	 * @param {int}  $event_id The ID of the current event.
+	 *
+	 * @return {bool}
+	 */
+	return apply_filters( 'mc_can_edit_event', $return, $event_id );
+}
+
+/**
+ * Determine max values to increment
+ *
+ * @param string $recur Type of recurrence.
+ */
+function _mc_increment_values( $recur ) {
+	switch ( $recur ) {
+		case 'S': // Single.
+			return 0;
+			break;
+		case 'D': // Daily.
+			return 500;
+			break;
+		case 'E': // Weekdays.
+			return 400;
+			break;
+		case 'W': // Weekly.
+			return 240;
+			break;
+		case 'B': // Biweekly.
+			return 240;
+			break;
+		case 'M': // Monthly.
+		case 'U':
+			return 240;
+			break;
+		case 'Y':
+			return 50;
+			break;
+		default:
+			false;
+	}
+}
+
+/**
+ * Deletes all instances of an event without deleting the event details. Sets stage for rebuilding event instances.
+ *
+ * @param int $id Event ID.
+ */
+function mc_delete_instances( $id ) {
+	global $wpdb;
+	$id = (int) $id;
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	// After bulk deletion, optimize table.
+	$wpdb->query( 'OPTIMIZE TABLE ' . my_calendar_event_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+}
+
+
+/**
+ * Check for events with known occurrence overlap problems.
+ */
+function mc_list_problems() {
+	$events   = get_posts(
+		array(
+			'post_type'  => 'mc-events',
+			'meta_key'   => '_occurrence_overlap',
+			'meta_value' => 'false',
+		)
+	);
+	$list     = array();
+	$problems = array();
+
+	if ( is_array( $events ) &amp;&amp; count( $events ) > 0 ) {
+		foreach ( $events as $event ) {
+			$event_id  = get_post_meta( $event->ID, '_mc_event_id', true );
+			$event_url = admin_url( 'admin.php?page=my-calendar&amp;mode=edit&amp;event_id=' . absint( $event_id ) );
+			$list[]    = '&lt;a href="' . esc_url( $event_url ) . '">' . esc_html( $event->post_title ) . '&lt;/a>';
+		}
+	}
+
+	if ( ! empty( $list ) ) {
+		$problems = array( 'Problem Events' => '&lt;ul>&lt;li>' . implode( '&lt;/li>&lt;li>', $list ) . '&lt;/li>&lt;/ul>' );
+	}
+
+	return $problems;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
