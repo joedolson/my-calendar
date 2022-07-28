@@ -1973,6 +1973,16 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	}
 	if ( isset( $post['mcs_check_conflicts'] ) ) {
 		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label );
+		/**
+		 * Filter the results of a check for time/location conflicts.
+		 *
+		 * @hook mcs_check_conflicts
+		 *
+		 * @param {array|bool} $conflicts False if no conflicts, array of conflicting events if found.
+		 * @param {array} $post Query.
+		 *
+		 * @return {array|bool}
+		 */
 		$conflicts = apply_filters( 'mcs_check_conflicts', $conflicts, $post );
 		if ( $conflicts ) {
 			$conflict_id = $conflicts[0]->occur_id;
@@ -2061,6 +2071,17 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		// Array: removed before DB insertion.
 		'event_categories'   => $cats,
 	);
+
+	/**
+	 * Generate errors for required fields.
+	 *
+	 * @hook mc_fields_required
+	 *
+	 * @param {string} $errors HTML output for errors.
+	 * @param {array}  $submit Submitted data being tested.
+	 *
+	 * @return {string}
+	 */
 	$errors = ( $ignore_required ) ? $errors : apply_filters( 'mc_fields_required', $errors, $submit );
 
 	if ( '' === $errors ) {
@@ -2264,12 +2285,30 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		'name'  => 'event_end[]',
 	);
 	$picker_end   = mc_datepicker_html( $args );
-	$max          = apply_filters( 'mc_time_max', '00:00' );
-	$min          = apply_filters( 'mc_time_min', '00:00' );
-	$attrs        = ( '00:00' !== $min || '00:00' !== $max ) ? ' max="' . $max . '" min="' . $min . '"' : '';
-	$append       = '';
-	$range        = '';
-	$aria         = '';
+	/**
+	 * Set the latest time an event can be scheduled for.
+	 *
+	 * @hook mc_time_max
+	 *
+	 * @param {string} $max Time string. Default 00:00.
+	 *
+	 * @return {string}
+	 */
+	$max = apply_filters( 'mc_time_max', '00:00' );
+	/**
+	 * Set the earliest time an event can be scheduled for.
+	 *
+	 * @hook mc_time_min
+	 *
+	 * @param {string} $min Time string. Default 00:00.
+	 *
+	 * @return {string}
+	 */
+	$min    = apply_filters( 'mc_time_min', '00:00' );
+	$attrs  = ( '00:00' !== $min || '00:00' !== $max ) ? ' max="' . $max . '" min="' . $min . '"' : '';
+	$append = '';
+	$range  = '';
+	$aria   = '';
 	if ( '00:00' !== $max || '00:00' !== $min ) {
 		// Translators: starting time, ending time.
 		$range  = '<p id="mc_time_range_allowed">' . sprintf( __( 'Times must be between %1$s and %2$s', 'my-calendar' ), mc_date( mc_time_format(), strtotime( $min ) ), mc_date( mc_time_format(), strtotime( $max ) ) ) . '</p>';
@@ -2440,6 +2479,18 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 				<label for='event_registration'>" . __( 'Registration Information', 'my-calendar' ) . "</label> <textarea name='event_registration'id='event_registration'cols='40'rows='4'/>$registration</textarea>
 			</p>";
 
+	/**
+	 * Filter event registration form for event input.
+	 *
+	 * @hook mc_event_registration_form
+	 *
+	 * @param {string} $form Default form HTML output.
+	 * @param {bool}   $has_data If this event has data.
+	 * @param {object} $data Event object.
+	 * @param {string} $context Admin context.
+	 *
+	 * @return {string}
+	 */
 	return apply_filters( 'mc_event_registration_form', $form, $has_data, $data, 'admin' );
 }
 
@@ -2491,6 +2542,15 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			}
 		}
 		$controls['delete'] = "<span class='dashicons dashicons-no' aria-hidden='true'></span><a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event_id$args" ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a>';
+		/**
+		 * Check whether permalinks are enabled.
+		 *
+		 * @hook mc_use_permalinks
+		 *
+		 * @param {string} $option Value of mc_use_permalinks setting.
+		 *
+		 * @return {string} 'true' value if permalinks are enabled.
+		 */
 		if ( 'true' === apply_filters( 'mc_use_permalinks', get_option( 'mc_use_permalinks' ) ) ) {
 			$post_id          = $event->event_post;
 			$post_link        = ( $post_id ) ? get_edit_post_link( $post_id ) : false;
@@ -2967,9 +3027,43 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
 	global $wpdb;
 	$format = array( '%d', '%s', '%s', '%d' );
 	if ( ! $test ) {
-		$insert = apply_filters( 'mc_insert_recurring', false, $data, $format, $id, $context );
+		/**
+		 * Short circuit inserting a recurring event. Return true if event should not be inserted.
+		 *
+		 * @hook mc_insert_recurring
+		 *
+		 * @param {bool}   $insert True to skip inserting.
+		 * @param {array}  $data Event date info.
+		 * @param {int}    $id Event ID.
+		 * @param {string} $context Type of recurring event.
+		 *
+		 * @return {bool}
+		 */
+		$insert = apply_filters( 'mc_insert_recurring', false, $data, $id, $context );
 		if ( ! $insert ) {
-			$data   = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+			/**
+			 * Filter recurring event instance data array.
+			 *
+			 * @hook mc_instance_data
+			 *
+			 * @param {array}  $format Array of data passed to insert query.
+			 * @param {string} $begin Beginning date.
+			 * @param {array}  $instances Original instances.
+			 *
+			 * @return {array}
+			 */
+			$data = apply_filters( 'mc_instance_data', $data, $begin, $instances );
+			/**
+			 * Filter recurring event instance database format array.
+			 *
+			 * @hook mc_instance_format
+			 *
+			 * @param {array}  $format Array of placeholder formats in insert query.
+			 * @param {string} $begin Beginning date.
+			 * @param {array}  $instances Original instances.
+			 *
+			 * @return {array}
+			 */
 			$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
 			$wpdb->insert( my_calendar_event_table(), $data, $format );
 		}
@@ -2986,6 +3080,19 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
  */
 function mc_refresh_cache( $action, $data, $event_id, $result ) {
 	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
+	/**
+	 * Filter URLS that should be refreshed in caches.
+	 *
+	 * @hook mc_cached_pages_to_refresh
+	 *
+	 * @param {array}  $to_refresh Array of post IDs to clear cache on.
+	 * @param {string} $action My Calendar action executing.
+	 * @param {array}  $data Data passed from event.
+	 * @param {int}    $event_id Event ID.
+	 * @param {int}    $result Result of calendar database query.
+	 *
+	 * @return {array}
+	 */
 	$to_refresh = apply_filters( 'mc_cached_pages_to_refresh', array( $mc_uri_id ), $action, $data, $event_id, $result );
 
 	foreach ( $to_refresh as $calendar ) {
