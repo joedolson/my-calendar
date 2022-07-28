@@ -1201,7 +1201,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				 * @return {string}
 				 */
 				$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
-				$return = $pre . '<h2>' . __( 'Registration Settings', 'my-calendar' ) . '</h2><div class="inside"><fieldset><legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '</legend>' . $event_registration_output . '</fieldset></div>' . $post;
+				$return                    = $pre . '<h2>' . __( 'Registration Settings', 'my-calendar' ) . '</h2><div class="inside"><fieldset><legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '</legend>' . $event_registration_output . '</fieldset></div>' . $post;
 			} else {
 				$tickets      = ( $has_data ) ? esc_url( $data->event_tickets ) : '';
 				$registration = ( $has_data ) ? esc_attr( $data->event_registration ) : '';
