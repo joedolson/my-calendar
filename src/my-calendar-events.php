@@ -184,7 +184,7 @@ function my_calendar_get_events( $args ) {
 	 *
 	 * @return {string}
 	 */
-	$secondary_sort  = apply_filters( 'mc_secondary_sort', 'event_title ASC', 'my_calendar_get_events' );
+	$secondary_sort = apply_filters( 'mc_secondary_sort', 'event_title ASC', 'my_calendar_get_events' );
 
 	/**
 	 * Filter site parameter in queries on a multisite network. Allows a query to show events merged from multiple sites using a single shortcode.
@@ -495,8 +495,7 @@ function mc_get_new_events( $cat_id = false ) {
 	 *
 	 * @return {int}
 	 */
-	$limit              = apply_filters( 'mc_rss_feed_date_range', 2 );
-
+	$limit  = apply_filters( 'mc_rss_feed_date_range', 2 );
 	$events = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table() . '
@@ -896,9 +895,9 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	 *
 	 * @return {string}
 	 */
-	$secondary_sort  = apply_filters( 'mc_secondary_sort', 'event_title ASC', 'my_calendar_events_now' );
-	$now             = current_time( 'Y-m-d H:i:s' );
-	$event_query     = 'SELECT *, ' . $ts_string . '
+	$secondary_sort = apply_filters( 'mc_secondary_sort', 'event_title ASC', 'my_calendar_events_now' );
+	$now            = current_time( 'Y-m-d H:i:s' );
+	$event_query    = 'SELECT *, ' . $ts_string . '
 					FROM ' . my_calendar_event_table( $site ) . ' AS o
 					JOIN ' . my_calendar_table( $site ) . " AS e
 					ON (event_id=occur_event_id)
@@ -909,7 +908,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 					$exclude_categories
 					AND ( CAST('$now' AS DATETIME) BETWEEN occur_begin AND occur_end )
 					ORDER BY $primary_sort, $secondary_sort";
-	$events = $mcdb->get_results( $event_query );
+	$events         = $mcdb->get_results( $event_query );
 	if ( ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
 			$event        =& $events[ $key ];
