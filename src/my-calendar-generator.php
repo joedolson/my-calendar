@@ -27,7 +27,17 @@ function mc_generate( $format = 'shortcode' ) {
 		$string      = '';
 		$templatekey = '';
 		$append      = '';
-		$output      = apply_filters( 'mc_shortcode_generator', false, $_POST );
+		/**
+		 * Inject custom shortcode generator output. Handles custom shortcode generation.
+		 *
+		 * @hook mc_shortcode_generator
+		 *
+		 * @param {string} $output Output from handling a POST request.
+		 * @param {string} $post   $_POST input.
+		 * 
+		 * @return {string}
+		 */
+		$output      = apply_filters( 'mc_shortcode_generator', '', $_POST );
 		$array       = array();
 		if ( ! $output ) {
 			switch ( $_POST['shortcode'] ) {
@@ -120,7 +130,18 @@ function my_calendar_shortcodes() {
 					<button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'><?php esc_html_e( 'Main', 'my-calendar' ); ?></button>
 					<button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'><?php esc_html_e( 'Upcoming', 'my-calendar' ); ?></a></button>
 					<button type="button" role="tab" aria-selected="false" id='tab_mc_today' aria-controls='mc_today'><?php esc_html_e( 'Today', 'my-calendar' ); ?></button>
-					<?php echo apply_filters( 'mc_generator_tabs', '' ); ?>
+					<?php
+					/**
+					 * Insert a tab selector button into the shortcode generator tab list.
+					 *
+					 * @hook mc_generator_tabs
+					 *
+					 * @param {string} $tabs Tab HTML content.
+					 *
+					 * @return {string}
+					 */
+					echo apply_filters( 'mc_generator_tabs', '' );
+					?>
 				</div>
 				<div class='wptab mc_main' id='mc_main' aria-live='assertive' aria-labelledby='tab_mc_main' role="tabpanel">
 					<?php mc_generator( 'main' ); ?>
@@ -131,7 +152,18 @@ function my_calendar_shortcodes() {
 				<div class='wptab mc_today' id='mc_today' aria-live='assertive' aria-labelledby='tab_mc_today' role="tabpanel">
 					<?php mc_generator( 'today' ); ?>
 				</div>
-				<?php echo apply_filters( 'mc_generator_tab_content', '' ); ?>
+				<?php
+				/**
+				 * Insert a tab panel into the shortcode generator tabs.
+				 *
+				 * @hook mc_generator_tab_content
+				 *
+				 * @param {string} $tabs Tab HTML content.
+				 *
+				 * @return {string}
+				 */
+				echo apply_filters( 'mc_generator_tab_content', '' );
+				?>
 			</div>
 		</div>
 	</div>

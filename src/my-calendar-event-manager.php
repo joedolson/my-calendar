@@ -321,6 +321,15 @@ function my_calendar_manage() {
 								if ( mc_count_locations() > 200 ) {
 									$calendar['below'] = 'categories,access';
 								}
+								/**
+								 * Filter arguments used to display the calendar grid view for admins.
+								 *
+								 * @hook mc_filter_admin_grid_args
+								 *
+								 * @param {array} $calendar Calendar display arguments.
+								 *
+								 * @return {array}
+								 */
 								apply_filters( 'mc_filter_admin_grid_args', $calendar );
 								echo my_calendar( $calendar );
 							} else {
@@ -389,9 +398,11 @@ function mc_show_bulk_actions() {
 	/**
 	 * Filter Event manager bulk actions.
 	 *
-	 * @param array $bulk_actions Array of bulk actions currently available.
+	 * @hook mc_bulk_actions
 	 *
-	 * @return array
+	 * @param {array} $bulk_actions Array of bulk actions currently available.
+	 *
+	 * @return {array}
 	 */
 	$bulk_actions = apply_filters( 'mc_bulk_actions', $bulk_actions );
 	$options      = '';
@@ -893,6 +904,16 @@ function mc_event_is_grouped( $group_id ) {
  */
 function mc_can_edit_category( $category, $user ) {
 	$permissions = get_user_meta( $user, 'mc_user_permissions', true );
+	/**
+	 * Filter permissions for users editing a category.
+	 *
+	 * @hook mc_user_permissions
+	 *
+	 * @param {array} $permissions User meta data for this user's category permissions.
+	 * @param {int}   $user User ID.
+	 *
+	 * @return {array} Array of categories this user can edit.
+	 */
 	$permissions = apply_filters( 'mc_user_permissions', $permissions, $category, $user );
 
 	if ( ( ! $permissions || empty( $permissions ) ) || in_array( 'all', $permissions, true ) || in_array( $category, $permissions, true ) || current_user_can( 'manage_options' ) ) {
@@ -917,6 +938,16 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 		return false;
 	}
 
+	/**
+	 * Filter permissions to edit an event via the My Calendar Pro REST API..
+	 *
+	 * @hook mc_api_can_edit_event
+	 *
+	 * @param {bool} $return True if API user can edit this event.
+	 * @param {object|int}  $event The ID of the current event or an event object.
+	 *
+	 * @return {bool}
+	 */
 	$api = apply_filters( 'mc_api_can_edit_event', false, $event );
 	if ( $api ) {
 
@@ -968,6 +999,16 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 		$return = true;
 	}
 
+	/**
+	 * Filter permissions to edit an event.
+	 *
+	 * @hook mc_can_edit_event
+	 *
+	 * @param {bool} $return True if user can edit this event.
+	 * @param {int}  $event_id The ID of the current event.
+	 *
+	 * @return {bool}
+	 */
 	return apply_filters( 'mc_can_edit_event', $return, $event_id );
 }
 

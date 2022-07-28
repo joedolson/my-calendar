@@ -35,6 +35,15 @@ function mc_event_object( $object ) {
 			}
 			$object->uid = $guid;
 		}
+		/**
+		 * Customize the My Calendar event object.
+		 *
+		 * @hook mc_event_object
+		 *
+		 * @param {object} $object A My Calendar event.
+		 *
+		 * @return {object}
+		 */
 		$object = apply_filters( 'mc_event_object', $object );
 	}
 
@@ -67,11 +76,13 @@ function mc_ts( $test = false ) {
 	global $wpdb;
 	$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
 	/**
-	 * Filter timezone offset applied when displaying events.
+	 * Filter timezone offset applied when displaying events. Can fix issues with an incorrect server time.
 	 *
-	 * @param string $offset Timezone offset format -HH:MM:SS.
+	 * @hook mc_filter_offset
 	 *
-	 * @return string
+	 * @param {string} $offset Timezone offset format -HH:MM:SS.
+	 *
+	 * @return {string}
 	 */
 	$offset = apply_filters( 'mc_filter_offset', $offset );
 	$offset = substr( $offset, 0, -3 );
@@ -152,6 +163,39 @@ function my_calendar_get_events( $args ) {
 	$arr_events         = array();
 	$ts_string          = mc_ts();
 
+	/**
+	 * Set primary sort for getting events. Default 'occur_begin'.
+	 *
+	 * @hook mc_primary_sort
+	 *
+	 * @param {string} $primary_sort SQL sort column.
+	 * @param {string} $context Current function.
+	 *
+	 * @return {string}
+	 */
+	$primary_sort = apply_filters( 'mc_primary_sort', 'occur_begin', 'my_calendar_get_events' );
+	/**
+	 * Set secondary sort for getting events. Default 'event_title ASC'.
+	 *
+	 * @hook mc_secondary_sort
+	 *
+	 * @param {string} $secondary_sort SQL sort column.
+	 * @param {string} $context Current function.
+	 *
+	 * @return {string}
+	 */
+	$secondary_sort  = apply_filters( 'mc_secondary_sort', 'event_title ASC', 'my_calendar_get_events' );
+
+	/**
+	 * Filter site parameter in queries on a multisite network. Allows a query to show events merged from multiple sites using a single shortcode.
+	 *
+	 * @hook mc_get_events_sites
+	 *
+	 * @param {array|int} $site Array of sites or a single site if displaying events from a different site on the network.
+	 * @param {array} $args Shortcode arguments.
+	 *
+	 * @return {array|int}
+	 */
 	$site = apply_filters( 'mc_get_events_sites', $site, $args );
 	if ( is_array( $site ) ) {
 		foreach ( $site as $s ) {
@@ -169,7 +213,7 @@ function my_calendar_get_events( $args ) {
 			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
 			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
 		$exclude_categories
-		GROUP BY o.occur_id ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+		GROUP BY o.occur_id ORDER BY $primary_sort, $secondary_sort";
 
 			$events = $mcdb->get_results( $event_query );
 
@@ -219,7 +263,7 @@ function my_calendar_get_events( $args ) {
 			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
 			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
 		$exclude_categories
-		GROUP BY o.occur_id ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
+		GROUP BY o.occur_id ORDER BY $primary_sort, $secondary_sort";
 
 		$events = $mcdb->get_results( $event_query );
 
@@ -255,6 +299,17 @@ function my_calendar_get_events( $args ) {
 		}
 	}
 
+	/**
+	 * Filter events returned by my_calendar_get_events queries. Function returns a range of events between a start and end date.
+	 *
+	 * @hook mc_filter_events
+	 *
+	 * @param {array} $arr_events Array of event objects.
+	 * @param {array} $args Event query arguments.
+	 * @param {string} $context Current function context.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_filter_events', $arr_events, $args, 'my_calendar_get_events' );
 }
 
@@ -372,6 +427,17 @@ function mc_get_all_events( $args ) {
 		}
 	}
 
+	/**
+	 * Filter events returned by mc_get_all_events queries. Function returns a range of events based on proximity to the current date using parameters for number of days/events before or after today.
+	 *
+	 * @hook mc_filter_events
+	 *
+	 * @param {array} $arr_events Array of event objects.
+	 * @param {array} $args Event query arguments.
+	 * @param {string} $context Current function context.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_filter_events', $arr_events, $args, 'mc_get_all_events' );
 }
 
@@ -420,6 +486,15 @@ function mc_get_new_events( $cat_id = false ) {
 		$cat = 'WHERE event_approved = 1 AND event_flagged <> 1';
 	}
 	$exclude_categories = mc_private_categories();
+	/**
+	 * Filter how many days of newly added events will be included in ICS subscription links.
+	 *
+	 * @hook mc_rss_feed_date_range
+	 *
+	 * @param {int} $limit Number of days. Default 2.
+	 *
+	 * @return {int}
+	 */
 	$limit              = apply_filters( 'mc_rss_feed_date_range', 2 );
 
 	$events = $mcdb->get_results(
@@ -492,8 +567,26 @@ function mc_get_search_results( $search ) {
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
+	/**
+	 * Filter number of past search results to return. Default 0.
+	 *
+	 * @hook mc_past_search_results
+	 *
+	 * @param {int} $before Number of results.
+	 *
+	 * @return {int}
+	 */
 	$before = apply_filters( 'mc_past_search_results', 0 );
-	$after  = apply_filters( 'mc_future_search_results', 15 ); // return only future events, nearest 10.
+	/**
+	 * Filter number of future search results to return. Default 15.
+	 *
+	 * @hook mc_future_search_results
+	 *
+	 * @param {int} $after Number of results.
+	 *
+	 * @return {int}
+	 */
+	$after = apply_filters( 'mc_future_search_results', 15 ); // return only future events, nearest 10.
 	if ( is_array( $search ) ) {
 		// If from & to are set, we need to use a date-based event query.
 		$from     = $search['from'];
@@ -516,6 +609,16 @@ function mc_get_search_results( $search ) {
 			'source'   => 'search',
 		);
 
+		/**
+		 * Filter advanced search query arguments.
+		 *
+		 * @hook mc_search_attributes
+		 *
+		 * @param {array} $args Search query arguments.
+		 * @param {string} $search Search term.
+		 *
+		 * @return {array}
+		 */
 		$args        = apply_filters( 'mc_search_attributes', $args, $search );
 		$event_array = my_calendar_events( $args );
 	} else {
@@ -538,6 +641,16 @@ function mc_get_search_results( $search ) {
 		}
 	}
 
+	/**
+	 * Filter search events.
+	 *
+	 * @hook mc_searched_events
+	 *
+	 * @param {array} $event_array Array of found event objects.
+	 * @param {array} $args Search query arguments.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_searched_events', $event_array, $args );
 }
 
@@ -697,6 +810,15 @@ function mc_get_data( $field, $id ) {
  * @return array Array of event objects with dates as keys.
  */
 function my_calendar_events( $args ) {
+	/**
+	 * Filter calendar event query arguments.
+	 *
+	 * @hook my_calendar_events_args
+	 *
+	 * @param {array} $args Array of arguments for display and limiting of events.
+	 *
+	 * @return {array}
+	 */
 	$args          = apply_filters( 'my_calendar_events_args', $args );
 	$events        = my_calendar_get_events( $args );
 	$event_array   = array();
@@ -753,6 +875,28 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	$select_location = '';
 	$select_author   = '';
 	$select_host     = '';
+	/**
+	 * Set primary sort for getting today's events. Default 'occur_begin'.
+	 *
+	 * @hook mc_primary_sort
+	 *
+	 * @param {string} $primary_sort SQL sort column.
+	 * @param {string} $context Current function.
+	 *
+	 * @return {string}
+	 */
+	$primary_sort = apply_filters( 'mc_primary_sort', 'occur_begin', 'my_calendar_events_now' );
+	/**
+	 * Set secondary sort for getting today's events. Default 'event_title ASC'.
+	 *
+	 * @hook mc_secondary_sort
+	 *
+	 * @param {string} $secondary_sort SQL sort column.
+	 * @param {string} $context Current function.
+	 *
+	 * @return {string}
+	 */
+	$secondary_sort  = apply_filters( 'mc_secondary_sort', 'event_title ASC', 'my_calendar_events_now' );
 	$now             = current_time( 'Y-m-d H:i:s' );
 	$event_query     = 'SELECT *, ' . $ts_string . '
 					FROM ' . my_calendar_event_table( $site ) . ' AS o
@@ -764,8 +908,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 					WHERE $select_published $select_category $select_location $select_author $select_host
 					$exclude_categories
 					AND ( CAST('$now' AS DATETIME) BETWEEN occur_begin AND occur_end )
-					ORDER BY " . apply_filters( 'mc_primary_sort', 'occur_begin' ) . ', ' . apply_filters( 'mc_secondary_sort', 'event_title ASC' );
-
+					ORDER BY $primary_sort, $secondary_sort";
 	$events = $mcdb->get_results( $event_query );
 	if ( ! empty( $events ) ) {
 		foreach ( array_keys( $events ) as $key ) {
@@ -780,6 +923,16 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			$template = mc_get_custom_template( $template );
 		}
 
+		/**
+		 * Customize the template used to draw the "happening now" shortcode output.
+		 *
+		 * @hook mc_happening_next_template
+		 *
+		 * @param {string} $template HTML and template tags.
+		 * @param {object} $event Event object to draw.
+		 *
+		 * @return {string}
+		 */
 		$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
 		$return = mc_run_shortcodes( $output );
 	} else {
@@ -853,6 +1006,16 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			$template = mc_get_custom_template( $template );
 		}
 
+		/**
+		 * Customize the template used to draw the next event shortcode output.
+		 *
+		 * @hook mc_happening_next_template
+		 *
+		 * @param {string} $template HTML and template tags.
+		 * @param {object} $event Event object to draw.
+		 *
+		 * @return {string}
+		 */
 		$output = mc_draw_template( $event, apply_filters( 'mc_happening_next_template', $template, $event ) );
 		$return = mc_run_shortcodes( $output );
 	} else {
