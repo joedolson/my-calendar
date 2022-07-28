@@ -62,7 +62,17 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 			$terms[] = (int) $term;
 		}
 
-		$title             = $data['event_title'];
+		$title = $data['event_title'];
+		/**
+		 * Filter post template when event post is generated.
+		 *
+		 * @hook mc_post_template
+		 *
+		 * @param {string} $template Template keyword or structure.
+		 * @param {array}  $terms Terms attached to this event.
+		 *
+		 * @return {string}
+		 */
 		$template          = apply_filters( 'mc_post_template', 'details', $terms );
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
 		$description       = $data['event_desc'];
@@ -189,8 +199,18 @@ function mc_create_event_post( $data, $event_id ) {
 			}
 			$terms[] = (int) $term;
 		}
-		$title             = $data['event_title'];
-		$template          = apply_filters( 'mc_post_template', 'details', $term );
+		$title = $data['event_title'];
+		/**
+		 * Filter post template when event post is generated.
+		 *
+		 * @hook mc_post_template
+		 *
+		 * @param {string} $template Template keyword or structure.
+		 * @param {array}  $terms Terms attached to this event.
+		 *
+		 * @return {string}
+		 */
+		$template          = apply_filters( 'mc_post_template', 'details', $terms );
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
 		$description       = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 		$excerpt           = isset( $data['event_short'] ) ? $data['event_short'] : '';
@@ -399,6 +419,15 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		$cats = $add['event_categories'];
 
 		unset( $add['event_categories'] );
+		/**
+		 * Filter updated event data prior to saving.
+		 *
+		 * @hook mc_before_save_insert
+		 *
+		 * @param {array} $add Newly added event data.
+		 *
+		 * @return {array}
+		 */
 		$add      = apply_filters( 'mc_before_save_insert', $add );
 		$result   = $wpdb->insert( my_calendar_table(), $add, $formats );
 		$event_id = $wpdb->insert_id;
@@ -476,6 +505,16 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			unset( $update['event_categories'] );
 			mc_update_category_relationships( $cats, $event_id );
 
+			/**
+			 * Filter updated event data prior to saving.
+			 *
+			 * @hook mc_before_save_update
+			 *
+			 * @param {array} $update Updated event data.
+			 * @param {int}   $event_id Event ID.
+			 *
+			 * @return {array}
+			 */
 			$update       = apply_filters( 'mc_before_save_update', $update, $event_id );
 			$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
 			$prev_eb      = ( isset( $_POST['prev_event_begin'] ) ) ? $_POST['prev_event_begin'] : '';
@@ -578,6 +617,15 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	);
 	mc_update_count_cache();
 
+	/**
+	 * Filter message returned to user after saving an event.
+	 *
+	 * @hook mc_event_saved_message
+	 *
+	 * @param {array} $saved_response Array with event ID and message text.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_event_saved_message', $saved_response );
 }
 
@@ -679,6 +727,17 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 		$data = $submission;
 	}
 
+	/**
+	 * Filter notices. This is really handled and used as an action, but is still labeled a filter for backwards compatibility.
+	 *
+	 * @hook mc_event_notices
+	 *
+	 * @param {string} $output Output (unused).
+	 * @param {object} $data Event object.
+	 * @param {int}    $event_id Event ID.
+	 *
+	 * @return void
+	 */
 	apply_filters( 'mc_event_notices', '', $data, $event_id );
 
 	if ( is_object( $data ) && 1 !== (int) $data->event_approved && 'edit' === $mode ) {
@@ -821,7 +880,17 @@ function mc_datepicker_html( $args ) {
 	$value    = isset( $args['value'] ) ? esc_attr( $args['value'] ) : '';
 	$required = isset( $args['required'] ) ? 'required' : '';
 	$output   = "<duet-date-picker first-day-of-week='$firstday' identifier='$id' name='$name' value='$value' $required></duet-date-picker><input type='date' id='$id' name='$name' value='$value' $required class='duet-fallback' />";
-	$output   = apply_filters( 'mc_datepicker_html', $output, $args );
+	/**
+	 * Filter the My Calendar datepicker output.
+	 *
+	 * @hook mc_datepicker_html
+	 *
+	 * @param {string} $output Default datepicker output.
+	 * @param {array}  $args Datepicker setup arguments.
+	 *
+	 * @return {string}
+	 */
+	$output = apply_filters( 'mc_datepicker_html', $output, $args );
 
 	return $output;
 }
@@ -880,7 +949,18 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			if ( $show_block ) {
 				global $current_screen;
 				// Because wp_editor cannot return a value, event_desc fields cannot be filtered if its enabled.
-				$value         = ( $has_data ) ? stripslashes( $data->event_desc ) : '';
+				$value = ( $has_data ) ? stripslashes( $data->event_desc ) : '';
+				/**
+				 * Filter the editor to use a custom content editor field.
+				 *
+				 * @hook mc_custom_content_editor
+				 *
+				 * @param {string|bool} $custom_editor Bool to use default editor, otherwise the HTML output for your editor.
+				 * @param {string}      $value Event description.
+				 * @param {object}      $data Event object.
+				 *
+				 * @return {string|bool}
+				 */
 				$custom_editor = apply_filters( 'mc_custom_content_editor', false, $value, $data );
 				if ( false !== $custom_editor ) {
 					$return = $custom_editor;
@@ -1090,13 +1170,38 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			break;
 		case 'event_access':
 			if ( $show_block ) {
-				$label  = __( 'Accessibility', 'my-calendar' );
-				$return = $pre . '<h2>' . $label . '</h2><div class="inside">' . mc_event_accessibility( '', $data, $label ) . apply_filters( 'mc_event_access_fields', '', $has_data, $data ) . '</div>' . $post;
+				/**
+				 * Custom fields after event accessibility selections.
+				 *
+				 * @hook mc_event_access_fields
+				 *
+				 * @param {string} $output HTML output.
+				 * @param {bool}   $has_data Has Data.
+				 * @param {object} $data Event object.
+				 *
+				 * @return {string}
+				 */
+				$mc_event_accessibility_fields = apply_filters( 'mc_event_access_fields', '', $has_data, $data );
+				$label                         = __( 'Accessibility', 'my-calendar' );
+				$return                        = $pre . '<h2>' . $label . '</h2><div class="inside">' . mc_event_accessibility( '', $data, $label ) . $mc_event_accessibility_fields . '</div>' . $post;
 			}
 			break;
 		case 'event_open':
 			if ( $show_block ) {
-				$return = $pre . '<h2>' . __( 'Registration Settings', 'my-calendar' ) . '</h2><div class="inside"><fieldset><legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '</legend>' . apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ) . '</fieldset></div>' . $post;
+				/**
+				 * Filter event registration fields.
+				 *
+				 * @hook mc_event_registration
+				 *
+				 * @param {string} $output HTML output. Default empty.
+				 * @param {bool}   $has_data Whether this event has data.
+				 * @param {object} $data Event data object.
+				 * @param {string} $context Indicates this is running in the admin.
+				 *
+				 * @return {string}
+				 */
+				$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
+				$return = $pre . '<h2>' . __( 'Registration Settings', 'my-calendar' ) . '</h2><div class="inside"><fieldset><legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '</legend>' . $event_registration_output . '</fieldset></div>' . $post;
 			} else {
 				$tickets      = ( $has_data ) ? esc_url( $data->event_tickets ) : '';
 				$registration = ( $has_data ) ? esc_attr( $data->event_registration ) : '';
@@ -1130,6 +1235,18 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 		default:
 			return;
 	}
+	/**
+	 * Filter the content of an editing block.
+	 *
+	 * @hook mc_show_block
+	 *
+	 * @param {string} $return HTML output of editing fields.
+	 * @param {object} $data Event object.
+	 * @param {string} $field Field hook.
+	 * @param {bool}   $has_data If has data.
+	 *
+	 * @return {string}
+	 */
 	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
 	if ( true === $echo ) {
 		echo $return;
@@ -1216,6 +1333,16 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$query_args['date'] = $instance;
 			}
 		}
+		/**
+		 * Insert content before the event form. Not in the form.
+		 *
+		 * @hook mc_before_event_form
+		 *
+		 * @param {string} $output HTML output. Default empty string.
+		 * @param {int}    $event_id Event ID.
+		 *
+		 * @return {string}
+		 */
 		echo apply_filters( 'mc_before_event_form', '', $event_id );
 		$action       = add_query_arg( $query_args, admin_url( 'admin.php?page=my-calendar' ) );
 		$group_id     = ( ! empty( $data->event_group_id ) && 'copy' !== $mode ) ? $data->event_group_id : mc_group_id();
@@ -1297,7 +1424,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<legend class="screen-reader-text"><?php esc_html_e( 'Event', 'my-calendar' ); ?></legend>
 				<p>
 					<label for="e_title"><?php esc_html_e( 'Event Title', 'my-calendar' ); ?></label><br/>
-					<input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="<?php echo ( $has_data ) ? apply_filters( 'mc_manage_event_title', stripslashes( esc_attr( $data->event_title ) ), $data ) : ''; ?>" />
+					<input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="<?php echo ( $has_data ) ? stripslashes( esc_attr( $data->event_title ) : ''; ?>" />
 				</p>
 				<?php
 				if ( is_object( $data ) && 1 === (int) $data->event_flagged ) {
@@ -1311,6 +1438,17 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					</div>
 					<?php
 				}
+				/**
+				 * Container for custom fields inserted after the event title field.
+				 *
+				 * @hook mc_insert_custom_fields
+				 *
+				 * @param {string} $output Output HTML.
+				 * @param {bool}   $has_data Has data.
+				 * @param {object} $data Event object.
+				 *
+				 * @return {string}
+				 */
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
 
 				if ( function_exists( 'wpt_post_to_twitter' ) && current_user_can( 'wpt_can_tweet' ) ) {
@@ -1355,6 +1493,18 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<legend class="screen-reader-text"><?php esc_html_e( 'Event Date and Time', 'my-calendar' ); ?></legend>
 				<div id="e_schedule">
 					<?php
+					/**
+					 * Filter My Calendar default date/time inputs.
+					 *
+					 * @hook mc_datetime_inputs
+					 *
+					 * @param {string} $output HTML output.
+					 * @param {bool}   $has_data If event has data.
+					 * @param {object} $data Event object.
+					 * @param {string} $context Admin context.
+					 *
+					 * @return {string}
+					 */
 					echo apply_filters( 'mc_datetime_inputs', '', $has_data, $data, 'admin' );
 					if ( 'edit' !== $mode ) {
 						$span_checked = '';
@@ -1431,6 +1581,18 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		</div>
 		<?php
 	}
+	/**
+	 * Render custom fields in the admin.
+	 *
+	 * @hook mc_event_details
+	 *
+	 * @param {string} $output HTML output. Default empty string.
+	 * @param {bool}   $has_data If event has data.
+	 * @param {object} $data Event object.
+	 * @param {string} $context Admin context.
+	 *
+	 * @return {string}
+	 */
 	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
 	if ( '' !== $custom_fields ) {
 		?>
@@ -1438,7 +1600,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	<div class="postbox">
 		<h2><?php esc_html_e( 'Event Custom Fields', 'my-calendar' ); ?></h2>
 		<div class="inside">
-			<?php echo apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' ); ?>
+			<?php echo $custom_fields; ?>
 		</div>
 	</div>
 </div>
@@ -1549,6 +1711,15 @@ function mc_event_location_dropdown_block( $data ) {
 	$fields           = '';
 	$autocomplete     = false;
 	$count            = mc_count_locations();
+	/**
+	 * Filter the number of locations required to trigger a switch between a select input and an autocomplete.
+	 *
+	 * @hook mc_convert_locations_select_to_autocomplete
+	 *
+	 * @param {int} $count Number of locations that will remain a select. Default 90.
+	 *
+	 * @return {int}
+	 */
 	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 		$autocomplete = true;
 	}
@@ -1615,6 +1786,15 @@ function mc_event_location_dropdown_block( $data ) {
  * @return array
  */
 function mc_event_access() {
+	/**
+	 * Filter available event accessibility options.
+	 *
+	 * @hook mc_event_access_choices
+	 *
+	 * @param {array} Indexed array of choices. Events store only the index.
+	 *
+	 * @return {array}
+	 */
 	$event_access = apply_filters(
 		'mc_event_access_choices',
 		array(
@@ -1651,7 +1831,7 @@ function mc_event_accessibility( $form, $data, $label ) {
 		<fieldset class='accessibility'>
 			<legend class='$class'>$label</legend>
 			<ul class='accessibility-features checkboxes'>";
-	$access        = apply_filters( 'mc_event_accessibility', mc_event_access() );
+	$access        = mc_event_access();
 	if ( ! empty( $data ) ) {
 		if ( property_exists( $data, 'event_post' ) ) {
 			$events_access = get_post_meta( $data->event_post, '_mc_event_access', true );
@@ -1691,7 +1871,18 @@ function mc_event_accessibility( $form, $data, $label ) {
  */
 function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	global $wpdb, $submission;
-	$user               = wp_get_current_user();
+	$user = wp_get_current_user();
+	/**
+	 * Filter posted data before performing event data checks.
+	 *
+	 * @hook mc_pre_checkdata
+	 *
+	 * @param {array} $post Post data.
+	 * @param {string} $action Action performed (edit, copy, add).
+	 * @param {int}    $i Current event index if parsing multiple events.
+	 *
+	 * @return {array}
+	 */
 	$post               = apply_filters( 'mc_pre_checkdata', $post, $action, $i );
 	$submit             = array();
 	$errors             = '';
@@ -1783,6 +1974,15 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$begin = mc_date( 'Y-m-d', mc_strtotime( $begin ), false );// regardless of entry format, convert.
 		$time  = ! empty( $post['event_time'][ $i ] ) ? trim( $post['event_time'][ $i ] ) : '';
 		if ( '' !== $time ) {
+			/**
+			 * Filter default event length. Events without a specified end time are considered to occupy one hour by default.
+			 *
+			 * @hook mc_default_event_length
+			 *
+			 * @param {string} $default_modifier Event length in a human-language string interpretable by strtotime(). Default '1 hour'.
+			 *
+			 * @return {string}
+			 */
 			$default_modifier = apply_filters( 'mc_default_event_length', '1 hour' );
 			$endtime          = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : mc_date( 'H:i:s', mc_strtotime( $time . ' +' . $default_modifier ), false );
 			if ( empty( $post['event_endtime'][ $i ] ) && mc_date( 'H', mc_strtotime( $endtime ), false ) === '00' ) {
@@ -1838,6 +2038,17 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$cats    = array( $default );
 			$primary = $default;
 		}
+		/**
+		 * Filter primary category decision. Primary category is normally the alphabetically first listed category or the first selected private category.
+		 *
+		 * @hook mc_set_primary_category
+		 *
+		 * @param {int}   $primary Primary category ID.
+		 * @param {array} $cats All selected categories.
+		 * @param {array} $post Submitted query.
+		 *
+		 * @return {int}
+		 */
 		$primary      = apply_filters( 'mc_set_primary_category', $primary, $cats, $post );
 		$event_author = ( isset( $post['event_author'] ) && is_numeric( $post['event_author'] ) ) ? $post['event_author'] : 0;
 		$event_link   = ! empty( $post['event_link'] ) ? trim( $post['event_link'] ) : '';
@@ -3079,7 +3290,7 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
  * @param int    $result Result of calendar save query.
  */
 function mc_refresh_cache( $action, $data, $event_id, $result ) {
-	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
+	$mc_uri_id = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
 	/**
 	 * Filter URLS that should be refreshed in caches.
 	 *
