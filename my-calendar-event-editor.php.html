@@ -88,7 +88,17 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 			$terms[] = (int) $term;
 		}
 
-		$title             = $data['event_title'];
+		$title = $data['event_title'];
+		/**
+		 * Filter post template when event post is generated.
+		 *
+		 * @hook mc_post_template
+		 *
+		 * @param {string} $template Template keyword or structure.
+		 * @param {array}  $terms Terms attached to this event.
+		 *
+		 * @return {string}
+		 */
 		$template          = apply_filters( 'mc_post_template', 'details', $terms );
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
 		$description       = $data['event_desc'];
@@ -215,8 +225,18 @@ function mc_create_event_post( $data, $event_id ) {
 			}
 			$terms[] = (int) $term;
 		}
-		$title             = $data['event_title'];
-		$template          = apply_filters( 'mc_post_template', 'details', $term );
+		$title = $data['event_title'];
+		/**
+		 * Filter post template when event post is generated.
+		 *
+		 * @hook mc_post_template
+		 *
+		 * @param {string} $template Template keyword or structure.
+		 * @param {array}  $terms Terms attached to this event.
+		 *
+		 * @return {string}
+		 */
+		$template          = apply_filters( 'mc_post_template', 'details', $terms );
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
 		$description       = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 		$excerpt           = isset( $data['event_short'] ) ? $data['event_short'] : '';
@@ -425,6 +445,15 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		$cats = $add['event_categories'];
 
 		unset( $add['event_categories'] );
+		/**
+		 * Filter updated event data prior to saving.
+		 *
+		 * @hook mc_before_save_insert
+		 *
+		 * @param {array} $add Newly added event data.
+		 *
+		 * @return {array}
+		 */
 		$add      = apply_filters( 'mc_before_save_insert', $add );
 		$result   = $wpdb->insert( my_calendar_table(), $add, $formats );
 		$event_id = $wpdb->insert_id;
@@ -502,6 +531,16 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			unset( $update['event_categories'] );
 			mc_update_category_relationships( $cats, $event_id );
 
+			/**
+			 * Filter updated event data prior to saving.
+			 *
+			 * @hook mc_before_save_update
+			 *
+			 * @param {array} $update Updated event data.
+			 * @param {int}   $event_id Event ID.
+			 *
+			 * @return {array}
+			 */
 			$update       = apply_filters( 'mc_before_save_update', $update, $event_id );
 			$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
 			$prev_eb      = ( isset( $_POST['prev_event_begin'] ) ) ? $_POST['prev_event_begin'] : '';
@@ -604,6 +643,15 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	);
 	mc_update_count_cache();
 
+	/**
+	 * Filter message returned to user after saving an event.
+	 *
+	 * @hook mc_event_saved_message
+	 *
+	 * @param {array} $saved_response Array with event ID and message text.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_event_saved_message', $saved_response );
 }
 
@@ -705,6 +753,17 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 		$data = $submission;
 	}
 
+	/**
+	 * Filter notices. This is really handled and used as an action, but is still labeled a filter for backwards compatibility.
+	 *
+	 * @hook mc_event_notices
+	 *
+	 * @param {string} $output Output (unused).
+	 * @param {object} $data Event object.
+	 * @param {int}    $event_id Event ID.
+	 *
+	 * @return void
+	 */
 	apply_filters( 'mc_event_notices', '', $data, $event_id );
 
 	if ( is_object( $data ) &amp;&amp; 1 !== (int) $data->event_approved &amp;&amp; 'edit' === $mode ) {
@@ -847,7 +906,17 @@ function mc_datepicker_html( $args ) {
 	$value    = isset( $args['value'] ) ? esc_attr( $args['value'] ) : '';
 	$required = isset( $args['required'] ) ? 'required' : '';
 	$output   = "&lt;duet-date-picker first-day-of-week='$firstday' identifier='$id' name='$name' value='$value' $required>&lt;/duet-date-picker>&lt;input type='date' id='$id' name='$name' value='$value' $required class='duet-fallback' />";
-	$output   = apply_filters( 'mc_datepicker_html', $output, $args );
+	/**
+	 * Filter the My Calendar datepicker output.
+	 *
+	 * @hook mc_datepicker_html
+	 *
+	 * @param {string} $output Default datepicker output.
+	 * @param {array}  $args Datepicker setup arguments.
+	 *
+	 * @return {string}
+	 */
+	$output = apply_filters( 'mc_datepicker_html', $output, $args );
 
 	return $output;
 }
@@ -906,7 +975,18 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			if ( $show_block ) {
 				global $current_screen;
 				// Because wp_editor cannot return a value, event_desc fields cannot be filtered if its enabled.
-				$value         = ( $has_data ) ? stripslashes( $data->event_desc ) : '';
+				$value = ( $has_data ) ? stripslashes( $data->event_desc ) : '';
+				/**
+				 * Filter the editor to use a custom content editor field.
+				 *
+				 * @hook mc_custom_content_editor
+				 *
+				 * @param {string|bool} $custom_editor Bool to use default editor, otherwise the HTML output for your editor.
+				 * @param {string}      $value Event description.
+				 * @param {object}      $data Event object.
+				 *
+				 * @return {string|bool}
+				 */
 				$custom_editor = apply_filters( 'mc_custom_content_editor', false, $value, $data );
 				if ( false !== $custom_editor ) {
 					$return = $custom_editor;
@@ -1116,13 +1196,38 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			break;
 		case 'event_access':
 			if ( $show_block ) {
-				$label  = __( 'Accessibility', 'my-calendar' );
-				$return = $pre . '&lt;h2>' . $label . '&lt;/h2>&lt;div class="inside">' . mc_event_accessibility( '', $data, $label ) . apply_filters( 'mc_event_access_fields', '', $has_data, $data ) . '&lt;/div>' . $post;
+				/**
+				 * Custom fields after event accessibility selections.
+				 *
+				 * @hook mc_event_access_fields
+				 *
+				 * @param {string} $output HTML output.
+				 * @param {bool}   $has_data Has Data.
+				 * @param {object} $data Event object.
+				 *
+				 * @return {string}
+				 */
+				$mc_event_accessibility_fields = apply_filters( 'mc_event_access_fields', '', $has_data, $data );
+				$label                         = __( 'Accessibility', 'my-calendar' );
+				$return                        = $pre . '&lt;h2>' . $label . '&lt;/h2>&lt;div class="inside">' . mc_event_accessibility( '', $data, $label ) . $mc_event_accessibility_fields . '&lt;/div>' . $post;
 			}
 			break;
 		case 'event_open':
 			if ( $show_block ) {
-				$return = $pre . '&lt;h2>' . __( 'Registration Settings', 'my-calendar' ) . '&lt;/h2>&lt;div class="inside">&lt;fieldset>&lt;legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '&lt;/legend>' . apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' ) . '&lt;/fieldset>&lt;/div>' . $post;
+				/**
+				 * Filter event registration fields.
+				 *
+				 * @hook mc_event_registration
+				 *
+				 * @param {string} $output HTML output. Default empty.
+				 * @param {bool}   $has_data Whether this event has data.
+				 * @param {object} $data Event data object.
+				 * @param {string} $context Indicates this is running in the admin.
+				 *
+				 * @return {string}
+				 */
+				$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
+				$return = $pre . '&lt;h2>' . __( 'Registration Settings', 'my-calendar' ) . '&lt;/h2>&lt;div class="inside">&lt;fieldset>&lt;legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '&lt;/legend>' . $event_registration_output . '&lt;/fieldset>&lt;/div>' . $post;
 			} else {
 				$tickets      = ( $has_data ) ? esc_url( $data->event_tickets ) : '';
 				$registration = ( $has_data ) ? esc_attr( $data->event_registration ) : '';
@@ -1156,6 +1261,18 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 		default:
 			return;
 	}
+	/**
+	 * Filter the content of an editing block.
+	 *
+	 * @hook mc_show_block
+	 *
+	 * @param {string} $return HTML output of editing fields.
+	 * @param {object} $data Event object.
+	 * @param {string} $field Field hook.
+	 * @param {bool}   $has_data If has data.
+	 *
+	 * @return {string}
+	 */
 	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
 	if ( true === $echo ) {
 		echo $return;
@@ -1242,6 +1359,16 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$query_args['date'] = $instance;
 			}
 		}
+		/**
+		 * Insert content before the event form. Not in the form.
+		 *
+		 * @hook mc_before_event_form
+		 *
+		 * @param {string} $output HTML output. Default empty string.
+		 * @param {int}    $event_id Event ID.
+		 *
+		 * @return {string}
+		 */
 		echo apply_filters( 'mc_before_event_form', '', $event_id );
 		$action       = add_query_arg( $query_args, admin_url( 'admin.php?page=my-calendar' ) );
 		$group_id     = ( ! empty( $data->event_group_id ) &amp;&amp; 'copy' !== $mode ) ? $data->event_group_id : mc_group_id();
@@ -1323,7 +1450,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Event', 'my-calendar' ); ?>&lt;/legend>
 				&lt;p>
 					&lt;label for="e_title">&lt;?php esc_html_e( 'Event Title', 'my-calendar' ); ?>&lt;/label>&lt;br/>
-					&lt;input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="&lt;?php echo ( $has_data ) ? apply_filters( 'mc_manage_event_title', stripslashes( esc_attr( $data->event_title ) ), $data ) : ''; ?>" />
+					&lt;input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="&lt;?php echo ( $has_data ) ? stripslashes( esc_attr( $data->event_title ) : ''; ?>" />
 				&lt;/p>
 				&lt;?php
 				if ( is_object( $data ) &amp;&amp; 1 === (int) $data->event_flagged ) {
@@ -1337,6 +1464,17 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					&lt;/div>
 					&lt;?php
 				}
+				/**
+				 * Container for custom fields inserted after the event title field.
+				 *
+				 * @hook mc_insert_custom_fields
+				 *
+				 * @param {string} $output Output HTML.
+				 * @param {bool}   $has_data Has data.
+				 * @param {object} $data Event object.
+				 *
+				 * @return {string}
+				 */
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
 
 				if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; current_user_can( 'wpt_can_tweet' ) ) {
@@ -1381,6 +1519,18 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Event Date and Time', 'my-calendar' ); ?>&lt;/legend>
 				&lt;div id="e_schedule">
 					&lt;?php
+					/**
+					 * Filter My Calendar default date/time inputs.
+					 *
+					 * @hook mc_datetime_inputs
+					 *
+					 * @param {string} $output HTML output.
+					 * @param {bool}   $has_data If event has data.
+					 * @param {object} $data Event object.
+					 * @param {string} $context Admin context.
+					 *
+					 * @return {string}
+					 */
 					echo apply_filters( 'mc_datetime_inputs', '', $has_data, $data, 'admin' );
 					if ( 'edit' !== $mode ) {
 						$span_checked = '';
@@ -1457,6 +1607,18 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		&lt;/div>
 		&lt;?php
 	}
+	/**
+	 * Render custom fields in the admin.
+	 *
+	 * @hook mc_event_details
+	 *
+	 * @param {string} $output HTML output. Default empty string.
+	 * @param {bool}   $has_data If event has data.
+	 * @param {object} $data Event object.
+	 * @param {string} $context Admin context.
+	 *
+	 * @return {string}
+	 */
 	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
 	if ( '' !== $custom_fields ) {
 		?>
@@ -1464,7 +1626,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	&lt;div class="postbox">
 		&lt;h2>&lt;?php esc_html_e( 'Event Custom Fields', 'my-calendar' ); ?>&lt;/h2>
 		&lt;div class="inside">
-			&lt;?php echo apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' ); ?>
+			&lt;?php echo $custom_fields; ?>
 		&lt;/div>
 	&lt;/div>
 &lt;/div>
@@ -1575,6 +1737,15 @@ function mc_event_location_dropdown_block( $data ) {
 	$fields           = '';
 	$autocomplete     = false;
 	$count            = mc_count_locations();
+	/**
+	 * Filter the number of locations required to trigger a switch between a select input and an autocomplete.
+	 *
+	 * @hook mc_convert_locations_select_to_autocomplete
+	 *
+	 * @param {int} $count Number of locations that will remain a select. Default 90.
+	 *
+	 * @return {int}
+	 */
 	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 		$autocomplete = true;
 	}
@@ -1641,6 +1812,15 @@ function mc_event_location_dropdown_block( $data ) {
  * @return array
  */
 function mc_event_access() {
+	/**
+	 * Filter available event accessibility options.
+	 *
+	 * @hook mc_event_access_choices
+	 *
+	 * @param {array} Indexed array of choices. Events store only the index.
+	 *
+	 * @return {array}
+	 */
 	$event_access = apply_filters(
 		'mc_event_access_choices',
 		array(
@@ -1677,7 +1857,7 @@ function mc_event_accessibility( $form, $data, $label ) {
 		&lt;fieldset class='accessibility'>
 			&lt;legend class='$class'>$label&lt;/legend>
 			&lt;ul class='accessibility-features checkboxes'>";
-	$access        = apply_filters( 'mc_event_accessibility', mc_event_access() );
+	$access        = mc_event_access();
 	if ( ! empty( $data ) ) {
 		if ( property_exists( $data, 'event_post' ) ) {
 			$events_access = get_post_meta( $data->event_post, '_mc_event_access', true );
@@ -1717,7 +1897,18 @@ function mc_event_accessibility( $form, $data, $label ) {
  */
 function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	global $wpdb, $submission;
-	$user               = wp_get_current_user();
+	$user = wp_get_current_user();
+	/**
+	 * Filter posted data before performing event data checks.
+	 *
+	 * @hook mc_pre_checkdata
+	 *
+	 * @param {array} $post Post data.
+	 * @param {string} $action Action performed (edit, copy, add).
+	 * @param {int}    $i Current event index if parsing multiple events.
+	 *
+	 * @return {array}
+	 */
 	$post               = apply_filters( 'mc_pre_checkdata', $post, $action, $i );
 	$submit             = array();
 	$errors             = '';
@@ -1809,6 +2000,15 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$begin = mc_date( 'Y-m-d', mc_strtotime( $begin ), false );// regardless of entry format, convert.
 		$time  = ! empty( $post['event_time'][ $i ] ) ? trim( $post['event_time'][ $i ] ) : '';
 		if ( '' !== $time ) {
+			/**
+			 * Filter default event length. Events without a specified end time are considered to occupy one hour by default.
+			 *
+			 * @hook mc_default_event_length
+			 *
+			 * @param {string} $default_modifier Event length in a human-language string interpretable by strtotime(). Default '1 hour'.
+			 *
+			 * @return {string}
+			 */
 			$default_modifier = apply_filters( 'mc_default_event_length', '1 hour' );
 			$endtime          = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : mc_date( 'H:i:s', mc_strtotime( $time . ' +' . $default_modifier ), false );
 			if ( empty( $post['event_endtime'][ $i ] ) &amp;&amp; mc_date( 'H', mc_strtotime( $endtime ), false ) === '00' ) {
@@ -1864,6 +2064,17 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$cats    = array( $default );
 			$primary = $default;
 		}
+		/**
+		 * Filter primary category decision. Primary category is normally the alphabetically first listed category or the first selected private category.
+		 *
+		 * @hook mc_set_primary_category
+		 *
+		 * @param {int}   $primary Primary category ID.
+		 * @param {array} $cats All selected categories.
+		 * @param {array} $post Submitted query.
+		 *
+		 * @return {int}
+		 */
 		$primary      = apply_filters( 'mc_set_primary_category', $primary, $cats, $post );
 		$event_author = ( isset( $post['event_author'] ) &amp;&amp; is_numeric( $post['event_author'] ) ) ? $post['event_author'] : 0;
 		$event_link   = ! empty( $post['event_link'] ) ? trim( $post['event_link'] ) : '';
@@ -3105,7 +3316,7 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
  * @param int    $result Result of calendar save query.
  */
 function mc_refresh_cache( $action, $data, $event_id, $result ) {
-	$mc_uri_id  = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
+	$mc_uri_id = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
 	/**
 	 * Filter URLS that should be refreshed in caches.
 	 *
@@ -3179,7 +3390,7 @@ add_action( 'mc_save_event', 'mc_refresh_cache', 10, 4 );
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
 </nav>
 
 <br class="clear">
