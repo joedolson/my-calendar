@@ -534,10 +534,14 @@ function mc_footer_js() {
  */
 function mc_admin_styles() {
 	global $current_screen;
-	$version    = get_option( 'mc_version' );
-	$id         = $current_screen->id;
-	$is_mc_page = isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'];
-
+	$version      = get_option( 'mc_version' );
+	$id           = $current_screen->id;
+	$is_mc_page   = isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'];
+	$enqueue_mcjs = false;
+	$grid         = 'false';
+	$list         = 'false';
+	$mini         = 'false';
+	$ajax         = 'false';
 	if ( false !== strpos( $id, 'my-calendar' ) || $is_mc_page ) {
 		// Toggle CSS & Scripts based on current mode.
 		$mode = get_option( 'mc_default_admin_view' );
@@ -555,62 +559,32 @@ function mc_admin_styles() {
 			wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 			wp_enqueue_style( 'my-calendar-admin-style' );
 			if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
-				$url          = apply_filters( 'mc_grid_js', plugins_url( 'js/mc-grid.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
-				wp_localize_script(
-					'mc.grid',
-					'mcgrid',
-					array(
-						'grid' => 'true',
-					)
-				);
+				$grid         = 'true';
 			}
 			if ( '1' !== get_option( 'mc_list_javascript' ) ) {
-				$url          = apply_filters( 'mc_list_js', plugins_url( 'js/mc-list.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
-				wp_localize_script(
-					'mc.list',
-					'mclist',
-					array(
-						'list' => 'true',
-					)
-				);
+				$list         = 'true';
 			}
 			if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
-				$url          = apply_filters( 'mc_mini_js', plugins_url( 'js/mc-mini.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
-				wp_localize_script(
-					'mc.mini',
-					'mcmini',
-					array(
-						'mini' => 'true',
-					)
-				);
+				$mini         = 'true';
 			}
 			if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
-				$url          = apply_filters( 'mc_ajax_js', plugins_url( 'js/mc-ajax.js', __FILE__ ) );
 				$enqueue_mcjs = true;
-				wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
-				wp_localize_script(
-					'mc.ajax',
-					'mcAjax',
-					array(
-						'ajax' => 'true',
-					)
-				);
+				$ajax         = 'true';
 			}
 			if ( $enqueue_mcjs ) {
-				wp_enqueue_script( 'mc.mcjs', plugins_url( 'js/mcjs.js', __FILE__ ), array( 'jquery' ), $version );
-				wp_localize_script(
-					'mc.mcjs',
-					'my_calendar',
-					array(
-						'newWindow' => __( 'New tab', 'my-calendar' ),
-					)
+				$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
+				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery' ), $version );
+				$args = array(
+					'grid'      => $grid,
+					'list'      => $list,
+					'mini'      => $mini,
+					'ajax'      => $ajax,
+					'newWindow' => __( 'New tab', 'my-calendar' ),
 				);
+				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
 			}
 		}
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
@@ -704,6 +678,15 @@ function mc_get_current_url() {
 	if ( $wp_rewrite->using_permalinks() ) {
 		$current_url = trailingslashit( $current_url );
 	}
+	/**
+	 * Filter the URL returned for the current URL.
+	 *
+	 * @hook mc_get_current_url
+	 *
+	 * @param {string} $current_url Current URL according to wp_rewrite.
+	 *
+	 * @return {string}
+	 */
 	$current_url = apply_filters( 'mc_get_current_url', $current_url );
 
 	return esc_url( $current_url );
@@ -1029,6 +1012,15 @@ function mc_admin_bar() {
 	$mc_id = get_option( 'mc_uri_id' );
 	if ( mc_get_uri( 'boolean' ) ) {
 		if ( is_page( $mc_id ) && current_user_can( 'mc_add_events' ) ) {
+			/**
+			 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
+			 *
+			 * @hook mc_add_events_url
+			 *
+			 * @param {string} $url Admin URL for adding events.
+			 *
+			 * @return {string}
+			 */
 			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
 			$args = array(
 				'id'    => 'mc-my-calendar',
@@ -1036,6 +1028,15 @@ function mc_admin_bar() {
 				'href'  => $url,
 			);
 		} else {
+			/**
+			 * Filter URL displayed for 'My Calendar' link in adminbar.
+			 *
+			 * @hook mc_adminbar_uri
+			 *
+			 * @param {string} $url Front-end URL for viewing events.
+			 *
+			 * @return {string}
+			 */
 			$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
 			$args = array(
 				'id'    => 'mc-my-calendar',
@@ -1055,14 +1056,25 @@ function mc_admin_bar() {
 	}
 	if ( current_user_can( 'mc_add_events' ) && 'true' !== get_option( 'mc_remote' ) ) {
 		if ( ! is_page( $mc_id ) ) {
+			/**
+			 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
+			 *
+			 * @hook mc_add_events_url
+			 *
+			 * @param {string} $url Admin URL for adding events.
+			 *
+			 * @return {string}
+			 */
 			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
-			$args = array(
-				'id'     => 'mc-add-event',
-				'title'  => __( 'Add Event', 'my-calendar' ),
-				'href'   => $url,
-				'parent' => 'mc-my-calendar',
-			);
-			$wp_admin_bar->add_node( $args );
+			if ( $url ) {
+				$args = array(
+					'id'     => 'mc-add-event',
+					'title'  => __( 'Add Event', 'my-calendar' ),
+					'href'   => $url,
+					'parent' => 'mc-my-calendar',
+				);
+				$wp_admin_bar->add_node( $args );
+			}
 		}
 	}
 	if ( isset( $_GET['mc_id'] ) && mc_can_edit_event( $_GET['mc_id'] ) ) {
@@ -1147,20 +1159,59 @@ add_filter( 'display_post_states', 'mc_admin_state', 10, 2 );
  * @param object $event Event object.
  */
 function my_calendar_send_email( $event ) {
-	$details = mc_create_tags( $event );
-	$headers = array();
-	// shift to boolean.
+	$details           = mc_create_tags( $event );
+	$headers           = array();
 	$send_email_option = ( 'true' === get_option( 'mc_event_mail' ) ) ? true : false;
+	/**
+	 * Filter whether email notifications should be sent.
+	 *
+	 * @hook mc_send_notification
+	 *
+	 * @param {bool} $send_email Boolean equivalent of value of event email setting.
+	 * @param {array} $details Event details for notifications.
+	 *
+	 * @return {bool}
+	 */
 	$send_email        = apply_filters( 'mc_send_notification', $send_email_option, $details );
 	if ( true === $send_email ) {
 		add_filter( 'wp_mail_content_type', 'mc_html_type' );
 	}
 	if ( 'true' === get_option( 'mc_event_mail' ) ) {
-		$to        = apply_filters( 'mc_event_mail_to', get_option( 'mc_event_mail_to' ), $details );
-		$from      = ( '' === get_option( 'mc_event_mail_from', '' ) ) ? get_bloginfo( 'admin_email' ) : get_option( 'mc_event_mail_from' );
+		/**
+		 * Filter event notification email to header.
+		 *
+		 * @hook mc_event_mail_to
+		 *
+		 * @param {string} $to Email to field string.
+		 * @param {array}  $details Array of details passed to email function.
+		 *
+		 * @return {string}
+		 */
+		$to   = apply_filters( 'mc_event_mail_to', get_option( 'mc_event_mail_to' ), $details );
+		$from = ( '' === get_option( 'mc_event_mail_from', '' ) ) ? get_bloginfo( 'admin_email' ) : get_option( 'mc_event_mail_from' );
+		/**
+		 * Filter event notification email from header.
+		 *
+		 * @hook mc_event_mail_from
+		 *
+		 * @param {string} $from Email string for email header from value.
+		 * @param {array}  $details Array of details passed to email function.
+		 *
+		 * @return {string}
+		 */
 		$from      = apply_filters( 'mc_event_mail_from', $from, $details );
 		$headers[] = 'From: ' . __( 'Event Notifications', 'my-calendar' ) . " <$from>";
-		$bcc       = apply_filters( 'mc_event_mail_bcc', get_option( 'mc_event_mail_bcc' ), $details );
+		/**
+		 * Filter event notification email bcc headers.
+		 *
+		 * @hook mc_event_mail_bcc
+		 *
+		 * @param {string} $bcc Comma separated list of emails for BCC.
+		 * @param {array}  $details Array of details passed to email function.
+		 *
+		 * @return {string}
+		 */
+		$bcc = apply_filters( 'mc_event_mail_bcc', get_option( 'mc_event_mail_bcc' ), $details );
 		if ( $bcc ) {
 			$bcc = explode( PHP_EOL, $bcc );
 			foreach ( $bcc as $b ) {
@@ -1170,8 +1221,38 @@ function my_calendar_send_email( $event ) {
 				}
 			}
 		}
+		/**
+		 * Filter event notification email headers.
+		 *
+		 * @hook mc_customize_email_headers
+		 *
+		 * @param {array}  $headers Email headers.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {string}
+		 */
 		$headers = apply_filters( 'mc_customize_email_headers', $headers, $event );
+		/**
+		 * Filter event notification email subject.
+		 *
+		 * @hook mc_event_mail_subject
+		 *
+		 * @param {string} $subject Email subject.
+		 * @param {array}  $details Array of details passed to email function.
+		 *
+		 * @return {string}
+		 */
 		$subject = apply_filters( 'mc_event_mail_subject', get_option( 'mc_event_mail_subject' ), $details );
+		/**
+		 * Filter event notification email body.
+		 *
+		 * @hook mc_event_mail_body
+		 *
+		 * @param {string} $body Email body.
+		 * @param {array}  $details Array of details passed to email function.
+		 *
+		 * @return {string}
+		 */
 		$body    = apply_filters( 'mc_event_mail_body', get_option( 'mc_event_mail_message' ), $details );
 		$subject = mc_draw_template( $details, $subject );
 		$message = mc_draw_template( $details, $body );
@@ -1193,7 +1274,27 @@ function my_calendar_send_email( $event ) {
  */
 function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	global $akismet_api_host, $akismet_api_port;
+	/**
+	 * Disable automatic spam checking (turned on when Akismet is active.)
+	 *
+	 * @hook mc_disable_spam_checking
+	 *
+	 * @param {bool}  $disabled True to disable spam checking. Default false.
+	 * @param {array} $post Posted event details for checking.
+	 *
+	 * @return {bool}
+	 */
 	if ( current_user_can( 'mc_add_events' ) || apply_filters( 'mc_disable_spam_checking', false, $post ) ) { // is a privileged user.
+		/**
+		 * Test spam status before Akismet runs. Returns immediately and shortcircuits tests.
+		 *
+		 * @hook mc_custom_spam_status
+		 *
+		 * @param {int}   $status Numeric status. 0 for valid, 1 for spam.
+		 * @param {array} $post Submitted data from POST.
+		 *
+		 * @return {int}
+		 */
 		return apply_filters( 'mc_custom_spam_status', 0, $post );
 	}
 	$akismet = false;
@@ -1473,6 +1574,15 @@ function mc_scripts() {
 				)
 			);
 		}
+		/**
+		 * Filter the number of locations required to trigger a switch between a select input and an autocomplete.
+		 *
+		 * @hook mc_convert_locations_select_to_autocomplete
+		 *
+		 * @param {int} $count Number of locations that will remain a select. Default 90.
+		 *
+		 * @return {int}
+		 */
 		if ( mc_count_locations() > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 			wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
 			wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
@@ -1944,18 +2054,44 @@ function mc_post_type() {
 	$arguments = array(
 		'public'              => apply_filters( 'mc_event_posts_public', true ),
 		'publicly_queryable'  => true,
-		// WARNING: Allowing the post type to be searchable will not provide a true event search, especially with respect to recurring events.
-		// It will not search recurring events by date, only the post content from each event. Enable only if requirements for search are limited to post content.
-		// Details: https://github.com/joedolson/my-calendar/issues/23.
+		/**
+		 * Should My Calendar post types be excluded from search. Default false.
+		 * Allowing the event post type to be searchable will not provide a true event search, especially with respect to recurring events.
+		 * It will not search recurring events by date, only the post content from each event. See https://github.com/joedolson/my-calendar/issues/23.
+		 *
+		 * @hook mc_event_exclude_from_search
+		 *
+		 * @param {bool} $show True to exclude from search.
+		 *
+		 * @return {bool}
+		 */
 		'exclude_from_search' => apply_filters( 'mc_event_exclude_from_search', true ),
 		'show_ui'             => true,
+		/**
+		 * Should My Calendar post types be shown in admin menus. Default false.
+		 *
+		 * @hook mc_show_custom_posts_in_menu
+		 *
+		 * @param {bool} $show True to show in menus.
+		 *
+		 * @return {bool}
+		 */
 		'show_in_menu'        => apply_filters( 'mc_show_custom_posts_in_menu', false ),
 		'menu_icon'           => null,
 		'supports'            => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'custom-fields' ),
 	);
 
-	$loc_arguments                        = $arguments;
-	$loc_arguments['supports']            = array( 'title', 'custom-fields', 'thumbnail' );
+	$loc_arguments             = $arguments;
+	$loc_arguments['supports'] = array( 'title', 'custom-fields', 'thumbnail' );
+	/**
+	 * Should location posts be excluded from search? Default true.
+	 *
+	 * @hook mc_location_exclude_from_search
+	 *
+	 * @param {bool} $exclude True to exclude.
+	 *
+	 * @return {bool}
+	 */
 	$loc_arguments['exclude_from_search'] = apply_filters( 'mc_location_exclude_from_search', true );
 
 	$types = array(
@@ -2011,6 +2147,15 @@ function mc_posttypes() {
 				'query_var'           => true,
 				'rewrite'             => array(
 					'with_front' => false,
+					/**
+					 * Filter default calendar post type slugs. Default 'mc-events' for events and 'mc-locations' for locations.
+					 *
+					 * @hook mc_event_slug
+					 *
+					 * @param {string} $key Slug.
+					 *
+					 * @return {string}
+					 */
 					'slug'       => apply_filters( 'mc_event_slug', $key ),
 				),
 				'hierarchical'        => false,
@@ -2055,6 +2200,15 @@ function mc_close_comments( $posts ) {
 	}
 
 	if ( 'mc-events' === get_post_type( $posts[0]->ID ) ) {
+		/**
+		 * Filter whether event posts should automatically close comments. Default 'true'.
+		 *
+		 * @hook mc_autoclose_comments
+		 *
+		 * @param {bool} $close 'true' to close comments.
+		 *
+		 * @return {bool}
+		 */
 		if ( apply_filters( 'mc_autoclose_comments', true ) && 'closed' !== $posts[0]->comment_status ) {
 			$posts[0]->comment_status = 'closed';
 			$posts[0]->ping_status    = 'closed';
@@ -2095,6 +2249,16 @@ function mc_taxonomies() {
 	if ( is_array( $enabled ) ) {
 		foreach ( $enabled as $key ) {
 			$value = $types[ $key ];
+			/**
+			 * Filter event category taxonomy slug. Default 'mc-event-category'.
+			 *
+			 * @hook mc_event_category_slug
+			 *
+			 * @param {string} $slug Default slug.
+			 *
+			 * @return {string}
+			 */
+			$slug = apply_filters( 'mc_event_category_slug', 'mc-event-category' );
 			register_taxonomy(
 				'mc-event-category',
 				// Internal name = machine-readable taxonomy name.
@@ -2103,7 +2267,7 @@ function mc_taxonomies() {
 					'hierarchical' => true,
 					'label'        => __( 'Event Categories', 'my-calendar' ),
 					'query_var'    => true,
-					'rewrite'      => array( 'slug' => apply_filters( 'mc_event_category_slug', 'mc-event-category' ) ),
+					'rewrite'      => array( 'slug' => $slug ),
 				)
 			);
 		}
@@ -2188,7 +2352,17 @@ function mc_setup_cors_access() {
 	if ( $cache ) {
 		$allowed = $cache;
 	} else {
-		$sites   = ( function_exists( 'get_sites' ) ) ? get_sites() : array();
+		$sites = ( function_exists( 'get_sites' ) ) ? get_sites() : array();
+		/**
+		 * Filter what sites are allowed CORS access.
+		 *
+		 * @hook mc_setup_allowed_sites
+		 *
+		 * @param {array} $allowed URLs permitted access. Default empty array.
+		 * @param {string} $origin HTTP origin passed.
+		 *
+		 * @return {array}
+		 */
 		$allowed = apply_filters( 'mc_setup_allowed_sites', array(), $origin );
 		if ( ! empty( $sites ) ) {
 			foreach ( $sites as $site ) {
