@@ -173,7 +173,7 @@ function mc_load_textdomain() {
 // Add actions.
 add_action( 'admin_menu', 'my_calendar_menu' );
 add_action( 'wp_head', 'mc_head' );
-add_action( 'delete_user', 'mc_deal_with_deleted_user' );
+add_action( 'delete_user', 'mc_deal_with_deleted_user', 10, 2 );
 add_action( 'widgets_init', 'mc_register_widgets' );
 add_action( 'init', 'mc_add_feed' );
 add_action( 'wp_footer', 'mc_footer_js' );
