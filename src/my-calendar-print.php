@@ -39,7 +39,7 @@ function my_calendar_print() {
 	} else {
 		$stylesheet = $url . 'css/mc-print.css';
 	}
-	$args = array(
+	$args       = array(
 		'type'     => 'print',
 		'category' => $category,
 		'time'     => $time,
