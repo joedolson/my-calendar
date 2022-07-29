@@ -183,8 +183,8 @@ add_action( 'wp_enqueue_scripts', 'mc_register_styles' );
  */
 function mc_register_styles() {
 	global $wp_query;
-	$version    = get_option( 'mc_version' );
-	$this_post  = $wp_query->get_queried_object();
+	$version   = get_option( 'mc_version' );
+	$this_post = $wp_query->get_queried_object();
 	/**
 	 * Filter url to get My Calendar stylesheet.
 	 *
@@ -381,7 +381,7 @@ function mc_generate_category_styles() {
  */
 function mc_deal_with_deleted_user( $id, $reassign ) {
 	global $wpdb;
-	$new        = ( ! $reassign ) ? $wpdb->get_var( 'SELECT MIN(ID) FROM ' . $wpdb->users, 0, 0 ) : $reassign;
+	$new = ( ! $reassign ) ? $wpdb->get_var( 'SELECT MIN(ID) FROM ' . $wpdb->users, 0, 0 ) : $reassign;
 	// This may not work quite right in multi-site. Need to explore further when I have time.
 	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 

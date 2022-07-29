@@ -20,11 +20,13 @@ function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) {
 		if ( 'true' === get_option( 'mc_api_enabled' ) ) {
 			/**
-			 * Filter to test access to the event API.
+			 * Filter to test access to the event API. Default 'true'.
 			 *
-			 * @param bool true Allows all by default.
+			 * @hook mc_api_key
 			 *
-			 * @return bool
+			 * @param {bool} $api_key Return true to allow access. Use filter to control or limit access.
+			 *
+			 * @return {bool}
 			 */
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
@@ -33,11 +35,13 @@ function my_calendar_api() {
 				$from   = ( isset( $_REQUEST['from'] ) ) ? $_REQUEST['from'] : current_time( 'Y-m-d' );
 				$range  = '+ 7 days';
 				/**
-				 * Default date for API 'to' parameter.
+				 * Default date for API 'to' parameter. Default '+ 7 days'.
 				 *
-				 * @param string $time time string convertable using strtotime.
+				 * @hook mc_api_auto_date
 				 *
-				 * @return string
+				 * @param {string} $time A time string convertable using strtotime.
+				 *
+				 * @return {string}
 				 */
 				$adjust = apply_filters( 'mc_api_auto_date', $range );
 				$to     = ( isset( $_REQUEST['to'] ) ) ? $_REQUEST['to'] : mc_date( 'Y-m-d', strtotime( $adjust ) );
@@ -62,11 +66,14 @@ function my_calendar_api() {
 				/**
 				 * Filter arguments submitted to the API.
 				 *
-				 * @param array $args Keys: ['from', 'to', 'category', 'ltype', 'lvalue', 'author', 'host', 'search'].
+				 * @hook mc_filter_api_args
+				 *
+				 * @param {array} $args Keys: ['from', 'to', 'category', 'ltype', 'lvalue', 'author', 'host', 'search'].
+				 * @param {array} $request $_REQUEST parameters, sanitized.
 				 *
 				 * @return array
 				 */
-				$args   = apply_filters( 'mc_filter_api_args', $args, $_REQUEST );
+				$args   = apply_filters( 'mc_filter_api_args', $args, map_deep( $_REQUEST, 'sanitize_text_field' ) );
 				$data   = my_calendar_events( $args );
 				$output = mc_format_api( $data, $format );
 				echo wp_kses_post( $output );
@@ -222,13 +229,15 @@ function mc_generate_vcal( $event_id = false ) {
 		// need to modify date values to match real values using date above.
 		$array = mc_create_tags( $event );
 		/**
-		 * Add an alarm to an event.
+		 * Filter information used to set an alarm on an event in .ics files.
 		 *
-		 * @param array $array Empty array.
-		 * @param int   $event_id Event ID.
-		 * @param int   $post_id Post ID.
+		 * @hook mc_event_has_alarm
 		 *
-		 * @return array
+		 * @param {array} Alarm information passable to `mc_generate_alert_ical()`
+		 * @param {int}   $event_id Event ID.
+		 * @param {int}   $post Post ID.
+		 *
+		 * @return {array}
 		 */
 		$alarm = apply_filters( 'mc_event_has_alarm', array(), $event_id, $array['post'] );
 		$alert = '';
@@ -260,9 +269,11 @@ END:VCALENDAR";
 		/**
 		 * Filter template for a single iCal event download.
 		 *
-		 * @param string $template iCal template.
+		 * @hook mc_single_ical_template
 		 *
-		 * @return string
+		 * @param {string} $template iCal template.
+		 *
+		 * @return {string}
 		 */
 		$template = apply_filters( 'mc_single_ical_template', $template, $array );
 		$output   = mc_draw_template( $array, $template );
@@ -325,19 +336,23 @@ function my_calendar_ical() {
 	/**
 	 * Filter iCal download 'from' date.
 	 *
-	 * @param string $from Date string.
-	 * @param string $p Date span.
+	 * @hook mc_ical_download_from
 	 *
-	 * @return string
+	 * @param {string} $from Date string.
+	 * @param {string} $p Date span.
+	 *
+	 * @return {string}
 	 */
 	$from = apply_filters( 'mc_ical_download_from', $from, $p );
 	/**
 	 * Filter iCal download 'to' date.
 	 *
-	 * @param string $from Date string.
-	 * @param string $p Date span.
+	 * @hook mc_ical_download_to
 	 *
-	 * @return string
+	 * @param {string} $from Date string.
+	 * @param {string} $p Date span.
+	 *
+	 * @return {string}
 	 */
 	$to   = apply_filters( 'mc_ical_download_to', $to, $p );
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
@@ -355,14 +370,16 @@ function my_calendar_ical() {
 	);
 
 	/**
-	 * Filter calendar arguments for iCal downloads.
+	 * Filter calendar arguments for iCal output.
 	 *
-	 * @param array $args Array of calendar query args.
-	 * @param array $get GET data.
+	 * @hook mc_ical_attributes
 	 *
-	 * @return array
+	 * @param {array} $args Array of calendar query args.
+	 * @param {array} $get GET parameters, sanitized.
+	 *
+	 * @return {array}
 	 */
-	$args = apply_filters( 'mc_ical_attributes', $args, $_GET );
+	$args = apply_filters( 'mc_ical_attributes', $args, map_deep( $_GET, 'sanitize_text_field' ) );
 	// Load search result from $_SESSION array.
 	if ( isset( $_GET['searched'] ) && $_GET['searched'] && isset( $_SESSION['MC_SEARCH_RESULT'] ) ) {
 		$data = mc_get_searched_events();
@@ -384,9 +401,11 @@ function mc_api_format_ical( $data, $context ) {
 	/**
 	 * Filter iCal template for multi-event output.
 	 *
-	 * @param string $templates['template'] Template string.
+	 * @hook mc_filter_ical_template
 	 *
-	 * @return string
+	 * @param {string} $template Template string.
+	 *
+	 * @return {string}
 	 */
 	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
 	$events    = mc_flatten_array( $data );
@@ -404,6 +423,17 @@ function mc_api_format_ical( $data, $context ) {
 						$processed[] = $event->event_id;
 					}
 					$array = mc_create_tags( $event, $context );
+					/**
+					 * Filter information used to set an alarm on an event in .ics files.
+					 *
+					 * @hook mc_event_has_alarm
+					 *
+					 * @param {array} Alarm information passable to `mc_generate_alert_ical()`
+					 * @param {int}   $event_id Event ID.
+					 * @param {int}   $post Post ID.
+					 *
+					 * @return {array}
+					 */
 					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
 					$alert = '';
 					if ( ! empty( $alarm ) ) {
@@ -445,7 +475,16 @@ function mc_ical_template() {
 	$tz_id = ( $tz_id ) ? $tz_id : $etc;
 	// Translators: Blogname.
 	$events_from = sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
-	$ttl         = apply_filters( 'ical_x_published_ttl', 'PT24H' );
+	/**
+	 * Filter the suggested frequency for iCal subscription sources to be rechecked. Default 'PT24H'.
+	 *
+	 * @hook ical_x_published_ttl
+	 *
+	 * @param {string} $ttl Time string for iCal templates.
+	 *
+	 * @return {string}
+	 */
+	$ttl = apply_filters( 'ical_x_published_ttl', 'PT24H' );
 	// establish template.
 	$template = "
 BEGIN:VEVENT

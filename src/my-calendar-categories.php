@@ -104,6 +104,15 @@ function mc_get_private_categories() {
 		$categories[] = $result->category_id;
 	}
 
+	/**
+	 * Filter which categories are considered private.
+	 *
+	 * @hook mc_private_categories
+	 *
+	 * @param {array} $categories Array of category objects.
+	 *
+	 * @return {array}
+	 */
 	return apply_filters( 'mc_private_categories', $categories );
 }
 
@@ -345,6 +354,16 @@ function mc_create_category( $category ) {
 	);
 
 	$add     = array_map( 'mc_kses_post', $add );
+	/**
+	 * Filter data before inserting a new category.
+	 *
+	 * @hook mc_pre_add_category
+	 *
+	 * @param {array} $add Data to be inserted.
+	 * @param {array} $category Category data passed to insert function.
+	 *
+	 * @return {array}
+	 */
 	$add     = apply_filters( 'mc_pre_add_category', $add, $category );
 	$results = $wpdb->insert( my_calendar_categories_table(), $add, $formats );
 	$cat_id  = $wpdb->insert_id;
@@ -479,6 +498,16 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 								</li>
 								</ul>
 								<?php
+								/**
+								 * Insert custom fields for categories.
+								 *
+								 * @hook mc_category_fields
+								 *
+								 * @param {string} $output Field HTML output.
+								 * @param {object} $cur_cat Current category object.
+								 *
+								 * @return {string}
+								 */
 								echo apply_filters( 'mc_category_fields', '', $cur_cat );
 								if ( 'add' === $view ) {
 									$save_text = __( 'Add Category', 'my-calendar' );
@@ -869,7 +898,7 @@ function mc_profile() {
 		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions, true ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
 		?>
 		<h3><?php esc_html_e( 'My Calendar Editor Permissions', 'my-calendar' ); ?></h3>
-		<table class="form-table">
+		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row">
 					<label for="mc_user_permissions"><?php esc_html_e( 'Allowed Categories', 'my-calendar' ); ?></label>
@@ -881,7 +910,19 @@ function mc_profile() {
 					</ul>
 				</td>
 			</tr>
-			<?php echo apply_filters( 'mc_user_fields', '', $user_edit ); ?>
+			<?php
+			/**
+			 * Add custom fields to the My Calendar section of the user profile.
+			 *
+			 * @hook mc_user_fields
+			 *
+			 * @param {string} $output HTML for fields.
+			 * @param {int}    $user_edit User ID being edited.
+			 *
+			 * @return {string}
+			 */
+			echo apply_filters( 'mc_user_fields', '', $user_edit );
+			?>
 		</table>
 		<?php
 	}
@@ -907,7 +948,7 @@ function mc_save_profile() {
 		}
 	}
 
-	apply_filters( 'mc_save_user', $edit_id, $_POST );
+	do_action( 'mc_save_user', $edit_id, $_POST );
 }
 
 
@@ -934,7 +975,17 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 	$default = '';
 	$cats    = mc_no_category_default();
 	if ( ! empty( $cats ) ) {
-		$cats = apply_filters( 'mc_category_list', $cats, $data, $option, $name );
+		/**
+		 * Filter the categories available in a category selection interface.
+		 *
+		 * @hook mc_category_list
+		 *
+		 * @param {array}  $cats Array of categories.
+		 * @param {object} $data An object with selected category data.
+		 *
+		 * @return {array}
+		 */
+		$cats = apply_filters( 'mc_category_list', $cats, $data );
 		foreach ( $cats as $cat ) {
 			$selected = '';
 			// if category is private, don't show if user is not logged in.
@@ -1266,12 +1317,23 @@ function mc_category_icon( $event, $type = 'html' ) {
 			}
 		}
 
+		/**
+		 * Filter the HTML output for a category icon.
+		 *
+		 * @hook mc_category_icon
+		 *
+		 * @param {string} $image Image HTML.
+		 * @param {object} $event Event object.
+		 * @param {string} $type Type of output - HTML or URL only.
+		 *
+		 * @return {string}
+		 */
 		return apply_filters( 'mc_category_icon', $image, $event, $type );
 	}
 
 	return '';
 }
-
+ 
 /**
  * Generate SVG output from category icon information. Passed object must include category_color, category_name, category_icon, category_id|occur_id
  *
