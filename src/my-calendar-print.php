@@ -39,22 +39,6 @@ function my_calendar_print() {
 	} else {
 		$stylesheet = $url . 'css/mc-print.css';
 	}
-	?>
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<!--<![endif]-->
-	<head>
-		<meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>" />
-		<meta name="viewport" content="width=device-width" />
-		<title><?php echo esc_html( get_bloginfo( 'name' ) ) . ' - ' . esc_html__( 'Calendar: Print View', 'my-calendar' ); ?></title>
-		<meta name="generator" content="My Calendar for WordPress" />
-		<meta name="robots" content="noindex,nofollow" />
-		<!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
-		<link rel="stylesheet" href="<?php echo esc_url( $stylesheet ); ?>" type="text/css" media="screen,print" />
-		<?php do_action( 'mc_print_view_head', '' ); ?>
-	</head>
-	<body>
-	<?php
 	$args = array(
 		'type'     => 'print',
 		'category' => $category,
@@ -62,20 +46,6 @@ function my_calendar_print() {
 		'ltype'    => $ltype,
 		'lvalue'   => $lvalue,
 	);
-
-	$calendar = array(
-		'name'     => 'print',
-		'format'   => 'calendar',
-		'category' => $category,
-		'time'     => $time,
-		'ltype'    => $ltype,
-		'lvalue'   => $lvalue,
-		'id'       => 'mc-print-view',
-		'below'    => 'none',
-		'above'    => 'none',
-	);
-
-	echo mc_kses_post( my_calendar( $calendar ) );
 	$return_url = mc_get_uri( false, $args );
 	/**
 	 * Filter the root URL used to generate the return URL.
@@ -97,11 +67,42 @@ function my_calendar_print() {
 		$ref_url  = esc_url( urldecode( $_GET['href'] ) );
 		$ref_root = parse_url( $ref_url )['host'];
 		$root     = parse_url( home_url() )['host'];
-		$local    = ( false !== stripos( home_url(), $ref_url ) && false !== stripos( $root, $ref_root ) ) ? true : false;
+		$local    = ( false !== stripos( $ref_url, home_url() ) && false !== stripos( $root, $ref_root ) ) ? true : false;
 		if ( $ref_url && $local ) {
 			$return_url = $ref_url;
+		} else {
+			wp_die( 'My Calendar: invalid print URL provided.' );
 		}
 	}
+	?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<!--<![endif]-->
+	<head>
+		<meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>" />
+		<meta name="viewport" content="width=device-width" />
+		<title><?php echo esc_html( get_bloginfo( 'name' ) ) . ' - ' . esc_html__( 'Calendar: Print View', 'my-calendar' ); ?></title>
+		<meta name="generator" content="My Calendar for WordPress" />
+		<meta name="robots" content="noindex,nofollow" />
+		<!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
+		<link rel="stylesheet" href="<?php echo esc_url( $stylesheet ); ?>" type="text/css" media="screen,print" />
+		<?php do_action( 'mc_print_view_head', '' ); ?>
+	</head>
+	<body>
+	<?php
+	$calendar = array(
+		'name'     => 'print',
+		'format'   => 'calendar',
+		'category' => $category,
+		'time'     => $time,
+		'ltype'    => $ltype,
+		'lvalue'   => $lvalue,
+		'id'       => 'mc-print-view',
+		'below'    => 'none',
+		'above'    => 'none',
+	);
+
+	echo mc_kses_post( my_calendar( $calendar ) );
 
 	$add = array_map( 'esc_html', $_GET );
 	unset( $add['cid'] );
