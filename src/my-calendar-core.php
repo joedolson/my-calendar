@@ -70,6 +70,16 @@ function mc_custom_dirs( $type = 'path' ) {
 	$dirs[] = ( 'path' === $type ) ? get_stylesheet_directory() . '/css/' : get_stylesheet_directory_uri() . '/css/';
 	$dirs[] = ( 'path' === $type ) ? get_stylesheet_directory() . '/' : get_stylesheet_directory_uri() . '/';
 
+	/**
+	 * Filter My Calendar's array of directories to check for custom files. Use to define where your custom templates and styles will be found.
+	 *
+	 * @hook mc_custom_dirs
+	 *
+	 * @param {array}  $dirs Array of directory paths to check.
+	 * @param {string} $type Checking paths or URLs.
+	 *
+	 * @return {array}
+	 */
 	$directories = apply_filters( 'mc_custom_dirs', $dirs, $type );
 
 	return ( is_array( $directories ) && ! empty( $directories ) ) ? $directories : $dirs;
@@ -83,7 +93,17 @@ function mc_custom_dirs( $type = 'path' ) {
  * @return boolean
  */
 function mc_file_exists( $file ) {
-	$file   = sanitize_file_name( $file );
+	$file = sanitize_file_name( $file );
+	/**
+	 * Filter test for whether a file exists. Return true to confirm file exists.
+	 *
+	 * @hook mc_file_exists
+	 *
+	 * @param {bool} $path File path.
+	 * @param {string} $file File name.
+	 *
+	 * @return {bool}
+	 */
 	$return = apply_filters( 'mc_file_exists', false, $file );
 	if ( $return ) {
 		return true;
@@ -123,6 +143,16 @@ function mc_get_file( $file, $type = 'path' ) {
 			break;
 		}
 	}
+	/**
+	 * Filter file paths for My Calendar files.
+	 *
+	 * @hook mc_get_file
+	 *
+	 * @param {string} $path File path.
+	 * @param {string} $file File name.
+	 *
+	 * @return {string}
+	 */
 	$path = apply_filters( 'mc_get_file', $path, $file );
 
 	return $path;
@@ -155,6 +185,15 @@ function mc_register_styles() {
 	global $wp_query;
 	$version    = get_option( 'mc_version' );
 	$this_post  = $wp_query->get_queried_object();
+	/**
+	 * Filter url to get My Calendar stylesheet.
+	 *
+	 * @hook mc_registered_stylesheet
+	 *
+	 * @param {string} $stylesheet URL to locate My Calendar's stylesheet.
+	 *
+	 * @return {string}
+	 */
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version );
@@ -170,6 +209,15 @@ function mc_register_styles() {
 		wp_enqueue_style( 'my-calendar-admin-style' );
 	}
 
+	/**
+	 * Filter whether My Calendar styles should be displayed on archive pages. Default 'true'.
+	 *
+	 * @hook mc_display_css_on_archives
+	 *
+	 * @param {bool} $default 'true' to display.
+	 *
+	 * @return {bool}
+	 */
 	$default     = apply_filters( 'mc_display_css_on_archives', true, $wp_query );
 	$id          = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
 	$js_array    = ( '' !== trim( get_option( 'mc_show_js', '' ) ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
@@ -329,15 +377,14 @@ function mc_generate_category_styles() {
  * Deal with events posted by a user when that user is deleted
  *
  * @param int $id user ID of deleted user.
+ * @param int $reassign User ID chosen for reassignment of content.
  */
-function mc_deal_with_deleted_user( $id ) {
+function mc_deal_with_deleted_user( $id, $reassign ) {
 	global $wpdb;
-	$new        = $wpdb->get_var( 'SELECT MIN(ID) FROM ' . $wpdb->users, 0, 0 );
-	$new_author = apply_filters( 'mc_deleted_author', $new );
+	$new        = ( ! $reassign ) ? $wpdb->get_var( 'SELECT MIN(ID) FROM ' . $wpdb->users, 0, 0 ) : $reassign;
 	// This may not work quite right in multi-site. Need to explore further when I have time.
 	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-	$new_host = apply_filters( 'mc_deleted_host', $new );
 	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
@@ -411,7 +458,15 @@ function mc_footer_js() {
 	global $wp_query;
 	$version = get_option( 'mc_version' );
 	$mcjs    = "<script>(function ($) { 'use strict'; $(function () { $( '.mc-main' ).removeClass( 'mcjs' ); });}(jQuery));</script>";
-
+	/**
+	 * Disable scripting on mobile devices.
+	 *
+	 * @hook mc_disable_mobile_js
+	 *
+	 * @param {bool} $disable Return true to disable JS on detected mobile devices.
+	 *
+	 * @return {bool}
+	 */
 	if ( mc_is_mobile() && apply_filters( 'mc_disable_mobile_js', false ) ) {
 
 		return;
@@ -427,6 +482,7 @@ function mc_footer_js() {
 			$id = false;
 		}
 		if ( '1' === get_option( 'mc_use_custom_js' ) ) {
+			// Due for removal.
 			$top     = '';
 			$bottom  = '';
 			$inner   = '';
@@ -466,7 +522,6 @@ function mc_footer_js() {
 (function( $ ) { \'use strict\';' . $inner . '}(jQuery));
 </script>';
 			}
-			$inner = apply_filters( 'mc_filter_javascript_footer', $inner );
 			echo ( '' !== $inner ) ? $script . $mcjs : '';
 		} else {
 			$enqueue_mcjs = false;
@@ -476,6 +531,15 @@ function mc_footer_js() {
 			$ajax         = 'false';
 			if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
 				if ( '1' !== get_option( 'mc_calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
+					/**
+					 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
+					 *
+					 * @hook mc_grid_js
+					 *
+					 * @param {string} $url URL to JS to operate My Calendar grid view.
+					 *
+					 * @return {string}
+					 */
 					$url          = apply_filters( 'mc_grid_js', '' );
 					$enqueue_mcjs = true;
 					if ( $url ) {
@@ -485,6 +549,15 @@ function mc_footer_js() {
 					}
 				}
 				if ( '1' !== get_option( 'mc_list_javascript' ) ) {
+					/**
+					 * Filter to replace scripts used on front-end for list behavior. Default empty string.
+					 *
+					 * @hook mc_list_js
+					 *
+					 * @param {string} $url URL to JS to operate My Calendar list view.
+					 *
+					 * @return {string}
+					 */
 					$url          = apply_filters( 'mc_list_js', '' );
 					$enqueue_mcjs = true;
 					if ( $url ) {
@@ -494,6 +567,15 @@ function mc_footer_js() {
 					}
 				}
 				if ( '1' !== get_option( 'mc_mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
+					/**
+					 * Filter to replace scripts used on front-end for mini calendar behavior. Default empty string.
+					 *
+					 * @hook mc_mini_js
+					 *
+					 * @param {string} $url URL to JS to operate My Calendar mini calendar.
+					 *
+					 * @return {string}
+					 */
 					$url          = apply_filters( 'mc_mini_js', '' );
 					$enqueue_mcjs = true;
 
@@ -504,6 +586,15 @@ function mc_footer_js() {
 					}
 				}
 				if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
+					/**
+					 * Filter to replace scripts used on front-end for AJAX behavior. Default empty string.
+					 *
+					 * @hook mc_ajax_js
+					 *
+					 * @param {string} $url URL to JS to operate My Calendar AJAX.
+					 *
+					 * @return {string}
+					 */
 					$url          = apply_filters( 'mc_ajax_js', '' );
 					$enqueue_mcjs = true;
 					if ( $url ) {
@@ -1065,7 +1156,7 @@ function mc_admin_bar() {
 			 *
 			 * @return {string}
 			 */
-			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
+			$url = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
 			if ( $url ) {
 				$args = array(
 					'id'     => 'mc-add-event',
@@ -1172,7 +1263,7 @@ function my_calendar_send_email( $event ) {
 	 *
 	 * @return {bool}
 	 */
-	$send_email        = apply_filters( 'mc_send_notification', $send_email_option, $details );
+	$send_email = apply_filters( 'mc_send_notification', $send_email_option, $details );
 	if ( true === $send_email ) {
 		add_filter( 'wp_mail_content_type', 'mc_html_type' );
 	}
