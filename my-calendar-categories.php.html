@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-categories.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-categories.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Manage event categories.
+ *
+ * @category Events
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Update a single field of a category
+ *
+ * @param string $field field name.
+ * @param mixed  $data Data to change.
+ * @param int    $category Category ID.
+ *
+ * @return result
+ */
+function mc_update_category( $field, $data, $category ) {
+	global $wpdb;
+	$field  = sanitize_key( $field );
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+
+	return $result;
+}
+
+/**
+ * List image files in a directory.
+ *
+ * @param string $directory Path to directory.
+ *
+ * @return array images in directory.
+ */
+function mc_directory_list( $directory ) {
+	if ( ! file_exists( $directory ) ) {
+		return array();
+	}
+	$results = array();
+	$handler = opendir( $directory );
+	// keep going until all files in directory have been read.
+	while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+		// if $file isn't this directory or its parent add it to the results array.
+		if ( filesize( $directory . '/' . $file ) > 11 ) {
+			if ( '.' !== $file &amp;&amp; '..' !== $file &amp;&amp; ! is_dir( $directory . '/' . $file ) &amp;&amp; (
+					'image/svg_xml' === mime_content_type( $directory . '/' . $file ) ||
+					'image/svg' === mime_content_type( $directory . '/' . $file ) ||
+					'image/svg+xml' === mime_content_type( $directory . '/' . $file ) ||
+					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_GIF ||
+					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_PNG ||
+					exif_imagetype( $directory . '/' . $file ) === IMAGETYPE_JPEG )
+			) {
+				$results[] = $file;
+			}
+		}
+	}
+	closedir( $handler );
+	sort( $results, SORT_STRING );
+
+	return $results;
+}
+
+/**
+ * Return SQL to select only categories *not* marked as private
+ *
+ * @return string partial SQL statement
+ */
+function mc_private_categories() {
+	$cats = '';
+	if ( ! is_user_logged_in() ) {
+		$categories = mc_get_private_categories();
+		$cats       = implode( ',', $categories );
+		if ( '' !== $cats ) {
+			$cats = " AND c.category_id NOT IN ($cats)";
+		}
+	}
+
+	return $cats;
+}
+
+/**
+ * Fetch array of private categories.
+ *
+ * @uses filter mc_private_categories
+ *
+ * @return array private categories
+ */
+function mc_get_private_categories() {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$table      = my_calendar_categories_table();
+	$query      = 'SELECT category_id FROM `' . $table . '` WHERE category_private = 1';
+	$results    = $mcdb->get_results( $query );
+	$categories = array();
+	foreach ( $results as $result ) {
+		$categories[] = $result->category_id;
+	}
+
+	/**
+	 * Filter which categories are considered private.
+	 *
+	 * @hook mc_private_categories
+	 *
+	 * @param {array} $categories Array of category objects.
+	 *
+	 * @return {array}
+	 */
+	return apply_filters( 'mc_private_categories', $categories );
+}
+
+/**
+ * Generate form to manage categories
+ */
+function my_calendar_manage_categories() {
+	global $wpdb;
+	?>
+	&lt;div class="wrap my-calendar-admin">
+		&lt;?php
+		my_calendar_check_db();
+		$append           = array();
+		$default_category = get_option( 'mc_default_category' );
+		$holiday_category = get_option( 'mc_skip_holidays_category' );
+		// We do some checking to see what we're doing.
+		if ( ! empty( $_POST ) ) {
+			$nonce = $_REQUEST['_wpnonce'];
+			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+				die( 'My Calendar: Security check failed' );
+			}
+		}
+
+		if ( isset( $_GET['default'] ) &amp;&amp; is_numeric( $_GET['default'] ) ) {
+			update_option( 'mc_default_category', (int) $_GET['default'] );
+			$default_category = (int) $_GET['default'];
+			mc_show_notice( __( 'Default Category Changed', 'my-calendar' ) );
+		}
+
+		if ( isset( $_POST['mode'] ) &amp;&amp; 'add' === $_POST['mode'] ) {
+			$cat_id = mc_create_category( $_POST );
+
+			if ( isset( $_POST['mc_default_category'] ) ) {
+				update_option( 'mc_default_category', $cat_id );
+				$append[] = __( 'Default category changed.', 'my-calendar' );
+			}
+
+			if ( isset( $_POST['mc_skip_holidays_category'] ) ) {
+				update_option( 'mc_skip_holidays_category', $cat_id );
+				$append[] = __( 'Holiday category changed.', 'my-calendar' );
+			}
+
+			if ( $cat_id ) {
+				$append = implode( ' ', $append );
+				mc_show_notice( __( 'Category added successfully', 'my-calendar' ) . ". $append" );
+			} else {
+				mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
+			}
+		} elseif ( isset( $_GET['mode'] ) &amp;&amp; isset( $_GET['category_id'] ) &amp;&amp; 'delete' === $_GET['mode'] ) {
+			$cat_id  = (int) $_GET['category_id'];
+			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+			if ( $results ) {
+				// Set events with deleted category as primary to default category as primary.
+				$set_category = ( is_numeric( $default_category ) &amp;&amp; $cat_id !== (int) $default_category ) ? absint( $default_category ) : 1;
+				$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				// Update existing relationships with this category.
+				$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_category_relationships_table() . '` SET category_id = %d WHERE category_id=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				// clean out duplicates.
+				$remove_dups = $wpdb->query( 'DELETE cr1 FROM `' . my_calendar_category_relationships_table() . '` AS cr1 INNER JOIN `' . my_calendar_category_relationships_table() . '` AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			} else {
+				$cal_results = false;
+			}
+			if ( $default_category === (string) $cat_id ) {
+				delete_option( 'mc_default_category' );
+			}
+			if ( $results &amp;&amp; ( $cal_results || $rel_results ) ) {
+				mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) );
+			} elseif ( $results &amp;&amp; ! $cal_results ) {
+				mc_show_notice( __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) );
+			} elseif ( ! $results &amp;&amp; $cal_results ) {
+				mc_show_error( __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) );
+			}
+		} elseif ( isset( $_GET['mode'] ) &amp;&amp; isset( $_GET['category_id'] ) &amp;&amp; 'edit' === $_GET['mode'] &amp;&amp; ! isset( $_POST['mode'] ) ) {
+			$cur_cat = (int) $_GET['category_id'];
+			mc_edit_category_form( 'edit', $cur_cat );
+		} elseif ( isset( $_POST['mode'] ) &amp;&amp; isset( $_POST['category_id'] ) &amp;&amp; isset( $_POST['category_name'] ) &amp;&amp; isset( $_POST['category_color'] ) &amp;&amp; 'edit' === $_POST['mode'] ) {
+			$append = array();
+			if ( isset( $_POST['mc_default_category'] ) &amp;&amp; $default_category !== $_POST['category_id'] ) {
+				update_option( 'mc_default_category', (int) $_POST['category_id'] );
+				$append[] = __( 'Default category changed.', 'my-calendar' );
+			} else {
+				if ( $default_category === $_POST['category_id'] ) {
+					delete_option( 'mc_default_category' );
+					$append[] = __( 'Default category removed.', 'my-calendar' );
+				}
+			}
+			if ( isset( $_POST['mc_skip_holidays_category'] ) &amp;&amp; $holiday_category !== $_POST['category_id'] ) {
+				update_option( 'mc_skip_holidays_category', (int) $_POST['category_id'] );
+				$append[] = __( 'Holiday category changed.', 'my-calendar' );
+			} else {
+				if ( $holiday_category === (string) $_POST['category_id'] ) {
+					delete_option( 'mc_skip_holidays_category' );
+					$append[] = __( 'Holiday category removed.', 'my-calendar' );
+				}
+			}
+
+			$update  = array(
+				'category_name'    => $_POST['category_name'],
+				'category_color'   => $_POST['category_color'],
+				'category_icon'    => $_POST['category_icon'],
+				'category_private' => ( ( isset( $_POST['category_private'] ) ) ? 1 : 0 ),
+			);
+			$results = mc_update_cat( $update );
+			$append  = implode( ' ', $append );
+			if ( $results ) {
+				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append" );
+			} else {
+				mc_show_error( __( 'Category was not changed.', 'my-calendar' ) . " $append" );
+			}
+			$cur_cat = (int) $_POST['category_id'];
+			mc_edit_category_form( 'edit', $cur_cat );
+		}
+
+		if ( isset( $_GET['mode'] ) &amp;&amp; 'edit' !== $_GET['mode'] || isset( $_POST['mode'] ) &amp;&amp; 'edit' !== $_POST['mode'] || ! isset( $_GET['mode'] ) &amp;&amp; ! isset( $_POST['mode'] ) ) {
+			mc_edit_category_form( 'add' );
+		}
+		?>
+		&lt;/div>
+	&lt;?php
+}
+
+/**
+ * Set up new category relationships for assigned cats to an event
+ *
+ * @param array $cats array of category IDs.
+ * @param int   $event_id My Calendar event ID.
+ */
+function mc_set_category_relationships( $cats, $event_id ) {
+	global $wpdb;
+	if ( is_array( $cats ) ) {
+		foreach ( $cats as $cat ) {
+			$wpdb->insert(
+				my_calendar_category_relationships_table(),
+				array(
+					'event_id'    => $event_id,
+					'category_id' => $cat,
+				),
+				array( '%d', '%d' )
+			);
+		}
+	}
+}
+
+/**
+ * Update existing category relationships for an event
+ *
+ * @param array $cats array of category IDs.
+ * @param int   $event_id My Calendar event ID.
+ */
+function mc_update_category_relationships( $cats, $event_id ) {
+	global $wpdb;
+	$old_cats = mc_get_categories( $event_id, 'testing' );
+	if ( $old_cats === $cats ) {
+		return;
+	}
+	$wpdb->delete( my_calendar_category_relationships_table(), array( 'event_id' => $event_id ), '%d' );
+
+	if ( is_array( $cats ) &amp;&amp; ! empty( $cats ) ) {
+		foreach ( $cats as $cat ) {
+			$wpdb->insert(
+				my_calendar_category_relationships_table(),
+				array(
+					'event_id'    => $event_id,
+					'category_id' => $cat,
+				),
+				array( '%d', '%d' )
+			);
+		}
+	}
+}
+
+/**
+ * Update a category.
+ *
+ * @param array $category Array of params to update.
+ *
+ * @return mixed boolean/int query result
+ */
+function mc_update_cat( $category ) {
+	global $wpdb;
+	$category_id = (int) $_POST['category_id'];
+	$formats     = array( '%s', '%s', '%s', '%d', '%d', '%d' );
+	$where       = array(
+		'category_id' => $category_id,
+	);
+	$cat_name    = strip_tags( $category['category_name'] );
+	$term_exists = term_exists( $cat_name, 'mc-event-category' );
+	if ( ! $term_exists ) {
+		$term = wp_insert_term( $cat_name, 'mc-event-category' );
+		if ( ! is_wp_error( $term ) ) {
+			$term = $term['term_id'];
+		} else {
+			$term = false;
+		}
+	} else {
+		$term = get_term_by( 'name', $cat_name, 'mc-event-category' );
+		$term = $term->term_id;
+	}
+	$category['category_term'] = $term;
+	// Delete category icons from database so they will be updated.
+	mc_delete_category_icon( $category_id );
+
+	$result = $wpdb->update( my_calendar_categories_table(), $category, $where, $formats, '%d' );
+
+	return $result;
+}
+
+/**
+ * Create a category.
+ *
+ * @param array $category Array of params to update.
+ *
+ * @return mixed boolean/int query result
+ */
+function mc_create_category( $category ) {
+	global $wpdb;
+
+	$formats     = array( '%s', '%s', '%s', '%d', '%d' );
+	$cat_name    = strip_tags( $category['category_name'] );
+	$term_exists = term_exists( $cat_name, 'mc-event-category' );
+	if ( ! $term_exists ) {
+		$term = wp_insert_term( $cat_name, 'mc-event-category' );
+		if ( ! is_wp_error( $term ) ) {
+			$term = $term['term_id'];
+		} else {
+			$term = false;
+		}
+	} else {
+		$term = get_term_by( 'name', $cat_name, 'mc-event-category' );
+		$term = $term->term_id;
+	}
+	$add = array(
+		'category_name'    => $category['category_name'],
+		'category_color'   => $category['category_color'],
+		'category_icon'    => $category['category_icon'],
+		'category_private' => ( ( isset( $category['category_private'] ) &amp;&amp; ( 'on' === $category['category_private'] || '1' === (string) $category['category_private'] ) ) ? 1 : 0 ),
+		'category_term'    => $term,
+	);
+
+	$add     = array_map( 'mc_kses_post', $add );
+	/**
+	 * Filter data before inserting a new category.
+	 *
+	 * @hook mc_pre_add_category
+	 *
+	 * @param {array} $add Data to be inserted.
+	 * @param {array} $category Category data passed to insert function.
+	 *
+	 * @return {array}
+	 */
+	$add     = apply_filters( 'mc_pre_add_category', $add, $category );
+	$results = $wpdb->insert( my_calendar_categories_table(), $add, $formats );
+	$cat_id  = $wpdb->insert_id;
+	do_action( 'mc_post_add_category', $add, $cat_id, $category );
+
+	return $cat_id;
+}
+
+/**
+ * Count occurrences of this category.
+ *
+ * @param int $category_id Category ID.
+ *
+ * @return int
+ */
+function mc_get_category_count( $category_id ) {
+	global $wpdb;
+	$result = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(DISTINCT event_id) FROM ' . my_calendar_category_relationships_table() . ' WHERE category_id = %d', $category_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	return $result;
+}
+
+/**
+ * Form to edit a category
+ *
+ * @param string $view Edit or create.
+ * @param id     $cat_id Category ID.
+ */
+function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
+	global $wpdb;
+	$dir     = plugin_dir_path( __FILE__ );
+	$url     = plugin_dir_url( __FILE__ );
+	$cur_cat = false;
+	if ( $cat_id ) {
+		$cat_id  = (int) $cat_id;
+		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	} else {
+		// If no category ID, change view.
+		$view = 'add';
+	}
+	if ( 'add' === $view ) {
+		?>
+		&lt;h1>&lt;?php esc_html_e( 'Categories', 'my-calendar' ); ?>&lt;/h1>
+		&lt;?php
+	} else {
+		?>
+		&lt;h1 class="wp-heading-inline">&lt;?php esc_html_e( 'Edit Category', 'my-calendar' ); ?>&lt;/h1>
+		&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-categories' ) ); ?>" class="page-title-action">&lt;?php esc_html_e( 'Add New', 'my-calendar' ); ?>&lt;/a>
+		&lt;hr class="wp-header-end">
+		&lt;?php
+	}
+	?>
+	&lt;div class="postbox-container jcd-wide">
+		&lt;div class="metabox-holder">
+
+			&lt;div class="ui-sortable meta-box-sortables">
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Category Editor', 'my-calendar' ); ?>&lt;/h2>
+
+					&lt;div class="inside">
+						&lt;form id="my-calendar" method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-categories' ) ); ?>">
+							&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>&lt;/div>
+							&lt;?php
+							if ( 'add' === $view ) {
+								?>
+								&lt;div>
+									&lt;input type="hidden" name="mode" value="add"/>
+									&lt;input type="hidden" name="category_id" value=""/>
+								&lt;/div>
+								&lt;?php
+							} else {
+								?>
+								&lt;div>
+									&lt;input type="hidden" name="mode" value="edit"/>
+									&lt;input type="hidden" name="category_id" value="&lt;?php echo ( is_object( $cur_cat ) ) ? absint( $cur_cat->category_id ) : ''; ?>" />
+								&lt;/div>
+								&lt;?php
+							}
+							if ( ! empty( $cur_cat ) &amp;&amp; is_object( $cur_cat ) ) {
+								$color  = ( strpos( $cur_cat->category_color, '#' ) !== 0 ) ? '#' : '';
+								$color .= $cur_cat->category_color;
+								$icon   = $cur_cat->category_icon;
+							} else {
+								$color = '';
+								$icon  = '';
+							}
+							$color = strip_tags( $color );
+							if ( ! empty( $cur_cat ) &amp;&amp; is_object( $cur_cat ) ) {
+								$cat_name = stripslashes( $cur_cat->category_name );
+							} else {
+								$cat_name = '';
+							}
+							?>
+							&lt;p>
+								&lt;label for="cat_name">&lt;?php esc_html_e( 'Category Name', 'my-calendar' ); ?>&lt;/label>
+								&lt;input type="text" id="cat_name" name="category_name" class="input" size="30" value="&lt;?php echo esc_attr( $cat_name ); ?>"/>
+								&lt;label for="cat_color">&lt;?php esc_html_e( 'Color', 'my-calendar' ); ?>&lt;/label>
+								&lt;input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="&lt;?php echo ( '#' !== $color ) ? esc_attr( $color ) : ''; ?>"/>
+							&lt;/p>
+							&lt;input type='hidden' name='category_icon' id="mc_category_icon" value='&lt;?php echo esc_attr( $icon ); ?>' />
+							&lt;div class="category-icon-selector">
+								&lt;label for="cat_icon">&lt;?php esc_html_e( 'Category Icon', 'my-calendar' ); ?>&lt;/label>
+								&lt;div class="mc-autocomplete autocomplete" id="mc-icons-autocomplete">
+									&lt;input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="&lt;?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="&lt;?php echo esc_attr( $icon ); ?>" />
+									&lt;ul class="autocomplete-result-list">&lt;/ul>
+								&lt;/div>
+								&lt;?php mc_help_link( __( 'Show Category Icons', 'my-calendar' ), __( 'Category Icons', 'my-calendar' ), 'Category Icons', 6 ); ?>
+							&lt;/div>
+							&lt;?php
+							if ( 'add' === $view ) {
+								$private_checked = false;
+							} else {
+								if ( ! empty( $cur_cat ) &amp;&amp; is_object( $cur_cat ) &amp;&amp; '1' === (string) $cur_cat->category_private ) {
+									$private_checked = true;
+								} else {
+									$private_checked = false;
+								}
+							}
+							$current = ( 'add' === $view ) ? false : $cur_cat->category_id;
+							?>
+							&lt;fieldset>
+								&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Category Meta', 'my-calendar' ); ?>&lt;/legend>
+								&lt;ul class='checkboxes'>
+								&lt;li>
+									&lt;input type="checkbox" value="on" name="category_private" id="cat_private"&lt;?php checked( $private_checked, true ); ?> /> &lt;label for="cat_private">&lt;?php esc_html_e( 'Private (logged-in users only)', 'my-calendar' ); ?>&lt;/label>
+								&lt;/li>
+								&lt;li>
+									&lt;input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"&lt;?php checked( get_option( 'mc_default_category', 'empty' ), $current ); ?> /> &lt;label for="mc_default_category">&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/label>
+								&lt;/li>
+								&lt;li>
+									&lt;input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"&lt;?php checked( get_option( 'mc_skip_holidays_category', 'empty' ), $current ); ?> /> &lt;label for="mc_shc">&lt;?php esc_html_e( 'Holiday', 'my-calendar' ); ?>&lt;/label>
+								&lt;/li>
+								&lt;/ul>
+								&lt;?php
+								/**
+								 * Insert custom fields for categories.
+								 *
+								 * @hook mc_category_fields
+								 *
+								 * @param {string} $output Field HTML output.
+								 * @param {object} $cur_cat Current category object.
+								 *
+								 * @return {string}
+								 */
+								echo apply_filters( 'mc_category_fields', '', $cur_cat );
+								if ( 'add' === $view ) {
+									$save_text = __( 'Add Category', 'my-calendar' );
+								} else {
+									$save_text = __( 'Save Changes', 'my-calendar' );
+								}
+								?>
+							&lt;/fieldset>
+							&lt;p>
+								&lt;input type="submit" name="save" class="button-primary" value="&lt;?php echo esc_attr( $save_text ); ?> "/>
+							&lt;/p>
+							&lt;?php do_action( 'mc_post_category_form', $cur_cat, $view ); ?>
+						&lt;/form>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+			&lt;div class="ui-sortable meta-box-sortables">
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Category List', 'my-calendar' ); ?>&lt;/h2>
+
+					&lt;div class="inside">
+						&lt;?php mc_manage_categories(); ?>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+			&lt;div class="ui-sortable meta-box-sortables">
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Category Settings', 'my-calendar' ); ?>&lt;/h2>
+
+					&lt;div class="inside">
+						&lt;?php echo wp_kses( mc_category_settings(), mc_kses_elements() ); ?>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+		&lt;?php
+		if ( mc_is_custom_icon() ) {
+			?>
+			&lt;div class="ui-sortable meta-box-sortables" id="custom-icons">
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Custom Icons', 'my-calendar' ); ?>&lt;/h2>
+
+					&lt;div class="inside">
+					&lt;ul class="checkboxes icon-list">
+			&lt;?php
+			$dir       = plugin_dir_path( __FILE__ );
+			$url       = plugin_dir_url( __FILE__ );
+			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
+			$path      = str_replace( '/my-calendar', '/my-calendar-custom', $url );
+			$iconlist  = mc_directory_list( $directory );
+			foreach ( $iconlist as $icon ) {
+				echo '&lt;li class="category-icon">&lt;code>' . $icon . '&lt;/code>&lt;img src="' . $path . '/' . esc_html( $icon ) . '" alt="" aria-hidden="true">&lt;/li>';
+			}
+			?>
+					&lt;/ul>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+			&lt;?php
+		} else {
+			// Preload icon cache.
+			$icons = mc_display_icons();
+		}
+		?>
+		&lt;/div>
+	&lt;/div>
+	&lt;?php
+		mc_show_sidebar( '' );
+}
+
+/**
+ * Update category settings.
+ *
+ * @return Update message.
+ */
+function mc_category_settings_update() {
+	$message = '';
+	$nonce   = ( isset( $_POST['_wpnonce'] ) ) ? $_POST['_wpnonce'] : false;
+	if ( isset( $_POST['mc_category_settings'] ) &amp;&amp; wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+		update_option( 'mc_hide_icons', ( ! empty( $_POST['mc_hide_icons'] ) &amp;&amp; 'on' === $_POST['mc_hide_icons'] ) ? 'true' : 'false' );
+		update_option( 'mc_apply_color', $_POST['mc_apply_color'] );
+
+		$message = mc_show_notice( __( 'My Calendar Category Configuration Updated', 'my-calendar' ), false );
+	}
+
+	return $message;
+}
+
+/**
+ * Generate category settings form.
+ *
+ * @return string HTML form.
+ */
+function mc_category_settings() {
+	if ( current_user_can( 'mc_edit_settings' ) ) {
+		$settings = '
+		&lt;form method="post" action="' . admin_url( 'admin.php?page=my-calendar-categories' ) . '">
+			&lt;div>
+				&lt;input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" />
+			&lt;/div>
+			&lt;div class="mc-category-settings">
+				&lt;fieldset>
+				&lt;legend class="screen-reader-text">' . __( 'Color Coding', 'my-calendar' ) . '&lt;/legend>
+					&lt;ul>' .
+					mc_settings_field(
+						'mc_apply_color',
+						array(
+							'default'    => __( 'Hide category colors', 'my-calendar' ),
+							'font'       => __( 'Title text color.', 'my-calendar' ),
+							'background' => __( 'Title background color.', 'my-calendar' ),
+						),
+						'default',
+						'',
+						array(),
+						'radio',
+						false
+					) . '
+					&lt;/ul>
+				&lt;/fieldset>
+				&lt;ul>
+					&lt;li>' . mc_settings_field( 'mc_hide_icons', __( 'Hide Category icons', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '&lt;/li>
+				&lt;/ul>
+			&lt;/div>
+			&lt;p>
+				&lt;input type="submit" name="mc_category_settings" class="button-primary" value="' . __( 'Save Settings', 'my-calendar' ) . '" />
+			&lt;/p>
+		&lt;/form>';
+
+		return $settings;
+	}
+}
+
+/**
+ * Get single field about a category.
+ *
+ * @param int    $cat_id Category ID.
+ * @param string $field Field name to get.
+ *
+ * @return mixed string/int Query result.
+ */
+function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$category = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
+
+	if ( $category ) {
+		if ( ! $field ) {
+			return $category;
+		}
+
+		return (string) $category->$field;
+	}
+}
+
+/**
+ * Fetch the category ID for categories passed by name
+ *
+ * @param string $string Name of category.
+ *
+ * @return int $cat_id or false.
+ */
+function mc_category_by_name( $string ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	$cat_id = false;
+	$sql    = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_name = %s';
+	$cat    = $mcdb->get_row( $mcdb->prepare( $sql, $string ) );
+
+	if ( is_object( $cat ) ) {
+		$cat_id = $cat->category_id;
+	}
+
+	return $cat_id;
+}
+
+/**
+ * Get or create a category if no default set.
+ *
+ * @param bool $single False for all categories; true for individual category.
+ *
+ * @return int
+ */
+function mc_no_category_default( $single = false ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$cats   = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+	$cat_id = $cats[0]->category_id;
+	if ( empty( $cats ) ) {
+		// need to have categories. Try to create again.
+		$cat_id = mc_create_category(
+			array(
+				'category_name'  => 'General',
+				'category_color' => '#ffffcc',
+				'category_icon'  => 'event.svg',
+			)
+		);
+
+		$cats = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+	}
+	if ( $single ) {
+		return $cat_id;
+	}
+
+	return $cats;
+}
+
+/**
+ * Fetch category object by ID or name.
+ *
+ * @param int|string $category Category name/id.
+ *
+ * @return object
+ */
+function mc_get_category( $category ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+	if ( is_int( $category ) ) {
+		$sql = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id = %d';
+		$cat = $mcdb->get_row( $mcdb->prepare( $sql, $category ) );
+	} else {
+		$cat = mc_category_by_name( $category );
+	}
+
+	return $cat;
+}
+
+/**
+ * Generate list of categories to edit.
+ */
+function mc_manage_categories() {
+	if ( current_user_can( 'mc_edit_settings' ) ) {
+		$response = mc_category_settings_update();
+		echo wp_kses_post( $response );
+	}
+	global $wpdb;
+	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co'];
+	switch ( $co ) {
+		case 1:
+			$cat_order = 'category_id';
+			break;
+		case 2:
+			$cat_order = 'category_name';
+			break;
+		default:
+			$cat_order = 'category_id';
+	}
+	$default_category = (string) get_option( 'mc_default_category' );
+	$hide_icon        = ( 'true' === get_option( 'mc_hide_icons' ) ) ? true : false;
+	// We pull the categories from the database.
+	$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( empty( $categories ) ) {
+		// If no categories are found, create the default category and re-fetch.
+		mc_create_category(
+			array(
+				'category_name'  => 'General',
+				'category_color' => '#ffffcc',
+				'category_icon'  => 'event.svg',
+			)
+		);
+		$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
+	if ( ! empty( $categories ) ) {
+		?>
+		&lt;table class="widefat striped page fixed mc-categories" id="my-calendar-admin-table">
+		&lt;thead>
+		&lt;tr>
+			&lt;th scope="col">
+				&lt;?php
+				echo ( '2' === (string) $co ) ? wp_kses_post( '&lt;a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-categories&amp;amp;co=1' ) ) . '">' . __( 'ID', 'my-calendar' ) . '&lt;/a>' ) : __( 'ID', 'my-calendar' );
+				?>
+			&lt;/th>
+			&lt;th scope="col">
+				&lt;?php
+				echo ( '1' === (string) $co ) ? wp_kses_post( '&lt;a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-categories&amp;amp;co=2' ) ) . '">' . __( 'Category Name', 'my-calendar' ) . '&lt;/a>' ) : __( 'Category Name', 'my-calendar' );
+				?>
+			&lt;/th>
+			&lt;th scope="col">&lt;?php esc_html_e( 'Events', 'my-calendar' ); ?>&lt;/th>
+			&lt;th scope="col">&lt;?php esc_html_e( 'Private', 'my-calendar' ); ?>&lt;/th>
+			&lt;?php
+			if ( ! $hide_icon ) {
+				?>
+			&lt;th scope="col">&lt;?php esc_html_e( 'Icon', 'my-calendar' ); ?>&lt;/th>
+				&lt;?php
+			}
+			?>
+			&lt;th scope="col">&lt;?php esc_html_e( 'Color', 'my-calendar' ); ?>&lt;/th>
+		&lt;/tr>
+		&lt;/thead>
+		&lt;?php
+		foreach ( $categories as $cat ) {
+			$icon       = ( ! $hide_icon ) ? mc_category_icon( $cat ) : '';
+			$background = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '' . $cat->category_color;
+			$foreground = mc_inverse_color( $background );
+			$cat_name   = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
+			?>
+		&lt;tr>
+			&lt;th scope="row">&lt;?php echo absint( $cat->category_id ); ?>&lt;/th>
+			&lt;td>
+			&lt;?php
+			$category_event_url = add_query_arg( 'filter', $cat->category_id, admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=category&amp;view=list&amp;limit=all' ) );
+			$count              = mc_get_category_count( $cat->category_id );
+			$count              = ( $count ) ? '&lt;a href="' . esc_url( $category_event_url ) . '">' . $count . '&lt;/a>' : '0';
+			echo esc_html( $cat_name );
+			// Translators: Name of category being edited.
+			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '&lt;span class="screen-reader-text">' . $cat_name . '&lt;/span>' );
+			// Translators: Category name.
+			$delete_cat = sprintf( __( 'Delete %s', 'my-calendar' ), '&lt;span class="screen-reader-text">' . $cat_name . '&lt;/span>' );
+			// Translators: Category name.
+			$default_text = sprintf( __( 'Set %s as Default', 'my-calendar' ), '&lt;span class="screen-reader-text">' . $cat_name . '&lt;/span>' );
+			if ( $default_category === (string) $cat->category_id ) {
+				echo ' &lt;strong>' . __( '(Default)', 'my-calendar' ) . '&lt;/strong>';
+				$default = '&lt;span class="mc_default">' . __( 'Default Category', 'my-calendar' ) . '&lt;/span>';
+			} else {
+				$url     = admin_url( "admin.php?page=my-calendar-categories&amp;amp;default=$cat->category_id" );
+				$default = '&lt;a href="' . esc_url( $url ) . '">' . $default_text . '&lt;/a>';
+			}
+			if ( get_option( 'mc_skip_holidays_category' ) === (string) $cat->category_id ) {
+				echo ' &lt;strong>' . __( '(Holiday)', 'my-calendar' ) . '&lt;/strong>';
+			}
+			?>
+				&lt;div class="row-actions">
+					&lt;a href="&lt;?php echo esc_url( admin_url( "admin.php?page=my-calendar-categories&amp;amp;mode=edit&amp;amp;category_id=$cat->category_id" ) ); ?>"
+					class='edit'>&lt;?php echo wp_kses_post( $edit_cat ); ?>&lt;/a> | 
+					&lt;?php
+					echo wp_kses_post( $default );
+					// Cannot delete the default category.
+					if ( '1' !== (string) $cat->category_id ) {
+						echo ' | ';
+						?>
+						&lt;a href="&lt;?php echo admin_url( "admin.php?page=my-calendar-categories&amp;amp;mode=delete&amp;amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('&lt;?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')">&lt;?php echo wp_kses_post( $delete_cat ); ?>&lt;/a>
+						&lt;?php
+					}
+					?>
+				&lt;/div>
+			&lt;/td>
+			&lt;td>&lt;?php echo wp_kses_post( $count ); ?>&lt;/td>
+			&lt;td>&lt;?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?>&lt;/td>
+			&lt;?php
+			if ( ! $hide_icon ) {
+				if ( 'background' === get_option( 'mc_apply_color' ) ) {
+					$icon_bg = $background;
+				} else {
+					$icon_bg = $foreground;
+				}
+				?>
+			&lt;td style="background-color:&lt;?php echo esc_attr( $icon_bg ); ?>;">&lt;?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?>&lt;/td>
+				&lt;?php
+			}
+			?>
+			&lt;td style="background-color:&lt;?php echo esc_attr( $background ); ?>;color: &lt;?php echo esc_attr( $foreground ); ?>;">&lt;?php echo ( '#' !== $background ) ? esc_attr( $background ) : ''; ?>&lt;/td>
+		&lt;/tr>
+			&lt;?php
+		}
+		?>
+	&lt;/table>
+		&lt;?php
+	} else {
+		echo wp_kses_post( '&lt;p>' . __( 'There are no categories in the database - or something has gone wrong!', 'my-calendar' ) . '&lt;/p>' );
+	}
+}
+
+add_action( 'show_user_profile', 'mc_profile' );
+add_action( 'edit_user_profile', 'mc_profile' );
+add_action( 'profile_update', 'mc_save_profile' );
+/**
+ * Show user profile data on Edit User pages.
+ */
+function mc_profile() {
+	global $user_ID;
+	$current_user = wp_get_current_user();
+	$user_edit    = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID;
+
+	if ( user_can( $user_edit, 'mc_manage_events' ) &amp;&amp; current_user_can( 'manage_options' ) ) {
+		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
+		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions, true ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
+		?>
+		&lt;h3>&lt;?php esc_html_e( 'My Calendar Editor Permissions', 'my-calendar' ); ?>&lt;/h3>
+		&lt;table class="form-table" role="presentation">
+			&lt;tr>
+				&lt;th scope="row">
+					&lt;label for="mc_user_permissions">&lt;?php esc_html_e( 'Allowed Categories', 'my-calendar' ); ?>&lt;/label>
+				&lt;/th>
+				&lt;td>
+					&lt;ul class='checkboxes'>
+						&lt;li>&lt;input type="checkbox" name="mc_user_permissions[]" value="all" id="mc_edit_all" &lt;?php echo esc_html( $selected ); ?>> &lt;label for="mc_edit_all">&lt;?php esc_html_e( 'Edit All Categories', 'my-calendar' ); ?>&lt;/li>
+						&lt;?php echo mc_category_select( $permissions, true, true, 'mc_user_permissions[]' ); ?>
+					&lt;/ul>
+				&lt;/td>
+			&lt;/tr>
+			&lt;?php
+			/**
+			 * Add custom fields to the My Calendar section of the user profile.
+			 *
+			 * @hook mc_user_fields
+			 *
+			 * @param {string} $output HTML for fields.
+			 * @param {int}    $user_edit User ID being edited.
+			 *
+			 * @return {string}
+			 */
+			echo apply_filters( 'mc_user_fields', '', $user_edit );
+			?>
+		&lt;/table>
+		&lt;?php
+	}
+}
+
+/**
+ * Save user profile data
+ */
+function mc_save_profile() {
+	global $user_ID;
+	$current_user = wp_get_current_user();
+	if ( isset( $_POST['user_id'] ) ) {
+		$edit_id = (int) $_POST['user_id'];
+	} else {
+		$edit_id = $user_ID;
+	}
+	if ( current_user_can( 'manage_options' ) ) {
+		if ( isset( $_POST['mc_user_permissions'] ) ) {
+			$mc_user_permission = $_POST['mc_user_permissions'];
+			update_user_meta( $edit_id, 'mc_user_permissions', $mc_user_permission );
+		} else {
+			delete_user_meta( $edit_id, 'mc_user_permissions' );
+		}
+	}
+
+	do_action( 'mc_save_user', $edit_id, $_POST );
+}
+
+
+/**
+ * Generate fields to select event categories.
+ *
+ * @param object               $data object with event_category value.
+ * @param boolean              $option Type of form.
+ * @param boolean              $multiple Allow multiple categories to be entered.
+ * @param mixed boolean|string $name Field name for input.
+ * @param mixed boolean|string $id ID for label/input.
+ *
+ * @return string HTML fields.
+ */
+function mc_category_select( $data = false, $option = true, $multiple = false, $name = false, $id = false ) {
+	if ( ! $name ) {
+		$name = 'event_category[]';
+	}
+	if ( ! $id ) {
+		$id = 'mc_cat_';
+	}
+	// Grab all the categories and list them.
+	$list    = '';
+	$default = '';
+	$cats    = mc_no_category_default();
+	if ( ! empty( $cats ) ) {
+		/**
+		 * Filter the categories available in a category selection interface.
+		 *
+		 * @hook mc_category_list
+		 *
+		 * @param {array}  $cats Array of categories.
+		 * @param {object} $data An object with selected category data.
+		 *
+		 * @return {array}
+		 */
+		$cats = apply_filters( 'mc_category_list', $cats, $data );
+		foreach ( $cats as $cat ) {
+			$selected = '';
+			// if category is private, don't show if user is not logged in.
+			if ( '1' === (string) $cat->category_private &amp;&amp; ! is_user_logged_in() ) {
+				continue;
+			}
+			if ( ! empty( $data ) ) {
+				if ( ! is_object( $data ) ) {
+					$category = $data;
+				} elseif ( is_array( $data ) &amp;&amp; $multiple &amp;&amp; 'mc_user_permissions[]' === $name ) {
+					$category = $data;
+				} elseif ( is_array( $data ) &amp;&amp; $multiple &amp;&amp; $id ) {
+					// This is coming from a widget.
+					$category = $data;
+				} else {
+					if ( $multiple ) {
+						$category = ( property_exists( $data, 'user_error' ) ) ? $data->event_categories : mc_get_categories( $data );
+					} else {
+						$category = $data->event_category;
+					}
+				}
+				if ( $multiple ) {
+					if ( is_array( $category ) &amp;&amp; in_array( $cat->category_id, $category, true ) ) {
+						$selected = ' checked="checked"';
+					} elseif ( is_numeric( $category ) &amp;&amp; ( (int) $category === (int) $cat->category_id ) ) {
+						$selected = ' checked="checked"';
+					} elseif ( ! $category ) {
+						$selected = ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) ? ' checked="checked"' : '';
+					}
+				} else {
+					if ( (int) $category === (int) $cat->category_id ) {
+						$selected = ' selected="selected"';
+					}
+				}
+			} else {
+				if ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) {
+					// Pass null value to prevent default from being selected.
+					$selected = ( null === $data ) ? '' : ' checked="checked"';
+				}
+			}
+			$category_name = strip_tags( stripslashes( trim( $cat->category_name ) ) );
+			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
+			if ( $multiple ) {
+				$icon = '&lt;span style="display:inline-block;max-width:1em;margin-left:6px;vertical-align:middle;">' . mc_category_icon( $cat ) . '&lt;/span>';
+				$c    = '&lt;li class="mc_cat_' . $cat->category_id . '">&lt;input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="' . $id . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> &lt;label for="' . $id . $cat->category_id . '">' . $category_name . $icon . '&lt;/label>&lt;/li>';
+			} else {
+				$c = '&lt;option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '&lt;/option>';
+			}
+			if ( get_option( 'mc_default_category' ) !== (string) $cat->category_id ) {
+				$list .= $c;
+			} else {
+				$default = $c;
+			}
+		}
+	} else {
+		$category_url = admin_url( 'admin.php?page=my-calendar-categories' );
+		// Translators: URL to add a new category.
+		mc_show_error( sprintf( __( 'You do not have any categories created. Please &lt;a href="%s">create at least one category!&lt;/a>', 'my-calendar' ), $category_url ) );
+	}
+	if ( ! $option ) {
+		$default = ( get_option( 'mc_default_category' ) ) ? get_option( 'mc_default_category' ) : 1;
+
+		return ( is_object( $data ) ) ? $data->event_category : $default;
+	}
+
+	return $default . $list;
+}
+
+/**
+ * Verify that an event has a valid category relationship.
+ *
+ * @param object $event Event object.
+ */
+function mc_check_category_relationships( $event ) {
+	global $wpdb;
+	$relationship = $wpdb->get_var( $wpdb->prepare( 'SELECT relationship_id FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d AND category_id = %d', $event->event_id, $event->event_category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( ! $relationship ) {
+		$wpdb->insert(
+			my_calendar_category_relationships_table(),
+			array(
+				'event_id'    => $event->event_id,
+				'category_id' => $event->event_category,
+			),
+			array( '%d', '%d' )
+		);
+	}
+}
+
+/**
+ * Show category output for editing lists.
+ *
+ * @param object $event Event object.
+ *
+ * @return string
+ */
+function mc_admin_category_list( $event ) {
+	if ( ! $event->event_category ) {
+		// Events *must* have a category.
+		mc_update_event( 'event_category', 1, $event->event_id, '%d' );
+	}
+	// Verify valid category relationships. Corrects problems caused by deleting a category pre 3.3.3.
+	mc_check_category_relationships( $event );
+	$cat = mc_get_category_detail( $event->event_category, false );
+	if ( ! is_object( $cat ) ) {
+		$cat = (object) array(
+			'category_color' => '',
+			'category_id'    => '',
+			'category_name'  => '',
+		);
+	}
+	$color      = $cat->category_color;
+	$color      = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
+	$color      = ( '#' !== $color ) ? '&lt;span class="category-color" style="background-color:' . $color . ';">&lt;/span>' : '';
+	$categories = mc_get_categories( $event );
+	$cats       = array();
+	$string     = $color;
+	if ( isset( $_GET['groups'] ) ) {
+		$string .= ' ' . esc_html( $cat->category_name );
+	} else {
+		$string .= " &lt;a class='mc_filter primary-category' href='" . esc_url( mc_admin_url( "admin.php?page=my-calendar-manage&amp;amp;filter=$event->event_category&amp;amp;restrict=category" ) ) . "'>&lt;span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '&lt;/span>' . esc_html( $cat->category_name ) . '&lt;/a>';
+	}
+
+	if ( is_array( $categories ) ) {
+		foreach ( $categories as $category ) {
+			$category = (int) $category;
+			if ( $category !== (int) $event->event_category ) {
+				$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;amp;filter=$category&amp;amp;restrict=category" );
+				$color  = mc_get_category_detail( $category, 'category_color' );
+				$color  = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
+				$color  = ( '#' !== $color ) ? '&lt;span class="category-color" style="background-color:' . $color . ';">&lt;/span>' : '';
+				if ( isset( $_GET['groups'] ) ) {
+					$cats[] = $color . ' ' . mc_get_category_detail( $category, 'category_name' );
+				} else {
+					$cats[] = $color . ' &lt;a href="' . $filter . '" class="secondary-category">' . mc_get_category_detail( $category, 'category_name' ) . '&lt;/a>';
+				}
+			}
+		}
+		if ( count( $cats ) > 0 ) {
+			$string .= ', ' . implode( ', ', $cats );
+		}
+	}
+
+	return $string;
+}
+
+/**
+ * Get all categories for given event
+ *
+ * @param object  $event Event object.
+ * @param boolean $ids Return objects or ids.
+ *
+ * @return array of values
+ */
+function mc_get_categories( $event, $ids = true ) {
+	global $wpdb;
+	$mcdb = $wpdb;
+	if ( 'true' === get_option( 'mc_remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
+		$mcdb = mc_remote_db();
+	}
+
+	$return  = array();
+	$results = false;
+	if ( is_object( $event ) ) {
+		$event_id = absint( $event->event_id );
+		$primary  = $event->event_category;
+		if ( property_exists( $event, 'categories' ) ) {
+			$results = $event->categories;
+		}
+	} elseif ( is_numeric( $event ) ) {
+		$event_id = absint( $event );
+		$primary  = mc_get_data( 'event_category', $event_id );
+	} else {
+
+		return ( 'html' === $ids ) ? '' : array();
+	}
+
+	if ( ! $results ) {
+		$relate  = my_calendar_category_relationships_table();
+		$catego  = my_calendar_categories_table();
+		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
+	if ( true === $ids ) {
+		if ( $results ) {
+			foreach ( $results as $result ) {
+				$return[] = $result->category_id;
+			}
+		} else {
+			$return[] = $primary;
+		}
+	} elseif ( 'html' === $ids ) {
+		$return = mc_categories_html( $results, $primary );
+	} elseif ( 'testing' === $ids ) {
+		if ( $results ) {
+			foreach ( $results as $result ) {
+				$return[] = $result->category_id;
+			}
+		}
+	} else {
+		$return = ( is_array( $results ) ) ? $results : array( $event->event_category );
+	}
+
+	return $return;
+}
+
+/**
+ * Return HTML representing categories.
+ *
+ * @param array $results array of categories.
+ * @param int   $primary Primary selected category for event.
+ *
+ * @return String
+ */
+function mc_categories_html( $results, $primary ) {
+	if ( $results ) {
+		foreach ( $results as $result ) {
+			if ( ! is_object( $result ) ) {
+				$result = (object) $result;
+			}
+			$icon     = mc_category_icon( $result );
+			$return[] = $icon . $result->category_name;
+		}
+	} else {
+		$return[] = $primary;
+	}
+	$return = implode( ', ', $return );
+
+	return $return;
+}
+
+/**
+ * Get category icon by filename.
+ *
+ * @param string $file File name.
+ * @param bool   $is_custom Querying a custom icon.
+ *
+ * @return string
+ */
+function mc_get_img( $file, $is_custom = false ) {
+	$parent_path = plugin_dir_path( __DIR__ );
+	$parent_url  = plugin_dir_url( __DIR__ );
+	$url         = plugin_dir_url( __FILE__ );
+	$self        = plugin_dir_path( __FILE__ );
+	if ( $is_custom ) {
+		$path = $parent . 'my-calendar-custom/';
+		$link = $parent_url . 'my-calendar-custom/';
+	} else {
+		$path = $self . 'images/icons/';
+		$link = $url . 'images/icons/';
+	}
+	$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
+	if ( false === stripos( $file, '.svg' ) ) {
+		return '&lt;img src="' . esc_url( $link . $file ) . '" alt="" />';
+	}
+	$src      = $path . $file;
+	$label_id = sanitize_title( $file );
+	global $wp_filesystem;
+	require_once( ABSPATH . '/wp-admin/includes/file.php' );
+	WP_Filesystem();
+	$svg   = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
+	$image = '&lt;img src="data:image/png;base64,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" alt="Error fetching image" />';
+	if ( $svg ) {
+		$image = $svg;
+		// If remote access is blocked, this will not return an SVG.
+		if ( 0 === stripos( $image, '&lt;svg' ) ) {
+			$image = str_replace( '&lt;svg ', '&lt;svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
+			$image = str_replace( '&lt;path ', "&lt;title id='" . $label_id . "'>$file&lt;/title>&lt;path ", $image );
+		}
+	}
+
+	return $image;
+}
+
+/**
+ * Delete category icon from storage. Enables replacement of stored icon if category is modified.
+ *
+ * @param int $category_id Category ID.
+ */
+function mc_delete_category_icon( $category_id ) {
+	delete_option( 'mc_category_icon_category_' . $category_id );
+	delete_option( 'mc_category_icon_event_' . $category_id );
+}
+
+/**
+ * Produce filepath &amp; name or full img HTML for specific category's icon
+ *
+ * @param object $event Current event object.
+ * @param string $type 'html' to generate HTML.
+ *
+ * @return string image path or HTML
+ */
+function mc_category_icon( $event, $type = 'html' ) {
+	if ( is_object( $event ) &amp;&amp; property_exists( $event, 'category_icon' ) ) {
+		$url   = plugin_dir_url( __FILE__ );
+		$image = '';
+		// Is this an event context or a category context.
+		if ( property_exists( $event, 'occur_id' ) ) {
+			$context = 'event';
+		} else {
+			$context = 'category';
+		}
+		if ( 'true' !== get_option( 'mc_hide_icons' ) ) {
+			if ( '' !== $event->category_icon ) {
+				if ( mc_is_custom_icon() ) {
+					$path = str_replace( 'my-calendar', 'my-calendar-custom', $url );
+					$src  = $path . $event->category_icon;
+				} else {
+					$path = plugins_url( 'images/icons', __FILE__ ) . '/';
+					$src  = $path . str_replace( '.png', '.svg', $event->category_icon );
+				}
+				$hex      = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
+				$color    = $hex . $event->category_color;
+				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name );
+				if ( 'html' === $type ) {
+					if ( false !== stripos( $src, '.svg' ) ) {
+						$image = get_option( 'mc_category_icon_' . $context . '_' . $event->category_id, '' );
+						// If there's a value, but it's not an svg, zero out.
+						if ( $image &amp;&amp; 0 !== stripos( $image, '&lt;svg' ) ) {
+							$image = '';
+						}
+						if ( '' === $image ) {
+							$image = mc_generate_category_icon( $event );
+						}
+					} else {
+						$image = '&lt;img src="' . esc_url( $src ) . '" alt="' . $cat_name . '" class="category-icon" style="background:' . $color . '" />';
+					}
+				} else {
+					$image = $path . $event->category_icon;
+				}
+			}
+		}
+
+		/**
+		 * Filter the HTML output for a category icon.
+		 *
+		 * @hook mc_category_icon
+		 *
+		 * @param {string} $image Image HTML.
+		 * @param {object} $event Event object.
+		 * @param {string} $type Type of output - HTML or URL only.
+		 *
+		 * @return {string}
+		 */
+		return apply_filters( 'mc_category_icon', $image, $event, $type );
+	}
+
+	return '';
+}
+ 
+/**
+ * Generate SVG output from category icon information. Passed object must include category_color, category_name, category_icon, category_id|occur_id
+ *
+ * @param object $source Either an event or a category object.
+ *
+ * @return string
+ */
+function mc_generate_category_icon( $source ) {
+	$path  = plugin_dir_path( __FILE__ ) . 'images/icons/';
+	$src   = $path . str_replace( '.png', '.svg', $source->category_icon );
+	$hex   = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
+	$color = $hex . $source->category_color;
+	$apply = get_option( 'mc_apply_color' );
+	if ( 'background' === $apply ) {
+		$color = mc_inverse_color( $color );
+	}
+	if ( 'default' === $apply ) {
+		$color = '';
+	}
+	// Is this an event context or a category context.
+	if ( property_exists( $source, 'occur_id' ) ) {
+		$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $source->category_name );
+		$occur_id = $source->occur_id;
+		$context  = 'event';
+	} else {
+		$cat_name = esc_attr( $source->category_name );
+		$occur_id = $source->category_id;
+		$context  = 'category';
+	}
+	$label_id = 'cat_' . $occur_id;
+	global $wp_filesystem;
+	require_once( ABSPATH . '/wp-admin/includes/file.php' );
+	WP_Filesystem();
+	$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
+	if ( 0 === stripos( $image, '&lt;svg' ) ) {
+		$image = str_replace( '&lt;svg ', '&lt;svg style="fill:' . $color . '" focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
+		$image = str_replace( '&lt;path ', "&lt;title id='" . $label_id . "'>$cat_name&lt;/title>&lt;path ", $image );
+
+		update_option( 'mc_category_icon_' . $context . '_' . $source->category_id, $image );
+	} else {
+		$image = '';
+	}
+
+	return $image;
+}
+add_filter(
+	'safe_style_css',
+	function( $styles ) {
+		$styles[] = 'fill';
+		return $styles;
+	}
+);
+
+/**
+ * Generate category classes for a given date
+ *
+ * @param object $object Usually an event, can be category.
+ * @param string $prefix Prefix to append to category; varies on context.
+ *
+ * @return string classes
+ */
+function mc_category_class( $object, $prefix ) {
+	if ( is_array( $object ) ) {
+		$term = $object['term'];
+		$name = $object['category'];
+		$id   = $object['category_id'];
+	} else {
+		$term = $object->category_term;
+		$name = $object->category_name;
+		$id   = $object->category_id;
+	}
+	$fallback = get_term_by( 'id', $term, 'mc-event-category' );
+	if ( is_object( $fallback ) ) {
+		$fallback = $fallback->slug;
+	} else {
+		$fallback = 'category_slug_missing';
+	}
+
+	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback ) );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="ical_x_published_ttl.html">ical_x_published_ttl</a></li><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_ical_template.html">mc_filter_ical_template</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_single_ical_template.html">mc_single_ical_template</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
