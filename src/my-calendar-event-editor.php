@@ -1424,7 +1424,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<legend class="screen-reader-text"><?php esc_html_e( 'Event', 'my-calendar' ); ?></legend>
 				<p>
 					<label for="e_title"><?php esc_html_e( 'Event Title', 'my-calendar' ); ?></label><br/>
-					<input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="<?php echo ( $has_data ) ? stripslashes( esc_attr( $data->event_title ) : ''; ?>" />
+					<input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="<?php echo ( $has_data ) ? stripslashes( esc_attr( $data->event_title ) ) : ''; ?>" />
 				</p>
 				<?php
 				if ( is_object( $data ) && 1 === (int) $data->event_flagged ) {
@@ -3021,7 +3021,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'daily' )
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'daily' );
 				}
 				break;
 			// Weekdays only.
@@ -3048,7 +3048,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'weekday' )
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'weekday' );
 				}
 				break;
 			// Weekly.
@@ -3073,7 +3073,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'weekly' )
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'weekly' );
 				}
 				break;
 			// Biweekly.
@@ -3098,7 +3098,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'biweekly' )
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'biweekly' );
 				}
 				break;
 			// Monthly by date.
@@ -3123,7 +3123,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'monthly' )
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'monthly' );
 				}
 				break;
 			// Monthly by day.
@@ -3139,7 +3139,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					'occur_end'      => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_end ), false ),
 					'occur_group_id' => $group_id,
 				);
-				mc_insert_recurring( $data, $id, strtotime( $orig_begin ), $instances, $test, 'month-by-day' )
+				mc_insert_recurring( $data, $id, strtotime( $orig_begin ), $instances, $test, 'month-by-day' );
 
 				$numforward = ( $numforward - 1 );
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
@@ -3173,7 +3173,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					mc_insert_recurring( $data, $id, $newbegin, $instances, $test, 'month-by-day' )
+					mc_insert_recurring( $data, $id, $newbegin, $instances, $test, 'month-by-day' );
 
 					$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 28, 0, 0 );
 					$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 28, 0, 0 );
@@ -3201,7 +3201,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 					}
 					$return[] = $data;
-					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'annual' )
+					mc_insert_recurring( $data, $id, $begin, $instances, $test, 'annual' );
 				}
 				break;
 		}
@@ -3214,7 +3214,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 			'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 			'occur_group_id' => $group_id,
 		);
-		mc_insert_recurring( $data, $id, $begin, $instances, $test, 'single' )
+		mc_insert_recurring( $data, $id, $begin, $instances, $test, 'single' );
 	}
 
 	if ( true === $test ) {
