@@ -114,10 +114,10 @@ class My_Calendar_Filters extends WP_Widget {
 	/**
 	 * Update the My Calendar Event Filters Widget settings.
 	 *
-	 * @param object $new Widget settings new data.
-	 * @param object $instance Widget settings instance.
+	 * @param array $new Widget settings new data.
+	 * @param array $instance Widget settings instance.
 	 *
-	 * @return $instance Updated instance.
+	 * @return array $instance Updated instance.
 	 */
 	function update( $new, $instance ) {
 		$instance['title'] = esc_html( $new['title'] );

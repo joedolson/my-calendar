@@ -955,7 +955,7 @@ function mc_save_profile() {
 /**
  * Generate fields to select event categories.
  *
- * @param object               $data object with event_category value.
+ * @param object|false|int     $data object with event_category value, empty value, or a category ID.
  * @param boolean              $option Type of form.
  * @param boolean              $multiple Allow multiple categories to be entered.
  * @param mixed boolean|string $name Field name for input.

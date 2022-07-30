@@ -190,9 +190,9 @@ function mc_is_selected( $field, $value, $array = '' ) {
  *
  * @deprecated 3.3.0
  *
- * @param string                   $field Name of the field.
- * @param mixed string/int/boolean $value Current value.
- * @param string                   $type checkbox, radio, option.
+ * @param string             $field Name of the field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $type checkbox, radio, option.
  *
  * @return string
  */
@@ -221,9 +221,9 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 /**
  * Check selection
  *
- * @param string                   $field Name of field.
- * @param mixed string/int/boolean $value Type of value.
- * @param string                   $type Type of input.
+ * @param string             $field Name of field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $type Type of input.
  *
  * @see mc_option_selected()
  *
@@ -240,7 +240,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 	 *
 	 * @param string $filename Name of file.
 	 *
-	 * @return string type of file.
+	 * @return string|bool type of file.
 	 */
 	function exif_imagetype( $filename ) {
 		if ( ! is_dir( $filename ) && ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.NonVariableAssignmentFound
@@ -407,7 +407,7 @@ function _mc_is_url( $url ) {
  */
 function mc_external_link( $link ) {
 	if ( ! _mc_is_url( $link ) ) {
-		return 'class="error-link"';
+		return true; // If this is not a valid URL, consider it to be external.
 	}
 
 	$url   = parse_url( $link );
@@ -460,7 +460,7 @@ function reverse_array( $array, $boolean, $order ) {
  * @param string $body Text for email body.
  * @param string $email target email (if sending via email).
  */
-function mc_debug( $subject, $body, $email = false ) {
+function mc_debug( $subject, $body, $email = '' ) {
 	if ( defined( 'MC_DEBUG' ) && true === MC_DEBUG ) {
 		if ( ! $email ) {
 			$email = get_option( 'admin_email' );
@@ -543,9 +543,8 @@ function mc_show_notice( $message, $echo = true, $code = false ) {
 	$message = "<div class='updated'><p>$message</p></div>";
 	if ( $echo ) {
 		echo wp_kses_post( $message );
-	} else {
-		return $message;
 	}
+	return $message;
 }
 
 /**
@@ -564,7 +563,6 @@ function mc_show_error( $message, $echo = true ) {
 	$message = "<div class='error'><p>$message</p></div>";
 	if ( $echo ) {
 		echo $message;
-	} else {
-		return $message;
 	}
+	return $message;
 }

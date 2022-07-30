@@ -2956,7 +2956,7 @@ function mc_reuse_id_format( $format, $begin, $instances ) {
  * @param boolean $test true if testing.
  * @param array   $instances When rebuilding, an array of all prior event dates & ids.
  *
- * @return null by default; data array if testing
+ * @return array
  */
 function mc_increment_event( $id, $post = array(), $test = false, $instances = array() ) {
 	$event  = mc_get_event_core( $id, true );
@@ -3010,7 +3010,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( 'test' === $test && $i > 0 ) {
+					if ( true === $test && $i > 0 ) {
 						return $data;
 					}
 					if ( $post_until ) {
@@ -3037,7 +3037,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( 'test' === $test && $i > 0 ) {
+					if ( true === $test && $i > 0 ) {
 						return $data;
 					}
 					if ( $post_until ) {
@@ -3062,7 +3062,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( 'test' === $test && $i > 0 ) {
+					if ( true === $test && $i > 0 ) {
 						return $data;
 					}
 					if ( $post_until ) {
@@ -3087,7 +3087,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( 'test' === $test && $i > 0 ) {
+					if ( true === $test && $i > 0 ) {
 						return $data;
 					}
 					if ( $post_until ) {
@@ -3112,7 +3112,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( 'test' === $test && $i > 0 ) {
+					if ( true === $test && $i > 0 ) {
 						return $data;
 					}
 					if ( $post_until ) {
@@ -3162,7 +3162,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( 'test' === $test && $i > 0 ) {
+					if ( true === $test && $i > 0 ) {
 						return $data;
 					}
 					if ( $post_until ) {
@@ -3190,7 +3190,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
 						'occur_group_id' => $group_id,
 					);
-					if ( 'test' === $test && $i > 0 ) {
+					if ( true === $test && $i > 0 ) {
 						return $data;
 					}
 					if ( $post_until ) {

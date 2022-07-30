@@ -83,7 +83,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *
 		 * Initialized to contain the default 'data'.
 		 *
-		 * @var array<string, Var>
+		 * @var array<string>
 		 */
 		private $template_data_var_names = array( 'data' );
 
@@ -180,9 +180,9 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 * @param string $name Template variation name.
 		 * @return array<string>
 		 */
-		protected function get_template_file_names( $slug, $name ) {
+		protected function get_template_file_names( $slug, $name = '' ) {
 			$templates = array();
-			if ( isset( $name ) ) {
+			if ( ! empty( $name ) ) {
 				$templates[] = $slug . '-' . $name . '.php';
 			}
 			$templates[] = $slug . '.php';
@@ -211,9 +211,9 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param string|array<string, Slug> $template_names Template file(s) to search for, in order.
-		 * @param bool                       $load           If true the template file will be loaded if it is found.
-		 * @param bool                       $require_once   Whether to require_once or require. Default true.
+		 * @param string|array<string> $template_names Template file(s) to search for, in order.
+		 * @param bool                 $load           If true the template file will be loaded if it is found.
+		 * @param bool                 $require_once   Whether to require_once or require. Default true.
 		 *                                                   Has no effect if $load is false.
 		 * @return string The template filename if one is located.
 		 */

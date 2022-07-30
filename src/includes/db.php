@@ -85,9 +85,9 @@ function my_calendar_locations_table( $site = false ) {
  * @since 2.5.0
  *
  * @param string           $table table name.
- * @param mixed int/string $site 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
+ * @param int|string|false $site 'global' to get global database; site ID to get that site's database; false for defaults according to settings.
  *
- * @return prefixed string table name
+ * @return string properly prefixed table name
  */
 function my_calendar_select_table( $table = 'my_calendar_events', $site = false ) {
 	global $wpdb;
@@ -109,18 +109,20 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 
 		switch ( $option ) {
 			case 0:
-				return $local;
+				$return = $local;
 				break;
 			case 1:
-				return $global;
+				$return = $global;
 				break;
 			case 2:
-				return ( 1 === $choice ) ? $global : $local;
+				$return = ( 1 === $choice ) ? $global : $local;
 				break;
 			default:
-				return $local;
+				$return = $local;
 		}
 	} else {
-		return $local;
+		$return = $local;
 	}
+
+	return $return;
 }

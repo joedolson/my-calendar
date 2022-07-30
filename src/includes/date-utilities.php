@@ -41,11 +41,11 @@ function mc_dateclass( $current ) {
  * @param int    $mth Number of months to add.
  * @param int    $yr number of years to add.
  *
- * @return timestamp
+ * @return int
  */
 function my_calendar_add_date( $givendate, $day = 0, $mth = 0, $yr = 0 ) {
 	$cd      = strtotime( $givendate );
-	$newdate = mktime( mc_date( 'H', $cd, false ), mc_date( 'i', $cd, false ), mc_date( 's', $cd, false ), mc_date( 'm', $cd, false ) + $mth, mc_date( 'd', $cd, false ) + $day, mc_date( 'Y', $cd, false ) + $yr );
+	$newdate = mktime( mc_date( 'H', $cd, false ), mc_date( 'i', $cd, false ), mc_date( 's', $cd, false ), (int) mc_date( 'm', $cd, false ) + $mth, (int) mc_date( 'd', $cd, false ) + $day, (int) mc_date( 'Y', $cd, false ) + $yr );
 
 	return $newdate;
 }
@@ -176,10 +176,10 @@ function mc_timediff_cmp( $a, $b ) {
 /**
  * Compare two dates for diff with high precision
  *
- * @param int              $start timestamp.
- * @param mixed int/string $end timestamp or 'now'.
+ * @param int        $start timestamp.
+ * @param int|string $end timestamp or 'now'.
  *
- * @return absolute time diff
+ * @return int absolute value of time diff
  */
 function mc_date_diff_precise( $start, $end = 'NOW' ) {
 	if ( 'NOW' === $end ) {
@@ -265,7 +265,7 @@ function mc_recur_date( $ts ) {
 /**
  * Get the first day value of the current week.
  *
- * @param mixed int/boolean $timestamp timestamp + offset or false if now.
+ * @param int|boolean $timestamp timestamp + offset or false if now.
  *
  * @return array day and month
  */
@@ -417,7 +417,7 @@ function mc_private_event( $event, $type = true ) {
  *
  * @param string $string Date information.
  *
- * @return string de-internationalized change
+ * @return int de-internationalized change
  */
 function mc_strtotime( $string ) {
 	$months  = array(
@@ -479,9 +479,9 @@ function mc_strtotime( $string ) {
 /**
  * Wrapper for mc_date()
  *
- * @param string $format Format to use.
- * @param int    $timestamp Timestamp.
- * @param bool   $offset false to not add offset; if already a true timestamp.
+ * @param string    $format Format to use.
+ * @param int|false $timestamp Timestamp or false if now.
+ * @param bool      $offset false to not add offset; if already a true timestamp.
  *
  * @return string Formatted date.
  */
@@ -678,8 +678,9 @@ function mc_get_from_to( $show_months, $params, $date ) {
  * @return int
  */
 function mc_date_relation( $event ) {
-	$ts  = $event->ts_occur_begin;
-	$end = $event->ts_occur_end;
+	$ts            = $event->ts_occur_begin;
+	$end           = $event->ts_occur_end;
+	$date_relation = 2;
 	$now = time();
 	if ( $ts < $now && $end > $now ) {
 		do_action( 'mc_event_happening', true, $event );

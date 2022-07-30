@@ -19,7 +19,7 @@ add_filter( 'wp_privacy_personal_data_exporters', 'my_calendar_exporter', 10 );
  *
  * @param array $exporters All registered exporters.
  *
- * @return array
+ * @return array<string, mixed>
  */
 function my_calendar_exporter( $exporters ) {
 	$exporters['my-calendar-exporter'] = array(
@@ -36,7 +36,7 @@ function my_calendar_exporter( $exporters ) {
  * @param string $email_address Email address to get data for.
  * @param int    $page Page of data to remove.
  *
- * @return array
+ * @return array<string, mixed>
  */
 function my_calendar_privacy_export( $email_address, $page = 1 ) {
 	global $wpdb;
@@ -117,7 +117,7 @@ add_filter( 'wp_privacy_personal_data_erasers', 'my_calendar_eraser', 10 );
  *
  * @param array $erasers All registered erasers.
  *
- * @return array
+ * @return array<string, mixed>
  */
 function my_calendar_eraser( $erasers ) {
 	$erasers['my-calendar-eraser'] = array(
@@ -134,7 +134,7 @@ function my_calendar_eraser( $erasers ) {
  * @param string $email_address Email address to get data for.
  * @param int    $page Page of data to remove.
  *
- * @return array
+ * @return array<string, mixed>
  */
 function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 	global $wpdb;
@@ -146,6 +146,8 @@ function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
 			'done'           => true,
 		);
 	}
+	$deletions = array();
+	$updates   = array();
 
 	// Need to get all events with this email address as host, author, or meta data.
 	$posts = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_submitter_details' AND 'meta_value' LIKE %s", '%' . esc_sql( $email_address ) . '%s' ) );

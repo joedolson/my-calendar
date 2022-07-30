@@ -16,9 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Build a URL for My Calendar views.
  *
- * @param array  $add keys and values to add to URL.
- * @param array  $subtract keys to subtract from URL.
- * @param string $root Root URL, optional.
+ * @param array<string> $add keys and values to add to URL.
+ * @param array<string> $subtract keys to subtract from URL.
+ * @param string        $root Root URL, optional.
  *
  * @return string URL.
  */
@@ -51,7 +51,7 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 		}
 	}
 
-	$variables = $_GET;
+	$variables = map_deep( $_GET, 'sanitize_text_field' );
 	$subtract  = array_merge( (array) $subtract, array( 'from', 'to', 'my-calendar-api', 's', 'embed' ) );
 	foreach ( $subtract as $value ) {
 		unset( $variables[ $value ] );
@@ -89,11 +89,11 @@ function mc_url_in_loop( $url ) {
 /**
  * Build the URL for use in the mini calendar
  *
- * @param string $start link date.
- * @param int    $category current category.
- * @param array  $events array of event objects.
- * @param array  $args calendar view parameters.
- * @param string $date view date.
+ * @param int   $start date timestamp.
+ * @param int   $category current category.
+ * @param array $events array of event objects.
+ * @param array $args calendar view parameters.
+ * @param array $date view date.
  *
  * @return string URL
  */
@@ -107,7 +107,7 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 			'dy'    => mc_date( 'j', $start, false ),
 			'time'  => 'day',
 		);
-		if ( ! ( '' === $category ) ) {
+		if ( $category ) {
 			$target['mcat'] = $category;
 		}
 		$day_url = mc_build_url( $target, array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ), apply_filters( 'mc_modify_day_uri', mc_get_uri( reset( $events ), $args ) ) );
@@ -141,6 +141,7 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
  */
 function mc_translate_url( $url ) {
 	$is_default = true;
+	$home_url   = home_url();
 	// Polylang support.
 	if ( function_exists( 'pll_home_url' ) ) {
 		$home_url   = pll_home_url();

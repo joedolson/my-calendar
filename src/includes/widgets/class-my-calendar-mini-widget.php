@@ -235,10 +235,10 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	/**
 	 * Update the My Calendar Mini Widget settings.
 	 *
-	 * @param object $new Widget settings new data.
-	 * @param object $instance Widget settings instance.
+	 * @param array $new Widget settings new data.
+	 * @param array $instance Widget settings instance.
 	 *
-	 * @return $instance Updated instance.
+	 * @return array $instance Updated instance.
 	 */
 	function update( $new, $instance ) {
 		$instance['my_calendar_mini_title']    = mc_kses_post( $new['my_calendar_mini_title'] );

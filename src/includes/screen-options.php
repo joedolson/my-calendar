@@ -14,7 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Implement show on page selection fields
+ * Implement show on page selection fields.
+ *
+ * @return void
  */
 function mc_event_editing() {
 	$args = array(
@@ -28,7 +30,7 @@ function mc_event_editing() {
 /**
  * Get event input default values.
  *
- * @return array
+ * @return array<string, string>
  */
 function mc_input_defaults() {
 	return apply_filters(
@@ -53,13 +55,13 @@ add_filter( 'screen_settings', 'mc_show_event_editing', 10, 2 );
  * Show event editing options for user
  *
  * @param string $status string.
- * @param array  $args array Arguments.
+ * @param object $screen Object - screen object.
  *
  * @return string
  */
-function mc_show_event_editing( $status, $args ) {
+function mc_show_event_editing( $status, $screen ) {
 	$return = $status;
-	if ( 'toplevel_page_my-calendar' === $args->base ) {
+	if ( 'toplevel_page_my-calendar' === $screen->base ) {
 		$input_options    = get_user_meta( get_current_user_id(), 'mc_show_on_page', true );
 		$settings_options = get_option( 'mc_input_options' );
 		if ( ! is_array( $input_options ) ) {
@@ -116,11 +118,11 @@ add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
 /**
  * Save settings for screen options
  *
- * @param string $status string.
- * @param string $option option name.
- * @param string $value rows to use.
+ * @param string       $status string.
+ * @param string       $option option name.
+ * @param array|string $value rows to use.
  *
- * @return value
+ * @return array<string>|string
  */
 function mc_set_event_editing( $status, $option, $value ) {
 	if ( 'mc_show_on_page' === $option ) {
@@ -140,7 +142,9 @@ function mc_set_event_editing( $status, $option, $value ) {
 }
 
 /**
- * Add the screen option for num per page
+ * Add the screen option for num per page.
+ *
+ * @return void
  */
 function mc_add_screen_option() {
 	$items_per_page = apply_filters( 'mc_num_per_page_default', 50 );
@@ -155,6 +159,8 @@ function mc_add_screen_option() {
 
 /**
  * Add help tab on events.
+ *
+ * @return void
  */
 function mc_add_help_tab() {
 	$screen  = get_current_screen();
@@ -178,7 +184,9 @@ function mc_add_help_tab() {
 }
 
 /**
- * Add help tab on events.
+ * Add help tab on locations.
+ *
+ * @return void
  */
 function mc_location_help_tab() {
 	$screen  = get_current_screen();

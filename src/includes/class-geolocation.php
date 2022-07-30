@@ -50,7 +50,7 @@ class Geolocation {
 		$url      = add_query_arg( 'key', sanitize_text_field( $api_key ), $url );
 		$response = wp_remote_get( $url );
 		if ( is_wp_error( $response ) ) {
-			return false;
+			return array();
 		}
 		$data = $response['body'];
 
@@ -175,7 +175,7 @@ class Geolocation {
 				'sensor'  => 'false',
 			)
 		);
-		if ( ! $results ) {
+		if ( empty( $results ) ) {
 			return array();
 		}
 		// return coordinates latitude/longitude.

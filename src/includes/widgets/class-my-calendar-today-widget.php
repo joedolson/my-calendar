@@ -181,10 +181,10 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	/**
 	 * Update the My Calendar Today's Events Widget settings.
 	 *
-	 * @param object $new Widget settings new data.
-	 * @param object $instance Widget settings instance.
+	 * @param array $new Widget settings new data.
+	 * @param array $instance Widget settings instance.
 	 *
-	 * @return $instance Updated instance.
+	 * @return array $instance Updated instance.
 	 */
 	function update( $new, $instance ) {
 		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
