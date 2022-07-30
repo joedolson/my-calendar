@@ -681,7 +681,7 @@ function mc_date_relation( $event ) {
 	$ts            = $event->ts_occur_begin;
 	$end           = $event->ts_occur_end;
 	$date_relation = 2;
-	$now = time();
+	$now           = time();
 	if ( $ts < $now && $end > $now ) {
 		do_action( 'mc_event_happening', true, $event );
 		$date_relation = 1;
