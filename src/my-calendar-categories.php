@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param int    $data Data to change.
  * @param int    $category Category ID.
  *
- * @return result
+ * @return int|bool Row ID or false.
  */
 function mc_update_category( $field, $data, $category ) {
 	global $wpdb;
@@ -389,10 +389,10 @@ function mc_get_category_count( $category_id ) {
 /**
  * Form to edit a category
  *
- * @param string $view Edit or create.
- * @param id     $cat_id Category ID.
+ * @param string   $view Edit or create.
+ * @param int|bool $cat_id Category ID.
  */
-function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
+function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 	global $wpdb;
 	$dir     = plugin_dir_path( __FILE__ );
 	$url     = plugin_dir_url( __FILE__ );
@@ -580,7 +580,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = '' ) {
 /**
  * Update category settings.
  *
- * @return Update message.
+ * @return string Update message.
  */
 function mc_category_settings_update() {
 	$message = '';
@@ -637,6 +637,8 @@ function mc_category_settings() {
 
 		return $settings;
 	}
+
+	return '';
 }
 
 /**
@@ -955,11 +957,11 @@ function mc_save_profile() {
 /**
  * Generate fields to select event categories.
  *
- * @param object|false|int $data object with event_category value, empty value, or a category ID.
- * @param boolean          $option Type of form.
- * @param boolean          $multiple Allow multiple categories to be entered.
- * @param boolean|string   $name Field name for input.
- * @param boolean|string   $id ID for label/input.
+ * @param object|false|int|null|array $data object with event_category value, empty value, or a category ID.
+ * @param boolean                     $option Type of form.
+ * @param boolean                     $multiple Allow multiple categories to be entered.
+ * @param boolean|string              $name Field name for input.
+ * @param boolean|string              $id ID for label/input.
  *
  * @return string HTML fields.
  */
@@ -1134,8 +1136,8 @@ function mc_admin_category_list( $event ) {
 /**
  * Get all categories for given event
  *
- * @param object  $event Event object.
- * @param boolean $ids Return objects or ids.
+ * @param object|int     $event Event object or event ID.
+ * @param boolean|string $ids Return objects, ids, or html output.
  *
  * @return array of values
  */
