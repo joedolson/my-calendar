@@ -47,8 +47,4 @@ function mc_embed_template() {
 		require_once( MC_TEMPLATES . 'my-calendar-template.php' );
 		exit;
 	}
-
-	// You've gone too far. Error case.
-	header( 'HTTP/1.0 404 Not Found' );
-	exit;
 }

@@ -348,7 +348,7 @@ function mc_core_autocomplete_search_locations() {
 		}
 		$query = sanitize_text_field( $_REQUEST['data'] );
 
-		$locations = mc_core_search_locations( $query, array( 'location_id', 'location_label' ) );
+		$locations = mc_core_search_locations( $query );
 		$response  = array();
 		foreach ( $locations as $location ) {
 			$response[] = array(

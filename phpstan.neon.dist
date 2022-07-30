@@ -11,4 +11,5 @@ parameters:
 	ignoreErrors:
 		# Uses func_get_args()
 		- '#^Function apply_filters invoked with [34567] parameters, 2 required\.$#'
+		- '#^One or more @param tags has an invalid name or invalid syntax\.$#'
 	reportUnmatchedIgnoredErrors: false

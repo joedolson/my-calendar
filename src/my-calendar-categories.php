@@ -1229,7 +1229,7 @@ function mc_get_img( $file, $is_custom = false ) {
 	$url         = plugin_dir_url( __FILE__ );
 	$self        = plugin_dir_path( __FILE__ );
 	if ( $is_custom ) {
-		$path = $parent . 'my-calendar-custom/';
+		$path = $parent_path . 'my-calendar-custom/';
 		$link = $parent_url . 'my-calendar-custom/';
 	} else {
 		$path = $self . 'images/icons/';
@@ -1309,7 +1309,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 							$image = mc_generate_category_icon( $event );
 						}
 					} else {
-						$image = '<img src="' . esc_url( $src ) . '" alt="' . $cat_name . '" class="category-icon" style="background:' . $color . '" />';
+						$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' .esc_attr( $color ) . '" />';
 					}
 				} else {
 					$image = $path . $event->category_icon;
@@ -1353,13 +1353,13 @@ function mc_generate_category_icon( $source ) {
 	if ( 'default' === $apply ) {
 		$color = '';
 	}
+	$cat_name = $source->category_name;
 	// Is this an event context or a category context.
 	if ( property_exists( $source, 'occur_id' ) ) {
-		$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $source->category_name );
+		$cat_name = __( 'Category', 'my-calendar' ) . ': ' . $cat_name;
 		$occur_id = $source->occur_id;
 		$context  = 'event';
 	} else {
-		$cat_name = esc_attr( $source->category_name );
 		$occur_id = $source->category_id;
 		$context  = 'category';
 	}
@@ -1370,7 +1370,7 @@ function mc_generate_category_icon( $source ) {
 	$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
 	if ( 0 === stripos( $image, '<svg' ) ) {
 		$image = str_replace( '<svg ', '<svg style="fill:' . $color . '" focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
-		$image = str_replace( '<path ', "<title id='" . $label_id . "'>$cat_name</title><path ", $image );
+		$image = str_replace( '<path ', "<title id='" . $label_id . "'>" . esc_html( $cat_name ) . "</title><path ", $image );
 
 		update_option( 'mc_category_icon_' . $context . '_' . $source->category_id, $image );
 	} else {
@@ -1390,8 +1390,8 @@ add_filter(
 /**
  * Generate category classes for a given date
  *
- * @param object $object Usually an event, can be category.
- * @param string $prefix Prefix to append to category; varies on context.
+ * @param object|array $object Usually an event, can be category.
+ * @param string       $prefix Prefix to append to category; varies on context.
  *
  * @return string classes
  */
