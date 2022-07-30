@@ -1923,6 +1923,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_longitude    = '';
 	$event_latitude     = '';
 	$event_location     = '';
+	$event_link         = '';
+	$repeats            = '';
+	$title              = '';
 
 	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) { //phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
 		$post = array_map( 'stripslashes_deep', $post );
@@ -2399,8 +2402,8 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 	if ( ! empty( $update ) ) {
 		$event   = mc_get_event( $event_instance );
 		$formats = array( '%d', '%s', '%s', '%d' );
-		$begin   = ( ! empty( $update ) ) ? $update['event_begin'] . ' ' . $update['event_time'] : $event->occur_begin;
-		$end     = ( ! empty( $update ) ) ? $update['event_end'] . ' ' . $update['event_endtime'] : $event->occur_end;
+		$begin   = $update['event_begin'] . ' ' . $update['event_time'];
+		$end     = $update['event_end'] . ' ' . $update['event_endtime'];
 		$data    = array(
 			'occur_event_id' => $event_id,
 			'occur_begin'    => $begin,
@@ -2869,7 +2872,7 @@ function mc_grouped_events( $id, $template = '' ) {
 				'end'     => $close,
 			);
 
-			$current_output = ( '' === $template ) ? $current . $begin . $end : mc_draw_template( $array, $template );
+			$current_output = ( '' === $template ) ? $current . $begin : mc_draw_template( $array, $template );
 			$output        .= "<li>$current_output</li>";
 		}
 	} else {
@@ -3144,12 +3147,12 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				$numforward = ( $numforward - 1 );
 				for ( $i = 0; $i <= $numforward; $i ++ ) {
 					$next_week_diff = ( mc_date( 'm', $newbegin, false ) === mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin, false ), 7, 0, 0 ) ) ) ? false : true;
-					$move_event     = ( ( 1 === (int) $fifth_week ) && ( ( mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 ) === (int) $week_of_event ) && true === $next_week_diff ) ? true : false;
+					$move_event     = ( ( 1 === (int) $fifth_week ) && ( ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) + 1 ) === (int) $week_of_event ) && true === $next_week_diff ) ? true : false;
 					if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
 					} else {
 						$newbegin   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 7, 0, 0 );
 						$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 7, 0, 0 );
-						$move_event = ( 1 === (int) $fifth_week && mc_week_of_month( mc_date( 'd', $newbegin ), false ) + 1 === (int) $week_of_event ) ? true : false;
+						$move_event = ( 1 === (int) $fifth_week && mc_week_of_month( mc_date( 'd', $newbegin, false ) ) + 1 === (int) $week_of_event ) ? true : false;
 						if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
 						} else {
 							$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 14, 0, 0 );
