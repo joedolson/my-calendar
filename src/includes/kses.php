@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param string $string Any string.
  *
- * @return Value passed or cleaned string
+ * @return string Value passed or cleaned string
  */
 function mc_kses_post( $string ) {
 	if ( ! is_string( $string ) ) {
@@ -36,7 +36,7 @@ add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
  * @param array  $tags Original allowed tags.
  * @param string $context Custom context for My Calendar to avoid running elsewhere.
  *
- * @return return array tags
+ * @return array tags
  */
 function mc_allowed_tags( $tags, $context ) {
 	if ( 'mycalendar' === $context ) {

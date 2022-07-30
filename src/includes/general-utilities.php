@@ -39,6 +39,8 @@ function mc_switch_sites() {
  *
  * @param string $prev Previous status.
  * @param string $new New status.
+ *
+ * @return void
  */
 function mc_tweet_approval( $prev, $new ) {
 	if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) !== '' ) {
@@ -54,7 +56,7 @@ function mc_tweet_approval( $prev, $new ) {
  *
  * @param array $events Array of events.
  *
- * @return new array
+ * @return array<int, mixed>
  */
 function mc_flatten_array( $events ) {
 	$new_array = array();
@@ -72,6 +74,8 @@ function mc_flatten_array( $events ) {
 add_action( 'admin_menu', 'mc_add_outer_box' );
 /**
  * Add meta boxes
+ *
+ * @return void
  */
 function mc_add_outer_box() {
 	add_meta_box( 'mcs_add_event', __( 'My Calendar Event', 'my-calendar' ), 'mc_add_inner_box', 'mc-events', 'side', 'high' );
@@ -79,6 +83,8 @@ function mc_add_outer_box() {
 
 /**
  * Add inner metabox
+ *
+ * @return void
  */
 function mc_add_inner_box() {
 	global $post;
@@ -105,7 +111,7 @@ function mc_add_inner_box() {
 /**
  * Pass group of allowed tags to strip_tags
  *
- * @return string of allowed tags parseable by strip_tags.
+ * @return string Allowed tags parseable by strip_tags.
  */
 function mc_strip_tags() {
 
@@ -115,7 +121,7 @@ function mc_strip_tags() {
 /**
  * Pass group of allowed tags to strip_tags
  *
- * @return string of allowed tags parseable by strip_tags.
+ * @return string Allowed tags parseable by strip_tags in admin.
  */
 function mc_admin_strip_tags() {
 
@@ -125,12 +131,12 @@ function mc_admin_strip_tags() {
 /**
  * Old function for checking value of an option field
  *
- * @param string                   $field Name of the field.
- * @param mixed string/int/boolean $value Current value.
- * @param string                   $array if this setting is an array, the array key.
- * @param boolean                  $return whether to return or echo.
+ * @param string             $field Name of the field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $array if this setting is an array, the array key.
+ * @param boolean            $return whether to return or echo.
  *
- * @return checked=checked
+ * @return string checked=checked
  */
 function mc_is_checked( $field, $value, $array = '', $return = false ) {
 	if ( ! is_array( get_option( $field ) ) ) {
@@ -151,14 +157,16 @@ function mc_is_checked( $field, $value, $array = '', $return = false ) {
 			}
 		}
 	}
+
+	return '';
 }
 
 /**
  * Old function for checking value of an option field in a select
  *
- * @param string                   $field Name of the field.
- * @param mixed string/int/boolean $value Current value.
- * @param string                   $array if this setting is an array, the array key.
+ * @param string             $field Name of the field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $array if this setting is an array, the array key.
  *
  * @return string selected=selected
  */
@@ -218,6 +226,8 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
  * @param string                   $type Type of input.
  *
  * @see mc_option_selected()
+ *
+ * @return string
  */
 function jd_option_selected( $field, $value, $type = 'checkbox' ) {
 
@@ -381,7 +391,7 @@ function mc_html_type() {
  *
  * @param string $url URL.
  *
- * @return URL, if valid.
+ * @return int|false URL, if valid.
  */
 function _mc_is_url( $url ) {
 

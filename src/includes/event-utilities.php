@@ -70,6 +70,8 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
 	} else {
 		echo wp_kses_post( $warning );
 	}
+
+	return $warning;
 }
 
 /**
