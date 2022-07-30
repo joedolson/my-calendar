@@ -24,15 +24,6 @@ on:
       - synchronize
 
 jobs:
-  build-test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - uses: php-actions/composer@v6 # or alternative dependency management
-    - uses: dingo-d/phpstan-wp-action@v1
-      with:
-        path: src/
   php-lint:
     name: PHP
     runs-on: ubuntu-latest
