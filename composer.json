@@ -19,7 +19,7 @@
         "wp-phpunit/wp-phpunit": "^5.8",
         "yoast/phpunit-polyfills": "^1.0",
 		"phpstan/phpstan": "^1.7",
-		"szepeviktor/phpstan-wordpress": "^1.0",
+		"szepeviktor/phpstan-wordpress": "^1.0"
     },
     "require": {
         "composer/installers": "~1.0"
