@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Update a single field of a category
  *
  * @param string $field field name.
- * @param mixed  $data Data to change.
+ * @param int    $data Data to change.
  * @param int    $category Category ID.
  *
  * @return result
@@ -955,11 +955,11 @@ function mc_save_profile() {
 /**
  * Generate fields to select event categories.
  *
- * @param object|false|int     $data object with event_category value, empty value, or a category ID.
- * @param boolean              $option Type of form.
- * @param boolean              $multiple Allow multiple categories to be entered.
- * @param mixed boolean|string $name Field name for input.
- * @param mixed boolean|string $id ID for label/input.
+ * @param object|false|int $data object with event_category value, empty value, or a category ID.
+ * @param boolean          $option Type of form.
+ * @param boolean          $multiple Allow multiple categories to be entered.
+ * @param boolean|string   $name Field name for input.
+ * @param boolean|string   $id ID for label/input.
  *
  * @return string HTML fields.
  */

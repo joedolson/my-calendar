@@ -755,7 +755,7 @@ function mc_notime_label( $event ) {
 /**
  * Get link to event's details page.
  *
- * @param mixed object/int $event Full event object or event occurrence ID.
+ * @param object|int $event Full event object or event occurrence ID.
  *
  * @return string URL.
  */

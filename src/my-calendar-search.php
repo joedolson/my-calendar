@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Output search results for a given query
  *
- * @param mixed string/array $query Search query.
+ * @param string|array $query Search query.
  *
  * @return string HTML output
  */

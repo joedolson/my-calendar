@@ -814,9 +814,9 @@ function mc_if_needs_permissions() {
 /**
  * Grant capabilities to standard site roles
  *
- * @param mixed string/boolean $add Add capabilities to this role.
- * @param mixed string/boolean $manage Manage capabilities to this role.
- * @param mixed string/boolean $approve Approve capabilities to this role.
+ * @param string|boolean $add Add capabilities to this role.
+ * @param string|boolean $manage Manage capabilities to this role.
+ * @param string|boolean $approve Approve capabilities to this role.
  */
 function mc_add_roles( $add = false, $manage = false, $approve = false ) {
 	$role = get_role( 'administrator' );

@@ -50,9 +50,9 @@ function mc_prepare_search_query( $query ) {
 /**
  * Generate WHERE pattern for a given category passed
  *
- * @param mixed  int/string $category Single or list of categories separated by commas using IDs or names.
- * @param string            $type context of query.
- * @param string            $group context of query.
+ * @param int|string $category Single or list of categories separated by commas using IDs or names.
+ * @param string     $type context of query.
+ * @param string     $group context of query.
  *
  * @return string SQL modifiers.
  */
@@ -214,8 +214,8 @@ function mc_author_select_ids( $author ) {
  *
  * @uses mc_select_author()
  *
- * @param mixed int/string $host Host ID or name..
- * @param string           $type context.
+ * @param int|string $host Host ID or name..
+ * @param string     $type context.
  *
  * @return string SQL
  */
@@ -228,8 +228,8 @@ function mc_select_host( $host, $type = 'event' ) {
 /**
  * Function to limit event query by location.
  *
- * @param string               $ltype {location type}.
- * @param mixed string|integer $lvalue {location value}.
+ * @param string         $ltype {location type}.
+ * @param string|integer $lvalue {location value}.
  *
  * @return string
  */

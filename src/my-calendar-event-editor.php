@@ -289,10 +289,10 @@ function mc_event_delete_post( $event_id, $post_id ) {
 /**
  * Update a single field in an event.
  *
- * @param string               $field database column.
- * @param mixed                $data value to be saved.
- * @param mixed string/integer $event could be integer or string.
- * @param string               $type signifier representing data type of $data (e.g. %d or %s).
+ * @param string         $field database column.
+ * @param mixed          $data value to be saved.
+ * @param string|integer $event could be integer or string.
+ * @param string         $type signifier representing data type of $data (e.g. %d or %s).
  *
  * @return database result
  */
@@ -679,9 +679,9 @@ function mc_delete_event( $event_id ) {
 /**
  * Get form data for an event ID
  *
- * @param mixed int/boolean $event_id My Calendar event ID or false if submission had errors.
+ * @param int|false $event_id My Calendar event ID or false if submission had errors.
  *
- * @return mixed array/object submitted or saved data
+ * @return array|object submitted or saved data
  */
 function mc_form_data( $event_id = false ) {
 	global $wpdb, $submission;
@@ -707,8 +707,8 @@ function mc_form_data( $event_id = false ) {
 /**
  * The event edit form for the manage events admin page
  *
- * @param string            $mode add, edit, or copy.
- * @param mixed int/boolean $event_id My Calendar event ID (false for new events).
+ * @param string    $mode add, edit, or copy.
+ * @param int|false $event_id My Calendar event ID (false for new events).
  *
  * @return string HTML form
  */
@@ -898,12 +898,12 @@ function mc_datepicker_html( $args ) {
 /**
  * Show a block of enabled fields.
  *
- * @param string             $field name of field group.
- * @param boolean            $has_data Whether fields have data.
- * @param mixed array/object $data Current data.
- * @param boolean            $echo whether to return or echo.
- * @param string             $default Default string value.
- * @param int                $group_id If in group editing, group ID.
+ * @param string  $field name of field group.
+ * @param boolean $has_data Whether fields have data.
+ * @param object  $data Current data.
+ * @param boolean $echo whether to return or echo.
+ * @param string  $default Default string value.
+ * @param int     $group_id If in group editing, group ID.
  *
  * @return string.
  */
@@ -1301,9 +1301,9 @@ function mc_additional_dates( $data ) {
 /**
  * Display all enabled form fields.
  *
- * @param mixed array/object $data Passed data.
- * @param string             $mode Copy/edit/add.
- * @param int                $event_id Event ID.
+ * @param object $data Passed data.
+ * @param string $mode Copy/edit/add.
+ * @param int    $event_id Event ID.
  */
 function mc_form_fields( $data, $mode, $event_id ) {
 	global $wpdb, $user_ID;
@@ -1819,9 +1819,9 @@ function mc_event_access() {
 /**
  * Form to select accessibility features.
  *
- * @param string             $form Form HTML.
- * @param mixed array/object $data Event data.
- * @param string             $label Primary label for fields.
+ * @param string $form Form HTML.
+ * @param object $data Event data.
+ * @param string $label Primary label for fields.
  */
 function mc_event_accessibility( $form, $data, $label ) {
 	$note_value    = '';
@@ -2429,7 +2429,7 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
  * @param mixed  $value required value for field.
  * @param string $format type of data format.
  *
- * @return mixed boolean/int $result Success condition
+ * @return int|false $result Updated row or false.
  */
 function mc_update_data( $event_id, $field, $value, $format = '%d' ) {
 	global $wpdb;
