@@ -111,7 +111,6 @@ function mc_file_exists( $file ) {
 	foreach ( mc_custom_dirs() as $dir ) {
 		if ( file_exists( $dir . $file ) ) {
 			return true;
-			break;
 		}
 	}
 
@@ -215,6 +214,7 @@ function mc_register_styles() {
 	 * @hook mc_display_css_on_archives
 	 *
 	 * @param {bool} $default 'true' to display.
+	 * @param {WP_Query} $wp_query WP Query.
 	 *
 	 * @return {bool}
 	 */
@@ -383,9 +383,9 @@ function mc_deal_with_deleted_user( $id, $reassign ) {
 	global $wpdb;
 	$new = ( ! $reassign ) ? $wpdb->get_var( 'SELECT MIN(ID) FROM ' . $wpdb->users, 0, 0 ) : $reassign;
 	// This may not work quite right in multi-site. Need to explore further when I have time.
-	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $new_author, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_author=%d WHERE event_author=%d', $reassign, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $new_host, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_host=%d WHERE event_host=%d', $reassign, $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 
 /**
@@ -457,6 +457,7 @@ function mc_plugin_update_message() {
 function mc_footer_js() {
 	global $wp_query;
 	$version = get_option( 'mc_version' );
+	$script  = '';
 	$mcjs    = "<script>(function ($) { 'use strict'; $(function () { $( '.mc-main' ).removeClass( 'mcjs' ); });}(jQuery));</script>";
 	/**
 	 * Disable scripting on mobile devices.
@@ -1361,7 +1362,7 @@ function my_calendar_send_email( $event ) {
  * @param string $description Event description.
  * @param array  $post Posted details.
  *
- * @return boolean true if spam
+ * @return int 1 if spam, 0 if not.
  */
 function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	global $akismet_api_host, $akismet_api_port;
@@ -1930,7 +1931,7 @@ $plugins_string
 				$sitename = substr( $sitename, 4 );
 			}
 			$from_email = 'wordpress@' . $sitename;
-			$from       = "From: $current_user->username <$from_email>\r\nReply-to: $current_user->username <$current_user->user_email>\r\n";
+			$from       = "From: $current_user->display_name <$from_email>\r\nReply-to: $current_user->display_name <$current_user->user_email>\r\n";
 
 			if ( ! $request ) {
 				echo wp_kses_post( '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>' );
@@ -2030,7 +2031,7 @@ function mc_previous_post_link( $output, $format ) {
 		if ( empty( $event ) ) {
 			return '';
 		}
-		remove_filter( 'the_title', 'mc_the_title', 10, 2 );
+		remove_filter( 'the_title', 'mc_the_title', 10 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
 		add_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
@@ -2061,7 +2062,7 @@ function mc_next_post_link( $output, $format ) {
 		if ( empty( $event ) ) {
 			return '';
 		}
-		remove_filter( 'the_title', 'mc_the_title', 10, 2 );
+		remove_filter( 'the_title', 'mc_the_title', 10 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
 		add_filter( 'the_title', 'mc_the_title', 10, 2 );
 		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
@@ -2084,6 +2085,7 @@ function mc_next_post_link( $output, $format ) {
 function mc_the_title( $title, $post_id = null ) {
 	if ( is_singular( 'mc-events' ) && in_the_loop() ) {
 		if ( $post_id ) {
+			$event    = false;
 			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 			if ( ! $event_id ) {
 				$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
@@ -2317,7 +2319,7 @@ add_filter( 'default_content', 'mc_posttypes_defaults', 10, 2 );
  * @param string $post_content unused.
  * @param object $post WP Post object.
  *
- * @return $post_content;
+ * @return string $post_content;
  */
 function mc_posttypes_defaults( $post_content, $post ) {
 	if ( $post->post_type ) {

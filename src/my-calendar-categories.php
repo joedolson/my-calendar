@@ -1311,7 +1311,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 							$image = mc_generate_category_icon( $event );
 						}
 					} else {
-						$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' .esc_attr( $color ) . '" />';
+						$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $color ) . '" />';
 					}
 				} else {
 					$image = $path . $event->category_icon;
@@ -1372,7 +1372,7 @@ function mc_generate_category_icon( $source ) {
 	$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
 	if ( 0 === stripos( $image, '<svg' ) ) {
 		$image = str_replace( '<svg ', '<svg style="fill:' . $color . '" focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
-		$image = str_replace( '<path ', "<title id='" . $label_id . "'>" . esc_html( $cat_name ) . "</title><path ", $image );
+		$image = str_replace( '<path ', "<title id='" . $label_id . "'>" . esc_html( $cat_name ) . '</title><path ', $image );
 
 		update_option( 'mc_category_icon_' . $context . '_' . $source->category_id, $image );
 	} else {
