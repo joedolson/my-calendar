@@ -49,7 +49,7 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
 	$start_end = ( $data->event_begin === $data->event_end ) ? true : false;
 	// Only run test when an event is set up to recur & starts/ends on different days.
 	if ( ! $single_recur && ! $start_end ) {
-		$check = mc_increment_event( $data->event_id, array(), 'test' );
+		$check = mc_increment_event( $data->event_id, array(), true );
 		if ( my_calendar_date_xcomp( $check['occur_begin'], $data->event_end . ' ' . $data->event_endtime ) ) {
 			$warning = "<div class='error'><span class='problem-icon dashicons dashicons-performance' aria-hidden='true'></span> <p><strong>" . __( 'Event hidden from public view.', 'my-calendar' ) . '</strong> ' . __( 'This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins.', 'my-calendar' ) . '</p><p>';
 			$enddate = date_i18n( mc_date_format(), strtotime( $data->event_end ) );
