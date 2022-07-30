@@ -24,6 +24,16 @@ on:
       - synchronize
 
 jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: php-actions/composer@v6 # or alternative dependency management
+    - uses: php-actions/phpstan@v3
+      with:
+        path: src/
+        php_version: '7.4'
   php-lint:
     name: PHP
     runs-on: ubuntu-latest
