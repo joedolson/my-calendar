@@ -581,7 +581,7 @@ function mc_get_instances( $id ) {
 /**
  * Fetch results of an event search.
  *
- * @param mixed array/string $search mixed array (PRO) or string (Simple).
+ * @param array|string $search array (PRO) or string (Simple).
  *
  * @return array of event objects
  */
@@ -870,9 +870,9 @@ function my_calendar_events( $args ) {
 /**
  * Get one event currently happening.
  *
- * @param mixed   $category string/integer category ID or 'default'.
- * @param string  $template display Template.
- * @param integer $site Site ID if fetching events from a different multisite instance.
+ * @param string|integer $category category ID or 'default'.
+ * @param string         $template display Template.
+ * @param integer        $site Site ID if fetching events from a different multisite instance.
  *
  * @return string output HTML
  */
@@ -974,10 +974,10 @@ function my_calendar_events_now( $category = 'default', $template = '&lt;strong>
 /**
  * Get the next scheduled event, not currently happening.
  *
- * @param mixed   $category string/integer category ID or 'default'.
- * @param string  $template display Template.
- * @param integer $skip Number of events to skip.
- * @param integer $site Site ID if fetching events from a different multisite instance.
+ * @param string|integer $category category ID or 'default'.
+ * @param string         $template display Template.
+ * @param integer        $skip Number of events to skip.
+ * @param integer        $site Site ID if fetching events from a different multisite instance.
  *
  * @return string output HTML
  */
