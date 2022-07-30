@@ -242,11 +242,11 @@ function my_calendar_send_vcal( $event_id ) {
 /**
  * Generate iCal formatted event for one event
  *
- * @param integer $event_id Event ID.
+ * @param int $event_id Event ID or false to get active event.
  *
  * @return string text for iCal
  */
-function mc_generate_vcal( $event_id = false ) {
+function mc_generate_vcal( $event_id ) {
 	global $mc_version;
 	$output = '';
 	$mc_id  = ( isset( $_GET['vcal'] ) ) ? (int) str_replace( 'mc_', '', $_GET['vcal'] ) : $event_id;
@@ -298,6 +298,7 @@ END:VCALENDAR";
 		 * @hook mc_single_ical_template
 		 *
 		 * @param {string} $template iCal template.
+		 * @param {array}  $array Event data.
 		 *
 		 * @return {string}
 		 */
