@@ -72,7 +72,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		/**
 		 * Internal use only: Store located template paths.
 		 *
-		 * @var array
+		 * @var array<string>
 		 */
 		private $template_path_cache = array();
 
@@ -83,7 +83,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *
 		 * Initialized to contain the default 'data'.
 		 *
-		 * @var array
+		 * @var array<string, Var>
 		 */
 		private $template_data_var_names = array( 'data' );
 
@@ -178,7 +178,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *
 		 * @param string $slug Template slug.
 		 * @param string $name Template variation name.
-		 * @return array
+		 * @return array<string>
 		 */
 		protected function get_template_file_names( $slug, $name ) {
 			$templates = array();
@@ -211,10 +211,10 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param string|array $template_names Template file(s) to search for, in order.
-		 * @param bool         $load           If true the template file will be loaded if it is found.
-		 * @param bool         $require_once   Whether to require_once or require. Default true.
-		 *                                     Has no effect if $load is false.
+		 * @param string|array<string, Slug> $template_names Template file(s) to search for, in order.
+		 * @param bool                       $load           If true the template file will be loaded if it is found.
+		 * @param bool                       $require_once   Whether to require_once or require. Default true.
+		 *                                                   Has no effect if $load is false.
 		 * @return string The template filename if one is located.
 		 */
 		public function locate_template( $template_names, $load = false, $require_once = true ) {
@@ -287,7 +287,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 			 *
 			 * @since 1.0.0
 			 *
-			 * @param array $var Default is directory in child theme at index 1, parent theme at 10, and plugin at 100.
+			 * @param array<string> $file_paths Default is directory in child theme at index 1, parent theme at 10, and plugin at 100.
 			 */
 			$file_paths = apply_filters( $this->filter_prefix . '_template_paths', $file_paths );
 

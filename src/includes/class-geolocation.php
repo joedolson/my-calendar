@@ -30,7 +30,7 @@ class Geolocation {
 	 *
 	 * @param array $parameters Query array.
 	 *
-	 * @return object
+	 * @return array
 	 */
 	protected static function call( $parameters = array() ) {
 
@@ -45,7 +45,7 @@ class Geolocation {
 		}
 		$api_key = ( '' !== get_option( 'mc_gmap_api_key', '' ) ) ? get_option( 'mc_gmap_api_key' ) : false;
 		if ( ! $api_key ) {
-			return '';
+			return array();
 		}
 		$url      = add_query_arg( 'key', sanitize_text_field( $api_key ), $url );
 		$response = wp_remote_get( $url );
@@ -94,7 +94,7 @@ class Geolocation {
 				'sensor' => 'false',
 			)
 		);
-		if ( ! $address_suggestions ) {
+		if ( empty( $address_suggestions ) ) {
 			return $addresses;
 		}
 

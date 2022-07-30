@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Generate classes for a given date
  *
- * @param string $current timestamp.
+ * @param int $current timestamp.
  *
  * @return string classes
  */

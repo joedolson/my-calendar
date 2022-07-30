@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * My Calendar main table
  *
- * @param mixed int/boolean $site Site ID in multisite.
+ * @param int|boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -27,7 +27,7 @@ function my_calendar_table( $site = false ) {
 /**
  * My Calendar event table
  *
- * @param mixed int/boolean $site Site ID in multisite.
+ * @param int|boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -38,7 +38,7 @@ function my_calendar_event_table( $site = false ) {
 /**
  * My Calendar category table
  *
- * @param mixed int/boolean $site Site ID in multisite.
+ * @param int|boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -49,7 +49,7 @@ function my_calendar_categories_table( $site = false ) {
 /**
  * My Calendar category relationships table
  *
- * @param mixed int/boolean $site Site ID in multisite.
+ * @param int|boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -60,7 +60,7 @@ function my_calendar_category_relationships_table( $site = false ) {
 /**
  * My Calendar location relationships table
  *
- * @param mixed int/boolean $site Site ID in multisite.
+ * @param int|boolean $site Site ID in multisite.
  *
  * @return string table name
  */
@@ -71,7 +71,7 @@ function my_calendar_location_relationships_table( $site = false ) {
 /**
  * My Calendar locations table
  *
- * @param mixed int/boolean $site Site ID in multisite.
+ * @param int|boolean $site Site ID in multisite.
  *
  * @return string table name
  */

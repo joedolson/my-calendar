@@ -157,11 +157,13 @@ function mc_is_core_template( $key ) {
 		case 'details':
 		case 'list':
 		case 'mini':
-			return true;
+			$return = true;
 			break;
 		default:
-			return false;
+			$return = false;
 	}
+
+	return $return;
 }
 
 /**
