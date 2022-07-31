@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $action type of action.
  * @param array  $events Optional. Array of event IDs to act on.
  *
- * @return array bulk action details.
+ * @return string bulk action details.
  */
 function mc_bulk_action( $action, $events = array() ) {
 	global $wpdb;
@@ -28,6 +28,7 @@ function mc_bulk_action( $action, $events = array() ) {
 	$total   = 0;
 	$ids     = array();
 	$prepare = array();
+	$sql     = '';
 
 	foreach ( $events as $value ) {
 		$value = (int) $value;
@@ -91,7 +92,7 @@ function mc_bulk_action( $action, $events = array() ) {
 	 */
 	do_action( 'mc_bulk_actions', $action, $ids );
 
-	$result = $wpdb->query( $wpdb->prepare( $sql, $ids ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$result = ( '' !== $sql ) ? $wpdb->query( $wpdb->prepare( $sql, $ids ) ) : false; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	mc_update_count_cache();
 	$results = array(
@@ -113,11 +114,12 @@ function mc_bulk_action( $action, $events = array() ) {
  * @return string message
  */
 function mc_bulk_message( $results, $action ) {
-	$count  = $results['count'];
-	$total  = $results['total'];
-	$ids    = $results['ids'];
-	$result = $results['result'];
-
+	$count   = $results['count'];
+	$total   = $results['total'];
+	$ids     = $results['ids'];
+	$result  = $results['result'];
+	$error   = '';
+	$success = '';
 	switch ( $action ) {
 		case 'delete':
 			// Translators: Number of events deleted, number selected.
@@ -667,11 +669,8 @@ function mc_list_events() {
 					$problem  = ( '' !== $check ) ? 'problem' : '';
 					$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
 					$copy_url = admin_url( "admin.php?page=my-calendar&amp;mode=copy&amp;event_id=$event->event_id" );
-					if ( ! $invalid ) {
-						$view_url = mc_get_details_link( $event );
-					} else {
-						$view_url = '';
-					}
+					$view_url = ( $invalid ) ? '' : mc_get_details_link( $event );
+
 					$group_url  = admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
 					$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" );
 					$can_edit   = mc_can_edit_event( $event );
@@ -903,13 +902,14 @@ function mc_event_is_grouped( $group_id ) {
  * @return boolean
  */
 function mc_can_edit_category( $category, $user ) {
-	$permissions = get_user_meta( $user, 'mc_user_permissions', true );
+	$permissions = ( '' === get_user_meta( $user, 'mc_user_permissions', true ) ) ? array() : get_user_meta( $user, 'mc_user_permissions', true );
 	/**
 	 * Filter permissions for users editing a category.
 	 *
 	 * @hook mc_user_permissions
 	 *
 	 * @param {array} $permissions User meta data for this user's category permissions.
+	 * @param {int}   $category Category ID.
 	 * @param {int}   $user User ID.
 	 *
 	 * @return {array} Array of categories this user can edit.
@@ -926,8 +926,8 @@ function mc_can_edit_category( $category, $user ) {
 /**
  * Unless an admin, authors can only edit their own events if they don't have mc_manage_events capabilities.
  *
- * @param object|boolean $event Event object.
- * @param string         $datatype 'event' or 'instance'.
+ * @param object|boolean|int $event Event object or event ID.
+ * @param string             $datatype 'event' or 'instance'.
  *
  * @return boolean
  */
@@ -1021,28 +1021,21 @@ function _mc_increment_values( $recur ) {
 	switch ( $recur ) {
 		case 'S': // Single.
 			return 0;
-			break;
 		case 'D': // Daily.
 			return 500;
-			break;
 		case 'E': // Weekdays.
 			return 400;
-			break;
 		case 'W': // Weekly.
 			return 240;
-			break;
 		case 'B': // Biweekly.
 			return 240;
-			break;
 		case 'M': // Monthly.
 		case 'U':
 			return 240;
-			break;
 		case 'Y':
 			return 50;
-			break;
 		default:
-			false;
+			return false;
 	}
 }
 
