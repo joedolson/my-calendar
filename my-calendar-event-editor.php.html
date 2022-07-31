@@ -2891,7 +2891,7 @@ function mc_grouped_events( $id, $template = '' ) {
 	$output = '';
 
 	$results = mc_get_grouped_events( $id );
-	if ( is_array( $results ) &amp;&amp; ! empty( $results ) ) {
+	if ( ! empty( $results ) ) {
 		foreach ( $results as $result ) {
 			$first = mc_get_first_event( $result->event_id );
 			if ( ! is_object( $first ) ) {
@@ -2998,6 +2998,9 @@ function mc_reuse_id_format( $format, $begin, $instances ) {
  */
 function mc_increment_event( $id, $post = array(), $test = false, $instances = array() ) {
 	$event  = mc_get_event_core( $id, true );
+	if ( ! $event ) {
+		return array();
+	}
 	$data   = array();
 	$return = array();
 	if ( empty( $post ) ) {
