@@ -47,10 +47,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param int      $event_id My Calendar event ID.
  * @param bool|int $result Results of DB query.
  *
- * @return int post ID
+ * @return int|false post ID or false if post ID not available or created.
  */
 function mc_event_post( $action, $data, $event_id, $result = false ) {
 	// if the event save was successful.
+	$post_id = false;
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
@@ -320,7 +321,7 @@ function mc_event_delete_post( $event_id, $post_id ) {
  * @param string|integer $event could be integer or string.
  * @param string         $type signifier representing data type of $data (e.g. %d or %s).
  *
- * @return database result
+ * @return int Number of rows affected.
  */
 function mc_update_event( $field, $data, $event, $type = '%d' ) {
 	global $wpdb;
@@ -428,11 +429,11 @@ function my_calendar_edit() {
 /**
  * Save an event to the database
  *
- * @param string $action Type of action.
- * @param array  $output Checked event data.
- * @param int    $event_id Event ID.
+ * @param string      $action Type of action.
+ * @param array       $output Checked event data.
+ * @param int}boolean $event_id Event ID or false for new events.
  *
- * @return string message
+ * @return array Array with event_id and message keys.
  */
 function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
@@ -466,6 +467,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			$data        = $add;
 			$event_error = '';
 			$event_link  = '';
+			$edit_link   = '';
 			mc_event_post( $action, $data, $event_id, $result );
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 
@@ -622,8 +624,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				// do an action using the $action and processed event data.
 				$event_approved = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
 				// check for event_approved provides support for older versions of My Calendar Pro.
-				if ( isset( $post['event_approved'] ) &amp;&amp; $post['event_approved'] !== $event_approved ) {
-					$event_approved = absint( $post['event_approved'] );
+				if ( isset( $_POST['event_approved'] ) &amp;&amp; $_POST['event_approved'] !== $event_approved ) {
+					$event_approved = absint( $_POST['event_approved'] );
 				}
 				if ( isset( $_POST['prev_event_status'] ) ) {
 					// Don't execute transition actions if prev status not known.
@@ -707,7 +709,7 @@ function mc_delete_event( $event_id ) {
  *
  * @param int|false $event_id My Calendar event ID or false if submission had errors.
  *
- * @return array|object submitted or saved data
+ * @return array|object|string submitted or saved data. Error message string if event not found.
  */
 function mc_form_data( $event_id = false ) {
 	global $wpdb, $submission;
@@ -736,7 +738,7 @@ function mc_form_data( $event_id = false ) {
  * @param string    $mode add, edit, or copy.
  * @param int|false $event_id My Calendar event ID (false for new events).
  *
- * @return string HTML form
+ * @return void
  */
 function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	global $submission;
@@ -782,7 +784,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
  *
  * @param string $field Name of field group.
  *
- * @return string.
+ * @return boolean
  */
 function mc_show_edit_block( $field ) {
 	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) &amp;&amp; current_user_can( 'manage_options' ) ) ? true : false;
@@ -864,8 +866,6 @@ function mc_edit_block_is_visible( $field ) {
 			return true;
 		}
 	}
-
-	return false;
 }
 
 /**
@@ -924,12 +924,12 @@ function mc_datepicker_html( $args ) {
 /**
  * Show a block of enabled fields.
  *
- * @param string  $field name of field group.
- * @param boolean $has_data Whether fields have data.
- * @param object  $data Current data.
- * @param boolean $echo whether to return or echo.
- * @param string  $default Default string value.
- * @param int     $group_id If in group editing, group ID.
+ * @param string    $field name of field group.
+ * @param boolean   $has_data Whether fields have data.
+ * @param object    $data Current data.
+ * @param boolean   $echo whether to return or echo.
+ * @param string    $default Default string value.
+ * @param int|false $group_id If in group editing, group ID.
  *
  * @return string.
  */
@@ -1031,6 +1031,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			if ( $show_block ) {
 				$button_text = __( 'Select Featured Image', 'my-calendar' );
 				$remove      = '';
+				$alt         = '';
 				if ( '' !== $image ) {
 					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 					$button_text = __( 'Change Featured Image', 'my-calendar' );
@@ -1328,8 +1329,8 @@ function mc_additional_dates( $data ) {
  * Display all enabled form fields.
  *
  * @param object|null $data Passed data; null for new events.
- * @param string $mode Copy/edit/add.
- * @param int    $event_id Event ID.
+ * @param string      $mode Copy/edit/add.
+ * @param int         $event_id Event ID.
  */
 function mc_form_fields( $data, $mode, $event_id ) {
 	global $wpdb, $user_ID;
