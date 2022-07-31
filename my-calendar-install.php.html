@@ -333,9 +333,7 @@ function mc_create_demo_content() {
  */
 function mc_default_settings() {
 	$globals = mc_globals();
-	foreach ( $globals as $key => $global ) {
-		${$key} = $global;
-	}
+
 	add_option( 'mc_display_single', array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ) );
 	add_option( 'mc_display_main', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
 	add_option( 'mc_display_mini', array( 'excerpt', 'image', 'more' ) );
@@ -364,10 +362,10 @@ function mc_default_settings() {
 			'title_list' => '{title}',
 			'title_solo' => '{title}',
 			'link'       => __( 'More information', 'my-calendar' ),
-			'grid'       => $grid_template,
-			'list'       => $list_template,
-			'mini'       => $mini_template,
-			'details'    => $single_template,
+			'grid'       => $globals['grid_template'],
+			'list'       => $globals['list_template'],
+			'mini'       => $globals['mini_template'],
+			'details'    => $globals['single_template'],
 			'label'      => __( 'Read more', 'my-calendar' ),
 		)
 	);
@@ -400,12 +398,12 @@ function mc_default_settings() {
 		mc_generate_calendar_page( $slug );
 	}
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	dbDelta( $initial_db );
-	dbDelta( $initial_occur_db );
-	dbDelta( $initial_cat_db );
-	dbDelta( $initial_rel_db );
-	dbDelta( $initial_loc_db );
-	dbDelta( $initial_loc_rel_db );
+	dbDelta( $globals['initial_db'] );
+	dbDelta( $globals['initial_occur_db'] );
+	dbDelta( $globals['initial_cat_db'] );
+	dbDelta( $globals['initial_rel_db'] );
+	dbDelta( $globals['initial_loc_db'] );
+	dbDelta( $globals['initial_loc_rel_db'] );
 }
 
 /**
@@ -550,7 +548,7 @@ function my_calendar_copyr( $source, $dest ) {
  *
  * @param string $dirname File directory.
  *
- * @return result.
+ * @return bool
  */
 function my_calendar_rmdirr( $dirname ) {
 	// Sanity check.
