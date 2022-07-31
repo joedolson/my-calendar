@@ -469,9 +469,9 @@ function mc_get_all_holidays( $before, $after, $today ) {
 /**
  * Get most recently added events.
  *
- * @param integer $cat_id Category ID.
+ * @param integer|false $cat_id Category ID.
  *
- * @return array of event objects
+ * @return array Event objects, limited by category if category ID passed.
  */
 function mc_get_new_events( $cat_id = false ) {
 	global $wpdb;
@@ -659,11 +659,11 @@ function mc_get_search_results( $search ) {
  * @param int     $id Event ID in my_calendar db.
  * @param boolean $rebuild Get core data only if doing an event rebuild.
  *
- * @return Event object
+ * @return object|false My Calendar Event
  */
 function mc_get_event_core( $id, $rebuild = false ) {
 	if ( ! is_numeric( $id ) ) {
-		return;
+		return false;
 	}
 
 	global $wpdb;
@@ -712,7 +712,7 @@ function mc_get_first_event( $id ) {
  *
  * @param int $instance_id Event instance ID.
  *
- * @return query result
+ * @return object|null query result
  */
 function mc_get_instance_data( $instance_id ) {
 	global $wpdb;
@@ -751,7 +751,7 @@ function mc_get_nearest_event( $id ) {
  * @param int    $id  Event instance ID.
  * @param string $type  'object' or 'html'.
  *
- * @return mixed object/string
+ * @return object|string
  */
 function mc_get_event( $id, $type = 'object' ) {
 	if ( ! is_numeric( $id ) ) {
@@ -775,8 +775,6 @@ function mc_get_event( $id, $type = 'object' ) {
 
 		return $value;
 	}
-
-	return false;
 }
 
 /**
@@ -844,9 +842,9 @@ function my_calendar_events( $args ) {
 /**
  * Get one event currently happening.
  *
- * @param string|integer $category category ID or 'default'.
- * @param string         $template display Template.
- * @param integer        $site Site ID if fetching events from a different multisite instance.
+ * @param string|integer      $category category ID or 'default'.
+ * @param string              $template display Template.
+ * @param integer|string|bool $site Site ID if fetching events from a different multisite instance.
  *
  * @return string output HTML
  */
@@ -948,10 +946,10 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 /**
  * Get the next scheduled event, not currently happening.
  *
- * @param string|integer $category category ID or 'default'.
- * @param string         $template display Template.
- * @param integer        $skip Number of events to skip.
- * @param integer        $site Site ID if fetching events from a different multisite instance.
+ * @param string|integer      $category category ID or 'default'.
+ * @param string              $template display Template.
+ * @param integer             $skip Number of events to skip.
+ * @param integer|string|bool $site Site ID if fetching events from a different multisite instance.
  *
  * @return string output HTML
  */
@@ -1057,7 +1055,7 @@ function mc_get_occurrences( $id ) {
 function mc_instance_list( $args ) {
 	$id = isset( $args['event'] ) ? $args['event'] : false;
 	if ( ! $id ) {
-		return;
+		return '';
 	}
 	$template = isset( $args['template'] ) ? $args['template'] : '<h3>{title}</h3>{description}';
 	$list     = isset( $args['list'] ) ? $args['list'] : '<li>{date}, {time}</li>';
@@ -1112,7 +1110,7 @@ function mc_instance_list( $args ) {
  *
  * @return bool|string
  */
-function mc_admin_instances( $id, $occur = false ) {
+function mc_admin_instances( $id, $occur = 0 ) {
 	global $wpdb;
 	$output     = '';
 	$ts_string  = mc_ts();
@@ -1163,7 +1161,7 @@ function mc_get_grouped_events( $id ) {
 	global $wpdb;
 	$id = (int) $id;
 	if ( 0 === $id ) {
-		return '';
+		return array();
 	}
 	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT event_id FROM ' . my_calendar_table() . ' WHERE event_group_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
