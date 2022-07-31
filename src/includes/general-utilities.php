@@ -550,16 +550,17 @@ function mc_show_notice( $message, $echo = true, $code = false ) {
 /**
  * Display an error message.
  *
- * @param string  $message Error message.
- * @param boolean $echo Echo or return. Default true (echo).
+ * @param string         $message Error message.
+ * @param boolean        $echo Echo or return. Default true (echo).
+ * @param boolean|string $code Message code.
  *
  * @return string
  */
-function mc_show_error( $message, $echo = true ) {
+function mc_show_error( $message, $echo = true, $code = false ) {
 	if ( trim( $message ) === '' ) {
 		return '';
 	}
-	$message = strip_tags( $message, mc_admin_strip_tags() );
+	$message = strip_tags( apply_filters( 'mc_filter_error', $message, $code ), mc_admin_strip_tags() );
 	$message = "<div class='error'><p>$message</p></div>";
 	if ( $echo ) {
 		echo $message;

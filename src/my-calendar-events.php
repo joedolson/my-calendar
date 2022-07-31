@@ -688,7 +688,7 @@ function mc_get_event_core( $id, $rebuild = false ) {
  *
  * @param int $id Event core ID.
  *
- * @return object Event
+ * @return object|boolean Event or false if no event found.
  */
 function mc_get_first_event( $id ) {
 	global $wpdb;

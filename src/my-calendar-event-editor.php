@@ -1250,9 +1250,9 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
 	if ( true === $echo ) {
 		echo $return;
-	} else {
-		return $return;
 	}
+
+	return $return;
 }
 
 /**
@@ -1301,22 +1301,24 @@ function mc_additional_dates( $data ) {
 /**
  * Display all enabled form fields.
  *
- * @param object $data Passed data.
+ * @param object|null $data Passed data; null for new events.
  * @param string $mode Copy/edit/add.
  * @param int    $event_id Event ID.
  */
 function mc_form_fields( $data, $mode, $event_id ) {
 	global $wpdb, $user_ID;
-	$has_data = ( empty( $data ) ) ? false : true;
+	$has_data = ( is_object( $data ) ) ? true : false;
 	if ( $data ) {
 		// This was previously only shown if $data was an object. Don't know why.
 		$test = mc_test_occurrence_overlap( $data );
 	}
 	$instance = ( isset( $_GET['date'] ) ) ? (int) $_GET['date'] : false;
 	if ( $instance ) {
-		$ins      = mc_get_instance_data( $instance );
-		$event_id = $ins->occur_event_id;
-		$data     = mc_get_first_event( $event_id );
+		$ins = mc_get_instance_data( $instance );
+		if ( property_exists( $ins, 'occur_event_id' ) ) {
+			$event_id = $ins->occur_event_id;
+			$data     = mc_get_first_event( $event_id );
+		}
 	}
 	?>
 	<div class="postbox-container jcd-wide">
@@ -1394,6 +1396,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
 				$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
 				if ( $deleted || $custom ) {
+					$notice = '';
 					if ( $deleted ) {
 						$notice = __( 'Some dates in this event have been deleted.', 'my-calendar' );
 					}
@@ -1926,6 +1929,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_link         = '';
 	$repeats            = '';
 	$title              = '';
+	$event_link         = '';
+	$desc               = '';
+	$primary            = 1;
 
 	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) { //phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
 		$post = array_map( 'stripslashes_deep', $post );
@@ -1951,7 +1957,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
 		$begin = trim( $post['event_begin'][ $i ] );
 		$end   = ( ! empty( $post['event_end'] ) ) ? trim( $post['event_end'][ $i ] ) : $post['event_begin'][ $i ];
-		if ( 'E' === $recur && '0' === ( mc_date( 'w', mc_strtotime( $begin ), false ) || '6' === mc_date( 'w', mc_strtotime( $begin ), false ) ) ) {
+		if ( 'E' === $recur && 0 === ( (int) mc_date( 'w', mc_strtotime( $begin ), false ) || 6 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) ) {
+			$newbegin = $begin;
+			$newend   = $end;
 			if ( 0 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) {
 				$newbegin = my_calendar_add_date( $begin, 1 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
@@ -2208,7 +2216,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			} else {
 				if ( mc_can_edit_event( $conflict_ev->event_id ) ) {
 					$referer = urlencode( mc_get_current_url() );
-					$link    = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
+					$link    = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$conflict_ev->event_id&amp;ref=$referer" );
 					// Translators: Link to edit event draft.
 					$error = sprintf( __( 'That event conflicts with a <a href="%s">previously submitted draft</a>.', 'my-calendar' ), $link );
 				} else {
