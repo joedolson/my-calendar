@@ -54,7 +54,7 @@ function mc_prepare_search_query( $query ) {
  * @param string     $type context of query.
  * @param string     $group context of query.
  *
- * @return string SQL modifiers.
+ * @return array<string> SQL clauses.
  */
 function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 	if ( ! $category || 'all' === $category ) {
@@ -94,7 +94,6 @@ function mc_category_select_ids( $category ) {
 	global $wpdb;
 	$mcdb   = $wpdb;
 	$select = array();
-
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
@@ -107,6 +106,7 @@ function mc_category_select_ids( $category ) {
 		}
 		$numcat = count( $categories );
 		foreach ( $categories as $key ) {
+			$add = false;
 			$key = trim( $key );
 			if ( is_numeric( $key ) ) {
 				$add = (int) $key;
@@ -117,7 +117,9 @@ function mc_category_select_ids( $category ) {
 					$add = $cat->category_id;
 				}
 			}
-			$select[] = $add;
+			if ( $add ) {
+				$select[] = $add;
+			}
 		}
 	} else {
 		$category = trim( $category );
@@ -137,9 +139,9 @@ function mc_category_select_ids( $category ) {
 /**
  * Get select parameter values for authors & hosts
  *
- * @param string $author numeric or string tokens for authors or list of authors.
- * @param string $type context of query.
- * @param string $context context of data.
+ * @param string|int $author numeric or string tokens for authors or list of authors.
+ * @param string     $type context of query.
+ * @param string     $context context of data.
  *
  * @return string WHERE limits
  */
@@ -148,7 +150,7 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
 		return '';
 	}
 	$author = urldecode( $author );
-	if ( '' === $author || 'all' === $author || 'default' === $author || null === $author ) {
+	if ( '' === $author || 'all' === $author || 'default' === $author ) {
 		return '';
 	}
 	$select_author = '';
@@ -325,7 +327,7 @@ function mc_access_limit( $access ) {
 /**
  * SQL modifiers for published vs. preview
  *
- * @return boolean
+ * @return string
  */
 function mc_select_published() {
 	if ( mc_is_preview() ) {

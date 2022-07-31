@@ -175,6 +175,7 @@ function mc_mass_delete_locations() {
 		$i         = 0;
 		$total     = 0;
 		$deleted   = array();
+		$failed    = array();
 		foreach ( $locations as $value ) {
 			$total  = count( $locations );
 			$result = mc_delete_location( $value, 'bool' );
@@ -442,11 +443,11 @@ function mc_location_manager_row( $location ) {
 	 *
 	 * @hook mc_location_manager_cells
 	 *
-	 * @param {string} $cells HTML output. Appends HTML in the end column of the location manager table row.
+	 * @param {string} $custom_location_cells HTML output. Appends HTML in the end column of the location manager table row.
 	 * @param {object} $location Locatino object.
 	 * @return {string}
 	 */
-	$cells = apply_filters( 'mc_location_manager_cells', '', $location );
+	$custom_location_cells = apply_filters( 'mc_location_manager_cells', '', $location );
 
 	$row  = '';
 	$row .= '

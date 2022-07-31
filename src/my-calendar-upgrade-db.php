@@ -72,17 +72,14 @@ function my_calendar_check_db() {
  */
 function mc_upgrade_db() {
 	$globals = mc_globals();
-	foreach ( $globals as $key => $global ) {
-		${$key} = $global;
-	}
 	global $mc_version;
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	dbDelta( $initial_db );
-	dbDelta( $initial_occur_db );
-	dbDelta( $initial_cat_db );
-	dbDelta( $initial_rel_db );
-	dbDelta( $initial_loc_db );
-	dbDelta( $initial_loc_rel_db );
+	dbDelta( $globals['initial_db'] );
+	dbDelta( $globals['initial_occur_db'] );
+	dbDelta( $globals['initial_cat_db'] );
+	dbDelta( $globals['initial_rel_db'] );
+	dbDelta( $globals['initial_loc_db'] );
+	dbDelta( $globals['initial_loc_rel_db'] );
 	update_option( 'mc_db_version', $mc_version );
 }
