@@ -2997,7 +2997,7 @@ function mc_reuse_id_format( $format, $begin, $instances ) {
  * @return array
  */
 function mc_increment_event( $id, $post = array(), $test = false, $instances = array() ) {
-	$event  = mc_get_event_core( $id, true );
+	$event = mc_get_event_core( $id, true );
 	if ( ! $event ) {
 		return array();
 	}
