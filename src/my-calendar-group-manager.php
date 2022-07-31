@@ -41,16 +41,18 @@ function my_calendar_group_edit() {
 		switch ( $_POST['event_action'] ) {
 			case 'edit':
 				if ( isset( $_POST['apply'] ) && is_array( $_POST['apply'] ) ) {
-					$mc_output = mc_check_group_data( $action, $_POST );
-					foreach ( $_POST['apply'] as $event_id ) {
+					$post      = map_deep( $_POST, 'sanitize_textarea_field' );
+					$mc_output = mc_check_group_data( $action, $post );
+					foreach ( $post['apply'] as $event_id ) {
 						$event_id = absint( $event_id );
-						$response = my_calendar_save_group( $action, $mc_output, $event_id, $_POST );
+						$response = my_calendar_save_group( $action, $mc_output, $event_id, $post );
 						echo $response;
 					}
 				}
 				break;
 			case 'break':
-				foreach ( $_POST['break'] as $event_id ) {
+				$events = map_deep( $_POST['break'], 'absint' );
+				foreach ( $events as $event_id ) {
 					$update  = array( 'event_group_id' => 0 );
 					$formats = array( '%d' );
 					$result  = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
@@ -67,7 +69,7 @@ function my_calendar_group_edit() {
 				break;
 			case 'group':
 				if ( isset( $_POST['group'] ) && is_array( $_POST['group'] ) ) {
-					$events = $_POST['group'];
+					$events = map_deep( $_POST['group'], 'absint' );
 					sort( $events );
 					foreach ( $events as $event_id ) {
 						$group_id = $events[0];
@@ -137,9 +139,9 @@ function my_calendar_group_edit() {
  * @param int    $event_id Event ID.
  * @param array  $post POST data.
  *
- * @return message
+ * @return string message
  */
-function my_calendar_save_group( $action, $output, $event_id = false, $post = array() ) {
+function my_calendar_save_group( $action, $output, $event_id, $post = array() ) {
 	global $wpdb, $event_author;
 	$proceed = $output[0];
 	$message = '';
@@ -197,11 +199,11 @@ function my_calendar_save_group( $action, $output, $event_id = false, $post = ar
 /**
  * Compare events within a group to see if they currently have the same information.
  *
- * @param int    $group_id Group ID.
- * @param string $field Column name of field to compare. Optional.
- * @param bool   $echo False to return if single field comparison.
+ * @param int          $group_id Group ID.
+ * @param string|false $field Column name of field to compare. False to check all grouped fields.
+ * @param bool         $echo False to return if single field comparison.
  *
- * @return boolean True if information is the same. Echo string for single field checks.
+ * @return string|boolean True if information is the same for multiple fields; string for single field checks.
  */
 function mc_compare_group_members( $group_id, $field = false, $echo = true ) {
 	global $wpdb;
@@ -283,7 +285,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
  * @param int    $event_id Event ID.
  * @param int    $group_id Group ID.
  */
-function mc_edit_groups( $mode = 'edit', $event_id = false, $group_id = false ) {
+function mc_edit_groups( $mode = 'edit', $event_id = 0, $group_id = 0 ) {
 	global $submission;
 	$event_id = ( 0 === $event_id ) ? false : $event_id;
 	$group_id = ( 0 === $group_id ) ? false : $group_id;
@@ -299,7 +301,7 @@ function mc_edit_groups( $mode = 'edit', $event_id = false, $group_id = false ) 
 	mc_show_error( $message );
 	echo wp_kses( $group, mc_kses_elements() );
 
-	my_calendar_print_group_fields( $data, $mode, $event_id, $group_id );
+	my_calendar_print_group_fields( $data, $mode, $event_id );
 }
 
 /**
@@ -308,11 +310,10 @@ function mc_edit_groups( $mode = 'edit', $event_id = false, $group_id = false ) 
  * @param object $data Event object data.
  * @param string $mode Editing mode.
  * @param int    $event_id Event ID.
- * @param int    $group_id Group ID.
  */
-function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = '' ) {
+function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 	global $user_ID;
-	$has_data    = ( empty( $data ) ) ? false : true;
+	$has_data    = ( is_object( $data ) ) ? true : false;
 	$user        = get_userdata( $user_ID );
 	$group_id    = ( ! empty( $data->event_group_id ) ) ? $data->event_group_id : mc_group_id();
 	$title       = '';
@@ -320,7 +321,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	$short       = '';
 	$image       = '';
 
-	if ( ! empty( $data ) ) {
+	if ( is_object( $data ) ) {
 		$title       = stripslashes( $data->event_title );
 		$description = stripslashes( $data->event_desc );
 		$short       = stripslashes( $data->event_short );
@@ -366,9 +367,9 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 
 				if ( '0' === $data->event_repeats && ( 'S1' === $data->event_recur || 'S' === $data->event_recur ) ) {
 					$span_checked = '';
-					if ( ! empty( $data ) && '1' === $data->event_span ) {
+					if ( is_object( $data ) && '1' === $data->event_span ) {
 						$span_checked = ' checked="checked"';
-					} elseif ( ! empty( $data ) && '0' === $data->event_span ) {
+					} elseif ( is_object( $data ) && '0' === $data->event_span ) {
 						$span_checked = '';
 					}
 					?>
@@ -453,6 +454,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 							}
 							$button_text = __( 'Select Featured Image', 'my-calendar' );
 							$remove      = '';
+							$alt         = '';
 							if ( '' !== $image ) {
 								$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 								$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
@@ -517,9 +519,10 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 					</p>
 					<?php
 					if ( mc_show_edit_block( 'event_link' ) ) {
-						if ( ! empty( $data ) && '1' === $data->event_link_expires ) {
+						$exp_checked = '';
+						if ( is_object( $data ) && '1' === $data->event_link_expires ) {
 							$exp_checked = ' checked="checked"';
-						} elseif ( ! empty( $data ) && '0' === $data->event_link_expires ) {
+						} elseif ( is_object( $data ) && '0' === $data->event_link_expires ) {
 							$exp_checked = '';
 						} elseif ( mc_event_link_expires() ) {
 							$exp_checked = ' checked="checked"';
@@ -532,7 +535,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 							mc_compare_group_members( $group_id, 'event_link' );
 							?>
 							</label>
-							<input type="text" id="e_link" name="event_link" size="40" value="<?php echo ( ! empty( $data ) ) ? esc_url( $data->event_link ) : ''; ?>" />
+							<input type="text" id="e_link" name="event_link" size="40" value="<?php echo ( is_object( $data ) ) ? esc_url( $data->event_link ) : ''; ?>" />
 							<input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"<?php echo $exp_checked; ?> />
 							<label for="e_link_expires"><?php esc_html_e( 'Link will expire after event.', 'my-calendar' ); ?></label>
 						</p>
@@ -548,7 +551,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	 *
 	 * @hook mc_event_registration
 	 *
-	 * @param {string} $output HTML output. Default empty.
+	 * @param {string} $event_registration_output HTML output. Default empty.
 	 * @param {bool}   $has_data Whether this event has data.
 	 * @param {object} $data Event data object.
 	 * @param {string} $context Indicates this is running in the admin.
@@ -556,7 +559,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id, $group_id = ''
 	 * @return {string}
 	 */
 	$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
-	if ( mc_show_edit_block( 'event_open' ) && '' !== $output ) {
+	if ( mc_show_edit_block( 'event_open' ) && '' !== $event_registration_output ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
@@ -638,10 +641,12 @@ function mc_check_group_data( $action, $post ) {
 	}
 	$errors = '';
 	if ( 'add' === $action || 'edit' === $action || 'copy' === $action ) {
-		$title = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
-		$desc  = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
-		$short = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
-		$host  = ! empty( $post['event_host'] ) ? $post['event_host'] : $current_user->ID;
+		$title   = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
+		$desc    = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
+		$short   = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
+		$host    = ! empty( $post['event_host'] ) ? $post['event_host'] : $current_user->ID;
+		$cats    = array();
+		$primary = 1;
 		if ( isset( $post['event_category'] ) ) {
 			$cats = $post['event_category'];
 			if ( is_array( $cats ) && ! empty( $cats ) ) {
@@ -705,52 +710,51 @@ function mc_check_group_data( $action, $post ) {
 		if ( ! ( '' === $event_link || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
 			$event_link = 'http://' . $event_link;
 		}
-	}
-	// A title is required, and can't be more than 255 characters.
-	$title_length = strlen( $title );
-	if ( ! ( $title_length >= 1 && $title_length <= 255 ) ) {
-		$title = __( 'Untitled Event', 'my-calendar' );
-	}
-	$proceed = true;
-	$submit  = array(
-		// Begin strings.
-		'event_title'        => $title,
-		'event_desc'         => $desc,
-		'event_short'        => $short,
-		'event_link'         => $event_link,
-		'event_label'        => $event_label,
-		'event_street'       => $event_street,
-		'event_street2'      => $event_street2,
-		'event_city'         => $event_city,
-		'event_state'        => $event_state,
-		'event_postcode'     => $event_postcode,
-		'event_region'       => $event_region,
-		'event_country'      => $event_country,
-		'event_url'          => $event_url,
-		'event_image'        => $event_image,
-		'event_phone'        => $event_phone,
-		'event_access'       => serialize( $event_access ),
-		'event_tickets'      => $event_tickets,
-		'event_registration' => $event_registration,
-		// Begin integers.
-		'event_category'     => $primary,
-		'event_link_expires' => $expires,
-		'event_zoom'         => $event_zoom,
-		'event_host'         => $host,
-		'event_span'         => $event_span,
-		// Begin floats.
-		'event_longitude'    => $event_longitude,
-		'event_latitude'     => $event_latitude,
-		// Array (not saved directly).
-		'event_categories'   => $cats,
-	);
+		// A title is required, and can't be more than 255 characters.
+		$title_length = strlen( $title );
+		if ( ! ( $title_length >= 1 && $title_length <= 255 ) ) {
+			$title = __( 'Untitled Event', 'my-calendar' );
+		}
+		$proceed = true;
+		$submit  = array(
+			// Begin strings.
+			'event_title'        => $title,
+			'event_desc'         => $desc,
+			'event_short'        => $short,
+			'event_link'         => $event_link,
+			'event_label'        => $event_label,
+			'event_street'       => $event_street,
+			'event_street2'      => $event_street2,
+			'event_city'         => $event_city,
+			'event_state'        => $event_state,
+			'event_postcode'     => $event_postcode,
+			'event_region'       => $event_region,
+			'event_country'      => $event_country,
+			'event_url'          => $event_url,
+			'event_image'        => $event_image,
+			'event_phone'        => $event_phone,
+			'event_access'       => serialize( $event_access ),
+			'event_tickets'      => $event_tickets,
+			'event_registration' => $event_registration,
+			// Begin integers.
+			'event_category'     => $primary,
+			'event_link_expires' => $expires,
+			'event_zoom'         => $event_zoom,
+			'event_host'         => $host,
+			'event_span'         => $event_span,
+			// Begin floats.
+			'event_longitude'    => $event_longitude,
+			'event_latitude'     => $event_latitude,
+			// Array (not saved directly).
+			'event_categories'   => $cats,
+		);
 
-	$submit = array_map( 'mc_kses_post', $submit );
-
-	if ( 'edit' === $action ) {
-		unset( $submit['event_author'] );
+		$submit = array_map( 'mc_kses_post', $submit );
+		$data   = array( $proceed, false, $submit, $errors );
+	} else {
+		$proceed = false;
+		$data    = array( $proceed, false, array(), __( 'Invalid Action', 'my-calendar' ) );
 	}
-	$data = array( $proceed, false, $submit, $errors );
 
 	return $data;
 }
@@ -923,8 +927,8 @@ function mc_list_groups() {
 					<td>
 						<strong>
 						<?php
+						$edit_link = '';
 						if ( $can_edit ) {
-							$edit_link = '';
 							if ( $is_grouped ) {
 								$edit_link = admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
 							}
