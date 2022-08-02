@@ -16,14 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Create navigation elements used in My Calendar main view
  *
- * @param array  $params Calendar parameters (modified).
- * @param int    $cat Original category from calendar args.
- * @param int    $start_of_week First day of week.
- * @param int    $show_months num months to show (modified).
- * @param string $main_class Class/ID.
- * @param int    $site Which site in multisite.
- * @param string $date current date.
- * @param string $from date view started from.
+ * @param array      $params Calendar parameters (modified).
+ * @param int        $cat Original category from calendar args.
+ * @param int        $start_of_week First day of week.
+ * @param int        $show_months num months to show (modified).
+ * @param string     $main_class Class/ID.
+ * @param int|string $site Which site in multisite.
+ * @param array      $date current date.
+ * @param string     $from date view started from.
  *
  * @return array of calendar nav for top & bottom
  */
@@ -478,7 +478,7 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
  * @param string $time current time view.
  * @param int    $months number of months shown in list views.
  *
- * @return string array of parameters for link
+ * @return array of parameters for link
  */
 function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	$cur_year  = $date['year'];
@@ -584,7 +584,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
  * @param string $time current time view.
  * @param int    $months number of months shown in list views.
  *
- * @return string array of parameters for link
+ * @return array of parameters for link
  */
 function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	$cur_year  = $date['year'];
@@ -701,7 +701,7 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
 		$fields = $args;
 	}
 	if ( empty( $fields ) ) {
-		return;
+		return '';
 	}
 	$has_multiple = ( count( $fields ) > 1 ) ? true : false;
 	$return       = false;
@@ -797,10 +797,8 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 			$form .= '<input type="hidden" name="cid" value="all" />';
 		}
 		foreach ( $qsa as $name => $argument ) {
-			$name     = esc_attr( strip_tags( $name ) );
-			$argument = esc_attr( strip_tags( $argument ) );
-			if ( 'mcat' !== $name || 'mc_id' !== $name ) {
-				$form .= '		<input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
+			if ( !( 'mcat' === $name || 'mc_id' === $name ) ) {
+				$form .= '		<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />' . "\n";
 			}
 		}
 	}
@@ -882,10 +880,8 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			$form .= '<input type="hidden" name="cid" value="all" />';
 		}
 		foreach ( $qsa as $name => $argument ) {
-			$name     = esc_attr( strip_tags( $name ) );
-			$argument = esc_attr( strip_tags( $argument ) );
-			if ( 'access' !== $name || 'mc_id' !== $name ) {
-				$form .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
+			if ( ! ( 'access' === $name || 'mc_id' === $name ) ) {
+				$form .= '<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />' . "\n";
 			}
 		}
 	}
@@ -998,8 +994,8 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	// Query to identify oldest start date in the database.
 	$first = $mcdb->get_var( 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1' );
 	$first = ( '1970-01-01' === $first ) ? '2000-01-01' : $first;
-	$year1 = mc_date( 'Y', strtotime( $first, false ) );
-	$diff1 = mc_date( 'Y' ) - $year1;
+	$year1 = (int) mc_date( 'Y', strtotime( $first, false ) );
+	$diff1 = (int) mc_date( 'Y' ) - $year1;
 	$past  = $diff1;
 	/**
 	 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
@@ -1015,7 +1011,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$fut    = 1;
 	$f      = '';
 	$p      = '';
-	$time   = current_time( 'Y' );
+	$time   = (int) current_time( 'Y' );
 
 	while ( $past > 0 ) {
 		$p   .= '<option value="';
@@ -1108,18 +1104,20 @@ function mc_format_toggle( $format, $toggle, $time ) {
 /**
  * Generate toggle for time views between day month & week
  *
- * @param string $format of current view.
- * @param string $time timespan of current view.
- * @param string $month current month.
- * @param string $year current year.
- * @param string $current Current date.
- * @param int    $start_of_week Day week starts on.
- * @param string $from Date started from.
+ * @param string     $format of current view.
+ * @param string     $time timespan of current view.
+ * @param string|int $month Numeric value ofcurrent month.
+ * @param string|int $year current year.
+ * @param string     $current Current date.
+ * @param int        $start_of_week Day week starts on.
+ * @param string     $from Date started from.
  *
  * @return string HTML output
  */
 function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week, $from ) {
 	// if dy parameter not set, use today's date instead of first day of month.
+	$month     = (int) $month;
+	$year      = (int) $year;
 	$weeks_day = mc_first_day_of_week( $current );
 	$adjusted  = false;
 	if ( isset( $_GET['dy'] ) ) {
@@ -1133,7 +1131,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			$current_day = absint( $_GET['dy'] );
 		}
 		$current_set = mktime( 0, 0, 0, $month, $current_day, $year );
-		if ( mc_date( 'N', $current_set, false ) === $start_of_week ) {
+		if ( (int) mc_date( 'N', $current_set, false ) === $start_of_week ) {
 			$weeks_day = mc_first_day_of_week( $current_set );
 		}
 	} else {

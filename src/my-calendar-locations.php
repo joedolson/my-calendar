@@ -636,11 +636,11 @@ function mc_controlled_field( $this_field ) {
  */
 function mc_get_location_coordinates( $location_id = false, $address = array() ) {
 	require_once( 'includes/class-geolocation.php' );
-	$street   = '';
-	$street2  = '';
-	$city     = '';
-	$zip      = '';
-	$country  = '';
+	$street  = '';
+	$street2 = '';
+	$city    = '';
+	$zip     = '';
+	$country = '';
 
 	new Geolocation;
 	if ( $location_id ) {

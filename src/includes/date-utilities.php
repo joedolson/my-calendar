@@ -477,13 +477,13 @@ function mc_strtotime( $string ) {
 }
 
 /**
- * Wrapper for mc_date()
+ * Wrapper for date()
  *
  * @param string    $format Format to use.
  * @param int|false $timestamp Timestamp or false if now.
  * @param bool      $offset false to not add offset; if already a true timestamp.
  *
- * @return string Formatted date.
+ * @return string|int Formatted date or timestamp if no format provided.
  */
 function mc_date( $format, $timestamp = false, $offset = true ) {
 	if ( ! $timestamp ) {
