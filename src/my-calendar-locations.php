@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param array $where Array with where query.
  * @param array $data saved location data.
- * @param int   $post POST data.
+ * @param array $post POST data.
  *
  * @return int post ID
  */
@@ -64,11 +64,11 @@ add_action( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
  * @param array    $data Saved event data.
  * @param array    $post POST data.
  *
- * @return int newly created post ID
+ * @return int|false newly created post ID or false if error.
  */
 function mc_create_location_post( $location_id, $data, $post = array() ) {
 	if ( ! $location_id ) {
-		return;
+		return false;
 	}
 	$post_id = mc_get_location_post( $location_id, false );
 	// If not post ID or the post ID has no status.
@@ -156,7 +156,7 @@ add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
  * @param int  $location_id Location ID.
  * @param bool $type True for full post object.
  *
- * @return object $post
+ * @return object|int|false WP_Post, post ID, or false if not found.
  */
 function mc_get_location_post( $location_id, $type = true ) {
 	global $wpdb;
@@ -438,19 +438,19 @@ function my_calendar_add_locations() {
 /**
  * Create location editing form.
  *
- * @param string $view type of view add/edit.
- * @param int    $loc_id Location ID.
+ * @param string    $view type of view add/edit.
+ * @param int|false $loc_id Location ID or false for new locations.
  */
-function mc_show_location_form( $view = 'add', $loc_id = '' ) {
+function mc_show_location_form( $view = 'add', $loc_id = false ) {
 	$cur_loc = false;
-	if ( '' !== $loc_id ) {
+	if ( $loc_id ) {
 		$update_location = false;
 		if ( isset( $_POST['update_gps'] ) ) {
 			$update_location = 'force';
 		}
 		$cur_loc = mc_get_location( $loc_id, $update_location );
 	}
-	$has_data = ( empty( $cur_loc ) ) ? false : true;
+	$has_data = ( is_object( $cur_loc ) ) ? true : false;
 	if ( 'add' === $view ) {
 		?>
 		<h1><?php esc_html_e( 'Add New Location', 'my-calendar' ); ?></h1>
@@ -629,13 +629,18 @@ function mc_controlled_field( $this_field ) {
 /**
  * Geolocate latitude and longitude of location.
  *
- * @param int   $location_id Location ID.
- * @param array $address Array of address parameters.
+ * @param int|false $location_id Location ID.
+ * @param array     $address Array of address parameters.
  *
  * @return array
  */
 function mc_get_location_coordinates( $location_id = false, $address = array() ) {
 	require_once( 'includes/class-geolocation.php' );
+	$street   = '';
+	$street2  = '';
+	$city     = '';
+	$zip      = '';
+	$country  = '';
 
 	new Geolocation;
 	if ( $location_id ) {
@@ -691,10 +696,10 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 /**
  * Produce the form to submit location data
  *
- * @param boolean $has_data Whether currently have data.
- * @param object  $data event or location data.
- * @param string  $context whether currently in an event or a location context.
- * @param int     $group_id Group ID if in group editing.
+ * @param boolean   $has_data Whether currently have data.
+ * @param object    $data event or location data.
+ * @param string    $context whether currently in an event or a location context.
+ * @param int|false $group_id Group ID if in group editing.
  *
  * @return string HTML form fields
  */
@@ -718,7 +723,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$return   .= '
 	<p>
 	<label for="e_label">' . __( 'Name of Location (required)', 'my-calendar' ) . $compare . '</label>';
-	$cur_label = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_label'} ) ) : '';
+	$cur_label = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_label'} ) ) : '';
 	if ( mc_controlled_field( 'label' ) ) {
 		$return .= mc_location_controller( 'label', $cur_label, $context );
 	} else {
@@ -743,7 +748,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</p>
 	<p>
 		<label for="e_city">' . __( 'City', 'my-calendar' ) . $compare . '</label> ';
-	$cur_city        = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_city'} ) ) : '';
+	$cur_city        = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_city'} ) ) : '';
 	if ( mc_controlled_field( 'city' ) ) {
 		$return .= mc_location_controller( 'city', $cur_city, $context );
 	} else {
@@ -753,7 +758,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 
 	$compare   = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_state', false ) : '';
 	$return   .= '<label for="e_state">' . __( 'State/Province', 'my-calendar' ) . $compare . '</label> ';
-	$cur_state = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_state'} ) ) : '';
+	$cur_state = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_state'} ) ) : '';
 	if ( mc_controlled_field( 'state' ) ) {
 		$return .= mc_location_controller( 'state', $cur_state, $context );
 	} else {
@@ -761,7 +766,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	}
 	$compare      = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_postcode', false ) : '';
 	$return      .= '</p><p><label for="e_postcode">' . __( 'Postal Code', 'my-calendar' ) . $compare . '</label> ';
-	$cur_postcode = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_postcode'} ) ) : '';
+	$cur_postcode = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_postcode'} ) ) : '';
 	if ( mc_controlled_field( 'postcode' ) ) {
 		$return .= mc_location_controller( 'postcode', $cur_postcode, $context );
 	} else {
@@ -770,7 +775,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare    = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_region', false ) : '';
 	$return    .= '</p><p>';
 	$return    .= '<label for="e_region">' . __( 'Region', 'my-calendar' ) . $compare . '</label> ';
-	$cur_region = ( ! empty( $data ) ) ? ( stripslashes( $data->{$context . '_region'} ) ) : '';
+	$cur_region = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_region'} ) ) : '';
 	if ( mc_controlled_field( 'region' ) ) {
 		$return .= mc_location_controller( 'region', $cur_region, $context );
 	} else {
@@ -962,9 +967,9 @@ function mc_location_fields() {
 /**
  * Get custom data for a location.
  *
- * @param int    $location_id Location ID.
- * @param int    $location_post Location Post ID.
- * @param string $field Custom field name.
+ * @param int|false    $location_id Location ID.
+ * @param int|false    $location_post Location Post ID.
+ * @param string|false $field Custom field name.
  *
  * @return mixed
  */
@@ -1032,7 +1037,7 @@ add_filter( 'mc_filter_shortcodes', 'mc_template_location_fields', 10, 2 );
  * Expand custom fields from array to field output
  *
  * @param array  $fields Array of field data.
- * @param array  $data Location data.
+ * @param object $data Location data.
  * @param string $context Location or event.
  *
  * @return string
@@ -1182,7 +1187,7 @@ function mc_location_data( $field, $id ) {
 /**
  * Get options list of locations to choose from
  *
- * @param object $location location object.
+ * @param object|false $location Selected location object or false if nothing selected.
  *
  * @return string set of option elements
  */
@@ -1218,7 +1223,7 @@ function mc_location_select( $location = false ) {
 /**
  * Get list of locations (IDs and labels)
  *
- * @param array $args array of relevant arguments.
+ * @param string|array $args array of relevant arguments. If string, get all locations and set context.
  *
  * @return array locations (IDs and labels only)
  */
