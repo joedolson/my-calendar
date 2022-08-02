@@ -2298,6 +2298,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	$syear  = $params['syear'];
 	$sday   = $params['sday'];
 	$c_m    = 0;
+	$dm     = array();
 	if ( isset( $_GET['dy'] ) && $main_class === $cid && ( 'day' === $time || 'week' === $time ) ) {
 		if ( '' === $_GET['dy'] ) {
 			$today = current_time( 'j' );
@@ -2339,7 +2340,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 			if ( $is_start_of_week ) {
 				$c_year = ( current_time( 'Y' ) );
 			} else {
-				$current_year = current_time( 'Y' );
+				$current_year = (int) current_time( 'Y' );
 				$c_year       = ( 0 === (int) $dm[1] ) ? $current_year : false;
 				if ( ! $c_year ) {
 					$c_year = ( mc_date( 'Y', strtotime( '-1 month' ), false ) === $current_year ) ? $current_year : $current_year - 1;
@@ -2367,6 +2368,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 * @hook mc_filter_year
 		 *
 		 * @param {int} $year An integer between 0 and 3000.
+		 * @param {array} Shortcode parameters.
 		 *
 		 * @return {int}
 		 */
@@ -2377,6 +2379,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 * @hook mc_filter_month
 		 *
 		 * @param {int} $month An integer between 1 and 12.
+		 * @param {array} Shortcode parameters.
 		 *
 		 * @return {int}
 		 */
@@ -2387,6 +2390,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 * @hook mc_filter_day
 		 *
 		 * @param {int} $day An integer between 1 and 31.
+		 * @param {array} Shortcode parameters.
 		 *
 		 * @return {int}
 		 */
@@ -2455,10 +2459,10 @@ function mc_wrap_title( $title ) {
  *
  * @return string HTML form.
  */
-function my_calendar_searchform( $type, $url ) {
+function my_calendar_searchform( $type, $url = '' ) {
 	$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : '';
 	if ( 'simple' === $type ) {
-		if ( ! $url || '' === $url ) {
+		if ( ! $url ) {
 			$url = mc_get_uri( false, array( 'type' => $type ) );
 		}
 		/**
@@ -2487,15 +2491,16 @@ function my_calendar_searchform( $type, $url ) {
 /**
  * Get list of locations.
  *
- * @param string   $datatype Type of data to sort by and return.
- * @param boolean  $full If need to return full location object.
- * @param constant $return_type valid query return type.
+ * @param string  $datatype Type of data to sort by and return.
+ * @param boolean $full If need to return full location object.
+ * @param string  $return_type valid query return type.
  *
  * @return array of location objects.
  */
-function mc_get_list_locations( $datatype, $full = true, $return_type = OBJECT ) {
+function mc_get_list_locations( $datatype, $full = true, $return_type = 'OBJECT' ) {
 	global $wpdb;
 	$mcdb = $wpdb;
+	$return_type = ( 'OBJECT' === $return_type ) ? OBJECT : ARRAY_A;
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
