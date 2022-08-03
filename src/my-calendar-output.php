@@ -37,9 +37,11 @@ function mc_time_html( $e, $type ) {
 	$notime  = '';
 	if ( ! $has_time ) {
 		$label   = mc_notime_label( $e );
-		$notime .= " <span class='event-time'>";
-		$notime .= ( 'N/A' === $label ) ? "<abbr title='" . esc_html__( 'Not Applicable', 'my-calendar' ) . "'>" . esc_html__( 'N/A', 'my-calendar' ) . '</abbr>' : esc_html( $label );
-		$notime .= '</span>';
+		if ( $label ) {
+			$notime .= " <span class='event-time'>";
+			$notime .= ( 'N/A' === $label ) ? "<abbr title='" . esc_html__( 'Not Applicable', 'my-calendar' ) . "'>" . esc_html__( 'N/A', 'my-calendar' ) . '</abbr>' : esc_html( $label );
+			$notime .= '</span>';
+		}
 	}
 	$date_start  = "<span class='mc-start-date dtstart' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $e->occur_begin ) ) . '</span>';
 	$time_start  = ( $has_time ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>' : $notime;
@@ -78,7 +80,7 @@ function mc_time_html( $e, $type ) {
  * @param string $template Template to use for drawing individual events.
  * @param string $id ID for the calendar calling this function.
  *
- * @return array [html] Generated HTML & [json] array of schema.org data.
+ * @return array|true [html] Generated HTML & [json] array of schema.org data. True if event details not included.
  */
 function my_calendar_draw_events( $events, $params, $process_date, $template = '', $id = '' ) {
 	$type = $params['format'];
@@ -89,7 +91,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		return true;
 	}
 	// We need to sort arrays of objects by time.
-	if ( is_array( $events ) ) {
+	if ( ! empty( $events ) ) {
 		$output_array = array();
 		$json         = array();
 		$begin        = '';
@@ -241,6 +243,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			 * @param {string}      $type View type.
 			 * @param {string}      $process_date Current date being processed.
 			 * @param {string}      $time View timeframe.
+			 * @param {string}      $template Existing template.
 			 *
 			 * @return {string}
 			 */
@@ -669,7 +672,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$details = $toggle . $details . "\n";
 			}
 
-			$img_class = ( '' !== $img ) ? ' has-image' : ' no-image';
+			$img_class = ( $img ) ? ' has-image' : ' no-image';
 			$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
 			/**
 			 * Filter details before the event content..
@@ -1774,7 +1777,7 @@ function my_calendar( $args ) {
 	 * @return {int}
 	 */
 	$show_months  = absint( apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args ) );
-	$show_months  = ( '0' === $show_months ) ? 1 : $show_months;
+	$show_months  = ( 0 === $show_months ) ? 1 : $show_months;
 	$caption_text = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
 	$week_format  = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
 	// Translators: Template tag with date format.
@@ -2049,7 +2052,7 @@ function my_calendar( $args ) {
 				$json              = array();
 				do {
 					$date_is    = mc_date( 'Y-m-d', $start, false );
-					$is_weekend = ( mc_date( 'N', $start, false ) < 6 ) ? false : true;
+					$is_weekend = ( (int) mc_date( 'N', $start, false ) < 6 ) ? false : true;
 					if ( $show_weekends || ( ! $show_weekends && ! $is_weekend ) ) {
 						if ( mc_date( 'N', $start, false ) === (string) $start_of_week && 'list' !== $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
@@ -2499,7 +2502,7 @@ function my_calendar_searchform( $type, $url = '' ) {
  */
 function mc_get_list_locations( $datatype, $full = true, $return_type = 'OBJECT' ) {
 	global $wpdb;
-	$mcdb = $wpdb;
+	$mcdb        = $wpdb;
 	$return_type = ( 'OBJECT' === $return_type ) ? OBJECT : ARRAY_A;
 	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();

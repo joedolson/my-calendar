@@ -161,7 +161,7 @@ add_filter( 'the_title', 'mc_search_results_title', 10, 2 );
  *
  * @return string New title
  */
-function mc_search_results_title( $title, $id = false ) {
+function mc_search_results_title( $title, $id ) {
 	if ( ( isset( $_GET['mcs'] ) || isset( $_POST['mcs'] ) ) && ( is_page( $id ) || is_single( $id ) ) && in_the_loop() ) {
 		$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : $_POST['mcs'];
 		// Translators: entered search query.
@@ -222,6 +222,9 @@ function mc_search_exportlinks() {
 	$mc_print_url = mc_build_url( $print_add, '', home_url() );
 	$print        = "<div class='mc-print'><a href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 
+	$above = array();
+	$below = array();
+
 	// Set up exports.
 	if ( '' !== get_option( 'mc_topnav', '' ) ) {
 		$above = array_map( 'trim', explode( ',', get_option( 'mc_topnav' ) ) );
@@ -268,8 +271,9 @@ function mc_searched_events( $event_array ) {
  */
 function mc_get_searched_events() {
 	if ( ! session_id() || ! isset( $_SESSION['MC_SEARCH_RESULT'] ) ) {
-		return;
+		return array();
 	}
+	$event_array    = array();
 	$event_searched = json_decode( $_SESSION['MC_SEARCH_RESULT'], true );
 	foreach ( $event_searched as $key => $value ) {
 		$daily_events = array();

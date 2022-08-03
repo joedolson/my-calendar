@@ -797,8 +797,8 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 			$form .= '<input type="hidden" name="cid" value="all" />';
 		}
 		foreach ( $qsa as $name => $argument ) {
-			if ( !( 'mcat' === $name || 'mc_id' === $name ) ) {
-				$form .= '		<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />' . "\n";
+			if ( ! ( 'mcat' === $name || 'mc_id' === $name ) ) {
+				$form .= '<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />' . "\n";
 			}
 		}
 	}
