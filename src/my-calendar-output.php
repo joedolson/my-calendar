@@ -36,7 +36,7 @@ function mc_time_html( $e, $type ) {
 	$dtend   = $end . 'T' . $e->event_endtime . $offset;
 	$notime  = '';
 	if ( ! $has_time ) {
-		$label   = mc_notime_label( $e );
+		$label = mc_notime_label( $e );
 		if ( $label ) {
 			$notime .= " <span class='event-time'>";
 			$notime .= ( 'N/A' === $label ) ? "<abbr title='" . esc_html__( 'Not Applicable', 'my-calendar' ) . "'>" . esc_html__( 'N/A', 'my-calendar' ) . '</abbr>' : esc_html( $label );

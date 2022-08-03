@@ -420,7 +420,7 @@ add_action( 'add_meta_boxes', 'mc_calendar_view' );
 /**
  * Settings to configure My Calendar view or build shortcode.
  *
- * @param object       $post Post object.
+ * @param object|false $post WP_Post object or false if no data.
  * @param array|string $callback_args Post callback args or selected type.
  */
 function mc_calendar_generator_fields( $post, $callback_args ) {
@@ -450,6 +450,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	?>
 	<div id="mc-generator" class="generator">
 		<?php
+		$message = '';
 		switch ( $type ) {
 			case 'main':
 				$message = __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
@@ -647,16 +648,16 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						$p      = '';
 						while ( $past > 0 ) {
 							$p   .= '<option value="';
-							$p   .= current_time( 'Y' ) - $past;
+							$p   .= (int) current_time( 'Y' ) - $past;
 							$p   .= '">';
-							$p   .= current_time( 'Y' ) - $past . "</option>\n";
+							$p   .= (int) current_time( 'Y' ) - $past . "</option>\n";
 							$past = $past - 1;
 						}
 						while ( $fut < $future ) {
 							$f  .= '<option value="';
-							$f  .= current_time( 'Y' ) + $fut;
+							$f  .= (int) current_time( 'Y' ) + $fut;
 							$f  .= '">';
-							$f  .= current_time( 'Y' ) + $fut . "</option>\n";
+							$f  .= (int) current_time( 'Y' ) + $fut . "</option>\n";
 							$fut = $fut + 1;
 						}
 						echo wp_kses( $p . '<option value="' . current_time( 'Y' ) . '"' . selected( current_time( 'Y' ), $year ) . '>' . current_time( 'Y' ) . "</option>\n" . $f, mc_kses_elements() );

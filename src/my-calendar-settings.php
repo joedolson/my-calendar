@@ -16,17 +16,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Generate input & field for a My Calendar setting.
  *
- * @param string  $name Name of option.
- * @param string  $label Label for input.
- * @param string  $default default value if not set.
- * @param string  $note Note to associate with field via aria-describedby.
- * @param array   $atts Array of keys and values to use as input attributes.
- * @param string  $type Field type for option.
- * @param boolean $echo True to echo, false to return.
+ * @param string       $name Name of option.
+ * @param string       $label Label for input.
+ * @param string|array $default default value or values if option not set.
+ * @param string       $note Note to associate with field via aria-describedby.
+ * @param array        $atts Array of keys and values to use as input attributes.
+ * @param string       $type Field type for option.
+ * @param boolean      $echo True to echo, false to return.
  */
 function mc_settings_field( $name, $label, $default = '', $note = '', $atts = array(), $type = 'text', $echo = true ) {
 	$options    = '';
 	$attributes = '';
+	$return     = '';
 	if ( 'text' === $type || 'url' === $type || 'email' === $type ) {
 		$base_atts = array(
 			'size' => '30',
@@ -350,18 +351,18 @@ function mc_update_output_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_input_settings( $post ) {
-	$mc_input_options_administrators = ( ! empty( $post['mc_input_options_administrators'] ) && 'on' === $post['mc_input_options_administrators'] ) ? 'true' : 'false';
+	$mc_input_options_administrators = ( isset( $post['mc_input_options_administrators'] ) ) ? 'true' : 'false';
 	$mc_input_options                = array(
-		'event_short'    => ( ! empty( $post['mci_event_short'] ) && $post['mci_event_short'] ) ? 'on' : 'off',
-		'event_desc'     => ( ! empty( $post['mci_event_desc'] ) && $post['mci_event_desc'] ) ? 'on' : 'off',
-		'event_category' => ( ! empty( $post['mci_event_category'] ) && $post['mci_event_category'] ) ? 'on' : 'off',
-		'event_image'    => ( ! empty( $post['mci_event_image'] ) && $post['mci_event_image'] ) ? 'on' : 'off',
-		'event_link'     => ( ! empty( $post['mci_event_link'] ) && $post['mci_event_link'] ) ? 'on' : 'off',
-		'event_recurs'   => ( ! empty( $post['mci_event_recurs'] ) && $post['mci_event_recurs'] ) ? 'on' : 'off',
-		'event_open'     => ( ! empty( $post['mci_event_open'] ) && $post['mci_event_open'] ) ? 'on' : 'off',
-		'event_location' => ( ! empty( $post['mci_event_location'] ) && $post['mci_event_location'] ) ? 'on' : 'off',
-		'event_access'   => ( ! empty( $post['mci_event_access'] ) && $post['mci_event_access'] ) ? 'on' : 'off',
-		'event_host'     => ( ! empty( $post['mci_event_host'] ) && $post['mci_event_host'] ) ? 'on' : 'off',
+		'event_short'    => ( isset( $post['mci_event_short'] ) ) ? 'on' : 'off',
+		'event_desc'     => ( isset( $post['mci_event_desc'] ) ) ? 'on' : 'off',
+		'event_category' => ( isset( $post['mci_event_category'] ) ) ? 'on' : 'off',
+		'event_image'    => ( isset( $post['mci_event_image'] ) ) ? 'on' : 'off',
+		'event_link'     => ( isset( $post['mci_event_link'] ) ) ? 'on' : 'off',
+		'event_recurs'   => ( isset( $post['mci_event_recurs'] ) ) ? 'on' : 'off',
+		'event_open'     => ( isset( $post['mci_event_open'] ) ) ? 'on' : 'off',
+		'event_location' => ( isset( $post['mci_event_location'] ) ) ? 'on' : 'off',
+		'event_access'   => ( isset( $post['mci_event_access'] ) ) ? 'on' : 'off',
+		'event_host'     => ( isset( $post['mci_event_host'] ) ) ? 'on' : 'off',
 	);
 	update_option( 'mc_input_options', $mc_input_options );
 	update_option( 'mc_input_options_administrators', $mc_input_options_administrators );
@@ -490,7 +491,7 @@ function my_calendar_settings() {
 		 */
 		$settings = do_action( 'mc_save_settings', '', $_POST );
 		if ( '' !== $settings ) {
-			mc_show_notice( $setings );
+			mc_show_notice( $settings );
 		}
 	}
 
@@ -1429,6 +1430,8 @@ function mc_location_controls() {
 
 		return $output;
 	}
+
+	return '';
 }
 
 /**

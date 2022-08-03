@@ -336,8 +336,8 @@ function mc_stylesheet_selector() {
 /**
  * Get path for given filename or current selected stylesheet.
  *
- * @param string $filename File name.
- * @param string $type path or url.
+ * @param string|false $filename File name or false for current selection.
+ * @param string       $type path or url.
  *
  * @return mixed string/boolean
  */
@@ -371,10 +371,10 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 /**
  * Fetch the styles for the current selected style
  *
- * @param string $filename File name.
- * @param string $return content or filename.
+ * @param string|false $filename File name or false to return defined default stylesheet.
+ * @param string       $return content, filename, or both.
  *
- * @return string
+ * @return string|array File name, file content, or array with both.
  */
 function mc_default_style( $filename = false, $return = 'content' ) {
 	if ( ! $filename ) {
@@ -391,13 +391,10 @@ function mc_default_style( $filename = false, $return = 'content' ) {
 		switch ( $return ) {
 			case 'content':
 				return $mc_current_style;
-				break;
 			case 'path':
 				return $mc_current_file;
-				break;
 			case 'both':
 				return array( $mc_current_file, $mc_current_style );
-				break;
 		}
 	}
 
@@ -443,17 +440,18 @@ function mc_write_styles( $file, $style ) {
 		return false;
 	}
 
-	$standard = dirname( __FILE__ ) . '/styles/';
-	$files    = mc_css_list( $standard );
+	$standard        = dirname( __FILE__ ) . '/styles/';
+	$files           = mc_css_list( $standard );
+	$accepted_styles = array();
 	foreach ( $files as $f ) {
 		$filepath = mc_get_style_path( $f );
 		$path     = pathinfo( $filepath );
 		if ( 'css' === $path['extension'] ) {
-			$styles_whitelist[] = $filepath;
+			$accepted_styles[] = $filepath;
 		}
 	}
 
-	if ( in_array( $file, $styles_whitelist, true ) ) {
+	if ( in_array( $file, $accepted_styles, true ) ) {
 		if ( function_exists( 'wp_is_writable' ) ) {
 			$is_writable = wp_is_writable( $file );
 		} else {
@@ -512,7 +510,7 @@ add_action(
  * @param int $b Blue value 1.
  * @param int $b2 Blue value 2.
  *
- * @return luminosity ratio.
+ * @return float luminosity ratio between 1.0 and 21.0.
  */
 function mc_luminosity( $r, $r2, $g, $g2, $b, $b2 ) {
 	$rs_rgb = $r / 255;
@@ -544,11 +542,11 @@ function mc_luminosity( $r, $r2, $g, $g2, $b, $b2 ) {
 /**
  * Convert an RGB value to a HEX value.
  *
- * @param int $r Red value.
- * @param int $g Green value.
- * @param int $b Blue value.
+ * @param int|array $r Red value or array with r, g, b keys.
+ * @param int       $g Green value.
+ * @param int       $b Blue value.
  *
- * @return Hexadecimal color equivalent.
+ * @return string Hexadecimal color equivalent of passed RGB value.
  */
 function mc_rgb2hex( $r, $g = - 1, $b = - 1 ) {
 	if ( is_array( $r ) && sizeof( $r ) === 3 ) {
