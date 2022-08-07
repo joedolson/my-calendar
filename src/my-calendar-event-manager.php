@@ -310,6 +310,8 @@ function my_calendar_manage() {
 
 						<div class="inside">
 							<?php
+							// If any subsidiary post actions (e.g. delete an event), handle before display.
+							mc_handle_post();
 							if ( $grid ) {
 								$calendar = array(
 									'name'     => 'admin',
@@ -416,18 +418,27 @@ function mc_show_bulk_actions() {
 }
 
 /**
+ * Handle event list/grid POST actions.
+ *
+ * @return void
+ */
+function mc_handle_post() {
+	$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
+	$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
+	if ( 'delete' === $action ) {
+		$message = mc_delete_event( $event_id );
+		echo wp_kses_post( $message );
+	}
+}
+
+/**
  * Used on the manage events admin page to display a list of events
  */
 function mc_list_events() {
 	global $wpdb;
 	if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_add_events' ) ) {
 
-		$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
-		$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
-		if ( 'delete' === $action ) {
-			$message = mc_delete_event( $event_id );
-			echo wp_kses_post( $message );
-		}
+
 
 		if ( isset( $_GET['order'] ) ) {
 			$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
