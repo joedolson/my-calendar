@@ -166,7 +166,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	 *
 	 * @return {string} Label used inside map link.
 	 */
-	$label = sprintf( apply_filters( 'mc_map_label', $label, $map_label ) );
+	$label = apply_filters( 'mc_map_label', $label, $map_label );
 	if ( strlen( trim( $map_string ) ) > 6 ) {
 		/**
 		 * Google maps URL.
