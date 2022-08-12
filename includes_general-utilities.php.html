@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: includes/general-utilities.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: includes/general-utilities.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * General utilities, not directly related to events display, management, or organization.
+ *
+ * @category Utilities
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Switch sites in multisite environment.
+ *
+ * @return boolean
+ */
+function mc_switch_sites() {
+	if ( function_exists( 'is_multisite' ) &amp;&amp; is_multisite() ) {
+		if ( get_site_option( 'mc_multisite' ) === '2' &amp;&amp; my_calendar_table() !== my_calendar_table( 'global' ) ) {
+			if ( get_option( 'mc_current_table' ) === '1' ) {
+				// can post to either, but is currently set to post to central table.
+				return true;
+			}
+		} elseif ( get_site_option( 'mc_multisite' ) === '1' &amp;&amp; my_calendar_table() !== my_calendar_table( 'global' ) ) {
+			// can only post to central table.
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Send a Tweet on approval of event
+ *
+ * @param string $prev Previous status.
+ * @param string $new New status.
+ *
+ * @return void
+ */
+function mc_tweet_approval( $prev, $new ) {
+	if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; isset( $_POST['mc_twitter'] ) &amp;&amp; trim( $_POST['mc_twitter'] ) !== '' ) {
+		if ( ( 0 === (int) $prev || 2 === (int) $prev ) &amp;&amp; 1 === (int) $new ) {
+			wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
+		}
+	}
+}
+
+/**
+ * Flatten event array; need an array that isn't multi dimensional
+ * Once used in upcoming events?
+ *
+ * @param array $events Array of events.
+ *
+ * @return array&lt;int, mixed>
+ */
+function mc_flatten_array( $events ) {
+	$new_array = array();
+	if ( is_array( $events ) ) {
+		foreach ( $events as $event ) {
+			foreach ( $event as $e ) {
+				$new_array[] = $e;
+			}
+		}
+	}
+
+	return $new_array;
+}
+
+add_action( 'admin_menu', 'mc_add_outer_box' );
+/**
+ * Add meta boxes
+ *
+ * @return void
+ */
+function mc_add_outer_box() {
+	add_meta_box( 'mcs_add_event', __( 'My Calendar Event', 'my-calendar' ), 'mc_add_inner_box', 'mc-events', 'side', 'high' );
+}
+
+/**
+ * Add inner metabox
+ *
+ * @return void
+ */
+function mc_add_inner_box() {
+	global $post;
+	$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
+	if ( $event_id ) {
+		$url     = admin_url( 'admin.php?page=my-calendar&amp;mode=edit&amp;event_id=' . $event_id );
+		$event   = mc_get_first_event( $event_id );
+		$content = '&lt;p>&lt;strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '&lt;/strong>&lt;br />' . $event->event_begin . ' @ ' . $event->event_time . '&lt;/p>';
+		if ( ! mc_is_recurring( $event ) ) {
+			$recur    = mc_event_recur_string( $event, $event->event_begin );
+			$content .= wpautop( $recur );
+		}
+		if ( '' !== $event->event_label ) {
+			// Translators: Name of event location.
+			$content .= '&lt;p>' . sprintf( __( '&lt;strong>Location:&lt;/strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . '&lt;/p>';
+		}
+		// Translators: Event URL.
+		$content .= '&lt;p>' . sprintf( __( '&lt;a href="%s">Edit event&lt;/a>.', 'my-calendar' ), $url ) . '&lt;/p>';
+
+		echo $content;
+	}
+}
+
+/**
+ * Pass group of allowed tags to strip_tags
+ *
+ * @return string Allowed tags parseable by strip_tags.
+ */
+function mc_strip_tags() {
+
+	return apply_filters( 'mc_strip_tags', '&lt;strong>&lt;em>&lt;i>&lt;b>&lt;span>&lt;br>&lt;a>&lt;time>&lt;img>' );
+}
+
+/**
+ * Pass group of allowed tags to strip_tags
+ *
+ * @return string Allowed tags parseable by strip_tags in admin.
+ */
+function mc_admin_strip_tags() {
+
+	return '&lt;strong>&lt;em>&lt;i>&lt;b>&lt;span>&lt;a>&lt;code>&lt;pre>&lt;br>';
+}
+
+/**
+ * Old function for checking value of an option field
+ *
+ * @param string             $field Name of the field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $array if this setting is an array, the array key.
+ * @param boolean            $return whether to return or echo.
+ *
+ * @return string checked=checked
+ */
+function mc_is_checked( $field, $value, $array = '', $return = false ) {
+	if ( ! is_array( get_option( $field ) ) ) {
+		if ( get_option( $field ) === (string) $value ) {
+			if ( $return ) {
+				return 'checked="checked"';
+			} else {
+				echo 'checked="checked"';
+			}
+		}
+	} else {
+		$setting = get_option( $field );
+		if ( ! empty( $setting[ $array ]['enabled'] ) &amp;&amp; (string) $setting[ $array ]['enabled'] === (string) $value ) {
+			if ( $return ) {
+				return 'checked="checked"';
+			} else {
+				echo 'checked="checked"';
+			}
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Old function for checking value of an option field in a select
+ *
+ * @param string             $field Name of the field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $array if this setting is an array, the array key.
+ *
+ * @return string selected=selected
+ */
+function mc_is_selected( $field, $value, $array = '' ) {
+	if ( ! is_array( get_option( $field ) ) ) {
+		if ( get_option( $field ) === (string) $value ) {
+			return 'selected="selected"';
+		}
+	} else {
+		$setting = get_option( $field );
+		if ( (string) $setting[ $array ]['enabled'] === (string) $value ) {
+			return 'selected="selected"';
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Old function for checking value of an option field.
+ *
+ * @deprecated 3.3.0
+ *
+ * @param string             $field Name of the field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $type checkbox, radio, option.
+ *
+ * @return string
+ */
+function mc_option_selected( $field, $value, $type = 'checkbox' ) {
+	switch ( $type ) {
+		case 'radio':
+		case 'checkbox':
+			$result = ' checked="checked"';
+			break;
+		case 'option':
+			$result = ' selected="selected"';
+			break;
+		default:
+			$result = '';
+			break;
+	}
+	if ( $field === $value ) {
+		$output = $result;
+	} else {
+		$output = '';
+	}
+
+	return $output;
+}
+
+/**
+ * Check selection
+ *
+ * @param string             $field Name of field.
+ * @param string|int|boolean $value Current value.
+ * @param string             $type Type of input.
+ *
+ * @see mc_option_selected()
+ *
+ * @return string
+ */
+function jd_option_selected( $field, $value, $type = 'checkbox' ) {
+
+	return mc_option_selected( $field, $value, $type );
+}
+
+if ( ! function_exists( 'exif_imagetype' ) ) {
+	/**
+	 * This is a hack for people who don't have PHP installed with exif_imagetype
+	 *
+	 * @param string $filename Name of file.
+	 *
+	 * @return string|bool type of file.
+	 */
+	function exif_imagetype( $filename ) {
+		if ( ! is_dir( $filename ) &amp;&amp; ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.NonVariableAssignmentFound
+			return $type;
+		}
+
+		return false;
+	}
+}
+
+/**
+ * Return default state of link expiration checkbox. Replaces option.
+ *
+ * @return bool Default false.
+ */
+function mc_event_link_expires() {
+	$return  = false;
+	$default = get_option( 'mc_event_link_expires' );
+	if ( 'true' === $default ) {
+		$return = true;
+	}
+
+	return apply_filters( 'mc_event_link_expires', $return );
+}
+
+/**
+ * Return default state of fifth week checkbox. Replaces option.
+ *
+ * @return bool Default true.
+ */
+function mc_no_fifth_week() {
+	$return  = true;
+	$default = get_option( 'mc_no_fifth_week' );
+	if ( 'false' === $default ) {
+		$return = false;
+	}
+
+	return apply_filters( 'mc_no_fifth_week', $return );
+}
+
+/**
+ * Return default state of skip holidays checkbox. Replaces option.
+ *
+ * @return bool Default false.
+ */
+function mc_skip_holidays() {
+	$return  = false;
+	$default = get_option( 'mc_skip_holidays' );
+	if ( 'true' === $default ) {
+		$return = true;
+	}
+
+	return apply_filters( 'mc_skip_holidays', $return );
+}
+
+/**
+ * Checks the contrast ratio of color &amp; returns the optimal color to use with it.
+ *
+ * @param string $color hex value.
+ *
+ * @return string white or black hex value
+ */
+function mc_inverse_color( $color ) {
+	$color = str_replace( '#', '', $color );
+	if ( strlen( $color ) !== 6 ) {
+		return '#000000';
+	}
+	$rgb       = '';
+	$total     = 0;
+	$red       = 0.299 * ( 255 - hexdec( substr( $color, 0, 2 ) ) );
+	$green     = 0.587 * ( 255 - hexdec( substr( $color, 2, 2 ) ) );
+	$blue      = 0.114 * ( 255 - hexdec( substr( $color, 4, 2 ) ) );
+	$luminance = 1 - ( ( $red + $green + $blue ) / 255 );
+	if ( $luminance &lt; 0.5 ) {
+		return '#ffffff';
+	} else {
+		return '#000000';
+	}
+}
+
+/**
+ * Shift color to an acceptable alternate color. Shifts dark colors darker and light colors lighter.
+ *
+ * @param string $color Color hex.
+ *
+ * @return string New color hex
+ */
+function mc_shift_color( $color ) {
+	$color   = str_replace( '#', '', $color );
+	$rgb     = '';
+	$percent = ( mc_inverse_color( $color ) === '#ffffff' ) ? - 20 : 20;
+	$per     = $percent / 100 * 255;
+	// Percentage to work with. Change middle figure to control color temperature.
+	if ( $per &lt; 0 ) {
+		// DARKER.
+		$per = abs( $per ); // Turns Neg Number to Pos Number.
+		for ( $x = 0; $x &lt; 3; $x ++ ) {
+			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) - $per;
+			$c    = ( $c &lt; 0 ) ? 0 : dechex( $c );
+			$rgb .= ( strlen( $c ) &lt; 2 ) ? '0' . $c : $c;
+		}
+	} else {
+		// LIGHTER.
+		for ( $x = 0; $x &lt; 3; $x ++ ) {
+			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) + $per;
+			$c    = ( $c > 255 ) ? 'ff' : dechex( $c );
+			$rgb .= ( strlen( $c ) &lt; 2 ) ? '0' . $c : $c;
+		}
+	}
+
+	return '#' . $rgb;
+}
+
+/**
+ * Convert a CSV string into an array
+ *
+ * @param string $csv Data.
+ * @param string $delimiter to use.
+ * @param string $enclosure to wrap strings.
+ * @param string $escape character.
+ * @param string $terminator end of line character.
+ *
+ * @return array
+ */
+function mc_csv_to_array( $csv, $delimiter = ',', $enclosure = '"', $escape = '\\', $terminator = "\n" ) {
+	$r    = array();
+	$rows = explode( $terminator, trim( $csv ) );
+	foreach ( $rows as $row ) {
+		if ( trim( $row ) ) {
+			$values          = explode( $delimiter, $row );
+			$r[ $values[0] ] = ( isset( $values[1] ) ) ? str_replace( array( $enclosure, $escape ), '', $values[1] ) : $values[0];
+		}
+	}
+
+	return $r;
+}
+
+/**
+ * Return string for HTML email types
+ */
+function mc_html_type() {
+
+	return 'text/html';
+}
+
+/**
+ * Duplicate of mc_is_url, which really should have been in this file. Bugger.
+ *
+ * @param string $url URL.
+ *
+ * @return int|false URL, if valid.
+ */
+function _mc_is_url( $url ) {
+
+	return preg_match( '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url );
+}
+
+/**
+ * Check whether a link is external
+ *
+ * @param string $link URL.
+ *
+ * @return boolean true if not on current host
+ */
+function mc_external_link( $link ) {
+	if ( ! _mc_is_url( $link ) ) {
+		return true; // If this is not a valid URL, consider it to be external.
+	}
+
+	$url   = parse_url( $link );
+	$host  = $url['host'];
+	$site  = parse_url( get_option( 'siteurl' ) );
+	$known = $site['host'];
+
+	if ( false === strpos( $host, $known ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Replace newline characters in a string
+ *
+ * @param string $string Any string.
+ *
+ * @return string string without newline chars
+ */
+function mc_newline_replace( $string ) {
+
+	return (string) str_replace( array( "\r", "\r\n", "\n" ), '', $string );
+}
+
+/**
+ * Reverse the order of an array
+ *
+ * @param array   $array Any array.
+ * @param boolean $boolean true or false arguments for array_reverse.
+ * @param string  $order sort order to use.
+ *
+ * @return array
+ */
+function reverse_array( $array, $boolean, $order ) {
+	if ( 'desc' === $order ) {
+
+		return array_reverse( $array, $boolean );
+	} else {
+
+		return $array;
+	}
+}
+
+/**
+ * Debugging handler shortcut
+ *
+ * @param string $subject Text for email subject.
+ * @param string $body Text for email body.
+ * @param string $email target email (if sending via email).
+ */
+function mc_debug( $subject, $body, $email = '' ) {
+	if ( defined( 'MC_DEBUG' ) &amp;&amp; true === MC_DEBUG ) {
+		if ( ! $email ) {
+			$email = get_option( 'admin_email' );
+		}
+		if ( defined( 'MC_DEBUG_METHOD' ) &amp;&amp; 'email' === MC_DEBUG_METHOD ) {
+			wp_mail( get_option( 'admin_email' ), $subject, print_r( $body ) );
+		} else {
+			/**
+			 * Execute a custom debug action during an mc_debug call. Runs if MC_DEBUG_METHOD is not 'email'.
+			 *
+			 * @hook mc_debug
+			 *
+			 * @param {string} $subject Subject line of email debugging message.
+			 * @param {string} $body Body of email debugging message.
+			 */
+			do_action( 'mc_debug', $subject, $body );
+		}
+	}
+}
+
+/**
+ * Get users as options in a select
+ *
+ * @param string $selected Group of selected users. Comma-separated IDs.
+ * @param string $group Type of roles to fetch.
+ *
+ * @return string select options.
+ */
+function mc_selected_users( $selected = '', $group = 'authors' ) {
+	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group );
+	if ( '' !== $options ) {
+		return $options;
+	}
+	$selected = explode( ',', $selected );
+	$users    = mc_get_users( $group );
+	foreach ( $users as $u ) {
+		if ( in_array( $u->ID, $selected, true ) ) {
+			$checked = ' selected="selected"';
+		} else {
+			$checked = '';
+		}
+		$display_name = ( '' === $u->display_name ) ? $u->user_nicename : $u->display_name;
+		$options     .= '&lt;option value="' . $u->ID . '"' . $checked . ">$display_name&lt;/option>\n";
+	}
+
+	return $options;
+}
+
+/**
+ * Get users.
+ *
+ * @param string $group Not used except in filters.
+ *
+ * @return array of users
+ */
+function mc_get_users( $group = 'authors' ) {
+	global $blog_id;
+	$users = apply_filters( 'mc_get_users', false, $group, $blog_id );
+	if ( $users ) {
+		return $users;
+	}
+	$count = count_users( 'time' );
+	$args  = array(
+		'blog_id' => $blog_id,
+		'orderby' => 'display_name',
+		'fields'  => array( 'ID', 'user_nicename', 'display_name' ),
+	);
+	$args  = apply_filters( 'mc_filter_user_arguments', $args, $count, $group );
+	$users = new WP_User_Query( $args );
+
+	return $users->get_results();
+}
+
+/**
+ * Display an update message.
+ *
+ * @param string         $message Update message.
+ * @param boolean        $echo Echo or return. Default true (echo).
+ * @param boolean|string $code Message code.
+ *
+ * @return string
+ */
+function mc_show_notice( $message, $echo = true, $code = false ) {
+	if ( trim( $message ) === '' ) {
+		return '';
+	}
+	$message = strip_tags( apply_filters( 'mc_filter_notice', $message, $code ), mc_admin_strip_tags() );
+	$message = "&lt;div class='updated'>&lt;p>$message&lt;/p>&lt;/div>";
+	if ( $echo ) {
+		echo wp_kses_post( $message );
+	}
+	return $message;
+}
+
+/**
+ * Display an error message.
+ *
+ * @param string         $message Error message.
+ * @param boolean        $echo Echo or return. Default true (echo).
+ * @param boolean|string $code Message code.
+ *
+ * @return string
+ */
+function mc_show_error( $message, $echo = true, $code = false ) {
+	if ( trim( $message ) === '' ) {
+		return '';
+	}
+	$message = strip_tags( apply_filters( 'mc_filter_error', $message, $code ), mc_admin_strip_tags() );
+	$message = "&lt;div class='error'>&lt;p>$message&lt;/p>&lt;/div>";
+	if ( $echo ) {
+		echo $message;
+	}
+	return $message;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="mc_debug.html">mc_debug</a></li><li><a href="mc_event_expired.html">mc_event_expired</a></li><li><a href="mc_event_future.html">mc_event_future</a></li><li><a href="mc_event_happening.html">mc_event_happening</a></li><li><a href="mc_event_over.html">mc_event_over</a></li><li><a href="mc_post_add_category.html">mc_post_add_category</a></li><li><a href="mc_post_category_form.html">mc_post_category_form</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_save_user.html">mc_save_user</a></li><li><a href="mc_tags_created.html">mc_tags_created</a></li><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="ical_x_published_ttl.html">ical_x_published_ttl</a></li><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_ical_template.html">mc_filter_ical_template</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_single_ical_template.html">mc_single_ical_template</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
