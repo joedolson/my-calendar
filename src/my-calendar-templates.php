@@ -34,7 +34,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 		return '';
 	}
 	foreach ( $array as $key => $value ) {
-		if ( is_object( $value ) && ! empty( $value ) ) {
+		if ( is_object( $value ) ) {
 			// If a value is an object, ignore it.
 		} else {
 			if ( strpos( $template, '{' . $key ) !== false ) {
@@ -96,7 +96,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
  * @param object $event object containing location properties.
  * @param string $source event or location.
  *
- * @return stringified address info
+ * @return string stringified address info
  */
 function mc_map_string( $event, $source = 'event' ) {
 	if ( ! is_object( $event ) ) {
@@ -353,7 +353,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
  */
 function mc_create_tags( $event, $context = 'filters' ) {
 	if ( ! is_object( $event ) ) {
-		return;
+		return array();
 	}
 	do_action( 'mc_create_tags', $event, $context );
 	$calendar_id = '';
@@ -600,7 +600,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 			 * @hook mc_phone_format
 			 *
 			 * @param {string} $number Phone number as saved in `$location->location_phone`.
-			 * @param {object} $location Location object.
 			 * @param {string} $context 'phone'.
 			 *
 			 * @return {string} Formatted number.
@@ -612,12 +611,11 @@ function mc_create_tags( $event, $context = 'filters' ) {
 			 * @hook mc_phone_format
 			 *
 			 * @param {string} $number Phone number as saved in `$location->location_phone`.
-			 * @param {object} $location Location object.
 			 * @param {string} $context 'phone2'.
 			 *
 			 * @return {string} Formatted number.
 			 */
-			$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ) );
+			$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ), 'phone2' );
 			$e['city']            = stripslashes( $location->location_city );
 			$e['state']           = stripslashes( $location->location_state );
 			$e['postcode']        = stripslashes( $location->location_postcode );
@@ -643,7 +641,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 * @hook mc_phone_format
 		 *
 		 * @param {string} $number Phone number as saved in `$event->event_phone`.
-		 * @param {object} $event Event object.
 		 * @param {stirng} $context 'phone'.
 		 *
 		 * @return {string} Formatted number.
@@ -655,7 +652,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 * @hook mc_phone_format
 		 *
 		 * @param {string} $number Phone number as saved in `$event->event_phone2`.
-		 * @param {object} $event Event object.
 		 * @param {string} $context 'phone2'.
 		 *
 		 * @return {string} Formatted number.
@@ -764,7 +760,7 @@ function mc_get_details_link( $event ) {
 		$event = mc_get_event( $event );
 	}
 	if ( ! is_object( $event ) ) {
-		return;
+		return '';
 	}
 	$restore = false;
 	if ( is_multisite() && property_exists( $event, 'site_id' ) && get_current_blog_id() !== $event->site_id ) {
@@ -1180,8 +1176,6 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			$map     = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . $markers . '</div>';
 			$locs    = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
 			$out     = '<div class="mc-maps">' . $map . $locs . '</div>';
-		} else {
-			$out = '';
 		}
 	}
 
@@ -1229,7 +1223,7 @@ function mc_expand( $data ) {
  * @param int   $event_span Whether these events constitute one event.
  * @param array $dates Start and end dates of current event.
  *
- * @return string
+ * @return array
  */
 function mc_event_date_span( $group_id, $event_span, $dates = array() ) {
 	global $wpdb;
@@ -1335,10 +1329,10 @@ function mc_author_data( $e, $event ) {
 			$e['author_id']    = $event->event_author;
 		}
 		if ( $host ) {
-			$e['host']          = ( ! $host || '' === $host->display_name ) ? $author->display_name : $host->display_name;
+			$e['host']          = ( '' === $host->display_name ) ? $author->display_name : $host->display_name;
 			$e['host_id']       = $event->event_host;
-			$e['host_email']    = ( ! $host || '' === $host->user_email ) ? $author->user_email : $host->user_email;
-			$e['host_gravatar'] = ( ! $host || '' === $host->user_email ) ? $e['gravatar'] : get_avatar( $host->user_email );
+			$e['host_email']    = ( '' === $host->user_email ) ? $author->user_email : $host->user_email;
+			$e['host_gravatar'] = ( '' === $host->user_email ) ? $e['gravatar'] : get_avatar( $host->user_email );
 		}
 	} else {
 		$e['author']        = 'Public Submitter';

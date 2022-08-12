@@ -438,8 +438,6 @@ function mc_list_events() {
 	global $wpdb;
 	if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_add_events' ) ) {
 
-
-
 		if ( isset( $_GET['order'] ) ) {
 			$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
 			$sortdir = ( isset( $_GET['order'] ) && 'DESC' === $_GET['order'] ) ? 'DESC' : $sortdir;
