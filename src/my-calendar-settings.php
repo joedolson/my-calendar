@@ -486,8 +486,6 @@ function my_calendar_settings() {
 		 *
 		 * @param {string} Message after updating settings sent to `mc_show_notice()`.
 		 * @param {array}  $post POST global.
-		 *
-		 * @return {string}
 		 */
 		$settings = do_action( 'mc_save_settings', '', $_POST );
 		if ( '' !== $settings ) {

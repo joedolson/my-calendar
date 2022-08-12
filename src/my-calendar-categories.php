@@ -367,6 +367,15 @@ function mc_create_category( $category ) {
 	$add     = apply_filters( 'mc_pre_add_category', $add, $category );
 	$results = $wpdb->insert( my_calendar_categories_table(), $add, $formats );
 	$cat_id  = $wpdb->insert_id;
+	/**
+	 * Execute action after inserting a new category into the My Calendar database.
+	 *
+	 * @hook mc_post_add_category
+	 *
+	 * @param {array}  $add Category data array used for DB insert.
+	 * @param {int}    $cat_id ID of new category.
+	 * @param {string} $category Original array sent to function.
+	 */
 	do_action( 'mc_post_add_category', $add, $cat_id, $category );
 
 	return $cat_id;
@@ -519,7 +528,17 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							<p>
 								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
 							</p>
-							<?php do_action( 'mc_post_category_form', $cur_cat, $view ); ?>
+							<?php
+							/**
+							 * Execute action after category editor form prints to screen.
+							 *
+							 * @hook mc_post_category_form
+							 *
+							 * @param {object} $cur_cat Current category object.
+							 * @param {string} $view Type of view ('add' or 'edit').
+							 */
+							do_action( 'mc_post_category_form', $cur_cat, $view );
+							?>
 						</form>
 					</div>
 				</div>
@@ -949,7 +968,14 @@ function mc_save_profile() {
 			delete_user_meta( $edit_id, 'mc_user_permissions' );
 		}
 	}
-
+	/**
+	 * Execute action when saving My Calendar data in a user profile.
+	 *
+	 * @hook mc_save_user
+	 *
+	 * @param {object} $int Edited user ID.
+	 * @param {array}  $_POST POST data.
+	 */
 	do_action( 'mc_save_user', $edit_id, $_POST );
 }
 

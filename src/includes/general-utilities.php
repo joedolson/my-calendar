@@ -468,6 +468,14 @@ function mc_debug( $subject, $body, $email = '' ) {
 		if ( defined( 'MC_DEBUG_METHOD' ) && 'email' === MC_DEBUG_METHOD ) {
 			wp_mail( get_option( 'admin_email' ), $subject, print_r( $body ) );
 		} else {
+			/**
+			 * Execute a custom debug action during an mc_debug call. Runs if MC_DEBUG_METHOD is not 'email'.
+			 *
+			 * @hook mc_debug
+			 *
+			 * @param {string} $subject Subject line of email debugging message.
+			 * @param {string} $body Body of email debugging message.
+			 */
 			do_action( 'mc_debug', $subject, $body );
 		}
 	}

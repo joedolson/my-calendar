@@ -683,13 +683,34 @@ function mc_date_relation( $event ) {
 	$date_relation = 2;
 	$now           = time();
 	if ( $ts < $now && $end > $now ) {
-		do_action( 'mc_event_happening', true, $event );
+		/**
+		 * Execute action while an event is happening.
+		 *
+		 * @hook mc_event_happening
+		 *
+		 * @param {object} $object Event object.
+		 */
+		do_action( 'mc_event_happening', $event );
 		$date_relation = 1;
 	} elseif ( $now < $ts ) {
-		do_action( 'mc_event_future', true, $event );
+		/**
+		 * Execute action before an event will occur.
+		 *
+		 * @hook mc_event_future
+		 *
+		 * @param {object} $object Event object.
+		 */
+		do_action( 'mc_event_future', $event );
 		$date_relation = 2;
 	} elseif ( $now > $ts ) {
-		do_action( 'mc_event_over', true, $event );
+		/**
+		 * Execute action after an event has occurred.
+		 *
+		 * @hook mc_event_over
+		 *
+		 * @param {object} $object Event object.
+		 */
+		do_action( 'mc_event_over', $event );
 		$date_relation = 0;
 	}
 

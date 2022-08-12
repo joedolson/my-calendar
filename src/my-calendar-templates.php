@@ -355,6 +355,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( ! is_object( $event ) ) {
 		return array();
 	}
+	/**
+	 * Execute action before tags are created.
+	 *
+	 * @hook mc_tags_created
+	 *
+	 * @param {object} $object Event object.
+	 * @param {string} $context Current execution context.
+	 */
 	do_action( 'mc_create_tags', $event, $context );
 	$calendar_id = '';
 	if ( 'filters' !== $context && 'related' !== $context ) {
@@ -714,6 +722,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 * @return {array} Array of template tags.
 	 */
 	$e = apply_filters( 'mc_filter_shortcodes', $e, $event );
+	/**
+	 * Execute action when tags are created.
+	 *
+	 * @hook mc_tags_created
+	 *
+	 * @param {object} $object Event object.
+	 * @param {string} $context Current execution context.
+	 */
 	do_action( 'mc_tags_created', $event, $context );
 
 	return $e;
@@ -1034,6 +1050,13 @@ function mc_event_link( $event ) {
 function mc_event_expired( $event ) {
 	if ( is_object( $event ) && property_exists( $event, 'occur_end' ) ) {
 		if ( my_calendar_date_xcomp( $event->occur_end, current_time( 'Y-m-d' ) ) ) {
+			/**
+			 * Execute action once an event is over.
+			 *
+			 * @hook mc_event_expired
+			 *
+			 * @param {object} $object Event object.
+			 */
 			do_action( 'mc_event_expired', $event );
 
 			return true;
