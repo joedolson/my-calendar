@@ -17,7 +17,7 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.3.17
+ * Version:     3.3.18
  */
 
 /*
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $mc_version, $wpdb;
-$mc_version = '3.3.17';
+$mc_version = '3.3.18';
 
 define( 'MC_DEBUG', false );
 define( 'MC_DIRECTORY', plugin_dir_path( __FILE__ ) );
