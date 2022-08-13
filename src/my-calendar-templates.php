@@ -408,6 +408,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$real_begin_date = ( isset( $event->occur_begin ) ) ? $event->occur_begin : $event->event_begin . ' ' . $event->event_time;
 	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ), $context );
 	$dtend           = mc_format_timestamp( strtotime( $real_end_date ), $context );
+	$recur_start     = mc_format_timestamp( strtotime( $event->event_begin . ' ' . $event->event_time ), $context );
+	$recur_end       = mc_format_timestamp( strtotime( $event->event_end . ' ' . $event->event_endtime ), $context );
 	/**
 	 * Start date format used in 'date_utc'. Default from My Calendar settings.
 	 *
@@ -691,8 +693,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// ICAL.
 	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
 	$e['ical_desc']        = $strip_desc;
-	$e['ical_start']       = $dtstart;
-	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd\THi00', strtotime( $dtend ) + 60, false ) : $dtend;
+	$e['ical_start']       = $recur_start;
+	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd\THi00', strtotime( $recur_end ) + 60, false ) : $recur_end;
 	$e['ical_recur']       = mc_generate_rrule( $event );
 	$ical_link             = mc_build_url(
 		array( 'vcal' => $event->occur_id ),
