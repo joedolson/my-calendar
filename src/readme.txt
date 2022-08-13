@@ -89,6 +89,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: img and svg category icon styles applied to list items in category admin.
 * Bug fix: duplicate sprintf call missing arguments.
 * Bug fix: Globally review & align var type declarations with params & returns in functions & documentation.
+* Bug fix: Fix some date iteration on recurring events in iCal exports.
 * Change: Return http 500 if invalid URL passed to print view return URL.
 * Continuing hook documentation.
 
