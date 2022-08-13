@@ -601,7 +601,7 @@ function mc_generate_rrule( $event ) {
 		$until = 'UNTIL=' . mc_date( 'Ymd\THis', strtotime( $repeat ), false ) . 'Z';
 	}
 
-	$rrule = ( '' !== $rrule ) ? PHP_EOL . "RRULE:$rrule;$by;$interval;$until" . PHP_EOL : '';
+	$rrule = ( '' !== $rrule ) ? PHP_EOL . "RRULE:$rrule;$by;$interval;$until" : '';
 	$rrule = str_replace( array( ';;;', ';;' ), ';', $rrule );
 
 	return $rrule;
