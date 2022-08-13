@@ -156,7 +156,8 @@ div.site-content, table {
 	color: inherit;
 }
 
-.category-icon,
+img.category-icon,
+svg.category-icon,
 .category-color-sample.svg * {
 	max-width: 18px;
 	min-width: 16px;
