@@ -250,7 +250,7 @@ function mc_recur_date( $ts ) {
 	$ts      = is_numeric( $ts ) ? $ts : strtotime( $ts );
 	$weekday = mc_date( 'l', $ts );
 	$month   = mc_date( 'M', $ts );
-	$ord     = 0;
+	$ord     = 1;
 
 	while ( mc_date( 'M', ( $ts = strtotime( '-1 week', $ts ) ) ) === $month ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		$ord++;
