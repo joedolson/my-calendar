@@ -48,6 +48,16 @@ function mc_update_location_post( $where, $data, $post ) {
 	}
 	$post_id = wp_update_post( $my_post );
 
+		/**
+		 * Executed an action when a location post is updated.
+		 *
+		 * @hook mc_update_location_posts
+		 *
+		 * @param {int}   $post_id Post ID.
+		 * @param {array} $post POST Array of data sent to create post.
+		 * @param {array} $data Data for this location.
+		 * @param {int}   $location_id Location ID.
+		 */
 	do_action( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
 	if ( mc_switch_sites() ) {
 		restore_current_blog();
@@ -92,7 +102,17 @@ function mc_create_location_post( $location_id, $data, $post = array() ) {
 			mc_transition_location( $location_id, $post_id );
 		}
 
-		do_action( 'mc_update_location_post', $post_id, $post, $data, $location_id );
+		/**
+		 * Executed an action when a location post is created.
+		 *
+		 * @hook mc_create_location_posts
+		 *
+		 * @param {int}   $post_id Post ID.
+		 * @param {array} $post POST Array of data sent to create post.
+		 * @param {array} $data Data for this location.
+		 * @param {int}   $location_id Location ID.
+		 */
+		do_action( 'mc_create_location_post', $post_id, $post, $data, $location_id );
 		wp_publish_post( $post_id );
 	}
 
@@ -145,6 +165,14 @@ function mc_location_delete_post( $result, $location_id ) {
 		wp_delete_post( $post, true );
 		// Delete post relationship.
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_location_relationships_table() . ' 	WHERE post_id = %d', $post ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		/**
+		 * Executed an action when a location's post is deleted.
+		 *
+		 * @hook mc_delete_location_posts
+		 *
+		 * @param {int} $location_id Location deleted.
+		 * @param {int} $post Post ID.
+		 */
 		do_action( 'mc_delete_location_posts', $location_id, $post );
 	}
 }
@@ -321,6 +349,14 @@ function mc_delete_location( $location, $type = 'string' ) {
 	global $wpdb;
 	$location = (int) ( ( isset( $_GET['location_id'] ) ) ? $_GET['location_id'] : $location );
 	$results  = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	/**
+	 * Executed an action when a location is deleted.
+	 *
+	 * @hook mc_delete_location
+	 *
+	 * @param {int|false} $results Result of database deletion. False if error; number of rows affected if successful.
+	 * @param {int} $location Location ID.
+	 */
 	do_action( 'mc_delete_location', $results, $location );
 	if ( $results ) {
 		$value            = true;
@@ -377,6 +413,15 @@ function my_calendar_add_locations() {
 		if ( isset( $_POST['mc_default_location'] ) ) {
 			update_option( 'mc_default_location', (int) $results );
 		}
+		/**
+		 * Executed an action when a location is saved.
+		 *
+		 * @hook mc_save_location
+		 *
+		 * @param {int|false} $results Result of database insertion. Row ID or false.
+		 * @param {array} $add Array of location parameters to add.
+		 * @param {array} $post POST array.
+		 */
 		do_action( 'mc_save_location', $results, $add, $_POST );
 		if ( $results ) {
 			mc_show_notice( __( 'Location added successfully', 'my-calendar' ) );
@@ -418,6 +463,15 @@ function my_calendar_add_locations() {
 		}
 		$results = mc_modify_location( $update, $where );
 
+		/**
+		 * Executed an action when a location is modified.
+		 *
+		 * @hook mc_modify_location
+		 *
+		 * @param {array} $where Array [location_id => $id].
+		 * @param {array} $update Array of location parameters to update.
+		 * @param {array} $post POST array.
+		 */
 		do_action( 'mc_modify_location', $where, $update, $_POST );
 		if ( false === $results ) {
 			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
