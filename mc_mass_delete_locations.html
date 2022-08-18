@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_happening_next_template - My Calendar Hook Doumentation</title>
+    <title>Action: mc_mass_delete_locations - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_happening_next_template</h1></header>
+    <header><h1 class="page-title">Action: mc_mass_delete_locations</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_happening_next_template">apply_filters( 'mc_happening_next_template', <span class="signature">$template, $event )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_mass_delete_locations">do_action( 'mc_mass_delete_locations', <span class="signature">$deleted, $failed )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Customize the template used to draw the next event shortcode output.</p>
+    <p>Run when multiple locations are deleted.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$template</code></td>
+                <td class="name"><code>$deleted</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">array</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>HTML and template tags.</p></td>
+            <td class="description last"><p>Array of location IDs successfully deleted.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$event</code></td>
+                <td class="name"><code>$failed</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">array</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>Event object to draw.</p></td>
+            <td class="description last"><p>Array of location IDs that were not successfully deleted.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-events.php.html">my-calendar-events.php</a>, <a href="my-calendar-events.php.html#line1006">line 1006</a>
+        <a href="my-calendar-location-manager.php.html">my-calendar-location-manager.php</a>, <a href="my-calendar-location-manager.php.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -180,217 +180,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-    
-    </div>
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    <h2></h2>
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    <h4 class="name" id="mc_happening_next_template">apply_filters( 'mc_happening_next_template', <span class="signature">$template, $event )</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Customize the template used to draw the &quot;happening now&quot; shortcode output.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>$template</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>HTML and template tags.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Event object to draw.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-events.php.html">my-calendar-events.php</a>, <a href="my-calendar-events.php.html#line923">line 923</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
