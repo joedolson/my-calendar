@@ -1346,6 +1346,9 @@ function mc_display_location_details( $content ) {
 	if ( is_singular( 'mc-locations' ) ) {
 		$location = mc_get_location_id( get_the_ID() );
 		$location = mc_get_location( $location );
+		if ( ! is_object( $location ) ) {
+			return $content;
+		}
 		$args     = array(
 			'ltype'    => 'name',
 			'lvalue'   => $location->location_label,
