@@ -32,7 +32,7 @@ function my_calendar_iframe() {
 	$body = '';
 	?>
 <!DOCTYPE html>
-<html<?php language_attributes(); ?>>
+<html <?php language_attributes(); ?>>
 <head>
 	<?php
 	wp_head();
