@@ -240,6 +240,15 @@ function mc_create_demo_content() {
 			'location_access'    => serialize( $access ),
 		);
 		$results = mc_insert_location( $add );
+		/**
+		 * Executed an action when the demo location is saved at installation.
+		 *
+		 * @hook mc_save_location
+		 *
+		 * @param {int|false} $results Result of database insertion. Row ID or false.
+		 * @param {array} $add Array of location parameters to add.
+		 * @param {array} $add Demo location array.
+		 */
 		do_action( 'mc_save_location', $results, $add, $add );
 		// Insert an event.
 		$submit = array(

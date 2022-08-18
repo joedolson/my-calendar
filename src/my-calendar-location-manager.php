@@ -147,8 +147,15 @@ function mc_clean_duplicate_locations() {
 			$i ++;
 		}
 		if ( ! empty( $deleted ) ) {
-			// Argument: array of event IDs.
-			do_action( 'mc_clean_duplicate_locations', $deleted );
+			/**
+			 * Run when action to clean up duplicate locations is run.
+			 *
+			 * @hook mc_clean_duplicate_locations
+			 *
+			 * @param {array} $deleted Array of location IDs successfully deleted.
+			 * @param {array} $failed Array of location IDs that were not successfully deleted.
+			 */
+			do_action( 'mc_clean_duplicate_locations', $deleted, $failed );
 			// Translators: Number of locations deleted, number selected.
 			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
 		} else {
@@ -187,7 +194,14 @@ function mc_mass_delete_locations() {
 			$i ++;
 		}
 		if ( ! empty( $deleted ) ) {
-			// Argument: array of event IDs.
+			/**
+			 * Run when multiple locations are deleted.
+			 *
+			 * @hook mc_mass_delete_locations
+			 *
+			 * @param {array} $deleted Array of location IDs successfully deleted.
+			 * @param {array} $failed Array of location IDs that were not successfully deleted.
+			 */
 			do_action( 'mc_mass_delete_locations', $deleted, $failed );
 			// Translators: Number of locations deleted, number selected.
 			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
