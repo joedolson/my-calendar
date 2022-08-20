@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-help.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-help.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Help page.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Display help.
+ */
+function my_calendar_help() {
+	?>
+
+	&lt;div class="wrap my-calendar-admin">
+	&lt;h1>&lt;?php esc_html_e( 'How to use My Calendar', 'my-calendar' ); ?>&lt;/h1>
+	&lt;div class="mc-tabs">
+		&lt;div class="tabs" role="tablist" data-default="my-calendar-start">
+			&lt;button type="button" role="tab" aria-selected="false"  id="tab_start" aria-controls="my-calendar-start">&lt;?php esc_html_e( 'Getting Started', 'my-calendar' ); ?>&lt;/button>
+			&lt;button type="button" role="tab" aria-selected="false"  id="tab_files" aria-controls="my-calendar-files">&lt;?php esc_html_e( 'Custom Files', 'my-calendar' ); ?>&lt;/button>
+			&lt;button type="button" role="tab" aria-selected="false"  id="tab_privacy" aria-controls="my-calendar-privacy">&lt;?php esc_html_e( 'Privacy', 'my-calendar' ); ?>&lt;/button>
+			&lt;button type="button" role="tab" aria-selected="false"  id="tab_support" aria-controls="my-calendar-support">&lt;?php esc_html_e( 'Get Support', 'my-calendar' ); ?>&lt;/button>
+		&lt;/div>
+	&lt;div class="postbox-container jcd-wide">
+	&lt;div class="metabox-holder">
+
+	&lt;div class="ui-sortable meta-box-sortables" id="get-started">
+		&lt;div class="wptab postbox" aria-labelledby="tab_start" role="tabpanel" id="my-calendar-start">
+			&lt;h2 id="help">&lt;?php esc_html_e( 'Getting Started', 'my-calendar' ); ?>&lt;/h2>
+
+			&lt;div class="inside">
+				&lt;ul class='list'>
+					&lt;?php
+					if ( ! mc_get_uri( 'boolean' ) ) {
+						echo '&lt;li>' . __( 'Add the My Calendar shortcode (&lt;code>[my_calendar]&lt;/code>) to a page.', 'my-calendar' ) . '&lt;/li>';
+						echo '&lt;li>' . __( 'Assign your Calendar Page Location at &lt;code>My Calendar > Settings > General&lt;/code>', 'my-calendar' ) . '&lt;/li>';
+					} else {
+						$permalink = mc_get_uri();
+						$edit_url  = get_edit_post_link( absint( get_option( 'mc_uri_id' ) ) );
+						// Translators: Calendar link, calendar edit link.
+						echo '&lt;li>' . sprintf( __( '&lt;a href="%1$s">View your calendar&lt;/a> or &lt;a href="%2$s">Edit the calendar page&lt;/a>', 'my-calendar' ), esc_url( $permalink ), esc_url( $edit_url ) ) . '&lt;/li>';
+					}
+					$add_categories = admin_url( 'admin.php?page=my-calendar-categories' );
+					$add_locations  = admin_url( 'admin.php?page=my-calendar-locations' );
+					$edit_events    = admin_url( 'admin.php?page=my-calendar-manage' );
+					$add_events     = admin_url( 'admin.php?page=my-calendar' );
+					// Translators: Add events link, manage events link.
+					echo '&lt;li>' . sprintf( __( '&lt;a href="%1$s">Add events&lt;/a> and &lt;a href="%2$s">administer your events&lt;/a>.', 'my-calendar' ), esc_url( $add_events ), esc_url( $edit_events ) ) . '&lt;/li>';
+					// Translators: Add categories link, add locations link.
+					echo '&lt;li>' . sprintf( __( '&lt;a href="%1$s">Add categories&lt;/a> and &lt;a href="%2$s">add locations&lt;/a>.', 'my-calendar' ), esc_url( $add_categories ), esc_url( $add_locations ) ) . '&lt;/li>';
+					// Translators: Documentation URL.
+					echo '&lt;li>' . sprintf( __( 'When you\'re ready, &lt;a href="%s">read the documentation&lt;/a>.', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' ) . '&lt;/li>';
+					?>
+				&lt;/ul>
+				&lt;?php
+				/**
+				 * Execute action after My Calendar Help data.
+				 *
+				 * @hook mc_after_help
+				 */
+				do_action( 'mc_before_help' );
+				?>
+			&lt;/div>
+		&lt;/div>
+	&lt;/div>
+
+	&lt;div class="ui-sortable meta-box-sortables" id="files">
+		&lt;div class="wptab postbox" aria-labelledby="tab_files" role="tabpanel" id="my-calendar-files">
+			&lt;h2>&lt;?php esc_html_e( 'Custom Files', 'my-calendar' ); ?>&lt;/h2>
+
+			&lt;div class="inside">
+				&lt;h3>&lt;?php esc_html_e( 'Custom Icons Location', 'my-calendar' ); ?>&lt;/h3>
+				&lt;ul>
+					&lt;li>&lt;code>&lt;?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/'; ?>&lt;/code>&lt;/li>
+				&lt;/ul>
+				&lt;h3>&lt;?php esc_html_e( 'Custom Styles Locations', 'my-calendar' ); ?>&lt;/h3>
+				&lt;ul>
+					&lt;?php
+					foreach ( mc_custom_dirs() as $dir ) {
+						echo "&lt;li>&lt;code>$dir&lt;/code>&lt;/li>";
+					}
+					?>
+				&lt;/ul>
+				&lt;p>
+					&lt;?php wp_kses_post( _e( 'Custom print, mobile, and tablet stylesheet file names: &lt;code>mc-print.css&lt;/code>, &lt;code>mc-mobile.css&lt;/code>, and &lt;code>mc-tablet.css&lt;/code>.', 'my-calendar' ) ); ?>
+				&lt;/p>
+			&lt;/div>
+		&lt;/div>
+	&lt;/div>
+
+	&lt;div class="ui-sortable meta-box-sortables" id="privacy">
+		&lt;div class="wptab postbox" aria-labelledby="tab_privacy" role="tabpanel" id="my-calendar-privacy">
+			&lt;h2>&lt;?php esc_html_e( 'Privacy', 'my-calendar' ); ?>&lt;/h2>
+
+			&lt;div class="inside">
+				&lt;h3>&lt;?php esc_html_e( 'Data Collection by My Calendar', 'my-calendar' ); ?>&lt;/h3>
+				&lt;p>
+					&lt;?php _e( 'My Calendar collects no personally identifying data.', 'my-calendar' ); ?>
+				&lt;/p>
+				&lt;p>
+					&lt;?php _e( 'My Calendar Pro, when installed, collects submitter names and email addresses when a public user submits an event from any public event submission form.', 'my-calendar' ); ?>
+				&lt;/p>
+				&lt;h3>&lt;?php esc_html_e( 'Data Sharing by My Calendar', 'my-calendar' ); ?>&lt;/h3>
+				&lt;p>
+					&lt;?php _e( 'The names and email addresses of people who author or host events are shared by My Calendar as part of the API output and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information.', 'my-calendar' ); ?>
+				&lt;/p>
+				&lt;p>
+					&lt;?php _e( 'Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted.', 'my-calendar' ); ?>
+				&lt;/p>
+				&lt;h3>&lt;?php esc_html_e( 'Data Removal in My Calendar', 'my-calendar' ); ?>&lt;/h3>
+				&lt;p>
+					&lt;?php _e( 'My Calendar supports the data export and removal features in WordPress 4.9.6 and later. When a data removal is requested, all events authored using the requested email address will be deleted. All events with that user assigned only as the host will remain, but the host will be changed.', 'my-calendar' ); ?>
+				&lt;/p>
+			&lt;/div>
+		&lt;/div>
+	&lt;/div>
+
+	&lt;?php
+	/**
+	 * Execute action after My Calendar Help data.
+	 *
+	 * @hook mc_after_help
+	 */
+	do_action( 'mc_after_help' );
+	?>
+
+	&lt;div class="ui-sortable meta-box-sortables" id="get-support">
+		&lt;div class="wptab postbox" aria-labelledby="tab_support" role="tabpanel" id="my-calendar-support">
+			&lt;h2 id="support">&lt;?php esc_html_e( 'Get Support', 'my-calendar' ); ?>&lt;/h2>
+
+			&lt;div class="inside">
+				&lt;div class='mc-support-me'>
+					&lt;p>
+					&lt;?php
+					// Translators: Donate URL, Purchase URL.
+					printf( __( 'Please, consider a &lt;a href="%1$s">donation&lt;/a> or a &lt;a href="%2$s">purchase&lt;/a> to support My Calendar!', 'my-calendar' ), 'https://www.joedolson.com/donate/', 'https://www.joedolson.com/my-calendar/pro/' );
+					?>
+					&lt;/p>
+				&lt;/div>
+				&lt;?php
+				if ( current_user_can( 'administrator' ) ) {
+					mc_get_support_form();
+				} else {
+					_e( 'My Calendar support requests can only be sent by administrators.', 'my-calendar' );
+				}
+				?>
+			&lt;/div>
+		&lt;/div>
+
+	&lt;/div>
+	&lt;/div>
+	&lt;/div>
+	&lt;?php mc_show_sidebar(); ?>
+
+	&lt;/div>
+	&lt;?php
+}
+
+/**
+ * Generate link for contextual help.
+ *
+ * @param string $link_text Link text.
+ * @param string $modal_title Modal iframe title.
+ * @param string $query Non-translatable version of modal title for search query.
+ * @param int    $id Help text ID.
+ * @param bool   $echo true to echo.
+ *
+ * @return string
+ */
+function mc_help_link( $link_text, $modal_title, $query, $id, $echo = true ) {
+	$url  = esc_url( admin_url( 'admin.php?help=' . (int) $id . '&amp;query=' . urlencode( $query ) . '&amp;page=mc-contextual-help&amp;TB_iframe=true&amp;width=600&amp;height=550&amp;modal_window=true' ) );
+	$link = sprintf(
+		'&lt;a href="%s" class="thickbox my-calendar-contextual-help" data-title="%s">&lt;span class="dashicons dashicons-editor-help" aria-hidden="true">&lt;/span>&lt;span class="screen-reader-text">%s&lt;/span>&lt;/a>',
+		$url,
+		$modal_title,
+		$link_text
+	);
+
+	if ( $echo ) {
+		echo wp_kses_post( $link );
+	}
+
+	return $link;
+}
+
+/**
+ * Load modal for contextual help.
+ */
+function mc_enqueue_modal_assets() {
+	$version = get_option( 'mc_version' );
+	// Load only for My Calendar admin pages.
+	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) &amp;&amp; get_option( 'mc_uri_id' ) === $_GET['post'] ) {
+		// Enqueue assets from WordPress.
+		wp_enqueue_style( 'thickbox' );
+		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), $version, true );
+	}
+}
+add_action( 'admin_enqueue_scripts', 'mc_enqueue_modal_assets' );
+
+/**
+ * Print the contents displayed within the modal window
+ */
+function mc_print_contextual_help() {
+	$id    = isset( $_REQUEST['help'] ) ? (int) $_REQUEST['help'] : false;
+	$query = isset( $_REQUEST['query'] ) ? sanitize_text_field( $_REQUEST['query'] ) : '';
+	?>
+	&lt;div class="modal-window-container">
+	&lt;?php
+	echo wp_kses( mc_get_help_text( $id ), mc_kses_elements() );
+	$return_url = add_query_arg( 's', $query, 'https://docs.joedolson.com/my-calendar/' );
+	$return     = wp_kses_post( '&lt;p class="docs-link">&lt;a target="_parent" href="' . esc_url( $return_url ) . '">' . __( 'Documentation', 'my-calendar' ) . '&lt;/a>&lt;/p>' );
+	echo wp_kses_post( mc_get_help_footer( $return ) );
+	?>
+	&lt;/div>
+	&lt;?php
+}
+
+/**
+ * Add custom CSS for contextual help modal.
+ */
+function mc_contextual_help_css() {
+	// Check that we are on the right screen.
+	if ( 'admin_page_mc-contextual-help' === get_current_screen()->id ) {
+		wp_enqueue_style( 'mc-contextual-help', plugins_url( 'css/help.css', __FILE__ ) );
+	}
+}
+add_action( 'admin_enqueue_scripts', 'mc_contextual_help_css' );
+
+/**
+ * Footer for contextual help modal.
+ *
+ * @param string $return Return text if not using default.
+ */
+function mc_get_help_footer( $return = '' ) {
+	if ( '' === $return ) {
+		$return = '
+		&lt;ul class="help">
+			&lt;li>
+				&lt;a href="https://docs.joedolson.com/my-calendar/">' . __( 'Documentation', 'my-calendar' ) . '&lt;/a>
+			&lt;/li>
+			&lt;li>
+				&lt;a href="' . admin_url( 'admin.php?page=my-calendar-shortcodes' ) . '">' . __( 'Shortcode Generator', 'my-calendar' ) . '&lt;/a>
+			&lt;/li>
+			&lt;li>
+				&lt;a href="' . admin_url( 'admin.php?page=my-calendar-help' ) . '#my-calendar-support">' . __( 'Get Support', 'my-calendar' ) . '&lt;/a>
+			&lt;/li>
+		&lt;/ul>
+		&lt;ul class="help">
+			&lt;li>
+				&lt;div class="dashicons dashicons-editor-help" aria-hidden="true">&lt;/div>
+				&lt;a href="' . admin_url( 'admin.php?page=my-calendar-help' ) . '">' . __( 'My Calendar Help', 'my-calendar' ) . '&lt;/a>
+			&lt;/li>
+			&lt;li>
+				&lt;div class="dashicons dashicons-yes" aria-hidden="true">&lt;/div>
+				&lt;a href="http://profiles.wordpress.org/joedolson/">' . __( 'Check out my other plugins', 'my-calendar' ) . '&lt;/a>
+			&lt;/li>
+			&lt;li>
+				&lt;div class="dashicons dashicons-star-filled" aria-hidden="true">&lt;/div>
+				&lt;a href="http://wordpress.org/support/plugin/my-calendar/reviews/?filter=5">' . __( 'Rate this plugin 5 stars!', 'my-calendar' ) . '&lt;/a>
+			&lt;/li>
+			&lt;li>
+				&lt;div class="dashicons dashicons-translation" aria-hidden="true">&lt;/div>
+				&lt;a href="https://translate.wordpress.org/projects/wp-plugins/my-calendar/">' . __( 'Help translate this plugin!', 'my-calendar' ) . '&lt;/a>
+			&lt;/li>
+		&lt;/ul>';
+	}
+
+	return '&lt;div class="mc-help-links">' . $return . '&lt;/div>';
+}
+
+/**
+ * Get contextual help by ID.
+ *
+ * @param int $id Help ID.
+ *
+ * @return string
+ */
+function mc_get_help_text( $id ) {
+	$help = array(
+		'1' => array(
+			'title' => __( 'Add Another Occurrence', 'my-calendar' ),
+			'text'  => __( 'Create a duplicate copy of this event for another date. After creation, you can manage each event separately in the event manager.', 'my-calendar' ),
+		),
+		'2' => array(
+			'title' => __( 'Repetition Pattern', 'my-calendar' ),
+			'text'  => __( 'Recurring events repeat on a specific pattern. The individual dates of recurring events are references to the main event, and only the main event will show in the event manager.', 'my-calendar' ),
+		),
+		'3' => array(
+			'title' => __( 'Navigation Keywords', 'my-calendar' ),
+			// Translators: Settings URL.
+			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the &lt;a href="%s">My Calendar Display settings&lt;/a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
+		),
+		'4' => array(
+			'title' => __( 'Copying Events', 'my-calendar' ),
+			'text'  => __( 'Copying an event (formerly described as creating an additional occurrence) sets up an additional copy of the event with a new set of dates and times. The new event is a completely separate event, associated with the source event via event groups. Marking a set of copied events as a "multi-day event" will cause them to be grouped as a single event in calendar views.', 'my-calendar' ),
+		),
+		'5' => array(
+			'title' => '',
+			'text'  => mc_display_template_tags(),
+		),
+		'6' => array(
+			'title' => __( 'Icon List', 'my-calendar' ),
+			'text'  => mc_display_icons(),
+		),
+	);
+
+	$title = ( '' !== $help[ $id ]['title'] ) ? '&lt;h2>' . $help[ $id ]['title'] . '&lt;/h2>' : '';
+	$text  = $help[ $id ]['text'];
+
+	return sprintf( '%1$s&lt;div class="mc-help-text">%2$s&lt;/div>', $title, wpautop( $text ) );
+}
+
+/**
+ * Generate a list of icons.
+ *
+ * @return string
+ */
+function mc_display_icons() {
+	$is_custom = mc_is_custom_icon();
+	$output    = get_transient( 'mc_svg_list' );
+	if ( ! $output ) {
+		if ( $is_custom ) {
+			$dir       = plugin_dir_path( __FILE__ );
+			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
+		} else {
+			$directory = dirname( __FILE__ ) . '/images/icons/';
+		}
+		$iconlist = mc_directory_list( $directory );
+		if ( ! empty( $iconlist ) ) {
+			$output = '&lt;ul class="checkboxes icon-list">';
+		}
+		foreach ( $iconlist as $icon ) {
+			$img     = mc_get_img( $icon, $is_custom );
+			$output .= '&lt;li class="category-icon">&lt;code>' . $icon . '&lt;/code>' . $img . '&lt;/li>';
+		}
+		$output .= '&lt;/ul>';
+		set_transient( 'mc_svg_list', $output, MONTH_IN_SECONDS );
+	}
+	$append = ( $is_custom ) ? '' : '&lt;p>&lt;a target="_parent" href="https://fontawesome.com/license">' . __( 'Icons by Font Awesome', 'my-calendar' ) . '&lt;/a>&lt;/p>';
+
+	return $output . $append;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="mc_after_help.html">mc_after_help</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_clean_duplicate_locations.html">mc_clean_duplicate_locations</a></li><li><a href="mc_create_location_posts.html">mc_create_location_posts</a></li><li><a href="mc_debug.html">mc_debug</a></li><li><a href="mc_delete_event.html">mc_delete_event</a></li><li><a href="mc_delete_event_instance.html">mc_delete_event_instance</a></li><li><a href="mc_delete_location.html">mc_delete_location</a></li><li><a href="mc_delete_location_posts.html">mc_delete_location_posts</a></li><li><a href="mc_deleted_post.html">mc_deleted_post</a></li><li><a href="mc_event_expired.html">mc_event_expired</a></li><li><a href="mc_event_future.html">mc_event_future</a></li><li><a href="mc_event_happening.html">mc_event_happening</a></li><li><a href="mc_event_over.html">mc_event_over</a></li><li><a href="mc_mass_delete_locations.html">mc_mass_delete_locations</a></li><li><a href="mc_mass_%257B$action%257D_events.html">mc_mass_{$action}_events</a></li><li><a href="mc_modify_location.html">mc_modify_location</a></li><li><a href="mc_notify_event_spam.html">mc_notify_event_spam</a></li><li><a href="mc_post_add_category.html">mc_post_add_category</a></li><li><a href="mc_post_category_form.html">mc_post_category_form</a></li><li><a href="mc_print_view_head.html">mc_print_view_head</a></li><li><a href="mc_save_event.html">mc_save_event</a></li><li><a href="mc_save_grouped_events.html">mc_save_grouped_events</a></li><li><a href="mc_save_location.html">mc_save_location</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_save_user.html">mc_save_user</a></li><li><a href="mc_tags_created.html">mc_tags_created</a></li><li><a href="mc_transition_event.html">mc_transition_event</a></li><li><a href="mc_update_event_post.html">mc_update_event_post</a></li><li><a href="mc_update_location_posts.html">mc_update_location_posts</a></li><li><a href="mcs_complete_submission.html">mcs_complete_submission</a></li><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li></ul><h3>Filters</h3><ul><li><a href="ical_x_published_ttl.html">ical_x_published_ttl</a></li><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_ical_template.html">mc_filter_ical_template</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_single_ical_template.html">mc_single_ical_template</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
