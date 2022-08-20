@@ -110,6 +110,16 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		$access_terms = implode( ',', array_values( $access ) );
 		mc_update_event( 'event_access', $access_terms, $event_id, '%s' );
 		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
+		/**
+		 * Execute action when an event's post is updated.
+		 *
+		 * @hook mc_update_event_post
+		 *
+		 * @param {int}   $post_id Post ID.
+		 * @param {array} $_POST POST data.
+		 * @param {array} $data Submitted event data.
+		 * @param {int}   $event_id Event ID.
+		 */
 		do_action( 'mc_update_event_post', $post_id, $_POST, $data, $event_id );
 		if ( mc_switch_sites() ) {
 			restore_current_blog();
@@ -248,6 +258,16 @@ function mc_create_event_post( $data, $event_id ) {
 		mc_update_event( 'event_post', $post_id, $event_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
 		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
+		/**
+		 * Execute action when an event's post is updated.
+		 *
+		 * @hook mc_update_event_post
+		 *
+		 * @param {int}   $post_id Post ID.
+		 * @param {array} $_POST POST data.
+		 * @param {array} $data Submitted event data.
+		 * @param {int}   $event_id Event ID.
+		 */
 		do_action( 'mc_update_event_post', $post_id, $_POST, $data, $event_id );
 		wp_publish_post( $post_id );
 	}
@@ -283,6 +303,14 @@ function mc_event_delete_posts( $deleted ) {
  * @param int $post_id Post ID.
  */
 function mc_event_delete_post( $event_id, $post_id ) {
+	/**
+	 * Execute action when an event's post is deleted.
+	 *
+	 * @hook mc_deleted_post
+	 *
+	 * @param {int} $event_id Event ID.
+	 * @param {int} $post_id Post ID.
+	 */
 	do_action( 'mc_deleted_post', $event_id, $post_id );
 	wp_delete_post( $post_id, true );
 }
@@ -443,12 +471,29 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			$event_link  = '';
 			$edit_link   = '';
 			mc_event_post( $action, $data, $event_id, $result );
+			/**
+			 * Run action when an event is saved.
+			 *
+			 * @hook mc_save_event
+			 *
+			 * @param {string}    $action Current action: edit, copy, add.
+			 * @param {array}     $data Data updated.
+			 * @param {int}       $event_id Event ID.
+			 * @param {int|false} $result Result of the DB update query.
+			 */
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 
 			if ( 'true' === get_option( 'mc_event_mail' ) ) {
 				// insert_id is last occurrence inserted in the db.
 				$event = mc_get_first_event( $event_id );
 				if ( 1 === (int) $event->event_flagged ) {
+					/**
+					 * Action executed when an event is marked as spam and eemail notifications are enabled.
+					 *
+					 * @hook mc_notify_event_spam
+					 *
+					 * @param {object} $event Event object.
+					 */
 					do_action( 'mc_notify_event_spam', $event );
 				} else {
 					my_calendar_send_email( $event );
@@ -591,19 +636,39 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			}
 			$data = $update;
 			mc_event_post( $action, $data, $event_id, $result );
+			/**
+			 * Run action when an event is saved.
+			 *
+			 * @hook mc_save_event
+			 *
+			 * @param {string}    $action Current action: edit, copy, add.
+			 * @param {array}     $data Data updated.
+			 * @param {int}       $event_id Event ID.
+			 * @param {int|false} $result Result of the DB update query.
+			 */
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 			if ( false === $result ) {
 				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} else {
 				// do an action using the $action and processed event data.
-				$event_approved = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
+				$new_event_status = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
 				// check for event_approved provides support for older versions of My Calendar Pro.
 				if ( isset( $_POST['event_approved'] ) && $_POST['event_approved'] !== $event_approved ) {
-					$event_approved = absint( $_POST['event_approved'] );
+					$new_event_status = absint( $_POST['event_approved'] );
 				}
 				if ( isset( $_POST['prev_event_status'] ) ) {
-					// Don't execute transition actions if prev status not known.
-					do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $event_approved, $action, $data, $event_id );
+					/**
+					 * Execute an action when an event changes status.
+					 *
+					 * @hook mc_transition_event
+					 *
+					 * @param {int}    $prev_event_status Previous status.
+					 * @param {int}    $new_event_status New status.
+					 * @param {string} $action Action being performed.
+					 * @param {array}  $data Submitted event data.
+					 * @param {int}    $event_id Event ID.
+					 */
+					do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $new_event_status, $action, $data, $event_id );
 				}
 				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, 'event-updated' );
 			}
@@ -664,8 +729,25 @@ function mc_delete_event( $event_id ) {
 		if ( empty( $result ) || empty( $result[0]->event_id ) ) {
 			// Do an action using the event_id.
 			if ( $instance ) {
+				/**
+				 * Action run when a single date of an event is deleted.
+				 *
+				 * @hook mc_delete_event_instance
+				 *
+				 * @param {int} $event_id Event ID.
+				 * @param {int} $post_id Post ID.
+				 * @param {int} $event_in Event instance ID.
+				 */
 				do_action( 'mc_delete_event_instance', $event_id, $post_id, $event_in );
 			} else {
+				/**
+				 * Action run when an event is deleted.
+				 *
+				 * @hook mc_delete_event
+				 *
+				 * @param {int} $event_id Event ID.
+				 * @param {int} $post_id Event Post ID.
+				 */
 				do_action( 'mc_delete_event', $event_id, $post_id );
 			}
 			$message = mc_show_notice( __( 'Event deleted successfully', 'my-calendar' ), false, 'event-deleted' );

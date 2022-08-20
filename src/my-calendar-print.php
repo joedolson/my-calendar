@@ -86,7 +86,16 @@ function my_calendar_print() {
 		<meta name="robots" content="noindex,nofollow" />
 		<!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
 		<link rel="stylesheet" href="<?php echo esc_url( $stylesheet ); ?>" type="text/css" media="screen,print" />
-		<?php do_action( 'mc_print_view_head', '' ); ?>
+		<?php
+		/**
+		 * Execute action in the `head` element of the My Calendar print view, where wp_head() won't be run.
+		 *
+		 * @hook mc_print_view_head
+		 *
+		 * @param {string} $output Potential output for My Calendar; default empty string.
+		 */
+		do_action( 'mc_print_view_head', '' );
+		?>
 	</head>
 	<body>
 	<?php

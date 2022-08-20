@@ -178,7 +178,26 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			$update = array_merge( $update, $post );
 			// Same as action on basic save.
 			mc_event_post( 'edit', $update, $event_id, $result );
+			/**
+			 * Run action when an event is saved.
+			 *
+			 * @hook mc_save_event
+			 *
+			 * @param {string}    $action Current action: edit, copy, add.
+			 * @param {array}     $update Data updated.
+			 * @param {int}       $event_id Event ID.
+			 * @param {int|false} $result Result of the DB update query.
+			 */
 			do_action( 'mc_save_event', 'edit', $update, $event_id, $result );
+			/**
+			 * Run action when a group of events are saved.
+			 *
+			 * @hook mc_save_grouped_events
+			 *
+			 * @param {int|false} $result Current action: edit, copy, add.
+			 * @param {int}       $event_id Event ID.
+			 * @param {array} $update Updated data.
+			 */
 			do_action( 'mc_save_grouped_events', $result, $event_id, $update );
 			if ( false === $result ) {
 				$message = mc_show_error( "#$event_id; " . __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );

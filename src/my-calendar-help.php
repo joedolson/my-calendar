@@ -59,7 +59,14 @@ function my_calendar_help() {
 					echo '<li>' . sprintf( __( 'When you\'re ready, <a href="%s">read the documentation</a>.', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' ) . '</li>';
 					?>
 				</ul>
-				<?php do_action( 'mc_before_help' ); ?>
+				<?php
+				/**
+				 * Execute action after My Calendar Help data.
+				 *
+				 * @hook mc_after_help
+				 */
+				do_action( 'mc_before_help' );
+				?>
 			</div>
 		</div>
 	</div>
@@ -115,7 +122,14 @@ function my_calendar_help() {
 		</div>
 	</div>
 
-	<?php do_action( 'mc_after_help' ); ?>
+	<?php
+	/**
+	 * Execute action after My Calendar Help data.
+	 *
+	 * @hook mc_after_help
+	 */
+	do_action( 'mc_after_help' );
+	?>
 
 	<div class="ui-sortable meta-box-sortables" id="get-support">
 		<div class="wptab postbox" aria-labelledby="tab_support" role="tabpanel" id="my-calendar-support">

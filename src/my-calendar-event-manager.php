@@ -79,6 +79,16 @@ function mc_bulk_action( $action, $events = array() ) {
 				if ( is_array( $submitter ) && ! empty( $submitter ) ) {
 					$name  = $submitter['first_name'] . ' ' . $submitter['last_name'];
 					$email = $submitter['email'];
+					/**
+					 * Run action when a publically submitted event is un-spammed.
+					 *
+					 * @hook mcs_complete_submission
+					 *
+					 * @param {string} $name Submitter's name.
+					 * @param {string} $email Submitter's email.
+					 * @param {int}    $id Event ID.
+					 * @param {string} $action Action performed ('edit').
+					 */
 					do_action( 'mcs_complete_submission', $name, $email, $id, 'edit' );
 				}
 			}
@@ -87,8 +97,10 @@ function mc_bulk_action( $action, $events = array() ) {
 	/**
 	 * Add custom bulk actions.
 	 *
-	 * @param string $action Declared action.
-	 * @param array  $ids Array of event IDs being requested.
+	 * @hook mc_bulk_actions
+	 *
+	 * @param {string} $action Declared action.
+	 * @param {array}  $ids Array of event IDs being requested.
 	 */
 	do_action( 'mc_bulk_actions', $action, $ids );
 
@@ -165,6 +177,13 @@ function mc_bulk_message( $results, $action ) {
 			// Translators: Sprintf as a 3rd argument if this string is appended to prior error. # of unchanged events.
 			$success .= ' ' . _n( '%3$d event was not changed in that update.', '%3$d events were not changed in that update.', $diff, 'my-calendar' );
 		}
+		/**
+		 * Dynamic action executed when a group of events is bulk modified.
+		 *
+		 * @hook mc_mass_{$action}_events
+		 *
+		 * @param {array} $ids Array of event IDs being handled.
+		 */
 		do_action( 'mc_mass_' . $action . '_events', $ids );
 		$message = mc_show_notice( sprintf( $success, $result, $total, $diff ) );
 	} else {
