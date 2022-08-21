@@ -736,13 +736,13 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					&lt;label for="skip">&lt;?php esc_html_e( 'Events/Days to Skip', 'my-calendar' ); ?>&lt;/label>
 					&lt;input type="number" name="skip" id="skip" value="" />
 				&lt;/p>
-				&lt;p>
-					&lt;label for="show_today">&lt;?php esc_html_e( "Show Today's Events", 'my-calendar' ); ?>&lt;/label>
+				&lt;p class="checkbox">
 					&lt;input type="checkbox" name="show_today" id="show_today" value="yes"/>
+					&lt;label for="show_today">&lt;?php esc_html_e( "Show Today's Events", 'my-calendar' ); ?>&lt;/label>
 				&lt;/p>
-				&lt;p>
-					&lt;label for="show_recurring">&lt;?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?>&lt;/label>
+				&lt;p class="checkbox">
 					&lt;input type="checkbox" name="show_recurring" id="show_recurring" value="no" />
+					&lt;label for="show_recurring">&lt;?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?>&lt;/label>
 				&lt;/p>
 				&lt;p>
 					&lt;label for="type">&lt;?php esc_html_e( 'Type of Upcoming Events List', 'my-calendar' ); ?>&lt;/label>
