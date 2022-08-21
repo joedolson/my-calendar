@@ -6,7 +6,7 @@ Requires at least: 4.4
 Tested up to: 6.0
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.3.18
+Stable tag: 3.3.19
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -83,6 +83,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.3.19 =
+
+* Bug fix: Missing support for 'show_recurring' parameter in shortcode builder.
+* Bug fix: Checkbox input layout in shortcode builder
+* Bug fix: Locations content filter needs to be restricted to main query only.
+* Complete documentation of hooks.
 
 = 3.3.18 =
 
