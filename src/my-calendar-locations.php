@@ -1371,7 +1371,7 @@ function mc_core_search_locations( $query = '' ) {
  * @return string
  */
 function mc_display_location_details( $content ) {
-	if ( is_singular( 'mc-locations' ) ) {
+	if ( is_singular( 'mc-locations' ) && in_the_loop() && is_main_query() ) {
 		$location = mc_get_location_id( get_the_ID() );
 		$location = mc_get_location( $location );
 		if ( ! is_object( $location ) ) {
