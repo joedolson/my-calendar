@@ -55,7 +55,7 @@ function mc_generate( $format = 'shortcode' ) {
 				default:
 					$shortcode = 'my_calendar';
 			}
-			$keys = array( 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'show_today', 'skip', 'after', 'before', 'template', 'fallback' );
+			$keys = array( 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'show_today', 'skip', 'after', 'before', 'template', 'fallback', 'show_recurring' );
 			foreach ( $_POST as $key => $value ) {
 				if ( in_array( $key, $keys, true ) ) {
 					if ( 'template' === $key ) {
