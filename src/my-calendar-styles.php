@@ -231,7 +231,7 @@ function my_calendar_style_edit() {
  * @return string
  */
 function mc_display_contrast_variables() {
-	$styles = get_option( 'mc_style_vars' );
+	$styles = get_option( 'mc_style_vars', array() );
 	$comp   = $styles;
 	$body   = '';
 	$head   = '<th>' . __( 'Variable', 'my-calendar' ) . '</th>';
