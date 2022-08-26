@@ -679,7 +679,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				// do an action using the $action and processed event data.
 				$new_event_status = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
 				// check for event_approved provides support for older versions of My Calendar Pro.
-				if ( isset( $_POST['event_approved'] ) &amp;&amp; $_POST['event_approved'] !== $event_approved ) {
+				if ( isset( $_POST['event_approved'] ) &amp;&amp; $_POST['event_approved'] !== $new_event_status ) {
 					$new_event_status = absint( $_POST['event_approved'] );
 				}
 				if ( isset( $_POST['prev_event_status'] ) ) {
@@ -3260,11 +3260,10 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				break;
 			// Monthly by day.
 			case 'U':
-				// Important to keep track of which date variables are strings and which are timestamps.
+				// The numeric week of the month this event occurs in.
 				$week_of_event = mc_week_of_month( mc_date( 'd', strtotime( $event->event_begin ), false ) );
 				$newbegin      = my_calendar_add_date( $orig_begin, 28, 0, 0 );
 				$newend        = my_calendar_add_date( $orig_end, 28, 0, 0 );
-				$fifth_week    = $event->event_fifth_week;
 				$data          = array(
 					'occur_event_id' => $id,
 					'occur_begin'    => mc_date( 'Y-m-d  H:i:s', strtotime( $orig_begin ), false ),
@@ -3275,38 +3274,52 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 
 				$numforward = ( $numforward - 1 );
 				for ( $i = 0; $i &lt;= $numforward; $i ++ ) {
-					$next_week_diff = ( mc_date( 'm', $newbegin, false ) === mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin, false ), 7, 0, 0 ) ) ) ? false : true;
-					$move_event     = ( ( 1 === (int) $fifth_week ) &amp;&amp; ( ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) + 1 ) === (int) $week_of_event ) &amp;&amp; true === $next_week_diff ) ? true : false;
-					if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
+					$skip = false;
+					// If next week is a different month, and we're supposed move the event, return true.
+					$move_event = mc_move_date( $newbegin, $event );
+					$week       = mc_week_of_month( mc_date( 'd', $newbegin, false ) );
+					if ( $week === $week_of_event || $move_event ) {
+						// If this is the correct week or is the last week of the month and dates are adjustable.
 					} else {
+						// If this is not the correct week generate a new date + 1 week.
+						$oldbegin   = $newbegin;
+						$oldend     = $newend;
 						$newbegin   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 7, 0, 0 );
 						$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 7, 0, 0 );
-						$move_event = ( 1 === (int) $fifth_week &amp;&amp; mc_week_of_month( mc_date( 'd', $newbegin, false ) ) + 1 === (int) $week_of_event ) ? true : false;
-						if ( mc_week_of_month( mc_date( 'd', $newbegin, false ) ) === $week_of_event || true === $move_event ) {
+						$week       = mc_week_of_month( mc_date( 'd', $newbegin, false ) );
+						$move_event = mc_move_date( $newbegin, $event );
+						if ( $week === $week_of_event || true === $move_event ) {
+							// If $newbegin is the correct week or is the last week of the month and dates are adjustable.
 						} else {
-							$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 14, 0, 0 );
-							$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 14, 0, 0 );
+							// Restore values because we're now in the wrong month.
+							$newbegin = $oldbegin;
+							$newend   = $oldend;
+							$skip     = true;
 						}
 					}
-					$data = array(
-						'occur_event_id' => $id,
-						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $newbegin, false ),
-						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend, false ),
-						'occur_group_id' => $group_id,
-					);
-					if ( true === $test &amp;&amp; $i > 0 ) {
-						return $data;
-					}
-					if ( $post_until ) {
-						if ( $newbegin &lt;= strtotime( $post_until ) ) {
-							$numforward ++;
-						} else {
-							continue;
+					if ( ! $skip ) {
+						$data = array(
+							'occur_event_id' => $id,
+							'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $newbegin, false ),
+							'occur_end'      => mc_date( 'Y-m-d  H:i:s', $newend, false ),
+							'occur_group_id' => $group_id,
+						);
+						if ( true === $test &amp;&amp; $i > 0 ) {
+							return $data;
 						}
+						if ( $post_until ) {
+							if ( $newbegin &lt;= strtotime( $post_until ) ) {
+								$numforward ++;
+							} else {
+								continue;
+							}
+						}
+						$return[] = $data;
+						mc_insert_recurring( $data, $id, $newbegin, $instances, $test, 'month-by-day' );
+						// Jump forward 4 weeks.
+					} else {
+						$numforward ++;
 					}
-					$return[] = $data;
-					mc_insert_recurring( $data, $id, $newbegin, $instances, $test, 'month-by-day' );
-
 					$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 28, 0, 0 );
 					$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 28, 0, 0 );
 				}
@@ -3354,6 +3367,29 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 	}
 
 	return $data;
+}
+
+/**
+ * Check whether a recurring date by month/day should be moved.
+ *
+ * @param int $newbegin A date.
+ * @param event object $event The event object.
+ *
+ * return bool
+ */
+function mc_move_date( $newbegin, $event ) {
+	$week_of_event = mc_week_of_month( mc_date( 'd', strtotime( $event->event_begin ), false ) );
+	$fifth_week    = ( 1 === (int) $event->event_fifth_week ) ? true : false;
+	if ( ! $fifth_week ) {
+		return false;
+	}
+	// Is the date one week ahead of the current date in the next month. If so, this is the last week.
+	$next_week_diff = ( mc_date( 'm', $newbegin, false ) === mc_date( 'm', my_calendar_add_date( mc_date( 'Y-m-d', $newbegin, false ), 7, 0, 0 ), false ) ) ? false : true;
+	$week           = mc_week_of_month( mc_date( 'd', $newbegin, false ) );
+	// If next week is not this month, and event should move, return true. This is the last week of the month.
+	$move_event = ( ( ( $week + 1 ) === $week_of_event ) &amp;&amp; ( true === $next_week_diff ) ) ? true : false;
+
+	return $move_event;
 }
 
 /**
