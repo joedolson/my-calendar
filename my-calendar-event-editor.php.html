@@ -3297,6 +3297,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 							$skip     = true;
 						}
 					}
+					// Skip on events starting on 5th week but not moved to the 4th week in months without 5 weeks.
 					if ( ! $skip ) {
 						$data = array(
 							'occur_event_id' => $id,
@@ -3372,8 +3373,8 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 /**
  * Check whether a recurring date by month/day should be moved.
  *
- * @param int    $newbegin A date.
- * @param object $event The event object.
+ * @param int    $newbegin A datestamp to check against.
+ * @param object $event A My Calendar event object.
  *
  * return bool
  */
