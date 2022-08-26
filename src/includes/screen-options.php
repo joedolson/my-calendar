@@ -90,11 +90,11 @@ function mc_show_event_editing( $status, $screen ) {
 			$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
 			$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
 			$allowed = ( isset( $settings_options[ $key ] ) && 'on' === $settings_options[ $key ] ) ? true : false;
-			if ( ! ( current_user_can( 'manage_options' ) && 'true' === get_option( 'mc_input_options_administrators' ) ) && ! $allowed ) {
+			if ( current_user_can( 'manage_options' ) || $allowed ) {
+				$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_show_on_page[$key]' value='on' $checked /> $value</label>";
+			} else {
 				// don't display options if this user can't use them.
 				$output .= "<input type='hidden' name='mc_show_on_page[$key]' value='off' />";
-			} else {
-				$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_show_on_page[$key]' value='on' $checked /> $value</label>";
 			}
 		}
 		$button  = get_submit_button( __( 'Apply', 'my-calendar' ), 'button', 'screen-options-apply', false );
