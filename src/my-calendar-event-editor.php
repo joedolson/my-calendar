@@ -3345,10 +3345,10 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 }
 
 /**
- * Check whether a recurring date by month/day should be moved.
+ * Check whether a last-week of the month recurring date needs to be moved. Function checks a given date & an object to see whether the event should only exist in the 5th week or is intended for the last week, regardless of number, then tests the date to see which week it is.
  *
  * @param int    $newbegin A datestamp to check against.
- * @param object $event A My Calendar event object.
+ * @param object $event The My Calendar event object source to generate recurrences for.
  *
  * return bool
  */
