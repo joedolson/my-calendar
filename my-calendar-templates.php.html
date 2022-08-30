@@ -1458,20 +1458,20 @@ function mc_search_excerpt( $description, $shortdesc, $term ) {
 	} else {
 		$use = $description;
 	}
-	$use = wp_strip_all_tags( $use );
+	$use      = wp_strip_all_tags( $use );
 	$position = stripos( $use, $term );
 	// Search term not found.
 	if ( false === $position ) {
 		return substr( $use, 0, 160 );
 	}
-	if ( $position === 0 ) {
+	if ( 0 === $position ) {
 		$start = 0;
 	} else {
 		$start = ( ( $position - 20 ) > 0 ) ? ( $position - 15 ) : 0;
 	}
 	$extract = substr( $use, $start, 160 );
 	// Remove first and last words, which are likely to be partial.
-	$clean   = explode( ' ', $extract );
+	$clean = explode( ' ', $extract );
 	unset( $clean[0] );
 	array_pop( $clean );
 	$extract = implode( ' ', $clean );
