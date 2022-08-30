@@ -137,6 +137,7 @@ function mc_search_results( $query ) {
 	 * @return {string}
 	 */
 	$header = apply_filters( 'mc_search_before', '<h2>%s</h2><ol class="mc-search-results" role="list">', $term );
+	// Translators: search term.
 	$header = sprintf( $header, sprintf( __( 'Search Results for "%s"', 'my-calendar' ), esc_html( $term ) ) );
 	/**
 	 * HTML template after the search results. Default `</ol>`.
