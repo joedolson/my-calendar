@@ -1427,10 +1427,82 @@ function mc_auto_excerpt( $e, $event ) {
 	} else {
 		$excerpt = $shortdesc;
 	}
-
-	$e['excerpt'] = $excerpt;
+	$search_excerpt = '';
+	if ( isset( $_REQUEST['mcs'] ) ) {
+		$term           = sanitize_text_field( trim( $_REQUEST['mcs'] ) );
+		$search_excerpt = mc_search_excerpt( $description, $shortdesc, $term );
+	}
+	$e['search_excerpt'] = $search_excerpt;
+	$e['excerpt']        = $excerpt;
 
 	return $e;
+}
+
+/**
+ * Generate an excerpt with highlighted search terms.
+ *
+ * @param string $description Full event description.
+ * @param string $shortdesc Short description of event.
+ * @param string $term Search term.
+ *
+ * @return string
+ */
+function mc_search_excerpt( $description, $shortdesc, $term ) {
+	// If neither description nor short, return early.
+	if ( '' === $description . $shortdesc ) {
+		return '';
+	}
+	// If no full description, use short.
+	if ( '' === $description ) {
+		$use = $shortdesc;
+	} else {
+		$use = $description;
+	}
+	$use = wp_strip_all_tags( $use );
+	$position = stripos( $use, $term );
+	// Search term not found.
+	if ( false === $position ) {
+		return substr( $use, 0, 160 );
+	}
+	if ( $position === 0 ) {
+		$start = 0;
+	} else {
+		$start = ( ( $position - 20 ) > 0 ) ? ( $position - 15 ) : 0;
+	}
+	$extract = substr( $use, $start, 160 );
+	// Remove first and last words, which are likely to be partial.
+	$clean   = explode( ' ', $extract );
+	unset( $clean[0] );
+	array_pop( $clean );
+	$extract = implode( ' ', $clean );
+
+	$excerpt = '...' . mc_str_replace_word_i( $term, $extract ) . '...';
+
+	return $excerpt;
+}
+
+/**
+ * Search text and wrap search terms.
+ *
+ * @param string $needle Word to find.
+ * @param string $haystack Source text.
+ *
+ * @return string
+ */
+function mc_str_replace_word_i( $needle, $haystack ) {
+	$keyword  = $needle;
+	$needle   = str_replace( '/', '\\/', preg_quote( $needle ) ); // allow '/' in keywords.
+	$pattern  = "/\b$needle(?!([^&lt;]+)?>)\b/i";
+	$type     = 'all';
+	$haystack = preg_replace_callback(
+		$pattern,
+		function( $m ) use ( $type, $keyword ) {
+			return '&lt;strong class="mc_search_term">' . $m[0] . '&lt;/strong>';
+		},
+		$haystack
+	);
+
+	return $haystack;
 }
 
 /**
