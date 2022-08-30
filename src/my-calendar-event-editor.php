@@ -3345,7 +3345,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 }
 
 /**
- * Check whether a last-week of the month recurring date needs to be moved. 
+ * Check whether a last-week of the month recurring date needs to be moved.
  * Checks a given date & an object to see whether the event should only exist in the 5th week or is intended for the last week, regardless of number, then tests the date to see which week it is.
  *
  * @param int    $newbegin A datestamp to check against.
