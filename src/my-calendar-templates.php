@@ -511,7 +511,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['event_status'] = ( 1 === (int) $event->event_approved ) ? __( 'Published', 'my-calendar' ) : __( 'Draft', 'my-calendar' );
 
 	// General text fields.
-	$e['title']                = stripslashes( $event->event_title );
+	$title                     = mc_search_highlight( $event->event_title );
+	$e['title']                = stripslashes( $title );
 	$e['description']          = wpautop( stripslashes( $event->event_desc ) );
 	$e['description_raw']      = stripslashes( $event->event_desc );
 	$e['description_stripped'] = strip_tags( stripslashes( $event->event_desc ) );
@@ -1401,56 +1402,77 @@ function mc_auto_excerpt( $e, $event ) {
 	} else {
 		$excerpt = $shortdesc;
 	}
-	$search_excerpt = '';
-	if ( isset( $_REQUEST['mcs'] ) ) {
-		$term           = sanitize_text_field( trim( $_REQUEST['mcs'] ) );
-		$search_excerpt = mc_search_excerpt( $description, $shortdesc, $term );
-	}
-	$e['search_excerpt'] = $search_excerpt;
+
+	$e['search_excerpt'] = mc_search_highlight( $description, $shortdesc );
 	$e['excerpt']        = $excerpt;
 
 	return $e;
 }
 
 /**
- * Generate an excerpt with highlighted search terms.
+ * Generate a string with highlighted search terms.
  *
- * @param string $description Full event description.
- * @param string $shortdesc Short description of event.
+ * @param string $string1 Default highlight text.
+ * @param string $string2 Alternate text to use if first might be blank.
  * @param string $term Search term.
  *
  * @return string
  */
-function mc_search_excerpt( $description, $shortdesc, $term ) {
+function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
+	$append = '';
+	if ( '' !== $term ) {
+		$append = ' ' . trim( $term );
+	}
+	if ( isset( $_REQUEST['mcs'] ) ) {
+		$term = sanitize_text_field( trim( $_REQUEST['mcs'] ) ) . $append;
+	}
+	$terms = explode( ' ', $term );
 	// If neither description nor short, return early.
-	if ( '' === $description . $shortdesc ) {
+	if ( '' === $string1 . $string2 ) {
 		return '';
 	}
 	// If no full description, use short.
-	if ( '' === $description ) {
-		$use = $shortdesc;
+	if ( '' === $string1 ) {
+		$use = $string2;
 	} else {
-		$use = $description;
+		$use = $string1;
 	}
-	$use      = wp_strip_all_tags( $use );
-	$position = stripos( $use, $term );
-	// Search term not found.
-	if ( false === $position ) {
-		return substr( $use, 0, 160 );
-	}
-	if ( 0 === $position ) {
-		$start = 0;
-	} else {
-		$start = ( ( $position - 20 ) > 0 ) ? ( $position - 15 ) : 0;
+	$use    = wp_strip_all_tags( $use );
+	$length = strlen( $use );
+	$start  = 0;
+	if ( $length > 160 ) {
+		foreach ( $terms as $t ) {
+			$positions[] = stripos( $use, $t );
+		}
+		// Use the first term referenced for positioning.
+		sort( $positions );
+		$position = $positions[0];
+		// Search term not found.
+		if ( false === $position ) {
+			return substr( $use, 0, 160 );
+		}
+		if ( 0 === $position ) {
+			$start = 0;
+		} else {
+			$start = ( ( $position - 20 ) > 0 ) ? ( $position - 15 ) : 0;
+		}
 	}
 	$extract = substr( $use, $start, 160 );
-	// Remove first and last words, which are likely to be partial.
-	$clean = explode( ' ', $extract );
-	unset( $clean[0] );
-	array_pop( $clean );
-	$extract = implode( ' ', $clean );
+	$ellipsis = '';
+	if ( strlen( $extract ) < $length ) {
+		$ellipsis = '...';
+		// Remove first and last words, which are likely to be partial.
+		$clean = explode( ' ', $extract );
+		unset( $clean[0] );
+		array_pop( $clean );
+		$extract = implode( ' ', $clean );
+	}
 
-	$excerpt = '...' . mc_str_replace_word_i( $term, $extract ) . '...';
+	foreach ( $terms as $t ) {
+		$extract = mc_str_replace_word_i( $t, $extract );
+	}
+
+	$excerpt = $ellipsis . $extract . $ellipsis;
 
 	return $excerpt;
 }

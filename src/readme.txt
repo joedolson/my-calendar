@@ -84,6 +84,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.20 =
+
+* Bug fix: Recurring month by day not propagating correctly.
+* Bug fix: Available admin input settings not displaying correctly.
+* Bug fix: Unset style variables array could throw PHP warning.
+* Change: Improvements to structure of search results.
+* Change: Change default search result template.
+* Add: search_results template tag with search term highlighting.
+
 = 3.3.19 =
 
 * Bug fix: Missing support for 'show_recurring' parameter in shortcode builder.

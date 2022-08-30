@@ -301,6 +301,11 @@ ol.mc-search-results li {
 	margin: 0 0 1em;
 }
 
+.mc-search-results .mc_search_term {
+	background: #ffa;
+	color: #111;
+}
+
 @-webkit-keyframes animation-rotate {
 	100% {
 	-webkit-transform: rotate(360deg);
