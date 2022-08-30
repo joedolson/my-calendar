@@ -1457,7 +1457,7 @@ function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
 			$start = ( ( $position - 20 ) > 0 ) ? ( $position - 15 ) : 0;
 		}
 	}
-	$extract = substr( $use, $start, 160 );
+	$extract  = substr( $use, $start, 160 );
 	$ellipsis = '';
 	if ( strlen( $extract ) < $length ) {
 		$ellipsis = '...';
