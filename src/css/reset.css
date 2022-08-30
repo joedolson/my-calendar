@@ -291,6 +291,16 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	padding: .5em;
 }
 
+ol.mc-search-results {
+	list-style-type: none;
+	margin: 0 auto;
+	padding: 0;
+}
+
+ol.mc-search-results li {
+	margin: 0 0 1em;
+}
+
 @-webkit-keyframes animation-rotate {
 	100% {
 	-webkit-transform: rotate(360deg);

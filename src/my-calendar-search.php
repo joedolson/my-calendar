@@ -87,7 +87,7 @@ function mc_search_results( $query ) {
 	$event_array = mc_get_search_results( $search );
 
 	if ( ! empty( $event_array ) ) {
-		$template = '<strong>{date}</strong> {title} {details}';
+		$template = '<h3><strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}</h3><div class="mcs-search-excerpt">{search_excerpt}</div>';
 		/**
 		 * Template for outputting search results. Default `<strong>{date}</strong> {title} {details}`.
 		 *
@@ -100,7 +100,7 @@ function mc_search_results( $query ) {
 		 */
 		$template = apply_filters( 'mc_search_template', $template, $term );
 		// No filters parameter prevents infinite looping on the_content filters.
-		$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', 0, $before, $after, 'yes', 'yes', 'nofilters' );
+		$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', 0, $before, $after, 'yes', 'yes', 'nofilters', $term );
 		/**
 		 * Filter that inserts search export links. Default empty string.
 		 *
@@ -136,7 +136,8 @@ function mc_search_results( $query ) {
 	 *
 	 * @return {string}
 	 */
-	$header = apply_filters( 'mc_search_before', '<ol class="mc-search-results">', $term );
+	$header = apply_filters( 'mc_search_before', '<h2>%s</h2><ol class="mc-search-results" role="list">', $term );
+	$header = sprintf( $header, sprintf( __( 'Search Results for "%s"', 'my-calendar' ), esc_html( $term ) ) );
 	/**
 	 * HTML template after the search results. Default `</ol>`.
 	 *

@@ -2482,7 +2482,7 @@ function my_calendar_searchform( $type, $url = '' ) {
 		<div class="mc-search-container" role="search">
 			<form class="mc-search-form" method="get" action="' . esc_url( $url ) . '" >
 				<div class="mc-search">
-					<label class="screen-reader-text" for="mcs">' . __( 'Search Events', 'my-calendar' ) . '</label><input type="text" value="' . esc_attr( stripslashes( urldecode( $query ) ) ) . '" name="mcs" id="mcs" /><input type="submit" data-href="' . esc_url( $url ) . '" class="button" id="searchsubmit" value="' . __( 'Search Events', 'my-calendar' ) . '" />
+					<label class="screen-reader-text" for="mcs">' . __( 'Search Events', 'my-calendar' ) . '</label><input type="text" value="' . esc_attr( stripslashes( urldecode( $query ) ) ) . '" name="mcs" id="mcs" /><input type="submit" data-href="' . esc_url( add_query_args( 'source', 'widget', $url ) ) . '" class="button" id="searchsubmit" value="' . __( 'Search Events', 'my-calendar' ) . '" />
 				</div>
 			</form>
 		</div>';
