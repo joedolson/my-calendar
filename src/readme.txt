@@ -84,6 +84,10 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.3.21 =
+
+* Bug fix: Accidentally stripped HTML out of all event titles with search excerpt highlighting.
+
 = 3.3.20 =
 
 * Bug fix: Recurring month by day not propagating correctly.
