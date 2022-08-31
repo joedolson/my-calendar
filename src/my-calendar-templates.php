@@ -1425,6 +1425,8 @@ function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
 	}
 	if ( isset( $_REQUEST['mcs'] ) ) {
 		$term = sanitize_text_field( trim( $_REQUEST['mcs'] ) ) . $append;
+	} else {
+		return $string1;
 	}
 	$terms = explode( ' ', $term );
 	// If neither description nor short, return early.
