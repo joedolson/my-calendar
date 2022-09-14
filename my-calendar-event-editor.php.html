@@ -1852,7 +1852,11 @@ function mc_event_location_dropdown_block( $data ) {
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
 					$base_loc = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
-					$selected = ( is_numeric( get_option( 'mc_default_location' ) ) &amp;&amp; (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
+					if ( ! $event_location ) {
+						$selected = ( is_numeric( get_option( 'mc_default_location' ) ) &amp;&amp; (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
+					} else {
+						$selected = '';
+					}
 					if ( (int) $loc->location_id === (int) $event_location ) {
 						$location_link = ( current_user_can( 'mc_edit_locations' ) ) ? add_query_arg(
 							array(
