@@ -107,7 +107,7 @@
 
 	if ( 'true' === my_calendar.ajax ) {
 		$(function () {
-			$(document).on('click', ".my-calendar-header a.mcajax, .my-calendar-footer a.mcajax, .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
+			$(document).on('click', ".my-calendar-header a, .my-calendar-footer a, .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
 				e.preventDefault();
 				var calendar = $( this ).closest( '.mc-main' );
 				var ref      = calendar.attr('id');
@@ -186,7 +186,7 @@
 				/* $('#' + ref + ' .mc-content' ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
 				$( '#' + ref + ' .mc-content' ).load(link + ' #' + ref + ' .mc-content > *', function ( response, status, xhr ) { */
 				$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-				$( '#' + ref ).load(link + ' #' + ref + ' > *', function ( response, status, xhr ) {
+				$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
 
 					if ( status == 'error' ) {
 						$( '#' + ref ).html( xhr.status + " " + xhr.statusText );

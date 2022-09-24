@@ -290,7 +290,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a href="' . $prev_link . '" rel="nofollow" class="mcajax">' . $prev['label'] . '</a></li>', $prev );
+	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a href="' . $prev_link . '" rel="nofollow">' . $prev['label'] . '</a></li>', $prev );
 	/**
 	 * Filter HTML output for navigation 'next' link.
 	 *
@@ -301,7 +301,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a href="' . $next_link . '" rel="nofollow" class="mcajax">' . $next['label'] . '</a></li>', $next );
+	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a href="' . $next_link . '" rel="nofollow">' . $next['label'] . '</a></li>', $next );
 
 	$nav = '
 		<div class="my-calendar-nav">
@@ -381,7 +381,7 @@ function mc_category_key( $category ) {
 			// If category colors are ignored, don't render HTML for them.
 			$cat_key .= $cat_name;
 		}
-		$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '" class="mcajax"' . $aria_current . '>' . $cat_key . '</a></li>';
+		$key .= '<li class="cat_' . $class . '"><a href="' . esc_url( $url ) . '"' . $aria_current . '>' . $cat_key . '</a></li>';
 	}
 	if ( isset( $_GET['mcat'] ) ) {
 		/**
@@ -394,7 +394,7 @@ function mc_category_key( $category ) {
 		 * @return {string}
 		 */
 		$all  = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
-		$key .= "<li class='all-categories'><a href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "' class='mcajax'>" . $all . '</a></li>';
+		$key .= "<li class='all-categories'><a href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "'>" . $all . '</a></li>';
 	}
 	$key .= '</ul></div>';
 
@@ -1066,12 +1066,12 @@ function mc_format_toggle( $format, $toggle, $time ) {
 			case 'list':
 				$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='grid mcajax'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='grid'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a>';
 				break;
 			default:
 				$url     = mc_build_url( array( 'format' => 'list' ), array() );
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='list mcajax'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='list'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a>';
 				break;
 		}
 		$toggle .= '</div>';
@@ -1161,7 +1161,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			case 'week':
 				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='month'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active week'>" . __( 'Week', 'my-calendar' ) . '</span>';
 				$url     = mc_build_url(
 					array(
@@ -1171,12 +1171,12 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 					array( 'dy', 'mc_id' )
 				);
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='day'>" . __( 'Day', 'my-calendar' ) . '</a>';
 				break;
 			case 'day':
 				$url     = mc_build_url( array( 'time' => 'month' ), array() );
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='month mcajax'>" . __( 'Month', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='month'>" . __( 'Month', 'my-calendar' ) . '</a>';
 				$url     = mc_build_url(
 					array(
 						'time'  => 'week',
@@ -1187,7 +1187,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 					array( 'dy', 'month', 'mc_id' )
 				);
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='week'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$toggle .= "<span class='mc-active day'>" . __( 'Day', 'my-calendar' ) . '</span>';
 				break;
 			default:
@@ -1201,10 +1201,10 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 					array( 'dy', 'month', 'mc_id' )
 				);
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='week mcajax'>" . __( 'Week', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='week'>" . __( 'Week', 'my-calendar' ) . '</a>';
 				$url     = mc_build_url( array( 'time' => 'day' ), array() );
 				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='day mcajax'>" . __( 'Day', 'my-calendar' ) . '</a>';
+				$toggle .= "<a href='$url' class='day'>" . __( 'Day', 'my-calendar' ) . '</a>';
 				break;
 		}
 		$toggle .= '</div>';
