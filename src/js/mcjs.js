@@ -15,11 +15,13 @@
 				$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
 				$( '.mini .has-events' ).children().not( '.trigger, .mc-date, .event-date' ).not( current_date ).hide();
 				$( this ).addClass( 'active-toggle' );
+				e.stopImmediatePropagation();
 			} );
 			$( document ).on( "click", ".calendar-events .close", function (e) {
 				e.preventDefault();
 				$(this).closest( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
 				$(this).closest( 'div.calendar-events' ).toggle();
+				e.stopImmediatePropagation();
 			} );
 		});
 	}
@@ -41,6 +43,8 @@
 					} else {
 						$(this).attr('aria-expanded', 'false');
 					}
+					e.stopImmediatePropagation();
+					return false;
 				});
 		});
 	}
@@ -68,6 +72,7 @@
 					lastFocus.attr( 'data-action', 'shiftback' );
 
 					$('.calendar-event').children().not('.event-title,.screen-reader-text').not( current_date ).hide();
+					e.stopImmediatePropagation();
 					return false;
 				});
 
@@ -78,6 +83,7 @@
 					$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
 					$(this).closest('.mc-event').find('.event-title a').trigger( 'focus' );
 					$(this).closest('div.details').toggle();
+					e.stopImmediatePropagation();
 				});
 
 			$(document).on( 'keydown', function(e) {
