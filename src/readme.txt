@@ -25,23 +25,27 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 
 = Features: =
 
-*	Calendar grid and list views of events
+*	Calendar grid or list views of events
 *	Monthly, weekly, or daily view.
-*	Mini-calendar for compact displays (as widget or as shortcode)
-*	Widgets: today's events, upcoming events, compact calendar, event search
-*	Custom templates for event output
+*	Mini-calendar for compact displays (as widget or shortcode)
+*	Widgets: today's events, upcoming events, mini calendar, event search
+*	Customize templates for event output
 *	Limit views by categories, location, author, or host
-*	Editable CSS styles and JavaScript behaviors
-*	Schedule recurring events.
-*	Edit single occurrences of recurring events
+*	Editable CSS styles.
+*	Extensive support for recurring events.
+*	Edit or add single dates in recurring events
 *	Rich permissions handling to restrict access to parts of My Calendar
-*	Email notification to administrator when events are scheduled or reserved
+*	Email notifications when events are scheduled or drafted
 *	Post to Twitter when events are created (using [WP to Twitter](http://wordpress.org/extend/plugins/wp-to-twitter/))
-*	Managing locations
+*	Manage locations
 *	Fetch events from a remote database. (Sharing events in a network of sites.)
 *	Multisite-friendly
 *	Integrated help page
 *	Shortcode Generator to create customized views of My Calendar
+
+= Accessibility =
+
+My Calendar is designed with accessibility in mind. All interfaces - both front and back end - are tested with various assistive technology. The plugin includes features for indicating the accessibility services available for events and at physical venues, as well as providing access to the content for users with disabilities.
 
 = What's in My Calendar Pro? =
 
@@ -87,7 +91,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.3.23 =
 
 * Bug fix: Don't set to default location if location already set.
-* Change: Streamline JS.
+* Bug fix: Add stopImmediatePropgation to click handlers to prevent other script's scroll effects
+* Change: Remove .mcajax class as unneeded.
 * 
 
 = 3.3.22 =
