@@ -93,7 +93,6 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Don't set to default location if location already set.
 * Bug fix: Add stopImmediatePropgation to click handlers to prevent other script's scroll effects
 * Change: Remove .mcajax class as unneeded.
-* 
 
 = 3.3.22 =
 
