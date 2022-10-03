@@ -1782,7 +1782,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( current_user_can( 'mc_edit_templates' ) || current_user_can( 'manage_options' ) ) {
 				?>
 		&lt;div class="postbox">
-			&lt;h2>&lt;?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?>&lt;/h2>
+			&lt;h2>&lt;button type="button" class="button-link toggle-inside">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>&lt;?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?>&lt;/button>&lt;/h2>
 			&lt;div class="inside">
 				&lt;p>&lt;?php esc_html_e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?>&lt;/p>
 				&lt;div class="mc-preview">
