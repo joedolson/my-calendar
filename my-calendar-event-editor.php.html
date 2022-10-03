@@ -136,6 +136,13 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		$access_terms = implode( ',', array_values( $access ) );
 		mc_update_event( 'event_access', $access_terms, $event_id, '%s' );
 		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
+		// Check if this is an ajax request.
+		$post_data = ( isset( $_POST['security'] ) ) ? $_POST['post'] : $_POST;
+		if ( $post_data !== $_POST ) {
+			parse_str( $post_data, $post );
+		} else {
+			$post = $post_data;
+		}
 		/**
 		 * Execute action when an event's post is updated.
 		 *
@@ -146,7 +153,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		 * @param {array} $data Submitted event data.
 		 * @param {int}   $event_id Event ID.
 		 */
-		do_action( 'mc_update_event_post', $post_id, $_POST, $data, $event_id );
+		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id );
 		if ( mc_switch_sites() ) {
 			restore_current_blog();
 		}
@@ -284,6 +291,13 @@ function mc_create_event_post( $data, $event_id ) {
 		mc_update_event( 'event_post', $post_id, $event_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
 		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
+		// Check if this is an ajax request.
+		$post_data = ( isset( $_POST['security'] ) ) ? $_POST['post'] : $_POST;
+		if ( $post_data !== $_POST ) {
+			parse_str( $post_data, $post );
+		} else {
+			$post = $post_data;
+		}
 		/**
 		 * Execute action when an event's post is updated.
 		 *
@@ -294,7 +308,7 @@ function mc_create_event_post( $data, $event_id ) {
 		 * @param {array} $data Submitted event data.
 		 * @param {int}   $event_id Event ID.
 		 */
-		do_action( 'mc_update_event_post', $post_id, $_POST, $data, $event_id );
+		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id );
 		wp_publish_post( $post_id );
 	}
 
