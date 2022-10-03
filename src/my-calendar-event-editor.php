@@ -1756,7 +1756,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( current_user_can( 'mc_edit_templates' ) || current_user_can( 'manage_options' ) ) {
 				?>
 		<div class="postbox">
-			<h2><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></h2>
+			<h2><button type="button" class="button-link toggle-inside"><span class="dashicons dashicons-plus" aria-hidden="true"></span><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></button></h2>
 			<div class="inside">
 				<p><?php esc_html_e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?></p>
 				<div class="mc-preview">

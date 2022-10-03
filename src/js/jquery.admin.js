@@ -177,6 +177,29 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
+	var toggleInside = document.querySelector( '.toggle-inside' );
+	if ( null !== toggleInside ) {
+		var parentEl = toggleInside.parentNode.parentNode;
+		console.log( toggleInside );
+		console.log( parentEl );
+		var target   = parentEl.querySelector( '.inside' );
+		target.classList.add( 'hidden' );
+		toggleInside.addEventListener( 'click', function(e) {
+			var expanded = this.getAttribute( 'aria-expanded' );
+			if ( 'true' === expanded ) {
+				target.classList.add( 'hidden' );
+				this.setAttribute( 'aria-expanded', 'false' );
+				this.firstChild.classList.add( 'dashicons-plus' );
+				this.firstChild.classList.remove( 'dashicons-minus' );
+			} else {
+				target.classList.remove( 'hidden' );
+				this.setAttribute( 'aria-expanded', 'true' );
+				this.firstChild.classList.add( 'dashicons-minus' );
+				this.firstChild.classList.remove( 'dashicons-plus' );
+			}
+		});
+	}
+
 	var viewDates = document.querySelector( '.toggle-dates' );
 	if ( null !== viewDates ) {
 		var addDates = document.getElementById( 'mc-view-scheduled-dates' );
