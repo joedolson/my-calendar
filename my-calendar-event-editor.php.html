@@ -52,16 +52,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_event_post( $action, $data, $event_id, $result = false ) {
 	// if the event save was successful.
 	$post_id = false;
+	// Check if this is an ajax request.
+	$post_data = ( wp_doing_ajax() ) ? $_POST['post'] : $_POST;
+	if ( $post_data !== $_POST ) {
+		parse_str( $post_data, $post );
+	} else {
+		$post = $post_data;
+	}
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
 		if ( isset( $data['event_post'] ) &amp;&amp; 'group' === $data['event_post'] ) {
 			$post_id = mc_get_event_post( $event_id );
 		} else {
-			if ( isset( $_POST['event_post'] ) &amp;&amp; ( 0 === (int) $_POST['event_post'] || '' === $_POST['event_post'] ) ) {
+			if ( isset( $post['event_post'] ) &amp;&amp; ( 0 === (int) $post['event_post'] || '' === $post['event_post'] ) ) {
 				$post_id = mc_create_event_post( $data, $event_id );
 			} else {
-				$post_id = ( isset( $_POST['event_post'] ) ) ? absint( $_POST['event_post'] ) : false;
+				$post_id = ( isset( $post['event_post'] ) ) ? absint( $post['event_post'] ) : false;
 				$post_id = ( isset( $data['event_post'] ) ) ? absint( $data['event_post'] ) : $post_id;
 			}
 		}
@@ -126,30 +133,23 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 			delete_post_thumbnail( $post_id );
 		} else {
 			// check POST data.
-			$attachment_id = ( isset( $_POST['event_image_id'] ) &amp;&amp; is_numeric( $_POST['event_image_id'] ) ) ? $_POST['event_image_id'] : false;
+			$attachment_id = ( isset( $post['event_image_id'] ) &amp;&amp; is_numeric( $post['event_image_id'] ) ) ? $post['event_image_id'] : false;
 			$attachment_id = ( isset( $data['event_image_id'] ) &amp;&amp; is_numeric( $data['event_image_id'] ) ) ? $data['event_image_id'] : $attachment_id;
 			if ( $attachment_id ) {
 				set_post_thumbnail( $post_id, $attachment_id );
 			}
 		}
-		$access       = ( isset( $_POST['events_access'] ) ) ? $_POST['events_access'] : array();
+		$access       = ( isset( $post['events_access'] ) ) ? $post['events_access'] : array();
 		$access_terms = implode( ',', array_values( $access ) );
 		mc_update_event( 'event_access', $access_terms, $event_id, '%s' );
-		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
-		// Check if this is an ajax request.
-		$post_data = ( isset( $_POST['security'] ) ) ? $_POST['post'] : $_POST;
-		if ( $post_data !== $_POST ) {
-			parse_str( $post_data, $post );
-		} else {
-			$post = $post_data;
-		}
+		mc_add_post_meta_data( $post_id, $post, $data, $event_id );
 		/**
 		 * Execute action when an event's post is updated.
 		 *
 		 * @hook mc_update_event_post
 		 *
 		 * @param {int}   $post_id Post ID.
-		 * @param {array} $_POST POST data.
+		 * @param {array} $post POST data.
 		 * @param {array} $data Submitted event data.
 		 * @param {int}   $event_id Event ID.
 		 */
@@ -230,6 +230,13 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
  */
 function mc_create_event_post( $data, $event_id ) {
 	$post_id = mc_get_event_post( $event_id );
+	// Check if this is an ajax request.
+	$post_data = ( wp_doing_ajax() ) ? $_POST['post'] : $_POST;
+	if ( $post_data !== $_POST ) {
+		parse_str( $post_data, $post );
+	} else {
+		$post = $post_data;
+	}
 	if ( ! $post_id ) {
 		$categories = mc_get_categories( $event_id );
 		$terms      = array();
@@ -259,8 +266,8 @@ function mc_create_event_post( $data, $event_id ) {
 		$description       = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 		$excerpt           = isset( $data['event_short'] ) ? $data['event_short'] : '';
 		$location_id       = isset( $data['event_location'] ) ? $data['event_location'] : 0;
-		if ( isset( $_POST['location_preset'] ) &amp;&amp; is_numeric( $_POST['location_preset'] ) ) {
-			$location_id = (int) $_POST['location_preset'];
+		if ( isset( $post['location_preset'] ) &amp;&amp; is_numeric( $post['location_preset'] ) ) {
+			$location_id = (int) $post['location_preset'];
 		} elseif ( isset( $data['location_preset'] ) &amp;&amp; is_numeric( $data['location_preset'] ) ) {
 			$location_id = $data['location_preset'];
 		}
@@ -280,8 +287,8 @@ function mc_create_event_post( $data, $event_id ) {
 		$post_id     = wp_insert_post( $my_post );
 		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
 		$attachment_id = false;
-		if ( isset( $_POST['event_image_id'] ) ) {
-			$attachment_id = (int) $_POST['event_image_id'];
+		if ( isset( $post['event_image_id'] ) ) {
+			$attachment_id = (int) $post['event_image_id'];
 		} elseif ( isset( $data['event_image_id'] ) ) {
 			$attachment_id = (int) $data['event_image_id'];
 		}
@@ -290,21 +297,14 @@ function mc_create_event_post( $data, $event_id ) {
 		}
 		mc_update_event( 'event_post', $post_id, $event_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
-		mc_add_post_meta_data( $post_id, $_POST, $data, $event_id );
-		// Check if this is an ajax request.
-		$post_data = ( isset( $_POST['security'] ) ) ? $_POST['post'] : $_POST;
-		if ( $post_data !== $_POST ) {
-			parse_str( $post_data, $post );
-		} else {
-			$post = $post_data;
-		}
+		mc_add_post_meta_data( $post_id, $post, $data, $event_id );
 		/**
 		 * Execute action when an event's post is updated.
 		 *
 		 * @hook mc_update_event_post
 		 *
 		 * @param {int}   $post_id Post ID.
-		 * @param {array} $_POST POST data.
+		 * @param {array} $post POST data.
 		 * @param {array} $data Submitted event data.
 		 * @param {int}   $event_id Event ID.
 		 */
