@@ -1582,6 +1582,7 @@ function mc_scripts() {
 	$slug    = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
+		// Script needs to be aware of current Pro version.
 		$mcs_version = ( get_option( 'mcs_version', '' ) ) ? get_option( 'mcs_version' ) : 1.0;
 		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 		wp_localize_script(
