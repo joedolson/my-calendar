@@ -113,7 +113,7 @@
 
 	if ( 'true' === my_calendar.ajax ) {
 		$(function () {
-			$(document).on('click', ".my-calendar-header a, .my-calendar-footer a, .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
+			$(document).on('click', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
 				e.preventDefault();
 				var calendar = $( this ).closest( '.mc-main' );
 				var ref      = calendar.attr('id');
