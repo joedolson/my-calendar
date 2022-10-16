@@ -157,19 +157,19 @@ jQuery(document).ready(function ($) {
 		var locationValue    = locationSelector.value;
 
 		var controls = addLocations.getAttribute( 'aria-controls' );
-		var target   = document.getElementById( controls );
-		target.classList.add( 'hidden' );
+		var fields   = document.getElementById( controls );
+		fields.classList.add( 'hidden' );
 		addLocations.addEventListener( 'click', function(e) {
 			var expanded = this.getAttribute( 'aria-expanded' );
 			if ( 'true' === expanded ) {
 				locationSelector.value = locationValue;
-				target.classList.add( 'hidden' );
+				fields.classList.add( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'false' );
 				this.firstChild.classList.add( 'dashicons-plus' );
 				this.firstChild.classList.remove( 'dashicons-minus' );
 			} else {
 				locationSelector.value = 'none';
-				target.classList.remove( 'hidden' );
+				fields.classList.remove( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'true' );
 				this.firstChild.classList.add( 'dashicons-minus' );
 				this.firstChild.classList.remove( 'dashicons-plus' );
@@ -180,8 +180,6 @@ jQuery(document).ready(function ($) {
 	var toggleInside = document.querySelector( '.toggle-inside' );
 	if ( null !== toggleInside ) {
 		var parentEl = toggleInside.parentNode.parentNode;
-		console.log( toggleInside );
-		console.log( parentEl );
 		var target   = parentEl.querySelector( '.inside' );
 		target.classList.add( 'hidden' );
 		toggleInside.addEventListener( 'click', function(e) {
