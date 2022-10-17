@@ -554,7 +554,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							mc_compare_group_members( $group_id, 'event_link' );
 							?>
 							</label>
-							<input type="text" id="e_link" name="event_link" size="40" value="<?php echo ( is_object( $data ) ) ? esc_url( $data->event_link ) : ''; ?>" />
+							<input type="text" placeholder="https://" id="e_link" name="event_link" size="40" value="<?php echo ( is_object( $data ) ) ? esc_url( $data->event_link ) : ''; ?>" />
 							<input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"<?php echo $exp_checked; ?> />
 							<label for="e_link_expires"><?php esc_html_e( 'Link will expire after event.', 'my-calendar' ); ?></label>
 						</p>
