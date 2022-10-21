@@ -181,6 +181,9 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	}
 	update_post_meta( $post_id, '_mc_event_desc', $description );
 	update_post_meta( $post_id, '_mc_event_image', $image );
+	//Nice date for event Calendar
+	update_post_meta( $post_id, '_mc_nice_date', date("d.m.",strtotime( $event_date )) );
+
 	// This is only used by My Tickets, so only the first date occurrence is required.
 	if ( isset( $data['event_begin'] ) ) {
 		$event_date = ( is_array( $data['event_begin'] ) ) ? $data['event_begin'][0] : $data['event_begin'];
