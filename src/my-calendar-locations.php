@@ -48,16 +48,16 @@ function mc_update_location_post( $where, $data, $post ) {
 	}
 	$post_id = wp_update_post( $my_post );
 
-		/**
-		 * Executed an action when a location post is updated.
-		 *
-		 * @hook mc_update_location_posts
-		 *
-		 * @param {int}   $post_id Post ID.
-		 * @param {array} $post POST Array of data sent to create post.
-		 * @param {array} $data Data for this location.
-		 * @param {int}   $location_id Location ID.
-		 */
+	/**
+	 * Executed an action when a location post is updated.
+	 *
+	 * @hook mc_update_location_posts
+	 *
+	 * @param {int}   $post_id Post ID.
+	 * @param {array} $post POST Array of data sent to create post.
+	 * @param {array} $data Data for this location.
+	 * @param {int}   $location_id Location ID.
+	 */
 	do_action( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
 	if ( mc_switch_sites() ) {
 		restore_current_blog();
@@ -631,6 +631,10 @@ function mc_get_location( $location_id, $update_location = true ) {
 	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
+		$prevent_geolocation     = ( '1' === get_post_meta( $location->location_post, '_mc_geolocate_error', true ) && 'force' !== $update_location ) ? true : false;
+		if ( $prevent_geolocation ) {
+			return $location;
+		}
 		if ( $update_location ) {
 			if ( get_option( 'mc_gmap_api_key' ) ) {
 				if ( 'force' === $update_location ) {
@@ -650,6 +654,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 						mc_update_location( 'location_latitude', $lat, $location_id );
 						$location->location_longitude = $lng;
 						$location->location_latitude  = $lat;
+					} else {
+						update_post_meta( $location->location_post, '_mc_geolocate_error', '1' );
 					}
 				}
 			}
