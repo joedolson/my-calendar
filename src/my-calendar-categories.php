@@ -914,7 +914,7 @@ function mc_profile() {
 	$current_user = wp_get_current_user();
 	$user_edit    = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID;
 
-	if ( user_can( $user_edit, 'mc_manage_events' ) && current_user_can( 'manage_options' ) ) {
+	if ( user_can( $user_edit, 'mc_add_events' ) && current_user_can( 'manage_options' ) ) {
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
 		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions, true ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
 		?>
