@@ -1020,6 +1020,9 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			if ( '1' === (string) $cat->category_private && ! is_user_logged_in() ) {
 				continue;
 			}
+			if ( ! mc_can_edit_category( $cat->category_id, wp_get_current_user()->ID ) ) {
+				continue;
+			}
 			if ( ! empty( $data ) ) {
 				if ( ! is_object( $data ) ) {
 					$category = $data;
