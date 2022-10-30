@@ -3,7 +3,7 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
 Requires at least: 4.4
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 7.0
 Text domain: my-calendar
 Stable tag: 3.3.24.1
@@ -87,6 +87,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.4 =
+
+* Bug fix: User category limits need to be configurable for all users who can add events.
+* Bug fix: User category limits should limit the categories selectable by users, not just those editable.
 
 = 3.3.24.1 =
 
