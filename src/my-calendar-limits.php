@@ -188,6 +188,9 @@ function mc_author_select_ids( $author ) {
 			$key = trim( $key );
 			if ( is_numeric( $key ) ) {
 				$add = absint( $key );
+			} else if ( 'current' === $key ) {
+				$author = wp_get_current_user();
+				$add    = $author->ID;
 			} else {
 				$author = get_user_by( 'login', $key ); // Get author by username.
 				$add    = $author->ID;
