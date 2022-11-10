@@ -470,7 +470,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					$details_label = mc_get_details_label( $event, $data );
 					$details_link  = mc_get_details_link( $event );
 					// Translators: Event title.
-					$aria = " aria-label='" . esc_attr( sprintf( __( 'Details about %s', 'my-calendar' ), strip_tags( $event_title ) ) ) . "'";
+					$aria = " aria-label='" . esc_attr( "$details_label: " . strip_tags( $event_title ) ) . "'";
 					if ( _mc_is_url( $details_link ) ) {
 						$more = "	<p class='mc-details'><a$aria href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
 					} else {
