@@ -391,7 +391,7 @@ function mc_update_text_settings( $post ) {
 	$mc_next_events          = $post['mc_next_events'];
 	$mc_week_caption         = $post['mc_week_caption'];
 	$mc_caption              = $post['mc_caption'];
-	$templates               = get_option( 'mc_templates' );
+	$templates               = get_option( 'mc_templates', array() );
 	$templates['title']      = $mc_title_template;
 	$templates['title_solo'] = $mc_title_template_solo;
 	$templates['title_list'] = $mc_title_template_list;
@@ -494,7 +494,7 @@ function my_calendar_settings() {
 	}
 
 	// Pull templates for passing into functions.
-	$templates              = get_option( 'mc_templates' );
+	$templates              = get_option( 'mc_templates', array() );
 	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
 	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( stripslashes( $templates['title_solo'] ) ) : '';
 	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( stripslashes( $templates['title_list'] ) ) : '';
