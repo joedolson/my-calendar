@@ -3004,28 +3004,55 @@ function mc_grouped_events( $id, $template = '' ) {
  * Generate recurrence options list
  *
  * @param string $value current event's value.
+ * @param string $return Return type: <option>s or array of values.
  *
- * @return string form options
+ * @return string|array form options or array of values.
  */
-function mc_recur_options( $value ) {
-	$s = ( 'S' === $value ) ? ' selected="selected"' : '';
-	$d = ( 'D' === $value ) ? ' selected="selected"' : '';
-	$e = ( 'E' === $value ) ? ' selected="selected"' : '';
-	$w = ( 'W' === $value || 'B' === $value ) ? ' selected="selected"' : '';
-	$m = ( 'M' === $value ) ? ' selected="selected"' : '';
-	$u = ( 'U' === $value ) ? ' selected="selected"' : '';
-	$y = ( 'Y' === $value ) ? ' selected="selected"' : '';
+function mc_recur_options( $value, $return = 'select' ) {
+	$values  = array(
+		array(
+			'value' => 'S',
+			'label' => __( 'Does not recur', 'my-calendar' ),
+		),
+		array(
+			'value' => 'D',
+			'label' => __( 'Daily', 'my-calendar' ),
+		),
+		array(
+			'value' => 'E',
+			'label' => __( 'Daily, weekdays only', 'my-calendar' ),
+		),
+		array(
+			'value' => 'W',
+			'label' => __( 'Weekly', 'my-calendar' ),
+		),
+		array(
+			'value' => 'M',
+			'label' => __( 'Monthly by date (the 24th of each month)', 'my-calendar' ),
+		),
+		array(
+			'value' => 'U',
+			'label' => __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ),
+		),
+		array(
+			'value' => 'Y',
+			'label' => __( 'Yearly', 'my-calendar' ),
+		),
+	);
+	$options = '';
+	if ( 'select' === $return ) {
+		foreach ( $values as $key => $val ) {
+			// Biweekly is just a subset of weekly types. No longer an option to choose.
+			if ( 'B' === $value && 'W' === $val['value'] ) {
+				$value = 'W';
+			}
+			$options .= '<option value="' . esc_attr( $val['value'] ) . '" ' . selected( $val['value'], $value, false ) . '>' . esc_html( $val['label'] ) . '</option>';
+		}
+	} else {
+		return $values;
+	}
 
-	$return = "
-				<option class='input' value='S' $s>" . __( 'Does not recur', 'my-calendar' ) . "</option>
-				<option class='input' value='D' $d>" . __( 'Daily', 'my-calendar' ) . "</option>
-				<option class='input' value='E' $e>" . __( 'Daily, weekdays only', 'my-calendar' ) . "</option>
-				<option class='input' value='W' $w>" . __( 'Weekly', 'my-calendar' ) . "</option>
-				<option class='input' value='M' $m>" . __( 'Monthly by date (the 24th of each month)', 'my-calendar' ) . "</option>
-				<option class='input' value='U' $u>" . __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ) . "</option>
-				<option class='input' value='Y' $y>" . __( 'Yearly', 'my-calendar' ) . '</option>';
-
-	return $return;
+	return $options;
 }
 
 add_filter( 'mc_instance_data', 'mc_reuse_id', 10, 3 );
