@@ -489,13 +489,14 @@ function mc_debug( $subject, $body, $email = '' ) {
  *
  * @return string select options.
  */
-function mc_selected_users( $selected = '', $group = 'authors' ) {
+function mc_selected_users( $selected = '', $group = 'authors', $return = 'select' ) {
 	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group );
 	if ( '' !== $options ) {
 		return $options;
 	}
 	$selected = explode( ',', $selected );
 	$users    = mc_get_users( $group );
+	$values   = array();
 	foreach ( $users as $u ) {
 		if ( in_array( $u->ID, $selected, true ) ) {
 			$checked = ' selected="selected"';
@@ -504,9 +505,10 @@ function mc_selected_users( $selected = '', $group = 'authors' ) {
 		}
 		$display_name = ( '' === $u->display_name ) ? $u->user_nicename : $u->display_name;
 		$options     .= '<option value="' . $u->ID . '"' . $checked . ">$display_name</option>\n";
+		$values[]     = array( $u->ID => $display_name );
 	}
 
-	return $options;
+	return ( 'select' === $return ) ? $options : $values;
 }
 
 /**
