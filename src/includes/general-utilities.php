@@ -491,7 +491,19 @@ function mc_debug( $subject, $body, $email = '' ) {
  * @return string|array <option> elements or an array of possible values.
  */
 function mc_selected_users( $selected = '', $group = 'authors', $return = 'select' ) {
-	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group );
+	/**
+	 * Filter the list of users used to select authors or hosts.
+	 *
+	 * @hook mc_custom_user_select
+	 *
+	 * @param {string}     $output Output that should replace data.
+	 * @param {string|int} $selected The currently selected user.
+	 * @param {string}     $group Whether this function is returning hosts or authors.
+	 * @param {string}     $return Whether this should return fully realized <option> values or an array of data.
+	 *
+	 * @return {string|array}
+	 */
+	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group, $return );
 	if ( '' !== $options ) {
 		return $options;
 	}
