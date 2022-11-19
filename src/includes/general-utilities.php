@@ -486,8 +486,9 @@ function mc_debug( $subject, $body, $email = '' ) {
  *
  * @param string $selected Group of selected users. Comma-separated IDs.
  * @param string $group Type of roles to fetch.
+ * @param string $return Type of return; string of select options or array.
  *
- * @return string select options.
+ * @return string|array <option> elements or an array of possible values.
  */
 function mc_selected_users( $selected = '', $group = 'authors', $return = 'select' ) {
 	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group );
@@ -505,7 +506,10 @@ function mc_selected_users( $selected = '', $group = 'authors', $return = 'selec
 		}
 		$display_name = ( '' === $u->display_name ) ? $u->user_nicename : $u->display_name;
 		$options     .= '<option value="' . $u->ID . '"' . $checked . ">$display_name</option>\n";
-		$values[]     = array( $u->ID => $display_name );
+		$values[]     = array(
+			'value' => $u->ID,
+			'label' => $display_name,
+		);
 	}
 
 	return ( 'select' === $return ) ? $options : $values;
