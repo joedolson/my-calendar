@@ -677,7 +677,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['link_map']        = $map;
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $event );
-		$e['location_access'] = mc_expand( unserialize( mc_location_data( 'location_access', $event->event_location ) ) );
+		$location_access      = mc_location_data( 'location_access', $event->event_location );
+		$e['location_access'] = ( is_string( $location_access ) && '' !== $location_access ) ? mc_expand( unserialize( $location_access ) ) : '';
 		$e['ical_location']   = trim( $event->event_label . ' ' . $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode );
 	}
 
