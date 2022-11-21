@@ -34,7 +34,7 @@
 			$(document).on( 'click', '.event-date button',
 				function (e) {
 					e.preventDefault();
-					var mcEvent = $( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' );
+					var mcEvent = $( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).first();
 					$( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).toggle();
 					mcEvent.attr('tabindex', '-1').trigger( 'focus' );
 					var visible = $(this).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).is(':visible');
