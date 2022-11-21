@@ -441,13 +441,12 @@ ol.mc-repeat-events li:last-of-type .buttons {
 }
 
 .my-calendar-admin label span.required {
-	font-size: .9em;
-	color: #8a2424;
+	color: #b32d2e;
 }
 
 .my-calendar-admin label .nomatch {
 	font-style: italic;
-	color: #8a2424;
+	color: #b32d2e;
 	font-weight: 700;
 }
 
