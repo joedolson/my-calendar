@@ -341,7 +341,7 @@ function mc_display_icons() {
 			$output .= '<li class="category-icon"><code>' . $icon . '</code>' . $img . '</li>';
 		}
 		$output .= '</ul>';
-		set_transient( 'mc_svg_list', $output, MONTH_IN_SECONDS );
+		set_transient( 'mc_svg_list', $output, HOUR_IN_SECONDS );
 	}
 	$append = ( $is_custom ) ? '' : '<p><a target="_parent" href="https://fontawesome.com/license">' . __( 'Icons by Font Awesome', 'my-calendar' ) . '</a></p>';
 

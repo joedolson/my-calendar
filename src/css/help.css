@@ -32,6 +32,7 @@ html.wp-toolbar {
 	bottom: 0;
 	width: calc( 100% - 20px );
 	background: #fff;
+	margin: 0 -10px;
 }
 
 .modal-window-container ul.help {
