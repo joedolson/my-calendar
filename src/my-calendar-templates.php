@@ -942,7 +942,7 @@ function mc_format_timestamp( $os, $source ) {
 		}
 
 		$timezone_object = timezone_open( $timezone_string );
-		$date_object     = date_create( null, $timezone_object );
+		$date_object     = date_create( 'now', $timezone_object );
 
 		$date_object->setTime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ) );
 		$date_object->setDate( mc_date( 'Y', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ) );
