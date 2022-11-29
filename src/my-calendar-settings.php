@@ -103,13 +103,15 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			if ( 'checkbox' === $type ) {
 				$att_name = $name . '[]';
 			}
-			foreach ( $label as $k => $v ) {
-				if ( 'radio' === $type ) {
-					$checked = ( $k === $value ) ? ' checked="checked"' : '';
-				} else {
-					$checked = ( in_array( $k, $value, true ) ) ? ' checked="checked"' : '';
+			if ( is_array( $label ) ) {
+				foreach ( $label as $k => $v ) {
+					if ( 'radio' === $type ) {
+						$checked = ( $k === $value ) ? ' checked="checked"' : '';
+					} else {
+						$checked = ( in_array( $k, $value, true ) ) ? ' checked="checked"' : '';
+					}
+					$options .= "<li><input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label for='$name-$k'>$v</label></li>";
 				}
-				$options .= "<li><input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label for='$name-$k'>$v</label></li>";
 			}
 			$return = "$options $note";
 			break;
@@ -488,7 +490,7 @@ function my_calendar_settings() {
 		 * @param {array}  $post POST global.
 		 */
 		$settings = do_action( 'mc_save_settings', '', $_POST );
-		if ( '' !== $settings ) {
+		if ( is_string( $settings ) && '' !== $settings ) {
 			mc_show_notice( $settings );
 		}
 	}
