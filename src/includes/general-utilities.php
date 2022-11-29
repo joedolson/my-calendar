@@ -218,22 +218,6 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 	return $output;
 }
 
-/**
- * Check selection
- *
- * @param string             $field Name of field.
- * @param string|int|boolean $value Current value.
- * @param string             $type Type of input.
- *
- * @see mc_option_selected()
- *
- * @return string
- */
-function jd_option_selected( $field, $value, $type = 'checkbox' ) {
-
-	return mc_option_selected( $field, $value, $type );
-}
-
 if ( ! function_exists( 'exif_imagetype' ) ) {
 	/**
 	 * This is a hack for people who don't have PHP installed with exif_imagetype
