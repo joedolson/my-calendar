@@ -192,8 +192,11 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	/**
 	 * Filter the order in which navigation elements are shown on the top of the calendar.
+	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
+	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
 	 *
 	 * @hook mc_header_navigation
+	 * @since 3.4.0
 	 *
 	 * @param {array} $mc_toporder Array of navigation elements.
 	 * @param {array} $used Array of all navigation elements in use for this view.
@@ -207,12 +210,18 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			$value      = trim( $value );
 			$mc_topnav .= ${$value};
 		}
+		if ( ! in_array( $value, $available, true ) ) {
+			$mc_topnav .= call_user_func( $value, $params );
+		}
 	}
 
 	/**
-	 * Filter the order in which navigation elements are shown on the bottom of the calendar.
+	 * Filter the order in which navigation elements are shown at the bottom of the calendar.
+	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
+	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
 	 *
 	 * @hook mc_footer_navigation
+	 * @since 3.4.0
 	 *
 	 * @param {array} $mc_bottomorder Array of navigation elements.
 	 * @param {array} $used Array of all navigation elements in use for this view.
@@ -225,6 +234,9 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		if ( 'none' !== $value && 'stop' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
 			$value         = trim( $value );
 			$mc_bottomnav .= ${$value};
+		}
+		if ( ! in_array( $value, $available, true ) ) {
+			$mc_topnav .= call_user_func( $value, $params );
 		}
 	}
 
