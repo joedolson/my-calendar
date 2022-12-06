@@ -864,10 +864,9 @@ function mc_show_edit_block( $field ) {
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
 
-	$input  = array_merge( $defaults, $input );
-	$user   = get_current_user_id();
-	$screen = get_current_screen();
-	$show   = get_user_meta( $user, 'mc_show_on_page', true );
+	$input = array_merge( $defaults, $input );
+	$user  = get_current_user_id();
+	$show  = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = get_option( 'mc_input_options' );
 	}
