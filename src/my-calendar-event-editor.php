@@ -857,7 +857,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
  * @return boolean
  */
 function mc_show_edit_block( $field ) {
-	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	$admin = ( 'true' === get_option( 'mc_input_options_administrators', 'true' ) && current_user_can( 'manage_options' ) ) ? true : false;
 	// Backwards compatibility. Collapsed location field settings into a single setting in 3.3.0.
 	$field = ( 'event_location_dropdown' === $field ) ? 'event_location' : $field;
 	$input = get_option( 'mc_input_options' );
@@ -2015,7 +2015,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_tickets      = '';
 	$event_registration = '';
 	$event_author       = '';
-	$category           = '';
 	$expires            = '';
 	$event_zoom         = '';
 	$host               = '';
@@ -2171,7 +2170,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$approved = absint( $post['event_approved'] );
 		}
 
-		$location_preset    = ! empty( $post['location_preset'] ) ? $post['location_preset'] : '';
+		$event_location     = ! empty( $post['preset_location'] ) ? $post['preset_location'] : '';
+		$location_preset    = ( ! empty( $post['location_preset'] ) ) ? $post['location_preset'] : '';
 		$event_tickets      = ( isset( $post['event_tickets'] ) ) ? trim( $post['event_tickets'] ) : '';
 		$event_registration = ( isset( $post['event_registration'] ) ) ? trim( $post['event_registration'] ) : '';
 		$event_image        = ( isset( $post['event_image'] ) ) ? esc_url_raw( $post['event_image'] ) : '';
@@ -2183,7 +2183,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_hide_end     = ( ! empty( $post['event_hide_end'] ) ) ? (int) $post['event_hide_end'] : 0;
 		$event_hide_end     = ( '' === $time || '23:59:59' === $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		// Set location.
-		if ( 'none' === $location_preset && empty( $post['event_label'] ) ) {
+		if ( 'none' === $location_preset && ( empty( $post['event_label'] ) || is_numeric( $event_location ) ) ) {
 			// event location name is required to copy over.
 		} else {
 			if ( 'none' !== $location_preset && is_numeric( $location_preset ) ) {
