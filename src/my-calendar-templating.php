@@ -38,7 +38,7 @@ function mc_templates_do_edit() {
 			} else {
 				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
 					$template          = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( stripslashes( $_POST['mc_template'] ) ) : '';
-					$templates         = get_option( 'mc_templates' );
+					$templates         = get_option( 'mc_templates', array() );
 					$templates[ $key ] = $template;
 					update_option( 'mc_templates', $templates );
 					update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
@@ -66,7 +66,7 @@ function mc_templates_edit() {
 		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize templates on this site.', 'my-calendar' ) . '</p>' );
 		return;
 	}
-	$templates = get_option( 'mc_templates' );
+	$templates = get_option( 'mc_templates', array() );
 	$key       = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
 
 	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
@@ -255,7 +255,7 @@ function mc_templates_edit() {
 		</div>
 	</div>
 	<?php
-	$templates = get_option( 'mc_templates' );
+	$templates = (array) get_option( 'mc_templates', array() );
 	ksort( $templates );
 	foreach ( $templates as $key => $template ) {
 		if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'link' === $key || 'label' === $key || 'rss' === $key ) {

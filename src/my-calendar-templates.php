@@ -525,7 +525,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['event_registration'] = stripslashes( wp_kses_data( $event->event_registration ) );
 
 	// Links.
-	$templates  = get_option( 'mc_templates' );
+	$templates  = get_option( 'mc_templates', array() );
 	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
 	/**
 	 * Filter template for the `{details}` output. Default: `Details about {title}`.
@@ -677,7 +677,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['link_map']        = $map;
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $event );
-		$e['location_access'] = mc_expand( unserialize( mc_location_data( 'location_access', $event->event_location ) ) );
+		$location_access      = mc_location_data( 'location_access', $event->event_location );
+		$e['location_access'] = ( is_string( $location_access ) && '' !== $location_access ) ? mc_expand( unserialize( $location_access ) ) : '';
 		$e['ical_location']   = trim( $event->event_label . ' ' . $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode );
 	}
 
@@ -904,7 +905,7 @@ function mc_get_uri( $event = false, $args = array() ) {
  * @return string label
  */
 function mc_get_details_label( $event, $e ) {
-	$templates  = get_option( 'mc_templates' );
+	$templates  = get_option( 'mc_templates', array() );
 	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Read more', 'my-calendar' );
 	$e_label    = wp_kses(
 		mc_draw_template( $e, $e_template ),
@@ -941,7 +942,7 @@ function mc_format_timestamp( $os, $source ) {
 		}
 
 		$timezone_object = timezone_open( $timezone_string );
-		$date_object     = date_create( null, $timezone_object );
+		$date_object     = date_create( 'now', $timezone_object );
 
 		$date_object->setTime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ) );
 		$date_object->setDate( mc_date( 'Y', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ) );
@@ -1511,7 +1512,7 @@ function mc_str_replace_word_i( $needle, $haystack ) {
  * @return string Template HTML/tags
  */
 function mc_get_template( $template ) {
-	$templates = get_option( 'mc_templates' );
+	$templates = get_option( 'mc_templates', array() );
 	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'grid' );
 
 	if ( ! in_array( $template, $keys, true ) ) {

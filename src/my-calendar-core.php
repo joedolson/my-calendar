@@ -2137,7 +2137,7 @@ function mc_field_callback() {
  * Custom field callback for permalinks settings
  */
 function mc_location_field_callback() {
-	$value = ( '' !== get_option( 'mc_locaton_cpt_base', '' ) ) ? get_option( 'mc__location_cpt_base' ) : 'mc-locations';
+	$value = ( '' !== get_option( 'mc_location_cpt_base', '' ) ) ? get_option( 'mc_location_cpt_base' ) : 'mc-locations';
 	echo '<input type="text" value="' . esc_attr( $value ) . '" name="mc_location_cpt_base" id="mc_location_cpt_base" class="regular-text" placeholder="mc-locations" />';
 }
 

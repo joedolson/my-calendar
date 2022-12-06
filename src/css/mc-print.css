@@ -4,44 +4,70 @@
 	size: landscape;
 }
 
-.my-calendar-header, .mc_bottomnav, h3 img, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing, .mc-date .event-icon {
+body {
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif
+}
+
+.my-calendar-header, .mc_bottomnav, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing, .mc-date .event-icon {
 	display: none;
+}
+
+img.category-icon,
+svg.category-icon,
+.category-color-sample.svg * {
+	max-width: 18px;
+	min-width: 16px;
+	height: auto;
+	padding: 1px;
+	border-radius: 2px; 
+}
+
+.dashicons {
+	vertical-align: middle;
 }
 
 h2 {
 	text-align: center;
+	margin-bottom: .5rem;
+}
+
+h3 a.has-image {
+	display: grid;
+	grid-template-columns: 18px 1fr;
+	align-items: top;
+	column-gap: 4px;
 }
 
 table {
-	border: 1px solid #ddd;
+	border: solid #dcdcde !important;
+	border-width: 1px 0 0 1px !important;
 	border-collapse: collapse;
+	table-layout: fixed;
 	margin: 0 auto;
 	width: 910px;
 }
 
 th {
 	text-align: center;
-	background: #f6f6f6;
-	border: 1px solid #ddd;
-	width: 130px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	padding: 8px;
+	width: 120px;
 	text-transform: uppercase;
 }
 
 td {
-	border: 1px solid #ddd;
-	font-size: 12px;
+	border: 1px solid #dcdcde !important;
 	vertical-align: top;
 	width: 130px;
-	height: 6em;
+	height: 4em;
+	position: relative;
+	padding-top: 1.5em;
 }
 
 .details {
 	color: #444;
 	margin-bottom: 2px;
-}
-
-.mc-event:not(:last-child) .details {
-	border-bottom: 1px solid #ddd;
 }
 
 .calendar .details * {
@@ -60,18 +86,7 @@ button.mc-text-button {
 
 h3 {
 	font-size: 14px;
-	margin: 2px 0 5px;
-}
-
-p {
-	margin: 2px 0;
-	padding: 1px 0;
-	line-height: 1.2;
-}
-
-caption {
-	font-size: 1.4em;
-	padding: 3px 0;
+	margin: 0 0 10px;
 }
 
 abbr {
@@ -89,23 +104,19 @@ a {
 	font-size: 16px;
 	width: 1em;
 	text-align: center;
-	padding: 2px 4px;
-	line-height: 1;
-	margin-left: 3px;
-	float: right;
-	background: #f9f9f9;
-	position: relative;
-	top: 0px;
-	right: -1px;
-	border-left: 1px solid #ddd;
-	border-bottom: 1px solid #ddd
+	padding: 2px 6px;
+	background: #f7f7f7;
+	position: absolute;
+	top: 0;
+	right: 0;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #ccc
 }
 
 .week .mc-date {
 	width: 100%;
 	padding: 0 0 2px;
 	margin-left: 0;
-	float: none;
 	top: 0;
 	right: 0;
 	border-left: none;
@@ -113,15 +124,22 @@ a {
 }
 
 .return {
-	font-weight: 700;
-	font-size: 1.5em;
+	margin-top: 2em;
 	text-align: center;
-	text-decoration: underline;
-	color: #d00;
 }
 
-.return:hover, .return:focus {
+.return a {
 	text-decoration: none;
+	color: #0a4b78;
+	border: 2px solid #043959;
+	background: #f0f6fc;
+	padding: 4px 8px 8px;
+	border-radius: 6px;
+}
+
+.return a:hover, .return a:focus {
+	outline: 2px solid #01557b;
+	outline-offset: 2px;
 }
 
 li.mc-events {

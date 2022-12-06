@@ -28,6 +28,7 @@ function my_calendar_print_view() {
  * Produce print view output.
  */
 function my_calendar_print() {
+	global $mc_version;
 	$url      = plugin_dir_url( __FILE__ );
 	$time     = ( isset( $_GET['time'] ) ) ? $_GET['time'] : 'month';
 	$category = ( isset( $_GET['mcat'] ) ) ? $_GET['mcat'] : ''; // These are sanitized elsewhere.
@@ -85,7 +86,8 @@ function my_calendar_print() {
 		<meta name="generator" content="My Calendar for WordPress" />
 		<meta name="robots" content="noindex,nofollow" />
 		<!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
-		<link rel="stylesheet" href="<?php echo esc_url( $stylesheet ); ?>" type="text/css" media="screen,print" />
+		<link rel="stylesheet" href="<?php echo esc_url( includes_url( '/css/dashicons.css' ) ); ?>" type="text/css" media="screen,print" />
+		<link rel="stylesheet" href="<?php echo esc_url( add_query_arg( 'version', $mc_version, $stylesheet ) ); ?>" type="text/css" media="screen,print" />
 		<?php
 		/**
 		 * Execute action in the `head` element of the My Calendar print view, where wp_head() won't be run.
@@ -111,7 +113,7 @@ function my_calendar_print() {
 		'above'    => 'none',
 	);
 
-	echo mc_kses_post( my_calendar( $calendar ) );
+	echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
 
 	$add = array_map( 'esc_html', $_GET );
 	unset( $add['cid'] );
@@ -129,7 +131,7 @@ function my_calendar_print() {
 	 */
 	$return_url = apply_filters( 'mc_return_to_calendar', mc_build_url( $add, array( 'feed', 'cid', 'href', 'searched' ), $return_url ), $add );
 	if ( $return_url ) {
-		echo wp_kses_post( "<p class='return'>&larr; <a href='" . esc_url( $return_url ) . "'>" . esc_html__( 'Return to calendar', 'my-calendar' ) . '</a></p>' );
+		echo "<p class='return'><a href='" . esc_url( $return_url ) . "'><span class='dashicons dashicons-arrow-left-alt' aria-hidden='true'></span> " . esc_html__( 'Return to calendar', 'my-calendar' ) . '</a> <a href="javascript:window.print()"><span class="dashicons dashicons-printer" aria-hidden="true"></span> ' . esc_html( __( 'Print', 'my-calendar' ) ) . '</a></p>';
 	}
 	?>
 	</body>

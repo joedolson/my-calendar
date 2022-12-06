@@ -45,13 +45,16 @@ function mc_is_all_day( $event ) {
  */
 function mc_is_custom_icon() {
 	$on     = get_transient( 'mc_custom_icons' );
+	$dir    = trailingslashit( dirname( __FILE__, 2 ) );
+	$base   = basename( $dir );
+	$custom = ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) );
 	$return = false;
-	if ( $on ) {
+	if ( $on && $custom ) {
 		return true;
 	} else {
 		$dir  = trailingslashit( dirname( __FILE__, 2 ) );
 		$base = basename( $dir );
-		if ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) ) {
+		if ( $custom ) {
 			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
 			if ( empty( $results ) ) {
 				$return = false;

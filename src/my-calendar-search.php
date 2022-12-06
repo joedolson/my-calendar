@@ -163,7 +163,7 @@ add_filter( 'the_title', 'mc_search_results_title', 10, 2 );
  *
  * @return string New title
  */
-function mc_search_results_title( $title, $id ) {
+function mc_search_results_title( $title, $id = null ) {
 	if ( ( isset( $_GET['mcs'] ) || isset( $_POST['mcs'] ) ) && ( is_page( $id ) || is_single( $id ) ) && in_the_loop() ) {
 		$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : $_POST['mcs'];
 		// Translators: entered search query.

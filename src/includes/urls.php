@@ -99,6 +99,8 @@ function mc_url_in_loop( $url ) {
  */
 function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	$open_day_uri = get_option( 'mc_open_day_uri' );
+	$mini_uri     = ( mc_is_url( get_option( 'mc_mini_uri' ) ) ) ? get_option( 'mc_mini_uri' ) : apply_filters( 'mc_modify_day_uri', mc_get_uri( reset( $events ), $args ) );
+
 	if ( 'true' === $open_day_uri || 'false' === $open_day_uri ) {
 		// Yes, this is weird. it's from some old settings...
 		$target = array(
@@ -110,10 +112,9 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 		if ( $category ) {
 			$target['mcat'] = $category;
 		}
-		$day_url = mc_build_url( $target, array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ), apply_filters( 'mc_modify_day_uri', mc_get_uri( reset( $events ), $args ) ) );
+		$day_url = mc_build_url( $target, array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ), $mini_uri );
 		$link    = ( '' !== $day_url ) ? $day_url : '#';
 	} else {
-		$mini_uri = get_option( 'mc_mini_uri' );
 		$atype    = str_replace( 'anchor', '', $open_day_uri ); // List or grid.
 		$ad       = str_pad( mc_date( 'j', $start, false ), 2, '0', STR_PAD_LEFT ); // Need to match format in ID.
 		$am       = str_pad( $date['month'], 2, '0', STR_PAD_LEFT );

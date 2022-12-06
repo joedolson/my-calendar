@@ -692,6 +692,7 @@ function mc_list_events() {
 					$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
 					$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
 					$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
+					$limit    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'all';
 					$private  = ( mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
 					$check    = mc_test_occurrence_overlap( $event, true );
 					$problem  = ( '' !== $check ) ? 'problem' : '';
@@ -775,7 +776,7 @@ function mc_list_events() {
 											$te = __( 'Publish', 'my-calendar' );
 										}
 										?>
-										<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;event_id=$event->event_id" ) ); ?>" class='<?php echo esc_attr( $mo ); ?>' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php echo esc_html( $te ); ?></a>
+										<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;limit=$limit&amp;event_id=$event->event_id" ) ); ?>" class='<?php echo esc_attr( $mo ); ?>' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php echo esc_html( $te ); ?></a>
 										<?php
 									} else {
 										switch ( $event->event_approved ) {

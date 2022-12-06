@@ -857,17 +857,16 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
  * @return boolean
  */
 function mc_show_edit_block( $field ) {
-	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	$admin = ( 'true' === get_option( 'mc_input_options_administrators', 'true' ) && current_user_can( 'manage_options' ) ) ? true : false;
 	// Backwards compatibility. Collapsed location field settings into a single setting in 3.3.0.
 	$field = ( 'event_location_dropdown' === $field ) ? 'event_location' : $field;
 	$input = get_option( 'mc_input_options' );
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
 
-	$input  = array_merge( $defaults, $input );
-	$user   = get_current_user_id();
-	$screen = get_current_screen();
-	$show   = get_user_meta( $user, 'mc_show_on_page', true );
+	$input = array_merge( $defaults, $input );
+	$user  = get_current_user_id();
+	$show  = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = get_option( 'mc_input_options' );
 	}
@@ -1165,7 +1164,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				}
 				$return = '
 					<p>
-						<label for="e_link">' . __( 'More Information', 'my-calendar' ) . '</label> <input type="url" placeholder="https://example.org" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
+						<label for="e_link">' . __( 'More Information', 'my-calendar' ) . '</label> <input type="url" placeholder="https://" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
 					</p>';
 			}
 			break;
@@ -2015,7 +2014,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_tickets      = '';
 	$event_registration = '';
 	$event_author       = '';
-	$category           = '';
 	$expires            = '';
 	$event_zoom         = '';
 	$host               = '';
@@ -2171,7 +2169,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$approved = absint( $post['event_approved'] );
 		}
 
-		$location_preset    = ! empty( $post['location_preset'] ) ? $post['location_preset'] : '';
+		$event_location     = ! empty( $post['preset_location'] ) ? $post['preset_location'] : '';
+		$location_preset    = ( ! empty( $post['location_preset'] ) ) ? $post['location_preset'] : '';
 		$event_tickets      = ( isset( $post['event_tickets'] ) ) ? trim( $post['event_tickets'] ) : '';
 		$event_registration = ( isset( $post['event_registration'] ) ) ? trim( $post['event_registration'] ) : '';
 		$event_image        = ( isset( $post['event_image'] ) ) ? esc_url_raw( $post['event_image'] ) : '';
@@ -2183,7 +2182,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_hide_end     = ( ! empty( $post['event_hide_end'] ) ) ? (int) $post['event_hide_end'] : 0;
 		$event_hide_end     = ( '' === $time || '23:59:59' === $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		// Set location.
-		if ( 'none' === $location_preset && empty( $post['event_label'] ) ) {
+		if ( 'none' === $location_preset && ( empty( $post['event_label'] ) || is_numeric( $event_location ) ) ) {
 			// event location name is required to copy over.
 		} else {
 			if ( 'none' !== $location_preset && is_numeric( $location_preset ) ) {
@@ -3004,28 +3003,55 @@ function mc_grouped_events( $id, $template = '' ) {
  * Generate recurrence options list
  *
  * @param string $value current event's value.
+ * @param string $return Return type: <option>s or array of values.
  *
- * @return string form options
+ * @return string|array form options or array of values.
  */
-function mc_recur_options( $value ) {
-	$s = ( 'S' === $value ) ? ' selected="selected"' : '';
-	$d = ( 'D' === $value ) ? ' selected="selected"' : '';
-	$e = ( 'E' === $value ) ? ' selected="selected"' : '';
-	$w = ( 'W' === $value || 'B' === $value ) ? ' selected="selected"' : '';
-	$m = ( 'M' === $value ) ? ' selected="selected"' : '';
-	$u = ( 'U' === $value ) ? ' selected="selected"' : '';
-	$y = ( 'Y' === $value ) ? ' selected="selected"' : '';
+function mc_recur_options( $value, $return = 'select' ) {
+	$values  = array(
+		array(
+			'value' => 'S',
+			'label' => __( 'Does not recur', 'my-calendar' ),
+		),
+		array(
+			'value' => 'D',
+			'label' => __( 'Daily', 'my-calendar' ),
+		),
+		array(
+			'value' => 'E',
+			'label' => __( 'Daily, weekdays only', 'my-calendar' ),
+		),
+		array(
+			'value' => 'W',
+			'label' => __( 'Weekly', 'my-calendar' ),
+		),
+		array(
+			'value' => 'M',
+			'label' => __( 'Monthly by date (the 24th of each month)', 'my-calendar' ),
+		),
+		array(
+			'value' => 'U',
+			'label' => __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ),
+		),
+		array(
+			'value' => 'Y',
+			'label' => __( 'Yearly', 'my-calendar' ),
+		),
+	);
+	$options = '';
+	if ( 'select' === $return ) {
+		foreach ( $values as $key => $val ) {
+			// Biweekly is just a subset of weekly types. No longer an option to choose.
+			if ( 'B' === $value && 'W' === $val['value'] ) {
+				$value = 'W';
+			}
+			$options .= '<option value="' . esc_attr( $val['value'] ) . '" ' . selected( $val['value'], $value, false ) . '>' . esc_html( $val['label'] ) . '</option>';
+		}
+	} else {
+		return $values;
+	}
 
-	$return = "
-				<option class='input' value='S' $s>" . __( 'Does not recur', 'my-calendar' ) . "</option>
-				<option class='input' value='D' $d>" . __( 'Daily', 'my-calendar' ) . "</option>
-				<option class='input' value='E' $e>" . __( 'Daily, weekdays only', 'my-calendar' ) . "</option>
-				<option class='input' value='W' $w>" . __( 'Weekly', 'my-calendar' ) . "</option>
-				<option class='input' value='M' $m>" . __( 'Monthly by date (the 24th of each month)', 'my-calendar' ) . "</option>
-				<option class='input' value='U' $u>" . __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ) . "</option>
-				<option class='input' value='Y' $y>" . __( 'Yearly', 'my-calendar' ) . '</option>';
-
-	return $return;
+	return $options;
 }
 
 add_filter( 'mc_instance_data', 'mc_reuse_id', 10, 3 );

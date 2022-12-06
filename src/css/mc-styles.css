@@ -441,13 +441,12 @@ ol.mc-repeat-events li:last-of-type .buttons {
 }
 
 .my-calendar-admin label span.required {
-	font-size: .9em;
-	color: #8a2424;
+	color: #b32d2e;
 }
 
 .my-calendar-admin label .nomatch {
 	font-style: italic;
-	color: #8a2424;
+	color: #b32d2e;
 	font-weight: 700;
 }
 
@@ -772,6 +771,15 @@ strong.label {
 	border-bottom: none;
 }
 
+#mc-sortable .ui-sortable-handle {
+	cursor: move;
+	border-left: 4px solid transparent;
+}
+
+#mc-sortable .ui-sortable-handle:hover {
+	border-left: 4px solid rgba(0,0,0,.5);
+}
+
 #mc-current-location {
 	padding: 6px;
 	background: rgba( 0, 0, 0, .05 );
@@ -815,7 +823,8 @@ strong.label {
 
 .mc-settings-page #mc-sortable .mc-updated,
 .mc-generator #mc-sortable .mc-updated {
-	background-color: #f5e6ab;
+	background-color: #f0c33c;
+	color: #000;
 }
 
 #mc-sortable .mc-buttons {

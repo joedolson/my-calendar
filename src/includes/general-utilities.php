@@ -218,22 +218,6 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 	return $output;
 }
 
-/**
- * Check selection
- *
- * @param string             $field Name of field.
- * @param string|int|boolean $value Current value.
- * @param string             $type Type of input.
- *
- * @see mc_option_selected()
- *
- * @return string
- */
-function jd_option_selected( $field, $value, $type = 'checkbox' ) {
-
-	return mc_option_selected( $field, $value, $type );
-}
-
 if ( ! function_exists( 'exif_imagetype' ) ) {
 	/**
 	 * This is a hack for people who don't have PHP installed with exif_imagetype
@@ -486,16 +470,30 @@ function mc_debug( $subject, $body, $email = '' ) {
  *
  * @param string $selected Group of selected users. Comma-separated IDs.
  * @param string $group Type of roles to fetch.
+ * @param string $return Type of return; string of select options or array.
  *
- * @return string select options.
+ * @return string|array <option> elements or an array of possible values.
  */
-function mc_selected_users( $selected = '', $group = 'authors' ) {
-	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group );
+function mc_selected_users( $selected = '', $group = 'authors', $return = 'select' ) {
+	/**
+	 * Filter the list of users used to select authors or hosts.
+	 *
+	 * @hook mc_custom_user_select
+	 *
+	 * @param {string}     $output Output that should replace data.
+	 * @param {string|int} $selected The currently selected user.
+	 * @param {string}     $group Whether this function is returning hosts or authors.
+	 * @param {string}     $return Whether this should return fully realized <option> values or an array of data.
+	 *
+	 * @return {string|array}
+	 */
+	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group, $return );
 	if ( '' !== $options ) {
 		return $options;
 	}
 	$selected = explode( ',', $selected );
 	$users    = mc_get_users( $group );
+	$values   = array();
 	foreach ( $users as $u ) {
 		if ( in_array( $u->ID, $selected, true ) ) {
 			$checked = ' selected="selected"';
@@ -504,9 +502,13 @@ function mc_selected_users( $selected = '', $group = 'authors' ) {
 		}
 		$display_name = ( '' === $u->display_name ) ? $u->user_nicename : $u->display_name;
 		$options     .= '<option value="' . $u->ID . '"' . $checked . ">$display_name</option>\n";
+		$values[]     = array(
+			'value' => $u->ID,
+			'label' => $display_name,
+		);
 	}
 
-	return $options;
+	return ( 'select' === $return ) ? $options : $values;
 }
 
 /**
