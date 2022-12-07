@@ -19,7 +19,7 @@
     "npm": ">=6.9.0"
   },
   "devDependencies": {
-    "@wordpress/env": "^4.1",
+    "@wordpress/env": "^5.7",
     "jsdoc": "~3.6.3",
     "wp-hookdoc": "^0.2.0"
   },
