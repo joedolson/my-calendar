@@ -60,14 +60,20 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 				$term = wp_insert_term( mc_get_category_detail( $category, 'category_name' ), 'mc-event-category' );
 				$term = ( ! is_wp_error( $term ) ) ? $term['term_id'] : false;
 				if ( $term ) {
-					$update = mc_update_category( 'category_term', $term, $category );
+					mc_update_category( 'category_term', $term, $category );
 				}
 			}
 			// if any selected category is private, make private.
 			if ( 'private' !== $privacy ) {
-				$privacy = ( '1' === mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : 'publish';
+				$status = ( '1' === mc_get_category_detail( $category, 'category_private' ) ) ? 'private' : $privacy;
 			}
 			$terms[] = (int) $term;
+		}
+		$event_in_trash = ( 2 === (int) $data['event_approved'] ) ? true : false;
+		if ( $event_in_trash ) {
+			$status = 'trash';
+		} else {
+			$status = $privacy;
 		}
 
 		$title = $data['event_title'];
@@ -85,14 +91,13 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
 		$description       = $data['event_desc'];
 		$excerpt           = $data['event_short'];
-		$post_status       = $privacy;
 		$auth              = ( isset( $data['event_author'] ) ) ? $data['event_author'] : get_current_user_id();
 		$type              = 'mc-events';
 		$my_post           = array(
 			'ID'           => $post_id,
 			'post_title'   => $title,
 			'post_content' => $description,
-			'post_status'  => $post_status,
+			'post_status'  => $status,
 			'post_author'  => $auth,
 			'post_name'    => sanitize_title( $title ),
 			'post_type'    => $type,

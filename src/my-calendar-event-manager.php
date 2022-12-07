@@ -258,6 +258,12 @@ function my_calendar_manage() {
 		if ( current_user_can( 'mc_approve_events' ) ) {
 			$event_id = absint( $_GET['event_id'] );
 			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			wp_update_post(
+				array(
+					'ID'          => mc_get_event_post( $event_id ),
+					'post_status' => 'trash',
+				)
+			);
 			mc_update_count_cache();
 		} else {
 			mc_show_error( __( 'You do not have permission to trash that event.', 'my-calendar' ) );
