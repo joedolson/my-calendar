@@ -919,7 +919,7 @@ function mc_get_event_image( $event, $data ) {
 	$return = true;
 
 	global $template;
-	$template_file_name = basename( $template );
+	$template_file_name = ( ! is_string( $template ) ) ? '' : basename( $template );
 	/**
 	 * Fires when displaying an event image in the default template. Return false to show the template image rather than the theme's featured image.
 	 *
