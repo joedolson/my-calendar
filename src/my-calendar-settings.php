@@ -57,7 +57,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 		case 'url':
 		case 'email':
 			if ( $note ) {
-				$note = sprintf( $note, "<code>$value</code>" );
+				$note = sprintf( str_replace( '%', '', $note ), "<code>$value</code>" );
 				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
