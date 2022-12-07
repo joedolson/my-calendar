@@ -260,11 +260,11 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	position: absolute;
 	top: 10%;
 	left: 50%;
-	margin: -20px 0 0 -20px;
-	height: 40px;
-	width: 40px;
-	border: 2px solid rgba(0,0,0,0.3);
-	border-left-color: rgba(0,0,0,0.7);
+	margin: -40px 0 0 -40px;
+	height: 80px;
+	width: 80px;
+	border: 6px solid var(--highlight-light);
+	border-left-color: var(--highlight-dark);
 	background-color: rgba(0,0,0,0.05);
 	-webkit-border-radius: 50px;
 	-moz-border-radius: 50px;
