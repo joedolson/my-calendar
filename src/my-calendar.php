@@ -45,8 +45,8 @@ global $wpdb;
 
 /**
  * Current My Calendar version.
- * 
- * return string
+ *
+ * @return string
  */
 function mc_get_version() {
 	return '3.3.24.1';

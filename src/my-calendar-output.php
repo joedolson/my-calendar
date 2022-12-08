@@ -916,7 +916,7 @@ function mc_get_event_image( $event, $data ) {
  * @return boolean
  */
 function mc_disable_link( $status, $event ) {
-	$option     = get_option( 'mc_no_link' );
+	$option = get_option( 'mc_no_link' );
 	if ( 'true' === $option ) {
 		$status = true;
 	}

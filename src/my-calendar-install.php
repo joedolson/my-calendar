@@ -315,7 +315,7 @@ function mc_create_demo_content() {
  * Get template values.
  */
 function mc_template_settings() {
-	$globals = mc_globals();
+	$globals   = mc_globals();
 	$templates = array(
 		'title'      => '{time}: {title}',
 		'title_list' => '{title}',
@@ -333,10 +333,10 @@ function mc_template_settings() {
 
 /**
  * Get a My Calendar setting. Supports old settings, as well.
- * 
- * @param string $setting Setting key.
+ *
+ * @param string $key Setting key.
  * @param mixed  $default Setting default value.
- * 
+ *
  * @return mixed
  */
 function mc_get_option( $key, $default = '' ) {
@@ -352,10 +352,10 @@ function mc_get_option( $key, $default = '' ) {
 
 /**
  * Save a My Calendar setting.
- * 
- * @param string $setting Setting key.
- * @param mixed  $value   Setting value.
- * 
+ *
+ * @param string $key Setting key.
+ * @param mixed  $value Setting value.
+ *
  * @return bool
  */
 function mc_update_option( $key, $value = '' ) {
@@ -368,7 +368,7 @@ function mc_update_option( $key, $value = '' ) {
 
 /**
  * Fetch My Calendar's default settings array.
- * 
+ *
  * @return array
  */
 function mc_default_options() {
@@ -409,16 +409,16 @@ function mc_default_options() {
 			'--highlight-dark'  => '#666',
 			'--highlight-light' => '#efefef',
 		),
-		'show_weekends'               => 'true',
-		'convert'                     => 'true',
-		'multisite_show'              => 0,
-		'topnav'                      => 'toggle,timeframe,jump,nav',
-		'bottomnav'                   => 'key,print',
-		'default_direction'           => 'DESC',
-		'remote'                      => 'false',
-		'gmap_api_key'                => '',
-		'uri'                         => '',
-		'uri_id'                      => '',
+		'show_weekends'                => 'true',
+		'convert'                      => 'true',
+		'multisite_show'               => 0,
+		'topnav'                       => 'toggle,timeframe,jump,nav',
+		'bottomnav'                    => 'key,print',
+		'default_direction'            => 'DESC',
+		'remote'                       => 'false',
+		'gmap_api_key'                 => '',
+		'uri'                          => '',
+		'uri_id'                       => '',
 	);
 
 	return $options;

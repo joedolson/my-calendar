@@ -467,7 +467,7 @@ function mc_footer_js() {
 		} else {
 			$id = false;
 		}
-		
+
 		$enqueue_mcjs = false;
 		$grid         = 'false';
 		$list         = 'false';
@@ -570,7 +570,7 @@ function mc_admin_styles() {
 	global $current_screen;
 	$version      = mc_get_version();
 	$id           = $current_screen->id;
-	$is_mc_page   = isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'];
+	$is_mc_page   = isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'];
 	$enqueue_mcjs = false;
 	$grid         = 'false';
 	$list         = 'false';
@@ -876,7 +876,7 @@ function my_calendar_check() {
 		$current_version = mc_get_version();
 
 		// If current version matches, don't bother running this.
-		if ( $current_version === mc_get_version() ) {
+		if ( mc_get_version() === $current_version ) {
 
 			return true;
 		}
@@ -939,6 +939,7 @@ function mc_do_upgrades( $upgrade_path ) {
 				mc_migrate_settings();
 				delete_option( 'mc_use_custom_js' );
 				delete_option( 'mc_version' );
+				break;
 			case '3.3.0':
 				// Event repeats is now a string, and prefers a date-like value.
 				mc_upgrade_db();
@@ -1044,7 +1045,7 @@ add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
  */
 function mc_admin_bar() {
 	global $wp_admin_bar;
-	$mc_id = get_option( 'mc_uri_id' );
+	$mc_id = mc_get_option( 'uri_id' );
 	if ( mc_get_uri( 'boolean' ) ) {
 		if ( is_page( $mc_id ) && current_user_can( 'mc_add_events' ) ) {
 			/**
@@ -1179,7 +1180,7 @@ function mc_admin_bar() {
  */
 function mc_admin_state( $states, $post ) {
 	if ( is_admin() ) {
-		if ( absint( get_option( 'mc_uri_id' ) ) === $post->ID ) {
+		if ( absint( mc_get_option( 'uri_id' ) ) === $post->ID ) {
 			$states[] = __( 'My Calendar Page', 'my-calendar' );
 		}
 	}
