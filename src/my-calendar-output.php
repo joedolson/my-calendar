@@ -1706,7 +1706,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 				$class = ( $i < 5 ) ? 'day-heading' : 'weekend-heading';
 			}
 			$dayclass = sanitize_html_class( $abbrevs[ $i ] );
-			if ( ( 'weekend-heading' === $class && ( get_option( 'mc_show_weekends' ) === 'true' ) ) || 'weekend-heading' !== $class ) {
+			if ( ( 'weekend-heading' === $class && ( mc_get_option( 'show_weekends' ) === 'true' ) ) || 'weekend-heading' !== $class ) {
 				$body .= "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
 			}
 		}
@@ -1759,15 +1759,14 @@ function my_calendar( $args ) {
 	$months   = isset( $args['months'] ) ? $args['months'] : false;
 
 	// Get options before switching sites in multisite environments.
-	$list_js_class = ( '1' !== get_option( 'mc_list_javascript' ) ) ? 'listjs' : '';
-	$grid_js_class = ( '1' !== get_option( 'mc_calendar_javascript' ) ) ? 'gridjs' : '';
-	$mini_js_class = ( '1' !== get_option( 'mc_mini_javascript' ) ) ? 'minijs' : '';
-	$ajax_js_class = ( '1' !== get_option( 'mc_ajax_javascript' ) ) ? 'ajaxjs' : '';
+	$list_js_class = ( '1' !== mc_get_option( 'list_javascript' ) ) ? 'listjs' : '';
+	$grid_js_class = ( '1' !== mc_get_option( 'calendar_javascript' ) ) ? 'gridjs' : '';
+	$mini_js_class = ( '1' !== mc_get_option( 'mini_javascript' ) ) ? 'minijs' : '';
+	$ajax_js_class = ( '1' !== mc_get_option( 'ajax_javascript' ) ) ? 'ajaxjs' : '';
 	$style_class   = sanitize_html_class( str_replace( '.css', '', get_option( 'mc_css_file' ) ) );
 	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
-	$show_weekends = ( get_option( 'mc_show_weekends' ) === 'true' ) ? true : false;
-	$skip_holidays = get_option( 'mc_skip_holidays_category' );
+	$show_weekends = ( mc_get_option( 'show_weekends' ) === 'true' ) ? true : false;
 	$month_format  = ( get_option( 'mc_month_format', '' ) === '' ) ? 'F Y' : get_option( 'mc_month_format' );
 	/**
 	 * Filter how many months to show in list views.
@@ -1779,10 +1778,10 @@ function my_calendar( $args ) {
 	 *
 	 * @return {int}
 	 */
-	$show_months  = absint( apply_filters( 'mc_show_months', get_option( 'mc_show_months' ), $args ) );
+	$show_months  = absint( apply_filters( 'mc_show_months', mc_get_option( 'show_months' ), $args ) );
 	$show_months  = ( 0 === $show_months ) ? 1 : $show_months;
 	$caption_text = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
-	$week_format  = ( ! get_option( 'mc_week_format' ) ) ? 'M j, \'y' : get_option( 'mc_week_format' );
+	$week_format  = ( ! mc_get_option( 'week_format' ) ) ? 'M j, \'y' : mc_get_option( 'week_format' );
 	// Translators: Template tag with date format.
 	$week_template = ( get_option( 'mc_week_caption', '' ) !== '' ) ? get_option( 'mc_week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
 	$open_day_uri  = ( ! get_option( 'mc_open_day_uri' ) ) ? 'false' : get_option( 'mc_open_day_uri' ); // This is not a URL. It's a behavior reference.
@@ -2280,9 +2279,9 @@ add_filter( 'mc_display_format', 'mc_convert_format', 10, 2 );
  * @return string new format.
  */
 function mc_convert_format( $format, $params ) {
-	if ( 'true' === get_option( 'mc_convert' ) ) {
+	if ( 'true' === mc_get_option( 'convert' ) ) {
 		$format = ( mc_is_mobile() && 'calendar' === $format ) ? 'list' : $format;
-	} elseif ( 'mini' === get_option( 'mc_convert' ) ) {
+	} elseif ( 'mini' === mc_get_option( 'convert' ) ) {
 		$format = ( mc_is_mobile() ) ? 'mini' : $format;
 	}
 

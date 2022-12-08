@@ -41,8 +41,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-global $mc_version, $wpdb;
-$mc_version = '3.3.24.1';
+global $wpdb;
+
+/**
+ * Current My Calendar version.
+ * 
+ * return string
+ */
+function mc_get_version() {
+	return '3.3.24.1';
+}
 
 define( 'MC_DEBUG', false );
 define( 'MC_DIRECTORY', plugin_dir_path( __FILE__ ) );

@@ -525,7 +525,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['event_registration'] = stripslashes( wp_kses_data( $event->event_registration ) );
 
 	// Links.
-	$templates  = get_option( 'mc_templates', array() );
+	$templates  = mc_get_option( 'templates', array() );
 	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
 	/**
 	 * Filter template for the `{details}` output. Default: `Details about {title}`.
@@ -748,7 +748,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
  */
 function mc_notime_label( $event ) {
 	$notime  = '';
-	$default = get_option( 'mc_notime_text' );
+	$default = mc_get_option( 'notime_text' );
 	if ( is_object( $event ) && property_exists( $event, 'event_post' ) ) {
 		$notime  = get_post_meta( $event->event_post, '_event_time_label', true );
 		$default = ( metadata_exists( 'post', $event->event_post, '_event_time_label' ) ) ? '' : $default;
@@ -905,7 +905,7 @@ function mc_get_uri( $event = false, $args = array() ) {
  * @return string label
  */
 function mc_get_details_label( $event, $e ) {
-	$templates  = get_option( 'mc_templates', array() );
+	$templates  = mc_get_option( 'templates', array() );
 	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Read more', 'my-calendar' );
 	$e_label    = wp_kses(
 		mc_draw_template( $e, $e_template ),
@@ -1512,7 +1512,7 @@ function mc_str_replace_word_i( $needle, $haystack ) {
  * @return string Template HTML/tags
  */
 function mc_get_template( $template ) {
-	$templates = get_option( 'mc_templates', array() );
+	$templates = mc_get_option( 'templates', array() );
 	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'grid' );
 
 	if ( ! in_array( $template, $keys, true ) ) {

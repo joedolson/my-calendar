@@ -31,6 +31,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	}
 
 	if ( get_option( 'mc_drop_settings' ) === 'true' ) {
+		delete_option( 'my_calendar_options' );
 		delete_option( 'mc_can_manage_events' );
 		delete_option( 'mc_style' );
 		delete_option( 'mc_display_author' );

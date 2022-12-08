@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_event_editing() {
 	$args = array(
 		'label'   => __( 'Event editing fields to show', 'my-calendar' ),
-		'default' => get_option( 'mc_input_options' ),
+		'default' => mc_get_option( 'input_options' ),
 		'option'  => 'mc_show_on_page',
 	);
 	add_screen_option( 'mc_show_on_page', $args );
@@ -63,7 +63,7 @@ function mc_show_event_editing( $status, $screen ) {
 	$return = $status;
 	if ( 'toplevel_page_my-calendar' === $screen->base ) {
 		$input_options    = get_user_meta( get_current_user_id(), 'mc_show_on_page', true );
-		$settings_options = get_option( 'mc_input_options' );
+		$settings_options = mc_get_option( 'input_options' );
 		if ( ! is_array( $input_options ) ) {
 			$input_options = $settings_options;
 		}
