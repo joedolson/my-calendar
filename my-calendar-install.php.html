@@ -338,67 +338,101 @@ function mc_create_demo_content() {
 }
 
 /**
- * Save default settings.
+ * Get template values.
  */
-function mc_default_settings() {
+function mc_template_settings() {
 	$globals = mc_globals();
-
-	add_option( 'mc_display_single', array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ) );
-	add_option( 'mc_display_main', array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ) );
-	add_option( 'mc_display_mini', array( 'excerpt', 'image', 'more' ) );
-	add_option( 'mc_use_permalinks', 'true' );
-	add_option( 'mc_use_styles', 'false' );
-	add_option( 'mc_show_months', 1 );
-	add_option( 'mc_calendar_javascript', 0 );
-	add_option( 'mc_list_javascript', 0 );
-	add_option( 'mc_mini_javascript', 0 );
-	add_option( 'mc_ajax_javascript', 0 );
-	add_option( 'mc_notime_text', 'All day' );
-	add_option( 'mc_hide_icons', 'true' );
-	add_option( 'mc_event_link_expires', 'false' );
-	add_option( 'mc_apply_color', 'background' );
-	add_option( 'mc_input_options', mc_input_defaults() );
-	add_option( 'mc_input_options_administrators', 'false' );
-	add_site_option( 'mc_multisite', '0' );
-	add_option( 'mc_event_mail', 'false' );
-	add_option( 'mc_week_format', "M j, 'y" );
-	add_option( 'mc_date_format', get_option( 'date_format' ) );
-	// This option *must* be complete, if it's partial we get errors. So use update instead of add.
-	update_option(
-		'mc_templates',
-		array(
-			'title'      => '{time}: {title}',
-			'title_list' => '{title}',
-			'title_solo' => '{title}',
-			'link'       => __( 'More information', 'my-calendar' ),
-			'grid'       => $globals['grid_template'],
-			'list'       => $globals['list_template'],
-			'mini'       => $globals['mini_template'],
-			'details'    => $globals['single_template'],
-			'label'      => __( 'Read more', 'my-calendar' ),
-		)
+	$templates = array(
+		'title'      => '{time}: {title}',
+		'title_list' => '{title}',
+		'title_solo' => '{title}',
+		'link'       => __( 'More information', 'my-calendar' ),
+		'grid'       => $globals['grid_template'],
+		'list'       => $globals['list_template'],
+		'mini'       => $globals['mini_template'],
+		'details'    => $globals['single_template'],
+		'label'      => __( 'Read more', 'my-calendar' ),
 	);
-	add_option( 'mc_css_file', 'twentytwentyone.css' );
-	add_option(
-		'mc_style_vars',
-		array(
+
+	return $templates;
+}
+
+/**
+ * Get a My Calendar setting. Supports old settings, as well.
+ * 
+ * @param string $setting Setting key.
+ * @param mixed  $default Setting default value.
+ * 
+ * @return mixed
+ */
+function mc_get_option( $key, $default = '' ) {
+	$options = get_option( 'my_calendar_options', mc_default_options() );
+	$new_key = str_replace( 'mc_', '', $key );
+	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : $default;
+	if ( ! $value ) {
+		$value = get_option( $key, $default );
+	}
+
+	return $value;
+}
+
+/**
+ * Fetch My Calendar's default settings array.
+ * 
+ * @return array
+ */
+function mc_default_options() {
+	$options = array(
+		'display_single'               => array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
+		'display_main'                 => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
+		'display_mini'                 => array( 'excerpt', 'image', 'more' ),
+		'use_permalinks'               => 'true',
+		'use_styles'                   => 'false',
+		'show_months'                  => 1,
+		'calendar_javascript'          => 0,
+		'list_javascript'              => 0,
+		'mini_javascript'              => 0,
+		'ajax_javascript'              => 0,
+		'notime_text'                  => 'All day',
+		'hide_icons'                   => 'true',
+		'event_link_expires'           => 'false',
+		'apply_color'                  => 'background',
+		'input_options'                => mc_input_defaults(),
+		'input_options_administrators' => 'false',
+		'event_mail'                   => 'false',
+		'week_format'                  => "M j, 'y",
+		'date_format'                  => get_option( 'date_format', 'Y-m-d' ),
+		'time_format'                  => get_option( 'time_format', 'H:i' ),
+		'templates'                    => mc_template_settings(),
+		'css_file'                     => 'twentytwentyone.css',
+		'style_vars'                   => array(
 			'--primary-dark'    => '#313233',
 			'--primary-light'   => '#fff',
 			'--secondary-light' => '#fff',
 			'--secondary-dark'  => '#000',
 			'--highlight-dark'  => '#666',
 			'--highlight-light' => '#efefef',
-		)
+		),
+		'show_weekends'               => 'true',
+		'convert'                     => 'true',
+		'multisite_show'              => 0,
+		'topnav'                      => 'toggle,timeframe,jump,nav',
+		'bottomnav'                   => 'key,print',
+		'default_direction'           => 'DESC',
 	);
-	add_option( 'mc_time_format', get_option( 'time_format' ) );
-	add_option( 'mc_show_weekends', 'true' );
-	add_option( 'mc_convert', 'true' );
-	add_option( 'mc_show_event_vcal', 'false' );
-	add_option( 'mc_multisite_show', 0 );
-	add_option( 'mc_topnav', 'toggle,timeframe,jump,nav' );
-	add_option( 'mc_bottomnav', 'key,print' );
-	add_option( 'mc_default_direction', 'DESC' );
-	update_option( 'mc_update_notice', 1 );
+
+	return $options;
+}
+
+/**
+ * Save default settings.
+ */
+function mc_default_settings() {
+	$globals = mc_globals();
+	$options = mc_default_options();
+	add_option( 'my_calendar_options', $options );
+	add_site_option( 'mc_multisite', '0' );
+
 	mc_add_roles();
 	$has_uri = mc_guess_calendar();
 	if ( false === $has_uri['response'] ) {

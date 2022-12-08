@@ -208,7 +208,7 @@ add_action( 'wp_enqueue_scripts', 'mc_register_styles' );
  */
 function mc_register_styles() {
 	global $wp_query;
-	$version   = get_option( 'mc_version' );
+	$version   = mc_get_version();
 	$this_post = $wp_query->get_queried_object();
 	/**
 	 * Filter url to get My Calendar stylesheet.
@@ -219,7 +219,7 @@ function mc_register_styles() {
 	 *
 	 * @return {string}
 	 */
-	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( get_option( 'mc_css_file' ), 'url' ) );
+	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version );
 	wp_register_style( 'my-calendar-locations', plugins_url( 'css/locations.css', __FILE__ ), array( 'dashicons' ), $version );
@@ -246,14 +246,14 @@ function mc_register_styles() {
 	 */
 	$default     = apply_filters( 'mc_display_css_on_archives', true, $wp_query );
 	$id          = ( is_object( $this_post ) &amp;&amp; isset( $this_post->ID ) ) ? $this_post->ID : false;
-	$js_array    = ( '' !== trim( get_option( 'mc_show_js', '' ) ) ) ? explode( ',', get_option( 'mc_show_js' ) ) : array();
-	$css_array   = ( '' !== trim( get_option( 'mc_show_css', '' ) ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : array();
+	$js_array    = ( '' !== trim( mc_get_option( 'show_js', '' ) ) ) ? explode( ',', mc_get_option( 'show_js' ) ) : array();
+	$css_array   = ( '' !== trim( mc_get_option( 'show_css', '' ) ) ) ? explode( ',', mc_get_option( 'show_css' ) ) : array();
 	$use_default = ( $default &amp;&amp; ! $id ) ? true : false;
 	$js_usage    = ( ( empty( $js_array ) ) || ( $id &amp;&amp; in_array( (string) $id, $js_array, true ) ) ) ? true : false;
 	$css_usage   = ( ( empty( $css_array ) ) || ( $id &amp;&amp; in_array( (string) $id, $css_array, true ) ) ) ? true : false;
 
 	// check whether any scripts are actually enabled.
-	if ( get_option( 'mc_calendar_javascript' ) !== '1' || get_option( 'mc_list_javascript' ) !== '1' || get_option( 'mc_mini_javascript' ) !== '1' || get_option( 'mc_ajax_javascript' ) !== '1' ) {
+	if ( mc_get_option( 'calendar_javascript' ) !== '1' || mc_get_option( 'list_javascript' ) !== '1' || mc_get_option( 'mini_javascript' ) !== '1' || mc_get_option( 'ajax_javascript' ) !== '1' ) {
 		if ( $use_default || $js_usage || is_singular( 'mc-events' ) || is_singular( 'mc-locations' ) ) {
 			wp_enqueue_script( 'jquery' );
 			if ( 'true' === get_option( 'mc_gmap' ) || mc_output_is_visible( 'gmap', 'single' ) || is_singular( 'mc-locations' ) ) {
@@ -273,7 +273,7 @@ function mc_register_styles() {
 		}
 	}
 	// True means styles are disabled.
-	if ( 'true' !== get_option( 'mc_use_styles' ) ) {
+	if ( 'true' !== mc_get_option( 'use_styles' ) ) {
 		if ( $use_default || $css_usage ) {
 			wp_enqueue_style( 'my-calendar-style' );
 		}
@@ -299,18 +299,18 @@ function mc_head() {
 	global $wp_query;
 	$array = array();
 
-	if ( get_option( 'mc_use_styles' ) !== 'true' ) {
+	if ( mc_get_option( 'use_styles' ) !== 'true' ) {
 		$this_post     = $wp_query->get_queried_object();
 		$id            = (string) ( is_object( $this_post ) &amp;&amp; isset( $this_post->ID ) ) ? $this_post->ID : false;
-		$array         = ( '' !== get_option( 'mc_show_css', '' ) ) ? explode( ',', get_option( 'mc_show_css' ) ) : $array;
+		$array         = ( '' !== mc_get_option( 'show_css', '' ) ) ? explode( ',', mc_get_option( 'show_css' ) ) : $array;
 		$category_vars = '';
-		if ( ( is_array( $array ) &amp;&amp; ! empty( $array ) ) || in_array( $id, $array, true ) || get_option( 'mc_show_css', '' ) === '' ) {
+		if ( ( is_array( $array ) &amp;&amp; ! empty( $array ) ) || in_array( $id, $array, true ) || mc_get_option( 'show_css', '' ) === '' ) {
 			// generate category colors.
 			$category_css    = mc_generate_category_styles();
 			$category_styles = $category_css['styles'];
 			$category_vars   = $category_css['vars'];
 
-			$styles     = (array) get_option( 'mc_style_vars' );
+			$styles     = (array) mc_get_option( 'style_vars' );
 			$style_vars = '';
 			foreach ( $styles as $key => $var ) {
 				if ( $var ) {
@@ -372,18 +372,19 @@ function mc_generate_category_styles() {
 		$class = mc_category_class( $category, 'mc_' );
 		$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
 		$color = $hex . $category->category_color;
+		$apply = mc_get_option( 'apply_color' );
 		if ( '#' !== $color ) {
 			$hcolor = mc_shift_color( $category->category_color );
-			if ( 'font' === get_option( 'mc_apply_color' ) ) {
+			if ( 'font' === $apply ) {
 				$type = 'color';
 				$alt  = 'background';
-			} elseif ( 'background' === get_option( 'mc_apply_color' ) ) {
+			} elseif ( 'background' === $apply ) {
 				$type = 'background';
 				$alt  = 'color';
 			}
 			$inverse = mc_inverse_color( $color );
 			$inv     = "$alt: $inverse !important;";
-			if ( 'font' === get_option( 'mc_apply_color' ) || 'background' === get_option( 'mc_apply_color' ) ) {
+			if ( 'font' === $apply || 'background' === $apply ) {
 				// always an anchor as of 1.11.0, apply also to title.
 				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
 				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor !important;}";
@@ -482,7 +483,7 @@ function mc_plugin_update_message() {
  */
 function mc_footer_js() {
 	global $wp_query;
-	$version = get_option( 'mc_version' );
+	$version = mc_get_version();
 	$script  = '';
 	$mcjs    = "&lt;script>(function ($) { 'use strict'; $(function () { $( '.mc-main' ).removeClass( 'mcjs' ); });}(jQuery));&lt;/script>";
 	/**
@@ -557,7 +558,7 @@ function mc_footer_js() {
 			$mini         = 'false';
 			$ajax         = 'false';
 			if ( ! $id || ( is_array( $pages ) &amp;&amp; in_array( $id, $pages, true ) ) || '' === $show_js ) {
-				if ( '1' !== get_option( 'mc_calendar_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_uri' ) ) {
+				if ( '1' !== mc_get_option( 'calendar_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_uri' ) ) {
 					/**
 					 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
 					 *
@@ -575,7 +576,7 @@ function mc_footer_js() {
 						$grid = 'true';
 					}
 				}
-				if ( '1' !== get_option( 'mc_list_javascript' ) ) {
+				if ( '1' !== mc_get_option( 'list_javascript' ) ) {
 					/**
 					 * Filter to replace scripts used on front-end for list behavior. Default empty string.
 					 *
@@ -593,7 +594,7 @@ function mc_footer_js() {
 						$list = 'true';
 					}
 				}
-				if ( '1' !== get_option( 'mc_mini_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_day_uri' ) ) {
+				if ( '1' !== mc_get_option( 'mini_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_day_uri' ) ) {
 					/**
 					 * Filter to replace scripts used on front-end for mini calendar behavior. Default empty string.
 					 *
@@ -612,7 +613,7 @@ function mc_footer_js() {
 						$mini = 'true';
 					}
 				}
-				if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
+				if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
 					/**
 					 * Filter to replace scripts used on front-end for AJAX behavior. Default empty string.
 					 *
@@ -652,7 +653,7 @@ function mc_footer_js() {
  */
 function mc_admin_styles() {
 	global $current_screen;
-	$version      = get_option( 'mc_version' );
+	$version      = mc_get_version();
 	$id           = $current_screen->id;
 	$is_mc_page   = isset( $_GET['post'] ) &amp;&amp; get_option( 'mc_uri_id' ) === $_GET['post'];
 	$enqueue_mcjs = false;
@@ -676,19 +677,19 @@ function mc_admin_styles() {
 			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 			wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 			wp_enqueue_style( 'my-calendar-admin-style' );
-			if ( '1' !== get_option( 'mc_calendar_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_uri' ) ) {
+			if ( '1' !== mc_get_option( 'calendar_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_uri' ) ) {
 				$enqueue_mcjs = true;
 				$grid         = 'true';
 			}
-			if ( '1' !== get_option( 'mc_list_javascript' ) ) {
+			if ( '1' !== mc_get_option( 'list_javascript' ) ) {
 				$enqueue_mcjs = true;
 				$list         = 'true';
 			}
-			if ( '1' !== get_option( 'mc_mini_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_day_uri' ) ) {
+			if ( '1' !== mc_get_option( 'mini_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_day_uri' ) ) {
 				$enqueue_mcjs = true;
 				$mini         = 'true';
 			}
-			if ( '1' !== get_option( 'mc_ajax_javascript' ) ) {
+			if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
 				$enqueue_mcjs = true;
 				$ajax         = 'true';
 			}
@@ -736,7 +737,7 @@ function mc_admin_head() {
 	$category_styles = $category_css['styles'];
 	$category_vars   = $category_css['vars'];
 
-	$styles     = (array) get_option( 'mc_style_vars' );
+	$styles     = (array) mc_get_option( 'style_vars' );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
 		if ( $var ) {
@@ -957,7 +958,7 @@ function my_calendar_check() {
 	if ( current_user_can( 'manage_options' ) ) {
 		global $wpdb, $mc_version;
 		mc_if_needs_permissions();
-		$current_version = ( '' === get_option( 'mc_version', '' ) ) ? get_option( 'my_calendar_version' ) : get_option( 'mc_version' );
+		$current_version = mc_get_version();
 
 		// If current version matches, don't bother running this.
 		if ( $current_version === $mc_version ) {
@@ -1022,6 +1023,8 @@ function mc_do_upgrades( $upgrade_path ) {
 	}
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.4.0':
+				mc_migrate_settings();
 			case '3.3.0':
 				// Event repeats is now a string, and prefers a date-like value.
 				mc_upgrade_db();
@@ -1279,7 +1282,7 @@ add_filter( 'display_post_states', 'mc_admin_state', 10, 2 );
 function my_calendar_send_email( $event ) {
 	$details           = mc_create_tags( $event );
 	$headers           = array();
-	$send_email_option = ( 'true' === get_option( 'mc_event_mail' ) ) ? true : false;
+	$send_email_option = ( 'true' === mc_get_option( 'event_mail' ) ) ? true : false;
 	/**
 	 * Filter whether email notifications should be sent.
 	 *
@@ -1294,7 +1297,7 @@ function my_calendar_send_email( $event ) {
 	if ( true === $send_email ) {
 		add_filter( 'wp_mail_content_type', 'mc_html_type' );
 	}
-	if ( 'true' === get_option( 'mc_event_mail' ) ) {
+	if ( 'true' === mc_get_option( 'event_mail' ) ) {
 		/**
 		 * Filter event notification email to header.
 		 *
@@ -1501,7 +1504,7 @@ function mc_datepicker() {
  * @return string
  */
 function mc_parse_date_format() {
-	$format = get_option( 'mcs_date_format' );
+	$format = get_option( 'mcs_date_format', 'Y-m-d' );
 	switch ( $format ) {
 		case 'Y-m-d':
 			$parsed = 'YYYY-MM-DD';
@@ -1603,7 +1606,7 @@ add_action( 'admin_enqueue_scripts', 'mc_scripts' );
  */
 function mc_scripts() {
 	global $current_screen;
-	$version = get_option( 'mc_version' );
+	$version = mc_get_version();
 	$id      = $current_screen->id;
 	$slug    = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
@@ -1753,7 +1756,7 @@ function mc_scripts() {
  * @return string format.
  */
 function mc_time_format() {
-	$mc_time_format = get_option( 'mc_time_format', '' );
+	$mc_time_format = mc_get_option( 'time_format', '' );
 	$time_format    = get_option( 'time_format', '' );
 	if ( '' === $mc_time_format ) {
 		$mc_time_format = $time_format;
@@ -1862,10 +1865,10 @@ function mc_get_support_form() {
 	global $current_user, $wpdb;
 	$current_user = wp_get_current_user();
 	// send fields for My Calendar.
-	$version       = get_option( 'mc_version' );
+	$version       = mc_get_version();
 	$mc_db_version = get_option( 'mc_db_version' );
 	$mc_uri        = mc_get_uri();
-	$mc_css        = get_option( 'mc_css_file' );
+	$mc_css        = mc_get_option( 'css_file' );
 
 	// Pro license status.
 	$license       = ( '' !== get_option( 'mcs_license_key', '' ) ) ? get_option( 'mcs_license_key' ) : '';
@@ -2452,10 +2455,6 @@ add_action( 'admin_notices', 'mc_update_notice' );
  */
 function mc_update_notice() {
 	if ( current_user_can( 'manage_options' ) &amp;&amp; isset( $_GET['page'] ) &amp;&amp; stripos( $_GET['page'], 'my-calendar' ) !== false ) {
-		if ( '1' === get_option( 'mc_use_custom_js' ) ) {
-			mc_show_notice( __( 'Stored custom JS will be removed from My Calendar in version 3.4.0. You should adapt your custom JS to a file-based replacement file or use the standard scripts.', 'my-calendar' ) . ' &lt;a href="' . admin_url( 'admin.php?page=my-calendar-design#my-calendar-scripts' ) . '">' . __( 'Update Script Settings', 'my-calendar' ) . '&lt;/a>' );
-
-		}
 		if ( 'true' === get_option( 'mc_remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' &lt;a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '&lt;/a>' );
 		}
