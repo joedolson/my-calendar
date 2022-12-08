@@ -1247,7 +1247,7 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @return {string}
 		 */
-		$bcc = apply_filters( 'mc_event_mail_bcc', get_option( 'mc_event_mail_bcc' ), $details );
+		$bcc = apply_filters( 'mc_event_mail_bcc', mc_get_option( 'event_mail_bcc' ), $details );
 		if ( $bcc ) {
 			$bcc = explode( PHP_EOL, $bcc );
 			foreach ( $bcc as $b ) {
@@ -1294,7 +1294,7 @@ function my_calendar_send_email( $event ) {
 		$message = mc_draw_template( $details, $body );
 		wp_mail( $to, $subject, $message, $headers );
 	}
-	if ( 'true' === get_option( 'mc_html_email' ) ) {
+	if ( 'true' === mc_get_option( 'html_email' ) ) {
 		remove_filter( 'wp_mail_content_type', 'mc_html_type' );
 	}
 }

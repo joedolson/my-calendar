@@ -396,6 +396,8 @@ function mc_default_options() {
 		'event_mail_from'              => get_bloginfo( 'admin_email' ),
 		'event_mail_subject'           => '',
 		'event_mail_message'           => '',
+		'event_mail_bcc'               => '',
+		'html_email'                   => 'true',
 		'week_format'                  => "M j, 'y",
 		'date_format'                  => get_option( 'date_format', 'Y-m-d' ),
 		'time_format'                  => get_option( 'time_format', 'H:i' ),

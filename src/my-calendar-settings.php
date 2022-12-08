@@ -35,7 +35,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 	} else {
 		$base_atts = $atts;
 	}
-	$value = get_option( $name, '' );
+	$value = mc_get_option( $name, '' );
 	$atts  = array_merge( $base_atts, $atts );
 	if ( is_array( $atts ) && ! empty( $atts ) ) {
 		foreach ( $atts as $key => $val ) {
@@ -219,29 +219,29 @@ function mc_update_management_settings( $post ) {
 	$mc_drop_tables   = ( ! empty( $post['mc_drop_tables'] ) && 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
 	$mc_drop_settings = ( ! empty( $post['mc_drop_settings'] ) && 'on' === $post['mc_drop_settings'] ) ? 'true' : 'false';
 	// Handle My Calendar primary URL.
-	$mc_uri = get_option( 'mc_uri' );
+	$mc_uri = mc_get_option( 'uri' );
 	if ( isset( $post['mc_uri'] ) && ! isset( $post['mc_uri_id'] ) ) {
 		$mc_uri = $post['mc_uri'];
 	} elseif ( isset( $post['mc_uri_id'] ) && is_numeric( $post['mc_uri_id'] ) ) {
 		if ( get_post( absint( $post['mc_uri_id'] ) ) ) {
 			$mc_uri = get_permalink( absint( $post['mc_uri_id'] ) );
 		} else {
-			$mc_uri = isset( $post['mc_uri'] ) ? $post['mc_uri'] : get_option( 'mc_uri' );
+			$mc_uri = isset( $post['mc_uri'] ) ? $post['mc_uri'] : mc_get_option( 'uri' );
 		}
 	}
-	update_option( 'mc_use_permalinks', ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false' );
-	update_option( 'mc_uri', $mc_uri );
-	update_option( 'mc_uri_id', absint( $post['mc_uri_id'] ) );
+	mc_update_option( 'use_permalinks', ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false' );
+	mc_update_option( 'uri', $mc_uri );
+	mc_update_option( 'uri_id', absint( $post['mc_uri_id'] ) );
 	// End handling of primary URL.
-	update_option( 'mc_api_enabled', $mc_api_enabled );
-	update_option( 'mc_remote', $mc_remote );
-	update_option( 'mc_drop_tables', $mc_drop_tables );
-	update_option( 'mc_drop_settings', $mc_drop_settings );
-	update_option( 'mc_default_sort', absint( $post['mc_default_sort'] ) );
-	update_option( 'mc_default_direction', sanitize_text_field( $post['mc_default_direction'] ) );
+	mc_update_option( 'api_enabled', $mc_api_enabled );
+	mc_update_option( 'remote', $mc_remote );
+	mc_update_option( 'drop_tables', $mc_drop_tables );
+	mc_update_option( 'drop_settings', $mc_drop_settings );
+	mc_update_option( 'default_sort', absint( $post['mc_default_sort'] ) );
+	mc_update_option( 'default_direction', sanitize_text_field( $post['mc_default_direction'] ) );
 	if ( 2 === (int) get_site_option( 'mc_multisite' ) ) {
 		$mc_current_table = ( isset( $post['mc_current_table'] ) ) ? (int) $post['mc_current_table'] : 0;
-		update_option( 'mc_current_table', $mc_current_table );
+		mc_update_option( 'current_table', $mc_current_table );
 	}
 }
 
@@ -309,13 +309,13 @@ function mc_update_permissions_settings( $post ) {
 function mc_update_output_settings( $post ) {
 	$mc_open_day_uri = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
 	$mc_open_uri     = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
-	update_option( 'mc_open_uri', $mc_open_uri );
-	update_option( 'mc_no_link', ( ! empty( $post['mc_no_link'] ) && 'on' === $post['mc_no_link'] ) ? 'true' : 'false' );
-	update_option( 'mc_mini_uri', $post['mc_mini_uri'] );
-	update_option( 'mc_open_day_uri', $mc_open_day_uri );
-	update_option( 'mc_show_list_info', ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false' );
-	update_option( 'mc_show_list_events', ( ! empty( $post['mc_show_list_events'] ) && 'on' === $post['mc_show_list_events'] ) ? 'true' : 'false' );
-	update_option( 'mc_show_months', (int) $post['mc_show_months'] );
+	mc_update_option( 'open_uri', $mc_open_uri );
+	mc_update_option( 'no_link', ( ! empty( $post['mc_no_link'] ) && 'on' === $post['mc_no_link'] ) ? 'true' : 'false' );
+	mc_update_option( 'mini_uri', $post['mc_mini_uri'] );
+	mc_update_option( 'open_day_uri', $mc_open_day_uri );
+	mc_update_option( 'show_list_info', ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false' );
+	mc_update_option( 'show_list_events', ( ! empty( $post['mc_show_list_events'] ) && 'on' === $post['mc_show_list_events'] ) ? 'true' : 'false' );
+	mc_update_option( 'show_months', (int) $post['mc_show_months'] );
 	// Calculate sequence for navigation elements.
 	$top    = array();
 	$bottom = array();
@@ -334,17 +334,17 @@ function mc_update_output_settings( $post ) {
 	}
 	$top    = ( empty( $top ) ) ? 'none' : implode( ',', $top );
 	$bottom = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
-	update_option( 'mc_bottomnav', $bottom );
-	update_option( 'mc_topnav', $top );
+	mc_update_option( 'bottomnav', $bottom );
+	mc_update_option( 'topnav', $top );
 	$single = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
 	$main   = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
 	$mini   = ( empty( $post['mc_display_mini'] ) ) ? array() : $post['mc_display_mini'];
-	update_option( 'mc_display_single', array_map( 'sanitize_text_field', $single ) );
-	update_option( 'mc_display_main', array_map( 'sanitize_text_field', $main ) );
-	update_option( 'mc_display_mini', array_map( 'sanitize_text_field', $mini ) );
-	update_option( 'mc_gmap_api_key', ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '' );
-	update_option( 'mc_show_weekends', ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false' );
-	update_option( 'mc_convert', ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false' );
+	mc_update_option( 'display_single', array_map( 'sanitize_text_field', $single ) );
+	mc_update_option( 'display_main', array_map( 'sanitize_text_field', $main ) );
+	mc_update_option( 'display_mini', array_map( 'sanitize_text_field', $mini ) );
+	mc_update_option( 'gmap_api_key', ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '' );
+	mc_update_option( 'show_weekends', ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false' );
+	mc_update_option( 'convert', ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false' );
 }
 
 /**
@@ -366,8 +366,8 @@ function mc_update_input_settings( $post ) {
 		'event_access'   => ( isset( $post['mci_event_access'] ) ) ? 'on' : 'off',
 		'event_host'     => ( isset( $post['mci_event_host'] ) ) ? 'on' : 'off',
 	);
-	update_option( 'mc_input_options', $mc_input_options );
-	update_option( 'mc_input_options_administrators', $mc_input_options_administrators );
+	mc_update_option( 'input_options', $mc_input_options );
+	mc_update_option( 'input_options_administrators', $mc_input_options_administrators );
 }
 
 /**
@@ -393,30 +393,30 @@ function mc_update_text_settings( $post ) {
 	$mc_next_events          = $post['mc_next_events'];
 	$mc_week_caption         = $post['mc_week_caption'];
 	$mc_caption              = $post['mc_caption'];
-	$templates               = get_option( 'mc_templates', array() );
+	$templates               = mc_get_option( 'templates', array() );
 	$templates['title']      = $mc_title_template;
 	$templates['title_solo'] = $mc_title_template_solo;
 	$templates['title_list'] = $mc_title_template_list;
 	$templates['label']      = $mc_details_label;
 	$templates['link']       = $mc_link_label;
-	update_option( 'mc_templates', $templates );
-	update_option( 'mc_event_title_template', $mc_event_title_template );
-	update_option( 'mc_heading_text', $mc_heading_text );
-	update_option( 'mc_notime_text', $mc_notime_text );
-	update_option( 'mc_hosted_by', $mc_hosted_by );
-	update_option( 'mc_posted_by', $mc_posted_by );
-	update_option( 'mc_buy_tickets', $mc_buy_tickets );
-	update_option( 'mc_event_accessibility', $mc_event_accessibility );
-	update_option( 'mc_view_full', $mc_view_full );
-	update_option( 'mc_week_caption', $mc_week_caption );
-	update_option( 'mc_next_events', $mc_next_events );
-	update_option( 'mc_previous_events', $mc_previous_events );
-	update_option( 'mc_caption', $mc_caption );
+	mc_update_option( 'templates', $templates );
+	mc_update_option( 'event_title_template', $mc_event_title_template );
+	mc_update_option( 'heading_text', $mc_heading_text );
+	mc_update_option( 'notime_text', $mc_notime_text );
+	mc_update_option( 'hosted_by', $mc_hosted_by );
+	mc_update_option( 'posted_by', $mc_posted_by );
+	mc_update_option( 'buy_tickets', $mc_buy_tickets );
+	mc_update_option( 'event_accessibility', $mc_event_accessibility );
+	mc_update_option( 'view_full', $mc_view_full );
+	mc_update_option( 'week_caption', $mc_week_caption );
+	mc_update_option( 'next_events', $mc_next_events );
+	mc_update_option( 'previous_events', $mc_previous_events );
+	mc_update_option( 'caption', $mc_caption );
 	// Date/time.
-	update_option( 'mc_date_format', stripslashes( $post['mc_date_format'] ) );
-	update_option( 'mc_week_format', stripslashes( $post['mc_week_format'] ) );
-	update_option( 'mc_time_format', stripslashes( $post['mc_time_format'] ) );
-	update_option( 'mc_month_format', stripslashes( $post['mc_month_format'] ) );
+	mc_update_option( 'date_format', stripslashes( $post['mc_date_format'] ) );
+	mc_update_option( 'week_format', stripslashes( $post['mc_week_format'] ) );
+	mc_update_option( 'time_format', stripslashes( $post['mc_time_format'] ) );
+	mc_update_option( 'month_format', stripslashes( $post['mc_month_format'] ) );
 }
 
 /**
@@ -430,7 +430,7 @@ function my_calendar_settings() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 		if ( isset( $_POST['mc_manage'] ) ) {
-			$before_permalinks = get_option( 'mc_use_permalinks' );
+			$before_permalinks = mc_get_option( 'use_permalinks' );
 			mc_update_management_settings( $_POST );
 			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) );
 		}
@@ -471,13 +471,13 @@ function my_calendar_settings() {
 			$mc_event_mail_subject = $_POST['mc_event_mail_subject'];
 			$mc_event_mail_message = $_POST['mc_event_mail_message'];
 			$mc_event_mail_bcc     = $_POST['mc_event_mail_bcc'];
-			update_option( 'mc_event_mail_to', $mc_event_mail_to );
-			update_option( 'mc_event_mail_from', $mc_event_mail_from );
-			update_option( 'mc_event_mail_subject', $mc_event_mail_subject );
-			update_option( 'mc_event_mail_message', $mc_event_mail_message );
-			update_option( 'mc_event_mail_bcc', $mc_event_mail_bcc );
-			update_option( 'mc_event_mail', $mc_event_mail );
-			update_option( 'mc_html_email', $mc_html_email );
+			mc_update_option( 'event_mail_to', $mc_event_mail_to );
+			mc_update_option( 'event_mail_from', $mc_event_mail_from );
+			mc_update_option( 'event_mail_subject', $mc_event_mail_subject );
+			mc_update_option( 'event_mail_message', $mc_event_mail_message );
+			mc_update_option( 'event_mail_bcc', $mc_event_mail_bcc );
+			mc_update_option( 'event_mail', $mc_event_mail );
+			mc_update_option( 'html_email', $mc_html_email );
 			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ) );
 		}
 
@@ -496,7 +496,7 @@ function my_calendar_settings() {
 	}
 
 	// Pull templates for passing into functions.
-	$templates              = get_option( 'mc_templates', array() );
+	$templates              = mc_get_option( 'templates', array() );
 	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
 	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( stripslashes( $templates['title_solo'] ) ) : '';
 	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( stripslashes( $templates['title_list'] ) ) : '';
@@ -579,15 +579,12 @@ function my_calendar_settings() {
 							<legend class="screen-reader-text"><?php esc_html_e( 'Management', 'my-calendar' ); ?></legend>
 							<ul>
 								<?php
-								$has_uri    = mc_get_uri( 'boolean' );
 								$page_title = '';
-								$permalink  = '';
 								$edit_link  = '';
 								$note       = __( 'Search to set a calendar page.', 'my-calendar' );
-								if ( get_option( 'mc_uri_id' ) ) {
-									$page_title = get_post( absint( get_option( 'mc_uri_id' ) ) )->post_title;
-									$permalink  = esc_url( get_permalink( absint( get_option( 'mc_uri_id' ) ) ) );
-									$edit_link  = esc_url( get_edit_post_link( absint( get_option( 'mc_uri_id' ) ) ) );
+								if ( mc_get_option( 'uri_id' ) ) {
+									$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
+									$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
 									// Translators: Editing URL for calendar page.
 									$note = sprintf( __( 'Search for a different page or <a href="%s">edit the current calendar page</a>.', 'my-calendar' ), $edit_link );
 								}
@@ -669,7 +666,7 @@ function my_calendar_settings() {
 										'radio'
 									);
 								} else {
-									if ( get_option( 'mc_remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
+									if ( mc_get_option( 'remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
 										?>
 										<li><?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
 										<?php
@@ -683,7 +680,7 @@ function my_calendar_settings() {
 							<ul>
 								<li><?php mc_settings_field( 'mc_remote', __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<?php
-								if ( 'true' === get_option( 'mc_remote' ) && ! function_exists( 'mc_remote_db' ) ) {
+								if ( 'true' === mc_get_option( 'remote' ) && ! function_exists( 'mc_remote_db' ) ) {
 									$class = 'visible';
 								} else {
 									$class = 'hidden';
@@ -701,7 +698,7 @@ function mc_remote_db() {
 								</li>
 								<li><?php mc_settings_field( 'mc_api_enabled', __( 'Enable external API', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>
 								<?php
-								if ( 'true' === get_option( 'mc_api_enabled' ) ) {
+								if ( 'true' === mc_get_option( 'api_enabled' ) ) {
 									$url = add_query_arg(
 										array(
 											'to'     => current_time( 'Y-m-d' ),
@@ -725,8 +722,8 @@ function mc_remote_db() {
 					</form>
 					<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
 					<?php
-						$current_location_slug = ( '' === get_option( 'mc_location_cpt_base', '' ) ) ? __( 'mc-locations', 'my-calendar' ) : get_option( 'mc_location_cpt_base' );
-						$current_event_slug    = ( '' === get_option( 'mc_cpt_base', '' ) ) ? __( 'mc-events', 'my-calendar' ) : get_option( 'mc_cpt_base' );
+						$current_location_slug = ( '' === mc_get_option( 'location_cpt_base', '' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
+						$current_event_slug    = ( '' === mc_get_option( 'cpt_base', '' ) ) ? __( 'mc-events', 'my-calendar' ) : mc_get_option( 'cpt_base' );
 					?>
 					<ul>
 						<li><?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>"><?php esc_html_e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
@@ -814,10 +811,10 @@ function mc_remote_db() {
 						<div><input type='hidden' name='mc_dates' value='true'/></div>
 						<ul>
 							<?php
-							$month_format = ( '' === get_option( 'mc_month_format', '' ) ) ? date_i18n( 'F Y' ) : date_i18n( get_option( 'mc_month_format' ) );
+							$month_format = ( '' === mc_get_option( 'month_format', '' ) ) ? date_i18n( 'F Y' ) : date_i18n( mc_get_option( 'month_format' ) );
 							$time_format  = date_i18n( mc_time_format() );
-							$week_format  = ( '' === get_option( 'mc_week_format', '' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( get_option( 'mc_week_format' ) );
-							$date_format  = ( '' === get_option( 'mc_date_format', '' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( get_option( 'mc_date_format' ) );
+							$week_format  = ( '' === mc_get_option( 'week_format', '' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( mc_get_option( 'week_format' ) );
+							$date_format  = ( '' === mc_get_option( 'date_format', '' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( mc_get_option( 'date_format' ) );
 							$tomorrow     = date( 'j' ) + 1; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 							?>
 							<li><?php mc_settings_field( 'mc_date_format', __( 'Primary Date Format', 'my-calendar' ), '', $date_format ); ?></li>
@@ -848,7 +845,7 @@ function mc_remote_db() {
 							<?php
 							$atts = array();
 							$note = '';
-							if ( '' === get_option( 'mc_uri_id', '' ) || '0' === get_option( 'mc_uri_id' ) ) {
+							if ( '' === mc_get_option( 'uri_id', '' ) || '0' === mc_get_option( 'uri_id' ) ) {
 								$atts = array( 'disabled' => 'disabled' );
 								$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
 							}
@@ -871,9 +868,9 @@ function mc_remote_db() {
 					<fieldset>
 						<legend><?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?></legend>
 						<?php
-						$topnav       = explode( ',', get_option( 'mc_topnav' ) );
+						$topnav       = explode( ',', mc_get_option( 'topnav' ) );
 						$calendar     = array( 'calendar' );
-						$botnav       = explode( ',', get_option( 'mc_bottomnav' ) );
+						$botnav       = explode( ',', mc_get_option( 'bottomnav' ) );
 						$order        = array_merge( $topnav, $calendar, $botnav );
 						$nav_elements = array(
 							'nav'        => '<div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></div> <div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></div> <span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '</span>',
@@ -1091,10 +1088,10 @@ function mc_remote_db() {
 						<ul>
 							<li><?php mc_settings_field( 'mc_mini_uri', __( 'Target link for mini calendar dates', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?></li>
 							<?php
-							$disabled = ( ! get_option( 'mc_uri' ) && ! get_option( 'mc_mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
+							$disabled = ( ! mc_get_option( 'uri' ) && ! mc_get_option( 'mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
 							if ( ! empty( $disabled ) ) {
 								// Ensure that this option is set to a valid value if no URI configured.
-								update_option( 'mc_open_day_uri', 'false' );
+								mc_update_option( 'open_day_uri', 'false' );
 							}
 							?>
 							<li>
@@ -1134,7 +1131,7 @@ function mc_remote_db() {
 						<ul class="checkboxes">
 							<?php
 							$output        = '';
-							$input_options = get_option( 'mc_input_options' );
+							$input_options = mc_get_option( 'input_options' );
 							$input_labels  = array(
 								'event_short'    => __( 'Excerpt', 'my-calendar' ),
 								'event_desc'     => __( 'Description', 'my-calendar' ),
@@ -1152,11 +1149,11 @@ function mc_remote_db() {
 							// Array of all options in default position.
 							$defaults = mc_input_defaults();
 							if ( ! is_array( $input_options ) ) {
-								update_option(
-									'mc_input_options',
+								mc_update_option(
+									'input_options',
 									$defaults
 								);
-								$input_options = get_option( 'mc_input_options' );
+								$input_options = mc_get_option( 'input_options' );
 							}
 							// Merge saved input options with default on, so all are displayed.
 							$input_options = array_merge( $defaults, $input_options );
@@ -1392,7 +1389,7 @@ function mc_location_controls() {
 			'event_region'   => __( 'Region', 'my-calendar' ),
 			'event_country'  => __( 'Country', 'my-calendar' ),
 		);
-		$mc_location_controls = get_option( 'mc_location_controls' );
+		$mc_location_controls = mc_get_option( 'location_controls' );
 
 		$output = $response . '
 		<p>' . __( 'Save custom values to change location text fields into dropdowns. One field per line.  Format: <code>saved_value,Displayed Value</code>', 'my-calendar' ) . '</p>

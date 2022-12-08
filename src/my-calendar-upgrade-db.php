@@ -95,6 +95,8 @@ function mc_migrate_settings() {
 		'event_mail_from'              => get_option( 'mc_event_mail_from' ),
 		'event_mail_subject'           => get_option( 'mc_event_mail_subject' ),
 		'event_mail_message'           => get_option( 'mc_event_mail_message' ),
+		'event_mail_bcc'               => get_option( 'mc_event_mail_bcc' ),
+		'html_email'                    => get_option( 'mc_html_email' ),
 		'week_format'                  => get_option( 'mc_week_format' ),
 		'date_format'                  => get_option( 'mc_date_format' ),
 		'templates'                    => get_option( 'mc_templates' ),
