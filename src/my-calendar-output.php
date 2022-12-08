@@ -269,19 +269,19 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 
 		// Fallback display options. Changed in 3.3.0; fallback to old settings if new don't exist.
-		$display_map     = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_map' ) : '';
-		$display_address = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_address' ) : '';
-		$display_gcal    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_gcal' ) : '';
-		$display_vcal    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_show_event_vcal' ) : '';
-		$display_author  = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_display_author' ) : '';
-		$display_host    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_display_host' ) : '';
-		$display_more    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_display_more' ) : '';
-		$display_desc    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_desc' ) : '';
-		$display_short   = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_short' ) : '';
-		$display_gmap    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_gmap' ) : '';
-		$display_link    = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_event_link' ) : '';
-		$display_image   = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_image' ) : '';
-		$display_reg     = ( '' === get_option( 'mc_display_' . $otype, '' ) ) ? get_option( 'mc_event_registration' ) : '';
+		$display_map     = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_show_map' ) : '';
+		$display_address = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_show_address' ) : '';
+		$display_gcal    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_show_gcal' ) : '';
+		$display_vcal    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_show_event_vcal' ) : '';
+		$display_author  = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_display_author' ) : '';
+		$display_host    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_display_host' ) : '';
+		$display_more    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_display_more' ) : '';
+		$display_desc    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_desc' ) : '';
+		$display_short   = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_short' ) : '';
+		$display_gmap    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_gmap' ) : '';
+		$display_link    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_event_link' ) : '';
+		$display_image   = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_image' ) : '';
+		$display_reg     = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_event_registration' ) : '';
 		$day_id          = mc_date( 'd', strtotime( $process_date ), false );
 		$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
 		$image           = mc_category_icon( $event );

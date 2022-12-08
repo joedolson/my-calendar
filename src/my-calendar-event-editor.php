@@ -502,7 +502,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			 */
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
 
-			if ( 'true' === get_option( 'mc_event_mail' ) ) {
+			if ( 'true' === mc_get_option( 'event_mail' ) ) {
 				// insert_id is last occurrence inserted in the db.
 				$event = mc_get_first_event( $event_id );
 				if ( 1 === (int) $event->event_flagged ) {
@@ -862,10 +862,10 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
  * @return boolean
  */
 function mc_show_edit_block( $field ) {
-	$admin = ( 'true' === get_option( 'mc_input_options_administrators', 'true' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	$admin = ( 'true' === mc_get_option( 'input_options_administrators', 'true' ) && current_user_can( 'manage_options' ) ) ? true : false;
 	// Backwards compatibility. Collapsed location field settings into a single setting in 3.3.0.
 	$field = ( 'event_location_dropdown' === $field ) ? 'event_location' : $field;
-	$input = get_option( 'mc_input_options' );
+	$input = mc_get_option( 'input_options' );
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
 
@@ -873,7 +873,7 @@ function mc_show_edit_block( $field ) {
 	$user  = get_current_user_id();
 	$show  = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
-		$show = get_option( 'mc_input_options' );
+		$show = mc_get_option( 'input_options' );
 	}
 	// if this doesn't exist in array, leave it on.
 	if ( ! isset( $input[ $field ] ) || ! isset( $show[ $field ] ) ) {
@@ -904,8 +904,8 @@ function mc_show_edit_block( $field ) {
  * @return bool
  */
 function mc_edit_block_is_visible( $field ) {
-	$admin = ( 'true' === get_option( 'mc_input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
-	$input = get_option( 'mc_input_options' );
+	$admin = ( 'true' === mc_get_option( 'input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	$input = mc_get_option( 'input_options' );
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
 
@@ -914,7 +914,7 @@ function mc_edit_block_is_visible( $field ) {
 	$screen = get_current_screen();
 	$show   = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
-		$show = get_option( 'mc_input_options' );
+		$show = mc_get_option( 'input_options' );
 	}
 	if ( empty( $show ) ) {
 		$show = $defaults;
@@ -2608,7 +2608,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 
 	$allday       = ( $has_data && ( mc_is_all_day( $data ) ) ) ? ' checked="checked"' : '';
 	$hide         = ( $has_data && '1' === $data->event_hide_end ) ? ' checked="checked"' : '';
-	$allday_label = ( $has_data ) ? mc_notime_label( $data ) : get_option( 'mc_notime_text' );
+	$allday_label = ( $has_data ) ? mc_notime_label( $data ) : mc_get_option( 'notime_text' );
 	$args         = array(
 		'value' => $event_begin,
 		'id'    => 'mc_event_date',
@@ -3483,7 +3483,7 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
  * @param int    $result Result of calendar save query.
  */
 function mc_refresh_cache( $action, $data, $event_id, $result ) {
-	$mc_uri_id = ( get_option( 'mc_uri_id' ) ) ? get_option( 'mc_uri_id' ) : false;
+	$mc_uri_id = mc_get_option( 'uri_id', false );
 	/**
 	 * Filter URLS that should be refreshed in caches.
 	 *

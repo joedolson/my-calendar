@@ -860,16 +860,16 @@ function mc_get_details_link( $event ) {
 function mc_get_uri( $event = false, $args = array() ) {
 	// For a brief period of time, mc_uri was a post ID.
 	// Convert mc_uri to mc_uri_id.
-	$mc_uri = get_option( 'mc_uri' );
-	$mc_id  = get_option( 'mc_uri_id' );
+	$mc_uri = mc_get_option( 'uri' );
+	$mc_id  = mc_get_option( 'uri_id' );
 	if ( is_numeric( $mc_uri ) && ! $mc_id ) {
-		update_option( 'mc_uri_id', $mc_uri );
-		update_option( 'mc_uri', get_permalink( $mc_id ) );
+		mc_update_option( 'uri_id', $mc_uri );
+		mc_update_option( 'uri', get_permalink( $mc_id ) );
 	}
-	$mc_uri = get_option( 'mc_uri' );
-	$mc_id  = get_option( 'mc_uri_id' );
+	$mc_uri = mc_get_option( 'uri' );
+	$mc_id  = mc_get_option( 'uri_id' );
 
-	$uri = ( get_permalink( $mc_id ) !== get_option( 'mc_uri' ) ) ? get_option( 'mc_uri' ) : get_permalink( $mc_id );
+	$uri = ( get_permalink( $mc_id ) !== mc_get_option( 'uri' ) ) ? mc_get_option( 'uri' ) : get_permalink( $mc_id );
 
 	if ( 'boolean' === $event ) {
 		if ( ! _mc_is_url( $uri ) ) {
@@ -1089,7 +1089,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	}
 
 	$id       = '0';
-	$api_key  = get_option( 'mc_gmap_api_key' );
+	$api_key  = mc_get_option( 'gmap_api_key' );
 	$markers  = '';
 	$loc_list = '';
 	$out      = '';

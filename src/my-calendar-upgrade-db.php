@@ -108,6 +108,8 @@ function mc_migrate_settings() {
 		'default_direction'            => get_option( 'mc_default_direction' ),
 		'remote'                       => get_option( 'mc_remote' ),
 		'gmap_api_key'                 => get_option( 'mc_gmap_api_key' ),
+		'uri'                          => get_option( 'mc_uri' ),
+		'uri_id'                       => get_option( 'mc_uri_id' ),
 	);
 	add_option( 'my_calendar_options', $options );
 	// Remove old options.
