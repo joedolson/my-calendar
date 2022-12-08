@@ -489,7 +489,7 @@ function mc_footer_js() {
 		$mini         = 'false';
 		$ajax         = 'false';
 		if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
-			if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
+			if ( '1' !== mc_get_option( 'calendar_javascript' ) ) {
 				/**
 				 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
 				 *
@@ -952,6 +952,8 @@ function mc_do_upgrades( $upgrade_path ) {
 		switch ( $upgrade ) {
 			case '3.4.0':
 				mc_migrate_settings();
+				delete_option( 'mc_use_custom_js' );
+				delete_option( 'mc_version' );
 			case '3.3.0':
 				// Event repeats is now a string, and prefers a date-like value.
 				mc_upgrade_db();
