@@ -351,6 +351,22 @@ function mc_get_option( $key, $default = '' ) {
 }
 
 /**
+ * Save a My Calendar setting.
+ * 
+ * @param string $setting Setting key.
+ * @param mixed  $value   Setting value.
+ * 
+ * @return bool
+ */
+function mc_update_option( $key, $value = '' ) {
+	$options         = get_option( 'my_calendar_options', mc_default_options() );
+	$options[ $key ] = $value;
+	$return          = update_option( 'my_calendar_options', $options );
+
+	return $return;
+}
+
+/**
  * Fetch My Calendar's default settings array.
  * 
  * @return array
@@ -367,13 +383,19 @@ function mc_default_options() {
 		'list_javascript'              => 0,
 		'mini_javascript'              => 0,
 		'ajax_javascript'              => 0,
+		'show_js'                      => '',
 		'notime_text'                  => 'All day',
 		'hide_icons'                   => 'true',
 		'event_link_expires'           => 'false',
 		'apply_color'                  => 'background',
 		'input_options'                => mc_input_defaults(),
 		'input_options_administrators' => 'false',
+		'default_admin_view'           => 'list',
 		'event_mail'                   => 'false',
+		'event_mail_to'                => get_bloginfo( 'admin_email' ),
+		'event_mail_from'              => get_bloginfo( 'admin_email' ),
+		'event_mail_subject'           => '',
+		'event_mail_message'           => '',
 		'week_format'                  => "M j, 'y",
 		'date_format'                  => get_option( 'date_format', 'Y-m-d' ),
 		'time_format'                  => get_option( 'time_format', 'H:i' ),

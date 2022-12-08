@@ -458,7 +458,7 @@ function mc_footer_js() {
 		return;
 	} else {
 		$pages   = array();
-		$show_js = get_option( 'mc_show_js', '' );
+		$show_js = mc_get_option( 'show_js', '' );
 		if ( '' !== $show_js ) {
 			$pages = explode( ',', $show_js );
 		}
@@ -578,13 +578,13 @@ function mc_admin_styles() {
 	$ajax         = 'false';
 	if ( false !== strpos( $id, 'my-calendar' ) || $is_mc_page ) {
 		// Toggle CSS & Scripts based on current mode.
-		$mode = get_option( 'mc_default_admin_view' );
+		$mode = mc_get_option( 'default_admin_view' );
 		if ( isset( $_GET['view'] ) && 'grid' === $_GET['view'] && 'grid' !== $mode ) {
-			update_option( 'mc_default_admin_view', 'grid' );
+			mc_update_option( 'default_admin_view', 'grid' );
 			$mode = 'grid';
 		}
 		if ( isset( $_GET['view'] ) && 'list' === $_GET['view'] && 'list' !== $mode ) {
-			update_option( 'mc_default_admin_view', 'list' );
+			mc_update_option( 'default_admin_view', 'list' );
 			$mode = 'list';
 		}
 		$grid = ( 'grid' === $mode );
@@ -633,7 +633,7 @@ function mc_admin_styles() {
  * @return string
  */
 function mc_admin_url( $url ) {
-	$mode = get_option( 'mc_default_admin_view' );
+	$mode = mc_get_option( 'default_admin_view' );
 	if ( 'grid' === $mode ) {
 		$url = add_query_arg( 'view', 'grid', $url );
 	} else {
@@ -1222,8 +1222,8 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @return {string}
 		 */
-		$to   = apply_filters( 'mc_event_mail_to', get_option( 'mc_event_mail_to' ), $details );
-		$from = ( '' === get_option( 'mc_event_mail_from', '' ) ) ? get_bloginfo( 'admin_email' ) : get_option( 'mc_event_mail_from' );
+		$to   = apply_filters( 'mc_event_mail_to', mc_get_option( 'event_mail_to' ), $details );
+		$from = ( '' === mc_get_option( 'event_mail_from', '' ) ) ? get_bloginfo( 'admin_email' ) : mc_get_option( 'event_mail_from' );
 		/**
 		 * Filter event notification email from header.
 		 *
@@ -1277,7 +1277,7 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @return {string}
 		 */
-		$subject = apply_filters( 'mc_event_mail_subject', get_option( 'mc_event_mail_subject' ), $details );
+		$subject = apply_filters( 'mc_event_mail_subject', mc_get_option( 'event_mail_subject' ), $details );
 		/**
 		 * Filter event notification email body.
 		 *
@@ -1288,7 +1288,7 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @return {string}
 		 */
-		$body    = apply_filters( 'mc_event_mail_body', get_option( 'mc_event_mail_message' ), $details );
+		$body    = apply_filters( 'mc_event_mail_body', mc_get_option( 'event_mail_message' ), $details );
 		$subject = mc_draw_template( $details, $subject );
 		$message = mc_draw_template( $details, $body );
 		wp_mail( $to, $subject, $message, $headers );

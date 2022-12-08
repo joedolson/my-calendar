@@ -82,13 +82,19 @@ function mc_migrate_settings() {
 		'list_javascript'              => get_option( 'mc_list_javascript' ),
 		'mini_javascript'              => get_option( 'mc_mini_javascript' ),
 		'ajax_javascript'              => get_option( 'mc_ajax_javascript' ),
+		'show_js'                      => get_option( 'mc_show_js' ),
 		'notime_text'                  => get_option( 'mc_notime_text' ),
 		'hide_icons'                   => get_option( 'mc_hide_icons' ),
 		'event_link_expires'           => get_option( 'mc_event_link_expires' ),
 		'apply_color'                  => get_option( 'mc_apply_color' ),
 		'input_options'                => get_option( 'mc_input_options' ),
 		'input_options_administrators' => get_option( 'mc_input_options_administrators' ),
+		'default_admin_view'           => get_option( 'mc_default_admin_view' ),
 		'event_mail'                   => get_option( 'mc_event_mail' ),
+		'event_mail_to'                => get_option( 'mc_event_mail_to' ),
+		'event_mail_from'              => get_option( 'mc_event_mail_from' ),
+		'event_mail_subject'           => get_option( 'mc_event_mail_subject' ),
+		'event_mail_message'           => get_option( 'mc_event_mail_message' ),
 		'week_format'                  => get_option( 'mc_week_format' ),
 		'date_format'                  => get_option( 'mc_date_format' ),
 		'templates'                    => get_option( 'mc_templates' ),
@@ -115,13 +121,19 @@ function mc_migrate_settings() {
 	delete_option( 'mc_list_javascript' );
 	delete_option( 'mc_mini_javascript' );
 	delete_option( 'mc_ajax_javascript' );
+	delete_option( 'mc_show_js' );
 	delete_option( 'mc_notime_text' );
 	delete_option( 'mc_hide_icons' );
 	delete_option( 'mc_event_link_expires' );
 	delete_option( 'mc_apply_color' );
 	delete_option( 'mc_input_options' );
 	delete_option( 'mc_input_options_administrators' );
+	delete_option( 'mc_default_admin_view' );
 	delete_option( 'mc_event_mail' );
+	delete_option( 'mc_event_mail_to' );
+	delete_option( 'mc_event_mail_from' );
+	delete_option( 'mc_event_mail_subject' );
+	delete_option( 'mc_event_mail_message' );
 	delete_option( 'mc_week_format' );
 	delete_option( 'mc_date_format' );
 	delete_option( 'mc_templates' );

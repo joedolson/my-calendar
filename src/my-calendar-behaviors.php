@@ -23,15 +23,13 @@ function my_calendar_behaviors_save() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 
-		$use_custom_js = ( isset( $_POST['mc_use_custom_js'] ) ) ? 1 : 0;
-		update_option( 'mc_use_custom_js', $use_custom_js );
-		update_option( 'mc_calendar_javascript', ( empty( $_POST['calendar_js'] ) ) ? 0 : 1 );
-		update_option( 'mc_list_javascript', ( empty( $_POST['list_js'] ) ) ? 0 : 1 );
-		update_option( 'mc_mini_javascript', ( empty( $_POST['mini_js'] ) ) ? 0 : 1 );
-		update_option( 'mc_ajax_javascript', ( empty( $_POST['ajax_js'] ) ) ? 0 : 1 );
+		mc_update_option( 'calendar_javascript', ( empty( $_POST['calendar_js'] ) ) ? 0 : 1 );
+		mc_update_option( 'list_javascript', ( empty( $_POST['list_js'] ) ) ? 0 : 1 );
+		mc_update_option( 'mini_javascript', ( empty( $_POST['mini_js'] ) ) ? 0 : 1 );
+		mc_update_option( 'ajax_javascript', ( empty( $_POST['ajax_js'] ) ) ? 0 : 1 );
 
 		$mc_show_js = ( '' === $_POST['mc_show_js'] ) ? '' : $_POST['mc_show_js'];
-		update_option( 'mc_show_js', $mc_show_js );
+		mc_update_option( 'show_js', $mc_show_js );
 
 		wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&scriptaction=saved#my-calendar-scripts' ) ) );
 	}
@@ -49,22 +47,12 @@ function my_calendar_behaviors_edit() {
 	if ( isset( $_GET['scriptaction'] ) && 'saved' === $_GET['scriptaction'] ) {
 		mc_show_notice( __( 'Behavior Settings saved', 'my-calendar' ) );
 	}
-	$mc_show_js = get_option( 'mc_show_js' );
+	$mc_show_js = mc_get_option( 'show_js' );
 	?>
 	<form id="my-calendar" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-scripts">
 		<div>
 			<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 		</div>
-		<?php
-		if ( get_option( 'mc_use_custom_js' ) === '1' ) {
-			?>
-		<p>
-			<input type="checkbox" name="mc_use_custom_js" id="mc_use_custom_js" <?php mc_is_checked( 'mc_use_custom_js', 1 ); ?> />
-			<label for="mc_use_custom_js"><?php esc_html_e( 'Use Custom JS', 'my-calendar' ); ?></label>
-		</p>
-			<?php
-		}
-		?>
 		<p>
 			<label for="mc_show_js"><?php esc_html_e( 'Insert scripts on these pages (comma separated post IDs)', 'my-calendar' ); ?></label>
 			<input type="text" id="mc_show_js" name="mc_show_js" value="<?php echo esc_attr( stripslashes( $mc_show_js ) ); ?>"/>
@@ -89,11 +77,6 @@ function my_calendar_behaviors_edit() {
 					<label for="ajax_js"><?php esc_html_e( 'Disable AJAX', 'my-calendar' ); ?></label></li>
 			</ul>
 		</div>
-		<?php
-		if ( get_option( 'mc_use_custom_js' ) === '1' ) {
-			echo wp_kses_post( '<p>' . __( 'The mechanisms for adding custom JS were removed in My Calendar 3.3.0. The output for these scripts will be disabled in My Calendar 3.4.0.', 'my-calendar' ) . '</p>' );
-		}
-		?>
 		<p>
 			<input type="submit" name="mc-js-save" class="button-primary" value="<?php echo esc_attr( __( 'Save', 'my-calendar' ) ); ?>"/>
 		</p>
