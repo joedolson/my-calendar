@@ -416,21 +416,6 @@ function mc_deal_with_deleted_user( $id, $reassign ) {
 }
 
 /**
- * Move sidebars into the footer.
- *
- * @param string $classes Existing admin body classes.
- *
- * @return string New admin body classes
- */
-function mc_admin_body_class( $classes ) {
-	if ( 'true' === get_option( 'mc_sidebar_footer' ) ) {
-		$classes .= ' mc-sidebar-footer';
-	}
-
-	return $classes;
-}
-
-/**
  * Write custom JS in admin head.
  */
 function mc_write_js() {
