@@ -393,6 +393,8 @@ function mc_default_options() {
 		'topnav'                      => 'toggle,timeframe,jump,nav',
 		'bottomnav'                   => 'key,print',
 		'default_direction'           => 'DESC',
+		'remote'                      => 'false',
+		'gmap_api_key'                => '',
 	);
 
 	return $options;

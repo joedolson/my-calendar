@@ -231,7 +231,7 @@ function mc_register_styles() {
 		if ( $use_default || $js_usage || is_singular( 'mc-events' ) || is_singular( 'mc-locations' ) ) {
 			wp_enqueue_script( 'jquery' );
 			if ( 'true' === get_option( 'mc_gmap' ) || mc_output_is_visible( 'gmap', 'single' ) || is_singular( 'mc-locations' ) ) {
-				$api_key = get_option( 'mc_gmap_api_key' );
+				$api_key = mc_get_option( 'gmap_api_key' );
 				if ( $api_key ) {
 					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array() );
 					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array( 'gmaps' ), $version, true );
@@ -333,7 +333,7 @@ $style_vars
 function mc_generate_category_styles() {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$category_styles = '';
@@ -607,7 +607,7 @@ function mc_admin_styles() {
 			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 			wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 			wp_enqueue_style( 'my-calendar-admin-style' );
-			if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
+			if ( '1' !== mc_get_option( 'calendar_javascript' ) ) {
 				$enqueue_mcjs = true;
 				$grid         = 'true';
 			}
@@ -1104,7 +1104,7 @@ function mc_admin_bar() {
 		);
 		$wp_admin_bar->add_node( $args );
 	}
-	if ( current_user_can( 'mc_add_events' ) && 'true' !== get_option( 'mc_remote' ) ) {
+	if ( current_user_can( 'mc_add_events' ) && 'true' !== mc_get_option( 'remote' ) ) {
 		if ( ! is_page( $mc_id ) ) {
 			/**
 			 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
@@ -1575,7 +1575,7 @@ function mc_scripts() {
 		}
 	}
 	if ( $slug . '_page_my-calendar-locations' === $id || 'toplevel_page_my-calendar' === $id ) {
-		$api_key = get_option( 'mc_gmap_api_key' );
+		$api_key = mc_get_option( 'gmap_api_key' );
 		if ( $api_key ) {
 			wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array() );
 			wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array( 'gmaps' ), $version, true );
@@ -2383,7 +2383,7 @@ add_action( 'admin_notices', 'mc_update_notice' );
  */
 function mc_update_notice() {
 	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
-		if ( 'true' === get_option( 'mc_remote' ) ) {
+		if ( 'true' === mc_get_option( 'remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' );
 		}
 	}

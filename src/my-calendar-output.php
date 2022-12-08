@@ -1040,7 +1040,7 @@ add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
 function mc_edit_panel( $html, $event, $type, $time ) {
 	// Create edit links.
 	$edit = '';
-	if ( mc_can_edit_event( $event ) && get_option( 'mc_remote' ) !== 'true' ) {
+	if ( mc_can_edit_event( $event ) && mc_get_option( 'remote' ) !== 'true' ) {
 		$mc_id     = $event->occur_id;
 		$groupedit = ( 0 !== (int) $event->event_group_id ) ? " &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . "</a>\n" : '';
 		$recurs    = str_split( $event->event_recur, 1 );
@@ -2498,7 +2498,7 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = 'OBJECT'
 	global $wpdb;
 	$mcdb        = $wpdb;
 	$return_type = ( 'OBJECT' === $return_type ) ? OBJECT : ARRAY_A;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 

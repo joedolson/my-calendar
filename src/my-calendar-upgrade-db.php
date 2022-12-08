@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Check whether the My Calendar database is up to date
  */
 function my_calendar_check_db() {
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		return;
 	}
 
@@ -100,6 +100,8 @@ function mc_migrate_settings() {
 		'topnav'                       => get_option( 'mc_topnav' ),
 		'bottomnav'                    => get_option( 'mc_bottomnav' ),
 		'default_direction'            => get_option( 'mc_default_direction' ),
+		'remote'                       => get_option( 'mc_remote' ),
+		'gmap_api_key'                 => get_option( 'mc_gmap_api_key' ),
 	);
 	add_option( 'my_calendar_options', $options );
 	// Remove old options.
@@ -132,6 +134,8 @@ function mc_migrate_settings() {
 	delete_option( 'mc_bottomnav' );
 	delete_option( 'mc_default_direction' );
 	delete_option( 'mc_show_event_vcal' );
+	delete_option( 'mc_remote' );
+	delete_option( 'mc_gmap_api_key' );
 }
 
 /**
@@ -139,7 +143,6 @@ function mc_migrate_settings() {
  */
 function mc_upgrade_db() {
 	$globals = mc_globals();
-	global $mc_version;
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $globals['initial_db'] );
@@ -148,5 +151,5 @@ function mc_upgrade_db() {
 	dbDelta( $globals['initial_rel_db'] );
 	dbDelta( $globals['initial_loc_db'] );
 	dbDelta( $globals['initial_loc_rel_db'] );
-	update_option( 'mc_db_version', $mc_version );
+	update_option( 'mc_db_version', mc_get_version() );
 }
