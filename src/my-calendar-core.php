@@ -437,12 +437,11 @@ add_action( 'in_plugin_update_message-my-calendar/my-calendar.php', 'mc_plugin_u
  * Display notices from  WordPress.org about updated versions.
  */
 function mc_plugin_update_message() {
-	global $mc_version;
 	define( 'MC_PLUGIN_README_URL', 'http://svn.wp-plugins.org/my-calendar/trunk/readme.txt' );
 	$response = wp_remote_get(
 		MC_PLUGIN_README_URL,
 		array(
-			'user-agent' => 'WordPress/My Calendar' . $mc_version . '; ' . get_bloginfo( 'url' ),
+			'user-agent' => 'WordPress/My Calendar' . mc_get_version() . '; ' . get_bloginfo( 'url' ),
 		)
 	);
 	if ( ! is_wp_error( $response ) || is_array( $response ) ) {
@@ -483,140 +482,97 @@ function mc_footer_js() {
 		} else {
 			$id = false;
 		}
-		if ( '1' === get_option( 'mc_use_custom_js' ) ) {
-			// Due for removal.
-			$top     = '';
-			$bottom  = '';
-			$inner   = '';
-			$list_js = stripcslashes( get_option( 'mc_listjs' ) );
-			$cal_js  = stripcslashes( get_option( 'mc_caljs' ) );
-			if ( 'true' === get_option( 'mc_open_uri' ) ) {
-				// remove sections of javascript if necessary.
-				$replacements = array(
-					'$(this).parent().children().not(".event-title").toggle();',
-					'e.preventDefault();',
+		
+		$enqueue_mcjs = false;
+		$grid         = 'false';
+		$list         = 'false';
+		$mini         = 'false';
+		$ajax         = 'false';
+		if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
+			if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
+				/**
+				 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
+				 *
+				 * @hook mc_grid_js
+				 *
+				 * @param {string} $url URL to JS to operate My Calendar grid view.
+				 *
+				 * @return {string}
+				 */
+				$url          = apply_filters( 'mc_grid_js', '' );
+				$enqueue_mcjs = true;
+				if ( $url ) {
+					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
+				} else {
+					$grid = 'true';
+				}
+			}
+			if ( '1' !== mc_get_option( 'list_javascript' ) ) {
+				/**
+				 * Filter to replace scripts used on front-end for list behavior. Default empty string.
+				 *
+				 * @hook mc_list_js
+				 *
+				 * @param {string} $url URL to JS to operate My Calendar list view.
+				 *
+				 * @return {string}
+				 */
+				$url          = apply_filters( 'mc_list_js', '' );
+				$enqueue_mcjs = true;
+				if ( $url ) {
+					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
+				} else {
+					$list = 'true';
+				}
+			}
+			if ( '1' !== mc_get_option( 'mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
+				/**
+				 * Filter to replace scripts used on front-end for mini calendar behavior. Default empty string.
+				 *
+				 * @hook mc_mini_js
+				 *
+				 * @param {string} $url URL to JS to operate My Calendar mini calendar.
+				 *
+				 * @return {string}
+				 */
+				$url          = apply_filters( 'mc_mini_js', '' );
+				$enqueue_mcjs = true;
+
+				if ( $url ) {
+					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
+				} else {
+					$mini = 'true';
+				}
+			}
+			if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
+				/**
+				 * Filter to replace scripts used on front-end for AJAX behavior. Default empty string.
+				 *
+				 * @hook mc_ajax_js
+				 *
+				 * @param {string} $url URL to JS to operate My Calendar AJAX.
+				 *
+				 * @return {string}
+				 */
+				$url          = apply_filters( 'mc_ajax_js', '' );
+				$enqueue_mcjs = true;
+				if ( $url ) {
+					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
+				} else {
+					$ajax = 'true';
+				}
+			}
+			if ( $enqueue_mcjs ) {
+				$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
+				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery' ), $version );
+				$args = array(
+					'grid'      => $grid,
+					'list'      => $list,
+					'mini'      => $mini,
+					'ajax'      => $ajax,
+					'newWindow' => __( 'New tab', 'my-calendar' ),
 				);
-				$cal_js       = str_replace( $replacements, '', $cal_js );
-			}
-			$mini_js  = stripcslashes( get_option( 'mc_minijs' ) );
-			$open_day = get_option( 'mc_open_day_uri' );
-			if ( 'true' === $open_day || 'listanchor' === $open_day || 'calendaranchor' === $open_day ) {
-				$mini_js = str_replace( 'e.preventDefault();', '', $mini_js );
-			}
-			$ajax_js = stripcslashes( get_option( 'mc_ajaxjs' ) );
-			$inner   = '';
-
-			if ( ! $id || ( ( is_array( $pages ) && in_array( $id, $pages, true ) ) ) || '' === $show_js ) {
-				if ( get_option( 'mc_calendar_javascript' ) !== '1' ) {
-					$inner .= "\n" . $cal_js;
-				}
-				if ( get_option( 'mc_list_javascript' ) !== '1' ) {
-					$inner .= "\n" . $list_js;
-				}
-				if ( get_option( 'mc_mini_javascript' ) !== '1' ) {
-					$inner .= "\n" . $mini_js;
-				}
-				if ( get_option( 'mc_ajax_javascript' ) !== '1' ) {
-					$inner .= "\n" . $ajax_js;
-				}
-				$script = '
-<script type="text/javascript">
-(function( $ ) { \'use strict\';' . $inner . '}(jQuery));
-</script>';
-			}
-			echo ( '' !== $inner ) ? $script . $mcjs : '';
-		} else {
-			$enqueue_mcjs = false;
-			$grid         = 'false';
-			$list         = 'false';
-			$mini         = 'false';
-			$ajax         = 'false';
-			if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
-				if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
-					/**
-					 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
-					 *
-					 * @hook mc_grid_js
-					 *
-					 * @param {string} $url URL to JS to operate My Calendar grid view.
-					 *
-					 * @return {string}
-					 */
-					$url          = apply_filters( 'mc_grid_js', '' );
-					$enqueue_mcjs = true;
-					if ( $url ) {
-						wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
-					} else {
-						$grid = 'true';
-					}
-				}
-				if ( '1' !== mc_get_option( 'list_javascript' ) ) {
-					/**
-					 * Filter to replace scripts used on front-end for list behavior. Default empty string.
-					 *
-					 * @hook mc_list_js
-					 *
-					 * @param {string} $url URL to JS to operate My Calendar list view.
-					 *
-					 * @return {string}
-					 */
-					$url          = apply_filters( 'mc_list_js', '' );
-					$enqueue_mcjs = true;
-					if ( $url ) {
-						wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
-					} else {
-						$list = 'true';
-					}
-				}
-				if ( '1' !== mc_get_option( 'mini_javascript' ) && 'true' !== get_option( 'mc_open_day_uri' ) ) {
-					/**
-					 * Filter to replace scripts used on front-end for mini calendar behavior. Default empty string.
-					 *
-					 * @hook mc_mini_js
-					 *
-					 * @param {string} $url URL to JS to operate My Calendar mini calendar.
-					 *
-					 * @return {string}
-					 */
-					$url          = apply_filters( 'mc_mini_js', '' );
-					$enqueue_mcjs = true;
-
-					if ( $url ) {
-						wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
-					} else {
-						$mini = 'true';
-					}
-				}
-				if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
-					/**
-					 * Filter to replace scripts used on front-end for AJAX behavior. Default empty string.
-					 *
-					 * @hook mc_ajax_js
-					 *
-					 * @param {string} $url URL to JS to operate My Calendar AJAX.
-					 *
-					 * @return {string}
-					 */
-					$url          = apply_filters( 'mc_ajax_js', '' );
-					$enqueue_mcjs = true;
-					if ( $url ) {
-						wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
-					} else {
-						$ajax = 'true';
-					}
-				}
-				if ( $enqueue_mcjs ) {
-					$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-					wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery' ), $version );
-					$args = array(
-						'grid'      => $grid,
-						'list'      => $list,
-						'mini'      => $mini,
-						'ajax'      => $ajax,
-						'newWindow' => __( 'New tab', 'my-calendar' ),
-					);
-					wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
-				}
+				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
 			}
 		}
 	}
@@ -930,12 +886,12 @@ function my_calendar_exists() {
 function my_calendar_check() {
 	// only execute this function for administrators.
 	if ( current_user_can( 'manage_options' ) ) {
-		global $wpdb, $mc_version;
+		global $wpdb;
 		mc_if_needs_permissions();
 		$current_version = mc_get_version();
 
 		// If current version matches, don't bother running this.
-		if ( $current_version === $mc_version ) {
+		if ( $current_version === mc_get_version() ) {
 
 			return true;
 		}
@@ -961,8 +917,6 @@ function my_calendar_check() {
 				}
 			}
 		}
-		// Having determined upgrade path, assign new version number.
-		update_option( 'mc_version', $mc_version );
 		// Now we've determined what the current install is.
 		if ( true === $new_install ) {
 			// Add default settings.
@@ -977,7 +931,7 @@ function my_calendar_check() {
 		*/
 		if ( 'true' === get_option( 'mc_uninstalled' ) ) {
 			mc_default_settings();
-			update_option( 'mc_db_version', $mc_version );
+			update_option( 'mc_db_version', mc_get_version() );
 			delete_option( 'mc_uninstalled' );
 		}
 	}
@@ -991,7 +945,6 @@ function my_calendar_check() {
  * @return bool
  */
 function mc_do_upgrades( $upgrade_path ) {
-	global $mc_version;
 	if ( empty( $upgrade_path ) ) {
 		return false;
 	}
@@ -1506,11 +1459,10 @@ function mc_parse_date_format() {
  * Enqueue Duet Date Picker.
  */
 function mc_enqueue_duet() {
-	global $mc_version;
-	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), $mc_version );
-	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $mc_version );
+	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), mc_get_version() );
+	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), mc_get_version() );
 	// Enqueue datepicker options.
-	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), $mc_version, true );
+	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), mc_get_version(), true );
 	wp_localize_script(
 		'mc.duet',
 		'duetFormats',
