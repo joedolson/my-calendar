@@ -256,7 +256,7 @@ function mc_register_styles() {
 	if ( mc_get_option( 'calendar_javascript' ) !== '1' || mc_get_option( 'list_javascript' ) !== '1' || mc_get_option( 'mini_javascript' ) !== '1' || mc_get_option( 'ajax_javascript' ) !== '1' ) {
 		if ( $use_default || $js_usage || is_singular( 'mc-events' ) || is_singular( 'mc-locations' ) ) {
 			wp_enqueue_script( 'jquery' );
-			if ( 'true' === get_option( 'mc_gmap' ) || mc_output_is_visible( 'gmap', 'single' ) || is_singular( 'mc-locations' ) ) {
+			if ( 'true' === mc_get_option( 'mc_gmap' ) || mc_output_is_visible( 'gmap', 'single' ) || is_singular( 'mc-locations' ) ) {
 				$api_key = mc_get_option( 'gmap_api_key' );
 				if ( $api_key ) {
 					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&amp;key=$api_key", array() );
@@ -974,23 +974,23 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_process_shortcodes' );
 				// Remap display settings.
 				$settings = array();
-				$single   = get_option( 'mc_display_single', array() );
-				$main     = get_option( 'mc_display_main', array() );
-				$mini     = get_option( 'mc_display_mini', array() );
+				$single   = mc_get_option( 'display_single', array() );
+				$main     = mc_get_option( 'display_main', array() );
+				$mini     = mc_get_option( 'display_mini', array() );
 				if ( empty( $single ) || empty( $main ) || empty( $mini ) ) {
-					$settings[] = ( 'true' === get_option( 'mc_display_author' ) ) ? 'author' : '';
-					$settings[] = ( 'true' === get_option( 'mc_display_host' ) ) ? 'host' : '';
-					$settings[] = ( 'true' === get_option( 'mc_show_event_vcal' ) ) ? 'ical' : '';
-					$settings[] = ( 'true' === get_option( 'mc_show_gcal' ) ) ? 'gcal' : '';
-					$settings[] = ( 'true' === get_option( 'mc_show_map' ) ) ? 'gmap_link' : '';
-					$settings[] = ( 'true' === get_option( 'mc_gmap' ) ) ? 'gmap' : '';
-					$settings[] = ( 'true' === get_option( 'mc_show_address' ) ) ? 'address' : '';
-					$settings[] = ( 'true' === get_option( 'mc_short' ) ) ? 'excerpt' : '';
-					$settings[] = ( 'true' === get_option( 'mc_desc' ) ) ? 'description' : '';
-					$settings[] = ( 'true' === get_option( 'mc_image' ) ) ? 'image' : '';
-					$settings[] = ( 'true' === get_option( 'mc_event_registration' ) ) ? 'tickets' : '';
-					$settings[] = ( 'true' === get_option( 'mc_event_link' ) ) ? 'link' : '';
-					$settings[] = ( 'true' === get_option( 'mc_display_more' ) ) ? 'more' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_display_author' ) ) ? 'author' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_display_host' ) ) ? 'host' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_show_event_vcal' ) ) ? 'ical' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_show_gcal' ) ) ? 'gcal' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_show_map' ) ) ? 'gmap_link' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_gmap' ) ) ? 'gmap' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_show_address' ) ) ? 'address' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_short' ) ) ? 'excerpt' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_desc' ) ) ? 'description' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_image' ) ) ? 'image' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_event_registration' ) ) ? 'tickets' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_event_link' ) ) ? 'link' : '';
+					$settings[] = ( 'true' === mc_get_option( 'mc_display_more' ) ) ? 'more' : '';
 					foreach ( $settings as $key => $value ) {
 						if ( '' === $value ) {
 							unset( $settings[ $key ] );
@@ -1769,8 +1769,8 @@ function mc_guess_calendar() {
 					)
 				);
 			}
-			update_option( 'mc_uri', $link );
-			update_option( 'mc_uri_id', $post_ID );
+			mc_update_option( 'uri', $link );
+			mc_update_option( 'uri_id', $post_ID );
 			$return = array(
 				'response' => true,
 				'message'  => esc_html__( 'Is this your calendar page?', 'my-calendar' ) . ' &lt;code>' . $link . '&lt;/code>',
@@ -1778,8 +1778,8 @@ function mc_guess_calendar() {
 
 			return $return;
 		} else {
-			update_option( 'mc_uri', '' );
-			update_option( 'mc_uri_id', '' );
+			mc_update_option( 'uri', '' );
+			mc_update_option( 'uri_id', '' );
 			$return = array(
 				'response' => false,
 				'message'  => esc_html__( 'No valid calendar detected. Please provide a URL!', 'my-calendar' ),
