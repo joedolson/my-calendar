@@ -282,6 +282,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$display_link    = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_event_link' ) : '';
 		$display_image   = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_image' ) : '';
 		$display_reg     = ( '' === mc_get_option( 'display_' . $otype, '' ) ) ? mc_get_option( 'mc_event_registration' ) : '';
+		$open_uri        = mc_get_option( 'open_uri' );
 		$day_id          = mc_date( 'd', strtotime( $process_date ), false );
 		$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
 		$image           = mc_category_icon( $event );
@@ -351,8 +352,14 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$no_link = apply_filters( 'mc_disable_link', false, $data );
 
 		if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type ) && ! $no_link ) {
-			$wrap    = "<a href='#$uid-$type-details-$id' class='open et_smooth_scroll_disabled opl-link url summary$has_image'>";
-			$balance = '</a>';
+			if ( 'true' === $open_uri ) {
+				$details_link = esc_url( mc_get_details_link( $event ) );
+				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
+				$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
+			} else {
+				$wrap    = "<a href='#$uid-$type-details-$id' class='open et_smooth_scroll_disabled opl-link url summary$has_image'>";
+				$balance = '</a>';
+			}
 		} else {
 			$wrap    = '';
 			$balance = '';
@@ -916,8 +923,9 @@ function mc_get_event_image( $event, $data ) {
  * @return boolean
  */
 function mc_disable_link( $status, $event ) {
-	$option = get_option( 'mc_no_link' );
-	if ( 'true' === $option ) {
+	$option     = get_option( 'mc_no_link' );
+	$new_option = get_option( 'mc_open_uri' );
+	if ( 'true' === $option || 'none' === $new_option ) {
 		$status = true;
 	}
 
@@ -1023,7 +1031,7 @@ function mc_show_details( $time, $type ) {
 	 */
 	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
-	return ( ( 'calendar' === $type && 'day' !== $time ) || $no_link ) ? false : true;
+	return ( ( 'calendar' === $type && 'true' === get_option( 'mc_open_uri' ) && 'day' !== $time ) || $no_link ) ? false : true;
 }
 
 add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
@@ -2437,7 +2445,7 @@ function mc_run_shortcodes( $content ) {
  * @return string title with wrapper if appropriate
  */
 function mc_wrap_title( $title ) {
-	if ( '1' !== mc_get_option( 'list_javascript' ) ) {
+	if ( '1' !== get_option( 'mc_list_javascript' ) ) {
 		$is_anchor       = '<button type="button" class="mc-text-button">';
 		$is_close_anchor = '</button>';
 	} else {

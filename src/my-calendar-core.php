@@ -474,7 +474,7 @@ function mc_footer_js() {
 		$mini         = 'false';
 		$ajax         = 'false';
 		if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
-			if ( '1' !== mc_get_option( 'calendar_javascript' ) ) {
+			if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== get_option( 'mc_open_uri' ) ) {
 				/**
 				 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
 				 *
