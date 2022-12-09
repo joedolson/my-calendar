@@ -940,7 +940,7 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_use_custom_js' );
 				delete_option( 'mc_version' );
 				break;
-			case '3.3.0':
+			case '3.3.0': // 2021-12-13
 				// Event repeats is now a string, and prefers a date-like value.
 				mc_upgrade_db();
 				// Count cache no longer counts 'archived' events as published.
@@ -998,11 +998,11 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_display_more' );
 				delete_option( 'mc_title' );
 				break;
-			case '3.1.13':
+			case '3.1.13': // 2019-03-15
 				delete_option( 'mc_inverse_color' );
 				mc_upgrade_db();
 				break;
-			case '3.0.0':
+			case '3.0.0': // 2018-06-14
 				delete_option( 'mc_event_open' );
 				delete_option( 'mc_widget_defaults' );
 				delete_option( 'mc_event_closed' );
