@@ -416,7 +416,16 @@ function mc_default_options() {
 		'location_cpt_base'            => '',
 	);
 
-	return $options;
+	/**
+	 * Filter the default values for My Calendar settings.
+	 * 
+	 * @hook mc_default_options
+	 * 
+	 * @param {array} $options Array of My Calendar settings.
+	 * 
+	 * @return {array}
+	 */
+	return apply_filters( 'mc_default_options', $options );
 }
 
 /**
