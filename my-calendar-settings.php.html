@@ -146,7 +146,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 			$return = "&lt;label for='$name'>$label&lt;/label>&lt;br />&lt;textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "&lt;/textarea>$note";
 			break;
 		case 'checkbox-single':
-			$checked = mc_is_checked( $name, 'true', '', true );
+			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
 			if ( $note ) {
 				$note = sprintf( $note, "&lt;code>$value&lt;/code>" );
 			} else {
