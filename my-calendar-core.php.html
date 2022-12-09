@@ -921,7 +921,7 @@ function my_calendar_check() {
 		} else {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '2.4.4', '3.0.0', '3.1.13', '3.3.0' );
+			$valid_upgrades = array( '3.0.0', '3.1.13', '3.3.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $current_version, $upgrade, '&lt;' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -1050,12 +1050,6 @@ function mc_do_upgrades( $upgrade_path ) {
 					)
 				);
 				mc_transition_categories();
-				break;
-			case '2.4.4': // 8-11-2015 (2.4.0).
-				$input_options               = get_option( 'mc_input_options' );
-				$input_options['event_host'] = 'on';
-				update_option( 'mc_input_options', $input_options );
-				add_option( 'mc_default_direction', 'DESC' );
 				break;
 			default:
 				break;
