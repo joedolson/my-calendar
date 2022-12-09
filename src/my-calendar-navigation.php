@@ -210,7 +210,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			$value      = trim( $value );
 			$mc_topnav .= ${$value};
 		}
-		if ( ! in_array( $value, $available, true ) ) {
+		if ( ! in_array( $value, $available, true ) && 'none' !== strtolower( $value ) ) {
 			$mc_topnav .= call_user_func( $value, $params );
 		}
 	}
@@ -235,7 +235,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			$value         = trim( $value );
 			$mc_bottomnav .= ${$value};
 		}
-		if ( ! in_array( $value, $available, true ) ) {
+		if ( ! in_array( $value, $available, true ) && 'none' !== strtolower( $value ) ) {
 			$mc_topnav .= call_user_func( $value, $params );
 		}
 	}

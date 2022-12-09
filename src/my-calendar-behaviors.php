@@ -61,19 +61,19 @@ function my_calendar_behaviors_edit() {
 		<div class='controls'>
 			<ul class="checkboxes">
 				<li>
-					<input type="checkbox" id="calendar_js" name="calendar_js" value="1" <?php mc_is_checked( 'mc_calendar_javascript', 1 ); ?>/>
+					<input type="checkbox" id="calendar_js" name="calendar_js" value="1" <?php checked( mc_get_option( 'calendar_javascript' ), '1' ); ?>/>
 					<label for="calendar_js"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
 				</li>
 				<li>
-					<input type="checkbox" id="list_js" name="list_js" value="1" <?php mc_is_checked( 'mc_list_javascript', 1 ); ?> />
+					<input type="checkbox" id="list_js" name="list_js" value="1" <?php checked( mc_get_option( 'list_javascript' ), '1' ); ?> />
 					<label for="list_js"><?php esc_html_e( 'Disable List JS', 'my-calendar' ); ?></label>
 				</li>
 				<li>
-					<input type="checkbox" id="mini_js" name="mini_js" value="1" <?php mc_is_checked( 'mc_mini_javascript', 1 ); ?> />
+					<input type="checkbox" id="mini_js" name="mini_js" value="1" <?php checked( mc_get_option( 'mini_javascript' ), '1' ); ?> />
 					<label for="mini_js"><?php esc_html_e( 'Disable Mini JS', 'my-calendar' ); ?></label>
 				</li>
 				<li>
-					<input type="checkbox" id="ajax_js" name="ajax_js" value="1" <?php mc_is_checked( 'mc_ajax_javascript', 1 ); ?> />
+					<input type="checkbox" id="ajax_js" name="ajax_js" value="1" <?php checked( mc_get_option( 'ajax_javascript' ), '1' ); ?> />
 					<label for="ajax_js"><?php esc_html_e( 'Disable AJAX', 'my-calendar' ); ?></label></li>
 			</ul>
 		</div>

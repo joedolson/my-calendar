@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_switch_sites() {
 	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 		if ( get_site_option( 'mc_multisite' ) === '2' && my_calendar_table() !== my_calendar_table( 'global' ) ) {
-			if ( get_option( 'mc_current_table' ) === '1' ) {
+			if ( mc_get_option( 'current_table' ) === '1' ) {
 				// can post to either, but is currently set to post to central table.
 				return true;
 			}
@@ -128,96 +128,6 @@ function mc_admin_strip_tags() {
 	return '<strong><em><i><b><span><a><code><pre><br>';
 }
 
-/**
- * Old function for checking value of an option field
- *
- * @param string             $field Name of the field.
- * @param string|int|boolean $value Current value.
- * @param string             $array if this setting is an array, the array key.
- * @param boolean            $return whether to return or echo.
- *
- * @return string checked=checked
- */
-function mc_is_checked( $field, $value, $array = '', $return = false ) {
-	if ( ! is_array( get_option( $field ) ) ) {
-		if ( get_option( $field ) === (string) $value ) {
-			if ( $return ) {
-				return 'checked="checked"';
-			} else {
-				echo 'checked="checked"';
-			}
-		}
-	} else {
-		$setting = get_option( $field );
-		if ( ! empty( $setting[ $array ]['enabled'] ) && (string) $setting[ $array ]['enabled'] === (string) $value ) {
-			if ( $return ) {
-				return 'checked="checked"';
-			} else {
-				echo 'checked="checked"';
-			}
-		}
-	}
-
-	return '';
-}
-
-/**
- * Old function for checking value of an option field in a select
- *
- * @param string             $field Name of the field.
- * @param string|int|boolean $value Current value.
- * @param string             $array if this setting is an array, the array key.
- *
- * @return string selected=selected
- */
-function mc_is_selected( $field, $value, $array = '' ) {
-	if ( ! is_array( get_option( $field ) ) ) {
-		if ( get_option( $field ) === (string) $value ) {
-			return 'selected="selected"';
-		}
-	} else {
-		$setting = get_option( $field );
-		if ( (string) $setting[ $array ]['enabled'] === (string) $value ) {
-			return 'selected="selected"';
-		}
-	}
-
-	return '';
-}
-
-/**
- * Old function for checking value of an option field.
- *
- * @deprecated 3.3.0
- *
- * @param string             $field Name of the field.
- * @param string|int|boolean $value Current value.
- * @param string             $type checkbox, radio, option.
- *
- * @return string
- */
-function mc_option_selected( $field, $value, $type = 'checkbox' ) {
-	switch ( $type ) {
-		case 'radio':
-		case 'checkbox':
-			$result = ' checked="checked"';
-			break;
-		case 'option':
-			$result = ' selected="selected"';
-			break;
-		default:
-			$result = '';
-			break;
-	}
-	if ( $field === $value ) {
-		$output = $result;
-	} else {
-		$output = '';
-	}
-
-	return $output;
-}
-
 if ( ! function_exists( 'exif_imagetype' ) ) {
 	/**
 	 * This is a hack for people who don't have PHP installed with exif_imagetype
@@ -242,7 +152,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
  */
 function mc_event_link_expires() {
 	$return  = false;
-	$default = get_option( 'mc_event_link_expires' );
+	$default = get_option( 'mc_event_link_expires' ); // Option only exists prior to 3.3.0.
 	if ( 'true' === $default ) {
 		$return = true;
 	}
@@ -257,7 +167,7 @@ function mc_event_link_expires() {
  */
 function mc_no_fifth_week() {
 	$return  = true;
-	$default = get_option( 'mc_no_fifth_week' );
+	$default = get_option( 'mc_no_fifth_week' ); // Option only exists prior to 3.3.0.
 	if ( 'false' === $default ) {
 		$return = false;
 	}
@@ -272,7 +182,7 @@ function mc_no_fifth_week() {
  */
 function mc_skip_holidays() {
 	$return  = false;
-	$default = get_option( 'mc_skip_holidays' );
+	$default = get_option( 'mc_skip_holidays' ); // Option only exists before 3.3.0.
 	if ( 'true' === $default ) {
 		$return = true;
 	}
