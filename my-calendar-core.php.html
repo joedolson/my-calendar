@@ -500,7 +500,7 @@ function mc_footer_js() {
 		$mini         = 'false';
 		$ajax         = 'false';
 		if ( ! $id || ( is_array( $pages ) &amp;&amp; in_array( $id, $pages, true ) ) || '' === $show_js ) {
-			if ( '1' !== mc_get_option( 'calendar_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_uri' ) ) {
+			if ( '1' !== mc_get_option( 'calendar_javascript' ) &amp;&amp; 'true' !== mc_get_option( 'open_uri' ) ) {
 				/**
 				 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
 				 *
@@ -536,7 +536,7 @@ function mc_footer_js() {
 					$list = 'true';
 				}
 			}
-			if ( '1' !== mc_get_option( 'mini_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_day_uri' ) ) {
+			if ( '1' !== mc_get_option( 'mini_javascript' ) &amp;&amp; 'true' !== mc_get_option( 'open_day_uri' ) ) {
 				/**
 				 * Filter to replace scripts used on front-end for mini calendar behavior. Default empty string.
 				 *
@@ -626,7 +626,7 @@ function mc_admin_styles() {
 				$enqueue_mcjs = true;
 				$list         = 'true';
 			}
-			if ( '1' !== mc_get_option( 'mini_javascript' ) &amp;&amp; 'true' !== get_option( 'mc_open_day_uri' ) ) {
+			if ( '1' !== mc_get_option( 'mini_javascript' ) &amp;&amp; 'true' !== mc_get_option( 'open_day_uri' ) ) {
 				$enqueue_mcjs = true;
 				$mini         = 'true';
 			}
@@ -1968,14 +1968,14 @@ add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
  */
 function mc_load_permalinks() {
 	if ( isset( $_POST['mc_cpt_base'] ) ) {
-		update_option( 'mc_cpt_base', sanitize_key( $_POST['mc_cpt_base'] ) );
+		mc_update_option( 'cpt_base', sanitize_key( $_POST['mc_cpt_base'] ) );
 	}
 	$opts = array( 'label_for' => 'mc_cpt_base' );
 	// Add a settings field to the permalink page.
 	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base', 'my-calendar' ), 'mc_field_callback', 'permalink', 'optional', $opts );
 
 	if ( isset( $_POST['mc_location_cpt_base'] ) ) {
-		update_option( 'mc_location_cpt_base', sanitize_key( $_POST['mc_location_cpt_base'] ) );
+		mc_update_option( 'location_cpt_base', sanitize_key( $_POST['mc_location_cpt_base'] ) );
 	}
 	$opts = array( 'label_for' => 'mc_location_cpt_base' );
 	// Add a settings field to the permalink page.
@@ -2098,7 +2098,7 @@ function mc_the_title( $title, $post_id = null ) {
  * Custom field callback for permalinks settings
  */
 function mc_field_callback() {
-	$value = ( '' !== get_option( 'mc_cpt_base', '' ) ) ? get_option( 'mc_cpt_base' ) : 'mc-events';
+	$value = ( '' !== mc_get_option( 'cpt_base', '' ) ) ? mc_get_option( 'cpt_base' ) : 'mc-events';
 	echo '&lt;input type="text" value="' . esc_attr( $value ) . '" name="mc_cpt_base" id="mc_cpt_base" class="regular-text" placeholder="mc-events" />';
 }
 
@@ -2106,7 +2106,7 @@ function mc_field_callback() {
  * Custom field callback for permalinks settings
  */
 function mc_location_field_callback() {
-	$value = ( '' !== get_option( 'mc_location_cpt_base', '' ) ) ? get_option( 'mc_location_cpt_base' ) : 'mc-locations';
+	$value = ( '' !== mc_get_option( 'location_cpt_base', '' ) ) ? mc_get_option( 'location_cpt_base' ) : 'mc-locations';
 	echo '&lt;input type="text" value="' . esc_attr( $value ) . '" name="mc_location_cpt_base" id="mc_location_cpt_base" class="regular-text" placeholder="mc-locations" />';
 }
 
@@ -2239,10 +2239,10 @@ function mc_posttypes() {
  */
 function mc_filter_posttype_slug( $slug ) {
 	if ( 'mc-events' === $slug ) {
-		$slug = ( '' !== get_option( 'mc_cpt_base', '' ) ) ? get_option( 'mc_cpt_base' ) : $slug;
+		$slug = ( '' !== mc_get_option( 'cpt_base', '' ) ) ? mc_get_option( 'cpt_base' ) : $slug;
 	}
 	if ( 'mc-locations' === $slug ) {
-		$slug = ( '' !== get_option( 'mc_location_cpt_base', '' ) ) ? get_option( 'mc_location_cpt_base' ) : $slug;
+		$slug = ( '' !== mc_get_option( 'location_cpt_base', '' ) ) ? mc_get_option( 'location_cpt_base' ) : $slug;
 	}
 
 	return $slug;
