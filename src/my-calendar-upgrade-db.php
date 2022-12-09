@@ -138,8 +138,8 @@ function mc_migrate_settings() {
 		'month_format'                 => get_option( 'mc_month_format' ),
 		'time_format'                  => get_option( 'mc_time_format' ),
 		'location_controls'            => get_option( 'mc_location_controls' ),
-		'cpt_base'                     => get_option( 'mc_cpt_base' ),
-		'location_cpt_base'            => get_option( 'mc_location_cpt_base' ),
+		'cpt_base'                     => get_option( 'mc_cpt_base', 'mc-events' ),
+		'location_cpt_base'            => get_option( 'mc_location_cpt_base', 'mc-locations' ),
 	);
 	add_option( 'my_calendar_options', $options );
 	// Remove old options.

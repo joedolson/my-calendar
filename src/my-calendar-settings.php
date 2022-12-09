@@ -14,24 +14,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Get a My Calendar setting. Supports old settings, as well.
+ * Get a My Calendar setting.
  *
  * @param string $key Setting key.
- * @param mixed  $default Setting default value.
  *
- * @return mixed
+ * @return mixed A boolean false return means the setting doesn't exist.
  */
-function mc_get_option( $key, $default = '' ) {
+function mc_get_option( $key ) {
 	$options = get_option( 'my_calendar_options', mc_default_options() );
+	$options = array_merge( mc_default_options(), $options );
 	$new_key = str_replace( 'mc_', '', $key );
-	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : $default;
-	if ( ! $value ) {
-		$value = get_option( $key, $default );
-		if ( ! $value ) {
-			// Find a fallback option from old settings.
-			$value = get_option( 'mc_' . $key, $default );
-		}
-	}
+	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : false;
 
 	return $value;
 }
