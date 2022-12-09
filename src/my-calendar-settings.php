@@ -14,6 +14,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Get a My Calendar setting. Supports old settings, as well.
+ *
+ * @param string $key Setting key.
+ * @param mixed  $default Setting default value.
+ *
+ * @return mixed
+ */
+function mc_get_option( $key, $default = '' ) {
+	$options = get_option( 'my_calendar_options', mc_default_options() );
+	$new_key = str_replace( 'mc_', '', $key );
+	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : $default;
+	if ( ! $value ) {
+		$value = get_option( $key, $default );
+		if ( ! $value ) {
+			// Find a fallback option from old settings.
+			$value = get_option( 'mc_' . $key, $default );
+		}
+	}
+
+	return $value;
+}
+
+/**
+ * Save a My Calendar setting.
+ *
+ * @param string $key Setting key.
+ * @param mixed  $value Setting value.
+ *
+ * @return bool
+ */
+function mc_update_option( $key, $value = '' ) {
+	$options         = get_option( 'my_calendar_options', mc_default_options() );
+	$options[ $key ] = $value;
+	$return          = update_option( 'my_calendar_options', $options );
+
+	return $return;
+}
+
+/**
  * Generate input & field for a My Calendar setting.
  *
  * @param string       $name Name of option.
