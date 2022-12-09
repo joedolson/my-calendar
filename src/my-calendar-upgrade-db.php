@@ -112,6 +112,34 @@ function mc_migrate_settings() {
 		'gmap_api_key'                 => get_option( 'mc_gmap_api_key' ),
 		'uri'                          => get_option( 'mc_uri' ),
 		'uri_id'                       => get_option( 'mc_uri_id' ),
+		'open_uri'                     => get_option( 'mc_open_uri' ),
+		'use_permalinks'               => get_option( 'mc_use_permalinks' ),
+		'drop_tables'                  => get_option( 'mc_drop_tables' ),
+		'drop_settings'                => get_option( 'mc_drop_settings' ),
+		'api_enabled'                  => get_option( 'mc_api_enabled' ),
+		'default_sort'                 => get_option( 'mc_default_sort' ),
+		'current_table'                => get_option( 'mc_current_table' ),
+		'open_day_uri'                 => get_option( 'mc_open_day_uri' ),
+		'mini_uri'                     => get_option( 'mc_mini_uri' ),
+		'show_list_info'               => get_option( 'mc_show_list_info' ),
+		'show_list_events'             => get_option( 'mc_show_list_events' ),
+		'event_title_template'         => get_option( 'mc_event_title_template' ),
+		'heading_text'                 => get_option( 'mc_heading_text' ),
+		'notime_text'                  => get_option( 'mc_notime_text' ),
+		'hosted_by'                    => get_option( 'mc_hosted_by' ),
+		'posted_by'                    => get_option( 'mc_posted_by' ),
+		'buy_tickets'                  => get_option( 'mc_buy_tickets' ),
+		'event_accessibility'          => get_option( 'mc_event_accessibility' ),
+		'view_full'                    => get_option( 'mc_view_full' ),
+		'week_caption'                 => get_option( 'mc_week_caption' ),
+		'next_events'                  => get_option( 'mc_next_events' ),
+		'previous_events'              => get_option( 'mc_previous_events' ),
+		'caption'                      => get_option( 'mc_caption' ),
+		'month_format'                 => get_option( 'mc_month_format' ),
+		'time_format'                  => get_option( 'mc_time_format' ),
+		'location_controls'            => get_option( 'mc_location_controls' ),
+		'cpt_base'                     => get_option( 'mc_cpt_base' ),
+		'location_cpt_base'            => get_option( 'mc_location_cpt_base' ),
 	);
 	add_option( 'my_calendar_options', $options );
 	// Remove old options.
@@ -152,6 +180,34 @@ function mc_migrate_settings() {
 	delete_option( 'mc_show_event_vcal' );
 	delete_option( 'mc_remote' );
 	delete_option( 'mc_gmap_api_key' );
+	delete_option( 'mc_use_permalinks' );
+	delete_option( 'mc_drop_tables' );
+	delete_option( 'mc_api_enabled' );
+	delete_option( 'mc_drop_settings' );
+	delete_option( 'mc_default_sort' );
+	delete_option( 'mc_current_table' );
+	delete_option( 'mc_open_day_uri' );
+	delete_option( 'mc_open_uri' );
+	delete_option( 'mc_mini_uri' );
+	delete_option( 'mc_show_list_info' );
+	delete_option( 'mc_show_list_events' );
+	delete_option( 'mc_event_title_template' );
+	delete_option( 'mc_heading_text' );
+	delete_option( 'mc_notime_text' );
+	delete_option( 'mc_hosted_by' );
+	delete_option( 'mc_posted_by' );
+	delete_option( 'mc_buy_tickets' );
+	delete_option( 'mc_event_accessibility' );
+	delete_option( 'mc_view_full' );
+	delete_option( 'mc_week_caption' );
+	delete_option( 'mc_next_events' );
+	delete_option( 'mc_previous_events' );
+	delete_option( 'mc_caption' );
+	delete_option( 'mc_month_format' );
+	delete_option( 'mc_time_format' );
+	delete_option( 'mc_location_controls' );
+	delete_option( 'mc_cpt_base' );
+	delete_option( 'mc_location_cpt_base' );
 }
 
 /**
