@@ -358,41 +358,6 @@ function mc_template_settings() {
 }
 
 /**
- * Get a My Calendar setting. Supports old settings, as well.
- *
- * @param string $key Setting key.
- * @param mixed  $default Setting default value.
- *
- * @return mixed
- */
-function mc_get_option( $key, $default = '' ) {
-	$options = get_option( 'my_calendar_options', mc_default_options() );
-	$new_key = str_replace( 'mc_', '', $key );
-	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : $default;
-	if ( ! $value ) {
-		$value = get_option( $key, $default );
-	}
-
-	return $value;
-}
-
-/**
- * Save a My Calendar setting.
- *
- * @param string $key Setting key.
- * @param mixed  $value Setting value.
- *
- * @return bool
- */
-function mc_update_option( $key, $value = '' ) {
-	$options         = get_option( 'my_calendar_options', mc_default_options() );
-	$options[ $key ] = $value;
-	$return          = update_option( 'my_calendar_options', $options );
-
-	return $return;
-}
-
-/**
  * Fetch My Calendar's default settings array.
  *
  * @return array
@@ -453,7 +418,6 @@ function mc_default_options() {
 		'drop_settings'                => '',
 		'api_enabled'                  => '',
 		'default_sort'                 => '',
-		'default_direction'            => '',
 		'current_table'                => '',
 		'open_day_uri'                 => '',
 		'mini_uri'                     => '',
@@ -476,7 +440,6 @@ function mc_default_options() {
 		'location_controls'            => '',
 		'cpt_base'                     => '',
 		'location_cpt_base'            => '',
-
 	);
 
 	return $options;
