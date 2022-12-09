@@ -10,10 +10,9 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
-
 /**
  * Old function for checking value of an option field in a select
- * 
+ *
  * @deprecated 3.4.0 2022-12-09.
  *
  * @param string             $field Name of the field.
@@ -70,12 +69,11 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 	return $output;
 }
 
-
 /**
  * Old function for checking value of an option field
  *
  * @deprecated 3.4.0 2022-12-09.
- * 
+ *
  * @param string             $field Name of the field.
  * @param string|int|boolean $value Current value.
  * @param string             $array if this setting is an array, the array key.
