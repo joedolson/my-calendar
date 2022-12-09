@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Action: mc_delete_event_instance - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_default_options - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Action: mc_delete_event_instance</h1></header>
+    <header><h1 class="page-title">Filter: mc_default_options</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_delete_event_instance">do_action( 'mc_delete_event_instance', <span class="signature">$event_id, $post_id, $event_in )</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mc_default_options">apply_filters( 'mc_default_options', <span class="signature">$options )</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Action run when a single date of an event is deleted.</p>
+    <p>Filter the default values for My Calendar settings.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$event_id</code></td>
+                <td class="name"><code>$options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">array</span>
 
 
             
@@ -93,53 +93,7 @@
 
             
 
-            <td class="description last"><p>Event ID.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$post_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Post ID.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$event_in</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Event instance ID.</p></td>
+            <td class="description last"><p>Array of My Calendar settings.</p></td>
         </tr>
 
     
@@ -180,7 +134,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-event-editor.php.html">my-calendar-event-editor.php</a>, <a href="my-calendar-event-editor.php.html#line751">line 751</a>
+        <a href="my-calendar-install.php.html">my-calendar-install.php</a>, <a href="my-calendar-install.php.html#line419">line 419</a>
     </li></ul></dd>
     
 
@@ -203,6 +157,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
