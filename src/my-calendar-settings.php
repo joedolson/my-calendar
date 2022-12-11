@@ -49,7 +49,7 @@ function mc_update_option( $key, $value = '' ) {
  * Save a group of My Calendar settings.
  *
  * @param array $options An array of settings.
- * 
+ *
  * @return bool
  */
 function mc_update_options( $options ) {
@@ -279,14 +279,14 @@ function mc_update_management_settings( $post ) {
 			$mc_uri = isset( $post['mc_uri'] ) ? $post['mc_uri'] : mc_get_option( 'uri' );
 		}
 	}
-	$option['use_permalinks'] = ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false';
-	$option['uri']            = $mc_uri;
-	$option['uri_id']         = absint( $post['mc_uri_id'] );
-	$option['api_enabled']   = $mc_api_enabled;
-	$option['remote']        = $mc_remote;
-	$option['drop_tables']   = $mc_drop_tables;
-	$option['drop_settings'] = $mc_drop_settings;
-	$option['default_sort']  = abinst( $post['mc_default_sort'] );
+	$option['use_permalinks']    = ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false';
+	$option['uri']               = $mc_uri;
+	$option['uri_id']            = absint( $post['mc_uri_id'] );
+	$option['api_enabled']       = $mc_api_enabled;
+	$option['remote']            = $mc_remote;
+	$option['drop_tables']       = $mc_drop_tables;
+	$option['drop_settings']     = $mc_drop_settings;
+	$option['default_sort']      = abinst( $post['mc_default_sort'] );
 	$option['default_direction'] = sanitize_text_field( $post['mc_default_direction'] );
 
 	mc_update_options( $option );
@@ -443,13 +443,13 @@ function mc_update_text_settings( $post ) {
 	$options['next_events']          = $post['mc_next_events'];
 	$options['week_caption']         = $post['mc_week_caption'];
 	$options['caption']              = $post['mc_caption'];
-	$templates               = array();
-	$templates['title']      = $post['mc_title_template'];
-	$templates['title_solo'] = $post['mc_title_template_solo'];
-	$templates['title_list'] = $post['mc_title_template_list'];
-	$templates['label']      = $post['mc_details_label'];
-	$templates['link']       = $post['mc_link_label'];
-	$options['templates']    = $templates;
+	$templates                       = array();
+	$templates['title']              = $post['mc_title_template'];
+	$templates['title_solo']         = $post['mc_title_template_solo'];
+	$templates['title_list']         = $post['mc_title_template_list'];
+	$templates['label']              = $post['mc_details_label'];
+	$templates['link']               = $post['mc_link_label'];
+	$options['templates']            = $templates;
 	// Date/time.
 	$options['date_format']  = stripslashes( $post['mc_date_format'] );
 	$options['week_format']  = stripslashes( $post['mc_week_format'] );
@@ -462,7 +462,7 @@ function mc_update_text_settings( $post ) {
 /**
  * Save email settings
  *
- * @param array $post POST array
+ * @param array $post POST array.
  */
 function mc_update_email_settings( $post ) {
 	$options                       = array();
@@ -522,7 +522,8 @@ function my_calendar_settings() {
 			mc_update_text_settings( $post );
 			mc_show_notice( __( 'Custom text settings saved', 'my-calendar' ) );
 		}
-		// Mail function by Roland.
+
+		// Save email settings.
 		if ( isset( $post['mc_email'] ) ) {
 			mc_update_email_settings( $post );
 			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ) );
