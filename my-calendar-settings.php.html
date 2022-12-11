@@ -75,7 +75,7 @@ function mc_update_option( $key, $value = '' ) {
  * Save a group of My Calendar settings.
  *
  * @param array $options An array of settings.
- * 
+ *
  * @return bool
  */
 function mc_update_options( $options ) {
@@ -85,7 +85,7 @@ function mc_update_options( $options ) {
 	$settings = get_option( 'my_calendar_options' );
 	$options  = array_merge( $settings, $options );
 
-	return update_option( 'my_calendar_option', $options );
+	return update_option( 'my_calendar_options', $options );
 }
 
 /**
@@ -305,14 +305,14 @@ function mc_update_management_settings( $post ) {
 			$mc_uri = isset( $post['mc_uri'] ) ? $post['mc_uri'] : mc_get_option( 'uri' );
 		}
 	}
-	$option['use_permalinks'] = ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false';
-	$option['uri']            = $mc_uri;
-	$option['uri_id']         = absint( $post['mc_uri_id'] );
-	$option['api_enabled']   = $mc_api_enabled;
-	$option['remote']        = $mc_remote;
-	$option['drop_tables']   = $mc_drop_tables;
-	$option['drop_settings'] = $mc_drop_settings;
-	$option['default_sort']  = abinst( $post['mc_default_sort'] );
+	$option['use_permalinks']    = ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false';
+	$option['uri']               = $mc_uri;
+	$option['uri_id']            = absint( $post['mc_uri_id'] );
+	$option['api_enabled']       = $mc_api_enabled;
+	$option['remote']            = $mc_remote;
+	$option['drop_tables']       = $mc_drop_tables;
+	$option['drop_settings']     = $mc_drop_settings;
+	$option['default_sort']      = absint( $post['mc_default_sort'] );
 	$option['default_direction'] = sanitize_text_field( $post['mc_default_direction'] );
 
 	mc_update_options( $option );
@@ -469,13 +469,13 @@ function mc_update_text_settings( $post ) {
 	$options['next_events']          = $post['mc_next_events'];
 	$options['week_caption']         = $post['mc_week_caption'];
 	$options['caption']              = $post['mc_caption'];
-	$templates               = array();
-	$templates['title']      = $post['mc_title_template'];
-	$templates['title_solo'] = $post['mc_title_template_solo'];
-	$templates['title_list'] = $post['mc_title_template_list'];
-	$templates['label']      = $post['mc_details_label'];
-	$templates['link']       = $post['mc_link_label'];
-	$options['templates']    = $templates;
+	$templates                       = array();
+	$templates['title']              = $post['mc_title_template'];
+	$templates['title_solo']         = $post['mc_title_template_solo'];
+	$templates['title_list']         = $post['mc_title_template_list'];
+	$templates['label']              = $post['mc_details_label'];
+	$templates['link']               = $post['mc_link_label'];
+	$options['templates']            = $templates;
 	// Date/time.
 	$options['date_format']  = stripslashes( $post['mc_date_format'] );
 	$options['week_format']  = stripslashes( $post['mc_week_format'] );
@@ -488,7 +488,7 @@ function mc_update_text_settings( $post ) {
 /**
  * Save email settings
  *
- * @param array $post POST array
+ * @param array $post POST array.
  */
 function mc_update_email_settings( $post ) {
 	$options                       = array();
@@ -501,6 +501,55 @@ function mc_update_email_settings( $post ) {
 	$options['event_mail_bcc']     = $post['mc_event_mail_bcc'];
 
 	mc_update_options( $options );
+}
+
+/**
+ * Generate URL to export settings.
+ */
+function mc_export_settings_url() {
+	$nonce = wp_create_nonce( 'mc-export-settings' );
+	$url   = add_query_arg( 'mc-export-settings', $nonce, admin_url( 'admin.php?my-calendar-config' ) );
+
+	return $url;
+}
+
+/**
+ * Export settings
+ */
+function mc_export_settings() {
+	if ( isset( $_GET['mc-export-settings'] ) ) {
+		$nonce = wp_verify_nonce( $_GET['mc-export-settings'], 'mc-export-settings' );
+		if ( $nonce ) {
+			$date     = gmdate( 'Y-m-d', current_time( 'timestamp' ) );
+			$settings = get_option( 'my_calendar_options' );
+			header('Content-Type: application/json');
+			header('Content-Disposition: attachment; filename=my-calendar-' . sanitize_title( get_bloginfo( 'name' ) ) . '-' . $date . '.json');
+			header('Pragma: no-cache');
+			wp_send_json( $settings, 200 );
+		}
+	}
+}
+add_action( 'admin_init', 'mc_export_settings' );
+
+/**
+ * Import settings
+ */
+function mc_import_settings() {
+	if ( isset( $_FILES['mc-import-settings'] ) ) {
+		$nonce    = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
+		if ( $nonce ) {
+			$settings = file_get_contents( $_FILES['mc-import-settings']['tmp_name'] );
+			$settings = json_decode( $settings, ARRAY_A );
+			if ( null === $settings ) {
+				$return = json_last_error();
+			} else {
+				update_option( 'my_calendar_options', $settings );
+				$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
+			}
+			return $return;
+		}
+	}
+	return '';
 }
 
 /**
@@ -548,7 +597,8 @@ function my_calendar_settings() {
 			mc_update_text_settings( $post );
 			mc_show_notice( __( 'Custom text settings saved', 'my-calendar' ) );
 		}
-		// Mail function by Roland.
+
+		// Save email settings.
 		if ( isset( $post['mc_email'] ) ) {
 			mc_update_email_settings( $post );
 			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ) );
@@ -565,6 +615,11 @@ function my_calendar_settings() {
 		$settings = do_action( 'mc_save_settings', '', $post );
 		if ( is_string( $settings ) &amp;&amp; '' !== $settings ) {
 			mc_show_notice( $settings );
+		}
+
+		$return = mc_import_settings();
+		if ( $return ) {
+			mc_show_notice( $return );
 		}
 	}
 
@@ -791,6 +846,16 @@ function mc_remote_db() {
 						&lt;/fieldset>
 						&lt;p>
 							&lt;input type="submit" name="mc_manage" class="button-primary" value="&lt;?php _e( 'Save Management Settings', 'my-calendar' ); ?>"/>
+						&lt;/p>
+					&lt;/form>
+					&lt;h3>&lt;?php _e( 'Import and Export Settings', 'my-calendar' ); ?>&lt;/h3>
+					&lt;p>&lt;a href="&lt;?php echo mc_export_settings_url(); ?>">&lt;?php _e( 'Export settings', 'my-calendar' ); ?>&lt;/a>&lt;/p>
+					&lt;form method="POST" enctype="multipart/form-data" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
+						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+						&lt;p>
+							&lt;label for="mc-import-settings">&lt;?php _e( 'Import Settings', 'my-calendar' ); ?>&lt;/label>
+							&lt;input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
+    						&lt;input type="submit" class="button-secondary" value="&lt;?php _e( 'Import Settings', 'my-calendar' ); ?>">	
 						&lt;/p>
 					&lt;/form>
 					&lt;h3>&lt;?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?>&lt;/h3>
