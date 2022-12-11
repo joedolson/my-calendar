@@ -1011,6 +1011,21 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
+#my-calendar-manage .mc-input-settings {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 10px;
+}
+
+#my-calendar-manage input[type=file] {
+	padding: .5em;
+	background: #f6f6f6;
+	border: 1px solid #ddd;
+	font-weight: 700;
+	font-size: 1.1em;
+}
+
 .my-calendar-admin .checkboxes .event-new-category {
 	background: transparent;
 	padding: 0;

@@ -826,7 +826,7 @@ function mc_remote_db() {
 					<p><a href="<?php echo mc_export_settings_url(); ?>"><?php _e( 'Export settings', 'my-calendar' ); ?></a></p>
 					<form method="POST" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-						<p>
+						<p class="mc-input-settings">
 							<label for="mc-import-settings"><?php _e( 'Import Settings', 'my-calendar' ); ?></label>
 							<input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
     						<input type="submit" class="button-secondary" value="<?php _e( 'Import Settings', 'my-calendar' ); ?>">	
