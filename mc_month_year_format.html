@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_heading_level - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_month_year_format - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_heading_level</h1></header>
+    <header><h1 class="page-title">Filter: mc_month_year_format</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_heading_level">apply_filters( 'mc_heading_level', <span class="signature">$h1, $format, $time, $template )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_month_year_format">apply_filters( 'mc_month_year_format', <span class="signature">$format, $date, $format, $time, $month )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Main heading level. Default <code>h2</code>.</p>
+    <p>Filter the date format used for previous link if the prev link is in a different year.</p>
 </div>
 
 
@@ -77,7 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$h1</code></td>
+                <td class="name"><code>$format</code></td>
             
 
             <td class="type">
@@ -93,7 +93,30 @@
 
             
 
-            <td class="description last"><p>Main heading level.</p></td>
+            <td class="description last"><p>PHP Date format string.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$date</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Current date array.</p></td>
         </tr>
 
     
@@ -116,7 +139,7 @@
 
             
 
-            <td class="description last"><p>Current view format.</p></td>
+            <td class="description last"><p>View format.</p></td>
         </tr>
 
     
@@ -139,14 +162,14 @@
 
             
 
-            <td class="description last"><p>Current view time frame.</p></td>
+            <td class="description last"><p>View time frame.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$template</code></td>
+                <td class="name"><code>$month</code></td>
             
 
             <td class="type">
@@ -162,7 +185,7 @@
 
             
 
-            <td class="description last"><p>Current view template.</p></td>
+            <td class="description last"><p>month used in navigation reference (previous month.)</p></td>
         </tr>
 
     
@@ -203,246 +226,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-output.php.html">my-calendar-output.php</a>, <a href="my-calendar-output.php.html#line1832">line 1832</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-    
-    </div>
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    <h2></h2>
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    <h4 class="name" id="mc_heading_level">apply_filters( 'mc_heading_level', <span class="signature">$heading, $format, $time, $template )</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Filter the main calendar heading level. Default <code>h2</code>.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>$heading</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>HTML heading element.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$format</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Viewed format.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$time</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Time frame currently viewed.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$template</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Heading template.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-output.php.html">my-calendar-output.php</a>, <a href="my-calendar-output.php.html#line1982">line 1982</a>
+        <a href="my-calendar-navigation.php.html">my-calendar-navigation.php</a>, <a href="my-calendar-navigation.php.html#line629">line 629</a>
     </li></ul></dd>
     
 
