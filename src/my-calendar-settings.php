@@ -494,11 +494,11 @@ function mc_export_settings() {
 	if ( isset( $_GET['mc-export-settings'] ) ) {
 		$nonce = wp_verify_nonce( $_GET['mc-export-settings'], 'mc-export-settings' );
 		if ( $nonce ) {
-			$date     = gmdate( 'Y-m-d', current_time( 'timestamp' ) );
+			$date     = gmdate( 'Y-m-d', current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 			$settings = get_option( 'my_calendar_options' );
-			header('Content-Type: application/json');
-			header('Content-Disposition: attachment; filename=my-calendar-' . sanitize_title( get_bloginfo( 'name' ) ) . '-' . $date . '.json');
-			header('Pragma: no-cache');
+			header( 'Content-Type: application/json' );
+			header( 'Content-Disposition: attachment; filename=my-calendar-' . sanitize_title( get_bloginfo( 'name' ) ) . '-' . $date . '.json' );
+			header( 'Pragma: no-cache' );
 			wp_send_json( $settings, 200 );
 		}
 	}
@@ -510,7 +510,7 @@ add_action( 'admin_init', 'mc_export_settings' );
  */
 function mc_import_settings() {
 	if ( isset( $_FILES['mc-import-settings'] ) ) {
-		$nonce    = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
+		$nonce = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
 		if ( $nonce ) {
 			$settings = file_get_contents( $_FILES['mc-import-settings']['tmp_name'] );
 			$settings = json_decode( $settings, ARRAY_A );
@@ -829,7 +829,7 @@ function mc_remote_db() {
 						<p class="mc-input-settings">
 							<label for="mc-import-settings"><?php _e( 'Import Settings', 'my-calendar' ); ?></label>
 							<input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
-    						<input type="submit" class="button-secondary" value="<?php _e( 'Import Settings', 'my-calendar' ); ?>">	
+							<input type="submit" class="button-secondary" value="<?php _e( 'Import Settings', 'my-calendar' ); ?>">	
 						</p>
 					</form>
 					<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
