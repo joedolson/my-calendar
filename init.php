@@ -42,3 +42,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 include( dirname( __FILE__ ) . '/src/my-calendar.php' );
+
+register_activation_hook( __FILE__, 'mc_plugin_activated' );
+register_deactivation_hook( __FILE__, 'mc_plugin_deactivated' );
