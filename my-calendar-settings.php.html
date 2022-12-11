@@ -72,6 +72,23 @@ function mc_update_option( $key, $value = '' ) {
 }
 
 /**
+ * Save a group of My Calendar settings.
+ *
+ * @param array $options An array of settings.
+ * 
+ * @return bool
+ */
+function mc_update_options( $options ) {
+	if ( empty( $options ) ) {
+		return false;
+	}
+	$settings = get_option( 'my_calendar_options' );
+	$options  = array_merge( $settings, $options );
+
+	return update_option( 'my_calendar_option', $options );
+}
+
+/**
  * Generate input &amp; field for a My Calendar setting.
  *
  * @param string       $name Name of option.
@@ -272,6 +289,7 @@ function my_calendar_import() {
  */
 function mc_update_management_settings( $post ) {
 	// Management settings.
+	$option           = array();
 	$mc_api_enabled   = ( ! empty( $post['mc_api_enabled'] ) &amp;&amp; 'on' === $post['mc_api_enabled'] ) ? 'true' : 'false';
 	$mc_remote        = ( ! empty( $post['mc_remote'] ) &amp;&amp; 'on' === $post['mc_remote'] ) ? 'true' : 'false';
 	$mc_drop_tables   = ( ! empty( $post['mc_drop_tables'] ) &amp;&amp; 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
@@ -287,16 +305,18 @@ function mc_update_management_settings( $post ) {
 			$mc_uri = isset( $post['mc_uri'] ) ? $post['mc_uri'] : mc_get_option( 'uri' );
 		}
 	}
-	mc_update_option( 'use_permalinks', ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false' );
-	mc_update_option( 'uri', $mc_uri );
-	mc_update_option( 'uri_id', absint( $post['mc_uri_id'] ) );
-	// End handling of primary URL.
-	mc_update_option( 'api_enabled', $mc_api_enabled );
-	mc_update_option( 'remote', $mc_remote );
-	mc_update_option( 'drop_tables', $mc_drop_tables );
-	mc_update_option( 'drop_settings', $mc_drop_settings );
-	mc_update_option( 'default_sort', absint( $post['mc_default_sort'] ) );
-	mc_update_option( 'default_direction', sanitize_text_field( $post['mc_default_direction'] ) );
+	$option['use_permalinks'] = ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false';
+	$option['uri']            = $mc_uri;
+	$option['uri_id']         = absint( $post['mc_uri_id'] );
+	$option['api_enabled']   = $mc_api_enabled;
+	$option['remote']        = $mc_remote;
+	$option['drop_tables']   = $mc_drop_tables;
+	$option['drop_settings'] = $mc_drop_settings;
+	$option['default_sort']  = abinst( $post['mc_default_sort'] );
+	$option['default_direction'] = sanitize_text_field( $post['mc_default_direction'] );
+
+	mc_update_options( $option );
+
 	if ( 2 === (int) get_site_option( 'mc_multisite' ) ) {
 		$mc_current_table = ( isset( $post['mc_current_table'] ) ) ? (int) $post['mc_current_table'] : 0;
 		mc_update_option( 'current_table', $mc_current_table );
@@ -365,15 +385,14 @@ function mc_update_permissions_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_output_settings( $post ) {
-	$mc_open_day_uri = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
-	$mc_open_uri     = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
-	mc_update_option( 'open_uri', $mc_open_uri );
-	mc_update_option( 'no_link', ( ! empty( $post['mc_no_link'] ) &amp;&amp; 'on' === $post['mc_no_link'] ) ? 'true' : 'false' );
-	mc_update_option( 'mini_uri', $post['mc_mini_uri'] );
-	mc_update_option( 'open_day_uri', $mc_open_day_uri );
-	mc_update_option( 'show_list_info', ( ! empty( $post['mc_show_list_info'] ) &amp;&amp; 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false' );
-	mc_update_option( 'show_list_events', ( ! empty( $post['mc_show_list_events'] ) &amp;&amp; 'on' === $post['mc_show_list_events'] ) ? 'true' : 'false' );
-	mc_update_option( 'show_months', (int) $post['mc_show_months'] );
+	$options                     = array();
+	$options['open_uri']         = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
+	$options['no_link']          = ( ! empty( $post['mc_no_link'] ) &amp;&amp; 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
+	$options['mini_uri']         = $post['mc_mini_uri'];
+	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
+	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) &amp;&amp; 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
+	$options['show_list_events'] = ( ! empty( $post['mc_show_list_events'] ) &amp;&amp; 'on' === $post['mc_show_list_events'] ) ? 'true' : 'false';
+	$options['show_months']      = (int) $post['mc_show_months'];
 	// Calculate sequence for navigation elements.
 	$top    = array();
 	$bottom = array();
@@ -390,19 +409,19 @@ function mc_update_output_settings( $post ) {
 			}
 		}
 	}
-	$top    = ( empty( $top ) ) ? 'none' : implode( ',', $top );
-	$bottom = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
-	mc_update_option( 'bottomnav', $bottom );
-	mc_update_option( 'topnav', $top );
-	$single = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
-	$main   = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
-	$mini   = ( empty( $post['mc_display_mini'] ) ) ? array() : $post['mc_display_mini'];
-	mc_update_option( 'display_single', array_map( 'sanitize_text_field', $single ) );
-	mc_update_option( 'display_main', array_map( 'sanitize_text_field', $main ) );
-	mc_update_option( 'display_mini', array_map( 'sanitize_text_field', $mini ) );
-	mc_update_option( 'gmap_api_key', ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '' );
-	mc_update_option( 'show_weekends', ( ! empty( $post['mc_show_weekends'] ) &amp;&amp; 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false' );
-	mc_update_option( 'convert', ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false' );
+	$options['bottomnav']      = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
+	$options['topnav']         = ( empty( $top ) ) ? 'none' : implode( ',', $top );
+	$single                    = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
+	$main                      = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
+	$mini                      = ( empty( $post['mc_display_mini'] ) ) ? array() : $post['mc_display_mini'];
+	$options['display_single'] = array_map( 'sanitize_text_field', $single );
+	$options['display_main']   = array_map( 'sanitize_text_field', $main );
+	$options['display_mini']   = array_map( 'sanitize_text_field', $mini );
+	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '';
+	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) &amp;&amp; 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
+	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
+
+	mc_update_options( $options );
 }
 
 /**
@@ -411,6 +430,7 @@ function mc_update_output_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_input_settings( $post ) {
+	$options                         = array();
 	$mc_input_options_administrators = ( isset( $post['mc_input_options_administrators'] ) ) ? 'true' : 'false';
 	$mc_input_options                = array(
 		'event_short'    => ( isset( $post['mci_event_short'] ) ) ? 'on' : 'off',
@@ -424,8 +444,11 @@ function mc_update_input_settings( $post ) {
 		'event_access'   => ( isset( $post['mci_event_access'] ) ) ? 'on' : 'off',
 		'event_host'     => ( isset( $post['mci_event_host'] ) ) ? 'on' : 'off',
 	);
-	mc_update_option( 'input_options', $mc_input_options );
-	mc_update_option( 'input_options_administrators', $mc_input_options_administrators );
+
+	$options['input_options']                = $mc_input_options;
+	$options['input_options_administrators'] = $mc_input_options_administrators;
+
+	mc_update_options( $options );
 }
 
 /**
@@ -434,47 +457,50 @@ function mc_update_input_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_text_settings( $post ) {
-	$mc_title_template       = $post['mc_title_template'];
-	$mc_title_template_solo  = $post['mc_title_template_solo'];
-	$mc_title_template_list  = $post['mc_title_template_list'];
-	$mc_details_label        = $post['mc_details_label'];
-	$mc_link_label           = $post['mc_link_label'];
-	$mc_event_title_template = $post['mc_event_title_template'];
-	$mc_heading_text         = $post['mc_heading_text'];
-	$mc_notime_text          = $post['mc_notime_text'];
-	$mc_hosted_by            = $post['mc_hosted_by'];
-	$mc_posted_by            = $post['mc_posted_by'];
-	$mc_buy_tickets          = $post['mc_buy_tickets'];
-	$mc_event_accessibility  = $post['mc_event_accessibility'];
-	$mc_view_full            = $post['mc_view_full'];
-	$mc_previous_events      = $post['mc_previous_events'];
-	$mc_next_events          = $post['mc_next_events'];
-	$mc_week_caption         = $post['mc_week_caption'];
-	$mc_caption              = $post['mc_caption'];
-	$templates               = mc_get_option( 'templates' );
-	$templates['title']      = $mc_title_template;
-	$templates['title_solo'] = $mc_title_template_solo;
-	$templates['title_list'] = $mc_title_template_list;
-	$templates['label']      = $mc_details_label;
-	$templates['link']       = $mc_link_label;
-	mc_update_option( 'templates', $templates );
-	mc_update_option( 'event_title_template', $mc_event_title_template );
-	mc_update_option( 'heading_text', $mc_heading_text );
-	mc_update_option( 'notime_text', $mc_notime_text );
-	mc_update_option( 'hosted_by', $mc_hosted_by );
-	mc_update_option( 'posted_by', $mc_posted_by );
-	mc_update_option( 'buy_tickets', $mc_buy_tickets );
-	mc_update_option( 'event_accessibility', $mc_event_accessibility );
-	mc_update_option( 'view_full', $mc_view_full );
-	mc_update_option( 'week_caption', $mc_week_caption );
-	mc_update_option( 'next_events', $mc_next_events );
-	mc_update_option( 'previous_events', $mc_previous_events );
-	mc_update_option( 'caption', $mc_caption );
+	$options['event_title_template'] = $post['mc_event_title_template'];
+	$options['heading_text']         = $post['mc_heading_text'];
+	$options['notime_text']          = $post['mc_notime_text'];
+	$options['hosted_by']            = $post['mc_hosted_by'];
+	$options['posted_by']            = $post['mc_posted_by'];
+	$options['buy_tickets']          = $post['mc_buy_tickets'];
+	$options['event_accessibility']  = $post['mc_event_accessibility'];
+	$options['view_full']            = $post['mc_view_full'];
+	$options['previous_events']      = $post['mc_previous_events'];
+	$options['next_events']          = $post['mc_next_events'];
+	$options['week_caption']         = $post['mc_week_caption'];
+	$options['caption']              = $post['mc_caption'];
+	$templates               = array();
+	$templates['title']      = $post['mc_title_template'];
+	$templates['title_solo'] = $post['mc_title_template_solo'];
+	$templates['title_list'] = $post['mc_title_template_list'];
+	$templates['label']      = $post['mc_details_label'];
+	$templates['link']       = $post['mc_link_label'];
+	$options['templates']    = $templates;
 	// Date/time.
-	mc_update_option( 'date_format', stripslashes( $post['mc_date_format'] ) );
-	mc_update_option( 'week_format', stripslashes( $post['mc_week_format'] ) );
-	mc_update_option( 'time_format', stripslashes( $post['mc_time_format'] ) );
-	mc_update_option( 'month_format', stripslashes( $post['mc_month_format'] ) );
+	$options['date_format']  = stripslashes( $post['mc_date_format'] );
+	$options['week_format']  = stripslashes( $post['mc_week_format'] );
+	$options['time_format']  = stripslashes( $post['mc_time_format'] );
+	$options['month_format'] = stripslashes( $post['mc_month_format'] );
+
+	mc_update_options( $options );
+}
+
+/**
+ * Save email settings
+ *
+ * @param array $post POST array
+ */
+function mc_update_email_settings( $post ) {
+	$options                       = array();
+	$options['event_mail']         = ( ! empty( $post['mc_event_mail'] ) &amp;&amp; 'on' === $post['mc_event_mail'] ) ? 'true' : 'false';
+	$options['html_email']         = ( ! empty( $post['mc_html_email'] ) &amp;&amp; 'on' === $post['mc_html_email'] ) ? 'true' : 'false';
+	$options['event_mail_to']      = $post['mc_event_mail_to'];
+	$options['event_mail_from']    = $post['mc_event_mail_from'];
+	$options['event_mail_subject'] = $post['mc_event_mail_subject'];
+	$options['event_mail_message'] = $post['mc_event_mail_message'];
+	$options['event_mail_bcc']     = $post['mc_event_mail_bcc'];
+
+	mc_update_options( $options );
 }
 
 /**
@@ -487,55 +513,44 @@ function my_calendar_settings() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		if ( isset( $_POST['mc_manage'] ) ) {
+		// Generic sanitizing.
+		$post = map_deep( $_POST, 'sanitize_textarea_field' );
+		if ( isset( $post['mc_manage'] ) ) {
 			$before_permalinks = mc_get_option( 'use_permalinks' );
-			mc_update_management_settings( $_POST );
+			mc_update_management_settings( $post );
 			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ) );
 		}
-		if ( isset( $_POST['mc_permissions'] ) ) {
-			mc_update_permissions_settings( $_POST );
+		if ( isset( $post['mc_permissions'] ) ) {
+			mc_update_permissions_settings( $post );
 			mc_show_notice( __( 'My Calendar Permissions Updated', 'my-calendar' ) );
 		}
 		// Output.
-		if ( isset( $_POST['mc_show_months'] ) ) {
-			mc_update_output_settings( $_POST );
+		if ( isset( $post['mc_show_months'] ) ) {
+			mc_update_output_settings( $post );
 			mc_show_notice( __( 'Display Settings saved', 'my-calendar' ) );
 		}
 		// INPUT.
-		if ( isset( $_POST['mc_input'] ) ) {
-			mc_update_input_settings( $_POST );
+		if ( isset( $post['mc_input'] ) ) {
+			mc_update_input_settings( $post );
 			mc_show_notice( __( 'Input Settings saved', 'my-calendar' ) );
 		}
 		if ( current_user_can( 'manage_network' ) &amp;&amp; is_multisite() ) {
-			if ( isset( $_POST['mc_network'] ) ) {
-				$mc_multisite = (int) $_POST['mc_multisite'];
+			if ( isset( $post['mc_network'] ) ) {
+				$mc_multisite = (int) $post['mc_multisite'];
 				update_site_option( 'mc_multisite', $mc_multisite );
-				$mc_multisite_show = (int) $_POST['mc_multisite_show'];
+				$mc_multisite_show = (int) $post['mc_multisite_show'];
 				update_site_option( 'mc_multisite_show', $mc_multisite_show );
 				mc_show_notice( __( 'Multisite settings saved', 'my-calendar' ) );
 			}
 		}
 		// custom text.
-		if ( isset( $_POST['mc_previous_events'] ) ) {
-			mc_update_text_settings( $_POST );
+		if ( isset( $post['mc_previous_events'] ) ) {
+			mc_update_text_settings( $post );
 			mc_show_notice( __( 'Custom text settings saved', 'my-calendar' ) );
 		}
 		// Mail function by Roland.
-		if ( isset( $_POST['mc_email'] ) ) {
-			$mc_event_mail         = ( ! empty( $_POST['mc_event_mail'] ) &amp;&amp; 'on' === $_POST['mc_event_mail'] ) ? 'true' : 'false';
-			$mc_html_email         = ( ! empty( $_POST['mc_html_email'] ) &amp;&amp; 'on' === $_POST['mc_html_email'] ) ? 'true' : 'false';
-			$mc_event_mail_to      = $_POST['mc_event_mail_to'];
-			$mc_event_mail_from    = $_POST['mc_event_mail_from'];
-			$mc_event_mail_subject = $_POST['mc_event_mail_subject'];
-			$mc_event_mail_message = $_POST['mc_event_mail_message'];
-			$mc_event_mail_bcc     = $_POST['mc_event_mail_bcc'];
-			mc_update_option( 'event_mail_to', $mc_event_mail_to );
-			mc_update_option( 'event_mail_from', $mc_event_mail_from );
-			mc_update_option( 'event_mail_subject', $mc_event_mail_subject );
-			mc_update_option( 'event_mail_message', $mc_event_mail_message );
-			mc_update_option( 'event_mail_bcc', $mc_event_mail_bcc );
-			mc_update_option( 'event_mail', $mc_event_mail );
-			mc_update_option( 'html_email', $mc_html_email );
+		if ( isset( $post['mc_email'] ) ) {
+			mc_update_email_settings( $post );
 			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ) );
 		}
 
@@ -547,7 +562,7 @@ function my_calendar_settings() {
 		 * @param {string} Message after updating settings sent to `mc_show_notice()`.
 		 * @param {array}  $post POST global.
 		 */
-		$settings = do_action( 'mc_save_settings', '', $_POST );
+		$settings = do_action( 'mc_save_settings', '', $post );
 		if ( is_string( $settings ) &amp;&amp; '' !== $settings ) {
 			mc_show_notice( $settings );
 		}
