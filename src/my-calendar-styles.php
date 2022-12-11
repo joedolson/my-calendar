@@ -59,12 +59,12 @@ function my_calendar_style_edit() {
 			}
 
 			$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : stripcslashes( $_POST['mc_show_css'] );
-			update_option( 'mc_show_css', $mc_show_css );
+			mc_update_option( 'show_css', $mc_show_css );
 			$use_styles = ( empty( $_POST['use_styles'] ) ) ? '' : 'true';
-			update_option( 'mc_use_styles', $use_styles );
+			mc_update_option( 'use_styles', $use_styles );
 
 			if ( ! empty( $_POST['style_vars'] ) ) {
-				$styles = get_option( 'mc_style_vars' );
+				$styles = mc_get_option( 'style_vars' );
 				if ( isset( $_POST['new_style_var'] ) ) {
 					$key = $_POST['new_style_var']['key'];
 					$val = $_POST['new_style_var']['val'];
@@ -86,7 +86,7 @@ function my_calendar_style_edit() {
 						unset( $styles[ $del ] );
 					}
 				}
-				update_option( 'mc_style_vars', $styles );
+				mc_update_option( 'style_vars', $styles );
 			}
 
 			$message .= ' <strong>' . __( 'Style Settings Saved', 'my-calendar' ) . '.</strong>';
@@ -100,12 +100,12 @@ function my_calendar_style_edit() {
 		}
 		$mc_css_file = stripcslashes( $_POST['mc_css_file'] );
 
-		update_option( 'mc_css_file', $mc_css_file );
+		mc_update_option( 'css_file', $mc_css_file );
 		$message = '<p><strong>' . __( 'New theme selected.', 'my-calendar' ) . '</strong></p>';
 		echo wp_kses_post( "<div id='message' class='updated fade'>$message</div>" );
 	}
 
-	$mc_show_css = get_option( 'mc_show_css' );
+	$mc_show_css = mc_get_option( 'show_css' );
 	$stylefile   = mc_get_style_path();
 	if ( $stylefile ) {
 		$f                 = fopen( $stylefile, 'r' );
@@ -129,8 +129,8 @@ function my_calendar_style_edit() {
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>" class="inline-form">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 						<input type="hidden" value="true" name="mc_reset_style"/>
-						<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( get_option( 'mc_css_file' ) ); ?>"/>
-						<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php esc_html_e( 'Reset stylesheet to match core version', 'my-calendar' ); ?></label>
+						<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( mc_get_option( 'css_file' ) ); ?>"/>
+						<input type="checkbox" id="reset_styles" name="reset_styles" <?php echo esc_attr( ( mc_is_custom_style( mc_get_option( 'css_file' ) ) ) ? 'disabled' : '' ); ?> /> <label for="reset_styles"><?php esc_html_e( 'Reset stylesheet to match core version', 'my-calendar' ); ?></label>
 						<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Reset Styles', 'my-calendar' ); ?>" />
 					</form>
 					<a class="button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>"><?php esc_html_e( 'Return to editing', 'my-calendar' ); ?></a>
@@ -157,45 +157,25 @@ function my_calendar_style_edit() {
 	}
 	echo mc_stylesheet_selector();
 	if ( ! isset( $_GET['diff'] ) ) {
-		$file = get_option( 'mc_css_file' );
+		$file = mc_get_option( 'css_file' );
 		?>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
 		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 		<input type="hidden" value="true" name="mc_edit_style" />
 		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( $file ); ?>" />
-		<fieldset style="position:relative;">
-			<legend><?php esc_html_e( 'CSS Style Options', 'my-calendar' ); ?></legend>
-			<p>
-				<label for="mc_show_css"><?php esc_html_e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label>
-				<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" /> <span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
-			</p>
-			<p>
-				<input type="checkbox" id="use_styles" name="use_styles" <?php checked( mc_get_option( 'use_styles' ), 'true' ); ?> />
-				<label for="use_styles"><?php esc_html_e( 'Disable My Calendar CSS', 'my-calendar' ); ?></label>
-			</p>
-			<?php
-			if ( mc_is_custom_style( get_option( 'mc_css_file' ) ) ) {
-				echo wp_kses_post( '<div class="notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
-			} else {
-				$disabled = ( $edit_files || get_option( 'mc_use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
-				?>
-				<label for="style">
-				<?php
-				// Translators: file name being edited.
-				echo sprintf( esc_html__( 'Edit %s', 'my-calendar' ), '<code>' . $file . '</code>' );
-				?>
-				</label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
-				<?php
-			}
-			?>
-			<fieldset class="mc-css-variables">
+		<p>
+			<label for="mc_show_css"><?php esc_html_e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label><br />
+			<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" /> <span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
+		</p>
+		<p>
+			<input type="checkbox" id="use_styles" name="use_styles" <?php checked( mc_get_option( 'use_styles' ), 'true' ); ?> />
+			<label for="use_styles"><?php esc_html_e( 'Disable styles', 'my-calendar' ); ?></label>
+		</p>
+		<fieldset class="mc-css-variables">
 				<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
-				<p>
-			<?php esc_html_e( 'Change the primary, secondary, and highlight colors.', 'my-calendar' ); ?>
-				</p>
 			<?php
 			$output = '';
-			$styles = get_option( 'mc_style_vars' );
+			$styles = mc_get_option( 'style_vars' );
 			foreach ( $styles as $var => $style ) {
 				$var_id = 'mc' . sanitize_key( $var );
 				if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light' ), true ) ) {
@@ -212,10 +192,28 @@ function my_calendar_style_edit() {
 			?>
 				<p>
 					<label for='new_style_var_key'><?php esc_html_e( 'New variable:', 'my-calendar' ); ?></label>
-					<input type='text' name='new_style_var[key]' id='new_style_var_key' /> <label for='new_style_var_val'><?php esc_html_e( 'Value:', 'my-calendar' ); ?></label>
-					<input type='text' name='new_style_var[val]' id='new_style_var_val' />
+					<input type='text' name='new_style_var[key]' id='new_style_var_key' /> 
+					<label for='new_style_var_val'><?php esc_html_e( 'Color:', 'my-calendar' ); ?></label>
+					<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
 				</p>
 			</fieldset>
+		<fieldset style="position:relative;">
+			<legend><?php esc_html_e( 'CSS Style Editor', 'my-calendar' ); ?></legend>
+			<?php
+			if ( mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
+				echo wp_kses_post( '<div class="notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
+			} else {
+				$disabled = ( $edit_files || mc_get_option( 'use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
+				?>
+				<label for="style">
+				<?php
+				// Translators: file name being edited.
+				echo sprintf( esc_html__( 'Edit %s', 'my-calendar' ), '<code>' . $file . '</code>' );
+				?>
+				</label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
+				<?php
+			}
+			?>
 			<p>
 				<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
 			</p>
@@ -231,7 +229,7 @@ function my_calendar_style_edit() {
  * @return string
  */
 function mc_display_contrast_variables() {
-	$styles = get_option( 'mc_style_vars', array() );
+	$styles = mc_get_option( 'style_vars', array() );
 	$comp   = $styles;
 	$body   = '';
 	$head   = '<th>' . __( 'Variable', 'my-calendar' ) . '</th>';
@@ -299,7 +297,7 @@ function mc_stylesheet_selector() {
 			$filepath = mc_get_style_path( $test );
 			$path     = pathinfo( $filepath );
 			if ( 'css' === $path['extension'] ) {
-				$selected = ( get_option( 'mc_css_file' ) === $test ) ? ' selected="selected"' : '';
+				$selected = ( mc_get_option( 'css_file' ) === $test ) ? ' selected="selected"' : '';
 				$options .= "<option value='mc_custom_$value'$selected>$value</option>\n";
 			}
 		}
@@ -311,7 +309,7 @@ function mc_stylesheet_selector() {
 		$filepath = mc_get_style_path( $value );
 		$path     = pathinfo( $filepath );
 		if ( 'css' === $path['extension'] ) {
-			$selected = ( get_option( 'mc_css_file' ) === $value ) ? ' selected="selected"' : '';
+			$selected = ( mc_get_option( 'css_file' ) === $value ) ? ' selected="selected"' : '';
 			$options .= "<option value='$value'$selected>$value</option>\n";
 		}
 	}
@@ -327,8 +325,8 @@ function mc_stylesheet_selector() {
 			</p>
 		</fieldset>
 	</form>';
-	$link     = add_query_arg( 'mcpreview', get_option( 'mc_css_file' ), mc_get_uri() );
-	$return  .= '<a href="' . esc_url( $link ) . '" class="preview-link" data-css="' . esc_attr( get_option( 'mc_css_file' ) ) . '">' . __( 'Preview Stylesheet', 'my-calendar' ) . '</a></div>';
+	$link     = add_query_arg( 'mcpreview', mc_get_option( 'css_file' ), mc_get_uri() );
+	$return  .= '<a href="' . esc_url( $link ) . '" class="preview-link" data-css="' . esc_attr( mc_get_option( 'css_file' ) ) . '">' . __( 'Preview Stylesheet', 'my-calendar' ) . '</a></div>';
 
 	return $return;
 }
@@ -345,7 +343,7 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 	$url = plugin_dir_url( __FILE__ );
 	$dir = plugin_dir_path( __FILE__ );
 	if ( ! $filename ) {
-		$filename = get_option( 'mc_css_file' );
+		$filename = mc_get_option( 'css_file' );
 	}
 	if ( ! $filename ) {
 		// If no value is saved, return default.
@@ -378,7 +376,7 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
  */
 function mc_default_style( $filename = false, $return = 'content' ) {
 	if ( ! $filename ) {
-		$mc_css_file = get_option( 'mc_css_file', '' );
+		$mc_css_file = mc_get_option( 'css_file', '' );
 	} else {
 		$mc_css_file = trim( $filename );
 	}
