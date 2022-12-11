@@ -67,7 +67,7 @@ function mc_settings_field( $name, $label, $default = '', $note = '', $atts = ar
 	} else {
 		$base_atts = $atts;
 	}
-	$value = mc_get_option( $name, '' );
+	$value = mc_get_option( $name );
 	$atts  = array_merge( $base_atts, $atts );
 	if ( is_array( $atts ) && ! empty( $atts ) ) {
 		foreach ( $atts as $key => $val ) {
@@ -425,7 +425,7 @@ function mc_update_text_settings( $post ) {
 	$mc_next_events          = $post['mc_next_events'];
 	$mc_week_caption         = $post['mc_week_caption'];
 	$mc_caption              = $post['mc_caption'];
-	$templates               = mc_get_option( 'templates', array() );
+	$templates               = mc_get_option( 'templates' );
 	$templates['title']      = $mc_title_template;
 	$templates['title_solo'] = $mc_title_template_solo;
 	$templates['title_list'] = $mc_title_template_list;
@@ -528,7 +528,7 @@ function my_calendar_settings() {
 	}
 
 	// Pull templates for passing into functions.
-	$templates              = mc_get_option( 'templates', array() );
+	$templates              = mc_get_option( 'templates' );
 	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
 	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( stripslashes( $templates['title_solo'] ) ) : '';
 	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( stripslashes( $templates['title_list'] ) ) : '';
@@ -754,8 +754,8 @@ function mc_remote_db() {
 					</form>
 					<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
 					<?php
-						$current_location_slug = ( '' === mc_get_option( 'location_cpt_base', '' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
-						$current_event_slug    = ( '' === mc_get_option( 'cpt_base', '' ) ) ? __( 'mc-events', 'my-calendar' ) : mc_get_option( 'cpt_base' );
+						$current_location_slug = ( '' === mc_get_option( 'location_cpt_base' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
+						$current_event_slug    = ( '' === mc_get_option( 'cpt_base' ) ) ? __( 'mc-events', 'my-calendar' ) : mc_get_option( 'cpt_base' );
 					?>
 					<ul>
 						<li><?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>"><?php esc_html_e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
@@ -843,10 +843,10 @@ function mc_remote_db() {
 						<div><input type='hidden' name='mc_dates' value='true'/></div>
 						<ul>
 							<?php
-							$month_format = ( '' === mc_get_option( 'month_format', '' ) ) ? date_i18n( 'F Y' ) : date_i18n( mc_get_option( 'month_format' ) );
+							$month_format = ( '' === mc_get_option( 'month_format' ) ) ? date_i18n( 'F Y' ) : date_i18n( mc_get_option( 'month_format' ) );
 							$time_format  = date_i18n( mc_time_format() );
-							$week_format  = ( '' === mc_get_option( 'week_format', '' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( mc_get_option( 'week_format' ) );
-							$date_format  = ( '' === mc_get_option( 'date_format', '' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( mc_get_option( 'date_format' ) );
+							$week_format  = ( '' === mc_get_option( 'week_format' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( mc_get_option( 'week_format' ) );
+							$date_format  = ( '' === mc_get_option( 'date_format' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( mc_get_option( 'date_format' ) );
 							$tomorrow     = date( 'j' ) + 1; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 							?>
 							<li><?php mc_settings_field( 'mc_date_format', __( 'Primary Date Format', 'my-calendar' ), '', $date_format ); ?></li>
@@ -877,7 +877,7 @@ function mc_remote_db() {
 							<?php
 							$atts = array();
 							$note = '';
-							if ( '' === mc_get_option( 'uri_id', '' ) || '0' === mc_get_option( 'uri_id' ) ) {
+							if ( '' === mc_get_option( 'uri_id' ) || '0' === mc_get_option( 'uri_id' ) ) {
 								$atts = array( 'disabled' => 'disabled' );
 								$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
 							}
@@ -897,73 +897,6 @@ function mc_remote_db() {
 							</li>
 						</ul>
 
-					<fieldset>
-						<legend><?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?></legend>
-						<?php
-						$topnav       = explode( ',', mc_get_option( 'topnav' ) );
-						$calendar     = array( 'calendar' );
-						$botnav       = explode( ',', mc_get_option( 'bottomnav' ) );
-						$order        = array_merge( $topnav, $calendar, $botnav );
-						$nav_elements = array(
-							'nav'        => '<div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></div> <div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></div> <span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '</span>',
-							'toggle'     => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <div class="dashicons dashicons-calendar"></div> <span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '</span>',
-							'jump'       => '<div class="dashicons dashicons-redo" aria-hidden="true"></div> <span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '</span>',
-							'print'      => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <span>' . __( 'Link to printable view', 'my-calendar' ) . '</span>',
-							'timeframe'  => '<div class="dashicons dashicons-clock" aria-hidden="true"></div> <span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '</span>',
-							'calendar'   => '<div class="dashicons dashicons-calendar" aria-hidden="true"></div> <span>' . __( 'My Calendar', 'my-calendar' ) . '</span>',
-							'key'        => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories', 'my-calendar' ) . '</span>',
-							'feeds'      => '<div class="dashicons dashicons-rss" aria-hidden="true"></div> <span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '</span>',
-							'exports'    => '<div class="dashicons dashicons-calendar-alt" aria-hidden="true"></div> <span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '</span>',
-							'locations'  => '<div class="dashicons dashicons-location" aria-hidden="true"></div> <span>' . __( 'Location (dropdown)', 'my-calendar' ) . '</span>',
-							'categories' => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '</span>',
-							'access'     => '<div class="dashicons dashicons-universal-access" aria-hidden="true"></div> <span>' . __( 'Access (dropdown)', 'my-calendar' ) . '</span>',
-							'search'     => '<div class="dashicons dashicons-search" aria-hidden="true"></div> <span>' . __( 'Search', 'my-calendar' ) . '</span>',
-						);
-						?>
-						<div id='mc-sortable-update' aria-live='assertive'></div>
-						<ul id='mc-sortable'>
-						<?php
-						$inserted = array();
-						$class    = 'visible';
-						$count    = count( $nav_elements );
-						$i        = 1;
-						foreach ( $order as $k ) {
-							$k = trim( $k );
-							$v = ( isset( $nav_elements[ $k ] ) ) ? $nav_elements[ $k ] : false;
-							if ( false !== $v ) {
-								$inserted[ $k ] = $v;
-								$label          = $k;
-								// Translators: control to move down.
-								$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $label );
-								// Translators: control to move up.
-								$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $label );
-								// Translators: control to hide.
-								$hide_label = sprintf( __( 'Hide %s', 'my-calendar' ), $label );
-								$hide       = ( 'calendar' === $k ) ? '' : "<button class='hide' type='button'><span class='screen-reader-text'>" . $hide_label . "</span><i class='dashicons dashicons-visibility' aria-hidden='true'></i></button>";
-								$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . '</span></button> ' . $hide;
-								$buttons    = "<div class='mc-buttons'>$buttons</div>";
-								echo wp_kses( "<li class='ui-state-default mc-$k mc-$class'>$buttons <code>$label</code> $v <input type='hidden' name='mc_nav[]' value='$k' /></li>", mc_kses_elements() );
-								$i ++;
-							}
-						}
-						$missed = array_diff( $nav_elements, $inserted );
-						$i      = 1;
-						$count  = count( $missed );
-						foreach ( $missed as $k => $v ) {
-							// Translators: control to move down.
-							$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $k );
-							// Translators: control to move up.
-							$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $k );
-							// Translators: control to hide.
-							$hide_label = sprintf( __( 'Show %s', 'my-calendar' ), $k );
-							$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . "</span></button> <button class='hide' type='button'><i class='dashicons dashicons-hidden' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
-							$buttons    = "<div class='mc-buttons'>$buttons</div>";
-							echo wp_kses( "<li class='ui-state-default mc-$k mc-hidden'>$buttons <code>$k</code> $v <input type='hidden' name='mc_nav[]' value='$k' disabled /></li>", mc_kses_elements() );
-							$i ++;
-						}
-						?>
-						</ul>
-					</fieldset>
 					<fieldset id='calendar-output' class='mc-output-tabs'>
 						<legend><?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?></legend>
 						<div class="mc-tabs">
@@ -1082,6 +1015,73 @@ function mc_remote_db() {
 								</ul>
 							</div>
 						</div>
+					</fieldset>
+					<fieldset>
+						<legend><?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?></legend>
+						<?php
+						$topnav       = explode( ',', mc_get_option( 'topnav' ) );
+						$calendar     = array( 'calendar' );
+						$botnav       = explode( ',', mc_get_option( 'bottomnav' ) );
+						$order        = array_merge( $topnav, $calendar, $botnav );
+						$nav_elements = array(
+							'nav'        => '<div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></div> <div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></div> <span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '</span>',
+							'toggle'     => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <div class="dashicons dashicons-calendar"></div> <span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '</span>',
+							'jump'       => '<div class="dashicons dashicons-redo" aria-hidden="true"></div> <span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '</span>',
+							'print'      => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <span>' . __( 'Link to printable view', 'my-calendar' ) . '</span>',
+							'timeframe'  => '<div class="dashicons dashicons-clock" aria-hidden="true"></div> <span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '</span>',
+							'calendar'   => '<div class="dashicons dashicons-calendar" aria-hidden="true"></div> <span>' . __( 'My Calendar', 'my-calendar' ) . '</span>',
+							'key'        => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories', 'my-calendar' ) . '</span>',
+							'feeds'      => '<div class="dashicons dashicons-rss" aria-hidden="true"></div> <span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '</span>',
+							'exports'    => '<div class="dashicons dashicons-calendar-alt" aria-hidden="true"></div> <span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '</span>',
+							'locations'  => '<div class="dashicons dashicons-location" aria-hidden="true"></div> <span>' . __( 'Location (dropdown)', 'my-calendar' ) . '</span>',
+							'categories' => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '</span>',
+							'access'     => '<div class="dashicons dashicons-universal-access" aria-hidden="true"></div> <span>' . __( 'Access (dropdown)', 'my-calendar' ) . '</span>',
+							'search'     => '<div class="dashicons dashicons-search" aria-hidden="true"></div> <span>' . __( 'Search', 'my-calendar' ) . '</span>',
+						);
+						?>
+						<div id='mc-sortable-update' aria-live='assertive'></div>
+						<ul id='mc-sortable'>
+						<?php
+						$inserted = array();
+						$class    = 'visible';
+						$count    = count( $nav_elements );
+						$i        = 1;
+						foreach ( $order as $k ) {
+							$k = trim( $k );
+							$v = ( isset( $nav_elements[ $k ] ) ) ? $nav_elements[ $k ] : false;
+							if ( false !== $v ) {
+								$inserted[ $k ] = $v;
+								$label          = $k;
+								// Translators: control to move down.
+								$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $label );
+								// Translators: control to move up.
+								$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $label );
+								// Translators: control to hide.
+								$hide_label = sprintf( __( 'Hide %s', 'my-calendar' ), $label );
+								$hide       = ( 'calendar' === $k ) ? '' : "<button class='hide' type='button'><span class='screen-reader-text'>" . $hide_label . "</span><i class='dashicons dashicons-visibility' aria-hidden='true'></i></button>";
+								$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . '</span></button> ' . $hide;
+								$buttons    = "<div class='mc-buttons'>$buttons</div>";
+								echo wp_kses( "<li class='ui-state-default mc-$k mc-$class'>$buttons <code>$label</code> $v <input type='hidden' name='mc_nav[]' value='$k' /></li>", mc_kses_elements() );
+								$i ++;
+							}
+						}
+						$missed = array_diff( $nav_elements, $inserted );
+						$i      = 1;
+						$count  = count( $missed );
+						foreach ( $missed as $k => $v ) {
+							// Translators: control to move down.
+							$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $k );
+							// Translators: control to move up.
+							$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $k );
+							// Translators: control to hide.
+							$hide_label = sprintf( __( 'Show %s', 'my-calendar' ), $k );
+							$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . "</span></button> <button class='hide' type='button'><i class='dashicons dashicons-hidden' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
+							$buttons    = "<div class='mc-buttons'>$buttons</div>";
+							echo wp_kses( "<li class='ui-state-default mc-$k mc-hidden'>$buttons <code>$k</code> $v <input type='hidden' name='mc_nav[]' value='$k' disabled /></li>", mc_kses_elements() );
+							$i ++;
+						}
+						?>
+						</ul>
 					</fieldset>
 					<fieldset>
 						<legend><?php esc_html_e( 'Grid Options', 'my-calendar' ); ?></legend>

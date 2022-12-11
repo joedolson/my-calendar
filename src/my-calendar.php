@@ -49,7 +49,7 @@ global $wpdb;
  * @return string
  */
 function mc_get_version() {
-	return '3.3.24.1';
+	return '3.4.0';
 }
 
 define( 'MC_DEBUG', false );

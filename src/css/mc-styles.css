@@ -939,12 +939,8 @@ input[name="mc_uri"] {
 
 #mc-sortable .mc-calendar {
 	background-color: #fff !important;
-	border: 1px solid #787c82 !important;
-	padding: 3em 1em;
-}
-
-#mc-sortable .mc-calendar .mc-buttons {
-	margin-right: 2.7em;
+	border: 2px solid #787c82 !important;
+	border-left-width: 4px !important;
 }
 
 #mc-sortable li.mc-stop {
