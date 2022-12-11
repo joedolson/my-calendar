@@ -629,7 +629,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		/**
 		 * Filter the date format used for previous link if the prev link is in a different year.
 		 *
-		 * @hook mc_month_format
+		 * @hook mc_month_year_format
 		 *
 		 * @param {string} $format PHP Date format string.
 		 * @param {array} $date Current date array.
