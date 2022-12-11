@@ -90,6 +90,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.4 =
 
+* Feature: import and export calendar settings.
 * Bug fix: User category limits need to be configurable for all users who can add events.
 * Bug fix: User category limits should limit the categories selectable by users, not just those editable.
 * Bug fix: Default events screen says 'All' but only showed 'Published'
@@ -101,6 +102,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix PHP notice if $templates not an array.
 * Bug fix: Fix JS for list view to handle if an event has a language change.
 * Bug fix: Mini URL used incorrectly.
+* Change: Manage settings in a single database option rather than individual options.
 * Change: Improved design on print view.
 * Change: Support 'current' as an argument in a comma-separated list of users.
 * Change: Updates to support future changes in My Calendar Pro.

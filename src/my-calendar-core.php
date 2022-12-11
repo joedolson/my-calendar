@@ -1218,7 +1218,7 @@ function my_calendar_send_email( $event ) {
 		 * @return {string}
 		 */
 		$to   = apply_filters( 'mc_event_mail_to', mc_get_option( 'event_mail_to' ), $details );
-		$from = ( '' === mc_get_option( 'event_mail_from', '' ) ) ? get_bloginfo( 'admin_email' ) : mc_get_option( 'event_mail_from' );
+		$from = ( '' === mc_get_option( 'event_mail_from' ) ) ? get_bloginfo( 'admin_email' ) : mc_get_option( 'event_mail_from' );
 		/**
 		 * Filter event notification email from header.
 		 *
@@ -1570,6 +1570,7 @@ function mc_scripts() {
 	}
 
 	if ( 'toplevel_page_my-calendar' === $id && function_exists( 'wpt_post_to_twitter' ) ) {
+		// When running locally, this is wrong. May change in the future.
 		wp_enqueue_script( 'charCount', plugins_url( 'wp-to-twitter/js/jquery.charcount.js' ), array( 'jquery' ), $version );
 	}
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {
@@ -1664,7 +1665,7 @@ function mc_scripts() {
  * @return string format.
  */
 function mc_time_format() {
-	$mc_time_format = mc_get_option( 'time_format', '' );
+	$mc_time_format = mc_get_option( 'time_format' );
 	$time_format    = get_option( 'time_format', '' );
 	if ( '' === $mc_time_format ) {
 		$mc_time_format = $time_format;
@@ -2066,7 +2067,7 @@ function mc_the_title( $title, $post_id = null ) {
  * Custom field callback for permalinks settings
  */
 function mc_field_callback() {
-	$value = ( '' !== mc_get_option( 'cpt_base', '' ) ) ? mc_get_option( 'cpt_base' ) : 'mc-events';
+	$value = ( '' !== mc_get_option( 'cpt_base' ) ) ? mc_get_option( 'cpt_base' ) : 'mc-events';
 	echo '<input type="text" value="' . esc_attr( $value ) . '" name="mc_cpt_base" id="mc_cpt_base" class="regular-text" placeholder="mc-events" />';
 }
 
@@ -2074,7 +2075,7 @@ function mc_field_callback() {
  * Custom field callback for permalinks settings
  */
 function mc_location_field_callback() {
-	$value = ( '' !== mc_get_option( 'location_cpt_base', '' ) ) ? mc_get_option( 'location_cpt_base' ) : 'mc-locations';
+	$value = ( '' !== mc_get_option( 'location_cpt_base' ) ) ? mc_get_option( 'location_cpt_base' ) : 'mc-locations';
 	echo '<input type="text" value="' . esc_attr( $value ) . '" name="mc_location_cpt_base" id="mc_location_cpt_base" class="regular-text" placeholder="mc-locations" />';
 }
 
@@ -2207,10 +2208,10 @@ function mc_posttypes() {
  */
 function mc_filter_posttype_slug( $slug ) {
 	if ( 'mc-events' === $slug ) {
-		$slug = ( '' !== mc_get_option( 'cpt_base', '' ) ) ? mc_get_option( 'cpt_base' ) : $slug;
+		$slug = ( '' !== mc_get_option( 'cpt_base' ) ) ? mc_get_option( 'cpt_base' ) : $slug;
 	}
 	if ( 'mc-locations' === $slug ) {
-		$slug = ( '' !== mc_get_option( 'location_cpt_base', '' ) ) ? mc_get_option( 'location_cpt_base' ) : $slug;
+		$slug = ( '' !== mc_get_option( 'location_cpt_base' ) ) ? mc_get_option( 'location_cpt_base' ) : $slug;
 	}
 
 	return $slug;
