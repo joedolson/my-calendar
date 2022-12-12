@@ -140,6 +140,13 @@ function mc_migrate_settings() {
 		'location_controls'            => get_option( 'mc_location_controls' ),
 		'cpt_base'                     => get_option( 'mc_cpt_base', 'mc-events' ),
 		'location_cpt_base'            => get_option( 'mc_location_cpt_base', 'mc-locations' ),
+		'default_category'             => get_option( 'mc_default_category' ),
+		'skip_holidays_category'       => get_option( 'mc_skip_holidays_category' ),
+		'hide_icons'                   => get_option( 'mc_hide_icons' ),
+		'use_list_template'            => get_option( 'mc_use_list_template' ),
+		'use_mini_template'            => get_option( 'mc_use_mini_template' ),
+		'use_details_template'         => get_option( 'mc_use_details_template' ),
+		'use_grid_template'            => get_option( 'mc_use_grid_template' ),
 	);
 	add_option( 'my_calendar_options', $options );
 	// Remove old options.
