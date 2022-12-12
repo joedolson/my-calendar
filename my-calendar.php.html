@@ -139,7 +139,8 @@ function mc_delete_posts( $type ) {
  * Uninstall function for removing terms and posts.
  */
 function mc_uninstall() {
-	if ( get_option( 'mc_drop_tables' ) === 'true' ) {
+	$options = get_option( 'my_calendar_options' );
+	if ( $options['drop_tables'] === 'true' ) {
 		mc_delete_posts( 'mc-events' );
 		mc_delete_posts( 'mc-locations' );
 		$terms = get_terms(

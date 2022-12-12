@@ -209,7 +209,7 @@ add_filter( 'the_content', 'mc_show_search_results' );
  */
 function mc_show_search_results( $content ) {
 	global $post;
-	if ( is_object( $post ) &amp;&amp; in_the_loop() &amp;&amp; ! is_page( get_option( 'mc_uri_id' ) ) ) {
+	if ( is_object( $post ) &amp;&amp; in_the_loop() &amp;&amp; ! is_page( mc_get_option( 'uri_id' ) ) ) {
 		// if this is the result of a search, show search output.
 		$ret   = false;
 		$query = false;
@@ -254,12 +254,12 @@ function mc_search_exportlinks() {
 	$below = array();
 
 	// Set up exports.
-	if ( '' !== get_option( 'mc_topnav', '' ) ) {
-		$above = array_map( 'trim', explode( ',', get_option( 'mc_topnav' ) ) );
+	if ( '' !== mc_get_option( 'topnav', '' ) ) {
+		$above = array_map( 'trim', explode( ',', mc_get_option( 'topnav' ) ) );
 	}
 
-	if ( '' !== get_option( 'mc_bottomnav', '' ) ) {
-		$below = array_map( 'trim', explode( ',', get_option( 'mc_bottomnav' ) ) );
+	if ( '' !== mc_get_option( 'bottomnav', '' ) ) {
+		$below = array_map( 'trim', explode( ',', mc_get_option( 'bottomnav' ) ) );
 	}
 	$used = array_merge( $above, $below );
 
