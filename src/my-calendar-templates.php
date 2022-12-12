@@ -798,7 +798,7 @@ function mc_get_details_link( $event ) {
 	 *
 	 * @return {bool} True value if permalinks are enabled.
 	 */
-	$permalinks   = apply_filters( 'mc_use_permalinks', get_option( 'mc_use_permalinks' ) );
+	$permalinks   = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
 	$permalinks   = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
 	$details_link = mc_event_link( $event );
 	if ( 0 !== (int) $event->event_post && 'true' !== mc_get_option( 'remote' ) && $permalinks ) {
