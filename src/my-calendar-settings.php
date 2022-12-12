@@ -1001,28 +1001,28 @@ function mc_remote_db() {
 									</p>
 									<ul class="checkboxes">
 									<?php
-										mc_settings_field(
-											'mc_display_single',
-											array(
-												'author'      => __( 'Author', 'my-calendar' ),
-												'host'        => __( 'Host', 'my-calendar' ),
-												'ical'        => __( 'iCal Download', 'my-calendar' ),
-												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-												'gmap'        => __( 'Google Map', 'my-calendar' ),
-												'address'     => __( 'Location Address', 'my-calendar' ),
-												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-												'description' => __( 'Description', 'my-calendar' ),
-												'image'       => __( 'Featured Image', 'my-calendar' ),
-												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-												'link'        => __( 'More Information', 'my-calendar' ),
-												'access'      => __( 'Accessibility', 'my-calendar' ),
-											),
-											array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
-											'',
-											array(),
-											'checkbox'
-										);
+									mc_settings_field(
+										'mc_display_single',
+										array(
+											'author'      => __( 'Author', 'my-calendar' ),
+											'host'        => __( 'Host', 'my-calendar' ),
+											'ical'        => __( 'iCal Download', 'my-calendar' ),
+											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+											'gmap'        => __( 'Google Map', 'my-calendar' ),
+											'address'     => __( 'Location Address', 'my-calendar' ),
+											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
+											'description' => __( 'Description', 'my-calendar' ),
+											'image'       => __( 'Featured Image', 'my-calendar' ),
+											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
+											'link'        => __( 'More Information', 'my-calendar' ),
+											'access'      => __( 'Accessibility', 'my-calendar' ),
+										),
+										array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
+										'',
+										array(),
+										'checkbox'
+									);
 									?>
 									</ul>
 									<p class="mc_gmap_api_key"><?php mc_settings_field( 'mc_gmap_api_key', __( 'Google Maps API Key', 'my-calendar' ), '', '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '</a>', array( 'id' => 'mc_gmap_id' ) ); ?></p>
@@ -1038,28 +1038,28 @@ function mc_remote_db() {
 									</p>
 									<ul class="checkboxes">
 									<?php
-										mc_settings_field(
-											'mc_display_main',
-											array(
-												'author'      => __( 'Author', 'my-calendar' ),
-												'host'        => __( 'Host', 'my-calendar' ),
-												'ical'        => __( 'iCal Download', 'my-calendar' ),
-												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-												'address'     => __( 'Location Address', 'my-calendar' ),
-												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-												'description' => __( 'Description', 'my-calendar' ),
-												'image'       => __( 'Featured Image', 'my-calendar' ),
-												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-												'link'        => __( 'More Information', 'my-calendar' ),
-												'more'        => __( 'Read More Link', 'my-calendar' ),
-												'access'      => __( 'Accessibility', 'my-calendar' ),
-											),
-											array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
-											'',
-											array(),
-											'checkbox'
-										);
+									mc_settings_field(
+										'mc_display_main',
+										array(
+											'author'      => __( 'Author', 'my-calendar' ),
+											'host'        => __( 'Host', 'my-calendar' ),
+											'ical'        => __( 'iCal Download', 'my-calendar' ),
+											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+											'address'     => __( 'Location Address', 'my-calendar' ),
+											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
+											'description' => __( 'Description', 'my-calendar' ),
+											'image'       => __( 'Featured Image', 'my-calendar' ),
+											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
+											'link'        => __( 'More Information', 'my-calendar' ),
+											'more'        => __( 'Read More Link', 'my-calendar' ),
+											'access'      => __( 'Accessibility', 'my-calendar' ),
+										),
+										array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
+										'',
+										array(),
+										'checkbox'
+									);
 									?>
 									</ul>
 								</div>
@@ -1074,28 +1074,28 @@ function mc_remote_db() {
 									</p>
 									<ul class="checkboxes">
 									<?php
-										mc_settings_field(
-											'mc_display_mini',
-											array(
-												'author'      => __( 'Author', 'my-calendar' ),
-												'host'        => __( 'Host', 'my-calendar' ),
-												'ical'        => __( 'iCal Download', 'my-calendar' ),
-												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-												'address'     => __( 'Location Address', 'my-calendar' ),
-												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-												'description' => __( 'Description', 'my-calendar' ),
-												'image'       => __( 'Featured Image', 'my-calendar' ),
-												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-												'link'        => __( 'More Information', 'my-calendar' ),
-												'more'        => __( 'Read More Link', 'my-calendar' ),
-												'access'      => __( 'Accessibility', 'my-calendar' ),
-											),
-											array( 'excerpt', 'image', 'more' ),
-											'',
-											array(),
-											'checkbox'
-										);
+									mc_settings_field(
+										'mc_display_mini',
+										array(
+											'author'      => __( 'Author', 'my-calendar' ),
+											'host'        => __( 'Host', 'my-calendar' ),
+											'ical'        => __( 'iCal Download', 'my-calendar' ),
+											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+											'address'     => __( 'Location Address', 'my-calendar' ),
+											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
+											'description' => __( 'Description', 'my-calendar' ),
+											'image'       => __( 'Featured Image', 'my-calendar' ),
+											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
+											'link'        => __( 'More Information', 'my-calendar' ),
+											'more'        => __( 'Read More Link', 'my-calendar' ),
+											'access'      => __( 'Accessibility', 'my-calendar' ),
+										),
+										array( 'excerpt', 'image', 'more' ),
+										'',
+										array(),
+										'checkbox'
+									);
 									?>
 									</ul>
 								</div>
