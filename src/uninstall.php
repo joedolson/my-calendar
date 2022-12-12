@@ -30,14 +30,14 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		}
 	}
 	$options = get_option( 'my_calendar_options' );
-	if ( $options['drop_settings'] === 'true' ) {
+	if ( 'true' === $options['drop_settings'] ) {
 		delete_option( 'my_calendar_options' );
 		delete_option( 'ko_calendar_imported' );
 		delete_option( 'mc_count_cache' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
-	if ( $options['drop_tables'] === 'true' ) {
+	if ( 'true' === $options['drop_tables'] ) {
 		global $wpdb;
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-events' ) );
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-locations' ) );

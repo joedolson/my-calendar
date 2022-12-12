@@ -114,7 +114,7 @@ function mc_delete_posts( $type ) {
  */
 function mc_uninstall() {
 	$options = get_option( 'my_calendar_options' );
-	if ( $options['drop_tables'] === 'true' ) {
+	if ( 'true' === $options['drop_tables'] ) {
 		mc_delete_posts( 'mc-events' );
 		mc_delete_posts( 'mc-locations' );
 		$terms = get_terms(

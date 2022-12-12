@@ -1759,10 +1759,10 @@ function mc_location_schema( $location ) {
 
 /**
  * Templating getter for new templating system.
- * 
+ *
  * @param object $event Object containing event and view data.
  * @param string $key Array key for data to fetch.
- * 
+ *
  * @return string
  */
 function mc_get_template_tag( $event, $key ) {
@@ -1778,7 +1778,7 @@ function mc_get_template_tag( $event, $key ) {
 
 /**
  * Print template values for new templating system.
- * 
+ *
  * @param object $event Event.
  * @param string $key Array key for data to fetch.
  */
