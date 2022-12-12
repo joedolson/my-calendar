@@ -1781,7 +1781,7 @@ function my_calendar( $args ) {
 	 */
 	$show_months  = absint( apply_filters( 'mc_show_months', mc_get_option( 'show_months' ), $args ) );
 	$show_months  = ( 0 === $show_months ) ? 1 : $show_months;
-	$caption_text = ' ' . stripslashes( trim( mc_get_option( 'caption' ) ) );
+	$caption_text = ( '' !== mc_get_option( 'caption' ) ) ? '<span class="mc-extended-caption">' . stripslashes( trim( mc_get_option( 'caption' ) ) ) . '</span>': '';
 	$week_format  = ( ! mc_get_option( 'week_format' ) ) ? 'M j, \'y' : mc_get_option( 'week_format' );
 	// Translators: Template tag with date format.
 	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
@@ -1969,10 +1969,10 @@ function my_calendar( $args ) {
 
 			// Determine which header text to show depending on format & time period displayed.
 			if ( 'week' !== $params['time'] && 'day' !== $params['time'] ) {
-				$heading = ( $months <= 1 ) ? $current_header . $caption_text . "\n" : $current_month_header . '&ndash;' . $through_month_header . $caption_text;
+				$heading = ( $months <= 1 ) ? $current_header . "\n" : $current_month_header . '&ndash;' . $through_month_header;
 				// Translators: time period displayed.
 				$header  = ( '' === mc_get_option( 'heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : str_replace( '{date}', '%s', mc_get_option( 'heading_text' ) );
-				$heading = sprintf( $header, $heading );
+				$heading = sprintf( $header, $heading ) . $caption_text;
 				if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
 					$heading = __( 'Search Results', 'my-calendar' );
 				}
