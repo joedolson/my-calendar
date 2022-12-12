@@ -33,6 +33,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	if ( $options['drop_settings'] === 'true' ) {
 		delete_option( 'my_calendar_options' );
 		delete_option( 'ko_calendar_imported' );
+		delete_option( 'mc_count_cache' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
