@@ -86,7 +86,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 	$type = $params['format'];
 	$time = $params['time'];
 
-	$open_option = get_option( 'mc_open_day_uri' );
+	$open_option = mc_get_option( 'open_day_uri' );
 	if ( 'mini' === $type && ( 'true' === $open_option || 'listanchor' === $open_option || 'calendaranchor' === $open_option ) ) {
 		return true;
 	}
@@ -446,7 +446,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 						$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
 						$a      = get_userdata( $event->event_author );
 						if ( $a ) {
-							$text   = ( '' !== get_option( 'mc_posted_by', '' ) ) ? get_option( 'mc_posted_by' ) : __( 'Posted by', 'my-calendar' );
+							$text   = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
 							$author = $avatar . '<p class="event-author"><span class="posted">' . $text . '</span> <span class="author-name">' . $a->display_name . "</span></p>\n";
 							if ( $avatars ) {
 								$author = '	<div class="mc-author-card">' . $author . '</div>';
@@ -459,7 +459,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 						$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
 						$h       = get_userdata( $event->event_host );
 						if ( $h ) {
-							$text = ( '' !== get_option( 'mc_hosted_by', '' ) ) ? get_option( 'mc_hosted_by' ) : __( 'Hosted by', 'my-calendar' );
+							$text = ( '' !== mc_get_option( 'hosted_by' ) ) ? mc_get_option( 'hosted_by' ) : __( 'Hosted by', 'my-calendar' );
 							$host = $havatar . '<p class="event-host"><span class="hosted">' . $text . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
 							if ( $avatars ) {
 								$host = '	<div class="mc-host-card">' . $host . '</div>';
@@ -494,7 +494,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
 				if ( mc_output_is_visible( 'access', $type, $event ) ) {
-					$access_heading = ( '' !== get_option( 'mc_event_accessibility', '' ) ) ? get_option( 'mc_event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
+					$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
 					$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
 					/**
 					 * Filter subheading levels inside event content.
@@ -543,7 +543,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					$info     = wpautop( stripcslashes( mc_kses_post( $event->event_registration ) ) );
 					$url      = esc_url( $event->event_tickets );
 					$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
-					$text     = ( '' !== get_option( 'mc_buy_tickets', '' ) ) ? get_option( 'mc_buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
+					$text     = ( '' !== mc_get_option( 'buy_tickets', '' ) ) ? mc_get_option( 'buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
 					$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'>" . $text . '</a>' : '';
 					if ( '' !== trim( $info . $tickets ) ) {
 						$tickets = '<div class="mc-registration">' . $info . $tickets . '</div>';
@@ -580,7 +580,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				 * @return {string}
 				 */
 				$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ) );
-				$text       = ( '' !== get_option( 'mc_view_full', '' ) ) ? get_option( 'mc_view_full' ) : __( 'View full calendar', 'my-calendar' );
+				$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : __( 'View full calendar', 'my-calendar' );
 				$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
 
 				if ( ! mc_show_details( $time, $type ) ) {
@@ -807,26 +807,26 @@ function mc_get_details( $data, $template, $type ) {
 		switch ( $type ) {
 			case 'mini':
 				$template = mc_get_template( 'mini' );
-				if ( '1' === get_option( 'mc_use_mini_template' ) && '' !== $template ) {
+				if ( '1' === mc_get_option( 'use_mini_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'list':
 				$template = mc_get_template( 'list' );
-				if ( '1' === get_option( 'mc_use_list_template' ) && '' !== $template ) {
+				if ( '1' === mc_get_option( 'use_list_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'single':
 				$template = mc_get_template( 'details' );
-				if ( '1' === get_option( 'mc_use_details_template' ) && '' !== $template ) {
+				if ( '1' === mc_get_option( 'use_details_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
 			case 'calendar':
 			default:
 				$template = mc_get_template( 'grid' );
-				if ( '1' === get_option( 'mc_use_grid_template' ) && '' !== $template ) {
+				if ( '1' === mc_get_option( 'use_grid_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 		}
@@ -1032,7 +1032,7 @@ function mc_show_details( $time, $type ) {
 	 */
 	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
-	return ( ( 'calendar' === $type && 'true' === get_option( 'mc_open_uri' ) && 'day' !== $time ) || $no_link ) ? false : true;
+	return ( ( 'calendar' === $type && 'true' === mc_get_option( 'open_uri' ) && 'day' !== $time ) || $no_link ) ? false : true;
 }
 
 add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
@@ -1272,7 +1272,7 @@ function mc_hidden_event() {
 function mc_output_is_visible( $feature, $type, $event = false ) {
 	// Map either calendar popup or list to main settings.
 	$type   = ( 'calendar' === $type || 'list' === $type ) ? 'main' : $type;
-	$option = get_option( 'mc_display_' . $type, array() );
+	$option = mc_get_option( 'display_' . $type, array() );
 	$return = false;
 	if ( in_array( $feature, $option, true ) ) {
 		$return = true;
@@ -1308,7 +1308,7 @@ function mc_event_filter( $title ) {
 			return $title;
 		}
 		$array    = mc_create_tags( $event );
-		$template = get_option( 'mc_event_title_template', '' );
+		$template = mc_get_option( 'event_title_template', '' );
 		$template = ( '' !== $template ) ? stripslashes( $template ) : '{title} / {date}';
 
 		return esc_html( strip_tags( stripslashes( mc_draw_template( $array, $template ) ) ) );
@@ -1351,7 +1351,7 @@ function mc_show_event_template( $content ) {
 
 				return $content;
 			}
-			if ( '1' === get_option( 'mc_use_details_template' ) ) {
+			if ( '1' === mc_get_option( 'use_details_template' ) ) {
 				/**
 				 * Prepend content before single event. Default empty string.
 				 *
@@ -1764,11 +1764,11 @@ function my_calendar( $args ) {
 	$grid_js_class = ( '1' !== mc_get_option( 'calendar_javascript' ) ) ? 'gridjs' : '';
 	$mini_js_class = ( '1' !== mc_get_option( 'mini_javascript' ) ) ? 'minijs' : '';
 	$ajax_js_class = ( '1' !== mc_get_option( 'ajax_javascript' ) ) ? 'ajaxjs' : '';
-	$style_class   = sanitize_html_class( str_replace( '.css', '', get_option( 'mc_css_file' ) ) );
+	$style_class   = sanitize_html_class( str_replace( '.css', '', mc_get_option( 'css_file' ) ) );
 	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
 	$show_weekends = ( mc_get_option( 'show_weekends' ) === 'true' ) ? true : false;
-	$month_format  = ( get_option( 'mc_month_format', '' ) === '' ) ? 'F Y' : get_option( 'mc_month_format' );
+	$month_format  = ( mc_get_option( 'month_format', '' ) === '' ) ? 'F Y' : mc_get_option( 'month_format' );
 	/**
 	 * Filter how many months to show in list views.
 	 *
@@ -1781,13 +1781,13 @@ function my_calendar( $args ) {
 	 */
 	$show_months  = absint( apply_filters( 'mc_show_months', mc_get_option( 'show_months' ), $args ) );
 	$show_months  = ( 0 === $show_months ) ? 1 : $show_months;
-	$caption_text = ' ' . stripslashes( trim( get_option( 'mc_caption' ) ) );
+	$caption_text = ' ' . stripslashes( trim( mc_get_option( 'caption' ) ) );
 	$week_format  = ( ! mc_get_option( 'week_format' ) ) ? 'M j, \'y' : mc_get_option( 'week_format' );
 	// Translators: Template tag with date format.
-	$week_template = ( get_option( 'mc_week_caption', '' ) !== '' ) ? get_option( 'mc_week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
-	$open_day_uri  = ( ! get_option( 'mc_open_day_uri' ) ) ? 'false' : get_option( 'mc_open_day_uri' ); // This is not a URL. It's a behavior reference.
-	$list_info     = get_option( 'mc_show_list_info' );
-	$list_events   = get_option( 'mc_show_list_events' );
+	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
+	$open_day_uri  = ( ! mc_get_option( 'open_day_uri' ) ) ? 'false' : mc_get_option( 'open_day_uri' ); // This is not a URL. It's a behavior reference.
+	$list_info     = mc_get_option( 'show_list_info' );
+	$list_events   = mc_get_option( 'show_list_events' );
 
 	if ( $site ) {
 		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
@@ -1971,7 +1971,7 @@ function my_calendar( $args ) {
 			if ( 'week' !== $params['time'] && 'day' !== $params['time'] ) {
 				$heading = ( $months <= 1 ) ? $current_header . $caption_text . "\n" : $current_month_header . '&ndash;' . $through_month_header . $caption_text;
 				// Translators: time period displayed.
-				$header  = ( '' === get_option( 'mc_heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : str_replace( '{date}', '%s', get_option( 'mc_heading_text' ) );
+				$header  = ( '' === mc_get_option( 'heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : str_replace( '{date}', '%s', mc_get_option( 'heading_text' ) );
 				$heading = sprintf( $header, $heading );
 				if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
 					$heading = __( 'Search Results', 'my-calendar' );
@@ -2446,7 +2446,7 @@ function mc_run_shortcodes( $content ) {
  * @return string title with wrapper if appropriate
  */
 function mc_wrap_title( $title ) {
-	if ( '1' !== get_option( 'mc_list_javascript' ) ) {
+	if ( '1' !== mc_get_option( 'list_javascript' ) ) {
 		$is_anchor       = '<button type="button" class="mc-text-button">';
 		$is_close_anchor = '</button>';
 	} else {
