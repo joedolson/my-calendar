@@ -10,4 +10,9 @@
  */
 
 ?>
-<div class="event">Mini Event</div>
+<div class="mc-event mc-single">
+    <h2 class="mc-title"><?php mc_template_tag( $event, 'title' ); ?></h2>
+    <?php mc_template_tag( $event, 'datetime' ); ?>
+    <?php mc_template_tag( $event, 'description' ); ?>
+</div>
+

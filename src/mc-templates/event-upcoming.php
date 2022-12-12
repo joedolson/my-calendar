@@ -9,5 +9,8 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
+    print_r( $data );
 ?>
-<div class="event">Upcoming Event</div>
+<strong class="mc-title"><?php mc_template_tag( $event, 'title' ); ?></strong> - <?php mc_template_tag( $event, 'datetime' ); ?>
+<?php mc_template_tag( $event, 'excerpt' ); ?>
+
