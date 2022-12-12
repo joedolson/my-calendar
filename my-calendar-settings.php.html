@@ -970,14 +970,14 @@ function mc_remote_db() {
 				&lt;/p>
 			&lt;/div>
 		&lt;/div>
+		&lt;div class="wptab initial-hidden" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
+			&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>">
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Display Settings', 'my-calendar' ); ?>&lt;/h2>
 
-		&lt;div class="wptab postbox initial-hidden" aria-labelledby="tab_output" role="tabpanel" id="mc-output">
-			&lt;h2>&lt;?php esc_html_e( 'Display Settings', 'my-calendar' ); ?>&lt;/h2>
-
-			&lt;div class="inside">
-				&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ); ?>">
-					&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-					&lt;input type="submit" name="save" class="button screen-reader-text" value="&lt;?php _e( 'Save Display Settings', 'my-calendar' ); ?>" />&lt;/p>
+					&lt;div class="inside">
+						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+						&lt;input type="submit" name="save" class="button screen-reader-text" value="&lt;?php _e( 'Save Display Settings', 'my-calendar' ); ?>" />&lt;/p>
 						&lt;ul>
 							&lt;li>
 							&lt;?php
@@ -1002,259 +1002,277 @@ function mc_remote_db() {
 							?>
 							&lt;/li>
 						&lt;/ul>
+					&lt;/div>
+				&lt;/div>
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?>&lt;/h2>
 
-					&lt;fieldset id='calendar-output' class='mc-output-tabs'>
-						&lt;legend>&lt;?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?>&lt;/legend>
-						&lt;div class="mc-tabs">
-							&lt;div class="tabs" role="tablist" data-default="single-event-output">
-								&lt;button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output">&lt;?php esc_html_e( 'Single Event', 'my-calendar' ); ?>&lt;/button>
-								&lt;button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output">&lt;?php esc_html_e( 'Main View (Popup or List)', 'my-calendar' ); ?>&lt;/button>
-								&lt;button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup">&lt;?php esc_html_e( 'Mini Calendar Popup', 'my-calendar' ); ?>&lt;/button>
+					&lt;div class="inside">
+						&lt;fieldset id='calendar-output' class='mc-output-tabs'>
+							&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?>&lt;/legend>
+							&lt;div class="mc-tabs">
+								&lt;div class="tabs" role="tablist" data-default="single-event-output">
+									&lt;button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output">&lt;?php esc_html_e( 'Single Event', 'my-calendar' ); ?>&lt;/button>
+									&lt;button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output">&lt;?php esc_html_e( 'Main View (Popup or List)', 'my-calendar' ); ?>&lt;/button>
+									&lt;button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup">&lt;?php esc_html_e( 'Mini Calendar Popup', 'my-calendar' ); ?>&lt;/button>
+								&lt;/div>
+								&lt;div role='tabpanel' aria-labelledby='tab_single_output' class='wptab' id='single-event-output'>
+									&lt;p>
+									&lt;?php
+									_e( 'Choose fields to show in the single event view.', 'my-calendar' );
+									echo ' ';
+									// Translators: URL to single event view template editing screen.
+									printf( __( 'The &lt;a href="%s">single event view template&lt;/a> overrides these settings.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=details#my-calendar-templates' ) ) );
+									?>
+									&lt;/p>
+									&lt;ul class="checkboxes">
+									&lt;?php
+										mc_settings_field(
+											'mc_display_single',
+											array(
+												'author'      => __( 'Author', 'my-calendar' ),
+												'host'        => __( 'Host', 'my-calendar' ),
+												'ical'        => __( 'iCal Download', 'my-calendar' ),
+												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+												'gmap'        => __( 'Google Map', 'my-calendar' ),
+												'address'     => __( 'Location Address', 'my-calendar' ),
+												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
+												'description' => __( 'Description', 'my-calendar' ),
+												'image'       => __( 'Featured Image', 'my-calendar' ),
+												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
+												'link'        => __( 'More Information', 'my-calendar' ),
+												'access'      => __( 'Accessibility', 'my-calendar' ),
+											),
+											array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
+											'',
+											array(),
+											'checkbox'
+										);
+									?>
+									&lt;/ul>
+									&lt;p class="mc_gmap_api_key">&lt;?php mc_settings_field( 'mc_gmap_api_key', __( 'Google Maps API Key', 'my-calendar' ), '', '&lt;a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '&lt;/a>', array( 'id' => 'mc_gmap_id' ) ); ?>&lt;/p>
+								&lt;/div>
+								&lt;div role='tabpanel' aria-labelledby='tab_main_output' class='wptab' id='calendar-main-output'>
+									&lt;p>
+									&lt;?php
+									_e( 'Choose fields to show in the calendar popup and list views.', 'my-calendar' );
+									echo ' ';
+									// Translators: URL to single event view template editing screen.
+									printf( __( 'The &lt;a href="%1$s">grid view template&lt;/a> overrides these settings for the calendar popup, and the &lt;a href="%2$s">list view template&lt;/a> overrides these settings in list view.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=grid#my-calendar-templates' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=list#my-calendar-templates' ) ) );
+									?>
+									&lt;/p>
+									&lt;ul class="checkboxes">
+									&lt;?php
+										mc_settings_field(
+											'mc_display_main',
+											array(
+												'author'      => __( 'Author', 'my-calendar' ),
+												'host'        => __( 'Host', 'my-calendar' ),
+												'ical'        => __( 'iCal Download', 'my-calendar' ),
+												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+												'address'     => __( 'Location Address', 'my-calendar' ),
+												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
+												'description' => __( 'Description', 'my-calendar' ),
+												'image'       => __( 'Featured Image', 'my-calendar' ),
+												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
+												'link'        => __( 'More Information', 'my-calendar' ),
+												'more'        => __( 'Read More Link', 'my-calendar' ),
+												'access'      => __( 'Accessibility', 'my-calendar' ),
+											),
+											array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
+											'',
+											array(),
+											'checkbox'
+										);
+									?>
+									&lt;/ul>
+								&lt;/div>
+								&lt;div role='tabpanel' aria-labelledby='tab_mini_output' class='wptab' id='mini-calendar-popup'>
+									&lt;p>
+									&lt;?php
+									_e( 'Choose fields to show in the mini calendar popup.', 'my-calendar' );
+									echo ' ';
+									// Translators: URL to single event view template editing screen.
+									printf( __( 'The &lt;a href="%s">mini view template&lt;/a> overrides these settings.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=mini#my-calendar-templates' ) ) );
+									?>
+									&lt;/p>
+									&lt;ul class="checkboxes">
+									&lt;?php
+										mc_settings_field(
+											'mc_display_mini',
+											array(
+												'author'      => __( 'Author', 'my-calendar' ),
+												'host'        => __( 'Host', 'my-calendar' ),
+												'ical'        => __( 'iCal Download', 'my-calendar' ),
+												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+												'address'     => __( 'Location Address', 'my-calendar' ),
+												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
+												'description' => __( 'Description', 'my-calendar' ),
+												'image'       => __( 'Featured Image', 'my-calendar' ),
+												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
+												'link'        => __( 'More Information', 'my-calendar' ),
+												'more'        => __( 'Read More Link', 'my-calendar' ),
+												'access'      => __( 'Accessibility', 'my-calendar' ),
+											),
+											array( 'excerpt', 'image', 'more' ),
+											'',
+											array(),
+											'checkbox'
+										);
+									?>
+									&lt;/ul>
+								&lt;/div>
 							&lt;/div>
-							&lt;div role='tabpanel' aria-labelledby='tab_single_output' class='wptab' id='single-event-output'>
-								&lt;p>
-								&lt;?php
-								_e( 'Choose fields to show in the single event view.', 'my-calendar' );
-								echo ' ';
-								// Translators: URL to single event view template editing screen.
-								printf( __( 'The &lt;a href="%s">single event view template&lt;/a> overrides these settings.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=details#my-calendar-templates' ) ) );
-								?>
-								&lt;/p>
-								&lt;ul class="checkboxes">
-								&lt;?php
-									mc_settings_field(
-										'mc_display_single',
-										array(
-											'author'      => __( 'Author', 'my-calendar' ),
-											'host'        => __( 'Host', 'my-calendar' ),
-											'ical'        => __( 'iCal Download', 'my-calendar' ),
-											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-											'gmap'        => __( 'Google Map', 'my-calendar' ),
-											'address'     => __( 'Location Address', 'my-calendar' ),
-											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-											'description' => __( 'Description', 'my-calendar' ),
-											'image'       => __( 'Featured Image', 'my-calendar' ),
-											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-											'link'        => __( 'More Information', 'my-calendar' ),
-											'access'      => __( 'Accessibility', 'my-calendar' ),
-										),
-										array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
-										'',
-										array(),
-										'checkbox'
-									);
-								?>
-								&lt;/ul>
-								&lt;p class="mc_gmap_api_key">&lt;?php mc_settings_field( 'mc_gmap_api_key', __( 'Google Maps API Key', 'my-calendar' ), '', '&lt;a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '&lt;/a>', array( 'id' => 'mc_gmap_id' ) ); ?>&lt;/p>
-							&lt;/div>
-							&lt;div role='tabpanel' aria-labelledby='tab_main_output' class='wptab' id='calendar-main-output'>
-								&lt;p>
-								&lt;?php
-								_e( 'Choose fields to show in the calendar popup and list views.', 'my-calendar' );
-								echo ' ';
-								// Translators: URL to single event view template editing screen.
-								printf( __( 'The &lt;a href="%1$s">grid view template&lt;/a> overrides these settings for the calendar popup, and the &lt;a href="%2$s">list view template&lt;/a> overrides these settings in list view.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=grid#my-calendar-templates' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=list#my-calendar-templates' ) ) );
-								?>
-								&lt;/p>
-								&lt;ul class="checkboxes">
-								&lt;?php
-									mc_settings_field(
-										'mc_display_main',
-										array(
-											'author'      => __( 'Author', 'my-calendar' ),
-											'host'        => __( 'Host', 'my-calendar' ),
-											'ical'        => __( 'iCal Download', 'my-calendar' ),
-											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-											'address'     => __( 'Location Address', 'my-calendar' ),
-											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-											'description' => __( 'Description', 'my-calendar' ),
-											'image'       => __( 'Featured Image', 'my-calendar' ),
-											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-											'link'        => __( 'More Information', 'my-calendar' ),
-											'more'        => __( 'Read More Link', 'my-calendar' ),
-											'access'      => __( 'Accessibility', 'my-calendar' ),
-										),
-										array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
-										'',
-										array(),
-										'checkbox'
-									);
-								?>
-								&lt;/ul>
-							&lt;/div>
-							&lt;div role='tabpanel' aria-labelledby='tab_mini_output' class='wptab' id='mini-calendar-popup'>
-								&lt;p>
-								&lt;?php
-								_e( 'Choose fields to show in the mini calendar popup.', 'my-calendar' );
-								echo ' ';
-								// Translators: URL to single event view template editing screen.
-								printf( __( 'The &lt;a href="%s">mini view template&lt;/a> overrides these settings.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&amp;mc_template=mini#my-calendar-templates' ) ) );
-								?>
-								&lt;/p>
-								&lt;ul class="checkboxes">
-								&lt;?php
-									mc_settings_field(
-										'mc_display_mini',
-										array(
-											'author'      => __( 'Author', 'my-calendar' ),
-											'host'        => __( 'Host', 'my-calendar' ),
-											'ical'        => __( 'iCal Download', 'my-calendar' ),
-											'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-											'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-											'address'     => __( 'Location Address', 'my-calendar' ),
-											'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-											'description' => __( 'Description', 'my-calendar' ),
-											'image'       => __( 'Featured Image', 'my-calendar' ),
-											'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-											'link'        => __( 'More Information', 'my-calendar' ),
-											'more'        => __( 'Read More Link', 'my-calendar' ),
-											'access'      => __( 'Accessibility', 'my-calendar' ),
-										),
-										array( 'excerpt', 'image', 'more' ),
-										'',
-										array(),
-										'checkbox'
-									);
-								?>
-								&lt;/ul>
-							&lt;/div>
-						&lt;/div>
-					&lt;/fieldset>
-					&lt;fieldset>
-						&lt;legend>&lt;?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?>&lt;/legend>
-						&lt;?php
-						$topnav       = explode( ',', mc_get_option( 'topnav' ) );
-						$calendar     = array( 'calendar' );
-						$botnav       = explode( ',', mc_get_option( 'bottomnav' ) );
-						$order        = array_merge( $topnav, $calendar, $botnav );
-						$nav_elements = array(
-							'nav'        => '&lt;div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '&lt;/span>',
-							'toggle'     => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-calendar">&lt;/div> &lt;span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '&lt;/span>',
-							'jump'       => '&lt;div class="dashicons dashicons-redo" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '&lt;/span>',
-							'print'      => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Link to printable view', 'my-calendar' ) . '&lt;/span>',
-							'timeframe'  => '&lt;div class="dashicons dashicons-clock" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '&lt;/span>',
-							'calendar'   => '&lt;div class="dashicons dashicons-calendar" aria-hidden="true">&lt;/div> &lt;span>' . __( 'My Calendar', 'my-calendar' ) . '&lt;/span>',
-							'key'        => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories', 'my-calendar' ) . '&lt;/span>',
-							'feeds'      => '&lt;div class="dashicons dashicons-rss" aria-hidden="true">&lt;/div> &lt;span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '&lt;/span>',
-							'exports'    => '&lt;div class="dashicons dashicons-calendar-alt" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '&lt;/span>',
-							'locations'  => '&lt;div class="dashicons dashicons-location" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Location (dropdown)', 'my-calendar' ) . '&lt;/span>',
-							'categories' => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '&lt;/span>',
-							'access'     => '&lt;div class="dashicons dashicons-universal-access" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Access (dropdown)', 'my-calendar' ) . '&lt;/span>',
-							'search'     => '&lt;div class="dashicons dashicons-search" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Search', 'my-calendar' ) . '&lt;/span>',
-						);
-						?>
-						&lt;div id='mc-sortable-update' aria-live='assertive'>&lt;/div>
-						&lt;ul id='mc-sortable'>
-						&lt;?php
-						$inserted = array();
-						$class    = 'visible';
-						$count    = count( $nav_elements );
-						$i        = 1;
-						foreach ( $order as $k ) {
-							$k = trim( $k );
-							$v = ( isset( $nav_elements[ $k ] ) ) ? $nav_elements[ $k ] : false;
-							if ( false !== $v ) {
-								$inserted[ $k ] = $v;
-								$label          = $k;
+						&lt;/fieldset>
+					&lt;/div>
+				&lt;/div>
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?>&lt;/h2>
+
+					&lt;div class="inside">
+						&lt;fieldset>
+							&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?>&lt;/legend>
+							&lt;?php
+							$topnav       = explode( ',', mc_get_option( 'topnav' ) );
+							$calendar     = array( 'calendar' );
+							$botnav       = explode( ',', mc_get_option( 'bottomnav' ) );
+							$order        = array_merge( $topnav, $calendar, $botnav );
+							$nav_elements = array(
+								'nav'        => '&lt;div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '&lt;/span>',
+								'toggle'     => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-calendar">&lt;/div> &lt;span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '&lt;/span>',
+								'jump'       => '&lt;div class="dashicons dashicons-redo" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '&lt;/span>',
+								'print'      => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Link to printable view', 'my-calendar' ) . '&lt;/span>',
+								'timeframe'  => '&lt;div class="dashicons dashicons-clock" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '&lt;/span>',
+								'calendar'   => '&lt;div class="dashicons dashicons-calendar" aria-hidden="true">&lt;/div> &lt;span>' . __( 'My Calendar', 'my-calendar' ) . '&lt;/span>',
+								'key'        => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories', 'my-calendar' ) . '&lt;/span>',
+								'feeds'      => '&lt;div class="dashicons dashicons-rss" aria-hidden="true">&lt;/div> &lt;span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '&lt;/span>',
+								'exports'    => '&lt;div class="dashicons dashicons-calendar-alt" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '&lt;/span>',
+								'locations'  => '&lt;div class="dashicons dashicons-location" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Location (dropdown)', 'my-calendar' ) . '&lt;/span>',
+								'categories' => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '&lt;/span>',
+								'access'     => '&lt;div class="dashicons dashicons-universal-access" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Access (dropdown)', 'my-calendar' ) . '&lt;/span>',
+								'search'     => '&lt;div class="dashicons dashicons-search" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Search', 'my-calendar' ) . '&lt;/span>',
+							);
+							?>
+							&lt;div id='mc-sortable-update' aria-live='assertive'>&lt;/div>
+							&lt;ul id='mc-sortable'>
+							&lt;?php
+							$inserted = array();
+							$class    = 'visible';
+							$count    = count( $nav_elements );
+							$i        = 1;
+							foreach ( $order as $k ) {
+								$k = trim( $k );
+								$v = ( isset( $nav_elements[ $k ] ) ) ? $nav_elements[ $k ] : false;
+								if ( false !== $v ) {
+									$inserted[ $k ] = $v;
+									$label          = $k;
+									// Translators: control to move down.
+									$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $label );
+									// Translators: control to move up.
+									$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $label );
+									// Translators: control to hide.
+									$hide_label = sprintf( __( 'Hide %s', 'my-calendar' ), $label );
+									$hide       = ( 'calendar' === $k ) ? '' : "&lt;button class='hide' type='button'>&lt;span class='screen-reader-text'>" . $hide_label . "&lt;/span>&lt;i class='dashicons dashicons-visibility' aria-hidden='true'>&lt;/i>&lt;/button>";
+									$buttons    = "&lt;button class='up' type='button'>&lt;i class='dashicons dashicons-arrow-up' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $up_label . "&lt;/span>&lt;/button> &lt;button class='down' type='button'>&lt;i class='dashicons dashicons-arrow-down' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $down_label . '&lt;/span>&lt;/button> ' . $hide;
+									$buttons    = "&lt;div class='mc-buttons'>$buttons&lt;/div>";
+									echo wp_kses( "&lt;li class='ui-state-default mc-$k mc-$class'>$buttons &lt;code>$label&lt;/code> $v &lt;input type='hidden' name='mc_nav[]' value='$k' />&lt;/li>", mc_kses_elements() );
+									$i ++;
+								}
+							}
+							$missed = array_diff( $nav_elements, $inserted );
+							$i      = 1;
+							$count  = count( $missed );
+							foreach ( $missed as $k => $v ) {
 								// Translators: control to move down.
-								$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $label );
+								$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $k );
 								// Translators: control to move up.
-								$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $label );
+								$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $k );
 								// Translators: control to hide.
-								$hide_label = sprintf( __( 'Hide %s', 'my-calendar' ), $label );
-								$hide       = ( 'calendar' === $k ) ? '' : "&lt;button class='hide' type='button'>&lt;span class='screen-reader-text'>" . $hide_label . "&lt;/span>&lt;i class='dashicons dashicons-visibility' aria-hidden='true'>&lt;/i>&lt;/button>";
-								$buttons    = "&lt;button class='up' type='button'>&lt;i class='dashicons dashicons-arrow-up' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $up_label . "&lt;/span>&lt;/button> &lt;button class='down' type='button'>&lt;i class='dashicons dashicons-arrow-down' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $down_label . '&lt;/span>&lt;/button> ' . $hide;
+								$hide_label = sprintf( __( 'Show %s', 'my-calendar' ), $k );
+								$buttons    = "&lt;button class='up' type='button'>&lt;i class='dashicons dashicons-arrow-up' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $up_label . "&lt;/span>&lt;/button> &lt;button class='down' type='button'>&lt;i class='dashicons dashicons-arrow-down' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $down_label . "&lt;/span>&lt;/button> &lt;button class='hide' type='button'>&lt;i class='dashicons dashicons-hidden' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $hide_label . '&lt;/span>&lt;/button>';
 								$buttons    = "&lt;div class='mc-buttons'>$buttons&lt;/div>";
-								echo wp_kses( "&lt;li class='ui-state-default mc-$k mc-$class'>$buttons &lt;code>$label&lt;/code> $v &lt;input type='hidden' name='mc_nav[]' value='$k' />&lt;/li>", mc_kses_elements() );
+								echo wp_kses( "&lt;li class='ui-state-default mc-$k mc-hidden'>$buttons &lt;code>$k&lt;/code> $v &lt;input type='hidden' name='mc_nav[]' value='$k' disabled />&lt;/li>", mc_kses_elements() );
 								$i ++;
 							}
-						}
-						$missed = array_diff( $nav_elements, $inserted );
-						$i      = 1;
-						$count  = count( $missed );
-						foreach ( $missed as $k => $v ) {
-							// Translators: control to move down.
-							$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $k );
-							// Translators: control to move up.
-							$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $k );
-							// Translators: control to hide.
-							$hide_label = sprintf( __( 'Show %s', 'my-calendar' ), $k );
-							$buttons    = "&lt;button class='up' type='button'>&lt;i class='dashicons dashicons-arrow-up' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $up_label . "&lt;/span>&lt;/button> &lt;button class='down' type='button'>&lt;i class='dashicons dashicons-arrow-down' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $down_label . "&lt;/span>&lt;/button> &lt;button class='hide' type='button'>&lt;i class='dashicons dashicons-hidden' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $hide_label . '&lt;/span>&lt;/button>';
-							$buttons    = "&lt;div class='mc-buttons'>$buttons&lt;/div>";
-							echo wp_kses( "&lt;li class='ui-state-default mc-$k mc-hidden'>$buttons &lt;code>$k&lt;/code> $v &lt;input type='hidden' name='mc_nav[]' value='$k' disabled />&lt;/li>", mc_kses_elements() );
-							$i ++;
-						}
-						?>
-						&lt;/ul>
-					&lt;/fieldset>
-					&lt;fieldset>
-						&lt;legend>&lt;?php esc_html_e( 'Grid Options', 'my-calendar' ); ?>&lt;/legend>
-						&lt;ul>
-							&lt;li>&lt;?php mc_settings_field( 'mc_show_weekends', __( 'Show Weekends on Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
-							&lt;li>
-							&lt;?php
-							mc_settings_field(
-								'mc_convert',
-								__( 'Mobile View', 'my-calendar' ),
-								array(
-									'true' => __( 'Switch to list view', 'my-calendar' ),
-									'mini' => __( 'Switch to mini calendar', 'my-calendar' ),
-									'none' => __( 'No change', 'my-calendar' ),
-								),
-								'',
-								array(),
-								'select'
-							);
 							?>
-							&lt;/li>
-						&lt;/ul>
-					&lt;/fieldset>
+							&lt;/ul>
+						&lt;/fieldset>
+					&lt;/div>
+				&lt;/div>
+				&lt;div class="postbox">
+					&lt;h2>&lt;?php esc_html_e( 'View Options', 'my-calendar' ); ?>&lt;/h2>
 
-					&lt;fieldset>
-						&lt;legend>&lt;?php esc_html_e( 'List Options', 'my-calendar' ); ?>&lt;/legend>
-						&lt;ul>
-							&lt;li>&lt;?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?>&lt;/li>
-							&lt;li>&lt;?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
-							&lt;li>&lt;?php mc_settings_field( 'mc_show_list_events', __( 'Show all event titles next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
-						&lt;/ul>
-					&lt;/fieldset>
+					&lt;div class="inside">						
+						&lt;fieldset>
+							&lt;legend>&lt;?php esc_html_e( 'Grid Options', 'my-calendar' ); ?>&lt;/legend>
+							&lt;ul>
+								&lt;li>&lt;?php mc_settings_field( 'mc_show_weekends', __( 'Show Weekends on Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
+								&lt;li>
+								&lt;?php
+								mc_settings_field(
+									'mc_convert',
+									__( 'Mobile View', 'my-calendar' ),
+									array(
+										'true' => __( 'Switch to list view', 'my-calendar' ),
+										'mini' => __( 'Switch to mini calendar', 'my-calendar' ),
+										'none' => __( 'No change', 'my-calendar' ),
+									),
+									'',
+									array(),
+									'select'
+								);
+								?>
+								&lt;/li>
+							&lt;/ul>
+						&lt;/fieldset>
 
-					&lt;fieldset>
-						&lt;legend>&lt;?php esc_html_e( 'Mini Calendar Options', 'my-calendar' ); ?>&lt;/legend>
-						&lt;ul>
-							&lt;li>&lt;?php mc_settings_field( 'mc_mini_uri', __( 'Target link for mini calendar dates', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?>&lt;/li>
-							&lt;?php
-							$disabled = ( ! mc_get_option( 'uri' ) &amp;&amp; ! mc_get_option( 'mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
-							if ( ! empty( $disabled ) ) {
-								// Ensure that this option is set to a valid value if no URI configured.
-								mc_update_option( 'open_day_uri', 'false' );
-							}
-							?>
-							&lt;li>
-							&lt;?php
-							mc_settings_field(
-								'mc_open_day_uri',
-								__( 'Link action for mini calendar', 'my-calendar' ),
-								array(
-									'false'          => __( 'Event popup ', 'my-calendar' ),
-									'true'           => __( 'daily view page (above)', 'my-calendar' ),
-									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
-									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
-								),
-								'',
-								$disabled,
-								'select'
-							);
-							?>
-							&lt;/li>
-						&lt;/ul>
-					&lt;/fieldset>
+						&lt;fieldset>
+							&lt;legend>&lt;?php esc_html_e( 'List Options', 'my-calendar' ); ?>&lt;/legend>
+							&lt;ul>
+								&lt;li>&lt;?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?>&lt;/li>
+								&lt;li>&lt;?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
+								&lt;li>&lt;?php mc_settings_field( 'mc_show_list_events', __( 'Show all event titles next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
+							&lt;/ul>
+						&lt;/fieldset>
 
-					&lt;p>&lt;input type="submit" name="save" class="button-primary" value="&lt;?php _e( 'Save Display Settings', 'my-calendar' ); ?>"/>&lt;/p>
-				&lt;/form>
-			&lt;/div>
+						&lt;fieldset>
+							&lt;legend>&lt;?php esc_html_e( 'Mini Calendar Options', 'my-calendar' ); ?>&lt;/legend>
+							&lt;ul>
+								&lt;li>&lt;?php mc_settings_field( 'mc_mini_uri', __( 'Target link for mini calendar dates', 'my-calendar' ), '', '', array( 'size' => '60' ), 'url' ); ?>&lt;/li>
+								&lt;?php
+								$disabled = ( ! mc_get_option( 'uri' ) &amp;&amp; ! mc_get_option( 'mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
+								if ( ! empty( $disabled ) ) {
+									// Ensure that this option is set to a valid value if no URI configured.
+									mc_update_option( 'open_day_uri', 'false' );
+								}
+								?>
+								&lt;li>
+								&lt;?php
+								mc_settings_field(
+									'mc_open_day_uri',
+									__( 'Link action for mini calendar', 'my-calendar' ),
+									array(
+										'false'          => __( 'Event popup ', 'my-calendar' ),
+										'true'           => __( 'daily view page (above)', 'my-calendar' ),
+										'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
+										'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
+									),
+									'',
+									$disabled,
+									'select'
+								);
+								?>
+								&lt;/li>
+							&lt;/ul>
+						&lt;/fieldset>
+
+						&lt;p>&lt;input type="submit" name="save" class="button-primary" value="&lt;?php _e( 'Save Display Settings', 'my-calendar' ); ?>"/>&lt;/p>
+					&lt;/div>
+				&lt;/div>
+			&lt;/form>
 		&lt;/div>
 		&lt;div class="wptab initial-hidden" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
 			&lt;div class="postbox">
