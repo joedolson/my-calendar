@@ -1230,63 +1230,68 @@ function mc_remote_db() {
 				</form>
 			</div>
 		</div>
+		<div class="wptab initial-hidden" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
+			<div class="postbox">
+				<h2><?php esc_html_e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
 
-		<div class="wptab postbox initial-hidden" aria-labelledby="tab_input" role="tabpanel" id="my-calendar-input">
-			<h2><?php esc_html_e( 'Calendar Input Fields', 'my-calendar' ); ?></h2>
-
-			<div class="inside">
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ) ); ?>">
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-					<fieldset>
-						<legend><?php esc_html_e( 'Event editing fields to show', 'my-calendar' ); ?></legend>
-						<div><input type='hidden' name='mc_input' value='true'/></div>
-						<ul class="checkboxes">
-							<?php
-							$output        = '';
-							$input_options = mc_get_option( 'input_options' );
-							$input_labels  = array(
-								'event_short'    => __( 'Excerpt', 'my-calendar' ),
-								'event_desc'     => __( 'Description', 'my-calendar' ),
-								'event_category' => __( 'Categories', 'my-calendar' ),
-								'event_image'    => __( 'Featured Image', 'my-calendar' ),
-								'event_link'     => __( 'More Information', 'my-calendar' ),
-								'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
-								'event_open'     => __( 'Registration Settings', 'my-calendar' ),
-								'event_location' => __( 'Event Location', 'my-calendar' ),
-								'event_access'   => __( 'Accessibility', 'my-calendar' ),
-								'event_host'     => __( 'Host', 'my-calendar' ),
-							);
-
-							// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
-							// Array of all options in default position.
-							$defaults = mc_input_defaults();
-							if ( ! is_array( $input_options ) ) {
-								mc_update_option(
-									'input_options',
-									$defaults
-								);
+				<div class="inside">
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ) ); ?>">
+						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+						<fieldset>
+							<legend><?php esc_html_e( 'Event editing fields to show', 'my-calendar' ); ?></legend>
+							<div><input type='hidden' name='mc_input' value='true'/></div>
+							<ul class="checkboxes">
+								<?php
+								$output        = '';
 								$input_options = mc_get_option( 'input_options' );
-							}
-							// Merge saved input options with default on, so all are displayed.
-							$input_options = array_merge( $defaults, $input_options );
-							asort( $input_labels );
-							foreach ( $input_labels as $key => $value ) {
-								$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
-								$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
-								$output .= "<li><input type='checkbox' id='mci_$key' name='mci_$key' $checked /> <label for='mci_$key'>$value</label></li>";
-							}
-							echo wp_kses( $output, mc_kses_elements() );
-							?>
-							<li><?php mc_settings_field( 'mc_input_options_administrators', __( 'Administrators see all input options', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-						</ul>
-					</fieldset>
-					<p>
-						<input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Input Settings', 'my-calendar' ); ?>"/>
-					</p>
-				</form>
-				<h3><?php esc_html_e( 'Location Controls', 'my-calendar' ); ?></h3>
+								$input_labels  = array(
+									'event_short'    => __( 'Excerpt', 'my-calendar' ),
+									'event_desc'     => __( 'Description', 'my-calendar' ),
+									'event_category' => __( 'Categories', 'my-calendar' ),
+									'event_image'    => __( 'Featured Image', 'my-calendar' ),
+									'event_link'     => __( 'More Information', 'my-calendar' ),
+									'event_recurs'   => __( 'Repetition Pattern', 'my-calendar' ),
+									'event_open'     => __( 'Registration Settings', 'my-calendar' ),
+									'event_location' => __( 'Event Location', 'my-calendar' ),
+									'event_access'   => __( 'Accessibility', 'my-calendar' ),
+									'event_host'     => __( 'Host', 'my-calendar' ),
+								);
 
-				<?php echo wp_kses( mc_location_controls(), mc_kses_elements() ); ?>
+								// If input options isn't an array, assume that plugin wasn't upgraded, and reset to default.
+								// Array of all options in default position.
+								$defaults = mc_input_defaults();
+								if ( ! is_array( $input_options ) ) {
+									mc_update_option(
+										'input_options',
+										$defaults
+									);
+									$input_options = mc_get_option( 'input_options' );
+								}
+								// Merge saved input options with default on, so all are displayed.
+								$input_options = array_merge( $defaults, $input_options );
+								asort( $input_labels );
+								foreach ( $input_labels as $key => $value ) {
+									$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
+									$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
+									$output .= "<li><input type='checkbox' id='mci_$key' name='mci_$key' $checked /> <label for='mci_$key'>$value</label></li>";
+								}
+								echo wp_kses( $output, mc_kses_elements() );
+								?>
+								<li><?php mc_settings_field( 'mc_input_options_administrators', __( 'Administrators see all input options', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+							</ul>
+						</fieldset>
+						<p>
+							<input type="submit" name="save" class="button-primary" value="<?php _e( 'Save Input Settings', 'my-calendar' ); ?>"/>
+						</p>
+					</form>
+				</div>
+			</div>
+			<div class="postbox">
+				<h2><?php esc_html_e( 'Location Controls', 'my-calendar' ); ?></h2>
+
+				<div class="inside">
+					<?php echo wp_kses( mc_location_controls(), mc_kses_elements() ); ?>
+				</div>
 			</div>
 		</div>
 
