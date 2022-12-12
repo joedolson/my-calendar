@@ -372,7 +372,7 @@ function my_calendar_upcoming_events( $args ) {
 function mc_span_time( $group_id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$group_id = (int) $group_id;

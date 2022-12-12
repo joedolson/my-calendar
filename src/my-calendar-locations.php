@@ -189,7 +189,7 @@ add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
 function mc_get_location_post( $location_id, $type = true ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$post_ids = $mcdb->get_results( $mcdb->prepare( 'SELECT post_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -229,7 +229,7 @@ function mc_get_location_post( $location_id, $type = true ) {
 function mc_get_location_id( $post_ID ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$location_id = $mcdb->get_var( $mcdb->prepare( 'SELECT location_id FROM ' . my_calendar_location_relationships_table() . ' WHERE post_id = %d', $post_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -361,7 +361,7 @@ function mc_delete_location( $location, $type = 'string' ) {
 	if ( $results ) {
 		$value            = true;
 		$return           = mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ), false );
-		$default_location = get_option( 'mc_default_location', false );
+		$default_location = mc_get_option( 'default_location', false );
 		if ( (int) $default_location === $location ) {
 			delete_option( 'mc_default_location' );
 		}
@@ -457,7 +457,7 @@ function my_calendar_add_locations() {
 		if ( isset( $_POST['mc_default_location'] ) ) {
 			update_option( 'mc_default_location', (int) $_POST['location_id'] );
 		}
-		$default_location = get_option( 'mc_default_location' );
+		$default_location = mc_get_option( 'default_location' );
 		if ( (int) $_POST['location_id'] === (int) $default_location && ! isset( $_POST['mc_default_location'] ) ) {
 			delete_option( 'mc_default_location' );
 		}
@@ -624,7 +624,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 function mc_get_location( $location_id, $update_location = true ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -636,7 +636,7 @@ function mc_get_location( $location_id, $update_location = true ) {
 			return $location;
 		}
 		if ( $update_location ) {
-			if ( get_option( 'mc_gmap_api_key' ) ) {
+			if ( mc_get_option( 'gmap_api_key' ) ) {
 				if ( 'force' === $update_location ) {
 					$latitude  = false;
 					$longitude = false;
@@ -674,7 +674,7 @@ function mc_get_location( $location_id, $update_location = true ) {
  */
 function mc_controlled_field( $this_field ) {
 	$this_field = trim( $this_field );
-	$controls   = get_option( 'mc_location_controls' );
+	$controls   = mc_get_option( 'location_controls' );
 	if ( ! is_array( $controls ) || empty( $controls ) ) {
 		return false;
 	}
@@ -735,7 +735,7 @@ function mc_get_location_coordinates( $location_id = false, $address = array() )
 function mc_location_controller( $fieldname, $selected, $context = 'location' ) {
 	$field    = ( 'location' === $context ) ? 'location_' . $fieldname : 'event_' . $fieldname;
 	$selected = trim( $selected );
-	$options  = get_option( 'mc_location_controls' );
+	$options  = mc_get_option( 'location_controls' );
 	$regions  = $options[ 'event_' . $fieldname ];
 	$form     = "<select name='$field' id='e_$fieldname'>";
 	$form    .= "<option value=''>" . __( 'Select', 'my-calendar' ) . '</option>';
@@ -774,7 +774,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 		$return .= '<p class="checkboxes"><input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location"' . $checked . ' /> <label for="mc_copy_location">' . __( 'Copy new location into the locations table', 'my-calendar' ) . '</label></p>';
 	}
 	if ( current_user_can( 'mc_edit_settings' ) && isset( $_GET['page'] ) && 'my-calendar-locations' === $_GET['page'] ) {
-		$checked = ( isset( $_GET['location_id'] ) && (int) get_option( 'mc_default_location' ) === (int) $_GET['location_id'] ) ? 'checked="checked"' : '';
+		$checked = ( isset( $_GET['location_id'] ) && (int) mc_get_option( 'default_location' ) === (int) $_GET['location_id'] ) ? 'checked="checked"' : '';
 		$return .= '<p class="checkbox">';
 		$return .= '<input type="checkbox" name="mc_default_location" id="mc_default_location"' . $checked . ' /> <label for="mc_default_location">' . __( 'Default Location', 'my-calendar' ) . '</label>';
 		$return .= '</p>';
@@ -863,7 +863,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$event_url    = ( $has_data ) ? stripslashes( $data->{$context . '_url'} ) : '';
 	$event_lat    = ( $has_data ) ? stripslashes( $data->{$context . '_latitude'} ) : '';
 	$event_lon    = ( $has_data ) ? stripslashes( $data->{$context . '_longitude'} ) : '';
-	$update_gps   = ( $has_data && get_option( 'mc_gmap_api_key', '' ) && 'location' === $context ) ? '<p class="checkboxes"><input type="checkbox" value="1" id="update_gps" name="update_gps" /> <label for="update_gps">' . __( 'Update GPS Coordinates', 'my-calendar' ) . '</label></p>' : '';
+	$update_gps   = ( $has_data && mc_get_option( 'gmap_api_key', '' ) && 'location' === $context ) ? '<p class="checkboxes"><input type="checkbox" value="1" id="update_gps" name="update_gps" /> <label for="update_gps">' . __( 'Update GPS Coordinates', 'my-calendar' ) . '</label></p>' : '';
 	$return      .= '</p>
 	<p>
 	<label for="e_zoom">' . __( 'Initial Zoom', 'my-calendar' ) . $compare_zoom . '</label>
@@ -979,7 +979,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</div>
 	</div>';
 
-	$api_key  = get_option( 'mc_gmap_api_key' );
+	$api_key  = mc_get_option( 'gmap_api_key' );
 	$location = ( $has_data && 'event' === $context ) ? $data->event_location : false;
 	if ( $api_key && ! ( 'event' === $context && false === (bool) $location ) ) {
 		$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
@@ -1233,7 +1233,7 @@ function mc_location_data( $field, $id ) {
 	if ( $id ) {
 		global $wpdb;
 		$mcdb = $wpdb;
-		if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 			$mcdb = mc_remote_db();
 		}
 		$sql    = $mcdb->prepare( "SELECT $field FROM " . my_calendar_locations_table() . ' WHERE location_id = %d', $id );

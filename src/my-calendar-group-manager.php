@@ -786,7 +786,7 @@ function mc_list_groups() {
 	global $wpdb;
 	$user = wp_get_current_user()->ID;
 
-	$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : get_option( 'mc_default_sort' );
+	$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : mc_get_option( 'default_sort' );
 	if ( isset( $_GET['order'] ) ) {
 		$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
 	} else {

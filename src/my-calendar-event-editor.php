@@ -410,7 +410,7 @@ function my_calendar_edit() {
 	<?php
 	my_calendar_check_db();
 	if ( '2' === get_site_option( 'mc_multisite' ) ) {
-		if ( '0' === get_option( 'mc_current_table' ) ) {
+		if ( '0' === mc_get_option( 'current_table' ) ) {
 			$message = __( 'Currently editing your local calendar', 'my-calendar' );
 		} else {
 			$message = __( 'Currently editing your central calendar', 'my-calendar' );
@@ -1205,7 +1205,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				$hol_checked   = ( '1' === $data->event_holiday ) ? true : $hol_checked;
 				$fifth_checked = ( '1' === $data->event_fifth_week ) ? true : $fifth_checked;
 			}
-			$holiday_category = get_option( 'mc_skip_holidays_category', '' );
+			$holiday_category = mc_get_option( 'skip_holidays_category', '' );
 			if ( $holiday_category ) {
 				$category_name = mc_get_category_detail( $holiday_category );
 				$category_name = ( $category_name ) ? '&ldquo;' . $category_name . '&rdquo;' : __( 'your "Holiday" Category', 'my-calendar' );
@@ -1845,7 +1845,7 @@ function mc_event_location_dropdown_block( $data ) {
 				if ( is_object( $loc ) ) {
 					$base_loc = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
 					if ( ! $event_location ) {
-						$selected = ( is_numeric( get_option( 'mc_default_location' ) ) && (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
+						$selected = ( is_numeric( mc_get_option( 'default_location' ) ) && (int) mc_get_option( 'default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					} else {
 						$selected = '';
 					}
@@ -2148,7 +2148,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				$cats    = array( $cats );
 			}
 		} else {
-			$default = get_option( 'mc_default_category' );
+			$default = mc_get_option( 'default_category' );
 			$default = ( ! $default ) ? mc_no_category_default( true ) : $default;
 			$cats    = array( $default );
 			$primary = $default;
@@ -2887,7 +2887,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		 *
 		 * @return {string} 'true' value if permalinks are enabled.
 		 */
-		if ( 'true' === apply_filters( 'mc_use_permalinks', get_option( 'mc_use_permalinks' ) ) ) {
+		if ( 'true' === apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) ) ) {
 			$post_id          = $event->event_post;
 			$post_link        = ( $post_id ) ? get_edit_post_link( $post_id ) : false;
 			$controls['post'] = ( $post_link ) ? sprintf( "<span class='dashicons dashicons-admin-post' aria-hidden='true'></span><a href='%s'>" . __( 'Edit Event Post', 'my-calendar' ) . '</a>', $post_link ) : '';

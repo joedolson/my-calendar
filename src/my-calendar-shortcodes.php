@@ -49,7 +49,7 @@ function my_calendar_insert( $atts, $content = null ) {
 		'my_calendar'
 	);
 
-	if ( (int) get_the_ID() === (int) get_option( 'mc_uri_id' ) ) {
+	if ( (int) get_the_ID() === (int) mc_get_option( 'uri_id' ) ) {
 		$params = get_post_meta( get_the_ID(), '_mc_calendar', true );
 		$params = ( is_array( $params ) ) ? $params : array();
 		$args   = array_merge( $args, $params );
@@ -410,7 +410,7 @@ function my_calendar_next( $atts ) {
  * Configure calendar view for primary calendar.
  */
 function mc_calendar_view() {
-	$calendar_id = get_option( 'mc_uri_id' );
+	$calendar_id = mc_get_option( 'uri_id' );
 	if ( isset( $_GET['post'] ) && $calendar_id === $_GET['post'] ) {
 		add_meta_box( 'mc-calendar-view', __( 'My Calendar Display Options', 'my-calendar' ), 'mc_calendar_generator_fields', 'page', 'advanced', 'high', 'main' );
 	}
@@ -625,7 +625,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<?php
 						global $wpdb;
 						$mcdb = $wpdb;
-						if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+						if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 							$mcdb = mc_remote_db();
 						}
 						$query = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
@@ -791,7 +791,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
  * @param int $post_id Post ID.
  */
 function mc_update_calendar( $post_id ) {
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $post_id ) || ! ( (int) get_option( 'mc_uri_id' ) === (int) $post_id ) ) {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $post_id ) || ! ( (int) mc_get_option( 'uri_id' ) === (int) $post_id ) ) {
 		return $post_id;
 	}
 	$options = mc_generate( 'array' );

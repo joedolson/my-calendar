@@ -77,7 +77,7 @@ function mc_build_url( $add, $subtract, $root = '' ) {
  */
 function mc_url_in_loop( $url ) {
 	// Only if AJAX is enabled.
-	if ( ( '1' !== get_option( 'mc_ajax_javascript' ) ) && true === apply_filters( 'mc_use_embed_targets', false, $url ) ) {
+	if ( ( '1' !== mc_get_option( 'ajax_javascript' ) ) && true === apply_filters( 'mc_use_embed_targets', false, $url ) ) {
 		if ( is_singular() && in_the_loop() && is_main_query() ) {
 			$url = esc_url( add_query_arg( 'embed', 'true', html_entity_decode( $url ) ) );
 		}
@@ -98,8 +98,8 @@ function mc_url_in_loop( $url ) {
  * @return string URL
  */
 function mc_build_mini_url( $start, $category, $events, $args, $date ) {
-	$open_day_uri = get_option( 'mc_open_day_uri' );
-	$mini_uri     = ( mc_is_url( get_option( 'mc_mini_uri' ) ) ) ? get_option( 'mc_mini_uri' ) : apply_filters( 'mc_modify_day_uri', mc_get_uri( reset( $events ), $args ) );
+	$open_day_uri = mc_get_option( 'open_day_uri' );
+	$mini_uri     = ( mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : apply_filters( 'mc_modify_day_uri', mc_get_uri( reset( $events ), $args ) );
 
 	if ( 'true' === $open_day_uri || 'false' === $open_day_uri ) {
 		// Yes, this is weird. it's from some old settings...

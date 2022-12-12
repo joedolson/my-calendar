@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) {
-		if ( 'true' === get_option( 'mc_api_enabled' ) ) {
+		if ( 'true' === mc_get_option( 'api_enabled' ) ) {
 			/**
 			 * Filter to test access to the event API. Default 'true'.
 			 *

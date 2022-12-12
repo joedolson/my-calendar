@@ -93,7 +93,7 @@ function mc_private_categories() {
 function mc_get_private_categories() {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$table      = my_calendar_categories_table();
@@ -126,8 +126,8 @@ function my_calendar_manage_categories() {
 		<?php
 		my_calendar_check_db();
 		$append           = array();
-		$default_category = get_option( 'mc_default_category' );
-		$holiday_category = get_option( 'mc_skip_holidays_category' );
+		$default_category = mc_get_option( 'default_category' );
+		$holiday_category = mc_get_option( 'skip_holidays_category' );
 		// We do some checking to see what we're doing.
 		if ( ! empty( $_POST ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
@@ -137,7 +137,7 @@ function my_calendar_manage_categories() {
 		}
 
 		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-			update_option( 'mc_default_category', (int) $_GET['default'] );
+			mc_update_option( 'default_category', (int) $_GET['default'] );
 			$default_category = (int) $_GET['default'];
 			mc_show_notice( __( 'Default Category Changed', 'my-calendar' ) );
 		}
@@ -146,12 +146,12 @@ function my_calendar_manage_categories() {
 			$cat_id = mc_create_category( $_POST );
 
 			if ( isset( $_POST['mc_default_category'] ) ) {
-				update_option( 'mc_default_category', $cat_id );
+				mc_update_option( 'default_category', $cat_id );
 				$append[] = __( 'Default category changed.', 'my-calendar' );
 			}
 
 			if ( isset( $_POST['mc_skip_holidays_category'] ) ) {
-				update_option( 'mc_skip_holidays_category', $cat_id );
+				mc_update_option( 'skip_holidays_category', $cat_id );
 				$append[] = __( 'Holiday category changed.', 'my-calendar' );
 			}
 
@@ -177,7 +177,7 @@ function my_calendar_manage_categories() {
 				$cal_results = false;
 			}
 			if ( $default_category === (string) $cat_id ) {
-				delete_option( 'mc_default_category' );
+				mc_update_option( 'default_category', '' );
 			}
 			if ( $results && ( $cal_results || $rel_results ) ) {
 				mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) );
@@ -192,20 +192,20 @@ function my_calendar_manage_categories() {
 		} elseif ( isset( $_POST['mode'] ) && isset( $_POST['category_id'] ) && isset( $_POST['category_name'] ) && isset( $_POST['category_color'] ) && 'edit' === $_POST['mode'] ) {
 			$append = array();
 			if ( isset( $_POST['mc_default_category'] ) && $default_category !== $_POST['category_id'] ) {
-				update_option( 'mc_default_category', (int) $_POST['category_id'] );
+				mc_update_option( 'default_category', (int) $_POST['category_id'] );
 				$append[] = __( 'Default category changed.', 'my-calendar' );
 			} else {
 				if ( $default_category === $_POST['category_id'] ) {
-					delete_option( 'mc_default_category' );
+					mc_update_option( 'default_category', '' );
 					$append[] = __( 'Default category removed.', 'my-calendar' );
 				}
 			}
 			if ( isset( $_POST['mc_skip_holidays_category'] ) && $holiday_category !== $_POST['category_id'] ) {
-				update_option( 'mc_skip_holidays_category', (int) $_POST['category_id'] );
+				mc_update_option( 'skip_holidays_category', (int) $_POST['category_id'] );
 				$append[] = __( 'Holiday category changed.', 'my-calendar' );
 			} else {
 				if ( $holiday_category === (string) $_POST['category_id'] ) {
-					delete_option( 'mc_skip_holidays_category' );
+					mc_update_option( 'skip_holidays_category', '' );
 					$append[] = __( 'Holiday category removed.', 'my-calendar' );
 				}
 			}
@@ -500,10 +500,10 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 									<input type="checkbox" value="on" name="category_private" id="cat_private"<?php checked( $private_checked, true ); ?> /> <label for="cat_private"><?php esc_html_e( 'Private (logged-in users only)', 'my-calendar' ); ?></label>
 								</li>
 								<li>
-									<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( get_option( 'mc_default_category', 'empty' ), $current ); ?> /> <label for="mc_default_category"><?php esc_html_e( 'Default', 'my-calendar' ); ?></label>
+									<input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"<?php checked( mc_get_option( 'default_category', 'empty' ), $current ); ?> /> <label for="mc_default_category"><?php esc_html_e( 'Default', 'my-calendar' ); ?></label>
 								</li>
 								<li>
-									<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( get_option( 'mc_skip_holidays_category', 'empty' ), $current ); ?> /> <label for="mc_shc"><?php esc_html_e( 'Holiday', 'my-calendar' ); ?></label>
+									<input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"<?php checked( mc_get_option( 'skip_holidays_category', 'empty' ), $current ); ?> /> <label for="mc_shc"><?php esc_html_e( 'Holiday', 'my-calendar' ); ?></label>
 								</li>
 								</ul>
 								<?php
@@ -671,7 +671,7 @@ function mc_category_settings() {
 function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -696,7 +696,7 @@ function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 function mc_category_by_name( $string ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$cat_id = false;
@@ -720,7 +720,7 @@ function mc_category_by_name( $string ) {
 function mc_no_category_default( $single = false ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -755,7 +755,7 @@ function mc_no_category_default( $single = false ) {
 function mc_get_category( $category ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	if ( is_int( $category ) ) {
@@ -788,8 +788,8 @@ function mc_manage_categories() {
 		default:
 			$cat_order = 'category_id';
 	}
-	$default_category = (string) get_option( 'mc_default_category' );
-	$hide_icon        = ( 'true' === get_option( 'mc_hide_icons' ) ) ? true : false;
+	$default_category = (string) mc_get_option( 'default_category' );
+	$hide_icon        = ( 'true' === mc_get_option( 'hide_icons' ) ) ? true : false;
 	// We pull the categories from the database.
 	$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( empty( $categories ) ) {
@@ -858,7 +858,7 @@ function mc_manage_categories() {
 				$url     = admin_url( "admin.php?page=my-calendar-categories&amp;default=$cat->category_id" );
 				$default = '<a href="' . esc_url( $url ) . '">' . $default_text . '</a>';
 			}
-			if ( get_option( 'mc_skip_holidays_category' ) === (string) $cat->category_id ) {
+			if ( mc_get_option( 'skip_holidays_category' ) === (string) $cat->category_id ) {
 				echo ' <strong>' . __( '(Holiday)', 'my-calendar' ) . '</strong>';
 			}
 			?>
@@ -881,7 +881,7 @@ function mc_manage_categories() {
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 			<?php
 			if ( ! $hide_icon ) {
-				if ( 'background' === get_option( 'mc_apply_color' ) ) {
+				if ( 'background' === mc_get_option( 'apply_color' ) ) {
 					$icon_bg = $background;
 				} else {
 					$icon_bg = $foreground;
@@ -1044,7 +1044,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					} elseif ( is_numeric( $category ) && ( (int) $category === (int) $cat->category_id ) ) {
 						$selected = ' checked="checked"';
 					} elseif ( ! $category ) {
-						$selected = ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) ? ' checked="checked"' : '';
+						$selected = ( mc_get_option( 'default_category' ) === (string) $cat->category_id ) ? ' checked="checked"' : '';
 					}
 				} else {
 					if ( (int) $category === (int) $cat->category_id ) {
@@ -1052,7 +1052,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					}
 				}
 			} else {
-				if ( get_option( 'mc_default_category' ) === (string) $cat->category_id ) {
+				if ( mc_get_option( 'default_category' ) === (string) $cat->category_id ) {
 					// Pass null value to prevent default from being selected.
 					$selected = ( null === $data ) ? '' : ' checked="checked"';
 				}
@@ -1065,7 +1065,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
 			}
-			if ( get_option( 'mc_default_category' ) !== (string) $cat->category_id ) {
+			if ( mc_get_option( 'default_category' ) !== (string) $cat->category_id ) {
 				$list .= $c;
 			} else {
 				$default = $c;
@@ -1077,7 +1077,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 		mc_show_error( sprintf( __( 'You do not have any categories created. Please <a href="%s">create at least one category!</a>', 'my-calendar' ), $category_url ) );
 	}
 	if ( ! $option ) {
-		$default = ( get_option( 'mc_default_category' ) ) ? get_option( 'mc_default_category' ) : 1;
+		$default = ( mc_get_option( 'default_category' ) ) ? mc_get_option( 'default_category' ) : 1;
 
 		return ( is_object( $data ) ) ? $data->event_category : $default;
 	}
@@ -1173,7 +1173,7 @@ function mc_admin_category_list( $event ) {
 function mc_get_categories( $event, $ids = true ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -1322,7 +1322,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 		} else {
 			$context = 'category';
 		}
-		if ( 'true' !== get_option( 'mc_hide_icons' ) ) {
+		if ( 'true' !== mc_get_option( 'hide_icons' ) ) {
 			if ( '' !== $event->category_icon ) {
 				if ( mc_is_custom_icon() ) {
 					$path = str_replace( 'my-calendar', 'my-calendar-custom', $url );
@@ -1382,7 +1382,7 @@ function mc_generate_category_icon( $source ) {
 	$src   = $path . str_replace( '.png', '.svg', $source->category_icon );
 	$hex   = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color = $hex . $source->category_color;
-	$apply = get_option( 'mc_apply_color' );
+	$apply = mc_get_option( 'apply_color' );
 	if ( 'background' === $apply ) {
 		$color = mc_inverse_color( $color );
 	}

@@ -57,8 +57,8 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		$mc_toporder = array();
 	} else {
 		// Set up above-calendar order of fields.
-		if ( '' !== get_option( 'mc_topnav', '' ) ) {
-			$mc_toporder = array_map( 'trim', explode( ',', get_option( 'mc_topnav' ) ) );
+		if ( '' !== mc_get_option( 'topnav', '' ) ) {
+			$mc_toporder = array_map( 'trim', explode( ',', mc_get_option( 'topnav' ) ) );
 		}
 
 		if ( '' !== $above ) {
@@ -69,8 +69,8 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	if ( 'none' === $below ) {
 		$mc_bottomorder = array();
 	} else {
-		if ( '' !== get_option( 'mc_bottomnav', '' ) ) {
-			$mc_bottomorder = array_map( 'trim', explode( ',', get_option( 'mc_bottomnav' ) ) );
+		if ( '' !== mc_get_option( 'bottomnav', '' ) ) {
+			$mc_bottomorder = array_map( 'trim', explode( ',', mc_get_option( 'bottomnav' ) ) );
 		}
 
 		if ( '' !== $below ) {
@@ -336,10 +336,10 @@ function mc_category_key( $category ) {
 	global $wpdb;
 	$url  = plugin_dir_url( __FILE__ );
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
-	$has_icons       = ( 'true' === get_option( 'mc_hide_icons' ) ) ? false : true;
+	$has_icons       = ( 'true' === mc_get_option( 'hide_icons' ) ) ? false : true;
 	$class           = ( $has_icons ) ? 'has-icons' : 'no-icons';
 	$key             = '';
 	$cat_limit       = mc_select_category( $category, 'all', 'category' );
@@ -385,9 +385,9 @@ function mc_category_key( $category ) {
 		if ( '' !== $cat->category_icon && $has_icons ) {
 			$image    = mc_category_icon( $cat );
 			$type     = ( stripos( $image, 'svg' ) ) ? 'svg' : 'img';
-			$back     = ( 'default' !== get_option( 'mc_apply_color' ) ) ? ' style="background:' . $hex . $cat->category_color . ';"' : '';
+			$back     = ( 'default' !== mc_get_option( 'apply_color' ) ) ? ' style="background:' . $hex . $cat->category_color . ';"' : '';
 			$cat_key .= '<span class="category-color-sample ' . $type . '"' . $back . '>' . $image . '</span>' . $cat_name;
-		} elseif ( 'default' !== get_option( 'mc_apply_color' ) ) {
+		} elseif ( 'default' !== mc_get_option( 'apply_color' ) ) {
 			$cat_key .= ( ( '' !== $cat->category_color ) ? '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' : '' ) . $cat_name;
 		} else {
 			// If category colors are ignored, don't render HTML for them.
@@ -498,7 +498,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	$cur_day   = $date['day'];
 
 	$next_year   = $cur_year + 1;
-	$mc_next     = get_option( 'mc_next_events', '' );
+	$mc_next     = mc_get_option( 'next_events', '' );
 	$next_events = ( '' === $mc_next ) ? '<span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . '</span>' : stripslashes( $mc_next );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 12 === (int) $cur_month ) {
@@ -604,7 +604,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	$cur_day   = $date['day'];
 
 	$last_year       = $cur_year - 1;
-	$mc_previous     = get_option( 'mc_previous_events', '' );
+	$mc_previous     = mc_get_option( 'previous_events', '' );
 	$previous_events = ( '' === $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . '</span>' : stripslashes( $mc_previous );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 1 === (int) $cur_month ) {
@@ -787,7 +787,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 	global $wpdb;
 	$mcdb = $wpdb;
 
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -961,7 +961,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$c_month = isset( $date['month'] ) ? $date['month'] : current_time( 'n' );
 	$c_year  = isset( $date['year'] ) ? $date['year'] : current_time( 'Y' );
 	$c_day   = isset( $date['day'] ) ? $date['day'] : current_time( 'j' );
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$current_url    = mc_get_current_url();
@@ -1095,7 +1095,7 @@ function mc_format_toggle( $format, $toggle, $time ) {
 		$toggle = "<div class='mc-format'><span class='mc-active list'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</span></div>';
 	}
 
-	if ( ( 'true' === get_option( 'mc_convert' ) || 'mini' === get_option( 'mc_convert' ) ) && mc_is_mobile() ) {
+	if ( ( 'true' === mc_get_option( 'convert' ) || 'mini' === mc_get_option( 'convert' ) ) && mc_is_mobile() ) {
 		$toggle = '';
 	}
 

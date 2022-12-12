@@ -29,14 +29,14 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 			delete_option( $result->option_name );
 		}
 	}
-
-	if ( get_option( 'mc_drop_settings' ) === 'true' ) {
+	$options = get_option( 'my_calendar_options' );
+	if ( $options['drop_settings'] === 'true' ) {
 		delete_option( 'my_calendar_options' );
 		delete_option( 'ko_calendar_imported' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
-	if ( get_option( 'mc_drop_tables' ) === 'true' ) {
+	if ( $options['drop_tables'] === 'true' ) {
 		global $wpdb;
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-events' ) );
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-locations' ) );
@@ -46,10 +46,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_category_relationships' );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_locations' );
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_location_relationships' );
-	}
-	if ( get_option( 'mc_drop_settings' ) === 'true' ) {
-		delete_option( 'mc_drop_tables' );
-		delete_option( 'mc_drop_settings' );
 	}
 
 	add_option( 'mc_uninstalled', 'true' );

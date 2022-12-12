@@ -123,7 +123,7 @@ function my_calendar_get_events( $args ) {
 
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -334,7 +334,7 @@ function mc_get_all_events( $args ) {
 
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -451,10 +451,10 @@ function mc_get_all_events( $args ) {
  * @return array events
  */
 function mc_get_all_holidays( $before, $after, $today ) {
-	if ( ! get_option( 'mc_skip_holidays_category' ) ) {
+	if ( ! mc_get_option( 'skip_holidays_category' ) ) {
 		return array();
 	} else {
-		$category = absint( get_option( 'mc_skip_holidays_category' ) );
+		$category = absint( mc_get_option( 'skip_holidays_category' ) );
 		$args     = array(
 			'category' => $category,
 			'before'   => $before,
@@ -476,7 +476,7 @@ function mc_get_all_holidays( $before, $after, $today ) {
 function mc_get_new_events( $cat_id = false ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$ts_string = mc_ts();
@@ -563,7 +563,7 @@ function mc_get_search_results( $search ) {
 	global $wpdb;
 	$mcdb        = $wpdb;
 	$event_array = array();
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	/**
@@ -669,7 +669,7 @@ function mc_get_event_core( $id, $rebuild = false ) {
 	global $wpdb;
 	$mcdb      = $wpdb;
 	$ts_string = mc_ts();
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -694,7 +694,7 @@ function mc_get_first_event( $id ) {
 	global $wpdb;
 	$mcdb      = $wpdb;
 	$ts_string = mc_ts();
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -717,7 +717,7 @@ function mc_get_first_event( $id ) {
 function mc_get_instance_data( $instance_id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$result = $mcdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_event_table() . ' WHERE occur_id = %d', $instance_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -736,7 +736,7 @@ function mc_get_nearest_event( $id ) {
 	global $wpdb;
 	$mcdb      = $wpdb;
 	$ts_string = mc_ts();
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -761,7 +761,7 @@ function mc_get_event( $id, $type = 'object' ) {
 
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$event = $mcdb->get_row( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -788,7 +788,7 @@ function mc_get_event( $id, $type = 'object' ) {
 function mc_get_data( $field, $id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$result = $mcdb->get_var( $mcdb->prepare( "SELECT $field FROM " . my_calendar_table() . ' WHERE event_id = %d', $id ) );
@@ -822,8 +822,8 @@ function my_calendar_events( $args ) {
 	$holiday_array = array();
 	$holidays      = array();
 	// Get holidays to filter out.
-	if ( get_option( 'mc_skip_holidays_category' ) ) {
-		$args['category'] = get_option( 'mc_skip_holidays_category' );
+	if ( mc_get_option( 'skip_holidays_category' ) ) {
+		$args['category'] = mc_get_option( 'skip_holidays_category' );
 		$args['holidays'] = 'holidays';
 		$holidays         = my_calendar_get_events( $args );
 		$holiday_array    = mc_set_date_array( $holidays );
@@ -856,7 +856,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -961,7 +961,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -1078,7 +1078,7 @@ function mc_instance_list( $args ) {
 			$event    = mc_get_event( $event_id );
 			$array    = mc_create_tags( $event );
 			if ( in_array( $template, array( 'details', 'grid', 'list', 'mini' ), true ) || mc_key_exists( $template ) ) {
-				if ( 1 === (int) get_option( 'mc_use_' . $template . '_template' ) ) {
+				if ( 1 === (int) mc_get_option( 'use_' . $template . '_template' ) ) {
 					$template = mc_get_template( $template );
 				} elseif ( mc_key_exists( $template ) ) {
 					$template = mc_get_custom_template( $template );
@@ -1180,7 +1180,7 @@ function mc_get_grouped_events( $id ) {
 function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 	$adjacence          = ( 'next' === $adjacent ) ? '>' : '<';
@@ -1232,7 +1232,7 @@ function mc_holiday_limit( $events, $holidays ) {
 	foreach ( array_keys( $events ) as $key ) {
 		if ( ! empty( $holidays[ $key ] ) ) {
 			foreach ( $events[ $key ] as $k => $event ) {
-				if ( (int) get_option( 'mc_skip_holidays_category' ) !== (int) $event->event_category && 1 === (int) $event->event_holiday ) {
+				if ( (int) mc_get_option( 'skip_holidays_category' ) !== (int) $event->event_category && 1 === (int) $event->event_holiday ) {
 					unset( $events[ $key ][ $k ] );
 				}
 			}
@@ -1282,7 +1282,7 @@ function mc_set_date_array( $events ) {
 function mc_valid_id( $mc_id ) {
 	global $wpdb;
 	$mcdb = $wpdb;
-	if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}
 
@@ -1325,7 +1325,7 @@ function mc_get_db_type() {
 		global $wpdb;
 		$mcdb    = $wpdb;
 		$db_type = 'MyISAM';
-		if ( 'true' === get_option( 'mc_remote' ) && function_exists( 'mc_remote_db' ) ) {
+		if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 			$mcdb = mc_remote_db();
 		}
 		$my_calendar = my_calendar_table();

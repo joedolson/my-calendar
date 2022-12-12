@@ -333,7 +333,7 @@ function my_calendar_manage() {
 					<div class="postbox">
 						<h2 class="mc-heading-inline"><?php esc_html_e( 'My Events', 'my-calendar' ); ?></h2>
 							<?php
-								$grid     = ( 'grid' === get_option( 'mc_default_admin_view' ) ) ? true : false;
+								$grid     = ( 'grid' === mc_get_option( 'default_admin_view' ) ) ? true : false;
 								$grid_url = admin_url( 'admin.php?page=my-calendar-manage&view=grid' );
 								$list_url = admin_url( 'admin.php?page=my-calendar-manage&view=list' );
 							?>
@@ -479,10 +479,10 @@ function mc_list_events() {
 			$sortdir = 'default';
 		}
 
-		$default_direction = ( '' === get_option( 'mc_default_direction', '' ) ) ? 'ASC' : get_option( 'mc_default_direction' );
+		$default_direction = ( '' === mc_get_option( 'default_direction', '' ) ) ? 'ASC' : mc_get_option( 'default_direction' );
 		$sortbydirection   = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
 
-		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : (int) get_option( 'mc_default_sort' );
+		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : (int) mc_get_option( 'default_sort' );
 		if ( empty( $sortby ) ) {
 			$sortbyvalue = 'event_begin';
 		} else {

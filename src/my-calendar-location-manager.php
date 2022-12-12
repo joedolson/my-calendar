@@ -48,7 +48,7 @@ function my_calendar_manage_locations() {
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'Locations', 'my-calendar' ); ?></h1>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
 		<?php
-		if ( '' === get_option( 'mc_location_cpt_base', '' ) ) {
+		if ( '' === mc_get_option( 'location_cpt_base', '' ) ) {
 			?>
 			<a class="page-title-action" href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>"><?php esc_html_e( 'Update location permalinks', 'my-calendar' ); ?></a>
 			<?php
@@ -79,7 +79,7 @@ function my_calendar_manage_locations() {
  * @return string
  */
 function mc_default_location() {
-	$default = get_option( 'mc_default_location' );
+	$default = mc_get_option( 'default_location' );
 	$output  = '';
 	if ( $default ) {
 		$location = mc_get_location( $default );
@@ -364,7 +364,7 @@ function mc_manage_locations() {
 			</thead>
 			<tbody>
 			<?php
-			$default_location = get_option( 'mc_default_location', '' );
+			$default_location = mc_get_option( 'default_location', '' );
 			if ( $default_location ) {
 				$default = mc_get_location( $default_location );
 				echo wp_kses( mc_location_manager_row( $default ), mc_kses_elements() );
@@ -437,7 +437,7 @@ function mc_location_manager_row( $location ) {
 		return '';
 	}
 
-	if ( (int) get_option( 'mc_default_location' ) === (int) $location->location_id ) {
+	if ( (int) mc_get_option( 'default_location' ) === (int) $location->location_id ) {
 		$card    = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
 		$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';
 	} else {

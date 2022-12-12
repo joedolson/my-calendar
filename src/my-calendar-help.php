@@ -43,7 +43,7 @@ function my_calendar_help() {
 						echo '<li>' . __( 'Assign your Calendar Page Location at <code>My Calendar > Settings > General</code>', 'my-calendar' ) . '</li>';
 					} else {
 						$permalink = mc_get_uri();
-						$edit_url  = get_edit_post_link( absint( get_option( 'mc_uri_id' ) ) );
+						$edit_url  = get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) );
 						// Translators: Calendar link, calendar edit link.
 						echo '<li>' . sprintf( __( '<a href="%1$s">View your calendar</a> or <a href="%2$s">Edit the calendar page</a>', 'my-calendar' ), esc_url( $permalink ), esc_url( $edit_url ) ) . '</li>';
 					}
@@ -194,9 +194,9 @@ function mc_help_link( $link_text, $modal_title, $query, $id, $echo = true ) {
  * Load modal for contextual help.
  */
 function mc_enqueue_modal_assets() {
-	$version = get_option( 'mc_version' );
+	$version = mc_get_version();
 	// Load only for My Calendar admin pages.
-	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) && get_option( 'mc_uri_id' ) === $_GET['post'] ) {
+	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'] ) {
 		// Enqueue assets from WordPress.
 		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), $version, true );

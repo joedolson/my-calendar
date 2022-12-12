@@ -38,10 +38,10 @@ function mc_templates_do_edit() {
 			} else {
 				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
 					$template          = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( stripslashes( $_POST['mc_template'] ) ) : '';
-					$templates         = get_option( 'mc_templates', array() );
+					$templates         = mc_get_option( 'templates', array() );
 					$templates[ $key ] = $template;
-					update_option( 'mc_templates', $templates );
-					update_option( 'mc_use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
+					mc_update_option( 'templates', $templates );
+					mc_update_option( 'use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
 					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=core&mc_template=' . $key . '#my-calendar-templates' ) ) );
 				} elseif ( isset( $_POST['mc_template'] ) ) {
 					$template = wp_kses_post( stripslashes( $_POST['mc_template'] ) );
@@ -66,7 +66,7 @@ function mc_templates_edit() {
 		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize templates on this site.', 'my-calendar' ) . '</p>' );
 		return;
 	}
-	$templates = get_option( 'mc_templates', array() );
+	$templates = mc_get_option( 'templates', array() );
 	$key       = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
 
 	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
@@ -128,7 +128,7 @@ function mc_templates_edit() {
 				if ( mc_is_core_template( $key ) ) {
 					?>
 				<p>
-					<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php checked( get_option( 'mc_use_' . $key . '_template' ), '1' ); ?> /> <label for="mc_use_template"><?php esc_html_e( 'Use this template', 'my-calendar' ); ?></label>
+					<input type="checkbox" id="mc_use_template" name="mc_use_template" value="1" <?php checked( mc_get_option( 'use_' . $key . '_template' ), '1' ); ?> /> <label for="mc_use_template"><?php esc_html_e( 'Use this template', 'my-calendar' ); ?></label>
 				</p>
 					<?php
 				}
@@ -255,7 +255,7 @@ function mc_templates_edit() {
 		</div>
 	</div>
 	<?php
-	$templates = (array) get_option( 'mc_templates', array() );
+	$templates = (array) mc_get_option( 'templates', array() );
 	ksort( $templates );
 	foreach ( $templates as $key => $template ) {
 		if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'link' === $key || 'label' === $key || 'rss' === $key ) {
@@ -550,10 +550,10 @@ function mc_list_core_templates( $current = '' ) {
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
 	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false;
 	$type            = ( isset( $_GET['mc_template'] ) ) ? $_GET['mc_template'] : '';
-	$grid_enabled    = ( ( 'grid' === $type && $switched ) || get_option( 'mc_use_grid_template' ) === '1' ) ? $check : $uncheck;
-	$list_enabled    = ( ( 'list' === $type && $switched ) || get_option( 'mc_use_list_template' ) === '1' ) ? $check : $uncheck;
-	$mini_enabled    = ( ( 'mini' === $type && $switched ) || get_option( 'mc_use_mini_template' ) === '1' ) ? $check : $uncheck;
-	$details_enabled = ( ( 'details' === $type && $switched ) || get_option( 'mc_use_details_template' ) === '1' ) ? $check : $uncheck;
+	$grid_enabled    = ( ( 'grid' === $type && $switched ) || mc_get_option( 'use_grid_template' ) === '1' ) ? $check : $uncheck;
+	$list_enabled    = ( ( 'list' === $type && $switched ) || mc_get_option( 'use_list_template' ) === '1' ) ? $check : $uncheck;
+	$mini_enabled    = ( ( 'mini' === $type && $switched ) || mc_get_option( 'use_mini_template' ) === '1' ) ? $check : $uncheck;
+	$details_enabled = ( ( 'details' === $type && $switched ) || mc_get_option( 'use_details_template' ) === '1' ) ? $check : $uncheck;
 
 	$list = "
 	<table class='widefat'>
