@@ -415,6 +415,13 @@ function mc_default_options() {
 		'cpt_base'                     => 'mc-events',
 		'location_cpt_base'            => 'mc-locations',
 		'uri_query'                    => '',
+		'default_category'             => '',
+		'skip_holidays_category'       => '',
+		'hide_icons'                   => '',
+		'use_list_template'            => '',
+		'use_mini_template'            => '',
+		'use_details_template'         => '',
+		'use_grid_template'            => '',
 	);
 
 	/**
