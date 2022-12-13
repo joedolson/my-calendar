@@ -308,13 +308,13 @@ function mc_manage_locations() {
 	<div class="mc-admin-header locations">
 		<?php echo wp_kses_post( $pagination ); ?>
 		<div class='mc-search'>
-			<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post">
+			<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post" role='search'>
 				<div>
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				</div>
 				<div>
 					<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search Locations', 'my-calendar' ); ?></label>
-					<input type='text' role='search' name='mcl' id='mc_search' value='<?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
+					<input type='text' name='mcl' id='mc_search' value='<?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
 					<input type='submit' value='<?php esc_attr_e( 'Search', 'my-calendar' ); ?>' class='button-secondary' />
 				</div>
 			</form>
