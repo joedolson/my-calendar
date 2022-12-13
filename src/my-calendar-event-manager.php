@@ -596,6 +596,44 @@ function mc_get_query_limit() {
 }
 
 /**
+ * Get filter type and filtered value.
+ *
+ * @return array
+ */
+function mc_get_filter() {
+	$restrict        = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
+
+	switch ( $restrict ) {
+		case 'all':
+			$filter = '';
+			break;
+		case 'where':
+			$filter   = ( isset( $_GET['filter'] ) ) ? esc_sql( urldecode( $_GET['filter'] ) ) : '';
+			$restrict = 'event_label';
+			break;
+		case 'author':
+			$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+			$restrict = 'event_author';
+			break;
+		case 'category':
+			$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+			$restrict = 'event_category';
+			break;
+		case 'flagged':
+			$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+			$restrict = 'event_flagged';
+			break;
+		default:
+			$filter = '';
+	}
+
+	return array(
+		'filter'   => $filter,
+		'restrict' => $restrict,
+	)
+}
+
+/**
  * Used on the manage events admin page to display a list of events
  */
 function mc_list_events() {
@@ -607,38 +645,16 @@ function mc_list_events() {
 		$sortbydirection = $sort['direction'];
 		$sortby          = $sort['sortby'];
 		$limit           = mc_get_event_status_limit();
+		$filters         = mc_get_filter();
+		$filter          = $filters['filter'];
+		$restrict        = $filters['restrict'];
 		$allow_filters   = true;
-		$restrict        = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
 
-		switch ( $restrict ) {
-			case 'all':
-				$filter = '';
-				break;
-			case 'where':
-				$filter   = ( isset( $_GET['filter'] ) ) ? $_GET['filter'] : '';
-				$restrict = 'event_label';
-				break;
-			case 'author':
-				$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
-				$restrict = 'event_author';
-				break;
-			case 'category':
-				$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
-				$restrict = 'event_category';
-				break;
-			case 'flagged':
-				$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
-				$restrict = 'event_flagged';
-				break;
-			default:
-				$filter = '';
-		}
 		if ( ! current_user_can( 'mc_manage_events' ) && ! current_user_can( 'mc_approve_events' ) ) {
 			$restrict      = 'event_author';
 			$filter        = get_current_user_id();
 			$allow_filters = false;
 		}
-		$filter = esc_sql( urldecode( $filter ) );
 		if ( 'event_label' === $restrict ) {
 			$filter = "'$filter'";
 		}
