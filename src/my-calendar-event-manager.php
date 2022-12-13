@@ -524,6 +524,7 @@ function mc_get_event_list_sorting() {
 	return array(
 		'sort'      => $sortbyvalue,
 		'direction' => $sort,
+		'sortby'    => $sortby,
 	);
 }
 
@@ -564,6 +565,7 @@ function mc_list_events() {
 		$sort            = mc_get_event_list_sorting();
 		$sortbyvalue     = $sort['sort'];
 		$sortbydirection = $sort['direction'];
+		$sortby          = $sort['sortby'];
 		$limit           = mc_get_event_status_limit();
 		$allow_filters   = true;
 		$restrict        = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
@@ -699,19 +701,19 @@ function mc_list_events() {
 				<thead>
 					<tr>
 					<?php
-					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sort&paged=$current" );
+					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sortbydirection&paged=$current" );
 					$url       = add_query_arg( 'sort', '1', $admin_url );
-					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
+					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sortbydirection, $sortby, '1', $url );
 					$url       = add_query_arg( 'sort', '2', $admin_url );
-					$col_head .= mc_table_header( __( 'Title', 'my-calendar' ), $sort, $sortby, '2', $url );
+					$col_head .= mc_table_header( __( 'Title', 'my-calendar' ), $sortbydirection, $sortby, '2', $url );
 					$url       = add_query_arg( 'sort', '7', $admin_url );
-					$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sort, $sortby, '7', $url );
+					$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sortbydirection, $sortby, '7', $url );
 					$url       = add_query_arg( 'sort', '4', $admin_url );
-					$col_head .= mc_table_header( __( 'Date/Time', 'my-calendar' ), $sort, $sortby, '4', $url );
+					$col_head .= mc_table_header( __( 'Date/Time', 'my-calendar' ), $sortbydirection, $sortby, '4', $url );
 					$url       = add_query_arg( 'sort', '5', $admin_url );
-					$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sort, $sortby, '5', $url );
+					$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sortbydirection, $sortby, '5', $url );
 					$url       = add_query_arg( 'sort', '6', $admin_url );
-					$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sort, $sortby, '6', $url );
+					$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sortbydirection, $sortby, '6', $url );
 					echo mc_kses_post( $col_head );
 					?>
 					</tr>
