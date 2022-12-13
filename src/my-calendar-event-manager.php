@@ -467,7 +467,7 @@ function mc_handle_post() {
 
 /**
  * Get the current sorting characteristics for the admin event list.
- * 
+ *
  * @return array
  */
 function mc_get_event_list_sorting() {
@@ -521,12 +521,15 @@ function mc_get_event_list_sorting() {
 	}
 	$sort = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
 
-	return array( 'sort' => $sortbyvalue, 'direction' => $sort );
+	return array(
+		'sort'      => $sortbyvalue,
+		'direction' => $sort,
+	);
 }
 
 /**
  * Get event list limits.
- * 
+ *
  * @return string
  */
 function mc_get_event_status_limit() {
