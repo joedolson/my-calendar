@@ -655,38 +655,40 @@ function mc_list_events() {
 			$filter        = get_current_user_id();
 			$allow_filters = false;
 		}
+		// Set up filter format for location names.
 		if ( 'event_label' === $restrict ) {
 			$filter = "'$filter'";
 		}
 		$join = '';
+		// Set up filter format for categories.
 		if ( 'event_category' === $restrict ) {
 			$cat_limit       = mc_select_category( $filter );
 			$join            = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 			$select_category = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
 			$limit          .= ' ' . $select_category;
 		}
+		// Set up standard filter limits - normal database fields.
 		if ( '' === $limit && '' !== $filter ) {
 			$limit = "WHERE $restrict = $filter";
 		} elseif ( '' !== $limit && '' !== $filter && 'event_category' !== $restrict ) {
 			$limit .= " AND $restrict = $filter";
 		}
-		if ( '' === $filter || ! $allow_filters ) {
-			$filtered = '';
-		} else {
-			$filtered = "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
-		}
-		// Default limits.
+		// Define default limits if none otherwise set.
 		if ( '' === $limit ) {
 			$limit .= ( 'event_flagged' !== $restrict ) ? ' WHERE event_flagged = 0' : '';
 		} else {
 			$limit .= ( 'event_flagged' !== $restrict ) ? ' AND event_flagged = 0' : '';
 		}
+		// Define search query parameters.
 		if ( isset( $_POST['mcs'] ) || isset( $_GET['mcs'] ) ) {
 			$query  = $_REQUEST['mcs'];
 			$limit .= mc_prepare_search_query( $query );
 		}
+		// Get page and pagination values.
 		$query_limit = mc_get_query_limit();
+		// Set event status limits.
 		$limit      .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
+		// Toggle query type depending on whether we're limiting categories, which requires a join.
 		if ( 'event_category' !== $sortbyvalue ) {
 			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 		} else {
@@ -711,12 +713,17 @@ function mc_list_events() {
 			);
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 		}
-		$status_links = mc_status_links( $allow_filters );
-		echo wp_kses( $filtered, mc_kses_elements() );
+
+		// Display a link to clear filters if set.
+		if ( '' !== $filter && $allow_filters ) {
+			echo "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
+		}
 		?>
 		<div class="mc-admin-header">
 			<?php
-			echo wp_kses( $status_links, mc_kses_elements() );
+			// Display links to different statuses.
+			echo wp_kses( mc_status_links( $allow_filters ), mc_kses_elements() );
+			// Display event search.
 			mc_admin_event_search();
 			?>
 		</div>
