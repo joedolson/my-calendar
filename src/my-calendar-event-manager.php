@@ -525,6 +525,33 @@ function mc_get_event_list_sorting() {
 }
 
 /**
+ * Get event list limits.
+ * 
+ * @return string
+ */
+function mc_get_event_status_limit() {
+	$status = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : '';
+	// Filter by status.
+	switch ( $status ) {
+		case 'all':
+			$limit = '';
+			break;
+		case 'draft':
+			$limit = 'WHERE event_approved = 0';
+			break;
+		case 'published':
+			$limit = 'WHERE event_approved = 1';
+			break;
+		case 'trashed':
+			$limit = 'WHERE event_approved = 2';
+			break;
+		default:
+			$limit = 'WHERE event_approved != 2';
+	}
+
+	return $limit;
+}
+/**
  * Used on the manage events admin page to display a list of events
  */
 function mc_list_events() {
@@ -534,25 +561,10 @@ function mc_list_events() {
 		$sort            = mc_get_event_list_sorting();
 		$sortbyvalue     = $sort['sort'];
 		$sortbydirection = $sort['direction'];
+		$limit           = mc_get_event_status_limit();
 		$allow_filters   = true;
-		$status          = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : '';
 		$restrict        = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
-		switch ( $status ) {
-			case 'all':
-				$limit = '';
-				break;
-			case 'draft':
-				$limit = 'WHERE event_approved = 0';
-				break;
-			case 'published':
-				$limit = 'WHERE event_approved = 1';
-				break;
-			case 'trashed':
-				$limit = 'WHERE event_approved = 2';
-				break;
-			default:
-				$limit = 'WHERE event_approved != 2';
-		}
+
 		switch ( $restrict ) {
 			case 'all':
 				$filter = '';
