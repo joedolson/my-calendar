@@ -492,54 +492,77 @@ function mc_handle_post() {
 }
 
 /**
+ * Get the current sorting characteristics for the admin event list.
+ * 
+ * @return array
+ */
+function mc_get_event_list_sorting() {
+	$user_direction    = get_user_meta( wp_get_current_user()->ID, '_mc_default_direction', true );
+	$default_direction = ( '' !== $user_direction ) ? $user_direction : mc_get_option( 'default_direction' );
+	$user_sort         = get_user_meta( wp_get_current_user()->ID, '_mc_default_sort', true );
+	$default_sort      = ( '' !== $user_sort ) ? $user_sort : mc_get_option( 'default_sort' );
+
+	if ( isset( $_GET['order'] ) ) {
+		$sortbydirection = ( isset( $_GET['order'] ) &amp;&amp; 'ASC' === $_GET['order'] ) ? 'ASC' : $default_direction;
+		$sortbydirection = ( isset( $_GET['order'] ) &amp;&amp; 'DESC' === $_GET['order'] ) ? 'DESC' : $sortbydirection;
+
+		update_user_meta( wp_get_current_user()->ID, '_mc_default_direction', $sortbydirection );
+	} else {
+		$sortbydirection = $default_direction;
+	}
+	if ( isset( $_GET['sort'] ) ) {
+		$sortby = absint( $_GET['sort'] );
+
+		update_user_meta( wp_get_current_user()->ID, '_mc_default_sort', $sortby );
+	} else {
+		$sortby = $default_sort;
+	}
+
+	if ( empty( $sortby ) ) {
+		$sortbyvalue = 'event_begin';
+	} else {
+		switch ( $sortby ) {
+			case 1:
+				$sortbyvalue = 'event_ID';
+				break;
+			case 2:
+			case 3:
+				$sortbyvalue = 'event_title';
+				break;
+			case 4:
+				$sortbyvalue = "event_begin $sortbydirection, event_time";
+				break;
+			case 5:
+				$sortbyvalue = 'event_author';
+				break;
+			case 6:
+				$sortbyvalue = 'event_category';
+				break;
+			case 7:
+				$sortbyvalue = 'event_label';
+				break;
+			default:
+				$sortbyvalue = "event_begin $sortbydirection, event_time";
+		}
+	}
+	$sort = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
+
+	return array( 'sort' => $sortbyvalue, 'direction' => $sort );
+}
+
+/**
  * Used on the manage events admin page to display a list of events
  */
 function mc_list_events() {
 	global $wpdb;
 	if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_add_events' ) ) {
-
-		if ( isset( $_GET['order'] ) ) {
-			$sortdir = ( isset( $_GET['order'] ) &amp;&amp; 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
-			$sortdir = ( isset( $_GET['order'] ) &amp;&amp; 'DESC' === $_GET['order'] ) ? 'DESC' : $sortdir;
-		} else {
-			$sortdir = 'default';
-		}
-
-		$default_direction = ( '' === mc_get_option( 'default_direction', '' ) ) ? 'ASC' : mc_get_option( 'default_direction' );
-		$sortbydirection   = ( 'default' === $sortdir ) ? $default_direction : $sortdir;
-
-		$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : (int) mc_get_option( 'default_sort' );
-		if ( empty( $sortby ) ) {
-			$sortbyvalue = 'event_begin';
-		} else {
-			switch ( $sortby ) {
-				case 1:
-					$sortbyvalue = 'event_ID';
-					break;
-				case 2:
-				case 3:
-					$sortbyvalue = 'event_title';
-					break;
-				case 4:
-					$sortbyvalue = "event_begin $sortbydirection, event_time";
-					break;
-				case 5:
-					$sortbyvalue = 'event_author';
-					break;
-				case 6:
-					$sortbyvalue = 'event_category';
-					break;
-				case 7:
-					$sortbyvalue = 'event_label';
-					break;
-				default:
-					$sortbyvalue = "event_begin $sortbydirection, event_time";
-			}
-		}
-		$sort          = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
-		$allow_filters = true;
-		$status        = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : '';
-		$restrict      = ( isset( $_GET['restrict'] ) ) ? $_GET['restrict'] : 'all';
+		// Check current user's last sort.
+		$sort            = mc_get_event_list_sorting();
+		$sortbyvalue     = $sort['sort'];
+		$sortbydirection = $sort['direction'];
+		$allow_filters   = true;
+		$status          = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : '';
+		$restrict        = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
 		switch ( $status ) {
 			case 'all':
 				$limit = '';
