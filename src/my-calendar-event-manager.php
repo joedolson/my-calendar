@@ -555,6 +555,27 @@ function mc_get_event_status_limit() {
 
 	return $limit;
 }
+
+/**
+ * Event list search form output.
+ *
+ * @param string $context Where is this form?
+ */
+function mc_admin_event_search( $context = '' ) {
+	?>
+	<div class='mc-search'>
+	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
+		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+		</div>
+		<div>
+			<label for="mc_search<?php echo esc_attr( $context ); ?>" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
+			<input type='text' name='mcs' id='mc_search<?php echo esc_attr( $context ); ?>' value='<?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
+			<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
+		</div>
+	</form>
+	</div>
+	<?php
+}
 /**
  * Used on the manage events admin page to display a list of events
  */
@@ -668,18 +689,10 @@ function mc_list_events() {
 		echo wp_kses( $filtered, mc_kses_elements() );
 		?>
 		<div class="mc-admin-header">
-			<?php echo wp_kses( $status_links, mc_kses_elements() ); ?>
-			<div class='mc-search'>
-				<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-					<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					</div>
-					<div>
-						<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
-						<input type='text' role='search' name='mcs' id='mc_search' value='<?php echo esc_attr( $search_text ); ?>' />
-						<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary' />
-					</div>
-				</form>
-			</div>
+			<?php
+			echo wp_kses( $status_links, mc_kses_elements() );
+			mc_admin_event_search();
+			?>
 		</div>
 		<?php
 		if ( ! empty( $events ) ) {
@@ -910,18 +923,8 @@ function mc_list_events() {
 			<?php
 			$status_links = mc_status_links( $allow_filters );
 			echo wp_kses( $status_links . $filtered, mc_kses_elements() );
+			mc_admin_event_search( '_footer' );
 			?>
-			<div class='mc-search'>
-			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-				<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-				</div>
-				<div>
-					<label for="mc_search_footer" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
-					<input type='text' role='search' name='mcs' id='mc_search_footer' value='<?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
-					<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
-				</div>
-			</form>
-			</div>
 		</div>
 			<?php
 		} else {
