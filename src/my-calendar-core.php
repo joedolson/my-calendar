@@ -873,12 +873,14 @@ function my_calendar_check() {
 	if ( current_user_can( 'manage_options' ) ) {
 		global $wpdb;
 		mc_if_needs_permissions();
-		$current_version = mc_get_version();
+		$current_version = mc_get_version( false );
 
 		// If current version matches, don't bother running this.
 		if ( mc_get_version() === $current_version ) {
 
 			return true;
+		} else {
+			update_option( 'mc_version', mc_get_version() );
 		}
 		// Assume this is not a new install until we prove otherwise.
 		$new_install        = false;
@@ -895,7 +897,7 @@ function my_calendar_check() {
 		} else {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '3.0.0', '3.1.13', '3.3.0' );
+			$valid_upgrades = array( '3.0.0', '3.1.13', '3.3.0', '3.4.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $current_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -938,7 +940,6 @@ function mc_do_upgrades( $upgrade_path ) {
 			case '3.4.0':
 				mc_migrate_settings();
 				delete_option( 'mc_use_custom_js' );
-				delete_option( 'mc_version' );
 				break;
 			case '3.3.0': // 2021-12-13
 				// Event repeats is now a string, and prefers a date-like value.

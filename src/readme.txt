@@ -102,6 +102,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix PHP notice if $templates not an array.
 * Bug fix: Fix JS for list view to handle if an event has a language change.
 * Bug fix: Mini URL used incorrectly.
+* Bug fix: If primary category is already private, no need to check whether a private category is asigned.
 * Change: Manage settings in a single database option rather than individual options.
 * Change: Improved design on print view.
 * Change: Support 'current' as an argument in a comma-separated list of users.

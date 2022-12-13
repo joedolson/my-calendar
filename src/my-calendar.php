@@ -45,10 +45,15 @@ global $wpdb;
 
 /**
  * Current My Calendar version.
+ * 
+ * @param bool $version Pass false to return previous installed version.
  *
  * @return string
  */
-function mc_get_version() {
+function mc_get_version( $version = true ) {
+	if ( ! $version ) {
+		return get_option( 'mc_version', '' );
+	}
 	return '3.4.0';
 }
 
