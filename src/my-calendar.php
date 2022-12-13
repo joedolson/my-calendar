@@ -45,7 +45,7 @@ global $wpdb;
 
 /**
  * Current My Calendar version.
- * 
+ *
  * @param bool $version Pass false to return previous installed version.
  *
  * @return string
