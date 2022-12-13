@@ -581,6 +581,27 @@ function mc_get_event_status_limit() {
 
 	return $limit;
 }
+
+/**
+ * Event list search form output.
+ *
+ * @param string $context Where is this form?
+ */
+function mc_admin_event_search( $context = '' ) {
+	?>
+	&lt;div class='mc-search'>
+	&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
+		&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+		&lt;/div>
+		&lt;div>
+			&lt;label for="mc_search&lt;?php echo esc_attr( $context ); ?>" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Events', 'my-calendar' ); ?>&lt;/label>
+			&lt;input type='text' name='mcs' id='mc_search&lt;?php echo esc_attr( $context ); ?>' value='&lt;?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
+			&lt;input type='submit' value='&lt;?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
+		&lt;/div>
+	&lt;/form>
+	&lt;/div>
+	&lt;?php
+}
 /**
  * Used on the manage events admin page to display a list of events
  */
@@ -694,18 +715,10 @@ function mc_list_events() {
 		echo wp_kses( $filtered, mc_kses_elements() );
 		?>
 		&lt;div class="mc-admin-header">
-			&lt;?php echo wp_kses( $status_links, mc_kses_elements() ); ?>
-			&lt;div class='mc-search'>
-				&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-					&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					&lt;/div>
-					&lt;div>
-						&lt;label for="mc_search" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Events', 'my-calendar' ); ?>&lt;/label>
-						&lt;input type='text' role='search' name='mcs' id='mc_search' value='&lt;?php echo esc_attr( $search_text ); ?>' />
-						&lt;input type='submit' value='&lt;?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary' />
-					&lt;/div>
-				&lt;/form>
-			&lt;/div>
+			&lt;?php
+			echo wp_kses( $status_links, mc_kses_elements() );
+			mc_admin_event_search();
+			?>
 		&lt;/div>
 		&lt;?php
 		if ( ! empty( $events ) ) {
@@ -936,18 +949,8 @@ function mc_list_events() {
 			&lt;?php
 			$status_links = mc_status_links( $allow_filters );
 			echo wp_kses( $status_links . $filtered, mc_kses_elements() );
+			mc_admin_event_search( '_footer' );
 			?>
-			&lt;div class='mc-search'>
-			&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-				&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-				&lt;/div>
-				&lt;div>
-					&lt;label for="mc_search_footer" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Events', 'my-calendar' ); ?>&lt;/label>
-					&lt;input type='text' role='search' name='mcs' id='mc_search_footer' value='&lt;?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
-					&lt;input type='submit' value='&lt;?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
-				&lt;/div>
-			&lt;/form>
-			&lt;/div>
 		&lt;/div>
 			&lt;?php
 		} else {
