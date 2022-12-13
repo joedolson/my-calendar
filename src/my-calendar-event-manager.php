@@ -592,7 +592,11 @@ function mc_get_query_limit() {
 	}
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
 
-	return $query_limit;
+	return array(
+		'query'          => $query_limit,
+		'current'        => $current,
+		'items_per_page' => $items_per_page,
+	);
 }
 
 /**
@@ -630,7 +634,7 @@ function mc_get_filter() {
 	return array(
 		'filter'   => $filter,
 		'restrict' => $restrict,
-	)
+	);
 }
 
 /**
@@ -685,20 +689,20 @@ function mc_list_events() {
 			$limit .= mc_prepare_search_query( $query );
 		}
 		// Get page and pagination values.
-		$query_limit = mc_get_query_limit();
+		$query = mc_get_query_limit();
 		// Set event status limits.
 		$limit      .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
 		// Toggle query type depending on whether we're limiting categories, which requires a join.
 		if ( 'event_category' !== $sortbyvalue ) {
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
 			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . ' AS e ' . $join . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . ' AS e ' . $join . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 		}
 		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
 		$items      = $found_rows[0];
-		$num_pages  = ceil( $items / $items_per_page );
+		$num_pages  = ceil( $items / $query['items_per_page'] );
 		if ( $num_pages > 1 ) {
 			$page_links = paginate_links(
 				array(
@@ -707,7 +711,7 @@ function mc_list_events() {
 					'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
 					'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
 					'total'     => $num_pages,
-					'current'   => $current,
+					'current'   => $query['current'],
 					'mid_size'  => 2,
 				)
 			);
@@ -715,8 +719,9 @@ function mc_list_events() {
 		}
 
 		// Display a link to clear filters if set.
+		$filtered = '';
 		if ( '' !== $filter && $allow_filters ) {
-			echo "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
+			$filtered = "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
 		}
 		?>
 		<div class="mc-admin-header">
@@ -747,7 +752,7 @@ function mc_list_events() {
 				<thead>
 					<tr>
 					<?php
-					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sortbydirection&paged=$current" );
+					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sortbydirection&paged=" . $query['current'] );
 					$url       = add_query_arg( 'sort', '1', $admin_url );
 					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sortbydirection, $sortby, '1', $url );
 					$url       = add_query_arg( 'sort', '2', $admin_url );
@@ -765,181 +770,7 @@ function mc_list_events() {
 					</tr>
 				</thead>
 				<tbody>
-				<?php
-				$class = '';
-
-				foreach ( array_keys( $events ) as $key ) {
-					$e       =& $events[ $key ];
-					$event   = mc_get_first_event( $e->event_id );
-					$invalid = false;
-					if ( ! is_object( $event ) ) {
-						$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-						$invalid = true;
-					}
-					$class   = ( $invalid ) ? 'invalid' : '';
-					$pending = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
-					$trashed = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
-					$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
-
-					if ( 1 === (int) $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
-						$spam       = 'spam';
-						$pending    = '';
-						$spam_label = '<strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':</strong> ';
-					} else {
-						$spam       = '';
-						$spam_label = '';
-					}
-
-					$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
-					$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
-					$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
-					$limit    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'all';
-					$private  = ( mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
-					$check    = mc_test_occurrence_overlap( $event, true );
-					$problem  = ( '' !== $check ) ? 'problem' : '';
-					$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
-					$copy_url = admin_url( "admin.php?page=my-calendar&amp;mode=copy&amp;event_id=$event->event_id" );
-					$view_url = ( $invalid ) ? '' : mc_get_details_link( $event );
-
-					$group_url  = admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
-					$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" );
-					$can_edit   = mc_can_edit_event( $event );
-					if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
-						?>
-						<tr class="<?php echo sanitize_html_class( "$class $spam $pending $trashed $problem" ); ?>">
-							<th scope="row">
-								<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
-								<label for="mc<?php echo absint( $event->event_id ); ?>">
-								<?php
-								// Translators: Event ID.
-								printf( __( "<span class='screen-reader-text'>Select event </span>%d", 'my-calendar' ), absint( $event->event_id ) );
-								?>
-								</label>
-							</th>
-							<td>
-								<strong>
-								<?php
-								if ( $can_edit ) {
-									?>
-									<a href="<?php echo esc_url( $edit_url ); ?>" class='edit'><span class="dashicons dashicons-edit" aria-hidden="true"></span>
-									<?php
-								}
-								echo $spam_label;
-								echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '</span>';
-								if ( $can_edit ) {
-									echo '</a>';
-									if ( '' !== $check ) {
-										// Translators: URL to edit event.
-										echo wp_kses_post( '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), esc_url( $edit_url ) ) . '</strong>' );
-									}
-								}
-								echo wp_kses_post( $private . $trash . $draft . $inv );
-								?>
-								</strong>
-
-								<div class='row-actions'>
-									<?php
-									if ( mc_event_published( $event ) ) {
-										?>
-										<a href="<?php echo esc_url( $view_url ); ?>" class='view' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'View', 'my-calendar' ); ?></a> |
-										<?php
-									} elseif ( current_user_can( 'mc_manage_events' ) ) {
-										?>
-										<a href="<?php echo esc_url( add_query_arg( 'preview', 'true', $view_url ) ); ?>" class='view' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Preview', 'my-calendar' ); ?></a> |
-										<?php
-									}
-									if ( $can_edit ) {
-										?>
-										<a href="<?php echo esc_url( $copy_url ); ?>" class='copy' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Copy', 'my-calendar' ); ?></a>
-										<?php
-									}
-									if ( $can_edit ) {
-										if ( mc_event_is_grouped( $event->event_group_id ) ) {
-											?>
-											| <a href="<?php echo esc_url( $group_url ); ?>" class='edit group' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Edit Group', 'my-calendar' ); ?></a>
-											<?php
-										}
-										?>
-										| <a href="<?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a>
-										<?php
-									} else {
-										_e( 'Not editable.', 'my-calendar' );
-									}
-									?>
-									|
-									<?php
-									if ( current_user_can( 'mc_approve_events' ) && $can_edit ) {
-										if ( 1 === (int) $event->event_approved ) {
-											$mo = 'reject';
-											$te = __( 'Trash', 'my-calendar' );
-										} else {
-											$mo = 'publish';
-											$te = __( 'Publish', 'my-calendar' );
-										}
-										?>
-										<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;limit=$limit&amp;event_id=$event->event_id" ) ); ?>" class='<?php echo esc_attr( $mo ); ?>' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php echo esc_html( $te ); ?></a>
-										<?php
-									} else {
-										switch ( $event->event_approved ) {
-											case 1:
-												_e( 'Published', 'my-calendar' );
-												break;
-											case 2:
-												_e( 'Trashed', 'my-calendar' );
-												break;
-											default:
-												_e( 'Awaiting Approval', 'my-calendar' );
-										}
-									}
-									?>
-								</div>
-							</td>
-							<td>
-								<?php
-								if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
-									$elabel = $event->location->location_label;
-								} else {
-									$elabel = $event->event_label;
-								}
-								if ( '' !== $elabel ) {
-									?>
-								<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $elabel ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $elabel ) ); ?></a>
-									<?php
-								}
-								?>
-							</td>
-							<td>
-							<?php
-							if ( '23:59:59' !== $event->event_endtime ) {
-								$event_time = date_i18n( mc_time_format(), mc_strtotime( $event->event_time ) );
-							} else {
-								$event_time = mc_notime_label( $event );
-							}
-							$begin = date_i18n( mc_date_format(), mc_strtotime( $event->event_begin ) );
-							echo esc_html( "$begin, $event_time" );
-							?>
-								<div class="recurs">
-									<?php echo wp_kses_post( mc_recur_string( $event ) ); ?>
-								</div>
-							</td>
-							<?php
-							$auth   = ( is_object( $author ) ) ? $author->ID : 0;
-							$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
-							$author = ( is_object( $author ) ? $author->display_name : $author );
-							?>
-							<td>
-								<a class='mc_filter' href="<?php echo esc_url( $filter ); ?>">
-									<span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( $author ); ?>
-								</a>
-							</td>
-							<td>
-							<?php echo mc_admin_category_list( $event ); ?>
-							</td>
-						</tr>
-						<?php
-					}
-				}
-				?>
+				<?php mc_admin_events_table( $events );	?>
 				</tbody>
 			</table>
 			<div class="mc-actions">
@@ -975,6 +806,187 @@ function mc_list_events() {
 			}
 		}
 	}
+}
+
+/**
+ * Output event table data for My Calendar admin events.
+ * 
+ * @param array $event Array of objects representing events.
+ */
+function mc_admin_events_table( $events ) {
+	$class = '';
+
+	foreach ( array_keys( $events ) as $key ) {
+		$e       =& $events[ $key ];
+		$event   = mc_get_first_event( $e->event_id );
+		$invalid = false;
+		if ( ! is_object( $event ) ) {
+			$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$invalid = true;
+		}
+		$class   = ( $invalid ) ? 'invalid' : '';
+		$pending = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
+		$trashed = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
+		$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
+
+		if ( 1 === (int) $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
+			$spam       = 'spam';
+			$pending    = '';
+			$spam_label = '<strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':</strong> ';
+		} else {
+			$spam       = '';
+			$spam_label = '';
+		}
+
+		$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
+		$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
+		$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
+		$limit    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'all';
+		$private  = ( mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
+		$check    = mc_test_occurrence_overlap( $event, true );
+		$problem  = ( '' !== $check ) ? 'problem' : '';
+		$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
+		$copy_url = admin_url( "admin.php?page=my-calendar&amp;mode=copy&amp;event_id=$event->event_id" );
+		$view_url = ( $invalid ) ? '' : mc_get_details_link( $event );
+
+		$group_url  = admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
+		$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" );
+		$can_edit   = mc_can_edit_event( $event );
+		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
+			?>
+			<tr class="<?php echo sanitize_html_class( "$class $spam $pending $trashed $problem" ); ?>">
+				<th scope="row">
+					<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
+					<label for="mc<?php echo absint( $event->event_id ); ?>">
+					<?php
+					// Translators: Event ID.
+					printf( __( "<span class='screen-reader-text'>Select event </span>%d", 'my-calendar' ), absint( $event->event_id ) );
+					?>
+					</label>
+				</th>
+				<td>
+					<strong>
+					<?php
+					if ( $can_edit ) {
+						?>
+						<a href="<?php echo esc_url( $edit_url ); ?>" class='edit'><span class="dashicons dashicons-edit" aria-hidden="true"></span>
+						<?php
+					}
+					echo $spam_label;
+					echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '</span>';
+					if ( $can_edit ) {
+						echo '</a>';
+						if ( '' !== $check ) {
+							// Translators: URL to edit event.
+							echo wp_kses_post( '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), esc_url( $edit_url ) ) . '</strong>' );
+						}
+					}
+					echo wp_kses_post( $private . $trash . $draft . $inv );
+					?>
+					</strong>
+
+					<div class='row-actions'>
+						<?php
+						if ( mc_event_published( $event ) ) {
+							?>
+							<a href="<?php echo esc_url( $view_url ); ?>" class='view' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'View', 'my-calendar' ); ?></a> |
+							<?php
+						} elseif ( current_user_can( 'mc_manage_events' ) ) {
+							?>
+							<a href="<?php echo esc_url( add_query_arg( 'preview', 'true', $view_url ) ); ?>" class='view' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Preview', 'my-calendar' ); ?></a> |
+							<?php
+						}
+						if ( $can_edit ) {
+							?>
+							<a href="<?php echo esc_url( $copy_url ); ?>" class='copy' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Copy', 'my-calendar' ); ?></a>
+							<?php
+						}
+						if ( $can_edit ) {
+							if ( mc_event_is_grouped( $event->event_group_id ) ) {
+								?>
+								| <a href="<?php echo esc_url( $group_url ); ?>" class='edit group' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Edit Group', 'my-calendar' ); ?></a>
+								<?php
+							}
+							?>
+							| <a href="<?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a>
+							<?php
+						} else {
+							_e( 'Not editable.', 'my-calendar' );
+						}
+						?>
+						|
+						<?php
+						if ( current_user_can( 'mc_approve_events' ) && $can_edit ) {
+							if ( 1 === (int) $event->event_approved ) {
+								$mo = 'reject';
+								$te = __( 'Trash', 'my-calendar' );
+							} else {
+								$mo = 'publish';
+								$te = __( 'Publish', 'my-calendar' );
+							}
+							?>
+							<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;limit=$limit&amp;event_id=$event->event_id" ) ); ?>" class='<?php echo esc_attr( $mo ); ?>' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php echo esc_html( $te ); ?></a>
+							<?php
+						} else {
+							switch ( $event->event_approved ) {
+								case 1:
+									_e( 'Published', 'my-calendar' );
+									break;
+								case 2:
+									_e( 'Trashed', 'my-calendar' );
+									break;
+								default:
+									_e( 'Awaiting Approval', 'my-calendar' );
+							}
+						}
+						?>
+					</div>
+				</td>
+				<td>
+					<?php
+					if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
+						$elabel = $event->location->location_label;
+					} else {
+						$elabel = $event->event_label;
+					}
+					if ( '' !== $elabel ) {
+						?>
+					<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $elabel ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $elabel ) ); ?></a>
+						<?php
+					}
+					?>
+				</td>
+				<td>
+				<?php
+				if ( '23:59:59' !== $event->event_endtime ) {
+					$event_time = date_i18n( mc_time_format(), mc_strtotime( $event->event_time ) );
+				} else {
+					$event_time = mc_notime_label( $event );
+				}
+				$begin = date_i18n( mc_date_format(), mc_strtotime( $event->event_begin ) );
+				echo esc_html( "$begin, $event_time" );
+				?>
+					<div class="recurs">
+						<?php echo wp_kses_post( mc_recur_string( $event ) ); ?>
+					</div>
+				</td>
+				<?php
+				$auth   = ( is_object( $author ) ) ? $author->ID : 0;
+				$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
+				$author = ( is_object( $author ) ? $author->display_name : $author );
+				?>
+				<td>
+					<a class='mc_filter' href="<?php echo esc_url( $filter ); ?>">
+						<span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( $author ); ?>
+					</a>
+				</td>
+				<td>
+				<?php echo mc_admin_category_list( $event ); ?>
+				</td>
+			</tr>
+			<?php
+		}
+	}	
 }
 
 /**
