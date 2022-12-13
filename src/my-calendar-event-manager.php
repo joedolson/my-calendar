@@ -559,9 +559,10 @@ function mc_get_event_status_limit() {
 /**
  * Event list search form output.
  *
- * @param string $context Where is this form?
+ * @param string $context String to differentiate for/ID attributes if on page twice.
  */
 function mc_admin_event_search( $context = '' ) {
+	$search_text  = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( $_POST['mcs'] ) : '';
 	?>
 	<div class='mc-search'>
 	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
@@ -569,13 +570,31 @@ function mc_admin_event_search( $context = '' ) {
 		</div>
 		<div>
 			<label for="mc_search<?php echo esc_attr( $context ); ?>" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
-			<input type='text' name='mcs' id='mc_search<?php echo esc_attr( $context ); ?>' value='<?php echo ( isset( $_POST['mcs'] ) ? esc_attr( $_POST['mcs'] ) : '' ); ?>' />
+			<input type='text' name='mcs' id='mc_search<?php echo esc_attr( $context ); ?>' value='<?php echo esc_attr( $search_text ); ?>' />
 			<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
 		</div>
 	</form>
 	</div>
 	<?php
 }
+
+/**
+ * Get query limit pagination values for DB query.
+ */
+function mc_get_query_limit() {
+	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
+	$user           = get_current_user_id();
+	$screen         = get_current_screen();
+	$option         = $screen->get_option( 'per_page', 'option' );
+	$items_per_page = get_user_meta( $user, $option, true );
+	if ( empty( $items_per_page ) || $items_per_page < 1 ) {
+		$items_per_page = $screen->get_option( 'per_page', 'default' );
+	}
+	$query_limit = ( ( $current - 1 ) * $items_per_page );
+
+	return $query_limit;
+}
+
 /**
  * Used on the manage events admin page to display a list of events
  */
@@ -640,14 +659,6 @@ function mc_list_events() {
 		} else {
 			$filtered = "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
 		}
-		$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
-		$user           = get_current_user_id();
-		$screen         = get_current_screen();
-		$option         = $screen->get_option( 'per_page', 'option' );
-		$items_per_page = get_user_meta( $user, $option, true );
-		if ( empty( $items_per_page ) || $items_per_page < 1 ) {
-			$items_per_page = $screen->get_option( 'per_page', 'default' );
-		}
 		// Default limits.
 		if ( '' === $limit ) {
 			$limit .= ( 'event_flagged' !== $restrict ) ? ' WHERE event_flagged = 0' : '';
@@ -658,7 +669,7 @@ function mc_list_events() {
 			$query  = $_REQUEST['mcs'];
 			$limit .= mc_prepare_search_query( $query );
 		}
-		$query_limit = ( ( $current - 1 ) * $items_per_page );
+		$query_limit = mc_get_query_limit();
 		$limit      .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
 		if ( 'event_category' !== $sortbyvalue ) {
 			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
@@ -685,7 +696,6 @@ function mc_list_events() {
 			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
 		}
 		$status_links = mc_status_links( $allow_filters );
-		$search_text  = ( isset( $_POST['mcs'] ) ) ? $_POST['mcs'] : '';
 		echo wp_kses( $filtered, mc_kses_elements() );
 		?>
 		<div class="mc-admin-header">
