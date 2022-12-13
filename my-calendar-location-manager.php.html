@@ -334,13 +334,13 @@ function mc_manage_locations() {
 	&lt;div class="mc-admin-header locations">
 		&lt;?php echo wp_kses_post( $pagination ); ?>
 		&lt;div class='mc-search'>
-			&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post">
+			&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post" role='search'>
 				&lt;div>
 					&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 				&lt;/div>
 				&lt;div>
 					&lt;label for="mc_search" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Locations', 'my-calendar' ); ?>&lt;/label>
-					&lt;input type='text' role='search' name='mcl' id='mc_search' value='&lt;?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
+					&lt;input type='text' name='mcl' id='mc_search' value='&lt;?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
 					&lt;input type='submit' value='&lt;?php esc_attr_e( 'Search', 'my-calendar' ); ?>' class='button-secondary' />
 				&lt;/div>
 			&lt;/form>
