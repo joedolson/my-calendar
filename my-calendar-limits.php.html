@@ -117,12 +117,8 @@ function mc_select_category( $category, $type = 'event', $group = 'events' ) {
  * @return array category IDs
  */
 function mc_category_select_ids( $category ) {
-	global $wpdb;
-	$mcdb   = $wpdb;
+	$mcdb   = mc_is_remote_db();
 	$select = array();
-	if ( 'true' === mc_get_option( 'remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
 
 	if ( strpos( $category, '|' ) || strpos( $category, ',' ) ) {
 		if ( strpos( $category, '|' ) ) {

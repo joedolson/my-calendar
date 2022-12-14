@@ -2530,12 +2530,8 @@ function my_calendar_searchform( $type, $url = '' ) {
  * @return array of location objects.
  */
 function mc_get_list_locations( $datatype, $full = true, $return_type = 'OBJECT' ) {
-	global $wpdb;
-	$mcdb        = $wpdb;
+	$mcdb        = mc_is_remote_db();
 	$return_type = ( 'OBJECT' === $return_type ) ? OBJECT : ARRAY_A;
-	if ( 'true' === mc_get_option( 'remote' ) &amp;&amp; function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
 
 	switch ( $datatype ) {
 		case 'name':
