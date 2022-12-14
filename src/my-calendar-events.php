@@ -868,18 +868,28 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			$template = mc_get_custom_template( $template );
 		}
 
-		/**
-		 * Customize the template used to draw the "happening now" shortcode output.
-		 *
-		 * @hook mc_happening_next_template
-		 *
-		 * @param {string} $template HTML and template tags.
-		 * @param {object} $event Event object to draw.
-		 *
-		 * @return {string}
-		 */
-		$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
-		$return = mc_run_shortcodes( $output );
+		$args = array(
+			'event'    => $arr_events[0],
+			'tags'     => $event,
+			'template' => $template,
+		);
+		$details = mc_load_template( 'now', $args );
+		if ( $details ) {
+			$return = $details;
+		} else {
+			/**
+			 * Customize the template used to draw the "happening now" shortcode output.
+			 *
+			 * @hook mc_happening_next_template
+			 *
+			 * @param {string} $template HTML and template tags.
+			 * @param {object} $event Event object to draw.
+			 *
+			 * @return {string}
+			 */
+			$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
+			$return = mc_run_shortcodes( $output );
+		}
 	} else {
 		$return = '';
 	}
@@ -946,7 +956,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 		}
 
 		$args = array(
-			'event'    => $arr_events[0];
+			'event'    => $arr_events[0],
 			'tags'     => $event,
 			'template' => $template,
 		);
