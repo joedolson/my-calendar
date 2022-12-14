@@ -784,16 +784,16 @@ function my_calendar_todays_events( $args ) {
 				$classes       = mc_event_classes( $e, 'today' );
 
 				$data    = array(
-					'event'        => $event,
-					'tags'         => $event_details,
-					'template'     => $template,
-					'args'         => $args,
+					'event'    => $event,
+					'tags'     => $event_details,
+					'template' => $template,
+					'args'     => $args,
 				);
 				$details = mc_load_template( 'today', $data );
 				if ( $details ) {
-					$todays_events[ $ts ][]  = $details;
+					$todays_events[ $ts ][] = $details;
 				} else {
-		/**
+					/**
 					 * Modify the HTML preceding each list item in a list of today's events.
 					 *
 					 * @hook mc_todays_events_before
@@ -834,7 +834,6 @@ function my_calendar_todays_events( $args ) {
 					}
 					$todays_events[ $ts ][] = $prepend . $item . $append;
 				}
-			
 			}
 		}
 		/**
