@@ -815,6 +815,7 @@ function mc_list_events() {
  * @param array $events Array of objects representing events.
  */
 function mc_admin_events_table( $events ) {
+	global $wpdb;
 	$class = '';
 
 	foreach ( array_keys( $events ) as $key ) {
