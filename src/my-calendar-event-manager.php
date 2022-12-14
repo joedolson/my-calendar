@@ -562,7 +562,7 @@ function mc_get_event_status_limit() {
  * @param string $context String to differentiate for/ID attributes if on page twice.
  */
 function mc_admin_event_search( $context = '' ) {
-	$search_text  = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( $_POST['mcs'] ) : '';
+	$search_text = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( $_POST['mcs'] ) : '';
 	?>
 	<div class='mc-search'>
 	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
@@ -605,7 +605,7 @@ function mc_get_query_limit() {
  * @return array
  */
 function mc_get_filter() {
-	$restrict        = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
+	$restrict = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
 
 	switch ( $restrict ) {
 		case 'all':
@@ -691,7 +691,7 @@ function mc_list_events() {
 		// Get page and pagination values.
 		$query = mc_get_query_limit();
 		// Set event status limits.
-		$limit      .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
+		$limit .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
 		// Toggle query type depending on whether we're limiting categories, which requires a join.
 		if ( 'event_category' !== $sortbyvalue ) {
 			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
@@ -810,8 +810,8 @@ function mc_list_events() {
 
 /**
  * Output event table data for My Calendar admin events.
- * 
- * @param array $event Array of objects representing events.
+ *
+ * @param array $events Array of objects representing events.
  */
 function mc_admin_events_table( $events ) {
 	$class = '';
@@ -986,7 +986,7 @@ function mc_admin_events_table( $events ) {
 			</tr>
 			<?php
 		}
-	}	
+	}
 }
 
 /**
