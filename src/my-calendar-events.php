@@ -868,7 +868,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			$template = mc_get_custom_template( $template );
 		}
 
-		$args = array(
+		$args    = array(
 			'event'    => $arr_events[0],
 			'tags'     => $event,
 			'template' => $template,
@@ -955,7 +955,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			$template = mc_get_custom_template( $template );
 		}
 
-		$args = array(
+		$args    = array(
 			'event'    => $arr_events[0],
 			'tags'     => $event,
 			'template' => $template,
