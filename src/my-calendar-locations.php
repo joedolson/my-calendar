@@ -187,11 +187,7 @@ add_action( 'mc_delete_location', 'mc_location_delete_post', 10, 2 );
  * @return object|int|false WP_Post, post ID, or false if not found.
  */
 function mc_get_location_post( $location_id, $type = true ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb     = mc_is_remote_db();
 	$post_ids = $mcdb->get_results( $mcdb->prepare( 'SELECT post_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	// If there are multiple records for this post, delete extras.
 	$post_id = false;
@@ -207,8 +203,7 @@ function mc_get_location_post( $location_id, $type = true ) {
 	if ( ! $post_id ) {
 		// Copy location into relationships table.
 		$post_id = false;
-		$post    = false;
-		$query   = $mcdb->prepare( "SELECT post_id FROM $wpdb->postmeta where meta_key ='_mc_location_id' and meta_value = %d", $location_id );
+		$query   = $mcdb->prepare( "SELECT post_id FROM $mcdb->postmeta where meta_key ='_mc_location_id' and meta_value = %d", $location_id );
 		$posts   = $mcdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( isset( $posts[0] ) ) {
 			$post_id = $posts[0];
@@ -227,11 +222,7 @@ function mc_get_location_post( $location_id, $type = true ) {
  * @return int
  */
 function mc_get_location_id( $post_ID ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb        = mc_is_remote_db();
 	$location_id = $mcdb->get_var( $mcdb->prepare( 'SELECT location_id FROM ' . my_calendar_location_relationships_table() . ' WHERE post_id = %d', $post_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( ! $location_id ) {
 		$location_id = get_post_meta( $post_ID, '_mc_location_id', true );
@@ -622,12 +613,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
  * @return object|false location if found
  */
 function mc_get_location( $location_id, $update_location = true ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
-
+	$mcdb     = mc_is_remote_db();
 	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
@@ -1231,11 +1217,7 @@ function mc_location_access() {
  */
 function mc_location_data( $field, $id ) {
 	if ( $id ) {
-		global $wpdb;
-		$mcdb = $wpdb;
-		if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-			$mcdb = mc_remote_db();
-		}
+		$mcdb   = mc_is_remote_db();
 		$sql    = $mcdb->prepare( "SELECT $field FROM " . my_calendar_locations_table() . ' WHERE location_id = %d', $id );
 		$result = $mcdb->get_var( $sql );
 

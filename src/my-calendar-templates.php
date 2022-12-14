@@ -1253,21 +1253,17 @@ function mc_expand( $data ) {
  * @return array
  */
 function mc_event_date_span( $group_id, $event_span, $dates = array() ) {
-	global $wpdb;
-	$mcdb = $wpdb;
+	$mcdb = mc_is_remote_db();
 	// Cache as transient to save db queries.
 	if ( get_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span ) ) {
 		return get_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span );
-	}
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
 	}
 	$group_id = (int) $group_id;
 	if ( 0 === (int) $group_id && 1 !== (int) $event_span ) {
 
 		return $dates;
 	} else {
-		$dates = $mcdb->get_results( $wpdb->prepare( 'SELECT occur_begin, occur_end FROM ' . my_calendar_event_table() . ' WHERE occur_group_id = %d ORDER BY occur_begin ASC', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$dates = $mcdb->get_results( $mcdb->prepare( 'SELECT occur_begin, occur_end FROM ' . my_calendar_event_table() . ' WHERE occur_group_id = %d ORDER BY occur_begin ASC', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		set_transient( 'mc_event_date_span_' . $group_id . '_' . $event_span, $dates, HOUR_IN_SECONDS );
 
 		return $dates;

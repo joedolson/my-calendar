@@ -331,11 +331,7 @@ $style_vars
  * @return array Variable styles & category styles.
  */
 function mc_generate_category_styles() {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb            = mc_is_remote_db();
 	$category_styles = '';
 	$category_vars   = '';
 	$inv             = '';
@@ -927,7 +923,7 @@ function my_calendar_check() {
 /**
  * Given a valid upgrade path, execute it.
  *
- * @param string $upgrade_path Specific path to execute.
+ * @param array $upgrade_paths Specific path to execute.
  *
  * @return bool
  */

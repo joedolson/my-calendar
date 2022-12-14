@@ -370,13 +370,9 @@ function my_calendar_upcoming_events( $args ) {
  * @return array beginning and ending dates
  */
 function mc_span_time( $group_id ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb     = mc_is_remote_db();
 	$group_id = (int) $group_id;
-	$dates    = $mcdb->get_results( $wpdb->prepare( 'SELECT event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() . ' WHERE event_group_id = %d ORDER BY event_begin ASC', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$dates    = $mcdb->get_results( $mcdb->prepare( 'SELECT event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() . ' WHERE event_group_id = %d ORDER BY event_begin ASC', $group_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$count    = count( $dates );
 	$last     = $count - 1;
 	$begin    = $dates[0]->event_begin . ' ' . $dates[0]->event_time;

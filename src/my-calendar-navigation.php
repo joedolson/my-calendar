@@ -333,12 +333,8 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
  * @return string HTML for category key
  */
 function mc_category_key( $category ) {
-	global $wpdb;
-	$url  = plugin_dir_url( __FILE__ );
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb            = mc_is_remote_db();
+	$url             = plugin_dir_url( __FILE__ );
 	$has_icons       = ( 'true' === mc_get_option( 'hide_icons' ) ) ? false : true;
 	$class           = ( $has_icons ) ? 'has-icons' : 'no-icons';
 	$key             = '';
@@ -784,13 +780,7 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
  * @return string HTML
  */
 function my_calendar_categories_list( $show = 'list', $context = 'public', $group = 'single', $target_url = '' ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
-
+	$mcdb        = mc_is_remote_db();
 	$output      = '';
 	$current_url = mc_get_uri();
 	$current_url = ( '' !== $target_url && esc_url( $target_url ) ) ? $target_url : $current_url;
@@ -956,14 +946,11 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	if ( 'week' === $time ) {
 		return '';
 	}
-	global $wpdb;
-	$mcdb    = $wpdb;
+	$mcdb    = mc_is_remote_db();
 	$c_month = isset( $date['month'] ) ? $date['month'] : current_time( 'n' );
 	$c_year  = isset( $date['year'] ) ? $date['year'] : current_time( 'Y' );
 	$c_day   = isset( $date['day'] ) ? $date['day'] : current_time( 'j' );
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+
 	$current_url    = mc_get_current_url();
 	$date_switcher  = '';
 	$date_switcher .= '<div class="my-calendar-date-switcher"><form class="mc-date-switcher" action="' . $current_url . '" method="get"><div>';

@@ -91,11 +91,7 @@ function mc_private_categories() {
  * @return array private categories
  */
 function mc_get_private_categories() {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb       = mc_is_remote_db();
 	$table      = my_calendar_categories_table();
 	$query      = 'SELECT category_id FROM `' . $table . '` WHERE category_private = 1';
 	$results    = $mcdb->get_results( $query );
@@ -669,12 +665,7 @@ function mc_category_settings() {
  * @return mixed string/int Query result.
  */
 function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
-
+	$mcdb     = mc_is_remote_db();
 	$category = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
 
 	if ( $category ) {
@@ -694,11 +685,7 @@ function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
  * @return int $cat_id or false.
  */
 function mc_category_by_name( $string ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb   = mc_is_remote_db();
 	$cat_id = false;
 	$sql    = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_name = %s';
 	$cat    = $mcdb->get_row( $mcdb->prepare( $sql, $string ) );
@@ -718,12 +705,7 @@ function mc_category_by_name( $string ) {
  * @return int
  */
 function mc_no_category_default( $single = false ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
-
+	$mcdb   = mc_is_remote_db();
 	$cats   = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
 	$cat_id = $cats[0]->category_id;
 	if ( empty( $cats ) ) {
@@ -753,11 +735,7 @@ function mc_no_category_default( $single = false ) {
  * @return object
  */
 function mc_get_category( $category ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
+	$mcdb = mc_is_remote_db();
 	if ( is_int( $category ) ) {
 		$sql = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id = %d';
 		$cat = $mcdb->get_row( $mcdb->prepare( $sql, $category ) );
@@ -1171,12 +1149,7 @@ function mc_admin_category_list( $event ) {
  * @return array of values
  */
 function mc_get_categories( $event, $ids = true ) {
-	global $wpdb;
-	$mcdb = $wpdb;
-	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
-	}
-
+	$mcdb    = mc_is_remote_db();
 	$return  = array();
 	$results = false;
 	if ( is_object( $event ) ) {
@@ -1196,7 +1169,7 @@ function mc_get_categories( $event, $ids = true ) {
 	if ( ! $results ) {
 		$relate  = my_calendar_category_relationships_table();
 		$catego  = my_calendar_categories_table();
-		$results = $mcdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $mcdb->get_results( $mcdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 	if ( true === $ids ) {
 		if ( $results ) {

@@ -623,11 +623,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<select name="year" id="year">
 						<option value=''><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
 						<?php
-						global $wpdb;
-						$mcdb = $wpdb;
-						if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-							$mcdb = mc_remote_db();
-						}
+						$mcdb  = mc_is_remote_db();
 						$query = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
 						$year1 = mc_date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
 						$diff1 = mc_date( 'Y' ) - $year1;
