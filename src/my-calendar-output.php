@@ -164,6 +164,28 @@ function mc_legacy_templates_enabled() {
 }
 
 /**
+ * Load a PHP template for an event.
+ *
+ * @param string $type Template type.
+ * @param array  $data Event and display data.
+ *
+ * @return string
+ */
+function mc_load_template( $type, $data ) {
+
+	$legacy_templates = mc_legacy_templates_enabled();
+	$details          = '';
+	if ( ! $legacy_templates ) {
+		$templates = new Mc_Template_Loader();
+		ob_start();
+		$templates->set_template_data( $data );
+		$templates->get_template_part( 'event', $type );
+		$details = ob_get_clean();
+	}
+
+	return $details;
+}
+/**
  * Draw a single event
  *
  * @param object $event Event object.
@@ -190,22 +212,14 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 * @param {object} $event My Calendar Event Object.
 	 */
 	do_action( 'my_calendar_drawing_event', $event );
-	$legacy_templates = mc_legacy_templates_enabled();
-	$details          = false;
-	if ( ! $legacy_templates ) {
-		$templates = new Mc_Template_Loader();
-		ob_start();
-		$data = array(
-			'event'        => $event,
-			'process_date' => $process_date,
-			'time'         => $time,
-			'id'           => $id,
-			'tags'         => $tags,
-		);
-		$templates->set_template_data( $data );
-		$templates->get_template_part( 'event', $type );
-		$details = ob_get_clean();
-	}
+	$data    = array(
+		'event'        => $event,
+		'process_date' => $process_date,
+		'time'         => $time,
+		'id'           => $id,
+		'tags'         => $tags,
+	);
+	$details = mc_load_template( $type, $data );
 
 	if ( ! $details ) {
 		// assign empty values to template sections.
