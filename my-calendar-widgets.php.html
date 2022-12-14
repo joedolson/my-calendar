@@ -585,10 +585,10 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 	$html = '';
 	foreach ( $output as $out ) {
 		$data    = array(
-			'event'        => $event,
-			'tags'         => $details,
-			'template'     => $template,
-			'type'         => $type,
+			'event'    => $event,
+			'tags'     => $details,
+			'template' => $template,
+			'type'     => $type,
 		);
 		$details = mc_load_template( 'upcoming', $data );
 		if ( ! $details ) {
@@ -783,46 +783,58 @@ function my_calendar_todays_events( $args ) {
 				$ts            = $e->ts_occur_begin;
 				$classes       = mc_event_classes( $e, 'today' );
 
-				/**
-				 * Modify the HTML preceding each list item in a list of today's events.
-				 *
-				 * @hook mc_todays_events_before
-				 *
-				 * @param {string} $item HTML string before each event.
-				 * @param {string} $classes Space separated list of classes for this event.
-				 * @param {string} $category Category argument passed to this list.
-				 *
-				 * @return {string} HTML preceding each event in today's events lists.
-				 */
-				$prepend = apply_filters( 'mc_todays_events_before', "&lt;li class='$classes'>", $classes, $category );
-				/**
-				 * Closing elements for today's events list items. Default `&lt;/li>`.
-				 *
-				 * @hook mc_todays_events_after
-				 *
-				 * @param {string} $item Template HTML closing tag.
-				 *
-				 * @return {string} HTML following each event in today's events lists.
-				 */
-				$append = apply_filters( 'mc_todays_events_after', '&lt;/li>' );
+				$data    = array(
+					'event'        => $event,
+					'tags'         => $event_details,
+					'template'     => $template,
+					'args'         => $args,
+				);
+				$details = mc_load_template( 'today', $data );
+				if ( $details ) {
+					$todays_events[ $ts ][]  = $details;
+				} else {
+		/**
+					 * Modify the HTML preceding each list item in a list of today's events.
+					 *
+					 * @hook mc_todays_events_before
+					 *
+					 * @param {string} $item HTML string before each event.
+					 * @param {string} $classes Space separated list of classes for this event.
+					 * @param {string} $category Category argument passed to this list.
+					 *
+					 * @return {string} HTML preceding each event in today's events lists.
+					 */
+					$prepend = apply_filters( 'mc_todays_events_before', "&lt;li class='$classes'>", $classes, $category );
+					/**
+					 * Closing elements for today's events list items. Default `&lt;/li>`.
+					 *
+					 * @hook mc_todays_events_after
+					 *
+					 * @param {string} $item Template HTML closing tag.
+					 *
+					 * @return {string} HTML following each event in today's events lists.
+					 */
+					$append = apply_filters( 'mc_todays_events_after', '&lt;/li>' );
 
-				/**
-				 * Draw a custom template for today's events. Returning any non-empty string short circuits other template settings.
-				 *
-				 * @hook mc_draw_todays_event
-				 *
-				 * @param {string} $item Empty string before event template is drawn.
-				 * @param {array}  $event_details Associative array of event template tags.
-				 * @param {string} $template Template string passed from widget or shortcode.
-				 * @param {array}  $args Associative array holding the arguments used to generate this list of events.
-				 *
-				 * @return {string} Event output details.
-				 */
-				$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $template, $args );
-				if ( '' === $item ) {
-					$item = mc_draw_template( $event_details, $template, 'list', $e );
+					/**
+					 * Draw a custom template for today's events. Returning any non-empty string short circuits other template settings.
+					 *
+					 * @hook mc_draw_todays_event
+					 *
+					 * @param {string} $item Empty string before event template is drawn.
+					 * @param {array}  $event_details Associative array of event template tags.
+					 * @param {string} $template Template string passed from widget or shortcode.
+					 * @param {array}  $args Associative array holding the arguments used to generate this list of events.
+					 *
+					 * @return {string} Event output details.
+					 */
+					$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $template, $args );
+					if ( '' === $item ) {
+						$item = mc_draw_template( $event_details, $template, 'list', $e );
+					}
+					$todays_events[ $ts ][] = $prepend . $item . $append;
 				}
-				$todays_events[ $ts ][] = $prepend . $item . $append;
+			
 			}
 		}
 		/**
