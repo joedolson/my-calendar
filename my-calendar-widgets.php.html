@@ -584,7 +584,16 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 
 	$html = '';
 	foreach ( $output as $out ) {
-		$html .= mc_format_upcoming_event( $out, $template, $type );
+		$data    = array(
+			'event'        => $event,
+			'tags'         => $details,
+			'template'     => $template,
+			'type'         => $type,
+		);
+		$details = mc_load_template( 'upcoming', $data );
+		if ( ! $details ) {
+			$html .= mc_format_upcoming_event( $out, $template, $type );
+		}
 	}
 
 	return $html;
