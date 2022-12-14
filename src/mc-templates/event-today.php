@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: Single Event, Upcoming events view.
+ * Template: Single Event, Today's events view.
  *
  * @category Templates
  * @package  My Calendar
