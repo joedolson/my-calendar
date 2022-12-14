@@ -130,11 +130,11 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 /**
  * Determine whether we're accessing a remote database.
  *
- * @return object WP DB object 
+ * @return object WP DB object
  */
 function mc_is_remote_db() {
 	global $wpdb;
-	$mcdb        = $wpdb;
+	$mcdb = $wpdb;
 	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
 		$mcdb = mc_remote_db();
 	}

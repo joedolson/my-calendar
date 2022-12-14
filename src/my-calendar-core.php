@@ -923,7 +923,7 @@ function my_calendar_check() {
 /**
  * Given a valid upgrade path, execute it.
  *
- * @param array $upgrade_paths Specific path to execute.
+ * @param array $upgrade_path Specific path to execute.
  *
  * @return bool
  */
