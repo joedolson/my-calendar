@@ -563,9 +563,10 @@ function mc_get_event_status_limit() {
  */
 function mc_admin_event_search( $context = '' ) {
 	$search_text = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( $_POST['mcs'] ) : '';
+	$args        = map_deep( $_GET, 'sanitize_text_field' );
 	?>
 	<div class='mc-search'>
-	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
+	<form action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
 		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 		</div>
 		<div>
@@ -770,7 +771,7 @@ function mc_list_events() {
 					</tr>
 				</thead>
 				<tbody>
-				<?php mc_admin_events_table( $events );	?>
+				<?php mc_admin_events_table( $events ); ?>
 				</tbody>
 			</table>
 			<div class="mc-actions">
