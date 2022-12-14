@@ -589,9 +589,10 @@ function mc_get_event_status_limit() {
  */
 function mc_admin_event_search( $context = '' ) {
 	$search_text = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( $_POST['mcs'] ) : '';
+	$args        = map_deep( $_GET, 'sanitize_text_field' );
 	?>
 	&lt;div class='mc-search'>
-	&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
+	&lt;form action="&lt;?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
 		&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 		&lt;/div>
 		&lt;div>
@@ -796,7 +797,7 @@ function mc_list_events() {
 					&lt;/tr>
 				&lt;/thead>
 				&lt;tbody>
-				&lt;?php mc_admin_events_table( $events );	?>
+				&lt;?php mc_admin_events_table( $events ); ?>
 				&lt;/tbody>
 			&lt;/table>
 			&lt;div class="mc-actions">
