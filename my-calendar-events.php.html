@@ -971,18 +971,28 @@ function my_calendar_events_next( $category = 'default', $template = '&lt;strong
 			$template = mc_get_custom_template( $template );
 		}
 
-		/**
-		 * Customize the template used to draw the next event shortcode output.
-		 *
-		 * @hook mc_happening_next_template
-		 *
-		 * @param {string} $template HTML and template tags.
-		 * @param {object} $event Event object to draw.
-		 *
-		 * @return {string}
-		 */
-		$output = mc_draw_template( $event, apply_filters( 'mc_happening_next_template', $template, $event ) );
-		$return = mc_run_shortcodes( $output );
+		$args = array(
+			'event'    => $arr_events[0];
+			'tags'     => $event,
+			'template' => $template,
+		);
+		$details = mc_load_template( 'next', $args );
+		if ( $details ) {
+			$return = $details;
+		} else {
+			/**
+			 * Customize the template used to draw the next event shortcode output.
+			 *
+			 * @hook mc_happening_next_template
+			 *
+			 * @param {string} $template HTML and template tags.
+			 * @param {object} $event Event object to draw.
+			 *
+			 * @return {string}
+			 */
+			$output = mc_draw_template( $event, apply_filters( 'mc_happening_next_template', $template, $event ) );
+			$return = mc_run_shortcodes( $output );
+		}
 	} else {
 		$return = '';
 	}
