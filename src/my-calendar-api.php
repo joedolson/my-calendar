@@ -614,17 +614,17 @@ function mc_generate_alert_ical( $alarm ) {
  */
 function my_calendar_rest_events() {
 	register_rest_route(
-		'my-calendar/v1', 
+		'my-calendar/v1',
 		'/events/',
 		array(
 			'methods'  => 'GET',
 			'callback' => 'my_calendar_rest_route',
 			'args'     => array(
 				'from'     => array(
-					'default'           => current_time( 'Y-m-d' ),
+					'default' => current_time( 'Y-m-d' ),
 				),
 				'to'       => array(
-					'default'           => mc_date( 'Y-m-d', strtotime( '+ 7 days' ) ),
+					'default' => mc_date( 'Y-m-d', strtotime( '+ 7 days' ) ),
 				),
 				'category' => array(),
 				'author'   => array(),
@@ -632,7 +632,7 @@ function my_calendar_rest_events() {
 				'search'   => array(),
 				'ltype'    => array(),
 				'lvalue'   => array(),
-			)
+			),
 		)
 	);
 }
@@ -640,6 +640,8 @@ add_action( 'rest_api_init', 'my_calendar_rest_events' );
 
 /**
  * Convert REST query into My Calendar event query.
+ *
+ * @oaram WP_REST_Request $request Request object.
  */
 function my_calendar_rest_route( WP_REST_Request $request ) {
 	$parameters = $request->get_params();
