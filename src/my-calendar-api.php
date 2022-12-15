@@ -617,9 +617,9 @@ function my_calendar_rest_events() {
 		'my-calendar/v1',
 		'/events/',
 		array(
-			'methods'  => 'GET',
-			'callback' => 'my_calendar_rest_route',
-			'args'     => array(
+			'methods'             => 'GET',
+			'callback'            => 'my_calendar_rest_route',
+			'args'                => array(
 				'from'     => array(
 					'default' => current_time( 'Y-m-d' ),
 				),
@@ -633,6 +633,7 @@ function my_calendar_rest_events() {
 				'ltype'    => array(),
 				'lvalue'   => array(),
 			),
+			'permission_callback' => '__return_true',
 		)
 	);
 }
@@ -641,7 +642,7 @@ add_action( 'rest_api_init', 'my_calendar_rest_events' );
 /**
  * Convert REST query into My Calendar event query.
  *
- * @oaram WP_REST_Request $request Request object.
+ * @param WP_REST_Request $request Request object.
  */
 function my_calendar_rest_route( WP_REST_Request $request ) {
 	$parameters = $request->get_params();
