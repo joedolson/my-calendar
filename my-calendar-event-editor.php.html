@@ -2836,7 +2836,6 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 	} else {
 		$tickets      = '';
 		$registration = '';
-		$default      = 'checked="checked"';
 	}
 
 	$form .= "&lt;p>
@@ -2860,7 +2859,6 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 	 */
 	return apply_filters( 'mc_event_registration_form', $form, $has_data, $data, 'admin' );
 }
-
 
 add_action( 'save_post', 'mc_post_update_event' );
 /**
@@ -2895,8 +2893,7 @@ function mc_post_update_event( $id ) {
  * @return string output controls
  */
 function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
-	$text_link = '';
-	$controls  = array();
+	$controls = array();
 
 	if ( 'edit' === $mode ) {
 		$publish_text = __( 'Update', 'my-calendar' );
@@ -3004,7 +3001,6 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
  * @param string $template Template format.
  */
 function mc_grouped_events( $id, $template = '' ) {
-	global $wpdb;
 	$id     = (int) $id;
 	$output = '';
 
