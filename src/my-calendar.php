@@ -139,6 +139,7 @@ include( dirname( __FILE__ ) . '/includes/date-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/general-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/event-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/kses.php' );
+include( dirname( __FILE__ ) . '/includes/post-types.php' );
 include( dirname( __FILE__ ) . '/includes/privacy.php' );
 include( dirname( __FILE__ ) . '/includes/conditionals.php' );
 include( dirname( __FILE__ ) . '/includes/urls.php' );
