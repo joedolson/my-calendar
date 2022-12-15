@@ -55,11 +55,12 @@ function my_calendar_print_view() {
  */
 function my_calendar_print() {
 	global $mc_version;
-	$url      = plugin_dir_url( __FILE__ );
-	$time     = ( isset( $_GET['time'] ) ) ? $_GET['time'] : 'month';
-	$category = ( isset( $_GET['mcat'] ) ) ? $_GET['mcat'] : ''; // These are sanitized elsewhere.
-	$ltype    = ( isset( $_GET['ltype'] ) ) ? $_GET['ltype'] : '';
-	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? $_GET['lvalue'] : '';
+	$url = plugin_dir_url( __FILE__ );
+	// The time string can contain a plus literal, which needs to be re-encoded.
+	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( urlencode( $_GET['time'] ) ) : 'month';
+	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( $_GET['mcat'] ) : '';
+	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( $_GET['ltype'] ) : '';
+	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( $_GET['lvalue'] ) : '';
 	header( 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) );
 	if ( mc_file_exists( 'mc-print.css' ) ) {
 		$stylesheet = mc_get_file( 'mc-print.css', 'url' );
