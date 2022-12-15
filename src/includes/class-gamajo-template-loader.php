@@ -133,7 +133,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *                         Default is 'data'.
 		 * @return Gamajo_Template_Loader
 		 */
-		public function set_template_data( $data, $var_name = 'event' ) {
+		public function set_template_data( $data, $var_name = 'data' ) {
 			global $wp_query;
 
 			$wp_query->query_vars[ $var_name ] = (object) $data;

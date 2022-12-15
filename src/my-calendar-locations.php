@@ -1385,24 +1385,33 @@ function mc_display_location_details( $content ) {
 		 */
 		$args    = apply_filters( 'mc_display_location_events', $args, $location );
 		$events  = my_calendar_upcoming_events( $args );
-		$content = '
+		$data    = array(
+			'location' => $location,
+			'events'   => $events,
+		);
+		$details = mc_load_template( 'location/single', $data );
+		if ( $details ) {
+			$content = $details;
+		} else {
+			$content = '
 <div class="mc-view-location">
 	<div class="mc-location-content">' . $content . '</div>
 	<div class="mc-location-gmap">' . mc_generate_map( $location, 'location' ) . '</div>
 	<div class="mc-location-hcard">' . mc_hcard( $location, 'true', 'true', 'location' ) . '</div>
 	<div class="mc-location-upcoming"><h2>' . __( 'Upcoming Events', 'my-calendar' ) . '</h2>' . $events . '</div>
 </div>';
-		/**
-		 * Filter the HTML output for single location details.
-		 *
-		 * @hook mc_location_output
-		 *
-		 * @param {string} $content Full HTML output.
-		 * @param {object} $location Calendar location object.
-		 *
-		 * @return {string}
-		 */
-		$content = apply_filters( 'mc_location_output', $content, $location );
+			/**
+			 * Filter the HTML output for single location details.
+			 *
+			 * @hook mc_location_output
+			 *
+			 * @param {string} $content Full HTML output.
+			 * @param {object} $location Calendar location object.
+			 *
+			 * @return {string}
+			 */
+			$content = apply_filters( 'mc_location_output', $content, $location );
+		}
 	}
 
 	return $content;

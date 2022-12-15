@@ -176,10 +176,16 @@ function mc_load_template( $type, $data ) {
 	$legacy_templates = mc_legacy_templates_enabled();
 	$details          = '';
 	if ( ! $legacy_templates ) {
+		$source = 'event';
+		if ( false === strpos( $type, '/' ) ) {
+			$parts  = explode( $type, '/' );
+			$source = $parts[0];
+			$type   = $parts[1];
+		}
 		$templates = new Mc_Template_Loader();
 		ob_start();
 		$templates->set_template_data( $data );
-		$templates->get_template_part( 'event', $type );
+		$templates->get_template_part( $source, $type );
 		$details = ob_get_clean();
 	}
 

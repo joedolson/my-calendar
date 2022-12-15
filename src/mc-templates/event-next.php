@@ -10,5 +10,5 @@
  */
 
 ?>
-<li class="<?php mc_event_classes( $event['event'] ); ?>"><strong class="mc-title"><?php mc_template_tag( $event, 'title' ); ?></strong> - <?php mc_template_tag( $event, 'datetime' ); ?>
-<?php mc_template_tag( $event, 'excerpt' ); ?></li>
+<li class="<?php mc_event_classes( $data['event'], 'next' ); ?>"><strong class="mc-title"><?php mc_template_tag( $data['event'], 'title' ); ?></strong> - <?php mc_template_tag( $data, 'datetime' ); ?>
+<?php mc_template_tag( $data['event'], 'excerpt' ); ?></li>
