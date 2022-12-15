@@ -438,8 +438,6 @@ function mc_plugin_update_message() {
 function mc_footer_js() {
 	global $wp_query;
 	$version = mc_get_version();
-	$script  = '';
-	$mcjs    = "<script>(function ($) { 'use strict'; $(function () { $( '.mc-main' ).removeClass( 'mcjs' ); });}(jQuery));</script>";
 	/**
 	 * Disable scripting on mobile devices.
 	 *
