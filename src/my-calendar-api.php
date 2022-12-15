@@ -608,3 +608,61 @@ function mc_generate_alert_ical( $alarm ) {
 
 	return $alert;
 }
+
+/**
+ * Get events via the REST API.
+ */
+function my_calendar_rest_events() {
+	register_rest_route(
+		'my-calendar/v1', 
+		'/events/',
+		array(
+			'methods'  => 'GET',
+			'callback' => 'my_calendar_rest_route',
+			'args'     => array(
+				'from'     => array(
+					'default'           => current_time( 'Y-m-d' ),
+				),
+				'to'       => array(
+					'default'           => mc_date( 'Y-m-d', strtotime( '+ 7 days' ) ),
+				),
+				'category' => array(),
+				'author'   => array(),
+				'host'     => array(),
+				'search'   => array(),
+				'ltype'    => array(),
+				'lvalue'   => array(),
+			)
+		)
+	);
+}
+add_action( 'rest_api_init', 'my_calendar_rest_events' );
+
+/**
+ * Convert REST query into My Calendar event query.
+ */
+function my_calendar_rest_route( WP_REST_Request $request ) {
+	$parameters = $request->get_params();
+	$from       = sanitize_text_field( $parameters['from'] );
+	$to         = sanitize_text_field( $parameters['to'] );
+	$category   = isset( $parameters['category'] ) ? absint( $parameters['category'] ) : '';
+	$ltype      = isset( $parameters['ltype'] ) ? sanitize_text_field( $parameters['ltype'] ) : '';
+	$lvalue     = isset( $parameters['lvalue'] ) ? sanitize_text_field( $parameters['lvalue'] ) : '';
+	$author     = isset( $parameters['author'] ) ? sanitize_text_field( $parameters['author'] ) : '';
+	$host       = isset( $parameters['host'] ) ? sanitize_text_field( $parameters['host'] ) : '';
+	$search     = isset( $parameters['search'] ) ? sanitize_text_field( $parameters['search'] ) : '';
+	$args       = array(
+		'from'     => $from,
+		'to'       => $to,
+		'category' => $category,
+		'ltype'    => $ltype,
+		'lvalue'   => $lvalue,
+		'author'   => $author,
+		'host'     => $host,
+		'search'   => $search,
+		'source'   => 'api',
+	);
+	$events     = my_calendar_events( $args );
+
+	return $events;
+}
