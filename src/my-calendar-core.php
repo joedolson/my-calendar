@@ -1926,7 +1926,6 @@ add_filter( 'the_title', 'mc_the_title', 10, 2 );
 add_action( 'init', 'mc_taxonomies', 0 );
 add_action( 'init', 'mc_posttypes' );
 
-add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
 /**
  * Add custom fields to permalinks settings page.
  */
@@ -1945,6 +1944,7 @@ function mc_load_permalinks() {
 	// Add a settings field to the permalink page.
 	add_settings_field( 'mc_location_cpt_base', __( 'My Calendar Locations base', 'my-calendar' ), 'mc_location_field_callback', 'permalink', 'optional', $opts );
 }
+add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
 
 /**
  * Change out previous post link for previous event.

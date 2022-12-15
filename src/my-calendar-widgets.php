@@ -758,7 +758,7 @@ function my_calendar_todays_events( $args ) {
 				$classes       = mc_event_classes( $e, 'today' );
 
 				$data    = array(
-					'event'    => $event,
+					'event'    => $e,
 					'tags'     => $event_details,
 					'template' => $template,
 					'args'     => $args,
