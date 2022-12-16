@@ -462,30 +462,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				 */
 				$avatars = apply_filters( 'mc_use_avatars', true, $event );
 				if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
-					if ( 0 !== (int) $event->event_author && is_numeric( $event->event_author ) ) {
-						$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
-						$a      = get_userdata( $event->event_author );
-						if ( $a ) {
-							$text   = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
-							$author = $avatar . '<p class="event-author"><span class="posted">' . $text . '</span> <span class="author-name">' . $a->display_name . "</span></p>\n";
-							if ( $avatars ) {
-								$author = '	<div class="mc-author-card">' . $author . '</div>';
-							}
-						}
-					}
+					$author = mc_template_user_card( $event->event_author );
 				}
 				if ( 'true' === $display_host || mc_output_is_visible( 'host', $type, $event ) ) {
-					if ( 0 !== (int) $event->event_host && is_numeric( $event->event_host ) ) {
-						$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
-						$h       = get_userdata( $event->event_host );
-						if ( $h ) {
-							$text = ( '' !== mc_get_option( 'hosted_by' ) ) ? mc_get_option( 'hosted_by' ) : __( 'Hosted by', 'my-calendar' );
-							$host = $havatar . '<p class="event-host"><span class="hosted">' . $text . '</span> <span class="host-name">' . $h->display_name . "</span></p>\n";
-							if ( $avatars ) {
-								$host = '	<div class="mc-host-card">' . $host . '</div>';
-							}
-						}
-					}
+					$host = mc_template_user_card( $event->event_host );
 				}
 				if ( ( 'true' === $display_more && ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
 					$details_label = mc_get_details_label( $event, $data );

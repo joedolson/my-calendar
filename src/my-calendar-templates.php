@@ -1754,6 +1754,32 @@ function mc_location_schema( $location ) {
 }
 
 /**
+ * Get an author or host card for display on events.
+ * 
+ * @param int    $user User ID.
+ * @param string $type Type of card.
+ * 
+ * @return string
+ */
+function mc_template_user_card( $user, $type = 'author' ) {
+	$card = '';
+	$type = ( 'author' === $type ) ? 'author' : 'host';
+	if ( 0 !== (int) $user && is_numeric( $user ) ) {
+		$avatar = ( $avatars ) ? get_avatar( $user ) : '';
+		$a      = get_userdata( $user );
+		if ( $a ) {
+			$text = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
+			$card = $avatar . '<p class="event-' . $type . '"><span class="posted">' . $text . '</span> <span class="'. $type . '-name">' . $a->display_name . "</span></p>\n";
+			if ( $avatars ) {
+				$card = '	<div class="mc-' . $type . '-card">' . $card . '</div>';
+			}
+		}
+	}
+
+	return $card;
+}
+
+/**
  * Templating getter for new templating system.
  *
  * @param object $event Object containing event and view data.
