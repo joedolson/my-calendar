@@ -698,23 +698,6 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 						 */
 						$details .= apply_filters( 'mc_event_detail_' . sanitize_title( $value ), ${$value}, $event );
 					}
-				} else {
-					$details .= "\n"
-								. $inner_title
-								. $list_title
-								. $time_html
-								. $img
-								. $description
-								. $short
-								. $location
-								. $access
-								. $link
-								. $status
-								. $tickets
-								. $sharing
-								. $author
-								. $host
-								. $return;
 				}
 			} else {
 				// If a custom template is in use.
