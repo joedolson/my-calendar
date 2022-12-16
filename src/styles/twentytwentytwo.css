@@ -366,12 +366,7 @@
 }
 
 /* Date/times */
-.mc-main .time-block {
-	float: right;
-}
-
 .mc-main.mini .time-block {
-	float: none;
 	font-size: 14px;
 }
 
@@ -558,6 +553,10 @@
 	margin: 1em 0;
 }
 
+.details .longdesc > * {
+	margin-bottom: 1.5rem;
+}
+
 /* hCard */
 .mc-main .address {
 	clear: right;
@@ -565,27 +564,12 @@
 
 .single-event .address,
 .mc-main .address {
-	margin: .5em 0 1em 1em;
-	float: right;
-	border-radius: 10px 0 0 10px;
-	padding: 10px;
-	width: 50%;
-	max-width: 250px;
-	background: rgba( 255, 255, 255, .15 );
+	margin: 1em 0;
 }
 
 .single-event .address {
-	float: none;
 	margin-left: 0;
 	padding: 0;
-}
-
-.mc-main.mini .address {
-	margin: 15px 0;
-	float: none;
-	width: 100%;
-	border-radius: 10px;
-	max-width: 100%;
 }
 
 .single-event .address .street-address,
@@ -604,7 +588,7 @@
 
 .mc-author-card, .mc-host-card {
 	margin-top: 1em;
-	background: #fcfcfc;
+	background: rgba( 255,255,255,.25 );;
 	color: #333;
 	font-size: 14px;
 	align-items: end;
@@ -628,17 +612,17 @@
 }
 
 .mc-main li.current-day {
-	border-left: 5px solid var(--highlight-dark);
+	border-left: 10px solid var(--highlight-dark);
 }
 
 .mc-main li.current-day button:nth-of-type(1) {
 	position: relative;
-	left: -5px;
+	left: -10px;
 }
 
 .mc-main .mc-list .mc-events {
 	list-style-type: none !important;
-	padding: 10px;
+	padding: 1rem;
 	background: rgba(0, 0, 0, .03);
 	margin: 0;
 }
@@ -728,6 +712,21 @@
 
 .view-full {
 	text-align: right;
+}
+
+.view-full a::before {
+	font-family: dashicons;
+	content: '\f508';
+}
+
+.map a.external::after {
+	font-family: dashicons;
+	content: '\f230';
+}
+
+.location-link.external::after {
+	font-family: dashicons;
+	content: '\f504';
 }
 
 .mc-list-details.all-events {
