@@ -450,22 +450,11 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 					$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 				}
-				/**
-				 * Filter to enable or disable avatars.
-				 *
-				 * @hook mc_use_avatars
-				 *
-				 * @param {bool} $avatars false to disable avatars.
-				 * @param {object} $event My Calendar event object.
-				 *
-				 * @return {bool}
-				 */
-				$avatars = apply_filters( 'mc_use_avatars', true, $event );
 				if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
-					$author = mc_template_user_card( $event->event_author );
+					$author = mc_template_user_card( $event, 'author' );
 				}
 				if ( 'true' === $display_host || mc_output_is_visible( 'host', $type, $event ) ) {
-					$host = mc_template_user_card( $event->event_host );
+					$host = mc_template_user_card( $event, 'host' );
 				}
 				if ( ( 'true' === $display_more && ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
 					$details_label = mc_get_details_label( $event, $data );

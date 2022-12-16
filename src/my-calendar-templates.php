@@ -1756,14 +1756,26 @@ function mc_location_schema( $location ) {
 /**
  * Get an author or host card for display on events.
  * 
- * @param int    $user User ID.
+ * @param int    $event Event object. 
  * @param string $type Type of card.
  * 
  * @return string
  */
-function mc_template_user_card( $user, $type = 'author' ) {
-	$card = '';
-	$type = ( 'author' === $type ) ? 'author' : 'host';
+function mc_template_user_card( $event, $type ) {
+	/**
+	 * Filter to enable or disable avatars.
+	 *
+	 * @hook mc_use_avatars
+	 *
+	 * @param {bool} $avatars false to disable avatars.
+	 * @param {object} $event My Calendar event object.
+	 *
+	 * @return {bool}
+	 */
+	$avatars = apply_filters( 'mc_use_avatars', true, $event );
+	$card    = '';
+	$type    = ( 'author' === $type ) ? 'author' : 'host';
+	$user    = ( 'author' === $type ) ? $event->event_author : $event->event_host;
 	if ( 0 !== (int) $user && is_numeric( $user ) ) {
 		$avatar = ( $avatars ) ? get_avatar( $user ) : '';
 		$a      = get_userdata( $user );
