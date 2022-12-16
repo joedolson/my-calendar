@@ -476,42 +476,11 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 					$list_title = "	&lt;$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "&lt;/$hlevel>\n";
 				}
-				/**
-				 * Filter to enable or disable avatars.
-				 *
-				 * @hook mc_use_avatars
-				 *
-				 * @param {bool} $avatars false to disable avatars.
-				 * @param {object} $event My Calendar event object.
-				 *
-				 * @return {bool}
-				 */
-				$avatars = apply_filters( 'mc_use_avatars', true, $event );
 				if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
-					if ( 0 !== (int) $event->event_author &amp;&amp; is_numeric( $event->event_author ) ) {
-						$avatar = ( $avatars ) ? get_avatar( $event->event_author ) : '';
-						$a      = get_userdata( $event->event_author );
-						if ( $a ) {
-							$text   = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
-							$author = $avatar . '&lt;p class="event-author">&lt;span class="posted">' . $text . '&lt;/span> &lt;span class="author-name">' . $a->display_name . "&lt;/span>&lt;/p>\n";
-							if ( $avatars ) {
-								$author = '	&lt;div class="mc-author-card">' . $author . '&lt;/div>';
-							}
-						}
-					}
+					$author = mc_template_user_card( $event, 'author' );
 				}
 				if ( 'true' === $display_host || mc_output_is_visible( 'host', $type, $event ) ) {
-					if ( 0 !== (int) $event->event_host &amp;&amp; is_numeric( $event->event_host ) ) {
-						$havatar = ( $avatars ) ? get_avatar( $event->event_host ) : '';
-						$h       = get_userdata( $event->event_host );
-						if ( $h ) {
-							$text = ( '' !== mc_get_option( 'hosted_by' ) ) ? mc_get_option( 'hosted_by' ) : __( 'Hosted by', 'my-calendar' );
-							$host = $havatar . '&lt;p class="event-host">&lt;span class="hosted">' . $text . '&lt;/span> &lt;span class="host-name">' . $h->display_name . "&lt;/span>&lt;/p>\n";
-							if ( $avatars ) {
-								$host = '	&lt;div class="mc-host-card">' . $host . '&lt;/div>';
-							}
-						}
-					}
+					$host = mc_template_user_card( $event, 'host' );
 				}
 				if ( ( 'true' === $display_more &amp;&amp; ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
 					$details_label = mc_get_details_label( $event, $data );
