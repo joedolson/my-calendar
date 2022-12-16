@@ -37,6 +37,11 @@ div.site-content, table {
 	padding: .25rem 0;
 }
 
+.mc-main .my-calendar-header a,
+.mc-main .my-calendar-footer a {
+	display: inline-block;
+}
+
 .mc-main .my-calendar-footer select:not(.my-calendar-admin select),
 .mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-footer input[type=submit]:not(.my-calendar-admin input[type=submit]),
@@ -248,6 +253,8 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	color: inherit;
 	background-color: transparent;
 	text-decoration: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
 }
 
 .mc-main.my-calendar ul button.mc-text-button:hover,
@@ -258,7 +265,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 
 .mc-main .mc-loading {
 	position: absolute;
-	top: 10%;
+	top: 45%;
 	left: 50%;
 	margin: -40px 0 0 -40px;
 	height: 80px;
@@ -278,7 +285,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-author-card, .mc-host-card {
 	display: grid;
 	grid-template-columns: 3.5em 1fr;
-	column-gap: 12px;
+	column-gap: 10px;
 }
 
 .mc-author-card img, .mc-host-card img {
