@@ -3,7 +3,7 @@
 }
 
 .mc-main .my-calendar-header, .mc-main .my-calendar-footer, .mc-main .my-calendar-table, .mc-main .my-calendar-list {
-	padding: 1rem;
+	padding: 1rem 0;
 	background: var(--primary-light);
 	color: var(--primary-dark);
 }
@@ -529,9 +529,7 @@
 }
 
 .mc-main .category-key li a {
-	padding: 2px 4px;
 	border: 1px solid transparent;
-	border-radius: 3px;
 }
 
 .mc-main .category-key li.current a {
