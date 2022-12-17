@@ -72,16 +72,14 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 3. Configure My Calendar using the settings pages in the admin panel:
 
-   My Calendar -> Add New Event
-   My Calendar -> Manage Events
-   My Calendar -> Event Groups
+   My Calendar -> Add Event
+   My Calendar -> Events
    My Calendar -> Add New Location
-   My Calendar -> Manage Locations
-   My Calendar -> Manage Categories
-   My Calendar -> Style Editor
-   My Calendar -> Script Manager
-   My Calendar -> Template Editor
+   My Calendar -> Locations
+   My Calendar -> Categories
+   My Calendar -> Design
    My Calendar -> Settings
+   My Calendar -> Shortcodes
    My Calendar -> Help
 
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
@@ -112,6 +110,10 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Accessibility: Omit aria-label if link text is already unique.
 * PHP 8.1 Compatibility fixes.
 * Remove a couple very long deprecated functions.
+* Prep for removal of core CSS editing.
+* New default stylesheet.
+* REST API support for outputting events.
+* Prep work for new templating framework.
 
 = 3.3.24.1 =
 
