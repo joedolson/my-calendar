@@ -1781,10 +1781,10 @@ function mc_location_schema( $location ) {
 
 /**
  * Get an author or host card for display on events.
- * 
- * @param int    $event Event object. 
+ *
+ * @param int    $event Event object.
  * @param string $type Type of card.
- * 
+ *
  * @return string
  */
 function mc_template_user_card( $event, $type ) {
@@ -1807,7 +1807,7 @@ function mc_template_user_card( $event, $type ) {
 		$a      = get_userdata( $user );
 		if ( $a ) {
 			$text = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
-			$card = $avatar . '&lt;p class="event-' . $type . '">&lt;span class="posted">' . $text . '&lt;/span> &lt;span class="'. $type . '-name">' . $a->display_name . "&lt;/span>&lt;/p>\n";
+			$card = $avatar . '&lt;p class="event-' . $type . '">&lt;span class="posted">' . $text . '&lt;/span> &lt;span class="' . $type . '-name">' . $a->display_name . "&lt;/span>&lt;/p>\n";
 			if ( $avatars ) {
 				$card = '	&lt;div class="mc-' . $type . '-card">' . $card . '&lt;/div>';
 			}
