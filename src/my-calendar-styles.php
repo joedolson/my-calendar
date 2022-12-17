@@ -155,6 +155,7 @@ function my_calendar_style_edit() {
 			mc_show_error( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-design&diff' ) ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
 		}
 	}
+	mc_show_notice( __( 'The CSS editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>.', 'my-calendar' ) );
 	echo mc_stylesheet_selector();
 	if ( ! isset( $_GET['diff'] ) ) {
 		$file = mc_get_option( 'css_file' );
