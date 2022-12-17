@@ -452,11 +452,11 @@ function mc_write_styles( $file, $style ) {
 	if ( in_array( $file, $accepted_styles, true ) ) {
 		$is_writable = wp_is_writable( $file );
 		if ( $is_writable ) {
-			$f = fopen( $file, 'w+' );
-			fwrite( $f, $style ); // number of bytes to write, max.
-			fclose( $f );
+			global $wp_filesystem;
+			WP_Filesystem();
+			$saved = $wp_filesystem->put_contents( $file, $style );
 
-			return true;
+			return $saved;
 		} else {
 			return false;
 		}
