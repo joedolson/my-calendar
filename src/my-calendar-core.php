@@ -176,7 +176,7 @@ function mc_preview_stylesheet( $file ) {
 	return $file;
 }
 
-add_action( 'wp_enqueue_scripts', 'mc_register_styles' );
+add_action( 'wp_enqueue_scripts', 'mc_register_styles', 20 );
 /**
  * Publically enqueued styles & scripts
  */
