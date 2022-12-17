@@ -450,11 +450,7 @@ function mc_write_styles( $file, $style ) {
 	}
 
 	if ( in_array( $file, $accepted_styles, true ) ) {
-		if ( function_exists( 'wp_is_writable' ) ) {
-			$is_writable = wp_is_writable( $file );
-		} else {
-			$is_writable = is_writeable( $file );
-		}
+		$is_writable = wp_is_writable( $file );
 		if ( $is_writable ) {
 			$f = fopen( $file, 'w+' );
 			fwrite( $f, $style ); // number of bytes to write, max.
