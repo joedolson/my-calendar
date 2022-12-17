@@ -72,10 +72,9 @@
 	box-shadow: none !important;
 }
 
-.mc-main .my-calendar-header a:hover, .mc-main .my-calendar-footer a:hover,
-.mc-main .my-calendar-header a:focus, .mc-main .my-calendar-footer a:focus {
-	text-decoration: none;
-	outline: 1px solid;
+.mc-main nav .my-calendar-header a:hover, .mc-main nav .my-calendar-footer a:hover,
+.mc-main nav .my-calendar-header a:focus, .mc-main nav .my-calendar-footer a:focus {
+	outline: 2px solid var(--primary-dark);
 	outline-offset: 2px;
 	border-radius: 3px;
 }
