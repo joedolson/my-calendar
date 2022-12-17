@@ -271,13 +271,15 @@
 	border-radius: 0 10px 10px 0;
 }
 
-.mc-main .mc-list .event-date button {
-	display: inline-block;
+.mc-main .mc-list .event-date button.mc-text-button {
 	width: auto;
-	text-align: left;
-	background-color: transparent;
-	color: #000;
-	color: var(--primary-dark);
+	padding: 0;
+	border: none;
+	background: transparent;
+	background-color: transparent ! important;
+	color: var(--primary-dark) ! important;
+	text-decoration: underline;
+	outline-offset: 2px;
 }
 
 .mc-main .mc-list .event-date button:hover,
