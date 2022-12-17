@@ -11,7 +11,7 @@
 			$( document ).on( "click", ".mini .has-events .trigger", function (e) {
 				e.preventDefault();
 				var current_date = $(this).parent().children();
-				current_date.not(".trigger").toggle().attr( "tabindex", "-1" ).trigger( 'focus' );
+				current_date.not(".trigger").toggle();
 				$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
 				$( '.mini .has-events' ).children().not( '.trigger, .mc-date, .event-date' ).not( current_date ).hide();
 				$( this ).addClass( 'active-toggle' );
@@ -34,9 +34,7 @@
 			$(document).on( 'click', '.event-date button',
 				function (e) {
 					e.preventDefault();
-					var mcEvent = $( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).first();
 					$( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).toggle();
-					mcEvent.attr('tabindex', '-1').trigger( 'focus' );
 					var visible = $(this).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).is(':visible');
 					if ( visible ) {
 						$(this).attr('aria-expanded', 'true');
@@ -52,20 +50,24 @@
 	if ( 'true' === my_calendar.grid ) {
 		$(function () {
 			$('.calendar-event').children().not('.event-title,.screen-reader-text').hide();
-			var body = document.querySelector( 'body' );
-			body.insertAdjacentElement( 'beforeend', mask );
 			$(document).on('click', '.calendar-event .event-title .open',
 				function (e) {
+					var visible    = $(this).parents( '.mc-event' ).children().not('.event-title').is(':visible');
+					var controls   = $( this ).attr( 'aria-controls' );
+					var controlled = $( '#' + controls );
+					if ( visible ) {
+						$(this).attr( 'aria-expanded', 'false' );
+					} else {
+						$(this).attr( 'aria-expanded', 'true' );
+					}
 					e.preventDefault();
 					var current_date = $(this).parents( '.mc-event' ).children();
 
 					$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
-					$(this).parents( '.mc-event' ).children().not('.event-title').toggle().attr('tabindex', '-1');
-					$(this).parents( '.mc-event' ).trigger( 'focus' );
+					controlled.toggle();
 
 					var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
 					var lastFocus  = focusable.last();
-					var firstFocus = focusable.first();
 					lastFocus.attr( 'data-action', 'shiftback' );
 
 					$('.calendar-event').children().not('.event-title,.screen-reader-text').not( current_date ).hide();
@@ -76,6 +78,7 @@
 			$(document).on('click', '.calendar-event .close',
 				function (e) {
 					e.preventDefault();
+					$(this).parents( '.mc-event' ).find( 'a.open' ).attr( 'aria-expanded', 'false' );
 					$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
 					$(this).closest('.mc-event').find('.event-title a').trigger( 'focus' );
 					$(this).closest('div.details').toggle();
@@ -90,7 +93,7 @@
 				}
 			});
 
-			$(document).on( 'keydown', '.details a, .details object, .details :input, .details iframe, .details [tabindex]',
+			$(document).on( 'keydown', '.mc-event a, .mc-event object, .mc-event :input, .mc-event iframe, .mc-event [tabindex]',
 				function(e) {
 					var keycode = ( e.keyCode ? e.keyCode : e.which );
 					var action  = $( ':focus' ).attr( 'data-action' );

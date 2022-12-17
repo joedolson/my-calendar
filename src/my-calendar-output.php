@@ -378,7 +378,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 				$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 			} else {
-				$wrap    = "<a href='#$uid-$type-details-$id' class='open et_smooth_scroll_disabled opl-link url summary$has_image'>";
+				$wrap    = "<a href='#$uid-$type-details-$id' aria-controls='$uid-$type-details-$id' class='open et_smooth_scroll_disabled opl-link url summary$has_image' aria-expanded='false'>";
 				$balance = '</a>';
 			}
 		} else {
@@ -649,7 +649,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 
 			$img_class = ( $img ) ? ' has-image' : ' no-image';
-			$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' role='alert' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+			$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
 			/**
 			 * Filter details before the event content..
 			 *
