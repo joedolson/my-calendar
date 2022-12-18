@@ -155,7 +155,7 @@ function my_calendar_style_edit() {
 			mc_show_error( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-design&diff' ) ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
 		}
 	}
-	mc_show_notice( __( 'The CSS editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>.', 'my-calendar' ) );
+	mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>.', 'my-calendar' ) );
 	echo mc_stylesheet_selector();
 	if ( ! isset( $_GET['diff'] ) ) {
 		$file = mc_get_option( 'css_file' );
@@ -173,7 +173,7 @@ function my_calendar_style_edit() {
 			<label for="use_styles"><?php esc_html_e( 'Disable styles', 'my-calendar' ); ?></label>
 		</p>
 		<fieldset class="mc-css-variables">
-				<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
+			<legend><?php esc_html_e( 'CSS Color Variables', 'my-calendar' ); ?></legend>
 			<?php
 			$output = '';
 			$styles = mc_get_option( 'style_vars' );
@@ -191,13 +191,13 @@ function my_calendar_style_edit() {
 				echo wp_kses( "<ul class='checkboxes'>$output</ul>", mc_kses_elements() );
 			}
 			?>
-				<p>
-					<label for='new_style_var_key'><?php esc_html_e( 'New variable:', 'my-calendar' ); ?></label>
-					<input type='text' name='new_style_var[key]' id='new_style_var_key' /> 
-					<label for='new_style_var_val'><?php esc_html_e( 'Color:', 'my-calendar' ); ?></label>
-					<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
-				</p>
-			</fieldset>
+			<p>
+				<label for='new_style_var_key'><?php esc_html_e( 'New variable:', 'my-calendar' ); ?></label>
+				<input type='text' name='new_style_var[key]' id='new_style_var_key' /> 
+				<label for='new_style_var_val'><?php esc_html_e( 'Color:', 'my-calendar' ); ?></label>
+				<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
+			</p>
+		</fieldset>
 		<fieldset style="position:relative;">
 			<legend><?php esc_html_e( 'CSS Style Editor', 'my-calendar' ); ?></legend>
 			<?php
