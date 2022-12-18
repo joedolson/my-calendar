@@ -226,7 +226,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	border-radius: 0 3px 3px 0;
 	position: relative;
 	left: -1px;
-	border-left: 0;
+	border-left-width: 0;
 }
 
 .mc-main .mc-date-switcher select:last-of-type,
