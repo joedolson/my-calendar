@@ -14,6 +14,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Migrate CSS file to custom.
+ */
+function mc_migrate_css() {
+	if ( isset( $_GET['migrate'] ) ) {
+		$verify = wp_verify_nonce( $_GET['migrate'], 'mc-migrate-css' );
+		if ( ! $verify ) {
+			wp_die( 'My Calendar: Permissions not granted to migrate CSS.', 'my-calendar' );
+		} else {
+			global $wp_filesystem;
+			WP_Filesystem();
+			$style           = mc_get_option( 'css_file' );
+			$stylefile       = mc_get_style_path();
+			$newfileroot     = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __DIR__ ) );
+			$newfiledir      = $newfileroot . 'styles/';
+			$newfilepath     = $newfiledir . $style;
+			if ( ! $wp_filesystem->exists( $newfileroot ) ) {
+				$wp_filesystem->mkdir( $newfileroot );
+			}
+			if ( ! $wp_filesystem->exists( $newfiledir ) ) {
+				$wp_filesystem->mkdir( $newfiledir );
+			}
+			$wrote_migration = $wp_filesystem->copy( $stylefile, $newfilepath, true );
+			if ( $wrote_migration ) {
+				$new   = 'mc_custom_' . $style;
+				mc_update_option( 'css_file', $new );
+				mc_show_notice( __( 'CSS migrated to custom directory.', 'my-calendar' ) );
+			} else {
+				mc_show_error( 'path: ' . $newfilepath . __( 'CSS migration failed.', 'my-calendar' ) );
+			}
+		}
+	}
+}
+
+/**
  * Generate stylesheet editor
  */
 function my_calendar_style_edit() {
@@ -27,6 +61,7 @@ function my_calendar_style_edit() {
 		$edit_files = false;
 		mc_show_error( __( 'File editing is disallowed in your WordPress installation. Edit your stylesheets offline.', 'my-calendar' ) );
 	}
+	mc_migrate_css();
 	if ( isset( $_POST['mc_edit_style'] ) || isset( $_POST['mc_reset_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -98,7 +133,7 @@ function my_calendar_style_edit() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		$mc_css_file = stripcslashes( $_POST['mc_css_file'] );
+		$mc_css_file = stripcslashes( sanitize_file_name( $_POST['mc_css_file'] ) );
 
 		mc_update_option( 'css_file', $mc_css_file );
 		$message = '<p><strong>' . __( 'New theme selected.', 'my-calendar' ) . '</strong></p>';
@@ -155,7 +190,14 @@ function my_calendar_style_edit() {
 			mc_show_error( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-design&diff' ) ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
 		}
 	}
-	mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>.', 'my-calendar' ) );
+	if ( ! mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
+		$nonce       = wp_create_nonce( 'mc-migrate-css' );
+		$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
+		mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%s">Migrate your stylesheet</a>.', 'my-calendar' ), $migrate_url ) );
+	} else {
+		mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );
+
+	}
 	echo mc_stylesheet_selector();
 	if ( ! isset( $_GET['diff'] ) ) {
 		$file = mc_get_option( 'css_file' );
@@ -202,7 +244,7 @@ function my_calendar_style_edit() {
 			<legend><?php esc_html_e( 'CSS Style Editor', 'my-calendar' ); ?></legend>
 			<?php
 			if ( mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
-				echo wp_kses_post( '<div class="notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
+				echo wp_kses_post( '<div class="style-editor-notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
 			} else {
 				$disabled = ( $edit_files || mc_get_option( 'use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 				?>
@@ -282,7 +324,7 @@ function mc_test_contrast( $color1, $color2 ) {
  * @return string
  */
 function mc_stylesheet_selector() {
-	$dir              = plugin_dir_path( __FILE__ );
+	$dir              = plugin_dir_path( __DIR__ );
 	$options          = '';
 	$return           = '
 	<div class="style-selector">
@@ -341,14 +383,10 @@ function mc_stylesheet_selector() {
  * @return mixed string/boolean
  */
 function mc_get_style_path( $filename = false, $type = 'path' ) {
-	$url = plugin_dir_url( __FILE__ );
-	$dir = plugin_dir_path( __FILE__ );
+	$url = plugin_dir_url( __DIR__ );
+	$dir = plugin_dir_path( __DIR__ );
 	if ( ! $filename ) {
 		$filename = mc_get_option( 'css_file' );
-	}
-	if ( ! $filename ) {
-		// If no value is saved, return default.
-		$filename = 'twentytwentyone.css';
 	}
 	if ( 0 === strpos( $filename, 'mc_custom_' ) ) {
 		$filename  = str_replace( 'mc_custom_', '', $filename );
@@ -462,6 +500,7 @@ function mc_write_styles( $file, $style ) {
 			return false;
 		}
 	}
+
 	return false;
 }
 
