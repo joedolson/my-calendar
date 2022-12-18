@@ -451,10 +451,10 @@ function mc_update_text_settings( $post ) {
 	$templates['link']               = $post['mc_link_label'];
 	$options['templates']            = $templates;
 	// Date/time.
-	$options['date_format']  = stripslashes( $post['mc_date_format'] );
-	$options['week_format']  = stripslashes( $post['mc_week_format'] );
-	$options['time_format']  = stripslashes( $post['mc_time_format'] );
-	$options['month_format'] = stripslashes( $post['mc_month_format'] );
+	$options['date_format']  = wp_unslash( $post['mc_date_format'] );
+	$options['week_format']  = wp_unslash( $post['mc_week_format'] );
+	$options['time_format']  = wp_unslash( $post['mc_time_format'] );
+	$options['month_format'] = wp_unslash( $post['mc_month_format'] );
 
 	mc_update_options( $options );
 }
