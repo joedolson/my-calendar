@@ -143,12 +143,11 @@ function my_calendar_style_edit() {
 	$mc_show_css = mc_get_option( 'show_css' );
 	$stylefile   = mc_get_style_path();
 	if ( $stylefile ) {
-		$f                 = fopen( $stylefile, 'r' );
-		$size              = ( 0 === filesize( $stylefile ) ) ? 1 : filesize( $stylefile );
-		$file              = fread( $f, $size );
+		global $wp_filesystem;
+		WP_Filesystem();
+		$file              = $wp_filesystem->get_contents( $stylefile );
 		$my_calendar_style = $file;
-		fclose( $f );
-		$mc_current_style = mc_default_style();
+		$mc_current_style  = mc_default_style();
 	} else {
 		$mc_current_style  = '';
 		$my_calendar_style = __( 'Sorry. The file you are looking for doesn\'t appear to exist. Please check your file name and location!', 'my-calendar' );
@@ -420,11 +419,11 @@ function mc_default_style( $filename = false, $return = 'content' ) {
 		$mc_css_file = trim( $filename );
 	}
 	$mc_current_file = dirname( __FILE__ ) . '/templates/' . $mc_css_file;
-	if ( $mc_css_file && file_exists( $mc_current_file ) ) {
-		$f                = fopen( $mc_current_file, 'r' );
-		$file             = fread( $f, filesize( $mc_current_file ) );
+	global $wp_filesystem;
+	WP_Filesystem();
+	if ( $mc_css_file && $wp_filesystem->exists( $mc_current_file ) ) {
+		$file             = $wp_filesystem->get_contents( $mc_current_file );
 		$mc_current_style = $file;
-		fclose( $f );
 		switch ( $return ) {
 			case 'content':
 				return $mc_current_style;
