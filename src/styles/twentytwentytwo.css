@@ -127,6 +127,12 @@
 	font-size: 14px;
 }
 
+.mc-main.mini .event-title {
+	font-weight: 700;
+	background: rgba( 0,0,0,.04 );
+	border-bottom: 1px solid rgba(0,0,0,.2);
+}
+
 .mc-main {
 	position: relative;
 }
@@ -206,9 +212,11 @@
 	color: var(--primary-dark);
 }
 
-.mc-main .calendar-events {
-	width: 110%;
-	left: -5%;
+.mc-main.mini .calendar-events {
+	top: 0;
+	left: 0;
+	width: 100%;
+	border: 1px solid var(--highlight-dark);
 }
 
 .mc-main .mc-event {
@@ -225,8 +233,6 @@
 
 .mc-main.mini .details {
 	padding: 16px;
-	border-top: 1px solid #666;
-	border-top: 1px solid var(--highlight-dark);
 }
 
 .mc-main .list-event .details {
