@@ -78,7 +78,7 @@ function my_calendar_help() {
 			<div class="inside">
 				<h3><?php esc_html_e( 'Custom Icons Location', 'my-calendar' ); ?></h3>
 				<ul>
-					<li><code><?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/'; ?></code></li>
+					<li><code><?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/icons/'; ?></code></li>
 				</ul>
 				<h3><?php esc_html_e( 'Custom Styles Locations', 'my-calendar' ); ?></h3>
 				<ul>

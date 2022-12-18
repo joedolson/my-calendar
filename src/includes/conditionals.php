@@ -47,17 +47,24 @@ function mc_is_custom_icon() {
 	$on     = get_transient( 'mc_custom_icons' );
 	$dir    = trailingslashit( dirname( __FILE__, 2 ) );
 	$base   = basename( $dir );
-	$custom = ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom' ) );
+	$custom = ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' ) );
+	if ( ! $custom ) {
+		// backcompat for old icon directories.
+		$custom = ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' ) );
+	}
 	$return = false;
 	if ( $on && $custom ) {
-		return true;
+		$return = true;
 	} else {
 		$dir  = trailingslashit( dirname( __FILE__, 2 ) );
 		$base = basename( $dir );
 		if ( $custom ) {
-			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
+			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' );
 			if ( empty( $results ) ) {
-				$return = false;
+				$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
+				if ( empty( $results ) ) {
+					$return = false;
+				}
 			} else {
 				$return = true;
 			}
