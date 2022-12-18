@@ -19,7 +19,7 @@ add_action( 'template_redirect', 'my_calendar_print_view' );
  */
 function my_calendar_print_view() {
 	if ( isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid'] ) {
-		echo my_calendar_print();
+		my_calendar_print();
 		exit;
 	}
 }
