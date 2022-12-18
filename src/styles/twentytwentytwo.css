@@ -237,12 +237,14 @@
 
 .mc-main .list-event .details {
 	padding: 0;
-	margin-top: 1em;
 }
 
 .mc-main .list-event .event-title {
-	padding: .25em;
-	border-radius: 0 10px 10px 0;
+	padding: 0;
+	margin-bottom: 1em !important;
+	display: flex;
+	column-gap: 10px;
+	align-items: center;
 }
 
 .mc-main .mc-list .event-date button.mc-text-button {
@@ -608,10 +610,6 @@
 	background: none;
 }
 
-.mc-main .list-event .event-title {
-	display: inline-block;
-}
-
 .mc-main .details .sharing {
 	clear: both;
 	margin: .5em 0;
@@ -661,12 +659,6 @@
 	width: 100%;
 	max-width: 100% !important;
 	height: auto;
-}
-
-.mc-main .list-event .event-title .category-icon {
-	margin-right: .5em;
-	position: relative;
-	top: -1px;
 }
 
 /* Single view */
