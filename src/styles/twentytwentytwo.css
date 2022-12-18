@@ -254,8 +254,11 @@
 	background: transparent;
 	background-color: transparent ! important;
 	color: var(--primary-dark) ! important;
-	text-decoration: underline;
 	outline-offset: 2px;
+}
+
+.mc-main .mc-list .mc-text-button > span {
+	text-decoration: underline;
 }
 
 .mc-main .mc-list .event-date button:hover,

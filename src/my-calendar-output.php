@@ -2125,7 +2125,7 @@ function my_calendar( $args ) {
 										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 									}
 									if ( '' !== $event_output ) {
-										$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( date_i18n( $date_format, $start ) . $inner ) . "$title</strong>" . $event_output . '</li>';
+										$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' ) . "$title</strong>" . $event_output . '</li>';
 										$odd   = ( 'odd' === $odd ) ? 'even' : 'odd';
 									}
 								} else {
@@ -2142,7 +2142,7 @@ function my_calendar( $args ) {
 								$body         .= "<$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span>\n</$td>\n";
 							} else {
 								if ( true === $show_all ) {
-									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( date_i18n( $date_format, $start ) ) . '</strong></li>';
+									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
 									$odd   = ( 'odd' === $odd ) ? 'even' : 'odd';
 								}
 							}
