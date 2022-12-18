@@ -39,6 +39,7 @@ function mc_migrate_css() {
 			if ( $wrote_migration ) {
 				$new = 'mc_custom_' . $style;
 				mc_update_option( 'css_file', $new );
+				mc_update_option( 'migrated', 'true' );
 				mc_show_notice( __( 'CSS migrated to custom directory.', 'my-calendar' ) );
 			} else {
 				mc_show_error( 'path: ' . $newfilepath . __( 'CSS migration failed.', 'my-calendar' ) );
@@ -189,14 +190,15 @@ function my_calendar_style_edit() {
 			mc_show_error( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-design&diff' ) ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
 		}
 	}
-	if ( ! mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
-		$nonce       = wp_create_nonce( 'mc-migrate-css' );
-		$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
-		// Translators: URL for link to migrate styles.
-		mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%s">Migrate your stylesheet</a>.', 'my-calendar' ), $migrate_url ) );
-	} else {
-		mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );
-
+	if ( ! 'true' === mc_get_option( 'migrated' ) ) {
+		if ( ! mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
+			$nonce       = wp_create_nonce( 'mc-migrate-css' );
+			$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
+			// Translators: URL for link to migrate styles.
+			mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%s">Migrate your stylesheet</a>.', 'my-calendar' ), $migrate_url ) );
+		} else {
+			mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );
+		}
 	}
 	echo mc_stylesheet_selector();
 	if ( ! isset( $_GET['diff'] ) ) {

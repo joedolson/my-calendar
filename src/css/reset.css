@@ -9,13 +9,13 @@
 }
 
 /* Override overflow:hidden */
-div.site-content, table {
+main,div.entry-content,div.site-content, table {
 	overflow: visible !important; 
 }
 
 .mc-main {
 	line-height: 1;
-	max-width: 1120px !important;
+	max-width: 1260px !important;
 	margin: 0 auto;
 }
 
@@ -50,8 +50,9 @@ div.site-content, table {
 .mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
 	line-height: 1;
 	padding-top: 6px;
-	padding-bottom: 6px;
+	padding-bottom: 5px;
 	margin: 0;
+	font-size: 1rem;
 	border: 1px solid;
 }
 

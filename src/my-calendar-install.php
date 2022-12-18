@@ -422,6 +422,7 @@ function mc_default_options() {
 		'use_mini_template'            => '',
 		'use_details_template'         => '',
 		'use_grid_template'            => '',
+		'migrated'                     => '',
 	);
 
 	/**
