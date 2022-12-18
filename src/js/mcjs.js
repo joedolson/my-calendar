@@ -2,217 +2,210 @@
 	'use strict';
 	$(function () {
 		mc_display_usertime();
-		$( '.mc-main' ).removeClass( 'mcjs' ); 
+		var calendar = document.querySelector( '.mc-main' );
+		calendar.classList.remove( 'mcjs' );
 	});
 
 	if ( 'true' === my_calendar.mini ) {
-		$(function () {
-			$( ".mini .has-events" ).children().not( ".trigger, .mc-date, .event-date" ).hide();
-			$( document ).on( "click", ".mini .has-events .trigger", function (e) {
-				e.preventDefault();
-				var current_date = $(this).parent().children();
-				current_date.not(".trigger").toggle();
-				$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
-				$( '.mini .has-events' ).children().not( '.trigger, .mc-date, .event-date' ).not( current_date ).hide();
-				$( this ).addClass( 'active-toggle' );
-				e.stopImmediatePropagation();
-			} );
-			$( document ).on( "click", ".calendar-events .close", function (e) {
-				e.preventDefault();
-				$(this).closest( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
-				$(this).closest( 'div.calendar-events' ).toggle();
-				e.stopImmediatePropagation();
-			} );
-		});
+		$( ".mini .calendar-events" ).hide();
+		$( document ).on( "click", ".mini .has-events .trigger", function (e) {
+			e.preventDefault();
+			var current_date = $(this).parent().children();
+			current_date.not(".trigger").toggle();
+			$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
+			$( '.mini .has-events' ).children().not( '.trigger, .mc-date, .event-date' ).not( current_date ).hide();
+			$( this ).addClass( 'active-toggle' );
+			e.stopImmediatePropagation();
+		} );
+		$( document ).on( "click", ".calendar-events .close", function (e) {
+			e.preventDefault();
+			$(this).closest( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
+			$(this).closest( 'div.calendar-events' ).toggle();
+			e.stopImmediatePropagation();
+		} );
 	}
 
 	if ( 'true' === my_calendar.list ) {
-		$(function () {
-			$('li.mc-events > *').not('.event-date').hide();
-			$('li.current-day > *').show();
-			$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
-			$(document).on( 'click', '.event-date button',
-				function (e) {
-					e.preventDefault();
-					$( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).toggle();
-					var visible = $(this).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).is(':visible');
-					if ( visible ) {
-						$(this).attr('aria-expanded', 'true');
-					} else {
-						$(this).attr('aria-expanded', 'false');
-					}
-					e.stopImmediatePropagation();
-					return false;
-				});
-		});
+		$('li .list-event' ).hide();
+		$('li.current-day .list-event').show();
+		$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
+		$(document).on( 'click', '.event-date button',
+			function (e) {
+				e.preventDefault();
+				$( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).toggle();
+				var visible = $(this).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).is(':visible');
+				if ( visible ) {
+					$(this).attr('aria-expanded', 'true');
+				} else {
+					$(this).attr('aria-expanded', 'false');
+				}
+				e.stopImmediatePropagation();
+				return false;
+			});
 	}
 
 	if ( 'true' === my_calendar.grid ) {
-		$(function () {
-			$('.calendar-event').children().not('.event-title,.screen-reader-text').hide();
-			$(document).on('click', '.calendar-event .event-title .open',
-				function (e) {
-					var visible    = $(this).parents( '.mc-event' ).children().not('.event-title').is(':visible');
-					var controls   = $( this ).attr( 'aria-controls' );
-					var controlled = $( '#' + controls );
-					if ( visible ) {
-						$(this).attr( 'aria-expanded', 'false' );
-					} else {
-						$(this).attr( 'aria-expanded', 'true' );
-					}
-					e.preventDefault();
-					var current_date = $(this).parents( '.mc-event' ).children();
-
-					$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
-					controlled.toggle();
-
-					var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
-					var lastFocus  = focusable.last();
-					lastFocus.attr( 'data-action', 'shiftback' );
-
-					$('.calendar-event').children().not('.event-title,.screen-reader-text').not( current_date ).hide();
-					e.stopImmediatePropagation();
-					return false;
-				});
-
-			$(document).on('click', '.calendar-event .close',
-				function (e) {
-					e.preventDefault();
-					$(this).parents( '.mc-event' ).find( 'a.open' ).attr( 'aria-expanded', 'false' );
-					$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
-					$(this).closest('.mc-event').find('.event-title a').trigger( 'focus' );
-					$(this).closest('div.details').toggle();
-					e.stopImmediatePropagation();
-				});
-
-			$(document).on( 'keydown', function(e) {
-				var keycode = ( e.keyCode ? e.keyCode : e.which );
-				if ( keycode == 27 ) {
-					$( '.mc-main ').removeClass( 'grid-open' );
-					$( '.calendar-event div.details' ).hide();
+		$('.calendar-event .details' ).hide();
+		$(document).on('click', '.calendar-event .event-title .open',
+			function (e) {
+				var visible    = $(this).parents( '.mc-event' ).children( '.details' ).is(':visible');
+				var controls   = $( this ).attr( 'aria-controls' );
+				var controlled = $( '#' + controls );
+				if ( visible ) {
+					$(this).attr( 'aria-expanded', 'false' );
+				} else {
+					$(this).attr( 'aria-expanded', 'true' );
 				}
+				e.preventDefault();
+				var current_date = $(this).parents( '.mc-event' ).children();
+
+				$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
+				controlled.toggle();
+
+				var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
+				var lastFocus  = focusable.last();
+				lastFocus.attr( 'data-action', 'shiftback' );
+
+				$('.calendar-event').children( '.details' ).not( current_date ).hide();
+				e.stopImmediatePropagation();
+				return false;
 			});
 
-			$(document).on( 'keydown', '.mc-event a, .mc-event object, .mc-event :input, .mc-event iframe, .mc-event [tabindex]',
-				function(e) {
-					var keycode = ( e.keyCode ? e.keyCode : e.which );
-					var action  = $( ':focus' ).attr( 'data-action' );
-					if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
-						e.preventDefault();
-						$( '.mc-toggle.close' ).trigger( 'focus' );
-					}
-					if ( ( e.shiftKey && keycode == 9 ) && action == 'shiftforward' ) {
-						e.preventDefault();
-						$( '[data-action=shiftback]' ).trigger( 'focus' );
-					}
-				});
+		$(document).on('click', '.calendar-event .close',
+			function (e) {
+				e.preventDefault();
+				$(this).parents( '.mc-event' ).find( 'a.open' ).attr( 'aria-expanded', 'false' );
+				$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
+				$(this).closest('.mc-event').find('.event-title a').trigger( 'focus' );
+				$(this).closest('div.details').toggle();
+				e.stopImmediatePropagation();
+			});
+
+		$(document).on( 'keydown', function(e) {
+			var keycode = ( e.keyCode ? e.keyCode : e.which );
+			if ( keycode == 27 ) {
+				$( '.mc-main ').removeClass( 'grid-open' );
+				$( '.calendar-event div.details' ).hide();
+			}
 		});
+
+		$(document).on( 'keydown', '.mc-event a, .mc-event object, .mc-event :input, .mc-event iframe, .mc-event [tabindex]',
+			function(e) {
+				var keycode = ( e.keyCode ? e.keyCode : e.which );
+				var action  = $( ':focus' ).attr( 'data-action' );
+				if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
+					e.preventDefault();
+					$( '.mc-toggle.close' ).trigger( 'focus' );
+				}
+				if ( ( e.shiftKey && keycode == 9 ) && action == 'shiftforward' ) {
+					e.preventDefault();
+					$( '[data-action=shiftback]' ).trigger( 'focus' );
+				}
+			});
 	}
 
 	if ( 'true' === my_calendar.ajax ) {
-		$(function () {
-			$(document).on('click', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
-				e.preventDefault();
-				var calendar = $( this ).closest( '.mc-main' );
-				var ref      = calendar.attr('id');
-				var month    = '';
-				var day      = '';
-				var year     = '';
-				var mcat     = '';
-				var loc      = '';
-				var access   = '';
-				var mcs      = '';
+		$(document).on('click', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
+			e.preventDefault();
+			var calendar = $( this ).closest( '.mc-main' );
+			var ref      = calendar.attr('id');
+			var month    = '';
+			var day      = '';
+			var year     = '';
+			var mcat     = '';
+			var loc      = '';
+			var access   = '';
+			var mcs      = '';
+			if ( 'INPUT' === this.nodeName ) {
+				var inputForm = $( this ).parents( 'form' );
+				if ( inputForm.hasClass( 'mc-date-switcher' ) ) {
+					var month = inputForm.find( 'select[name=month]' ).val();
+					var day   = inputForm.find( 'select[name=dy]' ).val();
+					var year  = inputForm.find( 'select[name=yr]' ).val();
+				}
+				if ( inputForm.hasClass( 'mc-categories-switcher' ) ) {
+					var mcat = inputForm.find( 'select[name=mcat]' ).val();
+				}
+				if ( inputForm.hasClass( 'mc-locations-switcher' ) ) {
+					var loc = inputForm.find( 'select[name=loc]' ).val();
+				}
+				if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
+					var access = inputForm.find( 'select[name=access]' ).val();
+				}
+				var mcs   = calendar.find( '#mcs' ).val();
+				var link  = $( this ).attr( 'data-href' );
+			} else {
+				var link = $(this).attr('href');
+			}
+			let url;
+			try {
+				url = new URL(link);
+				url.searchParams.delete('embed');
 				if ( 'INPUT' === this.nodeName ) {
-					var inputForm = $( this ).parents( 'form' );
-					if ( inputForm.hasClass( 'mc-date-switcher' ) ) {
-						var month = inputForm.find( 'select[name=month]' ).val();
-						var day   = inputForm.find( 'select[name=dy]' ).val();
-						var year  = inputForm.find( 'select[name=yr]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-categories-switcher' ) ) {
-						var mcat = inputForm.find( 'select[name=mcat]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-locations-switcher' ) ) {
-						var loc = inputForm.find( 'select[name=loc]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
-						var access = inputForm.find( 'select[name=access]' ).val();
-					}
-					var mcs   = calendar.find( '#mcs' ).val();
-					var link  = $( this ).attr( 'data-href' );
-				} else {
-					var link = $(this).attr('href');
-				}
-				let url;
-				try {
-					url = new URL(link);
-					url.searchParams.delete('embed');
-					if ( 'INPUT' === this.nodeName ) {
-						if ( '' !== month ) {
-							url.searchParams.delete( 'month' );
-							url.searchParams.delete( 'dy' );
-							url.searchParams.delete( 'yr' );
+					if ( '' !== month ) {
+						url.searchParams.delete( 'month' );
+						url.searchParams.delete( 'dy' );
+						url.searchParams.delete( 'yr' );
 
-							url.searchParams.append( 'month', parseInt( month ) );
-							if ( 'undefined' !== typeof( day ) ) {
-								url.searchParams.append( 'dy', parseInt( day ) );
-							}
-							url.searchParams.append( 'yr', parseInt( year ) );
+						url.searchParams.append( 'month', parseInt( month ) );
+						if ( 'undefined' !== typeof( day ) ) {
+							url.searchParams.append( 'dy', parseInt( day ) );
 						}
-						if ( '' !== mcat ) {
-							url.searchParams.delete( 'mcat' );
-							url.searchParams.append( 'mcat', mcat );
-						}
-						if ( '' !== loc ) {
-							url.searchParams.delete( 'loc' );
-							url.searchParams.delete( 'ltype' );
-							url.searchParams.append( 'ltype', 'name' );
-							url.searchParams.append( 'loc', loc );
-						}
-						if ( '' !== access ) {
-							url.searchParams.delete( 'access' );
-							url.searchParams.append( 'access', parseInt( access ) );
-						}
-						url.searchParams.delete( 'mcs' );
-						if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
-							url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
-						}
-
-						link = url.toString();
+						url.searchParams.append( 'yr', parseInt( year ) );
+					}
+					if ( '' !== mcat ) {
+						url.searchParams.delete( 'mcat' );
+						url.searchParams.append( 'mcat', mcat );
+					}
+					if ( '' !== loc ) {
+						url.searchParams.delete( 'loc' );
+						url.searchParams.delete( 'ltype' );
+						url.searchParams.append( 'ltype', 'name' );
+						url.searchParams.append( 'loc', loc );
+					}
+					if ( '' !== access ) {
+						url.searchParams.delete( 'access' );
+						url.searchParams.append( 'access', parseInt( access ) );
+					}
+					url.searchParams.delete( 'mcs' );
+					if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
+						url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
 					}
 
-					window.history.pushState({}, '', url );
-				} catch(_) {
-					url = false;
+					link = url.toString();
 				}
 
-				var height   = calendar.height();
-				/* $('#' + ref + ' .mc-content' ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-				$( '#' + ref + ' .mc-content' ).load(link + ' #' + ref + ' .mc-content > *', function ( response, status, xhr ) { */
-				$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-				$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
+				window.history.pushState({}, '', url );
+			} catch(_) {
+				url = false;
+			}
 
-					if ( status == 'error' ) {
-						$( '#' + ref ).html( xhr.status + " " + xhr.statusText );
-					}
-					// functions to execute when new view loads.
-					// List view.
-					if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
-						$('li.mc-events').children().not('.event-date').hide();
-						$('li.current-day').children().show();
-					}
-					// Grid view.
-					if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
-						$('.calendar-event').children().not('.event-title').hide();
-					}
-					// Mini view.
-					if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
-						$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
-					}
-					// All views.
-					$( '#' + ref ).attr('tabindex', '-1').trigger( 'focus' );
-					mc_display_usertime();
-				});
+			var height   = calendar.height();
+			/* $('#' + ref + ' .mc-content' ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
+			$( '#' + ref + ' .mc-content' ).load(link + ' #' + ref + ' .mc-content > *', function ( response, status, xhr ) { */
+			$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
+			$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
+
+				if ( status == 'error' ) {
+					$( '#' + ref ).html( xhr.status + " " + xhr.statusText );
+				}
+				// functions to execute when new view loads.
+				// List view.
+				if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
+					$('li.mc-events').children().not('.event-date').hide();
+					$('li.current-day').children().show();
+				}
+				// Grid view.
+				if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
+					$('.calendar-event').children().not('.event-title').hide();
+				}
+				// Mini view.
+				if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
+					$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
+				}
+				// All views.
+				$( '#' + ref ).attr('tabindex', '-1').trigger( 'focus' );
+				mc_display_usertime();
 			});
 		});
 	}
