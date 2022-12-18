@@ -67,21 +67,12 @@
 	text-decoration: none;
 }
 
-.mc-main span.category-color-sample {
-	border: none !important;
-	box-shadow: none !important;
-}
-
+.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
 .mc-main nav .my-calendar-header a:hover, .mc-main nav .my-calendar-footer a:hover,
 .mc-main nav .my-calendar-header a:focus, .mc-main nav .my-calendar-footer a:focus {
 	outline: 2px solid var(--primary-dark);
 	outline-offset: 2px;
 	border-radius: 3px;
-}
-
-.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus {
-	outline-offset: 0;
-	border-radius: 0;
 }
 
 .mc-main.calendar, .mc-main table {
@@ -148,12 +139,12 @@
 }
 
 .mc-main .event-title a {
-	display: block;
+	display: flex;
+	align-items: start;
+	column-gap: 4px;
 	line-height: 1.5;
-	padding: 4px 6px;
+	padding: 4px;
 	position: relative;
-	border-bottom: none;
-	box-shadow: none;
 }
 
 .my-calendar-prev a:before,
@@ -171,10 +162,6 @@
 	vertical-align: middle;
 	position: relative;
 	margin-right: 2px;
-}
-
-.mc-main .event-title .has-image {
-	padding-left: 24px;
 }
 
 .mc-main.mini .event-title {
@@ -205,24 +192,6 @@
 
 .mc-main .mc-format .grid:before {
 	content: "\f508";
-}
-
-.mc-main .event-title .category-icon, .mc-main .category-color-sample .category-icon {
-	position: absolute;
-	top: 6px;
-	left: 4px;
-	box-shadow: none;
-	background: transparent;
-	display: inline;
-	vertical-align: middle;
-}
-
-.mc-main .category-key .category-color-sample {
-	padding-right: 4px;
-}
-
-.mc-main .category-color-sample .category-icon {
-	position: static;
 }
 
 .mc-main .calendar-event .details, .mc-main .calendar-events {

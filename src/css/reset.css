@@ -263,6 +263,17 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	background-color: transparent;
 }
 
+.mc-main .category-key li a {
+	display: flex;
+	align-items: center;
+	column-gap: 4px;
+}
+
+.mc-main .category-key .category-color-sample {
+	display: flex;
+	align-items: center;
+}
+
 .mc-main .mc-loading {
 	position: absolute;
 	top: 45%;
@@ -351,6 +362,11 @@ ol.mc-search-results li {
 /* Prevent missing background image on google maps */
 .mc-gmap-markers img {
 	max-width: none ! important; 
+}
+
+.mc-main .calendar-events {
+	position: relative;
+	z-index: 100;
 }
 
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }

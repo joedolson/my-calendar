@@ -384,7 +384,7 @@ function mc_category_key( $category ) {
 			$back     = ( 'default' !== mc_get_option( 'apply_color' ) ) ? ' style="background:' . $hex . $cat->category_color . ';"' : '';
 			$cat_key .= '<span class="category-color-sample ' . $type . '"' . $back . '>' . $image . '</span>' . $cat_name;
 		} elseif ( 'default' !== mc_get_option( 'apply_color' ) ) {
-			$cat_key .= ( ( '' !== $cat->category_color ) ? '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' : '' ) . $cat_name;
+			$cat_key .= ( ( '' !== $cat->category_color ) ? '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' : '' ) . '<span class="mc-category-title">' . $cat_name . '</span>';
 		} else {
 			// If category colors are ignored, don't render HTML for them.
 			$cat_key .= $cat_name;
