@@ -1529,7 +1529,7 @@ function mc_update_location_controls() {
 		foreach ( $locations as $key => $value ) {
 			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
 		}
-		update_option( 'mc_location_controls', $mc_location_controls );
+		mc_update_option( 'location_controls', $mc_location_controls );
 		mc_show_notice( __( 'Location Controls Updated', 'my-calendar' ) );
 	}
 }
