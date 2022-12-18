@@ -52,6 +52,7 @@ div.site-content, table {
 	padding-top: 6px;
 	padding-bottom: 6px;
 	margin: 0;
+	border: 1px solid;
 }
 
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),

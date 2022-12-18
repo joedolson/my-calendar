@@ -24,11 +24,11 @@ function mc_migrate_css() {
 		} else {
 			global $wp_filesystem;
 			WP_Filesystem();
-			$style           = mc_get_option( 'css_file' );
-			$stylefile       = mc_get_style_path();
-			$newfileroot     = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __DIR__ ) );
-			$newfiledir      = $newfileroot . 'styles/';
-			$newfilepath     = $newfiledir . $style;
+			$style       = mc_get_option( 'css_file' );
+			$stylefile   = mc_get_style_path();
+			$newfileroot = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __DIR__ ) );
+			$newfiledir  = $newfileroot . 'styles/';
+			$newfilepath = $newfiledir . $style;
 			if ( ! $wp_filesystem->exists( $newfileroot ) ) {
 				$wp_filesystem->mkdir( $newfileroot );
 			}
@@ -37,7 +37,7 @@ function mc_migrate_css() {
 			}
 			$wrote_migration = $wp_filesystem->copy( $stylefile, $newfilepath, true );
 			if ( $wrote_migration ) {
-				$new   = 'mc_custom_' . $style;
+				$new = 'mc_custom_' . $style;
 				mc_update_option( 'css_file', $new );
 				mc_show_notice( __( 'CSS migrated to custom directory.', 'my-calendar' ) );
 			} else {
@@ -192,6 +192,7 @@ function my_calendar_style_edit() {
 	if ( ! mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
 		$nonce       = wp_create_nonce( 'mc-migrate-css' );
 		$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
+		// Translators: URL for link to migrate styles.
 		mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%s">Migrate your stylesheet</a>.', 'my-calendar' ), $migrate_url ) );
 	} else {
 		mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );

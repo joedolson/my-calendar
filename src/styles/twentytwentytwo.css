@@ -67,6 +67,8 @@
 	text-decoration: none;
 }
 
+.mc-main .my-calendar-header select:focus, .mc-main .my-calendar-footer select:focus,
+.mc-main .my-calendar-header select:hover, .mc-main .my-calendar-footer select:hover,
 .mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
 .mc-main nav .my-calendar-header a:hover, .mc-main nav .my-calendar-footer a:hover,
 .mc-main nav .my-calendar-header a:focus, .mc-main nav .my-calendar-footer a:focus {
@@ -292,18 +294,17 @@
 
 .mc-main button.close {
 	position: absolute;
-	right: 0px;
-	top: 0px;
+	right: 3px;
+	top: 4px;
 	padding: 10px !important;
 	background: #b00 !important;
-	border-radius: 0px 0 0 5px!important;
+	border-radius: 3px;
 	color: #fff !important;
 }
 
 .mc-main button.close, .mc-main button.close * {
 	padding: 0;
 	line-height: 1;
-	border-radius: 0;
 	opacity: 1;
 }
 
