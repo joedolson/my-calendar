@@ -3,7 +3,9 @@
 	$(function () {
 		mc_display_usertime();
 		var calendar = document.querySelector( '.mc-main' );
-		calendar.classList.remove( 'mcjs' );
+		if ( calendar ) {
+			calendar.classList.remove( 'mcjs' );
+		}
 	});
 
 	if ( 'true' === my_calendar.mini ) {
