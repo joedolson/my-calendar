@@ -187,8 +187,6 @@
 			}
 
 			var height = calendar.height();
-			/* $('#' + ref + ' .mc-content' ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-			$( '#' + ref + ' .mc-content' ).load(link + ' #' + ref + ' .mc-content > *', function ( response, status, xhr ) { */
 			$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
 			$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
 
