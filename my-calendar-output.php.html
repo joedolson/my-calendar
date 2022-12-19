@@ -473,7 +473,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					 *
 					 * @return {string}
 					 */
-					$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
+					$hlevel = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 					if ( 'false' === mc_get_option( 'list_links' ) ) {
 						$list_title = "	&lt;$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "&lt;/$hlevel>\n";
 					}
@@ -2158,7 +2158,7 @@ function my_calendar( $args ) {
 										} else {
 											$body .= "&lt;li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'>&lt;h2 class=\"event-date\">" . '&lt;span>' . date_i18n( $date_format, $start ) . $inner . '&lt;/span>' . "$title&lt;/h2>" . $event_output . '&lt;/li>';
 										}
-										$odd   = ( 'odd' === $odd ) ? 'even' : 'odd';
+										$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 									}
 								} else {
 									$marker = ( count( $events ) > 1 ) ? '&amp;#9679;&amp;#9679;' : '&amp;#9679;';
