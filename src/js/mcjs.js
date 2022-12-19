@@ -26,27 +26,30 @@
 	}
 
 	if ( 'true' === my_calendar.list ) {
-		$('li .list-event' ).hide();
-		$('li.current-day .list-event').show();
-		$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
-		$(document).on( 'click', '.event-date button',
-			function (e) {
-				e.preventDefault();
-				$( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).toggle();
-				var visible = $(this).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).is(':visible');
-				if ( visible ) {
-					$(this).attr('aria-expanded', 'true');
-				} else {
-					$(this).attr('aria-expanded', 'false');
-				}
-				e.stopImmediatePropagation();
-				return false;
-			});
+		if ( 'dates' === my_calendar.links ) {
+			$('li .list-event' ).hide();
+			$('li.current-day .list-event').show();
+			$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
+			$(document).on( 'click', '.event-date button',
+				function (e) {
+					e.preventDefault();
+					$( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).toggle();
+					var visible = $(this).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).is(':visible');
+					if ( visible ) {
+						$(this).attr('aria-expanded', 'true');
+					} else {
+						$(this).attr('aria-expanded', 'false');
+					}
+					e.stopImmediatePropagation();
+					return false;
+				});
+		}
 	}
 
-	if ( 'true' === my_calendar.grid ) {
-		$('.calendar-event .details' ).hide();
-		$(document).on('click', '.calendar-event .event-title .open',
+	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'titles' === my_calendar.links ) ) {
+		var wrapper = ( 'titles' === my_calendar.links ) ? '.mc-event' : '.calendar-event';
+		$( wrapper + ' .details' ).hide();
+		$(document).on('click', wrapper + ' .event-title .open',
 			function (e) {
 				var visible    = $(this).parents( '.mc-event' ).children( '.details' ).is(':visible');
 				var controls   = $( this ).attr( 'aria-controls' );
@@ -66,7 +69,7 @@
 				var lastFocus  = focusable.last();
 				lastFocus.attr( 'data-action', 'shiftback' );
 
-				$('.calendar-event').children( '.details' ).not( current_date ).hide();
+				$( wrapper ).children( '.details' ).not( current_date ).hide();
 				e.stopImmediatePropagation();
 				return false;
 			});
@@ -192,8 +195,12 @@
 				// functions to execute when new view loads.
 				// List view.
 				if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
-					$('li.mc-events').children().not('.event-date').hide();
-					$('li.current-day').children().show();
+					if ( 'dates' === my_calendar.links ) {
+						$('li.mc-events').children().not('.event-date').hide();
+						$('li.current-day').children().show();
+					} else {
+						$('li.mc-events .details' ).hide();
+					}
 				}
 				// Grid view.
 				if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {

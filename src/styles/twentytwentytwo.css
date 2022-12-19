@@ -237,16 +237,20 @@
 	padding: 16px;
 }
 
-.mc-main .list-event .details {
-	padding: 0;
+.mc-main .list-event .event-title {
+	display: flex;
+	column-gap: 10px;
+	align-items: center;
 }
 
 .mc-main .list-event .event-title {
 	padding: 0;
-	margin-bottom: 1em !important;
-	display: flex;
-	column-gap: 10px;
-	align-items: center;
+	margin-bottom: .25em 0 !important;
+}
+
+.mc-main .list-event > h3.event-title {
+	display: block;
+	font-size: 1.2rem;
 }
 
 .mc-main .mc-list .event-date button.mc-text-button {
@@ -257,6 +261,10 @@
 	background-color: transparent ! important;
 	color: var(--primary-dark) ! important;
 	outline-offset: 2px;
+}
+
+.mc-main .event-title a > *:not(span,svg) {
+	text-decoration: underline;
 }
 
 .mc-main .mc-list .mc-text-button > span {
@@ -352,14 +360,20 @@
 	font-size: 14px;
 }
 
-.mc-main .time-block p {
+.mc-main .time-block {
+	background: var(--primary-light);
+	padding: .5rem;
 	color: #000;
 	color: var(--secondary-dark);
+}
+
+.mc-main .time-block .time-wrapper {
+	font-weight: 700;
+}
+
+.mc-main .time-block p {
 	display: inline-block;
 	margin: 0 !important;
-	background: #fff;
-	background: var(--primary-light);
-	padding: 0 .25em !important;
 }
 
 .mc-main .time-block:before {
@@ -604,12 +618,12 @@
 
 .mc-main .mc-list .mc-events {
 	list-style-type: none !important;
-	padding: 1rem;
+	padding: .5rem;
 	background: rgba(0, 0, 0, .03);
 	margin: 0;
 }
 
-.mc-main .mc-list .mc-events.odd {
+.mc-main .mc-list .mc-events:nth-of-type(even) {
 	padding: 10px;
 	background: none;
 }
@@ -638,15 +652,12 @@
 }
 
 .mc-main .mc-list .event-date {
-	font-size: 16px;
+	font-size: 1.4rem;
 	font-weight: 600;
 }
 
 .mc-main .list-event {
-	border-top: 4px solid #d1d1d1;
-	border-top: 4px solid var(--highlight-light);
-	margin: .5em -10px;
-	clear: both;
+	margin: 0 0 0 2em;
 }
 
 .mc-main .day .list-event, .mc-main .day .details {

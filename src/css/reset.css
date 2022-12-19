@@ -229,6 +229,15 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	border-left-width: 0;
 }
 
+.mc-main .event-title button {
+	width: 100%;
+	text-align: left;
+	display: flex;
+	column-gap: 4px;
+	align-items: center;
+	padding: 1rem;
+}
+
 .mc-main .mc-date-switcher select:last-of-type,
 .mc-main .mc-search-form input[type=text],
 .mc-main .mc_filters select {

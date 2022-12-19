@@ -372,14 +372,18 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 */
 		$no_link = apply_filters( 'mc_disable_link', false, $data );
 
-		if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type ) && ! $no_link ) {
+		if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'titles' === mc_get_option( 'list_links' ) ) ) && ! $no_link ) {
 			if ( 'true' === $open_uri ) {
 				$details_link = esc_url( mc_get_details_link( $event ) );
 				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 				$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 			} else {
+				$append = '';
+				if ( 'list' === $type ) {
+					$append = '<span class="dashicons dashicons-plus" aria-hidden="true"></span>';
+				}
 				$wrap    = "<a href='#$uid-$type-details-$id' aria-controls='$uid-$type-details-$id' class='open et_smooth_scroll_disabled opl-link url summary$has_image' aria-expanded='false'>";
-				$balance = '</a>';
+				$balance = $append . '</a>';
 			}
 		} else {
 			$wrap    = '';
@@ -403,7 +407,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 		if ( 'single' === $type ) {
 			$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image $event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
-		} elseif ( 'list' !== $type ) {
+		} elseif ( 'list' !== $type || ( 'list' === $type && 'titles' === mc_get_option( 'list_links' ) ) ) {
 			/**
 			 * Filter event title inside event heading.
 			 *
@@ -448,7 +452,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					 * @return {string}
 					 */
 					$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
-					$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
+					if ( 'dates' === mc_get_option( 'list_links' ) ) {
+						$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
+					}
 				}
 				if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
 					$author = mc_template_user_card( $event, 'author' );
@@ -2125,7 +2131,11 @@ function my_calendar( $args ) {
 										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 									}
 									if ( '' !== $event_output ) {
-										$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' ) . "$title</strong>" . $event_output . '</li>';
+										if ( 'dates' === mc_get_option( 'list_links' ) ) {
+											$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' ) . "$title</strong>" . $event_output . '</li>';
+										} else {
+											$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2>" . $event_output . '</li>';
+										}
 										$odd   = ( 'odd' === $odd ) ? 'even' : 'odd';
 									}
 								} else {

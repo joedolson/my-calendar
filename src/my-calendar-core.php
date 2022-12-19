@@ -549,6 +549,7 @@ function mc_footer_js() {
 					'list'      => $list,
 					'mini'      => $mini,
 					'ajax'      => $ajax,
+					'links'     => mc_get_option( 'list_links' ),
 					'newWindow' => __( 'New tab', 'my-calendar' ),
 				);
 				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );

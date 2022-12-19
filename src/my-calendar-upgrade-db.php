@@ -147,6 +147,8 @@ function mc_migrate_settings() {
 		'use_mini_template'            => get_option( 'mc_use_mini_template' ),
 		'use_details_template'         => get_option( 'mc_use_details_template' ),
 		'use_grid_template'            => get_option( 'mc_use_grid_template' ),
+		'list_links'                   => 'dates',
+
 	);
 	add_option( 'my_calendar_options', $options );
 	// Remove old options.
