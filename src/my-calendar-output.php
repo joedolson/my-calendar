@@ -447,7 +447,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					 *
 					 * @return {string}
 					 */
-					$hlevel     = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
+					$hlevel = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 					if ( 'false' === mc_get_option( 'list_links' ) ) {
 						$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 					}
@@ -2132,7 +2132,7 @@ function my_calendar( $args ) {
 										} else {
 											$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2>" . $event_output . '</li>';
 										}
-										$odd   = ( 'odd' === $odd ) ? 'even' : 'odd';
+										$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 									}
 								} else {
 									$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';

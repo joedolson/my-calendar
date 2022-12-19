@@ -277,6 +277,10 @@
 
 .mc-main .event-title a > span {
 	text-decoration: underline;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	column-gap: 4px;
 }
 
 .mc-main .mc-list .mc-text-button > span {
@@ -458,8 +462,8 @@
 }
 
 .mc-main .current-day {
-	border-bottom: 5px solid #313233;
-	border-bottom: 5px solid var(--highlight-dark);
+	outline: 3px solid var(--highlight-dark);
+	outline-offset: -3px;
 }
 
 .mc-main .has-events a.mc-date {
