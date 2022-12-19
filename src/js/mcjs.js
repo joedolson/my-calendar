@@ -26,7 +26,7 @@
 	}
 
 	if ( 'true' === my_calendar.list ) {
-		if ( 'dates' === my_calendar.links ) {
+		if ( 'false' === my_calendar.links ) {
 			$('li .list-event' ).hide();
 			$('li.current-day .list-event').show();
 			$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
@@ -46,8 +46,8 @@
 		}
 	}
 
-	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'titles' === my_calendar.links ) ) {
-		var wrapper = ( 'titles' === my_calendar.links ) ? '.mc-event' : '.calendar-event';
+	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'true' === my_calendar.links ) ) {
+		var wrapper = ( 'true' === my_calendar.links ) ? '.mc-event' : '.calendar-event';
 		$( wrapper + ' .details' ).hide();
 		$(document).on('click', wrapper + ' .event-title .open',
 			function (e) {
@@ -195,7 +195,7 @@
 				// functions to execute when new view loads.
 				// List view.
 				if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
-					if ( 'dates' === my_calendar.links ) {
+					if ( 'false' === my_calendar.links ) {
 						$('li.mc-events').children().not('.event-date').hide();
 						$('li.current-day').children().show();
 					} else {

@@ -155,17 +155,25 @@
 	position: relative;
 }
 
-.my-calendar-prev a:before,
-.my-calendar-next a:after,
-.mc-export a:before,
-.mc-main .time-block:before,
-.mc-main .sharing .ical a:before,
-.mc-main .sharing .gcal a:before,
-.mc-main .sharing .mc-details a:before,
-.mc-main .mc-format a:before,
-.mc-main .mc-format span:before,
-.mc-main .mc-print a:before,
-.mc-main .mc-list .event-date button:nth-of-type(1):before {
+.mc-main .event-title a.list > span {
+	display: flex;
+	align-items: start;
+	column-gap: 4px;
+	flex: 1;
+}
+
+.my-calendar-prev a::before,
+.my-calendar-next a::after,
+.mc-export a::before,
+.mc-main .time-block::before,
+.mc-main .sharing .ical a::before,
+.mc-main .sharing .gcal a::before,
+.mc-main .sharing .mc-details a::before,
+.mc-main .mc-format a::before,
+.mc-main .mc-format span::before,
+.mc-main .mc-print a::before,
+.mc-main .mc-list .event-title a.list::before,
+.mc-main .mc-list .event-date button:nth-of-type(1)::before {
 	font-family: 'dashicons';
 	vertical-align: middle;
 	position: relative;
@@ -190,15 +198,15 @@
 	left: 0;
 }
 
-.mc-main .mc-print a:before {
+.mc-main .mc-print a::before {
 	content: "\f497";
 }
 
-.mc-main .mc-format .list:before {
+.mc-main .mc-format .list::before {
 	content: "\f163";
 }
 
-.mc-main .mc-format .grid:before {
+.mc-main .mc-format .grid::before {
 	content: "\f508";
 }
 
@@ -244,7 +252,7 @@
 }
 
 .mc-main .list-event .event-title {
-	padding: 0;
+	padding: .5rem;
 	margin-bottom: .25em 0 !important;
 }
 
@@ -263,7 +271,11 @@
 	outline-offset: 2px;
 }
 
-.mc-main .event-title a > *:not(span,svg) {
+.mc-main .event-title a.list {
+	text-decoration: none;
+}
+
+.mc-main .event-title a > span {
 	text-decoration: underline;
 }
 
@@ -276,13 +288,20 @@
 	background: transparent;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1):before {
+.mc-main .mc-list .event-date button:nth-of-type(1)::before {
 	content: "\f132";
 	top: 0;
 	margin-right: 3px;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true]:before {
+.mc-main .mc-list .event-title a.list::before {
+	content: "\f132";
+	top: 0;
+	margin-right: 3px;
+}
+
+.mc-main .mc-list .event-title a.list[aria-expanded=true]::before,
+.mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true]::before {
 	content: "\f460";
 }
 

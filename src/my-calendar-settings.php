@@ -366,7 +366,7 @@ function mc_update_output_settings( $post ) {
 	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
 	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
 	$options['show_list_events'] = ( ! empty( $post['mc_show_list_events'] ) && 'on' === $post['mc_show_list_events'] ) ? 'true' : 'false';
-	$options['list_links']       = ( ! empty( $post['mc_list_links'] ) && 'titles' === $post['mc_list_links'] ) ? 'titles' : 'dates';
+	$options['list_links']       = ( ! empty( $post['mc_list_links'] ) && 'on' === $post['mc_list_links'] ) ? 'true' : 'false';
 	$options['show_months']      = (int) $post['mc_show_months'];
 	// Calculate sequence for navigation elements.
 	$top    = array();
@@ -1209,7 +1209,7 @@ function mc_remote_db() {
 							<ul>
 								<li><?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?></li>
 								<li><?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-								<li><?php mc_settings_field( 'mc_list_links', __( 'Show collapsed events in list view.', 'my-calendar' ), 'titles', '', array(), 'checkbox-single' ); ?></li>
+								<li><?php mc_settings_field( 'mc_list_links', __( 'Show collapsed events in list view.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_show_list_events', __( 'Show all event titles next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							</ul>
 						</fieldset>
