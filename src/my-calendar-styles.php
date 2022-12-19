@@ -42,7 +42,7 @@ function mc_migrate_css() {
 				mc_update_option( 'migrated', 'true' );
 				mc_show_notice( __( 'CSS migrated to custom directory.', 'my-calendar' ) );
 			} else {
-				mc_show_error( 'path: ' . $newfilepath . __( 'CSS migration failed.', 'my-calendar' ) );
+				mc_show_error( __( 'CSS migration failed. You may need to migrate your file via FTP.', 'my-calendar' ) );
 			}
 		}
 	}
@@ -63,6 +63,16 @@ function my_calendar_style_edit() {
 		mc_show_error( __( 'File editing is disallowed in your WordPress installation. Edit your stylesheets offline.', 'my-calendar' ) );
 	}
 	mc_migrate_css();
+	if ( ! ( 'true' === mc_get_option( 'migrated' ) ) ) {
+		if ( ! mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
+			$nonce       = wp_create_nonce( 'mc-migrate-css' );
+			$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
+			// Translators: URL for link to migrate styles.
+			mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%s">Migrate your stylesheet</a>.', 'my-calendar' ), $migrate_url ) );
+		} else {
+			mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );
+		}
+	}
 	if ( isset( $_POST['mc_edit_style'] ) || isset( $_POST['mc_reset_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -188,16 +198,6 @@ function my_calendar_style_edit() {
 		}
 		if ( trim( $left_string ) !== trim( $right_string ) && ! isset( $_GET['diff'] ) ) {
 			mc_show_error( __( 'There have been updates to the stylesheet.', 'my-calendar' ) . ' <a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-design&diff' ) ) . '">' . __( 'Compare Your Stylesheet with latest installed version of My Calendar.', 'my-calendar' ) . '</a>' );
-		}
-	}
-	if ( ! 'true' === mc_get_option( 'migrated' ) ) {
-		if ( ! mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
-			$nonce       = wp_create_nonce( 'mc-migrate-css' );
-			$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
-			// Translators: URL for link to migrate styles.
-			mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%s">Migrate your stylesheet</a>.', 'my-calendar' ), $migrate_url ) );
-		} else {
-			mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );
 		}
 	}
 	echo mc_stylesheet_selector();
