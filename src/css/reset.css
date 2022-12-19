@@ -274,6 +274,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	background-color: transparent;
 }
 
+.mc-main .all-categories span,
 .mc-main .category-key li a {
 	display: flex;
 	align-items: center;

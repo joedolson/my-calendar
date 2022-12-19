@@ -392,18 +392,20 @@ function mc_category_key( $category, $id = '' ) {
 		}
 		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $cat->category_id . '-' . $id . '" href="' . esc_url( $url ) . '"' . $aria_current . '>' . $cat_key . '</a></li>';
 	}
+	/**
+	 * Filter text label for 'All Categories'.
+	 *
+	 * @hook mc_text_all_categories
+	 *
+	 * @param {string} $all Text for link to show all categories.
+	 *
+	 * @return {string}
+	 */
+	$all  = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
 	if ( isset( $_GET['mcat'] ) ) {
-		/**
-		 * Filter text label for 'All Categories'.
-		 *
-		 * @hook mc_text_all_categories
-		 *
-		 * @param {string} $all Text for link to show all categories.
-		 *
-		 * @return {string}
-		 */
-		$all  = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
 		$key .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "'>" . $all . '</a></li>';
+	} else {
+		$key .= "<li class='all-categories'><span class='mc-active' id='mc_cat_all-$id' tabindex='-1'>" . $all . '</span></li>';
 	}
 	$key .= '</ul></div>';
 
@@ -1152,7 +1154,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	$toggle = '';
 
 	if ( 'mini' !== $format ) {
-		$toggle      = "<div class='mc-time'>";
+		$toggle = "<div class='mc-time'>";
 		if ( -1 === (int) $adjust && ! $adjusted ) {
 			$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
 		} else {
