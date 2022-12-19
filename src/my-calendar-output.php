@@ -2440,10 +2440,11 @@ function mc_wrap_title( $title ) {
  *
  * @param string $type Type of search.
  * @param string $url URL to post query to.
+ * @param string $id Calendar view ID.
  *
  * @return string HTML form.
  */
-function my_calendar_searchform( $type, $url = '' ) {
+function my_calendar_searchform( $type, $url = '', $id = 'events' ) {
 	$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : '';
 	if ( 'simple' === $type ) {
 		if ( ! $url ) {
@@ -2463,7 +2464,7 @@ function my_calendar_searchform( $type, $url = '' ) {
 		<div class="mc-search-container" role="search">
 			<form class="mc-search-form" method="get" action="' . esc_url( $url ) . '" >
 				<div class="mc-search">
-					<label class="screen-reader-text" for="mcs">' . __( 'Search Events', 'my-calendar' ) . '</label><input type="text" value="' . esc_attr( stripslashes( urldecode( $query ) ) ) . '" name="mcs" id="mcs" /><input type="submit" data-href="' . esc_url( add_query_arg( 'source', 'widget', $url ) ) . '" class="button" id="searchsubmit" value="' . __( 'Search Events', 'my-calendar' ) . '" />
+					<label class="screen-reader-text" for="mc_query_search-' . $id . '">' . __( 'Search Events', 'my-calendar' ) . '</label><input id="mc_query_search-' . $id . '" type="text" value="' . esc_attr( stripslashes( urldecode( $query ) ) ) . '" name="mcs" /><input type="submit" data-href="' . esc_url( add_query_arg( 'source', 'widget', $url ) ) . '" class="button" id="mc_submit_search-' . $id . '" value="' . __( 'Search Events', 'my-calendar' ) . '" />
 				</div>
 			</form>
 		</div>';

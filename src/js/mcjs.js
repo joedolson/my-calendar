@@ -112,6 +112,7 @@
 	if ( 'true' === my_calendar.ajax ) {
 		$(document).on('click', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
 			e.preventDefault();
+			var targetId = $( this ).attr( 'id' );
 			var calendar = $( this ).closest( '.mc-main' );
 			var ref      = calendar.attr('id');
 			var month    = '';
@@ -185,7 +186,7 @@
 				url = false;
 			}
 
-			var height   = calendar.height();
+			var height = calendar.height();
 			/* $('#' + ref + ' .mc-content' ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
 			$( '#' + ref + ' .mc-content' ).load(link + ' #' + ref + ' .mc-content > *', function ( response, status, xhr ) { */
 			$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
@@ -213,7 +214,7 @@
 					$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
 				}
 				// All views.
-				$( '#' + ref ).attr('tabindex', '-1').trigger( 'focus' );
+				$( '#' + targetId ).trigger( 'focus' );
 				mc_display_usertime();
 			});
 		});
