@@ -1029,6 +1029,48 @@ function mc_do_upgrades( $upgrade_path ) {
 	return true;
 }
 
+/**
+ * Add primary adminbar link.
+ *
+ * @param int $mc_id Post ID for calendar.
+ */
+function mc_add_adminbar_link( $mc_id ) {
+	global $wp_admin_bar;
+	if ( is_page( $mc_id ) && current_user_can( 'mc_add_events' ) ) {
+		/**
+		 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
+		 *
+		 * @hook mc_add_events_url
+		 *
+		 * @param {string} $url Admin URL for adding events.
+		 *
+		 * @return {string}
+		 */
+		$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
+		$args = array(
+			'id'    => 'mc-my-calendar',
+			'title' => __( 'Add Event', 'my-calendar' ),
+			'href'  => $url,
+		);
+	} else {
+		/**
+		 * Filter URL displayed for 'My Calendar' link in adminbar.
+		 *
+		 * @hook mc_adminbar_uri
+		 *
+		 * @param {string} $url Front-end URL for viewing events.
+		 *
+		 * @return {string}
+		 */
+		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
+		$args = array(
+			'id'    => 'mc-my-calendar',
+			'title' => __( 'My Calendar', 'my-calendar' ),
+			'href'  => $url,
+		);
+	}
+	$wp_admin_bar->add_node( $args );	
+}
 add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
 /**
  * Set up adminbar links
@@ -1037,48 +1079,21 @@ function mc_admin_bar() {
 	global $wp_admin_bar;
 	$mc_id = mc_get_option( 'uri_id' );
 	if ( mc_get_uri( 'boolean' ) ) {
-		if ( is_page( $mc_id ) && current_user_can( 'mc_add_events' ) ) {
-			/**
-			 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
-			 *
-			 * @hook mc_add_events_url
-			 *
-			 * @param {string} $url Admin URL for adding events.
-			 *
-			 * @return {string}
-			 */
-			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
-			$args = array(
-				'id'    => 'mc-my-calendar',
-				'title' => __( 'Add Event', 'my-calendar' ),
-				'href'  => $url,
-			);
-		} else {
-			/**
-			 * Filter URL displayed for 'My Calendar' link in adminbar.
-			 *
-			 * @hook mc_adminbar_uri
-			 *
-			 * @param {string} $url Front-end URL for viewing events.
-			 *
-			 * @return {string}
-			 */
-			$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
-			$args = array(
-				'id'    => 'mc-my-calendar',
-				'title' => __( 'My Calendar', 'my-calendar' ),
-				'href'  => $url,
-			);
-		}
-		$wp_admin_bar->add_node( $args );
+		mc_add_adminbar_link( $mc_id );
 	} else {
-		$url  = admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' );
-		$args = array(
-			'id'    => 'mc-my-calendar',
-			'title' => __( 'Set Calendar URL', 'my-calendar' ),
-			'href'  => $url,
-		);
-		$wp_admin_bar->add_node( $args );
+		mc_locate_calendar();
+		$mc_id = mc_get_option( 'uri_id' );
+		if ( ! $mc_id ) {
+			$url  = admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' );
+			$args = array(
+				'id'    => 'mc-my-calendar',
+				'title' => __( 'Set Calendar URL', 'my-calendar' ),
+				'href'  => $url,
+			);
+			$wp_admin_bar->add_node( $args );
+		} else {
+			mc_add_adminbar_link( $mc_id );
+		}
 	}
 	if ( current_user_can( 'mc_add_events' ) && 'true' !== mc_get_option( 'remote' ) ) {
 		if ( ! is_page( $mc_id ) ) {
