@@ -475,9 +475,9 @@ function mc_default_settings() {
 	add_site_option( 'mc_multisite', '0' );
 
 	mc_add_roles();
-	$has_uri = mc_guess_calendar();
+	$has_uri = mc_locate_calendar();
 	if ( false === $has_uri['response'] ) {
-		// if mc_guess_calendar returns a string, no valid URI was found.
+		// if mc_locate_calendar returns a string, no valid URI was found.
 		$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 		mc_generate_calendar_page( $slug );
 	}

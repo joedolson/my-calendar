@@ -1055,6 +1055,48 @@ function mc_do_upgrades( $upgrade_path ) {
 	return true;
 }
 
+/**
+ * Add primary adminbar link.
+ *
+ * @param int $mc_id Post ID for calendar.
+ */
+function mc_add_adminbar_link( $mc_id ) {
+	global $wp_admin_bar;
+	if ( is_page( $mc_id ) &amp;&amp; current_user_can( 'mc_add_events' ) ) {
+		/**
+		 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
+		 *
+		 * @hook mc_add_events_url
+		 *
+		 * @param {string} $url Admin URL for adding events.
+		 *
+		 * @return {string}
+		 */
+		$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
+		$args = array(
+			'id'    => 'mc-my-calendar',
+			'title' => __( 'Add Event', 'my-calendar' ),
+			'href'  => $url,
+		);
+	} else {
+		/**
+		 * Filter URL displayed for 'My Calendar' link in adminbar.
+		 *
+		 * @hook mc_adminbar_uri
+		 *
+		 * @param {string} $url Front-end URL for viewing events.
+		 *
+		 * @return {string}
+		 */
+		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
+		$args = array(
+			'id'    => 'mc-my-calendar',
+			'title' => __( 'My Calendar', 'my-calendar' ),
+			'href'  => $url,
+		);
+	}
+	$wp_admin_bar->add_node( $args );	
+}
 add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
 /**
  * Set up adminbar links
@@ -1063,48 +1105,21 @@ function mc_admin_bar() {
 	global $wp_admin_bar;
 	$mc_id = mc_get_option( 'uri_id' );
 	if ( mc_get_uri( 'boolean' ) ) {
-		if ( is_page( $mc_id ) &amp;&amp; current_user_can( 'mc_add_events' ) ) {
-			/**
-			 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
-			 *
-			 * @hook mc_add_events_url
-			 *
-			 * @param {string} $url Admin URL for adding events.
-			 *
-			 * @return {string}
-			 */
-			$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
-			$args = array(
-				'id'    => 'mc-my-calendar',
-				'title' => __( 'Add Event', 'my-calendar' ),
-				'href'  => $url,
-			);
-		} else {
-			/**
-			 * Filter URL displayed for 'My Calendar' link in adminbar.
-			 *
-			 * @hook mc_adminbar_uri
-			 *
-			 * @param {string} $url Front-end URL for viewing events.
-			 *
-			 * @return {string}
-			 */
-			$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
-			$args = array(
-				'id'    => 'mc-my-calendar',
-				'title' => __( 'My Calendar', 'my-calendar' ),
-				'href'  => $url,
-			);
-		}
-		$wp_admin_bar->add_node( $args );
+		mc_add_adminbar_link( $mc_id );
 	} else {
-		$url  = admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' );
-		$args = array(
-			'id'    => 'mc-my-calendar',
-			'title' => __( 'Set Calendar URL', 'my-calendar' ),
-			'href'  => $url,
-		);
-		$wp_admin_bar->add_node( $args );
+		mc_locate_calendar();
+		$mc_id = mc_get_option( 'uri_id' );
+		if ( ! $mc_id ) {
+			$url  = admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' );
+			$args = array(
+				'id'    => 'mc-my-calendar',
+				'title' => __( 'Set Calendar URL', 'my-calendar' ),
+				'href'  => $url,
+			);
+			$wp_admin_bar->add_node( $args );
+		} else {
+			mc_add_adminbar_link( $mc_id );
+		}
 	}
 	if ( current_user_can( 'mc_add_events' ) &amp;&amp; 'true' !== mc_get_option( 'remote' ) ) {
 		if ( ! is_page( $mc_id ) ) {
@@ -1726,7 +1741,7 @@ function mc_table_header( $label, $sort, $sortby, $sorted, $url = false ) {
  *
  * @return array
  */
-function mc_guess_calendar() {
+function mc_locate_calendar() {
 	$return = array(
 		'response' => false,
 		'message'  => __( 'Calendar query was not able to run.', 'my-calendar' ),
@@ -1747,25 +1762,15 @@ function mc_guess_calendar() {
 	}
 
 	if ( ! $has_uri ) {
-		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_name LIKE '%my-calendar%' AND post_name NOT LIKE '%-my-calendar%' AND post_status = 'publish'" );
+		// Locate oldest post containing my_calendar shortcode.
+		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_content LIKE '%[my_calendar%' AND post_status = 'publish'" );
 		if ( $post_ID ) {
-			$link    = get_permalink( $post_ID );
-			$content = get_post( $post_ID )->post_content;
-			// if my-calendar exists but does not contain shortcode, add it.
-			if ( ! has_shortcode( $content, 'my_calendar' ) ) {
-				$content .= "\n\n[my_calendar id='my-calendar']";
-				wp_update_post(
-					array(
-						'ID'           => $post_ID,
-						'post_content' => $content,
-					)
-				);
-			}
+			$link = get_permalink( $post_ID );
 			mc_update_option( 'uri', $link );
 			mc_update_option( 'uri_id', $post_ID );
 			$return = array(
 				'response' => true,
-				'message'  => esc_html__( 'Is this your calendar page?', 'my-calendar' ) . ' &lt;code>' . $link . '&lt;/code>',
+				'message'  => esc_html__( 'Is this your calendar page?', 'my-calendar' ) . ' &lt;a href="' . esc_url( $link ) . '">&lt;code>' . esc_html( $link ) . '&lt;/code>&lt;/a>',
 			);
 
 			return $return;

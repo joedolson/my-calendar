@@ -385,14 +385,14 @@ function mc_update_permissions_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_output_settings( $post ) {
-	$options                     = array();
-	$options['open_uri']         = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
-	$options['no_link']          = ( ! empty( $post['mc_no_link'] ) &amp;&amp; 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
-	$options['mini_uri']         = $post['mc_mini_uri'];
-	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
-	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) &amp;&amp; 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
-	$options['list_links']       = ( ! empty( $post['mc_list_links'] ) &amp;&amp; 'on' === $post['mc_list_links'] ) ? 'true' : 'false';
-	$options['show_months']      = (int) $post['mc_show_months'];
+	$options                   = array();
+	$options['open_uri']       = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
+	$options['no_link']        = ( ! empty( $post['mc_no_link'] ) &amp;&amp; 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
+	$options['mini_uri']       = $post['mc_mini_uri'];
+	$options['open_day_uri']   = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
+	$options['show_list_info'] = ( ! empty( $post['mc_show_list_info'] ) &amp;&amp; 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
+	$options['list_links']     = ( ! empty( $post['mc_list_links'] ) &amp;&amp; 'on' === $post['mc_list_links'] ) ? 'true' : 'false';
+	$options['show_months']    = (int) $post['mc_show_months'];
 	// Calculate sequence for navigation elements.
 	$top    = array();
 	$bottom = array();
