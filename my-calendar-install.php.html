@@ -606,10 +606,11 @@ function mc_transition_location( $location_id, $location_post ) {
  *
  * @param string $source Source file.
  * @param string $dest Destination file.
+ * @param string $parent Parent directory. Optional.
  *
  * @return boolean.
  */
-function my_calendar_copyr( $source, $dest ) {
+function my_calendar_copyr( $source, $dest, $parent = '' ) {
 	if ( ! WP_Filesystem() ) {
 		exit;
 	}
@@ -617,7 +618,10 @@ function my_calendar_copyr( $source, $dest ) {
 	if ( ! file_exists( $source ) ) {
 		return false;
 	}
-
+	// If saving to a custom subdirectory, verify that parent directory exists.
+	if ( $parent &amp;&amp; ! is_dir( $parent ) ) {
+		$wp_filesystem->mkdir( $parent );
+	}
 	if ( ! is_dir( $dest ) ) {
 		$wp_filesystem->mkdir( $dest );
 	}
@@ -635,9 +639,10 @@ function my_calendar_copyr( $source, $dest ) {
  */
 function my_calendar_backup( $process, $plugin ) {
 	if ( isset( $plugin['plugin'] ) &amp;&amp; 'my-calendar/my-calendar.php' === $plugin['plugin'] ) {
-		$to   = plugin_dir_path( __DIR__ ) . '/my-calendar-custom/backup/';
-		$from = plugin_dir_path( __FILE__ ) . '/styles/';
-		my_calendar_copyr( $from, $to );
+		$parent = plugin_dir_path( __DIR__ ) . '/my-calendar-custom/';
+		$to     = plugin_dir_path( __DIR__ ) . '/my-calendar-custom/backup/';
+		$from   = plugin_dir_path( __FILE__ ) . '/styles/';
+		my_calendar_copyr( $from, $to, $parent );
 	}
 }
 
