@@ -1069,7 +1069,7 @@ function mc_add_adminbar_link( $mc_id ) {
 			'href'  => $url,
 		);
 	}
-	$wp_admin_bar->add_node( $args );	
+	$wp_admin_bar->add_node( $args );
 }
 add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
 /**

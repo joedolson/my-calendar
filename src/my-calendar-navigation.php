@@ -270,9 +270,9 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
  * @return string prev/next nav.
  */
 function mc_nav( $date, $format, $time, $show_months, $id ) {
-	$prev      = my_calendar_prev_link( $date, $format, $time, $show_months );
-	$next      = my_calendar_next_link( $date, $format, $time, $show_months );
-	$prev_link = mc_build_url(
+	$prev       = my_calendar_prev_link( $date, $format, $time, $show_months );
+	$next       = my_calendar_next_link( $date, $format, $time, $show_months );
+	$prev_link  = mc_build_url(
 		array(
 			'yr'    => $prev['yr'],
 			'month' => $prev['month'],
@@ -281,8 +281,8 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 		),
 		array()
 	);
-	$prev_link = mc_url_in_loop( $prev_link );
-	$next_link = mc_build_url(
+	$prev_link  = mc_url_in_loop( $prev_link );
+	$next_link  = mc_build_url(
 		array(
 			'yr'    => $next['yr'],
 			'month' => $next['month'],
@@ -299,7 +299,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 			array(
 				'cid' => $id,
 			),
-			array( 'yr', 'month', 'dy' ),
+			array( 'yr', 'month', 'dy' )
 		);
 		$today_link = mc_url_in_loop( $today );
 		/**
@@ -314,7 +314,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 		$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . esc_html( $today_text ) . '</a></li>' );
 	} else {
 		$today_link = '<span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . esc_html( $today_text ) . '</span>';
-	} 
+	}
 	/**
 	 * Filter HTML output for navigation 'prev' link.
 	 *
