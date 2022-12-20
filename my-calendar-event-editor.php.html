@@ -445,7 +445,9 @@ function my_calendar_edit() {
 	}
 	if ( 'edit' === $action ) {
 		?>
-		&lt;h1>&lt;?php esc_html_e( 'Edit Event', 'my-calendar' ); ?>&lt;/h1>
+		&lt;h1 id="mc-edit" class="wp-heading-inline">&lt;?php esc_html_e( 'Edit Event', 'my-calendar' ); ?>&lt;/h1>
+		&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="page-title-action">&lt;?php esc_html_e( 'Add New', 'my-calendar' ); ?>&lt;/a>
+		&lt;hr class="wp-header-end">
 		&lt;?php
 		if ( empty( $event_id ) ) {
 			mc_show_error( __( 'You must provide an event ID to edit events.', 'my-calendar' ) );
@@ -852,6 +854,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	} else {
 		$data = $submission;
 	}
+	mc_migrate_notice();
 
 	/**
 	 * Filter notices. This is really handled and used as an action, but is still labeled a filter for backwards compatibility.
