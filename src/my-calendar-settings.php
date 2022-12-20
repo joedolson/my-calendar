@@ -365,7 +365,6 @@ function mc_update_output_settings( $post ) {
 	$options['mini_uri']         = $post['mc_mini_uri'];
 	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
 	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
-	$options['show_list_events'] = ( ! empty( $post['mc_show_list_events'] ) && 'on' === $post['mc_show_list_events'] ) ? 'true' : 'false';
 	$options['list_links']       = ( ! empty( $post['mc_list_links'] ) && 'on' === $post['mc_list_links'] ) ? 'true' : 'false';
 	$options['show_months']      = (int) $post['mc_show_months'];
 	// Calculate sequence for navigation elements.
@@ -953,36 +952,6 @@ function mc_remote_db() {
 					<div class="inside">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Display Settings', 'my-calendar' ); ?>" /></p>
-						<ul>
-							<li>
-							<?php
-							$atts = array();
-							$note = '';
-							if ( '' === mc_get_option( 'uri_id' ) || '0' === mc_get_option( 'uri_id' ) ) {
-								$atts = array( 'disabled' => 'disabled' );
-								$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
-							}
-							mc_settings_field(
-								'mc_open_uri',
-								__( 'Calendar Links', 'my-calendar' ),
-								array(
-									'false' => __( 'Open links as a popup', 'my-calendar' ),
-									'true'  => __( 'Open event links in single event view', 'my-calendar' ),
-									'none'  => __( 'Disable event links', 'my-calendar' ),
-								),
-								$note,
-								$atts,
-								'select'
-							);
-							?>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="postbox">
-					<h2><?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?></h2>
-
-					<div class="inside">
 						<fieldset id='calendar-output' class='mc-output-tabs'>
 							<legend class="screen-reader-text"><?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?></legend>
 							<div class="mc-tabs">
@@ -1180,10 +1149,32 @@ function mc_remote_db() {
 				<div class="postbox">
 					<h2><?php esc_html_e( 'View Options', 'my-calendar' ); ?></h2>
 
-					<div class="inside">						
+					<div class="inside">					
 						<fieldset>
 							<legend><?php esc_html_e( 'Grid Options', 'my-calendar' ); ?></legend>
 							<ul>
+								<li>
+								<?php
+								$atts = array();
+								$note = '';
+								if ( '' === mc_get_option( 'uri_id' ) || '0' === mc_get_option( 'uri_id' ) ) {
+									$atts = array( 'disabled' => 'disabled' );
+									$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
+								}
+								mc_settings_field(
+									'mc_open_uri',
+									__( 'Calendar Links', 'my-calendar' ),
+									array(
+										'false' => __( 'Open links as a popup', 'my-calendar' ),
+										'true'  => __( 'Open event links in single event view', 'my-calendar' ),
+										'none'  => __( 'Disable event links', 'my-calendar' ),
+									),
+									$note,
+									$atts,
+									'select'
+								);
+								?>
+								</li>								
 								<li><?php mc_settings_field( 'mc_show_weekends', __( 'Show Weekends on Calendar', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li>
 								<?php
@@ -1210,7 +1201,6 @@ function mc_remote_db() {
 								<li><?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?></li>
 								<li><?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 								<li><?php mc_settings_field( 'mc_list_links', __( 'Show collapsed events in list view.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-								<li><?php mc_settings_field( 'mc_show_list_events', __( 'Show all event titles next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							</ul>
 						</fieldset>
 

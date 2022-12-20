@@ -401,7 +401,7 @@ function mc_category_key( $category, $id = '' ) {
 	 *
 	 * @return {string}
 	 */
-	$all  = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
+	$all = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
 	if ( isset( $_GET['mcat'] ) ) {
 		$key .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "'>" . $all . '</a></li>';
 	} else {
