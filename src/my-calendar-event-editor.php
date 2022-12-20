@@ -527,22 +527,19 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' !== trim( $_POST['mc_twitter'] ) ) {
 					wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
 				}
-				if ( mc_get_uri( 'boolean' ) ) {
-					$event_ids = mc_get_occurrences( $event_id );
-					if ( ! empty( $event_ids ) ) {
-						$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
-						$edit_link   = add_query_arg(
-							array(
-								'event_id' => $event_id,
-								'mode'     => 'edit',
-							),
-							admin_url( 'admin.php?page=my-calendar' )
-						);
-						$event_error = mc_error_check( $event_ids[0]->occur_event_id );
-					}
-				} else {
-					$event_link = false;
+				$event_ids = mc_get_occurrences( $event_id );
+				if ( ! empty( $event_ids ) ) {
+					$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
+					$edit_link   = add_query_arg(
+						array(
+							'event_id' => $event_id,
+							'mode'     => 'edit',
+						),
+						admin_url( 'admin.php?page=my-calendar' )
+					);
+					$event_error = mc_error_check( $event_ids[0]->occur_event_id );
 				}
+
 				if ( '' !== trim( $event_error ) ) {
 					$message = $event_error;
 				} else {
