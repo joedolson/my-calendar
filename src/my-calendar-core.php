@@ -1700,7 +1700,7 @@ function mc_table_header( $label, $sort, $sortby, $sorted, $url = false ) {
  *
  * @return array
  */
-function mc_guess_calendar() {
+function mc_locate_calendar() {
 	$return = array(
 		'response' => false,
 		'message'  => __( 'Calendar query was not able to run.', 'my-calendar' ),
@@ -1721,25 +1721,15 @@ function mc_guess_calendar() {
 	}
 
 	if ( ! $has_uri ) {
-		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_name LIKE '%my-calendar%' AND post_name NOT LIKE '%-my-calendar%' AND post_status = 'publish'" );
+		// Locate oldest post containing my_calendar shortcode.
+		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_content LIKE '%[my_calendar%' AND post_status = 'publish'" );
 		if ( $post_ID ) {
-			$link    = get_permalink( $post_ID );
-			$content = get_post( $post_ID )->post_content;
-			// if my-calendar exists but does not contain shortcode, add it.
-			if ( ! has_shortcode( $content, 'my_calendar' ) ) {
-				$content .= "\n\n[my_calendar id='my-calendar']";
-				wp_update_post(
-					array(
-						'ID'           => $post_ID,
-						'post_content' => $content,
-					)
-				);
-			}
+			$link = get_permalink( $post_ID );
 			mc_update_option( 'uri', $link );
 			mc_update_option( 'uri_id', $post_ID );
 			$return = array(
 				'response' => true,
-				'message'  => esc_html__( 'Is this your calendar page?', 'my-calendar' ) . ' <code>' . $link . '</code>',
+				'message'  => esc_html__( 'Is this your calendar page?', 'my-calendar' ) . ' <a href="' . esc_url( $link ) . '"><code>' . esc_html( $link ) . '</code></a>',
 			);
 
 			return $return;
