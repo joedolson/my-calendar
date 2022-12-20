@@ -599,7 +599,7 @@ function my_calendar_copyr( $source, $dest, $parent = '' ) {
 	if ( ! is_dir( $dest ) ) {
 		$wp_filesystem->mkdir( $dest );
 	}
-	// Copy directory into backup location.
+	// Copy directory into backup location using WP_Filesystem.
 	copy_dir( $source, $dest );
 
 	return true;
