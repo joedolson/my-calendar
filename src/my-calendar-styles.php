@@ -63,7 +63,7 @@ function mc_migrate_notice() {
 			$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
 			$dismiss_url = add_query_arg( 'migrate', 'false', admin_url( 'admin.php?page=my-calendar-design' ) );
 			// Translators: 1) URL for link to migrate styles. 2) URL to dismiss message and use existing styles. 3) Help link.
-			mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. Migrate custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%1$s" class="button-secondary">Migrate CSS now</a> <a href="%2$s" class="button-primary">Use My Calendar\'s styles</a> %3$s', 'my-calendar' ), $migrate_url, $dismiss_url, mc_help_link( __( 'Learn more', 'my-calendar' ), __( 'Migrating to Custom CSS', 'my-calendar' ), 'Custom CSS', 7 ) ) );
+			mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. Migrate custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%1$s" class="button-secondary">Migrate CSS now</a> <a href="%2$s" class="button-primary">Keep My Calendar\'s styles</a> %3$s', 'my-calendar' ), $migrate_url, $dismiss_url, mc_help_link( __( 'Learn more', 'my-calendar' ), __( 'Migrating to Custom CSS', 'my-calendar' ), 'Custom CSS', 7 ) ) );
 		} else {
 			mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );
 		}
