@@ -335,6 +335,10 @@ function mc_get_help_text( $id ) {
 			'title' => __( 'Icon List', 'my-calendar' ),
 			'text'  => mc_display_icons(),
 		),
+		'7' => array(
+			'title' => __( 'Migrating your CSS', 'my-calendar' ),
+			'text'  => '&lt;p>' . __( 'Since the first versions, My Calendar has allowed users to edit their stylesheets within the plug-in. Since version 1.7.0, it has supported using custom stylesheets from your theme directory or a custom plugin directory.', 'my-calendar' ) . '&lt;/p>&lt;p>' . __( 'Editing stylesheets within the plugin has been a problem since the beginning. Because of the possibility your stylesheets are customized, I need to copy and restore your stylesheets on every update. This also significantly restricts my ability to make changes to HTML structure or to fix problems with existing stylesheets.', 'my-calendar' ) . '&lt;/p>&lt;p>' . __( 'If you migrate your CSS to the custom style directory, you are taking responsibility for future updates to your CSS. If you leave them in place, then from 3.4.0 forward, your styles will be replaced by the latest versions in every update.' ) . '&lt;/p>',
+		)
 	);
 
 	$title = ( '' !== $help[ $id ]['title'] ) ? '&lt;h2>' . $help[ $id ]['title'] . '&lt;/h2>' : '';
