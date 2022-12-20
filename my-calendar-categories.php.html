@@ -67,29 +67,33 @@ function mc_directory_list( $directory ) {
 	if ( ! file_exists( $directory ) ) {
 		return array();
 	}
-	$results = array();
-	$handler = opendir( $directory );
-	// keep going until all files in directory have been read.
-	while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-		// if $file isn't this directory or its parent add it to the results array.
-		if ( strlen( $file ) &lt; 5 ) {
-			continue;
-		}
-		if ( filesize( $directory . '/' . $file ) > 11 ) {
-			if ( '.' !== $file &amp;&amp; '..' !== $file &amp;&amp; ! is_dir( $directory . $file ) &amp;&amp; (
-					'image/svg_xml' === mime_content_type( $directory . $file ) ||
-					'image/svg' === mime_content_type( $directory . $file ) ||
-					'image/svg+xml' === mime_content_type( $directory . $file ) ||
-					exif_imagetype( $directory . $file ) === IMAGETYPE_GIF ||
-					exif_imagetype( $directory . $file ) === IMAGETYPE_PNG ||
-					exif_imagetype( $directory . $file ) === IMAGETYPE_JPEG )
-			) {
-				$results[] = $file;
+	$results = get_transient( 'mc_icon_list' );
+	if ( empty( $results ) ) {
+		$results = array();
+		$handler = opendir( $directory );
+		// keep going until all files in directory have been read.
+		while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+			// if $file isn't this directory or its parent add it to the results array.
+			if ( strlen( $file ) &lt; 5 ) {
+				continue;
+			}
+			if ( filesize( $directory . '/' . $file ) > 11 ) {
+				if ( '.' !== $file &amp;&amp; '..' !== $file &amp;&amp; ! is_dir( $directory . $file ) &amp;&amp; (
+						'image/svg_xml' === mime_content_type( $directory . $file ) ||
+						'image/svg' === mime_content_type( $directory . $file ) ||
+						'image/svg+xml' === mime_content_type( $directory . $file ) ||
+						exif_imagetype( $directory . $file ) === IMAGETYPE_GIF ||
+						exif_imagetype( $directory . $file ) === IMAGETYPE_PNG ||
+						exif_imagetype( $directory . $file ) === IMAGETYPE_JPEG )
+				) {
+					$results[] = $file;
+				}
 			}
 		}
+		closedir( $handler );
+		sort( $results, SORT_STRING );
+		set_transient( 'mc_icon_list', $results, HOUR_IN_SECONDS );
 	}
-	closedir( $handler );
-	sort( $results, SORT_STRING );
 
 	return $results;
 }
