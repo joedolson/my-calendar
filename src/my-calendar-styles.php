@@ -18,31 +18,36 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_migrate_css() {
 	if ( isset( $_GET['migrate'] ) ) {
-		$verify = wp_verify_nonce( $_GET['migrate'], 'mc-migrate-css' );
-		if ( ! $verify ) {
-			wp_die( 'My Calendar: Permissions not granted to migrate CSS.', 'my-calendar' );
+		if ( 'false' === $_GET['migrate'] ) {
+			mc_update_option( 'migrated', 'true' );
+			mc_show_notice( __( 'Thank you! Your site will be updated to the latest version of core CSS at every update.', 'my-calendar' ) );
 		} else {
-			global $wp_filesystem;
-			WP_Filesystem();
-			$style       = mc_get_option( 'css_file' );
-			$stylefile   = mc_get_style_path();
-			$newfileroot = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __DIR__ ) );
-			$newfiledir  = $newfileroot . 'styles/';
-			$newfilepath = $newfiledir . $style;
-			if ( ! $wp_filesystem->exists( $newfileroot ) ) {
-				$wp_filesystem->mkdir( $newfileroot );
-			}
-			if ( ! $wp_filesystem->exists( $newfiledir ) ) {
-				$wp_filesystem->mkdir( $newfiledir );
-			}
-			$wrote_migration = $wp_filesystem->copy( $stylefile, $newfilepath, true );
-			if ( $wrote_migration ) {
-				$new = 'mc_custom_' . $style;
-				mc_update_option( 'css_file', $new );
-				mc_update_option( 'migrated', 'true' );
-				mc_show_notice( __( 'CSS migrated to custom directory.', 'my-calendar' ) );
+			$verify = wp_verify_nonce( $_GET['migrate'], 'mc-migrate-css' );
+			if ( ! $verify ) {
+				wp_die( 'My Calendar: Permissions not granted to migrate CSS.', 'my-calendar' );
 			} else {
-				mc_show_error( __( 'CSS migration failed. You may need to migrate your file via FTP.', 'my-calendar' ) );
+				global $wp_filesystem;
+				WP_Filesystem();
+				$style       = mc_get_option( 'css_file' );
+				$stylefile   = mc_get_style_path();
+				$newfileroot = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __DIR__ ) );
+				$newfiledir  = $newfileroot . 'styles/';
+				$newfilepath = $newfiledir . $style;
+				if ( ! $wp_filesystem->exists( $newfileroot ) ) {
+					$wp_filesystem->mkdir( $newfileroot );
+				}
+				if ( ! $wp_filesystem->exists( $newfiledir ) ) {
+					$wp_filesystem->mkdir( $newfiledir );
+				}
+				$wrote_migration = $wp_filesystem->copy( $stylefile, $newfilepath, true );
+				if ( $wrote_migration ) {
+					$new = 'mc_custom_' . $style;
+					mc_update_option( 'css_file', $new );
+					mc_update_option( 'migrated', 'true' );
+					mc_show_notice( __( 'CSS migrated to custom directory.', 'my-calendar' ) );
+				} else {
+					mc_show_error( __( 'CSS migration failed. You may need to migrate your file via FTP.', 'my-calendar' ) );
+				}
 			}
 		}
 	}
@@ -56,8 +61,9 @@ function mc_migrate_notice() {
 		if ( ! mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
 			$nonce       = wp_create_nonce( 'mc-migrate-css' );
 			$migrate_url = add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) );
-			// Translators: URL for link to migrate styles.
-			mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. You should migrate any custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%s">Migrate your stylesheet</a>.', 'my-calendar' ), $migrate_url ) );
+			$dismiss_url = add_query_arg( 'migrate', 'false', admin_url( 'admin.php?page=my-calendar-design' ) );
+			// Translators: 1) URL for link to migrate styles. 2) URL to dismiss message and use existing styles. 3) Help link.
+			mc_show_notice( sprintf( __( 'The CSS Style editor will be removed in My Calendar 3.5. Migrate custom CSS into the My Calendar custom directory at <code>/wp-content/plugins/my-calendar-custom/</code>. <a href="%1$s" class="button-secondary">Migrate CSS now</a> <a href="%2$s" class="button-primary">Use My Calendar\'s styles</a> %3$s', 'my-calendar' ), $migrate_url, $dismiss_url, mc_help_link( __( 'Learn more', 'my-calendar' ), __( 'Migrating to Custom CSS', 'my-calendar' ), 'Custom CSS', 7 ) ) );
 		} else {
 			mc_show_notice( __( 'The CSS Style editor will be removed in My Calendar 3.5. You are already using custom CSS, and no changes are required.', 'my-calendar' ) );
 		}
@@ -255,14 +261,16 @@ function my_calendar_style_edit() {
 			if ( mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
 				echo wp_kses_post( '<div class="style-editor-notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
 			} else {
-				$disabled = ( $edit_files || mc_get_option( 'use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
+				$nonce       = wp_create_nonce( 'mc-migrate-css' );
+				$migrate_url = '<a href="' . add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) ) . '" class="button-secondary">' . __( 'Migrate to custom CSS', 'my-calendar' ) . '</a>';
+				$disabled    = ( $edit_files || mc_get_option( 'use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 				?>
-				<label for="style">
+				<p><label for="style">
 				<?php
 				// Translators: file name being edited.
 				echo sprintf( esc_html__( 'Edit %s', 'my-calendar' ), '<code>' . $file . '</code>' );
 				?>
-				</label><br/><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
+				</label><?php echo $migrate_url; ?></p><textarea <?php echo esc_attr( $disabled ); ?> class="style-editor" id="style" name="style" rows="30" cols="80"><?php echo esc_textarea( $my_calendar_style ); ?></textarea>
 				<?php
 			}
 			?>
