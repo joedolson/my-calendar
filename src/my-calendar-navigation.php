@@ -291,7 +291,30 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 		),
 		array()
 	);
-	$next_link = mc_url_in_loop( $next_link );
+	$next_link  = mc_url_in_loop( $next_link );
+	$today_text = ( '' === mc_get_option( 'today_events' ) ) ? __( 'Today', 'my-calendar' ) : mc_get_option( 'today_events' );
+
+	if ( isset( $_GET['month'] ) || isset( $_GET['yr'] ) || isset( $_GET['dy'] ) ) {
+		$today      = mc_build_url(
+			array(
+				'cid' => $id,
+			),
+			array( 'yr', 'month', 'dy' ),
+		);
+		$today_link = mc_url_in_loop( $today );
+		/**
+		 * Filter HTML output for navigation 'today' link.
+		 *
+		 * @hook mc_today_link
+		 *
+		 * @param {string} $today_link HTML output for link.
+		 *
+		 * @return {string}
+		 */
+		$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . esc_html( $today_text ) . '</a></li>' );
+	} else {
+		$today_link = '<span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . esc_html( $today_text ) . '</span>';
+	} 
 	/**
 	 * Filter HTML output for navigation 'prev' link.
 	 *
@@ -302,7 +325,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . $prev['label'] . '</a></li>', $prev );
+	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . esc_html( $prev['label'] ) . '</a></li>', $prev );
 	/**
 	 * Filter HTML output for navigation 'next' link.
 	 *
@@ -313,12 +336,12 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . $next['label'] . '</a></li>', $next );
+	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . esc_html( $next['label'] ) . '</a></li>', $next );
 
 	$nav = '
 		<div class="my-calendar-nav">
 			<ul>
-				' . $prev_link . $next_link . '
+				' . $prev_link . $today_link . $next_link . '
 			</ul>
 		</div>';
 
@@ -497,7 +520,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 	$cur_day   = $date['day'];
 
 	$next_year   = $cur_year + 1;
-	$mc_next     = mc_get_option( 'next_events', '' );
+	$mc_next     = mc_get_option( 'next_events' );
 	$next_events = ( '' === $mc_next ) ? '<span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . '</span>' : stripslashes( $mc_next );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 12 === (int) $cur_month ) {
@@ -603,7 +626,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 	$cur_day   = $date['day'];
 
 	$last_year       = $cur_year - 1;
-	$mc_previous     = mc_get_option( 'previous_events', '' );
+	$mc_previous     = mc_get_option( 'previous_events' );
 	$previous_events = ( '' === $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . '</span>' : stripslashes( $mc_previous );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 1 === (int) $cur_month ) {

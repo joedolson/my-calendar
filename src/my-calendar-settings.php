@@ -441,6 +441,7 @@ function mc_update_text_settings( $post ) {
 	$options['view_full']            = $post['mc_view_full'];
 	$options['previous_events']      = $post['mc_previous_events'];
 	$options['next_events']          = $post['mc_next_events'];
+	$options['today_events']         = $post['mc_today_events'];
 	$options['week_caption']         = $post['mc_week_caption'];
 	$options['caption']              = $post['mc_caption'];
 	$templates                       = array();
@@ -869,6 +870,7 @@ function mc_remote_db() {
 						<ul>
 							<li><?php mc_settings_field( 'mc_previous_events', __( 'Previous events link', 'my-calendar' ), __( 'Previous', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
 							<li><?php mc_settings_field( 'mc_next_events', __( 'Next events link', 'my-calendar' ), __( 'Next', 'my-calendar' ), __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ) ); ?></li>
+							<li><?php mc_settings_field( 'mc_today_events', __( 'Today\'s events link', 'my-calendar' ), __( 'Today', 'my-calendar' ), '' ); ?></li>
 							<li>
 							<?php
 							mc_settings_field(
