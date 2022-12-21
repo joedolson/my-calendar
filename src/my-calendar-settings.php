@@ -359,14 +359,14 @@ function mc_update_permissions_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_output_settings( $post ) {
-	$options                   = array();
-	$options['open_uri']       = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
-	$options['no_link']        = ( ! empty( $post['mc_no_link'] ) && 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
-	$options['mini_uri']       = $post['mc_mini_uri'];
-	$options['open_day_uri']   = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
-	$options['show_list_info'] = ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
-	$options['list_links']     = ( ! empty( $post['mc_list_links'] ) && 'on' === $post['mc_list_links'] ) ? 'true' : 'false';
-	$options['show_months']    = (int) $post['mc_show_months'];
+	$options                     = array();
+	$options['open_uri']         = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
+	$options['no_link']          = ( ! empty( $post['mc_no_link'] ) && 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
+	$options['mini_uri']         = $post['mc_mini_uri'];
+	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
+	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
+	$options['list_link_titles'] = ( ! empty( $post['mc_list_link_titles'] ) && 'on' === $post['mc_list_link_titles'] ) ? 'true' : 'false';
+	$options['show_months']      = (int) $post['mc_show_months'];
 	// Calculate sequence for navigation elements.
 	$top    = array();
 	$bottom = array();
@@ -1202,7 +1202,7 @@ function mc_remote_db() {
 							<ul>
 								<li><?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?></li>
 								<li><?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
-								<li><?php mc_settings_field( 'mc_list_links', __( 'Show collapsed events in list view.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
+								<li><?php mc_settings_field( 'mc_list_link_titles', __( 'Show events in list view.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?></li>
 							</ul>
 						</fieldset>
 

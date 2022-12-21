@@ -372,7 +372,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 */
 		$no_link = apply_filters( 'mc_disable_link', false, $data );
 
-		if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_links' ) ) ) && ! $no_link ) {
+		if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) && ! $no_link ) {
 			if ( 'true' === $open_uri ) {
 				$details_link = esc_url( mc_get_details_link( $event ) );
 				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
@@ -448,7 +448,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					 * @return {string}
 					 */
 					$hlevel = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
-					if ( 'false' === mc_get_option( 'list_links' ) ) {
+					if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
 						$list_title = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 					}
 				}
