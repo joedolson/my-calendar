@@ -311,8 +311,8 @@ function mc_get_help_text( $id ) {
 		),
 		'7' => array(
 			'title' => __( 'Migrating your CSS', 'my-calendar' ),
-			'text'  => '<p>' . __( 'Since the first versions, My Calendar has allowed users to edit their stylesheets within the plug-in. Since version 1.7.0, it has supported using custom stylesheets from your theme directory or a custom plugin directory.', 'my-calendar' ) . '</p><p>' . __( 'Editing stylesheets within the plugin has been a problem since the beginning. Because of the possibility your stylesheets are customized, I need to copy and restore your stylesheets on every update. This also significantly restricts my ability to make changes to HTML structure or to fix problems with existing stylesheets.', 'my-calendar' ) . '</p><p>' . __( 'If you migrate your CSS to the custom style directory, you are taking responsibility for future updates to your CSS. If you leave them in place, then from 3.4.0 forward, your styles will be replaced by the latest versions in every update.' ) . '</p>',
-		)
+			'text'  => '<p>' . __( 'Since the first versions, My Calendar has allowed users to edit their stylesheets within the plug-in. Since version 1.7.0, it has supported using custom stylesheets from your theme directory or a custom plugin directory.', 'my-calendar' ) . '</p><p>' . __( 'Editing stylesheets within the plugin has been a problem since the beginning. Because of the possibility your stylesheets are customized, I need to copy and restore your stylesheets on every update. This also significantly restricts my ability to make changes to HTML structure or to fix problems with existing stylesheets.', 'my-calendar' ) . '</p><p>' . __( 'If you migrate your CSS to the custom style directory, you are taking responsibility for future updates to your CSS. If you leave them in place, then from 3.4.0 forward, your styles will be replaced by the latest versions in every update.', 'my-calendar' ) . '</p>',
+		),
 	);
 
 	$title = ( '' !== $help[ $id ]['title'] ) ? '<h2>' . $help[ $id ]['title'] . '</h2>' : '';
