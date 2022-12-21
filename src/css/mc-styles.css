@@ -1178,6 +1178,15 @@ label[for=e_host] {
 	display: inline-flex;
 	column-gap: 5px;
 	align-items: center;
+	text-decoration: none;
+}
+
+.wrap .updated a.my-calendar-contextual-help {
+	display: inline;
+}
+
+.wrap a.my-calendar-contextual-help .help-label-text {
+	text-decoration: underline;
 }
 
 .generator td input[type=text] {
