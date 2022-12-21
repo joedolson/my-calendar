@@ -1373,15 +1373,49 @@ div.mc-search {
 	font-size: 1.1em;
 }
 
-.postbox.sell {
-	background: #fff;
-	color: #000;
+
+.promotion h2 {
+	text-align: left;
 }
 
-.sales {
-	background: #e25822;
-	color: #fff; 
-	text-shadow: 1px 0 0 #000;
+.mc-support-me h2 {
+	color: #fff;
+}
+
+.promotion {
+	font-weight: 600;
+	text-align: center;
+}
+
+.promotion img {
+	max-width: 130px;
+	height: auto;
+	margin: 0 auto;
+	display: block;
+}
+
+.postbox.promotion p.coupon {
+	padding: 1em;
+	border: 2px dashed #ccc;
+	text-align: center;
+}
+
+.postbox.promotion .coupon code {
+	font-size: 1em;
+}
+
+.mc-support-me img {
+	max-width: 120px;
+}
+
+.mc-support-me {
+	background: #007eb3;
+	text-shadow: 1px 1px rgb( 35, 60, 127 );
+}
+
+.mc-flex {
+	display: flex;
+	align-items: center;
 }
 
 .my-calendar-admin .error .button-secondary {
@@ -1437,6 +1471,14 @@ tr.problem .error {
 
 #my-calendar .inside div iframe {
 	float: none;
+}
+
+.mc-support-me {
+	background: #007eb3;
+}
+
+.mc-support-me h2 {
+	color: #fff;
 }
 
 .mc-support-me p {

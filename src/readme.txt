@@ -106,6 +106,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Support 'current' as an argument in a comma-separated list of users.
 * Change: Updates to support future changes in My Calendar Pro.
 * Change: Use core functions to check file mime types.
+* Feature: Migrate CSS to custom file locations.
+* Performance: caching of icon list data.
 * Accessibility: Improve aria-label patterns so user settings override.
 * Accessibility: Omit aria-label if link text is already unique.
 * PHP 8.1 Compatibility fixes.

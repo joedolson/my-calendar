@@ -328,10 +328,11 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 			if ( ! function_exists( 'mcs_submissions' ) ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
-					<div class="postbox sell support">
-						<h2 class='sales'><strong><?php esc_html_e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
+					<div class="postbox mc-support-me promotion">
+						<h2><strong><?php esc_html_e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
 
-						<div class="inside resources">
+						<div class="inside resources mc-flex">
+							<img src="<?php echo plugins_url( 'images/awd-logo-disc.png', __FILE__ ); ?>" alt="Joe Dolson Accessible Web Design" />
 							<p class="mcbuy">
 							<?php
 							// Translators: URL for My Calendar Pro.
@@ -360,39 +361,6 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						</div>
 					</div>
 				</div>
-				<?php
-			}
-			if ( ! function_exists( 'mcs_submissions' ) ) {
-				?>
-			<div class="ui-sortable meta-box-sortables">
-				<div class="postbox support">
-					<h2><strong><?php esc_html_e( 'Support This Plugin', 'my-calendar' ); ?></strong></h2>
-
-					<div class="inside resources">
-						<p class="follow-me">
-							<a href="https://twitter.com/intent/follow?screen_name=joedolson" class="twitter-follow-button" data-size="small" data-related="joedolson">Follow
-								@joedolson</a>
-							<script>!function (d, s, id) {
-									var js, fjs = d.getElementsByTagName(s)[0];
-									if (!d.getElementById(id)) {
-										js = d.createElement(s);
-										js.id = id;
-										js.src = "https://platform.twitter.com/widgets.js";
-										fjs.parentNode.insertBefore(js, fjs);
-									}
-								}(document, "script", "twitter-wjs");</script>
-						</p>
-
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-							<p class="mcd">
-								<input type="hidden" name="cmd" value="_s-xclick" />
-								<input type="hidden" name="hosted_button_id" value="UZBQUG2LKKMRW" />
-								<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" alt="<?php esc_attr_e( 'Make a Donation', 'my-calendar' ); ?>" />
-							</p>
-						</form>
-					</div>
-				</div>
-			</div>
 				<?php
 			}
 		}
