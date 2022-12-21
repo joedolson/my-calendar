@@ -1110,14 +1110,14 @@ function mc_admin_category_list( $event ) {
 			'category_name'  => '',
 		);
 	}
-	$color      = ( 'default' !== mc_get_option( 'apply_color' ) ) ? $cat->category_color : '';
-	$icon       = ( 'true' === mc_get_option( 'hide_icons' ) ) ? '' : mc_category_icon( $event );
+	$color = ( 'default' !== mc_get_option( 'apply_color' ) ) ? $cat->category_color : '';
+	$icon  = ( 'true' === mc_get_option( 'hide_icons' ) ) ? '' : mc_category_icon( $event );
 	if ( ! $color ) {
 		$color = '<span class="category-color no-border">' . $icon . '</span>';
 	} else {
 		$color   = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
 		$inverse = mc_inverse_color( $cat->category_color );
-		$color   = ( 'background' === mc_get_option( 'apply_color' ) ) ? '<span class="category-color" style="background-color:' . $color . ';">' . $icon . '</span>' : '<span class="category-color" style="background-color:' . $inverse . ';">' . $icon . '</span>';	
+		$color   = ( 'background' === mc_get_option( 'apply_color' ) ) ? '<span class="category-color" style="background-color:' . $color . ';">' . $icon . '</span>' : '<span class="category-color" style="background-color:' . $inverse . ';">' . $icon . '</span>';
 	}
 	$categories = mc_get_categories( $event );
 	$cats       = array();
@@ -1336,7 +1336,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 				}
 			}
 		}
-		$inverse  = mc_inverse_color( $event->category_color );
+		$inverse = mc_inverse_color( $event->category_color );
 		if ( 'default' !== mc_get_option( 'apply_color' ) ) {
 			$back  = ( 'background' === mc_get_option( 'apply_color' ) ) ? true : false;
 			$image = ( $back ) ? str_replace( $event->category_color, $inverse, $image ) : str_replace( $inverse, $event->category_color, $image );
