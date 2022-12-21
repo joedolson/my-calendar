@@ -519,6 +519,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</p>
 			</fieldset>
 			<?php
+			// Main shortcode only.
 			if ( 'main' === $type ) {
 				?>
 			<fieldset>
@@ -539,11 +540,6 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<input type="text" name="below" id="below" placeholder="key,feeds" aria-labelledby='lbelow navigation-info' value="<?php echo esc_attr( $below ); ?>" /><br/>
 				</p>
 			</fieldset>
-				<?php
-			}
-			// Main shortcode only.
-			if ( 'main' === $type ) {
-				?>
 			<fieldset>
 				<legend><?php esc_html_e( 'Formatting & Timeframe', 'my-calendar' ); ?></legend>
 				<p>
