@@ -1174,6 +1174,12 @@ label[for=e_host] {
 	width: auto;
 }
 
+.wrap a.my-calendar-contextual-help {
+	display: inline-flex;
+	column-gap: 5px;
+	align-items: center;
+}
+
 .generator td input[type=text] {
 	width: 100%;
 }

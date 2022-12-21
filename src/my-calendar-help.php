@@ -177,7 +177,7 @@ function my_calendar_help() {
 function mc_help_link( $link_text, $modal_title, $query, $id, $echo = true ) {
 	$url  = esc_url( admin_url( 'admin.php?help=' . (int) $id . '&query=' . urlencode( $query ) . '&page=mc-contextual-help&TB_iframe=true&width=600&height=550&modal_window=true' ) );
 	$link = sprintf(
-		'<a href="%s" class="thickbox my-calendar-contextual-help" data-title="%s"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span><span class="screen-reader-text">%s</span></a>',
+		'<a href="%s" class="thickbox my-calendar-contextual-help" data-title="%s"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span><span class="help-label-text">%s</span></a>',
 		$url,
 		$modal_title,
 		$link_text
