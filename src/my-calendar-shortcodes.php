@@ -411,7 +411,7 @@ function my_calendar_next( $atts ) {
  */
 function mc_calendar_view() {
 	$calendar_id = mc_get_option( 'uri_id' );
-	if ( isset( $_GET['post'] ) && $calendar_id === $_GET['post'] ) {
+	if ( isset( $_GET['post'] ) && (int) $calendar_id === (int) $_GET['post'] ) {
 		add_meta_box( 'mc-calendar-view', __( 'My Calendar Display Options', 'my-calendar' ), 'mc_calendar_generator_fields', 'page', 'advanced', 'high', 'main' );
 	}
 }
@@ -425,9 +425,11 @@ add_action( 'add_meta_boxes', 'mc_calendar_view' );
  */
 function mc_calendar_generator_fields( $post, $callback_args ) {
 	$params = array();
-	$script = '';
-	if ( $post ) {
+	if ( $post && is_object( $post ) ) {
 		$params = get_post_meta( $post->ID, '_mc_calendar', true );
+	}
+	if ( $post && is_array( $post ) ) {
+		$params = $post;
 	}
 	$type       = ( is_array( $callback_args ) ) ? $callback_args['args'] : $callback_args;
 	$category   = ( isset( $params['category'] ) ) ? $params['category'] : null;
@@ -482,7 +484,8 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
 						</li>
 						<?php
-						$select = mc_category_select( $category, true, true, 'category[]', 'category_' . $type );
+						$categories = ( ! is_array( $category ) ) ? explode( ',', $category ) : $category; 
+						$select     = mc_category_select( $categories, true, true, 'category[]', 'category_' . $type );
 						echo wp_kses( $select, mc_kses_elements() );
 						?>
 					</ul>

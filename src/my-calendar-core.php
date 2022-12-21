@@ -565,7 +565,7 @@ function mc_admin_styles() {
 	global $current_screen;
 	$version      = mc_get_version();
 	$id           = $current_screen->id;
-	$is_mc_page   = isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'];
+	$is_mc_page   = isset( $_GET['post'] ) && (int) mc_get_option( 'uri_id' ) === (int) $_GET['post'];
 	$enqueue_mcjs = false;
 	$grid         = 'false';
 	$list         = 'false';
