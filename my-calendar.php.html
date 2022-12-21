@@ -354,10 +354,11 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 			if ( ! function_exists( 'mcs_submissions' ) ) {
 				?>
 				&lt;div class="ui-sortable meta-box-sortables">
-					&lt;div class="postbox sell support">
-						&lt;h2 class='sales'>&lt;strong>&lt;?php esc_html_e( 'My Calendar Pro', 'my-calendar' ); ?>&lt;/strong>&lt;/h2>
+					&lt;div class="postbox mc-support-me promotion">
+						&lt;h2>&lt;strong>&lt;?php esc_html_e( 'My Calendar Pro', 'my-calendar' ); ?>&lt;/strong>&lt;/h2>
 
-						&lt;div class="inside resources">
+						&lt;div class="inside resources mc-flex">
+							&lt;img src="&lt;?php echo plugins_url( 'images/awd-logo-disc.png', __FILE__ ); ?>" alt="Joe Dolson Accessible Web Design" />
 							&lt;p class="mcbuy">
 							&lt;?php
 							// Translators: URL for My Calendar Pro.
@@ -386,39 +387,6 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						&lt;/div>
 					&lt;/div>
 				&lt;/div>
-				&lt;?php
-			}
-			if ( ! function_exists( 'mcs_submissions' ) ) {
-				?>
-			&lt;div class="ui-sortable meta-box-sortables">
-				&lt;div class="postbox support">
-					&lt;h2>&lt;strong>&lt;?php esc_html_e( 'Support This Plugin', 'my-calendar' ); ?>&lt;/strong>&lt;/h2>
-
-					&lt;div class="inside resources">
-						&lt;p class="follow-me">
-							&lt;a href="https://twitter.com/intent/follow?screen_name=joedolson" class="twitter-follow-button" data-size="small" data-related="joedolson">Follow
-								@joedolson&lt;/a>
-							&lt;script>!function (d, s, id) {
-									var js, fjs = d.getElementsByTagName(s)[0];
-									if (!d.getElementById(id)) {
-										js = d.createElement(s);
-										js.id = id;
-										js.src = "https://platform.twitter.com/widgets.js";
-										fjs.parentNode.insertBefore(js, fjs);
-									}
-								}(document, "script", "twitter-wjs");&lt;/script>
-						&lt;/p>
-
-						&lt;form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-							&lt;p class="mcd">
-								&lt;input type="hidden" name="cmd" value="_s-xclick" />
-								&lt;input type="hidden" name="hosted_button_id" value="UZBQUG2LKKMRW" />
-								&lt;input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" name="submit" alt="&lt;?php esc_attr_e( 'Make a Donation', 'my-calendar' ); ?>" />
-							&lt;/p>
-						&lt;/form>
-					&lt;/div>
-				&lt;/div>
-			&lt;/div>
 				&lt;?php
 			}
 		}
