@@ -73,13 +73,15 @@
 
 .category-color {
 	width: 1em;
-	height: 1em;
-	display: inline-block;
+	height: auto;
+	display: inline-flex;
+	padding: 3px;
 	border-radius: 3px;
-	border: 1px solid #000;
-	vertical-align: middle;
-	position: relative;
-	top: -1px;
+	border: 1px solid #a6a6a6;
+}
+
+.category-color.no-border {
+	border: none;
 }
 
 .my-calendar-admin a[aria-current=true] {
