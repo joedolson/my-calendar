@@ -437,7 +437,7 @@ function my_calendar_next( $atts ) {
  */
 function mc_calendar_view() {
 	$calendar_id = mc_get_option( 'uri_id' );
-	if ( isset( $_GET['post'] ) &amp;&amp; $calendar_id === $_GET['post'] ) {
+	if ( isset( $_GET['post'] ) &amp;&amp; (int) $calendar_id === (int) $_GET['post'] ) {
 		add_meta_box( 'mc-calendar-view', __( 'My Calendar Display Options', 'my-calendar' ), 'mc_calendar_generator_fields', 'page', 'advanced', 'high', 'main' );
 	}
 }
@@ -451,9 +451,11 @@ add_action( 'add_meta_boxes', 'mc_calendar_view' );
  */
 function mc_calendar_generator_fields( $post, $callback_args ) {
 	$params = array();
-	$script = '';
-	if ( $post ) {
+	if ( $post &amp;&amp; is_object( $post ) ) {
 		$params = get_post_meta( $post->ID, '_mc_calendar', true );
+	}
+	if ( $post &amp;&amp; is_array( $post ) ) {
+		$params = $post;
 	}
 	$type       = ( is_array( $callback_args ) ) ? $callback_args['args'] : $callback_args;
 	$category   = ( isset( $params['category'] ) ) ? $params['category'] : null;
@@ -508,7 +510,8 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							&lt;input type="checkbox" value="all" &lt;?php checked( empty( $category ), true ); ?> name="category[]" id="category_&lt;?php echo esc_attr( $type ); ?>"> &lt;label for="category_&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/label>
 						&lt;/li>
 						&lt;?php
-						$select = mc_category_select( $category, true, true, 'category[]', 'category_' . $type );
+						$categories = ( ! is_array( $category ) ) ? explode( ',', $category ) : $category; 
+						$select     = mc_category_select( $categories, true, true, 'category[]', 'category_' . $type );
 						echo wp_kses( $select, mc_kses_elements() );
 						?>
 					&lt;/ul>
@@ -542,6 +545,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				&lt;/p>
 			&lt;/fieldset>
 			&lt;?php
+			// Main shortcode only.
 			if ( 'main' === $type ) {
 				?>
 			&lt;fieldset>
@@ -562,11 +566,6 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					&lt;input type="text" name="below" id="below" placeholder="key,feeds" aria-labelledby='lbelow navigation-info' value="&lt;?php echo esc_attr( $below ); ?>" />&lt;br/>
 				&lt;/p>
 			&lt;/fieldset>
-				&lt;?php
-			}
-			// Main shortcode only.
-			if ( 'main' === $type ) {
-				?>
 			&lt;fieldset>
 				&lt;legend>&lt;?php esc_html_e( 'Formatting &amp; Timeframe', 'my-calendar' ); ?>&lt;/legend>
 				&lt;p>

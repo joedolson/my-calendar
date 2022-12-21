@@ -82,7 +82,8 @@ function mc_generate( $format = 'shortcode' ) {
 					$shortcode = 'my_calendar';
 			}
 			$keys = array( 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'show_today', 'skip', 'after', 'before', 'template', 'fallback', 'show_recurring' );
-			foreach ( $_POST as $key => $value ) {
+			$post = map_deep( $_POST, 'sanitize_text_field' );
+			foreach ( $post as $key => $value ) {
 				if ( in_array( $key, $keys, true ) ) {
 					if ( 'template' === $key ) {
 						$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
@@ -121,11 +122,12 @@ function mc_generate( $format = 'shortcode' ) {
  * Form to create a shortcode
  *
  * @param string $type Type of shortcode to reproduce.
+ * @param array  $data Data submitted from shortcode generator.
  */
-function mc_generator( $type ) {
+function mc_generator( $type, $data = array() ) {
 	?>
 	&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-shortcodes' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
-	&lt;?php mc_calendar_generator_fields( false, $type ); ?>
+	&lt;?php mc_calendar_generator_fields( $data, $type ); ?>
 	&lt;p>
 		&lt;input type="submit" class="button-primary" name="generator" value="&lt;?php esc_html_e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
 	&lt;/p>
@@ -151,7 +153,10 @@ function my_calendar_shortcodes() {
 			&lt;h2 id="generator">&lt;?php esc_html_e( 'My Calendar Shortcode Generator', 'my-calendar' ); ?>&lt;/h2>
 
 			&lt;div class="inside mc-tabs">
-				&lt;?php mc_generate(); ?>
+				&lt;?php
+				mc_generate();
+				$data = mc_generate( 'array' );
+				?>
 				&lt;div class='tabs' role="tablist" data-default="mc_main">
 					&lt;button type="button" role="tab" aria-selected="false" id='tab_mc_main' aria-controls='mc_main'>&lt;?php esc_html_e( 'Main', 'my-calendar' ); ?>&lt;/button>
 					&lt;button type="button" role="tab" aria-selected="false" id='tab_mc_upcoming' aria-controls='mc_upcoming'>&lt;?php esc_html_e( 'Upcoming', 'my-calendar' ); ?>&lt;/a>&lt;/button>
@@ -170,13 +175,13 @@ function my_calendar_shortcodes() {
 					?>
 				&lt;/div>
 				&lt;div class='wptab mc_main' id='mc_main' aria-live='assertive' aria-labelledby='tab_mc_main' role="tabpanel">
-					&lt;?php mc_generator( 'main' ); ?>
+					&lt;?php mc_generator( 'main', $data ); ?>
 				&lt;/div>
 				&lt;div class='wptab mc_upcoming' id='mc_upcoming' aria-live='assertive' aria-labelledby='tab_mc_upcoming' role="tabpanel">
-					&lt;?php mc_generator( 'upcoming' ); ?>
+					&lt;?php mc_generator( 'upcoming', $data ); ?>
 				&lt;/div>
 				&lt;div class='wptab mc_today' id='mc_today' aria-live='assertive' aria-labelledby='tab_mc_today' role="tabpanel">
-					&lt;?php mc_generator( 'today' ); ?>
+					&lt;?php mc_generator( 'today', $data ); ?>
 				&lt;/div>
 				&lt;?php
 				/**
@@ -185,10 +190,11 @@ function my_calendar_shortcodes() {
 				 * @hook mc_generator_tab_content
 				 *
 				 * @param {string} $tabs Tab HTML content.
+				 * @param {array}  $data Data from last generator submission.
 				 *
 				 * @return {string}
 				 */
-				echo apply_filters( 'mc_generator_tab_content', '' );
+				echo apply_filters( 'mc_generator_tab_content', '', $data );
 				?>
 			&lt;/div>
 		&lt;/div>
