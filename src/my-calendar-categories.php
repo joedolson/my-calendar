@@ -866,6 +866,9 @@ function mc_manage_categories() {
 				} else {
 					$icon_bg = $foreground;
 				}
+				if ( ! $icon ) {
+					$icon_bg = 'transparent';
+				}
 				?>
 			<td style="background-color:<?php echo esc_attr( $icon_bg ); ?>;"><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 				<?php
@@ -1327,7 +1330,9 @@ function mc_category_icon( $event, $type = 'html' ) {
 				}
 			}
 		}
-
+		$back     = ( 'background' === mc_get_option( 'apply_color' ) ) ? true : false;
+		$inverse  = mc_inverse_color( $event->category_color );
+		$image    = ( $back ) ? str_replace( $event->category_color, $inverse, $image ) : str_replace( $inverse, $event->category_color, $image );
 		/**
 		 * Filter the HTML output for a category icon.
 		 *

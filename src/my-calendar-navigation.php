@@ -368,7 +368,6 @@ function mc_category_key( $category, $id = '' ) {
 	$sql        = 'SELECT * FROM ' . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
 	$categories = $mcdb->get_results( $sql );
 	$key       .= '<div class="category-key ' . $class . '"><h3 class="maybe-hide">' . __( 'Categories', 'my-calendar' ) . "</h3>\n<ul>\n";
-	$path       = ( mc_is_custom_icon() ) ? str_replace( 'my-calendar', 'my-calendar-custom', $url ) : plugins_url( 'images/icons', __FILE__ ) . '/';
 
 	foreach ( $categories as $cat ) {
 		$class = '';
@@ -379,7 +378,7 @@ function mc_category_key( $category, $id = '' ) {
 		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
 		$class = mc_category_class( $cat, '' );
 
-		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', $_GET['mcat'] );
+		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', map_deep( $_GET['mcat'], 'absint' ) );
 
 		if ( in_array( $cat->category_id, $selected_categories, true ) || $category === $cat->category_id ) {
 			$selected_categories = array_diff( $selected_categories, array( $cat->category_id ) );
@@ -405,7 +404,7 @@ function mc_category_key( $category, $id = '' ) {
 		if ( '' !== $cat->category_icon && $has_icons ) {
 			$image    = mc_category_icon( $cat );
 			$type     = ( stripos( $image, 'svg' ) ) ? 'svg' : 'img';
-			$back     = ( 'default' !== mc_get_option( 'apply_color' ) ) ? ' style="background:' . $hex . $cat->category_color . ';"' : '';
+			$back     = ( 'background' === mc_get_option( 'apply_color' ) ) ? ' style="background:' . $hex . $cat->category_color . ';"' : '';
 			$cat_key .= '<span class="category-color-sample ' . $type . '"' . $back . '>' . $image . '</span>' . $cat_name;
 		} elseif ( 'default' !== mc_get_option( 'apply_color' ) ) {
 			$cat_key .= ( ( '' !== $cat->category_color ) ? '<span class="category-color-sample no-icon" style="background:' . $hex . $cat->category_color . ';"> &nbsp; </span>' : '' ) . '<span class="mc-category-title">' . $cat_name . '</span>';
