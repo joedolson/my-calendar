@@ -189,14 +189,23 @@ function mc_add_help_tab() {
  * @return void
  */
 function mc_location_help_tab() {
-	$screen  = get_current_screen();
-	$content = '<ul><li>' . __( 'Check the locations you wish to remove', 'my-calendar' ) . '</li><li>' . __( 'Check the "Merge Duplicates" option at the top of the table', 'my-calendar' ) . '</li><li>' . __( 'Enter the ID of the location you want to have replace these locations', 'my-calendar' ) . '</li><li>' . __( 'Submit the form', 'my-calendar' ) . '</li></ul><p>' . __( 'The checked locations will be deleted. Events using those locations will be updated to use the provided ID', 'my-calendar' ) . '</p>';
-
+	$screen       = get_current_screen();
+	$settings_url = admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' );
+	$content      = '<h2>' . __( 'Merge Duplicates', 'my-calendar' ) . '</h2><ul><li>' . __( 'Check the locations you wish to remove', 'my-calendar' ) . '</li><li>' . __( 'Check the "Merge Duplicates" option at the top of the table', 'my-calendar' ) . '</li><li>' . __( 'Enter the ID of the location you want to have replace these locations', 'my-calendar' ) . '</li><li>' . __( 'Submit the form', 'my-calendar' ) . '</li></ul><p>' . __( 'The checked locations will be deleted. Events using those locations will be updated to use the provided ID', 'my-calendar' ) . '</p>';
+	$limits       = '<h2>' . __( 'Location Controls', 'my-calendar' ) . '</h2><p>' . sprintf( __( 'You can limit the values available for locations using the <a href="%s">Location Control</a> settings at <code>My Calendar > Settings > Inputs</code>.', 'my-calendar' ), $settings_url ) . '</p>';
 	$screen->add_help_tab(
 		array(
 			'id'      => 'mc_location_help_tab',
 			'title'   => __( 'Merging Duplicate Locations', 'my-calendar' ),
 			'content' => $content,
+		)
+	);
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mc_location_help_tab_limits',
+			'title'   => __( 'Limit Location Inputs', 'my-calendar' ),
+			'content' => $limits,
 		)
 	);
 }
