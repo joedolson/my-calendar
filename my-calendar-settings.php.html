@@ -385,14 +385,14 @@ function mc_update_permissions_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_output_settings( $post ) {
-	$options                   = array();
-	$options['open_uri']       = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
-	$options['no_link']        = ( ! empty( $post['mc_no_link'] ) &amp;&amp; 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
-	$options['mini_uri']       = $post['mc_mini_uri'];
-	$options['open_day_uri']   = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
-	$options['show_list_info'] = ( ! empty( $post['mc_show_list_info'] ) &amp;&amp; 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
-	$options['list_links']     = ( ! empty( $post['mc_list_links'] ) &amp;&amp; 'on' === $post['mc_list_links'] ) ? 'true' : 'false';
-	$options['show_months']    = (int) $post['mc_show_months'];
+	$options                     = array();
+	$options['open_uri']         = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
+	$options['no_link']          = ( ! empty( $post['mc_no_link'] ) &amp;&amp; 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
+	$options['mini_uri']         = $post['mc_mini_uri'];
+	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
+	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) &amp;&amp; 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
+	$options['list_link_titles'] = ( ! empty( $post['mc_list_link_titles'] ) &amp;&amp; 'on' === $post['mc_list_link_titles'] ) ? 'true' : 'false';
+	$options['show_months']      = (int) $post['mc_show_months'];
 	// Calculate sequence for navigation elements.
 	$top    = array();
 	$bottom = array();
@@ -1112,21 +1112,7 @@ function mc_remote_db() {
 							$calendar     = array( 'calendar' );
 							$botnav       = explode( ',', mc_get_option( 'bottomnav' ) );
 							$order        = array_merge( $topnav, $calendar, $botnav );
-							$nav_elements = array(
-								'nav'        => '&lt;div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '&lt;/span>',
-								'toggle'     => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-calendar">&lt;/div> &lt;span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '&lt;/span>',
-								'jump'       => '&lt;div class="dashicons dashicons-redo" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '&lt;/span>',
-								'print'      => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Link to printable view', 'my-calendar' ) . '&lt;/span>',
-								'timeframe'  => '&lt;div class="dashicons dashicons-clock" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '&lt;/span>',
-								'calendar'   => '&lt;div class="dashicons dashicons-calendar" aria-hidden="true">&lt;/div> &lt;span>' . __( 'My Calendar', 'my-calendar' ) . '&lt;/span>',
-								'key'        => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories', 'my-calendar' ) . '&lt;/span>',
-								'feeds'      => '&lt;div class="dashicons dashicons-rss" aria-hidden="true">&lt;/div> &lt;span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '&lt;/span>',
-								'exports'    => '&lt;div class="dashicons dashicons-calendar-alt" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '&lt;/span>',
-								'locations'  => '&lt;div class="dashicons dashicons-location" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Location (dropdown)', 'my-calendar' ) . '&lt;/span>',
-								'categories' => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '&lt;/span>',
-								'access'     => '&lt;div class="dashicons dashicons-universal-access" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Access (dropdown)', 'my-calendar' ) . '&lt;/span>',
-								'search'     => '&lt;div class="dashicons dashicons-search" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Search', 'my-calendar' ) . '&lt;/span>',
-							);
+							$nav_elements = mc_navigation_keywords();
 							?>
 							&lt;div id='mc-sortable-update' aria-live='assertive'>&lt;/div>
 							&lt;ul id='mc-sortable'>
@@ -1228,7 +1214,7 @@ function mc_remote_db() {
 							&lt;ul>
 								&lt;li>&lt;?php mc_settings_field( 'mc_show_months', __( 'How many months of events to show at a time:', 'my-calendar' ), '', '', array( 'size' => '3' ), 'text' ); ?>&lt;/li>
 								&lt;li>&lt;?php mc_settings_field( 'mc_show_list_info', __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
-								&lt;li>&lt;?php mc_settings_field( 'mc_list_links', __( 'Show collapsed events in list view.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
+								&lt;li>&lt;?php mc_settings_field( 'mc_list_link_titles', __( 'Show events in list view.', 'my-calendar' ), '', '', array(), 'checkbox-single' ); ?>&lt;/li>
 							&lt;/ul>
 						&lt;/fieldset>
 

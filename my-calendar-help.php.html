@@ -302,6 +302,38 @@ function mc_get_help_footer( $return = '' ) {
 }
 
 /**
+ * Get navigation keywords and descriptions.
+ */
+function mc_navigation_keywords( $return = 'array' ) {
+	$keywords = array(
+		'nav'        => '&lt;div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '&lt;/span>',
+		'toggle'     => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;div class="dashicons dashicons-calendar">&lt;/div> &lt;span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '&lt;/span>',
+		'jump'       => '&lt;div class="dashicons dashicons-redo" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '&lt;/span>',
+		'print'      => '&lt;div class="dashicons dashicons-list-view" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Link to printable view', 'my-calendar' ) . '&lt;/span>',
+		'timeframe'  => '&lt;div class="dashicons dashicons-clock" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '&lt;/span>',
+		'calendar'   => '&lt;div class="dashicons dashicons-calendar" aria-hidden="true">&lt;/div> &lt;span>' . __( 'My Calendar', 'my-calendar' ) . '&lt;/span>',
+		'key'        => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories', 'my-calendar' ) . '&lt;/span>',
+		'feeds'      => '&lt;div class="dashicons dashicons-rss" aria-hidden="true">&lt;/div> &lt;span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '&lt;/span>',
+		'exports'    => '&lt;div class="dashicons dashicons-calendar-alt" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '&lt;/span>',
+		'locations'  => '&lt;div class="dashicons dashicons-location" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Location (dropdown)', 'my-calendar' ) . '&lt;/span>',
+		'categories' => '&lt;div class="dashicons dashicons-admin-network" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '&lt;/span>',
+		'access'     => '&lt;div class="dashicons dashicons-universal-access" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Access (dropdown)', 'my-calendar' ) . '&lt;/span>',
+		'search'     => '&lt;div class="dashicons dashicons-search" aria-hidden="true">&lt;/div> &lt;span>' . __( 'Search', 'my-calendar' ) . '&lt;/span>',
+	);
+	if ( 'array' === $return ) {
+		return $keywords;
+	} else {
+		$output = '';
+		foreach ( $keywords as $key => $desc ) {
+			$output .= '&lt;li>&lt;code>' . $key . '&lt;/code>' . $desc . '&lt;/li>';
+		}
+		$output = '&lt;ul class="mc_keywords">' . $output . '&lt;/ul>';
+
+		return $output;
+	}
+}
+
+/**
  * Get contextual help by ID.
  *
  * @param int $id Help ID.
@@ -321,7 +353,7 @@ function mc_get_help_text( $id ) {
 		'3' => array(
 			'title' => __( 'Navigation Keywords', 'my-calendar' ),
 			// Translators: Settings URL.
-			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the &lt;a href="%s">My Calendar Display settings&lt;/a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
+			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the &lt;a href="%s">My Calendar Display settings&lt;/a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ) . mc_navigation_keywords( 'html' ),
 		),
 		'4' => array(
 			'title' => __( 'Copying Events', 'my-calendar' ),
@@ -336,9 +368,9 @@ function mc_get_help_text( $id ) {
 			'text'  => mc_display_icons(),
 		),
 		'7' => array(
-			'title' => __( 'Migrating your CSS', 'my-calendar' ),
-			'text'  => '&lt;p>' . __( 'Since the first versions, My Calendar has allowed users to edit their stylesheets within the plug-in. Since version 1.7.0, it has supported using custom stylesheets from your theme directory or a custom plugin directory.', 'my-calendar' ) . '&lt;/p>&lt;p>' . __( 'Editing stylesheets within the plugin has been a problem since the beginning. Because of the possibility your stylesheets are customized, I need to copy and restore your stylesheets on every update. This also significantly restricts my ability to make changes to HTML structure or to fix problems with existing stylesheets.', 'my-calendar' ) . '&lt;/p>&lt;p>' . __( 'If you migrate your CSS to the custom style directory, you are taking responsibility for future updates to your CSS. If you leave them in place, then from 3.4.0 forward, your styles will be replaced by the latest versions in every update.' ) . '&lt;/p>',
-		)
+			'title' => __( 'Migrating to custom CSS', 'my-calendar' ),
+			'text'  => '&lt;p>' . __( 'Since the first versions, My Calendar has allowed users to edit their stylesheets within the plug-in. Since version 1.7.0, it has supported using custom stylesheets from your theme directory or a custom plugin directory.', 'my-calendar' ) . '&lt;/p>&lt;p>' . __( 'Editing stylesheets within the plugin has been a problem since the beginning. Because of the possibility your stylesheets are customized, I need to copy and restore your stylesheets on every update. This also significantly restricts my ability to make changes to HTML structure or to fix problems with existing stylesheets.', 'my-calendar' ) . '&lt;/p>&lt;p>' . __( 'If you migrate your CSS to the custom style directory, you are taking responsibility for future updates to your CSS. If you leave them in place, then from 3.4.0 forward, your styles will be replaced by the latest versions in every update.', 'my-calendar' ) . '&lt;/p>',
+		),
 	);
 
 	$title = ( '' !== $help[ $id ]['title'] ) ? '&lt;h2>' . $help[ $id ]['title'] . '&lt;/h2>' : '';
