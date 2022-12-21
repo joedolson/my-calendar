@@ -248,7 +248,7 @@ function my_calendar_manage_categories() {
 			);
 			$results = mc_update_cat( $update );
 			$append  = implode( ' ', $append );
-			if ( $results ) {
+			if ( $results || '' !== trim( $append ) ) {
 				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append" );
 			} else {
 				mc_show_error( __( 'Category was not changed.', 'my-calendar' ) . " $append" );
@@ -526,15 +526,9 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							&lt;fieldset>
 								&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Category Meta', 'my-calendar' ); ?>&lt;/legend>
 								&lt;ul class='checkboxes'>
-								&lt;li>
-									&lt;input type="checkbox" value="on" name="category_private" id="cat_private"&lt;?php checked( $private_checked, true ); ?> /> &lt;label for="cat_private">&lt;?php esc_html_e( 'Private (logged-in users only)', 'my-calendar' ); ?>&lt;/label>
-								&lt;/li>
-								&lt;li>
-									&lt;input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"&lt;?php checked( mc_get_option( 'default_category' ), $current ); ?> /> &lt;label for="mc_default_category">&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/label>
-								&lt;/li>
-								&lt;li>
-									&lt;input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"&lt;?php checked( mc_get_option( 'skip_holidays_category' ), $current ); ?> /> &lt;label for="mc_shc">&lt;?php esc_html_e( 'Holiday', 'my-calendar' ); ?>&lt;/label>
-								&lt;/li>
+									&lt;li>&lt;input type="checkbox" value="on" name="category_private" id="cat_private"&lt;?php checked( $private_checked, true ); ?> /> &lt;label for="cat_private">&lt;?php esc_html_e( 'Private (logged-in users only)', 'my-calendar' ); ?>&lt;/label>&lt;/li>
+									&lt;li>&lt;input type="checkbox" value="on" name="mc_default_category" id="mc_default_category"&lt;?php checked( mc_get_option( 'default_category' ), $current ); ?> /> &lt;label for="mc_default_category">&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/label>&lt;/li>
+									&lt;li>&lt;input type="checkbox" value="on" name="mc_skip_holidays_category" id="mc_shc"&lt;?php checked( mc_get_option( 'skip_holidays_category' ), $current ); ?> /> &lt;label for="mc_shc">&lt;?php esc_html_e( 'Holiday', 'my-calendar' ); ?>&lt;/label>&lt;/li>
 								&lt;/ul>
 								&lt;?php
 								/**
