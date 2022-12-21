@@ -723,7 +723,7 @@ function mc_date_relation( $event ) {
  * @return string
  */
 function mc_date_format() {
-	$date_format = ( '' === mc_get_option( 'date_format', '' ) ) ? get_option( 'date_format' ) : mc_get_option( 'date_format' );
+	$date_format = ( '' === mc_get_option( 'date_format' ) ) ? get_option( 'date_format' ) : mc_get_option( 'date_format' );
 
 	return $date_format;
 }
