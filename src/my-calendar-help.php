@@ -277,6 +277,10 @@ function mc_get_help_footer( $return = '' ) {
 
 /**
  * Get navigation keywords and descriptions.
+ * 
+ * @param string $return Return data type.
+ * 
+ * @return array|string
  */
 function mc_navigation_keywords( $return = 'array' ) {
 	$keywords = array(
