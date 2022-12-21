@@ -74,6 +74,18 @@ html.wp-toolbar {
 	clear: right
 }
 
+.mc_keywords {
+	margin: 1em;
+}
+
+.mc_keywords li {
+	margin-bottom: .5em;
+}
+
+.mc_keywords p {
+	display: inline;
+}
+
 .icon-list {
 	display: grid;
 	grid-template-columns: repeat( 6, 1fr );

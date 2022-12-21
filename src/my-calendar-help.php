@@ -276,6 +276,38 @@ function mc_get_help_footer( $return = '' ) {
 }
 
 /**
+ * Get navigation keywords and descriptions.
+ */
+function mc_navigation_keywords( $return = 'array' ) {
+	$keywords = array(
+		'nav'        => '<div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></div> <div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></div> <span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '</span>',
+		'toggle'     => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <div class="dashicons dashicons-calendar"></div> <span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '</span>',
+		'jump'       => '<div class="dashicons dashicons-redo" aria-hidden="true"></div> <span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '</span>',
+		'print'      => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <span>' . __( 'Link to printable view', 'my-calendar' ) . '</span>',
+		'timeframe'  => '<div class="dashicons dashicons-clock" aria-hidden="true"></div> <span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '</span>',
+		'calendar'   => '<div class="dashicons dashicons-calendar" aria-hidden="true"></div> <span>' . __( 'My Calendar', 'my-calendar' ) . '</span>',
+		'key'        => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories', 'my-calendar' ) . '</span>',
+		'feeds'      => '<div class="dashicons dashicons-rss" aria-hidden="true"></div> <span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '</span>',
+		'exports'    => '<div class="dashicons dashicons-calendar-alt" aria-hidden="true"></div> <span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '</span>',
+		'locations'  => '<div class="dashicons dashicons-location" aria-hidden="true"></div> <span>' . __( 'Location (dropdown)', 'my-calendar' ) . '</span>',
+		'categories' => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '</span>',
+		'access'     => '<div class="dashicons dashicons-universal-access" aria-hidden="true"></div> <span>' . __( 'Access (dropdown)', 'my-calendar' ) . '</span>',
+		'search'     => '<div class="dashicons dashicons-search" aria-hidden="true"></div> <span>' . __( 'Search', 'my-calendar' ) . '</span>',
+	);
+	if ( 'array' === $return ) {
+		return $keywords;
+	} else {
+		$output = '';
+		foreach ( $keywords as $key => $desc ) {
+			$output .= '<li><code>' . $key . '</code>' . $desc . '</li>';
+		}
+		$output = '<ul class="mc_keywords">' . $output . '</ul>';
+
+		return $output;
+	}
+}
+
+/**
  * Get contextual help by ID.
  *
  * @param int $id Help ID.
@@ -295,7 +327,7 @@ function mc_get_help_text( $id ) {
 		'3' => array(
 			'title' => __( 'Navigation Keywords', 'my-calendar' ),
 			// Translators: Settings URL.
-			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Display settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ),
+			'text'  => sprintf( __( 'My Calendar shortcodes use keywords to represent the navigation interfaces that can be added to the calendar. The keywords can be added either above or below the calendar, and will appear in the order listed. These keywords are shown in the <a href="%s">My Calendar Display settings</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#my-calendar-output' ) ) . mc_navigation_keywords( 'html' ),
 		),
 		'4' => array(
 			'title' => __( 'Copying Events', 'my-calendar' ),

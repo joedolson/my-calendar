@@ -1086,21 +1086,7 @@ function mc_remote_db() {
 							$calendar     = array( 'calendar' );
 							$botnav       = explode( ',', mc_get_option( 'bottomnav' ) );
 							$order        = array_merge( $topnav, $calendar, $botnav );
-							$nav_elements = array(
-								'nav'        => '<div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></div> <div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></div> <span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '</span>',
-								'toggle'     => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <div class="dashicons dashicons-calendar"></div> <span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '</span>',
-								'jump'       => '<div class="dashicons dashicons-redo" aria-hidden="true"></div> <span>' . __( 'Jump to any other month/year', 'my-calendar' ) . '</span>',
-								'print'      => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <span>' . __( 'Link to printable view', 'my-calendar' ) . '</span>',
-								'timeframe'  => '<div class="dashicons dashicons-clock" aria-hidden="true"></div> <span>' . __( 'Toggle between day, week, and month view', 'my-calendar' ) . '</span>',
-								'calendar'   => '<div class="dashicons dashicons-calendar" aria-hidden="true"></div> <span>' . __( 'My Calendar', 'my-calendar' ) . '</span>',
-								'key'        => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories', 'my-calendar' ) . '</span>',
-								'feeds'      => '<div class="dashicons dashicons-rss" aria-hidden="true"></div> <span>' . __( 'iCal Subscription Links', 'my-calendar' ) . '</span>',
-								'exports'    => '<div class="dashicons dashicons-calendar-alt" aria-hidden="true"></div> <span>' . __( 'Links to iCal Exports', 'my-calendar' ) . '</span>',
-								'locations'  => '<div class="dashicons dashicons-location" aria-hidden="true"></div> <span>' . __( 'Location (dropdown)', 'my-calendar' ) . '</span>',
-								'categories' => '<div class="dashicons dashicons-admin-network" aria-hidden="true"></div> <span>' . __( 'Categories (dropdown)', 'my-calendar' ) . '</span>',
-								'access'     => '<div class="dashicons dashicons-universal-access" aria-hidden="true"></div> <span>' . __( 'Access (dropdown)', 'my-calendar' ) . '</span>',
-								'search'     => '<div class="dashicons dashicons-search" aria-hidden="true"></div> <span>' . __( 'Search', 'my-calendar' ) . '</span>',
-							);
+							$nav_elements = mc_navigation_keywords();
 							?>
 							<div id='mc-sortable-update' aria-live='assertive'></div>
 							<ul id='mc-sortable'>
