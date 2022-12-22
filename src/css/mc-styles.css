@@ -7,20 +7,6 @@
 	background: #fff;
 }
 
-.mcbuy, .follow-me {
-	font-size: 1.1em;
-	line-height: 1.5
-}
-
-.mcbuy a {
-	font-weight: 700;
-}
-
-.mcd, .follow-me {
-	text-align: center;
-	margin: 0;
-}
-
 #cat_icon option {
 	padding: 5px 0 5px 24px
 }
@@ -53,7 +39,6 @@
 #my-calendar-admin-table th .active {
 	font-weight: 700;
 }
-
 
 .import {
 	background: #fcf9e8;
@@ -1444,7 +1429,7 @@ div.mc-search {
 }
 
 .mc-support-me img {
-	max-width: 120px;
+	max-width: 60px;
 }
 
 .mc-support-me {
@@ -1455,6 +1440,35 @@ div.mc-search {
 .mc-flex {
 	display: flex;
 	align-items: center;
+}
+
+.mc-support-me p {
+	font-size: 1.6em;
+	font-weight: 600;
+	background: #007eb3;
+	text-shadow: 1px 1px rgb( 35, 60, 127 );
+	padding: 1em;
+	text-align: center;
+	margin: 0 0 1em;
+}
+
+.promotion.mc-support-me p {
+	text-align: left;
+	font-size: 1.5em;
+}
+
+.mc-support-me p, .mc-support-me a {
+	color: #f6f7f7;
+}
+
+@media ( max-width: 1200px ) {
+	.mc-flex {
+		flex-wrap: wrap;
+	}
+	.promotion.mc-support-me p {
+		font-size: 1.3em;
+		padding: .5em 0;
+	}
 }
 
 .my-calendar-admin .error .button-secondary {
@@ -1510,28 +1524,6 @@ tr.problem .error {
 
 #my-calendar .inside div iframe {
 	float: none;
-}
-
-.mc-support-me {
-	background: #007eb3;
-}
-
-.mc-support-me h2 {
-	color: #fff;
-}
-
-.mc-support-me p {
-	font-size: 1.6em;
-	font-weight: 600;
-	background: #007eb3;
-	text-shadow: 1px 1px rgb( 35, 60, 127 );
-	padding: 1em;
-	text-align: center;
-	margin: 0 0 1em;
-}
-
-.mc-support-me p, .mc-support-me a {
-	color: #f6f7f7;
 }
 
 .wrap ul.list {

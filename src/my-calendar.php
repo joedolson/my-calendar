@@ -333,7 +333,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 
 						<div class="inside resources mc-flex">
 							<img src="<?php echo plugins_url( 'images/awd-logo-disc.png', __FILE__ ); ?>" alt="Joe Dolson Accessible Web Design" />
-							<p class="mcbuy">
+							<p>
 							<?php
 							// Translators: URL for My Calendar Pro.
 							printf( __( "Buy <a href='%s' rel='external'>My Calendar Pro</a> &mdash; a more powerful calendar for your site.", 'my-calendar' ), 'https://www.joedolson.com/my-calendar/pro/' );
