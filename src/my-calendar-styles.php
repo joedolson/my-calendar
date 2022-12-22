@@ -368,13 +368,13 @@ function mc_stylesheet_selector() {
 	$options .= '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
 	$current  = mc_get_option( 'css_file' );
 	foreach ( $files as $value ) {
-		$append   = '';
+		$append = '';
 		if ( in_array( $value, $deprecated, true ) && $value !== $current ) {
 			continue;
 		}
 		if ( in_array( $value, $deprecated, true ) && $value === $current ) {
 			$append = ' (' . __( 'Deprecated', 'my-calendar' ) . ')';
-		}		
+		}
 		$filepath = mc_get_style_path( $value );
 		$path     = pathinfo( $filepath );
 		if ( 'css' === $path['extension'] ) {

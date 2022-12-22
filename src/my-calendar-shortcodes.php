@@ -484,7 +484,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
 						</li>
 						<?php
-						$categories = ( ! is_array( $category ) ) ? explode( ',', $category ) : $category; 
+						$categories = ( ! is_array( $category ) ) ? explode( ',', $category ) : $category;
 						$select     = mc_category_select( $categories, true, true, 'category[]', 'category_' . $type );
 						echo wp_kses( $select, mc_kses_elements() );
 						?>
