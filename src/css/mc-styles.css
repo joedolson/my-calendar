@@ -358,20 +358,20 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	margin-top: 8px;
 }
 
-#mc-clipboard {
+#mc-clipboard.help {
 	font-family: 'Courier New';
 	background: #fff;
 	padding: 5px;
 	height: 60em;
 }
 
-.mc-copy-help {
+.mc-copy-button {
 	display: flex;
 	align-items: center;
 	column-gap: 10px;
 }
 
-.mc-help-copied {
+.mc-notice-copied {
 	display: none;
 	background: #f5e6ab;
 	color: #000;
@@ -379,7 +379,7 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	border-radius: 3px;
 }
 
-.mc-help-copied.visible {
+.mc-notice-copied.visible {
 	display: block;
 }
 
@@ -727,7 +727,7 @@ strong.label {
 
 #mc-generator .shortcode-preview {
 	display: grid;
-	grid-template-columns: 1fr 13em;
+	grid-template-columns: 1fr auto auto;
 	column-gap: 10px;
 	align-items: center;
 }

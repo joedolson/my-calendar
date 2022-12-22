@@ -1535,7 +1535,7 @@ function mc_scripts() {
 	$id      = $current_screen->id;
 	$slug    = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
-	if ( false !== strpos( $id, 'my-calendar' ) ) {
+	if ( false !== strpos( $id, 'my-calendar' ) || isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'] ) {
 		// Script needs to be aware of current Pro version.
 		$mcs_version = ( get_option( 'mcs_version', '' ) ) ? get_option( 'mcs_version' ) : 1.0;
 		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
@@ -1863,9 +1863,9 @@ Version: $theme_version
 ==Active Plugins:==
 $plugins_string
 	";
-	$support_data = '<div class="mc-copy-help"><button class="button-primary help-to-clipboard" data-clipboard-target="#mc-clipboard">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button>
-	<span class="mc-help-copied">' . __( 'Help Info Copied', 'my-calendar' ) . '</span></div>
-	<textarea id="mc-clipboard" readonly>%s</textarea>';
+	$support_data = '<div class="mc-copy-button"><button class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc-clipboard">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button>
+	<span class="mc-notice-copied">' . __( 'Help Info Copied', 'my-calendar' ) . '</span></div>
+	<textarea id="mc-clipboard" class="help" readonly>%s</textarea>';
 	if ( $checked ) {
 		$request = '';
 		if ( isset( $_POST['mc_support'] ) ) {

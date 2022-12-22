@@ -1,6 +1,6 @@
-var clipboard = new ClipboardJS('.help-to-clipboard');
+var clipboard = new ClipboardJS('.mc-copy-to-clipboard');
 clipboard.on( 'success', function(e) {
-	var response = document.querySelector( '.mc-help-copied' );
+	var response = document.querySelector( '.mc-notice-copied' );
 	var text     = response.textContent;
 	wp.a11y.speak( text );
 	console.log( e );
