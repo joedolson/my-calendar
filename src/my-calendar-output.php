@@ -403,7 +403,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 		if ( 'single' === $type ) {
 			$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image $event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
-		} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_links' ) ) ) {
+		} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 			/**
 			 * Filter event title inside event heading.
 			 *
@@ -945,6 +945,10 @@ function mc_event_classes( $event, $type ) {
 		$length,
 		$start,
 	);
+
+	if ( 'single' !== $type ) {
+		$classes[] = 'mc-events';
+	}
 
 	if ( $event->event_begin !== $event->event_end ) {
 		$classes[] = 'multidate';
@@ -2127,7 +2131,7 @@ function my_calendar( $args ) {
 										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 									}
 									if ( '' !== $event_output ) {
-										if ( 'false' === mc_get_option( 'list_links' ) ) {
+										if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
 											$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' ) . "$title</strong>" . $event_output . '</li>';
 										} else {
 											$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2>" . $event_output . '</li>';

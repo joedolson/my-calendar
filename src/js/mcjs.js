@@ -50,7 +50,7 @@
 
 	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'true' === my_calendar.links ) ) {
 		var container = ( 'true' === my_calendar.grid ) ? '.calendar-event' : '.list-event';
-		var wrapper = ( 'true' === my_calendar.links && 'true' === my_calendar.grid ) ? '.mc-event' : container;
+		var wrapper = ( 'true' === my_calendar.links && 'true' === my_calendar.grid ) ? '.mc-events' : container;
 		$( wrapper + ' .details' ).hide();
 		$(document).on('click', wrapper + ' .event-title .open',
 			function (e) {
