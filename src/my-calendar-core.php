@@ -1532,7 +1532,7 @@ function mc_scripts() {
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		// Script needs to be aware of current Pro version.
 		$mcs_version = ( get_option( 'mcs_version', '' ) ) ? get_option( 'mcs_version' ) : 1.0;
-		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y', 'clipboard' ), $version, true );
+		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 		wp_localize_script(
 			'mc.admin',
 			'mcAdmin',
@@ -1546,6 +1546,8 @@ function mc_scripts() {
 				'mcs'           => $mcs_version,
 			)
 		);
+		wp_enqueue_script( 'mc.admin-footer', plugins_url( 'js/admin.js', __FILE__ ), array( 'wp-a11y', 'clipboard' ), $version, true );
+
 		if ( version_compare( $mcs_version, '2.1', '<' ) ) {
 			wp_enqueue_style( 'mcs-back-compat', plugins_url( 'css/backcompat.css', __FILE__ ), array(), $version );
 		}
