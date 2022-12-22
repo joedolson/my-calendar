@@ -431,7 +431,23 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	if ( $post && is_array( $post ) ) {
 		$params = $post;
 	}
-	$type       = ( is_array( $callback_args ) ) ? $callback_args['args'] : $callback_args;
+	$type    = ( is_array( $callback_args ) ) ? $callback_args['args'] : $callback_args;
+	$message = '';
+	$base    = '';
+	switch ( $type ) {
+		case 'main':
+			$base    = 'my_calendar';
+			$message = __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
+			break;
+		case 'upcoming':
+			$base    = 'my_calendar_upcoming';
+			$message = __( 'Generate the <code>[my_calendar_upcoming]</code> shortcode. Generates lists of upcoming events.', 'my-calendar' );
+			break;
+		case 'today':
+			$base    = 'my_calendar_today';
+			$message = __( 'Generate the <code>[my_calendar_today]</code> shortcode. Generates lists of events happening today.', 'my-calendar' );
+			break;
+	}
 	$category   = ( isset( $params['category'] ) ) ? $params['category'] : null;
 	$ltype      = ( isset( $params['ltype'] ) ) ? $params['ltype'] : '';
 	$lvalue     = ( isset( $params['lvalue'] ) ) ? $params['lvalue'] : '';
@@ -447,31 +463,18 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$months     = ( isset( $params['months'] ) ) ? $params['months'] : '';
 	$above      = ( isset( $params['above'] ) ) ? $params['above'] : '';
 	$below      = ( isset( $params['below'] ) ) ? $params['below'] : '';
-	$shortcode  = ( isset( $params['shortcode'] ) ) ? $params['shortcode'] : '';
+	$shortcode  = ( isset( $params['shortcode'] ) ) ? $params['shortcode'] : "[$base]";
+	$append     = ( isset( $params['append'] ) ) ? $params['append'] : '';
 
 	?>
 	<div id="mc-generator" class="generator">
-		<?php
-		$message = '';
-		switch ( $type ) {
-			case 'main':
-				$message = __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
-				break;
-			case 'upcoming':
-				$message = __( 'Generate the <code>[my_calendar_upcoming]</code> shortcode. Generates lists of upcoming events.', 'my-calendar' );
-				break;
-			case 'today':
-				$message = __( 'Generate the <code>[my_calendar_today]</code> shortcode. Generates lists of events happening today.', 'my-calendar' );
-				break;
-		}
-		echo wp_kses_post( wpautop( $message ) );
-		?>
+		<?php echo wp_kses_post( wpautop( $message ) ); ?>
 		<div><input type="hidden" name="_mc_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
 		<input type='hidden' name='shortcode' value='<?php echo esc_attr( $type ); ?>'/>
 		<?php
 		// Common Elements to all Shortcodes.
 		if ( $shortcode ) {
-			echo wp_kses( '<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly" id="mc_shortcode">' . $shortcode . '</textarea></p><p><button type="button" class="button button-hero reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>', mc_kses_elements() );
+			echo wp_kses( '<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '</textarea>' . $append . '</p><p><button data-type="' . $base . '" type="button" class="button button-hero reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>', mc_kses_elements() );
 		}
 		?>
 		<div class="mc-generator-inputs">

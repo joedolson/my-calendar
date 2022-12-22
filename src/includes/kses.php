@@ -268,6 +268,7 @@ function mc_kses_elements() {
 			'aria-selected'    => array(),
 			'aria-controls'    => array(),
 			'data-href'        => array(),
+			'data-type'        => array(),
 		),
 		'ul'               => array(
 			'class' => array(),
