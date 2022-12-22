@@ -81,13 +81,13 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
  * @param string $time time of event.
  * @param string $end date of event.
  * @param string $endtime time of event.
- * @param string $event_label location of event.
+ * @param int    $loc_id location of event.
  *
  * @return mixed results array or false
  */
-function mcs_check_conflicts( $begin, $time, $end, $endtime, $event_label ) {
+function mcs_check_conflicts( $begin, $time, $end, $endtime, $loc_id ) {
 	global $wpdb;
-	$select_location = ( '' !== $event_label ) ? "event_label = '" . esc_sql( $event_label ) . "' AND" : '';
+	$select_location = ( $loc_id ) ? "event_location = '" . absint( $loc_id ) . "' AND" : '';
 	$begin_time      = $begin . ' ' . $time;
 	$end_time        = $end . ' ' . $endtime;
 	// Need two queries; one to find outer events, one to find inner events.
