@@ -563,7 +563,7 @@ function mc_footer_js() {
  */
 function mc_admin_styles() {
 	global $current_screen;
-	$version      = mc_get_version();
+	$version = mc_get_version();
 	if ( SCRIPT_DEBUG ) {
 		$version .= rand( 10000, 100000 );
 	}
@@ -1532,8 +1532,8 @@ function mc_scripts() {
 	if ( SCRIPT_DEBUG ) {
 		$version .= rand( 10000, 100000 );
 	}
-	$id      = $current_screen->id;
-	$slug    = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
+	$id   = $current_screen->id;
+	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
 	if ( false !== strpos( $id, 'my-calendar' ) || isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'] ) {
 		// Script needs to be aware of current Pro version.
