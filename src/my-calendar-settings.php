@@ -26,7 +26,7 @@ function mc_get_option( $key ) {
 	$new_key = str_replace( 'mc_', '', $key );
 	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : false;
 
-	return $value;
+	return ( is_array( $value ) ) ? $value : (string) $value;
 }
 
 /**
@@ -1093,7 +1093,6 @@ function mc_remote_db() {
 							<?php
 							$inserted = array();
 							$class    = 'visible';
-							$count    = count( $nav_elements );
 							$i        = 1;
 							foreach ( $order as $k ) {
 								$k = trim( $k );
@@ -1116,7 +1115,6 @@ function mc_remote_db() {
 							}
 							$missed = array_diff( $nav_elements, $inserted );
 							$i      = 1;
-							$count  = count( $missed );
 							foreach ( $missed as $k => $v ) {
 								// Translators: control to move down.
 								$down_label = sprintf( __( 'Move %s Down', 'my-calendar' ), $k );
