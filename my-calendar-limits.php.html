@@ -47,7 +47,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string query params for SQL
  */
 function mc_prepare_search_query( $query ) {
-	global $wpdb;
 	$db_type = mc_get_db_type();
 	$length  = strlen( $query );
 	$search  = '';
@@ -126,7 +125,6 @@ function mc_category_select_ids( $category ) {
 		} else {
 			$categories = explode( ',', $category );
 		}
-		$numcat = count( $categories );
 		foreach ( $categories as $key ) {
 			$add = false;
 			$key = trim( $key );
