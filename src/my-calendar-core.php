@@ -564,6 +564,9 @@ function mc_footer_js() {
 function mc_admin_styles() {
 	global $current_screen;
 	$version      = mc_get_version();
+	if ( SCRIPT_DEBUG ) {
+		$version .= rand( 10000, 100000 );
+	}
 	$id           = $current_screen->id;
 	$is_mc_page   = isset( $_GET['post'] ) && (int) mc_get_option( 'uri_id' ) === (int) $_GET['post'];
 	$enqueue_mcjs = false;
@@ -1526,6 +1529,9 @@ add_action( 'admin_enqueue_scripts', 'mc_scripts' );
 function mc_scripts() {
 	global $current_screen;
 	$version = mc_get_version();
+	if ( SCRIPT_DEBUG ) {
+		$version .= rand( 10000, 100000 );
+	}
 	$id      = $current_screen->id;
 	$slug    = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
@@ -1859,7 +1865,7 @@ $plugins_string
 	";
 	$support_data = '<div class="mc-copy-help"><button class="button-primary help-to-clipboard" data-clipboard-target="#mc-clipboard">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button>
 	<span class="mc-help-copied">' . __( 'Help Info Copied', 'my-calendar' ) . '</span></div>
-	<textarea id="mc-clipboard" readonly>%s</textarea><div class="mc_support">' . $data . '</div>';
+	<textarea id="mc-clipboard" readonly>%s</textarea>';
 	if ( $checked ) {
 		$request = '';
 		if ( isset( $_POST['mc_support'] ) ) {
