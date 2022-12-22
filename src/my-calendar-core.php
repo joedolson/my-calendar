@@ -1532,7 +1532,7 @@ function mc_scripts() {
 	if ( false !== strpos( $id, 'my-calendar' ) ) {
 		// Script needs to be aware of current Pro version.
 		$mcs_version = ( get_option( 'mcs_version', '' ) ) ? get_option( 'mcs_version' ) : 1.0;
-		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
+		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y', 'clipboard' ), $version, true );
 		wp_localize_script(
 			'mc.admin',
 			'mcAdmin',
@@ -1855,6 +1855,9 @@ Version: $theme_version
 ==Active Plugins:==
 $plugins_string
 	";
+	$support_data = '<div class="mc-copy-help"><button class="button-primary help-to-clipboard" data-clipboard-target="#mc-clipboard">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button>
+	<span class="mc-help-copied">' . __( 'Help Info Copied', 'my-calendar' ) . '</span></div>
+	<textarea id="mc-clipboard" readonly>%s</textarea><div class="mc_support">' . $data . '</div>';
 	if ( $checked ) {
 		$request = '';
 		if ( isset( $_POST['mc_support'] ) ) {
@@ -1899,12 +1902,12 @@ $plugins_string
 				<input type='submit' value='<?php echo esc_attr( __( 'Send Support Request', 'my-calendar' ) ); ?>' name='mc_support' class='button-primary' />
 			</p>
 			<p><?php esc_html_e( 'The following additional information will be sent with your support request:', 'my-calendar' ); ?></p>
-			<div class="mc_support"><?php echo wp_kses_post( wpautop( $data ) ); ?></div>
+			<?php printf( wp_kses_post( wpautop( $support_data ) ), esc_textarea( $data ) ); ?>
 			</div>
 		</form>
 		<?php
 	} else {
-		echo wp_kses_post( '<p><a href="https://wordpress.org/support/plugin/my-calendar/">' . __( 'Request support at the WordPress.org Support Forums', 'my-calendar' ) . '</a> &bull; <a href="https://www.joedolson.com/my-calendar/pro/">' . __( 'Upgrade to Pro for direct plugin support!', 'my-calendar' ) . '</a></p><div class="mc_support">' . wpautop( $data ) . '</div>' );
+		echo wp_kses_post( '<p><a href="https://wordpress.org/support/plugin/my-calendar/">' . __( 'Request support at the WordPress.org Support Forums', 'my-calendar' ) . '</a> &bull; <a href="https://www.joedolson.com/my-calendar/pro/">' . __( 'Upgrade to Pro for direct plugin support!', 'my-calendar' ) . '</a></p>' . sprintf( wpautop( $support_data ), esc_textarea( $data ) ) );
 	}
 }
 

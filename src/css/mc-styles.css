@@ -379,6 +379,28 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	padding: 5px
 }
 
+.mc-copy-help {
+	display: flex;
+	align-items: center;
+	column-gap: 10px;
+}
+
+.mc-help-copied {
+	display: none;
+	background: #f5e6ab;
+	color: #000;
+	padding: 6px;
+	border-radius: 3px;
+}
+
+#mc-clipboard {
+	display: none;
+}
+
+.mc-help-copied.visible {
+	display: block;
+}
+
 .template-editor, .style-editor {
 	width: 98%
 }
