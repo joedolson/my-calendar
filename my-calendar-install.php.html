@@ -507,7 +507,7 @@ function mc_generate_calendar_page( $slug ) {
 			'post_type'    => 'page',
 			'post_author'  => $current_user->ID,
 			'ping_status'  => 'closed',
-			'post_content' => '[my_calendar id="my-calendar"]',
+			'post_content' => '&lt;!-- wp:shortcode -->[my_calendar id="my-calendar"]&lt;!-- /wp:shortcode -->',
 		);
 		$post_ID   = wp_insert_post( $page );
 		$post_slug = wp_unique_post_slug( $slug, $post_ID, 'publish', 'page', 0 );

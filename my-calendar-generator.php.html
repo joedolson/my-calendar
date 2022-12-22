@@ -112,6 +112,7 @@ function mc_generate( $format = 'shortcode' ) {
 			echo wp_kses( $return, mc_kses_elements() );
 		} else {
 			$array['shortcode'] = "[$output]";
+			$array['append']    = $append;
 
 			return $array;
 		}
@@ -154,7 +155,6 @@ function my_calendar_shortcodes() {
 
 			&lt;div class="inside mc-tabs">
 				&lt;?php
-				mc_generate();
 				$data = mc_generate( 'array' );
 				?>
 				&lt;div class='tabs' role="tablist" data-default="mc_main">
