@@ -341,6 +341,7 @@ function mc_test_contrast( $color1, $color2 ) {
  * @return string
  */
 function mc_stylesheet_selector() {
+	$deprecated       = array( 'dark.css', 'inherit.css', 'light.css', 'my-calendar.css', 'refresh.css', 'twentyfourteen.css', 'twentyfifteen.css' );
 	$dir              = plugin_dir_path( __DIR__ );
 	$options          = '';
 	$return           = '
@@ -365,12 +366,20 @@ function mc_stylesheet_selector() {
 	}
 	$files    = mc_css_list( $directory );
 	$options .= '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
+	$current  = mc_get_option( 'css_file' );
 	foreach ( $files as $value ) {
+		$append   = '';
+		if ( in_array( $value, $deprecated, true ) && $value !== $current ) {
+			continue;
+		}
+		if ( in_array( $value, $deprecated, true ) && $value === $current ) {
+			$append = ' (' . __( 'Deprecated', 'my-calendar' ) . ')';
+		}		
 		$filepath = mc_get_style_path( $value );
 		$path     = pathinfo( $filepath );
 		if ( 'css' === $path['extension'] ) {
-			$selected = ( mc_get_option( 'css_file' ) === $value ) ? ' selected="selected"' : '';
-			$options .= "<option value='$value'$selected>$value</option>\n";
+			$selected = ( $current === $value ) ? ' selected="selected"' : '';
+			$options .= "<option value='$value'$selected>$value$append</option>\n";
 		}
 	}
 	$options .= '</optgroup>';
