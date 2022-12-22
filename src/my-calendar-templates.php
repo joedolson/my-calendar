@@ -1756,7 +1756,7 @@ function mc_location_schema( $location ) {
 /**
  * Get an author or host card for display on events.
  *
- * @param int    $event Event object.
+ * @param object $event Event object.
  * @param string $type Type of card.
  *
  * @return string
