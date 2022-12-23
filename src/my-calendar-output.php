@@ -383,9 +383,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 				$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 			} else {
-				$gridtype  = mc_get_option( 'calendar_javascript' );
-				$listtype  = mc_get_option( 'list_javascript' );
-				if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) )  {
+				$gridtype = mc_get_option( 'calendar_javascript' );
+				$listtype = mc_get_option( 'list_javascript' );
+				if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
 					$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title ) . "'";
 					$classes = 'js-modal button';
 				} else {
@@ -670,9 +670,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 
 			$img_class = ( $img ) ? ' has-image' : ' no-image';
-			$gridtype  = mc_get_option( 'calendar_javascript' );
-			$listtype  = mc_get_option( 'list_javascript' );
-			if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) )  {
+			$gridtype = mc_get_option( 'calendar_javascript' );
+			$listtype = mc_get_option( 'list_javascript' );
+			if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
 				$img_class .= ' uses-modal';
 			}
 			if ( 'list' === $type || 'calendar' === $type ) {
@@ -2135,8 +2135,8 @@ function my_calendar( $args ) {
 								$event_output = ' ';
 							}
 							if ( 'mini' === $params['format'] && '' !== $event_output ) {
-								$minitype  = mc_get_option( 'mini_javascript' );
-								if ( 'modal' === $minitype )  {
+								$minitype = mc_get_option( 'mini_javascript' );
+								if ( 'modal' === $minitype ) {
 									$label   = date_i18n( mc_date_format(), $start );
 									$attrs   = "id='modal-button-$date_is' data-modal-content-id='date-$date_is' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $label ) . "'";
 									$trigger = ' js-modal button';
