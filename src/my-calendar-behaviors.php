@@ -23,7 +23,7 @@ function my_calendar_behaviors_save() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 
-		mc_update_option( 'calendar_javascript', ( empty( $_POST['calendar_js'] ) ) ? 0 : 1 );
+		mc_update_option( 'calendar_javascript', ( empty( $_POST['calendar_js'] ) ) ? 0 : sanitize_text_field( $_POST['calendar_js'] ) );
 		mc_update_option( 'list_javascript', ( empty( $_POST['list_js'] ) ) ? 0 : 1 );
 		mc_update_option( 'mini_javascript', ( empty( $_POST['mini_js'] ) ) ? 0 : 1 );
 		mc_update_option( 'ajax_javascript', ( empty( $_POST['ajax_js'] ) ) ? 0 : 1 );
@@ -59,11 +59,24 @@ function my_calendar_behaviors_edit() {
 		</p>
 
 		<div class='controls'>
-			<ul class="checkboxes">
+			<fieldset>
+				<legend>Grid JavaScript</legend>
+				<ul class="checkboxes">
 				<li>
-					<input type="checkbox" id="calendar_js" name="calendar_js" value="1" <?php checked( mc_get_option( 'calendar_javascript' ), '1' ); ?>/>
-					<label for="calendar_js"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
+					<input type="radio" id="calendar_js_disabled" name="calendar_js" value="1" <?php checked( mc_get_option( 'calendar_javascript' ), '1' ); ?>/>
+					<label for="calendar_js_disabled"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
 				</li>
+				<li>
+					<input type="radio" id="calendar_js_modal" name="calendar_js" value="modal" <?php checked( mc_get_option( 'calendar_javascript' ), 'modal' ); ?>/>
+					<label for="calendar_js_modal"><?php esc_html_e( 'Modal', 'my-calendar' ); ?></label>
+				</li>
+				<li>
+					<input type="radio" id="calendar_js_widget" name="calendar_js" value="0" <?php checked( mc_get_option( 'calendar_javascript' ), '0' ); ?>/>
+					<label for="calendar_js_widget"><?php esc_html_e( 'Disclosure Widget', 'my-calendar' ); ?></label>
+				</li>
+				</ul>
+			</fieldset>
+			<ul class="checkboxes">
 				<li>
 					<input type="checkbox" id="list_js" name="list_js" value="1" <?php checked( mc_get_option( 'list_javascript' ), '1' ); ?> />
 					<label for="list_js"><?php esc_html_e( 'Disable List JS', 'my-calendar' ); ?></label>

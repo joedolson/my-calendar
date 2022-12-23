@@ -675,7 +675,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		 *
 		 * @return {string}
 		 */
-		$format = apply_filters( 'mc_month_format', 'F, Y', $date, $format, $time, $month );
+		$format = apply_filters( 'mc_month_format', 'F', $date, $format, $time, $month );
 	}
 	$date = date_i18n( $format, mktime( 0, 0, 0, $month, 1, $yr ) );
 	$day  = '';

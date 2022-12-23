@@ -378,7 +378,15 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 				$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 			} else {
-				$wrap    = "<a href='#$uid-$type-details-$id' aria-controls='$uid-$type-details-$id' class='$type open et_smooth_scroll_disabled opl-link url summary$has_image' aria-expanded='false'><span>";
+				$uitype = mc_get_option( 'calendar_javascript' );
+				if ( 'modal' === $uitype ) {
+					$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title ) . "'";
+					$classes = 'js-modal button';
+				} else {
+					$params = " aria-expanded='false'";
+					$classes = 'open';
+				}
+				$wrap    = "<a href='#$uid-$type-details-$id' $params aria-controls='$uid-$type-details-$id' class='$type $classes et_smooth_scroll_disabled opl-link url summary$has_image'><span>";
 				$balance = '</span></a>';
 			}
 		} else {
@@ -519,8 +527,13 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 
 				if ( 'calendar' === $type ) {
 					// This is semantically a duplicate of the title, but can be beneficial for sighted users.
-					$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
-					$inner_title = '	<' . $headingtype . ' class="mc-title">' . $event_title . '</' . $headingtype . '>';
+					$uitype      = mc_get_option( 'calendar_javascript' );
+					if ( 'modal' === $uitype ) {
+						$inner_title = '';
+					} else {
+						$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
+						$inner_title = '	<' . $headingtype . ' class="mc-title">' . $event_title . '</' . $headingtype . '>';
+					}
 				}
 
 				if ( 'true' === $display_desc || mc_output_is_visible( 'description', $type, $event ) ) {
@@ -651,6 +664,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 
 			$img_class = ( $img ) ? ' has-image' : ' no-image';
+			$uitype = mc_get_option( 'calendar_javascript' );
+			if ( 'modal' === $uitype ) {
+				$img_class .= ' uses-modal';
+			}
 			$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
 			/**
 			 * Filter details before the event content..

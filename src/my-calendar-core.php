@@ -183,6 +183,9 @@ add_action( 'wp_enqueue_scripts', 'mc_register_styles', 20 );
 function mc_register_styles() {
 	global $wp_query;
 	$version   = mc_get_version();
+	if ( SCRIPT_DEBUG ) {
+		$version .= rand( 10000, 10000 );
+	}
 	$this_post = $wp_query->get_queried_object();
 	/**
 	 * Filter url to get My Calendar stylesheet.
@@ -483,7 +486,7 @@ function mc_footer_js() {
 				if ( $url ) {
 					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
 				} else {
-					$grid = 'true';
+					$grid = ( 'modal' === mc_get_option( 'calendar_javascript' ) ) ? 'modal' : 'true';
 				}
 			}
 			if ( '1' !== mc_get_option( 'list_javascript' ) ) {
@@ -553,6 +556,22 @@ function mc_footer_js() {
 					'newWindow' => __( 'New tab', 'my-calendar' ),
 				);
 				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
+			}
+			$uitype = mc_get_option( 'calendar_javascript' );
+			if ( 'modal' === $uitype ) {
+				if ( SCRIPT_DEBUG && true === SCRIPT_DEBUG ) {
+					$script  = 'van11y/van11y-accessible-modal-window-aria.js';
+				} else {
+					$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
+				}			
+				wp_enqueue_script( 'mc.modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
+				wp_localize_script(
+					'mc.modal',
+					'mcm',
+					array(
+						'context' => (string) is_user_logged_in(),
+					)
+				);
 			}
 		}
 	}

@@ -1002,7 +1002,7 @@ function mc_remote_db() {
 								<div role='tabpanel' aria-labelledby='tab_main_output' class='wptab' id='calendar-main-output'>
 									<p>
 									<?php
-									_e( 'Choose fields to show in the calendar popup and list views.', 'my-calendar' );
+									_e( 'Choose fields to show in the calendar popup and expanded list views.', 'my-calendar' );
 									echo ' ';
 									// Translators: URL to single event view template editing screen.
 									printf( __( 'The <a href="%1$s">grid view template</a> overrides these settings for the calendar popup, and the <a href="%2$s">list view template</a> overrides these settings in list view.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&mc_template=grid#my-calendar-templates' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-design&mc_template=list#my-calendar-templates' ) ) );
