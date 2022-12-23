@@ -48,7 +48,6 @@
 .mc-main .my-calendar-header input[type=submit], .mc-main .mc_bottomnav input[type=submit] {
 	padding: 4px 6px !important;
 	font-size: 16px;
-	line-height: 1.5;
 	font-weight: 400;
 	text-decoration: none;
 }
@@ -487,7 +486,6 @@
 .my-calendar-nav ul li, .mc-main .category-key ul li, .mc-main .mc-export ul li {
 	display: inline-block;
 	list-style-type: none;
-	margin: 0 0 6px;
 }
 
 .my-calendar-nav .my-calendar-prev a {
@@ -495,7 +493,7 @@
 }
 
 .my-calendar-nav .my-calendar-next a {
-	border-left: 1px solid #fff;
+	border-left: 1px solid #bbb;
 }
 
 .mc-main .mc-time .month {
@@ -621,10 +619,6 @@
 .mc-main .mc-list .mc-events.odd {
 	padding: 10px;
 	background: none;
-}
-
-.mc-main .list-event .event-title {
-	display: inline-block;
 }
 
 .mc-main .details .sharing {
