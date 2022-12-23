@@ -646,10 +646,6 @@
 	background: none;
 }
 
-.mc-main .list-event .event-title {
-	display: inline-block;
-}
-
 .mc-main .details .sharing {
 	clear: both;
 	margin: .5em 0;
@@ -733,16 +729,6 @@
 	text-align: left;
 	display: inline-block;
 	text-transform: none;
-}
-
-.my-calendar-mask.mc-mask-active {
-	position: fixed;
-	height: 100vh;
-	width: 100vw;
-	top: 0;
-	left: 0;
-	z-index: 10000;
-	background: #0006;
 }
 
 .mc-main .calendar-event .details {
