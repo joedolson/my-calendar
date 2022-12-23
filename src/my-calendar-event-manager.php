@@ -287,32 +287,21 @@ function my_calendar_manage() {
 		if ( isset( $_POST['mc_bulk_actions'] ) ) {
 			$action  = $_POST['mc_bulk_actions'];
 			$results = '';
-			if ( 'mass_delete' === $action ) {
-				$results = mc_bulk_action( 'delete' );
-			}
-
-			if ( 'mass_trash' === $action ) {
-				$results = mc_bulk_action( 'trash' );
-			}
-
-			if ( 'mass_publish' === $action ) {
-				$results = mc_bulk_action( 'approve' );
-			}
-
-			if ( 'mass_draft' === $action ) {
-				$results = mc_bulk_action( 'draft' );
-			}
-
-			if ( 'mass_archive' === $action ) {
-				$results = mc_bulk_action( 'archive' );
-			}
-
-			if ( 'mass_undo_archive' === $action ) {
-				$results = mc_bulk_action( 'unarchive' );
-			}
-
-			if ( 'mass_not_spam' === $action ) {
-				$results = mc_bulk_action( 'unspam' );
+			switch( $action ) {
+				case 'mass_delete' : mc_bulk_action( 'delete' );
+				break;
+				case 'mass_trash' : mc_bulk_action( 'trash' );
+				break;
+				case 'mass_publish' : mc_bulk_action( 'approve' );
+				break;
+				case 'mass_draft' : mc_bulk_action( 'draft' );
+				break;
+				case 'mass_archive' : mc_bulk_action( 'archive' );
+				break;
+				case 'mass_undo_archive' : mc_bulk_action( 'unarchive' );
+				break;
+				case 'mass_not_spam' : mc_bulk_action( 'unspam' );
+				break;
 			}
 
 			echo wp_kses_post( $results );
@@ -323,6 +312,7 @@ function my_calendar_manage() {
 		<h1 id="mc-manage" class="wp-heading-inline"><?php esc_html_e( 'Events', 'my-calendar' ); ?></h1>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
+		<?php mc_migrate_notice(); ?>
 		<div class="mc-tablinks">
 			<a href="#my-calendar-admin-table" aria-current="page"><?php esc_html_e( 'My Events', 'my-calendar' ); ?></strong>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true' ) ); ?>"><?php esc_html_e( 'Event Groups', 'my-calendar' ); ?></a>
@@ -460,8 +450,13 @@ function mc_handle_post() {
 	$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
 	$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
 	if ( 'delete' === $action ) {
-		$message = mc_delete_event( $event_id );
-		echo wp_kses_post( $message );
+		$verify  = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
+		if ( ! $verify ) {
+			wp_die( 'Could not verify your request.', 'my-calendar' );
+		} else {
+			$message = mc_delete_event( $event_id );
+			echo wp_kses_post( $message );
+		}
 	}
 }
 
