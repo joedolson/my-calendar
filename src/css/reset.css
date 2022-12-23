@@ -264,6 +264,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	color: inherit;
 	background-color: transparent;
 	text-decoration: none;
+	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 }
@@ -381,6 +382,10 @@ ol.mc-search-results li {
 	z-index: 100;
 }
 
+.mc-main .details.uses-modal {
+	display: none;
+}
+
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }
 .mcjs.mc-main .single-event .details, .mcjs.mc-main.list.day .details { display: block; }
 
@@ -442,4 +447,165 @@ ol.mc-search-results li {
 	max-width: 1em;
 	padding: 0;
 	display: inline-block;
+}
+
+/* Add styles for simple modal. */
+dialog.my-calendar-modal {
+	display: block;
+	border: 0;
+	border-radius: 10px;
+}
+
+dialog.my-calendar-modal #modal-title {
+	font-size: 1.25em;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-top: 0;
+	padding: 15px;
+	background: #f3f3f3;
+	width: calc( 100% - 30px );
+	z-index: 1;
+}
+
+dialog.my-calendar-modal .modal-content {
+	display: none;
+}
+
+#js-modal-content .mc-toggle {
+	display: none;
+}
+
+/* removes scroll when modal is opened */
+.no-scroll {
+	overflow: hidden;
+}
+
+/* overlay covers everything */
+.my-calendar-modal-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: #333;
+  opacity: .8;
+  z-index: 666;
+  cursor: pointer;
+}
+
+.my-calendar-modal .time-wrapper {
+	font-weight: 700;
+}
+
+.my-calendar-modal img {
+	max-width: 100%;
+}
+
+.my-calendar-modal .js-modal-content > * {
+	margin: 0 0 1.5em;
+}
+
+.my-calendar-modal__content {
+	margin-top: 4em;
+}
+
+.my-calendar-modal-overlay[data-background-click="disabled"] {
+  cursor: auto;
+}
+.my-calendar-modal-overlay  {
+  animation: fadewhite ease .5s 1 normal ;
+}
+
+@keyframes fadewhite {
+  0% {
+	opacity: 0;
+  }
+  100% {
+	opacity: .8;
+  }
+}
+/* modal */
+.my-calendar-modal {
+  position: fixed;
+	left: calc( ( 100% - 55.625em ) / 2 );
+  top: 10vh;
+  width: 100%;
+  max-width: 55.625em;
+  max-height: 80vh;
+  border: 2px solid #000;
+  background: #fefef8;
+  color: #333;
+  z-index: 667;
+  padding: 0 30px;
+  right: auto;
+  overflow: auto;
+}
+.my-calendar-modal-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #a00;
+  border-radius: 0 8px 0 4px;
+  color: #fff;
+  border: 0;
+  font: inherit;
+  padding: .75em;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+.my-calendar-modal-close:focus,
+.my-calendar-modal-close:hover,
+.my-calendar-modal-close:active {
+  color: #a00;
+  background: #fff;
+}
+
+.my-calendar-modal {
+  animation: apparition ease .5s 1 normal ;
+}
+
+@keyframes apparition {
+  0% {
+	opacity: 0;
+	max-height: 0;
+	width: 0;
+	left: 50%;
+  }
+  100% {
+	opacity: 1;
+	max-height: 100%;
+	width: 100%;
+	max-width: 55.625em;
+	left: calc( ( 100% - 55.625em ) / 2 );
+  }
+}
+
+/* it can be easily adapted in media-queries for tablets/mobile */
+
+/* for this example: tablets */
+@media (max-width: 55.625em) {
+
+  .my-calendar-modal {
+	left: 5%;
+	top: 5%;
+	height: 90%;
+	width: 90%;
+  }
+
+}
+
+/* for this example: mobile */
+@media (max-width: 44.375em) {
+
+  .my-calendar-modal {
+	left: 1%;
+	top: 1%;
+	width: 98%;
+	height: 98%;
+  }
+
 }

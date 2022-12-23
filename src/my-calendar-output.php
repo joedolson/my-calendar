@@ -383,7 +383,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 					$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title ) . "'";
 					$classes = 'js-modal button';
 				} else {
-					$params = " aria-expanded='false'";
+					$params  = " aria-expanded='false'";
 					$classes = 'open';
 				}
 				$wrap    = "<a href='#$uid-$type-details-$id' $params aria-controls='$uid-$type-details-$id' class='$type $classes et_smooth_scroll_disabled opl-link url summary$has_image'><span>";
@@ -527,7 +527,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 
 				if ( 'calendar' === $type ) {
 					// This is semantically a duplicate of the title, but can be beneficial for sighted users.
-					$uitype      = mc_get_option( 'calendar_javascript' );
+					$uitype = mc_get_option( 'calendar_javascript' );
 					if ( 'modal' === $uitype ) {
 						$inner_title = '';
 					} else {
@@ -664,7 +664,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 
 			$img_class = ( $img ) ? ' has-image' : ' no-image';
-			$uitype = mc_get_option( 'calendar_javascript' );
+			$uitype    = mc_get_option( 'calendar_javascript' );
 			if ( 'modal' === $uitype ) {
 				$img_class .= ' uses-modal';
 			}
