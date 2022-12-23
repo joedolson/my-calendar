@@ -1813,14 +1813,14 @@ function my_calendar( $args ) {
 	 */
 	$body = apply_filters( 'mc_before_calendar', '', $params );
 
-	$show_weekends = ( $params['weekends'] === 'true' ) ? true : false;
-	$id           = $params['id'];
-	$main_class   = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
-	$cid          = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
-	$lang         = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$mc_wrapper   = "
+	$show_weekends = ( 'true' === $params['weekends'] ) ? true : false;
+	$id            = $params['id'];
+	$main_class    = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
+	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
+	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
+	$mc_wrapper    = "
 &lt;div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class\" aria-live='assertive' aria-atomic='true' aria-relevant='additions'$lang>";
-	$mc_closer    = '
+	$mc_closer     = '
 &lt;/div>';
 
 	/**
