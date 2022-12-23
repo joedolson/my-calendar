@@ -99,7 +99,7 @@ function mc_url_in_loop( $url ) {
  */
 function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	$open_day_uri = mc_get_option( 'open_day_uri' );
-	$mini_uri     = ( mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : apply_filters( 'mc_modify_day_uri', mc_get_uri( reset( $events ), $args ) );
+	$mini_uri     = ( _mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : apply_filters( 'mc_modify_day_uri', mc_get_uri( reset( $events ), $args ) );
 
 	if ( 'true' === $open_day_uri || 'false' === $open_day_uri ) {
 		// Yes, this is weird. it's from some old settings...
