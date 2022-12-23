@@ -1538,6 +1538,7 @@ function mc_calendar_params( $args ) {
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
 	$site     = ( isset( $args['site'] ) && '' !== trim( $args['site'] ) ) ? $args['site'] : false;
 	$months   = isset( $args['months'] ) ? $args['months'] : false;
+	$weekends = isset( $args['weekends'] ) ? $args['weekends'] : mc_get_option( 'show_weekends' );
 
 	if ( ! in_array( $format, array( 'list', 'calendar', 'mini' ), true ) ) {
 		$format = 'calendar';
@@ -1600,6 +1601,7 @@ function mc_calendar_params( $args ) {
 		'smonth'   => $smonth,
 		'sday'     => $sday,
 		'search'   => $search,
+		'weekends' => $weekends,
 	);
 
 	// Hash cannot include 'time', 'category', 'search', or 'format', since those can be changed by navigation.
@@ -1630,7 +1632,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 	$days      = mc_get_week_days( $params, $start_of_week );
 	$name_days = $days['name_days'];
 	$abbrevs   = $days['abbrevs'];
-
+	$weekends  = ( 'true' === $params['weekends'] ) ? true : false;
 	/**
 	 * Alter the HTML date header element for the grid view. Default `th`
 	 *
@@ -1685,7 +1687,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 				$class = ( $i < 5 ) ? 'day-heading' : 'weekend-heading';
 			}
 			$dayclass = sanitize_html_class( $abbrevs[ $i ] );
-			if ( ( 'weekend-heading' === $class && ( mc_get_option( 'show_weekends' ) === 'true' ) ) || 'weekend-heading' !== $class ) {
+			if ( ( 'weekend-heading' === $class && $weekends ) || 'weekend-heading' !== $class ) {
 				$body .= "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
 			}
 		}
@@ -1745,7 +1747,6 @@ function my_calendar( $args ) {
 	$style_class   = sanitize_html_class( str_replace( '.css', '', mc_get_option( 'css_file' ) ) );
 	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
-	$show_weekends = ( mc_get_option( 'show_weekends' ) === 'true' ) ? true : false;
 	$month_format  = ( mc_get_option( 'month_format', '' ) === '' ) ? 'F Y' : mc_get_option( 'month_format' );
 	/**
 	 * Filter how many months to show in list views.
@@ -1786,13 +1787,14 @@ function my_calendar( $args ) {
 	 */
 	$body = apply_filters( 'mc_before_calendar', '', $params );
 
-	$id         = $params['id'];
-	$main_class = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
-	$cid        = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
-	$lang       = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$mc_wrapper = "
+	$show_weekends = ( $params['weekends'] === 'true' ) ? true : false;
+	$id           = $params['id'];
+	$main_class   = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
+	$cid          = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
+	$lang         = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
+	$mc_wrapper   = "
 <div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class\" aria-live='assertive' aria-atomic='true' aria-relevant='additions'$lang>";
-	$mc_closer  = '
+	$mc_closer    = '
 </div>';
 
 	/**
