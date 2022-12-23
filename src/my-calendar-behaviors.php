@@ -24,8 +24,8 @@ function my_calendar_behaviors_save() {
 		}
 
 		mc_update_option( 'calendar_javascript', ( empty( $_POST['calendar_js'] ) ) ? 0 : sanitize_text_field( $_POST['calendar_js'] ) );
-		mc_update_option( 'list_javascript', ( empty( $_POST['list_js'] ) ) ? 0 : 1 );
-		mc_update_option( 'mini_javascript', ( empty( $_POST['mini_js'] ) ) ? 0 : 1 );
+		mc_update_option( 'list_javascript', ( empty( $_POST['list_js'] ) ) ? 0 : sanitize_text_field( $_POST['list_js'] ) );
+		mc_update_option( 'mini_javascript', ( empty( $_POST['mini_js'] ) ) ? 0 : sanitize_text_field( $_POST['mini_js'] ) );
 		mc_update_option( 'ajax_javascript', ( empty( $_POST['ajax_js'] ) ) ? 0 : 1 );
 
 		$mc_show_js = ( '' === $_POST['mc_show_js'] ) ? '' : $_POST['mc_show_js'];
@@ -60,7 +60,7 @@ function my_calendar_behaviors_edit() {
 
 		<div class='controls'>
 			<fieldset>
-				<legend>Grid JavaScript</legend>
+				<legend><?php _e( 'Grid JavaScript', 'my-calendar' ); ?></legend>
 				<ul class="checkboxes">
 				<li>
 					<input type="radio" id="calendar_js_disabled" name="calendar_js" value="1" <?php checked( mc_get_option( 'calendar_javascript' ), '1' ); ?>/>
@@ -76,15 +76,41 @@ function my_calendar_behaviors_edit() {
 				</li>
 				</ul>
 			</fieldset>
+			<fieldset>
+				<legend><?php _e( 'List JavaScript', 'my-calendar' ); ?></legend>
+				<ul class="checkboxes">
+				<li>
+					<input type="radio" id="list_js_disabled" name="list_js" value="1" <?php checked( mc_get_option( 'list_javascript' ), '1' ); ?>/>
+					<label for="list_js_disabled"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
+				</li>
+				<li>
+					<input type="radio" id="list_js_modal" name="list_js" value="modal" <?php checked( mc_get_option( 'list_javascript' ), 'modal' ); ?>/>
+					<label for="list_js_modal"><?php esc_html_e( 'Modal', 'my-calendar' ); ?></label>
+				</li>
+				<li>
+					<input type="radio" id="list_js_widget" name="list_js" value="0" <?php checked( mc_get_option( 'list_javascript' ), '0' ); ?>/>
+					<label for="list_js_widget"><?php esc_html_e( 'Disclosure Widget', 'my-calendar' ); ?></label>
+				</li>
+				</ul>
+			</fieldset>
+			<fieldset>
+				<legend><?php _e( 'Mini Widget JavaScript', 'my-calendar' ); ?></legend>
+				<ul class="checkboxes">
+				<li>
+					<input type="radio" id="mini_js_disabled" name="mini_js" value="1" <?php checked( mc_get_option( 'mini_javascript' ), '1' ); ?>/>
+					<label for="mini_js_disabled"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
+				</li>
+				<li>
+					<input type="radio" id="mini_js_modal" name="mini_js" value="modal" <?php checked( mc_get_option( 'mini_javascript' ), 'modal' ); ?>/>
+					<label for="mini_js_modal"><?php esc_html_e( 'Modal', 'my-calendar' ); ?></label>
+				</li>
+				<li>
+					<input type="radio" id="mini_js_widget" name="mini_js" value="0" <?php checked( mc_get_option( 'mini_javascript' ), '0' ); ?>/>
+					<label for="mini_js_widget"><?php esc_html_e( 'Disclosure Widget', 'my-calendar' ); ?></label>
+				</li>
+				</ul>
+			</fieldset>
 			<ul class="checkboxes">
-				<li>
-					<input type="checkbox" id="list_js" name="list_js" value="1" <?php checked( mc_get_option( 'list_javascript' ), '1' ); ?> />
-					<label for="list_js"><?php esc_html_e( 'Disable List JS', 'my-calendar' ); ?></label>
-				</li>
-				<li>
-					<input type="checkbox" id="mini_js" name="mini_js" value="1" <?php checked( mc_get_option( 'mini_javascript' ), '1' ); ?> />
-					<label for="mini_js"><?php esc_html_e( 'Disable Mini JS', 'my-calendar' ); ?></label>
-				</li>
 				<li>
 					<input type="checkbox" id="ajax_js" name="ajax_js" value="1" <?php checked( mc_get_option( 'ajax_javascript' ), '1' ); ?> />
 					<label for="ajax_js"><?php esc_html_e( 'Disable AJAX', 'my-calendar' ); ?></label></li>

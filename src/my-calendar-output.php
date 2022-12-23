@@ -98,7 +98,12 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		$event_output = '';
 		$end          = '';
 		if ( 'mini' === $type && count( $events ) > 0 ) {
-			$begin .= "<div id='date-$process_date' class='calendar-events'>";
+			$minitype = mc_get_option( 'mini_javascript' );
+			if ( 'modal' === $minitype ) {
+				$begin .= "<div id='date-$process_date' class='calendar-events uses-modal'>";
+			} else {
+				$begin .= "<div id='date-$process_date' class='calendar-events'>";
+			}
 			$begin .= mc_close_button( "date-$process_date" );
 		}
 		foreach ( array_keys( $events ) as $key ) {
@@ -378,8 +383,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 				$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 			} else {
-				$uitype = mc_get_option( 'calendar_javascript' );
-				if ( 'modal' === $uitype ) {
+				$gridtype  = mc_get_option( 'calendar_javascript' );
+				$listtype  = mc_get_option( 'list_javascript' );
+				if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) )  {
 					$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title ) . "'";
 					$classes = 'js-modal button';
 				} else {
@@ -664,9 +670,13 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			}
 
 			$img_class = ( $img ) ? ' has-image' : ' no-image';
-			$uitype    = mc_get_option( 'calendar_javascript' );
-			if ( 'modal' === $uitype ) {
+			$gridtype  = mc_get_option( 'calendar_javascript' );
+			$listtype  = mc_get_option( 'list_javascript' );
+			if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) )  {
 				$img_class .= ' uses-modal';
+			}
+			if ( 'list' === $type || 'calendar' === $type ) {
+				$img_class .= ' single-details';
 			}
 			$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
 			/**
@@ -2125,10 +2135,18 @@ function my_calendar( $args ) {
 								$event_output = ' ';
 							}
 							if ( 'mini' === $params['format'] && '' !== $event_output ) {
+								$minitype  = mc_get_option( 'mini_javascript' );
+								if ( 'modal' === $minitype )  {
+									$label   = date_i18n( mc_date_format(), $start );
+									$attrs   = "id='modal-button-$date_is' data-modal-content-id='date-$date_is' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $label ) . "'";
+									$trigger = ' js-modal button';
+								} else {
+									$attrs   = " aria-expanded='false'";
+									$trigger = ' trigger';
+								}
 								$link    = mc_build_mini_url( $start, $params['category'], $events, $args, $date );
-								$element = "a href='$link'";
+								$element = "a $attrs href='$link'";
 								$close   = 'a';
-								$trigger = ' trigger';
 							} else {
 								$element = 'span';
 								$close   = 'span';

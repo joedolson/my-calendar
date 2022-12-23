@@ -51,7 +51,7 @@
 	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'true' === my_calendar.links ) ) {
 		var container = ( 'true' === my_calendar.grid ) ? '.calendar-event' : '.list-event';
 		var wrapper = ( 'true' === my_calendar.links && 'true' === my_calendar.grid ) ? '.mc-events' : container;
-		$( wrapper + ' .details' ).hide();
+		$( wrapper + ' .single-details' ).hide();
 		$(document).on('click', wrapper + ' .event-title .open',
 			function (e) {
 				var visible    = $(this).parents( '.mc-event' ).children( '.details' ).is(':visible');
@@ -72,7 +72,7 @@
 				var lastFocus  = focusable.last();
 				lastFocus.attr( 'data-action', 'shiftback' );
 
-				$( wrapper ).children( '.details' ).not( current_date ).hide();
+				$( wrapper ).children( '.single-details' ).not( current_date ).hide();
 				e.stopImmediatePropagation();
 				return false;
 			});
@@ -83,7 +83,7 @@
 				$(this).parents( '.mc-event' ).find( 'a.open' ).attr( 'aria-expanded', 'false' );
 				$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
 				$(this).closest('.mc-event').find('.event-title a').trigger( 'focus' );
-				$(this).closest('div.details').toggle();
+				$(this).closest('div.single-details').toggle();
 				e.stopImmediatePropagation();
 			});
 
@@ -91,7 +91,7 @@
 			var keycode = ( e.keyCode ? e.keyCode : e.which );
 			if ( keycode == 27 ) {
 				$( '.mc-main ').removeClass( 'grid-open' );
-				$( '.calendar-event div.details' ).hide();
+				$( '.calendar-event div.single-details' ).hide();
 			}
 		});
 
@@ -201,7 +201,7 @@
 						$('li.mc-events').children().not('.event-date').hide();
 						$('li.current-day').children().show();
 					} else {
-						$('li.mc-events .details' ).hide();
+						$('li.mc-events .single-details' ).hide();
 					}
 				}
 				// Grid view.

@@ -504,7 +504,7 @@ function mc_footer_js() {
 				if ( $url ) {
 					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
 				} else {
-					$list = 'true';
+					$list = ( 'modal' === mc_get_option( 'list_javascript' ) ) ? 'modal' : 'true';
 				}
 			}
 			if ( '1' !== mc_get_option( 'mini_javascript' ) && 'true' !== mc_get_option( 'open_day_uri' ) ) {
@@ -523,7 +523,7 @@ function mc_footer_js() {
 				if ( $url ) {
 					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
 				} else {
-					$mini = 'true';
+					$mini = ( 'modal' === mc_get_option( 'mini_javascript' ) ) ? 'modal' : 'true';
 				}
 			}
 			if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
@@ -557,8 +557,10 @@ function mc_footer_js() {
 				);
 				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
 			}
-			$uitype = mc_get_option( 'calendar_javascript' );
-			if ( 'modal' === $uitype ) {
+			$gridtype = mc_get_option( 'calendar_javascript' );
+			$listtype = mc_get_option( 'list_javascript' );
+			$minitype = mc_get_option( 'mini_javascript' );
+			if ( 'modal' === $gridtype || 'modal' === $listtype || 'modal' === $minitype ) {
 				if ( SCRIPT_DEBUG && true === SCRIPT_DEBUG ) {
 					$script = 'van11y/van11y-accessible-modal-window-aria.js';
 				} else {
