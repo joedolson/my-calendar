@@ -313,7 +313,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 		 */
 		$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . esc_html( $today_text ) . '</a></li>' );
 	} else {
-		$today_link = '<span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . esc_html( $today_text ) . '</span>';
+		$today_link = '<li class="my-calendar-today"><span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . esc_html( $today_text ) . '</span></li>';
 	}
 	/**
 	 * Filter HTML output for navigation 'prev' link.

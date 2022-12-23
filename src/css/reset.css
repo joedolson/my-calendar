@@ -37,6 +37,7 @@ main,div.entry-content,div.site-content, table {
 	padding: .25rem 0;
 }
 
+.mc-main span.mc-active,
 .mc-main .my-calendar-header a,
 .mc-main .my-calendar-footer a {
 	display: inline-block;
