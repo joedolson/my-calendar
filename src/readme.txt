@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.1
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.0
+Stable tag: 3.4.0-beta-2
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -101,12 +101,17 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix JS for list view to handle if an event has a language change.
 * Bug fix: Mini URL used incorrectly.
 * Bug fix: If primary category is already private, no need to check whether a private category is asigned.
+* Bug fix: Dynamically manage color in SVG icons.
 * Change: Manage settings in a single database option rather than individual options.
 * Change: Improved design on print view.
 * Change: Support 'current' as an argument in a comma-separated list of users.
 * Change: Updates to support future changes in My Calendar Pro.
-* Change: Use core functions to check file mime types.
+* Change: Refresh undeprecated stylesheets.
+* Change: Deprecate older stylesheets.
+* Change: show category icons in event manager.
 * Feature: Migrate CSS to custom file locations.
+* Feature: Add modal option for all popup views.
+* Feature: Copy to clipboard for help & shortcodes.
 * Performance: caching of icon list data.
 * Accessibility: Improve aria-label patterns so user settings override.
 * Accessibility: Omit aria-label if link text is already unique.
