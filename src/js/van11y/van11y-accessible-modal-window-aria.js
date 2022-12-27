@@ -249,7 +249,7 @@
 
             // insert overlay
             body.insertAdjacentHTML('beforeEnd', createOverlay({
-              text: modalCloseTitle,
+              text: modalCloseText,
               backgroundEnabled: backgroundEnabled,
               prefixClass: modalPrefixClass
             }));
@@ -261,7 +261,7 @@
               backgroundEnabled: modalContentId,
               modalTitle: modalTitle,
               modalCloseText: modalCloseText,
-              modalCloseTitle: modalCloseTitle,
+              modalCloseTitle: modalCloseText,
               modalContentId: modalContentId,
               modalDescribedById: modalDescribedById,
               modalFocusBackId: modalLauncher.getAttribute('id')
