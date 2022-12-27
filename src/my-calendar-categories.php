@@ -619,7 +619,27 @@ function mc_category_settings_update() {
  */
 function mc_category_settings() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
-		$settings = '
+		$color_settings = mc_settings_field(
+			array(
+				'name'    => 'mc_apply_color',
+				'label'   => array(
+					'default'    => __( 'Hide category colors', 'my-calendar' ),
+					'font'       => __( 'Title text color.', 'my-calendar' ),
+					'background' => __( 'Title background color.', 'my-calendar' ),
+				),
+				'default' => 'default',
+				'type'    => 'radio',
+				'echo'    => false,
+			)
+		);
+		$icons_settings = mc_settings_field(
+			array(
+				'name'  => 'mc_hide_icons',
+				'label' => __( 'Hide Category icons', 'my-calendar' ),
+				'type'  => 'checkbox-single',
+				'echo'  => false,
+			)
+		$settings       = '
 		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-categories' ) . '">
 			<div>
 				<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" />
@@ -627,24 +647,10 @@ function mc_category_settings() {
 			<div class="mc-category-settings">
 				<fieldset>
 				<legend class="screen-reader-text">' . __( 'Color Coding', 'my-calendar' ) . '</legend>
-					<ul>' .
-					mc_settings_field(
-						'mc_apply_color',
-						array(
-							'default'    => __( 'Hide category colors', 'my-calendar' ),
-							'font'       => __( 'Title text color.', 'my-calendar' ),
-							'background' => __( 'Title background color.', 'my-calendar' ),
-						),
-						'default',
-						'',
-						array(),
-						'radio',
-						false
-					) . '
-					</ul>
+					<ul>' . $color_settings . '</ul>
 				</fieldset>
 				<ul>
-					<li>' . mc_settings_field( 'mc_hide_icons', __( 'Hide Category icons', 'my-calendar' ), '', '', array(), 'checkbox-single', false ) . '</li>
+					<li>' . $icons_settings . '</li>
 				</ul>
 			</div>
 			<p>
