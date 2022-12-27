@@ -104,6 +104,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 * @param string $slug Template slug.
 		 * @param string $name Optional. Template variation name. Default null.
 		 * @param bool   $load Optional. Whether to load template. Default true.
+		 *
 		 * @return string
 		 */
 		public function get_template_part( $slug, $name = null, $load = true ) {
