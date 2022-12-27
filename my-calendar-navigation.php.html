@@ -337,9 +337,9 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 		 *
 		 * @return {string}
 		 */
-		$today_link = apply_filters( 'mc_today_link', '&lt;li class="my-calendar-today">&lt;a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . esc_html( $today_text ) . '&lt;/a>&lt;/li>' );
+		$today_link = apply_filters( 'mc_today_link', '&lt;li class="my-calendar-today">&lt;a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . wp_kses_post( $today_text ) . '&lt;/a>&lt;/li>' );
 	} else {
-		$today_link = '&lt;li class="my-calendar-today">&lt;span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . esc_html( $today_text ) . '&lt;/span>&lt;/li>';
+		$today_link = '&lt;li class="my-calendar-today">&lt;span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . wp_kses_post( $today_text ) . '&lt;/span>&lt;/li>';
 	}
 	/**
 	 * Filter HTML output for navigation 'prev' link.
@@ -351,7 +351,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$prev_link = apply_filters( 'mc_previous_link', '&lt;li class="my-calendar-prev">&lt;a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . esc_html( $prev['label'] ) . '&lt;/a>&lt;/li>', $prev );
+	$prev_link = apply_filters( 'mc_previous_link', '&lt;li class="my-calendar-prev">&lt;a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . wp_kses_post( $prev['label'] ) . '&lt;/a>&lt;/li>', $prev );
 	/**
 	 * Filter HTML output for navigation 'next' link.
 	 *
@@ -362,7 +362,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$next_link = apply_filters( 'mc_next_link', '&lt;li class="my-calendar-next">&lt;a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . esc_html( $next['label'] ) . '&lt;/a>&lt;/li>', $next );
+	$next_link = apply_filters( 'mc_next_link', '&lt;li class="my-calendar-next">&lt;a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . wp_kses_post( $next['label'] ) . '&lt;/a>&lt;/li>', $next );
 
 	$nav = '
 		&lt;div class="my-calendar-nav">
