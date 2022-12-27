@@ -1575,16 +1575,17 @@ function mc_remote_db() {
 								?>
 								<li>
 								<?php
+								$open_day_options = array(
+									'false'          => __( 'Event popup ', 'my-calendar' ),
+									'true'           => __( 'daily view page (above)', 'my-calendar' ),
+									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
+									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
+								);
 								mc_settings_field(
 									array(
 										'name'    => 'mc_open_day_uri',
 										'label'   => __( 'Link action for mini calendar', 'my-calendar' ),
-										'default' => array(
-											'false'          => __( 'Event popup ', 'my-calendar' ),
-											'true'           => __( 'daily view page (above)', 'my-calendar' ),
-											'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
-											'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
-										),
+										'default' => $open_day_options,
 										'atts'    => $disabled,
 										'type'    => 'select',
 									)
