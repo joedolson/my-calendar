@@ -457,6 +457,10 @@ dialog.my-calendar-modal {
 	border-radius: 10px;
 }
 
+dialog.my-calendar-modal .my-calendar-modal__wrapper {
+	padding: 0 30px;
+}
+
 dialog.my-calendar-modal #modal-title {
 	font-size: 1.25em;
 	position: absolute;
@@ -535,7 +539,7 @@ dialog.my-calendar-modal .modal-content {
 /* modal */
 .my-calendar-modal {
   position: fixed;
-	left: calc( ( 100% - 55.625em ) / 2 );
+  left: calc( ( 100% - 55.625em ) / 2 );
   top: 10vh;
   width: 100%;
   max-width: 55.625em;
@@ -544,7 +548,7 @@ dialog.my-calendar-modal .modal-content {
   background: #fefef8;
   color: #333;
   z-index: 667;
-  padding: 0 30px;
+  padding: 0;
   right: auto;
   overflow: auto;
 }
@@ -595,7 +599,6 @@ dialog.my-calendar-modal .modal-content {
 
 /* for this example: tablets */
 @media (max-width: 55.625em) {
-
   .my-calendar-modal {
 	left: 5%;
 	top: 5%;
@@ -607,7 +610,6 @@ dialog.my-calendar-modal .modal-content {
 
 /* for this example: mobile */
 @media (max-width: 44.375em) {
-
   .my-calendar-modal {
 	left: 1%;
 	top: 1%;
