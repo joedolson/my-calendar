@@ -237,6 +237,7 @@ function mc_kses_elements() {
 			'readonly'         => array(),
 			'autocomplete'     => array(),
 			'data-href'        => array(),
+			'placeholder'      => array(),
 		),
 		'textarea'         => array(
 			'id'               => array(),
@@ -249,6 +250,7 @@ function mc_kses_elements() {
 			'required'         => array(),
 			'readonly'         => array(),
 			'name'             => array(),
+			'placeholder'      => array(),
 		),
 		'form'             => array(
 			'id'     => array(),
