@@ -1328,24 +1328,25 @@ function mc_remote_db() {
 									&lt;/p>
 									&lt;ul class="checkboxes">
 									&lt;?php
+									$default_display_fields = array(
+										'author'      => __( 'Author', 'my-calendar' ),
+										'host'        => __( 'Host', 'my-calendar' ),
+										'ical'        => __( 'iCal Download', 'my-calendar' ),
+										'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+										'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+										'address'     => __( 'Location Address', 'my-calendar' ),
+										'excerpt'     => __( 'Excerpt', 'my-calendar' ),
+										'description' => __( 'Description', 'my-calendar' ),
+										'image'       => __( 'Featured Image', 'my-calendar' ),
+										'tickets'     => __( 'Registration Settings', 'my-calendar' ),
+										'link'        => __( 'More Information', 'my-calendar' ),
+										'more'        => __( 'Read More Link', 'my-calendar' ),
+										'access'      => __( 'Accessibility', 'my-calendar' ),
+									);
 									mc_settings_field(
 										array(
 											'name'    => 'mc_display_single',
-											'label'   => array(
-												'author'      => __( 'Author', 'my-calendar' ),
-												'host'        => __( 'Host', 'my-calendar' ),
-												'ical'        => __( 'iCal Download', 'my-calendar' ),
-												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-												'gmap'        => __( 'Google Map', 'my-calendar' ),
-												'address'     => __( 'Location Address', 'my-calendar' ),
-												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-												'description' => __( 'Description', 'my-calendar' ),
-												'image'       => __( 'Featured Image', 'my-calendar' ),
-												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-												'link'        => __( 'More Information', 'my-calendar' ),
-												'access'      => __( 'Accessibility', 'my-calendar' ),
-											),
+											'label'   => $default_display_fields,
 											'default' => array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
 											'type'    => 'checkbox',
 										)
@@ -1381,21 +1382,7 @@ function mc_remote_db() {
 									mc_settings_field(
 										array(
 											'name'    => 'mc_display_main',
-											'label'   => array(
-												'author'      => __( 'Author', 'my-calendar' ),
-												'host'        => __( 'Host', 'my-calendar' ),
-												'ical'        => __( 'iCal Download', 'my-calendar' ),
-												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-												'address'     => __( 'Location Address', 'my-calendar' ),
-												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-												'description' => __( 'Description', 'my-calendar' ),
-												'image'       => __( 'Featured Image', 'my-calendar' ),
-												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-												'link'        => __( 'More Information', 'my-calendar' ),
-												'more'        => __( 'Read More Link', 'my-calendar' ),
-												'access'      => __( 'Accessibility', 'my-calendar' ),
-											),
+											'label'   => $default_display_fields,
 											'default' => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
 											'type'    => 'checkbox',
 										)
@@ -1417,21 +1404,7 @@ function mc_remote_db() {
 									mc_settings_field(
 										array(
 											'name'    => 'mc_display_mini',
-											'label'   => array(
-												'author'      => __( 'Author', 'my-calendar' ),
-												'host'        => __( 'Host', 'my-calendar' ),
-												'ical'        => __( 'iCal Download', 'my-calendar' ),
-												'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-												'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
-												'address'     => __( 'Location Address', 'my-calendar' ),
-												'excerpt'     => __( 'Excerpt', 'my-calendar' ),
-												'description' => __( 'Description', 'my-calendar' ),
-												'image'       => __( 'Featured Image', 'my-calendar' ),
-												'tickets'     => __( 'Registration Settings', 'my-calendar' ),
-												'link'        => __( 'More Information', 'my-calendar' ),
-												'more'        => __( 'Read More Link', 'my-calendar' ),
-												'access'      => __( 'Accessibility', 'my-calendar' ),
-											),
+											'label'   => $default_display_fields,
 											'default' => array( 'excerpt', 'image', 'more' ),
 											'type'    => 'checkbox',
 										)
