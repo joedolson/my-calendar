@@ -1806,7 +1806,11 @@ function mc_template_user_card( $event, $type ) {
 		$avatar = ( $avatars ) ? get_avatar( $user ) : '';
 		$a      = get_userdata( $user );
 		if ( $a ) {
-			$text = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
+			if ( 'author' === $type ) {
+				$text = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
+			} else {
+				$text = ( '' !== mc_get_option( 'hosted_by' ) ) ? mc_get_option( 'hosted_by' ) : __( 'Hosted by', 'my-calendar' );
+			}
 			$card = $avatar . '&lt;p class="event-' . $type . '">&lt;span class="posted">' . $text . '&lt;/span> &lt;span class="' . $type . '-name">' . $a->display_name . "&lt;/span>&lt;/p>\n";
 			if ( $avatars ) {
 				$card = '	&lt;div class="mc-' . $type . '-card">' . $card . '&lt;/div>';

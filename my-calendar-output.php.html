@@ -900,9 +900,8 @@ function mc_get_event_image( $event, $data ) {
 		 *
 		 * @return {array}
 		 */
-		$atts      = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
-		$image_url = get_the_post_thumbnail_url( $event->event_post, $default_size );
-		$image     = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
+		$atts  = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
+		$image = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
 	} else {
 		/**
 		 * Customize alt attribute for an event featured image that is not attached to a post.
@@ -914,9 +913,8 @@ function mc_get_event_image( $event, $data ) {
 		 *
 		 * @return {string}
 		 */
-		$alt       = esc_attr( apply_filters( 'mc_event_image_alt', '', $event ) );
-		$image_url = $event->event_image;
-		$image     = ( '' !== $event->event_image ) ? "&lt;img src='$event->event_image' alt='$alt' class='mc-image photo' />" : '';
+		$alt   = esc_attr( apply_filters( 'mc_event_image_alt', '', $event ) );
+		$image = ( '' !== $event->event_image ) ? "&lt;img src='" . esc_url( $event->event_image ) . "' alt='" . esc_attr( $alt ) . "' class='mc-image photo' />" : '';
 	}
 	$return = true;
 
