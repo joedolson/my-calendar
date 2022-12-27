@@ -102,7 +102,7 @@ function my_calendar_style_edit() {
 			}
 		} else {
 			$my_calendar_style = ( isset( $_POST['style'] ) ) ? stripcslashes( $_POST['style'] ) : false;
-			$mc_css_file       = stripcslashes( $_POST['mc_css_file'] );
+			$mc_css_file       = stripcslashes( sanitize_file_name( $_POST['mc_css_file'] ) );
 
 			if ( $edit_files ) {
 				$stylefile    = mc_get_style_path( $mc_css_file );
@@ -117,7 +117,7 @@ function my_calendar_style_edit() {
 				$message = ( true === $wrote_styles ) ? '<p>' . __( 'The stylesheet has been updated.', 'my-calendar' ) . '</p>' : '<p><strong>' . __( 'Write Error! Please verify write permissions on the style file.', 'my-calendar' ) . '</strong></p>';
 			}
 
-			$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : stripcslashes( $_POST['mc_show_css'] );
+			$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : stripcslashes( sanitize_text_field( $_POST['mc_show_css'] ) );
 			mc_update_option( 'show_css', $mc_show_css );
 			$use_styles = ( empty( $_POST['use_styles'] ) ) ? '' : 'true';
 			mc_update_option( 'use_styles', $use_styles );
@@ -125,8 +125,8 @@ function my_calendar_style_edit() {
 			if ( ! empty( $_POST['style_vars'] ) ) {
 				$styles = mc_get_option( 'style_vars' );
 				if ( isset( $_POST['new_style_var'] ) ) {
-					$key = $_POST['new_style_var']['key'];
-					$val = $_POST['new_style_var']['val'];
+					$key = sanitize_text_field( $_POST['new_style_var']['key'] );
+					$val = sanitize_text_field( $_POST['new_style_var']['val'] );
 					if ( $key && $val ) {
 						if ( 0 !== strpos( $key, '--' ) ) {
 							$key = '--' . $key;
@@ -136,7 +136,7 @@ function my_calendar_style_edit() {
 				}
 				foreach ( $_POST['style_vars'] as $key => $value ) {
 					if ( '' !== trim( $value ) ) {
-						$styles[ $key ] = $value;
+						$styles[ $key ] = sanitize_text_field( $value );
 					}
 				}
 				if ( isset( $_POST['delete_var'] ) ) {
