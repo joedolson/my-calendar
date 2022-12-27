@@ -23,8 +23,6 @@
   var MODAL_TITLE_ATTR = 'data-modal-title';
   var MODAL_FOCUS_TO_ATTR = 'data-modal-focus-toid';
   var MODAL_CLOSE_TEXT_ATTR = 'data-modal-close-text';
-  var MODAL_CLOSE_TITLE_ATTR = 'data-modal-close-title';
-  var MODAL_CLOSE_IMG_ATTR = 'data-modal-close-img';
   var MODAL_ROLE = 'dialog';
 
   var MODAL_BUTTON_CLASS_SUFFIX = 'modal-close';
@@ -37,7 +35,6 @@
   var MODAL_CONTENT_CLASS_SUFFIX = 'modal__content';
   var MODAL_CONTENT_JS_ID = 'js-modal-content';
 
-  var MODAL_CLOSE_IMG_CLASS_SUFFIX = 'modal__closeimg';
   var MODAL_CLOSE_TEXT_CLASS_SUFFIX = 'modal-close__text';
 
   var MODAL_TITLE_ID = 'modal-title';
@@ -154,7 +151,7 @@
     var modalClassName = config.modalPrefixClass + MODAL_CLASS_SUFFIX;
     var modalClassWrapper = config.modalPrefixClass + MODAL_WRAPPER_CLASS_SUFFIX;
     var buttonCloseClassName = config.modalPrefixClass + MODAL_BUTTON_CLASS_SUFFIX;
-    var buttonCloseInner = config.modalCloseImgPath ? '<img src="' + config.modalCloseImgPath + '" alt="' + config.modalCloseText + '" class="' + config.modalPrefixClass + MODAL_CLOSE_IMG_CLASS_SUFFIX + '" />' : '<span class="' + config.modalPrefixClass + MODAL_CLOSE_TEXT_CLASS_SUFFIX + '">\n                                          ' + config.modalCloseText + '\n                                         </span>';
+    var buttonCloseInner = '<span class="' + config.modalPrefixClass + MODAL_CLOSE_TEXT_CLASS_SUFFIX + '">\n                                          ' + config.modalCloseText + '\n                                         </span>';
     var contentClassName = config.modalPrefixClass + MODAL_CONTENT_CLASS_SUFFIX;
     var titleClassName = config.modalPrefixClass + MODAL_TITLE_CLASS_SUFFIX;
     var title = config.modalTitle !== '' ? '<h1 id="' + MODAL_TITLE_ID + '" class="' + titleClassName + '">\n                                          ' + config.modalTitle + '\n                                         </h1>' : '';
@@ -245,8 +242,6 @@
             var modalDescribedById = modalLauncher.hasAttribute(MODAL_DESCRIBEDBY_ID_ATTR) === true ? modalLauncher.getAttribute(MODAL_DESCRIBEDBY_ID_ATTR) : '';
             var modalTitle = modalLauncher.hasAttribute(MODAL_TITLE_ATTR) === true ? modalLauncher.getAttribute(MODAL_TITLE_ATTR) : '';
             var modalCloseText = modalLauncher.hasAttribute(MODAL_CLOSE_TEXT_ATTR) === true ? modalLauncher.getAttribute(MODAL_CLOSE_TEXT_ATTR) : MODAL_OVERLAY_TXT;
-            var modalCloseTitle = modalLauncher.hasAttribute(MODAL_CLOSE_TITLE_ATTR) === true ? modalLauncher.getAttribute(MODAL_CLOSE_TITLE_ATTR) : modalCloseText;
-            var modalCloseImgPath = modalLauncher.hasAttribute(MODAL_CLOSE_IMG_ATTR) === true ? modalLauncher.getAttribute(MODAL_CLOSE_IMG_ATTR) : '';
             var backgroundEnabled = modalLauncher.hasAttribute(MODAL_DATA_BACKGROUND_ATTR) === true ? modalLauncher.getAttribute(MODAL_DATA_BACKGROUND_ATTR) : '';
             var modalGiveFocusToId = modalLauncher.hasAttribute(MODAL_FOCUS_TO_ATTR) === true ? modalLauncher.getAttribute(MODAL_FOCUS_TO_ATTR) : '';
 
@@ -267,7 +262,6 @@
               modalTitle: modalTitle,
               modalCloseText: modalCloseText,
               modalCloseTitle: modalCloseTitle,
-              modalCloseImgPath: modalCloseImgPath,
               modalContentId: modalContentId,
               modalDescribedById: modalDescribedById,
               modalFocusBackId: modalLauncher.getAttribute('id')
