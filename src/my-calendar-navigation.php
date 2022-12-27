@@ -311,9 +311,9 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 		 *
 		 * @return {string}
 		 */
-		$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . esc_html( $today_text ) . '</a></li>' );
+		$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . wp_kses_post( $today_text ) . '</a></li>' );
 	} else {
-		$today_link = '<li class="my-calendar-today"><span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . esc_html( $today_text ) . '</span></li>';
+		$today_link = '<li class="my-calendar-today"><span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . wp_kses_post( $today_text ) . '</span></li>';
 	}
 	/**
 	 * Filter HTML output for navigation 'prev' link.
@@ -325,7 +325,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . esc_html( $prev['label'] ) . '</a></li>', $prev );
+	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . wp_kses_post( $prev['label'] ) . '</a></li>', $prev );
 	/**
 	 * Filter HTML output for navigation 'next' link.
 	 *
@@ -336,7 +336,7 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 *
 	 * @return {string}
 	 */
-	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . esc_html( $next['label'] ) . '</a></li>', $next );
+	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . wp_kses_post( $next['label'] ) . '</a></li>', $next );
 
 	$nav = '
 		<div class="my-calendar-nav">
