@@ -22,6 +22,11 @@
  * @return string selected=selected
  */
 function mc_is_selected( $field, $value, $array = '' ) {
+	__doing_it_wrong(
+		__FUNCTION__,
+		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
+		'3.4.0',
+	);
 	if ( ! is_array( get_option( $field ) ) ) {
 		if ( get_option( $field ) === (string) $value ) {
 			return 'selected="selected"';
@@ -48,6 +53,11 @@ function mc_is_selected( $field, $value, $array = '' ) {
  * @return string
  */
 function mc_option_selected( $field, $value, $type = 'checkbox' ) {
+	__doing_it_wrong(
+		__FUNCTION__,
+		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
+		'3.4.0',
+	);
 	switch ( $type ) {
 		case 'radio':
 		case 'checkbox':
@@ -82,6 +92,11 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
  * @return string checked=checked
  */
 function mc_is_checked( $field, $value, $array = '', $return = false ) {
+	__doing_it_wrong(
+		__FUNCTION__,
+		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
+		'3.4.0',
+	);
 	if ( ! is_array( get_option( $field ) ) ) {
 		if ( get_option( $field ) === (string) $value ) {
 			if ( $return ) {
