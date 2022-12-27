@@ -944,8 +944,8 @@ function mc_remote_db() {
 									'name'    => 'mc_title_template',
 									'label'   => __( 'Event title (Grid)', 'my-calendar' ),
 									'default' => $mc_title_template,
-									'atts'  => array(
-										'placeholder' => '{title}',	
+									'atts'    => array(
+										'placeholder' => '{title}',
 									),
 									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
 								)
@@ -959,8 +959,8 @@ function mc_remote_db() {
 									'name'    => 'mc_title_template_solo',
 									'label'   => __( 'Event title (Single)', 'my-calendar' ),
 									'default' => $mc_title_template_solo,
-									'atts'  => array(
-										'placeholder' => '{title}',	
+									'atts'    => array(
+										'placeholder' => '{title}',
 									),
 									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
 								)
@@ -974,8 +974,8 @@ function mc_remote_db() {
 									'name'    => 'mc_title_template_list',
 									'label'   => __( 'Event title (List)', 'my-calendar' ),
 									'default' => $mc_title_template_list,
-									'atts'  => array(
-										'placeholder' => '{title}',	
+									'atts'    => array(
+										'placeholder' => '{title}',
 									),
 									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
 								)
@@ -995,7 +995,7 @@ function mc_remote_db() {
 									'label' => __( 'Previous events link', 'my-calendar' ),
 									'note'  => __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ),
 									'atts'  => array(
-										'placeholder' => __( 'Previous', 'my-calendar' ),	
+										'placeholder' => __( 'Previous', 'my-calendar' ),
 									),
 								)
 							);
@@ -1009,7 +1009,7 @@ function mc_remote_db() {
 									'label' => __( 'Next events link', 'my-calendar' ),
 									'note'  => __( 'Use <code>{date}</code> to display date in navigation.', 'my-calendar' ),
 									'atts'  => array(
-										'placeholder' => __( 'Next', 'my-calendar' ),	
+										'placeholder' => __( 'Next', 'my-calendar' ),
 									),
 								)
 							);
@@ -1022,7 +1022,7 @@ function mc_remote_db() {
 									'name'  => 'mc_today_events',
 									'label' => __( 'Today\'s events link', 'my-calendar' ),
 									'atts'  => array(
-										'placeholder' => __( 'Today', 'my-calendar' ),	
+										'placeholder' => __( 'Today', 'my-calendar' ),
 									),
 								)
 							);
@@ -1061,9 +1061,9 @@ function mc_remote_db() {
 							<?php
 							mc_settings_field(
 								array(
-									'name' => 'mc_caption',
+									'name'  => 'mc_caption',
 									'label' => __( 'Extended caption:', 'my-calendar' ),
-									'note' => __( 'Follows month/year in calendar heading.', 'my-calendar' ),
+									'note'  => __( 'Follows month/year in calendar heading.', 'my-calendar' ),
 								)
 							);
 							?>
@@ -1103,11 +1103,12 @@ function mc_remote_db() {
 							<?php
 							mc_settings_field(
 								array(
-									'name'    => 'mc_posted_by',
-									'label'   => __( 'Posted by', 'my-calendar' ),
+									'name'  => 'mc_posted_by',
+									'label' => __( 'Posted by', 'my-calendar' ),
 									'atts'  => array(
 										'placeholder' => __( 'Posted by', 'my-calendar' ),
-									),								)
+									),
+								)
 							);
 							?>
 							</li>
@@ -1115,8 +1116,8 @@ function mc_remote_db() {
 							<?php
 							mc_settings_field(
 								array(
-									'name'    => 'mc_buy_tickets',
-									'label'   => __( 'Buy tickets', 'my-calendar' ),
+									'name'  => 'mc_buy_tickets',
+									'label' => __( 'Buy tickets', 'my-calendar' ),
 									'atts'  => array(
 										'placeholder' => __( 'Buy Tickets', 'my-calendar' ),
 									),
@@ -1128,8 +1129,8 @@ function mc_remote_db() {
 							<?php
 							mc_settings_field(
 								array(
-									'name'    => 'mc_event_accessibility',
-									'label'   => __( 'Event Accessibility Heading', 'my-calendar' ),
+									'name'  => 'mc_event_accessibility',
+									'label' => __( 'Event Accessibility Heading', 'my-calendar' ),
 									'atts'  => array(
 										'placeholder' => __( 'Event Accessibility', 'my-calendar' ),
 									),
@@ -1141,8 +1142,8 @@ function mc_remote_db() {
 							<?php
 							mc_settings_field(
 								array(
-									'name'    => 'mc_view_full',
-									'label'   => __( 'View full calendar', 'my-calendar' ),
+									'name'  => 'mc_view_full',
+									'label' => __( 'View full calendar', 'my-calendar' ),
 									'atts'  => array(
 										'placeholder' => __( 'View full calendar', 'my-calendar' ),
 									),
@@ -1157,7 +1158,7 @@ function mc_remote_db() {
 									'name'    => 'mc_details_label',
 									'label'   => __( 'Read more text', 'my-calendar' ),
 									'default' => $mc_details_label,
-									'atts'  => array(
+									'atts'    => array(
 										'placeholder' => __( 'Read more', 'my-calendar' ),
 									),
 									'note'    => __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ),
@@ -1172,7 +1173,7 @@ function mc_remote_db() {
 									'name'    => 'mc_link_label',
 									'label'   => __( 'More information text', 'my-calendar' ),
 									'default' => $mc_link_label,
-									'atts'  => array(
+									'atts'    => array(
 										'placeholder' => __( 'More information', 'my-calendar' ),
 									),
 									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
@@ -1206,7 +1207,6 @@ function mc_remote_db() {
 							$time_format  = date_i18n( mc_time_format() );
 							$week_format  = ( '' === mc_get_option( 'week_format' ) ) ? date_i18n( 'M j, \'y' ) : date_i18n( mc_get_option( 'week_format' ) );
 							$date_format  = ( '' === mc_get_option( 'date_format' ) ) ? date_i18n( get_option( 'date_format' ) ) : date_i18n( mc_get_option( 'date_format' ) );
-							$tomorrow     = date( 'j' ) + 1; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 							?>
 							<li>
 							<?php
@@ -1216,7 +1216,7 @@ function mc_remote_db() {
 									'label' => __( 'Primary Date Format', 'my-calendar' ),
 									'note'  => $date_format,
 									'atts'  => array(
-										'placeholder' => get_option( 'date_format' ),	
+										'placeholder' => get_option( 'date_format' ),
 									),
 								)
 							);
@@ -1230,7 +1230,7 @@ function mc_remote_db() {
 									'label' => __( 'Time Format', 'my-calendar' ),
 									'note'  => $time_format,
 									'atts'  => array(
-										'placeholder' => get_option( 'time_format' ),	
+										'placeholder' => get_option( 'time_format' ),
 									),
 								)
 							);
@@ -1244,7 +1244,7 @@ function mc_remote_db() {
 									'label' => __( 'Month Format (calendar headings)', 'my-calendar' ),
 									'note'  => $month_format,
 									'atts'  => array(
-										'placeholder' => 'F Y',	
+										'placeholder' => 'F Y',
 									),
 								)
 							);
@@ -1258,7 +1258,7 @@ function mc_remote_db() {
 									'label' => __( 'Date in grid mode, week view', 'my-calendar' ),
 									'note'  => $week_format,
 									'atts'  => array(
-										'placeholder' => "M j, 'y",	
+										'placeholder' => "M j, 'y",
 									),
 								)
 							);
