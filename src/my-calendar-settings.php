@@ -92,7 +92,7 @@ function mc_settings_field( $args = array() ) {
 		__doing_it_wrong(
 			__FUNCTION__,
 			__( 'Since My Calendar 3.4.0, this functions arguments must be in an array.', 'my-calendar' ),
-			'3.4.0',
+			'3.4.0'
 		);
 	}
 	$options    = '';
@@ -715,7 +715,7 @@ function my_calendar_settings() {
 								?>
 								<li id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
 								<?php
-								mc_settings_field( 
+								mc_settings_field(
 									array(
 										'name'    => 'mc_uri_query',
 										'label'   => __( 'Calendar Page Location', 'my-calendar' ),
@@ -887,7 +887,7 @@ function mc_remote_db() {
 								mc_settings_field(
 									array(
 										'name'    => 'mc_drop_settings',
-										'label'   =>  __( 'Delete plugin settings on uninstall', 'my-calendar' ),
+										'label'   => __( 'Delete plugin settings on uninstall', 'my-calendar' ),
 										'default' => 'true',
 										'type'    => 'checkbox-single',
 									)
@@ -1288,7 +1288,7 @@ function mc_remote_db() {
 											'label' => __( 'Google Maps API Key', 'my-calendar' ),
 											'note'  => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '</a>',
 											'atts'  => array(
-												'id' => 'mc_gmap_id'
+												'id' => 'mc_gmap_id',
 											),
 										)
 									);
@@ -1501,7 +1501,7 @@ function mc_remote_db() {
 										'atts'  => array(
 											'size' => '3',
 										),
-										'type'  => 'text'
+										'type'  => 'text',
 									)
 								);
 								?>
@@ -1530,7 +1530,6 @@ function mc_remote_db() {
 								</li>
 							</ul>
 						</fieldset>
-
 						<fieldset>
 							<legend><?php esc_html_e( 'Mini Calendar Options', 'my-calendar' ); ?></legend>
 							<ul>
@@ -1538,12 +1537,12 @@ function mc_remote_db() {
 								<?php
 								mc_settings_field(
 									array(
-										'name' => 'mc_mini_uri',
-										'label' => __( 'Target link for mini calendar dates', 'my-calendar' ), 
+										'name'  => 'mc_mini_uri',
+										'label' => __( 'Target link for mini calendar dates', 'my-calendar' ),
 										'atts'  => array(
 											'size' => '60',
 										),
-										'type' => 'url',
+										'type'  => 'url',
 									)
 								);
 								?>
@@ -1810,19 +1809,19 @@ function mc_remote_db() {
 							?>
 							</li>
 							<li>
-	<?php
-	mc_settings_field(
-		array(
-			'name'  => 'mc_event_mail_bcc',
-			'label' => __( 'BCC on notifications (one per line):', 'my-calendar' ),
-			'atts'  => array(
-				'cols' => 60,
-				'rows' => 6,
-			),
-			'type' => 'textarea',
-		)
-	);
-	?>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_event_mail_bcc',
+									'label' => __( 'BCC on notifications (one per line):', 'my-calendar' ),
+									'atts'  => array(
+										'cols' => 60,
+										'rows' => 6,
+									),
+									'type'  => 'textarea',
+								)
+							);
+							?>
 							</li>
 							<li>
 							<?php
@@ -1833,7 +1832,7 @@ function mc_remote_db() {
 									'default' => get_bloginfo( 'name' ) . ': ' . __( 'New event added', 'my-calendar' ),
 									'atts'    => array(
 										'size' => 60,
-									)
+									),
 								)
 							);
 							?>
@@ -1842,15 +1841,15 @@ function mc_remote_db() {
 	<?php
 	mc_settings_field(
 		array(
-			'name' => 'mc_event_mail_message',
-			'label' => __( 'Message Body', 'my-calendar' ),
+			'name'    => 'mc_event_mail_message',
+			'label'   => __( 'Message Body', 'my-calendar' ),
 			'default' => __( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}",
 			'note'    => "<br /><a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
 			'atts'    => array(
 				'cols' => 60,
 				'rows' => 6,
 			),
-			'type' => 'textarea',
+			'type'    => 'textarea',
 		)
 	);
 	?>

@@ -639,6 +639,7 @@ function mc_category_settings() {
 				'type'  => 'checkbox-single',
 				'echo'  => false,
 			)
+		);
 		$settings       = '
 		<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-categories' ) . '">
 			<div>
