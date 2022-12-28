@@ -2035,6 +2035,7 @@ function mc_next_post_link( $output, $format ) {
  * @return string new title string
  */
 function mc_the_title( $title, $post_id = null ) {
+	// in_the_loop() is not true in Full Site Editing, but is_main_query() is.
 	if ( is_singular( 'mc-events' ) && ( in_the_loop() || is_main_query() ) ) {
 		if ( $post_id ) {
 			$event    = false;
