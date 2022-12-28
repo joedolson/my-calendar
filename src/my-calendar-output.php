@@ -402,6 +402,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 
 		$group_class = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
+		$hlevel      = ( mc_get_option( 'show_months' ) > 1 ) ? 'h4' : 'h3';
 		/**
 		 * Filter default event heading when in a table.
 		 *
@@ -414,7 +415,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 *
 		 * @return {string}
 		 */
-		$hlevel = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
+		$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
 		// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 		if ( 'single' === $type ) {
 			$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image$event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
