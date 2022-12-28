@@ -2035,7 +2035,7 @@ function mc_next_post_link( $output, $format ) {
  * @return string new title string
  */
 function mc_the_title( $title, $post_id = null ) {
-	if ( is_singular( 'mc-events' ) && in_the_loop() ) {
+	if ( is_singular( 'mc-events' ) && ( in_the_loop() || is_main_query() ) ) {
 		if ( $post_id ) {
 			$event    = false;
 			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
