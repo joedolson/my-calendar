@@ -112,6 +112,7 @@ function mc_plugin_activated() {
 	mc_upgrade_db();
 	my_calendar_check();
 	mc_create_demo_content();
+	mc_schedule_promotions();
 }
 
 register_uninstall_hook( __FILE__, 'mc_uninstall' );
