@@ -2176,3 +2176,58 @@ add_action( 'init', 'mc_register_meta' );
 function mc_can_update_meta() {
 	return current_user_can( 'edit_posts' );
 }
+
+
+/**
+ * Set an option indicating that a job has been scheduled for promoting My Calendar Pro.
+ */
+function mc_schedule_promotion() {
+	if ( ! function_exists( 'mcs_submissions' ) && '1' === get_option( 'mc_promotion_scheduled' ) ) {
+		update_option( 'mc_promotion_scheduled', '2' );
+	}
+}
+add_action( 'mc_schedule_promotion_action', 'mc_schedule_promotion' );
+
+/**
+ * Dismiss promotion notice.
+ */
+function mc_dismiss_promotion() {
+	if ( isset( $_GET['dismiss'] ) && 'promotion' === $_GET['dismiss'] ) {
+		update_option( 'mc_promotion_scheduled', '3' );
+	}
+}
+add_action( 'admin_notices', 'mc_dismiss_promotion', 5 );
+
+/**
+ * Display promotion notice to admin users who have not donated or purchased My Calendar Pro.
+ */
+function mc_promotion_notice() {
+	if ( function_exists( 'mcs_submissions' ) ) {
+		return;
+	}
+	if ( current_user_can( 'activate_plugins' ) && '2' === get_option( 'mc_promotion_scheduled' ) ) {
+		$upgrade = 'https://www.joedolson.com/awesome/my-calendar-pro/';
+		$dismiss = admin_url( 'admin.php?page=my-calendar-config&dismiss=promotion' );
+		// Translators: URL to upgrade.
+		echo "<div class='notice'><p>" . sprintf( __( 'I hope you\'ve enjoyed <strong>My Calendar</strong>! Take a look at <a href=\'%1$s\'>upgrading to My Calendar Pro</a> for advanced event management with WordPress! <a href=\'%2$s\'>Dismiss</a>', 'my-calendar' ), $upgrade, $dismiss ) . '</p></div>';
+	}
+}
+add_action( 'admin_notices', 'mc_promotion_notice', 10 );
+
+/**
+ * Schedule a promotional banner for My Calendar Pro if not present.
+ */
+function mc_schedule_promotions() {
+	if ( ! function_exists( 'mcs_submissions' ) ) {
+		if ( false === get_option( 'mc_promotion_scheduled', false ) ) {
+			// Promote Pro eight weeks after first event.
+			wp_schedule_single_event( time() + ( 60 * 60 * 24 * 7 * 8 ), 'mc_schedule_promotion_action' );
+			update_option( 'mc_promotion_scheduled', '1' );
+		}
+		if ( '3' === get_option( 'wpt_promotion_scheduled' ) ) {
+			// Schedule an additional promotion for 1 year after event created following previous promotion.
+			wp_schedule_single_event( YEAR_IN_SECONDS, 'mc_schedule_promotion_action' );
+			update_option( 'mc_promotion_scheduled', '1' );
+		}
+	}
+}
