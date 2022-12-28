@@ -643,7 +643,7 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	// The first day of the current month.
 	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
 	// Grid calendar can't show multiple months.
-	if ( 'list' === $format && 'week' !== $time ) {
+	if ( 'week' !== $time ) {
 		if ( $num > 0 && 'day' !== $time && 'week' !== $time ) {
 			if ( 'month+1' === $time ) {
 				$from = mc_date( 'Y-m-d', strtotime( '+1 month', $month_first ), false );
