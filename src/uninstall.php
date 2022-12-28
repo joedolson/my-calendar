@@ -49,5 +49,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar_location_relationships' );
 	}
 
+	delete_option( 'mc_promotion_scheduled' );
 	add_option( 'mc_uninstalled', 'true' );
 }
