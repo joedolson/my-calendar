@@ -1288,9 +1288,9 @@ function mc_remote_db() {
 								&lt;?php
 								mc_settings_field(
 									array(
-										'name'    => 'mc_title_template_solo',
-										'label'   => __( 'Event title (Single)', 'my-calendar' ),
-										'default' => $mc_title_template_solo,
+										'name'    => 'mc_title_template_list',
+										'label'   => __( 'Event title (List)', 'my-calendar' ),
+										'default' => $mc_title_template_list,
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
@@ -1303,9 +1303,9 @@ function mc_remote_db() {
 								&lt;?php
 								mc_settings_field(
 									array(
-										'name'    => 'mc_title_template_list',
-										'label'   => __( 'Event title (List)', 'my-calendar' ),
-										'default' => $mc_title_template_list,
+										'name'    => 'mc_title_template_solo',
+										'label'   => __( 'Event title (Single)', 'my-calendar' ),
+										'default' => $mc_title_template_solo,
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
@@ -1315,9 +1315,9 @@ function mc_remote_db() {
 								?>
 								&lt;/li>
 							&lt;/ul>
-						&lt;/fieldset>					
+						&lt;/fieldset>
 						&lt;fieldset id='calendar-output' class='mc-output-tabs'>
-							&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?>&lt;/legend>
+							&lt;legend>&lt;?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?>&lt;/legend>
 							&lt;div class="mc-tabs">
 								&lt;div class="tabs" role="tablist" data-default="single-event-output">
 									&lt;button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output">&lt;?php esc_html_e( 'Single Event', 'my-calendar' ); ?>&lt;/button>
@@ -1424,7 +1424,7 @@ function mc_remote_db() {
 					&lt;/div>
 				&lt;/div>
 				&lt;div class="postbox">
-					&lt;h2>&lt;?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?>&lt;/h2>
+					&lt;h2>&lt;?php esc_html_e( 'Calendar Navigation', 'my-calendar' ); ?>&lt;/h2>
 
 					&lt;div class="inside">
 						&lt;fieldset>

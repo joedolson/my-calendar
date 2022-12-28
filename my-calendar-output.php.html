@@ -2108,10 +2108,19 @@ function my_calendar( $args ) {
 						 * @return {string}
 						 */
 						$thisday_heading = ( 'week' === $params['time'] ) ? "&lt;small>$week_header&lt;/small>" : mc_date( apply_filters( 'mc_grid_date', 'j', $params ), $start, false );
-
+						$month_heading   = '';
+						$has_month       = '';
 						// Generate event classes &amp; attributes.
 						$events_class = mc_events_class( $events, $date_is );
-						$monthclass   = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
+						if ( $months > 1 ) {
+							$monthclass = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'month-' .$date['month'];
+							if ( mc_date( 'j', $start, false ) === '1' ) {
+								$month_heading = '&lt;h3 class="mc-change-months">' . mc_date( 'F', $start, false ) . '&lt;/h3>';
+								$has_month     = ' has-month';
+							}
+						} else {
+							$monthclass = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
+						}
 						$dateclass    = mc_dateclass( $start );
 						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
@@ -2207,14 +2216,14 @@ function my_calendar( $args ) {
 									$marker = ( count( $events ) > 1 ) ? '&amp;#9679;&amp;#9679;' : '&amp;#9679;';
 									// Translators: Number of events on this date.
 									$inner = ( count( $events ) > 0 ) ? '&lt;span class="event-icon" aria-hidden="true">' . $marker . '&lt;/span>&lt;span class="screen-reader-text">&lt;span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')&lt;/span>&lt;/span>' : '';
-									$body .= "&lt;$td id='$params[format]-$date_is'$ariacurrent class='$dateclass $weekend_class $monthclass $events_class day-with-date'>" . "\n	&lt;$element class='mc-date$trigger'>&lt;span aria-hidden='true'>$thisday_heading&lt;/span>&lt;span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "&lt;/span>$inner&lt;/$close>" . $event_output . "\n&lt;/$td>\n";
+									$body .= "&lt;$td id='$params[format]-$date_is'$ariacurrent class='$dateclass $weekend_class $monthclass $events_class day-with-date'>&lt;div class='mc-date-container$has_month'>$month_heading" . "\n	&lt;$element class='mc-date$trigger'>&lt;span aria-hidden='true'>$thisday_heading&lt;/span>&lt;span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "&lt;/span>$inner&lt;/$close>&lt;/div>" . $event_output . "\n&lt;/$td>\n";
 								}
 							}
 						} else {
 							// If there are no events on this date within current params.
 							if ( 'list' !== $params['format'] ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
-								$body         .= "&lt;$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'>&lt;span class='mc-date no-events'>&lt;span aria-hidden='true'>$thisday_heading&lt;/span>&lt;span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "&lt;/span>&lt;/span>\n&lt;/$td>\n";
+								$body         .= "&lt;$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'>&lt;div class='mc-date-container$has_month'>$month_heading&lt;span class='mc-date no-events'>&lt;span aria-hidden='true'>$thisday_heading&lt;/span>&lt;span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "&lt;/span>&lt;/span>&lt;/div>\n&lt;/$td>\n";
 							} else {
 								if ( true === $show_all ) {
 									$body .= "&lt;li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class $odd'>&lt;strong class=\"event-date\">" . mc_wrap_title( '&lt;span>' . date_i18n( $date_format, $start ) . '&lt;/span>' ) . '&lt;/strong>&lt;/li>';
