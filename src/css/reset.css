@@ -469,7 +469,7 @@ dialog.my-calendar-modal #modal-title {
 	margin-top: 0;
 	padding: 15px;
 	background: #f3f3f3;
-	width: calc( 100% - 30px );
+	width: 100%;
 	z-index: 1;
 }
 
