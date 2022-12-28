@@ -114,7 +114,7 @@ function my_calendar_style_edit() {
 			if ( 'disabled' === $wrote_styles ) {
 				$message = '<p>' . __( 'Styles are disabled, and were not edited.', 'my-calendar' ) . '</p>';
 			} else {
-				$message = ( true === $wrote_styles ) ? '<p>' . __( 'The stylesheet has been updated.', 'my-calendar' ) . '</p>' : '<p><strong>' . __( 'Write Error! Please verify write permissions on the style file.', 'my-calendar' ) . '</strong></p>';
+				$message = ( true === $wrote_styles ) ? '<p>' . __( 'The stylesheet has been updated.', 'my-calendar' ) .  ' <a href="' . add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) ) . '">' . __( 'Migrate your CSS to the Custom CSS Directory', 'my-calendar' ) . '</a></p>' : '<p><strong>' . __( 'Write Error! Please verify write permissions on the style file.', 'my-calendar' ) . '</strong></p>';
 			}
 
 			$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : stripcslashes( sanitize_text_field( $_POST['mc_show_css'] ) );
@@ -148,7 +148,7 @@ function my_calendar_style_edit() {
 				mc_update_option( 'style_vars', $styles );
 			}
 
-			$message .= ' <strong>' . __( 'Style Settings Saved', 'my-calendar' ) . '.</strong>';
+			$message .= ' ' . __( 'Style Settings Saved', 'my-calendar' ) . '.';
 		}
 		mc_show_notice( $message );
 	}
