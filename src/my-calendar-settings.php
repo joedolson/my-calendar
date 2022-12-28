@@ -1289,7 +1289,7 @@ function mc_remote_db() {
 								?>
 								</li>
 							</ul>
-						</fieldset>					
+						</fieldset>
 						<fieldset id='calendar-output' class='mc-output-tabs'>
 							<legend><?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?></legend>
 							<div class="mc-tabs">
