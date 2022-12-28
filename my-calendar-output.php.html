@@ -2113,7 +2113,7 @@ function my_calendar( $args ) {
 						// Generate event classes &amp; attributes.
 						$events_class = mc_events_class( $events, $date_is );
 						if ( $months > 1 ) {
-							$monthclass = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'month-' .$date['month'];
+							$monthclass = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'month-' . mc_date( 'm', $start, false );
 							if ( mc_date( 'j', $start, false ) === '1' ) {
 								$month_heading = '&lt;h3 class="mc-change-months">' . mc_date( 'F', $start, false ) . '&lt;/h3>';
 								$has_month     = ' has-month';
@@ -2121,8 +2121,8 @@ function my_calendar( $args ) {
 						} else {
 							$monthclass = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'nextmonth';
 						}
-						$dateclass    = mc_dateclass( $start );
-						$ariacurrent  = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
+						$dateclass   = mc_dateclass( $start );
+						$ariacurrent = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
 						/**
 						 * Alter the date wrapper HTML element for the grid view. Default `td`.
