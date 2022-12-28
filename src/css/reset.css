@@ -520,6 +520,10 @@ dialog.my-calendar-modal .modal-content {
 	font-weight: 700;
 }
 
+.mc-main span.event-time {
+	display: inline;
+}
+
 .my-calendar-modal .event-title {
 	display: flex;
 	align-items: center;
