@@ -2209,7 +2209,7 @@ function mc_promotion_notice() {
 		$upgrade = 'https://www.joedolson.com/awesome/my-calendar-pro/';
 		$dismiss = admin_url( 'admin.php?page=my-calendar-config&dismiss=promotion' );
 		// Translators: URL to upgrade.
-		echo "<div class='notice'><p>" . sprintf( __( 'I hope you\'ve enjoyed <strong>My Calendar</strong>! Take a look at <a href=\'%1$s\'>upgrading to My Calendar Pro</a> for advanced event management with WordPress! <a href=\'%2$s\'>Dismiss</a>', 'my-calendar' ), $upgrade, $dismiss ) . '</p></div>';
+		echo "<div class='notice mc-promotion'><p><img src='" . plugins_url( 'images/awd-logo-disc.png', __FILE__ ) . "' alt='Joe Dolson Accessible Web Design' /><span>" . sprintf( __( 'I hope you\'ve enjoyed <strong>My Calendar</strong>! Take a look at <a href=\'%1$s\'>upgrading to My Calendar Pro</a> for advanced event management with WordPress! <a href=\'%2$s\' class="button-secondary">Dismiss</a>', 'my-calendar' ), $upgrade, $dismiss ) . '</span></p></div>';
 	}
 }
 add_action( 'admin_notices', 'mc_promotion_notice', 10 );

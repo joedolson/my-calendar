@@ -868,6 +868,22 @@ strong.label {
 	border-radius: 3px;
 }
 
+.notice.mc-promotion {
+	border-left-color: #007eb3;
+}
+
+.notice.mc-promotion p {
+	display: grid;
+	grid-template-columns: 60px auto;
+	align-items: center;
+	column-gap: 20px;
+	font-size: 1.2em;
+}
+
+.notice.mc-promotion img {
+	width: 100%;
+}
+
 #mc-sortable li {
 	cursor: move;
 }
