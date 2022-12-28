@@ -402,6 +402,7 @@ ol.mc-search-results li {
 	column-gap: .5em;
 	margin: .5em 0;
 	list-style: none;
+	padding: 0;
 }
 
 .details img.alignnone,
