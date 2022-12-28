@@ -468,6 +468,8 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$shortcode  = ( isset( $params['shortcode'] ) ) ? $params['shortcode'] : "[$base]";
 	$append     = ( isset( $params['append'] ) ) ? $params['append'] : '';
 
+	$last_shortcode = mc_get_option( 'last_shortcode' );
+	$shortcode      = ( ! isset( $params['shortcode'] ) && $last_shortcode ) ? "[$last_shortcode]" : $shortcode;
 	?>
 	<div id="mc-generator" class="generator">
 		<?php echo wp_kses_post( wpautop( $message ) ); ?>
