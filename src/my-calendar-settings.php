@@ -415,6 +415,13 @@ function mc_update_output_settings( $post ) {
 	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
 	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
+	$templates                 = array();
+	$templates['title']        = $post['mc_title_template'];
+	$templates['title_solo']   = $post['mc_title_template_solo'];
+	$templates['title_list']   = $post['mc_title_template_list'];
+	$templates['label']        = mc_get_template( 'label' );
+	$templates['link']         = mc_get_template( 'link' );
+	$options['templates']      = $templates;
 
 	mc_update_options( $options );
 }
@@ -466,9 +473,9 @@ function mc_update_text_settings( $post ) {
 	$options['week_caption']         = $post['mc_week_caption'];
 	$options['caption']              = $post['mc_caption'];
 	$templates                       = array();
-	$templates['title']              = $post['mc_title_template'];
-	$templates['title_solo']         = $post['mc_title_template_solo'];
-	$templates['title_list']         = $post['mc_title_template_list'];
+	$templates['title']              = mc_get_template( 'title' );
+	$templates['title_solo']         = mc_get_template( 'title_solo' );
+	$templates['title_list']         = mc_get_template( 'title_list' );
 	$templates['label']              = $post['mc_details_label'];
 	$templates['link']               = $post['mc_link_label'];
 	$options['templates']            = $templates;
@@ -935,56 +942,6 @@ function mc_remote_db() {
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-text' ) ); ?>">
 					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					<fieldset>
-						<legend><?php esc_html_e( 'Templating', 'my-calendar' ); ?></legend>
-						<ul>
-							<li>
-							<?php
-							mc_settings_field(
-								array(
-									'name'    => 'mc_title_template',
-									'label'   => __( 'Event title (Grid)', 'my-calendar' ),
-									'default' => $mc_title_template,
-									'atts'    => array(
-										'placeholder' => '{title}',
-									),
-									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
-								)
-							);
-							?>
-							</li>
-							<li>
-							<?php
-							mc_settings_field(
-								array(
-									'name'    => 'mc_title_template_solo',
-									'label'   => __( 'Event title (Single)', 'my-calendar' ),
-									'default' => $mc_title_template_solo,
-									'atts'    => array(
-										'placeholder' => '{title}',
-									),
-									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
-								)
-							);
-							?>
-							</li>
-							<li>
-							<?php
-							mc_settings_field(
-								array(
-									'name'    => 'mc_title_template_list',
-									'label'   => __( 'Event title (List)', 'my-calendar' ),
-									'default' => $mc_title_template_list,
-									'atts'    => array(
-										'placeholder' => '{title}',
-									),
-									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
-								)
-							);
-							?>
-							</li>
-						</ul>
-					</fieldset>
-					<fieldset>
 						<legend><?php esc_html_e( 'Main Calendar View', 'my-calendar' ); ?></legend>
 						<ul>
 							<li>
@@ -1283,12 +1240,62 @@ function mc_remote_db() {
 					<div class="inside">
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						<input type="submit" name="save" class="button screen-reader-text" value="<?php _e( 'Save Display Settings', 'my-calendar' ); ?>" /></p>
+						<fieldset>
+							<legend><?php esc_html_e( 'Title Templates', 'my-calendar' ); ?></legend>
+							<ul class="my-calendar-text">
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'    => 'mc_title_template',
+										'label'   => __( 'Event title (Grid)', 'my-calendar' ),
+										'default' => $mc_title_template,
+										'atts'    => array(
+											'placeholder' => '{title}',
+										),
+										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+									)
+								);
+								?>
+								</li>
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'    => 'mc_title_template_solo',
+										'label'   => __( 'Event title (Single)', 'my-calendar' ),
+										'default' => $mc_title_template_solo,
+										'atts'    => array(
+											'placeholder' => '{title}',
+										),
+										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+									)
+								);
+								?>
+								</li>
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'    => 'mc_title_template_list',
+										'label'   => __( 'Event title (List)', 'my-calendar' ),
+										'default' => $mc_title_template_list,
+										'atts'    => array(
+											'placeholder' => '{title}',
+										),
+										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+									)
+								);
+								?>
+								</li>
+							</ul>
+						</fieldset>					
 						<fieldset id='calendar-output' class='mc-output-tabs'>
 							<legend class="screen-reader-text"><?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?></legend>
 							<div class="mc-tabs">
 								<div class="tabs" role="tablist" data-default="single-event-output">
 									<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php esc_html_e( 'Single Event', 'my-calendar' ); ?></button>
-									<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Main View (Popup or List)', 'my-calendar' ); ?></button>
+									<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Single Event Popup', 'my-calendar' ); ?></button>
 									<button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup"><?php esc_html_e( 'Mini Calendar Popup', 'my-calendar' ); ?></button>
 								</div>
 								<div role='tabpanel' aria-labelledby='tab_single_output' class='wptab' id='single-event-output'>

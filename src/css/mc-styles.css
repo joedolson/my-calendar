@@ -510,6 +510,7 @@ strong.label {
 	font-weight: 400;
 }
 
+.my-calendar-text label,
 #my-calendar-text label {
 	display: inline-block;
 	width: 12em;
@@ -852,6 +853,7 @@ strong.label {
 	box-shadow: 0 0 2px #dcdcde;
 }
 
+.my-calendar-text li,
 #my-calendar-text li {
 	display: flex;
 	flex-wrap: wrap;
@@ -859,6 +861,7 @@ strong.label {
 	column-gap: 6px;
 }
 
+.my-calendar-text span,
 #my-calendar-text span {
 	background: rgba( 0,0,0,.05 );
 	padding: 5px;
