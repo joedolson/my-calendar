@@ -561,10 +561,11 @@ function mc_name_days( $format ) {
  *
  * @param string $timestamp Time stamp for first date of current period.
  * @param string $period base type of date span displayed.
+ * @param int    $months Number of months to add to display.
  *
  * @return array from and to dates
  */
-function mc_date_array( $timestamp, $period, $months = 1 ) {
+function mc_date_array( $timestamp, $period, $months = 0 ) {
 	switch ( $period ) {
 		case 'month':
 		case 'month+1':
@@ -585,7 +586,7 @@ function mc_date_array( $timestamp, $period, $months = 1 ) {
 			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp, false ), mc_date( 't', $timestamp, false ), mc_date( 'Y', $timestamp, false ) );
 			$endtime = strtotime( "+$months months", $endtime );
 			$last    = (int) mc_date( 'N', $endtime, false );
-			$n    = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
+			$n       = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
 			if ( -1 === $n && '7' === mc_date( 'N', $endtime, false ) ) {
 				$n = 6;
 			}
