@@ -193,7 +193,7 @@
     color: #fff;
 }
 
-.mc-main h3 img {
+.mc-main .event-title img {
     vertical-align: middle;
     margin: 0 3px 0 0 !important;
 }
@@ -202,7 +202,7 @@
     vertical-align: middle;
 }
 
-.mc-main .list-event h3 {
+.mc-main .list-event .event-title {
     font-size: 1.2em;
     margin: 0;
 }
@@ -388,7 +388,7 @@
     display: none;
 }
 
-.mc-main.mini h3 {
+.mc-main.mini .event-title {
     font-size: 1.1em;
 }
 

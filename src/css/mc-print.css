@@ -31,7 +31,7 @@ h2 {
 	margin-bottom: .5rem;
 }
 
-h3 a.has-image {
+.event-title a.has-image {
 	display: grid;
 	grid-template-columns: 18px 1fr;
 	align-items: top;
@@ -84,7 +84,7 @@ button.mc-text-button {
 	padding: 0 0 .5em
 }
 
-h3 {
+.event-title {
 	font-size: 14px;
 	margin: 0 0 10px;
 }
@@ -158,7 +158,7 @@ ul.mc-list {
 	line-height: 1.4;
 }
 
-.mc-events .list-event h3 {
+.mc-events .list-event .event-title {
 	font-size: 16px;
 }
 
