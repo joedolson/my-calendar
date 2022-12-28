@@ -1398,7 +1398,7 @@ function mc_remote_db() {
 					</div>
 				</div>
 				<div class="postbox">
-					<h2><?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?></h2>
+					<h2><?php esc_html_e( 'Calendar Navigation', 'my-calendar' ); ?></h2>
 
 					<div class="inside">
 						<fieldset>
