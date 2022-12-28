@@ -564,7 +564,7 @@ function mc_name_days( $format ) {
  *
  * @return array from and to dates
  */
-function mc_date_array( $timestamp, $period ) {
+function mc_date_array( $timestamp, $period, $months = 1 ) {
 	switch ( $period ) {
 		case 'month':
 		case 'month+1':
@@ -583,10 +583,8 @@ function mc_date_array( $timestamp, $period ) {
 				$from  = mc_date( 'Y-m-d', $start, false );
 			}
 			$endtime = mktime( 0, 0, 0, mc_date( 'm', $timestamp, false ), mc_date( 't', $timestamp, false ), mc_date( 'Y', $timestamp, false ) );
-
-			// This allows multiple months displayed. Will figure out splitting tables...
-			// To handle: $endtime = strtotime( "+$months months",$endtime ); JCD TODO.
-			$last = (int) mc_date( 'N', $endtime, false );
+			$endtime = strtotime( "+$months months", $endtime );
+			$last    = (int) mc_date( 'N', $endtime, false );
 			$n    = ( '1' === get_option( 'start_of_week' ) ) ? 7 - $last : 6 - $last;
 			if ( -1 === $n && '7' === mc_date( 'N', $endtime, false ) ) {
 				$n = 6;
@@ -643,7 +641,7 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	// The first day of the current month.
 	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
 	// Grid calendar can't show multiple months.
-	if ( 'week' !== $time ) {
+	if ( 'list' === $format && 'week' !== $time ) {
 		if ( $num > 0 && 'day' !== $time && 'week' !== $time ) {
 			if ( 'month+1' === $time ) {
 				$from = mc_date( 'Y-m-d', strtotime( '+1 month', $month_first ), false );
@@ -664,7 +662,7 @@ function mc_get_from_to( $show_months, $params, $date ) {
 		);
 	} else {
 		// Get a view based on current date.
-		$dates = mc_date_array( $date['current_date'], $time );
+		$dates = mc_date_array( $date['current_date'], $time, $num );
 	}
 
 	return $dates;

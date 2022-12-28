@@ -451,6 +451,22 @@ ol.mc-search-results li {
 	display: inline-block;
 }
 
+.mc-date-container.has-month {
+	display: grid;
+	grid-template-columns: auto auto;
+	padding: 0 6px;
+	align-items: center;
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+.mc-date-container .mc-change-months {
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	font-weight: 700;
+}
+
 /* Add styles for simple modal. */
 dialog.my-calendar-modal {
 	display: block;
