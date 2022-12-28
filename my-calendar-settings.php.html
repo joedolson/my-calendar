@@ -1483,7 +1483,23 @@ function mc_remote_db() {
 				&lt;div class="postbox">
 					&lt;h2>&lt;?php esc_html_e( 'View Options', 'my-calendar' ); ?>&lt;/h2>
 
-					&lt;div class="inside">					
+					&lt;div class="inside">
+						&lt;ul>
+							&lt;li>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_show_months',
+									'label' => __( 'How many months of events to show at a time:', 'my-calendar' ),
+									'atts'  => array(
+										'size' => '3',
+									),
+									'type'  => 'text',
+								)
+							);
+							?>
+							&lt;/li>
+						&lt;/ul>				
 						&lt;fieldset>
 							&lt;legend>&lt;?php esc_html_e( 'Grid Options', 'my-calendar' ); ?>&lt;/legend>
 							&lt;ul>
@@ -1544,20 +1560,6 @@ function mc_remote_db() {
 						&lt;fieldset>
 							&lt;legend>&lt;?php esc_html_e( 'List Options', 'my-calendar' ); ?>&lt;/legend>
 							&lt;ul>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_show_months',
-										'label' => __( 'How many months of events to show at a time:', 'my-calendar' ),
-										'atts'  => array(
-											'size' => '3',
-										),
-										'type'  => 'text',
-									)
-								);
-								?>
-								&lt;/li>
 								&lt;li>
 								&lt;?php
 								mc_settings_field(
