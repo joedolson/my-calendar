@@ -1262,9 +1262,9 @@ function mc_remote_db() {
 								<?php
 								mc_settings_field(
 									array(
-										'name'    => 'mc_title_template_solo',
-										'label'   => __( 'Event title (Single)', 'my-calendar' ),
-										'default' => $mc_title_template_solo,
+										'name'    => 'mc_title_template_list',
+										'label'   => __( 'Event title (List)', 'my-calendar' ),
+										'default' => $mc_title_template_list,
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
@@ -1277,9 +1277,9 @@ function mc_remote_db() {
 								<?php
 								mc_settings_field(
 									array(
-										'name'    => 'mc_title_template_list',
-										'label'   => __( 'Event title (List)', 'my-calendar' ),
-										'default' => $mc_title_template_list,
+										'name'    => 'mc_title_template_solo',
+										'label'   => __( 'Event title (Single)', 'my-calendar' ),
+										'default' => $mc_title_template_solo,
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
