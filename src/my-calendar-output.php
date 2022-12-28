@@ -312,6 +312,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$day_id          = mc_date( 'd', strtotime( $process_date ), false );
 		$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
 		$image           = mc_category_icon( $event );
+		$image           = ( $image ) ? $image . ' ' : '';
 		$img             = '';
 		$has_image       = ( '' !== $image ) ? ' has-image' : '';
 		$event_classes   = mc_event_classes( $event, $type );
@@ -416,7 +417,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$hlevel = apply_filters( 'mc_heading_level_table', 'h3', $type, $time, $template );
 		// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 		if ( 'single' === $type ) {
-			$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image $event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
+			$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image$event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
 		} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 			/**
 			 * Filter event title inside event heading.
