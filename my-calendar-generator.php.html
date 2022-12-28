@@ -109,6 +109,7 @@ function mc_generate( $format = 'shortcode' ) {
 				}
 			}
 			$output = esc_html( $shortcode . $string );
+			mc_update_option( 'last_shortcode', $output );
 		}
 		$return = "&lt;div class='updated'>&lt;p>&lt;textarea readonly='readonly' class='large-text readonly'>[$output]&lt;/textarea>$append&lt;/p>&lt;/div>";
 		if ( 'shortcode' === $format ) {
