@@ -525,9 +525,9 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<label for="search<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Search keyword', 'my-calendar' ); ?></label>
 					<input type="text" name="search" id="search<?php echo esc_attr( $type ); ?>" aria-describedby="search-info" value="<?php echo esc_attr( $search ); ?>" /><br/>
 				</p>
-				<p id='search-info'>
+				<span id='search-info'>
 					<?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
-				</p>
+				</span>
 			</fieldset>
 			<?php
 			// Main shortcode only.
@@ -577,7 +577,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<input type="checkbox" value="true" name="weekends" id="weekends<?php echo esc_attr( $type ); ?>" <?php checked( 'true', $weekends ); ?> /><br/>
 				</p>
 				<p>
-					<label for="months<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Months to show in list view', 'my-calendar' ); ?></label>
+					<label for="months<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Months to show', 'my-calendar' ); ?></label>
 					<input type="number" min="1" max="12" step="1" name="months" id="months<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $months ); ?>" /><br/>
 				</p>
 			</fieldset>
