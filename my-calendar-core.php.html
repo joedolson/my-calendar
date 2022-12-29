@@ -995,9 +995,9 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_process_shortcodes' );
 				// Remap display settings.
 				$settings = array();
-				$single   = mc_get_option( 'display_single' );
-				$main     = mc_get_option( 'display_main' );
-				$mini     = mc_get_option( 'display_mini' );
+				$single   = get_option( 'display_single' );
+				$main     = get_option( 'display_main' );
+				$mini     = get_option( 'display_mini' );
 				if ( empty( $single ) || empty( $main ) || empty( $mini ) ) {
 					$settings[] = ( 'true' === get_option( 'mc_display_author' ) ) ? 'author' : '';
 					$settings[] = ( 'true' === get_option( 'mc_display_host' ) ) ? 'host' : '';
