@@ -91,11 +91,13 @@ function mc_settings_field( $args = array() ) {
 	$element = '';
 	$close   = '';
 	if ( ! empty( $wrap ) ) {
-		$el = $wrap['element'];
-		if ( $wrap['class'] ) {
+		$el    = isset( $wrap['element'] ) ? $wrap['element'] : 'p';
+		$class = '';
+		$id    = '';
+		if ( isset( $wrap['class'] ) && '' !== $wrap['class'] ) {
 			$class = ' class="' . $wrap['class'] . '"';
 		}
-		if ( $wrap['id'] ) {
+		if ( isset( $wrap['id'] ) && '' !== $wrap['id'] ) {
 			$id = ' id="' . $wrap['id'] . '"';
 		}
 		$element = "<$el$class$id>";
