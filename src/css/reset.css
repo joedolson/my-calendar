@@ -8,6 +8,10 @@
 	padding: 0;
 }
 
+.mc-main td {
+	vertical-align: top;
+}
+
 /* Override overflow:hidden */
 main,div.entry-content,div.site-content, table {
 	overflow: visible !important; 
