@@ -265,7 +265,7 @@ function my_calendar_style_edit() {
 				$migrate_url = '<a href="' . add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) ) . '" class="button-secondary">' . __( 'Migrate to custom CSS', 'my-calendar' ) . '</a>';
 				$disabled    = ( $edit_files || mc_get_option( 'use_styles' ) === 'true' ) ? '' : ' disabled="disabled"';
 				?>
-				<p><label for="style">
+				<p class="mc-label-with-button"><label for="style">
 				<?php
 				// Translators: file name being edited.
 				echo sprintf( esc_html__( 'Edit %s', 'my-calendar' ), '<code>' . $file . '</code>' );

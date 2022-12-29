@@ -884,6 +884,14 @@ strong.label {
 	width: 100%;
 }
 
+.mc-label-with-button {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 10px;
+	margin-bottom: 6px;
+}
+
 #mc-sortable li {
 	cursor: move;
 }
