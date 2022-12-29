@@ -750,8 +750,8 @@ function my_calendar_settings() {
 								<?php
 								mc_settings_field(
 									array(
-										'name'     => 'mc_default_sort',
-										'label'    => __( 'Default sort order for Admin Events List', 'my-calendar' ),
+										'name'    => 'mc_default_sort',
+										'label'   => __( 'Default sort order for Admin Events List', 'my-calendar' ),
 										'default' => array(
 											'1' => __( 'ID', 'my-calendar' ),
 											'2' => __( 'Title', 'my-calendar' ),
@@ -760,7 +760,7 @@ function my_calendar_settings() {
 											'6' => __( 'Category', 'my-calendar' ),
 											'7' => __( 'Location', 'my-calendar' ),
 										),
-										'type'     => 'select',
+										'type'    => 'select',
 									)
 								);
 								?>
@@ -769,13 +769,13 @@ function my_calendar_settings() {
 								<?php
 								mc_settings_field(
 									array(
-										'name'     => 'mc_default_direction',
-										'label'    => __( 'Default sort direction', 'my-calendar' ),
+										'name'    => 'mc_default_direction',
+										'label'   => __( 'Default sort direction', 'my-calendar' ),
 										'default' => array(
 											'ASC'  => __( 'Ascending', 'my-calendar' ),
 											'DESC' => __( 'Descending', 'my-calendar' ),
 										),
-										'type'     => 'select',
+										'type'    => 'select',
 									)
 								);
 								?>
