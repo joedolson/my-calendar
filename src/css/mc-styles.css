@@ -740,6 +740,10 @@ strong.label {
 	content: "\f342";
 }
 
+#mc-calendar-view .mc-generator-data {
+	display: none;
+}
+
 #mc-generator .shortcode-preview {
 	display: grid;
 	grid-template-columns: 1fr auto auto;

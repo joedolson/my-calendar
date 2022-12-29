@@ -472,19 +472,21 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$shortcode      = ( ! isset( $params['shortcode'] ) && $last_shortcode ) ? "[$last_shortcode]" : $shortcode;
 	?>
 	<div id="mc-generator" class="generator">
-		<?php echo wp_kses_post( wpautop( $message ) ); ?>
-		<div><input type="hidden" name="_mc_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
-		<input type='hidden' name='shortcode' value='<?php echo esc_attr( $type ); ?>'/>
-		<?php
-		// Common Elements to all Shortcodes.
-		if ( $shortcode ) {
-			echo wp_kses_post(
-				'<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '</textarea>' . $append . '</p>
-				<div class="mc-copy-button"><button type="button" class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc_shortcode_' . $type . '">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button><span class="mc-notice-copied">' . __( 'Shortcode Copied', 'my-calendar' ) . '</span></div>
-				<p><button data-type="' . $base . '" type="button" class="button button-secondary reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>'
-			);
-		}
-		?>
+		<div class="mc-generator-data">
+			<?php echo wp_kses_post( wpautop( $message ) ); ?>
+			<div><input type="hidden" name="_mc_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
+			<input type='hidden' name='shortcode' value='<?php echo esc_attr( $type ); ?>'/>
+			<?php
+			// Common Elements to all Shortcodes.
+			if ( $shortcode ) {
+				echo wp_kses_post(
+					'<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '</textarea>' . $append . '</p>
+					<div class="mc-copy-button"><button type="button" class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc_shortcode_' . $type . '">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button><span class="mc-notice-copied">' . __( 'Shortcode Copied', 'my-calendar' ) . '</span></div>
+					<p><button data-type="' . $base . '" type="button" class="button button-secondary reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>'
+				);
+			}
+			?>
+		</div>
 		<div class="mc-generator-inputs">
 			<fieldset>
 				<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>
