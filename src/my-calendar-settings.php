@@ -1365,7 +1365,7 @@ function mc_remote_db() {
 												'wrap'  => array(
 													'element' => 'p',
 													'class'   => 'mc_gmap_api_key',
-												)
+												),
 											)
 										);
 										?>
