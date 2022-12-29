@@ -338,7 +338,7 @@ function mc_template_settings() {
  */
 function mc_default_options() {
 	$options = array(
-		'display_single'               => array( 'author', 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
+		'display_single'               => array( 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
 		'display_main'                 => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
 		'display_mini'                 => array( 'excerpt', 'image', 'more' ),
 		'use_permalinks'               => 'true',
@@ -411,7 +411,7 @@ function mc_default_options() {
 		'today_events'                 => '',
 		'caption'                      => '',
 		'month_format'                 => '',
-		'time_format'                  => get_option( 'time_format' ),
+		'time_format'                  => '',
 		'location_controls'            => '',
 		'cpt_base'                     => 'mc-events',
 		'location_cpt_base'            => 'mc-locations',
