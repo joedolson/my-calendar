@@ -645,10 +645,9 @@ var mediaPopup = '';
 		$('.mc-image-upload')
 			.on('click', '.select-image', function (e) {
 				e.preventDefault();
-				var $self = $(this),
-					$inpField = document.querySelector('#e_image'),
-					$idField = document.querySelector('#e_image_id'),
-					$displayField = document.querySelector('.event_image');
+				$inpField = document.querySelector('#e_image'),
+				$idField = document.querySelector('#e_image_id'),
+				$displayField = document.querySelector('.event_image');
 				clear_existing();
 				mediaPopup = wp.media({
 					multiple: false, // add, reset, false.
