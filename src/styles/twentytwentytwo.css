@@ -437,7 +437,7 @@
 }
 
 .mc-main .nextmonth {
-	border: none;
+	border-color: rgba( 0,0,0,.1 );
 	background: rgba( 0,0,0,.08 );
 }
 
@@ -552,7 +552,6 @@
 	margin: 0 .25em;
 	border-radius: 16px;
 	position: relative;
-	top: -2px;
 	border: 1px solid #fff;
 }
 
