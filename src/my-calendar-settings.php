@@ -87,6 +87,20 @@ function mc_settings_field( $args = array() ) {
 	$atts    = ( isset( $args['atts'] ) ) ? $args['atts'] : array();
 	$type    = ( isset( $args['type'] ) ) ? $args['type'] : 'text';
 	$echo    = ( isset( $args['echo'] ) ) ? $args['echo'] : true;
+	$wrap    = ( isset( $args['wrap'] ) ) ? $args['wrap'] : array();
+	$element = '';
+	$close   = '';
+	if ( ! empty( $wrap ) ) {
+		$el = $wrap['element'];
+		if ( $wrap['class'] ) {
+			$class = ' class="' . $wrap['class'] . '"';
+		}
+		if ( $wrap['id'] ) {
+			$id = ' id="' . $wrap['id'] . '"';
+		}
+		$element = "<$el$class$id>";
+		$close   = "</$el>";
+	}
 
 	if ( is_string( $args ) ) {
 		__doing_it_wrong(
@@ -134,7 +148,7 @@ function mc_settings_field( $args = array() ) {
 				$note = '';
 				$aria = '';
 			}
-			$return = "<label class='label-$type' for='$name'>$label</label> <input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes /> $note";
+			$return = "$element<label class='label-$type' for='$name'>$label</label> <input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes />$close $note";
 			break;
 		case 'hidden':
 			$return = "<input type='hidden' id='$name' name='$name' value='" . esc_attr( $value ) . "' />";
@@ -148,7 +162,7 @@ function mc_settings_field( $args = array() ) {
 				$note = '';
 				$aria = '';
 			}
-			$return = "<label class='label-textarea' for='$name'>$label</label><br /><textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "</textarea>$note";
+			$return = "$element<label class='label-textarea' for='$name'>$label</label><br /><textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "</textarea>$close$note";
 			break;
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
@@ -157,7 +171,7 @@ function mc_settings_field( $args = array() ) {
 			} else {
 				$note = '';
 			}
-			$return = "<input type='checkbox' id='$name' name='$name' value='on' $checked$attributes /> <label for='$name' class='label-checkbox'>$label $note</label>";
+			$return = "$element<input type='checkbox' id='$name' name='$name' value='on' $checked$attributes /> <label for='$name' class='label-checkbox'>$label $note</label>$close";
 			break;
 		case 'checkbox':
 		case 'radio':
@@ -180,7 +194,7 @@ function mc_settings_field( $args = array() ) {
 					} else {
 						$checked = ( in_array( $k, $value, true ) ) ? ' checked="checked"' : '';
 					}
-					$options .= "<li><input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label class='label-$type' for='$name-$k'>$v</label></li>";
+					$options .= "<li>$element<input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label class='label-$type' for='$name-$k'>$v</label>$close</li>";
 				}
 			}
 			$return = "$options $note";
@@ -202,9 +216,9 @@ function mc_settings_field( $args = array() ) {
 			}
 			$return = "
 				<label class='label-select' for='$name'>$label</label>
-				<select id='$name' name='$name'$aria$attributes />
+				$element<select id='$name' name='$name'$aria$attributes />
 					$options
-				</select>
+				</select>$close
 			$note";
 			break;
 	}
@@ -1336,20 +1350,24 @@ function mc_remote_db() {
 									);
 									?>
 									</ul>
-									<p class="mc_gmap_api_key">
-									<?php
-									mc_settings_field(
-										array(
-											'name'  => 'mc_gmap_api_key',
-											'label' => __( 'Google Maps API Key', 'my-calendar' ),
-											'note'  => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '</a>',
-											'atts'  => array(
-												'id' => 'mc_gmap_id',
-											),
-										)
-									);
-									?>
-									</p>
+									<div class="mc-input-with-note">
+										<?php
+										mc_settings_field(
+											array(
+												'name'  => 'mc_gmap_api_key',
+												'label' => __( 'Google Maps API Key', 'my-calendar' ),
+												'note'  => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">' . __( 'Create your Google Maps API key', 'my-calendar' ) . '</a>',
+												'atts'  => array(
+													'id' => 'mc_gmap_id',
+												),
+												'wrap'  => array(
+													'element' => 'p',
+													'class'   => 'mc_gmap_api_key',
+												)
+											)
+										);
+										?>
+									</div>
 								</div>
 								<div role='tabpanel' aria-labelledby='tab_main_output' class='wptab' id='calendar-main-output'>
 									<p>
