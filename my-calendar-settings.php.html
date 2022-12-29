@@ -160,7 +160,7 @@ function mc_settings_field( $args = array() ) {
 				$note = '';
 				$aria = '';
 			}
-			$return = "&lt;label for='$name'>$label&lt;/label> &lt;input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes /> $note";
+			$return = "&lt;label class='label-$type' for='$name'>$label&lt;/label> &lt;input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes /> $note";
 			break;
 		case 'hidden':
 			$return = "&lt;input type='hidden' id='$name' name='$name' value='" . esc_attr( $value ) . "' />";
@@ -174,7 +174,7 @@ function mc_settings_field( $args = array() ) {
 				$note = '';
 				$aria = '';
 			}
-			$return = "&lt;label for='$name'>$label&lt;/label>&lt;br />&lt;textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "&lt;/textarea>$note";
+			$return = "&lt;label class='label-textarea' for='$name'>$label&lt;/label>&lt;br />&lt;textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "&lt;/textarea>$note";
 			break;
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
@@ -183,7 +183,7 @@ function mc_settings_field( $args = array() ) {
 			} else {
 				$note = '';
 			}
-			$return = "&lt;input type='checkbox' id='$name' name='$name' value='on' $checked$attributes /> &lt;label for='$name' class='checkbox-label'>$label $note&lt;/label>";
+			$return = "&lt;input type='checkbox' id='$name' name='$name' value='on' $checked$attributes /> &lt;label for='$name' class='label-checkbox'>$label $note&lt;/label>";
 			break;
 		case 'checkbox':
 		case 'radio':
@@ -206,7 +206,7 @@ function mc_settings_field( $args = array() ) {
 					} else {
 						$checked = ( in_array( $k, $value, true ) ) ? ' checked="checked"' : '';
 					}
-					$options .= "&lt;li>&lt;input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> &lt;label for='$name-$k'>$v&lt;/label>&lt;/li>";
+					$options .= "&lt;li>&lt;input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> &lt;label class='label-$type' for='$name-$k'>$v&lt;/label>&lt;/li>";
 				}
 			}
 			$return = "$options $note";
@@ -227,7 +227,7 @@ function mc_settings_field( $args = array() ) {
 				}
 			}
 			$return = "
-			&lt;label for='$name'>$label&lt;/label>
+				&lt;label class='label-select' for='$name'>$label&lt;/label>
 				&lt;select id='$name' name='$name'$aria$attributes />
 					$options
 				&lt;/select>
@@ -778,7 +778,7 @@ function my_calendar_settings() {
 									array(
 										'name'     => 'mc_default_sort',
 										'label'    => __( 'Default sort order for Admin Events List', 'my-calendar' ),
-										'defaults' => array(
+										'default' => array(
 											'1' => __( 'ID', 'my-calendar' ),
 											'2' => __( 'Title', 'my-calendar' ),
 											'4' => __( 'Date/Time', 'my-calendar' ),
@@ -797,7 +797,7 @@ function my_calendar_settings() {
 									array(
 										'name'     => 'mc_default_direction',
 										'label'    => __( 'Default sort direction', 'my-calendar' ),
-										'defaults' => array(
+										'default' => array(
 											'ASC'  => __( 'Ascending', 'my-calendar' ),
 											'DESC' => __( 'Descending', 'my-calendar' ),
 										),
@@ -1531,17 +1531,6 @@ function mc_remote_db() {
 								&lt;?php
 								mc_settings_field(
 									array(
-										'name'  => 'mc_show_weekends',
-										'label' => __( 'Show Weekends on Calendar', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								&lt;/li>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
 										'name'    => 'mc_convert',
 										'label'   => __( 'Mobile View', 'my-calendar' ),
 										'default' => array(
@@ -1554,9 +1543,19 @@ function mc_remote_db() {
 								);
 								?>
 								&lt;/li>
+								&lt;li>
+								&lt;?php
+								mc_settings_field(
+									array(
+										'name'  => 'mc_show_weekends',
+										'label' => __( 'Show Weekends on Calendar', 'my-calendar' ),
+										'type'  => 'checkbox-single',
+									)
+								);
+								?>
+								&lt;/li>
 							&lt;/ul>
 						&lt;/fieldset>
-
 						&lt;fieldset>
 							&lt;legend>&lt;?php esc_html_e( 'List Options', 'my-calendar' ); ?>&lt;/legend>
 							&lt;ul>
