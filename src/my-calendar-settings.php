@@ -134,7 +134,7 @@ function mc_settings_field( $args = array() ) {
 				$note = '';
 				$aria = '';
 			}
-			$return = "<label for='$name'>$label</label> <input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes /> $note";
+			$return = "<label class='label-$type' for='$name'>$label</label> <input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes /> $note";
 			break;
 		case 'hidden':
 			$return = "<input type='hidden' id='$name' name='$name' value='" . esc_attr( $value ) . "' />";
@@ -148,7 +148,7 @@ function mc_settings_field( $args = array() ) {
 				$note = '';
 				$aria = '';
 			}
-			$return = "<label for='$name'>$label</label><br /><textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "</textarea>$note";
+			$return = "<label class='label-textarea' for='$name'>$label</label><br /><textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "</textarea>$note";
 			break;
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
@@ -157,7 +157,7 @@ function mc_settings_field( $args = array() ) {
 			} else {
 				$note = '';
 			}
-			$return = "<input type='checkbox' id='$name' name='$name' value='on' $checked$attributes /> <label for='$name' class='checkbox-label'>$label $note</label>";
+			$return = "<input type='checkbox' id='$name' name='$name' value='on' $checked$attributes /> <label for='$name' class='label-checkbox'>$label $note</label>";
 			break;
 		case 'checkbox':
 		case 'radio':
@@ -180,7 +180,7 @@ function mc_settings_field( $args = array() ) {
 					} else {
 						$checked = ( in_array( $k, $value, true ) ) ? ' checked="checked"' : '';
 					}
-					$options .= "<li><input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label for='$name-$k'>$v</label></li>";
+					$options .= "<li><input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label class='label-$type' for='$name-$k'>$v</label></li>";
 				}
 			}
 			$return = "$options $note";
@@ -201,7 +201,7 @@ function mc_settings_field( $args = array() ) {
 				}
 			}
 			$return = "
-			<label for='$name'>$label</label>
+				<label class='label-select' for='$name'>$label</label>
 				<select id='$name' name='$name'$aria$attributes />
 					$options
 				</select>
@@ -752,7 +752,7 @@ function my_calendar_settings() {
 									array(
 										'name'     => 'mc_default_sort',
 										'label'    => __( 'Default sort order for Admin Events List', 'my-calendar' ),
-										'defaults' => array(
+										'default' => array(
 											'1' => __( 'ID', 'my-calendar' ),
 											'2' => __( 'Title', 'my-calendar' ),
 											'4' => __( 'Date/Time', 'my-calendar' ),
@@ -771,7 +771,7 @@ function my_calendar_settings() {
 									array(
 										'name'     => 'mc_default_direction',
 										'label'    => __( 'Default sort direction', 'my-calendar' ),
-										'defaults' => array(
+										'default' => array(
 											'ASC'  => __( 'Ascending', 'my-calendar' ),
 											'DESC' => __( 'Descending', 'my-calendar' ),
 										),
@@ -1505,17 +1505,6 @@ function mc_remote_db() {
 								<?php
 								mc_settings_field(
 									array(
-										'name'  => 'mc_show_weekends',
-										'label' => __( 'Show Weekends on Calendar', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
 										'name'    => 'mc_convert',
 										'label'   => __( 'Mobile View', 'my-calendar' ),
 										'default' => array(
@@ -1528,9 +1517,19 @@ function mc_remote_db() {
 								);
 								?>
 								</li>
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'  => 'mc_show_weekends',
+										'label' => __( 'Show Weekends on Calendar', 'my-calendar' ),
+										'type'  => 'checkbox-single',
+									)
+								);
+								?>
+								</li>
 							</ul>
 						</fieldset>
-
 						<fieldset>
 							<legend><?php esc_html_e( 'List Options', 'my-calendar' ); ?></legend>
 							<ul>

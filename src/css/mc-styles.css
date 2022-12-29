@@ -547,10 +547,6 @@ strong.label {
 	max-width: 600px;
 }
 
-.jcd-wide .style-selector {
-	margin-bottom: 1em;
-}
-
 .jcd-wide .style-selector fieldset {
 	display: flex;
 	flex-wrap: wrap;
@@ -884,12 +880,38 @@ strong.label {
 	width: 100%;
 }
 
+.label-select,
+.label-text,
+.label-url,
+.label-email {
+	display: block;
+}
+
 .mc-label-with-button {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	column-gap: 10px;
 	margin-bottom: 6px;
+}
+
+.mc-input-with-note {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 6px;
+	align-items: end;
+}
+
+.mc-input-with-note input {
+	width: 100%;
+}
+
+.mc-input-with-note p {
+	margin: 0;
+}
+
+.mc-input-with-note span {
+	padding: 4px;
 }
 
 #mc-sortable li {
