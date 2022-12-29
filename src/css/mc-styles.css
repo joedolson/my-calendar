@@ -924,6 +924,12 @@ input[name="mc_uri"] {
 	font-size: 1.4em;
 }
 
+#my-calendar-manage .inside {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 20px;
+}
+
 #mc-generator .custom {
 	background: #f6f7f7;
 	padding: 1em;

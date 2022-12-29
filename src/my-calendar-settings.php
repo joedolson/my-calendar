@@ -907,26 +907,28 @@ function mc_remote_db() {
 							<input type="submit" name="mc_manage" class="button-primary" value="<?php _e( 'Save Management Settings', 'my-calendar' ); ?>"/>
 						</p>
 					</form>
-					<h3><?php _e( 'Import and Export Settings', 'my-calendar' ); ?></h3>
-					<p><a href="<?php echo mc_export_settings_url(); ?>"><?php _e( 'Export settings', 'my-calendar' ); ?></a></p>
-					<form method="POST" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
-						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-						<p class="mc-input-settings">
-							<label for="mc-import-settings"><?php _e( 'Import Settings', 'my-calendar' ); ?></label>
-							<input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
-							<input type="submit" class="button-secondary" value="<?php _e( 'Import Settings', 'my-calendar' ); ?>">	
-						</p>
-					</form>
-					<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
-					<?php
-						$current_location_slug = ( '' === mc_get_option( 'location_cpt_base' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
-						$current_event_slug    = ( '' === mc_get_option( 'cpt_base' ) ) ? __( 'mc-events', 'my-calendar' ) : mc_get_option( 'cpt_base' );
-					?>
-					<ul>
-						<li><?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>"><?php esc_html_e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
-						<li><?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-location-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>"><?php esc_html_e( 'Location permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-location-slug">(<?php echo $current_location_slug; ?>)</span></li>
-						<li><?php esc_html_e( 'Settings > General', 'my-calendar' ); ?>: <a href="<?php echo esc_url( admin_url( 'options-general.php#start_of_week' ) ); ?>"><?php esc_html_e( 'First day of the week', 'my-calendar' ); ?></a></li>
-					</ul>
+					<div class="mc-extended-settings">
+						<h3><?php _e( 'Import and Export Settings', 'my-calendar' ); ?></h3>
+						<p><a href="<?php echo mc_export_settings_url(); ?>"><?php _e( 'Export settings', 'my-calendar' ); ?></a></p>
+						<form method="POST" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
+							<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+							<p class="mc-input-settings">
+								<label for="mc-import-settings"><?php _e( 'Import Settings', 'my-calendar' ); ?></label>
+								<input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
+								<input type="submit" class="button-secondary" value="<?php _e( 'Import Settings', 'my-calendar' ); ?>">	
+							</p>
+						</form>
+						<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
+						<?php
+							$current_location_slug = ( '' === mc_get_option( 'location_cpt_base' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
+							$current_event_slug    = ( '' === mc_get_option( 'cpt_base' ) ) ? __( 'mc-events', 'my-calendar' ) : mc_get_option( 'cpt_base' );
+						?>
+						<ul>
+							<li><?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-events-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>"><?php esc_html_e( 'Events permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-events-slug">(<?php echo $current_event_slug; ?>)</span></li>
+							<li><?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: <a aria-describedby='mc-current-location-slug' href="<?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>"><?php esc_html_e( 'Location permalink slug', 'my-calendar' ); ?></a> <span id="mc-current-location-slug">(<?php echo $current_location_slug; ?>)</span></li>
+							<li><?php esc_html_e( 'Settings > General', 'my-calendar' ); ?>: <a href="<?php echo esc_url( admin_url( 'options-general.php#start_of_week' ) ); ?>"><?php esc_html_e( 'First day of the week', 'my-calendar' ); ?></a></li>
+						</ul>
+					</div>
 					<?php
 				} else {
 					_e( 'My Calendar management settings are only available to administrators.', 'my-calendar' );
