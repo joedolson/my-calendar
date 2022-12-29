@@ -119,6 +119,7 @@
 
 .mc-main td .event-title {
 	font-size: 14px;
+	font-weight: 600;
 }
 
 .mc-main.mini .event-title {
@@ -149,7 +150,7 @@
 
 .mc-main .event-title a.list > span {
 	display: flex;
-	align-items: start;
+	align-items: center;
 	column-gap: 4px;
 	flex: 1;
 }
@@ -248,7 +249,7 @@
 	margin-bottom: .25em 0 !important;
 }
 
-.mc-main .list-event > h3.event-title {
+.mc-main .list-event > .event-title {
 	display: block;
 	font-size: 1.2rem;
 }
@@ -271,7 +272,7 @@
 	text-decoration: underline;
 	flex: 1;
 	display: flex;
-	align-items: center;
+	align-items: top;
 	column-gap: 4px;
 }
 
@@ -437,7 +438,7 @@
 }
 
 .mc-main .nextmonth {
-	border: none;
+	border-color: rgba( 0,0,0,.1 );
 	background: rgba( 0,0,0,.08 );
 }
 
@@ -552,7 +553,6 @@
 	margin: 0 .25em;
 	border-radius: 16px;
 	position: relative;
-	top: -2px;
 	border: 1px solid #fff;
 }
 
