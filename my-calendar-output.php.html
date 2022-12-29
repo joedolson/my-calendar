@@ -1818,7 +1818,7 @@ function my_calendar( $args ) {
 	$show_months  = absint( apply_filters( 'mc_show_months', mc_get_option( 'show_months' ), $args ) );
 	$show_months  = ( 0 === $show_months ) ? 1 : $show_months;
 	$caption_text = ( '' !== mc_get_option( 'caption' ) ) ? ' &lt;span class="mc-extended-caption">' . stripslashes( trim( mc_get_option( 'caption' ) ) ) . '&lt;/span>' : '';
-	$week_format  = ( ! mc_get_option( 'week_format' ) ) ? 'M j, \'y' : mc_get_option( 'week_format' );
+	$week_format  = ( mc_get_option( 'week_format' ) ) ? mc_get_option( 'week_format' ) : 'M j, \'y';
 	// Translators: Template tag with date format.
 	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
 	$open_day_uri  = ( ! mc_get_option( 'open_day_uri' ) ) ? 'false' : mc_get_option( 'open_day_uri' ); // This is not a URL. It's a behavior reference.

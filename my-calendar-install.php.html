@@ -346,12 +346,12 @@ function mc_template_settings() {
 		'title'      => '{time}: {title}',
 		'title_list' => '{title}',
 		'title_solo' => '{title}',
-		'link'       => __( 'More information', 'my-calendar' ),
+		'link'       => '', // Empty because usage has a fallback value.
 		'grid'       => $globals['grid_template'],
 		'list'       => $globals['list_template'],
 		'mini'       => $globals['mini_template'],
 		'details'    => $globals['single_template'],
-		'label'      => __( 'Read more', 'my-calendar' ),
+		'label'      => '', // Empty because usage has a fallback value.
 	);
 
 	return $templates;
@@ -389,9 +389,9 @@ function mc_default_options() {
 		'event_mail_message'           => '',
 		'event_mail_bcc'               => '',
 		'html_email'                   => 'true',
-		'week_format'                  => "M j, 'y",
-		'date_format'                  => get_option( 'date_format', 'Y-m-d' ),
-		'time_format'                  => get_option( 'time_format', 'H:i' ),
+		'week_format'                  => '',
+		'date_format'                  => '',
+		'time_format'                  => '',
 		'templates'                    => mc_template_settings(),
 		'css_file'                     => 'twentytwentytwo.css',
 		'style_vars'                   => array(
