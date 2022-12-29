@@ -498,19 +498,21 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$shortcode      = ( ! isset( $params['shortcode'] ) &amp;&amp; $last_shortcode ) ? "[$last_shortcode]" : $shortcode;
 	?>
 	&lt;div id="mc-generator" class="generator">
-		&lt;?php echo wp_kses_post( wpautop( $message ) ); ?>
-		&lt;div>&lt;input type="hidden" name="_mc_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/>&lt;/div>
-		&lt;input type='hidden' name='shortcode' value='&lt;?php echo esc_attr( $type ); ?>'/>
-		&lt;?php
-		// Common Elements to all Shortcodes.
-		if ( $shortcode ) {
-			echo wp_kses_post(
-				'&lt;div class="shortcode-preview">&lt;p>&lt;label for="mc_shortcode">Shortcode&lt;/label>&lt;textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '&lt;/textarea>' . $append . '&lt;/p>
-				&lt;div class="mc-copy-button">&lt;button type="button" class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc_shortcode_' . $type . '">' . __( 'Copy to clipboard', 'my-calendar' ) . '&lt;/button>&lt;span class="mc-notice-copied">' . __( 'Shortcode Copied', 'my-calendar' ) . '&lt;/span>&lt;/div>
-				&lt;p>&lt;button data-type="' . $base . '" type="button" class="button button-secondary reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '&lt;/button>&lt;/p>&lt;/div>'
-			);
-		}
-		?>
+		&lt;div class="mc-generator-data">
+			&lt;?php echo wp_kses_post( wpautop( $message ) ); ?>
+			&lt;div>&lt;input type="hidden" name="_mc_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/>&lt;/div>
+			&lt;input type='hidden' name='shortcode' value='&lt;?php echo esc_attr( $type ); ?>'/>
+			&lt;?php
+			// Common Elements to all Shortcodes.
+			if ( $shortcode ) {
+				echo wp_kses_post(
+					'&lt;div class="shortcode-preview">&lt;p>&lt;label for="mc_shortcode">Shortcode&lt;/label>&lt;textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '&lt;/textarea>' . $append . '&lt;/p>
+					&lt;div class="mc-copy-button">&lt;button type="button" class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc_shortcode_' . $type . '">' . __( 'Copy to clipboard', 'my-calendar' ) . '&lt;/button>&lt;span class="mc-notice-copied">' . __( 'Shortcode Copied', 'my-calendar' ) . '&lt;/span>&lt;/div>
+					&lt;p>&lt;button data-type="' . $base . '" type="button" class="button button-secondary reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '&lt;/button>&lt;/p>&lt;/div>'
+				);
+			}
+			?>
+		&lt;/div>
 		&lt;div class="mc-generator-inputs">
 			&lt;fieldset>
 				&lt;legend>&lt;?php esc_html_e( 'Content Filters', 'my-calendar' ); ?>&lt;/legend>
@@ -551,9 +553,9 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					&lt;label for="search&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Search keyword', 'my-calendar' ); ?>&lt;/label>
 					&lt;input type="text" name="search" id="search&lt;?php echo esc_attr( $type ); ?>" aria-describedby="search-info" value="&lt;?php echo esc_attr( $search ); ?>" />&lt;br/>
 				&lt;/p>
-				&lt;p id='search-info'>
+				&lt;span id='search-info'>
 					&lt;?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
-				&lt;/p>
+				&lt;/span>
 			&lt;/fieldset>
 			&lt;?php
 			// Main shortcode only.
@@ -603,7 +605,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					&lt;input type="checkbox" value="true" name="weekends" id="weekends&lt;?php echo esc_attr( $type ); ?>" &lt;?php checked( 'true', $weekends ); ?> />&lt;br/>
 				&lt;/p>
 				&lt;p>
-					&lt;label for="months&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Months to show in list view', 'my-calendar' ); ?>&lt;/label>
+					&lt;label for="months&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Months to show', 'my-calendar' ); ?>&lt;/label>
 					&lt;input type="number" min="1" max="12" step="1" name="months" id="months&lt;?php echo esc_attr( $type ); ?>" value="&lt;?php echo esc_attr( $months ); ?>" />&lt;br/>
 				&lt;/p>
 			&lt;/fieldset>
