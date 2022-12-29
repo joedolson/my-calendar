@@ -1118,7 +1118,7 @@ function mc_remote_db() {
 									'label'   => __( 'Read more text', 'my-calendar' ),
 									'default' => $mc_details_label,
 									'atts'    => array(
-										'placeholder' => __( 'Read more', 'my-calendar' ),
+										'placeholder' => __( 'Details about', 'my-calendar' ) . ' {title}',
 									),
 									'note'    => __( 'Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>.', 'my-calendar' ),
 								)
