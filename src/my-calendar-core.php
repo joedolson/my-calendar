@@ -2052,6 +2052,10 @@ function mc_the_title( $title, $post_id = null ) {
 			}
 			if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
 				$icon = mc_category_icon( $event );
+				if ( false !== stripos( $icon, 'svg' ) && 'background' === mc_get_option( 'apply_color' ) ) {
+					$color = esc_attr( $event->category_color );
+					$icon = str_replace( 'fill:', 'background:' . $color . ';fill:', $icon );
+				}
 			} else {
 				$icon = '';
 			}
