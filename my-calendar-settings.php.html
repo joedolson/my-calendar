@@ -933,26 +933,28 @@ function mc_remote_db() {
 							&lt;input type="submit" name="mc_manage" class="button-primary" value="&lt;?php _e( 'Save Management Settings', 'my-calendar' ); ?>"/>
 						&lt;/p>
 					&lt;/form>
-					&lt;h3>&lt;?php _e( 'Import and Export Settings', 'my-calendar' ); ?>&lt;/h3>
-					&lt;p>&lt;a href="&lt;?php echo mc_export_settings_url(); ?>">&lt;?php _e( 'Export settings', 'my-calendar' ); ?>&lt;/a>&lt;/p>
-					&lt;form method="POST" enctype="multipart/form-data" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
-						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
-						&lt;p class="mc-input-settings">
-							&lt;label for="mc-import-settings">&lt;?php _e( 'Import Settings', 'my-calendar' ); ?>&lt;/label>
-							&lt;input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
-							&lt;input type="submit" class="button-secondary" value="&lt;?php _e( 'Import Settings', 'my-calendar' ); ?>">	
-						&lt;/p>
-					&lt;/form>
-					&lt;h3>&lt;?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?>&lt;/h3>
-					&lt;?php
-						$current_location_slug = ( '' === mc_get_option( 'location_cpt_base' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
-						$current_event_slug    = ( '' === mc_get_option( 'cpt_base' ) ) ? __( 'mc-events', 'my-calendar' ) : mc_get_option( 'cpt_base' );
-					?>
-					&lt;ul>
-						&lt;li>&lt;?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: &lt;a aria-describedby='mc-current-events-slug' href="&lt;?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>">&lt;?php esc_html_e( 'Events permalink slug', 'my-calendar' ); ?>&lt;/a> &lt;span id="mc-current-events-slug">(&lt;?php echo $current_event_slug; ?>)&lt;/span>&lt;/li>
-						&lt;li>&lt;?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: &lt;a aria-describedby='mc-current-location-slug' href="&lt;?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>">&lt;?php esc_html_e( 'Location permalink slug', 'my-calendar' ); ?>&lt;/a> &lt;span id="mc-current-location-slug">(&lt;?php echo $current_location_slug; ?>)&lt;/span>&lt;/li>
-						&lt;li>&lt;?php esc_html_e( 'Settings > General', 'my-calendar' ); ?>: &lt;a href="&lt;?php echo esc_url( admin_url( 'options-general.php#start_of_week' ) ); ?>">&lt;?php esc_html_e( 'First day of the week', 'my-calendar' ); ?>&lt;/a>&lt;/li>
-					&lt;/ul>
+					&lt;div class="mc-extended-settings">
+						&lt;h3>&lt;?php _e( 'Import and Export Settings', 'my-calendar' ); ?>&lt;/h3>
+						&lt;p>&lt;a href="&lt;?php echo mc_export_settings_url(); ?>">&lt;?php _e( 'Export settings', 'my-calendar' ); ?>&lt;/a>&lt;/p>
+						&lt;form method="POST" enctype="multipart/form-data" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
+							&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+							&lt;p class="mc-input-settings">
+								&lt;label for="mc-import-settings">&lt;?php _e( 'Import Settings', 'my-calendar' ); ?>&lt;/label>
+								&lt;input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
+								&lt;input type="submit" class="button-secondary" value="&lt;?php _e( 'Import Settings', 'my-calendar' ); ?>">	
+							&lt;/p>
+						&lt;/form>
+						&lt;h3>&lt;?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?>&lt;/h3>
+						&lt;?php
+							$current_location_slug = ( '' === mc_get_option( 'location_cpt_base' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
+							$current_event_slug    = ( '' === mc_get_option( 'cpt_base' ) ) ? __( 'mc-events', 'my-calendar' ) : mc_get_option( 'cpt_base' );
+						?>
+						&lt;ul>
+							&lt;li>&lt;?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: &lt;a aria-describedby='mc-current-events-slug' href="&lt;?php echo esc_url( admin_url( 'options-permalink.php#mc_cpt_base' ) ); ?>">&lt;?php esc_html_e( 'Events permalink slug', 'my-calendar' ); ?>&lt;/a> &lt;span id="mc-current-events-slug">(&lt;?php echo $current_event_slug; ?>)&lt;/span>&lt;/li>
+							&lt;li>&lt;?php esc_html_e( 'Settings > Permalinks', 'my-calendar' ); ?>: &lt;a aria-describedby='mc-current-location-slug' href="&lt;?php echo esc_url( admin_url( 'options-permalink.php#mc_location_cpt_base' ) ); ?>">&lt;?php esc_html_e( 'Location permalink slug', 'my-calendar' ); ?>&lt;/a> &lt;span id="mc-current-location-slug">(&lt;?php echo $current_location_slug; ?>)&lt;/span>&lt;/li>
+							&lt;li>&lt;?php esc_html_e( 'Settings > General', 'my-calendar' ); ?>: &lt;a href="&lt;?php echo esc_url( admin_url( 'options-general.php#start_of_week' ) ); ?>">&lt;?php esc_html_e( 'First day of the week', 'my-calendar' ); ?>&lt;/a>&lt;/li>
+						&lt;/ul>
+					&lt;/div>
 					&lt;?php
 				} else {
 					_e( 'My Calendar management settings are only available to administrators.', 'my-calendar' );
