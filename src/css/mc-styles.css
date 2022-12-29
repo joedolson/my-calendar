@@ -353,9 +353,27 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	margin-bottom: 1em;
 }
 
-.my-calendar-admin .event_image img {
-	max-width: 400px;
+.my-calendar-admin .event_image {
 	margin-top: 8px;
+	position: relative;
+}
+
+.my-calendar-admin .event_image img {
+	max-width: 600px;
+}
+
+.event_image:has(img[alt="Current image: "]):after {
+	content: 'alt text missing';
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	background: rgba( 0,0,0,.65 );
+	color: #fff;
+	padding: 3px 5px;
+	border-radius: 5px;
+	border: 1px solid #b32d2e;
+	font-size: .875rem;
+	font-weight: 700;
 }
 
 #mc-clipboard.help {
