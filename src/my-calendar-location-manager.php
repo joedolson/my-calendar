@@ -31,7 +31,7 @@ function my_calendar_manage_locations() {
 		}
 	}
 	if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
-		$verify = wp_verify_nonce( $_GET['nonce'], 'my-calendar-delete-location' );
+		$verify = isset( $_GET['nonce'] ) ? wp_verify_nonce( $_GET['nonce'], 'my-calendar-delete-location' ) : false;
 		$loc    = absint( $_GET['location_id'] );
 		if ( isset( $_GET['confirm'] ) && $verify ) {
 			echo wp_kses_post( mc_delete_location( $loc ) );
