@@ -546,7 +546,7 @@ function mc_footer_js() {
 			}
 			if ( $enqueue_mcjs ) {
 				$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery' ), $version );
+				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version );
 				$args = array(
 					'grid'      => $grid,
 					'list'      => $list,

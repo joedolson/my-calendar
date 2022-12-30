@@ -214,6 +214,8 @@
 				}
 				// All views.
 				$( '#' + targetId ).trigger( 'focus' );
+				var refText = $( '#mc_head_' + ref ).text();
+				wp.a11y.speak( refText );
 				mc_display_usertime();
 			});
 		});
