@@ -23,9 +23,10 @@ main,div.entry-content,div.site-content, table {
 	margin: 0 auto;
 }
 
-.my-calendar-footer ul,
-.my-calendar-header ul {
+.mc-main .my-calendar-footer ul,
+.mc-main .my-calendar-header ul {
 	list-style-type: none;
+	list-style: none;
 }
 
 .my-calendar-nav ul {
