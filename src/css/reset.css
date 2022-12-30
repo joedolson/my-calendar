@@ -627,8 +627,6 @@ dialog.my-calendar-modal .modal-content {
   }
 }
 
-/* it can be easily adapted in media-queries for tablets/mobile */
-
 /* for this example: tablets */
 @media (max-width: 55.625em) {
   .my-calendar-modal {
