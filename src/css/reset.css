@@ -23,6 +23,11 @@ main,div.entry-content,div.site-content, table {
 	margin: 0 auto;
 }
 
+.my-calendar-footer ul,
+.my-calendar-header ul {
+	list-style-type: none;
+}
+
 .my-calendar-nav ul {
 	display: flex;
 }
@@ -476,6 +481,7 @@ dialog.my-calendar-modal {
 	display: block;
 	border: 0;
 	border-radius: 10px;
+	text-align: left;
 }
 
 dialog.my-calendar-modal .my-calendar-modal__wrapper {
