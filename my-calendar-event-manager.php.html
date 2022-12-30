@@ -485,7 +485,7 @@ function mc_handle_post() {
 	if ( 'delete' === $action ) {
 		$verify = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
 		if ( ! $verify ) {
-			wp_die( 'Could not verify your request.', 'my-calendar' );
+			wp_die( 'My Calendar: Could not verify your request.', 'my-calendar' );
 		} else {
 			$message = mc_delete_event( $event_id );
 			echo wp_kses_post( $message );
