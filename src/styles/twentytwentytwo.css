@@ -10,8 +10,6 @@
 
 .mc-main {
 	background: var(--primary-light);
-	padding: 1rem;
-	border-radius: 30px;
 }
 
 .mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
