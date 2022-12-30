@@ -31,8 +31,8 @@ function mc_migrate_css() {
 				$style       = mc_get_option( 'css_file' );
 				$stylefile   = mc_get_style_path();
 				$newfileroot = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __DIR__ ) );
-				$newfiledir  = $newfileroot . 'styles/';
-				$newfilepath = $newfiledir . $style;
+				$newfiledir  = trailingslashit( $newfileroot ) . 'styles/';
+				$newfilepath = trailingslashit( $newfiledir ) . $style;
 				if ( ! $wp_filesystem->exists( $newfileroot ) ) {
 					$wp_filesystem->mkdir( $newfileroot );
 				}
