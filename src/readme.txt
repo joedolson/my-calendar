@@ -115,6 +115,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Performance: caching of icon list data.
 * Accessibility: Improve aria-label patterns so user settings override.
 * Accessibility: Omit aria-label if link text is already unique.
+* Accessibility: Improve calendar navigation using AJAX.
 * PHP 8.1 Compatibility fixes.
 * Remove a couple very long deprecated functions.
 * Prep for removal of core CSS editing.

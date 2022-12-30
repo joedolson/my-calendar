@@ -4,17 +4,17 @@
 
 .mc-main .my-calendar-header, .mc-main .my-calendar-footer, .mc-main .my-calendar-table, .mc-main .my-calendar-list {
 	padding: 1rem 0;
-	background: var(--primary-light);
 	color: var(--primary-dark);
 }
 
-.mc-main {
+.mc-main .my-calendar-table tbody, .mc-main .my-calendar-list {
 	background: var(--primary-light);
 }
 
+.mc-main .my-calendar-header select, .my-calendar-footer select,
 .mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
 	color: var(--secondary-dark);
-	background: rgba(0,0,0,.08);
+	background: var(--primary-light);
 	padding: 4px 6px;
 	border-radius: 4px;
 }
@@ -93,10 +93,6 @@
 	line-height: 1.5;
 	text-align: center;
 	padding: 4px 0;
-	background: #fff !important;
-	background: var(--primary-light) !important;
-	color: #313233 !important;
-	color: var(--primary-dark) !important;
 	border-bottom: 1px solid var(--highlight-dark);
 }
 
