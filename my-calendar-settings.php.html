@@ -588,6 +588,7 @@ function mc_import_settings() {
 			if ( null === $settings ) {
 				$return = json_last_error();
 			} else {
+				$settings = map_deep( $settings, 'sanitize_textarea_field' );
 				update_option( 'my_calendar_options', $settings );
 				$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
 			}
