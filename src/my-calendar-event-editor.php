@@ -2921,20 +2921,21 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		}
 	}
 	// Event Status settings: draft, published, trash, (custom).
-	// Switch to select status.
+	$statuses = mc_event_statuses();
 	if ( 'header' === $position ) {
+		$status_control = '';
 		if ( 'edit' === $mode ) {
 			$controls['publish']     = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) { // Added by Roland P.
-				$status_control = "
-						<option value='1'" . selected( $event->event_approved, '1', false ) . '>' . __( 'Publish', 'my-calendar' ) . "</option>
-						<option value='0'" . selected( $event->event_approved, '0', false ) . '>' . __( 'Draft', 'my-calendar' ) . "</option>
-						<option value='2'" . selected( $event->event_approved, '2', false ) . '>' . __( 'Trash', 'my-calendar' ) . '</option>';
+				foreach ( $statuses as $code => $label ) {
+					$status_control .= '<option value="' . $code . '"' . selected( $event->event_approved, $code, false ) . '>' . $label . '</option>';
+				}
 			} else {
-				$status_control = "
-						<option value='0'" . selected( $event->event_approved, '0', false ) . '>' . __( 'Draft', 'my-calendar' ) . "</option>
-						<option value='2'" . selected( $event->event_approved, '2', false ) . '>' . __( 'Trash', 'my-calendar' ) . '</option>';
+				unset( $statuses['1'] );
+				foreach ( $statuses as $code => $label ) {
+					$status_control .= '<option value="' . $code . '"' . selected( $event->event_approved, $code, false ) . '>' . $label . '</option>';
+				}
 			}
 		} else { // Case: adding new event (if user can, then 1, else 0).
 			$status_control = '';
@@ -2974,6 +2975,32 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	}
 
 	return '<ul>' . $controls_output . '</ul>';
+}
+
+/**
+ * Get the array of available event status codes.
+ *
+ * @return array
+ */
+function mc_event_statuses() {
+	// Switch to select status.
+	$statuses = array(
+		'1' => __( 'Publish', 'my-calendar' ),
+		'0' => __( 'Draft', 'my-calendar' ),
+		'2' => __( 'Trash', 'my-calendar' ),
+	);
+	/**
+	 * Filter available event status types.
+	 *
+	 * @hook mc_event_statuses
+	 *
+	 * @param {array} Array of statuses where key is the integer value of the status and the value is the status label.
+	 *
+	 * @return {array}
+	 */
+	$statuses = apply_filters( 'mc_event_statuses', $statuses );
+
+	return $statuses;
 }
 
 /**
