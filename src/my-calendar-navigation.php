@@ -231,11 +231,11 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	 */
 	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
 	foreach ( $mc_bottomorder as $value ) {
-		if ( 'none' !== $value && 'stop' !== $value && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
+		if ( 'none' !== strtolower( $value ) && 'stop' !== strtolower( $value ) && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
 			$value         = trim( $value );
 			$mc_bottomnav .= ${$value};
 		}
-		if ( ! in_array( $value, $available, true ) && 'none' !== strtolower( $value ) ) {
+		if ( ! in_array( $value, $available, true ) && 'none' !== strtolower( $value ) && 'stop' !== strtolower( $value ) ) {
 			$mc_topnav .= call_user_func( $value, $params );
 		}
 	}
