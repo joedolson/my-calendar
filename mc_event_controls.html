@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Action: mc_debug - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_event_controls - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Action: mc_debug</h1></header>
+    <header><h1 class="page-title">Filter: mc_event_controls</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_debug">do_action( 'mc_debug', <span class="signature">$subject, $body )</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mc_event_controls">apply_filters( 'mc_event_controls', <span class="signature">$controls, $mode, $event, $position )</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Execute a custom debug action during an mc_debug call. Runs if MC_DEBUG_METHOD is not 'email'.</p>
+    <p>Filter array of controls shown on event editor.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$subject</code></td>
+                <td class="name"><code>$controls</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">array</span>
 
 
             
@@ -93,14 +93,14 @@
 
             
 
-            <td class="description last"><p>Subject line of email debugging message.</p></td>
+            <td class="description last"><p>Array of HTML strings to output in header and footer of event editor.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$body</code></td>
+                <td class="name"><code>$mode</code></td>
             
 
             <td class="type">
@@ -116,7 +116,53 @@
 
             
 
-            <td class="description last"><p>Body of email debugging message.</p></td>
+            <td class="description last"><p>Context of event editing page.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Event data.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>location of form.</p></td>
         </tr>
 
     
@@ -157,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="includes_general-utilities.php.html">includes/general-utilities.php</a>, <a href="includes_general-utilities.php.html#line365">line 365</a>
+        <a href="my-calendar-event-editor.php.html">my-calendar-event-editor.php</a>, <a href="my-calendar-event-editor.php.html#line2953">line 2953</a>
     </li></ul></dd>
     
 
@@ -180,6 +226,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
