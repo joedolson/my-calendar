@@ -2927,11 +2927,6 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			$controls['publish']     = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) { // Added by Roland P.
-				if ( $has_data && '1' === $event->event_approved ) {
-					$checked = ' checked="checked"';
-				} elseif ( $has_data && 0 === (int) $event->event_approved ) {
-					$checked = '';
-				}
 				$status_control = "
 						<option value='1'" . selected( $event->event_approved, '1', false ) . '>' . __( 'Publish', 'my-calendar' ) . "</option>
 						<option value='0'" . selected( $event->event_approved, '0', false ) . '>' . __( 'Draft', 'my-calendar' ) . "</option>
@@ -2955,6 +2950,19 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 						$status_control
 					</select>" : '';
 	}
+	/**
+	 * Filter array of controls shown on event editor.
+	 *
+	 * @hook mc_event_controls
+	 *
+	 * @param {array}  $controls Array of HTML strings to output in header and footer of event editor.
+	 * @param {string} $mode Context of event editing page.
+	 * @param {object} $event Event data.
+	 * @param {string} $position location of form.
+	 *
+	 * @return {array}
+	 */
+	$controls = apply_filters( 'mc_filter_event_controls', $controls, $mode, $event, $position = 'header' );
 
 	$controls_output = '';
 	foreach ( $controls as $key => $control ) {
