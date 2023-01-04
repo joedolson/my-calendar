@@ -71,10 +71,11 @@ function my_calendar_check_db() {
  * Migrate settings from individual options to a single collective option.
  */
 function mc_migrate_settings() {
-	$options = array(
-		'display_single'               => get_option( 'mc_display_single', '' ),
-		'display_main'                 => get_option( 'mc_display_main', '' ),
-		'display_mini'                 => get_option( 'mc_display_mini', '' ),
+	$defaults = mc_default_options();
+	$options  = array(
+		'display_single'               => get_option( 'mc_display_single' ),
+		'display_main'                 => get_option( 'mc_display_main' ),
+		'display_mini'                 => get_option( 'mc_display_mini' ),
 		'use_permalinks'               => get_option( 'mc_use_permalinks' ),
 		'use_styles'                   => get_option( 'mc_use_styles' ),
 		'show_months'                  => get_option( 'mc_show_months' ),
@@ -148,8 +149,13 @@ function mc_migrate_settings() {
 		'use_details_template'         => get_option( 'mc_use_details_template' ),
 		'use_grid_template'            => get_option( 'mc_use_grid_template' ),
 		'list_link_titles'             => 'false',
-
 	);
+	// Ensure that required settings have values.
+	foreach ( $defaults as $key => $value ) {
+		if ( '' === $options[ $key ] && '' !== $value ) {
+			$options[ $key ] = $defaults[ $key ];
+		}
+	}
 	add_option( 'my_calendar_options', $options );
 	// Remove old options.
 	delete_option( 'mc_display_single' );
