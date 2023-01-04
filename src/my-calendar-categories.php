@@ -871,13 +871,14 @@ function mc_manage_categories() {
 				if ( 'background' === mc_get_option( 'apply_color' ) ) {
 					$icon_bg = $background;
 				} else {
-					$icon_bg = $foreground;
+					$icon_bg = ( 'default' === mc_get_option( 'apply_color' ) ) ? '' : $foreground;
 				}
 				if ( ! $icon ) {
 					$icon_bg = 'transparent';
 				}
+				$style = ( '' !== $icon_bg ) ? ' style="background-color:' . esc_attr( $icon_bg ) . '"' : '';
 				?>
-			<td style="background-color:<?php echo esc_attr( $icon_bg ); ?>;"><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
+			<td<?php echo $style; ?>><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 				<?php
 			}
 			?>
