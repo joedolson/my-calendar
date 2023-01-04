@@ -694,7 +694,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// ICAL.
 	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
 	$e['ical_desc']        = $strip_desc;
-	$e['ical_start']       = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', $recur_start ) : $recur_start;
+	$e['ical_start']       = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $recur_start ) ) : $recur_start;
 	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $recur_end ) + 60, false ) : $recur_end;
 	$e['ical_recur']       = mc_generate_rrule( $event );
 	$ical_link             = mc_build_url(
