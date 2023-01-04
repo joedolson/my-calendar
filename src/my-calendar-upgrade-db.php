@@ -135,6 +135,7 @@ function mc_migrate_settings() {
 		'week_caption'                 => get_option( 'mc_week_caption' ),
 		'next_events'                  => get_option( 'mc_next_events' ),
 		'previous_events'              => get_option( 'mc_previous_events' ),
+		'today_events'                 => get_option( 'mc_today_events' ),
 		'caption'                      => get_option( 'mc_caption' ),
 		'month_format'                 => get_option( 'mc_month_format' ),
 		'time_format'                  => get_option( 'mc_time_format' ),
@@ -152,7 +153,10 @@ function mc_migrate_settings() {
 	);
 	// Ensure that required settings have values.
 	foreach ( $defaults as $key => $value ) {
-		if ( '' === $options[ $key ] && '' !== $value ) {
+		if ( 'uri_query' === $key || 'migrated' === $key ) {
+			continue;
+		}
+		if ( '' === (string) $options[ $key ] && '' !== $value ) {
 			$options[ $key ] = $defaults[ $key ];
 		}
 	}
