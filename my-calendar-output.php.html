@@ -1308,6 +1308,9 @@ function mc_output_is_visible( $feature, $type, $event = false ) {
 	// Map either calendar popup or list to main settings.
 	$type   = ( 'calendar' === $type || 'list' === $type ) ? 'main' : $type;
 	$option = mc_get_option( 'display_' . $type );
+	if ( ! is_array( $option ) ) {
+		$option = mc_default_options()['display_' . $type ];
+	}
 	$return = false;
 	if ( in_array( $feature, $option, true ) ) {
 		$return = true;
@@ -1363,8 +1366,9 @@ add_filter( 'the_content', 'mc_show_event_template', 100, 1 );
 function mc_show_event_template( $content ) {
 	global $post;
 	if ( ( is_single() || is_page() ) &amp;&amp; get_the_ID() === (int) mc_get_option( 'uri_id' ) ) {
-		if ( ! has_shortcode( $content, 'my_calendar' ) ) {
-			return $content . do_shortcode( '[my_calendar]' );
+		global $post;
+		if ( ! has_shortcode( $post->post_content, 'my_calendar' ) ) {
+			return $content . do_shortcode( '[my_calendar id="my_calendar_' . get_the_ID() . '"]' );
 		}
 	}
 	if ( is_single() &amp;&amp; in_the_loop() &amp;&amp; is_main_query() ) {
