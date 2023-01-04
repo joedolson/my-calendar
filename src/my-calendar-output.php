@@ -1282,6 +1282,9 @@ function mc_output_is_visible( $feature, $type, $event = false ) {
 	// Map either calendar popup or list to main settings.
 	$type   = ( 'calendar' === $type || 'list' === $type ) ? 'main' : $type;
 	$option = mc_get_option( 'display_' . $type );
+	if ( ! is_array( $option ) ) {
+		$option = mc_default_options()['display_' . $type ];
+	}
 	$return = false;
 	if ( in_array( $feature, $option, true ) ) {
 		$return = true;
