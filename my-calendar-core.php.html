@@ -279,6 +279,28 @@ function mc_register_styles() {
 	if ( 'true' !== mc_get_option( 'use_styles' ) ) {
 		if ( $use_default || $css_usage ) {
 			wp_enqueue_style( 'my-calendar-style' );
+			$category_vars = '';
+			// generate category colors.
+			$category_css    = mc_generate_category_styles();
+			$category_styles = $category_css['styles'];
+			$category_vars   = $category_css['vars'];
+
+			$styles     = (array) mc_get_option( 'style_vars' );
+			$style_vars = '';
+			foreach ( $styles as $key => $var ) {
+				if ( $var ) {
+					$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
+				}
+			}
+			if ( '' !== $style_vars ) {
+				$style_vars = '.mc-main {' . $style_vars . $category_vars . '}';
+			}
+
+			$css = "
+/* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
+$category_styles
+$style_vars";
+			wp_add_inline_style( 'my-calendar-style', $css );
 		}
 	}
 
@@ -299,42 +321,6 @@ function mc_register_styles() {
  * Publically written head styles &amp; scripts
  */
 function mc_head() {
-	global $wp_query;
-	$array = array();
-
-	if ( mc_get_option( 'use_styles' ) !== 'true' ) {
-		$this_post     = $wp_query->get_queried_object();
-		$id            = (string) ( is_object( $this_post ) &amp;&amp; isset( $this_post->ID ) ) ? $this_post->ID : false;
-		$array         = ( '' !== mc_get_option( 'show_css' ) ) ? explode( ',', mc_get_option( 'show_css' ) ) : $array;
-		$category_vars = '';
-		if ( ( is_array( $array ) &amp;&amp; ! empty( $array ) ) || in_array( $id, $array, true ) || mc_get_option( 'show_css' ) === '' ) {
-			// generate category colors.
-			$category_css    = mc_generate_category_styles();
-			$category_styles = $category_css['styles'];
-			$category_vars   = $category_css['vars'];
-
-			$styles     = (array) mc_get_option( 'style_vars' );
-			$style_vars = '';
-			foreach ( $styles as $key => $var ) {
-				if ( $var ) {
-					$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
-				}
-			}
-			if ( '' !== $style_vars ) {
-				$style_vars = '.mc-main {' . $style_vars . $category_vars . '}';
-			}
-
-			$all_styles = "
-&lt;style type=\"text/css\">
-&lt;!--
-/* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
-$category_styles
-$style_vars
--->
-&lt;/style>";
-			echo $all_styles;
-		}
-	}
 	if ( mc_is_single_event() ) {
 		$mc_id = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
 		if ( $mc_id ) {
