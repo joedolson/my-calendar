@@ -4,7 +4,7 @@
  *
  * @package     MyCalendar
  * @author      Joe Dolson
- * @copyright   2009-2022 Joe Dolson
+ * @copyright   2009-2023 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -54,7 +54,7 @@ function mc_get_version( $version = true ) {
 	if ( ! $version ) {
 		return get_option( 'mc_version', '' );
 	}
-	return '3.4.0-RC-1';
+	return '3.4.0';
 }
 
 define( 'MC_DEBUG', false );
