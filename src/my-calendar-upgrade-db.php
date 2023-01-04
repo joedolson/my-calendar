@@ -72,9 +72,9 @@ function my_calendar_check_db() {
  */
 function mc_migrate_settings() {
 	$options = array(
-		'display_single'               => get_option( 'mc_display_single' ),
-		'display_main'                 => get_option( 'mc_display_main' ),
-		'display_mini'                 => get_option( 'mc_display_mini' ),
+		'display_single'               => get_option( 'mc_display_single', '' ),
+		'display_main'                 => get_option( 'mc_display_main', '' ),
+		'display_mini'                 => get_option( 'mc_display_mini', '' ),
 		'use_permalinks'               => get_option( 'mc_use_permalinks' ),
 		'use_styles'                   => get_option( 'mc_use_styles' ),
 		'show_months'                  => get_option( 'mc_show_months' ),
