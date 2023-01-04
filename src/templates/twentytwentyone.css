@@ -179,6 +179,7 @@
 	font-family: 'dashicons';
 	vertical-align: middle;
 	position: relative;
+	top: -2px;
 	margin-right: 2px;
 }
 
@@ -643,6 +644,10 @@
 .mc-main .mc-list .mc-events.odd {
 	padding: 10px;
 	background: none;
+}
+
+.mc-main .list-event .event-title {
+	display: inline-block;
 }
 
 .mc-main .details .sharing {
