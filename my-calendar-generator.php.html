@@ -61,7 +61,7 @@ function mc_generate( $format = 'shortcode' ) {
 		 * @param {string} $output Output from handling a POST request.
 		 * @param {string} $post   $_POST input.
 		 *
-		 * @return {string}
+		 * @return {string|array}
 		 */
 		$output = apply_filters( 'mc_shortcode_generator', '', $_POST );
 		$array  = array();
@@ -111,10 +111,13 @@ function mc_generate( $format = 'shortcode' ) {
 			$output = esc_html( $shortcode . $string );
 			mc_update_option( 'last_shortcode', $output );
 		}
-		$return = "&lt;div class='updated'>&lt;p>&lt;textarea readonly='readonly' class='large-text readonly'>[$output]&lt;/textarea>$append&lt;/p>&lt;/div>";
-		if ( 'shortcode' === $format ) {
+		if ( 'shortcode' === $format &amp;&amp; ! is_array( $output ) ) {
+			$return = "&lt;div class='updated'>&lt;p>&lt;textarea readonly='readonly' class='large-text readonly'>[$output]&lt;/textarea>$append&lt;/p>&lt;/div>";
 			echo wp_kses( $return, mc_kses_elements() );
 		} else {
+			if ( is_array( $output ) ) {
+				return $output;
+			}
 			$array['shortcode'] = "[$output]";
 			$array['append']    = $append;
 

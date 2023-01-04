@@ -92,7 +92,7 @@ function mc_directory_list( $directory ) {
 		}
 		closedir( $handler );
 		sort( $results, SORT_STRING );
-		set_transient( 'mc_icon_list', $results, HOUR_IN_SECONDS );
+		set_transient( 'mc_icon_list', $results, MONTH_IN_SECONDS );
 	}
 
 	return $results;
