@@ -1337,8 +1337,9 @@ add_filter( 'the_content', 'mc_show_event_template', 100, 1 );
 function mc_show_event_template( $content ) {
 	global $post;
 	if ( ( is_single() || is_page() ) && get_the_ID() === (int) mc_get_option( 'uri_id' ) ) {
-		if ( ! has_shortcode( $content, 'my_calendar' ) ) {
-			return $content . do_shortcode( '[my_calendar]' );
+		global $post;
+		if ( ! has_shortcode( $post->post_content, 'my_calendar' ) ) {
+			return $content . do_shortcode( '[my_calendar id="my_calendar_' . get_the_ID() . '"]' );
 		}
 	}
 	if ( is_single() && in_the_loop() && is_main_query() ) {
