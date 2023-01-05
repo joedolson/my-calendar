@@ -3,7 +3,6 @@ clipboard.on( 'success', function(e) {
 	var response = document.querySelector( '.mc-notice-copied' );
 	var text     = response.textContent;
 	wp.a11y.speak( text );
-	console.log( e );
 	response.classList.add( 'visible' );
 });
 
