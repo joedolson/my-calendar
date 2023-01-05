@@ -27,8 +27,6 @@ function mc_get_option( $key ) {
 	$new_key = str_replace( 'mc_', '', $key );
 	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : false;
 	if ( ( ! $value || '' === $options[ $new_key ] ) && ( isset( $default[ $new_key ] ) && '' !== (string) $default[ $new_key ] ) ) {
-		echo $default[ $new_key ];
-		echo $new_key;
 		return $default[ $new_key ];
 	}
 
