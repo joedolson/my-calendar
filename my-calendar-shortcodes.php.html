@@ -513,6 +513,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			}
 			?>
 		&lt;/div>
+		&lt;?php
+		if ( isset( $_GET['post'] ) ) {
+			echo '&lt;div class="editor-save-notice">&lt;p>' . __( 'Save this post to update your My Calendar settings.', 'my-calendar' ) . '&lt;/p>&lt;/div>';
+		}
+		?>
 		&lt;div class="mc-generator-inputs">
 			&lt;fieldset>
 				&lt;legend>&lt;?php esc_html_e( 'Content Filters', 'my-calendar' ); ?>&lt;/legend>
