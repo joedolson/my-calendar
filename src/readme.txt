@@ -110,6 +110,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Deprecate older stylesheets.
 * Change: show category icons in event manager.
 * Change: Render CSS variables using `wp_add_inline_style()`.
+* Change: Render My Calendar main output without shortcode on defined home location.
 * Feature: Migrate CSS to custom file locations.
 * Feature: Add modal option for all popup views.
 * Feature: Copy to clipboard for help & shortcodes.
