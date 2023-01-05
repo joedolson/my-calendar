@@ -487,6 +487,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			}
 			?>
 		</div>
+		<?php
+		if ( isset( $_GET['post'] ) ) {
+			echo '<div class="editor-save-notice"><p>' . __( 'Save this post to update your My Calendar settings.', 'my-calendar' ) . '</p></div>';
+		}
+		?>
 		<div class="mc-generator-inputs">
 			<fieldset>
 				<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>

@@ -744,6 +744,12 @@ strong.label {
 	display: none;
 }
 
+#mc-calendar-view .editor-save-notice p {
+	text-align: right;
+	font-style: italic;
+	margin: 0;
+}
+
 #mc-generator .shortcode-preview {
 	display: grid;
 	grid-template-columns: 1fr auto auto;
