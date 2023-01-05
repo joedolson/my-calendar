@@ -137,7 +137,7 @@
     line-height: 1.7;
 }
 
-.mc-main .details h2, .mc-main .details h3 {
+.mc-main .details h2, .mc-main .details .event-title {
     font-weight: 700;
     font-size: 1.4em;
     line-height: 1.3;
@@ -444,3 +444,4 @@
     .mc-format {
         bottom: 0;
     }
+}

@@ -148,7 +148,7 @@
     border-bottom: none;
 }
 
-.mc-main h3, .mc-main h3 a {
+.mc-main .event-title, .mc-main .event-title a {
     display: block;
     border-radius: 2px;
     font-size: 10px !important;
@@ -164,16 +164,16 @@
     letter-spacing: 100%;
 }
 
-.mc-main h3 img {
+.mc-main .event-title img {
     vertical-align: middle;
     margin: 0 3px 0 0 !important;
 }
 
-.mc-main .mc-list h3 img {
+.mc-main .mc-list .event-title img {
     vertical-align: middle;
 }
 
-.mc-main .list-event h3 {
+.mc-main .list-event .event-title {
     font-size: 1.2em;
     margin: 0;
 }
@@ -368,7 +368,7 @@
     display: none;
 }
 
-.mc-main.mini h3 {
+.mc-main.mini .event-title {
     font-size: 1.1em;
 }
 

@@ -153,7 +153,7 @@
     border-bottom: none
 }
 
-.mc-main td h3, .mc-main td h3 a {
+.mc-main td .event-title, .mc-main td .event-title a {
     display: block;
     border-radius: 2px;
     font-size: 10px !important;
@@ -167,28 +167,28 @@
     letter-spacing: 100%;
 }
 
-.mc-main td h3 a {
+.mc-main td .event-title a {
     text-decoration: none
 }
 
-.mc-main td h3 a:hover, .mc-main td h3 a:focus {
+.mc-main td .event-title a:hover, .mc-main td .event-title a:focus {
     text-decoration: underline
 }
 
-.mc-main.mini td h3, .mc-main.list li h3 {
+.mc-main.mini td .event-title, .mc-main.list li .event-title {
     font-size: 1em !important
 }
 
-.mc-main.mini td h3 {
+.mc-main.mini td .event-title {
     font-weight: 700
 }
 
-.mc-main td h3 img {
+.mc-main td .event-title img {
     vertical-align: middle;
     margin: 0 2px 0 0 !important
 }
 
-.mc-main .list-event h3 {
+.mc-main .list-event .event-title {
     margin: 0
 }
 
@@ -399,7 +399,7 @@
     padding: 6px 2px !important
 }
 
-.mc-main.mini h3 {
+.mc-main.mini .event-title {
     font-size: 1.1em
 }
 
