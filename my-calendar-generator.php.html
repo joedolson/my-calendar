@@ -66,7 +66,8 @@ function mc_generate( $format = 'shortcode' ) {
 		$output = apply_filters( 'mc_shortcode_generator', '', $_POST );
 		$array  = array();
 		if ( ! $output ) {
-			switch ( $_POST['shortcode'] ) {
+			$type = sanitize_text_field( $_POST['shortcode'] );
+			switch ( $type ) {
 				case 'main':
 					$shortcode = 'my_calendar';
 					break;
@@ -109,7 +110,7 @@ function mc_generate( $format = 'shortcode' ) {
 				}
 			}
 			$output = esc_html( $shortcode . $string );
-			mc_update_option( 'last_shortcode', $output );
+			mc_update_option( 'last_shortcode_' . $type, $output );
 		}
 		if ( 'shortcode' === $format &amp;&amp; ! is_array( $output ) ) {
 			$return = "&lt;div class='updated'>&lt;p>&lt;textarea readonly='readonly' class='large-text readonly'>[$output]&lt;/textarea>$append&lt;/p>&lt;/div>";
