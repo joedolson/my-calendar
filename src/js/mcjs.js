@@ -12,10 +12,10 @@
 		$( ".mini .calendar-events" ).hide();
 		$( document ).on( "click", ".mini .has-events .trigger", function (e) {
 			e.preventDefault();
-			var current_date = $(this).parent().children();
-			current_date.not(".trigger").toggle();
+			var current_date = $(this).parents( '.has-events' ).children( '.calendar-events' );
+			current_date.toggle();
 			$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
-			$( '.mini .has-events' ).children().not( '.trigger, .mc-date, .event-date' ).not( current_date ).hide();
+			$( '.mini .has-events' ).children().not( '.mc-date-container' ).not( current_date ).hide();
 			$( this ).addClass( 'active-toggle' );
 			e.stopImmediatePropagation();
 		} );
@@ -92,6 +92,7 @@
 			if ( keycode == 27 ) {
 				$( '.mc-main ').removeClass( 'grid-open' );
 				$( '.calendar-event div.single-details' ).hide();
+				$( ".mini .calendar-events" ).hide();
 			}
 		});
 
