@@ -628,12 +628,10 @@
 .mc-main .mc-list .mc-events {
 	list-style-type: none !important;
 	padding: .5rem;
-	background: rgba(0, 0, 0, .03);
 	margin: 0;
 }
 
 .mc-main .mc-list .mc-events:nth-of-type(even) {
-	padding: 10px;
 	background: none;
 }
 
