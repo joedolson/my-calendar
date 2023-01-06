@@ -1,6 +1,7 @@
 var clipboard = new ClipboardJS('.mc-copy-to-clipboard');
 clipboard.on( 'success', function(e) {
-	var response = document.querySelector( '.mc-notice-copied' );
+	var parent   = e.trigger.parentNode;
+	var response = parent.querySelector( '.mc-notice-copied' );
 	var text     = response.textContent;
 	wp.a11y.speak( text );
 	response.classList.add( 'visible' );
