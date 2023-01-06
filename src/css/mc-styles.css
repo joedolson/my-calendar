@@ -1522,6 +1522,11 @@ div.mc-search {
 	align-items: center;
 }
 
+fieldset.mc-flex {
+	column-gap: 10px;
+	flex-wrap: wrap;
+}
+
 .mc-support-me p {
 	font-size: 1.6em;
 	font-weight: 600;
