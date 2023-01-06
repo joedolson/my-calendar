@@ -427,6 +427,9 @@ function mc_plugin_update_message() {
 function mc_footer_js() {
 	global $wp_query;
 	$version = mc_get_version();
+	if ( SCRIPT_DEBUG ) {
+		$version = $version . '-' . mt_rand( 10000, 100000 );
+	}
 	/**
 	 * Disable scripting on mobile devices.
 	 *
