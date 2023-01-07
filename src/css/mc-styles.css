@@ -797,6 +797,10 @@ strong.label {
 	margin: 10px 0 0;
 }
 
+#mc-sortable li.mc-visible {
+	background: rgba( 0, 0, 0, .02 );
+}
+
 #mc-sortable li {
 	margin: 0;
 	border-bottom: none;
