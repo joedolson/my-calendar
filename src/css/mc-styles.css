@@ -858,15 +858,23 @@ strong.label {
 	color: #000;
 }
 
+#mc-sortable li {
+	display: flex;
+	align-items: center;
+	column-gap: 4px;
+}
+
 #mc-sortable .mc-buttons {
-	display: inline-block;
+	display: inline-flex;
+	column-gap: 4px;
+	align-items: center;
 }
 
 #mc-sortable .mc-hidden > *:not(.mc-buttons) {
 	opacity: .5;
 }
 
-#mc-sortable li:nth-of-type(1) .mc-buttons .up, #mc-sortable li:nth-of-type(13) .mc-buttons .down {
+#mc-sortable li:first-of-type .mc-buttons .up, #mc-sortable li:last-of-type .mc-buttons .down {
 	background: none;
 	border: 1px solid transparent;
 	color: rgba( 0,0,0,.5 );
@@ -1050,7 +1058,7 @@ input[name="mc_uri"] {
 
 #mc-sortable code {
 	display: inline-block;
-	width: 5em;
+	min-width: 5em;
 	text-align: center;
 }
 
