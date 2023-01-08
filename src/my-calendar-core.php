@@ -927,7 +927,6 @@ function my_calendar_check() {
 		if ( 'true' === get_option( 'mc_uninstalled' ) ) {
 			mc_default_settings();
 			update_option( 'mc_db_version', mc_get_version() );
-			delete_option( 'mc_uninstalled' );
 		}
 	}
 }
