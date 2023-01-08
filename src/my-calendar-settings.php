@@ -45,7 +45,7 @@ function mc_get_option( $key ) {
  * @return bool
  */
 function mc_update_option( $key, $value = '' ) {
-	$options         = get_option( 'my_calendar_options', mc_default_options() );
+	$options = get_option( 'my_calendar_options', mc_default_options() );
 	if ( ! is_array( $options ) ) {
 		$options = mc_default_options();
 	}
