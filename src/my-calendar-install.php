@@ -425,6 +425,7 @@ function mc_default_options() {
 		'use_grid_template'            => '',
 		'migrated'                     => '',
 		'list_link_titles'             => 'true',
+		'default_location'             => '',
 	);
 
 	/**

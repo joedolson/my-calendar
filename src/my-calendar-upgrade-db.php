@@ -150,6 +150,7 @@ function mc_migrate_settings() {
 		'use_details_template'         => get_option( 'mc_use_details_template' ),
 		'use_grid_template'            => get_option( 'mc_use_grid_template' ),
 		'list_link_titles'             => 'false',
+		'default_location'             => get_option( 'mc_default_location' ),
 	);
 	// Ensure that required settings have values.
 	foreach ( $defaults as $key => $value ) {
