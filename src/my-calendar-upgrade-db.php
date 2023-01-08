@@ -156,7 +156,7 @@ function mc_migrate_settings() {
 		if ( 'uri_query' === $key || 'migrated' === $key ) {
 			continue;
 		}
-		if ( '' === (string) $options[ $key ] && '' !== $value ) {
+		if ( empty( $options[ $key ] ) && '' !== $value ) {
 			$options[ $key ] = $defaults[ $key ];
 		}
 	}
