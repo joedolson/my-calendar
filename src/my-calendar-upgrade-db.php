@@ -105,7 +105,6 @@ function mc_migrate_settings() {
 		'style_vars'                   => get_option( 'mc_style_vars' ),
 		'show_weekends'                => get_option( 'mc_show_weekends' ),
 		'convert'                      => get_option( 'mc_convert' ),
-		'multisite_show'               => get_option( 'mc_multisite_show' ),
 		'topnav'                       => get_option( 'mc_topnav' ),
 		'bottomnav'                    => get_option( 'mc_bottomnav' ),
 		'default_direction'            => get_option( 'mc_default_direction' ),
@@ -229,6 +228,8 @@ function mc_migrate_settings() {
 	delete_option( 'mc_location_controls' );
 	delete_option( 'mc_cpt_base' );
 	delete_option( 'mc_location_cpt_base' );
+	delete_option( 'mc_uri' );
+	delete_option( 'mc_uri_id' );
 }
 
 /**
