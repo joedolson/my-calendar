@@ -187,6 +187,7 @@ function mc_migrate_settings() {
 	delete_option( 'mc_event_mail_subject' );
 	delete_option( 'mc_event_mail_message' );
 	delete_option( 'mc_event_mail_bcc' );
+	delete_option( 'mc_html_email' );
 	delete_option( 'mc_week_format' );
 	delete_option( 'mc_date_format' );
 	delete_option( 'mc_templates' );

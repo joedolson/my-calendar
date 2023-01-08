@@ -34,7 +34,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'my_calendar_options' );
 		delete_option( 'ko_calendar_imported' );
 		delete_option( 'mc_count_cache' );
-		delete_option( 'mc_promotion_scheduled' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
