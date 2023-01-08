@@ -47,7 +47,7 @@ function my_calendar_manage_locations() {
 		}
 	}
 	if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-		update_option( 'mc_default_location', (int) $_GET['default'] );
+		mc_update_option( 'default_location', (int) $_GET['default'] );
 		mc_show_notice( __( 'Default Location Changed', 'my-calendar' ) );
 	}
 	?>
