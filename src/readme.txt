@@ -89,6 +89,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.4.0 =
 
 * Feature: import and export calendar settings.
+* Feature: Migrate CSS to custom file locations.
+* Feature: Add modal option for all popup views.
+* Feature: Copy to clipboard for help & shortcodes.
+* Feature: REST API support for outputting events.
+* Feature: New default stylesheet.
+* Feature: Support 'current' as an argument in a comma-separated list of users.
 * Bug fix: User category limits need to be configurable for all users who can add events.
 * Bug fix: User category limits should limit the categories selectable by users, not just those editable.
 * Bug fix: Default events screen says 'All' but only showed 'Published'
@@ -103,28 +109,24 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: If primary category is already private, no need to check whether a private category is asigned.
 * Bug fix: Dynamically manage color in SVG icons.
 * Bug fix: Delete post meta when dropping database on uninstall.
+* Bug fix: PHP 8.1. updates.
+* Bug fix: All day events not rendered correctly in iCal clients. Props @drjoeward.
 * Change: Manage settings in a single database option rather than individual options.
 * Change: Improved design on print view.
-* Change: Support 'current' as an argument in a comma-separated list of users.
-* Change: Updates to support future changes in My Calendar Pro.
 * Change: Refresh undeprecated stylesheets.
 * Change: Deprecate older stylesheets.
 * Change: show category icons in event manager.
 * Change: Render CSS variables using `wp_add_inline_style()`.
 * Change: Render My Calendar main output without shortcode on defined home location.
-* Feature: Migrate CSS to custom file locations.
-* Feature: Add modal option for all popup views.
-* Feature: Copy to clipboard for help & shortcodes.
+* Change: Remove a couple very long deprecated functions.
+* Change: Don't save default text settings; use coded fallbacks when empty.
+* Planning: Prep for removal of core CSS editing.
+* Planning: Prep work for new templating framework.
+* Planning: Updates to support future changes in My Calendar Pro.
 * Performance: caching of icon list data.
 * Accessibility: Improve aria-label patterns so user settings override.
 * Accessibility: Omit aria-label if link text is already unique.
 * Accessibility: Improve calendar navigation using AJAX.
-* PHP 8.1 Compatibility fixes.
-* Remove a couple very long deprecated functions.
-* Prep for removal of core CSS editing.
-* New default stylesheet.
-* REST API support for outputting events.
-* Prep work for new templating framework.
 
 = 3.3.24.1 =
 
