@@ -402,7 +402,6 @@ function mc_update_permissions_settings( $post ) {
 function mc_update_output_settings( $post ) {
 	$options                     = array();
 	$options['open_uri']         = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
-	$options['no_link']          = ( ! empty( $post['mc_no_link'] ) && 'on' === $post['mc_no_link'] ) ? 'true' : 'false';
 	$options['mini_uri']         = $post['mc_mini_uri'];
 	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
 	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';

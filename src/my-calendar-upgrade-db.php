@@ -167,6 +167,7 @@ function mc_migrate_settings() {
 	delete_option( 'mc_display_main' );
 	delete_option( 'mc_display_mini' );
 	delete_option( 'mc_use_permalinks' );
+	delete_option( 'mc_no_link' );
 	delete_option( 'mc_use_styles' );
 	delete_option( 'mc_show_months' );
 	delete_option( 'mc_calendar_javascript' );
