@@ -378,7 +378,6 @@ function mc_default_options() {
 		),
 		'show_weekends'                => 'true',
 		'convert'                      => 'true',
-		'multisite_show'               => '0',
 		'topnav'                       => 'toggle,timeframe,jump,nav',
 		'bottomnav'                    => 'key,print',
 		'default_direction'            => 'DESC',
