@@ -391,11 +391,11 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
 function my_calendar_edit() {
 	mc_check_imports();
 
-	$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
-	$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
+	$action   = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
+	$event_id = ! empty( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : '';
 
 	if ( isset( $_GET['mode'] ) ) {
-		$action = $_GET['mode'];
+		$action = sanitize_text_field( $_GET['mode'] );
 		if ( 'edit' === $action || 'copy' === $action ) {
 			$event_id = (int) $_GET['event_id'];
 		}
@@ -416,8 +416,9 @@ function my_calendar_edit() {
 			$response = my_calendar_save( $action, $mc_output, (int) $_POST['event_id'] );
 			echo wp_kses_post( $response['message'] );
 		}
+		$post = map_deep( $_POST, 'sanitize_textarea_field' );
 		for ( $i = 0; $i &lt; $count; $i ++ ) {
-			$mc_output = mc_check_data( $action, $_POST, $i );
+			$mc_output = mc_check_data( $action, $post, $i );
 			if ( 'add' === $action || 'copy' === $action ) {
 				$response = my_calendar_save( $action, $mc_output );
 			} else {
@@ -426,8 +427,8 @@ function my_calendar_edit() {
 			echo wp_kses_post( $response['message'] );
 		}
 		if ( isset( $_POST['ref'] ) ) {
-			$url = esc_url( urldecode( $_POST['ref'] ) );
-			echo wp_kses_post( "&lt;p class='return'>&lt;a href='$url'>" . __( 'Return to Calendar', 'my-calendar' ) . '&lt;/a>&lt;/p>' );
+			$url = urldecode( sanitize_text_field( $_POST['ref'] ) );
+			echo wp_kses_post( "&lt;p class='return'>&lt;a href='" . esc_url( $url ) ."'>" . __( 'Return to Calendar', 'my-calendar' ) . '&lt;/a>&lt;/p>' );
 		}
 	}
 	?>
@@ -1871,7 +1872,7 @@ function mc_event_location_dropdown_block( $data ) {
 				if ( is_object( $loc ) ) {
 					$base_loc = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
 					if ( ! $event_location ) {
-						$selected = ( is_numeric( get_option( 'mc_default_location' ) ) &amp;&amp; (int) get_option( 'mc_default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
+						$selected = ( is_numeric( mc_get_option( 'default_location' ) ) &amp;&amp; (int) mc_get_option( 'default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					} else {
 						$selected = '';
 					}
