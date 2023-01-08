@@ -151,6 +151,7 @@ function mc_migrate_settings() {
 		'list_link_titles'             => 'false',
 		'default_location'             => get_option( 'mc_default_location' ),
 	);
+
 	// Ensure that required settings have values.
 	foreach ( $defaults as $key => $value ) {
 		if ( 'uri_query' === $key || 'migrated' === $key ) {
@@ -160,7 +161,8 @@ function mc_migrate_settings() {
 			$options[ $key ] = $defaults[ $key ];
 		}
 	}
-	add_option( 'my_calendar_options', $options );
+
+	update_option( 'my_calendar_options', $options );
 	// Remove old options.
 	delete_option( 'mc_display_single' );
 	delete_option( 'mc_display_main' );

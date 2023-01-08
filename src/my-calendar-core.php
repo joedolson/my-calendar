@@ -879,49 +879,44 @@ function my_calendar_exists() {
 function my_calendar_check() {
 	// only execute this function for administrators.
 	if ( current_user_can( 'manage_options' ) ) {
-		global $wpdb;
 		mc_if_needs_permissions();
-		$current_version = mc_get_version( false );
+		$old_version = mc_get_version( false );
 
 		// If current version matches, don't bother running this.
-		if ( mc_get_version() === $current_version ) {
+		if ( mc_get_version() === $old_version ) {
 
 			return true;
 		} else {
 			update_option( 'mc_version', mc_get_version() );
 		}
-		// Assume this is not a new install until we prove otherwise.
-		$new_install        = false;
+
 		$upgrade_path       = array();
 		$my_calendar_exists = my_calendar_exists();
 
-		if ( $my_calendar_exists && '' === $current_version ) {
+		if ( $my_calendar_exists && '' === $old_version ) {
 			// If the table exists, but I don't know what version it is, I have to run the full cycle of upgrades.
-			$current_version = '2.2.9';
+			$old_version = '2.9.9';
 		}
 
-		if ( ! $my_calendar_exists ) {
-			$new_install = true;
-		} else {
+		if ( $my_calendar_exists ) {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
 			$valid_upgrades = array( '3.0.0', '3.1.13', '3.3.0', '3.4.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
-				if ( version_compare( $current_version, $upgrade, '<' ) ) {
+				if ( version_compare( $old_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
 				}
 			}
 		}
-		// Now we've determined what the current install is.
-		if ( true === $new_install ) {
-			// Add default settings.
+
+		if ( ! empty( $upgrade_path ) ) {
+			mc_do_upgrades( $upgrade_path );
+		} else {
 			mc_default_settings();
 		}
 
-		mc_do_upgrades( $upgrade_path );
-
 		/*
-		 * If the user has fully uninstalled the plugin but kept the database of events, this will restore default
+		 * If the user has uninstalled the plugin but kept the database of events, this will restore default
 		 * settings and upgrade db if needed.
 		*/
 		if ( 'true' === get_option( 'mc_uninstalled' ) ) {
