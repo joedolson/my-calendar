@@ -22,6 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_get_option( $key ) {
 	$options = get_option( 'my_calendar_options', mc_default_options() );
+	if ( ! is_array( $options ) ) {
+		$options = mc_default_options();
+	}
 	$default = mc_default_options();
 	$options = array_merge( $default, $options );
 	$new_key = str_replace( 'mc_', '', $key );
@@ -43,6 +46,9 @@ function mc_get_option( $key ) {
  */
 function mc_update_option( $key, $value = '' ) {
 	$options         = get_option( 'my_calendar_options', mc_default_options() );
+	if ( ! is_array( $options ) ) {
+		$options = mc_default_options();
+	}
 	$options[ $key ] = $value;
 	$return          = update_option( 'my_calendar_options', $options );
 
