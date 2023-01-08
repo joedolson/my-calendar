@@ -380,7 +380,7 @@ function mc_delete_location( $location, $type = 'string' ) {
 		$return           = mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ), false );
 		$default_location = mc_get_option( 'default_location', false );
 		if ( (int) $default_location === $location ) {
-			delete_option( 'mc_default_location' );
+			mc_update_option( 'default_location', '' );
 		}
 	} else {
 		$value  = false;
@@ -428,7 +428,7 @@ function my_calendar_add_locations() {
 
 		$results = mc_insert_location( $add );
 		if ( isset( $_POST['mc_default_location'] ) ) {
-			update_option( 'mc_default_location', (int) $results );
+			mc_update_option( 'default_location', (int) $results );
 		}
 		/**
 		 * Executed an action when a location is saved.
@@ -472,11 +472,11 @@ function my_calendar_add_locations() {
 
 		$where = array( 'location_id' => (int) $_POST['location_id'] );
 		if ( isset( $_POST['mc_default_location'] ) ) {
-			update_option( 'mc_default_location', (int) $_POST['location_id'] );
+			mc_update_option( 'default_location', (int) $_POST['location_id'] );
 		}
 		$default_location = mc_get_option( 'default_location' );
 		if ( (int) $_POST['location_id'] === (int) $default_location &amp;&amp; ! isset( $_POST['mc_default_location'] ) ) {
-			delete_option( 'mc_default_location' );
+			mc_update_option( 'default_location', '' );
 		}
 		$results = mc_modify_location( $update, $where );
 
