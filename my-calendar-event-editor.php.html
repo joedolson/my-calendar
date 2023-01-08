@@ -428,7 +428,7 @@ function my_calendar_edit() {
 		}
 		if ( isset( $_POST['ref'] ) ) {
 			$url = urldecode( sanitize_text_field( $_POST['ref'] ) );
-			echo wp_kses_post( "&lt;p class='return'>&lt;a href='" . esc_url( $url ) ."'>" . __( 'Return to Calendar', 'my-calendar' ) . '&lt;/a>&lt;/p>' );
+			echo wp_kses_post( "&lt;p class='return'>&lt;a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '&lt;/a>&lt;/p>' );
 		}
 	}
 	?>
