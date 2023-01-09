@@ -551,14 +551,14 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$('#mc-sortable').sortable({
+	$('.mc-sortable').sortable({
 		placeholder: 'mc-ui-state-highlight',
 		update: function (event, ui) {
-			$('#mc-sortable-update').html( 'Submit form to save changes' );
+			$('.mc-sortable-update').html( 'Submit form to save changes' );
 		}
 	});
 
-	$('#mc-sortable .hide').on('click', function (e) {
+	$('.mc-sortable .hide').on('click', function (e) {
 		var disabled = $( this ).find( '.dashicons' ).hasClass( 'dashicons-hidden' );
 		var current  = $( this ).parents( 'li' );
 		if ( disabled ) {
@@ -574,42 +574,42 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$('#mc-sortable .up').on('click', function (e) {
+	$('.mc-sortable .up').on('click', function (e) {
 		var parentEls = $( this ).parents().map(function() { return this.tagName; } ).get();
 		var parentLi  = $.inArray( 'LI', parentEls );
 		var parentTr  = $.inArray( 'TR', parentEls );
 		if ( 1 == parentLi ) {
 			$(this).parents('li').insertBefore($(this).parents('li').prev());
-			$( '#mc-sortable li' ).removeClass( 'mc-updated' );
+			$( '.mc-sortable li' ).removeClass( 'mc-updated' );
 			$(this).parents('li').addClass( 'mc-updated' );
 		} else if ( 1 == parentTr ) {
 			$(this).parents('tr').insertBefore($(this).parents('tr').prev());
-			$( '#mc-sortable tr' ).removeClass( 'mc-updated' );
+			$( '.mc-sortable tr' ).removeClass( 'mc-updated' );
 			$(this).parents('tr').addClass( 'mc-updated' );
 		} else {
 			$(this).parents('.mc-row').insertBefore($(this).parents('.mc-row').prev());
-			$( '#mc-sortable .mc-row' ).removeClass( 'mc-updated' );
+			$( '.mc-sortable .mc-row' ).removeClass( 'mc-updated' );
 			$(this).parents('.mc-row').addClass( 'mc-updated' );
 		}
 		$( this ).trigger( 'focus' );
 		wp.a11y.speak( 'Item moved up' );
 	});
 
-	$('#mc-sortable .down').on('click', function (e) {
+	$('.mc-sortable .down').on('click', function (e) {
 		var parentEls = $( this ).parents().map(function() { return this.tagName; } ).get();
 		var parentLi  = $.inArray( 'LI', parentEls );
 		var parentTr  = $.inArray( 'TR', parentEls );
 		if ( 1 == parentLi ) {
 			$(this).parents('li').insertAfter($(this).parents('li').next());
-			$( '#mc-sortable li' ).removeClass( 'mc-updated' );
+			$( '.mc-sortable li' ).removeClass( 'mc-updated' );
 			$(this).parents('li').addClass( 'mc-updated' );
 		} else if ( 1 == parentTr ) {
 			$(this).parents('tr').insertAfter($(this).parents('tr').next());
-			$( '#mc-sortable tr' ).removeClass( 'mc-updated' );
+			$( '.mc-sortable tr' ).removeClass( 'mc-updated' );
 			$(this).parents('tr').addClass( 'mc-updated' );
 		} else {
 			$(this).parents('.mc-row').insertAfter($(this).parents('.mc-row').next());
-			$( '#mc-sortable .mc-row' ).removeClass( 'mc-updated' );
+			$( '.mc-sortable .mc-row' ).removeClass( 'mc-updated' );
 			$(this).parents('.mc-row').addClass( 'mc-updated' );
 		}
 		$( this ).trigger( 'focus' );

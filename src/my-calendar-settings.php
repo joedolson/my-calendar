@@ -1442,8 +1442,8 @@ function mc_remote_db() {
 							$order        = array_merge( $topnav, $calendar, $botnav );
 							$nav_elements = mc_navigation_keywords();
 							?>
-							<div id='mc-sortable-update' aria-live='assertive'></div>
-							<ul id='mc-sortable'>
+							<div class='mc-sortable-update' aria-live='assertive'></div>
+							<ul class='mc-sortable' id="mc-sortable-nav">
 							<?php
 							$inserted = array();
 							$class    = 'visible';

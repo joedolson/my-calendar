@@ -790,28 +790,28 @@ strong.label {
 	display: inline-block;
 }
 
-#mc-sortable li {
+.mc-sortable li {
 	border: 1px solid #dcdcde;
 	background: rgba(0, 0, 0, .05);
 	padding: .5em 1em;
 	margin: 10px 0 0;
 }
 
-#mc-sortable li.mc-visible {
+.mc-sortable li.mc-visible {
 	background: rgba( 0, 0, 0, .02 );
 }
 
-#mc-sortable li {
+.mc-sortable li {
 	margin: 0;
 	border-bottom: none;
 }
 
-#mc-sortable .ui-sortable-handle {
+.mc-sortable .ui-sortable-handle {
 	cursor: move;
 	border-left: 4px solid transparent;
 }
 
-#mc-sortable .ui-sortable-handle:hover {
+.mc-sortable .ui-sortable-handle:hover {
 	border-left: 4px solid rgba(0,0,0,.5);
 }
 
@@ -856,35 +856,35 @@ strong.label {
 	font-size: 1.1rem;
 }
 
-.mc-settings-page #mc-sortable .mc-updated,
-.mc-generator #mc-sortable .mc-updated {
+.mc-settings-page .mc-sortable .mc-updated,
+.mc-generator .mc-sortable .mc-updated {
 	background-color: #f0c33c;
 	color: #000;
 }
 
-#mc-sortable li {
+.mc-sortable li {
 	display: flex;
 	align-items: center;
 	column-gap: 4px;
 }
 
-#mc-sortable .mc-buttons {
+.mc-sortable .mc-buttons {
 	display: inline-flex;
 	column-gap: 4px;
 	align-items: center;
 }
 
-#mc-sortable .mc-hidden > *:not(.mc-buttons) {
+.mc-sortable .mc-hidden > *:not(.mc-buttons) {
 	opacity: .5;
 }
 
-#mc-sortable li:first-of-type .mc-buttons .up, #mc-sortable li:last-of-type .mc-buttons .down {
+.mc-sortable li:first-of-type .mc-buttons .up, .mc-sortable li:last-of-type .mc-buttons .down {
 	background: none;
 	border: 1px solid transparent;
 	color: rgba( 0,0,0,.5 );
 }
 
-.my-calendar-admin .ui-accordion-header.ui-state-hover, .ui-accordion-header.ui-state-focus, .mc-settings-page #mc-sortable li:hover {
+.my-calendar-admin .ui-accordion-header.ui-state-hover, .ui-accordion-header.ui-state-focus, .mc-settings-page .mc-sortable li:hover {
 	background: #f6f7f7;
 	box-shadow: 0 0 2px #dcdcde;
 }
@@ -954,7 +954,7 @@ strong.label {
 	padding: 4px;
 }
 
-#mc-sortable li {
+.mc-sortable li {
 	cursor: move;
 }
 
@@ -1038,29 +1038,29 @@ input[name="mc_uri"] {
 	display: none;
 }
 
-#mc-sortable .mc-calendar {
+.mc-sortable .mc-calendar {
 	background-color: #fff !important;
 	border: 2px solid #787c82 !important;
 	border-left-width: 4px !important;
 }
 
-#mc-sortable li.mc-stop {
+.mc-sortable li.mc-stop {
 	border-radius: none;
 	background-color: #2c3338;
 	color: #f0f0f1;
 } 
 
-#mc-sortable .mc-ui-state-highlight {
+.mc-sortable .mc-ui-state-highlight {
 	background: #fcf9e8 !important;
 	height: 1.6em;
 }
 
-#mc-sortable div.dashicons {
+.mc-sortable div.dashicons {
 	vertical-align: middle;
 	height: 1em;
 }
 
-#mc-sortable code {
+.mc-sortable code {
 	display: inline-block;
 	min-width: 5em;
 	text-align: center;
