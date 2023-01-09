@@ -35,8 +35,9 @@
 			$(document).on( 'click', '.event-date button',
 				function (e) {
 					e.preventDefault();
-					$( this ).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).toggle();
-					var visible = $(this).closest( '.mc-events' ).children( '.mc-language, .mc-event' ).is(':visible');
+					console.log($( this ).closest( '.mc-events' ).find( '.mc-event' ) );
+					$( this ).closest( '.mc-events' ).find( '.mc-event' ).toggle();
+					var visible = $(this).closest( '.mc-events' ).find( '.mc-event' ).is(':visible');
 					if ( visible ) {
 						$(this).attr('aria-expanded', 'true');
 					} else {
@@ -211,7 +212,7 @@
 				}
 				// Mini view.
 				if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
-					$('.mini .has-events').children().not('.trigger, .mc-date, .event-date').hide();
+					$('.mini .has-events').children().not('.mc-date-container').hide();
 				}
 				// All views.
 				$( '#' + targetId ).trigger( 'focus' );
