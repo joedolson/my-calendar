@@ -59,7 +59,6 @@ function mc_widget_defaults() {
  * @return array
  */
 function mc_globals( $data = 'all' ) {
-	
 	$grid_template = '
 <span class="event-time value-title">{time}{endtime before="<span class=\'time-separator\'> - </span><span class=\'end-time\'>" after="</span>"}</span>
 {image before="<div class=\'mc-event-image\'>" after="</div>"}
@@ -83,10 +82,10 @@ function mc_globals( $data = 'all' ) {
 
 	if ( 'templates' === $data ) {
 		$templates = array(
-			'grid_template'      => addslashes( $grid_template ),
-			'list_template'      => addslashes( $grid_template ),
-			'mini_template'      => addslashes( $grid_template ),
-			'single_template'    => addslashes( $single_template ),
+			'grid_template'   => addslashes( $grid_template ),
+			'list_template'   => addslashes( $grid_template ),
+			'mini_template'   => addslashes( $grid_template ),
+			'single_template' => addslashes( $single_template ),
 		);
 		return $templates;
 	}
@@ -455,7 +454,7 @@ function mc_default_options() {
  * Save default settings.
  */
 function mc_default_settings() {
-	//delete_option( 'mc_uninstalled' );
+	delete_option( 'mc_uninstalled' );
 	$globals = mc_globals();
 	$options = mc_default_options();
 	update_option( 'my_calendar_options', $options, false );
