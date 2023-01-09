@@ -200,7 +200,7 @@
 				// List view.
 				if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
 					if ( 'false' === my_calendar.links ) {
-						$('li.mc-events').children().not('.event-date').hide();
+						$('li.mc-events').find( '.mc-events' ).hide();
 						$('li.current-day').children().show();
 					} else {
 						$('li.mc-events .single-details' ).hide();
