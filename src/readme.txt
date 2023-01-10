@@ -89,7 +89,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.4.2 =
 
 * Bug fix: Revert fix that supported custom title formats in Full Site Editor, as it caused problems in some classic themes.
-* Bug fix: default_settings should only ever call add_option, not update_option.
+* Bug fix: default_settings should only ever call add_option, not update_option. Resolves bug that could reset user's settings if they had previously uninstalled.
 * Bug fix: Accidentally used sanitize_textarea_field on event content instead of wp_kses_post, which stripped HTML.
 
 = 3.4.1 =
