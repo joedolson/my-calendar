@@ -211,7 +211,9 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			$mc_topnav .= ${$value};
 		}
 		if ( ! in_array( $value, $available, true ) && 'none' !== strtolower( $value ) ) {
-			$mc_topnav .= call_user_func( $value, $params );
+			if ( function_exists( $value ) ) {
+				$mc_topnav .= call_user_func( $value, $params );
+			}
 		}
 	}
 
