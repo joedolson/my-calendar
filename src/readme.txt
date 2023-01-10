@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.1
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -85,6 +85,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.4.2 =
+
+* Bug fix: Revert fix that supported custom title formats in Full Site Editor, as it caused problems in some classic themes.
+* Bug fix: default_settings should only ever call add_option, not update_option.
+* Bug fix: Accidentally used sanitize_textarea_field on event content instead of wp_kses_post, which stripped HTML.
 
 = 3.4.1 =
 
