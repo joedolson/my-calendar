@@ -457,7 +457,7 @@ function mc_default_settings() {
 	delete_option( 'mc_uninstalled' );
 	$globals = mc_globals();
 	$options = mc_default_options();
-	update_option( 'my_calendar_options', $options, false );
+	add_option( 'my_calendar_options', $options );
 	add_site_option( 'mc_multisite', '0' );
 
 	mc_add_roles();
