@@ -51,7 +51,7 @@
   var MODAL_OVERLAY_BG_ENABLED_ATTR = 'data-background-click';
 
   var VISUALLY_HIDDEN_CLASS = 'invisible';
-  var NO_SCROLL_CLASS = 'no-scroll';
+  var NO_SCROLL_CLASS = 'mc-no-scroll';
 
   var ATTR_ROLE = 'role';
   var ATTR_OPEN = 'open';

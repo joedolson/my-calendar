@@ -510,10 +510,10 @@ dialog.my-calendar-modal .modal-content {
 }
 
 /* removes scroll when modal is opened */
-.no-scroll {
+body.mc-no-scroll {
 	overflow: hidden;
 }
-
+/*
 /* overlay covers everything */
 .my-calendar-modal-overlay {
   position: fixed;
@@ -607,6 +607,7 @@ dialog.my-calendar-modal .modal-content {
   background: #fff;
 }
 
+
 .my-calendar-modal {
   animation: apparition ease .5s 1 normal ;
 }
@@ -635,7 +636,6 @@ dialog.my-calendar-modal .modal-content {
 	height: 90%;
 	width: 90%;
   }
-
 }
 
 /* for this example: mobile */
@@ -646,5 +646,4 @@ dialog.my-calendar-modal .modal-content {
 	width: 98%;
 	height: 98%;
   }
-
-}
+}*/
