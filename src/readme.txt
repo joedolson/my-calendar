@@ -86,6 +86,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.4.3 =
+
+* Bug fix: Overly general no-scroll selector on modal behaviors caused. Added prefix & specificity.
+* Bug fix: Wrong variable called for custom navigation items.
+* Bug fix: Verify that callable functions exist before calling them.
+
 = 3.4.2 =
 
 * Bug fix: Revert fix that supported custom title formats in Full Site Editor, as it caused problems in some classic themes.
