@@ -30,7 +30,7 @@ function mc_migrate_css() {
 				WP_Filesystem();
 				$style       = mc_get_option( 'css_file' );
 				$stylefile   = mc_get_style_path();
-				$newfileroot = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __DIR__ ) );
+				$newfileroot = str_replace( '/my-calendar/', '/my-calendar-custom/', plugin_dir_path( __FILE__ ) );
 				$newfiledir  = trailingslashit( $newfileroot ) . 'styles/';
 				$newfilepath = trailingslashit( $newfiledir ) . $style;
 				if ( ! $wp_filesystem->exists( $newfileroot ) ) {
@@ -380,7 +380,7 @@ function mc_stylesheet_selector() {
 		}
 		$filepath = mc_get_style_path( $value );
 		$path     = pathinfo( $filepath );
-		if ( 'css' === $path['extension'] ) {
+		if ( isset( $path['extension'] ) && 'css' === $path['extension'] ) {
 			$selected = ( $current === $value ) ? ' selected="selected"' : '';
 			$options .= "<option value='$value'$selected>$value$append</option>\n";
 		}
