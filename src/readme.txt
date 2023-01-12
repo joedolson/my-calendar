@@ -91,6 +91,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Overly general no-scroll selector on modal behaviors caused. Added prefix & specificity.
 * Bug fix: Wrong variable called for custom navigation items.
 * Bug fix: Verify that callable functions exist before calling them.
+* Bug fix: CSS Migration moved files into the wrong directory: move to correct directory.
+* Bug fix: Perform integrity checks on imported settings files.
+* Feature: Locate CSS migrated into wrong directory and offer to move them.
 
 = 3.4.2 =
 
