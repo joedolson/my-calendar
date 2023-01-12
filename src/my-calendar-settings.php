@@ -566,19 +566,55 @@ function mc_import_settings() {
 	if ( isset( $_FILES['mc-import-settings'] ) ) {
 		$nonce = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
 		if ( $nonce ) {
-			$settings = file_get_contents( $_FILES['mc-import-settings']['tmp_name'] );
-			$settings = json_decode( $settings, ARRAY_A );
-			if ( null === $settings ) {
-				$return = json_last_error();
+			$settings = ( 0 !== (int) $_FILES['mc-import-settings']['size'] ) ? file_get_contents( $_FILES['mc-import-settings']['tmp_name'] ) : false;
+			if ( ! $settings ) {
+				$return = __( 'No settings file provided.', 'my-calendar' );
 			} else {
-				$settings = map_deep( $settings, 'sanitize_textarea_field' );
-				update_option( 'my_calendar_options', $settings );
-				$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
+				$settings = json_decode( $settings, ARRAY_A );
+				if ( null === $settings ) {
+					$return = json_last_error();
+				} else {
+					$valid = mc_validate_settings( $settings );
+					if ( ! $valid ) {
+						$return = __( "The file uploaded doesn't seem to be a valid collection of My Calendar settings.", 'my-calendar' );
+					} else {
+						$settings = map_deep( $settings, 'sanitize_textarea_field' );
+						update_option( 'my_calendar_options', $settings );
+						$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
+					}
+				}
+				return $return;
 			}
-			return $return;
 		}
 	}
 	return '';
+}
+
+/**
+ * Validate an array of settings against the default settings. Checks for 20 matching keys in random order.
+ *
+ * @param array $settings An array of data expected to be My Calendar settings.
+ *
+ * @return bool
+ */
+function mc_validate_settings( $settings ) {
+	$defaults = mc_default_options();
+	$keys     = array_keys( $settings );
+	shuffle( $keys );
+	// Settings may not be identical to default settings, as not all settings are configured by default. However, they should be similar.
+	$i = 0;
+	foreach ( $keys as $key ) {
+		$exists = in_array( $key, array_keys( $defaults ), true ) ? true : false;
+		if ( $exists ) {
+			$i ++;
+		}
+		if ( $i > 20 ) {
+			return true;
+			break;
+		}
+	}
+
+	return false;
 }
 
 /**
