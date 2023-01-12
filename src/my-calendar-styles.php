@@ -69,8 +69,8 @@ function mc_remigrate_css() {
 			} else {
 				global $wp_filesystem;
 				WP_Filesystem();
-				$path   = str_replace( '/my-calendar', '', plugin_dir_path( __DIR__ ) ) . 'styles/';
-				$files  = mc_css_list( $path );
+				$path  = str_replace( '/my-calendar', '', plugin_dir_path( __DIR__ ) ) . 'styles/';
+				$files = mc_css_list( $path );
 				if ( ! empty( $files ) ) {
 					$style = $files[0];
 				}
@@ -122,8 +122,8 @@ function mc_migrate_notice() {
  */
 function mc_remigrate_notice() {
 	if ( ! ( 'true' === mc_get_option( 'remigrated' ) ) ) {
-		$path   = str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'styles/';
-		$files  = mc_css_list( $path );
+		$path  = str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'styles/';
+		$files = mc_css_list( $path );
 		if ( ! empty( $files ) ) {
 			$migrations  = implode( ',', $files );
 			$nonce       = wp_create_nonce( 'mc-remigrate-css' );
