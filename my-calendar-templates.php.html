@@ -1709,14 +1709,17 @@ function mc_event_schema( $e, $tags = array() ) {
 		'duration'    => $event['duration'],
 	);
 	if ( property_exists( $e, 'location' ) &amp;&amp; is_object( $e->location ) ) {
-		$location = $e->location;
-		$loc      = mc_location_schema( $location );
+		$location                      = $e->location;
+		$loc                           = mc_location_schema( $location );
+		$schema['eventAttendanceMode'] = 'https://schema.org/OfflineEventAttendanceMode';
+
 	} else {
 		// Location is a mandatory field for Google.
-		$loc = array(
+		$loc                           = array(
 			'@type' => 'VirtualLocation',
 			'url'   => $event['linking'],
 		);
+		$schema['eventAttendanceMode'] = 'https://schema.org/OnlineEventAttendanceMode';
 	}
 	$schema['location'] = $loc;
 	/**
