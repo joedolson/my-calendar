@@ -791,11 +791,11 @@ function mc_recur_string( $event, $args = array() ) {
 	switch ( $recur ) {
 		case 'D':
 			// Translators: number of days between repetitions.
-			$string = ( 1 === (int) $every ) ? __( 'Daily', 'my-calendar' ) : sprintf( __( 'Every %d days', 'my-calendar' ), $every );
+			$string = ( 1 === (int) $every ) ? __( 'Daily', 'my-calendar' ) : sprintf( __( 'Every %s day', 'my-calendar' ), mc_ordinal( $every ) );
 			break;
 		case 'E':
 			// Translators: number of days between repetitions.
-			$string = ( 1 === (int) $every ) ? __( 'Weekdays', 'my-calendar' ) : sprintf( __( 'Every %d weekdays', 'my-calendar' ), $every );
+			$string = ( 1 === (int) $every ) ? __( 'Weekdays', 'my-calendar' ) : sprintf( __( 'Every %s weekday', 'my-calendar' ), mc_ordinal( $every ) );
 			break;
 		case 'W':
 			// Translators: number of weeks between repetitions.
