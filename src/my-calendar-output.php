@@ -151,7 +151,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
  */
 function mc_legacy_templates_enabled() {
 	/**
-	 * Filter legacy templates status. New templates are intended for release with version 3.4.0 and will be in alpha at least through then.
+	 * Filter legacy templates status. New templates are intended for release with version 3.5.0 and will be in alpha at least through then.
 	 *
 	 * @hook mc_legacy_templates_enabled
 	 *
