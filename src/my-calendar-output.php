@@ -2712,10 +2712,8 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 					$output .= '<input type="hidden" name="cid" value="all" />';
 				}
 				foreach ( $qsa as $name => $argument ) {
-					$name     = esc_attr( strip_tags( $name ) );
-					$argument = esc_attr( strip_tags( $argument ) );
 					if ( 'loc' !== $name && 'ltype' !== $name ) {
-						$output .= "\n" . '<input type="hidden" name="' . $name . '" value="' . $argument . '" />';
+						$output .= "\n" . '<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />';
 					}
 				}
 			}
