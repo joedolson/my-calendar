@@ -405,8 +405,17 @@ function mc_private_event( $event, $type = true ) {
 		// Checking whether this is supposed to be private.
 		$status = ( 1 === absint( $event->category_private ) ) ? true : false;
 	}
-	// custom filter to grant custom reasons for exiting.
-	// $event may not be an event object; in some cases it's a category object.
+
+	/**
+	 * Filter the privacy status of an event or category.
+	 *
+	 * @hook mc_private_event
+	 *
+	 * @param {bool}   $status true if an event is private, false if it is public.
+	 * @param {object} $event A category or event object to test.
+	 *
+	 * @return {bool}
+	 */
 	$status = apply_filters( 'mc_private_event', $status, $event );
 
 	return $status;
