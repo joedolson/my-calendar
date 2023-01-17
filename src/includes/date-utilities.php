@@ -486,7 +486,7 @@ function mc_strtotime( $string ) {
 }
 
 /**
- * Wrapper for date()
+ * Wrapper for date(). Used for date comparisons and non-translatable dates.
  *
  * @param string    $format Format to use.
  * @param int|false $timestamp Timestamp or false if now.
