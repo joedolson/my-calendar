@@ -2101,7 +2101,7 @@ function my_calendar( $args ) {
 						if ( $months > 1 ) {
 							$monthclass = ( mc_date( 'n', $start, false ) === (string) (int) $date['month'] || 'month' !== $params['time'] ) ? '' : 'month-' . mc_date( 'm', $start, false );
 							if ( mc_date( 'j', $start, false ) === '1' ) {
-								$month_heading = '<h3 class="mc-change-months">' . mc_date( 'F', $start, false ) . '</h3>';
+								$month_heading = '<h3 class="mc-change-months">' . date_i18n( 'F', $start, false ) . '</h3>';
 								$has_month     = ' has-month';
 							}
 						} else {
