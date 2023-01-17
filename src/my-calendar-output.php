@@ -384,10 +384,12 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 				$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
 			} else {
-				$gridtype = mc_get_option( 'calendar_javascript' );
-				$listtype = mc_get_option( 'list_javascript' );
+				$gridtype           = mc_get_option( 'calendar_javascript' );
+				$listtype           = mc_get_option( 'list_javascript' );
+				$single_template    = ( mc_get_template( 'title_solo' ) === '' ) ? '{title}' : mc_get_template( 'title_solo' );
+				$event_title_single = mc_draw_template( $data, $single_template );
 				if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
-					$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title ) . "'";
+					$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title_single ) . "'";
 					$classes = 'js-modal button';
 				} else {
 					$params  = " aria-expanded='false'";
