@@ -479,6 +479,13 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								<label for="cat_color"><?php esc_html_e( 'Color', 'my-calendar' ); ?></label>
 								<input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="<?php echo ( '#' !== $color ) ? esc_attr( $color ) : ''; ?>"/>
 							</p>
+							<?php
+							if ( ! function_exists( 'mime_content_type' ) ) {
+								?>
+								<div class="notice"><p><?php _e( 'Category Icons require the <code>mime_content_type</code> function, which is not available on your system.', 'my-calendar' ); ?></p></div>
+								<?php
+							}
+							?>
 							<input type='hidden' name='category_icon' id="mc_category_icon" value='<?php echo esc_attr( $icon ); ?>' />
 							<div class="category-icon-selector">
 								<label for="cat_icon"><?php esc_html_e( 'Category Icon', 'my-calendar' ); ?></label>
