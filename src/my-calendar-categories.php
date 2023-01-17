@@ -1306,6 +1306,21 @@ function mc_delete_category_icon( $category_id ) {
  * @return string image path or HTML
  */
 function mc_category_icon( $event, $type = 'html' ) {
+	/**
+	 * Override the return value for a category icon.
+	 *
+	 * @hook mc_override_category_icon
+	 *
+	 * @param {bool}   $override Return a string value to short circuit the category icon query.
+	 * @param {object} $event Event object.
+	 * @param {string} $type Type of output - HTML or URL only.
+	 *
+	 * @return {string|bool}
+	 */
+	$override = apply_filters( 'mc_override_category_icon', false, $event, $type );
+	if ( $override ) {
+		return $override;
+	}
 	if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
 		$url   = plugin_dir_url( __FILE__ );
 		$image = '';
