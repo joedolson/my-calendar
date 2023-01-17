@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_filter_location_results - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_override_category_icon - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_filter_location_results</h1></header>
+    <header><h1 class="page-title">Filter: mc_override_category_icon</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_filter_location_results">apply_filters( 'mc_filter_location_results', <span class="signature">$results, $args )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_override_category_icon">apply_filters( 'mc_override_category_icon', <span class="signature">$override, $event, $type )</span><span class="type-signature"> &rarr; {string|bool}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter returned results when searching locations.</p>
+    <p>Override the return value for a category icon.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$results</code></td>
+                <td class="name"><code>$override</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">bool</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Array of IDs or objects.</p></td>
+            <td class="description last"><p>Return a string value to short circuit the category icon query.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$args</code></td>
+                <td class="name"><code>$event</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">object</span>
 
 
             
@@ -116,7 +116,30 @@
 
             
 
-            <td class="description last"><p>Query arguments.</p></td>
+            <td class="description last"><p>Event object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Type of output - HTML or URL only.</p></td>
         </tr>
 
     
@@ -157,7 +180,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-locations.php.html">my-calendar-locations.php</a>, <a href="my-calendar-locations.php.html#line1298">line 1298</a>
+        <a href="my-calendar-categories.php.html">my-calendar-categories.php</a>, <a href="my-calendar-categories.php.html#line1309">line 1309</a>
     </li></ul></dd>
     
 
@@ -191,7 +214,10 @@
     </dt>
     <dd>
         
-<span class="param-type">array</span>
+<span class="param-type">string</span>
+|
+
+<span class="param-type">bool</span>
 
 
     </dd>
