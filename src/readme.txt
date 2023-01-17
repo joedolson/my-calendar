@@ -86,6 +86,16 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.4.4 =
+
+* Bug fix: Improve modal CSS: better support for multiline titles, adminbar, and avoiding collision with close button.
+* Bug fix: Modal should use single title, not current context title.
+* Bug fix: Intermediary headings when viewing multiple months in grid were not translated.
+* Bug fix: Add user notification if required function `mime_content_type` not available.
+* Bug fix: Add eventattendancemode parameter to JSON schema.
+* Change: Use ordinals for recurring events by days, for improved textual clarity.
+* Docs: Document a couple undocumented filters.
+
 = 3.4.3 =
 
 * Bug fix: Overly general no-scroll selector on modal behaviors caused. Added prefix & specificity.
