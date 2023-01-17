@@ -38,6 +38,9 @@ function mc_update_category( $field, $data, $category ) {
  * @return array images in directory.
  */
 function mc_directory_list( $directory ) {
+	if ( ! function_exists( 'mime_content_type' ) ) {
+		return array();
+	}
 	if ( ! file_exists( $directory ) ) {
 		return array();
 	}
