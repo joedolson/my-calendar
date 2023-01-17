@@ -486,19 +486,21 @@ dialog.my-calendar-modal {
 }
 
 dialog.my-calendar-modal .my-calendar-modal__wrapper {
-	padding: 0 30px;
+	padding: 0;
+}
+
+dialog.my-calendar-modal .js-modal-title-container {
+	position: relative;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 15px;
+	background: #f3f3f3;
+	z-index: 1;
 }
 
 dialog.my-calendar-modal #modal-title {
 	font-size: 1.25em;
-	position: absolute;
-	top: 0;
-	left: 0;
-	margin-top: 0;
-	padding: 15px;
-	background: #f3f3f3;
-	width: calc( 100% - 30px );
-	z-index: 1;
+	margin-right: 4em;
 }
 
 dialog.my-calendar-modal .modal-content {
@@ -543,14 +545,15 @@ body.mc-no-scroll {
 
 .my-calendar-modal img {
 	max-width: 100%;
+	height: auto;
 }
 
-.my-calendar-modal .js-modal-content > * {
+.my-calendar-modal #js-modal-content {
+	padding: 15px;
+}
+
+.my-calendar-modal #js-modal-content > * {
 	margin: 0 0 1.5em;
-}
-
-.my-calendar-modal__content {
-	margin-top: 4em;
 }
 
 .my-calendar-modal-overlay[data-background-click="disabled"] {
@@ -586,13 +589,12 @@ body.mc-no-scroll {
 }
 .my-calendar-modal-close {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 5px;
+  right: 5px;
   background: #a00;
   border-radius: 0 8px 0 4px;
   color: #fff;
   border: 0;
-  font: inherit;
   padding: .75em;
   cursor: pointer;
   z-index: 2;

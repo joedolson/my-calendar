@@ -154,7 +154,7 @@
     var buttonCloseInner = '<span class="' + config.modalPrefixClass + MODAL_CLOSE_TEXT_CLASS_SUFFIX + '">\n                                          ' + config.modalCloseText + '\n                                         </span>';
     var contentClassName = config.modalPrefixClass + MODAL_CONTENT_CLASS_SUFFIX;
     var titleClassName = config.modalPrefixClass + MODAL_TITLE_CLASS_SUFFIX;
-    var title = config.modalTitle !== '' ? '<h1 id="' + MODAL_TITLE_ID + '" class="' + titleClassName + '">\n                                          ' + config.modalTitle + '\n                                         </h1>' : '';
+    var title = config.modalTitle !== '' ? '<div class="js-modal-title-container"><h1 id="' + MODAL_TITLE_ID + '" class="' + titleClassName + '">\n                                          ' + config.modalTitle + '\n                                         </h1></div>' : '';
     var button_close = '<button type="button" class="' + MODAL_BUTTON_JS_CLASS + ' ' + buttonCloseClassName + '" id="' + MODAL_BUTTON_JS_ID + '" ' + MODAL_BUTTON_CONTENT_BACK_ID + '="' + config.modalContentId + '" ' + MODAL_BUTTON_FOCUS_BACK_ID + '="' + config.modalFocusBackId + '"><span class="dashicons dashicons-no" aria-hidden="true"></span>\n                               ' + buttonCloseInner + '\n                              </button>';
     var content = config.modalText;
     var describedById = config.modalDescribedById !== '' ? ATTR_DESCRIBEDBY + '="' + config.modalDescribedById + '"' : '';
