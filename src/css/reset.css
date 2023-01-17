@@ -646,4 +646,8 @@ body.mc-no-scroll {
 	width: 98%;
 	height: 98%;
   }
-}*/
+  .admin-bar .my-calendar-modal {
+	top: 45px;
+	height: calc( 99% - 45px );
+  }
+}
