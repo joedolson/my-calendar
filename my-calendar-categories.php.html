@@ -64,6 +64,9 @@ function mc_update_category( $field, $data, $category ) {
  * @return array images in directory.
  */
 function mc_directory_list( $directory ) {
+	if ( ! function_exists( 'mime_content_type' ) ) {
+		return array();
+	}
 	if ( ! file_exists( $directory ) ) {
 		return array();
 	}
@@ -502,6 +505,13 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								&lt;label for="cat_color">&lt;?php esc_html_e( 'Color', 'my-calendar' ); ?>&lt;/label>
 								&lt;input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="&lt;?php echo ( '#' !== $color ) ? esc_attr( $color ) : ''; ?>"/>
 							&lt;/p>
+							&lt;?php
+							if ( ! function_exists( 'mime_content_type' ) ) {
+								?>
+								&lt;div class="notice">&lt;p>&lt;?php _e( 'Category Icons require the &lt;code>mime_content_type&lt;/code> function, which is not available on your system.', 'my-calendar' ); ?>&lt;/p>&lt;/div>
+								&lt;?php
+							}
+							?>
 							&lt;input type='hidden' name='category_icon' id="mc_category_icon" value='&lt;?php echo esc_attr( $icon ); ?>' />
 							&lt;div class="category-icon-selector">
 								&lt;label for="cat_icon">&lt;?php esc_html_e( 'Category Icon', 'my-calendar' ); ?>&lt;/label>
