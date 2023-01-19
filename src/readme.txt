@@ -508,4 +508,4 @@ The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](
 
 == Upgrade Notice ==
 
-Security Update: Please update to version 3.3.17 or later as soon as possible.
+Security Update: Please update to 3.4.4 as soon as possible.
