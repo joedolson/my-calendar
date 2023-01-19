@@ -296,7 +296,7 @@ function my_calendar_manage() {
 	// Reject and hide an Event ...by Roland.
 	if ( isset( $_GET['mode'] ) &amp;&amp; 'reject' === $_GET['mode'] ) {
 		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
-		if ( $mcnonce ) {		
+		if ( $mcnonce ) {
 			if ( current_user_can( 'mc_approve_events' ) ) {
 				$event_id = absint( $_GET['event_id'] );
 				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
