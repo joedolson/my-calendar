@@ -47,8 +47,13 @@ function my_calendar_manage_locations() {
 		}
 	}
 	if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-		mc_update_option( 'default_location', (int) $_GET['default'] );
-		mc_show_notice( __( 'Default Location Changed', 'my-calendar' ) );
+		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+		if ( $mcnonce ) {
+			mc_update_option( 'default_location', (int) $_GET['default'] );
+			mc_show_notice( __( 'Default Location Changed', 'my-calendar' ) );
+		} else {
+			mc_show_error( __( 'Invalid security check; please try again!', 'my-calendar' ) );
+		}
 	}
 	?>
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'Locations', 'my-calendar' ); ?></h1>
@@ -449,7 +454,8 @@ function mc_location_manager_row( $location ) {
 		$card    = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
 		$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';
 	} else {
-		$url     = admin_url( "admin.php?page=my-calendar-location-manager&amp;default=$location->location_id" );
+		$mcnonce = wp_create_nonce( 'mcnonce' );
+		$url     = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-location-manager&amp;default=$location->location_id" ) );
 		$default = '<a href="' . esc_url( $url ) . '">' . __( 'Set as Default', 'my-calendar' ) . '</a>';
 	}
 	$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );

@@ -244,38 +244,48 @@ function my_calendar_manage() {
 
 	// Approve and show an Event ...originally by Roland.
 	if ( isset( $_GET['mode'] ) && 'publish' === $_GET['mode'] ) {
-		if ( current_user_can( 'mc_approve_events' ) ) {
-			$event_id = absint( $_GET['event_id'] );
-			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$event   = mc_get_event_core( $event_id );
-			$private = mc_private_event( $event, false );
-			$status  = ( $private ) ? 'private' : 'publish';
-			wp_update_post(
-				array(
-					'ID'          => mc_get_event_post( $event_id ),
-					'post_status' => $status,
-				)
-			);
-			mc_update_count_cache();
+		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+		if ( $mcnonce ) {
+			if ( current_user_can( 'mc_approve_events' ) ) {
+				$event_id = absint( $_GET['event_id'] );
+				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$event   = mc_get_event_core( $event_id );
+				$private = mc_private_event( $event, false );
+				$status  = ( $private ) ? 'private' : 'publish';
+				wp_update_post(
+					array(
+						'ID'          => mc_get_event_post( $event_id ),
+						'post_status' => $status,
+					)
+				);
+				mc_update_count_cache();
+			} else {
+				mc_show_error( __( 'You do not have permission to approve that event.', 'my-calendar' ) );
+			}
 		} else {
-			mc_show_error( __( 'You do not have permission to approve that event.', 'my-calendar' ) );
+			mc_show_error( __( 'Invalid security check; please try again!', 'my-calendar' ) );
 		}
 	}
 
 	// Reject and hide an Event ...by Roland.
 	if ( isset( $_GET['mode'] ) && 'reject' === $_GET['mode'] ) {
-		if ( current_user_can( 'mc_approve_events' ) ) {
-			$event_id = absint( $_GET['event_id'] );
-			$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			wp_update_post(
-				array(
-					'ID'          => mc_get_event_post( $event_id ),
-					'post_status' => 'trash',
-				)
-			);
-			mc_update_count_cache();
+		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+		if ( $mcnonce ) {		
+			if ( current_user_can( 'mc_approve_events' ) ) {
+				$event_id = absint( $_GET['event_id'] );
+				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				wp_update_post(
+					array(
+						'ID'          => mc_get_event_post( $event_id ),
+						'post_status' => 'trash',
+					)
+				);
+				mc_update_count_cache();
+			} else {
+				mc_show_error( __( 'You do not have permission to trash that event.', 'my-calendar' ) );
+			}
 		} else {
-			mc_show_error( __( 'You do not have permission to trash that event.', 'my-calendar' ) );
+			mc_show_error( __( 'Invalid security check; please try again!', 'my-calendar' ) );
 		}
 	}
 
@@ -854,7 +864,8 @@ function mc_admin_events_table( $events ) {
 		$view_url = ( $invalid ) ? '' : mc_get_details_link( $event );
 
 		$group_url  = admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
-		$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" );
+		$mcnonce    = wp_create_nonce( 'mcnonce' );
+		$delete_url = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" ) );
 		$can_edit   = mc_can_edit_event( $event );
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
@@ -929,7 +940,7 @@ function mc_admin_events_table( $events ) {
 								$te = __( 'Publish', 'my-calendar' );
 							}
 							?>
-							<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;limit=$limit&amp;event_id=$event->event_id" ) ); ?>" class='<?php echo esc_attr( $mo ); ?>' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php echo esc_html( $te ); ?></a>
+							<a href="<?php echo esc_url( add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;limit=$limit&amp;event_id=$event->event_id" ) ) ); ?>" class='<?php echo esc_attr( $mo ); ?>' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php echo esc_html( $te ); ?></a>
 							<?php
 						} else {
 							switch ( $event->event_approved ) {

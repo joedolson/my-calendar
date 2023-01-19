@@ -2873,14 +2873,22 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	if ( 'edit' === $mode ) {
 		$publish_text = __( 'Update', 'my-calendar' );
 		$event_id     = $event->event_id;
-		$args         = '';
+		$mcnonce      = wp_create_nonce( '_mcnonce' );
+		$url          = add_query_arg(
+			array(
+				'mode'     => 'delete',
+				'event_id' => $event_id,
+				'_mcnonce' => $mcnonce,
+			),
+			admin_url( 'admin.php?page=my-calendar-manage' )
+		);
 		if ( isset( $_GET['date'] ) ) {
-			$id = ( is_numeric( $_GET['date'] ) ) ? $_GET['date'] : false;
+			$id = ( is_numeric( $_GET['date'] ) ) ? absint( $_GET['date'] ) : false;
 			if ( $id ) {
-				$args = "&amp;date=$id";
+				$url = add_query_arg( 'date', $id, $url );
 			}
 		}
-		$controls['delete'] = "<span class='dashicons dashicons-no' aria-hidden='true'></span><a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event_id$args" ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a>';
+		$controls['delete'] = "<span class='dashicons dashicons-no' aria-hidden='true'></span><a href='" . esc_url( $url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a>';
 		/**
 		 * Check whether permalinks are enabled.
 		 *

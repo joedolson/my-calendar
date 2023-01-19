@@ -169,29 +169,34 @@ function my_calendar_manage_categories() {
 				mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' === $_GET['mode'] ) {
-			$cat_id  = (int) $_GET['category_id'];
-			$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+			if ( $mcnonce ) {
+				$cat_id  = (int) $_GET['category_id'];
+				$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-			if ( $results ) {
-				// Set events with deleted category as primary to default category as primary.
-				$set_category = ( is_numeric( $default_category ) && $cat_id !== (int) $default_category ) ? absint( $default_category ) : 1;
-				$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				// Update existing relationships with this category.
-				$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_category_relationships_table() . '` SET category_id = %d WHERE category_id=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				// clean out duplicates.
-				$wpdb->query( 'DELETE cr1 FROM `' . my_calendar_category_relationships_table() . '` AS cr1 INNER JOIN `' . my_calendar_category_relationships_table() . '` AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				if ( $results ) {
+					// Set events with deleted category as primary to default category as primary.
+					$set_category = ( is_numeric( $default_category ) && $cat_id !== (int) $default_category ) ? absint( $default_category ) : 1;
+					$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					// Update existing relationships with this category.
+					$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_category_relationships_table() . '` SET category_id = %d WHERE category_id=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					// clean out duplicates.
+					$wpdb->query( 'DELETE cr1 FROM `' . my_calendar_category_relationships_table() . '` AS cr1 INNER JOIN `' . my_calendar_category_relationships_table() . '` AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				} else {
+					$cal_results = false;
+				}
+				if ( $default_category === (string) $cat_id ) {
+					mc_update_option( 'default_category', '' );
+				}
+				if ( $results && ( $cal_results || $rel_results ) ) {
+					mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) );
+				} elseif ( $results && ! $cal_results ) {
+					mc_show_notice( __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) );
+				} elseif ( ! $results && $cal_results ) {
+					mc_show_error( __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) );
+				}
 			} else {
-				$cal_results = false;
-			}
-			if ( $default_category === (string) $cat_id ) {
-				mc_update_option( 'default_category', '' );
-			}
-			if ( $results && ( $cal_results || $rel_results ) ) {
-				mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) );
-			} elseif ( $results && ! $cal_results ) {
-				mc_show_notice( __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) );
-			} elseif ( ! $results && $cal_results ) {
-				mc_show_error( __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) );
+				mc_show_error( 'Invalid security key; please try again!', 'my-calendar' );
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
 			$cur_cat = (int) $_GET['category_id'];
@@ -849,11 +854,12 @@ function mc_manage_categories() {
 			$delete_cat = sprintf( __( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			// Translators: Category name.
 			$default_text = sprintf( __( 'Set %s as Default', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
+			$mcnonce      = wp_create_nonce( 'mcnonce' );
 			if ( $default_category === (string) $cat->category_id ) {
 				echo ' <strong>' . __( '(Default)', 'my-calendar' ) . '</strong>';
 				$default = '<span class="mc_default">' . __( 'Default Category', 'my-calendar' ) . '</span>';
 			} else {
-				$url     = admin_url( "admin.php?page=my-calendar-categories&amp;default=$cat->category_id" );
+				$url     = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-categories&amp;default=$cat->category_id" ) );
 				$default = '<a href="' . esc_url( $url ) . '">' . $default_text . '</a>';
 			}
 			if ( mc_get_option( 'skip_holidays_category' ) === (string) $cat->category_id ) {
@@ -869,7 +875,7 @@ function mc_manage_categories() {
 					if ( '1' !== (string) $cat->category_id ) {
 						echo ' | ';
 						?>
-						<a href="<?php echo admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')"><?php echo wp_kses_post( $delete_cat ); ?></a>
+						<a href="<?php echo add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ) ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')"><?php echo wp_kses_post( $delete_cat ); ?></a>
 						<?php
 					}
 					?>
