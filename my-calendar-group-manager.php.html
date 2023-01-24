@@ -67,7 +67,7 @@ function my_calendar_group_edit() {
 		switch ( $_POST['event_action'] ) {
 			case 'edit':
 				if ( isset( $_POST['apply'] ) &amp;&amp; is_array( $_POST['apply'] ) ) {
-					$post      = map_deep( $_POST, 'sanitize_textarea_field' );
+					$post      = map_deep( $_POST, 'wp_kses_post' );
 					$mc_output = mc_check_group_data( $action, $post );
 					foreach ( $post['apply'] as $event_id ) {
 						$event_id = absint( $event_id );
