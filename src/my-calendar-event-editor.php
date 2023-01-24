@@ -69,7 +69,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 			}
 			$terms[] = (int) $term;
 		}
-		$event_in_trash = ( 2 === (int) $data['event_approved'] ) ? true : false;
+		$event_in_trash = ( isset( $data['event_approved'] ) && 2 === (int) $data['event_approved'] ) ? true : false;
 		if ( $event_in_trash ) {
 			$status = 'trash';
 		} else {
