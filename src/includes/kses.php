@@ -68,7 +68,8 @@ function mc_allowed_tags( $tags, $context ) {
 			);
 
 			$tags['option'] = array(
-				'value' => true,
+				'value'    => true,
+				'selected' => true,
 			);
 
 			$formtags     = ( isset( $tags['form'] ) && is_array( $tags['form'] ) ) ? $tags['form'] : array();
