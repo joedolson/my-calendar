@@ -1176,7 +1176,16 @@ function mc_admin_category_list( $event ) {
 	if ( isset( $_GET['groups'] ) ) {
 		$string .= ' ' . esc_html( $cat->category_name );
 	} else {
-		$string .= " &lt;a class='mc_filter primary-category' href='" . esc_url( mc_admin_url( "admin.php?page=my-calendar-manage&amp;amp;filter=$event->event_category&amp;amp;restrict=category" ) ) . "'>&lt;span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '&lt;/span>' . esc_html( $cat->category_name ) . '&lt;/a>';
+		$args = array(
+			'filter'   => $event->event_category,
+			'restrict' => 'category',
+		);
+		if ( is_admin() ) {
+			$url = add_query_arg( $args, mc_admin_url( 'admin.php?page=my-calendar-manage' ) );
+		} else {
+			$url = add_query_arg( $args, get_permalink() );
+		}
+		$string .= " &lt;a class='mc_filter primary-category' href='" . esc_url( $url ) . "'>&lt;span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '&lt;/span>' . esc_html( $cat->category_name ) . '&lt;/a>';
 	}
 
 	if ( is_array( $categories ) ) {
