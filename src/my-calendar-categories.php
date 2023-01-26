@@ -1150,7 +1150,16 @@ function mc_admin_category_list( $event ) {
 	if ( isset( $_GET['groups'] ) ) {
 		$string .= ' ' . esc_html( $cat->category_name );
 	} else {
-		$string .= " <a class='mc_filter primary-category' href='" . esc_url( mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$event->event_category&amp;restrict=category" ) ) . "'><span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '</span>' . esc_html( $cat->category_name ) . '</a>';
+		$args = array(
+			'filter'   => $event->event_category,
+			'restrict' => 'category',
+		);
+		if ( is_admin() ) {
+			$url = add_query_arg( $args, mc_admin_url( 'admin.php?page=my-calendar-manage' ) );
+		} else {
+			$url = add_query_arg( $args, get_permalink() );
+		}
+		$string .= " <a class='mc_filter primary-category' href='" . esc_url( $url ) . "'><span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '</span>' . esc_html( $cat->category_name ) . '</a>';
 	}
 
 	if ( is_array( $categories ) ) {
