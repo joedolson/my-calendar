@@ -1142,7 +1142,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				$return = '
 				&lt;div class="mc-image-upload field-holder">
 					&lt;div class="image_fields">
-						&lt;input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />&lt;input type="hidden" name="event_image" id="e_image" size="60" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> &lt;button type="button" class="button select-image" aria-describedby="event_image">' . $button_text . '&lt;/button> ' . $remove . '
+						&lt;input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />&lt;input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> &lt;button type="button" class="button select-image" aria-describedby="event_image">' . $button_text . '&lt;/button> ' . $remove . '
 					&lt;/div>';
 				if ( '' !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
