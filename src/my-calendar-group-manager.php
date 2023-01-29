@@ -379,7 +379,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					<label for="e_title"><?php esc_html_e( 'Event Title', 'my-calendar' ); ?> <span><?php esc_html_e( '(required)', 'my-calendar' ); ?></span>
 					<?php mc_compare_group_members( $group_id, 'event_title' ); ?>
 					</label><br/>
-					<input type="text" id="e_title" name="event_title" size="60" value="<?php echo esc_attr( $title ); ?>" />
+					<input type="text" id="e_title" class="widefat" name="event_title" value="<?php echo esc_attr( $title ); ?>" />
 				</p>
 				<?php
 				echo mc_group_form( $group_id, 'apply' );
@@ -481,7 +481,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 								$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
 							}
 							?>
-							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" size="60" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button select-image"><?php echo $button_text; ?></button> <?php echo $remove; ?>
+							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button select-image"><?php echo $button_text; ?></button> <?php echo $remove; ?>
 							</div>
 							<?php
 							if ( ! empty( $data->event_image ) ) {
