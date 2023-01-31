@@ -946,8 +946,7 @@ function mc_list_groups() {
 					&lt;/tr>
 				&lt;/thead>
 				&lt;?php
-				$class      = '';
-				$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$class = '';
 				foreach ( $events as $event ) {
 					$is_grouped = mc_event_is_grouped( $event->event_group_id );
 					$class      = ( 'alternate' === $class ) ? 'even' : 'alternate';
