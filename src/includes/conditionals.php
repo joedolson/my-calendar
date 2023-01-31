@@ -57,7 +57,7 @@ function mc_is_custom_icon() {
 		$return = true;
 	} else {
 		$dir  = trailingslashit( dirname( __FILE__, 2 ) );
-		$base = basename( $dir );
+		$base = trailingslashit( basename( $dir ) );
 		if ( $custom ) {
 			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' );
 			if ( empty( $results ) ) {

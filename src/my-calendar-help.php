@@ -371,9 +371,9 @@ function mc_display_icons() {
 	if ( ! $output ) {
 		if ( $is_custom ) {
 			$dir       = plugin_dir_path( __FILE__ );
-			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
+			$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons';
 		} else {
-			$directory = dirname( __FILE__ ) . '/images/icons/';
+			$directory = trailingslashit( dirname( __FILE__ ) ) . 'images/icons/';
 		}
 		$iconlist = mc_directory_list( $directory );
 		if ( ! empty( $iconlist ) ) {

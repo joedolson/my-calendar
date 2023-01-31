@@ -54,7 +54,8 @@ function mc_directory_list( $directory ) {
 			if ( strlen( $file ) < 5 ) {
 				continue;
 			}
-			if ( filesize( $directory . '/' . $file ) > 11 ) {
+			$directory = trailingslashit( $directory );
+			if ( filesize( $directory . $file ) > 11 ) {
 				if ( '.' !== $file && '..' !== $file && ! is_dir( $directory . $file ) && (
 						'image/svg_xml' === mime_content_type( $directory . $file ) ||
 						'image/svg' === mime_content_type( $directory . $file ) ||
@@ -586,8 +587,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 			<?php
 			$dir       = plugin_dir_path( __FILE__ );
 			$url       = plugin_dir_url( __FILE__ );
-			$directory = str_replace( '/my-calendar', '', $dir ) . '/my-calendar-custom/';
-			$path      = str_replace( '/my-calendar', '/my-calendar-custom', $url );
+			$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons';
+			$path      = str_replace( '/my-calendar', '/my-calendar-custom/icons', $url );
 			$iconlist  = mc_directory_list( $directory );
 			foreach ( $iconlist as $icon ) {
 				echo '<li class="category-icon"><code>' . $icon . '</code><img src="' . $path . '/' . esc_html( $icon ) . '" alt="" aria-hidden="true"></li>';
@@ -1282,8 +1283,8 @@ function mc_get_img( $file, $is_custom = false ) {
 	WP_Filesystem();
 
 	if ( $is_custom ) {
-		$path = $parent_path . 'my-calendar-custom/';
-		$link = $parent_url . 'my-calendar-custom/';
+		$path = $parent_path . 'my-calendar-custom/icons/';
+		$link = $parent_url . 'my-calendar-custom/icons/';
 	} else {
 		$path = $self . 'images/icons/';
 		$link = $url . 'images/icons/';
@@ -1358,7 +1359,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 		if ( 'true' !== mc_get_option( 'hide_icons' ) ) {
 			if ( '' !== $event->category_icon ) {
 				if ( mc_is_custom_icon() ) {
-					$path = str_replace( 'my-calendar', 'my-calendar-custom', $url );
+					$path = str_replace( 'my-calendar', 'my-calendar-custom/icons', $url );
 					$src  = $path . $event->category_icon;
 				} else {
 					$path = plugins_url( 'images/icons', __FILE__ ) . '/';
