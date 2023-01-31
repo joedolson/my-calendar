@@ -509,26 +509,26 @@ function mc_get_event_list_sorting() {
 	} else {
 		switch ( $sortby ) {
 			case 1:
-				$sortbyvalue = 'event_ID';
+				$sortbyvalue = "event_ID $sortbydirection";
 				break;
 			case 2:
 			case 3:
-				$sortbyvalue = 'event_title';
+				$sortbyvalue = "event_title $sortbydirection";
 				break;
 			case 4:
-				$sortbyvalue = "event_begin $sortbydirection, event_time";
+				$sortbyvalue = "event_begin $sortbydirection, event_time $sortbydirection";
 				break;
 			case 5:
-				$sortbyvalue = 'event_author';
+				$sortbyvalue = "event_author $sortbydirection";
 				break;
 			case 6:
-				$sortbyvalue = 'event_category';
+				$sortbyvalue = "event_category $sortbydirection";
 				break;
 			case 7:
-				$sortbyvalue = 'event_label';
+				$sortbyvalue = "event_label $sortbydirection";
 				break;
 			default:
-				$sortbyvalue = "event_begin $sortbydirection, event_time";
+				$sortbyvalue = "event_begin $sortbydirection, event_time $sortbydirection";
 		}
 	}
 	$sort = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
@@ -707,7 +707,7 @@ function mc_list_events() {
 		$limit .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
 		// Toggle query type depending on whether we're limiting categories, which requires a join.
 		if ( 'event_category' !== $sortbyvalue ) {
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue $sortbydirection " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT SQL_CALC_FOUND_ROWS e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
 			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
