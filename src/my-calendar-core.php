@@ -1715,7 +1715,7 @@ function mc_table_header( $label, $sort, $sortby, $sorted, $url = false ) {
 	$id    = sanitize_title( $label ) . ( ( $url ) ? md5( remove_query_arg( 'order', $url ) ) : '' );
 	$inner = ( $url ) ? '<a href="' . esc_url( $url ) . '#' . $id . '">' . $label . '</a>' : $label;
 	$sort  = ( ! $sort ) ? false : ( ( 'ASC' === $sort ) ? 'descending' : 'ascending' );
-	$th    = ( $sort && ( (int) $sortby === (int) $sorted ) ) ? '<th scope="col" aria-sort="' . $sort . '">' : '<th scope="col">';
+	$th    = ( $sort && ( (string) $sortby === (string) $sorted ) ) ? '<th scope="col" aria-sort="' . $sort . '">' : '<th scope="col">';
 
 	$return = $th . $inner . '</th>';
 
