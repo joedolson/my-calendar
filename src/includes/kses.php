@@ -349,9 +349,11 @@ function mc_kses_elements() {
 			'id'    => array(),
 		),
 		'th'               => array(
-			'scope' => array(),
-			'class' => array(),
-			'id'    => array(),
+			'scope'     => array(),
+			'class'     => array(),
+			'id'        => array(),
+			'aria-sort' => array(),
+
 		),
 		'td'               => array(
 			'class'     => array(),
