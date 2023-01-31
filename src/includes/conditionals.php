@@ -44,9 +44,9 @@ function mc_is_all_day( $event ) {
  * @return boolean
  */
 function mc_is_custom_icon() {
-	$on     = get_transient( 'mc_custom_icons' );
+	$on     = ( WP_DEBUG ) ? false : get_transient( 'mc_custom_icons' );
 	$dir    = trailingslashit( dirname( __FILE__, 2 ) );
-	$base   = basename( $dir );
+	$base   = trailingslashit( basename( $dir ) );
 	$custom = ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' ) );
 	if ( ! $custom ) {
 		// backcompat for old icon directories.

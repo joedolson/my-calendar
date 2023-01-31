@@ -44,7 +44,7 @@ function mc_directory_list( $directory ) {
 	if ( ! file_exists( $directory ) ) {
 		return array();
 	}
-	$results = get_transient( 'mc_icon_list' );
+	$results = ( WP_DEBUG ) ? array() : get_transient( 'mc_icon_list' );
 	if ( empty( $results ) ) {
 		$results = array();
 		$handler = opendir( $directory );
