@@ -382,7 +382,7 @@ function mc_category_key( $category, $id = '' ) {
 		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
 		$class = mc_category_class( $cat, '' );
 
-		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', map_deep( $_GET['mcat'], 'absint' ) );
+		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',',  $_GET['mcat'] );
 
 		if ( in_array( $cat->category_id, $selected_categories, true ) || $category === $cat->category_id ) {
 			$selected_categories = array_diff( $selected_categories, array( $cat->category_id ) );
