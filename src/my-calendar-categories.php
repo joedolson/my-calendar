@@ -1488,5 +1488,5 @@ function mc_category_class( $object, $prefix ) {
 		$fallback = 'category_slug_missing';
 	}
 
-	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback ) );
+	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $id ), $prefix . $fallback ) );
 }
