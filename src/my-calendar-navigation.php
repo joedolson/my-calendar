@@ -382,14 +382,15 @@ function mc_category_key( $category, $id = '' ) {
 		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
 		$class = mc_category_class( $cat, '' );
 
-		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : explode( ',', map_deep( $_GET['mcat'], 'absint' ) );
+		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : map_deep( explode( ',', $_GET['mcat'] ), 'absint' );
+		$category_id         = (int) $cat->category_id;
 
-		if ( in_array( $cat->category_id, $selected_categories, true ) || $category === $cat->category_id ) {
-			$selected_categories = array_diff( $selected_categories, array( $cat->category_id ) );
+		if ( in_array( $category_id, $selected_categories, true ) || $category === $category_id ) {
+			$selected_categories = array_diff( $selected_categories, array( $category_id ) );
 			$class              .= ' current';
 			$aria_current        = 'aria-current="true"';
 		} else {
-			$selected_categories[] = $cat->category_id;
+			$selected_categories[] = $category_id;
 			$aria_current          = '';
 		}
 		$selectable_categories = implode( ',', $selected_categories );
@@ -416,7 +417,7 @@ function mc_category_key( $category, $id = '' ) {
 			// If category colors are ignored, don't render HTML for them.
 			$cat_key .= $cat_name;
 		}
-		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $cat->category_id . '-' . $id . '" href="' . esc_url( $url ) . '"' . $aria_current . '>' . $cat_key . '</a></li>';
+		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $category_id . '-' . $id . '" href="' . esc_url( $url ) . '"' . $aria_current . '>' . $cat_key . '</a></li>';
 	}
 	/**
 	 * Filter text label for 'All Categories'.
