@@ -1481,7 +1481,7 @@ function mc_category_class( $object, $prefix ) {
 	}
 
 	$class = sanitize_html_class( trim( str_replace( ' ', '-', $name ) ) );
-	$class = ( '' ===  $class ) ? $id : $class;
+	$class = ( '' === $class ) ? $id : $class;
 
 	return $prefix . strtolower( $class );
 }
