@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.1
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.5
+Stable tag: 3.4.6
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -85,6 +85,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.4.6 =
+
+* Bug fix: Category classes on multibyte category names not rendered. (Props @sutefu23)
+* Bug fix: Current category classes failed for multiple selected classes. (Props @sutefu23)
+* Bug fix: Fix path references when using custom icon directories.
+* Bug fix: Don't use icon transients when WP_DEBUG is true.
+* Bug fix: Fix sorting direction on secondary sorts in events list.
+* Bug fix: Fix aria-sort rendering in sortable tables.
 
 = 3.4.5 =
 
