@@ -1490,31 +1490,26 @@ add_filter(
 );
 
 /**
- * Generate category classes for a given date
+ * Generate category class for a given date. Must generate a single class; multiple classes would require refactoring to function usage.
  *
  * @param object|array $object Usually an event, can be category.
  * @param string       $prefix Prefix to append to category; varies on context.
  *
- * @return string classes
+ * @return string a single class
  */
 function mc_category_class( $object, $prefix ) {
 	if ( is_array( $object ) ) {
-		$term = $object['term'];
 		$name = $object['category'];
 		$id   = $object['category_id'];
 	} else {
-		$term = $object->category_term;
 		$name = $object->category_name;
 		$id   = $object->category_id;
 	}
-	$fallback = get_term_by( 'id', $term, 'mc-event-category' );
-	if ( is_object( $fallback ) ) {
-		$fallback = $fallback->slug;
-	} else {
-		$fallback = 'category_slug_missing';
-	}
 
-	return $prefix . strtolower( sanitize_html_class( str_replace( ' ', '-', $name ), $prefix . $fallback ) );
+	$class = sanitize_html_class( trim( str_replace( ' ', '-', $name ) ) );
+	$class = ( '' ===  $class ) ? $id : $class;
+
+	return $prefix . strtolower( $class );
 }
 </code></pre>
         </article>
