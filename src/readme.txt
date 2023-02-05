@@ -178,6 +178,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Accessibility: Omit aria-label if link text is already unique.
 * Accessibility: Improve calendar navigation using AJAX.
 
+= 3.3.25 =
+
+* Security: Cross Site Request Forgery vulnerability in Event/Location deletion. Props rezaduty/Patchstack Alliance
+* Bug fix: Location handling problem when editing events where location is already set.
+* Bug fix: [Pro] List JS broken when rendering non-primary-language events.
+
 = 3.3.24.1 =
 
 * Bug fix: minified mcjs.min.js was invalid in 3.3.24, breaking jump navigation selector.
