@@ -2045,7 +2045,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		return array();
 	}
 
-	if ( 'add' === $action || 'edit' === $action || 'copy' === $action ) {
+	if ( 'add' === $action || 'edit' === $action || 'copy' === $action || 'check' === $action ) {
 		$title  = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
 		$desc   = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
 		$short  = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
@@ -2237,37 +2237,40 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_zoom . $event_phone . $event_phone2 ) ) {
 					$has_location_data = true;
 				}
-				if ( $has_location_data && isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
-					// Only add this with the first event, if adding multiples.
-					$add_loc        = array(
-						'location_label'     => $event_label,
-						'location_street'    => $event_street,
-						'location_street2'   => $event_street2,
-						'location_city'      => $event_city,
-						'location_state'     => $event_state,
-						'location_postcode'  => $event_postcode,
-						'location_region'    => $event_region,
-						'location_country'   => $event_country,
-						'location_url'       => $event_url,
-						'location_longitude' => $event_longitude,
-						'location_latitude'  => $event_latitude,
-						'location_zoom'      => $event_zoom,
-						'location_phone'     => $event_phone,
-						'location_phone2'    => $event_phone2,
-						'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
-					);
-					$loc_id         = mc_insert_location( $add_loc );
-					$event_location = $loc_id;
-					/**
-					 * Execute an action when a location is created during event editing.
-					 *
-					 * @hook mc_save_location
-					 *
-					 * @param {int|false} $loc_id Result of database insertion. Row ID or false.
-					 * @param {array} $add_loc Array of location parameters to add.
-					 * @param {array} $add_loc Array passed from event creation.
-					 */
-					do_action( 'mc_save_location', $loc_id, $add_loc, $add_loc );
+				// Don't save this location if we're only doing data validation.
+				if ( 'check' !== $action ) {
+					if ( $has_location_data && isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
+						// Only add this with the first event, if adding multiples.
+						$add_loc        = array(
+							'location_label'     => $event_label,
+							'location_street'    => $event_street,
+							'location_street2'   => $event_street2,
+							'location_city'      => $event_city,
+							'location_state'     => $event_state,
+							'location_postcode'  => $event_postcode,
+							'location_region'    => $event_region,
+							'location_country'   => $event_country,
+							'location_url'       => $event_url,
+							'location_longitude' => $event_longitude,
+							'location_latitude'  => $event_latitude,
+							'location_zoom'      => $event_zoom,
+							'location_phone'     => $event_phone,
+							'location_phone2'    => $event_phone2,
+							'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
+						);
+						$loc_id         = mc_insert_location( $add_loc );
+						$event_location = $loc_id;
+						/**
+						 * Execute an action when a location is created during event editing.
+						 *
+						 * @hook mc_save_location
+						 *
+						 * @param {int|false} $loc_id Result of database insertion. Row ID or false.
+						 * @param {array} $add_loc Array of location parameters to add.
+						 * @param {array} $add_loc Array passed from event creation.
+						 */
+						do_action( 'mc_save_location', $loc_id, $add_loc, $add_loc );
+					}
 				}
 			}
 		}
@@ -2426,15 +2429,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	 */
 	$errors = ( $ignore_required ) ? $errors : apply_filters( 'mc_fields_required', $errors, $submit );
 
-	if ( '' === $errors ) {
-		$ok = true;
-
-		$submit = array_map( 'mc_kses_post', $submit );
-	} else {
-		$ok           = false;
-		$event_access = ( is_array( $event_access ) ) ? serialize( $event_access ) : '';
-		// The form is going to be rejected due to field validation issues, so we preserve the users entries here.
-		// All submitted data should be in this object, regardless of data destination.
+	// Create submission object.
+	if ( '' !== $errors || 'check' === $action ) {
 		$submission                     = ( ! is_object( $submission ) ) ? new stdClass() : $submission;
 		$submission->event_id           = ( isset( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) ? $_GET['event_id'] : false;
 		$submission->event_title        = $title;
@@ -2473,13 +2469,21 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$submission->event_group_id     = $event_group_id;
 		$submission->event_span         = $event_span;
 		$submission->event_hide_end     = $event_hide_end;
-		$submission->event_access       = $event_access;
+		$submission->event_access       = ( is_array( $event_access ) ) ? serialize( $event_access ) : '';
 		$submission->events_access      = serialize( $events_access );
 		$submission->event_tickets      = $event_tickets;
 		$submission->event_registration = $event_registration;
 		$submission->event_categories   = $cats;
 		$submission->user_error         = true;
 		$submission->event_post         = ( isset( $_GET['event_id'] ) && is_numeric( $_GET['event_id'] ) ) ? mc_get_event_post( $_GET['event_id'] ) : false;
+	}
+
+	if ( '' === $errors ) {
+		$ok = true;
+
+		$submit = array_map( 'mc_kses_post', $submit );
+	} else {
+		$ok           = false;
 	}
 
 	$data = array( $ok, $submission, $submit, $errors );
