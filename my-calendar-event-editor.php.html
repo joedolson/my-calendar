@@ -2509,7 +2509,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 
 		$submit = array_map( 'mc_kses_post', $submit );
 	} else {
-		$ok           = false;
+		$ok = false;
 	}
 
 	$data = array( $ok, $submission, $submit, $errors );
