@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_event_recur_string - My Calendar Hook Doumentation</title>
+    <title>Action: mc_hide_past_dates - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_event_recur_string</h1></header>
+    <header><h1 class="page-title">Action: mc_hide_past_dates</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_event_recur_string">apply_filters( 'mc_event_recur_string', <span class="signature">$event_recur, $event )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_hide_past_dates">do_action( 'mc_hide_past_dates', <span class="signature">$hide_past_dates, $params )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Text representation of a recurring event pattern.</p>
+    <p>Filter whether past dates are hidden in the initial list view. Dates are only hidden when no date parameters are set in the URL.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$event_recur</code></td>
+                <td class="name"><code>$hide_past_dates</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">bool</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Template HTML closing tag.</p></td>
+            <td class="description last"><p>Whether to hide past dates.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$event</code></td>
+                <td class="name"><code>$params</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">array</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>Event object.</p></td>
+            <td class="description last"><p>Current view parameters.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line1648">line 1648</a>
+        <a href="my-calendar-output.php.html">my-calendar-output.php</a>, <a href="my-calendar-output.php.html#line2120">line 2120</a>
     </li></ul></dd>
     
 
@@ -180,24 +180,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
