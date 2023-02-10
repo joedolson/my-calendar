@@ -281,7 +281,7 @@ function mc_html_type() {
 }
 
 /**
- * Duplicate of mc_is_url, which really should have been in this file. Bugger.
+ * Test if a string is a properly formatted URL.
  *
  * @param string $url URL.
  *
