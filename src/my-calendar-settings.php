@@ -412,6 +412,7 @@ function mc_update_output_settings( $post ) {
 	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
 	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
 	$options['list_link_titles'] = ( ! empty( $post['mc_list_link_titles'] ) && 'on' === $post['mc_list_link_titles'] ) ? 'true' : 'false';
+	$options['hide_past_dates']  = ( ! empty( $post['mc_hide_past_dates'] ) && 'on' === $post['mc_hide_past_dates'] ) ? 'true' : 'false';
 	$options['show_months']      = (int) $post['mc_show_months'];
 	// Calculate sequence for navigation elements.
 	$top    = array();
@@ -1618,6 +1619,17 @@ function mc_remote_db() {
 									array(
 										'name'  => 'mc_list_link_titles',
 										'label' => __( 'Show events in list view.', 'my-calendar' ),
+										'type'  => 'checkbox-single',
+									)
+								);
+								?>
+								</li>
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'  => 'mc_hide_past_dates',
+										'label' => __( 'Hide past dates in initial list view.', 'my-calendar' ),
 										'type'  => 'checkbox-single',
 									)
 								);

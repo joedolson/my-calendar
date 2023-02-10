@@ -2112,6 +2112,21 @@ function my_calendar( $args ) {
 						$dateclass   = mc_dateclass( $start );
 						$ariacurrent = ( false !== strpos( $dateclass, 'current-day' ) ) ? ' aria-current="date"' : '';
 
+						$is_past_date = false;
+						if ( false !== stripos( $dateclass, 'past-day' ) ) {
+							$is_past_date = true;
+						}
+						$hide_past_dates = ( 'true' === mc_get_option( 'hide_past_dates' ) ) ? true : false;
+						/**
+						 * Filter whether past dates are hidden in the initial list view. Dates are only hidden when no date parameters are set in the URL.
+						 *
+						 * @hook mc_hide_past_dates
+						 *
+						 * @param {bool}  $hide_past_dates Whether to hide past dates.
+						 * @param {array} $params Current view parameters.
+						 */
+						$hide_past_dates = apply_filters( 'mc_hide_past_dates', $hide_past_dates, $params );
+
 						/**
 						 * Alter the date wrapper HTML element for the grid view. Default `td`.
 						 *
@@ -2193,12 +2208,17 @@ function my_calendar( $args ) {
 										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 									}
 									if ( '' !== $event_output ) {
-										if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
-											$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' ) . "$title</strong>" . $event_output . '</li>';
+										$date_params_set = ( isset( $_GET['month'] ) || isset( $_GET['dy'] ) || isset( $_GET['yr'] ) ) ? true : false;
+										if ( $is_past_date && $hide_past_dates && ! $date_params_set ) {
+											$body .= '<!-- Date Hidden -->';
 										} else {
-											$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2>" . $event_output . '</li>';
+											if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
+												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' ) . "$title</strong>" . $event_output . '</li>';
+											} else {
+												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2>" . $event_output . '</li>';
+											}
+											$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 										}
-										$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 									}
 								} else {
 									$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
