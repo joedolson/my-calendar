@@ -2061,7 +2061,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		// if this is an all weekdays event, and it's scheduled to start on a weekend, the math gets nasty.
 		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
 		$begin = trim( $post['event_begin'][ $i ] );
-		$end   = ( ! empty( $post['event_end'] ) ) ? trim( $post['event_end'][ $i ] ) : $post['event_begin'][ $i ];
+		$end   = ( ! empty( $post['event_end'] ) ) ? trim( $post['event_end'][ $i ] ) : $begin;
 		if ( 'E' === $recur && 0 === ( (int) mc_date( 'w', mc_strtotime( $begin ), false ) || 6 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) ) {
 			$newbegin = $begin;
 			$newend   = $end;
