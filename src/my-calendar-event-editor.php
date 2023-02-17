@@ -2066,6 +2066,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			// Move the start date of an all weekdays event to the next week day if it's been set to start on the weekend.
 			$newbegin = $begin;
 			$newend   = $end;
+			// if Sunday, move forward one day.
 			if ( 0 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) {
 				$newbegin = my_calendar_add_date( $begin, 1 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
@@ -2073,6 +2074,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				} else {
 					$newend = $newbegin;
 				}
+			// if Saturday, move forward two days.
 			} elseif ( 6 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) {
 				$newbegin = my_calendar_add_date( $begin, 2 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
