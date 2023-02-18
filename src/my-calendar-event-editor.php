@@ -27,7 +27,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 	// if the event save was successful.
 	$post_id = false;
 	// Check if this is an ajax request.
-	$post_data = ( wp_doing_ajax() ) ? $_POST['post'] : $_POST;
+	$post_data = ( wp_doing_ajax() && ! empty( $_POST ) ) ? $_POST['post'] : $_POST;
 	if ( $post_data !== $_POST ) {
 		parse_str( $post_data, $post );
 	} else {
@@ -210,7 +210,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 function mc_create_event_post( $data, $event_id ) {
 	$post_id = mc_get_event_post( $event_id );
 	// Check if this is an ajax request.
-	$post_data = ( wp_doing_ajax() ) ? $_POST['post'] : $_POST;
+	$post_data = ( wp_doing_ajax() && ! empty( $_POST ) ) ? $_POST['post'] : $_POST;
 	if ( $post_data !== $_POST ) {
 		parse_str( $post_data, $post );
 	} else {
