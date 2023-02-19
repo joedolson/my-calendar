@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.1
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.7
+Stable tag: 3.4.8
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -85,6 +85,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.4.8 =
+
+* Bug fix: Don't show edit event link to users who don't have permission to edit events.
+* Bug fix: Send front-end editing link when submitting from the front end. [Pro].
+* Bug fix: Fix AJAX notices in event importer [Pro].
+* Bug fix: Comment corrections & removal of unused variables.
 
 = 3.4.7 =
 
