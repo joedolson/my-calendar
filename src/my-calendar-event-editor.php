@@ -532,9 +532,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
-					$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
+					$event_link = mc_get_details_link( $event_ids[0]->occur_id );
 					if ( is_admin() && ! wp_doing_ajax() ) {
-						$edit_link   = add_query_arg(
+						$edit_link = add_query_arg(
 							array(
 								'event_id' => $event_id,
 								'mode'     => 'edit',
@@ -2080,7 +2080,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				} else {
 					$newend = $newbegin;
 				}
-			// if Saturday, move forward two days.
+				// if Saturday, move forward two days.
 			} elseif ( 6 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) {
 				$newbegin = my_calendar_add_date( $begin, 2 );
 				if ( ! empty( $post['event_end'][ $i ] ) ) {
