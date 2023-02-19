@@ -533,7 +533,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
 					$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
-					if ( is_admin() ) {
+					if ( is_admin() && ! wp_doing_ajax() ) {
 						$edit_link   = add_query_arg(
 							array(
 								'event_id' => $event_id,
@@ -554,7 +554,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s" class="button">View Event</a>', 'my-calendar' ), $event_link );
-						if ( mc_can_edit_event( $event ) && '' !== $edit_link ) {
+						if ( mc_can_edit_event( $event_id ) && '' !== $edit_link ) {
 							// Translators: URL to edit event.
 							$message .= sprintf( __( ' <a href="%s" class="button">Edit Event</a>', 'my-calendar' ), $edit_link );
 						}
