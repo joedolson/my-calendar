@@ -114,7 +114,6 @@ function my_calendar_get_events( $args ) {
 	$category = isset( $args['category'] ) ? $args['category'] : 'all';
 	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : 'all';
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : 'all';
-	$source   = isset( $args['source'] ) ? $args['source'] : 'calendar';
 	$author   = isset( $args['author'] ) ? $args['author'] : 'all';
 	$host     = isset( $args['host'] ) ? $args['host'] : 'all';
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
@@ -750,7 +749,6 @@ function mc_get_data( $field, $id ) {
 	return $result;
 }
 
-
 /**
  * Fetch all events according to date parameters and supported limits.
  *
@@ -1074,9 +1072,9 @@ function mc_instance_list( $args ) {
  */
 function mc_admin_instances( $id, $occur = 0 ) {
 	global $wpdb;
-	$output     = '';
-	$ts_string  = mc_ts();
-	$results    = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$output    = '';
+	$ts_string = mc_ts();
+	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( empty( $results ) ) {
 		return false;
 	}
