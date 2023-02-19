@@ -533,13 +533,17 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
 					$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
-					$edit_link   = add_query_arg(
-						array(
-							'event_id' => $event_id,
-							'mode'     => 'edit',
-						),
-						admin_url( 'admin.php?page=my-calendar' )
-					);
+					if ( is_admin() ) {
+						$edit_link   = add_query_arg(
+							array(
+								'event_id' => $event_id,
+								'mode'     => 'edit',
+							),
+							admin_url( 'admin.php?page=my-calendar' )
+						);
+					} else {
+						$edit_link = ( function_exists( 'mcs_submit_url' ) ) ? mcs_submit_url( $event_id, $event ) : '';
+					}
 					$event_error = mc_error_check( $event_ids[0]->occur_event_id );
 				}
 
@@ -550,7 +554,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s" class="button">View Event</a>', 'my-calendar' ), $event_link );
-						if ( mc_can_edit_event( $event ) ) {
+						if ( mc_can_edit_event( $event ) && '' !== $edit_link ) {
 							// Translators: URL to edit event.
 							$message .= sprintf( __( ' <a href="%s" class="button">Edit Event</a>', 'my-calendar' ), $edit_link );
 						}
