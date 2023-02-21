@@ -2145,6 +2145,8 @@ function my_calendar( $args ) {
 								$week_number_shown = true;
 							}
 						}
+						$label       = date_i18n( mc_date_format(), $start );
+						$modal_attrs = "id='{format}-modal-button-$date_is' data-modal-content-id='{target_id}' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $label ) . "'";
 
 						if ( ! empty( $events ) ) {
 							/**
@@ -2177,8 +2179,7 @@ function my_calendar( $args ) {
 							if ( 'mini' === $params['format'] && '' !== $event_output ) {
 								$minitype = mc_get_option( 'mini_javascript' );
 								if ( 'modal' === $minitype ) {
-									$label   = date_i18n( mc_date_format(), $start );
-									$attrs   = "id='modal-button-$date_is' data-modal-content-id='date-$date_is' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $label ) . "'";
+									$attrs   = str_replace( array( '{format}', '{target_id}' ), array( 'mini-', 'date-' . $date_is ), $modal_attrs );
 									$trigger = ' js-modal button';
 								} else {
 									$attrs   = " aria-expanded='false'";
@@ -2212,8 +2213,18 @@ function my_calendar( $args ) {
 										if ( $is_past_date && $hide_past_dates && ! $date_params_set ) {
 											$body .= '<!-- Date Hidden -->';
 										} else {
+											$attrs    = '';
+											$listtype = mc_get_option( 'list_javascript' );
+											if ( 'modal' === $listtype ) {
+												$attrs = str_replace( array( '{format}', '{target_id}' ), array( 'list-', 'list-date-' . $date_is ), $modal_attrs );
+											}
 											if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
-												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' ) . "$title</strong>" . $event_output . '</li>';
+												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'>
+													<strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>', $attrs ) . "$title</strong>
+													<div id='list-date-" . $date_is ."' class='mc-list-date-wrapper'>
+													" . $event_output . '
+													</div>
+												</li>';
 											} else {
 												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2>" . $event_output . '</li>';
 											}
@@ -2506,12 +2517,17 @@ function mc_run_shortcodes( $content ) {
  * Set up button wrapping event title
  *
  * @param string $title Event title.
+ * @param string $params Additional attributes if modal enabled.
  *
  * @return string title with wrapper if appropriate
  */
-function mc_wrap_title( $title ) {
+function mc_wrap_title( $title, $params = '' ) {
 	if ( '1' !== mc_get_option( 'list_javascript' ) ) {
-		$is_anchor       = '<button type="button" class="mc-text-button">';
+		$uses_modal = '';
+		if ( 'modal' === mc_get_option( 'list_javascript' ) ) {
+			$uses_modal = ' js-modal';
+		}
+		$is_anchor       = '<button type="button" ' . $params . ' class="mc-text-button' . $uses_modal . '">';
 		$is_close_anchor = '</button>';
 	} else {
 		$is_anchor       = '';
