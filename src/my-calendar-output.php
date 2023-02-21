@@ -2221,7 +2221,7 @@ function my_calendar( $args ) {
 											if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
 												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'>
 													<strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>', $attrs ) . "$title</strong>
-													<div id='list-date-" . $date_is ."' class='mc-list-date-wrapper'>
+													<div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>
 													" . $event_output . '
 													</div>
 												</li>';
