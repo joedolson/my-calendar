@@ -1721,7 +1721,7 @@ function mc_table_header( $label, $sort, $sortby, $sorted, $url = false ) {
 }
 
 /**
- * As of version 3.0.0, this only checks for 'my-calendar', to see if this plug-in already exists.
+ * As of version 3.4.0, this checks for the shortcode, to see if there's a page with the calendar shortcode.
  *
  * @return array
  */
@@ -1759,11 +1759,12 @@ function mc_locate_calendar() {
 
 			return $return;
 		} else {
-			mc_update_option( 'uri', '' );
-			mc_update_option( 'uri_id', '' );
+			$page = mc_generate_calendar_page( 'my-calendar' );
+			mc_update_option( 'uri', get_permalink( $page ) );
+			mc_update_option( 'uri_id', $page );
 			$return = array(
-				'response' => false,
-				'message'  => esc_html__( 'No valid calendar detected. Please provide a URL!', 'my-calendar' ),
+				'response' => true,
+				'message'  => sprintf( esc_html__( 'New calendar page created at <a href="%s">My Calendar</a>', 'my-calendar' ), get_permalink( $page ) ),
 			);
 
 			return $return;
