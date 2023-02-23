@@ -1762,9 +1762,11 @@ function mc_locate_calendar() {
 			$page = mc_generate_calendar_page( 'my-calendar' );
 			mc_update_option( 'uri', get_permalink( $page ) );
 			mc_update_option( 'uri_id', $page );
-			$return = array(
+			// translators: URL for new My Calendar page.
+			$confirmation = sprintf( esc_html__( 'New calendar page created at <a href="%s">My Calendar</a>', 'my-calendar' ), esc_url( get_permalink( $page ) ) );
+			$return       = array(
 				'response' => true,
-				'message'  => sprintf( esc_html__( 'New calendar page created at <a href="%s">My Calendar</a>', 'my-calendar' ), get_permalink( $page ) ),
+				'message'  => $confirmation,
 			);
 
 			return $return;
