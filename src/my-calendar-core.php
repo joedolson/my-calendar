@@ -1103,26 +1103,24 @@ function mc_admin_bar() {
 		}
 	}
 	if ( current_user_can( 'mc_add_events' ) && 'true' !== mc_get_option( 'remote' ) ) {
-		if ( ! is_page( $mc_id ) ) {
-			/**
-			 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
-			 *
-			 * @hook mc_add_events_url
-			 *
-			 * @param {string} $url Admin URL for adding events.
-			 *
-			 * @return {string}
-			 */
-			$url = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
-			if ( $url ) {
-				$args = array(
-					'id'     => 'mc-add-event',
-					'title'  => __( 'Add Event', 'my-calendar' ),
-					'href'   => $url,
-					'parent' => 'mc-my-calendar',
-				);
-				$wp_admin_bar->add_node( $args );
-			}
+		/**
+		 * Filter URL displayed for 'Add Event' link in adminbar. Return empty value to disable.
+		 *
+		 * @hook mc_add_events_url
+		 *
+		 * @param {string} $url Admin URL for adding events.
+		 *
+		 * @return {string}
+		 */
+		$url = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
+		if ( $url ) {
+			$args = array(
+				'id'     => 'mc-add-event',
+				'title'  => __( 'Add Event', 'my-calendar' ),
+				'href'   => $url,
+				'parent' => 'mc-my-calendar',
+			);
+			$wp_admin_bar->add_node( $args );
 		}
 	}
 	if ( isset( $_GET['mc_id'] ) && mc_can_edit_event( $_GET['mc_id'] ) ) {
