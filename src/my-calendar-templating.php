@@ -249,7 +249,7 @@ function mc_templates_edit() {
 					<dd><?php wp_kses_post( _e( 'Event address in <a href="http://microformats.org/wiki/hcard">hcard</a> format.', 'my-calendar' ) ); ?></dd>
 
 					<dt><code>{link_map}</code></dt>
-					<dd><?php esc_html_e( 'Link to Google Map to the event, if address information is available.', 'my-calendar' ); ?></dd>
+					<dd><?php esc_html_e( 'Link to Map to the event, if address information is available.', 'my-calendar' ); ?></dd>
 				</dl>
 			</div>
 		</div>
