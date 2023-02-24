@@ -414,6 +414,7 @@ function mc_update_output_settings( $post ) {
 	$options['list_link_titles'] = ( ! empty( $post['mc_list_link_titles'] ) && 'on' === $post['mc_list_link_titles'] ) ? 'true' : 'false';
 	$options['hide_past_dates']  = ( ! empty( $post['mc_hide_past_dates'] ) && 'on' === $post['mc_hide_past_dates'] ) ? 'true' : 'false';
 	$options['show_months']      = (int) $post['mc_show_months'];
+	$options['map_service']      = ( in_array( $post['mc_map_service'], array( 'mapquest', 'bing', 'google', 'none' ), true ) ) ? $post['mc_map_service'] : 'google';
 	// Calculate sequence for navigation elements.
 	$top    = array();
 	$bottom = array();
@@ -1379,7 +1380,7 @@ function mc_remote_db() {
 										'host'        => __( 'Host', 'my-calendar' ),
 										'ical'        => __( 'iCal Download', 'my-calendar' ),
 										'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
-										'gmap_link'   => __( 'Link to Google Map', 'my-calendar' ),
+										'gmap_link'   => __( 'Link to Map', 'my-calendar' ),
 										'address'     => __( 'Location Address', 'my-calendar' ),
 										'excerpt'     => __( 'Excerpt', 'my-calendar' ),
 										'description' => __( 'Description', 'my-calendar' ),
@@ -1538,6 +1539,23 @@ function mc_remote_db() {
 										'size' => '3',
 									),
 									'type'  => 'text',
+								)
+							);
+							?>
+							</li>
+							<li>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_map_service',
+									'label' => __( 'Mapping service', 'my-calendar' ),
+									'default'  => array(
+										'bing'     => __( 'Bing Maps', 'my-calendar' ),
+										'google'   => __( 'Google Maps', 'my-calendar' ),
+										'none'     => __( 'None', 'my-calendar' ),
+									),
+									'note'  => __( 'Map setting currently only supports map links; embedded maps are still only supported for Google Maps.', 'my-calendar' ),
+									'type'  => 'select',
 								)
 							);
 							?>

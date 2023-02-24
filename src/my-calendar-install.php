@@ -437,6 +437,7 @@ function mc_default_options() {
 		'list_link_titles'             => 'true',
 		'default_location'             => '',
 		'hide_past_dates'              => 'false',
+		'map_service'                  => 'google',
 	);
 
 	/**

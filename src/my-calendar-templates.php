@@ -112,7 +112,7 @@ function mc_map_string( $event, $source = 'event' ) {
 }
 
 /**
- * Set up link to Google Maps
+ * Set up link to Mapping service.
  *
  * @param object $event object containing location properties.
  * @param string $request source of request.
@@ -126,6 +126,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	if ( '' === $map_string ) {
 		return '';
 	}
+	$map_target = mc_get_option( 'map_service' );
 	if ( 'event' === $source ) {
 		if ( 'gcal' === $request ) {
 			return $map_string;
@@ -134,7 +135,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		$url        = $event->event_url;
 		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->event_label ) ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
 		$map_string = str_replace( ' ', '+', $map_string );
-		if ( '0.000000' !== $event->event_longitude && '0.000000' !== $event->event_latitude ) {
+		if ( '0.000000' !== $event->event_longitude && '0.000000' !== $event->event_latitude && 'mapquest' !== $map_target  ) {
 			$dir_lat    = ( $event->event_latitude > 0 ) ? 'N' : 'S';
 			$latitude   = abs( $event->event_latitude );
 			$dir_long   = ( $event->event_longitude > 0 ) ? 'E' : 'W';
@@ -146,7 +147,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
 		$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
 		$map_string = str_replace( ' ', '+', $map_string );
-		if ( '0.000000' !== $event->location_longitude && '0.000000' !== $event->location_latitude ) {
+		if ( '0.000000' !== $event->location_longitude && '0.000000' !== $event->location_latitude && 'mapquest' !== $map_target ) {
 			$dir_lat    = ( $event->location_latitude > 0 ) ? 'N' : 'S';
 			$latitude   = abs( $event->location_latitude );
 			$dir_long   = ( $event->location_longitude > 0 ) ? 'E' : 'W';
@@ -157,7 +158,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	// Translators: Name of location.
 	$label = sprintf( __( 'Map<span> to %s</span>', 'my-calendar' ), $map_label );
 	/**
-	 * Label for link to Google Maps for event.
+	 * Label for link to Maps for event location.
 	 *
 	 * @hook mc_map_label
 	 *
@@ -168,6 +169,20 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	 */
 	$label = apply_filters( 'mc_map_label', $label, $map_label );
 	if ( strlen( trim( $map_string ) ) > 6 ) {
+		switch ( $map_target ) {
+			case 'bing':
+				$map_url = "https://bing.com/maps/?level=$zoom&amp;where1=$map_string";
+				break;
+			case 'mapquest':
+				$map_url = "https://mapquest.com/search/$map_string?zoom=$zoom&amp;center=$map_string";
+				break;
+			case 'none':
+				$map_url = '';
+				break;
+			default:
+				$map_url = "https://maps.google.com/maps?z=$zoom&amp;daddr=$map_string";
+				break;
+		}
 		/**
 		 * Google maps URL.
 		 *
@@ -178,7 +193,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		 *
 		 * @return {string} Link.
 		 */
-		$map_url = apply_filters( 'mc_map_url', "http://maps.google.com/maps?z=$zoom&amp;daddr=$map_string", $event );
+		$map_url = apply_filters( 'mc_map_url', $map_url, $event );
 		$map     = '<a href="' . esc_url( $map_url ) . '" class="map-link external">' . $label . '</a>';
 	} elseif ( esc_url( $url ) ) {
 		$map_url = $url;
