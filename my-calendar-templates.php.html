@@ -161,7 +161,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		$url        = $event->event_url;
 		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->event_label ) ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
 		$map_string = str_replace( ' ', '+', $map_string );
-		if ( '0.000000' !== $event->event_longitude &amp;&amp; '0.000000' !== $event->event_latitude &amp;&amp; 'mapquest' !== $map_target  ) {
+		if ( '0.000000' !== $event->event_longitude &amp;&amp; '0.000000' !== $event->event_latitude &amp;&amp; 'mapquest' !== $map_target ) {
 			$dir_lat    = ( $event->event_latitude > 0 ) ? 'N' : 'S';
 			$latitude   = abs( $event->event_latitude );
 			$dir_long   = ( $event->event_longitude > 0 ) ? 'E' : 'W';
