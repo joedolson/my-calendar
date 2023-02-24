@@ -283,7 +283,7 @@ function mc_update_location_post_relationship( $location_id, $location_post ) {
 				'post_id'         => $location_post,
 				'relationship_id' => $location_relationship,
 			),
-			array( '%d', '%d', '%d' ),
+			array( '%d', '%d', '%d' )
 		);
 	}
 
