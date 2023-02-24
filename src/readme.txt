@@ -91,6 +91,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: List view with grouped lists and modal JS enabled did not trigger modal.
 * Bug fix: Add Event adminbar link should not depend on the My Calendar ID being set.
 * Bug fix: If no calendar is located, automatically create a new calendar page.
+* Bug fix: Location relationships were not created between locations and location posts.
 * Feature: Add support for map links using alternate mapping services. Embedded maps still only available via Google.
 
 = 3.4.8 =
