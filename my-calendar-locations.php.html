@@ -251,6 +251,7 @@ function mc_get_location_id( $post_ID ) {
 	$mcdb        = mc_is_remote_db();
 	$location_id = $mcdb->get_var( $mcdb->prepare( 'SELECT location_id FROM ' . my_calendar_location_relationships_table() . ' WHERE post_id = %d', $post_ID ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( ! $location_id ) {
+		// Migrate from previous method of storing location IDs.
 		$location_id = get_post_meta( $post_ID, '_mc_location_id', true );
 	}
 
@@ -290,16 +291,27 @@ function mc_update_location_post_relationship( $location_id, $location_post ) {
 	global $wpdb;
 	$location_relationship = $wpdb->get_var( $wpdb->prepare( 'SELECT relationship_id FROM ' . my_calendar_location_relationships_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$where                 = array( 'relationship_id' => (int) $location_relationship );
-
-	$update = $wpdb->update(
-		my_calendar_location_relationships_table(),
-		array(
-			'post_id' => $location_post,
-		),
-		$where,
-		array( '%d' ),
-		'%d'
-	);
+	if ( $location_relationship ) {
+		$update = $wpdb->update(
+			my_calendar_location_relationships_table(),
+			array(
+				'post_id' => $location_post,
+			),
+			$where,
+			array( '%d' ),
+			'%d'
+		);
+	} else {
+		$update = $wpdb->insert(
+			my_calendar_location_relationships_table(),
+			array(
+				'location_id'     => $location_id,
+				'post_id'         => $location_post,
+				'relationship_id' => $location_relationship,
+			),
+			array( '%d', '%d', '%d' ),
+		);
+	}
 
 	return $update;
 }
