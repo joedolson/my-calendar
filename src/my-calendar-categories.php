@@ -1352,9 +1352,11 @@ function mc_category_icon( $event, $type = 'html' ) {
 		$image = '';
 		// Is this an event context or a category context.
 		if ( property_exists( $event, 'occur_id' ) ) {
-			$context = 'event';
+			$context    = 'event';
+			$substitute = '-' . $event->occur_id;
 		} else {
-			$context = 'category';
+			$context    = 'category';
+			$substitute = '';
 		}
 		if ( 'true' !== mc_get_option( 'hide_icons' ) ) {
 			if ( '' !== $event->category_icon ) {
@@ -1393,6 +1395,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 		} else {
 			$image = str_replace( array( $event->category_color, $inverse ), 'inherit', $image );
 		}
+		$image = str_replace( 'cat_' . $event->category_id, 'cat_' . $event->category_id . $substitute, $image );
 		/**
 		 * Filter the HTML output for a category icon.
 		 *
