@@ -1090,6 +1090,7 @@ function mc_admin_instances( $id, $occur = 0 ) {
 			} else {
 				$time = mc_date( mc_time_format(), $start ) . '-' . mc_date( mc_time_format(), $end );
 			}
+			// Omitting format from mc_date() returns timestamp.
 			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
 			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
 			$class = '';
