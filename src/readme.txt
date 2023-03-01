@@ -86,6 +86,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.4.10 =
+
+* Bug fix: Duplicate ID attributes on category SVG icons.
+* Bug fix: Weekday recurring events used wrong basis for date addition.
+
 = 3.4.9 =
 
 * Bug fix: List view with grouped lists and modal JS enabled did not trigger modal.
