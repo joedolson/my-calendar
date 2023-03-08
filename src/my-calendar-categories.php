@@ -1421,6 +1421,9 @@ function mc_category_icon( $event, $type = 'html' ) {
  * @return string
  */
 function mc_generate_category_icon( $source ) {
+	if ( '' === $source->category_icon ) {
+		return '';
+	}
 	$path  = plugin_dir_path( __FILE__ ) . 'images/icons/';
 	$src   = $path . str_replace( '.png', '.svg', $source->category_icon );
 	$hex   = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
@@ -1458,6 +1461,10 @@ function mc_generate_category_icon( $source ) {
 
 	return $image;
 }
+
+/**
+ * Add a filter to safe CSS files to allow 'fill' on svg icons.
+ */
 add_filter(
 	'safe_style_css',
 	function( $styles ) {
