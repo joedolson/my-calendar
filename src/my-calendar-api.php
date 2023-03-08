@@ -530,9 +530,9 @@ function mc_generate_rrule( $event ) {
 	$rrule  = '';
 	$by     = '';
 	$repeat = $event->event_repeats;
-	$month  = mc_date( 'm', strtotime( $event->event_begin ) );
-	$day    = mc_date( 'd', strtotime( $event->event_begin ) );
-	$numday = mc_recur_date( $event->event_begin );
+	$month  = mc_date( 'm', strtotime( $event->event_begin ), false );
+	$day    = mc_date( 'd', strtotime( $event->event_begin ), false );
+	$numday = mc_recur_date( mc_date( 'Y-m-d', strtotime( $event->event_begin ), false ) );
 	$recurs = str_split( $event->event_recur, 1 );
 	$recur  = $recurs[0];
 	$every  = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
