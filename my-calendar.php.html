@@ -236,12 +236,12 @@ function mc_register_widgets() {
 	register_widget( 'My_Calendar_Filters' );
 }
 
-add_action( 'init', 'mc_custom_canonical' );
+add_action( 'template_redirect', 'mc_custom_canonical' );
 /**
  * Customize canonical URL for My Calendar custom links
  */
 function mc_custom_canonical() {
-	if ( isset( $_GET['mc_id'] ) ) {
+	if ( mc_is_single_event() ) {
 		add_action( 'wp_head', 'mc_canonical' );
 		remove_action( 'wp_head', 'rel_canonical' );
 		add_filter( 'wpseo_canonical', 'mc_disable_yoast_canonical' );
@@ -306,10 +306,12 @@ function mc_canonical() {
 	// End original code.
 	if ( isset( $_GET['mc_id'] ) ) {
 		$mc_id = ( absint( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
-		$link  = add_query_arg( 'mc_id', $mc_id, $link );
+	} else {
+		$mc_id = get_post_meta( $id, '_mc_event_id', true );
 	}
+	$link = add_query_arg( 'mc_id', $mc_id, $link );
 
-	echo "&lt;link rel='canonical' href='$link' />\n";
+	echo "&lt;link rel='canonical' href='" . esc_url( $link ) . "' />\n";
 }
 
 /**
