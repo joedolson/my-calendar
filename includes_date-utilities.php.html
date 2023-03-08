@@ -274,11 +274,11 @@ function mc_checkdate( $date ) {
  */
 function mc_recur_date( $ts ) {
 	$ts      = is_numeric( $ts ) ? $ts : strtotime( $ts );
-	$weekday = mc_date( 'l', $ts );
-	$month   = mc_date( 'M', $ts );
+	$weekday = mc_date( 'l', $ts, false );
+	$month   = mc_date( 'M', $ts, false );
 	$ord     = 1;
 
-	while ( mc_date( 'M', ( $ts = strtotime( '-1 week', $ts ) ) ) === $month ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+	while ( mc_date( 'M', ( $ts = strtotime( '-1 week', $ts ) ), false ) === $month ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		$ord++;
 	}
 
