@@ -86,6 +86,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.4.11 =
+
+* Bug fix: Exit without attempting to call category icons if database value is empty.
+* Bug fix: Set canonical URLs when mc_id parameter is not set.
+* Bug fix: Don't apply timezone offsets when creating recur rules.
+
 = 3.4.10 =
 
 * Bug fix: Duplicate ID attributes on category SVG icons.
