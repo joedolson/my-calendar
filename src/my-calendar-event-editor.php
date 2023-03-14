@@ -390,7 +390,7 @@ function my_calendar_edit() {
 			$response = my_calendar_save( $action, $mc_output, (int) $_POST['event_id'] );
 			echo wp_kses_post( $response['message'] );
 		}
-		$post = map_deep( $_POST, 'wp_kses_post' );
+		$post = map_deep( $_POST, 'mc_kses_post' );
 		for ( $i = 0; $i < $count; $i ++ ) {
 			$mc_output = mc_check_data( $action, $post, $i );
 			if ( 'add' === $action || 'copy' === $action ) {
@@ -1992,7 +1992,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	 *
 	 * @hook mc_pre_checkdata
 	 *
-	 * @param {array} $post Post data.
+	 * @param {array}  $post Post data.
 	 * @param {string} $action Action performed (edit, copy, add).
 	 * @param {int}    $i Current event index if parsing multiple events.
 	 *

@@ -127,11 +127,13 @@ function mc_allowed_tags( $tags, $context ) {
 		);
 
 		$tags['iframe'] = array(
-			'width'       => true,
-			'height'      => true,
-			'src'         => true,
-			'frameborder' => true,
-			'title'       => true,
+			'width'           => true,
+			'height'          => true,
+			'src'             => true,
+			'frameborder'     => true,
+			'title'           => true,
+			'allow'           => true,
+			'allowfullscreen' => true,
 		);
 
 		$tags['th'] = array(
@@ -395,6 +397,15 @@ function mc_kses_elements() {
 		'time'             => array(
 			'data-label' => array(),
 			'class'      => array(),
+		),
+		'iframe'           => array(
+			'width'           => array(),
+			'height'          => array(),
+			'src'             => array(),
+			'title'           => array(),
+			'frameborder'     => array(),
+			'allow'           => array(),
+			'allowfullscreen' => array(),
 		),
 	);
 
