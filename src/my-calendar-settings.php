@@ -442,12 +442,10 @@ function mc_update_output_settings( $post ) {
 	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
 	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
-	$templates                 = array();
+	$templates                 = mc_get_option( 'templates' );
 	$templates['title']        = $post['mc_title_template'];
 	$templates['title_solo']   = $post['mc_title_template_solo'];
 	$templates['title_list']   = $post['mc_title_template_list'];
-	$templates['label']        = mc_get_template( 'label' );
-	$templates['link']         = mc_get_template( 'link' );
 	$options['templates']      = $templates;
 
 	mc_update_options( $options );
@@ -499,10 +497,7 @@ function mc_update_text_settings( $post ) {
 	$options['today_events']         = $post['mc_today_events'];
 	$options['week_caption']         = $post['mc_week_caption'];
 	$options['caption']              = $post['mc_caption'];
-	$templates                       = array();
-	$templates['title']              = mc_get_template( 'title' );
-	$templates['title_solo']         = mc_get_template( 'title_solo' );
-	$templates['title_list']         = mc_get_template( 'title_list' );
+	$templates                       = mc_get_option( 'templates' );
 	$templates['label']              = $post['mc_details_label'];
 	$templates['link']               = $post['mc_link_label'];
 	$options['templates']            = $templates;
