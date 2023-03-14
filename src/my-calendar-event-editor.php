@@ -1076,7 +1076,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 						$return = '<div class="event_description">
 										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
 										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
-										<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . stripslashes( esc_attr( $value ) ) . '</textarea>
+										<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( stripslashes( $value ) ) . '</textarea>
 									</div>';
 					} else {
 						echo '
