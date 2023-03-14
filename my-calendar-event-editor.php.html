@@ -416,7 +416,7 @@ function my_calendar_edit() {
 			$response = my_calendar_save( $action, $mc_output, (int) $_POST['event_id'] );
 			echo wp_kses_post( $response['message'] );
 		}
-		$post = map_deep( $_POST, 'wp_kses_post' );
+		$post = map_deep( $_POST, 'mc_kses_post' );
 		for ( $i = 0; $i &lt; $count; $i ++ ) {
 			$mc_output = mc_check_data( $action, $post, $i );
 			if ( 'add' === $action || 'copy' === $action ) {
@@ -1102,7 +1102,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 						$return = '&lt;div class="event_description">
 										&lt;label for="content">' . __( 'Event Description', 'my-calendar' ) . '&lt;/label>
 										&lt;label for="content">' . __( 'Event Description', 'my-calendar' ) . '&lt;/label>
-										&lt;textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . stripslashes( esc_attr( $value ) ) . '&lt;/textarea>
+										&lt;textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( stripslashes( $value ) ) . '&lt;/textarea>
 									&lt;/div>';
 					} else {
 						echo '
@@ -2018,7 +2018,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	 *
 	 * @hook mc_pre_checkdata
 	 *
-	 * @param {array} $post Post data.
+	 * @param {array}  $post Post data.
 	 * @param {string} $action Action performed (edit, copy, add).
 	 * @param {int}    $i Current event index if parsing multiple events.
 	 *
