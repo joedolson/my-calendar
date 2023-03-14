@@ -92,6 +92,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Set canonical URLs when mc_id parameter is not set.
 * Bug fix: Don't apply timezone offsets when creating recur rules.
 * Bug fix: Saved custom templates were overwritten when updating settings that include templates.
+* Bug fix: Event element allow lists mismatched on initial check and final check.
 
 = 3.4.10 =
 
