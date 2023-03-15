@@ -911,17 +911,19 @@ function mc_get_event_image( $event, $data ) {
 		$atts  = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
 		$image = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
 	} else {
+		// Get alt attribute from a publicly submitted image.
+		$alt = get_post_meta( $data->event_post, '_mcs_submitted_alt', true );
 		/**
 		 * Customize alt attribute for an event featured image that is not attached to a post.
 		 *
 		 * @hook mc_event_image_alt
 		 *
-		 * @param {string} $alt Empty string.
+		 * @param {string} $alt Empty string or user submitted alt attribute.
 		 * @param {object} $event Event object.
 		 *
 		 * @return {string}
 		 */
-		$alt   = esc_attr( apply_filters( 'mc_event_image_alt', '', $event ) );
+		$alt   = apply_filters( 'mc_event_image_alt', $alt, $event );
 		$image = ( '' !== $event->event_image ) ? "&lt;img src='" . esc_url( $event->event_image ) . "' alt='" . esc_attr( $alt ) . "' class='mc-image photo' />" : '';
 	}
 	$return = true;
