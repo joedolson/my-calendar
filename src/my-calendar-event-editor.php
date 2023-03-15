@@ -1117,7 +1117,8 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 					$button_text = __( 'Change Featured Image', 'my-calendar' );
 					$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
-					$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
+					$alt         = ( '' === $alt ) ? get_post_meta( $data->event_post, '_mcs_submitted_alt', true ) : $alt;
+					$alt         = ( '' === $alt ) ? $data->event_image : $alt;
 				}
 				$return = '
 				<div class="mc-image-upload field-holder">
