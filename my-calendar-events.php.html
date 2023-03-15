@@ -720,15 +720,20 @@ function mc_get_instance_data( $instance_id ) {
 /**
  * Fetch the instance of an event closest to today.
  *
- * @param int $id Event core ID.
+ * @param int  $id Event core ID.
+ * @param bool $next If true, return closest event that's in the future.
  *
  * @return object Event
  */
-function mc_get_nearest_event( $id ) {
-	$mcdb      = mc_is_remote_db();
-	$ts_string = mc_ts();
-	$event     = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$event     = mc_event_object( $event );
+function mc_get_nearest_event( $id, $next = false ) {
+	$next_event = false;
+	$mcdb       = mc_is_remote_db();
+	$ts_string  = mc_ts();
+	$event      = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( true === $next ) {
+		$next_event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d AND occur_begin > NOW() ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
+	$event = ( $next_event ) ? mc_event_object( $next_event ) : mc_event_object( $event );
 
 	return $event;
 }

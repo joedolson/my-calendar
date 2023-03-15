@@ -307,7 +307,9 @@ function mc_canonical() {
 	if ( isset( $_GET['mc_id'] ) ) {
 		$mc_id = ( absint( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
 	} else {
-		$mc_id = get_post_meta( $id, '_mc_event_id', true );
+		$event_id = get_post_meta( $id, '_mc_event_id', true );
+		$event    = mc_get_first_event( $event_id );
+		$mc_id    = $event->occur_id;
 	}
 	$link = add_query_arg( 'mc_id', $mc_id, $link );
 
