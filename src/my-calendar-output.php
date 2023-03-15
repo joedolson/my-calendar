@@ -1360,7 +1360,7 @@ function mc_show_event_template( $content ) {
 				$time  = mc_date( 'H:i:00', strtotime( $event->occur_begin ), false );
 			} else {
 				if ( is_numeric( $event_id ) ) {
-					$event = mc_get_nearest_event( $event_id );
+					$event = mc_get_nearest_event( $event_id, true );
 					$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
 					$time  = mc_date( 'H:i:s', strtotime( $event->occur_begin ), false );
 				} else {
