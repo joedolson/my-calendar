@@ -44,9 +44,9 @@
     "lint-js": "eslint --fix './src/assets/js'",
     "wp-env": "wp-env"
   },
-	"lint-staged": {
-		"./src/assets/js/!(*min).js": ["eslint --fix", "prettier --write"],
-		"./src/assets/css/*.css": "prettier --write"
-	},
+  "lint-staged": {
+    "./src/assets/js/!(*min).js": ["eslint --fix", "prettier --write"],
+    "./src/assets/css/*.css": "prettier --write"
+  },
   "dependencies": {}
 }
