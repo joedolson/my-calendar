@@ -2027,12 +2027,12 @@ function mc_the_title( $title, $post_id = null ) {
 			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 			if ( ! $event_id ) {
 				$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
-				$event     = mc_get_nearest_event( $parent_id );
+				$event     = mc_get_nearest_event( $parent_id, true );
 			}
 			if ( is_numeric( $event_id ) ) {
 				$event = mc_get_event( $event_id );
 				if ( ! is_object( $event ) ) {
-					$event = mc_get_nearest_event( $event_id );
+					$event = mc_get_nearest_event( $event_id, true );
 				}
 			}
 			if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
