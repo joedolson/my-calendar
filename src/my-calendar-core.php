@@ -1540,7 +1540,8 @@ function mc_scripts() {
 	if ( false !== strpos( $id, 'my-calendar' ) || isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'] ) {
 		// Script needs to be aware of current Pro version.
 		$mcs_version = ( get_option( 'mcs_version', '' ) ) ? get_option( 'mcs_version' ) : 1.0;
-		wp_enqueue_script( 'mc.admin', plugins_url( 'js/jquery.admin.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
+		$url         = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.admin.js', __FILE__ ) : plugins_url( 'js/jquery.admin.min.js', __FILE__ );
+		wp_enqueue_script( 'mc.admin', $url, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 		wp_localize_script(
 			'mc.admin',
 			'mcAdmin',
