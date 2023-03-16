@@ -31,8 +31,8 @@
     "esbuild": "^0.17.10"
   },
   "scripts": {
-    "start": "esbuild mcjs.min=src/assets/js/mcjs.js --bundle --outdir=src/assets/js --target=chrome58,firefox57,safari11,edge16 --watch --sourcemap",
-    "build:js": "esbuild mcjs.min=src/assets/js/mcjs.js --bundle --outdir=src/assets/js --target=chrome58,firefox57,safari11,edge16 --minify",
+    "start": "esbuild mcjs.min=src/js/mcjs.js --bundle --outdir=src/js --target=chrome58,firefox57,safari11,edge16 --watch --sourcemap",
+    "build:js": "esbuild mcjs.min=src/js/mcjs.js --bundle --outdir=src/js --target=chrome58,firefox57,safari11,edge16 --minify",
     "presetup": "find .scripts -type f -exec chmod +x {} \\;",
     "build:docs": "rm -rf docs/ && jsdoc -c hookdoc-conf.json",
     "format-php": "wp-env run composer run-script format",
@@ -40,12 +40,12 @@
     "lint-php": "wp-env run composer run-script lint",
     "pretest-php": "wp-env run composer 'install --no-interaction'",
     "test-php": "wp-env run phpunit 'phpunit -c /var/www/html/wp-content/plugins/my-calendar/phpunit.xml.dist --verbose'",
-    "lint-js": "eslint --fix './src/assets/js'",
+    "lint-js": "eslint --fix './src/js'",
     "wp-env": "wp-env"
   },
   "lint-staged": {
-    "./src/assets/js/!(*min).js": ["eslint --fix", "prettier --write"],
-    "./src/assets/css/*.css": "prettier --write"
+    "./src/js/!(*min).js": ["eslint --fix", "prettier --write"],
+    "./src/css/*.css": "prettier --write"
   },
   "dependencies": {}
 }
