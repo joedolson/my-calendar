@@ -1642,9 +1642,8 @@ function mc_scripts() {
 					'security' => wp_create_nonce( 'mc-recurrence-nonce' ),
 				)
 			);
-			wp_enqueue_script( 'mc.ajaxcats', plugins_url( 'js/ajax-cats.js', __FILE__ ), array( 'jquery' ), $version );
 			wp_localize_script(
-				'mc.ajaxcats',
+				'mc.ajax',
 				'mc_cats',
 				array(
 					'action'   => 'add_category',
