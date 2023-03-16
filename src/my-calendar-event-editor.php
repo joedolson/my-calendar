@@ -504,10 +504,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			 * @param {int|false} $result Result of the DB update query.
 			 */
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
+			$event = mc_get_first_event( $event_id );
 
 			if ( 'true' === mc_get_option( 'event_mail' ) ) {
 				// insert_id is last occurrence inserted in the db.
-				$event = mc_get_first_event( $event_id );
 				if ( 1 === (int) $event->event_flagged ) {
 					/**
 					 * Action executed when an event is marked as spam and eemail notifications are enabled.
