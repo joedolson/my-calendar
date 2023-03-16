@@ -8,10 +8,12 @@ on:
 jobs:
   hookdocs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Use Node.js 14
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version-vile: '.nvmrc'
     - name: npm install, and build docs
