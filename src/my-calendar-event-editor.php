@@ -803,6 +803,9 @@ function mc_form_data( $event_id = false ) {
 		$data = $data[0];
 		// Recover users entries if there was an error.
 		if ( ! empty( $submission ) ) {
+			if ( property_exists( $data, 'event_id' ) ) {
+				$submission->event_id = $data->event_id;
+			}
 			$data = $submission;
 		}
 	} else {
