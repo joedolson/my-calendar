@@ -886,7 +886,9 @@ function mc_get_event_image( $event, $data ) {
 		$image = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
 	} else {
 		// Get alt attribute from a publicly submitted image.
-		$alt = get_post_meta( $data->event_post, '_mcs_submitted_alt', true );
+		if ( property_exists( $event, 'event_post' ) ) {
+			$alt = get_post_meta( $event->event_post, '_mcs_submitted_alt', true );
+		}
 		/**
 		 * Customize alt attribute for an event featured image that is not attached to a post.
 		 *
