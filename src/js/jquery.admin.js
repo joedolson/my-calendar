@@ -445,11 +445,11 @@ jQuery(document).ready(function ($) {
 			showPanel( '#' + firstItem );
 		}
 	}
-	var tabs = document.querySelectorAll('.mc-tabs [role=tab]'); //get all role=tab elements as a variable
+	var tabs = document.querySelectorAll('.mc-tabs [role=tab]'); // get all role=tab elements as a variable.
 	for ( var i = 0; i < tabs.length; i++) {
 		tabs[i].addEventListener( 'click', showTabPanel );
 		tabs[i].addEventListener( 'keydown', handleKeyPress );
-	} //add click event to each tab to run the showTabPanel function
+	} // add click event to each tab to run the showTabPanel function.
 	/**
 	 * Activate a panel from the click event.
 	 *
