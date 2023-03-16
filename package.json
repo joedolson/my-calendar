@@ -34,7 +34,6 @@
     "start": "esbuild mcjs.min=src/assets/js/mcjs.js --bundle --outdir=src/assets/js --target=chrome58,firefox57,safari11,edge16 --watch --sourcemap",
     "build:js": "esbuild mcjs.min=src/assets/js/mcjs.js --bundle --outdir=src/assets/js --target=chrome58,firefox57,safari11,edge16 --minify",
     "presetup": "find .scripts -type f -exec chmod +x {} \\;",
-	//"prepare": "./.scripts/prepare.sh",
     "build:docs": "rm -rf docs/ && jsdoc -c hookdoc-conf.json",
     "format-php": "wp-env run composer run-script format",
     "prelint-php": "wp-env run composer 'install --no-interaction'",
