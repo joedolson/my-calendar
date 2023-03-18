@@ -558,7 +558,12 @@ function mc_generate_rrule( $event ) {
 			$rrule = 'FREQ=MONTHLY';
 			break;
 		case 'U':
-			$by    = 'BYDAY=' . $numday['num'] . strtoupper( substr( $numday['day'], 0, 2 ) );
+			$fifth = $event->event_fifth_week;
+			if ( '1' === $fifth && 5 === $numday['num'] ) {
+				$by = 'BYDAY=-1' . strtoupper( substr( $numday['day'], 0, 2 ) );
+			} else {
+				$by = 'BYDAY=' . $numday['num'] . strtoupper( substr( $numday['day'], 0, 2 ) );
+			}
 			$rrule = 'FREQ=MONTHLY'; // Calculate which day/week the first date is for BYDAY= pattern.
 			break;
 		case 'Y':
