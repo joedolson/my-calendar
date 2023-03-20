@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.2
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.11
+Stable tag: 3.4.12
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -85,6 +85,17 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.4.12 =
+
+* Change: when mc_id not passed, display next event if there is one, rather than always the nearest event.
+* Change: minify admin JS.
+* Change: combine admin event ajax and category ajax into one file.
+* Bug fix: Use user-supplied alt attributes from Pro when image provided via URL.
+* Bug fix: Invalid canonical value when mc_id not passed.
+* Bug fix: Get event data earlier when processing post responses. Fixes undeclared variable error.
+* Bug fix: Pass event ID into submission data when editing an event. [Pro]
+* Bug fix: Fix final week recurring patterns in iCal exports. Props @masonwolf.
 
 = 3.4.11 =
 
