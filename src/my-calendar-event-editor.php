@@ -534,7 +534,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			}
 			if ( '0' === (string) $add['event_approved'] ) {
 				$edit_event = '';
-				if ( mc_can_edit_event( $event_id ) && '' !== $edit_link  ) {
+				if ( mc_can_edit_event( $event_id ) && '' !== $edit_link ) {
 					$edit_event = sprintf( ' <a href="%s">' . __( 'Continue editing event.', 'my-calendar' ) . '</a>', $edit_link );
 				}
 				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved' );
