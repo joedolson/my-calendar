@@ -547,10 +547,23 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					my_calendar_send_email( $event );
 				}
 			}
+			if ( is_admin() &amp;&amp; ! wp_doing_ajax() ) {
+				$edit_link = add_query_arg(
+					array(
+						'event_id' => $event_id,
+						'mode'     => 'edit',
+					),
+					admin_url( 'admin.php?page=my-calendar' )
+				);
+			} else {
+				$edit_link = ( function_exists( 'mcs_submit_url' ) ) ? mcs_submit_url( $event_id, $event ) : '';
+			}
 			if ( '0' === (string) $add['event_approved'] ) {
-				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&amp;mode=edit&amp;event_id=' . $event_id ) );
-				$edit_event = sprintf( ' &lt;a href="%s">' . __( 'Continue editing event.', 'my-calendar' ) . '&lt;/a>', $edit_url );
-				$message    = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved' );
+				$edit_event = '';
+				if ( mc_can_edit_event( $event_id ) &amp;&amp; '' !== $edit_link  ) {
+					$edit_event = sprintf( ' &lt;a href="%s">' . __( 'Continue editing event.', 'my-calendar' ) . '&lt;/a>', $edit_link );
+				}
+				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved' );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
 				if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; isset( $_POST['mc_twitter'] ) &amp;&amp; '' !== trim( $_POST['mc_twitter'] ) ) {
@@ -558,18 +571,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
-					$event_link = mc_get_details_link( $event_ids[0]->occur_id );
-					if ( is_admin() &amp;&amp; ! wp_doing_ajax() ) {
-						$edit_link = add_query_arg(
-							array(
-								'event_id' => $event_id,
-								'mode'     => 'edit',
-							),
-							admin_url( 'admin.php?page=my-calendar' )
-						);
-					} else {
-						$edit_link = ( function_exists( 'mcs_submit_url' ) ) ? mcs_submit_url( $event_id, $event ) : '';
-					}
+					$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
 					$event_error = mc_error_check( $event_ids[0]->occur_event_id );
 				}
 
