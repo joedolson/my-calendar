@@ -178,13 +178,14 @@ function mc_author_select_ids( $author ) {
 		} else {
 			$authors = explode( ',', $author );
 		}
-		foreach ( $authors as $key ) {
+		foreach ( $authors as $index => $key ) {
 			$key = trim( $key );
 			if ( is_numeric( $key ) ) {
 				$add = absint( $key );
 			} elseif ( 'current' === $key ) {
 				$author = wp_get_current_user();
 				$add    = $author->ID;
+				unset( $authors[ $index ] );
 			} else {
 				$author = get_user_by( 'login', $key ); // Get author by username.
 				$add    = $author->ID;
