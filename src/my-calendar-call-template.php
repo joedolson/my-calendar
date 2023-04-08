@@ -36,6 +36,7 @@ function mc_embed_template() {
 	if ( ! isset( $_GET['embed'] ) ) {
 		return;
 	}
+	add_filter( 'show_admin_bar', '__return_false' );
 
 	// Check to see if there is a template in the theme.
 	$template = locate_template( array( 'my-calendar-template.php' ) );
