@@ -88,7 +88,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.4.13 =
 
-* Bug fix: Don't send admin edit link to public sumitters.
+* Bug fix: Don't send admin edit link to public submitters.
 * Bug fix: Unset 'current' keyword when replaced with user ID in MySQL query.
 * Change: Hide adminbar when embedding calendar in iframe.
 
