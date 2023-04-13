@@ -159,6 +159,17 @@ function mc_posttypes() {
 					 * @return {string}
 					 */
 					'slug'       => apply_filters( 'mc_event_slug', $key ),
+					/**
+					 * Enable feeds for My Calendar post types.
+					 *
+					 * @hook mc_has_feeds
+					 *
+					 * @param {bool}   $enabled Default false.
+					 * @param {string} $key Post type name.
+					 *
+					 * @return {bool}
+					 */
+					'feeds'      => apply_filters( 'mc_has_feeds', false, $key ),
 				),
 				'hierarchical'        => false,
 				'menu_position'       => 20,
