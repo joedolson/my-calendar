@@ -996,7 +996,7 @@ function mc_save_profile() {
 	}
 	if ( current_user_can( 'manage_options' ) ) {
 		if ( isset( $_POST['mc_user_permissions'] ) ) {
-			$mc_user_permission = $_POST['mc_user_permissions'];
+			$mc_user_permission = map_deep( $_POST['mc_user_permissions'], 'sanitize_text_field' );
 			update_user_meta( $edit_id, 'mc_user_permissions', $mc_user_permission );
 		} else {
 			delete_user_meta( $edit_id, 'mc_user_permissions' );
