@@ -248,7 +248,10 @@ function my_calendar_manage() {
 		if ( $mcnonce ) {
 			if ( current_user_can( 'mc_approve_events' ) ) {
 				$event_id = absint( $_GET['event_id'] );
+				// Publish the event.
 				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				// Remove spam flag if present.
+				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$event   = mc_get_event_core( $event_id );
 				$private = mc_private_event( $event, false );
 				$status  = ( $private ) ? 'private' : 'publish';
