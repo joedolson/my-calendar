@@ -1065,16 +1065,39 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 	// Create edit links.
 	$edit = '';
 	if ( mc_can_edit_event( $event ) && mc_get_option( 'remote' ) !== 'true' ) {
-		$mc_id     = $event->occur_id;
-		$groupedit = ( 0 !== (int) $event->event_group_id ) ? " &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . "</a>\n" : '';
-		$recurs    = str_split( $event->event_recur, 1 );
-		$recur     = $recurs[0];
-		$referer   = urlencode( mc_get_current_url() );
-		$edit      = "	<div class='mc_edit_links'><p>";
-		if ( 'S' === $recur ) {
-			$edit .= "<a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . "</a>$groupedit";
+		$mc_id      = $event->occur_id;
+		$groupedit  = ( 0 !== (int) $event->event_group_id ) ? " &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . "</a>\n" : '';
+		$recurs     = str_split( $event->event_recur, 1 );
+		$recur      = $recurs[0];
+		$referer    = urlencode( mc_get_current_url() );
+		$edit       = "	<div class='mc_edit_links'><p>";
+		/**
+		 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
+		 *
+		 * @hook mcs_view_admin_links_on_frontend
+		 *
+		 * @param {string} $permission Permission required to see admin links instead of front-end links.
+		 * @param {object} $event Current event.
+		 *
+		 * @return {string}
+		 */
+		$perms_required = apply_filters( 'mcs_view_admin_links_on_frontend', 'manage_options', $event );
+		if ( is_admin() || current_user_can( $perms_required ) || ! function_exists( 'mcs_submit_url' ) ) {
+			$edit_url   = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
+			$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" );
+			$edit_group = add_query_arg( 'date', $mc_id, $edit_url );
+			$del_group  = add_query_arg( 'date', $mc_id, $delete_url );
 		} else {
-			$edit .= "<a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;date=$mc_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='edit'>" . __( 'Edit All', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;date=$mc_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "</a> &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" ) . "' class='delete'>" . __( 'Delete All', 'my-calendar' ) . "</a>
+			$edit_url   = mcs_submit_url( $event->event_id, $event );
+			$delete_url = mcs_delete_url( $event->event_id );
+			// Group editing is not currently supported in the Pro form.
+			$edit_group = false;
+			$del_group  = false;
+		}
+		if ( 'S' === $recur || ( ! $edit_group && ! $del_group ) ) {
+			$edit .= "<a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . "</a>$groupedit";
+		} else {
+			$edit .= "<a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit All', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete All', 'my-calendar' ) . "</a>
 			$groupedit";
 		}
 		$edit .= '</p></div>';
