@@ -989,7 +989,6 @@ function mc_profile() {
  */
 function mc_save_profile() {
 	global $user_ID;
-	$current_user = wp_get_current_user();
 	if ( isset( $_POST['user_id'] ) ) {
 		$edit_id = (int) $_POST['user_id'];
 	} else {
