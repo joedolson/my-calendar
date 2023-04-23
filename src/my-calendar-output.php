@@ -1065,12 +1065,12 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 	// Create edit links.
 	$edit = '';
 	if ( mc_can_edit_event( $event ) && mc_get_option( 'remote' ) !== 'true' ) {
-		$mc_id      = $event->occur_id;
-		$groupedit  = ( 0 !== (int) $event->event_group_id ) ? " &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . "</a>\n" : '';
-		$recurs     = str_split( $event->event_recur, 1 );
-		$recur      = $recurs[0];
-		$referer    = urlencode( mc_get_current_url() );
-		$edit       = "	<div class='mc_edit_links'><p>";
+		$mc_id     = $event->occur_id;
+		$groupedit = ( 0 !== (int) $event->event_group_id ) ? " &bull; <a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . "</a>\n" : '';
+		$recurs    = str_split( $event->event_recur, 1 );
+		$recur     = $recurs[0];
+		$referer   = urlencode( mc_get_current_url() );
+		$edit      = "	<div class='mc_edit_links'><p>";
 		/**
 		 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
 		 *
