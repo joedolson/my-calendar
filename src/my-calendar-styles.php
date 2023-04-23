@@ -207,7 +207,7 @@ function my_calendar_style_edit() {
 					}
 				}
 				if ( isset( $_POST['delete_var'] ) ) {
-					$delete = $_POST['delete_var'];
+					$delete = sanitize_text_field( $_POST['delete_var'] );
 					foreach ( $delete as $del ) {
 						unset( $styles[ $del ] );
 					}
