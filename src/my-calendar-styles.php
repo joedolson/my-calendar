@@ -329,7 +329,24 @@ function my_calendar_style_edit() {
 			<legend><?php esc_html_e( 'CSS Style Editor', 'my-calendar' ); ?></legend>
 			<?php
 			if ( mc_is_custom_style( mc_get_option( 'css_file' ) ) ) {
-				echo wp_kses_post( '<div class="style-editor-notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
+				$path    = mc_get_style_path( mc_get_option( 'css_file' ) );
+				$paths   = explode( 'wp-content', $path );
+				$remnant = $paths[1];
+				$built   = '';
+				if ( false !== stripos( $remnant, '/plugins/' ) ) {
+					$link   = admin_url( 'plugin-editor.php' );
+					$target = str_replace( '/plugins/', '', $remnant );
+					$built  = add_query_arg( 'file', $target, $link );
+				} elseif ( ! wp_is_block_theme() ) {
+					$link   = admin_url( 'theme-editor.php' );
+					$target = str_replace( '/themes/', '', $remnant );
+					$built  = add_query_arg( 'file', $target, $link );
+				}
+				if ( $built ) {
+					echo wp_kses_post( '<div class="style-editor-notice"><p class="mc-editor-not-available"><a href="' . esc_url( $built ) . '">' . __( 'Edit your custom CSS using the WordPress file editor.', 'my-calendar' ) . '</a></p></div>' );
+				} else {
+					echo wp_kses_post( '<div class="style-editor-notice"><p class="mc-editor-not-available">' . __( 'The editor is not available for custom CSS files. Edit your custom CSS locally, then upload your changes.', 'my-calendar' ) . '</p></div>' );
+				}
 			} else {
 				$nonce       = wp_create_nonce( 'mc-migrate-css' );
 				$migrate_url = '<a href="' . add_query_arg( 'migrate', $nonce, admin_url( 'admin.php?page=my-calendar-design' ) ) . '" class="button-secondary">' . __( 'Migrate to custom CSS', 'my-calendar' ) . '</a>';
