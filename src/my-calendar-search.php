@@ -189,10 +189,10 @@ function mc_show_search_results( $content ) {
 		$query = false;
 		if ( isset( $_GET['mcs'] ) ) { // Simple search.
 			$ret   = true;
-			$query = $_GET['mcs'];
+			$query = sanitize_text_field( $_GET['mcs'] );
 		} elseif ( isset( $_POST['mcs'] ) ) { // Advanced search.
 			$ret   = true;
-			$query = $_POST;
+			$query = map_deep( $_POST, 'sanitize_text_field' );
 		}
 		if ( $ret && $query ) {
 			return mc_search_results( $query );

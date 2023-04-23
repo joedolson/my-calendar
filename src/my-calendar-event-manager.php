@@ -298,7 +298,7 @@ function my_calendar_manage() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 		if ( isset( $_POST['mc_bulk_actions'] ) ) {
-			$action  = $_POST['mc_bulk_actions'];
+			$action  = sanitize_text_field( $_POST['mc_bulk_actions'] );
 			$results = '';
 			switch ( $action ) {
 				case 'mass_delete':

@@ -161,7 +161,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	update_post_meta( $post_id, '_mc_event_shortcode', $data['shortcode'] );
 	$events_access = '';
 	if ( isset( $_POST['events_access'] ) ) {
-		$events_access = $_POST['events_access'];
+		$events_access = map_deep( $_POST['events_access'], 'sanitize_text_field' );
 	} else {
 		// My Calendar Rest API.
 		if ( isset( $post['data'] ) && isset( $post['data']['events_access'] ) ) {
@@ -170,7 +170,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	}
 	$time_label = '';
 	if ( isset( $_POST['event_time_label'] ) ) {
-		$time_label = $_POST['event_time_label'];
+		$time_label = sanitize_text_field( $_POST['event_time_label'] );
 	} else {
 		// My Calendar Rest API.
 		if ( isset( $post['data'] ) && isset( $post['data']['event_time_label'] ) ) {
