@@ -1393,12 +1393,14 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
  */
 function mc_update_count_cache() {
 	global $wpdb;
-	$published = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$draft     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$trash     = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_approved = 2' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$archive   = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_status = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$spam      = $wpdb->get_var( 'SELECT count( event_id ) FROM ' . my_calendar_table() . ' WHERE event_flagged = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$all       = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$published = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$draft     = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 0 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$trash     = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 2 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$archive   = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved != 2 AND event_flagged = 0 AND event_status = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$spam      = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved != 2 AND event_flagged = 1 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$counts    = array(
+		'all'       => $all,
 		'published' => $published,
 		'draft'     => $draft,
 		'trash'     => $trash,
