@@ -92,6 +92,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: When publishing an event, remove any spam flag in place without requiring extra step.
 * Bug fix: Use front-end links for delete and edit if viewed from front-end in Pro.
 * Change: Add filter to enable RSS feeds for My Calendar post types.
+* Security hardening: Move sanitizing earlier in numerous locations.
 
 = 3.4.13 =
 
