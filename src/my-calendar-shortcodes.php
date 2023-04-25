@@ -58,12 +58,12 @@ function my_calendar_insert( $atts, $content = null ) {
 
 	if ( 'mini' !== $args['format'] ) {
 		if ( isset( $_GET['format'] ) ) {
-			$args['format'] = $_GET['format'];
+			$args['format'] = sanitize_text_field( $_GET['format'] );
 		}
 	}
 
 	if ( isset( $_GET['search'] ) ) {
-		$args['search'] = $_GET['search'];
+		$args['search'] = sanitize_text_field( $_GET['search'] );
 	}
 
 	global $user_ID;
