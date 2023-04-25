@@ -1667,7 +1667,7 @@ function mc_calendar_params( $args ) {
 	}
 
 	if ( isset( $_GET['mcs'] ) ) {
-		$search = $_GET['mcs'];
+		$search = sanitize_text_field( $_GET['mcs'] );
 	}
 
 	/**

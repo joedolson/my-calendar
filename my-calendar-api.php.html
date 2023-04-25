@@ -214,7 +214,7 @@ function mc_api_format_csv( $data ) {
  */
 function mc_export_vcal() {
 	if ( isset( $_GET['vcal'] ) ) {
-		$vcal = $_GET['vcal'];
+		$vcal = absint( $_GET['vcal'] );
 		print wp_kses_post( my_calendar_send_vcal( $vcal ) );
 		die;
 	}

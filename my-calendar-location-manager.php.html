@@ -261,7 +261,7 @@ function mc_manage_locations() {
 
 	if ( isset( $_GET['orderby'] ) ) {
 		$sortby = $_GET['orderby'];
-		switch ( $_GET['orderby'] ) {
+		switch ( $sortby ) {
 			case 'city':
 				$orderby = 'location_city';
 				break;
