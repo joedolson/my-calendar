@@ -1375,6 +1375,7 @@ function mc_remote_db() {
 										'host'        => __( 'Host', 'my-calendar' ),
 										'ical'        => __( 'iCal Download', 'my-calendar' ),
 										'gcal'        => __( 'Share to Google Calendar', 'my-calendar' ),
+										'gmap'        => __( 'Display Map', 'my-calendar' ),
 										'gmap_link'   => __( 'Link to Map', 'my-calendar' ),
 										'address'     => __( 'Location Address', 'my-calendar' ),
 										'excerpt'     => __( 'Excerpt', 'my-calendar' ),
@@ -1393,6 +1394,7 @@ function mc_remote_db() {
 											'type'    => 'checkbox',
 										)
 									);
+									unset( $default_display_fields['gmap'] );
 									?>
 									</ul>
 									<div class="mc-input-with-note">
