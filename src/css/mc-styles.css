@@ -1239,6 +1239,11 @@ label[for=e_host] {
 	margin-right: 6px;
 }
 
+.my-calendar-admin .categories label span svg {
+	width: 1em;
+	height: 1em;
+}
+
 .locations-container .columns-flex {
 	align-items: end;
 }
