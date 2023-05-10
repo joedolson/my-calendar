@@ -118,7 +118,8 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 				set_post_thumbnail( $post_id, $attachment_id );
 			}
 		}
-		$access       = ( isset( $post['events_access'] ) ) ? $post['events_access'] : array();
+		// Set location access.
+		$access       = ( isset( $post['event_access'] ) ) ? $post['event_access'] : array();
 		$access_terms = implode( ',', array_values( $access ) );
 		mc_update_event( 'event_access', $access_terms, $event_id, '%s' );
 		mc_add_post_meta_data( $post_id, $post, $data, $event_id );
@@ -160,8 +161,8 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	}
 	update_post_meta( $post_id, '_mc_event_shortcode', $data['shortcode'] );
 	$events_access = '';
-	if ( isset( $_POST['events_access'] ) ) {
-		$events_access = map_deep( $_POST['events_access'], 'sanitize_text_field' );
+	if ( isset( $post['events_access'] ) ) {
+		$events_access = map_deep( $post['events_access'], 'sanitize_text_field' );
 	} else {
 		// My Calendar Rest API.
 		if ( isset( $post['data'] ) && isset( $post['data']['events_access'] ) ) {
@@ -455,7 +456,7 @@ function my_calendar_edit() {
  *
  * @param string      $action Type of action.
  * @param array       $output Checked event data.
- * @param int}boolean $event_id Event ID or false for new events.
+ * @param int|boolean $event_id Event ID or false for new events.
  *
  * @return array Array with event_id and message keys.
  */
@@ -467,6 +468,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 
 	if ( ( 'add' === $action || 'copy' === $action ) && true === $proceed ) {
 		$add  = $output[2]; // add format here.
+		$data = $output[2];
 		$cats = $add['event_categories'];
 
 		unset( $add['event_categories'] );
@@ -488,10 +490,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			$message = mc_show_error( __( "I'm sorry! I couldn't add that event to the database.", 'my-calendar' ), false );
 		} else {
 			// do an action using the $action and processed event data.
-			$data        = $add;
 			$event_error = '';
 			$event_link  = '';
 			$edit_link   = '';
+
 			mc_event_post( $action, $data, $event_id, $result );
 			/**
 			 * Run action when an event is saved.
@@ -2207,6 +2209,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_span         = ( ! empty( $post['event_span'] ) && 0 !== (int) $event_group_id ) ? 1 : 0;
 		$event_hide_end     = ( ! empty( $post['event_hide_end'] ) ) ? (int) $post['event_hide_end'] : 0;
 		$event_hide_end     = ( '' === $time || '23:59:59' === $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
+		$events_access      = ( ! empty( $post['events_access'] ) ) ? $post['events_access'] : array();
 		// Set location.
 		if ( 'none' === $location_preset && ( empty( $post['event_label'] ) || is_numeric( $event_location ) ) ) {
 			// event location name is required to copy over.
@@ -2485,7 +2488,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$submission->event_span         = $event_span;
 		$submission->event_hide_end     = $event_hide_end;
 		$submission->event_access       = ( is_array( $event_access ) ) ? serialize( $event_access ) : '';
-		$submission->events_access      = serialize( $events_access );
+		$submission->events_access      = ( is_array( $events_access) ) ? serialize( $events_access ) : '';
 		$submission->event_tickets      = $event_tickets;
 		$submission->event_registration = $event_registration;
 		$submission->event_categories   = $cats;
