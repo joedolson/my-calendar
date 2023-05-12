@@ -257,10 +257,10 @@ BEGIN:VEVENT
 UID:{dateid}-{id}
 LOCATION:{ical_location}
 SUMMARY:{title}
-DTSTAMP:{ical_start}
+DTSTAMP:{ical_date_start}
 ORGANIZER;CN={host}:MAILTO:{host_email}
-DTSTART:{ical_start}
-DTEND:{ical_end}
+DTSTART:{ical_date_start}
+DTEND:{ical_date_end}
 CATEGORIES:{ical_category}
 URL;VALUE=URI:{details_link}
 DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_excerpt}$alert$all_day
