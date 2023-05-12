@@ -396,7 +396,6 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		'ical_location',
 		'ical_start',
 		'ical_recur',
-		'ical_description',
 		'event_status',
 		'id',
 		'location_source',

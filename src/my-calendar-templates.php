@@ -707,7 +707,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['event_span'] = $event->event_span;
 
 	// ICAL.
-	$e['ical_description'] = str_replace( "\r", '=0D=0A=', $event->event_desc );
 	$e['ical_desc']        = $strip_desc;
 	$e['ical_start']       = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $recur_start ) ) : $recur_start;
 	$e['ical_end']         = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $recur_end ) + 60, false ) : $recur_end;
@@ -1416,6 +1415,7 @@ function mc_auto_excerpt( $e, $event ) {
 
 	$e['search_excerpt'] = mc_search_highlight( $description, $shortdesc );
 	$e['excerpt']        = $excerpt;
+	$e['ical_excerpt']   = mc_newline_replace( strip_tags( $excerpt ) );
 
 	return $e;
 }
