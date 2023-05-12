@@ -496,7 +496,7 @@ DTSTAMP:{ical_start}
 ORGANIZER;CN={host}:MAILTO:{host_email}
 DTSTART;TZID=$tz_id:{ical_start}
 DTEND;TZID=$tz_id:{ical_end}{ical_recur}
-URL;VALUE=URI:{details_link}
+URL;VALUE=URI:{details_ical}
 DESCRIPTION:{ical_excerpt}
 CATEGORIES:{ical_categories}{alert}{all_day}
 END:VEVENT";

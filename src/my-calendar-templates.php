@@ -577,6 +577,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	}
 
 	$e['details_link'] = $e_link;
+	$e['details_ical'] = remove_query_arg( 'mc_id', $e_link ); // In ical series exports, it's impossible to get the actual details link.
 	$e['details']      = "<a href='" . esc_url( $e_link ) . "' class='mc-details' $nofollow>$e_label</a>";
 	$e['linking']      = ( '' !== $e['link'] ) ? $event->event_link : $e_link;
 
