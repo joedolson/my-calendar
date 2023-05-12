@@ -234,12 +234,12 @@ function mc_generate_vcal( $event_id ) {
 		 * @hook mc_event_has_alarm
 		 *
 		 * @param {array} Alarm information passable to `mc_generate_alert_ical()`
-		 * @param {int}   $event_id Event ID.
+		 * @param {int}   $mc_id Event ID.
 		 * @param {int}   $post Post ID.
 		 *
 		 * @return {array}
 		 */
-		$alarm = apply_filters( 'mc_event_has_alarm', array(), $event_id, $array['post'] );
+		$alarm = apply_filters( 'mc_event_has_alarm', array(), $mc_id, $array['post'] );
 		$alert = '';
 		if ( ! empty( $alarm ) ) {
 			$alert = mc_generate_alert_ical( $alarm );
