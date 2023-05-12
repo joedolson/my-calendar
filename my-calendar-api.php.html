@@ -260,12 +260,12 @@ function mc_generate_vcal( $event_id ) {
 		 * @hook mc_event_has_alarm
 		 *
 		 * @param {array} Alarm information passable to `mc_generate_alert_ical()`
-		 * @param {int}   $event_id Event ID.
+		 * @param {int}   $mc_id Event ID.
 		 * @param {int}   $post Post ID.
 		 *
 		 * @return {array}
 		 */
-		$alarm = apply_filters( 'mc_event_has_alarm', array(), $event_id, $array['post'] );
+		$alarm = apply_filters( 'mc_event_has_alarm', array(), $mc_id, $array['post'] );
 		$alert = '';
 		if ( ! empty( $alarm ) ) {
 			$alert = mc_generate_alert_ical( $alarm );
@@ -283,10 +283,10 @@ BEGIN:VEVENT
 UID:{dateid}-{id}
 LOCATION:{ical_location}
 SUMMARY:{title}
-DTSTAMP:{ical_start}
+DTSTAMP:{ical_date_start}
 ORGANIZER;CN={host}:MAILTO:{host_email}
-DTSTART:{ical_start}
-DTEND:{ical_end}
+DTSTART:{ical_date_start}
+DTEND:{ical_date_end}
 CATEGORIES:{ical_category}
 URL;VALUE=URI:{details_link}
 DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_excerpt}$alert$all_day
