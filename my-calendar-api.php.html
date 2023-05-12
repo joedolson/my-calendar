@@ -288,8 +288,8 @@ ORGANIZER;CN={host}:MAILTO:{host_email}
 DTSTART:{ical_start}
 DTEND:{ical_end}
 CATEGORIES:{ical_category}
-URL;VALUE=URI:{link}
-DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_desc}$alert$all_day
+URL;VALUE=URI:{details_link}
+DESCRIPTION;ENCODING=QUOTED-PRINTABLE:{ical_excerpt}$alert$all_day
 END:VEVENT
 END:VCALENDAR";
 		/**
@@ -522,8 +522,8 @@ DTSTAMP:{ical_start}
 ORGANIZER;CN={host}:MAILTO:{host_email}
 DTSTART;TZID=$tz_id:{ical_start}
 DTEND;TZID=$tz_id:{ical_end}{ical_recur}
-URL;VALUE=URI:{link}
-DESCRIPTION:{ical_desc}
+URL;VALUE=URI:{details_link}
+DESCRIPTION:{ical_excerpt}
 CATEGORIES:{ical_categories}{alert}{all_day}
 END:VEVENT";
 	// add ICAL headers.
