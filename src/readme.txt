@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.2
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.14
+Stable tag: 3.4.15
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -85,6 +85,16 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.5.15 =
+
+* Bug fix: Restore missing 'gmap' option.
+* Bug fix: Set width/height on category SVGs in event manager.
+* Bug fix: Accessibility data inconsistently passed from front-end submissions.
+* Bug fix: Use excerpts by default in iCal. props @masonwolf
+* Bug fix: Use details link by default in iCal. props @masonwolf
+* Bug fix: Single ical exports need to use correct date, not series start date. props @masonwolf
+* Bug fix: Series ical exports need to use root URL, not first instance URL. props @masonwolf
 
 = 3.4.14 =
 
