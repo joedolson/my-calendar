@@ -86,7 +86,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
-= 3.5.15 =
+= 3.4.15 =
 
 * Bug fix: Restore missing 'gmap' option.
 * Bug fix: Set width/height on category SVGs in event manager.
