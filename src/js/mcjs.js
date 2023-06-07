@@ -2,9 +2,11 @@
 	'use strict';
 	$(function () {
 		mc_display_usertime();
-		var calendar = document.querySelector( '.mc-main' );
+		var calendar = document.querySelectorAll( '.mc-main' );
 		if ( calendar ) {
-			calendar.classList.remove( 'mcjs' );
+			calendar.forEach( (el) => {
+				el.classList.remove( 'mcjs' );
+			});
 		}
 	});
 
