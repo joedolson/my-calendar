@@ -88,6 +88,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.4.16 =
 
+* Bug fix: Redirect single page for calendar to canonical location based on permalink settings.
 * Bug fix: Remove .mcjs class for every calendar on page.
 * Change: Pass event count to search results filter.
 
