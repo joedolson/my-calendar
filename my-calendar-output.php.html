@@ -1275,6 +1275,32 @@ function mc_list_titles( $events ) {
 	return "&lt;span class='mc-list-event'>$result&lt;/span>";
 }
 
+add_action( 'template_redirect', 'mc_handle_permalinks' );
+/**
+ * If a site has My Calendar permalinks disabled, redirect to in-calendar details URL. If a site uses permalinks, redirect to the permalink.
+ */
+function mc_handle_permalinks() {
+	$enabled      = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
+	$is_permalink = is_singular( 'mc-events' );
+	$mc_id        = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+
+	if ( $enabled &amp;&amp; $is_permalink ) {
+		return;
+	} elseif ( $enabled &amp;&amp; ! $is_permalink &amp;&amp; $mc_id ) {
+		// Permalinks are enabled, but this is a calendar event that isn't the permalink page.
+		$page = mc_get_details_link( $mc_id );
+
+		wp_safe_redirect( $page );
+		die;
+	} elseif ( ! $enabled &amp;&amp; $is_permalink ) {
+		// Permalinks are not enabled, but this is an event permalink page.
+		$page  = add_query_arg( 'mc_id', $mc_id, mc_get_uri() );
+
+		wp_safe_redirect( $page );
+		die;
+	}
+}
+
 add_action( 'template_redirect', 'mc_hidden_event' );
 /**
  * If an event is hidden from the current user, redirect to 404.
