@@ -1356,8 +1356,6 @@ function mc_get_locations( $args ) {
 function mc_core_search_locations( $query = '' ) {
 	global $wpdb;
 	$search  = '';
-	$results = array();
-	$current = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
 	$db_type = mc_get_db_type();
 	$query   = esc_sql( $query );
 	$length  = strlen( $query );

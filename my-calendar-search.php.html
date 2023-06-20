@@ -111,6 +111,7 @@ function mc_search_results( $query ) {
 	}
 
 	$event_array = mc_get_search_results( $search );
+	$count       = count( $event_array );
 
 	if ( ! empty( $event_array ) ) {
 		$template = '&lt;h3>&lt;strong>{timerange after=", "}{daterange}&lt;/strong> &amp;#8211; {linking_title}&lt;/h3>&lt;div class="mcs-search-excerpt">{search_excerpt}&lt;/div>';
@@ -133,7 +134,7 @@ function mc_search_results( $query ) {
 		 * @hook mc_search_exportlinks
 		 *
 		 * @param {string} $exports String.
-		 * @param {array}  $output Search results.
+		 * @param {string} $output Search results.
 		 *
 		 * @return {string}
 		 */
@@ -162,7 +163,7 @@ function mc_search_results( $query ) {
 	 *
 	 * @return {string}
 	 */
-	$header = apply_filters( 'mc_search_before', '&lt;h2>%s&lt;/h2>&lt;ol class="mc-search-results" role="list">', $term );
+	$header = apply_filters( 'mc_search_before', '&lt;h2>%s&lt;/h2>&lt;ol class="mc-search-results" role="list">', $term, $count );
 	// Translators: search term.
 	$header = sprintf( $header, sprintf( __( 'Search Results for "%s"', 'my-calendar' ), esc_html( $term ) ) );
 	/**
