@@ -1294,7 +1294,7 @@ function mc_handle_permalinks() {
 		die;
 	} elseif ( ! $enabled &amp;&amp; $is_permalink ) {
 		// Permalinks are not enabled, but this is an event permalink page.
-		$page  = add_query_arg( 'mc_id', $mc_id, mc_get_uri() );
+		$page = add_query_arg( 'mc_id', $mc_id, mc_get_uri() );
 
 		wp_safe_redirect( $page );
 		die;
