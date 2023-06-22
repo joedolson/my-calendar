@@ -48,8 +48,8 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	function widget( $args, $instance ) {
 		$before_widget = $args['before_widget'];
 		$after_widget  = $args['after_widget'];
-		$before_title  = $args['before_title'];
-		$after_title   = $args['after_title'];
+		$before_title  = str_replace( 'h1', 'h2', $args['before_title'] );
+		$after_title   = str_replace( 'h1', 'h2', $args['after_title'] );
 		$today_title   = isset( $instance['my_calendar_today_title'] ) ? $instance['my_calendar_today_title'] : '';
 		$template      = isset( $instance['my_calendar_today_template'] ) ? $instance['my_calendar_today_template'] : '';
 		$no_events     = isset( $instance['my_calendar_no_events_text'] ) ? $instance['my_calendar_no_events_text'] : '';

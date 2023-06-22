@@ -48,8 +48,8 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	function widget( $args, $instance ) {
 		$before_widget = $args['before_widget'];
 		$after_widget  = $args['after_widget'];
-		$before_title  = $args['before_title'];
-		$after_title   = $args['after_title'];
+		$before_title  = str_replace( 'h1', 'h2', $args['before_title'] );
+		$after_title   = str_replace( 'h1', 'h2', $args['after_title'] );
 
 		$widget_title = apply_filters( 'widget_title', $instance['title'], $instance, $args );
 		$widget_title = ( '' !== $widget_title ) ? $before_title . $widget_title . $after_title : '';
