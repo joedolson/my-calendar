@@ -856,6 +856,10 @@ strong.label {
 	font-size: 1.1rem;
 }
 
+#my-calendar .button-link.toggle-inside .dashicons {
+	text-decoration: none;
+}
+
 .mc-settings-page .mc-sortable .mc-updated,
 .mc-generator .mc-sortable .mc-updated {
 	background-color: #f0c33c;
