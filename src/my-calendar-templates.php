@@ -24,6 +24,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string HTML output of template.
  */
 function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
+	if ( is_object( $event ) ) {
+		/**
+		 * Filter event content inside wrapper.
+		 *
+		 * @hook mc_inner_content
+		 *
+		 * @param {string} $detail HTML with event data or empty string, when run as a pre-templating filter.
+		 * @param {object} $event My Calendar event object.
+		 * @param {string} $type View type.
+		 * @param {string} $time View timeframe. Empty when run as a pre-templating filter.
+		 *
+		 * @return {string} Returning any non-empty string will shortcircuit template drawing.
+		 */
+		$event_content = apply_filters( 'mc_inner_content', '', $event, $type, '' );
+		if ( $event_content ) {
+			return $event_content;
+		}
+	}
 	$template = stripcslashes( $template );
 	// If there are no brace characters, there is nothing to replace.
 	if ( strpos( $template, '{' ) === false ) {

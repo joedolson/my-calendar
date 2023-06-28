@@ -700,6 +700,18 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			 * @return {string}
 			 */
 			$container = apply_filters( 'mc_before_event', $container, $event, $type, $time );
+			/**
+			 * Filter event content inside wrapper.
+			 *
+			 * @hook mc_inner_content
+			 *
+			 * @param {string} $detail HTML with event data.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe.
+			 *
+			 * @return {string}
+			 */
 			$details   = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
 			/**
 			 * Filter details appended after the event content.
