@@ -2024,7 +2024,7 @@ function mc_the_title( $title, $post_id = null ) {
 	// in_the_loop() is not true in Full Site Editing, but is_main_query() is. This is a bug in FSE.
 	// However, in classic themes, is_main_query() is true in menus. So, screwed either way.
 	if ( is_singular( 'mc-events' ) && ( in_the_loop() ) ) {
-		if ( $post_id ) {
+		if ( $post_id && is_single( $post_id ) ) {
 			$event    = false;
 			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 			if ( ! $event_id ) {
