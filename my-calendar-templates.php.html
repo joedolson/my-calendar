@@ -63,23 +63,23 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 		 * @return {array}
 		 */
 		$description_fields = apply_filters( 'mc_inner_content_template_fields', $description_fields, $event );
-			foreach ( $description_fields as $field ) {
-				if ( isset( $array[ $field ] ) ) {
-				/**
-				 * Filter event content inside wrapper.
-				 *
-				 * @hook mc_inner_content
-				 *
-				 * @param {string} $detail Event details.
-				 * @param {object} $event My Calendar event object.
-				 * @param {string} $type View type.
-				 * @param {string} $time View timeframe. Empty when run as a pre-templating filter.
-				 *
-				 * @return {string} Returning any non-empty string will shortcircuit template drawing.
-				 */
-				$array[ $field ] = apply_filters( 'mc_inner_content', $array[ $field ], $event, $type, '' );
-			}
+		foreach ( $description_fields as $field ) {
+			if ( isset( $array[ $field ] ) ) {
+			/**
+			 * Filter event content inside wrapper.
+			 *
+			 * @hook mc_inner_content
+			 *
+			 * @param {string} $detail Event details.
+			 * @param {object} $event My Calendar event object.
+			 * @param {string} $type View type.
+			 * @param {string} $time View timeframe. Empty when run as a pre-templating filter.
+			 *
+			 * @return {string} Returning any non-empty string will shortcircuit template drawing.
+			 */
+			$array[ $field ] = apply_filters( 'mc_inner_content', $array[ $field ], $event, $type, '' );
 		}
+	}
 	}
 	$template = stripcslashes( $template );
 	// If there are no brace characters, there is nothing to replace.
