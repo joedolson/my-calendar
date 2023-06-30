@@ -342,9 +342,9 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$distance = ' (' . $dist . ')';
 	}
 	if ( is_admin() &amp;&amp; isset( $_GET['page'] ) &amp;&amp; 'my-calendar-location-manager' === $_GET['page'] ) {
-		$link = "&lt;a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&amp;mode=edit' ) ) . "' class='location-link edit'>&lt;span class='dashicons dashicons-edit' aria-hidden='true'>&lt;/span> &lt;span id='location$event->location_id'>$label&lt;/span>&lt;/a>";
+		$link = "&lt;a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&amp;mode=edit' ) ) . "' class='location-link edit p-name p-org u-url'>&lt;span class='dashicons dashicons-edit' aria-hidden='true'>&lt;/span> &lt;span id='location$event->location_id'>$label&lt;/span>&lt;/a>";
 	} else {
-		$link = ( '' !== $url ) ? "&lt;a href='$url' class='location-link external'>$label&lt;/a>" : $label;
+		$link = ( '' !== $url ) ? "&lt;a href='$url' class='location-link external p-name p-org u-url'>$label&lt;/a>" : $label;
 		$link = $link . $distance;
 	}
 	$post   = mc_get_location_post( $loc_id );
@@ -363,18 +363,18 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
 	$hcard  = '&lt;div class="address location vcard">';
 	if ( 'true' === $address ) {
-		$hcard .= '&lt;div class="adr">';
-		$hcard .= ( '' !== $label ) ? '&lt;div>&lt;strong class="org fn">' . $link . '&lt;/strong>&lt;/div>' : '';
+		$hcard .= '&lt;div class="adr h-card">';
+		$hcard .= ( '' !== $label ) ? '&lt;div>&lt;strong class="location-link">' . $link . '&lt;/strong>&lt;/div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "&lt;div class='sub-address'>";
-		$hcard .= ( '' !== $street ) ? '&lt;div class="street-address">' . $street . '&lt;/div>' : '';
-		$hcard .= ( '' !== $street2 ) ? '&lt;div class="street-address">' . $street2 . '&lt;/div>' : '';
+		$hcard .= ( '' !== $street ) ? '&lt;div class="street-address p-street-address">' . $street . '&lt;/div>' : '';
+		$hcard .= ( '' !== $street2 ) ? '&lt;div class="street-address p-extended-address">' . $street2 . '&lt;/div>' : '';
 		$hcard .= ( '' !== $city . $state . $zip ) ? '&lt;div>' : '';
-		$hcard .= ( '' !== $city ) ? '&lt;span class="locality">' . $city . '&lt;/span>&lt;span class="mc-sep">, &lt;/span>' : '';
-		$hcard .= ( '' !== $state ) ? '&lt;span class="region">' . $state . '&lt;/span> ' : '';
-		$hcard .= ( '' !== $zip ) ? ' &lt;span class="postal-code">' . $zip . '&lt;/span>' : '';
+		$hcard .= ( '' !== $city ) ? '&lt;span class="locality p-locality">' . $city . '&lt;/span>&lt;span class="mc-sep">, &lt;/span>' : '';
+		$hcard .= ( '' !== $state ) ? '&lt;span class="region p-region">' . $state . '&lt;/span> ' : '';
+		$hcard .= ( '' !== $zip ) ? ' &lt;span class="postal-code p-postal-code">' . $zip . '&lt;/span>' : '';
 		$hcard .= ( '' !== $city . $state . $zip ) ? '&lt;/div>' : '';
-		$hcard .= ( '' !== $country ) ? '&lt;div class="country-name">' . $country . '&lt;/div>' : '';
-		$hcard .= ( '' !== $phone ) ? '&lt;div class="tel">' . $phone . '&lt;/div>' : '';
+		$hcard .= ( '' !== $country ) ? '&lt;div class="country-name p-country-name">' . $country . '&lt;/div>' : '';
+		$hcard .= ( '' !== $phone ) ? '&lt;div class="tel p-tel">' . $phone . '&lt;/div>' : '';
 		$hcard .= ( '' !== $events ) ? '&lt;div class="mc-events-link">' . $events . '&lt;/div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : '&lt;/div>';
 		$hcard .= '&lt;/div>';
