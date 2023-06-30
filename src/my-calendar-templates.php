@@ -25,21 +25,34 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 	if ( is_object( $event ) ) {
+		$description_fields = array( 'excerpt', 'description', 'description_raw', 'description_stripped', 'ical_excerpt', 'shortdesc', 'shortdesc_raw', 'shortdesc_stripped', 'ical_desc' );
 		/**
-		 * Filter event content inside wrapper.
+		 * Filter fields that `mc_inner_content` runs on in templates.
 		 *
-		 * @hook mc_inner_content
+		 * @hook mc_inner_content_template_fields
 		 *
-		 * @param {string} $detail HTML with event data or empty string, when run as a pre-templating filter.
-		 * @param {object} $event My Calendar event object.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe. Empty when run as a pre-templating filter.
+		 * @param {array}  $description_fields Array of template tags containing event description data.
+		 * @param {object} $event Event object.
 		 *
-		 * @return {string} Returning any non-empty string will shortcircuit template drawing.
+		 * @return {array}
 		 */
-		$event_content = apply_filters( 'mc_inner_content', '', $event, $type, '' );
-		if ( $event_content ) {
-			return $event_content;
+		$description_fields = apply_filters( 'mc_inner_content_template_fields', $description_fields, $event );
+			foreach ( $description_fields as $field ) {
+				if ( isset( $array[ $field ] ) ) {
+				/**
+				 * Filter event content inside wrapper.
+				 *
+				 * @hook mc_inner_content
+				 *
+				 * @param {string} $detail Event details.
+				 * @param {object} $event My Calendar event object.
+				 * @param {string} $type View type.
+				 * @param {string} $time View timeframe. Empty when run as a pre-templating filter.
+				 *
+				 * @return {string} Returning any non-empty string will shortcircuit template drawing.
+				 */
+				$array[ $field ] = apply_filters( 'mc_inner_content', $array[ $field ], $event, $type, '' );
+			}
 		}
 	}
 	$template = stripcslashes( $template );
