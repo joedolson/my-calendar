@@ -408,6 +408,11 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		'description_stripped',
 		'shortdesc_raw',
 		'shortdesc_stripped',
+		'details_ical',
+		'ical_date_end',
+		'ical_date_start',
+		'ical_excerpt',
+		'ical_location',
 	);
 	foreach ( $data as $key => $value ) {
 		$uncommon = false;
