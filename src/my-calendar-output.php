@@ -440,7 +440,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		}
 		$header      .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
 		$close_button = mc_close_button( "$uid-$type-details-$id" );
-
+		$close        = '';
+		$toggle       = '';
 		if ( mc_show_details( $time, $type ) ) {
 			// Since 3.2.0, close button is added to event container in mini calendar.
 			$close = ( 'calendar' === $type ) ? $close_button : '';
@@ -655,7 +656,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				 * @return {array}
 				 */
 				$output_order = apply_filters( 'mc_default_output_order', $order, $event );
-				$details      = $close;
+				$details      = '';
 				if ( ! empty( $output_order ) ) {
 					foreach ( $output_order as $value ) {
 						/**
@@ -674,7 +675,6 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			} else {
 				// If a custom template is in use.
 				$toggle  = ( 'calendar' === $type ) ? $close_button : '';
-				$details = $toggle . $details . "\n";
 			}
 
 			$img_class = ( $img ) ? ' has-image' : ' no-image';
@@ -712,7 +712,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			 *
 			 * @return {string}
 			 */
-			$details = $header . $container . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+			$details = $header . $container . $close . $toggle . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
 			/**
 			 * Filter details appended after the event content.
 			 *
