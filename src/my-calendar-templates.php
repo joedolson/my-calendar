@@ -897,8 +897,8 @@ function mc_get_details_link( $event ) {
 /**
  * Get URI from settings
  *
- * @param object/string $event Event object or string for boolean result.
- * @param array         $args  Any arguments passed.
+ * @param object|string|bool $event Event object, string requesting boolean result, or boolean false.
+ * @param array              $args  Any arguments passed.
  *
  * @uses filter 'mc_get_uri'
  *
