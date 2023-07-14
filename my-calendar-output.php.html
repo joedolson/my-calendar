@@ -1314,6 +1314,10 @@ add_action( 'template_redirect', 'mc_hidden_event' );
  * If an event is hidden from the current user, redirect to 404.
  */
 function mc_hidden_event() {
+	// Early exit if this is not a singular event page.
+	if ( ! ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
+		return;
+	}
 	$do_redirect = false;
 	$is_404      = false;
 	if ( isset( $_GET['mc_id'] ) ) {
