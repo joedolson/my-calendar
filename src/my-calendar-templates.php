@@ -549,7 +549,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$inverse      = mc_inverse_color( $color );
 	$e['inverse'] = $inverse;
 
-
 	// This is because widgets now strip out style attributes.
 	$e['color_css']       = "<span style='background-color: $event->category_color; color: $inverse'>";
 	$e['close_color_css'] = '</span>';
