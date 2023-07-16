@@ -138,7 +138,7 @@ function mc_search_results( $query ) {
 		 */
 		$output = apply_filters( 'mc_search_no_results', "<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . '</li>', $term );
 	}
-	//$count = substr_count( $output, 'upcoming-event' );
+
 	/**
 	 * HTML template before the search results. Default `<ol class="mc-search-results">`.
 	 *
