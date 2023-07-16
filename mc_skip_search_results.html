@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_get_file - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_skip_search_results - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_get_file</h1></header>
+    <header><h1 class="page-title">Filter: mc_skip_search_results</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_get_file">apply_filters( 'mc_get_file', <span class="signature">$path, $file )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_skip_search_results">apply_filters( 'mc_skip_search_results', <span class="signature">$after, $context )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter file paths for My Calendar files.</p>
+    <p>Number of results to skip. Default <code>0</code>. Used for pagination.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$path</code></td>
+                <td class="name"><code>$after</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
             
@@ -93,14 +93,14 @@
 
             
 
-            <td class="description last"><p>File path.</p></td>
+            <td class="description last"><p>Number of results to skip.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$file</code></td>
+                <td class="name"><code>$context</code></td>
             
 
             <td class="type">
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>File name.</p></td>
+            <td class="description last"><p>'advanced' for advanced search results.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-core.php.html">my-calendar-core.php</a>, <a href="my-calendar-core.php.html#line145">line 145</a>
+        <a href="my-calendar-search.php.html">my-calendar-search.php</a>, <a href="my-calendar-search.php.html#line64">line 64</a>
     </li></ul></dd>
     
 
