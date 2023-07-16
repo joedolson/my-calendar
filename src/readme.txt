@@ -90,7 +90,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Only render event title filters when processing the event. 
 * Bug fix: `mc_inner_content` filter should run whenever description content is displayed.
+* Bug fix: `mc_inner_content` filter should not override disclosure close buttons.
 * Bug fix: If a theme uses H1 for widgets, replace with H2 instead of removing.
+* Bug fix: Hidden event redirect could fire on non-event pages.
+* Bug fix: PHP 8.1 compatibility fix.
+* Docs: Some docs fixes.
+* Docs: Move some additional template tags to the uncommon tags array.
 * Change: Update microformat classes to remove '.fn' (collision with block editor footnotes.)
 
 = 3.4.16 =
