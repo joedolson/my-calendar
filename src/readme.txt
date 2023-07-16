@@ -94,6 +94,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: If a theme uses H1 for widgets, replace with H2 instead of removing.
 * Bug fix: Hidden event redirect could fire on non-event pages.
 * Bug fix: PHP 8.1 compatibility fix.
+* Bug fix: allow {color} and {inverse} template tags in style attributes.
 * Docs: Some docs fixes.
 * Docs: Move some additional template tags to the uncommon tags array.
 * Change: Update microformat classes to remove '.fn' (collision with block editor footnotes.)
