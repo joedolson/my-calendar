@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string HTML output
  */
 function mc_search_results( $query ) {
+	$skip = 0;
 	/**
 	 * Number of past results to show. Default `0`.
 	 *
@@ -42,7 +43,7 @@ function mc_search_results( $query ) {
 	 *
 	 * @return {string}
 	 */
-	$after   = apply_filters( 'mc_future_search_results', 10, 'basic' ); // Return only future events, nearest 10.
+	$after   = apply_filters( 'mc_future_search_results', 20, 'basic' ); // Return only future events, nearest 20.
 	$exports = '';
 	if ( is_string( $query ) ) {
 		$search = mc_prepare_search_query( $query );
@@ -60,6 +61,17 @@ function mc_search_results( $query ) {
 		 */
 		$search = apply_filters( 'mc_advanced_search', '', $query );
 		$term   = $query['mcs'];
+		/**
+		 * Number of results to skip. Default `0`. Used for pagination.
+		 *
+		 * @hook mc_skip_search_results
+		 *
+		 * @param {int}    $after Number of results to skip.
+		 * @param {string} $context 'advanced' for advanced search results.
+		 *
+		 * @return {string}
+		 */
+		$skip = apply_filters( 'mc_skip_search_results', 0, 'advanced' );
 		/**
 		 * Number of past results to show. Default `0`.
 		 *
@@ -101,7 +113,7 @@ function mc_search_results( $query ) {
 		 */
 		$template = apply_filters( 'mc_search_template', $template, $term );
 		// No filters parameter prevents infinite looping on the_content filters.
-		$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', 0, $before, $after, 'yes', 'yes', 'nofilters', $term );
+		$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'yes', 'nofilters', $term );
 		/**
 		 * Filter that inserts search export links. Default empty string.
 		 *
@@ -126,7 +138,7 @@ function mc_search_results( $query ) {
 		 */
 		$output = apply_filters( 'mc_search_no_results', "<li class='no-results'>" . __( 'Sorry, your search produced no results.', 'my-calendar' ) . '</li>', $term );
 	}
-
+	//$count = substr_count( $output, 'upcoming-event' );
 	/**
 	 * HTML template before the search results. Default `<ol class="mc-search-results">`.
 	 *
@@ -188,12 +200,12 @@ function mc_show_search_results( $content ) {
 		// if this is the result of a search, show search output.
 		$ret   = false;
 		$query = false;
-		if ( isset( $_GET['mcs'] ) ) { // Simple search.
+		if ( isset( $_GET['mcs'] ) && ! isset( $_GET['mcp'] ) ) { // Simple search.
 			$ret   = true;
 			$query = sanitize_text_field( $_GET['mcs'] );
-		} elseif ( isset( $_POST['mcs'] ) ) { // Advanced search.
+		} elseif ( isset( $_GET['mcp'] ) && isset( $_GET['mcs'] ) ) { // Advanced search.
 			$ret   = true;
-			$query = map_deep( $_POST, 'sanitize_text_field' );
+			$query = map_deep( $_GET, 'sanitize_text_field' );
 		}
 		if ( $ret && $query ) {
 			return mc_search_results( $query );
