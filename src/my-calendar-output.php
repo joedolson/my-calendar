@@ -1015,6 +1015,11 @@ function mc_event_classes( $event, $type ) {
 		}
 		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
 	}
+	if ( 'body' === $type ) {
+		foreach ( $classes as $key => $class ) {
+			$classes[ $key ] = 'single-' . $class;
+		}
+	}
 
 	/**
 	 * Filter event classes.
