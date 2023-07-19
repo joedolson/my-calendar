@@ -1971,6 +1971,7 @@ add_filter( 'tmp_grunion_allow_editor_view', '__return_false' );
 add_filter( 'next_post_link', 'mc_next_post_link', 10, 2 );
 add_filter( 'previous_post_link', 'mc_previous_post_link', 10, 2 );
 add_filter( 'the_title', 'mc_the_title', 10, 2 );
+add_filter( 'body_class', 'mc_body_classes', 10, 1 );
 
 // Actions.
 add_action( 'init', 'mc_taxonomies', 0 );
@@ -2036,6 +2037,40 @@ function mc_next_post_link( $output, $format ) {
 	}
 
 	return $output;
+}
+
+/**
+ * Filter body classes on event singular posts.
+ *
+ * @param array $classes Array of body classes.
+ *
+ * @return array
+ */
+function mc_body_classes( $classes ) {
+	$event_classes = array();
+	if ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) {
+		$post_id = get_the_ID();
+		if ( $post_id &amp;&amp; is_single( $post_id ) ) {
+			$event    = false;
+			$event_id = ( isset( $_GET['mc_id'] ) &amp;&amp; is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+			if ( ! $event_id ) {
+				$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
+				$event     = mc_get_nearest_event( $parent_id, true );
+			}
+			if ( is_numeric( $event_id ) ) {
+				$event = mc_get_event( $event_id );
+				if ( ! is_object( $event ) ) {
+					$event = mc_get_nearest_event( $event_id, true );
+				}
+			}
+			if ( is_object( $event ) ) {
+				$event_classes = explode( ' ', mc_event_classes( $event, 'body' ) );
+			}
+		}
+	}
+	$classes = array_merge( $classes, $event_classes );
+
+	return $classes;
 }
 
 /**
