@@ -114,7 +114,7 @@ function mc_search_results( $query ) {
 		$template = apply_filters( 'mc_search_template', $template, $term );
 		// No filters parameter prevents infinite looping on the_content filters.
 		if ( is_string( $query ) ) {
-			$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'yes', 'nofilters', $term );		
+			$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'yes', 'nofilters', $term );
 		} else {
 			// Use this function for advanced search queries.
 			$output = mc_produce_search_results( $event_array, $template );
@@ -351,7 +351,7 @@ function mc_produce_search_results( $events, $template ) {
 							}
 							// end multi-day reduction.
 							if ( ! $md ) {
-								$instances    = mc_get_occurrences( $e->occur_event_id );
+								$instances = mc_get_occurrences( $e->occur_event_id );
 								if ( count( $instances ) > 1 ) {
 									$recurring_events[] = $e->occur_event_id;
 								}
