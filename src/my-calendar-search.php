@@ -301,23 +301,20 @@ function mc_get_searched_events() {
 	return $event_array;
 }
 
-
 /**
  * Generates the list of search results.
  *
- * @param array  $events (Array of events to analyze).
+ * @param array  $events Array of events to analyze, organized by date.
  * @param string $template Custom template to use for display.
  * @param string $context Display context.
  *
- * @return string; HTML output of list
+ * @return string HTML output of search results.
  */
 function mc_produce_search_results( $events, $template, $context = 'filters' ) {
-	// $events is an array of events organized by date.
 	$output      = array();
 	$near_events = array();
 	$temp_array  = array();
 
-	$count = count( $events );
 	$group = array();
 	$spans = array();
 	$occur = array();
