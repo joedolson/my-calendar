@@ -113,7 +113,12 @@ function mc_search_results( $query ) {
 		 */
 		$template = apply_filters( 'mc_search_template', $template, $term );
 		// No filters parameter prevents infinite looping on the_content filters.
-		$output = mc_produce_search_results( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'yes', 'nofilters', $term );
+		if ( is_string( $query ) ) {
+			$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'yes', 'nofilters', $term );		
+		} else {
+			// Use this function for advanced search queries.
+			$output = mc_produce_search_results( $event_array, $template );
+		}
 		/**
 		 * Filter that inserts search export links. Default empty string.
 		 *
@@ -306,11 +311,10 @@ function mc_get_searched_events() {
  *
  * @param array  $events Array of events to analyze, organized by date.
  * @param string $template Custom template to use for display.
- * @param string $context Display context.
  *
  * @return string HTML output of search results.
  */
-function mc_produce_search_results( $events, $template, $context = 'filters' ) {
+function mc_produce_search_results( $events, $template ) {
 	$output      = array();
 	$near_events = array();
 	$temp_array  = array();
@@ -372,7 +376,7 @@ function mc_produce_search_results( $events, $template, $context = 'filters' ) {
 		$groups = array();
 
 		foreach ( reverse_array( $temp_array, true, 'asc' ) as $event ) {
-			$details = mc_create_tags( $event, $context );
+			$details = mc_create_tags( $event, 'nofilters' );
 			if ( ! in_array( $details['group'], $groups, true ) ) {
 				$output[] = array(
 					'event' => $event,
