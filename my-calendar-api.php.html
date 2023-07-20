@@ -97,7 +97,7 @@ function my_calendar_api() {
 				 * @param {array} $args Keys: ['from', 'to', 'category', 'ltype', 'lvalue', 'author', 'host', 'search'].
 				 * @param {array} $request $_REQUEST parameters, sanitized.
 				 *
-				 * @return array
+				 * @return {array}
 				 */
 				$args   = apply_filters( 'mc_filter_api_args', $args, map_deep( $_REQUEST, 'sanitize_text_field' ) );
 				$data   = my_calendar_events( $args );
