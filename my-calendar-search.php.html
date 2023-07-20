@@ -139,7 +139,7 @@ function mc_search_results( $query ) {
 		 */
 		$template = apply_filters( 'mc_search_template', $template, $term );
 		// No filters parameter prevents infinite looping on the_content filters.
-		$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'yes', 'nofilters', $term );
+		$output = mc_produce_search_results( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'yes', 'nofilters', $term );
 		/**
 		 * Filter that inserts search export links. Default empty string.
 		 *
@@ -325,6 +325,110 @@ function mc_get_searched_events() {
 	}
 
 	return $event_array;
+}
+
+
+/**
+ * Generates the list of search results.
+ *
+ * @param array  $events (Array of events to analyze).
+ * @param string $template Custom template to use for display.
+ * @param string $context Display context.
+ *
+ * @return string; HTML output of list
+ */
+function mc_produce_search_results( $events, $template, $context = 'filters' ) {
+	// $events is an array of events organized by date.
+	$output      = array();
+	$near_events = array();
+	$temp_array  = array();
+
+	$count = count( $events );
+	$group = array();
+	$spans = array();
+	$occur = array();
+
+	$recurring_events = array();
+	$last_events      = array();
+	$last_group       = array();
+	if ( is_array( $events ) ) {
+		foreach ( $events as $k => $event ) {
+			if ( is_array( $event ) ) {
+				foreach ( $event as $e ) {
+					if ( ! mc_private_event( $e ) ) {
+						// Store span time in an array to avoid repeating database query.
+						if ( '1' === $e->event_span &amp;&amp; ( ! isset( $spans[ $e->occur_group_id ] ) ) ) {
+							// This is a multi-day event: treat each event as if it spanned the entire range of the group.
+							$span_time                   = mc_span_time( $e->occur_group_id );
+							$spans[ $e->occur_group_id ] = $span_time;
+						} elseif ( '1' === $e->event_span &amp;&amp; ( isset( $spans[ $e->occur_group_id ] ) ) ) {
+							$span_time = $spans[ $e->occur_group_id ];
+
+						}
+						if ( $e ) {
+							// If a multi-day event, show only once.
+							if ( '0' !== $e->occur_group_id &amp;&amp; '1' === $e->event_span &amp;&amp; in_array( $e->occur_group_id, $group, true ) || in_array( $e->occur_id, $occur, true ) ) {
+								$md = true;
+							} else {
+								$group[] = $e->occur_group_id;
+								$occur[] = $e->occur_id;
+								$md      = false;
+							}
+							// end multi-day reduction.
+							if ( ! $md ) {
+								$instances    = mc_get_occurrences( $e->occur_event_id );
+								if ( count( $instances ) > 1 ) {
+									$recurring_events[] = $e->occur_event_id;
+								}
+								$near_events[] = $e; // Split off another future event.
+								$last_events[] = $e->occur_id;
+								$last_group[]  = $e->occur_group_id;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	$events = $near_events;
+	usort( $events, 'mc_datetime_cmp' ); // Sort split events by date.
+
+	if ( is_array( $events ) ) {
+		foreach ( array_keys( $events ) as $key ) {
+			$event        =&amp; $events[ $key ];
+			$temp_array[] = $event;
+		}
+		$groups = array();
+
+		foreach ( reverse_array( $temp_array, true, 'asc' ) as $event ) {
+			$details = mc_create_tags( $event, $context );
+			if ( ! in_array( $details['group'], $groups, true ) ) {
+				$output[] = array(
+					'event' => $event,
+					'tags'  => $details,
+				);
+				if ( '1' === $details['event_span'] ) {
+					$groups[] = $details['group'];
+				}
+			}
+		}
+	}
+
+	$html = '';
+	foreach ( $output as $out ) {
+		$data    = array(
+			'event'    => $event,
+			'tags'     => $details,
+			'template' => $template,
+			'type'     => 'list',
+		);
+		$details = mc_load_template( 'upcoming', $data );
+		if ( ! $details ) {
+			$html .= mc_format_upcoming_event( $out, $template, 'list' );
+		}
+	}
+
+	return $html;
 }
 </code></pre>
         </article>
