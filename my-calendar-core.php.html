@@ -210,7 +210,7 @@ function mc_register_styles() {
 	global $wp_query;
 	$version = mc_get_version();
 	if ( SCRIPT_DEBUG ) {
-		$version .= rand( 10000, 10000 );
+		$version .= rand( 10000, 99999 );
 	}
 	$this_post = $wp_query->get_queried_object();
 	/**
