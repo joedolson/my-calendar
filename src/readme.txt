@@ -95,9 +95,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Hidden event redirect could fire on non-event pages.
 * Bug fix: PHP 8.1 compatibility fix.
 * Bug fix: allow {color} and {inverse} template tags in style attributes.
+* Bug fix: Cache busting on reset.css broken.
 * Docs: Some docs fixes.
 * Docs: Move some additional template tags to the uncommon tags array.
 * Change: Update microformat classes to remove '.fn' (collision with block editor footnotes.)
+* Change: Updates to search mechanisms for advanced search (Pro).
+* Change: Add baseline CSS for search results in reset.css
 
 = 3.4.16 =
 

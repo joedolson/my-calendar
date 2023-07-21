@@ -333,18 +333,31 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	padding: .5em;
 }
 
+/* Baseline styles for search results */
 ol.mc-search-results {
 	list-style-type: none;
-	margin: 0 auto;
+	margin: 0;
 	padding: 0;
 }
 
 ol.mc-search-results li {
-	margin: 0 0 1em;
+	margin: 0 0 1rem;
+	padding: 5px 1rem;
 }
 
 .mc-search-results .mc_search_term {
 	background: #ffa;
+	color: #111;
+}
+
+ol.mc-search-results li:nth-of-type(even) {
+	background: rgba( 0,0,0,.06 );
+}
+
+ol.mc-search-results li.no-results {
+	padding: 5px;
+	border-left: 6px solid #b32d2e;
+	background-color: #0000000a;
 	color: #111;
 }
 
