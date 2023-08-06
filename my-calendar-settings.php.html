@@ -930,7 +930,7 @@ function my_calendar_settings() {
 									$class = 'hidden';
 								}
 								?>
-								&lt;li class="mc_remote_info &lt;?php echo $class; ?>">&lt;?php wp_kses_post( _e( 'Add this code to your theme\'s &lt;code>functions.php&lt;/code> file:', 'my-calendar' ) ); ?>
+								&lt;li class="mc_remote_info &lt;?php echo $class; ?>">&lt;?php _e( "Add this code to your theme's &lt;code>functions.php&lt;/code> file:", 'my-calendar' ); ?>
 &lt;pre>
 function mc_remote_db() {
 	$mcdb = new wpdb('DB_USER','DB_PASSWORD','DB_NAME','DB_ADDRESS');
