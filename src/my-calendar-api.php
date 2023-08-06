@@ -442,7 +442,7 @@ function mc_api_format_ical( $data, $context ) {
 					}
 					$all_day = '';
 					if ( mc_is_all_day( $event ) ) {
-						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
+						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE';
 					}
 					$parse = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
 
