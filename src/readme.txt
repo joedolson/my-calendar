@@ -86,6 +86,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.4.18 =
+
+* Bug fix: Issue with AJAX search within calendar navigation elements.
+* Bug fix: Extra EOL possible in iCal output.
+* Bug fix: Remove quoted-printable from iCal encoding.
+* Bug fix: Deprecated argument error in calendar settings.
+
 = 3.4.17 =
 
 * Bug fix: Only render event title filters when processing the event. 
