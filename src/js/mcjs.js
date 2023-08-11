@@ -143,7 +143,7 @@
 				if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
 					var access = inputForm.find( 'select[name=access]' ).val();
 				}
-				var mcs   = calendar.find( '#mcs' ).val();
+				var mcs   = calendar.find( 'input[name=mcs]' ).val();
 				var link  = $( this ).attr( 'data-href' );
 			} else {
 				var link = $(this).attr('href');
@@ -152,6 +152,7 @@
 			try {
 				url = new URL(link);
 				url.searchParams.delete('embed');
+				url.searchParams.delete('source');
 				if ( 'INPUT' === this.nodeName ) {
 					if ( '' !== month ) {
 						url.searchParams.delete( 'month' );
