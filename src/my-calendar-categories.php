@@ -1189,7 +1189,7 @@ function mc_admin_category_list( $event ) {
  * Get all categories for given event
  *
  * @param object|int     $event Event object or event ID.
- * @param boolean|string $ids Return objects, ids, or html output.
+ * @param boolean|string $ids Return objects, ids, text, or html output.
  *
  * @return array of values
  */
@@ -1208,7 +1208,7 @@ function mc_get_categories( $event, $ids = true ) {
 		$primary  = mc_get_data( 'event_category', $event_id );
 	} else {
 
-		return ( 'html' === $ids ) ? '' : array();
+		return ( 'html' === $ids || 'text' === $ids ) ? '' : array();
 	}
 
 	if ( ! $results ) {
@@ -1224,8 +1224,8 @@ function mc_get_categories( $event, $ids = true ) {
 		} else {
 			$return[] = $primary;
 		}
-	} elseif ( 'html' === $ids ) {
-		$return = mc_categories_html( $results, $primary );
+	} elseif ( 'html' === $ids || 'text' === $ids ) {
+		$return = mc_categories_html( $results, $primary, $ids );
 	} elseif ( 'testing' === $ids ) {
 		if ( $results ) {
 			foreach ( $results as $result ) {
@@ -1242,24 +1242,27 @@ function mc_get_categories( $event, $ids = true ) {
 /**
  * Return HTML representing categories.
  *
- * @param array $results array of categories.
- * @param int   $primary Primary selected category for event.
+ * @param array  $results array of categories.
+ * @param int    $primary Primary selected category for event.
+ * @param string $output 'html' or 'text'. Include HTML or just raw text.
  *
  * @return String
  */
-function mc_categories_html( $results, $primary ) {
+function mc_categories_html( $results, $primary, $output = 'html' ) {
 	if ( $results ) {
 		foreach ( $results as $result ) {
 			if ( ! is_object( $result ) ) {
 				$result = (object) $result;
 			}
-			$icon     = mc_category_icon( $result );
+
+			$icon     = ( 'html' === $output ) ? mc_category_icon( $result ) : '';
 			$return[] = $icon . $result->category_name;
 		}
 	} else {
 		$return[] = $primary;
 	}
-	$return = implode( ', ', $return );
+
+	$return = implode( ', ', array_unique( $return ) );
 
 	return $return;
 }

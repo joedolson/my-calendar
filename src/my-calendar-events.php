@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_event_object( $object ) {
 	if ( is_object( $object ) ) {
 		if ( ! property_exists( $object, 'categories' ) ) {
-			$object->categories = mc_get_categories( $object, false );
+			$object->categories = mc_get_categories( $object, 'objects' );
 		}
 		if ( ! property_exists( $object, 'location' ) && is_numeric( $object->event_location ) && 0 !== (int) $object->event_location ) {
 			$object->location = mc_get_location( $object->event_location );
@@ -220,7 +220,7 @@ function my_calendar_get_events( $args ) {
 					$object_id      = $event->event_id;
 					$location_id    = $event->event_location;
 					if ( ! isset( $cats[ $object_id ] ) ) {
-						$categories         = mc_get_categories( $event, false );
+						$categories         = mc_get_categories( $event, 'objects' );
 						$event->categories  = $categories;
 						$cats[ $object_id ] = $categories;
 					} else {
@@ -270,7 +270,7 @@ function my_calendar_get_events( $args ) {
 				$object_id      = $event->event_id;
 				$location_id    = $event->event_location;
 				if ( ! isset( $cats[ $object_id ] ) ) {
-					$categories         = mc_get_categories( $event, false );
+					$categories         = mc_get_categories( $event, 'objects' );
 					$event->categories  = $categories;
 					$cats[ $object_id ] = $categories;
 				} else {
@@ -404,7 +404,7 @@ function mc_get_all_events( $args ) {
 		$event->site_id = $site;
 		$object_id      = $event->event_id;
 		if ( ! isset( $fetched[ $object_id ] ) ) {
-			$cats                  = mc_get_categories( $event, false );
+			$cats                  = mc_get_categories( $event, 'objects' );
 			$event->categories     = $cats;
 			$fetched[ $object_id ] = $cats;
 		} else {

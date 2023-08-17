@@ -1007,7 +1007,7 @@ function mc_event_classes( $event, $type ) {
 	if ( property_exists( $event, 'categories' ) ) {
 		$categories = $event->categories;
 	} else {
-		$categories = mc_get_categories( $event, false );
+		$categories = mc_get_categories( $event, 'objects' );
 	}
 	foreach ( $categories as $category ) {
 		if ( ! is_object( $category ) ) {
