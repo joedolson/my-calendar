@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.3
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.17
+Stable tag: 3.4.18
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -88,8 +88,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.4.18 =
 
-* Bug fix: Issue with AJAX search within calendar navigation elements.
+* Bug fix: Fix issue with AJAX search within calendar navigation elements.
 * Bug fix: Extra EOL possible in iCal output.
+* Bug fix: Categories were passed with icons to iCal, leaving duplicated category names after HTML was stripped.
 * Bug fix: Remove quoted-printable from iCal encoding.
 * Bug fix: Deprecated argument error in calendar settings.
 
