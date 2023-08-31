@@ -1225,7 +1225,7 @@ function mc_location_access() {
  * @param string $field Specific field to get.
  * @param int    $id Location ID.
  *
- * @return mixed value
+ * @return string value as string.
  */
 function mc_location_data( $field, $id ) {
 	if ( $id ) {
@@ -1233,8 +1233,10 @@ function mc_location_data( $field, $id ) {
 		$sql    = $mcdb->prepare( "SELECT $field FROM " . my_calendar_locations_table() . ' WHERE location_id = %d', $id );
 		$result = $mcdb->get_var( $sql );
 
-		return $result;
+		return (string) $result;
 	}
+
+	return '';
 }
 
 
