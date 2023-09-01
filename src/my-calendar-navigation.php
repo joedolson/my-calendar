@@ -417,7 +417,7 @@ function mc_category_key( $category, $id = '' ) {
 			// If category colors are ignored, don't render HTML for them.
 			$cat_key .= $cat_name;
 		}
-		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $category_id . '-' . $id . '" href="' . esc_url( $url ) . '"' . $aria_current . '>' . $cat_key . '</a></li>';
+		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $category_id . '-' . $id . '" href="' . esc_url( $url ) . '" ' . $aria_current . '>' . $cat_key . '</a></li>';
 	}
 	/**
 	 * Filter text label for 'All Categories'.
