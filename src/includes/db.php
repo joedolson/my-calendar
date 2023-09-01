@@ -134,9 +134,13 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
  */
 function mc_is_remote_db() {
 	global $wpdb;
+	global $remotedb;
 	$mcdb = $wpdb;
 	if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-		$mcdb = mc_remote_db();
+		if ( ! isset( $remotedb ) ) {
+			$remotedb = mc_remote_db();
+		}
+		$mcdb = $remotedb;
 	}
 
 	return $mcdb;
