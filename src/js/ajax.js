@@ -136,6 +136,8 @@
 						var category_id = response.category_id;
 						$( '#event_category_name' ).val( '' );
 						$( '<li class="new"><input type="checkbox" name="event_category[]" id="mc_cat_' + category_id + '" value="' + category_id + '" checked> <label for="mc_cat_' + category_id + '">' + category_name + '</label></li>' ).insertBefore( '.categories .event-new-category' );
+						var primary = $( '#e_category' );
+						primary.append( '<option value="' + category_id + '">' + category_name + '</option>' );
 					}
 				}, "json" );
 			}
