@@ -90,7 +90,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: missing space between attributes caused entire attribute string to fail `wp_kses` test.
 * Bug fix: Force variable types in a couple of function returns.
-* Bug fix: Use a persistent MySQL connection when accessing a remote DB.
+* Bug fix: Use a persistent MySQL connection when accessing a remote DB. Props @joerg-p.
 * Bug fix: Add new categories to primary selector on creation.
 
 = 3.4.18 =
