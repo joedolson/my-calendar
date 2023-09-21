@@ -1966,8 +1966,8 @@ function mc_remote_db() {
 		array(
 			'name'    => 'mc_event_mail_message',
 			'label'   => __( 'Message Body', 'my-calendar' ),
-			'default' => __( 'New Event:', 'my-calendar' ) . "\n{title}: {date}, {time} - {event_status}",
-			'note'    => "<br /><a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+			'default' => __( 'New Event:', 'my-calendar' ) . "\n\n{title}: {date}, {time} - {event_status}\n\nEdit Event: {edit_link}",
+			'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
 			'atts'    => array(
 				'cols' => 60,
 				'rows' => 6,
