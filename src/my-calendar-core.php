@@ -1205,10 +1205,10 @@ add_filter( 'display_post_states', 'mc_admin_state', 10, 2 );
  * @param object $event Event object.
  */
 function my_calendar_send_email( $event ) {
-	$details             = mc_create_tags( $event );
+	$details              = mc_create_tags( $event );
 	$details['edit_link'] = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
-	$headers             = array();
-	$send_email_option   = ( 'true' === mc_get_option( 'event_mail' ) ) ? true : false;
+	$headers              = array();
+	$send_email_option    = ( 'true' === mc_get_option( 'event_mail' ) ) ? true : false;
 	/**
 	 * Filter whether email notifications should be sent.
 	 *
