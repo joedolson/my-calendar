@@ -390,7 +390,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				$event_title_single = mc_draw_template( $data, $single_template );
 				if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
 					$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title_single ) . "'";
-					$classes = 'js-modal button';
+					$classes = 'js-modal button button-link';
 				} else {
 					$params  = " aria-expanded='false'";
 					$classes = 'open';
@@ -2250,7 +2250,7 @@ function my_calendar( $args ) {
 								$minitype = mc_get_option( 'mini_javascript' );
 								if ( 'modal' === $minitype ) {
 									$attrs   = str_replace( array( '{format}', '{target_id}' ), array( 'mini-', 'date-' . $date_is ), $modal_attrs );
-									$trigger = ' js-modal button';
+									$trigger = ' js-modal button button-link';
 								} else {
 									$attrs   = " aria-expanded='false'";
 									$trigger = ' trigger';
