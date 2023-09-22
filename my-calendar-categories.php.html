@@ -946,8 +946,7 @@ add_action( 'profile_update', 'mc_save_profile' );
  */
 function mc_profile() {
 	global $user_ID;
-	$current_user = wp_get_current_user();
-	$user_edit    = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID;
+	$user_edit = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID;
 
 	if ( user_can( $user_edit, 'mc_add_events' ) &amp;&amp; current_user_can( 'manage_options' ) ) {
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
@@ -1054,9 +1053,11 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			if ( '1' === (string) $cat->category_private &amp;&amp; ! is_user_logged_in() ) {
 				continue;
 			}
+			// If the current user can't edit a category, don't show it.
 			if ( ! mc_can_edit_category( $cat->category_id, wp_get_current_user()->ID ) ) {
 				continue;
 			}
+
 			if ( ! empty( $data ) ) {
 				if ( ! is_object( $data ) ) {
 					$category = $data;
