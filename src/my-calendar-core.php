@@ -535,7 +535,7 @@ function mc_footer_js() {
 			}
 			if ( $enqueue_mcjs ) {
 				$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version );
+				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version, true );
 				$args = array(
 					'grid'      => $grid,
 					'list'      => $list,
@@ -618,7 +618,7 @@ function mc_admin_styles() {
 			}
 			if ( $enqueue_mcjs ) {
 				$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery' ), $version );
+				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery' ), $version, true );
 				$args = array(
 					'grid'      => $grid,
 					'list'      => $list,
@@ -627,6 +627,22 @@ function mc_admin_styles() {
 					'newWindow' => __( 'New tab', 'my-calendar' ),
 				);
 				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
+			}
+			$gridtype = mc_get_option( 'calendar_javascript' );
+			if ( 'modal' === $gridtype ) {
+				if ( SCRIPT_DEBUG && true === SCRIPT_DEBUG ) {
+					$script = 'van11y/van11y-accessible-modal-window-aria.js';
+				} else {
+					$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
+				}
+				wp_enqueue_script( 'mc.modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
+				wp_localize_script(
+					'mc.modal',
+					'mcm',
+					array(
+						'context' => (string) is_user_logged_in(),
+					)
+				);
 			}
 		}
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
