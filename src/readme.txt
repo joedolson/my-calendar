@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.3
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.19
+Stable tag: 3.4.20
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -86,11 +86,20 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.4.20 =
+
+* Feature: Add {edit_link} template tag for admin email notifications.
+* Feature: Support filtering locations by ID when available.
+* I18n: Make security information texts more consistent.
+* Bug fix: Fix minor layout issues in admin grid view.
+* Bug fix: Fix script load in admin grid view. Support modals.
+* Bug fix: Update location configuration logic. Props @joergpe.
+
 = 3.4.19 =
 
 * Bug fix: missing space between attributes caused entire attribute string to fail `wp_kses` test.
 * Bug fix: Force variable types in a couple of function returns.
-* Bug fix: Use a persistent MySQL connection when accessing a remote DB. Props @joerg-p.
+* Bug fix: Use a persistent MySQL connection when accessing a remote DB. Props @joergpe.
 * Bug fix: Add new categories to primary selector on creation.
 
 = 3.4.18 =
