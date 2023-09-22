@@ -2240,7 +2240,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		if ( 'none' === $location_preset &amp;&amp; ( empty( $post['event_label'] ) &amp;&amp; ! is_numeric( $event_location ) ) ) {
 			// If no event data defined, do nothing.
 		} else {
-			$location_to_set = ( is_numeric( $location_preset) ) ? $location_preset: $event_location;
+			$location_to_set = ( is_numeric( $location_preset ) ) ? $location_preset : $event_location;
 			if ( is_numeric( $location_to_set ) ) {
 				$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_to_set ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				if ( is_object( $location ) ) {
