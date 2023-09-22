@@ -24,7 +24,7 @@ function mc_core_autocomplete_search_pages() {
 			wp_send_json(
 				array(
 					'success'  => 0,
-					'response' => array( 'error' => 'Invalid security value.' ),
+					'response' => array( 'error' => 'My Calendar: invalid security check.' ),
 				)
 			);
 		}
@@ -62,7 +62,7 @@ function mc_core_autocomplete_search_icons() {
 			wp_send_json(
 				array(
 					'success'  => 0,
-					'response' => array( 'error' => 'Invalid security value.' ),
+					'response' => array( 'error' => 'My Calendar: invalid security check.' ),
 				)
 			);
 		}
@@ -109,7 +109,7 @@ function mc_ajax_add_category() {
 		wp_send_json(
 			array(
 				'success'  => 0,
-				'response' => __( 'Invalid Security Check', 'my-calendar' ),
+				'response' => __( 'My Calendar: invalid security check.', 'my-calendar' ),
 			)
 		);
 	}
@@ -169,7 +169,7 @@ function mc_ajax_display_recurrence() {
 		wp_send_json(
 			array(
 				'success'  => 0,
-				'response' => __( 'Invalid Security Check', 'my-calendar' ),
+				'response' => __( 'My Calendar: invalid security check.', 'my-calendar' ),
 			)
 		);
 	}
@@ -202,7 +202,7 @@ function mc_ajax_delete_occurrence() {
 		wp_send_json(
 			array(
 				'success'  => 0,
-				'response' => __( 'Invalid Security Check', 'my-calendar' ),
+				'response' => __( 'My Calendar: invalid security check.', 'my-calendar' ),
 			)
 		);
 	}
@@ -260,7 +260,7 @@ function mc_ajax_add_date() {
 		wp_send_json(
 			array(
 				'success'  => 0,
-				'response' => __( 'Invalid Security Check', 'my-calendar' ),
+				'response' => __( 'My Calendar: invalid security check.', 'my-calendar' ),
 			)
 		);
 	}
@@ -342,7 +342,7 @@ function mc_core_autocomplete_search_locations() {
 			wp_send_json(
 				array(
 					'success'  => 0,
-					'response' => array( 'error' => 'Invalid security value.' ),
+					'response' => array( 'error' => 'My Calendar: invalid security check.' ),
 				)
 			);
 		}
