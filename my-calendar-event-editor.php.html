@@ -2237,11 +2237,12 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_hide_end     = ( '' === $time || '23:59:59' === $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		$events_access      = ( ! empty( $post['events_access'] ) ) ? $post['events_access'] : array();
 		// Set location.
-		if ( 'none' === $location_preset &amp;&amp; ( empty( $post['event_label'] ) || is_numeric( $event_location ) ) ) {
-			// event location name is required to copy over.
+		if ( 'none' === $location_preset &amp;&amp; ( empty( $post['event_label'] ) &amp;&amp; ! is_numeric( $event_location ) ) ) {
+			// If no event data defined, do nothing.
 		} else {
-			if ( 'none' !== $location_preset &amp;&amp; is_numeric( $location_preset ) ) {
-				$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$location_to_set = ( is_numeric( $location_preset) ) ? $location_preset: $event_location;
+			if ( is_numeric( $location_to_set ) ) {
+				$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_to_set ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				if ( is_object( $location ) ) {
 					$event_label     = $location->location_label;
 					$event_street    = $location->location_street;
