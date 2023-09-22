@@ -628,6 +628,10 @@ function mc_get_filter() {
 			$filter = '';
 			break;
 		case 'where':
+			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
+			$restrict = 'event_location';
+			break;
+		case 'where_name':
 			$filter   = ( isset( $_GET['filter'] ) ) ? esc_sql( urldecode( $_GET['filter'] ) ) : '';
 			$restrict = 'event_label';
 			break;
@@ -963,13 +967,17 @@ function mc_admin_events_table( $events ) {
 				<td>
 					<?php
 					if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
-						$elabel = $event->location->location_label;
+						$filter   = $event->event_location;
+						$elabel   = $event->location->location_label;
+						$restrict = 'where';
 					} else {
-						$elabel = $event->event_label;
+						$elabel   = $event->event_label;
+						$filter   = $elabel;
+						$restrict = 'where_name';
 					}
 					if ( '' !== $elabel ) {
 						?>
-					<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $elabel ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $elabel ) ); ?></a>
+					<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $filter ) . '&amp;restrict=' . $restrict ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $elabel ) ); ?></a>
 						<?php
 					}
 					?>
