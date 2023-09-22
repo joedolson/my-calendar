@@ -423,12 +423,9 @@ h4.mc-title {
 	text-decoration: none;
 }
 
-.my-calendar-nav .my-calendar-prev a {
-	border-right: 1px solid #bbb;
-}
-
-.my-calendar-nav .my-calendar-next a {
-	border-left: 1px solid #fff;
+.my-calendar-nav li > span {
+	padding: 5px;
+	display: inline-block;
 }
 
 .mc-main .mc-time .month {
