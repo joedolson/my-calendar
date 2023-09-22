@@ -920,8 +920,7 @@ add_action( 'profile_update', 'mc_save_profile' );
  */
 function mc_profile() {
 	global $user_ID;
-	$current_user = wp_get_current_user();
-	$user_edit    = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID;
+	$user_edit = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID;
 
 	if ( user_can( $user_edit, 'mc_add_events' ) && current_user_can( 'manage_options' ) ) {
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
