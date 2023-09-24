@@ -453,7 +453,6 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$weekends   = ( isset( $params['weekends'] ) ) ? $params['weekends'] : mc_get_option( 'show_weekends' );
 	$ltype      = ( isset( $params['ltype'] ) ) ? $params['ltype'] : '';
 	$lvalue     = ( isset( $params['lvalue'] ) ) ? $params['lvalue'] : '';
-	$disabled   = ( '' === $lvalue ) ? '' : 'disabled';
 	$search     = ( isset( $params['search'] ) ) ? $params['search'] : '';
 	$show_hosts = ( isset( $params['host'] ) ) ? explode( ',', $params['host'] ) : array();
 	$show_users = ( isset( $params['author'] ) ) ? explode( ',', $params['author'] ) : array();
@@ -522,7 +521,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</p>
 				<p>
 					<label for="lvalue<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
-					<input type="text" name="lvalue" id="lvalue<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' <?php echo esc_attr( $disabled ); ?> />
+					<input type="text" name="lvalue" id="lvalue<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' />
 				</p>
 
 				<p id='location-info'>
