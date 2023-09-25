@@ -463,8 +463,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$base    = '';
 	switch ( $type ) {
 		case 'main':
-			$base    = 'my_calendar';
-			$message = __( 'Generate the &lt;code>[my_calendar]&lt;/code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
+			$base     = 'my_calendar';
+			$post     = mc_get_option( 'mc_uri_id' );
+			$edit_url = add_query_arg( array( 'post' => $post, 'action' => 'edit' ), admin_url( 'post.php' ) ); 
+			// Translators: URL to edit your primary calendar settings.
+			$message = sprintf( __( 'Generate the &lt;code>[my_calendar]&lt;/code> shortcode. Generates the main grid, list, and mini calendar views. &lt;a href="%s">Configure your primary view.&lt;/a>', 'my-calendar' ), $edit_url );
 			break;
 		case 'upcoming':
 			$base    = 'my_calendar_upcoming';
@@ -479,7 +482,6 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$weekends   = ( isset( $params['weekends'] ) ) ? $params['weekends'] : mc_get_option( 'show_weekends' );
 	$ltype      = ( isset( $params['ltype'] ) ) ? $params['ltype'] : '';
 	$lvalue     = ( isset( $params['lvalue'] ) ) ? $params['lvalue'] : '';
-	$disabled   = ( '' === $lvalue ) ? '' : 'disabled';
 	$search     = ( isset( $params['search'] ) ) ? $params['search'] : '';
 	$show_hosts = ( isset( $params['host'] ) ) ? explode( ',', $params['host'] ) : array();
 	$show_users = ( isset( $params['author'] ) ) ? explode( ',', $params['author'] ) : array();
@@ -522,7 +524,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			&lt;fieldset>
 				&lt;legend>&lt;?php esc_html_e( 'Content Filters', 'my-calendar' ); ?>&lt;/legend>
 				&lt;fieldset class="categories">
-					&lt;legend>&lt;?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?>&lt;/legend>
+					&lt;legend>&lt;?php esc_html_e( 'Categories', 'my-calendar' ); ?>&lt;/legend>
 					&lt;ul style="padding:0;margin:0;list-style-type:none;columns:3;">
 						&lt;li>
 							&lt;input type="checkbox" value="all" &lt;?php checked( empty( $category ), true ); ?> name="category[]" id="category_&lt;?php echo esc_attr( $type ); ?>"> &lt;label for="category_&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/label>
@@ -548,7 +550,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				&lt;/p>
 				&lt;p>
 					&lt;label for="lvalue&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?>&lt;/label>
-					&lt;input type="text" name="lvalue" id="lvalue&lt;?php echo esc_attr( $type ); ?>" value="&lt;?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' &lt;?php echo esc_attr( $disabled ); ?> />
+					&lt;input type="text" name="lvalue" id="lvalue&lt;?php echo esc_attr( $type ); ?>" value="&lt;?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' />
 				&lt;/p>
 
 				&lt;p id='location-info'>
