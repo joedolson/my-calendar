@@ -437,8 +437,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$base    = '';
 	switch ( $type ) {
 		case 'main':
-			$base    = 'my_calendar';
-			$message = __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views.', 'my-calendar' );
+			$base     = 'my_calendar';
+			$post     = mc_get_option( 'mc_uri_id' );
+			$edit_url = add_query_arg( array( 'post' => $post, 'action' => 'edit' ), admin_url( 'post.php' ) ); 
+			// Translators: URL to edit your primary calendar settings.
+			$message = sprintf( __( 'Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views. <a href="%s">Configure your primary view.</a>', 'my-calendar' ), $edit_url );
 			break;
 		case 'upcoming':
 			$base    = 'my_calendar_upcoming';
@@ -495,7 +498,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			<fieldset>
 				<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>
 				<fieldset class="categories">
-					<legend><?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?></legend>
+					<legend><?php esc_html_e( 'Categories', 'my-calendar' ); ?></legend>
 					<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
 						<li>
 							<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
