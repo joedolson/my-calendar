@@ -2173,7 +2173,7 @@ function my_calendar( $args ) {
 						if ( $months > 1 ) {
 							$month_num   = mc_date( 'm', $start, false );
 							$monthclass  = ' month-' . $month_num;
-							$monthclass .= ( $month_num % 2 === 0 ) ? ' month-even' : ' month-odd';
+							$monthclass .= ( 0 === ( $month_num % 2 ) ) ? ' month-even' : ' month-odd';
 							if ( mc_date( 'j', $start, false ) === '1' ) {
 								$month_heading = '<h3 class="mc-change-months">' . date_i18n( 'F', $start ) . '</h3>';
 								$has_month     = ' has-month';
