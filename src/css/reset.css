@@ -490,6 +490,18 @@ ol.mc-search-results li.no-results {
 	font-weight: 700;
 }
 
+.mini .mc-date-container .mc-change-months {
+	display: none;
+}
+
+.mc-row .month-even {
+	background: rgba( 0,0,0,.05 );
+}
+
+.mini .mc-date-container.has-month {
+	grid-template-columns: 1fr;
+}
+
 /* Add styles for simple modal. */
 dialog.my-calendar-modal {
 	display: block;
