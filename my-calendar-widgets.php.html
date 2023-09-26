@@ -429,8 +429,8 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 	$output      = array();
 	$near_events = array();
 	$temp_array  = array();
-	$past        = 1;
-	$future      = 1;
+	$past        = 0; // Number of events selected in the past.
+	$future      = 0; // Number of events selected in the future.
 	uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
 	$count = count( $events );
 	$group = array();
@@ -486,7 +486,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									if ( ( 'yes' !== $show_recurring ) &amp;&amp; $is_recurring ) {
 										continue;
 									}
-
+									$event_used = false;
 									if ( 'yes' === $show_today &amp;&amp; my_calendar_date_equal( $beginning, $current ) ) {
 
 										/**
@@ -499,32 +499,46 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										 * @return {string} 'yes' or 'no'.
 										 */
 										$in_total = apply_filters( 'mc_include_today_in_total', 'yes' ); // count todays events in total.
-										if ( 'no' !== $in_total ) {
+										if ( 'yes' === $in_total ) {
 											$near_events[] = $e;
+											$event_used    = true;
+											// Should today's events be counted as future or past? If more past events chosen, count as past.
 											if ( $before > $after ) {
-												$future ++;
-											} else {
 												$past ++;
+											} else {
+												$future ++;
 											}
 										} else {
 											$near_events[] = $e;
+											$event_used    = true;
 										}
-									} elseif ( ( $past &lt;= $before &amp;&amp; $future &lt;= $after ) ) {
-										$near_events[] = $e; // If neither limit is reached, split off ly.
-									} elseif ( $past &lt;= $before &amp;&amp; ( my_calendar_date_comp( $beginning, $current ) ) ) {
+									}
+									if ( $past &lt;= $before &amp;&amp; ( my_calendar_date_comp( $beginning, $current ) ) &amp;&amp; ! $event_used ) {
 										$near_events[] = $e; // Split off another past event.
-									} elseif ( $future &lt;= $after &amp;&amp; ( ! my_calendar_date_comp( $end, $current ) ) ) {
+										$event_used    = true;
+									}
+									if ( $future &lt;= $after &amp;&amp; ( ! my_calendar_date_comp( $end, $current ) ) &amp;&amp; ! $event_used ) {
 										$near_events[] = $e; // Split off another future event.
+										$event_used    = true;
 									}
 
+									$event_added = false;
+									// If this event happened before the current date.
 									if ( my_calendar_date_comp( $beginning, $current ) ) {
 										$past ++;
-									} elseif ( my_calendar_date_equal( $beginning, $current ) ) {
+										$event_added = true;
+									}
+									// If this happened on the current date.
+									if ( my_calendar_date_equal( $beginning, $current ) &amp;&amp; ! $event_added ) {
 										if ( 'yes' === $show_today ) {
 											$extra ++;
+											$event_added = true;
 										}
-									} elseif ( ! my_calendar_date_comp( $end, $current ) ) {
+									}
+									// If this did not end before the current date.
+									if ( ! my_calendar_date_comp( $end, $current ) &amp;&amp; ! $event_added ) {
 										$future ++;
+										$event_added = true;
 									}
 
 									$last_events[] = $e->occur_id;
