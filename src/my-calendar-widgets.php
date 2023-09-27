@@ -468,7 +468,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										 *
 										 * @hook mc_include_today_in_total
 										 *
-										 * @param {string} $in_total Return 'no' to exclude today's events from event count.
+										 * @param {string} $in_total Return 'no' to exclude today's events from event count. Default 'yes'.
 										 *
 										 * @return {string} 'yes' or 'no'.
 										 */
