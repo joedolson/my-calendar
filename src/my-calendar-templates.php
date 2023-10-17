@@ -896,7 +896,7 @@ function mc_get_details_link( $event ) {
 }
 
 /**
- * Get URI from settings
+ * Get primary My Calendar URI from settings.
  *
  * @param object|string|bool $event Event object, string requesting boolean result, or boolean false.
  * @param array              $args  Any arguments passed.
@@ -935,9 +935,9 @@ function mc_get_uri( $event = false, $args = array() ) {
 	 *
 	 * @hook mc_get_uri
 	 *
-	 * @param {string} $link String to return if event link is expired.
-	 * @param {object} $event Event object.
-	 * @param {array}  $args Current view arguments. (Optional).
+	 * @param {string}             $link String to return if event link is expired.
+	 * @param {object|string|bool} $event Event object, string requesting boolean result, or boolean false.
+	 * @param {array}              $args Current view arguments. (Optional).
 	 *
 	 * @return {string} URL.
 	 */
