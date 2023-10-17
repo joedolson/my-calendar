@@ -646,5 +646,5 @@ The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](
 8. Template editing
 
 == Upgrade Notice ==
-
-Security Update: Please update to 3.4.4 as soon as possible.
+= 3.4.4 =
+Security Update: Please update to 3.4.4 or higher as soon as possible.
