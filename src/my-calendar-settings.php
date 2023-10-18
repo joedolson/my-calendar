@@ -484,8 +484,13 @@ function mc_update_input_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_text_settings( $post ) {
+	// This is the <title> element, and should not contain HTML.
 	$options['event_title_template'] = $post['mc_event_title_template'];
-	$options['heading_text']         = $post['mc_heading_text'];
+	foreach ( $post as $key => $value ) {
+		// If POST is set, change the sanitizing for settings in this group.
+		$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( $_POST[ $key ] ) : $value;
+	}
+	$options['heading_text']         = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( $_POST['mc_heading_text'] ) : $post['mc_heading_text'];
 	$options['notime_text']          = $post['mc_notime_text'];
 	$options['hosted_by']            = $post['mc_hosted_by'];
 	$options['posted_by']            = $post['mc_posted_by'];
@@ -522,7 +527,7 @@ function mc_update_email_settings( $post ) {
 	$options['event_mail_to']      = $post['mc_event_mail_to'];
 	$options['event_mail_from']    = $post['mc_event_mail_from'];
 	$options['event_mail_subject'] = $post['mc_event_mail_subject'];
-	$options['event_mail_message'] = $post['mc_event_mail_message'];
+	$options['event_mail_message'] = ( 'true' === $options['html_email'] && isset( $_POST['mc_event_mail_message'] ) ) ? wp_kses_post( $_POST['mc_event_mail_message'] ) : $post['mc_event_mail_message'];
 	$options['event_mail_bcc']     = $post['mc_event_mail_bcc'];
 
 	mc_update_options( $options );
@@ -624,7 +629,7 @@ function my_calendar_settings() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		// Generic sanitizing.
+		// Custom sanitizing.
 		$post = map_deep( $_POST, 'sanitize_textarea_field' );
 		if ( isset( $post['mc_manage'] ) ) {
 			$before_permalinks = mc_get_option( 'use_permalinks' );
@@ -637,10 +642,14 @@ function my_calendar_settings() {
 		}
 		// Output.
 		if ( isset( $post['mc_show_months'] ) ) {
+			// Restore HTML in keys that permit HTML.
+			$post['mc_title_template']      = wp_kses_post( $_POST['mc_title_template'] );
+			$post['mc_title_template_list'] = wp_kses_post( $_POST['mc_title_template_list'] );
+			$post['mc_title_template_solo'] = wp_kses_post( $_POST['mc_title_template_solo'] );
 			mc_update_output_settings( $post );
 			mc_show_notice( __( 'Display Settings saved', 'my-calendar' ) );
 		}
-		// INPUT.
+		// Input.
 		if ( isset( $post['mc_input'] ) ) {
 			mc_update_input_settings( $post );
 			mc_show_notice( __( 'Input Settings saved', 'my-calendar' ) );
