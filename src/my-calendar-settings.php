@@ -490,22 +490,22 @@ function mc_update_text_settings( $post ) {
 		// If POST is set, change the sanitizing for settings in this group.
 		$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( $_POST[ $key ] ) : $value;
 	}
-	$options['heading_text']         = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( $_POST['mc_heading_text'] ) : $post['mc_heading_text'];
-	$options['notime_text']          = $post['mc_notime_text'];
-	$options['hosted_by']            = $post['mc_hosted_by'];
-	$options['posted_by']            = $post['mc_posted_by'];
-	$options['buy_tickets']          = $post['mc_buy_tickets'];
-	$options['event_accessibility']  = $post['mc_event_accessibility'];
-	$options['view_full']            = $post['mc_view_full'];
-	$options['previous_events']      = $post['mc_previous_events'];
-	$options['next_events']          = $post['mc_next_events'];
-	$options['today_events']         = $post['mc_today_events'];
-	$options['week_caption']         = $post['mc_week_caption'];
-	$options['caption']              = $post['mc_caption'];
-	$templates                       = mc_get_option( 'templates' );
-	$templates['label']              = $post['mc_details_label'];
-	$templates['link']               = $post['mc_link_label'];
-	$options['templates']            = $templates;
+	$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( $_POST['mc_heading_text'] ) : $post['mc_heading_text'];
+	$options['notime_text']         = $post['mc_notime_text'];
+	$options['hosted_by']           = $post['mc_hosted_by'];
+	$options['posted_by']           = $post['mc_posted_by'];
+	$options['buy_tickets']         = $post['mc_buy_tickets'];
+	$options['event_accessibility'] = $post['mc_event_accessibility'];
+	$options['view_full']           = $post['mc_view_full'];
+	$options['previous_events']     = $post['mc_previous_events'];
+	$options['next_events']         = $post['mc_next_events'];
+	$options['today_events']        = $post['mc_today_events'];
+	$options['week_caption']        = $post['mc_week_caption'];
+	$options['caption']             = $post['mc_caption'];
+	$templates                      = mc_get_option( 'templates' );
+	$templates['label']             = $post['mc_details_label'];
+	$templates['link']              = $post['mc_link_label'];
+	$options['templates']           = $templates;
 	// Date/time.
 	$options['date_format']  = wp_unslash( $post['mc_date_format'] );
 	$options['week_format']  = wp_unslash( $post['mc_week_format'] );
