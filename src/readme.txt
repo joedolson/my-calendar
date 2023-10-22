@@ -3,10 +3,10 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
 Requires at least: 4.7
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.20
+Stable tag: 3.4.21
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -26,7 +26,7 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 = Features: =
 
 *	Calendar grid or list views of events
-*	Monthly, weekly, or daily view.
+*	Month, multi-month, week, or daily view.
 *	Mini-calendar for compact displays (as widget or shortcode)
 *	Widgets: today's events, upcoming events, mini calendar, event search
 *	Customize templates for event output
@@ -85,6 +85,17 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.4.21 =
+
+* Bug fix: Settings that allow HTML were aggressively sanitized, stripping HTML.
+* Bug fix: Location field should not be disabled in shortcode generator when has value.
+* Bug fix: Provide easier access to calendar page in shortcode generator.
+* Bug fix: (Design) Fix change of month heading in mini calendar.
+* Bug fix: Fix month number enumeration in date classes.
+* Bug fix: Improve counting of events in upcoming events lists.
+* Docs: Documentation on `mc_get_uri` filter incorrect.
+* Change: Pass $event object to `mc_return_uri` filter.
 
 = 3.4.20 =
 
