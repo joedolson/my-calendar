@@ -583,7 +583,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				 * @hook mc_registration_state
 				 *
 				 * @param {string} $status String.
-				 * @param {object} $event My Calendar object.
+				 * @param {object} $event My Calendar event object.
 				 *
 				 * @return {string}
 				 */
@@ -594,10 +594,11 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				 * @hook mc_return_uri
 				 *
 				 * @param {string} $url Calendar URL.
+				 * @param {object} $event My Calendar event object.
 				 *
 				 * @return {string}
 				 */
-				$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ) );
+				$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ), $event );
 				$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : __( 'View full calendar', 'my-calendar' );
 				$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
 
