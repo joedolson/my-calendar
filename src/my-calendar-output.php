@@ -440,7 +440,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		} else {
 			$title = '';
 		}
-		$header      .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
+		if ( 'card' !== $type ) {
+			$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
+		}
 		$close_button = mc_close_button( "$uid-$type-details-$id" );
 		$close        = '';
 		if ( mc_show_details( $time, $type ) ) {
@@ -550,6 +552,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 						$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
 						$inner_title = '	<' . $headingtype . ' class="mc-title">' . $event_title . '</' . $headingtype . '>';
 					}
+				}
+
+				if ( 'card' === $type ) {
+					$inner_title = $title;
 				}
 
 				if ( 'true' === $display_desc || mc_output_is_visible( 'description', $type, $event ) ) {
@@ -711,7 +717,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			 *
 			 * @return {string}
 			 */
-			$details = $header . $container . $close . apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+			$details = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+			$details = $header . $container . $close . $details;
+
 			/**
 			 * Filter details appended after the event content.
 			 *

@@ -10,6 +10,16 @@
 	border: 1px solid var(--highlight-dark);
 }
 
+.mc-main.card .details .mc_edit_links {
+	border: none;
+	position: absolute;
+	bottom: 0;
+}
+
+.mc-main.card .my-calendar-cards .card-event .details {
+	padding-bottom: 3rem;
+}
+
 .mc-main .details .mc_edit_links p {
 	padding: 0;
 	margin: 0;
