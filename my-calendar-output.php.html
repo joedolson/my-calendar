@@ -1658,15 +1658,12 @@ function mc_event_is_hidden( $event ) {
  * @return array $params New parameters, modified by context
  */
 function mc_calendar_params( $args ) {
-	$name     = isset( $args['name'] ) ? $args['name'] : 'calendar';
 	$format   = isset( $args['format'] ) ? $args['format'] : 'calendar';
 	$category = isset( $args['category'] ) ? $args['category'] : '';
 	$time     = isset( $args['time'] ) ? $args['time'] : 'month';
 	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : '';
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
 	$id       = isset( $args['id'] ) ? $args['id'] : '';
-	$template = isset( $args['template'] ) ? $args['template'] : '';
-	$content  = isset( $args['content'] ) ? $args['content'] : '';
 	$author   = isset( $args['author'] ) ? $args['author'] : null;
 	$host     = isset( $args['host'] ) ? $args['host'] : null;
 	$above    = isset( $args['above'] ) ? $args['above'] : '';
@@ -1674,10 +1671,7 @@ function mc_calendar_params( $args ) {
 	$syear    = isset( $args['year'] ) ? $args['year'] : false;
 	$smonth   = isset( $args['month'] ) ? $args['month'] : false;
 	$sday     = isset( $args['day'] ) ? $args['day'] : false;
-	$source   = isset( $args['source'] ) ? $args['source'] : 'shortcode';
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
-	$site     = ( isset( $args['site'] ) &amp;&amp; '' !== trim( $args['site'] ) ) ? $args['site'] : false;
-	$months   = isset( $args['months'] ) ? $args['months'] : false;
 	$weekends = isset( $args['weekends'] ) ? $args['weekends'] : mc_get_option( 'show_weekends' );
 
 	if ( ! in_array( $format, array( 'list', 'calendar', 'mini' ), true ) ) {
@@ -1694,7 +1688,7 @@ function mc_calendar_params( $args ) {
 		$category = 'all';
 	}
 
-	if ( isset( $_GET['format'] ) &amp;&amp; in_array( $_GET['format'], array( 'list', 'mini' ), true ) &amp;&amp; 'mini' !== $format ) {
+	if ( isset( $_GET['format'] ) &amp;&amp; in_array( $_GET['format'], array( 'list', 'mini', 'card' ), true ) &amp;&amp; 'mini' !== $format ) {
 		$format = esc_attr( $_GET['format'] );
 	} else {
 		$format = esc_attr( $format );
