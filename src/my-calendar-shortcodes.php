@@ -574,6 +574,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<option value=""><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
 						<option value="calendar"<?php selected( 'calendar', $format ); ?>><?php esc_html_e( 'Grid', 'my-calendar' ); ?></option>
 						<option value='list'<?php selected( 'list', $format ); ?>><?php esc_html_e( 'List', 'my-calendar' ); ?></option>
+						<option value='card'<?php selected( 'card', $format ); ?>><?php esc_html_e( 'Card', 'my-calendar' ); ?></option>
 						<option value="mini"<?php selected( 'mini', $format ); ?>><?php esc_html_e( 'Mini', 'my-calendar' ); ?></option>
 					</select>
 				</p>

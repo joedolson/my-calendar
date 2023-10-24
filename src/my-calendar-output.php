@@ -241,7 +241,6 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$host        = '';
 		$list_title  = '';
 		$title       = '';
-		$output      = '';
 		$container   = '';
 		$short       = '';
 		$description = '';
@@ -325,6 +324,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 				break;
 			case 'list':
 				$title_template = ( mc_get_template( 'title_list' ) === '' ) ? '{title}' : mc_get_template( 'title_list' );
+				break;
+			case 'card':
+				$title_template = ( mc_get_template( 'title_card' ) === '' ) ? '{title}' : mc_get_template( 'title_card' );
 				break;
 			case 'single':
 				$title_template = ( mc_get_template( 'title_solo' ) === '' ) ? '{title}' : mc_get_template( 'title_solo' );
@@ -838,6 +840,12 @@ function mc_get_details( $data, $template, $type ) {
 			case 'single':
 				$template = mc_get_template( 'details' );
 				if ( '1' === mc_get_option( 'use_details_template' ) && '' !== $template ) {
+					$details = mc_draw_template( $data, $template );
+				}
+				break;
+			case 'card':
+				$template = mc_get_template( 'card' );
+				if ( '1' === mc_get_option( 'use_card_template' ) && '' !== $template ) {
 					$details = mc_draw_template( $data, $template );
 				}
 				break;
@@ -1648,7 +1656,7 @@ function mc_calendar_params( $args ) {
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
 	$weekends = isset( $args['weekends'] ) ? $args['weekends'] : mc_get_option( 'show_weekends' );
 
-	if ( ! in_array( $format, array( 'list', 'calendar', 'mini' ), true ) ) {
+	if ( ! in_array( $format, array( 'list', 'calendar', 'mini', 'card' ), true ) ) {
 		$format = 'calendar';
 	}
 
@@ -1687,7 +1695,7 @@ function mc_calendar_params( $args ) {
 	 *
 	 * @hook mc_display_format
 	 *
-	 * @param {string} $format Current view format. E.g. 'grid', 'list'.
+	 * @param {string} $format Current view format. E.g. 'grid', 'list', 'card' or 'mini'.
 	 * @param {array}  $args Calendar view arguments.
 	 *
 	 * @return {string}

@@ -1091,20 +1091,27 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
  */
 function mc_format_toggle( $format, $toggle, $time, $id ) {
 	if ( 'mini' !== $format && 'yes' === $toggle ) {
-		$toggle = "<div class='mc-format'>";
-		switch ( $format ) {
-			case 'list':
-				$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a id='mc_grid-$id' href='$url' class='grid'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a>';
-				break;
-			default:
-				$url     = mc_build_url( array( 'format' => 'list' ), array() );
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a id='mc_list-$id' href='$url' class='list'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a>';
-				break;
-		}
-		$toggle .= '</div>';
+		$is_grid = ( 'grid' === $format ) ? ' aria-current="true"' : '';
+		$is_list = ( 'list' === $format ) ? ' aria-current="true"' : '';
+		$is_card = ( 'card' === $format ) ? ' aria-current="true"' : '';
+
+		$toggle = "<div class='mc-format'>
+		<ul>";
+
+		$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
+		$url     = mc_url_in_loop( $url );
+		$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='grid'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
+
+		$url     = mc_build_url( array( 'format' => 'card' ), array() );
+		$url     = mc_url_in_loop( $url );
+		$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='card'>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
+
+		$url     = mc_build_url( array( 'format' => 'list' ), array() );
+		$url     = mc_url_in_loop( $url );
+		$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='list'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
+
+		$toggle .= '</ul>
+		</div>';
 	} else {
 		$toggle = '';
 	}
@@ -1118,7 +1125,7 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
 	}
 
 	/**
-	 * Filter the HTML for the list/grid format switcher in navigation elements.
+	 * Filter the HTML for the list/grid/card format switcher in navigation elements.
 	 *
 	 * @hook mc_format_toggle_html
 	 *

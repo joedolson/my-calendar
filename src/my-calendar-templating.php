@@ -91,12 +91,6 @@ function mc_templates_edit() {
 		}
 	}
 
-	$globals             = mc_globals();
-	$mc_grid_template    = ( isset( $templates['grid'] ) && ! empty( $templates['grid'] ) ) ? $templates['grid'] : $globals['grid_template'];
-	$mc_list_template    = ( isset( $templates['list'] ) && ! empty( $templates['list'] ) ) ? $templates['list'] : $globals['list_template'];
-	$mc_mini_template    = ( isset( $templates['mini'] ) && ! empty( $templates['mini'] ) ) ? $templates['mini'] : $globals['mini_template'];
-	$mc_details_template = ( isset( $templates['details'] ) && ! empty( $templates['details'] ) ) ? $templates['details'] : $globals['single_template'];
-
 	$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
 	$template = stripslashes( $template );
 	$core     = mc_template_description( $key );
@@ -264,7 +258,7 @@ function mc_templates_edit() {
 	$templates = (array) mc_get_option( 'templates', array() );
 	ksort( $templates );
 	foreach ( $templates as $key => $template ) {
-		if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'link' === $key || 'label' === $key || 'rss' === $key ) {
+		if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'title_card' === $key || 'link' === $key || 'label' === $key || 'rss' === $key ) {
 			continue;
 		}
 		?>
@@ -356,9 +350,10 @@ function mc_display_template_preview( $template, $mc_id = false ) {
 	$output = html_entity_decode( $output );
 	$class  = ( 'list' === $template ) ? 'list-event' : 'calendar-event';
 	$class  = ( 'mini' === $template ) ? 'mini-event' : $class;
+	$class  = ( 'card' === $template ) ? 'card-event' : $class;
 	$class  = ( 'details' === $template ) ? 'single-event' : $class;
 
-	return '<div class="mc-main ' . $template . '">' . $output . '</div>';
+	return '<div class="mc-main ' . $class . ' ' . $template . '">' . $output . '</div>';
 }
 
 /**
@@ -539,6 +534,9 @@ function mc_template_description( $key ) {
 		case 'mini':
 			$return = __( '<strong>Core Template:</strong> used in popups for the mini calendar.', 'my-calendar' );
 			break;
+		case 'card':
+			$return = __( '<strong>Core Template:</strong> used for event display in the Card view.', 'my-calendar' );
+			break;
 	}
 
 	if ( ! mc_is_core_template( $key ) ) {
@@ -563,7 +561,9 @@ function mc_list_core_templates( $current = '' ) {
 	$grid_enabled    = ( ( 'grid' === $type && $switched ) || mc_get_option( 'use_grid_template' ) === '1' ) ? $check : $uncheck;
 	$list_enabled    = ( ( 'list' === $type && $switched ) || mc_get_option( 'use_list_template' ) === '1' ) ? $check : $uncheck;
 	$mini_enabled    = ( ( 'mini' === $type && $switched ) || mc_get_option( 'use_mini_template' ) === '1' ) ? $check : $uncheck;
+	$card_enabled    = ( ( 'card' === $type && $switched ) || mc_get_option( 'use_card_template' ) === '1' ) ? $check : $uncheck;
 	$details_enabled = ( ( 'details' === $type && $switched ) || mc_get_option( 'use_details_template' ) === '1' ) ? $check : $uncheck;
+
 
 	$list = "
 	<table class='widefat'>
@@ -571,13 +571,20 @@ function mc_list_core_templates( $current = '' ) {
 			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . "</th>
 		</thead>
 		<tbody>
-			<tr class='alternate'><td><a " . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_template_description( 'grid' ) . '</td>
+			<tr class='alternate'>
+				<td><a " . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_template_description( 'grid' ) . '</td>
 			</tr>
-			<tr><td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
+			<tr>
+				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
 			</tr>
-			<tr class='alternate'><td><a " . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . '</td>
+			<tr class='alternate'>
+				<td><a " . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
 			</tr>
-			<tr><td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
+			<tr>
+				<td><a " . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$card_enabled</td><td>" . mc_template_description( 'card' ) . '</td>
+			</tr>
+			<tr class="alternate">
+				<td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
 			</tr>
 		</tbody>
 	</table>';

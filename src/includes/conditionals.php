@@ -167,6 +167,7 @@ function mc_is_core_template( $key ) {
 		case 'details':
 		case 'list':
 		case 'mini':
+		case 'card':
 			$return = true;
 			break;
 		default:

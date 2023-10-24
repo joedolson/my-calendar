@@ -446,6 +446,7 @@ function mc_update_output_settings( $post ) {
 	$templates['title']        = $post['mc_title_template'];
 	$templates['title_solo']   = $post['mc_title_template_solo'];
 	$templates['title_list']   = $post['mc_title_template_list'];
+	$templates['title_card']   = $post['mc_title_template_card'];
 	$options['templates']      = $templates;
 
 	mc_update_options( $options );
@@ -699,6 +700,7 @@ function my_calendar_settings() {
 	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
 	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( stripslashes( $templates['title_solo'] ) ) : '';
 	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( stripslashes( $templates['title_list'] ) ) : '';
+	$mc_title_template_card = ( isset( $templates['title_card'] ) ) ? esc_attr( stripslashes( $templates['title_card'] ) ) : '';
 	$mc_details_label       = ( isset( $templates['label'] ) ) ? esc_attr( stripslashes( $templates['label'] ) ) : '';
 	$mc_link_label          = ( isset( $templates['link'] ) ) ? esc_attr( stripslashes( $templates['link'] ) ) : '';
 	?>
@@ -1335,6 +1337,21 @@ function mc_remote_db() {
 										'name'    => 'mc_title_template_list',
 										'label'   => __( 'Event title (List)', 'my-calendar' ),
 										'default' => $mc_title_template_list,
+										'atts'    => array(
+											'placeholder' => '{title}',
+										),
+										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+									)
+								);
+								?>
+								</li>
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'    => 'mc_title_template_card',
+										'label'   => __( 'Event title (Card)', 'my-calendar' ),
+										'default' => $mc_title_template_card,
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),

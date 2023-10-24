@@ -1042,7 +1042,7 @@ function mc_instance_list( $args ) {
 			$event_id = $result->occur_id;
 			$event    = mc_get_event( $event_id );
 			$array    = mc_create_tags( $event );
-			if ( in_array( $template, array( 'details', 'grid', 'list', 'mini' ), true ) || mc_key_exists( $template ) ) {
+			if ( in_array( $template, array( 'details', 'grid', 'list', 'mini', 'card' ), true ) || mc_key_exists( $template ) ) {
 				if ( 1 === (int) mc_get_option( 'use_' . $template . '_template' ) ) {
 					$template = mc_get_template( $template );
 				} elseif ( mc_key_exists( $template ) ) {

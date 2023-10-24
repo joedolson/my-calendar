@@ -80,12 +80,20 @@ function mc_globals( $data = 'all' ) {
 	{map before="<div class=\'mc-map\'>" after="</div>"}
 </div>';
 
+	$card_template = '
+	<span class="event-time value-title">{time}{endtime before="<span class=\'time-separator\'> - </span><span class=\'end-time\'>" after="</span>"}</span>
+	{image before="<div class=\'mc-event-image\'>" after="</div>"}
+	<div class="sub-details">
+		{excerpt before="<div class=\'mc-excerpt\'>" after="</div>"}
+	</div>';
+
 	if ( 'templates' === $data ) {
 		$templates = array(
 			'grid_template'   => addslashes( $grid_template ),
 			'list_template'   => addslashes( $grid_template ),
 			'mini_template'   => addslashes( $grid_template ),
 			'single_template' => addslashes( $single_template ),
+			'card_template'   => addslashes( $card_template ),
 		);
 		return $templates;
 	}
@@ -330,11 +338,13 @@ function mc_template_settings() {
 	$templates = array(
 		'title'      => '{time}: {title}',
 		'title_list' => '{title}',
+		'title_card' => '{title}',
 		'title_solo' => '{title}',
 		'link'       => '', // Empty because usage has a fallback value.
 		'grid'       => $globals['grid_template'],
 		'list'       => $globals['list_template'],
 		'mini'       => $globals['mini_template'],
+		'card'       => $globals['card_template'],
 		'details'    => $globals['single_template'],
 		'label'      => '', // Empty because usage has a fallback value.
 	);
@@ -430,6 +440,7 @@ function mc_default_options() {
 		'skip_holidays_category'       => '',
 		'hide_icons'                   => '',
 		'use_list_template'            => '',
+		'use_card_template'            => '',
 		'use_mini_template'            => '',
 		'use_details_template'         => '',
 		'use_grid_template'            => '',
