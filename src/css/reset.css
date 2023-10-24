@@ -12,9 +12,37 @@
 	vertical-align: top;
 }
 
+.mc-format a[aria-current="true"] {
+	outline: 2px solid;
+}
+
 /* Override overflow:hidden */
 main,div.entry-content,div.site-content, table {
 	overflow: visible !important; 
+}
+
+.my-calendar-cards {
+	display: grid;
+	grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
+	gap: 30px;
+}
+
+@media screen and (min-width:1200px) {
+	.my-calendar-cards {
+		grid-template-columns: repeat( 4, minmax( 0, 1fr ) );
+	}
+}
+
+@media screen and (max-width:731px) {
+	.my-calendar-cards {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+}
+
+@media screen and (max-width:360px) {
+	.my-calendar-cards {
+		grid-template-columns: repeat( 1, minmax( 0, 1fr ) );
+	}
 }
 
 .mc-main {

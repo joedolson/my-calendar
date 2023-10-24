@@ -197,6 +197,10 @@
 	content: "\f508";
 }
 
+.mc-main .mc-format .card::before {
+	content: "\f510";
+}
+
 .mc-main .calendar-event .details, .mc-main .calendar-events {
 	position: absolute;
 	top: 10em;

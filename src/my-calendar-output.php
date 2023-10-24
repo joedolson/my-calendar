@@ -1365,7 +1365,7 @@ function mc_output_is_visible( $feature, $type, $event = false ) {
 	$option = mc_get_option( 'display_' . $type );
 	if ( ! is_array( $option ) ) {
 		$display_type = 'display_' . $type;
-		$option       = mc_default_options()[ $display_type ];
+		$option       = ( isset( mc_default_options()[ $display_type ] ) ) ? mc_default_options()[ $display_type ] : array();
 	}
 	$return = false;
 	if ( in_array( $feature, $option, true ) ) {
@@ -1744,6 +1744,9 @@ function mc_calendar_params( $args ) {
  * @return string
  */
 function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
+	if ( 'card' === $params['format'] ) {
+		return '<div class="my-calendar-cards">';
+	}
 	$days      = mc_get_week_days( $params, $start_of_week );
 	$name_days = $days['name_days'];
 	$abbrevs   = $days['abbrevs'];
@@ -2152,7 +2155,7 @@ function my_calendar( $args ) {
 					$date_is    = mc_date( 'Y-m-d', $start, false );
 					$is_weekend = ( (int) mc_date( 'N', $start, false ) < 6 ) ? false : true;
 					if ( $show_weekends || ( ! $show_weekends && ! $is_weekend ) ) {
-						if ( mc_date( 'N', $start, false ) === (string) $start_of_week && 'list' !== $params['format'] ) {
+						if ( mc_date( 'N', $start, false ) === (string) $start_of_week && 'list' !== $params['format'] && 'card' !== $params['format'] ) {
 							$body .= "<$tr class='mc-row'>";
 						}
 						$events      = ( isset( $event_array[ $date_is ] ) ) ? $event_array[ $date_is ] : array();
@@ -2305,6 +2308,8 @@ function my_calendar( $args ) {
 											$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 										}
 									}
+								} elseif ( 'card' === $params['format'] ) {
+									$body .= $event_output;
 								} else {
 									$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
 									// Translators: Number of events on this date.
@@ -2314,7 +2319,9 @@ function my_calendar( $args ) {
 							}
 						} else {
 							// If there are no events on this date within current params.
-							if ( 'list' !== $params['format'] ) {
+							if ( 'card' === $params['format'] ) {
+								$body .= '';
+							} elseif ( 'grid' !== $params['format'] ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
 								$body         .= "<$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
 							} else {
@@ -2326,7 +2333,9 @@ function my_calendar( $args ) {
 						}
 
 						if ( mc_date( 'N', $start, false ) === (string) $end_of_week || ( mc_date( 'N', $start, false ) === '5' && ! $show_weekends ) ) {
-							if ( 'list' !== $params['format'] ) {
+							if ( 'card' === $params['format'] ) {
+								$body .= '';
+							} elseif ( 'list' !== $params['format'] ) {
 								$body .= "</$tr>\n<!-- End Event Row -->\n"; // End of 'is beginning of week'.
 							}
 							$week_number_shown = false;
@@ -2336,12 +2345,16 @@ function my_calendar( $args ) {
 
 				} while ( $start <= $end );
 			}
-
-			$end   = ( 'table' === $table ) ? "\n</tbody>\n</table>" : "</div></$table>";
+			$end = '';
+			if ( 'card' !== $params['format'] ) {
+				$end = ( 'table' === $table ) ? "\n</tbody>\n</table>" : "</div></$table>";
+			} else {
+				$end = '</div>';
+			}
 			$body .= ( 'list' === $params['format'] ) ? "\n</ul>" : $end;
 		}
-		// For clarity, day closer is appended above.
-		$body .= ( 'day' === $params['time'] ) ? '' : '</div><!-- .mc-content -->';
+		// Day view closer is appended above.
+		$body .= ( 'day' === $params['time'] && 'card' !== $params['format'] ) ? '' : '</div><!-- .mc-content -->';
 		$body .= $bottom;
 	}
 	/**
