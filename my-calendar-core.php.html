@@ -981,6 +981,9 @@ function mc_do_upgrades( $upgrade_path ) {
 	}
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.5.0':
+				// Need to set card display settings. TODO.
+				break;
 			case '3.4.0':
 				mc_migrate_settings();
 				delete_option( 'mc_use_custom_js' );
