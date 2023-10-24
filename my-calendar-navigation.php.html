@@ -1117,20 +1117,27 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
  */
 function mc_format_toggle( $format, $toggle, $time, $id ) {
 	if ( 'mini' !== $format &amp;&amp; 'yes' === $toggle ) {
-		$toggle = "&lt;div class='mc-format'>";
-		switch ( $format ) {
-			case 'list':
-				$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "&lt;a id='mc_grid-$id' href='$url' class='grid'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Grid', 'my-calendar' ) . '&lt;/a>';
-				break;
-			default:
-				$url     = mc_build_url( array( 'format' => 'list' ), array() );
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "&lt;a id='mc_list-$id' href='$url' class='list'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>List', 'my-calendar' ) . '&lt;/a>';
-				break;
-		}
-		$toggle .= '&lt;/div>';
+		$is_grid = ( 'grid' === $format ) ? ' aria-current="true"' : '';
+		$is_list = ( 'list' === $format ) ? ' aria-current="true"' : '';
+		$is_card = ( 'card' === $format ) ? ' aria-current="true"' : '';
+
+		$toggle = "&lt;div class='mc-format'>
+		&lt;ul>";
+
+		$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
+		$url     = mc_url_in_loop( $url );
+		$toggle .= "&lt;li>&lt;a id='mc_grid-$id' href='$url'" . $is_grid . " class='grid'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Grid', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+
+		$url     = mc_build_url( array( 'format' => 'card' ), array() );
+		$url     = mc_url_in_loop( $url );
+		$toggle .= "&lt;li>&lt;a id='mc_card-$id' href='$url'" . $is_card . " class='card'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Cards', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+
+		$url     = mc_build_url( array( 'format' => 'list' ), array() );
+		$url     = mc_url_in_loop( $url );
+		$toggle .= "&lt;li>&lt;a id='mc_list-$id' href='$url'" . $is_list . "  class='list'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>List', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+
+		$toggle .= '&lt;/ul>
+		&lt;/div>';
 	} else {
 		$toggle = '';
 	}
@@ -1144,7 +1151,7 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
 	}
 
 	/**
-	 * Filter the HTML for the list/grid format switcher in navigation elements.
+	 * Filter the HTML for the list/grid/card format switcher in navigation elements.
 	 *
 	 * @hook mc_format_toggle_html
 	 *
