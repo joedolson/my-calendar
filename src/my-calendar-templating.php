@@ -564,7 +564,6 @@ function mc_list_core_templates( $current = '' ) {
 	$card_enabled    = ( ( 'card' === $type && $switched ) || mc_get_option( 'use_card_template' ) === '1' ) ? $check : $uncheck;
 	$details_enabled = ( ( 'details' === $type && $switched ) || mc_get_option( 'use_details_template' ) === '1' ) ? $check : $uncheck;
 
-
 	$list = "
 	<table class='widefat'>
 		<thead>
@@ -578,10 +577,10 @@ function mc_list_core_templates( $current = '' ) {
 				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_template_description( 'list' ) . "</td>
 			</tr>
 			<tr class='alternate'>
-				<td><a " . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . "</td>
+				<td><a " . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_template_description( 'mini' ) . '</td>
 			</tr>
 			<tr>
-				<td><a " . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$card_enabled</td><td>" . mc_template_description( 'card' ) . '</td>
+				<td><a ' . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$card_enabled</td><td>" . mc_template_description( 'card' ) . '</td>
 			</tr>
 			<tr class="alternate">
 				<td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_template_description( 'details' ) . '</td>
