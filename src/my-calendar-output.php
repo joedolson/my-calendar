@@ -1700,7 +1700,6 @@ function mc_calendar_params( $args ) {
 	 */
 	$format = apply_filters( 'mc_display_format', $format, $args );
 	$params = array(
-		'name'     => $name, // Not used in my_calendar(); what is/was it for.
 		'format'   => $format,
 		'category' => $category,
 		'above'    => $above,
