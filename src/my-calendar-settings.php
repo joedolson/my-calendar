@@ -435,9 +435,11 @@ function mc_update_output_settings( $post ) {
 	$options['topnav']         = ( empty( $top ) ) ? 'none' : implode( ',', $top );
 	$single                    = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
 	$main                      = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
+	$card                      = ( empty( $post['mc_display_card'] ) ) ? array() : $post['mc_display_card'];
 	$mini                      = ( empty( $post['mc_display_mini'] ) ) ? array() : $post['mc_display_mini'];
 	$options['display_single'] = array_map( 'sanitize_text_field', $single );
 	$options['display_main']   = array_map( 'sanitize_text_field', $main );
+	$options['display_card']   = array_map( 'sanitize_text_field', $card );
 	$options['display_mini']   = array_map( 'sanitize_text_field', $mini );
 	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
@@ -1382,6 +1384,7 @@ function mc_remote_db() {
 							<div class="mc-tabs">
 								<div class="tabs" role="tablist" data-default="single-event-output">
 									<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php esc_html_e( 'Single Event', 'my-calendar' ); ?></button>
+									<button type="button" role="tab" aria-selected="false" id="tab_card_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Card', 'my-calendar' ); ?></button>
 									<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Single Event Popup', 'my-calendar' ); ?></button>
 									<button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup"><?php esc_html_e( 'Mini Calendar Popup', 'my-calendar' ); ?></button>
 								</div>
@@ -1441,6 +1444,28 @@ function mc_remote_db() {
 										);
 										?>
 									</div>
+								</div>
+								<div role='tabpanel' aria-labelledby='tab_card_output' class='wptab' id='calendar-card-output'>
+									<p>
+									<?php
+									_e( 'Choose fields to show in the card view.', 'my-calendar' );
+									echo ' ';
+									// Translators: URL to single event view template editing screen.
+									printf( __( 'The <a href="%1$s">card view template</a> overrides these settings.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design&mc_template=card#my-calendar-templates' ) ) );
+									?>
+									</p>
+									<ul class="checkboxes">
+									<?php
+									mc_settings_field(
+										array(
+											'name'    => 'mc_display_card',
+											'label'   => $default_display_fields,
+											'default' => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
+											'type'    => 'checkbox',
+										)
+									);
+									?>
+									</ul>
 								</div>
 								<div role='tabpanel' aria-labelledby='tab_main_output' class='wptab' id='calendar-main-output'>
 									<p>
