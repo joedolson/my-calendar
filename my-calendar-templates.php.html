@@ -1584,7 +1584,7 @@ function mc_str_replace_word_i( $needle, $haystack ) {
  */
 function mc_get_template( $template ) {
 	$templates = mc_get_option( 'templates' );
-	$keys      = array( 'title', 'title_list', 'title_solo', 'link', 'mini', 'list', 'details', 'grid', 'card' );
+	$keys      = array( 'title', 'title_list', 'title_solo', 'title_card', 'link', 'mini', 'list', 'details', 'grid', 'card' );
 
 	if ( ! in_array( $template, $keys, true ) ) {
 		$template = '';
