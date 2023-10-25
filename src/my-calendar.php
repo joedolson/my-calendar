@@ -147,6 +147,7 @@ include( dirname( __FILE__ ) . '/includes/urls.php' );
 include( dirname( __FILE__ ) . '/includes/screen-options.php' );
 include( dirname( __FILE__ ) . '/includes/db.php' );
 include( dirname( __FILE__ ) . '/includes/deprecated.php' );
+include( dirname( __FILE__ ) . '/templates/legacy-functions.php' );
 include( dirname( __FILE__ ) . '/my-calendar-core.php' );
 include( dirname( __FILE__ ) . '/my-calendar-install.php' );
 include( dirname( __FILE__ ) . '/my-calendar-settings.php' );
