@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Generate stylesheet editor
  */
 function my_calendar_style_edit() {
-	$message    = '';
+	$message = '';
 	if ( ! current_user_can( 'mc_edit_styles' ) ) {
 		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize styles on this site.', 'my-calendar' ) . '</p>' );
 
@@ -29,7 +29,7 @@ function my_calendar_style_edit() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-	
+
 		$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : stripcslashes( sanitize_text_field( $_POST['mc_show_css'] ) );
 		mc_update_option( 'show_css', $mc_show_css );
 		$use_styles = ( empty( $_POST['use_styles'] ) ) ? '' : 'true';
