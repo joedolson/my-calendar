@@ -264,7 +264,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	);
 	$details = mc_load_template( 'event/' . $type, $data );
 
-	$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
+	// If loading a template produces no results, then use legacy event templating.
+	if ( ! $details ) {
+		$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
+	}
 	$details = apply_filters( 'mc_event_details_output', $details, $event );
 	/**
 	 * Runs right after a calendar event template is run.
