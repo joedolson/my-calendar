@@ -11,6 +11,6 @@
 
 ?>
 <div class="mc-event mc-single mc-list">
-	<h2 class="mc-title"><?php mc_template_tag( $data['event'], 'title' ); ?></h2>
-	<?php mc_template_tag( $data['event'], 'datetime' ); ?>
+	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
+	<?php mc_template_tag( $data, 'datetime' ); ?>
 </div>

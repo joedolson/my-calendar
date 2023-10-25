@@ -14,9 +14,8 @@
  */
 ?>
 <div class="mc-event mc-single mc-grid">
-	<?php mc_template_tag( $data['event'], 'image' ); ?>
-	<h2 class="mc-title"><?php mc_template_tag( $data['event'], 'title' ); ?></h2>
-	<?php mc_template_tag( $data['event'], 'datetime' ); ?>
-	<?php mc_template_tag( $data['event'], 'description' ); ?>
+	<?php mc_template_tag( $data, 'image' ); ?>
+	<?php mc_template_tag( $data, 'datetime' ); ?>
+	<?php mc_template_tag( $data, 'description' ); ?>
 </div>
 

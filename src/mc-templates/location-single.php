@@ -14,7 +14,7 @@
  */
 ?>
 <div class="mc-location mc-view-location">
-	<div class="mc-location-gmap">' . mc_generate_map( $data['location'], 'location' ) . '</div>
-	<div class="mc-location-hcard">' . mc_hcard( $data['location'], 'true', 'true', 'location' ) . '</div>
+	<div class="mc-location-gmap">' . mc_generate_map( $data, 'location' ) . '</div>
+	<div class="mc-location-hcard">' . mc_hcard( $data, 'true', 'true', 'location' ) . '</div>
 	<div class="mc-location-upcoming"><h2>' . __( 'Upcoming Events', 'my-calendar' ) . '</h2>' . $data['events'] . '</div>
 </div>

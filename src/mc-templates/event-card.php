@@ -11,8 +11,8 @@
 
 ?>
 <div class="mc-event mc-single mc-card">
-	<h2 class="mc-title"><?php mc_template_tag( $data['event'], 'title' ); ?></h2>
-	<?php mc_template_tag( $data['event'], 'datetime' ); ?>
-	<?php mc_template_tag( $data['event'], 'image' ); ?>
-	<?php mc_template_tag( $data['event'], 'excerpt' ); ?>
+	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
+	<?php mc_template_tag( $data, 'datetime' ); ?>
+	<?php mc_template_tag( $data, 'image' ); ?>
+	<?php mc_template_tag( $data, 'excerpt' ); ?>
 </div>
