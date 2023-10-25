@@ -397,7 +397,7 @@ function mc_produce_search_results( $events, $template ) {
 			'template' => $template,
 			'type'     => 'list',
 		);
-		$details = mc_load_template( 'upcoming', $data );
+		$details = mc_load_template( 'event/upcoming', $data );
 		if ( ! $details ) {
 			$html .= mc_format_upcoming_event( $out, $template, 'list' );
 		}

@@ -876,7 +876,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			'tags'     => $event,
 			'template' => $template,
 		);
-		$details = mc_load_template( 'now', $args );
+		$details = mc_load_template( 'event/now', $args );
 		if ( $details ) {
 			$return = $details;
 		} else {
@@ -963,7 +963,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			'tags'     => $event,
 			'template' => $template,
 		);
-		$details = mc_load_template( 'next', $args );
+		$details = mc_load_template( 'event/next', $args );
 		if ( $details ) {
 			$return = $details;
 		} else {
