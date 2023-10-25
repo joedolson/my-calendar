@@ -237,16 +237,13 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		'tags'         => $tags,
 	);
 	$type    = ( 'calendar' === $type ) ? 'grid' : $type;
-	$header  = mc_load_template( 'event/' . $type . '-' . 'title', $data );
-	$body    = mc_load_template( 'event/' . $type, $data );
-	if ( $header || $body ) {
-		$details = $header . $body;
-	}
+	$details = mc_load_template( 'event/' . $type, $data );
 	// If loading a template produces no results, then use legacy event templating.
 	if ( ! $details ) {
 		$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
 	}
-	$details = apply_filters( 'mc_event_details_output', $details, $event );
+	$header  = mc_draw_event_header( $data, $type, $template );
+	$details = $header . apply_filters( 'mc_event_details_output', $details, $event );
 	/**
 	 * Runs right after a calendar event template is run.
 	 *
@@ -261,20 +258,51 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 }
 
 /**
- * Draw the header for a My Calendar event.
+ * Generate the container ID for an event.
+ *
+ * @param string $type Type of view.
+ * @param string $process_date Date in view.
+ * @param object $event My Calendar event.
  *
  * @return string
  */
-function mc_draw_event_header( $event, $type, $process_date, $time, $template, $id, $tags, $image ) {
+function mc_event_container_id( $type, $process_date, $event ) {
+	$day_id = mc_date( 'd', strtotime( $process_date ), false );
+	$uid    = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
+	$id     = $event->occur_id;
+
+	return "$uid-$type-details-$id";
+}
+
+/**
+ * Draw the header for a My Calendar event.
+ *
+ * @param array  $data Array of event object, process date, id, tags, and time viewed.
+ * @param string $type View type.
+ * @param string $template Template value.
+ *
+ * @return string
+ */
+function mc_draw_event_header( $data, $type, $template  ) {
+	$event         = $data['event'];
+	$tags          = $data['tags'];
+	$id            = $data['id'];
+	$process_date  = $data['process_date'];
+	$time          = $data['time'];
 	$open_uri      = mc_get_option( 'open_uri' );
+	$image         = mc_category_icon( $event );
+	$image         = ( $image ) ? $image . ' ' : '';
 	$has_image     = ( '' !== $image ) ? ' has-image' : '';
 	$event_classes = mc_event_classes( $event, $type );
 	$nofollow      = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
-	$day_id        = mc_date( 'd', strtotime( $process_date ), false );
-	$uid           = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
-	$header        = "\n\n	<div id='$uid-$type-$id' class='$event_classes'>\n";
+	$container_id  = mc_event_container_id( $type, $process_date, $event );
+	$parent_id     = str_replace( 'details-', '', $container_id );
+	$header        = "\n\n	<div id='$parent_id' class='$event_classes'>\n";
 
-	$event_title = mc_draw_event_title( $event, $tags, $type, $image );
+	$event_title = mc_load_template( 'event/' . $type . '-' . 'title', $data );
+	if ( ! $event_title ) {
+		$event_title = mc_draw_event_title( $event, $tags, $type, $image );
+	}
 	/**
 	 * Disable links on grid view.
 	 *
@@ -298,13 +326,13 @@ function mc_draw_event_header( $event, $type, $process_date, $time, $template, $
 			$single_template    = ( mc_get_template( 'title_solo' ) === '' ) ? '{title}' : mc_get_template( 'title_solo' );
 			$event_title_single = mc_draw_template( $tags, $single_template );
 			if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
-				$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title_single ) . "'";
+				$params  = "id='modal-button-$container_id' data-modal-content-id='$container_id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title_single ) . "'";
 				$classes = 'js-modal button button-link';
 			} else {
 				$params  = " aria-expanded='false'";
 				$classes = 'open';
 			}
-			$wrap    = "<a href='#$uid-$type-details-$id' $params aria-controls='$uid-$type-details-$id' class='$type $classes et_smooth_scroll_disabled opl-link url summary$has_image'><span>";
+			$wrap    = "<a href='#$container_id' $params aria-controls='$container_id' class='$type $classes et_smooth_scroll_disabled opl-link url summary$has_image'><span>";
 			$balance = '</span></a>';
 		}
 	} else {
@@ -350,6 +378,8 @@ function mc_draw_event_header( $event, $type, $process_date, $time, $template, $
 	if ( 'card' !== $type ) {
 		$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
 	}
+
+	return $header;
 }
 
 /**

@@ -98,14 +98,20 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	$display_link    = ( $no_old_options ) ? get_option( 'mc_event_link' ) : '';
 	$display_image   = ( $no_old_options ) ? get_option( 'mc_image' ) : '';
 	$display_reg     = ( $no_old_options ) ? get_option( 'mc_event_registration' ) : '';
-	$day_id          = mc_date( 'd', strtotime( $process_date ), false );
-	$uid             = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
 	$image           = mc_category_icon( $event );
 	$image           = ( $image ) ? $image . ' ' : '';
 	$img             = '';
+	$container_id    = mc_event_container_id( $type, $process_date, $event );
 
-	$header       = mc_draw_event_header( $event, $type, $process_date, $time, $template, $id, $data, $image );
-	$close_button = mc_close_button( "$uid-$type-details-$id" );
+	$data    = array(
+		'event'        => $event,
+		'process_date' => $process_date,
+		'time'         => $time,
+		'id'           => $id,
+		'tags'         => $tags,
+	);	
+	$header       = mc_draw_event_header( $data, $type, $template );
+	$close_button = mc_close_button( $container_id );
 	$close        = '';
 	if ( mc_show_details( $time, $type ) ) {
 		// Since 3.2.0, close button is added to event container in mini calendar.
@@ -354,7 +360,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		if ( 'list' === $type || 'calendar' === $type ) {
 			$img_class .= ' single-details';
 		}
-		$container = "\n	<div id='$uid-$type-details-$id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+		$container = "\n	<div id='$container_id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
 		/**
 		 * Filter details before the event content..
 		 *
