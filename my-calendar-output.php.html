@@ -208,10 +208,15 @@ function mc_load_template( $type, $data ) {
 	$details          = '';
 	if ( ! $legacy_templates ) {
 		$source = 'event';
-		if ( false === strpos( $type, '/' ) ) {
+		// Check for nested template parts.
+		if ( false !== strpos( $type, '/' ) ) {
 			$parts  = explode( $type, '/' );
 			$source = $parts[0];
-			$type   = $parts[1];
+			$type   = isset( $parts[1] ) ? $parts[1] : '';
+		}
+		if ( empty( $data['tags'] ) ) {
+			$tags         = mc_create_tags( $data['event'] );
+			$data['tags'] = $tags;
 		}
 		$templates = new Mc_Template_Loader();
 		ob_start();
