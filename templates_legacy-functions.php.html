@@ -38,6 +38,14 @@
  /**
   * Function to draw a single event.
   *
+  * @param object $event Event object.
+  * @param string $type Type of view being drawn.
+  * @param string $process_date Current date being displayed.
+  * @param string $time Time view being drawn.
+  * @param string $template Template to use to draw event.
+  * @param string $id ID for the calendar calling this function.
+  * @param array  $tags Event tags array.
+  *
   * @return string
   */
 function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template = '', $id = '', $tags = array() ) {
