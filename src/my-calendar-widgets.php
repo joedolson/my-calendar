@@ -578,7 +578,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			'template' => $template,
 			'type'     => $type,
 		);
-		$details = mc_load_template( 'upcoming', $data );
+		$details = mc_load_template( 'event/upcoming', $data );
 		if ( ! $details ) {
 			$html .= mc_format_upcoming_event( $out, $template, $type );
 		}
@@ -777,7 +777,7 @@ function my_calendar_todays_events( $args ) {
 					'template' => $template,
 					'args'     => $args,
 				);
-				$details = mc_load_template( 'today', $data );
+				$details = mc_load_template( 'event/today', $data );
 				if ( $details ) {
 					$todays_events[ $ts ][] = $details;
 				} else {

@@ -184,7 +184,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		protected function get_template_file_names( $slug, $name = '' ) {
 			$templates = array();
 			if ( ! empty( $name ) ) {
-				$templates[] = $slug . '-' . $name . '.php';
+				$templates[] = $slug . '/' . $name . '.php';
 			}
 			$templates[] = $slug . '.php';
 

@@ -184,7 +184,7 @@ function mc_load_template( $type, $data, $source = 'event' ) {
 	if ( ! $legacy_templates ) {
 		// Check for nested template parts.
 		if ( false !== strpos( $type, '/' ) ) {
-			$parts  = explode( $type, '/' );
+			$parts  = explode( '/', $type );
 			$source = $parts[0];
 			$type   = isset( $parts[1] ) ? $parts[1] : '';
 		}
@@ -236,7 +236,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		'id'           => $id,
 		'tags'         => $tags,
 	);
-	$details = mc_load_template( $type, $data );
+	$details = mc_load_template( 'event/' . $type, $data );
 
 	if ( ! $details ) {
 		// assign empty values to template sections.
