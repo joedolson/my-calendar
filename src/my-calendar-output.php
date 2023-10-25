@@ -236,8 +236,12 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		'id'           => $id,
 		'tags'         => $tags,
 	);
-	$details = mc_load_template( 'event/' . $type, $data );
-
+	$type    = ( 'calendar' === $type ) ? 'grid' : $type;
+	$header  = mc_load_template( 'event/' . $type . '-' . 'title', $data );
+	$body    = mc_load_template( 'event/' . $type, $data );
+	if ( $header || $body ) {
+		$details = $header . $body;
+	}
 	// If loading a template produces no results, then use legacy event templating.
 	if ( ! $details ) {
 		$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
@@ -254,6 +258,156 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	do_action( 'my_calendar_event_drawn', $event );
 
 	return $details;
+}
+
+/**
+ * Draw the header for a My Calendar event.
+ *
+ * @return string
+ */
+function mc_draw_event_header( $event, $type, $process_date, $time, $template, $id, $tags, $image ) {
+	$open_uri      = mc_get_option( 'open_uri' );
+	$has_image     = ( '' !== $image ) ? ' has-image' : '';
+	$event_classes = mc_event_classes( $event, $type );
+	$nofollow      = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
+	$day_id        = mc_date( 'd', strtotime( $process_date ), false );
+	$uid           = 'mc_' . $type . '_' . $day_id . '_' . $event->occur_id;
+	$header        = "\n\n	<div id='$uid-$type-$id' class='$event_classes'>\n";
+
+	$event_title = mc_draw_event_title( $event, $tags, $type, $image );
+	/**
+	 * Disable links on grid view.
+	 *
+	 * @hook mc_disable_link
+	 *
+	 * @param {bool} $no_link True to disable link.
+	 * @param {array} $data Event data array.
+	 *
+	 * @return {bool}
+	 */
+	$no_link = apply_filters( 'mc_disable_link', false, $tags );
+
+	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) && ! $no_link ) {
+		if ( 'true' === $open_uri ) {
+			$details_link = esc_url( mc_get_details_link( $event ) );
+			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
+			$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
+		} else {
+			$gridtype           = mc_get_option( 'calendar_javascript' );
+			$listtype           = mc_get_option( 'list_javascript' );
+			$single_template    = ( mc_get_template( 'title_solo' ) === '' ) ? '{title}' : mc_get_template( 'title_solo' );
+			$event_title_single = mc_draw_template( $tags, $single_template );
+			if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
+				$params  = "id='modal-button-$uid-$type-details-$id' data-modal-content-id='$uid-$type-details-$id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title_single ) . "'";
+				$classes = 'js-modal button button-link';
+			} else {
+				$params  = " aria-expanded='false'";
+				$classes = 'open';
+			}
+			$wrap    = "<a href='#$uid-$type-details-$id' $params aria-controls='$uid-$type-details-$id' class='$type $classes et_smooth_scroll_disabled opl-link url summary$has_image'><span>";
+			$balance = '</span></a>';
+		}
+	} else {
+		$wrap    = '';
+		$balance = '';
+	}
+
+	$group_class = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
+	$hlevel      = ( mc_get_option( 'show_months' ) > 1 ) ? 'h4' : 'h3';
+	/**
+	 * Filter default event heading when in a table.
+	 *
+	 * @hook mc_heading_level_table
+	 *
+	 * @param {string} $hlevel HTML element. Default 'h3'.
+	 * @param {string} $type View type.
+	 * @param {string} $time View timeframe.
+	 * @param {string} $template Current template.
+	 *
+	 * @return {string}
+	 */
+	$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
+	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
+	if ( 'single' === $type ) {
+		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image$event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
+	} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
+		/**
+		 * Filter event title inside event heading.
+		 *
+		 * @hook mc_heading_inner_title
+		 *
+		 * @param {string} $inner_heading Heading HTML and text.
+		 * @param {string} $event_title Title as passed.
+		 * @param {object} $event My Calendar event object.
+		 *
+		 * @return {string}
+		 */
+		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
+		$title         = "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n";
+	} else {
+		$title = '';
+	}
+	if ( 'card' !== $type ) {
+		$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
+	}
+}
+
+/**
+ * Draw an event title.
+ */
+function mc_draw_event_title( $event, $data, $type, $image ) {
+	switch ( $type ) {
+		case 'calendar':
+			$title_template = ( mc_get_template( 'title' ) === '' ) ? '{title}' : mc_get_template( 'title' );
+			break;
+		case 'list':
+			$title_template = ( mc_get_template( 'title_list' ) === '' ) ? '{title}' : mc_get_template( 'title_list' );
+			break;
+		case 'card':
+			$title_template = ( mc_get_template( 'title_card' ) === '' ) ? '{title}' : mc_get_template( 'title_card' );
+			break;
+		case 'single':
+			$title_template = ( mc_get_template( 'title_solo' ) === '' ) ? '{title}' : mc_get_template( 'title_solo' );
+			break;
+		default:
+			$title_template = ( mc_get_template( 'title' ) === '' ) ? '{title}' : mc_get_template( 'title' );
+	}
+
+	$event_title = mc_draw_template( $data, $title_template );
+	if ( 0 === strpos( $event_title, ': ' ) ) {
+		// If the first two characters of the title are ": ", this is the default templates but no time.
+		$event_title = str_replace( ': ', '', $event_title );
+	}
+	$event_title = ( '' === $event_title ) ? $data['title'] : strip_tags( $event_title, mc_strip_tags() );
+	if ( 'single' === $type ) {
+		/**
+		 * Customize event title in single view.
+		 *
+		 * @hook mc_single_event_title
+		 *
+		 * @param {string} $event_title Event title.
+		 * @param {object} $event My Calendar event object.
+		 *
+		 * @return {string}
+		 */
+		$event_title = apply_filters( 'mc_single_event_title', $event_title, $event );
+	} else {
+		/**
+		 * Customize event title in group views.
+		 *
+		 * @hook mc_event_title
+		 *
+		 * @param {string} $event_title Event title.
+		 * @param {object} $event My Calendar event object.
+		 * @param {string} $title Title in event template array.
+		 * @param {string} $image Category icon.
+		 *
+		 * @return {string}
+		 */
+		$event_title = apply_filters( 'mc_event_title', $event_title, $event, $data['title'], $image );
+	}
+
+	return $event_title;
 }
 
 /**
@@ -1736,8 +1890,13 @@ function my_calendar( $args ) {
 									$trigger = ' trigger';
 								}
 								$link    = mc_build_mini_url( $start, $params['category'], $events, $args, $date );
-								$element = "a $attrs href='$link'";
-								$close   = 'a';
+								if ( ! _mc_is_url( $link ) ) {
+									$element = "button type='button' $attrs";
+									$close   = 'button';
+								} else {
+									$element = "a $attrs href='$link'";
+									$close   = 'a';
+								}
 							} else {
 								$element = 'span';
 								$close   = 'span';
