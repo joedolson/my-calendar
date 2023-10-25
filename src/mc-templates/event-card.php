@@ -10,9 +10,9 @@
  */
 
 ?>
-<div class="mc-event mc-single mc-list">
-	<?php mc_template_tag( $data['event'], 'image' ); ?>
+<div class="mc-event mc-single mc-card">
 	<h2 class="mc-title"><?php mc_template_tag( $data['event'], 'title' ); ?></h2>
 	<?php mc_template_tag( $data['event'], 'datetime' ); ?>
-	<?php mc_template_tag( $data['event'], 'description' ); ?>
+	<?php mc_template_tag( $data['event'], 'image' ); ?>
+	<?php mc_template_tag( $data['event'], 'excerpt' ); ?>
 </div>
