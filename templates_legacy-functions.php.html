@@ -129,13 +129,13 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	$img             = '';
 	$container_id    = mc_event_container_id( $type, $process_date, $event );
 
-	$data    = array(
+	$data         = array(
 		'event'        => $event,
 		'process_date' => $process_date,
 		'time'         => $time,
 		'id'           => $id,
 		'tags'         => $tags,
-	);	
+	);
 	$header       = mc_draw_event_header( $data, $type, $template );
 	$close_button = mc_close_button( $container_id );
 	$close        = '';
