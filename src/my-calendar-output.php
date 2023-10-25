@@ -173,22 +173,23 @@ function mc_legacy_templates_enabled() {
  *
  * @param string $type Template type.
  * @param array  $data Event and display data.
+ * @param string $source Type of data this template is displaying. Default 'event'.
  *
  * @return string
  */
-function mc_load_template( $type, $data ) {
+function mc_load_template( $type, $data, $source = 'event' ) {
 
 	$legacy_templates = mc_legacy_templates_enabled();
 	$details          = '';
 	if ( ! $legacy_templates ) {
-		$source = 'event';
 		// Check for nested template parts.
 		if ( false !== strpos( $type, '/' ) ) {
 			$parts  = explode( $type, '/' );
 			$source = $parts[0];
 			$type   = isset( $parts[1] ) ? $parts[1] : '';
 		}
-		if ( empty( $data['tags'] ) ) {
+		if ( empty( $data['tags'] ) && 'event' === $source ) {
+			// If the event doesn't already have tags, create them before passing to template.
 			$tags         = mc_create_tags( $data['event'] );
 			$data['tags'] = $tags;
 		}
