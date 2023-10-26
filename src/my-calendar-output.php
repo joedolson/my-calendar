@@ -248,9 +248,22 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	$header       = mc_draw_event_header( $data, $type, $template );
 	$details      = apply_filters( 'mc_event_details_output', $details, $event );
 	$container_id = mc_event_container_id( $type, $process_date, $event );
-	$details      = mc_wrap_event_details( $details, $type, $container_id, $data );
-	$details      = $header . $details;
-	$details      = mc_wrap_event( $details, $event, $container_id, $type );
+	/**
+	 * Filter details appended after the event content.
+	 *
+	 * @hook mc_after_event
+	 *
+	 * @param {string} $details HTML content. Default empty.
+	 * @param {object} $event My Calendar event object.
+	 * @param {string} $type View type.
+	 * @param {string} $time View timeframe.
+	 *
+	 * @return {string}
+	 */
+	$details .= apply_filters( 'mc_after_event', '', $event, $type, $time );
+	$details  = mc_wrap_event_details( $details, $type, $time, $container_id, $data );
+	$details  = $header . $details;
+	$details  = mc_wrap_event( $details, $event, $container_id, $type );
 	/**
 	 * Runs right after a calendar event template is run.
 	 *
@@ -416,7 +429,7 @@ function mc_wrap_event( $content, $event, $container_id, $type ) {
  *
  * @return string
  */
-function mc_wrap_event_details( $contents, $type, $container_id, $data ) {
+function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) {
 	$tags  = $data['tags'];
 	$event = $data['event'];
 	$id    = $data['id'];
@@ -434,6 +447,19 @@ function mc_wrap_event_details( $contents, $type, $container_id, $data ) {
 		$img_class .= ' single-details';
 	}
 	$container = "<div id='$container_id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+	/**
+	 * Filter details before the event content.
+	 *
+	 * @hook mc_before_event
+	 *
+	 * @param {string} $details HTML content.
+	 * @param {object} $event My Calendar event object.
+	 * @param {string} $type View type.
+	 * @param {string} $time View timeframe.
+	 *
+	 * @return {string}
+	 */
+	$container = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 
 	return $container . $contents . '</div><!--end .details-->';
 }
@@ -812,7 +838,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 		$recurs    = str_split( $event->event_recur, 1 );
 		$recur     = $recurs[0];
 		$referer   = urlencode( mc_get_current_url() );
-		$edit      = "	<div class='mc_edit_links'><p>";
+		$edit      = "	<div class='mc_edit_links'><ul>";
 		/**
 		 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
 		 *
@@ -837,9 +863,9 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 			$del_group  = false;
 		}
 		if ( 'S' === $recur || ( ! $edit_group && ! $del_group ) ) {
-			$edit .= "<a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . "</a>$groupedit";
+			$edit .= "<li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . "</a></li>$groupedit";
 		} else {
-			$edit .= "<a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit All', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "</a> &bull; <a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete All', 'my-calendar' ) . "</a>
+			$edit .= "<li><a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "</a></li>
 			$groupedit";
 		}
 		$edit .= '</p></div>';
