@@ -86,6 +86,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.5.0 =
+
+* Major change: Remove CSS style editor and style migration functions.
+* Major change: Remove CSS and Icon backup functions.
+* Change: Make modal view the default pop-up view.
+* Change: Improve HTML semantics in event display.
+* Change: Switch popup triggers to buttons.
+* Feature: Add card view.
+
 = 3.4.21 =
 
 * Bug fix: Settings that allow HTML were aggressively sanitized, stripping HTML.
