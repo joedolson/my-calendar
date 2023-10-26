@@ -110,7 +110,8 @@ main,div.entry-content,div.site-content, table {
 .mc-main span.mc-active,
 .mc-main .my-calendar-header a,
 .mc-main .my-calendar-footer a {
-	display: inline-block;
+	display: flex;
+	align-items: center;
 }
 
 .mc-main .my-calendar-footer select:not(.my-calendar-admin select),
