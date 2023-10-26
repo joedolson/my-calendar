@@ -301,12 +301,21 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 }
 
 .mc-main .event-title button {
+	all: unset;
 	width: 100%;
 	text-align: left;
 	display: flex;
 	column-gap: 4px;
 	align-items: center;
-	padding: 1rem;
+	padding: .5rem;
+	box-sizing: border-box;
+}
+
+.mc-main .event-title button:hover,
+.mc-main .event-title button:focus {
+	cursor: default;
+	outline: 1px solid var(--highlight-light);
+	outline-offset: -1px;
 }
 
 .mc-main .mc-date-switcher select:last-of-type,

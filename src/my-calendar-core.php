@@ -346,7 +346,9 @@ function mc_generate_category_styles() {
 			if ( 'font' === $apply || 'background' === $apply ) {
 				// always an anchor as of 1.11.0, apply also to title.
 				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
+				$category_styles .= "\n.mc-main .$class .event-title button { $type: $color !important; $inv }";
 				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor !important;}";
+				$category_styles .= "\n.mc-main .$class .event-title button:hover, .mc-main .$class .event-title button:focus { $type: $hcolor !important;}";
 			}
 			// Variables aren't dependent on options.
 			$category_vars .= '--category-' . $class . ': ' . $color . '; ';

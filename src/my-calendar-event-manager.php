@@ -332,7 +332,6 @@ function my_calendar_manage() {
 		<h1 id="mc-manage" class="wp-heading-inline"><?php esc_html_e( 'Events', 'my-calendar' ); ?></h1>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
-		<?php mc_migrate_notice(); ?>
 		<div class="mc-tablinks">
 			<a href="#my-calendar-admin-table" aria-current="page"><?php esc_html_e( 'My Events', 'my-calendar' ); ?></strong>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true' ) ); ?>"><?php esc_html_e( 'Event Groups', 'my-calendar' ); ?></a>
