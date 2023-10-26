@@ -424,6 +424,7 @@ function mc_wrap_event( $content, $event, $container_id, $type ) {
  *
  * @param string $contents HTML content to wrap. Sourced from template generation.
  * @param string $type Type of view displayed.
+ * @param string $time Time frame displayed.
  * @param string $container_id The ID for this container.
  * @param array  $data Template loader array with event object, tags array, and ID.
  *
