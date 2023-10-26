@@ -289,7 +289,7 @@ function mc_event_container_id( $type, $process_date, $event ) {
  *
  * @return string
  */
-function mc_draw_event_header( $data, $type, $template  ) {
+function mc_draw_event_header( $data, $type, $template ) {
 	$event         = $data['event'];
 	$tags          = $data['tags'];
 	$id            = $data['id'];
@@ -390,6 +390,11 @@ function mc_draw_event_header( $data, $type, $template  ) {
 
 /**
  * Wrap event details in its container.
+ *
+ * @param string $contents HTML content to wrap. Sourced from template generation.
+ * @param string $type Type of view displayed.
+ * @param string $container_id The ID for this container.
+ * @param array  $data Template loader array with event object, tags array, and ID.
  *
  * @return string
  */
@@ -1959,7 +1964,7 @@ function my_calendar( $args ) {
 									$attrs   = " aria-expanded='false'";
 									$trigger = ' trigger';
 								}
-								$link    = mc_build_mini_url( $start, $params['category'], $events, $args, $date );
+								$link = mc_build_mini_url( $start, $params['category'], $events, $args, $date );
 								if ( ! _mc_is_url( $link ) ) {
 									$element = "button type='button' $attrs";
 									$close   = 'button';

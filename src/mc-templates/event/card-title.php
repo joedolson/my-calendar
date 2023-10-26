@@ -9,5 +9,4 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
-?>
-<?php mc_template_tag( $data, 'title' ); ?>
+mc_template_tag( $data, 'title' );
