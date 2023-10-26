@@ -385,7 +385,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 		$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
 	}
 
-	return $header;
+	return '<header>' . $header . '</header>';
 }
 
 /**
@@ -401,9 +401,9 @@ function mc_draw_event_header( $data, $type, $template ) {
 function mc_wrap_event( $content, $event, $container_id, $type ) {
 	$event_classes = mc_event_classes( $event, $type );
 	$parent_id     = str_replace( 'details-', '', $container_id );
-	$header        = "<div id='$parent_id' class='$event_classes'>";
+	$header        = "<article id='$parent_id' class='$event_classes'>";
 
-	return $header . $content . '</div>';
+	return $header . $content . '</article>';
 }
 
 /**
