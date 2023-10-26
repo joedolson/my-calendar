@@ -139,7 +139,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 				 */
 				$hlevel = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 				if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
-					$event_title = mc_draw_event_title( $event, $data, 'list', $image );
+					$event_title = mc_draw_event_title( $event, $tags, 'list', $image );
 					$list_title  = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
 				}
 			}
@@ -152,6 +152,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			if ( ( 'true' === $display_more && ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
 				$details_label = mc_get_details_label( $event, $data );
 				$details_link  = mc_get_details_link( $event );
+				$event_title   = mc_draw_event_title( $event, $tags, $type, $image );
 				$aria          = '';
 				// If the event title is already in the details label, omit ARIA.
 				if ( false === stripos( strip_tags( $details_label ), strip_tags( $event_title ) ) ) {

@@ -178,6 +178,10 @@ function mc_legacy_templates_enabled() {
  * @return string
  */
 function mc_load_template( $type, $data, $source = 'event' ) {
+	if ( 'calendar' === $type ) {
+		// Legacy.
+		$type = 'grid';
+	}
 
 	$legacy_templates = mc_legacy_templates_enabled();
 	$details          = '';
@@ -236,14 +240,16 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		'id'           => $id,
 		'tags'         => $tags,
 	);
-	$type    = ( 'calendar' === $type ) ? 'grid' : $type;
 	$details = mc_load_template( 'event/' . $type, $data );
 	// If loading a template produces no results, then use legacy event templating.
 	if ( ! $details ) {
 		$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
 	}
-	$header  = mc_draw_event_header( $data, $type, $template );
-	$details = $header . apply_filters( 'mc_event_details_output', $details, $event );
+	$header       = mc_draw_event_header( $data, $type, $template );
+	$details      = apply_filters( 'mc_event_details_output', $details, $event );
+	$container_id = mc_event_container_id( $type, $process_date, $event );
+	$details      = mc_wrap_event_details( $details, $type, $container_id, $data );
+	$details      = $header . $details;
 	/**
 	 * Runs right after a calendar event template is run.
 	 *
@@ -332,8 +338,8 @@ function mc_draw_event_header( $data, $type, $template  ) {
 				$params  = " aria-expanded='false'";
 				$classes = 'open';
 			}
-			$wrap    = "<a href='#$container_id' $params aria-controls='$container_id' class='$type $classes et_smooth_scroll_disabled opl-link url summary$has_image'><span>";
-			$balance = '</span></a>';
+			$wrap    = "<button type='button' $params aria-controls='$container_id' class='$type $classes url summary$has_image'><span>";
+			$balance = '</span></button>';
 		}
 	} else {
 		$wrap    = '';
@@ -383,7 +389,41 @@ function mc_draw_event_header( $data, $type, $template  ) {
 }
 
 /**
+ * Wrap event details in its container.
+ *
+ * @return string
+ */
+function mc_wrap_event_details( $contents, $type, $container_id, $data ) {
+	$tags  = $data['tags'];
+	$event = $data['event'];
+	$id    = $data['id'];
+	$img   = false;
+	if ( mc_output_is_visible( 'image', $type, $event ) ) {
+		$img = mc_get_event_image( $event, $tags );
+	}
+	$img_class = ( $img ) ? ' has-image' : ' no-image';
+	$gridtype  = mc_get_option( 'calendar_javascript' );
+	$listtype  = mc_get_option( 'list_javascript' );
+	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
+		$img_class .= ' uses-modal';
+	}
+	if ( 'list' === $type || 'calendar' === $type ) {
+		$img_class .= ' single-details';
+	}
+	$container = "<div id='$container_id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+
+	return $container . $contents . '</div><!--end .details-->';
+}
+
+/**
  * Draw an event title.
+ *
+ * @param object $event Event object.
+ * @param array  $data Event tags.
+ * @param string $type View type.
+ * @param string $image Has an image.
+ *
+ * @return string
  */
 function mc_draw_event_title( $event, $data, $type, $image ) {
 	switch ( $type ) {
@@ -1983,7 +2023,7 @@ function my_calendar( $args ) {
 							// If there are no events on this date within current params.
 							if ( 'card' === $params['format'] ) {
 								$body .= '';
-							} elseif ( 'grid' !== $params['format'] ) {
+							} elseif ( 'list' !== $params['format'] ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
 								$body         .= "<$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
 							} else {
@@ -2099,11 +2139,10 @@ add_filter( 'mc_display_format', 'mc_convert_format', 10, 2 );
  * Switch format for display depeding on environment.
  *
  * @param string $format current view.
- * @param array  $params Calendar view args.
  *
  * @return string new format.
  */
-function mc_convert_format( $format, $params ) {
+function mc_convert_format( $format ) {
 	if ( 'true' === mc_get_option( 'convert' ) ) {
 		$format = ( mc_is_mobile() && 'calendar' === $format ) ? 'list' : $format;
 	} elseif ( 'mini' === mc_get_option( 'convert' ) ) {
