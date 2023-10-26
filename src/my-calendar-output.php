@@ -250,6 +250,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	$container_id = mc_event_container_id( $type, $process_date, $event );
 	$details      = mc_wrap_event_details( $details, $type, $container_id, $data );
 	$details      = $header . $details;
+	$details      = mc_wrap_event( $details, $event, $container_id, $type );
 	/**
 	 * Runs right after a calendar event template is run.
 	 *
@@ -302,8 +303,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$event_classes = mc_event_classes( $event, $type );
 	$nofollow      = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
 	$container_id  = mc_event_container_id( $type, $process_date, $event );
-	$parent_id     = str_replace( 'details-', '', $container_id );
-	$header        = "\n\n	<div id='$parent_id' class='$event_classes'>\n";
+	$header        = '';
 
 	$event_title = mc_load_template( 'event/' . $type . '-' . 'title', $data );
 	if ( ! $event_title ) {
@@ -386,6 +386,24 @@ function mc_draw_event_header( $data, $type, $template ) {
 	}
 
 	return $header;
+}
+
+/**
+ * Wrap event header & body together.
+ *
+ * @param string $content Header & event body content.
+ * @param object $event Event object.
+ * @param string $container_id Container ID.
+ * @param string $type View type.
+ *
+ * @return string
+ */
+function mc_wrap_event( $content, $event, $container_id, $type ) {
+	$event_classes = mc_event_classes( $event, $type );
+	$parent_id     = str_replace( 'details-', '', $container_id );
+	$header        = "<div id='$parent_id' class='$event_classes'>";
+
+	return $header . $content . '</div>';
 }
 
 /**
