@@ -705,9 +705,8 @@ body.mc-no-scroll {
   background: #fff;
 }
 
-
 .my-calendar-modal {
-  animation: apparition ease .5s 1 normal ;
+  animation: apparition ease .3s 1 normal ;
 }
 
 @keyframes apparition {
@@ -715,14 +714,13 @@ body.mc-no-scroll {
 	opacity: 0;
 	max-height: 0;
 	width: 0;
-	left: 50%;
+	left: calc( ( 100% - 55.625em ) / 2 );
   }
   100% {
 	opacity: 1;
 	max-height: 100%;
 	width: 100%;
 	max-width: 55.625em;
-	left: calc( ( 100% - 55.625em ) / 2 );
   }
 }
 
