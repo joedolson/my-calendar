@@ -151,7 +151,7 @@ function mc_format_tribe_event_for_import( $event ) {
 		'event_category'   => $category_ids,
 		// Can I map the organizer info somehow? Don't want to add new users, for sure...
 		// Maybe add a new table for organizers?
-		'event_host'       => __( 'Event Host ID', 'my-calendar-submissions' ),
+		'event_host'       => $event->post_author,
 		// meta data.
 		'event_added'      => $event->post_date,
 		'event_nonce_name' => wp_create_nonce( 'event_nonce' ),
