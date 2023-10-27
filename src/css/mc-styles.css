@@ -40,12 +40,10 @@
 	font-weight: 700;
 }
 
-.import {
-	background: #fcf9e8;
-	padding: 5px 10px;
-	border: 1px solid #a7aaad;
-	border-radius: 5px;
-	margin: 15px 0
+#mc-importer {
+	display: flex;
+	align-items: center;
+	gap: 12px;
 }
 
 .n4 {
@@ -1497,7 +1495,6 @@ div.mc-search {
 	font-weight: 700;
 	font-size: 1.1em;
 }
-
 
 .promotion h2 {
 	text-align: left;

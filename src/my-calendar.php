@@ -177,6 +177,7 @@ include( dirname( __FILE__ ) . '/my-calendar-generator.php' );
 include( dirname( __FILE__ ) . '/my-calendar-call-template.php' );
 include( dirname( __FILE__ ) . '/my-calendar-help.php' );
 include( dirname( __FILE__ ) . '/my-calendar-ajax.php' );
+include( dirname( __FILE__ ) . '/my-calendar-import.php' );
 
 add_action( 'plugins_loaded', 'mc_load_textdomain' );
 /**

@@ -243,67 +243,6 @@ function mc_settings_field( $args = array() ) {
 }
 
 /**
- * Display the admin configuration page
- */
-function my_calendar_import() {
-	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
-		global $wpdb;
-		$events         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar', 'ARRAY_A' );
-		$event_ids      = array();
-		$events_results = false;
-		foreach ( $events as $key ) {
-			$endtime        = ( '00:00:00' === $key['event_time'] ) ? '00:00:00' : date( 'H:i:s', strtotime( "$key[event_time] +1 hour" ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-			$data           = array(
-				'event_title'    => $key['event_title'],
-				'event_desc'     => $key['event_desc'],
-				'event_begin'    => $key['event_begin'],
-				'event_end'      => $key['event_end'],
-				'event_time'     => $key['event_time'],
-				'event_endtime'  => $endtime,
-				'event_recur'    => $key['event_recur'],
-				'event_repeats'  => $key['event_repeats'],
-				'event_author'   => $key['event_author'],
-				'event_category' => $key['event_category'],
-				'event_hide_end' => 1,
-				'event_link'     => ( isset( $key['event_link'] ) ) ? $key['event_link'] : '',
-			);
-			$format         = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%s' );
-			$update         = $wpdb->insert( my_calendar_table(), $data, $format );
-			$events_results = ( $update ) ? true : false;
-			$event_ids[]    = $wpdb->insert_id;
-		}
-		foreach ( $event_ids as $value ) { // propagate event instances.
-			$sql   = 'SELECT event_begin, event_time, event_end, event_endtime FROM ' . my_calendar_table() . ' WHERE event_id = %d';
-			$event = $wpdb->get_results( $wpdb->prepare( $sql, $value ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$event = $event[0];
-			$dates = array(
-				'event_begin'   => $event->event_begin,
-				'event_end'     => $event->event_end,
-				'event_time'    => $event->event_time,
-				'event_endtime' => $event->event_endtime,
-			);
-			mc_increment_event( $value, $dates );
-		}
-		$cats         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar_categories', 'ARRAY_A' );
-		$cats_results = false;
-		foreach ( $cats as $key ) {
-			$name         = esc_sql( $key['category_name'] );
-			$color        = esc_sql( $key['category_colour'] );
-			$id           = (int) $key['category_id'];
-			$catsql       = 'INSERT INTO ' . my_calendar_categories_table() . ' SET category_id=%1$d, category_name=%2$s, category_color=%3$s ON DUPLICATE KEY UPDATE category_name=%2$s, category_color=%3$s;';
-			$cats_results = $wpdb->query( $wpdb->prepare( $catsql, $id, $name, $color ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		}
-		$message   = ( false !== $cats_results ) ? __( 'Categories imported successfully.', 'my-calendar' ) : __( 'Categories not imported.', 'my-calendar' );
-		$e_message = ( false !== $events_results ) ? __( 'Events imported successfully.', 'my-calendar' ) : __( 'Events not imported.', 'my-calendar' );
-		$return    = "<div id='message' class='updated fade'><ul><li>$message</li><li>$e_message</li></ul></div>";
-		echo wp_kses_post( $return );
-		if ( false !== $cats_results && false !== $events_results ) {
-			update_option( 'ko_calendar_imported', 'true' );
-		}
-	}
-}
-
-/**
  * Update Management Settings.
  *
  * @param array $post POST data.
@@ -747,26 +686,47 @@ function my_calendar_settings() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		my_calendar_import();
-	}
-	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
-		if ( function_exists( 'check_calendar' ) ) {
-			?>
-			<div class='import upgrade-db'>
-				<p>
-					<?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
-				</p>
-
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-					<div>
-						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-						<input type="hidden" name="import" value="true" />
-						<input type="submit" value="<?php _e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-					</div>
-				</form>
-			</div>
-			<?php
+		$source = ( in_array( $_POST['source'], array( 'calendar', 'tribe' ), true ) ) ? $_POST['source'] : false;
+		if ( $source ) {
+			my_calendar_import( $source );
 		}
+	}
+	if ( function_exists( 'check_calendar' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
+		?>
+		<div id="mc-importer" class='notice notice-info'>
+			<p>
+				<?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
+			</p>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
+				<div>
+					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					<input type="hidden" name="import" value="true" />
+					<input type="hidden" name="source" value="calendar" />
+					<input type="submit" value="<?php _e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
+				</div>
+			</form>
+		</div>
+		<?php
+	}
+	delete_option( 'mc_tribe_imported' );
+	if ( function_exists( 'tribe_get_event' ) && 'true' !== get_option( 'mc_tribe_imported' ) ) {
+		?>
+		<div id="mc-importer" class='notice notice-info'>
+			<p>
+				<?php _e( 'You have The Events Calendar installed. You can import those events, venues, and categories into My Calendar.', 'my-calendar' ); ?>
+			</p>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
+				<div>
+					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					<input type="hidden" name="import" value="true" />
+					<input type="hidden" name="source" value="tribe" />
+					<input type="submit" value="<?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
+				</div>
+			</form>
+		</div>
+		<?php
 	}
 	?>
 	<div class="ui-sortable meta-box-sortables">

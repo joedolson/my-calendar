@@ -842,7 +842,6 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	} else {
 		$data = $submission;
 	}
-	mc_migrate_notice();
 
 	/**
 	 * Filter notices. This is really handled and used as an action, but is still labeled a filter for backwards compatibility.

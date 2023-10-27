@@ -339,11 +339,14 @@ function mc_update_cat( $category ) {
  *
  * @param array $category Array of params to update.
  *
- * @return mixed boolean/int query result
+ * @return mixed boolean|int query result
  */
 function mc_create_category( $category ) {
 	global $wpdb;
 
+	if ( ! isset( $category['category_name'] ) ) {
+		return false;
+	}
 	$formats     = array( '%s', '%s', '%s', '%d', '%d' );
 	$cat_name    = strip_tags( $category['category_name'] );
 	$term_exists = term_exists( $cat_name, 'mc-event-category' );
@@ -360,8 +363,8 @@ function mc_create_category( $category ) {
 	}
 	$add = array(
 		'category_name'    => $category['category_name'],
-		'category_color'   => $category['category_color'],
-		'category_icon'    => $category['category_icon'],
+		'category_color'   => isset( $category['category_color'] ) ? $category['category_color'] : '#ffffff',
+		'category_icon'    => isset( $category['category_icon'] ) ? $category['category_icon'] : '',
 		'category_private' => ( ( isset( $category['category_private'] ) && ( 'on' === $category['category_private'] || '1' === (string) $category['category_private'] ) ) ? 1 : 0 ),
 		'category_term'    => $term,
 	);
@@ -377,9 +380,9 @@ function mc_create_category( $category ) {
 	 *
 	 * @return {array}
 	 */
-	$add     = apply_filters( 'mc_pre_add_category', $add, $category );
-	$results = $wpdb->insert( my_calendar_categories_table(), $add, $formats );
-	$cat_id  = $wpdb->insert_id;
+	$add = apply_filters( 'mc_pre_add_category', $add, $category );
+	$wpdb->insert( my_calendar_categories_table(), $add, $formats );
+	$cat_id = $wpdb->insert_id;
 	/**
 	 * Execute action after inserting a new category into the My Calendar database.
 	 *
