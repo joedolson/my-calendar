@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Handle import of events from other calendar sources.
+ *
+ * @param string $source Source to import from.
  */
 function my_calendar_import( $source ) {
 	// Kieran O'Shea's calendar.
@@ -43,13 +45,13 @@ function mc_import_source_tribe_events() {
 		$num_posts = 25;
 	}
 	// Get all events not already imported.
-	$args  = array(
+	$args   = array(
 		'post_type'   => 'tribe_events',
 		'numberposts' => $num_posts,
-		'fields'       => 'ids',
+		'fields'      => 'ids',
 		'post_status' => 'any',
-		'meta_query'   => array(
-			'queries'  => array(
+		'meta_query'  => array(
+			'queries' => array(
 				'key'     => '_mc_imported',
 				'compare' => 'NOT EXISTS',
 			),
@@ -64,7 +66,10 @@ function mc_import_source_tribe_events() {
 		}
 	}
 	$completed = count( $ids );
-	echo '<div class="notice notice-success"><p>' . sprintf( __( '%d events imported. %d remaining. Remaining events are being imported in the background. You can feel free to leave this page.', 'my-calendar' ), $completed, $total ) . '</p></div>';
+	// translators: 1) Number of events imported, 2) total number of events found.
+	echo '<div class="notice notice-success"><p>' . sprintf( __( '%1$d events imported. %2$d remaining. Remaining events are being imported in the background. You can feel free to leave this page.', 'my-calendar' ), $completed, $total ) . '</p></div>';
+
+	return $completed;
 }
 
 /**
@@ -114,11 +119,11 @@ function mc_import_source_tribe_event( $post_id ) {
  * @return array Importable data for My Calendar.
  */
 function mc_format_tribe_event_for_import( $event ) {
-	$terms             = get_the_terms( $event, 'tribe_events_cat' );
+	$terms = get_the_terms( $event, 'tribe_events_cat' );
 	foreach ( $terms as $term ) {
 		$cat_id = mc_category_by_name( $term->name );
 		if ( ! $cat_id ) {
-			$cat = array(
+			$cat    = array(
 				'category_name' => $term->name,
 			);
 			$cat_id = mc_create_category( $cat );
@@ -129,28 +134,28 @@ function mc_format_tribe_event_for_import( $event ) {
 
 	$my_calendar_event = array(
 		// Event data.
-		'event_title'        => $event->post_title,
-		'event_begin'        => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ), // Pretty sure UTC is what I want.
-		'event_end'          => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
-		'event_time'         => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ),
-		'event_endtime'      => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
-		'content'            => $event->post_content,
-		'event_short'        => $event->post_excerpt,
-		'event_link'         => get_post_meta( $event->ID, '_EventURL', true ),
+		'event_title'      => $event->post_title,
+		'event_begin'      => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ), // Pretty sure UTC is what I want.
+		'event_end'        => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
+		'event_time'       => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ),
+		'event_endtime'    => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
+		'content'          => $event->post_content,
+		'event_short'      => $event->post_excerpt,
+		'event_link'       => get_post_meta( $event->ID, '_EventURL', true ),
 		// Tribe recurring events work radically differently. Treat as event group?
-		'event_image'        => get_the_post_thumbnail_url( $event ),
-		'event_image_id'     => get_post_thumbnail_id( $event ),
-		'event_allday'       => ( 'yes' === get_post_meta( $event->ID, '_EventAllDay', true ) ) ? '1' : '0',
-		'event_author'       => $event->post_author,
-		'event_approved'     => mc_convert_post_status_to_approval( $event->post_status ),
-		'event_category'     => $category_ids,
+		'event_image'      => get_the_post_thumbnail_url( $event ),
+		'event_image_id'   => get_post_thumbnail_id( $event ),
+		'event_allday'     => ( 'yes' === get_post_meta( $event->ID, '_EventAllDay', true ) ) ? '1' : '0',
+		'event_author'     => $event->post_author,
+		'event_approved'   => mc_convert_post_status_to_approval( $event->post_status ),
+		'event_category'   => $category_ids,
 		// Can I map the organizer info somehow? Don't want to add new users, for sure...
 		// Maybe add a new table for organizers?
-		'event_host'         => __( 'Event Host ID', 'my-calendar-submissions' ),
+		'event_host'       => __( 'Event Host ID', 'my-calendar-submissions' ),
 		// meta data.
-		'event_added'        => $event->post_date,
-		'event_nonce_name'   => wp_create_nonce( 'event_nonce' ),
-		'event_group_id'     => mc_group_id(),
+		'event_added'      => $event->post_date,
+		'event_nonce_name' => wp_create_nonce( 'event_nonce' ),
+		'event_group_id'   => mc_group_id(),
 	);
 
 	$venue_id = get_post_meta( $event->ID, '_EventVenueID', true );
@@ -212,7 +217,7 @@ function mc_import_tribe_location( $venue_id ) {
 /**
  * Convert a post status to an approval type.
  *
- * @param $status Post status.
+ * @param string $status Post status.
  *
  * @return int Approval value.
  */
