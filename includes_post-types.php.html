@@ -56,6 +56,16 @@ function mc_load_permalinks() {
 	$opts = array( 'label_for' => 'mc_location_cpt_base' );
 	// Add a settings field to the permalink page.
 	add_settings_field( 'mc_location_cpt_base', __( 'My Calendar Locations base', 'my-calendar' ), 'mc_location_field_callback', 'permalink', 'optional', $opts );
+
+	if ( function_exists( 'mcs_submissions' ) &amp;&amp; 'true' === get_option( 'mcs_custom_hosts' ) ) {
+		if ( isset( $_POST['mc_hosts_cpt_base'] ) ) {
+			mc_update_option( 'hosts_cpt_base', sanitize_key( $_POST['mc_hosts_cpt_base'] ) );
+		}
+		$opts = array( 'label_for' => 'mc_cpt_base' );
+		// Add a settings field to the permalink page.
+		add_settings_field( 'mc_hosts_cpt_base', __( 'My Calendar Hosts base', 'my-calendar' ), 'mc_field_callback', 'permalink', 'optional', $opts );
+	}
+
 }
 add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
 
@@ -138,71 +148,131 @@ function mc_post_type() {
 			$loc_arguments,
 		),
 	);
+	if ( function_exists( 'mcs_submissions' ) &amp;&amp; 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+		$types['mc-hosts'] = array(
+			__( 'host', 'my-calendar' ),
+			__( 'hosts', 'my-calendar' ),
+			__( 'Host', 'my-calendar' ),
+			__( 'Hosts', 'my-calendar' ),
+			$loc_arguments,
+		);
+	}
 
 	return $types;
 }
+
+/**
+ * Labels for My Calendar post types.
+ *
+ * @param $type  Post type key.
+ * @param $value Array of post type name variations.
+ *
+ * @return array
+ */
+function mc_post_type_labels( $type, $value ) {
+	$labels = array();
+	switch ( $type ) {
+		case 'mc-events':
+			$labels = array(
+				'name'               => $value[3],
+				'singular_name'      => $value[2],
+				'add_new'            => __( 'Add New Event', 'my-calendar' ),
+				'add_new_item'       => __( 'Create New Event', 'my-calendar' ),
+				'edit_item'          => __( 'Modify Event', 'my-calendar' ),
+				'new_item'           => __( 'New Event', 'my-calendar' ),
+				'view_item'          => __( 'View Event', 'my-calendar' ),
+				'search_items'       => __( 'Search Events', 'my-calendar' ),
+				'not_found'          => __( 'No Event found', 'my-calendar' ),
+				'not_found_in_trash' => __( 'No Events found in Trash', 'my-calendar' ),
+				'parent_item_colon'  => '',
+			);
+			break;
+		case 'mc-locations':
+			$labels = array(
+				'name'               => $value[3],
+				'singular_name'      => $value[2],
+				'add_new'            => __( 'Add New Location', 'my-calendar' ),
+				'add_new_item'       => __( 'Create New Location', 'my-calendar' ),
+				'edit_item'          => __( 'Modify Location', 'my-calendar' ),
+				'new_item'           => __( 'New Location', 'my-calendar' ),
+				'view_item'          => __( 'View Location', 'my-calendar' ),
+				'search_items'       => __( 'Search Locations', 'my-calendar' ),
+				'not_found'          => __( 'No Location found', 'my-calendar' ),
+				'not_found_in_trash' => __( 'No Locations found in Trash', 'my-calendar' ),
+				'parent_item_colon'  => '',
+			);
+			break;
+		case 'mc-hosts':
+			$labels = array(
+				'name'               => $value[3],
+				'singular_name'      => $value[2],
+				'add_new'            => __( 'Add New Host', 'my-calendar' ),
+				'add_new_item'       => __( 'Create New Host', 'my-calendar' ),
+				'edit_item'          => __( 'Modify Host', 'my-calendar' ),
+				'new_item'           => __( 'New Host', 'my-calendar' ),
+				'view_item'          => __( 'View Host', 'my-calendar' ),
+				'search_items'       => __( 'Search Hosts', 'my-calendar' ),
+				'not_found'          => __( 'No Host found', 'my-calendar' ),
+				'not_found_in_trash' => __( 'No Hosts found in Trash', 'my-calendar' ),
+				'parent_item_colon'  => '',
+			);
+			break;
+	}
+
+	return $labels;
+}
+
 /**
  * Register custom post types for events
  */
 function mc_posttypes() {
 	$types   = mc_post_type();
 	$enabled = array( 'mc-events', 'mc-locations' );
-	if ( is_array( $enabled ) ) {
-		foreach ( $enabled as $key ) {
-			$value  =&amp; $types[ $key ];
-			$labels = array(
-				'name'               => $value[3],
-				'singular_name'      => $value[2],
-				'add_new'            => _x( 'Add New', 'Add new event', 'my-calendar' ),
-				'add_new_item'       => __( 'Create New Event', 'my-calendar' ),
-				'edit_item'          => __( 'Modify Event', 'my-calendar' ),
-				'new_item'           => __( 'New Event', 'my-calendar' ),
-				'view_item'          => __( 'View Event', 'my-calendar' ),
-				'search_items'       => __( 'Search Events', 'my-calendar' ),
-				'not_found'          => __( 'No event found', 'my-calendar' ),
-				'not_found_in_trash' => __( 'No events found in Trash', 'my-calendar' ),
-				'parent_item_colon'  => '',
-			);
-			$raw    = $value[4];
-			$args   = array(
-				'labels'              => $labels,
-				'public'              => $raw['public'],
-				'publicly_queryable'  => $raw['publicly_queryable'],
-				'exclude_from_search' => $raw['exclude_from_search'],
-				'show_ui'             => $raw['show_ui'],
-				'show_in_menu'        => $raw['show_in_menu'],
-				'menu_icon'           => ( null === $raw['menu_icon'] ) ? plugins_url( 'images', __FILE__ ) . '/icon.png' : $raw['menu_icon'],
-				'query_var'           => true,
-				'rewrite'             => array(
-					'with_front' => false,
-					/**
-					 * Filter default calendar post type slugs. Default 'mc-events' for events and 'mc-locations' for locations.
-					 *
-					 * @hook mc_event_slug
-					 *
-					 * @param {string} $key Slug.
-					 *
-					 * @return {string}
-					 */
-					'slug'       => apply_filters( 'mc_event_slug', $key ),
-					/**
-					 * Enable feeds for My Calendar post types.
-					 *
-					 * @hook mc_has_feeds
-					 *
-					 * @param {bool}   $enabled Default false.
-					 * @param {string} $key Post type name.
-					 *
-					 * @return {bool}
-					 */
-					'feeds'      => apply_filters( 'mc_has_feeds', false, $key ),
-				),
-				'hierarchical'        => false,
-				'menu_position'       => 20,
-				'supports'            => $raw['supports'],
-			);
-			register_post_type( $key, $args );
-		}
+	if ( function_exists( 'mcs_submissions' ) &amp;&amp; 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+		$enabled[] = 'mc-hosts';
+	}
+	foreach ( $enabled as $key ) {
+		$value  =&amp; $types[ $key ];
+		$labels = mc_post_type_labels( $key, $value );
+		$raw    = $value[4];
+		$args   = array(
+			'labels'              => $labels,
+			'public'              => $raw['public'],
+			'publicly_queryable'  => $raw['publicly_queryable'],
+			'exclude_from_search' => $raw['exclude_from_search'],
+			'show_ui'             => $raw['show_ui'],
+			'show_in_menu'        => $raw['show_in_menu'],
+			'menu_icon'           => ( null === $raw['menu_icon'] ) ? plugins_url( 'images', __FILE__ ) . '/icon.png' : $raw['menu_icon'],
+			'query_var'           => true,
+			'rewrite'             => array(
+				'with_front' => false,
+				/**
+				 * Filter default calendar post type slugs. Default 'mc-events' for events and 'mc-locations' for locations.
+				 *
+				 * @hook mc_event_slug
+				 *
+				 * @param {string} $key Slug.
+				 *
+				 * @return {string}
+				 */
+				'slug'       => apply_filters( 'mc_event_slug', $key ),
+				/**
+				 * Enable feeds for My Calendar post types.
+				 *
+				 * @hook mc_has_feeds
+				 *
+				 * @param {bool}   $enabled Default false.
+				 * @param {string} $key Post type name.
+				 *
+				 * @return {bool}
+				 */
+				'feeds'      => apply_filters( 'mc_has_feeds', false, $key ),
+			),
+			'hierarchical'        => false,
+			'menu_position'       => 20,
+			'supports'            => $raw['supports'],
+		);
+		register_post_type( $key, $args );
 	}
 }
 
@@ -219,6 +289,9 @@ function mc_filter_posttype_slug( $slug ) {
 	}
 	if ( 'mc-locations' === $slug ) {
 		$slug = ( '' !== mc_get_option( 'location_cpt_base' ) ) ? mc_get_option( 'location_cpt_base' ) : $slug;
+	}
+	if ( 'mc-hosts' === $slug ) {
+		$slug = ( '' !== mc_get_option( 'hosts_cpt_base' ) ) ? mc_get_option( 'hosts_cpt_base' ) : $slug;
 	}
 
 	return $slug;
@@ -283,33 +356,29 @@ function mc_posttypes_defaults( $post_content, $post ) {
  * Register taxonomies on My Calendar custom post types
  */
 function mc_taxonomies() {
-	$types   = mc_post_type();
 	$enabled = array( 'mc-events' );
-	if ( is_array( $enabled ) ) {
-		foreach ( $enabled as $key ) {
-			$value = $types[ $key ];
-			/**
-			 * Filter event category taxonomy slug. Default 'mc-event-category'.
-			 *
-			 * @hook mc_event_category_slug
-			 *
-			 * @param {string} $slug Default slug.
-			 *
-			 * @return {string}
-			 */
-			$slug = apply_filters( 'mc_event_category_slug', 'mc-event-category' );
-			register_taxonomy(
-				'mc-event-category',
-				// Internal name = machine-readable taxonomy name.
-				array( $key ),
-				array(
-					'hierarchical' => true,
-					'label'        => __( 'Event Categories', 'my-calendar' ),
-					'query_var'    => true,
-					'rewrite'      => array( 'slug' => $slug ),
-				)
-			);
-		}
+	foreach ( $enabled as $key ) {
+		/**
+		 * Filter event category taxonomy slug. Default 'mc-event-category'.
+		 *
+		 * @hook mc_event_category_slug
+		 *
+		 * @param {string} $slug Default slug.
+		 *
+		 * @return {string}
+		 */
+		$slug = apply_filters( 'mc_event_category_slug', 'mc-event-category' );
+		register_taxonomy(
+			'mc-event-category',
+			// Internal name = machine-readable taxonomy name.
+			array( $key ),
+			array(
+				'hierarchical' => true,
+				'label'        => __( 'Event Categories', 'my-calendar' ),
+				'query_var'    => true,
+				'rewrite'      => array( 'slug' => $slug ),
+			)
+		);
 	}
 }
 
@@ -322,11 +391,12 @@ function mc_taxonomies() {
  */
 function mc_posttypes_messages( $messages ) {
 	global $post, $post_ID;
-	$types   = mc_post_type();
 	$enabled = array( 'mc-events', 'mc-locations' );
-	if ( is_array( $enabled ) ) {
-		foreach ( $enabled as $key ) {
-			$value            = $types[ $key ];
+	if ( function_exists( 'mcs_submissions' ) &amp;&amp; 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+		$enabled[] = 'mc-hosts';
+	}
+	foreach ( $enabled as $key ) {
+		if ( 'mc-events' === $key ) {
 			$messages[ $key ] = array(
 				0  => '', // Unused. Messages start at index 1.
 				// Translators: URL to view event.
@@ -340,11 +410,53 @@ function mc_posttypes_messages( $messages ) {
 				6  => sprintf( __( 'Event published. &lt;a href="%s">View event&lt;/a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
 				7  => sprintf( __( 'Event saved.', 'my-calendar' ) ),
 				// Translators: URL to preview event.
-				8  => sprintf( __( 'Event submitted. &lt;a target="_blank" href="%s">Preview event&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+				8  => sprintf( __( 'Event submitted. &lt;a target="_blank" href="%s">Preview Event&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 				// Translators: Date event scheduled to be published, URL to preview event.
 				9  => sprintf( __( 'Event scheduled for: &lt;strong>%1$s&lt;/strong>. &lt;a target="_blank" href="%2$s">Preview event&lt;/a>', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i', 'my-calendar' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
 				// Translators: URL to preview event.
-				10 => sprintf( __( 'Event draft updated. &lt;a target="_blank" href="%s">Preview event&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+				10 => sprintf( __( 'Event draft updated. &lt;a target="_blank" href="%s">Preview Event&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+			);
+		}
+		if ( 'mc-locations' === $key ) {
+			$messages[ $key ] = array(
+				0  => '', // Unused. Messages start at index 1.
+				// Translators: URL to view event.
+				1  => sprintf( __( 'Location updated. &lt;a href="%s">View Location&lt;/a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
+				2  => __( 'Custom field updated.', 'my-calendar' ),
+				3  => __( 'Custom field deleted.', 'my-calendar' ),
+				4  => __( 'Location updated.', 'my-calendar' ),
+				// Translators: %s: date and time of the revision.
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Location restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				// Translators: URL to view event.
+				6  => sprintf( __( 'Location published. &lt;a href="%s">View event&lt;/a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
+				7  => sprintf( __( 'Location saved.', 'my-calendar' ) ),
+				// Translators: URL to preview event.
+				8  => sprintf( __( 'Location submitted. &lt;a target="_blank" href="%s">Preview Location&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+				// Translators: Date event scheduled to be published, URL to preview event.
+				9  => sprintf( __( 'Location scheduled for: &lt;strong>%1$s&lt;/strong>. &lt;a target="_blank" href="%2$s">Preview event&lt;/a>', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i', 'my-calendar' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
+				// Translators: URL to preview event.
+				10 => sprintf( __( 'Location draft updated. &lt;a target="_blank" href="%s">Preview Location&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+			);
+		}
+		if ( 'mc-hosts' === $key ) {
+			$messages[ $key ] = array(
+				0  => '', // Unused. Messages start at index 1.
+				// Translators: URL to view event.
+				1  => sprintf( __( 'Host updated. &lt;a href="%s">View Host&lt;/a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
+				2  => __( 'Custom field updated.', 'my-calendar' ),
+				3  => __( 'Custom field deleted.', 'my-calendar' ),
+				4  => __( 'Host updated.', 'my-calendar' ),
+				// Translators: %s: date and time of the revision.
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Host restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				// Translators: URL to view event.
+				6  => sprintf( __( 'Host published. &lt;a href="%s">View event&lt;/a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
+				7  => sprintf( __( 'Host saved.', 'my-calendar' ) ),
+				// Translators: URL to preview event.
+				8  => sprintf( __( 'Host submitted. &lt;a target="_blank" href="%s">Preview host&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
+				// Translators: Date event scheduled to be published, URL to preview event.
+				9  => sprintf( __( 'Host scheduled for: &lt;strong>%1$s&lt;/strong>. &lt;a target="_blank" href="%2$s">Preview event&lt;/a>', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i', 'my-calendar' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ) ),
+				// Translators: URL to preview event.
+				10 => sprintf( __( 'Host draft updated. &lt;a target="_blank" href="%s">Preview Host&lt;/a>', 'my-calendar' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) ),
 			);
 		}
 	}
