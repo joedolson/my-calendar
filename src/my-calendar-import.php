@@ -149,8 +149,7 @@ function mc_format_tribe_event_for_import( $event ) {
 		'event_author'     => $event->post_author,
 		'event_approved'   => mc_convert_post_status_to_approval( $event->post_status ),
 		'event_category'   => $category_ids,
-		// Can I map the organizer info somehow? Don't want to add new users, for sure...
-		// Maybe add a new table for organizers?
+		// Event organizers are only supported in My Calendar Pro.
 		'event_host'       => $event->post_author,
 		// meta data.
 		'event_added'      => $event->post_date,
