@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Action: mc_tags_created - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_format_tribe_event_for_import - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Action: mc_tags_created</h1></header>
+    <header><h1 class="page-title">Filter: mc_format_tribe_event_for_import</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_tags_created">do_action( 'mc_tags_created', <span class="signature">$object, $context )</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mc_format_tribe_event_for_import">apply_filters( 'mc_format_tribe_event_for_import', <span class="signature">$my_calendar_event, $event )</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Execute action before tags are created.</p>
+    <p>Filter event to be inserted from Tribe.</p>
 </div>
 
 
@@ -77,7 +77,30 @@
 
         <tr>
             
-                <td class="name"><code>$object</code></td>
+                <td class="name"><code>$my_calendar_event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of data to be passed to mc_check_data.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$event</code></td>
             
 
             <td class="type">
@@ -93,30 +116,7 @@
 
             
 
-            <td class="description last"><p>Event object.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$context</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current execution context.</p></td>
+            <td class="description last"><p>Post object from tribe_events post type.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line404">line 404</a>
+        <a href="my-calendar-import.php.html">my-calendar-import.php</a>, <a href="my-calendar-import.php.html#line177">line 177</a>
     </li></ul></dd>
     
 
@@ -180,181 +180,24 @@
 
 
 
-
-
-
-    
-    </div>
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    <h2></h2>
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    <h4 class="name" id="mc_tags_created">do_action( 'mc_tags_created', <span class="signature">$object, $context )</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Execute action when tags are created.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
+<h5>Returns:</h5>
 
         
 
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
         
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>$object</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
+<span class="param-type">array</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Event object.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$context</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current execution context.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line777">line 777</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
+    </dd>
 </dl>
 
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
