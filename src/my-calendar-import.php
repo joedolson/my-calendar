@@ -174,9 +174,17 @@ function mc_format_tribe_event_for_import( $event ) {
 		$my_calendar_event['event_url']      = get_post_meta( $venue_id, '_VenueURL', true );
 		$my_calendar_event['event_phone']    = get_post_meta( $venue_id, '_VenuePhone', true );
 	}
-	echo '<pre>';
-	print_r( $my_calendar_event );
-	echo '</pre>';
+	/**
+	 * Filter event to be inserted from Tribe.
+	 *
+	 * @hook mc_format_tribe_event_for_import
+	 *
+	 * @param {array}  $my_calendar_event Array of data to be passed to mc_check_data.
+	 * @param {object} $event Post object from tribe_events post type.
+	 *
+	 * @return {array}
+	 */
+	$my_calendar_event = apply_filters( 'mc_format_tribe_event_for_import', $my_calendar_event, $event );
 
 	return $my_calendar_event;
 }
