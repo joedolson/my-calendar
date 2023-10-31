@@ -607,6 +607,8 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 		$details = mc_load_template( 'event/upcoming', $data );
 		if ( ! $details ) {
 			$html .= mc_format_upcoming_event( $out, $template, $type );
+		} else {
+			$html .= $details;
 		}
 	}
 
