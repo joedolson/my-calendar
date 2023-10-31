@@ -126,7 +126,7 @@ function mc_post_type() {
 			$loc_arguments,
 		),
 	);
-	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) {
 		$types['mc-hosts'] = array(
 			__( 'event host', 'my-calendar' ),
 			__( 'event hosts', 'my-calendar' ),
@@ -142,8 +142,8 @@ function mc_post_type() {
 /**
  * Labels for My Calendar post types.
  *
- * @param $type  Post type key.
- * @param $value Array of post type name variations.
+ * @param string $type  Post type key.
+ * @param array  $value Array of post type name variations.
  *
  * @return array
  */
@@ -206,7 +206,7 @@ function mc_post_type_labels( $type, $value ) {
 function mc_posttypes() {
 	$types   = mc_post_type();
 	$enabled = array( 'mc-events', 'mc-locations' );
-	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) {
 		$enabled[] = 'mc-hosts';
 	}
 	foreach ( $enabled as $key ) {
@@ -370,7 +370,7 @@ function mc_taxonomies() {
 function mc_posttypes_messages( $messages ) {
 	global $post, $post_ID;
 	$enabled = array( 'mc-events', 'mc-locations' );
-	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) {
 		$enabled[] = 'mc-hosts';
 	}
 	foreach ( $enabled as $key ) {
