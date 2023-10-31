@@ -106,6 +106,10 @@ function mc_post_type() {
 	 */
 	$loc_arguments['exclude_from_search'] = apply_filters( 'mc_location_exclude_from_search', true );
 
+	$host_arguments                 = $arguments;
+	$host_arguments['show_in_menu'] = true;
+	$host_arguments['menu_icon']    = 'dashicons-superhero';
+
 	$types = array(
 		'mc-events'    => array(
 			__( 'event', 'my-calendar' ),
@@ -124,11 +128,11 @@ function mc_post_type() {
 	);
 	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) { 
 		$types['mc-hosts'] = array(
-			__( 'host', 'my-calendar' ),
-			__( 'hosts', 'my-calendar' ),
-			__( 'Host', 'my-calendar' ),
-			__( 'Hosts', 'my-calendar' ),
-			$loc_arguments,
+			__( 'event host', 'my-calendar' ),
+			__( 'event hosts', 'my-calendar' ),
+			__( 'Event Host', 'my-calendar' ),
+			__( 'Event Hosts', 'my-calendar' ),
+			$host_arguments,
 		);
 	}
 

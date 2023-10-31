@@ -1392,18 +1392,31 @@ add_filter( 'mc_insert_author_data', 'mc_author_data', 10, 2 );
 function mc_author_data( $e, $event ) {
 	if ( 0 !== (int) $event->event_author ) {
 		$author = get_userdata( $event->event_author );
-		$host   = get_userdata( $event->event_host );
 		if ( $author ) {
 			$e['author']       = $author->display_name;
 			$e['gravatar']     = get_avatar( $author->user_email );
 			$e['author_email'] = $author->user_email;
 			$e['author_id']    = $event->event_author;
 		}
-		if ( $host ) {
-			$e['host']          = ( '' === $host->display_name ) ? $author->display_name : $host->display_name;
-			$e['host_id']       = $event->event_host;
-			$e['host_email']    = ( '' === $host->user_email ) ? $author->user_email : $host->user_email;
-			$e['host_gravatar'] = ( '' === $host->user_email ) ? $e['gravatar'] : get_avatar( $host->user_email );
+		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+			$host = get_post( $event->event_host );
+			if ( $host ) {
+				$e['host']          = $host->post_title;
+				$e['host_id']       = $event->event_host;
+				$e['host_email']    = get_post_meta( $host->ID, '_mcs_host_email', true );
+				$e['host_gravatar'] = ( '' === get_the_post_thumbnail( $host ) ) ? get_avatar( $e['host_email'] ) : get_the_post_thumbnail( $host );
+				$e['host_phone']    = get_post_meta( $host->ID, '_mcs_host_phone', true );
+				$e['host_url']      = get_post_meta( $host->ID, '_mcs_host_url', true );
+				$e['host_bio']      = $host->post_content;
+			}
+		} else {
+			$host = get_userdata( $event->event_host );
+			if ( $host ) {
+				$e['host']          = ( '' === $host->display_name ) ? $author->display_name : $host->display_name;
+				$e['host_id']       = $event->event_host;
+				$e['host_email']    = ( '' === $host->user_email ) ? $author->user_email : $host->user_email;
+				$e['host_gravatar'] = ( '' === $host->user_email ) ? $e['gravatar'] : get_avatar( $host->user_email );
+			}
 		}
 	} else {
 		$e['author']        = 'Public Submitter';
@@ -1819,7 +1832,7 @@ function mc_template_user_card( $event, $type ) {
 	 *
 	 * @hook mc_use_avatars
 	 *
-	 * @param {bool} $avatars false to disable avatars.
+	 * @param {bool}   $avatars false to disable avatars.
 	 * @param {object} $event My Calendar event object.
 	 *
 	 * @return {bool}
@@ -1829,15 +1842,24 @@ function mc_template_user_card( $event, $type ) {
 	$type    = ( 'author' === $type ) ? 'author' : 'host';
 	$user    = ( 'author' === $type ) ? $event->event_author : $event->event_host;
 	if ( 0 !== (int) $user && is_numeric( $user ) ) {
-		$avatar = ( $avatars ) ? get_avatar( $user ) : '';
-		$a      = get_userdata( $user );
+		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) && 'host' === $type ) { 
+			$a = get_post( $event->event_host );
+			if ( $a ) {
+				$avatar = ( '' === get_the_post_thumbnail( $host ) ) ? get_avatar( get_post_meta( $a->ID, '_mcs_host_email', true ) ) : get_the_post_thumbnail( $a );
+				$name   = $a->post_title;
+			} else {
+				$avatar = ( $avatars ) ? get_avatar( $user ) : '';
+				$a      = get_userdata( $user );
+				$name   = $a->display_name;
+			}
+		}
 		if ( $a ) {
 			if ( 'author' === $type ) {
 				$text = ( '' !== mc_get_option( 'posted_by' ) ) ? mc_get_option( 'posted_by' ) : __( 'Posted by', 'my-calendar' );
 			} else {
 				$text = ( '' !== mc_get_option( 'hosted_by' ) ) ? mc_get_option( 'hosted_by' ) : __( 'Hosted by', 'my-calendar' );
 			}
-			$card = $avatar . '<p class="event-' . $type . '"><span class="posted">' . $text . '</span> <span class="' . $type . '-name">' . $a->display_name . "</span></p>\n";
+			$card = $avatar . '<p class="event-' . $type . '"><span class="posted">' . $text . '</span> <span class="' . $type . '-name">' . $name . "</span></p>\n";
 			if ( $avatars ) {
 				$card = '	<div class="mc-' . $type . '-card">' . $card . '</div>';
 			}
