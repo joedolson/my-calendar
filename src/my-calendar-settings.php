@@ -679,56 +679,7 @@ function my_calendar_settings() {
 			?>
 		</div>
 		<div class="settings postbox-container jcd-wide">
-		<div class="metabox-holder">
-	<?php
-	if ( isset( $_POST['import'] ) && 'true' === $_POST['import'] ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
-		}
-		$source = ( in_array( $_POST['source'], array( 'calendar', 'tribe' ), true ) ) ? $_POST['source'] : false;
-		if ( $source ) {
-			my_calendar_import( $source );
-		}
-	}
-	if ( function_exists( 'check_calendar' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
-		?>
-		<div id="mc-importer" class='notice notice-info'>
-			<p>
-				<?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
-			</p>
-
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-				<div>
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					<input type="hidden" name="import" value="true" />
-					<input type="hidden" name="source" value="calendar" />
-					<input type="submit" value="<?php _e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-				</div>
-			</form>
-		</div>
-		<?php
-	}
-	delete_option( 'mc_tribe_imported' );
-	if ( function_exists( 'tribe_get_event' ) && 'true' !== get_option( 'mc_tribe_imported' ) ) {
-		?>
-		<div id="mc-importer" class='notice notice-info'>
-			<p>
-				<?php _e( 'You have The Events Calendar installed. You can import those events, venues, and categories into My Calendar.', 'my-calendar' ); ?>
-			</p>
-
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-				<div>
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					<input type="hidden" name="import" value="true" />
-					<input type="hidden" name="source" value="tribe" />
-					<input type="submit" value="<?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-				</div>
-			</form>
-		</div>
-		<?php
-	}
-	?>
+<div class="metabox-holder">
 	<div class="ui-sortable meta-box-sortables">
 		<div class="wptab postbox" aria-labelledby="tab_manage" role="tabpanel" id="my-calendar-manage">
 			<h2><?php esc_html_e( 'My Calendar Management', 'my-calendar' ); ?></h2>
