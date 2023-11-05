@@ -136,6 +136,7 @@ function mc_uninstall() {
 	}
 }
 
+include( dirname( __FILE__ ) . '/action-scheduler/action-scheduler.php' );
 include( dirname( __FILE__ ) . '/includes/date-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/general-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/event-utilities.php' );
