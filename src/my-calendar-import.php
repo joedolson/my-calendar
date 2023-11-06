@@ -29,13 +29,56 @@ function my_calendar_import( $source ) {
 }
 
 /**
+ * Display current progress in importing.
+ *
+ * @return string
+ */
+function mc_display_progress() {
+	$message = '';
+	if ( as_has_scheduled_action( 'mc_import_tribe' ) ) {
+		$count   = mc_count_tribe_remaining();
+		$message = sprintf( __( 'Import from The Events Calendar is in progress. There are currently %d events remaining.', 'my-calendar' ), $count );
+	}
+
+	return ( $message ) ? '<div class="notice notice-info"><p>' . $message . '</p></div>' : '';
+}
+
+/**
+ * Count remaining events from Tribe Events Calendar.
+ *
+ * @return int
+ */
+function mc_count_tribe_remaining() {
+	$args   = array(
+		'post_type'   => 'tribe_events',
+		'numberposts' => -1,
+		'fields'      => 'ids',
+		'post_status' => 'any',
+		'meta_query'  => array(
+			array(
+				'key'     => '_mc_imported',
+				'compare' => 'NOT EXISTS',
+			),
+		),
+	);
+	$events = get_posts( $args );
+	if ( 0 === count( $events ) ) {
+		as_unschedule_all_actions( 'mc_import_tribe' );
+	}
+
+	return count( $events );
+}
+
+/**
  * Import Tribe Events.
  *
- * @return int Number of events imported.
+ * @return string Message about imported events.
  */
 function mc_import_source_tribe_events() {
-	$count = wp_count_posts( 'tribe_events' );
-	$total = 0;
+	global $wpdb;
+	$count   = wp_count_posts( 'tribe_events' );
+	$message = '';
+	$total   = 0;
 	foreach ( $count as $c ) {
 		$total = $total + (int) $c;
 	}
@@ -44,32 +87,42 @@ function mc_import_source_tribe_events() {
 	} else {
 		$num_posts = 25;
 	}
-	// Get all events not already imported.
-	$args   = array(
-		'post_type'   => 'tribe_events',
-		'numberposts' => $num_posts,
-		'fields'      => 'ids',
-		'post_status' => 'any',
-		'meta_query'  => array(
-			'queries' => array(
-				'key'     => '_mc_imported',
-				'compare' => 'NOT EXISTS',
-			),
-		),
-	);
-	$events = get_posts( $args );
-	$ids    = array();
-	foreach ( $events as $post_id ) {
-		$id = mc_import_source_tribe_event( $post_id );
-		if ( $id ) {
-			$ids[] = $id;
-		}
-	}
-	$completed = count( $ids );
-	// translators: 1) Number of events imported, 2) total number of events found.
-	echo '<div class="notice notice-success"><p>' . sprintf( __( '%1$d events imported. %2$d remaining. Remaining events are being imported in the background. You can feel free to leave this page.', 'my-calendar' ), $completed, $total ) . '</p></div>';
+	// Get selection of events not already imported.
+	$query  = "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status <> 'trash' AND $wpdb->posts.post_status <> 'auto-draft')) GROUP BY wp_posts.ID ORDER BY $wpdb->posts.post_date DESC LIMIT 0, $num_posts";
+	$events = $wpdb->get_results( $query );
+	print_r( $events );
 
-	return $completed;
+	$ids    = array();
+	$count  = count( $events );
+	if ( 0 === $count ) {
+		update_option( 'mc_import_tribe_completed', 'true' );
+	} else {
+		foreach ( $events as $post ) {
+			$id = mc_import_source_tribe_event( $post->ID );
+			if ( $id ) {
+				$ids[] = $id;
+			}
+		}
+
+		$completed = count( $ids );
+		if ( false === as_has_scheduled_action( 'mc_import_tribe' ) ) {
+			as_schedule_recurring_action( strtotime( '+1 minutes' ), 60, 'mc_import_tribe', array(), 'my-calendar' );
+		}
+		// translators: 1) Number of events imported, 2) total number of events found.
+		$message = '<div class="notice notice-info"><p>' . sprintf( __( '%1$d events imported. %2$d remaining. Remaining events are being imported in the background. You can feel free to leave this page.', 'my-calendar' ), $completed, $total ) . '</p></div>';
+	}
+
+	return $message;
+}
+add_action( 'mc_import_tribe', 'mc_import_source_tribe_events' );
+
+/**
+ * 
+ */
+function mc_check_tribe_imports() {
+	if ( 'true' === get_option( 'mc_import_tribe_completed' ) ) {
+		as_unschedule_all_actions( 'mc_import_tribe' );
+	}
 }
 
 /**
@@ -80,10 +133,10 @@ function mc_import_source_tribe_events() {
  * @return bool|int False of new post ID.
  */
 function mc_import_source_tribe_event( $post_id ) {
-	// If already imported, return the new event ID.
+	// If already imported, return false.
 	$imported = get_post_meta( $post_id, '_mc_imported', true );
 	if ( $imported ) {
-		return $imported;
+		return false;
 	}
 	$tribe_event = get_post( $post_id );
 	/**
@@ -106,6 +159,7 @@ function mc_import_source_tribe_event( $post_id ) {
 	if ( $check[0] ) {
 		$response = my_calendar_save( 'add', $check );
 		$event_id = $response['event_id'];
+		update_post_meta( $post_id, '_mc_imported', $event_id );
 	}
 
 	return $event_id;
@@ -120,18 +174,21 @@ function mc_import_source_tribe_event( $post_id ) {
  */
 function mc_format_tribe_event_for_import( $event ) {
 	$terms = get_the_terms( $event, 'tribe_events_cat' );
-	foreach ( $terms as $term ) {
-		$cat_id = mc_category_by_name( $term->name );
-		if ( ! $cat_id ) {
-			$cat    = array(
-				'category_name' => $term->name,
-			);
-			$cat_id = mc_create_category( $cat );
+	if ( is_array( $terms ) ) {
+		foreach ( $terms as $term ) {
+			$cat_id = mc_category_by_name( $term->name );
+			if ( ! $cat_id ) {
+				$cat    = array(
+					'category_name' => $term->name,
+				);
+				$cat_id = mc_create_category( $cat );
+			}
+			// if category does not exist, create.
+			$category_ids[] = $cat_id;
 		}
-		// if category does not exist, create.
-		$category_ids[] = $cat_id;
+	} else {
+		$category_ids[] = 1;
 	}
-
 	$my_calendar_event = array(
 		// Event data.
 		'event_title'      => $event->post_title,
