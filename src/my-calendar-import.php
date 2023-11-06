@@ -36,7 +36,7 @@ function my_calendar_import( $source ) {
 function mc_display_progress() {
 	$message = '';
 	if ( as_has_scheduled_action( 'mc_import_tribe' ) ) {
-		$count   = mc_count_tribe_remaining();
+		$count = mc_count_tribe_remaining();
 		// translators: Number of events remaining.
 		$message = sprintf( __( 'Import from The Events Calendar is in progress. There are currently %d events remaining.', 'my-calendar' ), $count );
 	}
@@ -85,8 +85,7 @@ function mc_import_source_tribe_events() {
 	}
 
 	// Get selection of events not already imported.
-	$query  = "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status <> 'trash' AND $wpdb->posts.post_status <> 'auto-draft')) GROUP BY wp_posts.ID ORDER BY $wpdb->posts.post_date DESC LIMIT 0, 25";
-	$events = $wpdb->get_results( $query );
+	$events = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status <> 'trash' AND $wpdb->posts.post_status <> 'auto-draft')) GROUP BY wp_posts.ID ORDER BY $wpdb->posts.post_date DESC LIMIT 0, 25" );
 	$ids    = array();
 	$count  = count( $events );
 	if ( 0 === $count ) {
