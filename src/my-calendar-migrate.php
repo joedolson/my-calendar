@@ -38,6 +38,7 @@ function my_calendar_migration() {
 					}
 					$import_source = '';
 					$message       = '';
+					$to_import     = 1;
 					if ( function_exists( 'check_calendar' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
 						$import_source = 'calendar';
 						$message       = __( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' );
@@ -45,7 +46,13 @@ function my_calendar_migration() {
 					delete_option( 'mc_tribe_imported' );
 					if ( function_exists( 'tribe_get_event' ) && 'true' !== get_option( 'mc_tribe_imported' ) ) {
 						$import_source = 'tribe';
-						$message       = __( 'You have The Events Calendar plugin installed. You can import those events, categories, and organizers into My Calendar.', 'my-calendar' );
+						$to_import     = mc_count_tribe_remaining();
+						if ( 0 !== $to_import ) {
+							// translators: Number of events to import.
+							$message = sprintf( __( 'You have The Events Calendar plugin installed with %d events available to migrate. You can import those events, categories, and organizers into My Calendar.', 'my-calendar' ), $to_import );
+						} else {
+							$message = __( 'You have The Events Calendar installed. All events have been migrated to My Calendar.', 'my-calendar' );
+						}
 					}
 					if ( $import_source ) {
 						?>
@@ -53,7 +60,9 @@ function my_calendar_migration() {
 						<p>
 							<?php echo $message; ?>
 						</p>
-
+						<?php
+						if ( 0 !== $to_import ) {
+							?>
 						<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-migrate' ) ); ?>">
 							<div>
 								<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
@@ -62,6 +71,9 @@ function my_calendar_migration() {
 								<input type="submit" value="<?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
 							</div>
 						</form>
+							<?php
+						}
+						?>
 					</div>
 						<?php
 					}
