@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-include( dirname( __FILE__ ) . '/includes/tribe.php' ); 
+include( dirname( __FILE__ ) . '/includes/tribe.php' );
 
 /**
  * Handle import of events from other calendar sources.
