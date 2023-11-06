@@ -36,45 +36,37 @@ function my_calendar_migration() {
 							my_calendar_import( $source );
 						}
 					}
+					$import_source = '';
+					$message       = '';
 					if ( function_exists( 'check_calendar' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
-						?>
-						<div id="mc-importer" class='notice notice-info'>
-							<p>
-								<?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
-							</p>
-
-							<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-								<div>
-									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-									<input type="hidden" name="import" value="true" />
-									<input type="hidden" name="source" value="calendar" />
-									<input type="submit" value="<?php _e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-								</div>
-							</form>
-						</div>
-						<?php
+						$import_source = 'calendar';
+						$message       = __( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' );
 					}
 					delete_option( 'mc_tribe_imported' );
 					if ( function_exists( 'tribe_get_event' ) && 'true' !== get_option( 'mc_tribe_imported' ) ) {
+						$import_source = 'tribe';
+						$message       = __( 'You have The Events Calendar plugin installed. You can import those events, categories, and organizers into My Calendar.', 'my-calendar' );
+					}
+					if ( $import_source ) {
 						?>
-						<div id="mc-importer" class='notice notice-info'>
-							<p>
-								<?php _e( 'You have The Events Calendar installed. You can import those events, venues, and categories into My Calendar.', 'my-calendar' ); ?>
-							</p>
+					<div id="mc-importer" class='notice notice-info'>
+						<p>
+							<?php echo $message; ?>
+						</p>
 
-							<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-								<div>
-									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-									<input type="hidden" name="import" value="true" />
-									<input type="hidden" name="source" value="tribe" />
-									<input type="submit" value="<?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-								</div>
-							</form>
-						</div>
+						<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-migrate' ) ); ?>">
+							<div>
+								<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+								<input type="hidden" name="import" value="true" />
+								<input type="hidden" name="source" value="<?php echo $import_source; ?>" />
+								<input type="submit" value="<?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
+							</div>
+						</form>
+					</div>
 						<?php
 					}
 					$in_progress = get_option( 'mc_import_running' );
-					mc_display_progress( $in_progress );
+					echo mc_display_progress( $in_progress );
 					?>
 				</div>
 			</div>
