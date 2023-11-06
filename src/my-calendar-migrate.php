@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 function my_calendar_migration() {
 	?>
 <div class="wrap my-calendar-admin mc-migration-page" id="mc_migration">
-	<h1><?php esc_html_e( 'My Calendar - Migration Tools', 'my-calendar' ); ?></h1>	
-	
+	<h1><?php esc_html_e( 'My Calendar - Migration Tools', 'my-calendar' ); ?></h1>
+
 	<div class="settings postbox-container jcd-wide">
 		<div class="metabox-holder">
 			<div class="ui-sortable meta-box-sortables">

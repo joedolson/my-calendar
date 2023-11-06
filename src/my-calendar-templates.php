@@ -1398,7 +1398,7 @@ function mc_author_data( $e, $event ) {
 			$e['author_email'] = $author->user_email;
 			$e['author_id']    = $event->event_author;
 		}
-		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) { 
+		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) {
 			$host = get_post( $event->event_host );
 			if ( $host ) {
 				$e['host']          = $host->post_title;
@@ -1842,7 +1842,7 @@ function mc_template_user_card( $event, $type ) {
 	$type    = ( 'author' === $type ) ? 'author' : 'host';
 	$user    = ( 'author' === $type ) ? $event->event_author : $event->event_host;
 	if ( 0 !== (int) $user && is_numeric( $user ) ) {
-		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) && 'host' === $type ) { 
+		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) && 'host' === $type ) {
 			$a = get_post( $event->event_host );
 			if ( $a ) {
 				$avatar = ( '' === get_the_post_thumbnail( $host ) ) ? get_avatar( get_post_meta( $a->ID, '_mcs_host_email', true ) ) : get_the_post_thumbnail( $a );

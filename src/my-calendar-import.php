@@ -37,6 +37,7 @@ function mc_display_progress() {
 	$message = '';
 	if ( as_has_scheduled_action( 'mc_import_tribe' ) ) {
 		$count   = mc_count_tribe_remaining();
+		// translators: Number of events remaining.
 		$message = sprintf( __( 'Import from The Events Calendar is in progress. There are currently %d events remaining.', 'my-calendar' ), $count );
 	}
 
@@ -82,16 +83,10 @@ function mc_import_source_tribe_events() {
 	foreach ( $count as $c ) {
 		$total = $total + (int) $c;
 	}
-	if ( $total < 50 ) {
-		$num_posts = -1;
-	} else {
-		$num_posts = 25;
-	}
-	// Get selection of events not already imported.
-	$query  = "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status <> 'trash' AND $wpdb->posts.post_status <> 'auto-draft')) GROUP BY wp_posts.ID ORDER BY $wpdb->posts.post_date DESC LIMIT 0, $num_posts";
-	$events = $wpdb->get_results( $query );
-	print_r( $events );
 
+	// Get selection of events not already imported.
+	$query  = "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status <> 'trash' AND $wpdb->posts.post_status <> 'auto-draft')) GROUP BY wp_posts.ID ORDER BY $wpdb->posts.post_date DESC LIMIT 0, 25";
+	$events = $wpdb->get_results( $query );
 	$ids    = array();
 	$count  = count( $events );
 	if ( 0 === $count ) {
@@ -117,13 +112,14 @@ function mc_import_source_tribe_events() {
 add_action( 'mc_import_tribe', 'mc_import_source_tribe_events' );
 
 /**
- * 
+ * Suspend import process if completed.
  */
 function mc_check_tribe_imports() {
 	if ( 'true' === get_option( 'mc_import_tribe_completed' ) ) {
 		as_unschedule_all_actions( 'mc_import_tribe' );
 	}
 }
+add_action( 'init', 'mc_check_tribe_imports' );
 
 /**
  * Import an event from Tribe Events Calendar.
