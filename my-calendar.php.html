@@ -162,6 +162,7 @@ function mc_uninstall() {
 	}
 }
 
+include( dirname( __FILE__ ) . '/action-scheduler/action-scheduler.php' );
 include( dirname( __FILE__ ) . '/includes/date-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/general-utilities.php' );
 include( dirname( __FILE__ ) . '/includes/event-utilities.php' );
@@ -177,6 +178,7 @@ include( dirname( __FILE__ ) . '/templates/legacy-functions.php' );
 include( dirname( __FILE__ ) . '/my-calendar-core.php' );
 include( dirname( __FILE__ ) . '/my-calendar-install.php' );
 include( dirname( __FILE__ ) . '/my-calendar-settings.php' );
+include( dirname( __FILE__ ) . '/my-calendar-migrate.php' );
 include( dirname( __FILE__ ) . '/my-calendar-categories.php' );
 include( dirname( __FILE__ ) . '/my-calendar-locations.php' );
 include( dirname( __FILE__ ) . '/my-calendar-location-manager.php' );
@@ -414,6 +416,21 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 }
 
 /**
+ * Test whether a system is present that My Calendar supports migration from.
+ *
+ * @return bool
+ */
+function mc_has_migration_path() {
+	if ( function_exists( 'check_calendar' ) &amp;&amp; 'true' !== get_option( 'ko_calendar_imported' ) ) {
+		return true;
+	}
+	if ( function_exists( 'tribe_get_event' ) &amp;&amp; 'true' !== get_option( 'mc_tribe_imported' ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
  * Add My Calendar menu items to main admin menu
  */
 function my_calendar_menu() {
@@ -465,6 +482,9 @@ function my_calendar_menu() {
 		}
 		add_submenu_page( 'my-calendar', __( 'Design', 'my-calendar' ), __( 'Design', 'my-calendar' ), $permission, 'my-calendar-design', 'my_calendar_design' );
 		add_submenu_page( 'my-calendar', __( 'Settings', 'my-calendar' ), __( 'Settings', 'my-calendar' ), 'mc_edit_settings', 'my-calendar-config', 'my_calendar_settings' );
+		if ( mc_has_migration_path() ) {
+			add_submenu_page( 'my-calendar', __( 'Migration', 'my-calendar' ), __( 'Migration', 'my-calendar' ), 'mc_edit_settings', 'my-calendar-migrate', 'my_calendar_migration' );
+		}
 		add_submenu_page( 'my-calendar', __( 'My Calendar Shortcode Generator', 'my-calendar' ), __( 'Shortcodes', 'my-calendar' ), 'mc_view_help', 'my-calendar-shortcodes', 'my_calendar_shortcodes' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Help', 'my-calendar' ), __( 'Help', 'my-calendar' ), 'mc_view_help', 'my-calendar-help', 'my_calendar_help' );
 		// Null submenu parent prevents this from appearing in the admin menu.

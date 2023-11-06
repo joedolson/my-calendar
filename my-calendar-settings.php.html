@@ -705,56 +705,7 @@ function my_calendar_settings() {
 			?>
 		&lt;/div>
 		&lt;div class="settings postbox-container jcd-wide">
-		&lt;div class="metabox-holder">
-	&lt;?php
-	if ( isset( $_POST['import'] ) &amp;&amp; 'true' === $_POST['import'] ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
-		}
-		$source = ( in_array( $_POST['source'], array( 'calendar', 'tribe' ), true ) ) ? $_POST['source'] : false;
-		if ( $source ) {
-			my_calendar_import( $source );
-		}
-	}
-	if ( function_exists( 'check_calendar' ) &amp;&amp; 'true' !== get_option( 'ko_calendar_imported' ) ) {
-		?>
-		&lt;div id="mc-importer" class='notice notice-info'>
-			&lt;p>
-				&lt;?php _e( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' ); ?>
-			&lt;/p>
-
-			&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-				&lt;div>
-					&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					&lt;input type="hidden" name="import" value="true" />
-					&lt;input type="hidden" name="source" value="calendar" />
-					&lt;input type="submit" value="&lt;?php _e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-				&lt;/div>
-			&lt;/form>
-		&lt;/div>
-		&lt;?php
-	}
-	delete_option( 'mc_tribe_imported' );
-	if ( function_exists( 'tribe_get_event' ) &amp;&amp; 'true' !== get_option( 'mc_tribe_imported' ) ) {
-		?>
-		&lt;div id="mc-importer" class='notice notice-info'>
-			&lt;p>
-				&lt;?php _e( 'You have The Events Calendar installed. You can import those events, venues, and categories into My Calendar.', 'my-calendar' ); ?>
-			&lt;/p>
-
-			&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-				&lt;div>
-					&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
-					&lt;input type="hidden" name="import" value="true" />
-					&lt;input type="hidden" name="source" value="tribe" />
-					&lt;input type="submit" value="&lt;?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-				&lt;/div>
-			&lt;/form>
-		&lt;/div>
-		&lt;?php
-	}
-	?>
+&lt;div class="metabox-holder">
 	&lt;div class="ui-sortable meta-box-sortables">
 		&lt;div class="wptab postbox" aria-labelledby="tab_manage" role="tabpanel" id="my-calendar-manage">
 			&lt;h2>&lt;?php esc_html_e( 'My Calendar Management', 'my-calendar' ); ?>&lt;/h2>
