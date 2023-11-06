@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_venue_accessibility - My Calendar Hook Doumentation</title>
+    <title>Action: my_calendar_imported_to_tribe - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_venue_accessibility</h1></header>
+    <header><h1 class="page-title">Action: my_calendar_imported_to_tribe</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_venue_accessibility">apply_filters( 'mc_venue_accessibility', <span class="signature">$access, $data )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="my_calendar_imported_to_tribe">do_action( 'my_calendar_imported_to_tribe', <span class="signature">$tribe_event, $event_id )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter venue accessibility array.</p>
+    <p>Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$access</code></td>
+                <td class="name"><code>$tribe_event</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">int</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Access parameters.</p></td>
+            <td class="description last"><p>Post ID from Tribe Events.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$data</code></td>
+                <td class="name"><code>$event_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">int</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>Current data object.</p></td>
+            <td class="description last"><p>Event ID from My Calendar.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-locations.php.html">my-calendar-locations.php</a>, <a href="my-calendar-locations.php.html#line923">line 923</a>
+        <a href="includes_tribe.php.html">includes/tribe.php</a>, <a href="includes_tribe.php.html#line126">line 126</a>
     </li></ul></dd>
     
 
@@ -180,24 +180,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">array</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
