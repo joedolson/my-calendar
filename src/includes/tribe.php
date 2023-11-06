@@ -123,6 +123,15 @@ function mc_import_source_tribe_event( $post_id ) {
 	if ( $check[0] ) {
 		$response = my_calendar_save( 'add', $check );
 		$event_id = $response['event_id'];
+		/**
+		 * Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.
+		 *
+		 * @hook my_calendar_imported_to_tribe
+		 *
+		 * @param {int} $tribe_event Post ID from Tribe Events.
+		 * @param {int} $event_id Event ID from My Calendar.
+		 */
+		do_action( 'my_calendar_imported_to_tribe', $tribe_event, $event_id );
 		update_post_meta( $post_id, '_mc_imported', $event_id );
 	}
 
