@@ -128,10 +128,10 @@ function mc_import_source_tribe_event( $post_id ) {
 		 *
 		 * @hook my_calendar_imported_to_tribe
 		 *
-		 * @param {int} $tribe_event Post ID from Tribe Events.
+		 * @param {int} $post_id Post ID from Tribe Events.
 		 * @param {int} $event_id Event ID from My Calendar.
 		 */
-		do_action( 'my_calendar_imported_to_tribe', $tribe_event, $event_id );
+		do_action( 'my_calendar_imported_to_tribe', $post_id, $event_id );
 		update_post_meta( $post_id, '_mc_imported', $event_id );
 	}
 
