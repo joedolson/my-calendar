@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_customize_email_headers - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_importer_custom_fields - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_customize_email_headers</h1></header>
+    <header><h1 class="page-title">Filter: mc_importer_custom_fields</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_customize_email_headers">apply_filters( 'mc_customize_email_headers', <span class="signature">$headers, $event )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_importer_custom_fields">apply_filters( 'mc_importer_custom_fields', <span class="signature">$output, $import_source )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter event notification email headers.</p>
+    <p>Output any custom fields or data required by the importer.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$headers</code></td>
+                <td class="name"><code>$output</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Email headers.</p></td>
+            <td class="description last"><p>HTML output to display. Default empty.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$event</code></td>
+                <td class="name"><code>$import_source</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">string</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>Event object.</p></td>
+            <td class="description last"><p>Name of source being displayed.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-core.php.html">my-calendar-core.php</a>, <a href="my-calendar-core.php.html#line1292">line 1292</a>
+        <a href="my-calendar-migrate.php.html">my-calendar-migrate.php</a>, <a href="my-calendar-migrate.php.html#line80">line 80</a>
     </li></ul></dd>
     
 
