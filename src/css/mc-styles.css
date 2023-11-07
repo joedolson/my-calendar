@@ -40,10 +40,8 @@
 	font-weight: 700;
 }
 
-#mc-importer {
-	display: flex;
-	align-items: center;
-	gap: 12px;
+#mc-importer form {
+	padding-bottom: .5rem;
 }
 
 .n4 {

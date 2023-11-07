@@ -33,6 +33,14 @@ function my_calendar_migration() {
 						}
 						$source = ( in_array( $_POST['source'], array( 'calendar', 'tribe' ), true ) ) ? $_POST['source'] : false;
 						if ( $source ) {
+							/**
+							 * Handle custom fields passed from the importer before doing the import.
+							 *
+							 * @hook mc_handle_importer_custom_fields
+							 *
+							 * @param {string} $source Importer source name.
+							 */
+							do_action( 'mc_handle_importer_custom_fields', $source );
 							my_calendar_import( $source );
 						}
 					}
@@ -68,6 +76,20 @@ function my_calendar_migration() {
 								<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
 								<input type="hidden" name="import" value="true" />
 								<input type="hidden" name="source" value="<?php echo $import_source; ?>" />
+								<?php
+								/**
+								 * Output any custom fields or data required by the importer.
+								 *
+								 * @hook mc_importer_custom_fields
+								 *
+								 * @param {string} $output HTML output to display. Default empty.
+								 * @param {string} $import_source Name of source being displayed.
+								 *
+								 * @return {string}
+								 */
+								$fields = apply_filters( 'mc_importer_custom_fields', '', $import_source );
+								echo $fields;
+								?>
 								<input type="submit" value="<?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
 							</div>
 						</form>
