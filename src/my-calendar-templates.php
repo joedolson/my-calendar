@@ -1179,7 +1179,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 		if ( is_array( $locations ) ) {
 			$multiple = ( count( $locations ) > 1 ) ? true : false;
 			foreach ( $locations as $location ) {
-				$id     = rand();
+				$id     = wp_rand();
 				$loc_id = $location->{$source . '_id'};
 				$source = ( 'event' === $source ) ? 'event' : 'location';
 				/**

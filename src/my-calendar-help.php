@@ -196,7 +196,7 @@ function mc_help_link( $link_text, $modal_title, $query, $id, $echo = true ) {
 function mc_enqueue_modal_assets() {
 	$version = mc_get_version();
 	if ( SCRIPT_DEBUG ) {
-		$version .= rand( 10000, 100000 );
+		$version .= wp_rand( 10000, 100000 );
 	}
 	// Load only for My Calendar admin pages.
 	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'] ) {

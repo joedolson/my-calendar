@@ -184,7 +184,7 @@ function mc_register_styles() {
 	global $wp_query;
 	$version = mc_get_version();
 	if ( SCRIPT_DEBUG ) {
-		$version .= rand( 10000, 99999 );
+		$version .= wp_rand( 10000, 99999 );
 	}
 	$this_post = $wp_query->get_queried_object();
 	/**
@@ -430,7 +430,7 @@ function mc_footer_js() {
 	global $wp_query;
 	$version = mc_get_version();
 	if ( SCRIPT_DEBUG ) {
-		$version = $version . '-' . mt_rand( 10000, 100000 );
+		$version = $version . '-' . wp_rand( 10000, 100000 );
 	}
 	/**
 	 * Disable scripting on mobile devices.
@@ -577,7 +577,7 @@ function mc_admin_styles() {
 	global $current_screen;
 	$version = mc_get_version();
 	if ( SCRIPT_DEBUG ) {
-		$version .= rand( 10000, 100000 );
+		$version .= wp_rand( 10000, 100000 );
 	}
 	$id           = $current_screen->id;
 	$is_mc_page   = isset( $_GET['post'] ) && (int) mc_get_option( 'uri_id' ) === (int) $_GET['post'];
@@ -1556,7 +1556,7 @@ function mc_scripts() {
 	global $current_screen;
 	$version = mc_get_version();
 	if ( SCRIPT_DEBUG ) {
-		$version .= rand( 10000, 100000 );
+		$version .= wp_rand( 10000, 100000 );
 	}
 	$id   = $current_screen->id;
 	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
