@@ -571,6 +571,8 @@ function mc_footer_js() {
 					'ajax'      => $ajax,
 					'links'     => mc_get_option( 'list_link_titles' ),
 					'newWindow' => __( 'New tab', 'my-calendar' ),
+					'subscribe' => __( 'Subscribe', 'my-calendar' ),
+					'export'    => __( 'Export', 'my-calendar' ),
 				);
 				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
 			}
