@@ -1,4 +1,4 @@
-=== My Calendar ===
+=== My Calendar - Accessible Event Manager ===
 Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
