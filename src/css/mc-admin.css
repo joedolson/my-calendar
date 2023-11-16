@@ -10,6 +10,8 @@
 	border: 1px solid var(--highlight-dark);
 }
 
+.my-calendar-modal .mc_edit_links li,
+.mc-main .mc_edit_links li,
 .my-calendar-modal .mc_edit_links ul,
 .mc-main .mc_edit_links ul {
 	list-style: none;

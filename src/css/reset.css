@@ -83,10 +83,13 @@ main,div.entry-content,div.site-content, table {
 	margin: 0 auto;
 }
 
+.mc-main .my-calendar-footer li,
+.mc-main .my-calendar-header li,
 .mc-main .my-calendar-footer ul,
 .mc-main .my-calendar-header ul {
 	list-style-type: none;
 	list-style: none;
+	margin: 0;
 }
 
 .my-calendar-nav ul {
@@ -712,14 +715,12 @@ body.mc-no-scroll {
 @keyframes apparition {
   0% {
 	opacity: 0;
-	max-height: 0;
-	width: 0;
-	left: calc( ( 100% - 55.625em ) / 2 );
+	max-height: 100%;
+	max-width: 55.625em;
   }
   100% {
 	opacity: 1;
 	max-height: 100%;
-	width: 100%;
 	max-width: 55.625em;
   }
 }
@@ -745,5 +746,5 @@ body.mc-no-scroll {
   .admin-bar .my-calendar-modal {
 	top: 45px;
 	height: calc( 99% - 45px );
-  }
+  }  
 }
