@@ -2,6 +2,7 @@
 	'use strict';
 	$(function () {
 		mc_display_usertime();
+		mc_build_toggles();
 		var calendar = document.querySelectorAll( '.mc-main' );
 		if ( calendar ) {
 			calendar.forEach( (el) => {
@@ -222,6 +223,7 @@
 				var refText = $( '#mc_head_' + ref ).text();
 				wp.a11y.speak( refText );
 				mc_display_usertime();
+				mc_build_toggles();
 			});
 		});
 	}
@@ -234,6 +236,47 @@
 			var utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
 			var udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
 			$( this ).html( '<span class="mc-local-time-label">' + label + '</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
+		});
+	}
+
+	function mc_build_toggles() {
+		var subscribe   = $( '.mc-subscribe' );
+		var exports     = $( '.mc-download' );
+		if ( subscribe.length > 0 ) {
+			var controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+			var toggle = document.createElement( 'button' );
+			toggle.setAttribute( 'type', 'button' );
+			toggle.setAttribute( 'aria-controls', controls_id );
+			toggle.setAttribute( 'aria-expanded', false );
+			toggle.innerText = my_calendar.subscribe;
+			subscribe.find( 'ul' ).attr( 'id', controls_id );
+			subscribe.find( 'ul' ).css( { 'display' : 'none' } );
+			subscribe.prepend( toggle );
+		}
+		if ( exports.length > 0 ) {
+			var controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+			var toggle = document.createElement( 'button' );
+			toggle.setAttribute( 'type', 'button' );
+			toggle.setAttribute( 'aria-controls', controls_id );
+			toggle.setAttribute( 'aria-expanded', false );
+			toggle.innerText = my_calendar.export;
+			exports.find( 'ul' ).attr( 'id', controls_id );
+			exports.find( 'ul' ).css( { 'display' : 'none' } );
+			exports.prepend( toggle );
+		}
+		var toggles = $( '.mc-export button' );
+		toggles.each( function() {
+			$( this ).on( 'click', function(e) {
+				var controlled = $( this ).attr( 'aria-controls' );
+				var target     = $( '#' + controlled );
+				if ( target.is( ':visible' ) ) {
+					target.css( { 'display' : 'none' } );
+					$( this ).attr( 'aria-expanded', 'false' );
+				} else {
+					target.css( { 'display' : 'block' } );
+					$( this ).attr( 'aria-expanded', 'true' );
+				}
+			});
 		});
 	}
 

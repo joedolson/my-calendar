@@ -262,6 +262,19 @@ svg.category-icon,
 	position: relative;
 }
 
+.mc-main .mc-export ul {
+	position: absolute;
+	border: 1px solid;
+}
+
+.mc-main .mc-export li {
+	border-bottom: 1px solid;
+}
+
+.mc-main .mc-export li:last-of-type {
+	border-bottom: none;
+}
+
 .mc-main .category-key.has-icons ul li {
 	display: inline;
 }
