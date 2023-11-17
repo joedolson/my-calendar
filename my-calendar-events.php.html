@@ -135,6 +135,7 @@ function mc_ts( $test = false ) {
  * @return array qualified events
  */
 function my_calendar_get_events( $args ) {
+	$get      = map_deep( $_GET, 'sanitize_text_field' );
 	$from     = isset( $args['from'] ) ? $args['from'] : '';
 	$to       = isset( $args['to'] ) ? $args['to'] : '';
 	$category = isset( $args['category'] ) ? $args['category'] : 'all';
@@ -152,14 +153,14 @@ function my_calendar_get_events( $args ) {
 	}
 
 	if ( null === $holidays ) {
-		$ccategory = ( isset( $_GET['mcat'] ) &amp;&amp; '' !== trim( $_GET['mcat'] ) ) ? $_GET['mcat'] : $category;
+		$ccategory = ( isset( $get['mcat'] ) &amp;&amp; '' !== trim( $get['mcat'] ) ) ? $get['mcat'] : $category;
 	} else {
 		$ccategory = $category;
 	}
-	$cltype  = ( isset( $_GET['ltype'] ) ) ? $_GET['ltype'] : $ltype;
-	$clvalue = ( isset( $_GET['loc'] ) ) ? $_GET['loc'] : $lvalue;
-	$clauth  = ( isset( $_GET['mc_auth'] ) ) ? $_GET['mc_auth'] : $author;
-	$clhost  = ( isset( $_GET['mc_host'] ) ) ? $_GET['mc_host'] : $host;
+	$cltype  = ( isset( $get['ltype'] ) ) ? $get['ltype'] : $ltype;
+	$clvalue = ( isset( $get['loc'] ) ) ? $get['loc'] : $lvalue;
+	$clauth  = ( isset( $get['mc_auth'] ) ) ? $get['mc_auth'] : $author;
+	$clhost  = ( isset( $get['mc_host'] ) ) ? $get['mc_host'] : $host;
 
 	// If location value is not set, then location type shouldn't be set.
 	if ( 'all' === $clvalue ) {
@@ -176,7 +177,7 @@ function my_calendar_get_events( $args ) {
 	$select_author      = ( 'all' !== $clauth ) ? mc_select_author( $clauth ) : '';
 	$select_host        = ( 'all' !== $clhost ) ? mc_select_host( $clhost ) : '';
 	$select_location    = mc_select_location( $cltype, $clvalue );
-	$select_access      = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
+	$select_access      = ( isset( $get['access'] ) ) ? mc_access_limit( $get['access'] ) : '';
 	$select_published   = mc_select_published();
 	$search             = mc_prepare_search_query( $search );
 	$exclude_categories = mc_private_categories();
