@@ -11,9 +11,9 @@
 }
 
 .my-calendar-modal .mc_edit_links li,
-.mc-main .mc_edit_links li,
+.mc-main.my-calendar .mc_edit_links li,
 .my-calendar-modal .mc_edit_links ul,
-.mc-main .mc_edit_links ul {
+.mc-main.my-calendar .mc_edit_links ul {
 	list-style: none;
 	margin: 0;
 	padding: 0;
