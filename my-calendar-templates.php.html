@@ -1909,7 +1909,7 @@ function mc_get_template_tag( $event, $key ) {
 	} else {
 		$data = mc_create_tags( $event->event );
 	}
-	$value = $data[ $key ];
+	$value = ( isset( $data[ $key ] ) ) ? $data[ $key ] : '';
 
 	return $value;
 }
@@ -1917,7 +1917,7 @@ function mc_get_template_tag( $event, $key ) {
 /**
  * Print template values for new templating system.
  *
- * @param object $event Event.
+ * @param object $event Event data object with property 'event' and 'tags'.
  * @param string $key Array key for data to fetch.
  */
 function mc_template_tag( $event, $key ) {
