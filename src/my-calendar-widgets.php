@@ -572,9 +572,11 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 
 	$html = '';
 	foreach ( $output as $out ) {
+		$event   = $out['event'];
+		$tags    = $out['tags'];
 		$data    = array(
 			'event'    => $event,
-			'tags'     => $details,
+			'tags'     => $tags,
 			'template' => $template,
 			'type'     => $type,
 		);
