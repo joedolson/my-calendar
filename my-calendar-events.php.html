@@ -167,7 +167,9 @@ function my_calendar_get_events( $args ) {
 		$cltype = 'all';
 	}
 
-	if ( ! mc_checkdate( $from ) || ! mc_checkdate( $to ) ) {
+	$from = mc_checkdate( $from );
+	$to   = mc_checkdate( $to );
+	if ( ! $from || ! $to ) {
 		return array();
 	} // Not valid dates.
 
