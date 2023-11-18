@@ -596,8 +596,8 @@ function mc_get_search_results( $search ) {
 	$after = apply_filters( 'mc_future_search_results', 15 ); // return only future events, nearest 10.
 	if ( is_array( $search ) ) {
 		// If from &amp; to are set, we need to use a date-based event query.
-		$from     = $search['from'];
-		$to       = $search['to'];
+		$from     = mc_checkdate( $search['from'] );
+		$to       = mc_checkdate( $search['to'] );
 		$category = ( isset( $search['category'] ) ) ? $search['category'] : null;
 		$ltype    = ( isset( $search['ltype'] ) ) ? $search['ltype'] : null;
 		$lvalue   = ( isset( $search['lvalue'] ) ) ? $search['lvalue'] : null;
