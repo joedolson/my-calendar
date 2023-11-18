@@ -228,7 +228,7 @@ function mc_week_of_month( $date_of_event ) {
  *
  * @param string $date date string.
  *
- * @return boolean true if verified date
+ * @return boolean|string date string if verified date, false if not.
  */
 function mc_checkdate( $date ) {
 	$time = strtotime( $date );
@@ -236,7 +236,12 @@ function mc_checkdate( $date ) {
 	$d    = mc_date( 'j', $time );
 	$y    = mc_date( 'Y', $time );
 
-	return checkdate( $m, $d, $y );
+	$check = checkdate( $m, $d, $y );
+	if ( $check ) {
+		return mc_date( 'Y-m-d', $time );
+	}
+
+	return false;
 }
 
 /**
