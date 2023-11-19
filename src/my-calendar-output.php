@@ -351,8 +351,8 @@ function mc_draw_event_header( $data, $type, $template ) {
 				$params  = " aria-expanded='false'";
 				$classes = 'open';
 			}
-			$wrap    = "<button type='button' $params aria-controls='$container_id' class='$type $classes url summary$has_image'><span>";
-			$balance = '</span></button>';
+			$wrap    = "<button type='button' $params aria-controls='$container_id' class='$type $classes url summary$has_image'>";
+			$balance = '</button>';
 		}
 	} else {
 		$wrap    = '';
