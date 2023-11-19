@@ -94,6 +94,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Improve HTML semantics in event display.
 * Change: Switch popup triggers to buttons.
 * Feature: Add card view.
+* Breaking change: `mc_event_classes()` now echos classes. Use `mc_get_event_classes()` to return.
+
 
 = 3.4.21 =
 

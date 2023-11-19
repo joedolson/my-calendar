@@ -313,7 +313,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$image         = mc_category_icon( $event );
 	$image         = ( $image ) ? $image . ' ' : '';
 	$has_image     = ( '' !== $image ) ? ' has-image' : '';
-	$event_classes = mc_event_classes( $event, $type );
+	$event_classes = mc_get_event_classes( $event, $type );
 	$nofollow      = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
 	$container_id  = mc_event_container_id( $type, $process_date, $event );
 	$header        = '';
@@ -710,6 +710,16 @@ function mc_disable_link( $status, $event ) {
 add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
 
 /**
+ * Echo classes for a given event.
+ *
+ * @param object $event Event Object.
+ * @param string $type Type of view being shown.
+ */
+function mc_event_classes( $event, $type ) {
+	echo mc_get_event_classes( $event, $type );
+}
+
+/**
  * Generate classes for a given event
  *
  * @param object $event Event Object.
@@ -717,7 +727,7 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
  *
  * @return string classes
  */
-function mc_event_classes( $event, $type ) {
+function mc_get_event_classes( $event, $type ) {
 	$uid      = 'mc_' . $type . '_' . $event->occur_id;
 	$relation = mc_date_relation( $event );
 	switch ( $relation ) {
@@ -1316,7 +1326,7 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 					$template = mc_get_custom_template( $template );
 				}
 				$html     = mc_draw_template( $array, $template );
-				$classes  = mc_event_classes( $event, 'related' );
+				$classes  = mc_get_event_classes( $event, 'related' );
 				$classes .= ( (int) $event_id === (int) $this_id ) ? ' current-event' : '';
 				$output  .= "<li class='$classes'>$html</li>";
 			}
