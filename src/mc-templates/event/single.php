@@ -13,7 +13,7 @@
  * Event templates access any template tags using the function `mc_template_tag`. The object $event is available in all templates.
  */
 ?>
-<div class="mc-event mc-single">
+<div class="mc-event mc-single <?php mc_event_classes( $data->event, 'single' ); ?>">
 	<?php mc_template_time( $data, 'single' ); ?>
 	<?php mc_template_image( $data, 'single' ); ?>
 	<?php mc_template_description( $data, 'single' ); ?>
