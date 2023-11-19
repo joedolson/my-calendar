@@ -123,12 +123,11 @@ main,div.entry-content,div.site-content, table {
 .mc-main .my-calendar-header select:not(.my-calendar-admin select),
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
-	line-height: 1;
 	padding-top: 6px;
-	padding-bottom: 5px;
+	padding-bottom: 6px;
 	margin: 0;
 	font-size: 1rem;
-	border: 1px solid;
+	border: 1px solid var(--primary-dark);
 }
 
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
@@ -273,6 +272,10 @@ svg.category-icon,
 
 .mc-main .mc-export li:last-of-type {
 	border-bottom: none;
+}
+
+.mc-main .mc-export button {
+	padding: 6px 12px;
 }
 
 .mc-main .category-key.has-icons ul li {
