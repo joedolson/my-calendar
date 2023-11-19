@@ -490,7 +490,7 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	$event   = $event['event'];
 	$today   = current_time( 'Y-m-d' );
 	$date    = mc_date( 'Y-m-d H:i:s', strtotime( $details['dtstart'] ), false );
-	$classes = mc_event_classes( $event, 'upcoming' );
+	$classes = mc_get_event_classes( $event, 'upcoming' );
 
 	if ( my_calendar_date_equal( $date, $today ) ) {
 		$classes .= ' today';
