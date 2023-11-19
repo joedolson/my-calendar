@@ -1982,7 +1982,7 @@ function mc_template_access( $data, $type ) {
 		if ( $access_content ) {
 			$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
 		}
-		$access   = ( '' !== $access ) ? '<div class="mc-access-information">' . $access . '</div>' : '';
+		$access = ( '' !== $access ) ? '<div class="mc-access-information">' . $access . '</div>' : '';
 	}
 
 	echo $access;
@@ -2020,7 +2020,7 @@ function mc_template_share( $data, $type ) {
 	if ( mc_output_is_visible( 'ical', $type, $event ) ) {
 		$vcal = "	<p class='ical'>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</p>';
 	}
-	$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
+	$sharing = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
 	echo $sharing;
 }
