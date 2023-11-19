@@ -412,7 +412,7 @@ function mc_draw_event_header( $data, $type, $template ) {
  * @return string
  */
 function mc_wrap_event( $content, $event, $container_id, $type ) {
-	$event_classes = mc_event_classes( $event, $type );
+	$event_classes = mc_get_event_classes( $event, $type );
 	$parent_id     = str_replace( 'details-', '', $container_id );
 	$header        = "<article id='$parent_id' class='$event_classes'>";
 
