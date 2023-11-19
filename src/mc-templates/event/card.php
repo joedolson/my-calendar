@@ -12,7 +12,15 @@
 ?>
 <div class="mc-event mc-single mc-card">
 	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
-	<?php mc_template_tag( $data, 'datetime' ); ?>
-	<?php mc_template_tag( $data, 'image' ); ?>
-	<?php mc_template_tag( $data, 'excerpt' ); ?>
+	<?php mc_template_time( $data->event, 'card' ); ?>
+	<?php mc_template_image( $data->event, 'card' ); ?>
+	<?php mc_template_description( $data->event, 'card' ); ?>
+	<?php mc_template_excerpt( $data->event, 'card' ); ?>
+	<?php mc_template_location( $data->event, 'card' ); ?>
+	<?php mc_template_access( $data->event, 'card' ); ?>
+	<?php mc_template_link( $data->event, 'card' ); ?>
+	<?php mc_template_registration( $data->event, 'card' ); ?>
+	<?php mc_template_author( $data->event, 'card' ); ?>
+	<?php mc_template_host( $data->event, 'card' ); ?>
+	<?php mc_template_share( $data->event, 'card' ); ?>
 </div>

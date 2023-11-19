@@ -11,8 +11,16 @@
 
 ?>
 <div class="mc-event mc-single mc-list">
-	<?php mc_template_tag( $data, 'image' ); ?>
 	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
-	<?php mc_template_tag( $data, 'datetime' ); ?>
-	<?php mc_template_tag( $data, 'description' ); ?>
+	<?php mc_template_time( $data, 'list' ); ?>
+	<?php mc_template_image( $data, 'list' ); ?>
+	<?php mc_template_description( $data, 'list' ); ?>
+	<?php mc_template_excerpt( $data, 'list' ); ?>
+	<?php mc_template_location( $data, 'list' ); ?>
+	<?php mc_template_access( $data, 'list' ); ?>
+	<?php mc_template_link( $data, 'list' ); ?>
+	<?php mc_template_registration( $data, 'list' ); ?>
+	<?php mc_template_author( $data, 'list' ); ?>
+	<?php mc_template_host( $data, 'list' ); ?>
+	<?php mc_template_share( $data, 'list' ); ?>
 </div>

@@ -1841,16 +1841,25 @@ function mc_template_user_card( $event, $type ) {
 	$card    = '';
 	$type    = ( 'author' === $type ) ? 'author' : 'host';
 	$user    = ( 'author' === $type ) ? $event->event_author : $event->event_host;
+	$a       = false;
 	if ( 0 !== (int) $user && is_numeric( $user ) ) {
 		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) && 'host' === $type ) {
 			$a = get_post( $event->event_host );
 			if ( $a ) {
-				$avatar = ( '' === get_the_post_thumbnail( $host ) ) ? get_avatar( get_post_meta( $a->ID, '_mcs_host_email', true ) ) : get_the_post_thumbnail( $a );
+				$avatar = ( '' === get_the_post_thumbnail( $a ) ) ? get_avatar( get_post_meta( $a->ID, '_mcs_host_email', true ) ) : get_the_post_thumbnail( $a );
 				$name   = $a->post_title;
 			} else {
 				$avatar = ( $avatars ) ? get_avatar( $user ) : '';
 				$a      = get_userdata( $user );
 				$name   = $a->display_name;
+			}
+		} else {
+			$avatar = ( $avatars ) ? get_avatar( $user ) : '';
+			$a      = get_userdata( $user );
+			if ( is_object( $a ) ) {
+				$name = $a->display_name;
+			} else {
+				$name = '';
 			}
 		}
 		if ( $a ) {
@@ -1889,11 +1898,276 @@ function mc_get_template_tag( $event, $key ) {
 }
 
 /**
- * Print template values for new templating system.
+ * Print template values for PHP templating system. Backwards compatible with display settings.
  *
- * @param object $event Event data object with property 'event' and 'tags'.
- * @param string $key Array key for data to fetch.
+ * @param object $data Calendar view object with (at minimum) property 'event' and 'tags'.
+ * @param string $key Array key in the tags array for data to fetch.
  */
-function mc_template_tag( $event, $key ) {
-	echo mc_get_template_tag( $event, $key );
+function mc_template_tag( $data, $key ) {
+	echo mc_get_template_tag( $data, $key );
+}
+
+/**
+ * Print time in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_time( $data, $type ) {
+	$event = $data->event;
+	mc_time_html( $event, $type );
+}
+
+/**
+ * Print author in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_author( $data, $type ) {
+	$event  = $data->event;
+	$author = '';
+	if ( mc_output_is_visible( 'author', $type, $event ) ) {
+		$author = mc_template_user_card( $event, 'author' );
+	}
+
+	echo $author;
+}
+
+/**
+ * Print host in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_host( $data, $type ) {
+	$event = $data->event;
+	$host  = '';
+	if ( mc_output_is_visible( 'host', $type, $event ) ) {
+		$host = mc_template_user_card( $event, 'host' );
+	}
+
+	echo $host;
+}
+
+/**
+ * Print accessibility features in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_access( $data, $type ) {
+	$event  = $data->event;
+	$access = '';
+	if ( mc_output_is_visible( 'access', $type, $event ) ) {
+		$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
+		$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+		$sublevel       = 'h4';
+		if ( 'single' === $type ) {
+			$sublevel = 'h2';
+		}
+		/**
+		 * Filter subheading levels inside event content.
+		 *
+		 * @hook mc_subheading_level
+		 *
+		 * @param {string} $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+		 * @param {string} $type View type.
+		 * @param {string} $time View timeframe.
+		 * @param {string} $template Current template.
+		 *
+		 * @return {string}
+		 */
+		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $data->time, 'php' );
+		if ( $access_content ) {
+			$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
+		}
+		$access   = ( '' !== $access ) ? '<div class="mc-access-information">' . $access . '</div>' : '';
+	}
+
+	echo $access;
+}
+
+/**
+ * Print share features in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_share( $data, $type ) {
+	$event = $data->event;
+	$more  = '';
+	$gcal  = '';
+	$vcal  = '';
+	if ( ( ! isset( $_GET['mc_id'] ) ) && mc_output_is_visible( 'more', $type, $event ) ) {
+		$details_label = mc_get_details_label( $event, $data->tags );
+		$details_link  = mc_get_details_link( $event );
+		$event_title   = mc_draw_event_title( $event, $data->tags, $type, '' );
+		$aria          = '';
+		// If the event title is already in the details label, omit ARIA.
+		if ( false === stripos( strip_tags( $details_label ), strip_tags( $event_title ) ) ) {
+			$aria = " aria-label='" . esc_attr( "$details_label: " . strip_tags( $event_title ) ) . "'";
+		}
+		if ( _mc_is_url( $details_link ) ) {
+			$more = "	<p class='mc-details'><a$aria href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
+		}
+	}
+	$more = apply_filters( 'mc_details_grid_link', $more, $event );
+	if ( mc_output_is_visible( 'gcal', $type, $event ) ) {
+		$gcal = "	<p class='gcal'>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '</p>';
+	}
+
+	if ( mc_output_is_visible( 'ical', $type, $event ) ) {
+		$vcal = "	<p class='ical'>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</p>';
+	}
+	$sharing  = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
+
+	echo $sharing;
+}
+
+/**
+ * Print featured image in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_image( $data, $type ) {
+	$event = $data->event;
+	$img   = '';
+	if ( mc_output_is_visible( 'image', $type, $event ) ) {
+		$img = mc_get_event_image( $event, $data->tags );
+	}
+
+	echo $img;
+}
+
+/**
+ * Print description content in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_description( $data, $type ) {
+	$event       = $data->event;
+	$description = '';
+	if ( mc_output_is_visible( 'description', $type, $event ) ) {
+		if ( '' !== trim( $event->event_desc ) ) {
+			$description = wpautop( stripcslashes( mc_kses_post( $event->event_desc ) ), 1 );
+			$description = "	<div class='longdesc description'>$description</div>";
+		}
+	}
+
+	echo $description;
+}
+
+/**
+ * Print registration information in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_registration( $data, $type ) {
+	$event   = $data->event;
+	$tickets = '';
+	if ( mc_output_is_visible( 'tickets', $type, $event ) ) {
+		$info     = wpautop( stripcslashes( mc_kses_post( $event->event_registration ) ) );
+		$url      = esc_url( $event->event_tickets );
+		$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
+		$text     = ( '' !== mc_get_option( 'buy_tickets', '' ) ) ? mc_get_option( 'buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
+		$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'>" . $text . '</a>' : '';
+		if ( '' !== trim( $info . $tickets ) ) {
+			$tickets = '<div class="mc-registration">' . $info . $tickets . '</div>';
+		}
+	}
+
+	echo $tickets;
+}
+
+/**
+ * Print excerpt in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_excerpt( $data, $type ) {
+	$event = $data->event;
+	$short = '';
+	if ( mc_output_is_visible( 'excerpt', $type, $event ) ) {
+		if ( '' !== trim( $event->event_short ) ) {
+			$short = wpautop( stripcslashes( mc_kses_post( $event->event_short ) ), 1 );
+			$short = "<div class='shortdesc description'>$short</div>";
+		}
+	}
+
+	echo $short;
+}
+
+/**
+ * Print return link in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_return( $data, $type ) {
+	$event = $data->event;
+	/**
+	 * Filter URL appended on single event view to return to calendar.
+	 *
+	 * @hook mc_return_uri
+	 *
+	 * @param {string} $url Calendar URL.
+	 * @param {object} $event My Calendar event object.
+	 *
+	 * @return {string}
+	 */
+	$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ), $event );
+	$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : __( 'View full calendar', 'my-calendar' );
+	$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
+
+	echo $return;
+}
+
+/**
+ * Print location in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar view data.
+ * @param string $type View type.
+ */
+function mc_template_location( $data, $type ) {
+	$event   = $data->event;
+	$address = '';
+	$map     = '';
+
+	if ( mc_output_is_visible( 'address', $type, $event ) ) {
+		$show_add = mc_output_is_visible( 'address', $type, $event ) ? 'true' : 'false';
+		$show_map = mc_output_is_visible( 'gmap_link', $type, $event ) ? 'true' : 'false';
+
+		$address = mc_hcard( $event, $show_add, $show_map );
+	}
+	if ( mc_output_is_visible( 'gmap', $type, $event ) ) {
+		$map = ( is_singular( 'mc-events' ) || 'single' === $type ) ? mc_generate_map( $event ) : '';
+	}
+	$location = ( '' === trim( $map . $address ) ) ? '' : '	<div class="mc-location">' . $map . $address . '</div>';
+
+	echo $location;
+}
+
+/**
+ * Print external link in PHP templates. Backwards compatible with display settings.
+ *
+ * @param object $data Calendar object.
+ * @param string $type View type.
+ */
+function mc_template_link( $data, $type ) {
+	$event      = $data->event;
+	$event_link = mc_event_link( $event );
+	$link       = '';
+	if ( '' !== $event_link && mc_output_is_visible( 'link', $type, $event ) ) {
+		$external_class = ( mc_external_link( $event_link ) ) ? "$type-link external url" : "$type-link url";
+		$link_template  = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
+		$link_text      = mc_draw_template( $data->tags, $link_template );
+		$link           = "<p><a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$data->id'>" . $link_text . '</a></p>';
+	}
+
+	echo $link;
 }

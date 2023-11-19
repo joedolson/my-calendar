@@ -11,7 +11,15 @@
 
 ?>
 <div class="mc-event mc-single mc-grid <?php mc_event_classes( $data->event, 'calendar' ); ?>">
-	<?php mc_template_tag( $data, 'image' ); ?>
-	<?php mc_template_tag( $data, 'datetime' ); ?>
-	<?php mc_template_tag( $data, 'description' ); ?>
+	<?php mc_template_time( $data, 'calendar' ); ?>
+	<?php mc_template_image( $data, 'calendar' ); ?>
+	<?php mc_template_description( $data, 'calendar' ); ?>
+	<?php mc_template_excerpt( $data, 'calendar' ); ?>
+	<?php mc_template_location( $data, 'calendar' ); ?>
+	<?php mc_template_access( $data, 'calendar' ); ?>
+	<?php mc_template_link( $data, 'calendar' ); ?>
+	<?php mc_template_registration( $data, 'calendar' ); ?>
+	<?php mc_template_author( $data, 'calendar' ); ?>
+	<?php mc_template_host( $data, 'calendar' ); ?>
+	<?php mc_template_share( $data, 'calendar' ); ?>
 </div>
