@@ -2110,14 +2110,15 @@ function my_calendar( $args ) {
 			$end = '';
 			if ( 'card' !== $params['format'] ) {
 				$end = ( 'table' === $table ) ? "\n</tbody>\n</table>" : "</div></$table>";
-			} else {
-				$end = '</div>';
 			}
 			$body .= ( 'list' === $params['format'] ) ? "\n</ul>" : $end;
 		}
 		// Day view closer is appended above.
 		$body .= ( 'day' === $params['time'] && 'card' !== $params['format'] ) ? '' : '</div><!-- .mc-content -->';
 		$body .= $bottom;
+		if ( 'card' === $params['format'] ) {
+			$body .= '</div>';
+		}
 	}
 	/**
 	 * Append content after the calendar.
