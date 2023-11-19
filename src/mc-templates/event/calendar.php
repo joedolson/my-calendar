@@ -10,7 +10,7 @@
  */
 
 ?>
-<div class="mc-event mc-single mc-grid">
+<div class="mc-event mc-single mc-grid <?php mc_event_classes( $data->event, 'calendar' ); ?>">
 	<?php mc_template_tag( $data, 'image' ); ?>
 	<?php mc_template_tag( $data, 'datetime' ); ?>
 	<?php mc_template_tag( $data, 'description' ); ?>

@@ -2062,7 +2062,7 @@ function mc_body_classes( $classes ) {
 				}
 			}
 			if ( is_object( $event ) ) {
-				$event_classes = explode( ' ', mc_event_classes( $event, 'body' ) );
+				$event_classes = explode( ' ', mc_get_event_classes( $event, 'body' ) );
 			}
 		}
 	}

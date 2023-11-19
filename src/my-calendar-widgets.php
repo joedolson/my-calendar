@@ -259,7 +259,7 @@ function my_calendar_upcoming_events( $args ) {
 			} else {
 				$today   = current_time( 'Y-m-d H:i' );
 				$date    = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
-				$classes = mc_event_classes( $event, 'upcoming' );
+				$classes = mc_get_event_classes( $event, 'upcoming' );
 				$prepend = "<li class='$classes'>";
 				$append  = '</li>';
 				/**
@@ -688,7 +688,7 @@ function my_calendar_todays_events( $args ) {
 			if ( ! mc_private_event( $e ) && ! in_array( $e->event_group_id, $groups, true ) ) {
 				$event_details = mc_create_tags( $e );
 				$ts            = $e->ts_occur_begin;
-				$classes       = mc_event_classes( $e, 'today' );
+				$classes       = mc_get_event_classes( $e, 'today' );
 
 				$data    = array(
 					'event'    => $e,
