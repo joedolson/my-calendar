@@ -11,7 +11,6 @@
 
 ?>
 <div class="mc-event-container">
-	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
 	<div class="mc-image-container">
 		<?php mc_template_time( $data, 'calendar' ); ?>
 		<?php mc_template_image( $data, 'calendar' ); ?>
