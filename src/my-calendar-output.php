@@ -334,8 +334,8 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 */
 	$no_link = apply_filters( 'mc_disable_link', false, $tags );
 
-	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) && ! $no_link ) {
-		if ( 'true' === $open_uri ) {
+	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) | 'card' === $type ) ) && ! $no_link ) {
+		if ( 'true' === $open_uri || 'card' === $type ) {
 			$details_link = esc_url( mc_get_details_link( $event ) );
 			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
 			$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
@@ -375,7 +375,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 */
 	$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
 	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
-	if ( 'single' === $type || 'card' === $type ) {
+	if ( 'single' === $type ) {
 		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image$event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
 	} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 		/**

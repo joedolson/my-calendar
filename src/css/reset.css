@@ -54,6 +54,15 @@ main,div.entry-content,div.site-content, table {
 	order: -2;
 }
 
+.my-calendar-cards .mc-image-container {
+	margin: 0 -12px;
+}
+
+.my-calendar-cards header h2 {
+	font-size: 1.125rem;
+	padding: 8px;
+}
+
 .my-calendar-cards .card-event .details h3 {
 	margin-bottom: 12px;
 	padding: 6px;
@@ -150,6 +159,24 @@ main,div.entry-content,div.site-content, table {
 .mc-time {
 	display: flex;
 	column-gap: 4px;
+}
+
+.mc-date-badge {
+	display: grid;
+	justify-content: center;
+	text-align: center;
+}
+
+.mc-content-container {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 16px;
+
+}
+
+.mc-date-badge .day {
+	font-weight: 700;
+	font-size: 1.2rem;
 }
 
 .my-calendar-header .mc-date-switcher > * {
