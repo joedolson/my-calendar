@@ -1667,9 +1667,33 @@ function my_calendar( $args ) {
 	$main_class    = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
 	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$mc_wrapper    = "
-<div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class\" $lang>";
-	$mc_closer     = '
+	$body_classes  = array(
+		'mc-main',
+		'mcjs',
+		$list_js_class,
+		$grid_js_class,
+		$mini_js_class,
+		$ajax_js_class,
+		$style_class,
+		$params['format'],
+		$params['time'],
+		$main_class,
+	);
+	/**
+	 * Filter classes used on the main My Calendar wrapper element.
+	 *
+	 * @hook mc_body_classes
+	 *
+	 * @param {array} $body_classes Array of class strings.
+	 * @param {array} $params View parameter array.
+	 *
+	 * @return {array}
+	 */
+	$body_classes = apply_filters( 'mc_body_classes', $body_classes, $params );
+	$classes      = implode( ' ', map_deep( $body_classes, 'sanitize_html_class' ) );
+	$mc_wrapper   = "
+<div id='$id' class='$classes' $lang>";
+	$mc_closer    = '
 </div>';
 
 	/**
