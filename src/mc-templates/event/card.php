@@ -10,7 +10,7 @@
  */
 
 ?>
-<div class="mc-event mc-card <?php mc_event_classes( $data->event, 'card' ); ?>">
+<div class="mc-v2 <?php mc_event_classes( $data->event, 'card' ); ?>">
 	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
 	<?php mc_template_time( $data->event, 'card' ); ?>
 	<?php mc_template_image( $data->event, 'card' ); ?>
