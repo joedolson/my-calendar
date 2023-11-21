@@ -120,6 +120,7 @@
 		links.each( function() {
 			$( this ).attr( 'role', 'button' );
 		});
+		// Prevents spacebar from scrolling the page on links with button role.
 		$(document).on( 'keydown', links, function(e) {
 			if ( 32 === e.which ) {
 				e.preventDefault();
