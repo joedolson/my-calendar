@@ -10,8 +10,8 @@
  */
 
 ?>
-<div class="mc-v2 <?php mc_event_classes( $data->event, 'mini' ); ?>">
-	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
+<div class="mc-event-container">
+	<h3 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h3>
 	<?php mc_template_time( $data, 'list' ); ?>
 	<?php mc_template_image( $data, 'list' ); ?>
 	<?php mc_template_description( $data, 'list' ); ?>

@@ -375,7 +375,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 */
 	$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
 	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
-	if ( 'single' === $type ) {
+	if ( 'single' === $type || 'card' === $type ) {
 		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image$event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
 	} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 		/**
@@ -394,9 +394,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	} else {
 		$title = '';
 	}
-	if ( 'card' !== $type ) {
-		$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
-	}
+	$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
 
 	return '<header>' . $header . '</header>';
 }
