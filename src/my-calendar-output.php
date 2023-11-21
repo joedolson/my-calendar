@@ -334,7 +334,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 */
 	$no_link = apply_filters( 'mc_disable_link', false, $tags );
 
-	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) | 'card' === $type ) ) && ! $no_link ) {
+	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $no_link ) {
 		if ( 'true' === $open_uri || 'card' === $type ) {
 			$details_link = esc_url( mc_get_details_link( $event ) );
 			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
@@ -342,7 +342,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 		} else {
 			$gridtype           = mc_get_option( 'calendar_javascript' );
 			$listtype           = mc_get_option( 'list_javascript' );
-			$single_template    = ( mc_get_template( 'title_solo' ) === '' ) ? '{title}' : mc_get_template( 'title_solo' );
+			$single_template    = mc_get_template( 'title_solo' ) === '' ? '{title}' : mc_get_template( 'title_solo' );
 			$event_title_single = mc_draw_template( $tags, $single_template );
 			if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
 				$params  = "id='modal-button-$container_id' data-modal-content-id='$container_id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title_single ) . "'";
