@@ -515,6 +515,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ), false );    // Date: hcal formatted end.
 	$e['userstart']    = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '&lt;/time>';
 	$e['userend']      = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '&lt;/time>';
+	$e['datebadge']    = '&lt;time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', strtotime( $real_begin_date ) ) . '">&lt;span class="month">' . mc_date( 'M', strtotime( $real_begin_date ) ) . '&lt;/span>&lt;span class="day">' . mc_date( 'j', strtotime( $real_begin_date ) ) . '&lt;/span>&lt;/time>';
 	/**
 	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
 	 *
