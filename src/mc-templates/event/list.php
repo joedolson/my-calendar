@@ -12,15 +12,19 @@
 ?>
 <div class="mc-v2 <?php mc_event_classes( $data->event, 'list' ); ?>">
 	<h2 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
-	<?php mc_template_time( $data, 'list' ); ?>
-	<?php mc_template_image( $data, 'list' ); ?>
-	<?php mc_template_description( $data, 'list' ); ?>
-	<?php mc_template_excerpt( $data, 'list' ); ?>
-	<?php mc_template_location( $data, 'list' ); ?>
-	<?php mc_template_access( $data, 'list' ); ?>
-	<?php mc_template_link( $data, 'list' ); ?>
-	<?php mc_template_registration( $data, 'list' ); ?>
-	<?php mc_template_author( $data, 'list' ); ?>
-	<?php mc_template_host( $data, 'list' ); ?>
-	<?php mc_template_share( $data, 'list' ); ?>
+	<div class="mc-image-container">
+		<?php mc_template_time( $data, 'calendar' ); ?>
+		<?php mc_template_image( $data, 'calendar' ); ?>
+	</div>
+	<div class="mc-content-container">
+		<?php mc_template_description( $data, 'calendar' ); ?>
+		<?php mc_template_excerpt( $data, 'calendar' ); ?>
+		<?php mc_template_location( $data, 'calendar' ); ?>
+		<?php mc_template_access( $data, 'calendar' ); ?>
+		<?php mc_template_link( $data, 'calendar' ); ?>
+		<?php mc_template_registration( $data, 'calendar' ); ?>
+		<?php mc_template_author( $data, 'calendar' ); ?>
+		<?php mc_template_host( $data, 'calendar' ); ?>
+		<?php mc_template_share( $data, 'calendar' ); ?>
+	</div>
 </div>
