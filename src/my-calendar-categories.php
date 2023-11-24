@@ -929,19 +929,14 @@ function mc_profile() {
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
 		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions, true ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
 		?>
+		<div class="mc-user-permissions">
 		<h3><?php esc_html_e( 'My Calendar Editor Permissions', 'my-calendar' ); ?></h3>
-		<table class="form-table" role="presentation">
-			<tr>
-				<th scope="row">
-					<label for="mc_user_permissions"><?php esc_html_e( 'Allowed Categories', 'my-calendar' ); ?></label>
-				</th>
-				<td>
-					<ul class='checkboxes'>
-						<li><input type="checkbox" name="mc_user_permissions[]" value="all" id="mc_edit_all" <?php echo esc_html( $selected ); ?>> <label for="mc_edit_all"><?php esc_html_e( 'Edit All Categories', 'my-calendar' ); ?></li>
-						<?php echo mc_category_select( $permissions, true, true, 'mc_user_permissions[]' ); ?>
-					</ul>
-				</td>
-			</tr>
+		<fieldset><legend><?php esc_html_e( 'Allowed Categories', 'my-calendar' ); ?></legend>
+			<ul class='checkboxes'>
+				<li><input type="checkbox" name="mc_user_permissions[]" value="all" id="mc_edit_all" <?php echo esc_html( $selected ); ?>> <label for="mc_edit_all"><?php esc_html_e( 'Edit All Categories', 'my-calendar' ); ?></li>
+				<?php echo mc_category_select( $permissions, true, true, 'mc_user_permissions[]' ); ?>
+			</ul>
+		</fieldset>
 			<?php
 			/**
 			 * Add custom fields to the My Calendar section of the user profile.
@@ -955,7 +950,7 @@ function mc_profile() {
 			 */
 			echo apply_filters( 'mc_user_fields', '', $user_edit );
 			?>
-		</table>
+		</div>
 		<?php
 	}
 }
