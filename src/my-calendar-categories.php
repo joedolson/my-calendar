@@ -931,7 +931,7 @@ function mc_profile() {
 		?>
 		<div class="mc-user-permissions">
 		<h3><?php esc_html_e( 'My Calendar Editor Permissions', 'my-calendar' ); ?></h3>
-		<fieldset><legend><?php esc_html_e( 'Allowed Categories', 'my-calendar' ); ?></legend>
+		<fieldset><legend style="font-size:1rem;font-weight:600"><?php esc_html_e( 'Allowed Categories', 'my-calendar' ); ?></legend>
 			<ul class='checkboxes'>
 				<li><input type="checkbox" name="mc_user_permissions[]" value="all" id="mc_edit_all" <?php echo esc_html( $selected ); ?>> <label for="mc_edit_all"><?php esc_html_e( 'Edit All Categories', 'my-calendar' ); ?></li>
 				<?php echo mc_category_select( $permissions, true, true, 'mc_user_permissions[]' ); ?>
