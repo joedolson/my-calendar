@@ -3078,6 +3078,7 @@ function mc_grouped_events( $id, $template = '' ) {
  * @return string|array form options or array of values.
  */
 function mc_recur_options( $value, $return = 'select' ) {
+	$options = '';
 	$values  = array(
 		array(
 			'value'  => 'S',
@@ -3116,7 +3117,6 @@ function mc_recur_options( $value, $return = 'select' ) {
 			'period' => YEAR_IN_SECONDS,
 		),
 	);
-	$options = '';
 	if ( 'select' === $return ) {
 		foreach ( $values as $key => $val ) {
 			// Biweekly is just a subset of weekly types. No longer an option to choose.
