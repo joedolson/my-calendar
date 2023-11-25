@@ -108,12 +108,30 @@ eventEnd.addEventListener( 'duetChange', function(e) {
 	myCalendarTestDates( endDate, startDate );
 });
 
+/**
+ * Disable the submit button if the end date is before the start date. Disable recurring options if length of event is greater than the recur period.
+ *
+ * @param {string} endDate Date string from end date field.
+ * @param {string} startDate Date string from start date field.
+ */
 function myCalendarTestDates( endDate, startDate ) {
 	if ( ! ( endDate && startDate ) ) {
 		return;
 	}
-	endDate = new Date( endDate );
+	endDate   = new Date( endDate );
 	startDate = new Date( startDate );
+	var dateDiff = ( endDate - startDate ) / 1000;
+	var recurOptions = document.querySelectorAll( '#e_recur option' );
+	if ( recurOptions ) {
+		recurOptions.forEach((el) =>{
+			var period = el.getAttribute( 'data-period' );
+			if ( period < dateDiff ) {
+				el.setAttribute( 'disabled', 'true' );
+			} else {
+				el.removeAttribute( 'disabled' );
+			}
+		});
+	}
 	if ( new Date( endDate ) < startDate ) {
 		eventDateError.classList.add( 'visible' );
 		submitButton.disabled = true;

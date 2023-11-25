@@ -3080,32 +3080,40 @@ function mc_grouped_events( $id, $template = '' ) {
 function mc_recur_options( $value, $return = 'select' ) {
 	$values  = array(
 		array(
-			'value' => 'S',
-			'label' => __( 'Does not recur', 'my-calendar' ),
+			'value'  => 'S',
+			'label'  => __( 'Does not recur', 'my-calendar' ),
+			'period' => 'none',
 		),
 		array(
-			'value' => 'D',
-			'label' => __( 'Daily', 'my-calendar' ),
+			'value'  => 'D',
+			'label'  => __( 'Daily', 'my-calendar' ),
+			'period' => 24 * HOUR_IN_SECONDS,
 		),
 		array(
-			'value' => 'E',
-			'label' => __( 'Daily, weekdays only', 'my-calendar' ),
+			'value'  => 'E',
+			'label'  => __( 'Daily, weekdays only', 'my-calendar' ),
+			'period' => 24 * HOUR_IN_SECONDS,
 		),
 		array(
-			'value' => 'W',
-			'label' => __( 'Weekly', 'my-calendar' ),
+			'value'  => 'W',
+			'label'  => __( 'Weekly', 'my-calendar' ),
+			'period' => 7 * DAY_IN_SECONDS,
+
 		),
 		array(
-			'value' => 'M',
-			'label' => __( 'Monthly by date (the 24th of each month)', 'my-calendar' ),
+			'value'  => 'M',
+			'label'  => __( 'Monthly by date (the 24th of each month)', 'my-calendar' ),
+			'period' => MONTH_IN_SECONDS,
 		),
 		array(
-			'value' => 'U',
-			'label' => __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ),
+			'value'  => 'U',
+			'label'  => __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ),
+			'period' => MONTH_IN_SECONDS,
 		),
 		array(
-			'value' => 'Y',
-			'label' => __( 'Yearly', 'my-calendar' ),
+			'value'  => 'Y',
+			'label'  => __( 'Yearly', 'my-calendar' ),
+			'period' => YEAR_IN_SECONDS,
 		),
 	);
 	$options = '';
@@ -3115,7 +3123,7 @@ function mc_recur_options( $value, $return = 'select' ) {
 			if ( 'B' === $value && 'W' === $val['value'] ) {
 				$value = 'W';
 			}
-			$options .= '<option value="' . esc_attr( $val['value'] ) . '" ' . selected( $val['value'], $value, false ) . '>' . esc_html( $val['label'] ) . '</option>';
+			$options .= '<option data-period="' . $val['period'] . '" value="' . esc_attr( $val['value'] ) . '" ' . selected( $val['value'], $value, false ) . '>' . esc_html( $val['label'] ) . '</option>';
 		}
 	} else {
 		return $values;
