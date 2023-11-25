@@ -1775,7 +1775,6 @@ function mc_locate_calendar() {
 		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_content LIKE '%[my_calendar%' AND post_status = 'publish'" );
 		if ( $post_ID ) {
 			$link = get_permalink( $post_ID );
-			mc_update_option( 'uri', $link );
 			mc_update_option( 'uri_id', $post_ID );
 			$return = array(
 				'response' => true,
@@ -1785,7 +1784,6 @@ function mc_locate_calendar() {
 			return $return;
 		} else {
 			$page = mc_generate_calendar_page( 'my-calendar' );
-			mc_update_option( 'uri', get_permalink( $page ) );
 			mc_update_option( 'uri_id', $page );
 			// translators: URL for new My Calendar page.
 			$confirmation = sprintf( esc_html__( 'New calendar page created at <a href="%s">My Calendar</a>', 'my-calendar' ), esc_url( get_permalink( $page ) ) );

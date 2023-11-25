@@ -692,7 +692,7 @@ function my_calendar_settings() {
 								<?php
 								$page_title = '';
 								$edit_link  = '';
-								$note       = __( 'Search to set a calendar page.', 'my-calendar' );
+								$note       = '';
 								if ( mc_get_option( 'uri_id' ) ) {
 									$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
 									$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
@@ -707,6 +707,7 @@ function my_calendar_settings() {
 										'name'    => 'mc_uri_query',
 										'label'   => __( 'Set My Calendar Primary Page', 'my-calendar' ),
 										'default' => $page_title,
+										'note'    => $note,
 										'atts'    => array(
 											'size'  => '20',
 											'class' => 'autocomplete-input',

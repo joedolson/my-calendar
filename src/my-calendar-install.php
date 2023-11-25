@@ -404,7 +404,6 @@ function mc_default_options() {
 		'default_direction'            => 'DESC',
 		'remote'                       => 'false',
 		'gmap_api_key'                 => '',
-		'uri'                          => '',
 		'uri_id'                       => '',
 		'open_uri'                     => '',
 		'use_permalinks'               => 'true',
@@ -520,7 +519,6 @@ function mc_generate_calendar_page( $slug ) {
 		$post    = get_page_by_path( $slug );
 		$post_ID = $post->ID;
 	}
-	mc_update_option( 'uri', get_permalink( $post_ID ) );
 	mc_update_option( 'uri_id', $post_ID );
 
 	return $post_ID;
