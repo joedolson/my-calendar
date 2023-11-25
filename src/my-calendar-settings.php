@@ -254,19 +254,8 @@ function mc_update_management_settings( $post ) {
 	$mc_remote        = ( ! empty( $post['mc_remote'] ) && 'on' === $post['mc_remote'] ) ? 'true' : 'false';
 	$mc_drop_tables   = ( ! empty( $post['mc_drop_tables'] ) && 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
 	$mc_drop_settings = ( ! empty( $post['mc_drop_settings'] ) && 'on' === $post['mc_drop_settings'] ) ? 'true' : 'false';
-	// Handle My Calendar primary URL.
-	$mc_uri = mc_get_option( 'uri' );
-	if ( isset( $post['mc_uri'] ) && ! isset( $post['mc_uri_id'] ) ) {
-		$mc_uri = $post['mc_uri'];
-	} elseif ( isset( $post['mc_uri_id'] ) && is_numeric( $post['mc_uri_id'] ) ) {
-		if ( get_post( absint( $post['mc_uri_id'] ) ) ) {
-			$mc_uri = get_permalink( absint( $post['mc_uri_id'] ) );
-		} else {
-			$mc_uri = isset( $post['mc_uri'] ) ? $post['mc_uri'] : mc_get_option( 'uri' );
-		}
-	}
+	// Handle My Calendar primary URL. Storing URL string removed in 3.5.0.
 	$option['use_permalinks']    = ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false';
-	$option['uri']               = $mc_uri;
 	$option['uri_id']            = absint( $post['mc_uri_id'] );
 	$option['api_enabled']       = $mc_api_enabled;
 	$option['remote']            = $mc_remote;
@@ -708,9 +697,8 @@ function my_calendar_settings() {
 								mc_settings_field(
 									array(
 										'name'    => 'mc_uri_query',
-										'label'   => __( 'Calendar Page Location', 'my-calendar' ),
+										'label'   => __( 'Set My Calendar Primary Page', 'my-calendar' ),
 										'default' => $page_title,
-										'note'    => $note,
 										'atts'    => array(
 											'size'  => '20',
 											'class' => 'autocomplete-input',
@@ -1632,7 +1620,7 @@ function mc_remote_db() {
 								?>
 								</li>
 								<?php
-								$disabled = ( ! mc_get_option( 'uri' ) && ! mc_get_option( 'mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
+								$disabled = ( ! mc_get_option( 'uri_id' ) && ! mc_get_option( 'mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
 								if ( ! empty( $disabled ) ) {
 									// Ensure that this option is set to a valid value if no URI configured.
 									mc_update_option( 'open_day_uri', 'false' );

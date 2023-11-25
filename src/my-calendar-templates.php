@@ -904,7 +904,7 @@ function mc_get_details_link( $event ) {
  *
  * @uses filter 'mc_get_uri'
  *
- * @return mixed string/boolean URL
+ * @return string|boolean URL or boolean.
  */
 function mc_get_uri( $event = false, $args = array() ) {
 	// For a brief period of time, mc_uri was a post ID.
@@ -913,12 +913,9 @@ function mc_get_uri( $event = false, $args = array() ) {
 	$mc_id  = mc_get_option( 'uri_id' );
 	if ( is_numeric( $mc_uri ) && ! $mc_id ) {
 		mc_update_option( 'uri_id', $mc_uri );
-		mc_update_option( 'uri', get_permalink( $mc_id ) );
 	}
-	$mc_uri = mc_get_option( 'uri' );
-	$mc_id  = mc_get_option( 'uri_id' );
-
-	$uri = ( get_permalink( $mc_id ) !== mc_get_option( 'uri' ) ) ? mc_get_option( 'uri' ) : get_permalink( $mc_id );
+	$mc_id = mc_get_option( 'uri_id' );
+	$uri   = ( get_permalink( $mc_id ) ) ? get_permalink( $mc_id ) : false;
 
 	if ( 'boolean' === $event ) {
 		if ( ! _mc_is_url( $uri ) ) {
@@ -928,9 +925,6 @@ function mc_get_uri( $event = false, $args = array() ) {
 		}
 	}
 
-	if ( ! $uri ) {
-		$uri = home_url();
-	}
 	/**
 	 * Link to the My Calendar main calendar view.
 	 *
