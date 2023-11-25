@@ -1508,10 +1508,11 @@ function mc_parse_date_format() {
  * Enqueue Duet Date Picker.
  */
 function mc_enqueue_duet() {
-	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), mc_get_version() );
-	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), mc_get_version() );
+	$version = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : mc_get_version();
+	wp_enqueue_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), $version );
+	wp_enqueue_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $version );
 	// Enqueue datepicker options.
-	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), mc_get_version(), true );
+	wp_enqueue_script( 'mc.duet', plugins_url( 'js/mc-datepicker.js', __FILE__ ), array( 'duet.js' ), $version, true );
 	wp_localize_script(
 		'mc.duet',
 		'duetFormats',
