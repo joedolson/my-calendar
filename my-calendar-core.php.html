@@ -1137,7 +1137,6 @@ function mc_admin_bar() {
 	if ( mc_get_uri( 'boolean' ) ) {
 		mc_add_adminbar_link( $mc_id );
 	} else {
-		mc_locate_calendar();
 		$mc_id = mc_get_option( 'uri_id' );
 		if ( ! $mc_id ) {
 			$url  = admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' );
@@ -1798,7 +1797,7 @@ function mc_locate_calendar() {
 	}
 
 	if ( ! $has_uri ) {
-		// Locate oldest post containing my_calendar shortcode.
+		// Locate oldest post containing my_calendar shortcode. Will also locate upcoming events shortcodes, however.
 		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_content LIKE '%[my_calendar%' AND post_status = 'publish'" );
 		if ( $post_ID ) {
 			$link = get_permalink( $post_ID );
@@ -1987,6 +1986,7 @@ function mc_register_actions() {
 	add_action( 'mc_delete_event', 'mc_event_delete_post', 10, 2 );
 	add_action( 'mc_mass_delete_events', 'mc_event_delete_posts', 10, 1 );
 	add_action( 'parse_request', 'my_calendar_api' );
+	add_action( 'delete_post', 'mc_check_calendar_page', 10, 2 );
 }
 
 // Filters.
@@ -2000,6 +2000,19 @@ add_filter( 'body_class', 'mc_body_classes', 10, 1 );
 // Actions.
 add_action( 'init', 'mc_taxonomies', 0 );
 add_action( 'init', 'mc_posttypes' );
+
+/**
+ * Check if deleted post is the My Calendar page. If it is, unset the My Calendar setting.
+ *
+ * @param int    $post_ID Post ID.
+ * @param object $post Post object.
+ */
+function mc_check_calendar_page( $post_ID, $post ) {
+	$calendar_page = mc_get_option( 'uri_id' );
+	if ( $post_ID === (int) $calendar_page ) {
+		mc_update_option( 'uri_id', '' );
+	}
+}
 
 /**
  * Change out previous post link for previous event.
