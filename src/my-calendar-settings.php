@@ -512,6 +512,14 @@ function mc_import_settings() {
 						$return = __( "The file uploaded doesn't seem to be a valid collection of My Calendar settings.", 'my-calendar' );
 					} else {
 						$settings = map_deep( $settings, 'sanitize_textarea_field' );
+						// Remove the calendar location ID from imported settings. Set to local value if present.
+						if ( isset( $settings['uri_id'] ) ) {
+							if ( mc_get_option( 'uri_id' ) ) {
+								$settings['uri_id'] = mc_get_option( 'uri_id' );
+							} else {
+								unset( $settings['uri_id'] );
+							}
+						}
 						update_option( 'my_calendar_options', $settings );
 						$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
 					}
