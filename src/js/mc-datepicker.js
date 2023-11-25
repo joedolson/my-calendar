@@ -20,21 +20,16 @@ pickers.forEach((picker) => {
 			switch ( duetFormats.date ) {
 				case 'Y-m-d':
 					return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-					break;
 				case 'm/d/Y':
 					return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-					break;
 				case 'd-m-Y':
 					return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-					break;
 				case 'j F Y':
 					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'long' } ).format( date );
 					return `${date.getDate()} ${fullMonth} ${date.getFullYear()}`
-					break;
 				case 'M j, Y':
 					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'short' } ).format( date );
 					return `${date.getDate()} ${fullMonth}, ${date.getFullYear()}`
-					break;
 				default:
 					return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
 			}
