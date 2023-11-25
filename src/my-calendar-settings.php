@@ -722,7 +722,7 @@ function my_calendar_settings() {
 								mc_settings_field(
 									array(
 										'name'    => 'mc_default_sort',
-										'label'   => __( 'Default sort order for Admin Events List', 'my-calendar' ),
+										'label'   => __( 'Default sort for Admin Events', 'my-calendar' ),
 										'default' => array(
 											'1' => __( 'ID', 'my-calendar' ),
 											'2' => __( 'Title', 'my-calendar' ),
@@ -831,7 +831,7 @@ function mc_remote_db() {
 								mc_settings_field(
 									array(
 										'name'  => 'mc_api_enabled',
-										'label' => __( 'Enable external API', 'my-calendar' ),
+										'label' => __( 'Enable events API', 'my-calendar' ),
 										'type'  => 'checkbox-single',
 									)
 								);
@@ -854,7 +854,7 @@ function mc_remote_db() {
 								mc_settings_field(
 									array(
 										'name'  => 'mc_drop_tables',
-										'label' => __( 'Drop MySQL tables on uninstall', 'my-calendar' ),
+										'label' => __( 'Drop database tables on uninstall', 'my-calendar' ),
 										'type'  => 'checkbox-single',
 									)
 								);
