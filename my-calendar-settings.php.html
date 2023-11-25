@@ -538,6 +538,14 @@ function mc_import_settings() {
 						$return = __( "The file uploaded doesn't seem to be a valid collection of My Calendar settings.", 'my-calendar' );
 					} else {
 						$settings = map_deep( $settings, 'sanitize_textarea_field' );
+						// Remove the calendar location ID from imported settings. Set to local value if present.
+						if ( isset( $settings['uri_id'] ) ) {
+							if ( mc_get_option( 'uri_id' ) ) {
+								$settings['uri_id'] = mc_get_option( 'uri_id' );
+							} else {
+								unset( $settings['uri_id'] );
+							}
+						}
 						update_option( 'my_calendar_options', $settings );
 						$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
 					}
@@ -710,7 +718,7 @@ function my_calendar_settings() {
 								&lt;?php
 								$page_title = '';
 								$edit_link  = '';
-								$note       = __( 'Search to set a calendar page.', 'my-calendar' );
+								$note       = '';
 								if ( mc_get_option( 'uri_id' ) ) {
 									$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
 									$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
@@ -725,6 +733,7 @@ function my_calendar_settings() {
 										'name'    => 'mc_uri_query',
 										'label'   => __( 'Set My Calendar Primary Page', 'my-calendar' ),
 										'default' => $page_title,
+										'note'    => $note,
 										'atts'    => array(
 											'size'  => '20',
 											'class' => 'autocomplete-input',
@@ -748,7 +757,7 @@ function my_calendar_settings() {
 								mc_settings_field(
 									array(
 										'name'    => 'mc_default_sort',
-										'label'   => __( 'Default sort order for Admin Events List', 'my-calendar' ),
+										'label'   => __( 'Default sort for Admin Events', 'my-calendar' ),
 										'default' => array(
 											'1' => __( 'ID', 'my-calendar' ),
 											'2' => __( 'Title', 'my-calendar' ),
@@ -857,7 +866,7 @@ function mc_remote_db() {
 								mc_settings_field(
 									array(
 										'name'  => 'mc_api_enabled',
-										'label' => __( 'Enable external API', 'my-calendar' ),
+										'label' => __( 'Enable events API', 'my-calendar' ),
 										'type'  => 'checkbox-single',
 									)
 								);
@@ -880,7 +889,7 @@ function mc_remote_db() {
 								mc_settings_field(
 									array(
 										'name'  => 'mc_drop_tables',
-										'label' => __( 'Drop MySQL tables on uninstall', 'my-calendar' ),
+										'label' => __( 'Drop database tables on uninstall', 'my-calendar' ),
 										'type'  => 'checkbox-single',
 									)
 								);
