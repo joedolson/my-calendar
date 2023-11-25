@@ -70,7 +70,7 @@ register_deactivation_hook( __FILE__, 'mc_plugin_deactivated' );
  * Actions to execute on activation.
  */
 function mc_plugin_activated() {
-	$required_php_version = '5.6.0';
+	$required_php_version = '7.0.0';
 
 	if ( version_compare( PHP_VERSION, $required_php_version, '<' ) ) {
 		$plugin_data = get_plugin_data( __FILE__, false );
