@@ -2134,6 +2134,11 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$endtime = '23:59:59';
 		}
 
+		if ( $endtime < $time && $end === $begin ) {
+			// If the endtime is earlier than the start time but the dates are the same.
+			// the user most likely is creating a late night event that ends on the next day.
+			$end = mc_date( 'Y-m-d', mc_strtotime( $end . ' + 1 day' ) );
+		}
 		// Verify formats.
 		$time    = mc_date( 'H:i:s', mc_strtotime( $time ), false );
 		$endtime = mc_date( 'H:i:s', mc_strtotime( $endtime ), false );
