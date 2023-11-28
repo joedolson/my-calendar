@@ -109,6 +109,7 @@ function mc_ts( $test = false ) {
  * @return array qualified events
  */
 function my_calendar_get_events( $args ) {
+	$get      = map_deep( $_GET, 'sanitize_text_field' );
 	$from     = isset( $args['from'] ) ? $args['from'] : '';
 	$to       = isset( $args['to'] ) ? $args['to'] : '';
 	$category = isset( $args['category'] ) ? $args['category'] : 'all';
@@ -126,21 +127,23 @@ function my_calendar_get_events( $args ) {
 	}
 
 	if ( null === $holidays ) {
-		$ccategory = ( isset( $_GET['mcat'] ) && '' !== trim( $_GET['mcat'] ) ) ? $_GET['mcat'] : $category;
+		$ccategory = ( isset( $get['mcat'] ) && '' !== trim( $get['mcat'] ) ) ? $get['mcat'] : $category;
 	} else {
 		$ccategory = $category;
 	}
-	$cltype  = ( isset( $_GET['ltype'] ) ) ? $_GET['ltype'] : $ltype;
-	$clvalue = ( isset( $_GET['loc'] ) ) ? $_GET['loc'] : $lvalue;
-	$clauth  = ( isset( $_GET['mc_auth'] ) ) ? $_GET['mc_auth'] : $author;
-	$clhost  = ( isset( $_GET['mc_host'] ) ) ? $_GET['mc_host'] : $host;
+	$cltype  = ( isset( $get['ltype'] ) ) ? $get['ltype'] : $ltype;
+	$clvalue = ( isset( $get['loc'] ) ) ? $get['loc'] : $lvalue;
+	$clauth  = ( isset( $get['mc_auth'] ) ) ? $get['mc_auth'] : $author;
+	$clhost  = ( isset( $get['mc_host'] ) ) ? $get['mc_host'] : $host;
 
 	// If location value is not set, then location type shouldn't be set.
 	if ( 'all' === $clvalue ) {
 		$cltype = 'all';
 	}
 
-	if ( ! mc_checkdate( $from ) || ! mc_checkdate( $to ) ) {
+	$from = mc_checkdate( $from );
+	$to   = mc_checkdate( $to );
+	if ( ! $from || ! $to ) {
 		return array();
 	} // Not valid dates.
 
@@ -150,7 +153,7 @@ function my_calendar_get_events( $args ) {
 	$select_author      = ( 'all' !== $clauth ) ? mc_select_author( $clauth ) : '';
 	$select_host        = ( 'all' !== $clhost ) ? mc_select_host( $clhost ) : '';
 	$select_location    = mc_select_location( $cltype, $clvalue );
-	$select_access      = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
+	$select_access      = ( isset( $get['access'] ) ) ? mc_access_limit( $get['access'] ) : '';
 	$select_published   = mc_select_published();
 	$search             = mc_prepare_search_query( $search );
 	$exclude_categories = mc_private_categories();
@@ -567,8 +570,8 @@ function mc_get_search_results( $search ) {
 	$after = apply_filters( 'mc_future_search_results', 15 ); // return only future events, nearest 10.
 	if ( is_array( $search ) ) {
 		// If from & to are set, we need to use a date-based event query.
-		$from     = $search['from'];
-		$to       = $search['to'];
+		$from     = mc_checkdate( $search['from'] );
+		$to       = mc_checkdate( $search['to'] );
 		$category = ( isset( $search['category'] ) ) ? $search['category'] : null;
 		$ltype    = ( isset( $search['ltype'] ) ) ? $search['ltype'] : null;
 		$lvalue   = ( isset( $search['lvalue'] ) ) ? $search['lvalue'] : null;
@@ -876,7 +879,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			'tags'     => $event,
 			'template' => $template,
 		);
-		$details = mc_load_template( 'now', $args );
+		$details = mc_load_template( 'event/now', $args );
 		if ( $details ) {
 			$return = $details;
 		} else {
@@ -963,7 +966,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			'tags'     => $event,
 			'template' => $template,
 		);
-		$details = mc_load_template( 'next', $args );
+		$details = mc_load_template( 'event/next', $args );
 		if ( $details ) {
 			$return = $details;
 		} else {
@@ -1042,7 +1045,7 @@ function mc_instance_list( $args ) {
 			$event_id = $result->occur_id;
 			$event    = mc_get_event( $event_id );
 			$array    = mc_create_tags( $event );
-			if ( in_array( $template, array( 'details', 'grid', 'list', 'mini' ), true ) || mc_key_exists( $template ) ) {
+			if ( in_array( $template, array( 'details', 'grid', 'list', 'mini', 'card' ), true ) || mc_key_exists( $template ) ) {
 				if ( 1 === (int) mc_get_option( 'use_' . $template . '_template' ) ) {
 					$template = mc_get_template( $template );
 				} elseif ( mc_key_exists( $template ) ) {
@@ -1098,7 +1101,7 @@ function mc_admin_instances( $id, $occur = 0 ) {
 			// Omitting format from mc_date() returns timestamp.
 			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
 			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
-			$class = '';
+			$class = ( my_calendar_date_xcomp( mc_date( 'Y-m-d H:i:00', $start ), mc_date( 'Y-m-d H:i:00', time() ) ) ) ? 'past-event' : 'future-event';
 			if ( (int) $result->occur_id === (int) $occur || 1 === $count ) {
 				$control = '';
 				$edit    = "<p>$date</p><p><em>" . __( 'Editing Now', 'my-calendar' ) . '</em></p>';

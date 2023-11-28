@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.4
 Requires PHP: 7.0
 Text domain: my-calendar
-Stable tag: 3.4.21
+Stable tag: 3.4.23
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
@@ -85,6 +85,14 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.4.23 =
+
+* Bug fix: Date validation function applied a timezone offset by mistake, causing functions detecting the current day to sometimes return the wrong day.
+
+= 3.4.22 =
+
+* Security: Fix unauthorized SQL injection vulnerability. Update as soon as possible. Props Tenable. 
 
 = 3.4.21 =
 
@@ -335,5 +343,5 @@ The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](
 8. Template editing
 
 == Upgrade Notice ==
-= 3.4.4 =
-Security Update: Please update to 3.4.4 or higher as soon as possible.
+= 3.4.22 =
+Security Update: Please update to 3.4.22 or higher as soon as possible.
