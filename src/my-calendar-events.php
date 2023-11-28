@@ -1101,7 +1101,7 @@ function mc_admin_instances( $id, $occur = 0 ) {
 			// Omitting format from mc_date() returns timestamp.
 			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
 			$date  = "<span id='occur_date_$result->occur_id'>" . $date . '<br />' . $time . '</span>';
-			$class = '';
+			$class = ( my_calendar_date_xcomp( mc_date( 'Y-m-d H:i:00', $start ), mc_date( 'Y-m-d H:i:00', time() ) ) ) ? 'past-event' : 'future-event';
 			if ( (int) $result->occur_id === (int) $occur || 1 === $count ) {
 				$control = '';
 				$edit    = "<p>$date</p><p><em>" . __( 'Editing Now', 'my-calendar' ) . '</em></p>';
