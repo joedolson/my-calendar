@@ -2631,8 +2631,8 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			<select name='loc' id='mc-locations-list'>
 			<option value='all'>" . __( 'All Locations', 'my-calendar' ) . "</option>\n";
 		}
-		foreach ( $locations as $key => $location ) {
-			foreach ( $location as $k => $value ) {
+		foreach ( $locations as $location ) {
+			foreach ( $location as $value ) {
 				$vt    = urlencode( trim( $value ) );
 				$value = strip_tags( stripcslashes( $value ), mc_strip_tags() );
 				if ( '' === trim( $value ) ) {
