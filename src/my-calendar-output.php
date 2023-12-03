@@ -233,6 +233,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 * @param {object} $event My Calendar Event Object.
 	 */
 	do_action( 'my_calendar_drawing_event', $event );
+	if ( empty( $tags ) ) {
+		$tags = mc_create_tags( $event );
+	}
 	$data    = array(
 		'event'        => $event,
 		'process_date' => $process_date,
@@ -473,7 +476,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
  *
  * @return string
  */
-function mc_draw_event_title( $event, $data, $type, $image ) {
+function mc_draw_event_title( $event, $tags, $type, $image ) {
 	switch ( $type ) {
 		case 'calendar':
 			$title_template = ( mc_get_template( 'title' ) === '' ) ? '{title}' : mc_get_template( 'title' );
@@ -491,12 +494,12 @@ function mc_draw_event_title( $event, $data, $type, $image ) {
 			$title_template = ( mc_get_template( 'title' ) === '' ) ? '{title}' : mc_get_template( 'title' );
 	}
 
-	$event_title = mc_draw_template( $data, $title_template );
+	$event_title = mc_draw_template( $tags, $title_template );
 	if ( 0 === strpos( $event_title, ': ' ) ) {
 		// If the first two characters of the title are ": ", this is the default templates but no time.
 		$event_title = str_replace( ': ', '', $event_title );
 	}
-	$event_title = ( '' === $event_title ) ? $data['title'] : strip_tags( $event_title, mc_strip_tags() );
+	$event_title = ( '' === $event_title ) ? $tags['title'] : strip_tags( $event_title, mc_strip_tags() );
 	if ( 'single' === $type ) {
 		/**
 		 * Customize event title in single view.
@@ -522,7 +525,7 @@ function mc_draw_event_title( $event, $data, $type, $image ) {
 		 *
 		 * @return {string}
 		 */
-		$event_title = apply_filters( 'mc_event_title', $event_title, $event, $data['title'], $image );
+		$event_title = apply_filters( 'mc_event_title', $event_title, $event, $tags['title'], $image );
 	}
 
 	return $event_title;
