@@ -366,12 +366,12 @@ function mc_get_all_events( $args ) {
 	$select_location    = mc_select_location( $ltype, $lvalue );
 	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
 
-	$select_access      = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
-	$select_published   = mc_select_published();
-	$select_author      = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
-	$select_host        = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
-	$date               = current_time( 'Y-m-d' );
-	$ts_string          = mc_ts();
+	$select_access    = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
+	$select_published = mc_select_published();
+	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
+	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
+	$date             = current_time( 'Y-m-d' );
+	$ts_string        = mc_ts();
 
 	$limit   = "$select_published $select_category $select_author $select_host $select_access $search";
 	$events1 = array();

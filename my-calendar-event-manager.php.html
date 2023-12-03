@@ -989,8 +989,8 @@ function mc_admin_events_table( $events ) {
 					&lt;?php
 					$elabel = '';
 					if ( property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
-						$filter   = $event->event_location;
-						$elabel   = $event->location->location_label;
+						$filter = $event->event_location;
+						$elabel = $event->location->location_label;
 					}
 					if ( '' !== $elabel ) {
 						?>
