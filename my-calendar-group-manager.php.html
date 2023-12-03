@@ -1009,7 +1009,15 @@ function mc_list_groups() {
 							?>
 						&lt;/div>
 					&lt;/td>
-					&lt;td>&lt;?php echo strip_tags( stripslashes( $event->event_label ) ); ?>&lt;/td>
+					&lt;td>
+					&lt;?php
+					$elabel = '';
+					if ( property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
+						$elabel = $event->location->location_label;
+					}
+					echo strip_tags( stripslashes( $elabel ) );
+					?>
+					&lt;/td>
 					&lt;?php
 					if ( '23:59:59' !== $event->event_endtime ) {
 						$event_time = date_i18n( mc_time_format(), strtotime( $event->event_time ) );
