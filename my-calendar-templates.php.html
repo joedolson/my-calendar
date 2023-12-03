@@ -159,9 +159,8 @@ function mc_map_string( $event, $source = 'event' ) {
 	if ( ! is_object( $event ) ) {
 		return '';
 	}
-	if ( 'event' === $source ) {
-		$map_string = $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode . ' ' . $event->event_country;
-	} else {
+	$event = mc_get_event_location( $event, $source );
+	if ( $event ) {
 		$map_string = $event->location_street . ' ' . $event->location_street2 . ' ' . $event->location_city . ' ' . $event->location_state . ' ' . $event->location_postcode . ' ' . $event->location_country;
 	}
 
@@ -178,39 +177,30 @@ function mc_map_string( $event, $source = 'event' ) {
  * @return string URL or link depending on request
  */
 function mc_maplink( $event, $request = 'map', $source = 'event' ) {
+	$event = mc_get_event_location( $event, $source );
+	if ( ! $event ) {
+		return '';
+	}
 	$map_string = mc_map_string( $event, $source );
 	// If the string is empty, then exit.
 	if ( '' === $map_string ) {
 		return '';
 	}
 	$map_target = mc_get_option( 'map_service' );
-	if ( 'event' === $source ) {
-		if ( 'gcal' === $request ) {
-			return $map_string;
-		}
-		$zoom       = ( '0' !== $event->event_zoom ) ? $event->event_zoom : '15';
-		$url        = $event->event_url;
-		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->event_label ) ) ? $event->event_label : $event->event_title ), mc_strip_tags() );
-		$map_string = str_replace( ' ', '+', $map_string );
-		if ( '0.000000' !== $event->event_longitude &amp;&amp; '0.000000' !== $event->event_latitude &amp;&amp; 'mapquest' !== $map_target ) {
-			$dir_lat    = ( $event->event_latitude > 0 ) ? 'N' : 'S';
-			$latitude   = abs( $event->event_latitude );
-			$dir_long   = ( $event->event_longitude > 0 ) ? 'E' : 'W';
-			$longitude  = abs( $event->event_longitude );
-			$map_string = $latitude . $dir_lat . ',' . $longitude . $dir_long;
-		}
-	} else {
-		$url        = $event->location_url;
-		$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
-		$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
-		$map_string = str_replace( ' ', '+', $map_string );
-		if ( '0.000000' !== $event->location_longitude &amp;&amp; '0.000000' !== $event->location_latitude &amp;&amp; 'mapquest' !== $map_target ) {
-			$dir_lat    = ( $event->location_latitude > 0 ) ? 'N' : 'S';
-			$latitude   = abs( $event->location_latitude );
-			$dir_long   = ( $event->location_longitude > 0 ) ? 'E' : 'W';
-			$longitude  = abs( $event->location_longitude );
-			$map_string = $latitude . $dir_lat . ',' . $longitude . $dir_long;
-		}
+	if ( 'gcal' === $request ) {
+		return $map_string;
+	}
+
+	$url        = $event->location_url;
+	$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
+	$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
+	$map_string = str_replace( ' ', '+', $map_string );
+	if ( '0.000000' !== $event->location_longitude &amp;&amp; '0.000000' !== $event->location_latitude &amp;&amp; 'mapquest' !== $map_target ) {
+		$dir_lat    = ( $event->location_latitude > 0 ) ? 'N' : 'S';
+		$latitude   = abs( $event->location_latitude );
+		$dir_long   = ( $event->location_longitude > 0 ) ? 'E' : 'W';
+		$longitude  = abs( $event->location_longitude );
+		$map_string = $latitude . $dir_lat . ',' . $longitude . $dir_long;
 	}
 	// Translators: Name of location.
 	$label = sprintf( __( 'Map&lt;span> to %s&lt;/span>', 'my-calendar' ), $map_label );
@@ -322,28 +312,25 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
  * @return string hcard
  */
 function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' ) {
-	if ( ! is_object( $event ) ) {
+	$event = mc_get_event_location( $event, $source );
+	if ( ! $event ) {
 		return '';
 	}
-	if ( 'event' === $source &amp;&amp; property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
-		$event  = $event->location;
-		$source = 'location';
-	}
+	$source  = 'location';
 	$the_map = mc_maplink( $event, 'url', $source );
-	$url     = ( 'event' === $source ) ? $event->event_url : $event->location_url;
-	$url     = esc_url( $url );
-	$label   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_label : $event->location_label ), mc_strip_tags() );
-	$street  = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_street : $event->location_street ), mc_strip_tags() );
-	$street2 = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_street2 : $event->location_street2 ), mc_strip_tags() );
-	$city    = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_city : $event->location_city ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_state : $event->location_state ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_state : $event->location_state ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_postcode : $event->location_postcode ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_postcode : $event->location_postcode ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_country : $event->location_country ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_country : $event->location_country ), mc_strip_tags() );
-	$phone   = strip_tags( stripslashes( ( 'event' === $source ) ? $event->event_phone : $event->location_phone ), mc_strip_tags() );
-	$loc_id  = absint( ( 'event' === $source ) ? false : $event->location_id );
+	$url     = esc_url( $event->location_url );
+	$label   = strip_tags( stripslashes( $event->location_label ), mc_strip_tags() );
+	$street  = strip_tags( stripslashes( $event->location_street ), mc_strip_tags() );
+	$street2 = strip_tags( stripslashes( $event->location_street2 ), mc_strip_tags() );
+	$city    = strip_tags( stripslashes( $event->location_city ), mc_strip_tags() );
+	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
+	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
+	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
+	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
+	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
+	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
+	$phone   = strip_tags( stripslashes( $event->location_phone ), mc_strip_tags() );
+	$loc_id  = absint( $event->location_id );
 	if ( ! $url &amp;&amp; ! $label &amp;&amp; ! $street &amp;&amp; ! $street2 &amp;&amp; ! $city &amp;&amp; ! $state &amp;&amp; ! $zip &amp;&amp; ! $country &amp;&amp; ! $phone ) {
 		return '';
 	}
@@ -427,6 +414,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( ! is_object( $event ) ) {
 		return array();
 	}
+	$location = mc_get_event_location( $event, 'event' );
 	/**
 	 * Execute action before tags are created.
 	 *
@@ -440,7 +428,6 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( 'filters' !== $context &amp;&amp; 'related' !== $context ) {
 		$calendar_id = $context;
 	}
-	$site        = ( isset( $event->site_id ) ) ? $event->site_id : false;
 	$e           = array();
 	$e['post']   = $event->event_post;
 	$date_format = mc_date_format();
@@ -465,15 +452,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @return {array} Template tag array.
 	 */
-	$e             = apply_filters( 'mc_filter_image_data', $e, $event );
-	$sitelink_html = "&lt;div class='url link'>&lt;a href='" . esc_url( $event->event_url ) . "' class='location-link external'>";
-
-	// Translators: Location name.
-	$sitelink_html     .= sprintf( __( 'Visit web site&lt;span class="screen-reader-text">: %s&lt;/span>', 'my-calendar' ), $event->event_label );
-	$sitelink_html     .= '&lt;/a>&lt;/div>';
-	$e['sitelink_html'] = $sitelink_html;
-	$e['sitelink']      = $event->event_url;
-	$e['access']        = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+	$e           = apply_filters( 'mc_filter_image_data', $e, $event );
+	$e['access'] = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
 
 	// Date &amp; time fields.
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
@@ -615,16 +595,16 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
 	$replacements = array(
 		stripslashes( $e['title'] ),
-		stripslashes( $event->event_label ),
+		stripslashes( ( $location ) ? $location->location_label : '' ),
 		$event->category_color,
 		$event->category_icon,
 		$e['date'],
 		$e['time'],
 	);
 
+	$e_label   = str_replace( $tags, $replacements, $e_template );
 	$classes   = mc_get_event_classes( $event, 'template' );
 	$nofollow  = ( stripos( $classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
-	$e_label   = str_replace( $tags, $replacements, $e_template );
 	$e_link    = mc_get_details_link( $event );
 	$e['link'] = mc_event_link( $event );
 	if ( $e['link'] ) {
@@ -670,90 +650,72 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// location fields.
 	$e['location_source'] = $event->event_location;
 	$map_gcal             = '';
-	if ( property_exists( $event, 'location' ) ) {
-		$location = $event->location;
-		if ( is_object( $location ) ) {
-			$map           = mc_maplink( $location, 'map', 'location' );
-			$map_url       = mc_maplink( $location, 'url', 'location' );
-			$map_gcal      = mc_maplink( $location, 'gcal', 'location' );
-			$e['location'] = stripslashes( $location->location_label );
-			$e['street']   = stripslashes( $location->location_street );
-			$e['street2']  = stripslashes( $location->location_street2 );
-			/**
-			 * Format a phone number for display in template tags.
-			 *
-			 * @hook mc_phone_format
-			 *
-			 * @param {string} $number Phone number as saved in `$location->location_phone`.
-			 * @param {string} $context 'phone'.
-			 *
-			 * @return {string} Formatted number.
-			 */
-			$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
-			/**
-			 * Format a phone number for display in template tags.
-			 *
-			 * @hook mc_phone_format
-			 *
-			 * @param {string} $number Phone number as saved in `$location->location_phone`.
-			 * @param {string} $context 'phone2'.
-			 *
-			 * @return {string} Formatted number.
-			 */
-			$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ), 'phone2' );
-			$e['city']            = stripslashes( $location->location_city );
-			$e['state']           = stripslashes( $location->location_state );
-			$e['postcode']        = stripslashes( $location->location_postcode );
-			$e['country']         = stripslashes( $location->location_country );
-			$e['region']          = $location->location_region;
-			$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
-			$e['link_map']        = $map;
-			$e['map_url']         = $map_url;
-			$e['map']             = mc_generate_map( $location, 'location' );
-			$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
-			$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
-		}
-	} else {
-		$map           = mc_maplink( $event );
-		$map_url       = mc_maplink( $event, 'url' );
-		$map_gcal      = mc_maplink( $event, 'gcal' );
-		$e['location'] = stripslashes( $event->event_label );
-		$e['street']   = stripslashes( $event->event_street );
-		$e['street2']  = stripslashes( $event->event_street2 );
+	if ( is_object( $location ) ) {
+		$sitelink_html = "&lt;div class='url link'>&lt;a href='" . esc_url( $location->location_url ) . "' class='location-link external'>";
+
+		// Translators: Location name.
+		$sitelink_html     .= sprintf( __( 'Visit web site&lt;span class="screen-reader-text">: %s&lt;/span>', 'my-calendar' ), $location->location_label );
+		$sitelink_html     .= '&lt;/a>&lt;/div>';
+		$e['sitelink_html'] = $sitelink_html;
+		$e['sitelink']      = $location->location_url;
+
+		$map           = mc_maplink( $location, 'map', 'location' );
+		$map_url       = mc_maplink( $location, 'url', 'location' );
+		$map_gcal      = mc_maplink( $location, 'gcal', 'location' );
+		$e['location'] = stripslashes( $location->location_label );
+		$e['street']   = stripslashes( $location->location_street );
+		$e['street2']  = stripslashes( $location->location_street2 );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
 		 * @hook mc_phone_format
 		 *
-		 * @param {string} $number Phone number as saved in `$event->event_phone`.
-		 * @param {stirng} $context 'phone'.
+		 * @param {string} $number Phone number as saved in `$location->location_phone`.
+		 * @param {string} $context 'phone'.
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone ), 'phone' );
+		$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
 		 * @hook mc_phone_format
 		 *
-		 * @param {string} $number Phone number as saved in `$event->event_phone2`.
+		 * @param {string} $number Phone number as saved in `$location->location_phone`.
 		 * @param {string} $context 'phone2'.
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $event->event_phone2 ), 'phone2' );
-		$e['city']            = stripslashes( $event->event_city );
-		$e['state']           = stripslashes( $event->event_state );
-		$e['postcode']        = stripslashes( $event->event_postcode );
-		$e['country']         = stripslashes( $event->event_country );
-		$e['region']          = $event->event_region;
-		$e['hcard']           = stripslashes( mc_hcard( $event ) );
+		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ), 'phone2' );
+		$e['city']            = stripslashes( $location->location_city );
+		$e['state']           = stripslashes( $location->location_state );
+		$e['postcode']        = stripslashes( $location->location_postcode );
+		$e['country']         = stripslashes( $location->location_country );
+		$e['region']          = $location->location_region;
+		$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
 		$e['link_map']        = $map;
 		$e['map_url']         = $map_url;
-		$e['map']             = mc_generate_map( $event );
-		$location_access      = mc_location_data( 'location_access', $event->event_location );
-		$e['location_access'] = ( is_string( $location_access ) &amp;&amp; '' !== $location_access ) ? mc_expand( unserialize( $location_access ) ) : '';
-		$e['ical_location']   = trim( $event->event_label . ' ' . $event->event_street . ' ' . $event->event_street2 . ' ' . $event->event_city . ' ' . $event->event_state . ' ' . $event->event_postcode );
+		$e['map']             = mc_generate_map( $location, 'location' );
+		$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
+		$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
+	} else {
+		// Until 3.5, these were populated from the events table.
+		$e['location']        = '';
+		$e['street']          = '';
+		$e['street2']         = '';
+		$e['phone']           = '';
+		$e['phone2']          = '';
+		$e['city']            = '';
+		$e['state']           = '';
+		$e['postcode']        = '';
+		$e['country']         = '';
+		$e['region']          = '';
+		$e['hcard']           = '';
+		$e['link_map']        = '';
+		$e['map_url']         = '';
+		$e['map']             = '';
+		$e['location_access'] = '';
+		$e['ical_location']   = '';
 	}
 
 	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
@@ -1140,6 +1102,35 @@ function mc_event_expired( $event ) {
 }
 
 /**
+ * Get location from event.
+ *
+ * @param object $event Either a location or an event object with location data.
+ * @param string $source Source type being checked.
+ *
+ * @return object|bool
+ */
+function mc_get_event_location( $event, $source ) {
+	if ( 'location' === $source ) {
+		return $event;
+	}
+	// This is an event with a location object property.
+	if ( 'event' === $source &amp;&amp; property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
+		$location = $event->location;
+
+		return $location;
+	}
+	// This is an event with a location ID, but no attached object.
+	if ( 'event' === $source &amp;&amp; property_exists( $event, 'event_location' ) ) {
+		$location = mc_get_location( $event->event_location );
+
+		return $location;
+	}
+
+	// If we've gotten this far without finding location info, return false.
+	return false;
+}
+
+/**
  * Generate script and HTML for Google Maps embed if API key present
  *
  * @param object|array $event Object containing location parameters or array of objects.
@@ -1157,6 +1148,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 		return '';
 	}
 
+	$event    = mc_get_event_location( $event, $source );
 	$id       = '0';
 	$api_key  = mc_get_option( 'gmap_api_key' );
 	$markers  = '';
@@ -1185,24 +1177,14 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	 */
 	$height = apply_filters( 'mc_map_height', '300px', $event );
 	$styles = " style='width: $width;height: $height'";
-	// This is an event with a location object property.
-	if ( 'event' === $source &amp;&amp; property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
-		$event  = $event->location;
-		$source = 'location';
-	}
-	// This is an event with a location ID, but no attached object.
-	if ( 'event' === $source &amp;&amp; $event->event_location ) {
-		$event  = mc_get_location( $event->event_location );
-		$source = 'location';
-	}
+
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
 		if ( is_array( $locations ) ) {
 			$multiple = ( count( $locations ) > 1 ) ? true : false;
 			foreach ( $locations as $location ) {
 				$id     = wp_rand();
-				$loc_id = $location->{$source . '_id'};
-				$source = ( 'event' === $source ) ? 'event' : 'location';
+				$loc_id = $location->location_id;
 				/**
 				 * URL to Google Map marker image.
 				 *
@@ -1210,16 +1192,16 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				 *
 				 * @param {string} $icon    Formatted HTML to be returned.
 				 * @param {object} $location Event or location object containing location information.
-				 * @param {string} $source Either 'event' or 'location' indicating type of object.
+				 * @param {string} $source 'location'. Event source removed in 3.5.
 				 *
 				 * @return {string} URL to icon.
 				 */
-				$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, $source );
-				$address       = addslashes( mc_map_string( $location, $source ) );
+				$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, 'location' );
+				$address       = addslashes( mc_map_string( $location, 'location' ) );
 
-				if ( '0.000000' !== $location->{$source . '_longitude'} &amp;&amp; '0.000000' !== $location->{$source . '_latitude'} ) {
-					$lat    = $location->{$source . '_latitude'};
-					$lng    = $location->{$source . '_longitude'};
+				if ( '0.000000' !== $location->location_longitude &amp;&amp; '0.000000' !== $location->location_latitude ) {
+					$lat    = $location->location_latitude;
+					$lng    = $location->location_longitude;
 					$latlng = true;
 				} else {
 					$lat    = '';
@@ -1230,8 +1212,8 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				if ( strlen( $address ) &lt; 10 &amp;&amp; ! $latlng ) {
 					return '';
 				}
-				$hcard  = mc_hcard( $location, 'true', false, $source );
-				$title  = esc_attr( $location->{$source . '_label'} );
+				$hcard  = mc_hcard( $location, 'true', false, 'location' );
+				$title  = esc_attr( $location->location_label );
 				$marker = wp_kses(
 					str_replace(
 						array( '&lt;/div>', '&lt;br />', '&lt;br>&lt;br>' ),

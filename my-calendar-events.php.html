@@ -209,6 +209,7 @@ function my_calendar_get_events( $args ) {
 	 */
 	$secondary_sort = apply_filters( 'mc_secondary_sort', 'event_title ASC', 'my_calendar_get_events' );
 
+	$location_join = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
 	/**
 	 * Filter site parameter in queries on a multisite network. Allows a query to show events merged from multiple sites using a single shortcode.
 	 *
@@ -230,7 +231,8 @@ function my_calendar_get_events( $args ) {
 		JOIN ' . my_calendar_categories_table( $s ) . " AS c 
 		ON (event_category=category_id)
 		$join
-		WHERE $select_published $select_category $select_location $select_author $select_host $select_access $search
+		$location_join
+		WHERE $select_published $select_category $select_author $select_host $select_access $search
 		AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 			OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
@@ -280,7 +282,8 @@ function my_calendar_get_events( $args ) {
 		JOIN ' . my_calendar_categories_table( $site ) . " AS c 
 		ON (event_category=category_id)
 		$join
-		WHERE $select_published $select_category $select_location $select_author $select_host $select_access $search
+		$location_join
+		WHERE $select_published $select_category $select_author $select_host $select_access $search
 		AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 			OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
@@ -361,6 +364,8 @@ function mc_get_all_events( $args ) {
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
 	$select_location    = mc_select_location( $ltype, $lvalue );
+	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
+
 	$select_access      = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
 	$select_published   = mc_select_published();
 	$select_author      = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
@@ -368,7 +373,7 @@ function mc_get_all_events( $args ) {
 	$date               = current_time( 'Y-m-d' );
 	$ts_string          = mc_ts();
 
-	$limit   = "$select_published $select_category $select_author $select_host $select_location $select_access $search";
+	$limit   = "$select_published $select_category $select_author $select_host $select_access $search";
 	$events1 = array();
 	$events2 = array();
 	$events3 = array();
@@ -382,6 +387,7 @@ function mc_get_all_events( $args ) {
 			JOIN ' . my_calendar_table( $site ) . " AS e
 			ON (event_id=occur_event_id)
 			$join
+			$location_join
 			JOIN " . my_calendar_categories_table( $site ) . " as c
 			ON (e.event_category=c.category_id)
 			WHERE $limit
@@ -398,6 +404,7 @@ function mc_get_all_events( $args ) {
 			JOIN ' . my_calendar_table( $site ) . " AS e
 			ON (event_id=occur_event_id)
 			$join
+			$location_join
 			JOIN " . my_calendar_categories_table( $site ) . " as c
 			ON (e.event_category=c.category_id)
 			WHERE $limit
@@ -414,6 +421,7 @@ function mc_get_all_events( $args ) {
 			JOIN ' . my_calendar_table( $site ) . " AS e
 			ON (event_id=occur_event_id)
 			$join
+			$location_join
 			JOIN " . my_calendar_categories_table( $site ) . " as c
 			ON (e.event_category=c.category_id)
 			WHERE $limit

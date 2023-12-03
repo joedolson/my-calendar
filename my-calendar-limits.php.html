@@ -279,30 +279,30 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 			$location = $ltype;
 			switch ( $location ) {
 				case 'name':
-					$location_type = 'event_label';
+					$location_type = 'location_label';
 					break;
 				case 'city':
-					$location_type = 'event_city';
+					$location_type = 'location_city';
 					break;
 				case 'state':
-					$location_type = 'event_state';
+					$location_type = 'location_state';
 					break;
 				case 'zip':
-					$location_type = 'event_postcode';
+					$location_type = 'location_postcode';
 					break;
 				case 'country':
-					$location_type = 'event_country';
+					$location_type = 'location_country';
 					break;
 				case 'region':
-					$location_type = 'event_region';
+					$location_type = 'location_region';
 					break;
 				case 'id':
-					$location_type = 'event_location';
+					$location_type = 'location_location';
 					break;
 				default:
-					$location_type = $location;
+					$location_type = str_replace( 'event_', 'location_', $location );
 			}
-			if ( in_array( $location_type, array( 'event_label', 'event_city', 'event_state', 'event_postcode', 'event_country', 'event_region', 'event_location', 'event_street', 'event_street2', 'event_url', 'event_longitude', 'event_latitude', 'event_zoom', 'event_phone', 'event_phone2' ), true ) ) {
+			if ( in_array( $location_type, array( 'location_label', 'location_city', 'location_state', 'location_postcode', 'location_country', 'location_region', 'location_location', 'location_street', 'location_street2', 'location_url', 'location_longitude', 'location_latitude', 'location_zoom', 'location_phone', 'location_phone2' ), true ) ) {
 				if ( 'all' !== $lval &amp;&amp; '' !== $lval ) {
 					$lval = trim( $lval );
 					if ( is_numeric( $lval ) ) {
@@ -315,7 +315,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 		}
 	}
 	if ( ! empty( $limit_strings ) ) {
-		$limit_string = 'AND (' . implode( ' OR ', $limit_strings ) . ')';
+		$limit_string = implode( ' OR ', $limit_strings );
 	}
 
 	/**

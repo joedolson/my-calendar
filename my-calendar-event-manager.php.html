@@ -656,10 +656,6 @@ function mc_get_filter() {
 			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_location';
 			break;
-		case 'where_name':
-			$filter   = ( isset( $_GET['filter'] ) ) ? esc_sql( urldecode( $_GET['filter'] ) ) : '';
-			$restrict = 'event_label';
-			break;
 		case 'author':
 			$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
 			$restrict = 'event_author';
@@ -991,18 +987,14 @@ function mc_admin_events_table( $events ) {
 				&lt;/td>
 				&lt;td>
 					&lt;?php
+					$elabel = '';
 					if ( property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
 						$filter   = $event->event_location;
 						$elabel   = $event->location->location_label;
-						$restrict = 'where';
-					} else {
-						$elabel   = $event->event_label;
-						$filter   = $elabel;
-						$restrict = 'where_name';
 					}
 					if ( '' !== $elabel ) {
 						?>
-					&lt;a class='mc_filter' href='&lt;?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;amp;filter=' . urlencode( $filter ) . '&amp;amp;restrict=' . $restrict ) ); ?>'>&lt;span class="screen-reader-text">&lt;?php esc_html_e( 'Show only: ', 'my-calendar' ); ?>&lt;/span>&lt;?php echo esc_html( stripslashes( $elabel ) ); ?>&lt;/a>
+					&lt;a class='mc_filter' href='&lt;?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;amp;filter=' . urlencode( $filter ) . '&amp;amp;restrict=where' ) ); ?>'>&lt;span class="screen-reader-text">&lt;?php esc_html_e( 'Show only: ', 'my-calendar' ); ?>&lt;/span>&lt;?php echo esc_html( stripslashes( $elabel ) ); ?>&lt;/a>
 						&lt;?php
 					}
 					?>

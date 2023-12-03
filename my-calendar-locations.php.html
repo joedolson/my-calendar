@@ -789,14 +789,6 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
  */
 function mc_locations_fields( $has_data, $data, $context = 'location', $group_id = false ) {
 	$return = '&lt;div class="mc-locations" id="location-fields">';
-	if ( current_user_can( 'mc_edit_locations' ) &amp;&amp; 'event' === $context ) {
-		$checked = ' checked="checked"';
-		// Default unchecked if event has a location or is being copied.
-		if ( ( $has_data &amp;&amp; ! empty( $data->event_location ) ) || isset( $_GET['mode'] ) &amp;&amp; 'copy' === $_GET['mode'] ) {
-			$checked = '';
-		}
-		$return .= '&lt;p class="checkboxes">&lt;input type="checkbox" value="on" name="mc_copy_location" id="mc_copy_location"' . $checked . ' /> &lt;label for="mc_copy_location">' . __( 'Copy new location into the locations table', 'my-calendar' ) . '&lt;/label>&lt;/p>';
-	}
 	if ( current_user_can( 'mc_edit_settings' ) &amp;&amp; isset( $_GET['page'] ) &amp;&amp; 'my-calendar-locations' === $_GET['page'] ) {
 		$checked = ( isset( $_GET['location_id'] ) &amp;&amp; (int) mc_get_option( 'default_location' ) === (int) $_GET['location_id'] ) ? 'checked="checked"' : '';
 		$return .= '&lt;p class="checkbox">';
