@@ -91,7 +91,7 @@ function mc_templates_edit() {
 		}
 	}
 
-	$template = ( mc_is_core_template( $key ) ) ? ${'mc_' . $key . '_template'} : mc_get_custom_template( $key );
+	$template = ( mc_is_core_template( $key ) ) ? $templates[ $key ] : mc_get_custom_template( $key );
 	$template = stripslashes( $template );
 	$core     = mc_admin_template_description( $key );
 	if ( $key ) {
