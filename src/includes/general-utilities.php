@@ -97,9 +97,13 @@ function mc_add_inner_box() {
 			$recur    = mc_event_recur_string( $event, $event->event_begin );
 			$content .= wpautop( $recur );
 		}
-		if ( '' !== $event->event_label ) {
+		$elabel = '';
+		if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
+			$elabel = $event->location->location_label;
+		}
+		if ( '' !== $elabel ) {
 			// Translators: Name of event location.
-			$content .= '<p>' . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $event->event_label, mc_strip_tags() ) ) . '</p>';
+			$content .= '<p>' . sprintf( __( '<strong>Location:</strong> %s', 'my-calendar' ), strip_tags( $elabel, mc_strip_tags() ) ) . '</p>';
 		}
 		// Translators: Event URL.
 		$content .= '<p>' . sprintf( __( '<a href="%s">Edit event</a>.', 'my-calendar' ), $url ) . '</p>';
