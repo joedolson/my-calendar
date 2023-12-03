@@ -137,8 +137,7 @@ function mc_api_format_csv( $data ) {
 			$values['UID'] = $values['uid'];
 			// If this is an import from Pro, insert locations into DB.
 			if ( ! ( isset( $_GET['file'] ) && 'false' === $_GET['file'] ) ) {
-				$values['mc_copy_location'] = 1;
-				$values['event_category']   = $values['category_name'];
+				$values['event_category'] = $values['category_name'];
 				unset( $values['uid'] );
 				unset( $values['site_id'] );
 				unset( $values['ts_occur_end'] );
