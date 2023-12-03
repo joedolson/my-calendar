@@ -470,7 +470,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
  * Draw an event title.
  *
  * @param object $event Event object.
- * @param array  $data Event tags.
+ * @param array  $tags Event tags.
  * @param string $type View type.
  * @param string $image Has an image.
  *
