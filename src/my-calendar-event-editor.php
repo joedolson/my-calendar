@@ -464,7 +464,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
 	$proceed = (bool) $output[0];
 	$message = '';
-	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%f', '%f' );
+	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d' );
 
 	if ( ( 'add' === $action || 'copy' === $action ) && true === $proceed ) {
 		$add  = $output[2]; // add format here.
@@ -1327,24 +1327,6 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 		case 'event_location':
 			if ( $show_block ) {
 				$return = mc_locations_fields( $has_data, $data, 'event', $group_id );
-			} else {
-				if ( $has_data ) {
-					$return = "<div>
-                    <input type='hidden' name='event_label' value='" . esc_attr( stripslashes( $data->event_label ) ) . "' />
-                    <input type='hidden' name='event_street' value='" . esc_attr( stripslashes( $data->event_street ) ) . "' />
-                    <input type='hidden' name='event_street2' value='" . esc_attr( stripslashes( $data->event_street2 ) ) . "' />
-                    <input type='hidden' name='event_phone' value='" . esc_attr( stripslashes( $data->event_phone ) ) . "' />
-                    <input type='hidden' name='event_phone2' value='" . esc_attr( stripslashes( $data->event_phone2 ) ) . "' />
-                    <input type='hidden' name='event_city' value='" . esc_attr( stripslashes( $data->event_city ) ) . "' />
-                    <input type='hidden' name='event_state' value='" . esc_attr( stripslashes( $data->event_state ) ) . "' />
-                    <input type='hidden' name='event_postcode' value='" . esc_attr( stripslashes( $data->event_postcode ) ) . "' />
-                    <input type='hidden' name='event_region' value='" . esc_attr( stripslashes( $data->event_region ) ) . "' />
-                    <input type='hidden' name='event_country' value='" . esc_attr( stripslashes( $data->event_country ) ) . "' />
-                    <input type='hidden' name='event_zoom' value='" . esc_attr( stripslashes( $data->event_zoom ) ) . "' />
-                    <input type='hidden' name='event_url' value='" . esc_attr( stripslashes( $data->event_url ) ) . "' />
-                    <input type='hidden' name='event_latitude' value='" . esc_attr( stripslashes( $data->event_latitude ) ) . "' />
-                    <input type='hidden' name='event_longitude' value='" . esc_attr( stripslashes( $data->event_longitude ) ) . "' /></div>";
-				}
 			}
 			break;
 		default:
@@ -2216,27 +2198,10 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		if ( 'none' === $location_preset && ( empty( $post['event_label'] ) && ! is_numeric( $event_location ) ) ) {
 			// If no event data defined, do nothing.
 		} else {
+			// Is a preset chosen?
 			$location_to_set = ( is_numeric( $location_preset ) ) ? $location_preset : $event_location;
-			if ( is_numeric( $location_to_set ) ) {
-				$location = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_to_set ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				if ( is_object( $location ) ) {
-					$event_label     = $location->location_label;
-					$event_street    = $location->location_street;
-					$event_street2   = $location->location_street2;
-					$event_city      = $location->location_city;
-					$event_state     = $location->location_state;
-					$event_postcode  = $location->location_postcode;
-					$event_region    = $location->location_region;
-					$event_country   = $location->location_country;
-					$event_url       = $location->location_url;
-					$event_longitude = $location->location_longitude;
-					$event_latitude  = $location->location_latitude;
-					$event_zoom      = $location->location_zoom;
-					$event_phone     = $location->location_phone;
-					$event_phone2    = $location->location_phone2;
-					$event_access    = $location->location_access;
-				}
-			} else {
+			if ( ! is_numeric( $location_to_set ) ) {
+				// No, we're adding a new location.
 				$event_label       = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
 				$event_street      = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
 				$event_street2     = ! empty( $post['event_street2'] ) ? $post['event_street2'] : '';
@@ -2260,7 +2225,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				}
 				// Don't save this location if we're only doing data validation.
 				if ( 'check' !== $action ) {
-					if ( $has_location_data && isset( $post['mc_copy_location'] ) && 'on' === $post['mc_copy_location'] && 0 === $i ) {
+					if ( $has_location_data && 0 === $i ) {
 						// Only add this with the first event, if adding multiples.
 						$add_loc        = array(
 							'location_label'     => $event_label,
@@ -2400,19 +2365,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_time'         => $time,
 		'event_endtime'      => $endtime,
 		'event_link'         => $event_link,
-		'event_label'        => $event_label,
-		'event_street'       => $event_street,
-		'event_street2'      => $event_street2,
-		'event_city'         => $event_city,
-		'event_state'        => $event_state,
-		'event_postcode'     => $event_postcode,
-		'event_region'       => $event_region,
-		'event_country'      => $event_country,
-		'event_url'          => $event_url,
 		'event_recur'        => $recur,
 		'event_image'        => $event_image,
-		'event_phone'        => $event_phone,
-		'event_phone2'       => $event_phone2,
 		'event_access'       => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
 		'event_tickets'      => $event_tickets,
 		'event_registration' => $event_registration,
@@ -2421,7 +2375,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_author'       => $event_author,
 		'event_category'     => $primary,
 		'event_link_expires' => $expires,
-		'event_zoom'         => $event_zoom,
 		'event_approved'     => $approved,
 		'event_host'         => $host,
 		'event_flagged'      => $spam,
@@ -2431,9 +2384,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_span'         => $event_span,
 		'event_hide_end'     => $event_hide_end,
 		'event_location'     => $event_location,
-		// Begin floats.
-		'event_longitude'    => $event_longitude,
-		'event_latitude'     => $event_latitude,
 		// Array: removed before DB insertion.
 		'event_categories'   => $cats,
 	);
