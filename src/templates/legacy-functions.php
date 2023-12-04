@@ -43,7 +43,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	$image       = '';
 	$tickets     = '';
 	$details     = '';
-	$data        = ( empty( $tags ) ) ? mc_create_tags( $event, $id ) : $tags;
+	$tags        = ( empty( $tags ) ) ? mc_create_tags( $event, $id ) : $tags;
 	$otype       = ( 'calendar' === $type ) ? 'grid' : $type;
 
 	if ( mc_show_details( $time, $type ) ) {
@@ -53,7 +53,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 * @hook mc_custom_template
 		 *
 		 * @param {string|bool} $details Output HTML for event. Default boolean false.
-		 * @param {array}       $data Event data array passed to template function.
+		 * @param {array}       $tags Event data array passed to template function.
 		 * @param {object}      $event My Calendar event object.
 		 * @param {string}      $type View type.
 		 * @param {string}      $process_date Current date being processed.
@@ -62,14 +62,14 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @return {string}
 		 */
-		$details = apply_filters( 'mc_custom_template', false, $data, $event, $type, $process_date, $time, $template );
+		$details = apply_filters( 'mc_custom_template', false, $tags, $event, $type, $process_date, $time, $template );
 		/**
 		 * Filter My Calendar view template.
 		 *
 		 * @hook mc_use_custom_template
 		 *
 		 * @param {string} $template HTML with template tags.
-		 * @param {array} $data Event data array passed to template function.
+		 * @param {array} $tags Event data array passed to template function.
 		 * @param {object} $event My Calendar event object.
 		 * @param {string} $type View type.
 		 * @param {string} $process_date Current date being processed.
@@ -77,9 +77,9 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @return {string}
 		 */
-		$template = apply_filters( 'mc_use_custom_template', $template, $data, $event, $type, $process_date, $time );
+		$template = apply_filters( 'mc_use_custom_template', $template, $tags, $event, $type, $process_date, $time );
 		if ( false === $details ) {
-			$details = mc_get_details( $data, $template, $type );
+			$details = mc_get_details( $tags, $template, $type );
 		}
 	}
 
@@ -200,13 +200,12 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 					$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
 				}
 			}
-
 			if ( 'true' === $display_gcal || mc_output_is_visible( 'gcal', $type, $event ) ) {
-				$gcal = "	<p class='gcal'>" . mc_draw_template( $data, '{gcal_link}' ) . '</p>';
+				$gcal = "	<p class='gcal'>" . mc_draw_template( $data['tags'], '{gcal_link}' ) . '</p>';
 			}
 
 			if ( 'true' === $display_vcal || mc_output_is_visible( 'ical', $type, $event ) ) {
-				$vcal = "	<p class='ical'>" . mc_draw_template( $data, '{ical_html}' ) . '</p>';
+				$vcal = "	<p class='ical'>" . mc_draw_template( $data['tags'], '{ical_html}' ) . '</p>';
 			}
 
 			if ( 'true' === $display_image || mc_output_is_visible( 'image', $type, $event ) ) {
