@@ -1874,7 +1874,7 @@ function mc_event_location_dropdown_block( $data ) {
 	} else {
 		$fields .= '<input type="hidden" name="location_preset" value="none" />
 		<p>
-		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '>">' . __( 'Add recurring locations for later use.', 'my-calendar' ) . '</a>
+		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '">' . __( 'Add a location', 'my-calendar' ) . '</a>
 		</p>';
 	}
 	$output  = $current_location . '<div class="mc-event-location-dropdown">' . '<div class="location-input">' . $fields . '</div>';
