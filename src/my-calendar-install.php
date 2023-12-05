@@ -448,6 +448,7 @@ function mc_default_options() {
 		'default_location'             => '',
 		'hide_past_dates'              => 'false',
 		'map_service'                  => 'google',
+		'disable_legacy_templates'     => 'false',
 	);
 
 	/**

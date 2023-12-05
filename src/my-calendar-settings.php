@@ -117,7 +117,7 @@ function mc_settings_field( $args = array() ) {
 	if ( is_string( $args ) ) {
 		_doing_it_wrong(
 			__FUNCTION__,
-			__( 'Since My Calendar 3.4.0, this functions arguments must be in an array.', 'my-calendar' ),
+			__( 'Since My Calendar 3.4.0, these function arguments must be an array.', 'my-calendar' ),
 			'3.4.0'
 		);
 	}
@@ -179,11 +179,13 @@ function mc_settings_field( $args = array() ) {
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
 			if ( $note ) {
-				$note = sprintf( $note, "<code>$value</code>" );
+				$note = "<div id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>" . sprintf( $note, "<code>$value</code>" ) . '</div>';
+				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
+				$aria = '';
 			}
-			$return = "$element<input type='checkbox' id='$name' name='$name' value='on' $checked$attributes /> <label for='$name' class='label-checkbox'>$label $note</label>$close";
+			$return = "$element<input type='checkbox' id='$name' name='$name' value='on' $checked$attributes$aria /> <label for='$name' class='label-checkbox'>$label</label>$close$note";
 			break;
 		case 'checkbox':
 		case 'radio':
@@ -372,12 +374,15 @@ function mc_update_output_settings( $post ) {
 	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
 	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
-	$templates                 = mc_get_option( 'templates' );
-	$templates['title']        = $post['mc_title_template'];
-	$templates['title_solo']   = $post['mc_title_template_solo'];
-	$templates['title_list']   = $post['mc_title_template_list'];
-	$templates['title_card']   = $post['mc_title_template_card'];
-	$options['templates']      = $templates;
+
+	$options['disable_legacy_templates'] = ( ! empty( $post['mc_disable_legacy_templates'] ) && 'on' === $post['mc_disable_legacy_templates'] ) ? 'true' : 'false';
+
+	$templates               = mc_get_option( 'templates' );
+	$templates['title']      = $post['mc_title_template'];
+	$templates['title_solo'] = $post['mc_title_template_solo'];
+	$templates['title_list'] = $post['mc_title_template_list'];
+	$templates['title_card'] = $post['mc_title_template_card'];
+	$options['templates']    = $templates;
 
 	mc_update_options( $options );
 }
@@ -1289,6 +1294,19 @@ function mc_remote_db() {
 						</fieldset>
 						<fieldset id='calendar-output' class='mc-output-tabs'>
 							<legend><?php esc_html_e( 'Event Display Fields', 'my-calendar' ); ?></legend>
+							<p>
+							<?php
+								mc_settings_field(
+									array(
+										'name'  => 'mc_disable_legacy_templates',
+										'label' => __( 'Enable PHP templating', 'my-calendar' ),
+										'type'  => 'checkbox-single',
+										// Translators: link to documentation on PHP templates.
+										'note'  => sprintf( __( 'PHP templates will replace any custom templates already in use. <a href="%s">See documentation.</a>', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' )
+									)
+								);
+								?>
+								</p>
 							<div class="mc-tabs">
 								<div class="tabs" role="tablist" data-default="single-event-output">
 									<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php esc_html_e( 'Single Event', 'my-calendar' ); ?></button>
