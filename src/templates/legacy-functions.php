@@ -360,8 +360,8 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @return {string}
 		 */
-		$details  = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
-		$details  = $container . $close . $details;
+		$details = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+		$details = $container . $close . $details;
 		/**
 		 * Filter details output.
 		 *
