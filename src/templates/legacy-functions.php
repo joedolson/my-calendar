@@ -356,6 +356,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		$listtype  = mc_get_option( 'list_javascript' );
 		if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
 			$img_class .= ' uses-modal';
+			$header     = '';
 		}
 		if ( 'list' === $type || 'calendar' === $type ) {
 			$img_class .= ' single-details';
@@ -402,7 +403,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 * @return {string}
 		 */
 		$details .= apply_filters( 'mc_after_event', '', $event, $type, $time );
-		$details .= "\n" . '	</div><!--end .details-->' . "\n" . '	</div>' . "\n";
+		$details .= "\n" . '	</div><!--end .details-->' . "\n";
 		/**
 		 * Filter details output.
 		 *
