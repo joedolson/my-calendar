@@ -223,7 +223,7 @@
 					}
 					// Grid view.
 					if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
-						$('.calendar-event').children().not('.event-title').hide();
+						$('.calendar-event').children().not('header').hide();
 					}
 					// Mini view.
 					if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
