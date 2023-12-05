@@ -55,7 +55,7 @@ function mc_get_option( $key ) {
 	$options = array_merge( $default, $options );
 	$new_key = str_replace( 'mc_', '', $key );
 	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : false;
-	if ( ( ! $value || '' === $options[ $new_key ] ) &amp;&amp; ( isset( $default[ $new_key ] ) &amp;&amp; ! empty( $default[ $new_key ] ) ) ) {
+	if ( ( ( 0 !== $value &amp;&amp; ! $value ) || '' === $options[ $new_key ] ) &amp;&amp; ( isset( $default[ $new_key ] ) &amp;&amp; ! empty( $default[ $new_key ] ) ) ) {
 		return $default[ $new_key ];
 	}
 
