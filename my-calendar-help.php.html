@@ -102,11 +102,8 @@ function my_calendar_help() {
 			&lt;h2>&lt;?php esc_html_e( 'Custom Files', 'my-calendar' ); ?>&lt;/h2>
 
 			&lt;div class="inside">
-				&lt;h3>&lt;?php esc_html_e( 'Custom Icons Location', 'my-calendar' ); ?>&lt;/h3>
-				&lt;ul>
-					&lt;li>&lt;code>&lt;?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/icons/'; ?>&lt;/code>&lt;/li>
-				&lt;/ul>
 				&lt;h3>&lt;?php esc_html_e( 'Custom Styles Locations', 'my-calendar' ); ?>&lt;/h3>
+				&lt;p>&lt;?php _e( 'My Calendar custom style files can be saved in any of these locations. CSS files in these locations will be selectable from the stylesheet selector.', 'my-calendar' ); ?>&lt;/p>
 				&lt;ul>
 					&lt;?php
 					foreach ( mc_custom_dirs() as $dir ) {
@@ -117,6 +114,13 @@ function my_calendar_help() {
 				&lt;p>
 					&lt;?php wp_kses_post( _e( 'Custom print, mobile, and tablet stylesheet file names: &lt;code>mc-print.css&lt;/code>, &lt;code>mc-mobile.css&lt;/code>, and &lt;code>mc-tablet.css&lt;/code>.', 'my-calendar' ) ); ?>
 				&lt;/p>
+				&lt;h3>&lt;?php esc_html_e( 'Custom Template Locations', 'my-calendar' ); ?>&lt;/h3>
+				&lt;p>&lt;?php _e( 'Default My Calendar templates are found in &lt;code>/wp-content/my-calendar/mc-templates/&lt;/code>. Copy those templates into a &lt;code>/mc-templates/&lt;/code> directory in your theme to customize.', 'my-calendar' ); ?>&lt;/p>
+				&lt;p>&lt;?php _e( 'Legacy My Calendar templates can be loaded as text files (.txt) from any of the allowed style directory locations.', 'my-calendar' ); ?>&lt;/p>
+				&lt;h3>&lt;?php esc_html_e( 'Custom Icons Location', 'my-calendar' ); ?>&lt;/h3>
+				&lt;ul>
+					&lt;li>&lt;code>&lt;?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/icons/'; ?>&lt;/code>&lt;/li>
+				&lt;/ul>
 			&lt;/div>
 		&lt;/div>
 	&lt;/div>
