@@ -413,22 +413,8 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @return {string}
 		 */
-		$details = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
-		$details = $header . $container . $close . $details;
-
-		/**
-		 * Filter details appended after the event content.
-		 *
-		 * @hook mc_after_event
-		 *
-		 * @param {string} $details HTML content. Default empty.
-		 * @param {object} $event My Calendar event object.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
-		 *
-		 * @return {string}
-		 */
-		$details .= apply_filters( 'mc_after_event', '', $event, $type, $time );
+		$details  = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
+		$details  = $header . $container . $close . $details;
 		$details .= "\n" . '	&lt;/div>&lt;!--end .details-->' . "\n";
 		/**
 		 * Filter details output.
