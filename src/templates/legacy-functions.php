@@ -25,7 +25,6 @@
  */
 function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template = '', $id = '', $tags = array() ) {
 	// assign empty values to template sections.
-	$header      = '';
 	$address     = '';
 	$more        = '';
 	$author      = '';
@@ -110,13 +109,24 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		'id'           => $id,
 		'tags'         => $tags,
 	);
-	$header       = mc_draw_event_header( $data, $type, $template );
 	$close_button = mc_close_button( $container_id );
 	$close        = '';
 	if ( mc_show_details( $time, $type ) ) {
 		// Since 3.2.0, close button is added to event container in mini calendar.
 		$close = ( 'calendar' === $type ) ? $close_button : '';
-
+		/**
+		 * Filter list event heading level. Default 'h3'.
+		 *
+		 * @hook mc_heading_level_list
+		 *
+		 * @param {string} $hlevel Default heading level element.
+		 * @param {string} $type View type.
+		 * @param {string} $time View timeframe.
+		 * @param {string} $template Current template.
+		 *
+		 * @return {string}
+		 */
+		$hlevel = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 		if ( false === $details ) {
 			if ( ( 'true' === $display_address || 'true' === $display_map ) || ( mc_output_is_visible( 'address', $type, $event ) || mc_output_is_visible( 'gmap_link', $type, $event ) ) ) {
 				$show_add = ( 'true' === $display_address || mc_output_is_visible( 'address', $type, $event ) ) ? 'true' : 'false';
@@ -125,19 +135,6 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			}
 			$time_html = mc_time_html( $event, $type );
 			if ( 'list' === $type ) {
-				/**
-				 * Filter list event heading level. Default 'h3'.
-				 *
-				 * @hook mc_heading_level_list
-				 *
-				 * @param {string} $hlevel Default heading level element.
-				 * @param {string} $type View type.
-				 * @param {string} $time View timeframe.
-				 * @param {string} $template Current template.
-				 *
-				 * @return {string}
-				 */
-				$hlevel = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
 				if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
 					$event_title = mc_draw_event_title( $event, $tags, 'list', $image );
 					$list_title  = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
@@ -351,30 +348,6 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			}
 		}
 
-		$img_class = ( $img ) ? ' has-image' : ' no-image';
-		$gridtype  = mc_get_option( 'calendar_javascript' );
-		$listtype  = mc_get_option( 'list_javascript' );
-		if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
-			$img_class .= ' uses-modal';
-			$header     = '';
-		}
-		if ( 'list' === $type || 'calendar' === $type ) {
-			$img_class .= ' single-details';
-		}
-		$container = "\n	<div id='$container_id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
-		/**
-		 * Filter details before the event content..
-		 *
-		 * @hook mc_before_event
-		 *
-		 * @param {string} $details HTML content.
-		 * @param {object} $event My Calendar event object.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
-		 *
-		 * @return {string}
-		 */
-		$container = apply_filters( 'mc_before_event', $container, $event, $type, $time );
 		/**
 		 * Filter event content inside wrapper.
 		 *
@@ -388,8 +361,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 * @return {string}
 		 */
 		$details  = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
-		$details  = $header . $container . $close . $details;
-		$details .= "\n" . '	</div><!--end .details-->' . "\n";
+		$details  = $container . $close . $details;
 		/**
 		 * Filter details output.
 		 *
@@ -403,34 +375,6 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 * @return {string}
 		 */
 		$details = apply_filters( 'mc_event_content', $details, $event, $type, $time );
-	} else {
-		/**
-		 * Filter container before event details when view details panel is disabled.
-		 *
-		 * @hook mc_before_event_no_details
-		 *
-		 * @param {string} $container HTML string.
-		 * @param {object} $event My Calendar event.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
-		 *
-		 * @return {string}
-		 */
-		$before = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time );
-		/**
-		 * Filter container after event details when view details panel is disabled.
-		 *
-		 * @hook mc_after_event_no_details
-		 *
-		 * @param {string} $container HTML string. Default empty.
-		 * @param {object} $event My Calendar event.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
-		 *
-		 * @return {string}
-		 */
-		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
-		$details = $before . $header . $after;
 	}
 
 	return $details;

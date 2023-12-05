@@ -248,7 +248,36 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	if ( ! $details ) {
 		$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
 	}
-	$header       = mc_draw_event_header( $data, $type, $template );
+	$header = mc_draw_event_header( $data, $type, $template );
+	if ( ! $details ) {
+		/**
+		 * Filter container before event details when view details panel is disabled.
+		 *
+		 * @hook mc_before_event_no_details
+		 *
+		 * @param {string} $container HTML string.
+		 * @param {object} $event My Calendar event.
+		 * @param {string} $type View type.
+		 * @param {string} $time View timeframe.
+		 *
+		 * @return {string}
+		 */
+		$before = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time );
+		/**
+		 * Filter container after event details when view details panel is disabled.
+		 *
+		 * @hook mc_after_event_no_details
+		 *
+		 * @param {string} $container HTML string. Default empty.
+		 * @param {object} $event My Calendar event.
+		 * @param {string} $type View type.
+		 * @param {string} $time View timeframe.
+		 *
+		 * @return {string}
+		 */
+		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
+		$details = $before . $header . $after;
+	}
 	$details      = apply_filters( 'mc_event_details_output', $details, $event );
 	$container_id = mc_event_container_id( $type, $process_date, $event );
 	/**
