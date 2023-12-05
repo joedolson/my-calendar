@@ -31,7 +31,6 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	$host        = '';
 	$list_title  = '';
 	$title       = '';
-	$container   = '';
 	$short       = '';
 	$description = '';
 	$link        = '';
@@ -100,7 +99,6 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	$image           = mc_category_icon( $event );
 	$image           = ( $image ) ? $image . ' ' : '';
 	$img             = '';
-	$container_id    = mc_event_container_id( $type, $process_date, $event );
 
 	$data         = array(
 		'event'        => $event,
@@ -109,11 +107,9 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		'id'           => $id,
 		'tags'         => $tags,
 	);
-	$close_button = mc_close_button( $container_id );
+
 	$close        = '';
 	if ( mc_show_details( $time, $type ) ) {
-		// Since 3.2.0, close button is added to event container in mini calendar.
-		$close = ( 'calendar' === $type ) ? $close_button : '';
 		/**
 		 * Filter list event heading level. Default 'h3'.
 		 *
@@ -361,7 +357,6 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 * @return {string}
 		 */
 		$details = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
-		$details = $container . $close . $details;
 		/**
 		 * Filter details output.
 		 *
