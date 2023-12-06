@@ -298,27 +298,30 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	$next_link  = mc_url_in_loop( $next_link );
 	$today_text = ( '' === mc_get_option( 'today_events' ) ) ? __( 'Today', 'my-calendar' ) : mc_get_option( 'today_events' );
 
-	if ( isset( $_GET['month'] ) || isset( $_GET['yr'] ) || isset( $_GET['dy'] ) ) {
-		$today      = mc_build_url(
-			array(
-				'cid' => $id,
-			),
-			array( 'yr', 'month', 'dy' )
-		);
-		$today_link = mc_url_in_loop( $today );
-		/**
-		 * Filter HTML output for navigation 'today' link.
-		 *
-		 * @hook mc_today_link
-		 *
-		 * @param {string} $today_link HTML output for link.
-		 *
-		 * @return {string}
-		 */
-		$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow">' . wp_kses_post( $today_text ) . '</a></li>' );
-	} else {
-		$today_link = '<li class="my-calendar-today"><span class="mc-active" id="mc_today_' . $id . '" tabindex="-1">' . wp_kses_post( $today_text ) . '</span></li>';
+	$active  = '';
+	$current = '';
+	if ( ! ( isset( $_GET['month'] ) || isset( $_GET['yr'] ) || isset( $_GET['dy'] ) ) ) {
+		$active  = ' mc-active';
+		$current = ' aria-current="true"';
 	}
+	$today      = mc_build_url(
+		array(
+			'cid' => $id,
+		),
+		array( 'yr', 'month', 'dy' )
+	);
+	$today_link = mc_url_in_loop( $today );
+	/**
+	 * Filter HTML output for navigation 'today' link.
+	 *
+	 * @hook mc_today_link
+	 *
+	 * @param {string} $today_link HTML output for link.
+	 *
+	 * @return {string}
+	 */
+	$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow" class="today' . $active . '"' . $current . '>' . wp_kses_post( $today_text ) . '</a></li>' );
+
 	/**
 	 * Filter HTML output for navigation 'prev' link.
 	 *
@@ -430,7 +433,7 @@ function mc_category_key( $category, $id = '' ) {
 	 */
 	$all = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
 	if ( isset( $_GET['mcat'] ) ) {
-		$key .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "'>" . $all . '</a></li>';
+		$key .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "'><span>" . $all . '</span></a></li>';
 	} else {
 		$key .= "<li class='all-categories'><span class='mc-active' id='mc_cat_all-$id' tabindex='-1'>" . $all . '</span></li>';
 	}
