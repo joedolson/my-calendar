@@ -146,6 +146,8 @@ function mc_allowed_tags( $tags, $context ) {
 			'href'             => true,
 			'class'            => true,
 			'target'           => true,
+			'aria-pressed'     => true,
+			'aria-current'     => true,
 		);
 
 		$tags['script'] = array(
@@ -274,6 +276,7 @@ function mc_kses_elements() {
 			'aria-controls'    => array(),
 			'data-href'        => array(),
 			'data-type'        => array(),
+			'aria-pressed'     => array(),
 		),
 		'ul'               => array(
 			'class' => array(),
@@ -369,6 +372,7 @@ function mc_kses_elements() {
 			'class'            => array(),
 			'aria-current'     => array(),
 			'target'           => array(),
+			'aria-pressed'     => array(),
 		),
 		'section'          => array(
 			'id'    => array(),

@@ -1091,24 +1091,33 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
  */
 function mc_format_toggle( $format, $toggle, $time, $id ) {
 	if ( 'mini' !== $format && 'yes' === $toggle ) {
-		$is_grid = ( 'grid' === $format ) ? ' aria-current="true"' : '';
-		$is_list = ( 'list' === $format ) ? ' aria-current="true"' : '';
-		$is_card = ( 'card' === $format ) ? ' aria-current="true"' : '';
+		if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
+			$is_grid = ( 'calendar' === $format ) ? ' aria-pressed="true"' : '';
+			$is_list = ( 'list' === $format ) ? ' aria-pressed="true"' : '';
+			$is_card = ( 'card' === $format ) ? ' aria-pressed="true"' : '';
+		} else {
+			$is_grid = ( 'calendar' === $format ) ? ' aria-current="true"' : '';
+			$is_list = ( 'list' === $format ) ? ' aria-current="true"' : '';
+			$is_card = ( 'card' === $format ) ? ' aria-current="true"' : '';
+		}
+		$grid_active = ( 'calendar' === $format ) ? ' mc-active' : '';
+		$list_active = ( 'list' === $format ) ? ' mc-active' : '';
+		$card_active = ( 'card' === $format ) ? ' mc-active' : '';
 
 		$toggle = "<div class='mc-format'>
 		<ul>";
 
 		$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
 		$url     = mc_url_in_loop( $url );
-		$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='grid'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='grid$grid_active'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
 
 		$url     = mc_build_url( array( 'format' => 'card' ), array() );
 		$url     = mc_url_in_loop( $url );
-		$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='card'>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='card$card_active'>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
 
 		$url     = mc_build_url( array( 'format' => 'list' ), array() );
 		$url     = mc_url_in_loop( $url );
-		$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='list'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='list$list_active'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
 
 		$toggle .= '</ul>
 		</div>';
@@ -1154,6 +1163,7 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
  */
 function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week, $from, $id ) {
 	// if dy parameter not set, use today's date instead of first day of month.
+	$aria      = ( '1' !== mc_get_option( 'ajax_javascript' ) ) ? 'pressed' : 'current';
 	$month     = (int) $month;
 	$year      = (int) $year;
 	$weeks_day = mc_first_day_of_week( $current );
@@ -1188,63 +1198,40 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	$toggle = '';
 
 	if ( 'mini' !== $format ) {
-		$toggle = "<div class='mc-time'>";
+		$toggle = "<div class='mc-time'><ul>";
 		if ( -1 === (int) $adjust && ! $adjusted ) {
 			$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
 		} else {
 			$wmonth = $month;
 		}
-		switch ( $time ) {
-			case 'week':
-				$url     = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a id='mc_month-$id'  href='$url' class='month'>" . __( 'Month', 'my-calendar' ) . '</a>';
-				$toggle .= "<span id='mc_week-$id' class='mc-active week' tabindex='-1'>" . __( 'Week', 'my-calendar' ) . '</span>';
-				$url     = mc_build_url(
-					array(
-						'time' => 'day',
-						'dy'   => $day,
-					),
-					array( 'dy', 'mc_id' )
-				);
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a id='mc_day-$id' href='$url' class='day'>" . __( 'Day', 'my-calendar' ) . '</a>';
-				break;
-			case 'day':
-				$url     = mc_build_url( array( 'time' => 'month' ), array() );
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a id='mc_month-$id' href='$url' class='month'>" . __( 'Month', 'my-calendar' ) . '</a>';
-				$url     = mc_build_url(
-					array(
-						'time'  => 'week',
-						'dy'    => $day,
-						'month' => $wmonth,
-						'yr'    => $year,
-					),
-					array( 'dy', 'month', 'mc_id' )
-				);
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a href='$url' class='week'>" . __( 'Week', 'my-calendar' ) . '</a>';
-				$toggle .= "<span id='mc_day-$id' class='mc-active day' tabindex='-1'>" . __( 'Day', 'my-calendar' ) . '</span>';
-				break;
-			default:
-				$toggle .= "<span id='mc_month-$id' class='mc-active month' tabindex='-1'>" . __( 'Month', 'my-calendar' ) . '</span>';
-				$url     = mc_build_url(
-					array(
-						'time'  => 'week',
-						'dy'    => $day,
-						'month' => $wmonth,
-					),
-					array( 'dy', 'month', 'mc_id' )
-				);
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a id='mc_week-$id'  href='$url' class='week'>" . __( 'Week', 'my-calendar' ) . '</a>';
-				$url     = mc_build_url( array( 'time' => 'day' ), array() );
-				$url     = mc_url_in_loop( $url );
-				$toggle .= "<a id='mc_day-$id'  href='$url' class='day'>" . __( 'Day', 'my-calendar' ) . '</a>';
-				break;
-		}
-		$toggle .= '</div>';
+		$month_url = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
+		$week_url  = mc_build_url(
+			array(
+				'time'  => 'week',
+				'dy'    => $day,
+				'month' => $wmonth,
+				'yr'    => $year,
+			),
+			array( 'dy', 'month', 'mc_id' )
+		);
+		$day_url  = mc_build_url(
+			array(
+				'time' => 'day',
+				'dy'   => $day,
+			),
+			array( 'dy', 'mc_id' )
+		);
+		$month_active = ( 'month' === $time ) ? ' mc-active' : '';
+		$week_active  = ( 'week' === $time ) ? ' mc-active' : '';
+		$day_active   = ( 'day' === $time ) ? ' mc-active' : '';
+		$aria_month   = ( 'month' === $time ) ? " aria-$aria='true'" : '';
+		$aria_week    = ( 'week' === $time ) ? " aria-$aria='true'" : '';
+		$aria_day     = ( 'day' === $time ) ? " aria-$aria='true'" : '';
+
+		$toggle .= "<li><a id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
+		$toggle .= '</ul></div>';
 	} else {
 		$toggle = '';
 	}
