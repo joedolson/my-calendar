@@ -1302,10 +1302,10 @@ function mc_remote_db() {
 										'label' => __( 'Enable PHP templating', 'my-calendar' ),
 										'type'  => 'checkbox-single',
 										// Translators: link to documentation on PHP templates.
-										'note'  => sprintf( __( 'PHP templates will replace any custom templates already in use. <a href="%s">See documentation.</a>', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' )
+										'note'  => sprintf( __( 'PHP templates will replace any custom templates already in use. <a href="%s">See documentation.</a>', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' ),
 									)
 								);
-								?>
+							?>
 								</p>
 							<div class="mc-tabs">
 								<div class="tabs" role="tablist" data-default="single-event-output">

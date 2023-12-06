@@ -100,15 +100,14 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	$image           = ( $image ) ? $image . ' ' : '';
 	$img             = '';
 
-	$data         = array(
+	$data  = array(
 		'event'        => $event,
 		'process_date' => $process_date,
 		'time'         => $time,
 		'id'           => $id,
 		'tags'         => $tags,
 	);
-
-	$close        = '';
+	$close = '';
 	if ( mc_show_details( $time, $type ) ) {
 		/**
 		 * Filter list event heading level. Default 'h3'.
