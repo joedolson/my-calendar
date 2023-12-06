@@ -1217,7 +1217,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			),
 			array( 'dy', 'month', 'mc_id' )
 		);
-		$day_url  = mc_build_url(
+		$day_url   = mc_build_url(
 			array(
 				'time' => 'day',
 				'dy'   => $day,
