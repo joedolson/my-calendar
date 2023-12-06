@@ -853,11 +853,6 @@ svg.category-icon,
 	border-radius: 2px; 
 }
 
-.category-key li a {
-	display: flex;
-	align-items: center;
-}
-
 .mc-adjacent .mc-event-date {
 	display: block;
 	font-size: 80%;
@@ -981,11 +976,11 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	background-color: transparent;
 }
 
-.mc-main .all-categories span,
 .mc-main .category-key li a {
 	display: flex;
 	align-items: center;
 	column-gap: 4px;
+	padding-right: 12px;
 }
 
 .mc-main .category-key .category-color-sample {
