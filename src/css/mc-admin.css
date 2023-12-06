@@ -8,6 +8,7 @@
 	background: var(--primary-light);
 	border-radius: 10px;
 	border: 1px solid var(--highlight-dark);
+	padding: 0 8px;
 }
 
 .my-calendar-modal .mc_edit_links li,
