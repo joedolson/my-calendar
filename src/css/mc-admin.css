@@ -1,6 +1,6 @@
 .my-calendar-modal .mc_edit_links,
 .mc-main .mc_edit_links {
-	font-size: 16px;
+	font-size: 14px;
 	font-family: sans-serif;
 	line-height: 1.62;
 	margin: 1.5rem 0 .5rem 0 !important;
@@ -15,19 +15,20 @@
 .my-calendar-modal .mc_edit_links ul,
 .mc-main .details .mc_edit_links ul {
 	list-style: none;
-	margin: .125rem .25rem;
+	margin: 4px 0;
 	padding: 0;
 	display: flex;
-	gap: 1rem;
+	gap: 8px;
 }
 
-.mc-main.card .mc_edit_links {
+.mc-main .my-calendar-cards .mc_edit_links {
 	border: none;
 	position: absolute;
 	bottom: 0;
+	padding-bottom: 0;
 }
 
-.mc-main.card .my-calendar-cards .card-event .details {
+.mc-main .my-calendar-cards .card-event .details {
 	padding-bottom: 3rem;
 }
 
