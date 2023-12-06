@@ -176,6 +176,8 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
  * @return bool
  */
 function mc_legacy_templates_enabled() {
+	$enabled = mc_get_option( 'disable_legacy_templates' );
+	$legacy  = ( 'true' === $enabled ) ? false : true;
 	/**
 	 * Filter legacy templates status. New templates are intended for release with version 3.5.0 and will be in alpha at least through then.
 	 *
@@ -185,7 +187,7 @@ function mc_legacy_templates_enabled() {
 	 *
 	 * @return {bool}
 	 */
-	$enabled = apply_filters( 'mc_legacy_templates_enabled', true );
+	$enabled = apply_filters( 'mc_legacy_templates_enabled', $legacy );
 	// New templates require at least WP 5.5.
 	if ( version_compare( $GLOBALS['wp_version'], '5.5', '&lt;' ) ) {
 		$enabled = true;
@@ -288,7 +290,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 *
 		 * @return {string}
 		 */
-		$before = apply_filters( 'mc_before_event_no_details', $container, $event, $type, $time );
+		$before = apply_filters( 'mc_before_event_no_details', '', $event, $type, $time );
 		/**
 		 * Filter container after event details when view details panel is disabled.
 		 *
@@ -306,6 +308,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	}
 	$details      = apply_filters( 'mc_event_details_output', $details, $event );
 	$container_id = mc_event_container_id( $type, $process_date, $event );
+	$close_button = mc_close_button( $container_id );
+	// Since 3.2.0, close button is added to event container in mini calendar.
+	$close = ( 'calendar' === $type ) ? $close_button : '';
 	/**
 	 * Filter details appended after the event content.
 	 *
@@ -318,7 +323,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 *
 	 * @return {string}
 	 */
-	$details .= apply_filters( 'mc_after_event', '', $event, $type, $time );
+	$details .= $close . apply_filters( 'mc_after_event', '', $event, $type, $time );
 	$details  = mc_wrap_event_details( $details, $type, $time, $container_id, $data );
 	$details  = $header . $details;
 	$details  = mc_wrap_event( $details, $event, $container_id, $type );
