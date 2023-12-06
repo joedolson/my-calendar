@@ -26,16 +26,22 @@
 
 .mc-main .my-calendar-header a,
 .mc-main .mc_bottomnav a,
+.mc-main .my-calendar-footer select, .mc-main .my-calendar-footer input,
 .mc-main .my-calendar-header select, .mc-main .my-calendar-header input {
 	color: #313233;
 	color: var(--primary-dark);
 	border: 1px solid #efefef;
 	border: 1px solid var(--highlight-light);
 	border-radius: 5px;
-	font-size: 14px;
+	font-size: 14px !important;
 	font-family: Arial;
 	background: #fff;
 	background: var(--secondary-light);
+}
+.mc-main .my-calendar-footer select, .mc-main .my-calendar-footer input,
+.mc-main .my-calendar-header select, .mc-main .my-calendar-header input {
+	padding-top: 6px !important;
+	padding-bottom: 6px !important;
 }
 
 .mc-main span.category-color-sample {
