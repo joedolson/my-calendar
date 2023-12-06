@@ -628,8 +628,7 @@ main,div.entry-content,div.site-content, table {
 	margin: 0 auto;
 }
 
-.mc-main .my-calendar-header, .mc-main .my-calendar-footer, .mc-main .my-calendar-table, .mc-main .my-calendar-list {
-	padding: 1rem 0;
+.mc-main .my-calendar-table, .mc-main .my-calendar-list {
 	color: var(--primary-dark);
 }
 
