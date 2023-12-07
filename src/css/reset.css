@@ -387,6 +387,25 @@
 	border: 1px solid #fff;
 }
 
+.mc-main .calendar-event .details, .mc-main .calendar-events {
+	position: absolute;
+	top: 10em;
+	left: 1%;
+	width: 98%;
+	background: #fff;
+	background: var(--primary-light);
+	box-shadow: 0 0 4px;
+	color: #333;
+	color: var(--primary-dark);
+}
+
+.mc-main.mini .calendar-events {
+	top: 0;
+	left: 0;
+	width: 100%;
+	border: 1px solid var(--highlight-dark);
+}
+
 /* hCard */
 .mc-main .address {
 	clear: right;

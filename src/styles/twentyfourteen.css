@@ -42,14 +42,12 @@
 }
 
 .mc-main .calendar-event .details, .mc-main .calendar-events {
-    position: absolute;
     left: 5%;
     width: 90%;
     z-index: 3;
     background: rgba(255, 255, 255, .98);
     padding: 2em;
     box-shadow: 0 0 4px;
-    color: #333;
 }
 
 .mc-main .close {

@@ -118,15 +118,10 @@
 }
 
 .mc-main .calendar-event .details, .mc-main .calendar-events {
-	position: absolute;
 	left: 3%;
 	width: 94%;
 	z-index: 3;
-	background: #fff;
-	background: var(--primary-light);
 	box-shadow: 0 0 4px;
-	color: #333;
-	color: var(--primary-dark);
 }
 
 .mc-main .calendar-events {

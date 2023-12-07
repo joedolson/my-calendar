@@ -117,13 +117,11 @@
 }
 
 .mc-main .calendar-event .details, .mc-main .calendar-events {
-	position: absolute;
 	left: 0;
 	width: 100%;
 	z-index: 3;
 	background: rgba(255, 255, 255, .98);
 	box-shadow: 0 0 4px;
-	color: #333;
 }
 
 .mc-main.calendar .details.no-image {

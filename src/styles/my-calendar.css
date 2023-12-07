@@ -138,12 +138,9 @@
 }
 
 .mc-main .calendar-event .details, .mc-main .calendar-events {
-    position: absolute;
-    left: 15%;
+	left: 15%;
     width: 70%;
     border-radius: 10px;
-    -moz-box-shadow: 3px 3px 6px #777;
-    -webkit-box-shadow: 3px 3px 6px #777;
     box-shadow: 3px 3px 6px #777;
     padding: 5px;
     z-index: 3;

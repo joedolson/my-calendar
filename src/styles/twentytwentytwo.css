@@ -46,25 +46,6 @@
 	content: "\f510";
 }
 
-.mc-main .calendar-event .details, .mc-main .calendar-events {
-	position: absolute;
-	top: 10em;
-	left: 1%;
-	width: 98%;
-	background: #fff;
-	background: var(--primary-light);
-	box-shadow: 0 0 4px;
-	color: #333;
-	color: var(--primary-dark);
-}
-
-.mc-main.mini .calendar-events {
-	top: 0;
-	left: 0;
-	width: 100%;
-	border: 1px solid var(--highlight-dark);
-}
-
 .mc-main .mc-list .event-date button:nth-of-type(1)::before {
 	content: "\f132";
 	top: 0;
