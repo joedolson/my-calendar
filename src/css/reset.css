@@ -94,9 +94,7 @@
 }
 
 .mc-main.mini .has-events .active-toggle {
-	background: #efefef;
 	background: var(--secondary-light);
-	color: #000;
 	color: var(--secondary-dark);
 }
 
@@ -248,7 +246,6 @@
 .mc-main .time-block {
 	background: var(--primary-light);
 	padding: 8px;
-	color: #000;
 	color: var(--secondary-dark);
 }
 
@@ -267,7 +264,6 @@
 
 .mc-main .mc-event-date {
 	font-weight: 700;
-	color: #333;
 	color: var(--primary-dark);
 }
 
@@ -285,41 +281,31 @@
 }
 
 .mc-main.mini .has-events.current-day a.mc-date {
-	color: #000;
 	color: var(--secondary-dark);
-	background: #eee;
 	background: var(--secondary-light);
 	border-top: 0px solid;
 }
 
 .mc-main.mini .has-events.current-day a.mc-date:hover,
 .mc-main.mini .has-events.current-day a.mc-date:focus {
-	background: #000;
 	background: var(--primary-dark);
-	color: #eee;
 	color: var(--primary-light);
 }
 
 .mc-main .has-events .mc-date {
 	font-weight: 700;
-	background: #333;
 	background: var(--primary-dark);
-	color: #fff;
 	color: var(--primary-light);
 }
 
 .mc-main .has-events a.mc-date {
-	color: #fff;
 	color: var(--primary-light);
-	background: #333;
 	background: var(--primary-dark);
 }
 
 .mc-main .has-events a.mc-date:hover,
 .mc-main .has-events a.mc-date:focus {
-	color: #333;
 	color: var(--primary-dark);
-	background: #fff;
 	background: var(--primary-light);
 }
 
@@ -395,7 +381,6 @@
 	background: #fff;
 	background: var(--primary-light);
 	box-shadow: 0 0 4px;
-	color: #333;
 	color: var(--primary-dark);
 	z-index: 3;
 }
@@ -908,7 +893,7 @@ button.mc-toggle {
 	padding: 4px;
 	background-color: transparent !important;
 	font-size: 20px;
-	color: #a00 !important;
+	color: #b32d2e !important;
 	font-family: dashicons !important;
 }
 
@@ -1057,7 +1042,7 @@ ol.mc-search-results li {
 
 .mc-search-results .mc_search_term {
 	background: #ffa;
-	color: #111;
+	color: var(--primary-dark);
 }
 
 ol.mc-search-results li:nth-of-type(even) {
@@ -1068,7 +1053,7 @@ ol.mc-search-results li.no-results {
 	padding: 5px;
 	border-left: 6px solid #b32d2e;
 	background-color: #0000000a;
-	color: #111;
+	color: var(--primary-dark)
 }
 
 @-webkit-keyframes animation-rotate {
@@ -1320,8 +1305,8 @@ body.mc-no-scroll {
   max-width: 55.625em;
   max-height: 80vh;
   border: 2px solid #000;
-  background: #fefef8;
-  color: #333;
+  background: var(--primary-light)
+  color: var(--primary-dark)
   z-index: 667;
   padding: 0;
   right: auto;
@@ -1333,7 +1318,7 @@ body.mc-no-scroll {
   right: 5px;
   background: #a00;
   border-radius: 0 8px 0 4px;
-  color: #fff;
+  color: var(--primary-light);
   border: 0;
   padding: .75em;
   cursor: pointer;
@@ -1345,8 +1330,8 @@ body.mc-no-scroll {
 .my-calendar-modal-close:focus,
 .my-calendar-modal-close:hover,
 .my-calendar-modal-close:active {
-  color: #a00;
-  background: #fff;
+  color: #b32d2e;
+  background: var(--primary-light);
 }
 
 .my-calendar-modal {
