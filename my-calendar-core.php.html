@@ -202,6 +202,32 @@ function mc_preview_stylesheet( $file ) {
 	return $file;
 }
 
+/**
+ * Ensure that expected style variables are always present.
+ *
+ * @param array $styles Array of style variables saved in settings.
+ *
+ * @return array
+ */
+function mc_style_variables( $styles = array() ) {
+	$core_styles = array(
+		'--primary-dark'    => '#313233',
+		'--primary-light'   => '#fff',
+		'--secondary-light' => '#fff',
+		'--secondary-dark'  => '#000',
+		'--highlight-dark'  => '#666',
+		'--highlight-light' => '#efefef',
+		'--close-button'    => '#b32d2e',
+	);
+	foreach ( $core_styles as $key => $value ) {
+		if ( ! isset( $styles[ $key ] ) ) {
+			$styles[ $key ] = $value;
+		}
+	}
+
+	return $styles;
+}
+
 add_action( 'wp_enqueue_scripts', 'mc_register_styles', 20 );
 /**
  * Publically enqueued styles &amp; scripts
@@ -286,6 +312,7 @@ function mc_register_styles() {
 			$category_vars   = $category_css['vars'];
 
 			$styles     = (array) mc_get_option( 'style_vars' );
+			$styles     = mc_style_variables( $styles );
 			$style_vars = '';
 			foreach ( $styles as $key => $var ) {
 				if ( $var ) {
