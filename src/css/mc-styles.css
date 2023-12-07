@@ -179,7 +179,6 @@ span.mc-notice {
 	column-gap: 8px
 }
 
-.recurrences .columns,
 #e_schedule .columns,
 .my-calendar-admin .columns-flex {
 	display: flex;
@@ -228,7 +227,6 @@ li.datetime-template:nth-of-type(even) {
 	grid-template-columns: repeat(2, 1fr );
 }
 
-.recurrences .columns,
 #e_schedule .columns {
 	align-items: start;
 	flex-wrap: wrap;
@@ -265,6 +263,24 @@ li.datetime-template:nth-of-type(even) {
 .recurrences .columns.instance-list,
 #e_schedule .columns.instance-list {
 	grid-template-columns: repeat( 3, 1fr )
+}
+
+@media (min-width: 1200px) {
+	.recurrences .columns.instance-list {
+		grid-template-columns: repeat( 4, 1fr )
+	}
+}
+
+@media (min-width: 1400px) {
+	.recurrences .columns.instance-list {
+		grid-template-columns: repeat( 5, 1fr )
+	}
+}
+
+@media (min-width: 1600px) {
+	.recurrences .columns.instance-list {
+		grid-template-columns: repeat( 6, 1fr )
+	}
 }
 
 .recurrences .columns.instance-list li,
