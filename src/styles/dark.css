@@ -211,7 +211,6 @@
 	left: 15%;
     width: 70%;
     padding: 5px;
-    z-index: 3;
     border: 2px solid #222;
     box-shadow: 3px 3px 10px #000;
 }

@@ -180,7 +180,6 @@ nav .my-calendar-nav ul {
     border-radius: 4px;
     box-shadow: 2px 2px 2px #444;
     padding: 24px;
-    z-index: 3;
 }
 
 .mc-main .calendar-events {

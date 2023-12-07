@@ -143,7 +143,6 @@
     border-radius: 10px;
     box-shadow: 3px 3px 6px #777;
     padding: 5px;
-    z-index: 3;
 }
 
 .mc-main .details .close {

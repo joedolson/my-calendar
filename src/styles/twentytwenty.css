@@ -120,7 +120,6 @@
 .mc-main .calendar-event .details, .mc-main .calendar-events {
 	left: 3%;
 	width: 94%;
-	z-index: 3;
 	box-shadow: 0 0 4px;
 }
 

@@ -397,6 +397,7 @@
 	box-shadow: 0 0 4px;
 	color: #333;
 	color: var(--primary-dark);
+	z-index: 3;
 }
 
 .mc-main.mini .calendar-events {
