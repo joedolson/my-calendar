@@ -192,6 +192,7 @@ function mc_style_variables( $styles = array() ) {
 		'--highlight-dark'  => '#666',
 		'--highlight-light' => '#efefef',
 		'--close-button'    => '#b32d2e',
+		'--highlight-text'  => '#ffffaa',
 	);
 	foreach ( $core_styles as $key => $value ) {
 		if ( ! isset( $styles[ $key ] ) ) {
