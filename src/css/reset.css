@@ -893,7 +893,7 @@ button.mc-toggle {
 	padding: 4px;
 	background-color: transparent !important;
 	font-size: 20px;
-	color: #b32d2e !important;
+	color: var(--close-button) !important;
 	font-family: dashicons !important;
 }
 
@@ -1051,7 +1051,7 @@ ol.mc-search-results li:nth-of-type(even) {
 
 ol.mc-search-results li.no-results {
 	padding: 5px;
-	border-left: 6px solid #b32d2e;
+	border-left: 6px solid var(--close-button);
 	background-color: #0000000a;
 	color: var(--primary-dark)
 }
@@ -1330,7 +1330,7 @@ body.mc-no-scroll {
 .my-calendar-modal-close:focus,
 .my-calendar-modal-close:hover,
 .my-calendar-modal-close:active {
-  color: #b32d2e;
+  color: var(--close-button);
   background: var(--primary-light);
 }
 

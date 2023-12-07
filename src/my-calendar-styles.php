@@ -111,9 +111,10 @@ function my_calendar_style_edit() {
 			<?php
 			$output = '';
 			$styles = mc_get_option( 'style_vars' );
+			$styles = mc_style_variables( $styles );
 			foreach ( $styles as $var => $style ) {
 				$var_id = 'mc' . sanitize_key( $var );
-				if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light' ), true ) ) {
+				if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light', '--close-button' ), true ) ) {
 					// Translators: CSS variable name.
 					$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
 				} else {
