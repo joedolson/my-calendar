@@ -77,9 +77,12 @@
 	display: flex;
 	align-items: start;
 	column-gap: 4px;
-	line-height: 1.5;
 	padding: 4px;
 	position: relative;
+}
+
+.mc-main .card-event .event-title a {
+	padding: 2px 8px;
 }
 
 .mc-main .event-title a.list > span {

@@ -27,6 +27,7 @@
 	position: absolute;
 	bottom: 0;
 	padding-bottom: 0;
+	margin-bottom: 0;
 }
 
 .mc-main .my-calendar-cards .card-event .details {
