@@ -99,7 +99,6 @@ function mc_url_in_loop( $url ) {
  */
 function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	$open_day_uri = mc_get_option( 'open_day_uri' );
-	$filtered     = 
 	$mini_uri     = ( _mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : mc_get_uri( reset( $events );
 	/**
 	 * Filter the URI used to link days in the mini calendar.
