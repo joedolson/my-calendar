@@ -21,13 +21,13 @@
 			$( '.mini .has-events' ).children().not( '.mc-date-container' ).not( current_date ).hide();
 			$( this ).addClass( 'active-toggle' );
 			e.stopImmediatePropagation();
-		} );
+		});
 		$( document ).on( "click", ".calendar-events .close", function (e) {
 			e.preventDefault();
 			$(this).closest( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
 			$(this).closest( 'div.calendar-events' ).toggle();
 			e.stopImmediatePropagation();
-		} );
+		});
 	}
 
 	if ( 'true' === my_calendar.list ) {
@@ -35,20 +35,19 @@
 			$('li .list-event' ).hide();
 			$('li.current-day .list-event').show();
 			$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
-			$(document).on( 'click', '.event-date button',
-				function (e) {
-					e.preventDefault();
-					console.log($( this ).closest( '.mc-events' ).find( '.mc-event' ) );
-					$( this ).closest( '.mc-events' ).find( '.mc-event' ).toggle();
-					var visible = $(this).closest( '.mc-events' ).find( '.mc-event' ).is(':visible');
-					if ( visible ) {
-						$(this).attr('aria-expanded', 'true');
-					} else {
-						$(this).attr('aria-expanded', 'false');
-					}
-					e.stopImmediatePropagation();
-					return false;
-				});
+			$(document).on( 'click', '.event-date button', function (e) {
+				e.preventDefault();
+				console.log($( this ).closest( '.mc-events' ).find( '.mc-event' ) );
+				$( this ).closest( '.mc-events' ).find( '.mc-event' ).toggle();
+				var visible = $(this).closest( '.mc-events' ).find( '.mc-event' ).is(':visible');
+				if ( visible ) {
+					$(this).attr('aria-expanded', 'true');
+				} else {
+					$(this).attr('aria-expanded', 'false');
+				}
+				e.stopImmediatePropagation();
+				return false;
+			});
 		}
 	}
 
