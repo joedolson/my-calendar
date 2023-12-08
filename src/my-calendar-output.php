@@ -914,7 +914,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 			$edit .= "<li><a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "</a></li>
 			$groupedit";
 		}
-		$edit .= '</p></div>';
+		$edit .= '</ul></div>';
 	}
 	if ( ! mc_show_details( $time, $type ) ) {
 		$edit = '';
