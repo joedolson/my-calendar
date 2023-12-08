@@ -90,7 +90,7 @@
 }
 
 .mc-main.mini .event-title {
-	padding: 10px 30px 9px 5px;
+	padding: 8px 32px 7px 8px;
 }
 
 .mc-main.mini .has-events .active-toggle {
@@ -193,7 +193,7 @@
 	position: absolute;
 	right: 3px;
 	top: 4px;
-	padding: 10px !important;
+	padding: 8px !important;
 	border-radius: 3px;
 }
 
@@ -218,23 +218,23 @@
 .mc-main .details img.alignleft {
 	width: auto;
 	float: left;
-	margin: 0 20px 10px 0;
+	margin: 0 16px 8px 0;
 }
 
 .mc-main .details img.alignright {
 	width: auto;
 	float: left;
-	margin: 0 0 10px 20px;
+	margin: 0 0 8px 16px;
 }
 
 .mc-main .details img.aligncenter {
 	width: auto;
 	display: block;
-	margin: 0 auto 10px;
+	margin: 0 auto 8px;
 }
 
 .mc-main .details p {
-	margin: 0 0 20px;
+	margin: 0 0 24px;
 }
 
 /* Date/times */
@@ -268,7 +268,7 @@
 
 .mc-main .mc-date {
 	display: block;
-	padding: 0 7px;
+	padding: 0 8px;
 	font-weight: 700;
 	font-size: 14px;
 	text-align: right;
@@ -310,7 +310,7 @@
 
 .mc-main .mc-single {
 	font-size: clamp( 1.25rem, 24px, 2.5rem );
-	margin: 0 0 .5em;
+	margin: 0 0 8px;
 }
 
 .mc-main .current-day {
@@ -343,8 +343,8 @@
 }
 
 .mc-main .mc-time .week {
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 8px;
+	padding-right: 8px;
 }
 
 .mc-main .category-key li a {
@@ -366,7 +366,7 @@
 	width: 16px;
 	height: 16px;
 	vertical-align: middle;
-	margin: 0 .25em;
+	margin: 0 4px;
 	border-radius: 16px;
 	position: relative;
 	border: 1px solid var(--primary-light);
@@ -397,7 +397,7 @@
 
 .single-event .address,
 .mc-main .address {
-	margin: 1em 0;
+	margin: 16px 0;
 }
 
 .single-event .address {
@@ -420,7 +420,7 @@
 }
 
 .mc-author-card, .mc-host-card {
-	margin-top: 1em;
+	margin-top: 16px;
 	background: #00000006;
 	color: var(--secondary-dark);
 	font-size: clamp( .75rem, 14px, 1.5rem);
@@ -455,7 +455,7 @@
 
 .mc-main .mc-list .mc-events {
 	list-style-type: none !important;
-	padding: .5rem;
+	padding: 8px;
 	margin: 0;
 }
 
@@ -465,7 +465,7 @@
 
 .mc-main .details .sharing {
 	clear: both;
-	margin: .5em 0;
+	margin: 8px 0;
 }
 
 .mc-main p:last-of-type {
@@ -473,26 +473,26 @@
 }
 
 .mc-main.mini .sharing p {
-	font-size: 14px;
-	padding: 0 .25em 0 0;
-	margin-bottom: 10px;
+	font-size: .875rem;
+	padding: 0 4px 0 0;
+	margin-bottom: 8px;
 }
 
 .details .longdesc {
-	margin: 1em 0;
+	margin: 16px 0;
 }
 
 .details .longdesc > * {
-	margin-bottom: 1.5rem;
+	margin-bottom: 24px;
 }
 
 .mc-main .mc-list .event-date {
-	font-size: 1.4rem;
+	font-size: 1.25rem;
 	font-weight: 600;
 }
 
 .mc-main .list-event {
-	margin: 0 0 0 2em;
+	margin: 0 0 0 32px;
 }
 
 .mc-main .day .list-event, .mc-main .day .details {
@@ -513,18 +513,18 @@
 
 /* Single view */
 .single-event .event-title {
-	padding: .5em;
+	padding: 8px;
 	font-size: inherit;
 }
 
 .single-event .time-block {
 	border-bottom: 1px solid;
 	background: #00000006;
-	padding: .5rem;
+	padding: 8px;
 }
 
 .single-event .event-title .category-icon {
-	margin-right: 10px;
+	margin-right: 8px;
 	position: static;
 }
 
@@ -562,7 +562,7 @@ main,div.entry-content,div.site-content, table {
 .my-calendar-cards {
 	display: grid;
 	grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
-	gap: 30px;
+	gap: 16px;
 }
 
 .my-calendar-cards .card-event {
@@ -575,8 +575,8 @@ main,div.entry-content,div.site-content, table {
 }
 
 .my-calendar-cards .card-event .details > *:not(h3, img) {
-	padding: 0 12px;
-	margin: 0 0 1rem;
+	padding: 0 8px;
+	margin: 0 0 16px;
 }
 
 .my-calendar-cards .card-event .details {
@@ -593,7 +593,7 @@ main,div.entry-content,div.site-content, table {
 }
 
 .my-calendar-cards .mc-image-container {
-	margin: 0 -12px;
+	margin: 0 -8px;
 }
 
 .my-calendar-cards header h2 {
@@ -659,7 +659,7 @@ main,div.entry-content,div.site-content, table {
 	align-items: center;
 	column-gap: 10px;
 	row-gap: 10px;
-	padding: .25rem 0;
+	padding: 4px 0;
 }
 
 .mc-main .mc-active,
@@ -684,8 +684,8 @@ main,div.entry-content,div.site-content, table {
 .mc-main .my-calendar-header select:not(.my-calendar-admin select),
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
-	padding-top: 6px;
-	padding-bottom: 6px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 	margin: 0;
 	font-size: 1rem;
 	border: 1px solid var(--primary-dark);
@@ -720,8 +720,8 @@ main,div.entry-content,div.site-content, table {
 
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]) {
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 }
 
 .mc-main .my-calendar-header select:not(.my-calendar-admin select),
@@ -773,7 +773,7 @@ main,div.entry-content,div.site-content, table {
 
 .mc-main h4.mc-title {
 	margin-top: 0;
-	margin-bottom: .5em;
+	margin-bottom: 8px;
 }
 
 .mc-main nav ul {
@@ -852,7 +852,7 @@ svg.category-icon,
 	max-width: 18px;
 	min-width: 16px;
 	height: auto;
-	padding: 1px;
+	padding: 2px;
 	border-radius: 2px; 
 }
 
@@ -879,7 +879,7 @@ svg.category-icon,
 }
 
 .mc-main .mc-export button {
-	padding: 6px 12px;
+	padding: 8px 16px;
 }
 
 .mc-main .category-key.has-icons ul li {
@@ -890,7 +890,7 @@ button.mc-toggle {
 	border: 0;
 	padding: 4px;
 	background-color: transparent !important;
-	font-size: 20px;
+	font-size: 1.25rem;
 	color: var(--close-button) !important;
 	font-family: dashicons !important;
 }
@@ -929,9 +929,9 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	width: 100%;
 	text-align: left;
 	display: flex;
-	column-gap: 4px;
+	gap: 4px;
 	align-items: center;
-	padding: .5rem;
+	padding: 8px;
 	box-sizing: border-box;
 }
 
@@ -949,7 +949,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 }
 
 .mc-main .mc-date-switcher select:not(:first-of-type) {
-	margin-left: 5px;
+	margin-left: 4px;
 }
 
 .mc-main .event-icon {
@@ -982,7 +982,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-main .category-key li a {
 	display: flex;
 	align-items: center;
-	column-gap: 4px;
+	gap: 4px;
 	padding-right: 12px;
 }
 
@@ -1013,7 +1013,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-author-card, .mc-host-card {
 	display: grid;
 	grid-template-columns: 3.5em 1fr;
-	column-gap: 10px;
+	gap: 8px;
 }
 
 .mc-author-card img, .mc-host-card img {
@@ -1023,7 +1023,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 
 .mc-author-card p, .mc-host-card p {
 	margin: 0;
-	padding: .5em;
+	padding: 8px;
 }
 
 /* Baseline styles for search results */
@@ -1034,8 +1034,8 @@ ol.mc-search-results {
 }
 
 ol.mc-search-results li {
-	margin: 0 0 1rem;
-	padding: 5px 1rem;
+	margin: 0 0 16px;
+	padding: 8px 16px;
 }
 
 .mc-search-results .mc_search_term {
@@ -1048,8 +1048,8 @@ ol.mc-search-results li:nth-of-type(even) {
 }
 
 ol.mc-search-results li.no-results {
-	padding: 5px;
-	border-left: 6px solid var(--close-button);
+	padding: 8px;
+	border-left: 8px solid var(--close-button);
 	background-color: #00000006;
 	color: var(--primary-dark)
 }
@@ -1106,21 +1106,21 @@ ol.mc-search-results li.no-results {
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }
 .mcjs.mc-main .single-event .details, .mcjs.mc-main.list.day .details { display: block; }
 
-.mc-main .details ul, .mc-main .details ol, .mc-main .details li  {
-	margin: 0 0 1.5em 3em;
+.mc-main .details ul, .mc-main .details ol  {
+	margin: 0 0 24px 32px;
 }
 
 .details .location,
 .mc-gmap-location-list {
-	margin: 1em 0;
+	margin: 16px 0;
 }
 
 .details .mc-accessibility ul.mc-access,
 .details .sharing {
 	display: flex;
 	flex-wrap: wrap;
-	column-gap: .5em;
-	margin: .5em 0;
+	gap: 4px;
+	margin: 8px 0;
 	list-style: none;
 	padding: 0;
 }
@@ -1138,18 +1138,18 @@ ol.mc-search-results li.no-results {
 
 .details .mc-access li {
 	background: #00000006;
-	padding: 3px;
+	padding: 4px;
 	border-radius: 3px;
 }
 
 .mc-location-details {
-	margin-bottom: .5em;
+	margin-bottom: 8px;
 }
 
 .mc-maps .mc-gmap-location-list .mc-location-details button {
-	padding: .33rem;
+	padding: 4px;
 	border-radius: 3px;
-	margin: 0 5px 0 0;
+	margin: 0 4px 0 0;
 }
 
 .mc-geolocate-form .mc-gl-fields {
@@ -1173,7 +1173,7 @@ ol.mc-search-results li.no-results {
 .mc-date-container.has-month {
 	display: grid;
 	grid-template-columns: auto auto;
-	padding: 0 6px;
+	padding: 0 8px;
 	align-items: center;
 	font-size: 1rem;
 	font-weight: 700;
@@ -1214,7 +1214,7 @@ dialog.my-calendar-modal .js-modal-title-container {
 	position: relative;
 	margin-top: 0;
 	margin-bottom: 0;
-	padding: 15px;
+	padding: 16px;
 	background: var(--highlight-light);
 	z-index: 1;
 }
@@ -1222,7 +1222,7 @@ dialog.my-calendar-modal .js-modal-title-container {
 dialog.my-calendar-modal #modal-title {
 	font-size: 1.5rem;
 	margin: 0;
-	margin-right: 4em;
+	margin-right: 64px;
 }
 
 dialog.my-calendar-modal .modal-content {
@@ -1271,11 +1271,11 @@ body.mc-no-scroll {
 }
 
 .my-calendar-modal #js-modal-content {
-	padding: 15px;
+	padding: 16px;
 }
 
 .my-calendar-modal #js-modal-content > * {
-	margin: 0 0 1.5em;
+	margin: 0 0 24px;
 }
 
 .my-calendar-modal-overlay[data-background-click="disabled"] {
@@ -1317,7 +1317,7 @@ body.mc-no-scroll {
   border-radius: 0 8px 0 4px;
   color: var(--primary-light);
   border: 0;
-  padding: .75em;
+  padding: 12px;
   cursor: pointer;
   z-index: 2;
   display: flex;
