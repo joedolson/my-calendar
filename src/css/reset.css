@@ -566,7 +566,8 @@ main,div.entry-content,div.site-content, table {
 }
 
 .my-calendar-cards .card-event {
-	border: 1px solid var(--highlight-dark);
+	border: 1px solid var(--highlight-light);
+	box-shadow: 4px 4px 4px var(--highlight-light);
 }
 
 .my-calendar-cards .card-event .details {
