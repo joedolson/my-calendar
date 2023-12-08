@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_event_statuses - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_modify_day_uri - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_event_statuses</h1></header>
+    <header><h1 class="page-title">Filter: mc_modify_day_uri</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_event_statuses">apply_filters( 'mc_event_statuses', <span class="signature">Array )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_modify_day_uri">apply_filters( 'mc_modify_day_uri', <span class="signature">string, array )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter available event status types.</p>
+    <p>Filter the URI used to link days in the mini calendar.</p>
 </div>
 
 
@@ -77,15 +77,10 @@
 
         <tr>
             
-                <td class="name"><code>Array</code></td>
+                <td class="name"><code>string</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
             
             </td>
 
@@ -93,7 +88,25 @@
 
             
 
-            <td class="description last"><p>of statuses where key is the integer value of the status and the value is the status label.</p></td>
+            <td class="description last"><p>$mini_uri The URL generated from settings.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>array</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>$args The arguments passed to the current calendar view.</p></td>
         </tr>
 
     
@@ -134,7 +147,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-event-editor.php.html">my-calendar-event-editor.php</a>, <a href="my-calendar-event-editor.php.html#line2976">line 2976</a>
+        <a href="includes_urls.php.html">includes/urls.php</a>, <a href="includes_urls.php.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -160,19 +173,11 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>string URL.</p>
+</div>
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">array</span>
-
-
-    </dd>
-</dl>
 
     
 
