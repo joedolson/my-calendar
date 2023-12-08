@@ -684,11 +684,19 @@ main,div.entry-content,div.site-content, table {
 .mc-main .my-calendar-header select:not(.my-calendar-admin select),
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding-top: 6px;
+	padding-bottom: 6px;
 	margin: 0;
 	font-size: 1rem;
 	border: 1px solid var(--primary-dark);
+}
+
+.mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
+.mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]),
+.mc-main .my-calendar-header select:not(.my-calendar-admin select),
+.mc-main .my-calendar-footer select:not(.my-calendar-admin select) {
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 .mc-main .my-calendar-header select, .my-calendar-footer select,
@@ -716,18 +724,6 @@ main,div.entry-content,div.site-content, table {
 	outline: 2px solid var(--primary-dark);
 	outline-offset: 2px;
 	border-radius: 3px;
-}
-
-.mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
-.mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]) {
-	padding-top: 8px;
-	padding-bottom: 8px;
-}
-
-.mc-main .my-calendar-header select:not(.my-calendar-admin select),
-.mc-main .my-calendar-footer select:not(.my-calendar-admin select) {
-	padding-top: 4px;
-	padding-bottom: 4px;
 }
 
 .mc-main .my-calendar-header input[type=submit],
