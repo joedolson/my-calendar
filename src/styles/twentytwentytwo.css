@@ -1,17 +1,3 @@
-.mc-main .maybe-hide {
-	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0;
-	position: absolute !important;
-	width: 1px;
-	word-wrap: normal !important;
-	color: inherit;
-}
-
 .my-calendar-prev a::before,
 .my-calendar-next a::after,
 .mc-export a::before,
@@ -112,15 +98,6 @@
 .mc-download .google a:before,
 .mc-download .outlook a:before {
 	content: "\f316";
-}
-
-.my-calendar-prev a:before {
-	content: '\f341';
-}
-
-.my-calendar-next a:after {
-	content: '\f345';
-	margin-left: 3px;
 }
 
 .mc-main .sharing .ical a:before, .mc-main .sharing .gcal a:before {

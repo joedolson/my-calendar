@@ -344,6 +344,21 @@
 	column-gap: .5rem;
 }
 
+.my-calendar-prev a:before, .my-calendar-next a:after {
+	font-family: 'dashicons';
+	vertical-align: middle;
+}
+
+.my-calendar-prev a:before {
+	content: '\f341';
+	margin-right: 3px;
+}
+
+.my-calendar-next a:after {
+	content: '\f345';
+	margin-left: 3px;
+}
+
 .my-calendar-header > * {
 	display: flex;
 }
@@ -672,6 +687,7 @@ main,div.entry-content,div.site-content, table {
 	row-gap: 10px;
 	padding: 4px 0;
 	margin: 8px 0;
+	background-color: var(--navbar-background);
 }
 
 .mc-main .mc-active,
@@ -700,7 +716,8 @@ main,div.entry-content,div.site-content, table {
 	padding-bottom: 6px;
 	margin: 0;
 	font-size: 1rem;
-	border: 1px solid var(--primary-dark);
+	border: 1px solid var(--navigation-input-border);
+	background: var(--navigation-input-background);
 }
 
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
@@ -713,8 +730,8 @@ main,div.entry-content,div.site-content, table {
 
 .mc-main .my-calendar-header select, .my-calendar-footer select,
 .mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
-	color: var(--secondary-dark);
-	background: var(--primary-light);
+	color: var(--navigation-button-color);
+	background: var(--navigation-button);
 	border-radius: 4px;
 }
 
@@ -840,6 +857,7 @@ main,div.entry-content,div.site-content, table {
 	box-sizing: border-box;
 }
 
+.mc-main .maybe-hide,
 .mc-main .mc_filters label,
 .mc-main .screen-reader-text {
 	border: 0;

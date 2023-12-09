@@ -2,20 +2,6 @@
 	margin: .25em 0 .5em 3em;
 }
 
-.mc-main .maybe-hide {
-	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0;
-	position: absolute !important;
-	width: 1px;
-	word-wrap: normal !important;
-	color: inherit;
-}
-
 .mc-main .my-calendar-header span, .mc-main .my-calendar-header a,
 .mc-main .mc_bottomnav span, .mc-main .mc_bottomnav a,
 .mc-main .my-calendar-header select, .mc-main .my-calendar-header input,
@@ -313,15 +299,6 @@
 .mc-download .google a:before,
 .mc-download .outlook a:before {
 	content: "\f316";
-}
-
-.my-calendar-prev a:before {
-	content: '\f341';
-}
-
-.my-calendar-next a:after {
-	content: '\f345';
-	margin-left: 3px;
 }
 
 /* Category Key */

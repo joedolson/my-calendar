@@ -2,20 +2,6 @@
 	margin: .25em 0 .5em 3em;
 }
 
-.mc-main .maybe-hide {
-	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0;
-	position: absolute !important;
-	width: 1px;
-	word-wrap: normal !important;
-	color: inherit;
-}
-
 .mc-main .my-calendar-header input,
 .mc-main .my-calendar-header a,
 .mc-main .mc_bottomnav a {
@@ -230,11 +216,6 @@ nav .mc-format ul, nav .mc-time ul, nav .my-calendar-nav ul {
 	column-gap: 0;
 }
 
-.my-calendar-prev a:before, .my-calendar-next a:after {
-	font-family: 'dashicons';
-	vertical-align: middle;
-}
-
 .mc-export .rss a:before {
 	font-family: 'dashicons';
 	vertical-align: middle;
@@ -247,16 +228,6 @@ nav .mc-format ul, nav .mc-time ul, nav .my-calendar-nav ul {
 	vertical-align: middle;
 	margin-right: 3px;
 	content: '\f508';
-}
-
-.my-calendar-prev a:before {
-	content: '\f341';
-	margin-right: 3px;
-}
-
-.my-calendar-next a:after {
-	content: '\f345';
-	margin-left: 3px;
 }
 
 /* hCard */

@@ -5,20 +5,6 @@
     color: #333;
 }
 
-.mc-main .maybe-hide:not(.my-calendar-nav .maybe-hide) {
-	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	height: 1px;
-	margin: -1px;
-	overflow: hidden;
-	padding: 0;
-	position: absolute !important;
-	width: 1px;
-	word-wrap: normal !important;
-	color: inherit;
-}
-
 .mc-main .heading, .mc-main .my-calendar-header,
 .mc-main .my-calendar-footer, .mc-main .calendar-event .details,
 .mc-main .calendar-events {
