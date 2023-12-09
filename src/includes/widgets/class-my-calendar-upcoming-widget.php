@@ -55,7 +55,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$before     = ( isset( $instance['my_calendar_upcoming_before'] ) ) ? $instance['my_calendar_upcoming_before'] : '';
 		$after      = ( isset( $instance['my_calendar_upcoming_after'] ) ) ? $instance['my_calendar_upcoming_after'] : '';
 		$skip       = ( isset( $instance['my_calendar_upcoming_skip'] ) ) ? $instance['my_calendar_upcoming_skip'] : '';
-		$show       = ( isset( $instance['my_calendar_upcoming_show_today'] ) ) ? $instance['my_calendar_upcoming_show_today'] : '';
 		$show_recur = ( isset( $instance['my_calendar_upcoming_show_recurring'] ) ) ? $instance['my_calendar_upcoming_show_recurring'] : '';
 		$type       = ( isset( $instance['my_calendar_upcoming_type'] ) ) ? $instance['my_calendar_upcoming_type'] : '';
 		$order      = ( isset( $instance['my_calendar_upcoming_order'] ) ) ? $instance['my_calendar_upcoming_order'] : '';
@@ -67,7 +66,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$before         = ( '' !== $before ) ? esc_attr( $instance['my_calendar_upcoming_before'] ) : 3;
 		$after          = ( '' !== $after ) ? esc_attr( $instance['my_calendar_upcoming_after'] ) : 3;
 		$skip           = ( '' !== $skip ) ? esc_attr( $instance['my_calendar_upcoming_skip'] ) : 0;
-		$show_today     = ( 'no' === $show ) ? 'no' : 'yes';
 		$show_recurring = ( 'no' === $show_recur ) ? 'no' : 'yes';
 		$type           = esc_attr( $type );
 		$order          = esc_attr( $order );
@@ -96,7 +94,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			'fallback'       => $the_substitute,
 			'order'          => $order,
 			'skip'           => $skip,
-			'show_today'     => $show_today,
 			'show_recurring' => $show_recurring,
 			'author'         => $author,
 			'host'           => $host,
@@ -135,7 +132,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$lvalue     = ( isset( $instance['lvalue'] ) ) ? esc_attr( $instance['lvalue'] ) : '';
 		$before     = ( isset( $instance['my_calendar_upcoming_before'] ) ) ? esc_attr( $instance['my_calendar_upcoming_before'] ) : 3;
 		$after      = ( isset( $instance['my_calendar_upcoming_after'] ) ) ? esc_attr( $instance['my_calendar_upcoming_after'] ) : 3;
-		$show_today = ( isset( $instance['my_calendar_upcoming_show_today'] ) ) ? esc_attr( $instance['my_calendar_upcoming_show_today'] ) : 'no';
 		$show_recur = ( isset( $instance['my_calendar_upcoming_show_recurring'] ) ) ? esc_attr( $instance['my_calendar_upcoming_show_recurring'] ) : 'yes';
 		$type       = ( isset( $instance['my_calendar_upcoming_type'] ) ) ? esc_attr( $instance['my_calendar_upcoming_type'] ) : 'events';
 		$order      = ( isset( $instance['my_calendar_upcoming_order'] ) ) ? esc_attr( $instance['my_calendar_upcoming_order'] ) : 'asc';
@@ -247,10 +243,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		}
 		?>
 		<p>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_show_today' ); ?>" value="yes"<?php echo ( 'yes' === $show_today ) ? ' checked="checked"' : ''; ?> />
-			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_today' ); ?>"><?php _e( "Include today's events", 'my-calendar' ); ?></label>
-		</p>
-		<p>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_recurring' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_upcoming_show_recurring' ); ?>" value="no"<?php echo ( 'no' === $show_recur ) ? ' checked="checked"' : ''; ?> />
 			<label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_show_recurring' ); ?>"><?php _e( 'Show only the first recurring event in a series', 'my-calendar' ); ?></label>
 		</p>
@@ -314,9 +306,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 */
 	function update( $new, $instance ) {
 		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
-		if ( ! isset( $new['my_calendar_upcoming_show_today'] ) ) {
-			$instance['my_calendar_upcoming_show_today'] = 'no';
-		}
 		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new['my_calendar_upcoming_category'], true ) ) ? array() : $new['my_calendar_upcoming_category'];
 
 		return $instance;

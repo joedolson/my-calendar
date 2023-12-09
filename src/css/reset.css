@@ -1310,8 +1310,8 @@ body.mc-no-scroll {
   max-width: 55.625em;
   max-height: 80vh;
   border: 2px solid var(--primary-dark);
-  background: var(--primary-light)
-  color: var(--primary-dark)
+  background: var(--primary-light);
+  color: var(--primary-dark);
   z-index: 667;
   padding: 0;
   right: auto;

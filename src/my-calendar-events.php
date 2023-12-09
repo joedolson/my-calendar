@@ -348,7 +348,7 @@ function mc_get_all_events( $args ) {
 	$limit   = "$select_published $select_category $select_author $select_host $select_access $search";
 
 	// New Query style.
-	$total  = $before + $after + 30;
+	$total  = absint( $before ) + absint( $after ) + 30;
 	$events = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table( $site ) . '
@@ -400,11 +400,10 @@ function mc_get_all_events( $args ) {
  *
  * @param int     $before Number of events before.
  * @param int     $after Number of events after.
- * @param boolean $today Whether to include today's events.
  *
  * @return array events
  */
-function mc_get_all_holidays( $before, $after, $today ) {
+function mc_get_all_holidays( $before, $after ) {
 	if ( ! mc_get_option( 'skip_holidays_category' ) ) {
 		return array();
 	} else {
@@ -413,7 +412,6 @@ function mc_get_all_holidays( $before, $after, $today ) {
 			'category' => $category,
 			'before'   => $before,
 			'after'    => $after,
-			'today'    => $today,
 		);
 
 		return mc_get_all_events( $args );
@@ -573,7 +571,7 @@ function mc_get_search_results( $search ) {
 		);
 
 		$arr_events    = mc_get_all_events( $args );
-		$holidays      = mc_get_all_holidays( $before, $after, 'yes' );
+		$holidays      = mc_get_all_holidays( $before, $after );
 		$holiday_array = mc_set_date_array( $holidays );
 
 		if ( is_array( $arr_events ) && ! empty( $arr_events ) ) {

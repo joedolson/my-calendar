@@ -115,7 +115,6 @@ function my_calendar_insert_upcoming( $atts ) {
 			'fallback'       => '',
 			'order'          => 'asc',
 			'skip'           => '0',
-			'show_today'     => 'yes',
 			'show_recurring' => 'yes',
 			'author'         => 'default',
 			'host'           => 'default',
@@ -735,10 +734,6 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				<p>
 					<label for="skip<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events/Days to Skip', 'my-calendar' ); ?></label>
 					<input type="number" name="skip" id="skip<?php echo esc_attr( $type ); ?>" value="" />
-				</p>
-				<p class="checkbox">
-					<input type="checkbox" name="show_today" id="show_today<?php echo esc_attr( $type ); ?>" value="yes"/>
-					<label for="show_today<?php echo esc_attr( $type ); ?>"><?php esc_html_e( "Show Today's Events", 'my-calendar' ); ?></label>
 				</p>
 				<p class="checkbox">
 					<input type="checkbox" name="show_recurring" id="show_recurring<?php echo esc_attr( $type ); ?>" value="no" />

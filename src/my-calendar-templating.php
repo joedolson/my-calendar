@@ -314,7 +314,6 @@ function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
 		$args   = array(
 			'before' => 1,
 			'after'  => 1,
-			'today'  => 'yes',
 		);
 		$events = mc_get_all_events( $args );
 		if ( isset( $events[0] ) ) {

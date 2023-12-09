@@ -41,7 +41,6 @@ function my_calendar_upcoming_events( $args ) {
 	$substitute     = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
 	$order          = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
 	$skip           = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
-	$show_today     = ( isset( $args['show_today'] ) ) ? $args['show_today'] : 'yes';
 	$show_recurring = ( isset( $args['show_recurring'] ) ) ? $args['show_recurring'] : 'yes';
 	$author         = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
 	$host           = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
@@ -300,7 +299,6 @@ function my_calendar_upcoming_events( $args ) {
 			'category' => $category,
 			'before'   => $before,
 			'after'    => $after,
-			'today'    => $show_today,
 			'author'   => $author,
 			'host'     => $host,
 			'ltype'    => $ltype,
@@ -309,7 +307,7 @@ function my_calendar_upcoming_events( $args ) {
 		);
 		$events = mc_get_all_events( $query );
 
-		$holidays      = mc_get_all_holidays( $before, $after, $show_today );
+		$holidays      = mc_get_all_holidays( $before, $after );
 		$holiday_array = mc_set_date_array( $holidays );
 
 		if ( is_array( $events ) && ! empty( $events ) ) {
@@ -319,7 +317,7 @@ function my_calendar_upcoming_events( $args ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			$output .= mc_produce_upcoming_events( $event_array, $template, 'list', $order, $skip, $before, $after, $show_today, $show_recurring );
+			$output .= mc_produce_upcoming_events( $event_array, $template, 'list', $order, $skip, $before, $after, $show_recurring );
 		} else {
 			$output = '';
 		}
@@ -392,13 +390,12 @@ function mc_span_time( $group_id ) {
  * @param int    $skip Number of events to skip over.
  * @param int    $before How many past events to show.
  * @param int    $after How many future events to show.
- * @param string $show_today 'yes' (anything else is false); whether to include events happening today.
  * @param string $show_recurring 'yes', show all recurring events. Else, first only.
  * @param string $context Display context.
  *
  * @return string; HTML output of list
  */
-function mc_produce_upcoming_events( $events, $template, $type = 'list', $order = 'asc', $skip = 0, $before = 0, $after = 3, $show_today = 'yes', $show_recurring = 'yes', $context = 'filters' ) {
+function mc_produce_upcoming_events( $events, $template, $type = 'list', $order = 'asc', $skip = 0, $before = 0, $after = 3, $show_recurring = 'yes', $context = 'filters' ) {
 	// $events has +5 before and +5 after if those values are non-zero.
 	// $events equals array of events based on before/after queries. Nothing skipped, order is not set, holiday conflicts removed.
 	$output      = array();
@@ -462,7 +459,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 										continue;
 									}
 									$event_used = false;
-									if ( 'yes' === $show_today && my_calendar_date_equal( $beginning, $current ) ) {
+									if ( my_calendar_date_equal( $beginning, $current ) ) {
 
 										/**
 										 * Should today's events be counted towards total number of upcoming events. Default `yes`. Any value other than 'no' will be interpreted as 'yes'.
@@ -505,10 +502,8 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									}
 									// If this happened on the current date.
 									if ( my_calendar_date_equal( $beginning, $current ) && ! $event_added ) {
-										if ( 'yes' === $show_today ) {
-											$extra ++;
-											$event_added = true;
-										}
+										$extra ++;
+										$event_added = true;
 									}
 									// If this did not end before the current date.
 									if ( ! my_calendar_date_comp( $end, $current ) && ! $event_added ) {
@@ -519,7 +514,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									$last_events[] = $e->occur_id;
 									$last_group[]  = $e->occur_group_id;
 								}
-								if ( $past > $before && $future > $after && 'yes' !== $show_today ) {
+								if ( $past > $before && $future > $after ) {
 									break;
 								}
 							}
