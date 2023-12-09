@@ -514,7 +514,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 									$private_checked = false;
 								}
 							}
-							$current = ( 'add' === $view ) ? false : $cur_cat->category_id;
+							$current = ( 'add' === $view ) ? 'false' : $cur_cat->category_id;
 							?>
 							<fieldset>
 								<legend class="screen-reader-text"><?php esc_html_e( 'Category Meta', 'my-calendar' ); ?></legend>
