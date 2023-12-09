@@ -13,7 +13,7 @@
 
 ?>
 <div class="mc-event-container">
-<div class="mc-image-container">
+	<div class="mc-image-container">
 		<?php mc_template_image( $data, 'card' ); ?>
 	</div>
 	<div class="mc-content-container">
