@@ -834,13 +834,6 @@ main,div.entry-content,div.site-content, table {
 	height: auto;
 }
 
-.mc-main select:not(.my-calendar-admin .mc-main select) {
-	background: inherit;
-	color: inherit;
-	-webkit-appearance: auto;
-	appearance: auto;
-}
-
 .mc-main *, .mc-main *:before, .mc-main *:after {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
