@@ -85,6 +85,13 @@
 	padding: 2px 8px;
 }
 
+.upcoming-events.my-calendar-cards li.card-event,
+.upcoming-events.my-calendar-cards {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
 .mc-main .event-title a.list > span {
 	display: flex;
 	align-items: center;
@@ -664,6 +671,7 @@ main,div.entry-content,div.site-content, table {
 	column-gap: 10px;
 	row-gap: 10px;
 	padding: 4px 0;
+	margin: 8px 0;
 }
 
 .mc-main .mc-active,

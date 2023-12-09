@@ -94,7 +94,8 @@ function my_calendar_upcoming_events( $args ) {
 
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events'$lang>";
+	$class          = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
+	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events $class'$lang>";
 	$footer         = '</ul>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
@@ -348,7 +349,7 @@ function my_calendar_upcoming_events( $args ) {
 		$output = $header . $output . $footer;
 		$return = mc_run_shortcodes( $output );
 	} else {
-		$return = '<div class="no-events-fallback upcoming-events">' . stripcslashes( $no_event_text ) . '</div>';
+		$return = '<div class="no-events-fallback upcoming-events ' . $class . '">' . stripcslashes( $no_event_text ) . '</div>';
 	}
 
 	if ( $site ) {
@@ -579,8 +580,13 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			'tags'     => $tags,
 			'template' => $template,
 			'type'     => $type,
+			'time'     => 'list',
 		);
-		$details = mc_load_template( 'event/upcoming', $data );
+		if ( 'card' === $template ) {
+			$details = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';
+		} else {
+			$details = mc_load_template( 'event/upcoming', $data );
+		}
 		if ( ! $details ) {
 			$html .= mc_format_upcoming_event( $out, $template, $type );
 		} else {
@@ -678,7 +684,8 @@ function my_calendar_todays_events( $args ) {
 
 	$today         = ( isset( $events[ $from ] ) ) ? $events[ $from ] : false;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$header        = "<ul id='todays-events-$hash' class='todays-events'$lang>";
+	$class         = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
+	$header        = "<ul id='todays-events-$hash' class='todays-events $class'$lang>";
 	$footer        = '</ul>';
 	$groups        = array();
 	$todays_events = array();
@@ -696,7 +703,11 @@ function my_calendar_todays_events( $args ) {
 					'template' => $template,
 					'args'     => $args,
 				);
-				$details = mc_load_template( 'event/today', $data );
+				if ( 'card' === $template ) {
+					$details = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';
+				} else {
+					$details = mc_load_template( 'event/today', $data );
+				}
 				if ( $details ) {
 					$todays_events[ $ts ][] = $details;
 				} else {

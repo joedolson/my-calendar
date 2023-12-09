@@ -1940,9 +1940,13 @@ function mc_template_access( $data, $type ) {
 		$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
 		$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
 		$sublevel       = 'h2';
-		if ( 'mini' === $type || 'list' === $type ) {
+		if ( 'mini' === $type || 'list' === $type || 'list' === $data->time ) {
 			// In the mini calendar, levels are reduced one because there are multiple events.
-			$sublevel = 'h3';
+			if ( 'list' === $data->time ) {
+				$sublevel = 'h4';
+			} else {
+				$sublevel = 'h3';
+			}
 		}
 		/**
 		 * Filter subheading levels inside event content.
