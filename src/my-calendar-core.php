@@ -168,9 +168,6 @@ add_filter( 'mc_registered_stylesheet', 'mc_preview_stylesheet', 10, 1 );
 function mc_preview_stylesheet( $file ) {
 	if ( isset( $_GET['mcpreview'] ) && current_user_can( 'mc_edit_styles' ) ) {
 		$file = mc_get_style_path( sanitize_text_field( $_GET['mcpreview'] ), 'url' );
-		if ( $file ) {
-			return $file;
-		}
 	}
 
 	return $file;
@@ -185,14 +182,19 @@ function mc_preview_stylesheet( $file ) {
  */
 function mc_style_variables( $styles = array() ) {
 	$core_styles = array(
-		'--primary-dark'    => '#313233',
-		'--primary-light'   => '#fff',
-		'--secondary-light' => '#fff',
-		'--secondary-dark'  => '#000',
-		'--highlight-dark'  => '#666',
-		'--highlight-light' => '#efefef',
-		'--close-button'    => '#b32d2e',
-		'--highlight-text'  => '#ffffaa',
+		'--primary-dark'                => '#313233',
+		'--primary-light'               => '#f6f7f7',
+		'--secondary-light'             => '#fff',
+		'--secondary-dark'              => '#000',
+		'--highlight-dark'              => '#646970',
+		'--highlight-light'             => '#f0f0f1',
+		'--close-button'                => '#b32d2e',
+		'--highlight-text'              => '#f5e6ab',
+		'--navigation-button'           => '#fff',
+		'--navigation-button-color'     => '#313233',
+		'--navbar-background'           => '#fff',
+		'--navigation-input-border'     => '#313233',
+		'--navigation-input-background' => '#fff',
 	);
 	foreach ( $core_styles as $key => $value ) {
 		if ( ! isset( $styles[ $key ] ) ) {
@@ -279,7 +281,13 @@ function mc_register_styles() {
 	// True means styles are disabled.
 	if ( 'true' !== mc_get_option( 'use_styles' ) ) {
 		if ( $use_default || $css_usage ) {
-			wp_enqueue_style( 'my-calendar-style' );
+			if ( '' !== $stylesheet ) {
+				wp_enqueue_style( 'my-calendar-style' );
+				$inline = 'my-calendar-style';
+			} else {
+				wp_enqueue_style( 'my-calendar-reset' );
+				$inline = 'my-calendar-reset';
+			}
 			$category_vars = '';
 			// generate category colors.
 			$category_css    = mc_generate_category_styles();
@@ -302,7 +310,7 @@ function mc_register_styles() {
 /* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
 $category_styles
 $style_vars";
-			wp_add_inline_style( 'my-calendar-style', $css );
+			wp_add_inline_style( $inline, $css );
 		}
 	}
 
