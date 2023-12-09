@@ -53,7 +53,7 @@ function my_calendar_style_edit() {
 				}
 			}
 			if ( isset( $_POST['delete_var'] ) ) {
-				$delete = sanitize_text_field( $_POST['delete_var'] );
+				$delete = map_deep( $_POST['delete_var'], 'sanitize_text_field' );
 				foreach ( $delete as $del ) {
 					unset( $styles[ $del ] );
 				}
@@ -71,25 +71,15 @@ function my_calendar_style_edit() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 		$mc_css_file = stripcslashes( sanitize_file_name( $_POST['mc_css_file'] ) );
-
 		mc_update_option( 'css_file', $mc_css_file );
 		$message = '<p><strong>' . __( 'New theme selected.', 'my-calendar' ) . '</strong></p>';
 		echo wp_kses_post( "<div id='message' class='updated fade'>$message</div>" );
 	}
 
 	$mc_show_css = mc_get_option( 'show_css' );
-	$stylefile   = mc_get_style_path();
-	if ( $stylefile ) {
-		global $wp_filesystem;
-		WP_Filesystem();
-		$file              = $wp_filesystem->get_contents( $stylefile );
-		$my_calendar_style = $file;
-	} else {
-		$my_calendar_style = __( 'Sorry. The file you are looking for doesn\'t appear to exist. Please check your file name and location!', 'my-calendar' );
-	}
-
 	echo mc_stylesheet_selector();
 	$file = mc_get_option( 'css_file' );
+	echo $file;
 	?>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
 		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
@@ -114,7 +104,7 @@ function my_calendar_style_edit() {
 			$styles = mc_style_variables( $styles );
 			foreach ( $styles as $var => $style ) {
 				$var_id = 'mc' . sanitize_key( $var );
-				if ( ! in_array( $var, array( '--primary-dark', '--primary-light', '--secondary-light', '--secondary-dark', '--highlight-dark', '--highlight-light', '--close-button' ), true ) ) {
+				if ( ! in_array( $var, mc_style_variables(), true ) ) {
 					// Translators: CSS variable name.
 					$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
 				} else {
@@ -144,6 +134,7 @@ function my_calendar_style_edit() {
  */
 function mc_display_contrast_variables() {
 	$styles = mc_get_option( 'style_vars', array() );
+	$styles = mc_style_variables( $styles );
 	$comp   = $styles;
 	$body   = '';
 	$head   = '<th>' . __( 'Variable', 'my-calendar' ) . '</th>';
@@ -233,7 +224,7 @@ function mc_stylesheet_selector() {
 		<fieldset>
 			<p>
 				<label for="mc_css_file">' . __( 'Select My Calendar Theme', 'my-calendar' ) . '</label><br />
-				<select name="mc_css_file" id="mc_css_file">' . $options . '</select>
+				<select name="mc_css_file" id="mc_css_file"><option value="">' . __( 'None', 'my-calendar' ) . '</option>' . $options . '</select>
 			</p>
 			<p>
 				<input type="submit" name="save" class="button-primary" value="' . __( 'Choose Style', 'my-calendar' ) . '"/>
@@ -259,6 +250,9 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 	$dir = plugin_dir_path( __DIR__ );
 	if ( ! $filename ) {
 		$filename = mc_get_option( 'css_file' );
+	}
+	if ( ! $filename ) {
+		return '';
 	}
 	if ( 0 === strpos( $filename, 'mc_custom_' ) ) {
 		$filename  = str_replace( 'mc_custom_', '', $filename );
