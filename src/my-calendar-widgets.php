@@ -573,9 +573,9 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 
 	$html = '';
 	foreach ( $output as $out ) {
-		$event   = $out['event'];
-		$tags    = $out['tags'];
-		$data    = array(
+		$event = $out['event'];
+		$tags  = $out['tags'];
+		$data  = array(
 			'event'    => $event,
 			'tags'     => $tags,
 			'template' => $template,
@@ -697,7 +697,7 @@ function my_calendar_todays_events( $args ) {
 				$ts            = $e->ts_occur_begin;
 				$classes       = mc_get_event_classes( $e, 'today' );
 
-				$data    = array(
+				$data = array(
 					'event'    => $e,
 					'tags'     => $event_details,
 					'template' => $template,
