@@ -122,6 +122,9 @@ function my_calendar_style_edit() {
 				<label for='new_style_var_val'><?php esc_html_e( 'Color:', 'my-calendar' ); ?></label>
 				<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
 			</p>
+			<p>
+				<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
+			</p>
 		</fieldset>
 	</form>
 	<?php
