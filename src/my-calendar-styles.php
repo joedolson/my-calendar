@@ -77,9 +77,11 @@ function my_calendar_style_edit() {
 	}
 
 	$mc_show_css = mc_get_option( 'show_css' );
+	?>
+	<div class="my-calendar-style-settings">
+	<?php
 	echo mc_stylesheet_selector();
 	$file = mc_get_option( 'css_file' );
-	echo $file;
 	?>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
 		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
@@ -110,7 +112,7 @@ function my_calendar_style_edit() {
 				} else {
 					$delete = '';
 				}
-				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
+				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
 			}
 			if ( $output ) {
 				echo wp_kses( "<ul class='checkboxes'>$output</ul>", mc_kses_elements() );
@@ -127,7 +129,9 @@ function my_calendar_style_edit() {
 			</p>
 		</fieldset>
 	</form>
+	</div>
 	<?php
+	echo do_shortcode( '[my_calendar]' );
 }
 
 /**
