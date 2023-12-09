@@ -338,10 +338,6 @@
 	column-gap: 8px;
 }
 
-.my-calendar-nav ul {
-	column-gap: .5rem;
-}
-
 .my-calendar-prev a:before, .my-calendar-next a:after {
 	font-family: 'dashicons';
 	vertical-align: middle;
@@ -362,7 +358,7 @@
 }
 
 .mc-time {
-	column-gap: 10px;
+	column-gap: 8px;
 }
 
 .mc-main .mc-time .week {
@@ -679,8 +675,8 @@ main,div.entry-content,div.site-content, table {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	column-gap: 10px;
-	row-gap: 10px;
+	column-gap: 8px;
+	row-gap: 8px;
 	padding: 4px 0;
 	margin: 8px 0;
 	background-color: var(--navbar-background);
@@ -697,7 +693,7 @@ main,div.entry-content,div.site-content, table {
 .mc-main .my-calendar-footer .mc-active,
 .mc-main .my-calendar-header .mc-active {
 	outline: 2px solid;
-	border-radius: 5px;
+	border-radius: 3px;
 	background-color: var(--primary-light);
 	filter: brightness(95%);
 }
@@ -708,28 +704,20 @@ main,div.entry-content,div.site-content, table {
 .mc-main .my-calendar-header select:not(.my-calendar-admin select),
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
 .mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
-	padding-top: 6px;
-	padding-bottom: 6px;
+	padding-top: 7px;
+	padding-bottom: 7px;
 	margin: 0;
-	font-size: 1rem;
+	font-size: clamp( .75rem, 16px, 1.5rem );
 	border: 1px solid var(--navigation-input-border);
 	background: var(--navigation-input-background);
 	color: var(--navigation-input-color);
-}
-
-.mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
-.mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]),
-.mc-main .my-calendar-header select:not(.my-calendar-admin select),
-.mc-main .my-calendar-footer select:not(.my-calendar-admin select) {
-	padding-top: 5px;
-	padding-bottom: 5px;
 }
 
 .mc-main .my-calendar-header select, .my-calendar-footer select,
 .mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
 	color: var(--navigation-button-color);
 	background: var(--navigation-button);
-	border-radius: 4px;
+	border-radius: 3px;
 }
 
 .mc-main .my-calendar-header span, .mc-main .my-calendar-header a,
@@ -795,7 +783,19 @@ main,div.entry-content,div.site-content, table {
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
-	column-gap: .5rem;
+	column-gap: 2px;
+}
+
+.mc-main nav ul li:nth-of-type(1) a {
+	border-radius: 3px 0 0 3px;
+}
+
+.mc-main nav ul li:nth-of-type(2) a {
+	border-radius: 0;
+}
+
+.mc-main nav ul li:nth-of-type(3) a {
+	border-radius: 0 3px 3px 0;
 }
 
 .mc-main ol {
@@ -863,7 +863,7 @@ svg.category-icon,
 	min-width: 16px;
 	height: auto;
 	padding: 2px;
-	border-radius: 2px; 
+	border-radius: 3px; 
 }
 
 .mc-adjacent .mc-event-date {
@@ -1011,12 +1011,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	border: 6px solid var(--highlight-light);
 	border-left-color: var(--highlight-dark);
 	background-color: #00000006;
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
 	border-radius: 50px;
-	-webkit-animation: animation-rotate 1250ms linear infinite;
-	-moz-animation: animation-rotate 1250ms linear infinite;
-	-o-animation: animation-rotate 1250ms linear infinite;
 	animation: animation-rotate 1250ms linear infinite;
 }
 
