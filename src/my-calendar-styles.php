@@ -104,7 +104,7 @@ function my_calendar_style_edit() {
 			$styles = mc_style_variables( $styles );
 			foreach ( $styles as $var => $style ) {
 				$var_id = 'mc' . sanitize_key( $var );
-				if ( ! in_array( $var, mc_style_variables(), true ) ) {
+				if ( ! in_array( $var, array_keys( mc_style_variables() ), true ) ) {
 					// Translators: CSS variable name.
 					$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
 				} else {
