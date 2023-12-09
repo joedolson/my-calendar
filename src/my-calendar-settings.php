@@ -1306,7 +1306,7 @@ function mc_remote_db() {
 									)
 								);
 							?>
-								</p>
+							</p>
 							<div class="mc-tabs">
 								<div class="tabs" role="tablist" data-default="single-event-output">
 									<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php esc_html_e( 'Single Event', 'my-calendar' ); ?></button>

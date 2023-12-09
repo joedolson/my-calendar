@@ -18,7 +18,7 @@
     color: #fff;
 }
 
-.mc-main caption, .mc-main .my-calendar-date-switcher,
+.mc-main .heading, .mc-main .my-calendar-date-switcher,
 .mc-main .category-key, .mc-main .calendar-event .details,
 .mc-main .calendar-events {
     background: #222;
@@ -34,8 +34,23 @@
     color: #fff;
 }
 
-.mc-main caption, .mc-main .my-calendar-date-switcher, .mc-main .my-calendar-nav li a:hover, .mc-main .category-key {
-    border: 1px solid #222;
+.mc-main .my-calendar-header a,
+.mc-main .my-calendar-footer a {
+	background: var(--primary-dark);
+	color: var(--primary-light);
+}
+
+.mc-main .my-calendar-header a:focus,
+.mc-main .my-calendar-footer a:focus,
+.mc-main .my-calendar-header a:hover,
+.mc-main .my-calendar-footer a:hover {
+	background: var(--secondary-dark);
+	color: var(--secondary-light);
+	outline-color: var(--primary-light) !important;
+}
+
+.mc-main .my-calendar-footer .mc-active, .mc-main .my-calendar-header .mc-active {
+	background-color: var(--secondary-dark);
 }
 
 .mc-main .my-calendar-date-switcher input, .mc-main .my-calendar-date-switcher select {
@@ -97,9 +112,11 @@
     color: #fff;
 }
 
-.mc-main .my-calendar-nav li a {
-    color: #aaf;
-    background: #000;
+.mc-main .mc_edit_links a,
+.mc-main .my-calendar-footer a,
+.mc-main .my-calendar-header a {
+    color: #bbf;
+    background: var(--primary-dark);
 }
 
 .mc-main .my-calendar-nav li a:hover {
@@ -166,4 +183,14 @@
 .mc-main .vcard, #mc_event .vcard {
     background: #111;
     border: 1px solid #333;
+}
+
+.mc-main .mc_edit_links {
+	background: var(--primary-dark);
+	border: none;
+}
+
+.my-calendar-cards .card-event {
+	border: 1px solid var(--secondary-dark);
+	box-shadow: 4px 4px 4px var(--secondary-dark);
 }

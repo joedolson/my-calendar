@@ -829,6 +829,7 @@ main,div.entry-content,div.site-content, table {
 
 .mc-main select:not(.my-calendar-admin .mc-main select) {
 	background: inherit;
+	color: inherit;
 	-webkit-appearance: auto;
 	appearance: auto;
 }
