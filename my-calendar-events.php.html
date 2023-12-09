@@ -370,8 +370,7 @@ function mc_get_all_events( $args ) {
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string        = mc_ts();
-
-	$limit   = "$select_published $select_category $select_author $select_host $select_access $search";
+	$limit            = "$select_published $select_category $select_author $select_host $select_access $search";
 
 	// New Query style.
 	$total  = absint( $before ) + absint( $after ) + 30;
@@ -424,8 +423,8 @@ function mc_get_all_events( $args ) {
 /**
  * Fetch only the defined holiday category
  *
- * @param int     $before Number of events before.
- * @param int     $after Number of events after.
+ * @param int $before Number of events before.
+ * @param int $after Number of events after.
  *
  * @return array events
  */
