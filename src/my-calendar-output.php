@@ -284,7 +284,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	$container_id = mc_event_container_id( $type, $process_date, $event );
 	$close_button = mc_close_button( $container_id );
 	// Since 3.2.0, close button is added to event container in mini calendar.
-	$close = ( 'calendar' === $type ) ? $close_button : '';
+	$close   = ( 'calendar' === $type ) ? $close_button : '';
+	$details = $close . $details;
 	/**
 	 * Filter details appended after the event content.
 	 *
@@ -297,7 +298,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 *
 	 * @return {string}
 	 */
-	$details .= $close . apply_filters( 'mc_after_event', '', $event, $type, $time );
+	$details .= apply_filters( 'mc_after_event', '', $event, $type, $time );
 	$details  = mc_wrap_event_details( $details, $type, $time, $container_id, $data );
 	$details  = $header . $details;
 	$details  = mc_wrap_event( $details, $event, $container_id, $type );
@@ -583,7 +584,7 @@ function mc_close_button( $controls ) {
 	 * @return {string}
 	 */
 	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
-	$close_button = "	<button type='button' aria-controls='$controls' class='mc-toggle close' data-action='shiftforward'>$close_image</button>";
+	$close_button = "	<button type='button' aria-controls='$controls' class='mc-toggle close'>$close_image</button>";
 
 	return $close_button;
 }
