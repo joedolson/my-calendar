@@ -1112,15 +1112,15 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
 
 		$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
 		$url     = mc_url_in_loop( $url );
-		$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='grid$grid_active'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
 
 		$url     = mc_build_url( array( 'format' => 'card' ), array() );
 		$url     = mc_url_in_loop( $url );
-		$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='card$card_active'>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active'>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
 
 		$url     = mc_build_url( array( 'format' => 'list' ), array() );
 		$url     = mc_url_in_loop( $url );
-		$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='list$list_active'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
 
 		$toggle .= '</ul>
 		</div>';
