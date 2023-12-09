@@ -324,7 +324,6 @@ function mc_get_all_events( $args ) {
 	$category = isset( $args['category'] ) ? $args['category'] : 'default';
 	$before   = isset( $args['before'] ) ? $args['before'] : 0;
 	$after    = isset( $args['after'] ) ? $args['after'] : 6;
-	$today    = isset( $args['today'] ) ? $args['today'] : 'no';
 	$author   = isset( $args['author'] ) ? $args['author'] : 'default';
 	$host     = isset( $args['host'] ) ? $args['host'] : 'default';
 	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : '';
@@ -344,74 +343,29 @@ function mc_get_all_events( $args ) {
 	$select_published = mc_select_published();
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
-	$date             = current_time( 'Y-m-d' );
 	$ts_string        = mc_ts();
 
 	$limit   = "$select_published $select_category $select_author $select_host $select_access $search";
-	$events1 = array();
-	$events2 = array();
-	$events3 = array();
 
-	// Events before today.
-	if ( $before > 0 ) {
-		$before  = $before + 15;
-		$events1 = $mcdb->get_results(
-			'SELECT *, ' . $ts_string . '
-			FROM ' . my_calendar_event_table( $site ) . '
-			JOIN ' . my_calendar_table( $site ) . " AS e
-			ON (event_id=occur_event_id)
-			$join
-			$location_join
-			JOIN " . my_calendar_categories_table( $site ) . " as c
-			ON (e.event_category=c.category_id)
-			WHERE $limit
-			AND DATE(occur_begin) < '$date'
-			$exclude_categories
-			ORDER BY occur_begin DESC LIMIT 0,$before"
-		);
-	}
-	// Events happening today.
-	if ( 'yes' === $today ) {
-		$events3 = $mcdb->get_results(
-			'SELECT *, ' . $ts_string . '
-			FROM ' . my_calendar_event_table( $site ) . '
-			JOIN ' . my_calendar_table( $site ) . " AS e
-			ON (event_id=occur_event_id)
-			$join
-			$location_join
-			JOIN " . my_calendar_categories_table( $site ) . " as c
-			ON (e.event_category=c.category_id)
-			WHERE $limit
-			$exclude_categories
-			AND ( ( DATE(occur_begin) < '$date' AND DATE(occur_end) >= '$date' ) OR DATE(occur_begin) = '$date' )"
-		);
-	}
-	// Upcoming Events.
-	if ( $after > 0 ) {
-		$after   = $after + 15;
-		$events2 = $mcdb->get_results(
-			'SELECT *, ' . $ts_string . '
-			FROM ' . my_calendar_event_table( $site ) . '
-			JOIN ' . my_calendar_table( $site ) . " AS e
-			ON (event_id=occur_event_id)
-			$join
-			$location_join
-			JOIN " . my_calendar_categories_table( $site ) . " as c
-			ON (e.event_category=c.category_id)
-			WHERE $limit
-			$exclude_categories
-			AND DATE(occur_begin) > '$date' ORDER BY occur_begin ASC LIMIT 0,$after"
-		);
-	}
-
-	$arr_events = array();
-	if ( ! empty( $events1 ) || ! empty( $events2 ) || ! empty( $events3 ) ) {
-		$arr_events = array_merge( $events1, $events3, $events2 );
-	}
+	// New Query style.
+	$total  = $before + $after + 30;
+	$events = $mcdb->get_results(
+		'SELECT *, ' . $ts_string . '
+		FROM ' . my_calendar_event_table( $site ) . '
+		JOIN ' . my_calendar_table( $site ) . " AS e
+		ON (event_id=occur_event_id)
+		$join
+		$location_join
+		JOIN " . my_calendar_categories_table( $site ) . " as c
+		ON (e.event_category=c.category_id)
+		WHERE $limit
+		$exclude_categories
+		ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), occur_begin)) ASC LIMIT 0,$total"
+	);
 
 	$cats = array();
-	foreach ( array_keys( $arr_events ) as $key ) {
-		$event          =& $arr_events[ $key ];
+	foreach ( array_keys( $events ) as $key ) {
+		$event          =& $events[ $key ];
 		$event->site_id = $site;
 		$object_id      = $event->event_id;
 		if ( ! isset( $fetched[ $object_id ] ) ) {
@@ -423,7 +377,7 @@ function mc_get_all_events( $args ) {
 		}
 		$object = mc_event_object( $event );
 		if ( false !== $object ) {
-			$arr_events[ $key ] = $object;
+			$events[ $key ] = $object;
 		}
 	}
 
@@ -432,13 +386,13 @@ function mc_get_all_events( $args ) {
 	 *
 	 * @hook mc_filter_events
 	 *
-	 * @param {array} $arr_events Array of event objects.
+	 * @param {array} $events Array of event objects.
 	 * @param {array} $args Event query arguments.
 	 * @param {string} $context Current function context.
 	 *
 	 * @return {array}
 	 */
-	return apply_filters( 'mc_filter_events', $arr_events, $args, 'mc_get_all_events' );
+	return apply_filters( 'mc_filter_events', $events, $args, 'mc_get_all_events' );
 }
 
 /**
