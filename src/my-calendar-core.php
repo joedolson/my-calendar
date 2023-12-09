@@ -383,7 +383,7 @@ function mc_enqueue_calendar_js() {
 		}
 	}
 	if ( $enqueue_mcjs ) {
-		$url     = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
+		$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
 		wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version, true );
 		$args = array(
 			'grid'      => $grid,
@@ -704,7 +704,9 @@ function mc_admin_styles() {
 		}
 		if ( 'my-calendar_page_my-calendar-design' === $id ) {
 			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
-			mc_enqueue_calendar_styles( '' );
+			$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
+			wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
+			mc_enqueue_calendar_styles( $stylesheet );
 			mc_enqueue_calendar_js();
 		}
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
