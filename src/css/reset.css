@@ -28,7 +28,7 @@
 }
 
 .mc-main thead {
-	border-bottom: 4px solid var(--primary-dark);
+	border-bottom: 4px solid var(--grid-header-border);
 }
 
 .mc-main th {
@@ -36,7 +36,6 @@
 	line-height: 1.5;
 	text-align: center;
 	padding: 4px 0;
-	border-bottom: 1px solid var(--highlight-dark);
 }
 
 .mc-main th abbr, .mc-main .event-time abbr {
@@ -45,7 +44,7 @@
 }
 
 .mc-main td {
-	border: 1px solid #0000001f;
+	border: 1px solid var(--grid-cell-border);
 	padding: 0 !important;
 	height: 6em;
 	vertical-align: top;
@@ -193,12 +192,6 @@
 	padding: 8px;
 }
 
-.mc-main .close img {
-	width: auto !important;
-	height: auto !important;
-	padding: 2px 2px 0;
-}
-
 .mc-main button.close {
 	position: absolute;
 	right: 3px;
@@ -211,6 +204,11 @@
 	padding: 0;
 	line-height: 1;
 	opacity: 1;
+}
+
+.mc-main button .dashicons {
+	width: auto;
+	height: auto;
 }
 
 .mc-main.mini .close {
@@ -403,7 +401,7 @@
 	left: 1%;
 	width: 98%;
 	background: var(--primary-light);
-	box-shadow: 0 0 4px;
+	box-shadow: 0 0 4px var(--highlight-dark);
 	color: var(--primary-dark);
 	z-index: 3;
 }
@@ -411,8 +409,6 @@
 .mc-main.mini .calendar-events {
 	top: 0;
 	left: 0;
-	width: 100%;
-	border: 1px solid var(--highlight-dark);
 }
 
 /* hCard */
@@ -772,13 +768,6 @@ main,div.entry-content,div.site-content, table {
 	text-align: center;
 }
 
-.mc-content-container {
-	display: grid;
-	grid-template-columns: auto 1fr;
-	gap: 16px;
-
-}
-
 .mc-date-badge .day {
 	font-weight: 700;
 	font-size: 1.2rem;
@@ -1136,6 +1125,15 @@ ol.mc-search-results li.no-results {
 
 .mc-main .details ul, .mc-main .details ol  {
 	margin: 0 0 24px 32px;
+}
+
+.mc-main .details a {
+	text-decoration: underline;
+}
+
+.mc-main .details a:hover,
+.mc-main .details a:focus {
+	text-decoration: none;
 }
 
 .details .location,
