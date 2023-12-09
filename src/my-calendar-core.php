@@ -284,36 +284,7 @@ function mc_register_styles() {
 	// True means styles are disabled.
 	if ( 'true' !== mc_get_option( 'use_styles' ) ) {
 		if ( $use_default || $css_usage ) {
-			if ( '' !== $stylesheet ) {
-				wp_enqueue_style( 'my-calendar-style' );
-				$inline = 'my-calendar-style';
-			} else {
-				wp_enqueue_style( 'my-calendar-reset' );
-				$inline = 'my-calendar-reset';
-			}
-			$category_vars = '';
-			// generate category colors.
-			$category_css    = mc_generate_category_styles();
-			$category_styles = $category_css['styles'];
-			$category_vars   = $category_css['vars'];
-
-			$styles     = (array) mc_get_option( 'style_vars' );
-			$styles     = mc_style_variables( $styles );
-			$style_vars = '';
-			foreach ( $styles as $key => $var ) {
-				if ( $var ) {
-					$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
-				}
-			}
-			if ( '' !== $style_vars ) {
-				$style_vars = '.mc-main {' . $style_vars . $category_vars . '}';
-			}
-
-			$css = "
-/* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
-$category_styles
-$style_vars";
-			wp_add_inline_style( $inline, $css );
+			mc_enqueue_calendar_styles( $stylesheet );
 		}
 	}
 
@@ -330,6 +301,159 @@ $style_vars";
 	}
 }
 
+/**
+ * Enqueue calendar JS.
+ */
+function mc_enqueue_calendar_js() {
+	$version = mc_get_version();
+	if ( SCRIPT_DEBUG ) {
+		$version = $version . '-' . wp_rand( 10000, 100000 );
+	}
+	if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== mc_get_option( 'open_uri' ) ) {
+		/**
+		 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
+		 *
+		 * @hook mc_grid_js
+		 *
+		 * @param {string} $url URL to JS to operate My Calendar grid view.
+		 *
+		 * @return {string}
+		 */
+		$url          = apply_filters( 'mc_grid_js', '' );
+		$enqueue_mcjs = true;
+		if ( $url ) {
+			wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
+		} else {
+			$grid = ( 'modal' === mc_get_option( 'calendar_javascript' ) ) ? 'modal' : 'true';
+		}
+	}
+	if ( '1' !== mc_get_option( 'list_javascript' ) ) {
+		/**
+		 * Filter to replace scripts used on front-end for list behavior. Default empty string.
+		 *
+		 * @hook mc_list_js
+		 *
+		 * @param {string} $url URL to JS to operate My Calendar list view.
+		 *
+		 * @return {string}
+		 */
+		$url          = apply_filters( 'mc_list_js', '' );
+		$enqueue_mcjs = true;
+		if ( $url ) {
+			wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
+		} else {
+			$list = ( 'modal' === mc_get_option( 'list_javascript' ) ) ? 'modal' : 'true';
+		}
+	}
+	if ( '1' !== mc_get_option( 'mini_javascript' ) && 'true' !== mc_get_option( 'open_day_uri' ) ) {
+		/**
+		 * Filter to replace scripts used on front-end for mini calendar behavior. Default empty string.
+		 *
+		 * @hook mc_mini_js
+		 *
+		 * @param {string} $url URL to JS to operate My Calendar mini calendar.
+		 *
+		 * @return {string}
+		 */
+		$url          = apply_filters( 'mc_mini_js', '' );
+		$enqueue_mcjs = true;
+
+		if ( $url ) {
+			wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
+		} else {
+			$mini = ( 'modal' === mc_get_option( 'mini_javascript' ) ) ? 'modal' : 'true';
+		}
+	}
+	if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
+		/**
+		 * Filter to replace scripts used on front-end for AJAX behavior. Default empty string.
+		 *
+		 * @hook mc_ajax_js
+		 *
+		 * @param {string} $url URL to JS to operate My Calendar AJAX.
+		 *
+		 * @return {string}
+		 */
+		$url          = apply_filters( 'mc_ajax_js', '' );
+		$enqueue_mcjs = true;
+		if ( $url ) {
+			wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
+		} else {
+			$ajax = 'true';
+		}
+	}
+	if ( $enqueue_mcjs ) {
+		$url     = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
+		wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version, true );
+		$args = array(
+			'grid'      => $grid,
+			'list'      => $list,
+			'mini'      => $mini,
+			'ajax'      => $ajax,
+			'links'     => mc_get_option( 'list_link_titles' ),
+			'newWindow' => __( 'New tab', 'my-calendar' ),
+			'subscribe' => __( 'Subscribe', 'my-calendar' ),
+			'export'    => __( 'Export', 'my-calendar' ),
+		);
+		wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
+	}
+	$gridtype = mc_get_option( 'calendar_javascript' );
+	$listtype = mc_get_option( 'list_javascript' );
+	$minitype = mc_get_option( 'mini_javascript' );
+	if ( 'modal' === $gridtype || 'modal' === $listtype || 'modal' === $minitype ) {
+		if ( SCRIPT_DEBUG && true === SCRIPT_DEBUG ) {
+			$script = 'van11y/van11y-accessible-modal-window-aria.js';
+		} else {
+			$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
+		}
+		wp_enqueue_script( 'mc.modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
+		wp_localize_script(
+			'mc.modal',
+			'mcm',
+			array(
+				'context' => (string) is_user_logged_in(),
+			)
+		);
+	}
+}
+
+/**
+ * Enqueue calendar stylesheet and inline styles.
+ *
+ * @param string $stylesheet Filename of the calendar stylesheet in use.
+ */
+function mc_enqueue_calendar_styles( $stylesheet ) {
+	if ( '' !== $stylesheet ) {
+		wp_enqueue_style( 'my-calendar-style' );
+		$inline = 'my-calendar-style';
+	} else {
+		wp_enqueue_style( 'my-calendar-reset' );
+		$inline = 'my-calendar-reset';
+	}
+	$category_vars = '';
+	// generate category colors.
+	$category_css    = mc_generate_category_styles();
+	$category_styles = $category_css['styles'];
+	$category_vars   = $category_css['vars'];
+
+	$styles     = (array) mc_get_option( 'style_vars' );
+	$styles     = mc_style_variables( $styles );
+	$style_vars = '';
+	foreach ( $styles as $key => $var ) {
+		if ( $var ) {
+			$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
+		}
+	}
+	if ( '' !== $style_vars ) {
+		$style_vars = '.mc-main {' . $style_vars . $category_vars . '}';
+	}
+
+	$css = "
+/* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
+$category_styles
+$style_vars";
+	wp_add_inline_style( $inline, $css );
+}
 /**
  * Publically written head styles & scripts
  */
@@ -495,118 +619,8 @@ function mc_footer_js() {
 			$id = false;
 		}
 
-		$enqueue_mcjs = false;
-		$grid         = 'false';
-		$list         = 'false';
-		$mini         = 'false';
-		$ajax         = 'false';
 		if ( ! $id || ( is_array( $pages ) && in_array( $id, $pages, true ) ) || '' === $show_js ) {
-			if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== mc_get_option( 'open_uri' ) ) {
-				/**
-				 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
-				 *
-				 * @hook mc_grid_js
-				 *
-				 * @param {string} $url URL to JS to operate My Calendar grid view.
-				 *
-				 * @return {string}
-				 */
-				$url          = apply_filters( 'mc_grid_js', '' );
-				$enqueue_mcjs = true;
-				if ( $url ) {
-					wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
-				} else {
-					$grid = ( 'modal' === mc_get_option( 'calendar_javascript' ) ) ? 'modal' : 'true';
-				}
-			}
-			if ( '1' !== mc_get_option( 'list_javascript' ) ) {
-				/**
-				 * Filter to replace scripts used on front-end for list behavior. Default empty string.
-				 *
-				 * @hook mc_list_js
-				 *
-				 * @param {string} $url URL to JS to operate My Calendar list view.
-				 *
-				 * @return {string}
-				 */
-				$url          = apply_filters( 'mc_list_js', '' );
-				$enqueue_mcjs = true;
-				if ( $url ) {
-					wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
-				} else {
-					$list = ( 'modal' === mc_get_option( 'list_javascript' ) ) ? 'modal' : 'true';
-				}
-			}
-			if ( '1' !== mc_get_option( 'mini_javascript' ) && 'true' !== mc_get_option( 'open_day_uri' ) ) {
-				/**
-				 * Filter to replace scripts used on front-end for mini calendar behavior. Default empty string.
-				 *
-				 * @hook mc_mini_js
-				 *
-				 * @param {string} $url URL to JS to operate My Calendar mini calendar.
-				 *
-				 * @return {string}
-				 */
-				$url          = apply_filters( 'mc_mini_js', '' );
-				$enqueue_mcjs = true;
-
-				if ( $url ) {
-					wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
-				} else {
-					$mini = ( 'modal' === mc_get_option( 'mini_javascript' ) ) ? 'modal' : 'true';
-				}
-			}
-			if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
-				/**
-				 * Filter to replace scripts used on front-end for AJAX behavior. Default empty string.
-				 *
-				 * @hook mc_ajax_js
-				 *
-				 * @param {string} $url URL to JS to operate My Calendar AJAX.
-				 *
-				 * @return {string}
-				 */
-				$url          = apply_filters( 'mc_ajax_js', '' );
-				$enqueue_mcjs = true;
-				if ( $url ) {
-					wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
-				} else {
-					$ajax = 'true';
-				}
-			}
-			if ( $enqueue_mcjs ) {
-				$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-				wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version, true );
-				$args = array(
-					'grid'      => $grid,
-					'list'      => $list,
-					'mini'      => $mini,
-					'ajax'      => $ajax,
-					'links'     => mc_get_option( 'list_link_titles' ),
-					'newWindow' => __( 'New tab', 'my-calendar' ),
-					'subscribe' => __( 'Subscribe', 'my-calendar' ),
-					'export'    => __( 'Export', 'my-calendar' ),
-				);
-				wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
-			}
-			$gridtype = mc_get_option( 'calendar_javascript' );
-			$listtype = mc_get_option( 'list_javascript' );
-			$minitype = mc_get_option( 'mini_javascript' );
-			if ( 'modal' === $gridtype || 'modal' === $listtype || 'modal' === $minitype ) {
-				if ( SCRIPT_DEBUG && true === SCRIPT_DEBUG ) {
-					$script = 'van11y/van11y-accessible-modal-window-aria.js';
-				} else {
-					$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
-				}
-				wp_enqueue_script( 'mc.modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
-				wp_localize_script(
-					'mc.modal',
-					'mcm',
-					array(
-						'context' => (string) is_user_logged_in(),
-					)
-				);
-			}
+			mc_enqueue_calendar_js();
 		}
 	}
 }
@@ -687,6 +701,11 @@ function mc_admin_styles() {
 					)
 				);
 			}
+		}
+		if ( 'my-calendar_page_my-calendar-design' === $id ) {
+			wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
+			mc_enqueue_calendar_styles( '' );
+			mc_enqueue_calendar_js();
 		}
 		wp_enqueue_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
 	}
@@ -953,7 +972,7 @@ function my_calendar_check() {
 		$my_calendar_exists = my_calendar_exists();
 
 		if ( $my_calendar_exists && '' === $old_version ) {
-			// If the table exists, but I don't know what version it is, I have to run the full cycle of upgrades.
+			// If the table exists, but I don't know what version it is, I have to run all upgrades.
 			$old_version = '2.9.9';
 		}
 
