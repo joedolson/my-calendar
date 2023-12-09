@@ -328,6 +328,14 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	display: block;
 }
 
+ul.mc-file-list ul {
+	margin-left: 2rem;
+}
+
+ul.mc-file-list ul li {
+	margin-left: 1rem;
+}
+
 #my-calendar .apply {
 	padding: 1px 5px 0;
 	border-radius: 3px;

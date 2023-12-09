@@ -44,12 +44,17 @@ function my_calendar_design() {
 						<div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
 							<h2>
 							<?php
-							_e( 'Template Editor', 'my-calendar' );
-							mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
+							if ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) {
+								_e( 'Template Documentation', 'my-calendar' );
+								echo '</h2>';
+							} else {
+								_e( 'Template Editor', 'my-calendar' );
+								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
 							?>
 							</h2>
 							<?php
-							echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
+								echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
+							}
 							?>
 							<div class="inside">
 							<?php mc_templates_edit(); ?>

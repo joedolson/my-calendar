@@ -65,11 +65,54 @@ function mc_templates_do_edit() {
 add_action( 'admin_init', 'mc_templates_do_edit' );
 
 /**
+ * Documentation for PHP templates.
+ */
+function mc_php_templates_docs() {
+	$intro     = '<p>' . __( 'PHP templates are enabled. To customize templates, copy one or more of the following files into your theme directory.', 'my-calendar' ) . '</p>';
+	$intro    .= '<p><a href="https://docs.joedolson.com/my-calendar/">' . __( 'Read the documentation for further assistance.', 'my-calendar' ) . '</a></p>';
+	$file_list = '<h3>' . __( 'Available Templates', 'my-calendar' ) . '</h3><ul class="mc-file-list">
+		<li><code>/mc-templates/</code>
+			<ul>
+				<li><code>/mc-templates/event/</code>
+					<ul>
+						<li><code>/mc-templates/event/calendar-title.php</code></li>
+						<li><code>/mc-templates/event/calendar.php</code></li>
+						<li><code>/mc-templates/event/card-title.php</code></li>
+						<li><code>/mc-templates/event/card.php</code></li>
+						<li><code>/mc-templates/event/list-title.php</code></li>
+						<li><code>/mc-templates/event/list.php</code></li>
+						<li><code>/mc-templates/event/mini-title.php</code></li>
+						<li><code>/mc-templates/event/mini.php</code></li>
+						<li><code>/mc-templates/event/calendar-title.php</code></li>
+						<li><code>/mc-templates/event/next.php</code></li>
+						<li><code>/mc-templates/event/now.php</code></li>
+						<li><code>/mc-templates/event/single-title.php</code></li>
+						<li><code>/mc-templates/event/single.php</code></li>
+						<li><code>/mc-templates/event/today.php</code></li>
+						<li><code>/mc-templates/event/upcoming.php</code></li>
+					</ul>
+				</li>
+				<li><code>/mc-templates/location/</code>
+				<ul>
+					<li><code>/mc-templates/location/location-single.php</code></li>
+				</ul>
+			</li>
+		</ul>';
+				
+
+	return $intro . $file_list;
+}
+
+/**
  * Template editing page.
  */
 function mc_templates_edit() {
 	if ( ! current_user_can( 'mc_edit_templates' ) ) {
 		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize templates on this site.', 'my-calendar' ) . '</p>' );
+		return;
+	}
+	if ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) {
+		echo mc_php_templates_docs();
 		return;
 	}
 	$templates = mc_get_option( 'templates', array() );
