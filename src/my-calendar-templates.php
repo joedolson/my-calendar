@@ -14,6 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * 
+ */
+function mc_template( $tags, $template, $type  = 'list' ) {
+	echo wp_kses( mc_draw_template( $tags, $template, $type ), mc_kses_elements() );
+}
+
+/**
  * Draw array of information into a template with {$key} formatted tags
  *
  * @param array       $array associative array of information intended to be parsed.
@@ -1880,7 +1887,7 @@ function mc_get_template_tag( $event, $key ) {
  * @param object $data Calendar view object with (at minimum) property 'event' and 'tags'.
  * @param string $key Array key in the tags array for data to fetch.
  */
-function mc_template_tag( $data, $key ) {
+function mc_template_tag( $data, $key = 'calendar' ) {
 	echo mc_get_template_tag( $data, $key );
 }
 
@@ -1890,7 +1897,7 @@ function mc_template_tag( $data, $key ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_time( $data, $type ) {
+function mc_template_time( $data, $type = 'calendar' ) {
 	$event = $data->event;
 	echo mc_time_html( $event, $type );
 }
@@ -1901,7 +1908,7 @@ function mc_template_time( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_author( $data, $type ) {
+function mc_template_author( $data, $type = 'calendar' ) {
 	$event  = $data->event;
 	$author = '';
 	if ( mc_output_is_visible( 'author', $type, $event ) ) {
@@ -1917,7 +1924,7 @@ function mc_template_author( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_host( $data, $type ) {
+function mc_template_host( $data, $type = 'calendar' ) {
 	$event = $data->event;
 	$host  = '';
 	if ( mc_output_is_visible( 'host', $type, $event ) ) {
@@ -1933,7 +1940,7 @@ function mc_template_host( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_access( $data, $type ) {
+function mc_template_access( $data, $type = 'calendar' ) {
 	$event  = $data->event;
 	$access = '';
 	if ( mc_output_is_visible( 'access', $type, $event ) ) {
@@ -1976,7 +1983,7 @@ function mc_template_access( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_share( $data, $type ) {
+function mc_template_share( $data, $type = 'calendar' ) {
 	$event = $data->event;
 	$more  = '';
 	$gcal  = '';
@@ -2013,7 +2020,7 @@ function mc_template_share( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_image( $data, $type ) {
+function mc_template_image( $data, $type = 'calendar' ) {
 	$event = $data->event;
 	$img   = '';
 	if ( mc_output_is_visible( 'image', $type, $event ) ) {
@@ -2029,7 +2036,7 @@ function mc_template_image( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_description( $data, $type ) {
+function mc_template_description( $data, $type = 'calendar' ) {
 	$event       = $data->event;
 	$description = '';
 	if ( mc_output_is_visible( 'description', $type, $event ) ) {
@@ -2048,7 +2055,7 @@ function mc_template_description( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_registration( $data, $type ) {
+function mc_template_registration( $data, $type = 'calendar' ) {
 	$event   = $data->event;
 	$tickets = '';
 	if ( mc_output_is_visible( 'tickets', $type, $event ) ) {
@@ -2071,7 +2078,7 @@ function mc_template_registration( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_excerpt( $data, $type ) {
+function mc_template_excerpt( $data, $type = 'calendar' ) {
 	$event = $data->event;
 	$short = '';
 	if ( mc_output_is_visible( 'excerpt', $type, $event ) ) {
@@ -2090,7 +2097,7 @@ function mc_template_excerpt( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_return( $data, $type ) {
+function mc_template_return( $data, $type = 'calendar' ) {
 	$event = $data->event;
 	/**
 	 * Filter URL appended on single event view to return to calendar.
@@ -2115,7 +2122,7 @@ function mc_template_return( $data, $type ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  */
-function mc_template_location( $data, $type ) {
+function mc_template_location( $data, $type = 'calendar' ) {
 	$event   = $data->event;
 	$address = '';
 	$map     = '';
@@ -2140,7 +2147,7 @@ function mc_template_location( $data, $type ) {
  * @param object $data Calendar object.
  * @param string $type View type.
  */
-function mc_template_link( $data, $type ) {
+function mc_template_link( $data, $type = 'calendar' ) {
 	$event      = $data->event;
 	$event_link = mc_event_link( $event );
 	$link       = '';
