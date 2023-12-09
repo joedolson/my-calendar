@@ -14,16 +14,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * 
+ * Echoing version of mc_draw_template(). Draws and prints a template.
+ *
+ * @param array  $tags associative array of information to be parsed.
+ * @param string $template Template containing tags wrapped in curly braces using keys of passed array.
+ * @param string $type Information about view type to inform templates of variations in rendering.
  */
-function mc_template( $tags, $template, $type  = 'list' ) {
+function mc_template( $tags, $template, $type = 'list' ) {
 	echo wp_kses( mc_draw_template( $tags, $template, $type ), mc_kses_elements() );
 }
 
 /**
  * Draw array of information into a template with {$key} formatted tags
  *
- * @param array       $array associative array of information intended to be parsed.
+ * @param array       $array associative array of information to be parsed.
  * @param string      $template template containing braced tags (e.g. `{title}`) using keys of passed array.
  * @param string      $type my calendar needs to render a different link for list versions and other views.
  * @param object|bool $event Event object. Optional.

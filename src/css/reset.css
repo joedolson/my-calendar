@@ -718,6 +718,7 @@ main,div.entry-content,div.site-content, table {
 	font-size: 1rem;
 	border: 1px solid var(--navigation-input-border);
 	background: var(--navigation-input-background);
+	color: var(--navigation-input-color);
 }
 
 .mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),

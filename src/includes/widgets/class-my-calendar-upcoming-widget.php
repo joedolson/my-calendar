@@ -305,7 +305,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 * @return array Updated instance.
 	 */
 	function update( $new, $instance ) {
-		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
+		$instance                                  = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
 		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new['my_calendar_upcoming_category'], true ) ) ? array() : $new['my_calendar_upcoming_category'];
 
 		return $instance;

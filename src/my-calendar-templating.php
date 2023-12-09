@@ -98,7 +98,6 @@ function mc_php_templates_docs() {
 				</ul>
 			</li>
 		</ul>';
-				
 
 	return $intro . $file_list;
 }

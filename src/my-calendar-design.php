@@ -50,9 +50,9 @@ function my_calendar_design() {
 							} else {
 								_e( 'Template Editor', 'my-calendar' );
 								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
-							?>
+								?>
 							</h2>
-							<?php
+								<?php
 								echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
 							}
 							?>
