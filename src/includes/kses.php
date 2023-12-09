@@ -243,6 +243,7 @@ function mc_kses_elements() {
 			'autocomplete'     => array(),
 			'data-href'        => array(),
 			'placeholder'      => array(),
+			'data-variable'    => array(),
 		),
 		'textarea'         => array(
 			'id'               => array(),
