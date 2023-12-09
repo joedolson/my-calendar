@@ -1439,7 +1439,13 @@ select[name="event_recur"] {
 }
 
 .mc-contrast-table th {
-	padding: 8px 10px;
+	padding: 4px 6px;
+	font-weight: 400;
+}
+
+.mc-css-variables .wp-picker-holder {
+	position: absolute;
+	box-shadow: 5px 5px 5px #aaa;
 }
 
 .mc-contrast-table td {
@@ -1448,11 +1454,11 @@ select[name="event_recur"] {
 }
 
 .mc-contrast-table div {
-	padding: 4px 6px;
+	padding: 2px;
 	font-weight: 700;
-	font-size: 1.2rem;
-	border-radius: 5px;
-	margin: 2px;
+	font-size: 1rem;
+	border-radius: 3px;
+	margin: 0;
 	font-style: normal;
 }
 
@@ -1465,7 +1471,7 @@ select[name="event_recur"] {
 }
 
 .mc-contrast-table p {
-	font-size: .9rem;
+	font-size: .75rem;
 	font-weight: 400;
 	padding: 4px 0 0;
 	margin: 0;
