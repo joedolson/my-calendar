@@ -73,6 +73,8 @@
 
 				var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
 				var lastFocus  = focusable.last();
+				var firstFocus = focusable.first();
+				firstFocus.attr( 'data-action', 'shiftforward' );
 				lastFocus.attr( 'data-action', 'shiftback' );
 
 				$( wrapper ).children( '.single-details' ).not( current_date ).hide();
@@ -105,7 +107,7 @@
 				var action  = $( ':focus' ).attr( 'data-action' );
 				if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
 					e.preventDefault();
-					$( '.mc-toggle.close' ).trigger( 'focus' );
+					$( '[data-action=shiftforward]' ).trigger( 'focus' );
 				}
 				if ( ( e.shiftKey && keycode == 9 ) && action == 'shiftforward' ) {
 					e.preventDefault();
