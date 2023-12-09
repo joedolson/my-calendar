@@ -937,10 +937,10 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 		if ( 'S' === $recur || ( ! $edit_group &amp;&amp; ! $del_group ) ) {
 			$edit .= "&lt;li>&lt;a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . "&lt;/a>&lt;/li>&lt;li>&lt;a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . "&lt;/a>&lt;/li>$groupedit";
 		} else {
-			$edit .= "&lt;li>&lt;a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit This Date', 'my-calendar' ) . "&lt;/a>&lt;/li>&lt;li>&lt;a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "&lt;/a>&lt;/li>&lt;li>&lt;a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete This Date', 'my-calendar' ) . "&lt;/a>&lt;/li>&lt;li>&lt;a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "&lt;/a>&lt;/li>
+			$edit .= "&lt;li>&lt;a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit Date', 'my-calendar' ) . "&lt;/a>&lt;/li>&lt;li>&lt;a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "&lt;/a>&lt;/li>&lt;li>&lt;a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete Date', 'my-calendar' ) . "&lt;/a>&lt;/li>&lt;li>&lt;a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "&lt;/a>&lt;/li>
 			$groupedit";
 		}
-		$edit .= '&lt;/p>&lt;/div>';
+		$edit .= '&lt;/ul>&lt;/div>';
 	}
 	if ( ! mc_show_details( $time, $type ) ) {
 		$edit = '';
