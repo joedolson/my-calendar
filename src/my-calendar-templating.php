@@ -69,7 +69,7 @@ add_action( 'admin_init', 'mc_templates_do_edit' );
  */
 function mc_php_templates_docs() {
 	$intro     = '<p>' . __( 'PHP templates are enabled. To customize templates, copy one or more of the following files into your theme directory.', 'my-calendar' ) . '</p>';
-	$intro    .= '<p><a href="https://docs.joedolson.com/my-calendar/">' . __( 'Read the documentation.', 'my-calendar' ) . '</a></p>';
+	$intro    .= '<p><a href="https://docs.joedolson.com/my-calendar/php-templates/">' . __( 'Read the documentation.', 'my-calendar' ) . '</a></p>';
 	$file_list = '<h3>' . __( 'Available Templates', 'my-calendar' ) . '</h3><ul class="mc-file-list">
 		<li><code>/mc-templates/</code>
 			<ul>
