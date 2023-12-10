@@ -250,6 +250,9 @@
 			if (undefined === label) {
 				label = $( this ).attr( 'data-label' );
 			}
+			if ( time.replace( 'Z', '.000Z' ) === new Date( time ).toISOString() ) {
+				$( this ).css( {'display' : 'none'} );
+			}
 			var utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
 			var udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
 			$( this ).html( '<span class="mc-local-time-label">' + label + ':</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
