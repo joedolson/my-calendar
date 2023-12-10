@@ -498,6 +498,22 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		$cats = $add['event_categories'];
 
 		unset( $add['event_categories'] );
+		// My Calendar no longer saves location data to the events table, and it'll cause problems if it's in the array.
+		if ( isset( $add['event_label'] ) ) {
+			unset( $add['event_label'] );
+			unset( $add['event_street'] );
+			unset( $add['event_street2'] );
+			unset( $add['event_city'] );
+			unset( $add['event_state'] );
+			unset( $add['event_postcode'] );
+			unset( $add['event_region'] );
+			unset( $add['event_country'] );
+			unset( $add['event_url'] );
+			unset( $add['event_phone'] );
+			unset( $add['event_phone2'] );
+			unset( $add['event_longitude'] );
+			unset( $add['event_latitude'] );
+		}
 		/**
 		 * Filter updated event data prior to saving.
 		 *
@@ -1233,7 +1249,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 			} else {
 				$repeats = '';
 			}
-			if ( is_numeric( $repeats ) ) {
+			if ( $repeats &amp;&amp; is_numeric( $repeats ) ) {
 				$occurrences = mc_get_occurrences( $data->event_id );
 				$last        = array_pop( $occurrences );
 				$event       = mc_get_instance_data( $last->occur_id );
@@ -1429,7 +1445,7 @@ function mc_additional_dates( $data ) {
  * @param int         $event_id Event ID.
  */
 function mc_form_fields( $data, $mode, $event_id ) {
-	global $wpdb, $user_ID;
+	global $user_ID;
 	$has_data = ( is_object( $data ) ) ? true : false;
 	if ( $data ) {
 		// This was previously only shown if $data was an object. Don't know why.
@@ -1903,11 +1919,66 @@ function mc_event_location_dropdown_block( $data ) {
 		&lt;a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '">' . __( 'Add a location', 'my-calendar' ) . '&lt;/a>
 		&lt;/p>';
 	}
+	if ( mc_event_location_diff( $data ) ) {
+		// translators: 1) URL to create a new location with this data; 2) URL to update the existing location.
+		$current_location .= '&lt;p>' . __( 'The location stored in the event is different from the related location. &lt;a href="%1$s">Create new&lt;/a> or &lt;a href="%2$s">update location&lt;/a>?', 'my-calendar' ) . '&lt;/p>';
+	}
 	$output  = $current_location . '&lt;div class="mc-event-location-dropdown">' . '&lt;div class="location-input">' . $fields . '&lt;/div>';
 	$output .= ( current_user_can( 'mc_edit_locations' ) ) ? '&lt;div class="location-toggle">&lt;button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>&lt;span>' . __( 'Add a new location', 'my-calendar' ) . '&lt;/span>&lt;/button>&lt;/div>' : '';
 	$output .= '&lt;/div>';
 
 	return $output;
+}
+
+/**
+ * Compare the location data in the event table with the location data in a location.
+ *
+ * @since 3.5.0
+ *
+ * @param object $event Event object.
+ *
+ * @return bool Returns true if the two datasets are different.
+ */
+function mc_event_location_diff( $event ) {
+	$location_id = ( $event &amp;&amp; property_exists( $event, 'event_location' ) ) ? $event->event_location : '';
+	if ( ! $location_id ) {
+		return false;
+	}
+	$location = mc_get_location( $location_id );
+
+	// If no location name, presume this has no data.
+	if ( is_object( $event ) &amp;&amp; '' === trim( $event->event_label ) || ! $event->event_label ) {
+		return false;
+	}
+
+	$event_location = array(
+		'location_id'        => $event->event_location,
+		'location_label'     => $event->event_label,
+		'location_street'    => $event->event_street,
+		'location_street2'   => $event->event_street2,
+		'location_city'      => $event->event_city,
+		'location_state'     => $event->event_state,
+		'location_postcode'  => $event->event_postcode,
+		'location_region'    => $event->event_region,
+		'location_url'       => $event->event_url,
+		'location_country'   => $event->event_country,
+		'location_longitude' => $event->event_longitude,
+		'location_latitude'  => $event->event_latitude,
+		'location_zoom'      => $event->event_zoom,
+		'location_phone'     => $event->event_phone,
+		'location_phone2'    => $event->event_phone2,
+	);
+
+	$location = (array) $location;
+	// Location post isn't in event data.
+	unset( $location['location_post'] );
+	// Location access data saved differently in the two datasets.
+	unset( $location['location_access'] );
+	if ( $location !== $event_location ) {
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -1998,7 +2069,7 @@ function mc_event_accessibility( $form, $data, $label ) {
  * @return array Modified data and information about approval.
  */
 function mc_check_data( $action, $post, $i, $ignore_required = false ) {
-	global $wpdb, $submission;
+	global $submission;
 	$user = wp_get_current_user();
 	/**
 	 * Filter posted data before performing event data checks.
@@ -2529,7 +2600,6 @@ function mc_compare( $update, $id ) {
 function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 	global $wpdb;
 	if ( ! empty( $update ) ) {
-		$event   = mc_get_event( $event_instance );
 		$formats = array( '%d', '%s', '%s', '%d' );
 		$begin   = $update['event_begin'] . ' ' . $update['event_time'];
 		$end     = $update['event_end'] . ' ' . $update['event_endtime'];
