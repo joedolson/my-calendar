@@ -204,8 +204,12 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 			$time_label = $post['data']['event_time_label'];
 		}
 	}
-	update_post_meta( $post_id, '_mc_event_access', $events_access );
-	update_post_meta( $post_id, '_event_time_label', $time_label );
+	if ( $events_access ) {
+		update_post_meta( $post_id, '_mc_event_access', $events_access );
+	}
+	if ( $time_label ) {
+		update_post_meta( $post_id, '_event_time_label', $time_label );
+	}
 
 	$mc_event_id = get_post_meta( $post_id, '_mc_event_id', true );
 	if ( ! $mc_event_id ) {
