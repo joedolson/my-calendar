@@ -243,12 +243,16 @@
 
 	function mc_display_usertime() {
 		var utime = $( '.mc-user-time' );
+		let label = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		utime.each(function() {
 			var time  = $( this ).text();
-			var label = $( this ).attr( 'data-label' );
+			// Handle Internet Explorer's lack of timezone info.
+			if (undefined === label) {
+				label = $( this ).attr( 'data-label' );
+			}
 			var utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
 			var udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
-			$( this ).html( '<span class="mc-local-time-label">' + label + '</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
+			$( this ).html( '<span class="mc-local-time-label">' + label + ':</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
 		});
 	}
 
