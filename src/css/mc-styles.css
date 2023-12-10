@@ -254,6 +254,7 @@ li.datetime-template:nth-of-type(even) {
 .recurrences .columns label:not(.duet-date__mobile-heading),
 .recurring .columns label:not(.duet-date__mobile-heading) {
 	display: block;
+	max-width: fit-content;
 }
 
 #e_schedule .columns .checkboxes label {
@@ -525,6 +526,7 @@ ul.mc-file-list ul li {
 
 label[for=l_preset] {
 	display: block;
+	max-width: fit-content;
 }
 
 input[id=e_label], input[id=e_title], input[id=location_label], textarea[id=mc_twitter] {
@@ -1180,6 +1182,7 @@ label[for=e_link],
 label[for=e_author],
 label[for=e_host] {
 	display: block;
+	max-width: fit-content;
 }
 
 .my-calendar-admin .button .dashicons-minus {
