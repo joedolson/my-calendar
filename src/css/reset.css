@@ -673,8 +673,8 @@ main,div.entry-content,div.site-content, table {
 	align-items: center;
 	column-gap: 8px;
 	row-gap: 8px;
-	padding: 4px 0;
-	margin: 8px 0;
+	padding: 8px 0;
+	margin: 0;
 	background-color: var(--navbar-background);
 }
 
@@ -1207,6 +1207,10 @@ ol.mc-search-results li.no-results {
 
 .mini .mc-date-container.has-month {
 	grid-template-columns: 1fr;
+}
+
+.mc-local-time-label {
+	font-weight: 700;
 }
 
 /* Add styles for simple modal. */
