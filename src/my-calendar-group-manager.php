@@ -690,7 +690,7 @@ function mc_check_group_data( $action, $post ) {
 		$event_registration = ! empty( $post['event_registration'] ) ? trim( $post['event_registration'] ) : '';
 		$event_image        = esc_url_raw( $post['event_image'] );
 		$event_span         = ! empty( $post['event_span'] ) ? 1 : 0;
-		
+
 		// We check to make sure the URL is acceptable (blank or starting with http://).
 		if ( ! ( '' === $event_link || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
 			$event_link = 'https://' . $event_link;
