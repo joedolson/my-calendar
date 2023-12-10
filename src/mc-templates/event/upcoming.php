@@ -10,5 +10,4 @@
  */
 
 ?>
-<li class="<?php mc_event_classes( $data->event, 'upcoming' ); ?>"><strong class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></strong> - <?php mc_template_tag( $data, 'datetime' ); ?>
-<?php mc_template_tag( $data, 'excerpt' ); ?></li>
+<li class="<?php mc_event_classes( $data->event, 'upcoming' ); ?>"><?php mc_template( $data->tags, $data->template, 'list' ); ?></li>
