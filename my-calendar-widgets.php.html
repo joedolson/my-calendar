@@ -106,16 +106,8 @@ function my_calendar_upcoming_events( $args ) {
 	 * @return {string} Template string.
 	 */
 	$template = apply_filters( 'mc_upcoming_events_template', $template );
-
-	// allow reference by file to external template.
-	if ( '' !== $template &amp;&amp; mc_file_exists( $template ) ) {
-		$template = file_get_contents( mc_get_file( $template ) );
-	}
-
-	$template = ( ! $template || 'default' === $template ) ? $defaults['upcoming']['template'] : $template;
-	if ( mc_key_exists( $template ) ) {
-		$template = mc_get_custom_template( $template );
-	}
+	$default  = ( ! $template || 'default' === $template ) ? $defaults['upcoming']['template'] : $template;
+	$template = mc_setup_template( $template, $default );
 
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
@@ -657,16 +649,9 @@ function my_calendar_todays_events( $args ) {
 	$hash   = md5( implode( ',', $params ) );
 	$output = '';
 
-	// allow reference by file to external template.
-	if ( '' !== $template &amp;&amp; mc_file_exists( $template ) ) {
-		$template = file_get_contents( mc_get_file( $template ) );
-	}
 	$defaults = mc_widget_defaults();
-	$template = ( ! $template || 'default' === $template ) ? $defaults['today']['template'] : $template;
-
-	if ( mc_key_exists( $template ) ) {
-		$template = mc_get_custom_template( $template );
-	}
+	$default  = ( ! $template || 'default' === $template ) ? $defaults['today']['template'] : $template;
+	$template = mc_setup_template( $template, $default );
 
 	$category      = ( 'default' === $category ) ? $defaults['today']['category'] : $category;
 	$no_event_text = ( '' === $substitute ) ? $defaults['today']['text'] : $substitute;
