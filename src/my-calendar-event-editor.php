@@ -1893,9 +1893,16 @@ function mc_event_location_dropdown_block( $data ) {
 		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '">' . __( 'Add a location', 'my-calendar' ) . '</a>
 		</p>';
 	}
-	if ( mc_event_location_diff( $data ) ) {
+	$differences = mc_event_location_diff( $data );
+	if ( $differences ) {
+		$add_url   = add_query_arg( 'event_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations' ) );
+		$merge_url = add_query_arg( 'merge_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit&location_id=' . absint( $data->event_location ) ) );
 		// translators: 1) URL to create a new location with this data; 2) URL to update the existing location.
-		$current_location .= '<p>' . __( 'The location stored in the event is different from the related location. <a href="%1$s">Create new</a> or <a href="%2$s">update location</a>?', 'my-calendar' ) . '</p>';
+		$current_location .= '<p>' . sprintf( __( 'The location stored in the event is different from the saved location. <a href="%1$s">Create a new location</a> or <a href="%2$s">update the saved location</a>?', 'my-calendar' ), $add_url, $merge_url ) . '</p><ul class="checkboxes">';
+		foreach ( $differences as $key => $value ) {
+			$current_location .= '<li><strong>' . ucfirst( str_replace( 'location_', '', $key ) ) . '</strong><br /><em>Location:</em> ' . stripslashes( esc_html( $value[0] ) ) . '<br /><em>Event:</em> ' . stripslashes( esc_html( $value[1] ) ) . '</li>';
+		}
+		$current_location .= '</ul>';
 	}
 	$output  = $current_location . '<div class="mc-event-location-dropdown">' . '<div class="location-input">' . $fields . '</div>';
 	$output .= ( current_user_can( 'mc_edit_locations' ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
@@ -1910,10 +1917,11 @@ function mc_event_location_dropdown_block( $data ) {
  * @since 3.5.0
  *
  * @param object $event Event object.
+ * @param string $return Data to return. 'location' or 'diff'.
  *
  * @return bool Returns true if the two datasets are different.
  */
-function mc_event_location_diff( $event ) {
+function mc_event_location_diff( $event, $return = 'diff' ) {
 	$location_id = ( $event && property_exists( $event, 'event_location' ) ) ? $event->event_location : '';
 	if ( ! $location_id ) {
 		return false;
@@ -1942,14 +1950,23 @@ function mc_event_location_diff( $event ) {
 		'location_phone'     => $event->event_phone,
 		'location_phone2'    => $event->event_phone2,
 	);
-
+	if ( 'location' === $return ) {
+		return $event_location;
+	}
 	$location = (array) $location;
 	// Location post isn't in event data.
 	unset( $location['location_post'] );
 	// Location access data saved differently in the two datasets.
 	unset( $location['location_access'] );
+	$differences = array();
 	if ( $location !== $event_location ) {
-		return true;
+		foreach ( $location as $key => $value ) {
+			// Ignore fields that have no values; these will be copied from the location if a new location is created.
+			if ( $value !== $event_location[ $key ] && $event_location[ $key ] && '0.000000' !== $event_location[ $key ] ) {
+				$differences[ $key ] = array( $value, $event_location[ $key ] );
+			}
+		}
+		return $differences;
 	}
 
 	return false;

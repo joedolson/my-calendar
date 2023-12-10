@@ -380,7 +380,6 @@ function mc_delete_location( $location, $type = 'string' ) {
  * Handle results of form submit & display form.
  */
 function my_calendar_add_locations() {
-	global $wpdb;
 	?>
 	<div class="wrap my-calendar-admin">
 	<?php
@@ -413,6 +412,11 @@ function my_calendar_add_locations() {
 		);
 
 		$results = mc_insert_location( $add );
+		// If this is being generated from an event/location merge, update the event to the new location ID.
+		if ( isset( $_GET['event_source'] ) ) {
+			$source = absint( $_GET['event_source'] );
+			mc_update_data( $source, 'event_location', $results );
+		}
 		if ( isset( $_POST['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', (int) $results );
 		}
@@ -507,6 +511,26 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 		}
 		$cur_loc = mc_get_location( $loc_id, $update_location );
 	}
+	// If creating from event, get data from event & location and merge.
+	if ( isset( $_GET['event_source'] ) ) {
+		$source   = absint( $_GET['event_source'] );
+		$event    = mc_get_event_core( $source );
+		$location = mc_get_location( $event->event_location );
+		$diff     = mc_event_location_diff( $event );
+		foreach ( $diff as $key => $val ) {
+			$location->$key = $val[1];
+		}
+		$cur_loc = $location;
+	}
+	// If updating from event, merge event data into this location.
+	if ( isset( $_GET['merge_source'] ) ) {
+		$source = absint( $_GET['merge_source'] );
+		$event  = mc_get_event_core( $source );
+		$diff   = mc_event_location_diff( $event );
+		foreach ( $diff as $key => $val ) {
+			$cur_loc->$key = $val[1];
+		}
+	}
 	$has_data = ( is_object( $cur_loc ) ) ? true : false;
 	if ( 'add' === $view ) {
 		?>
@@ -534,6 +558,12 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 							'mode'        => sanitize_text_field( $_GET['mode'] ),
 							'location_id' => absint( $_GET['location_id'] ),
 						);
+						if ( isset( $_GET['merge_source'] ) ) {
+							$params['merge_source'] = absint( $_GET['merge_source'] );
+						}
+					}
+					if ( isset( $_GET['event_source'] ) ) {
+						$params['event_source'] = absint( $_GET['event_source'] );
 					}
 					?>
 					<form id="my-calendar" method="post" action="<?php echo esc_url( add_query_arg( $params, admin_url( 'admin.php?page=my-calendar-locations' ) ) ); ?>">
