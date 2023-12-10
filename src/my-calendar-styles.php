@@ -87,17 +87,6 @@ function my_calendar_style_edit() {
 		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 		<input type="hidden" value="true" name="mc_edit_style" />
 		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( $file ); ?>" />
-		<div class="mc-input-with-note">
-			<p>
-				<label for="mc_show_css"><?php esc_html_e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label><br />
-				<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" />
-			</p>
-			<span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
-		</div>
-		<p>
-			<input type="checkbox" id="use_styles" name="use_styles" <?php checked( mc_get_option( 'use_styles' ), 'true' ); ?> />
-			<label for="use_styles"><?php esc_html_e( 'Disable styles', 'my-calendar' ); ?></label>
-		</p>
 		<fieldset class="mc-css-variables">
 			<legend><?php esc_html_e( 'CSS Color Variables', 'my-calendar' ); ?></legend>
 			<?php
@@ -119,15 +108,28 @@ function my_calendar_style_edit() {
 			}
 			?>
 			<p>
-				<label for='new_style_var_key'><?php esc_html_e( 'New variable:', 'my-calendar' ); ?></label>
-				<input type='text' name='new_style_var[key]' id='new_style_var_key' /> 
-				<label for='new_style_var_val'><?php esc_html_e( 'Color:', 'my-calendar' ); ?></label>
-				<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
+				<label for='new_style_var_key'><?php esc_html_e( 'New variable', 'my-calendar' ); ?></label>
+				<input type='text' name='new_style_var[key]' id='new_style_var_key' />
 			</p>
 			<p>
-				<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
+				<label for='new_style_var_val'><?php esc_html_e( 'Color', 'my-calendar' ); ?></label>
+				<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
 			</p>
 		</fieldset>
+		<div class="mc-input-with-note">
+			<p>
+				<label for="mc_show_css"><?php esc_html_e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label><br />
+				<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" />
+			</p>
+			<span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
+		</div>
+		<p>
+			<input type="checkbox" id="use_styles" name="use_styles" <?php checked( mc_get_option( 'use_styles' ), 'true' ); ?> />
+			<label for="use_styles"><?php esc_html_e( 'Disable styles', 'my-calendar' ); ?></label>
+		</p>
+		<p>
+				<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
+		</p>
 	</form>
 	</div>
 	<?php

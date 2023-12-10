@@ -74,7 +74,7 @@
 
 .mc-main .event-title a {
 	display: flex;
-	align-items: start;
+	align-items: middle;
 	column-gap: 4px;
 	padding: 4px;
 	position: relative;
@@ -563,10 +563,6 @@ dialog.my-calendar-modal #modal-title {
 	border-bottom: 4px solid var(--highlight-dark);
 }
 
-dialog.my-calendar-modal {
-	border-radius: 4px;
-}
-
 .my-calendar-modal-close {
 	border-radius: 0 2px 0 4px;
 }
@@ -708,15 +704,15 @@ main,div.entry-content,div.site-content, table {
 	padding-bottom: 7px;
 	margin: 0;
 	font-size: clamp( .75rem, 16px, 1.5rem );
-	border: 1px solid var(--navigation-input-border);
-	background: var(--navigation-input-background);
-	color: var(--navigation-input-color);
+	border: 1px solid var(--nav-input-border);
+	background: var(--nav-input-background);
+	color: var(--nav-input-color);
 }
 
 .mc-main .my-calendar-header select, .my-calendar-footer select,
 .mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
-	color: var(--navigation-button-color);
-	background: var(--navigation-button);
+	color: var(--nav-button-color);
+	background: var(--nav-button);
 	border-radius: 3px;
 }
 
@@ -999,6 +995,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-main .category-key .category-color-sample {
 	display: flex;
 	align-items: center;
+	position: relative;
 }
 
 .mc-main .mc-loading {
@@ -1216,7 +1213,7 @@ ol.mc-search-results li.no-results {
 dialog.my-calendar-modal {
 	display: block;
 	border: 0;
-	border-radius: 10px;
+	border-radius: 4px;
 	text-align: left;
 }
 

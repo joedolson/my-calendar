@@ -1448,6 +1448,27 @@ select[name="event_recur"] {
 	box-shadow: 5px 5px 5px #aaa;
 }
 
+#my-calendar-style .inside {
+	display: flex;
+	gap: 20px;
+}
+
+#my-calendar-style .my-calendar-style-settings {
+	max-width: 20rem;
+}
+
+@media (max-width:1200px) {
+	#my-calendar-style .inside {
+		display: block;
+	}
+	#my-calendar-style .my-calendar-style-settings {
+		max-width: 100%;
+	}
+	#my-calendar-style .my-calendar-style-settings .checkboxes li {
+		min-width: 1rem;
+	}
+}
+
 .mc-contrast-table td {
 	text-align: center;
 	font-style: italic;

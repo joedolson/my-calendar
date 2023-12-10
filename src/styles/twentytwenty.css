@@ -94,15 +94,6 @@
 	content: "\f508";
 }
 
-.mc-main .event-title .category-icon, .mc-main .category-color-sample .category-icon {
-	position: absolute;
-	top: 6px;
-	left: 4px;
-	background: transparent;
-	display: inline;
-	vertical-align: middle;
-}
-
 .mc-main .calendar-event .details, .mc-main .calendar-events {
 	left: 3%;
 	width: 94%;
