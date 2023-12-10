@@ -832,13 +832,15 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 		$return .= '<input type="text" id="e_region" name="' . $context . '_region" value="' . esc_attr( $cur_region ) . '" />';
 	}
 	$compare     = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_country', false ) : '';
-	$return     .= '</p><p><label for="e_country">' . __( 'Country', 'my-calendar' ) . $compare . '</label> ';
+	$return     .= '</p><p><label for="e_country">' . __( 'Country', 'my-calendar' ) . $compare . '</label><div class="mc-autocomplete autocomplete" id="mc-countries-autocomplete"> ';
 	$cur_country = ( $has_data ) ? ( stripslashes( $data->{$context . '_country'} ) ) : '';
 	if ( mc_controlled_field( 'country' ) ) {
 		$return .= mc_location_controller( 'country', $cur_country, $context );
 	} else {
-		$return .= '<input type="text" id="e_country" name="' . $context . '_country" size="10" value="' . esc_attr( $cur_country ) . '" />';
+		$return .= '<input type="text" class="autocomplete-input" id="e_country" name="' . $context . '_country" size="10" value="' . esc_attr( $cur_country ) . '" />';
 	}
+	$return .= '<ul class="autocomplete-result-list"></ul>
+	</div>';
 
 	$compare_zoom   = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_zoom', false ) : '';
 	$compare_phone  = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_phone', false ) : '';
@@ -1231,7 +1233,6 @@ function mc_location_data( $field, $id ) {
 	return '';
 }
 
-
 /**
  * Get options list of locations to choose from
  *
@@ -1278,13 +1279,11 @@ function mc_location_select( $location = false ) {
 function mc_get_locations( $args ) {
 	global $wpdb;
 	if ( is_array( $args ) ) {
-		$context = ( isset( $args['context'] ) ) ? $args['context'] : 'general';
 		$orderby = ( isset( $args['orderby'] ) ) ? $args['orderby'] : 'location_label';
 		$order   = ( isset( $args['order'] ) ) ? $args['order'] : 'ASC';
 		$where   = ( isset( $args['where'] ) ) ? $args['where'] : '1';
 		$is      = ( isset( $args['is'] ) ) ? $args['is'] : '1';
 	} else {
-		$context = $args;
 		$orderby = 'location_label';
 		$order   = 'ASC';
 		$where   = '1';
@@ -1353,6 +1352,343 @@ function mc_core_search_locations( $query = '' ) {
 	$locations = $wpdb->get_results( 'SELECT SQL_CALC_FOUND_ROWS location_id, location_label FROM ' . my_calendar_locations_table() . " $search ORDER BY location_label ASC" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 	return $locations;
+}
+
+
+/**
+ * Search location titles.
+ *
+ * @param string $query Location query.
+ *
+ * @return array locations
+ */
+function mc_get_countries( $query = '' ) {
+	global $wpdb;
+	$search  = '';
+	$db_type = mc_get_db_type();
+	$query   = esc_sql( $query );
+	$length  = strlen( $query );
+
+	if ( '' !== $query ) {
+		// Fulltext is supported in InnoDB since MySQL 5.6; minimum required by WP is 5.0 as of WP 5.5.
+		// 37% of installs still below 5.6 as of 11/30/2020.
+		// 2.4% of installs below 5.6 as of 7/14/2022.
+		if ( 'MyISAM' === $db_type && $length > 3 ) {
+			/**
+			 * Filter the fields used to handle MATCH queries in location searches on MyISAM dbs.
+			 *
+			 * @hook mc_search_fields
+			 *
+			 * @param {string} $fields Table columns in locations table.
+			 *
+			 * @return {string}
+			 */
+			$search = " WHERE MATCH(location_country) AGAINST ( '$query' IN BOOLEAN MODE ) ";
+		} else {
+			$search = " WHERE location_country LIKE '%$query%' ";
+		}
+	} else {
+		$search = '';
+	}
+
+	$locations = $wpdb->get_results( 'SELECT DISTINCT location_country FROM ' . my_calendar_locations_table() . " $search ORDER BY location_country ASC", 'ARRAY_A' ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	$return    = array();
+	foreach ( $locations as $location ) {
+		$return[] = $location['location_country'];
+	}
+
+	return $return;
+}
+
+/**
+ * Return an example country.
+ *
+ * @param string $query A search query.
+ *
+ * @return array
+ */
+function mc_default_countries( $query = '' ) {
+	$countries = array(
+		'AF' => __( 'Afghanistan', 'example' ), 
+		'AL' => __( 'Albania', 'example' ), 
+		'DZ' => __( 'Algeria', 'example' ), 
+		'AS' => __( 'American Samoa', 'example' ), 
+		'AD' => __( 'Andorra', 'example' ), 
+		'AO' => __( 'Angola', 'example' ), 
+		'AI' => __( 'Anguilla', 'example' ), 
+		'AQ' => __( 'Antarctica', 'example' ), 
+		'AG' => __( 'Antigua and Barbuda', 'example' ), 
+		'AR' => __( 'Argentina', 'example' ), 
+		'AM' => __( 'Armenia', 'example' ), 
+		'AW' => __( 'Aruba', 'example' ), 
+		'AU' => __( 'Australia', 'example' ), 
+		'AT' => __( 'Austria', 'example' ), 
+		'AZ' => __( 'Azerbaijan', 'example' ), 
+		'BS' => __( 'Bahamas', 'example' ), 
+		'BH' => __( 'Bahrain', 'example' ), 
+		'BD' => __( 'Bangladesh', 'example' ), 
+		'BB' => __( 'Barbados', 'example' ), 
+		'BY' => __( 'Belarus', 'example' ), 
+		'BE' => __( 'Belgium', 'example' ), 
+		'BZ' => __( 'Belize', 'example' ), 
+		'BJ' => __( 'Benin', 'example' ), 
+		'BM' => __( 'Bermuda', 'example' ), 
+		'BT' => __( 'Bhutan', 'example' ), 
+		'BO' => __( 'Bolivia', 'example' ), 
+		'BA' => __( 'Bosnia and Herzegovina', 'example' ), 
+		'BW' => __( 'Botswana', 'example' ), 
+		'BV' => __( 'Bouvet Island', 'example' ), 
+		'BR' => __( 'Brazil', 'example' ), 
+		'BQ' => __( 'British Antarctic Territory', 'example' ), 
+		'IO' => __( 'British Indian Ocean Territory', 'example' ), 
+		'VG' => __( 'British Virgin Islands', 'example' ), 
+		'BN' => __( 'Brunei', 'example' ), 
+		'BG' => __( 'Bulgaria', 'example' ), 
+		'BF' => __( 'Burkina Faso', 'example' ), 
+		'BI' => __( 'Burundi', 'example' ), 
+		'KH' => __( 'Cambodia', 'example' ), 
+		'CM' => __( 'Cameroon', 'example' ), 
+		'CA' => __( 'Canada', 'example' ), 
+		'CT' => __( 'Canton and Enderbury Islands', 'example' ), 
+		'CV' => __( 'Cape Verde', 'example' ), 
+		'KY' => __( 'Cayman Islands', 'example' ), 
+		'CF' => __( 'Central African Republic', 'example' ), 
+		'TD' => __( 'Chad', 'example' ), 
+		'CL' => __( 'Chile', 'example' ), 
+		'CN' => __( 'China', 'example' ), 
+		'CX' => __( 'Christmas Island', 'example' ), 
+		'CC' => __( 'Cocos [Keeling] Islands', 'example' ), 
+		'CO' => __( 'Colombia', 'example' ), 
+		'KM' => __( 'Comoros', 'example' ), 
+		'CG' => __( 'Congo - Brazzaville', 'example' ), 
+		'CD' => __( 'Congo - Kinshasa', 'example' ), 
+		'CK' => __( 'Cook Islands', 'example' ), 
+		'CR' => __( 'Costa Rica', 'example' ), 
+		'HR' => __( 'Croatia', 'example' ), 
+		'CU' => __( 'Cuba', 'example' ), 
+		'CY' => __( 'Cyprus', 'example' ), 
+		'CZ' => __( 'Czech Republic', 'example' ), 
+		'CI' => __( 'Côte d’Ivoire', 'example' ), 
+		'DK' => __( 'Denmark', 'example' ), 
+		'DJ' => __( 'Djibouti', 'example' ), 
+		'DM' => __( 'Dominica', 'example' ), 
+		'DO' => __( 'Dominican Republic', 'example' ), 
+		'NQ' => __( 'Dronning Maud Land', 'example' ), 
+		'DD' => __( 'East Germany', 'example' ), 
+		'EC' => __( 'Ecuador', 'example' ), 
+		'EG' => __( 'Egypt', 'example' ), 
+		'SV' => __( 'El Salvador', 'example' ), 
+		'GQ' => __( 'Equatorial Guinea', 'example' ), 
+		'ER' => __( 'Eritrea', 'example' ), 
+		'EE' => __( 'Estonia', 'example' ), 
+		'ET' => __( 'Ethiopia', 'example' ), 
+		'FK' => __( 'Falkland Islands', 'example' ), 
+		'FO' => __( 'Faroe Islands', 'example' ), 
+		'FJ' => __( 'Fiji', 'example' ), 
+		'FI' => __( 'Finland', 'example' ), 
+		'FR' => __( 'France', 'example' ), 
+		'GF' => __( 'French Guiana', 'example' ), 
+		'PF' => __( 'French Polynesia', 'example' ), 
+		'TF' => __( 'French Southern Territories', 'example' ), 
+		'FQ' => __( 'French Southern and Antarctic Territories', 'example' ), 
+		'GA' => __( 'Gabon', 'example' ), 
+		'GM' => __( 'Gambia', 'example' ), 
+		'GE' => __( 'Georgia', 'example' ), 
+		'DE' => __( 'Germany', 'example' ), 
+		'GH' => __( 'Ghana', 'example' ), 
+		'GI' => __( 'Gibraltar', 'example' ), 
+		'GR' => __( 'Greece', 'example' ), 
+		'GL' => __( 'Greenland', 'example' ), 
+		'GD' => __( 'Grenada', 'example' ), 
+		'GP' => __( 'Guadeloupe', 'example' ), 
+		'GU' => __( 'Guam', 'example' ), 
+		'GT' => __( 'Guatemala', 'example' ), 
+		'GG' => __( 'Guernsey', 'example' ), 
+		'GN' => __( 'Guinea', 'example' ), 
+		'GW' => __( 'Guinea-Bissau', 'example' ), 
+		'GY' => __( 'Guyana', 'example' ), 
+		'HT' => __( 'Haiti', 'example' ), 
+		'HM' => __( 'Heard Island and McDonald Islands', 'example' ), 
+		'HN' => __( 'Honduras', 'example' ), 
+		'HK' => __( 'Hong Kong SAR China', 'example' ), 
+		'HU' => __( 'Hungary', 'example' ), 
+		'IS' => __( 'Iceland', 'example' ), 
+		'IN' => __( 'India', 'example' ), 
+		'ID' => __( 'Indonesia', 'example' ), 
+		'IR' => __( 'Iran', 'example' ), 
+		'IQ' => __( 'Iraq', 'example' ), 
+		'IE' => __( 'Ireland', 'example' ), 
+		'IM' => __( 'Isle of Man', 'example' ), 
+		'IL' => __( 'Israel', 'example' ), 
+		'IT' => __( 'Italy', 'example' ), 
+		'JM' => __( 'Jamaica', 'example' ), 
+		'JP' => __( 'Japan', 'example' ), 
+		'JE' => __( 'Jersey', 'example' ), 
+		'JT' => __( 'Johnston Island', 'example' ), 
+		'JO' => __( 'Jordan', 'example' ), 
+		'KZ' => __( 'Kazakhstan', 'example' ), 
+		'KE' => __( 'Kenya', 'example' ), 
+		'KI' => __( 'Kiribati', 'example' ), 
+		'KW' => __( 'Kuwait', 'example' ), 
+		'KG' => __( 'Kyrgyzstan', 'example' ), 
+		'LA' => __( 'Laos', 'example' ), 
+		'LV' => __( 'Latvia', 'example' ), 
+		'LB' => __( 'Lebanon', 'example' ), 
+		'LS' => __( 'Lesotho', 'example' ), 
+		'LR' => __( 'Liberia', 'example' ), 
+		'LY' => __( 'Libya', 'example' ), 
+		'LI' => __( 'Liechtenstein', 'example' ), 
+		'LT' => __( 'Lithuania', 'example' ), 
+		'LU' => __( 'Luxembourg', 'example' ), 
+		'MO' => __( 'Macau SAR China', 'example' ), 
+		'MK' => __( 'Macedonia', 'example' ), 
+		'MG' => __( 'Madagascar', 'example' ), 
+		'MW' => __( 'Malawi', 'example' ), 
+		'MY' => __( 'Malaysia', 'example' ), 
+		'MV' => __( 'Maldives', 'example' ), 
+		'ML' => __( 'Mali', 'example' ), 
+		'MT' => __( 'Malta', 'example' ), 
+		'MH' => __( 'Marshall Islands', 'example' ), 
+		'MQ' => __( 'Martinique', 'example' ), 
+		'MR' => __( 'Mauritania', 'example' ), 
+		'MU' => __( 'Mauritius', 'example' ), 
+		'YT' => __( 'Mayotte', 'example' ), 
+		'FX' => __( 'Metropolitan France', 'example' ), 
+		'MX' => __( 'Mexico', 'example' ), 
+		'FM' => __( 'Micronesia', 'example' ), 
+		'MI' => __( 'Midway Islands', 'example' ), 
+		'MD' => __( 'Moldova', 'example' ), 
+		'MC' => __( 'Monaco', 'example' ), 
+		'MN' => __( 'Mongolia', 'example' ), 
+		'ME' => __( 'Montenegro', 'example' ), 
+		'MS' => __( 'Montserrat', 'example' ), 
+		'MA' => __( 'Morocco', 'example' ), 
+		'MZ' => __( 'Mozambique', 'example' ), 
+		'MM' => __( 'Myanmar [Burma]', 'example' ), 
+		'NA' => __( 'Namibia', 'example' ), 
+		'NR' => __( 'Nauru', 'example' ), 
+		'NP' => __( 'Nepal', 'example' ), 
+		'NL' => __( 'Netherlands', 'example' ), 
+		'AN' => __( 'Netherlands Antilles', 'example' ), 
+		'NT' => __( 'Neutral Zone', 'example' ), 
+		'NC' => __( 'New Caledonia', 'example' ), 
+		'NZ' => __( 'New Zealand', 'example' ), 
+		'NI' => __( 'Nicaragua', 'example' ), 
+		'NE' => __( 'Niger', 'example' ), 
+		'NG' => __( 'Nigeria', 'example' ), 
+		'NU' => __( 'Niue', 'example' ), 
+		'NF' => __( 'Norfolk Island', 'example' ), 
+		'KP' => __( 'North Korea', 'example' ), 
+		'VD' => __( 'North Vietnam', 'example' ), 
+		'MP' => __( 'Northern Mariana Islands', 'example' ), 
+		'NO' => __( 'Norway', 'example' ), 
+		'OM' => __( 'Oman', 'example' ), 
+		'PC' => __( 'Pacific Islands Trust Territory', 'example' ), 
+		'PK' => __( 'Pakistan', 'example' ), 
+		'PW' => __( 'Palau', 'example' ), 
+		'PS' => __( 'Palestinian Territories', 'example' ), 
+		'PA' => __( 'Panama', 'example' ), 
+		'PZ' => __( 'Panama Canal Zone', 'example' ), 
+		'PG' => __( 'Papua New Guinea', 'example' ), 
+		'PY' => __( 'Paraguay', 'example' ), 
+		'YD' => __( 'People\'s Democratic Republic of Yemen', 'example' ), 
+		'PE' => __( 'Peru', 'example' ), 
+		'PH' => __( 'Philippines', 'example' ), 
+		'PN' => __( 'Pitcairn Islands', 'example' ), 
+		'PL' => __( 'Poland', 'example' ), 
+		'PT' => __( 'Portugal', 'example' ), 
+		'PR' => __( 'Puerto Rico', 'example' ), 
+		'QA' => __( 'Qatar', 'example' ), 
+		'RO' => __( 'Romania', 'example' ), 
+		'RU' => __( 'Russia', 'example' ), 
+		'RW' => __( 'Rwanda', 'example' ), 
+		'BL' => __( 'Saint Barthélemy', 'example' ), 
+		'SH' => __( 'Saint Helena', 'example' ), 
+		'KN' => __( 'Saint Kitts and Nevis', 'example' ), 
+		'LC' => __( 'Saint Lucia', 'example' ), 
+		'MF' => __( 'Saint Martin', 'example' ), 
+		'PM' => __( 'Saint Pierre and Miquelon', 'example' ), 
+		'VC' => __( 'Saint Vincent and the Grenadines', 'example' ), 
+		'WS' => __( 'Samoa', 'example' ), 
+		'SM' => __( 'San Marino', 'example' ), 
+		'SA' => __( 'Saudi Arabia', 'example' ), 
+		'SN' => __( 'Senegal', 'example' ), 
+		'RS' => __( 'Serbia', 'example' ), 
+		'CS' => __( 'Serbia and Montenegro', 'example' ), 
+		'SC' => __( 'Seychelles', 'example' ), 
+		'SL' => __( 'Sierra Leone', 'example' ), 
+		'SG' => __( 'Singapore', 'example' ), 
+		'SK' => __( 'Slovakia', 'example' ), 
+		'SI' => __( 'Slovenia', 'example' ), 
+		'SB' => __( 'Solomon Islands', 'example' ), 
+		'SO' => __( 'Somalia', 'example' ), 
+		'ZA' => __( 'South Africa', 'example' ), 
+		'GS' => __( 'South Georgia and the South Sandwich Islands', 'example' ), 
+		'KR' => __( 'South Korea', 'example' ), 
+		'ES' => __( 'Spain', 'example' ), 
+		'LK' => __( 'Sri Lanka', 'example' ), 
+		'SD' => __( 'Sudan', 'example' ), 
+		'SR' => __( 'Suriname', 'example' ), 
+		'SJ' => __( 'Svalbard and Jan Mayen', 'example' ), 
+		'SZ' => __( 'Swaziland', 'example' ), 
+		'SE' => __( 'Sweden', 'example' ), 
+		'CH' => __( 'Switzerland', 'example' ), 
+		'SY' => __( 'Syria', 'example' ), 
+		'ST' => __( 'São Tomé and Príncipe', 'example' ), 
+		'TW' => __( 'Taiwan', 'example' ), 
+		'TJ' => __( 'Tajikistan', 'example' ), 
+		'TZ' => __( 'Tanzania', 'example' ), 
+		'TH' => __( 'Thailand', 'example' ), 
+		'TL' => __( 'Timor-Leste', 'example' ), 
+		'TG' => __( 'Togo', 'example' ), 
+		'TK' => __( 'Tokelau', 'example' ), 
+		'TO' => __( 'Tonga', 'example' ), 
+		'TT' => __( 'Trinidad and Tobago', 'example' ), 
+		'TN' => __( 'Tunisia', 'example' ), 
+		'TR' => __( 'Turkey', 'example' ), 
+		'TM' => __( 'Turkmenistan', 'example' ), 
+		'TC' => __( 'Turks and Caicos Islands', 'example' ), 
+		'TV' => __( 'Tuvalu', 'example' ), 
+		'UM' => __( 'U.S. Minor Outlying Islands', 'example' ), 
+		'PU' => __( 'U.S. Miscellaneous Pacific Islands', 'example' ), 
+		'VI' => __( 'U.S. Virgin Islands', 'example' ), 
+		'UG' => __( 'Uganda', 'example' ), 
+		'UA' => __( 'Ukraine', 'example' ), 
+		'SU' => __( 'Union of Soviet Socialist Republics', 'example' ), 
+		'AE' => __( 'United Arab Emirates', 'example' ), 
+		'GB' => __( 'United Kingdom', 'example' ), 
+		'US' => __( 'United States', 'example' ), 
+		'UY' => __( 'Uruguay', 'example' ), 
+		'UZ' => __( 'Uzbekistan', 'example' ), 
+		'VU' => __( 'Vanuatu', 'example' ), 
+		'VA' => __( 'Vatican City', 'example' ), 
+		'VE' => __( 'Venezuela', 'example' ), 
+		'VN' => __( 'Vietnam', 'example' ), 
+		'WK' => __( 'Wake Island', 'example' ), 
+		'WF' => __( 'Wallis and Futuna', 'example' ), 
+		'EH' => __( 'Western Sahara', 'example' ), 
+		'YE' => __( 'Yemen', 'example' ), 
+		'ZM' => __( 'Zambia', 'example' ), 
+		'ZW' => __( 'Zimbabwe', 'example' ), 
+		'AX' => __( 'Åland Islands', 'example' ), 
+	);
+	
+	/**
+	 * Filter the country list before returning.
+	 *
+	 * @hook mc_countries_filters
+	 * 
+	 * @param {array} $countries countries array for filtering.
+	 */
+	$countries = apply_filters( 'mc_countries_filters', $countries );
+	$results   = array();
+	foreach ( $countries as $key => $value ) {
+		if ( stripos( $value, $query ) !== false || strtolower( $query ) === strtolower( $key ) ) {
+			$results[] = $countries[ $key ];
+		}
+	}
+
+	return $results;
 }
 
 /**

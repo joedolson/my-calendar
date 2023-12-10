@@ -1763,6 +1763,20 @@ function mc_scripts() {
 			)
 		);
 	}
+
+	if ( $slug . '_page_my-calendar-locations' === $id ) {
+		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
+		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
+		wp_localize_script(
+			'mc-autocomplete',
+			'mccountries',
+			array(
+				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
+				'security' => wp_create_nonce( 'mc-search-countries' ),
+				'action'   => 'mc_core_autocomplete_search_countries',
+			)
+		);
+	}
 }
 
 

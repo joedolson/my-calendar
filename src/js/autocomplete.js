@@ -104,4 +104,40 @@
 		});
 	}
 
+	if ( typeof( mccountries ) !== 'undefined' ) {
+		/* https://autocomplete.trevoreyre.com/#/javascript-component?id=getresultvalue */
+		new Autocomplete( '#mc-countries-autocomplete', {
+			search: input => {
+				return new Promise( resolve => {
+					if (input.length < 2) {
+						return resolve([])
+					}
+
+					var data = new FormData();
+					data.append( 'action', mccountries.action );
+					data.append( 'security', mccountries.security );
+					data.append( 'data', input );
+					const response = fetch(mccountries.ajaxurl, {
+						method: 'POST',
+						credentials: 'same-origin',
+						body: data
+					}).then(response => response.json())
+					.then(data => {
+						resolve(data.response)
+					})
+				})
+			},
+			onSubmit: result => {
+				var location_field = document.getElementById( 'e_country' );
+
+				icon_field.value = result.country;
+				$( location_field ).trigger( 'change' );
+			},
+			renderResult: (result, props) => `
+				<li ${props}>${result.country}</li>
+			`,
+			getResultValue: result => result.country
+		});
+	}
+
 }(jQuery));

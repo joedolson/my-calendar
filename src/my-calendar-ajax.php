@@ -100,6 +100,41 @@ function mc_core_autocomplete_search_icons() {
 	}
 }
 
+add_action( 'wp_ajax_mc_core_autocomplete_search_countries', 'mc_core_autocomplete_search_countries' );
+/**
+ * Add SVG icon lookup for category pages.
+ */
+function mc_core_autocomplete_search_countries() {
+	if ( isset( $_REQUEST['action'] ) && 'mc_core_autocomplete_search_countries' === $_REQUEST['action'] ) {
+		$security = $_REQUEST['security'];
+		if ( ! wp_verify_nonce( $security, 'mc-search-countries' ) ) {
+			wp_send_json(
+				array(
+					'success'  => 0,
+					'response' => array( 'error' => 'My Calendar: invalid security check.' ),
+				)
+			);
+		}
+
+		$query     = sanitize_text_field( $_REQUEST['data'] );
+		$db        = mc_get_countries( $query );
+		$countries = mc_default_countries( $query );
+		$results   = array_unique( array_merge( $db, $countries ) );
+		$response  = array();
+		foreach ( $results as $result ) {
+			$response[] = array(
+				'country' => esc_attr( $result ),
+			);
+		}
+		wp_send_json(
+			array(
+				'success'  => 1,
+				'response' => $response,
+			)
+		);
+	}
+}
+
 add_action( 'wp_ajax_add_category', 'mc_ajax_add_category' );
 /**
  * Delete a single occurrence of an event from the event manager.
