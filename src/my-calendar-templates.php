@@ -133,6 +133,26 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 }
 
 /**
+ * Set up a template based on a reference passed in shortcode or settings.
+ *
+ * @param string $template Template passed.
+ * @param string $default Default template for this context.
+ *
+ * @return string
+ */
+function mc_setup_template( $template, $default ) {
+	// allow reference by file to external template.
+	if ( '' !== $template && mc_file_exists( $template ) ) {
+		$template = file_get_contents( mc_get_file( $template ) );
+	}
+	if ( mc_key_exists( $template ) ) {
+		$template = mc_get_custom_template( $template );
+	}
+
+	return ( '' !== $template ) ? $template : $default;
+}
+
+/**
  * Setup string version of address data
  *
  * @param object $event object containing location properties.

@@ -600,11 +600,8 @@ function mc_close_button( $controls ) {
  */
 function mc_get_details( $data, $template, $type ) {
 	$details = false;
-	if ( '' !== $template && mc_file_exists( $template ) ) {
-		$template = file_get_contents( mc_get_file( $template ) );
-		$details  = mc_draw_template( $data, $template );
-	} elseif ( '' !== $template && mc_key_exists( $template ) ) {
-		$template = mc_get_custom_template( $template );
+	if ( '' !== $template ) {
+		$template = mc_setup_template( $template, '' );
 		$details  = mc_draw_template( $data, $template );
 	} else {
 		switch ( $type ) {
