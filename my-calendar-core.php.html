@@ -1790,7 +1790,7 @@ function mc_scripts() {
 		);
 	}
 
-	if ( $slug . '_page_my-calendar-locations' === $id ) {
+	if ( $slug . '_page_my-calendar-locations' === $id || 'toplevel_page_my-calendar' === $id ) {
 		wp_enqueue_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
 		wp_enqueue_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
 		wp_localize_script(
