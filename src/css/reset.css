@@ -559,10 +559,6 @@
 	z-index: 10001 !important;
 }
 
-dialog.my-calendar-modal #modal-title {
-	border-bottom: 4px solid var(--highlight-dark);
-}
-
 .my-calendar-modal-close {
 	border-radius: 0 2px 0 4px;
 }
