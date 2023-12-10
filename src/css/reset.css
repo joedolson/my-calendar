@@ -1382,3 +1382,75 @@ body.mc-no-scroll {
 	height: calc( 99% - 45px );
   }  
 }
+
+
+/* Base responsive styles. Migrated to main plugin 12/10/2023 */
+@media screen and ( max-width: 720px ) {
+	.mc-main:not(.mini) thead {
+		border-bottom: none;
+	}
+
+	.mc-main:not(.mini) table.my-calendar-table,
+	.mc-main:not(.mini) .my-calendar-table thead,
+	.mc-main:not(.mini) .my-calendar-table tbody,
+	.mc-main:not(.mini) .my-calendar-table tr,
+	.mc-main:not(.mini) .my-calendar-table td,
+	.mc-main:not(.mini) .my-calendar-table caption {
+		display: block;
+		height: auto;
+		min-height: 0;
+	}
+
+	.mc-main:not(.mini) .my-calendar-header,
+	.mc-main:not(.mini) .my-calendar-footer,
+	.mc-main:not(.mini) table.my-calendar-table,
+	.mc-main:not(.mini) .my-calendar-table thead,
+	.mc-main:not(.mini) .my-calendar-table tbody,
+	.mc-main:not(.mini) .my-calendar-table caption  {
+		margin: .5rem auto;
+		padding: 0;
+	}
+
+	.mc-main:not(.mini) .my-calendar-table td {
+		margin-bottom: .5em;
+		width: auto;
+	}
+	.mc-main:not(.mini) .my-calendar-table td.no-events,
+	.mc-main:not(.mini) .my-calendar-table td.nextmonth {
+		display: none;
+	}
+
+	.mc-main:not(.mini) .my-calendar-table td .mc-date span[aria-hidden=true] {
+		display: none;
+	}
+
+	.mc-main:not(.mini) .my-calendar-table td .mc-date {
+		font-size: 16px;
+		padding: .5em 1em;
+	}
+
+	.mc-main:not(.mini) .my-calendar-table td .button {
+		font-size: 1rem;
+		padding: .5rem;
+	}
+
+	.mc-main:not(.mini) .my-calendar-table td .mc-date .screen-reader-text {
+		display: block;
+		clip: auto;
+		clip-path: none;
+		height: auto;
+		margin: 0;
+		overflow: auto;
+		position: static !important;
+		width: auto;
+		text-align: left;
+	}
+	
+	html[dir=rtl] .mc-main:not(.mini) .my-calendar-table td .mc-date .screen-reader-text {
+		text-align: right;
+	}
+
+	.mc-main:not(.mini) .my-calendar-table th {
+		display: none;
+	}
+}
