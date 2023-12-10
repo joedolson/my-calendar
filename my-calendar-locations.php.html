@@ -1698,12 +1698,12 @@ function mc_default_countries( $query = '' ) {
 		'ZW' => __( 'Zimbabwe', 'my-calendar' ),
 		'AX' => __( 'Åland Islands', 'my-calendar' ),
 	);
-	
+
 	/**
 	 * Filter the country list before returning.
 	 *
 	 * @hook mc_countries_filters
-	 * 
+	 *
 	 * @param {array} $countries countries array for filtering.
 	 */
 	$countries = apply_filters( 'mc_countries_filters', $countries );
