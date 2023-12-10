@@ -167,9 +167,8 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			 * @return {array}
 			 */
 			$update  = apply_filters( 'mc_update_group_data', $update, $event_author, $action, $event_id );
-			$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%f', '%f' );
-
-			$result = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
+			$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d' );
+			$result  = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
 
 			$edit_url = '<a href="' . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event_id" ) . '" class="button-secondary">' . __( 'Edit Event', 'my-calendar' ) . '</a>';
 			$view_url = ' <a href="' . mc_get_details_link( mc_get_first_event( $event_id ) ) . '" class="button-secondary">' . __( 'View Event', 'my-calendar' ) . '</a>';
@@ -227,7 +226,7 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 function mc_compare_group_members( $group_id, $field = false, $echo = true ) {
 	global $wpdb;
 	if ( ! $field ) {
-		$query = 'SELECT event_title, event_desc, event_short, event_link, event_label, event_street, event_street2, event_city, event_state, event_postcode, event_region, event_country, event_url, event_image, event_category, event_link_expires, event_zoom, event_phone, event_host, event_longitude, event_latitude FROM ' . my_calendar_table() . ' WHERE event_group_id = %d';
+		$query = 'SELECT event_title, event_desc, event_short, event_link, event_url, event_image, event_category, event_link_expires, event_host FROM ' . my_calendar_table() . ' WHERE event_group_id = %d';
 	} else {
 		// Just comparing a single field.
 		$query = "SELECT $field FROM " . my_calendar_table() . ' WHERE event_group_id = %d';
@@ -691,43 +690,10 @@ function mc_check_group_data( $action, $post ) {
 		$event_registration = ! empty( $post['event_registration'] ) ? trim( $post['event_registration'] ) : '';
 		$event_image        = esc_url_raw( $post['event_image'] );
 		$event_span         = ! empty( $post['event_span'] ) ? 1 : 0;
-		// Set location.
-		if ( 'none' !== $location_preset ) {
-			$location        = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_preset ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$event_label     = $location->location_label;
-			$event_street    = $location->location_street;
-			$event_street2   = $location->location_street2;
-			$event_city      = $location->location_city;
-			$event_state     = $location->location_state;
-			$event_postcode  = $location->location_postcode;
-			$event_region    = $location->location_region;
-			$event_country   = $location->location_country;
-			$event_url       = $location->location_url;
-			$event_longitude = $location->location_longitude;
-			$event_latitude  = $location->location_latitude;
-			$event_zoom      = $location->location_zoom;
-			$event_phone     = $location->location_phone;
-			$event_access    = $location->location_access;
-		} else {
-			$event_label     = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
-			$event_street    = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
-			$event_street2   = ! empty( $post['event_street2'] ) ? $post['event_street2'] : '';
-			$event_city      = ! empty( $post['event_city'] ) ? $post['event_city'] : '';
-			$event_state     = ! empty( $post['event_state'] ) ? $post['event_state'] : '';
-			$event_postcode  = ! empty( $post['event_postcode'] ) ? $post['event_postcode'] : '';
-			$event_region    = ! empty( $post['event_region'] ) ? $post['event_region'] : '';
-			$event_country   = ! empty( $post['event_country'] ) ? $post['event_country'] : '';
-			$event_url       = ! empty( $post['event_url'] ) ? $post['event_url'] : '';
-			$event_longitude = ! empty( $post['event_longitude'] ) ? $post['event_longitude'] : '';
-			$event_latitude  = ! empty( $post['event_latitude'] ) ? $post['event_latitude'] : '';
-			$event_zoom      = ! empty( $post['event_zoom'] ) ? $post['event_zoom'] : '';
-			$event_phone     = ! empty( $post['event_phone'] ) ? $post['event_phone'] : '';
-			$event_access    = ! empty( $post['event_access'] ) ? $post['event_access'] : array();
-			$event_access    = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
-		}
+		
 		// We check to make sure the URL is acceptable (blank or starting with http://).
 		if ( ! ( '' === $event_link || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
-			$event_link = 'http://' . $event_link;
+			$event_link = 'https://' . $event_link;
 		}
 		// A title is required, and can't be more than 255 characters.
 		$title_length = strlen( $title );
@@ -741,29 +707,15 @@ function mc_check_group_data( $action, $post ) {
 			'event_desc'         => $desc,
 			'event_short'        => $short,
 			'event_link'         => $event_link,
-			'event_label'        => $event_label,
-			'event_street'       => $event_street,
-			'event_street2'      => $event_street2,
-			'event_city'         => $event_city,
-			'event_state'        => $event_state,
-			'event_postcode'     => $event_postcode,
-			'event_region'       => $event_region,
-			'event_country'      => $event_country,
-			'event_url'          => $event_url,
 			'event_image'        => $event_image,
-			'event_phone'        => $event_phone,
-			'event_access'       => serialize( $event_access ),
 			'event_tickets'      => $event_tickets,
 			'event_registration' => $event_registration,
 			// Begin integers.
 			'event_category'     => $primary,
 			'event_link_expires' => $expires,
-			'event_zoom'         => $event_zoom,
 			'event_host'         => $host,
 			'event_span'         => $event_span,
-			// Begin floats.
-			'event_longitude'    => $event_longitude,
-			'event_latitude'     => $event_latitude,
+			'event_location'     => $location_preset,
 			// Array (not saved directly).
 			'event_categories'   => $cats,
 		);
