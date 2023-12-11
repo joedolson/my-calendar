@@ -472,7 +472,6 @@
 
 .mc-main .mc-list .mc-events {
 	list-style-type: none !important;
-	padding: 8px;
 	margin: 0;
 }
 
@@ -690,6 +689,8 @@ main,div.entry-content,div.site-content, table {
 .mc-main .my-calendar-navigation input[type=submit]:not(.my-calendar-admin input[type=submit]) {
 	padding-top: 4px;
 	padding-bottom: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
 	margin: 0;
 	font-size: clamp( .75rem, 16px, 1.5rem );
 	border: 1px solid var(--nav-input-border);
@@ -699,7 +700,7 @@ main,div.entry-content,div.site-content, table {
 	appearance: none;
 }
 
-.mc-main .my-calendar-navigation select {
+.mc-main .my-calendar-navigation select:not(.my-calendar-admin select) {
 	padding-right: 3rem;
 	background-image:
 	  linear-gradient(45deg, transparent 50%, gray 50%),
@@ -715,7 +716,7 @@ main,div.entry-content,div.site-content, table {
 	background-repeat: no-repeat;
   }
   
-  .mc-main .my-calendar-navigation select:focus {
+  .mc-main .my-calendar-navigation select:not(.my-calendar-admin select):focus {
 	background-image:
 	  linear-gradient(45deg, black 50%, transparent 50%),
 	  linear-gradient(135deg, transparent 50%, black 50%);
