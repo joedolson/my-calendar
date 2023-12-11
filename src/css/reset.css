@@ -1,4 +1,4 @@
-.my-calendar-header *, .my-calendar-footer *, .mc-main * {
+.my-calendar-navigation *, .mc-main * {
 	line-height: 1.62;
 }
 
@@ -335,29 +335,35 @@
 	padding: 0 !important;
 }
 
-.my-calendar-footer .category-key ul,
-.my-calendar-header .category-key ul {
+.my-calendar-navigation .category-key ul {
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: 8px;
 }
 
-.my-calendar-prev a:before, .my-calendar-next a:after {
-	font-family: 'dashicons';
+.my-calendar-today a::before,
+.my-calendar-prev a::before,
+.my-calendar-next a::after {
+	display: inline;
+	font-family: dashicons;
 	vertical-align: middle;
 }
 
-.my-calendar-prev a:before {
+.my-calendar-today a::before {
+	content: '';
+}
+
+.my-calendar-prev a::before {
 	content: '\f341';
 	margin-right: 3px;
 }
 
-.my-calendar-next a:after {
+.my-calendar-next a::after {
 	content: '\f345';
 	margin-left: 3px;
 }
 
-.my-calendar-header > * {
+.my-calendar-navigation div > * {
 	display: flex;
 }
 
@@ -383,8 +389,7 @@
 	font-size: clamp( 1.333rem, 28px, 2.666rem );
 }
 
-.mc-main .my-calendar-header .no-icon,
-.mc-main .mc_bottomnav .no-icon {
+.mc-main .my-calendar-navigation .no-icon {
 	display: inline-block;
 	width: 16px;
 	height: 16px;
@@ -431,8 +436,8 @@
 	display: inline;
 }
 
-.single-event .address .street-address:nth-of-type(2):before,
-.mc-main .address .street-address:nth-of-type(2):before {
+.single-event .address .street-address:nth-of-type(2)::before,
+.mc-main .address .street-address:nth-of-type(2)::before {
 	content: ', ';
 }
 
@@ -640,10 +645,8 @@ main,div.entry-content,div.site-content, table {
 	color: var(--primary-dark);
 }
 
-.mc-main .my-calendar-footer li,
-.mc-main .my-calendar-header li,
-.mc-main .my-calendar-footer ul,
-.mc-main .my-calendar-header ul {
+.mc-main .my-calendar-navigation li,
+.mc-main .my-calendar-navigation ul {
 	list-style-type: none;
 	list-style: none;
 	margin: 0;
@@ -657,8 +660,7 @@ main,div.entry-content,div.site-content, table {
 	display: block;
 }
 
-.mc-main .my-calendar-header,
-.mc-main .my-calendar-footer {
+.mc-main .my-calendar-navigation > div {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -670,66 +672,92 @@ main,div.entry-content,div.site-content, table {
 }
 
 .mc-main .mc-active,
-.mc-main .my-calendar-header a,
-.mc-main .my-calendar-footer a {
+.mc-main .my-calendar-navigation a {
 	padding: 4px;
 	display: flex;
 	align-items: center;
 }
 
-.mc-main .my-calendar-footer .mc-active,
-.mc-main .my-calendar-header .mc-active {
+.mc-main .my-calendar-navigation .mc-active {
 	outline: 2px solid;
 	border-radius: 3px;
 	background-color: var(--primary-light);
 	filter: brightness(95%);
 }
 
-.mc-main .my-calendar-footer select:not(.my-calendar-admin select),
-.mc-main .my-calendar-footer input[type=text]:not(.my-calendar-admin input[type=text]),
-.mc-main .my-calendar-footer input[type=submit]:not(.my-calendar-admin input[type=submit]),
-.mc-main .my-calendar-header select:not(.my-calendar-admin select),
-.mc-main .my-calendar-header input[type=text]:not(.my-calendar-admin input[type=text]),
-.mc-main .my-calendar-header input[type=submit]:not(.my-calendar-admin input[type=submit]) {
-	padding-top: 7px;
-	padding-bottom: 7px;
+.mc-main .my-calendar-navigation select:not(.my-calendar-admin select),
+.mc-main .my-calendar-navigation input[type=text]:not(.my-calendar-admin input[type=text]),
+.mc-main .my-calendar-navigation input[type=submit]:not(.my-calendar-admin input[type=submit]) {
+	padding-top: 4px;
+	padding-bottom: 4px;
 	margin: 0;
 	font-size: clamp( .75rem, 16px, 1.5rem );
 	border: 1px solid var(--nav-input-border);
-	background: var(--nav-input-background);
+	background-color: var(--nav-input-background);
 	color: var(--nav-input-color);
+	-webkit-appearance: none;
+	appearance: none;
 }
 
-.mc-main .my-calendar-header select, .my-calendar-footer select,
-.mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
+.mc-main .my-calendar-navigation select {
+	padding-right: 3rem;
+	background-image:
+	  linear-gradient(45deg, transparent 50%, gray 50%),
+	  linear-gradient(135deg, gray 50%, transparent 50%);
+	background-position:
+	  calc(100% - 20px) calc(1rem + 4px),
+	  calc(100% - 15px) calc(1rem + 4px),
+	  calc(100% - 2.5rem) 0.5rem;
+	background-size:
+	  5px 5px,
+	  5px 5px,
+	  1px 1.5rem;
+	background-repeat: no-repeat;
+  }
+  
+  .mc-main .my-calendar-navigation select:focus {
+	background-image:
+	  linear-gradient(45deg, black 50%, transparent 50%),
+	  linear-gradient(135deg, transparent 50%, black 50%);
+	background-position:
+	  calc(100% - 15px) 1rem,
+	  calc(100% - 20px) 1rem,
+	  calc(100% - 2.5rem) 0.5rem;
+	background-size:
+	  5px 5px,
+	  5px 5px,
+	  1px 1.5rem;
+	background-repeat: no-repeat;
+  }
+
+.mc-main .my-calendar-navigation select::-moz-focus-inner,
+.mc-main .my-calendar-navigation input[type=submit]::-moz-focus-inner { 
+	border: 0;
+}
+
+.mc-main .my-calendar-navigation a {
 	color: var(--nav-button-color);
-	background: var(--nav-button);
+	background-color: var(--nav-button);
 	border-radius: 3px;
 }
 
-.mc-main .my-calendar-header span, .mc-main .my-calendar-header a,
-.mc-main .mc_bottomnav span, .mc-main .mc_bottomnav a,
-.mc-main .my-calendar-header select, .mc-main .my-calendar-header input,
-.mc-main .mc_bottomnav select, .mc-main .mc_bottomnav input,
-.mc-main .my-calendar-header input[type=submit], .mc-main .mc_bottomnav input[type=submit] {
+.mc-main .my-calendar-navigation a,
+.mc-main .my-calendar-navigation select,
+.mc-main .my-calendar-navigation input,
+.mc-main .my-calendar-navigation input[type=submit] {
 	font-size: clamp( .75rem, 16px, 1.5rem );
 	font-weight: 400;
 	text-decoration: none;
 }
 
-.mc-main .my-calendar-header select:focus, .mc-main .my-calendar-footer select:focus,
-.mc-main .my-calendar-header select:hover, .mc-main .my-calendar-footer select:hover,
-.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
-.mc-main nav .my-calendar-header a:hover, .mc-main nav .my-calendar-footer a:hover,
-.mc-main nav .my-calendar-header a:focus, .mc-main nav .my-calendar-footer a:focus {
+.mc-main .my-calendar-navigation select:focus,
+.mc-main .my-calendar-navigation select:hover,
+.mc-main .my-calendar-navigation input:hover,
+.mc-main .my-calendar-navigation a:hover,
+.mc-main .my-calendar-navigation a:focus {
 	outline: 2px solid var(--primary-dark);
 	outline-offset: 2px;
 	border-radius: 3px;
-}
-
-.mc-main .my-calendar-header input[type=submit],
-.mc-main .my-calendar-footer input[type=submit] {
-	min-width: 44px;
 }
 
 .mc-time {
@@ -748,16 +776,7 @@ main,div.entry-content,div.site-content, table {
 	font-size: 1.2rem;
 }
 
-.my-calendar-header .mc-date-switcher > * {
-	margin: 0 2px;
-}
-
-.mc-main .my-calendar-header select,
-.mc-main .my-calendar-footer select {
-	display: inline;
-}
-
-.mc-main h2:before {
+.mc-main h2::before {
 	display: none;
 }
 
@@ -801,7 +820,7 @@ main,div.entry-content,div.site-content, table {
 	quotes: none;
 }
 
-.mc-main blockquote:before, .mc-main blockquote:after, .mc-main q:before, .mc-main q:after {
+.mc-main blockquote::before, .mc-main blockquote::after, .mc-main q::before, .mc-main q::after {
 	content: none;
 }
 
@@ -813,21 +832,11 @@ main,div.entry-content,div.site-content, table {
 	width: 100%;
 }
 
-.mc-main input, .mc-main select, .mc-main a img {
-	vertical-align: middle;
-}
-
-.mc-main select {
-	height: auto;
-}
-
-.mc-main *, .mc-main *:before, .mc-main *:after {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
+.mc-main *, .mc-main *::before, .mc-main *::after {
 	box-sizing: border-box;
 }
 
-.mc-main .maybe-hide,
+.mc-main .maybe-hide:not(.my-calendar-nav span),
 .mc-main .mc_filters label,
 .mc-main .screen-reader-text {
 	border: 0;
@@ -892,7 +901,7 @@ button.mc-toggle {
 	font-family: dashicons !important;
 }
 
-button .mc-toggle:before {
+button .mc-toggle::before {
 	font-family: dashicons !important;
 }
 
@@ -1396,8 +1405,7 @@ body.mc-no-scroll {
 		min-height: 0;
 	}
 
-	.mc-main:not(.mini) .my-calendar-header,
-	.mc-main:not(.mini) .my-calendar-footer,
+	.mc-main:not(.mini) .my-calendar-navigation,
 	.mc-main:not(.mini) table.my-calendar-table,
 	.mc-main:not(.mini) .my-calendar-table thead,
 	.mc-main:not(.mini) .my-calendar-table tbody,
