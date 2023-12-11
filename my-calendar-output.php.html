@@ -144,7 +144,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			} else {
 				$check = '';
 			}
-			if ( 'true' === $params['hide_groups'] &amp;&amp; in_array( $event->event_group_id, $params['displayed'] ) ) {
+			if ( 'true' === $params['hide_groups'] &amp;&amp; in_array( $event->event_group_id, $params['displayed'], true ) ) {
 				$check = false;
 			}
 			if ( '' === $check ) {
@@ -804,23 +804,24 @@ function mc_get_event_classes( $event, $type ) {
 	$relation = mc_date_relation( $event );
 	switch ( $relation ) {
 		case 0:
-			$date_relation = 'past-event';
+			$rel = 'past-event';
 			break;
 		case 1:
-			$date_relation = 'on-now';
+			$rel = 'on-now';
 			break;
 		case 2:
-			$date_relation = 'future-event';
+			$rel = 'future-event';
 			break;
 	}
-	$primary      = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
-	$length       = sanitize_title( 'mc-' . mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event ) );
-	$start        = sanitize_title( 'mc-start-' . mc_date( 'H-i', $event->ts_occur_begin ) );
-	$is_recurring = ( mc_is_recurring( $event ) ) ? 'recurring' : 'nonrecurring';
-	$group        = ( 0 !== (int) $event->event_group_id ) ? 'mc-group-' . $event->event_group_id : 'ungrouped';
-	$event_root   = 'mc-event-' . $event->event_id;
+	$primary   = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
+	$length    = sanitize_title( 'mc-' . mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event ) );
+	$start     = sanitize_title( 'mc-start-' . mc_date( 'H-i', $event->ts_occur_begin ) );
+	$recurring = ( mc_is_recurring( $event ) ) ? 'recurring' : 'nonrecurring';
+	$group     = ( 0 !== (int) $event->event_group_id ) ? 'mc-group-' . $event->event_group_id : 'ungrouped';
+	$root      = 'mc-event-' . $event->event_id;
+	$category  = mc_category_class( $event, 'mc_' );
 
-	$classes = array( 'mc-' . $uid, $type . '-event', mc_category_class( $event, 'mc_' ), $date_relation, $primary,	$is_recurring, $length, $start, $group, $event_root );
+	$classes = array( 'mc-' . $uid, $type . '-event', $category, $rel, $primary, $recurring, $length, $start, $group, $root );
 
 	if ( 'single' !== $type ) {
 		$classes[] = 'mc-events';
@@ -1317,7 +1318,7 @@ function mc_show_event_template( $content ) {
 				$new_content .= apply_filters( 'mc_after_event', '', $event, 'single', $time );
 			} else {
 				$event_output = my_calendar_draw_event( $event, 'single', $date, $time, '' );
-				$new_content  = $event_output['html']; 
+				$new_content  = $event_output['html'];
 			}
 			/**
 			 * Filter single event content prior to running shortcodes.
@@ -2097,7 +2098,7 @@ function my_calendar( $args ) {
 									$params['displayed'] = $displayed;
 									$events_array        = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
 									$displayed           = array_merge( $displayed, $events_array['groups'] );
-									$event_output = ' ';
+									$event_output        = ' ';
 									if ( ! empty( $events_array ) ) {
 										$event_output = $events_array['html'];
 										$json[]       = $events_array['json'];
