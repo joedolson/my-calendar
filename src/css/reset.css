@@ -568,14 +568,25 @@ main,div.entry-content,div.site-content, table {
 }
 
 .my-calendar-cards {
-	display: grid;
-	grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
+	display: flex;
+	flex-wrap: wrap;
 	gap: 16px;
+}
+
+.my-calendar-cards > * {
+	flex: 1 1 18rem;
 }
 
 .my-calendar-cards .card-event {
 	border: 1px solid var(--highlight-light);
 	box-shadow: 4px 4px 4px var(--highlight-light);
+	background: var(--primary-light);
+}
+
+.my-calendar-cards .card-event .mc-content-container {
+	display: grid;
+	grid-template-columns: 4rem auto;
+	gap: 8px;
 }
 
 .my-calendar-cards .card-event .details {
@@ -597,10 +608,6 @@ main,div.entry-content,div.site-content, table {
 	width: 100%;
 }
 
-.my-calendar-cards .card-event .details img {
-	order: -2;
-}
-
 .my-calendar-cards .mc-image-container {
 	margin: 0 -8px;
 }
@@ -613,24 +620,6 @@ main,div.entry-content,div.site-content, table {
 .my-calendar-cards .card-event .details h3 {
 	margin-bottom: 12px;
 	padding: 6px;
-}
-
-@media screen and (min-width:1200px) {
-	.my-calendar-cards {
-		grid-template-columns: repeat( 4, minmax( 0, 1fr ) );
-	}
-}
-
-@media screen and (max-width:731px) {
-	.my-calendar-cards {
-		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
-	}
-}
-
-@media screen and (max-width:360px) {
-	.my-calendar-cards {
-		grid-template-columns: repeat( 1, minmax( 0, 1fr ) );
-	}
 }
 
 .mc-main {
