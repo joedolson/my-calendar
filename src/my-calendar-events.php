@@ -693,9 +693,10 @@ function mc_get_event( $id, $type = 'object' ) {
 		$event = mc_event_object( $event );
 		return $event;
 	} else {
-		$date  = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
-		$time  = mc_date( 'H:i:s', strtotime( $event->occur_begin ), false );
-		$value = '<div id="mc_event">' . my_calendar_draw_event( $event, 'single', $date, $time, 'single' ) . '</div>';
+		$date         = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
+		$time         = mc_date( 'H:i:s', strtotime( $event->occur_begin ), false );
+		$event_output = my_calendar_draw_event( $event, 'single', $date, $time, 'single' );
+		$value        = '<div id="mc_event">' . $event_output['html'] . '</div>';
 
 		return $value;
 	}

@@ -83,9 +83,9 @@ function mc_time_html( $e, $type ) {
  * @return array|true [html] Generated HTML & [json] array of schema.org data. True if event details not included.
  */
 function my_calendar_draw_events( $events, $params, $process_date, $template = '', $id = '' ) {
-	$type = $params['format'];
-	$time = $params['time'];
-
+	$type        = $params['format'];
+	$time        = $params['time'];
+	$displayed   = array();
 	$open_option = mc_get_option( 'open_day_uri' );
 	if ( 'mini' === $type && ( 'true' === $open_option || 'listanchor' === $open_option || 'calendaranchor' === $open_option ) ) {
 		return true;
@@ -95,8 +95,8 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		$output_array = array();
 		$json         = array();
 		$begin        = '';
-		$event_output = '';
 		$end          = '';
+		$events_html  = '';
 		if ( 'mini' === $type && count( $events ) > 0 ) {
 			$minitype = mc_get_option( 'mini_javascript' );
 			if ( 'modal' === $minitype ) {
@@ -105,7 +105,9 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 				$begin .= "<div id='date-$process_date' class='calendar-events'>";
 			}
 			$begin .= mc_close_button( "date-$process_date" );
+			$end    = '</div>';
 		}
+
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
 			if ( 'S1' !== $event->event_recur ) {
@@ -116,98 +118,37 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			} else {
 				$check = '';
 			}
+			if ( 'true' === $params['hide_groups'] && in_array( $event->event_group_id, $params['displayed'] ) ) {
+				$check = false;
+			}
 			if ( '' === $check ) {
 				$tags           = mc_create_tags( $event, $id );
-				$output_array[] = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
+				$event_output   = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
+				$output_array[] = $event_output['html'];
+				$displayed[]    = $event_output['group'];
 				$json           = mc_event_schema( $event, $tags );
 			}
 		}
 		if ( is_array( $output_array ) ) {
 			foreach ( array_keys( $output_array ) as $key ) {
-				$value         =& $output_array[ $key ];
-				$event_output .= $value;
+				$value        =& $output_array[ $key ];
+				$events_html .= $value;
 			}
 		}
-		if ( '' === $event_output ) {
+		if ( '' === $events_html ) {
 			return array();
-		}
-		if ( 'mini' === $type && count( $events ) > 0 ) {
-			$end .= '</div>';
 		}
 
 		return array(
-			'html' => $begin . $event_output . $end,
-			'json' => $json,
+			'html'   => $begin . $events_html . $end,
+			'json'   => $json,
+			'groups' => $displayed,
 		);
 	}
 
 	return array();
 }
 
-/**
- * Check whether legacy templates are enabled.
- *
- * @return bool
- */
-function mc_legacy_templates_enabled() {
-	$enabled = mc_get_option( 'disable_legacy_templates' );
-	$legacy  = ( 'true' === $enabled ) ? false : true;
-	/**
-	 * Filter legacy templates status. New templates are intended for release with version 3.5.0 and will be in alpha at least through then.
-	 *
-	 * @hook mc_legacy_templates_enabled
-	 *
-	 * @param {bool} $enabled Return 'true' to use legacy templates.
-	 *
-	 * @return {bool}
-	 */
-	$enabled = apply_filters( 'mc_legacy_templates_enabled', $legacy );
-	// New templates require at least WP 5.5.
-	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
-		$enabled = true;
-	}
-
-	return $enabled;
-}
-
-/**
- * Load a PHP template for an event.
- *
- * @param string $type Template type.
- * @param array  $data Event and display data.
- * @param string $source Type of data this template is displaying. Default 'event'.
- *
- * @return string
- */
-function mc_load_template( $type, $data, $source = 'event' ) {
-	if ( 'calendar' === $type ) {
-		// Legacy.
-		$type = 'grid';
-	}
-
-	$legacy_templates = mc_legacy_templates_enabled();
-	$details          = '';
-	if ( ! $legacy_templates ) {
-		// Check for nested template parts.
-		if ( false !== strpos( $type, '/' ) ) {
-			$parts  = explode( '/', $type );
-			$source = $parts[0];
-			$type   = isset( $parts[1] ) ? $parts[1] : '';
-		}
-		if ( empty( $data['tags'] ) && 'event' === $source ) {
-			// If the event doesn't already have tags, create them before passing to template.
-			$tags         = mc_create_tags( $data['event'] );
-			$data['tags'] = $tags;
-		}
-		$templates = new Mc_Template_Loader();
-		ob_start();
-		$templates->set_template_data( $data );
-		$templates->get_template_part( $source, $type );
-		$details = ob_get_clean();
-	}
-
-	return $details;
-}
 /**
  * Draw a single event
  *
@@ -219,12 +160,15 @@ function mc_load_template( $type, $data, $source = 'event' ) {
  * @param string $id ID for the calendar calling this function.
  * @param array  $tags Event tags array.
  *
- * @return string Generated HTML.
+ * @return array [html => 'string', group => 'group_id', event => event_id] Generated HTML.
  */
 function my_calendar_draw_event( $event, $type, $process_date, $time, $template = '', $id = '', $tags = array() ) {
 	$exit_early = mc_exit_early( $event, $process_date );
 	if ( $exit_early ) {
-		return '';
+		return array(
+			'html' => '',
+			'id'   => '',
+		);
 	}
 	/**
 	 * Runs right before a calendar event template is handled.
@@ -311,6 +255,75 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 * @param {object} My Calendar event object.
 	 */
 	do_action( 'my_calendar_event_drawn', $event );
+
+	return array(
+		'html'  => $details,
+		'group' => $event->event_group_id,
+		'event' => $event->event_id,
+	);
+}
+
+/**
+ * Check whether legacy templates are enabled.
+ *
+ * @return bool
+ */
+function mc_legacy_templates_enabled() {
+	$enabled = mc_get_option( 'disable_legacy_templates' );
+	$legacy  = ( 'true' === $enabled ) ? false : true;
+	/**
+	 * Filter legacy templates status. New templates are intended for release with version 3.5.0 and will be in alpha at least through then.
+	 *
+	 * @hook mc_legacy_templates_enabled
+	 *
+	 * @param {bool} $enabled Return 'true' to use legacy templates.
+	 *
+	 * @return {bool}
+	 */
+	$enabled = apply_filters( 'mc_legacy_templates_enabled', $legacy );
+	// New templates require at least WP 5.5.
+	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
+		$enabled = true;
+	}
+
+	return $enabled;
+}
+
+/**
+ * Load a PHP template for an event.
+ *
+ * @param string $type Template type.
+ * @param array  $data Event and display data.
+ * @param string $source Type of data this template is displaying. Default 'event'.
+ *
+ * @return string
+ */
+function mc_load_template( $type, $data, $source = 'event' ) {
+	if ( 'calendar' === $type ) {
+		// Legacy.
+		$type = 'grid';
+	}
+
+	$legacy_templates = mc_legacy_templates_enabled();
+	$details          = '';
+	if ( ! $legacy_templates ) {
+		// Check for nested template parts.
+		if ( false !== strpos( $type, '/' ) ) {
+			$parts  = explode( '/', $type );
+			$source = $parts[0];
+			$type   = isset( $parts[1] ) ? $parts[1] : '';
+		}
+		if ( empty( $data['tags'] ) && 'event' === $source ) {
+			// If the event doesn't already have tags, create them before passing to template.
+			$tags         = mc_create_tags( $data['event'] );
+			$data['tags'] = $tags;
+		}
+		$templates = new Mc_Template_Loader();
+		ob_start();
+		$templates->set_template_data( $data );
+		$templates->get_template_part( $source, $type );
+		$details = ob_get_clean();
+	}
 
 	return $details;
 }
@@ -778,17 +791,10 @@ function mc_get_event_classes( $event, $type ) {
 	$length       = sanitize_title( 'mc-' . mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event ) );
 	$start        = sanitize_title( 'mc-start-' . mc_date( 'H-i', $event->ts_occur_begin ) );
 	$is_recurring = ( mc_is_recurring( $event ) ) ? 'recurring' : 'nonrecurring';
+	$group        = ( 0 !== (int) $event->event_group_id ) ? 'mc-group-' . $event->event_group_id : 'ungrouped';
+	$event_root   = 'mc-event-' . $event->event_id;
 
-	$classes = array(
-		'mc-' . $uid,
-		$type . '-event',
-		mc_category_class( $event, 'mc_' ),
-		$date_relation,
-		$primary,
-		$is_recurring,
-		$length,
-		$start,
-	);
+	$classes = array( 'mc-' . $uid, $type . '-event', mc_category_class( $event, 'mc_' ), $date_relation, $primary,	$is_recurring, $length, $start, $group, $event_root );
 
 	if ( 'single' !== $type ) {
 		$classes[] = 'mc-events';
@@ -1284,7 +1290,8 @@ function mc_show_event_template( $content ) {
 				 */
 				$new_content .= apply_filters( 'mc_after_event', '', $event, 'single', $time );
 			} else {
-				$new_content = my_calendar_draw_event( $event, 'single', $date, $time, '' );
+				$event_output = my_calendar_draw_event( $event, 'single', $date, $time, '' );
+				$new_content  = $event_output['html']; 
 			}
 			/**
 			 * Filter single event content prior to running shortcodes.
@@ -1445,6 +1452,7 @@ function mc_calendar_params( $args ) {
 	$sday     = isset( $args['day'] ) ? $args['day'] : false;
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
 	$weekends = isset( $args['weekends'] ) ? $args['weekends'] : mc_get_option( 'show_weekends' );
+	$groups   = isset( $args['hide_groups'] ) ? $args['hide_groups'] : '';
 
 	if ( ! in_array( $format, array( 'list', 'calendar', 'mini', 'card' ), true ) ) {
 		$format = 'calendar';
@@ -1492,21 +1500,22 @@ function mc_calendar_params( $args ) {
 	 */
 	$format = apply_filters( 'mc_display_format', $format, $args );
 	$params = array(
-		'format'   => $format,
-		'category' => $category,
-		'above'    => $above,
-		'below'    => $below,
-		'time'     => $time,
-		'ltype'    => $ltype,
-		'lvalue'   => $lvalue,
-		'author'   => $author,
-		'id'       => $id, // Changed when hash is processed.
-		'host'     => $host,
-		'syear'    => $syear,
-		'smonth'   => $smonth,
-		'sday'     => $sday,
-		'search'   => $search,
-		'weekends' => $weekends,
+		'format'      => $format,
+		'category'    => $category,
+		'above'       => $above,
+		'below'       => $below,
+		'time'        => $time,
+		'ltype'       => $ltype,
+		'lvalue'      => $lvalue,
+		'author'      => $author,
+		'id'          => $id, // Changed when hash is processed.
+		'host'        => $host,
+		'syear'       => $syear,
+		'smonth'      => $smonth,
+		'sday'        => $sday,
+		'search'      => $search,
+		'weekends'    => $weekends,
+		'hide_groups' => $groups,
 	);
 
 	// Hash cannot include 'time', 'category', 'search', or 'format', since those can be changed by navigation.
@@ -1635,8 +1644,9 @@ function mc_switch_language( $current, $switch ) {
  * @return string HTML output of calendar
  */
 function my_calendar( $args ) {
-	$language = isset( $args['language'] ) ? $args['language'] : '';
-	$switched = '';
+	$language  = isset( $args['language'] ) ? $args['language'] : '';
+	$displayed = array();
+	$switched  = '';
 	if ( $language ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
@@ -1853,8 +1863,10 @@ function my_calendar( $args ) {
 			$events_class = '';
 			$json         = '';
 			foreach ( $events as $day ) {
-				$events_class = mc_events_class( $day, $from );
-				$event_output = my_calendar_draw_events( $day, $params, $from, $template, $id );
+				$events_class        = mc_events_class( $day, $from );
+				$params['displayed'] = $displayed;
+				$event_output        = my_calendar_draw_events( $day, $params, $from, $template, $id );
+				$displayed           = array_merge( $displayed, $event_output['groups'] );
 				if ( ! empty( $event_output ) ) {
 					$mc_events .= $event_output['html'];
 					$json       = array( $event_output['json'] );
@@ -2056,7 +2068,9 @@ function my_calendar( $args ) {
 								if ( 'mini' === $params['format'] && 'false' !== $open_day_uri ) {
 									$event_output = ' ';
 								} else {
-									$events_array = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
+									$params['displayed'] = $displayed;
+									$events_array        = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
+									$displayed           = array_merge( $displayed, $events_array['groups'] );
 									$event_output = ' ';
 									if ( ! empty( $events_array ) ) {
 										$event_output = $events_array['html'];
