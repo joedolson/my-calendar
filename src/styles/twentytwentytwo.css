@@ -34,13 +34,11 @@
 
 .mc-main .mc-list .event-date button:nth-of-type(1)::before {
 	content: "\f132";
-	top: 0;
 	margin-right: 3px;
 }
 
 .mc-main .mc-list .event-title a.list::before {
 	content: "\f132";
-	top: 0;
 	margin-right: 3px;
 }
 
