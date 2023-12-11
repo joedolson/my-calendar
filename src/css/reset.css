@@ -326,6 +326,10 @@
 	outline-offset: -2px;
 }
 
+.mc-main .mc-list li.current-day {
+	border-left: 4px solid var(--highlight-dark);
+}
+
 .my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
 	margin: 0 !important;
 	padding: 0 !important;
@@ -459,15 +463,6 @@
 /* List View */
 .mc-main .mc-list li, .mc-day {
 	position: relative;
-}
-
-.mc-main li.current-day {
-	border-left: 10px solid var(--highlight-dark);
-}
-
-.mc-main li.current-day button:nth-of-type(1) {
-	position: relative;
-	left: -10px;
 }
 
 .mc-main .mc-list .mc-events {
