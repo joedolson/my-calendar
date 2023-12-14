@@ -90,11 +90,22 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Major change: Remove CSS style editor and style migration functions.
 * Major change: Remove CSS and Icon backup functions.
+* Major change: Upcoming events list now returns fixed numbers of events by default.
+* Major change: Location data only fetched from location table, no longer saved to event table.
+* Major change: Implement responsive table CSS & JS.
+* Major change: Introduce PHP templating.
+* Major change: Rewrite all additional stylesheet skins.
+* Change: Selecting a stylesheet is now optional.
+* Change: Add autocompletion for country selection.
 * Change: Make modal view the default pop-up view.
 * Change: Improve HTML semantics in event display.
 * Change: Switch popup triggers to buttons.
+* Change: Navigation controls are always controls; don't switch to span when active.
 * Feature: Add card view.
+* Feature: Style variable previews.
+* Feature: Add importer to import events from The Events Calendar.
 * Breaking change: `mc_event_classes()` now echos classes. Use `mc_get_event_classes()` to return.
+* Many, many minor visual changes to improve consistency.
 
 = 3.4.21 =
 
