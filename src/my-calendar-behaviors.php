@@ -64,7 +64,7 @@ function my_calendar_behaviors_edit() {
 				<ul class="checkboxes">
 				<li>
 					<input type="radio" id="calendar_js_disabled" name="calendar_js" value="1" <?php checked( mc_get_option( 'calendar_javascript' ), '1' ); ?>/>
-					<label for="calendar_js_disabled"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
+					<label for="calendar_js_disabled"><?php esc_html_e( 'Disable JS', 'my-calendar' ); ?></label>
 				</li>
 				<li>
 					<input type="radio" id="calendar_js_modal" name="calendar_js" value="modal" <?php checked( mc_get_option( 'calendar_javascript' ), 'modal' ); ?>/>
@@ -81,7 +81,7 @@ function my_calendar_behaviors_edit() {
 				<ul class="checkboxes">
 				<li>
 					<input type="radio" id="list_js_disabled" name="list_js" value="1" <?php checked( mc_get_option( 'list_javascript' ), '1' ); ?>/>
-					<label for="list_js_disabled"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
+					<label for="list_js_disabled"><?php esc_html_e( 'Disable JS', 'my-calendar' ); ?></label>
 				</li>
 				<li>
 					<input type="radio" id="list_js_modal" name="list_js" value="modal" <?php checked( mc_get_option( 'list_javascript' ), 'modal' ); ?>/>
@@ -98,7 +98,7 @@ function my_calendar_behaviors_edit() {
 				<ul class="checkboxes">
 				<li>
 					<input type="radio" id="mini_js_disabled" name="mini_js" value="1" <?php checked( mc_get_option( 'mini_javascript' ), '1' ); ?>/>
-					<label for="mini_js_disabled"><?php esc_html_e( 'Disable Grid JS', 'my-calendar' ); ?></label>
+					<label for="mini_js_disabled"><?php esc_html_e( 'Disable JS', 'my-calendar' ); ?></label>
 				</li>
 				<li>
 					<input type="radio" id="mini_js_modal" name="mini_js" value="modal" <?php checked( mc_get_option( 'mini_javascript' ), 'modal' ); ?>/>
