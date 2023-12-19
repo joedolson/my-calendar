@@ -420,6 +420,10 @@ function mc_kses_elements() {
 			'id'    => array(),
 			'class' => array(),
 		),
+		'nav'              => array(
+			'id'    => array(),
+			'class' => array(),
+		)
 	);
 
 	return $elements;

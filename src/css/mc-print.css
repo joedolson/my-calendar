@@ -8,7 +8,7 @@ body {
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif
 }
 
-.my-calendar-header, .mc_bottomnav, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing, .mc-date .event-icon {
+.my-calendar-header, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing, .mc-date .event-icon, .all-categories {
 	display: none;
 }
 
@@ -20,6 +20,44 @@ svg.category-icon,
 	height: auto;
 	padding: 1px;
 	border-radius: 2px; 
+}
+
+.my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.my-calendar-navigation .category-key ul {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 8px;
+}
+
+.mc-main .category-key li a {
+	border: 1px solid transparent;
+}
+
+.mc-main .category-key li.current a {
+	border: 1px solid var(--highlight-dark);
+	background-color: var(--primary-light);
+}
+
+.mc-main .category-key.has-icons ul li {
+	display: inline;
+}
+
+.mc-main .category-key li a {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding-right: 12px;
+}
+
+.mc-main .category-key .category-color-sample {
+	display: flex;
+	align-items: center;
+	position: relative;
+	padding: 2px;
 }
 
 .dashicons {
@@ -54,13 +92,16 @@ button.mc-text-button {
 	column-gap: 4px;
 }
 
+.mc-main {
+	width: 910px;
+	margin: 0 auto;
+}
+
 table {
 	border: solid #dcdcde !important;
 	border-width: 1px 0 0 1px !important;
 	border-collapse: collapse;
 	table-layout: fixed;
-	margin: 0 auto;
-	width: 910px;
 }
 
 th {

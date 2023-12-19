@@ -111,7 +111,7 @@ function my_calendar_print() {
 		'ltype'    => $ltype,
 		'lvalue'   => $lvalue,
 		'id'       => 'mc-print-view',
-		'below'    => 'none',
+		'below'    => 'key',
 		'above'    => 'none',
 	);
 
