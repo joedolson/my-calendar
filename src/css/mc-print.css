@@ -31,6 +31,22 @@ h2 {
 	margin-bottom: .5rem;
 }
 
+.event-title button,
+button.mc-text-button {
+	all: unset;
+	border: 0;
+	color: inherit;
+	background-color: transparent;
+	text-decoration: none;
+	font-size: clamp( .875rem, 14px, 1.125rem );
+	font-weight: 700;
+	padding: 0 0 .5em
+}
+
+.event-title button {
+	padding: 2px;
+}
+
 .event-title .has-image {
 	display: grid;
 	grid-template-columns: 18px 1fr;
@@ -74,19 +90,9 @@ td {
 	display: none;
 }
 
-button.mc-text-button {
-	border: 0;
-	color: inherit;
-	background-color: transparent;
-	text-decoration: none;
-	font-size: 16px;
-	font-weight: 700;
-	padding: 0 0 .5em
-}
-
 .event-title {
 	font-size: 14px;
-	margin: 0 0 10px;
+	margin: 0 0 4px;
 }
 
 abbr {
@@ -104,7 +110,7 @@ a {
 	font-size: 16px;
 	width: 1em;
 	text-align: center;
-	padding: 2px 6px;
+	padding: 1px 6px;
 	background: #f7f7f7;
 	position: absolute;
 	top: 0;

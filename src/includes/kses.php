@@ -412,6 +412,14 @@ function mc_kses_elements() {
 			'allow'           => array(),
 			'allowfullscreen' => array(),
 		),
+		'article'          => array(
+			'id'    => array(),
+			'class' => array(),
+		),
+		'header'           => array(
+			'id'    => array(),
+			'class' => array(),			
+		),
 	);
 
 	return $elements;

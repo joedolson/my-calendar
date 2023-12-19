@@ -28,7 +28,8 @@ function my_calendar_print_view() {
  * Produce print view output.
  */
 function my_calendar_print() {
-	$mc_version = mc_get_version();
+	$mc_version  = mc_get_version();
+	$mc_version .= ( SCRIPT_DEBUG ) ? '-' . wp_rand( 10000, 99999 ) : '';
 	$url        = plugin_dir_url( __FILE__ );
 	// The time string can contain a plus literal, which needs to be re-encoded.
 	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( urlencode( $_GET['time'] ) ) : 'month';

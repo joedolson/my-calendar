@@ -430,6 +430,15 @@ function mc_enqueue_calendar_styles( $stylesheet ) {
 		wp_enqueue_style( 'my-calendar-reset' );
 		$inline = 'my-calendar-reset';
 	}
+	$css = mc_generate_css();
+
+	wp_add_inline_style( $inline, $css );
+}
+
+/**
+ * Generate calendar CSS.
+ */
+function mc_generate_css() {
 	$category_vars = '';
 	// generate category colors.
 	$category_css    = mc_generate_category_styles();
@@ -452,8 +461,20 @@ function mc_enqueue_calendar_styles( $stylesheet ) {
 /* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
 $category_styles
 $style_vars";
-	wp_add_inline_style( $inline, $css );
+
+	return $css;
 }
+
+/**
+ * Add styles to the print view.
+ */
+function mc_enqueue_calendar_print_styles() {
+	$css = mc_generate_css();
+	$css = wp_filter_nohtml_kses( $css );
+	echo '<style>' . $css . '</style>';
+}
+add_action( 'mc_print_view_head', 'mc_enqueue_calendar_print_styles' );
+
 /**
  * Publically written head styles & scripts
  */
