@@ -31,10 +31,10 @@ h2 {
 	margin-bottom: .5rem;
 }
 
-.event-title a.has-image {
+.event-title .has-image {
 	display: grid;
 	grid-template-columns: 18px 1fr;
-	align-items: top;
+	align-items: start;
 	column-gap: 4px;
 }
 
