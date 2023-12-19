@@ -423,7 +423,7 @@ function mc_kses_elements() {
 		'nav'              => array(
 			'id'    => array(),
 			'class' => array(),
-		)
+		),
 	);
 
 	return $elements;
