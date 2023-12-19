@@ -418,7 +418,7 @@ function mc_kses_elements() {
 		),
 		'header'           => array(
 			'id'    => array(),
-			'class' => array(),			
+			'class' => array(),
 		),
 	);
 
