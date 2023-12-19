@@ -54,8 +54,8 @@ function my_calendar_print_view() {
  * Produce print view output.
  */
 function my_calendar_print() {
-	global $mc_version;
-	$url = plugin_dir_url( __FILE__ );
+	$mc_version = mc_get_version();
+	$url        = plugin_dir_url( __FILE__ );
 	// The time string can contain a plus literal, which needs to be re-encoded.
 	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( urlencode( $_GET['time'] ) ) : 'month';
 	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( $_GET['mcat'] ) : '';
