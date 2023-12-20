@@ -125,7 +125,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		$events_html  = '';
 		if ( 'mini' === $type &amp;&amp; count( $events ) > 0 ) {
 			$minitype = mc_get_option( 'mini_javascript' );
-			if ( 'modal' === $minitype ) {
+			if ( 'modal' === $minitype &amp;&amp; 'false' === mc_get_option( 'open_day_uri' ) ) {
 				$begin .= "&lt;div id='date-$process_date' class='calendar-events uses-modal'>";
 			} else {
 				$begin .= "&lt;div id='date-$process_date' class='calendar-events'>";
@@ -516,7 +516,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	$img_class = ( $img ) ? ' has-image' : ' no-image';
 	$gridtype  = mc_get_option( 'calendar_javascript' );
 	$listtype  = mc_get_option( 'list_javascript' );
-	if ( ( 'modal' === $gridtype &amp;&amp; 'calendar' === $type ) || ( 'modal' === $listtype &amp;&amp; 'list' === $type ) ) {
+	if ( ( 'modal' === $gridtype &amp;&amp; 'calendar' === $type ) || ( 'modal' === $listtype &amp;&amp; 'list' === $type ) &amp;&amp; 'day' !== $time ) {
 		$img_class .= ' uses-modal';
 	}
 	if ( 'list' === $type || 'calendar' === $type ) {
@@ -1501,7 +1501,8 @@ function mc_calendar_params( $args ) {
 		$format = esc_attr( $format );
 	}
 
-	if ( isset( $_GET['time'] ) &amp;&amp; in_array( $_GET['time'], array( 'day', 'week', 'month', 'month+1' ), true ) &amp;&amp; 'mini' !== $format ) {
+	// Mini calendar prevents format switch to avoid having a widget calendar switch in addition to the main calendar.
+	if ( isset( $_GET['time'] ) &amp;&amp; in_array( $_GET['time'], array( 'day', 'week', 'month', 'month+1' ), true ) &amp;&amp; ! ( 'mini' === $format &amp;&amp; ! in_the_loop() ) ) {
 		$time = esc_attr( $_GET['time'] );
 	} else {
 		$time = esc_attr( $time );
@@ -2110,7 +2111,7 @@ function my_calendar( $args ) {
 							}
 							if ( 'mini' === $params['format'] &amp;&amp; '' !== $event_output ) {
 								$minitype = mc_get_option( 'mini_javascript' );
-								if ( 'modal' === $minitype ) {
+								if ( 'modal' === $minitype &amp;&amp; 'false' === mc_get_option( 'open_day_uri' ) ) {
 									$attrs   = str_replace( array( '{format}', '{target_id}' ), array( 'mini-', 'date-' . $date_is ), $modal_attrs );
 									$trigger = ' js-modal button button-link';
 								} else {
