@@ -99,7 +99,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		$events_html  = '';
 		if ( 'mini' === $type && count( $events ) > 0 ) {
 			$minitype = mc_get_option( 'mini_javascript' );
-			if ( 'modal' === $minitype ) {
+			if ( 'modal' === $minitype && 'false' === mc_get_option( 'open_day_uri' ) ) {
 				$begin .= "<div id='date-$process_date' class='calendar-events uses-modal'>";
 			} else {
 				$begin .= "<div id='date-$process_date' class='calendar-events'>";
@@ -490,7 +490,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	$img_class = ( $img ) ? ' has-image' : ' no-image';
 	$gridtype  = mc_get_option( 'calendar_javascript' );
 	$listtype  = mc_get_option( 'list_javascript' );
-	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
+	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) && 'day' !== $time ) {
 		$img_class .= ' uses-modal';
 	}
 	if ( 'list' === $type || 'calendar' === $type ) {
