@@ -2084,7 +2084,7 @@ function my_calendar( $args ) {
 							}
 							if ( 'mini' === $params['format'] && '' !== $event_output ) {
 								$minitype = mc_get_option( 'mini_javascript' );
-								if ( 'modal' === $minitype ) {
+								if ( 'modal' === $minitype && 'false' === mc_get_option( 'open_day_uri' ) ) {
 									$attrs   = str_replace( array( '{format}', '{target_id}' ), array( 'mini-', 'date-' . $date_is ), $modal_attrs );
 									$trigger = ' js-modal button button-link';
 								} else {
