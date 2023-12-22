@@ -2659,7 +2659,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			$output .= '<ul id="mc-locations-list">
 			<li class="mc-show-all"><a href="' . $url . '">' . __( 'Show all', 'my-calendar' ) . '</a></li>';
 		} else {
-			$ltype   = ( ! isset( $_GET['ltype'] ) ) ? $datatype : $_GET['ltype'];
+			$ltype   = ( ! isset( $_GET['ltype'] ) ) ? $datatype : sanitize_text_field( $_GET['ltype'] );
 			$output .= ( 'single' === $group ) ? '<div id="mc_locations">' : '';
 			$output .= ( 'single' === $group ) ? "<form action='" . esc_url( $current_url ) . "' method='get'><div>" : '';
 			$output .= "<input type='hidden' name='ltype' value='" . esc_attr( $ltype ) . "' />";
