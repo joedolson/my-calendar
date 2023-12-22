@@ -774,19 +774,19 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
 		switch ( $show ) {
 			case 'categories':
 				$cats   = my_calendar_categories_list( 'form', 'public', 'group' );
-				$form  .= $cats;
+				$form  .= '<div class="mc-category-filter">' . $cats . '</div>';
 				$return = ( $cats || $return ) ? true : false;
 				$key    = __( 'Categories', 'my-calendar' );
 				break;
 			case 'locations':
 				$locs   = my_calendar_locations_list( 'form', $ltype, 'group' );
-				$form  .= $locs;
+				$form  .= '<div class="mc-location-filter">' . $locs . '</div>';
 				$return = ( $locs || $return ) ? true : false;
 				$key    = __( 'Locations', 'my-calendar' );
 				break;
 			case 'access':
 				$access = mc_access_list( 'form', 'group' );
-				$form  .= $access;
+				$form  .= '<div class="mc-access-filter">' . $access . '</div>';
 				$return = ( $access || $return ) ? true : false;
 				$key    = __( 'Accessibility Services', 'my-calendar' );
 				break;
