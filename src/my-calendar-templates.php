@@ -1260,6 +1260,10 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			$locs    = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
 			$out     = '<div class="mc-maps">' . $map . $locs . '</div>';
 		}
+	} else {
+		if ( current_user_can( 'manage_options' ) ) {
+			$out = wpautop( __( 'You need a Google Maps API key to display the location map.', 'my-calendar' ) );
+		}
 	}
 
 	return $out;
