@@ -2685,7 +2685,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			$output .= '&lt;ul id="mc-locations-list">
 			&lt;li class="mc-show-all">&lt;a href="' . $url . '">' . __( 'Show all', 'my-calendar' ) . '&lt;/a>&lt;/li>';
 		} else {
-			$ltype   = ( ! isset( $_GET['ltype'] ) ) ? $datatype : $_GET['ltype'];
+			$ltype   = ( ! isset( $_GET['ltype'] ) ) ? $datatype : sanitize_text_field( $_GET['ltype'] );
 			$output .= ( 'single' === $group ) ? '&lt;div id="mc_locations">' : '';
 			$output .= ( 'single' === $group ) ? "&lt;form action='" . esc_url( $current_url ) . "' method='get'>&lt;div>" : '';
 			$output .= "&lt;input type='hidden' name='ltype' value='" . esc_attr( $ltype ) . "' />";

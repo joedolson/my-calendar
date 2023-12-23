@@ -800,19 +800,19 @@ function mc_filters( $args, $target_url, $ltype = 'name' ) {
 		switch ( $show ) {
 			case 'categories':
 				$cats   = my_calendar_categories_list( 'form', 'public', 'group' );
-				$form  .= $cats;
+				$form  .= '&lt;div class="mc-category-filter">' . $cats . '&lt;/div>';
 				$return = ( $cats || $return ) ? true : false;
 				$key    = __( 'Categories', 'my-calendar' );
 				break;
 			case 'locations':
 				$locs   = my_calendar_locations_list( 'form', $ltype, 'group' );
-				$form  .= $locs;
+				$form  .= '&lt;div class="mc-location-filter">' . $locs . '&lt;/div>';
 				$return = ( $locs || $return ) ? true : false;
 				$key    = __( 'Locations', 'my-calendar' );
 				break;
 			case 'access':
 				$access = mc_access_list( 'form', 'group' );
-				$form  .= $access;
+				$form  .= '&lt;div class="mc-access-filter">' . $access . '&lt;/div>';
 				$return = ( $access || $return ) ? true : false;
 				$key    = __( 'Accessibility Services', 'my-calendar' );
 				break;
