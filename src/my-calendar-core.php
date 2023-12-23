@@ -309,6 +309,11 @@ function mc_enqueue_calendar_js() {
 	if ( SCRIPT_DEBUG ) {
 		$version = $version . '-' . wp_rand( 10000, 100000 );
 	}
+	$grid    = '';
+	$mini    = '';
+	$list    = '';
+	$ajax    = '';
+	$enqueue = false;
 	if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== mc_get_option( 'open_uri' ) ) {
 		/**
 		 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
@@ -319,8 +324,8 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @return {string}
 		 */
-		$url          = apply_filters( 'mc_grid_js', '' );
-		$enqueue_mcjs = true;
+		$url     = apply_filters( 'mc_grid_js', '' );
+		$enqueue = true;
 		if ( $url ) {
 			wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
 		} else {
@@ -337,8 +342,8 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @return {string}
 		 */
-		$url          = apply_filters( 'mc_list_js', '' );
-		$enqueue_mcjs = true;
+		$url     = apply_filters( 'mc_list_js', '' );
+		$enqueue = true;
 		if ( $url ) {
 			wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
 		} else {
@@ -355,8 +360,8 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @return {string}
 		 */
-		$url          = apply_filters( 'mc_mini_js', '' );
-		$enqueue_mcjs = true;
+		$url     = apply_filters( 'mc_mini_js', '' );
+		$enqueue = true;
 
 		if ( $url ) {
 			wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
@@ -374,15 +379,15 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @return {string}
 		 */
-		$url          = apply_filters( 'mc_ajax_js', '' );
-		$enqueue_mcjs = true;
+		$url     = apply_filters( 'mc_ajax_js', '' );
+		$enqueue = true;
 		if ( $url ) {
 			wp_enqueue_script( 'mc.ajax', $url, array( 'jquery' ), $version );
 		} else {
 			$ajax = 'true';
 		}
 	}
-	if ( $enqueue_mcjs ) {
+	if ( $enqueue ) {
 		$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
 		wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version, true );
 		$args = array(
