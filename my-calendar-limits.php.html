@@ -297,12 +297,12 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 					$location_type = 'location_region';
 					break;
 				case 'id':
-					$location_type = 'location_location';
+					$location_type = 'location_id';
 					break;
 				default:
 					$location_type = str_replace( 'event_', 'location_', $location );
 			}
-			if ( in_array( $location_type, array( 'location_label', 'location_city', 'location_state', 'location_postcode', 'location_country', 'location_region', 'location_location', 'location_street', 'location_street2', 'location_url', 'location_longitude', 'location_latitude', 'location_zoom', 'location_phone', 'location_phone2' ), true ) ) {
+			if ( in_array( $location_type, array( 'location_label', 'location_city', 'location_state', 'location_postcode', 'location_country', 'location_region', 'location_id', 'location_street', 'location_street2', 'location_url', 'location_longitude', 'location_latitude', 'location_zoom', 'location_phone', 'location_phone2' ), true ) ) {
 				if ( 'all' !== $lval &amp;&amp; '' !== $lval ) {
 					$lval = trim( $lval );
 					if ( is_numeric( $lval ) ) {

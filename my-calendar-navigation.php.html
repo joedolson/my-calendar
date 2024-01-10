@@ -181,7 +181,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		'locations',
 		'id' => $main_class . '-locations',
 	);
-	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( $loc_args, mc_get_current_url(), 'name' ) : '';
+	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( $loc_args, mc_get_current_url(), 'id' ) : '';
 
 	// Set up access filter.
 	$acc_args = array(
@@ -753,11 +753,11 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
  *
  * @param array  $args can include 'categories', 'locations' and 'access' to define individual filters.
  * @param string $target_url Where to send queries.
- * @param string $ltype Which type of location data to show in form.
+ * @param string $ltype Which type of location data to show in form. Default ID.
  *
  * @return string HTML output of form
  */
-function mc_filters( $args, $target_url, $ltype = 'name' ) {
+function mc_filters( $args, $target_url, $ltype = 'id' ) {
 	$id = ( isset( $args['id'] ) ) ? esc_attr( $args['id'] ) : 'mc_filters';
 	if ( isset( $args['id'] ) ) {
 		unset( $args['id'] );
