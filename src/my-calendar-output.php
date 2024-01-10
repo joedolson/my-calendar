@@ -2533,6 +2533,9 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = 'OBJECT'
 		case 'region':
 			$data = 'location_region';
 			break;
+		case 'id':
+			$data = 'location_id';
+			break;
 		default:
 			$data = 'location_label';
 	}
@@ -2635,13 +2638,13 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
  * Output filters by location
  *
  * @param string $show either 'list' or 'form'.
- * @param string $datatype Type of data to sort by.
+ * @param string $datatype Type of data to sort by. Default ID.
  * @param string $group whether this is being output as a single filter or as part of the group filters.
  * @param string $target_url URL to send requests to.
  *
  * @return string HTML to trigger location filters.
  */
-function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group = 'single', $target_url = '' ) {
+function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 'single', $target_url = '' ) {
 	$output      = '';
 	$locations   = mc_get_list_locations( $datatype, $datatype, ARRAY_A );
 	$current_url = mc_get_uri();
@@ -2685,7 +2688,11 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 		foreach ( $locations as $location ) {
 			foreach ( $location as $value ) {
 				$vt    = urlencode( trim( $value ) );
-				$value = strip_tags( stripcslashes( $value ), mc_strip_tags() );
+				if ( is_numeric( $value ) && 'id' === $ltype ) {
+					$value = mc_location_data( 'location_label', $value );
+				} else {
+					$value = strip_tags( stripcslashes( $value ), mc_strip_tags() );
+				}
 				if ( '' === trim( $value ) ) {
 					continue;
 				}

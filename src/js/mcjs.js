@@ -185,7 +185,7 @@
 						if ( '' !== loc ) {
 							url.searchParams.delete( 'loc' );
 							url.searchParams.delete( 'ltype' );
-							url.searchParams.append( 'ltype', 'name' );
+							url.searchParams.append( 'ltype', 'id' );
 							url.searchParams.append( 'loc', loc );
 						}
 						if ( '' !== access ) {
