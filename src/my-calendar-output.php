@@ -2687,7 +2687,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 		}
 		foreach ( $locations as $location ) {
 			foreach ( $location as $value ) {
-				$vt    = urlencode( trim( $value ) );
+				$vt = urlencode( trim( $value ) );
 				if ( is_numeric( $value ) && 'id' === $ltype ) {
 					$value = mc_location_data( 'location_label', $value );
 				} else {
