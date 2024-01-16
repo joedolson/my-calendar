@@ -26,7 +26,7 @@ function mc_time_html( $e, $type ) {
 	$time_format = mc_time_format();
 	$start       = mc_date( 'Y-m-d', strtotime( $e->occur_begin ), false );
 	$end         = mc_date( 'Y-m-d', strtotime( $e->occur_end ), false );
-	$has_time    = ( '00:00:00' !== $e->event_time && '' !== $e->event_time ) ? true : false;
+	$all_day     = mc_is_all_day( $e );
 
 	$offset  = get_option( 'gmt_offset' );
 	$hours   = (int) $offset;
@@ -35,7 +35,7 @@ function mc_time_html( $e, $type ) {
 	$dtstart = $start . 'T' . $e->event_time . $offset;
 	$dtend   = $end . 'T' . $e->event_endtime . $offset;
 	$notime  = '';
-	if ( ! $has_time ) {
+	if ( $all_day ) {
 		$label = mc_notime_label( $e );
 		if ( $label ) {
 			$notime .= " <span class='event-time'>";
@@ -44,9 +44,9 @@ function mc_time_html( $e, $type ) {
 		}
 	}
 	$date_start  = "<span class='mc-start-date dtstart' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $e->occur_begin ) ) . '</span>';
-	$time_start  = ( $has_time ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>' : $notime;
+	$time_start  = ( ! $all_day ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>' : $notime;
 	$date_end    = ( 0 === (int) $e->event_hide_end && ( $e->event_begin !== $e->event_end ) ) ? '<span class="event-time dtend">' . date_i18n( $date_format, strtotime( $e->occur_end ) ) . '</span>' : '';
-	$time_end    = ( $has_time && 0 === (int) $e->event_hide_end ) ? "<span class='end-time dtend'> <time class='value-title' datetime='" . esc_attr( $dtend ) . "' title='" . esc_attr( $dtend ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>' : '';
+	$time_end    = ( ! $all_day && 0 === (int) $e->event_hide_end ) ? "<span class='end-time dtend'> <time class='value-title' datetime='" . esc_attr( $dtend ) . "' title='" . esc_attr( $dtend ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>' : '';
 	$t_separator = ( $time_end ) ? "<span class='time-separator'> &ndash; </span>" : '';
 	$d_separator = ( $date_end ) ? "<span class='date-separator'> &ndash; </span>" : '';
 	$br          = ( $time_end || $time_start ) ? '<br />' : '';
