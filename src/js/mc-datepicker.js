@@ -5,108 +5,116 @@ window.customElements.whenDefined( 'duet-date-picker' ).then(() => {
 	});
 });
 
-const pickers = Array.prototype.slice.apply( document.querySelectorAll( 'duet-date-picker' ) );
+function mcLoadPickers() {
+	const pickers = Array.prototype.slice.apply( document.querySelectorAll( 'duet-date-picker' ) );
 
-pickers.forEach((picker) => {
-	const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-	picker.dateAdapter = {
-		parse(value = "", createDate) {
-		const matches = value.match(DATE_FORMAT_US)
-			if (matches) {
-				return createDate(matches[3], matches[1], matches[2])
-			}
-		},
-		format(date) {
-			switch ( duetFormats.date ) {
-				case 'Y-m-d':
-					return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-				case 'm/d/Y':
-					return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-				case 'd-m-Y':
-					return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-				case 'j F Y':
-					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'long' } ).format( date );
-					return `${date.getDate()} ${fullMonth} ${date.getFullYear()}`
-				case 'M j, Y':
-					var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'short' } ).format( date );
-					return `${date.getDate()} ${fullMonth}, ${date.getFullYear()}`
-				default:
-					return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-			}
-		},
-	}
-	picker.localization = duetLocalization;
-});
+	pickers.forEach((picker) => {
+		const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+		picker.dateAdapter = {
+			parse(value = "", createDate) {
+			const matches = value.match(DATE_FORMAT_US)
+				if (matches) {
+					return createDate(matches[3], matches[1], matches[2])
+				}
+			},
+			format(date) {
+				switch ( duetFormats.date ) {
+					case 'Y-m-d':
+						return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+					case 'm/d/Y':
+						return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+					case 'd-m-Y':
+						return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+					case 'j F Y':
+						var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'long' } ).format( date );
+						return `${date.getDate()} ${fullMonth} ${date.getFullYear()}`
+					case 'M j, Y':
+						var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'short' } ).format( date );
+						return `${date.getDate()} ${fullMonth}, ${date.getFullYear()}`
+					default:
+						return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+				}
+			},
+		}
+		picker.localization = duetLocalization;
+	});
 
-const eventBegin     = document.querySelector( 'duet-date-picker[identifier=mc_event_date]' );
-const eventRecur     = document.querySelector( 'duet-date-picker[identifier=r_begin]' );
-const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
-const eventDateError = document.querySelector( '#event_date_error' );
-const submitButton   = document.querySelector( '#my-calendar .button-primary' );
+	const eventBegin     = document.querySelector( 'duet-date-picker[identifier=mc_event_date]' );
+	const eventRecur     = document.querySelector( 'duet-date-picker[identifier=r_begin]' );
+	const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
+	const eventEndEl     = document.querySelector( 'input[name="event_end[]"]' );
+	const eventBeginEl   = document.querySelector( 'input[name="event_begin[]"]' );
+	var recurrences      = document.querySelector( '.disable-recurrences' );
 
-var startDate   = false;
-var endDate     = false;
-var recurrences = document.querySelector( '.disable-recurrences' );
+	if ( null !== eventBegin ) {
 
-if ( null !== eventRecur ) {
-	eventRecur.addEventListener( 'duetChange', function(e) {
-		startDate = e.detail.value;
-		recurValue = document.querySelector( 'input[name="recur_end[]"' ).value;
-		recurEnd   = document.querySelector( '[identifier="r_end"]' );
-		/* Handle adding occurrences */
-		if ( ( '' !== recurValue ) && startDate > recurValue ) {
-			recurEnd.value = e.detail.value;
+		var startDate   = false;
+		var endDate     = false;
+
+		if ( null !== eventRecur ) {
+			eventRecur.addEventListener( 'duetChange', function(e) {
+				startDate = e.detail.value;
+				recurValue = document.querySelector( 'input[name="recur_end[]"' ).value;
+				recurEnd   = document.querySelector( '[identifier="r_end"]' );
+				/* Handle adding occurrences */
+				if ( ( '' !== recurValue ) && startDate > recurValue ) {
+					recurEnd.value = e.detail.value;
+				}
+
+				myCalendarTestDates( endDate, startDate );
+			});
 		}
 
-		myCalendarTestDates( endDate, startDate );
-	});
+		eventBegin.addEventListener( 'duetChange', function(e) {
+			startDate = e.detail.value;
+			endValue  = eventEndEl.value;
+
+			/* Handle main date picker. */
+			if ( '' == endValue || startDate > endValue ) {
+				eventEnd.value = e.detail.value;
+			}
+
+			if ( null !== recurrences ) {
+				var fieldset = recurrences.querySelector( 'fieldset' );
+				fieldset.setAttribute( 'style', '' );
+				recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
+				var icon = recurrences.querySelector( '.dashicons' );
+				icon.classList.add( 'dashicons-arrow-down' );
+				icon.classList.remove( 'dashicons-arrow-right' );
+				var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+				inputs.forEach((input) => {
+					input.disabled = false;
+				});
+			}
+
+			myCalendarTestDates( endDate, startDate );
+		});
+
+		eventEnd.addEventListener( 'duetChange', function(e) {
+			endDate   = e.detail.value;
+			startDate = eventBeginEl.value;
+
+			if ( null !== recurrences ) {
+				var fieldset = recurrences.querySelector( 'fieldset' );
+				fieldset.setAttribute( 'style', '' );
+				recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
+				var icon = recurrences.querySelector( '.dashicons' );
+				icon.classList.add( 'dashicons-arrow-down' );
+				icon.classList.remove( 'dashicons-arrow-right' );
+				var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+				inputs.forEach((input) => {
+					input.disabled = false;
+				});
+			}
+
+			myCalendarTestDates( endDate, startDate );
+		});
+	}
 }
+mcLoadPickers();
 
-eventBegin.addEventListener( 'duetChange', function(e) {
-	startDate = e.detail.value;
-	endValue  = document.querySelector( 'input[name="event_end[]"]' ).value;
-	endDate   = document.querySelector( '[identifier="mc_event_enddate"]' );
-
-	/* Handle main date picker. */
-	if ( '' == endValue || startDate > endValue ) {
-		endDate.value = e.detail.value;
-	}
-
-	if ( null !== recurrences ) {
-		var fieldset = recurrences.querySelector( 'fieldset' );
-		fieldset.setAttribute( 'style', '' );
-		recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
-		var icon = recurrences.querySelector( '.dashicons' );
-		icon.classList.add( 'dashicons-arrow-down' );
-		icon.classList.remove( 'dashicons-arrow-right' );
-		var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
-		inputs.forEach((input) => {
-			input.disabled = false;
-		});
-	}
-
-	myCalendarTestDates( endDate, startDate );
-});
-
-eventEnd.addEventListener( 'duetChange', function(e) {
-	endDate   = e.detail.value;
-	startDate = document.querySelector( 'input[name="event_begin[]"]' ).value;
-
-	if ( null !== recurrences ) {
-		var fieldset = recurrences.querySelector( 'fieldset' );
-		fieldset.setAttribute( 'style', '' );
-		recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
-		var icon = recurrences.querySelector( '.dashicons' );
-		icon.classList.add( 'dashicons-arrow-down' );
-		icon.classList.remove( 'dashicons-arrow-right' );
-		var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
-		inputs.forEach((input) => {
-			input.disabled = false;
-		});
-	}
-
-	myCalendarTestDates( endDate, startDate );
-});
+const eventDateError = document.querySelector( '#event_date_error' );
+const submitButton   = document.querySelector( '#my-calendar .button-primary' );
 
 /**
  * Disable the submit button if the end date is before the start date. Disable recurring options if length of event is greater than the recur period.
