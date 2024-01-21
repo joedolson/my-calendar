@@ -221,6 +221,7 @@
         var wrapper = doc.createElement('DIV');
         wrapper.setAttribute('id', WRAPPER_PAGE_JS);
         wrapInner(body, wrapper);
+		wrapperBody = wrapper;
       }
     });
 
