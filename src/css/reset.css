@@ -907,7 +907,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 }
 
 .mc-main .mc-date-switcher div,
-.mc-main .mc-search-form,
+.mc-main .mc-search-form .mc-search,
 .mc-main .mc_filters form {
 	display: flex;
 	align-items: center;
