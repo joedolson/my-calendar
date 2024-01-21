@@ -156,8 +156,8 @@
 					if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
 						var access = inputForm.find( 'select[name=access]' ).val();
 					}
-					var mcs   = calendar.find( 'input[name=mcs]' ).val();
-					var link  = $( this ).attr( 'data-href' );
+					var mcs  = inputForm.find( 'input[name=mcs]' ).val();
+					var link = $( this ).attr( 'data-href' );
 				} else {
 					var link = $(this).attr('href');
 				}
