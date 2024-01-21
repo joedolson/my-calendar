@@ -37,7 +37,6 @@
 			$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
 			$(document).on( 'click', '.event-date button', function (e) {
 				e.preventDefault();
-				console.log($( this ).closest( '.mc-events' ).find( '.mc-event' ) );
 				$( this ).closest( '.mc-events' ).find( '.mc-event' ).toggle();
 				var visible = $(this).closest( '.mc-events' ).find( '.mc-event' ).is(':visible');
 				if ( visible ) {
