@@ -437,9 +437,9 @@ function mc_enqueue_calendar_js() {
 		} else {
 			$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
 		}
-		wp_enqueue_script( 'mc.modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
+		wp_enqueue_script( 'van11y-modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
 		wp_localize_script(
-			'mc.modal',
+			'van11y-modal',
 			'mcm',
 			array(
 				'context' => (string) is_user_logged_in(),
@@ -694,7 +694,7 @@ function mc_register_scripts() {
 	} else {
 		$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
 	}
-	wp_register_script( 'mc.modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
+	wp_register_script( 'van11y-modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
@@ -784,9 +784,9 @@ function mc_admin_styles() {
 			}
 			$gridtype = mc_get_option( 'calendar_javascript' );
 			if ( 'modal' === $gridtype ) {
-				wp_enqueue_script( 'mc.modal' );
+				wp_enqueue_script( 'van11y-modal' );
 				wp_localize_script(
-					'mc.modal',
+					'van11y-modal',
 					'mcm',
 					array(
 						'context' => (string) is_user_logged_in(),
