@@ -403,7 +403,7 @@ function mc_hex2rgb( $color ) {
  */
 function mc_contrast( $color1, $color2 ) {
 	$fore_color = $color1;
-	if ( '#' === $fore_color[0] ) {
+	if ( '#' === substr( $fore_color, 0, 1 ) ) {
 		$fore_color = str_replace( '#', '', $fore_color );
 	}
 	if ( 3 === strlen( $fore_color ) ) {
@@ -418,7 +418,7 @@ function mc_contrast( $color1, $color2 ) {
 		$echo_hex_fore = 'FFFFFF';
 	}
 	$back_color = $color2;
-	if ( '#' === $back_color[0] ) {
+	if ( '#' === substr( $back_color, 0, 1 ) ) {
 		$back_color = str_replace( '#', '', $back_color );
 	}
 	if ( 3 === strlen( $back_color ) ) {
