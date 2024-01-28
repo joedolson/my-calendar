@@ -769,6 +769,16 @@ function mc_admin_styles() {
 			}
 		}
 		if ( 'my-calendar_page_my-calendar-design' === $id ) {
+			/**
+			 * Filter url to get My Calendar stylesheet.
+			 *
+			 * @hook mc_registered_stylesheet
+			 *
+			 * @param {string} $stylesheet URL to locate My Calendar's stylesheet.
+			 *
+			 * @return {string}
+			 */
+			$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 			mc_enqueue_calendar_styles( $stylesheet );
 			mc_enqueue_calendar_js();
 		}
