@@ -609,10 +609,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 			<div class="inside location_form">
 				<fieldset>
 					<legend class="screen-reader-text"><?php esc_html_e( 'Event Location', 'my-calendar' ); ?></legend>
-		<?php
-		echo mc_event_location_dropdown_block( $data );
-		mc_show_block( 'event_location', $has_data, $data, true, '', $group_id );
-		?>
+		<?php echo mc_event_location_dropdown_block( $data ); ?>
 				</fieldset>
 			</div>
 		</div>
@@ -646,10 +643,8 @@ function mc_check_group_data( $action, $post ) {
 	 * @return {array}
 	 */
 	$post = apply_filters( 'mc_groups_pre_checkdata', $post, $action );
-	global $wpdb, $current_user, $submission;
+	global $current_user;
 
-	$url_ok   = 0;
-	$title_ok = 0;
 	$submit   = array();
 	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) { //phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
 		$post = array_map( 'stripslashes_deep', $post );

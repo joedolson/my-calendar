@@ -1909,7 +1909,7 @@ function mc_event_location_dropdown_block( $data ) {
 		$current_location .= '</ul>';
 	}
 	$output  = $current_location . '<div class="mc-event-location-dropdown">' . '<div class="location-input">' . $fields . '</div>';
-	$output .= ( current_user_can( 'mc_edit_locations' ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
+	$output .= ( current_user_can( 'mc_edit_locations' ) && ! isset( $_GET['group_id'] ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
 	$output .= '</div>';
 
 	return $output;
