@@ -142,6 +142,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
  */
 function mc_setup_template( $template, $default ) {
 	// allow reference by file to external template.
+	$template = ( 'default' === $template ) ? '' : $template;
 	if ( '' !== $template && mc_file_exists( $template ) ) {
 		$template = file_get_contents( mc_get_file( $template ) );
 	}
