@@ -803,7 +803,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$return   .= '
 	<p>
 	<label for="e_label">' . __( 'Name of Location (required)', 'my-calendar' ) . $compare . '</label>';
-	$cur_label = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_label'} ) ) : '';
+	$cur_label = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_label'} ) ) : '';
 	if ( mc_controlled_field( 'label' ) ) {
 		$return .= mc_location_controller( 'label', $cur_label, $context );
 	} else {
@@ -812,8 +812,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare1        = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_street', false ) : '';
 	$compare2        = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_street2', false ) : '';
 	$compare         = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_city', false ) : '';
-	$street_address  = ( $has_data ) ? stripslashes( $data->{$context . '_street'} ) : '';
-	$street_address2 = ( $has_data ) ? stripslashes( $data->{$context . '_street2'} ) : '';
+	$street_address  = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street'} ) : '';
+	$street_address2 = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street2'} ) : '';
 	$return         .= '
 	</p>
 	<div class="locations-container columns">
@@ -828,7 +828,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</p>
 	<p>
 		<label for="e_city">' . __( 'City', 'my-calendar' ) . $compare . '</label> ';
-	$cur_city        = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_city'} ) ) : '';
+	$cur_city        = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_city'} ) ) : '';
 	if ( mc_controlled_field( 'city' ) ) {
 		$return .= mc_location_controller( 'city', $cur_city, $context );
 	} else {
@@ -838,7 +838,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 
 	$compare   = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_state', false ) : '';
 	$return   .= '<label for="e_state">' . __( 'State/Province', 'my-calendar' ) . $compare . '</label> ';
-	$cur_state = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_state'} ) ) : '';
+	$cur_state = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_state'} ) ) : '';
 	if ( mc_controlled_field( 'state' ) ) {
 		$return .= mc_location_controller( 'state', $cur_state, $context );
 	} else {
@@ -846,7 +846,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	}
 	$compare      = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_postcode', false ) : '';
 	$return      .= '</p><p><label for="e_postcode">' . __( 'Postal Code', 'my-calendar' ) . $compare . '</label> ';
-	$cur_postcode = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_postcode'} ) ) : '';
+	$cur_postcode = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_postcode'} ) ) : '';
 	if ( mc_controlled_field( 'postcode' ) ) {
 		$return .= mc_location_controller( 'postcode', $cur_postcode, $context );
 	} else {
@@ -855,7 +855,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare    = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_region', false ) : '';
 	$return    .= '</p><p>';
 	$return    .= '<label for="e_region">' . __( 'Region', 'my-calendar' ) . $compare . '</label> ';
-	$cur_region = ( is_object( $data ) ) ? ( stripslashes( $data->{$context . '_region'} ) ) : '';
+	$cur_region = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_region'} ) ) : '';
 	if ( mc_controlled_field( 'region' ) ) {
 		$return .= mc_location_controller( 'region', $cur_region, $context );
 	} else {
@@ -863,7 +863,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	}
 	$compare     = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_country', false ) : '';
 	$return     .= '</p><p><label for="e_country">' . __( 'Country', 'my-calendar' ) . $compare . '</label><div class="mc-autocomplete autocomplete" id="mc-countries-autocomplete"> ';
-	$cur_country = ( $has_data ) ? ( stripslashes( $data->{$context . '_country'} ) ) : '';
+	$cur_country = ( $has_data ) ? ( stripslashes( (string) $data->{$context . '_country'} ) ) : '';
 	if ( mc_controlled_field( 'country' ) ) {
 		$return .= mc_location_controller( 'country', $cur_country, $context );
 	} else {
@@ -880,11 +880,11 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare_lat  = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_latitude', false ) : '';
 	$compare_lon  = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_longitude', false ) : '';
 	$zoom         = ( $has_data ) ? $data->{$context . '_zoom'} : '16';
-	$event_phone  = ( $has_data ) ? stripslashes( $data->{$context . '_phone'} ) : '';
-	$event_phone2 = ( $has_data ) ? stripslashes( $data->{$context . '_phone2'} ) : '';
-	$event_url    = ( $has_data ) ? stripslashes( $data->{$context . '_url'} ) : '';
-	$event_lat    = ( $has_data ) ? stripslashes( $data->{$context . '_latitude'} ) : '';
-	$event_lon    = ( $has_data ) ? stripslashes( $data->{$context . '_longitude'} ) : '';
+	$event_phone  = ( $has_data ) ? stripslashes( (string) $data->{$context . '_phone'} ) : '';
+	$event_phone2 = ( $has_data ) ? stripslashes( (string) $data->{$context . '_phone2'} ) : '';
+	$event_url    = ( $has_data ) ? stripslashes( (string) $data->{$context . '_url'} ) : '';
+	$event_lat    = ( $has_data ) ? stripslashes( (string) $data->{$context . '_latitude'} ) : '';
+	$event_lon    = ( $has_data ) ? stripslashes( (string) $data->{$context . '_longitude'} ) : '';
 	$update_gps   = ( $has_data && mc_get_option( 'gmap_api_key', '' ) && 'location' === $context ) ? '<p class="checkboxes"><input type="checkbox" value="1" id="update_gps" name="update_gps" /> <label for="update_gps">' . __( 'Update GPS Coordinates', 'my-calendar' ) . '</label></p>' : '';
 	$return      .= '</p>
 	<p>
