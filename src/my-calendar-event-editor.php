@@ -201,6 +201,10 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		update_post_meta( $post_id, '_mc_event_location', $location_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
 	}
+	$previous_data = get_post_meta( $post_id, '_mc_event_data', true );
+	if ( is_array( $previous_data ) ) {
+		$data = array_merge( $previous_data, $data );
+	}
 	update_post_meta( $post_id, '_mc_event_data', $data );
 }
 
