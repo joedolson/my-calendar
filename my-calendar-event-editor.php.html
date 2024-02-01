@@ -227,6 +227,10 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		update_post_meta( $post_id, '_mc_event_location', $location_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
 	}
+	$previous_data = get_post_meta( $post_id, '_mc_event_data', true );
+	if ( is_array( $previous_data ) ) {
+		$data = array_merge( $previous_data, $data );
+	}
 	update_post_meta( $post_id, '_mc_event_data', $data );
 }
 
@@ -1935,7 +1939,7 @@ function mc_event_location_dropdown_block( $data ) {
 		$current_location .= '&lt;/ul>';
 	}
 	$output  = $current_location . '&lt;div class="mc-event-location-dropdown">' . '&lt;div class="location-input">' . $fields . '&lt;/div>';
-	$output .= ( current_user_can( 'mc_edit_locations' ) ) ? '&lt;div class="location-toggle">&lt;button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>&lt;span>' . __( 'Add a new location', 'my-calendar' ) . '&lt;/span>&lt;/button>&lt;/div>' : '';
+	$output .= ( current_user_can( 'mc_edit_locations' ) &amp;&amp; ! isset( $_GET['group_id'] ) ) ? '&lt;div class="location-toggle">&lt;button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>&lt;span>' . __( 'Add a new location', 'my-calendar' ) . '&lt;/span>&lt;/button>&lt;/div>' : '';
 	$output .= '&lt;/div>';
 
 	return $output;

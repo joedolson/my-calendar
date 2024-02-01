@@ -62,9 +62,9 @@ function mc_prepare_search_query( $query ) {
 			 *
 			 * @return {string}
 			 */
-			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_label,event_city,event_postcode,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
+			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
-			$search = " AND ( event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_label LIKE '%$query%' OR event_city LIKE '%$query%' OR event_postcode LIKE '%$query%' OR event_registration LIKE '%$query%' ) ";
+			$search = " AND ( event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_registration LIKE '%$query%' ) ";
 		}
 	}
 
