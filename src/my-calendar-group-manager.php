@@ -477,7 +477,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 								$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 								$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 								$button_text = __( 'Change Featured Image', 'my-calendar' );
-								$image_desc  = ( '' === $alt ) ? $data->event_image : $alt;
+								$alt         = ( '' === $alt ) ? $data->event_image : $alt;
 							}
 							?>
 							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button select-image"><?php echo $button_text; ?></button> <?php echo $remove; ?>
@@ -645,7 +645,7 @@ function mc_check_group_data( $action, $post ) {
 	$post = apply_filters( 'mc_groups_pre_checkdata', $post, $action );
 	global $current_user;
 
-	$submit   = array();
+	$submit = array();
 	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) { //phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
 		$post = array_map( 'stripslashes_deep', $post );
 	}
