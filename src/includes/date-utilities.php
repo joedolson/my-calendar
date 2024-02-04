@@ -665,8 +665,8 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	$time   = $params['time'];
 	// The value is total months to show; need additional months to show.
 	$num     = $show_months - 1;
-	$c_month = $date['month'];
-	$c_year  = $date['year'];
+	$c_month = (int) $date['month'];
+	$c_year  = (int) $date['year'];
 	// The first day of the current month.
 	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
 	// Grid calendar can't show multiple months.
