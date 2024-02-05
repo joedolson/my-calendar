@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_get_uri - My Calendar Hook Doumentation</title>
+    <title>Action: my_calendar_imported_from_tribe - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_get_uri</h1></header>
+    <header><h1 class="page-title">Action: my_calendar_imported_from_tribe</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_get_uri">apply_filters( 'mc_get_uri', <span class="signature">$link, $event, $args )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="my_calendar_imported_from_tribe">do_action( 'my_calendar_imported_from_tribe', <span class="signature">$post_id, $event_id )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Link to the My Calendar main calendar view.</p>
+    <p>Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$link</code></td>
+                <td class="name"><code>$post_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
             
@@ -93,26 +93,20 @@
 
             
 
-            <td class="description last"><p>String to return if event link is expired.</p></td>
+            <td class="description last"><p>Post ID from Tribe Events.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$event</code></td>
+                <td class="name"><code>$event_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
-|
-
-<span class="param-type">string</span>
-|
-
-<span class="param-type">bool</span>
+<span class="param-type">int</span>
 
 
             
@@ -122,30 +116,7 @@
 
             
 
-            <td class="description last"><p>Event object, string requesting boolean result, or boolean false.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Current view arguments. (Optional).</p></td>
+            <td class="description last"><p>Event ID from My Calendar.</p></td>
         </tr>
 
     
@@ -186,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line922">line 922</a>
+        <a href="includes_tribe.php.html">includes/tribe.php</a>, <a href="includes_tribe.php.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -209,28 +180,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>URL.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
