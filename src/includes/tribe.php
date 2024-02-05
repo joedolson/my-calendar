@@ -1,6 +1,6 @@
 <?php
 /**
- * Migration tool: Tribe Events.
+ * Migration tool: The Events Calendar.
  *
  * @category Import
  * @package  My Calendar
@@ -117,22 +117,24 @@ function mc_import_source_tribe_event( $post_id ) {
 	if ( false === $event ) {
 		return;
 	}
-
-	$check    = mc_check_data( 'add', $event, 0, true );
-	$event_id = false;
-	if ( $check[0] ) {
-		$response = my_calendar_save( 'add', $check );
-		$event_id = $response['event_id'];
-		/**
-		 * Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.
-		 *
-		 * @hook my_calendar_imported_to_tribe
-		 *
-		 * @param {int} $post_id Post ID from Tribe Events.
-		 * @param {int} $event_id Event ID from My Calendar.
-		 */
-		do_action( 'my_calendar_imported_to_tribe', $post_id, $event_id );
-		update_post_meta( $post_id, '_mc_imported', $event_id );
+	$count = count( $event['event_begin'] );
+	for ( $i = 0; $i < $count; $i ++ ) {
+		$check    = mc_check_data( 'add', $event, 0, true );
+		$event_id = false;
+		if ( $check[0] ) {
+			$response = my_calendar_save( 'add', $check );
+			$event_id = $response['event_id'];
+			/**
+			 * Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.
+			 *
+			 * @hook my_calendar_imported_from_tribe
+			 *
+			 * @param {int} $post_id Post ID from Tribe Events.
+			 * @param {int} $event_id Event ID from My Calendar.
+			 */
+			do_action( 'my_calendar_imported_from_tribe', $post_id, $event_id );
+			update_post_meta( $post_id, '_mc_imported', $event_id );
+		}
 	}
 
 	return $event_id;
@@ -162,6 +164,10 @@ function mc_format_tribe_event_for_import( $event ) {
 	} else {
 		$category_ids[] = 1;
 	}
+
+	// If _EventRecurrence, create instance for each event. TODO
+	// Spawn collection of dates in array to be used in event_begin and event_end.
+
 	$my_calendar_event = array(
 		// Event data.
 		'event_title'      => $event->post_title,
@@ -250,3 +256,26 @@ function mc_import_tribe_location( $venue_id ) {
 
 	return $location_id;
 }
+
+
+/**
+ * Import tickets from Tribe to My Calendar/My Tickets.
+ *
+ * @param int $tribe_id    Post ID for a Tribe event.
+ * @param int $calendar_id Calendar ID for a My Calendar event.
+ *
+ * @return int Post ID for a My Calendar event.
+ */
+function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
+	// If Event Tickets installed, migrate tickets data.
+	if ( function_exists( 'tribe_events_has_tickets' ) ) {
+		$post_id     = mc_get_event_post( $calendar_id );
+		$has_tickets = tribe_events_has_tickets( $tribe_id );
+		if ( $has_tickets ) {
+			$ticket_capacity = get_post_meta( $tribe_id, '_tribe_ticket_capacity', true );
+		}
+
+		return $post_id;
+	}
+}
+add_filter( 'my_calendar_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
