@@ -427,7 +427,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
 	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 	if ( 'single' === $type ) {
-		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image$event_title</h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
+		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image<div>$event_title</div></h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
 	} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 		/**
 		 * Filter event title inside event heading.
@@ -440,7 +440,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 		 *
 		 * @return {string}
 		 */
-		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . trim( $event_title ) . $balance, $event_title, $event );
+		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . '<div>' . trim( $event_title ) . '</div>' . $balance, $event_title, $event );
 		$title         = "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n";
 	} else {
 		$title = '';
@@ -1443,7 +1443,7 @@ function mc_calendar_params( $args ) {
 	$time     = isset( $args['time'] ) ? $args['time'] : 'month';
 	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : '';
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
-	$id       = isset( $args['id'] ) ? $args['id'] : '';
+	$id       = isset( $args['id'] ) ? sanitize_title( $args['id'] ) : '';
 	$author   = isset( $args['author'] ) ? $args['author'] : null;
 	$host     = isset( $args['host'] ) ? $args['host'] : null;
 	$above    = isset( $args['above'] ) ? $args['above'] : '';
@@ -1709,7 +1709,7 @@ function my_calendar( $args ) {
 
 	$show_weekends = ( 'true' === $params['weekends'] ) ? true : false;
 	$id            = $params['id'];
-	$main_class    = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
+	$main_class    = ( '' !== $id ) ? $id : 'all';
 	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$body_classes  = array(
@@ -1737,7 +1737,7 @@ function my_calendar( $args ) {
 	$body_classes = apply_filters( 'mc_body_classes', $body_classes, $params );
 	$classes      = implode( ' ', map_deep( $body_classes, 'sanitize_html_class' ) );
 	$mc_wrapper   = "
-<div id='$id' class='$classes' $lang>";
+<div id='" . esc_attr( $id ) . "' class='$classes' $lang>";
 	$mc_closer    = '
 </div>';
 
@@ -1779,7 +1779,7 @@ function my_calendar( $args ) {
 		$date          = mc_get_current_date( $main_class, $cid, $params );
 		$current       = $date['current_date'];
 
-		if ( is_numeric( $months ) && $months < 12 && $months > 0 ) {
+		if ( is_numeric( $months ) && $months <= 12 && $months > 0 ) {
 			$show_months = absint( $months );
 		}
 
@@ -2229,6 +2229,7 @@ function my_calendar( $args ) {
 	if ( $language ) {
 		mc_switch_language( $language, $locale );
 	}
+
 	return $output;
 }
 
@@ -2362,9 +2363,9 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	}
 	if ( ! ( isset( $_GET['yr'] ) || isset( $_GET['month'] ) || isset( $_GET['dy'] ) ) ) {
 		// Month/year based on shortcode.
-		$shortcode_month = ( false !== $smonth ) ? $smonth : $c_month;
-		$shortcode_year  = ( false !== $syear ) ? $syear : $c_year;
-		$shortcode_day   = ( false !== $sday ) ? $sday : $c_day;
+		$shortcode_month = ( $smonth ) ? $smonth : $c_month;
+		$shortcode_year  = ( $syear ) ? $syear : $c_year;
+		$shortcode_day   = ( $sday ) ? $sday : $c_day;
 		/**
 		 * Filter the starting year for the [my_calendar] shortcode.
 		 *
@@ -2404,9 +2405,9 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	$c_month = str_pad( $c_month, 2, '0', STR_PAD_LEFT );
 
 	return array(
-		'day'          => $c_day,
-		'month'        => $c_month,
-		'year'         => $c_year,
+		'day'          => (int) $c_day,
+		'month'        => (int) $c_month,
+		'year'         => (int) $c_year,
 		'current_date' => $current,
 	);
 }
