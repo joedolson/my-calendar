@@ -2070,7 +2070,7 @@ function mc_template_description( $data, $type = 'calendar' ) {
 	$description = '';
 	if ( mc_output_is_visible( 'description', $type, $event ) ) {
 		if ( '' !== trim( $event->event_desc ) ) {
-			$description = wpautop( stripcslashes( mc_kses_post( $event->event_desc ) ), 1 );
+			$description = wpautop( stripcslashes( mc_kses_post_input( $event->event_desc ) ), 1 );
 			$description = "	<div class='longdesc description'>$description</div>";
 		}
 	}
@@ -2088,7 +2088,7 @@ function mc_template_registration( $data, $type = 'calendar' ) {
 	$event   = $data->event;
 	$tickets = '';
 	if ( mc_output_is_visible( 'tickets', $type, $event ) ) {
-		$info     = wpautop( stripcslashes( mc_kses_post( $event->event_registration ) ) );
+		$info     = wpautop( stripcslashes( mc_kses_post_input( $event->event_registration ) ) );
 		$url      = esc_url( $event->event_tickets );
 		$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
 		$text     = ( '' !== mc_get_option( 'buy_tickets', '' ) ) ? mc_get_option( 'buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
@@ -2112,7 +2112,7 @@ function mc_template_excerpt( $data, $type = 'calendar' ) {
 	$short = '';
 	if ( mc_output_is_visible( 'excerpt', $type, $event ) ) {
 		if ( '' !== trim( $event->event_short ) ) {
-			$short = wpautop( stripcslashes( mc_kses_post( $event->event_short ) ), 1 );
+			$short = wpautop( stripcslashes( mc_kses_post_input( $event->event_short ) ), 1 );
 			$short = "<div class='shortdesc description'>$short</div>";
 		}
 	}

@@ -88,7 +88,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	 * @return array $instance Updated instance.
 	 */
 	function update( $new, $instance ) {
-		$instance['title'] = mc_kses_post( $new['title'] );
+		$instance['title'] = wp_kses_post( $new['title'] );
 		$instance['url']   = esc_url_raw( $new['url'] );
 
 		return $instance;

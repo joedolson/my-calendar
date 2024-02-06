@@ -369,7 +369,7 @@ function mc_create_category( $category ) {
 		'category_term'    => $term,
 	);
 
-	$add = array_map( 'mc_kses_post', $add );
+	$add = array_map( 'mc_kses_post_input', $add );
 	/**
 	 * Filter data before inserting a new category.
 	 *
