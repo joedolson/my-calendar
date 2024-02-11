@@ -1917,7 +1917,7 @@ function mc_get_template_tag( $event, $key ) {
  * @param string $key Array key in the tags array for data to fetch.
  */
 function mc_template_tag( $data, $key = 'calendar' ) {
-	echo mc_get_template_tag( $data, $key );
+	echo wp_kses_post( mc_get_template_tag( $data, $key ) );
 }
 
 /**
@@ -1928,7 +1928,7 @@ function mc_template_tag( $data, $key = 'calendar' ) {
  */
 function mc_template_time( $data, $type = 'calendar' ) {
 	$event = $data->event;
-	echo mc_time_html( $event, $type );
+	echo wp_kses_post( mc_time_html( $event, $type ) );
 }
 
 /**
@@ -1944,7 +1944,7 @@ function mc_template_author( $data, $type = 'calendar' ) {
 		$author = mc_template_user_card( $event, 'author' );
 	}
 
-	echo $author;
+	echo wp_kses_post( $author );
 }
 
 /**
@@ -1960,7 +1960,7 @@ function mc_template_host( $data, $type = 'calendar' ) {
 		$host = mc_template_user_card( $event, 'host' );
 	}
 
-	echo $host;
+	echo wp_kses_post( $host );
 }
 
 /**
@@ -2003,7 +2003,7 @@ function mc_template_access( $data, $type = 'calendar' ) {
 		$access = ( '' !== $access ) ? '<div class="mc-access-information">' . $access . '</div>' : '';
 	}
 
-	echo $access;
+	echo wp_kses_post( $access );
 }
 
 /**
@@ -2040,7 +2040,7 @@ function mc_template_share( $data, $type = 'calendar' ) {
 	}
 	$sharing = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
-	echo $sharing;
+	echo wp_kses_post( $sharing );
 }
 
 /**
@@ -2056,7 +2056,7 @@ function mc_template_image( $data, $type = 'calendar' ) {
 		$img = mc_get_event_image( $event, $data->tags );
 	}
 
-	echo $img;
+	echo wp_kses_post( $img );
 }
 
 /**
@@ -2075,7 +2075,7 @@ function mc_template_description( $data, $type = 'calendar' ) {
 		}
 	}
 
-	echo $description;
+	echo wp_kses_post( $description );
 }
 
 /**
@@ -2098,7 +2098,7 @@ function mc_template_registration( $data, $type = 'calendar' ) {
 		}
 	}
 
-	echo $tickets;
+	echo wp_kses_post( $tickets );
 }
 
 /**
@@ -2117,7 +2117,7 @@ function mc_template_excerpt( $data, $type = 'calendar' ) {
 		}
 	}
 
-	echo $short;
+	echo wp_kses_post( $short );
 }
 
 /**
@@ -2142,7 +2142,7 @@ function mc_template_return( $data, $type = 'calendar' ) {
 	$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : __( 'View full calendar', 'my-calendar' );
 	$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
 
-	echo $return;
+	echo wp_kses_post( $return );
 }
 
 /**
@@ -2167,7 +2167,7 @@ function mc_template_location( $data, $type = 'calendar' ) {
 	}
 	$location = ( '' === trim( $map . $address ) ) ? '' : '	<div class="mc-location">' . $map . $address . '</div>';
 
-	echo $location;
+	echo wp_kses_post( $location );
 }
 
 /**
@@ -2187,5 +2187,5 @@ function mc_template_link( $data, $type = 'calendar' ) {
 		$link           = "<p><a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$data->id'>" . $link_text . '</a></p>';
 	}
 
-	echo $link;
+	echo wp_kses_post( $link );
 }
