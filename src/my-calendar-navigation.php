@@ -519,9 +519,9 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
  * @return array of parameters for link
  */
 function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
-	$cur_year  = $date['year'];
-	$cur_month = $date['month'];
-	$cur_day   = $date['day'];
+	$cur_year  = (int) $date['year'];
+	$cur_month = (int) $date['month'];
+	$cur_day   = (int) $date['day'];
 
 	$next_year   = $cur_year + 1;
 	$mc_next     = mc_get_option( 'next_events' );
@@ -625,9 +625,9 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
  * @return array of parameters for link
  */
 function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
-	$cur_year  = $date['year'];
-	$cur_month = $date['month'];
-	$cur_day   = $date['day'];
+	$cur_year  = (int) $date['year'];
+	$cur_month = (int) $date['month'];
+	$cur_day   = (int) $date['day'];
 
 	$last_year       = $cur_year - 1;
 	$mc_previous     = mc_get_option( 'previous_events' );

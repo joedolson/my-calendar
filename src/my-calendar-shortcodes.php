@@ -36,11 +36,11 @@ function my_calendar_insert( $atts, $content = null ) {
 			'template' => '',
 			'above'    => '',
 			'below'    => '',
-			'year'     => false,
-			'month'    => false,
-			'day'      => false,
-			'site'     => false,
-			'months'   => false,
+			'year'     => '',
+			'month'    => '',
+			'day'      => '',
+			'site'     => '',
+			'months'   => 'false',
 			'search'   => '',
 			'self'     => '',
 			'language' => '',
@@ -49,6 +49,7 @@ function my_calendar_insert( $atts, $content = null ) {
 		$atts,
 		'my_calendar'
 	);
+	$args = map_deep( $args, 'sanitize_text_field' );
 
 	if ( (int) get_the_ID() === (int) mc_get_option( 'uri_id' ) ) {
 		$params = get_post_meta( get_the_ID(), '_mc_calendar', true );

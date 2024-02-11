@@ -1638,9 +1638,7 @@ function mc_calendar_params( $args ) {
 	$time     = isset( $args['time'] ) ? $args['time'] : 'month';
 	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : '';
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
-	$id       = isset( $args['id'] ) ? $args['id'] : '';
-	$template = isset( $args['template'] ) ? $args['template'] : '';
-	$content  = isset( $args['content'] ) ? $args['content'] : '';
+	$id       = isset( $args['id'] ) ? sanitize_title( $args['id'] ) : '';
 	$author   = isset( $args['author'] ) ? $args['author'] : null;
 	$host     = isset( $args['host'] ) ? $args['host'] : null;
 	$above    = isset( $args['above'] ) ? $args['above'] : '';
@@ -1648,10 +1646,7 @@ function mc_calendar_params( $args ) {
 	$syear    = isset( $args['year'] ) ? $args['year'] : false;
 	$smonth   = isset( $args['month'] ) ? $args['month'] : false;
 	$sday     = isset( $args['day'] ) ? $args['day'] : false;
-	$source   = isset( $args['source'] ) ? $args['source'] : 'shortcode';
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
-	$site     = ( isset( $args['site'] ) && '' !== trim( $args['site'] ) ) ? $args['site'] : false;
-	$months   = isset( $args['months'] ) ? $args['months'] : false;
 	$weekends = isset( $args['weekends'] ) ? $args['weekends'] : mc_get_option( 'show_weekends' );
 
 	if ( ! in_array( $format, array( 'list', 'calendar', 'mini' ), true ) ) {
@@ -1903,11 +1898,11 @@ function my_calendar( $args ) {
 
 	$show_weekends = ( 'true' === $params['weekends'] ) ? true : false;
 	$id            = $params['id'];
-	$main_class    = ( '' !== $id ) ? sanitize_title( $id ) : 'all';
+	$main_class    = ( '' !== $id ) ? $id : 'all';
 	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$mc_wrapper    = "
-<div id=\"$id\" class=\"mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class\" $lang>";
+<div id='" . esc_attr( $id ) . "' class='mc-main mcjs $list_js_class $grid_js_class $mini_js_class $ajax_js_class $style_class $params[format] $params[time] $main_class' $lang>";
 	$mc_closer     = '
 </div>';
 
@@ -2513,9 +2508,9 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	}
 	if ( ! ( isset( $_GET['yr'] ) || isset( $_GET['month'] ) || isset( $_GET['dy'] ) ) ) {
 		// Month/year based on shortcode.
-		$shortcode_month = ( false !== $smonth ) ? $smonth : $c_month;
-		$shortcode_year  = ( false !== $syear ) ? $syear : $c_year;
-		$shortcode_day   = ( false !== $sday ) ? $sday : $c_day;
+		$shortcode_month = ( $smonth ) ? $smonth : $c_month;
+		$shortcode_year  = ( $syear ) ? $syear : $c_year;
+		$shortcode_day   = ( $sday ) ? $sday : $c_day;
 		/**
 		 * Filter the starting year for the [my_calendar] shortcode.
 		 *
@@ -2555,9 +2550,9 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	$c_month = str_pad( $c_month, 2, '0', STR_PAD_LEFT );
 
 	return array(
-		'day'          => $c_day,
-		'month'        => $c_month,
-		'year'         => $c_year,
+		'day'          => (int) $c_day,
+		'month'        => (int) $c_month,
+		'year'         => (int) $c_year,
 		'current_date' => $current,
 	);
 }
