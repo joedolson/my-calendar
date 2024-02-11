@@ -715,7 +715,7 @@ function mc_check_group_data( $action, $post ) {
 			'event_categories'   => $cats,
 		);
 
-		$submit = array_map( 'mc_kses_post_input', $submit );
+		$submit = array_map( 'mc_kses_post', $submit );
 		$data   = array( $proceed, false, $submit, $errors );
 	} else {
 		$proceed = false;

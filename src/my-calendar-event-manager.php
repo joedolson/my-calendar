@@ -378,7 +378,7 @@ function my_calendar_manage() {
 								 * @return {array}
 								 */
 								apply_filters( 'mc_filter_admin_grid_args', $calendar );
-								echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
+								echo my_calendar( $calendar );
 							} else {
 								mc_list_events();
 							}

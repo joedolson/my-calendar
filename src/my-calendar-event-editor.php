@@ -399,7 +399,7 @@ function my_calendar_edit() {
 			$response = my_calendar_save( $action, $mc_output, (int) $_POST['event_id'] );
 			echo wp_kses_post( $response['message'] );
 		}
-		$post = map_deep( $_POST, 'mc_kses_post_input' );
+		$post = map_deep( $_POST, 'mc_kses_post' );
 		for ( $i = 0; $i < $count; $i ++ ) {
 			$mc_output = mc_check_data( $action, $post, $i );
 			if ( 'add' === $action || 'copy' === $action ) {
@@ -2548,7 +2548,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	if ( '' === $errors ) {
 		$ok = true;
 
-		$submit = array_map( 'mc_kses_post_input', $submit );
+		$submit = array_map( 'mc_kses_post', $submit );
 	} else {
 		$ok = false;
 	}

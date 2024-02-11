@@ -14,21 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Execute KSES post on string inputs from My Calendar fields.
- *
- * @param string $string Any string.
- *
- * @return string Value passed or cleaned string
- */
-function mc_kses_post_input( $string ) {
-	if ( ! is_string( $string ) ) {
-		return $string;
-	} else {
-		return wp_kses( $string, 'mycalendarpost' );
-	}
-}
-
-/**
  * Execute KSES post on strings, otherwise, return as is.
  *
  * @param string $string Any string.
@@ -54,7 +39,7 @@ add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
  * @return array tags
  */
 function mc_allowed_tags( $tags, $context ) {
-	if ( 'mycalendar' === $context || 'mycalendarpost' === $context ) {
+	if ( 'mycalendar' === $context ) {
 		global $allowedposttags;
 		$tags = $allowedposttags;
 
@@ -164,12 +149,10 @@ function mc_allowed_tags( $tags, $context ) {
 			'aria-pressed'     => true,
 			'aria-current'     => true,
 		);
-		// This is not permitted in user-input checking.
-		if ( 'mycalendar' === $context ) {
-			$tags['script'] = array(
-				'type' => 'application/ld+json',
-			);
-		}
+
+		$tags['script'] = array(
+			'type' => 'application/ld+json',
+		);
 	}
 
 	return apply_filters( 'mc_kses_post', $tags );

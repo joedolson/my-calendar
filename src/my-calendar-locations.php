@@ -299,7 +299,7 @@ function mc_update_location_post_relationship( $location_id, $location_post ) {
  */
 function mc_insert_location( $add ) {
 	global $wpdb;
-	$add     = array_map( 'mc_kses_post_input', $add );
+	$add     = array_map( 'mc_kses_post', $add );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->insert( my_calendar_locations_table(), $add, $formats );
 	if ( $results ) {
@@ -333,7 +333,7 @@ function mc_count_locations() {
  */
 function mc_modify_location( $update, $where ) {
 	global $wpdb;
-	$update  = array_map( 'mc_kses_post_input', $update );
+	$update  = array_map( 'mc_kses_post', $update );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->update( my_calendar_locations_table(), $update, $where, $formats, '%d' );
 
@@ -1292,7 +1292,7 @@ function mc_location_select( $location = false ) {
 				$l .= ' selected="selected"';
 			}
 		}
-		$l    .= '>' . wp_kses_post( stripslashes( $label ) ) . '</option>';
+		$l    .= '>' . mc_kses_post( stripslashes( $label ) ) . '</option>';
 		$list .= $l;
 	}
 
