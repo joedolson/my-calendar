@@ -147,10 +147,6 @@ function mc_allowed_tags( $tags, $context ) {
 			'class'            => true,
 			'target'           => true,
 		);
-
-		$tags['script'] = array(
-			'type' => 'application/ld+json',
-		);
 	}
 
 	return apply_filters( 'mc_kses_post', $tags );
