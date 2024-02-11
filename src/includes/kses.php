@@ -149,10 +149,6 @@ function mc_allowed_tags( $tags, $context ) {
 			'aria-pressed'     => true,
 			'aria-current'     => true,
 		);
-
-		$tags['script'] = array(
-			'type' => 'application/ld+json',
-		);
 	}
 
 	return apply_filters( 'mc_kses_post', $tags );
