@@ -107,6 +107,19 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Breaking change: `mc_event_classes()` now echos classes. Use `mc_get_event_classes()` to return.
 * Many, many minor visual changes to improve consistency.
 
+= 3.4.24 =
+
+* Security: Fix XSS scripting issue (shortcode parsing) reported by Patchstack.
+* Security: Fix XSS scripting issue (event creation and output) reported by WPScan.
+
+= 3.4.23 =
+
+* Bug fix: Date validation function applied a timezone offset by mistake, causing functions detecting the current day to sometimes return the wrong day.
+
+= 3.4.22 =
+
+* Security: Fix unauthorized SQL injection vulnerability. Update as soon as possible. Props Tenable. 
+
 = 3.4.21 =
 
 * Bug fix: Settings that allow HTML were aggressively sanitized, stripping HTML.
