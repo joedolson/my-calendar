@@ -1247,7 +1247,7 @@ function mc_get_categories( $event, $ids = true ) {
  *
  * @return String
  */
- function mc_categories_html( $results, $primary, $output = 'html' ) {
+function mc_categories_html( $results, $primary, $output = 'html' ) {
 	$primary_category = mc_get_category( (int) $primary );
 	$return[]         = ( 'html' === $output ) ? mc_category_icon( $primary ) . $primary_category->category_name : $primary_category->category_name;
 	if ( $results ) {
@@ -1266,7 +1266,6 @@ function mc_get_categories( $event, $ids = true ) {
 			$return[] = $icon . $result->category_name;
 		}
 	}
-
 
 	$return = implode( ', ', array_unique( $return ) );
 
