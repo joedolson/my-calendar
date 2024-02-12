@@ -256,3 +256,26 @@ function mc_import_tribe_location( $venue_id ) {
 
 	return $location_id;
 }
+
+
+/**
+ * Import tickets from Tribe to My Calendar/My Tickets.
+ *
+ * @param int $tribe_id    Post ID for a Tribe event.
+ * @param int $calendar_id Calendar ID for a My Calendar event.
+ *
+ * @return int Post ID for a My Calendar event.
+ */
+function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
+	// If Event Tickets installed, migrate tickets data.
+	if ( function_exists( 'tribe_events_has_tickets' ) ) {
+		$post_id     = mc_get_event_post( $calendar_id );
+		$has_tickets = tribe_events_has_tickets( $tribe_id );
+		if ( $has_tickets ) {
+			$ticket_capacity = get_post_meta( $tribe_id, '_tribe_ticket_capacity', true );
+		}
+
+		return $post_id;
+	}
+}
+add_filter( 'my_calendar_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
