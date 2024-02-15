@@ -186,7 +186,7 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 			'event_end'     => gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ),
 			'event_endtime' => gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ),
 			'group'         => '', // No correlation in Tribe.
-		);	
+		);
 	} else {
 		$my_calendar_event = array(
 			// Event data.

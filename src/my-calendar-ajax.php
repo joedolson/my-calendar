@@ -325,7 +325,7 @@ function mc_ajax_add_date() {
 			'event_endtime' => $event_endtime,
 			'group'         => $group_id,
 		);
-		$id = mc_insert_instance( $args );
+		$id   = mc_insert_instance( $args );
 
 		if ( $id ) {
 			wp_send_json(
