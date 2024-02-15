@@ -129,12 +129,12 @@ function mc_import_source_tribe_event( $post_id ) {
 				/**
 				 * Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.
 				 *
-				 * @hook my_calendar_imported_from_tribe
+				 * @hook my_calendar_event_imported_from_tribe
 				 *
 				 * @param {int} $post_id Post ID from Tribe Events.
 				 * @param {int} $event_id Event ID from My Calendar.
 				 */
-				do_action( 'my_calendar_imported_from_tribe', $post_id, $event_id );
+				do_action( 'my_calendar_event_imported_from_tribe', $post_id, $event_id );
 				update_post_meta( $post_id, '_mc_imported', $event_id );
 			}
 		}
@@ -145,6 +145,16 @@ function mc_import_source_tribe_event( $post_id ) {
 		$args['id'] = $mc_event;
 		// This isn't the same event ID; it's an instance ID. Only used for counting the imports, however.
 		$event_id = mc_insert_instance( $args );
+		/**
+		 * Perform an action after an occurrence has been imported from Tribe Events Calendar to My Calendar.
+		 *
+		 * @hook my_calendar_instance_imported_from_tribe
+		 *
+		 * @param {int} $post_id Post ID from Tribe Events.
+		 * @param {int} $mc_event Event ID from My Calendar.
+		 * @param {int} $parent Parent ID from Tribe.
+		 */
+		do_action( 'my_calendar_instance_imported_from_tribe', $post_id, $mc_event, $parent );
 	}
 
 	return $event_id;
@@ -279,14 +289,11 @@ function mc_import_tribe_location( $venue_id ) {
 	return $location_id;
 }
 
-
 /**
  * Import tickets from Tribe to My Calendar/My Tickets.
  *
  * @param int $tribe_id    Post ID for a Tribe event.
  * @param int $calendar_id Calendar ID for a My Calendar event.
- *
- * @return int Post ID for a My Calendar event.
  */
 function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 	// If Event Tickets && My Tickets installed, migrate tickets data.
@@ -297,8 +304,27 @@ function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 			// Follow notes in pad to map data.
 			$ticket_capacity = get_post_meta( $tribe_id, '_tribe_ticket_capacity', true );
 		}
-
-		return $post_id;
 	}
 }
-add_filter( 'my_calendar_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
+add_action( 'my_calendar_event_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
+
+
+/**
+ * Add tickets from Tribe when an instance is added to an event.
+ *
+ * @param int $tribe_id    Post ID for a Tribe event.
+ * @param int $calendar_id Calendar ID for a My Calendar event.
+ * @param int $tribe_parent Parent ID from the Tribe event.
+ */
+function mc_import_tribe_tickets( $tribe_id, $calendar_id, $tribe_parent ) {
+	// If Event Tickets && My Tickets installed, migrate tickets data.
+	if ( function_exists( 'tribe_events_has_tickets' ) ) {
+		$post_id     = mc_get_event_post( $calendar_id );
+		$has_tickets = tribe_events_has_tickets( $tribe_id );
+		if ( $has_tickets ) {
+			// Follow notes in pad to map data.
+			$ticket_capacity = get_post_meta( $tribe_id, '_tribe_ticket_capacity', true );
+		}
+	}
+}
+add_action( 'my_calendar_instance_imported_from_tribe', 'mc_import_tribe_instance_tickets', 10, 3 );
