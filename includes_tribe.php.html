@@ -80,7 +80,7 @@ function mc_import_source_tribe_events() {
 	}
 
 	// Get selection of events not already imported.
-	$events = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status &lt;> 'trash' AND $wpdb->posts.post_status &lt;> 'auto-draft')) GROUP BY $wpdb->posts.ID ORDER BY $wpdb->posts.post_date DESC LIMIT 0, 25" );
+	$events = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status &lt;> 'trash' AND $wpdb->posts.post_status &lt;> 'auto-draft')) GROUP BY $wpdb->posts.ID ORDER BY $wpdb->posts.post_parent ASC LIMIT 0, 25" );
 	$ids    = array();
 	$count  = count( $events );
 	if ( 0 === $count ) {
@@ -138,29 +138,39 @@ function mc_import_source_tribe_event( $post_id ) {
 	 *
 	 * @return {array|false}
 	 */
-	$event = apply_filters( 'mc_imported_event_tribe', $tribe_event );
-	$event = mc_format_tribe_event_for_import( $event );
-	if ( false === $event ) {
-		return;
-	}
-	$count = count( $event['event_begin'] );
-	for ( $i = 0; $i &lt; $count; $i ++ ) {
-		$check    = mc_check_data( 'add', $event, 0, true );
-		$event_id = false;
-		if ( $check[0] ) {
-			$response = my_calendar_save( 'add', $check );
-			$event_id = $response['event_id'];
-			/**
-			 * Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.
-			 *
-			 * @hook my_calendar_imported_from_tribe
-			 *
-			 * @param {int} $post_id Post ID from Tribe Events.
-			 * @param {int} $event_id Event ID from My Calendar.
-			 */
-			do_action( 'my_calendar_imported_from_tribe', $post_id, $event_id );
-			update_post_meta( $post_id, '_mc_imported', $event_id );
+	$event  = apply_filters( 'mc_imported_event_tribe', $tribe_event );
+	$parent = $tribe_event->post_parent;
+	if ( ! $parent ) {
+		$event = mc_format_tribe_event_for_import( $event );
+		if ( false === $event ) {
+			return;
 		}
+		$count = count( $event['event_begin'] );
+		for ( $i = 0; $i &lt; $count; $i ++ ) {
+			$check    = mc_check_data( 'add', $event, 0, true );
+			$event_id = false;
+			if ( $check[0] ) {
+				$response = my_calendar_save( 'add', $check );
+				$event_id = $response['event_id'];
+				/**
+				 * Perform an action after an event has been imported from Tribe Events Calendar to My Calendar.
+				 *
+				 * @hook my_calendar_imported_from_tribe
+				 *
+				 * @param {int} $post_id Post ID from Tribe Events.
+				 * @param {int} $event_id Event ID from My Calendar.
+				 */
+				do_action( 'my_calendar_imported_from_tribe', $post_id, $event_id );
+				update_post_meta( $post_id, '_mc_imported', $event_id );
+			}
+		}
+	} else {
+		// This is part of a recurring series; add to parent event.
+		$event      = mc_format_tribe_event_for_import( $event, 'instance' );
+		$mc_event   = get_post_meta( $parent, '_mc_imported', true );
+		$args['id'] = $mc_event;
+
+		mc_insert_instance( $args );
 	}
 
 	return $event_id;
@@ -170,10 +180,11 @@ function mc_import_source_tribe_event( $post_id ) {
  * Adapt a Tribe event to the My Calendar import structure.
  *
  * @param object $event WordPress Post from Tribe Events.
+ * @param string $type  Type of return. 'event' or 'instance'.
  *
- * @return array Importable data for My Calendar.
+ * @return array Importable data for My Calendar depending on type.
  */
-function mc_format_tribe_event_for_import( $event ) {
+function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 	$terms = get_the_terms( $event, 'tribe_events_cat' );
 	if ( is_array( $terms ) ) {
 		foreach ( $terms as $term ) {
@@ -193,47 +204,57 @@ function mc_format_tribe_event_for_import( $event ) {
 
 	// If _EventRecurrence, create instance for each event. TODO
 	// Spawn collection of dates in array to be used in event_begin and event_end.
+	if ( 'instance' === $type ) {
+		$my_calendar_event = array(
+			'id'            => '',
+			'event_date'    => gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ),
+			'event_time'    => gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ),
+			'event_end'     => gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ),
+			'event_endtime' => gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ),
+			'group'         => '', // No correlation in Tribe.
+		);	
+	} else {
+		$my_calendar_event = array(
+			// Event data.
+			'event_title'      => $event->post_title,
+			'event_begin'      => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ),
+			'event_end'        => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
+			'event_time'       => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ),
+			'event_endtime'    => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
+			'content'          => $event->post_content,
+			'event_short'      => $event->post_excerpt,
+			'event_link'       => get_post_meta( $event->ID, '_EventURL', true ),
+			// Tribe recurring events work radically differently. Treat as event group?
+			'event_image'      => get_the_post_thumbnail_url( $event ),
+			'event_image_id'   => get_post_thumbnail_id( $event ),
+			'event_allday'     => ( 'yes' === get_post_meta( $event->ID, '_EventAllDay', true ) ) ? '1' : '0',
+			'event_author'     => $event->post_author,
+			'event_approved'   => mc_convert_post_status_to_approval( $event->post_status ),
+			'event_category'   => $category_ids,
+			// Event organizers are only supported in My Calendar Pro.
+			'event_host'       => $event->post_author,
+			// meta data.
+			'event_added'      => $event->post_date,
+			'event_nonce_name' => wp_create_nonce( 'event_nonce' ),
+			'event_group_id'   => mc_group_id(),
+		);
 
-	$my_calendar_event = array(
-		// Event data.
-		'event_title'      => $event->post_title,
-		'event_begin'      => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ), // Pretty sure UTC is what I want.
-		'event_end'        => array( gmdate( 'Y-m-d', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
-		'event_time'       => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventStartDate', true ) ) ) ),
-		'event_endtime'    => array( gmdate( 'H:i:00', strtotime( get_post_meta( $event->ID, '_EventEndDate', true ) ) ) ),
-		'content'          => $event->post_content,
-		'event_short'      => $event->post_excerpt,
-		'event_link'       => get_post_meta( $event->ID, '_EventURL', true ),
-		// Tribe recurring events work radically differently. Treat as event group?
-		'event_image'      => get_the_post_thumbnail_url( $event ),
-		'event_image_id'   => get_post_thumbnail_id( $event ),
-		'event_allday'     => ( 'yes' === get_post_meta( $event->ID, '_EventAllDay', true ) ) ? '1' : '0',
-		'event_author'     => $event->post_author,
-		'event_approved'   => mc_convert_post_status_to_approval( $event->post_status ),
-		'event_category'   => $category_ids,
-		// Event organizers are only supported in My Calendar Pro.
-		'event_host'       => $event->post_author,
-		// meta data.
-		'event_added'      => $event->post_date,
-		'event_nonce_name' => wp_create_nonce( 'event_nonce' ),
-		'event_group_id'   => mc_group_id(),
-	);
-
-	$venue_id = get_post_meta( $event->ID, '_EventVenueID', true );
-	if ( $venue_id ) {
-		$location_id = get_post_meta( $venue_id, '_mc_location_id', true );
-		if ( ! $location_id ) {
-			$location_id = mc_import_tribe_location( $venue_id );
+		$venue_id = get_post_meta( $event->ID, '_EventVenueID', true );
+		if ( $venue_id ) {
+			$location_id = get_post_meta( $venue_id, '_mc_location_id', true );
+			if ( ! $location_id ) {
+				$location_id = mc_import_tribe_location( $venue_id );
+			}
+			$my_calendar_event['event_location'] = $location_id;
+			$my_calendar_event['event_label']    = get_post( $venue_id )->post_title;
+			$my_calendar_event['event_street']   = get_post_meta( $venue_id, '_VenueAddress', true );
+			$my_calendar_event['event_city']     = get_post_meta( $venue_id, '_VenueCity', true );
+			$my_calendar_event['event_state']    = get_post_meta( $venue_id, '_VenueState', true ); // province and state are separate fields in Tribe.
+			$my_calendar_event['event_postcode'] = get_post_meta( $venue_id, '_VenueZip', true );
+			$my_calendar_event['event_country']  = get_post_meta( $venue_id, '_VenueCountry', true );
+			$my_calendar_event['event_url']      = get_post_meta( $venue_id, '_VenueURL', true );
+			$my_calendar_event['event_phone']    = get_post_meta( $venue_id, '_VenuePhone', true );
 		}
-		$my_calendar_event['event_location'] = $location_id;
-		$my_calendar_event['event_label']    = get_post( $venue_id )->post_title;
-		$my_calendar_event['event_street']   = get_post_meta( $venue_id, '_VenueAddress', true );
-		$my_calendar_event['event_city']     = get_post_meta( $venue_id, '_VenueCity', true );
-		$my_calendar_event['event_state']    = get_post_meta( $venue_id, '_VenueState', true ); // province and state are separate fields in Tribe.
-		$my_calendar_event['event_postcode'] = get_post_meta( $venue_id, '_VenueZip', true );
-		$my_calendar_event['event_country']  = get_post_meta( $venue_id, '_VenueCountry', true );
-		$my_calendar_event['event_url']      = get_post_meta( $venue_id, '_VenueURL', true );
-		$my_calendar_event['event_phone']    = get_post_meta( $venue_id, '_VenuePhone', true );
 	}
 	/**
 	 * Filter event to be inserted from Tribe.
@@ -242,10 +263,11 @@ function mc_format_tribe_event_for_import( $event ) {
 	 *
 	 * @param {array}  $my_calendar_event Array of data to be passed to mc_check_data.
 	 * @param {object} $event Post object from tribe_events post type.
+	 * @param {string} $type Type of data being returned; instance or event.
 	 *
 	 * @return {array}
 	 */
-	$my_calendar_event = apply_filters( 'mc_format_tribe_event_for_import', $my_calendar_event, $event );
+	$my_calendar_event = apply_filters( 'mc_format_tribe_event_for_import', $my_calendar_event, $event, $type );
 
 	return $my_calendar_event;
 }
