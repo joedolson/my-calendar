@@ -94,7 +94,7 @@ add_action( 'init', 'mc_check_tribe_imports' );
  *
  * @param int $post_id ID of a tribe event post.
  *
- * @return bool|int False of new post ID.
+ * @return bool|int False or new post ID.
  */
 function mc_import_source_tribe_event( $post_id ) {
 	// If already imported, return false.
@@ -143,8 +143,8 @@ function mc_import_source_tribe_event( $post_id ) {
 		$event      = mc_format_tribe_event_for_import( $event, 'instance' );
 		$mc_event   = get_post_meta( $parent, '_mc_imported', true );
 		$args['id'] = $mc_event;
-
-		mc_insert_instance( $args );
+		// This isn't the same event ID; it's an instance ID. Only used for counting the imports, however.
+		$event_id = mc_insert_instance( $args );
 	}
 
 	return $event_id;
