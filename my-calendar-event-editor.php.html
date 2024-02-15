@@ -2651,7 +2651,7 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 /**
  * Insert a single instance to the database.
  *
- * @param array $args ['id', 'event_date', 'event_end', 'event_time', 'event_endtime', 'group']
+ * @param array $args ['id', 'event_date', 'event_end', 'event_time', 'event_endtime', 'group'].
  *
  * @return int New instance ID.
  */
@@ -2672,8 +2672,8 @@ function mc_insert_instance( $args ) {
 	$begin = strtotime( $event_date . ' ' . $event_time );
 	$end   = ( '' !== $event_endtime ) ? strtotime( $event_end . ' ' . $event_endtime ) : strtotime( $event_end . ' ' . $event_time ) + HOUR_IN_SECONDS;
 
-	$format      = array( '%d', '%s', '%s', '%d' );
-	$data        = array(
+	$format = array( '%d', '%s', '%s', '%d' );
+	$data   = array(
 		'occur_event_id' => $event_id,
 		'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
 		'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
