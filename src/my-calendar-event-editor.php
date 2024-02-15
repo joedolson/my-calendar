@@ -2623,6 +2623,48 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 }
 
 /**
+ * Insert a single instance to the database.
+ *
+ * @param array $args ['id', 'event_date', 'event_end', 'event_time', 'event_endtime', 'group']
+ *
+ * @return int New instance ID.
+ */
+function mc_insert_instance( $args ) {
+	global $wpdb;
+	$event_end     = $args['event_end'];
+	$event_date    = $args['event_date'];
+	$event_endtime = $args['event_endtime'];
+	$event_time    = $args['event_time'];
+	$event_id      = $args['id'];
+	$group_id      = $args['group'];
+
+	// event end can not be earlier than event start.
+	if ( ! $event_end || strtotime( $event_end ) < strtotime( $event_date ) ) {
+		$event_end = $event_date;
+	}
+
+	$begin = strtotime( $event_date . ' ' . $event_time );
+	$end   = ( '' !== $event_endtime ) ? strtotime( $event_end . ' ' . $event_endtime ) : strtotime( $event_end . ' ' . $event_time ) + HOUR_IN_SECONDS;
+
+	$format      = array( '%d', '%s', '%s', '%d' );
+	$data        = array(
+		'occur_event_id' => $event_id,
+		'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
+		'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
+		'occur_group_id' => $group_id,
+	);
+	$wpdb->insert( my_calendar_event_table(), $data, $format );
+	$id          = $wpdb->insert_id;
+	$event_post  = mc_get_event_post( $event_id );
+	$instances   = get_post_meta( $event_post, '_mc_custom_instances', true );
+	$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
+	$instances[] = $data;
+	update_post_meta( $event_post, '_mc_custom_instances', $instances );
+
+	return $id;
+}
+
+/**
  * Update a single arbitrary field in event table
  *
  * @param int    $event_id Event to modify.

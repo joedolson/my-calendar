@@ -300,7 +300,6 @@ function mc_ajax_add_date() {
 		);
 	}
 	if ( current_user_can( 'mc_manage_events' ) ) {
-		global $wpdb;
 		$event_id = (int) $_REQUEST['event_id'];
 
 		if ( 0 === $event_id ) {
@@ -318,30 +317,17 @@ function mc_ajax_add_date() {
 		$event_endtime = isset( $_REQUEST['event_endtime'] ) ? sanitize_text_field( $_REQUEST['event_endtime'] ) : '';
 		$group_id      = (int) $_REQUEST['group_id'];
 
-		// event end can not be earlier than event start.
-		if ( ! $event_end || strtotime( $event_end ) < strtotime( $event_date ) ) {
-			$event_end = $event_date;
-		}
-
-		$begin = strtotime( $event_date . ' ' . $event_time );
-		$end   = ( '' !== $event_endtime ) ? strtotime( $event_end . ' ' . $event_endtime ) : strtotime( $event_end . ' ' . $event_time ) + HOUR_IN_SECONDS;
-
-		$format      = array( '%d', '%s', '%s', '%d' );
-		$data        = array(
-			'occur_event_id' => $event_id,
-			'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
-			'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
-			'occur_group_id' => $group_id,
+		$args = array(
+			'id'            => $event_id,
+			'event_date'    => $event_date,
+			'event_end'     => $event_end,
+			'event_time'    => $event_time,
+			'event_endtime' => $event_endtime,
+			'group'         => $group_id,
 		);
-		$result      = $wpdb->insert( my_calendar_event_table(), $data, $format );
-		$id          = $wpdb->insert_id;
-		$event_post  = mc_get_event_post( $event_id );
-		$instances   = get_post_meta( $event_post, '_mc_custom_instances', true );
-		$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
-		$instances[] = $data;
-		update_post_meta( $event_post, '_mc_custom_instances', $instances );
+		$id = mc_insert_instance( $args );
 
-		if ( $result ) {
+		if ( $id ) {
 			wp_send_json(
 				array(
 					'success'  => 1,
