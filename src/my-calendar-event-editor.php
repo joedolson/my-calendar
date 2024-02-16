@@ -2636,7 +2636,7 @@ function mc_insert_instance( $args ) {
 	$event_endtime = $args['event_endtime'];
 	$event_time    = $args['event_time'];
 	$event_id      = $args['id'];
-	$group_id      = $args['group'];
+	$group_id      = ( '' === $args['group'] ) ? $args['id'] : (int) $args['group'];
 
 	// event end can not be earlier than event start.
 	if ( ! $event_end || strtotime( $event_end ) < strtotime( $event_date ) ) {
