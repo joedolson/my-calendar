@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_widget_defaults - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_import_tribe_tickets_options - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_widget_defaults</h1></header>
+    <header><h1 class="page-title">Filter: mc_import_tribe_tickets_options</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_widget_defaults">apply_filters( 'mc_widget_defaults', <span class="signature">$defaults )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_import_tribe_tickets_options">apply_filters( 'mc_import_tribe_tickets_options', <span class="signature">$registration_options, $tribe_id, $calendar_id )</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Customize the default values used for Upcoming and Today's events widgets.</p>
+    <p>Filter My Tickets profile data before saving.</p>
 </div>
 
 
@@ -77,7 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$defaults</code></td>
+                <td class="name"><code>$registration_options</code></td>
             
 
             <td class="type">
@@ -93,7 +93,53 @@
 
             
 
-            <td class="description last"><p>Array of values used to set up upcoming and today's events lists in widgets.</p></td>
+            <td class="description last"><p>Options data to save for new event.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$tribe_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Tribe event ID.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$calendar_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>My Calendar event ID.</p></td>
         </tr>
 
     
@@ -134,7 +180,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-install.php.html">my-calendar-install.php</a>, <a href="my-calendar-install.php.html#line42">line 42</a>
+        <a href="includes_tribe.php.html">includes/tribe.php</a>, <a href="includes_tribe.php.html#line358">line 358</a>
     </li></ul></dd>
     
 
