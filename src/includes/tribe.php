@@ -42,9 +42,11 @@ function mc_count_tribe_remaining() {
 /**
  * Import Tribe Events.
  *
+ * @param int $limit Number of events to import.
+ *
  * @return string Message about imported events.
  */
-function mc_import_source_tribe_events() {
+function mc_import_source_tribe_events( $limit = 25 ) {
 	global $wpdb;
 	$count   = wp_count_posts( 'tribe_events' );
 	$message = '';
@@ -54,7 +56,7 @@ function mc_import_source_tribe_events() {
 	}
 
 	// Get selection of events not already imported.
-	$events = $wpdb->get_results( "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status <> 'trash' AND $wpdb->posts.post_status <> 'auto-draft')) GROUP BY $wpdb->posts.ID ORDER BY $wpdb->posts.post_parent ASC LIMIT 0, 25" );
+	$events = $wpdb->get_results( $wpdb->prepare( "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status <> 'trash' AND $wpdb->posts.post_status <> 'auto-draft')) GROUP BY $wpdb->posts.ID ORDER BY $wpdb->posts.post_parent ASC LIMIT 0, %d", $limit ) );
 	$ids    = array();
 	$count  = count( $events );
 	if ( 0 === $count ) {
@@ -135,16 +137,20 @@ function mc_import_source_tribe_event( $post_id ) {
 				 * @param {int} $event_id Event ID from My Calendar.
 				 */
 				do_action( 'my_calendar_event_imported_from_tribe', $post_id, $event_id );
+				// Import tickets from Tribe Tickets to My Tickets.
+				mc_import_tribe_tickets( $post_id, $event_id );
 				update_post_meta( $post_id, '_mc_imported', $event_id );
 			}
 		}
 	} else {
 		// This is part of a recurring series; add to parent event.
-		$event      = mc_format_tribe_event_for_import( $event, 'instance' );
-		$mc_event   = get_post_meta( $parent, '_mc_imported', true );
-		$args['id'] = $mc_event;
+		$event       = mc_format_tribe_event_for_import( $event, 'instance' );
+		$mc_event    = get_post_meta( $parent, '_mc_imported', true );
+		$event['id'] = $mc_event;
 		// This isn't the same event ID; it's an instance ID. Only used for counting the imports, however.
-		$event_id = mc_insert_instance( $args );
+		$event_id = mc_insert_instance( $event );
+		// Mark post as imported.
+		update_post_meta( $post_id, '_mc_imported', $mc_event );
 		/**
 		 * Perform an action after an occurrence has been imported from Tribe Events Calendar to My Calendar.
 		 *
@@ -224,20 +230,12 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 		);
 
 		$venue_id = get_post_meta( $event->ID, '_EventVenueID', true );
-		if ( $venue_id ) {
+		if ( $venue_id && 'tribe_venue' === get_post_type( $venue_id ) ) {
 			$location_id = get_post_meta( $venue_id, '_mc_location_id', true );
 			if ( ! $location_id ) {
 				$location_id = mc_import_tribe_location( $venue_id );
 			}
 			$my_calendar_event['event_location'] = $location_id;
-			$my_calendar_event['event_label']    = get_post( $venue_id )->post_title;
-			$my_calendar_event['event_street']   = get_post_meta( $venue_id, '_VenueAddress', true );
-			$my_calendar_event['event_city']     = get_post_meta( $venue_id, '_VenueCity', true );
-			$my_calendar_event['event_state']    = get_post_meta( $venue_id, '_VenueState', true ); // province and state are separate fields in Tribe.
-			$my_calendar_event['event_postcode'] = get_post_meta( $venue_id, '_VenueZip', true );
-			$my_calendar_event['event_country']  = get_post_meta( $venue_id, '_VenueCountry', true );
-			$my_calendar_event['event_url']      = get_post_meta( $venue_id, '_VenueURL', true );
-			$my_calendar_event['event_phone']    = get_post_meta( $venue_id, '_VenuePhone', true );
 		}
 	}
 	/**
@@ -264,6 +262,11 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
  * @return int $location_id Location ID for a My Calendar location.
  */
 function mc_import_tribe_location( $venue_id ) {
+	// This is a double check before inserting.
+	$check = get_post_meta( $venue_id, '_mc_location_id', true );
+	if ( is_numeric( $check ) ) {
+		return $check;
+	}
 	$state = ( get_post_meta( $venue_id, '_VenueState', true ) ) ? get_post_meta( $venue_id, '_VenueState', true ) : get_post_meta( $venue_id, '_VenueProvince', true );
 	$add   = array(
 		'location_label'     => get_post( $venue_id )->post_title,
@@ -284,47 +287,90 @@ function mc_import_tribe_location( $venue_id ) {
 	);
 
 	$location_id = mc_insert_location( $add );
-	update_post_meta( $venue_id, '_mc_location_id', $location_id );
+	if ( is_numeric( $location_id ) ) {
+		// Only set the venue relationship if location ID is set.
+		update_post_meta( $venue_id, '_mc_location_id', $location_id );
 
+		// Set featured image for location.
+		$featured_image_id = get_post_thumbnail_id( $venue_id );
+		if ( $featured_image_id ) {
+			$location_post = mc_get_location_post( $location_id );
+			set_post_thumbnail( $location_post, $featured_image_id );
+		}
+	}
 	return $location_id;
 }
 
 /**
- * Import tickets from Tribe to My Calendar/My Tickets.
+ * Add tickets from Tribe when an event is added.
  *
  * @param int $tribe_id    Post ID for a Tribe event.
  * @param int $calendar_id Calendar ID for a My Calendar event.
  */
 function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 	// If Event Tickets && My Tickets installed, migrate tickets data.
-	if ( function_exists( 'tribe_events_has_tickets' ) ) {
+	if ( function_exists( 'tribe_events_has_tickets' ) && function_exists( 'mt_create_payment' ) ) {
 		$post_id     = mc_get_event_post( $calendar_id );
 		$has_tickets = tribe_events_has_tickets( $tribe_id );
+		// Handle creation of tickets on event post.
 		if ( $has_tickets ) {
-			// Follow notes in pad to map data.
-			$ticket_capacity = get_post_meta( $tribe_id, '_tribe_ticket_capacity', true );
-		}
+			global $wpdb;
+			// Get post meta for this data.
+			$prices        = array();
+			$tribe_tickets = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key = '_tribe_wooticket_for_event' AND meta_value = %d", $tribe_id ) );
+			foreach ( $tribe_tickets as $ticket ) {
+				$ticket_id = $ticket->post_id;
+				$title     = get_the_title( $ticket_id ); // Title is the label for ticket.
+				$title_key = sanitize_key( $title );
+				$sales     = get_post_meta( $ticket_id, 'total_sales', true ); // Sales on this ticket.
+				$total     = get_post_meta( $ticket_id, '_tribe_ticket_capacity', true ); // Number available.
+				$price     = get_post_meta( $ticket_id, '_price', true ); // ticket price as int.
+				$end       = get_post_meta( $ticket_id, '_ticket_end_date', true ); // ticket off sale date.
+				// Structure prices array.
+				$prices[ $title_key ] = array (
+					'label'   => $title,
+					'price'   => $price,
+					'tickets' => $total,
+					'sold'    => $sales,
+					'close'   => strtotime( $end ),
+				);
+			}
+			// Global My Calendar event data.
+			$mc_event_data = get_post_meta( $post_id, '_mc_event_data', true );
+			$mc_event_data['general_admission'] = ''; // Tribe events don't support general admission.
+			$mc_event_data['event_valid']       = ''; // Event validity only applies to general admissions.
+			$mc_event_data['expire_date']       = ''; // Expiration date for general admission.
+			update_post_meta( $post_id, '_mc_event_data', $mc_event_data );
+			// Set sales to expired if date in past.
+			$begin = strtotime( $mc_event_data['event_begin'] . ' ' . $mc_event_data['event_time'] );
+			if ( mt_date_comp( mt_date( 'Y-m-d H:i:s', $begin ), mt_date( 'Y-m-d H:i:s', mt_current_time() ) ) ) {
+				update_post_meta( $post_id, '_mt_event_expired', 'true' );
+			}
+			update_post_meta( $post_id, '_mc_event_date', $begin );
+			$registration_options = array(
+				'reg_expires'     => 1,
+				'sales_type'      => 'tickets',
+				'counting_method' => 'discrete',
+				'prices'          => $prices,
+				'total'           => 'inherit',
+				'multiple'        => 'true',
+			);
+			/**
+			 * Filter My Tickets profile data before saving.
+			 *
+			 * @hook mc_import_tribe_tickets_options
+			 *
+			 * @param {array} $registration_options Options data to save for new event.
+			 * @param {int}   $tribe_id Tribe event ID.
+			 * @param {int}   $calendar_id My Calendar event ID.
+			 *
+			 * @return {array}
+			 */
+			$registration_options = apply_filters( 'mc_import_tribe_tickets_options', $registration_options, $tribe_id, $calendar_id );
+			update_post_meta( $post_id, '_mt_registration_options', $registration_options );
+			update_post_meta( $post_id, '_mt_sell_tickets', 'true' );
+		}	
 	}
 }
 add_action( 'my_calendar_event_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
 
-
-/**
- * Add tickets from Tribe when an instance is added to an event.
- *
- * @param int $tribe_id    Post ID for a Tribe event.
- * @param int $calendar_id Calendar ID for a My Calendar event.
- * @param int $tribe_parent Parent ID from the Tribe event.
- */
-function mc_import_tribe_tickets( $tribe_id, $calendar_id, $tribe_parent ) {
-	// If Event Tickets && My Tickets installed, migrate tickets data.
-	if ( function_exists( 'tribe_events_has_tickets' ) ) {
-		$post_id     = mc_get_event_post( $calendar_id );
-		$has_tickets = tribe_events_has_tickets( $tribe_id );
-		if ( $has_tickets ) {
-			// Follow notes in pad to map data.
-			$ticket_capacity = get_post_meta( $tribe_id, '_tribe_ticket_capacity', true );
-		}
-	}
-}
-add_action( 'my_calendar_instance_imported_from_tribe', 'mc_import_tribe_instance_tickets', 10, 3 );
