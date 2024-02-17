@@ -327,7 +327,7 @@ function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 				$price     = get_post_meta( $ticket_id, '_price', true ); // ticket price as int.
 				$end       = get_post_meta( $ticket_id, '_ticket_end_date', true ); // ticket off sale date.
 				// Structure prices array.
-				$prices[ $title_key ] = array (
+				$prices[ $title_key ] = array(
 					'label'   => $title,
 					'price'   => $price,
 					'tickets' => $total,
@@ -336,7 +336,7 @@ function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 				);
 			}
 			// Global My Calendar event data.
-			$mc_event_data = get_post_meta( $post_id, '_mc_event_data', true );
+			$mc_event_data                      = get_post_meta( $post_id, '_mc_event_data', true );
 			$mc_event_data['general_admission'] = ''; // Tribe events don't support general admission.
 			$mc_event_data['event_valid']       = ''; // Event validity only applies to general admissions.
 			$mc_event_data['expire_date']       = ''; // Expiration date for general admission.
@@ -369,7 +369,7 @@ function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 			$registration_options = apply_filters( 'mc_import_tribe_tickets_options', $registration_options, $tribe_id, $calendar_id );
 			update_post_meta( $post_id, '_mt_registration_options', $registration_options );
 			update_post_meta( $post_id, '_mt_sell_tickets', 'true' );
-		}	
+		}
 	}
 }
 add_action( 'my_calendar_event_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
