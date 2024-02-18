@@ -334,6 +334,21 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 }
 
 /**
+ * Get the featured image for a location.
+ */
+function mc_location_image( $event, $source = 'event' ) {
+	$event = mc_get_event_location( $event, $source );
+	if ( ! $event ) {
+		return '';
+	}
+	$source = 'location';
+	$post   = mc_get_location_post( $event->location_post );
+	$image  = get_the_post_thumbnail( $post, 'full' );
+
+	return $image;
+}
+
+/**
  * Format an hcard for event location
  *
  * @param object $event object with location properties.
