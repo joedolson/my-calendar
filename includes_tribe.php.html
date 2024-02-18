@@ -342,7 +342,7 @@ function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 		// Handle creation of tickets on event post.
 		if ( is_array( $tribe_tickets ) &amp;&amp; count( $tribe_tickets ) > 0 ) {
 			// Get post meta for this data.
-			$prices        = array();
+			$prices = array();
 			foreach ( $tribe_tickets as $ticket ) {
 				$ticket_id = $ticket->post_id;
 				$title     = get_the_title( $ticket_id ); // Title is the label for ticket.
