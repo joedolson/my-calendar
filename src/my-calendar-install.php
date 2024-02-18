@@ -268,7 +268,7 @@ function mc_create_demo_content() {
 		 * @param {array} $add Array of location parameters to add.
 		 * @param {array} $add Demo location array.
 		 */
-		do_action( 'mc_save_location', $results, $add, $add );
+		$results = apply_filters( 'mc_save_location', $results, $add, $add );
 		// Insert an event.
 		$submit = array(
 			// Begin strings.

@@ -58,14 +58,14 @@ function mc_update_location_post( $where, $data, $post ) {
 	 * @param {array} $data Data for this location.
 	 * @param {int}   $location_id Location ID.
 	 */
-	do_action( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
+	$post_id = apply_filters( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
 	if ( mc_switch_sites() ) {
 		restore_current_blog();
 	}
 
 	return $post_id;
 }
-add_action( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
+add_filter( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
 
 /**
  * Create a post for My Calendar location data on save
@@ -118,7 +118,7 @@ function mc_create_location_post( $location_id, $data, $post = array() ) {
 
 	return $post_id;
 }
-add_action( 'mc_save_location', 'mc_create_location_post', 10, 3 );
+add_filter( 'mc_save_location', 'mc_create_location_post', 10, 3 );
 
 /**
  * Update custom fields for a location.
@@ -131,6 +131,13 @@ add_action( 'mc_save_location', 'mc_create_location_post', 10, 3 );
  * @return array Errors.
  */
 function mc_update_location_custom_fields( $post_id, $post, $data, $location_id ) {
+	// Set featured image.
+	$attachment_id = ( isset( $post['location_image_id'] ) && is_numeric( $post['location_image_id'] ) ) ? $post['location_image_id'] : false;
+	$attachment_id = ( isset( $data['location_image_id'] ) && is_numeric( $data['location_image_id'] ) ) ? $data['location_image_id'] : $attachment_id;
+	if ( $attachment_id ) {
+		set_post_thumbnail( $post_id, $attachment_id );
+	}
+
 	$fields       = mc_location_fields();
 	$field_errors = array();
 	foreach ( $fields as $name => $field ) {
@@ -393,23 +400,24 @@ function my_calendar_add_locations() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 	}
-	if ( isset( $_POST['mode'] ) && 'add' === $_POST['mode'] ) {
+	$post = map_deep( $_POST, 'wp_kses_post' );
+	if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
 		$add = array(
-			'location_label'     => $_POST['location_label'],
-			'location_street'    => $_POST['location_street'],
-			'location_street2'   => $_POST['location_street2'],
-			'location_city'      => $_POST['location_city'],
-			'location_state'     => $_POST['location_state'],
-			'location_postcode'  => $_POST['location_postcode'],
-			'location_region'    => $_POST['location_region'],
-			'location_country'   => $_POST['location_country'],
-			'location_url'       => $_POST['location_url'],
-			'location_longitude' => $_POST['location_longitude'],
-			'location_latitude'  => $_POST['location_latitude'],
-			'location_zoom'      => $_POST['location_zoom'],
-			'location_phone'     => $_POST['location_phone'],
-			'location_phone2'    => $_POST['location_phone2'],
-			'location_access'    => isset( $_POST['location_access'] ) ? serialize( $_POST['location_access'] ) : '',
+			'location_label'     => $post['location_label'],
+			'location_street'    => $post['location_street'],
+			'location_street2'   => $post['location_street2'],
+			'location_city'      => $post['location_city'],
+			'location_state'     => $post['location_state'],
+			'location_postcode'  => $post['location_postcode'],
+			'location_region'    => $post['location_region'],
+			'location_country'   => $post['location_country'],
+			'location_url'       => $post['location_url'],
+			'location_longitude' => $post['location_longitude'],
+			'location_latitude'  => $post['location_latitude'],
+			'location_zoom'      => $post['location_zoom'],
+			'location_phone'     => $post['location_phone'],
+			'location_phone2'    => $post['location_phone2'],
+			'location_access'    => isset( $post['location_access'] ) ? serialize( $post['location_access'] ) : '',
 		);
 
 		$results = mc_insert_location( $add );
@@ -418,7 +426,7 @@ function my_calendar_add_locations() {
 			$source = absint( $_GET['event_source'] );
 			mc_update_data( $source, 'event_location', $results );
 		}
-		if ( isset( $_POST['mc_default_location'] ) ) {
+		if ( isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', (int) $results );
 		}
 		/**
@@ -430,7 +438,7 @@ function my_calendar_add_locations() {
 		 * @param {array} $add Array of location parameters to add.
 		 * @param {array} $post POST array.
 		 */
-		do_action( 'mc_save_location', $results, $add, $_POST );
+		$results = apply_filters( 'mc_save_location', $results, $add, $post );
 		if ( $results ) {
 			mc_show_notice( __( 'Location added successfully', 'my-calendar' ) );
 		} else {
@@ -439,34 +447,34 @@ function my_calendar_add_locations() {
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
 		$loc = absint( $_GET['location_id'] );
 		echo mc_delete_location( $loc );
-	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && 'edit' === $_GET['mode'] && ! isset( $_POST['mode'] ) ) {
+	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
-	} elseif ( isset( $_POST['location_id'] ) && isset( $_POST['location_label'] ) && 'edit' === $_POST['mode'] ) {
+	} elseif ( isset( $post['location_id'] ) && isset( $post['location_label'] ) && 'edit' === $post['mode'] ) {
 		$update = array(
-			'location_label'     => $_POST['location_label'],
-			'location_street'    => $_POST['location_street'],
-			'location_street2'   => $_POST['location_street2'],
-			'location_city'      => $_POST['location_city'],
-			'location_state'     => $_POST['location_state'],
-			'location_postcode'  => $_POST['location_postcode'],
-			'location_region'    => $_POST['location_region'],
-			'location_country'   => $_POST['location_country'],
-			'location_url'       => $_POST['location_url'],
-			'location_longitude' => $_POST['location_longitude'],
-			'location_latitude'  => $_POST['location_latitude'],
-			'location_zoom'      => $_POST['location_zoom'],
-			'location_phone'     => $_POST['location_phone'],
-			'location_phone2'    => $_POST['location_phone2'],
-			'location_access'    => isset( $_POST['location_access'] ) ? serialize( $_POST['location_access'] ) : '',
+			'location_label'     => $post['location_label'],
+			'location_street'    => $post['location_street'],
+			'location_street2'   => $post['location_street2'],
+			'location_city'      => $post['location_city'],
+			'location_state'     => $post['location_state'],
+			'location_postcode'  => $post['location_postcode'],
+			'location_region'    => $post['location_region'],
+			'location_country'   => $post['location_country'],
+			'location_url'       => $post['location_url'],
+			'location_longitude' => $post['location_longitude'],
+			'location_latitude'  => $post['location_latitude'],
+			'location_zoom'      => $post['location_zoom'],
+			'location_phone'     => $post['location_phone'],
+			'location_phone2'    => $post['location_phone2'],
+			'location_access'    => isset( $post['location_access'] ) ? serialize( $post['location_access'] ) : '',
 		);
 
-		$where = array( 'location_id' => (int) $_POST['location_id'] );
-		if ( isset( $_POST['mc_default_location'] ) ) {
-			mc_update_option( 'default_location', (int) $_POST['location_id'] );
+		$where = array( 'location_id' => (int) $post['location_id'] );
+		if ( isset( $post['mc_default_location'] ) ) {
+			mc_update_option( 'default_location', (int) $post['location_id'] );
 		}
 		$default_location = mc_get_option( 'default_location' );
-		if ( (int) $_POST['location_id'] === (int) $default_location && ! isset( $_POST['mc_default_location'] ) ) {
+		if ( (int) $post['location_id'] === (int) $default_location && ! isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', '' );
 		}
 		$results = mc_modify_location( $update, $where );
@@ -480,7 +488,7 @@ function my_calendar_add_locations() {
 		 * @param {array} $update Array of location parameters to update.
 		 * @param {array} $post POST array.
 		 */
-		do_action( 'mc_modify_location', $where, $update, $_POST );
+		$results = apply_filters( 'mc_modify_location', $where, $update, $_POST );
 		if ( false === $results ) {
 			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
 		} elseif ( 0 === $results ) {
@@ -815,8 +823,15 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare         = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_city', false ) : '';
 	$street_address  = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street'} ) : '';
 	$street_address2 = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street2'} ) : '';
-	$return         .= '
-	</p>
+	$return         .= '</p>';
+	$image_field = '';
+	if ( 'location' === $context ) {
+		$location_id = (int) $_GET['location_id'];
+		$post_id     = mc_get_location_post( $location_id );
+		$image_field = mc_location_featured_image_field( $post_id );
+	}
+	$return .= $image_field;
+	$return .= '
 	<div class="locations-container columns">
 	<div class="location-primary">
 	<fieldset>
@@ -1115,6 +1130,37 @@ function mc_template_location_fields( $e, $event ) {
 	return $e;
 }
 add_filter( 'mc_filter_shortcodes', 'mc_template_location_fields', 10, 2 );
+
+/**
+ * Output location featured image field.
+ */
+function mc_location_featured_image_field( $post_id ) {
+	$image       = ( has_post_thumbnail( $post_id ) ) ? get_the_post_thumbnail_url( $post_id ) : '';
+	$image_id    = ( has_post_thumbnail( $post_id ) ) ? get_post_thumbnail_id( $post_id ) : '';
+	$button_text = __( 'Select Featured Image', 'my-calendar' );
+	$remove      = '';
+	$alt         = '';
+	if ( '' !== $image ) {
+		$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
+		$button_text = __( 'Change Featured Image', 'my-calendar' );
+		$remove      = '<button type="button" data-context="location" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
+		$alt         = ( '' === $alt ) ? get_post_meta( $post_id, '_mcs_submitted_alt', true ) : $alt;
+		$alt         = ( '' === $alt ) ? $image : $alt;
+	}
+	$return = '
+	<div class="mc-image-upload field-holder">
+		<div class="image_fields">
+			<input type="hidden" name="location_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="l_image_id" /> <input type="hidden" name="location_image" id="l_image" value="' . esc_attr( $image ) . '" /><button type="button" data-context="location" class="button select-image" aria-describedby="location_image">' . $button_text . '</button> ' . $remove . '
+		</div>';
+	if ( '' !== $image ) {
+		$return .= '<div class="event_image" aria-live="assertive"><img id="location_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
+	} else {
+		$return .= '<div class="event_image"></div>';
+	}
+	$return .= '</div>';
+
+	return $return;
+}
 
 /**
  * Expand custom fields from array to field output
