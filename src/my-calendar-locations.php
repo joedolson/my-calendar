@@ -105,7 +105,7 @@ function mc_create_location_post( $location_id, $data, $post = array() ) {
 		/**
 		 * Executed an action when a location post is created.
 		 *
-		 * @hook mc_create_location_posts
+		 * @hook mc_create_location_post
 		 *
 		 * @param {int}   $post_id Post ID.
 		 * @param {array} $post POST Array of data sent to create post.
@@ -151,6 +151,7 @@ function mc_update_location_custom_fields( $post_id, $post, $data, $location_id 
 	return $field_errors;
 }
 add_action( 'mc_update_location_post', 'mc_update_location_custom_fields', 10, 4 );
+add_action( 'mc_create_location_post', 'mc_update_location_custom_fields', 10, 4 );
 
 /**
  * Delete custom post type associated with event
@@ -1137,9 +1138,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 	if ( is_object( $data ) && 'location' === $context ) {
 		$location_id = $data->location_id;
 	}
-	if ( ! $location_id ) {
-		return '';
-	}
+
 	/**
 	 * Filter available custom fields & set display order.
 	 *
