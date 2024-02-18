@@ -336,14 +336,13 @@ function mc_import_tribe_location( $venue_id ) {
 function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 	// If Event Tickets &amp;&amp; My Tickets installed, migrate tickets data.
 	if ( function_exists( 'tribe_events_has_tickets' ) &amp;&amp; function_exists( 'mt_create_payment' ) ) {
-		$post_id     = mc_get_event_post( $calendar_id );
-		$has_tickets = tribe_events_has_tickets( $tribe_id );
+		global $wpdb;
+		$post_id       = mc_get_event_post( $calendar_id );
+		$tribe_tickets = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key = '_tribe_wooticket_for_event' AND meta_value = %d", $tribe_id ) );
 		// Handle creation of tickets on event post.
-		if ( $has_tickets ) {
-			global $wpdb;
+		if ( is_array( $tribe_tickets ) &amp;&amp; count( $tribe_tickets ) > 0 ) {
 			// Get post meta for this data.
 			$prices        = array();
-			$tribe_tickets = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key = '_tribe_wooticket_for_event' AND meta_value = %d", $tribe_id ) );
 			foreach ( $tribe_tickets as $ticket ) {
 				$ticket_id = $ticket->post_id;
 				$title     = get_the_title( $ticket_id ); // Title is the label for ticket.
