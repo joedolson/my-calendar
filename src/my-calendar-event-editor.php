@@ -1146,14 +1146,14 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 				if ( '' !== $image ) {
 					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 					$button_text = __( 'Change Featured Image', 'my-calendar' );
-					$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
+					$remove      = '<button type="button" data-context="event" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 					$alt         = ( '' === $alt ) ? get_post_meta( $data->event_post, '_mcs_submitted_alt', true ) : $alt;
 					$alt         = ( '' === $alt ) ? $data->event_image : $alt;
 				}
 				$return = '
 				<div class="mc-image-upload field-holder">
 					<div class="image_fields">
-						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" placeholder="http://yourdomain.com/image.jpg" /> <button type="button" class="button select-image" aria-describedby="event_image">' . $button_text . '</button> ' . $remove . '
+						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" /> <button type="button" data-context="event" class="button select-image" aria-describedby="event_image">' . $button_text . '</button> ' . $remove . '
 					</div>';
 				if ( '' !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
@@ -2351,7 +2351,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 						 * @param {array} $add_loc Array of location parameters to add.
 						 * @param {array} $add_loc Array passed from event creation.
 						 */
-						do_action( 'mc_save_location', $loc_id, $add_loc, $add_loc );
+						$results = apply_filters( 'mc_save_location', $loc_id, $add_loc, $add_loc );
 					}
 				}
 			}

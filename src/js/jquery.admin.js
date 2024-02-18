@@ -636,17 +636,21 @@ var mediaPopup = '';
 		}
 
 		$('.mc-image-upload').on( 'click', '.remove-image', function (e) {
-			$( '#e_image_id' ).val( '' );
-			$( '#e_image' ).val( '' );
-			$( '#event_image' ).attr( 'src', '' ).attr( 'alt', '' );
+			var context = $( this ).data( 'context' );
+			var short   = context.substr( 0, 1 );
+			$( '#' + short + '_image_id' ).val( '' );
+			$( '#' + short + '_image' ).val( '' );
+			$( '#' + context + '_image' ).attr( 'src', '' ).attr( 'alt', '' );
 			$( '.event_image' ).text( mcAdmin.imageRemoved );
 		});
 
 		$('.mc-image-upload')
 			.on('click', '.select-image', function (e) {
+				var context = $( this ).data( 'context' );
+				var short   = context.substr( 0, 1 );
 				e.preventDefault();
-				var $inpField = document.querySelector('#e_image');
-				var $idField = document.querySelector('#e_image_id');
+				var $inpField = document.querySelector('#' + short + '_image');
+				var $idField = document.querySelector('#' + short + '_image_id');
 				var $displayField = document.querySelector('.event_image');
 				clear_existing();
 				mediaPopup = wp.media({
