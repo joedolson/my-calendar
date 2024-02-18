@@ -824,14 +824,14 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$street_address  = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street'} ) : '';
 	$street_address2 = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street2'} ) : '';
 	$return         .= '</p>';
-	$image_field = '';
+	$image_field     = '';
 	if ( 'location' === $context ) {
 		$location_id = (int) $_GET['location_id'];
 		$post_id     = mc_get_location_post( $location_id );
 		$image_field = mc_location_featured_image_field( $post_id );
 	}
-	$return .= $image_field;
-	$return .= '
+	$return  .= $image_field;
+	$return  .= '
 	<div class="locations-container columns">
 	<div class="location-primary">
 	<fieldset>
@@ -844,7 +844,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</p>
 	<p>
 		<label for="e_city">' . __( 'City', 'my-calendar' ) . $compare . '</label> ';
-	$cur_city        = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_city'} ) ) : '';
+	$cur_city = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_city'} ) ) : '';
 	if ( mc_controlled_field( 'city' ) ) {
 		$return .= mc_location_controller( 'city', $cur_city, $context );
 	} else {
@@ -1133,6 +1133,10 @@ add_filter( 'mc_filter_shortcodes', 'mc_template_location_fields', 10, 2 );
 
 /**
  * Output location featured image field.
+ *
+ * @param int $post_id Post ID for the currently edited post.
+ *
+ * @return string
  */
 function mc_location_featured_image_field( $post_id ) {
 	$image       = ( has_post_thumbnail( $post_id ) ) ? get_the_post_thumbnail_url( $post_id ) : '';
