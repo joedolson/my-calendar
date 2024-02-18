@@ -1927,7 +1927,7 @@ function mc_event_location_dropdown_block( $data ) {
  * @param object $event Event object.
  * @param string $return Data to return. 'location' or 'diff'.
  *
- * @return bool Returns true if the two datasets are different.
+ * @return bool|array Returns boolean if 'diff'; array if 'location'.
  */
 function mc_event_location_diff( $event, $return = 'diff' ) {
 	$location_id = ( $event && property_exists( $event, 'event_location' ) ) ? $event->event_location : '';
