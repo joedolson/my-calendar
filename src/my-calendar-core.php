@@ -1717,6 +1717,9 @@ function mc_scripts() {
 		if ( version_compare( $mcs_version, '2.1', '<' ) ) {
 			wp_enqueue_style( 'mcs-back-compat' );
 		}
+		if ( function_exists( 'wp_enqueue_media' ) && ! did_action( 'wp_enqueue_media' ) ) {
+			wp_enqueue_media();
+		}
 	}
 
 	wp_enqueue_style( 'wp-color-picker' );
@@ -1729,9 +1732,6 @@ function mc_scripts() {
 
 	if ( 'toplevel_page_my-calendar' === $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' ); // required for character counting.
-		if ( function_exists( 'wp_enqueue_media' ) && ! did_action( 'wp_enqueue_media' ) ) {
-			wp_enqueue_media();
-		}
 	}
 	if ( $slug . '_page_my-calendar-locations' === $id || 'toplevel_page_my-calendar' === $id ) {
 		$api_key = mc_get_option( 'gmap_api_key' );
