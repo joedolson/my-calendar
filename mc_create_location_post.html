@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Action: mc_clean_duplicate_locations - My Calendar Hook Doumentation</title>
+    <title>Action: mc_create_location_post - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Action: mc_clean_duplicate_locations</h1></header>
+    <header><h1 class="page-title">Action: mc_create_location_post</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_clean_duplicate_locations">do_action( 'mc_clean_duplicate_locations', <span class="signature">$deleted, $failed )</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mc_create_location_post">do_action( 'mc_create_location_post', <span class="signature">$post_id, $post, $data, $location_id )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Run when action to clean up duplicate locations is run.</p>
+    <p>Executed an action when a location post is created.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$deleted</code></td>
+                <td class="name"><code>$post_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">int</span>
 
 
             
@@ -93,14 +93,14 @@
 
             
 
-            <td class="description last"><p>Array of location IDs successfully deleted.</p></td>
+            <td class="description last"><p>Post ID.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$failed</code></td>
+                <td class="name"><code>$post</code></td>
             
 
             <td class="type">
@@ -116,7 +116,53 @@
 
             
 
-            <td class="description last"><p>Array of location IDs that were not successfully deleted.</p></td>
+            <td class="description last"><p>POST Array of data sent to create post.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Data for this location.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$location_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Location ID.</p></td>
         </tr>
 
     
@@ -157,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-location-manager.php.html">my-calendar-location-manager.php</a>, <a href="my-calendar-location-manager.php.html#line162">line 162</a>
+        <a href="my-calendar-locations.php.html">my-calendar-locations.php</a>, <a href="my-calendar-locations.php.html#line105">line 105</a>
     </li></ul></dd>
     
 
