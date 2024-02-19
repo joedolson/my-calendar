@@ -221,9 +221,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 *
 		 * @return {string}
 		 */
-		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time ) . '</div>';
+		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time );
 		$details = $before . $header . $after;
 	}
+
 	$details      = apply_filters( 'mc_event_details_output', $details, $event );
 	$container_id = mc_event_container_id( $type, $process_date, $event );
 	$close_button = mc_close_button( $container_id );
