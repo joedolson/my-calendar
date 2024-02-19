@@ -104,6 +104,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Feature: Add card view.
 * Feature: Style variable previews.
 * Feature: Add importer to import events from The Events Calendar.
+* Feature: Add support for featured image on locations.
 * Breaking change: `mc_event_classes()` now echos classes. Use `mc_get_event_classes()` to return.
 * Many, many minor visual changes to improve consistency.
 
