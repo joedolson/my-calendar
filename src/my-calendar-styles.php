@@ -104,7 +104,7 @@ function my_calendar_style_edit() {
 				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
 			}
 			if ( $output ) {
-				echo wp_kses( "<ul class='checkboxes'>$output</ul>", mc_kses_elements() );
+				echo wp_kses( "<ul class='mc-variables'>$output</ul>", mc_kses_elements() );
 			}
 			?>
 			<p>

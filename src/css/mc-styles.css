@@ -1236,6 +1236,25 @@ label[for=e_host] {
 	margin-top: 1em;
 }
 
+ul.mc-variables li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+ul.mc-variables li:has(.wp-picker-active) {
+	display: block;
+}
+
+ul.mc-variables li:has(.wp-picker-active) label {
+	font-weight: 700;
+	margin-bottom: 6px;
+}
+
+.mc-css-variables .wp-picker-holder {
+	box-shadow: 5px 5px 5px #aaa;
+}
+
 .my-calendar-admin .checkboxes li {
 	display: inline-block;
 	padding: 5px;
@@ -1400,19 +1419,6 @@ select[name="event_recur"] {
 	display: inline;
 }
 
-.mc-css-variables .checkboxes {
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.mc-css-variables .checkboxes button {
-	margin-bottom: 0;
-}
-
-.mc-css-variables .checkboxes .wp-picker-container {
-	display: block;
-}
-
 .faux-p {
 	padding: 2px;
 	margin: .5em 0;
@@ -1444,11 +1450,6 @@ select[name="event_recur"] {
 .mc-contrast-table th {
 	padding: 4px 6px;
 	font-weight: 400;
-}
-
-.mc-css-variables .wp-picker-holder {
-	position: absolute;
-	box-shadow: 5px 5px 5px #aaa;
 }
 
 #my-calendar-style .inside {
