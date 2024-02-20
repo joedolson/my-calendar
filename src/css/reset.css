@@ -59,6 +59,11 @@
 	font-weight: 600;
 }
 
+.mc-main td .event-title img {
+	max-width: 100%;
+	height: auto;
+}
+
 .mc-main.mini .event-title {
 	font-weight: 700;
 	background: #00000006;
