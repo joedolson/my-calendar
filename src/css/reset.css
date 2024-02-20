@@ -57,6 +57,7 @@
 .mc-main td .event-title {
 	font-size: clamp( .75rem, 14px, 1.125rem );
 	font-weight: 600;
+	color: var(--event-title);
 }
 
 .mc-main td .event-title img {

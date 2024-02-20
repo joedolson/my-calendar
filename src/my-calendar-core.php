@@ -198,6 +198,7 @@ function mc_style_variables( $styles = array() ) {
 		'--nav-input-color'      => '#313233',
 		'--grid-cell-border'     => '#0000001f',
 		'--grid-header-border'   => '#313233',
+		'--event-title'          => '#313233',
 	);
 	foreach ( $core_styles as $key => $value ) {
 		if ( ! isset( $styles[ $key ] ) ) {
@@ -237,10 +238,10 @@ function mc_register_styles() {
 		wp_enqueue_style( 'my-calendar-locations' );
 	}
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
-	wp_register_style( 'my-calendar-admin-style', $admin_stylesheet, array(), $version );
+	wp_register_style( 'my-calendar-frontend-admin-style', $admin_stylesheet, array(), $version );
 
 	if ( current_user_can( 'mc_manage_events' ) ) {
-		wp_enqueue_style( 'my-calendar-admin-style' );
+		wp_enqueue_style( 'my-calendar-frontend-admin-style' );
 	}
 
 	/**
