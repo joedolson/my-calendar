@@ -426,7 +426,7 @@ ul.mc-file-list ul li {
 	width: 98%
 }
 
-#my-calendar-templates h2,
+#my-calendar-templates h2:not(.mc-flex),
 #my-calendar-templates h2 + p {
 	display: inline-block;
 }

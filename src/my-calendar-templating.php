@@ -220,7 +220,7 @@ function mc_templates_edit() {
 	</div>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="mc-postbox">
-			<h2>
+			<h2 class="mc-flex">
 			<?php
 			esc_html_e( 'Template Tags', 'my-calendar' );
 			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template-tags', 5 );

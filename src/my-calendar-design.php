@@ -44,20 +44,29 @@ function my_calendar_design() {
 						<div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
 							<h2>
 							<?php
-							if ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) {
+							$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
+							if ( $disable_templates ) {
 								_e( 'Template Documentation', 'my-calendar' );
 								echo '</h2>';
 							} else {
-								_e( 'Template Editor', 'my-calendar' );
-								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
+								_e( 'Template Editor (Legacy)', 'my-calendar' );
 								?>
 							</h2>
 								<?php
-								echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<p><a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a></p>' );
+								echo '<p><span class="mc-flex">';
+								echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a>' );
+								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
+								echo '</span></p>';
 							}
 							?>
 							<div class="inside">
-							<?php mc_templates_edit(); ?>
+							<?php
+							echo '<p>';
+							// translators: URL for the PHP templating docs.
+							printf( __( 'Learn about the <a href="%s">PHP templating system in My Calendar</a>.', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/php-templates/' );
+							echo '</p>';
+							mc_templates_edit();
+							?>
 							</div>
 						</div>
 					</div>
