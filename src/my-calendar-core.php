@@ -1982,7 +1982,8 @@ function mc_get_support_form() {
 	$php_version = phpversion();
 	$db_version  = $wpdb->db_version();
 	$admin_email = get_option( 'admin_email' );
-	$db_time     = mc_ts( true );
+	$db_time     = mc_ts( true )['db'];
+	$wp_time     = mc_ts( true )['wp'];
 	$db_type     = mc_get_db_type();
 	// theme data.
 	$theme         = wp_get_theme();
@@ -2025,6 +2026,7 @@ Charset: $charset
 PHP Version: $php_version
 DB Version: $db_version
 DB UTC Offset: $db_time
+WP UTC Offset: $wp_time
 DB Type: $db_type
 Server Software: $_SERVER[SERVER_SOFTWARE]
 User Agent: $_SERVER[HTTP_USER_AGENT]

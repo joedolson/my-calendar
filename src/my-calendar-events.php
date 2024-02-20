@@ -70,7 +70,7 @@ function mc_create_guid( $event ) {
  *
  * @param bool $test Test offset time.
  *
- * @return string
+ * @return string|array
  */
 function mc_ts( $test = false ) {
 	global $wpdb;
@@ -89,13 +89,19 @@ function mc_ts( $test = false ) {
 	if ( strpos( $offset, '-' ) !== 0 ) {
 		$offset = '+' . $offset;
 	}
-	if ( $test ) {
-		return $offset;
-	}
+
 	$wp_time  = get_option( 'gmt_offset', '0' );
 	$wp_time  = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ) : '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
 	$wp_time .= ':00';
 
+	if ( $test ) {
+		return array(
+			'db' => $offset,
+			'wp' => $wp_time
+		);
+	}
+	// Converts occur_begin value from the WordPress timezone to the db timezone.
+	// Has weakness that if an event was entered during DST, it's wrong during ST and vice versa.
 	return "UNIX_TIMESTAMP( CONVERT_TZ( `occur_begin`, '$wp_time', '$offset' ) ) AS ts_occur_begin, UNIX_TIMESTAMP( CONVERT_TZ( `occur_end`, '$wp_time', '$offset' ) ) AS ts_occur_end ";
 }
 
@@ -1056,7 +1062,7 @@ function mc_admin_instances( $id, $occur = 0 ) {
 			} elseif ( ( $end - $start ) <= HOUR_IN_SECONDS ) {
 				$time = mc_date( mc_time_format(), $start );
 			} else {
-				$time = mc_date( mc_time_format(), $start ) . '-' . mc_date( mc_time_format(), $end );
+				$time = mc_date( mc_time_format(), $start ) . ' - ' . mc_date( mc_time_format(), $end );
 			}
 			// Omitting format from mc_date() returns timestamp.
 			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
