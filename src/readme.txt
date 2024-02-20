@@ -106,6 +106,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Feature: Add importer to import events from The Events Calendar.
 * Feature: Add support for featured image on locations.
 * Breaking change: `mc_event_classes()` now echos classes. Use `mc_get_event_classes()` to return.
+* Bug fix: Prevent My Calendar post types from showing up in export tool. Props @carstenbach.
 * Many, many minor visual changes to improve consistency.
 
 = 3.4.24 =
