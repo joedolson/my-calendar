@@ -97,7 +97,7 @@ function mc_ts( $test = false ) {
 	if ( $test ) {
 		return array(
 			'db' => $offset,
-			'wp' => $wp_time
+			'wp' => $wp_time,
 		);
 	}
 	// Converts occur_begin value from the WordPress timezone to the db timezone.
