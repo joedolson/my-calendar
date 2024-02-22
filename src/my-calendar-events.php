@@ -126,6 +126,7 @@ function my_calendar_get_events( $args ) {
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
 	$holidays = isset( $args['holidays'] ) ? $args['holidays'] : null;
 	$site     = isset( $args['site'] ) ? $args['site'] : false;
+	$site     = ! is_array( $site ) ? array( $site ) : $site;
 	$mcdb     = mc_is_remote_db();
 
 	if ( 'holidays' === $holidays && '' === $category ) {
@@ -195,81 +196,31 @@ function my_calendar_get_events( $args ) {
 	 *
 	 * @hook mc_get_events_sites
 	 *
-	 * @param {array|int} $site Array of sites or a single site if displaying events from a different site on the network.
+	 * @param {array} $site Array of sites or a single site if displaying events from a different site on the network.
 	 * @param {array} $args Shortcode arguments.
 	 *
-	 * @return {array|int}
+	 * @return {array}
 	 */
 	$site = apply_filters( 'mc_get_events_sites', $site, $args );
-	if ( is_array( $site ) ) {
-		foreach ( $site as $s ) {
-			$event_query = '
-		SELECT *, ' . $ts_string . '
-		FROM ' . my_calendar_event_table( $s ) . '
-		JOIN ' . my_calendar_table( $s ) . ' AS e
-		ON (event_id=occur_event_id)
-		JOIN ' . my_calendar_categories_table( $s ) . " AS c 
-		ON (event_category=category_id)
-		$join
-		$location_join
-		WHERE $select_published $select_category $select_author $select_host $select_access $search
-		AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
-			OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
-			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
-			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
-		$exclude_categories
-		GROUP BY o.occur_id ORDER BY $primary_sort, $secondary_sort";
+	$site = ! is_array( $site ) ? array( $site ) : $site;
 
-			$events = $mcdb->get_results( $event_query );
-
-			if ( ! empty( $events ) ) {
-				$cats = array();
-				$locs = array();
-				foreach ( array_keys( $events ) as $key ) {
-					$event          =& $events[ $key ];
-					$event->site_id = $s;
-					$object_id      = $event->event_id;
-					$location_id    = $event->event_location;
-					if ( ! isset( $cats[ $object_id ] ) ) {
-						$categories         = mc_get_categories( $event, 'objects' );
-						$event->categories  = $categories;
-						$cats[ $object_id ] = $categories;
-					} else {
-						$event->categories = $cats[ $object_id ];
-					}
-					if ( 0 !== (int) $location_id ) {
-						if ( ! isset( $locs[ $object_id ] ) ) {
-							$location           = mc_get_location( $location_id );
-							$event->location    = $location;
-							$locs[ $object_id ] = $location;
-						} else {
-							$event->location = $locs[ $object_id ];
-						}
-					}
-					$object = mc_event_object( $event );
-					if ( false !== $object ) {
-						$arr_events[] = $object;
-					}
-				}
-			}
-		}
-	} else {
+	foreach ( $site as $s ) {
 		$event_query = '
-		SELECT *, ' . $ts_string . '
-		FROM ' . my_calendar_event_table( $site ) . ' AS o
-		JOIN ' . my_calendar_table( $site ) . ' AS e
-		ON (event_id=occur_event_id)
-		JOIN ' . my_calendar_categories_table( $site ) . " AS c 
-		ON (event_category=category_id)
-		$join
-		$location_join
-		WHERE $select_published $select_category $select_author $select_host $select_access $search
-		AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
-			OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
-			OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
-			OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
-		$exclude_categories
-		GROUP BY o.occur_id ORDER BY $primary_sort, $secondary_sort";
+	SELECT *, ' . $ts_string . '
+	FROM ' . my_calendar_event_table( $s ) . ' AS o
+	JOIN ' . my_calendar_table( $s ) . ' AS e
+	ON (event_id=occur_event_id)
+	JOIN ' . my_calendar_categories_table( $s ) . " AS c 
+	ON (event_category=category_id)
+	$join
+	$location_join
+	WHERE $select_published $select_category $select_author $select_host $select_access $search
+	AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
+		OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
+		OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
+		OR ( DATE('$to') BETWEEN DATE(occur_begin) AND DATE(occur_end) ) )
+	$exclude_categories
+	GROUP BY o.occur_id ORDER BY $primary_sort, $secondary_sort";
 
 		$events = $mcdb->get_results( $event_query );
 
@@ -278,7 +229,7 @@ function my_calendar_get_events( $args ) {
 			$locs = array();
 			foreach ( array_keys( $events ) as $key ) {
 				$event          =& $events[ $key ];
-				$event->site_id = $site;
+				$event->site_id = $s;
 				$object_id      = $event->event_id;
 				$location_id    = $event->event_location;
 				if ( ! isset( $cats[ $object_id ] ) ) {
