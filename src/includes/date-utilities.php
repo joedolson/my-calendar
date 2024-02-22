@@ -224,7 +224,7 @@ function mc_week_of_month( $date_of_event ) {
 }
 
 /**
- * Validate that a string is a valid date.
+ * Validate that a string is a valid date. Returns a Y-m-d date string with no timezone offset applied.
  *
  * @param string $date date string.
  *
@@ -238,7 +238,7 @@ function mc_checkdate( $date ) {
 
 	$check = checkdate( $m, $d, $y );
 	if ( $check ) {
-		return mc_date( 'Y-m-d', $time );
+		return mc_date( 'Y-m-d', $time, false );
 	}
 
 	return false;
@@ -669,7 +669,7 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	$c_year  = (int) $date['year'];
 	// The first day of the current month.
 	$month_first = mktime( 0, 0, 0, $c_month, 1, $c_year );
-	// Grid calendar can't show multiple months.
+
 	if ( 'list' === $format && 'week' !== $time ) {
 		if ( $num > 0 && 'day' !== $time && 'week' !== $time ) {
 			if ( 'month+1' === $time ) {
