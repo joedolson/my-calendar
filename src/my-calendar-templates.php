@@ -1764,7 +1764,7 @@ function mc_event_recur_string( $event, $begin ) {
  */
 function mc_event_schema( $e, $tags = array() ) {
 	$event   = ( empty( $tags ) ) ? mc_create_tags( $e ) : $tags;
-	$wp_time = mc_ts( true );
+	$wp_time = mc_ts( true )['db'];
 	$wp_time = str_replace( array( ':30:00', ':00:00' ), array( ':30', ':00' ), $wp_time );
 	$image   = ( $event['image_url'] ) ? $event['image_url'] : get_site_icon_url();
 	$schema  = array(
