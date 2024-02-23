@@ -275,7 +275,7 @@ function mc_register_styles() {
 						'mc-maps',
 						'gmaps',
 						array(
-							'toggle' => '<span class="dashicons dashicons-arrow-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Location Details', 'my-calendar' ) . '</span>',
+							'toggle'  => '<span class="dashicons dashicons-arrow-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Location Details', 'my-calendar' ) . '</span>',
 						)
 					);
 				}
@@ -1743,7 +1743,7 @@ function mc_scripts() {
 				'mc-maps',
 				'gmaps',
 				array(
-					'toggle' => '<span class="dashicons dashicons-arrow-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Toggle Address', 'my-calendar' ) . '</span>',
+					'toggle'  => '<span class="dashicons dashicons-arrow-right" aria-hidden="true"></span><span class="screen-reader-text">' . __( 'Location Details', 'my-calendar' ) . '</span>',
 				)
 			);
 		}

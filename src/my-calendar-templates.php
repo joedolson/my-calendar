@@ -1277,7 +1277,9 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			 */
 			$markers = apply_filters( 'mc_gmap_html', $markers, $event );
 			$class   = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
-			$map     = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . $markers . '</div>';
+			$maptype = mc_location_custom_data( $loc_id, $location->location_post, 'maptype' );
+			$maptype = ( $maptype ) ? strtolower( $maptype ) : mc_get_option( 'maptype' );
+			$map     = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' data-maptype='" . esc_attr( $maptype ) . "'$styles>" . $markers . '</div>';
 			$locs    = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
 			$out     = '<div class="mc-maps">' . $map . $locs . '</div>';
 		}

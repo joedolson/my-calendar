@@ -345,6 +345,8 @@ function mc_update_output_settings( $post ) {
 	$options['hide_past_dates']  = ( ! empty( $post['mc_hide_past_dates'] ) && 'on' === $post['mc_hide_past_dates'] ) ? 'true' : 'false';
 	$options['show_months']      = (int) $post['mc_show_months'];
 	$options['map_service']      = ( in_array( $post['mc_map_service'], array( 'mapquest', 'bing', 'google', 'none' ), true ) ) ? $post['mc_map_service'] : 'google';
+	$options['maptype']          = ( in_array( $post['mc_maptype'], array( 'roadmap', 'satellite', 'hybrid', 'terrain' ), true ) ) ? $post['mc_maptype'] : 'roadmap';
+
 	// Calculate sequence for navigation elements.
 	$top    = array();
 	$bottom = array();
@@ -1527,6 +1529,24 @@ function mc_remote_db() {
 										'bing'   => __( 'Bing Maps', 'my-calendar' ),
 										'google' => __( 'Google Maps', 'my-calendar' ),
 										'none'   => __( 'None', 'my-calendar' ),
+									),
+									'note'    => __( 'Map setting currently only supports map links; embedded maps are still only supported for Google Maps.', 'my-calendar' ),
+									'type'    => 'select',
+								)
+							);
+							?>
+							</li>
+							<li>
+							<?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_maptype',
+									'label'   => __( 'Default map display', 'my-calendar' ),
+									'default' => array(
+										'roadmap'   => __( 'Road map', 'my-calendar' ),
+										'satellite' => __( 'Satellite', 'my-calendar' ),
+										'hybrid'    => __( 'Hybrid (Satellite/Road)', 'my-calendar' ),
+										'terrain'   => __( 'Terrain', 'my-calendar' ),
 									),
 									'note'    => __( 'Map setting currently only supports map links; embedded maps are still only supported for Google Maps.', 'my-calendar' ),
 									'type'    => 'select',

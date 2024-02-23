@@ -60,13 +60,13 @@
 		// var
 		var $markers = el.querySelectorAll( '.marker' );
 		var count    = $markers.length;
-
+		var mapType  = el.getAttribute( 'data-maptype' );
 		// vars
 		var args = {
 			center    : {lng: 0.0000, lat: 0.0000},
-			mapTypeId : google.maps.MapTypeId.roadmap
+			mapTypeId : mapType
 		};
-		
+	
 		// create map
 		var plot   = new google.maps.Map( el, args );
 		var bounds = new google.maps.LatLngBounds();
