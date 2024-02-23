@@ -1066,6 +1066,11 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
  * @return array
  */
 function mc_location_fields() {
+	$fields['maptype'] = array(
+		'title'        => __( 'Map display type', 'my-calendar' ),
+		'input_type'   => 'select',
+		'input_values' => array( 'Default', 'Roadmap', 'Satellite', 'Hybrid', 'Terrain' ),
+	);
 	/**
 	 * Return custom fields for use in My Calendar locations. Fields should format like:
 	 *
@@ -1083,7 +1088,7 @@ function mc_location_fields() {
 	 *
 	 * @return {array}
 	 */
-	$fields = apply_filters( 'mc_location_fields', array() );
+	$fields = apply_filters( 'mc_location_fields', $fields );
 
 	return $fields;
 }

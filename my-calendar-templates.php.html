@@ -1303,7 +1303,9 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			 */
 			$markers = apply_filters( 'mc_gmap_html', $markers, $event );
 			$class   = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
-			$map     = "&lt;div class='mc-gmap-markers $class' id='mc_gmap_$id' $styles>" . $markers . '&lt;/div>';
+			$maptype = mc_location_custom_data( $loc_id, $location->location_post, 'maptype' );
+			$maptype = ( $maptype ) ? strtolower( $maptype ) : mc_get_option( 'maptype' );
+			$map     = "&lt;div class='mc-gmap-markers $class' id='mc_gmap_$id' data-maptype='" . esc_attr( $maptype ) . "'$styles>" . $markers . '&lt;/div>';
 			$locs    = ( $loc_list ) ? '&lt;div class="mc-gmap-location-list">&lt;h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '&lt;/h2>' . $loc_list . '&lt;/div>' : '';
 			$out     = '&lt;div class="mc-maps">' . $map . $locs . '&lt;/div>';
 		}
