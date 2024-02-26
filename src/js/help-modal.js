@@ -6,17 +6,16 @@
 
 jQuery( function( $ ) {
 
-	var tbWindow,
+	let tbWindow,
 		$iframeBody,
 		$tabbables,
 		$firstTabbable,
 		$lastTabbable,
 		$focusedBefore = $(),
-		$wrap = $ ( '.wrap' ),
 		$body = $( document.body );
 
 	window.tb_position = function() {
-		var width = $( window ).width(),
+		let width = $( window ).width(),
 			H = $( window ).height() - ( ( 792 < width ) ? 240 : 160 ),
 			W = ( 792 < width ) ? 772 : width - 20;
 
@@ -37,7 +36,7 @@ jQuery( function( $ ) {
 		}
 
 		return $( 'a.thickbox' ).each( function() {
-			var href = $( this ).attr( 'href' );
+			let href = $( this ).attr( 'href' );
 			if ( ! href ) {
 				return;
 			}
@@ -65,7 +64,7 @@ jQuery( function( $ ) {
 		});
 
 	function iframeLoaded() {
-		var $iframe = tbWindow.find( '#TB_iframeContent' );
+		let $iframe = tbWindow.find( '#TB_iframeContent' );
 
 		// Get the iframe body.
 		$iframeBody = $iframe.contents().find( 'body' );
@@ -92,14 +91,13 @@ jQuery( function( $ ) {
 	 * @todo Consider to implement a WordPress general utility for this and don't use jQuery UI.
 	 */
 	function handleTabbables() {
-		var $firstAndLast;
+		const $firstAndLast;
 		// Get all the tabbable elements.
 		$tabbables = $( ':tabbable', $iframeBody );
 		// Our first tabbable element is always the "Close" button.
 		$firstTabbable = tbWindow.find( '#TB_closeWindowButton' );
 		// Get the last tabbable element.
 		$lastTabbable = $tabbables.last();
-		console.log( 'tabbable', $lastTabbable );
 		// Make a jQuery collection.
 		$firstAndLast = $firstTabbable.add( $lastTabbable );
 		// Detach any previously attached keydown event.
@@ -129,7 +127,7 @@ jQuery( function( $ ) {
 	 * Open the help modal.
 	 */
 	$( '.wrap' ).on( 'click', '.thickbox.my-calendar-contextual-help', function( e ) {
-		var title = $( this ).data( 'title' );
+		let title = $( this ).data( 'title' );
 
 		e.preventDefault();
 		e.stopPropagation();
@@ -151,13 +149,13 @@ jQuery( function( $ ) {
 		tbWindow.find( '#TB_iframeContent' ).attr( 'title', title );
 	});
 
-	var reset = document.querySelectorAll( '.reset-my-calendar' );
+	let reset = document.querySelectorAll( '.reset-my-calendar' );
 	if ( null !== reset ) {
 		reset.forEach( (el) => {
 			el.addEventListener( 'click', resetShortcode );
 			function resetShortcode( e ) {
-				var control  = e.target;
-				var controls = document.querySelectorAll( '.mc-generator-inputs input, .mc-generator-inputs select' );
+				let control    = e.target;
+				const controls = document.querySelectorAll( '.mc-generator-inputs input, .mc-generator-inputs select' );
 				for (i = 0; i < controls.length; i++) {
 					switch ( controls[i].type ) {
 						case 'password':
@@ -177,7 +175,7 @@ jQuery( function( $ ) {
 							break;
 					}
 				}
-				var shortcode = document.querySelectorAll( '.mc-shortcode-container' );
+				let shortcode = document.querySelectorAll( '.mc-shortcode-container' );
 				shortcode.forEach( (el) => {
 					el.value = '[' + control.getAttribute( 'data-type' ) + ']';
 				});
