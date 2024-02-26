@@ -91,7 +91,7 @@ jQuery( function( $ ) {
 	 * @todo Consider to implement a WordPress general utility for this and don't use jQuery UI.
 	 */
 	function handleTabbables() {
-		const $firstAndLast;
+		let $firstAndLast;
 		// Get all the tabbable elements.
 		$tabbables = $( ':tabbable', $iframeBody );
 		// Our first tabbable element is always the "Close" button.
