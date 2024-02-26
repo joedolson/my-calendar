@@ -1,11 +1,10 @@
 jQuery(document).ready(function ($) {
-	var r = document.querySelector('.mc-main');
+	let r = document.querySelector('.mc-main');
 
 	$('.mc-color-input').wpColorPicker({
 		change:	function( event, ui ) {
-			var color    = ui.color.toString();
-			var variable = event.target.getAttribute( 'data-variable' );
-			console.log( color, variable );
+			let color    = ui.color.toString();
+			let variable = event.target.getAttribute( 'data-variable' );
 			r.style.setProperty( variable, color );
 		},
 	});
