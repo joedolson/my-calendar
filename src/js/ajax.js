@@ -3,11 +3,11 @@
 		// Delete single instances of recurring events.
 		$( '.mc_response' ).hide();
 		$('.instance-list').on( 'click', 'button.delete_occurrence', function () {
-			var value = $(this).attr( 'data-value' );
-			var id    = $(this).attr( 'data-event' );
-			var begin = $(this).attr( 'data-begin' );
-			var end   = $(this).attr( 'data-end' );
-			var data = {
+			let value  = $(this).attr( 'data-value' );
+			let id     = $(this).attr( 'data-event' );
+			let begin  = $(this).attr( 'data-begin' );
+			let end    = $(this).attr( 'data-end' );
+			const data = {
 				'action': mc_data.action,
 				'occur_id': value,
 				'event_id': id,
@@ -26,7 +26,7 @@
 		$( '.mc_add_new' ).hide();
 
 		$( 'button.add-occurrence').on( 'click', function() {
-			var expanded = $( this ).attr( 'aria-expanded' );
+			let expanded = $( this ).attr( 'aria-expanded' );
 			if ( expanded == 'true' ) {
 				$( this ).attr( 'aria-expanded', 'false' ).find( '.dashicons' ).addClass( 'dashicons-plus' ).removeClass( 'dashicons-minus' );
 				$( this ).attr( 'data-action', 'shiftback' );
@@ -41,14 +41,14 @@
 		 * Save additional date.
 		 */
 		$( 'button.save-occurrence').on( 'click', function() {
-			var date    = $( '#r_begin' ).val();
-			var begin   = $( '#r_time' ).val();
-			var end     = $( '#r_endtime' ).val();
-			var enddate = $( '#r_enddate' ).val();
-			var event_id = $( 'input[name="event_id"]' ).val();
-			var group_id = $( 'input[name="event_group_id"]' ).val();
+			let date    = $( '#r_begin' ).val();
+			let begin   = $( '#r_time' ).val();
+			let end     = $( '#r_endtime' ).val();
+			let enddate = $( '#r_enddate' ).val();
+			let event_id = $( 'input[name="event_id"]' ).val();
+			let group_id = $( 'input[name="event_group_id"]' ).val();
 
-			var data    = {
+			const data    = {
 				'action': mc_data.recur,
 				'event_id': event_id,
 				'group_id': group_id,
@@ -60,10 +60,10 @@
 			};
 			$.post( ajaxurl, data, function (response) {
 				if ( response.success == 1 ) {
-					var time     = begin.split( ':' );
-					var display  = time[0] + ':' + time[1];
-					var edit_url = mc_data.url + response.id;
-					var dateEnd  = ( typeof( enddate ) === 'undefined' ) ? date : enddate;
+					let time     = begin.split( ':' );
+					let display  = time[0] + ':' + time[1];
+					let edit_url = mc_data.url + response.id;
+					let dateEnd  = ( typeof( enddate ) === 'undefined' ) ? date : enddate;
 					$( '.instance-list' ).append( '<li class="new"><p><span id="occur_date_' + response.id + '"><strong>Added:</strong> ' + date + ' @ ' + display + '</span></p><p class="instance-buttons"><button class="button delete_occurrence" type="button" data-event="' + event_id + '" data-begin="' + date + ' ' + begin + '" data-end="' + dateEnd + ' ' + end + '" data-value="' + response.id + '" aria-describedby="occur_date_' + response.id + '">Delete</button> <a href="' + edit_url + '" class="button">Edit</a></p></li>' );
 				}
 				$('.mc_response').text( response.response ).show( 300 );
@@ -74,11 +74,11 @@
 		 * Display human-readable event repetition pattern when making changes.
 		 */
 		$( '#e_recur, #e_every' ).on( 'change', function() {
-			var recur = $( '#e_recur' ).val();
-			var every = $( '#e_every' ).val();
-			var until = $( 'duet-date-picker[identifier=e_repeats]' ).val();
+			let recur = $( '#e_recur' ).val();
+			let every = $( '#e_every' ).val();
+			let until = $( 'duet-date-picker[identifier=e_repeats]' ).val();
 
-			var data  = {
+			const data  = {
 				'action': mc_recur.action,
 				'until' : until,
 				'every' : every,
@@ -103,11 +103,11 @@
 		const repeats = document.querySelector( 'duet-date-picker[identifier=e_repeats]' );
 		if ( null !== repeats ) {
 			repeats.addEventListener( 'duetChange', function(e) {
-				var until = e.detail.value;
-				var recur = $( '#e_recur' ).val();
-				var every = $( '#e_every' ).val();
+				let until = e.detail.value;
+				let recur = $( '#e_recur' ).val();
+				let every = $( '#e_every' ).val();
 
-				var data  = {
+				const data  = {
 					'action': mc_recur.action,
 					'until' : until,
 					'every' : every,
@@ -124,19 +124,19 @@
 	});
 	$(function () {
 		$( 'button.add-category' ).on( 'click', function() {
-			var category_name = $( '#event_category_name' ).val();
+			let category_name = $( '#event_category_name' ).val();
 			if ( '' !== category_name ) {
-				var data    = {
+				const data = {
 					'action': mc_cats.action,
 					'category_name': category_name,
 					'security': mc_cats.security
 				};
 				$.post( ajaxurl, data, function (response) {
 					if ( response.success == 1 ) {
-						var category_id = response.category_id;
+						let category_id = response.category_id;
 						$( '#event_category_name' ).val( '' );
 						$( '<li class="new"><input type="checkbox" name="event_category[]" id="mc_cat_' + category_id + '" value="' + category_id + '" checked> <label for="mc_cat_' + category_id + '">' + category_name + '</label></li>' ).insertBefore( '.categories .event-new-category' );
-						var primary = $( '#e_category' );
+						let primary = $( '#e_category' );
 						primary.append( '<option value="' + category_id + '">' + category_name + '</option>' );
 					}
 				}, "json" );
