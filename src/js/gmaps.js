@@ -101,8 +101,8 @@
 	*/
 
 	function add_marker( $marker, plot, bounds ) {
-		const latlng = new google.maps.LatLng( $marker.getAttribute('data-lat'), $marker.getAttribute('data-lng') );
-		let marker   = null;
+		let latlng = new google.maps.LatLng( $marker.getAttribute('data-lat'), $marker.getAttribute('data-lng') );
+		let marker  = null;
 		// Geocoder
 		if ( '' == $marker.getAttribute( 'data-lat' ) || '' == $marker.getAttribute( 'data-lng' ) ) {
 			const geocoder = new google.maps.Geocoder();
@@ -117,7 +117,7 @@
 				title		: $marker.getAttribute( 'data-title' ),
 			});
 
-			const latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
 			bounds.extend( latlng );
 			// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 			if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
@@ -163,7 +163,7 @@
 					title : $marker.getAttribute( 'data-title' ),
 				});
 
-				const latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+				let latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
 				bounds.extend( latlng );
 				// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 				if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
