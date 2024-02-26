@@ -3,7 +3,7 @@
 	$(function () {
 		mc_display_usertime();
 		mc_build_toggles();
-		var calendar = document.querySelectorAll( '.mc-main' );
+		const calendar = document.querySelectorAll( '.mc-main' );
 		if ( calendar ) {
 			calendar.forEach( (el) => {
 				el.classList.remove( 'mcjs' );
@@ -15,7 +15,7 @@
 		$( ".mini .calendar-events" ).hide();
 		$( document ).on( "click", ".mini .has-events .trigger", function (e) {
 			e.preventDefault();
-			var current_date = $(this).parents( '.has-events' ).children( '.calendar-events' );
+			const current_date = $(this).parents( '.has-events' ).children( '.calendar-events' );
 			current_date.toggle();
 			$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
 			$( '.mini .has-events' ).children().not( '.mc-date-container' ).not( current_date ).hide();
@@ -38,7 +38,7 @@
 			$(document).on( 'click', '.event-date button', function (e) {
 				e.preventDefault();
 				$( this ).closest( '.mc-events' ).find( '.mc-event' ).toggle();
-				var visible = $(this).closest( '.mc-events' ).find( '.mc-event' ).is(':visible');
+				let visible = $(this).closest( '.mc-events' ).find( '.mc-event' ).is(':visible');
 				if ( visible ) {
 					$(this).attr('aria-expanded', 'true');
 				} else {
@@ -51,28 +51,28 @@
 	}
 
 	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'true' === my_calendar.links ) ) {
-		var container = ( 'true' === my_calendar.grid ) ? '.calendar-event' : '.list-event';
-		var wrapper = ( 'true' === my_calendar.links && 'true' === my_calendar.grid ) ? '.mc-events' : container;
+		let container = ( 'true' === my_calendar.grid ) ? '.calendar-event' : '.list-event';
+		let wrapper = ( 'true' === my_calendar.links && 'true' === my_calendar.grid ) ? '.mc-events' : container;
 		$( wrapper + ' .single-details' ).hide();
 		$(document).on('click', wrapper + ' .event-title .open',
 			function (e) {
-				var visible    = $(this).parents( '.mc-event' ).children( '.details' ).is(':visible');
-				var controls   = $( this ).attr( 'aria-controls' );
-				var controlled = $( '#' + controls );
+				let visible      = $(this).parents( '.mc-event' ).children( '.details' ).is(':visible');
+				let controls     = $( this ).attr( 'aria-controls' );
+				const controlled = $( '#' + controls );
 				if ( visible ) {
 					$(this).attr( 'aria-expanded', 'false' );
 				} else {
 					$(this).attr( 'aria-expanded', 'true' );
 				}
 				e.preventDefault();
-				var current_date = $(this).parents( '.mc-event' ).children();
+				let current_date = $(this).parents( '.mc-event' ).children();
 
 				$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
 				controlled.toggle();
 
-				var focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
-				var lastFocus  = focusable.last();
-				var firstFocus = focusable.first();
+				const focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
+				const lastFocus  = focusable.last();
+				const firstFocus = focusable.first();
 				firstFocus.attr( 'data-action', 'shiftforward' );
 				lastFocus.attr( 'data-action', 'shiftback' );
 
@@ -92,7 +92,7 @@
 			});
 
 		$(document).on( 'keydown', function(e) {
-			var keycode = ( e.keyCode ? e.keyCode : e.which );
+			let keycode = ( e.keyCode ? e.keyCode : e.which );
 			if ( keycode == 27 ) {
 				$( '.mc-main ').removeClass( 'grid-open' );
 				$( '.calendar-event div.single-details' ).hide();
@@ -102,8 +102,8 @@
 
 		$(document).on( 'keydown', '.mc-event a, .mc-event object, .mc-event :input, .mc-event iframe, .mc-event [tabindex]',
 			function(e) {
-				var keycode = ( e.keyCode ? e.keyCode : e.which );
-				var action  = $( ':focus' ).attr( 'data-action' );
+				let keycode = ( e.keyCode ? e.keyCode : e.which );
+				let action  = $( ':focus' ).attr( 'data-action' );
 				if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
 					e.preventDefault();
 					$( '[data-action=shiftforward]' ).trigger( 'focus' );
@@ -116,7 +116,7 @@
 	}
 
 	if ( 'true' === my_calendar.ajax ) {
-		var links = $( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
+		const links = $( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
 		links.each( function() {
 			$( this ).attr( 'role', 'button' );
 		});
@@ -129,38 +129,39 @@
 		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
 			e.preventDefault();
 			if ( 'click' === e.type || ( 'keyup' === e.type && 32 === e.which ) ) {
-				var targetId = $( this ).attr( 'id' );
-				var calendar = $( this ).closest( '.mc-main' );
-				var ref      = calendar.attr('id');
-				var month    = '';
-				var day      = '';
-				var year     = '';
-				var mcat     = '';
-				var loc      = '';
-				var access   = '';
-				var mcs      = '';
+				let targetId   = $( this ).attr( 'id' );
+				const calendar = $( this ).closest( '.mc-main' );
+				let ref        = calendar.attr('id');
+				let month      = '';
+				let day        = '';
+				let year       = '';
+				let mcat       = '';
+				let loc        = '';
+				let access     = '';
+				let mcs        = '';
+				let link       = '';
+				let url;
 				if ( 'INPUT' === this.nodeName ) {
-					var inputForm = $( this ).parents( 'form' );
+					const inputForm = $( this ).parents( 'form' );
 					if ( inputForm.hasClass( 'mc-date-switcher' ) ) {
-						var month = inputForm.find( 'select[name=month]' ).val();
-						var day   = inputForm.find( 'select[name=dy]' ).val();
-						var year  = inputForm.find( 'select[name=yr]' ).val();
+						month = inputForm.find( 'select[name=month]' ).val();
+						day   = inputForm.find( 'select[name=dy]' ).val();
+						year  = inputForm.find( 'select[name=yr]' ).val();
 					}
 					if ( inputForm.hasClass( 'mc-categories-switcher' ) ) {
-						var mcat = inputForm.find( 'select[name=mcat]' ).val();
+						mcat = inputForm.find( 'select[name=mcat]' ).val();
 					}
 					if ( inputForm.hasClass( 'mc-locations-switcher' ) ) {
-						var loc = inputForm.find( 'select[name=loc]' ).val();
+						loc = inputForm.find( 'select[name=loc]' ).val();
 					}
 					if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
-						var access = inputForm.find( 'select[name=access]' ).val();
+						access = inputForm.find( 'select[name=access]' ).val();
 					}
-					var mcs  = inputForm.find( 'input[name=mcs]' ).val();
-					var link = $( this ).attr( 'data-href' );
+					mcs  = inputForm.find( 'input[name=mcs]' ).val();
+					link = $( this ).attr( 'data-href' );
 				} else {
-					var link = $(this).attr('href');
+					link = $(this).attr('href');
 				}
-				let url;
 				try {
 					url = new URL(link);
 					url.searchParams.delete('embed');
@@ -204,7 +205,7 @@
 					url = false;
 				}
 
-				var height = calendar.height();
+				let height = calendar.height();
 				$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
 				$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
 
@@ -231,7 +232,7 @@
 					}
 					// All views.
 					$( '#' + targetId ).trigger( 'focus' );
-					var refText = $( '#mc_head_' + ref ).text();
+					let refText = $( '#mc_head_' + ref ).text();
 					wp.a11y.speak( refText );
 					mc_display_usertime();
 					mc_build_toggles();
@@ -242,10 +243,11 @@
 	}
 
 	function mc_display_usertime() {
-		var utime = $( '.mc-user-time' );
+		const utime = $( '.mc-user-time' );
 		let label = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		let udate = '';
 		utime.each(function() {
-			var time  = $( this ).text();
+			let time  = $( this ).text();
 			// Handle Internet Explorer's lack of timezone info.
 			if (undefined === label) {
 				label = $( this ).attr( 'data-label' );
@@ -253,18 +255,18 @@
 			if ( time.replace( 'Z', '.000Z' ) === new Date( time ).toISOString() ) {
 				$( this ).css( {'display' : 'none'} );
 			}
-			var utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
-			var udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
+			utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
+			udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
 			$( this ).html( '<span class="mc-local-time-label">' + label + ':</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
 		});
 	}
 
 	function mc_build_toggles() {
-		var subscribe   = $( '.mc-subscribe' );
-		var exports     = $( '.mc-download' );
+		const subscribe   = $( '.mc-subscribe' );
+		const exports     = $( '.mc-download' );
 		if ( subscribe.length > 0 ) {
-			var controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
-			var toggle = document.createElement( 'button' );
+			let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+			const toggle = document.createElement( 'button' );
 			toggle.setAttribute( 'type', 'button' );
 			toggle.setAttribute( 'aria-controls', controls_id );
 			toggle.setAttribute( 'aria-expanded', false );
@@ -274,8 +276,8 @@
 			subscribe.prepend( toggle );
 		}
 		if ( exports.length > 0 ) {
-			var controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
-			var toggle = document.createElement( 'button' );
+			let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+			const toggle = document.createElement( 'button' );
 			toggle.setAttribute( 'type', 'button' );
 			toggle.setAttribute( 'aria-controls', controls_id );
 			toggle.setAttribute( 'aria-expanded', false );
@@ -284,11 +286,11 @@
 			exports.find( 'ul' ).css( { 'display' : 'none' } );
 			exports.prepend( toggle );
 		}
-		var toggles = $( '.mc-export button' );
+		const toggles = $( '.mc-export button' );
 		toggles.each( function() {
 			$( this ).on( 'click', function(e) {
-				var controlled = $( this ).attr( 'aria-controls' );
-				var target     = $( '#' + controlled );
+				let controlled = $( this ).attr( 'aria-controls' );
+				let target     = $( '#' + controlled );
 				if ( target.is( ':visible' ) ) {
 					target.css( { 'display' : 'none' } );
 					$( this ).attr( 'aria-expanded', 'false' );
@@ -307,29 +309,30 @@
 	 */
 		function my_calendar_table_aria() {
 			try {
-				var allTables = document.querySelectorAll('.mc-main.calendar table.my-calendar-table');
-				for (var i = 0; i < allTables.length; i++) {
+				const allTables = document.querySelectorAll('.mc-main.calendar table.my-calendar-table');
+				const allRowGroups = document.querySelectorAll('.mc-main.calendar table.my-calendar-table thead, .mc-main.calendar table.my-calendar-table tbody, .mc-main.calendar table.my-calendar-table tfoot');
+				const allRows = document.querySelectorAll('.mc-main.calendar table.my-calendar-table tr');
+				const allCells = document.querySelectorAll('.mc-main.calendar table.my-calendar-table td');
+				const allHeaders = document.querySelectorAll('.mc-main.calendar table.my-calendar-table th');
+				const allRowHeaders = document.querySelectorAll('.mc-main.calendar table.my-calendar-table th[scope=row]');
+
+				for (let i = 0; i < allTables.length; i++) {
 				  allTables[i].setAttribute('role','table');
 				}
-				var allRowGroups = document.querySelectorAll('.mc-main.calendar table.my-calendar-table thead, .mc-main.calendar table.my-calendar-table tbody, .mc-main.calendar table.my-calendar-table tfoot');
-				for (var i = 0; i < allRowGroups.length; i++) {
+				for (let i = 0; i < allRowGroups.length; i++) {
 				  allRowGroups[i].setAttribute('role','rowgroup');
 				}
-				var allRows = document.querySelectorAll('.mc-main.calendar table.my-calendar-table tr');
-				for (var i = 0; i < allRows.length; i++) {
+				for (let i = 0; i < allRows.length; i++) {
 				  allRows[i].setAttribute('role','row');
 				}
-				var allCells = document.querySelectorAll('.mc-main.calendar table.my-calendar-table td');
-				for (var i = 0; i < allCells.length; i++) {
+				for (let i = 0; i < allCells.length; i++) {
 				  allCells[i].setAttribute('role','cell');
 				}
-				var allHeaders = document.querySelectorAll('.mc-main.calendar table.my-calendar-table th');
-				for (var i = 0; i < allHeaders.length; i++) {
+				for (let i = 0; i < allHeaders.length; i++) {
 				  allHeaders[i].setAttribute('role','columnheader');
 				}
 				// this accounts for scoped row headers
-				var allRowHeaders = document.querySelectorAll('.mc-main.calendar table.my-calendar-table th[scope=row]');
-				for (var i = 0; i < allRowHeaders.length; i++) {
+				for (let i = 0; i < allRowHeaders.length; i++) {
 				  allRowHeaders[i].setAttribute('role','rowheader');
 				}
 				// caption role not needed as it is not a real role and
