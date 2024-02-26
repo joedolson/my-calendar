@@ -58,18 +58,18 @@
 
 	function mc_map( el ) {
 		// var
-		var $markers = el.querySelectorAll( '.marker' );
-		var count    = $markers.length;
-		var mapType  = el.getAttribute( 'data-maptype' );
+		const $markers = el.querySelectorAll( '.marker' );
+		const count    = $markers.length;
+		let mapType  = el.getAttribute( 'data-maptype' );
 		// vars
-		var args = {
+		const args = {
 			center    : {lng: 0.0000, lat: 0.0000},
 			mapTypeId : mapType
 		};
 	
 		// create map
-		var plot   = new google.maps.Map( el, args );
-		var bounds = new google.maps.LatLngBounds();
+		const plot   = new google.maps.Map( el, args );
+		const bounds = new google.maps.LatLngBounds();
 
 		// add markers
 		$markers.forEach((marker) => {
@@ -78,7 +78,7 @@
 
 		if ( count > 25 ) {
 			// If there's a large number of locations, allow the bounds to extend outside the minimum area.
-			var extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() - 0.01, bounds.getNorthEast().lng() - 0.01 );
+			const extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() - 0.01, bounds.getNorthEast().lng() - 0.01 );
 			bounds.extend( extendPoint );
 		}
 
@@ -101,11 +101,11 @@
 	*/
 
 	function add_marker( $marker, plot, bounds ) {
-		var latlng  = new google.maps.LatLng( $marker.getAttribute('data-lat'), $marker.getAttribute('data-lng') );
-		var marker  = null;
+		const latlng = new google.maps.LatLng( $marker.getAttribute('data-lat'), $marker.getAttribute('data-lng') );
+		let marker   = null;
 		// Geocoder
 		if ( '' == $marker.getAttribute( 'data-lat' ) || '' == $marker.getAttribute( 'data-lng' ) ) {
-			var geocoder = new google.maps.Geocoder();
+			const geocoder = new google.maps.Geocoder();
 			marker = new getAddress( geocoder, $marker, plot, bounds );
 		} else {
 			plot.setCenter( latlng );
@@ -117,20 +117,20 @@
 				title		: $marker.getAttribute( 'data-title' ),
 			});
 
-			var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			const latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
 			bounds.extend( latlng );
 			// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 			if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
-				var extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
+				const extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
 				bounds.extend( extendPoint );
 			}
 			plot.fitBounds(bounds);
 
 			// if marker contains HTML, add it to an infoWindow
-			var content = $marker.innerHTML;
+			let content = $marker.innerHTML;
 			if ( content ) {
 				// create info window
-				var infowindow = new google.maps.InfoWindow({
+				const infowindow = new google.maps.InfoWindow({
 					content		: content
 				});
 
@@ -151,8 +151,8 @@
 	 * @param bounds Google boundary object.
 	 */
 	function getAddress( geocoder, $marker, plot, bounds ) {
-		var address = $marker.getAttribute( 'data-address' );
-		var marker = null;
+		let address = $marker.getAttribute( 'data-address' );
+		let marker = null;
 		marker = geocoder.geocode({'address': address}, function(results, status) {
 			if ( status === 'OK' ) {
 				plot.setCenter( results[0].geometry.location );
@@ -163,20 +163,20 @@
 					title : $marker.getAttribute( 'data-title' ),
 				});
 
-				var latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+				const latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
 				bounds.extend( latlng );
 				// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 				if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
-					var extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
+					const extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
 					bounds.extend( extendPoint );
 				}
 				plot.fitBounds(bounds);
 
 				// if marker contains HTML, add it to an infoWindow
-				var content = $marker.innerHTML;
+				let content = $marker.innerHTML;
 				if ( content ) {
 					// create info window
-					var infowindow = new google.maps.InfoWindow({
+					const infowindow = new google.maps.InfoWindow({
 						content		: content
 					});
 
