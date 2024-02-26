@@ -9,7 +9,7 @@
 						return resolve([])
 					}
 
-					var data = new FormData();
+					const data = new FormData();
 					data.append( 'action', mclocations.action );
 					data.append( 'security', mclocations.security );
 					data.append( 'data', input );
@@ -24,7 +24,7 @@
 				})
 			},
 			onSubmit: result => {
-				var location_field = document.getElementById( 'mc_event_location_value' );
+				let location_field = document.getElementById( 'mc_event_location_value' );
 
 				location_field.value = result.location_id;
 				$( location_field ).trigger( 'change' );
@@ -43,7 +43,7 @@
 						return resolve([])
 					}
 
-					var data = new FormData();
+					const data = new FormData();
 					data.append( 'action', mcpages.action );
 					data.append( 'security', mcpages.security );
 					data.append( 'data', input );
@@ -58,7 +58,7 @@
 				})
 			},
 			onSubmit: result => {
-				var pages_field = document.getElementById( 'mc_uri_id' );
+				let pages_field = document.getElementById( 'mc_uri_id' );
 
 				pages_field.value = result.post_id;
 				$( pages_field ).trigger( 'change' );
@@ -77,7 +77,7 @@
 						return resolve([])
 					}
 
-					var data = new FormData();
+					const data = new FormData();
 					data.append( 'action', mcicons.action );
 					data.append( 'security', mcicons.security );
 					data.append( 'data', input );
@@ -92,7 +92,7 @@
 				})
 			},
 			onSubmit: result => {
-				var icon_field = document.getElementById( 'mc_category_icon' );
+				let icon_field = document.getElementById( 'mc_category_icon' );
 
 				icon_field.value = result.filename;
 				$( icon_field ).trigger( 'change' );
@@ -113,7 +113,7 @@
 						return resolve([])
 					}
 
-					var data = new FormData();
+					const data = new FormData();
 					data.append( 'action', mccountries.action );
 					data.append( 'security', mccountries.security );
 					data.append( 'data', input );
@@ -128,7 +128,7 @@
 				})
 			},
 			onSubmit: result => {
-				var location_field = document.getElementById( 'e_country' );
+				let location_field = document.getElementById( 'e_country' );
 
 				icon_field.value = result.country;
 				$( location_field ).trigger( 'change' );
