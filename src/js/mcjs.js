@@ -243,10 +243,11 @@
 	}
 
 	function mc_display_usertime() {
-		const utime = $( '.mc-user-time' );
-		let label = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		let udate = '';
-		utime.each(function() {
+		const usertime = $( '.mc-user-time' );
+		let label = Intl.DateTimeFormat().resolvedOptions().timeZone,
+			udate = '',
+			utime = '';
+		usertime.each(function() {
 			let time  = $( this ).text();
 			// Handle Internet Explorer's lack of timezone info.
 			if (undefined === label) {
