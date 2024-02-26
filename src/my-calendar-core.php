@@ -579,7 +579,7 @@ function mc_write_js() {
 				<?php
 				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_GET['page'] ) && 'my-calendar' === $_GET['page'] ) {
 					?>
-				var mc_allowed = $( '#mc_twitter' ).attr( 'data-allowed' );
+				let mc_allowed = $( '#mc_twitter' ).attr( 'data-allowed' );
 				$('#mc_twitter').charCount({
 					allowed: mc_allowed,
 					counterText: '<?php esc_html_e( 'Characters left: ', 'my-calendar' ); ?>'
@@ -1751,7 +1751,7 @@ function mc_scripts() {
 
 	if ( 'toplevel_page_my-calendar' === $id && function_exists( 'wpt_post_to_twitter' ) ) {
 		// When running locally, this is wrong. May change in the future.
-		wp_enqueue_script( 'charCount', plugins_url( 'wp-to-twitter/js/jquery.charcount.js' ), array( 'jquery' ), $version );
+		wp_enqueue_script( 'wpt.charcount' );
 	}
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {
 		if ( current_user_can( 'mc_manage_events' ) ) {
