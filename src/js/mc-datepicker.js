@@ -10,6 +10,7 @@ function mcLoadPickers() {
 
 	pickers.forEach((picker) => {
 		const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+		let fullMonth;
 		picker.dateAdapter = {
 			parse(value = "", createDate) {
 			const matches = value.match(DATE_FORMAT_US)
@@ -26,10 +27,10 @@ function mcLoadPickers() {
 					case 'd-m-Y':
 						return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
 					case 'j F Y':
-						var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'long' } ).format( date );
+						fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'long' } ).format( date );
 						return `${date.getDate()} ${fullMonth} ${date.getFullYear()}`
 					case 'M j, Y':
-						var fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'short' } ).format( date );
+						fullMonth = Intl.DateTimeFormat( 'en-US', { month: 'short' } ).format( date );
 						return `${date.getDate()} ${fullMonth}, ${date.getFullYear()}`
 					default:
 						return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
@@ -44,12 +45,12 @@ function mcLoadPickers() {
 	const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
 	const eventEndEl     = document.querySelector( 'input[name="event_end[]"]' );
 	const eventBeginEl   = document.querySelector( 'input[name="event_begin[]"]' );
-	var recurrences      = document.querySelector( '.disable-recurrences' );
+	const recurrences    = document.querySelector( '.disable-recurrences' );
 
 	if ( null !== eventBegin ) {
 
-		var startDate   = false;
-		var endDate     = false;
+		let startDate   = false;
+		let endDate     = false;
 
 		if ( null !== eventRecur ) {
 			eventRecur.addEventListener( 'duetChange', function(e) {
@@ -75,13 +76,14 @@ function mcLoadPickers() {
 			}
 
 			if ( null !== recurrences ) {
-				var fieldset = recurrences.querySelector( 'fieldset' );
+				const fieldset = recurrences.querySelector( 'fieldset' );
+				const icon     = recurrences.querySelector( '.dashicons' );
+				const inputs   = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+
 				fieldset.setAttribute( 'style', '' );
 				recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
-				var icon = recurrences.querySelector( '.dashicons' );
 				icon.classList.add( 'dashicons-arrow-down' );
 				icon.classList.remove( 'dashicons-arrow-right' );
-				var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
 				inputs.forEach((input) => {
 					input.disabled = false;
 				});
@@ -95,13 +97,14 @@ function mcLoadPickers() {
 			startDate = eventBeginEl.value;
 
 			if ( null !== recurrences ) {
-				var fieldset = recurrences.querySelector( 'fieldset' );
+				const fieldset = recurrences.querySelector( 'fieldset' );
+				const icon     = recurrences.querySelector( '.dashicons' );
+				const inputs   = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+
 				fieldset.setAttribute( 'style', '' );
 				recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
-				var icon = recurrences.querySelector( '.dashicons' );
 				icon.classList.add( 'dashicons-arrow-down' );
 				icon.classList.remove( 'dashicons-arrow-right' );
-				var inputs = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
 				inputs.forEach((input) => {
 					input.disabled = false;
 				});
@@ -128,11 +131,11 @@ function myCalendarTestDates( endDate, startDate ) {
 	}
 	endDate   = new Date( endDate );
 	startDate = new Date( startDate );
-	var dateDiff = ( endDate - startDate ) / 1000;
-	var recurOptions = document.querySelectorAll( '#e_recur option' );
+	let dateDiff = ( endDate - startDate ) / 1000;
+	const recurOptions = document.querySelectorAll( '#e_recur option' );
 	if ( recurOptions ) {
 		recurOptions.forEach((el) =>{
-			var period = el.getAttribute( 'data-period' );
+			let period = el.getAttribute( 'data-period' );
 			if ( period < dateDiff ) {
 				el.setAttribute( 'disabled', 'true' );
 			} else {
@@ -140,6 +143,7 @@ function myCalendarTestDates( endDate, startDate ) {
 			}
 		});
 	}
+	console.log( { endDate, startDate } );
 	if ( new Date( endDate ) < startDate ) {
 		eventDateError.classList.add( 'visible' );
 		submitButton.disabled = true;
