@@ -76,6 +76,24 @@ function mc_event_object( $object ) {
 	return $object;
 }
 
+/**
+ * Get the first and last event stored in the database.
+ *
+ * @param int|false $site Optional. Site to check.
+ *
+ * @return array Array containing the date of the first and last event.
+ */
+function mc_get_date_bounds( $site = false ) {
+	$mcdb  = mc_is_remote_db();
+	$first = $mcdb->get_var( 'SELECT occur_begin FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_begin ASC LIMIT 0, 1' );
+	$last  = $mcdb->get_var( 'SELECT occur_end FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_end DESC LIMIT 0, 1' );
+
+	return array(
+		'first' => $first,
+		'last'  => $last,
+	);
+}
+
 
 /**
  * Create a GUID for an event.
