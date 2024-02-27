@@ -486,7 +486,6 @@ add_action( 'mc_print_view_head', 'mc_enqueue_calendar_print_styles' );
  */
 function mc_head() {
 	if ( defined( 'WPSEO_VERSION' ) ) {
-		add_filter( 'wpseo_schema_graph', 'mc_add_yoast_schema', 10, 2 );
 		return;
 	}
 
