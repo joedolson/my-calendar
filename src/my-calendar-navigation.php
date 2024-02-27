@@ -169,7 +169,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up navigation links.
 	if ( in_array( 'nav', $used, true ) ) {
-		$nav = mc_nav( $date, $format, $time, $show_months, $main_class );
+		$nav = mc_nav( $date, $format, $time, $show_months, $main_class, $site );
 	}
 
 	// Set up subscription feeds.
@@ -187,7 +187,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up date switcher.
 	if ( in_array( 'jump', $used, true ) ) {
-		$jump = mc_date_switcher( $format, $main_class, $time, $date );
+		$jump = mc_date_switcher( $format, $main_class, $time, $date, $site );
 	}
 
 	/**
@@ -270,32 +270,61 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
  * @param string $time Current time view.
  * @param int    $show_months Num months to show.
  * @param string $id view ID.
+ * @param int    $site Optional. Site ID if not main site.
  *
  * @return string prev/next nav.
  */
-function mc_nav( $date, $format, $time, $show_months, $id ) {
-	$prev       = my_calendar_prev_link( $date, $format, $time, $show_months );
-	$next       = my_calendar_next_link( $date, $format, $time, $show_months );
-	$prev_link  = mc_build_url(
-		array(
-			'yr'    => $prev['yr'],
-			'month' => $prev['month'],
-			'dy'    => $prev['day'],
-			'cid'   => $id,
-		),
-		array()
-	);
-	$prev_link  = mc_url_in_loop( $prev_link );
-	$next_link  = mc_build_url(
-		array(
-			'yr'    => $next['yr'],
-			'month' => $next['month'],
-			'dy'    => $next['day'],
-			'cid'   => $id,
-		),
-		array()
-	);
-	$next_link  = mc_url_in_loop( $next_link );
+function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
+	$prev      = my_calendar_prev_link( $date, $format, $time, $show_months );
+	$next      = my_calendar_next_link( $date, $format, $time, $show_months );
+	$prev_link = '';
+	$next_link = '';
+	if ( $prev ) {
+		$prev_link  = mc_build_url(
+			array(
+				'yr'    => $prev['yr'],
+				'month' => $prev['month'],
+				'dy'    => $prev['day'],
+				'cid'   => $id,
+			),
+			array()
+		);
+		$prev_link  = mc_url_in_loop( $prev_link );
+		/**
+		 * Filter HTML output for navigation 'prev' link.
+		 *
+		 * @hook mc_prev_link
+		 *
+		 * @param {string} $prev_link HTML output for link.
+		 * @param {array} $prev Previous link parameters.
+		 *
+		 * @return {string}
+		 */
+		$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . wp_kses_post( $prev['label'] ) . '</a></li>', $prev );
+	}
+	if ( $next ) {
+		$next_link  = mc_build_url(
+			array(
+				'yr'    => $next['yr'],
+				'month' => $next['month'],
+				'dy'    => $next['day'],
+				'cid'   => $id,
+			),
+			array()
+		);
+		$next_link  = mc_url_in_loop( $next_link );
+		/**
+		 * Filter HTML output for navigation 'next' link.
+		 *
+		 * @hook mc_next_link
+		 *
+		 * @param {string} $next_link HTML output for link.
+		 * @param {array} $next Next link parameters.
+		 *
+		 * @return {string}
+		 */
+		$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . wp_kses_post( $next['label'] ) . '</a></li>', $next );
+	}
 	$today_text = ( '' === mc_get_option( 'today_events' ) ) ? __( 'Today', 'my-calendar' ) : mc_get_option( 'today_events' );
 
 	$active  = '';
@@ -321,29 +350,6 @@ function mc_nav( $date, $format, $time, $show_months, $id ) {
 	 * @return {string}
 	 */
 	$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow" class="today' . $active . '"' . $current . '>' . wp_kses_post( $today_text ) . '</a></li>' );
-
-	/**
-	 * Filter HTML output for navigation 'prev' link.
-	 *
-	 * @hook mc_prev_link
-	 *
-	 * @param {string} $prev_link HTML output for link.
-	 * @param {array} $prev Previous link parameters.
-	 *
-	 * @return {string}
-	 */
-	$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . wp_kses_post( $prev['label'] ) . '</a></li>', $prev );
-	/**
-	 * Filter HTML output for navigation 'next' link.
-	 *
-	 * @hook mc_next_link
-	 *
-	 * @param {string} $next_link HTML output for link.
-	 * @param {array} $next Next link parameters.
-	 *
-	 * @return {string}
-	 */
-	$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . wp_kses_post( $next['label'] ) . '</a></li>', $next );
 
 	$nav = '
 		<div class="my-calendar-nav">
@@ -518,10 +524,12 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
  * @param string $format of calendar.
  * @param string $time current time view.
  * @param int    $months number of months shown in list views.
+ * @param int    $site Optional. Site ID if not main site.
  *
  * @return array of parameters for link
  */
-function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
+function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $site = false) {
+	$bounds    = mc_get_date_bounds( $site );
 	$cur_year  = (int) $date['year'];
 	$cur_month = (int) $date['month'];
 	$cur_day   = (int) $date['day'];
@@ -607,12 +615,17 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
 		$date = date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) );
 	}
 	$next_events = str_replace( '{date}', $date, $next_events );
-	$output      = array(
-		'month' => $month,
-		'yr'    => $yr,
-		'day'   => $day,
-		'label' => $next_events,
-	);
+	$test_date   = ( $day ) ? "$yr-$month-$day" : "$yr-" . str_pad( $month, 2, 0, STR_PAD_LEFT ) . '-01';
+	if ( strtotime( $bounds['last'] ) < strtotime( $test_date ) ) {
+		$output = false;
+	} else {
+		$output = array(
+			'month' => $month,
+			'yr'    => $yr,
+			'day'   => $day,
+			'label' => $next_events,
+		);
+	}
 
 	return $output;
 }
@@ -624,10 +637,12 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1 ) {
  * @param string $format of calendar.
  * @param string $time current time view.
  * @param int    $months number of months shown in list views.
+ * @param int    $site Optional. Site ID if not main site.
  *
  * @return array of parameters for link
  */
-function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
+function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1, $site = false ) {
+	$bounds    = mc_get_date_bounds( $site );
 	$cur_year  = (int) $date['year'];
 	$cur_month = (int) $date['month'];
 	$cur_day   = (int) $date['day'];
@@ -712,12 +727,17 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1 ) {
 		$date = date_i18n( $format, mktime( 0, 0, 0, $month, $day, $yr ) );
 	}
 	$previous_events = str_replace( '{date}', $date, $previous_events );
-	$output          = array(
-		'month' => $month,
-		'yr'    => $yr,
-		'day'   => $day,
-		'label' => $previous_events,
-	);
+	$test_date       = ( $day ) ? "$yr-$month-$day" : "$yr-" . str_pad( $month, 2, 0, STR_PAD_LEFT ) . '-' . mc_date( 't', strtotime( "$yr-$month" ) );
+	if ( strtotime( $bounds['first'] ) > strtotime( $test_date ) ) {
+		$output = false;
+	} else {
+		$output          = array(
+			'month' => $month,
+			'yr'    => $yr,
+			'day'   => $day,
+			'label' => $previous_events,
+		);
+	}
 
 	return $output;
 }
@@ -972,14 +992,14 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
  * @param string $cid ID of current view.
  * @param string $time Current time view.
  * @param array  $date current date array (month, year, day).
+ * @param int    $site Optional. Site ID if not current site.
  *
  * @return string HTML output.
  */
-function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $date = array() ) {
+function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $date = array(), $site = false ) {
 	if ( 'week' === $time ) {
 		return '';
 	}
-	$mcdb    = mc_is_remote_db();
 	$c_month = isset( $date['month'] ) ? $date['month'] : current_time( 'n' );
 	$c_year  = isset( $date['year'] ) ? $date['year'] : current_time( 'Y' );
 	$c_day   = isset( $date['day'] ) ? $date['day'] : current_time( 'j' );
@@ -1024,7 +1044,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	$date_switcher .= '</select>' . "\n" . $day_switcher . ' <label class="maybe-hide" for="' . $cid . '-year">' . __( 'Year', 'my-calendar' ) . '</label> <select id="' . $cid . '-year" name="yr">' . "\n";
 	// Query to identify oldest start date in the database.
-	$bounds = mc_get_date_bounds();
+	$bounds = mc_get_date_bounds( $site );
 	$first  = $bounds['first'];
 	$first = ( '1970-01-01 00:00:00' === $first ) ? '2000-01-01' : $first;
 	$year1 = (int) mc_date( 'Y', strtotime( $first, false ) );

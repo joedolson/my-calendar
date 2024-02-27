@@ -58,9 +58,9 @@ function mc_event_object( $object ) {
  * @return array Array containing the date of the first and last event.
  */
 function mc_get_date_bounds( $site = false ) {
-	global $wpdb;
-	$first = $wpdb->get_var( 'SELECT occur_begin FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_begin ASC LIMIT 0, 1' );
-	$last  = $wpdb->get_var( 'SELECT occur_end FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_end DESC LIMIT 0, 1' );
+	$mcdb  = mc_is_remote_db();
+	$first = $mcdb->get_var( 'SELECT occur_begin FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_begin ASC LIMIT 0, 1' );
+	$last  = $mcdb->get_var( 'SELECT occur_end FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_end DESC LIMIT 0, 1' );
 
 	return array(
 		'first' => $first,
