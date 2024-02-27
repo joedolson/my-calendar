@@ -485,6 +485,11 @@ add_action( 'mc_print_view_head', 'mc_enqueue_calendar_print_styles' );
  * Publically written head styles & scripts
  */
 function mc_head() {
+	if ( defined( 'WPSEO_VERSION' ) ) {
+		add_filter( 'wpseo_schema_graph', 'mc_add_yoast_schema', 10, 2 );
+		return;
+	}
+
 	if ( mc_is_single_event() ) {
 		$mc_id = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
 		if ( $mc_id ) {
@@ -502,6 +507,45 @@ function mc_head() {
 
 		echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
 	}
+}
+
+/**
+ * Filters the Schema output, adding in organization blocks.
+ *
+ * @param array             $graph   The schema graph.
+ * @param Meta_Tags_Context $context Context value object.
+ *
+ * @return array
+ */
+function mc_add_yoast_schema( $graph, $context ) {
+	if ( mc_is_single_event() ) {
+		$mc_id = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+		if ( $mc_id ) {
+			$event  = mc_get_event( $mc_id );
+			$schema = mc_event_schema( $event );
+
+			unset( $schema['@context'] );
+			$schema['mainEntityOfPage'] = [ '@id' => $context->canonical ];
+			
+			if ( isset( $schema['location'] ) ) {
+				unset( $schema['location']['@context'] );
+			}
+			$graph[] = $schema;
+		}
+	}
+	
+	if ( is_singular( 'mc-locations' ) ) {
+		$loc_id   = mc_get_location_id( get_the_ID() );
+		$location = mc_get_location( $loc_id );
+		$schema   = mc_location_schema( $location );
+
+		unset( $schema['@context'] );
+		$schema['mainEntityOfPage'] = [ '@id' => $context->canonical ];
+
+		$graph[] = $schema;
+	}
+	
+	return $graph;
 }
 
 /**
