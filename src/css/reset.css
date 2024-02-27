@@ -571,7 +571,7 @@
 }
 
 /* Override overflow:hidden */
-main,div.entry-content,div.site-content, table {
+main,div.entry-content,div.site-content, table, .mc-main nav {
 	overflow: visible !important; 
 }
 
@@ -852,11 +852,18 @@ svg.category-icon,
 
 .mc-main .mc-export ul {
 	position: absolute;
-	border: 1px solid;
+	box-shadow: 0 0 3px #ccc;
+	width: calc( 100% - 4px );
+	left: 2px;
+	top: calc( 1.62rem + 16px ); /* Line-height + padding of control. */
+}
+
+.mc-main .mc-export {
+	position: relative;
 }
 
 .mc-main .mc-export li {
-	border-bottom: 1px solid;
+	border-bottom: 1px solid #ccc;
 }
 
 .mc-main .mc-export li:last-of-type {
