@@ -1,3 +1,5 @@
+mcLoadPickers();
+
 window.customElements.whenDefined( 'duet-date-picker' ).then(() => {
 	elem = document.querySelectorAll('.duet-fallback');
 	elem.forEach((el) => {
@@ -48,15 +50,12 @@ function mcLoadPickers() {
 	const recurrences    = document.querySelector( '.disable-recurrences' );
 
 	if ( null !== eventBegin ) {
-
-		let startDate   = false;
-		let endDate     = false;
-
 		if ( null !== eventRecur ) {
 			eventRecur.addEventListener( 'duetChange', function(e) {
-				startDate = e.detail.value;
-				recurValue = document.querySelector( 'input[name="recur_end[]"' ).value;
-				recurEnd   = document.querySelector( '[identifier="r_end"]' );
+				let startDate = e.detail.value;
+				let endDate    = eventEndEl.value;
+				let recurValue = document.querySelector( 'input[name="recur_end[]"' ).value;
+				let recurEnd   = document.querySelector( '[identifier="r_end"]' );
 				/* Handle adding occurrences */
 				if ( ( '' !== recurValue ) && startDate > recurValue ) {
 					recurEnd.value = e.detail.value;
@@ -67,11 +66,11 @@ function mcLoadPickers() {
 		}
 
 		eventBegin.addEventListener( 'duetChange', function(e) {
-			startDate = e.detail.value;
-			endValue  = eventEndEl.value;
+			let startDate = e.detail.value;
+			let endDate  = eventEndEl.value;
 
 			/* Handle main date picker. */
-			if ( '' == endValue || startDate > endValue ) {
+			if ( '' == endDate || startDate > endDate ) {
 				eventEnd.value = e.detail.value;
 			}
 
@@ -93,8 +92,8 @@ function mcLoadPickers() {
 		});
 
 		eventEnd.addEventListener( 'duetChange', function(e) {
-			endDate   = e.detail.value;
-			startDate = eventBeginEl.value;
+			let endDate   = e.detail.value;
+			let startDate = eventBeginEl.value;
 
 			if ( null !== recurrences ) {
 				const fieldset = recurrences.querySelector( 'fieldset' );
@@ -114,10 +113,6 @@ function mcLoadPickers() {
 		});
 	}
 }
-mcLoadPickers();
-
-const eventDateError = document.querySelector( '#event_date_error' );
-const submitButton   = document.querySelector( '#my-calendar .button-primary' );
 
 /**
  * Disable the submit button if the end date is before the start date. Disable recurring options if length of event is greater than the recur period.
@@ -125,14 +120,17 @@ const submitButton   = document.querySelector( '#my-calendar .button-primary' );
  * @param {string} endDate Date string from end date field.
  * @param {string} startDate Date string from start date field.
  */
-function myCalendarTestDates( endDate, startDate ) {
-	if ( ! ( endDate && startDate ) ) {
+function myCalendarTestDates( end, start ) {
+	const eventDateError = document.querySelector( '#event_date_error' );
+	const submitButton   = document.querySelector( '#my-calendar .button-primary' );
+	const recurOptions   = document.querySelectorAll( '#e_recur option' );
+
+	if ( ! ( end && start ) ) {
 		return;
 	}
-	endDate   = new Date( endDate );
-	startDate = new Date( startDate );
-	let dateDiff = ( endDate - startDate ) / 1000;
-	const recurOptions = document.querySelectorAll( '#e_recur option' );
+	let endDate   = new Date( end );
+	let startDate = new Date( start );
+	let dateDiff  = ( endDate - startDate ) / 1000;
 	if ( recurOptions ) {
 		recurOptions.forEach((el) =>{
 			let period = el.getAttribute( 'data-period' );
