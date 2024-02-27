@@ -485,6 +485,7 @@ add_action( 'mc_print_view_head', 'mc_enqueue_calendar_print_styles' );
  * Publically written head styles & scripts
  */
 function mc_head() {
+	// If Yoast SEO is active, we don't need to output this schema.
 	if ( defined( 'WPSEO_VERSION' ) ) {
 		return;
 	}
@@ -509,7 +510,7 @@ function mc_head() {
 }
 
 /**
- * Filters the Schema output, adding in organization blocks.
+ * Filters the Yoast SEO Schema output, adding in graph blocks for Events and Location.
  *
  * @param array             $graph   The schema graph.
  * @param Meta_Tags_Context $context Context value object.
