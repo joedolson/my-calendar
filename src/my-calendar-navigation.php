@@ -280,7 +280,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 	$prev_link = '';
 	$next_link = '';
 	if ( $prev ) {
-		$prev_link  = mc_build_url(
+		$prev_link = mc_build_url(
 			array(
 				'yr'    => $prev['yr'],
 				'month' => $prev['month'],
@@ -289,7 +289,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 			),
 			array()
 		);
-		$prev_link  = mc_url_in_loop( $prev_link );
+		$prev_link = mc_url_in_loop( $prev_link );
 		/**
 		 * Filter HTML output for navigation 'prev' link.
 		 *
@@ -303,7 +303,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 		$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . wp_kses_post( $prev['label'] ) . '</a></li>', $prev );
 	}
 	if ( $next ) {
-		$next_link  = mc_build_url(
+		$next_link = mc_build_url(
 			array(
 				'yr'    => $next['yr'],
 				'month' => $next['month'],
@@ -312,7 +312,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 			),
 			array()
 		);
-		$next_link  = mc_url_in_loop( $next_link );
+		$next_link = mc_url_in_loop( $next_link );
 		/**
 		 * Filter HTML output for navigation 'next' link.
 		 *
@@ -528,7 +528,7 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
  *
  * @return array of parameters for link
  */
-function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $site = false) {
+function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $site = false ) {
 	$bounds    = mc_get_date_bounds( $site );
 	$cur_year  = (int) $date['year'];
 	$cur_month = (int) $date['month'];
@@ -731,7 +731,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1, $s
 	if ( strtotime( $bounds['first'] ) > strtotime( $test_date ) ) {
 		$output = false;
 	} else {
-		$output          = array(
+		$output = array(
 			'month' => $month,
 			'yr'    => $yr,
 			'day'   => $day,
@@ -1043,14 +1043,14 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		$date_switcher .= "<option value='$i'" . selected( $test, $c_month, false ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '</option>' . "\n";
 	}
 	$date_switcher .= '</select>' . "\n" . $day_switcher . ' <label class="maybe-hide" for="' . $cid . '-year">' . __( 'Year', 'my-calendar' ) . '</label> <select id="' . $cid . '-year" name="yr">' . "\n";
-	// Query to identify oldest start date in the database.
+	// Check first start date in the database.
 	$bounds = mc_get_date_bounds( $site );
 	$first  = $bounds['first'];
-	$first = ( '1970-01-01 00:00:00' === $first ) ? '2000-01-01' : $first;
-	$year1 = (int) mc_date( 'Y', strtotime( $first, false ) );
-	$diff1 = (int) mc_date( 'Y' ) - $year1;
-	$past  = $diff1;
-
+	$first  = ( '1970-01-01 00:00:00' === $first ) ? '2000-01-01' : $first;
+	$year1  = (int) mc_date( 'Y', strtotime( $first, false ) );
+	$diff1  = (int) mc_date( 'Y' ) - $year1;
+	$past   = $diff1;
+	// Check last end date.
 	$last   = $bounds['last'];
 	$year2  = (int) mc_date( 'Y', strtotime( $last, false ) );
 	$diff2  = $year2 - (int) mc_date( 'Y' );
