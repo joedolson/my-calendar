@@ -1024,11 +1024,17 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	$date_switcher .= '</select>' . "\n" . $day_switcher . ' <label class="maybe-hide" for="' . $cid . '-year">' . __( 'Year', 'my-calendar' ) . '</label> <select id="' . $cid . '-year" name="yr">' . "\n";
 	// Query to identify oldest start date in the database.
-	$first = $mcdb->get_var( 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1' );
-	$first = ( '1970-01-01' === $first ) ? '2000-01-01' : $first;
+	$bounds = mc_get_date_bounds();
+	$first  = $bounds['first'];
+	$first = ( '1970-01-01 00:00:00' === $first ) ? '2000-01-01' : $first;
 	$year1 = (int) mc_date( 'Y', strtotime( $first, false ) );
 	$diff1 = (int) mc_date( 'Y' ) - $year1;
 	$past  = $diff1;
+
+	$last   = $bounds['last'];
+	$year2  = (int) mc_date( 'Y', strtotime( $last, false ) );
+	$diff2  = $year2 - (int) mc_date( 'Y' );
+	$future = $diff2;
 	/**
 	 * How many years into the future should be shown in the navigation jumpbox. Default '5'.
 	 *
@@ -1039,7 +1045,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	 *
 	 * @return {int}
 	 */
-	$future = apply_filters( 'mc_jumpbox_future_years', 5, $cid );
+	$future = apply_filters( 'mc_jumpbox_future_years', $future, $cid );
 	$fut    = 1;
 	$f      = '';
 	$p      = '';
@@ -1053,7 +1059,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		$past = $past - 1;
 	}
 
-	while ( $fut < $future ) {
+	while ( $fut <= $future ) {
 		$f  .= '<option value="';
 		$f  .= $time + $fut;
 		$f  .= '"' . selected( $time + $fut, $c_year, false ) . '>';
