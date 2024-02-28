@@ -183,10 +183,10 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	 * Test that the start and end dates for the displayed period are correct.
 	 */
 	public function test_mc_date_array() {
-		$month_view = mc_date_array( '2024-02-28', 'month' );
-		$week_view  = mc_date_array( '2024-02-28', 'week' );
-		$next_month = mc_date_array( '2024-02-28', 'month+1' );
-		$two_month  = mc_date_array( '2024-02-28', 'month', 1 );
+		$month_view = mc_date_array( strtotime( '2024-02-28' ), 'month' );
+		$week_view  = mc_date_array( strtotime( '2024-02-28' ), 'week' );
+		$next_month = mc_date_array( strtotime( '2024-02-28' ), 'month+1' );
+		$two_month  = mc_date_array( strtotime( '2024-02-28' ), 'month', 1 );
 
 		$month_view_expected = array(
 			'from' => '2024-01-28',
@@ -218,8 +218,14 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 			'format' => 'list',
 			'time'   => 'month',
 		);
-		$single_month = mc_get_from_to( 1, $params, '2024-02-28' );
-		$two_month    = mc_get_from_to( 2, $params, '2024-02-28' );
+		$date        = array(
+			'day'          => 28,
+			'month'        => 2,
+			'year'         => 2024,
+			'current_date' => '2024-02-28',
+		);
+		$single_month = mc_get_from_to( 1, $params, $date );
+		$two_month    = mc_get_from_to( 2, $params, $date );
 
 		$expected_single = array(
 			'from' => '2024-02-01',
