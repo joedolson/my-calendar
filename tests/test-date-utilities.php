@@ -124,7 +124,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 			'num' => 1,
 			'day' => 'Thursday',
 		);
-		$third_week_expected = array(
+		$third_week_expected  = array(
 			'num' => 3,
 			'day' => 'Thursday',
 		);
@@ -155,7 +155,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 		$start_of_week_is_monday = mc_first_day_of_week( strtotime( '2024-04-04' ) );
 		$monday_expected         = array( '1', 'April' );
 		update_option( 'start_of_week', '2' );
-		$start_of_week_is_other  = mc_first_day_of_week( strtotime( '2024-04-04' ) );
+		$start_of_week_is_other = mc_first_day_of_week( strtotime( '2024-04-04' ) );
 		update_option( 'start_of_week', $start_of_week ); // Reset to original setting.
 
 		$this->assertSame( $start_of_week_is_sunday, $sunday_expected, 'Expecting Sunday, March 31st.' );
@@ -214,9 +214,9 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	 * Get the month from/to dates in list view.
 	 */
 	public function test_mc_get_from_to() {
-		$params = array(
+		$params       = array(
 			'format' => 'list',
-			'time'   => 'month'
+			'time'   => 'month',
 		);
 		$single_month = mc_get_from_to( 1, $params, '2024-02-28' );
 		$two_month    = mc_get_from_to( 2, $params, '2024-02-28' );
@@ -225,7 +225,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 			'from' => '2024-02-01',
 			'to'   => '2024-02-29',
 		);
-		$expected_multi = array(
+		$expected_multi  = array(
 			'from' => '2024-02-01',
 			'to'   => '2024-03-31',
 		);
