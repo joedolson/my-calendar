@@ -78,7 +78,7 @@ jobs:
 
       - name: Install WP
         shell: bash
-        run: tests/bin/install-wp-tests.sh wordpress_tests root '' 127.0.0.1:3306 ${{ matrix.wp_version }}
+        run: bin/install-wp-tests.sh wordpress_tests root '' 127.0.0.1:3306 ${{ matrix.wp_version }}
 
       - name: Run unit tests - single site
         run: composer test
