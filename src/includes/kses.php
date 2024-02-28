@@ -16,15 +16,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Execute KSES post on strings, otherwise, return as is.
  *
- * @param string $string Any string.
+ * @param string $input Any string.
  *
  * @return string Value passed or cleaned string
  */
-function mc_kses_post( $string ) {
-	if ( ! is_string( $string ) ) {
-		return $string;
+function mc_kses_post( $input ) {
+	if ( ! is_string( $input ) ) {
+		return $input;
 	} else {
-		return wp_kses( $string, 'mycalendar' );
+		return wp_kses( $input, 'mycalendar' );
 	}
 }
 

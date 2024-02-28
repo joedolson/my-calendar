@@ -13,11 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-include( dirname( __FILE__ ) . '/includes/widgets/class-my-calendar-simple-search.php' );
-include( dirname( __FILE__ ) . '/includes/widgets/class-my-calendar-filters.php' );
-include( dirname( __FILE__ ) . '/includes/widgets/class-my-calendar-today-widget.php' );
-include( dirname( __FILE__ ) . '/includes/widgets/class-my-calendar-upcoming-widget.php' );
-include( dirname( __FILE__ ) . '/includes/widgets/class-my-calendar-mini-widget.php' );
+require __DIR__ . '/includes/widgets/class-my-calendar-simple-search.php';
+require __DIR__ . '/includes/widgets/class-my-calendar-filters.php';
+require __DIR__ . '/includes/widgets/class-my-calendar-today-widget.php';
+require __DIR__ . '/includes/widgets/class-my-calendar-upcoming-widget.php';
+require __DIR__ . '/includes/widgets/class-my-calendar-mini-widget.php';
 
 /**
  * Generate the widget output for upcoming events.
@@ -247,7 +247,7 @@ function my_calendar_upcoming_events( $args ) {
 				$item = mc_draw_template( $details, $template, 'list', $event );
 			}
 			if ( $i < $skip && 0 !== $skip ) {
-				$i ++;
+				++$i;
 			} else {
 				$today   = current_time( 'Y-m-d H:i' );
 				$date    = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
@@ -468,9 +468,9 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 											$event_used    = true;
 											// Should today's events be counted as future or past? If more past events chosen, count as past.
 											if ( $before > $after ) {
-												$past ++;
+												++$past;
 											} else {
-												$future ++;
+												++$future;
 											}
 										} else {
 											$near_events[] = $e;
@@ -489,17 +489,17 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									$event_added = false;
 									// If this event happened before the current date.
 									if ( my_calendar_date_comp( $beginning, $current ) ) {
-										$past ++;
+										++$past;
 										$event_added = true;
 									}
 									// If this happened on the current date.
 									if ( my_calendar_date_equal( $beginning, $current ) && ! $event_added ) {
-										$extra ++;
+										++$extra;
 										$event_added = true;
 									}
 									// If this did not end before the current date.
 									if ( ! my_calendar_date_comp( $end, $current ) && ! $event_added ) {
-										$future ++;
+										++$future;
 										$event_added = true;
 									}
 
@@ -533,7 +533,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			if ( ! in_array( $details['group'], $groups, true ) ) {
 				// dtstart is already in current time zone.
 				if ( $i < $skip && 0 !== $skip ) {
-					$i ++;
+					++$i;
 				} else {
 					if ( ! in_array( $details['dateid'], $skips, true ) ) {
 						$output[] = array(
@@ -553,7 +553,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 	$intended = $before + $after + $extra;
 	$actual   = count( $output );
 	if ( $actual > $intended ) {
-		for ( $i = 0; $i < ( $actual - $intended ); $i ++ ) {
+		for ( $i = 0; $i < ( $actual - $intended ); $i++ ) {
 			array_pop( $output );
 		}
 	}

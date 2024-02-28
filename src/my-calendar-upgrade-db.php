@@ -242,7 +242,7 @@ function mc_migrate_settings() {
 function mc_upgrade_db() {
 	$globals = mc_globals();
 
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $globals['initial_db'] );
 	dbDelta( $globals['initial_occur_db'] );
 	dbDelta( $globals['initial_cat_db'] );

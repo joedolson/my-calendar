@@ -28,7 +28,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	/**
 	 * Contructor.
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Mini Calendar', 'my-calendar' ),
@@ -45,7 +45,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		$before_widget = $args['before_widget'];
 		$after_widget  = $args['after_widget'];
 		$before_title  = str_replace( 'h1', 'h2', $args['before_title'] );
@@ -114,7 +114,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	 *
 	 * @param array $instance Current widget settings.
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		$title           = empty( $instance['my_calendar_mini_title'] ) ? '' : $instance['my_calendar_mini_title'];
 		$widget_time     = empty( $instance['my_calendar_mini_time'] ) ? '' : $instance['my_calendar_mini_time'];
 		$widget_category = empty( $instance['my_calendar_mini_category'] ) ? null : $instance['my_calendar_mini_category'];
@@ -235,34 +235,34 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	/**
 	 * Update the My Calendar Mini Widget settings.
 	 *
-	 * @param array $new Widget settings new data.
+	 * @param array $new_data Widget settings new_data$new_data data.
 	 * @param array $instance Widget settings instance.
 	 *
 	 * @return array $instance Updated instance.
 	 */
-	function update( $new, $instance ) {
-		$instance['my_calendar_mini_title']    = mc_kses_post( $new['my_calendar_mini_title'] );
-		$instance['my_calendar_mini_time']     = mc_kses_post( $new['my_calendar_mini_time'] );
-		$instance['my_calendar_mini_category'] = ( in_array( 'all', (array) $new['my_calendar_mini_category'], true ) ) ? array() : $new['my_calendar_mini_category'];
-		$instance['above']                     = ( isset( $new['above'] ) && '' !== $new['above'] ) ? $new['above'] : 'none';
-		$instance['mc_link']                   = $new['mc_link'];
-		$instance['below']                     = ( isset( $new['below'] ) && '' !== $new['below'] ) ? $new['below'] : 'none';
+	public function update( $new_data, $instance ) {
+		$instance['my_calendar_mini_title']    = mc_kses_post( $new_data['my_calendar_mini_title'] );
+		$instance['my_calendar_mini_time']     = mc_kses_post( $new_data['my_calendar_mini_time'] );
+		$instance['my_calendar_mini_category'] = ( in_array( 'all', (array) $new_data['my_calendar_mini_category'], true ) ) ? array() : $new_data['my_calendar_mini_category'];
+		$instance['above']                     = ( isset( $new_data['above'] ) && '' !== $new_data['above'] ) ? $new_data['above'] : 'none';
+		$instance['mc_link']                   = $new_data['mc_link'];
+		$instance['below']                     = ( isset( $new_data['below'] ) && '' !== $new_data['below'] ) ? $new_data['below'] : 'none';
 		$author                                = '';
 		$host                                  = '';
-		if ( isset( $new['author'] ) ) {
-			$author = implode( ',', $new['author'] );
+		if ( isset( $new_data['author'] ) ) {
+			$author = implode( ',', $new_data['author'] );
 		}
-		if ( isset( $new['host'] ) ) {
-			$host = implode( ',', $new['host'] );
+		if ( isset( $new_data['host'] ) ) {
+			$host = implode( ',', $new_data['host'] );
 		}
 		$instance['author'] = $author;
 		$instance['host']   = $host;
-		$instance['ltype']  = ( '' !== $new['ltype'] && '' !== $new['lvalue'] ) ? $new['ltype'] : '';
-		$instance['lvalue'] = ( '' !== $new['ltype'] && '' !== $new['lvalue'] ) ? $new['lvalue'] : '';
+		$instance['ltype']  = ( '' !== $new_data['ltype'] && '' !== $new_data['lvalue'] ) ? $new_data['ltype'] : '';
+		$instance['lvalue'] = ( '' !== $new_data['ltype'] && '' !== $new_data['lvalue'] ) ? $new_data['lvalue'] : '';
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-			$instance['site'] = $new['site'];
+			$instance['site'] = $new_data['site'];
 		}
-		$instance['months'] = $new['months'];
+		$instance['months'] = $new_data['months'];
 
 		return $instance;
 	}

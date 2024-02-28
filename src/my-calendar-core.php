@@ -43,7 +43,7 @@ add_action( 'wp_feed_options', 'mc_cache_feeds' );
  * @return array updated set of links
  */
 function mc_plugin_action( $links, $file ) {
-	if ( plugin_basename( dirname( __FILE__ ) . '/my-calendar.php' ) === $file ) {
+	if ( plugin_basename( __DIR__ . '/my-calendar.php' ) === $file ) {
 		$links[] = '<a href="admin.php?page=my-calendar-config">' . __( 'Settings', 'my-calendar' ) . '</a>';
 		$links[] = '<a href="admin.php?page=my-calendar-help">' . __( 'Help', 'my-calendar' ) . '</a>';
 		if ( ! function_exists( 'mcs_submissions' ) ) {
@@ -695,7 +695,6 @@ function mc_register_scripts() {
 	wp_register_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ), $version );
 	wp_register_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
 	wp_register_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
-
 }
 add_action( 'wp_enqueue_scripts', 'mc_register_scripts' );
 add_action( 'admin_enqueue_scripts', 'mc_register_scripts' );

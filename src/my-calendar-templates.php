@@ -27,14 +27,14 @@ function mc_template( $tags, $template, $type = 'list' ) {
 /**
  * Draw array of information into a template with {$key} formatted tags
  *
- * @param array       $array associative array of information to be parsed.
+ * @param array       $data associative array of information to be parsed.
  * @param string      $template template containing braced tags (e.g. `{title}`) using keys of passed array.
  * @param string      $type my calendar needs to render a different link for list versions and other views.
  * @param object|bool $event Event object. Optional.
  *
  * @return string HTML output of template.
  */
-function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
+function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	if ( is_object( $event ) ) {
 		$description_fields = array( 'excerpt', 'description', 'description_raw', 'description_stripped', 'ical_excerpt', 'shortdesc', 'shortdesc_raw', 'shortdesc_stripped', 'ical_desc' );
 		/**
@@ -49,7 +49,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 		 */
 		$description_fields = apply_filters( 'mc_inner_content_template_fields', $description_fields, $event );
 		foreach ( $description_fields as $field ) {
-			if ( isset( $array[ $field ] ) ) {
+			if ( isset( $data[ $field ] ) ) {
 				/**
 				 * Filter event content inside wrapper.
 				 *
@@ -62,7 +62,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 				 *
 				 * @return {string} Returning any non-empty string will shortcircuit template drawing.
 				 */
-				$array[ $field ] = apply_filters( 'mc_inner_content', $array[ $field ], $event, $type, '' );
+				$data[ $field ] = apply_filters( 'mc_inner_content', $data[ $field ], $event, $type, '' );
 			}
 		}
 	}
@@ -72,17 +72,17 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 		return trim( $template );
 	}
 	// If the data passed is not an array or is empty, return empty string.
-	if ( ! is_array( $array ) || empty( $array ) ) {
+	if ( ! is_array( $data ) || empty( $data ) ) {
 		return '';
 	}
-	foreach ( $array as $key => $value ) {
+	foreach ( $data as $key => $value ) {
 		if ( is_object( $value ) ) {
 			// If a value is an object, ignore it.
 		} else {
 			if ( strpos( $template, '{' . $key ) !== false ) {
 				if ( 'list' !== $type ) {
 					if ( 'link' === $key && '' === $value ) {
-						$value = mc_get_uri( false, $array );
+						$value = mc_get_uri( false, $data );
 					}
 					if ( 'guid' !== $key ) {
 						$value = htmlentities( $value );
@@ -93,7 +93,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 					preg_match_all( '/{' . $key . '\b(?>\s+(?:before="([^"]*)"|after="([^"]*)"|format="([^"]*)")|[^\s]+|\s+){0,3}}/', $template, $matches, PREG_PATTERN_ORDER );
 					if ( $matches ) {
 						$number = count( $matches[0] );
-						for ( $i = 0; $i < $number; $i ++ ) {
+						for ( $i = 0; $i < $number; $i++ ) {
 							$orig   = $value;
 							$before = $matches[1][ $i ];
 							$after  = $matches[2][ $i ];
@@ -127,7 +127,7 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
 	 *
 	 * @return {string} Formatted HTML.
 	 */
-	$template = apply_filters( 'mc_template', $template, $array, $type, $event );
+	$template = apply_filters( 'mc_template', $template, $data, $type, $event );
 
 	return stripslashes( trim( $template ) );
 }
@@ -136,11 +136,11 @@ function mc_draw_template( $array, $template, $type = 'list', $event = false ) {
  * Set up a template based on a reference passed in shortcode or settings.
  *
  * @param string $template Template passed.
- * @param string $default Default template for this context.
+ * @param string $default_template Default template for this context.
  *
  * @return string
  */
-function mc_setup_template( $template, $default ) {
+function mc_setup_template( $template, $default_template ) {
 	// allow reference by file to external template.
 	$template = ( 'default' === $template ) ? '' : $template;
 	if ( '' !== $template && mc_file_exists( $template ) ) {
@@ -150,7 +150,7 @@ function mc_setup_template( $template, $default ) {
 		$template = mc_get_custom_template( $template );
 	}
 
-	return ( '' !== $template ) ? $template : $default;
+	return ( '' !== $template ) ? $template : $default_template;
 }
 
 /**
@@ -1358,13 +1358,13 @@ function mc_event_date_span( $group_id, $event_span, $dates = array() ) {
  *
  * @param array  $dates to format.
  * @param string $display type of display to use.
- * @param string $default value if no dates passed.
+ * @param string $default_output value if no dates passed.
  *
  * @return string
  */
-function mc_format_date_span( $dates, $display = 'simple', $default = '' ) {
+function mc_format_date_span( $dates, $display = 'simple', $default_output = '' ) {
 	if ( ! $dates ) {
-		return $default;
+		return $default_output;
 	}
 	$count = count( $dates );
 	$last  = $count - 1;
@@ -1588,7 +1588,7 @@ function mc_str_replace_word_i( $needle, $haystack ) {
 	$type     = 'all';
 	$haystack = preg_replace_callback(
 		$pattern,
-		function( $m ) use ( $type, $keyword ) {
+		function ( $m ) use ( $type, $keyword ) {
 			return '<strong class="mc_search_term">' . $m[0] . '</strong>';
 		},
 		$haystack

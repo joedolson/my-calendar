@@ -732,14 +732,14 @@ function mc_controlled_field( $this_field ) {
  * @return array
  */
 function mc_get_location_coordinates( $location_id = false, $address = array() ) {
-	require_once( 'includes/class-geolocation.php' );
+	require_once 'includes/class-geolocation.php';
 	$street  = '';
 	$street2 = '';
 	$city    = '';
 	$zip     = '';
 	$country = '';
 
-	new Geolocation;
+	new Geolocation();
 	if ( $location_id ) {
 		$location = mc_get_location( $location_id, false );
 		$street   = $location->location_street;

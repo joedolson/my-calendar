@@ -202,7 +202,7 @@ function mc_stylesheet_selector() {
 	<form method="post" action="' . esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ) . '">
 		<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '"/><input type="hidden" value="true" name="mc_choose_style"/>';
 	$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
-	$directory        = dirname( __FILE__ ) . '/styles/';
+	$directory        = __DIR__ . '/styles/';
 	$files            = mc_css_list( $custom_directory );
 	if ( ! empty( $files ) ) {
 		$options .= '<optgroup label="' . __( 'Your Custom Stylesheets', 'my-calendar' ) . '">';
@@ -267,7 +267,7 @@ function mc_get_style_path( $filename = false, $type = 'path' ) {
 		$filename  = str_replace( 'mc_custom_', '', $filename );
 		$stylefile = ( 'path' === $type ) ? str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/' . $filename : str_replace( '/my-calendar/', '', $url ) . '/my-calendar-custom/styles/' . $filename;
 	} else {
-		$stylefile = ( 'path' === $type ) ? dirname( __FILE__ ) . '/styles/' . $filename : plugins_url( 'styles', __FILE__ ) . '/' . $filename;
+		$stylefile = ( 'path' === $type ) ? __DIR__ . '/styles/' . $filename : plugins_url( 'styles', __FILE__ ) . '/' . $filename;
 	}
 	if ( 'path' === $type ) {
 		if ( is_file( $stylefile ) ) {
@@ -294,7 +294,7 @@ function mc_css_list( $directory ) {
 	$results = array();
 	$handler = opendir( $directory );
 	// Keep going until all files in directory have been read.
-	while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+	while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		// If $file isn't this directory or parent, add it to the results array.
 		if ( '.' !== $file && '..' !== $file ) {
 			$results[] = $file;
@@ -386,7 +386,7 @@ function mc_hex2rgb( $color ) {
 		return array( 0, 0, 0 );
 	}
 	$rgb = array();
-	for ( $x = 0; $x < 3; $x ++ ) {
+	for ( $x = 0; $x < 3; $x++ ) {
 		$rgb[ $x ] = hexdec( substr( $color, ( 2 * $x ), 2 ) );
 	}
 

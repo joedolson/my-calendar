@@ -49,7 +49,7 @@ function mc_directory_list( $directory ) {
 		$results = array();
 		$handler = opendir( $directory );
 		// keep going until all files in directory have been read.
-		while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+		while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 			// if $file isn't this directory or its parent add it to the results array.
 			if ( strlen( $file ) < 5 ) {
 				continue;
@@ -708,15 +708,15 @@ function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 /**
  * Fetch the category ID for categories passed by name
  *
- * @param string $string Name of category.
+ * @param string $category_name Name of category.
  *
  * @return int $cat_id or false.
  */
-function mc_category_by_name( $string ) {
+function mc_category_by_name( $category_name ) {
 	$mcdb   = mc_is_remote_db();
 	$cat_id = false;
 	$sql    = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_name = %s';
-	$cat    = $mcdb->get_row( $mcdb->prepare( $sql, $string ) );
+	$cat    = $mcdb->get_row( $mcdb->prepare( $sql, $category_name ) );
 
 	if ( is_object( $cat ) ) {
 		$cat_id = $cat->category_id;
@@ -1286,7 +1286,7 @@ function mc_get_img( $file, $is_custom = false ) {
 	$url         = plugin_dir_url( __FILE__ );
 	$self        = plugin_dir_path( __FILE__ );
 	global $wp_filesystem;
-	require_once( ABSPATH . '/wp-admin/includes/file.php' );
+	require_once ABSPATH . '/wp-admin/includes/file.php';
 	WP_Filesystem();
 
 	if ( $is_custom ) {
@@ -1454,7 +1454,7 @@ function mc_generate_category_icon( $source ) {
 	}
 	$label_id = 'cat_' . $occur_id;
 	global $wp_filesystem;
-	require_once( ABSPATH . '/wp-admin/includes/file.php' );
+	require_once ABSPATH . '/wp-admin/includes/file.php';
 	WP_Filesystem();
 	$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
 	if ( 0 === stripos( $image, '<svg' ) ) {
@@ -1474,7 +1474,7 @@ function mc_generate_category_icon( $source ) {
  */
 add_filter(
 	'safe_style_css',
-	function( $styles ) {
+	function ( $styles ) {
 		$styles[] = 'fill';
 		return $styles;
 	}
@@ -1483,18 +1483,18 @@ add_filter(
 /**
  * Generate category class for a given date. Must generate a single class; multiple classes would require refactoring to function usage.
  *
- * @param object|array $object Usually an event, can be category.
- * @param string       $prefix Prefix to append to category; varies on context.
+ * @param object|array $event_or_category Usually an event, can be category.
+ * @param string       $prefix            Prefix to append to category; varies on context.
  *
  * @return string a single class
  */
-function mc_category_class( $object, $prefix ) {
-	if ( is_array( $object ) ) {
-		$name = $object['category'];
-		$id   = $object['category_id'];
+function mc_category_class( $event_or_category, $prefix ) {
+	if ( is_array( $event_or_category ) ) {
+		$name = $event_or_category['category'];
+		$id   = $event_or_category['category_id'];
 	} else {
-		$name = $object->category_name;
-		$id   = $object->category_id;
+		$name = $event_or_category->category_name;
+		$id   = $event_or_category->category_id;
 	}
 
 	$class = sanitize_html_class( trim( str_replace( ' ', '-', $name ) ) );

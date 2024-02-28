@@ -554,7 +554,7 @@ function mc_validate_settings( $settings ) {
 	foreach ( $keys as $key ) {
 		$exists = in_array( $key, array_keys( $defaults ), true ) ? true : false;
 		if ( $exists ) {
-			$i ++;
+			++$i;
 		}
 		if ( $i > 20 ) {
 			return true;
@@ -1478,7 +1478,7 @@ function mc_remote_db() {
 									$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . '</span></button> ' . $hide;
 									$buttons    = "<div class='mc-buttons'>$buttons</div>";
 									echo wp_kses( "<li class='ui-state-default mc-$k mc-$class'>$buttons <code>$label</code> $v <input type='hidden' name='mc_nav[]' value='$k' /></li>", mc_kses_elements() );
-									$i ++;
+									++$i;
 								}
 							}
 							$missed = array_diff( $nav_elements, $inserted );
@@ -1493,7 +1493,7 @@ function mc_remote_db() {
 								$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . "</span></button> <button class='hide' type='button'><i class='dashicons dashicons-hidden' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
 								$buttons    = "<div class='mc-buttons'>$buttons</div>";
 								echo wp_kses( "<li class='ui-state-default mc-$k mc-hidden'>$buttons <code>$k</code> $v <input type='hidden' name='mc_nav[]' value='$k' disabled /></li>", mc_kses_elements() );
-								$i ++;
+								++$i;
 							}
 							?>
 							</ul>

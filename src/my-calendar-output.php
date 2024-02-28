@@ -1600,7 +1600,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 		if ( apply_filters( 'mc_show_week_number', false, $params ) ) {
 			$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
 		}
-		for ( $i = 0; $i <= 6; $i ++ ) {
+		for ( $i = 0; $i <= 6; $i++ ) {
 			if ( 0 === (int) $start_of_week ) {
 				$class = ( $i < 6 && $i > 0 ) ? 'day-heading' : 'weekend-heading';
 			} else {
@@ -1622,18 +1622,18 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
  * Handle switching languages in shortcodes.
  *
  * @param string $current Current language set.
- * @param string $switch  Language to switch to.
+ * @param string $target_language  Language to switch to.
  *
  * @return string HTML attribute.
  */
-function mc_switch_language( $current, $switch ) {
+function mc_switch_language( $current, $target_language ) {
 	$available = get_available_languages();
 	$lang      = '';
-	if ( in_array( $switch, $available, true ) ) {
-		if ( $switch && ( $current !== $switch ) ) {
-			switch_to_locale( $switch );
+	if ( in_array( $target_language, $available, true ) ) {
+		if ( $target_language && ( $current !== $target_language ) ) {
+			switch_to_locale( $target_language );
 		}
-		$lang = explode( '_', $switch )[0];
+		$lang = explode( '_', $target_language )[0];
 	}
 
 	return $lang;

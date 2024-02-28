@@ -191,4 +191,4 @@ class Geolocation {
  *
  * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
-class GeolocationException extends \Exception {}
+class GeolocationException extends \Exception {} // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound

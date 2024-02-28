@@ -400,7 +400,7 @@ function my_calendar_edit() {
 			echo wp_kses_post( $response['message'] );
 		}
 		$post = map_deep( $_POST, 'mc_kses_post' );
-		for ( $i = 0; $i < $count; $i ++ ) {
+		for ( $i = 0; $i < $count; $i++ ) {
 			$mc_output = mc_check_data( $action, $post, $i );
 			if ( 'add' === $action || 'copy' === $action ) {
 				$response = my_calendar_save( $action, $mc_output );
@@ -1038,13 +1038,13 @@ function mc_datepicker_html( $args ) {
  * @param string    $field name of field group.
  * @param boolean   $has_data Whether fields have data.
  * @param object    $data Current data.
- * @param boolean   $echo whether to return or echo.
- * @param string    $default Default string value.
+ * @param boolean   $display whether to return or echo.
+ * @param string    $default_str Default string value.
  * @param int|false $group_id If in group editing, group ID.
  *
  * @return string.
  */
-function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $group_id = false ) {
+function mc_show_block( $field, $has_data, $data, $display = true, $default_str = '', $group_id = false ) {
 	global $user_ID;
 	$return     = '';
 	$checked    = '';
@@ -1079,7 +1079,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 					. '</select>
 				</p>';
 			} else {
-				$return = '<input type="hidden" name="event_author" value="' . $default . '" />';
+				$return = '<input type="hidden" name="event_author" value="' . $default_str . '" />';
 			}
 			break;
 		case 'event_desc':
@@ -1369,7 +1369,7 @@ function mc_show_block( $field, $has_data, $data, $echo = true, $default = '', $
 	 * @return {string}
 	 */
 	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
-	if ( true === $echo ) {
+	if ( true === $display ) {
 		echo $return;
 	}
 
@@ -1925,11 +1925,11 @@ function mc_event_location_dropdown_block( $data ) {
  * @since 3.5.0
  *
  * @param object $event Event object.
- * @param string $return Data to return. 'location' or 'diff'.
+ * @param string $return_type Data to return. 'location' or 'diff'.
  *
  * @return bool|array Returns boolean if 'diff'; array if 'location'.
  */
-function mc_event_location_diff( $event, $return = 'diff' ) {
+function mc_event_location_diff( $event, $return_type = 'diff' ) {
 	$location_id = ( $event && property_exists( $event, 'event_location' ) ) ? $event->event_location : '';
 	if ( ! $location_id ) {
 		return false;
@@ -1958,7 +1958,7 @@ function mc_event_location_diff( $event, $return = 'diff' ) {
 		'location_phone'     => $event->event_phone,
 		'location_phone2'    => $event->event_phone2,
 	);
-	if ( 'location' === $return ) {
+	if ( 'location' === $return_type ) {
 		return $event_location;
 	}
 	$location = (array) $location;
@@ -3165,11 +3165,11 @@ function mc_grouped_events( $id, $template = '' ) {
  * Generate recurrence options list
  *
  * @param string $value current event's value.
- * @param string $return Return type: <option>s or array of values.
+ * @param string $return_type Return type: <option>s or array of values.
  *
  * @return string|array form options or array of values.
  */
-function mc_recur_options( $value, $return = 'select' ) {
+function mc_recur_options( $value, $return_type = 'select' ) {
 	$options = '';
 	$values  = array(
 		array(
@@ -3209,7 +3209,7 @@ function mc_recur_options( $value, $return = 'select' ) {
 			'period' => YEAR_IN_SECONDS,
 		),
 	);
-	if ( 'select' === $return ) {
+	if ( 'select' === $return_type ) {
 		foreach ( $values as $key => $val ) {
 			// Biweekly is just a subset of weekly types. No longer an option to choose.
 			if ( 'B' === $value && 'W' === $val['value'] ) {
@@ -3320,7 +3320,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 		switch ( $recur ) {
 			// Daily.
 			case 'D':
-				for ( $i = 0; $i <= $numforward; $i ++ ) {
+				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$begin = my_calendar_add_date( $orig_begin, $i * $every, 0, 0 );
 					$end   = my_calendar_add_date( $orig_end, $i * $every, 0, 0 );
 
@@ -3335,7 +3335,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 					if ( $post_until ) {
 						if ( $begin <= strtotime( $post_until ) ) {
-							$numforward ++;
+							++$numforward;
 						} else {
 							continue;
 						}
@@ -3348,7 +3348,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 			case 'E':
 				// Every = $every = e.g. every 14 weekdays.
 				// Num forward = $numforward = e.g. 7 times.
-				for ( $i = 0; $i <= $numforward; $i ++ ) {
+				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$begin = strtotime( $event->event_begin . ' ' . ( $every * $i ) . ' weekdays' ) + $begin_diff;
 					$end   = strtotime( $event->event_end . ' ' . ( $every * $i ) . ' weekdays' ) + $end_diff;
 					$data  = array(
@@ -3362,7 +3362,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 					if ( $post_until ) {
 						if ( $begin <= strtotime( $post_until ) ) {
-							$numforward ++;
+							++$numforward;
 						} else {
 							continue;
 						}
@@ -3373,7 +3373,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				break;
 			// Weekly.
 			case 'W':
-				for ( $i = 0; $i <= $numforward; $i ++ ) {
+				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$begin = my_calendar_add_date( $orig_begin, ( $i * 7 ) * $every, 0, 0 );
 					$end   = my_calendar_add_date( $orig_end, ( $i * 7 ) * $every, 0, 0 );
 					$data  = array(
@@ -3387,7 +3387,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 					if ( $post_until ) {
 						if ( $begin <= strtotime( $post_until ) ) {
-							$numforward ++;
+							++$numforward;
 						} else {
 							continue;
 						}
@@ -3398,7 +3398,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				break;
 			// Biweekly.
 			case 'B':
-				for ( $i = 0; $i <= $numforward; $i ++ ) {
+				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$begin = my_calendar_add_date( $orig_begin, ( $i * 14 ), 0, 0 );
 					$end   = my_calendar_add_date( $orig_end, ( $i * 14 ), 0, 0 );
 					$data  = array(
@@ -3412,7 +3412,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 					if ( $post_until ) {
 						if ( $begin <= strtotime( $post_until ) ) {
-							$numforward ++;
+							++$numforward;
 						} else {
 							continue;
 						}
@@ -3423,7 +3423,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				break;
 			// Monthly by date.
 			case 'M':
-				for ( $i = 0; $i <= $numforward; $i ++ ) {
+				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$begin = my_calendar_add_date( $orig_begin, 0, $i * $every, 0 );
 					$end   = my_calendar_add_date( $orig_end, 0, $i * $every, 0 );
 					$data  = array(
@@ -3437,7 +3437,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 					if ( $post_until ) {
 						if ( $begin <= strtotime( $post_until ) ) {
-							$numforward ++;
+							++$numforward;
 						} else {
 							continue;
 						}
@@ -3461,7 +3461,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				mc_insert_recurring( $data, $id, strtotime( $orig_begin ), $instances, $test, 'month-by-day' );
 
 				$numforward = ( $numforward - 1 );
-				for ( $i = 0; $i <= $numforward; $i ++ ) {
+				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$skip = false;
 					// If next week is a different month, and we're supposed move the event, return true.
 					$move_event = mc_move_date( $newbegin, $event );
@@ -3498,7 +3498,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						}
 						if ( $post_until ) {
 							if ( $newbegin <= strtotime( $post_until ) ) {
-								$numforward ++;
+								++$numforward;
 							} else {
 								continue;
 							}
@@ -3507,7 +3507,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						mc_insert_recurring( $data, $id, $newbegin, $instances, $test, 'month-by-day' );
 						// Jump forward 4 weeks.
 					} else {
-						$numforward ++;
+						++$numforward;
 					}
 					$newbegin = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newbegin, false ), 28, 0, 0 );
 					$newend   = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 28, 0, 0 );
@@ -3515,7 +3515,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				break;
 			// Annual.
 			case 'Y':
-				for ( $i = 0; $i <= $numforward; $i ++ ) {
+				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$begin = my_calendar_add_date( $orig_begin, 0, 0, $i * $every );
 					$end   = my_calendar_add_date( $orig_end, 0, 0, $i * $every );
 					$data  = array(
@@ -3529,7 +3529,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 					}
 					if ( $post_until ) {
 						if ( $begin <= strtotime( $post_until ) ) {
-							$numforward ++;
+							++$numforward;
 						} else {
 							continue;
 						}
