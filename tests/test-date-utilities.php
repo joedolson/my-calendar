@@ -14,7 +14,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	 */
 	public function test_mc_dateclass() {
 		$past   = mc_dateclass( strtotime( '-1 day' ) );
-		$now    = mc_dateclass( strtotime() );
+		$now    = mc_dateclass( strtotime( 'now' ) );
 		$future = mc_dateclass( strtotime( '+1 day' ) );
 
 		$this->assertSame( $past, 'past-day past-date', 'Past date does not generate past date classes.' );

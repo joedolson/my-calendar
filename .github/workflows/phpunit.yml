@@ -1,0 +1,90 @@
+name: Test
+
+on:
+  # Run on pushes to select branches and on all pull requests.
+  push:
+  pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+# Cancels all previous workflow runs for the same branch that have not yet completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - php_version: '8.1'
+            wp_version: '6.2'
+            multisite: false
+
+          - php_version: '8.1'
+            wp_version: 'latest'
+            multisite: false
+
+          - php_version: '8.1'
+            wp_version: 'latest'
+            multisite: true
+
+          - php_version: '8.2'
+            wp_version: 'latest'
+            multisite: true
+
+    name: "Integration Test: PHP ${{ matrix.php_version }} | WP ${{ matrix.wp_version }}${{ matrix.multisite == true && ' (+ ms)' || '' }}"
+
+    # Allow builds to fail on as-of-yet unreleased WordPress versions.
+    continue-on-error: ${{ matrix.wp_version == 'trunk' }}
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php_version }}
+          ini-values: zend.assertions=1, error_reporting=-1, display_errors=On
+          coverage: none
+
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      - name: "Composer: remove the PHP platform requirement"
+        run: composer config --unset platform.php
+
+      - name: "Install Composer dependencies"
+        uses: ramsey/composer-install@v2
+        with:
+          # Force a `composer update` run.
+          dependency-versions: "highest"
+          # But make it selective.
+          composer-options: "yoast/wp-test-utils --with-dependencies"
+          # Bust the cache at least once a month - output format: YYYY-MM-DD.
+          custom-cache-suffix: $(date -u -d "-0 month -$(($(date +%d)-1)) days" "+%F")
+
+      - name: Install WP
+        shell: bash
+        run: tests/bin/install-wp-tests.sh wordpress_tests root '' 127.0.0.1:3306 ${{ matrix.wp_version }}
+
+      - name: Run unit tests - single site
+        run: composer test
+
+      - name: Run unit tests - multisite
+        if: ${{ matrix.multisite == true }}
+        run: composer test
+        env:
+          WP_MULTISITE: 1
