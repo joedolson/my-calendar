@@ -9,8 +9,6 @@ on:
       - 'composer.json'
       - 'composer.lock'
   pull_request:
-    branches:
-      - master
     # Only run if PHP-related files changed.
     paths:
       - '.github/workflows/main.yml'
