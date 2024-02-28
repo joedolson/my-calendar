@@ -235,7 +235,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	/**
 	 * Update the My Calendar Mini Widget settings.
 	 *
-	 * @param array $new_data Widget settings new_data$new_data data.
+	 * @param array $new_data Widget settings new data.
 	 * @param array $instance Widget settings instance.
 	 *
 	 * @return array $instance Updated instance.
