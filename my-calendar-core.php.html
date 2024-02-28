@@ -551,26 +551,26 @@ function mc_add_yoast_schema( $graph, $context ) {
 			$schema = mc_event_schema( $event );
 
 			unset( $schema['@context'] );
-			$schema['mainEntityOfPage'] = [ '@id' => $context->canonical ];
-			
+			$schema['mainEntityOfPage'] = array( '@id' => $context->canonical );
+
 			if ( isset( $schema['location'] ) ) {
 				unset( $schema['location']['@context'] );
 			}
 			$graph[] = $schema;
 		}
 	}
-	
+
 	if ( is_singular( 'mc-locations' ) ) {
 		$loc_id   = mc_get_location_id( get_the_ID() );
 		$location = mc_get_location( $loc_id );
 		$schema   = mc_location_schema( $location );
 
 		unset( $schema['@context'] );
-		$schema['mainEntityOfPage'] = [ '@id' => $context->canonical ];
+		$schema['mainEntityOfPage'] = array( '@id' => $context->canonical );
 
 		$graph[] = $schema;
 	}
-	
+
 	return $graph;
 }
 
