@@ -37,14 +37,14 @@ function mc_switch_sites() {
 /**
  * Send a Tweet on approval of event
  *
- * @param string $prev Previous status.
- * @param string $new New status.
+ * @param string $previous_status Previous status.
+ * @param string $new_status New status.
  *
  * @return void
  */
-function mc_tweet_approval( $prev, $new ) {
+function mc_tweet_approval( $previous_status, $new_status ) {
 	if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) !== '' ) {
-		if ( ( 0 === (int) $prev || 2 === (int) $prev ) && 1 === (int) $new ) {
+		if ( ( 0 === (int) $previous_status || 2 === (int) $previous_status ) && 1 === (int) $new_status ) {
 			wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
 		}
 	}
@@ -235,14 +235,14 @@ function mc_shift_color( $color ) {
 	if ( $per < 0 ) {
 		// DARKER.
 		$per = abs( $per ); // Turns Neg Number to Pos Number.
-		for ( $x = 0; $x < 3; $x ++ ) {
+		for ( $x = 0; $x < 3; $x++ ) {
 			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) - $per;
 			$c    = ( $c < 0 ) ? 0 : dechex( $c );
 			$rgb .= ( strlen( $c ) < 2 ) ? '0' . $c : $c;
 		}
 	} else {
 		// LIGHTER.
-		for ( $x = 0; $x < 3; $x ++ ) {
+		for ( $x = 0; $x < 3; $x++ ) {
 			$c    = hexdec( substr( $color, ( 2 * $x ), 2 ) ) + $per;
 			$c    = ( $c > 255 ) ? 'ff' : dechex( $c );
 			$rgb .= ( strlen( $c ) < 2 ) ? '0' . $c : $c;
@@ -323,32 +323,29 @@ function mc_external_link( $link ) {
 /**
  * Replace newline characters in a string
  *
- * @param string $string Any string.
+ * @param string $input_string Any string.
  *
  * @return string string without newline chars
  */
-function mc_newline_replace( $string ) {
+function mc_newline_replace( $input_string ) {
 
-	return (string) str_replace( array( "\r", "\r\n", "\n" ), '', $string );
+	return (string) str_replace( array( "\r", "\r\n", "\n" ), '', $input_string );
 }
 
 /**
  * Reverse the order of an array
  *
- * @param array   $array Any array.
+ * @param array   $input_array Any array.
  * @param boolean $boolean true or false arguments for array_reverse.
  * @param string  $order sort order to use.
  *
  * @return array
  */
-function reverse_array( $array, $boolean, $order ) {
+function reverse_array( $input_array, $boolean, $order ) {
 	if ( 'desc' === $order ) {
-
-		return array_reverse( $array, $boolean );
-	} else {
-
-		return $array;
+		return array_reverse( $input_array, $boolean );
 	}
+	return $input_array;
 }
 
 /**
@@ -384,11 +381,11 @@ function mc_debug( $subject, $body, $email = '' ) {
  *
  * @param string $selected Group of selected users. Comma-separated IDs.
  * @param string $group Type of roles to fetch.
- * @param string $return Type of return; string of select options or array.
+ * @param string $return_type Type of return; string of select options or array.
  *
  * @return string|array <option> elements or an array of possible values.
  */
-function mc_selected_users( $selected = '', $group = 'authors', $return = 'select' ) {
+function mc_selected_users( $selected = '', $group = 'authors', $return_type = 'select' ) {
 	/**
 	 * Filter the list of users used to select authors or hosts.
 	 *
@@ -401,7 +398,7 @@ function mc_selected_users( $selected = '', $group = 'authors', $return = 'selec
 	 *
 	 * @return {string|array}
 	 */
-	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group, $return );
+	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group, $return_type );
 	if ( '' !== $options ) {
 		return $options;
 	}
@@ -422,7 +419,7 @@ function mc_selected_users( $selected = '', $group = 'authors', $return = 'selec
 		);
 	}
 
-	return ( 'select' === $return ) ? $options : $values;
+	return ( 'select' === $return_type ) ? $options : $values;
 }
 
 /**
@@ -454,18 +451,18 @@ function mc_get_users( $group = 'authors' ) {
  * Display an update message.
  *
  * @param string         $message Update message.
- * @param boolean        $echo Echo or return. Default true (echo).
+ * @param boolean        $display Echo or return. Default true (echo).
  * @param boolean|string $code Message code.
  *
  * @return string
  */
-function mc_show_notice( $message, $echo = true, $code = false ) {
+function mc_show_notice( $message, $display = true, $code = false ) {
 	if ( trim( $message ) === '' ) {
 		return '';
 	}
 	$message = strip_tags( apply_filters( 'mc_filter_notice', $message, $code ), mc_admin_strip_tags() );
 	$message = "<div class='updated'><p>$message</p></div>";
-	if ( $echo ) {
+	if ( $display ) {
 		echo wp_kses_post( $message );
 	}
 	return $message;
@@ -475,18 +472,18 @@ function mc_show_notice( $message, $echo = true, $code = false ) {
  * Display an error message.
  *
  * @param string         $message Error message.
- * @param boolean        $echo Echo or return. Default true (echo).
+ * @param boolean        $display Echo or return. Default true (echo).
  * @param boolean|string $code Message code.
  *
  * @return string
  */
-function mc_show_error( $message, $echo = true, $code = false ) {
+function mc_show_error( $message, $display = true, $code = false ) {
 	if ( trim( $message ) === '' ) {
 		return '';
 	}
 	$message = strip_tags( apply_filters( 'mc_filter_error', $message, $code ), mc_admin_strip_tags() );
 	$message = "<div class='error'><p>$message</p></div>";
-	if ( $echo ) {
+	if ( $display ) {
 		echo $message;
 	}
 	return $message;

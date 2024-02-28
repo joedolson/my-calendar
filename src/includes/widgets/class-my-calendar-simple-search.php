@@ -28,7 +28,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	/**
 	 * Contructor.
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Simple Event Search', 'my-calendar' ),
@@ -45,7 +45,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		$before_widget = $args['before_widget'];
 		$after_widget  = $args['after_widget'];
 		$before_title  = str_replace( 'h1', 'h2', $args['before_title'] );
@@ -62,7 +62,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	 *
 	 * @param array $instance Current widget settings.
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		$widget_title = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : '';
 		?>
@@ -82,14 +82,14 @@ class My_Calendar_Simple_Search extends WP_Widget {
 	/**
 	 * Update the My Calendar Search Widget settings.
 	 *
-	 * @param array $new Widget settings new data.
+	 * @param array $new_settings Widget settings new data.
 	 * @param array $instance Widget settings instance.
 	 *
 	 * @return array $instance Updated instance.
 	 */
-	function update( $new, $instance ) {
-		$instance['title'] = mc_kses_post( $new['title'] );
-		$instance['url']   = esc_url_raw( $new['url'] );
+	public function update( $new_settings, $instance ) {
+		$instance['title'] = mc_kses_post( $new_settings['title'] );
+		$instance['url']   = esc_url_raw( $new_settings['url'] );
 
 		return $instance;
 	}

@@ -1037,7 +1037,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	// We build the months in the switcher.
 	$date_switcher .= ' <label class="maybe-hide" for="' . $cid . '-month">' . __( 'Month', 'my-calendar' ) . '</label> <select id="' . $cid . '-month" name="month">' . "\n";
-	for ( $i = 1; $i <= 12; $i ++ ) {
+	for ( $i = 1; $i <= 12; $i++ ) {
 		$test           = str_pad( $i, 2, '0', STR_PAD_LEFT );
 		$c_month        = str_pad( $c_month, 2, '0', STR_PAD_LEFT );
 		$date_switcher .= "<option value='$i'" . selected( $test, $c_month, false ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '</option>' . "\n";

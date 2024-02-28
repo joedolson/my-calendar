@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MC_TEMPLATES', trailingslashit( dirname( __FILE__ ) ) . 'templates/' );
+define( 'MC_TEMPLATES', trailingslashit( __DIR__ ) . 'templates/' );
 add_action( 'template_redirect', 'mc_embed_template' );
 /**
  * Load Template.
@@ -41,11 +41,11 @@ function mc_embed_template() {
 	// Check to see if there is a template in the theme.
 	$template = locate_template( array( 'my-calendar-template.php' ) );
 	if ( ! empty( $template ) ) {
-		require_once( $template );
+		require_once $template;
 		exit;
 	} else {
 		// Use plugin's template file.
-		require_once( MC_TEMPLATES . 'my-calendar-template.php' );
+		require_once MC_TEMPLATES . 'my-calendar-template.php';
 		exit;
 	}
 }

@@ -14,7 +14,7 @@ class Tests_My_Calendar_General extends WP_UnitTestCase {
 	 *
 	 * Fails if attributes or elements not represented in kses filters.
 	 */
-	function test_my_calendar_sanitized_output() {
+	public function test_my_calendar_sanitized_output() {
 		// Fetch core calendar output & then run through sanitize. Requires factory.
 		$output    = '';
 		$sanitized = '';

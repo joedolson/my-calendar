@@ -40,13 +40,13 @@ function mc_bulk_action( $action, $events = array() ) {
 				$wpdb->query( $wpdb->prepare( $occurrences, $value ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$ids[]     = (int) $value;
 				$prepare[] = '%d';
-				$i ++;
+				++$i;
 			}
 		}
 		if ( 'delete' !== $action && current_user_can( 'mc_approve_events' ) ) {
 			$ids[]     = (int) $value;
 			$prepare[] = '%d';
-			$i ++;
+			++$i;
 		}
 	}
 	$prepared = implode( ',', $prepare );

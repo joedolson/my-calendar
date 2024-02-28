@@ -460,7 +460,7 @@ function mc_default_settings() {
 		$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 		mc_generate_calendar_page( $slug );
 	}
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $globals['initial_db'] );
 	dbDelta( $globals['initial_occur_db'] );
 	dbDelta( $globals['initial_cat_db'] );

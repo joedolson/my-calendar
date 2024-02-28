@@ -345,12 +345,12 @@ function mc_templates_edit() {
  * Get template tags for use in previews.
  *
  * @param int|bool $mc_id Event occurrence id.
- * @param string   $return Type of data to return.
+ * @param string   $return_type Type of data to return.
  *
  * @return array|int
  */
-function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
-	$event = ( 'array' === $return ) ? array() : 0;
+function mc_get_template_tag_preview( $mc_id, $return_type = 'array' ) {
+	$event = ( 'array' === $return_type ) ? array() : 0;
 	$data  = array();
 	if ( ! isset( $_GET['mc-event'] ) && ! $mc_id ) {
 		$args   = array(
@@ -370,7 +370,7 @@ function mc_get_template_tag_preview( $mc_id, $return = 'array' ) {
 		$data = mc_create_tags( $event );
 	}
 
-	return ( 'array' === $return ) ? $data : $mc_id;
+	return ( 'array' === $return_type ) ? $data : $mc_id;
 }
 
 /**
@@ -666,7 +666,7 @@ function mc_list_custom_templates( $current = '' ) {
 
 add_action(
 	'admin_enqueue_scripts',
-	function() {
+	function () {
 		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			return;
 		}

@@ -156,7 +156,7 @@ function mc_clean_duplicate_locations() {
 				'%d',
 				'%d'
 			);
-			$i ++;
+			++$i;
 		}
 		if ( ! empty( $deleted ) ) {
 			/**
@@ -204,7 +204,7 @@ function mc_mass_delete_locations() {
 			} else {
 				$deleted[] = absint( $value );
 			}
-			$i ++;
+			++$i;
 		}
 		if ( ! empty( $deleted ) ) {
 			/**

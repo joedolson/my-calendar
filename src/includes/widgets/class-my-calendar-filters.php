@@ -28,7 +28,7 @@ class My_Calendar_Filters extends WP_Widget {
 	/**
 	 * Contructor.
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Event Filters', 'my-calendar' ),
@@ -45,7 +45,7 @@ class My_Calendar_Filters extends WP_Widget {
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		$before_widget = $args['before_widget'];
 		$after_widget  = $args['after_widget'];
 		$before_title  = str_replace( 'h1', 'h2', $args['before_title'] );
@@ -67,7 +67,7 @@ class My_Calendar_Filters extends WP_Widget {
 	 *
 	 * @param array $instance Current widget settings.
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		$widget_title = ( isset( $instance['title'] ) ) ? $instance['title'] : '';
 		$widget_url   = ( isset( $instance['url'] ) ) ? $instance['url'] : mc_get_uri();
 		$ltype        = ( isset( $instance['ltype'] ) ) ? $instance['ltype'] : false;
@@ -114,16 +114,16 @@ class My_Calendar_Filters extends WP_Widget {
 	/**
 	 * Update the My Calendar Event Filters Widget settings.
 	 *
-	 * @param array $new Widget settings new data.
+	 * @param array $new_settings Widget settings new data.
 	 * @param array $instance Widget settings instance.
 	 *
 	 * @return array $instance Updated instance.
 	 */
-	function update( $new, $instance ) {
-		$instance['title'] = esc_html( $new['title'] );
-		$instance['url']   = esc_url_raw( $new['url'] );
-		$instance['ltype'] = sanitize_text_field( $new['ltype'] );
-		$show              = ( isset( $new['show'] ) ) ? (array) $new['show'] : array();
+	public function update( $new_settings, $instance ) {
+		$instance['title'] = esc_html( $new_settings['title'] );
+		$instance['url']   = esc_url_raw( $new_settings['url'] );
+		$instance['ltype'] = sanitize_text_field( $new_settings['ltype'] );
+		$show              = ( isset( $new_settings['show'] ) ) ? (array) $new_settings['show'] : array();
 		$instance['show']  = array_map( 'sanitize_text_field', $show );
 
 		return $instance;

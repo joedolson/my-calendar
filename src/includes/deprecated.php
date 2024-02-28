@@ -17,11 +17,11 @@
  *
  * @param string             $field Name of the field.
  * @param string|int|boolean $value Current value.
- * @param string             $array if this setting is an array, the array key.
+ * @param string             $array_key if this setting is an array, the array key.
  *
  * @return string selected=selected
  */
-function mc_is_selected( $field, $value, $array = '' ) {
+function mc_is_selected( $field, $value, $array_key = '' ) {
 	_doing_it_wrong(
 		__FUNCTION__,
 		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
@@ -33,7 +33,7 @@ function mc_is_selected( $field, $value, $array = '' ) {
 		}
 	} else {
 		$setting = get_option( $field );
-		if ( (string) $setting[ $array ]['enabled'] === (string) $value ) {
+		if ( (string) $setting[ $array_key ]['enabled'] === (string) $value ) {
 			return 'selected="selected"';
 		}
 	}
@@ -86,12 +86,12 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
  *
  * @param string             $field Name of the field.
  * @param string|int|boolean $value Current value.
- * @param string             $array if this setting is an array, the array key.
- * @param boolean            $return whether to return or echo.
+ * @param string             $array_key if this setting is an array, the array key.
+ * @param boolean            $should_return whether to return or echo.
  *
  * @return string checked=checked
  */
-function mc_is_checked( $field, $value, $array = '', $return = false ) {
+function mc_is_checked( $field, $value, $array_key = '', $should_return = false ) {
 	_doing_it_wrong(
 		__FUNCTION__,
 		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
@@ -99,7 +99,7 @@ function mc_is_checked( $field, $value, $array = '', $return = false ) {
 	);
 	if ( ! is_array( get_option( $field ) ) ) {
 		if ( get_option( $field ) === (string) $value ) {
-			if ( $return ) {
+			if ( $should_return ) {
 				return 'checked="checked"';
 			} else {
 				echo 'checked="checked"';
@@ -107,8 +107,8 @@ function mc_is_checked( $field, $value, $array = '', $return = false ) {
 		}
 	} else {
 		$setting = get_option( $field );
-		if ( ! empty( $setting[ $array ]['enabled'] ) && (string) $setting[ $array ]['enabled'] === (string) $value ) {
-			if ( $return ) {
+		if ( ! empty( $setting[ $array_key ]['enabled'] ) && (string) $setting[ $array_key ]['enabled'] === (string) $value ) {
+			if ( $should_return ) {
 				return 'checked="checked"';
 			} else {
 				echo 'checked="checked"';

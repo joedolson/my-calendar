@@ -174,11 +174,11 @@ function my_calendar_help() {
  * @param string $modal_title Modal iframe title.
  * @param string $query Non-translatable version of modal title for search query.
  * @param int    $id Help text ID.
- * @param bool   $echo true to echo.
+ * @param bool   $display True to echo.
  *
  * @return string
  */
-function mc_help_link( $link_text, $modal_title, $query, $id, $echo = true ) {
+function mc_help_link( $link_text, $modal_title, $query, $id, $display = true ) {
 	$url  = esc_url( admin_url( 'admin.php?help=' . (int) $id . '&query=' . urlencode( $query ) . '&page=mc-contextual-help&TB_iframe=true&width=600&height=550&modal_window=true' ) );
 	$link = sprintf(
 		'<a href="%s" class="thickbox my-calendar-contextual-help" data-title="%s"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span><span class="help-label-text">%s</span></a>',
@@ -187,7 +187,7 @@ function mc_help_link( $link_text, $modal_title, $query, $id, $echo = true ) {
 		$link_text
 	);
 
-	if ( $echo ) {
+	if ( $display ) {
 		echo wp_kses_post( $link );
 	}
 
@@ -243,11 +243,11 @@ add_action( 'admin_enqueue_scripts', 'mc_contextual_help_css' );
 /**
  * Footer for contextual help modal.
  *
- * @param string $return Return text if not using default.
+ * @param string $return_str Return text if not using default.
  */
-function mc_get_help_footer( $return = '' ) {
-	if ( '' === $return ) {
-		$return = '
+function mc_get_help_footer( $return_str = '' ) {
+	if ( '' === $return_str ) {
+		$return_str = '
 		<ul class="help">
 			<li>
 				<a href="https://docs.joedolson.com/my-calendar/">' . __( 'Documentation', 'my-calendar' ) . '</a>
@@ -279,17 +279,17 @@ function mc_get_help_footer( $return = '' ) {
 		</ul>';
 	}
 
-	return '<div class="mc-help-links">' . $return . '</div>';
+	return '<div class="mc-help-links">' . $return_str . '</div>';
 }
 
 /**
  * Get navigation keywords and descriptions.
  *
- * @param string $return Return data type.
+ * @param string $return_type Return data type.
  *
  * @return array|string
  */
-function mc_navigation_keywords( $return = 'array' ) {
+function mc_navigation_keywords( $return_type = 'array' ) {
 	$keywords = array(
 		'nav'        => '<div class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></div> <div class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></div> <span>' . __( 'Primary Previous/Next Buttons', 'my-calendar' ) . '</span>',
 		'toggle'     => '<div class="dashicons dashicons-list-view" aria-hidden="true"></div> <div class="dashicons dashicons-calendar"></div> <span>' . __( 'Switch between list and grid views', 'my-calendar' ) . '</span>',
@@ -305,7 +305,7 @@ function mc_navigation_keywords( $return = 'array' ) {
 		'access'     => '<div class="dashicons dashicons-universal-access" aria-hidden="true"></div> <span>' . __( 'Access (dropdown)', 'my-calendar' ) . '</span>',
 		'search'     => '<div class="dashicons dashicons-search" aria-hidden="true"></div> <span>' . __( 'Search', 'my-calendar' ) . '</span>',
 	);
-	if ( 'array' === $return ) {
+	if ( 'array' === $return_type ) {
 		return $keywords;
 	} else {
 		$output = '';
@@ -377,7 +377,7 @@ function mc_display_icons() {
 			$dir       = plugin_dir_path( __FILE__ );
 			$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons';
 		} else {
-			$directory = trailingslashit( dirname( __FILE__ ) ) . 'images/icons/';
+			$directory = trailingslashit( __DIR__ ) . 'images/icons/';
 		}
 		$iconlist = mc_directory_list( $directory );
 		if ( ! empty( $iconlist ) ) {

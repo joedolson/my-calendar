@@ -37,11 +37,11 @@ function mc_error_check( $event_id ) {
  * Test whether an event has an invalid overlap.
  *
  * @param object  $data Event object.
- * @param boolean $return Return or echo.
+ * @param boolean $should_return Return or echo.
  *
  * @return string Warning text about problem with event.
  */
-function mc_test_occurrence_overlap( $data, $return = false ) {
+function mc_test_occurrence_overlap( $data, $should_return = false ) {
 	$warning = '';
 	// If this event is single, skip query.
 	$single_recur = ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ? true : false;
@@ -65,7 +65,7 @@ function mc_test_occurrence_overlap( $data, $return = false ) {
 		// If event has been changed to same date, still delete meta.
 		delete_post_meta( $data->event_post, '_occurrence_overlap' );
 	}
-	if ( $return ) {
+	if ( $should_return ) {
 		return $warning;
 	} else {
 		echo wp_kses_post( $warning );

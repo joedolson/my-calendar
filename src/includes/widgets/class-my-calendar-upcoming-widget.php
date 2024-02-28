@@ -28,7 +28,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	/**
 	 * Contructor.
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct(
 			false,
 			$name = __( 'My Calendar: Upcoming Events', 'my-calendar' ),
@@ -45,7 +45,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 * @param array $args Widget arguments.
 	 * @param array $instance This instance settings.
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		$before_widget = $args['before_widget'];
 		$after_widget  = $args['after_widget'];
 		$before_title  = str_replace( 'h1', 'h2', $args['before_title'] );
@@ -117,7 +117,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 *
 	 * @return void
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		$defaults = mc_widget_defaults();
 		$title    = ( isset( $instance['my_calendar_upcoming_title'] ) ) ? esc_attr( $instance['my_calendar_upcoming_title'] ) : '';
 		$template = ( isset( $instance['my_calendar_upcoming_template'] ) ) ? esc_attr( $instance['my_calendar_upcoming_template'] ) : '';
@@ -299,14 +299,14 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	/**
 	 * Update the My Calendar Upcoming Widget settings.
 	 *
-	 * @param array $new Widget settings new data.
+	 * @param array $new_settings Widget settings new data.
 	 * @param array $instance Widget settings instance.
 	 *
 	 * @return array Updated instance.
 	 */
-	function update( $new, $instance ) {
-		$instance                                  = array_map( 'mc_kses_post', array_merge( $instance, $new ) );
-		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new['my_calendar_upcoming_category'], true ) ) ? array() : $new['my_calendar_upcoming_category'];
+	public function update( $new_settings, $instance ) {
+		$instance                                  = array_map( 'mc_kses_post', array_merge( $instance, $new_settings ) );
+		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new_settings['my_calendar_upcoming_category'], true ) ) ? array() : $new_settings['my_calendar_upcoming_category'];
 
 		return $instance;
 	}
