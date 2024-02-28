@@ -63,7 +63,7 @@ function mc_location_field_callback() {
  */
 function mc_post_type() {
 	$arguments = array(
-		'public'              => apply_filters( 'mc_event_posts_public', true ),
+		'public'              => true,
 		'publicly_queryable'  => true,
 		/**
 		 * Should My Calendar post types be excluded from search. Default false.
