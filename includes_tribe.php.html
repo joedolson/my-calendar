@@ -148,7 +148,7 @@ function mc_import_source_tribe_event( $post_id ) {
 			return;
 		}
 		$count = count( $event['event_begin'] );
-		for ( $i = 0; $i &lt; $count; $i ++ ) {
+		for ( $i = 0; $i &lt; $count; $i++ ) {
 			$check    = mc_check_data( 'add', $event, 0, true );
 			$event_id = false;
 			if ( $check[0] ) {
@@ -398,7 +398,6 @@ function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 	}
 }
 add_action( 'my_calendar_event_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
-
 </code></pre>
         </article>
     </section>

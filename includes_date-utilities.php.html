@@ -283,8 +283,8 @@ function mc_recur_date( $ts ) {
 	$month   = mc_date( 'M', $ts, false );
 	$ord     = 1;
 
-	while ( mc_date( 'M', ( $ts = strtotime( '-1 week', $ts ) ), false ) === $month ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-		$ord++;
+	while ( mc_date( 'M', ( $ts = strtotime( '-1 week', $ts ) ), false ) === $month ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+		++$ord;
 	}
 
 	return array(
@@ -455,11 +455,11 @@ function mc_private_event( $event, $type = true ) {
 /**
  * Parse a string and replace internationalized months with English so strtotime() will parse correctly
  *
- * @param string $string Date information.
+ * @param string $date Date information.
  *
  * @return int de-internationalized change
  */
-function mc_strtotime( $string ) {
+function mc_strtotime( $date ) {
 	$months  = array(
 		date_i18n( 'F', strtotime( 'January 1' ) ),
 		date_i18n( 'F', strtotime( 'February 1' ) ),
@@ -513,7 +513,7 @@ function mc_strtotime( $string ) {
 		'Dec',
 	);
 
-	return strtotime( str_replace( $months, $english, $string ) );
+	return strtotime( str_replace( $months, $english, $date ) );
 }
 
 /**

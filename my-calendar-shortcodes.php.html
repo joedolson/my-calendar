@@ -723,7 +723,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						&lt;option value=''>&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/option>
 						&lt;?php
 						$list_months = '';
-						for ( $i = 1; $i &lt;= 12; $i ++ ) {
+						for ( $i = 1; $i &lt;= 12; $i++ ) {
 							$list_months .= "&lt;option value='$i'" . selected( $i, $month ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '&lt;/option>' . "\n";
 						}
 						echo wp_kses( $list_months, mc_kses_elements() );

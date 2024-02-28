@@ -580,7 +580,7 @@ function mc_validate_settings( $settings ) {
 	foreach ( $keys as $key ) {
 		$exists = in_array( $key, array_keys( $defaults ), true ) ? true : false;
 		if ( $exists ) {
-			$i ++;
+			++$i;
 		}
 		if ( $i > 20 ) {
 			return true;
@@ -1504,7 +1504,7 @@ function mc_remote_db() {
 									$buttons    = "&lt;button class='up' type='button'>&lt;i class='dashicons dashicons-arrow-up' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $up_label . "&lt;/span>&lt;/button> &lt;button class='down' type='button'>&lt;i class='dashicons dashicons-arrow-down' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $down_label . '&lt;/span>&lt;/button> ' . $hide;
 									$buttons    = "&lt;div class='mc-buttons'>$buttons&lt;/div>";
 									echo wp_kses( "&lt;li class='ui-state-default mc-$k mc-$class'>$buttons &lt;code>$label&lt;/code> $v &lt;input type='hidden' name='mc_nav[]' value='$k' />&lt;/li>", mc_kses_elements() );
-									$i ++;
+									++$i;
 								}
 							}
 							$missed = array_diff( $nav_elements, $inserted );
@@ -1519,7 +1519,7 @@ function mc_remote_db() {
 								$buttons    = "&lt;button class='up' type='button'>&lt;i class='dashicons dashicons-arrow-up' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $up_label . "&lt;/span>&lt;/button> &lt;button class='down' type='button'>&lt;i class='dashicons dashicons-arrow-down' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $down_label . "&lt;/span>&lt;/button> &lt;button class='hide' type='button'>&lt;i class='dashicons dashicons-hidden' aria-hidden='true'>&lt;/i>&lt;span class='screen-reader-text'>" . $hide_label . '&lt;/span>&lt;/button>';
 								$buttons    = "&lt;div class='mc-buttons'>$buttons&lt;/div>";
 								echo wp_kses( "&lt;li class='ui-state-default mc-$k mc-hidden'>$buttons &lt;code>$k&lt;/code> $v &lt;input type='hidden' name='mc_nav[]' value='$k' disabled />&lt;/li>", mc_kses_elements() );
-								$i ++;
+								++$i;
 							}
 							?>
 							&lt;/ul>

@@ -245,11 +245,11 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
  *
  * @param int          $group_id Group ID.
  * @param string|false $field Column name of field to compare. False to check all grouped fields.
- * @param bool         $echo False to return if single field comparison.
+ * @param bool         $display False to return if single field comparison.
  *
  * @return string|boolean True if information is the same for multiple fields; string for single field checks.
  */
-function mc_compare_group_members( $group_id, $field = false, $echo = true ) {
+function mc_compare_group_members( $group_id, $field = false, $display = true ) {
 	global $wpdb;
 	if ( ! $field ) {
 		$query = 'SELECT event_title, event_desc, event_short, event_link, event_url, event_image, event_category, event_link_expires, event_host FROM ' . my_calendar_table() . ' WHERE event_group_id = %d';
@@ -259,12 +259,12 @@ function mc_compare_group_members( $group_id, $field = false, $echo = true ) {
 	}
 	$results = $wpdb->get_results( $wpdb->prepare( $query, $group_id ), ARRAY_N ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$count   = count( $results );
-	for ( $i = 0; $i &lt; $count; $i ++ ) {
+	for ( $i = 0; $i &lt; $count; $i++ ) {
 		$n = ( ( $i + 1 ) > $count - 1 ) ? 0 : $i + 1;
 		if ( md5( implode( '', $results[ $i ] ) ) !== md5( implode( '', $results[ $n ] ) ) ) {
 			if ( $field ) {
 				$message = ' &lt;span class="nomatch">' . __( 'Fields do not match', 'my-calendar' ) . '&lt;/span>';
-				if ( $echo ) {
+				if ( $display ) {
 					echo wp_kses_post( $message );
 				} else {
 					return $message;

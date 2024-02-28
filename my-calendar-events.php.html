@@ -42,24 +42,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Processes objects to add needed properties.
  *
- * @param object $object Event object.
+ * @param object $event Event object.
  *
- * @return object $object Modifed event.
+ * @return object $event Modifed event.
  */
-function mc_event_object( $object ) {
-	if ( is_object( $object ) ) {
-		if ( ! property_exists( $object, 'categories' ) ) {
-			$object->categories = mc_get_categories( $object, 'objects' );
+function mc_event_object( $event ) {
+	if ( is_object( $event ) ) {
+		if ( ! property_exists( $event, 'categories' ) ) {
+			$event->categories = mc_get_categories( $event, 'objects' );
 		}
-		if ( ! property_exists( $object, 'location' ) &amp;&amp; is_numeric( $object->event_location ) &amp;&amp; 0 !== (int) $object->event_location ) {
-			$object->location = mc_get_location( $object->event_location );
+		if ( ! property_exists( $event, 'location' ) &amp;&amp; is_numeric( $event->event_location ) &amp;&amp; 0 !== (int) $event->event_location ) {
+			$event->location = mc_get_location( $event->event_location );
 		}
-		if ( ! property_exists( $object, 'uid' ) ) {
-			$guid = (string) get_post_meta( $object->event_post, '_mc_guid', true );
+		if ( ! property_exists( $event, 'uid' ) ) {
+			$guid = (string) get_post_meta( $event->event_post, '_mc_guid', true );
 			if ( '' === $guid ) {
-				$guid = mc_create_guid( $object );
+				$guid = mc_create_guid( $event );
 			}
-			$object->uid = $guid;
+			$event->uid = $guid;
 		}
 		/**
 		 * Customize the My Calendar event object.
@@ -70,10 +70,10 @@ function mc_event_object( $object ) {
 		 *
 		 * @return {object}
 		 */
-		$object = apply_filters( 'mc_event_object', $object );
+		$event = apply_filters( 'mc_event_object', $event );
 	}
 
-	return $object;
+	return $event;
 }
 
 /**
