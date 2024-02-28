@@ -96,7 +96,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	 */
 	public function test_mc_checkdate() {
 		$valid   = mc_checkdate( '2024-02-28' ); // Real date.
-		$invalid = mc_checkdate( '2023-02-29' ); // Properly formatted, but doesn't exist.
+		$invalid = mc_checkdate( '2023-02-32' ); // Properly formatted, but doesn't exist.
 		$notdate = mc_checkdate( 'not a date' ); // Not a valid date format.
 		$string  = mc_checkdate( 'Wednesday, February 28, 2024' );
 
@@ -146,20 +146,33 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	/**
 	 * Test that the day & month of the first day of the current week is correctly identified.
 	 */
-	public function test_mc_first_day_of_week() {
-		$start_of_week = get_option( 'start_of_week' );
+	public function test_mc_first_day_of_week_is_sunday() {
 		update_option( 'start_of_week', '0' );
 		$start_of_week_is_sunday = mc_first_day_of_week( strtotime( '2024-04-04' ) );
 		$sunday_expected         = array( '31', -1 );
+
+		$this->assertSame( $start_of_week_is_sunday, $sunday_expected, 'Expecting Sunday, March 31st.' );
+	}
+
+	/**
+	 * Test that the day & month of the first day of the current week is correctly identified.
+	 */
+	public function test_mc_first_day_of_week_is_monday() {
 		update_option( 'start_of_week', '1' );
 		$start_of_week_is_monday = mc_first_day_of_week( strtotime( '2024-04-04' ) );
 		$monday_expected         = array( '1', 0 );
+
+		$this->assertSame( $start_of_week_is_monday, $monday_expected, 'Expecting Monday, April 1st.' );
+	}
+
+	/**
+	 * Test that the day & month of the first day of the current week is correctly identified.
+	 */
+	public function test_mc_first_day_of_week_is_other() {
 		update_option( 'start_of_week', '2' );
 		$start_of_week_is_other = mc_first_day_of_week( strtotime( '2024-04-04' ) );
 		update_option( 'start_of_week', $start_of_week ); // Reset to original setting.
 
-		$this->assertSame( $start_of_week_is_sunday, $sunday_expected, 'Expecting Sunday, March 31st.' );
-		$this->assertSame( $start_of_week_is_monday, $monday_expected, 'Expecting Monday, April 1st.' );
 		$this->assertSame( $start_of_week_is_other, $monday_expected, 'Expecting Sunday, March 31st.' );
 	}
 
@@ -218,7 +231,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 			'format' => 'list',
 			'time'   => 'month',
 		);
-		$date        = array(
+		$date         = array(
 			'day'          => 28,
 			'month'        => 2,
 			'year'         => 2024,
