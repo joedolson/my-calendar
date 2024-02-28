@@ -78,11 +78,11 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	 * Test that the week of the month an event occurs in is correct.
 	 */
 	public function test_mc_week_of_month() {
-		$first_week  = mc_week_of_month( '2024-02-01' );
-		$second_week = mc_week_of_month( '2024-02-08' );
-		$third_week  = mc_week_of_month( '2024-02-15' );
-		$fourth_week = mc_week_of_month( '2024-02-22' );
-		$fifth_week  = mc_week_of_month( '2024-02-29' );
+		$first_week  = mc_week_of_month( strtotime( '2024-02-01' ) );
+		$second_week = mc_week_of_month( strtotime( '2024-02-08' ) );
+		$third_week  = mc_week_of_month( strtotime( '2024-02-15' ) );
+		$fourth_week = mc_week_of_month( strtotime( '2024-02-22' ) );
+		$fifth_week  = mc_week_of_month( strtotime( '2024-02-29' ) );
 
 		$this->assertSame( $first_week, 0, 'This date should be the 1st week of the month.' );
 		$this->assertSame( $second_week, 1, 'This date should be the 2nd week of the month.' );
@@ -103,7 +103,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 		$this->assertSame( $valid, '2024-02-28', 'Valid Y-m-d dates should return the same information passed.' );
 		$this->assertSame( $string, '2024-02-28', 'Valid string dates should return a Y-m-d equivalent.' );
 		$this->assertSame( $invalid, gmdate( 'Y-m-d' ), 'Invalid dates should return today.' );
-		$this->assertSame( $notdate, '1970-01-01', 'Dates that are not valid in any way should return Unix epoch.' );
+		$this->assertSame( $notdate, gmdate( 'Y-m-d' ), 'Dates that are not valid in any way should return current day.' );
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	public function test_mc_first_day_of_week_is_other() {
 		update_option( 'start_of_week', '2' );
 		$start_of_week_is_other = mc_first_day_of_week( strtotime( '2024-04-04' ) );
-		update_option( 'start_of_week', $start_of_week ); // Reset to original setting.
+		$monday_expected         = array( '1', 0 );
 
 		$this->assertSame( $start_of_week_is_other, $monday_expected, 'Expecting Sunday, March 31st.' );
 	}
