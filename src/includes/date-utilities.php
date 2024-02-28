@@ -196,9 +196,9 @@ function mc_date_diff_precise( $start, $end = 'NOW' ) {
 /**
  * Get the week of the month a given date falls on.
  *
- * @param integer $date_of_event  current month's date.
+ * @param integer $date_of_event  A numbered day of the month. E.g., 9 or 24.
  *
- * @return integer $week_of_event The week of the month this date falls in;
+ * @return integer $week_of_event The week of the month this date falls in, 0 - 4.
  */
 function mc_week_of_month( $date_of_event ) {
 	$week_of_event = 0;
