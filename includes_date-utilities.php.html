@@ -298,7 +298,7 @@ function mc_recur_date( $ts ) {
  *
  * @param int|boolean $timestamp timestamp + offset or false if now.
  *
- * @return array day and month
+ * @return array day and integer representing the month offset. -1 for previous month, 0 for current month.
  */
 function mc_first_day_of_week( $timestamp = false ) {
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' || get_option( 'start_of_week' ) === '0' ) ? absint( get_option( 'start_of_week' ) ) : 0;
