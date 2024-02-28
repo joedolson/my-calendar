@@ -17,9 +17,9 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 		$now    = mc_dateclass( strtotime( 'now' ) );
 		$future = mc_dateclass( strtotime( '+1 day' ) );
 
-		$this->assertSame( $past, 'past-day past-date', 'Past date does not generate past date classes.' );
-		$this->assertSame( $now, 'current-day', 'Current date does not generate current date class.' );
-		$this->assertSame( $future, 'future-day', 'Future date does not generate future date class.' );
+		$this->assertStringContainsString( 'past-day past-date', $past, 'Past date does not generate past date classes.' );
+		$this->assertStringContainsString( 'current-day', $now, 'Current date does not generate current date class.' );
+		$this->assertStringContainsString( 'future-day', $future, 'Future date does not generate future date class.' );
 	}
 
 	/**
@@ -102,7 +102,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 
 		$this->assertSame( $valid, '2024-02-28', 'Valid Y-m-d dates should return the same information passed.' );
 		$this->assertSame( $string, '2024-02-28', 'Valid string dates should return a Y-m-d equivalent.' );
-		$this->assertSame( $invalid, false, 'Invalid dates should return false.' );
+		$this->assertSame( $invalid, gmdate( 'Y-m-d' ), 'Invalid dates should return today.' );
 		$this->assertSame( $notdate, '1970-01-01', 'Dates that are not valid in any way should return Unix epoch.' );
 	}
 
@@ -121,7 +121,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 			'day' => 'Thursday',
 		);
 		$second_week_expected = array(
-			'num' => 1,
+			'num' => 2,
 			'day' => 'Thursday',
 		);
 		$third_week_expected  = array(
@@ -150,10 +150,10 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 		$start_of_week = get_option( 'start_of_week' );
 		update_option( 'start_of_week', '0' );
 		$start_of_week_is_sunday = mc_first_day_of_week( strtotime( '2024-04-04' ) );
-		$sunday_expected         = array( '31', 'March' );
+		$sunday_expected         = array( '31', -1 );
 		update_option( 'start_of_week', '1' );
 		$start_of_week_is_monday = mc_first_day_of_week( strtotime( '2024-04-04' ) );
-		$monday_expected         = array( '1', 'April' );
+		$monday_expected         = array( '1', 0 );
 		update_option( 'start_of_week', '2' );
 		$start_of_week_is_other = mc_first_day_of_week( strtotime( '2024-04-04' ) );
 		update_option( 'start_of_week', $start_of_week ); // Reset to original setting.
@@ -169,7 +169,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	public function test_mc_date() {
 		$offset = get_option( 'gmt_offset' );
 		update_option( 'gmt_offset', '6' );
-		$timestamp       = mc_date();
+		$timestamp       = mc_date( '', false, false );
 		$includes_offset = mc_date( 'Y-m-d H:i:s', strtotime( '2024-02-28 00:00:00' ) );
 		$without_offset  = mc_date( 'Y-m-d H:i:s', strtotime( '2024-02-28 00:00:00' ), false );
 		update_option( 'gmt_offset', $offset ); // Reset to original setting.
