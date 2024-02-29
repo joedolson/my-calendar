@@ -624,7 +624,7 @@ function mc_date_array( $timestamp, $period, $months = 0 ) {
 			$last_of_month = mc_date( 't', strtotime( $to ) );
 			if ( $month !== $last_of_month ) {
 				$n  = $n + 7;
-				$to = $to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ), false );
+				$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ), false );
 			}
 
 			$return = array(
