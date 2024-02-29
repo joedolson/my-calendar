@@ -627,7 +627,7 @@ function mc_date_array( $timestamp, $period, $months = 0 ) {
 			 * strtotime( "+ 1 month" ) doesn't always yield the next month.
 			 * But it does always yield something close to it. If the date is
 			 * more than 25, then this is the end of the month, and can be increased.
-			 */ 
+			 */
 			if ( $date < $last_of_month && $date > 25 ) {
 				$n  = $n + 7;
 				$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ), false );
