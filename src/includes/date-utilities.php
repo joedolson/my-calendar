@@ -619,7 +619,6 @@ function mc_date_array( $timestamp, $period, $months = 0 ) {
 				$n = 6;
 			}
 			$to = mc_date( 'Y-m-d', strtotime( "+$n days", $endtime ), false );
-
 			$return = array(
 				'from' => $from,
 				'to'   => $to,

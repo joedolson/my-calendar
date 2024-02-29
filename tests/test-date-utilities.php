@@ -171,7 +171,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	public function test_mc_first_day_of_week_is_other() {
 		update_option( 'start_of_week', '2' );
 		$start_of_week_is_other = mc_first_day_of_week( strtotime( '2024-04-04' ) );
-		$sunday_expected         = array( '31', -1 );
+		$sunday_expected        = array( '31', -1 );
 
 		$this->assertSame( $start_of_week_is_other, $sunday_expected, 'Expecting Sunday, March 31st.' );
 	}
@@ -197,10 +197,10 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	 */
 	public function test_mc_date_array() {
 		update_option( 'start_of_week', 0 );
-		$month_view = mc_date_array( strtotime( '2024-02-28' ), 'month' );
-		$week_view  = mc_date_array( strtotime( '2024-02-28' ), 'week' );
-		$next_month = mc_date_array( strtotime( '2024-02-28' ), 'month+1' );
-		$two_month  = mc_date_array( strtotime( '2024-02-28' ), 'month', 1 );
+		$month_view = mc_date_array( strtotime( '2024-02-01' ), 'month' );
+		$week_view  = mc_date_array( strtotime( '2024-02-26' ), 'week' );
+		$next_month = mc_date_array( strtotime( '2024-02-01' ), 'month+1' );
+		$two_month  = mc_date_array( strtotime( '2024-02-01' ), 'month', 1 );
 
 		$month_view_expected = array(
 			'from' => '2024-01-28',
