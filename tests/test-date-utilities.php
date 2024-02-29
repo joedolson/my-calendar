@@ -183,11 +183,12 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 		$offset = get_option( 'gmt_offset' );
 		update_option( 'gmt_offset', '6' );
 		$timestamp       = mc_date( '', false, false );
+		$test_time       = time();
 		$includes_offset = mc_date( 'Y-m-d H:i:s', strtotime( '2024-02-28 00:00:00' ) );
 		$without_offset  = mc_date( 'Y-m-d H:i:s', strtotime( '2024-02-28 00:00:00' ), false );
 		update_option( 'gmt_offset', $offset ); // Reset to original setting.
 
-		$this->assertSame( $timestamp, time(), 'Expecting current timestamp.' );
+		$this->assertSame( $timestamp, $test_time, 'Expecting current timestamp.' );
 		$this->assertSame( $includes_offset, '2024-02-28 06:00:00', 'Expecting a six hour timezone offset.' );
 		$this->assertSame( $without_offset, '2024-02-28 00:00:00', 'Expecting same value as passed.' );
 	}
