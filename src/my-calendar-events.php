@@ -610,11 +610,17 @@ function mc_get_event_core( $id, $rebuild = false ) {
 function mc_get_first_event( $id ) {
 	$mcdb      = mc_is_remote_db();
 	$ts_string = mc_ts();
-	$event     = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event     = get_transient( 'mc_first_event_cache_' . $id );
 	if ( $event ) {
-		$event = mc_event_object( $event );
+		return $event;
 	} else {
-		$event = false;
+		$event     = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( $event ) {
+			$event = mc_event_object( $event );
+			set_transient( 'mc_first_event_cache_' . $id, $event, WEEK_IN_SECONDS );
+		} else {
+			$event = false;
+		}
 	}
 
 	return $event;
