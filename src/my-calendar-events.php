@@ -92,7 +92,7 @@ function mc_create_guid( $event ) {
  */
 function mc_ts( $test = false ) {
 	$ts_sql = get_transient( 'mc_ts_string' );
-	if ( ! $ts_sql ) {
+	if ( $test || ! $ts_sql ) {
 		global $wpdb;
 		$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
 		/**
