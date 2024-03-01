@@ -1146,7 +1146,7 @@ function mc_get_event_location( $event, $source ) {
 		return $location;
 	}
 	// This is an event with a location ID, but no attached object.
-	if ( 'event' === $source && property_exists( $event, 'event_location' ) ) {
+	if ( 'event' === $source && property_exists( $event, 'event_location' ) && $event->event_location ) {
 		$location = mc_get_location( $event->event_location );
 
 		return $location;
@@ -1434,7 +1434,11 @@ function mc_author_data( $e, $event ) {
 			$e['author_id']    = $event->event_author;
 		}
 		if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) {
-			$host = get_post( $event->event_host );
+			if ( ! $event->event_host || ! ( get_post_type( $event->event_host ) ) ) {
+				$host = false;
+			} else {
+				$host = get_post( $event->event_host );
+			}
 			if ( $host ) {
 				$e['host']          = $host->post_title;
 				$e['host_id']       = $event->event_host;
