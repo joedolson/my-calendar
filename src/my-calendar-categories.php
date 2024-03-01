@@ -764,14 +764,20 @@ function mc_no_category_default( $single = false ) {
  * @return object
  */
 function mc_get_category( $category ) {
+	if ( is_int( $category ) ) {
+		$cat = get_transient( 'mc_cat_' . $category );
+		if ( $cat ) {
+			return $cat;
+		}
+	}
 	$mcdb = mc_is_remote_db();
 	if ( is_int( $category ) ) {
 		$sql = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id = %d';
 		$cat = $mcdb->get_row( $mcdb->prepare( $sql, $category ) );
+		set_transient( 'mc_cat_' . $category, $cat, WEEK_IN_SECONDS );
 	} else {
 		$cat = mc_category_by_name( $category );
 	}
-
 	return $cat;
 }
 
