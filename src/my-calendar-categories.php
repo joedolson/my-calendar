@@ -26,6 +26,7 @@ function mc_update_category( $field, $data, $category ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
 	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	delete_transient( 'mc_cat_' . $category );
 
 	return $result;
 }
@@ -330,6 +331,7 @@ function mc_update_cat( $category ) {
 	mc_delete_category_icon( $category_id );
 
 	$result = $wpdb->update( my_calendar_categories_table(), $category, $where, $formats, '%d' );
+	delete_transient( 'mc_cat_' . $category_id );
 
 	return $result;
 }
