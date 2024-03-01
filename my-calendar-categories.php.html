@@ -721,8 +721,8 @@ function mc_category_settings() {
  * @return mixed string/int Query result.
  */
 function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
-	$mcdb     = mc_is_remote_db();
-	$category = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) );
+	$cat_id   = absint( $cat_id );
+	$category = mc_get_category( $cat_id );
 
 	if ( $category ) {
 		if ( ! $field ) {
