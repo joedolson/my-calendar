@@ -1201,17 +1201,16 @@ function mc_admin_category_list( $event ) {
  * @return array of values
  */
 function mc_get_categories( $event, $ids = true ) {
-	$mcdb    = mc_is_remote_db();
-	$return  = array();
-	$results = false;
+	$mcdb     = mc_is_remote_db();
+	$event_id = ( is_object( $event ) ) ? absint( $event->event_id ) : absint( $event );
+	$return   = array();
+	$results  = false;
 	if ( is_object( $event ) ) {
-		$event_id = absint( $event->event_id );
 		$primary  = $event->event_category;
 		if ( property_exists( $event, 'categories' ) ) {
 			$results = $event->categories;
 		}
 	} elseif ( is_numeric( $event ) ) {
-		$event_id = absint( $event );
 		$primary  = mc_get_data( 'event_category', $event_id );
 	} else {
 
@@ -1221,7 +1220,13 @@ function mc_get_categories( $event, $ids = true ) {
 	if ( ! $results ) {
 		$relate  = my_calendar_category_relationships_table();
 		$catego  = my_calendar_categories_table();
-		$results = $mcdb->get_results( $mcdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$cache   = get_transient( 'mc_categories_' . $event_id );
+		if ( $cache ) {
+			$results = $cache;
+		} else {
+			$results = $mcdb->get_results( $mcdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			set_transient( 'mc_categories_' . $event_id, $results, WEEK_IN_SECONDS );
+		}
 	}
 	if ( true === $ids ) {
 		if ( $results ) {

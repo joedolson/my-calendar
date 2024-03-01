@@ -665,6 +665,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$formats,
 					'%d'
 				);
+				// Delete transient cache for event.
+				delete_transient( 'mc_categories_' . $event_id );
+				
 				if ( ! isset( $_POST['event_recur'] ) && isset( $_POST['event_repeats'] ) ) {
 					unset( $_POST['event_repeats'] );
 				}
