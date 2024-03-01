@@ -91,36 +91,42 @@ function mc_create_guid( $event ) {
  * @return string|array
  */
 function mc_ts( $test = false ) {
-	global $wpdb;
-	$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
-	/**
-	 * Filter timezone offset applied when displaying events. Can fix issues with an incorrect server time.
-	 *
-	 * @hook mc_filter_offset
-	 *
-	 * @param {string} $offset Timezone offset format -HH:MM:SS.
-	 *
-	 * @return {string}
-	 */
-	$offset = apply_filters( 'mc_filter_offset', $offset );
-	$offset = substr( $offset, 0, -3 );
-	if ( strpos( $offset, '-' ) !== 0 ) {
-		$offset = '+' . $offset;
+	$ts_sql = get_transient( 'mc_ts_string' );
+	if ( ! $ts_sql ) {
+		global $wpdb;
+		$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
+		/**
+		 * Filter timezone offset applied when displaying events. Can fix issues with an incorrect server time.
+		 *
+		 * @hook mc_filter_offset
+		 *
+		 * @param {string} $offset Timezone offset format -HH:MM:SS.
+		 *
+		 * @return {string}
+		 */
+		$offset = apply_filters( 'mc_filter_offset', $offset );
+		$offset = substr( $offset, 0, -3 );
+		if ( strpos( $offset, '-' ) !== 0 ) {
+			$offset = '+' . $offset;
+		}
+
+		$wp_time  = get_option( 'gmt_offset', '0' );
+		$wp_time  = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ) : '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
+		$wp_time .= ':00';
+
+		if ( $test ) {
+			return array(
+				'db' => $offset,
+				'wp' => $wp_time,
+			);
+		}
+		// Converts occur_begin value from the WordPress timezone to the db timezone.
+		// Has weakness that if an event was entered during DST, it's wrong during ST and vice versa.
+		$ts_sql = "UNIX_TIMESTAMP( CONVERT_TZ( `occur_begin`, '$wp_time', '$offset' ) ) AS ts_occur_begin, UNIX_TIMESTAMP( CONVERT_TZ( `occur_end`, '$wp_time', '$offset' ) ) AS ts_occur_end ";
+		set_transient( 'mc_ts_string', $ts_sql, WEEK_IN_SECONDS );
 	}
 
-	$wp_time  = get_option( 'gmt_offset', '0' );
-	$wp_time  = ( $wp_time < 0 ) ? '-' . str_pad( absint( $wp_time ), 2, 0, STR_PAD_LEFT ) : '+' . str_pad( $wp_time, 2, 0, STR_PAD_LEFT );
-	$wp_time .= ':00';
-
-	if ( $test ) {
-		return array(
-			'db' => $offset,
-			'wp' => $wp_time,
-		);
-	}
-	// Converts occur_begin value from the WordPress timezone to the db timezone.
-	// Has weakness that if an event was entered during DST, it's wrong during ST and vice versa.
-	return "UNIX_TIMESTAMP( CONVERT_TZ( `occur_begin`, '$wp_time', '$offset' ) ) AS ts_occur_begin, UNIX_TIMESTAMP( CONVERT_TZ( `occur_end`, '$wp_time', '$offset' ) ) AS ts_occur_end ";
+	return $ts_sql;
 }
 
 /**
