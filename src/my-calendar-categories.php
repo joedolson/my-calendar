@@ -1206,21 +1206,21 @@ function mc_get_categories( $event, $ids = true ) {
 	$return   = array();
 	$results  = false;
 	if ( is_object( $event ) ) {
-		$primary  = $event->event_category;
+		$primary = $event->event_category;
 		if ( property_exists( $event, 'categories' ) ) {
 			$results = $event->categories;
 		}
 	} elseif ( is_numeric( $event ) ) {
-		$primary  = mc_get_data( 'event_category', $event_id );
+		$primary = mc_get_data( 'event_category', $event_id );
 	} else {
 
 		return ( 'html' === $ids || 'text' === $ids ) ? '' : array();
 	}
 
 	if ( ! $results ) {
-		$relate  = my_calendar_category_relationships_table();
-		$catego  = my_calendar_categories_table();
-		$cache   = get_transient( 'mc_categories_' . $event_id );
+		$relate = my_calendar_category_relationships_table();
+		$catego = my_calendar_categories_table();
+		$cache  = get_transient( 'mc_categories_' . $event_id );
 		if ( $cache ) {
 			$results = $cache;
 		} else {
