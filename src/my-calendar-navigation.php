@@ -469,14 +469,15 @@ function mc_sub_links() {
 	$replace = 'webcal:';
 	$search  = array( 'http:', 'https:' );
 
-	$google  = str_replace( $search, $replace, get_feed_link( 'my-calendar-google' ) );
-	$outlook = str_replace( $search, $replace, get_feed_link( 'my-calendar-outlook' ) );
+	$google = str_replace( $search, $replace, get_feed_link( 'my-calendar-google' ) );
+	$google = add_query_arg( 'cid', $google, 'https://www.google.com/calendar/render' );
+	$ical   = str_replace( $search, $replace, get_feed_link( 'my-calendar-ical' ) );
 
-	$sub_google  = "<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
-	$sub_outlook = "<li class='ics outlook'><a href='" . esc_url( $outlook ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Outlook', 'my-calendar' ) . '</a></li>';
+	$sub_google = "<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
+	$sub_ical   = "<li class='ics ical'><a href='" . esc_url( $ical ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>iCal', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-subscribe'>
-	<ul>$sub_google$sub_outlook</ul>
+	<ul>$sub_google$sub_ical</ul>
 </div>";
 
 	return $output;
@@ -500,16 +501,15 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	$add['nmonth'] = $next['month'];
 	unset( $add['href'] );
 
-	$add['export'] = 'google';
-	$ics           = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
-	$add['export'] = 'outlook';
-	$ics2          = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
+	$ics  = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
+	$ics  = add_query_arg( 'cid', $ics, 'https://www.google.com/calendar/render' );
+	$ics2 = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
 
-	$google  = "<li class='ics google'><a href='" . $ics . "'>" . __( '<span class="maybe-hide">Export to </span>Google', 'my-calendar' ) . '</a></li>';
-	$outlook = "<li class='ics outlook'><a href='" . $ics2 . "'>" . __( '<span class="maybe-hide">Export to </span>iCal', 'my-calendar' ) . '</a></li>';
+	$google = "<li class='ics google'><a href='" . $ics . "'>" . __( '<span class="maybe-hide">Export to </span>Google', 'my-calendar' ) . '</a></li>';
+	$ical   = "<li class='ics ical'><a href='" . $ics2 . "'>" . __( '<span class="maybe-hide">Export to </span>iCal', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-download'>
-	<ul>$google$outlook</ul>
+	<ul>$google$ical</ul>
 </div>";
 
 	return $output;

@@ -981,36 +981,15 @@ function mc_get_details_label( $event, $e ) {
 }
 
 /**
- * Format a timestamp for use in ical
+ * Format a timestamp for use in iCal.
  *
  * @param integer $os timestamp.
- * @param string  $source google or outlook.
  *
  * @return string formatted time
  */
-function mc_format_timestamp( $os, $source ) {
-	if ( isset( $_GET['outlook'] ) || 'outlook' === $source ) {
-		// Should iCal be in UTC or in current timezone.
-		$timezone_string = get_option( 'timezone_string' );
-		if ( ! $timezone_string ) {
-			// Multiply gmt_offset by -1 because POSIX has it reversed.
-			// See: http://stackoverflow.com/questions/20228224/php-timezone-issue.
-			$timezone_string = sprintf( 'Etc/GMT%+d', -1 * get_option( 'gmt_offset' ) );
-		}
-
-		$timezone_object = timezone_open( $timezone_string );
-		$date_object     = date_create( 'now', $timezone_object );
-
-		$date_object->setTime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ) );
-		$date_object->setDate( mc_date( 'Y', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ) );
-
-		$timestamp = $date_object->getTimestamp();
-		$time      = gmdate( 'Ymd\THi00', $timestamp ) . 'Z';
-
-	} else {
-		$os_time = mktime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ), mc_date( 's', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ), mc_date( 'Y', $os, false ) );
-		$time    = mc_date( 'Ymd\THi00', $os_time, false );
-	}
+function mc_format_timestamp( $os ) {
+	$os_time = mktime( mc_date( 'H', $os, false ), mc_date( 'i', $os, false ), mc_date( 's', $os, false ), mc_date( 'm', $os, false ), mc_date( 'd', $os, false ), mc_date( 'Y', $os, false ) );
+	$time    = mc_date( 'Ymd\THi00', $os_time, false );
 
 	return $time;
 }

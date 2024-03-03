@@ -257,7 +257,7 @@
 }
 
 .mc-download .google a:before,
-.mc-download .outlook a:before {
+.mc-download .ical a:before {
 	content: "\f316";
 }
 

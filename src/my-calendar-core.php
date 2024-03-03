@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_add_feed() {
 	add_feed( 'my-calendar-ics', 'my_calendar_ical' );
 	add_feed( 'my-calendar-google', 'mc_ics_subscribe_google' );
-	add_feed( 'my-calendar-outlook', 'mc_ics_subscribe_outlook' );
+	add_feed( 'my-calendar-outlook', 'mc_ics_subscribe_outlook' ); // Deprecated. Still in place for back compat.
 }
 
 /**
