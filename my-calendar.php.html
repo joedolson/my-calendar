@@ -96,7 +96,7 @@ register_deactivation_hook( __FILE__, 'mc_plugin_deactivated' );
  * Actions to execute on activation.
  */
 function mc_plugin_activated() {
-	$required_php_version = '7.0.0';
+	$required_php_version = '7.4.0';
 
 	if ( version_compare( PHP_VERSION, $required_php_version, '&lt;' ) ) {
 		$plugin_data = get_plugin_data( __FILE__, false );
@@ -277,20 +277,14 @@ function mc_start_session() {
 	if ( isset( $_GET['wp_scrape_key'] ) ) {
 		return;
 	}
-	$required_php_version = '5.4.0';
-	if ( version_compare( PHP_VERSION, $required_php_version, '&lt;' ) ) {
-		if ( ! session_id() ) {
-			session_start();
-		}
-	} else {
-		$status = session_status();
-		if ( PHP_SESSION_DISABLED === $status ) {
-			return;
-		}
 
-		if ( PHP_SESSION_NONE === $status ) {
-			session_start();
-		}
+	$status = session_status();
+	if ( PHP_SESSION_DISABLED === $status ) {
+		return;
+	}
+
+	if ( PHP_SESSION_NONE === $status ) {
+		session_start();
 	}
 }
 
