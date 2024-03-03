@@ -28,10 +28,12 @@ class CustomEvent extends Event {
 	/**
 	 * Create new event type.
 	 *
+	 * @param string $name Event title.
+	 *
 	 * @since 1.0.0
 	 */
-	public static function create(string $name = null): CustomEvent {
-		return new self($name);
+	public static function create( string $name = null ): CustomEvent {
+		return new self( $name );
 	}
 
 	/**
@@ -60,7 +62,7 @@ class CustomEvent extends Event {
 	 *
 	 * @since 1.0.0
 	 */
-	public function descriptionHtml(string $descriptionHtml): CustomEvent {
+	public function descriptionHtml( string $descriptionHtml ): CustomEvent {
 		$this->descriptionHtml = $descriptionHtml;
 		return $this;
 	}
@@ -72,7 +74,7 @@ class CustomEvent extends Event {
 	 *
 	 * @since 1.0.0
 	 */
-	public function categories(array $categories): CustomEvent {
+	public function categories( array $categories ): CustomEvent {
 		$this->categories = $categories;
 		return $this;
 	}
@@ -84,7 +86,7 @@ class CustomEvent extends Event {
 	 *
 	 * @since 1.0.0
 	 */
-	public function url(string $url): CustomEvent {
+	public function url( string $url ): CustomEvent {
 		$this->url = $url;
 		return $this;
 	}
@@ -96,7 +98,7 @@ class CustomEvent extends Event {
 	 */
 	protected function payload(): ComponentPayload {
 		$payload = parent::payload();
-		$this->resolveCustomProperties($payload);
+		$this->resolveCustomProperties( $payload );
 		return $payload;
 	}
 
@@ -107,19 +109,19 @@ class CustomEvent extends Event {
 	 *
 	 * @since 1.0.0
 	 */
-	private function resolveCustomProperties(ComponentPayload $payload): self {
+	private function resolveCustomProperties( ComponentPayload $payload ): self {
 		$payload
 			->optional(
 				$this->descriptionHtml,
-				fn () => TextProperty::create('X-ALT-DESC;FMTTYPE=TEXT/HTML', $this->descriptionHtml)
+				fn () => TextProperty::create( 'X-ALT-DESC;FMTTYPE=TEXT/HTML', $this->descriptionHtml )
 			)
 			->optional(
 				$this->categories,
-				fn () => TextProperty::create('CATEGORIES', implode(", ", $this->categories))->withoutEscaping()
+				fn () => TextProperty::create('CATEGORIES', implode( ", ", $this->categories ) )->withoutEscaping()
 			)
 			->optional(
 				$this->url,
-				fn () => TextProperty::create('URL;VALUE=URI', $this->url)->withoutEscaping()
+				fn () => TextProperty::create( 'URL;VALUE=URI', $this->url )->withoutEscaping()
 			);
 
 		return $this;

@@ -1,6 +1,6 @@
 <?php
 /**
- * iCal generation
+ * Export iCal generation
  *
  * @category Utilities
  * @package  My Calendar
