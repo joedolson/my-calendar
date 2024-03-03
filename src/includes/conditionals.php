@@ -192,3 +192,37 @@ function mc_is_single_event() {
 
 	return false;
 }
+
+/**
+ * Check whether a given output field should be displayed.
+ *
+ * @param string         $feature Feature key.
+ * @param string         $type Display type.
+ * @param object|boolean $event Event if in event context.
+ *
+ * @return bool
+ */
+function mc_output_is_visible( $feature, $type, $event = false ) {
+	// Map either calendar popup or list to main settings.
+	$type   = ( 'calendar' === $type || 'list' === $type ) ? 'main' : $type;
+	$option = mc_get_option( 'display_' . $type );
+	if ( ! is_array( $option ) ) {
+		$display_type = 'display_' . $type;
+		$option       = ( isset( mc_default_options()[ $display_type ] ) ) ? mc_default_options()[ $display_type ] : array();
+	}
+	$return = false;
+	if ( in_array( $feature, $option, true ) ) {
+		$return = true;
+	}
+	/**
+	 * Filter whether any given piece of information should be output.
+	 *
+	 * @param {bool}           $return Should this piece of data be output.
+	 * @param {string}         $feature Feature key.
+	 * @param {string}         $type Type of view.
+	 * @param {object|boolean} $event Event object if in event context.
+	 *
+	 * @return bool
+	 */
+	return apply_filters( 'mc_output_is_visible', $return, $feature, $type, $event );
+}
