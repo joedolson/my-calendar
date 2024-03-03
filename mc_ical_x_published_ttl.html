@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_event_category_slug - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_ical_x_published_ttl - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_event_category_slug</h1></header>
+    <header><h1 class="page-title">Filter: mc_ical_x_published_ttl</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_event_category_slug">apply_filters( 'mc_event_category_slug', <span class="signature">$slug )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_ical_x_published_ttl">apply_filters( 'mc_ical_x_published_ttl', <span class="signature">$ttl )</span><span class="type-signature"> &rarr; {int}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter event category taxonomy slug. Default 'mc-event-category'.</p>
+    <p>Filter the suggested frequency for iCal subscription sources to be rechecked. Default 1440 (One day in minutes).</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$slug</code></td>
+                <td class="name"><code>$ttl</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
             
@@ -93,7 +93,7 @@
 
             
 
-            <td class="description last"><p>Default slug.</p></td>
+            <td class="description last"><p>Refresh interval in minutes.</p></td>
         </tr>
 
     
@@ -134,7 +134,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="includes_post-types.php.html">includes/post-types.php</a>, <a href="includes_post-types.php.html#line340">line 340</a>
+        <a href="includes_ical.php.html">includes/ical.php</a>, <a href="includes_ical.php.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -168,7 +168,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
     </dd>
