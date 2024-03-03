@@ -463,11 +463,9 @@ function mc_category_key( $category, $id = '' ) {
 /**
  * Set up subscription links for calendar
  *
- * @param array $subtract Array of data to remove.
- *
  * @return string HTML output for subscription links
  */
-function mc_sub_links( $subtract ) {
+function mc_sub_links() {
 	$replace = 'webcal:';
 	$search  = array( 'http:', 'https:' );
 
@@ -507,8 +505,8 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	$add['export'] = 'outlook';
 	$ics2          = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
 
-	$google  = "<li class='ics google'><a href='" . $ics . "'>" . __( '<span class="maybe-hide">Export for </span>Google', 'my-calendar' ) . '</a></li>';
-	$outlook = "<li class='ics outlook'><a href='" . $ics2 . "'>" . __( '<span class="maybe-hide">Export for </span>Outlook', 'my-calendar' ) . '</a></li>';
+	$google  = "<li class='ics google'><a href='" . $ics . "'>" . __( '<span class="maybe-hide">Export to </span>Google', 'my-calendar' ) . '</a></li>';
+	$outlook = "<li class='ics outlook'><a href='" . $ics2 . "'>" . __( '<span class="maybe-hide">Export to </span>iCal', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-download'>
 	<ul>$google$outlook</ul>

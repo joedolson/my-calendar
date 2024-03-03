@@ -100,8 +100,7 @@ function mc_format_api( $data, $format ) {
 			mc_api_format_csv( $data );
 			break;
 		case 'ical':
-			$context = ( isset( $_GET['context'] ) ) ? sanitize_text_field( $_GET['context'] ) : 'google';
-			mc_api_format_ical( $data, $context );
+			mc_api_format_ical( $data );
 			break;
 	}
 }
@@ -206,10 +205,10 @@ function my_calendar_send_vcal( $event_id ) {
 	header( 'Cache-control: private' );
 	header( 'Pragma: private' );
 	header( 'Expires: Thu, 11 Nov 1977 05:40:00 GMT' ); // That's my birthday. :).
-	header( "Content-Disposition: inline; filename=my-calendar-$sitename.ics" );
-	$output = preg_replace( '~(?<!\r)\n~', "\r\n", mc_generate_vcal( $event_id ) );
+	header( "Content-Disposition: inline; filename=my-calendar-$event_id-$sitename.ics" );
+	$output = mc_generate_vcal( $event_id );
 
-	return urldecode( stripcslashes( $output ) );
+	return $output;
 }
 
 /**
@@ -220,63 +219,11 @@ function my_calendar_send_vcal( $event_id ) {
  * @return string text for iCal
  */
 function mc_generate_vcal( $event_id ) {
-	global $mc_version;
 	$output = '';
 	$mc_id  = ( isset( $_GET['vcal'] ) ) ? (int) str_replace( 'mc_', '', $_GET['vcal'] ) : $event_id;
 	if ( $mc_id ) {
-		$event = mc_get_event( $mc_id );
-		// need to modify date values to match real values using date above.
-		$array = mc_create_tags( $event );
-		/**
-		 * Filter information used to set an alarm on an event in .ics files.
-		 *
-		 * @hook mc_event_has_alarm
-		 *
-		 * @param {array} Alarm information passable to `mc_generate_alert_ical()`
-		 * @param {int}   $mc_id Event ID.
-		 * @param {int}   $post Post ID.
-		 *
-		 * @return {array}
-		 */
-		$alarm = apply_filters( 'mc_event_has_alarm', array(), $mc_id, $array['post'] );
-		$alert = '';
-		if ( ! empty( $alarm ) ) {
-			$alert = mc_generate_alert_ical( $alarm );
-		}
-		$all_day = '';
-		if ( mc_is_all_day( $event ) ) {
-			$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE' . PHP_EOL;
-		}
-
-		$template = "BEGIN:VCALENDAR
-VERSION:2.0
-METHOD:PUBLISH
-PRODID:-//Accessible Web Design//My Calendar//http://www.joedolson.com//v$mc_version//EN';
-BEGIN:VEVENT
-UID:{dateid}-{id}
-LOCATION:{ical_location}
-SUMMARY:{title}
-DTSTAMP:{ical_date_start}
-ORGANIZER;CN={host}:MAILTO:{host_email}
-DTSTART:{ical_date_start}
-DTEND:{ical_date_end}
-CATEGORIES:{ical_categories}
-URL;VALUE=URI:{details_link}
-DESCRIPTION:{ical_excerpt}$alert$all_day
-END:VEVENT
-END:VCALENDAR";
-		/**
-		 * Filter template for a single iCal event download.
-		 *
-		 * @hook mc_single_ical_template
-		 *
-		 * @param {string} $template iCal template.
-		 * @param {array}  $array Event data.
-		 *
-		 * @return {string}
-		 */
-		$template = apply_filters( 'mc_single_ical_template', $template, $array );
-		$output   = mc_draw_template( $array, $template );
+		$event  = mc_get_event( $mc_id );
+		$output = mc_generate_ical( array( $event ) );
 	}
 
 	return $output;
@@ -284,10 +231,8 @@ END:VCALENDAR";
 
 /**
  * Generate an iCal subscription export with most recently added events by category.
- *
- * @param string $source Google or outlook export format.
  */
-function mc_ics_subscribe( $source ) {
+function mc_ics_subscribe() {
 	// get event category.
 	if ( isset( $_GET['mcat'] ) ) {
 		$cat_id = (int) $_GET['mcat'];
@@ -296,7 +241,7 @@ function mc_ics_subscribe( $source ) {
 	}
 	$events = mc_get_new_events( $cat_id );
 
-	mc_api_format_ical( $events, $source );
+	mc_api_format_ical( $events );
 }
 
 /**
@@ -323,7 +268,6 @@ function my_calendar_ical() {
 	$ny  = ( isset( $_GET['nyr'] ) ) ? absint( $_GET['nyr'] ) : $y;
 	$nm  = ( isset( $_GET['nmonth'] ) ) ? absint( $_GET['nmonth'] ) : $m;
 	$cat = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : '';
-	$con = ( isset( $_GET['context'] ) ) ? sanitize_text_field( $_GET['context'] ) : 'google';
 
 	if ( $p ) {
 		$from = "$y-1-1";
@@ -388,7 +332,7 @@ function my_calendar_ical() {
 		$data = my_calendar_events( $args );
 	}
 
-	mc_api_format_ical( $data, $con );
+	mc_api_format_ical( $data );
 }
 
 /**
@@ -397,61 +341,10 @@ function my_calendar_ical() {
  * @param array  $data array of event objects.
  * @param string $context iCal or Google export format.
  */
-function mc_api_format_ical( $data, $context ) {
-	$templates = mc_ical_template();
-	/**
-	 * Filter iCal template for multi-event output.
-	 *
-	 * @hook mc_filter_ical_template
-	 *
-	 * @param {string} $template Template string.
-	 *
-	 * @return {string}
-	 */
-	$template  = apply_filters( 'mc_filter_ical_template', $templates['template'] );
-	$events    = mc_flatten_array( $data );
-	$output    = '';
-	$processed = array();
-	if ( is_array( $events ) && ! empty( $events ) ) {
-		foreach ( array_keys( $events ) as $key ) {
-			$event =& $events[ $key ];
-			if ( is_object( $event ) ) {
-				if ( ! mc_private_event( $event ) ) {
-					// Only include one recurring instance in collection.
-					if ( mc_is_recurring( $event ) && in_array( $event->event_id, $processed, true ) ) {
-						continue;
-					} else {
-						$processed[] = $event->event_id;
-					}
-					$array = mc_create_tags( $event, $context );
-					/**
-					 * Filter information used to set an alarm on an event in .ics files.
-					 *
-					 * @hook mc_event_has_alarm
-					 *
-					 * @param {array} Alarm information passable to `mc_generate_alert_ical()`
-					 * @param {int}   $event_id Event ID.
-					 * @param {int}   $post Post ID.
-					 *
-					 * @return {array}
-					 */
-					$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $array['post'] );
-					$alert = '';
-					if ( ! empty( $alarm ) ) {
-						$alert = mc_generate_alert_ical( $alarm );
-					}
-					$all_day = '';
-					if ( mc_is_all_day( $event ) ) {
-						$all_day = PHP_EOL . 'X-FUNAMBOL-ALLDAY: 1' . PHP_EOL . 'X-MICROSOFT-CDO-ALLDAYEVENT: TRUE';
-					}
-					$parse = str_replace( array( '{alert}', '{all_day}' ), array( $alert, $all_day ), $template );
-
-					$output .= PHP_EOL . mc_draw_template( $array, $parse, 'ical' );
-				}
-			}
-		}
-	}
-	$output = html_entity_decode( preg_replace( "~(?<!\r)\n~", "\r\n", $templates['head'] . $output . $templates['foot'] ) );
+function mc_api_format_ical( $data ) {
+	$events = mc_flatten_array( $data );
+	$output = mc_generate_ical( $events );
+	
 	if ( ! ( isset( $_GET['sync'] ) && 'true' === $_GET['sync'] ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
@@ -461,62 +354,6 @@ function mc_api_format_ical( $data, $context ) {
 	}
 
 	echo wp_kses_post( $output );
-}
-
-/**
- * Templates for iCal event formats.
- *
- * @return array Parts of iCal events.
- */
-function mc_ical_template() {
-	global $mc_version;
-	$tz_id = get_option( 'timezone_string' );
-	$off   = ( get_option( 'gmt_offset' ) * -1 );
-	$etc   = 'Etc/GMT' . ( ( 0 > $off ) ? $off : '+' . $off );
-	$tz_id = ( $tz_id ) ? $tz_id : $etc;
-	// Translators: Blogname.
-	$events_from = sprintf( __( 'Events from %s', 'my-calendar' ), get_bloginfo( 'blogname' ) );
-	/**
-	 * Filter the suggested frequency for iCal subscription sources to be rechecked. Default 'PT24H'.
-	 *
-	 * @hook ical_x_published_ttl
-	 *
-	 * @param {string} $ttl Time string for iCal templates.
-	 *
-	 * @return {string}
-	 */
-	$ttl = apply_filters( 'ical_x_published_ttl', 'PT24H' );
-	// establish template.
-	$template = "
-BEGIN:VEVENT
-UID:{dateid}-{id}
-LOCATION:{ical_location}
-SUMMARY:{title}
-DTSTAMP:{ical_start}
-ORGANIZER;CN={host}:MAILTO:{host_email}
-DTSTART;TZID=$tz_id:{ical_start}
-DTEND;TZID=$tz_id:{ical_end}{ical_recur}
-URL;VALUE=URI:{details_ical}
-DESCRIPTION:{ical_excerpt}
-CATEGORIES:{ical_categories}{alert}{all_day}
-END:VEVENT";
-	// add ICAL headers.
-	$head = 'BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//My Calendar//http://www.joedolson.com//v' . $mc_version . '//EN
-METHOD:PUBLISH
-CALSCALE:GREGORIAN
-X-WR-CALNAME:' . get_bloginfo( 'blogname' ) . '
-X-PUBLISHED-TTL:' . $ttl . '
-REFRESH-INTERVAL;VALUE=DURATION:' . $ttl . '
-X-WR-CALDESC:' . $events_from;
-	$foot = "\nEND:VCALENDAR";
-
-	return array(
-		'template' => $template,
-		'head'     => $head,
-		'foot'     => $foot,
-	);
 }
 
 /**
@@ -580,7 +417,7 @@ function mc_generate_rrule( $event ) {
 		$until = 'UNTIL=' . mc_date( 'Ymd\THis', strtotime( $repeat ), false ) . 'Z';
 	}
 
-	$rrule = ( '' !== $rrule ) ? PHP_EOL . "RRULE:$rrule;$by;$interval;$until" : '';
+	$rrule = ( '' !== $rrule ) ? "$rrule;$by;$interval;$until" : '';
 	$rrule = str_replace( array( ';;;', ';;' ), ';', $rrule );
 
 	return $rrule;

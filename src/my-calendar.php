@@ -136,6 +136,7 @@ function mc_uninstall() {
 	}
 }
 
+require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/action-scheduler/action-scheduler.php';
 require __DIR__ . '/includes/date-utilities.php';
 require __DIR__ . '/includes/general-utilities.php';
@@ -148,6 +149,8 @@ require __DIR__ . '/includes/urls.php';
 require __DIR__ . '/includes/screen-options.php';
 require __DIR__ . '/includes/db.php';
 require __DIR__ . '/includes/deprecated.php';
+require __DIR__ . '/includes/class-custom-event.php';
+require __DIR__ . '/includes/ical.php';
 require __DIR__ . '/templates/legacy-functions.php';
 require __DIR__ . '/my-calendar-core.php';
 require __DIR__ . '/my-calendar-install.php';

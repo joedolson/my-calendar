@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => 'ae1c08f01b049356ad9be382ef7d805492379a76',
+        'name' => '__root__',
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => 'ae1c08f01b049356ad9be382ef7d805492379a76',
+            'dev_requirement' => false,
+        ),
+        'spatie/enum' => array(
+            'pretty_version' => '3.12.0',
+            'version' => '3.12.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/enum',
+            'aliases' => array(),
+            'reference' => 'c0180f1de7c5d06e4b84efbc751ea19167140173',
+            'dev_requirement' => false,
+        ),
+        'spatie/icalendar-generator' => array(
+            'pretty_version' => '2.6.1',
+            'version' => '2.6.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/icalendar-generator',
+            'aliases' => array(),
+            'reference' => '378c70e6fc0246174a7613fc995e9d77b24e15ee',
+            'dev_requirement' => false,
+        ),
+    ),
+);
