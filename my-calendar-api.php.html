@@ -365,12 +365,11 @@ function my_calendar_ical() {
  * Output iCal formatted events
  *
  * @param array  $data array of event objects.
- * @param string $context iCal or Google export format.
  */
 function mc_api_format_ical( $data ) {
 	$events = mc_flatten_array( $data );
 	$output = mc_generate_ical( $events );
-	
+
 	if ( ! ( isset( $_GET['sync'] ) &amp;&amp; 'true' === $_GET['sync'] ) ) {
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
