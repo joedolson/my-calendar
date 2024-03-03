@@ -338,7 +338,7 @@ function my_calendar_ical() {
 /**
  * Output iCal formatted events
  *
- * @param array  $data array of event objects.
+ * @param array $data array of event objects.
  */
 function mc_api_format_ical( $data ) {
 	$events = mc_flatten_array( $data );
