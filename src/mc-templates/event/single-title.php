@@ -9,4 +9,10 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
-mc_template_tag( $data, 'title' );
+$title_template = mc_get_template( 'title_solo' );
+if ( $title_template != mc_template_settings( 'title_solo' ) ) {
+	// If the title template has been modified, use that.
+	echo wp_kses_post( mc_draw_template( $data, $title_template ) );
+} else {
+	mc_template_tag( $data, 'title' );
+}
