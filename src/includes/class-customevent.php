@@ -41,29 +41,29 @@ class CustomEvent extends Event {
 	 *
 	 * @var string
 	 */
-	public ?string $descriptionHtml = null;
+	public ?string $description_html = null;
 	/**
 	 * Categories.
 	 *
 	 * @var array
 	 */
-	public ?array $categories       = null;
+	public ?array $categories = null;
 	/**
 	 * Event URL.
 	 *
 	 * @var string
 	 */
-	public ?string $url             = null;
+	public ?string $url = null;
 
 	/**
 	 * Add HTML description to the object.
 	 *
-	 * @param string $descriptionHtml Description content.
+	 * @param string $description_html Description content.
 	 *
 	 * @since 1.0.0
 	 */
-	public function descriptionHtml( string $descriptionHtml ): CustomEvent {
-		$this->descriptionHtml = $descriptionHtml;
+	public function description_html( string $description_html ): CustomEvent {
+		$this->description_html = $description_html;
 		return $this;
 	}
 
@@ -112,12 +112,12 @@ class CustomEvent extends Event {
 	private function resolveCustomProperties( ComponentPayload $payload ): self {
 		$payload
 			->optional(
-				$this->descriptionHtml,
-				fn () => TextProperty::create( 'X-ALT-DESC;FMTTYPE=TEXT/HTML', $this->descriptionHtml )
+				$this->description_html,
+				fn () => TextProperty::create( 'X-ALT-DESC;FMTTYPE=TEXT/HTML', $this->description_html )
 			)
 			->optional(
 				$this->categories,
-				fn () => TextProperty::create('CATEGORIES', implode( ", ", $this->categories ) )->withoutEscaping()
+				fn () => TextProperty::create( 'CATEGORIES', implode( ', ', $this->categories ) )->withoutEscaping()
 			)
 			->optional(
 				$this->url,

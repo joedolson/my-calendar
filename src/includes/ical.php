@@ -71,7 +71,7 @@ function mc_generate_ical( $events, $context = '' ) {
 					->startsAt( new DateTime( $tags['ical_date_start'], new DateTimeZone( $tz_id ) ) )
 					->endsAt( new DateTime( $tags['ical_date_end'], new DateTimeZone( $tz_id ) ) )
 					->address( $tags['ical_location'] )
-					->descriptionHtml( $tags['excerpt'] )
+					->description_html( $tags['excerpt'] )
 					->organizer( $tags['host_email'], $tags['host'] )
 					->categories( explode( ',', $tags['ical_categories'] ) )
 					->url( $tags['details_link'] )
