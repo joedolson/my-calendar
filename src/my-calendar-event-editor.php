@@ -1272,10 +1272,10 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$date_picker = mc_datepicker_html( $args );
 				$recur_data  = ( $has_data ) ? mc_recur_string( $data ) : '';
 				$active      = ( $has_data && '' !== $recur_data ) ? ' active' : '';
-				$display     = '<div class="mc_recur_string ' . $active . '" aria-live="polite"><p>' . $recur_data . '</p></div>';
+				$recur_info  = '<div class="mc_recur_string ' . $active . '" aria-live="polite"><p>' . $recur_data . '</p></div>';
 				$return      = $pre . '
 	<h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( __( 'Help', 'my-calendar' ), __( 'Repetition Pattern', 'my-calendar' ), 'repetition pattern', '2', false ) . '</h2>
-	<div class="inside recurrences ' . $class . '">' . $prev . $display . $warning . '
+	<div class="inside recurrences ' . $class . '">' . $prev . $recur_info . $warning . '
 		<fieldset class="recurring">
 		<legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '</legend>
 			<div class="columns">
