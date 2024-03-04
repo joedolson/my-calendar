@@ -31,6 +31,9 @@ Bugs or feature development contributions should be made through the [GitHub rep
 
 Contributors listed only since moving development to GitHub. [Github Contributors](https://github.com/joedolson/my-calendar/graphs/contributors)
 
+A big thank you to everybody who's contributed to building this plugin!
+
+* [Joost de Valk](https://github.com/jdevalk)
 * [Josef Fallmann](https://github.com/joseffallman)
 * [Jessi Shank](https://github.com/shankj3)
 * [timlah](https://github.com/timlah)
