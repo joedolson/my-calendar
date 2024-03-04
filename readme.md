@@ -2,7 +2,7 @@
 
 Accessible Event Manager for WordPress
 
-[![Code Linting](https://github.com/joedolson/my-calendar/actions/workflows/main.yml/badge.svg)](https://github.com/joedolson/my-calendar/actions/workflows/main.yml)  ![Docs Built](https://github.com/joedolson/my-calendar/actions/workflows/build-docs.yml/badge.svg)  [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/license/gpl-2.0.html)
+[![Code Linting](https://github.com/joedolson/my-calendar/actions/workflows/main.yml/badge.svg)](https://github.com/joedolson/my-calendar/actions/workflows/main.yml) [![PHP Unit Tests](https://github.com/joedolson/my-calendar/actions/workflows/main.yml/badge.svg)](https://github.com/joedolson/my-calendar/actions/workflows/phpunit.yml) ![Docs Built](https://github.com/joedolson/my-calendar/actions/workflows/build-docs.yml/badge.svg)  [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/license/gpl-2.0.html)
 
 ## My Calendar Build Environment
 
@@ -10,7 +10,7 @@ Accessible Event Manager for WordPress
 * Tags: calendar, event management, events
 * Requires at least: 4.9
 * Tested up to: 6.4
-* Requires PHP: 7.0
+* Requires PHP: 7.4
 * Stable tag: `3.4.24`
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
