@@ -10,7 +10,7 @@
  */
 
 $title_template = mc_get_template( 'title_solo' );
-if ( $title_template != mc_template_settings( 'title_solo' ) ) {
+if (  mc_template_settings( 'title_solo' ) !== $title_template ) {
 	// If the title template has been modified, use that.
 	echo wp_kses_post( mc_draw_template( $data, $title_template ) );
 } else {
