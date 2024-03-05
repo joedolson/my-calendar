@@ -48,8 +48,6 @@ function mcLoadPickers() {
 	const eventRecur     = document.querySelector( 'duet-date-picker[identifier=r_begin]' );
 	const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
 	const eventEndEl     = document.querySelector( 'input[name="event_end[]"]' );
-	const eventBeginEl   = document.querySelector( 'input[name="event_begin[]"]' );
-	const recurrences    = document.querySelector( '.disable-recurrences' );
 
 	if ( null !== eventBegin ) {
 		if ( null !== eventRecur ) {
@@ -67,54 +65,64 @@ function mcLoadPickers() {
 			});
 		}
 
-		eventBegin.addEventListener( 'duetChange', function(e) {
-			let startDate = e.detail.value;
-			let endDate  = eventEndEl.value;
+		eventBegin.addEventListener( 'duetChange', duetBeginUpdate );
+		eventEnd.addEventListener( 'duetChange', duetEndUpdate );
 
-			/* Handle main date picker. */
-			if ( '' == endDate || startDate > endDate ) {
-				eventEnd.value = e.detail.value;
-				endDate        = e.detail.value;
-			}
+	}
+}
 
-			if ( null !== recurrences ) {
-				const fieldset = recurrences.querySelector( 'fieldset' );
-				const icon     = recurrences.querySelector( '.dashicons' );
-				const inputs   = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+function duetEndUpdate(e) {
+	const eventBeginEl   = document.querySelector( 'input[name="event_begin[]"]' );
+	const recurrences    = document.querySelector( '.disable-recurrences' );
 
-				fieldset.setAttribute( 'style', '' );
-				recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
-				icon.classList.add( 'dashicons-arrow-down' );
-				icon.classList.remove( 'dashicons-arrow-right' );
-				inputs.forEach((input) => {
-					input.disabled = false;
-				});
-			}
+	let endDate   = e.detail.value;
+	let startDate = eventBeginEl.value;
 
-			myCalendarTestDates( endDate, startDate );
-		});
+	if ( null !== recurrences ) {
+		const fieldset = recurrences.querySelector( 'fieldset' );
+		const icon     = recurrences.querySelector( '.dashicons' );
+		const inputs   = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
 
-		eventEnd.addEventListener( 'duetChange', function(e) {
-			let endDate   = e.detail.value;
-			let startDate = eventBeginEl.value;
-
-			if ( null !== recurrences ) {
-				const fieldset = recurrences.querySelector( 'fieldset' );
-				const icon     = recurrences.querySelector( '.dashicons' );
-				const inputs   = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
-
-				fieldset.setAttribute( 'style', '' );
-				recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
-				icon.classList.add( 'dashicons-arrow-down' );
-				icon.classList.remove( 'dashicons-arrow-right' );
-				inputs.forEach((input) => {
-					input.disabled = false;
-				});
-			}
-
-			myCalendarTestDates( endDate, startDate );
+		fieldset.setAttribute( 'style', '' );
+		recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
+		icon.classList.add( 'dashicons-arrow-down' );
+		icon.classList.remove( 'dashicons-arrow-right' );
+		inputs.forEach((input) => {
+			input.disabled = false;
 		});
 	}
+
+	myCalendarTestDates( endDate, startDate );
+}
+
+function duetBeginUpdate(e) {
+	const eventEndEl     = document.querySelector( 'input[name="event_end[]"]' );
+	const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
+	const recurrences    = document.querySelector( '.disable-recurrences' );
+
+	let startDate = e.detail.value;
+	let endDate  = eventEndEl.value;
+	/* Handle main date picker. */
+	if ( '' == endDate || startDate > endDate ) {
+		eventEnd.value = e.detail.value;
+		endDate        = e.detail.value;
+	}
+
+	if ( null !== recurrences ) {
+		const fieldset = recurrences.querySelector( 'fieldset' );
+		const icon     = recurrences.querySelector( '.dashicons' );
+		const inputs   = recurrences.querySelectorAll( 'fieldset input, fieldset select, fieldset duet-date-picker' );
+
+		fieldset.setAttribute( 'style', '' );
+		recurrences.querySelector( '.enable-repetition' ).setAttribute( 'aria-expanded', 'true' );
+		icon.classList.add( 'dashicons-arrow-down' );
+		icon.classList.remove( 'dashicons-arrow-right' );
+		inputs.forEach((input) => {
+			input.disabled = false;
+		});
+	}
+
+	myCalendarTestDates( endDate, startDate );
 }
 
 /**
