@@ -72,6 +72,7 @@ function mcLoadPickers() {
 			/* Handle main date picker. */
 			if ( '' == endDate || startDate > endDate ) {
 				eventEnd.value = e.detail.value;
+				endDate        = e.detail.value;
 			}
 
 			if ( null !== recurrences ) {
