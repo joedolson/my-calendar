@@ -706,14 +706,10 @@ function mc_register_scripts() {
 	}
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 	wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
-	$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-	wp_register_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y' ), $version, true );
-	if ( SCRIPT_DEBUG && true === SCRIPT_DEBUG ) {
-		$script = 'van11y/van11y-accessible-modal-window-aria.js';
-	} else {
-		$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
-	}
-	wp_register_script( 'van11y-modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
+	$mcjs = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
+	wp_register_script( 'mc.mcjs', $mcjs, array( 'jquery', 'wp-a11y' ), $version, true );
+	$van11y = ( SCRIPT_DEBUG ) ? 'van11y/van11y-accessible-modal-window-aria.js' : 'van11y/van11y-accessible-modal-window-aria.min.js';
+	wp_register_script( 'van11y-modal', plugins_url( 'js/' . $van11y, __FILE__ ), array(), $version, true );
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
@@ -723,8 +719,8 @@ function mc_register_scripts() {
 	// Enqueue datepicker options.
 	$mcdp = ( SCRIPT_DEBUG ) ? plugins_url( 'js/mc-datepicker.js', __FILE__ ) : plugins_url( 'js/mc-datepicker.min.js', __FILE__ );
 	wp_register_script( 'mc.duet', $mcdp, array( 'duet.js' ), $version, true );
-	$url = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.admin.js', __FILE__ ) : plugins_url( 'js/jquery.admin.min.js', __FILE__ );
-	wp_register_script( 'mc.admin', $url, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
+	$adminjs = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.admin.js', __FILE__ ) : plugins_url( 'js/jquery.admin.min.js', __FILE__ );
+	wp_register_script( 'mc.admin', $adminjs, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 	wp_register_script( 'mc.admin-footer', plugins_url( 'js/admin.js', __FILE__ ), array( 'wp-a11y', 'clipboard' ), $version, true );
 
 	if ( version_compare( $version, '2.1', '<' ) ) {
@@ -734,10 +730,12 @@ function mc_register_scripts() {
 	wp_register_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), $version, true );
 	$api_key = mc_get_option( 'gmap_api_key' );
 	if ( $api_key ) {
+		$gmaps = ( SCRIPT_DEBUG ) ? plugins_url( 'js/gmaps.js', __FILE__ ) : plugins_url( 'js/gmaps.min.js', __FILE__ );
 		wp_register_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&key=$api_key", array() );
-		wp_register_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array( 'gmaps' ), $version, true );
+		wp_register_script( 'mc-maps', $gmaps, array( 'gmaps' ), $version, true );
 	}
-	wp_register_script( 'mc.ajax', plugins_url( 'js/ajax.js', __FILE__ ), array( 'jquery' ), $version );
+	$ajax = ( SCRIPT_DEBUG ) ? plugins_url( 'js/ajax.js', __FILE__ ) : plugins_url( 'js/ajax.min.js', __FILE__ );
+	wp_register_script( 'mc.ajax', $ajax, array( 'jquery' ), $version );
 	wp_register_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
 	wp_register_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
 }
