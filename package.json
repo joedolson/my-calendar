@@ -31,8 +31,8 @@
     "esbuild": "^0.17.10"
   },
   "scripts": {
-    "start": "esbuild mcjs.min=src/js/mcjs.js jquery.admin.min=src/js/jquery.admin.js --bundle --outdir=src/js --target=chrome58,firefox57,safari11,edge16 --watch --sourcemap",
-    "build:js": "esbuild mcjs.min=src/js/mcjs.js jquery.admin.min=src/js/jquery.admin.js --bundle --outdir=src/js --target=chrome58,firefox57,safari11,edge16 --minify",
+    "start": "esbuild mcjs.min=src/js/mcjs.js jquery.admin.min=src/js/jquery.admin.js mc-datepicker.min=src/js/mc-datepicker.js --bundle --outdir=src/js --target=chrome58,firefox57,safari11,edge16 --watch --sourcemap",
+    "build:js": "esbuild mcjs.min=src/js/mcjs.js jquery.admin.min=src/js/jquery.admin.js mc-datepicker.min=src/js/mc-datepicker.js --bundle --outdir=src/js --target=chrome58,firefox57,safari11,edge16 --minify",
     "presetup": "find .scripts -type f -exec chmod +x {} \\;",
     "build:docs": "rm -rf docs/ && jsdoc -c hookdoc-conf.json",
     "format-php": "wp-env run composer run-script format",

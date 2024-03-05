@@ -142,11 +142,9 @@ function myCalendarTestDates( end, start ) {
 			}
 		});
 	}
-	console.log( { endDate, startDate } );
 	if ( new Date( endDate ) < startDate ) {
 		eventDateError.classList.add( 'visible' );
 		submitButton.disabled = true;
-		console.log( 'Your end date is before your start date: ', endDate + ' ' + startDate );
 	} else {
 		eventDateError.classList.remove( 'visible' );
 		submitButton.disabled = false;
