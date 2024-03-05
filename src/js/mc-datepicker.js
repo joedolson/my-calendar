@@ -1,4 +1,6 @@
-mcLoadPickers();
+window.addEventListener('load', function() {
+	mcLoadPickers();
+});
 
 window.customElements.whenDefined( 'duet-date-picker' ).then(() => {
 	elem = document.querySelectorAll('.duet-fallback');
