@@ -433,11 +433,7 @@ function mc_enqueue_calendar_js() {
 	$listtype = mc_get_option( 'list_javascript' );
 	$minitype = mc_get_option( 'mini_javascript' );
 	if ( 'modal' === $gridtype || 'modal' === $listtype || 'modal' === $minitype ) {
-		if ( SCRIPT_DEBUG &amp;&amp; true === SCRIPT_DEBUG ) {
-			$script = 'van11y/van11y-accessible-modal-window-aria.js';
-		} else {
-			$script = 'van11y/van11y-accessible-modal-window-aria.min.js';
-		}
+		$script = ( SCRIPT_DEBUG ) ? 'van11y/van11y-accessible-modal-window-aria.js' : 'van11y/van11y-accessible-modal-window-aria.min.js';
 		wp_enqueue_script( 'van11y-modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
 		wp_localize_script(
 			'van11y-modal',
@@ -744,7 +740,7 @@ function mc_register_scripts() {
 	wp_register_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $version );
 	// Enqueue datepicker options.
 	$mcdp = ( SCRIPT_DEBUG ) ? plugins_url( 'js/mc-datepicker.js', __FILE__ ) : plugins_url( 'js/mc-datepicker.min.js', __FILE__ );
-	wp_register_script( 'mc.duet', $mcdp, array( 'duet.js' ), $version, true );
+	wp_register_script( 'mc.duet', $mcdp, array( 'duet.js' ), $version, false );
 	$adminjs = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.admin.js', __FILE__ ) : plugins_url( 'js/jquery.admin.min.js', __FILE__ );
 	wp_register_script( 'mc.admin', $adminjs, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 	wp_register_script( 'mc.admin-footer', plugins_url( 'js/admin.js', __FILE__ ), array( 'wp-a11y', 'clipboard' ), $version, true );
