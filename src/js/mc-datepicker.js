@@ -72,8 +72,8 @@ function mcLoadPickers() {
 }
 
 function duetEndUpdate(e) {
-	const eventBeginEl   = document.querySelector( 'input[name="event_begin[]"]' );
-	const recurrences    = document.querySelector( '.disable-recurrences' );
+	const eventBeginEl = document.querySelector( 'input[name="event_begin[]"]' );
+	const recurrences  = document.querySelector( '.disable-recurrences' );
 
 	let endDate   = e.detail.value;
 	let startDate = eventBeginEl.value;
@@ -96,9 +96,9 @@ function duetEndUpdate(e) {
 }
 
 function duetBeginUpdate(e) {
-	const eventEndEl     = document.querySelector( 'input[name="event_end[]"]' );
-	const eventEnd       = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
-	const recurrences    = document.querySelector( '.disable-recurrences' );
+	const eventEndEl  = document.querySelector( 'input[name="event_end[]"]' );
+	const eventEnd    = document.querySelector( 'duet-date-picker[identifier=mc_event_enddate]' );
+	const recurrences = document.querySelector( '.disable-recurrences' );
 
 	let startDate = e.detail.value;
 	let endDate  = eventEndEl.value;
