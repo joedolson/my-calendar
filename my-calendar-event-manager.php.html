@@ -1148,15 +1148,11 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 			$event = mc_get_event( $event_id );
 		}
 		$event_author = $event->event_author;
-	} else {
-		// What is the case where the event is neither an object, int, or falsey? Hmm.
-		$event_author = wp_get_current_user()->ID;
-		$event_id     = $event;
 	}
 
 	$current_user    = wp_get_current_user();
 	$user            = $current_user->ID;
-	$categories      = mc_get_categories( $event_id );
+	$categories      = mc_get_categories( $event );
 	$has_permissions = true;
 	if ( is_array( $categories ) ) {
 		foreach ( $categories as $cat ) {

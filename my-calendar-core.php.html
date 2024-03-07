@@ -1343,7 +1343,7 @@ function mc_admin_bar() {
 			$wp_admin_bar->add_node( $args );
 		}
 	}
-	if ( isset( $_GET['mc_id'] ) &amp;&amp; mc_can_edit_event( $_GET['mc_id'] ) ) {
+	if ( isset( $_GET['mc_id'] ) &amp;&amp; mc_can_edit_event( absint( $_GET['mc_id'] ) ) ) {
 		$event_id = mc_valid_id( $_GET['mc_id'] );
 		$query    = array(
 			'event_id' => $event_id,
