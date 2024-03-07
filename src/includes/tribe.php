@@ -215,8 +215,8 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 			'event_short'      => $event->post_excerpt,
 			'event_link'       => get_post_meta( $event->ID, '_EventURL', true ),
 			// Tribe recurring events work radically differently. Treat as event group?
-			'event_image'      => get_the_post_thumbnail_url( $event ),
-			'event_image_id'   => get_post_thumbnail_id( $event ),
+			'event_image'      => get_the_post_thumbnail_url( $event->ID ),
+			'event_image_id'   => get_post_thumbnail_id( $event->ID ),
 			'event_allday'     => ( 'yes' === get_post_meta( $event->ID, '_EventAllDay', true ) ) ? '1' : '0',
 			'event_author'     => $event->post_author,
 			'event_approved'   => mc_convert_post_status_to_approval( $event->post_status ),
