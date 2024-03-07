@@ -418,12 +418,13 @@ function mc_produce_search_results( $events, $template ) {
 	$html = '';
 	foreach ( $output as $out ) {
 		$data    = array(
-			'event'    => $event,
-			'tags'     => $details,
+			'event'    => $out['event'],
+			'tags'     => $out['tags'],
 			'template' => $template,
 			'type'     => 'list',
 		);
-		$details = mc_load_template( 'event/upcoming', $data );
+		$details = mc_load_template( 'event/search', $data );
+		$html   .= $details;
 		if ( ! $details ) {
 			$html .= mc_format_upcoming_event( $out, $template, 'list' );
 		}
