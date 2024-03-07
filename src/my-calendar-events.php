@@ -58,14 +58,20 @@ function mc_event_object( $event ) {
  * @return array Array containing the date of the first and last event.
  */
 function mc_get_date_bounds( $site = false ) {
-	$mcdb  = mc_is_remote_db();
-	$first = $mcdb->get_var( 'SELECT occur_begin FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_begin ASC LIMIT 0, 1' );
-	$last  = $mcdb->get_var( 'SELECT occur_end FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_end DESC LIMIT 0, 1' );
+	$return = get_transient( 'mc_get_date_bounds' );
+	if ( ! $return ) {
+		$mcdb  = mc_is_remote_db();
+		$first = $mcdb->get_var( 'SELECT occur_begin FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_begin ASC LIMIT 0, 1' );
+		$last  = $mcdb->get_var( 'SELECT occur_end FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_end DESC LIMIT 0, 1' );
 
-	return array(
-		'first' => $first,
-		'last'  => $last,
-	);
+		$return = array(
+			'first' => $first,
+			'last'  => $last,
+		);
+		set_transient( 'mc_get_date_bounds', $return, WEEK_IN_SECONDS );
+	}
+
+	return $return;
 }
 
 
@@ -92,7 +98,11 @@ function mc_create_guid( $event ) {
  */
 function mc_ts( $test = false ) {
 	$ts_sql = get_transient( 'mc_ts_string' );
-	if ( $test || ! $ts_sql ) {
+	$ts_db  = get_transient( 'mc_ts_db' );
+	if ( $ts_db && $test ) {
+		return $ts_db;
+	}
+	if ( $test || ! $ts_sql || ! $ts_db ) {
 		global $wpdb;
 		$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
 		/**
@@ -115,10 +125,13 @@ function mc_ts( $test = false ) {
 		$wp_time .= ':00';
 
 		if ( $test ) {
-			return array(
+			$return = array(
 				'db' => $offset,
 				'wp' => $wp_time,
 			);
+			set_transient( 'mc_ts_db', $return, WEEK_IN_SECONDS );
+
+			return $return;
 		}
 		// Converts occur_begin value from the WordPress timezone to the db timezone.
 		// Has weakness that if an event was entered during DST, it's wrong during ST and vice versa.
