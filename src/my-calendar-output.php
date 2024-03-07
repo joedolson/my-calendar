@@ -692,7 +692,7 @@ function mc_get_event_image( $event, $data ) {
 		 *
 		 * @return {array}
 		 */
-		$atts  = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
+		$atts = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
 		if ( ! isset( $atts['alt'] ) && ! get_post_meta( get_post_thumbnail_id( $event->event_post, '_wp_attachment_image_alt', true ) ) ) {
 			$atts['alt'] = $event->post_title;
 		}
