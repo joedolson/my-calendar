@@ -681,7 +681,6 @@ function mc_get_event_image( $event, $data ) {
 	 * @return {string}
 	 */
 	$default_size = apply_filters( 'mc_default_image_size', $default_size );
-
 	if ( is_numeric( $event->event_post ) && 0 !== (int) $event->event_post && ( isset( $data[ $default_size ] ) && '' !== $data[ $default_size ] ) ) {
 		/**
 		 * Customize featured image attributes.
@@ -694,6 +693,9 @@ function mc_get_event_image( $event, $data ) {
 		 * @return {array}
 		 */
 		$atts  = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
+		if ( ! isset( $atts['alt'] ) && ! get_post_meta( get_post_thumbnail_id( $event->event_post, '_wp_attachment_image_alt', true ) ) ) {
+			$atts['alt'] = $event->post_title;
+		}
 		$image = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
 	} else {
 		// Get alt attribute from a publicly submitted image.
