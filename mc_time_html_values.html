@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Action: mc_delete_event - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_time_html_values - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Action: mc_delete_event</h1></header>
+    <header><h1 class="page-title">Filter: mc_time_html_values</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_delete_event">do_action( 'mc_delete_event', <span class="signature">$event_id, $post_id )</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mc_time_html_values">apply_filters( 'mc_time_html_values', <span class="signature">$times, $event->occur_begin, $event->occur_end, $event )</span><span class="type-signature"> &rarr; {array}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Action run when an event is deleted.</p>
+    <p>Filter time and date display values.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$event_id</code></td>
+                <td class="name"><code>$times</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">array</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Event ID.</p></td>
+            <td class="description last"><p>Array with formatted <code>time_start</code>, <code>time_end</code>, <code>date_start</code>, and <code>date_end</code>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$post_id</code></td>
+                <td class="name"><code>$event->occur_begin</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">string</span>
 
 
             
@@ -116,7 +116,53 @@
 
             
 
-            <td class="description last"><p>Event Post ID.</p></td>
+            <td class="description last"><p>Beginning datetime for this event.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$event->occur_end</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>End datetime for this event.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Event object.</p></td>
         </tr>
 
     
@@ -157,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-event-editor.php.html">my-calendar-event-editor.php</a>, <a href="my-calendar-event-editor.php.html#line801">line 801</a>
+        <a href="my-calendar-output.php.html">my-calendar-output.php</a>, <a href="my-calendar-output.php.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -180,6 +226,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
