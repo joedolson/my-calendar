@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * HTML output for event time
  *
- * @param object $e Current event.
+ * @param object $event Current event.
  * @param string $type Type of view.
  *
  * @return string HTML output.
@@ -64,7 +64,7 @@ function mc_time_html( $event, $type ) {
 	 *
 	 * @param {array}  $times Array with formatted `time_start`, `time_end`, `date_start`, and `date_end`.
 	 * @param {string} $event->occur_begin Beginning datetime for this event.
-	 * @param {string} $event->occur_end End datetime for this event. 
+	 * @param {string} $event->occur_end End datetime for this event.
 	 * @param {object} $event Event object.
 	 *
 	 * @return {array}
