@@ -21,37 +21,56 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return string HTML output.
  */
-function mc_time_html( $e, $type ) {
+function mc_time_html( $event, $type ) {
 	$date_format = mc_date_format();
 	$time_format = mc_time_format();
-	$start       = mc_date( 'Y-m-d', strtotime( $e->occur_begin ), false );
-	$end         = mc_date( 'Y-m-d', strtotime( $e->occur_end ), false );
-	$all_day     = mc_is_all_day( $e );
+	$start       = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
+	$end         = mc_date( 'Y-m-d', strtotime( $event->occur_end ), false );
+	$all_day     = mc_is_all_day( $event );
 
 	$offset  = get_option( 'gmt_offset' );
 	$hours   = (int) $offset;
 	$minutes = abs( ( $offset - (int) $offset ) * 60 );
 	$offset  = sprintf( '%+03d:%02d', $hours, $minutes );
-	$dtstart = $start . 'T' . $e->event_time . $offset;
-	$dtend   = $end . 'T' . $e->event_endtime . $offset;
+	$dtstart = $start . 'T' . $event->event_time . $offset;
+	$dtend   = $end . 'T' . $event->event_endtime . $offset;
 	$notime  = '';
 	if ( $all_day ) {
-		$label = mc_notime_label( $e );
+		$label = mc_notime_label( $event );
 		if ( $label ) {
 			$notime .= " <span class='event-time'>";
 			$notime .= ( 'N/A' === $label ) ? "<abbr title='" . esc_html__( 'Not Applicable', 'my-calendar' ) . "'>" . esc_html__( 'N/A', 'my-calendar' ) . '</abbr>' : esc_html( $label );
 			$notime .= '</span>';
 		}
 	}
-	$date_start  = "<span class='mc-start-date dtstart' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $e->occur_begin ) ) . '</span>';
-	$time_start  = ( ! $all_day ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_begin ) ) . '</time></span>' : $notime;
-	$date_end    = ( 0 === (int) $e->event_hide_end && ( $e->event_begin !== $e->event_end ) ) ? '<span class="event-time dtend">' . date_i18n( $date_format, strtotime( $e->occur_end ) ) . '</span>' : '';
-	$time_end    = ( ! $all_day && 0 === (int) $e->event_hide_end ) ? "<span class='end-time dtend'> <time class='value-title' datetime='" . esc_attr( $dtend ) . "' title='" . esc_attr( $dtend ) . "'>" . date_i18n( $time_format, strtotime( $e->occur_end ) ) . '</time></span>' : '';
+	$date_start  = "<span class='mc-start-date dtstart' title='" . esc_attr( $dtstart ) . "' content='" . esc_attr( $dtstart ) . "'>" . date_i18n( $date_format, strtotime( $event->occur_begin ) ) . '</span>';
+	$time_start  = ( ! $all_day ) ? "<span class='event-time dtstart'><time class='value-title' datetime='" . esc_attr( $dtstart ) . "' title='" . esc_attr( $dtstart ) . "'>" . date_i18n( $time_format, strtotime( $event->occur_begin ) ) . '</time></span>' : $notime;
+	$date_end    = ( 0 === (int) $event->event_hide_end && ( $event->event_begin !== $event->event_end ) ) ? '<span class="event-time dtend">' . date_i18n( $date_format, strtotime( $event->occur_end ) ) . '</span>' : '';
+	$time_end    = ( ! $all_day && 0 === (int) $event->event_hide_end ) ? "<span class='end-time dtend'> <time class='value-title' datetime='" . esc_attr( $dtend ) . "' title='" . esc_attr( $dtend ) . "'>" . date_i18n( $time_format, strtotime( $event->occur_end ) ) . '</time></span>' : '';
 	$t_separator = ( $time_end ) ? "<span class='time-separator'> &ndash; </span>" : '';
 	$d_separator = ( $date_end ) ? "<span class='date-separator'> &ndash; </span>" : '';
 	$br          = ( $time_end || $time_start ) ? '<br />' : '';
 
-	$time_content = '<span class="time-wrapper">' . $time_start . ' ' . $t_separator . ' ' . $time_end . '</span>' . $br . '<span class="date-wrapper">' . $date_start . ' ' . $d_separator . ' ' . $date_end . '</span>';
+	$times = array(
+		'time_start' => $time_start,
+		'time_end'   => $time_end,
+		'date_start' => $date_start,
+		'date_end'   => $date_end,
+	);
+	/**
+	 * Filter time and date display values.
+	 *
+	 * @hook mc_time_html_values
+	 *
+	 * @param {array}  $times Array with formatted `time_start`, `time_end`, `date_start`, and `date_end`.
+	 * @param {string} $event->occur_begin Beginning datetime for this event.
+	 * @param {string} $event->occur_end End datetime for this event. 
+	 * @param {object} $event Event object.
+	 *
+	 * @return {array}
+	 */
+	$times        = apply_filters( 'mc_time_html_values', $times, $event->occur_begin, $event->occur_end, $event );
+	$time_content = '<span class="time-wrapper">' . $times['time_start'] . ' ' . $t_separator . ' ' . $times['time_end'] . '</span>' . $br . '<span class="date-wrapper">' . $times['date_start'] . ' ' . $d_separator . ' ' . $times['date_end'] . '</span>';
 
 	$time = "
 	<div class='time-block'>
@@ -64,11 +83,11 @@ function mc_time_html( $e, $type ) {
 	 * @hook mcs_time_block
 	 *
 	 * @param {string} $time HTML time block output.
-	 * @param {object} $e Event object.
+	 * @param {object} $event Event object.
 	 *
-	 * @return string
+	 * @return {string}
 	 */
-	return apply_filters( 'mcs_time_block', $time, $e );
+	return apply_filters( 'mcs_time_block', $time, $event );
 }
 
 /**
