@@ -550,45 +550,51 @@ function mc_add_yoast_schema( $graph, $context ) {
  * @return array Variable styles & category styles.
  */
 function mc_generate_category_styles() {
-	$mcdb            = mc_is_remote_db();
-	$category_styles = '';
-	$category_vars   = '';
-	$inv             = '';
-	$type            = '';
-	$alt             = '';
-	$categories      = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table( get_current_blog_id() ) . ' ORDER BY category_id ASC' );
-	foreach ( $categories as $category ) {
-		$class = mc_category_class( $category, 'mc_' );
-		$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
-		$color = $hex . $category->category_color;
-		$apply = mc_get_option( 'apply_color' );
-		if ( '#' !== $color ) {
-			$hcolor = mc_shift_color( $category->category_color );
-			if ( 'font' === $apply ) {
-				$type = 'color';
-				$alt  = 'background';
-			} elseif ( 'background' === $apply ) {
-				$type = 'background';
-				$alt  = 'color';
+	$styles = get_transient( 'mc_generated_category_styles' );
+	if ( ! $styles ) {
+		$mcdb            = mc_is_remote_db();
+		$category_styles = '';
+		$category_vars   = '';
+		$inv             = '';
+		$type            = '';
+		$alt             = '';
+		$categories      = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table( get_current_blog_id() ) . ' ORDER BY category_id ASC' );
+		foreach ( $categories as $category ) {
+			$class = mc_category_class( $category, 'mc_' );
+			$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
+			$color = $hex . $category->category_color;
+			$apply = mc_get_option( 'apply_color' );
+			if ( '#' !== $color ) {
+				$hcolor = mc_shift_color( $category->category_color );
+				if ( 'font' === $apply ) {
+					$type = 'color';
+					$alt  = 'background';
+				} elseif ( 'background' === $apply ) {
+					$type = 'background';
+					$alt  = 'color';
+				}
+				$inverse = mc_inverse_color( $color );
+				$inv     = "$alt: $inverse !important;";
+				if ( 'font' === $apply || 'background' === $apply ) {
+					// always an anchor as of 1.11.0, apply also to title.
+					$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
+					$category_styles .= "\n.mc-main .$class .event-title button { $type: $color !important; $inv }";
+					$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor !important;}";
+					$category_styles .= "\n.mc-main .$class .event-title button:hover, .mc-main .$class .event-title button:focus { $type: $hcolor !important;}";
+				}
+				// Variables aren't dependent on options.
+				$category_vars .= '--category-' . $class . ': ' . $color . '; ';
 			}
-			$inverse = mc_inverse_color( $color );
-			$inv     = "$alt: $inverse !important;";
-			if ( 'font' === $apply || 'background' === $apply ) {
-				// always an anchor as of 1.11.0, apply also to title.
-				$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
-				$category_styles .= "\n.mc-main .$class .event-title button { $type: $color !important; $inv }";
-				$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor !important;}";
-				$category_styles .= "\n.mc-main .$class .event-title button:hover, .mc-main .$class .event-title button:focus { $type: $hcolor !important;}";
-			}
-			// Variables aren't dependent on options.
-			$category_vars .= '--category-' . $class . ': ' . $color . '; ';
 		}
+
+		$styles = array(
+			'styles' => $category_styles,
+			'vars'   => $category_vars,
+		);
+		set_transient( 'mc_generated_category_styles', $styles, WEEK_IN_SECONDS );
 	}
 
-	return array(
-		'styles' => $category_styles,
-		'vars'   => $category_vars,
-	);
+	return $styles;
 }
 
 /**
