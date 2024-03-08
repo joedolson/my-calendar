@@ -382,4 +382,3 @@ function mc_import_tribe_tickets( $tribe_id, $calendar_id ) {
 		}
 	}
 }
-add_action( 'my_calendar_event_imported_from_tribe', 'mc_import_tribe_tickets', 10, 2 );
