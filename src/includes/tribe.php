@@ -117,6 +117,7 @@ function mc_import_source_tribe_event( $post_id ) {
 	$event  = apply_filters( 'mc_imported_event_tribe', $tribe_event );
 	$parent = $tribe_event->post_parent;
 	if ( ! $parent ) {
+		// This is a full event, not a sub event in a recurring series.
 		$event = mc_format_tribe_event_for_import( $event );
 		if ( false === $event ) {
 			return;
@@ -233,11 +234,11 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 
 		$venue_id = get_post_meta( $event->ID, '_EventVenueID', true );
 		if ( $venue_id && 'tribe_venue' === get_post_type( $venue_id ) ) {
-			$location_id = get_post_meta( $venue_id, '_mc_location_id', true );
+			$location_id = get_post_meta( $venue_id, '_mc_tribe_location_id', true );
 			if ( ! $location_id ) {
 				$location_id = mc_import_tribe_location( $venue_id );
 			}
-			$my_calendar_event['event_location'] = $location_id;
+			$my_calendar_event['preset_location'] = $location_id;
 		}
 	}
 	/**
@@ -265,13 +266,14 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
  */
 function mc_import_tribe_location( $venue_id ) {
 	// This is a double check before inserting.
-	$check = get_post_meta( $venue_id, '_mc_location_id', true );
+	$check = get_post_meta( $venue_id, '_mc_tribe_location_id', true );
 	if ( is_numeric( $check ) ) {
 		return $check;
 	}
 	$state = ( get_post_meta( $venue_id, '_VenueState', true ) ) ? get_post_meta( $venue_id, '_VenueState', true ) : get_post_meta( $venue_id, '_VenueProvince', true );
+	$venue = get_post( $venue_id );
 	$add   = array(
-		'location_label'     => get_post( $venue_id )->post_title,
+		'location_label'     => $venue->post_title,
 		'location_street'    => get_post_meta( $venue_id, '_VenueAddress', true ),
 		'location_street2'   => '',
 		'location_city'      => get_post_meta( $venue_id, '_VenueCity', true ),
@@ -291,7 +293,7 @@ function mc_import_tribe_location( $venue_id ) {
 	$location_id = mc_insert_location( $add );
 	if ( is_numeric( $location_id ) ) {
 		// Only set the venue relationship if location ID is set.
-		update_post_meta( $venue_id, '_mc_location_id', $location_id );
+		update_post_meta( $venue_id, '_mc_tribe_location_id', $location_id );
 
 		// Set featured image for location.
 		$featured_image_id = get_post_thumbnail_id( $venue_id );
@@ -299,7 +301,14 @@ function mc_import_tribe_location( $venue_id ) {
 			$location_post = mc_get_location_post( $location_id );
 			set_post_thumbnail( $location_post, $featured_image_id );
 		}
+		// Set location post content to venue content.
+		$update_post = array(
+			'ID'           => $location_post,
+			'post_content' => $venue->post_content,
+		);
+		wp_update_post( $update_post );
 	}
+
 	return $location_id;
 }
 

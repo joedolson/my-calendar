@@ -319,6 +319,7 @@ function mc_event_delete_posts( $deleted ) {
 		);
 		if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
 			$post_id = $posts[0]->ID;
+			if ( '')
 			wp_delete_post( $post_id, true );
 		}
 	}
@@ -463,7 +464,7 @@ function my_calendar_edit() {
  * Save an event to the database
  *
  * @param string      $action Type of action.
- * @param array       $output Checked event data.
+ * @param array       $output Checked event data & post data.
  * @param int|boolean $event_id Event ID or false for new events.
  *
  * @return array Array with event_id, event_post, and message keys.
@@ -471,6 +472,7 @@ function my_calendar_edit() {
 function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
 	$proceed    = (bool) $output[0];
+	$post       = $output[4];
 	$message    = '';
 	$event_post = false;
 	$formats    = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d' );
@@ -567,8 +569,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved' );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
-				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && '' !== trim( $_POST['mc_twitter'] ) ) {
-					wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
+				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $post['mc_twitter'] ) && '' !== trim( $post['mc_twitter'] ) ) {
+					wpt_post_to_twitter( stripslashes( $post['mc_twitter'] ) );
 				}
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
@@ -601,7 +603,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		// Translators: URL to view calendar.
 		$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
 		if ( mc_can_edit_event( $event_id ) ) {
-			$update = $output[2];
+			$update = isset( $output['checked'] ) ? $output['checked'] : $output[2];
 			$cats   = $update['event_categories'];
 			unset( $update['event_categories'] );
 			mc_update_category_relationships( $cats, $event_id );
@@ -618,16 +620,16 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			 */
 			$update       = apply_filters( 'mc_before_save_update', $update, $event_id );
 			$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
-			$prev_eb      = ( isset( $_POST['prev_event_begin'] ) ) ? $_POST['prev_event_begin'] : '';
-			$prev_et      = ( isset( $_POST['prev_event_time'] ) ) ? $_POST['prev_event_time'] : '';
-			$prev_ee      = ( isset( $_POST['prev_event_end'] ) ) ? $_POST['prev_event_end'] : '';
-			$prev_eet     = ( isset( $_POST['prev_event_endtime'] ) ) ? $_POST['prev_event_endtime'] : '';
+			$prev_eb      = ( isset( $post['prev_event_begin'] ) ) ? $post['prev_event_begin'] : '';
+			$prev_et      = ( isset( $post['prev_event_time'] ) ) ? $post['prev_event_time'] : '';
+			$prev_ee      = ( isset( $post['prev_event_end'] ) ) ? $post['prev_event_end'] : '';
+			$prev_eet     = ( isset( $post['prev_event_endtime'] ) ) ? $post['prev_event_endtime'] : '';
 			$update_time  = mc_date( 'H:i:00', mc_strtotime( $update['event_time'] ), false );
 			$date_changed = ( $update['event_begin'] !== $prev_eb || $update_time !== $prev_et || $update['event_end'] !== $prev_ee || ( $endtime !== $prev_eet && ( '' !== $prev_eet && '23:59:59' !== $endtime ) ) ) ? true : false;
-			if ( isset( $_POST['event_instance'] ) ) {
+			if ( isset( $post['event_instance'] ) ) {
 				// compares the information sent to the information saved for a given event.
 				$is_changed     = mc_compare( $update, $event_id );
-				$event_instance = (int) $_POST['event_instance'];
+				$event_instance = (int) $post['event_instance'];
 				if ( $is_changed ) {
 					// if changed, create new event, match group id, update instance to reflect event connection, same group id.
 					// if group ID == 0, need to add group ID to both records.
@@ -638,8 +640,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 						mc_update_data( $event_id, 'event_group_id', $event_id );
 					}
 					// retain saved location unless actively changed.
-					if ( isset( $_POST['preset_location'] ) && 'none' === $_POST['location_preset'] ) {
-						$location                 = absint( $_POST['preset_location'] );
+					if ( isset( $post['preset_location'] ) && 'none' === $post['location_preset'] ) {
+						$location                 = absint( $post['preset_location'] );
 						$update['event_location'] = $location;
 					}
 					$wpdb->insert( my_calendar_table(), $update, $formats );
@@ -648,7 +650,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					mc_update_category_relationships( $cats, $new_event );
 					$result = mc_update_instance( $event_instance, $new_event, $update );
 				} else {
-					if ( $update['event_begin'][0] === $_POST['prev_event_begin'] && $update['event_end'][0] === $_POST['prev_event_end'] ) {
+					if ( $update['event_begin'][0] === $post['prev_event_begin'] && $update['event_end'][0] === $post['prev_event_end'] ) {
 						// There were no changes at all.
 					} else {
 						// Only dates were changed.
@@ -671,13 +673,13 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				delete_transient( 'mc_first_event_cache_' . $event_id );
 				delete_transient( 'mc_get_date_bounds' );
 
-				if ( ! isset( $_POST['event_recur'] ) && isset( $_POST['event_repeats'] ) ) {
-					unset( $_POST['event_repeats'] );
+				if ( ! isset( $post['event_recur'] ) && isset( $post['event_repeats'] ) ) {
+					unset( $post['event_repeats'] );
 				}
 				// Only execute new increments if 'event_repeats' is present or date/time has changed.
-				if ( isset( $_POST['event_repeats'] ) || $date_changed ) {
-					if ( isset( $_POST['prev_event_repeats'] ) && isset( $_POST['prev_event_recur'] ) ) {
-						$recur_changed = ( $update['event_repeats'] !== $_POST['prev_event_repeats'] || $update['event_recur'] !== $_POST['prev_event_recur'] ) ? true : false;
+				if ( isset( $post['event_repeats'] ) || $date_changed ) {
+					if ( isset( $post['prev_event_repeats'] ) && isset( $post['prev_event_recur'] ) ) {
+						$recur_changed = ( $update['event_repeats'] !== $post['prev_event_repeats'] || $update['event_recur'] !== $post['prev_event_recur'] ) ? true : false;
 					} else {
 						$recur_changed = false;
 					}
@@ -712,10 +714,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				// do an action using the $action and processed event data.
 				$new_event_status = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
 				// check for event_approved provides support for older versions of My Calendar Pro.
-				if ( isset( $_POST['event_approved'] ) && $_POST['event_approved'] !== $new_event_status ) {
-					$new_event_status = absint( $_POST['event_approved'] );
+				if ( isset( $post['event_approved'] ) && $post['event_approved'] !== $new_event_status ) {
+					$new_event_status = absint( $post['event_approved'] );
 				}
-				if ( isset( $_POST['prev_event_status'] ) ) {
+				if ( isset( $post['prev_event_status'] ) ) {
 					/**
 					 * Execute an action when an event changes status.
 					 *
@@ -727,7 +729,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					 * @param {array}  $data Submitted event data.
 					 * @param {int}    $event_id Event ID.
 					 */
-					do_action( 'mc_transition_event', (int) $_POST['prev_event_status'], $new_event_status, $action, $data, $event_id );
+					do_action( 'mc_transition_event', (int) $post['prev_event_status'], $new_event_status, $action, $data, $event_id );
 				}
 				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, 'event-updated' );
 			}
@@ -736,7 +738,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		}
 	}
 
-	$message        = $message . "\n" . $output[3];
+	$message        = $message . "\n" . $output[3]; // Errors.
 	$saved_response = array(
 		'event_id'   => $event_id,
 		'event_post' => $event_post,
@@ -2560,7 +2562,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$ok = false;
 	}
 
-	$data = array( $ok, $submission, $submit, $errors );
+	$data = array( $ok, $submission, $submit, $errors, $post );
 
 	return $data;
 }

@@ -303,7 +303,7 @@ function mc_update_location_post_relationship( $location_id, $location_post ) {
  *
  * @param array $add Array of location details to add.
  *
- * @return mixed boolean/int query result.
+ * @return boolean|int New location ID or false.
  */
 function mc_insert_location( $add ) {
 	global $wpdb;
