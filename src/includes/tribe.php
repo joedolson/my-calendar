@@ -136,8 +136,9 @@ function mc_import_source_tribe_event( $tribe_id ) {
 				 *
 				 * @param {int} $tribe_id Post ID from Tribe Events.
 				 * @param {int} $event_id Event ID from My Calendar.
+				 * @param {int} $event_post Post ID for My Calendar event.
 				 */
-				do_action( 'my_calendar_event_imported_from_tribe', $tribe_id, $event_id );
+				do_action( 'my_calendar_event_imported_from_tribe', $tribe_id, $event_id, $response['event_post'] );
 				if ( ! empty( $event['event_image_id'] ) ) {
 					set_post_thumbnail( $response['event_post'], $event['event_image_id'] );
 				}
