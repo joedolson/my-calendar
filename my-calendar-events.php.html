@@ -642,14 +642,14 @@ function mc_get_event_core( $id, $rebuild = false ) {
 /**
  * Fetches the first fully-realized event object with all parameters even if the specific instance ID isn't available.
  *
- * @param int $id Event core ID.
+ * @param int  $id Event core ID.
  *
  * @return object|boolean Event or false if no event found.
  */
 function mc_get_first_event( $id ) {
 	$mcdb      = mc_is_remote_db();
 	$ts_string = mc_ts();
-	$event     = get_transient( 'mc_first_event_cache_' . $id );
+	$event     = ( ! is_admin() ) ? get_transient( 'mc_first_event_cache_' . $id ) : false;
 	if ( $event ) {
 		return $event;
 	} else {
