@@ -319,7 +319,6 @@ function mc_event_delete_posts( $deleted ) {
 		);
 		if ( isset( $posts[0] ) && is_object( $posts[0] ) ) {
 			$post_id = $posts[0]->ID;
-			if ( '')
 			wp_delete_post( $post_id, true );
 		}
 	}
