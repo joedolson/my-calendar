@@ -466,13 +466,14 @@ function my_calendar_edit() {
  * @param array       $output Checked event data.
  * @param int|boolean $event_id Event ID or false for new events.
  *
- * @return array Array with event_id and message keys.
+ * @return array Array with event_id, event_post, and message keys.
  */
 function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
-	$proceed = (bool) $output[0];
-	$message = '';
-	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d' );
+	$proceed    = (bool) $output[0];
+	$message    = '';
+	$event_post = false;
+	$formats    = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d' );
 
 	if ( ( 'add' === $action || 'copy' === $action ) && true === $proceed ) {
 		$add  = $output[2]; // add format here.
@@ -518,7 +519,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			$event_link  = '';
 			$edit_link   = '';
 
-			mc_event_post( $action, $data, $event_id, $result );
+			$event_post = mc_event_post( $action, $data, $event_id, $result );
 			/**
 			 * Run action when an event is saved.
 			 *
@@ -692,8 +693,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					}
 				}
 			}
-			$data = $update;
-			mc_event_post( $action, $data, $event_id, $result );
+			$data       = $update;
+			$event_post = mc_event_post( $action, $data, $event_id, $result );
 			/**
 			 * Run action when an event is saved.
 			 *
@@ -737,8 +738,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 
 	$message        = $message . "\n" . $output[3];
 	$saved_response = array(
-		'event_id' => $event_id,
-		'message'  => $message,
+		'event_id'   => $event_id,
+		'event_post' => $event_post,
+		'message'    => $message,
 	);
 	mc_update_count_cache();
 

@@ -139,6 +139,9 @@ function mc_import_source_tribe_event( $post_id ) {
 				do_action( 'my_calendar_event_imported_from_tribe', $post_id, $event_id );
 				// Import tickets from Tribe Tickets to My Tickets.
 				mc_import_tribe_tickets( $post_id, $event_id );
+				if ( ! empty( $event['event_image_id'] ) ) {
+					set_post_thumbnail( $response['event_post'], $event['event_image_id'] );
+				}
 				update_post_meta( $post_id, '_mc_imported', $event_id );
 			}
 		}
@@ -214,7 +217,6 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 			'content'          => $event->post_content,
 			'event_short'      => $event->post_excerpt,
 			'event_link'       => get_post_meta( $event->ID, '_EventURL', true ),
-			// Tribe recurring events work radically differently. Treat as event group?
 			'event_image'      => get_the_post_thumbnail_url( $event->ID ),
 			'event_image_id'   => get_post_thumbnail_id( $event->ID ),
 			'event_allday'     => ( 'yes' === get_post_meta( $event->ID, '_EventAllDay', true ) ) ? '1' : '0',
