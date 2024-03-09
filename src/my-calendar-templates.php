@@ -321,7 +321,7 @@ function mc_location_image( $event, $source = 'event' ) {
 		return '';
 	}
 	$source = 'location';
-	$post   = mc_get_location_post( $event->location_post );
+	$post   = ( absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $event->location_id );
 	$image  = get_the_post_thumbnail( $post, 'full' );
 
 	return $image;
@@ -373,7 +373,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external p-name p-org u-url'>$label</a>" : $label;
 		$link = $link . $distance;
 	}
-	$post   = mc_get_location_post( $loc_id );
+	$post   = ( absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $loc_id );
 	$events = ( $post && ! is_single( $post ) && ! is_admin() && 'mc-locations' === get_post_type( $post ) ) ? '<a class="location-link" href="' . esc_url( get_the_permalink( $post ) ) . '">' . __( 'View Location', 'my-calendar' ) . '</a>' : '';
 	/**
 	 * Filter link to location-specific events in hcard.
@@ -1799,12 +1799,13 @@ function mc_event_schema( $e, $tags = array() ) {
  * @return array
  */
 function mc_location_schema( $location ) {
-	$schema = array(
+	$location_post = ( absint( $location->location_post ) ) ? $location->location_post : mc_get_location_post( $location->location_id );
+	$schema        = array(
 		'@context'    => 'https://schema.org',
 		'@type'       => 'Place',
 		'name'        => $location->location_label,
 		'description' => '',
-		'url'         => get_permalink( mc_get_location_post( $location->location_id ) ),
+		'url'         => get_permalink( $location_post ),
 		'address'     => array(
 			'@type'           => 'PostalAddress',
 			'streetAddress'   => $location->location_street,
