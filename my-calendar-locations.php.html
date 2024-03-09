@@ -371,6 +371,8 @@ function mc_modify_location( $update, $where ) {
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->update( my_calendar_locations_table(), $update, $where, $formats, '%d' );
 
+	delete_transient( 'mc_location_' . $where );
+
 	return $results;
 }
 
@@ -690,39 +692,47 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
  * @return object|false location if found
  */
 function mc_get_location( $location_id, $update_location = true ) {
+	if ( ! is_admin() ) {
+		$location = get_transient( 'mc_location_' . $location_id );
+		if ( $location ) {
+			return $location;
+		}
+	}
 	$mcdb     = mc_is_remote_db();
 	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
 		$prevent_geolocation     = ( '1' === get_post_meta( $location->location_post, '_mc_geolocate_error', true ) &amp;&amp; 'force' !== $update_location ) ? true : false;
-		if ( $prevent_geolocation ) {
-			return $location;
-		}
-		if ( $update_location ) {
-			if ( mc_get_option( 'gmap_api_key' ) ) {
-				if ( 'force' === $update_location ) {
-					$latitude  = false;
-					$longitude = false;
-				} else {
-					$latitude  = ( '0.000000' === (string) $location->location_latitude ) ? false : true;
-					$longitude = ( '0.000000' === (string) $location->location_longitude ) ? false : true;
-				}
-				if ( ! $latitude || ! $longitude ) {
-					$loc = mc_get_location_coordinates( $location_id );
-					$lat = isset( $loc['latitude'] ) ? $loc['latitude'] : '';
-					$lng = isset( $loc['longitude'] ) ? $loc['longitude'] : '';
-
-					if ( $lat &amp;&amp; $lng ) {
-						mc_update_location( 'location_longitude', $lng, $location_id );
-						mc_update_location( 'location_latitude', $lat, $location_id );
-						$location->location_longitude = $lng;
-						$location->location_latitude  = $lat;
+		if ( ! $prevent_geolocation ) {
+			if ( $update_location ) {
+				if ( mc_get_option( 'gmap_api_key' ) ) {
+					if ( 'force' === $update_location ) {
+						$latitude  = false;
+						$longitude = false;
 					} else {
-						update_post_meta( $location->location_post, '_mc_geolocate_error', '1' );
+						$latitude  = ( '0.000000' === (string) $location->location_latitude ) ? false : true;
+						$longitude = ( '0.000000' === (string) $location->location_longitude ) ? false : true;
+					}
+					if ( ! $latitude || ! $longitude ) {
+						$loc = mc_get_location_coordinates( $location_id );
+						$lat = isset( $loc['latitude'] ) ? $loc['latitude'] : '';
+						$lng = isset( $loc['longitude'] ) ? $loc['longitude'] : '';
+
+						if ( $lat &amp;&amp; $lng ) {
+							mc_update_location( 'location_longitude', $lng, $location_id );
+							mc_update_location( 'location_latitude', $lat, $location_id );
+							$location->location_longitude = $lng;
+							$location->location_latitude  = $lat;
+						} else {
+							update_post_meta( $location->location_post, '_mc_geolocate_error', '1' );
+						}
 					}
 				}
 			}
 		}
+	}
+	if ( ! is_admin() ) {
+		set_transient( 'mc_location_' . $location_id, $location, WEEK_IN_SECONDS );
 	}
 
 	return $location;
