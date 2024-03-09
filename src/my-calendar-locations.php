@@ -71,7 +71,7 @@ add_filter( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
  * Create a post for My Calendar location data on save
  *
  * @param bool|int $location_id Result of save action; location ID or false.
- * @param array    $data Saved event data.
+ * @param array    $data Saved location data.
  * @param array    $post POST data.
  *
  * @return int|false newly created post ID or false if error.
@@ -432,7 +432,7 @@ function my_calendar_add_locations() {
 			mc_update_option( 'default_location', (int) $results );
 		}
 		/**
-		 * Executed an action when a location is saved.
+		 * Execute an action when a location is saved.
 		 *
 		 * @hook mc_save_location
 		 *
