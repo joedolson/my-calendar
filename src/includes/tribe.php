@@ -292,6 +292,7 @@ function mc_import_tribe_location( $venue_id ) {
 	);
 
 	$location_id = mc_insert_location( $add );
+	$location_id = apply_filters( 'mc_save_location', $location_id, $add, array() );
 	if ( is_numeric( $location_id ) ) {
 		// Only set the venue relationship if location ID is set.
 		update_post_meta( $venue_id, '_mc_tribe_location_id', $location_id );
