@@ -102,14 +102,16 @@ function mc_time_html( $event, $type ) {
  * @return array|true [html] Generated HTML & [json] array of schema.org data. True if event details not included.
  */
 function my_calendar_draw_events( $events, $params, $process_date, $template = '', $id = '' ) {
-	$type        = $params['format'];
-	$time        = $params['time'];
-	$displayed   = array();
-	$open_option = mc_get_option( 'open_day_uri' );
+	$type           = $params['format'];
+	$time           = $params['time'];
+	$hide_recurring = explode( ',', $params['hide_recurring'] );
+	$shown_groups   = array(); // Displayed groups.
+	$shown_events   = array(); // Displayed events.
+	$open_option    = mc_get_option( 'open_day_uri' );
 	if ( 'mini' === $type && ( 'true' === $open_option || 'listanchor' === $open_option || 'calendaranchor' === $open_option ) ) {
 		return true;
 	}
-	// We need to sort arrays of objects by time.
+
 	if ( ! empty( $events ) ) {
 		$output_array = array();
 		$json         = array();
@@ -137,14 +139,22 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			} else {
 				$check = '';
 			}
-			if ( 'true' === $params['hide_groups'] && in_array( $event->event_group_id, $params['displayed'], true ) ) {
+			// If this group has already been shown, skip event.
+			if ( 'true' === $params['hide_groups'] && in_array( $event->event_group_id, $params['groups'], true ) ) {
 				$check = false;
 			}
+			$params['groups'][] = $event->event_group_id;
+			// If this recurring event has already been shown, skip.
+			if ( in_array( $type, $hide_recurring, true ) && in_array( $event->event_id, $params['events'], true ) ) {
+				$check = false;
+			}
+			$params['events'][] = $event->event_id;
 			if ( '' === $check ) {
 				$tags           = mc_create_tags( $event, $id );
 				$event_output   = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
 				$output_array[] = $event_output['html'];
-				$displayed[]    = $event_output['group'];
+				$shown_groups[] = $event_output['group'];
+				$shown_events[] = $event->event_id;
 				$json           = mc_event_schema( $event, $tags );
 			}
 		}
@@ -154,15 +164,18 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 				$events_html .= $value;
 			}
 		}
-		if ( '' === $events_html ) {
-			return array();
-		}
-
-		return array(
+		$return = array(
 			'html'   => $begin . $events_html . $end,
 			'json'   => $json,
-			'groups' => $displayed,
+			'groups' => $shown_groups,
+			'events' => $shown_events,
 		);
+
+		if ( '' === $events_html ) {
+			$return['html'] = '';
+		}
+
+		return $return;
 	}
 
 	return array();
@@ -1426,22 +1439,23 @@ function mc_event_is_hidden( $event ) {
  * @return array $params New parameters, modified by context
  */
 function mc_calendar_params( $args ) {
-	$format   = isset( $args['format'] ) ? $args['format'] : 'calendar';
-	$category = isset( $args['category'] ) ? $args['category'] : '';
-	$time     = isset( $args['time'] ) ? $args['time'] : 'month';
-	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : '';
-	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
-	$id       = isset( $args['id'] ) ? sanitize_title( $args['id'] ) : '';
-	$author   = isset( $args['author'] ) ? $args['author'] : null;
-	$host     = isset( $args['host'] ) ? $args['host'] : null;
-	$above    = isset( $args['above'] ) ? $args['above'] : '';
-	$below    = isset( $args['below'] ) ? $args['below'] : '';
-	$syear    = isset( $args['year'] ) ? $args['year'] : false;
-	$smonth   = isset( $args['month'] ) ? $args['month'] : false;
-	$sday     = isset( $args['day'] ) ? $args['day'] : false;
-	$search   = isset( $args['search'] ) ? $args['search'] : '';
-	$weekends = isset( $args['weekends'] ) ? $args['weekends'] : mc_get_option( 'show_weekends' );
-	$groups   = isset( $args['hide_groups'] ) ? $args['hide_groups'] : '';
+	$format    = isset( $args['format'] ) ? $args['format'] : 'calendar';
+	$category  = isset( $args['category'] ) ? $args['category'] : '';
+	$time      = isset( $args['time'] ) ? $args['time'] : 'month';
+	$ltype     = isset( $args['ltype'] ) ? $args['ltype'] : '';
+	$lvalue    = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
+	$id        = isset( $args['id'] ) ? sanitize_title( $args['id'] ) : '';
+	$author    = isset( $args['author'] ) ? $args['author'] : null;
+	$host      = isset( $args['host'] ) ? $args['host'] : null;
+	$above     = isset( $args['above'] ) ? $args['above'] : '';
+	$below     = isset( $args['below'] ) ? $args['below'] : '';
+	$syear     = isset( $args['year'] ) ? $args['year'] : false;
+	$smonth    = isset( $args['month'] ) ? $args['month'] : false;
+	$sday      = isset( $args['day'] ) ? $args['day'] : false;
+	$search    = isset( $args['search'] ) ? $args['search'] : '';
+	$weekends  = isset( $args['weekends'] ) ? $args['weekends'] : mc_get_option( 'show_weekends' );
+	$groups    = isset( $args['hide_groups'] ) ? $args['hide_groups'] : '';
+	$recurring = isset( $args['hide_recurring'] ) ? $args['hide_recurring'] : '';
 
 	if ( ! in_array( $format, array( 'list', 'calendar', 'mini', 'card' ), true ) ) {
 		$format = 'calendar';
@@ -1490,22 +1504,23 @@ function mc_calendar_params( $args ) {
 	 */
 	$format = apply_filters( 'mc_display_format', $format, $args );
 	$params = array(
-		'format'      => $format,
-		'category'    => $category,
-		'above'       => $above,
-		'below'       => $below,
-		'time'        => $time,
-		'ltype'       => $ltype,
-		'lvalue'      => $lvalue,
-		'author'      => $author,
-		'id'          => $id, // Changed when hash is processed.
-		'host'        => $host,
-		'syear'       => $syear,
-		'smonth'      => $smonth,
-		'sday'        => $sday,
-		'search'      => $search,
-		'weekends'    => $weekends,
-		'hide_groups' => $groups,
+		'format'         => $format,
+		'category'       => $category,
+		'above'          => $above,
+		'below'          => $below,
+		'time'           => $time,
+		'ltype'          => $ltype,
+		'lvalue'         => $lvalue,
+		'author'         => $author,
+		'id'             => $id, // Changed when hash is processed.
+		'host'           => $host,
+		'syear'          => $syear,
+		'smonth'         => $smonth,
+		'sday'           => $sday,
+		'search'         => $search,
+		'weekends'       => $weekends,
+		'hide_groups'    => $groups,
+		'hide_recurring' => $recurring,
 	);
 
 	// Hash cannot include 'time', 'category', 'search', or 'format', since those can be changed by navigation.
@@ -1634,9 +1649,10 @@ function mc_switch_language( $current, $target_language ) {
  * @return string HTML output of calendar
  */
 function my_calendar( $args ) {
-	$language  = isset( $args['language'] ) ? $args['language'] : '';
-	$displayed = array();
-	$switched  = '';
+	$language     = isset( $args['language'] ) ? $args['language'] : '';
+	$shown_groups = array(); // Holds group events to prevent re-display of event groups when enabled.
+	$shown_events = array(); // Holds event IDs to prevent re-display of event instances when enabled.
+	$switched     = '';
 	if ( $language ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
@@ -1853,10 +1869,12 @@ function my_calendar( $args ) {
 			$events_class = '';
 			$json         = '';
 			foreach ( $events as $day ) {
-				$events_class        = mc_events_class( $day, $from );
-				$params['displayed'] = $displayed;
-				$event_output        = my_calendar_draw_events( $day, $params, $from, $template, $id );
-				$displayed           = array_merge( $displayed, $event_output['groups'] );
+				$events_class     = mc_events_class( $day, $from );
+				$params['groups'] = $shown_groups;
+				$params['events'] = $shown_events;
+				$event_output     = my_calendar_draw_events( $day, $params, $from, $template, $id );
+				$shown_groups     = array_merge( $shown_groups, $event_output['groups'] );
+				$shown_events     = array_merge( $shown_events, $event_output['events'] );
 				if ( ! empty( $event_output ) ) {
 					$mc_events .= $event_output['html'];
 					$json       = array( $event_output['json'] );
@@ -2058,10 +2076,12 @@ function my_calendar( $args ) {
 								if ( 'mini' === $params['format'] && 'false' !== $open_day_uri ) {
 									$event_output = ' ';
 								} else {
-									$params['displayed'] = $displayed;
-									$events_array        = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
-									$displayed           = array_merge( $displayed, $events_array['groups'] );
-									$event_output        = ' ';
+									$params['groups'] = $shown_groups;
+									$params['events'] = $shown_events;
+									$events_array     = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
+									$shown_groups     = array_merge( $shown_groups, $events_array['groups'] );
+									$shown_events     = array_merge( $shown_events, $events_array['events'] );
+									$event_output     = ' ';
 									if ( ! empty( $events_array ) ) {
 										$event_output = $events_array['html'];
 										$json[]       = $events_array['json'];
