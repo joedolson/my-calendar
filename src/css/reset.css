@@ -602,6 +602,10 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	padding: 0;
 }
 
+.my-calendar-cards .card-event .mc-card-content > * {
+	margin-bottom: 1rem;
+}
+
 .my-calendar-cards .card-event .details > *:not(h3, img) {
 	padding: 0 8px;
 	margin: 0 0 16px;
