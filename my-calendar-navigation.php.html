@@ -103,10 +103,44 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			$mc_bottomorder = array_map( 'trim', explode( ',', $below ) );
 		}
 	}
+	// Navigation elements passed from shortcode or settings.
+	$used = array_merge( $mc_toporder, $mc_bottomorder );
+	/**
+	 * Filter the order in which navigation elements are shown on the top of the calendar.
+	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
+	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
+	 *
+	 * @hook mc_header_navigation
+	 * @since 3.4.0
+	 *
+	 * @param {array} $mc_toporder Array of navigation elements.
+	 * @param {array} $used Array of all navigation elements in use for this view.
+	 * @param {array} $params Current calendar view parameters.
+	 *
+	 * @return {array}
+	 */
+	$mc_toporder = apply_filters( 'mc_header_navigation', $mc_toporder, $used, $params );
+	$aboves      = $mc_toporder;
 
-	$aboves = $mc_toporder;
-	$belows = $mc_bottomorder;
-	$used   = array_merge( $aboves, $belows );
+	/**
+	 * Filter the order in which navigation elements are shown at the bottom of the calendar.
+	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
+	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
+	 *
+	 * @hook mc_footer_navigation
+	 * @since 3.4.0
+	 *
+	 * @param {array} $mc_bottomorder Array of navigation elements.
+	 * @param {array} $used Array of all navigation elements in use for this view.
+	 * @param {array} $params Current calendar view parameters.
+	 *
+	 * @return {array}
+	 */
+	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
+	$belows         = $mc_bottomorder;
+
+	// Generate array of navigation elements in use, to avoid executing unneeded code.
+	$used = array_merge( $aboves, $belows );
 
 	// Define navigation element strings.
 	$timeframe    = '';
@@ -192,7 +226,6 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up search.
 	$search = ( in_array( 'search', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url(), $main_class ) : '';
-
 	// Set up navigation links.
 	if ( in_array( 'nav', $used, true ) ) {
 		$nav = mc_nav( $date, $format, $time, $show_months, $main_class, $site );
@@ -216,21 +249,6 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		$jump = mc_date_switcher( $format, $main_class, $time, $date, $site );
 	}
 
-	/**
-	 * Filter the order in which navigation elements are shown on the top of the calendar.
-	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
-	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
-	 *
-	 * @hook mc_header_navigation
-	 * @since 3.4.0
-	 *
-	 * @param {array} $mc_toporder Array of navigation elements.
-	 * @param {array} $used Array of all navigation elements in use for this view.
-	 * @param {array} $params Current calendar view parameters.
-	 *
-	 * @return {array}
-	 */
-	$mc_toporder = apply_filters( 'mc_header_navigation', $mc_toporder, $used, $params );
 	foreach ( $mc_toporder as $value ) {
 		if ( 'none' !== $value &amp;&amp; in_array( $value, $used, true ) &amp;&amp; in_array( $value, $available, true ) ) {
 			$value      = trim( $value );
@@ -243,21 +261,6 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		}
 	}
 
-	/**
-	 * Filter the order in which navigation elements are shown at the bottom of the calendar.
-	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
-	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
-	 *
-	 * @hook mc_footer_navigation
-	 * @since 3.4.0
-	 *
-	 * @param {array} $mc_bottomorder Array of navigation elements.
-	 * @param {array} $used Array of all navigation elements in use for this view.
-	 * @param {array} $params Current calendar view parameters.
-	 *
-	 * @return {array}
-	 */
-	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
 	foreach ( $mc_bottomorder as $value ) {
 		if ( 'none' !== strtolower( $value ) &amp;&amp; 'stop' !== strtolower( $value ) &amp;&amp; in_array( $value, $used, true ) &amp;&amp; in_array( $value, $available, true ) ) {
 			$value         = trim( $value );
