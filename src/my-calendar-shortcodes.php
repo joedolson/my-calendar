@@ -363,7 +363,7 @@ function my_calendar_search( $atts ) {
 		'my_calendar_search'
 	);
 
-	return my_calendar_searchform( $args['type'], $args['url'] );
+	return my_calendar_searchform( $args['type'], $args['url'], 'shortcode' );
 }
 
 /**
