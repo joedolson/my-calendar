@@ -907,8 +907,9 @@ function mc_get_current_url() {
 	global $wp, $wp_rewrite;
 	$args = array();
 	if ( isset( $_GET['page_id'] ) ) {
-		$args = array( 'page_id' => absint( $_GET['page_id'] ) );
+		$args['page_id'] = absint( $_GET['page_id'] );
 	}
+
 	$current_url = home_url( add_query_arg( $args, $wp->request ) );
 
 	if ( $wp_rewrite->using_index_permalinks() && false === strpos( $current_url, 'index.php' ) ) {
@@ -918,6 +919,8 @@ function mc_get_current_url() {
 	if ( $wp_rewrite->using_permalinks() ) {
 		$current_url = trailingslashit( $current_url );
 	}
+	$args        = map_deep( $_GET, 'sanitize_text_field' );
+	$current_url = add_query_arg( $args, $current_url );
 	/**
 	 * Filter the URL returned for the current URL.
 	 *
@@ -929,7 +932,7 @@ function mc_get_current_url() {
 	 */
 	$current_url = apply_filters( 'mc_get_current_url', $current_url );
 
-	return esc_url( $current_url );
+	return $current_url;
 }
 
 /**
@@ -1323,8 +1326,9 @@ function mc_admin_bar() {
 			$wp_admin_bar->add_node( $args );
 		}
 	}
-	if ( isset( $_GET['mc_id'] ) && mc_can_edit_event( absint( $_GET['mc_id'] ) ) ) {
-		$event_id = mc_valid_id( $_GET['mc_id'] );
+	$mc_id = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+	if ( $mc_id && mc_can_edit_event( mc_get_event( $mc_id ) ) ) {
+		$event_id = mc_valid_id( $mc_id );
 		$query    = array(
 			'event_id' => $event_id,
 			'ref'      => urlencode( mc_get_current_url() ),
