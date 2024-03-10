@@ -1007,7 +1007,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 
 	$current_url    = mc_get_current_url();
 	$date_switcher  = '';
-	$date_switcher .= '<div class="my-calendar-date-switcher"><form class="mc-date-switcher" action="' . $current_url . '" method="get"><div>';
+	$date_switcher .= '<div class="my-calendar-date-switcher"><form class="mc-date-switcher" action="' . esc_url( $current_url ) . '" method="get"><div>';
 	$qsa            = array();
 	if ( isset( $_SERVER['QUERY_STRING'] ) ) {
 		parse_str( $_SERVER['QUERY_STRING'], $qsa );

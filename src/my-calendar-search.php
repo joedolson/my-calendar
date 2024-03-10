@@ -240,7 +240,7 @@ function mc_search_exportlinks() {
 	);
 	$subtract     = array( 'time', 'ltype', 'lvalue', 'mcat', 'yr', 'month', 'dy' );
 	$mc_print_url = mc_build_url( $print_add, '', home_url() );
-	$print        = "<div class='mc-print'><a href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
+	$print        = "<div class='mc-print'><a href='" . esc_url( $mc_print_url ) . "'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 
 	$above = array();
 	$below = array();

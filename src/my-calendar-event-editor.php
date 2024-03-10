@@ -2429,7 +2429,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			} else {
 				if ( mc_can_edit_event( $conflict_ev->event_id ) ) {
 					$referer = urlencode( mc_get_current_url() );
-					$link    = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$conflict_ev->event_id&amp;ref=$referer" );
+					$link    = admin_url( "admin.php?page=my-calendar&mode=edit&event_id=$conflict_ev->event_id&ref=$referer" );
 					// Translators: Link to edit event draft.
 					$error = sprintf( __( 'That event conflicts with a <a href="%s">previously submitted draft</a>.', 'my-calendar' ), $link );
 				} else {
