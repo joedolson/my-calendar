@@ -94,7 +94,7 @@ function mc_get_date_bounds( $site = false ) {
 			'first' => $first,
 			'last'  => $last,
 		);
-		set_transient( 'mc_get_date_bounds', $return, WEEK_IN_SECONDS );
+		set_transient( 'mc_get_date_bounds', $return, DAY_IN_SECONDS );
 	}
 
 	return $return;
