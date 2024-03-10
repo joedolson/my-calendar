@@ -938,7 +938,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	outline-offset: -1px;
 }
 
-.mc-main .mc-date-switcher select:last-of-type,
+.mc-main .mc-date-switcher select:first-of-type,
 .mc-main .mc-search-form input[type=text],
 .mc-main .mc_filters select {
 	border-radius: 3px 0 0 3px;
