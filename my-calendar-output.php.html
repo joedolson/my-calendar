@@ -716,18 +716,23 @@ function mc_get_details( $data, $template, $type ) {
 /**
  * Get image for an event
  *
- * @param object $event Event object.
- * @param array  $data event tags.
+ * @param object       $event Event object.
+ * @param array        $data event tags.
+ * @param string|array $size Image size as expected by `get_the_post_thumbnail`.
  *
  * @return string HTML output
  */
-function mc_get_event_image( $event, $data ) {
+function mc_get_event_image( $event, $data, $size = '' ) {
 	$image = '';
-	$sizes = get_intermediate_image_sizes();
-	if ( in_array( 'large', $sizes, true ) ) {
-		$default_size = 'large';
+	if ( ! $size ) {
+		$sizes = get_intermediate_image_sizes();
+		if ( in_array( 'large', $sizes, true ) ) {
+			$default_size = 'large';
+		} else {
+			$default_size = 'medium';
+		}
 	} else {
-		$default_size = 'medium';
+		$default_size = $size;
 	}
 	/**
 	 * Customize default image size for event output. Default is 'large' if it exists, 'medium' if not.

@@ -2078,14 +2078,15 @@ function mc_template_share( $data, $type = 'calendar' ) {
 /**
  * Print featured image in PHP templates. Backwards compatible with display settings.
  *
- * @param object $data Calendar view data.
- * @param string $type View type.
+ * @param object       $data Calendar view data.
+ * @param string       $type View type.
+ * @param string|array $size Image size as expected by `get_the_post_thumbnail`.
  */
-function mc_template_image( $data, $type = 'calendar' ) {
+function mc_template_image( $data, $type = 'calendar', $size = '' ) {
 	$event = $data->event;
 	$img   = '';
 	if ( mc_output_is_visible( 'image', $type, $event ) ) {
-		$img = mc_get_event_image( $event, $data->tags );
+		$img = mc_get_event_image( $event, $data->tags, $size );
 	}
 
 	echo wp_kses_post( $img );
