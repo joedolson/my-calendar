@@ -146,8 +146,13 @@
    * @return {String}
    */
   var createModal = function createModal(config) {
+	var dialog = document.createElement( 'dialog' );
+	var outerContent = document.createElement( 'div' );
+	var innerContent = document.createElement( 'div' );
+	var contentContainer = document.createElement( 'div' );
+	contentContainer.setAttribute( 'id', MODAL_CONTENT_JS_ID );
 
-    var id = MODAL_JS_ID;
+	var id = MODAL_JS_ID;
     var modalClassName = config.modalPrefixClass + MODAL_CLASS_SUFFIX;
     var modalClassWrapper = config.modalPrefixClass + MODAL_WRAPPER_CLASS_SUFFIX;
     var buttonCloseClassName = config.modalPrefixClass + MODAL_BUTTON_CLASS_SUFFIX;
@@ -157,32 +162,45 @@
     var title = config.modalTitle !== '' ? '<div class="js-modal-title-container"><h1 id="' + MODAL_TITLE_ID + '" class="' + titleClassName + '">\n                                          ' + config.modalTitle + '\n                                         </h1></div>' : '';
     var button_close = '<button type="button" class="' + MODAL_BUTTON_JS_CLASS + ' ' + buttonCloseClassName + '" id="' + MODAL_BUTTON_JS_ID + '" ' + MODAL_BUTTON_CONTENT_BACK_ID + '="' + config.modalContentId + '" ' + MODAL_BUTTON_FOCUS_BACK_ID + '="' + config.modalFocusBackId + '"><span class="dashicons dashicons-no" aria-hidden="true"></span>\n                               ' + buttonCloseInner + '\n                              </button>';
     var content = config.modalText;
-    var describedById = config.modalDescribedById !== '' ? ATTR_DESCRIBEDBY + '="' + config.modalDescribedById + '"' : '';
 
     // If there is no content but an id we try to fetch content id
     if (content === '' && config.modalContentId) {
       var contentFromId = findById(config.modalContentId);
       if (contentFromId) {
-        content = '<div id="' + MODAL_CONTENT_JS_ID + '">\n                              ' + contentFromId.innerHTML + '\n                             </div';
-        // we remove content from its source to avoid id duplicates, etc.
-        contentFromId.innerHTML = '';
+		contentContainer.insertAdjacentElement( 'beforeEnd', contentFromId );
       }
-    }
+    } else {
+		contentContainer.insertAdjacentHTML( 'beforeEnd', content );
+	}
+	dialog.setAttribute( 'id', id );
+	dialog.classList.add( modalClassName );
+	dialog.setAttribute( ATTR_ROLE, MODAL_ROLE );
+	dialog.setAttribute( ATTR_DESCRIBEDBY, config.modalDescribedById + ' ' + ATTR_OPEN );
+	dialog.setAttribute( ATTR_LABELLEDBY, MODAL_TITLE_ID );
+	outerContent.setAttribute( 'role', 'document' );
+	outerContent.classList.add( modalClassWrapper );
+	outerContent.insertAdjacentHTML( 'afterBegin', button_close );
+	innerContent.classList.add( contentClassName );
+	innerContent.insertAdjacentHTML( 'afterBegin', title );
+	innerContent.insertAdjacentElement( 'beforeEnd', contentContainer );
+	outerContent.insertAdjacentElement( 'afterBegin', innerContent );
+	dialog.insertAdjacentElement( 'afterBegin', outerContent );
 
-    return '<dialog id="' + id + '" class="' + modalClassName + '" ' + ATTR_ROLE + '="' + MODAL_ROLE + '" ' + describedById + ' ' + ATTR_OPEN + ' ' + ATTR_LABELLEDBY + '="' + MODAL_TITLE_ID + '">\n                    <div role="document" class="' + modalClassWrapper + '">\n                      ' + button_close + '\n                      <div class="' + contentClassName + '">\n                        ' + title + '\n                        ' + content + '\n                      </div>\n                    </div>\n                  </dialog>';
+	return dialog;
   };
 
   var closeModal = function closeModal(config) {
 
-    remove(config.modal);
-    remove(config.overlay);
+    if (config.modalFocusBackId !== '') {
+		var modalReturn = findById( config.modalFocusBackId );
+		var modalReturnContainer = modalReturn.closest( 'article' );
+		if (modalReturnContainer ) {
+			modalReturnContainer.insertAdjacentElement( 'beforeEnd', config.modalContent );
+		}
+	}
 
-    if (config.contentBackId !== '') {
-      var contentBack = findById(config.contentBackId);
-      if (contentBack) {
-        contentBack.innerHTML = config.modalContent;
-      }
-    }
+	remove(config.modal);
+    remove(config.overlay);
 
     if (config.modalFocusBackId) {
       var contentFocus = findById(config.modalFocusBackId);
@@ -255,8 +273,8 @@
               prefixClass: modalPrefixClass
             }));
 
-            // insert modal
-            body.insertAdjacentHTML('beforeEnd', createModal({
+			// insert modal
+            body.insertAdjacentElement('beforeEnd', createModal({
               modalText: modalText,
               modalPrefixClass: modalPrefixClass,
               backgroundEnabled: modalContentId,
@@ -296,7 +314,7 @@
             var body = doc.querySelector('body');
             var wrapperBody = findById(WRAPPER_PAGE_JS);
             var modal = findById(MODAL_JS_ID);
-            var modalContent = findById(MODAL_CONTENT_JS_ID) ? findById(MODAL_CONTENT_JS_ID).innerHTML : '';
+            var modalContent = findById(MODAL_CONTENT_JS_ID) ? findById(MODAL_CONTENT_JS_ID) : '';
             var overlay = findById(MODAL_OVERLAY_ID);
             var modalButtonClose = findById(MODAL_BUTTON_JS_ID);
             var modalFocusBackId = modalButtonClose.getAttribute(MODAL_BUTTON_FOCUS_BACK_ID);
