@@ -17,6 +17,11 @@ Accessible Event Manager for WordPress
 
 This is the development environment for My Calendar.
 
+## Documentation
+
+* [My Calendar Public Documetation](https://docs.joedolson.com/my-calendar/)
+* [My Calendar Hook Documentation](https://joedolson.github.io/my-calendar/)
+
 ## Contact
 
 Support questions should be sent via the Support form that appears on the Help screen within the plug-in.
