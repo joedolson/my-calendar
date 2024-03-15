@@ -335,7 +335,7 @@ function mc_count_locations() {
  * Update a location.
  *
  * @param array $update Array of location details to modify.
- * @param int   $where Location ID to update.
+ * @param array $where [location_id => int] Location ID to update.
  *
  * @return mixed boolean/int query result.
  */
@@ -345,7 +345,7 @@ function mc_modify_location( $update, $where ) {
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->update( my_calendar_locations_table(), $update, $where, $formats, '%d' );
 
-	delete_transient( 'mc_location_' . $where );
+	delete_transient( 'mc_location_' . absint( $where['location_id'] ) );
 
 	return $results;
 }
@@ -404,6 +404,7 @@ function my_calendar_add_locations() {
 		}
 	}
 	$post = map_deep( $_POST, 'wp_kses_post' );
+
 	if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
 		$add = array(
 			'location_label'     => $post['location_label'],
