@@ -193,7 +193,7 @@
 
     if (config.modalFocusBackId !== '') {
 		var modalReturn = findById( config.modalFocusBackId );
-		var modalReturnContainer = modalReturn.closest( 'article' ); // only works when control is inside container.
+		var modalReturnContainer = modalReturn.closest( '.mc-events' ); // only works when control is inside container.
 		if (modalReturnContainer ) {
 			modalReturnContainer.insertAdjacentElement( 'beforeEnd', config.modalContent.firstChild );
 		}
