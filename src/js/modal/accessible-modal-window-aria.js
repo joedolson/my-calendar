@@ -193,9 +193,9 @@
 
     if (config.modalFocusBackId !== '') {
 		var modalReturn = findById( config.modalFocusBackId );
-		var modalReturnContainer = modalReturn.closest( 'article' );
+		var modalReturnContainer = modalReturn.closest( 'article' ); // only works when control is inside container.
 		if (modalReturnContainer ) {
-			modalReturnContainer.insertAdjacentElement( 'beforeEnd', config.modalContent );
+			modalReturnContainer.insertAdjacentElement( 'beforeEnd', config.modalContent.firstChild );
 		}
 	}
 
@@ -346,7 +346,7 @@
             var body = doc.querySelector('body');
             var wrapperBody = findById(WRAPPER_PAGE_JS);
             var modal = findById(MODAL_JS_ID);
-            var modalContent = findById(MODAL_CONTENT_JS_ID) ? findById(MODAL_CONTENT_JS_ID).innerHTML : '';
+            var modalContent = findById(MODAL_CONTENT_JS_ID) ? findById(MODAL_CONTENT_JS_ID) : '';
             var overlay = findById(MODAL_OVERLAY_ID);
             var modalButtonClose = findById(MODAL_BUTTON_JS_ID);
             var modalFocusBackId = modalButtonClose.getAttribute(MODAL_BUTTON_FOCUS_BACK_ID);
