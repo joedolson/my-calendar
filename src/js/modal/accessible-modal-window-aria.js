@@ -407,5 +407,5 @@
 
   document.addEventListener('DOMContentLoaded', onLoad);
 
-  window.van11yAccessibleModalWindowAria = attach;
+  window.accessibleModalWindowAria = attach;
 })(document);

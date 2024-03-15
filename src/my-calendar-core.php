@@ -407,10 +407,10 @@ function mc_enqueue_calendar_js() {
 	$listtype = mc_get_option( 'list_javascript' );
 	$minitype = mc_get_option( 'mini_javascript' );
 	if ( 'modal' === $gridtype || 'modal' === $listtype || 'modal' === $minitype ) {
-		$script = ( SCRIPT_DEBUG ) ? 'van11y/van11y-accessible-modal-window-aria.js' : 'van11y/van11y-accessible-modal-window-aria.min.js';
-		wp_enqueue_script( 'van11y-modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
+		$script = ( SCRIPT_DEBUG ) ? 'modal/accessible-modal-window-aria.js' : 'modal/accessible-modal-window-aria.min.js';
+		wp_enqueue_script( 'mc-modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
 		wp_localize_script(
-			'van11y-modal',
+			'mc-modal',
 			'mcm',
 			array(
 				'context' => (string) is_user_logged_in(),
@@ -710,8 +710,8 @@ function mc_register_scripts() {
 	wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 	$mcjs = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
 	wp_register_script( 'mc.mcjs', $mcjs, array( 'jquery', 'wp-a11y' ), $version, true );
-	$van11y = ( SCRIPT_DEBUG ) ? 'van11y/van11y-accessible-modal-window-aria.js' : 'van11y/van11y-accessible-modal-window-aria.min.js';
-	wp_register_script( 'van11y-modal', plugins_url( 'js/' . $van11y, __FILE__ ), array(), $version, true );
+	$modal = ( SCRIPT_DEBUG ) ? 'modal/accessible-modal-window-aria.js' : 'modal/accessible-modal-window-aria.min.js';
+	wp_register_script( 'mc-modal', plugins_url( 'js/' . $modal, __FILE__ ), array(), $version, true );
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
@@ -803,9 +803,9 @@ function mc_admin_styles() {
 			}
 			$gridtype = mc_get_option( 'calendar_javascript' );
 			if ( 'modal' === $gridtype ) {
-				wp_enqueue_script( 'van11y-modal' );
+				wp_enqueue_script( 'mc-modal' );
 				wp_localize_script(
-					'van11y-modal',
+					'mc-modal',
 					'mcm',
 					array(
 						'context' => (string) is_user_logged_in(),
