@@ -951,7 +951,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 	$edit = '';
 	if ( mc_can_edit_event( $event ) &amp;&amp; mc_get_option( 'remote' ) !== 'true' ) {
 		$mc_id     = $event->occur_id;
-		$groupedit = ( 0 !== (int) $event->event_group_id ) ? " &amp;bull; &lt;a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;mode=edit&amp;amp;event_id=$event->event_id&amp;amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . "&lt;/a>\n" : '';
+		$groupedit = ( 0 !== (int) $event->event_group_id ) ? "&lt;li>&lt;a href='" . admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;mode=edit&amp;amp;event_id=$event->event_id&amp;amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . '&lt;/a>&lt;/li>' : '';
 		$recurs    = str_split( $event->event_recur, 1 );
 		$recur     = $recurs[0];
 		$referer   = urlencode( mc_get_current_url() );
