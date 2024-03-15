@@ -772,7 +772,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['ical_location']   = '';
 	}
 
-	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
+	$strip_desc = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
 	if ( mc_is_all_day( $event ) ) {
 		$google_start = mc_date( 'Ymd', strtotime( $dtstart ), false );
 		$google_end   = mc_date( 'Ymd', strtotime( $dtend ), false );
