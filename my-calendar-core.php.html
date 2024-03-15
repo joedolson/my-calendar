@@ -1168,6 +1168,19 @@ function mc_do_upgrades( $upgrade_path ) {
 		switch ( $upgrade ) {
 			case '3.5.0':
 				// Need to set card display settings. TODO.
+				$options = get_option( 'my_calendar_options' );
+				$caljs   = $options['calendar_javascript'];
+				$minijs  = $options['mini_javascript'];
+				$listjs  = $options['list_javascript'];
+				if ( 0 === (int) $caljs ) {
+					$options['calendar_javascript'] = 'disclosure';
+				}
+				if ( 0 === (int) $minijs ) {
+					$options['mini_javascript'] = 'disclosure';
+				}
+				if ( 0 === (int) $listjs ) {
+					$options['list_javascript'] = 'disclosure';
+				}
 				break;
 			case '3.4.0':
 				mc_migrate_settings();
