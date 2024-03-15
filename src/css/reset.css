@@ -732,6 +732,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	font-size: clamp( .75rem, 16px, 1.5rem );
 	font-weight: 400;
 	text-decoration: none;
+	margin: 0 2px;
 }
 
 .mc-main .my-calendar-navigation select:focus,
