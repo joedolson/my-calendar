@@ -1230,6 +1230,7 @@ dialog.my-calendar-modal #modal-title {
 	font-size: 1.5rem;
 	margin: 0;
 	margin-right: 64px;
+	box-sizing: border-box;
 }
 
 dialog.my-calendar-modal .modal-content {
