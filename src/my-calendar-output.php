@@ -239,7 +239,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 * @return {string} Return empty string to display header only.
 	 */
 	$details = apply_filters( 'mc_event_details_output', $details, $event );
- 	if ( ! $details ) {
+	if ( ! $details ) {
 		/**
 		 * Filter container before event details when view details panel is disabled.
 		 *
