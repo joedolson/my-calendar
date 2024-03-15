@@ -1172,15 +1172,16 @@ function mc_do_upgrades( $upgrade_path ) {
 				$caljs   = $options['calendar_javascript'];
 				$minijs  = $options['mini_javascript'];
 				$listjs  = $options['list_javascript'];
-				if ( 0 === (int) $caljs ) {
+				if ( ! $caljs ) {
 					$options['calendar_javascript'] = 'disclosure';
 				}
-				if ( 0 === (int) $minijs ) {
+				if ( ! $minijs ) {
 					$options['mini_javascript'] = 'disclosure';
 				}
-				if ( 0 === (int) $listjs ) {
+				if ( ! $listjs ) {
 					$options['list_javascript'] = 'disclosure';
 				}
+				update_option( 'my_calendar_options', $options );
 				break;
 			case '3.4.0':
 				mc_migrate_settings();
