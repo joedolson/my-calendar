@@ -382,6 +382,7 @@ function mc_delete_location( $location, $type = 'string' ) {
 		$value  = false;
 		$return = mc_show_error( __( 'Location could not be deleted', 'my-calendar' ), false );
 	}
+	delete_transient( 'mc_location_' . $location );
 
 	return ( 'string' === $type ) ? $return : $value;
 }
