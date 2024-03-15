@@ -249,10 +249,9 @@ function my_calendar_upcoming_events( $args ) {
 			if ( $i < $skip && 0 !== $skip ) {
 				++$i;
 			} else {
-				$today   = current_time( 'Y-m-d H:i' );
 				$date    = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
 				$classes = mc_get_event_classes( $event, 'upcoming' );
-				$prepend = "<li class='$classes'>";
+				$prepend = "<li class='mc-events $classes'>";
 				$append  = '</li>';
 				/**
 				 * Opening elements for upcoming events list items. Default `<li class="$classes">`.
