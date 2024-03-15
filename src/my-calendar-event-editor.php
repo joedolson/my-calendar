@@ -667,10 +667,6 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$formats,
 					'%d'
 				);
-				// Delete transient caches.
-				delete_transient( 'mc_categories_' . $event_id );
-				delete_transient( 'mc_first_event_cache_' . $event_id );
-				delete_transient( 'mc_get_date_bounds' );
 
 				if ( ! isset( $post['event_recur'] ) && isset( $post['event_repeats'] ) ) {
 					unset( $post['event_repeats'] );
@@ -707,6 +703,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			 * @param {int|false} $result Result of the DB update query.
 			 */
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
+			// Delete transient caches.
+			delete_transient( 'mc_categories_' . $event_id );
+			delete_transient( 'mc_first_event_cache_' . $event_id );
+			delete_transient( 'mc_get_date_bounds' );
 			if ( false === $result ) {
 				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} else {
