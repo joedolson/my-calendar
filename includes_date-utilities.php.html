@@ -653,7 +653,7 @@ function mc_date_array( $timestamp, $period, $months = 0 ) {
 			 * This looks magic, but it's logical. The problem here is that
 			 * strtotime( "+ 1 month" ) doesn't always yield the next month.
 			 * But it does always yield something close to it. If the date is
-			 * more than length of new month - 7, then this is the end of the month, and can be increased.
+			 * more than length - 7, this is late in the month, and can be increased.
 			 */
 			if ( $calculated_date &lt; $last_of_month &amp;&amp; $calculated_date > $boundary ) {
 				$n  = $n + 7;
