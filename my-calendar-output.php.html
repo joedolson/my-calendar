@@ -2188,7 +2188,7 @@ function my_calendar( $args ) {
 									$marker = ( count( $events ) > 1 ) ? '&amp;#9679;&amp;#9679;' : '&amp;#9679;';
 									// Translators: Number of events on this date.
 									$inner = ( count( $events ) > 0 ) ? '&lt;span class="event-icon" aria-hidden="true">' . $marker . '&lt;/span>&lt;span class="screen-reader-text">&lt;span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')&lt;/span>&lt;/span>' : '';
-									$body .= "&lt;$td id='$params[format]-$date_is'$ariacurrent class='$dateclass $weekend_class $monthclass $events_class day-with-date'>&lt;div class='mc-date-container$has_month'>$month_heading" . "\n	&lt;$element class='mc-date$trigger'>&lt;span aria-hidden='true'>$thisday_heading&lt;/span>&lt;span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "&lt;/span>$inner&lt;/$close>&lt;/div>" . $event_output . "\n&lt;/$td>\n";
+									$body .= "&lt;$td id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $weekend_class $monthclass $events_class day-with-date'>&lt;div class='mc-date-container$has_month'>$month_heading" . "\n	&lt;$element class='mc-date$trigger'>&lt;span aria-hidden='true'>$thisday_heading&lt;/span>&lt;span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "&lt;/span>$inner&lt;/$close>&lt;/div>" . $event_output . "\n&lt;/$td>\n";
 								}
 							}
 						} else {
