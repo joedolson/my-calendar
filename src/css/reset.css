@@ -699,6 +699,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	color: var(--nav-input-color);
 	-webkit-appearance: none;
 	appearance: none;
+	line-height: inherit;
 }
 
 .mc-main .my-calendar-navigation select:not(.my-calendar-admin select) {
