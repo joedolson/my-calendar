@@ -198,8 +198,9 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	$exit_early = mc_exit_early( $event, $process_date );
 	if ( $exit_early ) {
 		return array(
-			'html' => '',
-			'id'   => '',
+			'html'  => '',
+			'event' => '',
+			'group' => '',
 		);
 	}
 	/**
@@ -227,7 +228,18 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
 	}
 	$header = mc_draw_event_header( $data, $type, $template );
-	if ( ! $details ) {
+	/**
+	 * Filter event details HTML. Content not including title header.
+	 *
+	 * @hook mc_event_details_output
+	 *
+	 * @param {string} $details HTML string. Default empty.
+	 * @param {object} $event My Calendar event.
+	 *
+	 * @return {string} Return empty string to display header only.
+	 */
+	$details = apply_filters( 'mc_event_details_output', $details, $event );
+ 	if ( ! $details ) {
 		/**
 		 * Filter container before event details when view details panel is disabled.
 		 *
@@ -255,9 +267,14 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 */
 		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time );
 		$details = $before . $header . $after;
+
+		return array(
+			'html'  => $details,
+			'group' => $event->event_group_id,
+			'event' => $event->event_id,
+		);
 	}
 
-	$details      = apply_filters( 'mc_event_details_output', $details, $event );
 	$container_id = mc_event_container_id( $type, $process_date, $event );
 	$close_button = mc_close_button( $container_id );
 	// Since 3.2.0, close button is added to event container in mini calendar.
