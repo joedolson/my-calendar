@@ -509,9 +509,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// Date &amp; time fields.
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
+	$real_end_time   = ( mc_is_all_day( $event ) ) ? strtotime( $real_end_date ) + 60 : strtotime( $real_end_date );
 	$real_begin_date = ( isset( $event->occur_begin ) ) ? $event->occur_begin : $event->event_begin . ' ' . $event->event_time;
 	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ), $context );
-	$dtend           = mc_format_timestamp( strtotime( $real_end_date ), $context );
+	$dtend           = mc_format_timestamp( $real_end_time, $context );
 	$recur_start     = mc_format_timestamp( strtotime( $event->event_begin . ' ' . $event->event_time ), $context );
 	$recur_end       = mc_format_timestamp( strtotime( $event->event_end . ' ' . $event->event_endtime ), $context );
 	/**
@@ -544,7 +545,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['runtime']      = mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event );
 	$e['duration']     = mc_duration( $event );
 	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ), false );  // Date: hcal formatted.
-	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_end_date ), false );    // Date: hcal formatted end.
+	$hcal_dt_end       = ( mc_is_all_day( $event ) ) ? strtotime( $real_end_date ) + 60 : strtotime( $real_end_date );
+	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', $hcal_dt_end, false );    // Date: hcal formatted end.
 	$e['userstart']    = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '&lt;/time>';
 	$e['userend']      = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '&lt;/time>';
 	$e['datebadge']    = '&lt;time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', strtotime( $real_begin_date ) ) . '">&lt;span class="month">' . mc_date( 'M', strtotime( $real_begin_date ) ) . '&lt;/span>&lt;span class="day">' . mc_date( 'j', strtotime( $real_begin_date ) ) . '&lt;/span>&lt;/time>';
@@ -771,7 +773,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	}
 
 	$strip_desc     = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
-	$e['gcal']      = mc_google_cal( $dtstart, $dtend, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
+	if ( mc_is_all_day( $event ) ) {
+		$google_start = mc_date( 'Ymd', strtotime( $dtstart ), false );
+		$google_end   = mc_date( 'Ymd', strtotime( $dtend ), false );
+	} else {
+		$google_start = $dtstart;
+		$google_end   = $dtend;
+	}
+	$e['gcal']      = mc_google_cal( $google_start, $google_end, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
 	$e['gcal_link'] = "&lt;a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'Google Calendar', 'my-calendar' ) . '&lt;/a>';
 
 	// IDs.
@@ -782,9 +791,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// ICAL.
 	$e['ical_desc']       = $strip_desc;
-	$e['ical_start']      = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $recur_start ) ) : $recur_start;
+	$e['ical_start']      = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $recur_start ), false ) : $recur_start;
 	$e['ical_end']        = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $recur_end ) + 60, false ) : $recur_end;
-	$e['ical_date_start'] = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $dtstart ) ) : $dtstart;
+	$e['ical_date_start'] = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $dtstart ), false ) : $dtstart;
 	$e['ical_date_end']   = ( mc_is_all_day( $event ) ) ? mc_date( 'Ymd', strtotime( $dtend ) + 60, false ) : $dtend;
 	$e['ical_recur']      = mc_generate_rrule( $event );
 	$ical_link            = mc_build_url(
