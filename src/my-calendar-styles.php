@@ -132,8 +132,12 @@ function my_calendar_style_edit() {
 		</p>
 	</form>
 	</div>
+	<div class="my-calendar-style-preview">
 	<?php
 	echo do_shortcode( '[my_calendar]' );
+	?>
+	</div>
+	<?php
 }
 
 /**
