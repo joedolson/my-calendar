@@ -642,23 +642,17 @@ function mc_deal_with_deleted_user( $id, $reassign ) {
  * Write custom JS in admin head.
  */
 function mc_write_js() {
-	if ( isset( $_GET['page'] ) &amp;&amp; ( 'my-calendar' === $_GET['page'] || 'my-calendar-config' === $_GET['page'] ) ) {
+	if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; isset( $_GET['page'] ) &amp;&amp; 'my-calendar' === $_GET['page'] ) {
 		?>
 		&lt;script>
 			//&lt;![CDATA[
 			jQuery(document).ready(function ($) {
 				$( '#mc-accordion' ).accordion( { collapsible: true, active: false, heightStyle: 'content' } );
-				&lt;?php
-				if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; isset( $_GET['page'] ) &amp;&amp; 'my-calendar' === $_GET['page'] ) {
-					?>
 				let mc_allowed = $( '#mc_twitter' ).attr( 'data-allowed' );
 				$('#mc_twitter').charCount({
 					allowed: mc_allowed,
 					counterText: '&lt;?php esc_html_e( 'Characters left: ', 'my-calendar' ); ?>'
 				});
-					&lt;?php
-				}
-				?>
 			});
 			//]]>
 		&lt;/script>
