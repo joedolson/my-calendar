@@ -1893,7 +1893,7 @@ function mc_event_location_dropdown_block( $data ) {
 						$loc_name = ( $location_link ) ? '<a href="' . esc_url( $location_link ) . '" target="blank">' . sprintf( __( 'Edit %s', 'my-calendar' ), $base_loc ) . ' (' . __( 'New tab', 'my-calendar' ) . ')</a>' : $base_loc;
 						// Translators: Link to edit current location, e.g. 'Edit %s'.
 						$current_location  = "<div id='mc-current-location'><span class='dashicons dashicons-location' aria-hidden='true'></span>" . sprintf( __( 'Current location: %s', 'my-calendar' ), $loc_name ) . '</div>';
-						$current_location .= "<input type='hidden' name='preset_location' value='$event_location' />";
+						$current_location .= "<input type='hidden' id='preset_l' name='preset_location' value='$event_location' />";
 					}
 					$fields .= "<option value='" . $loc->location_id . "'$selected />" . $base_loc . '</option>';
 				}

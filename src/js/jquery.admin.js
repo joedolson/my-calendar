@@ -154,8 +154,10 @@ jQuery(document).ready(function ($) {
 
 	const addLocations = document.querySelector( '.add-location' );
 	if ( null !== addLocations ) {
-		let locationSelector = document.getElementById( 'l_preset' );
-		let locationValue    = locationSelector.value;
+		let locationSelector    = document.getElementById( 'l_preset' );
+		let presetLocation      = document.getElementById( 'preset_l' );
+		let locationValue       = locationSelector.value;
+		let presetLocationValue = presetLocation.value;
 
 		let controls = addLocations.getAttribute( 'aria-controls' );
 		const fields = document.getElementById( controls );
@@ -164,12 +166,14 @@ jQuery(document).ready(function ($) {
 			let expanded = this.getAttribute( 'aria-expanded' );
 			if ( 'true' === expanded ) {
 				locationSelector.value = locationValue;
+				presetLocation.value   = presetLocationValue;
 				fields.classList.add( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'false' );
 				this.firstChild.classList.add( 'dashicons-plus' );
 				this.firstChild.classList.remove( 'dashicons-minus' );
 			} else {
 				locationSelector.value = 'none';
+				presetLocation.value   = '';
 				fields.classList.remove( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'true' );
 				this.firstChild.classList.add( 'dashicons-minus' );
