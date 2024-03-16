@@ -442,7 +442,7 @@ function my_calendar_edit() {
 		if ( isset( $post['ref'] ) ) {
 			$url = urldecode( sanitize_text_field( $post['ref'] ) );
 			// A link to the main calendar is always shown. Only show this if it was a different calendar.
-			if ( $url !== mc_get_uri() ) {
+			if ( mc_get_uri() !== $url ) {
 				mc_show_notice( "&lt;a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '&lt;/a>' );
 			}
 		}
@@ -1620,7 +1620,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				 * @return {string}
 				 */
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
-
 				if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; current_user_can( 'wpt_can_tweet' ) ) {
 					if ( ! ( 'edit' === $mode &amp;&amp; 1 === (int) $data->event_approved ) ) {
 						$mc_allowed = absint( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : 140 );

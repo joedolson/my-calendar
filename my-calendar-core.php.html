@@ -642,7 +642,9 @@ function mc_deal_with_deleted_user( $id, $reassign ) {
  * Write custom JS in admin head.
  */
 function mc_write_js() {
-	if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; isset( $_GET['page'] ) &amp;&amp; 'my-calendar' === $_GET['page'] ) {
+	$is_calendar = ( isset( $_GET['page'] ) &amp;&amp; 'my-calendar' === $_GET['page'] ) ? true : false;
+	$is_edit     = ( isset( $_GET['mode'] ) &amp;&amp; 'edit' === $_GET['mode'] ) ? true : false;
+	if ( function_exists( 'wpt_post_to_twitter' ) &amp;&amp; $is_calendar &amp;&amp; ! $is_edit ) {
 		?>
 		&lt;script>
 			//&lt;![CDATA[
@@ -736,11 +738,11 @@ function mc_register_scripts() {
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
 	wp_register_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
-	wp_register_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), $version );
+	wp_register_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), $version, true );
 	wp_register_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $version );
 	// Enqueue datepicker options.
 	$mcdp = ( SCRIPT_DEBUG ) ? plugins_url( 'js/mc-datepicker.js', __FILE__ ) : plugins_url( 'js/mc-datepicker.min.js', __FILE__ );
-	wp_register_script( 'mc.duet', $mcdp, array( 'duet.js' ), $version, false );
+	wp_register_script( 'mc.duet', $mcdp, array( 'duet.js' ), $version, true );
 	$adminjs = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.admin.js', __FILE__ ) : plugins_url( 'js/jquery.admin.min.js', __FILE__ );
 	wp_register_script( 'mc.admin', $adminjs, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 	wp_register_script( 'mc.admin-footer', plugins_url( 'js/admin.js', __FILE__ ), array( 'wp-a11y', 'clipboard' ), $version, true );
@@ -1832,7 +1834,6 @@ function mc_scripts() {
 	}
 
 	if ( 'toplevel_page_my-calendar' === $id &amp;&amp; function_exists( 'wpt_post_to_twitter' ) ) {
-		// When running locally, this is wrong. May change in the future.
 		wp_enqueue_script( 'wpt.charcount' );
 	}
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {
