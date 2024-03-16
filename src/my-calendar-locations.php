@@ -424,14 +424,14 @@ function my_calendar_add_locations() {
 			'location_access'    => isset( $post['location_access'] ) ? serialize( $post['location_access'] ) : '',
 		);
 
-		$results = mc_insert_location( $add );
+		$location_id = mc_insert_location( $add );
 		// If this is being generated from an event/location merge, update the event to the new location ID.
 		if ( isset( $_GET['event_source'] ) ) {
 			$source = absint( $_GET['event_source'] );
-			mc_update_data( $source, 'event_location', $results );
+			mc_update_data( $source, 'event_location', $location_id );
 		}
 		if ( isset( $post['mc_default_location'] ) ) {
-			mc_update_option( 'default_location', (int) $results );
+			mc_update_option( 'default_location', (int) $location_id );
 		}
 		/**
 		 * Execute an action when a location is saved.
@@ -442,9 +442,15 @@ function my_calendar_add_locations() {
 		 * @param {array} $add Array of location parameters to add.
 		 * @param {array} $post POST array.
 		 */
-		$results = apply_filters( 'mc_save_location', $results, $add, $post );
+		$results = apply_filters( 'mc_save_location', $location_id, $add, $post );
 		if ( $results ) {
-			mc_show_notice( __( 'Location added successfully', 'my-calendar' ) );
+			$args     = array(
+				'mode'        => 'edit',
+				'location_id' => $location_id,
+			);
+			$edit_url = add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-locations' ) );
+			// Translators: Link to edit new location.
+			mc_show_notice( sprintf( __( 'Location added successfully. <a href="%s">Edit location.</a>', 'my-calendar' ), $edit_url ) );
 		} else {
 			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
