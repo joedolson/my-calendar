@@ -853,8 +853,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$return         .= '</p>';
 	$image_field     = '';
 	if ( 'location' === $context ) {
-		$location_id = (int) $_GET['location_id'];
-		$post_id     = mc_get_location_post( $location_id );
+		$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : false;
+		$post_id     = ( $location_id ) ? mc_get_location_post( $location_id ) : false;
 		$image_field = mc_location_featured_image_field( $post_id );
 	}
 	$return  .= $image_field;
