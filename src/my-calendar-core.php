@@ -1806,7 +1806,6 @@ function mc_scripts() {
 	}
 
 	if ( 'toplevel_page_my-calendar' === $id && function_exists( 'wpt_post_to_twitter' ) ) {
-		// When running locally, this is wrong. May change in the future.
 		wp_enqueue_script( 'wpt.charcount' );
 	}
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {
