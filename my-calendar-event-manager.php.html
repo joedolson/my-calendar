@@ -1137,8 +1137,11 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 	if ( is_object( $event ) ) {
 		$event_id     = $event->event_id;
 		$event_author = $event->event_author;
-	} elseif ( is_int( $event ) ) {
-		$event_id = $event;
+	} else {
+		$event_id = absint( $event );
+		if ( ! $event_id ) {
+			return false;
+		}
 		if ( 'event' === $datatype ) {
 			$event = mc_get_first_event( $event );
 			if ( ! is_object( $event ) ) {
