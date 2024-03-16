@@ -157,7 +157,7 @@ jQuery(document).ready(function ($) {
 		let locationSelector    = document.getElementById( 'l_preset' );
 		let presetLocation      = document.getElementById( 'preset_l' );
 		let locationValue       = locationSelector.value;
-		let presetLocationValue = presetLocation.value;
+		let presetLocationValue = ( presetLocation ) ? presetLocation.value : '';
 
 		let controls = addLocations.getAttribute( 'aria-controls' );
 		const fields = document.getElementById( controls );
