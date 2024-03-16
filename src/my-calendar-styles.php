@@ -232,7 +232,7 @@ function mc_stylesheet_selector() {
 	$return  .= '
 		<fieldset>
 			<p>
-				<label for="mc_css_file">' . __( 'Select My Calendar Theme', 'my-calendar' ) . '</label><br />
+				<label for="mc_css_file">' . __( 'Select Theme (optional)', 'my-calendar' ) . '</label><br />
 				<select name="mc_css_file" id="mc_css_file"><option value="">' . __( 'None', 'my-calendar' ) . '</option>' . $options . '</select>
 			</p>
 			<p>
