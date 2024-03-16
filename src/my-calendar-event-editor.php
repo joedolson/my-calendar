@@ -607,7 +607,12 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
 		if ( mc_can_edit_event( $event_id ) ) {
 			$update = isset( $output['checked'] ) ? $output['checked'] : $output[2];
-			$cats   = $update['event_categories'];
+			// If the previously stored location is not the same as a new location, remove event location fields.
+			if ( $post['preset_location'] !== $post['location_preset'] && ! empty( $post['event_label'] ) ) {
+				mc_remove_location_from_event( $event_id );
+			}
+			// Update event category data.
+			$cats = $update['event_categories'];
 			unset( $update['event_categories'] );
 			mc_update_category_relationships( $cats, $event_id );
 
@@ -2688,9 +2693,8 @@ function mc_insert_instance( $args ) {
  */
 function mc_update_data( $event_id, $field, $value, $format = '%d' ) {
 	global $wpdb;
-	$data    = array( $field => $value );
-	$formats = ( $format );
-	$result  = $wpdb->update( my_calendar_table(), $data, array( 'event_id' => $event_id ), $formats, '%d' );
+	$data   = array( $field => $value );
+	$result = $wpdb->update( my_calendar_table(), $data, array( 'event_id' => $event_id ), $format, '%d' );
 
 	return $result;
 }

@@ -715,6 +715,21 @@ function mc_get_location( $location_id, $update_location = true ) {
 }
 
 /**
+ * Remove event data stored on an event.
+ *
+ * Helper to prevent unneeded data change notifications & make the transition to single storage easier.
+ *
+ * @param int $event_id Event ID.
+ */
+function mc_remove_location_from_event( $event_id ) {
+	$fields = array( 'label', 'street', 'street2', 'city', 'state', 'postcode', 'region', 'country', 'url', 'phone', 'phone2', 'longitude', 'latitude' );
+	foreach ( $fields as $field ) {
+		$format = ( 'longitude' === $field || 'latitude' === $field ) ? '%f' : '%s';
+		$value  = ( 'longitude' === $field || 'latitude' === $field ) ? 0 : '';
+		mc_update_data( $event_id, 'event_' . $field, $value, $format );
+	}
+}
+/**
  * Check whether this location field has pre-entered controls on input
  *
  * @param string $this_field field name.
