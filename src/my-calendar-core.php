@@ -616,23 +616,17 @@ function mc_deal_with_deleted_user( $id, $reassign ) {
  * Write custom JS in admin head.
  */
 function mc_write_js() {
-	if ( isset( $_GET['page'] ) && ( 'my-calendar' === $_GET['page'] || 'my-calendar-config' === $_GET['page'] ) ) {
+	if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_GET['page'] ) && 'my-calendar' === $_GET['page'] ) {
 		?>
 		<script>
 			//<![CDATA[
 			jQuery(document).ready(function ($) {
 				$( '#mc-accordion' ).accordion( { collapsible: true, active: false, heightStyle: 'content' } );
-				<?php
-				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_GET['page'] ) && 'my-calendar' === $_GET['page'] ) {
-					?>
 				let mc_allowed = $( '#mc_twitter' ).attr( 'data-allowed' );
 				$('#mc_twitter').charCount({
 					allowed: mc_allowed,
 					counterText: '<?php esc_html_e( 'Characters left: ', 'my-calendar' ); ?>'
 				});
-					<?php
-				}
-				?>
 			});
 			//]]>
 		</script>
