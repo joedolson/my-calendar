@@ -1331,8 +1331,8 @@ body.mc-no-scroll {
 .my-calendar-modal-close:focus,
 .my-calendar-modal-close:hover,
 .my-calendar-modal-close:active {
-  color: var(--close-button);
-  background: var(--primary-light);
+  outline: 2px solid var(--primary-light);
+  outline-offset: -4px;
 }
 
 .my-calendar-modal {
