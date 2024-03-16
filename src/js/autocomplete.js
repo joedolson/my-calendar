@@ -130,7 +130,7 @@
 			onSubmit: result => {
 				let location_field = document.getElementById( 'e_country' );
 
-				icon_field.value = result.country;
+				location_field.value = result.country;
 				$( location_field ).trigger( 'change' );
 			},
 			renderResult: (result, props) => `
