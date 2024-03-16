@@ -2131,7 +2131,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_hide_end     = '';
 	$event_longitude    = '';
 	$event_latitude     = '';
-	$event_location     = '';
+	$saved_location     = '';
 	$event_link         = '';
 	$repeats            = '';
 	$title              = '';
@@ -2309,7 +2309,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			// Is a preset chosen?
 			$location_to_set = ( is_numeric( $select_location ) ) ? $select_location : $saved_location;
 			if ( ! is_numeric( $location_to_set ) ) {
-				// No, we're adding a new location.
+				// The location to set is not an integer, but 'event_label' exists, so add a new location.
 				$event_label       = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
 				$event_street      = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
 				$event_street2     = ! empty( $post['event_street2'] ) ? $post['event_street2'] : '';
