@@ -492,25 +492,25 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	/**
 	 * Start date format used in 'date_utc'. Default from My Calendar settings.
 	 *
-	 * @hook mc_date_format
+	 * @hook mc_date_utc_format
 	 *
 	 * @param {string} $format Date Format in PHP date format.
 	 * @param {string} $context 'template_begin_ts'.
 	 *
 	 * @return {string} Date format.
 	 */
-	$e['date_utc'] = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
+	$e['date_utc'] = date_i18n( apply_filters( 'mc_date_utc_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
 	/**
 	 * End date format used in 'date_end_utc'. Default from My Calendar settings.
 	 *
-	 * @hook mc_date_format
+	 * @hook mc_date_utc_format
 	 *
 	 * @param {string} $format Date Format in PHP date format.
 	 * @param {string} $context 'template_end_ts'.
 	 *
 	 * @return {string} Date format.
 	 */
-	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
+	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_utc_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
 	$notime            = esc_html( mc_notime_label( $event ) );
 	$e['time']         = ( '00:00:00' === mc_date( 'H:i:s', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
 	$e['time24']       = ( '00:00' === mc_date( 'G:i', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
@@ -527,25 +527,25 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	/**
 	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
 	 *
-	 * @hook mc_date_format
+	 * @hook mc_daterange_begin_format
 	 *
 	 * @param {string} $format Date Format in PHP date format.
 	 * @param {string} $context 'template_begin'.
 	 *
 	 * @return {string} Date format.
 	 */
-	$date = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
+	$date = date_i18n( apply_filters( 'mc_daterange_begin_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
 	/**
 	 * End date format used in 'enddate' and 'daterange' template tags. Default from My Calendar settings.
 	 *
-	 * @hook mc_date_format
+	 * @hook mc_daterange_end_format
 	 *
 	 * @param {string} $format Date Format in PHP date format.
 	 * @param {string} $context 'template_end'.
 	 *
 	 * @return {string} Date format.
 	 */
-	$date_end = date_i18n( apply_filters( 'mc_date_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
+	$date_end = date_i18n( apply_filters( 'mc_daterange_end_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
 	$date_arr = array(
 		'occur_begin' => $real_begin_date,
 		'occur_end'   => $real_end_date,
