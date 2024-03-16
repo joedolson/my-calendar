@@ -29,12 +29,12 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 	// Check if this is an ajax request.
 	$post_post = isset( $_POST['post'] ) ? $_POST['post'] : array();
 	$post_data = ( wp_doing_ajax() && ! empty( $_POST ) ) ? $post_post : $_POST;
-	$post_data = map_deep( $post_data, 'wp_kses_post' );
-	if ( $post_data !== $_POST ) {
+	if ( $post_data !== $_POST && is_string( $post_data ) ) {
 		parse_str( $post_data, $post );
 	} else {
 		$post = $post_data;
 	}
+	$post = map_deep( $post_data, 'wp_kses_post' );
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
@@ -223,12 +223,12 @@ function mc_create_event_post( $data, $event_id ) {
 	// Check if this is an ajax request.
 	$post_post = isset( $_POST['post'] ) ? $_POST['post'] : array();
 	$post_data = ( wp_doing_ajax() && ! empty( $_POST ) ) ? $post_post : $_POST;
-	$post_data = map_deep( $post_data, 'wp_kses_post' );
-	if ( $post_data !== $_POST ) {
+	if ( $post_data !== $_POST && is_string( $post_data ) ) {
 		parse_str( $post_data, $post );
 	} else {
 		$post = $post_data;
 	}
+	$post = map_deep( $post_data, 'wp_kses_post' );
 	if ( ! $post_id ) {
 		$categories = mc_get_categories( $event_id );
 		$terms      = array();
@@ -389,6 +389,7 @@ function my_calendar_edit() {
 	}
 
 	if ( isset( $_POST['event_action'] ) ) {
+		$post  = map_deep( $_POST, 'mc_kses_post' );
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
@@ -397,24 +398,23 @@ function my_calendar_edit() {
 		global $mc_output;
 		$count = 0;
 
-		if ( isset( $_POST['event_begin'] ) && is_array( $_POST['event_begin'] ) ) {
-			$count = count( $_POST['event_begin'] );
+		if ( isset( $post['event_begin'] ) && is_array( $post['event_begin'] ) ) {
+			$count = count( $post['event_begin'] );
 		} else {
-			$response = my_calendar_save( $action, $mc_output, (int) $_POST['event_id'] );
+			$response = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
 			echo wp_kses_post( $response['message'] );
 		}
-		$post = map_deep( $_POST, 'mc_kses_post' );
 		for ( $i = 0; $i < $count; $i++ ) {
 			$mc_output = mc_check_data( $action, $post, $i );
 			if ( 'add' === $action || 'copy' === $action ) {
 				$response = my_calendar_save( $action, $mc_output );
 			} else {
-				$response = my_calendar_save( $action, $mc_output, (int) $_POST['event_id'] );
+				$response = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
 			}
 			echo wp_kses_post( $response['message'] );
 		}
-		if ( isset( $_POST['ref'] ) ) {
-			$url = urldecode( sanitize_text_field( $_POST['ref'] ) );
+		if ( isset( $post['ref'] ) ) {
+			$url = urldecode( sanitize_text_field( $post['ref'] ) );
 			echo wp_kses_post( "<p class='return'><a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a></p>' );
 		}
 	}
