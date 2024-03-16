@@ -743,6 +743,9 @@ function mc_register_scripts() {
 	// Enqueue datepicker options.
 	$mcdp = ( SCRIPT_DEBUG ) ? plugins_url( 'js/mc-datepicker.js', __FILE__ ) : plugins_url( 'js/mc-datepicker.min.js', __FILE__ );
 	wp_register_script( 'mc.duet', $mcdp, array( 'duet.js' ), $version, true );
+	$charcount = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.charcount.js', __FILE__ ) : plugins_url( 'js/jquery.charcount.min.js', __FILE__ );
+	wp_register_script( 'mc.charcount', $charcount, array( 'jquery' ), $version );
+
 	$adminjs = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.admin.js', __FILE__ ) : plugins_url( 'js/jquery.admin.min.js', __FILE__ );
 	wp_register_script( 'mc.admin', $adminjs, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
 	wp_register_script( 'mc.admin-footer', plugins_url( 'js/admin.js', __FILE__ ), array( 'wp-a11y', 'clipboard' ), $version, true );
@@ -1834,7 +1837,7 @@ function mc_scripts() {
 	}
 
 	if ( 'toplevel_page_my-calendar' === $id &amp;&amp; function_exists( 'wpt_post_to_twitter' ) ) {
-		wp_enqueue_script( 'wpt.charcount' );
+		wp_enqueue_script( 'mc.charcount' );
 	}
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {
 		if ( current_user_can( 'mc_manage_events' ) ) {
