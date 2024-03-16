@@ -566,10 +566,6 @@
 	z-index: 10001 !important;
 }
 
-.my-calendar-modal-close {
-	border-radius: 0 2px 0 4px;
-}
-
 /* Override overflow:hidden */
 main,div.entry-content,div.site-content, table, .mc-main nav {
 	overflow: visible !important; 
@@ -1319,10 +1315,10 @@ body.mc-no-scroll {
 }
 .my-calendar-modal-close {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 3px;
+  right: 3px;
   background: var(--close-button);
-  border-radius: 0 8px 0 4px;
+  border-radius: 3px;
   color: var(--primary-light);
   border: 0;
   padding: 12px;
