@@ -1171,7 +1171,7 @@ add_filter( 'mc_filter_shortcodes', 'mc_template_location_fields', 10, 2 );
  * @return string
  */
 function mc_location_featured_image_field( $post_id ) {
-	$image       = ( has_post_thumbnail( $post_id ) ) ? get_the_post_thumbnail_url( $post_id ) : '';
+	$image       = ( has_post_thumbnail( $post_id ) ) ? get_the_post_thumbnail_url( $post_id, array( '150', '150' ) ) : '';
 	$image_id    = ( has_post_thumbnail( $post_id ) ) ? get_post_thumbnail_id( $post_id ) : '';
 	$button_text = __( 'Select Featured Image', 'my-calendar' );
 	$remove      = '';

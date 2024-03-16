@@ -374,13 +374,16 @@ ul.mc-file-list ul li {
 	margin-bottom: 1em;
 }
 
-.my-calendar-admin .event_image {
-	margin-top: 8px;
-	position: relative;
+.my-calendar-admin .mc-image-upload {
+	display: flex;
+	background: rgba( 0,0,0,.03 );
+	padding: .5rem;
+	margin-bottom: .5rem;
+	gap: 10px;
 }
 
-.my-calendar-admin .event_image img {
-	max-width: 600px;
+.my-calendar-admin .event_image {
+	position: relative;
 }
 
 .event_image:has(img[alt="Current image: "]):after {
