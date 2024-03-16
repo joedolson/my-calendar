@@ -415,7 +415,10 @@ function my_calendar_edit() {
 		}
 		if ( isset( $post['ref'] ) ) {
 			$url = urldecode( sanitize_text_field( $post['ref'] ) );
-			echo wp_kses_post( "<p class='return'><a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a></p>' );
+			// A link to the main calendar is always shown. Only show this if it was a different calendar.
+			if ( $url !== mc_get_uri() ) {
+				mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>' );
+			}
 		}
 	}
 	?>
