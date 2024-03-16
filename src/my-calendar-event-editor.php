@@ -1594,7 +1594,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				 * @return {string}
 				 */
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
-
 				if ( function_exists( 'wpt_post_to_twitter' ) && current_user_can( 'wpt_can_tweet' ) ) {
 					if ( ! ( 'edit' === $mode && 1 === (int) $data->event_approved ) ) {
 						$mc_allowed = absint( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : 140 );
