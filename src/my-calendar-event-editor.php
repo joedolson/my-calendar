@@ -1918,7 +1918,7 @@ function mc_event_location_dropdown_block( $data ) {
 		$add_url   = add_query_arg( 'event_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations' ) );
 		$merge_url = add_query_arg( 'merge_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit&location_id=' . absint( $data->event_location ) ) );
 		// translators: 1) URL to create a new location with this data; 2) URL to update the existing location.
-		$current_location .= '<p>' . sprintf( __( 'The location stored in the event is different from the saved location. <a href="%1$s">Create a new location</a> or <a href="%2$s">update the saved location</a>?', 'my-calendar' ), $add_url, $merge_url ) . '</p><ul class="checkboxes">';
+		$current_location .= '<p>' . sprintf( __( 'Some of the location data saved in the event is different from the stored location. <a href="%1$s">Create a new location</a> or <a href="%2$s">update the saved location</a>?', 'my-calendar' ), $add_url, $merge_url ) . '</p><ul class="checkboxes">';
 		foreach ( $differences as $key => $value ) {
 			$current_location .= '<li><strong>' . ucfirst( str_replace( 'location_', '', $key ) ) . '</strong><br /><em>Location:</em> ' . stripslashes( esc_html( $value[0] ) ) . '<br /><em>Event:</em> ' . stripslashes( esc_html( $value[1] ) ) . '</li>';
 		}
@@ -2289,8 +2289,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$approved = absint( $post['event_approved'] );
 		}
 
-		$event_location     = ! empty( $post['preset_location'] ) ? $post['preset_location'] : '';
-		$location_preset    = ( ! empty( $post['location_preset'] ) ) ? $post['location_preset'] : '';
+		$saved_location     = ! empty( $post['preset_location'] ) ? $post['preset_location'] : '';
+		$select_location    = ( ! empty( $post['location_preset'] ) ) ? $post['location_preset'] : '';
 		$event_tickets      = ( isset( $post['event_tickets'] ) ) ? trim( $post['event_tickets'] ) : '';
 		$event_registration = ( isset( $post['event_registration'] ) ) ? trim( $post['event_registration'] ) : '';
 		$event_image        = ( isset( $post['event_image'] ) ) ? esc_url_raw( $post['event_image'] ) : '';
@@ -2303,11 +2303,11 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_hide_end     = ( '' === $time || '23:59:59' === $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		$events_access      = ( ! empty( $post['events_access'] ) ) ? $post['events_access'] : array();
 		// Set location.
-		if ( 'none' === $location_preset && ( empty( $post['event_label'] ) && ! is_numeric( $event_location ) ) ) {
+		if ( 'none' === $select_location && ( empty( $post['event_label'] ) && ! is_numeric( $saved_location ) ) ) {
 			// If no event data defined, do nothing.
 		} else {
 			// Is a preset chosen?
-			$location_to_set = ( is_numeric( $location_preset ) ) ? $location_preset : $event_location;
+			$location_to_set = ( is_numeric( $select_location ) ) ? $select_location : $saved_location;
 			if ( ! is_numeric( $location_to_set ) ) {
 				// No, we're adding a new location.
 				$event_label       = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
@@ -2353,7 +2353,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 							'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
 						);
 						$loc_id         = mc_insert_location( $add_loc );
-						$event_location = $loc_id;
+						$saved_location = $loc_id;
 						/**
 						 * Execute an action when a location is created during event editing.
 						 *
@@ -2411,7 +2411,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$recur   = 'S1';
 	}
 	if ( isset( $post['mcs_check_conflicts'] ) ) {
-		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $event_location );
+		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $saved_location );
 		/**
 		 * Filter the results of a check for time/location conflicts.
 		 *
@@ -2491,7 +2491,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_group_id'     => $event_group_id,
 		'event_span'         => $event_span,
 		'event_hide_end'     => $event_hide_end,
-		'event_location'     => $event_location,
+		'event_location'     => $saved_location,
 		// Array: removed before DB insertion.
 		'event_categories'   => $cats,
 	);
