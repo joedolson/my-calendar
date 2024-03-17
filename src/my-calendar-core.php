@@ -722,6 +722,9 @@ function mc_register_scripts() {
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
+	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
+	wp_register_style( 'my-calendar-frontend-admin-style', $admin_stylesheet, array(), $version );
+
 	wp_register_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
 	wp_register_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), $version, true );
 	wp_register_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $version );
@@ -835,6 +838,7 @@ function mc_admin_styles() {
 			 */
 			$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 			mc_enqueue_calendar_styles( $stylesheet );
+			wp_enqueue_style( 'my-calendar-frontend-admin-style' );
 			mc_enqueue_calendar_js();
 		}
 		wp_enqueue_style( 'mc-styles' );
