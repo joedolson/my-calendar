@@ -922,6 +922,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	background: var(--nav-button-bg);
 	border-color: var(--nav-button-border);
 	line-height: 1.62;
+	word-break: normal;
 }
 
 .mc-main .my-calendar-navigation button {
