@@ -189,8 +189,8 @@ function mc_style_variables( $styles = array() ) {
 		'--highlight-dark'       => '#646970',
 		'--highlight-light'      => '#f0f0f1',
 		'--close-button'         => '#b32d2e',
-		'--highlight-text'       => '#f5e6ab',
-		'--nav-button'           => '#fff',
+		'--search-highlight-bg'  => '#f5e6ab',
+		'--nav-button-bg'        => '#fff',
 		'--nav-button-color'     => '#313233',
 		'--navbar-background'    => 'transparent',
 		'--nav-input-border'     => '#313233',
@@ -198,7 +198,7 @@ function mc_style_variables( $styles = array() ) {
 		'--nav-input-color'      => '#313233',
 		'--grid-cell-border'     => '#0000001f',
 		'--grid-header-border'   => '#313233',
-		'--event-title'          => '#313233',
+		'--event-title-color'    => '#313233',
 	);
 	foreach ( $core_styles as $key => $value ) {
 		if ( ! isset( $styles[ $key ] ) ) {
@@ -444,8 +444,8 @@ function mc_generate_css() {
 	$category_vars = '';
 	// generate category colors.
 	$category_css    = mc_generate_category_styles();
-	$category_styles = $category_css['styles'];
-	$category_vars   = $category_css['vars'];
+	$category_styles = ( ! empty( $category_css ) ) ? $category_css['styles'] : '';
+	$category_vars   = ( ! empty( $category_css ) ) ? $category_css['vars'] : '';
 
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$styles     = mc_style_variables( $styles );
@@ -550,6 +550,10 @@ function mc_add_yoast_schema( $graph, $context ) {
  * @return array Variable styles & category styles.
  */
 function mc_generate_category_styles() {
+	$apply = mc_get_option( 'apply_color' );
+	if ( 'default' === $apply ) {
+		return array();
+	}
 	$styles = get_transient( 'mc_generated_category_styles' );
 	if ( ! $styles ) {
 		$mcdb            = mc_is_remote_db();
@@ -563,7 +567,6 @@ function mc_generate_category_styles() {
 			$class = mc_category_class( $category, 'mc_' );
 			$hex   = ( strpos( $category->category_color, '#' ) !== 0 ) ? '#' : '';
 			$color = $hex . $category->category_color;
-			$apply = mc_get_option( 'apply_color' );
 			if ( '#' !== $color ) {
 				$hcolor = mc_shift_color( $category->category_color );
 				if ( 'font' === $apply ) {
@@ -854,8 +857,8 @@ function mc_admin_url( $url ) {
 function mc_admin_head() {
 	// generate category colors.
 	$category_css    = mc_generate_category_styles();
-	$category_styles = $category_css['styles'];
-	$category_vars   = $category_css['vars'];
+	$category_styles = ( ! empty( $category_css ) ) ? $category_css['styles'] : '';
+	$category_vars   = ( ! empty( $category_css ) ) ? $category_css['vars'] : '';
 
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$style_vars = '';
