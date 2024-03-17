@@ -1460,6 +1460,23 @@ select[name="event_recur"] {
 	gap: 20px;
 }
 
+#my-calendar-style .my-calendar-style-preview {
+	position: relative;
+	width: 100%;
+}
+
+#my-calendar-style .my-calendar-style-preview .mc-main {
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+
+#my-calendar-style .my-calendar-style-preview .mc-main.fix {
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
 #my-calendar-style .my-calendar-style-settings {
 	max-width: 20rem;
 }

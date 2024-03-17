@@ -727,8 +727,8 @@ function mc_register_scripts() {
 	if ( version_compare( $version, '2.1', '<' ) ) {
 		wp_register_style( 'mcs-back-compat', plugins_url( 'css/backcompat.css', __FILE__ ), array(), $version );
 	}
-	// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
-	wp_register_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker' ), $version, true );
+	wp_register_script( 'mc-stickyscroll', plugins_url( 'js/jquery.stick.js', __FILE__ ), array( 'jquery' ), $version );
+	wp_register_script( 'mc-color-picker', plugins_url( 'js/color-picker.js', __FILE__ ), array( 'wp-color-picker', 'mc-stickyscroll' ), $version, true );
 	$api_key = mc_get_option( 'gmap_api_key' );
 	if ( $api_key ) {
 		$gmaps = ( SCRIPT_DEBUG ) ? plugins_url( 'js/gmaps.js', __FILE__ ) : plugins_url( 'js/gmaps.min.js', __FILE__ );
