@@ -160,7 +160,7 @@
 	background: transparent;
 	background-color: transparent ! important;
 	color: var(--primary-dark) ! important;
-	outline-offset: -1px;
+	outline-offset: -2px;
 	font-size: 1.25rem;
 }
 
@@ -670,7 +670,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .my-calendar-navigation .mc-active {
 	outline: 2px solid;
-	outline-offset: -1px;
+	outline-offset: -2px;
 	border-radius: 3px;
 	background-color: var(--primary-light);
 	color: var(--primary-dark);
@@ -738,8 +738,8 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .my-calendar-navigation button:focus,
 .mc-main .my-calendar-navigation a:hover,
 .mc-main .my-calendar-navigation a:focus {
-	outline: 2px solid var(--primary-dark);
-	outline-offset: -1px;
+	outline: 3px solid var(--primary-dark);
+	outline-offset: -2px;
 	border-radius: 3px;
 }
 
@@ -939,7 +939,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-main .event-title button:focus {
 	cursor: default;
 	outline: 1px solid var(--highlight-light);
-	outline-offset: -1px;
+	outline-offset: -2px;
 }
 
 .mc-main .mc-date-switcher select:first-of-type,
