@@ -815,7 +815,8 @@ function mc_filters( $args, $target_url, $ltype = 'id' ) {
 			$form    .= '&lt;input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
 		}
 	}
-	$key = __( 'Choose Filters', 'my-calendar' );
+	$multiple = __( 'Events', 'my-calendar' );
+	$key      = '';
 	foreach ( $fields as $show ) {
 		$show = trim( $show );
 		switch ( $show ) {
@@ -839,8 +840,10 @@ function mc_filters( $args, $target_url, $ltype = 'id' ) {
 				break;
 		}
 	}
-	$label = ( $has_multiple ) ? __( 'Filter Events', 'my-calendar' ) : $key;
-	$form .= '&lt;p>&lt;input type="submit" id="mc_filter_' . $show . '-' . $id . '" class="button" data-href="' . esc_url( $current_url ) . '" value="' . esc_attr( $label ) . '" />&lt;/p>
+	$key   = ( $has_multiple ) ? $multiple : $key;
+	// Translators: Type of filter shown. Events, Categories, Locations, or Accessibility Services.
+	$label = sprintf( __( 'Filter %s', 'my-calendar' ), '&lt;span class="screen-reader-text"> ' . $key . '&lt;/a>' );
+	$form .= '&lt;p>&lt;button id="mc_filter_' . $show . '-' . $id . '" class="button" data-href="' . esc_url( $current_url ) . '">' . $label . '"&lt;/button>&lt;/p>
 	&lt;/form>&lt;/div>';
 	if ( $return ) {
 		return $form;
