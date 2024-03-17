@@ -198,7 +198,6 @@ function mc_style_variables( $styles = array() ) {
 		'--nav-input-color'      => '#313233',
 		'--grid-cell-border'     => '#0000001f',
 		'--grid-header-border'   => '#313233',
-		'--event-title-color'    => '#313233',
 	);
 	foreach ( $core_styles as $key => $value ) {
 		if ( ! isset( $styles[ $key ] ) ) {
