@@ -814,7 +814,7 @@ function mc_filters( $args, $target_url, $ltype = 'id' ) {
 				break;
 		}
 	}
-	$key   = ( $has_multiple ) ? $multiple : $key;
+	$key = ( $has_multiple ) ? $multiple : $key;
 	// Translators: Type of filter shown. Events, Categories, Locations, or Accessibility Services.
 	$label = sprintf( __( 'Filter %s', 'my-calendar' ), '<span class="screen-reader-text"> ' . $key . '</a>' );
 	$form .= '<p><button id="mc_filter_' . $show . '-' . $id . '" class="button" data-href="' . esc_url( $current_url ) . '">' . $label . '"</button></p>
