@@ -57,7 +57,6 @@
 .mc-main td .event-title {
 	font-size: clamp( .75rem, 14px, 1.125rem );
 	font-weight: 600;
-	color: var(--event-title);
 }
 
 .mc-main td .event-title img {
@@ -721,7 +720,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .my-calendar-navigation a {
 	color: var(--nav-button-color);
-	background-color: var(--nav-button);
+	background-color: var(--nav-button-bg);
 	border-radius: 3px;
 }
 
@@ -1042,7 +1041,7 @@ ol.mc-search-results li {
 }
 
 .mc-search-results .mc_search_term {
-	background: var(--highlight-text);
+	background: var(--search-highlight-bg);
 	color: var(--primary-dark);
 }
 
