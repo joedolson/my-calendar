@@ -1958,7 +1958,7 @@ function mc_get_template_tag( $event, $key ) {
  * @param string $key Array key in the tags array for data to fetch.
  */
 function mc_template_tag( $data, $key = 'calendar' ) {
-	echo wp_kses_post( mc_get_template_tag( $data, $key ) );
+	echo mc_kses_post( mc_get_template_tag( $data, $key ) );
 }
 
 /**
@@ -1969,7 +1969,7 @@ function mc_template_tag( $data, $key = 'calendar' ) {
  */
 function mc_template_time( $data, $type = 'calendar' ) {
 	$event = $data->event;
-	echo wp_kses_post( mc_time_html( $event, $type ) );
+	echo mc_kses_post( mc_time_html( $event, $type ) );
 }
 
 /**
