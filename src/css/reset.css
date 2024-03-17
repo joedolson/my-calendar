@@ -917,7 +917,6 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-main .mc_filters .button {
 	border-radius: 0 3px 3px 0;
 	position: relative;
-	left: -1px;
 	border-left-width: 0;
 	color: var(--nav-button-color);
 	background: var(--nav-button-bg);

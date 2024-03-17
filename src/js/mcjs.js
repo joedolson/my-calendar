@@ -126,7 +126,7 @@
 				e.preventDefault();
 			}
 		});
-		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit]", function (e) {
+		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button, .my-calendar-footer button", function (e) {
 			e.preventDefault();
 			if ( 'click' === e.type || ( 'keyup' === e.type && 32 === e.which ) ) {
 				let targetId   = $( this ).attr( 'id' );
@@ -141,7 +141,7 @@
 				let mcs        = '';
 				let link       = '';
 				let url;
-				if ( 'INPUT' === this.nodeName ) {
+				if ( 'INPUT' === this.nodeName || 'BUTTON' === this.nodeName ) {
 					const inputForm = $( this ).parents( 'form' );
 					if ( inputForm.hasClass( 'mc-date-switcher' ) ) {
 						month = inputForm.find( 'select[name=month]' ).val();
@@ -166,7 +166,7 @@
 					url = new URL(link);
 					url.searchParams.delete('embed');
 					url.searchParams.delete('source');
-					if ( 'INPUT' === this.nodeName ) {
+					if ( 'INPUT' === this.nodeName || 'BUTTON' === this.nodeName ) {
 						if ( '' !== month ) {
 							url.searchParams.delete( 'month' );
 							url.searchParams.delete( 'dy' );
