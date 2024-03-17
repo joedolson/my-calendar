@@ -84,6 +84,11 @@ function mc_allowed_tags( $tags, $context ) {
 			);
 		}
 
+		$tags['time'] = array(
+			'datetime' => true,
+			'class'    => true,
+		);
+
 		$tags['button'] = array_merge(
 			$tags['button'],
 			array(
