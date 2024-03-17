@@ -36,6 +36,8 @@
 	line-height: 1.5;
 	text-align: center;
 	padding: 4px 0;
+	color: var(--grid-header-color);
+	background: var(--grid-header-bg);
 }
 
 .mc-main th abbr, .mc-main .event-time abbr {
@@ -295,32 +297,32 @@
 }
 
 .mc-main.mini .has-events.current-day a.mc-date {
-	color: var(--secondary-dark);
-	background: var(--secondary-light);
+	background: var(--date-has-events-bg);
+	color: var(--date-has-events-color);
 	border-top: 0px solid;
 }
 
 .mc-main.mini .has-events.current-day a.mc-date:hover,
 .mc-main.mini .has-events.current-day a.mc-date:focus {
-	background: var(--primary-dark);
-	color: var(--primary-light);
+	color: var(--date-has-events-bg);
+	background: var(--date-has-events-color);
 }
 
 .mc-main .has-events .mc-date {
 	font-weight: 700;
-	background: var(--primary-dark);
-	color: var(--primary-light);
+	background: var(--date-has-events-bg);
+	color: var(--date-has-events-color);
 }
 
 .mc-main .has-events a.mc-date {
-	color: var(--primary-light);
-	background: var(--primary-dark);
+	background: var(--date-has-events-bg);
+	color: var(--date-has-events-color);
 }
 
 .mc-main .has-events a.mc-date:hover,
 .mc-main .has-events a.mc-date:focus {
-	color: var(--primary-dark);
-	background: var(--primary-light);
+	color: var(--date-has-events-bg);
+	background: var(--date-has-events-color);
 }
 
 .mc-main .mc-single {
@@ -329,12 +331,15 @@
 }
 
 .mc-main .current-day {
-	outline: 2px solid var(--highlight-dark);
+	outline: 2px solid var(--current-day-border);
+	background: var(--current-day-bg);
+	color: var(--current-day-color);
 	outline-offset: -2px;
 }
 
 .mc-main .mc-list li.current-day {
-	border-left: 4px solid var(--highlight-dark);
+	border-left: 4px solid var(--current-day-border);
+	background: var(--current-day-bg);
 }
 
 .my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
