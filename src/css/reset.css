@@ -45,6 +45,7 @@
 
 .mc-main td {
 	border: 1px solid var(--grid-cell-border);
+	background: var(--grid-cell-background);
 	padding: 0 !important;
 	height: 6em;
 	vertical-align: top;
@@ -459,13 +460,6 @@
 	align-items: end;
 }
 
-/* Jumpbox */
-.mc-main .my-calendar-date-switcher select {
-	width: auto;
-	margin: 0;
-	height: auto;
-}
-
 .mc-main .my-calendar-date-switcher input[type=submit] {
 	min-width: 2em;
 	width: auto;
@@ -683,9 +677,9 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	filter: brightness(95%);
 }
 
-.mc-main .my-calendar-navigation select:not(.my-calendar-admin select),
-.mc-main .my-calendar-navigation input[type=text]:not(.my-calendar-admin input[type=text]),
-.mc-main .my-calendar-navigation input[type=submit]:not(.my-calendar-admin input[type=submit]),
+.mc-main .my-calendar-navigation select,
+.mc-main .my-calendar-navigation input[type=text],
+.mc-main .my-calendar-navigation input[type=submit],
 .mc-main .my-calendar-navigation button {
 	padding-top: 4px;
 	padding-bottom: 4px;
@@ -698,10 +692,10 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	color: var(--nav-input-color);
 	-webkit-appearance: none;
 	appearance: none;
-	line-height: inherit;
+	line-height: 1.62;
 }
 
-.mc-main .my-calendar-navigation select:not(.my-calendar-admin select) {
+.mc-main .my-calendar-navigation select {
 	padding-right: 3rem;
 	background-image: url("data:image/svg+xml,%3csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3e%3cg id='arrow-down'%3e%3cpath transform='rotate(90 398.52 307.42)' stroke='%23323232' id='svg_2' d='m151.01949%2c560.26198l230.96062%2c-252.90392l-230.96062%2c-252.90574l132.00568%2c-144.53259l362.99432%2c397.43833l-362.99432%2c397.56164' fill='%23323232'/%3e%3c/g%3e%3c/svg%3e");
 	background-repeat: no-repeat;
@@ -709,7 +703,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	background-size: 0.65rem auto;
   }
   
-  .mc-main .my-calendar-navigation select:not(.my-calendar-admin select):focus {
+  .mc-main .my-calendar-navigation select:focus {
 	background-image: url("data:image/svg+xml,%3csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3e%3cg id='arrow-up'%3e%3cpath transform='rotate(-90 398.519 307.42)' stroke='%23323232' id='svg_2' d='m151.01949%2c560.26198l230.96062%2c-252.90392l-230.96062%2c-252.90574l132.00568%2c-144.53259l362.99432%2c397.43833l-362.99432%2c397.56164' fill='%23323232'/%3e%3c/g%3e%3c/svg%3e");
   }
 
@@ -923,6 +917,10 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	position: relative;
 	left: -1px;
 	border-left-width: 0;
+	color: var(--nav-button-color);
+	background: var(--nav-button-bg);
+	border-color: var(--nav-button-border);
+	line-height: 1.62;
 }
 
 .mc-main .my-calendar-navigation button {
