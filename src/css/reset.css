@@ -160,7 +160,7 @@
 	background: transparent;
 	background-color: transparent ! important;
 	color: var(--primary-dark) ! important;
-	outline-offset: 2px;
+	outline-offset: -1px;
 	font-size: 1.25rem;
 }
 
@@ -670,9 +670,10 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .my-calendar-navigation .mc-active {
 	outline: 2px solid;
-	outline-offset: 2px;
+	outline-offset: -1px;
 	border-radius: 3px;
 	background-color: var(--primary-light);
+	color: var(--primary-dark);
 	border: 1px solid transparent;
 	filter: brightness(95%);
 }
@@ -729,10 +730,6 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	text-decoration: none;
 }
 
-.mc-main .my-calendar-navigation a {
-	margin: 0 2px;
-}
-
 .mc-main .my-calendar-navigation select:focus,
 .mc-main .my-calendar-navigation select:hover,
 .mc-main .my-calendar-navigation input:hover,
@@ -742,7 +739,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .my-calendar-navigation a:hover,
 .mc-main .my-calendar-navigation a:focus {
 	outline: 2px solid var(--primary-dark);
-	outline-offset: 2px;
+	outline-offset: -1px;
 	border-radius: 3px;
 }
 
