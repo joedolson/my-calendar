@@ -1,7 +1,7 @@
 === My Calendar - Accessible Event Manager ===
 Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
-Tags: calendar, dates, times, event, events, scheduling, schedule, event manager, event calendar, class, concert, venue, location, box office, tickets, registration
+Tags: event manager, event calendar, venue, location, accessibility
 Requires at least: 4.7
 Tested up to: 6.4
 Requires PHP: 7.4
@@ -9,7 +9,7 @@ Text domain: my-calendar
 Stable tag: 3.4.24
 License: GPLv2 or later
 
-Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets.
+Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
 
 == Description ==
 
@@ -45,7 +45,9 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 
 = Accessibility =
 
-My Calendar is designed with accessibility in mind. All interfaces - both front and back end - are tested with various assistive technology. The plugin includes features for indicating the accessibility services available for events and at physical venues, as well as providing access to the content for users with disabilities.
+My Calendar is designed with accessibility in mind. All interfaces - both front and back end - are tested with various assistive technology. 
+
+The plugin includes features for indicating the accessibility services available for events and at physical venues, as well as providing access to the content for users with disabilities.
 
 = What's in My Calendar Pro? =
 
