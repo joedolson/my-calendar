@@ -58,10 +58,10 @@
         this.each(function () {
             $(this).after('<' + options.counterElement + ' aria-live="polite" aria-atomic="true" class="' + options.css + '">' + options.counterText + '</' + options.counterElement + '>');
             calculate(this);
-            $(this).keyup(function () {
+            $(this).on( 'keyup', function () {
                 calculate(this)
             });
-            $(this).change(function () {
+            $(this).on( 'change', function () {
                 calculate(this)
             });
         });
