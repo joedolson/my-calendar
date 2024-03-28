@@ -58,12 +58,12 @@
         this.each(function () {
             $(this).after('<' + options.counterElement + ' aria-live="polite" aria-atomic="true" class="' + options.css + '">' + options.counterText + '</' + options.counterElement + '>');
             calculate(this);
-            $(this).on( 'keyup', function () {
-                calculate(this)
-            });
-            $(this).on( 'change', function () {
-                calculate(this)
-            });
+			$(this).on( 'keyup', function(e) {
+				setTimeout( calculate(this), 200 );
+			});
+			$(this).on( 'change', function(e) {
+				setTimeout( calculate(this), 200 );
+			});
         });
 
     };
