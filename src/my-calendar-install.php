@@ -303,7 +303,7 @@ function mc_create_demo_content() {
 			'event_categories'   => array( 1 ),
 		);
 
-		$event    = array( true, false, $submit, false );
+		$event    = array( true, false, $submit, false, array() );
 		$response = my_calendar_save( 'add', $event );
 		$event_id = $response['event_id'];
 		mc_update_event( 'event_location', (int) $results, $event_id );
