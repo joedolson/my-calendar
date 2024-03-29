@@ -1133,9 +1133,9 @@ function my_calendar_check() {
 
 		$upgrade_path       = array();
 		$my_calendar_exists = my_calendar_exists();
-
+		$settings           = get_option( 'my_calendar_options' );
 		if ( $my_calendar_exists &amp;&amp; '' === $old_version ) {
-			// If the table exists, but I don't know what version it is, I have to run all upgrades.
+			// If the table exists, but I don't know what version it is, run all upgrades.
 			$old_version = '2.9.9';
 		}
 
@@ -1152,7 +1152,9 @@ function my_calendar_check() {
 
 		if ( ! empty( $upgrade_path ) ) {
 			mc_do_upgrades( $upgrade_path );
-		} else {
+		}
+		// If there are no settings, set up default settings.
+		if ( ! $settings ) {
 			mc_default_settings();
 		}
 
@@ -1284,7 +1286,7 @@ function mc_do_upgrades( $upgrade_path ) {
 						'--highlight-light' => '#efefef',
 					)
 				);
-				mc_transition_categories();
+				mc_transition_categories(); // This is the only use of this function.
 				break;
 			default:
 				break;
