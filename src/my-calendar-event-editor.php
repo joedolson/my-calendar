@@ -1027,7 +1027,7 @@ function mc_datepicker_html( $args ) {
 	if ( isset( $args['first-day-of-week'] ) ) {
 		$firstday = (int) $args['first-day-of-week'];
 	} else {
-		$sweek                     = absint( get_option( 'start_of_week' ) );
+		$sweek                     = absint( get_option( 'start_of_week', '1' ) );
 		$firstday                  = ( 1 === $sweek || 0 === $sweek ) ? $sweek : 0;
 		$args['first-day-of-week'] = (int) $firstday;
 	}
