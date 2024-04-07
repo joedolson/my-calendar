@@ -519,14 +519,14 @@ function mc_contrast( $color1, $color2 ) {
 	} else {
 		$echo_hex_back = 'FFFFFF';
 	}
-	$color    = mc_hex2rgb( $echo_hex_fore . $fore_opacity );
-	$color2   = mc_hex2rgb( $echo_hex_back . $back_opacity );
-	$rfore    = $color[0];
-	$gfore    = $color[1];
-	$bfore    = $color[2];
-	$rback    = $color2[0];
-	$gback    = $color2[1];
-	$bback    = $color2[2];
+	$color  = mc_hex2rgb( $echo_hex_fore . $fore_opacity );
+	$color2 = mc_hex2rgb( $echo_hex_back . $back_opacity );
+	$rfore  = $color[0];
+	$gfore  = $color[1];
+	$bfore  = $color[2];
+	$rback  = $color2[0];
+	$gback  = $color2[1];
+	$bback  = $color2[2];
 	$colors = array(
 		'hex1'   => $echo_hex_fore . $fore_opacity,
 		'hex2'   => $echo_hex_back . $back_opacity,
