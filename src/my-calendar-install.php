@@ -312,7 +312,9 @@ function mc_create_demo_content() {
 		$post_id = $e->event_post;
 		$image   = media_sideload_image( plugins_url( '/images/demo/event.jpg', __FILE__ ), $post_id, null, 'id' );
 
-		set_post_thumbnail( $post_id, $image );
+		if ( ! is_wp_error( $image ) ) {
+			set_post_thumbnail( $post_id, $image );
+		}
 	}
 }
 
