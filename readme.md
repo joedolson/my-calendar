@@ -9,7 +9,7 @@ Accessible Event Manager for WordPress
 * Donate link: https://www.joedolson.com/donate/
 * Tags: calendar, event management, events
 * Requires at least: 4.9
-* Tested up to: 6.4
+* Tested up to: 6.5
 * Requires PHP: 7.4
 * Stable tag: `3.4.24`
 * License: GPLv2 or later
