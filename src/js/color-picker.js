@@ -7,8 +7,19 @@ jQuery(document).ready(function ($) {
 				let color    = ui.color.toString();
 				let variable = event.target.getAttribute( 'data-variable' );
 				r.style.setProperty( variable, color );
+				wp.a11y.speak( 'Preview updated' );
 			}
 		},
+	});
+
+	$('.mc-text-input').on( 'keyup', function(event) {
+		let el = $( this );
+		setTimeout( function() {
+			let text = el.val();
+			let variable = event.target.getAttribute( 'data-variable' );
+			r.style.setProperty( variable, text );
+			wp.a11y.speak( 'Preview updated' );
+		}, 500, el, event );
 	});
 
 	var el = $(".my-calendar-style-preview");

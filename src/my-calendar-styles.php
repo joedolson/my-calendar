@@ -47,15 +47,39 @@ function my_calendar_style_edit() {
 					$styles[ $key ] = $val;
 				}
 			}
+			if ( isset( $_POST['new_style_text_var'] ) ) {
+				$key = sanitize_text_field( $_POST['new_style_text_var']['key'] );
+				$val = sanitize_text_field( $_POST['new_style_text_var']['val'] );
+				if ( $key && $val ) {
+					if ( 0 !== strpos( $key, '--' ) ) {
+						$key = '--' . $key;
+					}
+					$styles['text'][ $key ] = $val;
+				}
+			}
 			foreach ( $_POST['style_vars'] as $key => $value ) {
-				if ( '' !== trim( $value ) ) {
-					$styles[ $key ] = sanitize_text_field( $value );
+				if ( 'text' === $key ) {
+					foreach ( $value as $var => $text ) {
+						if ( '' !== trim( $text ) ) {
+							$styles['text'][ $var ] = sanitize_text_field( $text );
+						}
+					}
+				} else {
+					if ( '' !== trim( $value ) ) {
+						$styles[ $key ] = sanitize_text_field( $value );
+					}
 				}
 			}
 			if ( isset( $_POST['delete_var'] ) ) {
 				$delete = map_deep( $_POST['delete_var'], 'sanitize_text_field' );
 				foreach ( $delete as $del ) {
 					unset( $styles[ $del ] );
+				}
+			}
+			if ( isset( $_POST['delete_var_text'] ) ) {
+				$delete = map_deep( $_POST['delete_var_text'], 'sanitize_text_field' );
+				foreach ( $delete as $del ) {
+					unset( $styles['text'][ $del ] );
 				}
 			}
 			mc_update_option( 'style_vars', $styles );
@@ -88,33 +112,66 @@ function my_calendar_style_edit() {
 		<input type="hidden" value="true" name="mc_edit_style" />
 		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( $file ); ?>" />
 		<fieldset class="mc-css-variables">
-			<legend><?php esc_html_e( 'CSS Color Variables', 'my-calendar' ); ?></legend>
+			<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
 			<?php
-			$output = '';
-			$styles = mc_get_option( 'style_vars' );
-			$styles = mc_style_variables( $styles );
+			$output      = '';
+			$text_output = '';
+			$styles      = mc_get_option( 'style_vars' );
+			$styles      = mc_style_variables( $styles );
 			foreach ( $styles as $var => $style ) {
-				$var_id = 'mc' . sanitize_key( $var );
-				if ( ! in_array( $var, array_keys( mc_style_variables() ), true ) ) {
-					// Translators: CSS variable name.
-					$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
+				if ( 'text' === $var ) {
+					foreach ( $style as $variable => $value ) {
+						$variable_id = 'mc' . sanitize_key( $variable );
+						if ( ! in_array( $variable, array_keys( mc_style_variables()['text'] ), true ) ) {
+							// Translators: CSS variable name.
+							$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_text[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
+						} else {
+							$delete = '';
+						}
+						$text_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[text][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
+					}
 				} else {
-					$delete = '';
+					$var_id = 'mc' . sanitize_key( $var );
+					if ( ! in_array( $var, array_keys( mc_style_variables() ), true ) ) {
+						// Translators: CSS variable name.
+						$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
+					} else {
+						$delete = '';
+					}
+					$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
 				}
-				$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
 			}
 			if ( $output ) {
+				echo '<h3>' . __( 'Color Variables', 'my-calendar' ) . '</h3>';
 				echo wp_kses( "<ul class='mc-variables'>$output</ul>", mc_kses_elements() );
 			}
 			?>
-			<p>
-				<label for='new_style_var_key'><?php esc_html_e( 'New variable', 'my-calendar' ); ?></label>
-				<input type='text' name='new_style_var[key]' id='new_style_var_key' />
-			</p>
-			<p>
-				<label for='new_style_var_val'><?php esc_html_e( 'Color', 'my-calendar' ); ?></label>
-				<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
-			</p>
+			<div class="mc-new-variable">
+				<p>
+					<label for='new_style_var_key'><?php esc_html_e( 'New color variable', 'my-calendar' ); ?></label>
+					<input type='text' name='new_style_var[key]' id='new_style_var_key' />
+				</p>
+				<p>
+					<label for='new_style_var_val'><?php esc_html_e( 'Color', 'my-calendar' ); ?></label>
+					<input type='text' class="mc-color-input" name='new_style_var[val]' id='new_style_var_val' />
+				</p>
+			</div>
+			<?php
+			if ( $text_output ) {
+				echo '<h3>' . __( 'Style Variables', 'my-calendar' ) . '</h3>';
+				echo wp_kses( "<ul class='mc-variables'>$text_output</ul>", mc_kses_elements() );
+			}
+			?>
+			<div class="mc-new-variable">
+				<p>
+					<label for='new_style_var_text_key'><?php esc_html_e( 'New text variable', 'my-calendar' ); ?></label>
+					<input type='text' name='new_style_var_text[key]' id='new_style_var_text_key' />
+				</p>
+				<p>
+					<label for='new_style_var_text_val'><?php esc_html_e( 'Value', 'my-calendar' ); ?></label>
+					<input type='text' class="mc-text-input" name='new_style_var_text[val]' id='new_style_var_text_val' />
+				</p>
+			</div>
 		</fieldset>
 		<div class="mc-input-with-note">
 			<p>
@@ -148,9 +205,19 @@ function my_calendar_style_edit() {
 function mc_display_contrast_variables() {
 	$styles = mc_get_option( 'style_vars', array() );
 	$styles = mc_style_variables( $styles );
-	$comp   = $styles;
-	$body   = '';
-	$head   = '<th>' . __( 'Variable', 'my-calendar' ) . '</th>';
+	// Eliminate text settings.
+	unset( $styles['text'] );
+	$colors = array();
+	// Eliminate duplicate colors and transparency. Only compare unique colors.
+	foreach ( $styles as $variable => $color ) {
+		if ( in_array( $color, $colors, true ) || 'transparent' === $color || strlen( $color ) > 7 ) {
+			unset( $styles[ $variable ] );
+		}
+		$colors[] = $color;
+	}
+	$comp = $styles;
+	$body = '';
+	$head = '<th>' . __( 'Variable', 'my-calendar' ) . '</th>';
 	foreach ( $styles as $var => $color ) {
 		$head .= '<th scope="col">' . str_replace( '--', '', $var ) . '</th>';
 		$row   = '<tr><th scope="row">' . str_replace( '--', '', $var ) . '</th>';
@@ -184,7 +251,7 @@ function mc_test_contrast( $color1, $color2 ) {
 	$text     = '<p>' . __( 'Meets WCAG', 'my-calendar' ) . '</p>';
 	$class    = '';
 	if ( $contrast < 3.0 ) {
-		return '<span>invalid</span>';
+		$text = '<p>' . __( 'Fails', 'my-calendar' ) . '</p>';
 	}
 	if ( $contrast < 4.5 && $contrast > 3.0 ) {
 		$class = 'large-text';
@@ -385,14 +452,20 @@ function mc_rgb2hex( $r, $g = - 1, $b = - 1 ) {
  * @return array of RGB values in R,G,B order.
  */
 function mc_hex2rgb( $color ) {
-	$color = str_replace( '#', '', $color );
+	$color   = str_replace( '#', '', $color );
+	$rgb     = array();
+	$opacity = 1;
+	if ( strlen( $color ) === 8 ) {
+		$opacity = hexdec( substr( $color, 6, 2 ) );
+		$color   = substr( $color, 0, 6 );
+	}
 	if ( strlen( $color ) !== 6 ) {
 		return array( 0, 0, 0 );
 	}
-	$rgb = array();
 	for ( $x = 0; $x < 3; $x++ ) {
 		$rgb[ $x ] = hexdec( substr( $color, ( 2 * $x ), 2 ) );
 	}
+	$rgb['opacity'] = $opacity;
 
 	return $rgb;
 }
@@ -406,7 +479,9 @@ function mc_hex2rgb( $color ) {
  * @return array
  */
 function mc_contrast( $color1, $color2 ) {
-	$fore_color = $color1;
+	$fore_color   = $color1;
+	$fore_opacity = '';
+	$back_opacity = '';
 	if ( '#' === substr( $fore_color, 0, 1 ) ) {
 		$fore_color = str_replace( '#', '', $fore_color );
 	}
@@ -415,6 +490,10 @@ function mc_contrast( $color1, $color2 ) {
 		$color6char .= $fore_color[1] . $fore_color[1];
 		$color6char .= $fore_color[2] . $fore_color[2];
 		$fore_color  = $color6char;
+	}
+	if ( 8 === strlen( $fore_color ) ) {
+		$fore_opacity = substr( $fore_color, 6, 2 );
+		$fore_color   = substr( $fore_color, 0, 6 );
 	}
 	if ( preg_match( '/^#?([0-9a-f]{1,2}){3}$/i', $fore_color ) ) {
 		$echo_hex_fore = str_replace( '#', '', $fore_color );
@@ -431,28 +510,34 @@ function mc_contrast( $color1, $color2 ) {
 		$color6char .= $back_color[2] . $back_color[2];
 		$back_color  = $color6char;
 	}
+	if ( 8 === strlen( $back_color ) ) {
+		$back_opacity = substr( $back_color, 6, 2 );
+		$back_color   = substr( $back_color, 0, 6 );
+	}
 	if ( preg_match( '/^#?([0-9a-f]{1,2}){3}$/i', $back_color ) ) {
 		$echo_hex_back = str_replace( '#', '', $back_color );
 	} else {
 		$echo_hex_back = 'FFFFFF';
 	}
-	$color  = mc_hex2rgb( $echo_hex_fore );
-	$color2 = mc_hex2rgb( $echo_hex_back );
-	$rfore  = $color[0];
-	$gfore  = $color[1];
-	$bfore  = $color[2];
-	$rback  = $color2[0];
-	$gback  = $color2[1];
-	$bback  = $color2[2];
+	$color    = mc_hex2rgb( $echo_hex_fore . $fore_opacity );
+	$color2   = mc_hex2rgb( $echo_hex_back . $back_opacity );
+	$rfore    = $color[0];
+	$gfore    = $color[1];
+	$bfore    = $color[2];
+	$rback    = $color2[0];
+	$gback    = $color2[1];
+	$bback    = $color2[2];
 	$colors = array(
-		'hex1'   => $echo_hex_fore,
-		'hex2'   => $echo_hex_back,
+		'hex1'   => $echo_hex_fore . $fore_opacity,
+		'hex2'   => $echo_hex_back . $back_opacity,
 		'red1'   => $rfore,
 		'green1' => $gfore,
 		'blue1'  => $bfore,
+		'op1'    => $color['opacity'],
 		'red2'   => $rback,
 		'green2' => $gback,
 		'blue2'  => $bback,
+		'op2'    => $color2['opacity'],
 	);
 
 	return $colors;

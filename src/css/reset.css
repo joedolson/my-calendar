@@ -21,7 +21,7 @@
 }
 
 .mc-main.list .my-calendar-month, .mc-main .heading  {
-	font-size: clamp( 1.125rem, 24px, 2.5rem );
+	font-size: var(--calendar-heading);
 	color: var(--primary-dark);
 	text-align: center;
 	margin: 0;
@@ -32,7 +32,7 @@
 }
 
 .mc-main th {
-	font-size: clamp( .75rem, 16px, 1.5rem );
+	font-size: var(--grid-date-heading);
 	line-height: 1.5;
 	text-align: center;
 	padding: 4px 0;
@@ -75,7 +75,7 @@
 
 .mc-main .event-title {
 	margin: 0 !important;
-	font-size: clamp( 1.25rem, 24px, 2.5rem );;
+	font-size: var(--event-title);
 	text-transform: none;
 	letter-spacing: normal;
 }
@@ -151,7 +151,7 @@
 
 .mc-main .list-event > .event-title {
 	display: block;
-	font-size: 1.2rem;
+	font-size: var(--list-event-title);
 }
 
 .mc-main .mc-list .event-date button.mc-text-button {
@@ -163,7 +163,7 @@
 	background-color: transparent ! important;
 	color: var(--primary-dark) ! important;
 	outline-offset: -2px;
-	font-size: 1.25rem;
+	font-size: var(--list-event-date);
 }
 
 .mc-main .mc-list .event-date button.mc-text-button:hover,
@@ -256,7 +256,7 @@
 
 /* Date/times */
 .mc-main.mini .time-block {
-	font-size: clamp( .75rem, 14px 1.25rem );
+	font-size: var(--mini-time-text);
 }
 
 .mc-main .time-block {
@@ -287,7 +287,7 @@
 	display: block;
 	padding: 0 8px;
 	font-weight: 700;
-	font-size: 14px;
+	font-size: var(--grid-date);
 	text-align: right;
 }
 
@@ -326,7 +326,7 @@
 }
 
 .mc-main .mc-single {
-	font-size: clamp( 1.25rem, 24px, 2.5rem );
+	font-size: var(--single-event-title);
 	margin: 0 0 8px;
 }
 
@@ -461,7 +461,7 @@
 	margin-top: 16px;
 	background: #00000006;
 	color: var(--secondary-dark);
-	font-size: clamp( .75rem, 14px, 1.5rem);
+	font-size: var(--author-card);
 	align-items: end;
 }
 
@@ -509,7 +509,7 @@
 }
 
 .mc-main .mc-list .event-date {
-	font-size: 1.25rem;
+	font-size: var(--list-date);
 	font-weight: 600;
 }
 
@@ -619,7 +619,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 }
 
 .my-calendar-cards header h2 {
-	font-size: 1.125rem;
+	font-size: var(--card-heading);
 	padding: 8px;
 }
 
@@ -692,7 +692,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	padding-left: 8px;
 	padding-right: 8px;
 	margin: 0;
-	font-size: clamp( .75rem, 16px, 1.5rem );
+	font-size: var(--navigation-controls);
 	border: 1px solid var(--nav-input-border);
 	background-color: var(--nav-input-background);
 	color: var(--nav-input-color);
@@ -730,7 +730,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .my-calendar-navigation input,
 .mc-main .my-calendar-navigation input[type=submit],
 .mc-main .my-calendar-navigation button {
-	font-size: clamp( .75rem, 16px, 1.5rem );
+	font-size: var(--navigation-controls);
 	font-weight: 400;
 	text-decoration: none;
 }
@@ -1235,7 +1235,7 @@ dialog.my-calendar-modal .js-modal-title-container {
 }
 
 dialog.my-calendar-modal #modal-title {
-	font-size: 1.5rem;
+	font-size: var(--modal-title);
 	margin: 0;
 	margin-right: 64px;
 	box-sizing: border-box;
@@ -1429,7 +1429,7 @@ body.mc-no-scroll {
 	}
 
 	.mc-main:not(.mini) .my-calendar-table td .mc-date {
-		font-size: 16px;
+		font-size: var(--grid-date);
 		padding: .5em 1em;
 	}
 

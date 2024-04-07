@@ -1844,11 +1844,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 /**
  * Produce Event location dropdown.
  *
- * @param object $data Current event data.
+ * @param object|int $data Current event data or selected location ID.
+ * @param bool       $hide_extras Default: false. Hide current location and add new buttons.
  *
  * @return string
  */
-function mc_event_location_dropdown_block( $data ) {
+function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 	$current_location = '';
 	$event_location   = false;
 	$fields           = '';
@@ -1871,6 +1872,8 @@ function mc_event_location_dropdown_block( $data ) {
 		if ( property_exists( $data, 'event_location' ) ) {
 			$event_location = $data->event_location;
 		}
+	} else {
+		$event_location = $data;
 	}
 	if ( 0 !== $count ) {
 		$fields .= ( $event_location ) ? '<label for="l_preset">' . __( 'Change location:', 'my-calendar' ) . '</label>' : '<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label>';
@@ -1920,19 +1923,24 @@ function mc_event_location_dropdown_block( $data ) {
 		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '">' . __( 'Add a location', 'my-calendar' ) . '</a>
 		</p>';
 	}
-	$differences = mc_event_location_diff( $data );
-	if ( $differences ) {
-		$add_url   = add_query_arg( 'event_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations' ) );
-		$merge_url = add_query_arg( 'merge_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit&location_id=' . absint( $data->event_location ) ) );
-		// translators: 1) URL to create a new location with this data; 2) URL to update the existing location.
-		$current_location .= '<p>' . sprintf( __( 'Some of the location data saved in the event is different from the stored location. <a href="%1$s">Create a new location</a> or <a href="%2$s">update the saved location</a>?', 'my-calendar' ), $add_url, $merge_url ) . '</p><ul class="checkboxes">';
-		foreach ( $differences as $key => $value ) {
-			$current_location .= '<li><strong>' . ucfirst( str_replace( 'location_', '', $key ) ) . '</strong><br /><em>Location:</em> ' . stripslashes( esc_html( $value[0] ) ) . '<br /><em>Event:</em> ' . stripslashes( esc_html( $value[1] ) ) . '</li>';
+	if ( is_object( $data ) ) {
+		$differences = mc_event_location_diff( $data );
+		if ( $differences ) {
+			$add_url   = add_query_arg( 'event_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations' ) );
+			$merge_url = add_query_arg( 'merge_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit&location_id=' . absint( $data->event_location ) ) );
+			// translators: 1) URL to create a new location with this data; 2) URL to update the existing location.
+			$current_location .= '<p>' . sprintf( __( 'Some of the location data saved in the event is different from the stored location. <a href="%1$s">Create a new location</a> or <a href="%2$s">update the saved location</a>?', 'my-calendar' ), $add_url, $merge_url ) . '</p><ul class="checkboxes">';
+			foreach ( $differences as $key => $value ) {
+				$current_location .= '<li><strong>' . ucfirst( str_replace( 'location_', '', $key ) ) . '</strong><br /><em>Location:</em> ' . stripslashes( esc_html( $value[0] ) ) . '<br /><em>Event:</em> ' . stripslashes( esc_html( $value[1] ) ) . '</li>';
+			}
+			$current_location .= '</ul>';
 		}
-		$current_location .= '</ul>';
 	}
-	$output  = $current_location . '<div class="mc-event-location-dropdown">' . '<div class="location-input">' . $fields . '</div>';
-	$output .= ( current_user_can( 'mc_edit_locations' ) && ! isset( $_GET['group_id'] ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
+	$current_location = ( $hide_extras ) ? '' : $current_location;
+	$output           = $current_location . '<div class="mc-event-location-dropdown">' . '<div class="location-input">' . $fields . '</div>';
+	if ( ! $hide_extras ) {
+		$output .= ( current_user_can( 'mc_edit_locations' ) && ! isset( $_GET['group_id'] ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary"><span class="dashicons dashicons-plus" aria-hidden="true"></span><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
+	}
 	$output .= '</div>';
 
 	return $output;
