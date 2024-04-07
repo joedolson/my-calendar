@@ -233,8 +233,30 @@ function mc_style_variables( $styles = array() ) {
 		'--secondary-dark'        => '#000',
 		'--highlight-dark'        => '#646970',
 		'--highlight-light'       => '#f0f0f1',
+		'text'                    => array(
+			'--calendar-heading'    => 'clamp( 1.125rem, 24px, 2.5rem )',
+			'--event-title'         => 'clamp( 1.25rem, 24px, 2.5rem )',
+			'--grid-date'           => '16px',
+			'--grid-date-heading'   => 'clamp( .75rem, 16px, 1.5rem )',
+			'--modal-title'         => '1.5rem',
+			'--navigation-controls' => 'clamp( .75rem, 16px, 1.5rem )',
+			'--card-heading'        => '1.125rem',
+			'--list-date'           => '1.25rem',
+			'--author-card'         => 'clamp( .75rem, 14px, 1.5rem)',
+			'--single-event-title'  => 'clamp( 1.25rem, 24px, 2.5rem )',
+			'--mini-time-text'      => 'clamp( .75rem, 14px 1.25rem )',
+			'--list-event-date'     => '1.25rem',
+			'--list-event-title'    => '1.2rem',
+		),
 	);
 	foreach ( $core_styles as $key => $value ) {
+		if ( 'text' === $key ) {
+			foreach ( $value as $var => $text ) {
+				if ( ! isset( $styles['text'][ $var ] ) ) {
+					$styles['text'][ $var ] = $text;
+				}
+			}
+		}
 		if ( ! isset( $styles[ $key ] ) ) {
 			$styles[ $key ] = $value;
 		}
@@ -485,8 +507,14 @@ function mc_generate_css() {
 	$styles     = mc_style_variables( $styles );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
-		if ( $var ) {
-			$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
+		if ( 'text' === $key ) {
+			foreach ( $var as $variable => $value ) {
+				$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $value ) . '; ';
+			}
+		} else {
+			if ( $var ) {
+				$style_vars .= sanitize_key( $key ) . ': ' . esc_html( $var ) . '; ';
+			}
 		}
 	}
 	if ( '' !== $style_vars ) {
@@ -901,8 +929,16 @@ function mc_admin_head() {
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
-		if ( $var ) {
-			$style_vars .= sanitize_key( $key ) . ': ' . $var . '; ';
+		if ( 'text' === $key ) {
+			foreach ( $var as $variable => $text ) {
+				if ( $variable ) {
+					$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $text ) . '; ';
+				}
+			}
+		} else {
+			if ( $var ) {
+				$style_vars .= sanitize_key( $key ) . ': ' . esc_html( $var ) . '; ';
+			}
 		}
 	}
 	if ( '' !== $style_vars ) {
@@ -910,7 +946,7 @@ function mc_admin_head() {
 	}
 
 	$all_styles = "
-&lt;style type=\"text/css\">
+&lt;style>
 &lt;!--
 /* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
 $category_styles
