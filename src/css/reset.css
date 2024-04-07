@@ -939,7 +939,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	width: 100%;
 	text-align: left;
 	display: flex;
-	gap: 4px;
+	gap: .5rem;
 	align-items: center;
 	padding: 8px;
 	box-sizing: border-box;
