@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_groups_pre_checkdata - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_hide_additional_days - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_groups_pre_checkdata</h1></header>
+    <header><h1 class="page-title">Filter: mc_hide_additional_days</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_groups_pre_checkdata">apply_filters( 'mc_groups_pre_checkdata', <span class="signature">$post, $action )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_hide_additional_days">apply_filters( 'mc_hide_additional_days', <span class="signature">$hide_days_default, $event )</span><span class="type-signature"> &rarr; {bool}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter posted event group data prior to running event data checks.</p>
+    <p>Hide subsequent days of events crossing multiple days.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$post</code></td>
+                <td class="name"><code>$hide_days_default</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">bool</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>POST data.</p></td>
+            <td class="description last"><p>False if 'same day event' not checked.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$action</code></td>
+                <td class="name"><code>$event</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>Type of action running.(add, edit, or copy.)</p></td>
+            <td class="description last"><p>Event object.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-group-manager.php.html">my-calendar-group-manager.php</a>, <a href="my-calendar-group-manager.php.html#line635">line 635</a>
+        <a href="includes_date-utilities.php.html">includes/date-utilities.php</a>, <a href="includes_date-utilities.php.html#line375">line 375</a>
     </li></ul></dd>
     
 
@@ -191,7 +191,7 @@
     </dt>
     <dd>
         
-<span class="param-type">array</span>
+<span class="param-type">bool</span>
 
 
     </dd>
