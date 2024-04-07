@@ -843,11 +843,16 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 img.category-icon,
 svg.category-icon,
 .category-color-sample.svg * {
-	max-width: 18px;
-	min-width: 16px;
+	max-width: 22px;
+	min-width: 18px;
 	height: auto;
-	padding: 2px;
+	padding: 1px;
 	border-radius: 3px; 
+}
+
+.mc-main .category-color-sample {
+	border-radius: 3px;
+	padding: 3px;
 }
 
 .mc-adjacent .mc-event-date {
