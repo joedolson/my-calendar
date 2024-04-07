@@ -368,7 +368,21 @@ function mc_exit_early( $event, $process_date ) {
 		return true;
 	}
 
-	$hide_days = apply_filters( 'mc_hide_additional_days', false, $event );
+	$hide_days_default = false;
+	if ( 'true' === get_post_meta( $event->event_post, '_event_same_day', true ) ) {
+		$hide_days_default = true;
+	}
+	/**
+	 * Hide subsequent days of events crossing multiple days.
+	 *
+	 * @hook mc_hide_additional_days
+	 *
+	 * @param {bool}   $hide_days_default False if 'same day event' not checked.
+	 * @param {object} $event Event object.
+	 *
+	 * @return {bool}
+	 */
+	$hide_days = apply_filters( 'mc_hide_additional_days', $hide_days_default, $event );
 	$today     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
 	$current   = mc_date( 'Y-m-d', strtotime( $process_date ) );
 	$end       = mc_date( 'Y-m-d', strtotime( $event->occur_end ) );

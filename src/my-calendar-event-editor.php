@@ -180,11 +180,23 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 			$time_label = $post['data']['event_time_label'];
 		}
 	}
+	$same_day = '';
+	if ( isset( $_POST['event_same_day'] ) ) {
+		$same_day = sanitize_text_field( $_POST['event_same_day'] );
+	} else {
+		// My Calendar Rest API.
+		if ( isset( $post['data'] ) && isset( $post['data']['event_same_day'] ) ) {
+			$same_day = $post['data']['event_same_day'];
+		}
+	}
 	if ( $events_access ) {
 		update_post_meta( $post_id, '_mc_event_access', $events_access );
 	}
 	if ( $time_label ) {
 		update_post_meta( $post_id, '_event_time_label', $time_label );
+	}
+	if ( $same_day ) {
+		update_post_meta( $post_id, '_event_same_day', 'true' );
 	}
 
 	$mc_event_id = get_post_meta( $post_id, '_mc_event_id', true );
@@ -2753,6 +2765,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	$allday       = ( $has_data && ( mc_is_all_day( $data ) ) ) ? ' checked="checked"' : '';
 	$hide         = ( $has_data && '1' === $data->event_hide_end ) ? ' checked="checked"' : '';
 	$allday_label = ( $has_data ) ? mc_notime_label( $data ) : mc_get_option( 'notime_text' );
+	$same_day     = ( $has_data && 'true' === get_post_meta( $data->event_post, '_event_same_day', true ) ) ? ' checked="checked"' : '';
 	$args         = array(
 		'value' => $event_begin,
 		'id'    => 'mc_event_date',
@@ -2815,6 +2828,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	<ul class="checkboxes">
 		<li><input type="checkbox" value="1" id="e_allday" name="event_allday"' . $allday . ' /> <label for="e_allday">' . __( 'All day event', 'my-calendar' ) . '</label> <span class="event_time_label"><label for="e_time_label">' . __( 'Time label:', 'my-calendar' ) . '</label> <input type="text" name="event_time_label" id="e_time_label" value="' . esc_attr( $allday_label ) . '" /> </li>
 		<li><input type="checkbox" value="1" id="e_hide_end" name="event_hide_end"' . $hide . ' /> <label for="e_hide_end">' . __( 'Hide end time', 'my-calendar' ) . '</label></li>
+		<li><input type="checkbox" value="1" id="e_same_day" name="event_same_day"' . $same_day . ' /> <label for="e_same_day">' . __( 'Same day event', 'my-calendar' ) . '</label></li>
 	</ul>';
 
 	return $form;
