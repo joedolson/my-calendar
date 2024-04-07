@@ -1460,6 +1460,17 @@ select[name="event_recur"] {
 	gap: 20px;
 }
 
+#my-calendar-style .mc-new-variable {
+	position: relative;
+	padding: 8px;
+	background: rgba( 0,0,0,.04 );
+	border-radius: 5px;
+}
+
+#my-calendar-style .mc-new-variable label {
+	display: block;
+}
+
 #my-calendar-style .my-calendar-style-preview {
 	position: relative;
 	width: 100%;
