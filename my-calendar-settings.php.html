@@ -391,6 +391,7 @@ function mc_update_output_settings( $post ) {
 	}
 	$options['bottomnav']      = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
 	$options['topnav']         = ( empty( $top ) ) ? 'none' : implode( ',', $top );
+	$views                     = ( empty( $post['mc_views'] ) ) ? array() : $post['mc_views'];
 	$single                    = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
 	$main                      = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
 	$card                      = ( empty( $post['mc_display_card'] ) ) ? array() : $post['mc_display_card'];
@@ -399,6 +400,7 @@ function mc_update_output_settings( $post ) {
 	$options['display_main']   = array_map( 'sanitize_text_field', $main );
 	$options['display_card']   = array_map( 'sanitize_text_field', $card );
 	$options['display_mini']   = array_map( 'sanitize_text_field', $mini );
+	$options['views']          = array_map( 'sanitize_text_field', $views );
 	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) &amp;&amp; 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
 	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
@@ -1256,6 +1258,27 @@ function mc_remote_db() {
 						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 						&lt;input type="submit" name="save" class="button screen-reader-text" value="&lt;?php _e( 'Save Display Settings', 'my-calendar' ); ?>" />&lt;/p>
 						&lt;fieldset>
+							&lt;legend>&lt;?php esc_html_e( 'Enabled Views', 'my-calendar' ); ?>&lt;/legend>
+							&lt;ul class="checkboxes">
+								&lt;?php
+								$default_views = array(
+									'calendar' => __( 'Grid', 'my-calendar' ),
+									'card'     => __( 'Card', 'my-calendar' ),
+									'list'     => __( 'List', 'my-calendar' ),
+									'mini'     => __( 'Mini', 'my-calendar' ),
+								);
+								mc_settings_field(
+									array(
+										'name'    => 'mc_views',
+										'label'   => $default_views,
+										'default' => array( 'calendar', 'list', 'mini' ),
+										'type'    => 'checkbox',
+									)
+								);
+								?>
+							&lt;/ul>
+						&lt;/fieldset>
+						&lt;fieldset>
 							&lt;legend>&lt;?php esc_html_e( 'Title Templates', 'my-calendar' ); ?>&lt;/legend>
 							&lt;ul class="my-calendar-text">
 								&lt;li>
@@ -1471,7 +1494,6 @@ function mc_remote_db() {
 				&lt;/div>
 				&lt;div class="postbox">
 					&lt;h2>&lt;?php esc_html_e( 'Calendar Navigation', 'my-calendar' ); ?>&lt;/h2>
-
 					&lt;div class="inside">
 						&lt;fieldset>
 							&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Update calendar layout', 'my-calendar' ); ?>&lt;/legend>

@@ -1149,6 +1149,16 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
  * @return string HTML output
  */
 function mc_format_toggle( $format, $toggle, $time, $id ) {
+	$enabled = mc_get_option( 'views' );
+	foreach ( $enabled as $key => $type ) {
+		if ( 'mini' === $type ) {
+			unset( $enabled[ $key ] );
+		}
+	}
+	// If there is only one format enabled, don't show format toggle.
+	if ( count( $enabled ) &lt; 2 ) {
+		return '';
+	}
 	if ( 'mini' !== $format &amp;&amp; 'yes' === $toggle ) {
 		if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
 			$is_grid = ( 'calendar' === $format ) ? ' aria-pressed="true"' : '';
@@ -1166,18 +1176,21 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
 		$toggle = "&lt;div class='mc-format'>
 		&lt;ul>";
 
-		$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
-		$url     = mc_url_in_loop( $url );
-		$toggle .= "&lt;li>&lt;a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Grid', 'my-calendar' ) . '&lt;/a>&lt;/li>';
-
-		$url     = mc_build_url( array( 'format' => 'card' ), array() );
-		$url     = mc_url_in_loop( $url );
-		$toggle .= "&lt;li>&lt;a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Cards', 'my-calendar' ) . '&lt;/a>&lt;/li>';
-
-		$url     = mc_build_url( array( 'format' => 'list' ), array() );
-		$url     = mc_url_in_loop( $url );
-		$toggle .= "&lt;li>&lt;a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>List', 'my-calendar' ) . '&lt;/a>&lt;/li>';
-
+		if ( in_array( 'calendar', $enabled, true ) ) {
+			$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
+			$url     = mc_url_in_loop( $url );
+			$toggle .= "&lt;li>&lt;a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Grid', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+		}
+		if ( in_array( 'card', $enabled, true ) ) {
+			$url     = mc_build_url( array( 'format' => 'card' ), array() );
+			$url     = mc_url_in_loop( $url );
+			$toggle .= "&lt;li>&lt;a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>Cards', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+		}
+		if ( in_array( 'list', $enabled, true ) ) {
+			$url     = mc_build_url( array( 'format' => 'list' ), array() );
+			$url     = mc_url_in_loop( $url );
+			$toggle .= "&lt;li>&lt;a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active'>" . __( '&lt;span class="maybe-hide">View as &lt;/span>List', 'my-calendar' ) . '&lt;/a>&lt;/li>';
+		}
 		$toggle .= '&lt;/ul>
 		&lt;/div>';
 	} else {
