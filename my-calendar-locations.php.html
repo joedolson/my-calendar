@@ -1223,7 +1223,7 @@ function mc_location_featured_image_field( $post_id ) {
 	if ( '' !== $image ) {
 		$return .= '&lt;div class="event_image" aria-live="assertive">&lt;img id="location_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" />&lt;/div>';
 	} else {
-		$return .= '&lt;div class="event_image">&lt;/div>';
+		$return .= '&lt;div class="event_image" id="event_image">&lt;/div>';
 	}
 	$return .= '&lt;/div>';
 

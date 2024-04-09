@@ -516,7 +516,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			// Common Elements to all Shortcodes.
 			if ( $shortcode ) {
 				echo wp_kses_post(
-					'&lt;div class="shortcode-preview">&lt;p>&lt;label for="mc_shortcode">Shortcode&lt;/label>&lt;textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '&lt;/textarea>' . $append . '&lt;/p>
+					'&lt;div class="shortcode-preview">&lt;p>&lt;label for="mc_shortcode_' . $type . '">Shortcode&lt;/label>&lt;textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '&lt;/textarea>' . $append . '&lt;/p>
 					&lt;div class="mc-copy-button">&lt;button type="button" class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc_shortcode_' . $type . '">' . __( 'Copy to clipboard', 'my-calendar' ) . '&lt;/button>&lt;span class="mc-notice-copied">' . __( 'Shortcode Copied', 'my-calendar' ) . '&lt;/span>&lt;/div>
 					&lt;p>&lt;button data-type="' . $base . '" type="button" class="button button-secondary reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '&lt;/button>&lt;/p>&lt;/div>'
 				);
@@ -557,7 +557,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					&lt;/select>
 				&lt;/p>
 				&lt;p>
-					&lt;label for="lvalue&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?>&lt;/label>
+					&lt;label id="lval" for="lvalue&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?>&lt;/label>
 					&lt;input type="text" name="lvalue" id="lvalue&lt;?php echo esc_attr( $type ); ?>" value="&lt;?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' />
 				&lt;/p>
 

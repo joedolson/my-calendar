@@ -2181,7 +2181,7 @@ $plugins_string
 	";
 	$support_data = '&lt;div class="mc-copy-button">&lt;button class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc-clipboard">' . __( 'Copy to clipboard', 'my-calendar' ) . '&lt;/button>
 	&lt;span class="mc-notice-copied">' . __( 'Help Info Copied', 'my-calendar' ) . '&lt;/span>&lt;/div>
-	&lt;textarea id="mc-clipboard" class="help" readonly>%s&lt;/textarea>';
+	&lt;label for="mc-clipboard">' . __( 'Help Info', 'my-calendar' ) . '&lt;/label>&lt;textarea id="mc-clipboard" class="help" readonly>%s&lt;/textarea>';
 	if ( $checked ) {
 		$request = '';
 		if ( isset( $_POST['mc_support'] ) ) {

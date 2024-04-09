@@ -512,7 +512,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							if ( ! empty( $data->event_image ) ) {
 								echo '&lt;div class="event_image" aria-live="assertive">&lt;img id="event_image" src="' . esc_url( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" />&lt;/div>';
 							} else {
-								echo '&lt;div class="event_image">&lt;/div>';
+								echo '&lt;div class="event_image" id="event_image">&lt;/div>';
 							}
 							?>
 						&lt;/div>
