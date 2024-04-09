@@ -1894,7 +1894,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 			$text             = ( $event_location ) ? __( 'No change', 'my-calendar' ) : __( 'No location', 'my-calendar' );
 			$aria_describedby = ( $event_location ) ? ' aria-describedby="mc-current-location"' : '';
 			$fields          .= '
-			 <select name="location_preset" id="l_preset"' . $aria_describedby . ">
+			 <select name="location_preset" id="l_preset"' . $aria_describedby . '>
 				<option value="none">' . $text . '</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
