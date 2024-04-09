@@ -279,6 +279,7 @@ function mc_kses_elements() {
 			'data-href'        => array(),
 			'data-type'        => array(),
 			'aria-pressed'     => array(),
+			'id'               => array(),
 		),
 		'ul'               => array(
 			'class' => array(),

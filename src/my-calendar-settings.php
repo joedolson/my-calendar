@@ -662,11 +662,11 @@ function my_calendar_settings() {
 			<?php
 			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
 				?>
-				<button type="button" role="tab" aria-selected="false"  id="tab_multi" aria-controls="my-calendar-multisite"><?php esc_html_e( 'Multisite', 'my-calendar' ); ?></button>
+				<button type="button" role="tab" aria-selected="false" id="tab_multi" aria-controls="my-calendar-multisite"><?php esc_html_e( 'Multisite', 'my-calendar' ); ?></button>
 				<?php
 			}
 			?>
-			<button type="button" role="tab" aria-selected="false"  id="tab_permissions" aria-controls="my-calendar-permissions"><?php esc_html_e( 'Permissions', 'my-calendar' ); ?></button>
+			<button type="button" role="tab" aria-selected="false" id="tab_permissions" aria-controls="my-calendar-permissions"><?php esc_html_e( 'Permissions', 'my-calendar' ); ?></button>
 			<button type="button" role="tab" id="tab_email" aria-selected="false" aria-controls="my-calendar-email"><?php esc_html_e( 'Notifications', 'my-calendar' ); ?></button>
 			<?php
 			/**
@@ -1849,13 +1849,13 @@ function mc_remote_db() {
 			if ( 'administrator' === $role ) {
 				continue;
 			}
-			$tabs           .= '<button type="button" role="tab" aria-selected="false" id="tab_' . $role . '" aria-controls="container_mc_' . $role . '">' . $rolename . '</button>';
-			$role_container .= "<div role='tabpanel' aria-labelledby='tab_$role' class='wptab mc_$role mc_permissions' id='container_mc_$role'><fieldset id='mc_$role' class='roles'><legend>$rolename</legend>";
+			$tabs           .= "<button type='button' role='tab' aria-selected='false' id='tab_$role' aria-controls='container_mc_$role'>" . $rolename . '</button>' . PHP_EOL;
+			$role_container .= "<div role='tabpanel' aria-labelledby='tab_$role' class='wptab mc_$role mc_permissions' id='container_mc_$role'>" . PHP_EOL . "<fieldset id='mc_$role' class='roles'><legend>$rolename</legend>" . PHP_EOL;
 			$role_container .= "<input type='hidden' value='none' name='mc_caps[" . $role . "][none]' /><ul class='mc-settings checkboxes'>";
 			foreach ( $caps as $cap => $name ) {
 				$role_container .= mc_cap_checkbox( $role, $cap, $name );
 			}
-			$role_container .= '</ul></fieldset></div>';
+			$role_container .= '</ul></fieldset></div>' . PHP_EOL;
 		}
 		$tabs .= '</div>';
 		echo '<div class="mc-tabs vertical">';
