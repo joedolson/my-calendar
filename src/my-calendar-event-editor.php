@@ -1191,7 +1191,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
 					$return .= '<div class="event_image" aria-live="assertive"><img id="event_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 				} else {
-					$return .= '<div class="event_image"></div>';
+					$return .= '<div class="event_image" id="event_image"></div>';
 				}
 				$return .= '</div>';
 			} else {
@@ -1239,7 +1239,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				}
 				$return = '
 					<p>
-						<label for="e_link">' . __( 'More Information', 'my-calendar' ) . '</label> <input type="url" placeholder="https://" id="e_link" name="event_link" size="40" value="' . $value . '" aria-describedby="event_link_description" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
+						<label for="e_link">' . __( 'More Information', 'my-calendar' ) . '</label> <input type="url" placeholder="https://" id="e_link" name="event_link" size="40" value="' . $value . '" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
 					</p>';
 			}
 			break;
@@ -1890,10 +1890,11 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 	if ( 0 !== $count ) {
 		$fields .= ( $event_location ) ? '<label for="l_preset">' . __( 'Change location:', 'my-calendar' ) . '</label>' : '<label for="l_preset">' . __( 'Choose location:', 'my-calendar' ) . '</label>';
 		if ( ! $autocomplete ) {
-			$locs    = mc_get_locations( 'select-locations' );
-			$text    = ( $event_location ) ? __( 'No change', 'my-calendar' ) : __( 'No location', 'my-calendar' );
-			$fields .= '
-			 <select name="location_preset" id="l_preset" aria-describedby="mc-current-location">
+			$locs             = mc_get_locations( 'select-locations' );
+			$text             = ( $event_location ) ? __( 'No change', 'my-calendar' ) : __( 'No location', 'my-calendar' );
+			$aria_describedby = ( $event_location ) ? ' aria-describedby="mc-current-location"' : '';
+			$fields          .= '
+			 <select name="location_preset" id="l_preset"' . $aria_describedby . ">
 				<option value="none">' . $text . '</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
