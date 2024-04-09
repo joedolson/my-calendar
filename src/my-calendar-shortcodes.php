@@ -531,8 +531,8 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					</select>
 				</p>
 				<p>
-					<label for="lvalue<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
-					<input type="text" name="lvalue" id="lvalue<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lvalue location-info' />
+					<label id="lval" for="lvalue<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Location values (comma-separated)', 'my-calendar' ); ?></label>
+					<input type="text" name="lvalue" id="lvalue<?php echo esc_attr( $type ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" aria-labelledby='lval location-info' />
 				</p>
 
 				<p id='location-info'>
