@@ -490,7 +490,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			// Common Elements to all Shortcodes.
 			if ( $shortcode ) {
 				echo wp_kses_post(
-					'<div class="shortcode-preview"><p><label for="mc_shortcode">Shortcode</label><textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '</textarea>' . $append . '</p>
+					'<div class="shortcode-preview"><p><label for="mc_shortcode_' . $type . '">Shortcode</label><textarea readonly class="large-text readonly mc-shortcode-container" id="mc_shortcode_' . $type . '">' . $shortcode . '</textarea>' . $append . '</p>
 					<div class="mc-copy-button"><button type="button" class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc_shortcode_' . $type . '">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button><span class="mc-notice-copied">' . __( 'Shortcode Copied', 'my-calendar' ) . '</span></div>
 					<p><button data-type="' . $base . '" type="button" class="button button-secondary reset-my-calendar">' . __( 'Reset Shortcode', 'my-calendar' ) . '</button></p></div>'
 				);
