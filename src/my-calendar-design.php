@@ -31,7 +31,7 @@ function my_calendar_design() {
 				<div class="metabox-holder">
 
 					<div class="ui-sortable meta-box-sortables" id="my-calendar-styles">
-						<div class="wptab postbox" aria-labelledby="tab_start" role="tabpanel" id="my-calendar-style">
+						<div class="wptab postbox" aria-labelledby="tab_style" role="tabpanel" id="my-calendar-style">
 							<h2 id="styles"><?php esc_html_e( 'Style Editor', 'my-calendar' ); ?></h2>
 							<div class="inside">
 							<?php my_calendar_style_edit(); ?>
