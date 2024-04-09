@@ -1197,7 +1197,7 @@ function mc_location_featured_image_field( $post_id ) {
 	if ( '' !== $image ) {
 		$return .= '<div class="event_image" aria-live="assertive"><img id="location_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 	} else {
-		$return .= '<div class="event_image"></div>';
+		$return .= '<div class="event_image" id="event_image"></div>';
 	}
 	$return .= '</div>';
 
