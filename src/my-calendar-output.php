@@ -1479,8 +1479,9 @@ function mc_calendar_params( $args ) {
 	$groups    = isset( $args['hide_groups'] ) ? $args['hide_groups'] : '';
 	$recurring = isset( $args['hide_recurring'] ) ? $args['hide_recurring'] : '';
 
-	if ( ! in_array( $format, array( 'list', 'calendar', 'mini', 'card' ), true ) ) {
-		$format = 'calendar';
+	$enabled = mc_get_option( 'views' );
+	if ( ! in_array( $format, $enabled, true ) ) {
+		$format = ( in_array( 'calendar', $enabled, true ) ) ? 'calendar' : $enabled[0];
 	}
 
 	if ( ! in_array( $time, array( 'day', 'week', 'month', 'month+1' ), true ) ) {
@@ -1493,7 +1494,7 @@ function mc_calendar_params( $args ) {
 		$category = 'all';
 	}
 
-	if ( isset( $_GET['format'] ) && in_array( $_GET['format'], array( 'list', 'mini', 'card' ), true ) && 'mini' !== $format ) {
+	if ( isset( $_GET['format'] ) && in_array( $_GET['format'], $enabled, true ) && 'mini' !== $format ) {
 		$format = esc_attr( $_GET['format'] );
 	} else {
 		$format = esc_attr( $format );
@@ -2239,7 +2240,7 @@ function my_calendar( $args ) {
 		restore_current_blog();
 	}
 	$json_ld = '';
-	if ( ! is_admin() ) {
+	if ( ! is_admin() && ! ( isset( $args['json'] ) && 'false' === $args['json'] ) ) {
 		if ( ! empty( $json ) && is_array( $json ) ) {
 			$json_ld = json_encode( map_deep( $json, 'esc_html' ), JSON_UNESCAPED_SLASHES );
 			$json_ld = PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . $json_ld . PHP_EOL . '</script>' . PHP_EOL;
