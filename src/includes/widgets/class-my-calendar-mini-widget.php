@@ -85,10 +85,14 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		} else {
 			$title = '';
 		}
-
+		$enabled = mc_get_option( 'views' );
+		if ( ! in_array( 'mini', $enabled, true ) ) {
+			$format = 'list';
+		}
+		
 		$calendar = array(
 			'name'     => 'mini',
-			'format'   => 'mini',
+			'format'   => $format,
 			'category' => implode( ',', $category ),
 			'time'     => $time,
 			'ltype'    => $ltype,
@@ -101,11 +105,12 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			'site'     => $site,
 			'month'    => $months,
 			'source'   => 'widget',
+			'json'     => 'false',
 		);
 
 		$the_events = my_calendar( $calendar );
 		if ( '' !== $the_events ) {
-			echo wp_kses( $before_widget . $title . $the_events . $after_widget, mc_kses_elements() );
+			echo wp_kses_post( $before_widget . $title . $the_events . $after_widget );
 		}
 	}
 

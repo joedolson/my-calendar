@@ -391,9 +391,6 @@ function mc_kses_elements() {
 		'pre'              => array(
 			'class' => array(),
 		),
-		'script'           => array(
-			'type' => 'application/ld+json',
-		),
 		'duet-date-picker' => array(
 			'identifier'        => array(),
 			'first-day-of-week' => array(),
