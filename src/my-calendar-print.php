@@ -113,9 +113,10 @@ function my_calendar_print() {
 		'id'       => 'mc-print-view',
 		'below'    => 'key',
 		'above'    => 'none',
+		'json'     => 'false',
 	);
 
-	echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
+	echo wp_kses_post( my_calendar( $calendar ) );
 
 	$add = array_map( 'esc_html', $_GET );
 	unset( $add['cid'] );
