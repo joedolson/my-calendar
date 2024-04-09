@@ -116,10 +116,7 @@
 	}
 
 	if ( 'true' === my_calendar.ajax ) {
-		const links = $( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
-		links.each( function() {
-			$( this ).attr( 'role', 'button' );
-		});
+		mc_render_buttons();
 		// Prevents spacebar from scrolling the page on links with button role.
 		$(document).on( 'keydown', '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)', function(e) {
 			if ( 32 === e.which ) {
@@ -230,6 +227,7 @@
 					if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
 						$('.mini .has-events').children().not('.mc-date-container').hide();
 					}
+					mc_render_buttons();
 					// All views.
 					$( '#' + targetId ).trigger( 'focus' );
 					let refText = $( '#mc_head_' + ref ).text();
@@ -259,6 +257,13 @@
 			utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
 			udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
 			$( this ).html( '<span class="mc-local-time-label">' + label + ':</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
+		});
+	}
+
+	function mc_render_buttons() {
+		const links = $( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
+		links.each( function() {
+			$( this ).attr( 'role', 'button' );
 		});
 	}
 
