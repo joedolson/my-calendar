@@ -1520,7 +1520,7 @@ function mc_calendar_params( $args ) {
 	 *
 	 * @hook mc_display_format
 	 *
-	 * @param {string} $format Current view format. E.g. 'grid', 'list', 'card' or 'mini'.
+	 * @param {string} $format Current view format. E.g. 'calendar', 'list', 'card' or 'mini'.
 	 * @param {array}  $args Calendar view arguments.
 	 *
 	 * @return {string}
@@ -1793,7 +1793,6 @@ function my_calendar( $args ) {
 	 * @return {string}
 	 */
 	$hl = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
-
 	if ( isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
 		// single event, main calendar only.
 		$mc_id = ( is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
