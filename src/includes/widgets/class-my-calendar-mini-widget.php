@@ -89,7 +89,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		if ( ! in_array( 'mini', $enabled, true ) ) {
 			$format = 'list';
 		}
-		
+
 		$calendar = array(
 			'name'     => 'mini',
 			'format'   => $format,
