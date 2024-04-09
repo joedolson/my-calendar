@@ -602,7 +602,7 @@ label[for=mc_uri_query]::before {
 	padding: 6px 32px 6px 6px;
 }
 
-.jcd-wide .style-selector fieldset {
+.jcd-wide .style-selector form > div {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: end;

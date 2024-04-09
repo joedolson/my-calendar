@@ -301,7 +301,7 @@ function mc_stylesheet_selector() {
 	}
 	$options .= '</optgroup>';
 	$return  .= '
-		<fieldset>
+		<div>
 			<p>
 				<label for="mc_css_file">' . __( 'Select Theme (optional)', 'my-calendar' ) . '</label><br />
 				<select name="mc_css_file" id="mc_css_file"><option value="">' . __( 'None', 'my-calendar' ) . '</option>' . $options . '</select>
@@ -309,7 +309,7 @@ function mc_stylesheet_selector() {
 			<p>
 				<input type="submit" name="save" class="button-primary" value="' . __( 'Choose Style', 'my-calendar' ) . '"/>
 			</p>
-		</fieldset>
+		</div>
 	</form>';
 	$link     = add_query_arg( 'mcpreview', mc_get_option( 'css_file' ), mc_get_uri() );
 	$return  .= '<a href="' . esc_url( $link ) . '" class="preview-link" data-css="' . esc_attr( mc_get_option( 'css_file' ) ) . '">' . __( 'Preview Stylesheet', 'my-calendar' ) . '</a></div>';
