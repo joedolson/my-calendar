@@ -1191,7 +1191,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			break;
 		case 'event_image':
 			if ( $has_data &amp;&amp; property_exists( $data, 'event_post' ) ) {
-				$image    = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
+				$image    = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post, 'post-thumbnail' ) : $data->event_image;
 				$image_id = ( has_post_thumbnail( $data->event_post ) ) ? get_post_thumbnail_id( $data->event_post ) : '';
 			} else {
 				$image    = ( $has_data &amp;&amp; '' !== $data->event_image ) ? $data->event_image : '';
