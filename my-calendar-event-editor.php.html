@@ -649,7 +649,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		if ( mc_can_edit_event( $event_id ) ) {
 			$update = isset( $output['checked'] ) ? $output['checked'] : $output[2];
 			// If the previously stored location is not the same as a new location, remove event location fields.
-			if ( $post['preset_location'] !== $post['location_preset'] &amp;&amp; ! empty( $post['event_label'] ) ) {
+			if ( isset( $post['preset_location'] ) &amp;&amp; ( $post['preset_location'] !== $post['location_preset'] ) &amp;&amp; ! empty( $post['event_label'] ) ) {
 				mc_remove_location_from_event( $event_id );
 			}
 			// Update event category data.
