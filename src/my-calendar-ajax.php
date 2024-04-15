@@ -243,23 +243,11 @@ function mc_ajax_delete_occurrence() {
 	}
 
 	if ( current_user_can( 'mc_manage_events' ) ) {
-		global $wpdb;
 		$occur_id = (int) $_REQUEST['occur_id'];
 		$event_id = (int) $_REQUEST['event_id'];
 		$begin    = sanitize_text_field( $_REQUEST['occur_begin'] );
 		$end      = sanitize_text_field( $_REQUEST['occur_end'] );
-		$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
-		$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-		$event_post  = mc_get_event_post( $event_id );
-		$instances   = get_post_meta( $event_post, '_mc_deleted_instances', true );
-		$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
-		$instances[] = array(
-			'occur_event_id' => $event_id,
-			'occur_begin'    => $begin,
-			'occur_end'      => $end,
-		);
-		update_post_meta( $event_post, '_mc_deleted_instances', $instances );
+		$result   = mc_delete_instance( $occur_id, $event_id, $begin, $end );
 
 		if ( $result ) {
 			wp_send_json(

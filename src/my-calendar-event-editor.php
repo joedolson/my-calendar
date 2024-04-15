@@ -2667,6 +2667,34 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 }
 
 /**
+ * Delete an instance from the database and record in deleted instances.
+ *
+ * @param int    $occur_id Instance ID.
+ * @param int    $event_id Event ID.
+ * @param string $begin Beginning time.
+ * @param string $end Ending time.
+ *
+ * @return int|bool
+ */
+function mc_delete_instance(  $occur_id, $event_id, $begin, $end ) {
+	global $wpdb;
+	$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
+	$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	$event_post  = mc_get_event_post( $event_id );
+	$instances   = get_post_meta( $event_post, '_mc_deleted_instances', true );
+	$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
+	$instances[] = array(
+		'occur_event_id' => $event_id,
+		'occur_begin'    => $begin,
+		'occur_end'      => $end,
+	);
+	update_post_meta( $event_post, '_mc_deleted_instances', $instances );
+
+	return $result;
+}
+
+/**
  * Insert a single instance to the database.
  *
  * @param array $args ['id', 'event_date', 'event_end', 'event_time', 'event_endtime', 'group'].
