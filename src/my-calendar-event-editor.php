@@ -2676,10 +2676,10 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
  *
  * @return int|bool
  */
-function mc_delete_instance(  $occur_id, $event_id, $begin, $end ) {
+function mc_delete_instance( $occur_id, $event_id, $begin, $end ) {
 	global $wpdb;
-	$delete   = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
-	$result   = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$delete = 'DELETE FROM `' . my_calendar_event_table() . '` WHERE occur_id = %d';
+	$result = $wpdb->query( $wpdb->prepare( $delete, $occur_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	$event_post  = mc_get_event_post( $event_id );
 	$instances   = get_post_meta( $event_post, '_mc_deleted_instances', true );
