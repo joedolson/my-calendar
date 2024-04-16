@@ -2337,6 +2337,26 @@ function mc_next_post_link( $output, $format ) {
 }
 
 /**
+ * Filter the edit post link to point to the event editor.
+ *
+ * @param string $link Link to editor.
+ * @param int    $post_id Current post ID.
+ * @param string $context Calling context.
+ *
+ * @return string Link.
+ */
+function mc_get_edit_post_link( $link, $post_id, $context ) {
+	if ( is_singular( 'mc-events' ) ) {
+		$event_id = get_post_meta( $post_id, '_mc_event_id', true );
+		$link     = admin_url( 'admin.php?page=my-calendar&amp;mode=edit&amp;event_id=' . absint( $event_id ) );
+		$link     = ( 'display' === $context ) ? esc_url( $link ) : $link;
+	}
+
+	return $link;
+}
+add_filter( 'get_edit_post_link', 'mc_get_edit_post_link', 10, 3 );
+
+/**
  * Filter body classes on event singular posts.
  *
  * @param array $classes Array of body classes.
