@@ -276,7 +276,7 @@
 			toggle.setAttribute( 'type', 'button' );
 			toggle.setAttribute( 'aria-controls', controls_id );
 			toggle.setAttribute( 'aria-expanded', false );
-			toggle.innerText = my_calendar.subscribe;
+			toggle.innerHTML = my_calendar.subscribe + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
 			subscribe.find( 'ul' ).attr( 'id', controls_id );
 			subscribe.find( 'ul' ).css( { 'display' : 'none' } );
 			subscribe.prepend( toggle );
@@ -300,9 +300,11 @@
 				if ( target.is( ':visible' ) ) {
 					target.css( { 'display' : 'none' } );
 					$( this ).attr( 'aria-expanded', 'false' );
+					$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-right' );
 				} else {
 					target.css( { 'display' : 'block' } );
 					$( this ).attr( 'aria-expanded', 'true' );
+					$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-right' ).addClass( 'dashicons-arrow-down' );
 				}
 			});
 		});
