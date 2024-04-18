@@ -123,7 +123,7 @@
 				e.preventDefault();
 			}
 		});
-		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button, .my-calendar-footer button", function (e) {
+		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-subscribe button), .my-calendar-footer button:not(.mc-subscribe button)", function (e) {
 			e.preventDefault();
 			if ( 'click' === e.type || ( 'keyup' === e.type && 32 === e.which ) ) {
 				let targetId   = $( this ).attr( 'id' );
