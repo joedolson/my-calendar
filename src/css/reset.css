@@ -870,6 +870,7 @@ svg.category-icon,
 	width: calc( 100% - 4px );
 	left: 2px;
 	top: calc( 1.62rem + 16px ); /* Line-height + padding of control. */
+	z-index: 2;
 }
 
 .mc-main .mc-export {
