@@ -468,7 +468,27 @@ function mc_posttypes_messages( $messages ) {
 
 	return $messages;
 }
-</code></pre>
+
+/**
+ * Pass edits to event description or excerpt back to event if edited in editor.
+ *
+ * @param int    $post_id Post ID.
+ * @param object $post Post object.
+ *
+ * @return bool|int
+ */
+function mc_save_post( $post_id, $post ) {
+	if ( empty( $_POST ) || ( defined( 'DOING_AUTOSAVE' ) &amp;&amp; DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || ( defined( 'DOING_AJAX' ) &amp;&amp; DOING_AJAX ) || ! ( 'mc-events' === get_post_type( $post_id ) ) ) {
+		return $post_id;
+	}
+	// Copy post content to event.
+	$event_id       = get_post_meta( $post_id, '_mc_event_id', true );
+	$update_content = mc_update_data( $event_id, 'event_desc', $post->post_content, '%s' );
+	$update_excerpt = mc_update_data( $event_id, 'event_short', $post->post_excerpt, '%s' );
+
+	return $post_id;
+}
+add_action( 'wp_after_insert_post', 'mc_save_post', 10, 2 );</code></pre>
         </article>
     </section>
 
