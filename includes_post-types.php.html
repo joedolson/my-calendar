@@ -483,8 +483,8 @@ function mc_save_post( $post_id, $post ) {
 	}
 	// Copy post content to event.
 	$event_id       = get_post_meta( $post_id, '_mc_event_id', true );
-	$update_content = mc_update_data( $event_id, 'event_desc', $post->post_content, '%s' );
-	$update_excerpt = mc_update_data( $event_id, 'event_short', $post->post_excerpt, '%s' );
+	mc_update_data( $event_id, 'event_desc', $post->post_content, '%s' );
+	mc_update_data( $event_id, 'event_short', $post->post_excerpt, '%s' );
 
 	return $post_id;
 }
