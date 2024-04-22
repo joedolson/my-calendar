@@ -97,7 +97,8 @@ function mc_search_results( $query ) {
 	}
 
 	$event_array = mc_get_search_results( $search );
-	$count       = count( $event_array );
+	$event_array = mc_remove_hidden_events( $event_array );
+	$count       = mc_count_events( $event_array );
 
 	if ( ! empty( $event_array ) ) {
 		$template = '<h3><strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}</h3><div class="mcs-search-excerpt">{search_excerpt}</div>';
