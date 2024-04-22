@@ -1177,6 +1177,46 @@ function mc_handle_permalinks() {
 	}
 }
 
+/**
+ * Remove hidden events from a collection of events.
+ *
+ * @param array $events Array of events.
+ *
+ * @return array
+ */
+function mc_remove_hidden_events( $events ) {
+	foreach ( $events as $date => $collection ) {
+		foreach ( $collection as $index => $event ) {
+			if ( mc_exit_early( $event, $date ) ) {
+				unset( $events[ $date ][ $index ] );
+			}
+		}
+		if ( 0 === count( $events[ $date ] ) ) {
+			unset( $events[ $date ] );
+		}
+	}
+
+	return $events;
+}
+
+/**
+ * Count the events in an event/date array.
+ *
+ * @param array $events Array keyed by date > events in date.
+ *
+ * @return int
+ */
+function mc_count_events( $events ) {
+	$count = 0;
+	foreach ( $events as $collection ) {
+		foreach ( $collection as $event ) {
+			++$count;
+		}
+	}
+
+	return $count;
+}
+
 add_action( 'template_redirect', 'mc_hidden_event' );
 /**
  * If an event is hidden from the current user, redirect to 404.
