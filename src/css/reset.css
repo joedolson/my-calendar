@@ -20,7 +20,7 @@
 	background: var(--primary-light);
 }
 
-.mc-main.list .my-calendar-month, .mc-main .heading  {
+.mc-main.list .my-calendar-month:not(.widget .mc-main.list .my-calendar-month), .mc-main .heading:not(.widget .mc-main .heading)  {
 	font-size: var(--calendar-heading);
 	color: var(--primary-dark);
 	text-align: center;
