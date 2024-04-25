@@ -115,7 +115,7 @@ function mc_import_source_tribe_event( $tribe_id ) {
 	 * @return {array|false}
 	 */
 	$event  = apply_filters( 'mc_imported_event_tribe', $tribe_event );
-	$parent = $tribe_event->post_parent;
+	$parent = $event->post_parent;
 	if ( ! $parent ) {
 		// This is a full event, not a sub event in a recurring series.
 		$event = mc_format_tribe_event_for_import( $event );
