@@ -268,6 +268,7 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 function mc_import_tribe_location( $venue_id ) {
 	// This is a double check before inserting.
 	$check = get_post_meta( $venue_id, '_mc_tribe_location_id', true );
+
 	if ( is_numeric( $check ) ) {
 		return $check;
 	}
@@ -292,7 +293,8 @@ function mc_import_tribe_location( $venue_id ) {
 	);
 
 	$location_id = mc_insert_location( $add );
-	$location_id = apply_filters( 'mc_save_location', $location_id, $add, array() );
+	// Ensure the location post is created and get that ID.
+	$post_id = apply_filters( 'mc_save_location', $location_id, $add, array() );
 	if ( is_numeric( $location_id ) ) {
 		// Only set the venue relationship if location ID is set.
 		update_post_meta( $venue_id, '_mc_tribe_location_id', $location_id );
@@ -300,7 +302,7 @@ function mc_import_tribe_location( $venue_id ) {
 		// Set featured image for location.
 		$featured_image_id = get_post_thumbnail_id( $venue_id );
 		if ( $featured_image_id ) {
-			$location_post = mc_get_location_post( $location_id );
+			$location_post = ( $post_id ) ? $post_id : mc_get_location_post( $location_id );
 			set_post_thumbnail( $location_post, $featured_image_id );
 		}
 		// Set location post content to venue content.
