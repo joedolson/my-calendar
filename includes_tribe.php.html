@@ -399,11 +399,12 @@ function mc_import_tribe_tickets( $tribe_id, $event_post ) {
 			 *
 			 * @param {array} $registration_options Options data to save for new event.
 			 * @param {int}   $tribe_id Tribe event ID.
+			 * @param {int}   $ticket_id Tribe ticket ID.
 			 * @param {int}   $event_post My Calendar event post ID.
 			 *
 			 * @return {array}
 			 */
-			$registration_options = apply_filters( 'mc_import_tribe_tickets_options', $registration_options, $tribe_id, $event_post );
+			$registration_options = apply_filters( 'mc_import_tribe_tickets_options', $registration_options, $tribe_id, $ticket_id, $event_post );
 			update_post_meta( $event_post, '_mt_registration_options', $registration_options );
 			update_post_meta( $event_post, '_mt_sell_tickets', 'true' );
 		}
