@@ -29,12 +29,12 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 	// Check if this is an ajax request.
 	$post_post = isset( $_POST['post'] ) ? $_POST['post'] : array();
 	$post_data = ( wp_doing_ajax() && ! empty( $_POST ) ) ? $post_post : $_POST;
-	if ( $post_data !== $_POST && is_string( $post_data ) ) {
+	if ( is_string( $post_data ) ) {
 		parse_str( $post_data, $post );
 	} else {
 		$post = $post_data;
 	}
-	$post = map_deep( $post_data, 'wp_kses_post' );
+	$post = map_deep( $post, 'wp_kses_post' );
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
@@ -235,12 +235,12 @@ function mc_create_event_post( $data, $event_id ) {
 	// Check if this is an ajax request.
 	$post_post = isset( $_POST['post'] ) ? $_POST['post'] : array();
 	$post_data = ( wp_doing_ajax() && ! empty( $_POST ) ) ? $post_post : $_POST;
-	if ( $post_data !== $_POST && is_string( $post_data ) ) {
+	if ( is_string( $post_data ) ) {
 		parse_str( $post_data, $post );
 	} else {
 		$post = $post_data;
 	}
-	$post = map_deep( $post_data, 'wp_kses_post' );
+	$post = map_deep( $post, 'wp_kses_post' );
 	if ( ! $post_id ) {
 		$categories = mc_get_categories( $event_id );
 		$terms      = array();
