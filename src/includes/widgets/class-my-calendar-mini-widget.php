@@ -86,6 +86,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			$title = '';
 		}
 		$enabled = mc_get_option( 'views' );
+		$format  = 'mini';
 		if ( ! in_array( 'mini', $enabled, true ) ) {
 			$format = 'list';
 		}
