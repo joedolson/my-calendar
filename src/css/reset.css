@@ -1203,6 +1203,10 @@ ol.mc-search-results li.no-results {
 	font-weight: 700;
 }
 
+.mini .mc-date-container {
+	display: grid;
+}
+
 .mini .mc-date-container .mc-change-months {
 	display: none;
 }
