@@ -583,7 +583,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						);
 						$options         = '<option value="">' . esc_html( 'Default', 'my-calendar' ) . '</option>';
 						foreach ( $enabled_formats as $f ) {
-							$options .= '<option value="' . $f . '"' . selected( $f, $format ) . '>' . $format_labels[ $f ]. '</option>';
+							$options .= '<option value="' . $f . '"' . selected( $f, $format ) . '>' . $format_labels[ $f ] . '</option>';
 						}
 						echo $options;
 						?>
