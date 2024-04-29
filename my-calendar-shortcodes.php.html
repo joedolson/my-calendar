@@ -599,11 +599,20 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				&lt;p>
 					&lt;label for="format&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Format', 'my-calendar' ); ?>&lt;/label>
 					&lt;select name="format" id="format&lt;?php echo esc_attr( $type ); ?>">
-						&lt;option value="">&lt;?php esc_html_e( 'Default', 'my-calendar' ); ?>&lt;/option>
-						&lt;option value="calendar"&lt;?php selected( 'calendar', $format ); ?>>&lt;?php esc_html_e( 'Grid', 'my-calendar' ); ?>&lt;/option>
-						&lt;option value='list'&lt;?php selected( 'list', $format ); ?>>&lt;?php esc_html_e( 'List', 'my-calendar' ); ?>&lt;/option>
-						&lt;option value='card'&lt;?php selected( 'card', $format ); ?>>&lt;?php esc_html_e( 'Card', 'my-calendar' ); ?>&lt;/option>
-						&lt;option value="mini"&lt;?php selected( 'mini', $format ); ?>>&lt;?php esc_html_e( 'Mini', 'my-calendar' ); ?>&lt;/option>
+						&lt;?php
+						$enabled_formats = mc_get_option( 'views' );
+						$format_labels   = array(
+							'calendar' => __( 'Grid', 'my-calendar' ),
+							'list'     => __( 'List', 'my-calendar' ),
+							'card'     => __( 'Card', 'my-calendar' ),
+							'mini'     => __( 'Mini', 'my-calendar' ),
+						);
+						$options         = '&lt;option value="">' . esc_html( 'Default', 'my-calendar' ) . '&lt;/option>';
+						foreach ( $enabled_formats as $f ) {
+							$options .= '&lt;option value="' . $f . '"' . selected( $f, $format ) . '>' . $format_labels[ $f ]. '&lt;/option>';
+						}
+						echo $options;
+						?>
 					&lt;/select>
 				&lt;/p>
 				&lt;p>
