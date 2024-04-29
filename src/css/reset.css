@@ -231,7 +231,6 @@
 	outline: 1px solid var(--primary-dark);
 }
 
-
 .mc-main .details img.alignleft {
 	width: auto;
 	float: left;
@@ -1182,7 +1181,7 @@ ol.mc-search-results li.no-results {
 
 .entry-title .category-icon {
 	fill: var(--primary-dark) !important;
-	max-width: 1em;
+	max-width: .75em;
 	padding: 0;
 	display: inline-block;
 }
