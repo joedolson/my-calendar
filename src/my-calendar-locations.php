@@ -1383,7 +1383,7 @@ function mc_location_select( $location = false ) {
 		$list .= $l;
 	}
 
-	return '<option value="">' . __( 'Select', 'my-calendar' ) . '</option>' . $list;
+	return '<option value="none">' . __( 'No location', 'my-calendar' ) . '</option>' . $list;
 }
 
 /**
