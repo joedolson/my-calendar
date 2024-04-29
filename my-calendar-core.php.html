@@ -641,6 +641,9 @@ function mc_generate_category_styles() {
 				$inverse = mc_inverse_color( $color );
 				$inv     = "$alt: $inverse !important;";
 				if ( 'font' === $apply || 'background' === $apply ) {
+					if ( 'background' === $apply ) {
+						$category_styles .= "\n.my-calendar-modal .event-title svg { background-color: $color; padding: 3px; }";
+					}
 					// always an anchor as of 1.11.0, apply also to title.
 					$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
 					$category_styles .= "\n.mc-main .$class .event-title button { $type: $color !important; $inv }";
