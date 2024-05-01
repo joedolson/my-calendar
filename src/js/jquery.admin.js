@@ -570,11 +570,13 @@ jQuery(document).ready(function ($) {
 		if ( disabled ) {
 			current.removeClass( 'mc-hidden' ).addClass( 'mc-visible' );
 			current.find( 'input[type=hidden]' ).prop( 'disabled', false );
+			$( this ).attr( 'aria-pressed', 'false' );
 			$( this ).find( '.dashicons' ).removeClass( 'dashicons-hidden' ).addClass( 'dashicons-visibility' );
 			wp.a11y.speak( 'Item shown' );
 		} else {
 			current.addClass( 'mc-hidden' ).removeClass( 'mc-visible' );
 			current.find( 'input[type=hidden]' ).prop( 'disabled', true );
+			$( this ).attr( 'aria-pressed', 'true' );
 			$( this ).find( '.dashicons' ).removeClass( 'dashicons-visibility' ).addClass( 'dashicons-hidden' );
 			wp.a11y.speak( 'Item hidden' );
 		}
