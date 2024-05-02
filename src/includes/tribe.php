@@ -340,13 +340,25 @@ function mc_import_tribe_tickets( $tribe_id, $event_post ) {
 				$price     = get_post_meta( $ticket_id, '_price', true ); // ticket price as int.
 				$end       = get_post_meta( $ticket_id, '_ticket_end_date', true ); // ticket off sale date.
 				// Structure prices array.
-				$prices[ $title_key ] = array(
+				$title_array = array(
 					'label'   => $title,
 					'price'   => $price,
 					'tickets' => $total,
 					'sold'    => $sales,
 					'close'   => strtotime( $end ),
 				);
+				/**
+				 * Filter My Tickets pricing array for a single ticket.
+				 *
+				 * @hook mc_filter_price_array
+				 *
+				 * @param {array} $title_array Pricing array for one Tribe ticket.
+				 * @param {int}   $ticket_id Tribe ticket ID.
+				 *
+				 * @return {array}
+				 */
+				$title_array          = apply_filters( 'mc_filter_price_array', $title_array, $ticket_id );
+				$prices[ $title_key ] = $title_array;
 			}
 			// Global My Calendar event data.
 			$mc_event_data                      = get_post_meta( $event_post, '_mc_event_data', true );
