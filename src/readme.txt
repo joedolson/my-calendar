@@ -25,7 +25,7 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 
 = Features: =
 
-*	Calendar grid, card, or list views of events
+*	Calendar grid, card, and list views of events
 *	Month, multi-month, week, or daily view.
 *	Mini-calendar for compact displays (as widget or shortcode)
 *	Widgets: today's events, upcoming events, mini calendar, event search
