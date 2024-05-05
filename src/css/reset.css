@@ -2,6 +2,10 @@
 	line-height: 1.62;
 }
 
+.mc-main {
+	position: relative;
+}
+
 .mc-main div, .mc-main span, .mc-main h1, .mc-main h2, .mc-main h3, .mc-main h4, .mc-main h5, .mc-main h6, .mc-main p, .mc-main blockquote, .mc-main pre, .mc-main a, .mc-main img, .mc-main dl, .mc-main dt, .mc-main dd, .mc-main ol, .mc-main ul, .mc-main li, .mc-main fieldset, .mc-main form, .mc-main label, .mc-main legend, .mc-main table, .mc-main caption, .mc-main tbody, .mc-main tfoot, .mc-main thead, .mc-main tr, .mc-main th, .mc-main td, .mc-main article, .mc-main aside, .mc-main details, .mc-main footer, .mc-main header, .mc-main menu, .mc-main meter, .mc-main nav, .mc-main output, .mc-main progress, .mc-main section, .mc-main summary {
 	border: 0;
 	outline: 0;
