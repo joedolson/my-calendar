@@ -3268,12 +3268,12 @@ function mc_recur_options( $value, $return_type = 'select' ) {
 		),
 		array(
 			'value'  => 'M',
-			'label'  => __( 'Monthly by date (the 24th of each month)', 'my-calendar' ),
+			'label'  => __( 'Monthly by date (e.g. the 24th of each month)', 'my-calendar' ),
 			'period' => MONTH_IN_SECONDS,
 		),
 		array(
 			'value'  => 'U',
-			'label'  => __( 'Monthly by day (the 3rd Monday of each month)', 'my-calendar' ),
+			'label'  => __( 'Monthly by day (e.g. the 3rd Monday of each month)', 'my-calendar' ),
 			'period' => MONTH_IN_SECONDS,
 		),
 		array(
