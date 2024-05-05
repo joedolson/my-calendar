@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.5
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.4.24
+Stable tag: 3.5.0
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -106,12 +106,18 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Improve HTML semantics in event display.
 * Change: Switch popup triggers to buttons.
 * Change: Navigation controls are always controls; don't switch to span when active.
+* Change: Replace ical generation with spatie/icalendar-generator.
 * Feature: Add card view.
 * Feature: Style variable previews.
 * Feature: Add importer to import events from The Events Calendar.
 * Feature: Add support for featured image on locations.
 * Breaking change: `mc_event_classes()` now echos classes. Use `mc_get_event_classes()` to return.
 * Bug fix: Prevent My Calendar post types from showing up in export tool. Props @carstenbach.
+* Performance: Use fragment caching to reduce duplicate db queries.
+* Performance: Prevent infinite date navigation in calendar navigation tools.
+* Performance/SEO: Only output Schema on main event views, not in widgets.
+* Support Yoast schema engine (props @joostdevalk)
+* Update to WPCS 3 (props @joostdevalk)
 * Many, many minor visual changes to improve consistency.
 
 = 3.4.24 =
