@@ -753,10 +753,6 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			 * @param {int|false} $result Result of the DB update query.
 			 */
 			do_action( 'mc_save_event', $action, $data, $event_id, $result );
-			// Delete transient caches.
-			delete_transient( 'mc_categories_' . $event_id );
-			delete_transient( 'mc_first_event_cache_' . $event_id );
-			delete_transient( 'mc_get_date_bounds' );
 			if ( false === $result ) {
 				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} else {
@@ -3747,6 +3743,11 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
  * @param int    $result Result of calendar save query.
  */
 function mc_refresh_cache( $action, $data, $event_id, $result ) {
+	// Delete transient caches.
+	delete_transient( 'mc_categories_' . $event_id );
+	delete_transient( 'mc_first_event_cache_' . $event_id );
+	delete_transient( 'mc_get_date_bounds' );
+	// Check page caches.
 	$mc_uri_id = mc_get_option( 'uri_id' );
 	/**
 	 * Filter URLS that should be refreshed in caches.
