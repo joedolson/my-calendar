@@ -338,7 +338,9 @@ function mc_get_all_events( $args ) {
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string        = mc_ts();
-	$limit            = "$select_published $select_category $select_author $select_host $select_access $search";
+	$select_window    = ( ! $before ) ? 'AND occur_begin > NOW()' : '';
+	$select_window    = ( ! $after ) ? 'AND occur_end < NOW()' : $select_window;
+	$limit            = "$select_published $select_category $select_author $select_host $select_access $search $select_window";
 
 	// New Query style.
 	$total  = absint( $before ) + absint( $after ) + 30;
