@@ -126,6 +126,6 @@ function mc_import_source_calendar() {
 	$return    = "<div id='message' class='notice notice-success'><ul><li>$message</li><li>$e_message</li></ul></div>";
 	echo wp_kses_post( $return );
 	if ( false !== $cats_results && false !== $events_results ) {
-		update_option( 'ko_calendar_imported', 'true' );
+		update_option( 'ko_calendar_imported', 'true', 'no' );
 	}
 }
