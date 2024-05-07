@@ -1436,8 +1436,8 @@ function mc_get_locations( $args ) {
 		// Prevent invalid order parameters.
 		$order = 'ASC';
 	}
-	$valid_args = $wpdb->get_col( 'DESC ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	if ( ! ( in_array( $orderby, $valid_args, true ) ) ) {
+	$valid_args = array( 'location_id', 'location_label', 'location_street', 'location_street2', 'location_city', 'location_state', 'location_postcode', 'location_region', 'location_url', 'location_country', 'location_longitude', 'location_latitude', 'location_zoom', 'location_phone', 'location_phone2', 'location_access' );
+	if ( ! in_array( $orderby, $valid_args, true ) ) {
 		// Prevent invalid order columns.
 		$orderby = 'location_label';
 	}
