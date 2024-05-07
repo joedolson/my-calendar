@@ -22,7 +22,13 @@ function my_calendar_check_db() {
 	}
 
 	global $wpdb;
-	$cols         = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$db_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'sqlite' : 'mysql';
+	if ( 'mysql' === $db_engine ) {
+		$cols = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	} else {
+		// No verification for sqlite.
+		return;
+	}
 	$needs_update = false;
 
 	if ( ! in_array( 'event_tickets', $cols, true ) ) {

@@ -97,14 +97,19 @@ function mc_create_guid( $event ) {
  * @return string|array
  */
 function mc_ts( $test = false ) {
-	$ts_sql = get_transient( 'mc_ts_string' );
-	$ts_db  = get_transient( 'mc_ts_db' );
+	$db_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'sqlite' : 'mysql';
+	$ts_sql    = get_transient( 'mc_ts_string' );
+	$ts_db     = get_transient( 'mc_ts_db' );
 	if ( $ts_db && $test ) {
 		return $ts_db;
 	}
 	if ( $test || ! $ts_sql || ! $ts_db ) {
 		global $wpdb;
-		$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
+		if ( 'sqlite' === $db_engine ) {
+			$offset = $wpdb->get_var( "SELECT STRFTIME('%Y-%m-%dT%H:%M:%S', DATETIME('now', 'localtime')) || PRINTF('%+.2d:%.2d', ROUND((JULIANDAY('now', 'localtime') - JULIANDAY('now')) * 24), ABS(ROUND((JULIANDAY('now', 'localtime') - JULIANDAY('now')) * 24 * 60) % 60));" );
+		} else {
+			$offset = $wpdb->get_var( 'SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);' );
+		}
 		/**
 		 * Filter timezone offset applied when displaying events. Can fix issues with an incorrect server time.
 		 *
@@ -136,6 +141,9 @@ function mc_ts( $test = false ) {
 		// Converts occur_begin value from the WordPress timezone to the db timezone.
 		// Has weakness that if an event was entered during DST, it's wrong during ST and vice versa.
 		$ts_sql = "UNIX_TIMESTAMP( CONVERT_TZ( `occur_begin`, '$wp_time', '$offset' ) ) AS ts_occur_begin, UNIX_TIMESTAMP( CONVERT_TZ( `occur_end`, '$wp_time', '$offset' ) ) AS ts_occur_end ";
+		if ( 'sqlite' === $db_engine ) {
+			$ts_sql = "datetime( `occur_begin`, '$offset hour' ) || '+$wp_time' AS ts_occur_begin, datetime( `occur_end`, '$offset hour' ) || '+$wp_time' AS ts_occur_end ";
+		}
 		set_transient( 'mc_ts_string', $ts_sql, WEEK_IN_SECONDS );
 	}
 
