@@ -60,7 +60,7 @@ function mc_import_source_tribe_events( $limit = 25 ) {
 	$ids    = array();
 	$count  = count( $events );
 	if ( 0 === $count ) {
-		update_option( 'mc_import_tribe_completed', 'true' );
+		update_option( 'mc_import_tribe_completed', 'true', 'no' );
 	} else {
 		foreach ( $events as $post ) {
 			$id = mc_import_source_tribe_event( $post->ID );
