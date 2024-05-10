@@ -79,7 +79,8 @@
 				$( wrapper ).children( '.single-details' ).not( current_date ).hide();
 				e.stopImmediatePropagation();
 				return false;
-			});
+			}
+		);
 
 		$(document).on('click', '.calendar-event .close',
 			function (e) {
@@ -221,7 +222,7 @@
 					}
 					// Grid view.
 					if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
-						$('.calendar-event').children().not('header').hide();
+						$('.has-events > .calendar-event').children().not('header').hide();
 					}
 					// Mini view.
 					if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
