@@ -847,6 +847,7 @@ function mc_get_event_classes( $event, $type ) {
 			$rel = 'future-event';
 			break;
 	}
+	$is_today  = ( mc_date( 'Y-m-d', $event->ts_occur_begin ) === mc_date( 'Y-m-d' ) ) ? 'today-event' : '';
 	$primary   = 'mc_primary_' . sanitize_title( mc_get_category_detail( $event->event_category, 'category_name' ) );
 	$length    = sanitize_title( 'mc-' . mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event ) );
 	$start     = sanitize_title( 'mc-start-' . mc_date( 'H-i', $event->ts_occur_begin ) );
@@ -856,6 +857,10 @@ function mc_get_event_classes( $event, $type ) {
 	$category  = mc_category_class( $event, 'mc_' );
 
 	$classes = array( 'mc-' . $uid, $type . '-event', $category, $rel, $primary, $recurring, $length, $start, $group, $root );
+
+	if ( $is_today ) {
+		$classes[] = $is_today;
+	}
 
 	if ( 'single' !== $type ) {
 		$classes[] = 'mc-events';
