@@ -409,7 +409,8 @@ function mc_category_key( $category, $id = '' ) {
 		if ( '' === $selectable_categories ) {
 			$url = remove_query_arg( 'mcat', mc_get_current_url() );
 		} else {
-			$url = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
+			$raw_url = remove_query_arg( 'mcat', mc_get_current_url() );
+			$url     = mc_build_url( array( 'mcat' => $selectable_categories ), array( 'mcat' ) );
 		}
 		$url = mc_url_in_loop( $url );
 		if ( 1 === (int) $cat->category_private ) {
@@ -442,7 +443,8 @@ function mc_category_key( $category, $id = '' ) {
 	 */
 	$all = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
 	if ( isset( $_GET['mcat'] ) ) {
-		$key .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), mc_get_current_url() ) ) ) . "'><span>" . $all . '</span></a></li>';
+		$raw_url = remove_query_arg( 'mcat', mc_get_current_url() );
+		$key    .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), $raw_url ) ) ) . "'><span>" . $all . '</span></a></li>';
 	} else {
 		$key .= "<li class='all-categories'><span class='mc-active' id='mc_cat_all-$id' tabindex='-1'>" . $all . '</span></li>';
 	}
