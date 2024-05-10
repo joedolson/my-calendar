@@ -76,8 +76,8 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 * @return {string} Must have at least five characters or it will be ignored.
 		 */
 		$template = apply_filters( 'mc_use_custom_template', $template, $tags, $event, $type, $process_date, $time );
-		if ( false === $details && strlen( trim( $template ) ) >= 5 ) {
-			$details = wp_kses_post( mc_get_details( $tags, $template, $type ) );
+		if ( false === $details ) {
+			$details = ( $details ) ? wp_kses_post( mc_get_details( $tags, $template, $type ) ) : $details;
 		}
 	}
 
