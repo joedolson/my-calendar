@@ -334,7 +334,7 @@
 	margin: 0 0 8px;
 }
 
-.mc-main .current-day {
+.mc-main .current-day:not(.day .current-day) {
 	outline: 2px solid var(--current-day-border);
 	background: var(--current-day-bg);
 	color: var(--current-day-color);
