@@ -203,6 +203,8 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 			'group' => '',
 		);
 	}
+	$container_id = mc_event_container_id( $type, $process_date, $event );
+
 	/**
 	 * Runs right before a calendar event template is handled.
 	 *
@@ -267,7 +269,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 */
 		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time );
 		$details = $before . $header . $after;
-
+		$details = mc_wrap_event( $details, $event, $container_id, $type );
 		return array(
 			'html'  => $details,
 			'group' => $event->event_group_id,
@@ -275,7 +277,6 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		);
 	}
 
-	$container_id = mc_event_container_id( $type, $process_date, $event );
 	$close_button = mc_close_button( $container_id );
 	// Since 3.2.0, close button is added to event container in mini calendar.
 	$close   = ( 'calendar' === $type ) ? $close_button : '';
