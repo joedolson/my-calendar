@@ -77,7 +77,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 */
 		$template = apply_filters( 'mc_use_custom_template', $template, $tags, $event, $type, $process_date, $time );
 		if ( false === $details ) {
-			$details = ( $details ) ? wp_kses_post( mc_get_details( $tags, $template, $type ) ) : $details;
+			$details = wp_kses_post( mc_get_details( $tags, $template, $type ) );
 		}
 	}
 
