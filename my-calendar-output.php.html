@@ -250,7 +250,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		'id'           => $id,
 		'tags'         => $tags,
 	);
-	$details = mc_load_template( 'event/' . $type, $data );
+	$details = '';
+	if ( mc_show_details( $time, $type ) ) {
+		$details = mc_load_template( 'event/' . $type, $data );
+	}
 	// If loading a template produces no results, then use legacy event templating.
 	if ( ! $details ) {
 		$details = mc_legacy_template_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
