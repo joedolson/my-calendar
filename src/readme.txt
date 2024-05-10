@@ -17,6 +17,10 @@ My Calendar does WordPress event management with richly customizable ways to dis
 
 Easy to use for anybody, My Calendar provides enormous flexibility for designers and developers needing a custom calendar. My Calendar is built with accessibility in mind, so all your users can get equal access and experience in your calendar.
 
+My Calendar is an events calendar focused on holistic accessibility: providing a positive experience for site visitors and administrators who use assistive technology. It also builds in settings where you can describe the ADA compliance features of your events and venues.
+
+Learn more about [My Calendar and accessible events](https://docs.joedolson.com/my-calendar/event-accessibility/).
+
 = Premium Event Management =
 Looking for more? [Buy My Calendar Pro](https://www.joedolson.com/my-calendar/pro/), the premium extension for My Calendar to add support for user-submitted events, integration between posting and event creation, and import events from outside sources.
 
