@@ -703,6 +703,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	-webkit-appearance: none;
 	appearance: none;
 	line-height: 1.62;
+	height: auto;
 }
 
 .mc-main .my-calendar-navigation select {
