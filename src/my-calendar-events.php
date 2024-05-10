@@ -351,8 +351,10 @@ function mc_get_all_events( $args ) {
 	$limit            = "$select_published $select_category $select_author $select_host $select_access $search $select_window";
 
 	// New Query style.
-	$total  = absint( $before ) + absint( $after ) + 30;
-	$events = $mcdb->get_results(
+	$total     = absint( $before ) + absint( $after ) + 30;
+	$db_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'sqlite' : 'mysql';
+	$ordering  = ( 'sqlite' === $db_engine ) ? 'ABS( ( SELECT unixepoch() ) - ( SELECT unixepoch(occur_begin) ))' : 'ABS(TIMESTAMPDIFF(SECOND, NOW(), occur_begin))';
+	$events    = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table( $site ) . '
 		JOIN ' . my_calendar_table( $site ) . " AS e
@@ -363,7 +365,7 @@ function mc_get_all_events( $args ) {
 		ON (e.event_category=c.category_id)
 		WHERE $limit
 		$exclude_categories
-		ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), occur_begin)) ASC LIMIT 0,$total"
+		ORDER BY $ordering ASC LIMIT 0,$total"
 	);
 
 	$cats = array();
