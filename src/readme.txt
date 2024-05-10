@@ -98,6 +98,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Category filters did not remove existing filter when adding categories.
 * Bug fix: PHP templating rendered event details when linking to external URL.
 * Bug fix: Fix handling of custom templates with legacy templating when passed via settings.
+* Addition: class 'today-event' for events occurring on the current day.
 
 = 3.5.1 =
 
