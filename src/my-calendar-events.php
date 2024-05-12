@@ -1255,7 +1255,7 @@ function mc_get_db_type() {
 		return 'sqlite';
 	}
 	// This is unlikely to change, but it's not impossible.
-	$db_type = get_transient( 'mc_db_type' );
+	$db_type = false; // get_transient( 'mc_db_type' );
 	if ( ! $db_type ) {
 		$db_type     = 'MyISAM';
 		$mcdb        = mc_is_remote_db();
@@ -1265,6 +1265,11 @@ function mc_get_db_type() {
 			$db = (array) $db;
 			if ( my_calendar_table() === $db['Name'] ) {
 				$db_type = $db['Engine'];
+				if ( version_compare( $db['Version'], '5.6', '<' ) && 'innodb' === strtolower( $db_type ) ) {
+					update_option( 'mc_db_below_requirements', 'true' );
+				} else {
+					delete_option( 'mc_db_below_requirements' );
+				}
 			}
 		}
 		set_transient( 'mc_db_type', $db_type, MONTH_IN_SECONDS );

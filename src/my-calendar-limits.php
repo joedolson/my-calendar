@@ -25,8 +25,8 @@ function mc_prepare_search_query( $query ) {
 	$length  = strlen( $query );
 	$search  = '';
 	if ( '' !== trim( $query ) ) {
-		$query = esc_sql( urldecode( urldecode( $query ) ) );
-		if ( 'myisam' === strtolower( $db_type ) && $length > 3 ) {
+		if ( 'sqlite' !== $db_type && $length > 3 ) {
+			$query = esc_sql( urldecode( urldecode( $query ) ) );
 			/**
 			 * Customize the MATCH fields for a MyISAM boolean search query.
 			 *
@@ -37,8 +37,6 @@ function mc_prepare_search_query( $query ) {
 			 * @return {string}
 			 */
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
-		} else {
-			$search = " AND ( event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_registration LIKE '%$query%' ) ";
 		}
 	}
 

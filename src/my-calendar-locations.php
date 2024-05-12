@@ -1445,10 +1445,7 @@ function mc_core_search_locations( $query = '' ) {
 	$length  = strlen( $query );
 
 	if ( '' !== $query ) {
-		// Fulltext is supported in InnoDB since MySQL 5.6; minimum required by WP is 5.0 as of WP 5.5.
-		// 37% of installs still below 5.6 as of 11/30/2020.
-		// 2.4% of installs below 5.6 as of 7/14/2022.
-		if ( 'MyISAM' === $db_type && $length > 3 ) {
+		if ( 'sqlite' !== strtolower( $db_type ) && $length > 3 ) {
 			/**
 			 * Filter the fields used to handle MATCH queries in location searches on MyISAM dbs.
 			 *
@@ -1459,8 +1456,6 @@ function mc_core_search_locations( $query = '' ) {
 			 * @return {string}
 			 */
 			$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
-		} else {
-			$search = " WHERE location_label LIKE '%$query%' ";
 		}
 	} else {
 		$search = '';
@@ -1487,10 +1482,7 @@ function mc_get_countries( $query = '' ) {
 	$length  = strlen( $query );
 
 	if ( '' !== $query ) {
-		// Fulltext is supported in InnoDB since MySQL 5.6; minimum required by WP is 5.0 as of WP 5.5.
-		// 37% of installs still below 5.6 as of 11/30/2020.
-		// 2.4% of installs below 5.6 as of 7/14/2022.
-		if ( 'MyISAM' === $db_type && $length > 3 ) {
+		if ( 'sqlite' !== $db_type && $length > 3 ) {
 			/**
 			 * Filter the fields used to handle MATCH queries in location searches on MyISAM dbs.
 			 *
@@ -1501,8 +1493,6 @@ function mc_get_countries( $query = '' ) {
 			 * @return {string}
 			 */
 			$search = " WHERE MATCH(location_country) AGAINST ( '$query' IN BOOLEAN MODE ) ";
-		} else {
-			$search = " WHERE location_country LIKE '%$query%' ";
 		}
 	} else {
 		$search = '';
