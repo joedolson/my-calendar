@@ -1255,7 +1255,7 @@ function mc_get_db_type() {
 		return 'sqlite';
 	}
 	// This is unlikely to change, but it's not impossible.
-	$db_type = false; // get_transient( 'mc_db_type' );
+	$db_type = get_transient( 'mc_db_type' );
 	if ( ! $db_type ) {
 		$db_type     = 'MyISAM';
 		$mcdb        = mc_is_remote_db();
