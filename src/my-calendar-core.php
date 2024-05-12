@@ -2556,7 +2556,8 @@ function mc_promotion_notice() {
 	if ( function_exists( 'mcs_submissions' ) ) {
 		return;
 	}
-	if ( current_user_can( 'activate_plugins' ) && '2' === get_option( 'mc_promotion_scheduled' ) ) {
+	$is_calendar = isset( $_GET['page'] ) && false !== stripos( $_GET['page'], 'my-calendar' );
+	if ( current_user_can( 'activate_plugins' ) && '2' === get_option( 'mc_promotion_scheduled' ) && $is_calendar ) {
 		$upgrade = 'https://www.joedolson.com/awesome/my-calendar-pro/';
 		$dismiss = admin_url( 'admin.php?page=my-calendar-config&dismiss=promotion' );
 		// Translators: URL to upgrade.
