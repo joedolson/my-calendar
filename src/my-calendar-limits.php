@@ -26,7 +26,7 @@ function mc_prepare_search_query( $query ) {
 	$search  = '';
 	if ( '' !== trim( $query ) ) {
 		$query = esc_sql( urldecode( urldecode( $query ) ) );
-		if ( 'MyISAM' === $db_type && $length > 3 ) {
+		if ( 'myisam' === strtolower( $db_type ) && $length > 3 ) {
 			/**
 			 * Customize the MATCH fields for a MyISAM boolean search query.
 			 *
