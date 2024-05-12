@@ -2471,6 +2471,10 @@ function mc_update_notice() {
 		if ( 'true' === mc_get_option( 'remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' &lt;a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '&lt;/a>' );
 		}
+		$db_problem = get_option( 'mc_db_below_requirements' );
+		if ( 'true' === $db_problem ) {
+			wp_admin_notice( __( 'Your database version and engine do not support full text searching. My Calendar searches will not work.', 'my-calendar' ) );
+		}
 	}
 }
 
@@ -2578,7 +2582,8 @@ function mc_promotion_notice() {
 	if ( function_exists( 'mcs_submissions' ) ) {
 		return;
 	}
-	if ( current_user_can( 'activate_plugins' ) &amp;&amp; '2' === get_option( 'mc_promotion_scheduled' ) ) {
+	$is_calendar = isset( $_GET['page'] ) &amp;&amp; false !== stripos( $_GET['page'], 'my-calendar' );
+	if ( current_user_can( 'activate_plugins' ) &amp;&amp; '2' === get_option( 'mc_promotion_scheduled' ) &amp;&amp; $is_calendar ) {
 		$upgrade = 'https://www.joedolson.com/awesome/my-calendar-pro/';
 		$dismiss = admin_url( 'admin.php?page=my-calendar-config&amp;dismiss=promotion' );
 		// Translators: URL to upgrade.
