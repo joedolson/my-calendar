@@ -97,7 +97,7 @@ function mc_create_guid( $event ) {
  * @return string|array
  */
 function mc_ts( $test = false ) {
-	$db_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'sqlite' : 'mysql';
+	$db_engine = mc_get_db_type();
 	$ts_sql    = get_transient( 'mc_ts_string' );
 	$ts_db     = get_transient( 'mc_ts_db' );
 	if ( $ts_db && $test ) {
@@ -352,7 +352,7 @@ function mc_get_all_events( $args ) {
 
 	// New Query style.
 	$total     = absint( $before ) + absint( $after ) + 30;
-	$db_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'sqlite' : 'mysql';
+	$db_engine = mc_get_db_type();
 	$ordering  = ( 'sqlite' === $db_engine ) ? 'ABS( ( SELECT unixepoch() ) - ( SELECT unixepoch(occur_begin) ))' : 'ABS(TIMESTAMPDIFF(SECOND, NOW(), occur_begin))';
 	$events    = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
@@ -1249,6 +1249,11 @@ function mc_get_event_post( $event_id ) {
  * @return string type of database engine in use;
  */
 function mc_get_db_type() {
+	// If running sqlite, return that.
+	$db_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'sqlite' : 'mysql';
+	if ( 'sqlite' === $db_engine ) {
+		return 'sqlite';
+	}
 	// This is unlikely to change, but it's not impossible.
 	$db_type = get_transient( 'mc_db_type' );
 	if ( ! $db_type ) {

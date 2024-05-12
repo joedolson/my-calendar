@@ -22,7 +22,7 @@ function my_calendar_check_db() {
 	}
 
 	global $wpdb;
-	$db_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'sqlite' : 'mysql';
+	$db_engine = mc_get_db_type();
 	if ( 'mysql' === $db_engine ) {
 		$cols = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	} else {
