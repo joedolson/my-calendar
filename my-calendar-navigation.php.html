@@ -528,8 +528,8 @@ function mc_sub_links() {
 function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	$add['yr']     = $y;
 	$add['month']  = $m;
-	$add['nyr']    = $next['yr'];
-	$add['nmonth'] = $next['month'];
+	$add['nyr']    = ( is_array( $next ) ) ? $next['yr'] : '';
+	$add['nmonth'] = ( is_array( $next ) ) ? $next['month'] : '';
 	unset( $add['href'] );
 
 	$ics  = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );

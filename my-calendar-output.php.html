@@ -692,7 +692,8 @@ function mc_close_button( $controls ) {
  */
 function mc_get_details( $data, $template, $type ) {
 	$details = false;
-	if ( '' !== $template ) {
+	// If template is not empty and not the same as the display type, run custom template engine.
+	if ( '' !== $template &amp;&amp; ( $template !== $type ) ) {
 		$template = mc_setup_template( $template, '' );
 		$details  = mc_draw_template( $data, $template );
 	} else {
