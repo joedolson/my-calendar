@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.5
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.5.4
+Stable tag: 3.5.5
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -94,6 +94,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.5.5 =
+
+* Bug fix: Templates rendered incorrectly when search-friendly permalinks disabled.
+* Bug fix: Clear PHP warning if no future dates in export generation.
+* Bug fix: Only show Pro promo inside My Calendar pages.
+* Bug fix: Remove support for InnoDB search on pre 5.5 MySQL; add support for Fulltext search on InnoDB otherwise.
+* Bug fix: Event title not rendered unless 'read more' enabled.
+* Change: Move sqlite check to existing db engine check function.
 
 = 3.5.4 =
 
