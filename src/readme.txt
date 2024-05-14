@@ -102,6 +102,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Only show Pro promo inside My Calendar pages.
 * Bug fix: Remove support for InnoDB search on pre 5.5 MySQL; add support for Fulltext search on InnoDB otherwise.
 * Bug fix: Event title not rendered unless 'read more' enabled.
+* Bug fix: Category color styles cache deleted in wrong place.
 * Change: Move sqlite check to existing db engine check function.
 
 = 3.5.4 =
