@@ -521,7 +521,7 @@ function mc_import_settings() {
 						$return = __( "The file uploaded doesn't seem to be a valid collection of My Calendar settings.", 'my-calendar' );
 					} else {
 						// Templates need different sanitizing than other fields.
-						$templates             = map_deep( $settings['templates'], 'wp_kses_post' );;
+						$templates             = map_deep( $settings['templates'], 'wp_kses_post' );
 						$settings              = map_deep( $settings, 'sanitize_textarea_field' );
 						$settings['templates'] = $templates;
 						// Remove the calendar location ID from imported settings. Set to local value if present.
