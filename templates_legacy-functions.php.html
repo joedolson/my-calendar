@@ -169,7 +169,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			if ( 'true' === $display_host || mc_output_is_visible( 'host', $type, $event ) ) {
 				$host = mc_template_user_card( $event, 'host' );
 			}
-			$event_title   = mc_draw_event_title( $event, $tags, $type, $image );
+			$event_title = mc_draw_event_title( $event, $tags, $type, $image );
 			if ( ( 'true' === $display_more &amp;&amp; ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
 				$details_label = mc_get_details_label( $event, $data );
 				$details_link  = mc_get_details_link( $event );
