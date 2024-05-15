@@ -166,14 +166,18 @@ jQuery(document).ready(function ($) {
 			let expanded = this.getAttribute( 'aria-expanded' );
 			if ( 'true' === expanded ) {
 				locationSelector.value = locationValue;
-				presetLocation.value   = presetLocationValue;
+				if ( presetLocation ) {
+					presetLocation.value = presetLocationValue;
+				}
 				fields.classList.add( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'false' );
 				this.firstChild.classList.add( 'dashicons-plus' );
 				this.firstChild.classList.remove( 'dashicons-minus' );
 			} else {
 				locationSelector.value = 'none';
-				presetLocation.value   = '';
+				if ( presetLocation ) {
+					presetLocation.value = '';
+				}
 				fields.classList.remove( 'hidden' );
 				this.setAttribute( 'aria-expanded', 'true' );
 				this.firstChild.classList.add( 'dashicons-minus' );
