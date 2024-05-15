@@ -95,6 +95,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.5.6 =
+
+* Bug fix: JS error breaking add new location in event editor.
+* Bug fix: Imported settings should not strip HTML from templates.
+
 = 3.5.5 =
 
 * Bug fix: Templates rendered incorrectly when search-friendly permalinks disabled.
