@@ -1909,7 +1909,7 @@ function mc_scripts() {
 		 *
 		 * @return {int}
 		 */
-		if ( mc_count_locations() > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
+		if ( mc_count_locations() > apply_filters( 'mc_convert_locations_select_to_autocomplete', 10 ) ) {
 			wp_enqueue_script( 'accessible-autocomplete' );
 			wp_enqueue_script( 'mc-autocomplete' );
 			wp_localize_script(

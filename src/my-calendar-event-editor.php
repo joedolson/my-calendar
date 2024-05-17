@@ -1872,7 +1872,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 	 *
 	 * @return {int}
 	 */
-	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
+	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 10 ) ) {
 		$autocomplete = true;
 	}
 	if ( is_object( $data ) ) {

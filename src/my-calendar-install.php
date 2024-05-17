@@ -148,7 +148,8 @@ function mc_globals( $data = 'all' ) {
  event_image TEXT,
  event_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY  (event_id),
- KEY event_category (event_category)
+ KEY event_category (event_category),
+ FULLTEXT KEY fulltext_event (event_title,event_desc,event_short)
  ) $charset_collate;";
 
 	$initial_occur_db = 'CREATE TABLE ' . my_calendar_event_table() . " (
@@ -204,7 +205,8 @@ function mc_globals( $data = 'all' ) {
  location_phone VARCHAR(32) NOT NULL,
  location_phone2 VARCHAR(32) NOT NULL,
  location_access TEXT,
- PRIMARY KEY  (location_id)
+ PRIMARY KEY  (location_id),
+ FULLTEXT KEY fulltext_location (location_label,location_city,location_state,location_region,location_country,location_street,location_street2,location_phone)
  ) $charset_collate;";
 
 	$globals = array(
