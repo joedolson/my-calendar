@@ -2445,10 +2445,6 @@ function mc_update_notice() {
 		if ( 'true' === mc_get_option( 'remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' );
 		}
-		$db_problem = get_option( 'mc_db_below_requirements' );
-		if ( 'true' === $db_problem ) {
-			wp_admin_notice( __( 'Your database version and engine do not support full text searching. My Calendar searches will not work.', 'my-calendar' ) );
-		}
 	}
 }
 
