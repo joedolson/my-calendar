@@ -99,6 +99,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: JS error breaking add new location in event editor.
 * Bug fix: Imported settings should not strip HTML from templates.
+* Revert: InnoDB change in version 3.5.5 created unanticipated problems.
 
 = 3.5.5 =
 
