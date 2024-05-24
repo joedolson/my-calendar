@@ -351,7 +351,7 @@ function mc_ordinal( $number ) {
 		}
 	}
 
-	return apply_filters( 'mc_ordinal', "${number}$suffix", $number, $suffix );
+	return apply_filters( 'mc_ordinal', $number . $suffix, $number, $suffix );
 }
 
 /**

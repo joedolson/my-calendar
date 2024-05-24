@@ -253,4 +253,23 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 		$this->assertSame( $single_month, $expected_single, 'Expected Feb 1 to Feb 29.' );
 		$this->assertSame( $two_month, $expected_multi, 'Expected Feb 1 to March 31.' );
 	}
+
+	/**
+	 * Test a miscellaneous set of ordinal numbers.
+	 */
+	function test_mc_ordinal() {
+		$one   = mc_ordinal( 1 );
+		$two   = mc_ordinal( 2 );
+		$three = mc_ordinal( 3 );
+		$four  = mc_ordinal( 4 );
+		$two1  = mc_ordinal( 21 );
+		$two7  = mc_ordinal( 32 );
+
+		$this->assertSame( $one, '1st', 'Expected "1st"' );
+		$this->assertSame( $two, '2nd', 'Expected "2nd"' );
+		$this->assertSame( $three, '3rd', 'Expected "3rd"' );
+		$this->assertSame( $four, '4th', 'Expected "4th"' );
+		$this->assertSame( $two1, '21st', 'Expected "21st"' );
+		$this->assertSame( $two7, '27th', 'Expected "27th"' );
+	}
 }
