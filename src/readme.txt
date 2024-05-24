@@ -6,7 +6,7 @@ Requires at least: 4.7
 Tested up to: 6.5
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.5.6
+Stable tag: 3.5.7
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -94,6 +94,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.5.7 =
+
+* Bug fix: PHP 8.2 deprecated error in `mc_ordinal`.
+* Bug fix: Category dropdown navigation element should limit categories shown.
+* Docs: Fix incorrect docs on `mc_category_key`.
 
 = 3.5.6 =
 
