@@ -263,7 +263,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 		$three = mc_ordinal( 3 );
 		$four  = mc_ordinal( 4 );
 		$two1  = mc_ordinal( 21 );
-		$two7  = mc_ordinal( 32 );
+		$two7  = mc_ordinal( 27 );
 
 		$this->assertSame( $one, '1st', 'Expected "1st"' );
 		$this->assertSame( $two, '2nd', 'Expected "2nd"' );
