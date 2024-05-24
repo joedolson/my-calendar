@@ -208,7 +208,8 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		'categories',
 		'id' => $main_class . '-categories',
 	);
-	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( $cat_args, mc_get_current_url() ) : '';
+	$cats       = mc_category_select_ids( $cat );
+	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( $cat_args, mc_get_current_url(), 'id', $cats ) : '';
 
 	// Set up location filter.
 	$loc_args  = array(
@@ -777,10 +778,11 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1, $s
  * @param array  $args can include 'categories', 'locations' and 'access' to define individual filters.
  * @param string $target_url Where to send queries.
  * @param string $ltype Which type of location data to show in form. Default ID.
+ * @param array  $options Array of values to include in the form.
  *
  * @return string HTML output of form
  */
-function mc_filters( $args, $target_url, $ltype = 'id' ) {
+function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 	$id = ( isset( $args['id'] ) ) ? esc_attr( $args['id'] ) : 'mc_filters';
 	if ( isset( $args['id'] ) ) {
 		unset( $args['id'] );
@@ -823,7 +825,7 @@ function mc_filters( $args, $target_url, $ltype = 'id' ) {
 		$show = trim( $show );
 		switch ( $show ) {
 			case 'categories':
-				$cats   = my_calendar_categories_list( 'form', 'public', 'group' );
+				$cats   = my_calendar_categories_list( 'form', 'public', 'group', '', $options );
 				$form  .= '&lt;div class="mc-category-filter">' . $cats . '&lt;/div>';
 				$return = ( $cats || $return ) ? true : false;
 				$key    = __( 'Categories', 'my-calendar' );
@@ -861,10 +863,11 @@ function mc_filters( $args, $target_url, $ltype = 'id' ) {
  * @param string $context Public or admin.
  * @param string $group single form or part of a field group.
  * @param string $target_url Where to post form to.
+ * @param array  $options Categories to include in form.
  *
  * @return string HTML
  */
-function my_calendar_categories_list( $show = 'list', $context = 'public', $group = 'single', $target_url = '' ) {
+function my_calendar_categories_list( $show = 'list', $context = 'public', $group = 'single', $target_url = '', $options = array() ) {
 	$mcdb        = mc_is_remote_db();
 	$output      = '';
 	$current_url = mc_get_uri();
@@ -911,6 +914,11 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 			$category_name = strip_tags( stripcslashes( $category->category_name ), mc_strip_tags() );
 			$mcat          = ( empty( $_GET['mcat'] ) ) ? '' : (int) $_GET['mcat'];
 			$category_id   = (int) $category->category_id;
+			if ( ! empty( $options ) ) {
+				if ( ! in_array( $category_id, $options, true ) ) {
+					continue;
+				}
+			}
 			if ( 'list' === $show ) {
 				$this_url = mc_build_url( array( 'mcat' => $category->category_id ), array() );
 				$selected = ( $category_id === $mcat ) ? ' class="selected"' : '';
