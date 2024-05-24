@@ -257,7 +257,7 @@ class Tests_My_Calendar_Date_Utilities extends WP_UnitTestCase {
 	/**
 	 * Test a miscellaneous set of ordinal numbers.
 	 */
-	function test_mc_ordinal() {
+	public function test_mc_ordinal() {
 		$one   = mc_ordinal( 1 );
 		$two   = mc_ordinal( 2 );
 		$three = mc_ordinal( 3 );
