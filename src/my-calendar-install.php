@@ -410,6 +410,8 @@ function mc_default_options() {
 		'previous_events'              => '',
 		'today_events'                 => '',
 		'caption'                      => '',
+		'subscribe'                    => '',
+		'export'                       => '',
 		'month_format'                 => '',
 		'time_format'                  => '',
 		'location_controls'            => '',

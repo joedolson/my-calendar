@@ -442,6 +442,8 @@ function mc_update_text_settings( $post ) {
 	$options['today_events']        = $post['mc_today_events'];
 	$options['week_caption']        = $post['mc_week_caption'];
 	$options['caption']             = $post['mc_caption'];
+	$options['subscribe']           = $post['mc_subscribe'];
+	$options['export']              = $post['mc_export'];
 	$templates                      = mc_get_option( 'templates' );
 	$templates['label']             = $post['mc_details_label'];
 	$templates['link']              = $post['mc_link_label'];
@@ -1015,6 +1017,26 @@ function mc_remote_db() {
 									'name'  => 'mc_caption',
 									'label' => __( 'Extended caption:', 'my-calendar' ),
 									'note'  => __( 'Follows month/year in calendar heading.', 'my-calendar' ),
+								)
+							);
+							?>
+							</li>
+							<li>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_export',
+									'label' => __( 'Export button:', 'my-calendar' ),
+								)
+							);
+							?>
+							</li>
+							<li>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_subscribe',
+									'label' => __( 'Subscribe button:', 'my-calendar' ),
 								)
 							);
 							?>

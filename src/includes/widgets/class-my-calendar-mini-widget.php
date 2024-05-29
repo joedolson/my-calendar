@@ -108,6 +108,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			'source'   => 'widget',
 			'json'     => 'false',
 		);
+
 		$the_events = my_calendar( $calendar );
 		if ( '' !== $the_events ) {
 			echo wp_kses( $before_widget . $title . $the_events . $after_widget, mc_kses_elements() );
