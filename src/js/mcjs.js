@@ -2,10 +2,11 @@
 	'use strict';
 	$(function () {
 		mc_display_usertime();
-		mc_build_toggles();
 		const calendar = document.querySelectorAll( '.mc-main' );
 		if ( calendar ) {
 			calendar.forEach( (el) => {
+				let targetId = el.getAttribute( 'id' );
+				mc_build_toggles( targetId );
 				el.classList.remove( 'mcjs' );
 			});
 		}
@@ -124,7 +125,7 @@
 				e.preventDefault();
 			}
 		});
-		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-subscribe button), .my-calendar-footer button:not(.mc-subscribe button)", function (e) {
+		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-export button), .my-calendar-footer button:not(.mc-export button)", function (e) {
 			e.preventDefault();
 			if ( 'click' === e.type || ( 'keyup' === e.type && 32 === e.which ) ) {
 				let targetId   = $( this ).attr( 'id' );
@@ -234,7 +235,7 @@
 					let refText = $( '#mc_head_' + ref ).text();
 					wp.a11y.speak( refText );
 					mc_display_usertime();
-					mc_build_toggles();
+					mc_build_toggles( targetId );
 					my_calendar_table_aria();
 				});
 			}
@@ -268,47 +269,50 @@
 		});
 	}
 
-	function mc_build_toggles() {
-		const subscribe   = $( '.mc-subscribe' );
-		const exports     = $( '.mc-download' );
-		if ( subscribe.length > 0 ) {
-			let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
-			const toggle = document.createElement( 'button' );
-			toggle.setAttribute( 'type', 'button' );
-			toggle.setAttribute( 'aria-controls', controls_id );
-			toggle.setAttribute( 'aria-expanded', false );
-			toggle.innerHTML = my_calendar.subscribe + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
-			subscribe.find( 'ul' ).attr( 'id', controls_id );
-			subscribe.find( 'ul' ).css( { 'display' : 'none' } );
-			subscribe.prepend( toggle );
-		}
-		if ( exports.length > 0 ) {
-			let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
-			const toggle = document.createElement( 'button' );
-			toggle.setAttribute( 'type', 'button' );
-			toggle.setAttribute( 'aria-controls', controls_id );
-			toggle.setAttribute( 'aria-expanded', false );
-			toggle.innerText = my_calendar.export;
-			exports.find( 'ul' ).attr( 'id', controls_id );
-			exports.find( 'ul' ).css( { 'display' : 'none' } );
-			exports.prepend( toggle );
-		}
-		const toggles = $( '.mc-export button' );
-		toggles.each( function() {
-			$( this ).on( 'click', function(e) {
-				let controlled = $( this ).attr( 'aria-controls' );
-				let target     = $( '#' + controlled );
-				if ( target.is( ':visible' ) ) {
-					target.css( { 'display' : 'none' } );
-					$( this ).attr( 'aria-expanded', 'false' );
-					$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-right' );
-				} else {
-					target.css( { 'display' : 'block' } );
-					$( this ).attr( 'aria-expanded', 'true' );
-					$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-right' ).addClass( 'dashicons-arrow-down' );
-				}
+	function mc_build_toggles( targetId ) {
+		console.log( targetId );
+		if ( targetId ) {
+			const subscribe   = $( '#' + targetId + ' .mc-subscribe' );
+			const exports     = $( '#' + targetId + ' .mc-download' );
+			if ( subscribe.length > 0 ) {
+				let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+				const toggle = document.createElement( 'button' );
+				toggle.setAttribute( 'type', 'button' );
+				toggle.setAttribute( 'aria-controls', controls_id );
+				toggle.setAttribute( 'aria-expanded', false );
+				toggle.innerHTML = my_calendar.subscribe + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
+				subscribe.find( 'ul' ).attr( 'id', controls_id );
+				subscribe.find( 'ul' ).css( { 'display' : 'none' } );
+				subscribe.prepend( toggle );
+			}
+			if ( exports.length > 0 ) {
+				let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+				const toggle = document.createElement( 'button' );
+				toggle.setAttribute( 'type', 'button' );
+				toggle.setAttribute( 'aria-controls', controls_id );
+				toggle.setAttribute( 'aria-expanded', false );
+				toggle.innerHTML = my_calendar.export + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
+				exports.find( 'ul' ).attr( 'id', controls_id );
+				exports.find( 'ul' ).css( { 'display' : 'none' } );
+				exports.prepend( toggle );
+			}
+			const toggles = $( '#' + targetId + ' .mc-export button' );
+			toggles.each( function() {
+				$( this ).on( 'click', function() {
+					let controlled = $( this ).attr( 'aria-controls' );
+					let target     = $( '#' + controlled );
+					if ( target.is( ':visible' ) ) {
+						target.css( { 'display' : 'none' } );
+						$( this ).attr( 'aria-expanded', 'false' );
+						$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-right' );
+					} else {
+						target.css( { 'display' : 'block' } );
+						$( this ).attr( 'aria-expanded', 'true' );
+						$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-right' ).addClass( 'dashicons-arrow-down' );
+					}
+				});
 			});
-		});
+		}
 	}
 
 	$('.mc-main a[target=_blank]').append( ' <span class="dashicons dashicons-external" aria-hidden="true"></span><span class="screen-reader-text"> ' + my_calendar.newWindow + '</span>' );
