@@ -99,6 +99,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: PHP 8.2 deprecated error in `mc_ordinal`.
 * Bug fix: Category dropdown navigation element should limit categories shown.
+* Bug fix: Export dropdown button broken.
+* Bug fix: Export/Subscribe dropdowns duplicated if multiple calendars present. Props @mikeknappe.
+* Bug fix: Incorrect argument passed to mini widget ignored months setting.
+* Bug fix: Reset styles didn't handle Mini calendar widget disclosure properly.
+* Feature: Add setting to change subscribe and export button text. Props @mikeknappe.
 * Docs: Fix incorrect docs on `mc_category_key`.
 
 = 3.5.6 =
