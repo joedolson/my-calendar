@@ -454,8 +454,8 @@ function mc_enqueue_calendar_js() {
 			'ajax'      => $ajax,
 			'links'     => mc_get_option( 'list_link_titles' ),
 			'newWindow' => __( 'New tab', 'my-calendar' ),
-			'subscribe' => __( 'Subscribe', 'my-calendar' ),
-			'export'    => __( 'Export', 'my-calendar' ),
+			'subscribe' => ( '' === mc_get_option( 'subscribe' ) ) ? __( 'Subscribe', 'my-calendar' ) : mc_get_option( 'subscribe' ),
+			'export'    => ( '' === mc_get_option( 'export' ) ) ? __( 'Export', 'my-calendar' ) : mc_get_option( 'export' ),
 		);
 		wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
 	}
