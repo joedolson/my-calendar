@@ -270,7 +270,6 @@
 	}
 
 	function mc_build_toggles( targetId ) {
-		console.log( targetId );
 		if ( targetId ) {
 			const subscribe   = $( '#' + targetId + ' .mc-subscribe' );
 			const exports     = $( '#' + targetId + ' .mc-download' );
