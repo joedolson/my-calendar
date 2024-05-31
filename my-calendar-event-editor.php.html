@@ -156,12 +156,13 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		 *
 		 * @hook mc_update_event_post
 		 *
-		 * @param {int}   $post_id Post ID.
-		 * @param {array} $post POST data.
-		 * @param {array} $data Submitted event data.
-		 * @param {int}   $event_id Event ID.
+		 * @param {int}    $post_id Post ID.
+		 * @param {array}  $post POST data.
+		 * @param {array}  $data Submitted event data.
+		 * @param {int}    $event_id Event ID.
+		 * @param {string} $action Action being taken.
 		 */
-		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id );
+		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id, $action );
 		if ( mc_switch_sites() ) {
 			restore_current_blog();
 		}
@@ -333,12 +334,13 @@ function mc_create_event_post( $data, $event_id ) {
 		 *
 		 * @hook mc_update_event_post
 		 *
-		 * @param {int}   $post_id Post ID.
-		 * @param {array} $post POST data.
-		 * @param {array} $data Submitted event data.
-		 * @param {int}   $event_id Event ID.
+		 * @param {int}    $post_id Post ID.
+		 * @param {array}  $post POST data.
+		 * @param {array}  $data Submitted event data.
+		 * @param {int}    $event_id Event ID.
+		 * @param {string} $action Action being taken.
 		 */
-		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id );
+		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id, 'add' );
 		wp_publish_post( $post_id );
 	}
 
