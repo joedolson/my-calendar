@@ -105,6 +105,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Reset styles didn't handle Mini calendar widget disclosure properly.
 * Feature: Add setting to change subscribe and export button text. Props @mikeknappe.
 * Docs: Fix incorrect docs on `mc_category_key`.
+* I18n: Missing translator function. Props @DAnn2012.
 
 = 3.5.6 =
 
