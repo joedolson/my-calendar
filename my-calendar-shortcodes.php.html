@@ -607,7 +607,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							'card'     => __( 'Card', 'my-calendar' ),
 							'mini'     => __( 'Mini', 'my-calendar' ),
 						);
-						$options         = '&lt;option value="">' . esc_html( 'Default', 'my-calendar' ) . '&lt;/option>';
+						$options         = '&lt;option value="">' . esc_html__( 'Default', 'my-calendar' ) . '&lt;/option>';
 						foreach ( $enabled_formats as $f ) {
 							$options .= '&lt;option value="' . $f . '"' . selected( $f, $format ) . '>' . $format_labels[ $f ] . '&lt;/option>';
 						}
