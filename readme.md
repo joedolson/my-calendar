@@ -38,6 +38,7 @@ Contributors listed only since moving development to GitHub. [Github Contributor
 
 A big thank you to everybody who's contributed to building this plugin!
 
+* [DAnn2012](https://github.com/DAnn2012)
 * [Joost de Valk](https://github.com/jdevalk)
 * [Josef Fallmann](https://github.com/joseffallman)
 * [Jessi Shank](https://github.com/shankj3)
