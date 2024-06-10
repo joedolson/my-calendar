@@ -1010,7 +1010,7 @@ function mc_events_class( $events, $date = false ) {
 	} else {
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
-			if ( '00:00:00' === $event->event_endtime && mc_date( 'Y-m-d', strtotime( $event->occur_end ), false ) === $date && mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false ) !== $date ) {
+			if ( mc_exit_early( $event, $date ) ) {
 				continue;
 			}
 			$author = ' author' . $event->event_author;
