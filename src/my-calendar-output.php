@@ -1467,42 +1467,6 @@ function mc_event_published( $event ) {
 }
 
 /**
- * Check whether an event should be hidden (privacy)
- *
- * @param object $event Event object.
- *
- * @return boolean
- */
-function mc_event_is_hidden( $event ) {
-	if ( ! is_object( $event ) ) {
-		return false;
-	}
-	// Also hide events that are unpublished if the current user does not have permission to edit.
-	if ( ! mc_event_published( $event ) && ! mc_can_edit_event( $event->event_id ) ) {
-		return true;
-	}
-	$category = $event->event_category;
-	$private  = mc_get_private_categories();
-	/**
-	 * Filter whether an event is visible to the current user.
-	 *
-	 * @hook mc_user_can_see_private_events
-	 *
-	 * @param {bool}   $can_see 'true' if the event should be shown.
-	 * @param {object} $event Event object.
-	 *
-	 * @return {bool}
-	 */
-	$can_see = apply_filters( 'mc_user_can_see_private_events', is_user_logged_in(), $event );
-	if ( in_array( $category, $private, true ) && ! $can_see ) {
-
-		return true;
-	}
-
-	return false;
-}
-
-/**
  * Translates the arguments passed to the calendar and process them to generate the actual view.
  *
  * @param array $args Parameters from shortcode or my_calendar() function call.
