@@ -481,6 +481,10 @@ function mc_save_post( $post_id, $post ) {
 	if ( empty( $_POST ) || ( defined( 'DOING_AUTOSAVE' ) &amp;&amp; DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || ( defined( 'DOING_AJAX' ) &amp;&amp; DOING_AJAX ) || ! ( 'mc-events' === get_post_type( $post_id ) ) ) {
 		return $post_id;
 	}
+	// Don't run this when editing in the event editor.
+	if ( isset( $_GET['page'] ) &amp;&amp; 'my-calendar' === $_GET['page'] ) {
+		return $post_id;
+	}
 	// Copy post content to event.
 	$event_id = get_post_meta( $post_id, '_mc_event_id', true );
 	mc_update_data( $event_id, 'event_desc', $post->post_content, '%s' );
