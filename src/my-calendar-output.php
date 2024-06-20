@@ -1474,6 +1474,11 @@ function mc_event_published( $event ) {
  * @return array $params New parameters, modified by context
  */
 function mc_calendar_params( $args ) {
+	if ( isset( $_GET['cid'] ) && $_GET['cid'] !== $args['id'] ) {
+		$get = array();
+	} else {
+		$get = map_deep( $_GET, 'sanitize_text_field' );
+	}
 	$format    = isset( $args['format'] ) ? $args['format'] : 'calendar';
 	$category  = isset( $args['category'] ) ? $args['category'] : '';
 	$time      = isset( $args['time'] ) ? $args['time'] : 'month';
@@ -1501,21 +1506,21 @@ function mc_calendar_params( $args ) {
 		$time = 'month';
 	}
 
-	$category = ( isset( $_GET['mcat'] ) ) ? (int) $_GET['mcat'] : $category;
+	$category = ( isset( $get['mcat'] ) ) ? (int) $get['mcat'] : $category;
 	// This relates to default value inconsistencies, I think.
 	if ( '' === $category ) {
 		$category = 'all';
 	}
 
-	if ( isset( $_GET['format'] ) && in_array( $_GET['format'], $enabled, true ) && 'mini' !== $format ) {
-		$format = esc_attr( $_GET['format'] );
+	if ( isset( $get['format'] ) && in_array( $get['format'], $enabled, true ) && 'mini' !== $format ) {
+		$format = esc_attr( $get['format'] );
 	} else {
 		$format = esc_attr( $format );
 	}
 
 	// Mini calendar prevents format switch to avoid having a widget calendar switch in addition to the main calendar.
-	if ( isset( $_GET['time'] ) && in_array( $_GET['time'], array( 'day', 'week', 'month', 'month+1' ), true ) && ! ( 'mini' === $format && ! in_the_loop() ) ) {
-		$time = esc_attr( $_GET['time'] );
+	if ( isset( $get['time'] ) && in_array( $get['time'], array( 'day', 'week', 'month', 'month+1' ), true ) && ! ( 'mini' === $format && ! in_the_loop() ) ) {
+		$time = esc_attr( $get['time'] );
 	} else {
 		$time = esc_attr( $time );
 	}
@@ -1524,8 +1529,8 @@ function mc_calendar_params( $args ) {
 		$format = 'list';
 	}
 
-	if ( isset( $_GET['mcs'] ) ) {
-		$search = sanitize_text_field( $_GET['mcs'] );
+	if ( isset( $get['mcs'] ) ) {
+		$search = sanitize_text_field( $get['mcs'] );
 	}
 
 	/**
@@ -2312,9 +2317,8 @@ function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	return $body;
 }
 
-add_filter( 'mc_display_format', 'mc_convert_format', 10, 2 );
 /**
- * Switch format for display depeding on environment.
+ * Switch format for display depending on view environment. Used to display mini or list calendars on mobile devices.
  *
  * @param string $format current view.
  *
@@ -2329,6 +2333,7 @@ function mc_convert_format( $format ) {
 
 	return $format;
 }
+add_filter( 'mc_display_format', 'mc_convert_format', 10, 2 );
 
 /**
  * Get the current date for display of calendar
