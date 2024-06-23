@@ -100,6 +100,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Use `mc_exit_early()` to determine classes as well as to determine display.
 * Bug fix: Editing a single date updated descriptions for all events.
 * Bug fix: Only parse URL arguments for specific calendar ID.
+* Bug fix: No content fallback text not passed to output function in main shortcode.
 * Bug fix: Don't duplicate registration fields in front-end submissions (Pro).
 * Bug fix: Handle the possibility that front-end location presets may be 0 instead of empty (Pro).
 
