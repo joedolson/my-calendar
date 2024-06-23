@@ -2988,6 +2988,9 @@ function mc_recur_datetime_input( $data ) {
  * @return string HTML output for form
  */
 function mc_standard_event_registration( $form, $has_data, $data, $context = 'admin' ) {
+	if ( 'public' === $context ) {
+		return '';
+	}
 	if ( $has_data ) {
 		$tickets      = $data->event_tickets;
 		$registration = stripslashes( esc_attr( $data->event_registration ) );
