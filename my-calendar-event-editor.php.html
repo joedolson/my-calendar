@@ -237,7 +237,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		$event_date = ( is_array( $data['event_begin'] ) ) ? $data['event_begin'][0] : $data['event_begin'];
 		update_post_meta( $post_id, '_mc_event_date', strtotime( $event_date ) );
 	}
-	$location_id = ( isset( $post['location_preset'] ) &amp;&amp; is_numeric( $post['location_preset'] ) ) ? (int) $post['location_preset'] : false;
+	$location_id = ( isset( $post['location_preset'] ) &amp;&amp; is_numeric( $post['location_preset'] ) &amp;&amp; 0 !== (int) $post['location_preset'] ) ? (int) $post['location_preset'] : false;
 	if ( $location_id ) { // only change location ID if dropdown set.
 		update_post_meta( $post_id, '_mc_event_location', $location_id );
 		mc_update_event( 'event_location', $location_id, $event_id );
@@ -297,7 +297,7 @@ function mc_create_event_post( $data, $event_id ) {
 		$description       = isset( $data['event_desc'] ) ? $data['event_desc'] : '';
 		$excerpt           = isset( $data['event_short'] ) ? $data['event_short'] : '';
 		$location_id       = isset( $data['event_location'] ) ? $data['event_location'] : 0;
-		if ( isset( $post['location_preset'] ) &amp;&amp; is_numeric( $post['location_preset'] ) ) {
+		if ( isset( $post['location_preset'] ) &amp;&amp; is_numeric( $post['location_preset'] ) &amp;&amp; 0 !== (int) $post['location_preset'] ) {
 			$location_id = (int) $post['location_preset'];
 		} elseif ( isset( $data['location_preset'] ) &amp;&amp; is_numeric( $data['location_preset'] ) ) {
 			$location_id = $data['location_preset'];
