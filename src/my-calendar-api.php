@@ -163,9 +163,7 @@ function mc_api_format_csv( $data ) {
 			fputcsv( $stream, $values );
 		}
 	}
-	// Rewind the stream.
-	rewind( $stream );
-	// You can now echo its content.
+	// Echo the content as a file. Use content-type headers if for download.
 	if ( ! ( isset( $_GET['file'] ) && 'false' === $_GET['file'] ) ) {
 		// If accessing remotely as content.
 		header( 'Content-type: text/csv' );
