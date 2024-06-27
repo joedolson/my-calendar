@@ -960,7 +960,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 	if ( ! empty( $access_options ) && count( $access_options ) >= 1 ) {
 		$output       = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';
 		$url          = mc_build_url( array( 'access' => 'all' ), array() );
-		$not_selected = ( ! isset( $_GET['access'] ) ) ? 'selected="selected"' : '';
+		$not_selected = ( ! isset( $_GET['access'] ) ) ? ' selected="selected"' : '';
 		$output      .= ( 'list' === $show ) ? "
 		<ul>
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
