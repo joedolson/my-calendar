@@ -846,7 +846,7 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 	}
 	$key = ( $has_multiple ) ? $multiple : $key;
 	// Translators: Type of filter shown. Events, Categories, Locations, or Accessibility Services.
-	$label = sprintf( __( 'Filter %s', 'my-calendar' ), '&lt;span class="screen-reader-text"> ' . $key . '&lt;/a>' );
+	$label = sprintf( __( 'Filter %s', 'my-calendar' ), '&lt;span class="screen-reader-text"> ' . $key . '&lt;/span>' );
 	$form .= '&lt;p>&lt;button id="mc_filter_' . $show . '-' . $id . '" class="button" data-href="' . esc_url( $current_url ) . '">' . $label . '"&lt;/button>&lt;/p>
 	&lt;/form>&lt;/div>';
 	if ( $return ) {
@@ -986,7 +986,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 	if ( ! empty( $access_options ) &amp;&amp; count( $access_options ) >= 1 ) {
 		$output       = ( 'single' === $group ) ? "&lt;div id='mc_access'>\n" : '';
 		$url          = mc_build_url( array( 'access' => 'all' ), array() );
-		$not_selected = ( ! isset( $_GET['access'] ) ) ? 'selected="selected"' : '';
+		$not_selected = ( ! isset( $_GET['access'] ) ) ? ' selected="selected"' : '';
 		$output      .= ( 'list' === $show ) ? "
 		&lt;ul>
 			&lt;li>&lt;a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '&lt;/a>&lt;/li>' : $form . '
