@@ -952,6 +952,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	align-items: center;
 	padding: 8px;
 	box-sizing: border-box;
+	white-space: wrap;
 }
 
 .mc-main .event-title button:hover,
