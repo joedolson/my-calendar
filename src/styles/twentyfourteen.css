@@ -191,7 +191,8 @@
 }
 
 .mc-main.mini .has-events, .mc-main.mini .has-events .mc-date {
-    background: #fff;
+    background: var(--date-has-events-bg);
+	color: var(--date-has-events-color);
     font-weight: 700;
 }
 
