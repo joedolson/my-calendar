@@ -2480,8 +2480,11 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		die;
 	}
 
-	$current_user = wp_get_current_user();
-	$event_author = ( $event_author === $current_user->ID || current_user_can( 'mc_manage_events' ) ) ? $event_author : $current_user->ID;
+	$current_user = is_user_logged_in() ? wp_get_current_user() : false;
+	if ( $current_user ) {
+		// Users without manage events capability can't change author values.
+		$event_author = ( $event_author === $current_user->ID || current_user_can( 'mc_manage_events' ) ) ? $event_author : $current_user->ID;
+	}
 	$primary      = ( ! $primary ) ? 1 : $primary;
 	$cats         = ( isset( $cats ) && is_array( $cats ) ) ? $cats : array( 1 );
 	// Set transient with start date/time of this event for 15 minutes.
