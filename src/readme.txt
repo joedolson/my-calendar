@@ -3,7 +3,7 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: event manager, event calendar, venue, location, accessibility
 Requires at least: 4.9
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 7.4
 Text domain: my-calendar
 Stable tag: 3.5.9
