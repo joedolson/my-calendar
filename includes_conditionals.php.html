@@ -94,7 +94,9 @@ function mc_is_custom_icon() {
 			} else {
 				$return = true;
 			}
-			set_transient( 'mc_custom_icons', true, HOUR_IN_SECONDS );
+			if ( ! WP_DEBUG ) {
+				set_transient( 'mc_custom_icons', true, HOUR_IN_SECONDS );
+			}
 		}
 	}
 
