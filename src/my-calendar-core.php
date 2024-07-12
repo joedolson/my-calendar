@@ -906,7 +906,7 @@ function mc_admin_head() {
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
-		if ( 'text' === $key ) {
+		if ( 'text' === $key && is_array( $var ) ) {
 			foreach ( $var as $variable => $text ) {
 				if ( $variable ) {
 					$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $text ) . '; ';
