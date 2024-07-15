@@ -687,7 +687,7 @@ function mc_get_nearest_event( $id, $next = false ) {
 }
 
 /**
- * Returns the event object for a specific instance of an event.
+ * Returns the event object for a specific instance of an event. Use mc_get_first_event() if the instance ID is unknown.
  *
  * @param int    $id  Event instance ID.
  * @param string $type  'object' or 'html'.
