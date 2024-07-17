@@ -1378,6 +1378,23 @@ function mc_add_adminbar_link( $mc_id ) {
 	$wp_admin_bar->add_node( $args );
 }
 add_action( 'admin_bar_menu', 'mc_admin_bar', 200 );
+
+
+/**
+ * Add primary adminbar link.
+ *
+ * @param array $classes An array of body class names.
+ */
+function mc_primary_page_class( $classes ) {
+	$mc_id = mc_get_option( 'uri_id' );
+	if ( is_page( $mc_id ) ) {
+		$classes[] = 'my-calendar';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'mc_primary_page_class', 10, 1 );
+
 /**
  * Set up adminbar links
  */
