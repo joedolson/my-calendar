@@ -565,6 +565,13 @@ function mc_head() {
 
 		echo PHP_EOL . '&lt;script type="application/ld+json">' . PHP_EOL . '[' . json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '&lt;/script>' . PHP_EOL;
 	}
+
+	$page_id = mc_get_option( 'uri_id' );
+	$is_page = ( is_single( $page_id ) || is_page( $page_id ) ) ? true : false;
+	// Force noindex on calendar archive pages as long as they are not the home, front page, or individual event view.
+	if ( ( $page_id &amp;&amp; $is_page ) &amp;&amp; ! ( isset( $_GET['mc_id'] ) || is_front_page() ) ) {
+		echo PHP_EOL . '&lt;meta name="robots" content="noindex,follow" />' . PHP_EOL;
+	}
 }
 
 /**
