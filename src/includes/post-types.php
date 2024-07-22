@@ -110,6 +110,28 @@ function mc_post_type() {
 	$host_arguments['show_in_menu'] = true;
 	$host_arguments['menu_icon']    = 'dashicons-superhero';
 
+	/**
+	 * Filter post type arguments for My Calendar events (mc-events).
+	 *
+	 * @hook mc_event_post_type_args
+	 *
+	 * @param {array} $arguments Post type arguments.
+	 *
+	 * @return {array}
+	 */
+	$arguments = apply_filters( 'mc_event_post_type_args', $arguments );
+
+	/**
+	 * Filter post type arguments for My Calendar locations (mc-locations).
+	 *
+	 * @hook mc_location_post_type_args
+	 *
+	 * @param {array} $loc_arguments Post type arguments.
+	 *
+	 * @return {array}
+	 */
+	$arguments = apply_filters( 'mc_location_post_type_args', $loc_arguments );
+
 	$types = array(
 		'mc-events'    => array(
 			__( 'event', 'my-calendar' ),
