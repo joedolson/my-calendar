@@ -750,9 +750,10 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 		 *
 		 * @return {array}
 		 */
-		$atts = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
-		if ( ! isset( $atts['alt'] ) && ! get_post_meta( get_post_thumbnail_id( $event->event_post, '_wp_attachment_image_alt', true ) ) ) {
-			$atts['alt'] = $event->post_title;
+		$atts         = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
+		$thumbnail_id = get_post_thumbnail_id( $event->event_post );
+		if ( ! isset( $atts['alt'] ) && ! get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true ) ) {
+			$atts['alt'] = $event->event_title;
 		}
 		$image = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
 	} else {
