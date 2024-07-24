@@ -1471,9 +1471,9 @@ add_filter( 'mc_filter_shortcodes', 'mc_auto_excerpt', 10, 2 );
 function mc_auto_excerpt( $e, $event ) {
 	$description = $e['description'];
 	$shortdesc   = $e['shortdesc'];
-	$excerpt     = '';
+	$excerpt     = $shortdesc;
 	$autoexcerpt = '';
-	if ( '' !== $description ) { // if description is empty, this won't work, so skip it.
+	if ( '' !== trim( $description ) ) { // if description is empty, this won't work, so skip it.
 		/**
 		 * Length of My Calendar generated excerpts in words. Default 55.
 		 *
@@ -1484,10 +1484,10 @@ function mc_auto_excerpt( $e, $event ) {
 		 * @return {int}
 		 */
 		$num_words   = apply_filters( 'mc_excerpt_length', 55 );
-		$excerpt     = wp_trim_words( $description, $num_words );
-		$autoexcerpt = $excerpt;
-	} else {
-		$excerpt = $shortdesc;
+		$autoexcerpt = wp_trim_words( $description, $num_words );
+	}
+	if ( '' === trim( $shortdesc ) ) {
+		$excerpt = $autoexcerpt;
 	}
 
 	$e['search_excerpt'] = mc_search_highlight( $description, $shortdesc );
