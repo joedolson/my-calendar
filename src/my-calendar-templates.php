@@ -1473,7 +1473,7 @@ function mc_auto_excerpt( $e, $event ) {
 	$shortdesc   = $e['shortdesc'];
 	$excerpt     = '';
 	$autoexcerpt = '';
-	if ( '' !== $description && '' === $shortdesc ) { // if description is empty, this won't work, so skip it.
+	if ( '' !== $description ) { // if description is empty, this won't work, so skip it.
 		/**
 		 * Length of My Calendar generated excerpts in words. Default 55.
 		 *
