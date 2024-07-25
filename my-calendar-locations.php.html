@@ -624,6 +624,8 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 									if ( $view_url &amp;&amp; esc_url( $view_url ) ) {
 										?>
 								&lt;li>&lt;span class="dashicons dashicons-laptop" aria-hidden="true">&lt;/span>&lt;a class="view" href="&lt;?php echo esc_url( $view_url ); ?>">&lt;?php esc_html_e( 'View', 'my-calendar' ); ?>&lt;/a>&lt;/li>
+								&lt;li>&lt;span class="dashicons dashicons-edit" aria-hidden="true">&lt;/span>&lt;a class="edit" href="&lt;?php echo esc_url( get_edit_post_link( mc_get_location_post( $loc_id, false ) ) ); ?>">&lt;?php esc_html_e( 'Edit Post', 'my-calendar' ); ?>&lt;/a>&lt;/li>
+
 										&lt;?php
 									}
 								}
