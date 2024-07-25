@@ -598,6 +598,8 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 									if ( $view_url && esc_url( $view_url ) ) {
 										?>
 								<li><span class="dashicons dashicons-laptop" aria-hidden="true"></span><a class="view" href="<?php echo esc_url( $view_url ); ?>"><?php esc_html_e( 'View', 'my-calendar' ); ?></a></li>
+								<li><span class="dashicons dashicons-edit" aria-hidden="true"></span><a class="edit" href="<?php echo esc_url( get_edit_post_link( mc_get_location_post( $loc_id, false ) ) ); ?>"><?php esc_html_e( 'Edit Post', 'my-calendar' ); ?></a></li>
+
 										<?php
 									}
 								}
