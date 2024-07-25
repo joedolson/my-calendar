@@ -94,7 +94,7 @@ function mc_post_type() {
 	);
 
 	$loc_arguments             = $arguments;
-	$loc_arguments['supports'] = array( 'title', 'custom-fields', 'thumbnail' );
+	$loc_arguments['supports'] = array( 'title', 'editor', 'custom-fields', 'thumbnail' );
 	/**
 	 * Should location posts be excluded from search? Default true.
 	 *
