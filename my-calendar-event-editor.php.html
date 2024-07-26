@@ -620,7 +620,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
-					$event_link  = mc_get_details_link( $event_ids[0]->occur_id );
+					$event_link  = mc_get_permalink( $event_ids[0]->occur_id );
 					$event_error = mc_error_check( $event_ids[0]->occur_event_id );
 				}
 
@@ -1845,9 +1845,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						esc_html_e( 'Unable to retrieve template tags for this event.', 'my-calendar' );
 						$tag_preview = '';
 					} else {
-						$view_url = mc_get_details_link( $first );
+						$view_url = mc_get_permalink( $first );
 						if ( ! mc_event_published( $data ) ) {
-							$view_url = add_query_arg( 'preview', 'true', mc_get_details_link( $first ) );
+							$view_url = add_query_arg( 'preview', 'true', mc_get_permalink( $first ) );
 						}
 						$tag_url     = admin_url( "admin.php?page=my-calendar-design&amp;mc-event=$first->occur_id#my-calendar-templates" );
 						$tag_preview = add_query_arg(
@@ -2483,7 +2483,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$conflict_id = $conflicts[0]->occur_id;
 			$conflict_ev = mc_get_event( $conflict_id );
 			if ( '1' === $conflict_ev->event_approved ) {
-				$conflict = mc_get_details_link( $conflict_ev );
+				$conflict = mc_get_permalink( $conflict_ev );
 				// Translators: URL to event details.
 				$errors .= mc_show_error( sprintf( __( 'That event conflicts with a &lt;a href="%s">previously scheduled event&lt;/a>.', 'my-calendar' ), $conflict ), false, 'conflict' );
 			} else {
@@ -3127,7 +3127,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 
 	if ( $has_data &amp;&amp; is_object( $event ) ) {
 		$first    = mc_get_first_event( $event->event_id );
-		$view_url = mc_get_details_link( $first );
+		$view_url = mc_get_permalink( $first );
 		if ( mc_event_published( $event ) ) {
 			$controls['view'] = "&lt;span class='dashicons dashicons-laptop' aria-hidden='true'>&lt;/span>&lt;a href='" . esc_url( $view_url ) . "' class='view'>" . __( 'View', 'my-calendar' ) . '&lt;/a>';
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {

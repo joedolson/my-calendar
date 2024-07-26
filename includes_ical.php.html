@@ -100,7 +100,7 @@ function mc_generate_ical( $events, $context = '' ) {
 					->description_html( $tags['excerpt'] )
 					->organizer( $tags['host_email'], $tags['host'] )
 					->categories( explode( ',', $tags['ical_categories'] ) )
-					->url( $tags['details_link'] )
+					->url( $tags['permalink'] )
 					->uniqueIdentifier( $tags['dateid'] . '-' . $tags['id'] );
 				if ( $rrule ) {
 					$ical->rruleAsString( $rrule );
