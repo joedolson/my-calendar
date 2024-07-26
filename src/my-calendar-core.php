@@ -2297,7 +2297,7 @@ function mc_previous_post_link( $output, $format ) {
 		remove_filter( 'the_title', 'mc_the_title', 10 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
 		add_filter( 'the_title', 'mc_the_title', 10, 2 );
-		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
+		$link = add_query_arg( 'mc_id', $event['dateid'], $event['permalink'] );
 		$date = ' <span class="mc-event-date">' . $event['date'] . '</span>';
 
 		$output = str_replace( '%link', '<a href="' . $link . '" rel="next" class="mc-adjacent">' . $title . $date . '</a>', $format );
@@ -2328,7 +2328,7 @@ function mc_next_post_link( $output, $format ) {
 		remove_filter( 'the_title', 'mc_the_title', 10 );
 		$title = apply_filters( 'the_title', $event['title'], $event['post'] );
 		add_filter( 'the_title', 'mc_the_title', 10, 2 );
-		$link = add_query_arg( 'mc_id', $event['dateid'], $event['details_link'] );
+		$link = add_query_arg( 'mc_id', $event['dateid'], $event['permalink'] );
 		$date = ' <span class="mc-event-date">' . $event['date'] . '</span>';
 
 		$output = str_replace( '%link', '<a href="' . $link . '" rel="next" class="mc-adjacent">' . $title . $date . '</a>', $format );

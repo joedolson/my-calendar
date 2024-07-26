@@ -633,7 +633,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e_label   = str_replace( $tags, $replacements, $e_template );
 	$classes   = mc_get_event_classes( $event, 'template' );
 	$nofollow  = ( stripos( $classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
-	$e_link    = mc_get_details_link( $event );
+	$e_link    = mc_get_permalink( $event );
 	$e['link'] = mc_event_link( $event );
 	if ( $e['link'] ) {
 		$e['link_image'] = str_replace( "alt=''", "alt='" . esc_attr( $e['title'] ) . "'", "<a href='" . esc_url( $e['link'] ) . "' $nofollow>" . $e['image'] . '</a>' );
@@ -644,6 +644,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	}
 
 	$e['details_link'] = $e_link;
+	$e['permalink']    = $e_link;
 	$e['details_ical'] = remove_query_arg( 'mc_id', $e_link ); // In ical series exports, it's impossible to get the actual details link.
 	$e['details']      = "<a href='" . esc_url( $e_link ) . "' class='mc-details' $nofollow>$e_label</a>";
 	$e['linking']      = ( '' !== $e['link'] ) ? $event->event_link : $e_link;
@@ -841,6 +842,17 @@ function mc_notime_label( $event ) {
 }
 
 /**
+ * Get link to event's details page. Alias for `mt_get_details_link`.
+ *
+ * @param object|int $event Full event object or event occurrence ID.
+ *
+ * @return string URL.
+ */
+function mc_get_permalink( $event ) {
+	return mc_get_permalink( $event );
+}
+
+/**
  * Get link to event's details page.
  *
  * @param object|int $event Full event object or event occurrence ID.
@@ -870,14 +882,14 @@ function mc_get_details_link( $event ) {
 	 *
 	 * @return {bool} True value if permalinks are enabled.
 	 */
-	$permalinks   = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
-	$permalinks   = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
-	$details_link = mc_event_link( $event );
+	$permalinks = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
+	$permalinks = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
+	$permalink  = mc_event_link( $event );
 	if ( 0 !== (int) $event->event_post && 'true' !== mc_get_option( 'remote' ) && $permalinks ) {
-		$details_link = add_query_arg( 'mc_id', $event->occur_id, get_permalink( $event->event_post ) );
+		$permalink = add_query_arg( 'mc_id', $event->occur_id, get_permalink( $event->event_post ) );
 	} else {
 		if ( mc_get_uri( 'boolean' ) ) {
-			$details_link = mc_build_url(
+			$permalink = mc_build_url(
 				array( 'mc_id' => $event->occur_id ),
 				array(
 					'month',
@@ -905,18 +917,18 @@ function mc_get_details_link( $event ) {
 	 *
 	 * @hook mc_customize_details_link
 	 *
-	 * @param {string} $details_link Link to event details page/permalink.
+	 * @param {string} $permalink Link to event details page/permalink.
 	 * @param {object} $event Event object.
 	 *
 	 * @return {string} URL.
 	 */
-	$details_link = apply_filters( 'mc_customize_details_link', $details_link, $event );
+	$permalink = apply_filters( 'mc_customize_details_link', $permalink, $event );
 
 	if ( $restore ) {
 		restore_current_blog();
 	}
 
-	return $details_link;
+	return $permalink;
 }
 
 /**
@@ -2037,15 +2049,15 @@ function mc_template_share( $data, $type = 'calendar' ) {
 	$vcal  = '';
 	if ( ( ! isset( $_GET['mc_id'] ) ) && mc_output_is_visible( 'more', $type, $event ) ) {
 		$details_label = mc_get_details_label( $event, $data->tags );
-		$details_link  = mc_get_details_link( $event );
+		$permalink     = mc_get_permalink( $event );
 		$event_title   = mc_draw_event_title( $event, $data->tags, $type, '' );
 		$aria          = '';
 		// If the event title is already in the details label, omit ARIA.
 		if ( false === stripos( strip_tags( $details_label ), strip_tags( $event_title ) ) ) {
 			$aria = " aria-label='" . esc_attr( "$details_label: " . strip_tags( $event_title ) ) . "'";
 		}
-		if ( _mc_is_url( $details_link ) ) {
-			$more = "	<p class='mc-details'><a$aria href='" . esc_url( $details_link ) . "'>$details_label</a></p>\n";
+		if ( _mc_is_url( $permalink ) ) {
+			$more = "	<p class='mc-details'><a$aria href='" . esc_url( $permalink ) . "'>$details_label</a></p>\n";
 		}
 	}
 	$more = apply_filters( 'mc_details_grid_link', $more, $event );

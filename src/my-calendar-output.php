@@ -441,9 +441,9 @@ function mc_draw_event_header( $data, $type, $template ) {
 
 	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $no_link ) {
 		if ( 'true' === $open_uri || 'card' === $type ) {
-			$details_link = esc_url( mc_get_details_link( $event ) );
-			$wrap         = ( _mc_is_url( $details_link ) ) ? "<a href='$details_link' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
-			$balance      = ( _mc_is_url( $details_link ) ) ? '</a>' : '</span>';
+			$permalink = esc_url( mc_get_permalink( $event ) );
+			$wrap      = ( _mc_is_url( $permalink ) ) ? "<a href='$permalink' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
+			$balance   = ( _mc_is_url( $permalink ) ) ? '</a>' : '</span>';
 		} else {
 			$gridtype           = mc_get_option( 'calendar_javascript' );
 			$listtype           = mc_get_option( 'list_javascript' );
@@ -1148,7 +1148,7 @@ function mc_handle_permalinks() {
 		return;
 	} elseif ( $enabled && ! $is_permalink && $mc_id ) {
 		// Permalinks are enabled, but this is a calendar event that isn't the permalink page.
-		$page = mc_get_details_link( $mc_id );
+		$page = mc_get_permalink( $mc_id );
 
 		wp_safe_redirect( $page );
 		die;

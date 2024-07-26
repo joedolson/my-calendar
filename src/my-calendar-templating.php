@@ -317,7 +317,7 @@ function mc_templates_edit() {
 		echo wp_kses_post( mc_admin_template_description( $key ) );
 		$mc_id = mc_get_template_tag_preview( false, 'int' );
 		if ( $mc_id ) {
-			$view_url    = mc_get_details_link( $mc_id );
+			$view_url    = mc_get_permalink( $mc_id );
 			$tag_preview = add_query_arg(
 				array(
 					'iframe'   => 'true',

@@ -171,7 +171,7 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			$result  = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
 
 			$edit_url = '<a href="' . admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event_id" ) . '" class="button-secondary">' . __( 'Edit Event', 'my-calendar' ) . '</a>';
-			$view_url = ' <a href="' . mc_get_details_link( mc_get_first_event( $event_id ) ) . '" class="button-secondary">' . __( 'View Event', 'my-calendar' ) . '</a>';
+			$view_url = ' <a href="' . mc_get_permalink( mc_get_first_event( $event_id ) ) . '" class="button-secondary">' . __( 'View Event', 'my-calendar' ) . '</a>';
 			$url      = $edit_url . $view_url;
 			// Make sure POST data is available in update array.
 			$update = array_merge( $update, $post );

@@ -863,7 +863,7 @@ function mc_admin_events_table( $events ) {
 		$problem  = ( '' !== $check ) ? 'problem' : '';
 		$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
 		$copy_url = admin_url( "admin.php?page=my-calendar&amp;mode=copy&amp;event_id=$event->event_id" );
-		$view_url = ( $invalid ) ? '' : mc_get_details_link( $event );
+		$view_url = ( $invalid ) ? '' : mc_get_permalink( $event );
 
 		$group_url  = admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" );
 		$mcnonce    = wp_create_nonce( 'mcnonce' );
