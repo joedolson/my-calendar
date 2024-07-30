@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.5.10
+Stable tag: 3.5.11
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -94,6 +94,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.5.11 =
+
+* Bug fix: Default image alt attribute incorrectly fetched.
+* Change: Add filters for locations and events post type arguments.
+* Change: Add 'autoexcerpt' as a template tag in addition to the `excerpt` and `short_desc` tags.
+* Change: Add editor support for location post types.
+* Change: Add link to location post editor in location manager.
+* Change: Add `permalink` as alias for `details_link` for clearer tag & function usage.
 
 = 3.5.10 =
 
