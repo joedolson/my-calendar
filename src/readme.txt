@@ -98,6 +98,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.5.11 =
 
 * Bug fix: Default image alt attribute incorrectly fetched.
+* Bug fix: Remove stray quote in filter button text.
+* Bug fix: Prevent PHP warning if category styles transient contains invalid content.
 * Change: Add filters for locations and events post type arguments.
 * Change: Add 'autoexcerpt' as a template tag in addition to the `excerpt` and `short_desc` tags.
 * Change: Add editor support for location post types.
