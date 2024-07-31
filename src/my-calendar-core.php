@@ -471,11 +471,15 @@ function mc_enqueue_calendar_styles( $stylesheet ) {
  * Generate calendar CSS.
  */
 function mc_generate_css() {
-	$category_vars = '';
+	$category_vars   = '';
+	$category_styles = '';
 	// generate category colors.
-	$category_css    = mc_generate_category_styles();
-	$category_styles = ( ! empty( $category_css ) ) ? $category_css['styles'] : '';
-	$category_vars   = ( ! empty( $category_css ) ) ? $category_css['vars'] : '';
+	$category_css = mc_generate_category_styles();
+	if ( ! empty( $category_css ) && is_array( $category_css ) ) {
+		$category_styles = ( isset( $category_css['styles'] ) ) ? $category_css['styles'] : '';
+		$category_vars   = ( isset( $category_css['vars'] ) ) ? $category_css['vars'] : '';
+	}
+
 
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$styles     = mc_style_variables( $styles );
@@ -905,10 +909,14 @@ function mc_admin_url( $url ) {
  * Add custom CSS variables in admin head.
  */
 function mc_admin_head() {
+	$category_vars   = '';
+	$category_styles = '';
 	// generate category colors.
-	$category_css    = mc_generate_category_styles();
-	$category_styles = ( ! empty( $category_css ) ) ? $category_css['styles'] : '';
-	$category_vars   = ( ! empty( $category_css ) ) ? $category_css['vars'] : '';
+	$category_css = mc_generate_category_styles();
+	if ( ! empty( $category_css ) && is_array( $category_css ) ) {
+		$category_styles = ( isset( $category_css['styles'] ) ) ? $category_css['styles'] : '';
+		$category_vars   = ( isset( $category_css['vars'] ) ) ? $category_css['vars'] : '';
+	}
 
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$style_vars = '';
