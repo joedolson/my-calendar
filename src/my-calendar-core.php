@@ -2259,7 +2259,6 @@ function mc_register_actions() {
 
 // Filters.
 add_filter( 'post_updated_messages', 'mc_posttypes_messages' );
-add_filter( 'tmp_grunion_allow_editor_view', '__return_false' );
 add_filter( 'next_post_link', 'mc_next_post_link', 10, 2 );
 add_filter( 'previous_post_link', 'mc_previous_post_link', 10, 2 );
 add_filter( 'the_title', 'mc_the_title', 10, 2 );
