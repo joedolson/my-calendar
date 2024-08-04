@@ -87,8 +87,8 @@ function my_calendar_help() {
 				</ul>
 				<p>
 					<?php
-					// translators: print CSS file name, mobile CSS file name, tablet CSS file name.
 					printf(
+						// translators: print CSS file name, mobile CSS file name, tablet CSS file name.
 						__( 'Custom print, mobile, and tablet stylesheet file names: %1$s, %2$s, and %3$s.', 'my-calendar' ),
 						'<code>mc-print.css</code>',
 						'<code>mc-mobile.css</code>',
