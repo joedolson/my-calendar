@@ -1288,7 +1288,7 @@ body.mc-no-scroll {
   left: 0;
   background: var(--primary-dark);
   opacity: .8;
-  z-index: 666;
+  z-index: 99998;
   cursor: pointer;
 }
 
@@ -1345,7 +1345,7 @@ body.mc-no-scroll {
   border: 2px solid var(--primary-dark);
   background: var(--primary-light);
   color: var(--primary-dark);
-  z-index: 667;
+  z-index: 99999;
   padding: 0;
   right: auto;
   overflow: auto;
