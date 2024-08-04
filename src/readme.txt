@@ -114,6 +114,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Remove stray quote in filter button text.
 * Bug fix: Prevent PHP warning if category styles transient contains invalid content.
 * Bug fix: PHP warning on Help screen.
+* Bug fix: Increase z-index on modals.
 * Change: Add filters for locations and events post type arguments.
 * Change: Add 'autoexcerpt' as a template tag in addition to the `excerpt` and `short_desc` tags.
 * Change: Add editor support for location post types.
