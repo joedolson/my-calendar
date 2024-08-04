@@ -13,18 +13,30 @@ Accessible WordPress event calendar plugin. Manage single or recurring events, e
 
 == Description ==
 
-My Calendar does WordPress event management with richly customizable ways to display events. The plugin supports individual event calendars within WordPress Multisite, multiple calendars displayed by categories, locations or author, or simple lists of upcoming events.
+[My Calendar](https://joedolson.com/my-calendar/) offers easy-to-use WordPress event management with rich options for custom displays. Display individual event calendars in WordPress Multisite, offer multiple views of calendars limited by event categories, locations or author, or show simple text-based lists of your upcoming events.
 
-Easy to use for anybody, My Calendar provides enormous flexibility for designers and developers needing a custom calendar. My Calendar is built with accessibility in mind, so all your users can get equal access and experience in your calendar.
+= Rich Event Calendar Features = 
 
-My Calendar is an events calendar focused on holistic accessibility: providing a positive experience for site visitors and administrators who use assistive technology. It also builds in settings where you can describe the ADA compliance features of your events and venues.
+You'll find enormous design flexibility fo your custom calendar. With recurring event support, design customization tools, custom templating, and category and venue support out of the box, My Calendar gives you a great feature set to get your calendar set up.
 
-Learn more about [My Calendar and accessible events](https://docs.joedolson.com/my-calendar/event-accessibility/).
+= Built with Accessibility in Mind =
+
+My Calendar is an events calendar focused on holistic accessibility: providing a positive experience for site visitors and administrators who use assistive technology. It includes built-in settings where you can describe the ADA compliance features of your events and venues. Accessibility is a critical part of your website, so your audience can get equal access and experience to the events you list.
+
+Learn about [accessible events](https://docs.joedolson.com/my-calendar/event-accessibility/) or [visit the My Calendar demo](https://demos.joedolson.com/my-calendar/)
 
 = Premium Event Management =
-Looking for more? [Buy My Calendar Pro](https://www.joedolson.com/my-calendar/pro/), the premium extension for My Calendar to add support for user-submitted events, integration between posting and event creation, and import events from outside sources.
+Looking for more? [Buy My Calendar Pro](https://www.joedolson.com/my-calendar/pro/), the premium extension for My Calendar.
 
-= Selling event tickets? =
+My Calendar Pro adds tons of great additional features:
+
+* Support for user-submitted events,
+* Custom field creation and management,
+* integration between posting and event creation,
+* Import events from outside sources, and
+* support for sharing events between multiple sites.
+
+= Sell Event Tickets =
 Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plugins/my-tickets/) and sell tickets for My Calendar events. Set prices, ticket availability, and sell multiple events at the same time using My Tickets.
 
 = Features: =
@@ -35,20 +47,21 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 *	Widgets: today's events, upcoming events, mini calendar, event search
 *	Customize templates for event output
 *	Limit views by categories, location, author, or host
-*	Editable CSS styles.
 *	Extensive support for recurring events.
 *	Edit or add single dates in recurring events
 *	Rich permissions handling to restrict access to parts of My Calendar
 *	Email notifications when events are scheduled or drafted
-*	Post to Twitter when events are created (using [WP to Twitter](http://wordpress.org/extend/plugins/wp-to-twitter/))
-*	Manage locations
+*	Post to X when events are created (using [XPoster](http://wordpress.org/plugins/wp-to-twitter/))
+*	Event location management
 *	Fetch events from a remote database. (Sharing events in a network of sites.)
 *	Multisite-friendly
 *	Integrated help page
 *	Shortcode Generator to create customized views of My Calendar
-*	JSON-LD structured data for events and venues.
+*	SEO with JSON-LD structured data for events and venues.
 *	Export or subscribe via iCal or Google Calendar.
-*	Responsive
+*	Completely responsive events views
+*	Extensive [public documentation](https://docs.joedolson.com/my-calendar/).
+*	Hundreds of [actions and filters for custom development](https://joedolson.github.io/my-calendar/)
 
 = Accessibility =
 
@@ -100,6 +113,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Default image alt attribute incorrectly fetched.
 * Bug fix: Remove stray quote in filter button text.
 * Bug fix: Prevent PHP warning if category styles transient contains invalid content.
+* Bug fix: PHP warning on Help screen.
 * Change: Add filters for locations and events post type arguments.
 * Change: Add 'autoexcerpt' as a template tag in addition to the `excerpt` and `short_desc` tags.
 * Change: Add editor support for location post types.
@@ -447,21 +461,21 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Frequently Asked Questions ==
 
-= Hey! Why don't you have any Frequently Asked Questions here! =
+= Where can I find plugin documentation? =
 
-Because the majority of users end up on my web site asking for help anyway -- and it's simply more work to maintain two copies. Please visit [my web site FAQ](https://www.joedolson.com/my-calendar/faq/) to read my Frequently Asked Questions!
+Take a look at my [documentation website for My Calendar](https://docs.joedolson.com/my-calendar/) or the [developer hook documentation](https://joedolson.github.io/my-calendar/). If you're using the free version, please consider [making a donation](https://www.joedolson.com/donate/) or [buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/) before requesting support.
 
-= This plugin is complicated. Why won't you help me figure out how to use it? =
+= How can my visitors or members submit events? =
 
-I will! But not in person. Take a look at my [documentation website for My Calendar](https://docs.joedolson.com/my-calendar/) or the [developer hook documentation](https://joedolson.github.io/my-calendar/) before making your request, and consider [making a donation](https://www.joedolson.com/donate/) or [buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/)!
-
-= Can my visitors or members submit events? =
-
-I've written a premium plugin that adds this feature: My Calendar Pro. [Buy it today](https://www.joedolson.com/my-calendar/pro/)!
+My Calendar Pro supports a richly featured interface for getting events from the public. You can customize the form to collect exactly the fields you need, and review the events before publishing. [Buy it today](https://www.joedolson.com/my-calendar/pro/)!
 
 = Is there an advanced search feature? =
 
-The search feature in My Calendar is pretty basic; but [buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/) gives you a richer search feature, where you can narrow by dates, categories, authors, and more to refine your event search.
+[Buying My Calendar Pro](https://www.joedolson.com/my-calendar/pro/) gets you a richly featured advanced event search. You can narrow by dates, categories, authors, and more to refine your event search.
+
+= Where can I report issues or request features? =
+
+My Calendar is developed on Github, and I welcome contribution. [Vist the My Calendar repository](https://github.com/joedolson/my-calendar) to make requests.
 
 == Screenshots ==
 
