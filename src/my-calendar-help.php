@@ -230,7 +230,7 @@ function mc_print_contextual_help() {
 	<?php
 	echo wp_kses( mc_get_help_text( $id ), mc_kses_elements() );
 	$return_url = add_query_arg( 's', $query, 'https://docs.joedolson.com/my-calendar/' );
-	$return     = wp_kses_post( '<p class="docs-link"><a target="_parent" href="' . esc_url( $return_url ) . '">' . __( 'Documentation', 'my-calendar' ) . '</a></p>' );
+	$return     = '<p class="docs-link"><a target="_parent" href="' . esc_url( $return_url ) . '">' . __( 'Documentation', 'my-calendar' ) . '</a></p>';
 	echo wp_kses_post( mc_get_help_footer( $return ) );
 	?>
 	</div>
