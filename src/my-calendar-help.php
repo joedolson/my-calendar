@@ -86,7 +86,15 @@ function my_calendar_help() {
 					?>
 				</ul>
 				<p>
-					<?php wp_kses_post( _e( 'Custom print, mobile, and tablet stylesheet file names: <code>mc-print.css</code>, <code>mc-mobile.css</code>, and <code>mc-tablet.css</code>.', 'my-calendar' ) ); ?>
+					<?php
+					// translators: print CSS file name, mobile CSS file name, tablet CSS file name.
+					printf(
+						__( 'Custom print, mobile, and tablet stylesheet file names: %1$s, %2$s, and %3$s.', 'my-calendar' ),
+						'<code>mc-print.css</code>',
+						'<code>mc-mobile.css</code>',
+						'<code>mc-tablet.css</code>'
+					)
+					?>
 				</p>
 				<h3><?php esc_html_e( 'Custom Template Locations', 'my-calendar' ); ?></h3>
 				<p><?php _e( 'Default My Calendar templates are found in <code>/wp-content/my-calendar/mc-templates/</code>. Copy those templates into a <code>/mc-templates/</code> directory in your theme to customize.', 'my-calendar' ); ?></p>
