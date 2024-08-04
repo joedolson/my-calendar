@@ -119,6 +119,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Add editor support for location post types.
 * Change: Add link to location post editor in location manager.
 * Change: Add `permalink` as alias for `details_link` for clearer tag & function usage.
+* Remove override for deprecated filter `tmp_grunion_allow_editor_view`.
 
 = 3.5.10 =
 
