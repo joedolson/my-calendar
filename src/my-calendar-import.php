@@ -72,6 +72,31 @@ function mc_convert_post_status_to_approval( $status ) {
 }
 
 /**
+ * Convert an approval type to a post status.
+ *
+ * @param int $approval Approval value.
+ *
+ * @return string Post status.
+ */
+function mc_convert_approval_to_post_status( $approval ) {
+	switch ( $approval ) {
+		case 1:
+			$status = 'publish';
+			break;
+		case 0:
+			$status = 'draft';
+			break;
+		case 2:
+			$status = 'trash';
+			break;
+		default:
+			$status = 'draft';
+	}
+
+	return $status;
+}
+
+/**
  * Import events from Kieran O'Shea's "Calendar". Largely obsolete.
  */
 function mc_import_source_calendar() {
