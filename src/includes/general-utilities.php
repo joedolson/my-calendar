@@ -453,15 +453,26 @@ function mc_get_users( $group = 'authors' ) {
  * @param string         $message Update message.
  * @param boolean        $display Echo or return. Default true (echo).
  * @param boolean|string $code Message code.
+ * @param string         $type Type of message. 'error', 'success', 'warning', or 'info'.
  *
  * @return string
  */
-function mc_show_notice( $message, $display = true, $code = false ) {
+function mc_show_notice( $message, $display = true, $code = false, $type = 'notice' ) {
 	if ( trim( $message ) === '' ) {
 		return '';
 	}
-	$message = strip_tags( apply_filters( 'mc_filter_notice', $message, $code ), mc_admin_strip_tags() );
-	$message = "<div class='updated'><p>$message</p></div>";
+	/**
+	 * Filter My Calendar admin notices.
+	 *
+	 * @hook mc_filter_{type}
+	 *
+	 * @param {string}         $message Message to print.
+	 * @param {boolean|string} $code Message code. 
+	 *
+	 * @return {string}
+	 */
+	$message = strip_tags( apply_filters( 'mc_filter_' . $type, $message, $code ), mc_admin_strip_tags() );
+	$message = "<div class='notice notice-" . esc_attr( $type ) . "'><p>$message</p></div>";
 	if ( $display ) {
 		echo wp_kses_post( $message );
 	}
@@ -469,7 +480,7 @@ function mc_show_notice( $message, $display = true, $code = false ) {
 }
 
 /**
- * Display an error message.
+ * Display an error message. Alias for `mc_show_notice()` with the 'error' argument.
  *
  * @param string         $message Error message.
  * @param boolean        $display Echo or return. Default true (echo).
@@ -478,13 +489,5 @@ function mc_show_notice( $message, $display = true, $code = false ) {
  * @return string
  */
 function mc_show_error( $message, $display = true, $code = false ) {
-	if ( trim( $message ) === '' ) {
-		return '';
-	}
-	$message = strip_tags( apply_filters( 'mc_filter_error', $message, $code ), mc_admin_strip_tags() );
-	$message = "<div class='error'><p>$message</p></div>";
-	if ( $display ) {
-		echo $message;
-	}
-	return $message;
+	return mc_show_notice( $message, $display, $code, 'error' );
 }

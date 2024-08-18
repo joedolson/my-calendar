@@ -912,9 +912,9 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 
 	if ( is_object( $data ) && 1 !== (int) $data->event_approved && 'edit' === $mode ) {
 		if ( 0 === (int) $data->event_approved ) {
-			mc_show_error( __( '<strong>Draft</strong>: Publish this event to show it on the calendar.', 'my-calendar' ) );
+			mc_show_notice( __( '<strong>Draft</strong>: Publish this event to show it on the calendar.', 'my-calendar' ), true, false, 'info' );
 		} else {
-			mc_show_error( __( '<strong>Trash</strong>: Remove from the trash to show this event on the calendar.', 'my-calendar' ) );
+			mc_show_notice( __( '<strong>Trash</strong>: Remove from the trash to show this event on the calendar.', 'my-calendar' ), true, false, 'info' );
 		}
 	}
 

@@ -1360,7 +1360,7 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	text-decoration: none;
 }
 
-.wrap .updated a.my-calendar-contextual-help {
+.wrap .notice a.my-calendar-contextual-help {
 	display: inline;
 }
 
@@ -1682,7 +1682,7 @@ fieldset.mc-flex {
 	}
 }
 
-.my-calendar-admin .error .button-secondary {
+.my-calendar-admin .notice-error .button-secondary {
 	vertical-align: baseline;
 }
 
