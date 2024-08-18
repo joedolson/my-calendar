@@ -108,6 +108,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.5.12 =
+
+* Add: Function that converts from a My Calendar approval status to the equivalent post status.
+* Change: Simplify My Calendar's admin notice function and support all standard notice types.
+
 = 3.5.11 =
 
 * Bug fix: Default image alt attribute incorrectly fetched.
