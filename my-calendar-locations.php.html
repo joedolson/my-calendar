@@ -874,7 +874,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	&lt;p>
 	&lt;label for="e_label">' . __( 'Name of Location (required)', 'my-calendar' ) . $compare . '&lt;/label>';
 	$cur_label = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_label'} ) ) : '';
-	if ( mc_controlled_field( 'label' ) ) {
+	if ( mc_controlled_field( 'label' ) &amp;&amp; 'location' !== $context ) {
 		$return .= mc_location_controller( 'label', $cur_label, $context );
 	} else {
 		$return .= '&lt;input type="text" id="e_label" name="' . $context . '_label" value="' . esc_attr( $cur_label ) . '" />';
