@@ -111,7 +111,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.5.12 =
 
 * Add: Function that converts from a My Calendar approval status to the equivalent post status.
-* Bug fix: If location name controls in place, do not show on location edit screen.
+* Bug fix: If location name controls in place, do not show on location edit screen. Props @jacquebert.
 * Change: Simplify My Calendar's admin notice function and support all standard notice types.
 
 = 3.5.11 =
