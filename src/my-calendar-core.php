@@ -499,7 +499,7 @@ function mc_generate_css() {
 	}
 
 	$css = "
-/* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
+/* Styles by My Calendar - Joe Dolson https://www.joedolson.com/ */
 $category_styles
 $style_vars";
 

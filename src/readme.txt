@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.5.11
+Stable tag: 3.5.12
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -111,6 +111,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.5.12 =
 
 * Add: Function that converts from a My Calendar approval status to the equivalent post status.
+* Bug fix: If location name controls in place, do not show on location edit screen.
 * Change: Simplify My Calendar's admin notice function and support all standard notice types.
 
 = 3.5.11 =
