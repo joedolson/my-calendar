@@ -3746,6 +3746,32 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
 }
 
 /**
+ * Globally remote transient caches for categories, locations, and events.
+ */
+function mc_clear_all_transients() {
+	$mcdb = mc_is_remote_db();
+	// Unqualified transients.
+	delete_transient( 'mc_generated_category_styles' );
+	delete_transient( 'mc_get_date_bounds' );
+	// Category transients.
+	$categories = mc_get_all_categories();
+	foreach ( $categories as $category ) {
+		delete_transient( 'mc_cat_' . $category->category_id );
+	}
+	// Location transients.
+	$locations = mc_get_locations( 'all' );
+	foreach ( $locations as $location ) {
+		delete_transient( 'mc_location_' . $location->location_id );
+	}
+	// Event transients.
+	$events = $mcdb->get_results( 'SELECT event_id FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	foreach ( $events as $event ) {
+		delete_transient( 'mc_categories_' . $event->event_id );
+		delete_transient( 'mc_first_event_cache_' . $event->event_id );
+	}
+}
+
+/**
  * Execute a refresh of the My Calendar primary URL cache if caching plug-in installed.
  *
  * @param string $action Type of action performed.

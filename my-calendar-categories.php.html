@@ -757,6 +757,15 @@ function mc_category_by_name( $category_name ) {
 }
 
 /**
+ * Get an array of all categories.
+ *
+ * @return array
+ */
+function mc_get_all_categories() {
+	return mc_no_category_default( false );
+}
+
+/**
  * Get all categories or get the ID of the first category; create a category if no default set.
  *
  * @param bool $single False for all categories; true for individual category.
