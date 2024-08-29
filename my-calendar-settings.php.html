@@ -283,7 +283,7 @@ function mc_update_management_settings( $post ) {
 	$mc_drop_tables   = ( ! empty( $post['mc_drop_tables'] ) &amp;&amp; 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
 	$mc_drop_settings = ( ! empty( $post['mc_drop_settings'] ) &amp;&amp; 'on' === $post['mc_drop_settings'] ) ? 'true' : 'false';
 	// Handle My Calendar primary URL. Storing URL string removed in 3.5.0.
-	$option['use_permalinks']    = ( ! empty( $post['mc_use_permalinks'] ) ) ? 'true' : 'false';
+	$option['use_permalinks']    = ( ! empty( $post['mc_use_permalinks'] ) &amp;&amp; 'true' !== $mc_remote ) ? 'true' : 'false';
 	$option['uri_id']            = absint( $post['mc_uri_id'] );
 	$option['api_enabled']       = $mc_api_enabled;
 	$option['remote']            = $mc_remote;
@@ -806,7 +806,11 @@ function my_calendar_settings() {
 									// Translators: URL for WordPress Settings > Permalinks.
 									$note = ' &lt;span class="mc-notice">' . sprintf( __( 'Go to &lt;a href="%s">permalink settings&lt;/a> to set the base URL for events.', 'my-calendar' ) . '&lt;/span>', $url );
 								} else {
-									$note = '';
+									if ( 'true' === mc_get_option( 'remote' ) ) {
+										$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
+									} else {
+										$note = '';
+									}
 								}
 								?>
 								&lt;li>
@@ -859,11 +863,7 @@ function my_calendar_settings() {
 								?>
 								&lt;/li>
 								&lt;?php
-								if ( 'true' === mc_get_option( 'remote' ) &amp;&amp; ! function_exists( 'mc_remote_db' ) ) {
-									$class = 'visible';
-								} else {
-									$class = 'hidden';
-								}
+								$class = ( 'true' === mc_get_option( 'remote' ) &amp;&amp; ! function_exists( 'mc_remote_db' ) ) ? 'visible' : 'hidden';
 								?>
 								&lt;li class="mc_remote_info &lt;?php echo $class; ?>">&lt;?php _e( "Add this code to your theme's &lt;code>functions.php&lt;/code> file:", 'my-calendar' ); ?>
 &lt;pre>
