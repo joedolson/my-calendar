@@ -141,7 +141,7 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 }
 
 /**
- * Determine whether we're accessing a remote database.
+ * Get the database connection, checking whether a remote DB is in use.
  *
  * @return object WP DB object
  */

@@ -208,7 +208,7 @@ function mc_get_location_post( $location_id, $type = true ) {
 			break;
 		}
 	}
-	if ( ! $post_id && ! mc_is_remote_db() ) {
+	if ( ! $post_id && ( 'true' !== mc_get_option( 'remote' ) ) ) {
 		// Copy location into relationships table.
 		$post_id = false;
 		$query   = $mcdb->prepare( "SELECT post_id FROM $mcdb->postmeta where meta_key ='_mc_location_id' and meta_value = %d", $location_id );

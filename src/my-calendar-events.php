@@ -976,7 +976,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
  */
 function mc_get_occurrences( $id ) {
 	$mcdb = mc_is_remote_db();
-	$id = absint( $id );
+	$id   = absint( $id );
 	if ( 0 === $id ) {
 		return array();
 	}
