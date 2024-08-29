@@ -265,6 +265,10 @@ function mc_update_management_settings( $post ) {
 	$option['drop_settings']     = $mc_drop_settings;
 	$option['default_sort']      = absint( $post['mc_default_sort'] );
 	$option['default_direction'] = sanitize_text_field( $post['mc_default_direction'] );
+	if ( ( 'true' !== mc_get_option( 'remote' ) && 'true' === $mc_remote ) || 'true' === $post['mc_clear_cache'] ) {
+		// Remote database has been turned on or cache clear requested.
+		mc_clear_all_transients();
+	}
 
 	mc_update_options( $option );
 
@@ -890,6 +894,18 @@ function mc_remote_db() {
 										'name'    => 'mc_drop_settings',
 										'label'   => __( 'Delete plugin settings on uninstall', 'my-calendar' ),
 										'default' => 'true',
+										'type'    => 'checkbox-single',
+									)
+								);
+								?>
+								</li>
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'    => 'mc_clear_cache',
+										'label'   => __( 'Clear My Calendar fragment cache', 'my-calendar' ),
+										'default' => 'false',
 										'type'    => 'checkbox-single',
 									)
 								);
