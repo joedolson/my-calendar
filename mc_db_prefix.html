@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_pre_checkdata - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_db_prefix - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_pre_checkdata</h1></header>
+    <header><h1 class="page-title">Filter: mc_db_prefix</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_pre_checkdata">apply_filters( 'mc_pre_checkdata', <span class="signature">$post, $action, $i )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_db_prefix">apply_filters( 'mc_db_prefix', <span class="signature">$wpdb->prefix, $table, $site )</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter posted data before performing event data checks.</p>
+    <p>Filter the database prefix. Useful when accessing a remote database with a different prefix.</p>
 </div>
 
 
@@ -77,30 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$post</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Post data.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$action</code></td>
+                <td class="name"><code>$wpdb->prefix</code></td>
             
 
             <td class="type">
@@ -116,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Action performed (edit, copy, add).</p></td>
+            <td class="description last"><p>Local DB prefix.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$i</code></td>
+                <td class="name"><code>$table</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">int</span>
+<span class="param-type">string</span>
 
 
             
@@ -139,7 +116,36 @@
 
             
 
-            <td class="description last"><p>Current event index if parsing multiple events.</p></td>
+            <td class="description last"><p>Database table requested.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$site</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">bool</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A site ID, the string 'global' for the main site, or false for defaults.</p></td>
         </tr>
 
     
@@ -180,7 +186,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-event-editor.php.html">my-calendar-event-editor.php</a>, <a href="my-calendar-event-editor.php.html#line2115">line 2115</a>
+        <a href="includes_db.php.html">includes/db.php</a>, <a href="includes_db.php.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -214,7 +220,7 @@
     </dt>
     <dd>
         
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
     </dd>
