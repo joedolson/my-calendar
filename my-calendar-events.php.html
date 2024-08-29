@@ -1001,12 +1001,12 @@ function my_calendar_events_next( $category = 'default', $template = '&lt;strong
  * @return array of objects with instance and event IDs.
  */
 function mc_get_occurrences( $id ) {
-	global $wpdb;
+	$mcdb = mc_is_remote_db();
 	$id = absint( $id );
 	if ( 0 === $id ) {
 		return array();
 	}
-	$results = $wpdb->get_results( $wpdb->prepare( 'SELECT occur_id, occur_event_id FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$results = $mcdb->get_results( $mcdb->prepare( 'SELECT occur_id, occur_event_id FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 	return $results;
 }
