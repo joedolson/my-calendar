@@ -108,6 +108,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.5.13 =
+
+* Bug fix: Missing remote DB reference for event occurrence lists.
+* Bug fix: Don't attempt to copy location relationships when fetching data remotely.
+* Bug fix: Clear fragment cache when remote DB is acctivated.
+* Feature: Add filter to change remote DB prefix when using remote DB.
+* Feature: Setting to flush fragment cache.
+* Change: Remove usages of deprecated 'SQL_CALC_FOUND_ROWS'.
+
 = 3.5.12 =
 
 * Add: Function that converts from a My Calendar approval status to the equivalent post status.
