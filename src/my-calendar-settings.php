@@ -265,7 +265,8 @@ function mc_update_management_settings( $post ) {
 	$option['drop_settings']     = $mc_drop_settings;
 	$option['default_sort']      = absint( $post['mc_default_sort'] );
 	$option['default_direction'] = sanitize_text_field( $post['mc_default_direction'] );
-	if ( ( 'true' !== mc_get_option( 'remote' ) && 'true' === $mc_remote ) || 'true' === $post['mc_clear_cache'] ) {
+	$clear_cache                 = ( isset( $post['mc_clear_cache'] ) && 'true' === $post['mc_clear_cache'] ) ? true : false;
+	if ( ( 'true' !== mc_get_option( 'remote' ) && 'true' === $mc_remote ) || $clear_cache ) {
 		// Remote database has been turned on or cache clear requested.
 		mc_clear_all_transients();
 	}
