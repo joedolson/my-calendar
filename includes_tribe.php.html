@@ -82,7 +82,7 @@ function mc_import_source_tribe_events( $limit = 25 ) {
 	}
 
 	// Get selection of events not already imported.
-	$events = $wpdb->get_results( $wpdb->prepare( "SELECT SQL_CALC_FOUND_ROWS $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status &lt;> 'trash' AND $wpdb->posts.post_status &lt;> 'auto-draft')) GROUP BY $wpdb->posts.ID ORDER BY $wpdb->posts.post_parent ASC LIMIT 0, %d", $limit ) );
+	$events = $wpdb->get_results( $wpdb->prepare( "SELECT $wpdb->posts.ID FROM $wpdb->posts LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id AND $wpdb->postmeta.meta_key = '_mc_imported' ) WHERE 1=1 AND ( $wpdb->postmeta.post_id IS NULL ) AND $wpdb->posts.post_type = 'tribe_events' AND (($wpdb->posts.post_status &lt;> 'trash' AND $wpdb->posts.post_status &lt;> 'auto-draft')) GROUP BY $wpdb->posts.ID ORDER BY $wpdb->posts.post_parent ASC LIMIT 0, %d", $limit ) );
 	$ids    = array();
 	$count  = count( $events );
 	if ( 0 === $count ) {
