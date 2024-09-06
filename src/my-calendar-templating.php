@@ -233,7 +233,7 @@ function mc_templates_edit() {
 					<dt><code>{title}</code></dt>
 					<dd><?php esc_html_e( 'Title of the event.', 'my-calendar' ); ?></dd>
 
-					<dt><code>{link_title}</code></dt>
+					<dt><code>{linking_title}</code></dt>
 					<dd><?php esc_html_e( 'Title of the event as a link if a URL is present, or the title alone if not.', 'my-calendar' ); ?></dd>
 
 					<dt><code>{time}</code></dt>
