@@ -442,6 +442,7 @@ function my_calendar_menu() {
 			add_action( "load-$locations", 'mc_location_help_tab' );
 			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
 		}
+		// The Design screen is available with any of these permissions.
 		$permission = 'manage_options';
 		if ( current_user_can( 'mc_edit_styles' ) ) {
 			$permission = 'mc_edit_styles';
