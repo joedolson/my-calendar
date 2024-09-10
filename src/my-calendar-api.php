@@ -153,7 +153,7 @@ function mc_api_format_csv( $data ) {
 			}
 
 			foreach ( $values as $key => $text ) {
-				$values[ $key ] = str_replace( array( "\r\n", "\r", "\n" ), '<br class="mc-export" />', trim( $text ) );
+				$values[ $key ] = str_replace( array( "\r\n", "\r", "\n" ), '<br class="mc-export" />', trim( wp_kses_stripslashes( $text ) ) );
 			}
 			if ( ! $keyed ) {
 				$keys = array_keys( $values );
