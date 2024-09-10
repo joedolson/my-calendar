@@ -1407,6 +1407,10 @@ function mc_show_event_template( $content ) {
 			$content = do_shortcode( apply_filters( 'mc_event_post_content', $new_content, $content, $post ) );
 		}
 	}
+	// Execute content filters so that OEmbeds are processed, after removing this filter.
+	remove_filter( 'the_content', 'mc_show_event_template', 100, 1 );
+	$content = apply_filters( 'the_content', $content );
+	add_filter( 'the_content', 'mc_show_event_template', 100, 1 );
 
 	return $content;
 }
