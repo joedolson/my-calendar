@@ -209,7 +209,8 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	// This is only used by My Tickets, so only the first date occurrence is required.
 	if ( isset( $data['event_begin'] ) ) {
 		$event_date = ( is_array( $data['event_begin'] ) ) ? $data['event_begin'][0] : $data['event_begin'];
-		update_post_meta( $post_id, '_mc_event_date', strtotime( $event_date ) );
+		$event_time = ( is_array( $data['event_time'] ) ) ? $data['event_time'][0] : $data['event_time'];
+		update_post_meta( $post_id, '_mc_event_date', strtotime( $event_date . ' ' . $event_time ) );
 	}
 	$location_id = ( isset( $post['location_preset'] ) && is_numeric( $post['location_preset'] ) && 0 !== (int) $post['location_preset'] ) ? (int) $post['location_preset'] : false;
 	if ( $location_id ) { // only change location ID if dropdown set.
