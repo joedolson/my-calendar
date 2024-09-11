@@ -409,9 +409,9 @@ function mc_exit_early( $event, $process_date ) {
 	 * @return {bool}
 	 */
 	$hide_days = apply_filters( 'mc_hide_additional_days', $hide_days_default, $event );
-	$today     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ) );
-	$current   = mc_date( 'Y-m-d', strtotime( $process_date ) );
-	$end       = mc_date( 'Y-m-d', strtotime( $event->occur_end ) );
+	$today     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
+	$current   = mc_date( 'Y-m-d', strtotime( $process_date ), false );
+	$end       = mc_date( 'Y-m-d', strtotime( $event->occur_end ), false );
 	// if event ends at midnight today (e.g., very first thing of the day), exit without re-drawing.
 	// or if event started yesterday &amp; has event_hide_end checked.
 	$ends_at_midnight = ( '00:00:00' === $event->event_endtime &amp;&amp; $end === $process_date &amp;&amp; $current !== $today ) ? true : false;
