@@ -112,6 +112,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Typo in template tag documentation. Props @robnicholson.
 * Bug fix: Incorrectly escaped double quotes in CSV output broke importing.
+* Bug fix: Verify whether 'event_location' property exists when processing submission errors.
+* Bug fix: Autosetting end date failed due to incorrect logic & timezone offsetting.
+* Bug fix: Don't offset timezone when calculating whether an event should be displayed based on options.
 * Change: Execute `the_content` filters on output to support oEmbed and block output in events.
 
 = 3.5.13 =
