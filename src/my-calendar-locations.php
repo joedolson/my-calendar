@@ -1053,7 +1053,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</div>';
 
 	$api_key  = mc_get_option( 'gmap_api_key' );
-	$location = ( $has_data && 'event' === $context ) ? $data->event_location : false;
+	$location = ( $has_data && 'event' === $context && property_exists( $data, 'event_location' ) ) ? $data->event_location : false;
 	if ( $api_key && ! ( 'event' === $context && false === (bool) $location ) ) {
 		$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
 		$map     = mc_generate_map( $data, $context );
@@ -1223,10 +1223,10 @@ function mc_display_location_fields( $fields, $data, $context ) {
 	$return      = '';
 	$location_id = false;
 	if ( is_object( $data ) && 'event' === $context ) {
-		$location_id = $data->event_location;
+		$location_id = ( property_exists( $data, 'event_location' ) ) ? $data->event_location : $location_id;
 	}
 	if ( is_object( $data ) && 'location' === $context ) {
-		$location_id = $data->location_id;
+		$location_id = ( property_exists( $data, 'event_location' ) ) ? $data->location_id : $location_id;
 	}
 
 	/**
