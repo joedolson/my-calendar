@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_filter_location_results - My Calendar Hook Doumentation</title>
+    <title>Filter: mc_execute_the_content - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_filter_location_results</h1></header>
+    <header><h1 class="page-title">Filter: mc_execute_the_content</h1></header>
 	<main>
     
 
@@ -36,14 +36,15 @@
 
     
 
-    <h4 class="name" id="mc_filter_location_results">apply_filters( 'mc_filter_location_results', <span class="signature">$results, $args )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_execute_the_content">apply_filters( 'mc_execute_the_content', <span class="signature">$execute )</span><span class="type-signature"> &rarr; {bool}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter returned results when searching locations.</p>
+    <p>Enable running <code>the_content</code> filters on My Calendar output.
+Allows oembed and block articulation, but may cause other problems.</p>
 </div>
 
 
@@ -77,13 +78,13 @@
 
         <tr>
             
-                <td class="name"><code>$results</code></td>
+                <td class="name"><code>$execute</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">bool</span>
 
 
             
@@ -93,30 +94,7 @@
 
             
 
-            <td class="description last"><p>Array of IDs or objects.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Query arguments.</p></td>
+            <td class="description last"><p>Whether <code>the_content</code> will be run. Default false.</p></td>
         </tr>
 
     
@@ -157,7 +135,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-locations.php.html">my-calendar-locations.php</a>, <a href="my-calendar-locations.php.html#line1422">line 1422</a>
+        <a href="my-calendar-output.php.html">my-calendar-output.php</a>, <a href="my-calendar-output.php.html#line1384">line 1384</a>
     </li></ul></dd>
     
 
@@ -191,7 +169,7 @@
     </dt>
     <dd>
         
-<span class="param-type">array</span>
+<span class="param-type">bool</span>
 
 
     </dd>
