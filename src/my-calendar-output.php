@@ -1397,7 +1397,7 @@ function mc_show_event_template( $content ) {
 		remove_filter( 'the_content', 'mc_show_event_template', 100, 1 );
 		$content = apply_filters( 'the_content', $content );
 		add_filter( 'the_content', 'mc_show_event_template', 100, 1 );
-	|
+	}
 
 	return $content;
 }
