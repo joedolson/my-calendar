@@ -679,6 +679,12 @@ function mc_list_events() {
 			$filter = "'$filter'";
 		}
 		$join = '';
+		// Set up standard filter limits - normal database fields.
+		if ( '' === $limit && '' !== $filter ) {
+			$limit = "WHERE $restrict = $filter";
+		} elseif ( '' !== $limit && '' !== $filter ) {
+			$limit .= " AND $restrict = $filter";
+		}
 		// Set up filter format for categories.
 		if ( 'event_category' === $restrict ) {
 			$cat_limit       = mc_select_category( $filter );
@@ -686,12 +692,7 @@ function mc_list_events() {
 			$select_category = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
 			$limit          .= ' ' . $select_category;
 		}
-		// Set up standard filter limits - normal database fields.
-		if ( '' === $limit && '' !== $filter ) {
-			$limit = "WHERE $restrict = $filter";
-		} elseif ( '' !== $limit && '' !== $filter && 'event_category' !== $restrict ) {
-			$limit .= " AND $restrict = $filter";
-		}
+
 		// Define default limits if none otherwise set.
 		if ( '' === $limit ) {
 			$limit .= ( 'event_flagged' !== $restrict ) ? ' WHERE event_flagged = 0' : '';
@@ -709,15 +710,17 @@ function mc_list_events() {
 		$limit .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
 		// Toggle query type depending on whether we're limiting categories, which requires a join.
 		if ( 'event_category' !== $sortbyvalue ) {
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$events     = $wpdb->get_results( $wpdb->prepare( 'SELECT e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$found_rows = $wpdb->get_col( 'SELECT COUNT(*) FROM  ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		} else {
-			$limit  = str_replace( array( 'WHERE ' ), '', $limit );
-			$limit  = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
-			$events = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT e.event_id FROM ' . my_calendar_table() . ' AS e ' . $join . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$limit      = str_replace( array( 'WHERE ' ), '', $limit );
+			$limit      = ( strpos( $limit, 'AND' ) === 0 ) ? $limit : 'AND ' . $limit;
+			$events     = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT e.event_id FROM ' . my_calendar_table() . ' AS e ' . $join . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$found_rows = $wpdb->get_col( 'SELECT COUNT(*) FROM  ' . my_calendar_table() . ' AS e ' . $join . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
 		}
-		$found_rows = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
-		$items      = $found_rows[0];
-		$num_pages  = ceil( $items / $query['items_per_page'] );
+		$items     = $found_rows[0];
+		$num_pages = ceil( $items / $query['items_per_page'] );
 		if ( $num_pages > 1 ) {
 			$page_links = paginate_links(
 				array(
@@ -768,6 +771,7 @@ function mc_list_events() {
 					<tr>
 					<?php
 					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sortbydirection&paged=" . $query['current'] );
+					$admin_url = isset( $_GET['limit'] ) ? add_query_arg( 'limit', sanitize_text_field( $_GET['limit'] ), $admin_url ) : $admin_url;
 					$url       = add_query_arg( 'sort', '1', $admin_url );
 					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sortbydirection, $sortby, '1', $url );
 					$url       = add_query_arg( 'sort', '2', $admin_url );

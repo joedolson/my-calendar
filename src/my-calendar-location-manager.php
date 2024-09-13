@@ -296,7 +296,7 @@ function mc_manage_locations() {
 
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
 	$locations   = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id FROM ' . my_calendar_locations_table() . " $search ORDER BY $orderby $query_order LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
-	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
+	$found_rows  = $wpdb->get_col( 'SELECT COUNT(*) FROM  ' . my_calendar_locations_table() . " $search ORDER BY $orderby $query_order" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	$items       = $found_rows[0];
 	$pagination  = '';
 

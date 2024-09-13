@@ -797,7 +797,7 @@ function mc_list_groups() {
 	}
 	$query_limit = ( ( $current - 1 ) * $items_per_page );
 	$events      = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . " $limit ORDER BY $sortbyvalue $sortbydirection LIMIT %d, %d", $query_limit, $items_per_page ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
-	$found_rows  = $wpdb->get_col( 'SELECT FOUND_ROWS();' );
+	$found_rows  = $wpdb->get_col( 'SELECT COUNT(*) FROM  ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$items       = $found_rows[0];
 	?>
 	<div class='inside'>
@@ -848,6 +848,7 @@ function mc_list_groups() {
 					<tr>
 						<?php
 						$admin_url = admin_url( "admin.php?page=my-calendar-manage&groups=true&order=$sort&paged=$current" );
+						$admin_url = isset( $_GET['limit'] ) ? add_query_arg( 'limit', sanitize_text_field( $_GET['limit'] ), $admin_url ) : $admin_url;
 						$url       = add_query_arg( 'sort', '1', $admin_url );
 						$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
 						$url       = add_query_arg( 'sort', '8', $admin_url );
