@@ -111,6 +111,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.5.15 =
 
 * Bug fix: Execute `the_content` filters on output broke some displays.
+* Bug fix: Use full event date & time in the stored _mc_event_date meta.
 * Add: filter `mc_execute_the_content` to enable execution of `the_content` filters.
 
 = 3.5.14 =
