@@ -185,7 +185,7 @@ function mc_bulk_message( $results, $action ) {
 		 * @param {array} $ids Array of event IDs being handled.
 		 */
 		do_action( 'mc_mass_' . $action . '_events', $ids );
-		$message = mc_show_notice( sprintf( $success, $result, $total, $diff ) );
+		$message = mc_show_notice( sprintf( $success, $result, $total, $diff ), true, false, 'success' );
 	} else {
 		$message = mc_show_error( $error, false );
 	}

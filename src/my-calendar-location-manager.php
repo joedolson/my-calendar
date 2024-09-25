@@ -43,14 +43,14 @@ function my_calendar_manage_locations() {
 			);
 			// Translators: Delete link.
 			$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
-			mc_show_notice( $notice, true, false, 'warning'  );
+			mc_show_notice( $notice, true, false, 'warning' );
 		}
 	}
 	if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
 		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 		if ( $mcnonce ) {
 			mc_update_option( 'default_location', (int) $_GET['default'] );
-			mc_show_notice( __( 'Default Location Changed', 'my-calendar' ) );
+			mc_show_notice( __( 'Default Location Changed', 'my-calendar' ), true, false, 'success' );
 		} else {
 			mc_show_error( __( 'Invalid security check; please try again!', 'my-calendar' ) );
 		}
@@ -169,7 +169,7 @@ function mc_clean_duplicate_locations() {
 			 */
 			do_action( 'mc_clean_duplicate_locations', $deleted, $failed );
 			// Translators: Number of locations deleted, number selected.
-			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
+			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false, false, 'success' );
 		} else {
 			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
 		}

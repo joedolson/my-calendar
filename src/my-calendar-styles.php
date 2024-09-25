@@ -87,7 +87,7 @@ function my_calendar_style_edit() {
 
 		$message .= ' ' . __( 'Style Settings Saved', 'my-calendar' ) . '.';
 
-		mc_show_notice( $message );
+		mc_show_notice( $message, true, false, 'success' );
 	}
 	if ( isset( $_POST['mc_choose_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
