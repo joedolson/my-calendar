@@ -69,7 +69,7 @@ function my_calendar_manage_locations() {
 			);
 			// Translators: Delete link.
 			$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '&lt;a class="button delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '&lt;/a>' );
-			mc_show_notice( $notice );
+			mc_show_notice( $notice, true, false, 'warning'  );
 		}
 	}
 	if ( isset( $_GET['default'] ) &amp;&amp; is_numeric( $_GET['default'] ) ) {
