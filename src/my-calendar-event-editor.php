@@ -163,6 +163,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		update_post_meta( $post_id, '_mc_guid', $guid );
 	}
 	update_post_meta( $post_id, '_mc_event_shortcode', $data['shortcode'] );
+	// Event access characteristics.
 	$events_access = '';
 	if ( isset( $post['events_access'] ) ) {
 		$events_access = map_deep( $post['events_access'], 'sanitize_text_field' );
@@ -191,6 +192,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		}
 	}
 	if ( $events_access ) {
+		// Event access characteristics.
 		update_post_meta( $post_id, '_mc_event_access', $events_access );
 	}
 	if ( $time_label ) {
@@ -2055,13 +2057,13 @@ function mc_event_access() {
 	 *
 	 * @return {array}
 	 */
-	$event_access = apply_filters( 'mc_event_access_choices', $choices );
+	$events_access = apply_filters( 'mc_event_access_choices', $choices );
 
-	return $event_access;
+	return $events_access;
 }
 
 /**
- * Form to select accessibility features.
+ * Form to select event accessibility features.
  *
  * @param string $form Form HTML.
  * @param object $data Event data.
@@ -2151,7 +2153,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_image        = '';
 	$event_phone        = '';
 	$event_phone2       = '';
-	$event_access       = '';
+	$location_access    = '';
 	$event_tickets      = '';
 	$event_registration = '';
 	$event_author       = '';
@@ -2358,8 +2360,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				$event_zoom        = ! empty( $post['event_zoom'] ) ? $post['event_zoom'] : '';
 				$event_phone       = ! empty( $post['event_phone'] ) ? $post['event_phone'] : '';
 				$event_phone2      = ! empty( $post['event_phone2'] ) ? $post['event_phone2'] : '';
-				$event_access      = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
-				$event_access      = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $event_access;
+				$location_access   = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
+				$location_access   = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $location_access;
 				$has_location_data = false;
 
 				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_zoom . $event_phone . $event_phone2 ) ) {
@@ -2384,7 +2386,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 							'location_zoom'      => $event_zoom,
 							'location_phone'     => $event_phone,
 							'location_phone2'    => $event_phone2,
-							'location_access'    => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
+							'location_access'    => ( is_array( $location_access ) ) ? serialize( $location_access ) : '',
 						);
 						$loc_id         = mc_insert_location( $add_loc );
 						$saved_location = $loc_id;
@@ -2512,7 +2514,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_link'         => $event_link,
 		'event_recur'        => $recur,
 		'event_image'        => $event_image,
-		'event_access'       => ( is_array( $event_access ) ) ? serialize( $event_access ) : '',
+		'event_access'       => ( is_array( $location_access ) ) ? serialize( $location_access ) : '',
 		'event_tickets'      => $event_tickets,
 		'event_registration' => $event_registration,
 		'event_repeats'      => $repeats,
@@ -2585,7 +2587,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$submission->event_group_id     = $event_group_id;
 		$submission->event_span         = $event_span;
 		$submission->event_hide_end     = $event_hide_end;
-		$submission->event_access       = ( is_array( $event_access ) ) ? serialize( $event_access ) : '';
+		$submission->event_access       = ( is_array( $location_access ) ) ? serialize( $location_access ) : '';
 		$submission->events_access      = ( is_array( $events_access ) ) ? serialize( $events_access ) : '';
 		$submission->event_tickets      = $event_tickets;
 		$submission->event_registration = $event_registration;
