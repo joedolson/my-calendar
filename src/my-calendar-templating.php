@@ -118,11 +118,11 @@ function mc_templates_edit() {
 	$key       = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
 
 	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
-		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ) );
+		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ), true, false, 'success'  );
 		$key = '';
 	} else {
 		if ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) {
-			mc_show_notice( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
+			mc_show_error( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
 		} else {
 			if ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'core' === $_GET['action'] ) {
 				// Translators: unique key for template.

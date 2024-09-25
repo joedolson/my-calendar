@@ -45,7 +45,7 @@ function my_calendar_behaviors_edit() {
 		return;
 	}
 	if ( isset( $_GET['scriptaction'] ) && 'saved' === $_GET['scriptaction'] ) {
-		mc_show_notice( __( 'Behavior Settings saved', 'my-calendar' ) );
+		mc_show_notice( __( 'Behavior Settings saved', 'my-calendar' ), true, false, 'success' );
 	}
 	$mc_show_js = mc_get_option( 'show_js' );
 	?>

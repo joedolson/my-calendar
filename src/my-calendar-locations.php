@@ -387,7 +387,7 @@ function mc_delete_location( $location, $type = 'string' ) {
 	do_action( 'mc_delete_location', $results, $location );
 	if ( $results ) {
 		$value            = true;
-		$return           = mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ), false );
+		$return           = mc_show_notice( __( 'Location deleted successfully', 'my-calendar' ), false, false, 'success' );
 		$default_location = mc_get_option( 'default_location', false );
 		if ( (int) $default_location === $location ) {
 			mc_update_option( 'default_location', '' );
@@ -464,7 +464,7 @@ function my_calendar_add_locations() {
 			);
 			$edit_url = add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-locations' ) );
 			// Translators: Link to edit new location.
-			mc_show_notice( sprintf( __( 'Location added successfully. <a href="%s">Edit location.</a>', 'my-calendar' ), $edit_url ) );
+			mc_show_notice( sprintf( __( 'Location added successfully. <a href="%s">Edit location.</a>', 'my-calendar' ), $edit_url ), true, false, 'success' );
 		} else {
 			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
@@ -518,7 +518,7 @@ function my_calendar_add_locations() {
 		} elseif ( 0 === $results ) {
 			mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
 		} else {
-			mc_show_notice( __( 'Location edited successfully', 'my-calendar' ) );
+			mc_show_notice( __( 'Location edited successfully', 'my-calendar' ), true, false, 'success' );
 		}
 		$cur_loc = (int) $_POST['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );

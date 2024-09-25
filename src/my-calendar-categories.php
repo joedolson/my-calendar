@@ -149,7 +149,7 @@ function my_calendar_manage_categories() {
 		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
 			mc_update_option( 'default_category', (int) $_GET['default'] );
 			$default_category = (int) $_GET['default'];
-			mc_show_notice( __( 'Default Category Changed', 'my-calendar' ) );
+			mc_show_notice( __( 'Default Category Changed', 'my-calendar' ), true, false, 'success'  );
 		}
 
 		if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
@@ -167,7 +167,7 @@ function my_calendar_manage_categories() {
 
 			if ( $cat_id ) {
 				$append = implode( ' ', $append );
-				mc_show_notice( __( 'Category added successfully', 'my-calendar' ) . ". $append" );
+				mc_show_notice( __( 'Category added successfully', 'my-calendar' ) . ". $append", true, false, 'success'  );
 			} else {
 				mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
 			}
@@ -192,9 +192,9 @@ function my_calendar_manage_categories() {
 					mc_update_option( 'default_category', '' );
 				}
 				if ( $results && ( $cal_results || $rel_results ) ) {
-					mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ) );
+					mc_show_notice( __( 'Category deleted successfully. Categories in calendar updated.', 'my-calendar' ), true, false, 'success'  );
 				} elseif ( $results && ! $cal_results ) {
-					mc_show_notice( __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ) );
+					mc_show_notice( __( 'Category deleted successfully. Category was not in use; categories in calendar not updated.', 'my-calendar' ), true, false, 'success'  );
 				} elseif ( ! $results && $cal_results ) {
 					mc_show_error( __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) );
 				}
@@ -234,7 +234,7 @@ function my_calendar_manage_categories() {
 			$results = mc_update_cat( $update );
 			$append  = implode( ' ', $append );
 			if ( $results || '' !== trim( $append ) ) {
-				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append" );
+				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append", true, false, 'success'  );
 			} else {
 				mc_show_error( __( 'Category was not changed.', 'my-calendar' ) . " $append" );
 			}
