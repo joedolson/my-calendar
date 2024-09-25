@@ -318,9 +318,9 @@ function mc_manage_locations() {
 	}
 
 	if ( ! empty( $locations ) ) {
+		echo wp_kses_post( $pagination );
 		?>
 	<div class="mc-admin-header locations">
-		<?php echo wp_kses_post( $pagination ); ?>
 		<div class='mc-search'>
 			<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post" role='search'>
 				<div>
@@ -361,6 +361,7 @@ function mc_manage_locations() {
 				$col_head .= mc_table_header( __( 'City', 'my-calendar' ), $order, $sortby, 'city', $url );
 				$url       = add_query_arg( 'orderby', 'state', $admin_url );
 				$col_head .= mc_table_header( __( 'State/Province', 'my-calendar' ), $order, $sortby, 'state', $url );
+				$col_head .= mc_table_header( __( 'Events', 'my-calendar' ), $order, $sortby, 'count', '' );
 				echo wp_kses( $col_head, mc_kses_elements() );
 				/**
 				 * Add custom column table headers to Location Manager.
@@ -445,8 +446,17 @@ function mc_verify_location( $location ) {
  * @return string
  */
 function mc_location_manager_row( $location ) {
-	$card   = mc_hcard( $location, 'true', 'false', 'location' );
-	$verify = mc_verify_location( $location );
+	$card            = mc_hcard( $location, 'true', 'false', 'location' );
+	$verify          = mc_verify_location( $location );
+	$count           = mc_count_location_events( $location->location_id );
+	$filters         = array(
+		'filter'   => $location->location_id,
+		'restrict' => 'where',
+	);
+	$location_filter = add_query_arg( $filters, admin_url( 'admin.php?page=my-calendar-manage' ) );
+	if ( $count ) {
+		$count = '<a href="' . esc_url( $location_filter ) . '">' . $count . '</a>';
+	}
 	if ( ! $verify ) {
 		return '';
 	}
@@ -493,6 +503,7 @@ function mc_location_manager_row( $location ) {
 		</td>
 		<td>' . esc_html( $location->location_city ) . '</td>
 		<td>' . esc_html( $location->location_state ) . '</td>' . $custom_location_cells . '
+		<td>' . $count . '</td>
 	</tr>';
 
 	return $row;
