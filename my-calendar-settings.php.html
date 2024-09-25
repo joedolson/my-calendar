@@ -618,11 +618,11 @@ function my_calendar_settings() {
 		if ( isset( $post['mc_manage'] ) ) {
 			$before_permalinks = mc_get_option( 'use_permalinks' );
 			mc_update_management_settings( $post );
-			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ), true, false, 'success'  );
+			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ), true, false, 'success' );
 		}
 		if ( isset( $post['mc_permissions'] ) ) {
 			mc_update_permissions_settings( $post );
-			mc_show_notice( __( 'My Calendar Permissions Updated', 'my-calendar' ), true, false, 'success'  );
+			mc_show_notice( __( 'My Calendar Permissions Updated', 'my-calendar' ), true, false, 'success' );
 		}
 		// Output.
 		if ( isset( $post['mc_show_months'] ) ) {
@@ -631,12 +631,12 @@ function my_calendar_settings() {
 			$post['mc_title_template_list'] = wp_kses_post( $_POST['mc_title_template_list'] );
 			$post['mc_title_template_solo'] = wp_kses_post( $_POST['mc_title_template_solo'] );
 			mc_update_output_settings( $post );
-			mc_show_notice( __( 'Display Settings saved', 'my-calendar' ), true, false, 'success'  );
+			mc_show_notice( __( 'Display Settings saved', 'my-calendar' ), true, false, 'success' );
 		}
 		// Input.
 		if ( isset( $post['mc_input'] ) ) {
 			mc_update_input_settings( $post );
-			mc_show_notice( __( 'Input Settings saved', 'my-calendar' ), true, false, 'success'  );
+			mc_show_notice( __( 'Input Settings saved', 'my-calendar' ), true, false, 'success' );
 		}
 		if ( current_user_can( 'manage_network' ) &amp;&amp; is_multisite() ) {
 			if ( isset( $post['mc_network'] ) ) {
@@ -644,19 +644,19 @@ function my_calendar_settings() {
 				update_site_option( 'mc_multisite', $mc_multisite );
 				$mc_multisite_show = (int) $post['mc_multisite_show'];
 				update_site_option( 'mc_multisite_show', $mc_multisite_show );
-				mc_show_notice( __( 'Multisite settings saved', 'my-calendar' ), true, false, 'success'  );
+				mc_show_notice( __( 'Multisite settings saved', 'my-calendar' ), true, false, 'success' );
 			}
 		}
 		// custom text.
 		if ( isset( $post['mc_previous_events'] ) ) {
 			mc_update_text_settings( $post );
-			mc_show_notice( __( 'Custom text settings saved', 'my-calendar' ), true, false, 'success'  );
+			mc_show_notice( __( 'Custom text settings saved', 'my-calendar' ), true, false, 'success' );
 		}
 
 		// Save email settings.
 		if ( isset( $post['mc_email'] ) ) {
 			mc_update_email_settings( $post );
-			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ), true, false, 'success'  );
+			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ), true, false, 'success' );
 		}
 
 		/**
@@ -669,12 +669,12 @@ function my_calendar_settings() {
 		 */
 		$settings = do_action( 'mc_save_settings', '', $post );
 		if ( is_string( $settings ) &amp;&amp; '' !== $settings ) {
-			mc_show_notice( $settings, true, false, 'success'  );
+			mc_show_notice( $settings, true, false, 'success' );
 		}
 
 		$return = mc_import_settings();
 		if ( $return ) {
-			mc_show_notice( $return, true, false, 'success'  );
+			mc_show_notice( $return, true, false, 'success' );
 		}
 	}
 
@@ -2112,7 +2112,7 @@ function mc_update_location_controls() {
 			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
 		}
 		mc_update_option( 'location_controls', $mc_location_controls );
-		mc_show_notice( __( 'Location Controls Updated', 'my-calendar' ) );
+		mc_show_notice( __( 'Location Controls Updated', 'my-calendar' ), true, false, 'success' );
 	}
 }
 

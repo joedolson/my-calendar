@@ -87,9 +87,9 @@ function my_calendar_group_edit() {
 					if ( false === $result ) {
 						$message = mc_show_error( __( 'Event not updated.', 'my-calendar' ) . " $url", false );
 					} elseif ( 0 === $result ) {
-						$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url", false );
+						$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url", false, false, 'info' );
 					} else {
-						$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
+						$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, false, 'success' );
 					}
 				}
 				break;
@@ -106,10 +106,10 @@ function my_calendar_group_edit() {
 						if ( false === $result ) {
 							$message = mc_show_error( __( 'Event not grouped.', 'my-calendar' ), false );
 						} elseif ( 0 === $result ) {
-							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false );
+							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false, false, 'warning' );
 						} else {
 							// Translators: Event group ID.
-							$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false );
+							$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false, false, 'success' );
 						}
 					}
 				}
@@ -227,9 +227,9 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			if ( false === $result ) {
 				$message = mc_show_error( "#$event_id; " . __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
 			} elseif ( 0 === $result ) {
-				$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . " $url", false );
+				$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . " $url", false, false, 'warning' );
 			} else {
-				$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false );
+				$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, false, 'success' );
 			}
 		} else {
 			$message = mc_show_error( "#$event_id: " . __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
