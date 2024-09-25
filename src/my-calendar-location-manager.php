@@ -313,7 +313,8 @@ function mc_manage_locations() {
 				'mid_size'  => 1,
 			)
 		);
-		$pagination = sprintf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
+		$nav_label  = esc_attr( __( 'Locations Pagination', 'my-calendar' ) );
+		$pagination = sprintf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
 	}
 
 	if ( ! empty( $locations ) ) {

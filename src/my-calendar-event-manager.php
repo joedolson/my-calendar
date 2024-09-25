@@ -733,7 +733,8 @@ function mc_list_events() {
 					'mid_size'  => 2,
 				)
 			);
-			printf( "<div class='tablenav'><div class='tablenav-pages'>%s</div></div>", $page_links );
+			$nav_label  = esc_attr( __( 'Events Pagination', 'my-calendar' ) );
+			printf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
 		}
 
 		// Display a link to clear filters if set.
