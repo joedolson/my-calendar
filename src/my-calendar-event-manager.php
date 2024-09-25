@@ -743,14 +743,14 @@ function mc_list_events() {
 			$filtered = "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
 		}
 		?>
-		<div class="mc-admin-header">
+		<nav class="mc-admin-header" aria-label="<?php esc_attr_e( 'Search and Filter', 'my-calendar' ); ?>">
 			<?php
 			// Display links to different statuses.
 			echo wp_kses( mc_status_links( $allow_filters ), mc_kses_elements() );
 			// Display event search.
 			mc_admin_event_search();
 			?>
-		</div>
+		</nav>
 		<?php
 		if ( ! empty( $events ) ) {
 			?>

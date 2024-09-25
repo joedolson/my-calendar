@@ -801,18 +801,6 @@ function mc_list_groups() {
 	$items       = $found_rows[0];
 	?>
 	<div class='inside'>
-		<div class="mc-admin-header">
-		<ul class="links">
-			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?></a>
-			</li>
-			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?></a>
-			</li>
-			<li>
-				<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></a>
-			</li>
-		</ul>
 	<?php
 	$num_pages = ceil( $items / $items_per_page );
 	if ( $num_pages > 1 ) {
@@ -827,11 +815,23 @@ function mc_list_groups() {
 				'mid_size'  => 1,
 			)
 		);
-		$nav_label  = __( 'Groups Pagination', 'my-calendar' );
+		$nav_label  = esc_attr( __( 'Events Pagination', 'my-calendar' ) );
 		printf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
 	}
 	?>
-		</div>
+		<nav class="mc-admin-header" aria-label="<?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
+			<ul class="links">
+				<li>
+					<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?></a>
+				</li>
+				<li>
+					<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?></a>
+				</li>
+				<li>
+					<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></a>
+				</li>
+			</ul>
+		</nav>
 	<?php
 	if ( ! empty( $events ) ) {
 		?>
