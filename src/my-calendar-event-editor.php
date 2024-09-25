@@ -149,7 +149,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
  * Add post meta data to an event post.
  *
  * @param int   $post_id Post ID.
- * @param array $post Post object.
+ * @param array $post POST data.
  * @param array $data Event POST data or event data.
  * @param int   $event_id Event ID.
  */
@@ -174,33 +174,29 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		}
 	}
 	$time_label = '';
-	if ( isset( $_POST['event_time_label'] ) ) {
-		$time_label = sanitize_text_field( $_POST['event_time_label'] );
+	if ( isset( $post['event_time_label'] ) ) {
+		$time_label = sanitize_text_field( $post['event_time_label'] );
 	} else {
+		// If this is not set, don't change it.
+		$time_label = get_post_meta( $post_id, '_event_time_label', true );
 		// My Calendar Rest API.
 		if ( isset( $post['data'] ) && isset( $post['data']['event_time_label'] ) ) {
 			$time_label = $post['data']['event_time_label'];
 		}
 	}
-	$same_day = '';
-	if ( isset( $_POST['event_same_day'] ) ) {
-		$same_day = sanitize_text_field( $_POST['event_same_day'] );
+	$same_day = 'false';
+	if ( isset( $post['event_same_day'] ) ) {
+		$same_day = 'true';
 	} else {
 		// My Calendar Rest API.
 		if ( isset( $post['data'] ) && isset( $post['data']['event_same_day'] ) ) {
-			$same_day = $post['data']['event_same_day'];
+			$same_day = 'true';
 		}
 	}
-	if ( $events_access ) {
-		// Event access characteristics.
-		update_post_meta( $post_id, '_mc_event_access', $events_access );
-	}
-	if ( $time_label ) {
-		update_post_meta( $post_id, '_event_time_label', $time_label );
-	}
-	if ( $same_day ) {
-		update_post_meta( $post_id, '_event_same_day', 'true' );
-	}
+	// Event access characteristics.
+	update_post_meta( $post_id, '_mc_event_access', $events_access );
+	update_post_meta( $post_id, '_event_time_label', $time_label );
+	update_post_meta( $post_id, '_event_same_day', $same_day );
 
 	$mc_event_id = get_post_meta( $post_id, '_mc_event_id', true );
 	if ( ! $mc_event_id ) {
