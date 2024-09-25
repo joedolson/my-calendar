@@ -432,7 +432,7 @@ function my_calendar_edit() {
 			$url = urldecode( sanitize_text_field( $post['ref'] ) );
 			// A link to the main calendar is always shown. Only show this if it was a different calendar.
 			if ( mc_get_uri() !== $url ) {
-				mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>' );
+				mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>', true, false, 'info' );
 			}
 		}
 	}
@@ -587,7 +587,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				if ( mc_can_edit_event( $event_id ) && '' !== $edit_link ) {
 					$edit_event = sprintf( ' <a href="%s">' . __( 'Continue editing event.', 'my-calendar' ) . '</a>', $edit_link );
 				}
-				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved' );
+				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved', 'success' );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
 				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $post['mc_twitter'] ) && '' !== trim( $post['mc_twitter'] ) ) {
@@ -600,8 +600,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				}
 
 				if ( '' !== trim( $event_error ) ) {
+					$type    = 'error';
 					$message = $event_error;
 				} else {
+					$type    = 'success';
 					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
@@ -611,9 +613,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 							$message .= sprintf( __( ' <a href="%s" class="button">Edit Event</a>', 'my-calendar' ), $edit_link );
 						}
 					} else {
+						$type     = 'error';
 						$message .= __( ' No link was generated for this event. There may be an unknown error.', 'my-calendar' );
 					}
-					$message = mc_show_notice( $message, false, 'new-event' );
+					$message = mc_show_notice( $message, false, 'new-event', $type );
 				}
 			}
 		}
@@ -681,7 +684,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					} else {
 						// Only dates were changed.
 						$result  = mc_update_instance( $event_instance, $event_id, $update );
-						$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url", false, 'date-updated' );
+						$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url", false, 'date-updated', 'success' );
 					}
 				}
 			} else {
@@ -753,7 +756,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					 */
 					do_action( 'mc_transition_event', (int) $post['prev_event_status'], $new_event_status, $action, $data, $event_id );
 				}
-				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, 'event-updated' );
+				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, 'event-updated', 'success' );
 			}
 		} else {
 			$message = mc_show_error( __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
@@ -834,7 +837,7 @@ function mc_delete_event( $event_id ) {
 				 */
 				do_action( 'mc_delete_event', $event_id, $post_id );
 			}
-			$message = mc_show_notice( __( 'Event deleted successfully', 'my-calendar' ), false, 'event-deleted' );
+			$message = mc_show_notice( __( 'Event deleted successfully', 'my-calendar' ), false, 'event-deleted', 'success' );
 		} else {
 			$message = mc_show_error( __( 'Despite issuing a request to delete, the event still remains in the database. Please investigate.', 'my-calendar' ), false );
 		}
@@ -1556,7 +1559,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						$notice = __( 'The dates for this event have been added or modified.', 'my-calendar' );
 					}
 					$notice .= ' ' . __( 'Changing the date or repetition pattern will reset its scheduled dates.', 'my-calendar' );
-					mc_show_notice( $notice );
+					mc_show_notice( $notice, true, false, 'warning' );
 				}
 			}
 			echo mc_controls( $mode, $has_data, $data );
@@ -1570,9 +1573,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				$edit_event = sprintf( ' <a href="%s">' . __( 'Edit the root event.', 'my-calendar' ) . '</a>', $edit_url );
 				// Translators: Date of a specific event occurrence.
 				$message = sprintf( __( 'You are editing the <strong>%s</strong> date of this event. Other dates for this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
-				mc_show_notice( $message );
+				mc_show_notice( $message, true, false, 'info' );
 			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
-				mc_show_notice( __( 'The ID for an event date was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ) );
+				mc_show_notice( __( 'The ID for an event date was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ), true, false, 'warning' );
 			}
 			?>
 			<fieldset class="details">
