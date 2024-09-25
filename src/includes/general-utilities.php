@@ -457,7 +457,7 @@ function mc_get_users( $group = 'authors' ) {
  *
  * @return string
  */
-function mc_show_notice( $message, $display = true, $code = false, $type = 'notice' ) {
+function mc_show_notice( $message, $display = true, $code = false, $type = 'info' ) {
 	if ( trim( $message ) === '' ) {
 		return '';
 	}
