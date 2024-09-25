@@ -827,18 +827,6 @@ function mc_list_groups() {
 	$items       = $found_rows[0];
 	?>
 	&lt;div class='inside'>
-		&lt;div class="mc-admin-header">
-		&lt;ul class="links">
-			&lt;li>
-				&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=grouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?>&lt;/a>
-			&lt;/li>
-			&lt;li>
-				&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=ungrouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?>&lt;/a>
-			&lt;/li>
-			&lt;li>
-				&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/a>
-			&lt;/li>
-		&lt;/ul>
 	&lt;?php
 	$num_pages = ceil( $items / $items_per_page );
 	if ( $num_pages > 1 ) {
@@ -853,11 +841,23 @@ function mc_list_groups() {
 				'mid_size'  => 1,
 			)
 		);
-		$nav_label  = __( 'Groups Pagination', 'my-calendar' );
+		$nav_label  = esc_attr( __( 'Events Pagination', 'my-calendar' ) );
 		printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
 	}
 	?>
-		&lt;/div>
+		&lt;nav class="mc-admin-header" aria-label="&lt;?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
+			&lt;ul class="links">
+				&lt;li>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=grouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?>&lt;/a>
+				&lt;/li>
+				&lt;li>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=ungrouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?>&lt;/a>
+				&lt;/li>
+				&lt;li>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/a>
+				&lt;/li>
+			&lt;/ul>
+		&lt;/nav>
 	&lt;?php
 	if ( ! empty( $events ) ) {
 		?>

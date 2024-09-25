@@ -769,14 +769,14 @@ function mc_list_events() {
 			$filtered = "&lt;a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'>&lt;span class='dashicons dashicons-no' aria-hidden='true'>&lt;/span> " . __( 'Clear filters', 'my-calendar' ) . '&lt;/a>';
 		}
 		?>
-		&lt;div class="mc-admin-header">
+		&lt;nav class="mc-admin-header" aria-label="&lt;?php esc_attr_e( 'Search and Filter', 'my-calendar' ); ?>">
 			&lt;?php
 			// Display links to different statuses.
 			echo wp_kses( mc_status_links( $allow_filters ), mc_kses_elements() );
 			// Display event search.
 			mc_admin_event_search();
 			?>
-		&lt;/div>
+		&lt;/nav>
 		&lt;?php
 		if ( ! empty( $events ) ) {
 			?>
