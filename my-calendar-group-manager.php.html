@@ -853,7 +853,8 @@ function mc_list_groups() {
 				'mid_size'  => 1,
 			)
 		);
-		printf( "&lt;div class='tablenav'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/div>", $page_links );
+		$nav_label  = __( 'Groups Pagination', 'my-calendar' );
+		printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
 	}
 	?>
 		&lt;/div>
