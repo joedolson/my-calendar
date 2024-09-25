@@ -336,7 +336,7 @@ function mc_count_locations() {
  *
  * @param int $location Location ID.
  *
- * @return int 
+ * @return int
  */
 function mc_count_location_events( $location ) {
 	global $wpdb;
