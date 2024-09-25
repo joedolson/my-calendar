@@ -417,7 +417,7 @@ function mc_category_key( $category, $id = '' ) {
 		if ( 1 === (int) $cat->category_private ) {
 			$class .= ' private';
 		}
-		$cat_name = mc_kses_post( stripcslashes( $cat->category_name ) );
+		$cat_name = wp_strip_all_tags( stripcslashes( $cat->category_name ) );
 		$cat_name = ( '' === $cat_name ) ? '<span class="screen-reader-text">' . __( 'Untitled Category', 'my-calendar' ) . '</span>' : $cat_name;
 		$cat_key  = '';
 		if ( '' !== $cat->category_icon && $has_icons ) {

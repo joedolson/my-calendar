@@ -112,6 +112,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Restore event and location pagination broken in 3.5.13.
 * Bug fix: Pass valid `$type` parameters to admin notice function.
+* Bug fix: Able to delete the custom all day time label for an event.
+* Bug fix: Checkboxes not uncheckable for event date handling parameters.
 * Accessibility: Wrap pagination and filters in `nav` elements.
 * Accessibility: Consistent ordering of pagination and filters.
 * Feature: Add event count column to locations screen.
