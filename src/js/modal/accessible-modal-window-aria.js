@@ -351,7 +351,7 @@
             var modalButtonClose = findById(MODAL_BUTTON_JS_ID);
             var modalFocusBackId = modalButtonClose.getAttribute(MODAL_BUTTON_FOCUS_BACK_ID);
             var contentBackId = modalButtonClose.getAttribute(MODAL_BUTTON_CONTENT_BACK_ID);
-            var $listFocusables = [].slice.call(modal.querySelectorAll(FOCUSABLE_ELEMENTS_STRING));
+            var listFocusables = [].slice.call(modal.querySelectorAll(FOCUSABLE_ELEMENTS_STRING));
 
             // esc
             if (e.keyCode === 27) {
@@ -372,27 +372,27 @@
             }
 
             // tab or Maj Tab in modal => capture focus
-            if (e.keyCode === 9 && $listFocusables.indexOf(e.target) >= 0) {
+            if (e.keyCode === 9 && listFocusables.indexOf(e.target) >= 0) {
 
               // maj-tab on first element focusable => focus on last
               if (e.shiftKey) {
-                if (e.target === $listFocusables[0]) {
-                  $listFocusables[$listFocusables.length - 1].focus();
+                if (e.target === listFocusables[0]) {
+                  listFocusables[listFocusables.length - 1].focus();
                   e.preventDefault();
                 }
               } else {
                 // tab on last element focusable => focus on first
-                if (e.target === $listFocusables[$listFocusables.length - 1]) {
-                  $listFocusables[0].focus();
+                if (e.target === listFocusables[listFocusables.length - 1]) {
+                  listFocusables[0].focus();
                   e.preventDefault();
                 }
               }
             }
 
             // tab outside modal => put it in focus
-            if (e.keyCode === 9 && $listFocusables.indexOf(e.target) === -1) {
+            if (e.keyCode === 9 && listFocusables.indexOf(e.target) === -1) {
               e.preventDefault();
-              $listFocusables[0].focus();
+              listFocusables[0].focus();
             }
           }
         }, true);
