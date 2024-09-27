@@ -100,6 +100,7 @@ function mc_time_html( $event, $type ) {
 
 	$time = "
 	&lt;div class='time-block'>
+		&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>
 		&lt;p>$time_content&lt;/p>
 	&lt;/div>";
 
@@ -2542,7 +2543,7 @@ function mc_wrap_title( $title, $params = '' ) {
 		if ( 'modal' === mc_get_option( 'list_javascript' ) ) {
 			$uses_modal = ' js-modal';
 		}
-		$is_anchor       = '&lt;button type="button" ' . $params . ' class="mc-text-button' . $uses_modal . '">';
+		$is_anchor       = '&lt;button type="button" ' . $params . ' class="mc-text-button' . $uses_modal . '">&lt;span class="mc-icon" aria-hidden="true">&lt;/span>';
 		$is_close_anchor = '&lt;/button>';
 	} else {
 		$is_anchor       = '';
