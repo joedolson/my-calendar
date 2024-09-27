@@ -163,7 +163,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	if ( in_array( 'print', $used, true ) ) {
 		$print_add    = array_merge( $add, array( 'cid' => 'mc-print-view' ) );
 		$mc_print_url = mc_build_url( $print_add, $subtract, home_url() );
-		$print        = "<div class='mc-print'><a id='mc_print-$main_class' href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
+		$print        = "<div class='mc-print'><span class='mc-icon' aria-hidden='true'></span><a id='mc_print-$main_class' href='$mc_print_url'>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 	}
 
 	// Set up format toggle.
@@ -304,7 +304,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 		 *
 		 * @return {string}
 		 */
-		$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . wp_kses_post( $prev['label'] ) . '</a></li>', $prev );
+		$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><span class="mc-icon" aria-hidden="true"></span><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow">' . wp_kses_post( $prev['label'] ) . '</a></li>', $prev );
 	}
 	if ( $next ) {
 		$next_link = mc_build_url(
@@ -327,7 +327,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 		 *
 		 * @return {string}
 		 */
-		$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . wp_kses_post( $next['label'] ) . '</a></li>', $next );
+		$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . wp_kses_post( $next['label'] ) . '</a><span class="mc-icon" aria-hidden="true"></span></li>', $next );
 	}
 	$today_text = ( '' === mc_get_option( 'today_events' ) ) ? __( 'Today', 'my-calendar' ) : mc_get_option( 'today_events' );
 
@@ -479,8 +479,8 @@ function mc_sub_links() {
 	$google = add_query_arg( 'cid', $google, 'https://www.google.com/calendar/render' );
 	$ical   = str_replace( $search, $replace, get_feed_link( 'my-calendar-ical' ) );
 
-	$sub_google = "<li class='ics google'><a href='" . esc_url( $google ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
-	$sub_ical   = "<li class='ics ical'><a href='" . esc_url( $ical ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>iCal', 'my-calendar' ) . '</a></li>';
+	$sub_google = "<li class='ics google'><span class='mc-icon' aria-hidden='true'></span><a href='" . esc_url( $google ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
+	$sub_ical   = "<li class='ics ical'><span class='mc-icon' aria-hidden='true'></span><a href='" . esc_url( $ical ) . "'>" . __( '<span class="maybe-hide">Subscribe in </span>iCal', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-subscribe'>
 	<ul>$sub_google$sub_ical</ul>
@@ -511,8 +511,8 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	$ics  = add_query_arg( 'cid', $ics, 'https://www.google.com/calendar/render' );
 	$ics2 = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
 
-	$google = "<li class='ics google'><a href='" . $ics . "'>" . __( '<span class="maybe-hide">Export to </span>Google', 'my-calendar' ) . '</a></li>';
-	$ical   = "<li class='ics ical'><a href='" . $ics2 . "'>" . __( '<span class="maybe-hide">Export to </span>iCal', 'my-calendar' ) . '</a></li>';
+	$google = "<li class='ics google'><span class='mc-icon' aria-hidden='true'></span><a href='" . $ics . "'>" . __( '<span class="maybe-hide">Export to </span>Google', 'my-calendar' ) . '</a></li>';
+	$ical   = "<li class='ics ical'><span class='mc-icon' aria-hidden='true'></span><a href='" . $ics2 . "'>" . __( '<span class="maybe-hide">Export to </span>iCal', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-download'>
 	<ul>$google$ical</ul>
@@ -1163,17 +1163,17 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
 		if ( in_array( 'calendar', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><span class='mc-icon' aria-hidden='true'></span><a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active'>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
 		}
 		if ( in_array( 'card', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'card' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active'>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><span class='mc-icon' aria-hidden='true'></span><a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active'>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
 		}
 		if ( in_array( 'list', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'list' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><span class='mc-icon' aria-hidden='true'></span><a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active'>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
 		}
 		$toggle .= '</ul>
 		</div>';

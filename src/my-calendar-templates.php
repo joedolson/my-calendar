@@ -247,10 +247,10 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		 * @return {string} Link.
 		 */
 		$map_url = apply_filters( 'mc_map_url', $map_url, $event );
-		$map     = '<a href="' . esc_url( $map_url ) . '" class="map-link external">' . $label . '</a>';
+		$map     = '<a href="' . esc_url( $map_url ) . '" class="map-link external"><span class="mc-icon" aria-hidden="true"></span>' . $label . '</a>';
 	} elseif ( esc_url( $url ) ) {
 		$map_url = $url;
-		$map     = "<a href=\"$map_url\" class='map-link external map-url'>" . $label . '</a>';
+		$map     = "<a href=\"$map_url\" class='map-link external map-url'><span class='mc-icon' aria-hidden='true'></span>" . $label . '</a>';
 	} else {
 		$map_url = '';
 		$map     = '';
@@ -370,7 +370,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	if ( is_admin() && isset( $_GET['page'] ) && 'my-calendar-location-manager' === $_GET['page'] ) {
 		$link = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link edit p-name p-org u-url'><span class='dashicons dashicons-edit' aria-hidden='true'></span> <span id='location$event->location_id'>$label</span></a>";
 	} else {
-		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external p-name p-org u-url'>$label</a>" : $label;
+		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external p-name p-org u-url'><span class='mc-icon' aria-hidden='true'></span>$label</a>" : $label;
 		$link = $link . $distance;
 	}
 	$post   = ( absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $loc_id );
@@ -406,7 +406,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$hcard .= '</div>';
 	}
 	if ( 'true' === $map && false !== $the_map ) {
-		$the_link = "<a href='$the_map' class='url external'>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
+		$the_link = "<a href='$the_map' class='url external'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
 		$hcard   .= ( '' !== $the_map ) ? "<div class='map'>$the_link</div>" : '';
 	}
 	$hcard .= '</div>';
@@ -657,7 +657,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 			$rel = 'rel="external"';
 		}
 	}
-	$e['linking_title'] = ( '' !== $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $rel>" . $e['title'] . '</a>' : $e['title'];
+	$e['linking_title'] = ( '' !== $e['linking'] ) ? "<a href='" . esc_url( $e['linking'] ) . "' $rel><span class='mc-icon' aria-hidden='true'></span>" . $e['title'] . '</a>' : $e['title'];
 
 	if ( 'related' !== $context && ( mc_is_single_event() ) ) {
 		/**
@@ -680,7 +680,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['location_source'] = $event->event_location;
 	$map_gcal             = '';
 	if ( is_object( $location ) ) {
-		$sitelink_html = "<div class='url link'><a href='" . esc_url( $location->location_url ) . "' class='location-link external'>";
+		$sitelink_html = "<div class='url link'><a href='" . esc_url( $location->location_url ) . "' class='location-link external'><span class='mc-icon' aria-hidden='true'></span>";
 
 		// Translators: Location name.
 		$sitelink_html     .= sprintf( __( 'Visit web site<span class="screen-reader-text">: %s</span>', 'my-calendar' ), $location->location_label );
@@ -756,7 +756,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$google_end   = $dtend;
 	}
 	$e['gcal']      = mc_google_cal( $google_start, $google_end, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
+	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title-$calendar_id'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
@@ -2057,16 +2057,16 @@ function mc_template_share( $data, $type = 'calendar' ) {
 			$aria = " aria-label='" . esc_attr( "$details_label: " . strip_tags( $event_title ) ) . "'";
 		}
 		if ( _mc_is_url( $permalink ) ) {
-			$more = "	<p class='mc-details'><a$aria href='" . esc_url( $permalink ) . "'>$details_label</a></p>\n";
+			$more = "	<p class='mc-details'><span class='mc-icon' aria-hidden='true'></span><a$aria href='" . esc_url( $permalink ) . "'>$details_label</a></p>\n";
 		}
 	}
 	$more = apply_filters( 'mc_details_grid_link', $more, $event );
 	if ( mc_output_is_visible( 'gcal', $type, $event ) ) {
-		$gcal = "	<p class='gcal'>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '</p>';
+		$gcal = "	<p class='gcal'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '</p>';
 	}
 
 	if ( mc_output_is_visible( 'ical', $type, $event ) ) {
-		$vcal = "	<p class='ical'>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</p>';
+		$vcal = "	<p class='ical'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</p>';
 	}
 	$sharing = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
 
@@ -2123,7 +2123,7 @@ function mc_template_registration( $data, $type = 'calendar' ) {
 		$url      = esc_url( $event->event_tickets );
 		$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
 		$text     = ( '' !== mc_get_option( 'buy_tickets', '' ) ) ? mc_get_option( 'buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
-		$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'>" . $text . '</a>' : '';
+		$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'><span class='mc-icon' aria-hidden='true'></span>" . $text . '</a>' : '';
 		if ( '' !== trim( $info . $tickets ) ) {
 			$tickets = '<div class="mc-registration">' . $info . $tickets . '</div>';
 		}
@@ -2215,7 +2215,7 @@ function mc_template_link( $data, $type = 'calendar' ) {
 		$external_class = ( mc_external_link( $event_link ) ) ? "$type-link external url" : "$type-link url";
 		$link_template  = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
 		$link_text      = mc_draw_template( $data->tags, $link_template );
-		$link           = "<p><a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$data->id'>" . $link_text . '</a></p>';
+		$link           = "<p><a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$data->id'><span class='mc-icon' aria-hidden='true'></span>" . $link_text . '</a></p>';
 	}
 
 	echo wp_kses_post( $link );

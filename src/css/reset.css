@@ -357,24 +357,24 @@
 	column-gap: 4px;
 }
 
-.my-calendar-today a::before,
-.my-calendar-prev a::before,
-.my-calendar-next a::after {
+.my-calendar-today a .mc-icon::before,
+.my-calendar-prev a .mc-icon::before,
+.my-calendar-next a .mc-icon::before {
 	display: inline;
 	font-family: dashicons;
 	vertical-align: middle;
 }
 
-.my-calendar-today a::before {
+.my-calendar-today a .mc-icon::before {
 	content: '';
 }
 
-.my-calendar-prev a::before {
+.my-calendar-prev a .mc-icon::before {
 	content: '\f341';
 	margin-right: 3px;
 }
 
-.my-calendar-next a::after {
+.my-calendar-next a .mc-icon::before {
 	content: '\f345';
 	margin-left: 3px;
 }
