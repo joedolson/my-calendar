@@ -56,10 +56,10 @@
 	color: #fff;
 }
 
-.mc-main .heading {
+.mc-main.twentyfifteen .heading:not(.widget .mc-main-heading) {
 	font-size: 2em;
-	color: #fff;
-	background: #333; 
+	color: var(--primary-light);
+	background: var(--primary-dark); 
 	padding: 5px;
 	text-align: right;
 }
