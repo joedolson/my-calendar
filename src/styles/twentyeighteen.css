@@ -84,17 +84,17 @@
 	padding-left: 24px;
 }
 
-.mc-main.twentyeighteen .mc-format a .mc-icon: .mc-icon::before, .mc-main.twentyeighteen .mc-format span .mc-icon: .mc-icon::before {
+.mc-main.twentyeighteen .mc-format a .mc-icon::before, .mc-main.twentyeighteen .mc-format span .mc-icon::before {
 	font-family: dashicons;
 	margin-right: 3px;
 	vertical-align: middle;
 }
 
-.mc-main.twentyeighteen .mc-format .list .mc-icon: .mc-icon::before {
+.mc-main.twentyeighteen .mc-format .list .mc-icon::before {
 	content: "\f163";
 }
 
-.mc-main.twentyeighteen .mc-format .grid .mc-icon: .mc-icon::before {
+.mc-main.twentyeighteen .mc-format .grid .mc-icon::before {
 	content: "\f508";
 }
 
@@ -145,7 +145,7 @@
 	font-size: 14px;
 }
 
-.mc-main.twentyeighteen .time-block .mc-icon: .mc-icon::before {
+.mc-main.twentyeighteen .time-block .mc-icon::before {
 	font-family: dashicons;
 	content: "\f469";
 	vertical-align: top;
