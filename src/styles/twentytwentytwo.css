@@ -1,5 +1,5 @@
 .my-calendar-prev a .mc-icon::before,
-.my-calendar-next a .mc-icon::after,
+.my-calendar-next a .mc-icon::before,
 .mc-export a .mc-icon::before,
 .mc-main .time-block .mc-icon::before,
 .mc-main .sharing .ical a .mc-icon::before,
@@ -111,12 +111,12 @@
 	content: '\f508';
 }
 
-.map a.external .mc-icon::after {
+.map a.external .mc-icon::before {
 	font-family: dashicons;
 	content: '\f230';
 }
 
-.location-link.external .mc-icon::after {
+.location-link.external .mc-icon::before {
 	font-family: dashicons;
 	content: '\f504';
 }

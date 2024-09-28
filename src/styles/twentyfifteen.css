@@ -88,17 +88,17 @@
 	left: 0;
 }
 
-.mc-main .mc-format a:before {
+.mc-main .mc-format a .mc-icon::before {
 	font-family: dashicons;
 	margin-right: 4px;
 	vertical-align: text-top;
 }
 
-.mc-main .mc-format .list:before {
+.mc-main .mc-format .list .mc-icon::before {
 	content: "\f163";
 }
 
-.mc-main .mc-format .grid:before {
+.mc-main .mc-format .grid .mc-icon::before {
 	content: "\f508";
 }
 
@@ -191,7 +191,7 @@
 	padding: 0 10px !important;
 }
 
-.mc-main .time-block p:before {
+.mc-main .time-block p .mc-icon::before {
 	font-family: dashicons;
 	content: "\f469";
 	vertical-align: top;
@@ -245,12 +245,12 @@ nav .my-calendar-nav ul {
 	border-radius: 0;
 }
 
-.my-calendar-prev a::before {
+.my-calendar-prev a: .mc-icon::before {
 	content: '\25C0 ';
 	margin-right: 4px;
 }
 
-.my-calendar-next a::after {
+.my-calendar-next a .mc-icon::before {
 	content: ' \25b6';
 	margin-left: 4px;
 }
@@ -273,7 +273,7 @@ nav .my-calendar-nav ul {
 }
 
 /* List View */
-.mc-list .current-day .event-date:before {
+.mc-list .current-day .event-date .mc-icon::before {
 	content: "\f139 ";
 	font-family: dashicons;
 	vertical-align: middle;

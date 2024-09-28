@@ -93,12 +93,12 @@
 }
 
 /* Navigation */
-.my-calendar-nav .my-calendar-prev a::before {
+.my-calendar-nav .my-calendar-prev a .mc-icon::before {
     content: '\25C0 ';
 	margin-right: 4px;
 }
 
-.my-calendar-nav .my-calendar-next a::after {
+.my-calendar-nav .my-calendar-next a .mc-icon::before {
     content: ' \25b6';
 	margin-left: 4px;
 }
@@ -122,7 +122,7 @@
     margin-bottom: 1em;
 }
 
-.mc-list .current-day .event-date:before {
+.mc-list .current-day .event-date .mc-icon::before {
     content: "\21D2";
     color: red;
     padding: 0 .5em .5em 0;

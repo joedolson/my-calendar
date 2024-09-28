@@ -42,17 +42,17 @@
 	font-size: 24px;
 }
 
-.my-calendar-prev a:before,
-.my-calendar-next a:after,
-.mc-export a:before,
-.mc-main .time-block:before,
-.mc-main .sharing .ical a:before,
-.mc-main .sharing .gcal a:before,
-.mc-main .sharing .mc-details a:before,
-.mc-main .mc-format a:before,
-.mc-main .mc-format span:before,
-.mc-main .mc-print a:before,
-.mc-main .mc-list .event-date button:nth-of-type(1):before {
+.my-calendar-prev a .mc-icon::before,
+.my-calendar-next a .mc-icon::before,
+.mc-export a .mc-icon::before,
+.mc-main .time-block .mc-icon::before,
+.mc-main .sharing .ical a .mc-icon::before,
+.mc-main .sharing .gcal a .mc-icon::before,
+.mc-main .sharing .mc-details a .mc-icon::before,
+.mc-main .mc-format a .mc-icon::before,
+.mc-main .mc-format span .mc-icon::before,
+.mc-main .mc-print a .mc-icon::before,
+.mc-main .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
 	font-family: 'dashicons';
 	vertical-align: middle;
 	position: relative;
@@ -63,15 +63,15 @@
 	padding-left: 24px;
 }
 
-.mc-main .mc-print a:before {
+.mc-main .mc-print a .mc-icon::before {
 	content: "\f497";
 }
 
-.mc-main .mc-format .list:before {
+.mc-main .mc-format .list .mc-icon::before {
 	content: "\f163";
 }
 
-.mc-main .mc-format .grid:before {
+.mc-main .mc-format .grid .mc-icon::before {
 	content: "\f508";
 }
 
@@ -123,13 +123,13 @@
 	display: inline-block;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1):before {
+.mc-main .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
 	content: "\f132";
 	top: 0;
 	margin-right: 3px;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true]:before {
+.mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
 	content: "\f460";
 }
 
@@ -180,7 +180,7 @@
 	padding: 0 .25em !important;
 }
 
-.mc-main .time-block:before {
+.mc-main .time-block .mc-icon::before {
 	content: "\f469";
 	vertical-align: top;
 	margin-right: 4px;
@@ -256,20 +256,20 @@
 	border-right: 1px solid #bbb;
 }
 
-.mc-export a:before {
+.mc-export a .mc-icon::before {
 	margin-right: 3px;
 }
 
-.mc-export .rss a:before {
+.mc-export .rss a .mc-icon::before {
 	content: '\f303';
 }
 
-.mc-export .ics a:before {
+.mc-export .ics a .mc-icon::before {
 	content: '\f508';
 }
 
-.mc-download .google a:before,
-.mc-download .ical a:before {
+.mc-download .google a .mc-icon::before,
+.mc-download .ical a .mc-icon::before {
 	content: "\f316";
 }
 
@@ -330,11 +330,11 @@
 	padding: .5em .5em .5em 0;
 }
 
-.mc-main .sharing .ical a:before, .mc-main .sharing .gcal a:before {
+.mc-main .sharing .ical a .mc-icon::before, .mc-main .sharing .gcal a .mc-icon::before {
 	content: "\f502";
 }
 
-.mc-main .sharing .mc-details a:before {
+.mc-main .sharing .mc-details a .mc-icon::before {
 	content: "\f242";
 }
 
