@@ -827,6 +827,7 @@ function mc_admin_styles() {
 		}
 		$grid = ( 'grid' === $mode );
 		if ( $grid ) {
+			mc_enqueue_calendar_styles( '' );
 			wp_enqueue_style( 'my-calendar-admin-style' );
 			if ( '1' !== mc_get_option( 'calendar_javascript' ) ) {
 				$enqueue_mcjs = true;
