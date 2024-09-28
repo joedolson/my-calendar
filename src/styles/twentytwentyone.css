@@ -1,34 +1,34 @@
-.mc-main .my-calendar-header, .mc-main .my-calendar-footer {
+.mc-main.twentytwentyone .my-calendar-header, .mc-main.twentytwentyone .my-calendar-footer {
 	padding: .5em;
 	background: #e3e3e3;
 	background: var(--secondary-light);
 	color: var(--secondary-dark);
 }
 
-.mc-main .my-calendar-header a, .mc-main .my-calendar-footer a {
+.mc-main.twentytwentyone .my-calendar-header a, .mc-main.twentytwentyone .my-calendar-footer a {
 	color: var(--secondary-dark);
 }
 
-.mc-main .details ul, .mc-main .details ol, .mc-main details li  {
+.mc-main.twentytwentyone .details ul, .mc-main.twentytwentyone .details ol, .mc-main.twentytwentyone details li  {
 	margin: .25em 0 .5em 3em;
 }
 
-.mc-main span.category-color-sample {
+.mc-main.twentytwentyone span.category-color-sample {
 	border: none !important;
 }
 
-.mc-main .my-calendar-header a:hover, .mc-main .my-calendar-footer a:hover,
-.mc-main .my-calendar-header a:focus, .mc-main .my-calendar-footer a:focus {
+.mc-main.twentytwentyone .my-calendar-header a:hover, .mc-main.twentytwentyone .my-calendar-footer a:hover,
+.mc-main.twentytwentyone .my-calendar-header a:focus, .mc-main.twentytwentyone .my-calendar-footer a:focus {
 	text-decoration: none;
 	outline: 1px solid !important;
 }
 
-.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus {
+.mc-main.twentytwentyone .my-calendar-header input:hover, .mc-main.twentytwentyone .my-calendar-header input:focus {
 	outline-offset: 0;
 	border-radius: 0;
 }
 
-.mc-main.list .my-calendar-month, .mc-main .heading  {
+.mc-main.twentytwentyone.list .my-calendar-month, .mc-main.twentytwentyone .heading  {
 	font-size: 20px;
 	color: #313233;
 	color: var(--primary-dark);
@@ -36,11 +36,11 @@
 	margin: 0;
 }
 
-.mc-main .heading {
+.mc-main.twentytwentyone .heading {
 	position: relative;
 }
 
-.mc-main .heading:before {
+.mc-main.twentytwentyone .heading:before {
 	display: block;
 	border-top: 1px solid var(--highlight-dark);
 	content: '';
@@ -54,65 +54,65 @@
 	z-index: -1;
 }
 
-.mc-main .heading span {
+.mc-main.twentytwentyone .heading span {
 	background: var(--primary-light);
 	padding: 0 15px;
 }
 
-.mc-main th {
+.mc-main.twentytwentyone th {
 	background: #fff !important;
 	background: var(--primary-light) !important;
 	color: #313233 !important;
 	color: var(--primary-dark) !important;
 }
 
-.mc-main td {
+.mc-main.twentytwentyone td {
 	border: 1px solid #efefef;
 	border: 1px solid var(--highlight-light);
 }
 
-.mc-main td .event-title {
+.mc-main.twentytwentyone td .event-title {
 	font-size: 12px;
 }
 
-.mc-main {
+.mc-main.twentytwentyone {
 	position: relative;
 }
 
-.mc-main .event-title {
+.mc-main.twentytwentyone .event-title {
 	font-size: 24px;
 }
 
 .my-calendar-prev a .mc-icon::before,
 .my-calendar-next a .mc-icon::before,
 .mc-export a .mc-icon::before,
-.mc-main .time-block .mc-icon::before,
-.mc-main .sharing .ical a .mc-icon::before,
-.mc-main .sharing .gcal a .mc-icon::before,
-.mc-main .sharing .mc-details a .mc-icon::before,
-.mc-main .mc-format a .mc-icon::before,
-.mc-main .mc-format span .mc-icon::before,
-.mc-main .mc-print a .mc-icon::before,
-.mc-main .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
+.mc-main.twentytwentyone .time-block .mc-icon::before,
+.mc-main.twentytwentyone .sharing .ical a .mc-icon::before,
+.mc-main.twentytwentyone .sharing .gcal a .mc-icon::before,
+.mc-main.twentytwentyone .sharing .mc-details a .mc-icon::before,
+.mc-main.twentytwentyone .mc-format a .mc-icon::before,
+.mc-main.twentytwentyone .mc-format span .mc-icon::before,
+.mc-main.twentytwentyone .mc-print a .mc-icon::before,
+.mc-main.twentytwentyone .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
 	font-family: 'dashicons';
 	vertical-align: middle;
 	position: relative;
 	margin-right: 2px;
 }
 
-.mc-main .mc-print a .mc-icon::before {
+.mc-main.twentytwentyone .mc-print a .mc-icon::before {
 	content: "\f497";
 }
 
-.mc-main .mc-format .list .mc-icon::before {
+.mc-main.twentytwentyone .mc-format .list .mc-icon::before {
 	content: "\f163";
 }
 
-.mc-main .mc-format .grid .mc-icon::before {
+.mc-main.twentytwentyone .mc-format .grid .mc-icon::before {
 	content: "\f508";
 }
 
-.mc-main .calendar-event .details, .mc-main .calendar-events {
+.mc-main.twentytwentyone .calendar-event .details, .mc-main.twentytwentyone .calendar-events {
 	position: absolute;
 	left: 0;
 	width: 100%;
@@ -123,49 +123,49 @@
 	color: var(--primary-dark);
 }
 
-.mc-main .calendar-events {
+.mc-main.twentytwentyone .calendar-events {
 	width: 110%;
 	left: -5%;
 }
 
-.mc-main .calendar-events .mc-event:nth-of-type(1n+1) {
+.mc-main.twentytwentyone .calendar-events .mc-event:nth-of-type(1n+1) {
 	border-top: 1px solid var(--highlight-dark);
 }
 
-.mc-main.mini .details {
+.mc-main.twentytwentyone.mini .details {
 	border-top: 1px solid #666;
 	border-top: 1px solid var(--highlight-dark);
 }
 
-.mc-main .list-event .details {
+.mc-main.twentytwentyone .list-event .details {
 	padding: 0;
 	margin-top: 1em;
 }
 
-.mc-main .list-event .event-title {
+.mc-main.twentytwentyone .list-event .event-title {
 	padding: .25em;
 	border-radius: 0 10px 10px 0;
 }
 
-.mc-main .mc-list .event-date button {
+.mc-main.twentytwentyone .mc-list .event-date button {
 	display: inline-block;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
+.mc-main.twentytwentyone .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
 	content: "\f132";
 	top: 0;
 	margin-right: 3px;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
+.mc-main.twentytwentyone .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
 	content: "\f460";
 }
 
-.mc-main .mc-list .details .address {
+.mc-main.twentytwentyone .mc-list .details .address {
 	padding-right: 0;
 }
 
-.mc-main button.close {
+.mc-main.twentytwentyone button.close {
 	right: 0px;
 	top: 0px;
 	background: #d00 !important;
@@ -173,41 +173,41 @@
 	color: #fff !important;
 }
 
-.mc-main button.close, .mc-main button.close * {
+.mc-main.twentytwentyone button.close, .mc-main.twentytwentyone button.close * {
 	padding: 0;
 	line-height: 1;
 	border-radius: 0;
 	opacity: 1;
 }
 
-.mc-main.mini .close {
+.mc-main.twentytwentyone.mini .close {
 	left: auto;
 	right: 0;
 	font-size: 18px;
 }
 
-.mc-main .close:hover, .mc-main .close:focus {
+.mc-main.twentytwentyone .close:hover, .mc-main.twentytwentyone .close:focus {
 	background: #fff !important;
 	background: var(--primary-light) !important;
 	color: #d00 !important;
 	outline: 1px solid var(--primary-dark);
 }
 
-.mc-main .details .category-icon {
+.mc-main.twentytwentyone .details .category-icon {
 	width: auto;
 }
 
 /* Date/times */
-.mc-main .time-block {
+.mc-main.twentytwentyone .time-block {
 	float: right;
 }
 
-.mc-main.mini .time-block {
+.mc-main.twentytwentyone.mini .time-block {
 	float: none;
 	font-size: 14px;
 }
 
-.mc-main .time-block p {
+.mc-main.twentytwentyone .time-block p {
 	color: #000;
 	color: var(--secondary-dark);
 	background: #fff;
@@ -215,28 +215,28 @@
 	padding: 0 .25em !important;
 }
 
-.mc-main .time-block .mc-icon::before {
+.mc-main.twentytwentyone .time-block .mc-icon::before {
 	content: "\f469";
 	vertical-align: top;
 	margin-right: 4px;
 }
 
-.mc-main .nextmonth {
+.mc-main.twentytwentyone .nextmonth {
 	background: rgba( 200,200,200,.1 );
 }
 
-.mc-main .nextmonth .mc-date {
+.mc-main.twentytwentyone .nextmonth .mc-date {
 	background: transparent;
 	color: var(--primary-dark);
 }
 
-.mc-main .current-day {
+.mc-main.twentytwentyone .current-day {
 	border-bottom: 5px solid #313233;
 	border-bottom: 5px solid var(--highlight-dark);
 }
 
 /* Navigation */
-.mc-main .mc-time .week {
+.mc-main.twentytwentyone .mc-time .week {
 	padding-left: 6px;
 	padding-right: 6px;
 	border-left: 1px solid #bbb;
@@ -267,7 +267,7 @@
 
 /* hCard */
 .single-event .address,
-.mc-main .address {
+.mc-main.twentytwentyone .address {
 	margin: .5em 0 1em 1em;
 	float: right;
 	border-radius: 10px 0 0 10px;
@@ -283,7 +283,7 @@
 	padding: 0;
 }
 
-.mc-main.mini .address {
+.mc-main.twentytwentyone.mini .address {
 	margin: 15px 0;
 	float: none;
 	width: 100%;
@@ -296,48 +296,48 @@
 }
 
 /* List View */
-.mc-main li.current-day {
+.mc-main.twentytwentyone li.current-day {
 	border-left: 5px solid var(--highlight-dark);
 }
 
-.mc-main li.current-day button:nth-of-type(1) {
+.mc-main.twentytwentyone li.current-day button:nth-of-type(1) {
 	left: -5px;
 }
 
-.mc-main .mc-list li.mc-events {
+.mc-main.twentytwentyone .mc-list li.mc-events {
 	padding: 10px;
 	background: rgba(0, 0, 0, .03);
 }
 
-.mc-main .sharing p {
+.mc-main.twentytwentyone .sharing p {
 	display: inline-block;
 	padding: .5em .5em .5em 0;
 }
 
-.mc-main.mini .sharing p {
+.mc-main.twentytwentyone.mini .sharing p {
 	font-size: 14px;
 	padding: 0 .25em 0 0;
 	margin-bottom: 10px;
 }
 
-.mc-main .sharing .ical a .mc-icon::before, .mc-main .sharing .gcal a .mc-icon::before {
+.mc-main.twentytwentyone .sharing .ical a .mc-icon::before, .mc-main.twentytwentyone .sharing .gcal a .mc-icon::before {
 	content: "\f502";
 }
 
-.mc-main .sharing .mc-details a .mc-icon::before {
+.mc-main.twentytwentyone .sharing .mc-details a .mc-icon::before {
 	content: "\f242";
 }
 
-.mc-main .mc-list .event-date {
+.mc-main.twentytwentyone .mc-list .event-date {
 	font-size: 16px;
 }
 
-.mc-main .list-event {
+.mc-main.twentytwentyone .list-event {
 	margin: .5em -10px;
 	clear: both;
 }
 
-.mc-main .list-event .event-title .category-icon {
+.mc-main.twentytwentyone .list-event .event-title .category-icon {
 	margin-right: .5em;
 	position: relative;
 	top: -1px;

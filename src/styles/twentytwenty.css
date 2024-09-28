@@ -1,14 +1,14 @@
-.mc-main span.category-color-sample {
+.mc-main.twentytwenty span.category-color-sample {
 	border: none !important;
 }
 
-.mc-main .my-calendar-header input:hover, .mc-main .my-calendar-header input:focus,
-.mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover,
-.mc-main .my-calendar-header a:focus, .mc-main .mc_bottomnav a:focus {
+.mc-main.twentytwenty .my-calendar-header input:hover, .mc-main.twentytwenty .my-calendar-header input:focus,
+.mc-main.twentytwenty .my-calendar-header a:hover, .mc-main.twentytwenty .mc_bottomnav a:hover,
+.mc-main.twentytwenty .my-calendar-header a:focus, .mc-main.twentytwenty .mc_bottomnav a:focus {
 	text-decoration: underline;
 }
 
-.mc-main.list .my-calendar-month, .mc-main .heading  {
+.mc-main.twentytwenty.list .my-calendar-month, .mc-main.twentytwenty .heading  {
 	font-size: 20px;
 	color: #313233;
 	color: var(--primary-dark);
@@ -16,11 +16,11 @@
 	margin: 0;
 }
 
-.mc-main.mini .heading {
+.mc-main.twentytwenty.mini .heading {
 	font-size: 16px;
 }
 
-.mc-main th {
+.mc-main.twentytwenty th {
 	font-size: 16px;
 	background: #fff !important;
 	background: var(--primary-light) !important;
@@ -29,123 +29,123 @@
 	border-bottom: 1px solid var(--primary-dark);
 }
 
-.mc-main td {
+.mc-main.twentytwenty td {
 	border: 1px solid #efefef;
 	border: 1px solid var(--highlight-light);
 }
 
-.mc-main td .event-title {
+.mc-main.twentytwenty td .event-title {
 	font-size: 12px;
 }
 
-.mc-main .event-title {
+.mc-main.twentytwenty .event-title {
 	font-size: 24px;
 }
 
 .my-calendar-prev a .mc-icon::before,
 .my-calendar-next a .mc-icon::before,
 .mc-export a .mc-icon::before,
-.mc-main .time-block .mc-icon::before,
-.mc-main .sharing .ical a .mc-icon::before,
-.mc-main .sharing .gcal a .mc-icon::before,
-.mc-main .sharing .mc-details a .mc-icon::before,
-.mc-main .mc-format a .mc-icon::before,
-.mc-main .mc-format span .mc-icon::before,
-.mc-main .mc-print a .mc-icon::before,
-.mc-main .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
+.mc-main.twentytwenty .time-block .mc-icon::before,
+.mc-main.twentytwenty .sharing .ical a .mc-icon::before,
+.mc-main.twentytwenty .sharing .gcal a .mc-icon::before,
+.mc-main.twentytwenty .sharing .mc-details a .mc-icon::before,
+.mc-main.twentytwenty .mc-format a .mc-icon::before,
+.mc-main.twentytwenty .mc-format span .mc-icon::before,
+.mc-main.twentytwenty .mc-print a .mc-icon::before,
+.mc-main.twentytwenty .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
 	font-family: 'dashicons';
 	vertical-align: middle;
 	position: relative;
 	margin-right: 2px;
 }
 
-.mc-main .event-title .has-image {
+.mc-main.twentytwenty .event-title .has-image {
 	padding-left: 24px;
 }
 
-.mc-main .mc-print a .mc-icon::before {
+.mc-main.twentytwenty .mc-print a .mc-icon::before {
 	content: "\f497";
 }
 
-.mc-main .mc-format .list .mc-icon::before {
+.mc-main.twentytwenty .mc-format .list .mc-icon::before {
 	content: "\f163";
 }
 
-.mc-main .mc-format .grid .mc-icon::before {
+.mc-main.twentytwenty .mc-format .grid .mc-icon::before {
 	content: "\f508";
 }
 
-.mc-main .calendar-event .details, .mc-main .calendar-events {
+.mc-main.twentytwenty .calendar-event .details, .mc-main.twentytwenty .calendar-events {
 	left: 3%;
 	width: 94%;
 	box-shadow: 0 0 4px;
 }
 
-.mc-main .calendar-events {
+.mc-main.twentytwenty .calendar-events {
 	width: 110%;
 	left: -5%;
 }
 
-.mc-main .calendar-events .mc-event:nth-of-type(1n+1) {
+.mc-main.twentytwenty .calendar-events .mc-event:nth-of-type(1n+1) {
 	border-top: 1px solid var(--highlight-dark);
 }
 
-.mc-main .details {
+.mc-main.twentytwenty .details {
 	padding: 10px 40px;
 }
 
-.mc-main .single-event .details {
+.mc-main.twentytwenty .single-event .details {
 	padding: 0;
 }
 
-.mc-main.mini .details {
+.mc-main.twentytwenty.mini .details {
 	padding: 16px;
 	border-top: 1px solid #666;
 	border-top: 1px solid var(--highlight-dark);
 }
 
-.mc-main .list-event .details {
+.mc-main.twentytwenty .list-event .details {
 	padding: 0;
 	margin-top: 1em;
 }
 
-.mc-main .list-event .event-title {
+.mc-main.twentytwenty .list-event .event-title {
 	padding: .25em;
 	border-radius: 0 10px 10px 0;
 }
 
-.mc-main .mc-list {
+.mc-main.twentytwenty .mc-list {
 	border-top: 1px solid var(--highlight-light);
 	border-left: 1px solid var(--highlight-light);
 }
 
-.mc-main .mc-list .event-date button {
+.mc-main.twentytwenty .mc-list .event-date button {
 	display: inline-block;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
+.mc-main.twentytwenty .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
 	content: "\f132";
 	top: 0;
 	margin-right: 3px;
 }
 
-.mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
+.mc-main.twentytwenty .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
 	content: "\f460";
 }
 
-.mc-main .mc-list .details > div {
+.mc-main.twentytwenty .mc-list .details > div {
 	padding: 0 .5em;
 }
 
-.mc-main .mc-list .details .location {
+.mc-main.twentytwenty .mc-list .details .location {
 	padding-right: 0;
 }
 
-.mc-main .mc-list .details > p {
+.mc-main.twentytwenty .mc-list .details > p {
 	padding: .5em;
 }
 
-.mc-main button.close {
+.mc-main.twentytwenty button.close {
 	left: 0px;
 	top: 0px;
 	padding: 10px !important;
@@ -153,26 +153,26 @@
 	border-radius: 20px;
 }
 
-.mc-main button.close, .mc-main button.close * {
+.mc-main.twentytwenty button.close, .mc-main.twentytwenty button.close * {
 	background: #fff;
 	border-radius: 10px;
 }
 
-.mc-main .details .category-icon {
+.mc-main.twentytwenty .details .category-icon {
 	width: auto;
 }
 
 /* Date/times */
-.mc-main .time-block {
+.mc-main.twentytwenty .time-block {
 	float: right;
 }
 
-.mc-main.mini .time-block {
+.mc-main.twentytwenty.mini .time-block {
 	float: none;
 	font-size: 14px;
 }
 
-.mc-main .time-block p {
+.mc-main.twentytwenty .time-block p {
 	color: #000;
 	color: var(--secondary-dark);
 	background: #fff;
@@ -180,59 +180,59 @@
 	padding: 0 .25em !important;
 }
 
-.mc-main .time-block .mc-icon::before {
+.mc-main.twentytwenty .time-block .mc-icon::before {
 	content: "\f469";
 	vertical-align: top;
 	margin-right: 4px;
 }
 
-.mc-main .time-block .mc-event-date {
+.mc-main.twentytwenty .time-block .mc-event-date {
 	display: block;
 }
 
-.mc-main .mc-event-date {
+.mc-main.twentytwenty .mc-event-date {
 	font-weight: 700;
 	color: #333;
 	color: var(--primary-dark);
 }
 
-.mc-main .mc-date {
+.mc-main.twentytwenty .mc-date {
 	padding: 0 8px;
 	font-size: 16px;
 }
 
-.mc-main.mini .mc-date {
+.mc-main.twentytwenty.mini .mc-date {
 	font-size: 14px;
 }
 
-.mc-main .nextmonth {
+.mc-main.twentytwenty .nextmonth {
 	background: rgba( 200,200,200,.1 );
 }
 
-.mc-main .nextmonth .mc-date {
+.mc-main.twentytwenty .nextmonth .mc-date {
 	background: transparent;
 }
 
-.mc-main .current-day {
+.mc-main.twentytwenty .current-day {
 	border-top: 1px solid #313233;
 	border-top: 1px solid var(--highlight-dark);
 	background: linear-gradient(to bottom, #fff 0%, var(--secondary-light) 30%, var(--highlight-light) 100%)
 }
 
-.mc-main .current-day .mc-date {
+.mc-main.twentytwenty .current-day .mc-date {
 	border-top: 1px solid #313233;
 	border-top: 1px solid var(--highlight-dark);
 }
 
-.mc-main .has-events a.mc-date {
+.mc-main.twentytwenty .has-events a.mc-date {
 	color: #fff;
 	color: var(--primary-light);
 	background: #333;
 	background: var(--primary-dark);
 }
 
-.mc-main .has-events a.mc-date:hover,
-.mc-main .has-events a.mc-date:focus {
+.mc-main.twentytwenty .has-events a.mc-date:hover,
+.mc-main.twentytwenty .has-events a.mc-date:focus {
 	color: #333;
 	color: var(--primary-dark);
 	background: #fff;
@@ -248,11 +248,11 @@
 	border-left: 1px solid #bbb;
 }
 
-.mc-main .mc-time .month {
+.mc-main.twentytwenty .mc-time .month {
 	border-right: 1px solid #bbb;
 }
 
-.mc-main .mc-time .week {
+.mc-main.twentytwenty .mc-time .week {
 	border-right: 1px solid #bbb;
 }
 
@@ -274,21 +274,21 @@
 }
 
 /* Category Key */
-.mc-main .category-key h3 {
+.mc-main.twentytwenty .category-key h3 {
 	margin: 0 0 10px 0 !important;
 }
 
-.mc-main .category-key li.current a {
+.mc-main.twentytwenty .category-key li.current a {
 	border: 1px solid #000;
 	background: #fff;
 }
 
 /* hCard */
-.mc-main .location {
+.mc-main.twentytwenty .location {
 	clear: right;
 }
 
-.mc-main .vcard {
+.mc-main.twentytwenty .vcard {
 	margin: 0 0 1em 1em;
 	float: right;
 	padding: 10px;
@@ -298,7 +298,7 @@
 	background: rgba( 0, 0, 0, .05 );
 }
 
-.mc-main.mini .vcard {
+.mc-main.twentytwenty.mini .vcard {
 	margin: 15px 0;
 	float: none;
 	width: 100%;
@@ -306,48 +306,48 @@
 }
 
 /* List View */
-.mc-main li.current-day {
+.mc-main.twentytwenty li.current-day {
 	border-left: 5px solid;
 }
 
-.mc-main li.current-day button:nth-of-type(1) {
+.mc-main.twentytwenty li.current-day button:nth-of-type(1) {
 	position: relative;
 	left: -5px;
 }
 
-.mc-main .mc-list .mc-events {
+.mc-main.twentytwenty .mc-list .mc-events {
 	padding: 10px;
 	background: rgba(0, 0, 0, .05);
 }
 
-.mc-main .mc-list .mc-events.odd {
+.mc-main.twentytwenty .mc-list .mc-events.odd {
 	padding: 10px;
 	background: none;
 }
 
-.mc-main .sharing p {
+.mc-main.twentytwenty .sharing p {
 	display: inline-block;
 	padding: .5em .5em .5em 0;
 }
 
-.mc-main .sharing .ical a .mc-icon::before, .mc-main .sharing .gcal a .mc-icon::before {
+.mc-main.twentytwenty .sharing .ical a .mc-icon::before, .mc-main.twentytwenty .sharing .gcal a .mc-icon::before {
 	content: "\f502";
 }
 
-.mc-main .sharing .mc-details a .mc-icon::before {
+.mc-main.twentytwenty .sharing .mc-details a .mc-icon::before {
 	content: "\f242";
 }
 
-.mc-main .mc-list .event-date {
+.mc-main.twentytwenty .mc-list .event-date {
 	font-size: 16px;
 }
 
-.mc-main .list-event {
+.mc-main.twentytwenty .list-event {
 	border-top: 1px solid #d1d1d1;
 	margin: .5em -10px;
 }
 
-.mc-main .list-event .event-title .category-icon {
+.mc-main.twentytwenty .list-event .event-title .category-icon {
 	margin-right: .5em;
 	position: relative;
 	top: -1px;

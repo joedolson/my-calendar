@@ -1,36 +1,36 @@
-.mc-main, .mc-list {
+.mc-main.refresh, .mc-list {
     background: #fff;
     padding: 5px;
     border-radius: 5px;
     color: #333
 }
 
-.mc-main .my-calendar-date-switcher, .mc-main .calendar-event .details, .mc-main .calendar-events {
+.mc-main.refresh .my-calendar-date-switcher, .mc-main.refresh .calendar-event .details, .mc-main.refresh .calendar-events {
     background: #edf7ff
 }
 
-.mc-main .my-calendar-date-switcher input, .mc-main .my-calendar-date-switcher select {
+.mc-main.refresh .my-calendar-date-switcher input, .mc-main.refresh .my-calendar-date-switcher select {
     margin: 0;
     padding: 0
 }
 
-.mc-main .calendar-event .details, .mc-main .calendar-events {
+.mc-main.refresh .calendar-event .details, .mc-main.refresh .calendar-events {
     color: #000
 }
 
-.mc-main .nextmonth, .mc-main .nextmonth .weekend {
+.mc-main.refresh .nextmonth, .mc-main.refresh .nextmonth .weekend {
     color: #777
 }
 
-.mc-main .mc-list .mc-events {
+.mc-main.refresh .mc-list .mc-events {
     padding: 1px 4px
 }
 
-.mc-main .mc-list .odd {
+.mc-main.refresh .mc-list .odd {
     background: #efecec
 }
 
-.mc-main .list-event .details {
+.mc-main.refresh .list-event .details {
     background: #f6f6f6;
     margin: 10px;
     box-shadow: 0 0 5px #aaa;
@@ -38,34 +38,34 @@
     padding: 10px
 }
 
-.mc-main .mc-list .odd .details {
+.mc-main.refresh .mc-list .odd .details {
     background: #fff
 }
 
-.mc-main .current-day {
+.mc-main.refresh .current-day {
     background: #ffc
 }
 
-.mc-main .current-day .mc-date {
+.mc-main.refresh .current-day .mc-date {
     color: #000;
     background: #ffc
 }
 
-.mc-main .mc-date, .mc-main.mini td {
+.mc-main.refresh .mc-date, .mc-main.refresh.mini td {
     background: #f6f6f6
 }
 
-.mc-main .weekend .mc-date {
+.mc-main.refresh .weekend .mc-date {
     background: #f0f1f5;
     color: #000
 }
 
-.mc-main .details .mc-event-date {
+.mc-main.refresh .details .mc-event-date {
     font-weight: 700;
     font-size: 1.3em;
 }
 
-.mc-main .details .time-block p {
+.mc-main.refresh .details .time-block p {
     padding: 0;
     margin: 0;
 }
@@ -74,7 +74,7 @@ nav .my-calendar-nav ul {
 	column-gap: 0;
 }
 
-.mc-main .my-calendar-nav li a {
+.mc-main.refresh .my-calendar-nav li a {
     color: #fff;
 	padding-left: 8px;
 	padding-right: 8px;
@@ -84,7 +84,7 @@ nav .my-calendar-nav ul {
     background-image: linear-gradient(to bottom, #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #1e69de 100%);
 }
 
-.mc-main .my-calendar-nav li a:hover {
+.mc-main.refresh .my-calendar-nav li a:hover {
     color: #fff;
     text-decoration: underline
 }
@@ -101,7 +101,7 @@ nav .my-calendar-nav ul {
     color: #555
 }
 
-.mc-main .heading, .mc-main .my-calendar-month, .mc-main .my-calendar-week, .mc-main .mc-single {
+.mc-main.refresh .heading, .mc-main.refresh .my-calendar-month, .mc-main.refresh .my-calendar-week, .mc-main.refresh .mc-single {
     background: #f6f6f6;
     background: linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(241, 241, 241, 1) 50%, rgba(225, 225, 225, 1) 51%, rgba(246, 246, 246, 1) 100%);
     margin: 2px 0;
@@ -111,7 +111,7 @@ nav .my-calendar-nav ul {
     text-align: center;
 }
 
-.mc-main .mc-single {
+.mc-main.refresh .mc-single {
     font-size: 1.1em !important;
     text-align: left;
     padding: 4px
@@ -121,11 +121,11 @@ nav .my-calendar-nav ul {
     height: auto !important
 }
 
-.mc-main th abbr {
+.mc-main.refresh th abbr {
     border-bottom: none
 }
 
-.mc-main td .event-title, .mc-main td .event-title a {
+.mc-main.refresh td .event-title, .mc-main.refresh td .event-title a {
     display: block;
     border-radius: 2px;
     font-size: 12px !important;
@@ -134,32 +134,32 @@ nav .my-calendar-nav ul {
     clear: none;
 }
 
-.mc-main td .event-title a {
+.mc-main.refresh td .event-title a {
     text-decoration: none
 }
 
-.mc-main td .event-title a:hover, .mc-main td .event-title a:focus {
+.mc-main.refresh td .event-title a:hover, .mc-main.refresh td .event-title a:focus {
     text-decoration: underline
 }
 
-.mc-main.mini td .event-title, .mc-main.list li .event-title {
+.mc-main.refresh.mini td .event-title, .mc-main.refresh.list li .event-title {
     font-size: 1em !important
 }
 
-.mc-main.mini td .event-title {
+.mc-main.refresh.mini td .event-title {
     font-weight: 700
 }
 
-.mc-main td .event-title img {
+.mc-main.refresh td .event-title img {
     vertical-align: middle;
     margin: 0 2px 0 0 !important
 }
 
-.mc-main .list-event .event-title {
+.mc-main.refresh .list-event .event-title {
     margin: 0
 }
 
-.mc-main .calendar-event .details, .mc-main .calendar-events {
+.mc-main.refresh .calendar-event .details, .mc-main.refresh .calendar-events {
     top: 25%;
     left: 5%;
     width: 85%;
@@ -168,47 +168,47 @@ nav .my-calendar-nav ul {
     padding: 24px;
 }
 
-.mc-main .calendar-events {
+.mc-main.refresh .calendar-events {
     padding: 10px;
     width: 100%;
     left: -10px
 }
 
-.mc-main .calendar-events .details {
+.mc-main.refresh .calendar-events .details {
     width: 100%;
     padding: 0px !important
 }
 
-.mc-main .details .close {
+.mc-main.refresh .details .close {
     position: absolute;
 	background: #fff;
     right: 1px;
     top: 1px
 }
 
-.mc-main.mini .details .close {
+.mc-main.refresh.mini .details .close {
     position: absolute;
     top: 8px;
     right: 8px
 }
 
-.mc-main .mc-list {
+.mc-main.refresh .mc-list {
     margin: 0;
     padding: 0
 }
 
-.mc-main .mc-list li {
+.mc-main.refresh .mc-list li {
     list-style-type: none;
     list-style-image: none;
     background-image: none
 }
 
-.mc-main .mc-date {
+.mc-main.refresh .mc-date {
     display: block;
     padding: 2px 4px
 }
 
-.mc-main th {
+.mc-main.refresh th {
     font-size: .8em;
     text-transform: uppercase;
     text-align: center;
@@ -222,75 +222,75 @@ nav .my-calendar-nav ul {
     padding: 0
 }
 
-.mc-main .my-calendar-next {
+.mc-main.refresh .my-calendar-next {
     text-align: right
 }
 
-.mc-main .my-calendar-next a {
+.mc-main.refresh .my-calendar-next a {
     border-radius: 0 18px 18px 0
 }
 
-.mc-main .my-calendar-prev a {
+.mc-main.refresh .my-calendar-prev a {
     border-radius: 18px 0 0 18px
 }
 
-.mc-main.mini td .category-icon {
+.mc-main.refresh.mini td .category-icon {
     display: none
 }
 
-.mc-main.mini .mc-date {
+.mc-main.refresh.mini .mc-date {
     padding: 6px 2px !important
 }
 
-.mc-main.mini .event-title {
+.mc-main.refresh.mini .event-title {
     font-size: 1.1em
 }
 
-.mc-main.mini .day-with-date span, .mc-main.mini .day-with-date a, .mc-main.mini .current-day span, .mc-main.mini .current-day a {
+.mc-main.refresh.mini .day-with-date span, .mc-main.refresh.mini .day-with-date a, .mc-main.refresh.mini .current-day span, .mc-main.refresh.mini .current-day a {
     font-size: .9em;
     padding: 1px;
     text-align: center;
 }
 
-.mc-main .mini-event .details span, .mc-main .mini-event .details a {
+.mc-main.refresh .mini-event .details span, .mc-main.refresh .mini-event .details a {
     text-align: left
 }
 
-.mc-main .mini-event .sub-details {
+.mc-main.refresh .mini-event .sub-details {
     margin: 0;
     border-bottom: 1px solid #ccc;
     padding: 2px 0 0;
     margin-bottom: 5px
 }
 
-.mc-main .mini-event .details img {
+.mc-main.refresh .mini-event .details img {
     width: 100%
 }
 
-.mc-main .list-event .details img {
+.mc-main.refresh .list-event .details img {
     width: auto;
     max-width: 100%;
 }
 
-.mc-main.mini .day-with-date a {
+.mc-main.refresh.mini .day-with-date a {
     display: block;
     margin: -2px;
     font-weight: 700;
     text-decoration: underline
 }
 
-.mc-main .nextmonth {
+.mc-main.refresh .nextmonth {
     background: #f6f6f6;
     color: #333;
     opacity: .7
 }
 
-.mc-main .nextmonth .mc-date {
+.mc-main.refresh .nextmonth .mc-date {
     background: #eee;
 	color: #333;
 }
 
-.mc-main .vcard, #mc_event .vcard {
+.mc-main.refresh .vcard, #mc_event .vcard {
     float: right;
     width: 33%;
     margin-left: 12px

@@ -1,10 +1,10 @@
-.mc-main .my-calendar-header, .mc-main .mc_bottomnav {
+.mc-main.twentyfifteen .my-calendar-header, .mc-main.twentyfifteen .mc_bottomnav {
 	background-color: rgba( 0, 0, 0, .15 );
 	color: #000;
 	padding: 2px 10px;
 }
 
-.mc-main .details ul, .mc-main .details ol, .mc-main details li  {
+.mc-main.twentyfifteen .details ul, .mc-main.twentyfifteen .details ol, .mc-main.twentyfifteen details li  {
 	margin: 5px 0 10px 30px;
 }
 
@@ -12,19 +12,19 @@
 	margin: 5px;
 }
 
-.mc-main .my-calendar-header a,
-.mc-main .mc_bottomnav a,
-.mc-main .my-calendar-footer select, .mc-main .my-calendar-footer input,
-.mc-main .my-calendar-header select, .mc-main .my-calendar-header input {
+.mc-main.twentyfifteen .my-calendar-header a,
+.mc-main.twentyfifteen .mc_bottomnav a,
+.mc-main.twentyfifteen .my-calendar-footer select, .mc-main.twentyfifteen .my-calendar-footer input,
+.mc-main.twentyfifteen .my-calendar-header select, .mc-main.twentyfifteen .my-calendar-header input {
 	font-size: 16px !important;
 }
-.mc-main .my-calendar-footer select, .mc-main .my-calendar-footer input,
-.mc-main .my-calendar-header select, .mc-main .my-calendar-header input {
+.mc-main.twentyfifteen .my-calendar-footer select, .mc-main.twentyfifteen .my-calendar-footer input,
+.mc-main.twentyfifteen .my-calendar-header select, .mc-main.twentyfifteen .my-calendar-header input {
 	padding-top: 6px !important;
 	padding-bottom: 6px !important;
 }
 
-.mc-main .my-calendar-header a, .mc-main .mc_bottomnav a {
+.mc-main.twentyfifteen .my-calendar-header a, .mc-main.twentyfifteen .mc_bottomnav a {
 	color: #333;
 	text-decoration: none;
 	border-radius: 5px;
@@ -33,25 +33,25 @@
 	background: linear-gradient(to top, rgba(230, 230, 230, .95) 0%, rgba(250, 250, 250, .95) 70%);
 }
 
-.mc-main .my-calendar-header a:hover, .mc-main .mc_bottomnav a:hover, .mc-main .my-calendar-header a:focus, .mc-main .mc_bottomnav a:focus {
+.mc-main.twentyfifteen .my-calendar-header a:hover, .mc-main.twentyfifteen .mc_bottomnav a:hover, .mc-main.twentyfifteen .my-calendar-header a:focus, .mc-main.twentyfifteen .mc_bottomnav a:focus {
 	color: #fff;
 	text-decoration: underline;
 	background: linear-gradient(to bottom, rgba(125, 125, 125, .95) 0%, rgba( 90, 90, 90, .95) 70%);
 }
 
-.mc-main tr td {
+.mc-main.twentyfifteen tr td {
 	border: 1px solid #f6f6f6;
 	height: 5em;
 }
 
-.mc-main th {
+.mc-main.twentyfifteen th {
 	text-transform: uppercase;
 	padding: 8px 0;
 	background: rgba(0, 0, 0, .8);
 	color: #fff !important;
 }
 
-.mc-main table .current-day .mc-date {
+.mc-main.twentyfifteen table .current-day .mc-date {
 	background: rgba(0, 0, 0, .8) !important;
 	color: #fff;
 }
@@ -256,7 +256,7 @@ nav .my-calendar-nav ul {
 }
 
 /* hCard */
-.mc-main .vcard {
+.mc-main.twentyfifteen .vcard {
 	margin: 0 0 15px 15px;
 	float: right;
 	padding: 20px;
@@ -264,11 +264,11 @@ nav .my-calendar-nav ul {
 	background: rgba( 0, 0, 0, .1 );
 }
 
-.mc-main .vcard .street-address {
+.mc-main.twentyfifteen .vcard .street-address {
 	display: inline;
 }
 
-.mc-main .vcard .street-address:nth-of-type(2):before {
+.mc-main.twentyfifteen .vcard .street-address:nth-of-type(2):before {
 	content: ', ';
 }
 
@@ -279,19 +279,19 @@ nav .my-calendar-nav ul {
 	vertical-align: middle;
 }
 
-.mc-main .mc-list .mc-events {
+.mc-main.twentyfifteen .mc-list .mc-events {
 	list-style-type: none !important;
 	padding: 10px;
 	background: rgba(0, 0, 0, .05);
 	margin: 0;
 }
 
-.mc-main .mc-list .mc-events.odd {
+.mc-main.twentyfifteen .mc-list .mc-events.odd {
 	padding: 10px;
 	background: none;
 }
 
-.mc-main.list .my-calendar-month {
+.mc-main.twentyfifteen.list .my-calendar-month {
 	font-size: 1.4em;
 	background: #000;
 	color: #fff;
@@ -299,28 +299,28 @@ nav .my-calendar-nav ul {
 	text-align: right;
 }
 
-.mc-main .list-event .event-title {
+.mc-main.twentyfifteen .list-event .event-title {
 	margin-top: 10px !important;
 	padding: 5px;
 }
 
-.mc-main .mc-list .event-date {
+.mc-main.twentyfifteen .mc-list .event-date {
 	font-size: 1.1em;
 	font-weight: 600;
 }
 
-.mc-main .list-event {
+.mc-main.twentyfifteen .list-event {
 	margin-top: 1em;
 	clear: both;
 }
 
-.mc-main .list-event .event-title img {
+.mc-main.twentyfifteen .list-event .event-title img {
 	margin-right: .5em;
 	position: relative;
 	top: -1px;
 }
 
-.mc-main .nextmonth .event-title {
+.mc-main.twentyfifteen .nextmonth .event-title {
 	opacity: .7;
 }
 
@@ -336,15 +336,15 @@ nav .my-calendar-nav ul {
 }
 
 /* Mini */
-.mc-main.mini table {
+.mc-main.twentyfifteen.mini table {
 	margin-bottom: 0;
 }
 
-.mc-main.mini tr td {
+.mc-main.twentyfifteen.mini tr td {
 	height: auto;
 }
 
-.mc-main.mini .vcard {
+.mc-main.twentyfifteen.mini .vcard {
 	line-height: 1.5;
 	margin: 0 0 15px;
 	float: none;
