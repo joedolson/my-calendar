@@ -245,7 +245,7 @@ nav .my-calendar-nav ul {
 	border-radius: 0;
 }
 
-.my-calendar-prev a: .mc-icon::before {
+.my-calendar-prev a .mc-icon::before {
 	content: '\25C0 ';
 	margin-right: 4px;
 }
