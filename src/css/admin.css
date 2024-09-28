@@ -226,6 +226,11 @@
 	color: var(--primary-dark);
 }
 
+.mc_edit_links ul {
+	display: flex;
+	gap: 10px;
+}
+
 .mc-main .mc-list .event-date button:hover,
 .mc-main .mc-list .event-date button:focus {
 	background: transparent;
