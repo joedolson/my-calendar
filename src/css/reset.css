@@ -1119,6 +1119,10 @@ ol.mc-search-results li.no-results {
 	display: none !important;
 }
 
+.mc-main.list.has-modal .mc-list .mc-events .list-event {
+	padding: 0;
+}
+
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }
 .mcjs.mc-main .single-event .details, .mcjs.mc-main.list.day .details { display: block; }
 

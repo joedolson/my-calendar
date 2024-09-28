@@ -269,12 +269,11 @@ nav .mc-format ul, nav .mc-time ul, nav .my-calendar-nav ul {
 }
 
 .mc-main.twentyeighteen .mc-list .mc-events.even {
-	padding: 10px;
 	background: rgba( 0,0,0,.03 );
 }
 
 .mc-main.twentyeighteen .list-event .event-title {
-	margin: 0 0 1em!important;
+	margin: 0 0 1em !important;
 }
 
 .mc-main.twentyeighteen .details .sharing {
