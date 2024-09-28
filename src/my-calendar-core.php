@@ -831,15 +831,15 @@ function mc_admin_styles() {
 			wp_enqueue_style( 'my-calendar-admin-style' );
 			if ( '1' !== mc_get_option( 'calendar_javascript' ) ) {
 				$enqueue_mcjs = true;
-				$grid         = 'true';
+				$grid         = ( 'modal' === mc_get_option( 'calendar_javascript' ) ) ? 'modal' : 'true';
 			}
 			if ( '1' !== mc_get_option( 'list_javascript' ) ) {
 				$enqueue_mcjs = true;
-				$list         = 'true';
+				$list         = ( 'modal' === mc_get_option( 'list_javascript' ) ) ? 'modal' : 'true';
 			}
 			if ( '1' !== mc_get_option( 'mini_javascript' ) && 'true' !== mc_get_option( 'open_day_uri' ) ) {
 				$enqueue_mcjs = true;
-				$mini         = 'true';
+				$mini         = ( 'modal' === mc_get_option( 'mini_javascript' ) ) ? 'modal' : 'true';
 			}
 			if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
 				$enqueue_mcjs = true;
