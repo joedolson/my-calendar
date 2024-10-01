@@ -239,6 +239,9 @@ function mc_templates_edit() {
 					<dt><code>{time}</code></dt>
 					<dd><?php esc_html_e( 'Start time for the event.', 'my-calendar' ); ?></dd>
 
+					<dt><code>{timerange}</code></dt>
+					<dd><?php esc_html_e( 'Beginning time to end time; excludes end time if hidden or same as start time.', 'my-calendar' ); ?></dd>
+
 					<dt><code>{date}</code></dt>
 					<dd><?php esc_html_e( 'Date on which the event begins.', 'my-calendar' ); ?></dd>
 
