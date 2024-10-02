@@ -803,6 +803,9 @@ function mc_get_location_coordinates( $location_id = false, $address = array() )
 		$zip     = ( isset( $address['zip'] ) ) ? $address['zip'] : '';
 		$country = ( isset( $address['country'] ) ) ? $address['country'] : '';
 	}
+	if ( ! $street && ! $street2 && ! $city && ! $zip && ! $country ) {
+		return array();
+	}
 
 	$coordinates = Geolocation::get_coordinates( $street, $street2, $city, $zip, $country );
 
