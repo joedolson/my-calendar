@@ -47,3 +47,4 @@ A big thank you to everybody who's contributed to building this plugin!
 * [jongund](https://github.com/jongund)
 * [Dan Kegel](https://kegel.com)
 * [Tomohide Hirakawa](https://github.com/sutefu23)
+* [squash](https://github.com/squash)
