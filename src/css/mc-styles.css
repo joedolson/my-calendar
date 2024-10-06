@@ -80,6 +80,7 @@ ul.links li {
 	padding: 8px 12px;
 	margin: 0;
 	line-height: 1.4;
+	display: flex;
 }
 
 .my-calendar-admin .metabox-holder .mc-postbox > h2 {
@@ -307,6 +308,11 @@ li.datetime-template:nth-of-type(even) {
 	display: none;
 }
 
+p.event_span {
+	display: flex;
+	gap: 4px;
+}
+
 p.event_span.checkboxes {
 	border: 1px solid #c3c4c7;
 	border-radius: 3px;
@@ -326,7 +332,9 @@ ol.mc-repeat-events .buttons {
 }
 
 ol.mc-repeat-events li:last-of-type .buttons {
-	display: block;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 
 ul.mc-file-list ul {
@@ -1348,7 +1356,7 @@ ul.mc-variables li:has(.wp-picker-active) label {
 }
 
 .my-calendar-contextual-help .dashicons:not( h2 .dashicons ) {
-	line-height: inherit;
+	line-height: 1;
 	height: auto;
 	width: auto;
 }
@@ -1362,6 +1370,10 @@ ul.mc-variables li:has(.wp-picker-active) label {
 
 .wrap .notice a.my-calendar-contextual-help {
 	display: inline;
+}
+
+.my-calendar-contextual-help .dashicons {
+	text-decoration: none;
 }
 
 .wrap a.my-calendar-contextual-help .help-label-text {
