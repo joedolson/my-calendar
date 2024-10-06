@@ -84,20 +84,6 @@
 	padding-left: 24px;
 }
 
-.mc-main.twentyeighteen .mc-format a .mc-icon::before, .mc-main.twentyeighteen .mc-format span .mc-icon::before {
-	font-family: dashicons;
-	margin-right: 3px;
-	vertical-align: middle;
-}
-
-.mc-main.twentyeighteen .mc-format .list .mc-icon::before {
-	content: "\f163";
-}
-
-.mc-main.twentyeighteen .mc-format .grid .mc-icon::before {
-	content: "\f508";
-}
-
 .mc-main.twentyeighteen .calendar-event .details, .mc-main.twentyeighteen .calendar-events {
 	left: 5%;
 	width: 90%;
@@ -143,13 +129,6 @@
 .mc-main.twentyeighteen.mini .time-block {
 	float: none;
 	font-size: 14px;
-}
-
-.mc-main.twentyeighteen .time-block .mc-icon::before {
-	font-family: dashicons;
-	content: "\f469";
-	vertical-align: top;
-	margin-right: 4px;
 }
 
 .mc-main.twentyeighteen .mc-date {
@@ -216,20 +195,6 @@ nav .mc-format ul, nav .mc-time ul, nav .my-calendar-nav ul {
 	column-gap: 0;
 }
 
-.mc-export .rss a .mc-icon::before {
-	font-family: 'dashicons';
-	vertical-align: middle;
-	margin-right: 3px;
-	content: '\f303';
-}
-
-.mc-export .ics a .mc-icon::before {
-	font-family: 'dashicons';
-	vertical-align: middle;
-	margin-right: 3px;
-	content: '\f508';
-}
-
 /* hCard */
 .mc-main.twentyeighteen .location {
 	clear: right;
@@ -250,16 +215,6 @@ nav .mc-format ul, nav .mc-time ul, nav .my-calendar-nav ul {
 	float: none;
 	width: 100%;
 	max-width: 100%;
-}
-
-
-/* List View */
-.mc-list .current-day .event-date .mc-icon::before {
-	content: "\f345";
-	margin-right: 5px;
-	font-family: dashicons;
-	vertical-align: middle;
-	margin-left: -5px;
 }
 
 .mc-main.twentyeighteen .mc-list .mc-events {
@@ -289,20 +244,6 @@ nav .mc-format ul, nav .mc-time ul, nav .my-calendar-nav ul {
 	font-size: 14px;
 	padding: 0 .25em 0 0;
 	margin-bottom: 10px;
-}
-
-.mc-main.twentyeighteen .sharing .ical a .mc-icon::before, .mc-main.twentyeighteen .sharing .gcal a .mc-icon::before {
-	font-family: 'dashicons';
-	content: "\f502";
-	margin-right: 3px;
-	vertical-align: middle;
-}
-
-.mc-main.twentyeighteen .sharing .mc-details a .mc-icon::before {
-	font-family: 'dashicons';
-	content: "\f242";
-	margin-right: 3px;
-	vertical-align: middle;
 }
 
 .mc-main.twentyeighteen .mc-list .event-date {

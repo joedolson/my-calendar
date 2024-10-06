@@ -42,37 +42,8 @@
 	font-size: 24px;
 }
 
-.my-calendar-prev a .mc-icon::before,
-.my-calendar-next a .mc-icon::before,
-.mc-export a .mc-icon::before,
-.mc-main.twentytwenty .time-block .mc-icon::before,
-.mc-main.twentytwenty .sharing .ical a .mc-icon::before,
-.mc-main.twentytwenty .sharing .gcal a .mc-icon::before,
-.mc-main.twentytwenty .sharing .mc-details a .mc-icon::before,
-.mc-main.twentytwenty .mc-format a .mc-icon::before,
-.mc-main.twentytwenty .mc-format span .mc-icon::before,
-.mc-main.twentytwenty .mc-print a .mc-icon::before,
-.mc-main.twentytwenty .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
-	font-family: 'dashicons';
-	vertical-align: middle;
-	position: relative;
-	margin-right: 2px;
-}
-
 .mc-main.twentytwenty .event-title .has-image {
 	padding-left: 24px;
-}
-
-.mc-main.twentytwenty .mc-print a .mc-icon::before {
-	content: "\f497";
-}
-
-.mc-main.twentytwenty .mc-format .list .mc-icon::before {
-	content: "\f163";
-}
-
-.mc-main.twentytwenty .mc-format .grid .mc-icon::before {
-	content: "\f508";
 }
 
 .mc-main.twentytwenty .calendar-event .details, .mc-main.twentytwenty .calendar-events {
@@ -123,16 +94,6 @@
 	display: inline-block;
 }
 
-.mc-main.twentytwenty .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
-	content: "\f132";
-	top: 0;
-	margin-right: 3px;
-}
-
-.mc-main.twentytwenty .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
-	content: "\f460";
-}
-
 .mc-main.twentytwenty .mc-list .details > div {
 	padding: 0 .5em;
 }
@@ -178,12 +139,6 @@
 	background: #fff;
 	background: var(--primary-light);
 	padding: 0 .25em !important;
-}
-
-.mc-main.twentytwenty .time-block .mc-icon::before {
-	content: "\f469";
-	vertical-align: top;
-	margin-right: 4px;
 }
 
 .mc-main.twentytwenty .time-block .mc-event-date {
@@ -256,23 +211,6 @@
 	border-right: 1px solid #bbb;
 }
 
-.mc-export a .mc-icon::before {
-	margin-right: 3px;
-}
-
-.mc-export .rss a .mc-icon::before {
-	content: '\f303';
-}
-
-.mc-export .ics a .mc-icon::before {
-	content: '\f508';
-}
-
-.mc-download .google a .mc-icon::before,
-.mc-download .ical a .mc-icon::before {
-	content: "\f316";
-}
-
 /* Category Key */
 .mc-main.twentytwenty .category-key h3 {
 	margin: 0 0 10px 0 !important;
@@ -328,14 +266,6 @@
 .mc-main.twentytwenty .sharing p {
 	display: inline-block;
 	padding: .5em .5em .5em 0;
-}
-
-.mc-main.twentytwenty .sharing .ical a .mc-icon::before, .mc-main.twentytwenty .sharing .gcal a .mc-icon::before {
-	content: "\f502";
-}
-
-.mc-main.twentytwenty .sharing .mc-details a .mc-icon::before {
-	content: "\f242";
 }
 
 .mc-main.twentytwenty .mc-list .event-date {

@@ -83,35 +83,6 @@
 	font-size: 24px;
 }
 
-.my-calendar-prev a .mc-icon::before,
-.my-calendar-next a .mc-icon::before,
-.mc-export a .mc-icon::before,
-.mc-main.twentytwentyone .time-block .mc-icon::before,
-.mc-main.twentytwentyone .sharing .ical a .mc-icon::before,
-.mc-main.twentytwentyone .sharing .gcal a .mc-icon::before,
-.mc-main.twentytwentyone .sharing .mc-details a .mc-icon::before,
-.mc-main.twentytwentyone .mc-format a .mc-icon::before,
-.mc-main.twentytwentyone .mc-format span .mc-icon::before,
-.mc-main.twentytwentyone .mc-print a .mc-icon::before,
-.mc-main.twentytwentyone .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
-	font-family: 'dashicons';
-	vertical-align: middle;
-	position: relative;
-	margin-right: 2px;
-}
-
-.mc-main.twentytwentyone .mc-print a .mc-icon::before {
-	content: "\f497";
-}
-
-.mc-main.twentytwentyone .mc-format .list .mc-icon::before {
-	content: "\f163";
-}
-
-.mc-main.twentytwentyone .mc-format .grid .mc-icon::before {
-	content: "\f508";
-}
-
 .mc-main.twentytwentyone .calendar-event .details, .mc-main.twentytwentyone .calendar-events {
 	position: absolute;
 	left: 0;
@@ -149,16 +120,6 @@
 
 .mc-main.twentytwentyone .mc-list .event-date button {
 	display: inline-block;
-}
-
-.mc-main.twentytwentyone .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
-	content: "\f132";
-	top: 0;
-	margin-right: 3px;
-}
-
-.mc-main.twentytwentyone .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
-	content: "\f460";
 }
 
 .mc-main.twentytwentyone .mc-list .details .address {
@@ -215,12 +176,6 @@
 	padding: 0 .25em !important;
 }
 
-.mc-main.twentytwentyone .time-block .mc-icon::before {
-	content: "\f469";
-	vertical-align: top;
-	margin-right: 4px;
-}
-
 .mc-main.twentytwentyone .nextmonth {
 	background: rgba( 200,200,200,.1 );
 }
@@ -242,23 +197,6 @@
 	border-left: 1px solid #bbb;
 	border-right: 1px solid #bbb;
 	border-radius: 0;
-}
-
-.mc-export a .mc-icon::before {
-	margin-right: 3px;
-}
-
-.mc-export .rss a .mc-icon::before {
-	content: '\f303';
-}
-
-.mc-export .ics a .mc-icon::before {
-	content: '\f508';
-}
-
-.mc-download .google a .mc-icon::before,
-.mc-download .ical a .mc-icon::before {
-	content: "\f316";
 }
 
 .details .longdesc {
@@ -318,14 +256,6 @@
 	font-size: 14px;
 	padding: 0 .25em 0 0;
 	margin-bottom: 10px;
-}
-
-.mc-main.twentytwentyone .sharing .ical a .mc-icon::before, .mc-main.twentytwentyone .sharing .gcal a .mc-icon::before {
-	content: "\f502";
-}
-
-.mc-main.twentytwentyone .sharing .mc-details a .mc-icon::before {
-	content: "\f242";
 }
 
 .mc-main.twentytwentyone .mc-list .event-date {
