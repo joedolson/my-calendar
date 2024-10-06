@@ -161,7 +161,6 @@
 }
 
 /* Date/times */
-
 .mc-main.mini .time-block p {
 	position: relative;
 	display: block; 
@@ -169,6 +168,7 @@
 	top: 10px;
 	right: 0;
 }
+
 .mc-main .time-block p {
 	color: #000;
 	display: inline-block;
