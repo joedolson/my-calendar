@@ -355,6 +355,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: 4px;
+	row-gap: 4px;
 }
 
 .my-calendar-today a .mc-icon::before,
@@ -365,7 +366,10 @@
 }
 
 .my-calendar-today a .mc-icon::before {
-	content: '';
+	content: '\f145';
+	width: 0px;
+	color: transparent;
+	display: inline-block;
 }
 
 .my-calendar-prev a .mc-icon::before {
