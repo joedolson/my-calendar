@@ -17,6 +17,15 @@
     border: 1px solid #a9e3ff;
 }
 
+dialog.my-calendar-modal .js-modal-title-container {
+	background: #edf7ff;
+	border: 1px solid #a9e3ff;
+}
+
+.my-calendar-modal .mc_edit_links, .mc-main .mc_edit_links, .mc-event .mc_edit_links {
+	background: #bd7e;
+	border: 1px solid #9b5;
+}
 
 .mc-main.my-calendar .list-event .details, .mc-main.my-calendar td {
     border: 1px solid #eee;
