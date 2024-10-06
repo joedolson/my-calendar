@@ -134,7 +134,7 @@
 	border-top: 1px solid var(--highlight-dark);
 }
 
-.mc-main .details:not(.single-event .details) {
+.mc-main .details:not(.single-event .details, .card-event .details) {
 	padding: 24px;
 }
 
