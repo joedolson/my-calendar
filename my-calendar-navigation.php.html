@@ -379,7 +379,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 	 *
 	 * @return {string}
 	 */
-	$today_link = apply_filters( 'mc_today_link', '&lt;li class="my-calendar-today">&lt;a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow" class="today' . $active . '"' . $current . '>' . wp_kses_post( $today_text ) . '&lt;/a>&lt;/li>' );
+	$today_link = apply_filters( 'mc_today_link', '&lt;li class="my-calendar-today">&lt;a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow" class="today' . $active . '"' . $current . '>&lt;span class="mc-icon" aria-hidden="true">&lt;/span>' . wp_kses_post( $today_text ) . '&lt;/a>&lt;/li>' );
 
 	$nav = '
 		&lt;div class="my-calendar-nav">
