@@ -25,5 +25,6 @@
 	<?php mc_template_author( $data, 'single' ); ?>
 	<?php mc_template_host( $data, 'single' ); ?>
 	<?php mc_template_share( $data, 'single' ); ?>
+	<?php mc_template_return( $data, 'single' ); ?>
 </div>
 
