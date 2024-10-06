@@ -1327,7 +1327,7 @@ function mc_status_links( $allow_filters ) {
 		<li>
 			<a ' . $arc_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ) . '">' . $arc_text . '</a>
 		</li>';
-	if ( function_exists( 'akismet_http_post' ) && $allow_filters ) {
+	if ( ( function_exists( 'akismet_http_post' ) || ( 0 < (int) $counts['spam'] ) ) && $allow_filters ) {
 		$output .= '
 		<li>
 			<a ' . $spa_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=flagged&amp;filter=1' ) . '">' . $spa_text . '</a>
