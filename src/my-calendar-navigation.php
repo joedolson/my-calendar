@@ -163,7 +163,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	if ( in_array( 'print', $used, true ) ) {
 		$print_add    = array_merge( $add, array( 'cid' => 'mc-print-view' ) );
 		$mc_print_url = mc_build_url( $print_add, $subtract, home_url() );
-		$print        = "<div class='mc-print'><a id='mc_print-$main_class' href='$mc_print_url'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
+		$print        = "<div class='mc-print'><a id='mc_print-$main_class' href='$mc_print_url' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 	}
 
 	// Set up format toggle.
@@ -431,7 +431,7 @@ function mc_category_key( $category, $id = '' ) {
 			// If category colors are ignored, don't render HTML for them.
 			$cat_key .= $cat_name;
 		}
-		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $category_id . '-' . $id . '" href="' . esc_url( $url ) . '" ' . $aria_current . '>' . $cat_key . '</a></li>';
+		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $category_id . '-' . $id . '" href="' . esc_url( $url ) . '" ' . $aria_current . ' rel="nofollow">' . $cat_key . '</a></li>';
 	}
 	/**
 	 * Filter text label for 'All Categories'.
@@ -445,7 +445,7 @@ function mc_category_key( $category, $id = '' ) {
 	$all = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
 	if ( isset( $_GET['mcat'] ) ) {
 		$raw_url = remove_query_arg( 'mcat', mc_get_current_url() );
-		$key    .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), $raw_url ) ) ) . "'><span>" . $all . '</span></a></li>';
+		$key    .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), $raw_url ) ) ) . "' rel='nofollow'><span>" . $all . '</span></a></li>';
 	} else {
 		$key .= "<li class='all-categories'><span class='mc-active' id='mc_cat_all-$id' tabindex='-1'>" . $all . '</span></li>';
 	}
@@ -479,8 +479,8 @@ function mc_sub_links() {
 	$google = add_query_arg( 'cid', $google, 'https://www.google.com/calendar/render' );
 	$ical   = str_replace( $search, $replace, get_feed_link( 'my-calendar-ical' ) );
 
-	$sub_google = "<li class='ics google'><a href='" . esc_url( $google ) . "'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
-	$sub_ical   = "<li class='ics ical'><a href='" . esc_url( $ical ) . "'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Subscribe in </span>iCal', 'my-calendar' ) . '</a></li>';
+	$sub_google = "<li class='ics google'><a href='" . esc_url( $google ) . "' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
+	$sub_ical   = "<li class='ics ical'><a href='" . esc_url( $ical ) . "' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Subscribe in </span>iCal', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-subscribe'>
 	<ul>$sub_google$sub_ical</ul>
@@ -511,8 +511,8 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	$ics  = add_query_arg( 'cid', $ics, 'https://www.google.com/calendar/render' );
 	$ics2 = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
 
-	$google = "<li class='ics google'><a href='" . $ics . "'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Export to </span>Google', 'my-calendar' ) . '</a></li>';
-	$ical   = "<li class='ics ical'><a href='" . $ics2 . "'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Export to </span>iCal', 'my-calendar' ) . '</a></li>';
+	$google = "<li class='ics google'><a href='" . $ics . "' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Export to </span>Google', 'my-calendar' ) . '</a></li>';
+	$ical   = "<li class='ics ical'><a href='" . $ics2 . "' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Export to </span>iCal', 'my-calendar' ) . '</a></li>';
 
 	$output = "<div class='mc-export mc-download'>
 	<ul>$google$ical</ul>
@@ -879,7 +879,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		$url     = mc_build_url( array( 'mcat' => 'all' ), array() );
 		$output .= ( 'list' === $show ) ? "
 		<ul>
-			<li><a href='$url'>" . __( 'All Categories', 'my-calendar' ) . '</a></li>' : $public_form . '
+			<li><a href='$url' rel='nofollow'>" . __( 'All Categories', 'my-calendar' ) . '</a></li>' : $public_form . '
 			<label for="category">' . __( 'Categories', 'my-calendar' ) . ' ' . $admin_label . '</label>
 			<select' . $admin_fields . ' id="category">
 			<option value="all">' . __( 'All Categories', 'my-calendar' ) . '</option>' . "\n";
@@ -1163,17 +1163,17 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
 		if ( in_array( 'calendar', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
 		}
 		if ( in_array( 'card', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'card' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
 		}
 		if ( in_array( 'list', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'list' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
 		}
 		$toggle .= '</ul>
 		</div>';
@@ -1285,9 +1285,9 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		$aria_week    = ( 'week' === $time ) ? " aria-$aria='true'" : '';
 		$aria_day     = ( 'day' === $time ) ? " aria-$aria='true'" : '';
 
-		$toggle .= "<li><a id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
-		$toggle .= "<li><a id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
-		$toggle .= "<li><a id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
+		$toggle .= "<li><a rel='nofollow' id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a rel='nofollow' id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
+		$toggle .= "<li><a rel='nofollow' id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
 		$toggle .= '</ul></div>';
 	} else {
 		$toggle = '';
