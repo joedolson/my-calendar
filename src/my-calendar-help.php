@@ -317,6 +317,7 @@ function mc_navigation_keywords( $return_type = 'array' ) {
 		return $keywords;
 	} else {
 		$output = '';
+		unset( $keywords['calendar'] );
 		foreach ( $keywords as $key => $desc ) {
 			$output .= '<li><code>' . $key . '</code>' . $desc . '</li>';
 		}
