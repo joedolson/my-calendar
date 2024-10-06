@@ -114,7 +114,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Misc. design changes to improve icon alignments and sizing.
 * Change: Misc. changes to standardize rendering of icons between different stylesheets.
 * Change: Add `rel="nofollow"` to filtering and navigation links to reduce crawling on duplicate views.
-* Change: Add CSS prefix to stylesheets so additional stylesheets override reset.css
+* Change: Add CSS prefix to stylesheets so additional stylesheets override reset.css.
+* Change: Query location upcoming events by ID, not name.
 * Docs: Add `timerange` to in-plugin docs list.
 * Bug fix: Don't perform geolocation calls if passed fields have no values.
 * Bug fix: Missing CSS variables & script localization in admin grid view.
