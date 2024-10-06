@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.5.16
+Stable tag: 3.5.17
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -107,6 +107,18 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.5.17 =
+
+* Accessibility: Move icon rendering to an `aria-hidden` element instead of directly generated content.
+* Change: Misc. design changes to improve icon alignments and sizing.
+* Change: Misc. changes to standardize rendering of icons between different stylesheets.
+* Change: Add `rel="nofollow"` to filtering and navigation links to reduce crawling on duplicate views.
+* Change: Add CSS prefix to stylesheets so additional stylesheets override reset.css
+* Docs: Add `timerange` to in-plugin docs list.
+* Bug fix: Don't perform geolocation calls if passed fields have no values.
+* Bug fix: Missing CSS variables & script localization in admin grid view.
+* Bug fix: Style modal edit links in admin.
 
 = 3.5.16 =
 

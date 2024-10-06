@@ -17,7 +17,7 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.5.16
+ * Version:     3.5.17
  */
 
 /*
@@ -54,7 +54,7 @@ function mc_get_version( $version = true ) {
 	if ( ! $version ) {
 		return get_option( 'mc_version', '' );
 	}
-	return '3.5.16';
+	return '3.5.17';
 }
 
 define( 'MC_DEBUG', false );
