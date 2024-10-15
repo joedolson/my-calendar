@@ -108,6 +108,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.5.18 =
+
+* Bug fix: PHP template for location single misnamed with incorrectly called variables.
+* 
+
 = 3.5.17 =
 
 * Accessibility: Move icon rendering to an `aria-hidden` element instead of directly generated content.
