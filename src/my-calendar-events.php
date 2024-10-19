@@ -90,7 +90,7 @@ function mc_create_guid( $event ) {
 }
 
 /**
- * Function for extracting event timestamps from MySQL.
+ * Function for extracting event timestamps from MySQL. My Calendar expects the MySQL server to be in UTC.
  *
  * @param bool $test Test offset time.
  *
