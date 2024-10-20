@@ -94,7 +94,7 @@ function mc_php_templates_docs() {
 				</li>
 				<li><code>/mc-templates/location/</code>
 				<ul>
-					<li><code>/mc-templates/location/location-single.php</code></li>
+					<li><code>/mc-templates/location/single.php</code></li>
 				</ul>
 			</li>
 		</ul>';
