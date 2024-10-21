@@ -184,15 +184,6 @@ require __DIR__ . '/my-calendar-help.php';
 require __DIR__ . '/my-calendar-ajax.php';
 require __DIR__ . '/my-calendar-import.php';
 
-add_action( 'plugins_loaded', 'mc_load_textdomain' );
-/**
- * Load internationalization.
- */
-function mc_load_textdomain() {
-	// Shipped translations removed @v3.3.0.
-	load_plugin_textdomain( 'my-calendar' );
-}
-
 // Add actions.
 add_action( 'admin_menu', 'my_calendar_menu' );
 add_action( 'wp_head', 'mc_head' );
