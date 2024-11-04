@@ -899,7 +899,7 @@ function mc_manage_categories() {
 		&lt;/thead>
 		&lt;?php
 		foreach ( $categories as $cat ) {
-			$cat_name   = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
+			$cat_name = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
 			?>
 		&lt;tr>
 			&lt;th scope="row">&lt;?php echo absint( $cat->category_id ); ?>&lt;/th>
@@ -960,7 +960,7 @@ function mc_manage_categories() {
 				if ( ! $icon ) {
 					$icon_bg = 'transparent';
 				}
-				$style = ( '' !== $icon_bg ) ? ' style="background-color:' . esc_attr( $icon_bg ) . '"' : '';
+				$style = ( '' !== $icon_bg ) ? ' style="text-align:center;vertical-align:middle;background-color:' . esc_attr( $icon_bg ) . '"' : '';
 				?>
 			&lt;td&lt;?php echo $style; ?>>&lt;?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?>&lt;/td>
 				&lt;?php
@@ -974,7 +974,7 @@ function mc_manage_categories() {
 					$fg = '';
 				}
 				?>
-			&lt;td style="background-color:&lt;?php echo esc_attr( $bg ); ?>;color: &lt;?php echo esc_attr( $fg ); ?>;">&lt;?php echo ( '#' !== $background ) ? esc_attr( $background ) : 'N/A'; ?>&lt;/td>
+			&lt;td style="font-size:1.3rem;text-align:center;vertical-align:middle;background-color:&lt;?php echo esc_attr( $bg ); ?>;color: &lt;?php echo esc_attr( $fg ); ?>;">&lt;?php echo ( '#' !== $background ) ? esc_attr( $background ) : 'N/A'; ?>&lt;/td>
 				&lt;?php
 			}
 			?>
