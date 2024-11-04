@@ -934,7 +934,7 @@ function mc_manage_categories() {
 				if ( ! $icon ) {
 					$icon_bg = 'transparent';
 				}
-				$style = ( '' !== $icon_bg ) ? ' style="background-color:' . esc_attr( $icon_bg ) . '"' : '';
+				$style = ( '' !== $icon_bg ) ? ' style="text-align:center;vertical-align:middle;background-color:' . esc_attr( $icon_bg ) . '"' : '';
 				?>
 			<td<?php echo $style; ?>><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 				<?php
@@ -948,7 +948,7 @@ function mc_manage_categories() {
 					$fg = '';
 				}
 				?>
-			<td style="background-color:<?php echo esc_attr( $bg ); ?>;color: <?php echo esc_attr( $fg ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : 'N/A'; ?></td>
+			<td style="font-size:1.3rem;text-align:center;vertical-align:middle;background-color:<?php echo esc_attr( $bg ); ?>;color: <?php echo esc_attr( $fg ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : 'N/A'; ?></td>
 				<?php
 			}
 			?>
