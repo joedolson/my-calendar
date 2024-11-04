@@ -382,6 +382,25 @@ ul.mc-file-list ul li {
 	margin-right: 180px
 }
 
+.mc-help-links .help:nth-of-type(1) {
+	display: flex;
+	gap: 10px;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+
+.mc-help-links .help:nth-of-type(1) a {
+	padding: 10px;
+	border: 1px solid;
+	box-shadow: 4px 4px 0 #787c82;
+}
+
+.mc-help-links .help:nth-of-type(1) a:hover,
+.mc-help-links .help:nth-of-type(1) a:focus {
+	box-shadow: 4px 4px 0 #007eb3;
+	background-color: #f0f0f1;
+}
+
 .my-calendar-admin .event_description {
 	margin-bottom: 1em;
 }
