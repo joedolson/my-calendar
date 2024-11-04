@@ -40,7 +40,8 @@ function mc_update_category( $field, $data, $category ) {
  * @return array images in directory.
  */
 function mc_directory_list( $directory ) {
-	if ( ! function_exists( 'mime_content_type' ) ) {
+	// If icons are disabled, don't parse the directory.
+	if ( ! function_exists( 'mime_content_type' ) || ( 'true' === mc_get_option( 'hide_icons' ) ) ) {
 		return array();
 	}
 	if ( ! file_exists( $directory ) ) {
@@ -499,7 +500,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								<div class="notice"><p><?php _e( 'Category Icons require the <code>mime_content_type</code> function, which is not available on your system.', 'my-calendar' ); ?></p></div>
 								<?php
 							}
-							?>
+							if ( 'true' !== mc_get_option( 'hide_icons' ) ) {
+								?>
 							<input type='hidden' name='category_icon' id="mc_category_icon" value='<?php echo esc_attr( $icon ); ?>' />
 							<div class="category-icon-selector">
 								<label for="cat_icon"><?php esc_html_e( 'Category Icon', 'my-calendar' ); ?></label>
@@ -509,7 +511,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								</div>
 								<?php mc_help_link( __( 'Show Category Icons', 'my-calendar' ), __( 'Category Icons', 'my-calendar' ), 'Category Icons', 6 ); ?>
 							</div>
-							<?php
+								<?php
+							}
 							if ( 'add' === $view ) {
 								$private_checked = false;
 							} else {

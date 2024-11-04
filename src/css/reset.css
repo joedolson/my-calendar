@@ -1510,7 +1510,6 @@ body.mc-no-scroll {
   }  
 }
 
-
 /* Base responsive styles. Migrated to main plugin 12/10/2023 */
 @media screen and ( max-width: 720px ) {
 	.mc-main:not(.mini) thead {
