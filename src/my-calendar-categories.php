@@ -873,7 +873,7 @@ function mc_manage_categories() {
 		</thead>
 		<?php
 		foreach ( $categories as $cat ) {
-			$cat_name   = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
+			$cat_name = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
 			?>
 		<tr>
 			<th scope="row"><?php echo absint( $cat->category_id ); ?></th>
