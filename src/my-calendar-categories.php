@@ -491,8 +491,14 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							<p>
 								<label for="cat_name"><?php esc_html_e( 'Category Name', 'my-calendar' ); ?></label>
 								<input type="text" id="cat_name" name="category_name" class="input" size="30" value="<?php echo esc_attr( $cat_name ); ?>"/>
+								<?php
+								if ( 'default' !== mc_get_option( 'apply_color' ) ) {
+									?>
 								<label for="cat_color"><?php esc_html_e( 'Color', 'my-calendar' ); ?></label>
 								<input type="text" id="cat_color" name="category_color" class="mc-color-input" size="10" maxlength="7" value="<?php echo ( '#' !== $color ) ? esc_attr( $color ) : ''; ?>"/>
+									<?php
+								}
+								?>
 							</p>
 							<?php
 							if ( ! function_exists( 'mime_content_type' ) ) {
@@ -651,8 +657,8 @@ function mc_category_settings() {
 				'name'    => 'mc_apply_color',
 				'label'   => array(
 					'default'    => __( 'Hide category colors', 'my-calendar' ),
-					'font'       => __( 'Title text color.', 'my-calendar' ),
-					'background' => __( 'Title background color.', 'my-calendar' ),
+					'font'       => __( 'Event titles and icons use category color for text.', 'my-calendar' ),
+					'background' => __( 'Event titles and icons use category color as a background color.', 'my-calendar' ),
 				),
 				'default' => 'default',
 				'type'    => 'radio',
@@ -820,6 +826,7 @@ function mc_manage_categories() {
 	}
 	$default_category = (string) mc_get_option( 'default_category' );
 	$hide_icon        = ( 'true' === mc_get_option( 'hide_icons' ) ) ? true : false;
+	$hide_color       = ( 'default' === mc_get_option( 'apply_color' ) ) ? true : false;
 	// We pull the categories from the database.
 	$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( empty( $categories ) ) {
@@ -856,15 +863,16 @@ function mc_manage_categories() {
 			<th scope="col"><?php esc_html_e( 'Icon', 'my-calendar' ); ?></th>
 				<?php
 			}
-			?>
+			if ( 'default' !== mc_get_option( 'apply_color' ) ) {
+				?>
 			<th scope="col"><?php esc_html_e( 'Color', 'my-calendar' ); ?></th>
+				<?php
+			}
+			?>
 		</tr>
 		</thead>
 		<?php
 		foreach ( $categories as $cat ) {
-			$icon       = ( ! $hide_icon ) ? mc_category_icon( $cat ) : '';
-			$background = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '' . $cat->category_color;
-			$foreground = mc_inverse_color( $background );
 			$cat_name   = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
 			?>
 		<tr>
@@ -911,6 +919,12 @@ function mc_manage_categories() {
 			<td><?php echo wp_kses_post( $count ); ?></td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
 			<?php
+			if ( ! $hide_icon || ! $hide_color ) {
+				$has_color  = ( '' !== $cat->category_color && strlen( $cat->category_color ) > 2 ) ? true : false;
+				$icon       = ( ! $hide_icon ) ? mc_category_icon( $cat ) : '';
+				$background = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '' . $cat->category_color;
+				$foreground = ( $has_color ) ? mc_inverse_color( $background ) : 'transparent';
+			}
 			if ( ! $hide_icon ) {
 				if ( 'background' === mc_get_option( 'apply_color' ) ) {
 					$icon_bg = $background;
@@ -925,8 +939,19 @@ function mc_manage_categories() {
 			<td<?php echo $style; ?>><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 				<?php
 			}
+			if ( ! $hide_color ) {
+				if ( $cat->category_color ) {
+					$bg = ( 'background' === mc_get_option( 'apply_color' ) ) ? $background : $foreground;
+					$fg = ( 'background' === mc_get_option( 'apply_color' ) ) ? $foreground : $background;
+				} else {
+					$bg = 'transparent';
+					$fg = '';
+				}
+				?>
+			<td style="background-color:<?php echo esc_attr( $bg ); ?>;color: <?php echo esc_attr( $fg ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : 'N/A'; ?></td>
+				<?php
+			}
 			?>
-			<td style="background-color:<?php echo esc_attr( $background ); ?>;color: <?php echo esc_attr( $foreground ); ?>;"><?php echo ( '#' !== $background ) ? esc_attr( $background ) : ''; ?></td>
 		</tr>
 			<?php
 		}
