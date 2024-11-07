@@ -166,6 +166,7 @@
 
 .mc-main.twentytwenty .nextmonth .mc-date {
 	background: transparent;
+	color: var(--secondary-dark);
 }
 
 .mc-main.twentytwenty .current-day {
