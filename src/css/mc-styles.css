@@ -1677,6 +1677,23 @@ div.mc-search {
 .mc-flex {
 	display: flex;
 	align-items: center;
+	gap: 16px;
+	justify-content: center;
+}
+
+.mc-flex.mc-social {
+	margin: 0;
+	align-items: center;
+}
+
+.mc-flex.mc-social li {
+	margin: 0;
+}
+
+.mc-flex.mc-social a {
+	display: block;
+	padding: 3px;
+	border-radius: 3px;
 }
 
 fieldset.mc-flex {
