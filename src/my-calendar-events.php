@@ -669,7 +669,7 @@ function mc_get_instance_data( $instance_id ) {
  * Fetch the instance of an event closest to today.
  *
  * @param int  $id Event core ID.
- * @param bool $next If true, return closest event that's in the future.
+ * @param bool $next If true, return closest event that's in the future. If false, return the event object for $id.
  *
  * @return object Event
  */
