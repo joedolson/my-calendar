@@ -1550,7 +1550,7 @@ function mc_category_class( $event_or_category, $prefix ) {
 		$id   = $event_or_category->category_id;
 	}
 
-	$class = sanitize_html_class( trim( str_replace( ' ', '-', $name ) ) );
+	$class = sanitize_html_class( str_replace( ' ', '-', trim( $name ) ) );
 	$class = ( '' === $class ) ? $id : $class;
 
 	return $prefix . strtolower( $class );
