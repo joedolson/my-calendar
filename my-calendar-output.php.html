@@ -884,8 +884,9 @@ function mc_get_event_classes( $event, $type ) {
 	$group     = ( 0 !== (int) $event->event_group_id ) ? 'mc-group-' . $event->event_group_id : 'ungrouped';
 	$root      = 'mc-event-' . $event->event_id;
 	$category  = mc_category_class( $event, 'mc_' );
+	$location  = mc_location_class( $event, 'mc_' );
 
-	$classes = array( 'mc-' . $uid, $type . '-event', $category, $rel, $primary, $recurring, $length, $start, $group, $root );
+	$classes = array( 'mc-' . $uid, $type . '-event', $category, $location, $rel, $primary, $recurring, $length, $start, $group, $root );
 
 	if ( $is_today ) {
 		$classes[] = $is_today;
