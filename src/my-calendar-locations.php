@@ -1828,6 +1828,32 @@ function mc_default_countries( $query = '' ) {
 }
 
 /**
+ * Generate location class for a given event. Must generate a single class; multiple classes would require refactoring to function usage.
+ *
+ * @param object|array $event_or_location Usually an event, can be location.
+ * @param string       $prefix            Prefix to append to class; varies on context.
+ *
+ * @return string a single class
+ */
+function mc_location_class( $event_or_location, $prefix ) {
+	if ( property_exists( $event_or_location, 'location' ) ) {
+		$location = $event_or_location->location;
+		$name     = $location->location_label;
+		$id       = $location->location_id;
+	} elseif ( property_exists( $event_or_location, 'location_label' ) ) {
+		$name = $event_or_location->location_label;
+		$id   = $event_or_location->location_id;
+	} else {
+		$name = 'no-location';
+	}
+
+	$class = sanitize_html_class( str_replace( ' ', '-', trim( $name ) ) );
+	$class = ( '' === $class ) ? 'location-' . $id : $class;
+
+	return $prefix . strtolower( $class );
+}
+
+/**
  * Filter theme content to display My Calendar location data.
  *
  * @param string $content Post content.
