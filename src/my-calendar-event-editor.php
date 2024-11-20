@@ -2189,7 +2189,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			unset( $post['event_repeats'] );
 		}
 		$every = ! empty( $post['event_every'] ) ? (int) $post['event_every'] : 1;
-		if ( strlen( $recur > 1 ) ) {
+		if ( strlen( $recur ) > 1 ) {
 			$recur = substr( $recur, 0, 1 );
 		}
 		$begin = trim( $post['event_begin'][ $i ] );
