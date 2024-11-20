@@ -505,7 +505,7 @@ function my_calendar_edit() {
 }
 
 /**
- * Do event save actions.
+ * Do event save actions. Create event post, update post meta, and run actions.
  * 
  * @param string    $action Current action: edit, copy, add.
  * @param array     $data Data updated.
@@ -717,7 +717,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$new_event = $wpdb->insert_id;
 					mc_update_category_relationships( $cats, $new_event );
 					mc_update_instance( $event_instance, $new_event, $update );
-					$event_post = mc_do_event_save_actions( $action, $update, $new_event, $result );
+					$event_post = mc_do_event_save_actions( 'add', $update, $new_event, $result );
 				} else {
 					if ( $update['event_begin'][0] === $post['prev_event_begin'] &amp;&amp; $update['event_end'][0] === $post['prev_event_end'] ) {
 						// There were no changes at all.
@@ -1597,7 +1597,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( ! empty( $_GET['date'] ) ) {
 				$event      = mc_get_event( $instance );
 				$date       = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
-				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&amp;mode=edit&amp;event_id=' . $data->event_id ) );
+				$root_id    = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : $data->event_id;
+				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&amp;mode=edit&amp;event_id=' . $root_id ) );
 				$edit_event = sprintf( ' &lt;a href="%s">' . __( 'Edit the root event.', 'my-calendar' ) . '&lt;/a>', $edit_url );
 				// Translators: Date of a specific event occurrence.
 				$message = sprintf( __( 'You are editing the &lt;strong>%s&lt;/strong> date of this event. Other dates for this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
