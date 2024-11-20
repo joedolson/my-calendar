@@ -64,55 +64,55 @@
 	text-align: right;
 }
 
-.mc-main.mini .heading {
+.mc-main.twentyfifteen.mini .heading {
 	font-size: 1.2em;
 }
 
-.mc-main .event-title {
+.mc-main.twentyfifteen .event-title {
 	margin: 0 !important;
 	font-size: .8em;
 }
 
-.mc-main .event-title .has-image {
+.mc-main.twentyfifteen .event-title .has-image {
 	padding-left: 24px; 
 }
 
-.mc-main.mini .event-title {
+.mc-main.twentyfifteen.mini .event-title {
 	padding: 10px 30px 10px 5px;
 }
 
-.mc-main.mini .event-title img {
+.mc-main.twentyfifteen.mini .event-title img {
 	position: relative;
 	margin-right: 4px;
 	top: 0;
 	left: 0;
 }
 
-.mc-main .calendar-event .details, .mc-main .calendar-events {
+.mc-main.twentyfifteen .calendar-event .details, .mc-main .calendar-events {
 	left: 0;
 	width: 100%;
 	background: rgba(255, 255, 255, .98);
 	box-shadow: 0 0 4px;
 }
 
-.mc-main.calendar .details.no-image {
+.mc-main.twentyfifteen.calendar .details.no-image {
 	padding-top: 60px;
 }
 
-.mc-main.calendar .single-event .details.no-image {
+.mc-main.twentyfifteen.calendar .single-event .details.no-image {
 	padding-top: 0;
 }
 
-.mc-main .details {
+.mc-main.twentyfifteen .details {
 	padding: 10px;
 	position: relative;
 }
 
-.mc-main .mc-list .details {
+.mc-main.twentyfifteen .mc-list .details {
 	padding: 0;
 }
 
-.mc-main .close {
+.mc-main.twentyfifteen .close {
 	position: absolute;
 	left: -1em;
 	top: -1em;
@@ -120,48 +120,48 @@
 	line-height: 1;
 	border-bottom: none;
 }
-.mc-main.mini .close {
+.mc-main.twentyfifteen.mini .close {
 	left: auto;
 	top: .25em;
 	right: .5em;
 }
 
-.mc-main .close:hover, .mc-main .close:focus {
+.mc-main.twentyfifteen .close:hover, .mc-main .close:focus {
 	background: rgba( 240, 240, 240, .8 );
 }
 
-.mc-main .details img {
+.mc-main.twentyfifteen .details img {
 	width: 100%;
 	height: auto;
 }
 
-.mc-main .details .category-icon {
+.mc-main.twentyfifteen .details .category-icon {
 	width: auto;
 }
 
-.mc-main .details p {
+.mc-main.twentyfifteen .details p {
 	margin: 0 0 20px;
 }
 
-.mc-main .details h2, .mc-main .details h3 {
+.mc-main.twentyfifteen .details h2, .mc-main.twentyfifteen .details h3 {
 	font-weight: 700;
 	font-size: 1.3em;
 	line-height: 1.3;
 }
 
-.mc-main .details h4, .mc-main .details h5, .mc-main .details h6 {
+.mc-main.twentyfifteen .details h4, .mc-main.twentyfifteen .details h5, .mc-main.twentyfifteen .details h6 {
 	font-weight: 400;
 	font-size: 1.1em;
 	line-height: 1.5;
 }
 
 /* Sharing */
-.mc-main .details .sharing {
+.mc-main.twentyfifteen .details .sharing {
 	clear: both;
 }
 
 /* Date/times */
-.mc-main.mini .time-block p {
+.mc-main.twentyfifteen.mini .time-block p {
 	position: relative;
 	display: block; 
 	text-align: center;
@@ -169,7 +169,7 @@
 	right: 0;
 }
 
-.mc-main .time-block p {
+.mc-main.twentyfifteen .time-block p {
 	color: #000;
 	display: inline-block;
 	margin: 0 !important;
@@ -177,22 +177,22 @@
 	padding: 0 10px !important;
 }
 
-.mc-main .mc-event-date {
+.mc-main.twentyfifteen .mc-event-date {
 	font-weight: 700;
 	color: #333;
 }
 
-.mc-main .has-events .mc-date {
+.mc-main.twentyfifteen .has-events .mc-date {
 	font-weight: 700;
 	background: #333;
 	color: #fff;
 }
 
-.mc-main .has-events .mc-date a {
+.mc-main.twentyfifteen .has-events .mc-date a {
 	color: #fff;
 }
 
-.mc-main .mc-date {
+.mc-main.twentyfifteen .mc-date {
 	display: block;
 	padding: 4px;
 	font-size: 1.2em;
@@ -200,7 +200,7 @@
 	color: #111;
 }
 
-.mc-main .mc-single {
+.mc-main.twentyfifteen .mc-single {
 	font-size: 1.4em;
 	margin: 0;
 }
