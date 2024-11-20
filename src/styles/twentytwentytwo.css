@@ -1,26 +1,26 @@
-.mc-main button.close {
+.mc-main.twentytwentytwo button.close {
 	background: #b00 !important;
 	color: #fff !important;
 }
 
-.mc-main .close:hover, .mc-main .close:focus {
+.mc-main.twentytwentytwo .close:hover, .mc-main.twentytwentytwo .close:focus {
 	color: #d00 !important;
 }
 
-.mc-main .details .category-icon {
+.mc-main.twentytwentytwo .details .category-icon {
 	width: auto;
 }
 
-.mc-main .nextmonth {
+.mc-main.twentytwentytwo .nextmonth {
 	border-color: rgba( 0,0,0,.1 );
 	background: rgba( 0,0,0,.08 );
 }
 
-.mc-main .nextmonth * {
+.mc-main.twentytwentytwo .nextmonth * {
 	display: none;
 }
 
-.mc-main .current-day {
+.mc-main.twentytwentytwo .current-day {
 	outline: 3px solid var(--highlight-dark);
 	outline-offset: -3px;
 }
