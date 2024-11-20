@@ -176,18 +176,7 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			// Make sure POST data is available in update array.
 			$update = array_merge( $update, $post );
 			// Same as action on basic save.
-			mc_event_post( 'edit', $update, $event_id, $result );
-			/**
-			 * Run action when an event is saved.
-			 *
-			 * @hook mc_save_event
-			 *
-			 * @param {string}    $action Current action: edit, copy, add.
-			 * @param {array}     $update Data updated.
-			 * @param {int}       $event_id Event ID.
-			 * @param {int|false} $result Result of the DB update query.
-			 */
-			do_action( 'mc_save_event', 'edit', $update, $event_id, $result );
+			mc_do_event_save_actions( 'edit', $update, $event_id, $result );
 			/**
 			 * Run action when a group of events are saved.
 			 *
