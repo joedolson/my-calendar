@@ -52,7 +52,8 @@
 }
 
 .mc-main.refresh .mc-date, .mc-main.refresh.mini td {
-    background: #f6f6f6
+	background: #f6f6f6;
+	color: #000;
 }
 
 .mc-main.refresh .weekend .mc-date {

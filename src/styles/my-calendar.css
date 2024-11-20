@@ -72,6 +72,7 @@ dialog.my-calendar-modal .js-modal-title-container {
 
 .mc-main.my-calendar .mc-date {
     background: #f6f6f6;
+	color: #000;
 }
 
 .mc-main.my-calendar .my-calendar-nav li a {
