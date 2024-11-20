@@ -1,20 +1,20 @@
 .mc-main.my-calendar, .mc-list {
-    background: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    color: #333;
+	background: #fff;
+	padding: 5px;
+	border-radius: 5px;
+	color: #333;
 }
 
 .mc-main.my-calendar .heading, .mc-main.my-calendar .my-calendar-header,
 .mc-main.my-calendar .my-calendar-footer, .mc-main.my-calendar .calendar-event .details,
 .mc-main.my-calendar .calendar-events {
-    background: #edf7ff;
+	background: #edf7ff;
 	padding: 5px;
 	margin: 2px 0;
 }
 
 .mc-main.my-calendar .heading, .mc-main.my-calendar .my-calendar-header, .my-calendar-footer, .mc-main.my-calendar .my-calendar-nav li a:hover {
-    border: 1px solid #a9e3ff;
+	border: 1px solid #a9e3ff;
 }
 
 dialog.my-calendar-modal .js-modal-title-container {
@@ -28,117 +28,117 @@ dialog.my-calendar-modal .js-modal-title-container {
 }
 
 .mc-main.my-calendar .list-event .details, .mc-main.my-calendar td {
-    border: 1px solid #eee;
+	border: 1px solid #eee;
 }
 
 .mc-main.my-calendar .calendar-event .details, .mc-main.my-calendar .calendar-events {
-    color: #000;
+	color: #000;
 }
 
 .mc-main.my-calendar .my-calendar-nav li a, .mc-main.my-calendar .calendar-event .details, .mc-main.my-calendar .calendar-events {
-    border: 1px solid #9b5;
+	border: 1px solid #9b5;
 }
 
 .mc-main.my-calendar .list-event .details {
-    background: #fafafa;
+	background: #fafafa;
 }
 
 .mc-main.my-calendar .nextmonth, .mc-main.my-calendar .nextmonth .weekend {
-    color: #777;
+	color: #777;
 }
 
 .mc-main.my-calendar .mc-list .odd {
-    background: #d3e3e3;
+	background: #d3e3e3;
 }
 
 .mc-main.my-calendar .odd .list-event .details {
-    background: #e3f3f3;
-    border: 1px solid #c3d3d3;
+	background: #e3f3f3;
+	border: 1px solid #c3d3d3;
 }
 
 .mc-main.my-calendar .current-day {
-    background: #ffb;
+	background: #ffb;
 }
 
 .mc-main.my-calendar .current-day .mc-date {
-    color: #000;
-    background: #eee;
+	color: #000;
+	background: #eee;
 }
 
 .mc-main.my-calendar .weekend .mc-date {
-    background: #bd7;
-    color: #000;
+	background: #bd7;
+	color: #000;
 }
 
 .mc-main.my-calendar .mc-date {
-    background: #f6f6f6;
+	background: #f6f6f6;
 	color: #000;
 }
 
 .mc-main.my-calendar .my-calendar-nav li a {
-    color: #243f82;
-    background: #fff;
+	color: #243f82;
+	background: #fff;
 }
 
 .mc-main.my-calendar .my-calendar-nav li a:hover {
-    color: #000;
-    border: 1px solid #243f82;
+	color: #000;
+	border: 1px solid #243f82;
 }
 
 .upcoming-events .past-event {
-    color: #777;
+	color: #777;
 }
 
 .upcoming-events .today {
-    color: #111;
+	color: #111;
 }
 
 .upcoming-events .future-event {
-    color: #555;
+	color: #555;
 }
 
 .mc-main.my-calendar .heading {
-    margin: 2px 0;
-    font-weight: 700;
-    padding: 2px;
+	margin: 2px 0;
+	font-weight: 700;
+	padding: 2px;
 }
 
 .mc-main.my-calendar td {
-    padding: 2px !important;
+	padding: 2px !important;
 }
 
 .mini td {
-    height: auto !important;
+	height: auto !important;
 }
 
 .mc-main.my-calendar th {
-    text-align: center;
-    padding: 5px 0 !important;
-    letter-spacing: 1px;
+	text-align: center;
+	padding: 5px 0 !important;
+	letter-spacing: 1px;
 }
 
 .mc-main.my-calendar .event-title, .mc-main.my-calendar .event-title a {
-    display: block;
-    font-size: 12px !important;
-    font-family: Arial, Verdana, sans-serif;
-    font-weight: 700;
-    margin: 2px 0 !important;
-    padding: 1px;
-    border-radius: 3px;
-    text-transform: none;
+	display: block;
+	font-size: 12px !important;
+	font-family: Arial, Verdana, sans-serif;
+	font-weight: 700;
+	margin: 2px 0 !important;
+	padding: 1px;
+	border-radius: 3px;
+	text-transform: none;
 }
 
 .mc-main.my-calendar .list-event .event-title {
-    font-size: 1.2em;
-    margin: 0;
+	font-size: 1.2em;
+	margin: 0;
 }
 
 .mc-main.my-calendar .calendar-event .details, .mc-main.my-calendar .calendar-events {
 	left: 15%;
-    width: 70%;
-    border-radius: 10px;
-    box-shadow: 3px 3px 6px #777;
-    padding: 5px;
+	width: 70%;
+	border-radius: 10px;
+	box-shadow: 3px 3px 6px #777;
+	padding: 5px;
 }
 
 .mc-main.my-calendar .details .close {
@@ -148,44 +148,44 @@ dialog.my-calendar-modal .js-modal-title-container {
 }
 
 .mc-main.my-calendar.mini .details .close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+	position: absolute;
+	top: 8px;
+	right: 8px;
 }
 
 .mc-main.my-calendar .calendar-events {
-    width: 200px !important;
-    left: 0px;
+	width: 200px !important;
+	left: 0px;
 }
 
 .mc-main.my-calendar .list-event .details {
-    border-radius: 5px;
-    margin: 5px 0;
-    padding: 5px 5px 0;
+	border-radius: 5px;
+	margin: 5px 0;
+	padding: 5px 5px 0;
 }
 
 .mc-main.my-calendar .mc-list li {
-    padding: 5px;
-    list-style-type: none;
-    list-style-image: none;
-    margin: 0;
+	padding: 5px;
+	list-style-type: none;
+	list-style-image: none;
+	margin: 0;
 }
 
 .mc-main.my-calendar .mc-date {
-    display: block;
-    padding: 2px 4px;
+	display: block;
+	padding: 2px 4px;
 }
 
 .mc-main.my-calendar th {
-    font-size: .8em;
-    text-transform: uppercase;
-    padding: 2px 4px 2px 0;
+	font-size: .8em;
+	text-transform: uppercase;
+	padding: 2px 4px 2px 0;
 }
 
 .mc-list li {
-    text-indent: 0;
-    margin: 0;
-    padding: 0;
+	text-indent: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .mc-event-date {
@@ -194,30 +194,30 @@ dialog.my-calendar-modal .js-modal-title-container {
 }
 
 .mc-main.my-calendar .calendar-event .event-time, .mc-main.my-calendar .list-event .event-time {
-    height: 100%;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    font-weight: 700;
-    font-size: .9em;
+	height: 100%;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	font-weight: 700;
+	font-size: .9em;
 }
 
 .mc-main.my-calendar p {
-    line-height: 1.5;
-    margin: 0 0 1em;
-    padding: 0;
+	line-height: 1.5;
+	margin: 0 0 1em;
+	padding: 0;
 }
 
 .mc-main.my-calendar .sub-details {
-    margin-left: 7em;
+	margin-left: 7em;
 }
 
 .mc-main.my-calendar .my-calendar-next {
-    margin-left: 4px;
-    text-align: right;
+	margin-left: 4px;
+	text-align: right;
 }
 
 .mc-main.my-calendar .my-calendar-next a {
-    border-radius: 0 8px 8px 0;
+	border-radius: 0 8px 8px 0;
 }
 
 nav .my-calendar-nav ul {
@@ -229,73 +229,73 @@ nav .my-calendar-nav ul {
 }
 
 .mc-main.my-calendar .my-calendar-prev a {
-    border-radius: 8px 0 0 8px;
+	border-radius: 8px 0 0 8px;
 }
 
 .mc-main.my-calendar.mini td .category-icon {
-    display: none;
+	display: none;
 }
 
 .mc-main.my-calendar.mini .event-title {
-    font-size: 1.1em;
+	font-size: 1.1em;
 }
 
 .mc-main.my-calendar.mini .day-with-date span, .mc-main.my-calendar.mini .day-with-date a {
-    font-size: .9em;
-    padding: 1px;
-    text-align: center;
+	font-size: .9em;
+	padding: 1px;
+	text-align: center;
 }
 
 .mc-main.my-calendar .mini-event .details span, .mc-main.my-calendar .mini-event .details a {
-    text-align: left;
+	text-align: left;
 }
 
 .mc-main.my-calendar .mini-event .sub-details {
-    margin: 0;
-    border-bottom: 1px solid #ccc;
-    padding: 2px 0 0;
-    margin-bottom: 5px;
+	margin: 0;
+	border-bottom: 1px solid #ccc;
+	padding: 2px 0 0;
+	margin-bottom: 5px;
 }
 
 .mc-main.my-calendar .mini-event .details img {
-    width: 100%;
+	width: 100%;
 }
 
 .mc-main.my-calendar .list-event .details img {
-    width: auto;
-    max-width: 100%;
+	width: auto;
+	max-width: 100%;
 }
 
 .mc-main.my-calendar.mini .day-with-date a {
-    display: block;
-    margin: -2px;
-    font-weight: 700;
-    text-decoration: underline;
+	display: block;
+	margin: -2px;
+	font-weight: 700;
+	text-decoration: underline;
 }
 
 .mc-main.my-calendar .nextmonth {
-    background: #f6f6f6;
-    color: #888;
+	background: #f6f6f6;
+	color: #888;
 }
 
 .mc-main.my-calendar .nextmonth .event-title {
-    opacity: .7;
+	opacity: .7;
 }
 
 .mc-main.my-calendar .nextmonth .mc-date {
-    background: #eee;
+	background: #eee;
 	color: #333;
 }
 
 .mc-main.my-calendar .nextmonth .weekend {
-    color: #888;
+	color: #888;
 }
 
 .mc-main.my-calendar .vcard {
-    font-size: .9em;
-    background: #f9fbff;
-    padding: .5em;
-    float: right;
-    clear: right;
-    width: 120px;
+	font-size: .9em;
+	background: #f9fbff;
+	padding: .5em;
+	float: right;
+	clear: right;
+	width: 120px;
 }

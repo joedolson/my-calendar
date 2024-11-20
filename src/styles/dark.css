@@ -1,37 +1,37 @@
 /* A theme in dark grays and blacks with light text and dark blue highlighting. */
 .mc-main.dark .event-title {
-    color: #fff;
+	color: #fff;
 }
 
 .mc-main.dark, .mc-list {
-    background: #333;
-    color: #fff;
+	background: #333;
+	color: #fff;
 }
 
 .mc-main.dark a {
-    color: #9cf;
-    text-decoration: none;
+	color: #9cf;
+	text-decoration: none;
 }
 
 .mc-main.dark a:hover {
-    text-decoration: underline;
-    color: #fff;
+	text-decoration: underline;
+	color: #fff;
 }
 
 .mc-main.dark .heading, .mc-main.dark .my-calendar-date-switcher,
 .mc-main.dark .category-key, .mc-main.dark .calendar-event .details,
 .mc-main.dark .calendar-events {
-    background: #222;
-    color: #fff;
+	background: #222;
+	color: #fff;
 }
 
 .mc-main.dark .category-key .no-icon {
-    border: 1px solid #bbb;
+	border: 1px solid #bbb;
 }
 
 .mc-main.dark, .mc-list {
-    background: #333;
-    color: #fff;
+	background: #333;
+	color: #fff;
 }
 
 .mc-main.dark .my-calendar-header a,
@@ -55,137 +55,137 @@
 }
 
 .mc-main.dark .my-calendar-date-switcher input, .mc-main.dark .my-calendar-date-switcher select {
-    color: #333;
+	color: #333;
 }
 
 .mc-main.dark .my-calendar-date-switcher label {
-    color: #fff;
+	color: #fff;
 }
 
 .mc-main.dark .list-event .details, .mc-main.dark td {
-    border: 1px solid #222;
+	border: 1px solid #222;
 	background: #333;
 	color: #f0f0f0;
 }
 
 .mc-main.dark .calendar-event .details, .mc-main.dark .calendar-events {
-    background: #444;
-    border: 1px solid #222;
-    color: #fff;
+	background: #444;
+	border: 1px solid #222;
+	color: #fff;
 }
 
 .mc-main.dark .my-calendar-nav li a, .mc-main.dark .calendar-event .details, .mc-main.dark .calendar-events {
-    border: 1px solid #444;
+	border: 1px solid #444;
 }
 
 .mc-main.dark .list-event .details {
-    background: #252525;
-    color: #eee;
+	background: #252525;
+	color: #eee;
 }
 
 .mc-main.dark .mc-list .odd {
-    background: #353535;
+	background: #353535;
 }
 
 .mc-main.dark .odd .list-event .details {
-    background: #151515;
-    border: 1px solid #353535;
+	background: #151515;
+	border: 1px solid #353535;
 }
 
 .mc-main.dark .nextmonth, .mc-main.dark .nextmonth .weekend {
-    color: #999;
+	color: #999;
 }
 
 .mc-main.dark .current-day {
-    background: #224;
+	background: #224;
 }
 
 .mc-main.dark .current-day .mc-date {
-    color: #fff;
-    background: #111;
+	color: #fff;
+	background: #111;
 }
 
 .mc-main.dark .weekend {
-    background: #555 !important;
-    color: #fff !important;
+	background: #555 !important;
+	color: #fff !important;
 }
 
 .mc-main.dark .mc-date {
-    background: #080808;
-    color: #fff;
+	background: #080808;
+	color: #fff;
 }
 
 .mc-main.dark .mc_edit_links a,
 .mc-main.dark .my-calendar-footer a,
 .mc-main.dark .my-calendar-header a {
-    color: #bbf;
-    background: var(--primary-dark);
+	color: #bbf;
+	background: var(--primary-dark);
 }
 
 .mc-main.dark .my-calendar-nav li a:hover {
-    color: #fff;
-    border: 1px solid #aaf;
+	color: #fff;
+	border: 1px solid #aaf;
 }
 
 .upcoming-events .past-event {
-    color: #aaa;
+	color: #aaa;
 }
 
 .upcoming-events .today {
-    color: #eee;
+	color: #eee;
 }
 
 .upcoming-events .future-event {
-    color: #bbb;
+	color: #bbb;
 }
 
 .mc-main.dark .event-title, .mc-main.dark .event-title a {
-    color: #fff;
+	color: #fff;
 }
 
 .mc-main.dark h2 {
-    color: #fff;
+	color: #fff;
 }
 
 .mc-main.dark .calendar-event .details, .mc-main.dark .calendar-events {
-    border: 2px solid #222;
-    box-shadow: 3px 3px 10px #000;
+	border: 2px solid #222;
+	box-shadow: 3px 3px 10px #000;
 }
 
 .mc-main.dark.mini .day-with-date span, .mc-main.dark.mini .day-with-date a {
-    color: #fff;
+	color: #fff;
 }
 
 .mc-main.dark .mini-event .sub-details {
-    border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
 
 .mc-main.dark .nextmonth {
-    background: #f6f6f6;
-    color: #888;
+	background: #f6f6f6;
+	color: #888;
 }
 
 .mc-main.dark .nextmonth .event-title {
-    opacity: .7;
+	opacity: .7;
 }
 
 .mc-main.dark .nextmonth .weekend {
-    color: #888;
-    background: #161616 !important;
+	color: #888;
+	background: #161616 !important;
 }
 
 .mc-main.dark .nextmonth {
-    background: #000;
-    color: #666 !important;
+	background: #000;
+	color: #666 !important;
 }
 
 .mc-main.dark .nextmonth .mc-date {
-    background: #161616;
+	background: #161616;
 }
 
 .mc-main.dark .vcard, #mc_event .vcard {
-    background: #111;
-    border: 1px solid #333;
+	background: #111;
+	border: 1px solid #333;
 }
 
 .mc-main.dark .mc_edit_links {

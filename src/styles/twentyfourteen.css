@@ -1,219 +1,219 @@
 .mc-main.twentyfourteen .my-calendar-header a, .mc-main.twentyfourteen .mc_bottomnav a {
-    color: #333;
-    text-decoration: none;
-    background: linear-gradient(to bottom, rgba(240, 240, 240, .95) 0%, rgba(225, 225, 225, .95) 70%);
+	color: #333;
+	text-decoration: none;
+	background: linear-gradient(to bottom, rgba(240, 240, 240, .95) 0%, rgba(225, 225, 225, .95) 70%);
 }
 
 .mc-main.twentyfourteen .my-calendar-header a:hover, .mc-main.twentyfourteen .mc_bottomnav a:hover, .mc-main.twentyfourteen .my-calendar-header a:focus, .mc-main.twentyfourteen .mc_bottomnav a:focus {
-    color: #000;
-    text-decoration: underline;
-    background: linear-gradient(to bottom, rgba(225, 225, 225, .95) 0%, rgba(210, 210, 210, .95) 70%);
+	color: #000;
+	text-decoration: underline;
+	background: linear-gradient(to bottom, rgba(225, 225, 225, .95) 0%, rgba(210, 210, 210, .95) 70%);
 }
 
 .mc-main.twentyfourteen tr td {
-    border: 1px solid #f6f6f6;
-    height: 5em;
+	border: 1px solid #f6f6f6;
+	height: 5em;
 }
 
 .mc-main.twentyfourteen th {
-    text-transform: uppercase;
-    padding: 1em 0;
-    background: rgba(0, 0, 0, .8);
-    color: #fff !important;
+	text-transform: uppercase;
+	padding: 1em 0;
+	background: rgba(0, 0, 0, .8);
+	color: #fff !important;
 }
 
 .mc-main.twentyfourteen table, .mc-main.twentyfourteen .mc-list {
-    box-shadow: 0 0 2px;
+	box-shadow: 0 0 2px;
 }
 
 .mc-main.twentyfourteen table .current-day .mc-date {
-    background: rgba(0, 0, 0, .8) !important;
-    color: #fff;
+	background: rgba(0, 0, 0, .8) !important;
+	color: #fff;
 }
 
 .mc-main.twentyfourteen .heading {
-    font-size: 1.5em;
-    margin: 0 !important;
+	font-size: 1.5em;
+	margin: 0 !important;
 }
 
 .mc-main.twentyfourteen.mini .heading {
-    font-size: 1.2em;
-    margin: 6px 0 !important;
+	font-size: 1.2em;
+	margin: 6px 0 !important;
 }
 
 .mc-main.twentyfourteen .calendar-event .details, .mc-main.twentyfourteen .calendar-events {
-    left: 5%;
-    width: 90%;
-    background: rgba(255, 255, 255, .98);
-    padding: 2em;
-    box-shadow: 0 0 4px;
+	left: 5%;
+	width: 90%;
+	background: rgba(255, 255, 255, .98);
+	padding: 2em;
+	box-shadow: 0 0 4px;
 }
 
 .mc-main.twentyfourteen .close {
-    position: absolute;
-    right: 1em;
-    top: 1em;
-    padding: 2px;
+	position: absolute;
+	right: 1em;
+	top: 1em;
+	padding: 2px;
 }
 
 .mc-main.twentyfourteen .close:hover, .mc-main.twentyfourteen .close:focus {
-    outline: 1px solid #777;
+	outline: 1px solid #777;
 }
 
 /* Sharing */
 .mc-main.twentyfourteen .details .sharing {
-    padding: .5em;
-    clear: both;
+	padding: .5em;
+	clear: both;
 }
 
 .mc-main.twentyfourteen .details .sharing p {
-    display: inline-block;
-    margin: 0 1em 0 0;
+	display: inline-block;
+	margin: 0 1em 0 0;
 }
 
 /* Date/times */
 .mc-main.twentyfourteen .time-block p {
-    font-size: 1.2em;
-    color: #000;
-    margin: 0;
+	font-size: 1.2em;
+	color: #000;
+	margin: 0;
 }
 
 .mc-main.twentyfourteen .mc-event-date {
-    font-weight: 700;
-    color: #333;
+	font-weight: 700;
+	color: #333;
 }
 
 .mc-main.twentyfourteen .mc-date {
-    display: block;
-    padding: 4px 2px;
-    text-align: center;
-    font-size: 1.2em;
-    background: rgba(240, 240, 240, .9);
-    color: #111;
+	display: block;
+	padding: 4px 2px;
+	text-align: center;
+	font-size: 1.2em;
+	background: rgba(240, 240, 240, .9);
+	color: #111;
 }
 
 /* Navigation */
 .my-calendar-nav .my-calendar-prev a .mc-icon::before {
-    content: '\25C0 ';
+	content: '\25C0 ';
 	margin-right: 4px;
 }
 
 .my-calendar-nav .my-calendar-next a .mc-icon::before {
-    content: ' \25b6';
+	content: ' \25b6';
 	margin-left: 4px;
 }
 
 /* Time frame */
 .mc-time a {
-    padding: .5em;
+	padding: .5em;
 }
 
 /* hCard */
 .mc-main.twentyfourteen .vcard {
-    line-height: 1.5;
-    margin: 0 0 1.5em 1.5em;
-    float: right;
-    padding: 2em;
-    max-width: 50%;
+	line-height: 1.5;
+	margin: 0 0 1.5em 1.5em;
+	float: right;
+	padding: 2em;
+	max-width: 50%;
 }
 
 /* List View */
 .mc-main.twentyfourteen .mc-list {
-    margin-bottom: 1em;
+	margin-bottom: 1em;
 }
 
 .mc-list .current-day .event-date .mc-icon::before {
-    content: "\21D2";
-    color: red;
-    padding: 0 .5em .5em 0;
+	content: "\21D2";
+	color: red;
+	padding: 0 .5em .5em 0;
 }
 
 .mc-main.twentyfourteen .mc-list .mc-events {
-    list-style-type: none !important;
-    padding: .75em;
-    background: rgba(0, 0, 0, .1);
-    margin: 0;
+	list-style-type: none !important;
+	padding: .75em;
+	background: rgba(0, 0, 0, .1);
+	margin: 0;
 }
 
 .mc-main.twentyfourteen .mc-list .mc-events.odd {
-    list-style-type: none !important;
-    padding: .75em;
-    background: none;
+	list-style-type: none !important;
+	padding: .75em;
+	background: none;
 }
 
 .mc-main.twentyfourteen.list .my-calendar-month {
-    font-size: 1.4em;
-    background: rgba(0, 0, 0, .8);
-    color: #fff;
-    padding: .25em;
-    text-align: right;
+	font-size: 1.4em;
+	background: rgba(0, 0, 0, .8);
+	color: #fff;
+	padding: .25em;
+	text-align: right;
 }
 
 .mc-main.twentyfourteen .list-event {
-    background: rgba(255, 255, 255, .9);
-    padding: 1em 2em;
-    margin: .5em -.5em -.5em -.5em;
+	background: rgba(255, 255, 255, .9);
+	padding: 1em 2em;
+	margin: .5em -.5em -.5em -.5em;
 	clear: both;
 }
 
 .mc-main.twentyfourteen .list-event .event-title {
-    padding: .25em;
-    margin-bottom: .5em;
+	padding: .25em;
+	margin-bottom: .5em;
 }
 
 .mc-main.twentyfourteen .mc-list .event-date {
-    font-size: 1.1em;
-    font-weight: 600;
+	font-size: 1.1em;
+	font-weight: 600;
 }
 
 /* Out of current month */
 .mc-main.twentyfourteen .nextmonth .event-title {
-    opacity: .7;
+	opacity: .7;
 }
 
 /* Single view */
 .single-event .event-title {
-    padding: .5em;
-    font-size: 1.4em;
+	padding: .5em;
+	font-size: 1.4em;
 }
 
 .single-event .event-title img {
-    margin-right: .5em;
+	margin-right: .5em;
 }
 
 /* Mini */
 .mc-main.twentyfourteen.mini table {
-    margin-bottom: 1.5em;
+	margin-bottom: 1.5em;
 }
 
 .mc-main.twentyfourteen.mini tr td {
-    height: auto;
+	height: auto;
 }
 
 .mc-main.twentyfourteen.mini .has-events, .mc-main.twentyfourteen.mini .has-events .mc-date {
-    background: var(--date-has-events-bg);
+	background: var(--date-has-events-bg);
 	color: var(--date-has-events-color);
-    font-weight: 700;
+	font-weight: 700;
 }
 
 .mc-main.twentyfourteen.mini .vcard {
-    line-height: 1.5;
-    margin: 0 0 1.5em;
-    float: none;
-    padding: 1em;
-    max-width: 100%;
+	line-height: 1.5;
+	margin: 0 0 1.5em;
+	float: none;
+	padding: 1em;
+	max-width: 100%;
 }
 
 .mc-main.twentyfourteen.mini .my-calendar-nav, .mc-main.twentyfourteen.mini .mc-time, .mc-main.twentyfourteen.mini .my-calendar-date-switcher {
-    width: 100% !important;
-    margin: .5em 0 !important;
+	width: 100% !important;
+	margin: .5em 0 !important;
 }
 
 .mc-main.twentyfourteen.mini .my-calendar-nav li a {
-    padding: .2em .5em !important;
-    font-family: sans-serif;
+	padding: .2em .5em !important;
+	font-family: sans-serif;
 }
 
 .mc-main.twentyfourteen.mini .event-title {
-    padding: .5em;
+	padding: .5em;
 }
