@@ -479,7 +479,7 @@ function my_calendar_edit() {
 }
 
 /**
- * Do event save actions.
+ * Do event save actions. Create event post, update post meta, and run actions.
  * 
  * @param string    $action Current action: edit, copy, add.
  * @param array     $data Data updated.
@@ -1571,7 +1571,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( ! empty( $_GET['date'] ) ) {
 				$event      = mc_get_event( $instance );
 				$date       = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
-				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id ) );
+				$root_id    = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : $data->event_id;
+				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $root_id ) );
 				$edit_event = sprintf( ' <a href="%s">' . __( 'Edit the root event.', 'my-calendar' ) . '</a>', $edit_url );
 				// Translators: Date of a specific event occurrence.
 				$message = sprintf( __( 'You are editing the <strong>%s</strong> date of this event. Other dates for this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
