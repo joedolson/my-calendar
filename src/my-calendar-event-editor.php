@@ -691,7 +691,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$new_event = $wpdb->insert_id;
 					mc_update_category_relationships( $cats, $new_event );
 					mc_update_instance( $event_instance, $new_event, $update );
-					$event_post = mc_do_event_save_actions( $action, $update, $new_event, $result );
+					$event_post = mc_do_event_save_actions( 'add', $update, $new_event, $result );
 				} else {
 					if ( $update['event_begin'][0] === $post['prev_event_begin'] && $update['event_end'][0] === $post['prev_event_end'] ) {
 						// There were no changes at all.
