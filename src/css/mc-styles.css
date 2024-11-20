@@ -387,6 +387,7 @@ ul.mc-file-list ul li {
 	gap: 10px;
 	justify-content: space-between;
 	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
 }
 
 .mc-help-links .help:nth-of-type(1) a {
