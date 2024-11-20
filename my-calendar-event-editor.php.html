@@ -1852,7 +1852,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						if ( ! mc_event_published( $data ) ) {
 							$view_url = add_query_arg( 'preview', 'true', mc_get_permalink( $first ) );
 						}
-						$tag_url     = admin_url( "admin.php?page=my-calendar-design&amp;mc-event=$first->occur_id#my-calendar-templates" );
 						$tag_preview = add_query_arg(
 							array(
 								'iframe'   => 'true',
@@ -2216,7 +2215,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			unset( $post['event_repeats'] );
 		}
 		$every = ! empty( $post['event_every'] ) ? (int) $post['event_every'] : 1;
-		if ( strlen( $recur > 1 ) ) {
+		if ( strlen( $recur ) > 1 ) {
 			$recur = substr( $recur, 0, 1 );
 		}
 		$begin = trim( $post['event_begin'][ $i ] );
