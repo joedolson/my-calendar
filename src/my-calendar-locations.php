@@ -1839,10 +1839,9 @@ function mc_location_class( $event_or_location, $prefix ) {
 	$name = 'no-location';
 	if ( property_exists( $event_or_location, 'location' ) ) {
 		$location = $event_or_location->location;
-		print_r( $location );
 		if ( $location ) {
-			$name     = $location->location_label;
-			$id       = $location->location_id;
+			$name = $location->location_label;
+			$id   = $location->location_id;
 		}
 	} elseif ( property_exists( $event_or_location, 'location_label' ) ) {
 		$name = $event_or_location->location_label;
