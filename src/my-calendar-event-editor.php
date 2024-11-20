@@ -1826,7 +1826,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						if ( ! mc_event_published( $data ) ) {
 							$view_url = add_query_arg( 'preview', 'true', mc_get_permalink( $first ) );
 						}
-						$tag_url     = admin_url( "admin.php?page=my-calendar-design&mc-event=$first->occur_id#my-calendar-templates" );
 						$tag_preview = add_query_arg(
 							array(
 								'iframe'   => 'true',
