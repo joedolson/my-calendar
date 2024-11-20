@@ -658,6 +658,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$is_changed     = mc_compare( $update, $event_id );
 				$event_instance = (int) $post['event_instance'];
 				if ( $is_changed ) {
+					// Split an event into multiple separate events.
 					// if changed, create new event, match group id, update instance to reflect event connection, same group id.
 					// if group ID == 0, need to add group ID to both records.
 					// if a single instance is edited, it should not inherit recurring settings from parent.
@@ -1927,7 +1928,8 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 			}
 			$fields .= '</select>';
 		} else {
-			$location_label = ( $event_location && is_numeric( $event_location ) ) ? mc_get_location( $event_location )->location_label : '';
+			$location       = ( $event_location && is_numeric( $event_location ) ) ? mc_get_location( $event_location ) : false;
+			$location_label = ( $location ) ? $location->location_label : '';
 			$fields        .= '<div id="mc-locations-autocomplete" class="mc-autocomplete autocomplete">
 				<input class="autocomplete-input" type="text" placeholder="' . __( 'Search locations...', 'my-calendar' ) . '" id="l_preset" value="' . esc_attr( $location_label ) . '" />
 				<ul class="autocomplete-result-list"></ul>
