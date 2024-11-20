@@ -1463,7 +1463,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	$has_data = ( is_object( $data ) ) ? true : false;
 	if ( $data ) {
 		// This was previously only shown if $data was an object. Don't know why.
-		$test = mc_test_occurrence_overlap( $data );
+		mc_test_occurrence_overlap( $data );
 	}
 	$instance = ( isset( $_GET['date'] ) ) ? (int) $_GET['date'] : false;
 	if ( $instance ) {
