@@ -39,7 +39,7 @@ function mc_error_check( $event_id ) {
  * @param object  $data Event object.
  * @param boolean $should_return Return or echo.
  *
- * @return string Warning text about problem with event.
+ * @return string|void Warning text about problem with event.
  */
 function mc_test_occurrence_overlap( $data, $should_return = false ) {
 	$warning = '';
