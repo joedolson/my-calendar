@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.5.19
+Stable tag: 3.5.20
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -107,6 +107,20 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.5.20 =
+
+* Bug fix: Undefined foreground color in some stylesheets.
+* Bug fix: Missing close `span` in SVG wrapper.
+* Bug fix: Check whether `$event` is an object before accessing properties in event template check.
+* Bug fix: Add missing stylesheet class in some calendar themes.
+* Bug fix: Handle uncommon case where a location ID is assigned but location no longer exists.
+* Bug fix: Fix incorrect parentheses that could unset recurring event instances unintentionally.
+* Bug fix: Allow help links to wrap.
+* Bug fix: Root event link should point to source event, not self.
+* Bug fix: When splitting an event, execute the 'add' action instead of the 'edit' action to ensure post meta fields are saved correctly.
+* Update social media links.
+* Add class for locations to event class list. 
 
 = 3.5.19 =
 
