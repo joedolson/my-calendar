@@ -915,6 +915,10 @@ label[for=mc_uri_query]::before {
 	width: 30em;
 }
 
+.location-input select {
+	width: 100%;
+}
+
 .wp-core-ui .location-toggle .button {
 	margin-bottom: 0;
 }
