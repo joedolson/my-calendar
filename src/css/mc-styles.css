@@ -1589,6 +1589,17 @@ select[name="event_recur"] {
 	clear: both;
 }
 
+@media (max-width: 782px) {
+	.mc-admin-footer,
+	.mc-admin-header {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.mc-admin-footer .button-secondary, .mc-admin-header .button-secondary {
+		padding: 5px 10px;
+	}
+}
+
 .mc-admin-header.locations {
 	display: block;
 	float: right;
