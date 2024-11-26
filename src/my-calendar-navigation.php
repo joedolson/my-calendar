@@ -290,6 +290,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 				'month' => $prev['month'],
 				'dy'    => $prev['day'],
 				'cid'   => $id,
+				'time'  => $time,
 			),
 			array()
 		);
@@ -313,6 +314,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 				'month' => $next['month'],
 				'dy'    => $next['day'],
 				'cid'   => $id,
+				'time'  => $time,
 			),
 			array()
 		);
