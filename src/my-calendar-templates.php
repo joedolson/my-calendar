@@ -310,7 +310,7 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 /**
  * Get the featured image for a location.
  *
- * @param object $event object with location properties.
+ * @param object $event object with location properties. Accepts either an event or location object.
  * @param string $source Source type.
  *
  * @return string
