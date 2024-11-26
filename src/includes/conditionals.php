@@ -87,7 +87,15 @@ function mc_is_mobile() {
 	if ( function_exists( 'wp_is_mobile' ) ) {
 		$mobile = wp_is_mobile();
 	}
-
+	/**
+	 * Add custom logic to detect mobile environments for My Calendar.
+	 *
+	 * @hook mc_is_mobile
+	 *
+	 * @param bool $mobile true if mobile user agent detected.
+	 *
+	 * @return bool
+	 */
 	return apply_filters( 'mc_is_mobile', $mobile );
 }
 
@@ -97,7 +105,15 @@ function mc_is_mobile() {
  * @return boolean
  */
 function mc_is_tablet() {
-
+	/**
+	 * Add custom logic to detect tablet environments for My Calendar.
+	 *
+	 * @hook mc_is_tablet
+	 *
+	 * @param bool $tablet true if mobile user agent detected. Default false.
+	 *
+	 * @return bool
+	 */
 	return apply_filters( 'mc_is_tablet', false );
 }
 
