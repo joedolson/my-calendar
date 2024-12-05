@@ -35,7 +35,7 @@ function mc_switch_sites() {
 }
 
 /**
- * Send a Tweet on approval of event
+ * Send a Status update on approval of event
  *
  * @param string $previous_status Previous status.
  * @param string $new_status New status.
