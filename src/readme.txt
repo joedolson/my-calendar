@@ -108,6 +108,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.5.21 =
+
+* Bug fix: iCal feed link incorrect.
+* Bug fix: Pass time frame into navigation calculation to help prevent calendars from switching formats when multiple calendars appear on a page.
+* Code docs improvements.
+
 = 3.5.20 =
 
 * Bug fix: Undefined foreground color in some stylesheets.
