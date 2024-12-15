@@ -42,17 +42,12 @@ function my_calendar_design() {
 
 					<div class="ui-sortable meta-box-sortables" id="templates">
 						<div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
-							<h2>
 							<?php
 							$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
 							if ( $disable_templates ) {
-								_e( 'Template Documentation', 'my-calendar' );
-								echo '</h2>';
+								echo '<h2>' . __( 'Template Documentation', 'my-calendar' ) . '</h2>';
 							} else {
-								_e( 'Template Editor (Legacy)', 'my-calendar' );
-								?>
-							</h2>
-								<?php
+								echo '<h2>' . __( 'Template Editor (Legacy)', 'my-calendar' ) . '</h2>';
 								echo '<p><span class="mc-flex">';
 								echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a>' );
 								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
