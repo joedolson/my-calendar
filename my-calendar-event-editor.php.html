@@ -1642,7 +1642,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						$mc_allowed = absint( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : 140 );
 						?>
 						&lt;p class='mc-twitter'>
-							&lt;label for='mc_twitter'>&lt;?php esc_html_e( 'Post a Status Update (via XPoster)', 'my-calendar' ); ?>&lt;/label>&lt;br/>
+							&lt;label for='mc_twitter'>&lt;span class="dashicons dashicons-share" aria-hidden="true">&lt;/span> &lt;?php esc_html_e( 'Post a Status Update (via XPoster)', 'my-calendar' ); ?>&lt;/label>&lt;br/>
 							&lt;textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter' data-allowed="&lt;?php echo absint( $mc_allowed ); ?>">&lt;?php echo esc_textarea( stripslashes( apply_filters( 'mc_twitter_text', '', $data ) ) ); ?>&lt;/textarea>
 						&lt;/p>
 						&lt;?php
