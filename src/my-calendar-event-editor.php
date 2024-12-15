@@ -1616,7 +1616,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						$mc_allowed = absint( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : 140 );
 						?>
 						<p class='mc-twitter'>
-							<label for='mc_twitter'><?php esc_html_e( 'Post a Status Update (via XPoster)', 'my-calendar' ); ?></label><br/>
+							<label for='mc_twitter'><span class="dashicons dashicons-share" aria-hidden="true"></span> <?php esc_html_e( 'Post a Status Update (via XPoster)', 'my-calendar' ); ?></label><br/>
 							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter' data-allowed="<?php echo absint( $mc_allowed ); ?>"><?php echo esc_textarea( stripslashes( apply_filters( 'mc_twitter_text', '', $data ) ) ); ?></textarea>
 						</p>
 						<?php

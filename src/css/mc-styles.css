@@ -587,11 +587,6 @@ input[id=e_link], input[id=e_image] {
 	margin-bottom: .5em;
 }
 
-label[for=mc_twitter] {
-	background: url(../images/twitter.png) left 50% no-repeat;
-	padding-left: 20px;
-}
-
 strong.label {
 	font-weight: 400;
 }
