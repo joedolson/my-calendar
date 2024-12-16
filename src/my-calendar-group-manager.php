@@ -962,6 +962,24 @@ function mc_list_groups() {
 		</div>
 		</form>
 		<?php
+		if ( $num_pages > 1 ) {
+			printf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
+		}
+		?>
+		<nav class="mc-admin-footer" aria-label="<?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
+			<ul class="links">
+				<li>
+					<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?></a>
+				</li>
+				<li>
+					<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?></a>
+				</li>
+				<li>
+					<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></a>
+				</li>
+			</ul>
+		</nav>
+		<?php
 	} else {
 		?>
 		<p class="mc-none"><?php esc_html_e( 'No events found.', 'my-calendar' ); ?></p>
