@@ -803,11 +803,11 @@ function mc_list_events() {
 				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label>
 			</div>
 		</form>
-		<?php
-		if ( $num_pages > 1 ) {
-			printf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
-		}
-		?>
+			<?php
+			if ( $num_pages > 1 ) {
+				printf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
+			}
+			?>
 		<div class='mc-admin-footer'>
 			<?php
 			$status_links = mc_status_links( $allow_filters );
