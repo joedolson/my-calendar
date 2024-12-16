@@ -534,7 +534,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				&lt;legend>&lt;?php esc_html_e( 'Content Filters', 'my-calendar' ); ?>&lt;/legend>
 				&lt;fieldset class="categories">
 					&lt;legend>&lt;?php esc_html_e( 'Categories', 'my-calendar' ); ?>&lt;/legend>
-					&lt;ul style="padding:0;margin:0;list-style-type:none;columns:3;">
+					&lt;ul style="padding:0;margin:0;list-style-type:none;display:flex;flex-wrap:wrap;gap:12px;">
 						&lt;li>
 							&lt;input type="checkbox" value="all" &lt;?php checked( empty( $category ), true ); ?> name="category[]" id="category_&lt;?php echo esc_attr( $type ); ?>"> &lt;label for="category_&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/label>
 						&lt;/li>
