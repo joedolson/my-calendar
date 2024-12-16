@@ -79,7 +79,7 @@ function mc_php_templates_docs() {
 	$intro     = '<p>' . __( 'PHP templates are enabled. To customize templates, copy one or more of the following files into your theme directory.', 'my-calendar' ) . '</p>';
 	$intro    .= '<p><a href="https://docs.joedolson.com/my-calendar/php-templates/">' . __( 'Read the documentation.', 'my-calendar' ) . '</a></p>';
 	$templates = array(
-		'event' => array(
+		'event'    => array(
 			'calendar-title',
 			'calendar',
 			'card-title',
@@ -99,7 +99,7 @@ function mc_php_templates_docs() {
 			'single',
 		),
 	);
-	$output = '';
+	$output    = '';
 	foreach ( $templates as $type => $template ) {
 		$base    = '/mc-templates/' . $type;
 		$output .= '<li><code>' . $base . '</code><ul>';
@@ -133,7 +133,7 @@ function mc_move_template_to_theme_dir() {
 		$file            = $template[1];
 		$type            = $template[0];
 		$mc_template     = plugin_dir_path( __FILE__ ) . 'mc-templates/' . $type . '/' . $file . '.php';
-		$custom_template = get_template_directory() . '/mc-templates/' . $type . '/' . $file  . '.php';
+		$custom_template = get_template_directory() . '/mc-templates/' . $type . '/' . $file . '.php';
 		$transient       = false;
 
 		global $wp_filesystem;
@@ -148,7 +148,7 @@ function mc_move_template_to_theme_dir() {
 			);
 		}
 		if ( $wp_filesystem->exists( $custom_template ) ) {
-			$transient = __( 'My Calendar template already exists in the target theme.', 'my-calendar');
+			$transient = __( 'My Calendar template already exists in the target theme.', 'my-calendar' );
 			$transient = array(
 				'message' => $transient,
 				'type'    => 'error',
@@ -186,7 +186,7 @@ add_action( 'init', 'mc_move_template_to_theme_dir' );
 /**
  * Check whether a template already exists in the custom theme directory.
  *
- * @param string $template Template path.
+ * @param string $path Template path.
  *
  * @return bool
  */
