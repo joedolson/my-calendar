@@ -848,6 +848,12 @@ label[for=mc_uri_query]::before {
 	align-items: center;
 }
 
+@media screen and ( width <= 481px ) {
+	#mc-generator .shortcode-preview {
+		grid-template-columns: 1fr;
+	}
+}
+
 #mc-generator .mc-tabs .tabs button {
 	padding: 8px 16px;
 	background: #fff;
@@ -1191,20 +1197,9 @@ input[name="mc_uri"] {
 	text-decoration: none;
 }
 
-.my-calendar-admin .checkboxes {
-	margin: 0;
-}
-
 .my-calendar-admin .bullets {
 	list-style: disc;
 	margin-left: 1em;
-}
-
-.my-calendar-admin .checkboxes:after {
-	content: '';
-	display: table;
-	clear: both;
-	margin-bottom: 1em;
 }
 
 #my-calendar-manage .mc-input-settings {
@@ -1221,6 +1216,18 @@ input[name="mc_uri"] {
 	font-weight: 700;
 	font-size: 1.1em;
 }
+
+.my-calendar-admin .checkboxes {
+	margin: 0;
+}
+
+.my-calendar-admin .checkboxes:after {
+	content: '';
+	display: table;
+	clear: both;
+	margin-bottom: 1em;
+}
+
 
 .my-calendar-admin .checkboxes .event-new-category {
 	background: transparent;
