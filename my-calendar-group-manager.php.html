@@ -988,6 +988,24 @@ function mc_list_groups() {
 		&lt;/div>
 		&lt;/form>
 		&lt;?php
+		if ( $num_pages > 1 ) {
+			printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
+		}
+		?>
+		&lt;nav class="mc-admin-footer" aria-label="&lt;?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
+			&lt;ul class="links">
+				&lt;li>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=grouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?>&lt;/a>
+				&lt;/li>
+				&lt;li>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=ungrouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?>&lt;/a>
+				&lt;/li>
+				&lt;li>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/a>
+				&lt;/li>
+			&lt;/ul>
+		&lt;/nav>
+		&lt;?php
 	} else {
 		?>
 		&lt;p class="mc-none">&lt;?php esc_html_e( 'No events found.', 'my-calendar' ); ?>&lt;/p>
