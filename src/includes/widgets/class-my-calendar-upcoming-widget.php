@@ -254,7 +254,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		?>
 		<fieldset>
 			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
-			<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
+			<ul style="padding:0;margin:0;list-style-type:none;display:flex;flex-wrap:wrap;gap:12px;">
 				<li>
 					<input type="checkbox" value="all" <?php echo $all_checked; ?> name="<?php echo $this->get_field_name( 'my_calendar_upcoming_category' ) . '[]'; ?>" id="<?php echo $this->get_field_id( 'my_calendar_upcoming_category' ); ?>"> <label for="<?php echo $this->get_field_id( 'my_calendar_upcoming_category' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
 				</li>

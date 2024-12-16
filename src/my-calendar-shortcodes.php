@@ -508,7 +508,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>
 				<fieldset class="categories">
 					<legend><?php esc_html_e( 'Categories', 'my-calendar' ); ?></legend>
-					<ul style="padding:0;margin:0;list-style-type:none;columns:3;">
+					<ul style="padding:0;margin:0;list-style-type:none;display:flex;flex-wrap:wrap;gap:12px;">
 						<li>
 							<input type="checkbox" value="all" <?php checked( empty( $category ), true ); ?> name="category[]" id="category_<?php echo esc_attr( $type ); ?>"> <label for="category_<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
 						</li>
