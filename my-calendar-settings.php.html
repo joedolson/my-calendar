@@ -1861,7 +1861,7 @@ function mc_remote_db() {
 				&lt;h2>&lt;?php esc_html_e( 'Location Controls', 'my-calendar' ); ?>&lt;/h2>
 
 				&lt;div class="inside">
-					&lt;?php echo wp_kses( mc_location_controls(), mc_kses_elements() ); ?>
+					&lt;?php mc_location_controls(); ?>
 				&lt;/div>
 			&lt;/div>
 		&lt;/div>
@@ -2118,8 +2118,6 @@ function mc_update_location_controls() {
 
 /**
  * Location controls for limiting location submission options.
- *
- * @return string HTML controls.
  */
 function mc_location_controls() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
@@ -2141,7 +2139,7 @@ function mc_location_controls() {
 		&lt;div>&lt;input type="hidden" name="mc_locations" value="true" />&lt;/div>
 		&lt;fieldset>
 			&lt;legend class="screen-reader-text">' . __( 'Restrict Location Input', 'my-calendar' ) . '&lt;/legend>
-			&lt;div id="mc-accordion" class="mc-locations-control">';
+			&lt;div id="mc-locations-controls" class="mc-locations-control">';
 		foreach ( $location_fields as $field => $label ) {
 			$locations = '';
 			$class     = '';
@@ -2158,9 +2156,10 @@ function mc_location_controls() {
 				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
 			}
 			$holder  = strtolower( $label ) . ',' . ucfirst( $label );
-			$output .= '&lt;h4' . $class . '>&lt;span class="dashicons" aria-hidden="true"> &lt;/span>&lt;button type="button" class="button-link">' . $label . $active . '&lt;/button>&lt;/h4>';
+			$output .= '&lt;details' . $class . '>&lt;summary>' . $label . $active . '&lt;/summary>';
 			// Translators: Name of field being restricted.
-			$output .= '&lt;div>&lt;label for="loc_values_' . $field . '">' . sprintf( __( 'Controls for %s', 'my-calendar' ), ucfirst( $label ) ) . '&lt;/label>&lt;br/>&lt;textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '&lt;/textarea>&lt;/div>';
+			$output .= '&lt;div>&lt;label for="loc_values_' . $field . '">' . sprintf( __( 'Controls for %s', 'my-calendar' ), ucfirst( $label ) ) . '&lt;/label>&lt;br/>&lt;textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '&lt;/textarea>&lt;/div>
+			&lt;/details>';
 		}
 		$output .= "
 			&lt;/div>
@@ -2168,10 +2167,8 @@ function mc_location_controls() {
 		&lt;/fieldset>
 		&lt;/form>";
 
-		return $output;
+		echo $output;
 	}
-
-	return '';
 }
 
 /**
