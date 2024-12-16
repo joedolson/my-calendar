@@ -1211,7 +1211,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					'<li class="event-new-category"> ' . $add_category . '</li>
 				</ul></fieldset>';
 				$return      .= '<div class="new-event-category">
-					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" id="event_category_name" name="event_category_name" disabled /> <button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
+					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" id="event_category_name" name="event_category_name" disabled /></p><p><button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
 				</div>';
 				$return      .= '
 					<p class="mc-primary-category">

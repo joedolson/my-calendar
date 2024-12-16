@@ -1245,13 +1245,19 @@ label[for=e_host] {
 	background: #0000000a;
 	padding: .5em 1em;
 	margin-top: -1em;
+	display: flex;
+	align-items: end;
+	column-gap: 2px;
+	flex-wrap: wrap;
 }
 
-.new-event-category p {
-	display: flex;
-	align-items: center;
-	column-gap: 4px;
-	flex-wrap: wrap;
+.new-event-category label {
+	display: block;
+}
+
+.wp-core-ui .new-event-category button {
+	margin-bottom: 0;
+	padding: 0 6px;
 }
 
 .my-calendar-admin .mc-heading-inline {
