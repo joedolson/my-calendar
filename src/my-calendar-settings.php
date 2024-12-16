@@ -16,11 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get a My Calendar setting.
  *
- * @param string $key Setting key.
+ * @param string       $key Setting key.
+ * @param string|array $fallback Fallback value to return.
  *
  * @return mixed A boolean false return means the setting doesn't exist.
  */
-function mc_get_option( $key ) {
+function mc_get_option( $key, $fallback = '' ) {
 	$options = get_option( 'my_calendar_options', mc_default_options() );
 	if ( ! is_array( $options ) ) {
 		$options = mc_default_options();
@@ -32,8 +33,12 @@ function mc_get_option( $key ) {
 	if ( ( ( 0 !== $value && ! $value ) || '' === $options[ $new_key ] ) && ( isset( $default[ $new_key ] ) && ! empty( $default[ $new_key ] ) ) ) {
 		return $default[ $new_key ];
 	}
+	$return = ( is_array( $value ) ) ? $value : (string) $value;
+	if ( ! $return && $fallback ) {
+		$return = $fallback;
+	}
 
-	return ( is_array( $value ) ) ? $value : (string) $value;
+	return $return;
 }
 
 /**
@@ -1181,7 +1186,7 @@ function mc_remote_db() {
 										'placeholder' => '{title} &raquo; {date}',
 									),
 									// Translators: Current title template (code).
-									'note'  => __( 'Current: %s', 'my-calendar' ),
+									'note'  => sprintf( __( 'Current: %s', 'my-calendar' ), mc_get_option( 'mc_event_title_template', '{title} &raquo; {date}' ) ),
 								)
 							);
 							?>
