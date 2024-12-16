@@ -2003,8 +2003,14 @@ input#mc_event_time:valid+span {
 
 	.mc-responsive-table th {
 		padding: 8px 4px;
+		background: rgba( 0,0,0,.05 );
 	}
 	
+	.mc-responsive-table tbody th {
+		font-weight: 700;
+		color: #000;
+	}
+
 	.mc-responsive-table tr:nth-of-type(odd) {
 		background: #fff;
 	}
@@ -2016,6 +2022,10 @@ input#mc_event_time:valid+span {
 
 	.mc-responsive-table.mc-locations-table thead tr {
 		grid-template-columns: repeat( 5, minmax( 0, 1fr ) );
+	}
+
+	.mc-responsive-table.mc-categories thead tr {
+		grid-template-columns: repeat( 6, minmax( 0, 1fr ) );
 	}
 
 	.mc-responsive-table.mc-contrast-table thead {

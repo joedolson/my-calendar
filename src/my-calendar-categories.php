@@ -842,7 +842,7 @@ function mc_manage_categories() {
 	}
 	if ( ! empty( $categories ) ) {
 		?>
-		<table class="widefat striped page fixed mc-categories" id="my-calendar-admin-table">
+		<table class="widefat striped page fixed mc-responsive-table mc-categories" id="my-calendar-admin-table">
 		<thead>
 		<tr>
 			<th scope="col">
