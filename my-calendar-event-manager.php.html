@@ -829,11 +829,11 @@ function mc_list_events() {
 				&lt;input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> &lt;label for='mass_edit_footer'>&lt;?php esc_html_e( 'Check all', 'my-calendar' ); ?>&lt;/label>
 			&lt;/div>
 		&lt;/form>
-		&lt;?php
-		if ( $num_pages > 1 ) {
-			printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
-		}
-		?>
+			&lt;?php
+			if ( $num_pages > 1 ) {
+				printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
+			}
+			?>
 		&lt;div class='mc-admin-footer'>
 			&lt;?php
 			$status_links = mc_status_links( $allow_filters );
