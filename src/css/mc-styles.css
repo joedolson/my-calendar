@@ -1334,7 +1334,7 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	column-gap: 6px;
+	gap: 6px;
 	margin: 6px 0 4px;
 	clear: both;
 }
@@ -1368,6 +1368,7 @@ ul.mc-variables li:has(.wp-picker-active) label {
 
 .locations-container .columns-flex {
 	align-items: end;
+	gap: 8px;
 }
 
 .locations-container .columns-flex .checkboxes {
@@ -1842,6 +1843,12 @@ tr.problem .error {
 	width: 80%;
 }
 
+@media screen and ( width <= 481px ) {
+	.mc-locations .locations-container input:not([type=checkbox]) {
+		width: 100%;
+	}
+}
+
 .follow-me {
 	overflow: hidden;
 }
@@ -1939,36 +1946,52 @@ input#mc_event_time:valid+span {
 }
 
 @media screen and ( max-width: 720px ) {
-	.mc-contrast-table,
-	.mc-contrast-table tbody,
-	.mc-contrast-table tr,
-	.mc-contrast-table td,
-	.mc-contrast-table th,
-	.mc-contrast-table caption {
+	.mc-responsive-table,
+	.mc-responsive-table tbody,
+	.mc-responsive-table tr,
+	.mc-responsive-table td,
+	.mc-responsive-table th,
+	.mc-responsive-table caption {
 		display: block;
 		height: auto;
 		min-height: 0;
 	}
 
-	.mc-contrast-table .comparison {
+	.mc-responsive-table .comparison {
 		display: inline;
 		font-style: normal;
 	}
 
-	.mc-contrast-table th {
+	.mc-responsive-table.mc-contrast-table th {
 		border: 2px solid;
 	}
 
-	.mc-contrast-table,
-	.mc-contrast-table thead,
-	.mc-contrast-table tbody,
-	.mc-contrast-table caption  {
-		width: calc( 100% - 32px );
+	#my-calendar-admin-table.mc-responsive-table tr > th:nth-of-type(1) {
+		width: auto;
+	}
+
+	.mc-responsive-table .row-actions {
+		margin-left: 0;
+		margin-right: 0.
+	}
+
+	.mc-responsive-table,
+	.mc-responsive-table thead,
+	.mc-responsive-table tbody,
+	.mc-responsive-table caption  {
+		width: 100%;
 		margin: 0 auto;
 		padding: 0;
 	}
 
-	.mc-contrast-table td {
+	.mc-responsive-table.mc-contrast-table,
+	.mc-responsive-table.mc-contrast-table thead,
+	.mc-responsive-table.mc-contrast-table tbody,
+	.mc-responsive-table.mc-contrast-table caption  {
+		width: calc( 100% - 32px );
+	}
+
+	.mc-responsive-table.mc-contrast-table td {
 		padding: .5rem;
 		width: auto;
 		text-align: left;
@@ -1977,12 +2000,25 @@ input#mc_event_time:valid+span {
 		align-items: center;
 		column-gap: .5rem;
 	}
+
+	.mc-responsive-table th {
+		padding: 8px 4px;
+	}
 	
-	.mc-contrast-table td:nth-of-type(odd) {
+	.mc-responsive-table tr:nth-of-type(odd) {
 		background: #fff;
 	}
 
-	.mc-contrast-table thead {
+	.mc-responsive-table thead tr {
+		display: grid;
+		width: auto;
+	}
+
+	.mc-responsive-table.mc-locations-table thead tr {
+		grid-template-columns: repeat( 5, minmax( 0, 1fr ) );
+	}
+
+	.mc-responsive-table.mc-contrast-table thead {
 		display: none;
 	}
 }

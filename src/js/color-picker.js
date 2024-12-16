@@ -31,4 +31,43 @@ jQuery(document).ready(function ($) {
 		stickClass: 'fix',
 		setWidthOnStick: true,
 	});
+	
+	/**
+	 * Map ARIA attributes to My Calendar table so responsive view doesn't break table relationships.
+	 */
+	function my_calendar_table_aria() {
+		try {
+			const allTables = document.querySelectorAll('.mc-responsive-table');
+			const allRowGroups = document.querySelectorAll('.mc-responsive-table thead, .mc-responsive-table tbody, .mc-responsive-table tfoot');
+			const allRows = document.querySelectorAll('.mc-responsive-table tr');
+			const allCells = document.querySelectorAll('.mc-responsive-table td');
+			const allHeaders = document.querySelectorAll('.mc-responsive-table th');
+			const allRowHeaders = document.querySelectorAll('.mc-responsive-table th[scope=row]');
+
+			for (let i = 0; i < allTables.length; i++) {
+				allTables[i].setAttribute('role','table');
+			}
+			for (let i = 0; i < allRowGroups.length; i++) {
+				allRowGroups[i].setAttribute('role','rowgroup');
+			}
+			for (let i = 0; i < allRows.length; i++) {
+				allRows[i].setAttribute('role','row');
+			}
+			for (let i = 0; i < allCells.length; i++) {
+				allCells[i].setAttribute('role','cell');
+			}
+			for (let i = 0; i < allHeaders.length; i++) {
+				allHeaders[i].setAttribute('role','columnheader');
+			}
+			// this accounts for scoped row headers
+			for (let i = 0; i < allRowHeaders.length; i++) {
+				allRowHeaders[i].setAttribute('role','rowheader');
+			}
+			// caption role not needed as it is not a real role and
+			// browsers do not dump their own role with display block
+		} catch (e) {
+			console.log( "my_calendar_table_aria(): " + e );
+		}
+	}
+	my_calendar_table_aria();
 });

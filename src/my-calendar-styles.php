@@ -232,7 +232,7 @@ function mc_display_contrast_variables() {
 	$header = '<thead><tr>' . $head . '</tr></thead>';
 	$body   = '<tbody>' . $body . '</tbody>';
 
-	$output = '<table class="mc-contrast-table striped"><caption>' . __( 'Accessible Color Combinations', 'my-calendar' ) . '</caption>' . $header . $body . '</table>';
+	$output = '<table class="mc-contrast-table mc-responsive-table striped"><caption>' . __( 'Accessible Color Combinations', 'my-calendar' ) . '</caption>' . $header . $body . '</table>';
 
 	return $output;
 }
