@@ -664,6 +664,7 @@ var mediaPopup = '';
 				const inpField     = document.querySelector('#' + short + '_image');
 				const idField      = document.querySelector('#' + short + '_image_id');
 				const displayField = document.querySelector('.event_image');
+				const container    = document.querySelector( '.mc-image-upload' );
 				clear_existing();
 				mediaPopup = wp.media({
 					multiple: false, // add, reset, false.
@@ -689,6 +690,7 @@ var mediaPopup = '';
 						inpField.value         = selection.first().attributes.url;
 						idField.value          = id;
 						displayField.innerHTML = img;
+						container.classList.add( 'has-image' );
 					}
 				});
 				mediaPopup.open();

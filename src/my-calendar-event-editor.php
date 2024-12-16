@@ -1168,6 +1168,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			}
 			break;
 		case 'event_image':
+			$has_image = '';
 			if ( $has_data && property_exists( $data, 'event_post' ) ) {
 				$image    = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post, 'post-thumbnail' ) : $data->event_image;
 				$image_id = ( has_post_thumbnail( $data->event_post ) ) ? get_post_thumbnail_id( $data->event_post ) : '';
@@ -1185,9 +1186,10 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					$remove      = '<button type="button" data-context="event" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 					$alt         = ( '' === $alt ) ? get_post_meta( $data->event_post, '_mcs_submitted_alt', true ) : $alt;
 					$alt         = ( '' === $alt ) ? $data->event_image : $alt;
+					$has_image   = ' has-image';
 				}
 				$return = '
-				<div class="mc-image-upload field-holder">
+				<div class="mc-image-upload field-holder' . $has_image . '">
 					<div class="image_fields">
 						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" /> <button type="button" data-context="event" class="button select-image" aria-describedby="event_image">' . $button_text . '</button> ' . $remove . '
 					</div>';
@@ -1898,7 +1900,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 			$text             = ( $event_location ) ? __( 'No change', 'my-calendar' ) : __( 'No location', 'my-calendar' );
 			$aria_describedby = ( $event_location ) ? ' aria-describedby="mc-current-location"' : '';
 			$fields          .= '
-			 <select name="location_preset" id="l_preset"' . $aria_describedby . '>
+			 <select class="widefat" name="location_preset" id="l_preset"' . $aria_describedby . '>
 				<option value="none">' . $text . '</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {

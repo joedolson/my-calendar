@@ -422,9 +422,12 @@ ul.mc-file-list ul li {
 .my-calendar-admin .mc-image-upload .image_fields {
 	display: flex;
 	gap: 10px;
-	position: absolute;
 	padding: 10px;
 	z-index: 10;
+}
+
+.my-calendar-admin .mc-image-upload.has-image .image_fields {
+	position: absolute;
 }
 
 .my-calendar-admin .event_image {
@@ -434,6 +437,12 @@ ul.mc-file-list ul li {
 .my-calendar-admin #event_image {
 	max-width: 50%;
 	height: auto;
+}
+
+@media screen and ( width < 481px ) {
+	.my-calendar-admin #event_image {
+		max-width: 100%;
+	}
 }
 
 .event_image:has(img[alt="Current image: "]):after {
@@ -913,7 +922,7 @@ label[for=mc_uri_query]::before {
 }
 
 .location-input {
-	width: 30em;
+	max-width: 30em;
 }
 
 .location-input select {
@@ -922,6 +931,7 @@ label[for=mc_uri_query]::before {
 
 .wp-core-ui .location-toggle .button {
 	margin-bottom: 0;
+	margin-top: 8px;
 }
 
 #my-calendar.disabled .ui-sortable .postbox .inside > *:not(#mc-scheduled-dates) {
