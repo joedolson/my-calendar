@@ -766,7 +766,7 @@ function mc_list_events() {
 					<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
 				</div>
 
-			<table class="widefat striped wp-list-table" id="my-calendar-admin-table">
+			<table class="widefat striped mc-responsive-table mc-events-table wp-list-table" id="my-calendar-admin-table">
 				<caption class="screen-reader-text"><?php esc_html_e( 'Event list. Use column headers to sort.', 'my-calendar' ); ?></caption>
 				<thead>
 					<tr>

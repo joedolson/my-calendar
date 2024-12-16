@@ -2024,6 +2024,11 @@ input#mc_event_time:valid+span {
 		grid-template-columns: repeat( 5, minmax( 0, 1fr ) );
 	}
 
+	.mc-responsive-table.mc-groups-table thead tr {
+		grid-template-columns: repeat( 7, minmax( 0, 1fr ) );
+	}
+
+	.mc-responsive-table.mc-events-table thead tr,
 	.mc-responsive-table.mc-categories thead tr {
 		grid-template-columns: repeat( 6, minmax( 0, 1fr ) );
 	}
