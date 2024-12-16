@@ -871,6 +871,12 @@ label[for=mc_uri_query]::before {
 	padding: 12px;
 }
 
+@media screen and ( width < 481px ) {
+	#mc-generator .mc-tabs .wptab {
+		padding: 12px 0;
+	}
+}
+
 .mc-generator-inputs {
 	display: grid;
 	grid-template-columns: repeat( 3, 1fr );
@@ -1381,6 +1387,11 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	border: 1px solid #c3c4c7;
 	margin: 10px 0;
 	padding: 10px;
+}
+
+.mc-generator-inputs > fieldset {
+	border: none;
+	padding: 0;
 }
 
 .mc-generator-inputs fieldset:nth-of-type(1) {
