@@ -1835,7 +1835,7 @@ function mc_remote_db() {
 				<h2><?php esc_html_e( 'Location Controls', 'my-calendar' ); ?></h2>
 
 				<div class="inside">
-					<?php echo wp_kses( mc_location_controls(), mc_kses_elements() ); ?>
+					<?php mc_location_controls(); ?>
 				</div>
 			</div>
 		</div>
@@ -2092,8 +2092,6 @@ function mc_update_location_controls() {
 
 /**
  * Location controls for limiting location submission options.
- *
- * @return string HTML controls.
  */
 function mc_location_controls() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
@@ -2115,7 +2113,7 @@ function mc_location_controls() {
 		<div><input type="hidden" name="mc_locations" value="true" /></div>
 		<fieldset>
 			<legend class="screen-reader-text">' . __( 'Restrict Location Input', 'my-calendar' ) . '</legend>
-			<div id="mc-accordion" class="mc-locations-control">';
+			<div id="mc-locations-controls" class="mc-locations-control">';
 		foreach ( $location_fields as $field => $label ) {
 			$locations = '';
 			$class     = '';
@@ -2132,9 +2130,10 @@ function mc_location_controls() {
 				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
 			}
 			$holder  = strtolower( $label ) . ',' . ucfirst( $label );
-			$output .= '<h4' . $class . '><span class="dashicons" aria-hidden="true"> </span><button type="button" class="button-link">' . $label . $active . '</button></h4>';
+			$output .= '<details' . $class . '><summary>' . $label . $active . '</summary>';
 			// Translators: Name of field being restricted.
-			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Controls for %s', 'my-calendar' ), ucfirst( $label ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '</textarea></div>';
+			$output .= '<div><label for="loc_values_' . $field . '">' . sprintf( __( 'Controls for %s', 'my-calendar' ), ucfirst( $label ) ) . '</label><br/><textarea name="mc_location_controls[' . $field . '][]" id="loc_values_' . $field . '" cols="80" rows="6" placeholder="' . $holder . '">' . trim( $locations ) . '</textarea></div>
+			</details>';
 		}
 		$output .= "
 			</div>
@@ -2142,10 +2141,8 @@ function mc_location_controls() {
 		</fieldset>
 		</form>";
 
-		return $output;
+		echo $output;
 	}
-
-	return '';
 }
 
 /**

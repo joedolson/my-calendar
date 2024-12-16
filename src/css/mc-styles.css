@@ -1079,10 +1079,6 @@ input[name="mc_uri"] {
 	line-height: 1.5;
 }
 
-.my-calendar-admin .mc-locations-control .ui-accordion-header .dashicons {
-	line-height: 1;
-}
-
 .my-calendar-admin .ui-accordion-header .dashicons:before {
 	content: "\f139";
 }
@@ -1096,20 +1092,19 @@ input[name="mc_uri"] {
 	border: 1px solid #c3c4c7;
 }
 
-.my-calendar-admin .mc-locations-control .ui-accordion-content {
-	padding: 0;
-	border: none;
-}
-
-.my-calendar-admin .mc-locations-control h4 {
+.my-calendar-admin .mc-locations-control summary {
 	margin: 0;
-	padding: .5em 0;
+	padding: .5rem;
 	background: #0000000a;
 	border: 1px solid #fff;
 }
 
-.my-calendar-admin .mc-locations-control h4:hover {
+.my-calendar-admin .mc-locations-control summary:hover {
 	border: 1px solid #000;
+}
+
+.my-calendar-admin .mc-locations-control details > div {
+	padding: .5rem;
 }
 
 .my-calendar-admin .mc-category-settings {

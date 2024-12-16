@@ -675,7 +675,6 @@ function mc_write_js() {
 		<script>
 			//<![CDATA[
 			jQuery(document).ready(function ($) {
-				$( '#mc-accordion' ).accordion( { collapsible: true, active: false, heightStyle: 'content' } );
 				let mc_allowed = $( '#mc_twitter' ).attr( 'data-allowed' );
 				$('#mc_twitter').charCount({
 					allowed: mc_allowed,
@@ -1875,10 +1874,6 @@ function mc_scripts() {
 	wp_enqueue_style( 'wp-color-picker' );
 	// Switch to wp_add_inline_script when no longer supporting WP 4.4.x.
 	wp_enqueue_script( 'mc-color-picker' );
-
-	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-config' === $id ) {
-		wp_enqueue_script( 'jquery-ui-accordion' );
-	}
 
 	if ( 'toplevel_page_my-calendar' === $id ) {
 		wp_enqueue_script( 'jquery-ui-autocomplete' ); // required for character counting.

@@ -722,5 +722,4 @@ var mediaPopup = '';
 			}
 		});
 	}
-
 })(jQuery);
