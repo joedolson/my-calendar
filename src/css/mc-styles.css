@@ -1591,7 +1591,7 @@ select[name="event_recur"] {
 	clear: both;
 }
 
-@media (max-width: 782px) {
+@media ( width <= 782px) {
 	.mc-admin-footer,
 	.mc-admin-header {
 		display: flex;
@@ -1599,6 +1599,12 @@ select[name="event_recur"] {
 	}
 	.mc-admin-footer .button-secondary, .mc-admin-header .button-secondary {
 		padding: 5px 10px;
+	}
+	ul.mc-file-list ul {
+		margin-left: 0;
+	}
+	ul.mc-file-list ul li {
+		margin-left: 0;
 	}
 }
 
