@@ -108,7 +108,7 @@ function mc_php_templates_docs() {
 			$id      = 'template_' . $type . '-' . $temp;
 			$nonce   = wp_nonce_field( 'mc-copy-file' );
 			$button  = '<form method="post">' . $nonce . '<input type="hidden" name="mc_file_template" value="' . $type . '/' . $temp . '"><button type="submit" class="button-secondary" aria-describedby="' . $id . '">Copy to Theme</button></form>';
-			$append  = ( $exists ) ? '<span class="dashicons dashicons-yes" aria-hidden-"true"></span> Copied to Theme</span>' : $button;
+			$append  = ( $exists ) ? '<span><span class="dashicons dashicons-yes" aria-hidden-"true"></span> Copied to Theme</span></span>' : $button;
 			$output .= '<li>' . $append . '<code id="' . $id . '">' . $base . '/' . $temp . '.php' . '</code></li>';
 		}
 		$output .= '</ul></li>';
