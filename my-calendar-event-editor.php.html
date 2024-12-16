@@ -1194,6 +1194,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			}
 			break;
 		case 'event_image':
+			$has_image = '';
 			if ( $has_data &amp;&amp; property_exists( $data, 'event_post' ) ) {
 				$image    = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post, 'post-thumbnail' ) : $data->event_image;
 				$image_id = ( has_post_thumbnail( $data->event_post ) ) ? get_post_thumbnail_id( $data->event_post ) : '';
@@ -1211,9 +1212,10 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					$remove      = '&lt;button type="button" data-context="event" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '&lt;/button>';
 					$alt         = ( '' === $alt ) ? get_post_meta( $data->event_post, '_mcs_submitted_alt', true ) : $alt;
 					$alt         = ( '' === $alt ) ? $data->event_image : $alt;
+					$has_image   = ' has-image';
 				}
 				$return = '
-				&lt;div class="mc-image-upload field-holder">
+				&lt;div class="mc-image-upload field-holder' . $has_image . '">
 					&lt;div class="image_fields">
 						&lt;input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />&lt;input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" /> &lt;button type="button" data-context="event" class="button select-image" aria-describedby="event_image">' . $button_text . '&lt;/button> ' . $remove . '
 					&lt;/div>';
@@ -1237,7 +1239,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					'&lt;li class="event-new-category"> ' . $add_category . '&lt;/li>
 				&lt;/ul>&lt;/fieldset>';
 				$return      .= '&lt;div class="new-event-category">
-					&lt;p>&lt;label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '&lt;/label> &lt;input type="text" value="" id="event_category_name" name="event_category_name" disabled /> &lt;button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '&lt;/button>&lt;/p>
+					&lt;p>&lt;label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '&lt;/label> &lt;input type="text" value="" id="event_category_name" name="event_category_name" disabled />&lt;/p>&lt;p>&lt;button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '&lt;/button>&lt;/p>
 				&lt;/div>';
 				$return      .= '
 					&lt;p class="mc-primary-category">
@@ -1342,7 +1344,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			&lt;/p>
 			&lt;p>
 				&lt;label for="e_recur">' . __( 'Period', 'my-calendar' ) . '&lt;/label>
-				&lt;select name="event_recur" id="e_recur">
+				&lt;select class="widefat" name="event_recur" id="e_recur">
 					' . mc_recur_options( $recur ) . '
 				&lt;/select>
 			&lt;/p>
@@ -1924,7 +1926,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 			$text             = ( $event_location ) ? __( 'No change', 'my-calendar' ) : __( 'No location', 'my-calendar' );
 			$aria_describedby = ( $event_location ) ? ' aria-describedby="mc-current-location"' : '';
 			$fields          .= '
-			 &lt;select name="location_preset" id="l_preset"' . $aria_describedby . '>
+			 &lt;select class="widefat" name="location_preset" id="l_preset"' . $aria_describedby . '>
 				&lt;option value="none">' . $text . '&lt;/option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
