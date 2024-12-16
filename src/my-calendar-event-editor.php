@@ -1316,7 +1316,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			</p>
 			<p>
 				<label for="e_recur">' . __( 'Period', 'my-calendar' ) . '</label>
-				<select name="event_recur" id="e_recur">
+				<select class="widefat" name="event_recur" id="e_recur">
 					' . mc_recur_options( $recur ) . '
 				</select>
 			</p>
