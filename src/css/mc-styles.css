@@ -345,8 +345,15 @@ ul.mc-file-list ul {
 	margin-left: 2rem;
 }
 
+ul.mc-file-list > li > code {
+	font-weight: 700;
+}
+
 ul.mc-file-list ul li {
 	margin-left: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 #my-calendar .apply {
