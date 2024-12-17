@@ -2218,7 +2218,7 @@ function my_calendar( $args ) {
 													</div>
 												</li>';
 											} else {
-												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2>" . $event_output . '</li>';
+												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2><div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>" . $event_output . '</div></li>';
 											}
 											$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 										}
