@@ -1369,6 +1369,10 @@ dialog.my-calendar-modal .modal-content {
 	display: none;
 }
 
+#js-modal-content p {
+	margin: 0 0 1rem 0;
+}
+
 /* removes scroll when modal is opened */
 body.mc-no-scroll {
 	overflow: hidden;
