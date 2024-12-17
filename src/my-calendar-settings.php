@@ -1699,7 +1699,7 @@ function mc_remote_db() {
 								mc_settings_field(
 									array(
 										'name'  => 'mc_list_link_titles',
-										'label' => __( 'Show events in list view.', 'my-calendar' ),
+										'label' => __( 'Show events in list view. (Agenda view)', 'my-calendar' ),
 										'type'  => 'checkbox-single',
 									)
 								);
