@@ -282,7 +282,7 @@
 	margin: 0 0 8px;
 }
 
-.mc-main .current-day:not(.day .current-day) {
+.mc-main .current-day:not(.day .current-day, .list .current-day) {
 	outline: 2px solid var(--current-day-border);
 	background: var(--current-day-bg);
 	color: var(--current-day-color);
@@ -532,12 +532,9 @@
 
 .mc-main .mc-list li.mc-events {
 	list-style-type: none !important;
-	margin: 0;
-	padding: 4px 0;
-}
-
-.mc-main .mc-list .mc-events:nth-of-type(even) {
-	background: none;
+	margin: 0 0 8px;
+	padding: 8px;
+	border: 1px solid var(--grid-cell-border);
 }
 
 .mc-main .list-event .event-title {
