@@ -1178,7 +1178,6 @@ input[name="mc_uri"] {
 .mc-sortable .mc-calendar {
 	background-color: #fff !important;
 	border: 2px solid #787c82 !important;
-	border-left-width: 4px !important;
 }
 
 .mc-sortable li.mc-stop {
