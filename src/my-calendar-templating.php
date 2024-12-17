@@ -101,15 +101,16 @@ function mc_php_templates_docs() {
 	);
 	$output    = '';
 	foreach ( $templates as $type => $template ) {
-		$base    = '/mc-templates/' . $type;
-		$output .= '<li><code>' . $base . '</code><ul>';
+		$base    = 'mc-templates/' . $type;
+		$output .= '<li><code>/' . $base . '</code><ul>';
 		foreach ( $template as $temp ) {
-			$exists  = mc_template_exists( $base . '/' . $temp . '.php' );
-			$id      = 'template_' . $type . '-' . $temp;
-			$nonce   = wp_nonce_field( 'mc-copy-file' );
-			$button  = '<form method="post">' . $nonce . '<input type="hidden" name="mc_file_template" value="' . $type . '/' . $temp . '"><button type="submit" class="button-secondary" aria-describedby="' . $id . '">Copy to Theme</button></form>';
-			$append  = ( $exists ) ? '<span><span class="dashicons dashicons-yes" aria-hidden-"true"></span> Copied to Theme</span></span>' : $button;
-			$output .= '<li>' . $append . '<code id="' . $id . '">' . $base . '/' . $temp . '.php' . '</code></li>';
+			$exists    = mc_template_exists( '/' . $base . '/' . $temp . '.php' );
+			$edit_link = ( $exists ) ? add_query_arg( 'file', $base . '/' . $temp . '.php', admin_url( 'theme-editor.php' ) ) : '';
+			$id        = 'template_' . $type . '-' . $temp;
+			$nonce     = wp_nonce_field( 'mc-copy-file' );
+			$button    = '<form method="post">' . $nonce . '<input type="hidden" name="mc_file_template" value="' . $type . '/' . $temp . '"><button type="submit" class="button-secondary" aria-describedby="' . $id . '">Copy to Theme</button></form>';
+			$append    = ( $exists ) ? '<span><span class="dashicons dashicons-yes" aria-hidden-"true"></span> <a href="' . esc_url( $edit_link ) . '">' . __( 'Edit in Theme', 'my-calendar' ) . '</a></span></span>' : $button;
+			$output   .= '<li>' . $append . '<code id="' . $id . '">/' . $base . '/' . $temp . '.php' . '</code></li>';
 		}
 		$output .= '</ul></li>';
 	}
