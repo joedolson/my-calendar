@@ -119,6 +119,7 @@
 
 	if ( 'true' === my_calendar.ajax ) {
 		mc_render_buttons();
+		my_calendar_edit_toggles();
 		// Prevents spacebar from scrolling the page on links with button role.
 		$(document).on( 'keydown', '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)', function(e) {
 			if ( 32 === e.which ) {
@@ -230,6 +231,7 @@
 						$('.mini .has-events').children().not('.mc-date-container').hide();
 					}
 					mc_render_buttons();
+					my_calendar_edit_toggles();
 					// All views.
 					$( '#' + targetId ).trigger( 'focus' );
 					let refText = $( '#mc_head_' + ref ).text();
@@ -316,6 +318,25 @@
 
 	$('.mc-main a[target=_blank]').append( ' <span class="dashicons dashicons-external" aria-hidden="true"></span><span class="screen-reader-text"> ' + my_calendar.newWindow + '</span>' );
 
+	function my_calendar_edit_toggles() {
+		const adminToggles = document.querySelectorAll( '.mc-toggle-edit' );
+		if ( adminToggles ) {
+			adminToggles.forEach( (el) => {
+				let controls = el.getAttribute( 'aria-controls' );
+				let controlled = document.querySelector( '#' + controls );
+				el.addEventListener( 'click', function(e) {
+					let expanded = el.getAttribute( 'aria-expanded' );
+					if ( 'true' === expanded ) {
+						controlled.style.display = 'none';
+						el.setAttribute( 'aria-expanded', 'false' );
+					} else {
+						controlled.style.display = 'block';
+						el.setAttribute( 'aria-expanded', 'true' );
+					}
+				});
+			});
+		}
+	}
 	/**
 	 * Map ARIA attributes to My Calendar table so responsive view doesn't break table relationships.
 	 */
