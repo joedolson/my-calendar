@@ -1004,23 +1004,25 @@ function mc_get_details_label( $event, $e ) {
 /**
  * Format a date into a badge.
  *
- * @param int $date Datestamp.
+ * @param string $date Date in strtotime formattable string..
  *
  * @return string
  */
 function mc_date_badge( $date ) {
-	$badge = '<time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', strtotime( $date ) ) . '"><span class="month">' . mc_date( 'M', strtotime( $date ) ) . '</span><span class="day">' . mc_date( 'j', strtotime( $date ) ) . '</span></time>';
+	$time  = strtotime( $date );
+	$badge = '<time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', $time ) . '"><span class="month">' . mc_date( 'M', $time ) . '</span><span class="day">' . mc_date( 'j', $time ) . '</span></time>';
 	/**
 	 * Filter the date badge HTML.
 	 *
 	 * @hook mc_date_badge
 	 *
 	 * @param {string} $badge HTML output of the badge.
-	 * @param {int}    $date Datestamp.
+	 * @param {int}    $time Timestamp used.
+	 * @param {string} $date Date string passed into function.
 	 *
 	 * @return {string}
 	 */
-	$badge = apply_filters( 'mc_date_badge', $badge, $date );
+	$badge = apply_filters( 'mc_date_badge', $badge, $time, $date );
 
 	return $badge;
 }
