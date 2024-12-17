@@ -546,8 +546,11 @@
 	align-items: center;
 }
 
-.mc-main .list-event .event-title {
+.mc-main .mc-list .event-title a {
 	padding: 8px;
+}
+
+.mc-main .list-event .event-title {
 	margin-bottom: 4px 0 !important;
 }
 
@@ -600,10 +603,6 @@
 .mc-main .mc-list .event-date {
 	font-size: var(--list-date);
 	font-weight: 600;
-}
-
-.mc-main .list-event {
-	margin: 0 0 0 32px;
 }
 
 .mc-main .day .list-event, .mc-main .day .details {
