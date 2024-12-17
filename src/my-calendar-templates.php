@@ -523,7 +523,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', $hcal_dt_end, false );    // Date: hcal formatted end.
 	$e['userstart']    = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
 	$e['userend']      = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
-	$e['datebadge']    = '<time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', strtotime( $real_begin_date ) ) . '"><span class="month">' . mc_date( 'M', strtotime( $real_begin_date ) ) . '</span><span class="day">' . mc_date( 'j', strtotime( $real_begin_date ) ) . '</span></time>';
+	$e['datebadge']    = mc_date_badge( $real_begin_date );
 	/**
 	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
 	 *
@@ -999,6 +999,30 @@ function mc_get_details_label( $event, $e ) {
 	);
 
 	return $e_label;
+}
+
+/**
+ * Format a date into a badge.
+ *
+ * @param int $date Datestamp.
+ *
+ * @return string
+ */
+function mc_date_badge( $date ) {
+	$badge = '<time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', strtotime( $date ) ) . '"><span class="month">' . mc_date( 'M', strtotime( $date ) ) . '</span><span class="day">' . mc_date( 'j', strtotime( $date ) ) . '</span></time>';
+	/**
+	 * Filter the date badge HTML.
+	 *
+	 * @hook mc_date_badge
+	 *
+	 * @param {string} $badge HTML output of the badge.
+	 * @param {int}    $date Datestamp.
+	 *
+	 * @return {string}
+	 */
+	$badge = apply_filters( 'mc_date_badge', $badge, $date );
+
+	return $badge;
 }
 
 /**
