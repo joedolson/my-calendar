@@ -129,11 +129,14 @@ ul.links li {
 	margin-right: 5px
 }
 
-span.mc-notice {
-	padding: 5px;
-	background: #fcf9e8;
-	border: 1px solid #b32d2e;
-	border-radius: 5px;
+.mc-input-description {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.mc-input-description span.mc-notice {
+	margin: 0;
 }
 
 .my-calendar-admin .spam {

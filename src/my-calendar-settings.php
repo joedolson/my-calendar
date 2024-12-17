@@ -159,7 +159,7 @@ function mc_settings_field( $args = array() ) {
 		case 'email':
 			if ( $note ) {
 				$note = sprintf( str_replace( '%', '', $note ), "<code>$value</code>" );
-				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -173,7 +173,7 @@ function mc_settings_field( $args = array() ) {
 		case 'textarea':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -184,7 +184,7 @@ function mc_settings_field( $args = array() ) {
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
 			if ( $note ) {
-				$note = "<div id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>" . sprintf( $note, "<code>$value</code>" ) . '</div>';
+				$note = "<div id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>" . sprintf( $note, "<code>$value</code>" ) . '</div>';
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -196,7 +196,7 @@ function mc_settings_field( $args = array() ) {
 		case 'radio':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -221,7 +221,7 @@ function mc_settings_field( $args = array() ) {
 		case 'select':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
 				$aria = " aria-describedby='$name-note'";
 			} else {
 				$note = '';
@@ -788,7 +788,7 @@ function my_calendar_settings() {
 								if ( isset( $_POST['mc_use_permalinks'] ) && ( ! ( 'on' === $_POST['mc_use_permalinks'] && 'true' === $before_permalinks ) ) ) {
 									$url = admin_url( 'options-permalink.php#mc_cpt_base' );
 									// Translators: URL for WordPress Settings > Permalinks.
-									$note = ' <span class="mc-notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
+									$note = ' <span class="mc-notice notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
 								} else {
 									if ( 'true' === mc_get_option( 'remote' ) ) {
 										$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
