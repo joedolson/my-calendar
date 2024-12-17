@@ -748,22 +748,24 @@ label[for=mc_uri_query]::before {
 	clear: both;
 }
 
-.mc-tabs.vertical .tabs button[aria-selected=true]:after,
-.mc-tabs.vertical .tabs button[aria-selected=true]:before {
-	left: 100%;
-	top: 50%;
-	border-left: 10px solid #fff;
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent;
-	margin-top: -10px;
-}
+@media screen and ( width >= 481px ) {
+	.mc-tabs.vertical .tabs button[aria-selected=true]:after,
+	.mc-tabs.vertical .tabs button[aria-selected=true]:before {
+		left: 100%;
+		top: 50%;
+		border-left: 10px solid #fff;
+		border-top: 10px solid transparent;
+		border-bottom: 10px solid transparent;
+		margin-top: -10px;
+	}
 
-.mc-tabs.vertical .tabs button[aria-selected=true]:before {
-	left: calc( 100% + 1px );
-	top: 50%;
-	border-left: 10px solid #a2a4a7;
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent;
+	.mc-tabs.vertical .tabs button[aria-selected=true]:before {
+		left: calc( 100% + 1px );
+		top: 50%;
+		border-left: 10px solid #a2a4a7;
+		border-top: 10px solid transparent;
+		border-bottom: 10px solid transparent;
+	}
 }
 
 
@@ -805,6 +807,31 @@ label[for=mc_uri_query]::before {
 .mc-tabs.vertical .wptab {
 	border-left: 1px solid #c3c4c7;
 	padding: 10px;
+}
+
+@media screen and ( width < 481px ) {
+	.mc-tabs.vertical {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.mc-tabs.vertical .tabs {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.mc-tabs.vertical .tabs button {
+		border: 1px solid #c3c4c7;
+	}
+	.mc-tabs.vertical .wptab {
+		padding: 0;
+		margin-top: 10px;
+	}
+	.mc-tabs.vertical .tabs button[aria-selected="true"]::before,
+	.mc-tabs.vertical .tabs button[aria-selected="true"]::after {
+		display: none;
+	}
+	.mc-tabs.vertical .tabs button[aria-selected="true"] {
+		border-bottom: 2px solid black;
+	}
 }
 
 .my-calendar-admin fieldset .wptab {
