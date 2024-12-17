@@ -1985,7 +1985,9 @@ input#mc_event_time:valid+span {
 
 	.mc-responsive-table .row-actions {
 		margin-left: 0;
-		margin-right: 0.
+		margin-right: 0;
+		position: static;
+		left: auto;
 	}
 
 	.mc-responsive-table,
