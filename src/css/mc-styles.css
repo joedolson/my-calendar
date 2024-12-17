@@ -1465,24 +1465,17 @@ select[name="event_recur"] {
 	color: red;
 }
 
-.mc-controls {
-	text-align: right;
+.mc-controls ul {
+	justify-content: end;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
 	margin: 0;
 }
 
 .mc-controls.footer {
 	margin: 20px 0 0;
-}
-
-.mc-controls ul {
-	margin: 0;
-	padding: 0;
-}
-
-.mc-controls li {
-	display: inline-block;
-	padding: 0 15px 0 0;
-	margin: 0;
 }
 
 .mc-controls li:last-of-type {
