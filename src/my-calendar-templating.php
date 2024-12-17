@@ -80,7 +80,8 @@ function mc_php_templates_docs() {
 	$theme_name   = $theme->get( 'Name' );
 	$theme_parent = $theme->get( 'Template' );
 	if ( '' === $theme_parent ) {
-		wp_admin_notice( 
+		wp_admin_notice(
+			// translators: The name of the currently active theme.
 			sprintf( __( 'Your current theme, %s, is not a child theme. Updates to your theme will delete custom My Calendar templates.', 'my-calendar' ), $theme_name ),
 			array(
 				'type' => 'error',
