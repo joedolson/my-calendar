@@ -76,6 +76,18 @@ function mc_php_templates_docs() {
 		wp_admin_notice( $message, array( 'type' => $type ) );
 		delete_transient( 'mc_file_copy' );
 	}
+	$theme        = wp_get_theme();
+	$theme_name   = $theme->get( 'Name' );
+	$theme_parent = $theme->get( 'Template' );
+	if ( '' === $theme_parent ) {
+		wp_admin_notice( 
+			sprintf( __( 'Your current theme, %s, is not a child theme. Updates to your theme will delete custom My Calendar templates.', 'my-calendar' ), $theme_name ),
+			array(
+				'type' => 'error',
+			)
+		);
+	}
+
 	$intro     = '<p>' . __( 'PHP templates are enabled. To customize templates, copy one or more of the following files into your theme directory.', 'my-calendar' ) . '</p>';
 	$intro    .= '<p><a href="https://docs.joedolson.com/my-calendar/php-templates/">' . __( 'Read the documentation.', 'my-calendar' ) . '</a></p>';
 	$templates = array(
