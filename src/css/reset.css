@@ -9,7 +9,7 @@
 .mc-main div, .mc-main span, .mc-main h1, .mc-main h2, .mc-main h3, .mc-main h4, .mc-main h5, .mc-main h6, .mc-main p, .mc-main blockquote, .mc-main pre, .mc-main a, .mc-main img, .mc-main dl, .mc-main dt, .mc-main dd, .mc-main ol, .mc-main ul, .mc-main li, .mc-main fieldset, .mc-main form, .mc-main label, .mc-main legend, .mc-main table, .mc-main caption, .mc-main tbody, .mc-main tfoot, .mc-main thead, .mc-main tr, .mc-main th, .mc-main td, .mc-main article, .mc-main aside, .mc-main details, .mc-main footer, .mc-main header, .mc-main menu, .mc-main meter, .mc-main nav, .mc-main output, .mc-main progress, .mc-main section, .mc-main summary {
 	border: 0;
 	outline: 0;
-	font-size: 100%;
+	font-size: 1rem;
 	vertical-align: baseline;
 	background: transparent;
 	margin: 0;
@@ -142,41 +142,6 @@
 	padding: 16px;
 }
 
-.mc-main .list-event .event-title {
-	display: flex;
-	column-gap: 16px;
-	align-items: center;
-}
-
-.mc-main .list-event .event-title {
-	padding: 8px;
-	margin-bottom: 4px 0 !important;
-}
-
-.mc-main .list-event > .event-title {
-	display: block;
-	font-size: var(--list-event-title);
-}
-
-.mc-main .mc-list .event-date button.mc-text-button {
-	width: auto;
-	padding: 0;
-	border: none;
-	text-align: left;
-	background: transparent;
-	background-color: transparent ! important;
-	color: var(--primary-dark) ! important;
-	outline-offset: 2px;
-	font-size: var(--list-event-date);
-}
-
-.mc-main .mc-list .event-date button.mc-text-button:hover,
-.mc-main .mc-list .event-date button.mc-text-button:focus {
-	background: transparent;
-	background-color: transparent !important;
-	outline: 1px solid var(--nav-button-border);
-}
-
 .mc-main .event-title a.list {
 	text-decoration: none;
 }
@@ -187,23 +152,6 @@
 	display: flex;
 	align-items: top;
 	column-gap: 4px;
-}
-
-.mc-main .mc-list .mc-text-button > span {
-	text-decoration: underline;
-}
-
-.mc-main .mc-list .event-date button:hover,
-.mc-main .mc-list .event-date button:focus {
-	background: transparent;
-}
-
-.mc-main .mc-list .details .address {
-	padding-right: 0;
-}
-
-.mc-main .mc-list .details > p {
-	padding: 8px;
 }
 
 .mc-main button.close {
@@ -339,11 +287,6 @@
 	background: var(--current-day-bg);
 	color: var(--current-day-color);
 	outline-offset: -2px;
-}
-
-.mc-main .mc-list li.current-day {
-	border-left: 4px solid var(--current-day-border);
-	background: var(--current-day-bg);
 }
 
 .my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
@@ -557,20 +500,6 @@
 	width: auto;
 }
 
-/* List View */
-.mc-main .mc-list li, .mc-day {
-	position: relative;
-}
-
-.mc-main .mc-list li.mc-events {
-	list-style-type: none !important;
-	margin: 0;
-	padding: 4px 0;
-}
-
-.mc-main .mc-list .mc-events:nth-of-type(even) {
-	background: none;
-}
 
 .mc-main .details .sharing {
 	clear: both;
@@ -595,6 +524,79 @@
 	margin-bottom: 24px;
 }
 
+
+/* List View */
+.mc-main .mc-list li, .mc-day {
+	position: relative;
+}
+
+.mc-main .mc-list li.mc-events {
+	list-style-type: none !important;
+	margin: 0;
+	padding: 4px 0;
+}
+
+.mc-main .mc-list .mc-events:nth-of-type(even) {
+	background: none;
+}
+
+.mc-main .list-event .event-title {
+	display: flex;
+	column-gap: 16px;
+	align-items: center;
+}
+
+.mc-main .list-event .event-title {
+	padding: 8px;
+	margin-bottom: 4px 0 !important;
+}
+
+.mc-main .list-event > .event-title {
+	display: block;
+	font-size: var(--list-event-title);
+}
+
+.mc-main .mc-list .event-date button.mc-text-button {
+	width: auto;
+	padding: 0;
+	border: none;
+	text-align: left;
+	background: transparent;
+	background-color: transparent ! important;
+	color: var(--primary-dark) ! important;
+	outline-offset: 2px;
+	font-size: var(--list-event-date);
+}
+
+.mc-main .mc-list .event-date button.mc-text-button:hover,
+.mc-main .mc-list .event-date button.mc-text-button:focus {
+	background: transparent;
+	background-color: transparent !important;
+	outline: 1px solid var(--nav-button-border);
+}
+
+.mc-main .mc-list .mc-text-button > span {
+	text-decoration: underline;
+}
+
+.mc-main .mc-list .event-date button:hover,
+.mc-main .mc-list .event-date button:focus {
+	background: transparent;
+}
+
+.mc-main .mc-list .details .address {
+	padding-right: 0;
+}
+
+.mc-main .mc-list .details > p {
+	padding: 8px;
+}
+
+.mc-main .mc-list li.current-day {
+	border-left: 4px solid var(--current-day-border);
+	background: var(--current-day-bg);
+}
+
 .mc-main .mc-list .event-date {
 	font-size: var(--list-date);
 	font-weight: 600;
@@ -612,6 +614,16 @@
 .mc-main .mc-list-extended {
 	font-size: 14px;
 	font-style: italic;
+}
+
+.mc-list-details.all-events {
+	text-align: left;
+	display: inline-block;
+	text-transform: none;
+}
+
+.mc-main.list.has-modal .mc-list .mc-events .list-event {
+	padding: 0;
 }
 
 .mc-main .details .mc-image {
@@ -652,12 +664,6 @@
 
 .view-full {
 	text-align: right;
-}
-
-.mc-list-details.all-events {
-	text-align: left;
-	display: inline-block;
-	text-transform: none;
 }
 
 .mc-main .calendar-event .details {
@@ -1211,10 +1217,6 @@ ol.mc-search-results li.no-results {
 
 .mc-main .uses-modal {
 	display: none !important;
-}
-
-.mc-main.list.has-modal .mc-list .mc-events .list-event {
-	padding: 0;
 }
 
 .mcjs.mc-main.listjs .details, .mcjs.mc-main.gridjs .calendar-events { display: none; }
