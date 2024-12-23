@@ -2107,7 +2107,7 @@ function mc_get_support_form() {
 	$mc_css        = mc_get_option( 'css_file' );
 
 	// Pro license status.
-	$license       = ( '' !== get_option( 'mcs_license_key', '' ) ) ? get_option( 'mcs_license_key' ) : '';
+	$license       = ( ! defined( 'MCS_LICENSE_KEY' ) ) ? get_option( 'mcs_license_key' ) : MCS_LICENSE_KEY;
 	$license_valid = get_option( 'mcs_license_key_valid' );
 	$checked       = ( 'valid' === $license_valid ) ? true : false;
 
