@@ -603,8 +603,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved', 'success' );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
-				if ( function_exists( 'wpt_post_to_twitter' ) && isset( $post['mc_twitter'] ) && '' !== trim( $post['mc_twitter'] ) ) {
-					wpt_post_to_twitter( stripslashes( $post['mc_twitter'] ) );
+				// wpt_post_to_twiter was changed to wpt_post_to_service on 12.29.2024.
+				if ( function_exists( 'wpt_post_to_service' ) && isset( $post['mc_twitter'] ) && '' !== trim( $post['mc_twitter'] ) ) {
+					wpt_post_to_service( stripslashes( $post['mc_twitter'] ) );
 				}
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
@@ -1613,13 +1614,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				 * @return {string}
 				 */
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
-				if ( function_exists( 'wpt_post_to_twitter' ) && current_user_can( 'wpt_can_tweet' ) ) {
+				if ( function_exists( 'wpt_post_to_service' ) && current_user_can( 'wpt_can_tweet' ) ) {
 					if ( ! ( 'edit' === $mode && 1 === (int) $data->event_approved ) ) {
-						$mc_allowed = absint( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : 140 );
 						?>
 						<p class='mc-twitter'>
 							<label for='mc_twitter'><span class="dashicons dashicons-share" aria-hidden="true"></span> <?php esc_html_e( 'Post a Status Update (via XPoster)', 'my-calendar' ); ?></label><br/>
-							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter' data-allowed="<?php echo absint( $mc_allowed ); ?>"><?php echo esc_textarea( stripslashes( apply_filters( 'mc_twitter_text', '', $data ) ) ); ?></textarea>
+							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter' data-allowed="280"><?php echo esc_textarea( stripslashes( apply_filters( 'mc_twitter_text', '', $data ) ) ); ?></textarea>
 						</p>
 						<?php
 					}

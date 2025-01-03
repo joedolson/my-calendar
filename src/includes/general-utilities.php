@@ -43,9 +43,9 @@ function mc_switch_sites() {
  * @return void
  */
 function mc_tweet_approval( $previous_status, $new_status ) {
-	if ( function_exists( 'wpt_post_to_twitter' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) !== '' ) {
+	if ( function_exists( 'wpt_post_to_service' ) && isset( $_POST['mc_twitter'] ) && trim( $_POST['mc_twitter'] ) !== '' ) {
 		if ( ( 0 === (int) $previous_status || 2 === (int) $previous_status ) && 1 === (int) $new_status ) {
-			wpt_post_to_twitter( stripslashes( $_POST['mc_twitter'] ) );
+			wpt_post_to_service( stripslashes( $_POST['mc_twitter'] ) );
 		}
 	}
 }

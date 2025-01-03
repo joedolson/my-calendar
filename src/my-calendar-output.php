@@ -2291,7 +2291,7 @@ function my_calendar( $args ) {
 	$json_ld = '';
 	if ( ! is_admin() && ! ( isset( $args['json'] ) && 'false' === $args['json'] ) ) {
 		if ( ! empty( $json ) && is_array( $json ) ) {
-			$json_ld = json_encode( map_deep( $json, 'esc_html' ), JSON_UNESCAPED_SLASHES );
+			$json_ld = wp_json_encode( map_deep( $json, 'esc_html' ), JSON_UNESCAPED_SLASHES );
 			$json_ld = PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . $json_ld . PHP_EOL . '</script>' . PHP_EOL;
 		}
 	}

@@ -531,7 +531,7 @@ function mc_head() {
 			$event  = mc_get_event( $mc_id );
 			$schema = mc_event_schema( $event );
 
-			echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
+			echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . wp_json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
 		}
 	}
 
@@ -540,7 +540,7 @@ function mc_head() {
 		$location = mc_get_location( $loc_id );
 		$schema   = mc_location_schema( $location );
 
-		echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
+		echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . wp_json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
 	}
 
 	$page_id = mc_get_option( 'uri_id' );
@@ -670,7 +670,7 @@ function mc_deal_with_deleted_user( $id, $reassign ) {
 function mc_write_js() {
 	$is_calendar = ( isset( $_GET['page'] ) && 'my-calendar' === $_GET['page'] ) ? true : false;
 	$is_edit     = ( isset( $_GET['mode'] ) && 'edit' === $_GET['mode'] ) ? true : false;
-	if ( function_exists( 'wpt_post_to_twitter' ) && $is_calendar && ! $is_edit ) {
+	if ( function_exists( 'wpt_post_to_service' ) && $is_calendar && ! $is_edit ) {
 		?>
 		<script>
 			//<![CDATA[
@@ -1893,7 +1893,7 @@ function mc_scripts() {
 		}
 	}
 
-	if ( 'toplevel_page_my-calendar' === $id && function_exists( 'wpt_post_to_twitter' ) ) {
+	if ( 'toplevel_page_my-calendar' === $id && function_exists( 'wpt_post_to_service' ) ) {
 		wp_enqueue_script( 'mc.charcount' );
 	}
 	if ( 'toplevel_page_my-calendar' === $id || $slug . '_page_my-calendar-manage' === $id ) {

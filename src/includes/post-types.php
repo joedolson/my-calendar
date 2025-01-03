@@ -313,19 +313,21 @@ function mc_close_comments( $posts ) {
 	}
 
 	if ( 'mc-events' === get_post_type( $posts[0]->ID ) ) {
+		$post = $posts[0];
 		/**
 		 * Filter whether event posts should automatically close comments. Default 'true'.
 		 *
 		 * @hook mc_autoclose_comments
 		 *
-		 * @param {bool} $close 'true' to close comments.
+		 * @param {bool}    $close 'true' to close comments.
+		 * @param {WP_Post} $post Post object.
 		 *
 		 * @return {bool}
 		 */
-		if ( apply_filters( 'mc_autoclose_comments', true ) && 'closed' !== $posts[0]->comment_status ) {
-			$posts[0]->comment_status = 'closed';
-			$posts[0]->ping_status    = 'closed';
-			wp_update_post( $posts[0] );
+		if ( apply_filters( 'mc_autoclose_comments', true, $post ) && 'closed' !== $post->comment_status ) {
+			$post->comment_status = 'closed';
+			$post->ping_status    = 'closed';
+			wp_update_post( $post );
 		}
 	}
 

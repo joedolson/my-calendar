@@ -279,7 +279,7 @@ add_filter( 'mc_searched_events', 'mc_searched_events', 10, 1 );
  */
 function mc_searched_events( $event_array ) {
 	if ( session_id() ) {
-		$_SESSION['MC_SEARCH_RESULT'] = json_encode( $event_array );
+		$_SESSION['MC_SEARCH_RESULT'] = wp_json_encode( $event_array );
 	}
 
 	return $event_array;
