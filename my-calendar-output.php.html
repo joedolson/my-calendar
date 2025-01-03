@@ -2317,7 +2317,7 @@ function my_calendar( $args ) {
 	$json_ld = '';
 	if ( ! is_admin() &amp;&amp; ! ( isset( $args['json'] ) &amp;&amp; 'false' === $args['json'] ) ) {
 		if ( ! empty( $json ) &amp;&amp; is_array( $json ) ) {
-			$json_ld = json_encode( map_deep( $json, 'esc_html' ), JSON_UNESCAPED_SLASHES );
+			$json_ld = wp_json_encode( map_deep( $json, 'esc_html' ), JSON_UNESCAPED_SLASHES );
 			$json_ld = PHP_EOL . '&lt;script type="application/ld+json">' . PHP_EOL . $json_ld . PHP_EOL . '&lt;/script>' . PHP_EOL;
 		}
 	}
