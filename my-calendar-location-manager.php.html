@@ -153,7 +153,7 @@ function mc_clean_duplicate_locations() {
 		$location  = mc_get_location( $replace );
 		if ( ! $location ) {
 			// If this isn't a valid location, don't continue.
-			echo mc_show_error( __( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
+			echo mc_show_error( esc_html__( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
 			return;
 		}
 		$i       = 0;
@@ -350,7 +350,7 @@ function mc_manage_locations() {
 		&lt;div class='mc-search'>
 			&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post" role='search'>
 				&lt;div>
-					&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 				&lt;/div>
 				&lt;div>
 					&lt;label for="mc_search" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Locations', 'my-calendar' ); ?>&lt;/label>
@@ -361,14 +361,14 @@ function mc_manage_locations() {
 		&lt;/div>
 	&lt;/div>
 	&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-		&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>&lt;/div>
+		&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>&lt;/div>
 		&lt;div class='mc-actions'>
 			&lt;input type="submit" class="button-secondary delete" name="mass_delete" value="&lt;?php esc_attr_e( 'Delete locations', 'my-calendar' ); ?>" />
 			&lt;div class="mass-replace-wrap">
 				&lt;input type="checkbox" name="mass_replace_on" disabled id="mass_replace_on" value="true">&lt;label for="mass_replace_on">&lt;?php esc_attr_e( 'Merge duplicates', 'my-calendar' ); ?>&lt;/label>
 				&lt;div class="mass-replace-container">
-					&lt;label for="mass-replace">&lt;?php _e( 'Replacement ID', 'my-calendar' ); ?>&lt;/label>&lt;input type="text" size="4" id="mass-replace" name="mass_replace_id" class="mass-replace" value="" />
-					&lt;input type="submit" class="button-secondary delete" name="mass_replace" value="&lt;?php _e( 'Replace', 'my-calendar' ); ?>" />
+					&lt;label for="mass-replace">&lt;?php esc_html_e( 'Replacement ID', 'my-calendar' ); ?>&lt;/label>&lt;input type="text" size="4" id="mass-replace" name="mass_replace_id" class="mass-replace" value="" />
+					&lt;input type="submit" class="button-secondary delete" name="mass_replace" value="&lt;?php esc_html_e( 'Replace', 'my-calendar' ); ?>" />
 				&lt;/div>
 			&lt;/div>
 			&lt;div>&lt;input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> &lt;label for='mass_edit'>&lt;?php esc_html_e( 'Check all', 'my-calendar' ); ?>&lt;/label>&lt;/div>
@@ -399,7 +399,7 @@ function mc_manage_locations() {
 				 * @return {string}
 				 */
 				$headers = apply_filters( 'mc_location_manager_headers', '' );
-				echo $headers;
+				echo wp_kses( $headers, mc_kses_elements() );
 				?>
 			&lt;/tr>
 			&lt;/thead>
@@ -422,7 +422,7 @@ function mc_manage_locations() {
 		&lt;/table>
 		&lt;div class="mc-actions">
 		&lt;p>
-			&lt;input type="submit" class="button-secondary delete" name="mass_delete" value="&lt;?php _e( 'Delete locations', 'my-calendar' ); ?>" />
+			&lt;input type="submit" class="button-secondary delete" name="mass_delete" value="&lt;?php esc_html_e( 'Delete locations', 'my-calendar' ); ?>" />
 		&lt;/p>
 		&lt;/div>
 		&lt;/form>
@@ -431,7 +431,7 @@ function mc_manage_locations() {
 		if ( isset( $_POST['mcl'] ) ) {
 			echo '&lt;p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '&lt;/p>';
 		}
-		echo '&lt;p>&lt;a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . __( 'Create a new location', 'my-calendar' ) . '&lt;/a>&lt;/p>';
+		echo '&lt;p>&lt;a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . esc_html__( 'Create a new location', 'my-calendar' ) . '&lt;/a>&lt;/p>';
 	}
 }
 
