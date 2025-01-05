@@ -514,27 +514,25 @@ function mc_generate_calendar_page( $slug ) {
  * See whether there are importable calendars present.
  */
 function mc_check_imports() {
-	$output = '';
 	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		if ( function_exists( 'check_calendar' ) ) {
-			$output .= "
+			?>
 			<div id='message' class='updated'>
-				<p>" . __( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ) . '</p>
-				<form method="post" action="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">
+				<p><?php esc_html_e( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ); ?></p>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ); ?>">
 					<div>
-						<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '" />
+						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ); ?>" />
 					</div>
 					<div>
 						<input type="hidden" name="import" value="true"/>
-						<input type="submit" value="' . __( 'Import from Calendar', 'my-calendar' ) . '" name="import-calendar" class="button-primary"/>
+						<input type="submit" value="<?php esc_attr_e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
 					</div>
 				</form>
-				<p>' . __( 'Although it is possible that this import could fail to import your events correctly, it should not have any impact on your existing Calendar database.', 'my-calendar' ) . '</p>
-			</div>';
+				<p><?php esc_html_e( 'Although it is possible that this import could fail to import your events correctly, it should not have any impact on your existing Calendar database.', 'my-calendar' ); ?></p>
+			</div>
+			<?php
 		}
 	}
-
-	echo $output;
 }
 
 /**
