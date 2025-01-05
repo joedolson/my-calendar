@@ -154,9 +154,9 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_link' ) ); ?>" value="<?php echo esc_url( $widget_link ); ?>"/>
 		</p>
 		<?php
-		$all_checked = '';
+		$all_checked = false;
 		if ( empty( $widget_category ) ) {
-			$all_checked = ' checked="checked"';
+			$all_checked = true;
 		}
 
 		?>
@@ -164,11 +164,11 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			<legend><?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?></legend>
 			<ul style="padding:0;margin:0;list-style-type:none;display:flex;flex-wrap:wrap;gap:12px">
 				<li>
-					<input type="checkbox" value="all" <?php echo $all_checked; ?> name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_mini_category' ) . '[]' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_mini_category' ) ); ?>"> <label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_mini_category' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
+					<input type="checkbox" value="all" <?php checked( true, $all_checked ); ?> name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_mini_category' ) . '[]' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_mini_category' ) ); ?>"> <label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_mini_category' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
 				</li>
 			<?php
 			$select = mc_category_select( $widget_category, true, true, $this->get_field_name( 'my_calendar_mini_category' ) . '[]', $this->get_field_id( 'my_calendar_mini_category' ) );
-			echo $select;
+			echo wp_kses( $select, mc_kses_elements() );
 			?>
 			</ul>
 		</fieldset>
@@ -188,16 +188,15 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			<select name="<?php echo esc_attr( $this->get_field_name( 'author' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'author' ) ); ?>" multiple="multiple" class="widefat">
 				<option value="all"><?php esc_html_e( 'All authors', 'my-calendar' ); ?></option>
 				<option value="current"><?php esc_html_e( 'Active User', 'my-calendar' ); ?></option>
-				<?php echo mc_selected_users( $author ); ?>
+				<?php echo wp_kses( mc_selected_users( $author ), mc_kses_elements() ); ?>
 			</select>
 		</p>
 		<p>
-			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'host' ) ); ?>"><?php esc_html_e( 'Limit by Host', 'my-calendar' ); ?></label><br/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'host' ) ); ?>"><?php esc_html_e( 'Limit by Host', 'my-calendar' ); ?></label><br/>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'host' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'host' ) ); ?>" multiple="multiple" class="widefat">
 				<option value="all"><?php esc_html_e( 'All hosts', 'my-calendar' ); ?></option>
 				<option value="current"><?php esc_html_e( 'Active User', 'my-calendar' ); ?></option>
-				<?php echo mc_selected_users( $host ); ?>
+				<?php echo wp_kses( mc_selected_users( $host ), mc_kses_elements() ); ?>
 			</select>
 		</p>
 		<p>
