@@ -75,30 +75,30 @@ class My_Calendar_Filters extends WP_Widget {
 		?>
 		<div class="my-calendar-widget-wrapper my-calendar-filters-widget">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title', 'my-calendar' ); ?>:</label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title', 'my-calendar' ); ?>:</label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Target Calendar Page', 'my-calendar' ); ?>:</label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'url' ); ?>" name="<?php echo $this->get_field_name( 'url' ); ?>" value="<?php echo esc_url( $widget_url ); ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Target Calendar Page', 'my-calendar' ); ?>:</label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" value="<?php echo esc_url( $widget_url ); ?>"/>
 		</p>
 		<ul>
-			<?php $locations = in_array( 'locations', $show, true ) ? 'checked="checked"' : ''; ?>
+			<?php $locations = in_array( 'locations', $show, true ) ? true : false; ?>
 			<li>
-				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_locations" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="locations" <?php echo $locations; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_locations"><?php _e( 'Locations', 'my-calendar' ); ?></label>
+				<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'show' ) ); ?>_locations" name="<?php echo esc_attr( $this->get_field_name( 'show' ) ); ?>[]" value="locations" <?php checked( true, $locations ); ?> /> <label for="<?php echo esc_attr( $this->get_field_id( 'show' ) ); ?>_locations"><?php esc_html_e( 'Locations', 'my-calendar' ); ?></label>
 			</li>
-			<?php $categories = in_array( 'categories', $show, true ) ? 'checked="checked"' : ''; ?>
+			<?php $categories = in_array( 'categories', $show, true ) ? true : false; ?>
 			<li>
-				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_categories" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="categories" <?php echo $categories; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_categories"><?php _e( 'Categories', 'my-calendar' ); ?></label>
+				<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'show' ) ); ?>_categories" name="<?php echo esc_attr( $this->get_field_name( 'show' ) ); ?>[]" value="categories" <?php checked( true, $categories ); ?> /> <label for="<?php echo esc_attr( $this->get_field_id( 'show' ) ); ?>_categories"><?php esc_html_e( 'Categories', 'my-calendar' ); ?></label>
 			</li>
-			<?php $access = in_array( 'access', $show, true ) ? 'checked="checked"' : ''; ?>
+			<?php $access = in_array( 'access', $show, true ) ? true : false; ?>
 			<li>
-				<input type="checkbox" id="<?php echo $this->get_field_id( 'show' ); ?>_access" name="<?php echo $this->get_field_name( 'show' ); ?>[]" value="access" <?php echo $access; ?> /> <label for="<?php echo $this->get_field_id( 'show' ); ?>_access"><?php esc_html_e( 'Accessibility Features', 'my-calendar' ); ?></label>
+				<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'show' ) ); ?>_access" name="<?php echo esc_attr( $this->get_field_name( 'show' ) ); ?>[]" value="access" <?php checked( true, $access ); ?> /> <label for="<?php echo esc_attr( $this->get_field_id( 'show' ) ); ?>_access"><?php esc_html_e( 'Accessibility Features', 'my-calendar' ); ?></label>
 			</li>
 		</ul>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'ltype' ); ?>"><?php esc_html_e( 'Filter locations by', 'my-calendar' ); ?></label>
-			<select id="<?php echo $this->get_field_id( 'ltype' ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ltype' ) ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'ltype' ) ); ?>"><?php esc_html_e( 'Filter locations by', 'my-calendar' ); ?></label>
+			<select id="<?php echo esc_attr( $this->get_field_id( 'ltype' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ltype' ) ); ?>">
 				<option value="name" <?php selected( $ltype, 'name' ); ?>><?php esc_html_e( 'Location Name', 'my-calendar' ); ?></option>
 				<option value="state" <?php selected( $ltype, 'state' ); ?>><?php esc_html_e( 'State/Province', 'my-calendar' ); ?></option>
 				<option value="city" <?php selected( $ltype, 'city' ); ?>><?php esc_html_e( 'City', 'my-calendar' ); ?></option>
