@@ -519,9 +519,9 @@ function mc_check_imports() {
 			?>
 			<div id='message' class='updated'>
 				<p><?php esc_html_e( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ); ?></p>
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ); ?>">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
 					<div>
-						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 					</div>
 					<div>
 						<input type="hidden" name="import" value="true"/>
