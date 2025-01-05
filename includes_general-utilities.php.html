@@ -71,7 +71,7 @@ function mc_switch_sites() {
 function mc_tweet_approval( $previous_status, $new_status ) {
 	if ( function_exists( 'wpt_post_to_service' ) &amp;&amp; isset( $_POST['mc_twitter'] ) &amp;&amp; trim( $_POST['mc_twitter'] ) !== '' ) {
 		if ( ( 0 === (int) $previous_status || 2 === (int) $previous_status ) &amp;&amp; 1 === (int) $new_status ) {
-			wpt_post_to_service( stripslashes( $_POST['mc_twitter'] ) );
+			wpt_post_to_service( esc_html( stripslashes( $_POST['mc_twitter'] ) ) );
 		}
 	}
 }
@@ -118,23 +118,32 @@ function mc_add_inner_box() {
 	if ( $event_id ) {
 		$url     = admin_url( 'admin.php?page=my-calendar&amp;mode=edit&amp;event_id=' . $event_id );
 		$event   = mc_get_first_event( $event_id );
-		$content = '&lt;p>&lt;strong>' . strip_tags( $event->event_title, mc_strip_tags() ) . '&lt;/strong>&lt;br />' . $event->event_begin . ' @ ' . $event->event_time . '&lt;/p>';
+		?>
+		&lt;p>
+			&lt;strong>&lt;?php echo esc_html( strip_tags( $event->event_title, mc_strip_tags() ) ); ?>&lt;/strong>&lt;br />
+			&lt;?php echo esc_html( $event->event_begin ); ?> @ &lt;?php echo esc_html( $event->event_time ); ?>
+		&lt;/p>
+		&lt;?php
 		if ( ! mc_is_recurring( $event ) ) {
-			$recur    = mc_event_recur_string( $event, $event->event_begin );
-			$content .= wpautop( $recur );
+			$recur = mc_event_recur_string( $event, $event->event_begin );
+			?>
+			&lt;p>&lt;?php echo esc_html( $recur ); ?>&lt;/p>
+			&lt;?php
 		}
 		$elabel = '';
 		if ( property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
 			$elabel = $event->location->location_label;
 		}
 		if ( '' !== $elabel ) {
-			// Translators: Name of event location.
-			$content .= '&lt;p>' . sprintf( __( '&lt;strong>Location:&lt;/strong> %s', 'my-calendar' ), strip_tags( $elabel, mc_strip_tags() ) ) . '&lt;/p>';
+			?>
+			&lt;p>
+				&lt;strong>&lt;?php esc_html_e( 'Location:', 'my-calendar' ); ?>&lt;/strong>&lt;?php echo esc_html( strip_tags( $elabel, mc_strip_tags() ) ); ?>
+			&lt;/p>
+			&lt;?php
 		}
-		// Translators: Event URL.
-		$content .= '&lt;p>' . sprintf( __( '&lt;a href="%s">Edit event&lt;/a>.', 'my-calendar' ), $url ) . '&lt;/p>';
-
-		echo $content;
+		?>
+		&lt;p>&lt;a href="&lt;?php echo esc_url( $url ); ?>">&lt;?php esc_html_e( 'Edit event', 'my-calendar' ); ?>&lt;/a>&lt;/p>';
+		&lt;?php
 	}
 }
 

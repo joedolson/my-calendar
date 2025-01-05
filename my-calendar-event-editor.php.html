@@ -1174,7 +1174,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					} else {
 						echo '
 						&lt;div class="event_description">
-						&lt;label for="content">' . __( 'Event Description', 'my-calendar' ) . '&lt;/label>';
+						&lt;label for="content">' . esc_html__( 'Event Description', 'my-calendar' ) . '&lt;/label>';
 						if ( user_can_richedit() ) {
 							wp_editor( $value, 'content', array( 'textarea_rows' => 20 ) );
 						} else {
@@ -1439,7 +1439,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 	 */
 	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
 	if ( true === $display ) {
-		echo $return;
+		echo wp_kses( $return, mc_kses_elements() );
 	}
 
 	return $return;
@@ -1535,14 +1535,14 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		 *
 		 * @return {string}
 		 */
-		echo apply_filters( 'mc_before_event_form', '', $event_id );
+		echo wp_kses( apply_filters( 'mc_before_event_form', '', $event_id ), mc_kses_elements() );
 		$action       = add_query_arg( $query_args, admin_url( 'admin.php?page=my-calendar' ) );
 		$group_id     = ( ! empty( $data->event_group_id ) &amp;&amp; 'copy' !== $mode ) ? $data->event_group_id : mc_group_id();
 		$event_author = ( 'edit' !== $mode ) ? $user_ID : $data->event_author;
 		?>
 &lt;form id="my-calendar" method="post" action="&lt;?php echo esc_url( $action ); ?>">
 &lt;div>
-	&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+	&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 	&lt;?php
 	if ( isset( $_GET['ref'] ) ) {
 		echo '&lt;input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />';
@@ -1569,7 +1569,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		$post_id = false;
 	}
 	?>
-	&lt;input type="hidden" name="event_nonce_name" value="&lt;?php echo wp_create_nonce( 'event_nonce' ); ?>" />
+	&lt;input type="hidden" name="event_nonce_name" value="&lt;?php echo esc_attr( wp_create_nonce( 'event_nonce' ) ); ?>" />
 &lt;/div>
 
 &lt;div class="ui-sortable meta-box-sortables event-primary">
@@ -1597,7 +1597,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					mc_show_notice( $notice, true, false, 'warning' );
 				}
 			}
-			echo mc_controls( $mode, $has_data, $data );
+			echo wp_kses( mc_controls( $mode, $has_data, $data ), mc_kses_elements() );
 			?>
 		&lt;/div>
 			&lt;?php
@@ -1618,7 +1618,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Event', 'my-calendar' ); ?>&lt;/legend>
 				&lt;p>
 					&lt;label for="e_title">&lt;?php esc_html_e( 'Event Title', 'my-calendar' ); ?>&lt;/label>&lt;br/>
-					&lt;input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="&lt;?php echo ( $has_data ) ? stripslashes( esc_attr( $data->event_title ) ) : ''; ?>" />
+					&lt;input type="text" id="e_title" name="event_title" size="50" maxlength="255" value="&lt;?php echo ( $has_data ) ? esc_attr( wp_unslash( $data->event_title ) ) : ''; ?>" />
 				&lt;/p>
 				&lt;?php
 				if ( is_object( $data ) &amp;&amp; 1 === (int) $data->event_flagged ) {
@@ -1697,13 +1697,13 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					 *
 					 * @return {string}
 					 */
-					echo apply_filters( 'mc_datetime_inputs', '', $has_data, $data, 'admin' );
+					echo wp_kses( apply_filters( 'mc_datetime_inputs', '', $has_data, $data, 'admin' ), mc_kses_elements() );
 					if ( 'edit' !== $mode ) {
-						$span_checked = '';
+						$span_checked = false;
 						if ( $has_data &amp;&amp; '1' === $data->event_span ) {
-							$span_checked = ' checked="checked"';
+							$span_checked = true;
 						} elseif ( $has_data &amp;&amp; '0' === $data->event_span ) {
-							$span_checked = '';
+							$span_checked = false;
 						}
 						?>
 					&lt;p class="event_span">
@@ -1715,7 +1715,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 							&lt;legend>
 							&lt;?php
 							// Translators: placeholder for number of occurrences added.
-							printf( __( 'Event Copy %1$s', 'my-calendar' ), '&lt;span class="number_of">2&lt;/span>' );
+							printf( esc_html__( 'Event Copy %1$s', 'my-calendar' ), '&lt;span class="number_of">2&lt;/span>' );
 							?>
 							&lt;/legend>
 							&lt;?php
@@ -1728,7 +1728,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						&lt;/li>
 					&lt;/ol>
 					&lt;p class="event_span checkboxes">
-						&lt;input type="checkbox" value="1" id="e_span" name="event_span"&lt;?php echo $span_checked; ?> />
+						&lt;input type="checkbox" value="1" id="e_span" name="event_span"&lt;?php checked( $span_checked, true ); ?> />
 						&lt;label for="e_span">&lt;?php esc_html_e( 'These are one multi-day event.', 'my-calendar' ); ?>&lt;/label>
 					&lt;/p>
 						&lt;?php
@@ -1792,7 +1792,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	&lt;div class="postbox">
 		&lt;h2>&lt;?php esc_html_e( 'Event Custom Fields', 'my-calendar' ); ?>&lt;/h2>
 		&lt;div class="inside">
-			&lt;?php echo $custom_fields; ?>
+			&lt;?php echo wp_kses( $custom_fields, mc_kses_elements() ); ?>
 		&lt;/div>
 	&lt;/div>
 &lt;/div>
@@ -1809,7 +1809,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			&lt;fieldset class="locations">
 				&lt;legend class='screen-reader-text'>&lt;?php esc_html_e( 'Event Location', 'my-calendar' ); ?>&lt;/legend>
 		&lt;?php
-		echo mc_event_location_dropdown_block( $data );
+		echo wp_kses( mc_event_location_dropdown_block( $data ), mc_kses_elements() );
 		mc_show_block( 'event_location', $has_data, $data );
 		?>
 			&lt;/fieldset>
@@ -1825,7 +1825,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		&lt;div class="postbox">
 			&lt;div class="inside">
 				&lt;div class='mc-controls footer'>
-					&lt;?php echo mc_controls( $mode, $has_data, $data, 'footer' ); ?>
+					&lt;?php echo wp_kses( mc_controls( $mode, $has_data, $data, 'footer' ), mc_kses_elements() ); ?>
 				&lt;/div>
 			&lt;/div>
 		&lt;/div>
@@ -2919,7 +2919,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
  * @param string  $context rendering context [not used].
  */
 function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admin' ) {
-	echo mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = 'admin' );
+	echo wp_kses( mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = 'admin' ), mc_kses_elements() );
 }
 
 /**
