@@ -39,24 +39,24 @@ function my_calendar_help() {
 				<ul class='list'>
 					<?php
 					if ( ! mc_get_uri( 'boolean' ) ) {
-						echo '<li>' . __( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ) . '</li>';
-						echo '<li>' . __( 'Assign your Calendar Page Location at <code>My Calendar > Settings > General</code>', 'my-calendar' ) . '</li>';
+						echo '<li>' . wp_kses_post( __( 'Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page.', 'my-calendar' ) ) . '</li>';
+						echo '<li>' . wp_kses_post( __( 'Assign your Calendar Page Location at <code>My Calendar > Settings > General</code>', 'my-calendar' ) ) . '</li>';
 					} else {
 						$permalink = mc_get_uri();
 						$edit_url  = get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) );
 						// Translators: Calendar link, calendar edit link.
-						echo '<li>' . sprintf( __( '<a href="%1$s">View your calendar</a> or <a href="%2$s">Edit the calendar page</a>', 'my-calendar' ), esc_url( $permalink ), esc_url( $edit_url ) ) . '</li>';
+						echo '<li>' . wp_kses_post( sprintf( __( '<a href="%1$s">View your calendar</a> or <a href="%2$s">Edit the calendar page</a>', 'my-calendar' ), esc_url( $permalink ), esc_url( $edit_url ) ) ) . '</li>';
 					}
 					$add_categories = admin_url( 'admin.php?page=my-calendar-categories' );
 					$add_locations  = admin_url( 'admin.php?page=my-calendar-locations' );
 					$edit_events    = admin_url( 'admin.php?page=my-calendar-manage' );
 					$add_events     = admin_url( 'admin.php?page=my-calendar' );
 					// Translators: Add events link, manage events link.
-					echo '<li>' . sprintf( __( '<a href="%1$s">Add events</a> and <a href="%2$s">administer your events</a>.', 'my-calendar' ), esc_url( $add_events ), esc_url( $edit_events ) ) . '</li>';
+					echo '<li>' . wp_kses_post( sprintf( __( '<a href="%1$s">Add events</a> and <a href="%2$s">administer your events</a>.', 'my-calendar' ), esc_url( $add_events ), esc_url( $edit_events ) ) ) . '</li>';
 					// Translators: Add categories link, add locations link.
-					echo '<li>' . sprintf( __( '<a href="%1$s">Add categories</a> and <a href="%2$s">add locations</a>.', 'my-calendar' ), esc_url( $add_categories ), esc_url( $add_locations ) ) . '</li>';
+					echo '<li>' . wp_kses_post( sprintf( __( '<a href="%1$s">Add categories</a> and <a href="%2$s">add locations</a>.', 'my-calendar' ), esc_url( $add_categories ), esc_url( $add_locations ) ) ) . '</li>';
 					// Translators: Documentation URL.
-					echo '<li>' . sprintf( __( 'When you\'re ready, <a href="%s">read the documentation</a>.', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' ) . '</li>';
+					echo '<li>' . wp_kses_post( sprintf( __( 'When you\'re ready, <a href="%s">read the documentation</a>.', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/' ) ) . '</li>';
 					?>
 				</ul>
 				<?php
@@ -77,11 +77,11 @@ function my_calendar_help() {
 
 			<div class="inside">
 				<h3><?php esc_html_e( 'Custom Styles Locations', 'my-calendar' ); ?></h3>
-				<p><?php _e( 'My Calendar custom style files can be saved in any of these locations. CSS files in these locations will be selectable from the stylesheet selector.', 'my-calendar' ); ?></p>
+				<p><?php esc_html_e( 'My Calendar custom style files can be saved in any of these locations. CSS files in these locations will be selectable from the stylesheet selector.', 'my-calendar' ); ?></p>
 				<ul>
 					<?php
 					foreach ( mc_custom_dirs() as $dir ) {
-						echo "<li><code>$dir</code></li>";
+						echo '<li><code>' . esc_html( $dir ) . '</code></li>';
 					}
 					?>
 				</ul>
@@ -89,7 +89,7 @@ function my_calendar_help() {
 					<?php
 					printf(
 						// translators: print CSS file name, mobile CSS file name, tablet CSS file name.
-						__( 'Custom print, mobile, and tablet stylesheet file names: %1$s, %2$s, and %3$s.', 'my-calendar' ),
+						esc_html__( 'Custom print, mobile, and tablet stylesheet file names: %1$s, %2$s, and %3$s.', 'my-calendar' ),
 						'<code>mc-print.css</code>',
 						'<code>mc-mobile.css</code>',
 						'<code>mc-tablet.css</code>'
@@ -97,11 +97,11 @@ function my_calendar_help() {
 					?>
 				</p>
 				<h3><?php esc_html_e( 'Custom Template Locations', 'my-calendar' ); ?></h3>
-				<p><?php _e( 'Default My Calendar templates are found in <code>/wp-content/my-calendar/mc-templates/</code>. Copy those templates into a <code>/mc-templates/</code> directory in your theme to customize.', 'my-calendar' ); ?></p>
-				<p><?php _e( 'Legacy My Calendar templates can be loaded as text files (.txt) from any of the allowed style directory locations.', 'my-calendar' ); ?></p>
+				<p><?php echo wp_kses_post( __( 'Default My Calendar templates are found in <code>/wp-content/my-calendar/mc-templates/</code>. Copy those templates into a <code>/mc-templates/</code> directory in your theme to customize.', 'my-calendar' ) ); ?></p>
+				<p><?php esc_html_e( 'Legacy My Calendar templates can be loaded as text files (.txt) from any of the allowed style directory locations.', 'my-calendar' ); ?></p>
 				<h3><?php esc_html_e( 'Custom Icons Location', 'my-calendar' ); ?></h3>
 				<ul>
-					<li><code><?php echo str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) . 'my-calendar-custom/icons/'; ?></code></li>
+					<li><code><?php echo esc_html( str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) ) . 'my-calendar-custom/icons/'; ?></code></li>
 				</ul>
 			</div>
 		</div>
@@ -114,21 +114,21 @@ function my_calendar_help() {
 			<div class="inside">
 				<h3><?php esc_html_e( 'Data Collection by My Calendar', 'my-calendar' ); ?></h3>
 				<p>
-					<?php _e( 'My Calendar collects no personally identifying data.', 'my-calendar' ); ?>
+					<?php esc_html_e( 'My Calendar collects no personally identifying data.', 'my-calendar' ); ?>
 				</p>
 				<p>
-					<?php _e( 'My Calendar Pro, when installed, collects submitter names and email addresses when a public user submits an event from any public event submission form.', 'my-calendar' ); ?>
+					<?php esc_html_e( 'My Calendar Pro, when installed, collects submitter names and email addresses when a public user submits an event from any public event submission form.', 'my-calendar' ); ?>
 				</p>
 				<h3><?php esc_html_e( 'Data Sharing by My Calendar', 'my-calendar' ); ?></h3>
 				<p>
-					<?php _e( 'The names and email addresses of people who author or host events are shared by My Calendar as part of the API output and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information.', 'my-calendar' ); ?>
+					<?php esc_html_e( 'The names and email addresses of people who author or host events are shared by My Calendar as part of the API output and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information.', 'my-calendar' ); ?>
 				</p>
 				<p>
-					<?php _e( 'Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted.', 'my-calendar' ); ?>
+					<?php esc_html_e( 'Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted.', 'my-calendar' ); ?>
 				</p>
 				<h3><?php esc_html_e( 'Data Removal in My Calendar', 'my-calendar' ); ?></h3>
 				<p>
-					<?php _e( 'My Calendar supports the data export and removal features in WordPress 4.9.6 and later. When a data removal is requested, all events authored using the requested email address will be deleted. All events with that user assigned only as the host will remain, but the host will be changed.', 'my-calendar' ); ?>
+					<?php esc_html_e( 'My Calendar supports the data export and removal features in WordPress 4.9.6 and later. When a data removal is requested, all events authored using the requested email address will be deleted. All events with that user assigned only as the host will remain, but the host will be changed.', 'my-calendar' ); ?>
 				</p>
 			</div>
 		</div>
@@ -152,7 +152,7 @@ function my_calendar_help() {
 					<p>
 					<?php
 					// Translators: Donate URL, Purchase URL.
-					printf( __( 'Please, consider a <a href="%1$s">donation</a> or a <a href="%2$s">purchase</a> to support My Calendar!', 'my-calendar' ), 'https://www.joedolson.com/donate/', 'https://www.joedolson.com/my-calendar/pro/' );
+					echo wp_kses_post( sprintf( __( 'Please, consider a <a href="%1$s">donation</a> or a <a href="%2$s">purchase</a> to support My Calendar!', 'my-calendar' ), 'https://www.joedolson.com/donate/', 'https://www.joedolson.com/my-calendar/pro/' ) );
 					?>
 					</p>
 				</div>
@@ -160,7 +160,7 @@ function my_calendar_help() {
 				if ( current_user_can( 'administrator' ) ) {
 					mc_get_support_form();
 				} else {
-					_e( 'My Calendar support requests can only be sent by administrators.', 'my-calendar' );
+					esc_html_e( 'My Calendar support requests can only be sent by administrators.', 'my-calendar' );
 				}
 				?>
 			</div>
