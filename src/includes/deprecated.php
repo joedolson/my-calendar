@@ -24,7 +24,7 @@
 function mc_is_selected( $field, $value, $array_key = '' ) {
 	_doing_it_wrong(
 		__FUNCTION__,
-		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
+		esc_html__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
 		'3.4.0'
 	);
 	if ( ! is_array( get_option( $field ) ) ) {
@@ -55,7 +55,7 @@ function mc_is_selected( $field, $value, $array_key = '' ) {
 function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 	_doing_it_wrong(
 		__FUNCTION__,
-		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
+		esc_html__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
 		'3.4.0'
 	);
 	switch ( $type ) {
@@ -94,7 +94,7 @@ function mc_option_selected( $field, $value, $type = 'checkbox' ) {
 function mc_is_checked( $field, $value, $array_key = '', $should_return = false ) {
 	_doing_it_wrong(
 		__FUNCTION__,
-		__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
+		esc_html__( 'This function was deprecated in My Calendar 3.4.0, and should not be used.', 'my-calendar' ),
 		'3.4.0'
 	);
 	if ( ! is_array( get_option( $field ) ) ) {
