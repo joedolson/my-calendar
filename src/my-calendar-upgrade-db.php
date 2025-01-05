@@ -51,7 +51,7 @@ function my_calendar_check_db() {
 				</p>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
 					<div>
-						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 						<input type="hidden" name="upgrade" value="true" />
 					</div>
 					<p>
