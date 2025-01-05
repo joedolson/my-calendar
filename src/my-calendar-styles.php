@@ -104,11 +104,11 @@ function my_calendar_style_edit() {
 	?>
 	<div class="my-calendar-style-settings">
 	<?php
-	echo mc_stylesheet_selector();
+	mc_stylesheet_selector();
 	$file = mc_get_option( 'css_file' );
 	?>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
-		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+		<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 		<input type="hidden" value="true" name="mc_edit_style" />
 		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( $file ); ?>" />
 		<fieldset class="mc-css-variables">
@@ -142,7 +142,7 @@ function my_calendar_style_edit() {
 				}
 			}
 			if ( $output ) {
-				echo '<h3>' . __( 'Color Variables', 'my-calendar' ) . '</h3>';
+				echo '<h3>' . esc_html__( 'Color Variables', 'my-calendar' ) . '</h3>';
 				echo wp_kses( "<ul class='mc-variables'>$output</ul>", mc_kses_elements() );
 			}
 			?>
@@ -158,7 +158,7 @@ function my_calendar_style_edit() {
 			</div>
 			<?php
 			if ( $text_output ) {
-				echo '<h3>' . __( 'Style Variables', 'my-calendar' ) . '</h3>';
+				echo '<h3>' . esc_html__( 'Style Variables', 'my-calendar' ) . '</h3>';
 				echo wp_kses( "<ul class='mc-variables'>$text_output</ul>", mc_kses_elements() );
 			}
 			?>
@@ -273,53 +273,69 @@ function mc_test_contrast( $color1, $color2 ) {
 function mc_stylesheet_selector() {
 	$dir              = plugin_dir_path( __DIR__ );
 	$options          = '';
-	$return           = '
-	<div class="style-selector">
-	<form method="post" action="' . esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ) . '">
-		<input type="hidden" name="_wpnonce" value="' . wp_create_nonce( 'my-calendar-nonce' ) . '"/><input type="hidden" value="true" name="mc_choose_style"/>';
+	?>
+<div class="style-selector">
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
+		<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
+		<input type="hidden" value="true" name="mc_choose_style"/>
+	<?php
 	$custom_directory = str_replace( '/my-calendar/', '', $dir ) . '/my-calendar-custom/styles/';
 	$directory        = __DIR__ . '/styles/';
 	$files            = mc_css_list( $custom_directory );
 	if ( ! empty( $files ) ) {
-		$options .= '<optgroup label="' . __( 'Your Custom Stylesheets', 'my-calendar' ) . '">';
+		?>
+		<optgroup label="<?php esc_html_e( 'Your Custom Stylesheets', 'my-calendar' ); ?>">
+		<?php
 		foreach ( $files as $value ) {
 			$test     = 'mc_custom_' . $value;
 			$filepath = mc_get_style_path( $test );
 			$path     = pathinfo( $filepath );
 			if ( 'css' === $path['extension'] ) {
-				$selected = ( mc_get_option( 'css_file' ) === $test ) ? ' selected="selected"' : '';
-				$options .= "<option value='mc_custom_$value'$selected>$value</option>\n";
+				$selected = ( mc_get_option( 'css_file' ) === $test ) ? true : false;
+				?>
+				<option value='mc_custom_<?php echo esc_attr( $value ); ?>'<?php selected( true, $selected ); ?>><?php echo esc_html( $value ); ?></option>
+				<?php
 			}
 		}
-		$options .= '</optgroup>';
+		?>
+		</optgroup>
+		<?php
 	}
-	$files    = mc_css_list( $directory );
-	$options .= '<optgroup label="' . __( 'Installed Stylesheets', 'my-calendar' ) . '">';
-	$current  = mc_get_option( 'css_file' );
+	$files = mc_css_list( $directory );
+	?>
+		<optgroup label="<?php esc_html_e( 'Installed Stylesheets', 'my-calendar' ); ?>">
+	<?php
+	$current = mc_get_option( 'css_file' );
 	foreach ( $files as $value ) {
 		$filepath = mc_get_style_path( $value );
 		$path     = pathinfo( $filepath );
 		if ( isset( $path['extension'] ) && 'css' === $path['extension'] ) {
-			$selected = ( $current === $value ) ? ' selected="selected"' : '';
-			$options .= "<option value='$value'$selected>$value</option>\n";
+			$selected = ( $current === $value ) ? true : false;
+			?>
+			<option value='<?php echo esc_attr( $value ); ?>'<?php selected( true, $selected ); ?>><?php echo esc_html( $value ); ?></option>
+			<?php
 		}
 	}
-	$options .= '</optgroup>';
-	$return  .= '
+	?>
+		</optgroup>
 		<div>
 			<p>
-				<label for="mc_css_file">' . __( 'Select Theme (optional)', 'my-calendar' ) . '</label><br />
-				<select name="mc_css_file" id="mc_css_file"><option value="">' . __( 'None', 'my-calendar' ) . '</option>' . $options . '</select>
+				<label for="mc_css_file"><?php esc_html_e( 'Select Theme (optional)', 'my-calendar' ); ?></label><br />
+				<select name="mc_css_file" id="mc_css_file"><option value=""><?php esc_html_e( 'None', 'my-calendar' ); ?></option>
+				<?php echo wp_kses_post( $options ); ?>
+				</select>
 			</p>
 			<p>
-				<input type="submit" name="save" class="button-primary" value="' . __( 'Choose Style', 'my-calendar' ) . '"/>
+				<input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Choose Style', 'my-calendar' ); ?>" />
 			</p>
 		</div>
-	</form>';
-	$link     = add_query_arg( 'mcpreview', mc_get_option( 'css_file' ), mc_get_uri() );
-	$return  .= '<a href="' . esc_url( $link ) . '" class="preview-link" data-css="' . esc_attr( mc_get_option( 'css_file' ) ) . '">' . __( 'Preview Stylesheet', 'my-calendar' ) . '</a></div>';
-
-	return $return;
+	</form>
+	<?php
+	$link = add_query_arg( 'mcpreview', mc_get_option( 'css_file' ), mc_get_uri() );
+	?>
+	<a href="<?php echo esc_url( $link ); ?>" class="preview-link" data-css="<?php echo esc_attr( mc_get_option( 'css_file' ) ); ?>"><?php esc_html_e( 'Preview Stylesheet', 'my-calendar' ); ?></a>
+</div>
+	<?php
 }
 
 /**
