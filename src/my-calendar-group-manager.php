@@ -89,7 +89,7 @@ function my_calendar_group_edit() {
 				}
 				break;
 		}
-		echo $message;
+		echo wp_kses_post( $message );
 	}
 	?>
 
@@ -97,7 +97,7 @@ function my_calendar_group_edit() {
 	<?php
 	my_calendar_check_db();
 	if ( 'edit' === $action ) {
-		echo '<h1>' . __( 'Edit Event Group', 'my-calendar' ) . '</h1>';
+		echo '<h1>' . esc_html__( 'Edit Event Group', 'my-calendar' ) . '</h1>';
 		if ( empty( $event_id ) || empty( $group_id ) ) {
 			mc_show_error( __( 'You must provide an event group id in order to edit it', 'my-calendar' ) );
 		} else {
@@ -107,10 +107,10 @@ function my_calendar_group_edit() {
 		?>
 		<h1><?php esc_html_e( 'Event Groups', 'my-calendar' ); ?></h1>
 		<p>
-			<?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you choose.', 'my-calendar' ); ?>
+			<?php esc_html_e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you choose.', 'my-calendar' ); ?>
 		</p>
 		<div class="mc-tablinks">
-			<a href="<?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>"><?php esc_html_e( 'My Events', 'my-calendar' ); ?></strong>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>"><?php esc_html_e( 'My Events', 'my-calendar' ); ?></strong>
 			<a href="#my-calendar-admin-table" aria-current="page"><?php esc_html_e( 'Event Groups', 'my-calendar' ); ?></a>
 		</div>
 		<div class="postbox-container jcd-wide">
@@ -333,18 +333,24 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 		$short       = stripslashes( $data->event_short );
 		$image       = $data->event_image;
 	}
+	$args = array(
+		'groups'   => 'true',
+		'mode'     => 'edit',
+		'event_id' => $event_id,
+		'group_id' => $group_id,
+	);
 	?>
 	<div class="postbox-container jcd-wide">
 	<div class="metabox-holder">
-	<form method="post" action="<?php echo admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ); ?>">
+	<form method="post" action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-manage' ) ) ); ?>">
 	<div>
-		<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+		<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 		<input type="hidden" name="group_id" value="<?php echo absint( $group_id ); ?>" />
 		<input type="hidden" name="event_action" value="<?php echo esc_attr( $mode ); ?>" />
 		<input type="hidden" name="event_id" value="<?php echo absint( $event_id ); ?>" />
 		<input type="hidden" name="event_author" value="<?php echo absint( $user_ID ); ?>" />
 		<input type="hidden" name="event_post" value="group" />
-		<input type="hidden" name="event_nonce_name" value="<?php echo wp_create_nonce( 'event_nonce' ); ?>" />
+		<input type="hidden" name="event_nonce_name" value="<?php echo esc_attr( wp_create_nonce( 'event_nonce' ) ); ?>" />
 	</div>
 	<div class="ui-sortable meta-box-sortables">
 		<div class="postbox">
@@ -353,13 +359,8 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 			<div class="inside">
 				<div class="mc-controls">
 					<ul>
-						<li>
-						<?php
-						$manage_text = __( 'Manage groups', 'my-calendar' );
-						echo "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage&groups=true' ) . '">' . $manage_text . '</a>';
-						?>
-						</li>
-						<li><input type="submit" name="save" class="button-primary" value="<?php _e( 'Update Event Group', 'my-calendar' ); ?>"/></li>
+						<li><span class='dashicons dashicons-calendar' aria-hidden='true'></span><a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true' ) ); ?>"><?php esc_html_e( 'Manage groups', 'my-calendar' ); ?></a></li>
+						<li><input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Update Event Group', 'my-calendar' ); ?>"/></li>
 					</ul>
 				</div>
 				<p>
@@ -369,21 +370,21 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					<input type="text" id="e_title" class="widefat" name="event_title" value="<?php echo esc_attr( $title ); ?>" />
 				</p>
 				<?php
-				echo mc_group_form( $group_id, 'apply' );
+				echo wp_kses( mc_group_form( $group_id, 'apply' ), mc_kses_elements() );
 
 				if ( '0' === $data->event_repeats && ( 'S1' === $data->event_recur || 'S' === $data->event_recur ) ) {
-					$span_checked = '';
+					$span_checked = false;
 					if ( is_object( $data ) && '1' === $data->event_span ) {
-						$span_checked = ' checked="checked"';
+						$span_checked = true;
 					} elseif ( is_object( $data ) && '0' === $data->event_span ) {
-						$span_checked = '';
+						$span_checked = false;
 					}
 					?>
 					<p>
-						<input type="checkbox" value="1" id="e_span" name="event_span" <?php echo $span_checked; ?> />
+						<input type="checkbox" value="1" id="e_span" name="event_span" <?php checked( true, $span_checked ); ?> />
 						<label for="e_span">
 						<?php
-						_e( 'Selected dates are a single multi-day event.', 'my-calendar' );
+						esc_html_e( 'Selected dates are a single multi-day event.', 'my-calendar' );
 						mc_compare_group_members( $group_id, 'event_span' );
 						?>
 						</label>
@@ -399,7 +400,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					<div id="group_description">
 						<label for="content">
 						<?php
-						_e( 'Event Description', 'my-calendar' );
+						esc_html_e( 'Event Description', 'my-calendar' );
 						mc_compare_group_members( $group_id, 'event_desc' );
 						?>
 						</label><br/>
@@ -412,7 +413,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					<p>
 						<label for="e_short">
 						<?php
-						_e( 'Excerpt', 'my-calendar' );
+						esc_html_e( 'Excerpt', 'my-calendar' );
 						mc_compare_group_members( $group_id, 'event_short' );
 						?>
 						</label><br/>
@@ -463,12 +464,14 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							$alt         = '';
 							if ( '' !== $image ) {
 								$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
-								$remove      = '<button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
+								$remove      = '<button type="button" data-context="event" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 								$button_text = __( 'Change Featured Image', 'my-calendar' );
 								$alt         = ( '' === $alt ) ? $data->event_image : $alt;
 							}
 							?>
-							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" value="<?php echo esc_url( $image ); ?>" /> <button type='button' class="button select-image"><?php echo $button_text; ?></button> <?php echo $remove; ?>
+							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" />
+							<input type="hidden" name="event_image" id="e_image" value="<?php echo esc_url( $image ); ?>" /> 
+							<button type='button' data-context="event" class="button select-image"><?php echo esc_html( $button_text ); ?></button> <?php echo wp_kses_post( $remove ); ?>
 							</div>
 							<?php
 							if ( ! empty( $data->event_image ) ) {
