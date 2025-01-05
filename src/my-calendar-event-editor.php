@@ -1343,7 +1343,11 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					$repeats = '0';
 				}
 				$return = '
-				<div>' . $prev . '<input type="hidden" name="event_repeats" value="' . esc_attr( $repeats ) . '" /><input type="hidden" name="event_every" value="' . esc_attr( $every ) . '" /><input type="hidden" name="event_recur" value="' . esc_attr( $recur ) . '" /></div>';
+				<div>
+				' . $prev . '<input type="hidden" name="event_repeats" value="' . esc_attr( $repeats ) . '" />
+				<input type="hidden" name="event_every" value="' . esc_attr( $every ) . '" />
+				<input type="hidden" name="event_recur" value="' . esc_attr( $recur ) . '" />
+				</div>';
 			}
 			break;
 		case 'event_access':
