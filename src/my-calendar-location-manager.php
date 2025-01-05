@@ -127,7 +127,7 @@ function mc_clean_duplicate_locations() {
 		$location  = mc_get_location( $replace );
 		if ( ! $location ) {
 			// If this isn't a valid location, don't continue.
-			echo mc_show_error( __( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
+			echo mc_show_error( esc_html__( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
 			return;
 		}
 		$i       = 0;
@@ -324,7 +324,7 @@ function mc_manage_locations() {
 		<div class='mc-search'>
 			<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-location-manager' ) ); ?>" method="post" role='search'>
 				<div>
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 				</div>
 				<div>
 					<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search Locations', 'my-calendar' ); ?></label>
@@ -335,14 +335,14 @@ function mc_manage_locations() {
 		</div>
 	</div>
 	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
+		<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/></div>
 		<div class='mc-actions'>
 			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php esc_attr_e( 'Delete locations', 'my-calendar' ); ?>" />
 			<div class="mass-replace-wrap">
 				<input type="checkbox" name="mass_replace_on" disabled id="mass_replace_on" value="true"><label for="mass_replace_on"><?php esc_attr_e( 'Merge duplicates', 'my-calendar' ); ?></label>
 				<div class="mass-replace-container">
-					<label for="mass-replace"><?php _e( 'Replacement ID', 'my-calendar' ); ?></label><input type="text" size="4" id="mass-replace" name="mass_replace_id" class="mass-replace" value="" />
-					<input type="submit" class="button-secondary delete" name="mass_replace" value="<?php _e( 'Replace', 'my-calendar' ); ?>" />
+					<label for="mass-replace"><?php esc_html_e( 'Replacement ID', 'my-calendar' ); ?></label><input type="text" size="4" id="mass-replace" name="mass_replace_id" class="mass-replace" value="" />
+					<input type="submit" class="button-secondary delete" name="mass_replace" value="<?php esc_html_e( 'Replace', 'my-calendar' ); ?>" />
 				</div>
 			</div>
 			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
@@ -373,7 +373,7 @@ function mc_manage_locations() {
 				 * @return {string}
 				 */
 				$headers = apply_filters( 'mc_location_manager_headers', '' );
-				echo $headers;
+				echo wp_kses( $headers, mc_kses_elements() );
 				?>
 			</tr>
 			</thead>
@@ -396,7 +396,7 @@ function mc_manage_locations() {
 		</table>
 		<div class="mc-actions">
 		<p>
-			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php _e( 'Delete locations', 'my-calendar' ); ?>" />
+			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php esc_html_e( 'Delete locations', 'my-calendar' ); ?>" />
 		</p>
 		</div>
 		</form>
@@ -405,7 +405,7 @@ function mc_manage_locations() {
 		if ( isset( $_POST['mcl'] ) ) {
 			echo '<p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '</p>';
 		}
-		echo '<p><a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . __( 'Create a new location', 'my-calendar' ) . '</a></p>';
+		echo '<p><a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . esc_html__( 'Create a new location', 'my-calendar' ) . '</a></p>';
 	}
 }
 
