@@ -511,8 +511,7 @@ $style_vars";
  */
 function mc_enqueue_calendar_print_styles() {
 	$css = mc_generate_css();
-	$css = wp_filter_nohtml_kses( $css );
-	echo '<style>' . $css . '</style>';
+	echo '<style>' . wp_filter_nohtml_kses( $css ) . '</style>';
 }
 add_action( 'mc_print_view_head', 'mc_enqueue_calendar_print_styles' );
 
@@ -702,7 +701,7 @@ function mc_plugin_update_message() {
 	if ( ! is_wp_error( $response ) || is_array( $response ) ) {
 		$data = $response['body'];
 		$bits = explode( '== Upgrade Notice ==', $data );
-		echo '</div><div id="mc-upgrade" class="notice inline notice-warning"><ul><li><strong style="color:#c22;">Upgrade Notes:</strong> ' . str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) . '</li></ul>';
+		echo '</div><div id="mc-upgrade" class="notice inline notice-warning"><ul><li><strong style="color:#c22;">Upgrade Notes:</strong> ' . esc_html( str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) ) . '</li></ul>';
 	}
 }
 
@@ -935,16 +934,15 @@ function mc_admin_head() {
 	if ( '' !== $style_vars ) {
 		$style_vars = '.mc-main {' . $style_vars . $category_vars . '}';
 	}
-
-	$all_styles = "
+	?>
 <style>
-<!--
 /* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
-$category_styles
-$style_vars
--->
-</style>";
-	echo $all_styles;
+	<?php
+	echo wp_filter_nohtml_kses( $category_styles );
+	echo wp_filter_nohtml_kses( $style_vars );
+	?>
+</style>
+	<?php
 }
 add_action( 'admin_head', 'mc_admin_head' );
 
@@ -2219,7 +2217,7 @@ $plugins_string
 
 		?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-help' ) ); ?>">
-			<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" /></div>
+			<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" /></div>
 			<div>
 			<code><?php echo esc_html( __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;" ); ?></code>
 			</p>
@@ -2583,7 +2581,7 @@ function mc_promotion_notice() {
 		$upgrade = 'https://www.joedolson.com/awesome/my-calendar-pro/';
 		$dismiss = admin_url( 'admin.php?page=my-calendar-config&dismiss=promotion' );
 		// Translators: URL to upgrade.
-		echo "<div class='notice mc-promotion'><p><img src='" . plugins_url( 'images/awd-logo-disc.png', __FILE__ ) . "' alt='Joe Dolson Accessible Web Design' /><span>" . sprintf( __( 'I hope you\'ve enjoyed <strong>My Calendar</strong>! Take a look at <a href=\'%1$s\'>upgrading to My Calendar Pro</a> for advanced event management with WordPress! <a href=\'%2$s\' class="button-secondary">Dismiss</a>', 'my-calendar' ), $upgrade, $dismiss ) . '</span></p></div>';
+		echo "<div class='notice mc-promotion'><p><img src='" . esc_url( plugins_url( 'images/awd-logo-disc.png', __FILE__ ) ) . "' alt='Joe Dolson Accessible Web Design' /><span>" . wp_kses_post( sprintf( __( 'I hope you\'ve enjoyed <strong>My Calendar</strong>! Take a look at <a href=\'%1$s\'>upgrading to My Calendar Pro</a> for advanced event management with WordPress! <a href=\'%2$s\' class="button-secondary">Dismiss</a>', 'my-calendar' ), esc_url( $upgrade ), esc_url( $dismiss ) ) ) . '</span></p></div>';
 	}
 }
 add_action( 'admin_notices', 'mc_promotion_notice', 10 );
