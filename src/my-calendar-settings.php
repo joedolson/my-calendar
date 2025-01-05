@@ -2134,7 +2134,7 @@ function mc_location_controls() {
 				$class  = 'active-limit';
 				$active = ' (' . __( 'active limits', 'my-calendar' ) . ')';
 			}
-			$holder  = strtolower( $label ) . ',' . ucfirst( $label );
+			$holder = strtolower( $label ) . ',' . ucfirst( $label );
 			// Translators: Name of field being restricted.
 			$field_label = sprintf( __( 'Controls for %s', 'my-calendar' ), ucfirst( $label ) )
 			?>

@@ -267,12 +267,10 @@ function mc_test_contrast( $color1, $color2 ) {
 
 /**
  * Display stylesheet selector as added component in sidebar.
- *
- * @return string
  */
 function mc_stylesheet_selector() {
-	$dir              = plugin_dir_path( __DIR__ );
-	$options          = '';
+	$dir     = plugin_dir_path( __DIR__ );
+	$options = '';
 	?>
 <div class="style-selector">
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
