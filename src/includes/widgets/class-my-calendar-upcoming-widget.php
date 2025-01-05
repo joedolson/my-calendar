@@ -168,7 +168,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<textarea class="widefat" rows="6" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_template' ) ); ?>"><?php echo esc_textarea( $template ); ?></textarea>
 		</p>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>"><?php _e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>"><?php esc_html_e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_link' ) ); ?>" value="<?php echo esc_url( $link ); ?>"/>
 		</p>
 		<p>
@@ -225,7 +225,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 				<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_after' ) ); ?>">
 				<?php
 				// Translators: "days" or "events".
-				printf( esc_html__( '%s into the future', 'my-calendar' ), ucfirst( $type ) );
+				printf( esc_html__( '%s into the future', 'my-calendar' ), esc_html( ucfirst( $type ) ) );
 				?>
 				</label>
 				<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_after' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_after' ) ); ?>" value="<?php echo esc_attr( $after ); ?>" size="1" maxlength="3" />
@@ -234,7 +234,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 				<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_before' ) ); ?>">
 				<?php
 				// Translators: "days" or "events".
-				printf( esc_html__( '%s from the past', 'my-calendar' ), ucfirst( $type ) );
+				printf( esc_html__( '%s from the past', 'my-calendar' ), esc_html( ucfirst( $type ) ) );
 				?>
 				</label>
 				<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_before' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_before' ) ); ?>" value="<?php echo esc_attr( $before ); ?>" size="1" maxlength="3" /> 
@@ -253,7 +253,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		}
 		?>
 		<fieldset>
-			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
+			<legend><?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?></legend>
 			<ul style="padding:0;margin:0;list-style-type:none;display:flex;flex-wrap:wrap;gap:12px;">
 				<li>
 					<input type="checkbox" value="all" <?php checked( true, $all_checked ); ?> name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_category' ) ) . '[]'; ?>" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_category' ) ); ?>"> <label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_category' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
