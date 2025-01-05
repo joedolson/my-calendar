@@ -199,8 +199,6 @@ function my_calendar_style_edit() {
 
 /**
  * Display color contrast array of custom variables.
- *
- * @return string
  */
 function mc_display_contrast_variables() {
 	$styles = mc_get_option( 'style_vars', array() );
@@ -229,12 +227,19 @@ function mc_display_contrast_variables() {
 		$row  .= '</tr>';
 		$body .= $row;
 	}
-	$header = '<thead><tr>' . $head . '</tr></thead>';
-	$body   = '<tbody>' . $body . '</tbody>';
-
-	$output = '<table class="mc-contrast-table mc-responsive-table striped"><caption>' . __( 'Accessible Color Combinations', 'my-calendar' ) . '</caption>' . $header . $body . '</table>';
-
-	return $output;
+	?>
+	<table class="mc-contrast-table mc-responsive-table striped">
+		<caption><?php esc_html_e( 'Accessible Color Combinations', 'my-calendar' ); ?></caption>
+		<thead>
+			<tr>
+				<?php echo wp_kses_post( $head ); ?>
+			</tr>
+		</thead>
+		<tbody>
+			<?php echo wp_kses_post( $body ); ?>
+		</tbody>
+	</table>
+	<?php
 }
 
 /**

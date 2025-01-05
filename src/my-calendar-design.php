@@ -36,7 +36,7 @@ function my_calendar_design() {
 							<div class="inside">
 							<?php my_calendar_style_edit(); ?>
 							</div>
-							<?php echo mc_display_contrast_variables(); ?>
+							<?php mc_display_contrast_variables(); ?>
 						</div>
 					</div>
 
@@ -45,9 +45,9 @@ function my_calendar_design() {
 							<?php
 							$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
 							if ( $disable_templates ) {
-								echo '<h2>' . __( 'Template Documentation', 'my-calendar' ) . '</h2>';
+								echo '<h2>' . esc_html__( 'Template Documentation', 'my-calendar' ) . '</h2>';
 							} else {
-								echo '<h2>' . __( 'Template Editor (Legacy)', 'my-calendar' ) . '</h2>';
+								echo '<h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '</h2>';
 								echo '<p><span class="mc-flex">';
 								echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a>' );
 								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
@@ -58,7 +58,7 @@ function my_calendar_design() {
 							<?php
 							echo '<p>';
 							// translators: URL for the PHP templating docs.
-							printf( __( 'Learn about the <a href="%s">PHP templating system in My Calendar</a>.', 'my-calendar' ), 'https://docs.joedolson.com/my-calendar/php-templates/' );
+							printf( wp_kses_post( __( 'Learn about the <a href="%s">PHP templating system in My Calendar</a>.', 'my-calendar' ) ), 'https://docs.joedolson.com/my-calendar/php-templates/' );
 							echo '</p>';
 							mc_templates_edit();
 							?>
