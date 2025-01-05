@@ -46,7 +46,7 @@ function my_calendar_group_edit() {
 					foreach ( $post['apply'] as $event_id ) {
 						$event_id = absint( $event_id );
 						$response = my_calendar_save_group( $action, $mc_output, $event_id, $post );
-						echo $response;
+						echo wp_kses_post( $response );
 					}
 				}
 				break;
@@ -277,7 +277,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 		$title  = esc_html( stripslashes( $first->event_title ) );
 		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$first->event_id' id='$type$first->event_id'$checked /> <label for='break$first->event_id'>$title<br />$date, $time</label></li>\n";
 	}
-	$group .= "<li><input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> <label for='$type'><b>" . __( 'Check/Uncheck all', 'my-calendar' ) . "</b></label></li>\n</ul>";
+	$group .= "<li><input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> <label for='$type'>" . __( 'Select all', 'my-calendar' ) . "</label></li>\n</ul>";
 	$group .= ( 'apply' === $type ) ? '</fieldset>' : '';
 	$group .= ( 'break' === $type ) ? "<p><input type='submit' class='button' value='" . __( 'Remove checked events from this group', 'my-calendar' ) . "' /></p></form>" : '';
 	$group .= '</div>';
@@ -293,7 +293,6 @@ function mc_group_form( $group_id, $type = 'break' ) {
  * @param int    $group_id Group ID.
  */
 function mc_edit_groups( $mode = 'edit', $event_id = 0, $group_id = 0 ) {
-	global $submission;
 	$event_id = ( 0 === $event_id ) ? false : $event_id;
 	$group_id = ( 0 === $group_id ) ? false : $group_id;
 	$message  = '';

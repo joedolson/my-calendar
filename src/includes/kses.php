@@ -250,6 +250,7 @@ function mc_kses_elements() {
 			'maxlength'        => array(),
 			'step'             => array(),
 			'data-context'     => array(),
+			'data-action'      => array(),
 		),
 		'textarea'         => array(
 			'id'               => array(),
