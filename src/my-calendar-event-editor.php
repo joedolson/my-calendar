@@ -1148,7 +1148,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					} else {
 						echo '
 						<div class="event_description">
-						<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>';
+						<label for="content">' . esc_html__( 'Event Description', 'my-calendar' ) . '</label>';
 						if ( user_can_richedit() ) {
 							wp_editor( $value, 'content', array( 'textarea_rows' => 20 ) );
 						} else {
@@ -1413,7 +1413,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 	 */
 	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
 	if ( true === $display ) {
-		echo $return;
+		echo wp_kses( $return, mc_kses_elements() );
 	}
 
 	return $return;
