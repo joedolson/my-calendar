@@ -210,7 +210,7 @@ function mc_kses_elements() {
 			'for'   => array(),
 			'class' => array(),
 		),
-		'option'          => array(
+		'option'           => array(
 			'value'       => array(),
 			'selected'    => array(),
 			'data-period' => array(),

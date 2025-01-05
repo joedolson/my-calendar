@@ -90,8 +90,8 @@ function mc_add_inner_box() {
 	global $post;
 	$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 	if ( $event_id ) {
-		$url     = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id );
-		$event   = mc_get_first_event( $event_id );
+		$url   = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id );
+		$event = mc_get_first_event( $event_id );
 		?>
 		<p>
 			<strong><?php echo esc_html( strip_tags( $event->event_title, mc_strip_tags() ) ); ?></strong><br />
