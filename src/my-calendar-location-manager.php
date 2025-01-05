@@ -127,7 +127,7 @@ function mc_clean_duplicate_locations() {
 		$location  = mc_get_location( $replace );
 		if ( ! $location ) {
 			// If this isn't a valid location, don't continue.
-			echo mc_show_error( esc_html__( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
+			mc_show_error( esc_html__( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
 			return;
 		}
 		$i       = 0;
