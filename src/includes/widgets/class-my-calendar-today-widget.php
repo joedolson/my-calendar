@@ -97,82 +97,82 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		$defaults        = mc_widget_defaults();
-		$widget_title    = ( isset( $instance['my_calendar_today_title'] ) ) ? esc_attr( $instance['my_calendar_today_title'] ) : '';
-		$widget_template = ( isset( $instance['my_calendar_today_template'] ) ) ? esc_attr( $instance['my_calendar_today_template'] ) : '';
+		$widget_title    = ( isset( $instance['my_calendar_today_title'] ) ) ? $instance['my_calendar_today_title'] : '';
+		$widget_template = ( isset( $instance['my_calendar_today_template'] ) ) ? $instance['my_calendar_today_template'] : '';
 		if ( ! $widget_template ) {
 			$widget_template = $defaults['today']['template'];
 		}
-		$widget_text     = ( isset( $instance['my_calendar_no_events_text'] ) ) ? esc_attr( $instance['my_calendar_no_events_text'] ) : '';
+		$widget_text     = ( isset( $instance['my_calendar_no_events_text'] ) ) ? $instance['my_calendar_no_events_text'] : '';
 		$widget_category = ( isset( $instance['my_calendar_today_category'] ) ) ? (array) $instance['my_calendar_today_category'] : null;
-		$widget_linked   = ( isset( $instance['my_calendar_today_linked'] ) ) ? esc_attr( $instance['my_calendar_today_linked'] ) : '';
-		$date            = ( isset( $instance['mc_date'] ) ) ? esc_attr( $instance['mc_date'] ) : '';
+		$widget_linked   = ( isset( $instance['my_calendar_today_linked'] ) ) ? $instance['my_calendar_today_linked'] : '';
+		$date            = ( isset( $instance['mc_date'] ) ) ? $instance['mc_date'] : '';
 		if ( 'yes' === $widget_linked ) {
 			$default_link = mc_get_uri( false, $instance );
 		} else {
 			$default_link = '';
 		}
-		$widget_link   = ( ! empty( $instance['mc_link'] ) ) ? esc_url( $instance['mc_link'] ) : $default_link;
-		$widget_author = ( isset( $instance['my_calendar_today_author'] ) ) ? esc_attr( $instance['my_calendar_today_author'] ) : '';
-		$widget_host   = ( isset( $instance['mc_host'] ) ) ? esc_attr( $instance['mc_host'] ) : '';
-		$site          = ( isset( $instance['mc_site'] ) ) ? esc_attr( $instance['mc_site'] ) : '';
+		$widget_link   = ( ! empty( $instance['mc_link'] ) ) ? $instance['mc_link'] : $default_link;
+		$widget_author = ( isset( $instance['my_calendar_today_author'] ) ) ? $instance['my_calendar_today_author'] : '';
+		$widget_host   = ( isset( $instance['mc_host'] ) ) ? $instance['mc_host'] : '';
+		$site          = ( isset( $instance['mc_site'] ) ) ? $instance['mc_site'] : '';
 
 		?>
 		<div class="my-calendar-widget-wrapper my-calendar-today-widget">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_today_title' ); ?>"><?php _e( 'Title', 'my-calendar' ); ?>:</label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_today_title' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_today_title' ); ?>" value="<?php echo $widget_title; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_title' ) ); ?>"><?php esc_html_e( 'Title', 'my-calendar' ); ?>:</label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_title' ) ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
 		</p>
 		<?php
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 			?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'mc_site' ); ?>"><?php _e( 'Blog ID', 'my-calendar' ); ?>:</label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_site' ); ?>" name="<?php echo $this->get_field_name( 'mc_site' ); ?>" value="<?php echo esc_attr( $site ); ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_site' ) ); ?>"><?php esc_html_e( 'Blog ID', 'my-calendar' ); ?>:</label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_site' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_site' ) ); ?>" value="<?php echo esc_attr( $site ); ?>"/>
 		</p>
 			<?php
 		}
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_today_template' ); ?>"><?php _e( 'Template', 'my-calendar' ); ?></label><br/>
-			<textarea class="widefat" rows="8" cols="20" id="<?php echo $this->get_field_id( 'my_calendar_today_template' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_today_template' ); ?>"><?php echo $widget_template; ?></textarea>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label><br/>
+			<textarea class="widefat" rows="8" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_template' ) ); ?>"><?php echo esc_textarea( $widget_template ); ?></textarea>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'mc_link' ); ?>"><?php _e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_link' ); ?>" name="<?php echo $this->get_field_name( 'mc_link' ); ?>" value="<?php echo $widget_link; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>"><?php esc_html_e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_link' ) ); ?>" value="<?php echo esc_url( $widget_link ); ?>"/>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>"><?php _e( 'No events text', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_no_events_text' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_no_events_text' ); ?>" value="<?php echo $widget_text; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_no_events_text' ) ); ?>"><?php esc_html_e( 'No events text', 'my-calendar' ); ?></label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_no_events_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_no_events_text' ) ); ?>" value="<?php echo esc_attr( $widget_text ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'mc_date' ); ?>"><?php _e( 'Custom date', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_date' ); ?>" name="<?php echo $this->get_field_name( 'mc_date' ); ?>" value="<?php echo $date; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_date' ) ); ?>"><?php esc_html_e( 'Custom date', 'my-calendar' ); ?></label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_date' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_date' ) ); ?>" value="<?php echo esc_attr( $date ); ?>"/>
 		</p>
 		<?php
-		$all_checked = '';
+		$all_checked = false;
 		if ( empty( $widget_category ) ) {
-			$all_checked = ' checked="checked"';
+			$all_checked = true;
 		}
 		?>
 		<fieldset>
-			<legend><?php _e( 'Categories to display:', 'my-calendar' ); ?></legend>
+			<legend><?php esc_html_e( 'Categories to display:', 'my-calendar' ); ?></legend>
 			<ul style="padding:0;margin:0;list-style-type:none;display:flex;flex-wrap:wrap;gap:12px;">
 				<li>
-					<input type="checkbox" value="all" <?php echo $all_checked; ?> name="<?php echo $this->get_field_name( 'my_calendar_today_category' ) . '[]'; ?>" id="<?php echo $this->get_field_id( 'my_calendar_today_category' ); ?>"> <label for="<?php echo $this->get_field_id( 'my_calendar_today_category' ); ?>"><?php _e( 'All', 'my-calendar' ); ?></label>
+					<input type="checkbox" value="all" <?php checked( true, $all_checked ); ?> name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_category' ) . '[]' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_category' ) ); ?>"> <label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_category' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></label>
 				</li>
 			<?php
 			$select = mc_category_select( $widget_category, true, true, $this->get_field_name( 'my_calendar_today_category' ) . '[]', $this->get_field_id( 'my_calendar_today_category' ) );
-			echo $select;
+			echo wp_kses( $select, mc_kses_elements() );
 			?>
 			</ul>
 		</fieldset>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'my_calendar_today_author' ); ?>"><?php _e( 'Author or authors to show:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'my_calendar_today_author' ); ?>" name="<?php echo $this->get_field_name( 'my_calendar_today_author' ); ?>" value="<?php echo $widget_author; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_author' ) ); ?>"><?php esc_html_e( 'Author or authors to show:', 'my-calendar' ); ?></label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_author' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_author' ) ); ?>" value="<?php echo esc_attr( $widget_author ); ?>"/>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'mc_host' ); ?>"><?php _e( 'Host or hosts to show:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'mc_host' ); ?>" name="<?php echo $this->get_field_name( 'mc_host' ); ?>" value="<?php echo $widget_host; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_host' ) ); ?>"><?php esc_html_e( 'Host or hosts to show:', 'my-calendar' ); ?></label><br/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_host' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_host' ) ); ?>" value="<?php echo esc_attr( $widget_host ); ?>"/>
 		</p>
 		</div>
 		<?php
