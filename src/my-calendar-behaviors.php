@@ -51,7 +51,7 @@ function my_calendar_behaviors_edit() {
 	?>
 	<form id="my-calendar" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-scripts">
 		<div>
-			<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+			<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 		</div>
 		<p>
 			<label for="mc_show_js"><?php esc_html_e( 'Insert scripts on these pages (comma separated post IDs)', 'my-calendar' ); ?></label>
@@ -60,7 +60,7 @@ function my_calendar_behaviors_edit() {
 
 		<div class='controls'>
 			<fieldset>
-				<legend><?php _e( 'Grid JavaScript', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'Grid JavaScript', 'my-calendar' ); ?></legend>
 				<ul class="checkboxes">
 				<li>
 					<input type="radio" id="calendar_js_disabled" name="calendar_js" value="1" <?php checked( mc_get_option( 'calendar_javascript' ), '1' ); ?>/>
@@ -77,7 +77,7 @@ function my_calendar_behaviors_edit() {
 				</ul>
 			</fieldset>
 			<fieldset>
-				<legend><?php _e( 'List JavaScript', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'List JavaScript', 'my-calendar' ); ?></legend>
 				<ul class="checkboxes">
 				<li>
 					<input type="radio" id="list_js_disabled" name="list_js" value="1" <?php checked( mc_get_option( 'list_javascript' ), '1' ); ?>/>
@@ -94,7 +94,7 @@ function my_calendar_behaviors_edit() {
 				</ul>
 			</fieldset>
 			<fieldset>
-				<legend><?php _e( 'Mini Widget JavaScript', 'my-calendar' ); ?></legend>
+				<legend><?php esc_html_e( 'Mini Widget JavaScript', 'my-calendar' ); ?></legend>
 				<ul class="checkboxes">
 				<li>
 					<input type="radio" id="mini_js_disabled" name="mini_js" value="1" <?php checked( mc_get_option( 'mini_javascript' ), '1' ); ?>/>
