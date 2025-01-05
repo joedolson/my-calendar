@@ -266,7 +266,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</fieldset>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_author' ) ); ?>"><?php esc_html_e( 'Author or authors to show:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo esc_atr( $this->get_field_id( 'my_calendar_upcoming_author' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_author' ) ); ?>" value="<?php echo esc_attr( $author ); ?>"/>
+			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_author' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_author' ) ); ?>" value="<?php echo esc_attr( $author ); ?>"/>
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_host' ) ); ?>"><?php esc_html_e( 'Host or hosts to show:', 'my-calendar' ); ?></label><br/>
@@ -289,7 +289,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'lvalue' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'lvalue' ) ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_no_events_text' ) ); ?>"><?php esc_html_e( 'No events text', 'my-calendar' ) ); ?></label><br/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_no_events_text' ) ); ?>"><?php esc_html_e( 'No events text', 'my-calendar' ); ?></label><br/>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_no_events_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_no_events_text' ) ); ?>" value="<?php echo esc_attr( $text ); ?>"/>
 		</p>
 		</div>
