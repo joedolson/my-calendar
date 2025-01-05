@@ -496,7 +496,7 @@ function my_calendar_add_locations() {
 		}
 	} elseif ( isset( $_GET['location_id'] ) &amp;&amp; 'delete' === $_GET['mode'] ) {
 		$loc = absint( $_GET['location_id'] );
-		echo mc_delete_location( $loc );
+		echo wp_kses_post( mc_delete_location( $loc ) );
 	} elseif ( isset( $_GET['mode'] ) &amp;&amp; isset( $_GET['location_id'] ) &amp;&amp; 'edit' === $_GET['mode'] &amp;&amp; ! isset( $post['mode'] ) ) {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
@@ -598,7 +598,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 	} else {
 		?>
 		&lt;h1 class="wp-heading-inline">&lt;?php esc_html_e( 'Edit Location', 'my-calendar' ); ?>&lt;/h1>
-		&lt;a href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>" class="page-title-action">&lt;?php esc_html_e( 'Add New', 'my-calendar' ); ?>&lt;/a>
+		&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>" class="page-title-action">&lt;?php esc_html_e( 'Add New', 'my-calendar' ); ?>&lt;/a>
 		&lt;hr class="wp-header-end">
 		&lt;?php
 	}
@@ -647,7 +647,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 								&lt;li>&lt;input type="submit" name="save" class="button-primary" value="&lt;?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/>&lt;/li>
 							&lt;/ul>
 						&lt;/div>
-						&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>&lt;/div>
+						&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>&lt;/div>
 							&lt;?php
 							if ( 'add' === $view ) {
 								?>
@@ -660,11 +660,11 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 								?>
 								&lt;div>
 									&lt;input type="hidden" name="mode" value="edit"/>
-									&lt;input type="hidden" name="location_id" value="&lt;?php echo $cur_loc->location_id; ?>"/>
+									&lt;input type="hidden" name="location_id" value="&lt;?php echo esc_attr( $cur_loc->location_id ); ?>"/>
 								&lt;/div>
 								&lt;?php
 							}
-							echo mc_locations_fields( $has_data, $cur_loc, 'location' );
+							echo wp_kses( mc_locations_fields( $has_data, $cur_loc, 'location' ), mc_kses_elements() );
 							?>
 							&lt;div class="mc-controls footer">
 								&lt;ul>
@@ -693,7 +693,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 			if ( 'edit' === $view ) {
 				?>
 				&lt;p>
-					&lt;a href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-locations' ); ?>">&lt;?php esc_html_e( 'Add a New Location', 'my-calendar' ); ?>&lt;/a>
+					&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>">&lt;?php esc_html_e( 'Add a New Location', 'my-calendar' ); ?>&lt;/a>
 				&lt;/p>
 				&lt;?php
 			}

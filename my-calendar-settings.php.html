@@ -2111,7 +2111,7 @@ function mc_update_location_controls() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'Invalid nonce' );
 		}
-		$locations            = isset( $_POST['mc_location_controls'] ) ? map_deep( $_POST['mc_location_controls'], 'sanitize_textarea_field' ) : array();
+		$locations            = isset( $_POST['mc_location_controls'] ) ? map_deep( wp_unslash( $_POST['mc_location_controls'] ), 'sanitize_textarea_field' ) : array();
 		$mc_location_controls = array();
 		foreach ( $locations as $key => $value ) {
 			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
@@ -2126,7 +2126,6 @@ function mc_update_location_controls() {
  */
 function mc_location_controls() {
 	if ( current_user_can( 'mc_edit_settings' ) ) {
-		$response             = mc_update_location_controls();
 		$location_fields      = array(
 			'event_label'    => __( 'Name of Location', 'my-calendar' ),
 			'event_city'     => __( 'City', 'my-calendar' ),
@@ -2136,7 +2135,7 @@ function mc_location_controls() {
 			'event_country'  => __( 'Country', 'my-calendar' ),
 		);
 		$mc_location_controls = mc_get_option( 'location_controls' );
-
+		mc_update_location_controls();
 		?>
 		&lt;p>&lt;?php echo wp_kses_post( __( 'Save custom values to change location text fields into dropdowns. One field per line.  Format: &lt;code>saved_value,Displayed Value&lt;/code>', 'my-calendar' ) ); ?>&lt;/p>
 		&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' ) ); ?>">
