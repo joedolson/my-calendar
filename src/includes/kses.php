@@ -210,9 +210,10 @@ function mc_kses_elements() {
 			'for'   => array(),
 			'class' => array(),
 		),
-		'option'           => array(
-			'value'    => array(),
-			'selected' => array(),
+		'option'          => array(
+			'value'       => array(),
+			'selected'    => array(),
+			'data-period' => array(),
 		),
 		'select'           => array(
 			'id'               => array(),
@@ -225,6 +226,7 @@ function mc_kses_elements() {
 			'required'         => array(),
 			'readonly'         => array(),
 			'autocomplete'     => array(),
+			'class'            => array(),
 		),
 		'input'            => array(
 			'id'               => array(),
@@ -245,6 +247,9 @@ function mc_kses_elements() {
 			'data-href'        => array(),
 			'placeholder'      => array(),
 			'data-variable'    => array(),
+			'maxlength'        => array(),
+			'step'             => array(),
+			'data-context'     => array(),
 		),
 		'textarea'         => array(
 			'id'               => array(),
@@ -280,6 +285,9 @@ function mc_kses_elements() {
 			'data-type'        => array(),
 			'aria-pressed'     => array(),
 			'id'               => array(),
+			'data-context'     => array(),
+			'data-model'       => array(),
+			'data-event'       => array(),
 		),
 		'ul'               => array(
 			'class' => array(),
@@ -310,8 +318,9 @@ function mc_kses_elements() {
 			'aria-hidden' => array(),
 		),
 		'strong'           => array(
-			'id'    => array(),
-			'class' => array(),
+			'id'          => array(),
+			'class'       => array(),
+			'aria-hidden' => array(),
 		),
 		'b'                => array(
 			'id'    => array(),
@@ -332,6 +341,8 @@ function mc_kses_elements() {
 			'aria-labelledby' => array(),
 			'style'           => array(),
 			'lang'            => array(),
+			'aria-label'      => array(),
+			'tabindex'        => array(),
 		),
 		'img'              => array(
 			'class'    => true,
@@ -376,6 +387,7 @@ function mc_kses_elements() {
 			'aria-current'     => array(),
 			'target'           => array(),
 			'aria-pressed'     => array(),
+			'data-title'       => array(),
 		),
 		'section'          => array(
 			'id'    => array(),
