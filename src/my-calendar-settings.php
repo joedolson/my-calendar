@@ -479,7 +479,7 @@ function mc_update_email_settings( $post ) {
 	$options['event_mail_to']      = $post['mc_event_mail_to'];
 	$options['event_mail_from']    = $post['mc_event_mail_from'];
 	$options['event_mail_subject'] = $post['mc_event_mail_subject'];
-	$options['event_mail_message'] = ( 'true' === $options['html_email'] && isset( wp_unslash( $_POST['mc_event_mail_message'] ) ) ) ? wp_kses_post( $_POST['mc_event_mail_message'] ) : $post['mc_event_mail_message'];
+	$options['event_mail_message'] = ( 'true' === $options['html_email'] && isset( $_POST['mc_event_mail_message'] ) ) ? wp_kses_post( wp_unslash( $_POST['mc_event_mail_message'] ) ) : $post['mc_event_mail_message'];
 	$options['event_mail_bcc']     = $post['mc_event_mail_bcc'];
 
 	mc_update_options( $options );
