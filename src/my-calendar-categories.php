@@ -456,7 +456,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 
 					<div class="inside">
 						<form id="my-calendar" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-categories' ) ); ?>">
-							<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/></div>
+							<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/></div>
 							<?php
 							if ( 'add' === $view ) {
 								?>
@@ -503,7 +503,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							<?php
 							if ( ! function_exists( 'mime_content_type' ) ) {
 								?>
-								<div class="notice"><p><?php _e( 'Category Icons require the <code>mime_content_type</code> function, which is not available on your system.', 'my-calendar' ); ?></p></div>
+								<div class="notice"><p><?php echo wp_kses_post( __( 'Category Icons require the <code>mime_content_type</code> function, which is not available on your system.', 'my-calendar' ) ); ?></p></div>
 								<?php
 							}
 							if ( 'true' !== mc_get_option( 'hide_icons' ) ) {
@@ -512,7 +512,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							<div class="category-icon-selector">
 								<label for="cat_icon"><?php esc_html_e( 'Category Icon', 'my-calendar' ); ?></label>
 								<div class="mc-autocomplete autocomplete" id="mc-icons-autocomplete">
-									<input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="<?php _e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
+									<input type="text" class="autocomplete-input" id="cat_icon" name='category_icon' placeholder="<?php esc_attr_e( 'Search for an icon', 'my-calendar' ); ?>" value="<?php echo esc_attr( $icon ); ?>" />
 									<ul class="autocomplete-result-list"></ul>
 								</div>
 								<?php mc_help_link( __( 'Show Category Icons', 'my-calendar' ), __( 'Category Icons', 'my-calendar' ), 'Category Icons', 6 ); ?>
@@ -548,7 +548,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								 *
 								 * @return {string}
 								 */
-								echo apply_filters( 'mc_category_fields', '', $cur_cat );
+								echo wp_kses( apply_filters( 'mc_category_fields', '', $cur_cat ), mc_kses_elements() );
 								if ( 'add' === $view ) {
 									$save_text = __( 'Add Category', 'my-calendar' );
 								} else {
@@ -608,7 +608,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 			$path      = str_replace( '/my-calendar', '/my-calendar-custom/icons', $url );
 			$iconlist  = mc_directory_list( $directory );
 			foreach ( $iconlist as $icon ) {
-				echo '<li class="category-icon"><code>' . $icon . '</code><img src="' . $path . '/' . esc_html( $icon ) . '" alt="" aria-hidden="true"></li>';
+				echo '<li class="category-icon"><code>' . esc_html( $icon ) . '</code><img src="' . esc_attr( $path ) . '/' . esc_html( $icon ) . '" alt="" aria-hidden="true"></li>';
 			}
 			?>
 					</ul>
@@ -848,12 +848,12 @@ function mc_manage_categories() {
 		<tr>
 			<th scope="col">
 				<?php
-				echo ( '2' === (string) $co ) ? wp_kses_post( '<a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-categories&amp;co=1' ) ) . '">' . __( 'ID', 'my-calendar' ) . '</a>' ) : __( 'ID', 'my-calendar' );
+				echo ( '2' === (string) $co ) ? wp_kses_post( '<a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-categories&amp;co=1' ) ) . '">' . __( 'ID', 'my-calendar' ) . '</a>' ) : esc_html__( 'ID', 'my-calendar' );
 				?>
 			</th>
 			<th scope="col">
 				<?php
-				echo ( '1' === (string) $co ) ? wp_kses_post( '<a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-categories&amp;co=2' ) ) . '">' . __( 'Category Name', 'my-calendar' ) . '</a>' ) : __( 'Category Name', 'my-calendar' );
+				echo ( '1' === (string) $co ) ? wp_kses_post( '<a href="' . esc_url( admin_url( 'admin.php?page=my-calendar-categories&amp;co=2' ) ) . '">' . __( 'Category Name', 'my-calendar' ) . '</a>' ) : esc_html__( 'Category Name', 'my-calendar' );
 				?>
 			</th>
 			<th scope="col"><?php esc_html_e( 'Events', 'my-calendar' ); ?></th>
@@ -892,14 +892,14 @@ function mc_manage_categories() {
 			$default_text = sprintf( __( 'Set %s as Default', 'my-calendar' ), '<span class="screen-reader-text">' . $cat_name . '</span>' );
 			$mcnonce      = wp_create_nonce( 'mcnonce' );
 			if ( $default_category === (string) $cat->category_id ) {
-				echo ' <strong>' . __( '(Default)', 'my-calendar' ) . '</strong>';
+				echo ' <strong>' . esc_html__( '(Default)', 'my-calendar' ) . '</strong>';
 				$default = '<span class="mc_default">' . __( 'Default Category', 'my-calendar' ) . '</span>';
 			} else {
 				$url     = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-categories&amp;default=$cat->category_id" ) );
 				$default = '<a href="' . esc_url( $url ) . '">' . $default_text . '</a>';
 			}
 			if ( mc_get_option( 'skip_holidays_category' ) === (string) $cat->category_id ) {
-				echo ' <strong>' . __( '(Holiday)', 'my-calendar' ) . '</strong>';
+				echo ' <strong>' . esc_html__( '(Holiday)', 'my-calendar' ) . '</strong>';
 			}
 			?>
 				<div class="row-actions">
@@ -911,14 +911,14 @@ function mc_manage_categories() {
 					if ( '1' !== (string) $cat->category_id ) {
 						echo ' | ';
 						?>
-						<a href="<?php echo add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ) ); ?>" class="delete" onclick="return confirm('<?php _e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')"><?php echo wp_kses_post( $delete_cat ); ?></a>
+						<a href="<?php echo esc_url( add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-categories&amp;mode=delete&amp;category_id=$cat->category_id" ) ) ); ?>" class="delete" onclick="return confirm('<?php esc_html_e( 'Are you sure you want to delete this category?', 'my-calendar' ); ?>')"><?php echo wp_kses_post( $delete_cat ); ?></a>
 						<?php
 					}
 					?>
 				</div>
 			</td>
 			<td><?php echo wp_kses_post( $count ); ?></td>
-			<td><?php echo ( '1' === (string) $cat->category_private ) ? __( 'Yes', 'my-calendar' ) : __( 'No', 'my-calendar' ); ?></td>
+			<td><?php echo ( '1' === (string) $cat->category_private ) ? esc_html__( 'Yes', 'my-calendar' ) : esc_html__( 'No', 'my-calendar' ); ?></td>
 			<?php
 			if ( ! $hide_icon || ! $hide_color ) {
 				$has_color  = ( '' !== $cat->category_color && strlen( $cat->category_color ) > 2 ) ? true : false;
@@ -935,9 +935,8 @@ function mc_manage_categories() {
 				if ( ! $icon ) {
 					$icon_bg = 'transparent';
 				}
-				$style = ( '' !== $icon_bg ) ? ' style="text-align:center;vertical-align:middle;background-color:' . esc_attr( $icon_bg ) . '"' : '';
 				?>
-			<td<?php echo $style; ?>><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
+			<td <?php echo ( '' !== $icon_bg ) ? ' style="text-align:center;vertical-align:middle;background-color:' . esc_attr( $icon_bg ) . '"' : ''; ?>><?php echo ( $icon ) ? wp_kses( $icon, mc_kses_elements() ) : ''; ?></td>
 				<?php
 			}
 			if ( ! $hide_color ) {
@@ -983,7 +982,7 @@ function mc_profile() {
 		<fieldset><legend style="font-size:1rem;font-weight:600"><?php esc_html_e( 'Allowed Categories', 'my-calendar' ); ?></legend>
 			<ul class='checkboxes'>
 				<li><input type="checkbox" name="mc_user_permissions[]" value="all" id="mc_edit_all" <?php echo esc_html( $selected ); ?>> <label for="mc_edit_all"><?php esc_html_e( 'Edit All Categories', 'my-calendar' ); ?></li>
-				<?php echo mc_category_select( $permissions, true, true, 'mc_user_permissions[]' ); ?>
+				<?php echo wp_kses( mc_category_select( $permissions, true, true, 'mc_user_permissions[]' ), mc_kses_elements() ); ?>
 			</ul>
 		</fieldset>
 			<?php
@@ -997,7 +996,7 @@ function mc_profile() {
 			 *
 			 * @return {string}
 			 */
-			echo apply_filters( 'mc_user_fields', '', $user_edit );
+			echo wp_kses( apply_filters( 'mc_user_fields', '', $user_edit ), mc_kses_elements() );
 			?>
 		</div>
 		<?php
