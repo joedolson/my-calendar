@@ -410,8 +410,6 @@ function my_calendar_manage_screen() {
 
 /**
  * Show bulk actions dropdown in event manager.
- *
- * @return string
  */
 function mc_show_bulk_actions() {
 	$bulk_actions = array(
@@ -867,10 +865,10 @@ function mc_admin_events_table( $events ) {
 		$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
 
 		if ( 1 === (int) $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
-			$spam       = 'spam';
-			$pending    = '';
+			$spam    = 'spam';
+			$pending = '';
 		} else {
-			$spam       = '';
+			$spam = '';
 		}
 
 		$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
