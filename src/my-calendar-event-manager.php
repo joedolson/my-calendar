@@ -213,7 +213,7 @@ function my_calendar_manage() {
 			<div class="error">
 				<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>" method="post">
 					<p><strong><?php esc_html_e( 'Delete Event', 'my-calendar' ); ?>:</strong> <?php esc_html_e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
-						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 						<input type="hidden" value="delete" name="event_action" />
 						<?php
 						if ( ! empty( $_GET['date'] ) ) {
@@ -452,12 +452,11 @@ function mc_show_bulk_actions() {
 	 * @return {array}
 	 */
 	$bulk_actions = apply_filters( 'mc_bulk_actions', $bulk_actions );
-	$options      = '';
 	foreach ( $bulk_actions as $action => $label ) {
-		$options .= '<option value="' . $action . '">' . $label . '</option>';
+		?>
+		<option value="<?php echo esc_attr( $action ); ?>"><?php echo esc_html( $label ); ?></option>
+		<?php
 	}
-
-	return $options;
 }
 
 /**
@@ -581,7 +580,7 @@ function mc_admin_event_search( $context = '' ) {
 	?>
 	<div class='mc-search'>
 	<form action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
-		<div><input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+		<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 		</div>
 		<div>
 			<label for="mc_search<?php echo esc_attr( $context ); ?>" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
@@ -733,8 +732,14 @@ function mc_list_events() {
 					'mid_size'  => 2,
 				)
 			);
-			$nav_label  = esc_attr( __( 'Events Pagination', 'my-calendar' ) );
-			printf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
+			$nav_label  = __( 'Events Pagination', 'my-calendar' );
+			?>
+			<nav class='tablenav' aria-label='<?php echo esc_attr( $nav_label ); ?>'>
+				<div class='tablenav-pages'>
+					<?php echo wp_kses_post( $page_links ); ?>
+				</div>
+			</nav>
+			<?php
 		}
 
 		// Display a link to clear filters if set.
@@ -755,12 +760,12 @@ function mc_list_events() {
 		if ( ! empty( $events ) ) {
 			?>
 			<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+				<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 				<div class='mc-actions'>
 					<label for="mc_bulk_actions" class="screen-reader-text"><?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?></label>
 					<select name="mc_bulk_actions" id="mc_bulk_actions">
 						<option value=""><?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?></option>
-						<?php echo mc_show_bulk_actions(); ?>
+						<?php mc_show_bulk_actions(); ?>
 					</select>
 					<input type="submit" class="button-secondary" value="<?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
 					<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
@@ -797,7 +802,7 @@ function mc_list_events() {
 				<label for="mc_bulk_actions_footer" class="screen-reader-text"><?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?></label>
 				<select name="mc_bulk_actions" id="mc_bulk_actions_footer">
 					<option value=""><?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?></option>
-					<?php echo mc_show_bulk_actions(); ?>
+					<?php mc_show_bulk_actions(); ?>
 				</select>
 				<input type="submit" class="button-secondary" value="<?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
 				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label>
@@ -805,7 +810,13 @@ function mc_list_events() {
 		</form>
 			<?php
 			if ( $num_pages > 1 ) {
-				printf( "<nav class='tablenav' aria-label='$nav_label'><div class='tablenav-pages'>%s</div></nav>", $page_links );
+				?>
+				<nav class='tablenav' aria-label='<?php echo esc_attr( $nav_label ); ?>'>
+					<div class='tablenav-pages'>
+						<?php echo wp_kses_post( $page_links ); ?>
+					</div>
+				</nav>
+				<?php
 			}
 			?>
 		<div class='mc-admin-footer'>
@@ -858,10 +869,8 @@ function mc_admin_events_table( $events ) {
 		if ( 1 === (int) $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
 			$spam       = 'spam';
 			$pending    = '';
-			$spam_label = '<strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':</strong> ';
 		} else {
 			$spam       = '';
-			$spam_label = '';
 		}
 
 		$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
@@ -881,13 +890,13 @@ function mc_admin_events_table( $events ) {
 		$can_edit   = mc_can_edit_event( $event );
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
-			<tr class="<?php echo sanitize_html_class( "$class $spam $pending $trashed $problem" ); ?>">
+			<tr class="<?php echo esc_attr( "$class $spam $pending $trashed $problem" ); ?>">
 				<th scope="row">
-					<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo $event->event_id; ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
+					<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo absint( $event->event_id ); ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
 					<label for="mc<?php echo absint( $event->event_id ); ?>">
 					<?php
 					// Translators: Event ID.
-					printf( __( "<span class='screen-reader-text'>Select event </span>%d", 'my-calendar' ), absint( $event->event_id ) );
+					echo wp_kses_post( sprintf( __( "<span class='screen-reader-text'>Select event </span>%d", 'my-calendar' ), absint( $event->event_id ) ) );
 					?>
 					</label>
 				</th>
@@ -899,7 +908,7 @@ function mc_admin_events_table( $events ) {
 						<a href="<?php echo esc_url( $edit_url ); ?>" class='edit'><span class="dashicons dashicons-edit" aria-hidden="true"></span>
 						<?php
 					}
-					echo $spam_label;
+					echo ( 'spam' === $spam ) ? '<strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':</strong> ' : '';
 					echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '</span>';
 					if ( $can_edit ) {
 						echo '</a>';
@@ -938,7 +947,7 @@ function mc_admin_events_table( $events ) {
 							| <a href="<?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Delete', 'my-calendar' ); ?></a>
 							<?php
 						} else {
-							_e( 'Not editable.', 'my-calendar' );
+							esc_html_e( 'Not editable.', 'my-calendar' );
 						}
 						?>
 						|
@@ -957,13 +966,13 @@ function mc_admin_events_table( $events ) {
 						} else {
 							switch ( $event->event_approved ) {
 								case 1:
-									_e( 'Published', 'my-calendar' );
+									esc_html_e( 'Published', 'my-calendar' );
 									break;
 								case 2:
-									_e( 'Trashed', 'my-calendar' );
+									esc_html_e( 'Trashed', 'my-calendar' );
 									break;
 								default:
-									_e( 'Awaiting Approval', 'my-calendar' );
+									esc_html_e( 'Awaiting Approval', 'my-calendar' );
 							}
 						}
 						?>
@@ -1008,7 +1017,7 @@ function mc_admin_events_table( $events ) {
 					</a>
 				</td>
 				<td>
-				<?php echo mc_admin_category_list( $event ); ?>
+				<?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
 				</td>
 			</tr>
 			<?php
