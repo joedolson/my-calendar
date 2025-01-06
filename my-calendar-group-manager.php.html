@@ -929,7 +929,7 @@ function mc_list_groups() {
 							}
 						}
 						echo wp_kses_post( $spam_label );
-						echo '&lt;span id="event_' . esc_attr( $event->event_id ) . '">' . esc_html( strip_tags( wp_unslash( $title ) ) ) . '&lt;/span>';
+						echo '&lt;span id="event_' . esc_attr( $event->event_id ) . '">' . esc_html( wp_strip_all_tags( wp_unslash( $title ) ) ) . '&lt;/span>';
 						if ( $can_edit &amp;&amp; $edit_link ) {
 							echo '&lt;/a>';
 						}
