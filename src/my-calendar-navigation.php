@@ -788,10 +788,10 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 		$form .= '<input type="hidden" name="cid" value="all" />';
 	}
 	foreach ( $qsa as $name => $argument ) {
-		$name = esc_attr( strip_tags( $name ) );
+		$name = esc_attr( wp_strip_all_tags( $name ) );
 		if ( ! ( 'access' === $name || 'mcat' === $name || 'loc' === $name || 'ltype' === $name || 'mc_id' === $name || 'legacy-widget-preview' === $name ) ) {
 			$argument = ( ! is_string( $argument ) ) ? (string) $argument : $argument;
-			$argument = esc_attr( strip_tags( $argument ) );
+			$argument = esc_attr( wp_strip_all_tags( $argument ) );
 			$form    .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
 		}
 	}
@@ -864,7 +864,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		}
 		foreach ( $qsa as $name => $argument ) {
 			if ( ! ( 'mcat' === $name || 'mc_id' === $name ) ) {
-				$form .= '<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />' . "\n";
+				$form .= '<input type="hidden" name="' . esc_attr( wp_strip_all_tags( $name ) ) . '" value="' . esc_attr( wp_strip_all_tags( $argument ) ) . '" />' . "\n";
 			}
 		}
 	}
@@ -952,7 +952,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 		}
 		foreach ( $qsa as $name => $argument ) {
 			if ( ! ( 'access' === $name || 'mc_id' === $name ) ) {
-				$form .= '<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />' . "\n";
+				$form .= '<input type="hidden" name="' . esc_attr( wp_strip_all_tags( $name ) ) . '" value="' . esc_attr( wp_strip_all_tags( $argument ) ) . '" />' . "\n";
 			}
 		}
 	}
@@ -1032,11 +1032,11 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	}
 	$data_href = $current_url;
 	foreach ( $qsa as $name => $argument ) {
-		$name = esc_attr( strip_tags( $name ) );
+		$name = esc_attr( wp_strip_all_tags( $name ) );
 		if ( is_array( $argument ) ) {
 			$argument = '';
 		} else {
-			$argument = esc_attr( strip_tags( $argument ) );
+			$argument = esc_attr( wp_strip_all_tags( $argument ) );
 		}
 		if ( 'month' !== $name && 'yr' !== $name && 'dy' !== $name ) {
 			$date_switcher .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />';
