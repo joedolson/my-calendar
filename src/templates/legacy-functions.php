@@ -79,7 +79,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		if ( false === $details ) {
 			$details = wp_kses_post( mc_get_details( $tags, $template, $type ) );
 			// Set details to false if it has no content.
-			$details = ( '' === trim( strip_tags( $details ) ) ) ? false : $details;
+			$details = ( '' === trim( wp_strip_all_tags( $details ) ) ) ? false : $details;
 		}
 	}
 
@@ -149,8 +149,8 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 				$permalink     = mc_get_permalink( $event );
 				$aria          = '';
 				// If the event title is already in the details label, omit ARIA.
-				if ( false === stripos( strip_tags( $details_label ), strip_tags( $event_title ) ) ) {
-					$aria = " aria-label='" . esc_attr( "$details_label: " . strip_tags( $event_title ) ) . "'";
+				if ( false === stripos( wp_strip_all_tags( $details_label ), wp_strip_all_tags( $event_title ) ) ) {
+					$aria = " aria-label='" . esc_attr( "$details_label: " . wp_strip_all_tags( $event_title ) ) . "'";
 				}
 				if ( _mc_is_url( $permalink ) ) {
 					$more = "	<p class='mc-details'><a$aria href='" . esc_url( $permalink ) . "'>$details_label</a></p>\n";
