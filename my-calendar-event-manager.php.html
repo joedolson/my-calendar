@@ -239,7 +239,7 @@ function my_calendar_manage() {
 			&lt;div class="error">
 				&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>" method="post">
 					&lt;p>&lt;strong>&lt;?php esc_html_e( 'Delete Event', 'my-calendar' ); ?>:&lt;/strong> &lt;?php esc_html_e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
-						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 						&lt;input type="hidden" value="delete" name="event_action" />
 						&lt;?php
 						if ( ! empty( $_GET['date'] ) ) {
@@ -478,12 +478,11 @@ function mc_show_bulk_actions() {
 	 * @return {array}
 	 */
 	$bulk_actions = apply_filters( 'mc_bulk_actions', $bulk_actions );
-	$options      = '';
 	foreach ( $bulk_actions as $action => $label ) {
-		$options .= '&lt;option value="' . $action . '">' . $label . '&lt;/option>';
+		?>
+		&lt;option value="&lt;?php echo esc_attr( $action ); ?>">&lt;?php echo esc_html( $label ); ?>&lt;/option>
+		&lt;?php
 	}
-
-	return $options;
 }
 
 /**
@@ -607,7 +606,7 @@ function mc_admin_event_search( $context = '' ) {
 	?>
 	&lt;div class='mc-search'>
 	&lt;form action="&lt;?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
-		&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+		&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 		&lt;/div>
 		&lt;div>
 			&lt;label for="mc_search&lt;?php echo esc_attr( $context ); ?>" class='screen-reader-text'>&lt;?php esc_html_e( 'Search Events', 'my-calendar' ); ?>&lt;/label>
@@ -759,8 +758,14 @@ function mc_list_events() {
 					'mid_size'  => 2,
 				)
 			);
-			$nav_label  = esc_attr( __( 'Events Pagination', 'my-calendar' ) );
-			printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
+			$nav_label  = __( 'Events Pagination', 'my-calendar' );
+			?>
+			&lt;nav class='tablenav' aria-label='&lt;?php echo esc_attr( $nav_label ); ?>'>
+				&lt;div class='tablenav-pages'>
+					&lt;?php echo wp_kses_post( $page_links ); ?>
+				&lt;/div>
+			&lt;/nav>
+			&lt;?php
 		}
 
 		// Display a link to clear filters if set.
@@ -781,12 +786,12 @@ function mc_list_events() {
 		if ( ! empty( $events ) ) {
 			?>
 			&lt;form action="&lt;?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
-				&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+				&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 				&lt;div class='mc-actions'>
 					&lt;label for="mc_bulk_actions" class="screen-reader-text">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/label>
 					&lt;select name="mc_bulk_actions" id="mc_bulk_actions">
 						&lt;option value="">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/option>
-						&lt;?php echo mc_show_bulk_actions(); ?>
+						&lt;?php mc_show_bulk_actions(); ?>
 					&lt;/select>
 					&lt;input type="submit" class="button-secondary" value="&lt;?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
 					&lt;div>&lt;input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> &lt;label for='mass_edit'>&lt;?php esc_html_e( 'Check all', 'my-calendar' ); ?>&lt;/label>&lt;/div>
@@ -823,7 +828,7 @@ function mc_list_events() {
 				&lt;label for="mc_bulk_actions_footer" class="screen-reader-text">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/label>
 				&lt;select name="mc_bulk_actions" id="mc_bulk_actions_footer">
 					&lt;option value="">&lt;?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?>&lt;/option>
-					&lt;?php echo mc_show_bulk_actions(); ?>
+					&lt;?php mc_show_bulk_actions(); ?>
 				&lt;/select>
 				&lt;input type="submit" class="button-secondary" value="&lt;?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
 				&lt;input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> &lt;label for='mass_edit_footer'>&lt;?php esc_html_e( 'Check all', 'my-calendar' ); ?>&lt;/label>
@@ -831,7 +836,13 @@ function mc_list_events() {
 		&lt;/form>
 			&lt;?php
 			if ( $num_pages > 1 ) {
-				printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
+				?>
+				&lt;nav class='tablenav' aria-label='&lt;?php echo esc_attr( $nav_label ); ?>'>
+					&lt;div class='tablenav-pages'>
+						&lt;?php echo wp_kses_post( $page_links ); ?>
+					&lt;/div>
+				&lt;/nav>
+				&lt;?php
 			}
 			?>
 		&lt;div class='mc-admin-footer'>
@@ -884,10 +895,8 @@ function mc_admin_events_table( $events ) {
 		if ( 1 === (int) $event->event_flagged &amp;&amp; ( isset( $_GET['restrict'] ) &amp;&amp; 'flagged' === $_GET['restrict'] ) ) {
 			$spam       = 'spam';
 			$pending    = '';
-			$spam_label = '&lt;strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':&lt;/strong> ';
 		} else {
 			$spam       = '';
-			$spam_label = '';
 		}
 
 		$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
@@ -907,13 +916,13 @@ function mc_admin_events_table( $events ) {
 		$can_edit   = mc_can_edit_event( $event );
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
-			&lt;tr class="&lt;?php echo sanitize_html_class( "$class $spam $pending $trashed $problem" ); ?>">
+			&lt;tr class="&lt;?php echo esc_attr( "$class $spam $pending $trashed $problem" ); ?>">
 				&lt;th scope="row">
-					&lt;input type="checkbox" value="&lt;?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc&lt;?php echo $event->event_id; ?>" aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>' />
+					&lt;input type="checkbox" value="&lt;?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc&lt;?php echo absint( $event->event_id ); ?>" aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>' />
 					&lt;label for="mc&lt;?php echo absint( $event->event_id ); ?>">
 					&lt;?php
 					// Translators: Event ID.
-					printf( __( "&lt;span class='screen-reader-text'>Select event &lt;/span>%d", 'my-calendar' ), absint( $event->event_id ) );
+					echo wp_kses_post( sprintf( __( "&lt;span class='screen-reader-text'>Select event &lt;/span>%d", 'my-calendar' ), absint( $event->event_id ) ) );
 					?>
 					&lt;/label>
 				&lt;/th>
@@ -925,7 +934,7 @@ function mc_admin_events_table( $events ) {
 						&lt;a href="&lt;?php echo esc_url( $edit_url ); ?>" class='edit'>&lt;span class="dashicons dashicons-edit" aria-hidden="true">&lt;/span>
 						&lt;?php
 					}
-					echo $spam_label;
+					echo ( 'spam' === $spam ) ? '&lt;strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':&lt;/strong> ' : '';
 					echo '&lt;span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '&lt;/span>';
 					if ( $can_edit ) {
 						echo '&lt;/a>';
@@ -964,7 +973,7 @@ function mc_admin_events_table( $events ) {
 							| &lt;a href="&lt;?php echo esc_url( $delete_url ); ?>" class="delete" aria-describedby='event&lt;?php echo absint( $event->event_id ); ?>'>&lt;?php esc_html_e( 'Delete', 'my-calendar' ); ?>&lt;/a>
 							&lt;?php
 						} else {
-							_e( 'Not editable.', 'my-calendar' );
+							esc_html_e( 'Not editable.', 'my-calendar' );
 						}
 						?>
 						|
@@ -983,13 +992,13 @@ function mc_admin_events_table( $events ) {
 						} else {
 							switch ( $event->event_approved ) {
 								case 1:
-									_e( 'Published', 'my-calendar' );
+									esc_html_e( 'Published', 'my-calendar' );
 									break;
 								case 2:
-									_e( 'Trashed', 'my-calendar' );
+									esc_html_e( 'Trashed', 'my-calendar' );
 									break;
 								default:
-									_e( 'Awaiting Approval', 'my-calendar' );
+									esc_html_e( 'Awaiting Approval', 'my-calendar' );
 							}
 						}
 						?>
@@ -1034,7 +1043,7 @@ function mc_admin_events_table( $events ) {
 					&lt;/a>
 				&lt;/td>
 				&lt;td>
-				&lt;?php echo mc_admin_category_list( $event ); ?>
+				&lt;?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
 				&lt;/td>
 			&lt;/tr>
 			&lt;?php
