@@ -482,7 +482,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
 	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 	if ( 'single' === $type ) {
-		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image<div>$event_title</div></h2>\n" : '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>';
+		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image<div>$event_title</div></h2>\n" : '	<span class="summary screen-reader-text">' . wp_strip_all_tags( $event_title ) . '</span>';
 	} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 		/**
 		 * Filter event title inside event heading.
@@ -500,7 +500,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	} else {
 		$title = '';
 	}
-	$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . strip_tags( $event_title ) . '</span>' : $title;
+	$header .= ( false === stripos( $title, 'summary' ) ) ? '	<span class="summary screen-reader-text">' . wp_strip_all_tags( $event_title ) . '</span>' : $title;
 
 	return '<header>' . $header . '</header>';
 }
@@ -1277,7 +1277,7 @@ function mc_event_filter( $title ) {
 		$template = mc_get_option( 'event_title_template', '' );
 		$template = ( '' !== $template ) ? stripslashes( $template ) : '{title} / {date}';
 
-		return esc_html( strip_tags( stripslashes( mc_draw_template( $array, $template ) ) ) );
+		return esc_html( wp_strip_all_tags( stripslashes( mc_draw_template( $array, $template ) ) ) );
 	} else {
 		return $title;
 	}
@@ -1786,7 +1786,7 @@ function my_calendar( $args ) {
 	$show_weekends = ( 'true' === $params['weekends'] ) ? true : false;
 	$id            = $params['id'];
 	$main_class    = ( '' !== $id ) ? $id : 'all';
-	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( strip_tags( $_GET['cid'] ) ) : $main_class;
+	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( wp_strip_all_tags( $_GET['cid'] ) ) : $main_class;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$body_classes  = array(
 		'mc-main',
@@ -2760,7 +2760,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 				}
 				foreach ( $qsa as $name => $argument ) {
 					if ( 'loc' !== $name && 'ltype' !== $name ) {
-						$output .= "\n" . '<input type="hidden" name="' . esc_attr( strip_tags( $name ) ) . '" value="' . esc_attr( strip_tags( $argument ) ) . '" />';
+						$output .= "\n" . '<input type="hidden" name="' . esc_attr( wp_strip_all_tags( $name ) ) . '" value="' . esc_attr( wp_strip_all_tags( $argument ) ) . '" />';
 					}
 				}
 			}

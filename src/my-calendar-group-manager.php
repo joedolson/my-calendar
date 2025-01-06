@@ -903,7 +903,7 @@ function mc_list_groups() {
 							}
 						}
 						echo wp_kses_post( $spam_label );
-						echo '<span id="event_' . esc_attr( $event->event_id ) . '">' . esc_html( strip_tags( wp_unslash( $title ) ) ) . '</span>';
+						echo '<span id="event_' . esc_attr( $event->event_id ) . '">' . esc_html( wp_strip_all_tags( wp_unslash( $title ) ) ) . '</span>';
 						if ( $can_edit && $edit_link ) {
 							echo '</a>';
 						}

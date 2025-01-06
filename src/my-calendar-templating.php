@@ -646,7 +646,7 @@ function mc_key_exists( $key ) {
  */
 function mc_create_template( $template, $post = array() ) {
 	$key         = md5( $template );
-	$description = strip_tags( $post['mc_template_key'] );
+	$description = wp_strip_all_tags( $post['mc_template_key'] );
 	update_option( "mc_template_desc_$key", $description );
 	update_option( "mc_ctemplate_$key", $template );
 
@@ -699,7 +699,7 @@ function mc_admin_template_description( $key ) {
 	}
 
 	if ( ! mc_is_core_template( $key ) ) {
-		$return = strip_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
+		$return = wp_strip_all_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
 	}
 
 	return wpautop( $return );

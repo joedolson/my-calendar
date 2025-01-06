@@ -315,7 +315,7 @@ function mc_update_cat( $category ) {
 	$where       = array(
 		'category_id' => $category_id,
 	);
-	$cat_name    = strip_tags( $category['category_name'] );
+	$cat_name    = wp_strip_all_tags( $category['category_name'] );
 	$term_exists = term_exists( $cat_name, 'mc-event-category' );
 	if ( ! $term_exists ) {
 		$term = wp_insert_term( $cat_name, 'mc-event-category' );
@@ -354,7 +354,7 @@ function mc_create_category( $category ) {
 		return false;
 	}
 	$formats     = array( '%s', '%s', '%s', '%d', '%d' );
-	$cat_name    = strip_tags( $category['category_name'] );
+	$cat_name    = wp_strip_all_tags( $category['category_name'] );
 	$term_exists = term_exists( $cat_name, 'mc-event-category' );
 	if ( ! $term_exists ) {
 		$term = wp_insert_term( $cat_name, 'mc-event-category' );
@@ -481,7 +481,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								$color = '';
 								$icon  = '';
 							}
-							$color = strip_tags( $color );
+							$color = wp_strip_all_tags( $color );
 							if ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) {
 								$cat_name = stripslashes( $cur_cat->category_name );
 							} else {
@@ -1112,7 +1112,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					$selected = ( null === $data ) ? '' : ' checked="checked"';
 				}
 			}
-			$category_name = strip_tags( stripslashes( trim( $cat->category_name ) ) );
+			$category_name = wp_strip_all_tags( stripslashes( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
 				$icon = '<span style="display:inline-block;max-width:1em;margin-left:6px;vertical-align:middle;">' . mc_category_icon( $cat ) . '</span>';
