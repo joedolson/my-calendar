@@ -30,10 +30,11 @@ function my_calendar_api() {
 			 */
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
-				$format = ( isset( $_REQUEST['my-calendar-api'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['my-calendar-api'] ) ) : 'json';
-				$format = ( isset( $_REQUEST['mc-api'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['mc-api'] ) ) : $format;
-				$from   = ( isset( $_REQUEST['from'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['from'] ) ): current_time( 'Y-m-d' );
-				$range  = '+ 7 days';
+				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' );
+				$format  = ( isset( $request['my-calendar-api'] ) ) ? $request['my-calendar-api'] : 'json';
+				$format  = ( isset( $request['mc-api'] ) ) ? $request['mc-api'] : $format;
+				$from    = ( isset( $request['from'] ) ) ? $request['from'] : current_time( 'Y-m-d' );
+				$range   = '+ 7 days';
 				/**
 				 * Default date for API 'to' parameter. Default '+ 7 days'.
 				 *
@@ -44,13 +45,13 @@ function my_calendar_api() {
 				 * @return {string}
 				 */
 				$adjust   = apply_filters( 'mc_api_auto_date', $range );
-				$to       = ( isset( $_REQUEST['to'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['to'] ) ) : mc_date( 'Y-m-d', strtotime( $adjust ) );
-				$category = ( isset( $_REQUEST['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['mcat'] ) ) : '';
-				$ltype    = ( isset( $_REQUEST['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['ltype'] ) ) : '';
-				$lvalue   = ( isset( $_REQUEST['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['lvalue'] ) ) : '';
-				$author   = ( isset( $_REQUEST['author'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['author'] ) ) : '';
-				$host     = ( isset( $_REQUEST['host'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['host'] ) ) : '';
-				$search   = ( isset( $_REQUEST['search'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['search'] ) ) : '';
+				$to       = ( isset( $request['to'] ) ) ? $request['to'] : mc_date( 'Y-m-d', strtotime( $adjust ) );
+				$category = ( isset( $request['mcat'] ) ) ? $request['mcat'] : '';
+				$ltype    = ( isset( $request['ltype'] ) ) ? $request['ltype'] : '';
+				$lvalue   = ( isset( $request['lvalue'] ) ) ? $request['lvalue'] : '';
+				$author   = ( isset( $request['author'] ) ) ? $request['author'] : '';
+				$host     = ( isset( $request['host'] ) ) ? $request['host'] : '';
+				$search   = ( isset( $request['search'] ) ) ? $request['search'] : '';
 				$args     = array(
 					'from'     => $from,
 					'to'       => $to,
@@ -72,7 +73,7 @@ function my_calendar_api() {
 				 *
 				 * @return {array}
 				 */
-				$args   = apply_filters( 'mc_filter_api_args', $args, map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' ) );
+				$args   = apply_filters( 'mc_filter_api_args', $args, $request );
 				$data   = my_calendar_events( $args );
 				$output = mc_format_api( $data, $format );
 				echo wp_kses_post( $output );
