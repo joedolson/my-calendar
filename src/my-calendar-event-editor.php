@@ -3123,8 +3123,8 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		if ( mc_event_published( $event ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . esc_url( $view_url ) . "' class='view'>" . __( 'View', 'my-calendar' ) . '</a>';
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
-			$nonce    = wp_create_nonce( 'mcpreviewnonce' );
-			$args     = array(
+			$nonce            = wp_create_nonce( 'mcpreviewnonce' );
+			$args             = array(
 				'preview'        => 'true',
 				'mcpreviewnonce' => $nonce,
 			);
