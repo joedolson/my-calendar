@@ -597,7 +597,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['cat_id']          = $event->event_category;
 	$e['category_id']     = $event->event_category;
 	$e['category']        = stripslashes( $event->category_name );
-	$e['ical_category']   = strip_tags( stripslashes( $event->category_name ) );
+	$e['ical_category']   = wp_strip_all_tags(( stripslashes( $event->category_name ) );
 	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
 	$e['ical_categories'] = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category, 'text' ) : mc_get_categories( $event, 'text' );
 	$e['term']            = intval( $event->category_term );
@@ -623,10 +623,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['title']                = stripslashes( $title );
 	$e['description']          = wpautop( stripslashes( $event->event_desc ) );
 	$e['description_raw']      = stripslashes( $event->event_desc );
-	$e['description_stripped'] = strip_tags( stripslashes( $event->event_desc ) );
+	$e['description_stripped'] = wp_strip_all_tags( stripslashes( $event->event_desc ) );
 	$e['shortdesc']            = wpautop( stripslashes( $event->event_short ) );
 	$e['shortdesc_raw']        = stripslashes( $event->event_short );
-	$e['shortdesc_stripped']   = strip_tags( stripslashes( $event->event_short ) );
+	$e['shortdesc_stripped']   = wp_strip_all_tags( stripslashes( $event->event_short ) );
 
 	// Registration fields.
 	$e['event_tickets']      = $event->event_tickets;
@@ -773,7 +773,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['ical_location']   = '';
 	}
 
-	$strip_desc = mc_newline_replace( strip_tags( $event->event_desc ) ) . ' ' . $e['link'];
+	$strip_desc = mc_newline_replace( wp_strip_all_tags( $event->event_desc ) ) . ' ' . $e['link'];
 	if ( mc_is_all_day( $event ) ) {
 		$google_start = mc_date( 'Ymd', strtotime( $dtstart ), false );
 		$google_end   = mc_date( 'Ymd', strtotime( $dtend ), false );
@@ -1557,7 +1557,7 @@ function mc_auto_excerpt( $e, $event ) {
 	$e['search_excerpt'] = mc_search_highlight( $description, $shortdesc );
 	$e['auto_excerpt']   = $autoexcerpt;
 	$e['excerpt']        = $excerpt;
-	$e['ical_excerpt']   = mc_newline_replace( strip_tags( $excerpt ) );
+	$e['ical_excerpt']   = mc_newline_replace( wp_strip_all_tags( $excerpt ) );
 
 	return $e;
 }
@@ -1706,7 +1706,7 @@ function mc_image_data( $e, $event ) {
 			$e[ $size . '_url' ] = $src[0];
 		}
 		if ( isset( $e['large'] ) &amp;&amp; '' !== $e['large'] ) {
-			$e['image_url'] = strip_tags( $e['large'] );
+			$e['image_url'] = wp_strip_all_tags( $e['large'] );
 			$e['image']     = $e['large'];
 		} else {
 			/**
@@ -1719,7 +1719,7 @@ function mc_image_data( $e, $event ) {
 			 * @return {string} Image size description key.
 			 */
 			$image_size     = apply_filters( 'mc_default_image_size', 'thumbnail' );
-			$e['image_url'] = strip_tags( $e[ $image_size ] );
+			$e['image_url'] = wp_strip_all_tags( $e[ $image_size ] );
 			$e['image']     = $e[ $image_size ];
 		}
 	} else {
@@ -2105,8 +2105,8 @@ function mc_template_share( $data, $type = 'calendar' ) {
 		$event_title   = mc_draw_event_title( $event, $data->tags, $type, '' );
 		$aria          = '';
 		// If the event title is already in the details label, omit ARIA.
-		if ( false === stripos( strip_tags( $details_label ), strip_tags( $event_title ) ) ) {
-			$aria = " aria-label='" . esc_attr( "$details_label: " . strip_tags( $event_title ) ) . "'";
+		if ( false === stripos( wp_strip_all_tags( $details_label ), wp_strip_all_tags( $event_title ) ) ) {
+			$aria = " aria-label='" . esc_attr( "$details_label: " . wp_strip_all_tags( $event_title ) ) . "'";
 		}
 		if ( _mc_is_url( $permalink ) ) {
 			$more = "	&lt;p class='mc-details'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>&lt;a$aria href='" . esc_url( $permalink ) . "'>$details_label&lt;/a>&lt;/p>\n";
