@@ -73,7 +73,7 @@ function my_calendar_migration() {
 							?>
 						<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-migrate' ) ); ?>">
 							<div>
-								<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+								<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 								<input type="hidden" name="import" value="true" />
 								<input type="hidden" name="source" value="<?php echo $import_source; ?>" />
 								<?php

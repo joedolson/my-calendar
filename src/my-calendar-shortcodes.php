@@ -485,7 +485,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	<div id="mc-generator" class="generator">
 		<div class="mc-generator-data">
 			<?php echo wp_kses_post( wpautop( $message ) ); ?>
-			<div><input type="hidden" name="_mc_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/></div>
+			<div><input type="hidden" name="_mc_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-generator' ) ); ?>"/></div>
 			<input type='hidden' name='shortcode' value='<?php echo esc_attr( $type ); ?>'/>
 			<?php
 			// Common Elements to all Shortcodes.
