@@ -385,7 +385,7 @@ function mc_update_output_settings( $post ) {
 	$options['display_card']   = array_map( 'sanitize_text_field', $card );
 	$options['display_mini']   = array_map( 'sanitize_text_field', $mini );
 	$options['views']          = array_map( 'sanitize_text_field', $views );
-	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? strip_tags( $post['mc_gmap_api_key'] ) : '';
+	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? wp_strip_all_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
 	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
 
@@ -440,7 +440,7 @@ function mc_update_text_settings( $post ) {
 		// If POST is set, change the sanitizing for settings in this group.
 		$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( $_POST[ $key ] ) : $value;
 	}
-	$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( $_POST['mc_heading_text'] ) : $post['mc_heading_text'];
+	$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( wp_unslash( $_POST['mc_heading_text'] ) ) : $post['mc_heading_text'];
 	$options['notime_text']         = $post['mc_notime_text'];
 	$options['hosted_by']           = $post['mc_hosted_by'];
 	$options['posted_by']           = $post['mc_posted_by'];
@@ -479,7 +479,7 @@ function mc_update_email_settings( $post ) {
 	$options['event_mail_to']      = $post['mc_event_mail_to'];
 	$options['event_mail_from']    = $post['mc_event_mail_from'];
 	$options['event_mail_subject'] = $post['mc_event_mail_subject'];
-	$options['event_mail_message'] = ( 'true' === $options['html_email'] && isset( $_POST['mc_event_mail_message'] ) ) ? wp_kses_post( $_POST['mc_event_mail_message'] ) : $post['mc_event_mail_message'];
+	$options['event_mail_message'] = ( 'true' === $options['html_email'] && isset( wp_unslash( $_POST['mc_event_mail_message'] ) ) ) ? wp_kses_post( $_POST['mc_event_mail_message'] ) : $post['mc_event_mail_message'];
 	$options['event_mail_bcc']     = $post['mc_event_mail_bcc'];
 
 	mc_update_options( $options );
