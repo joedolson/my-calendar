@@ -500,7 +500,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 		</div>
 		<?php
 		if ( isset( $_GET['post'] ) ) {
-			echo '<div class="editor-save-notice"><p>' . __( 'Save this post to update your My Calendar settings.', 'my-calendar' ) . '</p></div>';
+			echo '<div class="editor-save-notice"><p>' . esc_html__( 'Save this post to update your My Calendar settings.', 'my-calendar' ) . '</p></div>';
 		}
 		?>
 		<div class="mc-generator-inputs">
@@ -537,14 +537,14 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				</p>
 
 				<p id='location-info'>
-					<?php _e( 'If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
+					<?php esc_html_e( 'If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. "Saint Paul" is not equivalent to "saint paul" or "St. Paul")', 'my-calendar' ); ?>
 				</p>
 				<p>
 					<label for="search<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Search keyword', 'my-calendar' ); ?></label>
 					<input type="text" name="search" id="search<?php echo esc_attr( $type ); ?>" aria-describedby="search-info" value="<?php echo esc_attr( $search ); ?>" /><br/>
 				</p>
 				<span id='search-info'>
-					<?php _e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
+					<?php esc_html_e( 'Show events containing a specific search keyword.', 'my-calendar' ); ?>
 				</span>
 			</fieldset>
 			<?php
@@ -556,7 +556,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 				<p id='navigation-info'>
 					<?php
 					// Translators: Settings page URL.
-					printf( __( "Navigation above and below the calendar: your <a href='%s'>settings</a> if this is left blank. Use <code>none</code> to hide all navigation.", 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
+					echo wp_kses_post( sprintf( __( "Navigation above and below the calendar: your <a href='%s'>settings</a> if this is left blank. Use <code>none</code> to hide all navigation.", 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-config#mc-output' ) ) ) );
 					mc_help_link( __( 'Help', 'my-calendar' ), __( 'Navigation Keywords', 'my-calendar' ), 'navigation keywords', 3 );
 					?>
 				</p>
@@ -582,11 +582,14 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							'card'     => __( 'Card', 'my-calendar' ),
 							'mini'     => __( 'Mini', 'my-calendar' ),
 						);
-						$options         = '<option value="">' . esc_html__( 'Default', 'my-calendar' ) . '</option>';
+						?>
+						<option value=""><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
+						<?php
 						foreach ( $enabled_formats as $f ) {
-							$options .= '<option value="' . $f . '"' . selected( $f, $format ) . '>' . $format_labels[ $f ] . '</option>';
+							?>
+							<option value="<?php echo esc_attr( $f ); ?>"<?php selected( $f, $format ); ?>><?php echo esc_html( $format_labels[ $f ] ); ?></option>
+							<?php
 						}
-						echo $options;
 						?>
 					</select>
 				</p>
@@ -806,7 +809,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<textarea cols="40" rows="4" name="template" id="template<?php echo esc_attr( $type ); ?>" aria-describedby="mc_template-note"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea><span id="mc_template-note"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i>
 					<?php
 					// Translators: Link to custom template UI.
-					printf( __( 'Creates a new <a href="%s">custom template</a>.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) );
+					echo wp_kses_post( sprintf( __( 'Creates a new <a href="%s">custom template</a>.', 'my-calendar' ), esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ) ) );
 					?>
 					</span>
 				</p>
