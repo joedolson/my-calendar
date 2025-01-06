@@ -109,7 +109,7 @@ function mc_generate( $format = 'shortcode' ) {
  */
 function mc_generator( $type, $data = array() ) {
 	?>
-	<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-shortcodes' ) ) . '#mc_' . $type; ?>" method="POST" id="my-calendar-generate">
+	<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-shortcodes' ) ) . '#mc_' . esc_attr( $type ); ?>" method="POST" id="my-calendar-generate">
 	<?php mc_calendar_generator_fields( $data, $type ); ?>
 	<p>
 		<input type="submit" class="button-primary" name="generator" value="<?php esc_html_e( 'Generate Shortcode', 'my-calendar' ); ?>"/>
@@ -153,7 +153,7 @@ function my_calendar_shortcodes() {
 					 *
 					 * @return {string}
 					 */
-					echo apply_filters( 'mc_generator_tabs', '' );
+					echo wp_kses( apply_filters( 'mc_generator_tabs', '' ), mc_kses_elements() );
 					?>
 				</div>
 				<div class='wptab mc_main' id='mc_main' aria-live='assertive' aria-labelledby='tab_mc_main' role="tabpanel">
@@ -176,7 +176,7 @@ function my_calendar_shortcodes() {
 				 *
 				 * @return {string}
 				 */
-				echo apply_filters( 'mc_generator_tab_content', '', $data );
+				echo wp_kses( apply_filters( 'mc_generator_tab_content', '', $data ), mc_kses_elements() );
 				?>
 			</div>
 		</div>
