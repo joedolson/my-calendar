@@ -226,7 +226,7 @@ function mc_templates_edit() {
 		return;
 	}
 	if ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) {
-		echo mc_php_templates_docs();
+		echo wp_kses( mc_php_templates_docs(), mc_kses_elements() );
 		return;
 	}
 	$templates = mc_get_option( 'templates', array() );
@@ -264,7 +264,7 @@ function mc_templates_edit() {
 			<?php echo ( '' !== $core ) ? wp_kses_post( "<div class='template-description'>$core</div>" ) : ''; ?>
 			<form method="post" action="<?php echo esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ); ?>#my-calendar-templates">
 				<div>
-					<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+					<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 				</div>
 			<?php
 			if ( 'add-new' === $key ) {
@@ -294,7 +294,7 @@ function mc_templates_edit() {
 					<label for="mc_template">
 					<?php
 					// Translators: template type.
-					printf( __( 'Custom Template (%s)', 'my-calendar' ), $key );
+					printf( esc_html__( 'Custom Template (%s)', 'my-calendar' ), esc_html( $key ) );
 					?>
 					</label><br/>
 					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="16" cols="76"><?php echo esc_textarea( $template ); ?></textarea>
@@ -427,7 +427,7 @@ function mc_templates_edit() {
 				<h2>
 		<?php
 		// Translators: name of template being previewed.
-		printf( __( 'Template Preview: %s', 'my-calendar' ), ucfirst( $key ) );
+		printf( esc_html( __( 'Template Preview: %s', 'my-calendar' ) ), esc_html( ucfirst( $key ) ) );
 		?>
 				</h2>
 				<div class="template-preview mc-inside">
