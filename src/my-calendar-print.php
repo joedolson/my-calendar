@@ -32,10 +32,10 @@ function my_calendar_print() {
 	$mc_version .= ( SCRIPT_DEBUG ) ? '-' . wp_rand( 10000, 99999 ) : '';
 	$url         = plugin_dir_url( __FILE__ );
 	// The time string can contain a plus literal, which needs to be re-encoded.
-	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( urlencode( $_GET['time'] ) ) : 'month';
-	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( $_GET['mcat'] ) : '';
-	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( $_GET['ltype'] ) : '';
-	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( $_GET['lvalue'] ) : '';
+	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( urlencode( wp_unslash( $_GET['time'] ) ) ) : 'month';
+	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcat'] ) ) : '';
+	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_GET['ltype'] ) ) : '';
+	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_GET['lvalue'] ) ) : '';
 	header( 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) );
 	if ( mc_file_exists( 'mc-print.css' ) ) {
 		$stylesheet = mc_get_file( 'mc-print.css', 'url' );
@@ -67,9 +67,9 @@ function my_calendar_print() {
 
 	if ( isset( $_GET['href'] ) ) {
 		// Only support URLs on the same home_url().
-		$ref_url  = esc_url( urldecode( $_GET['href'] ) );
-		$ref_root = parse_url( $ref_url )['host'];
-		$root     = parse_url( home_url() )['host'];
+		$ref_url  = sanitize_text_field( urldecode( wp_unslash( $_GET['href'] ) ) );
+		$ref_root = wp_parse_url( $ref_url )['host'];
+		$root     = wp_parse_url( home_url() )['host'];
 		$local    = ( false !== stripos( $ref_url, home_url() ) && false !== stripos( $root, $ref_root ) ) ? true : false;
 		if ( $ref_url && $local ) {
 			$return_url = $ref_url;
@@ -118,7 +118,7 @@ function my_calendar_print() {
 
 	echo wp_kses_post( my_calendar( $calendar ) );
 
-	$add = array_map( 'esc_html', $_GET );
+	$add = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' );
 	unset( $add['cid'] );
 	unset( $add['feed'] );
 	unset( $add['href'] );
