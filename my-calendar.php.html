@@ -149,8 +149,8 @@ function mc_uninstall() {
 		mc_delete_posts( 'mc-events' );
 		mc_delete_posts( 'mc-locations' );
 		$terms = get_terms(
-			'mc-event-category',
 			array(
+				'taxonomy'   => 'mc-event-category',
 				'fields'     => 'ids',
 				'hide_empty' => false,
 			)
@@ -456,7 +456,7 @@ function my_calendar_menu() {
 			if ( isset( $_GET['event_id'] ) ) {
 				$event_id = absint( $_GET['event_id'] );
 				// Translators: Title of event.
-				$page_title = sprintf( __( 'Editing Event: %s', 'my-calendar' ), esc_html( strip_tags( stripslashes( mc_get_data( 'event_title', $event_id ) ) ) ) );
+				$page_title = sprintf( __( 'Editing Event: %s', 'my-calendar' ), esc_html( wp_strip_all_tags( wp_unslash( mc_get_data( 'event_title', $event_id ) ) ) ) );
 			} else {
 				$page_title = __( 'Add New Event', 'my-calendar' );
 			}
