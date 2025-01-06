@@ -19,7 +19,7 @@ add_action( 'template_redirect', 'my_calendar_iframe_view' );
  */
 function my_calendar_iframe_view() {
 	if ( mc_is_iframe() ) {
-		echo my_calendar_iframe();
+		my_calendar_iframe();
 		exit;
 	}
 }
