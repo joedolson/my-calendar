@@ -956,7 +956,7 @@ function mc_list_groups() {
 							<?php echo esc_html( mc_recur_string( $event ) ); ?>
 						</div>
 					</td>
-					<td><?php echo esc_html( is_object( $author ) ) ? $author->display_name : $author ); ?></td>
+					<td><?php echo esc_html( is_object( $author ) ? $author->display_name : $author ); ?></td>
 					<td>
 					<?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
 					</td>
