@@ -397,7 +397,7 @@ function mc_category_key( $category, $id = '' ) {
 		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
 		$class = mc_category_class( $cat, '' );
 
-		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : map_deep( explode( ',', $_GET['mcat'] ), 'absint' );
+		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : map_deep( explode( ',', wp_unslash( $_GET['mcat'] ) ), 'absint' );
 		$category_id         = (int) $cat->category_id;
 
 		if ( in_array( $category_id, $selected_categories, true ) || $category === $category_id ) {
@@ -782,17 +782,17 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 		<form action='" . esc_url( $current_url ) . "' method='get' class='$class'>\n";
 	$qsa         = array();
 	if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-		parse_str( $_SERVER['QUERY_STRING'], $qsa );
+		parse_str( map_deep( wp_unslash( $_SERVER['QUERY_STRING'] ), 'sanitize_text_field' ), $qsa );
 	}
 	if ( ! isset( $_GET['cid'] ) ) {
 		$form .= '<input type="hidden" name="cid" value="all" />';
 	}
 	foreach ( $qsa as $name => $argument ) {
-		$name = esc_attr( wp_strip_all_tags( $name ) );
+		$name = wp_strip_all_tags( $name );
 		if ( ! ( 'access' === $name || 'mcat' === $name || 'loc' === $name || 'ltype' === $name || 'mc_id' === $name || 'legacy-widget-preview' === $name ) ) {
 			$argument = ( ! is_string( $argument ) ) ? (string) $argument : $argument;
-			$argument = esc_attr( wp_strip_all_tags( $argument ) );
-			$form    .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />' . "\n";
+			$argument = wp_strip_all_tags( $argument );
+			$form    .= '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $argument ) . '" />' . "\n";
 		}
 	}
 	$multiple = __( 'Events', 'my-calendar' );
@@ -857,7 +857,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 	if ( 'single' === $group ) {
 		$qsa = array();
 		if ( isset( $_SERVER['QUERY_STRING'] ) ) {
-			parse_str( $_SERVER['QUERY_STRING'], $qsa );
+			parse_str( map_deep( wp_unslash( $_SERVER['QUERY_STRING'] ), 'sanitize_text_field' ), $qsa );
 		}
 		if ( ! isset( $_GET['cid'] ) ) {
 			$form .= '<input type="hidden" name="cid" value="all" />';
