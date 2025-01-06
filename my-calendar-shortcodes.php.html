@@ -511,7 +511,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	&lt;div id="mc-generator" class="generator">
 		&lt;div class="mc-generator-data">
 			&lt;?php echo wp_kses_post( wpautop( $message ) ); ?>
-			&lt;div>&lt;input type="hidden" name="_mc_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-generator' ); ?>"/>&lt;/div>
+			&lt;div>&lt;input type="hidden" name="_mc_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-generator' ) ); ?>"/>&lt;/div>
 			&lt;input type='hidden' name='shortcode' value='&lt;?php echo esc_attr( $type ); ?>'/>
 			&lt;?php
 			// Common Elements to all Shortcodes.

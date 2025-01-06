@@ -99,7 +99,7 @@ function my_calendar_migration() {
 							?>
 						&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-migrate' ) ); ?>">
 							&lt;div>
-								&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+								&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 								&lt;input type="hidden" name="import" value="true" />
 								&lt;input type="hidden" name="source" value="&lt;?php echo $import_source; ?>" />
 								&lt;?php
