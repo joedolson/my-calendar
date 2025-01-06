@@ -438,7 +438,7 @@ function mc_update_text_settings( $post ) {
 	$options['event_title_template'] = $post['mc_event_title_template'];
 	foreach ( $post as $key => $value ) {
 		// If POST is set, change the sanitizing for settings in this group.
-		$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( $_POST[ $key ] ) : $value;
+		$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( wp_unslash( $_POST[ $key ] ) ) : $value;
 	}
 	$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( wp_unslash( $_POST['mc_heading_text'] ) ) : $post['mc_heading_text'];
 	$options['notime_text']         = $post['mc_notime_text'];
@@ -520,7 +520,9 @@ function mc_import_settings() {
 	if ( isset( $_FILES['mc-import-settings'] ) ) {
 		$nonce = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
 		if ( $nonce ) {
-			$settings = ( 0 !== (int) $_FILES['mc-import-settings']['size'] ) ? file_get_contents( $_FILES['mc-import-settings']['tmp_name'] ) : false;
+			$size     = isset( $_FILES['mc-import-settings']['size'] ) ? absint( $_FILES['mc-import-settings']['size'] ) : 0;
+			$name     = isset( $_FILES['mc-import-settings']['tmp_name'] ) ? sanitize_text_field( $_FILES['mc-import-settings']['tmp_name'] ) : '';
+			$settings = ( 0 !== $size ) ? file_get_contents( $name ) : false;
 			if ( ! $settings ) {
 				$return = __( 'No settings file provided.', 'my-calendar' );
 			} else {
