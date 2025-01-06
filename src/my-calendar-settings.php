@@ -437,7 +437,12 @@ function mc_update_text_settings( $post ) {
 	// This is the <title> element, and should not contain HTML.
 	$options['event_title_template'] = $post['mc_event_title_template'];
 	foreach ( $post as $key => $value ) {
+		$nonce = $_REQUEST['_wpnonce'];
+		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+			wp_die( 'My Calendar: Security check failed' );
+		}
 		// If POST is set, change the sanitizing for settings in this group.
+		// The POST array was sanitized before being sent, but that sanitizing strips HTML.
 		$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( wp_unslash( $_POST[ $key ] ) ) : $value;
 	}
 	$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( wp_unslash( $_POST['mc_heading_text'] ) ) : $post['mc_heading_text'];
