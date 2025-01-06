@@ -918,7 +918,7 @@ function mc_list_groups() {
 							<?php
 							if ( $can_edit ) {
 								?>
-								<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar&mode=edit&event_id=$event->event_id" ) ); ?>" class='edit' aria-describedby='event_<?php echo $event->event_id; ?>'><?php esc_html_e( 'Edit Event', 'my-calendar' ); ?></a>
+								<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar&mode=edit&event_id=$event->event_id" ) ); ?>" class='edit' aria-describedby='event_<?php echo esc_attr( $event->event_id ); ?>'><?php esc_html_e( 'Edit Event', 'my-calendar' ); ?></a>
 								<?php
 								if ( $is_grouped ) {
 									?>
