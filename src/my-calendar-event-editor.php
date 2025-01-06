@@ -1834,7 +1834,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					} else {
 						$view_url = mc_get_permalink( $first );
 						if ( ! mc_event_published( $data ) ) {
-							$view_url = add_query_arg( 'preview', 'true', mc_get_permalink( $first ) );
+							$nonce    = wp_create_nonce( 'mcpreviewnonce' );
+							$args     = array(
+								'preview'        => 'true',
+								'mcpreviewnonce' => $nonce,
+							);
+							$view_url = add_query_arg( $args, mc_get_permalink( $first ) );
 						}
 						$tag_preview = add_query_arg(
 							array(
@@ -3118,7 +3123,12 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		if ( mc_event_published( $event ) ) {
 			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . esc_url( $view_url ) . "' class='view'>" . __( 'View', 'my-calendar' ) . '</a>';
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
-			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( 'preview', 'true', $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';
+			$nonce    = wp_create_nonce( 'mcpreviewnonce' );
+			$args     = array(
+				'preview'        => 'true',
+				'mcpreviewnonce' => $nonce,
+			);
+			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . add_query_arg( $args, $view_url ) . "' class='view'>" . __( 'Preview', 'my-calendar' ) . '</a>';
 		}
 		$manage_text        = __( 'Events', 'my-calendar' );
 		$controls['manage'] = "<span class='dashicons dashicons-calendar' aria-hidden='true'></span>" . '<a href="' . admin_url( 'admin.php?page=my-calendar-manage' ) . '">' . $manage_text . '</a>';
