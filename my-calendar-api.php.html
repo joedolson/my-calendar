@@ -244,7 +244,7 @@ function my_calendar_send_vcal( $event_id ) {
  */
 function mc_generate_vcal( $event_id ) {
 	$output = '';
-	$mc_id  = ( isset( $_GET['vcal'] ) ) ? (int) str_replace( 'mc_', '', $_GET['vcal'] ) : $event_id;
+	$mc_id  = ( isset( $_GET['vcal'] ) ) ? absint( str_replace( 'mc_', '', wp_unslash( $_GET['vcal'] ) ) ) : $event_id;
 	if ( $mc_id ) {
 		$event  = mc_get_event( $mc_id );
 		$output = mc_generate_ical( array( $event ) );

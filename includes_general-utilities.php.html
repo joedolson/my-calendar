@@ -69,9 +69,9 @@ function mc_switch_sites() {
  * @return void
  */
 function mc_tweet_approval( $previous_status, $new_status ) {
-	if ( function_exists( 'wpt_post_to_service' ) &amp;&amp; isset( $_POST['mc_twitter'] ) &amp;&amp; trim( $_POST['mc_twitter'] ) !== '' ) {
+	if ( function_exists( 'wpt_post_to_service' ) &amp;&amp; isset( $_POST['mc_twitter'] ) ) {
 		if ( ( 0 === (int) $previous_status || 2 === (int) $previous_status ) &amp;&amp; 1 === (int) $new_status ) {
-			wpt_post_to_service( esc_html( stripslashes( $_POST['mc_twitter'] ) ) );
+			wpt_post_to_service( sanitize_textarea_field( wp_unslash( $_POST['mc_twitter'] ) ) );
 		}
 	}
 }
@@ -396,7 +396,7 @@ function mc_debug( $subject, $body, $email = '' ) {
 			$email = get_option( 'admin_email' );
 		}
 		if ( defined( 'MC_DEBUG_METHOD' ) &amp;&amp; 'email' === MC_DEBUG_METHOD ) {
-			wp_mail( get_option( 'admin_email' ), $subject, print_r( $body ) );
+			wp_mail( get_option( 'admin_email' ), $subject, print_r( $body, 1 ) );
 		} else {
 			/**
 			 * Execute a custom debug action during an mc_debug call. Runs if MC_DEBUG_METHOD is not 'email'.
