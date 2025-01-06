@@ -66,7 +66,7 @@ function my_calendar_migration() {
 						?>
 					<div id="mc-importer" class='notice notice-info'>
 						<p>
-							<?php echo $message; ?>
+							<?php echo esc_html( $message ); ?>
 						</p>
 						<?php
 						if ( 0 !== $to_import ) {
@@ -75,7 +75,7 @@ function my_calendar_migration() {
 							<div>
 								<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 								<input type="hidden" name="import" value="true" />
-								<input type="hidden" name="source" value="<?php echo $import_source; ?>" />
+								<input type="hidden" name="source" value="<?php echo esc_attr( $import_source ); ?>" />
 								<?php
 								/**
 								 * Output any custom fields or data required by the importer.
@@ -88,9 +88,9 @@ function my_calendar_migration() {
 								 * @return {string}
 								 */
 								$fields = apply_filters( 'mc_importer_custom_fields', '', $import_source );
-								echo $fields;
+								echo wp_kses( $fields, mc_kses_elements() );
 								?>
-								<input type="submit" value="<?php _e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
+								<input type="submit" value="<?php esc_html_e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
 							</div>
 						</form>
 							<?php
@@ -100,7 +100,7 @@ function my_calendar_migration() {
 						<?php
 					}
 					$in_progress = get_option( 'mc_import_running' );
-					echo mc_display_progress( $in_progress );
+					echo wp_kses_post( mc_display_progress( $in_progress ) );
 					?>
 				</div>
 			</div>
