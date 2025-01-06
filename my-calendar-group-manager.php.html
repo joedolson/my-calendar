@@ -72,7 +72,7 @@ function my_calendar_group_edit() {
 					foreach ( $post['apply'] as $event_id ) {
 						$event_id = absint( $event_id );
 						$response = my_calendar_save_group( $action, $mc_output, $event_id, $post );
-						echo $response;
+						echo wp_kses_post( $response );
 					}
 				}
 				break;
@@ -115,7 +115,7 @@ function my_calendar_group_edit() {
 				}
 				break;
 		}
-		echo $message;
+		echo wp_kses_post( $message );
 	}
 	?>
 
@@ -123,7 +123,7 @@ function my_calendar_group_edit() {
 	&lt;?php
 	my_calendar_check_db();
 	if ( 'edit' === $action ) {
-		echo '&lt;h1>' . __( 'Edit Event Group', 'my-calendar' ) . '&lt;/h1>';
+		echo '&lt;h1>' . esc_html__( 'Edit Event Group', 'my-calendar' ) . '&lt;/h1>';
 		if ( empty( $event_id ) || empty( $group_id ) ) {
 			mc_show_error( __( 'You must provide an event group id in order to edit it', 'my-calendar' ) );
 		} else {
@@ -133,10 +133,10 @@ function my_calendar_group_edit() {
 		?>
 		&lt;h1>&lt;?php esc_html_e( 'Event Groups', 'my-calendar' ); ?>&lt;/h1>
 		&lt;p>
-			&lt;?php _e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you choose.', 'my-calendar' ); ?>
+			&lt;?php esc_html_e( 'When you choose a group of events to edit, the form will be pre-filled with the content from the event you choose.', 'my-calendar' ); ?>
 		&lt;/p>
 		&lt;div class="mc-tablinks">
-			&lt;a href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage' ); ?>">&lt;?php esc_html_e( 'My Events', 'my-calendar' ); ?>&lt;/strong>
+			&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>">&lt;?php esc_html_e( 'My Events', 'my-calendar' ); ?>&lt;/strong>
 			&lt;a href="#my-calendar-admin-table" aria-current="page">&lt;?php esc_html_e( 'Event Groups', 'my-calendar' ); ?>&lt;/a>
 		&lt;/div>
 		&lt;div class="postbox-container jcd-wide">
@@ -303,7 +303,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 		$title  = esc_html( stripslashes( $first->event_title ) );
 		$group .= "&lt;li>&lt;input type='checkbox' name='$type" . "[]' value='$first->event_id' id='$type$first->event_id'$checked /> &lt;label for='break$first->event_id'>$title&lt;br />$date, $time&lt;/label>&lt;/li>\n";
 	}
-	$group .= "&lt;li>&lt;input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> &lt;label for='$type'>&lt;b>" . __( 'Check/Uncheck all', 'my-calendar' ) . "&lt;/b>&lt;/label>&lt;/li>\n&lt;/ul>";
+	$group .= "&lt;li>&lt;input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> &lt;label for='$type'>" . __( 'Select all', 'my-calendar' ) . "&lt;/label>&lt;/li>\n&lt;/ul>";
 	$group .= ( 'apply' === $type ) ? '&lt;/fieldset>' : '';
 	$group .= ( 'break' === $type ) ? "&lt;p>&lt;input type='submit' class='button' value='" . __( 'Remove checked events from this group', 'my-calendar' ) . "' />&lt;/p>&lt;/form>" : '';
 	$group .= '&lt;/div>';
@@ -319,7 +319,6 @@ function mc_group_form( $group_id, $type = 'break' ) {
  * @param int    $group_id Group ID.
  */
 function mc_edit_groups( $mode = 'edit', $event_id = 0, $group_id = 0 ) {
-	global $submission;
 	$event_id = ( 0 === $event_id ) ? false : $event_id;
 	$group_id = ( 0 === $group_id ) ? false : $group_id;
 	$message  = '';
@@ -360,18 +359,24 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 		$short       = stripslashes( $data->event_short );
 		$image       = $data->event_image;
 	}
+	$args = array(
+		'groups'   => 'true',
+		'mode'     => 'edit',
+		'event_id' => $event_id,
+		'group_id' => $group_id,
+	);
 	?>
 	&lt;div class="postbox-container jcd-wide">
 	&lt;div class="metabox-holder">
-	&lt;form method="post" action="&lt;?php echo admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;mode=edit&amp;amp;event_id=$event_id&amp;amp;group_id=$group_id" ); ?>">
+	&lt;form method="post" action="&lt;?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-manage' ) ) ); ?>">
 	&lt;div>
-		&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>" />
+		&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 		&lt;input type="hidden" name="group_id" value="&lt;?php echo absint( $group_id ); ?>" />
 		&lt;input type="hidden" name="event_action" value="&lt;?php echo esc_attr( $mode ); ?>" />
 		&lt;input type="hidden" name="event_id" value="&lt;?php echo absint( $event_id ); ?>" />
 		&lt;input type="hidden" name="event_author" value="&lt;?php echo absint( $user_ID ); ?>" />
 		&lt;input type="hidden" name="event_post" value="group" />
-		&lt;input type="hidden" name="event_nonce_name" value="&lt;?php echo wp_create_nonce( 'event_nonce' ); ?>" />
+		&lt;input type="hidden" name="event_nonce_name" value="&lt;?php echo esc_attr( wp_create_nonce( 'event_nonce' ) ); ?>" />
 	&lt;/div>
 	&lt;div class="ui-sortable meta-box-sortables">
 		&lt;div class="postbox">
@@ -380,13 +385,8 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 			&lt;div class="inside">
 				&lt;div class="mc-controls">
 					&lt;ul>
-						&lt;li>
-						&lt;?php
-						$manage_text = __( 'Manage groups', 'my-calendar' );
-						echo "&lt;span class='dashicons dashicons-calendar' aria-hidden='true'>&lt;/span>" . '&lt;a href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true' ) . '">' . $manage_text . '&lt;/a>';
-						?>
-						&lt;/li>
-						&lt;li>&lt;input type="submit" name="save" class="button-primary" value="&lt;?php _e( 'Update Event Group', 'my-calendar' ); ?>"/>&lt;/li>
+						&lt;li>&lt;span class='dashicons dashicons-calendar' aria-hidden='true'>&lt;/span>&lt;a href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true' ) ); ?>">&lt;?php esc_html_e( 'Manage groups', 'my-calendar' ); ?>&lt;/a>&lt;/li>
+						&lt;li>&lt;input type="submit" name="save" class="button-primary" value="&lt;?php esc_html_e( 'Update Event Group', 'my-calendar' ); ?>"/>&lt;/li>
 					&lt;/ul>
 				&lt;/div>
 				&lt;p>
@@ -396,21 +396,21 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					&lt;input type="text" id="e_title" class="widefat" name="event_title" value="&lt;?php echo esc_attr( $title ); ?>" />
 				&lt;/p>
 				&lt;?php
-				echo mc_group_form( $group_id, 'apply' );
+				echo wp_kses( mc_group_form( $group_id, 'apply' ), mc_kses_elements() );
 
 				if ( '0' === $data->event_repeats &amp;&amp; ( 'S1' === $data->event_recur || 'S' === $data->event_recur ) ) {
-					$span_checked = '';
+					$span_checked = false;
 					if ( is_object( $data ) &amp;&amp; '1' === $data->event_span ) {
-						$span_checked = ' checked="checked"';
+						$span_checked = true;
 					} elseif ( is_object( $data ) &amp;&amp; '0' === $data->event_span ) {
-						$span_checked = '';
+						$span_checked = false;
 					}
 					?>
 					&lt;p>
-						&lt;input type="checkbox" value="1" id="e_span" name="event_span" &lt;?php echo $span_checked; ?> />
+						&lt;input type="checkbox" value="1" id="e_span" name="event_span" &lt;?php checked( true, $span_checked ); ?> />
 						&lt;label for="e_span">
 						&lt;?php
-						_e( 'Selected dates are a single multi-day event.', 'my-calendar' );
+						esc_html_e( 'Selected dates are a single multi-day event.', 'my-calendar' );
 						mc_compare_group_members( $group_id, 'event_span' );
 						?>
 						&lt;/label>
@@ -426,7 +426,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					&lt;div id="group_description">
 						&lt;label for="content">
 						&lt;?php
-						_e( 'Event Description', 'my-calendar' );
+						esc_html_e( 'Event Description', 'my-calendar' );
 						mc_compare_group_members( $group_id, 'event_desc' );
 						?>
 						&lt;/label>&lt;br/>
@@ -439,7 +439,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					&lt;p>
 						&lt;label for="e_short">
 						&lt;?php
-						_e( 'Excerpt', 'my-calendar' );
+						esc_html_e( 'Excerpt', 'my-calendar' );
 						mc_compare_group_members( $group_id, 'event_short' );
 						?>
 						&lt;/label>&lt;br/>
@@ -490,16 +490,18 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							$alt         = '';
 							if ( '' !== $image ) {
 								$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
-								$remove      = '&lt;button type="button" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '&lt;/button>';
+								$remove      = '&lt;button type="button" data-context="event" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '&lt;/button>';
 								$button_text = __( 'Change Featured Image', 'my-calendar' );
 								$alt         = ( '' === $alt ) ? $data->event_image : $alt;
 							}
 							?>
-							&lt;input type="hidden" name="event_image_id" value="&lt;?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" />&lt;input type="hidden" name="event_image" id="e_image" value="&lt;?php echo esc_url( $image ); ?>" /> &lt;button type='button' class="button select-image">&lt;?php echo $button_text; ?>&lt;/button> &lt;?php echo $remove; ?>
+							&lt;input type="hidden" name="event_image_id" value="&lt;?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" />
+							&lt;input type="hidden" name="event_image" id="e_image" value="&lt;?php echo esc_url( $image ); ?>" /> 
+							&lt;button type='button' data-context="event" class="button select-image">&lt;?php echo esc_html( $button_text ); ?>&lt;/button> &lt;?php echo wp_kses_post( $remove ); ?>
 							&lt;/div>
 							&lt;?php
 							if ( ! empty( $data->event_image ) ) {
-								echo '&lt;div class="event_image" aria-live="assertive">&lt;img id="event_image" src="' . esc_url( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" />&lt;/div>';
+								echo '&lt;div class="event_image" aria-live="assertive">&lt;img id="event_image" src="' . esc_url( $image ) . '" alt="' . esc_attr__( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" />&lt;/div>';
 							} else {
 								echo '&lt;div class="event_image" id="event_image">&lt;/div>';
 							}
@@ -529,7 +531,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					&lt;p>
 						&lt;label for="e_host">
 						&lt;?php
-						_e( 'Event Host', 'my-calendar' );
+						esc_html_e( 'Event Host', 'my-calendar' );
 						mc_compare_group_members( $group_id, 'event_host' );
 						?>
 						&lt;/label>
@@ -538,38 +540,40 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							// Grab hosts and list them.
 							$user_list = mc_get_users( 'hosts' );
 							foreach ( $user_list as $u ) {
-								echo '&lt;option value="' . $u->ID . '"';
+								$selected = false;
 								if ( is_object( $data ) &amp;&amp; absint( $data->event_host ) === absint( $u->ID ) ) {
-									echo ' selected="selected"';
+									$selected = true;
 								} elseif ( is_object( $u ) &amp;&amp; $u->ID === $user->ID &amp;&amp; empty( $data->event_host ) ) {
-									echo ' selected="selected"';
+									$selected = true;
 								}
 								$display_name = ( '' === $u->display_name ) ? $u->user_nicename : $u->display_name;
-								echo ">$display_name&lt;/option>\n";
+								?>
+								&lt;option value="&lt;?php echo esc_attr( $u->ID ); ?>" &lt;?php selected( true, $selected ); ?>>&lt;?php echo esc_html( $display_name ); ?>&lt;/option>
+								&lt;?php
 							}
 							?>
 						&lt;/select>
 					&lt;/p>
 					&lt;?php
 					if ( mc_show_edit_block( 'event_link' ) ) {
-						$exp_checked = '';
+						$exp_checked = false;
 						if ( is_object( $data ) &amp;&amp; '1' === $data->event_link_expires ) {
-							$exp_checked = ' checked="checked"';
+							$exp_checked = true;
 						} elseif ( is_object( $data ) &amp;&amp; '0' === $data->event_link_expires ) {
-							$exp_checked = '';
+							$exp_checked = false;
 						} elseif ( mc_event_link_expires() ) {
-							$exp_checked = ' checked="checked"';
+							$exp_checked = true;
 						}
 						?>
 						&lt;p>
 							&lt;label for="e_link">
 							&lt;?php
-							_e( 'Event Link (Optional)', 'my-calendar' );
+							esc_html_e( 'Event Link (Optional)', 'my-calendar' );
 							mc_compare_group_members( $group_id, 'event_link' );
 							?>
 							&lt;/label>
 							&lt;input type="text" placeholder="https://" id="e_link" name="event_link" size="40" value="&lt;?php echo ( is_object( $data ) ) ? esc_url( $data->event_link ) : ''; ?>" />
-							&lt;input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"&lt;?php echo $exp_checked; ?> />
+							&lt;input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"&lt;?php checked( true, $exp_checked ); ?> />
 							&lt;label for="e_link_expires">&lt;?php esc_html_e( 'Link will expire after event.', 'my-calendar' ); ?>&lt;/label>
 						&lt;/p>
 						&lt;?php
@@ -601,7 +605,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 				&lt;div class="inside">
 					&lt;fieldset>
 						&lt;legend>&lt;?php esc_html_e( 'Event Registration Status', 'my-calendar' ); ?>&lt;/legend>
-						&lt;?php echo $event_registration_output; ?>
+						&lt;?php echo wp_kses( $event_registration_output, mc_kses_elements() ); ?>
 					&lt;/fieldset>
 				&lt;/div>
 			&lt;/div>
@@ -624,7 +628,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 			&lt;div class="inside location_form">
 				&lt;fieldset>
 					&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Event Location', 'my-calendar' ); ?>&lt;/legend>
-		&lt;?php echo mc_event_location_dropdown_block( $data ); ?>
+					&lt;?php echo wp_kses( mc_event_location_dropdown_block( $data ), mc_kses_elements() ); ?>
 				&lt;/fieldset>
 			&lt;/div>
 		&lt;/div>
@@ -830,33 +834,39 @@ function mc_list_groups() {
 				'mid_size'  => 1,
 			)
 		);
-		$nav_label  = esc_attr( __( 'Events Pagination', 'my-calendar' ) );
-		printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
+		$nav_label  = __( 'Events Pagination', 'my-calendar' );
+		?>
+		&lt;nav class='tablenav' aria-label='&lt;?php echo esc_attr( $nav_label ); ?>'>
+			&lt;div class='tablenav-pages'>
+				&lt;?php echo wp_kses_post( $page_links ); ?>
+			&lt;/div>
+		&lt;/nav>
+		&lt;?php
 	}
 	?>
 		&lt;nav class="mc-admin-header" aria-label="&lt;?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
 			&lt;ul class="links">
 				&lt;li>
-					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=grouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?>&lt;/a>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=grouped#my-calendar-admin-table' ) ); ?>">&lt;?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?>&lt;/a>
 				&lt;/li>
 				&lt;li>
-					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=ungrouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?>&lt;/a>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=ungrouped#my-calendar-admin-table' ) ); ?>">&lt;?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?>&lt;/a>
 				&lt;/li>
 				&lt;li>
-					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/a>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true#my-calendar-admin-table' ) ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/a>
 				&lt;/li>
 			&lt;/ul>
 		&lt;/nav>
 	&lt;?php
 	if ( ! empty( $events ) ) {
 		?>
-		&lt;form action="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true' ); ?>" method="post">
+		&lt;form action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true' ) ); ?>" method="post">
 			&lt;div>
-				&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo wp_create_nonce( 'my-calendar-nonce' ); ?>"/>
+				&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 				&lt;input type="hidden" name="event_action" value="group"/>
 			&lt;/div>
 			&lt;p class="mc-group-buttons mc-actions">
-				&lt;input type="submit" class="button-primary group" value="&lt;?php _e( 'Group events', 'my-calendar' ); ?>" />
+				&lt;input type="submit" class="button-primary group" value="&lt;?php esc_html_e( 'Group events', 'my-calendar' ); ?>" />
 			&lt;/p>
 			&lt;table class="widefat wp-list-table mc-responsive-table mc-groups-table" id="my-calendar-admin-table">
 				&lt;caption class="screen-reader-text">&lt;?php esc_html_e( 'Grouped Events list. Use column headers to sort.', 'my-calendar' ); ?>&lt;/caption>
@@ -879,7 +889,7 @@ function mc_list_groups() {
 						$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sort, $sortby, '5', $url );
 						$url       = add_query_arg( 'sort', '6', $admin_url );
 						$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sort, $sortby, '6', $url );
-						echo $col_head;
+						echo wp_kses( $col_head, mc_kses_elements() );
 						?>
 					&lt;/tr>
 				&lt;/thead>
@@ -889,22 +899,22 @@ function mc_list_groups() {
 					$is_grouped = mc_event_is_grouped( $event->event_group_id );
 					$class      = ( 'alternate' === $class ) ? 'even' : 'alternate';
 					$spam       = ( '1' === $event->event_flagged ) ? ' spam' : '';
-					$spam_label = ( '1' === $event->event_flagged ) ? '&lt;strong>Possible spam:&lt;/strong> ' : '';
-					$author     = ( '0' !== $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
+					$spam_label = ( '1' === $event->event_flagged ) ? '&lt;strong>' . __( 'Possible spam:', 'my-calendar' ) . '&lt;/strong> ' : '';
+					$author     = ( '0' !== $event->event_author ) ? get_userdata( $event->event_author ) : __( 'Public Submitter', 'my-calendar' );
 					$can_edit   = mc_can_edit_event( $event );
 					if ( '' !== trim( $event->event_link ) ) {
-						$title = "&lt;a href='" . esc_attr( $event->event_link ) . "'>" . strip_tags( $event->event_title, mc_strip_tags() ) . '&lt;/a>';
+						$title = "&lt;a href='" . esc_url( $event->event_link ) . "'>" . strip_tags( $event->event_title, mc_strip_tags() ) . '&lt;/a>';
 					} else {
 						$title = $event->event_title;
 					}
 					?>
-				&lt;tr class="&lt;?php echo "$class $spam"; ?>" id="event&lt;?php echo $event->event_id; ?>">
+				&lt;tr class="&lt;?php echo esc_attr( "$class $spam" ); ?>" id="event&lt;?php echo esc_attr( $event->event_id ); ?>">
 					&lt;th scope="row">
-						&lt;input type="checkbox" aria-describedby="event_&lt;?php echo $event->event_id; ?>" value="&lt;?php echo $event->event_id; ?>" name="group[]" id="mc&lt;?php echo $event->event_id; ?>" &lt;?php echo ( $is_grouped ) ? ' disabled="disabled"' : ''; ?> />
-						&lt;label for="mc&lt;?php echo $event->event_id; ?>">&lt;span class="screen-reader-text">&lt;?php esc_html_e( 'Group event', 'my-calendar' ); ?>&lt;/span>&lt;?php echo $event->event_id; ?>&lt;/label>
+						&lt;input type="checkbox" aria-describedby="event_&lt;?php echo esc_attr( $event->event_id ); ?>" value="&lt;?php echo esc_attr( $event->event_id ); ?>" name="group[]" id="mc&lt;?php echo esc_attr( $event->event_id ); ?>" &lt;?php echo ( $is_grouped ) ? ' disabled="disabled"' : ''; ?> />
+						&lt;label for="mc&lt;?php echo esc_attr( $event->event_id ); ?>">&lt;span class="screen-reader-text">&lt;?php esc_html_e( 'Group event', 'my-calendar' ); ?>&lt;/span>&lt;?php echo esc_attr( $event->event_id ); ?>&lt;/label>
 					&lt;/th>
 					&lt;th scope="row">
-						&lt;?php echo ( '0' === $event->event_group_id ) ? '-' : $event->event_group_id; ?>
+						&lt;?php echo ( '0' === $event->event_group_id ) ? '-' : esc_html( $event->event_group_id ); ?>
 					&lt;/th>
 					&lt;td>
 						&lt;strong>
@@ -918,13 +928,13 @@ function mc_list_groups() {
 								echo '&lt;a href="' . esc_url( $edit_link ) . '" class="edit">';
 							}
 						}
-						echo $spam_label;
-						echo '&lt;span id="event_' . $event->event_id . '">' . strip_tags( stripslashes( $title ) ) . '&lt;/span>';
+						echo wp_kses_post( $spam_label );
+						echo '&lt;span id="event_' . esc_attr( $event->event_id ) . '">' . esc_html( strip_tags( wp_unslash( $title ) ) ) . '&lt;/span>';
 						if ( $can_edit &amp;&amp; $edit_link ) {
 							echo '&lt;/a>';
 						}
 						if ( ! $is_grouped ) {
-							echo ' - &lt;em>' . __( 'Ungrouped', 'my-calendar' ) . '&lt;/em>';
+							echo ' - &lt;em>' . esc_html__( 'Ungrouped', 'my-calendar' ) . '&lt;/em>';
 
 						}
 						?>
@@ -934,15 +944,15 @@ function mc_list_groups() {
 							&lt;?php
 							if ( $can_edit ) {
 								?>
-								&lt;a href="&lt;?php echo admin_url( "admin.php?page=my-calendar&amp;amp;mode=edit&amp;amp;event_id=$event->event_id" ); ?>" class='edit' aria-describedby='event_&lt;?php echo $event->event_id; ?>'>&lt;?php esc_html_e( 'Edit Event', 'my-calendar' ); ?>&lt;/a>
+								&lt;a href="&lt;?php echo esc_url( admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" ) ); ?>" class='edit' aria-describedby='event_&lt;?php echo esc_attr( $event->event_id ); ?>'>&lt;?php esc_html_e( 'Edit Event', 'my-calendar' ); ?>&lt;/a>
 								&lt;?php
 								if ( $is_grouped ) {
 									?>
-									| &lt;a href="&lt;?php echo admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;mode=edit&amp;amp;event_id=$event->event_id&amp;amp;group_id=$event->event_group_id" ); ?>" class='edit group'>&lt;?php esc_html_e( 'Edit Group', 'my-calendar' ); ?>&lt;/a>
+									| &lt;a href="&lt;?php echo esc_url( admin_url( "admin.php?page=my-calendar-manage&amp;groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) ); ?>" class='edit group'>&lt;?php esc_html_e( 'Edit Group', 'my-calendar' ); ?>&lt;/a>
 									&lt;?php
 								}
 							} else {
-								_e( 'Not editable.', 'my-calendar' );
+								esc_html_e( 'Not editable.', 'my-calendar' );
 							}
 							?>
 						&lt;/div>
@@ -953,7 +963,7 @@ function mc_list_groups() {
 					if ( property_exists( $event, 'location' ) &amp;&amp; is_object( $event->location ) ) {
 						$elabel = $event->location->location_label;
 					}
-					echo strip_tags( stripslashes( $elabel ) );
+					echo esc_html( wp_strip_all_tags( stripslashes( $elabel ) ) );
 					?>
 					&lt;/td>
 					&lt;?php
@@ -969,12 +979,12 @@ function mc_list_groups() {
 						echo esc_html( "$begin, $event_time" );
 					?>
 						&lt;div class="recurs">
-							&lt;?php echo mc_recur_string( $event ); ?>
+							&lt;?php echo esc_html( mc_recur_string( $event ) ); ?>
 						&lt;/div>
 					&lt;/td>
-					&lt;td>&lt;?php echo ( is_object( $author ) ) ? $author->display_name : $author; ?>&lt;/td>
+					&lt;td>&lt;?php echo esc_html( is_object( $author ) ? $author->display_name : $author ); ?>&lt;/td>
 					&lt;td>
-					&lt;?php echo mc_admin_category_list( $event ); ?>
+					&lt;?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
 					&lt;/td>
 					&lt;/tr>
 					&lt;?php
@@ -983,25 +993,31 @@ function mc_list_groups() {
 			&lt;/table>
 		&lt;div class="mc-controls footer">
 			&lt;p class="mc-actions mc-group-buttons">
-				&lt;input type="submit" class="button-primary group" value="&lt;?php _e( 'Group events', 'my-calendar' ); ?>"/>
+				&lt;input type="submit" class="button-primary group" value="&lt;?php esc_html_e( 'Group events', 'my-calendar' ); ?>"/>
 			&lt;/p>
 		&lt;/div>
 		&lt;/form>
 		&lt;?php
 		if ( $num_pages > 1 ) {
-			printf( "&lt;nav class='tablenav' aria-label='$nav_label'>&lt;div class='tablenav-pages'>%s&lt;/div>&lt;/nav>", $page_links );
+			?>
+			&lt;nav class='tablenav' aria-label='&lt;?php esc_attr( $nav_label ); ?>'>
+				&lt;div class='tablenav-pages'>
+					&lt;?php echo wp_kses_post( $page_links ); ?>
+				&lt;/div>
+			&lt;/nav>
+			&lt;?php
 		}
 		?>
 		&lt;nav class="mc-admin-footer" aria-label="&lt;?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
 			&lt;ul class="links">
 				&lt;li>
-					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=grouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?>&lt;/a>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=grouped#my-calendar-admin-table' ) ); ?>">&lt;?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?>&lt;/a>
 				&lt;/li>
 				&lt;li>
-					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=ungrouped#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?>&lt;/a>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true&amp;amp;limit=ungrouped#my-calendar-admin-table' ) ); ?>">&lt;?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?>&lt;/a>
 				&lt;/li>
 				&lt;li>
-					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true#my-calendar-admin-table' ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/a>
+					&lt;a &lt;?php echo ( isset( $_GET['limit'] ) &amp;&amp; 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&amp;groups=true#my-calendar-admin-table' ) ); ?>">&lt;?php esc_html_e( 'All', 'my-calendar' ); ?>&lt;/a>
 				&lt;/li>
 			&lt;/ul>
 		&lt;/nav>
