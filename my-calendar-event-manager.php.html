@@ -324,7 +324,7 @@ function my_calendar_manage() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 		if ( isset( $_POST['mc_bulk_actions'] ) ) {
-			$action  = sanitize_text_field( $_POST['mc_bulk_actions'] );
+			$action  = sanitize_text_field( wp_unslash( $_POST['mc_bulk_actions'] ) );
 			$results = '';
 			switch ( $action ) {
 				case 'mass_delete':
@@ -599,7 +599,7 @@ function mc_get_event_status_limit() {
  * @param string $context String to differentiate for/ID attributes if on page twice.
  */
 function mc_admin_event_search( $context = '' ) {
-	$search_text = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( $_POST['mcs'] ) : '';
+	$search_text = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_POST['mcs'] ) ) : '';
 	$args        = map_deep( $_GET, 'sanitize_text_field' );
 	?>
 	&lt;div class='mc-search'>
@@ -643,7 +643,7 @@ function mc_get_query_limit() {
  * @return array
  */
 function mc_get_filter() {
-	$restrict = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( $_GET['restrict'] ) : 'all';
+	$restrict = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( wp_unslash( $_GET['restrict'] ) ) : 'all';
 
 	switch ( $restrict ) {
 		case 'all':
@@ -654,15 +654,15 @@ function mc_get_filter() {
 			$restrict = 'event_location';
 			break;
 		case 'author':
-			$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_author';
 			break;
 		case 'category':
-			$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_category';
 			break;
 		case 'flagged':
-			$filter   = ( isset( $_GET['filter'] ) ) ? (int) $_GET['filter'] : '';
+			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_flagged';
 			break;
 		default:
