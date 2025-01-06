@@ -39,7 +39,7 @@ function mc_core_autocomplete_search_pages() {
 		foreach ( $posts as $post ) {
 			$response[] = array(
 				'post_id'    => absint( $post->ID ),
-				'post_title' => esc_html( html_entity_decode( strip_tags( $post->post_title ) ) ),
+				'post_title' => esc_html( html_entity_decode( wp_strip_all_tags(( $post->post_title ) ) ),
 			);
 		}
 		wp_send_json(
@@ -362,7 +362,7 @@ function mc_core_autocomplete_search_locations() {
 		foreach ( $locations as $location ) {
 			$response[] = array(
 				'location_id'    => (int) $location->location_id,
-				'location_label' => esc_html( strip_tags( $location->location_label ) ),
+				'location_label' => esc_html( wp_strip_all_tags(( $location->location_label ) ),
 			);
 		}
 		wp_send_json(
