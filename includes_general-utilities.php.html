@@ -343,9 +343,9 @@ function mc_external_link( $link ) {
 		return true; // If this is not a valid URL, consider it to be external.
 	}
 
-	$url   = parse_url( $link );
+	$url   = wp_parse_url( $link );
 	$host  = $url['host'];
-	$site  = parse_url( get_option( 'siteurl' ) );
+	$site  = wp_parse_url( get_option( 'siteurl' ) );
 	$known = $site['host'];
 
 	if ( false === strpos( $host, $known ) ) {
