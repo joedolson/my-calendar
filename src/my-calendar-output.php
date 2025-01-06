@@ -825,7 +825,7 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
  * @param string $type Type of view being shown.
  */
 function mc_event_classes( $event, $type ) {
-	echo mc_get_event_classes( $event, $type );
+	echo esc_attr( mc_get_event_classes( $event, $type ) );
 }
 
 /**
