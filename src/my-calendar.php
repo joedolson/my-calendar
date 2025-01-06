@@ -75,7 +75,7 @@ function mc_plugin_activated() {
 		$plugin_data = get_plugin_data( __FILE__, false );
 		// Translators: Name of plug-in, required PHP version, current PHP version.
 		$message = sprintf( __( '%1$s requires PHP version %2$s or higher. Your current PHP version is %3$s', 'my-calendar' ), $plugin_data['Name'], $required_php_version, phpversion() );
-		echo "<div class='error'><p>$message</p></div>";
+		echo '<div class="notice notice-error"><p>' . esc_html( $message ) . '</p></div>';
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		exit;
 	}
@@ -311,10 +311,10 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				?>
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
-						<h2><?php echo $key; ?></h2>
+						<h2><?php echo esc_html( $key ); ?></h2>
 
-						<div class='<?php echo sanitize_title( $key ); ?> inside'>
-							<?php echo $value; ?>
+						<div class='<?php echo esc_attr( sanitize_title( $key ) ); ?> inside'>
+							<?php echo wp_kses_post( $value ); ?>
 						</div>
 					</div>
 				</div>
@@ -329,11 +329,11 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 						<h2><strong><?php esc_html_e( 'My Calendar Pro', 'my-calendar' ); ?></strong></h2>
 
 						<div class="inside resources mc-flex">
-							<img src="<?php echo plugins_url( 'images/awd-logo-disc.png', __FILE__ ); ?>" alt="Joe Dolson Accessible Web Design" />
+							<img src="<?php echo esc_url( plugins_url( 'images/awd-logo-disc.png', __FILE__ ) ); ?>" alt="Joe Dolson Accessible Web Design" />
 							<p>
 							<?php
 							// Translators: URL for My Calendar Pro.
-							printf( __( "Buy <a href='%s' rel='external'>My Calendar Pro</a> &mdash; a more powerful calendar for your site.", 'my-calendar' ), 'https://www.joedolson.com/my-calendar/pro/' );
+							echo wp_kses_post( sprintf( __( "Buy <a href='%s' rel='external'>My Calendar Pro</a> &mdash; a more powerful calendar for your site.", 'my-calendar' ), 'https://www.joedolson.com/my-calendar/pro/' ) );
 							?>
 							</p>
 						</div>
@@ -351,7 +351,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 							<p class="mcbuy">
 							<?php
 							// Translators: URL to view details about My Tickets.
-							printf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) );
+							echo wp_kses_post( sprintf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) ) ) );
 							?>
 							</p>
 
@@ -367,7 +367,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				<h2><?php esc_html_e( 'Get Help', 'my-calendar' ); ?></h2>
 
 				<div class="inside">
-					<?php echo mc_get_help_footer(); ?>
+					<?php echo wp_kses_post( mc_get_help_footer() ); ?>
 					<ul class="mc-flex mc-social">
 						<li><a href="https://toot.io/@joedolson">
 							<svg aria-hidden="true" width="24" height="24" viewBox="0 0 61 65" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M60.7539 14.3904C59.8143 7.40642 53.7273 1.90257 46.5117 0.836066C45.2943 0.655854 40.6819 0 29.9973 0H29.9175C19.2299 0 16.937 0.655854 15.7196 0.836066C8.70488 1.87302 2.29885 6.81852 0.744617 13.8852C-0.00294988 17.3654 -0.0827298 21.2237 0.0561464 24.7629C0.254119 29.8384 0.292531 34.905 0.753482 39.9598C1.07215 43.3175 1.62806 46.6484 2.41704 49.9276C3.89445 55.9839 9.87499 61.0239 15.7344 63.0801C22.0077 65.2244 28.7542 65.5804 35.2184 64.1082C35.9295 63.9428 36.6318 63.7508 37.3252 63.5321C38.8971 63.0329 40.738 62.4745 42.0913 61.4937C42.1099 61.4799 42.1251 61.4621 42.1358 61.4417C42.1466 61.4212 42.1526 61.3986 42.1534 61.3755V56.4773C42.153 56.4557 42.1479 56.4345 42.1383 56.4151C42.1287 56.3958 42.1149 56.3788 42.0979 56.3655C42.0809 56.3522 42.0611 56.3429 42.04 56.3382C42.019 56.3335 41.9971 56.3336 41.9761 56.3384C37.8345 57.3276 33.5905 57.8234 29.3324 57.8156C22.0045 57.8156 20.0336 54.3384 19.4693 52.8908C19.0156 51.6397 18.7275 50.3346 18.6124 49.0088C18.6112 48.9866 18.6153 48.9643 18.6243 48.9439C18.6333 48.9236 18.647 48.9056 18.6643 48.8915C18.6816 48.8774 18.7019 48.8675 18.7237 48.8628C18.7455 48.858 18.7681 48.8585 18.7897 48.8641C22.8622 49.8465 27.037 50.3423 31.2265 50.3412C32.234 50.3412 33.2387 50.3412 34.2463 50.3146C38.4598 50.1964 42.9009 49.9808 47.0465 49.1713C47.1499 49.1506 47.2534 49.1329 47.342 49.1063C53.881 47.8507 60.1038 43.9097 60.7362 33.9301C60.7598 33.5372 60.8189 29.8148 60.8189 29.4071C60.8218 28.0215 61.2651 19.5781 60.7539 14.3904Z" fill="url(#paint0_linear_89_8)"/><path d="M50.3943 22.237V39.5876H43.5185V22.7481C43.5185 19.2029 42.0411 17.3949 39.036 17.3949C35.7325 17.3949 34.0778 19.5338 34.0778 23.7585V32.9759H27.2434V23.7585C27.2434 19.5338 25.5857 17.3949 22.2822 17.3949C19.2949 17.3949 17.8027 19.2029 17.8027 22.7481V39.5876H10.9298V22.237C10.9298 18.6918 11.835 15.8754 13.6453 13.7877C15.5128 11.7049 17.9623 10.6355 21.0028 10.6355C24.522 10.6355 27.1813 11.9885 28.9542 14.6917L30.665 17.5633L32.3788 14.6917C34.1517 11.9885 36.811 10.6355 40.3243 10.6355C43.3619 10.6355 45.8114 11.7049 47.6847 13.7877C49.4931 15.8734 50.3963 18.6899 50.3943 22.237Z" fill="white"/><defs><linearGradient id="paint0_linear_89_8" x1="30.5" y1="0" x2="30.5" y2="65" gradientUnits="userSpaceOnUse"><stop stop-color="#6364FF"/><stop offset="1" stop-color="#563ACC"/></linearGradient></defs></svg>
