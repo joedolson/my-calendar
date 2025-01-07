@@ -15,13 +15,13 @@
 ?>
 <div class="mc-location mc-view-location">
 	<div class="mc-location-gmap">
-		<?php echo mc_generate_map( $data->location, 'location' ); ?>
+		<?php echo wp_kses_post( mc_generate_map( $data->location, 'location' ) ); ?>
 	</div>
 	<div class="mc-location-hcard">
-		<?php echo mc_hcard( $data->location, 'true', 'true', 'location' ); ?>
+		<?php echo wp_kses_post( mc_hcard( $data->location, 'true', 'true', 'location' ) ); ?>
 	</div>
 	<div class="mc-location-upcoming">
 		<h2><?php esc_html_e( 'Upcoming Events', 'my-calendar' ); ?></h2>
-		<?php echo $data->events; ?>
+		<?php echo wp_kses_post( $data->events ); ?>
 	</div>
 </div>
