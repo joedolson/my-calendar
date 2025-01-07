@@ -788,7 +788,7 @@ function mc_list_events() {
 					$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sortbydirection, $sortby, '5', $url );
 					$url       = add_query_arg( 'sort', '6', $admin_url );
 					$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sortbydirection, $sortby, '6', $url );
-					echo mc_kses_post( $col_head );
+					echo wp_kses( $col_head, 'mycalendar' );
 					?>
 					</tr>
 				</thead>

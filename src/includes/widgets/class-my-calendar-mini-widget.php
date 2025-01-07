@@ -242,8 +242,8 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 	 * @return array $instance Updated instance.
 	 */
 	public function update( $new_data, $instance ) {
-		$instance['my_calendar_mini_title']    = mc_kses_post( $new_data['my_calendar_mini_title'] );
-		$instance['my_calendar_mini_time']     = mc_kses_post( $new_data['my_calendar_mini_time'] );
+		$instance['my_calendar_mini_title']    = wp_kses( $new_data['my_calendar_mini_title'], 'mycalendar' );
+		$instance['my_calendar_mini_time']     = wp_kses( $new_data['my_calendar_mini_time'], 'mycalendar' );
 		$instance['my_calendar_mini_category'] = ( in_array( 'all', (array) $new_data['my_calendar_mini_category'], true ) ) ? array() : $new_data['my_calendar_mini_category'];
 		$instance['above']                     = ( isset( $new_data['above'] ) && '' !== $new_data['above'] ) ? $new_data['above'] : 'none';
 		$instance['mc_link']                   = $new_data['mc_link'];
