@@ -527,7 +527,11 @@ function mc_import_settings() {
 		if ( $nonce ) {
 			$size     = isset( $_FILES['mc-import-settings']['size'] ) ? absint( $_FILES['mc-import-settings']['size'] ) : 0;
 			$name     = isset( $_FILES['mc-import-settings']['tmp_name'] ) ? sanitize_text_field( $_FILES['mc-import-settings']['tmp_name'] ) : '';
-			$settings = ( 0 !== $size ) ? file_get_contents( $name ) : false;
+			global $wp_filesystem;
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+			WP_Filesystem();
+
+			$settings = ( 0 !== $size ) ? $wp_filesystem->get_contents( $name ) : false;
 			if ( ! $settings ) {
 				$return = __( 'No settings file provided.', 'my-calendar' );
 			} else {
@@ -555,8 +559,8 @@ function mc_import_settings() {
 						$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
 					}
 				}
-				return $return;
 			}
+			return $return;
 		}
 	}
 	return '';

@@ -144,7 +144,11 @@ function mc_setup_template( $template, $default_template ) {
 	// allow reference by file to external template.
 	$template = ( 'default' === $template ) ? '' : $template;
 	if ( '' !== $template && mc_file_exists( $template ) ) {
-		$template = file_get_contents( mc_get_file( $template ) );
+		global $wp_filesystem;
+		require_once ABSPATH . '/wp-admin/includes/file.php';
+		WP_Filesystem();
+
+		$template = $wp_filesystem->get_contents( mc_get_file( $template ) );
 	}
 	if ( mc_key_exists( $template ) ) {
 		$template = mc_get_custom_template( $template );
