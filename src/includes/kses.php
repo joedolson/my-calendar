@@ -344,6 +344,12 @@ function mc_kses_elements() {
 			'lang'            => array(),
 			'aria-label'      => array(),
 			'tabindex'        => array(),
+			'data-maptype'    => array(),
+			'data-title'      => array(),
+			'data-address'    => array(),
+			'data-icon'       => array(),
+			'data-lat'        => array(),
+			'data-lng'        => array(),
 		),
 		'img'              => array(
 			'class'    => true,
