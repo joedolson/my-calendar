@@ -1,13 +1,20 @@
 .mc-toggle-edit {
 	all: unset;
-	height: 32px;
-	width: 32px;
 	box-sizing: border-box;
+	padding: 4px 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background: rgba( 0,0,0,.04 );
 	color: #333;
+}
+
+.mc-toggle-edit:focus,
+.mc-toggle-edit:hover {
+	background: #333;
+	color: #fffefd;
+	outline: 2px solid #333;
+	outline-offset: 2px;
 }
 
 .mc-toggle-edit[aria-expanded=true] {
@@ -30,7 +37,7 @@
 	border: 1px solid;
 	padding: 1rem;
 	bottom: 0;
-	left: 34px;
+	left: 4.5rem;
 	list-style: none;
 	z-index: 2;
 	box-shadow: 3px 3px 1px #ccc;
