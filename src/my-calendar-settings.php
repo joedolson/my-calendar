@@ -525,8 +525,8 @@ function mc_import_settings() {
 	if ( isset( $_FILES['mc-import-settings'] ) ) {
 		$nonce = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
 		if ( $nonce ) {
-			$size     = isset( $_FILES['mc-import-settings']['size'] ) ? absint( $_FILES['mc-import-settings']['size'] ) : 0;
-			$name     = isset( $_FILES['mc-import-settings']['tmp_name'] ) ? sanitize_text_field( $_FILES['mc-import-settings']['tmp_name'] ) : '';
+			$size = isset( $_FILES['mc-import-settings']['size'] ) ? absint( $_FILES['mc-import-settings']['size'] ) : 0;
+			$name = isset( $_FILES['mc-import-settings']['tmp_name'] ) ? sanitize_text_field( $_FILES['mc-import-settings']['tmp_name'] ) : '';
 			global $wp_filesystem;
 			require_once ABSPATH . '/wp-admin/includes/file.php';
 			WP_Filesystem();
