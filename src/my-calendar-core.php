@@ -511,7 +511,7 @@ $style_vars";
  */
 function mc_enqueue_calendar_print_styles() {
 	$css = mc_generate_css();
-	echo '<style>' . wp_filter_nohtml_kses( $css ) . '</style>';
+	echo '<style>' . esc_html( wp_strip_all_tags( $css ) ) . '</style>';
 }
 add_action( 'mc_print_view_head', 'mc_enqueue_calendar_print_styles' );
 
@@ -938,8 +938,8 @@ function mc_admin_head() {
 <style>
 /* Styles by My Calendar - Joseph C Dolson https://www.joedolson.com/ */
 	<?php
-	echo wp_filter_nohtml_kses( $category_styles );
-	echo wp_filter_nohtml_kses( $style_vars );
+	echo esc_html( wp_strip_all_tags( $category_styles ) );
+	echo esc_html( wp_strip_all_tags( $style_vars ) );
 	?>
 </style>
 	<?php
