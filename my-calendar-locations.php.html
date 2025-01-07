@@ -1424,7 +1424,7 @@ function mc_location_select( $location = false ) {
 				$l .= ' selected="selected"';
 			}
 		}
-		$l    .= '>' . mc_kses_post( stripslashes( $label ) ) . '&lt;/option>';
+		$l    .= '>' . esc_html( wp_strip_all_tags( wp_unslash( $label ) ) ) . '&lt;/option>';
 		$list .= $l;
 	}
 
