@@ -184,7 +184,7 @@ add_filter( 'the_title', 'mc_search_results_title', 10, 2 );
  */
 function mc_search_results_title( $title, $id = null ) {
 	if ( ( isset( $_GET['mcs'] ) || isset( $_POST['mcs'] ) ) && ( is_page( $id ) || is_single( $id ) ) && in_the_loop() ) {
-		$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : $_POST['mcs'];
+		$query = ( isset( $_GET['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcs'] ) ) : sanitize_text_field( wp_unslash( $_POST['mcs'] ) );
 		// Translators: entered search query.
 		$title = sprintf( __( 'Events Search for &ldquo;%s&rdquo;', 'my-calendar' ), esc_html( $query ) );
 	}
@@ -208,10 +208,10 @@ function mc_show_search_results( $content ) {
 		$query = false;
 		if ( isset( $_GET['mcs'] ) && ! isset( $_GET['mcp'] ) ) { // Simple search.
 			$ret   = true;
-			$query = sanitize_text_field( $_GET['mcs'] );
+			$query = sanitize_text_field( wp_unslash( $_GET['mcs'] ) );
 		} elseif ( isset( $_GET['mcp'] ) && isset( $_GET['mcs'] ) ) { // Advanced search.
 			$ret   = true;
-			$query = map_deep( $_GET, 'sanitize_text_field' );
+			$query = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' );
 		}
 		if ( $ret && $query ) {
 			return mc_search_results( $query );
@@ -295,7 +295,7 @@ function mc_get_searched_events() {
 		return array();
 	}
 	$event_array    = array();
-	$event_searched = json_decode( $_SESSION['MC_SEARCH_RESULT'], true );
+	$event_searched = json_decode( map_deep( wp_unslash( $_SESSION['MC_SEARCH_RESULT'] ), 'wp_kses_post' ), true );
 	foreach ( $event_searched as $key => $value ) {
 		$daily_events = array();
 		foreach ( $value as $k => $v ) {
