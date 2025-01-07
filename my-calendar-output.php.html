@@ -984,7 +984,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 		$recurs    = str_split( $event->event_recur, 1 );
 		$recur     = $recurs[0];
 		$referer   = urlencode( mc_get_current_url() );
-		$edit      = "	&lt;div class='mc_edit_links'>&lt;button type='button' class='mc-toggle-edit' aria-expanded='false' aria-controls='mc-edit-$mc_id' aria-label='" . __( 'Edit', 'my-calendar' ) . "'>&lt;span class='dashicons dashicons-edit' aria-hidden='true'>&lt;/span>&lt;/button>&lt;ul id='mc-edit-$mc_id'>";
+		$edit      = "	&lt;div class='mc_edit_links'>&lt;button type='button' class='mc-toggle-edit' aria-expanded='false' aria-controls='mc-edit-$mc_id'>&lt;span class='dashicons dashicons-edit' aria-hidden='true'>&lt;/span>" . __( 'Edit', 'my-calendar' ) . "&lt;/button>&lt;ul id='mc-edit-$mc_id'>";
 		/**
 		 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
 		 *
