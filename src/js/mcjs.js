@@ -325,6 +325,8 @@
 				let controls = el.getAttribute( 'aria-controls' );
 				let controlled = document.querySelector( '#' + controls );
 				el.addEventListener( 'click', function(e) {
+					let position = el.offsetWidth + 8;
+					controlled.style.left = position + 'px';
 					let expanded = el.getAttribute( 'aria-expanded' );
 					if ( 'true' === expanded ) {
 						controlled.style.display = 'none';
