@@ -496,10 +496,8 @@
 }
 
 .mc-main .my-calendar-date-switcher input[type=submit] {
-	min-width: 2em;
 	width: auto;
 }
-
 
 .mc-main .details .sharing {
 	clear: both;
