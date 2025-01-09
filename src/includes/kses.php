@@ -207,8 +207,10 @@ function mc_kses_elements() {
 			'id'    => array(),
 		),
 		'label'            => array(
-			'for'   => array(),
-			'class' => array(),
+			'for'             => array(),
+			'class'           => array(),
+			'id'              => array(),
+			'aria-labelledby' => array(),
 		),
 		'option'           => array(
 			'value'       => array(),
@@ -318,6 +320,11 @@ function mc_kses_elements() {
 			'style'       => array(),
 			'lang'        => array(),
 			'title'       => array(),
+		),
+		'em'               => array(
+			'id'          => array(),
+			'class'       => array(),
+			'aria-hidden' => array(),
 		),
 		'i'                => array(
 			'id'          => array(),
