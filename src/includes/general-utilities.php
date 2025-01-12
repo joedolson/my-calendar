@@ -78,7 +78,7 @@ add_action( 'admin_menu', 'mc_add_outer_box' );
  * @return void
  */
 function mc_add_outer_box() {
-	add_meta_box( 'mcs_add_event', __( 'My Calendar Event', 'my-calendar' ), 'mc_add_inner_box', 'mc-events', 'side', 'high' );
+	add_meta_box( 'mc_add_event', __( 'My Calendar Event', 'my-calendar' ), 'mc_add_inner_box', 'mc-events', 'side', 'high' );
 }
 
 /**
@@ -116,7 +116,7 @@ function mc_add_inner_box() {
 			<?php
 		}
 		?>
-		<p><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'Edit event', 'my-calendar' ); ?></a></p>';
+		<p><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'Edit event', 'my-calendar' ); ?></a></p>
 		<?php
 	}
 }
