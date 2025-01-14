@@ -299,6 +299,7 @@ function mc_kses_elements() {
 			'data-begin'              => array(),
 			'data-end'                => array(),
 			'data-value'              => array(),
+			'value'                   => array(),
 		),
 		'ul'               => array(
 			'class' => array(),
