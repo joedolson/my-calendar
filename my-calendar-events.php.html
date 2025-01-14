@@ -1101,14 +1101,19 @@ function mc_admin_instances( $id, $occur = 0 ) {
 			$date  = "&lt;span id='occur_date_$result->occur_id'>&lt;strong>" . $date . '&lt;/strong>&lt;br />' . $time . '&lt;/span>';
 			$class = ( my_calendar_date_xcomp( mc_date( 'Y-m-d H:i:00', $start ), mc_date( 'Y-m-d H:i:00', time() ) ) ) ? 'past-event' : 'future-event';
 			if ( (int) $result->occur_id === (int) $occur || 1 === $count ) {
-				$control = '';
-				$edit    = "&lt;p>$date&lt;/p>&lt;p>&lt;em>" . __( 'Editing Now', 'my-calendar' ) . '&lt;/em>&lt;/p>';
-				$class   = 'current-event';
+				$control  = '';
+				$control .= "&lt;p>$date&lt;/p>&lt;p>&lt;em>" . __( 'Editing Now', 'my-calendar' ) . '&lt;/em>&lt;/p>';
+				$class    = 'current-event';
 			} else {
-				$control = "&lt;p>$date&lt;/p>&lt;p class='instance-buttons'>&lt;button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '&lt;/button> ';
-				$edit    = "&lt;a href='" . admin_url( 'admin.php?page=my-calendar' ) . "&amp;amp;mode=edit&amp;amp;event_id=$id&amp;amp;date=$result->occur_id' class='button' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit', 'my-calendar' ) . '&lt;/a>&lt;/p>';
+				$control  = "&lt;p>$date&lt;/p>";
+				$control .= "&lt;p class='instance-buttons'>";
+				$control .= "&lt;button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '&lt;/button> ';
+				$control .= "&lt;button class='button edit_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Edit Date', 'my-calendar' ) . '&lt;/button>';
+				$control .= '&lt;/p>&lt;p>';
+				$control .= "&lt;a href='" . admin_url( 'admin.php?page=my-calendar' ) . "&amp;amp;mode=edit&amp;amp;event_id=$id&amp;amp;date=$result->occur_id' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit Details', 'my-calendar' ) . '&lt;/a>';
+				$control .= '&lt;/p>';
 			}
-			$output .= "&lt;li class='$class'>$control$edit&lt;/li>";
+			$output .= "&lt;li class='$class'>$control&lt;/li>";
 		}
 	}
 
