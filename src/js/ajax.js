@@ -25,11 +25,38 @@
 
 		$( '.mc_add_new' ).hide();
 
+		$( 'button.edit_occurrence').on( 'click', function() {
+			let expanded = $( this ).attr( 'aria-pressed' );
+			let visible  = $( 'button.save-occurrence' ).is( ':visible' );
+			if ( expanded == 'true' ) {
+				$( this ).removeAttr( 'aria-pressed' );
+			} else {
+				$( this ).attr( 'aria-pressed', 'true' );
+				$( 'button.edit_occurrence' ).not( this ).removeAttr( 'aria-pressed' );
+				$( '#r_time' ).trigger( 'focus' );
+				$( '.save-occurrence' ).text( 'Edit Date' );
+				let instance_id = $( this ).data( 'value' );
+				let begin       = $( this ).data( 'begin' ).split(' ');
+				let end         = $( this ).data( 'end' ).split(' ');
+				$( 'input[name="r_instance"]' ).val( instance_id );
+				$( '#r_time' ).val( begin[1] );
+				$( '#r_begin' ).val( begin[0] );
+				$( '#r_endtime' ).val( end[1] );
+				$( '#r_end' ).val( end[0] );
+			}
+			if ( ! visible ) {
+				$( '.mc_add_new' ).toggle();
+			}
+
+		});
+
 		$( 'button.add-occurrence').on( 'click', function() {
 			let expanded = $( this ).attr( 'aria-expanded' );
+			$( 'input[name="r_instance"]' ).val( '' );
 			if ( expanded == 'true' ) {
 				$( this ).attr( 'aria-expanded', 'false' ).find( '.dashicons' ).addClass( 'dashicons-plus' ).removeClass( 'dashicons-minus' );
 				$( this ).attr( 'data-action', 'shiftback' );
+				$( '.save-occurrence' ).text( 'Add Date' );
 			} else {
 				$( this ).attr( 'aria-expanded', 'true' ).find( '.dashicons' ).addClass( 'dashicons-minus' ).removeClass( 'dashicons-plus' );
 				$( this ).attr( 'data-action', '' );
@@ -41,12 +68,13 @@
 		 * Save additional date.
 		 */
 		$( 'button.save-occurrence').on( 'click', function() {
-			let date    = $( '#r_begin' ).val();
-			let begin   = $( '#r_time' ).val();
-			let end     = $( '#r_endtime' ).val();
-			let enddate = $( '#r_enddate' ).val();
-			let event_id = $( 'input[name="event_id"]' ).val();
-			let group_id = $( 'input[name="event_group_id"]' ).val();
+			let date        = $( '#r_begin' ).val();
+			let begin       = $( '#r_time' ).val();
+			let end         = $( '#r_endtime' ).val();
+			let enddate     = $( '#r_enddate' ).val();
+			let event_id    = $( 'input[name="event_id"]' ).val();
+			let group_id    = $( 'input[name="event_group_id"]' ).val();
+			let instance_id = $( 'input[name="r_instance"]' ).val();
 
 			const data    = {
 				'action': mc_data.recur,
@@ -56,6 +84,7 @@
 				'event_time' : begin,
 				'event_endtime' : end,
 				'event_enddate' : enddate,
+				'event_instance' : instance_id,
 				'security': mc_data.security
 			};
 			$.post( ajaxurl, data, function (response) {
@@ -64,7 +93,11 @@
 					let display  = time[0] + ':' + time[1];
 					let edit_url = mc_data.url + response.id;
 					let dateEnd  = ( typeof( enddate ) === 'undefined' ) ? date : enddate;
-					$( '.instance-list' ).append( '<li class="new"><p><span id="occur_date_' + response.id + '"><strong>Added:</strong> ' + date + ' @ ' + display + '</span></p><p class="instance-buttons"><button class="button delete_occurrence" type="button" data-event="' + event_id + '" data-begin="' + date + ' ' + begin + '" data-end="' + dateEnd + ' ' + end + '" data-value="' + response.id + '" aria-describedby="occur_date_' + response.id + '">Delete</button> <a href="' + edit_url + '" class="button">Edit</a></p></li>' );
+					if ( instance_id ) {
+						$( '.instance-list' ).append( '<li class="new"><p><span id="occur_date_' + response.id + '"><strong>Edited:</strong> ' + date + ' @ ' + display + '</span></p></li>' );
+					} else {
+						$( '.instance-list' ).append( '<li class="new"><p><span id="occur_date_' + response.id + '"><strong>Added:</strong> ' + date + ' @ ' + display + '</span></p><p class="instance-buttons"><button class="button delete_occurrence" type="button" data-event="' + event_id + '" data-begin="' + date + ' ' + begin + '" data-end="' + dateEnd + ' ' + end + '" data-value="' + response.id + '" aria-describedby="occur_date_' + response.id + '">Delete</button> <a href="' + edit_url + '" class="button">Edit</a></p></li>' );
+					}
 				}
 				$('.mc_response').text( response.response ).show( 300 );
 			}, "json" );

@@ -271,32 +271,20 @@ li.datetime-template:nth-of-type(even) {
 
 .recurrences .columns.instance-list,
 #e_schedule .columns.instance-list {
-	grid-template-columns: repeat( 3, 1fr )
-}
-
-@media (min-width: 1200px) {
-	.recurrences .columns.instance-list {
-		grid-template-columns: repeat( 4, 1fr )
-	}
-}
-
-@media (min-width: 1400px) {
-	.recurrences .columns.instance-list {
-		grid-template-columns: repeat( 5, 1fr )
-	}
-}
-
-@media (min-width: 1600px) {
-	.recurrences .columns.instance-list {
-		grid-template-columns: repeat( 6, 1fr )
-	}
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .recurrences .columns.instance-list li,
 #e_schedule .columns.instance-list li {
-	min-height: 80px;
 	background: rgba( 0,0,0,.05 );
-	padding: 0 10px;
+	padding: 0 8px;
+	flex-grow: 1;
+}
+
+.instance-list button[aria-pressed="true"] {
+	outline: 2px solid;
+	outline-offset: 2px;
 }
 
 .recurrences input[type=time],
@@ -1894,7 +1882,10 @@ tr.problem .error {
 }
 
 .recurrences .columns p.instance-buttons {
-	display: block;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
 }
 
 input#mc_event_endtime:invalid+span,

@@ -2981,6 +2981,7 @@ function mc_recur_datetime_input( $data ) {
 
 	$form = '
 	<div class="columns">
+		<input type="hidden" name="r_instance" value="" />
 		<p>
 			<label for="r_time">' . __( 'Start Time', 'my-calendar' ) . '</label>
 			<input type="time" id="r_time" name="recur_time[]" size="8" value="' . esc_attr( $starttime ) . '" />

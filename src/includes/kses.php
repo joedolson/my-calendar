@@ -296,6 +296,9 @@ function mc_kses_elements() {
 			'data-modal-prefix-class' => array(),
 			'data-modal-close-text'   => array(),
 			'data-modal-title'        => array(),
+			'data-begin'              => array(),
+			'data-end'                => array(),
+			'data-value'              => array(),
 		),
 		'ul'               => array(
 			'class' => array(),

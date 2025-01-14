@@ -304,30 +304,49 @@ function mc_ajax_add_date() {
 		$event_time    = sanitize_text_field( $_REQUEST['event_time'] );
 		$event_endtime = isset( $_REQUEST['event_endtime'] ) ? sanitize_text_field( $_REQUEST['event_endtime'] ) : '';
 		$group_id      = (int) $_REQUEST['group_id'];
+		$update        = false;
 
-		$args = array(
-			'id'            => $event_id,
-			'event_date'    => $event_date,
-			'event_end'     => $event_end,
-			'event_time'    => $event_time,
-			'event_endtime' => $event_endtime,
-			'group'         => $group_id,
-		);
-		$id   = mc_insert_instance( $args );
+		if ( isset( $_REQUEST['event_instance'] ) && ! empty( $_REQUEST['event_instance'] ) ) {
+			$instance = absint( $_REQUEST['event_instance'] );
+			$args     = array(
+				'event_begin'    => $event_date,
+				'event_time'     => $event_time,
+				'event_end'      => $event_end,
+				'event_endtime'  => $event_endtime,
+				'event_group_id' => $group_id,
+			);
+			$id       = mc_update_instance( $instance, $event_id, $args );
+			$update   = true;
+		} else {
+			$args = array(
+				'id'            => $event_id,
+				'event_date'    => $event_date,
+				'event_end'     => $event_end,
+				'event_time'    => $event_time,
+				'event_endtime' => $event_endtime,
+				'group'         => $group_id,
+			);
+			$id   = mc_insert_instance( $args );
+		}
 
 		if ( $id ) {
+			if ( $update ) {
+				$message = esc_html__( 'The date of your occurrence has been changed.', 'my-calendar' );
+			} else {
+				$message = esc_html__( 'A new date has been added to this event.', 'my-calendar' );
+			}
 			wp_send_json(
 				array(
 					'success'  => 1,
 					'id'       => (int) $id,
-					'response' => esc_html__( 'A new date has been added to this event.', 'my-calendar' ),
+					'response' => $message,
 				)
 			);
 		} else {
 			wp_send_json(
 				array(
 					'success'  => 0,
-					'response' => esc_html__( 'Sorry! I failed to add that date to your event.', 'my-calendar' ),
+					'response' => esc_html__( "Sorry! I wasn't able to update your event.", 'my-calendar' ),
 				)
 			);
 		}
