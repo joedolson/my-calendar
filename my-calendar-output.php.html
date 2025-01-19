@@ -1893,10 +1893,11 @@ function my_calendar( $args ) {
 		 *
 		 * @param {string} $from Start date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
 		 * @param {string} $to Ending date of current view in format `yyyy-mm-dd`.
+		 * @param {array}  $params Calendar view parameters.
 		 *
 		 * @return {string}
 		 */
-		$from = apply_filters( 'mc_from_date', $dates['from'], $dates['to'] );
+		$from = apply_filters( 'mc_from_date', $dates['from'], $dates['to'], $params );
 		/**
 		 * Filter the calendar end date.
 		 *
@@ -1904,10 +1905,11 @@ function my_calendar( $args ) {
 		 *
 		 * @param {string} $to End date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
 		 * @param {string} $from Starting date of current view in format `yyyy-mm-dd`.
+		 * @param {array}  $params Calendar view parameters.
 		 *
 		 * @return {string}
 		 */
-		$to    = apply_filters( 'mc_to_date', $dates['to'], $dates['from'] );
+		$to    = apply_filters( 'mc_to_date', $dates['to'], $dates['from'], $params );
 		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $from;
 		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $to;
 		$query = array(
