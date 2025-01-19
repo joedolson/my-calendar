@@ -1881,7 +1881,6 @@ function my_calendar( $args ) {
 		 *
 		 * @return {string}
 		 */
-		$to    = apply_filters( 'mc_to_date', $dates['to'], $dates['from'] );
 		$to    = mc_date( 'Y-m-d', strtotime( $from . ' + 13 days' ) );
 		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $from;
 		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $to;
