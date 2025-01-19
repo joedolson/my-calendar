@@ -1866,20 +1866,23 @@ function my_calendar( $args ) {
 		 * @hook mc_from_date
 		 *
 		 * @param {string} $from Start date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+		 * @param {string} $to Ending date of current view in format `yyyy-mm-dd`.
 		 *
 		 * @return {string}
 		 */
-		$from = apply_filters( 'mc_from_date', $dates['from'] );
+		$from = apply_filters( 'mc_from_date', $dates['from'], $dates['to'] );
 		/**
 		 * Filter the calendar end date.
 		 *
 		 * @hook mc_to_date
 		 *
 		 * @param {string} $to End date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+		 * @param {string} $from Starting date of current view in format `yyyy-mm-dd`.
 		 *
 		 * @return {string}
 		 */
-		$to    = apply_filters( 'mc_to_date', $dates['to'] );
+		$to    = apply_filters( 'mc_to_date', $dates['to'], $dates['from'] );
+		$to    = mc_date( 'Y-m-d', strtotime( $from . ' + 13 days' ) );
 		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $from;
 		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $to;
 		$query = array(
