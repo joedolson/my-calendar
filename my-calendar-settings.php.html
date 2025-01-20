@@ -754,11 +754,13 @@ function my_calendar_settings() {
 								$page_title = '';
 								$edit_link  = '';
 								$note       = '';
-								if ( mc_get_option( 'uri_id' ) ) {
+								if ( mc_get_option( 'uri_id' ) &amp;&amp; 'publish' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
 									$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
 									$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
 									// Translators: Editing URL for calendar page.
 									$note = sprintf( __( 'Search for a different page or &lt;a href="%s">edit the current calendar page&lt;/a>.', 'my-calendar' ), $edit_link );
+								} elseif ( mc_get_option( 'uri_id' ) &amp;&amp; 'trash' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
+									$note = __( 'Your primary My Calendar page is set, but the page is in the Trash.', 'my-calendar' );
 								}
 								?>
 								&lt;li id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
