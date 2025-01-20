@@ -133,6 +133,7 @@ ul.links li {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	gap: .25rem;
 }
 
 .mc-input-description span.mc-notice {
