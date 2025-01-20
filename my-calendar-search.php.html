@@ -228,7 +228,7 @@ add_filter( 'the_content', 'mc_show_search_results' );
  */
 function mc_show_search_results( $content ) {
 	global $post;
-	if ( is_object( $post ) &amp;&amp; in_the_loop() &amp;&amp; ! is_page( mc_get_option( 'uri_id' ) ) ) {
+	if ( is_object( $post ) &amp;&amp; in_the_loop() &amp;&amp; ! is_page( mc_get_option( 'uri_id' ) &amp;&amp; ! has_shortcode( $post->post_content, 'my_calendar' ) ) ) {
 		// if this is the result of a search, show search output.
 		$ret   = false;
 		$query = false;
