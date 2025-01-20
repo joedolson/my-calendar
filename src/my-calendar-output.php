@@ -1730,6 +1730,7 @@ function my_calendar( $args ) {
 	$source   = isset( $args['source'] ) ? $args['source'] : 'shortcode';
 	$site     = ( isset( $args['site'] ) && '' !== trim( $args['site'] ) ) ? $args['site'] : false;
 	$months   = isset( $args['months'] ) ? $args['months'] : false;
+	$custom   = isset( $args['class'] ) ? $args['class'] : '';
 
 	$list_js = mc_get_option( 'list_javascript' );
 	$grid_js = mc_get_option( 'calendar_javascript' );
@@ -1800,6 +1801,7 @@ function my_calendar( $args ) {
 		$params['time'],
 		$main_class,
 		$has_modal,
+		$custom,
 	);
 	/**
 	 * Filter classes used on the main My Calendar wrapper element.
