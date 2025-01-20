@@ -202,7 +202,7 @@ add_filter( 'the_content', 'mc_show_search_results' );
  */
 function mc_show_search_results( $content ) {
 	global $post;
-	if ( is_object( $post ) && in_the_loop() && ! is_page( mc_get_option( 'uri_id' ) ) ) {
+	if ( is_object( $post ) && in_the_loop() && ! is_page( mc_get_option( 'uri_id' ) && ! has_shortcode( $post->post_content, 'my_calendar' ) ) ) {
 		// if this is the result of a search, show search output.
 		$ret   = false;
 		$query = false;
