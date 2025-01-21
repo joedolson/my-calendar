@@ -44,6 +44,11 @@
 	background: var(--grid-header-bg);
 }
 
+.mc-main th.weekend-heading {
+	color: var(--grid-weekend-color);
+	background: var(--grid-weekend-bg);	
+}
+
 .mc-main th abbr, .mc-main .event-time abbr {
 	border-bottom: none;
 	text-decoration: none;
