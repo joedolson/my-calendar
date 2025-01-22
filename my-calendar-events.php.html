@@ -524,7 +524,7 @@ function mc_get_instances( $id ) {
 	$return  = array();
 
 	foreach ( $results as $result ) {
-		$key            = sanitize_key( mc_date( 'Y-m-d', strtotime( $result->occur_begin ), false ) );
+		$key            = sanitize_key( mc_date( 'Y-m-d H:i:s', strtotime( $result->occur_begin ), false ) );
 		$return[ $key ] = $result->occur_id;
 	}
 
