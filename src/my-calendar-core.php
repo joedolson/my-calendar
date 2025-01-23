@@ -224,12 +224,15 @@ function mc_style_variables( $styles = array() ) {
 			'--list-event-date'     => '1.25rem',
 			'--list-event-title'    => '1.2rem',
 		),
+		'sizing'                  => array(
+			'--grid-max-width' => '1260px',
+		),
 	);
 	foreach ( $core_styles as $key => $value ) {
-		if ( 'text' === $key ) {
+		if ( 'text' === $key || 'sizing' == $key ) {
 			foreach ( $value as $var => $text ) {
-				if ( ! isset( $styles['text'][ $var ] ) ) {
-					$styles['text'][ $var ] = $text;
+				if ( ! isset( $styles[ $key ][ $var ] ) ) {
+					$styles[ $key ][ $var ] = $text;
 				}
 			}
 		}
@@ -486,7 +489,7 @@ function mc_generate_css() {
 	$styles     = mc_style_variables( $styles );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
-		if ( 'text' === $key ) {
+		if ( 'text' === $key || 'sizing' === $key ) {
 			foreach ( $var as $variable => $value ) {
 				$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $value ) . '; ';
 			}
@@ -922,7 +925,7 @@ function mc_admin_head() {
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
-		if ( 'text' === $key && is_array( $var ) ) {
+		if ( ( 'text' === $key || 'sizing' === $key ) && is_array( $var ) ) {
 			foreach ( $var as $variable => $text ) {
 				if ( $variable ) {
 					$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $text ) . '; ';

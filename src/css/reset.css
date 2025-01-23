@@ -736,7 +736,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main {
 	line-height: 1;
 	width: 100%;
-	max-width: 1260px !important;
+	max-width: var(--grid-max-width) !important;
 	margin: 0 auto;
 }
 
@@ -1516,7 +1516,7 @@ body.mc-no-scroll {
 }
 
 /* Base responsive styles. Migrated to main plugin 12/10/2023 */
-@media screen and ( max-width: 720px ) {
+@media screen and ( width <= 720px ) {
 	.mc-main:not(.mini,.disable-responsive) thead {
 		border-bottom: none;
 	}

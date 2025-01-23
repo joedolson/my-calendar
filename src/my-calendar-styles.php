@@ -47,9 +47,9 @@ function my_calendar_style_edit() {
 					$styles[ $key ] = $val;
 				}
 			}
-			if ( isset( $_POST['new_style_text_var'] ) ) {
-				$key = sanitize_text_field( $_POST['new_style_text_var']['key'] );
-				$val = sanitize_text_field( $_POST['new_style_text_var']['val'] );
+			if ( isset( $_POST['new_style_var_text'] ) ) {
+				$key = sanitize_text_field( $_POST['new_style_var_text']['key'] );
+				$val = sanitize_text_field( $_POST['new_style_var_text']['val'] );
 				if ( $key && $val ) {
 					if ( 0 !== strpos( $key, '--' ) ) {
 						$key = '--' . $key;
@@ -57,11 +57,21 @@ function my_calendar_style_edit() {
 					$styles['text'][ $key ] = $val;
 				}
 			}
+			if ( isset( $_POST['new_style_var_sizing'] ) ) {
+				$key = sanitize_text_field( $_POST['new_style_var_sizing']['key'] );
+				$val = sanitize_text_field( $_POST['new_style_var_sizing']['val'] );
+				if ( $key && $val ) {
+					if ( 0 !== strpos( $key, '--' ) ) {
+						$key = '--' . $key;
+					}
+					$styles['sizing'][ $key ] = $val;
+				}
+			}
 			foreach ( $_POST['style_vars'] as $key => $value ) {
-				if ( 'text' === $key ) {
+				if ( 'text' === $key || 'sizing' === $key ) {
 					foreach ( $value as $var => $text ) {
 						if ( '' !== trim( $text ) ) {
-							$styles['text'][ $var ] = sanitize_text_field( $text );
+							$styles[ $key ][ $var ] = sanitize_text_field( $text );
 						}
 					}
 				} else {
@@ -80,6 +90,12 @@ function my_calendar_style_edit() {
 				$delete = map_deep( $_POST['delete_var_text'], 'sanitize_text_field' );
 				foreach ( $delete as $del ) {
 					unset( $styles['text'][ $del ] );
+				}
+			}
+			if ( isset( $_POST['delete_var_sizing'] ) ) {
+				$delete = map_deep( $_POST['delete_var_sizing'], 'sanitize_text_field' );
+				foreach ( $delete as $del ) {
+					unset( $styles['sizing'][ $del ] );
 				}
 			}
 			mc_update_option( 'style_vars', $styles );
@@ -114,21 +130,33 @@ function my_calendar_style_edit() {
 		<fieldset class="mc-css-variables">
 			<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
 			<?php
-			$output      = '';
-			$text_output = '';
-			$styles      = mc_get_option( 'style_vars' );
-			$styles      = mc_style_variables( $styles );
+			$output        = '';
+			$text_output   = '';
+			$sizing_output = '';
+			$styles        = mc_get_option( 'style_vars' );
+			$styles        = mc_style_variables( $styles );
 			foreach ( $styles as $var => $style ) {
 				if ( 'text' === $var ) {
 					foreach ( $style as $variable => $value ) {
 						$variable_id = 'mc' . sanitize_key( $variable );
-						if ( ! in_array( $variable, array_keys( mc_style_variables()['text'] ), true ) ) {
+						if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
 							// Translators: CSS variable name.
 							$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_text[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
 						} else {
 							$delete = '';
 						}
-						$text_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[text][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
+						$text_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
+					}
+				} elseif ( 'sizing' === $var ) {
+					foreach ( $style as $variable => $value ) {
+						$variable_id = 'mc' . sanitize_key( $variable );
+						if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
+							// Translators: CSS variable name.
+							$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_sizing[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
+						} else {
+							$delete = '';
+						}
+						$sizing_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
 					}
 				} else {
 					$var_id = 'mc' . sanitize_key( $var );
@@ -158,7 +186,7 @@ function my_calendar_style_edit() {
 			</div>
 			<?php
 			if ( $text_output ) {
-				echo '<h3>' . esc_html__( 'Style Variables', 'my-calendar' ) . '</h3>';
+				echo '<h3>' . esc_html__( 'Text Variables', 'my-calendar' ) . '</h3>';
 				echo wp_kses( "<ul class='mc-variables'>$text_output</ul>", mc_kses_elements() );
 			}
 			?>
@@ -170,6 +198,22 @@ function my_calendar_style_edit() {
 				<p>
 					<label for='new_style_var_text_val'><?php esc_html_e( 'Value', 'my-calendar' ); ?></label>
 					<input type='text' class="mc-text-input" name='new_style_var_text[val]' id='new_style_var_text_val' />
+				</p>
+			</div>
+			<?php
+			if ( $sizing_output ) {
+				echo '<h3>' . esc_html__( 'Size Variables', 'my-calendar' ) . '</h3>';
+				echo wp_kses( "<ul class='mc-variables'>$sizing_output</ul>", mc_kses_elements() );
+			}
+			?>
+			<div class="mc-new-variable">
+				<p>
+					<label for='new_style_var_sizing_key'><?php esc_html_e( 'New size variable', 'my-calendar' ); ?></label>
+					<input type='text' name='new_style_var_sizing[key]' id='new_style_var_sizing_key' />
+				</p>
+				<p>
+					<label for='new_style_var_sizing_val'><?php esc_html_e( 'Value', 'my-calendar' ); ?></label>
+					<input type='text' class="mc-text-input" name='new_style_var_sizing[val]' id='new_style_var_sizing_val' />
 				</p>
 			</div>
 		</fieldset>
@@ -205,6 +249,7 @@ function mc_display_contrast_variables() {
 	$styles = mc_style_variables( $styles );
 	// Eliminate text settings.
 	unset( $styles['text'] );
+	unset( $styles['sizing'] );
 	$colors = array();
 	// Eliminate duplicate colors and transparency. Only compare unique colors.
 	foreach ( $styles as $variable => $color ) {
