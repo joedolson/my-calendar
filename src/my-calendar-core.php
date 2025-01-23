@@ -229,7 +229,7 @@ function mc_style_variables( $styles = array() ) {
 		),
 	);
 	foreach ( $core_styles as $key => $value ) {
-		if ( 'text' === $key || 'sizing' == $key ) {
+		if ( 'text' === $key || 'sizing' === $key ) {
 			foreach ( $value as $var => $text ) {
 				if ( ! isset( $styles[ $key ][ $var ] ) ) {
 					$styles[ $key ][ $var ] = $text;
