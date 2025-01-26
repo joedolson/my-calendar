@@ -91,7 +91,7 @@
 
 .mc-main .event-title a {
 	display: flex;
-	align-items: middle;
+	align-items: center;
 	column-gap: 4px;
 	padding: 4px;
 	position: relative;
