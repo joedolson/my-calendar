@@ -821,11 +821,12 @@ add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
 /**
  * Echo classes for a given event.
  *
- * @param object $event Event Object.
- * @param string $type Type of view being shown.
+ * @param object   $event Event Object.
+ * @param string   $type Type of view being shown.
+ * @param string[] $classes Additional classes to add.
  */
-function mc_event_classes( $event, $type ) {
-	echo esc_attr( mc_get_event_classes( $event, $type ) );
+function mc_event_classes( $event, $type, $classes = array() ) {
+	echo esc_attr( mc_get_event_classes( $event, $type, $classes ) );
 }
 
 /**
@@ -833,10 +834,11 @@ function mc_event_classes( $event, $type ) {
  *
  * @param object $event Event Object.
  * @param string $type Type of view being shown.
+ * @param string[] $classes Additional classes to add.
  *
  * @return string classes
  */
-function mc_get_event_classes( $event, $type ) {
+function mc_get_event_classes( $event, $type, $classes = array() ) {
 	$uid      = 'mc_' . $type . '_' . $event->occur_id;
 	$relation = mc_date_relation( $event );
 	switch ( $relation ) {
@@ -860,7 +862,8 @@ function mc_get_event_classes( $event, $type ) {
 	$category  = mc_category_class( $event, 'mc_' );
 	$location  = mc_location_class( $event, 'mc_' );
 
-	$classes = array( 'mc-' . $uid, $type . '-event', $category, $location, $rel, $primary, $recurring, $length, $start, $group, $root );
+	$classes = ( is_array( $classes ) ) ? $classes : array( $classes );
+	$classes = array_merge( $classes, array( 'mc-' . $uid, $type . '-event', $category, $location, $rel, $primary, $recurring, $length, $start, $group, $root ) );
 
 	if ( $is_today ) {
 		$classes[] = $is_today;
