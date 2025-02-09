@@ -1436,8 +1436,12 @@ function mc_category_icon( $event, $type = 'html' ) {
 		if ( 'true' !== mc_get_option( 'hide_icons' ) ) {
 			if ( '' !== $event->category_icon ) {
 				if ( mc_is_custom_icon() ) {
-					$path = str_replace( 'my-calendar', 'my-calendar-custom/icons', $url );
-					$src  = $path . $event->category_icon;
+					if ( str_contains( $url, 'my-calendar/src' ) ) {
+						$path = str_replace( 'my-calendar/src', 'my-calendar-custom/icons', $url );
+					} else {
+						$path = str_replace( 'my-calendar', 'my-calendar-custom/icons', $url );
+					}
+					$src = $path . $event->category_icon;
 				} else {
 					$path = plugins_url( 'images/icons', __FILE__ ) . '/';
 					$src  = $path . str_replace( '.png', '.svg', $event->category_icon );
