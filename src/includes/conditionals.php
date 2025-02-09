@@ -44,9 +44,12 @@ function mc_is_all_day( $event ) {
  * @return boolean
  */
 function mc_is_custom_icon() {
-	$on     = ( WP_DEBUG ) ? false : get_transient( 'mc_custom_icons' );
-	$dir    = trailingslashit( dirname( __DIR__, 1 ) );
-	$base   = trailingslashit( basename( $dir ) );
+	$on   = ( WP_DEBUG ) ? false : get_transient( 'mc_custom_icons' );
+	$dir  = trailingslashit( dirname( __DIR__, 1 ) );
+	$base = trailingslashit( basename( $dir ) );
+	if ( str_contains( $dir, 'my-calendar/src' ) ) {
+		$base = 'my-calendar/' . $base;
+	}
 	$custom = ( file_exists( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' ) );
 	if ( ! $custom ) {
 		// backcompat for old icon directories.
@@ -56,8 +59,6 @@ function mc_is_custom_icon() {
 	if ( $on && $custom ) {
 		$return = true;
 	} else {
-		$dir  = trailingslashit( dirname( __DIR__, 1 ) );
-		$base = trailingslashit( basename( $dir ) );
 		if ( $custom ) {
 			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' );
 			if ( empty( $results ) ) {
