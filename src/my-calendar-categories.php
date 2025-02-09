@@ -1341,10 +1341,18 @@ function mc_categories_html( $results, $primary, $output = 'html' ) {
  * @return string
  */
 function mc_get_img( $file, $is_custom = false ) {
+	if ( null === $is_custom ) {
+		$is_custom = mc_is_custom_icon();
+	}
 	$parent_path = plugin_dir_path( __DIR__ );
 	$parent_url  = plugin_dir_url( __DIR__ );
 	$url         = plugin_dir_url( __FILE__ );
 	$self        = plugin_dir_path( __FILE__ );
+	// If running from a subdirectory, plugin_dir_path will be a level up.
+	if ( str_contains( $parent_path, 'my-calendar' ) && $is_custom ) {
+		$parent_path = str_replace( 'my-calendar/', '', $parent_path );
+		$parent_url  = str_replace( 'my-calendar/', '', $parent_url );
+	}
 	global $wp_filesystem;
 	require_once ABSPATH . '/wp-admin/includes/file.php';
 	WP_Filesystem();
