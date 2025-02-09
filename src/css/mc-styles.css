@@ -1156,6 +1156,17 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
+.my-calendar-admin .icon-list.checkboxes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px;
+}
+
+.my-calendar-admin .icon-list.checkboxes li {
+	display: flex;
+	align-items: center;
+}
+
 .icon-list .category-icon img {
 	max-width: 100%;
 }
