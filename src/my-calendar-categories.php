@@ -40,38 +40,39 @@ function mc_update_category( $field, $data, $category ) {
  * @return array images in directory.
  */
 function mc_directory_list( $directory ) {
+	global $wp_filesystem;
+	require_once ABSPATH . '/wp-admin/includes/file.php';
+	WP_Filesystem();	
 	// If icons are disabled, don't parse the directory.
 	if ( ! function_exists( 'mime_content_type' ) || ( 'true' === mc_get_option( 'hide_icons' ) ) ) {
 		return array();
 	}
-	if ( ! file_exists( $directory ) ) {
+	if ( ! $wp_filesystem->exists( $directory ) ) {
 		return array();
 	}
 	$results = ( WP_DEBUG ) ? array() : get_transient( 'mc_icon_list' );
 	if ( empty( $results ) ) {
 		$results = array();
-		$handler = opendir( $directory );
+		$files   = list_files( $directory );
 		// keep going until all files in directory have been read.
-		while ( false !== ( $file = readdir( $handler ) ) ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+		foreach ( $files as $file ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 			// if $file isn't this directory or its parent add it to the results array.
 			if ( strlen( $file ) < 5 ) {
 				continue;
 			}
-			$directory = trailingslashit( $directory );
-			if ( filesize( $directory . $file ) > 11 ) {
-				if ( '.' !== $file && '..' !== $file && ! is_dir( $directory . $file ) && (
-						'image/svg_xml' === mime_content_type( $directory . $file ) ||
-						'image/svg' === mime_content_type( $directory . $file ) ||
-						'image/svg+xml' === mime_content_type( $directory . $file ) ||
-						exif_imagetype( $directory . $file ) === IMAGETYPE_GIF ||
-						exif_imagetype( $directory . $file ) === IMAGETYPE_PNG ||
-						exif_imagetype( $directory . $file ) === IMAGETYPE_JPEG )
+			if ( filesize( $file ) > 11 ) {
+				if ( '.' !== $file && '..' !== $file && ! is_dir( $file ) && (
+						'image/svg_xml' === mime_content_type( $file ) ||
+						'image/svg' === mime_content_type( $file ) ||
+						'image/svg+xml' === mime_content_type( $file ) ||
+						exif_imagetype( $file ) === IMAGETYPE_GIF ||
+						exif_imagetype( $file ) === IMAGETYPE_PNG ||
+						exif_imagetype( $file ) === IMAGETYPE_JPEG )
 				) {
-					$results[] = $file;
+					$results[] = str_replace( trailingslashit( $directory ), '', $file );
 				}
 			}
 		}
-		closedir( $handler );
 		sort( $results, SORT_STRING );
 		set_transient( 'mc_icon_list', $results, MONTH_IN_SECONDS );
 	}
@@ -604,11 +605,17 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 			<?php
 			$dir       = plugin_dir_path( __FILE__ );
 			$url       = plugin_dir_url( __FILE__ );
-			$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons';
-			$path      = str_replace( '/my-calendar', '/my-calendar-custom/icons', $url );
-			$iconlist  = mc_directory_list( $directory );
+			
+			if ( str_contains( $dir, 'my-calendar/src' ) ) {
+				$directory = trailingslashit( str_replace( '/my-calendar/src', '', $dir ) ) . 'my-calendar-custom/icons';
+				$path      = trailingslashit( str_replace( '/my-calendar/src', '/my-calendar-custom/icons', $url ) );
+			} else {
+				$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons';
+				$path      = trailingslashit( str_replace( '/my-calendar', '/my-calendar-custom/icons', $url ) );
+			}
+			$iconlist = mc_directory_list( $directory );
 			foreach ( $iconlist as $icon ) {
-				echo '<li class="category-icon"><code>' . esc_html( $icon ) . '</code><img src="' . esc_attr( $path ) . '/' . esc_html( $icon ) . '" alt="" aria-hidden="true"></li>';
+				echo '<li class="category-icon"><code>' . esc_html( $icon ) . '</code><img width="32" src="' . esc_url( $path . $icon ) . '" alt="" aria-hidden="true"></li>';
 			}
 			?>
 					</ul>

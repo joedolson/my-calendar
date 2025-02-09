@@ -86,6 +86,10 @@ html.wp-toolbar {
 	display: inline;
 }
 
+.notice {
+	display: none;
+}
+
 .icon-list {
 	display: grid;
 	grid-template-columns: repeat( 6, 1fr );

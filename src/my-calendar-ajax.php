@@ -71,8 +71,12 @@ function mc_core_autocomplete_search_icons() {
 		$dir   = plugin_dir_path( __FILE__ );
 		if ( mc_is_custom_icon() ) {
 			$is_custom = true;
-			$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons/';
-			$iconlist  = mc_directory_list( $directory );
+			if ( str_contains( $dir, 'my-calendar/src' ) ) {
+				$directory = trailingslashit( str_replace( '/my-calendar/src', '', $dir ) ) . 'my-calendar-custom/icons/';
+			} else {
+				$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons/';
+			}
+			$iconlist = mc_directory_list( $directory );
 		} else {
 			$is_custom = false;
 			$directory = trailingslashit( __DIR__ ) . 'images/icons/';
