@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_filter_offset - My Calendar Hook Doumentation</title>
+    <title>Action: mc_category_key_array - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_filter_offset</h1></header>
+    <header><h1 class="page-title">Action: mc_category_key_array</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_filter_offset">apply_filters( 'mc_filter_offset', <span class="signature">$offset )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_category_key_array">do_action( 'mc_category_key_array', <span class="signature">$categories, $category, $id )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter timezone offset applied when displaying events. Can fix issues with an incorrect server time.</p>
+    <p>Filter the array of categories used to generate the category legend in My Calendar.</p>
 </div>
 
 
@@ -77,7 +77,30 @@
 
         <tr>
             
-                <td class="name"><code>$offset</code></td>
+                <td class="name"><code>$categories</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of category objects.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$category</code></td>
             
 
             <td class="type">
@@ -93,7 +116,30 @@
 
             
 
-            <td class="description last"><p>Timezone offset format -HH:MM:SS.</p></td>
+            <td class="description last"><p>The active categories in the view. Comma-separated string of IDs or category name.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The calendar view ID.</p></td>
         </tr>
 
     
@@ -134,7 +180,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-events.php.html">my-calendar-events.php</a>, <a href="my-calendar-events.php.html#line113">line 113</a>
+        <a href="my-calendar-navigation.php.html">my-calendar-navigation.php</a>, <a href="my-calendar-navigation.php.html#line389">line 389</a>
     </li></ul></dd>
     
 
@@ -157,24 +203,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
