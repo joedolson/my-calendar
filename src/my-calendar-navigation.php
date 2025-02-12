@@ -386,6 +386,16 @@ function mc_category_key( $category, $id = '' ) {
 
 	$sql        = 'SELECT * FROM ' . my_calendar_categories_table() . " $select_category ORDER BY category_name ASC";
 	$categories = $mcdb->get_results( $sql );
+	/**
+	 * Filter the array of categories used to generate the category legend in My Calendar.
+	 *
+	 * @hook mc_category_key_array
+	 *
+	 * @param {array}  $categories Array of category objects.
+	 * @param {string} $category The active categories in the view. Comma-separated string of IDs or category name.
+	 * @param {string} $id The calendar view ID.
+	 */
+	$categories = apply_filters( 'mc_category_key_array', $categories, $category, $id );
 	$key       .= '<div class="category-key ' . $class . '"><h3 class="maybe-hide">' . __( 'Categories', 'my-calendar' ) . "</h3>\n<ul>\n";
 
 	foreach ( $categories as $cat ) {
