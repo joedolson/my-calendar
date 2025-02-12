@@ -383,7 +383,7 @@ function mc_display_icons() {
 	$output    = ( WP_DEBUG ) ? false : get_transient( 'mc_svg_list' );
 	if ( ! $output ) {
 		if ( $is_custom ) {
-			$dir       = plugin_dir_path( __FILE__ );
+			$dir = plugin_dir_path( __FILE__ );
 			if ( str_contains( $dir, 'my-calendar/src' ) ) {
 				$directory = trailingslashit( str_replace( '/my-calendar/src', '', $dir ) ) . 'my-calendar-custom/icons';
 			} else {

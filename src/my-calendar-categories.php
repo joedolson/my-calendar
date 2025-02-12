@@ -42,7 +42,7 @@ function mc_update_category( $field, $data, $category ) {
 function mc_directory_list( $directory ) {
 	global $wp_filesystem;
 	require_once ABSPATH . '/wp-admin/includes/file.php';
-	WP_Filesystem();	
+	WP_Filesystem();
 	// If icons are disabled, don't parse the directory.
 	if ( ! function_exists( 'mime_content_type' ) || ( 'true' === mc_get_option( 'hide_icons' ) ) ) {
 		return array();
@@ -603,9 +603,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 					<div class="inside">
 					<ul class="checkboxes icon-list">
 			<?php
-			$dir       = plugin_dir_path( __FILE__ );
-			$url       = plugin_dir_url( __FILE__ );
-			
+			$dir = plugin_dir_path( __FILE__ );
+			$url = plugin_dir_url( __FILE__ );
 			if ( str_contains( $dir, 'my-calendar/src' ) ) {
 				$directory = trailingslashit( str_replace( '/my-calendar/src', '', $dir ) ) . 'my-calendar-custom/icons';
 				$path      = trailingslashit( str_replace( '/my-calendar/src', '/my-calendar-custom/icons', $url ) );

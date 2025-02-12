@@ -832,8 +832,8 @@ function mc_event_classes( $event, $type, $classes = array() ) {
 /**
  * Generate classes for a given event
  *
- * @param object $event Event Object.
- * @param string $type Type of view being shown.
+ * @param object   $event Event Object.
+ * @param string   $type Type of view being shown.
  * @param string[] $classes Additional classes to add.
  *
  * @return string classes
