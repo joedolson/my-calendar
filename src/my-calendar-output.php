@@ -224,6 +224,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		'time'         => $time,
 		'id'           => $id,
 		'tags'         => $tags,
+		'class'        => '',
 	);
 	$details = '';
 	if ( mc_show_details( $time, $type ) ) {

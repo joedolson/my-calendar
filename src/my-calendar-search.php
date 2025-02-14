@@ -397,6 +397,7 @@ function mc_produce_search_results( $events, $template ) {
 			'tags'     => $out['tags'],
 			'template' => $template,
 			'type'     => 'list',
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		$details = mc_load_template( 'event/search', $data );
 		$html   .= $details;

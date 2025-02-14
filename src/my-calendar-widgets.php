@@ -567,6 +567,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			'template' => $template,
 			'type'     => $type,
 			'time'     => 'list',
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		if ( 'card' === $template ) {
 			$details = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';
@@ -681,6 +682,7 @@ function my_calendar_todays_events( $args ) {
 					'tags'     => $event_details,
 					'template' => $template,
 					'args'     => $args,
+					'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 				);
 				if ( 'card' === $template ) {
 					$details = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';

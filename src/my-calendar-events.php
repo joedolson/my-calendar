@@ -850,6 +850,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			'event'    => $arr_events[0],
 			'tags'     => $event,
 			'template' => $template,
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		$details = mc_load_template( 'event/now', $args );
 		if ( $details ) {
@@ -937,6 +938,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			'event'    => $arr_events[0],
 			'tags'     => $event,
 			'template' => $template,
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		$details = mc_load_template( 'event/next', $args );
 		if ( $details ) {
