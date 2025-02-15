@@ -876,6 +876,7 @@ function my_calendar_events_now( $category = 'default', $template = '&lt;strong>
 			'event'    => $arr_events[0],
 			'tags'     => $event,
 			'template' => $template,
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		$details = mc_load_template( 'event/now', $args );
 		if ( $details ) {
@@ -894,6 +895,7 @@ function my_calendar_events_now( $category = 'default', $template = '&lt;strong>
 			$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
 			$return = mc_run_shortcodes( $output );
 		}
+		$return = '&lt;div class="mc-event-list">' . $return . '&lt;/div>';
 	} else {
 		$return = '';
 	}
@@ -963,6 +965,7 @@ function my_calendar_events_next( $category = 'default', $template = '&lt;strong
 			'event'    => $arr_events[0],
 			'tags'     => $event,
 			'template' => $template,
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		$details = mc_load_template( 'event/next', $args );
 		if ( $details ) {
@@ -981,6 +984,7 @@ function my_calendar_events_next( $category = 'default', $template = '&lt;strong
 			$output = mc_draw_template( $event, apply_filters( 'mc_happening_next_template', $template, $event ) );
 			$return = mc_run_shortcodes( $output );
 		}
+		$return = '&lt;div class="mc-event-list">' . $return . '&lt;/div>';
 	} else {
 		$return = '';
 	}

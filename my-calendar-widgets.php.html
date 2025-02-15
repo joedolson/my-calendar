@@ -112,7 +112,7 @@ function my_calendar_upcoming_events( $args ) {
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$class          = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
-	$header         = "&lt;ul id='upcoming-events-$hash' class='upcoming-events $class'$lang>";
+	$header         = "&lt;ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
 	$footer         = '&lt;/ul>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
@@ -341,7 +341,7 @@ function my_calendar_upcoming_events( $args ) {
 	}
 	if ( '' !== $output ) {
 		/**
-		 * Replace the list header for upcoming events lists. Default value `&lt;ul id='upcoming-events-$hash' class='upcoming-events'$lang>`.
+		 * Replace the list header for upcoming events lists. Default value `&lt;ul id='upcoming-events-$hash' class='mc-event-list upcoming-events'$lang>`.
 		 *
 		 * @hook mc_upcoming_events_header
 		 *
@@ -364,7 +364,7 @@ function my_calendar_upcoming_events( $args ) {
 		$output = $header . $output . $footer;
 		$return = mc_run_shortcodes( $output );
 	} else {
-		$return = '&lt;div class="no-events-fallback upcoming-events ' . $class . '">' . stripcslashes( $no_event_text ) . '&lt;/div>';
+		$return = '&lt;div class="mc-event-list no-events-fallback upcoming-events ' . $class . '">' . stripcslashes( $no_event_text ) . '&lt;/div>';
 	}
 
 	if ( $site ) {
@@ -593,6 +593,7 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 			'template' => $template,
 			'type'     => $type,
 			'time'     => 'list',
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		if ( 'card' === $template ) {
 			$details = '&lt;li class="card-event">&lt;h3>' . mc_load_template( 'event/card-title', $data ) . '&lt;/h3>' . mc_load_template( 'event/card', $data ) . '&lt;/li>';
@@ -690,7 +691,7 @@ function my_calendar_todays_events( $args ) {
 	$today         = ( isset( $events[ $from ] ) ) ? $events[ $from ] : false;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$class         = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
-	$header        = "&lt;ul id='todays-events-$hash' class='todays-events $class'$lang>";
+	$header        = "&lt;ul id='todays-events-$hash' class='mc-event-list todays-events $class'$lang>";
 	$footer        = '&lt;/ul>';
 	$groups        = array();
 	$todays_events = array();
@@ -707,6 +708,7 @@ function my_calendar_todays_events( $args ) {
 					'tags'     => $event_details,
 					'template' => $template,
 					'args'     => $args,
+					'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 				);
 				if ( 'card' === $template ) {
 					$details = '&lt;li class="card-event">&lt;h3>' . mc_load_template( 'event/card-title', $data ) . '&lt;/h3>' . mc_load_template( 'event/card', $data ) . '&lt;/li>';
@@ -777,7 +779,7 @@ function my_calendar_todays_events( $args ) {
 		}
 		if ( 0 !== count( $events ) ) {
 			/**
-			 * Replace the list header for today's events lists. Default value `&lt;ul id='todays-events-$hash' class='todays-events'$lang>`.
+			 * Replace the list header for today's events lists. Default value `&lt;ul id='todays-events-$hash' class='mc-event-list todays-events'$lang>`.
 			 *
 			 * @hook mc_todays_events_header
 			 *

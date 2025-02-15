@@ -172,7 +172,7 @@ function mc_search_results( $query ) {
 	}
 
 	/**
-	 * HTML template before the search results. Default `&lt;ol class="mc-search-results">`.
+	 * HTML template before the search results. Default `&lt;ol class="mc-event-list mc-search-results">`.
 	 *
 	 * @hook mc_search_before
 	 *
@@ -181,7 +181,7 @@ function mc_search_results( $query ) {
 	 *
 	 * @return {string}
 	 */
-	$header = apply_filters( 'mc_search_before', '&lt;h2>%s&lt;/h2>&lt;ol class="mc-search-results" role="list">', $term, $count );
+	$header = apply_filters( 'mc_search_before', '&lt;h2>%s&lt;/h2>&lt;ol class="mc-event-list mc-search-results" role="list">', $term, $count );
 	// Translators: search term.
 	$header = sprintf( $header, sprintf( __( 'Search Results for "%s"', 'my-calendar' ), esc_html( $term ) ) );
 	/**
@@ -423,6 +423,7 @@ function mc_produce_search_results( $events, $template ) {
 			'tags'     => $out['tags'],
 			'template' => $template,
 			'type'     => 'list',
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? $template : '',
 		);
 		$details = mc_load_template( 'event/search', $data );
 		$html   .= $details;
