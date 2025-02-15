@@ -35,6 +35,15 @@ function mc_template( $tags, $template, $type = 'list' ) {
  * @return string HTML output of template.
  */
 function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
+	// Get the default list variant.
+	$default_template = mc_get_option( 'mc_upcoming_template', 'list' );
+	if ( str_contains( $template, 'list_preset_' ) || 'list' !== $default_template ) {
+		$meta_type = 'list';
+		$template  = ( str_contains( $template, 'list_preset_' ) ) ? $template : $default_template;
+		$template  = mc_get_preset_template( $template );
+	} else {
+		$meta_type = $type;
+	}
 	if ( is_object( $event ) ) {
 		$description_fields = array( 'excerpt', 'description', 'description_raw', 'description_stripped', 'ical_excerpt', 'shortdesc', 'shortdesc_raw', 'shortdesc_stripped', 'ical_desc' );
 		/**
@@ -62,7 +71,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 				 *
 				 * @return {string} Returning any non-empty string will shortcircuit template drawing.
 				 */
-				$data[ $field ] = apply_filters( 'mc_inner_content', $data[ $field ], $event, $type, '' );
+				$data[ $field ] = apply_filters( 'mc_inner_content', $data[ $field ], $event, $meta_type, '' );
 			}
 		}
 	}
@@ -80,7 +89,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 			// If a value is an object, ignore it.
 		} else {
 			if ( strpos( $template, '{' . $key ) !== false ) {
-				if ( 'list' !== $type ) {
+				if ( 'list' !== $meta_type ) {
 					if ( 'link' === $key && '' === $value ) {
 						$value = mc_get_uri( false, $data );
 					}
@@ -127,9 +136,37 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	 *
 	 * @return {string} Formatted HTML.
 	 */
-	$template = apply_filters( 'mc_template', $template, $data, $type, $event );
+	$template = apply_filters( 'mc_template', $template, $data, $meta_type, $event );
 
 	return stripslashes( trim( $template ) );
+}
+
+/**
+ * Get a preset template for rendering.
+ *
+ * @param string $type Preset type.
+ *
+ * @return string
+ */
+function mc_get_preset_template( $type ) {
+	switch ( $type ) {
+		case 'list_preset_1';
+			$template = '<div>{datebadge}</div><div>{linking_title}<br />{timerange}<br /><strong>{location}</strong>{city before=", "} {state}</div><div>{thumbnail}</div>';
+			break;
+		case 'list_preset_2';
+			$template = '<div>{datebadge}</div><div><a href="{permalink}">{timerange after="<br>"}<strong>{title}</strong><br />{location}{city before="<br>"} {state}</a></div><div>{thumbnail}</div>';
+			break;
+		case 'list_preset_3';
+			$template = '<div>{daterange before="<strong>" after="</strong>"}{timerange before="<br>"}</div><div><a href="{permalink}">{title}</a></div><div>{hcard}</div>';
+			break;
+		case 'list_preset_4';
+			$template = '<div>{image}</div><div class="list-card-contents">{linking_title}<div>{daterange before="<strong>" after="</strong>"}{timerange before="<br>"}</div><div class="location">{city after=", "} {state}</div></div>';
+			break;
+		default:
+			$template = '<div>{datebadge}</div><div><a href="{permalink}">{title}</a><br />{timerange}<br />{hcard}</div><div>{image}</div>';
+	}
+
+	return $template;
 }
 
 /**
