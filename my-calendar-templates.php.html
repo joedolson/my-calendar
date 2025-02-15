@@ -176,16 +176,16 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
  */
 function mc_get_preset_template( $type ) {
 	switch ( $type ) {
-		case 'list_preset_1';
+		case 'list_preset_1':
 			$template = '&lt;div>{datebadge}&lt;/div>&lt;div>{linking_title}&lt;br />{timerange}&lt;br />&lt;strong>{location}&lt;/strong>{city before=", "} {state}&lt;/div>&lt;div>{thumbnail}&lt;/div>';
 			break;
-		case 'list_preset_2';
+		case 'list_preset_2':
 			$template = '&lt;div>{datebadge}&lt;/div>&lt;div>&lt;a href="{permalink}">{timerange after="&lt;br>"}&lt;strong>{title}&lt;/strong>&lt;br />{location}{city before="&lt;br>"} {state}&lt;/a>&lt;/div>&lt;div>{thumbnail}&lt;/div>';
 			break;
-		case 'list_preset_3';
+		case 'list_preset_3':
 			$template = '&lt;div>{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div>&lt;a href="{permalink}">{title}&lt;/a>&lt;/div>&lt;div>{hcard}&lt;/div>';
 			break;
-		case 'list_preset_4';
+		case 'list_preset_4':
 			$template = '&lt;div>{image}&lt;/div>&lt;div class="list-card-contents">{linking_title}&lt;div>{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div class="location">{city after=", "} {state}&lt;/div>&lt;/div>';
 			break;
 		default:
