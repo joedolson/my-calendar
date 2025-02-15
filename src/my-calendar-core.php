@@ -500,7 +500,7 @@ function mc_generate_css() {
 		}
 	}
 	if ( '' !== $style_vars ) {
-		$style_vars = '.mc-main, .mc-event, .my-calendar-modal, .my-calendar-modal-overlay {' . $style_vars . $category_vars . '}';
+		$style_vars = '.mc-main, .mc-event, .my-calendar-modal, .my-calendar-modal-overlay, .mc-event-list {' . $style_vars . $category_vars . '}';
 	}
 
 	$css = "

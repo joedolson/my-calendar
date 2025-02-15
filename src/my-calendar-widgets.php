@@ -86,7 +86,7 @@ function my_calendar_upcoming_events( $args ) {
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$class          = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
-	$header         = "<ul id='upcoming-events-$hash' class='upcoming-events $class'$lang>";
+	$header         = "<ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
 	$footer         = '</ul>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
@@ -315,7 +315,7 @@ function my_calendar_upcoming_events( $args ) {
 	}
 	if ( '' !== $output ) {
 		/**
-		 * Replace the list header for upcoming events lists. Default value `<ul id='upcoming-events-$hash' class='upcoming-events'$lang>`.
+		 * Replace the list header for upcoming events lists. Default value `<ul id='upcoming-events-$hash' class='mc-event-list upcoming-events'$lang>`.
 		 *
 		 * @hook mc_upcoming_events_header
 		 *
@@ -338,7 +338,7 @@ function my_calendar_upcoming_events( $args ) {
 		$output = $header . $output . $footer;
 		$return = mc_run_shortcodes( $output );
 	} else {
-		$return = '<div class="no-events-fallback upcoming-events ' . $class . '">' . stripcslashes( $no_event_text ) . '</div>';
+		$return = '<div class="mc-event-list no-events-fallback upcoming-events ' . $class . '">' . stripcslashes( $no_event_text ) . '</div>';
 	}
 
 	if ( $site ) {
@@ -665,7 +665,7 @@ function my_calendar_todays_events( $args ) {
 	$today         = ( isset( $events[ $from ] ) ) ? $events[ $from ] : false;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$class         = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
-	$header        = "<ul id='todays-events-$hash' class='todays-events $class'$lang>";
+	$header        = "<ul id='todays-events-$hash' class='mc-event-list todays-events $class'$lang>";
 	$footer        = '</ul>';
 	$groups        = array();
 	$todays_events = array();
@@ -753,7 +753,7 @@ function my_calendar_todays_events( $args ) {
 		}
 		if ( 0 !== count( $events ) ) {
 			/**
-			 * Replace the list header for today's events lists. Default value `<ul id='todays-events-$hash' class='todays-events'$lang>`.
+			 * Replace the list header for today's events lists. Default value `<ul id='todays-events-$hash' class='mc-event-list todays-events'$lang>`.
 			 *
 			 * @hook mc_todays_events_header
 			 *

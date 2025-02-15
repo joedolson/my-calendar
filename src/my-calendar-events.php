@@ -869,6 +869,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			$output = mc_draw_template( $event, apply_filters( 'mc_happening_now_template', $template, $event ) );
 			$return = mc_run_shortcodes( $output );
 		}
+		$return = '<div class="mc-event-list">' . $return . '</div>';
 	} else {
 		$return = '';
 	}
@@ -957,6 +958,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			$output = mc_draw_template( $event, apply_filters( 'mc_happening_next_template', $template, $event ) );
 			$return = mc_run_shortcodes( $output );
 		}
+		$return = '<div class="mc-event-list">' . $return . '</div>';
 	} else {
 		$return = '';
 	}
