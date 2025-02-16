@@ -524,7 +524,6 @@ function mc_display_template_preview( $template, $mc_id = false ) {
  * @return string
  */
 function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
-	$event   = false;
 	$data    = mc_get_template_tag_preview( $mc_id );
 	$output  = '';
 	$empty   = '';
