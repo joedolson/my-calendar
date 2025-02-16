@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_event_detail_{name} - My Calendar Hook Doumentation</title>
+    <title>Source: my-calendar-design.php - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,199 +15,183 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_event_detail_{name}</h1></header>
+    <header><h1 class="page-title">Source: my-calendar-design.php</h1></header>
 	<main>
     
 
 
 
-
-<section>
-
-<header>
-    <h2></h2>
     
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-
-    <h4 class="name" id="mc_event_detail_{name}">apply_filters( 'mc_event_detail_{name}', <span class="signature">$details, $event )</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Filter individual display output items. Variable filter name based on <code>array( 'close', 'inner_title', 'list_title', 'time_html', 'img', 'description', 'short', 'location', 'access', 'link', 'status', 'tickets', 'author', 'host', 'sharing', 'return' );</code></p>
-</div>
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>$details</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>HTML content for section.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>My Calendar event object.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="templates_legacy-functions.php.html">templates/legacy-functions.php</a>, <a href="templates_legacy-functions.php.html#line333">line 333</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-    
-    </div>
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Design settings page.
+ *
+ * @category Core
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv2 or later
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Display help.
+ */
+function my_calendar_design() {
+	?>
+
+	&lt;div class="wrap my-calendar-admin">
+		&lt;h1>&lt;?php esc_html_e( 'Design', 'my-calendar' ); ?>&lt;/h1>
+		&lt;div class="mc-tabs">
+			&lt;div class="tabs" role="tablist" data-default="my-calendar-style">
+				&lt;button type="button" role="tab" aria-selected="false"  id="tab_style" aria-controls="my-calendar-style">&lt;?php esc_html_e( 'Style Editor', 'my-calendar' ); ?>&lt;/button>
+				&lt;button type="button" role="tab" aria-selected="false"  id="tab_templates" aria-controls="my-calendar-templates">&lt;?php esc_html_e( 'Templates', 'my-calendar' ); ?>&lt;/button>
+				&lt;button type="button" role="tab" aria-selected="false"  id="tab_scripts" aria-controls="my-calendar-scripts">&lt;?php esc_html_e( 'Scripts', 'my-calendar' ); ?>&lt;/button>
+			&lt;/div>
+			&lt;div class="postbox-container jcd-wide">
+				&lt;div class="metabox-holder">
+
+					&lt;div class="ui-sortable meta-box-sortables" id="my-calendar-styles">
+						&lt;div class="wptab postbox" aria-labelledby="tab_style" role="tabpanel" id="my-calendar-style">
+							&lt;h2 id="styles">&lt;?php esc_html_e( 'Style Editor', 'my-calendar' ); ?>&lt;/h2>
+							&lt;div class="inside">
+							&lt;?php my_calendar_style_edit(); ?>
+							&lt;/div>
+							&lt;?php mc_display_contrast_variables(); ?>
+						&lt;/div>
+					&lt;/div>
+
+					&lt;div class="ui-sortable meta-box-sortables" id="templates">
+						&lt;div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
+						&lt;?php
+							$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
+							if ( $disable_templates ) {
+								echo '&lt;h2>' . esc_html__( 'Template Documentation', 'my-calendar' ) . '&lt;/h2>';
+							} else {
+								echo '&lt;h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '&lt;/h2>';
+								echo '&lt;p>&lt;span class="mc-flex">';
+								echo ( isset( $_GET['mc_template'] ) &amp;&amp; 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '&lt;a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '&lt;/a>' );
+								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
+								echo '&lt;/span>&lt;/p>';
+							}
+							?>
+							&lt;div class="inside">
+								&lt;h3>&lt;?php esc_html_e( 'Default List Template', 'my-calendar' ); ?>&lt;/h3>
+								&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?>">
+									&lt;div>
+										&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
+									&lt;?php
+									if ( ! empty( $_POST ) ) {
+										$nonce = $_REQUEST['_wpnonce'];
+										if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+											wp_die( 'My Calendar: Security check failed' );
+										}
+										// Custom sanitizing.
+										$post = map_deep( $_POST, 'sanitize_textarea_field' );
+										if ( isset( $post['mc_list_template'] ) ) {
+											mc_update_option( 'list_template', $post['mc_list_template'] );
+											mc_show_notice( __( 'My Calendar List Template Updated', 'my-calendar' ), true, false, 'success' );
+										}
+									}
+									$template_options = mc_select_preset_templates();
+									mc_settings_field(
+										array(
+											'name'    => 'mc_list_template',
+											'label'   => __( 'Default List Template', 'my-calendar' ),
+											'default' => $template_options,
+											'note'    => __( 'Default format for upcoming event, search results, and other list widgets and shortcodes. Any custom template overrides this.', 'my-calendar' ),
+											'type'    => 'select',
+										)
+									);
+									?>
+									&lt;/div>
+									&lt;p>
+										&lt;input type="submit" class="button-primary" value="&lt;?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>">
+									&lt;/p>
+								&lt;/form>
+								&lt;div class="list-templates">
+									&lt;h4>&lt;?php esc_html_e( 'Preview', 'my-calendar' ); ?>&lt;/h4>
+									&lt;p>&lt;?php esc_html_e( 'The preview shows your next few upcoming events.', 'my-calendar' ); ?>
+									&lt;?php
+									$default   = '&lt;strong>{timerange after=", "}{daterange}&lt;/strong> &amp;#8211; {linking_title}';
+									$templates = array( 'list', 'list_preset_1', 'list_preset_2', 'list_preset_3', 'list_preset_4' );
+									foreach ( $templates as $template ) {
+										echo '&lt;div class="mc-list-preview ' . esc_attr( $template ) . '">';
+										$template  = ( 'list' === $template ) ? $default : $template;
+										$atts      = array(
+											'before'   => 0,
+											'after'    => 3,
+											'template' => $template,
+										);
+										echo my_calendar_insert_upcoming( $atts );
+										echo '&lt;/div>';
+									}
+									?>
+								&lt;/div>
+							&lt;?php
+							echo '&lt;p>';
+							// translators: URL for the PHP templating docs.
+							printf( wp_kses_post( __( 'Learn about the &lt;a href="%s">PHP templating system in My Calendar&lt;/a>.', 'my-calendar' ) ), 'https://docs.joedolson.com/my-calendar/php-templates/' );
+							echo '&lt;/p>';
+							mc_templates_edit();
+							?>
+							&lt;/div>
+						&lt;/div>
+					&lt;/div>
+
+					&lt;div class="ui-sortable meta-box-sortables" id="scripts">
+						&lt;div class="wptab postbox" aria-labelledby="tab_scripts" role="tabpanel" id="my-calendar-scripts">
+							&lt;h2>&lt;?php esc_html_e( 'Script Manager', 'my-calendar' ); ?>&lt;/h2>
+
+							&lt;div class="inside">
+							&lt;?php my_calendar_behaviors_edit(); ?>
+							&lt;/div>
+						&lt;/div>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+		&lt;/div>
+	&lt;?php mc_show_sidebar(); ?>
+
+	&lt;/div>
+	&lt;?php
+}
+
+/**
+ * Get the array of possible options for preset templates.
+ *
+ * @return array
+ */
+function mc_select_preset_templates() {
+	$template_options = array(
+		'list'          => '--',
+		'list_preset_1' => __( 'Template 1: (short date, linked title, time, brief location, image)', 'my-calendar' ),
+		'list_preset_2' => __( 'Template 2: (short date, linked time, title and brief location, image)', 'my-calendar' ),
+		'list_preset_3' => __( 'Template 3: (full date, time, linked title, full location)', 'my-calendar' ),
+		'list_preset_4' => __( 'Template 4: (responsive cards: image, linked title, time, brief location)', 'my-calendar' ),
+	);
+	/**
+	 * Filter the selectable list of template options in settings. 
+	 * Keys must start with 'list_preset_'. Use filter `mc_preset_template` 
+	 * to return a template.
+	 *
+	 * @hook mc_select_preset_templates
+	 *
+	 * @param {array} Array of key/value pairs with a preset type and description.
+	 */
+	$template_options = apply_filters( 'mc_select_preset_templates', $template_options );
+
+	return $template_options;
+}
+
+</code></pre>
+        </article>
+    </section>
 
 
 
