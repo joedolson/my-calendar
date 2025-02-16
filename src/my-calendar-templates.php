@@ -36,7 +36,7 @@ function mc_template( $tags, $template, $type = 'list' ) {
  */
 function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	// Get the default list variant.
-	$default_template = mc_get_option( 'mc_upcoming_template', 'list' );
+	$default_template = mc_get_option( 'list_template', 'list' );
 	if ( str_contains( $template, 'list_preset_' ) || 'list' !== $default_template ) {
 		$meta_type = 'list';
 		$template  = ( str_contains( $template, 'list_preset_' ) ) ? $template : $default_template;
