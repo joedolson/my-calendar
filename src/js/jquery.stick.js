@@ -21,9 +21,6 @@
     /*global $,jQuery */
 
     var
-        // Check if we're working in IE. Will control the animation
-        // on the fixed elements.
-        isIE = ($.support.optSelected === false ? true : false),
 
         // List of viewports and associated array of bound sticky elements
         viewports = {},
@@ -90,11 +87,6 @@
 
                     // TODO: What about calculating top values with margin's set?
                     // pt.params.footer.css('marginTop').replace(/auto/, 0)
-
-                    // If not using the window object, then stop any IE animation
-                    if (o.isWindow === false && isIE) {
-                        o.ele.stop();
-                    }
 
                     // If the current scrollTop position is greater
                     // than our maxTop value, then make element stick on the page.
@@ -189,21 +181,9 @@
 
                         }
 
-                        // Stick the element
-                        if (isIE && o.isWindow === false) {
-
-                            o.ele
-                                .addClass(o.stickClass)
-                                .css("position", cssPosition.position)
-                                .animate({top: cssPosition.top}, 150);
-
-                        } else {
-
-                            o.ele
-                                .css(cssPosition)
-                                .addClass(o.stickClass);
-
-                        }
+                		o.ele
+                            .css(cssPosition)
+                            .addClass(o.stickClass);
 
                         // If making element stick now, then trigger
                         // onStick callback if any
@@ -352,8 +332,8 @@
                                         ) || 0;
             o.footerElement             = $(o.footerElement);
             o.isWindow                  = true;
-            o.isOnStickSet              = $.isFunction(o.onStick);
-            o.isOnUnStickSet            = $.isFunction(o.onUnStick);
+            o.isOnStickSet              = typeof o.onStick === 'function';
+            o.isOnUnStickSet            = typeof o.onUnStick === 'function';
             o.wasStickCalled            = false;
             o.isViewportOffsetParent    = true;
 
@@ -490,7 +470,7 @@
 
             }
 
-            if (!$.isWindow(o.viewport[0])) {
+            if ( ! (o.viewport[0] != null && o.viewport[0] === o.viewport[0].window ) ) {
 
                 o.isWindow  = false;
 
