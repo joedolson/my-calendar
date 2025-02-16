@@ -69,17 +69,17 @@ function my_calendar_design() {
 					&lt;div class="ui-sortable meta-box-sortables" id="templates">
 						&lt;div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
 						&lt;?php
-							$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
-							if ( $disable_templates ) {
-								echo '&lt;h2>' . esc_html__( 'Template Documentation', 'my-calendar' ) . '&lt;/h2>';
-							} else {
-								echo '&lt;h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '&lt;/h2>';
-								echo '&lt;p>&lt;span class="mc-flex">';
-								echo ( isset( $_GET['mc_template'] ) &amp;&amp; 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '&lt;a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '&lt;/a>' );
-								mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
-								echo '&lt;/span>&lt;/p>';
-							}
-							?>
+						$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
+						if ( $disable_templates ) {
+							echo '&lt;h2>' . esc_html__( 'Template Documentation', 'my-calendar' ) . '&lt;/h2>';
+						} else {
+							echo '&lt;h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '&lt;/h2>';
+							echo '&lt;p>&lt;span class="mc-flex">';
+							echo ( isset( $_GET['mc_template'] ) &amp;&amp; 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '&lt;a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '&lt;/a>' );
+							mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
+							echo '&lt;/span>&lt;/p>';
+						}
+						?>
 							&lt;div class="inside">
 								&lt;h3>&lt;?php esc_html_e( 'Default List Template', 'my-calendar' ); ?>&lt;/h3>
 								&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?>">
@@ -122,8 +122,8 @@ function my_calendar_design() {
 									$templates = array( 'list', 'list_preset_1', 'list_preset_2', 'list_preset_3', 'list_preset_4' );
 									foreach ( $templates as $template ) {
 										echo '&lt;div class="mc-list-preview ' . esc_attr( $template ) . '">';
-										$template  = ( 'list' === $template ) ? $default : $template;
-										$atts      = array(
+										$template = ( 'list' === $template ) ? $default : $template;
+										$atts     = array(
 											'before'   => 0,
 											'after'    => 3,
 											'template' => $template,
@@ -176,8 +176,8 @@ function mc_select_preset_templates() {
 		'list_preset_4' => __( 'Template 4: (responsive cards: image, linked title, time, brief location)', 'my-calendar' ),
 	);
 	/**
-	 * Filter the selectable list of template options in settings. 
-	 * Keys must start with 'list_preset_'. Use filter `mc_preset_template` 
+	 * Filter the selectable list of template options in settings.
+	 * Keys must start with 'list_preset_'. Use filter `mc_preset_template`
 	 * to return a template.
 	 *
 	 * @hook mc_select_preset_templates
