@@ -110,13 +110,14 @@ function my_calendar_insert( $atts, $content = null ) {
  * @return string Calendar.
  */
 function my_calendar_insert_upcoming( $atts ) {
-	$args = shortcode_atts(
+	$default = mc_get_option( 'list_template', 'default' );
+	$args    = shortcode_atts(
 		array(
 			'before'         => 'default',
 			'after'          => 'default',
 			'type'           => 'default',
 			'category'       => 'default',
-			'template'       => 'default',
+			'template'       => $default,
 			'fallback'       => '',
 			'order'          => 'asc',
 			'skip'           => '0',
@@ -173,12 +174,13 @@ function my_calendar_insert_upcoming( $atts ) {
  * @return string Calendar.
  */
 function my_calendar_insert_today( $atts ) {
-	$args = shortcode_atts(
+	$default = mc_get_option( 'list_template', 'default' );
+	$args    = shortcode_atts(
 		array(
 			'category' => 'default',
 			'author'   => 'default',
 			'host'     => 'default',
-			'template' => 'default',
+			'template' => $default,
 			'fallback' => '',
 			'date'     => false,
 			'site'     => false,

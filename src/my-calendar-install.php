@@ -434,6 +434,7 @@ function mc_default_options() {
 		'disable_legacy_templates'     => 'false',
 		'maptype'                      => 'roadmap',
 		'views'                        => array( 'calendar', 'list', 'mini' ),
+		'list_template'                => '',
 	);
 
 	/**

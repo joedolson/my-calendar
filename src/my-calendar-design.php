@@ -42,7 +42,7 @@ function my_calendar_design() {
 
 					<div class="ui-sortable meta-box-sortables" id="templates">
 						<div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
-							<?php
+						<?php
 							$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
 							if ( $disable_templates ) {
 								echo '<h2>' . esc_html__( 'Template Documentation', 'my-calendar' ) . '</h2>';
@@ -55,6 +55,58 @@ function my_calendar_design() {
 							}
 							?>
 							<div class="inside">
+								<h3><?php esc_html_e( 'Default List Template', 'my-calendar' ); ?></h3>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?>">
+									<div>
+										<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
+									<?php
+									if ( ! empty( $_POST ) ) {
+										$nonce = $_REQUEST['_wpnonce'];
+										if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+											wp_die( 'My Calendar: Security check failed' );
+										}
+										// Custom sanitizing.
+										$post = map_deep( $_POST, 'sanitize_textarea_field' );
+										if ( isset( $post['mc_list_template'] ) ) {
+											mc_update_option( 'list_template', $post['mc_list_template'] );
+											mc_show_notice( __( 'My Calendar List Template Updated', 'my-calendar' ), true, false, 'success' );
+										}
+									}
+									$template_options = mc_select_preset_templates();
+									mc_settings_field(
+										array(
+											'name'    => 'mc_list_template',
+											'label'   => __( 'Default List Template', 'my-calendar' ),
+											'default' => $template_options,
+											'note'    => __( 'Default format for upcoming event, search results, and other list widgets and shortcodes. Any custom template overrides this.', 'my-calendar' ),
+											'type'    => 'select',
+										)
+									);
+									?>
+									</div>
+									<p>
+										<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>">
+									</p>
+								</form>
+								<div class="list-templates">
+									<h4><?php esc_html_e( 'Preview', 'my-calendar' ); ?></h4>
+									<p><?php esc_html_e( 'The preview shows your next few upcoming events.', 'my-calendar' ); ?>
+									<?php
+									$default   = '<strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}';
+									$templates = array( 'list', 'list_preset_1', 'list_preset_2', 'list_preset_3', 'list_preset_4' );
+									foreach ( $templates as $template ) {
+										echo '<div class="mc-list-preview ' . esc_attr( $template ) . '">';
+										$template  = ( 'list' === $template ) ? $default : $template;
+										$atts      = array(
+											'before'   => 0,
+											'after'    => 3,
+											'template' => $template,
+										);
+										echo my_calendar_insert_upcoming( $atts );
+										echo '</div>';
+									}
+									?>
+								</div>
 							<?php
 							echo '<p>';
 							// translators: URL for the PHP templating docs.
@@ -83,3 +135,31 @@ function my_calendar_design() {
 	</div>
 	<?php
 }
+
+/**
+ * Get the array of possible options for preset templates.
+ *
+ * @return array
+ */
+function mc_select_preset_templates() {
+	$template_options = array(
+		'list'          => '--',
+		'list_preset_1' => __( 'Template 1: (short date, linked title, time, brief location, image)', 'my-calendar' ),
+		'list_preset_2' => __( 'Template 2: (short date, linked time, title and brief location, image)', 'my-calendar' ),
+		'list_preset_3' => __( 'Template 3: (full date, time, linked title, full location)', 'my-calendar' ),
+		'list_preset_4' => __( 'Template 4: (responsive cards: image, linked title, time, brief location)', 'my-calendar' ),
+	);
+	/**
+	 * Filter the selectable list of template options in settings. 
+	 * Keys must start with 'list_preset_'. Use filter `mc_preset_template` 
+	 * to return a template.
+	 *
+	 * @hook mc_select_preset_templates
+	 *
+	 * @param {array} Array of key/value pairs with a preset type and description.
+	 */
+	$template_options = apply_filters( 'mc_select_preset_templates', $template_options );
+
+	return $template_options;
+}
+

@@ -265,7 +265,8 @@ function mc_register_styles() {
 	 * @return {string}
 	 */
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
-	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
+	wp_register_style( 'my-calendar-lists', plugins_url( 'css/list-presets.css', __FILE__ ), array(), $version );
+	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons', 'my-calendar-lists' ), $version );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
 	wp_register_style( 'my-calendar-locations', plugins_url( 'css/locations.css', __FILE__ ), array( 'dashicons' ), $version );
 
@@ -757,19 +758,21 @@ function mc_register_scripts() {
 	if ( SCRIPT_DEBUG ) {
 		$version .= wp_rand( 10000, 100000 );
 	}
-	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
+	wp_register_style( 'my-calendar-lists', plugins_url( 'css/list-presets.css', __FILE__ ), array(), $version );
+	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons', 'my-calendar-lists' ), $version );
 	wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 	$mcjs = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
 	wp_register_script( 'mc.mcjs', $mcjs, array( 'jquery', 'wp-a11y' ), $version, true );
 	$modal = ( SCRIPT_DEBUG ) ? 'modal/accessible-modal-window-aria.js' : 'modal/accessible-modal-window-aria.min.js';
 	wp_register_script( 'mc-modal', plugins_url( 'js/' . $modal, __FILE__ ), array(), $version, true );
-	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons' ), $version );
+	wp_register_style( 'my-calendar-lists', plugins_url( 'css/list-presets.css', __FILE__ ), array(), $version );
+	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons', 'my-calendar-lists' ), $version );
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
 	wp_register_style( 'my-calendar-frontend-admin-style', $admin_stylesheet, array(), $version );
 
-	wp_register_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array(), $version );
+	wp_register_style( 'mc-styles', plugins_url( 'css/mc-styles.css', __FILE__ ), array( 'my-calendar-lists' ), $version );
 	wp_register_script( 'duet.js', plugins_url( 'js/duet/duet.js', __FILE__ ), array(), $version, true );
 	wp_register_style( 'duet.css', plugins_url( 'js/duet/themes/default.css', __FILE__ ), array(), $version );
 	// Enqueue datepicker options.

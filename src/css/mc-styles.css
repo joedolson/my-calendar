@@ -333,6 +333,19 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	gap: 4px;
 }
 
+.list-templates {
+	padding: 1rem;
+	margin: 1rem 0;
+	box-shadow: 0 3px 4px #ccc;
+	border: 1px solid #e6e6e6;
+	max-width: 720px;
+}
+
+.list-templates h4 {
+	margin: 0;
+	font-size: 1.2rem;
+}
+
 ul.mc-file-list ul {
 	margin-left: 2rem;
 }
