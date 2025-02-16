@@ -283,7 +283,6 @@ jQuery(document).ready(function ($) {
 		});
 	});
 
-
 	$( '.row-actions' ).on( 'focus', 'a', function() {
 		$( this ).parent( '.row-actions' ).css( { 'left' : 'auto' } );
 	});
@@ -391,7 +390,7 @@ jQuery(document).ready(function ($) {
 		$( '.event_time_label' ).hide();
 	}
 
-	$( 'input[id="e_allday"]' ).change( function() {
+	$( 'input[id="e_allday"]' ).on( 'change', function() {
 		let checked = $(this).prop( "checked" );
 		if ( checked ) {
 			$( '.event_time_label' ).show();
@@ -405,7 +404,7 @@ jQuery(document).ready(function ($) {
 		$( '.mc_remote_info' ).hide();
 	}
 
-	$( 'input[id="mc_remote"]' ).change( function() {
+	$( 'input[id="mc_remote"]' ).on( 'change', function() {
 		let checked = $(this).prop( "checked" );
 		if ( checked ) {
 			$( '.mc_remote_info' ).show();
@@ -419,7 +418,7 @@ jQuery(document).ready(function ($) {
 		$( '#mc_gmap_api_key' ).attr( 'required', 'true' );
 	}
 
-	$( 'input[id="mc_display_single-gmap"]' ).change( function() {
+	$( 'input[id="mc_display_single-gmap"]' ).on( 'change', function() {
 		let checked = $(this).prop( "checked" );
 		if ( checked ) {
 			$( '#mc_gmap_api_key' ).attr( 'required', 'true' );
@@ -433,7 +432,7 @@ jQuery(document).ready(function ($) {
 		$( 'label[for=mc_event_endtime] span' ).show();
 	}
 
-	$( 'input[id="e_hide_end"]' ).change( function() {
+	$( 'input[id="e_hide_end"]' ).on( 'change', function() {
 		let checked = $(this).prop( "checked" );
 		if ( checked ) {
 			$( 'label[for=mc_event_endtime] span' ).show();
@@ -720,6 +719,17 @@ var mediaPopup = '';
 					$(target).removeAttr( 'aria-hidden' ).show().trigger( 'focus' );
 				});
 			}
+		});
+	}
+
+	const list_selector = $( '#mc_list_template' ).val();
+	if ( list_selector ) {
+		let current = list_selector.val();
+		$( '.mc-list-preview:not(.' + current ).hide();
+		list_selector.on( 'change', function(e) {
+			current = $( this ).val();
+			$( '.mc-list-preview' ).hide();
+			$( '.mc-list-preview .' + current ).show();
 		});
 	}
 })(jQuery);
