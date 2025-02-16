@@ -1377,8 +1377,17 @@ ul.mc-event-list:has(li.list_preset_4) {
 	margin-bottom: 0;
 }
 
+div.mc-event-list-container {
+	container: mc_list_container / inline-size;
+}
 
-@media screen and ( width < 720px ) {
+@container mc_list_container ( width < 720px ) {
+	ul.mc-event-list:has(li.list_preset_4) {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}	
+}
+
+@container mc_list_container ( width < 480px ) {
 	ul.mc-event-list:has(li.list_preset_4) {
 		grid-template-columns: 1fr;
 	}	

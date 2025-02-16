@@ -170,7 +170,7 @@ function mc_search_results( $query ) {
 	 */
 	$footer = apply_filters( 'mc_search_after', '</ol>', $term );
 
-	return $header . $output . $footer . $exports;
+	return '<div class="mc-event-list-container">' . $header . $output . $footer . $exports . '</div>';
 }
 
 add_filter( 'the_title', 'mc_search_results_title', 10, 2 );

@@ -349,7 +349,7 @@ function my_calendar_upcoming_events( $args ) {
 		mc_switch_language( $language, $locale );
 	}
 
-	return $return;
+	return '<div class="mc-event-list-container">' . $return . '</div>';
 }
 
 /**
@@ -790,5 +790,5 @@ function my_calendar_todays_events( $args ) {
 		mc_switch_language( $language, $locale );
 	}
 
-	return $output;
+	return '<div class="mc-event-list-container">' . $output . '</div>';
 }
