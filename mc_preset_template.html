@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_heading_inner_title - My Calendar Hook Doumentation</title>
+    <title>Action: mc_preset_template - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_heading_inner_title</h1></header>
+    <header><h1 class="page-title">Action: mc_preset_template</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_heading_inner_title">apply_filters( 'mc_heading_inner_title', <span class="signature">$inner_heading, $event_title, $event )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_preset_template">do_action( 'mc_preset_template', <span class="signature">$template, $type )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter event title inside event heading.</p>
+    <p>Filter the HTML output of default list presets.</p>
 </div>
 
 
@@ -77,7 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$inner_heading</code></td>
+                <td class="name"><code>$template</code></td>
             
 
             <td class="type">
@@ -93,14 +93,14 @@
 
             
 
-            <td class="description last"><p>Heading HTML and text.</p></td>
+            <td class="description last"><p>The HTML and template tags used to construct a template preset.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$event_title</code></td>
+                <td class="name"><code>$type</code></td>
             
 
             <td class="type">
@@ -116,30 +116,7 @@
 
             
 
-            <td class="description last"><p>Title as passed.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>My Calendar event object.</p></td>
+            <td class="description last"><p>The template preset type selected.</p></td>
         </tr>
 
     
@@ -180,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-output.php.html">my-calendar-output.php</a>, <a href="my-calendar-output.php.html#line488">line 488</a>
+        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -203,24 +180,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
