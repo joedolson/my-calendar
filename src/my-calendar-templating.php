@@ -120,7 +120,7 @@ function mc_php_templates_docs() {
 			$exists    = mc_template_exists( '/' . $base . '/' . $temp . '.php' );
 			$edit_link = ( $exists ) ? add_query_arg( 'file', $base . '/' . $temp . '.php', admin_url( 'theme-editor.php' ) ) : '';
 			$id        = 'template_' . $type . '-' . $temp;
-			$nonce     = wp_nonce_field( 'mc-copy-file' );
+			$nonce     = wp_nonce_field( 'mc-copy-file', '_wpnonce', true, false );
 			$button    = '<form method="post">' . $nonce . '<input type="hidden" name="mc_file_template" value="' . $type . '/' . $temp . '"><button type="submit" class="button-secondary" aria-describedby="' . $id . '">Copy to Theme</button></form>';
 			$append    = ( $exists ) ? '<span><span class="dashicons dashicons-yes" aria-hidden-"true"></span> <a href="' . esc_url( $edit_link ) . '">' . __( 'Edit in Theme', 'my-calendar' ) . '</a></span></span>' : $button;
 			$output   .= '<li>' . $append . '<code id="' . $id . '">/' . $base . '/' . $temp . '.php' . '</code></li>';
