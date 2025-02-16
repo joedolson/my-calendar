@@ -1372,6 +1372,11 @@ ul.mc-event-list:has(li.list_preset_4) {
 	gap: 30px;
 }
 
+.list_preset_4 {
+	margin-bottom: 0;
+}
+
+
 @media screen and ( width < 720px ) {
 	ul.mc-event-list:has(li.list_preset_4) {
 		grid-template-columns: 1fr;
