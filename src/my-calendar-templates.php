@@ -166,6 +166,16 @@ function mc_get_preset_template( $type ) {
 			$template = '<div>{datebadge}</div><div><a href="{permalink}">{title}</a><br />{timerange}<br />{hcard}</div><div>{image}</div>';
 	}
 
+	/**
+	 * Filter the HTML output of default list presets.
+	 *
+	 * @hook mc_preset_template
+	 *
+	 * @param {string} $template The HTML and template tags used to construct a template preset.
+	 * @param {string} $type     The template preset type selected.
+	 */
+	$template = apply_filters( 'mc_preset_template', $template, $type );
+
 	return $template;
 }
 
