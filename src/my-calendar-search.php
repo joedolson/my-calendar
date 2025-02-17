@@ -101,7 +101,8 @@ function mc_search_results( $query ) {
 	$count       = mc_count_events( $event_array );
 
 	if ( ! empty( $event_array ) ) {
-		$template = '<h3><strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}</h3><div class="mcs-search-excerpt">{search_excerpt}</div>';
+		$type                = mc_get_option( 'list_template', 'list' );
+		$template_pre_filter = '<h3><strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}</h3><div class="mcs-search-excerpt">{search_excerpt}</div>';
 		/**
 		 * Template for outputting search results. Default `<strong>{date}</strong> {title} {details}`.
 		 *
@@ -112,7 +113,10 @@ function mc_search_results( $query ) {
 		 *
 		 * @return {string}
 		 */
-		$template = apply_filters( 'mc_search_template', $template, $term );
+		$template = apply_filters( 'mc_search_template', $template_pre_filter, $term );
+		if ( $template === $template_pre_filter && 'list' !== $type ) {
+			$template = $type;
+		}
 		// No filters parameter prevents infinite looping on the_content filters.
 		if ( is_string( $query ) ) {
 			$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'nofilters', $term );
