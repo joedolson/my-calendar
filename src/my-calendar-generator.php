@@ -64,9 +64,9 @@ function mc_generate( $format = 'shortcode' ) {
 			foreach ( $post as $key => $value ) {
 				if ( in_array( $key, $keys, true ) ) {
 					if ( 'preset_template' === $key && 'list' !== $value ) {
-						$v    = $value;
+						$v = $value;
 					}
-					$is_preset = ( isset( $post['preset_template'] ) && $post['preset_template'] !== 'list' ) ? true : false;
+					$is_preset = ( isset( $post['preset_template'] ) && 'list' !== $post['preset_template'] ) ? true : false;
 					// Handle preset_template not set or preset_template is 'custom'.
 					if ( 'template' === $key && ! $is_preset ) {
 						$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
