@@ -90,6 +90,8 @@ function mc_update_options( $options ) {
  *     @type array        $atts Array of attributes to use on the input.
  *     @type string       $type Type of input field.
  *     @type boolean      $echo True to echo, false to return.
+ *     @type array        $wrap Array of wrapper details (class, element, id).
+ *     @type string       $id Override the default ID, which is derived from the name.
  * }
  *
  * @return string|void
@@ -103,6 +105,7 @@ function mc_settings_field( $args = array() ) {
 	$type    = ( isset( $args['type'] ) ) ? $args['type'] : 'text';
 	$echo    = ( isset( $args['echo'] ) ) ? $args['echo'] : true;
 	$wrap    = ( isset( $args['wrap'] ) ) ? $args['wrap'] : array();
+	$id      = ( isset( $args['id'] ) ) ? $args['id'] : $name;
 	$element = '';
 	$close   = '';
 	if ( ! empty( $wrap ) ) {
@@ -159,45 +162,45 @@ function mc_settings_field( $args = array() ) {
 		case 'email':
 			if ( $note ) {
 				$note = sprintf( str_replace( '%', '', $note ), "<code>$value</code>" );
-				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
-				$aria = " aria-describedby='$name-note'";
+				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
 				$aria = '';
 			}
-			$return = "$element<label class='label-$type' for='$name'>$label</label> <input type='$type' id='$name' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes />$close $note";
+			$return = "$element<label class='label-$type' for='$id'>$label</label> <input type='$type' id='$id' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes />$close $note";
 			break;
 		case 'hidden':
-			$return = "<input type='hidden' id='$name' name='$name' value='" . esc_attr( $value ) . "' />";
+			$return = "<input type='hidden' id='$id' name='$name' value='" . esc_attr( $value ) . "' />";
 			break;
 		case 'textarea':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
-				$aria = " aria-describedby='$name-note'";
+				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
 				$aria = '';
 			}
-			$return = "$element<label class='label-textarea' for='$name'>$label</label><br /><textarea id='$name' name='$name'$aria$attributes>" . esc_attr( $value ) . "</textarea>$close$note";
+			$return = "$element<label class='label-textarea' for='$id'>$label</label><br /><textarea id='$id' name='$name'$aria$attributes>" . esc_attr( $value ) . "</textarea>$close$note";
 			break;
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
 			if ( $note ) {
-				$note = "<div id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>" . sprintf( $note, "<code>$value</code>" ) . '</div>';
-				$aria = " aria-describedby='$name-note'";
+				$note = "<div id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>" . sprintf( $note, "<code>$value</code>" ) . '</div>';
+				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
 				$aria = '';
 			}
-			$return = "$element<input type='checkbox' id='$name' name='$name' value='on' $checked$attributes$aria /> <label for='$name' class='label-checkbox'>$label</label>$close$note";
+			$return = "$element<input type='checkbox' id='$id' name='$name' value='on' $checked$attributes$aria /> <label for='$id' class='label-checkbox'>$label</label>$close$note";
 			break;
 		case 'checkbox':
 		case 'radio':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
-				$aria = " aria-describedby='$name-note'";
+				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
 				$aria = '';
@@ -213,7 +216,7 @@ function mc_settings_field( $args = array() ) {
 					} else {
 						$checked = ( in_array( $k, $value, true ) ) ? ' checked="checked"' : '';
 					}
-					$options .= "<li>$element<input type='$type' id='$name-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label class='label-$type' for='$name-$k'>$v</label>$close</li>";
+					$options .= "<li>$element<input type='$type' id='$id-$k' value='" . esc_attr( $k ) . "' name='$att_name'$aria$attributes$checked /> <label class='label-$type' for='$id-$k'>$v</label>$close</li>";
 				}
 			}
 			$return = "$options $note";
@@ -221,8 +224,8 @@ function mc_settings_field( $args = array() ) {
 		case 'select':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$name-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
-				$aria = " aria-describedby='$name-note'";
+				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
 				$aria = '';
@@ -234,8 +237,8 @@ function mc_settings_field( $args = array() ) {
 				}
 			}
 			$return = "
-				<label class='label-select' for='$name'>$label</label>
-				$element<select id='$name' name='$name'$aria$attributes />
+				<label class='label-select' for='$id'>$label</label>
+				$element<select id='$id' name='$name'$aria$attributes />
 					$options
 				</select>$close
 			$note";
