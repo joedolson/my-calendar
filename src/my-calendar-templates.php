@@ -36,8 +36,13 @@ function mc_template( $tags, $template, $type = 'list' ) {
  */
 function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	// Get the default list variant.
+	$original_default = mc_widget_default_list_template();
 	$default_template = mc_get_option( 'list_template', 'list' );
-	if ( str_contains( $template, 'list_preset_' ) || 'list' !== $default_template ) {
+	$is_custom        = ( $template !== $original_default && $template !== $default_template ) ? true : false;
+	if ( 'list' === $default_template && ! $is_custom && ! str_contains( $template, 'list_preset_' ) ) {
+		$template = $original_default;
+	}
+	if ( str_contains( $template, 'list_preset_' ) ) {
 		$meta_type = 'list';
 		$template  = ( str_contains( $template, 'list_preset_' ) ) ? $template : $default_template;
 		$template  = mc_get_preset_template( $template );

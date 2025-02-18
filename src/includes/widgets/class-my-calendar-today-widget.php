@@ -131,10 +131,27 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		</p>
 			<?php
 		}
+		$template_options         = mc_select_preset_templates();
+		$template_options['list'] = __( 'Custom', 'my-calendar' );
+		if ( in_array( $widget_template, array_keys( $template_options ) ) ) {
+			$preset = $widget_template;
+		}
 		?>
 		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_preset_template' ) ); ?>"><?php esc_html_e( 'Select Template', 'my-calendar' ); ?></label>
+			<select id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_preset_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_preset_template' ) ); ?>">
+			<?php
+			foreach ( $template_options as $value => $label ) {
+				?>
+				<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $preset ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php
+			}
+			?>
+			</select>
+		</p>
+		<p class="mc-custom-template">
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label><br/>
-			<textarea class="widefat" rows="8" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_template' ) ); ?>"><?php echo esc_textarea( $widget_template ); ?></textarea>
+			<textarea class="widefat" rows="8" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_template' ) ); ?>"><?php echo esc_textarea( wp_unslash( $widget_template ) ); ?></textarea>
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>"><?php esc_html_e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
@@ -187,6 +204,9 @@ class My_Calendar_Today_Widget extends WP_Widget {
 	 * @return array $instance Updated instance.
 	 */
 	public function update( $new_settings, $instance ) {
+		if ( isset( $new_settings['my_calendar_today_preset_template'] ) && 'list' !== $new_settings['my_calendar_today_preset_template'] ) {
+			$new_settings['my_calendar_today_template'] = $new_settings['my_calendar_today_preset_template'];
+		}
 		$instance = array_map( 'mc_kses_post', array_merge( $instance, $new_settings ) );
 		// Set special value for category.
 		$instance['my_calendar_today_category'] = ( in_array( 'all', (array) $new_settings['my_calendar_today_category'], true ) ) ? array() : $new_settings['my_calendar_today_category'];

@@ -14,12 +14,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Get the original default list template. Any other template is considered customized.
+ */
+function mc_widget_default_list_template() {
+	return '<strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}';
+}
+
+/**
  * Default settings for widgets.
  *
  * @return array
  */
 function mc_widget_defaults() {
-	$default_template = '<strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}';
+	$default_template = mc_widget_default_list_template();
 
 	$defaults = array(
 		'upcoming' => array(

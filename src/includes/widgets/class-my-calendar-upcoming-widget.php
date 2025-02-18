@@ -162,8 +162,25 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</p>
 			<?php
 		}
+		$template_options         = mc_select_preset_templates();
+		$template_options['list'] = __( 'Custom', 'my-calendar' );
+		if ( in_array( $template, array_keys( $template_options ) ) ) {
+			$preset = $template;
+		}
 		?>
 		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_preset_template' ) ); ?>"><?php esc_html_e( 'Select Template', 'my-calendar' ); ?></label>
+			<select id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_preset_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_preset_template' ) ); ?>">
+			<?php
+			foreach ( $template_options as $value => $label ) {
+				?>
+				<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $preset ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php
+			}
+			?>
+			</select>
+		</p>
+		<p class="mc-custom-template">
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_template' ) ); ?>"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label><br/>
 			<textarea class="widefat" rows="6" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_template' ) ); ?>"><?php echo esc_textarea( $template ); ?></textarea>
 		</p>
@@ -305,6 +322,9 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 * @return array Updated instance.
 	 */
 	public function update( $new_settings, $instance ) {
+		if ( isset( $new_settings['my_calendar_upcoming_preset_template'] ) && 'list' !== $new_settings['my_calendar_upcoming_preset_template'] ) {
+			$new_settings['my_calendar_upcoming_template'] = $new_settings['my_calendar_upcoming_preset_template'];
+		}
 		$instance                                  = array_map( 'mc_kses_post', array_merge( $instance, $new_settings ) );
 		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new_settings['my_calendar_upcoming_category'], true ) ) ? array() : $new_settings['my_calendar_upcoming_category'];
 
