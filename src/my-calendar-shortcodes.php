@@ -807,7 +807,20 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					<label for="fallback<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Fallback Text', 'my-calendar' ); ?></label>
 					<input type="text" name="fallback" id="fallback<?php echo esc_attr( $type ); ?>" value="" />
 				</p>
-				<p>
+				<?php
+				$template_options         = mc_select_preset_templates();
+				$template_options['list'] = __( 'Custom', 'my-calendar' );
+				mc_settings_field(
+					array(
+						'name'    => 'preset_template',
+						'id'      => 'preset_template' . $type,
+						'label'   => __( 'Preset Template', 'my-calendar' ),
+						'default' => $template_options,
+						'type'    => 'select',
+					)
+				);
+				?>
+				<p class="mc-custom-template">
 					<label for="template<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label>
 					<textarea cols="40" rows="4" name="template" id="template<?php echo esc_attr( $type ); ?>" aria-describedby="mc_template-note"><?php echo esc_textarea( '<strong>{date}</strong>, {time}: {link_title}' ); ?></textarea><span id="mc_template-note"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i>
 					<?php

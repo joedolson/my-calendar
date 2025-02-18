@@ -56,18 +56,29 @@ function mc_generate( $format = 'shortcode' ) {
 				default:
 					$shortcode = 'my_calendar';
 			}
-			$keys = array( 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'skip', 'after', 'before', 'template', 'fallback', 'show_recurring', 'weekends' );
+			$keys = array( 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'skip', 'after', 'before', 'preset_template', 'template', 'fallback', 'show_recurring', 'weekends' );
 			$post = map_deep( $_POST, 'sanitize_text_field' );
 			if ( ! isset( $post['weekends'] ) ) {
 				$post['weekends'] = 'false';
 			}
 			foreach ( $post as $key => $value ) {
 				if ( in_array( $key, $keys, true ) ) {
-					if ( 'template' === $key ) {
+					if ( 'preset_template' === $key && 'list' !== $value ) {
+						$v    = $value;
+					}
+					$is_preset = ( isset( $post['preset_template'] ) && $post['preset_template'] !== 'list' ) ? true : false;
+					// Handle preset_template not set or preset_template is 'custom'.
+					if ( 'template' === $key && ! $is_preset ) {
 						$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
 						$v        = $template;
 						$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ) . "'>" . __( 'Edit Custom Template', 'my-calendar' ) . ' &rarr;</a>';
 					} else {
+						if ( 'template' === $key && $is_preset ) {
+							continue;
+						}
+						if ( 'preset_template' === $key ) {
+							$key = 'template';
+						}
 						if ( is_array( $value ) ) {
 							if ( in_array( 'all', $value, true ) ) {
 								unset( $value[0] );

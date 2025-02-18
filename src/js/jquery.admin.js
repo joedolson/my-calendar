@@ -637,6 +637,23 @@ jQuery(document).ready(function ($) {
 			$( '.mc-list-preview.' + current ).show();
 		});
 	}
+
+	const shortcode_list_selector = $( 'select[name="preset_template"]' );
+	if ( shortcode_list_selector ) {
+		shortcode_list_selector.each( function() {
+			let el = $( this );
+			let custom  = el.parent( 'fieldset' ).find( '.mc-custom-template' );
+			el.on( 'change', function(e) {
+				let current = el.val();
+				if ( current === 'list' ) {
+					custom.show();
+				} else {
+					custom.hide();
+				}
+			});
+		})
+	}
+
 });
 
 var mediaPopup = '';
