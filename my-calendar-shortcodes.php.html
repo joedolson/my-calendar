@@ -833,7 +833,20 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 					&lt;label for="fallback&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Fallback Text', 'my-calendar' ); ?>&lt;/label>
 					&lt;input type="text" name="fallback" id="fallback&lt;?php echo esc_attr( $type ); ?>" value="" />
 				&lt;/p>
-				&lt;p>
+				&lt;?php
+				$template_options         = mc_select_preset_templates();
+				$template_options['list'] = __( 'Custom', 'my-calendar' );
+				mc_settings_field(
+					array(
+						'name'    => 'preset_template',
+						'id'      => 'preset_template' . $type,
+						'label'   => __( 'Preset Template', 'my-calendar' ),
+						'default' => $template_options,
+						'type'    => 'select',
+					)
+				);
+				?>
+				&lt;p class="mc-custom-template">
 					&lt;label for="template&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Template', 'my-calendar' ); ?>&lt;/label>
 					&lt;textarea cols="40" rows="4" name="template" id="template&lt;?php echo esc_attr( $type ); ?>" aria-describedby="mc_template-note">&lt;?php echo esc_textarea( '&lt;strong>{date}&lt;/strong>, {time}: {link_title}' ); ?>&lt;/textarea>&lt;span id="mc_template-note">&lt;i class="dashicons dashicons-editor-help" aria-hidden="true">&lt;/i>
 					&lt;?php
