@@ -920,8 +920,12 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	if ( is_object( $data ) && 1 !== (int) $data->event_approved && 'edit' === $mode ) {
 		if ( 0 === (int) $data->event_approved ) {
 			mc_show_notice( __( '<strong>Draft</strong>: Publish this event to show it on the calendar.', 'my-calendar' ), true, false, 'info' );
-		} else {
+		} elseif ( 2 === (int) $data->event_approved ) {
 			mc_show_notice( __( '<strong>Trash</strong>: Remove from the trash to show this event on the calendar.', 'my-calendar' ), true, false, 'info' );
+		} elseif ( 3 === (int) $data->event_approved ) {
+			mc_show_notice( __( '<strong>Cancelled</strong>: This event has been cancelled, but is still shown on the calendar.', 'my-calendar' ), true, false, 'info' );
+		} elseif ( 4 === (int) $data->event_approved ) {
+			mc_show_notice( __( '<strong>Private</strong>: This event is private, and visible only to logged-in users.', 'my-calendar' ), true, false, 'info' );
 		}
 	}
 
@@ -2474,7 +2478,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		if ( $conflicts ) {
 			$conflict_id = $conflicts[0]->occur_id;
 			$conflict_ev = mc_get_event( $conflict_id );
-			if ( '1' === $conflict_ev->event_approved ) {
+			if ( 'public' === mc_event_states_type( $conflict_ev->event_approved ) ) {
 				$conflict = mc_get_permalink( $conflict_ev );
 				// Translators: URL to event details.
 				$errors .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false, 'conflict' );
@@ -3146,7 +3150,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		}
 	}
 	// Event Status settings: draft, published, trash, (custom).
-	$statuses = mc_event_statuses();
+	$statuses = mc_event_states();
 	if ( 'header' === $position ) {
 		$status_control = '';
 		if ( 'edit' === $mode ) {

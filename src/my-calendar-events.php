@@ -433,10 +433,11 @@ function mc_get_all_holidays( $before, $after ) {
 function mc_get_new_events( $cat_id = false ) {
 	$mcdb      = mc_is_remote_db();
 	$ts_string = mc_ts();
+	$public    = implode( ',', mc_event_states_by_type( 'public' ) );
 	if ( $cat_id ) {
-		$cat = "WHERE event_category = $cat_id AND event_approved = 1 AND event_flagged <> 1";
+		$cat = "WHERE event_category = $cat_id AND event_approved IN (' . $public . ') AND event_flagged <> 1";
 	} else {
-		$cat = 'WHERE event_approved = 1 AND event_flagged <> 1';
+		$cat = 'WHERE event_approved IN (' . $public . ') AND event_flagged <> 1';
 	}
 	$exclude_categories = mc_private_categories();
 	/**
@@ -1315,6 +1316,19 @@ function mc_status_links( $allow_filters ) {
 	// Translators: Number of total events.
 	$arc_text = sprintf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] );
 
+	$can_text = '';
+	if ( isset( $counts['cancel'] ) && 0 < (int) $counts['cancel'] ) {
+		$can_attributes = ( isset( $_GET['limit'] ) && 'cancelled' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+		// Translators: Number of total events.
+		$can_text = sprintf( __( 'Cancelled (%d)', 'my-calendar' ), $counts['cancel'] );
+	}
+	$pri_text = '';
+	if ( isset( $counts['private'] ) && 0 < (int) $counts['private'] ) {
+		$pri_attributes = ( isset( $_GET['limit'] ) && 'private' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+		// Translators: Number of total events.
+		$pri_text = sprintf( __( 'Private (%d)', 'my-calendar' ), $counts['private'] );
+	}
+
 	$spa_attributes = ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$spa_text = sprintf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] );
@@ -1336,6 +1350,18 @@ function mc_status_links( $allow_filters ) {
 		<li>
 			<a ' . $arc_attributes . ' href="' . mc_admin_url( 'admin.php?page=my-calendar-manage&amp;restrict=archived' ) . '">' . $arc_text . '</a>
 		</li>';
+	if ( $can_text ) {
+		$output .= '
+		<li>
+			<a ' . $can_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=cancelled' ) . '">' . $can_text . '</a>
+		</li>';
+	}
+	if ( $pri_text ) {
+		$output .= '
+		<li>
+			<a ' . $pri_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=private' ) . '">' . $pri_text . '</a>
+		</li>';
+	}
 	if ( ( function_exists( 'akismet_http_post' ) || ( 0 < (int) $counts['spam'] ) ) && $allow_filters ) {
 		$output .= '
 		<li>

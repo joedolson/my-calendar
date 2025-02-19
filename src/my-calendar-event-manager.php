@@ -59,10 +59,10 @@ function mc_bulk_action( $action, $events = array() ) {
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
 			break;
 		case 'cancel':
-			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 3 WHERE event_id IN (' . $prepared . ')';
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 3 WHERE event_id IN (' . $prepared . ')';
 			break;
 		case 'private':
-			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 4 WHERE event_id IN (' . $prepared . ')';
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 4 WHERE event_id IN (' . $prepared . ')';
 			break;
 		case 'archive':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
@@ -569,7 +569,9 @@ function mc_get_event_list_sorting() {
  * @return string
  */
 function mc_get_event_status_limit() {
-	$status = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : '';
+	$status    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : '';
+	$published = implode( ',', mc_event_states_by_type( 'public' ) );
+
 	// Filter by status.
 	switch ( $status ) {
 		case 'all':
@@ -579,7 +581,13 @@ function mc_get_event_status_limit() {
 			$limit = 'WHERE event_approved = 0';
 			break;
 		case 'published':
-			$limit = 'WHERE event_approved = 1';
+			$limit = 'WHERE event_approved IN (' . $published . ')';
+			break;
+		case 'cancelled':
+			$limit = 'WHERE event_approved = 3';
+			break;
+		case 'private':
+			$limit = 'WHERE event_approved = 4';
 			break;
 		case 'trashed':
 			$limit = 'WHERE event_approved = 2';
@@ -728,7 +736,7 @@ function mc_list_events() {
 		// Get page and pagination values.
 		$query = mc_get_query_limit();
 		// Set event status limits.
-		$limit .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1' : ' AND e.event_status = 0';
+		$limit .= ( 'archived' !== $restrict ) ? ' AND e.event_status = 1 ' : ' AND e.event_status = 0';
 		// Toggle query type depending on whether we're limiting categories, which requires a join.
 		if ( 'event_category' !== $sortbyvalue ) {
 			$events     = $wpdb->get_results( $wpdb->prepare( 'SELECT e.event_id FROM ' . my_calendar_table() . " AS e $join $limit ORDER BY $sortbyvalue " . 'LIMIT %d, %d', $query['query'], $query['items_per_page'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
@@ -883,10 +891,11 @@ function mc_admin_events_table( $events ) {
 			$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$invalid = true;
 		}
-		$class   = ( $invalid ) ? 'invalid' : '';
-		$pending = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
-		$trashed = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
-		$author  = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
+		$class     = ( $invalid ) ? 'invalid' : '';
+		$pending   = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
+		$trashed   = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
+		$cancelled = ( 3 === (int) $event->event_approved ) ? 'cancelled' : '';
+		$author    = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
 
 		if ( 1 === (int) $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
 			$spam    = 'spam';
@@ -897,6 +906,7 @@ function mc_admin_events_table( $events ) {
 
 		$trash    = ( '' !== $trashed ) ? ' - ' . __( 'Trash', 'my-calendar' ) : '';
 		$draft    = ( '' !== $pending ) ? ' - ' . __( 'Draft', 'my-calendar' ) : '';
+		$cancel   = ( '' !== $cancelled ) ? ' - ' . __( 'Cancelled', 'my-calendar' ) : '';
 		$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
 		$limit    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'all';
 		$private  = ( mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
@@ -912,7 +922,7 @@ function mc_admin_events_table( $events ) {
 		$can_edit   = mc_can_edit_event( $event );
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
-			<tr class="<?php echo esc_attr( "$class $spam $pending $trashed $problem" ); ?>">
+			<tr class="<?php echo esc_attr( "$class $spam $pending $trashed $problem $cancelled" ); ?>">
 				<th scope="row">
 					<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo absint( $event->event_id ); ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
 					<label for="mc<?php echo absint( $event->event_id ); ?>">
@@ -939,7 +949,7 @@ function mc_admin_events_table( $events ) {
 							echo wp_kses_post( '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), esc_url( $edit_url ) ) . '</strong>' );
 						}
 					}
-					echo wp_kses_post( $private . $trash . $draft . $inv );
+					echo wp_kses_post( $private . $trash . $draft . $cancel . $inv );
 					?>
 					</strong>
 
@@ -975,12 +985,12 @@ function mc_admin_events_table( $events ) {
 						|
 						<?php
 						if ( current_user_can( 'mc_approve_events' ) && $can_edit ) {
-							if ( 1 === (int) $event->event_approved ) {
+							if ( 'public' === mc_event_states_type( $event->event_approved ) ) {
 								$mo = 'reject';
 								$te = __( 'Trash', 'my-calendar' );
 							} else {
 								$mo = 'publish';
-								$te = __( 'Publish', 'my-calendar' );
+								$te = ( 'private' === mc_event_states_type( $event->event_approved ) ) ? __( 'Make Public', 'my-calendar' ) : __( 'Publish', 'my-calendar' );
 							}
 							?>
 							<a href="<?php echo esc_url( add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-manage&amp;mode=$mo&amp;limit=$limit&amp;event_id=$event->event_id" ) ) ); ?>" class='<?php echo esc_attr( $mo ); ?>' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php echo esc_html( $te ); ?></a>

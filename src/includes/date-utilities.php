@@ -363,8 +363,8 @@ function mc_ordinal( $number ) {
  * @return boolean true if early exit is qualified.
  */
 function mc_exit_early( $event, $process_date ) {
-	// if event is not approved, return without processing.
-	if ( 1 !== (int) $event->event_approved && ! mc_is_preview() ) {
+	// if event is in trash, return without processing.
+	if ( 2 === (int) $event->event_approved && ! mc_is_preview() ) {
 		return true;
 	}
 
@@ -417,12 +417,17 @@ function mc_private_event( $event, $type = true ) {
 	if ( ! is_object( $event ) || ! property_exists( $event, 'category_private' ) ) {
 		return true;
 	}
-	if ( $type ) {
-		// Checking whether this should currently be hidden.
-		$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
+	// If this event has the private state.
+	if ( property_exists( $event, 'event_approved' ) && 4 === (int) $event->event_approved ) {
+		$status = ( is_user_logged_in() ) ? false : true;
 	} else {
-		// Checking whether this is supposed to be private.
-		$status = ( 1 === absint( $event->category_private ) ) ? true : false;
+		if ( $type ) {
+			// Checking whether this should currently be hidden.
+			$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
+		} else {
+			// Checking whether this is supposed to be private.
+			$status = ( 1 === absint( $event->category_private ) ) ? true : false;
+		}
 	}
 
 	/**

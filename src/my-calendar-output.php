@@ -1483,21 +1483,6 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 }
 
 /**
- * Determine whether event is published.
- *
- * @param object $event Event object.
- *
- * @return boolean
- */
-function mc_event_published( $event ) {
-	if ( 1 === (int) $event->event_approved ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
  * Translates the arguments passed to the calendar and process them to generate the actual view.
  *
  * @param array $args Parameters from shortcode or my_calendar() function call.

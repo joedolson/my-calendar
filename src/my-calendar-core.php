@@ -1216,6 +1216,8 @@ function mc_do_upgrades( $upgrade_path ) {
 	}
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.6.0':
+				// TODO.
 			case '3.5.0':
 				// Need to set card display settings. TODO.
 				$options = get_option( 'my_calendar_options' );
@@ -1707,8 +1709,8 @@ function mc_update_count_cache() {
 	global $wpdb;
 	$all       = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$published = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$cancelled = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged = 0 AND event_status = 3' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	$private   = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged = 0 AND event_status = 4' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$cancelled = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 3 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$private   = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 4 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$draft     = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 0 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$trash     = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved = 2 AND event_flagged = 0 AND event_status = 1' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$archive   = $wpdb->get_var( 'SELECT count(event_id) FROM ' . my_calendar_table() . ' WHERE event_approved != 2 AND event_flagged = 0 AND event_status = 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -1719,6 +1721,8 @@ function mc_update_count_cache() {
 		'draft'     => $draft,
 		'trash'     => $trash,
 		'archive'   => $archive,
+		'cancel'    => $cancelled,
+		'private'   => $private,
 		'spam'      => $spam,
 	);
 	update_option( 'mc_count_cache', $counts );

@@ -217,6 +217,22 @@ function mc_is_single_event() {
 }
 
 /**
+ * Determine whether event is published.
+ *
+ * @param object $event Event object.
+ *
+ * @return boolean
+ */
+function mc_event_published( $event ) {
+	$state = mc_event_states_type( $event->event_approved );
+	if ( 'public' === $state || is_user_logged_in() && 'private' === $state ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Check whether an event should be hidden (privacy)
  *
  * @param object $event Event object.
@@ -244,7 +260,8 @@ function mc_event_is_hidden( $event ) {
 	 * @return {bool}
 	 */
 	$can_see = apply_filters( 'mc_user_can_see_private_events', is_user_logged_in(), $event );
-	if ( in_array( $category, $private, true ) && ! $can_see ) {
+	$state   = mc_event_states_type( $event->event_approved );
+	if ( ( in_array( $category, $private, true ) || 'private' === $state ) && ! $can_see ) {
 
 		return true;
 	}

@@ -118,13 +118,13 @@ function mcs_check_conflicts( $begin, $time, $end, $endtime, $loc_id ) {
 }
 
 /**
- * Get all statuses, labels, types. Valid types are 'hidden', 'public', and 'private'. Hidden statuses
+ * Get all states, labels, types. Valid types are 'hidden', 'public', and 'private'. Hidden statuses
  * are not output to public APIs or shown on calendars at all. Private statuses are shown to logged-in users.
  *
  * @return array
  */
-function mc_event_statuses() {
-	$statuses = array(
+function mc_event_states() {
+	$states = array(
 		'0' => array(
 			'type'  => 'hidden',
 			'label' => __( 'Draft', 'my-calendar' ),
@@ -150,27 +150,27 @@ function mc_event_statuses() {
 	/**
 	 * Filter available event status types.
 	 *
-	 * @hook mc_event_statuses
+	 * @hook mc_event_states
 	 *
-	 * @param {array} Array of statuses where key is the integer value of the
-	 *                status and the value is an array with type and label.
+	 * @param {array} Array of states where key is the integer value of the
+	 *                state and the value is an array with type and label.
 	 *
 	 * @return {array}
 	 */
-	$statuses = apply_filters( 'mc_event_statuses', $statuses );
+	$states = apply_filters( 'mc_event_states', $states );
 
-	return $statuses;
+	return $states;
 }
 
 /**
- * Get an array of statuses by type.
+ * Get an array of states by type.
  *
  * @param  string $type 'public', 'private', or, 'hidden'.
  *
  * @return array
  */
-function mc_event_status_by_type( $type ) {
-	$statuses = mc_event_statuses();
+function mc_event_states_by_type( $type ) {
+	$statuses = mc_event_states();
 	$values   = array();
 	foreach ( $statuses as $key => $value ) {
 		if ( $type === $value['type'] ) {
@@ -179,37 +179,37 @@ function mc_event_status_by_type( $type ) {
 	}
 
 	/**
-	 * Filter the display type for event statuses.
+	 * Filter the display type for event states.
 	 *
-	 * @hook mc_event_status_by_type
+	 * @hook mc_event_states_by_type
 	 *
-	 * @param {array}  $values Array of integers representing the event statuses that match the passed type.
+	 * @param {array}  $values Array of integers representing the event states that match the passed type.
 	 * @param {string} $type Publication type requested.
 	 */
-	return apply_filters( 'mc_event_status_by_type', $values, $type );
+	return apply_filters( 'mc_event_states_by_type', $values, $type );
 }
 
 /**
  * Get the publication type of a status.
  *
- * @param int $status An integer status value.
+ * @param int $state An integer status value.
  *
  * @return string 'public', 'private', or 'hidden'.
  */
-function mc_event_status_type( $status ) {
-	$statuses = mc_event_statuses();
-	$return   = $statuses[ $status ]['type'];
+function mc_event_states_type( $state ) {
+	$states = mc_event_states();
+	$return = $states[ $state ]['type'];
 
 	/**
 	 * Filter the display conditions of an event status. Events can either be public; private; or hidden.
 	 * Public events are visible to all; private events are visible to logged-in users; and hidden events are not visible.
 	 *
-	 * @hook mc_event_status_type
+	 * @hook mc_event_states_type
 	 *
 	 * @param {string} $return Type for the current status.
-	 * @param {int}    $status An integer representation of a status.
+	 * @param {int}    $states An integer representation of a status.
 	 *
 	 * @return {string}
 	 */
-	return apply_filters( 'mc_event_status_type', $return, $status );
+	return apply_filters( 'mc_event_states_type', $return, $states );
 }

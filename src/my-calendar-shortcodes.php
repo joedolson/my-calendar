@@ -672,7 +672,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<option value=''><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
 						<?php
 						$mcdb  = mc_is_remote_db();
-						$query = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved = 1 AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
+						$query = 'SELECT event_begin FROM ' . my_calendar_table() . ' WHERE event_approved IN (1,3,4) AND event_flagged <> 1 ORDER BY event_begin ASC LIMIT 0 , 1';
 						$year1 = mc_date( 'Y', strtotime( $mcdb->get_var( $query ) ) );
 						$diff1 = mc_date( 'Y' ) - $year1;
 						$past  = $diff1;
