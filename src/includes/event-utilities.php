@@ -144,7 +144,7 @@ function mc_event_statuses() {
 		'4' => array(
 			'type'  => 'private',
 			'label' => __( 'Private', 'my-calendar' ),
-		),		
+		),
 	);
 
 	/**
@@ -167,7 +167,7 @@ function mc_event_statuses() {
  *
  * @param  string $type 'public', 'private', or, 'hidden'.
  *
- * @return array 
+ * @return array
  */
 function mc_event_status_by_type( $type ) {
 	$statuses = mc_event_statuses();
@@ -204,12 +204,12 @@ function mc_event_status_type( $status ) {
 	 * Filter the display conditions of an event status. Events can either be public; private; or hidden.
 	 * Public events are visible to all; private events are visible to logged-in users; and hidden events are not visible.
 	 *
-	 * @hook mc_event_status_type 
-	 * 
+	 * @hook mc_event_status_type
+	 *
 	 * @param {string} $return Type for the current status.
 	 * @param {int}    $status An integer representation of a status.
 	 *
-	 * @return {string} 
+	 * @return {string}
 	 */
 	return apply_filters( 'mc_event_status_type', $return, $status );
 }
