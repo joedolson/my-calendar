@@ -58,6 +58,12 @@ function mc_bulk_action( $action, $events = array() ) {
 		case 'unarchive':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 1 WHERE event_id IN (' . $prepared . ')';
 			break;
+		case 'cancel':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 3 WHERE event_id IN (' . $prepared . ')';
+			break;
+		case 'private':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 4 WHERE event_id IN (' . $prepared . ')';
+			break;
 		case 'archive':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
 			break;
@@ -162,6 +168,16 @@ function mc_bulk_message( $results, $action ) {
 			// Translators: Number of events removed from archive, number of events selected.
 			$success = __( '%1$d events removed from archive successfully out of %2$d selected.', 'my-calendar' );
 			$error   = __( 'Your events have not been removed from the archive. Were these events already archived? Please investigate.', 'my-calendar' );
+			break;
+		case 'private':
+			// Translators: Number of events made private, number of events selected.
+			$success = __( '%1$d events made privately available out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been made private. Were these events already private? Please investigate.', 'my-calendar' );
+			break;
+		case 'cancel':
+			// Translators: Number of events cancelled, number of events selected.
+			$success = __( '%1$d events cancelled out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been cancelled. Were these events already cancelled? Please investigate.', 'my-calendar' );
 			break;
 		case 'unspam':
 			// Translators: Number of events removed from archive, number of events selected.
@@ -319,6 +335,12 @@ function my_calendar_manage() {
 				case 'mass_undo_archive':
 					mc_bulk_action( 'unarchive' );
 					break;
+				case 'mass_private':
+					mc_bulk_action( 'private' );
+					break;
+				case 'mass_cancel':
+					mc_bulk_action( 'cancel' );
+					break;
 				case 'mass_not_spam':
 					mc_bulk_action( 'unspam' );
 					break;
@@ -419,6 +441,8 @@ function mc_show_bulk_actions() {
 		'mass_trash'        => __( 'Trash', 'my-calendar' ),
 		'mass_archive'      => __( 'Archive', 'my-calendar' ),
 		'mass_undo_archive' => __( 'Remove from Archive', 'my-calendar' ),
+		'mass_private'      => __( 'Make private', 'my-calendar' ),
+		'mass_cancel'       => __( 'Cancel', 'my-calendar' ),
 		'mass_delete'       => __( 'Delete', 'my-calendar' ),
 	);
 
