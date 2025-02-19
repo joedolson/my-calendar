@@ -3153,12 +3153,16 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			$controls['publish']     = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) { // Added by Roland P.
-				foreach ( $statuses as $code => $label ) {
+				foreach ( $statuses as $code => $args ) {
+					$label           = $args['label'];
 					$status_control .= '<option value="' . $code . '"' . selected( $event->event_approved, $code, false ) . '>' . $label . '</option>';
 				}
 			} else {
-				unset( $statuses['1'] );
-				foreach ( $statuses as $code => $label ) {
+				foreach ( $statuses as $code => $args ) {
+					if ( 'publish' === $args['type'] ) {
+						continue;
+					}
+					$label           = $args['label'];
 					$status_control .= '<option value="' . $code . '"' . selected( $event->event_approved, $code, false ) . '>' . $label . '</option>';
 				}
 			}
@@ -3200,32 +3204,6 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	}
 
 	return '<ul>' . $controls_output . '</ul>';
-}
-
-/**
- * Get the array of available event status codes.
- *
- * @return array
- */
-function mc_event_statuses() {
-	// Switch to select status.
-	$statuses = array(
-		'1' => __( 'Publish', 'my-calendar' ),
-		'0' => __( 'Draft', 'my-calendar' ),
-		'2' => __( 'Trash', 'my-calendar' ),
-	);
-	/**
-	 * Filter available event status types.
-	 *
-	 * @hook mc_event_statuses
-	 *
-	 * @param {array} Array of statuses where key is the integer value of the status and the value is the status label.
-	 *
-	 * @return {array}
-	 */
-	$statuses = apply_filters( 'mc_event_statuses', $statuses );
-
-	return $statuses;
 }
 
 /**
