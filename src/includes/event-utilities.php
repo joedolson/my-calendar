@@ -131,7 +131,7 @@ function mc_event_states() {
 		),
 		'1' => array(
 			'type'  => 'public',
-			'label' => __( 'Publish', 'my-calendar' ),
+			'label' => __( 'Published', 'my-calendar' ),
 		),
 		'2' => array(
 			'type'  => 'hidden',
@@ -139,7 +139,7 @@ function mc_event_states() {
 		),
 		'3' => array(
 			'type'  => 'public',
-			'label' => __( 'Cancel', 'my-calendar' ),
+			'label' => __( 'Cancelled', 'my-calendar' ),
 		),
 		'4' => array(
 			'type'  => 'private',
@@ -212,4 +212,29 @@ function mc_event_states_type( $state ) {
 	 * @return {string}
 	 */
 	return apply_filters( 'mc_event_states_type', $return, $states );
+}
+
+
+/**
+ * Get the label for an event state.
+ *
+ * @param int $state An integer state value.
+ *
+ * @return string Label for this state.
+ */
+function mc_event_states_label( $state ) {
+	$states = mc_event_states();
+	$return = $states[ $state ]['label'];
+
+	/**
+	 * Filter the label for an event state.
+	 *
+	 * @hook mc_event_states_label
+	 *
+	 * @param {string} $return Type for the current status.
+	 * @param {int}    $states An integer representation of a status.
+	 *
+	 * @return {string}
+	 */
+	return apply_filters( 'mc_event_states_label', $return, $states );
 }

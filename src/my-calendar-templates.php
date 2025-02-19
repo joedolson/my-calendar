@@ -646,11 +646,12 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// Special.
 	$e['skip_holiday'] = ( 0 === (int) $event->event_holiday ) ? 'false' : 'true';
-	$e['event_status'] = ( 1 === (int) $event->event_approved ) ? __( 'Published', 'my-calendar' ) : __( 'Draft', 'my-calendar' );
+	$e['event_status'] = mc_event_states_label( $event->event_approved );
+	$cancelled         = ( 3 === (int) $event->event_approved ) ? '<span class="mc-event-cancelled">' . trim( mc_get_option( 'cancel_text', mc_event_states_label( 3 ) . ':' ) ) . ' ' . '</span>' : '';
 
 	// General text fields.
 	$title                     = mc_search_highlight( $event->event_title );
-	$e['title']                = stripslashes( $title );
+	$e['title']                = $cancelled . stripslashes( $title );
 	$e['description']          = wpautop( stripslashes( $event->event_desc ) );
 	$e['description_raw']      = stripslashes( $event->event_desc );
 	$e['description_stripped'] = wp_strip_all_tags( stripslashes( $event->event_desc ) );

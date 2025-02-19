@@ -450,6 +450,7 @@ function mc_update_text_settings( $post ) {
 	}
 	$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( wp_unslash( $_POST['mc_heading_text'] ) ) : $post['mc_heading_text'];
 	$options['notime_text']         = $post['mc_notime_text'];
+	$options['cancel_text']         = $post['mc_cancel_text'];
 	$options['hosted_by']           = $post['mc_hosted_by'];
 	$options['posted_by']           = $post['mc_posted_by'];
 	$options['buy_tickets']         = $post['mc_buy_tickets'];
@@ -1092,6 +1093,19 @@ function mc_remote_db() {
 									'label' => __( 'Label for all-day events', 'my-calendar' ),
 									'atts'  => array(
 										'placeholder' => __( 'All Day', 'my-calendar' ),
+									),
+								)
+							);
+							?>
+							</li>
+							<li>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_cancel_text',
+									'label' => __( 'Cancelled events label', 'my-calendar' ),
+									'atts'  => array(
+										'placeholder' => __( 'Cancelled:', 'my-calendar' ),
 									),
 								)
 							);
