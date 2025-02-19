@@ -1896,6 +1896,10 @@ function mc_event_schema( $e, $tags = array() ) {
 		'endDate'     => $event['dtend'] . $wp_time,
 		'duration'    => $event['duration'],
 	);
+	// If an event is cancelled, reflect that in the schema.
+	if ( 3 === (int) $e->event_approved ) {
+		$schema['eventStatus'] = 'https://schema.org/EventCancelled';
+	}
 	if ( property_exists( $e, 'location' ) &amp;&amp; is_object( $e->location ) ) {
 		$location                      = $e->location;
 		$loc                           = mc_location_schema( $location );
