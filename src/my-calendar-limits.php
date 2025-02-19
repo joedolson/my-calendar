@@ -331,8 +331,8 @@ function mc_select_published() {
 	if ( mc_is_preview() ) {
 		$published = 'event_flagged <> 1 AND ( event_approved <> 2 )';
 	} else {
-		$public    = mc_event_states_by_type( 'public' );
-		$private   = mc_event_states_by_type( 'private' );
+		$public  = mc_event_states_by_type( 'public' );
+		$private = mc_event_states_by_type( 'private' );
 		if ( is_user_logged_in() ) {
 			$public = array_merge( $public, $private );
 		}
