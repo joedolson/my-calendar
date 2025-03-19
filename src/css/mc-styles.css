@@ -1169,6 +1169,19 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
+.mc-category-icon-wrapper {
+	display: inline-block;
+	width: 1.5rem;
+	height: 1.5rem;
+	vertical-align: middle;
+	margin-right: 6px;
+}
+
+.mc-category-icon-wrapper > * {
+	width: auto;
+	height: 100%;
+}
+
 .my-calendar-admin .icon-list.checkboxes {
 	display: flex;
 	flex-wrap: wrap;
@@ -1370,10 +1383,11 @@ ul.mc-variables li:has(.wp-picker-active) label {
 }
 
 .my-calendar-admin .checkboxes li {
-	display: inline-block;
-	padding: 5px;
+	padding: 6px;
 	background: rgba(0, 0, 0, .05);
 	margin: 2px;
+	display: inline-flex;
+	align-items: center;
 }
 
 .my-calendar-admin .checkboxes li:hover {
