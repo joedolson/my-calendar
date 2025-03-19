@@ -26,3 +26,15 @@
 .mc-user-permissions .checkboxes li:hover {
 	background: #fff;
 }
+
+.mc-widget-categories {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+}
+
+.widgets-php .mc-widget-categories {
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+	column-gap: 20px;
+}

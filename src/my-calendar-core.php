@@ -893,7 +893,7 @@ function mc_admin_styles() {
 		}
 		wp_enqueue_style( 'mc-styles' );
 	}
-	if ( 'profile' === $id ) {
+	if ( 'profile' === $id || 'widgets' === $id || 'customize' === $id ) {
 		wp_enqueue_style( 'mc-user-styles' );
 	}
 }
