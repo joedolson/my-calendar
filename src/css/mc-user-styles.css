@@ -1,0 +1,28 @@
+.mc-category-icon-wrapper {
+	display: inline-block;
+	width: 1.5rem;
+	height: 1.5rem;
+	vertical-align: middle;
+	margin-right: 6px;
+}
+
+.mc-category-icon-wrapper > * {
+	width: auto;
+	height: 100%;
+}
+
+.mc-user-permissions ul {
+	max-width: 50rem;
+}
+
+.mc-user-permissions .checkboxes li {
+	padding: 6px;
+	background: rgba(0, 0, 0, .05);
+	margin: 2px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.mc-user-permissions .checkboxes li:hover {
+	background: #fff;
+}
