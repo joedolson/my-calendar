@@ -420,6 +420,7 @@ function my_calendar_edit() {
 			$mc_output = mc_check_data( $action, $post, $i );
 			if ( 'add' === $action || 'copy' === $action ) {
 				$response = my_calendar_save( $action, $mc_output );
+				$action   = 'add'; // After saving, reset action to default.
 			} else {
 				$response = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
 			}
@@ -618,7 +619,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$message = $event_error;
 				} else {
 					$type    = 'success';
-					$message = __( 'Event added. It will now show on the calendar.', 'my-calendar' );
+					$message = ( 'copy' === $action ) ? __( 'Event copied. It will now show on the calendar.', 'my-calendar' ) : __( 'Event added. It will now show on the calendar.', 'my-calendar' );
+
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
 						$message .= sprintf( __( ' <a href="%s" class="button">View Event</a>', 'my-calendar' ), $event_link );
@@ -3119,7 +3121,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			$controls['post'] = ( $post_link ) ? sprintf( "<span class='dashicons dashicons-admin-post' aria-hidden='true'></span><a href='%s'>" . __( 'Edit Event Post', 'my-calendar' ) . '</a>', $post_link ) : '';
 		}
 	} else {
-		$publish_text = __( 'Publish', 'my-calendar' );
+		$publish_text = ( 'copy' === $mode ) ? __( 'Publish Copy', 'my-calendar' ) : __( 'Publish', 'my-calendar' );
 	}
 
 	if ( $has_data && is_object( $event ) ) {
