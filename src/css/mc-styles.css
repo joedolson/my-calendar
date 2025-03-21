@@ -1193,6 +1193,10 @@ input[name="mc_uri"] {
 	align-items: center;
 }
 
+.icon-list .category-icon code {
+	background: transparent;
+}
+
 .icon-list .category-icon img {
 	max-width: 100%;
 }
