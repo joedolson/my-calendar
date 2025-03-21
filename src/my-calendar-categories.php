@@ -1345,7 +1345,7 @@ function mc_get_img( $file, $is_custom = false ) {
 	$image_key     = $label_id . '-' . $is_custom_key;
 	$image         = get_transient( $image_key );
 	if ( $image ) {
-		return $image; 
+		return $image;
 	} else {
 		if ( null === $is_custom ) {
 			$is_custom = mc_is_custom_icon();
