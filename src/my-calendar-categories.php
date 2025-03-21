@@ -1340,51 +1340,60 @@ function mc_categories_html( $results, $primary, $output = 'html' ) {
  * @return string
  */
 function mc_get_img( $file, $is_custom = false ) {
-	if ( null === $is_custom ) {
-		$is_custom = mc_is_custom_icon();
-	}
-	$parent_path = plugin_dir_path( __DIR__ );
-	$parent_url  = plugin_dir_url( __DIR__ );
-	$url         = plugin_dir_url( __FILE__ );
-	$self        = plugin_dir_path( __FILE__ );
-	// If running from a subdirectory, plugin_dir_path will be a level up.
-	if ( str_contains( $parent_path, 'my-calendar' ) && $is_custom ) {
-		$parent_path = str_replace( 'my-calendar/', '', $parent_path );
-		$parent_url  = str_replace( 'my-calendar/', '', $parent_url );
-	}
-	global $wp_filesystem;
-	require_once ABSPATH . '/wp-admin/includes/file.php';
-	WP_Filesystem();
-
-	if ( $is_custom ) {
-		$path = $parent_path . 'my-calendar-custom/icons/';
-		$link = $parent_url . 'my-calendar-custom/icons/';
+	$is_custom_key = ( $is_custom ) ? 'custom' : 'core';
+	$label_id      = sanitize_title( $file );
+	$image_key     = $label_id . '-' . $is_custom_key;
+	$image         = get_transient( $image_key );
+	if ( $image ) {
+		return $image; 
 	} else {
-		$path = $self . 'images/icons/';
-		$link = $url . 'images/icons/';
-	}
-	$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
-	if ( false === stripos( $file, '.svg' ) ) {
-		if ( $wp_filesystem->exists( $path . $file ) ) {
-			return '<img src="' . esc_url( $link . $file ) . '" alt="" />';
-		} else {
-			return '';
+		if ( null === $is_custom ) {
+			$is_custom = mc_is_custom_icon();
 		}
-	}
-	$src      = $path . $file;
-	$label_id = sanitize_title( $file );
-	$svg      = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
-	$image    = '<img src="data:image/png;base64,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" alt="Error fetching image" />';
-	if ( $svg ) {
-		$image = $svg;
-		// If remote access is blocked, this will not return an SVG.
-		if ( 0 === stripos( $image, '<svg' ) ) {
-			$image = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
-			$image = str_replace( '<path ', "<title id='" . $label_id . "'>$file</title><path ", $image );
+		$parent_path = plugin_dir_path( __DIR__ );
+		$parent_url  = plugin_dir_url( __DIR__ );
+		$url         = plugin_dir_url( __FILE__ );
+		$self        = plugin_dir_path( __FILE__ );
+		// If running from a subdirectory, plugin_dir_path will be a level up.
+		if ( str_contains( $parent_path, 'my-calendar' ) && $is_custom ) {
+			$parent_path = str_replace( 'my-calendar/', '', $parent_path );
+			$parent_url  = str_replace( 'my-calendar/', '', $parent_url );
 		}
-	}
+		global $wp_filesystem;
+		require_once ABSPATH . '/wp-admin/includes/file.php';
+		WP_Filesystem();
 
-	return $image;
+		if ( $is_custom ) {
+			$path = $parent_path . 'my-calendar-custom/icons/';
+			$link = $parent_url . 'my-calendar-custom/icons/';
+		} else {
+			$path = $self . 'images/icons/';
+			$link = $url . 'images/icons/';
+		}
+		$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
+		if ( false === stripos( $file, '.svg' ) ) {
+			if ( $wp_filesystem->exists( $path . $file ) ) {
+				return '<img src="' . esc_url( $link . $file ) . '" alt="" />';
+			} else {
+				return '';
+			}
+		}
+		$src   = $path . $file;
+		$svg   = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
+		$image = '<img src="data:image/png;base64,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" alt="Error fetching image" />';
+		if ( $svg ) {
+			$image = $svg;
+			// If remote access is blocked, this will not return an SVG.
+			if ( 0 === stripos( $image, '<svg' ) ) {
+				$image = str_replace( '<svg ', '<svg focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
+				$image = str_replace( '<path ', "<title id='" . $label_id . "'>$file</title><path ", $image );
+			}
+		}
+
+		set_transient( $image_key, $image, MONTH_IN_SECONDS );
+
+		return $image;
+	}
 }
 
 /**
