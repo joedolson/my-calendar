@@ -108,6 +108,39 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.6.0 =
+
+* Feature: Added 'Cancelled' state as an event status option. Cancelled events are public, but marked as cancelled.
+* Feature: Added text setting to customize 'Cancelled' text.
+* Feature: Added 'Private' state as an event status option. Private events are public, but only to logged-in users.
+* Feature: Added default template designs for upcoming events and other list outputs.
+* Feature: Made default template designs selectable globally and individually by shortcode/widget.
+* Feature: Add main shortcode parameter to define custom classes.
+* Feature: Improve AJAX editing of single instances to support dynamic editing as well as deletion.
+* Feature: Add option to automatically copy PHP templates into your theme.
+* Feature: Add "edit in theme" link in PHP template browser when custom template exists.
+* Feature: Add `mc_date_badge()` to generate a formatted date badge on events.
+* Change: Improved UX when copying events.
+* Change: Improve design of category selector for widgets and user permissions.
+* Change: Change table responsiveness to be driven by container width rather than viewport width.
+* Change: Added wrapper around upcoming lists and other list outputs.
+* Change: Added support for My Calendar CSS variables inside upcoming lists and other list outputs.
+* Change: Added variables for weekend grid headers.
+* Change: Added class to disable responsive styles.
+* Change: Extensive fixes to responsive behavior in the admin.
+* Filters: Added filter to modify categories shown in category key `mc_category_key_array`.
+* Bug fix: Fix deprecated jQuery methods.
+* Bug fix: Hide admin notices inside the Help modal.
+* Bug fix: Prevent invalid event IDs in canonical link generator.
+* Bug fix: Change `webcal` protocols to `webcals`.
+* Bug fix: Change instance key to use full date and time.
+* Bug fix: Don't display search results if the page content contains the main shortcode.
+* Bug fix: Enqueue front-end admin styles in back-end admin.
+* Bug fix: Add missing attributes to kses handler.
+* Bug fix: Misc. design tweaks to handle additional theme design cases.
+* Security: Misc. hardening.
+* Structure: Move action scheduler into vendor directory.
+
 = 3.5.21 =
 
 * Bug fix: iCal feed link incorrect.
