@@ -361,7 +361,7 @@ function mc_get_all_events( $args ) {
 	$time     = isset( $args['time'] ) ? $args['time'] : strtotime( $args['time'] );
 	$mcdb     = mc_is_remote_db();
 
-	$now                = ( $time === 'now' ) ? 'NOW()' : $time;
+	$now                = ( 'now' === $time ) ? 'NOW()' : $time;
 	$exclude_categories = mc_private_categories();
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
