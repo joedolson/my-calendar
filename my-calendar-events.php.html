@@ -358,8 +358,10 @@ function mc_get_all_events( $args ) {
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
 	$site     = isset( $args['site'] ) ? $args['site'] : false;
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
+	$time     = isset( $args['time'] ) ? $args['time'] : strtotime( $args['time'] );
 	$mcdb     = mc_is_remote_db();
 
+	$now                = ( $time === 'now' ) ? 'NOW()' : $time;
 	$exclude_categories = mc_private_categories();
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
@@ -372,14 +374,14 @@ function mc_get_all_events( $args ) {
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string        = mc_ts();
-	$select_window    = ( ! $before ) ? 'AND occur_begin > NOW()' : '';
-	$select_window    = ( ! $after ) ? 'AND occur_end &lt; NOW()' : $select_window;
+	$select_window    = ( ! $before ) ? 'AND occur_begin > ' . $now : '';
+	$select_window    = ( ! $after ) ? 'AND occur_end &lt; ' . $now : $select_window;
 	$limit            = "$select_published $select_category $select_author $select_host $select_access $search $select_window";
 
 	// New Query style.
 	$total     = absint( $before ) + absint( $after ) + 30;
 	$db_engine = mc_get_db_type();
-	$ordering  = ( 'sqlite' === $db_engine ) ? 'ABS( ( SELECT unixepoch() ) - ( SELECT unixepoch(occur_begin) ))' : 'ABS(TIMESTAMPDIFF(SECOND, NOW(), occur_begin))';
+	$ordering  = ( 'sqlite' === $db_engine ) ? 'ABS( ( SELECT unixepoch() ) - ( SELECT unixepoch(occur_begin) ))' : 'ABS(TIMESTAMPDIFF(SECOND, ' . $now . ', occur_begin))';
 	$events    = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table( $site ) . '
