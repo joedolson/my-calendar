@@ -63,13 +63,13 @@ function my_calendar_upcoming_events( $args ) {
 	$display_type = ( '' === $display_type ) ? 'events' : $display_type;
 
 	// Get number of units we should go into the future.
-	$after = ( 'default' === $after ) ? $defaults['upcoming']['after'] : $after;
-	$after = ( '' === $after ) ? 10 : $after;
+	$args['after'] = ( 'default' === $args['after'] ) ? $defaults['upcoming']['after'] : $args['after'];
+	$args['after'] = ( '' === $args['after'] ) ? 10 : $args['after'];
 
 	// Get number of units we should go into the past.
-	$before   = ( 'default' === $before ) ? $defaults['upcoming']['before'] : $before;
-	$before   = ( '' === $before ) ? 0 : $before;
-	$category = ( 'default' === $category ) ? '' : $category;
+	$args['before'] = ( 'default' === $args['before'] ) ? $defaults['upcoming']['before'] : $args['before'];
+	$args['before'] = ( '' === $args['before'] ) ? 0 : $args['before'];
+	$category       = ( 'default' === $category ) ? '' : $category;
 
 	/**
 	 * Pass a custom template to the upcoming events list. Template can either be a template key referencing a stored template or a template pattern using {} template tags.
@@ -80,20 +80,20 @@ function my_calendar_upcoming_events( $args ) {
 	 *
 	 * @return {string} Template string.
 	 */
-	$template = apply_filters( 'mc_upcoming_events_template', $template );
-	$default  = ( ! $template || 'default' === $template ) ? $defaults['upcoming']['template'] : $template;
-	$template = mc_setup_template( $template, $default );
+	$args['template'] = apply_filters( 'mc_upcoming_events_template', $args['template'] );
+	$default          = ( ! $args['template'] || 'default' === $args['template'] ) ? $defaults['upcoming']['template'] : $args['template'];
+	$args['template'] = mc_setup_template( $args['template'], $default );
 
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$class          = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
+	$class          = ( 'card' === $args['template'] ) ? 'my-calendar-cards' : 'list-events';
 	$header         = "<ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
 	$footer         = '</ul>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
 		if ( 'days' === $display_type ) {
-			$from = mc_date( 'Y-m-d', strtotime( "-$before days" ), false );
+			$from = mc_date( 'Y-m-d', strtotime( "-$args[before] days" ), false );
 			$to   = mc_date( 'Y-m-d', strtotime( "+$after days" ), false );
 		}
 		if ( 'month' === $display_type ) {
@@ -236,7 +236,7 @@ function my_calendar_upcoming_events( $args ) {
 			 *
 			 * @return {string} Event template details.
 			 */
-			$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $args );
+			$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $args['template'], $args );
 			// if an event is a multidate group, only display first found.
 			if ( in_array( $event->event_group_id, $omit, true ) ) {
 				continue;
@@ -245,7 +245,7 @@ function my_calendar_upcoming_events( $args ) {
 				$omit[] = $event->event_group_id;
 			}
 			if ( '' === $item ) {
-				$item = mc_draw_template( $details, $template, 'list', $event );
+				$item = mc_draw_template( $details, $args['template'], 'list', $event );
 			}
 			if ( $i < $skip && 0 !== $skip ) {
 				++$i;
@@ -289,7 +289,7 @@ function my_calendar_upcoming_events( $args ) {
 	} else {
 		$query  = array(
 			'category' => $category,
-			'before'   => $before,
+			'before'   => $args['before'],
 			'after'    => $after,
 			'author'   => $author,
 			'host'     => $host,
@@ -300,7 +300,7 @@ function my_calendar_upcoming_events( $args ) {
 		);
 		$events = mc_get_all_events( $query );
 
-		$holidays      = mc_get_all_holidays( $before, $after, $time );
+		$holidays      = mc_get_all_holidays( $args['before'], $args['after'], $time );
 		$holiday_array = mc_set_date_array( $holidays );
 
 		if ( is_array( $events ) && ! empty( $events ) ) {
@@ -310,7 +310,8 @@ function my_calendar_upcoming_events( $args ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			$output .= mc_produce_upcoming_events( $event_array, $template, 'list', $order, $skip, $before, $after, $show_recurring );
+			print_r( $args );
+			$output .= mc_produce_upcoming_events( $event_array, $args, 'list' );
 		} else {
 			$output = '';
 		}
@@ -377,23 +378,25 @@ function mc_span_time( $group_id ) {
  * Generates the list of upcoming events when counting by events rather than a date pattern
  *
  * @param array  $events (Array of events to analyze).
- * @param string $template Custom template to use for display.
+ * @param string $args Array of list arguments from calling function.
  * @param string $type Usually 'list', but also RSS or export.
- * @param string $order 'asc' or 'desc'.
- * @param int    $skip Number of events to skip over.
- * @param int    $before How many past events to show.
- * @param int    $after How many future events to show.
- * @param string $show_recurring 'yes', show all recurring events. Else, first only.
  * @param string $context Display context.
  *
  * @return string; HTML output of list
  */
-function mc_produce_upcoming_events( $events, $template, $type = 'list', $order = 'asc', $skip = 0, $before = 0, $after = 3, $show_recurring = 'yes', $context = 'filters' ) {
+function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 'filters' ) {
+	$template       = $args['template'];
+	$order          = $args['template'];
+	$skip           = $args['skip'];
+	$before         = $args['before'];
+	$after          = $args['after'];
+	$show_recurring = $args['show_recurring'];
 	// $events has +5 before and +5 after if those values are non-zero.
 	// $events equals array of events based on before/after queries. Nothing skipped, order is not set, holiday conflicts removed.
 	$output      = array();
 	$near_events = array();
 	$temp_array  = array();
+	$next_item   = false;
 	$past        = 0; // Number of events selected in the past.
 	$future      = 0; // Number of events selected in the future.
 	uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
@@ -485,6 +488,10 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 									if ( $future <= $after && ( ! my_calendar_date_comp( $end, $current ) ) && ! $event_used ) {
 										$near_events[] = $e; // Split off another future event.
 										$event_used    = true;
+									}
+									if ( $future > $after && ! $event_used && ! $next_item ) {
+										$next_date = $e->occur_begin;
+										$next_item = true;
 									}
 
 									$event_added = false;
@@ -581,6 +588,9 @@ function mc_produce_upcoming_events( $events, $template, $type = 'list', $order 
 		} else {
 			$html .= $details;
 		}
+	}
+	if ( $next_date ) {
+		$html .= '<button type="button" value="' . esc_attr( $next_date ) . '">' . esc_html__( 'Load more', 'my-calendar' ) . '</button>';
 	}
 
 	return $html;
