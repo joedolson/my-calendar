@@ -2,7 +2,7 @@
 	'use strict';
 	$(function () {
 		mc_display_usertime();
-		const calendar = document.querySelectorAll( '.mc-main' );
+		const calendar = document.querySelectorAll( '.mc-main, .mc-event-list' );
 		if ( calendar ) {
 			calendar.forEach( (el) => {
 				let targetId = el.getAttribute( 'id' );
