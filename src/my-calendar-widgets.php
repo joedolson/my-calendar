@@ -49,6 +49,7 @@ function my_calendar_upcoming_events( $args ) {
 	$from           = ( isset( $args['from'] ) ) ? $args['from'] : '';
 	$to             = ( isset( $args['to'] ) ) ? $args['to'] : '';
 	$site           = ( isset( $args['site'] ) ) ? $args['site'] : false;
+	$time           = ( isset( $args['time'] ) ) ? $args['time'] : '';
 
 	if ( $site ) {
 		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
@@ -295,10 +296,11 @@ function my_calendar_upcoming_events( $args ) {
 			'ltype'    => $ltype,
 			'lvalue'   => $lvalue,
 			'site'     => $site,
+			'time'     => $time,
 		);
 		$events = mc_get_all_events( $query );
 
-		$holidays      = mc_get_all_holidays( $before, $after );
+		$holidays      = mc_get_all_holidays( $before, $after, $time );
 		$holiday_array = mc_set_date_array( $holidays );
 
 		if ( is_array( $events ) && ! empty( $events ) ) {

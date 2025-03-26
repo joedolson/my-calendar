@@ -332,7 +332,7 @@ function mc_get_all_events( $args ) {
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
 	$site     = isset( $args['site'] ) ? $args['site'] : false;
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
-	$time     = isset( $args['time'] ) ? $args['time'] : strtotime( $args['time'] );
+	$time     = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) : 'now';
 	$mcdb     = mc_is_remote_db();
 
 	$now                = ( 'now' === $time ) ? 'NOW()' : $time;
@@ -405,12 +405,13 @@ function mc_get_all_events( $args ) {
 /**
  * Fetch only the defined holiday category
  *
- * @param int $before Number of events before.
- * @param int $after Number of events after.
+ * @param int    $before Number of events before.
+ * @param int    $after Number of events after.
+ * @param string $time Time/date to center collection on.
  *
  * @return array events
  */
-function mc_get_all_holidays( $before, $after ) {
+function mc_get_all_holidays( $before, $after, $time = '' ) {
 	if ( ! mc_get_option( 'skip_holidays_category' ) ) {
 		return array();
 	} else {
@@ -419,6 +420,7 @@ function mc_get_all_holidays( $before, $after ) {
 			'category' => $category,
 			'before'   => $before,
 			'after'    => $after,
+			'time'     => $time,
 		);
 
 		return mc_get_all_events( $args );
@@ -512,10 +514,11 @@ function mc_get_instances( $id ) {
  * Fetch results of an event search.
  *
  * @param array|string $search array (PRO) or string (Simple).
+ * @param string       $time A date/time string used as the baseline for relative date results. Optional.
  *
  * @return array of event objects
  */
-function mc_get_search_results( $search ) {
+function mc_get_search_results( $search, $time = '' ) {
 	/**
 	 * Filter number of past search results to return. Default 0.
 	 *
@@ -535,7 +538,7 @@ function mc_get_search_results( $search ) {
 	 *
 	 * @return {int}
 	 */
-	$after = apply_filters( 'mc_future_search_results', 15 ); // return only future events, nearest 10.
+	$after = apply_filters( 'mc_future_search_results', 15 );
 	if ( is_array( $search ) ) {
 		// If from & to are set, we need to use a date-based event query.
 		$from     = mc_checkdate( $search['from'] );
@@ -577,6 +580,9 @@ function mc_get_search_results( $search ) {
 			'after'  => $after,
 			'search' => $search,
 		);
+		if ( $time ) {
+			$args['time'] = $time;
+		}
 
 		$arr_events    = mc_get_all_events( $args );
 		$holidays      = mc_get_all_holidays( $before, $after );
