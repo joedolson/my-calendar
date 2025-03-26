@@ -1049,7 +1049,9 @@ function mc_admin_events_table( $events ) {
 					</a>
 				</td>
 				<td>
-				<?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
+				<div class="mc-category-list">
+					<?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
+				</div>
 				</td>
 			</tr>
 			<?php
