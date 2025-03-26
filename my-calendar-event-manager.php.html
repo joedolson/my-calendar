@@ -1075,7 +1075,9 @@ function mc_admin_events_table( $events ) {
 					&lt;/a>
 				&lt;/td>
 				&lt;td>
-				&lt;?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
+				&lt;div class="mc-category-list">
+					&lt;?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
+				&lt;/div>
 				&lt;/td>
 			&lt;/tr>
 			&lt;?php

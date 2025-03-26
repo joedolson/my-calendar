@@ -984,7 +984,9 @@ function mc_list_groups() {
 					&lt;/td>
 					&lt;td>&lt;?php echo esc_html( is_object( $author ) ? $author->display_name : $author ); ?>&lt;/td>
 					&lt;td>
-					&lt;?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
+					&lt;div class="mc-category-list">
+						&lt;?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
+					&lt;/div>
 					&lt;/td>
 					&lt;/tr>
 					&lt;?php

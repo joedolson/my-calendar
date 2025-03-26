@@ -1240,6 +1240,7 @@ function mc_admin_category_list( $event ) {
 		}
 		$string .= " &lt;a class='mc_filter primary-category' href='" . esc_url( $url ) . "'>&lt;span class='screen-reader-text'>" . __( 'Show only: ', 'my-calendar' ) . '&lt;/span>' . esc_html( $cat->category_name ) . '&lt;/a>';
 	}
+	$string = '&lt;span class="mc-category-item">' . $string . '&lt;/span>';
 
 	if ( is_array( $categories ) ) {
 		foreach ( $categories as $category ) {
@@ -1250,14 +1251,14 @@ function mc_admin_category_list( $event ) {
 				$color  = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
 				$color  = ( '#' !== $color ) ? '&lt;span class="category-color" style="background-color:' . $color . ';">&lt;/span>' : '';
 				if ( isset( $_GET['groups'] ) ) {
-					$cats[] = $color . ' ' . mc_get_category_detail( $category, 'category_name' );
+					$cats[] = '&lt;span class="mc-category-item">' . $color . ' ' . mc_get_category_detail( $category, 'category_name' ) . '&lt;/span>';
 				} else {
-					$cats[] = $color . ' &lt;a href="' . $filter . '" class="secondary-category">' . mc_get_category_detail( $category, 'category_name' ) . '&lt;/a>';
+					$cats[] = '&lt;span class="mc-category-item">' . $color . ' &lt;a href="' . $filter . '" class="secondary-category">' . mc_get_category_detail( $category, 'category_name' ) . '&lt;/a>&lt;/span>';
 				}
 			}
 		}
 		if ( count( $cats ) > 0 ) {
-			$string .= ', ' . implode( ', ', $cats );
+			$string .= implode( ' ', $cats );
 		}
 	}
 
