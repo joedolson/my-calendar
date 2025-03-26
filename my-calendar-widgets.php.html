@@ -336,7 +336,6 @@ function my_calendar_upcoming_events( $args ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			print_r( $args );
 			$output .= mc_produce_upcoming_events( $event_array, $args, 'list' );
 		} else {
 			$output = '';
