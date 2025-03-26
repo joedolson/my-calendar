@@ -145,7 +145,14 @@ function mc_search_results( $query ) {
 		}
 		// No filters parameter prevents infinite looping on the_content filters.
 		if ( is_string( $query ) ) {
-			$output = mc_produce_upcoming_events( $event_array, $template, 'list', 'ASC', $skip, $before, $after, 'yes', 'nofilters', $term );
+			$args   = array(
+				'order'          => 'ASC',
+				'skip'           => $skip,
+				'before'         => $before,
+				'after'          => $after,
+				'show_recurring' => 'yes',
+			);
+			$output = mc_produce_upcoming_events( $event_array, $args, 'list', 'nofilters' );
 		} else {
 			// Use this function for advanced search queries.
 			$output = mc_produce_search_results( $event_array, $template );
