@@ -336,6 +336,7 @@ function mc_get_all_events( $args ) {
 	$mcdb     = mc_is_remote_db();
 
 	$now                = ( 'now' === $time ) ? 'NOW()' : $time;
+	$now_limit          = ( 'now' === $time ) ? 'NOW()' : "from_unixtime($time)";
 	$exclude_categories = mc_private_categories();
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
@@ -348,8 +349,8 @@ function mc_get_all_events( $args ) {
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string        = mc_ts();
-	$select_window    = ( ! $before ) ? 'AND occur_begin > ' . $now : '';
-	$select_window    = ( ! $after ) ? 'AND occur_end < ' . $now : $select_window;
+	$select_window    = ( ! $before ) ? 'AND occur_begin > ' . $now_limit : '';
+	$select_window    = ( ! $after ) ? 'AND occur_end < ' . $now_limit : $select_window;
 	$limit            = "$select_published $select_category $select_author $select_host $select_access $search $select_window";
 
 	// New Query style.
