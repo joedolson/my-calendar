@@ -33,20 +33,20 @@ function my_calendar_upcoming_events( $args ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
 	}
-	$after          = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
-	$type           = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
-	$category       = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
-	$substitute     = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
-	$order          = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
-	$skip           = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
-	$author         = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
-	$host           = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
-	$ltype          = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
-	$lvalue         = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
-	$from           = ( isset( $args['from'] ) ) ? $args['from'] : '';
-	$to             = ( isset( $args['to'] ) ) ? $args['to'] : '';
-	$site           = ( isset( $args['site'] ) ) ? $args['site'] : false;
-	$time           = ( isset( $args['time'] ) ) ? $args['time'] : '';
+	$after      = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
+	$type       = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
+	$category   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
+	$substitute = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
+	$order      = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
+	$skip       = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
+	$author     = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
+	$host       = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
+	$ltype      = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
+	$lvalue     = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
+	$from       = ( isset( $args['from'] ) ) ? $args['from'] : '';
+	$to         = ( isset( $args['to'] ) ) ? $args['to'] : '';
+	$site       = ( isset( $args['site'] ) ) ? $args['site'] : false;
+	$time       = ( isset( $args['time'] ) ) ? $args['time'] : '';
 
 	if ( $site ) {
 		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
