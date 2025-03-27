@@ -199,6 +199,61 @@ function mc_ajax_add_category() {
 	}
 }
 
+
+add_action( 'wp_ajax_mcjs_action', 'mc_ajax_mcjs_action' );
+/**
+ * Display the recurring settings in human-readable format.
+ */
+function mc_ajax_mcjs_action() {
+	if ( ! check_ajax_referer( 'mcjs-action', 'security', false ) ) {
+		wp_send_json(
+			array(
+				'success'  => 0,
+				'response' => __( 'My Calendar: invalid security check.', 'my-calendar' ),
+			)
+		);
+	}
+	$behavior = isset( $_REQUEST['behavior'] ) ? sanitize_text_field( $_REQUEST['behavior'] ) : '';
+	switch ( $behavior ) {
+		case 'loadupcoming':
+			add_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );
+			add_filter( 'mc_upcoming_events_footer', 'mc_ajax_clear_wrappers' );
+			$request      = isset( $_REQUEST['args'] ) ? wp_unslash( sanitize_text_field( $_REQUEST['args'] ) ) : array();
+			$request      = str_replace( '|', '&', $request );
+			$request      = parse_str( $request, $args );
+			$args['time'] = sanitize_text_field( $_REQUEST['time'] );
+			$response     = my_calendar_upcoming_events( $args );
+			remove_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );
+			remove_filter( 'mc_upcoming_events_footer', 'mc_ajax_clear_wrappers' );
+	}
+	if ( $response ) {
+		wp_send_json(
+			array(
+				'success'  => 1,
+				'args'     => $args,
+				'response' => $response,
+			)
+		);
+	}
+	wp_send_json(
+		array(
+			'success'  => 0,
+			'response' => __( 'No upcoming events found.', 'my-calendar' ),
+		)
+	);
+}
+
+/**
+ * Clear the content from upcoming events header and footer for use in AJAX queries.
+ *
+ * @param string $output Default content.
+ *
+ * @return string
+ */
+function mc_ajax_clear_wrappers( $output ) {
+	return '';
+}
+
 add_action( 'wp_ajax_display_recurrence', 'mc_ajax_display_recurrence' );
 /**
  * Display the recurring settings in human-readable format.

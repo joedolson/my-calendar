@@ -12,6 +12,40 @@
 		}
 	});
 
+	const loadmore = document.querySelectorAll( '.mc-load-upcoming-events' );
+	if ( loadmore ) {
+		loadmore.forEach( (el) => {
+			const parent = el.closest( 'ul' );
+			parent.addEventListener( 'click', function( e ) {
+				loadUpcoming( e, parent );
+			});
+		});
+	}
+
+	function loadUpcoming( e, parent ) {
+		let request = new XMLHttpRequest();
+		let el      = e.target;
+		request.open( 'POST', my_calendar.ajaxurl, true );
+		request.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded;' );
+		request.onload = function () {
+			if (this.status >= 200 && this.status < 400) {
+				// Successful request.
+				let results = JSON.parse( this.response );
+				parent.innerHTML += results.response;
+				console.log(results);
+			} else {
+				// Request failed.
+				console.log(this.response);
+			}
+		};
+		request.onerror = function() {
+			// Connection error
+		};
+		let time = el.value;
+		let args = el.getAttribute( 'data-value' );
+		request.send('action=' + my_calendar.action + '&behavior=loadupcoming&security=' + my_calendar.security + '&time=' + time + '&args=' + args );
+	}
+
 	if ( 'true' === my_calendar.mini ) {
 		$( ".mini .calendar-events" ).hide();
 		$( document ).on( "click", ".mini .has-events .trigger", function (e) {
