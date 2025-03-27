@@ -33,15 +33,12 @@ function my_calendar_upcoming_events( $args ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
 	}
-	$before         = ( isset( $args['before'] ) ) ? $args['before'] : 'default';
 	$after          = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
 	$type           = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
 	$category       = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
-	$template       = ( isset( $args['template'] ) ) ? $args['template'] : 'default';
 	$substitute     = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
 	$order          = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
 	$skip           = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
-	$show_recurring = ( isset( $args['show_recurring'] ) ) ? $args['show_recurring'] : 'yes';
 	$author         = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
 	$host           = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
 	$ltype          = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
@@ -87,8 +84,8 @@ function my_calendar_upcoming_events( $args ) {
 	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$class          = ( 'card' === $args['template'] ) ? 'my-calendar-cards' : 'list-events';
-	$header         = "<ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
-	$footer         = '</ul>';
+	$header         = "<div class='mc-event-list-container'><ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
+	$footer         = '</ul></div>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
@@ -351,7 +348,7 @@ function my_calendar_upcoming_events( $args ) {
 		mc_switch_language( $language, $locale );
 	}
 
-	return '<div class="mc-event-list-container">' . $return . '</div>';
+	return $return;
 }
 
 /**
@@ -589,7 +586,8 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		}
 	}
 	if ( $next_date ) {
-		$html .= '<button type="button" value="' . esc_attr( $next_date ) . '">' . esc_html__( 'Load more', 'my-calendar' ) . '</button>';
+		$json_args = str_replace( '&', '|', http_build_query( $args ) );
+		$html     .= '<li><button class="mc-load-upcoming-events" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '">' . esc_html__( 'Load more', 'my-calendar' ) . '</button></li>';
 	}
 
 	return $html;
