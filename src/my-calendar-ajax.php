@@ -199,8 +199,8 @@ function mc_ajax_add_category() {
 	}
 }
 
-
 add_action( 'wp_ajax_mcjs_action', 'mc_ajax_mcjs_action' );
+add_action( 'wp_ajax_nopriv_mcjs_action', 'mc_ajax_mcjs_action' );
 /**
  * Display the recurring settings in human-readable format.
  */
