@@ -1,4 +1,6 @@
 (function ($) {
+	const { __, _x, _n, _nx } = wp.i18n;
+
 	'use strict';
 	$(function () {
 		mc_display_usertime();
@@ -12,12 +14,15 @@
 		}
 	});
 
-	const loadmore = document.querySelectorAll( '.mc-load-upcoming-events' );
+	const loadmore = document.querySelectorAll( '.mc-loader' );
 	if ( loadmore ) {
 		loadmore.forEach( (el) => {
 			const parent = el.closest( 'ul' );
+			parent.setAttribute( 'tabindex', '-1' );
 			parent.addEventListener( 'click', function( e ) {
-				loadUpcoming( e, parent );
+				if ( e.target.nodeName === 'BUTTON' ) {
+					loadUpcoming( e, parent );
+				}
 			});
 		});
 	}
@@ -29,10 +34,16 @@
 		request.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded;' );
 		request.onload = function () {
 			if (this.status >= 200 && this.status < 400) {
-				// Successful request.
 				let results = JSON.parse( this.response );
+				// Remove the button.
+				parent.querySelectorAll( 'li' ).forEach( e => e.remove() );
+				// Get length, append, then re-check length.
 				parent.innerHTML += results.response;
-				console.log(results);
+				parent.querySelector( '.mc-load-prev-upcoming-events' ).display = 'block';
+				// Get number of events added.
+				// Set focus to last item in previous set.
+				parent.focus();
+				wp.a11y.speak( __( 'Upcoming events loaded', 'my-calendar' ) );
 			} else {
 				// Request failed.
 				console.log(this.response);
