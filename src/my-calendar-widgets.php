@@ -374,7 +374,7 @@ function mc_span_time( $group_id ) {
  * Generates the list of upcoming events when counting by events rather than a date pattern
  *
  * @param array  $events (Array of events to analyze).
- * @param string $args Array of list arguments from calling function.
+ * @param array  $args Array of list arguments from calling function.
  * @param string $type Usually 'list', but also RSS or export.
  * @param string $context Display context.
  *
