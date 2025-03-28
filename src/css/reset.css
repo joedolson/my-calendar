@@ -307,6 +307,7 @@
 	row-gap: 4px;
 }
 
+.mc-loader .mc-icon::before,
 .my-calendar-today a .mc-icon::before,
 .my-calendar-prev a .mc-icon::before,
 .my-calendar-next a .mc-icon::before,
@@ -326,6 +327,17 @@
 	font-family: 'dashicons';
 	display: inline;
 	margin-right: 2px;
+}
+
+.mc-loader {
+	display: inline-flex;
+	padding: 6px 12px;
+}
+
+.mc-load-events-controls {
+	display: flex;
+	gap: .5rem;
+	justify-content: space-between;
 }
 
 .mc-main .mc-print a .mc-icon::before {
@@ -365,10 +377,12 @@
 	margin-right: 0;
 }
 
+.mc-load-prev-upcoming-events .mc-icon::before,
 .my-calendar-prev a .mc-icon::before {
 	content: '\f341';
 }
 
+.mc-load-next-upcoming-events .mc-icon::before,
 .my-calendar-next a .mc-icon::before {
 	content: '\f345';
 	margin-left: 2px;
