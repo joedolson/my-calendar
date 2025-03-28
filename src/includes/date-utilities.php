@@ -155,16 +155,18 @@ function mc_datetime_cmp( $a, $b ) {
  *
  * @param object $a event object.
  * @param object $b event object.
+ * @param int    $compare_date Alternate date to compare against.
  *
  * @return integer (ternary value)
  */
-function mc_timediff_cmp( $a, $b ) {
+function mc_timediff_cmp( $a, $b, $compare_date = 0 ) {
+	$compare    = ( $compare_date ) ? strtotime( $compare_date ) : 'NOW';
 	$a          = $a . current_time( ' H:i:s' );
 	$b          = $b . current_time( ' H:i:s' );
 	$event_dt_a = strtotime( $a );
 	$event_dt_b = strtotime( $b );
-	$diff_a     = mc_date_diff_precise( $event_dt_a );
-	$diff_b     = mc_date_diff_precise( $event_dt_b );
+	$diff_a     = mc_date_diff_precise( $event_dt_a, $compare );
+	$diff_b     = mc_date_diff_precise( $event_dt_b, $compare );
 
 	if ( $diff_a === $diff_b ) {
 		return 0;
