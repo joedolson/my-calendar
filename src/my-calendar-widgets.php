@@ -399,10 +399,13 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
 	} else {
 		$compare_time = $args['time'];
-		uksort( $events, function( $a, $b ) use ( $compare_time ) {
+		uksort(
+			$events,
+			function ( $a, $b ) use ( $compare_time ) {
 
-			return mc_timediff_cmp( $a, $b, $compare_time );
-		});
+				return mc_timediff_cmp( $a, $b, $compare_time );
+			}
+		);
 	}
 	$count = count( $events );
 	$group = array();
@@ -572,7 +575,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 	$html       = '';
 	$first_date = false;
 	$last_date  = false;
-	$i = 1;
+	$i          = 1;
 	foreach ( $output as $out ) {
 		$event = $out['event'];
 		$tags  = $out['tags'];
@@ -588,8 +591,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		if ( ! $first_date ) {
 			$first_date = $event->occur_id;
 		}
-		
-		if ( $i === count( $output ) ) {
+		if ( count( $output ) === $i ) {
 			$last_date = $event->occur_id;
 		}
 		if ( 'card' === $template ) {
@@ -602,7 +604,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		} else {
 			$html .= $details;
 		}
-		++ $i;
+		++$i;
 	}
 	if ( $last_date || $first_date ) {
 		unset( $args['time'] );

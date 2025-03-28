@@ -1144,21 +1144,18 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous', $args = array() ) {
 	$arr_events         = array();
 	$select_published   = mc_select_published();
 	$exclude_categories = mc_private_categories();
-	// Test arguments.
 	$category           = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
 	$ltype              = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
 	$lvalue             = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
 	$author             = ( isset( $args['author'] ) ) ? $args['author'] : '';
 	$host               = ( isset( $args['host'] ) ) ? $args['host'] : '';
-
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
 	$select_location    = mc_select_location( $ltype, $lvalue );
 	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
-
-	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
-	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
+	$select_author      = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
+	$select_host        = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string          = mc_ts();
 	$source             = mc_get_event( $mc_id );
 	$return             = array();
