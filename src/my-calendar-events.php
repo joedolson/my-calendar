@@ -1132,10 +1132,11 @@ function mc_get_grouped_events( $id ) {
  *
  * @param integer $mc_id ID of current event.
  * @param string  $adjacent Next/Previous.
+ * @param array   $args Additional arguments to pass to query and return.
  *
- * @return array Event template array.
+ * @return array|object Event template array or object.
  */
-function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
+function mc_adjacent_event( $mc_id, $adjacent = 'previous', $args = array() ) {
 	$mcdb               = mc_is_remote_db();
 	$adjacence          = ( 'next' === $adjacent ) ? '>' : '<';
 	$order              = ( 'next' === $adjacent ) ? 'ASC' : 'DESC';
@@ -1143,9 +1144,26 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 	$arr_events         = array();
 	$select_published   = mc_select_published();
 	$exclude_categories = mc_private_categories();
+	// Test arguments.
+	$category           = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
+	$ltype              = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
+	$lvalue             = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
+	$author             = ( isset( $args['author'] ) ) ? $args['author'] : '';
+	$host               = ( isset( $args['host'] ) ) ? $args['host'] : '';
+
+	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
+	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
+	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
+	$select_location    = mc_select_location( $ltype, $lvalue );
+	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
+
+	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
+	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string          = mc_ts();
 	$source             = mc_get_event( $mc_id );
 	$return             = array();
+
+	$offset = ( isset( $args['offset'] ) ) ? absint( $args['offset'] ) : 0;
 	if ( is_object( $source ) ) {
 		$date        = mc_date( 'Y-m-d H:i:s', strtotime( $source->occur_begin ), false );
 		$event_query = 'SELECT *, ' . $ts_string . '
@@ -1154,8 +1172,10 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 				ON (event_id=occur_event_id)
 				JOIN ' . my_calendar_categories_table( $site ) . " as c
 				ON (e.event_category=c.category_id)
-				WHERE $select_published $exclude_categories
-				AND occur_begin $adjacence CAST('$date' as DATETIME) ORDER BY occur_begin $order LIMIT 0,1";
+				$join
+				$location_join
+				WHERE $select_published $select_category $select_author $select_host $exclude_categories
+				AND occur_begin $adjacence CAST('$date' as DATETIME) ORDER BY occur_begin $order LIMIT $offset,1";
 
 		$events = $mcdb->get_results( $event_query );
 		if ( ! empty( $events ) ) {
@@ -1165,7 +1185,7 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous' ) {
 			}
 		}
 		if ( ! empty( $arr_events ) ) {
-			$return = mc_create_tags( $arr_events[0] );
+			$return = ( isset( $args['return'] ) && 'object' === $args['return'] ) ? $arr_events[0] : mc_create_tags( $arr_events[0] );
 		} else {
 			$return = array();
 		}
