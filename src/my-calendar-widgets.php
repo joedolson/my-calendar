@@ -307,7 +307,8 @@ function my_calendar_upcoming_events( $args ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			$output .= mc_produce_upcoming_events( $event_array, $args, 'list' );
+			$args['time'] = $time;
+			$output      .= mc_produce_upcoming_events( $event_array, $args, 'list' );
 		} else {
 			$output = '';
 		}
@@ -392,10 +393,17 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 	$output      = array();
 	$near_events = array();
 	$temp_array  = array();
-	$next_item   = false;
 	$past        = 0; // Number of events selected in the past.
 	$future      = 0; // Number of events selected in the future.
-	uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
+	if ( '' === $args['time'] ) {
+		uksort( $events, 'mc_timediff_cmp' ); // Sort all events by proximity to current date.
+	} else {
+		$compare_time = $args['time'];
+		uksort( $events, function( $a, $b ) use ( $compare_time ) {
+
+			return mc_timediff_cmp( $a, $b, $compare_time );
+		});
+	}
 	$count = count( $events );
 	$group = array();
 	$spans = array();
@@ -477,6 +485,9 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 											$event_used    = true;
 										}
 									}
+									if ( '' !== $args['time'] ) {
+										$current = strtotime( $args['time'] );
+									}
 									if ( $past <= $before && ( my_calendar_date_comp( $beginning, $current ) ) && ! $event_used ) {
 										$near_events[] = $e; // Split off another past event.
 										$event_used    = true;
@@ -484,10 +495,6 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 									if ( $future <= $after && ( ! my_calendar_date_comp( $end, $current ) ) && ! $event_used ) {
 										$near_events[] = $e; // Split off another future event.
 										$event_used    = true;
-									}
-									if ( $future > $after && ! $event_used && ! $next_item ) {
-										$next_date = $e->occur_begin;
-										$next_item = true;
 									}
 
 									$event_added = false;
@@ -562,7 +569,10 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		}
 	}
 
-	$html = '';
+	$html       = '';
+	$first_date = false;
+	$last_date  = false;
+	$i = 1;
 	foreach ( $output as $out ) {
 		$event = $out['event'];
 		$tags  = $out['tags'];
@@ -574,6 +584,14 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 			'time'     => 'list',
 			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template" : '',
 		);
+		// Get first ID in set.
+		if ( ! $first_date ) {
+			$first_date = $event->occur_id;
+		}
+		
+		if ( $i === count( $output ) ) {
+			$last_date = $event->occur_id;
+		}
 		if ( 'card' === $template ) {
 			$details = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';
 		} else {
@@ -584,10 +602,28 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		} else {
 			$html .= $details;
 		}
+		++ $i;
 	}
-	if ( $next_date ) {
-		$json_args = str_replace( '&', '|', http_build_query( $args ) );
-		$html     .= '<li><button class="mc-load-upcoming-events" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '">' . esc_html__( 'Load more', 'my-calendar' ) . '</button></li>';
+	if ( $last_date || $first_date ) {
+		unset( $args['time'] );
+		$json_args   = str_replace( '&', '|', http_build_query( $args ) );
+		$prev_button = '';
+		$next_button = '';
+		if ( $first_date ) {
+			$args['return'] = 'object';
+			$args['offset'] = count( $output ) - 1;
+			$prev           = mc_adjacent_event( $first_date, 'previous', $args );
+			$prev_date      = $prev->occur_begin;
+			$prev_button   .= '<button class="mc-loader mc-load-prev-upcoming-events" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span>' . esc_html__( 'Previous Events', 'my-calendar' ) . '</button>';
+		}
+		if ( $last_date ) {
+			unset( $args['offset'] );
+			$args['return'] = 'object';
+			$next           = mc_adjacent_event( $last_date, 'next', $args );
+			$next_date      = $next->occur_begin;
+			$next_button   .= '<button class="mc-loader mc-load-next-upcoming-events" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '">' . esc_html__( 'Future Events', 'my-calendar' ) . '<span class="mc-icon" aria-hidden="true"></span></button>';
+		}
+		$html .= ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
 	}
 
 	return $html;
