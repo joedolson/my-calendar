@@ -54,8 +54,7 @@
 		};
 		let time = el.value;
 		let args = el.getAttribute( 'data-value' );
-		let type = el.getAttribute( 'data-type' );
-		type = ( 'events' === type ) ? 'time' : 'dates';
+		type = ( 'dates' === time ) ? 'dates' : 'time';
 
 		request.send('action=' + my_calendar.action + '&behavior=loadupcoming&' + type + '=' + time + '&args=' + args );
 	}
