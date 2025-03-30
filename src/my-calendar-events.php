@@ -332,7 +332,8 @@ function mc_get_all_events( $args ) {
 	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
 	$site     = isset( $args['site'] ) ? $args['site'] : false;
 	$search   = isset( $args['search'] ) ? $args['search'] : '';
-	$time     = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) : 'now';
+	$offset   = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
+	$time     = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) + $offset : 'now';
 	$mcdb     = mc_is_remote_db();
 
 	$now                = ( 'now' === $time ) ? 'NOW()' : $time;
