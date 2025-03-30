@@ -377,12 +377,25 @@
 	margin-right: 0;
 }
 
-.mc-load-prev-upcoming-events .mc-icon::before,
+.mc-loader.mc-previous .mc-icon::before,
 .my-calendar-prev a .mc-icon::before {
 	content: '\f341';
 }
 
-.mc-load-next-upcoming-events .mc-icon::before,
+.mc-loader.mc-today .mc-icon::before {
+	content: '\f531';
+	font-weight: 400;
+}
+
+.mc-loader.mc-today.mc-load-next-upcoming-events .mc-icon::before {
+	margin-left: 2px;
+}
+
+.mc-loader.mc-today.mc-load-prev-upcoming-events .mc-icon::before {
+	margin-right: 2px;
+}
+
+.mc-loader.mc-next .mc-icon::before,
 .my-calendar-next a .mc-icon::before {
 	content: '\f345';
 	margin-left: 2px;
