@@ -623,7 +623,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 				$label     = __( 'Today', 'my-calendar' );
 				$class     = 'mc-today';
 			}
-			$prev_button   .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span>' . esc_html( $label ) . '</button>';
+			$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span>' . esc_html( $label ) . '</button>';
 		}
 		if ( $last_date ) {
 			unset( $args['offset'] );
@@ -640,7 +640,8 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 			}
 			$next_button .= '<button class="mc-loader mc-load-next-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '">' . esc_html( $label ) . '<span class="mc-icon" aria-hidden="true"></span></button>';
 		}
-		$html .= ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
+		$buttons = ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
+		$html    = $buttons . $html;
 	}
 
 	return $html;
