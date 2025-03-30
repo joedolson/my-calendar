@@ -210,13 +210,13 @@ function mc_ajax_mcjs_action() {
 		case 'loadupcoming':
 			add_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );
 			add_filter( 'mc_upcoming_events_footer', 'mc_ajax_clear_wrappers' );
-			$request      = isset( $_REQUEST['args'] ) ? wp_unslash( sanitize_text_field( $_REQUEST['args'] ) ) : array();
-			$request      = str_replace( '|', '&', $request );
-			$request      = parse_str( $request, $args );
+			$request = isset( $_REQUEST['args'] ) ? wp_unslash( sanitize_text_field( $_REQUEST['args'] ) ) : array();
+			$request = str_replace( '|', '&', $request );
+			$request = parse_str( $request, $args );
 			if ( isset( $_REQUEST['time'] ) ) {
 				$args['time'] = sanitize_text_field( $_REQUEST['time'] );
 			}
-			$response     = my_calendar_upcoming_events( $args );
+			$response = my_calendar_upcoming_events( $args );
 			remove_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );
 			remove_filter( 'mc_upcoming_events_footer', 'mc_ajax_clear_wrappers' );
 	}

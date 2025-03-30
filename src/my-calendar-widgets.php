@@ -203,7 +203,7 @@ function my_calendar_upcoming_events( $args ) {
 			}
 			if ( $i < $skip && 0 !== $skip ) {
 				++$i;
-			} else {	
+			} else {
 				// Recurring events should only appear once.
 				if ( ! in_array( $details['dateid'], $skips, true ) ) {
 					$output .= ( $item === $last_item ) ? '' : $item;
@@ -306,7 +306,7 @@ function mc_set_from_and_to( $args, $display_type ) {
 		$args['to']   = ( 'today' === $args['to'] ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $args['to'] ), false );
 	}
 
-	for ( $i = 1; ++ $i; $i <= 12 ) {
+	for ( $i = 1; ++$i; $i <= 12 ) {
 		if ( 'month+' . $i === $display_type ) {
 			$args['from'] = mc_date( 'Y-m-1', strtotime( '+' . $i . ' month' ), false );
 			$args['to']   = mc_date( 'Y-m-t', strtotime( '+' . $i . ' month' ), false );
@@ -584,6 +584,8 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 /**
  * Generate upcoming events navigation for dates.
  *
+ * @param array $args Array of Upcoming events arguments.
+ *
  * @return string 
  */
 function mc_upcoming_dates_navigation( $args ) {
@@ -592,11 +594,11 @@ function mc_upcoming_dates_navigation( $args ) {
 		$args['to']   = gmdate( 'Y-m-d', time() + DAY_IN_SECONDS * $args['after'] );
 	}
 
-	$diff      = strtotime( $args['to'] ) - strtotime( $args['from'] );
-	$new_from  = gmdate( 'Y-m-d', strtotime( $args['from'] ) - $diff );
-	$new_to    = gmdate( 'Y-m-d', strtotime( $args['to'] ) + $diff );
-	$to        = $args['to'];
-	$from      = $args['from'];
+	$diff     = strtotime( $args['to'] ) - strtotime( $args['from'] );
+	$new_from = gmdate( 'Y-m-d', strtotime( $args['from'] ) - $diff );
+	$new_to   = gmdate( 'Y-m-d', strtotime( $args['to'] ) + $diff );
+	$to       = $args['to'];
+	$from     = $args['from'];
 
 	$args['to']     = $from;
 	$args['from']   = $new_from;
