@@ -338,6 +338,7 @@
 	display: flex;
 	gap: .5rem;
 	justify-content: space-between;
+	margin-bottom: .5rem;
 }
 
 .mc-main .mc-print a .mc-icon::before {
