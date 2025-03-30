@@ -306,7 +306,7 @@ function mc_set_from_and_to( $args, $display_type ) {
 		$args['to']   = ( 'today' === $args['to'] ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $args['to'] ), false );
 	}
 
-	for ( $i = 1; ++$i; $i <= 12 ) {
+	for ( $i = 1; $i <= 12; ++$i  ) {
 		if ( 'month+' . $i === $display_type ) {
 			$args['from'] = mc_date( 'Y-m-1', strtotime( '+' . $i . ' month' ), false );
 			$args['to']   = mc_date( 'Y-m-t', strtotime( '+' . $i . ' month' ), false );
@@ -609,8 +609,8 @@ function mc_upcoming_dates_navigation( $args ) {
 	$json_args_next = str_replace( '&', '|', http_build_query( $args ) );
 
 	return '<li class="mc-load-events-controls">
-				<button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-to="' . esc_attr( $args['from'] ) . '" data-value="' . esc_attr( $json_args_prev ) . '" value="' . esc_attr( $new_from ) . '"><span class="mc-icon" aria-hidden="true"></span>Previous Events</button>
-				<button class="mc-loader mc-load-next-upcoming-dates mc-next" type="button" data-to="' . esc_attr( $new_to ) . '" data-value="' . esc_attr( $json_args_next ) . '" value="' . esc_attr( $args['to'] ) . '">Future Events<span class="mc-icon" aria-hidden="true"></span></button>
+				<button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-value="' . esc_attr( $json_args_prev ) . '" value="dates"><span class="mc-icon" aria-hidden="true"></span>Previous Events</button>
+				<button class="mc-loader mc-load-next-upcoming-dates mc-next" type="button" data-value="' . esc_attr( $json_args_next ) . '" value="dates">Future Events<span class="mc-icon" aria-hidden="true"></span></button>
 			</li>';
 }
 
