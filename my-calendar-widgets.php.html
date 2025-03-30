@@ -247,6 +247,20 @@ function my_calendar_upcoming_events( $args ) {
 		$omit      = array();
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event );
+			$classes = mc_get_event_classes( $event, 'upcoming' );
+
+			$data = array(
+				'event'    => $event,
+				'tags'     => $details,
+				'template' => $args['template'],
+				'args'     => $args,
+				'class'    => ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '',
+			);
+			if ( 'card' === $args['template'] ) {
+				$item = '&lt;li class="card-event">&lt;h3>' . mc_load_template( 'event/card-title', $data ) . '&lt;/h3>' . mc_load_template( 'event/card', $data ) . '&lt;/li>';
+			} else {
+				$item = mc_load_template( 'event/upcoming', $data );
+			}
 			/**
 			 * Draw a custom template for upcoming events. Returning any non-empty string short circuits other template settings.
 			 *
@@ -259,7 +273,7 @@ function my_calendar_upcoming_events( $args ) {
 			 *
 			 * @return {string} Event template details.
 			 */
-			$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $args['template'], $args );
+			$item = apply_filters( 'mc_draw_upcoming_event', $item, $details, $args['template'], $args );
 			// if an event is a multidate group, only display first found.
 			if ( in_array( $event->event_group_id, $omit, true ) ) {
 				continue;
@@ -687,6 +701,7 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date ) {
 
 	return $buttons;
 }
+
 /**
  * Process the Today's Events widget.
  *
