@@ -205,14 +205,6 @@ add_action( 'wp_ajax_nopriv_mcjs_action', 'mc_ajax_mcjs_action' );
  * Display the recurring settings in human-readable format.
  */
 function mc_ajax_mcjs_action() {
-	if ( ! check_ajax_referer( 'mcjs-action', 'security', false ) ) {
-		wp_send_json(
-			array(
-				'success'  => 0,
-				'response' => __( 'My Calendar: invalid security check.', 'my-calendar' ),
-			)
-		);
-	}
 	$behavior = isset( $_REQUEST['behavior'] ) ? sanitize_text_field( $_REQUEST['behavior'] ) : '';
 	switch ( $behavior ) {
 		case 'loadupcoming':
@@ -221,7 +213,9 @@ function mc_ajax_mcjs_action() {
 			$request      = isset( $_REQUEST['args'] ) ? wp_unslash( sanitize_text_field( $_REQUEST['args'] ) ) : array();
 			$request      = str_replace( '|', '&', $request );
 			$request      = parse_str( $request, $args );
-			$args['time'] = sanitize_text_field( $_REQUEST['time'] );
+			if ( isset( $_REQUEST['time'] ) ) {
+				$args['time'] = sanitize_text_field( $_REQUEST['time'] );
+			}
 			$response     = my_calendar_upcoming_events( $args );
 			remove_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );
 			remove_filter( 'mc_upcoming_events_footer', 'mc_ajax_clear_wrappers' );
