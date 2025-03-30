@@ -398,6 +398,8 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	if ( '1' === $details['event_span'] ) {
 		$classes .= ' multiday';
 	}
+	$classes .= ( str_contains( $template, 'list_preset_' ) ) ? " list-preset $template" : '';
+
 	if ( 'list' === $type ) {
 		$prepend = "\n<li class=\"$classes\">";
 		$append  = "</li>\n";
