@@ -119,71 +119,9 @@ function my_calendar_upcoming_events( $args ) {
 			$from = $args['from'];
 			$to   = $args['to'];
 		} else {
-			if ( 'days' === $display_type ) {
-				$from = mc_date( 'Y-m-d', strtotime( "-$args[before] days" ), false );
-				$to   = mc_date( 'Y-m-d', strtotime( "+$after days" ), false );
-			}
-			if ( 'month' === $display_type ) {
-				$from = mc_date( 'Y-m-1' );
-				$to   = mc_date( 'Y-m-t' );
-			}
-			if ( 'custom' === $display_type &amp;&amp; '' !== $from &amp;&amp; '' !== $to ) {
-				$from = mc_date( 'Y-m-d', strtotime( $from ), false );
-				$to   = ( 'today' === $to ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $to ), false );
-			}
-			/* Yes, this is crude. But there are only 12 possibilities, after all. */
-			if ( 'month+1' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+1 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+1 month' ), false );
-			}
-			if ( 'month+2' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+2 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+2 month' ), false );
-			}
-			if ( 'month+3' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+3 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+3 month' ), false );
-			}
-			if ( 'month+4' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+4 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+4 month' ), false );
-			}
-			if ( 'month+5' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+5 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+5 month' ), false );
-			}
-			if ( 'month+6' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+6 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+6 month' ), false );
-			}
-			if ( 'month+7' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+7 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+7 month' ), false );
-			}
-			if ( 'month+8' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+8 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+8 month' ), false );
-			}
-			if ( 'month+9' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+9 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+9 month' ), false );
-			}
-			if ( 'month+10' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+10 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+10 month' ), false );
-			}
-			if ( 'month+11' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+11 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+11 month' ), false );
-			}
-			if ( 'month+12' === $display_type ) {
-				$from = mc_date( 'Y-m-1', strtotime( '+12 month' ), false );
-				$to   = mc_date( 'Y-m-t', strtotime( '+12 month' ), false );
-			}
-			if ( 'year' === $display_type ) {
-				$from = mc_date( 'Y-1-1' );
-				$to   = mc_date( 'Y-12-31' );
-			}
+			$args = mc_set_from_and_to( $args, $display_type );
+			$from = $args['from'];
+			$to   = $args['to'];
 		}
 		/**
 		 * Custom upcoming events date start value for upcoming events lists using date parameters.
@@ -372,6 +310,41 @@ function my_calendar_upcoming_events( $args ) {
 	return $return;
 }
 
+/**
+ * Generate from and to values from arguments.
+ *
+ * @param array  $args Upcoming Event arguments.
+ * @param string $display_type Type of display.
+ *
+ * @return array
+ */
+function mc_set_from_and_to( $args, $display_type ) {
+	if ( 'days' === $display_type ) {
+		$args['from'] = mc_date( 'Y-m-d', strtotime( "-$args[before] days" ), false );
+		$args['to']   = mc_date( 'Y-m-d', strtotime( "+$args[after] days" ), false );
+	}
+	if ( 'month' === $display_type ) {
+		$args['from'] = mc_date( 'Y-m-1' );
+		$args['to']   = mc_date( 'Y-m-t' );
+	}
+	if ( 'custom' === $display_type &amp;&amp; '' !== $args['from'] &amp;&amp; '' !== $args['to'] ) {
+		$args['from'] = mc_date( 'Y-m-d', strtotime( $args['from'] ), false );
+		$args['to']   = ( 'today' === $args['to'] ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $args['to'] ), false );
+	}
+
+	for ( $i = 1; ++ $i; $i &lt;= 12 ) {
+		if ( 'month+' . $i === $display_type ) {
+			$args['from'] = mc_date( 'Y-m-1', strtotime( '+' . $i . ' month' ), false );
+			$args['to']   = mc_date( 'Y-m-t', strtotime( '+' . $i . ' month' ), false );
+		}
+	}
+	if ( 'year' === $display_type ) {
+		$args['from'] = mc_date( 'Y-1-1' );
+		$args['to']   = mc_date( 'Y-12-31' );
+	}
+
+	return $args;
+}
 /**
  * For a set of grouped events, get the total time spanned by the group of events.
  *
