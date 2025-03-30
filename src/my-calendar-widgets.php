@@ -606,47 +606,61 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		++$i;
 	}
 	if ( $last_date || $first_date ) {
-		unset( $args['time'] );
-		$json_args   = str_replace( '&', '|', http_build_query( $args ) );
-		$prev_button = '';
-		$next_button = '';
-		if ( $first_date ) {
-			$args['return'] = 'object';
-			$args['offset'] = count( $output ) - 1;
-			$prev           = mc_adjacent_event( $first_date, 'previous', $args );
-			if ( is_object( $prev ) ) {
-				$prev_date = $prev->occur_begin;
-				$label     = __( 'Previous Events', 'my-calendar' );
-				$class     = 'mc-previous';
-			} else {
-				$prev_date = '';
-				$label     = __( 'Today', 'my-calendar' );
-				$class     = 'mc-today';
-			}
-			$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span>' . esc_html( $label ) . '</button>';
-		}
-		if ( $last_date ) {
-			unset( $args['offset'] );
-			$args['return'] = 'object';
-			$next           = mc_adjacent_event( $last_date, 'next', $args );
-			if ( is_object( $next ) ) {
-				$next_date = $next->occur_begin;
-				$label     = __( 'Future Events', 'my-calendar' );
-				$class     = 'mc-next';
-			} else {
-				$next_date = '';
-				$label     = __( 'Today', 'my-calendar' );
-				$class     = 'mc-today';
-			}
-			$next_button .= '<button class="mc-loader mc-load-next-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '">' . esc_html( $label ) . '<span class="mc-icon" aria-hidden="true"></span></button>';
-		}
-		$buttons = ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
-		$html    = $buttons . $html;
+		$args['offset'] = count( $output ) - 1;
+		$buttons        = mc_upcoming_events_navigation( $args, $first_date, $last_date );
+		$html           = $buttons . $html;
 	}
 
 	return $html;
 }
 
+/**
+ * Generate upcoming events navigation buttons.
+ *
+ * @param array    $args Upcoming Events arguments.
+ * @param int|bool $first_date Occurrence ID of previous event.
+ * @param int|bool $last_date  Occurrence ID of next event.
+ *
+ * @return string
+ */
+function mc_upcoming_events_navigation( $args, $first_date, $last_date ) {
+	unset( $args['time'] );
+	$json_args   = str_replace( '&', '|', http_build_query( $args ) );
+	$prev_button = '';
+	$next_button = '';
+	if ( $first_date ) {
+		$args['return'] = 'object';
+		$prev           = mc_adjacent_event( $first_date, 'previous', $args );
+		if ( is_object( $prev ) ) {
+			$prev_date = $prev->occur_begin;
+			$label     = __( 'Previous Events', 'my-calendar' );
+			$class     = 'mc-previous';
+		} else {
+			$prev_date = '';
+			$label     = __( 'Today', 'my-calendar' );
+			$class     = 'mc-today';
+		}
+		$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span>' . esc_html( $label ) . '</button>';
+	}
+	if ( $last_date ) {
+		unset( $args['offset'] );
+		$args['return'] = 'object';
+		$next           = mc_adjacent_event( $last_date, 'next', $args );
+		if ( is_object( $next ) ) {
+			$next_date = $next->occur_begin;
+			$label     = __( 'Future Events', 'my-calendar' );
+			$class     = 'mc-next';
+		} else {
+			$next_date = '';
+			$label     = __( 'Today', 'my-calendar' );
+			$class     = 'mc-today';
+		}
+		$next_button .= '<button class="mc-loader mc-load-next-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '">' . esc_html( $label ) . '<span class="mc-icon" aria-hidden="true"></span></button>';
+	}
+	$buttons = ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
+
+	return $buttons;
+}
 /**
  * Process the Today's Events widget.
  *
