@@ -30,6 +30,7 @@
 	function loadUpcoming( e, parent ) {
 		let request = new XMLHttpRequest();
 		let el      = e.target;
+
 		request.open( 'POST', my_calendar.ajaxurl, true );
 		request.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded;' );
 		request.onload = function () {
@@ -39,7 +40,6 @@
 				parent.querySelectorAll( 'li' ).forEach( e => e.remove() );
 				// Get length, append, then re-check length.
 				parent.innerHTML += results.response;
-				parent.querySelector( '.mc-load-prev-upcoming-events' ).display = 'block';
 				// Get number of events added.
 				// Set focus to last item in previous set.
 				parent.focus();
@@ -54,7 +54,10 @@
 		};
 		let time = el.value;
 		let args = el.getAttribute( 'data-value' );
-		request.send('action=' + my_calendar.action + '&behavior=loadupcoming&security=' + my_calendar.security + '&time=' + time + '&args=' + args );
+		let type = el.getAttribute( 'data-type' );
+		type = ( 'events' === type ) ? 'time' : 'dates';
+
+		request.send('action=' + my_calendar.action + '&behavior=loadupcoming&' + type + '=' + time + '&args=' + args );
 	}
 
 	if ( 'true' === my_calendar.mini ) {
