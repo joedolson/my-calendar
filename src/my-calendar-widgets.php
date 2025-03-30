@@ -586,7 +586,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
  *
  * @param array $args Array of Upcoming events arguments.
  *
- * @return string 
+ * @return string
  */
 function mc_upcoming_dates_navigation( $args ) {
 	if ( ! isset( $args['from'] ) || ! $args['from'] ) {
