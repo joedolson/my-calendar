@@ -107,7 +107,7 @@ function my_calendar_upcoming_events( $args ) {
 	$default          = ( ! $args['template'] || 'default' === $args['template'] ) ? $defaults['upcoming']['template'] : $args['template'];
 	$args['template'] = mc_setup_template( $args['template'], $default );
 
-	$no_event_text  = ( '' === $substitute ) ? $defaults['upcoming']['text'] : $substitute;
+	$no_event_text  = ( ! $substitute ) ? $defaults['upcoming']['text'] : $substitute;
 	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$class          = ( 'card' === $args['template'] ) ? 'my-calendar-cards' : 'list-events';
 	$header         = "&lt;div class='mc-event-list-container'>&lt;ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
@@ -115,70 +115,75 @@ function my_calendar_upcoming_events( $args ) {
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
-		if ( 'days' === $display_type ) {
-			$from = mc_date( 'Y-m-d', strtotime( "-$args[before] days" ), false );
-			$to   = mc_date( 'Y-m-d', strtotime( "+$after days" ), false );
-		}
-		if ( 'month' === $display_type ) {
-			$from = mc_date( 'Y-m-1' );
-			$to   = mc_date( 'Y-m-t' );
-		}
-		if ( 'custom' === $display_type &amp;&amp; '' !== $from &amp;&amp; '' !== $to ) {
-			$from = mc_date( 'Y-m-d', strtotime( $from ), false );
-			$to   = ( 'today' === $to ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $to ), false );
-		}
-		/* Yes, this is crude. But there are only 12 possibilities, after all. */
-		if ( 'month+1' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+1 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+1 month' ), false );
-		}
-		if ( 'month+2' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+2 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+2 month' ), false );
-		}
-		if ( 'month+3' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+3 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+3 month' ), false );
-		}
-		if ( 'month+4' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+4 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+4 month' ), false );
-		}
-		if ( 'month+5' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+5 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+5 month' ), false );
-		}
-		if ( 'month+6' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+6 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+6 month' ), false );
-		}
-		if ( 'month+7' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+7 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+7 month' ), false );
-		}
-		if ( 'month+8' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+8 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+8 month' ), false );
-		}
-		if ( 'month+9' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+9 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+9 month' ), false );
-		}
-		if ( 'month+10' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+10 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+10 month' ), false );
-		}
-		if ( 'month+11' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+11 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+11 month' ), false );
-		}
-		if ( 'month+12' === $display_type ) {
-			$from = mc_date( 'Y-m-1', strtotime( '+12 month' ), false );
-			$to   = mc_date( 'Y-m-t', strtotime( '+12 month' ), false );
-		}
-		if ( 'year' === $display_type ) {
-			$from = mc_date( 'Y-1-1' );
-			$to   = mc_date( 'Y-12-31' );
+		if ( ! empty( $args['from'] ) &amp;&amp; ! empty( $args['to'] ) ) {
+			$from = $args['from'];
+			$to   = $args['to'];
+		} else {
+			if ( 'days' === $display_type ) {
+				$from = mc_date( 'Y-m-d', strtotime( "-$args[before] days" ), false );
+				$to   = mc_date( 'Y-m-d', strtotime( "+$after days" ), false );
+			}
+			if ( 'month' === $display_type ) {
+				$from = mc_date( 'Y-m-1' );
+				$to   = mc_date( 'Y-m-t' );
+			}
+			if ( 'custom' === $display_type &amp;&amp; '' !== $from &amp;&amp; '' !== $to ) {
+				$from = mc_date( 'Y-m-d', strtotime( $from ), false );
+				$to   = ( 'today' === $to ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $to ), false );
+			}
+			/* Yes, this is crude. But there are only 12 possibilities, after all. */
+			if ( 'month+1' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+1 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+1 month' ), false );
+			}
+			if ( 'month+2' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+2 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+2 month' ), false );
+			}
+			if ( 'month+3' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+3 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+3 month' ), false );
+			}
+			if ( 'month+4' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+4 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+4 month' ), false );
+			}
+			if ( 'month+5' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+5 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+5 month' ), false );
+			}
+			if ( 'month+6' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+6 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+6 month' ), false );
+			}
+			if ( 'month+7' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+7 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+7 month' ), false );
+			}
+			if ( 'month+8' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+8 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+8 month' ), false );
+			}
+			if ( 'month+9' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+9 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+9 month' ), false );
+			}
+			if ( 'month+10' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+10 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+10 month' ), false );
+			}
+			if ( 'month+11' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+11 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+11 month' ), false );
+			}
+			if ( 'month+12' === $display_type ) {
+				$from = mc_date( 'Y-m-1', strtotime( '+12 month' ), false );
+				$to   = mc_date( 'Y-m-t', strtotime( '+12 month' ), false );
+			}
+			if ( 'year' === $display_type ) {
+				$from = mc_date( 'Y-1-1' );
+				$to   = mc_date( 'Y-12-31' );
+			}
 		}
 		/**
 		 * Custom upcoming events date start value for upcoming events lists using date parameters.
@@ -282,42 +287,14 @@ function my_calendar_upcoming_events( $args ) {
 				$omit[] = $event->event_group_id;
 			}
 			if ( '' === $item ) {
-				$item = mc_draw_template( $details, $args['template'], 'list', $event );
+				$item = mc_format_upcoming_event( $data, $args['template'], 'list' );
 			}
 			if ( $i &lt; $skip &amp;&amp; 0 !== $skip ) {
 				++$i;
-			} else {
-				$date    = mc_date( 'Y-m-d H:i', strtotime( $details['dtstart'], false ) );
-				$classes = mc_get_event_classes( $event, 'upcoming' );
-				$prepend = "&lt;li class='mc-events $classes'>";
-				$append  = '&lt;/li>';
-				/**
-				 * Opening elements for upcoming events list items. Default `&lt;li class="$classes">`.
-				 *
-				 * @hook mc_event_upcoming_before
-				 *
-				 * @param {string} $append Template HTML closing tag.
-				 * @param {string} $classes Space-separated list of classes for the event.
-				 * @param {string} $date Event date in Y-m-d H:i:s format.
-				 *
-				 * @return {string} HTML following each event in upcoming events lists.
-				 */
-				$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $classes, $date );
-				/**
-				 * Closing elements for upcoming events list items. Default `&lt;/li>`.
-				 *
-				 * @hook mc_event_upcoming_after
-				 *
-				 * @param {string} $append Template HTML closing tag.
-				 * @param {string} $classes Space-separated list of classes for the event.
-				 * @param {string} $date Event date in Y-m-d H:i:s format.
-				 *
-				 * @return {string} HTML following each event in upcoming events lists.
-				 */
-				$append = apply_filters( 'mc_event_upcoming_after', $append, $classes, $date );
+			} else {	
 				// Recurring events should only appear once.
 				if ( ! in_array( $details['dateid'], $skips, true ) ) {
-					$output .= ( $item === $last_item ) ? '' : $prepend . $item . $append;
+					$output .= ( $item === $last_item ) ? '' : $item;
 				}
 			}
 			$skips[]   = $details['dateid']; // Prevent the same event from showing more than once.
@@ -353,32 +330,35 @@ function my_calendar_upcoming_events( $args ) {
 			$output = '';
 		}
 	}
+	/**
+	 * Replace the list header for upcoming events lists. Default value `&lt;ul id='upcoming-events-$hash' class='mc-event-list upcoming-events'$lang>`.
+	 *
+	 * @hook mc_upcoming_events_header
+	 *
+	 * @param {string} $header Existing upcoming events header HTML.
+	 *
+	 * @return {string} List header HTML.
+	 */
+	$header = apply_filters( 'mc_upcoming_events_header', $header );
+	/**
+	 * Replace the list footer for upcoming events lists. Default value `&lt;/ul>`.
+	 *
+	 * @hook mc_upcoming_events_footer
+	 *
+	 * @param {string} $header Existing upcoming events footer HTML.
+	 *
+	 * @return {string} List header HTML.
+	 */
+	$footer = apply_filters( 'mc_upcoming_events_footer', $footer );
 	if ( '' !== $output ) {
-		/**
-		 * Replace the list header for upcoming events lists. Default value `&lt;ul id='upcoming-events-$hash' class='mc-event-list upcoming-events'$lang>`.
-		 *
-		 * @hook mc_upcoming_events_header
-		 *
-		 * @param {string} $header Existing upcoming events header HTML.
-		 *
-		 * @return {string} List header HTML.
-		 */
-		$header = apply_filters( 'mc_upcoming_events_header', $header );
-		/**
-		 * Replace the list footer for upcoming events lists. Default value `&lt;/ul>`.
-		 *
-		 * @hook mc_upcoming_events_footer
-		 *
-		 * @param {string} $header Existing upcoming events footer HTML.
-		 *
-		 * @return {string} List header HTML.
-		 */
-
-		$footer = apply_filters( 'mc_upcoming_events_footer', $footer );
-		$output = $header . $output . $footer;
-		$return = mc_run_shortcodes( $output );
+		$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
+		$output     = $header . $navigation . $output . $footer;
+		$return     = mc_run_shortcodes( $output );
 	} else {
-		$return = '&lt;div class="mc-event-list no-events-fallback upcoming-events ' . $class . '">' . stripcslashes( $no_event_text ) . '&lt;/div>';
+		$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
+		$header     = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
+		$class      = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '';
+		$return     = $header . $navigation . '&lt;li class="' . $class . '">' . wp_unslash( $no_event_text ) . '&lt;/li>' . $footer;
 	}
 
 	if ( $site ) {
@@ -645,13 +625,44 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		}
 		++$i;
 	}
-	if ( $last_date || $first_date ) {
+	if ( ( $last_date || $first_date ) &amp;&amp; 'events' === $args['type'] ) {
 		$args['offset'] = count( $output ) - 1;
 		$buttons        = mc_upcoming_events_navigation( $args, $first_date, $last_date );
 		$html           = $buttons . $html;
 	}
 
 	return $html;
+}
+
+/**
+ * Generate upcoming events navigation for dates.
+ *
+ * @return string 
+ */
+function mc_upcoming_dates_navigation( $args ) {
+	if ( ! isset( $args['from'] ) || ! $args['from'] ) {
+		$args['from'] = gmdate( 'Y-m-d', time() - DAY_IN_SECONDS * $args['before'] );
+		$args['to']   = gmdate( 'Y-m-d', time() + DAY_IN_SECONDS * $args['after'] );
+	}
+
+	$diff      = strtotime( $args['to'] ) - strtotime( $args['from'] );
+	$new_from  = gmdate( 'Y-m-d', strtotime( $args['from'] ) - $diff );
+	$new_to    = gmdate( 'Y-m-d', strtotime( $args['to'] ) + $diff );
+	$to        = $args['to'];
+	$from      = $args['from'];
+
+	$args['to']     = $from;
+	$args['from']   = $new_from;
+	$json_args_prev = str_replace( '&amp;', '|', http_build_query( $args ) );
+
+	$args['to']     = $new_to;
+	$args['from']   = $to;
+	$json_args_next = str_replace( '&amp;', '|', http_build_query( $args ) );
+
+	return '&lt;li class="mc-load-events-controls">
+				&lt;button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-to="' . esc_attr( $args['from'] ) . '" data-value="' . esc_attr( $json_args_prev ) . '" value="' . esc_attr( $new_from ) . '">&lt;span class="mc-icon" aria-hidden="true">&lt;/span>Previous Events&lt;/button>
+				&lt;button class="mc-loader mc-load-next-upcoming-dates mc-next" type="button" data-to="' . esc_attr( $new_to ) . '" data-value="' . esc_attr( $json_args_next ) . '" value="' . esc_attr( $args['to'] ) . '">Future Events&lt;span class="mc-icon" aria-hidden="true">&lt;/span>&lt;/button>
+			&lt;/li>';
 }
 
 /**
