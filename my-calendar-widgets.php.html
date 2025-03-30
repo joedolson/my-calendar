@@ -332,7 +332,7 @@ function mc_set_from_and_to( $args, $display_type ) {
 		$args['to']   = ( 'today' === $args['to'] ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $args['to'] ), false );
 	}
 
-	for ( $i = 1; $i &lt;= 12; ++$i  ) {
+	for ( $i = 1; $i &lt;= 12; ++$i ) {
 		if ( 'month+' . $i === $display_type ) {
 			$args['from'] = mc_date( 'Y-m-1', strtotime( '+' . $i . ' month' ), false );
 			$args['to']   = mc_date( 'Y-m-t', strtotime( '+' . $i . ' month' ), false );
