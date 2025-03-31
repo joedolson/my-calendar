@@ -590,6 +590,9 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
  * @return string
  */
 function mc_upcoming_dates_navigation( $args ) {
+	if ( 'true' !== $args['navigation'] ) {
+		return '';
+	}
 	if ( ! isset( $args['from'] ) || ! $args['from'] ) {
 		$args['from'] = gmdate( 'Y-m-d', time() - DAY_IN_SECONDS * $args['before'] );
 		$args['to']   = gmdate( 'Y-m-d', time() + DAY_IN_SECONDS * $args['after'] );
@@ -625,6 +628,9 @@ function mc_upcoming_dates_navigation( $args ) {
  * @return string
  */
 function mc_upcoming_events_navigation( $args, $first_date, $last_date ) {
+	if ( 'true' !== $args['navigation'] ) {
+		return '';
+	}
 	unset( $args['time'] );
 	$json_args   = str_replace( '&', '|', http_build_query( $args ) );
 	$prev_button = '';

@@ -59,6 +59,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$type       = ( isset( $instance['my_calendar_upcoming_type'] ) ) ? $instance['my_calendar_upcoming_type'] : '';
 		$order      = ( isset( $instance['my_calendar_upcoming_order'] ) ) ? $instance['my_calendar_upcoming_order'] : '';
 		$cat        = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : array();
+		$navigation = ( isset( $instance['my_calendar_upcoming_navigation'] ) ) ? $instance['my_calendar_upcoming_navigation'] : false;
 
 		$the_title      = apply_filters( 'widget_title', $title, $instance, $args );
 		$the_template   = ( isset( $instance['my_calendar_upcoming_template'] ) ) ? $instance['my_calendar_upcoming_template'] : '';
@@ -102,6 +103,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			'lvalue'         => $lvalue,
 			'to'             => $to,
 			'site'           => $site,
+			'navigation'     => $navigation,
 		);
 
 		$the_events = my_calendar_upcoming_events( $args );
@@ -125,6 +127,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			$template = $defaults['upcoming']['template'];
 		}
 		$text       = ( isset( $instance['my_calendar_no_events_text'] ) ) ? $instance['my_calendar_no_events_text'] : '';
+		$navigation = ( isset( $instance['my_calendar_upcoming_navigation'] ) ) ? $instance['my_calendar_upcoming_navigation'] : '';
 		$category   = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : null;
 		$author     = ( isset( $instance['my_calendar_upcoming_author'] ) ) ? $instance['my_calendar_upcoming_author'] : '';
 		$host       = ( isset( $instance['mc_host'] ) ) ? $instance['mc_host'] : '';
@@ -152,6 +155,9 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_title' ) ); ?>"><?php esc_html_e( 'Title', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_title' ) ); ?>" value="<?php echo esc_attr( $title ); ?>"/>
+		</p>
+		<p>
+			<input class="widefat" type="checkbox" value="true" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_navigation' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_navigation' ) ); ?>" <?php checked( $navigation, 'true' ); ?> /> <label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_navigation' ) ); ?>"><?php esc_html_e( 'Include Navigation', 'my-calendar' ); ?></label>
 		</p>
 		<?php
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
