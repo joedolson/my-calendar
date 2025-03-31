@@ -297,10 +297,12 @@ function mc_set_from_and_to( $args, $display_type ) {
 		$args['from'] = mc_date( 'Y-m-d', strtotime( "-$args[before] days" ), false );
 		$args['to']   = mc_date( 'Y-m-d', strtotime( "+$args[after] days" ), false );
 	}
+
 	if ( 'month' === $display_type ) {
 		$args['from'] = mc_date( 'Y-m-1' );
 		$args['to']   = mc_date( 'Y-m-t' );
 	}
+
 	if ( 'custom' === $display_type && '' !== $args['from'] && '' !== $args['to'] ) {
 		$args['from'] = mc_date( 'Y-m-d', strtotime( $args['from'] ), false );
 		$args['to']   = ( 'today' === $args['to'] ) ? current_time( 'Y-m-d' ) : mc_date( 'Y-m-d', strtotime( $args['to'] ), false );
@@ -312,6 +314,7 @@ function mc_set_from_and_to( $args, $display_type ) {
 			$args['to']   = mc_date( 'Y-m-t', strtotime( '+' . $i . ' month' ), false );
 		}
 	}
+
 	if ( 'year' === $display_type ) {
 		$args['from'] = mc_date( 'Y-1-1' );
 		$args['to']   = mc_date( 'Y-12-31' );
@@ -609,8 +612,8 @@ function mc_upcoming_dates_navigation( $args ) {
 	$json_args_next = str_replace( '&', '|', http_build_query( $args ) );
 
 	return '<li class="mc-load-events-controls">
-				<button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-value="' . esc_attr( $json_args_prev ) . '" value="dates"><span class="mc-icon" aria-hidden="true"></span>Previous Events</button>
-				<button class="mc-loader mc-load-next-upcoming-dates mc-next" type="button" data-value="' . esc_attr( $json_args_next ) . '" value="dates">Future Events<span class="mc-icon" aria-hidden="true"></span></button>
+				<button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-value="' . esc_attr( $json_args_prev ) . '" value="dates"><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html__( 'Previous Events', 'my-calendar' ) . '</span></button>
+				<button class="mc-loader mc-load-next-upcoming-dates mc-next" type="button" data-value="' . esc_attr( $json_args_next ) . '" value="dates"><span class="mc-text">' . esc_html__( 'Future Events', 'my-calendar' ) . '</span><span class="mc-icon" aria-hidden="true"></span></button>
 			</li>';
 }
 
@@ -640,7 +643,7 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date ) {
 			$label     = __( 'Today', 'my-calendar' );
 			$class     = 'mc-today';
 		}
-		$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span>' . esc_html( $label ) . '</button>';
+		$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html( $label ) . '</span></button>';
 	}
 	if ( $last_date ) {
 		unset( $args['offset'] );
@@ -655,7 +658,7 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date ) {
 			$label     = __( 'Today', 'my-calendar' );
 			$class     = 'mc-today';
 		}
-		$next_button .= '<button class="mc-loader mc-load-next-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '">' . esc_html( $label ) . '<span class="mc-icon" aria-hidden="true"></span></button>';
+		$next_button .= '<button class="mc-loader mc-load-next-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '"><span class="mc-text">' . esc_html( $label ) . '</span><span class="mc-icon" aria-hidden="true"></span></button>';
 	}
 	$buttons = ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
 
