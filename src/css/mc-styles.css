@@ -1474,6 +1474,10 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	display: block;
 }
 
+.generator .checkboxes label {
+	display: inline;
+}
+
 .my-calendar-contextual-help {
 	margin-left: .25em;
 }
