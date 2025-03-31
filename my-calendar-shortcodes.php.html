@@ -156,6 +156,7 @@ function my_calendar_insert_upcoming( $atts ) {
 			'to'             => false,
 			'site'           => false,
 			'language'       => '',
+			'navigation'     => false,
 		),
 		$atts,
 		'my_calendar_upcoming'
@@ -507,6 +508,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 	$below      = ( isset( $params['below'] ) ) ? $params['below'] : '';
 	$shortcode  = ( isset( $params['shortcode'] ) ) ? $params['shortcode'] : "[$base]";
 	$append     = ( isset( $params['append'] ) ) ? $params['append'] : '';
+	$navigation = ( isset( $params['navigation'] ) ) ? $params['navigation'] : '';
 
 	$last_shortcode = mc_get_option( 'last_shortcode_' . $type );
 	$shortcode      = ( ! isset( $params['shortcode'] ) &amp;&amp; $last_shortcode ) ? "[$last_shortcode]" : $shortcode;
@@ -535,6 +537,13 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 		&lt;div class="mc-generator-inputs">
 			&lt;fieldset>
 				&lt;legend>&lt;?php esc_html_e( 'Content Filters', 'my-calendar' ); ?>&lt;/legend>
+				&lt;?php
+				if ( 'upcoming' === $type ) {
+					?>
+					&lt;p class="checkboxes">&lt;input type="checkbox" value="true" name="navigation" id="upcoming_navigation"> &lt;label for="upcoming_navigation">&lt;?php esc_html_e( 'Include navigation', 'my-calendar' ); ?>&lt;/p>
+					&lt;?php
+				}
+				?>
 				&lt;fieldset class="categories">
 					&lt;legend>&lt;?php esc_html_e( 'Categories', 'my-calendar' ); ?>&lt;/legend>
 					&lt;ul style="padding:0;margin:0;list-style-type:none;display:flex;flex-wrap:wrap;gap:12px;">
