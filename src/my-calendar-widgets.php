@@ -164,9 +164,7 @@ function my_calendar_upcoming_events( $args ) {
 		$omit      = array();
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event );
-			$classes = mc_get_event_classes( $event, 'upcoming' );
-
-			$data = array(
+			$data    = array(
 				'event'    => $event,
 				'tags'     => $details,
 				'template' => $args['template'],
