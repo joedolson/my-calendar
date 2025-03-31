@@ -56,9 +56,9 @@ function mc_generate( $format = 'shortcode' ) {
 				default:
 					$shortcode = 'my_calendar';
 			}
-			$keys = array( 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'skip', 'after', 'before', 'preset_template', 'template', 'fallback', 'show_recurring', 'weekends' );
+			$keys = array( 'navigation', 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'skip', 'after', 'before', 'preset_template', 'template', 'fallback', 'show_recurring', 'weekends' );
 			$post = map_deep( $_POST, 'sanitize_text_field' );
-			if ( ! isset( $post['weekends'] ) ) {
+			if ( ! isset( $post['weekends'] ) && 'main' === $type ) {
 				$post['weekends'] = 'false';
 			}
 			foreach ( $post as $key => $value ) {
