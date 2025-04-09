@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: Single Event, List view.
+ * Template: Event Title, List view.
  *
  * @category Templates
  * @package  My Calendar

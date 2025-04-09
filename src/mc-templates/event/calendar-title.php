@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: Single Event, Grid view.
+ * Template: Event Title, Grid view.
  *
  * @category Templates
  * @package  My Calendar

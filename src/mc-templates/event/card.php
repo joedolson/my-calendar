@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: Single Event, List view.
+ * Template: Single Event, Card view.
  *
  * Contents are inside the `article` wrapper for event data, after the `header` element.
  *
