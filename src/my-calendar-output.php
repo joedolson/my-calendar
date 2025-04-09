@@ -1656,7 +1656,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 		 *
 		 * @return {bool}
 		 */
-		if ( apply_filters( 'mc_show_week_number', false, $params ) ) {
+		if ( apply_filters( 'mc_show_week_number', false, $params ) && 'grid' === $params['format'] ) {
 			$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
 		}
 		for ( $i = 0; $i <= 6; $i++ ) {
@@ -2332,7 +2332,7 @@ function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	 *
 	 * @return {bool}
 	 */
-	if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
+	if ( apply_filters( 'mc_show_week_number', false, $args ) && 'grid' === $params['format'] ) {
 		$weeknumber = mc_date( 'W', $start, false );
 		if ( 'list' !== $format ) {
 			$body = "<$td class='week_number'>$weeknumber</$td>";
