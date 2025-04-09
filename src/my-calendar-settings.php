@@ -1672,7 +1672,7 @@ function mc_remote_db() {
 										'default' => array(
 											'false' => __( 'Open links as a popup', 'my-calendar' ),
 											'true'  => __( 'Open event links in single event view', 'my-calendar' ),
-											'none'  => __( 'Disable event links', 'my-calendar' ),
+											'none'  => __( 'Disable event links (Grid and Card)', 'my-calendar' ),
 										),
 										'note'    => $note,
 										'atts'    => $atts,
