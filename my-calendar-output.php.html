@@ -965,7 +965,7 @@ function mc_show_details( $time, $type ) {
 	 */
 	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
-	return ( ( 'calendar' === $type &amp;&amp; 'true' === mc_get_option( 'open_uri' ) &amp;&amp; 'day' !== $time ) || $no_link ) ? false : true;
+	return ( ( ( 'calendar' === $type &amp;&amp; 'true' === mc_get_option( 'open_uri' ) &amp;&amp; 'day' !== $time ) || $no_link ) &amp;&amp; ( ! 'card' === $type ) ) ? false : true;
 }
 
 add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
@@ -1682,7 +1682,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 		 *
 		 * @return {bool}
 		 */
-		if ( apply_filters( 'mc_show_week_number', false, $params ) ) {
+		if ( apply_filters( 'mc_show_week_number', false, $params ) &amp;&amp; 'grid' === $params['format'] ) {
 			$body .= "		&lt;$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "&lt;/$close_th>\n";
 		}
 		for ( $i = 0; $i &lt;= 6; $i++ ) {
@@ -2358,7 +2358,7 @@ function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	 *
 	 * @return {bool}
 	 */
-	if ( apply_filters( 'mc_show_week_number', false, $args ) ) {
+	if ( apply_filters( 'mc_show_week_number', false, $args ) &amp;&amp; 'grid' === $format ) {
 		$weeknumber = mc_date( 'W', $start, false );
 		if ( 'list' !== $format ) {
 			$body = "&lt;$td class='week_number'>$weeknumber&lt;/$td>";
