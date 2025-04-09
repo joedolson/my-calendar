@@ -2332,7 +2332,7 @@ function mc_show_week_number( $events, $args, $format, $td, $start ) {
 	 *
 	 * @return {bool}
 	 */
-	if ( apply_filters( 'mc_show_week_number', false, $args ) && 'grid' === $params['format'] ) {
+	if ( apply_filters( 'mc_show_week_number', false, $args ) && 'grid' === $format ) {
 		$weeknumber = mc_date( 'W', $start, false );
 		if ( 'list' !== $format ) {
 			$body = "<$td class='week_number'>$weeknumber</$td>";
