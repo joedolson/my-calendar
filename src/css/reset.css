@@ -1163,6 +1163,12 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	animation: animation-rotate 1250ms linear infinite;
 }
 
+@media (prefers-reduced-motion) {
+	.mc-main .mc-loading {
+		animation: animation-rotate 5000ms linear infinite;
+	}
+}
+
 .mc-author-card, .mc-host-card {
 	display: grid;
 	grid-template-columns: 3.5em 1fr;
