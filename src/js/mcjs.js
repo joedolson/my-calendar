@@ -20,16 +20,16 @@
 			const parent = el.closest( 'ul' );
 			parent.setAttribute( 'tabindex', '-1' );
 			parent.addEventListener( 'click', function( e ) {
-				if ( e.target.nodeName === 'BUTTON' ) {
-					loadUpcoming( e, parent );
+				let targetParent = e.target.closest( 'button' );
+				if ( targetParent.classList.contains( 'mc-loader' ) ) {
+					loadUpcoming( targetParent, parent );
 				}
 			});
 		});
 	}
 
-	function loadUpcoming( e, parent ) {
+	function loadUpcoming( el, parent ) {
 		let request = new XMLHttpRequest();
-		let el      = e.target;
 
 		request.open( 'POST', my_calendar.ajaxurl, true );
 		request.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded;' );
