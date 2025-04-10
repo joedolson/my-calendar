@@ -247,6 +247,24 @@ li.datetime-template:nth-of-type(even) {
 	margin-bottom: 12px;
 }
 
+.mc-view-options .inside > div {
+	display: grid;
+	grid-template-columns: repeat( 3, 1fr );
+	gap: 20px;
+}
+
+@media ( width < 1500px ) {
+	.mc-view-options .inside > div {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+}
+
+@media ( width < 782px ) {
+	.mc-view-options .inside > div {
+		grid-template-columns: repeat( 1, 1fr );
+	}
+}
+
 .mc_permissions .mc-settings,
 .my-calendar-admin .columns {
 	grid-template-columns: repeat(2, 1fr );
