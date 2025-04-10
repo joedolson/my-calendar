@@ -59,7 +59,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$type       = ( isset( $instance['my_calendar_upcoming_type'] ) ) ? $instance['my_calendar_upcoming_type'] : '';
 		$order      = ( isset( $instance['my_calendar_upcoming_order'] ) ) ? $instance['my_calendar_upcoming_order'] : '';
 		$cat        = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : array();
-		$navigation = ( isset( $instance['my_calendar_upcoming_navigation'] ) ) ? $instance['my_calendar_upcoming_navigation'] : false;
+		$navigation = ( isset( $instance['my_calendar_upcoming_navigation'] ) ) ? $instance['my_calendar_upcoming_navigation'] : mc_get_option( 'upcoming_events_navigation' );
 
 		$the_title      = apply_filters( 'widget_title', $title, $instance, $args );
 		$the_template   = ( isset( $instance['my_calendar_upcoming_template'] ) ) ? $instance['my_calendar_upcoming_template'] : '';
@@ -127,7 +127,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			$template = $defaults['upcoming']['template'];
 		}
 		$text       = ( isset( $instance['my_calendar_no_events_text'] ) ) ? $instance['my_calendar_no_events_text'] : '';
-		$navigation = ( isset( $instance['my_calendar_upcoming_navigation'] ) ) ? $instance['my_calendar_upcoming_navigation'] : '';
+		$navigation = ( isset( $instance['my_calendar_upcoming_navigation'] ) ) ? $instance['my_calendar_upcoming_navigation'] : mc_get_option( 'upcoming_events_navigation' );
 		$category   = ( isset( $instance['my_calendar_upcoming_category'] ) ) ? (array) $instance['my_calendar_upcoming_category'] : null;
 		$author     = ( isset( $instance['my_calendar_upcoming_author'] ) ) ? $instance['my_calendar_upcoming_author'] : '';
 		$host       = ( isset( $instance['mc_host'] ) ) ? $instance['mc_host'] : '';

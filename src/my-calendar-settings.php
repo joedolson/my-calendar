@@ -359,6 +359,8 @@ function mc_update_output_settings( $post ) {
 	$options['show_months']      = (int) $post['mc_show_months'];
 	$options['map_service']      = ( in_array( $post['mc_map_service'], array( 'mapquest', 'bing', 'google', 'none' ), true ) ) ? $post['mc_map_service'] : 'google';
 	$options['maptype']          = ( in_array( $post['mc_maptype'], array( 'roadmap', 'satellite', 'hybrid', 'terrain' ), true ) ) ? $post['mc_maptype'] : 'roadmap';
+	// Globally enable navigation on upcoming events.
+	$options['upcoming_events_navigation'] = ( ! empty( $post['mc_upcoming_events_navigation'] ) && 'on' === $post['mc_upcoming_events_navigation'] ) ? 'true' : 'false';
 
 	// Calculate sequence for navigation elements.
 	$top    = array();
@@ -1599,202 +1601,219 @@ function mc_remote_db() {
 						</fieldset>
 					</div>
 				</div>
-				<div class="postbox">
+				<div class="postbox mc-view-options">
 					<h2><?php esc_html_e( 'View Options', 'my-calendar' ); ?></h2>
 
 					<div class="inside">
-						<ul>
-							<li>
-							<?php
-							mc_settings_field(
-								array(
-									'name'  => 'mc_show_months',
-									'label' => __( 'How many months of events to show at a time:', 'my-calendar' ),
-									'atts'  => array(
-										'size' => '3',
-									),
-									'type'  => 'text',
-								)
-							);
-							?>
-							</li>
-							<li>
-							<?php
-							mc_settings_field(
-								array(
-									'name'    => 'mc_map_service',
-									'label'   => __( 'Mapping service', 'my-calendar' ),
-									'default' => array(
-										'bing'   => __( 'Bing Maps', 'my-calendar' ),
-										'google' => __( 'Google Maps', 'my-calendar' ),
-										'none'   => __( 'None', 'my-calendar' ),
-									),
-									'note'    => __( 'Map setting currently only supports map links; embedded maps are still only supported for Google Maps.', 'my-calendar' ),
-									'type'    => 'select',
-								)
-							);
-							?>
-							</li>
-							<li>
-							<?php
-							mc_settings_field(
-								array(
-									'name'    => 'mc_maptype',
-									'label'   => __( 'Default map display', 'my-calendar' ),
-									'default' => array(
-										'roadmap'   => __( 'Road map', 'my-calendar' ),
-										'satellite' => __( 'Satellite', 'my-calendar' ),
-										'hybrid'    => __( 'Hybrid (Satellite/Road)', 'my-calendar' ),
-										'terrain'   => __( 'Terrain', 'my-calendar' ),
-									),
-									'note'    => __( 'Map setting currently only supports map links; embedded maps are still only supported for Google Maps.', 'my-calendar' ),
-									'type'    => 'select',
-								)
-							);
-							?>
-							</li>
-						</ul>				
-						<fieldset>
-							<legend><?php esc_html_e( 'Grid Options', 'my-calendar' ); ?></legend>
-							<ul>
-								<li>
-								<?php
-								$atts = array();
-								$note = '';
-								if ( '' === mc_get_option( 'uri_id' ) || '0' === mc_get_option( 'uri_id' ) ) {
-									$atts = array( 'disabled' => 'disabled' );
-									$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
-								}
-								mc_settings_field(
-									array(
-										'name'    => 'mc_open_uri',
-										'label'   => __( 'Calendar Links', 'my-calendar' ),
-										'default' => array(
-											'false' => __( 'Open links as a popup', 'my-calendar' ),
-											'true'  => __( 'Open event links in single event view', 'my-calendar' ),
-											'none'  => __( 'Disable event links (Grid and Card)', 'my-calendar' ),
-										),
-										'note'    => $note,
-										'atts'    => $atts,
-										'type'    => 'select',
-									)
-								);
-								?>
-								</li>								
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_convert',
-										'label'   => __( 'Mobile View', 'my-calendar' ),
-										'default' => array(
-											'true' => __( 'Switch to list view', 'my-calendar' ),
-											'mini' => __( 'Switch to mini calendar', 'my-calendar' ),
-											'none' => __( 'No change', 'my-calendar' ),
-										),
-										'type'    => 'select',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_show_weekends',
-										'label' => __( 'Show Weekends on Calendar', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-							</ul>
-						</fieldset>
-						<fieldset>
-							<legend><?php esc_html_e( 'List Options', 'my-calendar' ); ?></legend>
+						<div>
 							<ul>
 								<li>
 								<?php
 								mc_settings_field(
 									array(
-										'name'  => 'mc_show_list_info',
-										'label' => __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_list_link_titles',
-										'label' => __( 'Show events in list view. (Agenda view)', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_hide_past_dates',
-										'label' => __( 'Hide past dates in initial list view.', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-							</ul>
-						</fieldset>
-						<fieldset>
-							<legend><?php esc_html_e( 'Mini Calendar Options', 'my-calendar' ); ?></legend>
-							<ul>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_mini_uri',
-										'label' => __( 'Target link for mini calendar dates', 'my-calendar' ),
+										'name'  => 'mc_show_months',
+										'label' => __( 'How many months of events to show at a time:', 'my-calendar' ),
 										'atts'  => array(
-											'size' => '60',
+											'size' => '3',
 										),
-										'type'  => 'url',
+										'type'  => 'text',
 									)
 								);
 								?>
 								</li>
-								<?php
-								$disabled = ( ! mc_get_option( 'uri_id' ) && ! mc_get_option( 'mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
-								if ( ! empty( $disabled ) ) {
-									// Ensure that this option is set to a valid value if no URI configured.
-									mc_update_option( 'open_day_uri', 'false' );
-								}
-								?>
 								<li>
 								<?php
-								$open_day_options = array(
-									'false'          => __( 'Event popup ', 'my-calendar' ),
-									'true'           => __( 'daily view page (above)', 'my-calendar' ),
-									'current'        => __( 'current page (if singular)', 'my-calendar' ),
-									'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
-									'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
-								);
 								mc_settings_field(
 									array(
-										'name'    => 'mc_open_day_uri',
-										'label'   => __( 'Link action for mini calendar', 'my-calendar' ),
-										'default' => $open_day_options,
-										'atts'    => $disabled,
+										'name'    => 'mc_map_service',
+										'label'   => __( 'Mapping service', 'my-calendar' ),
+										'default' => array(
+											'bing'   => __( 'Bing Maps', 'my-calendar' ),
+											'google' => __( 'Google Maps', 'my-calendar' ),
+											'none'   => __( 'None', 'my-calendar' ),
+										),
+										'note'    => __( 'Setting only supports links; embedded maps are still only Google Maps.', 'my-calendar' ),
 										'type'    => 'select',
 									)
 								);
 								?>
 								</li>
-							</ul>
-						</fieldset>
-
+								<li>
+								<?php
+								mc_settings_field(
+									array(
+										'name'    => 'mc_maptype',
+										'label'   => __( 'Default map display', 'my-calendar' ),
+										'default' => array(
+											'roadmap'   => __( 'Road map', 'my-calendar' ),
+											'satellite' => __( 'Satellite', 'my-calendar' ),
+											'hybrid'    => __( 'Hybrid (Satellite/Road)', 'my-calendar' ),
+											'terrain'   => __( 'Terrain', 'my-calendar' ),
+										),
+										'note'    => __( 'Setting only supports links; embedded maps are still only Google Maps.', 'my-calendar' ),
+										'type'    => 'select',
+									)
+								);
+								?>
+								</li>
+							</ul>				
+							<fieldset>
+								<legend><?php esc_html_e( 'Grid Options', 'my-calendar' ); ?></legend>
+								<ul>
+									<li>
+									<?php
+									$atts = array();
+									$note = '';
+									if ( '' === mc_get_option( 'uri_id' ) || '0' === mc_get_option( 'uri_id' ) ) {
+										$atts = array( 'disabled' => 'disabled' );
+										$note = ' (' . __( 'Set a main calendar page first.', 'my-calendar' ) . ')';
+									}
+									mc_settings_field(
+										array(
+											'name'    => 'mc_open_uri',
+											'label'   => __( 'Calendar Links', 'my-calendar' ),
+											'default' => array(
+												'false' => __( 'Open links as a popup', 'my-calendar' ),
+												'true'  => __( 'Open event links in single event view', 'my-calendar' ),
+												'none'  => __( 'Disable event links (Grid and Card)', 'my-calendar' ),
+											),
+											'note'    => $note,
+											'atts'    => $atts,
+											'type'    => 'select',
+										)
+									);
+									?>
+									</li>								
+									<li>
+									<?php
+									mc_settings_field(
+										array(
+											'name'    => 'mc_convert',
+											'label'   => __( 'Mobile View', 'my-calendar' ),
+											'default' => array(
+												'true' => __( 'Switch to list view', 'my-calendar' ),
+												'mini' => __( 'Switch to mini calendar', 'my-calendar' ),
+												'none' => __( 'No change', 'my-calendar' ),
+											),
+											'type'    => 'select',
+										)
+									);
+									?>
+									</li>
+									<li>
+									<?php
+									mc_settings_field(
+										array(
+											'name'  => 'mc_show_weekends',
+											'label' => __( 'Show Weekends on Calendar', 'my-calendar' ),
+											'type'  => 'checkbox-single',
+										)
+									);
+									?>
+									</li>
+								</ul>
+							</fieldset>
+							<fieldset>
+								<legend><?php esc_html_e( 'List Options', 'my-calendar' ); ?></legend>
+								<ul>
+									<li>
+									<?php
+									mc_settings_field(
+										array(
+											'name'  => 'mc_show_list_info',
+											'label' => __( 'Show the first event\'s title and the number of events that day next to the date.', 'my-calendar' ),
+											'type'  => 'checkbox-single',
+										)
+									);
+									?>
+									</li>
+									<li>
+									<?php
+									mc_settings_field(
+										array(
+											'name'  => 'mc_list_link_titles',
+											'label' => __( 'Show events in list view. (Agenda view)', 'my-calendar' ),
+											'type'  => 'checkbox-single',
+										)
+									);
+									?>
+									</li>
+									<li>
+									<?php
+									mc_settings_field(
+										array(
+											'name'  => 'mc_hide_past_dates',
+											'label' => __( 'Hide past dates in initial list view.', 'my-calendar' ),
+											'type'  => 'checkbox-single',
+										)
+									);
+									?>
+									</li>
+								</ul>
+							</fieldset>
+							<fieldset>
+								<legend><?php esc_html_e( 'Mini Calendar Options', 'my-calendar' ); ?></legend>
+								<ul>
+									<li>
+									<?php
+									mc_settings_field(
+										array(
+											'name'  => 'mc_mini_uri',
+											'label' => __( 'Target link for mini calendar dates', 'my-calendar' ),
+											'atts'  => array(
+												'size' => '60',
+											),
+											'type'  => 'url',
+										)
+									);
+									?>
+									</li>
+									<?php
+									$disabled = ( ! mc_get_option( 'uri_id' ) && ! mc_get_option( 'mini_uri' ) ) ? array( 'disabled' => 'disabled' ) : array();
+									if ( ! empty( $disabled ) ) {
+										// Ensure that this option is set to a valid value if no URI configured.
+										mc_update_option( 'open_day_uri', 'false' );
+									}
+									?>
+									<li>
+									<?php
+									$open_day_options = array(
+										'false'          => __( 'Event popup ', 'my-calendar' ),
+										'true'           => __( 'daily view page (above)', 'my-calendar' ),
+										'current'        => __( 'current page (if singular)', 'my-calendar' ),
+										'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
+										'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
+									);
+									mc_settings_field(
+										array(
+											'name'    => 'mc_open_day_uri',
+											'label'   => __( 'Link action for mini calendar', 'my-calendar' ),
+											'default' => $open_day_options,
+											'atts'    => $disabled,
+											'type'    => 'select',
+										)
+									);
+									?>
+									</li>
+								</ul>
+							</fieldset>
+							<fieldset>
+								<legend><?php esc_html_e( 'Upcoming Events', 'my-calendar' ); ?></legend>
+								<ul>
+									<li>
+									<?php
+									mc_settings_field(
+										array(
+											'name'  => 'mc_upcoming_events_navigation',
+											'label' => __( 'Globally enable Upcoming Events navigation', 'my-calendar' ),
+											'type'  => 'checkbox-single',
+										)
+									);
+									?>
+									</li>
+								</ul>
+							</fieldset>
+						</div>
 						<p><input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Save Display Settings', 'my-calendar' ); ?>"/></p>
 					</div>
 				</div>

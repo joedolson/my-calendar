@@ -130,7 +130,7 @@ function my_calendar_insert_upcoming( $atts ) {
 			'to'             => false,
 			'site'           => false,
 			'language'       => '',
-			'navigation'     => false,
+			'navigation'     => mc_get_option( 'upcoming_events_navigation' ),
 		),
 		$atts,
 		'my_calendar_upcoming'
