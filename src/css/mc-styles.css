@@ -1841,6 +1841,10 @@ div.mc-search {
 	border-radius: 3px;
 }
 
+.mc-flex.mc-social a:hover {
+	outline: 2px solid;
+}
+
 fieldset.mc-flex {
 	column-gap: 10px;
 	flex-wrap: wrap;
