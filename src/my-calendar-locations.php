@@ -974,10 +974,10 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</p>
 	<div class="columns-flex">
 	<p>
-		<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . $compare_lat . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . esc_attr( $event_lat ) . '" />
+		<label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . $compare_lat . '</label> <input type="text" id="e_latitude" name="' . $context . '_latitude" size="14" placeholder="51.477928" value="' . esc_attr( $event_lat ) . '" />
 	</p>
 	<p>
-		<label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . esc_attr( $event_lon ) . '" />
+		<label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '</label> <input type="text" id="e_longitude" name="' . $context . '_longitude" size="14" placeholder="-0.001545" value="' . esc_attr( $event_lon ) . '" />
 	</p>' . $update_gps . '
 	</div>
 	</fieldset>';
