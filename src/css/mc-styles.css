@@ -1999,6 +1999,19 @@ input#mc_event_time:valid+span {
 	color: inherit;
 }
 
+#privacy h3 {
+	font-size: 1.2em;
+	margin: 1em 0 0;
+}
+
+#privacy p {
+	max-width: 40rem;
+}
+
+#privacy .inside {
+	padding-bottom: 2em;
+}
+
 /**
  * Autocomplete CSS
  */
