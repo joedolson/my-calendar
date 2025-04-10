@@ -1121,7 +1121,8 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			$category_name = wp_strip_all_tags( stripslashes( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
-				$icon = '<div class="mc-category-icon-wrapper">' . mc_category_icon( $cat ) . '</div>';
+				$icon = mc_category_icon( $cat );
+				$icon = ( $icon ) ? '<div class="mc-category-icon-wrapper">' . $icon . '</div>' : '';
 				$c    = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="' . $id . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="' . $id . $cat->category_id . '">' . $icon . $category_name . '</label></li>';
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
