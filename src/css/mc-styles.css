@@ -243,6 +243,10 @@ li.datetime-template:nth-of-type(even) {
 	background: rgba( 0, 0, 0, .02 );
 }
 
+.my-calendar-admin li {
+	margin-bottom: 12px;
+}
+
 .mc_permissions .mc-settings,
 .my-calendar-admin .columns {
 	grid-template-columns: repeat(2, 1fr );
