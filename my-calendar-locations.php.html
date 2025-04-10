@@ -1000,10 +1000,10 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	&lt;/p>
 	&lt;div class="columns-flex">
 	&lt;p>
-		&lt;label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . $compare_lat . '&lt;/label> &lt;input type="text" id="e_latitude" name="' . $context . '_latitude" size="10" value="' . esc_attr( $event_lat ) . '" />
+		&lt;label for="e_latitude">' . __( 'Latitude', 'my-calendar' ) . $compare_lat . '&lt;/label> &lt;input type="text" id="e_latitude" name="' . $context . '_latitude" size="14" placeholder="51.477928" value="' . esc_attr( $event_lat ) . '" />
 	&lt;/p>
 	&lt;p>
-		&lt;label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '&lt;/label> &lt;input type="text" id="e_longitude" name="' . $context . '_longitude" size="10" value="' . esc_attr( $event_lon ) . '" />
+		&lt;label for="e_longitude">' . __( 'Longitude', 'my-calendar' ) . $compare_lon . '&lt;/label> &lt;input type="text" id="e_longitude" name="' . $context . '_longitude" size="14" placeholder="-0.001545" value="' . esc_attr( $event_lon ) . '" />
 	&lt;/p>' . $update_gps . '
 	&lt;/div>
 	&lt;/fieldset>';
