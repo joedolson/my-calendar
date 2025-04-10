@@ -90,6 +90,7 @@
 	letter-spacing: normal;
 }
 
+.mc-main .event-title:not(.event-title:has(a)),
 .mc-main .event-title a {
 	display: flex;
 	align-items: center;
