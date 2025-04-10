@@ -32,6 +32,7 @@ svg.category-icon,
 	flex-wrap: wrap;
 	column-gap: 8px;
 	align-items: center;
+	list-style: none;
 }
 
 .mc-main .category-key li a {
