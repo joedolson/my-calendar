@@ -41,7 +41,7 @@
 				// Get length, append, then re-check length.
 				parent.innerHTML += results.response;
 				// Get number of events added.
-				// Set focus to last item in previous set.
+				// Set focus to parent list.
 				parent.focus();
 				wp.a11y.speak( __( 'Upcoming events loaded', 'my-calendar' ) );
 			} else {
