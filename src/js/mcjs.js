@@ -21,7 +21,7 @@
 			parent.setAttribute( 'tabindex', '-1' );
 			parent.addEventListener( 'click', function( e ) {
 				let targetParent = e.target.closest( 'button' );
-				if ( targetParent.classList.contains( 'mc-loader' ) ) {
+				if ( targetParent && targetParent.classList.contains( 'mc-loader' ) ) {
 					loadUpcoming( targetParent, parent );
 				}
 			});
