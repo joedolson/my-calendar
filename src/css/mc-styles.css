@@ -1557,6 +1557,7 @@ select[name="event_recur"] {
 
 .my-calendar-admin li.events_access_notes {
 	padding: 0px 1px 1px 5px;
+	gap: 5px;
 }
 
 .req {
