@@ -6,6 +6,7 @@ ul.mc-event-list:has(li.list-preset) {
 	padding: 0;
 }
 
+.mc-event-list .list-preset > .mc-language,
 .mc-event-list .list-preset {
 	display: grid;
 	grid-template-columns: auto 1fr auto;
