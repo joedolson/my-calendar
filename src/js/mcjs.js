@@ -254,6 +254,7 @@
 
 				let height = calendar.height();
 				$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
+				wp.a11y.speak( __( 'Loading', 'my-calendar' ) );
 				$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
 
 					if ( status == 'error' ) {
