@@ -233,7 +233,7 @@ function mc_style_variables( $styles = array() ) {
 			'--list-preset-date-badge-background' => '#000',
 			'--list-preset-date-badge-color'      => '#fff',
 			'--list-preset-background'            => 'transparent',
-			'--list-preset-color'                 => '#333',
+			'--list-preset-color'                 => '',
 		),
 	);
 	foreach ( $core_styles as $key => $value ) {
@@ -503,7 +503,9 @@ function mc_generate_css() {
 	foreach ( $styles as $key => $var ) {
 		if ( 'text' === $key || 'sizing' === $key || 'list-presets' === $key ) {
 			foreach ( $var as $variable => $value ) {
-				$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $value ) . '; ';
+				if ( $value ) {
+					$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $value ) . '; ';
+				}
 			}
 		} else {
 			if ( $var ) {
