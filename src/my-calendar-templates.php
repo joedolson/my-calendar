@@ -568,7 +568,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 */
 	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_utc_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
 	$notime            = esc_html( mc_notime_label( $event ) );
-	$e['time']         = ( '00:00:00' === mc_date( 'H:i:s', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
+	$e['time']         = ( mc_is_all_day( $event ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
 	$e['time24']       = ( '00:00' === mc_date( 'G:i', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
 	$endtime           = ( '23:59:59' === $event->event_end ) ? '00:00:00' : mc_date( 'H:i:s', strtotime( $real_end_date ), false );
 	$e['endtime']      = ( $real_end_date === $real_begin_date || '1' === $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ), false ) ) ? '' : date_i18n( mc_time_format(), strtotime( $endtime ) );
