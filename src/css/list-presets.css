@@ -20,7 +20,7 @@ ul.mc-event-list:has(li.list-preset) {
 
 .mc-event-list .list_preset_2 {
 	padding: 1rem;
-	border: 1px solid var(--date-has-events-color);
+	border: 1px solid var(--list-preset-border-color);
 	border-bottom: none;
 	margin-bottom: 0;
 	margin-top: 0;
@@ -69,7 +69,7 @@ div.mc-event-list-container {
 }
 
 .mc-event-list .list_preset_3:nth-of-type(odd) {
-	background: rgba( 0,0,0,.04 );
+	background: var(--list-preset-stripe-background); /* rgba( 0,0,0,.04 ); */
 }
 
 .mc-event-list .list_preset_2 .mc-date-badge {
@@ -83,13 +83,13 @@ div.mc-event-list-container {
 
 .mc-event-list .list_preset_2:last-of-type {
 	border-radius: 0 0 12px 12px;
-	border-bottom: 1px solid var(--date-has-events-color);
+	border-bottom: 1px solid var(--list-preset-border-color);
 }
 
 .mc-event-list .list_preset_1 .mc-date-badge {
 	padding: 6px 9px;
-	background: var(--date-has-events-bg);
-	color: var(--date-has-events-color);
+	background: var(--list-preset-date-badge-background);
+	color: var(--list-preset-date-badge-color);
 	border-radius: 3px;
 }
 

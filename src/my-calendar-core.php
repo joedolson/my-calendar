@@ -227,9 +227,17 @@ function mc_style_variables( $styles = array() ) {
 		'sizing'                  => array(
 			'--grid-max-width' => '1260px',
 		),
+		'list-presets'            => array(
+			'--list-preset-border-color'          => '#000000',
+			'--list-preset-stripe-background'     => 'rgba( 0,0,0,.04 )',
+			'--list-preset-date-badge-background' => '#000',
+			'--list-preset-date-badge-color'      => '#fff',
+			'--list-preset-background'            => 'transparent',
+			'--list-preset-color'                 => '#333',
+		),
 	);
 	foreach ( $core_styles as $key => $value ) {
-		if ( 'text' === $key || 'sizing' === $key ) {
+		if ( 'text' === $key || 'sizing' === $key || 'list-presets' === $key ) {
 			foreach ( $value as $var => $text ) {
 				if ( ! isset( $styles[ $key ][ $var ] ) ) {
 					$styles[ $key ][ $var ] = $text;
@@ -493,7 +501,7 @@ function mc_generate_css() {
 	$styles     = mc_style_variables( $styles );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
-		if ( 'text' === $key || 'sizing' === $key ) {
+		if ( 'text' === $key || 'sizing' === $key || 'list-presets' === $key ) {
 			foreach ( $var as $variable => $value ) {
 				$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $value ) . '; ';
 			}
@@ -935,7 +943,7 @@ function mc_admin_head() {
 	$styles     = (array) mc_get_option( 'style_vars' );
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
-		if ( ( 'text' === $key || 'sizing' === $key ) && is_array( $var ) ) {
+		if ( ( 'text' === $key || 'sizing' === $key || 'list-presets' === $key ) && is_array( $var ) ) {
 			foreach ( $var as $variable => $text ) {
 				if ( $variable ) {
 					$style_vars .= sanitize_key( $variable ) . ': ' . esc_html( $text ) . '; ';

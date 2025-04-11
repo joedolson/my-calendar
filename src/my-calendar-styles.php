@@ -67,8 +67,18 @@ function my_calendar_style_edit() {
 					$styles['sizing'][ $key ] = $val;
 				}
 			}
+			if ( isset( $_POST['new_style_var_list_presets'] ) ) {
+				$key = sanitize_text_field( $_POST['new_style_var_list_presets']['key'] );
+				$val = sanitize_text_field( $_POST['new_style_var_list_presets']['val'] );
+				if ( $key && $val ) {
+					if ( 0 !== strpos( $key, '--' ) ) {
+						$key = '--' . $key;
+					}
+					$styles['list-presets'][ $key ] = $val;
+				}
+			}
 			foreach ( $_POST['style_vars'] as $key => $value ) {
-				if ( 'text' === $key || 'sizing' === $key ) {
+				if ( 'text' === $key || 'sizing' === $key || 'list-presets' === $key ) {
 					foreach ( $value as $var => $text ) {
 						if ( '' !== trim( $text ) ) {
 							$styles[ $key ][ $var ] = sanitize_text_field( $text );
@@ -96,6 +106,12 @@ function my_calendar_style_edit() {
 				$delete = map_deep( $_POST['delete_var_sizing'], 'sanitize_text_field' );
 				foreach ( $delete as $del ) {
 					unset( $styles['sizing'][ $del ] );
+				}
+			}
+			if ( isset( $_POST['delete_var_list_presets'] ) ) {
+				$delete = map_deep( $_POST['delete_var_list_presets'], 'sanitize_text_field' );
+				foreach ( $delete as $del ) {
+					unset( $styles['list-presets'][ $del ] );
 				}
 			}
 			mc_update_option( 'style_vars', $styles );
@@ -130,11 +146,12 @@ function my_calendar_style_edit() {
 		<fieldset class="mc-css-variables">
 			<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
 			<?php
-			$output        = '';
-			$text_output   = '';
-			$sizing_output = '';
-			$styles        = mc_get_option( 'style_vars' );
-			$styles        = mc_style_variables( $styles );
+			$output         = '';
+			$text_output    = '';
+			$sizing_output  = '';
+			$presets_output = '';
+			$styles         = mc_get_option( 'style_vars' );
+			$styles         = mc_style_variables( $styles );
 			foreach ( $styles as $var => $style ) {
 				if ( 'text' === $var ) {
 					foreach ( $style as $variable => $value ) {
@@ -157,6 +174,17 @@ function my_calendar_style_edit() {
 							$delete = '';
 						}
 						$sizing_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
+					}
+				} elseif ( 'list-presets' === $var ) {
+					foreach ( $style as $variable => $value ) {
+						$variable_id = 'mc' . sanitize_key( $variable );
+						if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
+							// Translators: CSS variable name.
+							$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_list_presets[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
+						} else {
+							$delete = '';
+						}
+						$presets_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
 					}
 				} else {
 					$var_id = 'mc' . sanitize_key( $var );
@@ -216,6 +244,22 @@ function my_calendar_style_edit() {
 					<input type='text' class="mc-text-input" name='new_style_var_sizing[val]' id='new_style_var_sizing_val' />
 				</p>
 			</div>
+			<?php
+			if ( $presets_output ) {
+				echo '<h3>' . esc_html__( 'List Variables', 'my-calendar' ) . '</h3>';
+				echo wp_kses( "<ul class='mc-variables'>$presets_output</ul>", mc_kses_elements() );
+			}
+			?>
+			<div class="mc-new-variable">
+				<p>
+					<label for='new_style_var_list_presets_key'><?php esc_html_e( 'New list variable', 'my-calendar' ); ?></label>
+					<input type='text' name='new_style_var_list_presets[key]' id='new_style_var_list_presets_key' />
+				</p>
+				<p>
+					<label for='new_style_var_list_presets_val'><?php esc_html_e( 'Value', 'my-calendar' ); ?></label>
+					<input type='text' class="mc-text-input" name='new_style_var_list_presets[val]' id='new_style_var_list_presets_val' />
+				</p>
+			</div>
 		</fieldset>
 		<div class="mc-input-with-note">
 			<p>
@@ -250,6 +294,7 @@ function mc_display_contrast_variables() {
 	// Eliminate text settings.
 	unset( $styles['text'] );
 	unset( $styles['sizing'] );
+	unset( $styles['list-presets'] );
 	$colors = array();
 	// Eliminate duplicate colors and transparency. Only compare unique colors.
 	foreach ( $styles as $variable => $color ) {
@@ -314,8 +359,7 @@ function mc_test_contrast( $color1, $color2 ) {
  * Display stylesheet selector as added component in sidebar.
  */
 function mc_stylesheet_selector() {
-	$dir     = plugin_dir_path( __DIR__ );
-	$options = '';
+	$dir = plugin_dir_path( __DIR__ );
 	?>
 <div class="style-selector">
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
