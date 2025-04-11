@@ -156,19 +156,19 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 function mc_get_preset_template( $type ) {
 	switch ( $type ) {
 		case 'list_preset_1':
-			$template = '<div>{datebadge}</div><div>{linking_title}<br />{timerange}<br /><strong>{location}</strong>{city before=", "} {state}</div><div>{thumbnail}</div>';
+			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2">{linking_title}<br />{timerange}<br /><strong>{location}</strong>{city before=", "} {state}</div><div class="mc-group-3">{thumbnail}</div>';
 			break;
 		case 'list_preset_2':
-			$template = '<div>{datebadge}</div><div><a href="{permalink}">{timerange after="<br>"}<strong>{title}</strong><br />{location}{city before="<br>"} {state}</a></div><div>{thumbnail}</div>';
+			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2"><a href="{permalink}">{timerange after="<br>"}<strong>{title}</strong><br />{location}{city before="<br>"} {state}</a></div><div class="mc-group-3">{thumbnail}</div>';
 			break;
 		case 'list_preset_3':
-			$template = '<div>{daterange before="<strong>" after="</strong>"}{timerange before="<br>"}</div><div><a href="{permalink}">{title}</a></div><div>{hcard}</div>';
+			$template = '<div class="mc-group-1">{daterange before="<strong>" after="</strong>"}{timerange before="<br>"}</div><div><a href="{permalink}">{title}</a></div><div class="mc-group-3">{hcard}</div>';
 			break;
 		case 'list_preset_4':
-			$template = '<div>{image}</div><div class="list-card-contents">{linking_title}<div>{daterange before="<strong>" after="</strong>"}{timerange before="<br>"}</div><div class="location">{city after=", "} {state}</div></div>';
+			$template = '<div class="mc-group-1">{image}</div><div class="list-card-contents mc-group-2">{linking_title}<div class="mc-date-group">{daterange before="<strong>" after="</strong>"}{timerange before="<br>"}</div><div class="location mc-group-3">{city after=", "} {state}</div></div>';
 			break;
 		default:
-			$template = '<div>{datebadge}</div><div><a href="{permalink}">{title}</a><br />{timerange}<br />{hcard}</div><div>{image}</div>';
+			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2"><a href="{permalink}">{title}</a><br />{timerange}<br />{hcard}</div><div class="mc-group-3">{image}</div>';
 	}
 
 	/**
