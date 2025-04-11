@@ -34,19 +34,20 @@
 		request.open( 'POST', my_calendar.ajaxurl, true );
 		request.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded;' );
 		request.onload = function () {
-			if (this.status >= 200 && this.status < 400) {
+			if ( this.status >= 200 && this.status < 400) {
 				let results = JSON.parse( this.response );
-				// Remove the button.
+				// Remove the list items.
 				parent.querySelectorAll( 'li' ).forEach( e => e.remove() );
-				// Get length, append, then re-check length.
+				// Append the response.
 				parent.innerHTML += results.response;
-				// Get number of events added.
+				console.log( results.response );
 				// Set focus to parent list.
 				parent.focus();
 				wp.a11y.speak( __( 'Upcoming events loaded', 'my-calendar' ) );
 			} else {
 				// Request failed.
-				console.log(this.response);
+				parent.innerHTML += '<li>' + __( 'Upcoming Events failed to load', 'my-calendar' ) + '</li>';
+				wp.a11y.speak( __( 'Upcoming Events failed to load', 'my-calendar' ) );
 			}
 		};
 		request.onerror = function() {
