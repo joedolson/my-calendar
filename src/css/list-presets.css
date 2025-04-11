@@ -93,6 +93,11 @@ div.mc-event-list-container {
 	border-radius: 3px;
 }
 
+.mc-event-list .list-preset {
+	background: var(--list-preset-background);
+	color: var(--list-preset-color);
+}
+
 .mc-event-list .list-preset img {
 	max-width: 5rem;
 	height: 100%;
