@@ -16,7 +16,7 @@
  * Text Domain: my-calendar
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version:     3.6.0-beta1
+ * Version:     3.6.0-RC1
  */
 
 /*
