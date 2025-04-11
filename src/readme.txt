@@ -120,6 +120,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Feature: Add option to automatically copy PHP templates into your theme.
 * Feature: Add "edit in theme" link in PHP template browser when custom template exists.
 * Feature: Add `mc_date_badge()` to generate a formatted date badge on events.
+* Feature: Add CSS variables targeting list presets.
+* Feature: Add previous and next events navigation in Upcoming Events list.
 * Change: Improved UX when copying events.
 * Change: Improve design of category selector for widgets and user permissions.
 * Change: Change table responsiveness to be driven by container width rather than viewport width.
@@ -128,6 +130,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Added variables for weekend grid headers.
 * Change: Added class to disable responsive styles.
 * Change: Extensive fixes to responsive behavior in the admin.
+* Change: Support usertime JS updates in Upcoming Events lists.
 * Filters: Added filter to modify categories shown in category key `mc_category_key_array`.
 * Bug fix: Fix deprecated jQuery methods.
 * Bug fix: Hide admin notices inside the Help modal.
@@ -138,8 +141,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Enqueue front-end admin styles in back-end admin.
 * Bug fix: Add missing attributes to kses handler.
 * Bug fix: Misc. design tweaks to handle additional theme design cases.
+* Bug fix: Start time didn't display if event started at midnight.
+* Bug fix: 24 hour time template used saved template instead of forcing 24 hour time.
+* Bug fix: Prevent double padding or missing padding on event titles.
+* Bug fix: When disabling event title links, don't disable event details in card view.
+* Bug fix: Don't show week numbers in card view.
 * Security: Misc. hardening.
 * Structure: Move action scheduler into vendor directory.
+* Accessibility: Reduce animations when prefers-reduced-motion applied.
+* Accessibility: Announce when main calendar is loading changes.
 
 = 3.5.21 =
 
