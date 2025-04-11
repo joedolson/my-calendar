@@ -182,19 +182,19 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 function mc_get_preset_template( $type ) {
 	switch ( $type ) {
 		case 'list_preset_1':
-			$template = '&lt;div>{datebadge}&lt;/div>&lt;div>{linking_title}&lt;br />{timerange}&lt;br />&lt;strong>{location}&lt;/strong>{city before=", "} {state}&lt;/div>&lt;div>{thumbnail}&lt;/div>';
+			$template = '&lt;div class="mc-group-1">{datebadge}&lt;/div>&lt;div class="mc-group-2">{linking_title}&lt;br />{timerange}&lt;br />&lt;strong>{location}&lt;/strong>{city before=", "} {state}&lt;/div>&lt;div class="mc-group-3">{thumbnail}&lt;/div>';
 			break;
 		case 'list_preset_2':
-			$template = '&lt;div>{datebadge}&lt;/div>&lt;div>&lt;a href="{permalink}">{timerange after="&lt;br>"}&lt;strong>{title}&lt;/strong>&lt;br />{location}{city before="&lt;br>"} {state}&lt;/a>&lt;/div>&lt;div>{thumbnail}&lt;/div>';
+			$template = '&lt;div class="mc-group-1">{datebadge}&lt;/div>&lt;div class="mc-group-2">&lt;a href="{permalink}">{timerange after="&lt;br>"}&lt;strong>{title}&lt;/strong>&lt;br />{location}{city before="&lt;br>"} {state}&lt;/a>&lt;/div>&lt;div class="mc-group-3">{thumbnail}&lt;/div>';
 			break;
 		case 'list_preset_3':
-			$template = '&lt;div>{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div>&lt;a href="{permalink}">{title}&lt;/a>&lt;/div>&lt;div>{hcard}&lt;/div>';
+			$template = '&lt;div class="mc-group-1">{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div>&lt;a href="{permalink}">{title}&lt;/a>&lt;/div>&lt;div class="mc-group-3">{hcard}&lt;/div>';
 			break;
 		case 'list_preset_4':
-			$template = '&lt;div>{image}&lt;/div>&lt;div class="list-card-contents">{linking_title}&lt;div>{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div class="location">{city after=", "} {state}&lt;/div>&lt;/div>';
+			$template = '&lt;div class="mc-group-1">{image}&lt;/div>&lt;div class="list-card-contents mc-group-2">{linking_title}&lt;div class="mc-date-group">{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div class="location mc-group-3">{city after=", "} {state}&lt;/div>&lt;/div>';
 			break;
 		default:
-			$template = '&lt;div>{datebadge}&lt;/div>&lt;div>&lt;a href="{permalink}">{title}&lt;/a>&lt;br />{timerange}&lt;br />{hcard}&lt;/div>&lt;div>{image}&lt;/div>';
+			$template = '&lt;div class="mc-group-1">{datebadge}&lt;/div>&lt;div class="mc-group-2">&lt;a href="{permalink}">{title}&lt;/a>&lt;br />{timerange}&lt;br />{hcard}&lt;/div>&lt;div class="mc-group-3">{image}&lt;/div>';
 	}
 
 	/**
@@ -594,7 +594,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 */
 	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_utc_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
 	$notime            = esc_html( mc_notime_label( $event ) );
-	$e['time']         = ( '00:00:00' === mc_date( 'H:i:s', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
+	$e['time']         = ( mc_is_all_day( $event ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
 	$e['time24']       = ( '00:00' === mc_date( 'G:i', strtotime( $real_begin_date ), false ) ) ? $notime : mc_date( mc_time_format(), strtotime( $real_begin_date ), false );
 	$endtime           = ( '23:59:59' === $event->event_end ) ? '00:00:00' : mc_date( 'H:i:s', strtotime( $real_end_date ), false );
 	$e['endtime']      = ( $real_end_date === $real_begin_date || '1' === $event->event_hide_end || '23:59:59' === mc_date( 'H:i:s', strtotime( $real_end_date ), false ) ) ? '' : date_i18n( mc_time_format(), strtotime( $endtime ) );
