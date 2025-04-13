@@ -131,6 +131,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Added class to disable responsive styles.
 * Change: Extensive fixes to responsive behavior in the admin.
 * Change: Support usertime JS updates in Upcoming Events lists.
+* Change: Minimum WordPress version to 6.4.
 * Filters: Added filter to modify categories shown in category key `mc_category_key_array`.
 * Bug fix: Fix deprecated jQuery methods.
 * Bug fix: Hide admin notices inside the Help modal.
