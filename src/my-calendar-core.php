@@ -812,7 +812,11 @@ function mc_register_scripts() {
 	}
 	$ajax = ( SCRIPT_DEBUG ) ? plugins_url( 'js/ajax.js', __FILE__ ) : plugins_url( 'js/ajax.min.js', __FILE__ );
 	wp_register_script( 'mc.ajax', $ajax, array( 'jquery' ), $version );
-	wp_register_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
+	if ( SCRIPT_DEBUG ) {
+		wp_register_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.js', __FILE__ ), array(), $version );
+	} else {
+		wp_register_script( 'accessible-autocomplete', plugins_url( '/js/accessible-autocomplete.min.js', __FILE__ ), array(), $version );
+	}
 	wp_register_script( 'mc-autocomplete', plugins_url( '/js/autocomplete.js', __FILE__ ), array( 'jquery', 'accessible-autocomplete' ), $version, true );
 }
 add_action( 'wp_enqueue_scripts', 'mc_register_scripts' );
