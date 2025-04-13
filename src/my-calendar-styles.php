@@ -249,7 +249,7 @@ function my_calendar_style_edit() {
 			</div>
 			<?php
 			if ( $presets_output ) {
-				echo '<h3>' . esc_html__( 'List Variables', 'my-calendar' ) . '</h3>';
+				echo '<h3>' . esc_html__( 'Upcoming Events Variables', 'my-calendar' ) . '</h3>';
 				echo wp_kses( "<ul class='mc-variables'>$presets_output</ul>", mc_kses_elements() );
 			}
 			?>
