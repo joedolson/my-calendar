@@ -203,6 +203,7 @@ function my_calendar_style_edit() {
 			}
 			?>
 			<div class="mc-new-variable">
+				<button type="button" class="button-secondary add-new-variable" aria-expanded="false"><?php esc_html_e( 'Add Variable', 'my-calendar' ); ?></button>
 				<p>
 					<label for='new_style_var_key'><?php esc_html_e( 'New color variable', 'my-calendar' ); ?></label>
 					<input type='text' name='new_style_var[key]' id='new_style_var_key' />
@@ -219,6 +220,7 @@ function my_calendar_style_edit() {
 			}
 			?>
 			<div class="mc-new-variable">
+				<button type="button" class="button-secondary add-new-variable" aria-expanded="false"><?php esc_html_e( 'Add Variable', 'my-calendar' ); ?></button>
 				<p>
 					<label for='new_style_var_text_key'><?php esc_html_e( 'New text variable', 'my-calendar' ); ?></label>
 					<input type='text' name='new_style_var_text[key]' id='new_style_var_text_key' />
@@ -235,6 +237,7 @@ function my_calendar_style_edit() {
 			}
 			?>
 			<div class="mc-new-variable">
+				<button type="button" class="button-secondary add-new-variable" aria-expanded="false"><?php esc_html_e( 'Add Variable', 'my-calendar' ); ?></button>
 				<p>
 					<label for='new_style_var_sizing_key'><?php esc_html_e( 'New size variable', 'my-calendar' ); ?></label>
 					<input type='text' name='new_style_var_sizing[key]' id='new_style_var_sizing_key' />
@@ -251,6 +254,7 @@ function my_calendar_style_edit() {
 			}
 			?>
 			<div class="mc-new-variable">
+				<button type="button" class="button-secondary add-new-variable" aria-expanded="false"><?php esc_html_e( 'Add Variable', 'my-calendar' ); ?></button>
 				<p>
 					<label for='new_style_var_list_presets_key'><?php esc_html_e( 'New list variable', 'my-calendar' ); ?></label>
 					<input type='text' name='new_style_var_list_presets[key]' id='new_style_var_list_presets_key' />

@@ -31,7 +31,24 @@ jQuery(document).ready(function ($) {
 		stickClass: 'fix',
 		setWidthOnStick: true,
 	});
-	
+
+	let styleToggles = document.querySelectorAll( '.add-new-variable' );
+	styleToggles.forEach( (el) => {
+		let target  = el.closest( '.mc-new-variable' );
+		let targets = target.querySelectorAll( 'p' );
+		targets.forEach( (t) => { t.style.display = 'none'; } );
+
+		el.addEventListener( 'click', function() {
+			let expanded = el.getAttribute( 'aria-expanded' );
+			if ( 'true' === expanded ) {
+				targets.forEach( (t) => { console.log( t ); t.style.display = 'none'; } );
+				el.setAttribute( 'aria-expanded', 'false' );
+			} else {
+				targets.forEach( (t) => { t.style.display = 'block'; } );
+				el.setAttribute( 'aria-expanded', 'true' );
+			}
+		});		
+	});
 	/**
 	 * Map ARIA attributes to My Calendar table so responsive view doesn't break table relationships.
 	 */
