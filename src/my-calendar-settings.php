@@ -97,17 +97,18 @@ function mc_update_options( $options ) {
  * @return string|void
  */
 function mc_settings_field( $args = array() ) {
-	$name    = ( isset( $args['name'] ) ) ? $args['name'] : '';
-	$label   = ( isset( $args['label'] ) ) ? $args['label'] : '';
-	$default = ( isset( $args['default'] ) ) ? $args['default'] : '';
-	$note    = ( isset( $args['note'] ) ) ? $args['note'] : '';
-	$atts    = ( isset( $args['atts'] ) ) ? $args['atts'] : array();
-	$type    = ( isset( $args['type'] ) ) ? $args['type'] : 'text';
-	$echo    = ( isset( $args['echo'] ) ) ? $args['echo'] : true;
-	$wrap    = ( isset( $args['wrap'] ) ) ? $args['wrap'] : array();
-	$id      = ( isset( $args['id'] ) ) ? $args['id'] : $name;
-	$element = '';
-	$close   = '';
+	$name     = ( isset( $args['name'] ) ) ? $args['name'] : '';
+	$label    = ( isset( $args['label'] ) ) ? $args['label'] : '';
+	$default  = ( isset( $args['default'] ) ) ? $args['default'] : '';
+	$note     = ( isset( $args['note'] ) ) ? $args['note'] : '';
+	$atts     = ( isset( $args['atts'] ) ) ? $args['atts'] : array();
+	$type     = ( isset( $args['type'] ) ) ? $args['type'] : 'text';
+	$echo     = ( isset( $args['echo'] ) ) ? $args['echo'] : true;
+	$wrap     = ( isset( $args['wrap'] ) ) ? $args['wrap'] : array();
+	$position = ( isset( $args['position'] ) ) ? $args['position'] : 'bottom';
+	$id       = ( isset( $args['id'] ) ) ? $args['id'] : $name;
+	$element  = '';
+	$close    = '';
 	if ( ! empty( $wrap ) ) {
 		$el    = isset( $wrap['element'] ) ? $wrap['element'] : 'p';
 		$class = '';
@@ -168,7 +169,9 @@ function mc_settings_field( $args = array() ) {
 				$note = '';
 				$aria = '';
 			}
-			$return = "$element<label class='label-$type' for='$id'>$label</label> <input type='$type' id='$id' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes />$close $note";
+			$note_top    = ( 'top' === $position ) ? $note : '';
+			$note_bottom = ( 'bottom' === $position ) ? $note : '';
+			$return      = "$element<label class='label-$type' for='$id'>$label</label> $note_top <input type='$type' id='$id' name='$name' value='" . esc_attr( $value ) . "'$aria$attributes />$close $note_bottom";
 			break;
 		case 'hidden':
 			$return = "<input type='hidden' id='$id' name='$name' value='" . esc_attr( $value ) . "' />";
@@ -747,11 +750,12 @@ function my_calendar_settings() {
 								<?php
 								mc_settings_field(
 									array(
-										'name'    => 'mc_uri_query',
-										'label'   => __( 'Set My Calendar Primary Page', 'my-calendar' ),
-										'default' => $page_title,
-										'note'    => $note,
-										'atts'    => array(
+										'name'     => 'mc_uri_query',
+										'label'    => __( 'Set My Calendar Primary Page', 'my-calendar' ),
+										'default'  => $page_title,
+										'note'     => $note,
+										'position' => 'top',
+										'atts'     => array(
 											'size'  => '20',
 											'class' => 'autocomplete-input',
 										),
