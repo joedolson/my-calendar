@@ -143,6 +143,19 @@ function my_calendar_style_edit() {
 		<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 		<input type="hidden" value="true" name="mc_edit_style" />
 		<input type="hidden" name="mc_css_file" value="<?php echo esc_attr( $file ); ?>" />
+		<div class="mc-general-style-options">
+			<div class="mc-input-with-note">
+				<p>
+					<label for="mc_show_css"><?php esc_html_e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label><br />
+					<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" />
+				</p>
+				<span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
+			</div>
+			<p>
+				<input type="checkbox" id="use_styles" name="use_styles" <?php checked( mc_get_option( 'use_styles' ), 'true' ); ?> />
+				<label for="use_styles"><?php esc_html_e( 'Disable styles', 'my-calendar' ); ?></label>
+			</p>
+		</div>
 		<fieldset class="mc-css-variables">
 			<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
 			<?php
@@ -219,17 +232,6 @@ function my_calendar_style_edit() {
 				</p>
 			</div>
 		</fieldset>
-		<div class="mc-input-with-note">
-			<p>
-				<label for="mc_show_css"><?php esc_html_e( 'Load CSS only on selected pages', 'my-calendar' ); ?></label><br />
-				<input type="text" id="mc_show_css" name="mc_show_css" value="<?php echo esc_attr( $mc_show_css ); ?>" aria-describedby="mc_css_info" />
-			</p>
-			<span id="mc_css_info"><i class="dashicons dashicons-editor-help" aria-hidden="true"></i><?php esc_html_e( 'Comma-separated post IDs', 'my-calendar' ); ?></span>
-		</div>
-		<p>
-			<input type="checkbox" id="use_styles" name="use_styles" <?php checked( mc_get_option( 'use_styles' ), 'true' ); ?> />
-			<label for="use_styles"><?php esc_html_e( 'Disable styles', 'my-calendar' ); ?></label>
-		</p>
 		<p>
 				<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
 		</p>
@@ -280,7 +282,7 @@ function mc_style_variable_editing() {
 				}
 				$sizing_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
 			}
-			$output['size'] = $sizing_output;
+			$output['sizing'] = $sizing_output;
 		} elseif ( 'list-presets' === $var ) {
 			foreach ( $style as $variable => $value ) {
 				$variable_id = 'mc' . sanitize_key( $variable );
@@ -305,7 +307,7 @@ function mc_style_variable_editing() {
 			$output['vars'] = $var_output;
 		}
 	}
-	
+	return $output;
 }
 
 /**

@@ -1117,6 +1117,11 @@ label[for=mc_uri_query]::before {
 	margin-bottom: 6px;
 }
 
+.mc-general-style-options {
+	display: grid;
+	grid-template-columns: 1fr auto;
+}
+
 .mc-input-with-note {
 	display: flex;
 	flex-wrap: wrap;
