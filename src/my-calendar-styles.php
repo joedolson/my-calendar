@@ -303,7 +303,7 @@ function mc_style_variable_editing() {
 			} else {
 				$delete = '';
 			}
-			$var_output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
+			$var_output    .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
 			$output['vars'] = $var_output;
 		}
 	}
