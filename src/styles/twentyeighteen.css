@@ -10,6 +10,7 @@
 	transition: color 80ms ease-in, box-shadow 130ms ease-in-out;
 }
 
+.mc-main.twentyeighteen .mc-active,
 .mc-main.twentyeighteen .my-calendar-header a,
 .mc-main.twentyeighteen .mc_bottomnav a,
 .mc-main.twentyeighteen .my-calendar-footer select, .mc-main.twentyeighteen .my-calendar-footer input,
@@ -34,6 +35,7 @@
 	border: none !important;
 }
 
+.mc-main.twentyeighteen .mc-active,
 .mc-main.twentyeighteen .my-calendar-header input,
 .mc-main.twentyeighteen .my-calendar-header a,
 .mc-main.twentyeighteen .mc_bottomnav a {
