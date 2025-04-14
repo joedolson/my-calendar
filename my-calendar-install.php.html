@@ -573,29 +573,6 @@ function mc_check_imports() {
 }
 
 /**
- * Transition event categories to category relationships. Used in upgrade from lower than 3.0.0.
- *
- * @since 3.0.0
- */
-function mc_transition_categories() {
-	global $wpdb;
-	$results = $wpdb->get_results( 'SELECT event_id, event_category FROM ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	foreach ( $results as $result ) {
-		$event_id = $result->event_id;
-		$category = $result->event_category;
-
-		$wpdb->insert(
-			my_calendar_category_relationships_table(),
-			array(
-				'event_id'    => $event_id,
-				'category_id' => $category,
-			),
-			array( '%d', '%d' )
-		);
-	}
-}
-
-/**
  * Transition location relationships into own table.
  *
  * @param int $location_id Location ID from location table.
