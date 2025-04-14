@@ -1239,7 +1239,7 @@ function mc_do_upgrades( $upgrade_path ) {
 		switch ( $upgrade ) {
 			case '3.6.0':
 				// TODO.
-			case '3.5.0':
+			case '3.5.0': // 2024-05-05
 				// Need to set card display settings. TODO.
 				$options = get_option( 'my_calendar_options' );
 				$caljs   = $options['calendar_javascript'];
@@ -1256,7 +1256,7 @@ function mc_do_upgrades( $upgrade_path ) {
 				}
 				update_option( 'my_calendar_options', $options );
 				break;
-			case '3.4.0':
+			case '3.4.0': // 2023-01-08
 				mc_migrate_settings();
 				delete_option( 'mc_use_custom_js' );
 				break;
@@ -1332,17 +1332,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_user_location_type' );
 				delete_option( 'mc_event_approve_perms' );
 				delete_option( 'mc_location_type' );
-				add_option(
-					'mc_style_vars',
-					array(
-						'--primary-dark'    => '#313233',
-						'--primary-light'   => '#fff',
-						'--secondary-light' => '#fff',
-						'--secondary-dark'  => '#000',
-						'--highlight-dark'  => '#666',
-						'--highlight-light' => '#efefef',
-					)
-				);
 				mc_transition_categories(); // This is the only use of this function.
 				break;
 			default:
