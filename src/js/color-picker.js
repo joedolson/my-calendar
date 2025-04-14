@@ -44,7 +44,7 @@ jQuery(document).ready(function ($) {
 				targets.forEach( (t) => { console.log( t ); t.style.display = 'none'; } );
 				el.setAttribute( 'aria-expanded', 'false' );
 			} else {
-				targets.forEach( (t) => { t.style.display = 'block'; } );
+				targets.forEach( (t) => { t.style.display = 'grid'; } );
 				el.setAttribute( 'aria-expanded', 'true' );
 			}
 		});		

@@ -1647,8 +1647,10 @@ select[name="event_recur"] {
 	border-radius: 5px;
 }
 
-#my-calendar-style .mc-new-variable label {
-	display: block;
+#my-calendar-style .mc-new-variable p {
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	gap: 10px;
 }
 
 #my-calendar-style .my-calendar-style-preview {
