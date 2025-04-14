@@ -193,6 +193,10 @@
 	border: none;
 }
 
+.mc_edit_links button.mc-toggle-edit {
+	color: var(--nav-button-color);
+}
+
 .mc-main.dark .heading:not(.widget .mc-main .heading) {
 	color: #f0f0f0;
 }
@@ -229,6 +233,15 @@ dialog.my-calendar-modal .js-modal-title-container {
 	background: #aaa;
 }
 
-.my-calendar-modal .mc_edit_links, .mc-main .mc_edit_links, .mc-event .mc_edit_links {
+#js-modal .mc_edit_links ul, .my-calendar-modal .mc_edit_links, .mc-main .mc_edit_links, .mc-event .mc_edit_links {
 	background: #000;
+	border: #333;
+}
+
+#js-modal .mc_edit_links ul {
+	box-shadow: 3px 3px 3px #333;
+}
+
+dialog.my-calendar-modal #modal-title {
+	color: #fff;
 }
