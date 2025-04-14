@@ -1,3 +1,7 @@
+.my-calendar-admin {
+	container: mcadmin / inline-size;
+}
+
 #my-calendar legend {
 	font-weight: 700;
 	font-size: 1em
@@ -2217,4 +2221,10 @@ input#mc_event_time:valid+span {
 	.mc-responsive-table.mc-contrast-table thead {
 		display: none;
 	}
+}
+
+@container mcadmin ( width < 1700px ) {
+	.jcd-wide:has(#my-calendar-styles) {
+		width: 100%;
+	} 
 }
