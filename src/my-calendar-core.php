@@ -1191,13 +1191,13 @@ function my_calendar_check() {
 		$settings           = get_option( 'my_calendar_options' );
 		if ( $my_calendar_exists && '' === $old_version ) {
 			// If the table exists, but I don't know what version it is, run all upgrades.
-			$old_version = '2.9.9';
+			$old_version = '3.1.12';
 		}
 
 		if ( $my_calendar_exists ) {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '3.0.0', '3.1.13', '3.3.0', '3.4.0', '3.5.0' );
+			$valid_upgrades = array( '3.1.13', '3.3.0', '3.4.0', '3.5.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $old_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -1321,18 +1321,6 @@ function mc_do_upgrades( $upgrade_path ) {
 			case '3.1.13': // 2019-03-15
 				delete_option( 'mc_inverse_color' );
 				mc_upgrade_db();
-				break;
-			case '3.0.0': // 2018-06-14
-				delete_option( 'mc_event_open' );
-				delete_option( 'mc_widget_defaults' );
-				delete_option( 'mc_event_closed' );
-				delete_option( 'mc_event_approve' );
-				delete_option( 'mc_ical_utc' );
-				delete_option( 'mc_user_settings_enabled' );
-				delete_option( 'mc_user_location_type' );
-				delete_option( 'mc_event_approve_perms' );
-				delete_option( 'mc_location_type' );
-				mc_transition_categories(); // This is the only use of this function.
 				break;
 			default:
 				break;
