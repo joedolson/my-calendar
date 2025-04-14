@@ -146,60 +146,14 @@ function my_calendar_style_edit() {
 		<fieldset class="mc-css-variables">
 			<legend><?php esc_html_e( 'CSS Variables', 'my-calendar' ); ?></legend>
 			<?php
-			$output         = '';
-			$text_output    = '';
-			$sizing_output  = '';
-			$presets_output = '';
-			$styles         = mc_get_option( 'style_vars' );
-			$styles         = mc_style_variables( $styles );
-			foreach ( $styles as $var => $style ) {
-				if ( 'text' === $var ) {
-					foreach ( $style as $variable => $value ) {
-						$variable_id = 'mc' . sanitize_key( $variable );
-						if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
-							// Translators: CSS variable name.
-							$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_text[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
-						} else {
-							$delete = '';
-						}
-						$text_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
-					}
-				} elseif ( 'sizing' === $var ) {
-					foreach ( $style as $variable => $value ) {
-						$variable_id = 'mc' . sanitize_key( $variable );
-						if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
-							// Translators: CSS variable name.
-							$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_sizing[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
-						} else {
-							$delete = '';
-						}
-						$sizing_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
-					}
-				} elseif ( 'list-presets' === $var ) {
-					foreach ( $style as $variable => $value ) {
-						$variable_id = 'mc' . sanitize_key( $variable );
-						if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
-							// Translators: CSS variable name.
-							$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_list_presets[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
-						} else {
-							$delete = '';
-						}
-						$presets_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
-					}
-				} else {
-					$var_id = 'mc' . sanitize_key( $var );
-					if ( ! in_array( $var, array_keys( mc_style_variables() ), true ) ) {
-						// Translators: CSS variable name.
-						$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
-					} else {
-						$delete = '';
-					}
-					$output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
-				}
-			}
-			if ( $output ) {
+			$output         = mc_style_variable_editing();
+			$var_output     = $output['vars'];
+			$text_output    = $output['text'];
+			$sizing_output  = $output['sizing'];
+			$presets_output = $output['presets'];
+			if ( $var_output ) {
 				echo '<h3>' . esc_html__( 'Color Variables', 'my-calendar' ) . '</h3>';
-				echo wp_kses( "<ul class='mc-variables'>$output</ul>", mc_kses_elements() );
+				echo wp_kses( "<ul class='mc-variables'>$var_output</ul>", mc_kses_elements() );
 			}
 			?>
 			<div class="mc-new-variable">
@@ -215,7 +169,7 @@ function my_calendar_style_edit() {
 			</div>
 			<?php
 			if ( $text_output ) {
-				echo '<h3>' . esc_html__( 'Text Variables', 'my-calendar' ) . '</h3>';
+				echo '<h3>' . esc_html__( 'Text Size Variables', 'my-calendar' ) . '</h3>';
 				echo wp_kses( "<ul class='mc-variables'>$text_output</ul>", mc_kses_elements() );
 			}
 			?>
@@ -287,6 +241,71 @@ function my_calendar_style_edit() {
 	?>
 	</div>
 	<?php
+}
+
+/**
+ * Generate style variable editing lists.
+ *
+ * @return array
+ */
+function mc_style_variable_editing() {
+	$output         = array();
+	$text_output    = '';
+	$sizing_output  = '';
+	$presets_output = '';
+	$var_output     = '';
+	$styles         = mc_get_option( 'style_vars' );
+	$styles         = mc_style_variables( $styles );
+	foreach ( $styles as $var => $style ) {
+		if ( 'text' === $var ) {
+			foreach ( $style as $variable => $value ) {
+				$variable_id = 'mc' . sanitize_key( $variable );
+				if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
+					// Translators: CSS variable name.
+					$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_text[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
+				} else {
+					$delete = '';
+				}
+				$text_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
+			}
+			$output['text'] = $text_output;
+		} elseif ( 'sizing' === $var ) {
+			foreach ( $style as $variable => $value ) {
+				$variable_id = 'mc' . sanitize_key( $variable );
+				if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
+					// Translators: CSS variable name.
+					$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_sizing[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
+				} else {
+					$delete = '';
+				}
+				$sizing_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
+			}
+			$output['size'] = $sizing_output;
+		} elseif ( 'list-presets' === $var ) {
+			foreach ( $style as $variable => $value ) {
+				$variable_id = 'mc' . sanitize_key( $variable );
+				if ( ! in_array( $variable, array_keys( mc_style_variables()[ $var ] ), true ) ) {
+					// Translators: CSS variable name.
+					$delete = " <input type='checkbox' id='delete_var_$variable_id' name='delete_var_list_presets[]' value='" . esc_attr( $variable ) . "' /><label for='delete_var_$variable_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $variable . '</span>' ) . '</label>';
+				} else {
+					$delete = '';
+				}
+				$presets_output .= "<li><label for='$variable_id'>" . esc_html( $variable ) . "</label> <input class='mc-text-input' type='text' id='$variable_id' data-variable='$variable' name='style_vars[$var][$variable]' value='" . esc_attr( $value ) . "' />$delete</li>";
+			}
+			$output['presets'] = $presets_output;
+		} else {
+			$var_id = 'mc' . sanitize_key( $var );
+			if ( ! in_array( $var, array_keys( mc_style_variables() ), true ) ) {
+				// Translators: CSS variable name.
+				$delete = " <input type='checkbox' id='delete_var_$var_id' name='delete_var[]' value='" . esc_attr( $var ) . "' /><label for='delete_var_$var_id'>" . sprintf( esc_html__( 'Delete %s', 'my-calendar' ), '<span class="screen-reader-text">' . $var . '</span>' ) . '</label>';
+			} else {
+				$delete = '';
+			}
+			$var_output .= "<li><label for='$var_id'>" . esc_html( $var ) . "</label> <input class='mc-color-input' type='text' id='$var_id' data-variable='$var' name='style_vars[$var]' value='" . esc_attr( $style ) . "' />$delete</li>";
+			$output['vars'] = $var_output;
+		}
+	}
+	
 }
 
 /**
