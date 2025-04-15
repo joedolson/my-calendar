@@ -133,6 +133,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Support usertime JS updates in Upcoming Events lists.
 * Change: Minimum WordPress version to 6.4.
 * Change: Update autocomplete to version 3.0.3.
+* Change: Don't render single events in main shortcode if pretty permalinks enabled.
+* Change: Polish themes.
 * Filters: Added filter to modify categories shown in category key `mc_category_key_array`.
 * Bug fix: Fix deprecated jQuery methods.
 * Bug fix: Hide admin notices inside the Help modal.
@@ -148,6 +150,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Prevent double padding or missing padding on event titles.
 * Bug fix: When disabling event title links, don't disable event details in card view.
 * Bug fix: Don't show week numbers in card view.
+* Bug fix: Validate occurrence IDs before attempting redirect.
 * Security: Misc. hardening.
 * Structure: Move action scheduler into vendor directory.
 * Accessibility: Reduce animations when prefers-reduced-motion applied.
