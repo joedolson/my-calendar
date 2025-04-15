@@ -1152,7 +1152,7 @@ function mc_handle_permalinks() {
 
 	if ( $enabled && $is_permalink ) {
 		return;
-	} elseif ( $enabled && ! $is_permalink && $mc_id ) {
+	} elseif ( $enabled && ! $is_permalink && mc_valid_id( $mc_id ) ) {
 		// Permalinks are enabled, but this is a calendar event that isn't the permalink page.
 		$page = mc_get_permalink( $mc_id );
 
@@ -1160,7 +1160,7 @@ function mc_handle_permalinks() {
 		die;
 	} elseif ( ! $enabled && $is_permalink ) {
 		// Permalinks are not enabled, but this is an event permalink page.
-		$page = add_query_arg( 'mc_id', $mc_id, mc_get_uri() );
+		$page = ( mc_valid_id( $mc_id ) ) ? add_query_arg( 'mc_id', $mc_id, mc_get_uri() ) : remove_query_arg( 'mc_id', mc_get_uri() );
 
 		wp_safe_redirect( $page );
 		die;
@@ -1833,8 +1833,9 @@ function my_calendar( $args ) {
 	 *
 	 * @return {string}
 	 */
-	$hl = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
-	if ( isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
+	$hl         = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
+	$permalinks = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
+	if ( ! $permalinks && isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
 		// single event, main calendar only.
 		$mc_id = ( is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 		if ( $mc_id ) {
