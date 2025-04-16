@@ -434,7 +434,8 @@ ul.mc-file-list ul li {
 
 .mc-help-links .help:nth-of-type(1) {
 	display: flex;
-	gap: 20px;
+	gap: 12px;
+	justify-content: center;
 	margin-bottom: 1.5rem;
 	flex-wrap: wrap;
 }
@@ -718,6 +719,7 @@ label[for=mc_uri_query]::before {
 
 .my-calendar-admin .jcd-narrow {
 	width: 25%;
+	max-width: 25rem;
 }
 
 #my-calendar-admin-table .row-actions {
