@@ -14,16 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Generate stylesheet editor
+ * Update styles on save.
  */
-function my_calendar_style_edit() {
+function my_calendar_update_styles() {
 	$message = '';
-	if ( ! current_user_can( 'mc_edit_styles' ) ) {
-		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize styles on this site.', 'my-calendar' ) . '</p>' );
-
-		return;
-	}
-
 	if ( isset( $_POST['mc_edit_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
@@ -119,7 +113,8 @@ function my_calendar_style_edit() {
 
 		$message .= ' ' . __( 'Style Settings Saved', 'my-calendar' ) . '.';
 
-		mc_show_notice( $message, true, false, 'success' );
+		$message = mc_show_notice( $message, false, false, 'success' );
+		set_transient( 'mc_styles_updated', $message, 10 );
 	}
 	if ( isset( $_POST['mc_choose_style'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
@@ -128,10 +123,27 @@ function my_calendar_style_edit() {
 		}
 		$mc_css_file = stripcslashes( sanitize_file_name( $_POST['mc_css_file'] ) );
 		mc_update_option( 'css_file', $mc_css_file );
-		$message = '<p><strong>' . __( 'New theme selected.', 'my-calendar' ) . '</strong></p>';
-		echo wp_kses_post( "<div id='message' class='updated fade'>$message</div>" );
+		$message = __( 'New theme selected.', 'my-calendar' );
+		$message = mc_show_notice( $message, false, false, 'success' );
+		set_transient( 'mc_styles_updated', $message, 10 );
 	}
+}
+add_action( 'admin_init', 'my_calendar_update_styles' );
 
+/**
+ * Generate stylesheet editor
+ */
+function my_calendar_style_edit() {
+	if ( ! current_user_can( 'mc_edit_styles' ) ) {
+		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize styles on this site.', 'my-calendar' ) . '</p>' );
+
+		return;
+	}
+	$message = get_transient( 'mc_styles_updated' );
+	if ( $message ) {
+		echo wp_kses_post( $message );
+		delete_transient( 'mc_styles_updated' );
+	}
 	$mc_show_css = mc_get_option( 'show_css' );
 	?>
 	<div class="my-calendar-style-settings">
