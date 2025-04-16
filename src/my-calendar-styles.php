@@ -389,7 +389,7 @@ function mc_stylesheet_selector() {
 <div class="style-selector">
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>">
 		<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
-		<input type="hidden" value="true" name="mc_choose_style"/>
+		<input type="hidden" value="true" name="mc_choose_style" />
 		<div>
 			<p>
 				<label for="mc_css_file"><?php esc_html_e( 'Select Theme (optional)', 'my-calendar' ); ?></label><br />
