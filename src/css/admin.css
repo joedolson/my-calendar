@@ -131,10 +131,6 @@
 	margin-right: 2px;
 }
 
-.mc-main .event-title .has-image {
-	padding-left: 24px;
-}
-
 .mc-main.mini .event-title {
 	padding: 10px 30px 10px 5px;
 }
@@ -154,9 +150,6 @@
 }
 
 .mc-main .event-title .category-icon {
-	position: absolute;
-	top: 6px;
-	left: 4px;
 	box-shadow: none;
 	background: transparent;
 	display: inline;
