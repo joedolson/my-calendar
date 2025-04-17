@@ -415,16 +415,18 @@ function mc_display_icons() {
 			} else {
 				$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/icons';
 			}
+			$iconlist = mc_directory_list( $directory );
 		} else {
-			$directory = trailingslashit( __DIR__ ) . 'images/icons/';
+			$iconlist  = mc_get_full_core_icons();
 		}
-		$iconlist = mc_directory_list( $directory );
+		
 		if ( ! empty( $iconlist ) ) {
 			$output = '&lt;ul class="checkboxes icon-list">';
 		}
-		foreach ( $iconlist as $icon ) {
-			$img     = mc_get_img( $icon, $is_custom );
-			$output .= '&lt;li class="category-icon">&lt;code>' . $icon . '&lt;/code>' . $img . '&lt;/li>';
+		foreach ( $iconlist as $key => $icon ) {
+			$img     = mc_get_img( $icon, $is_custom, $key );
+			$file    = ( $is_custom ) ? $icon : $key;
+			$output .= '&lt;li class="category-icon">&lt;code>' . $file . '&lt;/code>' . $img . '&lt;/li>';
 		}
 		$output .= '&lt;/ul>';
 		set_transient( 'mc_svg_list', $output, HOUR_IN_SECONDS );
