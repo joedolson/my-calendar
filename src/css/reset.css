@@ -986,6 +986,11 @@ svg.category-icon,
 	border-radius: 3px; 
 }
 
+svg.category-icon,
+img.category-icon {
+	width: 20px;
+}
+
 .mc-main .category-color-sample {
 	border-radius: 3px;
 	padding: 3px;
