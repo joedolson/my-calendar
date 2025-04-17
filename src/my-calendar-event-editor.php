@@ -436,7 +436,7 @@ function my_calendar_edit() {
 	}
 	?>
 
-	<div class="wrap my-calendar-admin">
+	<div class="wrap my-calendar-admin my-calendar-editor">
 	<?php
 	my_calendar_check_db();
 	if ( '2' === get_site_option( 'mc_multisite' ) ) {

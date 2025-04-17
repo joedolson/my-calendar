@@ -93,7 +93,7 @@ function my_calendar_group_edit() {
 	}
 	?>
 
-	<div class="wrap my-calendar-admin" id="my-calendar">
+	<div class="wrap my-calendar-admin my-calendar-groups" id="my-calendar">
 	<?php
 	my_calendar_check_db();
 	if ( 'edit' === $action ) {

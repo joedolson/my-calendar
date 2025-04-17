@@ -136,7 +136,7 @@ function mc_generator( $type, $data = array() ) {
 function my_calendar_shortcodes() {
 	?>
 
-	<div class="wrap my-calendar-admin">
+	<div class="wrap my-calendar-admin my-calendar-shortcodes">
 	<h1><?php esc_html_e( 'Generate Shortcodes', 'my-calendar' ); ?></h1>
 
 	<div class="postbox-container jcd-wide">

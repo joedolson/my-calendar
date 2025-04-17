@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function my_calendar_help() {
 	?>
 
-	<div class="wrap my-calendar-admin">
+	<div class="wrap my-calendar-admin my-calendar-help">
 	<h1><?php esc_html_e( 'How to use My Calendar', 'my-calendar' ); ?></h1>
 	<div class="mc-tabs">
 		<div class="tabs" role="tablist" data-default="my-calendar-start">

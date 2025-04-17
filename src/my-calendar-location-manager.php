@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function my_calendar_manage_locations() {
 	?>
-	<div class="wrap my-calendar-admin">
+	<div class="wrap my-calendar-admin my-calendar-locations">
 	<?php
 	my_calendar_check_db();
 	// We do some checking to see what we're doing.

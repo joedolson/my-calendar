@@ -406,7 +406,7 @@ function mc_delete_location( $location, $type = 'string' ) {
  */
 function my_calendar_add_locations() {
 	?>
-	<div class="wrap my-calendar-admin">
+	<div class="wrap my-calendar-admin my-calendar-location">
 	<?php
 	my_calendar_check_db();
 	// We do some checking to see what we're doing.

@@ -133,7 +133,7 @@ function mc_get_private_categories() {
 function my_calendar_manage_categories() {
 	global $wpdb;
 	?>
-	<div class="wrap my-calendar-admin">
+	<div class="wrap my-calendar-admin my-calendar-categories">
 		<?php
 		my_calendar_check_db();
 		$append           = array();
