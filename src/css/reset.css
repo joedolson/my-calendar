@@ -70,6 +70,7 @@
 .mc-main td .event-title {
 	font-size: clamp( .75rem, 14px, 1.125rem );
 	font-weight: 600;
+	text-wrap: balance;
 }
 
 .mc-main td .event-title img {
