@@ -77,13 +77,8 @@
 }
 
 .mc-main.twentyeighteen td .event-title {
-	text-overflow: ellipsis;
-	overflow: hidden;
+	text-wrap: balance;
 	font-size: 13px;
-}
-
-.mc-main.twentyeighteen .event-title .has-image {
-	padding-left: 24px;
 }
 
 .mc-main.twentyeighteen .calendar-event .details, .mc-main.twentyeighteen .calendar-events {
