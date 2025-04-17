@@ -391,9 +391,8 @@ function mc_display_icons() {
 			}
 			$iconlist = mc_directory_list( $directory );
 		} else {
-			$iconlist  = mc_get_core_icons();
+			$iconlist = mc_get_core_icons();
 		}
-		
 		if ( ! empty( $iconlist ) ) {
 			$output = '<ul class="checkboxes icon-list">';
 		}

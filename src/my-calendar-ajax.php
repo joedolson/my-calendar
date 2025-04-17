@@ -91,7 +91,7 @@ function mc_core_autocomplete_search_icons() {
 		$response = array();
 		foreach ( $results as $result ) {
 			if ( $is_custom ) {
-				$icon = $result;
+				$icon   = $result;
 				$result = '';
 			} else {
 				$icon = $icons[ $result ];

@@ -1336,8 +1336,9 @@ function mc_categories_html( $results, $primary, $output = 'html' ) {
 /**
  * Get category icon by filename.
  *
- * @param string $file File name.
+ * @param string $file File name or full SVG HTML string.
  * @param bool   $is_custom Querying a custom icon.
+ * @param string $file_name If passing an SVG icon into `$file`, provided the text alternative or file name.
  *
  * @return string
  */
