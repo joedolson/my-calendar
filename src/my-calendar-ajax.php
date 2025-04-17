@@ -79,8 +79,8 @@ function mc_core_autocomplete_search_icons() {
 			$iconlist = mc_directory_list( $directory );
 		} else {
 			$is_custom = false;
-			$directory = trailingslashit( __DIR__ ) . 'images/icons/';
-			$iconlist  = mc_directory_list( $directory );
+			$icons     = mc_get_full_core_icons();
+			$iconlist  = mc_get_core_icons();
 		}
 		$results  = array_filter(
 			$iconlist,
@@ -90,9 +90,15 @@ function mc_core_autocomplete_search_icons() {
 		);
 		$response = array();
 		foreach ( $results as $result ) {
+			if ( $is_custom ) {
+				$icon = $result;
+				$result = '';
+			} else {
+				$icon = $icons[ $result ];
+			}
 			$response[] = array(
 				'filename' => esc_attr( $result ),
-				'svg'      => mc_get_img( $result, $is_custom ),
+				'svg'      => mc_get_img( $icon, $is_custom, $result ),
 			);
 		}
 		wp_send_json(

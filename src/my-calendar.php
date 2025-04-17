@@ -140,6 +140,7 @@ require __DIR__ . '/vendor/action-scheduler/action-scheduler.php';
 require __DIR__ . '/includes/date-utilities.php';
 require __DIR__ . '/includes/general-utilities.php';
 require __DIR__ . '/includes/event-utilities.php';
+require __DIR__ . '/includes/category-icons.php';
 require __DIR__ . '/includes/kses.php';
 require __DIR__ . '/includes/post-types.php';
 require __DIR__ . '/includes/privacy.php';
