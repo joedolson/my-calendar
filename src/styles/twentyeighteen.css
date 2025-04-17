@@ -22,8 +22,8 @@
 	border-radius: 5px;
 	font-size: 14px !important;
 	font-family: Arial;
-	background: #fff;
-	background: var(--secondary-light);
+	background-color: #fff;
+	background-color: var(--secondary-light);
 }
 .mc-main.twentyeighteen .my-calendar-footer select, .mc-main.twentyeighteen .my-calendar-footer input,
 .mc-main.twentyeighteen .my-calendar-header select, .mc-main.twentyeighteen .my-calendar-header input {
