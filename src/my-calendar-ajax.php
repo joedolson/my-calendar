@@ -79,8 +79,8 @@ function mc_core_autocomplete_search_icons() {
 			$iconlist = mc_directory_list( $directory );
 		} else {
 			$is_custom = false;
-			$icons     = mc_get_full_core_icons();
-			$iconlist  = mc_get_core_icons();
+			$icons     = mc_get_core_icons();
+			$iconlist  = mc_get_core_icon_index();
 		}
 		$results  = array_filter(
 			$iconlist,

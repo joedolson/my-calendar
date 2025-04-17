@@ -1342,16 +1342,17 @@ function mc_categories_html( $results, $primary, $output = 'html' ) {
  * @return string
  */
 function mc_get_img( $file, $is_custom = false, $file_name = '' ) {
-	$svg           = str_contains( $file, '<svg ' ) ? $file : false;
+	$is_core_svg   = ( 0 === stripos( $file, '<svg' ) ) ? true : false;
+	$svg           = ( 0 === stripos( $file, '<svg' ) ) ? $file : false;
 	$is_custom_key = ( $is_custom ) ? 'custom' : 'core';
 	$label_id      = ( $svg ) ? sanitize_title( $file_name ) : sanitize_title( $file );
 	$image_key     = $label_id . '-' . $is_custom_key;
-	$image         = false; //get_transient( $image_key );
+	$image         = ( ! $svg ) ? get_transient( $image_key ) : false;
 	if ( $image ) {
 		return $image;
 	} else {
 		// If the value passed to mc_get_img is an SVG, that's the icon to use.
-		if ( ! $svg ) {
+		if ( ! $is_core_svg ) {
 			if ( null === $is_custom ) {
 				$is_custom = mc_is_custom_icon();
 			}
@@ -1397,7 +1398,10 @@ function mc_get_img( $file, $is_custom = false, $file_name = '' ) {
 				$image = str_replace( '<path ', "<title id='" . $label_id . "'>$file</title><path ", $image );
 			}
 		}
-		set_transient( $image_key, $image, MONTH_IN_SECONDS );
+		// If this was fetched as a file, then set the transient.
+		if ( ! $is_core_svg ) {
+			set_transient( $image_key, $image, MONTH_IN_SECONDS );
+		}
 
 		return $image;
 	}

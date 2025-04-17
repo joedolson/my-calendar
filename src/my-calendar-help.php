@@ -391,17 +391,19 @@ function mc_display_icons() {
 			}
 			$iconlist = mc_directory_list( $directory );
 		} else {
-			$iconlist  = mc_get_full_core_icons();
+			$iconlist  = mc_get_core_icons();
 		}
 		
 		if ( ! empty( $iconlist ) ) {
 			$output = '<ul class="checkboxes icon-list">';
 		}
+
 		foreach ( $iconlist as $key => $icon ) {
 			$img     = mc_get_img( $icon, $is_custom, $key );
 			$file    = ( $is_custom ) ? $icon : $key;
 			$output .= '<li class="category-icon"><code>' . $file . '</code>' . $img . '</li>';
 		}
+
 		$output .= '</ul>';
 		set_transient( 'mc_svg_list', $output, HOUR_IN_SECONDS );
 	}
