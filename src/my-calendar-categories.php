@@ -55,7 +55,7 @@ function mc_directory_list( $directory ) {
 		$results = array();
 		$files   = list_files( $directory );
 		// keep going until all files in directory have been read.
-		foreach ( $files as $file ) { // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+		foreach ( $files as $file ) {
 			// if $file isn't this directory or its parent add it to the results array.
 			if ( strlen( $file ) < 5 ) {
 				continue;
@@ -1391,7 +1391,6 @@ function mc_get_img( $file, $is_custom = false ) {
 				$image = str_replace( '<path ', "<title id='" . $label_id . "'>$file</title><path ", $image );
 			}
 		}
-
 		set_transient( $image_key, $image, MONTH_IN_SECONDS );
 
 		return $image;
