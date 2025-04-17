@@ -1470,18 +1470,20 @@ function mc_category_icon( $event, $type = 'html' ) {
 				$hex      = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
 				$color    = $hex . $event->category_color;
 				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name );
-				if ( 'html' === $type && ! $image ) {
-					if ( false !== stripos( $src, '.svg' ) ) {
-						$image = get_option( 'mc_category_icon_' . $context . '_' . $event->category_id, '' );
-						// If there's a value, but it's not an svg, zero out.
-						if ( $image && 0 !== stripos( $image, '<svg' ) ) {
-							$image = '';
+				if ( 'html' === $type ) {
+					if ( ! $image ) {
+						if ( false !== stripos( $src, '.svg' ) ) {
+							$image = get_option( 'mc_category_icon_' . $context . '_' . $event->category_id, '' );
+							// If there's a value, but it's not an svg, zero out.
+							if ( $image && 0 !== stripos( $image, '<svg' ) ) {
+								$image = '';
+							}
+							if ( '' === $image ) {
+								$image = mc_generate_category_icon( $event );
+							}
+						} else {
+							$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $color ) . '" />';
 						}
-						if ( '' === $image ) {
-							$image = mc_generate_category_icon( $event );
-						}
-					} else {
-						$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $color ) . '" />';
 					}
 				} else {
 					$image = $path . $event->category_icon;
@@ -1524,11 +1526,12 @@ function mc_generate_category_icon( $source ) {
 	if ( '' === $source->category_icon ) {
 		return '';
 	}
-	$path  = plugin_dir_path( __FILE__ ) . 'images/icons/';
-	$src   = $path . str_replace( '.png', '.svg', $source->category_icon );
-	$hex   = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
-	$color = $hex . $source->category_color;
-	$apply = mc_get_option( 'apply_color' );
+	$path     = plugin_dir_path( __FILE__ ) . 'images/icons/';
+	$filename = str_replace( '.png', '.svg', $source->category_icon );
+	$src      = $path . $filename;
+	$hex      = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
+	$color    = $hex . $source->category_color;
+	$apply    = mc_get_option( 'apply_color' );
 	if ( 'background' === $apply ) {
 		$color = mc_inverse_color( $color );
 	}
