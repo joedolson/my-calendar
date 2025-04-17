@@ -1463,13 +1463,14 @@ function mc_category_icon( $event, $type = 'html' ) {
 					}
 					$src = $path . $event->category_icon;
 				} else {
-					$path = plugins_url( 'images/icons', __FILE__ ) . '/';
-					$src  = $path . str_replace( '.png', '.svg', $event->category_icon );
+					$path  = plugins_url( 'images/icons', __FILE__ ) . '/';
+					$src   = $path . str_replace( '.png', '.svg', $event->category_icon );
+					$image = mc_generate_category_icon( $event );
 				}
 				$hex      = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
 				$color    = $hex . $event->category_color;
 				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name );
-				if ( 'html' === $type ) {
+				if ( 'html' === $type && ! $image ) {
 					if ( false !== stripos( $src, '.svg' ) ) {
 						$image = get_option( 'mc_category_icon_' . $context . '_' . $event->category_id, '' );
 						// If there's a value, but it's not an svg, zero out.
@@ -1545,10 +1546,14 @@ function mc_generate_category_icon( $source ) {
 		$context  = 'category';
 	}
 	$label_id = 'cat_' . $occur_id;
-	global $wp_filesystem;
-	require_once ABSPATH . '/wp-admin/includes/file.php';
-	WP_Filesystem();
-	$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
+	$image    = ( isset( mc_get_core_icons()[ $filename ] ) ) ? mc_get_core_icons()[ $filename ] : false;
+	// Fetch this image from file if it is not found in the array set.
+	if ( ! $image ) {
+		global $wp_filesystem;
+		require_once ABSPATH . '/wp-admin/includes/file.php';
+		WP_Filesystem();
+		$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
+	}
 	if ( 0 === stripos( $image, '<svg' ) ) {
 		$image = str_replace( '<svg ', '<svg style="fill:' . $color . '" focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
 		$image = str_replace( '<path ', "<title id='" . $label_id . "'>" . esc_html( $cat_name ) . '</title><path ', $image );

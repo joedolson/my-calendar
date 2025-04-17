@@ -155,6 +155,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Structure: Move action scheduler into vendor directory.
 * Accessibility: Reduce animations when prefers-reduced-motion applied.
 * Accessibility: Announce when main calendar is loading changes.
+* Performance: Move SVG resources to code, to avoid excess file lookups.
 
 = 3.5.21 =
 
