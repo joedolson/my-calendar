@@ -822,7 +822,7 @@ function mc_register_scripts() {
 	wp_register_script( 'mc.charcount', $charcount, array( 'jquery' ), $version );
 
 	$adminjs = ( SCRIPT_DEBUG ) ? plugins_url( 'js/jquery.admin.js', __FILE__ ) : plugins_url( 'js/jquery.admin.min.js', __FILE__ );
-	wp_register_script( 'mc.admin', $adminjs, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version );
+	wp_register_script( 'mc.admin', $adminjs, array( 'jquery', 'jquery-ui-sortable', 'wp-a11y' ), $version, true );
 	wp_register_script( 'mc.admin-footer', plugins_url( 'js/admin.js', __FILE__ ), array( 'wp-a11y', 'clipboard' ), $version, true );
 
 	if ( version_compare( $version, '2.1', '&lt;' ) ) {
