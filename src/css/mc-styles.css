@@ -1122,6 +1122,7 @@ label[for=mc_uri_query]::before {
 .mc-general-style-options {
 	display: grid;
 	grid-template-columns: 1fr auto;
+	margin: 1rem 0;
 }
 
 .mc-input-with-note {
@@ -1412,6 +1413,11 @@ label[for=e_host] {
 	margin-top: 1em;
 }
 
+.mc-css-variables h3 {
+	font-size: 1.1em;
+	border-bottom: 1px solid #a2a4a7;
+}
+
 ul.mc-variables li {
 	display: flex;
 	align-items: center;
@@ -1640,13 +1646,6 @@ select[name="event_recur"] {
 #my-calendar-style .inside {
 	display: flex;
 	gap: 20px;
-}
-
-#my-calendar-style .mc-new-variable {
-	position: relative;
-	padding: 8px;
-	background: rgba( 0,0,0,.04 );
-	border-radius: 5px;
 }
 
 #my-calendar-style .mc-new-variable p {
