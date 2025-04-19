@@ -763,4 +763,22 @@ var mediaPopup = '';
 			$('.mcs-submit-post-event').hide(200);
 		}
 	});
+
+	$('#mcs_use_post_title').on('click', function () {
+		let checked_status = $(this).prop('checked');
+		if (checked_status == true) {
+			$('#e_title' ).attr( 'disabled', 'disabled' );
+		} else {
+			$('#e_title' ).removeAttr( 'disabled' );
+		}
+	});
+
+	$('#mc_use_permalink').on('click', function () {
+		let checked_status = $(this).prop('checked');
+		if (checked_status == true) {
+			$('#e_link' ).attr( 'disabled', 'disabled' );
+		} else {
+			$('#e_link' ).removeAttr( 'disabled' );
+		}
+	});
 })(jQuery);
