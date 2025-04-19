@@ -1,5 +1,6 @@
 #adminmenumain,
-#wpadminbar {
+#wpadminbar,
+#wpfooter {
 	display: none;
 }
 
@@ -9,6 +10,7 @@ html.wp-toolbar {
 
 #wpcontent {
 	padding: 0 !important;
+	margin: 0 !important;
 }
 
 .modal-window-container {
@@ -26,11 +28,12 @@ html.wp-toolbar {
 }
 
 .modal-window-container .mc-help-links {
-	padding: .5em;
-	border-top: 2px solid;
+	padding: .5em 1em;
+	border-top: 2px solid #a2a4a7;
 	position: fixed;
 	bottom: 0;
-	width: calc( 100% - 20px );
+	box-sizing: border-box;
+	width: 100%;
 	background: #fff;
 	margin: 0 -10px;
 }
@@ -41,6 +44,9 @@ html.wp-toolbar {
 	column-gap: 10px;
 }
 
+.mc-help-text p {
+	font-size: 1.2em;
+}
 
 .mc-template-cards {
 	display: grid;
