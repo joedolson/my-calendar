@@ -1761,6 +1761,11 @@ div.mc-search {
 	vertical-align: middle;
 }
 
+.mc-submissions input[disabled] {
+	background: rgba( 0,0,0,.05 ) !important;
+	border: 1px solid #ccc !important;
+}
+
 .mc_add_new {
 	position: relative;
 	z-index: 200;
