@@ -1566,7 +1566,7 @@ body.mc-no-scroll {
 }
 
 /* Base responsive styles. Migrated to main plugin 12/10/2023 */
-@container mcmain ( width <= 720px ) {
+@container mcmain ( width <= 600px ) {
 	.mc-main:not(.mini,.disable-responsive) thead {
 		border-bottom: none;
 	}
