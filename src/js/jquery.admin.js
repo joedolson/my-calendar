@@ -749,4 +749,18 @@ var mediaPopup = '';
 			}
 		});
 	}
+
+	const mcs_inputs = $( '.mcs-submit-post-event input, .mcs-submit-post-event select, .mcs-submt-post-event textarea' );
+	mcs_inputs.attr( 'disabled', 'disabled' );
+	$('.mcs-submit-post-event').hide();
+	$('#mcs_enable_events').on('click', function () {
+		let checked_status = $(this).prop('checked');
+		if (checked_status == true) {
+			mcs_inputs.removeAttr( 'disabled' );
+			$('.mcs-submit-post-event' ).show(300);
+		} else {
+			mcs_inputs.attr( 'disabled', 'disabled' );
+			$('.mcs-submit-post-event').hide(200);
+		}
+	});
 })(jQuery);
