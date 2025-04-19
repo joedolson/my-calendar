@@ -712,6 +712,14 @@ label[for=mc_uri_query]::before {
 	vertical-align: middle;
 }
 
+.mc-categories th:nth-of-type(5) {
+	width: 80px;
+}
+
+.mc-categories th:nth-of-type(6) {
+	width: 6em;
+}
+
 .jcd-wide {
 	width: 75%;
 }
