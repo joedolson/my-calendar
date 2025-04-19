@@ -710,7 +710,6 @@ label[for=mc_uri_query]::before {
 .mc-categories td svg {
 	max-width: 40px;
 	vertical-align: middle;
-	margin-right: 10px;
 }
 
 .jcd-wide {
