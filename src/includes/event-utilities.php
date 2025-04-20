@@ -214,7 +214,6 @@ function mc_event_states_type( $state ) {
 	return apply_filters( 'mc_event_states_type', $return, $states );
 }
 
-
 /**
  * Get the label for an event state.
  *
@@ -237,4 +236,20 @@ function mc_event_states_label( $state ) {
 	 * @return {string}
 	 */
 	return apply_filters( 'mc_event_states_label', $return, $states );
+}
+
+/**
+ * Get the integer value for an event state.
+ *
+ * @param string $status A text state value.
+ *
+ * @return int Integer representation of state.
+ */
+function mc_event_state_from_label( $label ) {
+	$states = mc_event_states();
+	foreach ( $states as $state => $l ) {
+		if ( $label === $l['type'] ) {
+			return $state;
+		}
+	}
 }
