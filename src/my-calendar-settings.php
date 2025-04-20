@@ -894,8 +894,8 @@ function mc_remote_db() {
 								if ( 'true' === mc_get_option( 'api_enabled' ) ) {
 									$url = add_query_arg(
 										array(
-											'to'     => current_time( 'Y-m-d' ),
-											'from'   => mc_date( 'Y-m-d', time() - MONTH_IN_SECONDS ),
+											'to'     => mc_date( 'Y-m-d', time() + MONTH_IN_SECONDS ),
+											'from'   => current_time( 'Y-m-d' ),
 											'mc-api' => 'json',
 										),
 										home_url()
