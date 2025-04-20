@@ -1847,6 +1847,9 @@ div.mc-search {
 	display: flex;
 	align-items: center;
 	gap: 16px;
+}
+
+.mc-flex.mc-social {
 	justify-content: center;
 }
 
