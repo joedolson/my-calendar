@@ -246,9 +246,12 @@ function mc_event_states_label( $state ) {
  * @return int Integer representation of state.
  */
 function mc_event_state_from_label( $label ) {
+	if ( ! $label ) {
+		return '';
+	}
 	$states = mc_event_states();
 	foreach ( $states as $state => $l ) {
-		if ( $label === $l['type'] ) {
+		if ( isset( $l['type'] ) && $label === $l['type'] ) {
 			return $state;
 		}
 	}
