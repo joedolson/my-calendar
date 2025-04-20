@@ -241,7 +241,7 @@ function mc_event_states_label( $state ) {
 /**
  * Get the integer value for an event state.
  *
- * @param string $status A text state value.
+ * @param string $label A text state value.
  *
  * @return int Integer representation of state.
  */
