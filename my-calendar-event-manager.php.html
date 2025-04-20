@@ -1203,7 +1203,7 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 		} else {
 			$event = mc_get_event( $event_id );
 		}
-		$event_author = $event->event_author;
+		$event_author = ( is_object( $event ) ) ? $event->event_author : false;
 	}
 
 	$current_user    = wp_get_current_user();
