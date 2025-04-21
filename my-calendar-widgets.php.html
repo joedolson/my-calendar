@@ -288,12 +288,12 @@ function my_calendar_upcoming_events( $args ) {
 	$footer     = apply_filters( 'mc_upcoming_events_footer', $footer );
 	$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
 	if ( '' !== $output ) {
-		$output     = $header . $navigation . $output . $footer;
-		$return     = mc_run_shortcodes( $output );
+		$output = $header . $navigation . $output . $footer;
+		$return = mc_run_shortcodes( $output );
 	} else {
-		$header     = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
-		$class      = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '';
-		$return     = $header . $navigation . '&lt;li class="' . $class . '">' . wp_unslash( $no_event_text ) . '&lt;/li>' . $footer;
+		$header = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
+		$class  = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '';
+		$return = $header . $navigation . '&lt;li class="' . $class . '">' . wp_unslash( $no_event_text ) . '&lt;/li>' . $footer;
 	}
 
 	if ( $site ) {
