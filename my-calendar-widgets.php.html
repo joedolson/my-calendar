@@ -285,13 +285,12 @@ function my_calendar_upcoming_events( $args ) {
 	 *
 	 * @return {string} List header HTML.
 	 */
-	$footer = apply_filters( 'mc_upcoming_events_footer', $footer );
+	$footer     = apply_filters( 'mc_upcoming_events_footer', $footer );
+	$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
 	if ( '' !== $output ) {
-		$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
 		$output     = $header . $navigation . $output . $footer;
 		$return     = mc_run_shortcodes( $output );
 	} else {
-		$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
 		$header     = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
 		$class      = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '';
 		$return     = $header . $navigation . '&lt;li class="' . $class . '">' . wp_unslash( $no_event_text ) . '&lt;/li>' . $footer;
@@ -599,7 +598,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		}
 		++$i;
 	}
-	if ( ( $last_date || $first_date ) &amp;&amp; 'events' === $args['type'] ) {
+	if ( ( $last_date || $first_date ) &amp;&amp; 'events' === $args['type'] || 'default' === $args['type'] ) {
 		$args['offset'] = count( $output ) - 1;
 		$buttons        = mc_upcoming_events_navigation( $args, $first_date, $last_date );
 		$html           = $buttons . $html;
