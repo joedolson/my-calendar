@@ -336,6 +336,10 @@
 	padding: 6px 12px;
 }
 
+.mc-loader:active {
+	padding: inherit;
+}
+
 .mc-load-events-controls {
 	display: flex;
 	gap: .5rem;
