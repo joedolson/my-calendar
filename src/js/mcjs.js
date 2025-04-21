@@ -40,7 +40,6 @@
 				parent.querySelectorAll( 'li' ).forEach( e => e.remove() );
 				// Append the response.
 				parent.innerHTML += results.response;
-				console.log( results.response );
 				// Set focus to parent list.
 				parent.focus();
 				wp.a11y.speak( __( 'Upcoming events loaded', 'my-calendar' ) );
