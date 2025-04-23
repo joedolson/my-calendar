@@ -151,6 +151,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: When disabling event title links, don't disable event details in card view.
 * Bug fix: Don't show week numbers in card view.
 * Bug fix: Validate occurrence IDs before attempting redirect.
+* Bug fix: Default admin events view is not 'all', and 'all' should not be marked active.
 * Security: Misc. hardening.
 * Structure: Move action scheduler into vendor directory.
 * Accessibility: Reduce animations when prefers-reduced-motion applied.
