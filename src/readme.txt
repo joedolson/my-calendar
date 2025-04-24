@@ -110,7 +110,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.6.1 =
 
-* Bug fix: Fix logic that set details to show in card view when event links pointed to individual pages.
+* Bug fix: Fix logic that set details to show in card view when event links pointed to individual pages, but caused details to render in non-card views.
 * Remove upgrade cycle intended for 3.6.0. There were no settings or database updates required.
 
 = 3.6.0 =
