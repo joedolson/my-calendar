@@ -794,8 +794,14 @@ add_action(
 
 		if ( isset( $_GET['mc_template'] ) ) {
 			// Enqueue code editor and settings for manipulating HTML.
-			$settings = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
-
+			$settings = wp_enqueue_code_editor(
+				array(
+					'type'       => 'text/html',
+					'codemirror' => array(
+						'autoRefresh' => true,
+					),
+				)
+			);
 			// Bail if user disabled CodeMirror.
 			if ( false === $settings ) {
 				return;
