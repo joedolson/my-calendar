@@ -169,6 +169,7 @@
 	padding: 8px !important;
 	border-radius: 3px;
 	max-width: 2.5rem;
+	z-index: 5;
 }
 
 .mc-main button.close, .mc-main button.close * {
