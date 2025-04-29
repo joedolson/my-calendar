@@ -1777,6 +1777,7 @@ function my_calendar( $args ) {
 	 */
 	$body = apply_filters( 'mc_before_calendar', '', $params );
 
+	$is_main_view  = ( isset( $_GET['month'] ) || isset( $_GET['yr'] ) || isset( $_GET['dy'] ) ) ? '' : 'is-main-view';
 	$show_weekends = ( 'true' === $params['weekends'] ) ? true : false;
 	$id            = $params['id'];
 	$main_class    = ( '' !== $id ) ? $id : 'all';
@@ -1795,6 +1796,7 @@ function my_calendar( $args ) {
 		$main_class,
 		$has_modal,
 		$custom,
+		$is_main_view,
 	);
 	/**
 	 * Filter classes used on the main My Calendar wrapper element.

@@ -178,6 +178,7 @@
 			if ( 'click' === e.type || ( 'keyup' === e.type && 32 === e.which ) ) {
 				let targetId   = $( this ).attr( 'id' );
 				const calendar = $( this ).closest( '.mc-main' );
+				calendar.removeClass( 'is-main-view' );
 				let ref        = calendar.attr('id');
 				let month      = '';
 				let day        = '';
