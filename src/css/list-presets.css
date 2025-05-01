@@ -37,6 +37,10 @@ ul.mc-event-list:has(li.list_preset_4) {
 	gap: 30px;
 }
 
+ul.mc-event-list:has(li.list_preset_4) .mc-load-events-controls {
+	grid-column: 1/4;
+}
+
 .mc-event-list .list_preset_4 {
 	margin-bottom: 0;
 }
