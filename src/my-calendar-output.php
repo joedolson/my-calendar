@@ -1664,11 +1664,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 			$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
 		}
 		for ( $i = 0; $i <= 6; $i++ ) {
-			if ( 0 === (int) $start_of_week ) {
-				$class = ( $i < 6 && $i > 0 ) ? 'day-heading' : 'weekend-heading';
-			} else {
-				$class = ( $i < 5 ) ? 'day-heading' : 'weekend-heading';
-			}
+			$class    = ( $i < 6 && $i > 0 ) ? 'day-heading' : 'weekend-heading';
 			$dayclass = sanitize_html_class( $abbrevs[ $i ] );
 			if ( ( 'weekend-heading' === $class && $weekends ) || 'weekend-heading' !== $class ) {
 				$body .= "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
