@@ -1844,10 +1844,9 @@ function my_calendar( $args ) {
 			$body .= mc_get_event( $mc_id, 'html' );
 		}
 	} else {
-		$end_of_week   = ( 1 === (int) $start_of_week ) ? 7 : 6;
-		$start_of_week = ( $show_weekends ) ? $start_of_week : 1;
-		$date          = mc_get_current_date( $main_class, $cid, $params );
-		$current       = $date['current_date'];
+		$end_of_week = ( 1 === (int) $start_of_week ) ? 7 : 6;
+		$date        = mc_get_current_date( $main_class, $cid, $params );
+		$current     = $date['current_date'];
 
 		if ( is_numeric( $months ) && $months <= 12 && $months > 0 ) {
 			$show_months = absint( $months );
