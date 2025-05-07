@@ -3022,20 +3022,15 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 	if ( 'public' === $context ) {
 		return '';
 	}
-	if ( $has_data ) {
-		$tickets      = $data->event_tickets;
-		$registration = stripslashes( esc_attr( $data->event_registration ) );
-	} else {
-		$tickets      = '';
-		$registration = '';
-	}
+	$tickets      = ( $has_data ) ? $data->event_tickets : '';
+	$registration = ( $has_data ) ? $data->event_registration : '';
 
 	$form .= "<p>
 				<label for='event_tickets'>" . __( 'Tickets URL', 'my-calendar' ) . "</label> <input type='url' name='event_tickets' id='event_tickets' value='" . esc_attr( $tickets ) . "' />
 			</p>
 			<p>
-				<label for='event_registration'>" . __( 'Registration Information', 'my-calendar' ) . "</label> <textarea name='event_registration'id='event_registration'cols='40'rows='4'/>$registration</textarea>
-			</p>";
+				<label for='event_registration'>" . __( 'Registration Information', 'my-calendar' ) . "</label> <textarea name='event_registration' id='event_registration' cols='40' rows='4' />" . esc_textarea( wp_unslash( $registration ) ) . '</textarea>
+			</p>';
 
 	/**
 	 * Filter event registration form for event input.
