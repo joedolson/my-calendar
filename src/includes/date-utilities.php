@@ -764,7 +764,7 @@ function mc_date_relation( $event ) {
 		 */
 		do_action( 'mc_event_future', $event );
 		$date_relation = 2;
-	} elseif ( $now > $ts ) {
+	} elseif ( $now > $end ) {
 		/**
 		 * Execute action after an event has occurred.
 		 *
