@@ -1689,13 +1689,20 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 		if ( apply_filters( 'mc_show_week_number', false, $params ) &amp;&amp; 'grid' === $params['format'] ) {
 			$body .= "		&lt;$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "&lt;/$close_th>\n";
 		}
+		$headings = array();
 		for ( $i = 0; $i &lt;= 6; $i++ ) {
-			$class    = ( $i &lt; 6 &amp;&amp; $i > 0 ) ? 'day-heading' : 'weekend-heading';
+			$class    = ( $i &lt; 5 ) ? 'day-heading' : 'weekend-heading';
 			$dayclass = sanitize_html_class( $abbrevs[ $i ] );
 			if ( ( 'weekend-heading' === $class &amp;&amp; $weekends ) || 'weekend-heading' !== $class ) {
-				$body .= "		&lt;$th class='$class $dayclass'>" . $name_days[ $i ] . "&lt;/$close_th>\n";
+				$headings[] = "		&lt;$th class='$class $dayclass'>" . $name_days[ $i ] . "&lt;/$close_th>\n";
 			}
 		}
+		// If day starts on Sunday, and weekends are shown, change heading order.
+		if ( 7 === $start_of_week &amp;&amp; $weekends ) {
+			$last_heading = array_pop( $headings );
+			array_unshift( $headings, $last_heading );
+		}
+		$body .= implode( PHP_EOL, $headings );
 		$body .= "	&lt;/$tr>\n";
 		$body .= ( 'tr' === $tr ) ? "&lt;/thead>\n&lt;tbody>\n" : '';
 	}
