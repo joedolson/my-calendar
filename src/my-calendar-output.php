@@ -1663,13 +1663,20 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 		if ( apply_filters( 'mc_show_week_number', false, $params ) && 'grid' === $params['format'] ) {
 			$body .= "		<$th class='mc-week-number'>" . __( 'Week', 'my-calendar' ) . "</$close_th>\n";
 		}
+		$headings = array();
 		for ( $i = 0; $i <= 6; $i++ ) {
-			$class    = ( $i < 6 && $i > 0 ) ? 'day-heading' : 'weekend-heading';
+			$class    = ( $i < 5 ) ? 'day-heading' : 'weekend-heading';
 			$dayclass = sanitize_html_class( $abbrevs[ $i ] );
 			if ( ( 'weekend-heading' === $class && $weekends ) || 'weekend-heading' !== $class ) {
-				$body .= "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
+				$headings[] = "		<$th class='$class $dayclass'>" . $name_days[ $i ] . "</$close_th>\n";
 			}
 		}
+		// If day starts on Sunday, and weekends are shown, change heading order.
+		if ( 7 === $start_of_week && $weekends ) {
+			$last_heading = array_pop( $headings );
+			array_unshift( $headings, $last_heading );
+		}
+		$body .= implode( PHP_EOL, $headings );
 		$body .= "	</$tr>\n";
 		$body .= ( 'tr' === $tr ) ? "</thead>\n<tbody>\n" : '';
 	}

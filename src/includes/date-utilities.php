@@ -539,20 +539,13 @@ function mc_date( $format = '', $timestamp = false, $offset = true ) {
  * Get the days of the week for calendar layout.
  *
  * @param array $params Calendar parameters.
- * @param int   $start_of_week First day of this week.
  *
  * @return array
  */
-function mc_get_week_days( $params, $start_of_week ) {
+function mc_get_week_days( $params ) {
 	$name_days = mc_name_days( $params['format'] );
-	$abbrevs   = array( 'sun', 'mon', 'tues', 'wed', 'thur', 'fri', 'sat' );
-	if ( 1 === (int) $start_of_week ) {
-		$first       = array_shift( $name_days );
-		$afirst      = array_shift( $abbrevs );
-		$name_days[] = $first;
-		$abbrevs[]   = $afirst;
-	}
-	$return = array(
+	$abbrevs   = array( 'mon', 'tues', 'wed', 'thur', 'fri', 'sat', 'sun', );
+	$return    = array(
 		'name_days' => $name_days,
 		'abbrevs'   => $abbrevs,
 	);
@@ -565,11 +558,10 @@ function mc_get_week_days( $params, $start_of_week ) {
 	 *
 	 * @param {array} $return Array of full names and abbreviations.
 	 * @param {array} $params Array of parameters for this calendar view.
-	 * @param {int}   $start_of_week Which day is the start of the week.
 	 *
 	 * @return {array}
 	 */
-	return apply_filters( 'mc_get_week_days', $return, $params, $start_of_week );
+	return apply_filters( 'mc_get_week_days', $return, $params );
 }
 
 /**
@@ -581,24 +573,24 @@ function mc_get_week_days( $params, $start_of_week ) {
  */
 function mc_name_days( $format ) {
 	$name_days = array(
-		'<abbr title="' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Sunday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Tuesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Wednesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Thursday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Friday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Friday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Saturday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>',
+		'<abbr title="' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Sunday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>',
 	);
 	if ( 'mini' === $format ) {
 		// PHP doesn't have a single letter abbreviation, so this has to be a translatable.
 		$name_days = array(
-			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 			'<span aria-hidden="true">' . __( '<abbr title="Monday">M</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 			'<span aria-hidden="true">' . __( '<abbr title="Tuesday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 			'<span aria-hidden="true">' . __( '<abbr title="Wednesday">W</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Wednesday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 			'<span aria-hidden="true">' . __( '<abbr title="Thursday">T</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Thursday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 			'<span aria-hidden="true">' . __( '<abbr title="Friday">F</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Friday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 			'<span aria-hidden="true">' . __( '<abbr title="Saturday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Saturday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
+			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 		);
 	}
 
