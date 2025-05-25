@@ -112,6 +112,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Follow up fix to incorrect headings in 5-day view when week starts on Monday.
 * Bug fix: `mc_event_over` action should only fire after event ends, not after it starts.
+* Bug fix: Don't output `aria-labelledby` on event details container in single event view. Only relevant for dialog rendering.
 
 = 3.6.3 =
 
