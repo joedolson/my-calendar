@@ -553,7 +553,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	}
 	$arialabelled = '';
 	if ( ! ( 'single' === $type ) ) {
-		$arialabelled = " aria-labelledby='mc_$event->occur_id-title"  . '-' . $id . "'";
+		$arialabelled = " aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'";
 	}
 	$container = "<div id='$container_id' class='details$img_class' $arialabelled>\n";
 	/**
