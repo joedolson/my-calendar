@@ -551,7 +551,11 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	if ( 'list' === $type || 'calendar' === $type ) {
 		$img_class .= ' single-details';
 	}
-	$container = "<div id='$container_id' class='details$img_class' aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'>\n";
+	$arialabelled = '';
+	if ( ! ( 'single' === $type ) ) {
+		$arialabelled = " aria-labelledby='mc_$event->occur_id-title"  . '-' . $id . "'";
+	}
+	$container = "<div id='$container_id' class='details$img_class' $arialabelled>\n";
 	/**
 	 * Filter details before the event content.
 	 *
