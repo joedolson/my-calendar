@@ -42,7 +42,7 @@
 	z-index: 2;
 	box-shadow: 3px 3px 1px #ccc;
 	padding: 4px;
-	margin: 0;
+	margin: 0 !important;
 }
 
 .mc-event .mc_edit_links ul a,
