@@ -440,7 +440,7 @@ function my_calendar_edit() {
 	<?php
 	my_calendar_check_db();
 	if ( '2' === get_site_option( 'mc_multisite' ) ) {
-		if ( '0' === get_option( 'mc_current_table' ) ) {
+		if ( '0' === mc_get_option( 'current_table' ) ) {
 			$message = __( 'Currently editing your local calendar', 'my-calendar' );
 		} else {
 			$message = __( 'Currently editing your central calendar', 'my-calendar' );
