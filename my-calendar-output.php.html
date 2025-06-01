@@ -1832,6 +1832,11 @@ function my_calendar( $args ) {
 		$custom,
 		$is_main_view,
 	);
+	foreach ( $body_classes as $key => $classes ) {
+		if ( empty( $classes ) ) {
+			unset( $body_classes[ $key ] );
+		}
+	}
 	/**
 	 * Filter classes used on the main My Calendar wrapper element.
 	 *
