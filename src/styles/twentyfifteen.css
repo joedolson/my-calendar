@@ -50,11 +50,11 @@
 	text-transform: uppercase;
 	padding: 8px 0;
 	background: rgba(0, 0, 0, .8);
-	color: #fff !important;
+	color: #fff;
 }
 
 .mc-main.twentyfifteen table .current-day .mc-date {
-	background: rgba(0, 0, 0, .8) !important;
+	background: rgba(0, 0, 0, .8);
 	color: #fff;
 }
 
@@ -195,6 +195,12 @@
 	font-size: 1.2em;
 	background: rgba(240, 240, 240, .9);
 	color: #111;
+}
+
+.mc-main.twentyfifteen .mc-date:focus,
+.mc-main.twentyfifteen .mc-date:hover {
+	background: #111;
+	color: rgba(240, 240, 240, .9);
 }
 
 .mc-main.twentyfifteen .mc-single {
