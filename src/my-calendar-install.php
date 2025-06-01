@@ -401,7 +401,7 @@ function mc_default_options() {
 		'api_enabled'                  => '',
 		'default_sort'                 => '',
 		'current_table'                => '',
-		'open_day_uri'                 => '',
+		'open_day_uri'                 => 'false',
 		'upcoming_events_navigation'   => 'false',
 		'mini_uri'                     => '',
 		'show_list_info'               => '',
