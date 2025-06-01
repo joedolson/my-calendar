@@ -6,7 +6,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.6.4
+Stable tag: 3.6.5
 License: GPLv2 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -114,6 +114,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Front-end edit controls didn't override theme margins.
 * Bug fix: Control rendering for edit & subscribe panels dependent on AJAX being enabled.
 * Bug fix: Open day URI setting had no default value.
+* Bug fix: Card view closing div in wrong location.
 
 = 3.6.4 =
 
