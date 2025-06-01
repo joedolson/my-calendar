@@ -109,7 +109,8 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 	$shown_groups   = array(); // Displayed groups.
 	$shown_events   = array(); // Displayed events.
 	$open_option    = mc_get_option( 'open_day_uri' );
-	if ( 'mini' === $type && ( 'true' === $open_option || 'listanchor' === $open_option || 'calendaranchor' === $open_option ) ) {
+	if ( 'mini' === $type && ( 'false' !== $open_option ) ) {
+		// This should never occur, as this function is not called in this case.
 		return true;
 	}
 
