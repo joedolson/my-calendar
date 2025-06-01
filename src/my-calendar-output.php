@@ -1948,7 +1948,8 @@ function my_calendar( $args ) {
 			 *
 			 * @return {string}
 			 */
-			$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'><span>" . apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] ) . "</span></$hl>";
+			$heading_text = apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] );
+			$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'><span>" . trim( $heading_text ) . "</span></$hl>";
 			$dateclass    = mc_dateclass( $current );
 			$mc_events    = '';
 			$events       = my_calendar_events( $query );
@@ -2023,7 +2024,7 @@ function my_calendar( $args ) {
 			 * @return {string}
 			 */
 			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'], $template );
-			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>$heading</span></$h2>\n";
+			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>" . trim( $heading ) . "</span></$h2>\n";
 			$body   .= $top;
 
 			/**
