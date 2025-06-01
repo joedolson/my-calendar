@@ -108,6 +108,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.6.5 =
+
+* Bug fix: Network site check referenced obsolete option.
+* Bug fix: Front-end edit controls didn't override theme margins.
+* Bug fix: Control rendering for edit & subscribe panels dependent on AJAX being enabled.
+* Bug fix: Open day URI setting had no default value.
+
 = 3.6.4 =
 
 * Bug fix: Follow up fix to incorrect headings in 5-day view when week starts on Monday.
