@@ -250,10 +250,10 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$instance['below']                     = ( isset( $new_data['below'] ) && '' !== $new_data['below'] ) ? $new_data['below'] : 'none';
 		$author                                = '';
 		$host                                  = '';
-		if ( isset( $new_data['author'] ) ) {
+		if ( isset( $new_data['author'] ) && is_array( $new_data['author'] ) ) {
 			$author = implode( ',', $new_data['author'] );
 		}
-		if ( isset( $new_data['host'] ) ) {
+		if ( isset( $new_data['host'] ) && is_array( $new_data['author'] ) ) {
 			$host = implode( ',', $new_data['host'] );
 		}
 		$instance['author'] = $author;
