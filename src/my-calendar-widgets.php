@@ -67,6 +67,7 @@ function my_calendar_upcoming_events( $args ) {
 	$args['before'] = ( 'default' === $args['before'] ) ? $defaults['upcoming']['before'] : $args['before'];
 	$args['before'] = ( '' === $args['before'] ) ? 0 : $args['before'];
 	$category       = ( 'default' === $category ) ? '' : $category;
+	$template       = ( isset( $args['template'] ) ) ? $args['template'] : '';
 
 	/**
 	 * Pass a custom template to the upcoming events list. Template can either be a template key referencing a stored template or a template pattern using {} template tags.
@@ -77,7 +78,7 @@ function my_calendar_upcoming_events( $args ) {
 	 *
 	 * @return {string} Template string.
 	 */
-	$args['template'] = apply_filters( 'mc_upcoming_events_template', $args['template'] );
+	$args['template'] = apply_filters( 'mc_upcoming_events_template', $template );
 	$default          = ( ! $args['template'] || 'default' === $args['template'] ) ? $defaults['upcoming']['template'] : $args['template'];
 	$args['template'] = mc_setup_template( $args['template'], $default );
 
