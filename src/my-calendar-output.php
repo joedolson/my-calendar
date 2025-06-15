@@ -1543,8 +1543,7 @@ function mc_calendar_params( $args ) {
 		$format = esc_attr( $format );
 	}
 
-	// Mini calendar prevents format switch to avoid having a widget calendar switch in addition to the main calendar.
-	if ( isset( $get['time'] ) && in_array( $get['time'], array( 'day', 'week', 'month', 'month+1' ), true ) && ! ( 'mini' === $format && ! in_the_loop() ) ) {
+	if ( isset( $get['time'] ) && in_array( $get['time'], array( 'day', 'week', 'month', 'month+1' ), true ) ) {
 		$time = esc_attr( $get['time'] );
 	} else {
 		$time = esc_attr( $time );
