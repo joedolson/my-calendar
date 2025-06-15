@@ -1272,13 +1272,20 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		} else {
 			$wmonth = $month;
 		}
-		$month_url = mc_build_url( array( 'time' => 'month' ), array( 'mc_id' ) );
+		$month_url = mc_build_url(
+			array(
+				'time' => 'month',
+				'cid'  => $id,
+			),
+			array( 'mc_id' ),
+		);
 		$week_url  = mc_build_url(
 			array(
 				'time'  => 'week',
 				'dy'    => $day,
 				'month' => $wmonth,
 				'yr'    => $year,
+				'cid'   => $id,
 			),
 			array( 'dy', 'month', 'mc_id' )
 		);
@@ -1286,6 +1293,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			array(
 				'time' => 'day',
 				'dy'   => $day,
+				'cid'  => $id,
 			),
 			array( 'dy', 'mc_id' )
 		);
