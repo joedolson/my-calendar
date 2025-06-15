@@ -299,7 +299,7 @@
 	outline-offset: -2px;
 }
 
-.my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list, .mc-time ul {
+.my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list, .mc-time ul, .mc-format ul {
 	margin: 0 !important;
 	padding: 0 !important;
 }
