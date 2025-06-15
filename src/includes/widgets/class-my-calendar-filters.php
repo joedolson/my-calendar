@@ -5,7 +5,7 @@
  * @category Widgets
  * @package  My Calendar
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.joedolson.com/my-calendar/
  */
 
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package   My Calendar
  * @author    Joe Dolson
  * @copyright 2009
- * @license   GPLv2 or later
+ * @license   GPLv3
  * @version   1.0
  */
 class My_Calendar_Filters extends WP_Widget {

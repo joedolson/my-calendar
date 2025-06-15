@@ -12,7 +12,7 @@ Accessible Event Manager for WordPress
 * Tested up to: 6.8
 * Requires PHP: 7.4
 * Stable tag: `3.6.6`
-* License: GPLv2 or later
+* License: GPLv3.
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 This is the development environment for My Calendar.

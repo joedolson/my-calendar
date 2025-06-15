@@ -5,7 +5,7 @@
  * @category Utilities
  * @package  My Calendar
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.joedolson.com/my-calendar/
  */
 
