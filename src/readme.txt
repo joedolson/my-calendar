@@ -111,6 +111,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.6.6 =
 
 * Bug fix: Fix two PHP 8+ fatal errors in My Calendar legacy widget admin.
+* Bug fix: Fix undefined array key in widget output.
 * Bug fix: Add CID attribute to time format navigation, allow time format switching in mini calendar.
 * Bug fix: CSS fix for time frame and calendar format navigation margins.
 
