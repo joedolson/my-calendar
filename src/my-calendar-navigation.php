@@ -1263,55 +1263,49 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		}
 	}
 	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
-	$toggle = '';
+	$toggle = "<div class='mc-time'><ul>";
+	if ( -1 === (int) $adjust && ! $adjusted ) {
+		$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
+	} else {
+		$wmonth = $month;
+	}
+	$month_url = mc_build_url(
+		array(
+			'time' => 'month',
+			'cid'  => $id,
+		),
+		array( 'mc_id' ),
+	);
+	$week_url  = mc_build_url(
+		array(
+			'time'  => 'week',
+			'dy'    => $day,
+			'month' => $wmonth,
+			'yr'    => $year,
+			'cid'   => $id,
+		),
+		array( 'dy', 'month', 'mc_id' )
+	);
+	$day_url   = mc_build_url(
+		array(
+			'time' => 'day',
+			'dy'   => $day,
+			'cid'  => $id,
+		),
+		array( 'dy', 'mc_id' )
+	);
 
-	//if ( 'mini' !== $format ) {
-		$toggle = "<div class='mc-time'><ul>";
-		if ( -1 === (int) $adjust && ! $adjusted ) {
-			$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
-		} else {
-			$wmonth = $month;
-		}
-		$month_url = mc_build_url(
-			array(
-				'time' => 'month',
-				'cid'  => $id,
-			),
-			array( 'mc_id' ),
-		);
-		$week_url  = mc_build_url(
-			array(
-				'time'  => 'week',
-				'dy'    => $day,
-				'month' => $wmonth,
-				'yr'    => $year,
-				'cid'   => $id,
-			),
-			array( 'dy', 'month', 'mc_id' )
-		);
-		$day_url   = mc_build_url(
-			array(
-				'time' => 'day',
-				'dy'   => $day,
-				'cid'  => $id,
-			),
-			array( 'dy', 'mc_id' )
-		);
+	$month_active = ( 'month' === $time ) ? ' mc-active' : '';
+	$week_active  = ( 'week' === $time ) ? ' mc-active' : '';
+	$day_active   = ( 'day' === $time ) ? ' mc-active' : '';
+	$aria_month   = ( 'month' === $time ) ? " aria-$aria='true'" : '';
+	$aria_week    = ( 'week' === $time ) ? " aria-$aria='true'" : '';
+	$aria_day     = ( 'day' === $time ) ? " aria-$aria='true'" : '';
 
-		$month_active = ( 'month' === $time ) ? ' mc-active' : '';
-		$week_active  = ( 'week' === $time ) ? ' mc-active' : '';
-		$day_active   = ( 'day' === $time ) ? ' mc-active' : '';
-		$aria_month   = ( 'month' === $time ) ? " aria-$aria='true'" : '';
-		$aria_week    = ( 'week' === $time ) ? " aria-$aria='true'" : '';
-		$aria_day     = ( 'day' === $time ) ? " aria-$aria='true'" : '';
-
-		$toggle .= "<li><a rel='nofollow' id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
-		$toggle .= "<li><a rel='nofollow' id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
-		$toggle .= "<li><a rel='nofollow' id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
-		$toggle .= '</ul></div>';
-	//} else {
-	//	$toggle = '';
-	//}
+	$toggle .= "<li><a rel='nofollow' id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
+	$toggle .= "<li><a rel='nofollow' id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
+	$toggle .= "<li><a rel='nofollow' id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
+	$toggle .= '</ul></div>';
 
 	/**
 	 * Filter the HTML for the time format switcher in navigation elements.
