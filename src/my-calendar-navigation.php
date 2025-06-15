@@ -20,14 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param int        $cat Original category from calendar args.
  * @param int        $start_of_week First day of week.
  * @param int        $show_months num months to show (modified).
- * @param string     $main_class Class/ID.
+ * @param string     $id Class/ID.
  * @param int|string $site Which site in multisite.
  * @param array      $date current date.
  * @param string     $from date view started from.
  *
  * @return array of calendar nav for top & bottom
  */
-function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, $main_class, $site, $date, $from ) {
+function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, $id, $site, $date, $from ) {
 	if ( $site ) {
 		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		$restore = $site;
@@ -163,24 +163,24 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	if ( in_array( 'print', $used, true ) ) {
 		$print_add    = array_merge( $add, array( 'cid' => 'mc-print-view' ) );
 		$mc_print_url = mc_build_url( $print_add, $subtract, home_url() );
-		$print        = "<div class='mc-print'><a id='mc_print-$main_class' href='$mc_print_url' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
+		$print        = "<div class='mc-print'><a id='mc_print-$id' href='$mc_print_url' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 	}
 
 	// Set up format toggle.
-	$toggle = ( in_array( 'toggle', $used, true ) ) ? mc_format_toggle( $format, 'yes', $time, $main_class ) : '';
+	$toggle = ( in_array( 'toggle', $used, true ) ) ? mc_format_toggle( $format, 'yes', $time, $id ) : '';
 
 	// Set up time toggle.
 	if ( in_array( 'timeframe', $used, true ) ) {
-		$timeframe = mc_time_toggle( $format, $time, $date['month'], $date['year'], $date['current_date'], $start_of_week, $from, $main_class );
+		$timeframe = mc_time_toggle( $format, $time, $date['month'], $date['year'], $date['current_date'], $start_of_week, $from, $id );
 	}
 
 	// Set up category key.
-	$key = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat, $main_class ) : '';
+	$key = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat, $id ) : '';
 
 	// Set up category filter.
 	$cat_args   = array(
 		'categories',
-		'id' => $main_class . '-categories',
+		'id' => $id . '-categories',
 	);
 	$cats       = mc_category_select_ids( $cat );
 	$categories = ( in_array( 'categories', $used, true ) ) ? mc_filters( $cat_args, mc_get_current_url(), 'id', $cats ) : '';
@@ -188,22 +188,22 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	// Set up location filter.
 	$loc_args  = array(
 		'locations',
-		'id' => $main_class . '-locations',
+		'id' => $id . '-locations',
 	);
 	$locations = ( in_array( 'locations', $used, true ) ) ? mc_filters( $loc_args, mc_get_current_url(), 'id' ) : '';
 
 	// Set up access filter.
 	$acc_args = array(
 		'access',
-		'id' => $main_class . '-access',
+		'id' => $id . '-access',
 	);
 	$access   = ( in_array( 'access', $used, true ) ) ? mc_filters( $acc_args, mc_get_current_url() ) : '';
 
 	// Set up search.
-	$search = ( in_array( 'search', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url(), $main_class ) : '';
+	$search = ( in_array( 'search', $used, true ) ) ? my_calendar_searchform( 'simple', mc_get_current_url(), $id ) : '';
 	// Set up navigation links.
 	if ( in_array( 'nav', $used, true ) ) {
-		$nav = mc_nav( $date, $format, $time, $show_months, $main_class, $site );
+		$nav = mc_nav( $date, $format, $time, $show_months, $id, $site );
 	}
 
 	// Set up subscription feeds.
@@ -221,7 +221,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up date switcher.
 	if ( in_array( 'jump', $used, true ) ) {
-		$jump = mc_date_switcher( $format, $main_class, $time, $date, $site );
+		$jump = mc_date_switcher( $format, $id, $time, $date, $site );
 	}
 
 	foreach ( $mc_toporder as $value ) {
@@ -1265,7 +1265,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
 	$toggle = '';
 
-	if ( 'mini' !== $format ) {
+	//if ( 'mini' !== $format ) {
 		$toggle = "<div class='mc-time'><ul>";
 		if ( -1 === (int) $adjust && ! $adjusted ) {
 			$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
@@ -1301,9 +1301,9 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		$toggle .= "<li><a rel='nofollow' id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
 		$toggle .= "<li><a rel='nofollow' id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
 		$toggle .= '</ul></div>';
-	} else {
-		$toggle = '';
-	}
+	//} else {
+	//	$toggle = '';
+	//}
 
 	/**
 	 * Filter the HTML for the time format switcher in navigation elements.
