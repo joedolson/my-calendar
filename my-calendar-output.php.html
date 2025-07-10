@@ -1022,7 +1022,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 			$del_group  = false;
 		}
 		if ( 'S' === $recur || ( ! $edit_group &amp;&amp; ! $del_group ) ) {
-			$edit .= ( $edit_url ) ? "&lt;li>&lt;a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '&lt;/a>&lt;/li>' : ''; 
+			$edit .= ( $edit_url ) ? "&lt;li>&lt;a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '&lt;/a>&lt;/li>' : '';
 			$edit .= ( $delete_url ) ? "&lt;li>&lt;a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '&lt;/a>&lt;/li>' : '';
 			$edit .= $groupedit;
 		} else {
