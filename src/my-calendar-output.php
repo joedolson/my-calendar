@@ -996,7 +996,7 @@ function mc_edit_panel( $html, $event, $type, $time ) {
 			$del_group  = false;
 		}
 		if ( 'S' === $recur || ( ! $edit_group && ! $del_group ) ) {
-			$edit .= ( $edit_url ) ? "<li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '</a></li>' : ''; 
+			$edit .= ( $edit_url ) ? "<li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '</a></li>' : '';
 			$edit .= ( $delete_url ) ? "<li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a></li>' : '';
 			$edit .= $groupedit;
 		} else {
