@@ -210,17 +210,17 @@
 	padding: 4px;
 }
 
-dialog.my-calendar-modal .js-modal-title-container {
+dialog.my-calendar-modal .mc-modal-title-container {
 	background: #000;
 	color: #f0f0f0;
 }
 
-.my-calendar-modal #js-modal-content {
+.my-calendar-modal #mc-modal-content {
 	background: #333;
 	color: #f0f0f0;
 }
 
-.my-calendar-modal #js-modal-content a {
+.my-calendar-modal #mc-modal-content a {
 	color: #fff;
 }
 
@@ -233,12 +233,12 @@ dialog.my-calendar-modal .js-modal-title-container {
 	background: #aaa;
 }
 
-#js-modal .mc_edit_links ul, .my-calendar-modal .mc_edit_links, .mc-main .mc_edit_links, .mc-event .mc_edit_links {
+#mc-modal .mc_edit_links ul, .my-calendar-modal .mc_edit_links, .mc-main .mc_edit_links, .mc-event .mc_edit_links {
 	background: #000;
 	border: #333;
 }
 
-#js-modal .mc_edit_links ul {
+#mc-modal .mc_edit_links ul {
 	box-shadow: 3px 3px 3px #333;
 }
 

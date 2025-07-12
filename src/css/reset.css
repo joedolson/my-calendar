@@ -1403,7 +1403,7 @@ dialog.my-calendar-modal .my-calendar-modal__wrapper {
 	padding: 0;
 }
 
-dialog.my-calendar-modal .js-modal-title-container {
+dialog.my-calendar-modal .mc-modal-title-container {
 	position: relative;
 	margin-top: 0;
 	margin-bottom: 0;
@@ -1423,11 +1423,11 @@ dialog.my-calendar-modal .modal-content {
 	display: none;
 }
 
-#js-modal-content .mc-toggle {
+#mc-modal-content .mc-toggle {
 	display: none;
 }
 
-#js-modal-content p {
+#mc-modal-content p {
 	margin: 0 0 1rem 0;
 }
 
@@ -1468,11 +1468,11 @@ body.mc-no-scroll {
 	height: auto;
 }
 
-.my-calendar-modal #js-modal-content {
+.my-calendar-modal #mc-modal-content {
 	padding: 16px;
 }
 
-.my-calendar-modal #js-modal-content > * {
+.my-calendar-modal #mc-modal-content > * {
 	margin: 0 0 24px;
 }
 

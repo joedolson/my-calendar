@@ -12,7 +12,7 @@
 
   'use strict';
 
-  var MODAL_JS_CLASS = 'js-modal';
+  var MODAL_JS_CLASS = 'mc-modal';
   var MODAL_ID_PREFIX = 'label_modal_';
   var MODAL_CLASS_SUFFIX = 'modal';
   var MODAL_DATA_BACKGROUND_ATTR = 'data-modal-background-click';
@@ -26,14 +26,14 @@
   var MODAL_ROLE = 'dialog';
 
   var MODAL_BUTTON_CLASS_SUFFIX = 'modal-close';
-  var MODAL_BUTTON_JS_ID = 'js-modal-close';
-  var MODAL_BUTTON_JS_CLASS = 'js-modal-close';
+  var MODAL_BUTTON_JS_ID = 'mc-modal-close';
+  var MODAL_BUTTON_JS_CLASS = 'mc-modal-close';
   var MODAL_BUTTON_CONTENT_BACK_ID = 'data-content-back-id';
   var MODAL_BUTTON_FOCUS_BACK_ID = 'data-focus-back';
 
   var MODAL_WRAPPER_CLASS_SUFFIX = 'modal__wrapper';
   var MODAL_CONTENT_CLASS_SUFFIX = 'modal__content';
-  var MODAL_CONTENT_JS_ID = 'js-modal-content';
+  var MODAL_CONTENT_JS_ID = 'mc-modal-content';
 
   var MODAL_CLOSE_TEXT_CLASS_SUFFIX = 'modal-close__text';
 
@@ -41,11 +41,11 @@
   var MODAL_TITLE_CLASS_SUFFIX = 'modal-title';
 
   var FOCUSABLE_ELEMENTS_STRING = "a[href], area[href], input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]";
-  var WRAPPER_PAGE_JS = 'js-modal-page';
+  var WRAPPER_PAGE_JS = 'mc-modal-page';
 
-  var MODAL_JS_ID = 'js-modal';
+  var MODAL_JS_ID = 'mc-modal';
 
-  var MODAL_OVERLAY_ID = 'js-modal-overlay';
+  var MODAL_OVERLAY_ID = 'mc-modal-overlay';
   var MODAL_OVERLAY_CLASS_SUFFIX = 'modal-overlay';
   var MODAL_OVERLAY_TXT = 'Close modal';
   var MODAL_OVERLAY_BG_ENABLED_ATTR = 'data-background-click';
@@ -159,7 +159,7 @@
     var buttonCloseInner = '<span class="' + config.modalPrefixClass + MODAL_CLOSE_TEXT_CLASS_SUFFIX + '">\n                                          ' + config.modalCloseText + '\n                                         </span>';
     var contentClassName = config.modalPrefixClass + MODAL_CONTENT_CLASS_SUFFIX;
     var titleClassName = config.modalPrefixClass + MODAL_TITLE_CLASS_SUFFIX;
-    var title = config.modalTitle !== '' ? '<div class="js-modal-title-container"><h1 id="' + MODAL_TITLE_ID + '" class="' + titleClassName + '">\n                                          ' + config.modalTitle + '\n                                         </h1></div>' : '';
+    var title = config.modalTitle !== '' ? '<div class="mc-modal-title-container"><h1 id="' + MODAL_TITLE_ID + '" class="' + titleClassName + '">\n                                          ' + config.modalTitle + '\n                                         </h1></div>' : '';
     var button_close = '<button type="button" class="' + MODAL_BUTTON_JS_CLASS + ' ' + buttonCloseClassName + '" id="' + MODAL_BUTTON_JS_ID + '" ' + MODAL_BUTTON_CONTENT_BACK_ID + '="' + config.modalContentId + '" ' + MODAL_BUTTON_FOCUS_BACK_ID + '="' + config.modalFocusBackId + '"><span class="dashicons dashicons-no" aria-hidden="true"></span>\n                               ' + buttonCloseInner + '\n                              </button>';
     var content = config.modalText;
 
