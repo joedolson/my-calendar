@@ -752,27 +752,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			<fieldset>
 				<legend><?php esc_html_e( 'Event Range', 'my-calendar' ); ?></legend>
 				<p>
-					<label for="before<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events/Days Before Current Day', 'my-calendar' ); ?></label>
-					<input type="number" name="before" id="before<?php echo esc_attr( $type ); ?>" value="" />
-				</p>
-				<p>
-					<label for="after<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events/Days After Current Day', 'my-calendar' ); ?></label>
-					<input type="number" name="after" id="after<?php echo esc_attr( $type ); ?>" value="" />
-				</p>
-				<p>
-					<label for="skip<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events/Days to Skip', 'my-calendar' ); ?></label>
-					<input type="number" name="skip" id="skip<?php echo esc_attr( $type ); ?>" value="" />
-				</p>
-				<p class="checkbox">
-					<input type="checkbox" name="show_recurring" id="show_recurring<?php echo esc_attr( $type ); ?>" value="no" />
-					<label for="show_recurring<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?></label>
-				</p>
-				<p>
 					<label for="type<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Type of Upcoming Events List', 'my-calendar' ); ?></label>
 					<select name="type" id="type<?php echo esc_attr( $type ); ?>">
 						<option value="event" selected="selected"><?php esc_html_e( 'Events', 'my-calendar' ); ?></option>
-						<option value="year"><?php esc_html_e( 'Current Year', 'my-calendar' ); ?></option>
 						<option value="days"><?php esc_html_e( 'Days', 'my-calendar' ); ?></option>
+						<option value="year"><?php esc_html_e( 'Current Year', 'my-calendar' ); ?></option>
 						<option value="custom"><?php esc_html_e( 'Custom Dates', 'my-calendar' ); ?></option>
 						<option value="month"><?php esc_html_e( 'Current Month', 'my-calendar' ); ?></option>
 						<option value="month+1"><?php esc_html_e( 'Next Month', 'my-calendar' ); ?></option>
@@ -789,12 +773,31 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<option value="month+12"><?php esc_html_e( '12th Month Out', 'my-calendar' ); ?></option>
 					</select>
 				</p>
+				<p>
+					<label class="days" for="before<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Days Before Current Day', 'my-calendar' ); ?></label>
+					<label class="events" for="before<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events Before Current Day', 'my-calendar' ); ?></label>
+					<input type="number" name="before" id="before<?php echo esc_attr( $type ); ?>" value="" />
+				</p>
+				<p>
+					<label class="days" for="after<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Days After Current Day', 'my-calendar' ); ?></label>
+					<label class="events" for="after<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events After Current Day', 'my-calendar' ); ?></label>
+					<input type="number" name="after" id="after<?php echo esc_attr( $type ); ?>" value="" />
+				</p>
+				<p>
+					<label class="days" for="skip<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Days to Skip', 'my-calendar' ); ?></label>
+					<label class="events" for="skip<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events to Skip', 'my-calendar' ); ?></label>
+					<input type="number" name="skip" id="skip<?php echo esc_attr( $type ); ?>" value="" />
+				</p>
+				<p class="checkbox">
+					<input type="checkbox" name="show_recurring" id="show_recurring<?php echo esc_attr( $type ); ?>" value="no" />
+					<label for="show_recurring<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?></label>
+				</p>
 				<div class='custom'>
 					<p>
-						<label for='from<?php echo esc_attr( $type ); ?>'><?php esc_html_e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='from' id='from<?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
+						<label for='from<?php echo esc_attr( $type ); ?>'><?php esc_html_e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='date' name='from' id='from<?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
 					</p>
 					<p>
-						<label for='to<?php echo esc_attr( $type ); ?>'><?php esc_html_e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='text' name='to' id='to<?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
+						<label for='to<?php echo esc_attr( $type ); ?>'><?php esc_html_e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?></label> <input type='date' name='to' id='to<?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
 					</p>
 				</div>
 				<p>
