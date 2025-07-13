@@ -18,3 +18,28 @@ window.addEventListener( 'beforeunload', function(e) {
 	}
 	//else: user is allowed to leave without a warning dialog
 });
+
+let typeSelector = document.getElementById( 'typeupcoming' );
+let labels;
+if ( typeSelector ) {
+	let dayLabels = document.querySelectorAll( 'label.days' );
+	let eventLabels = document.querySelectorAll( 'label.events' );
+	let inputs = document.querySelectorAll( '.before-input, .after-input' );
+	dayLabels.forEach( (el) => { el.style.display = 'none' } );
+	typeSelector.addEventListener( 'change', function(e) {
+		let value = typeSelector.value;
+		if ( value === 'event' ) {
+			dayLabels.forEach( (el) => { el.style.display = 'none' } );
+			eventLabels.forEach( (el) => { el.style.display = 'block' } );
+		}
+		if ( value === 'days' ) {
+			eventLabels.forEach( (el) => { el.style.display = 'none' } );
+			dayLabels.forEach( (el) => { el.style.display = 'block' } );
+		}
+		if ( 'days' !== value && 'event' !== value ) {
+			inputs.forEach( (el) => { el.style.display = 'none' } );
+		} else {
+			inputs.forEach( (el) => { el.style.display = 'block' } );
+		}
+	});
+}

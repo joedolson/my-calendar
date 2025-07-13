@@ -773,12 +773,12 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<option value="month+12"><?php esc_html_e( '12th Month Out', 'my-calendar' ); ?></option>
 					</select>
 				</p>
-				<p>
+				<p class="before-input">
 					<label class="days" for="before<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Days Before Current Day', 'my-calendar' ); ?></label>
 					<label class="events" for="before<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events Before Current Day', 'my-calendar' ); ?></label>
 					<input type="number" name="before" id="before<?php echo esc_attr( $type ); ?>" value="" />
 				</p>
-				<p>
+				<p class="after-input">
 					<label class="days" for="after<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Days After Current Day', 'my-calendar' ); ?></label>
 					<label class="events" for="after<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Events After Current Day', 'my-calendar' ); ?></label>
 					<input type="number" name="after" id="after<?php echo esc_attr( $type ); ?>" value="" />
