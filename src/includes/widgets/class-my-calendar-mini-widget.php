@@ -182,7 +182,6 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			<?php esc_html_e( 'Navigation options:', 'my-calendar' ); ?> <code>nav,jump,timeframe,print,key,feeds,exports,none</code><?php mc_help_link( __( 'Help', 'my-calendar' ), __( 'Navigation Keywords', 'my-calendar' ), 'navigation keywords', 3 ); ?>
 		</span>
 		</p>
-
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'author' ) ); ?>"><?php esc_html_e( 'Limit by Author', 'my-calendar' ); ?></label><br/>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'author' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'author' ) ); ?>" multiple="multiple" class="widefat">
@@ -199,23 +198,26 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 				<?php echo wp_kses( mc_selected_users( $host ), mc_kses_elements() ); ?>
 			</select>
 		</p>
-		<p>
-			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'ltype' ) ); ?>"><?php esc_html_e( 'Location (Type)', 'my-calendar' ); ?></label><br/>
-			<select name="<?php echo esc_attr( $this->get_field_name( 'ltype' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'ltype' ) ); ?>" class="widefat">
-				<option value=''><?php esc_html_e( 'All locations', 'my-calendar' ); ?></option>
-				<option value='event_label' <?php selected( $ltype, 'event_label' ); ?>><?php esc_html_e( 'Location Name', 'my-calendar' ); ?></option>
-				<option value='event_city' <?php selected( $ltype, 'event_city' ); ?>><?php esc_html_e( 'City', 'my-calendar' ); ?></option>
-				<option value='event_state' <?php selected( $ltype, 'event_state' ); ?>><?php esc_html_e( 'State', 'my-calendar' ); ?></option>
-				<option value='event_postcode' <?php selected( $ltype, 'event_postcode' ); ?>><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></option>
-				<option value='event_country' <?php selected( $ltype, 'event_country' ); ?>><?php esc_html_e( 'Country', 'my-calendar' ); ?></option>
-				<option value='event_region' <?php selected( $ltype, 'event_region' ); ?>><?php esc_html_e( 'Region', 'my-calendar' ); ?></option>
-			</select>
-		</p>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'lvalue' ) ); ?>"><?php esc_html_e( 'Location (Value)', 'my-calendar' ); ?></label><br/>
-			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'lvalue' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'lvalue' ) ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" />
-		</p>
+		<div class="mc-flex" style="display: flex; flex-wrap: wrap; gap: 20px">
+			<p>
+				<label
+					for="<?php echo esc_attr( $this->get_field_id( 'ltype' ) ); ?>"><?php esc_html_e( 'Location (Type)', 'my-calendar' ); ?></label><br/>
+				<select name="<?php echo esc_attr( $this->get_field_name( 'ltype' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'ltype' ) ); ?>" class="widefat">
+					<option value=''><?php esc_html_e( 'All locations', 'my-calendar' ); ?></option>
+					<option value='event_label' <?php selected( $ltype, 'event_label' ); ?>><?php esc_html_e( 'Location Name', 'my-calendar' ); ?></option>
+					<option value='event_city' <?php selected( $ltype, 'event_city' ); ?>><?php esc_html_e( 'City', 'my-calendar' ); ?></option>
+					<option value='event_state' <?php selected( $ltype, 'event_state' ); ?>><?php esc_html_e( 'State', 'my-calendar' ); ?></option>
+					<option value='event_postcode' <?php selected( $ltype, 'event_postcode' ); ?>><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></option>
+					<option value='event_country' <?php selected( $ltype, 'event_country' ); ?>><?php esc_html_e( 'Country', 'my-calendar' ); ?></option>
+					<option value='event_region' <?php selected( $ltype, 'event_region' ); ?>><?php esc_html_e( 'Region', 'my-calendar' ); ?></option>
+				</select>
+			</p>
+			<p>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'lvalue' ) ); ?>"><?php esc_html_e( 'Location (Value)', 'my-calendar' ); ?></label><br/>
+				<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'lvalue' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'lvalue' ) ); ?>" value="<?php echo esc_attr( $lvalue ); ?>" />
+			</p>
+		</div>
+		<div class="mc-flex" style="display: flex; flex-wrap: wrap; gap: 20px">
 		<p>
 			<label
 				for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_mini_time' ) ); ?>"><?php esc_html_e( 'Mini-Calendar Timespan:', 'my-calendar' ); ?></label>
@@ -229,6 +231,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			<label for="<?php echo esc_attr( $this->get_field_id( 'months' ) ); ?>"><?php esc_html_e( 'Months to show in list view', 'my-calendar' ); ?></label>
 			<input type="number" max="12" step="1" min="1" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'months' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'months' ) ); ?>" value="<?php echo ( '' === $months ) ? '' : esc_attr( $months ); ?>" />
 		</p>
+		</div>
 		</div>
 		<?php
 	}
