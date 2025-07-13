@@ -574,9 +574,10 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		++$i;
 	}
 	if ( ( $last_date || $first_date ) && 'events' === $args['type'] || 'default' === $args['type'] ) {
-		$args['offset'] = count( $output ) - 1;
-		$buttons        = mc_upcoming_events_navigation( $args, $first_date, $last_date );
-		$html           = $buttons . $html;
+		$args['offset']     = count( $output ) - 1;
+		$args['navigation'] = ( ! isset( $args['navigation'] ) ) ? mc_get_option( 'upcoming_events_navigation' ) : $args['navigation'];
+		$buttons            = mc_upcoming_events_navigation( $args, $first_date, $last_date );
+		$html               = $buttons . $html;
 	}
 
 	return $html;
