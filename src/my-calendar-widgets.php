@@ -33,7 +33,7 @@ function my_calendar_upcoming_events( $args ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
 	}
-	$args['after']     = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
+	$args['after']      = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
 	$args['type']       = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
 	$args['category']   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
 	$args['substitute'] = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
@@ -56,8 +56,8 @@ function my_calendar_upcoming_events( $args ) {
 	$hash         = md5( implode( ',', $args ) );
 	$output       = '';
 	$defaults     = mc_widget_defaults();
-	$display_type = ( 'default' === $args['type'] ) ? $defaults['upcoming']['type'] : $args['type'];
-	$display_type = ( '' === $display_type ) ? 'events' : $display_type;
+	$args['type'] = ( 'default' === $args['type'] ) ? $defaults['upcoming']['type'] : $args['type'];
+	$args['type'] = ( '' === $args['type'] ) ? 'events' : $args['type'];
 
 	// Get number of units we should go into the future.
 	$args['after'] = ( 'default' === $args['after'] ) ? $defaults['upcoming']['after'] : $args['after'];
@@ -87,12 +87,12 @@ function my_calendar_upcoming_events( $args ) {
 	$class              = ( 'card' === $args['template'] ) ? 'my-calendar-cards' : 'list-events';
 	$header             = "<div class='mc-event-list-container'><ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
 	$footer             = '</ul></div>';
-	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
+	$display_events     = ( 'events' === $args['type'] || 'event' === $args['type'] ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
 		if ( ! empty( $args['from'] ) && ! empty( $args['to'] ) ) {
 		} else {
-			$args = mc_set_from_and_to( $args, $display_type );
+			$args = mc_set_from_and_to( $args, $args['type'] );
 		}
 		/**
 		 * Custom upcoming events date start value for upcoming events lists using date parameters.
