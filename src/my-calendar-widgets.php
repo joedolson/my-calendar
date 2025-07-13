@@ -33,30 +33,30 @@ function my_calendar_upcoming_events( $args ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
 	}
-	$after      = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
-	$type       = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
-	$category   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
-	$substitute = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
-	$order      = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
-	$skip       = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
-	$author     = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
-	$host       = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
-	$ltype      = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
-	$lvalue     = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
-	$from       = ( isset( $args['from'] ) ) ? $args['from'] : '';
-	$to         = ( isset( $args['to'] ) ) ? $args['to'] : '';
-	$site       = ( isset( $args['site'] ) ) ? $args['site'] : false;
-	$time       = ( isset( $args['time'] ) ) ? $args['time'] : '';
+	$args['after']     = ( isset( $args['after'] ) ) ? $args['after'] : 'default';
+	$args['type']       = ( isset( $args['type'] ) ) ? $args['type'] : 'default';
+	$args['category']   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
+	$args['substitute'] = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
+	$args['order']      = ( isset( $args['order'] ) ) ? $args['order'] : 'asc';
+	$args['skip']       = ( isset( $args['skip'] ) ) ? $args['skip'] : 0;
+	$args['author']     = ( isset( $args['author'] ) ) ? $args['author'] : 'default';
+	$args['host']       = ( isset( $args['host'] ) ) ? $args['host'] : 'default';
+	$args['ltype']      = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
+	$args['lvalue']     = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
+	$args['from']       = ( isset( $args['from'] ) ) ? $args['from'] : '';
+	$args['to']         = ( isset( $args['to'] ) ) ? $args['to'] : '';
+	$args['site']       = ( isset( $args['site'] ) ) ? $args['site'] : false;
+	$args['time']       = ( isset( $args['time'] ) ) ? $args['time'] : '';
 
-	if ( $site ) {
-		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
-		switch_to_blog( $site );
+	if ( $args['site'] ) {
+		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
+		switch_to_blog( $args['site'] );
 	}
 
 	$hash         = md5( implode( ',', $args ) );
 	$output       = '';
 	$defaults     = mc_widget_defaults();
-	$display_type = ( 'default' === $type ) ? $defaults['upcoming']['type'] : $type;
+	$display_type = ( 'default' === $args['type'] ) ? $defaults['upcoming']['type'] : $args['type'];
 	$display_type = ( '' === $display_type ) ? 'events' : $display_type;
 
 	// Get number of units we should go into the future.
@@ -64,10 +64,10 @@ function my_calendar_upcoming_events( $args ) {
 	$args['after'] = ( '' === $args['after'] ) ? 10 : $args['after'];
 
 	// Get number of units we should go into the past.
-	$args['before'] = ( 'default' === $args['before'] ) ? $defaults['upcoming']['before'] : $args['before'];
-	$args['before'] = ( '' === $args['before'] ) ? 0 : $args['before'];
-	$category       = ( 'default' === $category ) ? '' : $category;
-	$template       = ( isset( $args['template'] ) ) ? $args['template'] : '';
+	$args['before']    = ( 'default' === $args['before'] ) ? $defaults['upcoming']['before'] : $args['before'];
+	$args['before']    = ( '' === $args['before'] ) ? 0 : $args['before'];
+	$args['category']  = ( 'default' === $args['category'] ) ? '' : $args['category'];
+	$args['template '] = ( isset( $args['template'] ) ) ? $args['template'] : '';
 
 	/**
 	 * Pass a custom template to the upcoming events list. Template can either be a template key referencing a stored template or a template pattern using {} template tags.
@@ -78,25 +78,21 @@ function my_calendar_upcoming_events( $args ) {
 	 *
 	 * @return {string} Template string.
 	 */
-	$args['template'] = apply_filters( 'mc_upcoming_events_template', $template );
+	$args['template'] = apply_filters( 'mc_upcoming_events_template', $args['template'] );
 	$default          = ( ! $args['template'] || 'default' === $args['template'] ) ? $defaults['upcoming']['template'] : $args['template'];
 	$args['template'] = mc_setup_template( $args['template'], $default );
 
-	$no_event_text  = ( ! $substitute ) ? $defaults['upcoming']['text'] : $substitute;
-	$lang           = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$class          = ( 'card' === $args['template'] ) ? 'my-calendar-cards' : 'list-events';
-	$header         = "<div class='mc-event-list-container'><ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
-	$footer         = '</ul></div>';
+	$args['substitute'] = ( ! $args['substitute'] ) ? $defaults['upcoming']['text'] : $args['substitute'];
+	$lang               = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
+	$class              = ( 'card' === $args['template'] ) ? 'my-calendar-cards' : 'list-events';
+	$header             = "<div class='mc-event-list-container'><ul id='upcoming-events-$hash' class='mc-event-list upcoming-events $class'$lang>";
+	$footer             = '</ul></div>';
 	$display_events = ( 'events' === $display_type || 'event' === $display_type ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
 		if ( ! empty( $args['from'] ) && ! empty( $args['to'] ) ) {
-			$from = $args['from'];
-			$to   = $args['to'];
 		} else {
 			$args = mc_set_from_and_to( $args, $display_type );
-			$from = $args['from'];
-			$to   = $args['to'];
 		}
 		/**
 		 * Custom upcoming events date start value for upcoming events lists using date parameters.
@@ -108,7 +104,7 @@ function my_calendar_upcoming_events( $args ) {
 		 *
 		 * @return {string} List starting date.
 		 */
-		$from = apply_filters( 'mc_upcoming_date_from', $from, $args );
+		$args['from'] = apply_filters( 'mc_upcoming_date_from', $args['from'], $args );
 		/**
 		 * Custom upcoming events date end value for upcoming events lists using date parameters.
 		 *
@@ -119,19 +115,19 @@ function my_calendar_upcoming_events( $args ) {
 		 *
 		 * @return {string} List ending date.
 		 */
-		$to = apply_filters( 'mc_upcoming_date_to', $to, $args );
+		$args['to'] = apply_filters( 'mc_upcoming_date_to', $args['to'], $args );
 
 		$query = array(
-			'from'     => $from,
-			'to'       => $to,
-			'category' => $category,
-			'ltype'    => $ltype,
-			'lvalue'   => $lvalue,
-			'author'   => $author,
-			'host'     => $host,
+			'from'     => $args['from'],
+			'to'       => $args['to'],
+			'category' => $args['category'],
+			'ltype'    => $args['ltype'],
+			'lvalue'   => $args['lvalue'],
+			'author'   => $args['author'],
+			'host'     => $args['host'],
 			'search'   => '',
 			'source'   => 'upcoming',
-			'site'     => $site,
+			'site'     => $args['site'],
 		);
 		/**
 		 * Modify the arguments used to generate upcoming events.
@@ -163,7 +159,7 @@ function my_calendar_upcoming_events( $args ) {
 		$last_item = '';
 		$skips     = array();
 		$omit      = array();
-		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
+		foreach ( reverse_array( $temp_array, true, $args['order'] ) as $event ) {
 			$details = mc_create_tags( $event );
 			$data    = array(
 				'event'    => $event,
@@ -200,7 +196,7 @@ function my_calendar_upcoming_events( $args ) {
 			if ( '' === $item ) {
 				$item = mc_format_upcoming_event( $data, $args['template'], 'list' );
 			}
-			if ( $i < $skip && 0 !== $skip ) {
+			if ( $i < $args['skip'] && 0 !== $args['skip'] ) {
 				++$i;
 			} else {
 				// Recurring events should only appear once.
@@ -213,19 +209,19 @@ function my_calendar_upcoming_events( $args ) {
 		}
 	} else {
 		$query  = array(
-			'category' => $category,
+			'category' => $args['category'],
 			'before'   => $args['before'],
-			'after'    => $after,
-			'author'   => $author,
-			'host'     => $host,
-			'ltype'    => $ltype,
-			'lvalue'   => $lvalue,
-			'site'     => $site,
-			'time'     => $time,
+			'after'    => $args['after'],
+			'author'   => $args['author'],
+			'host'     => $args['host'],
+			'ltype'    => $args['ltype'],
+			'lvalue'   => $args['lvalue'],
+			'site'     => $args['site'],
+			'time'     => $args['time'],
 		);
 		$events = mc_get_all_events( $query );
 
-		$holidays      = mc_get_all_holidays( $args['before'], $args['after'], $time );
+		$holidays      = mc_get_all_holidays( $args['before'], $args['after'], $args['time'] );
 		$holiday_array = mc_set_date_array( $holidays );
 
 		if ( is_array( $events ) && ! empty( $events ) ) {
@@ -235,8 +231,7 @@ function my_calendar_upcoming_events( $args ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			$args['time'] = $time;
-			$output      .= mc_produce_upcoming_events( $event_array, $args, 'list' );
+			$output .= mc_produce_upcoming_events( $event_array, $args, 'list' );
 		} else {
 			$output = '';
 		}
@@ -268,10 +263,10 @@ function my_calendar_upcoming_events( $args ) {
 	} else {
 		$header = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
 		$class  = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '';
-		$return = $header . $navigation . '<li class="' . $class . '">' . wp_unslash( $no_event_text ) . '</li>' . $footer;
+		$return = $header . $navigation . '<li class="' . $class . '">' . wp_unslash( $args['substitute'] ) . '</li>' . $footer;
 	}
 
-	if ( $site ) {
+	if ( $args['site'] ) {
 		restore_current_blog();
 	}
 
