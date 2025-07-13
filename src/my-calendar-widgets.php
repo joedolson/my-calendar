@@ -680,55 +680,55 @@ function my_calendar_todays_events( $args ) {
 		$switched = mc_switch_language( $locale, $language );
 	}
 
-	$category   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
-	$template   = ( isset( $args['template'] ) ) ? $args['template'] : 'default';
-	$substitute = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
-	$author     = ( isset( $args['author'] ) ) ? $args['author'] : 'all';
-	$host       = ( isset( $args['host'] ) ) ? $args['host'] : 'all';
-	$date       = ( isset( $args['date'] ) ) ? $args['date'] : false;
-	$site       = ( isset( $args['site'] ) ) ? $args['site'] : false;
+	$args['category']   = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
+	$args['template']   = ( isset( $args['template'] ) ) ? $args['template'] : 'default';
+	$args['substitute'] = ( isset( $args['fallback'] ) ) ? $args['fallback'] : '';
+	$args['author']     = ( isset( $args['author'] ) ) ? $args['author'] : 'all';
+	$args['host']       = ( isset( $args['host'] ) ) ? $args['host'] : 'all';
+	$args['date']       = ( isset( $args['date'] ) ) ? $args['date'] : false;
+	$args['site']       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 
-	if ( $site ) {
-		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
-		switch_to_blog( $site );
+	if ( $args['site'] ) {
+		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
+		switch_to_blog( $args['site'] );
 	}
 
 	$params = array(
-		'category'   => $category,
-		'template'   => $template,
-		'substitute' => $substitute,
-		'author'     => $author,
-		'host'       => $host,
-		'date'       => $date,
+		'category'   => $args['category'],
+		'template'   => $args['template'],
+		'substitute' => $args['substitute'],
+		'author'     => $args['author'],
+		'host'       => $args['host'],
+		'date'       => $args['date'],
 	);
 	$hash   = md5( implode( ',', $params ) );
 	$output = '';
 
-	$defaults = mc_widget_defaults();
-	$default  = ( ! $template || 'default' === $template ) ? $defaults['today']['template'] : $template;
-	$template = mc_setup_template( $template, $default );
+	$defaults         = mc_widget_defaults();
+	$default          = ( ! $args['template'] || 'default' === $args['template'] ) ? $defaults['today']['template'] : $args['template'];
+	$args['template'] = mc_setup_template( $args['template'], $default );
 
-	$category      = ( 'default' === $category ) ? $defaults['today']['category'] : $category;
-	$no_event_text = ( '' === $substitute ) ? $defaults['today']['text'] : $substitute;
-	if ( $date ) {
-		$from = mc_date( 'Y-m-d', strtotime( $date ), false );
-		$to   = mc_date( 'Y-m-d', strtotime( $date ), false );
+	$args['category']   = ( 'default' === $args['category'] ) ? $defaults['today']['category'] : $args['category'];
+	$args['substitute'] = ( '' === $args['substitute'] ) ? $defaults['today']['text'] : $args['substitute'];
+	if ( $args['date'] ) {
+		$args['from'] = mc_date( 'Y-m-d', strtotime( $args['date'] ), false );
+		$args['to']   = mc_date( 'Y-m-d', strtotime( $args['date'] ), false );
 	} else {
-		$from = current_time( 'Y-m-d' );
-		$to   = current_time( 'Y-m-d' );
+		$args['from'] = current_time( 'Y-m-d' );
+		$args['to']   = current_time( 'Y-m-d' );
 	}
 
 	$args = array(
-		'from'     => $from,
-		'to'       => $to,
-		'category' => $category,
+		'from'     => $args['from'],
+		'to'       => $args['to'],
+		'category' => $args['category'],
 		'ltype'    => '',
 		'lvalue'   => '',
-		'author'   => $author,
-		'host'     => $host,
+		'author'   => $args['author'],
+		'host'     => $args['host'],
 		'search'   => '',
 		'source'   => 'upcoming',
-		'site'     => $site,
+		'site'     => $args['site'],
 	);
 	/**
 	 * Modify the arguments used to generate today's events.
@@ -743,9 +743,9 @@ function my_calendar_todays_events( $args ) {
 	$args   = apply_filters( 'mc_today_attributes', $args, $params );
 	$events = my_calendar_events( $args );
 
-	$today         = ( isset( $events[ $from ] ) ) ? $events[ $from ] : false;
+	$today         = ( isset( $events[ $args['from'] ] ) ) ? $events[ $args['from'] ] : false;
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
-	$class         = ( 'card' === $template ) ? 'my-calendar-cards' : 'list-events';
+	$class         = ( 'card' === $args['template'] ) ? 'my-calendar-cards' : 'list-events';
 	$header        = "<ul id='todays-events-$hash' class='mc-event-list todays-events $class'$lang>";
 	$footer        = '</ul>';
 	$groups        = array();
@@ -761,11 +761,11 @@ function my_calendar_todays_events( $args ) {
 				$data = array(
 					'event'    => $e,
 					'tags'     => $event_details,
-					'template' => $template,
+					'template' => $args['template'],
 					'args'     => $args,
-					'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template" : '',
+					'class'    => ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '',
 				);
-				if ( 'card' === $template ) {
+				if ( 'card' === $args['template'] ) {
 					$details = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';
 				} else {
 					$details = mc_load_template( 'event/today', $data );
@@ -784,7 +784,7 @@ function my_calendar_todays_events( $args ) {
 					 *
 					 * @return {string} HTML preceding each event in today's events lists.
 					 */
-					$prepend = apply_filters( 'mc_todays_events_before', "<li class='$classes'>", $classes, $category );
+					$prepend = apply_filters( 'mc_todays_events_before', "<li class='$classes'>", $classes, $args['category'] );
 					/**
 					 * Closing elements for today's events list items. Default `</li>`.
 					 *
@@ -808,9 +808,9 @@ function my_calendar_todays_events( $args ) {
 					 *
 					 * @return {string} Event output details.
 					 */
-					$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $template, $args );
+					$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $args['template'], $args );
 					if ( '' === $item ) {
-						$item = mc_draw_template( $event_details, $template, 'list', $e );
+						$item = mc_draw_template( $event_details, $args['template'], 'list', $e );
 					}
 					$todays_events[ $ts ][] = $prepend . $item . $append;
 				}
@@ -855,13 +855,13 @@ function my_calendar_todays_events( $args ) {
 			 */
 			$return .= apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
-			$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '</div>';
+			$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $args['substitute'] ) . '</div>';
 		}
 	} else {
-		$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $no_event_text ) . '</div>';
+		$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $args['substitute'] ) . '</div>';
 	}
 
-	if ( $site ) {
+	if ( $args['site'] ) {
 		restore_current_blog();
 	}
 
