@@ -778,27 +778,11 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			&lt;fieldset>
 				&lt;legend>&lt;?php esc_html_e( 'Event Range', 'my-calendar' ); ?>&lt;/legend>
 				&lt;p>
-					&lt;label for="before&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Events/Days Before Current Day', 'my-calendar' ); ?>&lt;/label>
-					&lt;input type="number" name="before" id="before&lt;?php echo esc_attr( $type ); ?>" value="" />
-				&lt;/p>
-				&lt;p>
-					&lt;label for="after&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Events/Days After Current Day', 'my-calendar' ); ?>&lt;/label>
-					&lt;input type="number" name="after" id="after&lt;?php echo esc_attr( $type ); ?>" value="" />
-				&lt;/p>
-				&lt;p>
-					&lt;label for="skip&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Events/Days to Skip', 'my-calendar' ); ?>&lt;/label>
-					&lt;input type="number" name="skip" id="skip&lt;?php echo esc_attr( $type ); ?>" value="" />
-				&lt;/p>
-				&lt;p class="checkbox">
-					&lt;input type="checkbox" name="show_recurring" id="show_recurring&lt;?php echo esc_attr( $type ); ?>" value="no" />
-					&lt;label for="show_recurring&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?>&lt;/label>
-				&lt;/p>
-				&lt;p>
 					&lt;label for="type&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Type of Upcoming Events List', 'my-calendar' ); ?>&lt;/label>
 					&lt;select name="type" id="type&lt;?php echo esc_attr( $type ); ?>">
 						&lt;option value="event" selected="selected">&lt;?php esc_html_e( 'Events', 'my-calendar' ); ?>&lt;/option>
-						&lt;option value="year">&lt;?php esc_html_e( 'Current Year', 'my-calendar' ); ?>&lt;/option>
 						&lt;option value="days">&lt;?php esc_html_e( 'Days', 'my-calendar' ); ?>&lt;/option>
+						&lt;option value="year">&lt;?php esc_html_e( 'Current Year', 'my-calendar' ); ?>&lt;/option>
 						&lt;option value="custom">&lt;?php esc_html_e( 'Custom Dates', 'my-calendar' ); ?>&lt;/option>
 						&lt;option value="month">&lt;?php esc_html_e( 'Current Month', 'my-calendar' ); ?>&lt;/option>
 						&lt;option value="month+1">&lt;?php esc_html_e( 'Next Month', 'my-calendar' ); ?>&lt;/option>
@@ -815,12 +799,31 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						&lt;option value="month+12">&lt;?php esc_html_e( '12th Month Out', 'my-calendar' ); ?>&lt;/option>
 					&lt;/select>
 				&lt;/p>
+				&lt;p class="before-input">
+					&lt;label class="days" for="before&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Days Before Current Day', 'my-calendar' ); ?>&lt;/label>
+					&lt;label class="events" for="before&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Events Before Current Day', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="number" name="before" id="before&lt;?php echo esc_attr( $type ); ?>" value="" />
+				&lt;/p>
+				&lt;p class="after-input">
+					&lt;label class="days" for="after&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Days After Current Day', 'my-calendar' ); ?>&lt;/label>
+					&lt;label class="events" for="after&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Events After Current Day', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="number" name="after" id="after&lt;?php echo esc_attr( $type ); ?>" value="" />
+				&lt;/p>
+				&lt;p>
+					&lt;label class="days" for="skip&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Days to Skip', 'my-calendar' ); ?>&lt;/label>
+					&lt;label class="events" for="skip&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Events to Skip', 'my-calendar' ); ?>&lt;/label>
+					&lt;input type="number" name="skip" id="skip&lt;?php echo esc_attr( $type ); ?>" value="" />
+				&lt;/p>
+				&lt;p class="checkbox">
+					&lt;input type="checkbox" name="show_recurring" id="show_recurring&lt;?php echo esc_attr( $type ); ?>" value="no" />
+					&lt;label for="show_recurring&lt;?php echo esc_attr( $type ); ?>">&lt;?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?>&lt;/label>
+				&lt;/p>
 				&lt;div class='custom'>
 					&lt;p>
-						&lt;label for='from&lt;?php echo esc_attr( $type ); ?>'>&lt;?php esc_html_e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?>&lt;/label> &lt;input type='text' name='from' id='from&lt;?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
+						&lt;label for='from&lt;?php echo esc_attr( $type ); ?>'>&lt;?php esc_html_e( 'Starting Date (YYYY-MM-DD)', 'my-calendar' ); ?>&lt;/label> &lt;input type='date' name='from' id='from&lt;?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
 					&lt;/p>
 					&lt;p>
-						&lt;label for='to&lt;?php echo esc_attr( $type ); ?>'>&lt;?php esc_html_e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?>&lt;/label> &lt;input type='text' name='to' id='to&lt;?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
+						&lt;label for='to&lt;?php echo esc_attr( $type ); ?>'>&lt;?php esc_html_e( 'End Date (YYYY-MM-DD)', 'my-calendar' ); ?>&lt;/label> &lt;input type='date' name='to' id='to&lt;?php echo esc_attr( $type ); ?>' placeholder="YYYY-MM-DD" />
 					&lt;/p>
 				&lt;/div>
 				&lt;p>
