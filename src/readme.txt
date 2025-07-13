@@ -116,7 +116,6 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change & bug fix: Change `js-modal` prefix to `mc-modal` to reduce conflicts with other uses of this modal library.
 * Change: UI changes to Upcoming Events shortcode builder & widget interfaces to clarify usage.
 
-
 = 3.6.6 =
 
 * Bug fix: Fix two PHP 8+ fatal errors in My Calendar legacy widget admin.
