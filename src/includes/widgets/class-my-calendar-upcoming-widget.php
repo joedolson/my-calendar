@@ -200,6 +200,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			<select id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_type' ) ); ?>">
 				<option value="events" <?php selected( 'events', $type ); ?>><?php esc_html_e( 'Events (e.g. 2 past, 3 future)', 'my-calendar' ); ?></option>
 				<option value="days" <?php selected( 'days', $type ); ?>><?php esc_html_e( 'Dates (e.g. 4 days past, 5 forward)', 'my-calendar' ); ?></option>
+				<option value="custom" <?php selected( 'custom', $type ); ?>><?php esc_html_e( 'Custom Dates', 'my-calendar' ); ?></option>
 				<option value="month" <?php selected( 'month', $type ); ?>><?php esc_html_e( 'Show current month', 'my-calendar' ); ?></option>
 				<option value="month+1" <?php selected( 'month+1', $type ); ?>><?php esc_html_e( 'Show next month', 'my-calendar' ); ?></option>
 				<option value="month+2" <?php selected( 'month+2', $type ); ?>><?php esc_html_e( 'Show 2nd month out', 'my-calendar' ); ?></option>
@@ -214,7 +215,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 				<option value="month+11" <?php selected( 'month+11', $type ); ?>><?php esc_html_e( 'Show 11th month out', 'my-calendar' ); ?></option>
 				<option value="month+12" <?php selected( 'month+12', $type ); ?>><?php esc_html_e( 'Show 12th month out', 'my-calendar' ); ?></option>
 				<option value="year" <?php selected( 'year', $type ); ?>><?php esc_html_e( 'Show current year', 'my-calendar' ); ?></option>
-				<option value="custom" <?php selected( 'custom', $type ); ?>><?php esc_html_e( 'Custom Dates', 'my-calendar' ); ?></option>
 			</select>
 		</p>
 		<?php
@@ -243,7 +243,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			</select>
 		</p>
 		<?php
-		if ( ! ( 'month' === $type || 'month+1' === $type || 'year' === $type ) ) {
+		if ( 'days' === $type || 'events' === $type ) {
 			?>
 			<p>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_after' ) ); ?>">
