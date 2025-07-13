@@ -122,6 +122,10 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_title' ) ); ?>"><?php esc_html_e( 'Title', 'my-calendar' ); ?>:</label><br/>
 			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_title' ) ); ?>" value="<?php echo esc_attr( $widget_title ); ?>"/>
 		</p>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>"><?php esc_html_e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
+			<input class="widefat" type="url" id="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_link' ) ); ?>" value="<?php echo esc_url( $widget_link ); ?>"/>
+		</p>
 		<?php
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 			?>
@@ -151,11 +155,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		</p>
 		<p class="mc-custom-template">
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label><br/>
-			<textarea class="widefat" rows="8" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_template' ) ); ?>"><?php echo esc_textarea( wp_unslash( $widget_template ) ); ?></textarea>
-		</p>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>"><?php esc_html_e( 'Widget title links to:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_link' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_link' ) ); ?>" value="<?php echo esc_url( $widget_link ); ?>"/>
+			<textarea class="widefat" rows="4" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_template' ) ); ?>"><?php echo esc_textarea( wp_unslash( $widget_template ) ); ?></textarea>
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_no_events_text' ) ); ?>"><?php esc_html_e( 'No events text', 'my-calendar' ); ?></label><br/>
@@ -163,7 +163,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_date' ) ); ?>"><?php esc_html_e( 'Custom date', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_date' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_date' ) ); ?>" value="<?php echo esc_attr( $date ); ?>"/>
+			<input class="widefat" type="date" id="<?php echo esc_attr( $this->get_field_id( 'mc_date' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_date' ) ); ?>" value="<?php echo esc_attr( $date ); ?>"/>
 		</p>
 		<?php
 		$all_checked = false;
@@ -183,14 +183,16 @@ class My_Calendar_Today_Widget extends WP_Widget {
 			?>
 			</ul>
 		</fieldset>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_author' ) ); ?>"><?php esc_html_e( 'Author or authors to show:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_author' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_author' ) ); ?>" value="<?php echo esc_attr( $widget_author ); ?>"/>
-		</p>
-		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'mc_host' ) ); ?>"><?php esc_html_e( 'Host or hosts to show:', 'my-calendar' ); ?></label><br/>
-			<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_host' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_host' ) ); ?>" value="<?php echo esc_attr( $widget_host ); ?>"/>
-		</p>
+		<div class="mc-flex" style="display: flex; flex-wrap: wrap; gap: 20px;">
+			<p>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_author' ) ); ?>"><?php esc_html_e( 'Author or authors to show:', 'my-calendar' ); ?></label><br/>
+				<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_today_author' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_today_author' ) ); ?>" value="<?php echo esc_attr( $widget_author ); ?>"/>
+			</p>
+			<p>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'mc_host' ) ); ?>"><?php esc_html_e( 'Host or hosts to show:', 'my-calendar' ); ?></label><br/>
+				<input class="widefat" type="text" id="<?php echo esc_attr( $this->get_field_id( 'mc_host' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mc_host' ) ); ?>" value="<?php echo esc_attr( $widget_host ); ?>"/>
+			</p>
+		</div>
 		</div>
 		<?php
 	}
