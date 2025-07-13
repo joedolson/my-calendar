@@ -1221,10 +1221,17 @@ function mc_admin_category_list( $event ) {
 		foreach ( $categories as $category ) {
 			$category = (int) $category;
 			if ( $category !== (int) $event->event_category ) {
-				$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
-				$color  = mc_get_category_detail( $category, 'category_color' );
-				$color  = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
-				$color  = ( '#' !== $color ) ? '<span class="category-color" style="background-color:' . $color . ';"></span>' : '';
+				$filter     = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
+				$cat_object = mc_get_category( $category );
+				$color      = $cat_object->category_color;
+				$icon       = ( 'true' === mc_get_option( 'hide_icons' ) ) ? '' : mc_category_icon( $cat_object );
+				if ( ! $color ) {
+					$color = '<span class="category-color no-border">' . $icon . '</span>';
+				} else {
+					$color   = ( 0 !== strpos( $color, '#' ) ) ? '#' . $color : $color;
+					$inverse = mc_inverse_color( $color );
+					$color   = ( 'background' === mc_get_option( 'apply_color' ) ) ? '<span class="category-color" style="background-color:' . $color . ';">' . $icon . '</span>' : '<span class="category-color" style="background-color:' . $inverse . ';">' . $icon . '</span>';
+				}
 				if ( isset( $_GET['groups'] ) ) {
 					$cats[] = '<span class="mc-category-item">' . $color . ' ' . mc_get_category_detail( $category, 'category_name' ) . '</span>';
 				} else {
@@ -1421,83 +1428,83 @@ function mc_delete_category_icon( $category_id ) {
 /**
  * Produce filepath & name or full img HTML for specific category's icon
  *
- * @param object $event Current event object.
+ * @param object $event_or_category Current event or category object.
  * @param string $type 'html' to generate HTML.
  *
  * @return string image path or HTML
  */
-function mc_category_icon( $event, $type = 'html' ) {
+function mc_category_icon( $event_or_category, $type = 'html' ) {
 	/**
 	 * Override the return value for a category icon.
 	 *
 	 * @hook mc_override_category_icon
 	 *
 	 * @param {bool}   $override Return a string value to short circuit the category icon query.
-	 * @param {object} $event Event object.
+	 * @param {object} $event_or_category Event object.
 	 * @param {string} $type Type of output - HTML or URL only.
 	 *
 	 * @return {string|bool}
 	 */
-	$override = apply_filters( 'mc_override_category_icon', false, $event, $type );
+	$override = apply_filters( 'mc_override_category_icon', false, $event_or_category, $type );
 	if ( $override ) {
 		return $override;
 	}
-	if ( is_object( $event ) && property_exists( $event, 'category_icon' ) ) {
+	if ( is_object( $event_or_category ) && property_exists( $event_or_category, 'category_icon' ) ) {
 		$url   = plugin_dir_url( __FILE__ );
 		$image = '';
 		// Is this an event context or a category context.
-		if ( property_exists( $event, 'occur_id' ) ) {
+		if ( property_exists( $event_or_category, 'occur_id' ) ) {
 			$context    = 'event';
-			$substitute = '-' . $event->occur_id;
+			$substitute = '-' . $event_or_category->occur_id;
 		} else {
 			$context    = 'category';
 			$substitute = '';
 		}
 		if ( 'true' !== mc_get_option( 'hide_icons' ) ) {
-			if ( '' !== $event->category_icon ) {
+			if ( '' !== $event_or_category->category_icon ) {
 				if ( mc_is_custom_icon() ) {
 					if ( str_contains( $url, 'my-calendar/src' ) ) {
 						$path = str_replace( 'my-calendar/src', 'my-calendar-custom/icons', $url );
 					} else {
 						$path = str_replace( 'my-calendar', 'my-calendar-custom/icons', $url );
 					}
-					$src = $path . $event->category_icon;
+					$src = $path . $event_or_category->category_icon;
 				} else {
 					$path  = plugins_url( 'images/icons', __FILE__ ) . '/';
-					$src   = $path . str_replace( '.png', '.svg', $event->category_icon );
-					$image = mc_generate_category_icon( $event );
+					$src   = $path . str_replace( '.png', '.svg', $event_or_category->category_icon );
+					$image = mc_generate_category_icon( $event_or_category );
 				}
-				$hex      = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
-				$color    = $hex . $event->category_color;
-				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event->category_name );
+				$hex      = ( strpos( $event_or_category->category_color, '#' ) !== 0 ) ? '#' : '';
+				$color    = $hex . $event_or_category->category_color;
+				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event_or_category->category_name );
 				if ( 'html' === $type ) {
 					if ( ! $image ) {
 						if ( false !== stripos( $src, '.svg' ) ) {
-							$image = get_option( 'mc_category_icon_' . $context . '_' . $event->category_id, '' );
+							$image = get_option( 'mc_category_icon_' . $context . '_' . $event_or_category->category_id, '' );
 							// If there's a value, but it's not an svg, zero out.
 							if ( $image && 0 !== stripos( $image, '<svg' ) ) {
 								$image = '';
 							}
 							if ( '' === $image ) {
-								$image = mc_generate_category_icon( $event );
+								$image = mc_generate_category_icon( $event_or_category );
 							}
 						} else {
 							$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $color ) . '" />';
 						}
 					}
 				} else {
-					$image = $path . $event->category_icon;
+					$image = $path . $event_or_category->category_icon;
 				}
 			}
 		}
-		$inverse = mc_inverse_color( $event->category_color );
+		$inverse = mc_inverse_color( $event_or_category->category_color );
 		if ( 'default' !== mc_get_option( 'apply_color' ) ) {
 			$back  = ( 'background' === mc_get_option( 'apply_color' ) ) ? true : false;
-			$image = ( $back ) ? str_replace( $event->category_color, $inverse, $image ) : str_replace( $inverse, $event->category_color, $image );
+			$image = ( $back ) ? str_replace( $event_or_category->category_color, $inverse, $image ) : str_replace( $inverse, $event_or_category->category_color, $image );
 		} else {
-			$image = str_replace( array( $event->category_color, $inverse ), 'inherit', $image );
+			$image = str_replace( array( $event_or_category->category_color, $inverse ), 'inherit', $image );
 		}
-		$image = str_replace( 'cat_' . $event->category_id, 'cat_' . $event->category_id . $substitute, $image );
+		$image = str_replace( 'cat_' . $event_or_category->category_id, 'cat_' . $event_or_category->category_id . $substitute, $image );
 		/**
 		 * Filter the HTML output for a category icon.
 		 *
@@ -1509,7 +1516,7 @@ function mc_category_icon( $event, $type = 'html' ) {
 		 *
 		 * @return {string}
 		 */
-		return apply_filters( 'mc_category_icon', $image, $event, $type );
+		return apply_filters( 'mc_category_icon', $image, $event_or_category, $type );
 	}
 
 	return '';
