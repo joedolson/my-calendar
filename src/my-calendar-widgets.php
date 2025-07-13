@@ -718,18 +718,11 @@ function my_calendar_todays_events( $args ) {
 		$args['to']   = current_time( 'Y-m-d' );
 	}
 
-	$args = array(
-		'from'     => $args['from'],
-		'to'       => $args['to'],
-		'category' => $args['category'],
-		'ltype'    => '',
-		'lvalue'   => '',
-		'author'   => $args['author'],
-		'host'     => $args['host'],
-		'search'   => '',
-		'source'   => 'upcoming',
-		'site'     => $args['site'],
-	);
+	$args['source'] = 'upcoming';
+	$args['ltype']  = '';
+	$args['lvalue'] = '';
+	$args['search'] = '';
+	$args['source'] = 'upcoming';
 	/**
 	 * Modify the arguments used to generate today's events.
 	 *
