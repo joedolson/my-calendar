@@ -776,6 +776,7 @@ function my_calendar_todays_events( $args ) {
 				$event_details = mc_create_tags( $e );
 				$ts            = $e->ts_occur_begin;
 				$classes       = mc_get_event_classes( $e, 'today' );
+				$classes      .= ( str_contains( $args['template'], 'list_preset_' ) ) ? " list-preset $args[template]" : '';
 
 				$data = array(
 					'event'    => $e,
