@@ -114,6 +114,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Improve argument passing in upcoming & today's events handler.
 * Bug fix: Don't output edit and delete links if the link is not valid. (Pro)
 * Change & bug fix: Change `js-modal` prefix to `mc-modal` to reduce conflicts with other uses of this modal library.
+* Change: UI changes to Upcoming Events shortcode builder & widget interfaces to clarify usage.
+
 
 = 3.6.6 =
 
