@@ -112,6 +112,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Properly fetch icons for secondary categories in admin events list.
 * Bug fix: Improve argument passing in upcoming & today's events handler.
+* Bug fix: List preset wrapper templates missing in legacy templating on today's events lists.
 * Bug fix: Don't output edit and delete links if the link is not valid. (Pro)
 * Change & bug fix: Change `js-modal` prefix to `mc-modal` to reduce conflicts with other uses of this modal library.
 * Change: UI changes to shortcode builder & widget interfaces to clarify usage.
