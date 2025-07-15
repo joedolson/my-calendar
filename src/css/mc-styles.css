@@ -1792,6 +1792,7 @@ div.mc-search {
 
 .my-calendar-admin .postbox .hndle {
 	cursor: auto;
+	user-select: auto;
 }
 
 .my-calendar-admin #wp-content-editor-tools {
