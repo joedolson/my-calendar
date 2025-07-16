@@ -196,7 +196,7 @@ add_action( 'init', 'mc_export_vcal', 200 );
 // Add filters.
 add_filter( 'widget_text', 'do_shortcode', 9 );
 add_filter( 'plugin_action_links', 'mc_plugin_action', 10, 2 );
-add_filter( 'pre_get_document_title', 'mc_event_filter', 10, 1 );
+add_filter( 'pre_get_document_title', 'mc_event_filter', 100, 1 );
 
 /**
  * Register all My Calendar widgets
