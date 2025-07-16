@@ -1292,7 +1292,7 @@ function mc_event_filter( $title ) {
 		$template = mc_get_option( 'event_title_template', '' );
 		$template = ( '' !== $template ) ? stripslashes( $template ) : '{title} / {date}';
 
-		return esc_html( wp_strip_all_tags( stripslashes( mc_draw_template( $array, $template ) ) ) );
+		return esc_html( wp_strip_all_tags( stripslashes( mc_draw_template( $array, $template ) ) ) . ' / ' . get_bloginfo( 'title' ) );
 	} else {
 		return $title;
 	}
