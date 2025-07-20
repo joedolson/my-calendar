@@ -1681,6 +1681,9 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		}
 		$query_string = '';
 		foreach ( $c as $key => $data ) {
+			if ( is_array( $data ) ) {
+				$data = implode( '|', $data );
+			}
 			$query_string .= $key . '=' . urlencode( stripslashes( (string) $data ) ) . '&';
 		}
 		if ( method_exists( 'Akismet', 'http_post' ) ) {
