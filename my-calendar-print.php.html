@@ -94,9 +94,12 @@ function my_calendar_print() {
 	if ( isset( $_GET['href'] ) ) {
 		// Only support URLs on the same home_url().
 		$ref_url  = sanitize_text_field( urldecode( wp_unslash( $_GET['href'] ) ) );
-		$ref_root = wp_parse_url( $ref_url )['host'];
+		$ref_root = ( wp_parse_url( $ref_url ) ) ? wp_parse_url( $ref_url )['host'] : false;
 		$root     = wp_parse_url( home_url() )['host'];
-		$local    = ( false !== stripos( $ref_url, home_url() ) &amp;&amp; false !== stripos( $root, $ref_root ) ) ? true : false;
+		$local    = false;
+		if ( $ref_root ) {
+			$local = ( false !== stripos( $ref_url, home_url() ) &amp;&amp; false !== stripos( $root, $ref_root ) ) ? true : false;
+		}
 		if ( $ref_url &amp;&amp; $local ) {
 			$return_url = $ref_url;
 		} else {
