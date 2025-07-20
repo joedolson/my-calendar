@@ -119,7 +119,7 @@ function my_calendar_print() {
 		'json'     => 'false',
 	);
 
-	echo wp_kses_post( my_calendar( $calendar ) );
+	echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
 
 	$add = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' );
 	unset( $add['cid'] );
