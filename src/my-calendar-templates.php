@@ -2085,12 +2085,17 @@ function mc_template_host( $data, $type = 'calendar' ) {
  *
  * @param object $data Calendar view data.
  * @param string $type View type.
+ * @param string $text Optional. Accessibility heading text.
  */
-function mc_template_access( $data, $type = 'calendar' ) {
+function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 	$event  = $data->event;
 	$access = '';
 	if ( mc_output_is_visible( 'access', $type, $event ) ) {
-		$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
+		if ( $text ) {
+			$access_heading = $text;
+		} else {
+			$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
+		}
 		$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
 		$sublevel       = 'h2';
 		if ( 'mini' === $type || 'list' === $type || 'list' === $data->time ) {
@@ -2128,14 +2133,15 @@ function mc_template_access( $data, $type = 'calendar' ) {
  *
  * @param object $data Calendar view data.
  * @param string $type View type.
+ * @param string $text Optional. Details link text.
  */
-function mc_template_share( $data, $type = 'calendar' ) {
+function mc_template_share( $data, $type = 'calendar', $text = '' ) {
 	$event = $data->event;
 	$more  = '';
 	$gcal  = '';
 	$vcal  = '';
 	if ( ( ! isset( $_GET['mc_id'] ) ) && mc_output_is_visible( 'more', $type, $event ) ) {
-		$details_label = mc_get_details_label( $event, $data->tags );
+		$details_label = ( $text ) ? $text : mc_get_details_label( $event, $data->tags );
 		$permalink     = mc_get_permalink( $event );
 		$event_title   = mc_draw_event_title( $event, $data->tags, $type, '' );
 		$aria          = '';
@@ -2201,15 +2207,17 @@ function mc_template_description( $data, $type = 'calendar' ) {
  *
  * @param object $data Calendar view data.
  * @param string $type View type.
+ * @param string $text Optional. Visible link text.
  */
-function mc_template_registration( $data, $type = 'calendar' ) {
+function mc_template_registration( $data, $type = 'calendar', $text = '' ) {
 	$event   = $data->event;
 	$tickets = '';
+	$text    = ( $text ) ? $text : __( 'Buy Tickets', 'my-calendar' );
 	if ( mc_output_is_visible( 'tickets', $type, $event ) ) {
 		$info     = wpautop( wp_unslash( $event->event_registration ) );
 		$url      = esc_url( $event->event_tickets );
 		$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
-		$text     = ( '' !== mc_get_option( 'buy_tickets', '' ) ) ? mc_get_option( 'buy_tickets' ) : __( 'Buy Tickets', 'my-calendar' );
+		$text     = ( '' !== mc_get_option( 'buy_tickets', '' ) ) ? mc_get_option( 'buy_tickets' ) : $text;
 		$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'><span class='mc-icon' aria-hidden='true'></span>" . $text . '</a>' : '';
 		if ( '' !== trim( $info . $tickets ) ) {
 			$tickets = '<div class="mc-registration">' . $info . $tickets . '</div>';
@@ -2243,9 +2251,11 @@ function mc_template_excerpt( $data, $type = 'calendar' ) {
  *
  * @param object $data Calendar view data.
  * @param string $type View type.
+ * @param string $text Optional. Visible link text.
  */
-function mc_template_return( $data, $type = 'calendar' ) {
+function mc_template_return( $data, $type = 'calendar', $text = '' ) {
 	$event = $data->event;
+	$text  = ( $text ) ? $text : __( 'View full calendar', 'my-calendar' );
 	/**
 	 * Filter URL appended on single event view to return to calendar.
 	 *
@@ -2257,7 +2267,7 @@ function mc_template_return( $data, $type = 'calendar' ) {
 	 * @return {string}
 	 */
 	$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ), $event );
-	$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : __( 'View full calendar', 'my-calendar' );
+	$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : $text;
 	$return     = ( 'single' === $type ) ? "	<p class='view-full'><a href='$return_url'>" . $text . '</a></p>' : '';
 
 	echo wp_kses_post( $return );
@@ -2293,15 +2303,20 @@ function mc_template_location( $data, $type = 'calendar' ) {
  *
  * @param object $data Calendar object.
  * @param string $type View type.
+ * @param string $text Optional. Visible link text.
  */
-function mc_template_link( $data, $type = 'calendar' ) {
+function mc_template_link( $data, $type = 'calendar', $text = '' ) {
 	$event      = $data->event;
 	$event_link = mc_event_link( $event );
 	$link       = '';
 	if ( '' !== $event_link && mc_output_is_visible( 'link', $type, $event ) ) {
 		$external_class = ( mc_external_link( $event_link ) ) ? "$type-link external url" : "$type-link url";
-		$link_template  = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
-		$link_text      = mc_draw_template( $data->tags, $link_template );
+		if ( $text ) {
+			$link_text = $text;
+		} else {
+			$link_template = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
+			$link_text     = mc_draw_template( $data->tags, $link_template );
+		}
 		$link           = "<p><a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$data->id'><span class='mc-icon' aria-hidden='true'></span>" . $link_text . '</a></p>';
 	}
 
