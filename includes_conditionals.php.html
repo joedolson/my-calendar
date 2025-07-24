@@ -151,12 +151,37 @@ function mc_is_tablet() {
  * @return boolean
  */
 function mc_is_preview() {
-	if ( isset( $_GET['preview'] ) &amp;&amp; 'true' === $_GET['preview'] &amp;&amp; current_user_can( 'mc_manage_events' ) ) {
+	if ( isset( $_GET['mc_id'] ) &amp;&amp; isset( $_GET['preview'] ) &amp;&amp; 'true' === $_GET['preview'] &amp;&amp; current_user_can( 'mc_manage_events' ) ) {
 		$nonce = sanitize_text_field( wp_unslash( $_GET['mcpreviewnonce'] ) );
 		if ( ! wp_verify_nonce( $nonce, 'mcpreviewnonce' ) ) {
 			return false;
 		}
 		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Check whether an event has a category.
+ *
+ * @param object|int $event Event object or ID
+ * @param int|string $category category ID or name.
+ *
+ * @return bool
+ */
+function mc_has_category( $event, $category ) {
+	$categories = mc_get_categories( $event, 'ids' );
+	foreach ( $categories as $cat ) {
+		if ( is_int( $category ) ) {
+			if ( $category === $cat->category_id ) {
+				return true;
+			}
+		} else if ( is_string( $category ) ) {
+			if ( $category === $cat->category_name ) {
+				return true;
+			}
+		}
 	}
 
 	return false;
