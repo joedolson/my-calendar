@@ -139,7 +139,7 @@ function mc_is_preview() {
 /**
  * Check whether an event has a category.
  *
- * @param object|int $event Event object or ID
+ * @param object|int $event Event object or ID.
  * @param int|string $category category ID or name.
  *
  * @return bool
@@ -151,7 +151,7 @@ function mc_has_category( $event, $category ) {
 			if ( $category === $cat->category_id ) {
 				return true;
 			}
-		} else if ( is_string( $category ) ) {
+		} elseif ( is_string( $category ) ) {
 			if ( $category === $cat->category_name ) {
 				return true;
 			}
