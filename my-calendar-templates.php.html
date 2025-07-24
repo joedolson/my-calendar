@@ -2343,7 +2343,7 @@ function mc_template_link( $data, $type = 'calendar', $text = '' ) {
 			$link_template = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
 			$link_text     = mc_draw_template( $data->tags, $link_template );
 		}
-		$link           = "&lt;p>&lt;a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$data->id'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . $link_text . '&lt;/a>&lt;/p>';
+		$link = "&lt;p>&lt;a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$data->id'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . $link_text . '&lt;/a>&lt;/p>';
 	}
 
 	echo wp_kses_post( $link );
