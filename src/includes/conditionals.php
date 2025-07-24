@@ -137,6 +137,31 @@ function mc_is_preview() {
 }
 
 /**
+ * Check whether an event has a category.
+ *
+ * @param object|int $event Event object or ID
+ * @param int|string $category category ID or name.
+ *
+ * @return bool
+ */
+function mc_has_category( $event, $category ) {
+	$categories = mc_get_categories( $event, 'ids' );
+	foreach ( $categories as $cat ) {
+		if ( is_int( $category ) ) {
+			if ( $category === $cat->category_id ) {
+				return true;
+			}
+		} else if ( is_string( $category ) ) {
+			if ( $category === $cat->category_name ) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
  * Check whether this event is targeted for an iFrame.
  *
  * @return boolean
