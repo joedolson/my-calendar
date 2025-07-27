@@ -1979,20 +1979,21 @@ function my_calendar( $args ) {
 			$heading      = "&lt;$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'>&lt;span>" . trim( $heading_text ) . "&lt;/span>&lt;/$hl>";
 			$dateclass    = mc_dateclass( $current );
 			$mc_events    = '';
-			$events       = my_calendar_events( $query );
+			$dates        = my_calendar_events( $query );
 			$events_class = '';
 			$json         = '';
-			foreach ( $events as $day ) {
-				$events_class     = mc_events_class( $day, $from );
-				$params['groups'] = $shown_groups;
-				$params['events'] = $shown_events;
-				$event_output     = my_calendar_draw_events( $day, $params, $from, $template, $id );
-				$shown_groups     = array_merge( $shown_groups, $event_output['groups'] );
-				$shown_events     = array_merge( $shown_events, $event_output['events'] );
-				if ( ! empty( $event_output ) ) {
-					$mc_events .= $event_output['html'];
-					$json       = array( $event_output['json'] );
-				}
+			// The $events array explodes multi-day events to contain each individual day.
+			// Only display the versions relevant to the current day.
+			$events           = $dates[ $from ];
+			$events_class     = mc_events_class( $events, $from );
+			$params['groups'] = $shown_groups;
+			$params['events'] = $shown_events;
+			$event_output     = my_calendar_draw_events( $events, $params, $from, $template, $id );
+			$shown_groups     = array_merge( $shown_groups, $event_output['groups'] );
+			$shown_events     = array_merge( $shown_events, $event_output['events'] );
+			if ( ! empty( $event_output ) ) {
+				$mc_events .= $event_output['html'];
+				$json       = array( $event_output['json'] );
 			}
 			$body .= $heading . $top . '
 			&lt;div class="mc-content">
