@@ -719,15 +719,21 @@ function mc_get_details( $data, $template, $type ) {
  * Get image for an event
  *
  * @param object       $event Event object.
- * @param array        $data event tags.
+ * @param array        $data Event tags array.
  * @param string|array $size Image size as expected by `get_the_post_thumbnail`.
  *
  * @return string HTML output
  */
 function mc_get_event_image( $event, $data, $size = '' ) {
 	$image = '';
+	$sizes = get_intermediate_image_sizes();
+	if ( $size && ! in_array( $size, $sizes, true ) ) {
+		// I don't want thumbnail, which is first, but the end is likely to be custom sizes.
+		// Shift twice, so you'll probably end up with medium or medium_large.
+		$size = array_shift( $sizes );
+		$size = array_shift( $sizes );
+	}
 	if ( ! $size ) {
-		$sizes = get_intermediate_image_sizes();
 		if ( in_array( 'large', $sizes, true ) ) {
 			$default_size = 'large';
 		} else {
@@ -801,7 +807,6 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 	if ( $override && is_singular( 'mc-events' ) && has_post_thumbnail( $event->event_post ) && current_theme_supports( 'post-thumbnails' ) && ( 'single-mc-events.php' !== $template_file_name ) ) {
 		return '';
 	}
-
 	return $image;
 }
 

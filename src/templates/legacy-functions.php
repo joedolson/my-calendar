@@ -203,7 +203,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			}
 
 			if ( 'true' === $display_image || mc_output_is_visible( 'image', $type, $event ) ) {
-				$img = mc_get_event_image( $event, $data );
+				$img = mc_get_event_image( $event, $data['tags'] );
 			}
 
 			if ( 'calendar' === $type ) {
