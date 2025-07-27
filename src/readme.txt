@@ -117,6 +117,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Move `pre_get_document_title` filter to later priority to apply after SEO plugins.
 * Bug fix: Add site name to page title.
 * Bug fix: Section headers were not selectable.
+* Bug fix: Single-day view returned all dates of long-running single events.
+* Bug fix: In legacy templates, data passed to get event images was the full data object instead of the tags array.
 
 = 3.6.7 =
 
