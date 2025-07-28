@@ -630,8 +630,9 @@ function mc_draw_event_title( $event, $tags, $type, $image ) {
 
 	$event_title = mc_draw_template( $tags, $title_template );
 	if ( 0 === strpos( $event_title, ': ' ) ) {
-		// If the first two characters of the title are ": ", this is the default templates but no time.
-		$event_title = str_replace( ': ', '', $event_title );
+		// If the first two characters of the title are ": ", this is the default template with no time.
+		$title_template = str_replace( ': ', '', $title_template );
+		$event_title    = mc_draw_template( $tags, $title_template );
 	}
 	$event_title = ( '' === $event_title ) ? $tags['title'] : strip_tags( $event_title, mc_strip_tags() );
 	if ( 'single' === $type ) {
