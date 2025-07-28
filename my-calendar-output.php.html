@@ -1989,13 +1989,16 @@ function my_calendar( $args ) {
 			$json         = '';
 			// The $events array explodes multi-day events to contain each individual day.
 			// Only display the versions relevant to the current day.
-			$events           = $dates[ $from ];
+			$events           = isset( $dates[ $from ] ) ? $dates[ $from ] : array();
 			$events_class     = mc_events_class( $events, $from );
 			$params['groups'] = $shown_groups;
 			$params['events'] = $shown_events;
 			$event_output     = my_calendar_draw_events( $events, $params, $from, $template, $id );
-			$shown_groups     = array_merge( $shown_groups, $event_output['groups'] );
-			$shown_events     = array_merge( $shown_events, $event_output['events'] );
+			// Merge arrays if there are results from drawing events.
+			if ( is_array( $event_output ) &amp;&amp; isset( $event_output['groups'] ) ) {
+				$shown_groups = array_merge( $shown_groups, $event_output['groups'] );
+				$shown_events = array_merge( $shown_events, $event_output['events'] );
+			}
 			if ( ! empty( $event_output ) ) {
 				$mc_events .= $event_output['html'];
 				$json       = array( $event_output['json'] );
