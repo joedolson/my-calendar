@@ -346,7 +346,7 @@ function mc_span_time( $group_id ) {
  */
 function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 'filters' ) {
 	$template       = $args['template'];
-	$order          = $args['template'];
+	$order          = $args['order'];
 	$skip           = $args['skip'];
 	$before         = $args['before'];
 	$after          = $args['after'];
