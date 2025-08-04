@@ -812,8 +812,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$google_start = $dtstart;
 		$google_end   = $dtend;
 	}
+	$aria_described = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
 	$e['gcal']      = mc_google_cal( $google_start, $google_end, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow' aria-describedby='mc_$event->occur_id-title-$calendar_id'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
+	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
@@ -843,7 +844,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		mc_get_uri( $event )
 	);
 	$e['ical']            = $ical_link;
-	$e['ical_html']       = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title-$calendar_id'><span class='mc-icon' aria-hidden='true'></span>" . __( 'iCal', 'my-calendar' ) . '</a>';
+	$e['ical_html']       = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'iCal', 'my-calendar' ) . '</a>';
 
 	/**
 	 * Filter all template tags after generation.
