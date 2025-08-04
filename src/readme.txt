@@ -67,16 +67,16 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 
 My Calendar is designed with accessibility in mind. All interfaces - both front and back end - are tested with various assistive technology.
 
-The plugin includes features for indicating the accessibility services available for events and at physical venues, as well as providing access to the content for users with disabilities.
+The plugin includes features for showing the accessibility services available for events and at physical venues, as well as providing access to your event information for users with disabilities.
 
 = What's in My Calendar Pro? =
 
 * Let your site visitors submit events to your site (pay to post or free!).
 * Let logged-in users edit their events from the front-end.
+* Custom field creator
 * Create events when you publish a blog post
 * Publish a blog post when you create an event
 * Advanced search features
-* Responsive mode
 * Import events from .ics or .csv formats via file or URL.
 * REST API support for sharing events between multiple sites.
 
