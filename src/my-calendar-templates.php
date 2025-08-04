@@ -843,7 +843,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		mc_get_uri( $event )
 	);
 	$e['ical']            = $ical_link;
-	$e['ical_html']       = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title-$calendar_id'>" . __( 'iCal', 'my-calendar' ) . '</a>';
+	$e['ical_html']       = "<a class='ical' rel='nofollow' href='" . esc_url( $ical_link ) . "' aria-describedby='mc_$event->occur_id-title-$calendar_id'><span class='mc-icon' aria-hidden='true'></span>" . __( 'iCal', 'my-calendar' ) . '</a>';
 
 	/**
 	 * Filter all template tags after generation.
