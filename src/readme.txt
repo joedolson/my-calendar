@@ -6,7 +6,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.6.9
+Stable tag: 3.6.10
 License: GPLv3 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -15,7 +15,7 @@ Accessible WordPress event calendar plugin. Manage single or recurring events, e
 
 [My Calendar](https://joedolson.com/my-calendar/) offers easy-to-use WordPress event management with rich options for custom displays. Display individual event calendars in WordPress Multisite, offer multiple views of calendars limited by event categories, locations or author, or show simple text-based lists of your upcoming events.
 
-= Rich Event Calendar Features = 
+= Rich Event Calendar Features =
 
 You'll find enormous design flexibility fo your custom calendar. With recurring event support, design customization tools, custom templating, and category and venue support out of the box, My Calendar gives you a great feature set to get your calendar set up.
 
@@ -65,7 +65,7 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 
 = Accessibility =
 
-My Calendar is designed with accessibility in mind. All interfaces - both front and back end - are tested with various assistive technology. 
+My Calendar is designed with accessibility in mind. All interfaces - both front and back end - are tested with various assistive technology.
 
 The plugin includes features for indicating the accessibility services available for events and at physical venues, as well as providing access to the content for users with disabilities.
 
@@ -107,6 +107,14 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.6.10 =
+
+* Bug fix: Typo in upcoming events arguments broke sort order by attempting to assign the template key as an order.
+* Bug fix: Trigger for editing events did not work for single events that ran multiple days because of non-unique ID.
+* Bug fix: Add HTML for icons to iCal link for design parity.
+* Bug fix: Omit aria-described when there is no calendar ID.
+* Change: Exit edit panel generation before creating if not in context that generates it.
 
 = 3.6.9 =
 
@@ -243,7 +251,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Root event link should point to source event, not self.
 * Bug fix: When splitting an event, execute the 'add' action instead of the 'edit' action to ensure post meta fields are saved correctly.
 * Update social media links.
-* Add class for locations to event class list. 
+* Add class for locations to event class list.
 
 = 3.5.19 =
 
@@ -442,7 +450,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.4.22 =
 
-* Security: Fix unauthorized SQL injection vulnerability. Update as soon as possible. Props Tenable. 
+* Security: Fix unauthorized SQL injection vulnerability. Update as soon as possible. Props Tenable.
 
 = 3.4.21 =
 
@@ -481,7 +489,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.4.17 =
 
-* Bug fix: Only render event title filters when processing the event. 
+* Bug fix: Only render event title filters when processing the event.
 * Bug fix: `mc_inner_content` filter should run whenever description content is displayed.
 * Bug fix: `mc_inner_content` filter should not override disclosure close buttons.
 * Bug fix: If a theme uses H1 for widgets, replace with H2 instead of removing.
@@ -586,7 +594,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Clear PHP warning on 'event_approved'
 * Bug fix: selected attribute stripped from select inputs in mc_kses_elements
 * Bug fix: Change wide field inputs to prevent exceeding size of containers
-* Change: Allow mc_admin_category_list() to work on front end for Pro. 
+* Change: Allow mc_admin_category_list() to work on front end for Pro.
 
 = 3.4.4 =
 
