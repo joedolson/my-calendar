@@ -270,10 +270,11 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		 * @param {object} $event My Calendar event.
 		 * @param {string} $type View type.
 		 * @param {string} $time View timeframe.
+		 * @param {string} $process_date Date currently being processed.
 		 *
 		 * @return {string}
 		 */
-		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time );
+		$after   = apply_filters( 'mc_after_event_no_details', '', $event, $type, $time, $process_date );
 		$details = $before . $header . $after;
 		$details = mc_wrap_event( $details, $event, $container_id, $type );
 		return array(
@@ -296,10 +297,11 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 * @param {object} $event My Calendar event object.
 	 * @param {string} $type View type.
 	 * @param {string} $time View timeframe.
+	 * @param {string} $process_date Date currently being processed.
 	 *
 	 * @return {string}
 	 */
-	$details .= apply_filters( 'mc_after_event', '', $event, $type, $time );
+	$details .= apply_filters( 'mc_after_event', '', $event, $type, $time, $process_date );
 	$details  = mc_wrap_event_details( $details, $type, $time, $container_id, $data );
 	$details  = $header . $details;
 	$details  = mc_wrap_event( $details, $event, $container_id, $type );
@@ -957,7 +959,7 @@ function mc_show_details( $time, $type ) {
 	}
 }
 
-add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
+add_filter( 'mc_after_event', 'mc_edit_panel', 10, 5 );
 /**
  * List of edit links; shown if user has permission to see them.
  *
@@ -965,54 +967,58 @@ add_filter( 'mc_after_event', 'mc_edit_panel', 10, 4 );
  * @param object $event Current event.
  * @param string $type type of view.
  * @param string $time timespan shown.
+ * @param string $date Current date being processed in YYYY-MM-DD.
  *
  * @return string HTML output
  */
-function mc_edit_panel( $html, $event, $type, $time ) {
+function mc_edit_panel( $html, $event, $type, $time, $date ) {
 	// Create edit links.
 	$edit = '';
-	if ( mc_can_edit_event( $event ) && mc_get_option( 'remote' ) !== 'true' ) {
-		$mc_id     = $event->occur_id;
-		$groupedit = ( 0 !== (int) $event->event_group_id ) ? "<li><a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . '</a></li>' : '';
-		$recurs    = str_split( $event->event_recur, 1 );
-		$recur     = $recurs[0];
-		$referer   = urlencode( mc_get_current_url() );
-		$edit      = "	<div class='mc_edit_links'><button type='button' class='mc-toggle-edit' aria-expanded='false' aria-controls='mc-edit-$mc_id'><span class='dashicons dashicons-edit' aria-hidden='true'></span>" . __( 'Edit', 'my-calendar' ) . "</button><ul id='mc-edit-$mc_id'>";
-		/**
-		 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
-		 *
-		 * @hook mcs_view_admin_links_on_frontend
-		 *
-		 * @param {string} $permission Permission required to see admin links instead of front-end links.
-		 * @param {object} $event Current event.
-		 *
-		 * @return {string}
-		 */
-		$perms_required = apply_filters( 'mcs_view_admin_links_on_frontend', 'manage_options', $event );
-		if ( is_admin() || current_user_can( $perms_required ) || ! function_exists( 'mcs_submit_url' ) ) {
-			$edit_url   = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
-			$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" );
-			$edit_group = add_query_arg( 'date', $mc_id, $edit_url );
-			$del_group  = add_query_arg( 'date', $mc_id, $delete_url );
-		} else {
-			$edit_url   = mcs_submit_url( $event->event_id, $event );
-			$delete_url = mcs_delete_url( $event->event_id );
-			// Group editing is not currently supported in the Pro form.
-			$edit_group = false;
-			$del_group  = false;
-		}
-		if ( 'S' === $recur || ( ! $edit_group && ! $del_group ) ) {
-			$edit .= ( $edit_url ) ? "<li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '</a></li>' : '';
-			$edit .= ( $delete_url ) ? "<li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a></li>' : '';
-			$edit .= $groupedit;
-		} else {
-			$edit .= "<li><a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "</a></li>
-			$groupedit";
-		}
-		$edit .= '</ul></div>';
-	}
 	if ( ! mc_show_details( $time, $type ) ) {
-		$edit = '';
+		// Return early if this view shouldn't show details.
+		return $html;
+	} else {
+		if ( mc_can_edit_event( $event ) && mc_get_option( 'remote' ) !== 'true' ) {
+			$mc_id     = $event->occur_id;
+			$control   = $mc_id . '-' . $date;
+			$groupedit = ( 0 !== (int) $event->event_group_id ) ? "<li><a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . '</a></li>' : '';
+			$recurs    = str_split( $event->event_recur, 1 );
+			$recur     = $recurs[0];
+			$referer   = urlencode( mc_get_current_url() );
+			$edit      = "	<div class='mc_edit_links'><button type='button' class='mc-toggle-edit' aria-expanded='false' aria-controls='mc-edit-$control'><span class='dashicons dashicons-edit' aria-hidden='true'></span>" . __( 'Edit', 'my-calendar' ) . "</button><ul id='mc-edit-$control'>";
+			/**
+			 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
+			 *
+			 * @hook mcs_view_admin_links_on_frontend
+			 *
+			 * @param {string} $permission Permission required to see admin links instead of front-end links.
+			 * @param {object} $event Current event.
+			 *
+			 * @return {string}
+			 */
+			$perms_required = apply_filters( 'mcs_view_admin_links_on_frontend', 'manage_options', $event );
+			if ( is_admin() || current_user_can( $perms_required ) || ! function_exists( 'mcs_submit_url' ) ) {
+				$edit_url   = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
+				$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" );
+				$edit_group = add_query_arg( 'date', $mc_id, $edit_url );
+				$del_group  = add_query_arg( 'date', $mc_id, $delete_url );
+			} else {
+				$edit_url   = mcs_submit_url( $event->event_id, $event );
+				$delete_url = mcs_delete_url( $event->event_id );
+				// Group editing is not currently supported in the Pro form.
+				$edit_group = false;
+				$del_group  = false;
+			}
+			if ( 'S' === $recur || ( ! $edit_group && ! $del_group ) ) {
+				$edit .= ( $edit_url ) ? "<li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '</a></li>' : '';
+				$edit .= ( $delete_url ) ? "<li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a></li>' : '';
+				$edit .= $groupedit;
+			} else {
+				$edit .= "<li><a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "</a></li>
+				$groupedit";
+			}
+			$edit .= '</ul></div>';
+		}
 	}
 
 	return $html . $edit;
