@@ -1352,7 +1352,6 @@ function mc_show_event_template( $content ) {
 			} else {
 				return $content;
 			}
-
 			if ( is_object( $event ) && mc_event_is_hidden( $event ) ) {
 
 				return $content;
@@ -1395,10 +1394,11 @@ function mc_show_event_template( $content ) {
 				 * @param {object} $event Event object.
 				 * @param {string} $view View type.
 				 * @param {string} $time Time view.
+				 * @param {string} $date Date being processed.
 				 *
 				 * @return {string}
 				 */
-				$new_content .= apply_filters( 'mc_after_event', '', $event, 'single', $time );
+				$new_content .= apply_filters( 'mc_after_event', '', $event, 'single', $time, $date );
 			} else {
 				$event_output = my_calendar_draw_event( $event, 'single', $date, $time, '' );
 				$new_content  = $event_output['html'];
