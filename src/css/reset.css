@@ -47,7 +47,7 @@
 
 .mc-main th.weekend-heading {
 	color: var(--grid-weekend-color);
-	background: var(--grid-weekend-bg);	
+	background: var(--grid-weekend-bg);
 }
 
 .mc-main th abbr, .mc-main .event-time abbr {
@@ -707,7 +707,7 @@
 
 /* Override overflow:hidden */
 main,div.entry-content,div.site-content, table, .mc-main nav {
-	overflow: visible !important; 
+	overflow: visible !important;
 }
 
 .my-calendar-cards {
@@ -850,13 +850,13 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	background-position: right 0.7rem top 50%;
 	background-size: 0.65rem auto;
   }
-  
+
   .mc-main .my-calendar-navigation select:focus {
 	background-image: url("data:image/svg+xml,%3csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3e%3cg id='arrow-up'%3e%3cpath transform='rotate(-90 398.519 307.42)' stroke='%23323232' id='svg_2' d='m151.01949%2c560.26198l230.96062%2c-252.90392l-230.96062%2c-252.90574l132.00568%2c-144.53259l362.99432%2c397.43833l-362.99432%2c397.56164' fill='%23323232'/%3e%3c/g%3e%3c/svg%3e");
   }
 
 .mc-main .my-calendar-navigation select::-moz-focus-inner,
-.mc-main .my-calendar-navigation input[type=submit]::-moz-focus-inner { 
+.mc-main .my-calendar-navigation input[type=submit]::-moz-focus-inner {
 	border: 0;
 }
 
@@ -970,7 +970,6 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .mc_filters label,
 .mc-main .screen-reader-text {
 	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
 	clip-path: inset(50%);
 	height: 1px;
 	margin: -1px;
@@ -989,7 +988,7 @@ svg.category-icon,
 	min-width: 18px;
 	height: auto;
 	padding: 1px;
-	border-radius: 3px; 
+	border-radius: 3px;
 }
 
 svg.category-icon,
@@ -1261,7 +1260,7 @@ ol.mc-search-results li.no-results {
 
 /* Prevent missing background image on google maps */
 .mc-gmap-markers img {
-	max-width: none ! important; 
+	max-width: none ! important;
 }
 
 .mc-main .calendar-events {
@@ -1567,7 +1566,7 @@ body.mc-no-scroll {
   .admin-bar .my-calendar-modal {
 	top: 45px;
 	height: calc( 99% - 45px );
-  }  
+  }
 }
 
 /* Base responsive styles. Migrated to main plugin 12/10/2023 */
@@ -1621,7 +1620,6 @@ body.mc-no-scroll {
 
 	.mc-main:not(.mini,.disable-responsive) .my-calendar-table td .mc-date .screen-reader-text {
 		display: block;
-		clip: auto;
 		clip-path: none;
 		height: auto;
 		margin: 0;
@@ -1630,7 +1628,7 @@ body.mc-no-scroll {
 		width: auto;
 		text-align: left;
 	}
-	
+
 	html[dir=rtl] .mc-main:not(.mini,.disable-responsive) .my-calendar-table td .mc-date .screen-reader-text {
 		text-align: right;
 	}

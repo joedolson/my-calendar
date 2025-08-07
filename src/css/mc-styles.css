@@ -1266,7 +1266,7 @@ input[name="mc_uri"] {
 	border-radius: none;
 	background-color: #2c3338;
 	color: #f0f0f1;
-} 
+}
 
 .mc-sortable .mc-ui-state-highlight {
 	background: #fcf9e8 !important;
@@ -1941,7 +1941,7 @@ tr.problem .error {
 
 .problem-icon {
 	font-size: 64px;
-	float: left; 
+	float: left;
 	margin-right: .25em;
 	height: 64px;
 	width: 64px;
@@ -2014,7 +2014,6 @@ input#mc_event_time:valid+span {
 /* Screen reader text class to avoid overrides from core focus.*/
 .mc-srt {
 	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
 	clip-path: inset(50%);
 	height: 1px;
 	margin: -1px;
@@ -2213,7 +2212,7 @@ input#mc_event_time:valid+span {
 		padding: 8px 4px;
 		background: rgba( 0,0,0,.05 );
 	}
-	
+
 	.mc-responsive-table tbody th {
 		font-weight: 700;
 		color: #000;
@@ -2249,5 +2248,5 @@ input#mc_event_time:valid+span {
 @container mcadmin ( width < 1700px ) {
 	.jcd-wide:has(#my-calendar-styles) {
 		width: 100%;
-	} 
+	}
 }
