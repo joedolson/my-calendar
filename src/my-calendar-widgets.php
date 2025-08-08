@@ -67,7 +67,7 @@ function my_calendar_upcoming_events( $args ) {
 	$args['before']    = ( 'default' === $args['before'] ) ? $defaults['upcoming']['before'] : $args['before'];
 	$args['before']    = ( '' === $args['before'] ) ? 0 : $args['before'];
 	$args['category']  = ( 'default' === $args['category'] ) ? '' : $args['category'];
-	$args['template '] = ( isset( $args['template'] ) ) ? $args['template'] : '';
+	$args['template']  = $args['template'] ?? '';
 
 	/**
 	 * Pass a custom template to the upcoming events list. Template can either be a template key referencing a stored template or a template pattern using {} template tags.
@@ -350,7 +350,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 	$skip           = $args['skip'];
 	$before         = $args['before'];
 	$after          = $args['after'];
-	$show_recurring = $args['show_recurring'];
+	$show_recurring = $args['show_recurring'] ?? 'yes';
 	// $events has +5 before and +5 after if those values are non-zero.
 	// $events equals array of events based on before/after queries. Nothing skipped, order is not set, holiday conflicts removed.
 	$output      = array();
