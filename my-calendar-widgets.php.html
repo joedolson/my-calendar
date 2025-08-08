@@ -90,10 +90,10 @@ function my_calendar_upcoming_events( $args ) {
 	$args['after'] = ( '' === $args['after'] ) ? 10 : $args['after'];
 
 	// Get number of units we should go into the past.
-	$args['before']    = ( 'default' === $args['before'] ) ? $defaults['upcoming']['before'] : $args['before'];
-	$args['before']    = ( '' === $args['before'] ) ? 0 : $args['before'];
-	$args['category']  = ( 'default' === $args['category'] ) ? '' : $args['category'];
-	$args['template']  = $args['template'] ?? '';
+	$args['before']   = ( 'default' === $args['before'] ) ? $defaults['upcoming']['before'] : $args['before'];
+	$args['before']   = ( '' === $args['before'] ) ? 0 : $args['before'];
+	$args['category'] = ( 'default' === $args['category'] ) ? '' : $args['category'];
+	$args['template'] = $args['template'] ?? '';
 
 	/**
 	 * Pass a custom template to the upcoming events list. Template can either be a template key referencing a stored template or a template pattern using {} template tags.
