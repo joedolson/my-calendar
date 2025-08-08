@@ -1513,7 +1513,7 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
  * @return array $params New parameters, modified by context
  */
 function mc_calendar_params( $args ) {
-	if ( isset( $_GET['cid'] ) && $_GET['cid'] !== $args['id'] ) {
+	if ( ( isset( $_GET['cid'] ) && ! empty( $args['id'] ) ) && ( $_GET['cid'] !== $args['id'] ) ) {
 		$get = array();
 	} else {
 		$get = map_deep( $_GET, 'sanitize_text_field' );
