@@ -484,7 +484,7 @@ function mc_category_key( $category, $id = '' ) {
  * @return string HTML output for subscription links
  */
 function mc_sub_links() {
-	$replace = 'webcals:';
+	$replace = 'webcal:';
 	$search  = array( 'http:', 'https:' );
 
 	$google = str_replace( $search, $replace, get_feed_link( 'my-calendar-google' ) );
