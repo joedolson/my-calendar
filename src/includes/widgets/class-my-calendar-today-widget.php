@@ -137,6 +137,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		}
 		$template_options         = mc_select_preset_templates();
 		$template_options['list'] = __( 'Custom', 'my-calendar' );
+		$preset                   = '';
 		if ( in_array( $widget_template, array_keys( $template_options ), true ) ) {
 			$preset = $widget_template;
 		}
