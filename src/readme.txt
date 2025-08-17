@@ -6,7 +6,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.6.11
+Stable tag: 3.6.12
 License: GPLv3 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -107,6 +107,17 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.6.12 =
+
+* Bug fix: Update screen reader text classes to remove `clip`.
+* Bug fix: Fix PHP warning from unverified array keys.
+* Bug fix: Navigation broken when using auto-generated ID keys.
+* Bug fix: Switch `webcals` URLs back to `webcal` due to lack of Google support.
+* Bug fix: Missing variable declaration in Today's events widget.
+* Bug fix: Inspect event object for location_post property before accessing.
+* Change: Modify list preset 4 template so group 3 is not a child of group 2.
+* Change: Remove Chrome hack for `windowunload` events.
 
 = 3.6.11 =
 
