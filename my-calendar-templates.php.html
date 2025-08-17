@@ -191,7 +191,7 @@ function mc_get_preset_template( $type ) {
 			$template = '&lt;div class="mc-group-1">{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div>&lt;a href="{permalink}">{title}&lt;/a>&lt;/div>&lt;div class="mc-group-3">{hcard}&lt;/div>';
 			break;
 		case 'list_preset_4':
-			$template = '&lt;div class="mc-group-1">{image}&lt;/div>&lt;div class="list-card-contents mc-group-2">{linking_title}&lt;div class="mc-date-group">{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;div class="location mc-group-3">{city after=", "} {state}&lt;/div>&lt;/div>';
+			$template = '&lt;div class="mc-group-1">{image}&lt;/div>&lt;div class="list-card-contents">&lt;div class="mc-group-2">{linking_title}&lt;div class="mc-date-group">{daterange before="&lt;strong>" after="&lt;/strong>"}{timerange before="&lt;br>"}&lt;/div>&lt;/div>&lt;div class="location mc-group-3">{city after=", "} {state}&lt;/div>&lt;/div>';
 			break;
 		default:
 			$template = '&lt;div class="mc-group-1">{datebadge}&lt;/div>&lt;div class="mc-group-2">&lt;a href="{permalink}">{title}&lt;/a>&lt;br />{timerange}&lt;br />{hcard}&lt;/div>&lt;div class="mc-group-3">{image}&lt;/div>';
