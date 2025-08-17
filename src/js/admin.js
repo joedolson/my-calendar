@@ -11,12 +11,9 @@ window.addEventListener( 'beforeunload', function(e) {
 	let unsubmitted = document.getElementById( 'mc_unsubmitted' );
 	let hold        = ( typeof( unsubmitted ) != 'undefined' && unsubmitted != null ) ? true : false;
 	if ( hold ) {
-		// following two lines will cause the browser to ask the user if they
-		// want to leave. The text of this dialog is controlled by the browser.
-		e.preventDefault(); //per the standard
-		e.returnValue = ''; //required for Chrome
+		// Prompt to check whether user wants to leave.
+		e.preventDefault();
 	}
-	//else: user is allowed to leave without a warning dialog
 });
 
 let typeSelector = document.getElementById( 'typeupcoming' );
