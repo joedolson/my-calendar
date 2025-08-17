@@ -429,7 +429,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external p-name p-org u-url'><span class='mc-icon' aria-hidden='true'></span>$label</a>" : $label;
 		$link = $link . $distance;
 	}
-	$post   = ( absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $loc_id );
+	$post   = ( property_exists( $event, 'location_post' ) && absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $loc_id );
 	$events = ( $post && ! is_single( $post ) && ! is_admin() && 'mc-locations' === get_post_type( $post ) ) ? '<a class="location-link" href="' . esc_url( get_the_permalink( $post ) ) . '">' . __( 'View Location', 'my-calendar' ) . '</a>' : '';
 	/**
 	 * Filter link to location-specific events in hcard.
