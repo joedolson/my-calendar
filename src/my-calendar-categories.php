@@ -1361,13 +1361,8 @@ function mc_get_img( $file, $is_custom = false, $file_name = '' ) {
 	} else {
 		// If the value passed to mc_get_img is an SVG, that's the icon to use.
 		if ( ! $is_core_svg ) {
-			if ( null === $is_custom ) {
-				$is_custom = mc_is_custom_icon();
-			}
 			$parent_path = plugin_dir_path( __DIR__ );
 			$parent_url  = plugin_dir_url( __DIR__ );
-			$url         = plugin_dir_url( __FILE__ );
-			$self        = plugin_dir_path( __FILE__ );
 			// If running from a subdirectory, plugin_dir_path will be a level up.
 			if ( str_contains( $parent_path, 'my-calendar' ) && $is_custom ) {
 				$parent_path = str_replace( 'my-calendar/', '', $parent_path );
@@ -1377,14 +1372,9 @@ function mc_get_img( $file, $is_custom = false, $file_name = '' ) {
 			require_once ABSPATH . '/wp-admin/includes/file.php';
 			WP_Filesystem();
 
-			if ( $is_custom ) {
-				$path = $parent_path . 'my-calendar-custom/icons/';
-				$link = $parent_url . 'my-calendar-custom/icons/';
-			} else {
-				$path = $self . 'images/icons/';
-				$link = $url . 'images/icons/';
-			}
-			$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
+			$path = $parent_path . 'my-calendar-custom/icons/';
+			$link = $parent_url . 'my-calendar-custom/icons/';
+
 			if ( false === stripos( $file, '.svg' ) ) {
 				if ( $wp_filesystem->exists( $path . $file ) ) {
 					return '<img src="' . esc_url( $link . $file ) . '" alt="" />';
