@@ -532,7 +532,7 @@ ul.mc-file-list ul li {
 }
 
 #my-calendar-templates h2:not(.mc-flex),
-#my-calendar-templates h2 + p {
+#my-calendar-templates h2:not(.mc-flex) + p {
 	display: inline-block;
 }
 

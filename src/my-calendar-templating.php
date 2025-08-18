@@ -89,7 +89,7 @@ function mc_php_templates_docs() {
 		);
 	}
 
-	$intro     = '<p>' . __( 'PHP templates are enabled. To customize templates, copy one or more of the following files into your theme directory.', 'my-calendar' ) . '</p>';
+	$intro     = '<p>' . __( 'To customize templates, copy one or more of the following files into your theme directory.', 'my-calendar' ) . '</p>';
 	$intro    .= '<p><a href="https://docs.joedolson.com/my-calendar/php-templates/">' . __( 'Read the documentation.', 'my-calendar' ) . '</a></p>';
 	$templates = array(
 		'event'    => array(
