@@ -71,7 +71,7 @@ function my_calendar_design() {
 						&lt;?php
 						$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
 						if ( $disable_templates ) {
-							echo '&lt;h2>' . esc_html__( 'Template Documentation', 'my-calendar' ) . '&lt;/h2>';
+							echo '&lt;h2>' . esc_html__( 'Templates', 'my-calendar' ) . '&lt;/h2>';
 						} else {
 							echo '&lt;h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '&lt;/h2>';
 							echo '&lt;p>&lt;span class="mc-flex">';
@@ -134,6 +134,7 @@ function my_calendar_design() {
 									?>
 								&lt;/div>
 							&lt;?php
+							echo '&lt;h2 class="mc-flex">' . esc_html__( 'PHP Templates', 'my-calendar' ) . '&lt;/h2>';
 							echo '&lt;p>';
 							// translators: URL for the PHP templating docs.
 							printf( wp_kses_post( __( 'Learn about the &lt;a href="%s">PHP templating system in My Calendar&lt;/a>.', 'my-calendar' ) ), 'https://docs.joedolson.com/my-calendar/php-templates/' );
