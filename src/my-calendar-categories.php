@@ -910,7 +910,7 @@ function mc_manage_categories() {
 			?>
 				<div class="row-actions">
 					<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ) ); ?>"
-					class='edit'><?php echo wp_kses_post( $edit_cat ); ?></a> | 
+					class='edit'><?php echo wp_kses_post( $edit_cat ); ?></a> |
 					<?php
 					echo wp_kses_post( $default );
 					// Cannot delete the default category.
