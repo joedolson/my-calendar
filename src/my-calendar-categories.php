@@ -1432,11 +1432,10 @@ function mc_category_icon( $event_or_category ) {
 	 *
 	 * @param {bool}   $override Return a string value to short circuit the category icon query.
 	 * @param {object} $event_or_category Event object.
-	 * @param {string} $type Type of output - HTML or URL only.
 	 *
 	 * @return {string|bool}
 	 */
-	$override = apply_filters( 'mc_override_category_icon', false, $event_or_category, $type );
+	$override = apply_filters( 'mc_override_category_icon', false, $event_or_category );
 	if ( $override ) {
 		return $override;
 	}
@@ -1517,6 +1516,7 @@ function mc_generate_category_icon( $source ) {
 	if ( '' === $source->category_icon ) {
 		return '';
 	}
+	$filename = str_replace( '.png', '.svg', $source->category_icon );
 	$hex      = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color    = $hex . $source->category_color;
 	$apply    = mc_get_option( 'apply_color' );
