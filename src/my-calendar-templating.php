@@ -539,6 +539,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 	$skipping = array(
 		'author_id',
 		'cat_id',
+		'icon_html', // Now an alias for `icon`.
 		'category_id',
 		'dateid',
 		'duration',
