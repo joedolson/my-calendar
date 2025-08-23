@@ -1517,9 +1517,6 @@ function mc_generate_category_icon( $source ) {
 	if ( '' === $source->category_icon ) {
 		return '';
 	}
-	$path     = plugin_dir_path( __FILE__ ) . 'images/icons/';
-	$filename = str_replace( '.png', '.svg', $source->category_icon );
-	$src      = $path . $filename;
 	$hex      = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color    = $hex . $source->category_color;
 	$apply    = mc_get_option( 'apply_color' );
@@ -1541,13 +1538,7 @@ function mc_generate_category_icon( $source ) {
 	}
 	$label_id = 'cat_' . $occur_id;
 	$image    = ( isset( mc_get_core_icons()[ $filename ] ) ) ? mc_get_core_icons()[ $filename ] : false;
-	// Fetch this image from file if it is not found in the array set.
-	if ( ! $image ) {
-		global $wp_filesystem;
-		require_once ABSPATH . '/wp-admin/includes/file.php';
-		WP_Filesystem();
-		$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
-	}
+
 	if ( 0 === stripos( $image, '<svg' ) ) {
 		$image = str_replace( '<svg ', '<svg style="fill:' . $color . '" focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
 		$image = str_replace( '<path ', "<title id='" . $label_id . "'>" . esc_html( $cat_name ) . '</title><path ', $image );
