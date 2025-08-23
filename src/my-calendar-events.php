@@ -64,6 +64,10 @@ function mc_get_date_bounds( $site = false ) {
 		$first = $mcdb->get_var( 'SELECT occur_begin FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_begin ASC LIMIT 0, 1' );
 		$last  = $mcdb->get_var( 'SELECT occur_end FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_end DESC LIMIT 0, 1' );
 
+		// If falsey value, set to a usable date value.
+		$first = $first ? $first : gmdate( 'Y-m-d' );
+		$last  = $last ? $last : gmdate( 'Y-m-d' );
+
 		$return = array(
 			'first' => $first,
 			'last'  => $last,
@@ -255,7 +259,7 @@ function my_calendar_get_events( $args ) {
 	FROM ' . my_calendar_event_table( $s ) . ' AS o
 	JOIN ' . my_calendar_table( $s ) . ' AS e
 	ON (event_id=occur_event_id)
-	JOIN ' . my_calendar_categories_table( $s ) . " AS c 
+	JOIN ' . my_calendar_categories_table( $s ) . " AS c
 	ON (event_category=category_id)
 	$join
 	$location_join
@@ -461,7 +465,7 @@ function mc_get_new_events( $cat_id = false ) {
 		FROM ' . my_calendar_event_table() . '
 		JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
 		JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
-		AND event_added > NOW() - INTERVAL $limit DAY 
+		AND event_added > NOW() - INTERVAL $limit DAY
 		$exclude_categories
 		ORDER BY event_added DESC"
 	);
