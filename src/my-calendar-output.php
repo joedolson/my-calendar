@@ -2234,7 +2234,7 @@ function my_calendar( $args ) {
 										$count  = 0;
 										foreach ( $cats as $cat ) {
 											++ $count;
-											if ( $count > 4 ) {
+											if ( $count > 5 ) {
 												break;
 											}
 											$marker .= '<span class="' . esc_attr( $cat ) . '">&#9679;</span>';
