@@ -1783,8 +1783,8 @@ function mc_remote_db() {
 									<li>
 									<?php
 									$open_day_options = array(
-										'false'          => __( 'Event popup ', 'my-calendar' ),
-										'true'           => __( 'daily view page (above)', 'my-calendar' ),
+										'false' => __( 'Event popup ', 'my-calendar' ),
+										'true'  => __( 'daily view page (above)', 'my-calendar' ),
 									);
 									mc_settings_field(
 										array(
