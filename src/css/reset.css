@@ -1422,6 +1422,11 @@ dialog.my-calendar-modal .modal-content {
 	display: none;
 }
 
+.my-calendar-modal .calendar-events {
+	display: grid;
+	gap: 60px;
+}
+
 #mc-modal-content .mc-toggle {
 	display: none;
 }
