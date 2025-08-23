@@ -1883,8 +1883,8 @@ function my_calendar( $args ) {
 		}
 
 		$dates = mc_get_from_to( $show_months, $params, $date );
-		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $from;
-		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $to;
+		$from  = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $dates['from'];
+		$to    = ( 'day' === $params['time'] ) ? mc_date( 'Y-m-d', $current, false ) : $dates['to'];
 		$query = array(
 			'from'     => $from,
 			'to'       => $to,
