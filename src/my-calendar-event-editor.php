@@ -2471,7 +2471,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		}
 		// Check for valid URL (blank or starting with http://).
 		if ( ! ( '' === $event_link || preg_match( '/^(http)(s?)(:)\/\//', $event_link ) ) ) {
-			$event_link = 'http://' . $event_link;
+			$event_link = 'https://' . $event_link;
 		}
 	}
 	// A title is required, and can't be more than 255 characters.
