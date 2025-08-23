@@ -417,13 +417,7 @@ function my_calendar_edit() {
 			echo wp_kses_post( $response['message'] );
 		}
 		for ( $i = 0; $i < $count; $i++ ) {
-			$mc_output = mc_check_data( $action, $post, $i );
-			if ( 'add' === $action || 'copy' === $action ) {
-				$response = my_calendar_save( $action, $mc_output );
-				$action   = 'add'; // After saving, reset action to default.
-			} else {
-				$response = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
-			}
+			$response = mc_insert_event( $action, $post, $i );
 			echo wp_kses_post( $response['message'] );
 		}
 		if ( isset( $post['ref'] ) ) {
@@ -2121,6 +2115,36 @@ function mc_event_accessibility( $form, $data, $label ) {
 	</fieldset>';
 
 	return $form;
+}
+
+/**
+ * Insert an event. Checks data and saves event to the data, returning a response array.
+ *
+ * @param string $action Type of action being performed.
+ * @param array  $post Post data.
+ * @param int    $i If multiple events submitted, which index this is.
+ * @param bool   $ignore_required Pass 'true' to ignore required fields.
+ *
+ * @return array Modified data and information about approval.
+ */
+function mc_insert_event( $action, $post, $i, $ignore_required = false ) {
+	$mc_output = mc_check_data( $action, $post, $i, $ignore_required );
+	if ( $mc_output[0] ) {
+		if ( 'add' === $action || 'copy' === $action ) {
+			$response = my_calendar_save( $action, $mc_output );
+			$action   = 'add'; // After saving, reset action to default.
+		} else {
+			$response = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
+		}
+	} else {
+		$response = array(
+			'event_id'   => false,
+			'event_post' => false,
+			'message'    => $mc_output[3],
+		);
+	}
+
+	return $response;
 }
 
 /**
