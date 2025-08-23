@@ -103,10 +103,7 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 		return false;
 	}
 	$mini_uri = ( _mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : mc_get_uri( reset( $events ) );
-	if ( is_singular() && 'current' === $open_day_uri ) {
-		global $post;
-		$mini_uri = get_permalink( $post->ID );
-	}
+
 	/**
 	 * Filter the URI used to link days in the mini calendar.
 	 *
@@ -131,20 +128,6 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 		}
 		$day_url = mc_build_url( $target, array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ), $mini_uri );
 		$link    = ( '' !== $day_url ) ? $day_url : '#';
-	} else {
-		$atype    = str_replace( 'anchor', '', $open_day_uri ); // List or grid.
-		$ad       = str_pad( mc_date( 'j', $start, false ), 2, '0', STR_PAD_LEFT ); // Need to match format in ID.
-		$am       = str_pad( $date['month'], 2, '0', STR_PAD_LEFT );
-		$date_url = mc_build_url(
-			array(
-				'yr'    => $date['year'],
-				'month' => $date['month'],
-				'dy'    => mc_date( 'j', $start, false ),
-			),
-			array( 'month', 'dy', 'yr', 'ltype', 'loc', 'mcat', 'cid', 'mc_id' ),
-			$mini_uri
-		);
-		$link     = esc_url( ( '' !== $mini_uri ) ? $date_url . '#' . $atype . '-' . $date['year'] . '-' . $am . '-' . $ad : '#' );
 	}
 
 	return $link;
