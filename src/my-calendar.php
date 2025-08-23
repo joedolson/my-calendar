@@ -98,6 +98,19 @@ function mc_plugin_deactivated() {
 }
 
 /**
+ * If network activated on multisite, execute action to activate on each site when the admin is initialized.
+ * This does not bulk activate the sites, because of the processing burden on large networks.
+ */
+function mc_multisite_activation() {
+	$is_activated = get_option( 'mc_site_activated', 'false' );
+	if ( 'false' === $is_activated ) {
+		mc_plugin_activated();
+		update_option( 'mc_site_activated', 'true', false );
+	}
+}
+add_action( 'admin_init', 'mc_multisite_activation' );
+
+/**
  * Bulk delete posts.
  *
  * @param string $type Post type.
