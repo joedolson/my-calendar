@@ -1590,10 +1590,11 @@ function mc_category_class( $event_or_category, $prefix ) {
  *
  * @param object $event Event object.
  * @param string $return Return type: string or array.
+ * @param string $prefix Category prefix.
  *
  * @return string|array
  */
-function mc_category_classes( $event, $return = 'string' ) {
+function mc_category_classes( $event, $return = 'string', $prefix = 'mc_rel' ) {
 
 	$related_classes = '';
 	if ( property_exists( $event, 'categories' ) ) {
@@ -1606,7 +1607,13 @@ function mc_category_classes( $event, $return = 'string' ) {
 		if ( ! is_object( $category ) ) {
 			$category = (object) $category;
 		}
-		$classes[] = strtolower( 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id ) );
+		if ( 'mc' === $prefix ) {
+			$class = sanitize_html_class( str_replace( ' ', '-', trim( $category->category_name ) ) );
+			$class = ( '' === $class ) ? $category->category_id : $class;
+		} else {
+			$class = sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
+		}
+		$classes[] = strtolower( $prefix . '_' . $class );
 	}
 	$related_classes = ' ' . implode( ' ', $classes );
 

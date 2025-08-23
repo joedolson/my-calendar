@@ -402,6 +402,7 @@ function mc_default_options() {
 		'default_sort'                 => '',
 		'current_table'                => '',
 		'open_day_uri'                 => 'false',
+		'mini_marker'                  => 'events',
 		'upcoming_events_navigation'   => 'false',
 		'mini_uri'                     => '',
 		'show_list_info'               => '',

@@ -130,7 +130,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			$begin .= mc_close_button( "date-$process_date" );
 			$end    = '</div>';
 		}
-
+		$categories = array();
 		foreach ( array_keys( $events ) as $key ) {
 			$event =& $events[ $key ];
 			if ( 'S1' !== $event->event_recur ) {
@@ -152,12 +152,14 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			}
 			$params['events'][] = $event->event_id;
 			if ( '' === $check ) {
-				$tags           = mc_create_tags( $event, $id );
-				$event_output   = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
-				$output_array[] = $event_output['html'];
-				$shown_groups[] = $event_output['group'];
-				$shown_events[] = $event->event_id;
-				$json           = mc_event_schema( $event, $tags );
+				$tags             = mc_create_tags( $event, $id );
+				$event_output     = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
+				$output_array[]   = $event_output['html'];
+				$shown_groups[]   = $event_output['group'];
+				$shown_events[]   = $event->event_id;
+				$event_categories = mc_category_classes( $event, 'array', 'mc' );
+				$categories       = array_unique( array_merge( $categories, $event_categories ) );
+				$json             = mc_event_schema( $event, $tags );
 			}
 		}
 		if ( is_array( $output_array ) ) {
@@ -167,10 +169,11 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			}
 		}
 		$return = array(
-			'html'   => $begin . $events_html . $end,
-			'json'   => $json,
-			'groups' => $shown_groups,
-			'events' => $shown_events,
+			'html'       => $begin . $events_html . $end,
+			'json'       => $json,
+			'groups'     => $shown_groups,
+			'events'     => $shown_events,
+			'categories' => $categories,
 		);
 
 		if ( '' === $events_html ) {
@@ -2225,11 +2228,25 @@ function my_calendar( $args ) {
 								} elseif ( 'card' === $params['format'] ) {
 									$body .= $event_output;
 								} else {
-
-									$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
-									$marker = ( count( $events ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
+									if ( 'categories' === mc_get_option( 'mini_marker' ) ) {
+										$cats   = $events_array['categories'];
+										$marker = '';
+										$count  = 0;
+										foreach ( $cats as $cat ) {
+											++ $count;
+											if ( $count > 4 ) {
+												break;
+											}
+											$marker .= '<span class="' . esc_attr( $cat ) . '">&#9679;</span>';
+										}
+										$desc   = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event category', '%d event categories', count( $cats ), 'my-calendar' ), count( $cats ) ) . ')</span>';
+									} else {
+										$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
+										$marker = ( count( $events ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
+										$desc   = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
+									}
 									// Translators: Number of events on this date.
-									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text"><span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span></span>' : '';
+									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text">' . $desc. '</span>' : '';
 									$body .= "<$td id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading" . "\n	<$element class='mc-date$trigger'><span aria-hidden='true' class='mc-day-number'>$thisday_heading</span><span class='screen-reader-text mc-day-date'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span>$inner</$close></div>" . $event_output . "\n</$td>\n";
 								}
 							}

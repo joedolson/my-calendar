@@ -356,6 +356,7 @@ function mc_update_output_settings( $post ) {
 	$options['open_uri']         = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
 	$options['mini_uri']         = $post['mc_mini_uri'];
 	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
+	$options['mini_marker']      = ( ! empty( $post['mc_mini_marker'] ) ) ? $post['mc_mini_marker'] : 'events';
 	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) && 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
 	$options['list_link_titles'] = ( ! empty( $post['mc_list_link_titles'] ) && 'on' === $post['mc_list_link_titles'] ) ? 'true' : 'false';
 	$options['hide_past_dates']  = ( ! empty( $post['mc_hide_past_dates'] ) && 'on' === $post['mc_hide_past_dates'] ) ? 'true' : 'false';
@@ -953,8 +954,8 @@ function mc_remote_db() {
 							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 							<p class="mc-input-settings">
 								<label for="mc-import-settings"><?php esc_html_e( 'Import Settings', 'my-calendar' ); ?></label>
-								<input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
-								<input type="submit" class="button-secondary" value="<?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>">	
+								<input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" />
+								<input type="submit" class="button-secondary" value="<?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>">
 							</p>
 						</form>
 						<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
@@ -1660,7 +1661,7 @@ function mc_remote_db() {
 								);
 								?>
 								</li>
-							</ul>				
+							</ul>
 							<fieldset>
 								<legend><?php esc_html_e( 'Grid Options', 'my-calendar' ); ?></legend>
 								<ul>
@@ -1687,7 +1688,7 @@ function mc_remote_db() {
 										)
 									);
 									?>
-									</li>								
+									</li>
 									<li>
 									<?php
 									mc_settings_field(
@@ -1794,6 +1795,22 @@ function mc_remote_db() {
 											'label'   => __( 'Link action for mini calendar', 'my-calendar' ),
 											'default' => $open_day_options,
 											'atts'    => $disabled,
+											'type'    => 'select',
+										)
+									);
+									?>
+									</li>
+									<li>
+									<?php
+									$marker_options = array(
+										'events'     => __( 'Event count indicator dots', 'my-calendar' ),
+										'categories' => __( 'Color-coded category indicators', 'my-calendar' ),
+									);
+									mc_settings_field(
+										array(
+											'name'    => 'mc_mini_marker',
+											'label'   => __( 'Event count indicator', 'my-calendar' ),
+											'default' => $marker_options,
 											'type'    => 'select',
 										)
 									);
