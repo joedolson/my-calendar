@@ -28,7 +28,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
     "prettier": "^2.8.4",
-    "esbuild": "^0.17.10"
+    "esbuild": "^0.25.0"
   },
   "scripts": {
     "start": "esbuild mcjs.min=src/js/mcjs.js jquery.admin.min=src/js/jquery.admin.js jquery.charcount.min=src/js/jquery.charcount.js mc-datepicker.min=src/js/mc-datepicker.js gmaps.min=src/js/gmaps.js ajax.min=src/js/ajax.js --bundle --outdir=src/js --target=chrome58,firefox57,safari11,edge18 --watch --sourcemap",
