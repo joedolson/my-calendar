@@ -631,8 +631,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
 	$e['ical_categories'] = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category, 'text' ) : mc_get_categories( $event, 'text' );
 	$e['term']            = intval( $event->category_term );
-	$e['icon']            = mc_category_icon( $event, 'img' );
-	$e['icon_html']       = mc_category_icon( $event );
+	$e['icon']            = mc_category_icon( $event );
+	$e['icon_html']       = $e['icon']; // Changed to an alias for icon.
 	$e['color']           = $event->category_color;
 
 	$hex          = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';

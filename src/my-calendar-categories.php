@@ -1419,11 +1419,12 @@ function mc_delete_category_icon( $category_id ) {
  * Produce filepath & name or full img HTML for specific category's icon
  *
  * @param object $event_or_category Current event or category object.
- * @param string $type 'html' to generate HTML.
  *
  * @return string image path or HTML
  */
-function mc_category_icon( $event_or_category, $type = 'html' ) {
+function mc_category_icon( $event_or_category ) {
+	// By default, icons are SVG strings.
+	$src = false;
 	/**
 	 * Override the return value for a category icon.
 	 *
@@ -1440,6 +1441,8 @@ function mc_category_icon( $event_or_category, $type = 'html' ) {
 		return $override;
 	}
 	if ( is_object( $event_or_category ) && property_exists( $event_or_category, 'category_icon' ) ) {
+		$color = $event_or_category->category_color;
+		$id    = $event_or_category->category_id;
 		$url   = plugin_dir_url( __FILE__ );
 		$image = '';
 		// Is this an event context or a category context.
@@ -1460,41 +1463,33 @@ function mc_category_icon( $event_or_category, $type = 'html' ) {
 					}
 					$src = $path . $event_or_category->category_icon;
 				} else {
-					$path  = plugins_url( 'images/icons', __FILE__ ) . '/';
-					$src   = $path . str_replace( '.png', '.svg', $event_or_category->category_icon );
 					$image = mc_generate_category_icon( $event_or_category );
 				}
-				$hex      = ( strpos( $event_or_category->category_color, '#' ) !== 0 ) ? '#' : '';
-				$color    = $hex . $event_or_category->category_color;
+				$hex      = ( strpos( $color, '#' ) !== 0 ) ? '#' : '';
+				$hexcolor = $hex . $color;
 				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event_or_category->category_name );
-				if ( 'html' === $type ) {
-					if ( ! $image ) {
-						if ( false !== stripos( $src, '.svg' ) ) {
-							$image = get_option( 'mc_category_icon_' . $context . '_' . $event_or_category->category_id, '' );
-							// If there's a value, but it's not an svg, zero out.
-							if ( $image && 0 !== stripos( $image, '<svg' ) ) {
-								$image = '';
-							}
-							if ( '' === $image ) {
-								$image = mc_generate_category_icon( $event_or_category );
-							}
-						} else {
-							$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $color ) . '" />';
+				if ( ! $image ) {
+					if ( $src && false !== stripos( $src, '.svg' ) ) {
+						$image = get_option( 'mc_category_icon_' . $context . '_' . $id, '' );
+						// If there's a value, but it's not an svg, zero out.
+						if ( ( $image && 0 !== stripos( $image, '<svg' ) ) || '' === $image ) {
+							$image = mc_generate_category_icon( $event_or_category );
 						}
+					} else {
+						// An image src has been passed.
+						$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $hexcolor ) . '" />';
 					}
-				} else {
-					$image = $path . $event_or_category->category_icon;
 				}
 			}
 		}
-		$inverse = mc_inverse_color( $event_or_category->category_color );
+		$inverse = mc_inverse_color( $color );
 		if ( 'default' !== mc_get_option( 'apply_color' ) ) {
 			$back  = ( 'background' === mc_get_option( 'apply_color' ) ) ? true : false;
-			$image = ( $back ) ? str_replace( $event_or_category->category_color, $inverse, $image ) : str_replace( $inverse, $event_or_category->category_color, $image );
+			$image = ( $back ) ? str_replace( $color, $inverse, $image ) : str_replace( $inverse, $color, $image );
 		} else {
-			$image = str_replace( array( $event_or_category->category_color, $inverse ), 'inherit', $image );
+			$image = str_replace( array( $color, $inverse ), 'inherit', $image );
 		}
-		$image = str_replace( 'cat_' . $event_or_category->category_id, 'cat_' . $event_or_category->category_id . $substitute, $image );
+		$image = str_replace( 'cat_' . $id, 'cat_' . $id . $substitute, $image );
 		/**
 		 * Filter the HTML output for a category icon.
 		 *
@@ -1502,11 +1497,10 @@ function mc_category_icon( $event_or_category, $type = 'html' ) {
 		 *
 		 * @param {string} $image Image HTML.
 		 * @param {object} $event Event object.
-		 * @param {string} $type Type of output - HTML or URL only.
 		 *
 		 * @return {string}
 		 */
-		return apply_filters( 'mc_category_icon', $image, $event_or_category, $type );
+		return apply_filters( 'mc_category_icon', $image, $event_or_category );
 	}
 
 	return '';
