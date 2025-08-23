@@ -1584,3 +1584,31 @@ function mc_category_class( $event_or_category, $prefix ) {
 
 	return $prefix . strtolower( $class );
 }
+
+/**
+ * Get all categories on an event.
+ *
+ * @param object $event Event object.
+ * @param string $return Return type: string or array.
+ *
+ * @return string|array
+ */
+function mc_category_classes( $event, $return = 'string' ) {
+
+	$related_classes = '';
+	if ( property_exists( $event, 'categories' ) ) {
+		$categories = $event->categories;
+	} else {
+		$categories = mc_get_categories( $event, 'objects' );
+	}
+	$classes = array();
+	foreach ( $categories as $category ) {
+		if ( ! is_object( $category ) ) {
+			$category = (object) $category;
+		}
+		$classes[] = strtolower( 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id ) );
+	}
+	$related_classes = ' ' . implode( ' ', $classes );
+
+	return ( 'string' === $return ) ? $related_classes : $classes;
+}

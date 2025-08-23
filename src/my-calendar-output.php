@@ -895,18 +895,9 @@ function mc_get_event_classes( $event, $type, $classes = array() ) {
 		$classes[] = 'mc-event';
 	}
 
-	// Adds a number of extra queries; if they aren't needed, leave disabled.
-	if ( property_exists( $event, 'categories' ) ) {
-		$categories = $event->categories;
-	} else {
-		$categories = mc_get_categories( $event, 'objects' );
-	}
-	foreach ( $categories as $category ) {
-		if ( ! is_object( $category ) ) {
-			$category = (object) $category;
-		}
-		$classes[] = 'mc_rel_' . sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
-	}
+	$category_relations = mc_category_classes( $event, 'array' );
+	$classes            = array_merge( $classes, $category_relations );
+
 	if ( 'body' === $type ) {
 		foreach ( $classes as $key => $class ) {
 			$classes[ $key ] = 'single-' . $class;
