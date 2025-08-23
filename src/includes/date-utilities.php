@@ -720,6 +720,30 @@ function mc_get_from_to( $show_months, $params, $date ) {
 		// Get a view based on current date.
 		$dates = mc_date_array( $date['current_date'], $time, $num );
 	}
+	/**
+	 * Filter the calendar start date.
+	 *
+	 * @hook mc_from_date
+	 *
+	 * @param {string} $from Start date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+	 * @param {string} $to Ending date of current view in format `yyyy-mm-dd`.
+	 * @param {array}  $params Calendar view parameters.
+	 *
+	 * @return {string}
+	 */
+	$dates['from'] = apply_filters( 'mc_from_date', $dates['from'], $dates['to'], $params );
+	/**
+	 * Filter the calendar end date.
+	 *
+	 * @hook mc_to_date
+	 *
+	 * @param {string} $to End date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+	 * @param {string} $from Starting date of current view in format `yyyy-mm-dd`.
+	 * @param {array}  $params Calendar view parameters.
+	 *
+	 * @return {string}
+	 */
+	$dates['to'] = apply_filters( 'mc_to_date', $dates['to'], $dates['from'], $params );
 
 	return $dates;
 }
