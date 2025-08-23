@@ -1589,12 +1589,12 @@ function mc_category_class( $event_or_category, $prefix ) {
  * Get all categories on an event.
  *
  * @param object $event Event object.
- * @param string $return Return type: string or array.
+ * @param string $return_type Return type: string or array.
  * @param string $prefix Category prefix.
  *
  * @return string|array
  */
-function mc_category_classes( $event, $return = 'string', $prefix = 'mc_rel' ) {
+function mc_category_classes( $event, $return_type = 'string', $prefix = 'mc_rel' ) {
 
 	$related_classes = '';
 	if ( property_exists( $event, 'categories' ) ) {
@@ -1617,5 +1617,5 @@ function mc_category_classes( $event, $return = 'string', $prefix = 'mc_rel' ) {
 	}
 	$related_classes = ' ' . implode( ' ', $classes );
 
-	return ( 'string' === $return ) ? $related_classes : $classes;
+	return ( 'string' === $return_type ) ? $related_classes : $classes;
 }

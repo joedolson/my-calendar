@@ -2233,20 +2233,21 @@ function my_calendar( $args ) {
 										$marker = '';
 										$count  = 0;
 										foreach ( $cats as $cat ) {
-											++ $count;
+											++$count;
 											if ( $count > 5 ) {
 												break;
 											}
 											$marker .= '<span class="' . esc_attr( $cat ) . '">&#9679;</span>';
 										}
-										$desc   = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event category', '%d event categories', count( $cats ), 'my-calendar' ), count( $cats ) ) . ')</span>';
+										// Translators: Number of event categories represented on this date.
+										$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event category', '%d event categories', count( $cats ), 'my-calendar' ), count( $cats ) ) . ')</span>';
 									} else {
 										$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
 										$marker = ( count( $events ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
 										$desc   = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 									}
 									// Translators: Number of events on this date.
-									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text">' . $desc. '</span>' : '';
+									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text">' . $desc . '</span>' : '';
 									$body .= "<$td id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading" . "\n	<$element class='mc-date$trigger'><span aria-hidden='true' class='mc-day-number'>$thisday_heading</span><span class='screen-reader-text mc-day-date'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span>$inner</$close></div>" . $event_output . "\n</$td>\n";
 								}
 							}
