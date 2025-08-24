@@ -1159,6 +1159,13 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	position: relative;
 }
 
+.mc-main:has(.loading) > .heading,
+.mc-main:has(.loading) > nav,
+.mc-main:has(.loading) > table,
+.mc-main:has(.loading) > div:not(.mc-loading) {
+	opacity: .15;
+}
+
 .mc-main .mc-loading {
 	position: absolute;
 	top: 45%;
@@ -1171,6 +1178,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	background-color: #00000006;
 	border-radius: 50px;
 	animation: animation-rotate 1250ms linear infinite;
+	z-index: 25;
 }
 
 @media (prefers-reduced-motion) {

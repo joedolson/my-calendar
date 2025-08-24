@@ -165,131 +165,166 @@
 	my_calendar_edit_toggles();
 	mc_render_buttons();
 	if ( 'true' === my_calendar.ajax ) {
+		mc_setup_handlers();
+	}
+
+	function mc_setup_handlers() {
 		// Prevents spacebar from scrolling the page on links with button role.
-		$(document).on( 'keydown', '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)', function(e) {
-			if ( 32 === e.which ) {
-				e.preventDefault();
-			}
+		let buttonHandlers = document.querySelectorAll('.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)');
+		buttonHandlers.forEach( (el) => {
+			el.addEventListener( 'keydown', function(e) {
+				if ( ' ' === e.key ) {
+					e.preventDefault();
+				}
+			});
 		});
-		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-export button), .my-calendar-footer button:not(.mc-export button)", function (e) {
-			e.preventDefault();
-			if ( 'click' === e.type || ( 'keyup' === e.type && 32 === e.which ) ) {
-				let targetId   = $( this ).attr( 'id' );
-				const calendar = $( this ).closest( '.mc-main' );
-				calendar.removeClass( 'is-main-view' );
-				let ref        = calendar.attr('id');
-				let month      = '';
-				let day        = '';
-				let year       = '';
-				let mcat       = '';
-				let loc        = '';
-				let access     = '';
-				let mcs        = '';
-				let link       = '';
-				let url;
-				if ( 'INPUT' === this.nodeName || 'BUTTON' === this.nodeName ) {
-					const inputForm = $( this ).parents( 'form' );
-					if ( inputForm.hasClass( 'mc-date-switcher' ) ) {
-						month = inputForm.find( 'select[name=month]' ).val();
-						day   = inputForm.find( 'select[name=dy]' ).val();
-						year  = inputForm.find( 'select[name=yr]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-categories-switcher' ) ) {
-						mcat = inputForm.find( 'select[name=mcat]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-locations-switcher' ) ) {
-						loc = inputForm.find( 'select[name=loc]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
-						access = inputForm.find( 'select[name=access]' ).val();
-					}
-					mcs  = inputForm.find( 'input[name=mcs]' ).val();
-					link = $( this ).attr( 'data-href' );
-				} else {
-					link = $(this).attr('href');
+		let navActions = document.querySelectorAll('.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-export button), .my-calendar-footer button:not(.mc-export button)');
+		navActions.forEach( (el) => {
+			el.addEventListener( 'click', function(e) {
+				mc_handle_navigation(e, el);
+			});
+			el.addEventListener( 'keyup', function(e) {
+				mc_handle_navigation(e, el);
+			});
+		});
+	}
+
+	function mc_handle_navigation(e, el) {
+		e.preventDefault();
+		if ( 'click' === e.type || ( 'keyup' === e.type && ' ' === e.key ) ) {
+			const calendar = el.closest( '.mc-main' );
+			calendar.classList.remove( 'is-main-view' );
+			let targetId   = el.getAttribute( 'id' ), ref = calendar.getAttribute('id'),
+							month, day, year, mcat, loc, access, mcs, link, url;
+			console.log( targetId );
+			if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
+				const inputForm = el.closest( 'form' );
+				if ( inputForm.classList.contains( 'mc-date-switcher' ) ) {
+					month = inputForm.querySelector( 'select[name=month]' ).value;
+					day   = inputForm.querySelector( 'select[name=dy]' ).value;
+					year  = inputForm.querySelector( 'select[name=yr]' ).value;
 				}
-				try {
-					url = new URL(link);
-					url.searchParams.delete('embed');
-					url.searchParams.delete('source');
-					if ( 'INPUT' === this.nodeName || 'BUTTON' === this.nodeName ) {
-						if ( '' !== month ) {
-							url.searchParams.delete( 'month' );
-							url.searchParams.delete( 'dy' );
-							url.searchParams.delete( 'yr' );
+				if ( inputForm.classList.contains( 'mc-categories-switcher' ) ) {
+					mcat = inputForm.querySelector( 'select[name=mcat]' ).value;
+				}
+				if ( inputForm.classList.contains( 'mc-locations-switcher' ) ) {
+					loc = inputForm.querySelector( 'select[name=loc]' ).value;
+				}
+				if ( inputForm.classList.contains( 'mc-access-switcher' ) ) {
+					access = inputForm.querySelector( 'select[name=access]' ).value;
+				}
+				mcs  = inputForm.querySelector( 'input[name=mcs]' ).value;
+				link = el.getAttribute( 'data-href' );
+			} else {
+				link = el.getAttribute('href');
+			}
+			try {
+				url = new URL(link);
+				url.searchParams.delete('embed');
+				url.searchParams.delete('source');
+				if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
+					if ( '' !== month ) {
+						url.searchParams.delete( 'month' );
+						url.searchParams.delete( 'dy' );
+						url.searchParams.delete( 'yr' );
 
-							url.searchParams.append( 'month', parseInt( month ) );
-							if ( 'undefined' !== typeof( day ) ) {
-								url.searchParams.append( 'dy', parseInt( day ) );
-							}
-							url.searchParams.append( 'yr', parseInt( year ) );
+						url.searchParams.append( 'month', parseInt( month ) );
+						if ( 'undefined' !== typeof( day ) ) {
+							url.searchParams.append( 'dy', parseInt( day ) );
 						}
-						if ( '' !== mcat ) {
-							url.searchParams.delete( 'mcat' );
-							url.searchParams.append( 'mcat', mcat );
-						}
-						if ( '' !== loc ) {
-							url.searchParams.delete( 'loc' );
-							url.searchParams.delete( 'ltype' );
-							url.searchParams.append( 'ltype', 'id' );
-							url.searchParams.append( 'loc', loc );
-						}
-						if ( '' !== access ) {
-							url.searchParams.delete( 'access' );
-							url.searchParams.append( 'access', parseInt( access ) );
-						}
-						url.searchParams.delete( 'mcs' );
-						if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
-							url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
-						}
-
-						link = url.toString();
+						url.searchParams.append( 'yr', parseInt( year ) );
+					}
+					if ( '' !== mcat ) {
+						url.searchParams.delete( 'mcat' );
+						url.searchParams.append( 'mcat', mcat );
+					}
+					if ( '' !== loc ) {
+						url.searchParams.delete( 'loc' );
+						url.searchParams.delete( 'ltype' );
+						url.searchParams.append( 'ltype', 'id' );
+						url.searchParams.append( 'loc', loc );
+					}
+					if ( '' !== access ) {
+						url.searchParams.delete( 'access' );
+						url.searchParams.append( 'access', parseInt( access ) );
+					}
+					url.searchParams.delete( 'mcs' );
+					if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
+						url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
 					}
 
-					window.history.pushState({}, '', url );
-				} catch(_) {
-					url = false;
+					link = url.toString();
 				}
 
-				let height = calendar.height();
-				$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-				wp.a11y.speak( __( 'Loading', 'my-calendar' ) );
-				$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
+				window.history.pushState({}, '', url );
+			} catch(_) {
+				url = false;
+			}
 
-					if ( status == 'error' ) {
-						$( '#' + ref ).html( xhr.status + " " + xhr.statusText );
+			calendar.insertAdjacentHTML( 'afterbegin', '<div class="mc-loading"></div><div class="loading"><span class="screen-reader-text">Loading...</span></div>');
+			wp.a11y.speak( __( 'Loading', 'my-calendar' ) );
+
+			fetch( link )
+				.then( response => {
+					if ( response.ok ) {
+						return response.text();
 					}
-					// functions to execute when new view loads.
-					// List view.
-					if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
-						if ( 'false' === my_calendar.links ) {
-							$('li.mc-events').find( '.mc-events' ).hide();
-							$('li.current-day').children().show();
-						} else {
-							$('li.mc-events .single-details' ).hide();
-						}
+				}).then (html => {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString( html, "text/html" );
+					calendar.replaceWith( doc.querySelector( '#' + ref ) );
+					mc_build_calendar( targetId, ref );
+				}).catch( error => {
+					calendar.insertAdjacentHTML( 'beforebegin', error );
+				});
+		}
+	}
+
+	function mc_build_calendar( targetId, ref ) {
+		// functions to execute when new view loads.
+		// List view.
+		if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
+			let listEvents;
+			if ( 'false' === my_calendar.links ) {
+				listEvents = document.querySelectorAll( 'li.mc-events' );
+				listEvents.forEach( (el) => {
+					let target = el.querySelector( '.mc-events' );
+					if ( ! el.classList.contains( 'current-day' ) ) {
+						target.style.display = 'none';
 					}
-					// Grid view.
-					if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
-						$('.has-events > .calendar-event').children().not('header').hide();
-					}
-					// Mini view.
-					if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
-						$('.mini .has-events').children().not('.mc-date-container').hide();
-					}
-					mc_render_buttons();
-					my_calendar_external_links();
-					my_calendar_edit_toggles();
-					// All views.
-					$( '#' + targetId ).trigger( 'focus' );
-					let refText = $( '#mc_head_' + ref ).text();
-					wp.a11y.speak( refText );
-					mc_display_usertime();
-					mc_build_toggles( ref );
-					my_calendar_table_aria();
+				});
+			} else {
+				listEvents =  document.querySelectorAll( 'li.mc-events .single-details' );
+				listEvents.forEach( (el) => {
+					el.style.display = 'none';
 				});
 			}
-		});
+		}
+		// Grid view.
+		if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
+			let gridEvents = document.querySelectorAll('.has-events > .calendar-event > *:not(header)');
+			gridEvents.forEach( (el) => {
+				el.style.display = 'none';
+			});
+		}
+		// Mini view.
+		if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
+			let miniEvents = document.querySelectorAll( '.min .has-events > *:not(.mc-date-container)' );
+			miniEvents.forEach( (el) => {
+				el.style.display = 'none';
+			});
+		}
+		mc_render_buttons();
+		my_calendar_external_links();
+		my_calendar_edit_toggles();
+		let originalFocus = document.getElementById( targetId );
+		originalFocus.focus();
+		let refAnnounce = document.getElementById( 'mc_head_' + ref );
+		wp.a11y.speak( refAnnounce.innerText );
+		mc_display_usertime();
+		mc_build_toggles( ref );
+		mc_setup_handlers();
+		my_calendar_table_aria();
 	}
 
 	function mc_display_usertime() {
