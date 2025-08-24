@@ -2,17 +2,15 @@
 	const { __, _x, _n, _nx } = wp.i18n;
 
 	'use strict';
-	$(function () {
-		mc_display_usertime();
-		const calendar = document.querySelectorAll( '.mc-main, .mc-event-list' );
-		if ( calendar ) {
-			calendar.forEach( (el) => {
-				let targetId = el.getAttribute( 'id' );
-				mc_build_toggles( targetId );
-				el.classList.remove( 'mcjs' );
-			});
-		}
-	});
+	mc_display_usertime();
+	const calendar = document.querySelectorAll( '.mc-main, .mc-event-list' );
+	if ( calendar ) {
+		calendar.forEach( (el) => {
+			let targetId = el.getAttribute( 'id' );
+			mc_build_toggles( targetId );
+			el.classList.remove( 'mcjs' );
+		});
+	}
 
 	const loadmore = document.querySelectorAll( '.mc-loader' );
 	if ( loadmore ) {
@@ -286,7 +284,7 @@
 					let refText = $( '#mc_head_' + ref ).text();
 					wp.a11y.speak( refText );
 					mc_display_usertime();
-					mc_build_toggles( targetId );
+					mc_build_toggles( ref );
 					my_calendar_table_aria();
 				});
 			}
@@ -426,5 +424,5 @@
 		}
 	}
 	my_calendar_table_aria();
-	
+
 }(jQuery));
