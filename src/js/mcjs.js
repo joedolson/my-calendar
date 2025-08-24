@@ -330,43 +330,48 @@
 
 	function mc_build_toggles( targetId ) {
 		if ( targetId ) {
-			const subscribe   = $( '#' + targetId + ' .mc-subscribe' );
-			const exports     = $( '#' + targetId + ' .mc-download' );
-			if ( subscribe.length > 0 ) {
+			const subscribe   = document.querySelector( '#' + targetId + ' .mc-subscribe' );
+			const exports     = document.querySelector( '#' + targetId + ' .mc-download' );
+			if ( null !== subscribe ) {
 				let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
 				const toggle = document.createElement( 'button' );
 				toggle.setAttribute( 'type', 'button' );
 				toggle.setAttribute( 'aria-controls', controls_id );
 				toggle.setAttribute( 'aria-expanded', false );
 				toggle.innerHTML = my_calendar.subscribe + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
-				subscribe.find( 'ul' ).attr( 'id', controls_id );
-				subscribe.find( 'ul' ).css( { 'display' : 'none' } );
-				subscribe.prepend( toggle );
+				subscribe.querySelector( 'ul' ).setAttribute( 'id', controls_id );
+				subscribe.querySelector( 'ul' ).style.display = 'none';
+				subscribe.insertAdjacentElement( 'afterbegin', toggle );
 			}
-			if ( exports.length > 0 ) {
+			if ( null !== exports ) {
 				let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
 				const toggle = document.createElement( 'button' );
 				toggle.setAttribute( 'type', 'button' );
 				toggle.setAttribute( 'aria-controls', controls_id );
 				toggle.setAttribute( 'aria-expanded', false );
 				toggle.innerHTML = my_calendar.export + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
-				exports.find( 'ul' ).attr( 'id', controls_id );
-				exports.find( 'ul' ).css( { 'display' : 'none' } );
-				exports.prepend( toggle );
+				exports.querySelector( 'ul' ).setAttribute( 'id', controls_id );
+				exports.querySelector( 'ul' ).style.display = 'none';
+				exports.insertAdjacentElement( 'afterbegin', toggle );
 			}
-			const toggles = $( '#' + targetId + ' .mc-export button' );
-			toggles.each( function() {
-				$( this ).on( 'click', function() {
-					let controlled = $( this ).attr( 'aria-controls' );
-					let target     = $( '#' + controlled );
-					if ( target.is( ':visible' ) ) {
-						target.css( { 'display' : 'none' } );
-						$( this ).attr( 'aria-expanded', 'false' );
-						$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-right' );
+			const toggles = document.querySelectorAll( '#' + targetId + ' .mc-export button' );
+			let icon;
+			toggles.forEach( (el) => {
+				el.addEventListener( 'click', function() {
+					let controlled = el.getAttribute( 'aria-controls' );
+					let target     = document.getElementById( controlled );
+					if ( target.checkVisibility() ) {
+						target.style.display = 'none';
+						el.setAttribute( 'aria-expanded', 'false' );
+						icon = el.querySelector( '.dashicons' );
+						icon.classList.remove( 'dashicons-arrow-down' );
+						icon.classList.add( 'dashicons-arrow-right' );
 					} else {
-						target.css( { 'display' : 'block' } );
-						$( this ).attr( 'aria-expanded', 'true' );
-						$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-right' ).addClass( 'dashicons-arrow-down' );
+						target.style.display = 'block';
+						el.setAttribute( 'aria-expanded', 'true' );
+						icon = el.querySelector( '.dashicons' );
+						icon.classList.remove( 'dashicons-arrow-right' )
+						icon.classList.add( 'dashicons-arrow-down' );
 					}
 				});
 			});
