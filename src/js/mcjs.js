@@ -293,7 +293,7 @@
 
 	function mc_display_usertime() {
 		const usertime = document.querySelectorAll( '.mc-user-time' );
-		let label = Intl.DateTimeFormat().resolvedOptions().timeZone, udate, utime;
+		let label = new Intl.DateTimeFormat().resolvedOptions().timeZone, udate, utime;
 		usertime.forEach( (el) => {
 			let time  = el.innerText;
 			let type  = el.getAttribute( 'data-type' );
