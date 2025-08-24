@@ -161,7 +161,7 @@
 				}
 			});
 	}
-
+	my_calendar_external_links();
 	my_calendar_edit_toggles();
 	mc_render_buttons();
 	if ( 'true' === my_calendar.ajax ) {
@@ -278,6 +278,7 @@
 						$('.mini .has-events').children().not('.mc-date-container').hide();
 					}
 					mc_render_buttons();
+					my_calendar_external_links();
 					my_calendar_edit_toggles();
 					// All views.
 					$( '#' + targetId ).trigger( 'focus' );
@@ -372,7 +373,13 @@
 		}
 	}
 
-	$('.mc-main a[target=_blank]').append( ' <span class="dashicons dashicons-external" aria-hidden="true"></span><span class="screen-reader-text"> ' + my_calendar.newWindow + '</span>' );
+	function my_calendar_external_links() {
+		let external_links = document.querySelectorAll('.mc-main a[target=_blank]');
+		external_links.forEach( (el) => {
+			el.classList.add( 'mc-opens-in-new-tab' );
+			el.insertAdjacentHTML( 'beforeend', ' <span class="dashicons dashicons-external" aria-hidden="true"></span><span class="screen-reader-text"> ' + my_calendar.newWindow + '</span>' );
+		});
+	}
 
 	function my_calendar_edit_toggles() {
 		const adminToggles = document.querySelectorAll( '.mc-toggle-edit' );
