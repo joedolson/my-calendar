@@ -292,29 +292,38 @@
 	}
 
 	function mc_display_usertime() {
-		const usertime = $( '.mc-user-time' );
-		let label = Intl.DateTimeFormat().resolvedOptions().timeZone,
-			udate = '',
-			utime = '';
-		usertime.each(function() {
-			let time  = $( this ).text();
+		const usertime = document.querySelectorAll( '.mc-user-time' );
+		let label = Intl.DateTimeFormat().resolvedOptions().timeZone, udate, utime;
+		usertime.forEach( (el) => {
+			let time  = el.innerText;
+			let type  = el.getAttribute( 'data-type' );
 			// Handle Internet Explorer's lack of timezone info.
 			if (undefined === label) {
-				label = $( this ).attr( 'data-label' );
+				label = el.getAttribute( 'data-label' );
 			}
-			if ( time.replace( 'Z', '.000Z' ) === new Date( time ).toISOString() ) {
-				$( this ).css( {'display' : 'none'} );
+			if ( 'datetime' === type ) {
+				utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
+				udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
+				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + udate + '<span class="sep">, </span>' + utime;
 			}
-			utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
-			udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
-			$( this ).html( '<span class="mc-local-time-label">' + label + ':</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
+			if ( 'date' === type ) {
+				udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
+				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + udate;
+
+			}
+			if ( 'time' === type ) {
+				utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
+				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + utime;
+
+			}
+			el.setAttribute( 'data-time', time );
 		});
 	}
 
 	function mc_render_buttons() {
-		const links = $( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
-		links.each( function() {
-			$( this ).attr( 'role', 'button' );
+		const links = document.querySelectorAll( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
+		links.forEach( (el) => {
+			el.setAttribute( 'role', 'button' );
 		});
 	}
 
