@@ -1403,18 +1403,24 @@ dialog.my-calendar-modal .my-calendar-modal__wrapper {
 }
 
 dialog.my-calendar-modal .mc-modal-title-container {
-	position: relative;
+	position: sticky;
+	top: 0;
 	margin-top: 0;
 	margin-bottom: 0;
-	padding: 16px;
+	padding: 4px 16px;
 	background: var(--highlight-light);
 	z-index: 1;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 16px;
+	align-items: center;
+	border-bottom: 1px solid var(--highlight-dark);
 }
 
 dialog.my-calendar-modal #modal-title {
 	font-size: var(--modal-title);
 	margin: 0;
-	margin-right: 64px;
+	padding: 0;
 	box-sizing: border-box;
 }
 
@@ -1512,9 +1518,6 @@ body.mc-no-scroll {
   overflow: auto;
 }
 .my-calendar-modal-close {
-  position: absolute;
-  top: 3px;
-  right: 3px;
   background: var(--close-button);
   border-radius: 3px;
   color: var(--primary-light);
@@ -1525,6 +1528,9 @@ body.mc-no-scroll {
   display: flex;
   align-items: center;
   column-gap: 4px;
+  order: 1;
+  font-size: 1rem;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif
 }
 .my-calendar-modal-close:focus,
 .my-calendar-modal-close:hover,
