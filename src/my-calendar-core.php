@@ -449,6 +449,7 @@ function mc_enqueue_calendar_js() {
 			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
 		);
 		wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
+		// If any disclosure widget is enabled, load the scripting for those.
 		if ( 'true' === $grid || 'true' === $list || 'true' === $mini ) {
 			wp_enqueue_script( 'mc.legacy' );
 		}
