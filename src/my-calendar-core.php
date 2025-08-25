@@ -449,6 +449,9 @@ function mc_enqueue_calendar_js() {
 			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
 		);
 		wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
+		if ( 'true' === $grid || 'true' === $list || 'true' === $mini ) {
+			wp_enqueue_script( 'mc.legacy' );
+		}
 	}
 	$gridtype = mc_get_option( 'calendar_javascript' );
 	$listtype = mc_get_option( 'list_javascript' );
@@ -776,6 +779,7 @@ function mc_register_scripts() {
 	wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 	$mcjs = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
 	wp_register_script( 'mc.mcjs', $mcjs, array( 'wp-a11y', 'wp-i18n' ), $version, true );
+	wp_register_script( 'mc.legacy', plugins_url( 'js/legacy-disclosure.js', __FILE__ ), array( 'jquery' ), $version, true );
 	$modal = ( SCRIPT_DEBUG ) ? 'modal/accessible-modal-window-aria.js' : 'modal/accessible-modal-window-aria.min.js';
 	wp_register_script( 'mc-modal', plugins_url( 'js/' . $modal, __FILE__ ), array(), $version, true );
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
