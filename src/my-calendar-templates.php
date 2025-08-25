@@ -584,8 +584,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['userenddate']   = '<time class="mc-user-time" data-type="date" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
 	$e['userstarttime'] = '<time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
 	$e['userendtime']   = '<time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
-
-	$e['datebadge']    = mc_date_badge( $real_begin_date );
+	$e['datebadge']     = mc_date_badge( $real_begin_date );
 	/**
 	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
 	 *
