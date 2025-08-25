@@ -1,5 +1,4 @@
 (function ($) {
-	// Lines 61 - 165 are the legacy disclosure widgets.
 	if ( 'true' === my_calendar.mini ) {
 		$( ".mini .calendar-events" ).hide();
 		$( document ).on( "click", ".mini .has-events .trigger", function (e) {
@@ -59,8 +58,7 @@
 				$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
 				controlled.toggle();
 
-				const focusable = current_date.find( 'a, button:not(.event-title > button), object, :input, iframe, [tabindex]' );
-				console.log( focusable );
+				const focusable  = current_date.find( 'a, button:not(.event-title > button), object, :input, iframe, [tabindex]' );
 				const lastFocus  = focusable.last();
 				const firstFocus = focusable.first();
 				firstFocus.attr( 'data-action', 'shiftforward' );
