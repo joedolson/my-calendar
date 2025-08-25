@@ -347,7 +347,7 @@ function mc_register_styles() {
 }
 
 /**
- * Enqueue calendar JS.
+ * Enqueue front-end calendar JS.
  */
 function mc_enqueue_calendar_js() {
 	$version = mc_get_version();
@@ -434,7 +434,7 @@ function mc_enqueue_calendar_js() {
 	}
 	if ( $enqueue ) {
 		$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-		wp_enqueue_script( 'mc.mcjs', $url, array( 'jquery', 'wp-a11y', 'wp-i18n' ), $version, true );
+		wp_enqueue_script( 'mc.mcjs', $url, array( 'wp-a11y', 'wp-i18n' ), $version, true );
 		$args = array(
 			'grid'      => $grid,
 			'list'      => $list,
@@ -764,7 +764,7 @@ function mc_footer_js() {
 }
 
 /**
- * Register scripts and styles.
+ * Register all scripts and styles.
  */
 function mc_register_scripts() {
 	$version = mc_get_version();
@@ -775,11 +775,9 @@ function mc_register_scripts() {
 	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons', 'my-calendar-lists' ), $version );
 	wp_register_style( 'my-calendar-admin-style', plugins_url( 'css/admin.css', __FILE__ ), array( 'my-calendar-reset' ), $version );
 	$mcjs = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
-	wp_register_script( 'mc.mcjs', $mcjs, array( 'jquery', 'wp-a11y', 'wp-i18n' ), $version, true );
+	wp_register_script( 'mc.mcjs', $mcjs, array( 'wp-a11y', 'wp-i18n' ), $version, true );
 	$modal = ( SCRIPT_DEBUG ) ? 'modal/accessible-modal-window-aria.js' : 'modal/accessible-modal-window-aria.min.js';
 	wp_register_script( 'mc-modal', plugins_url( 'js/' . $modal, __FILE__ ), array(), $version, true );
-	wp_register_style( 'my-calendar-lists', plugins_url( 'css/list-presets.css', __FILE__ ), array(), $version );
-	wp_register_style( 'my-calendar-reset', plugins_url( 'css/reset.css', __FILE__ ), array( 'dashicons', 'my-calendar-lists' ), $version );
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-style', $stylesheet, array( 'my-calendar-reset' ), $version . '-' . sanitize_title( mc_get_option( 'css_file' ) ) );
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
