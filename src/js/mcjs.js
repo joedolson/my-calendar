@@ -3,13 +3,17 @@
 
 	'use strict';
 	mc_display_usertime();
-	const calendar = document.querySelectorAll( '.mc-main, .mc-event-list' );
-	if ( calendar ) {
-		calendar.forEach( (el) => {
-			let targetId = el.getAttribute( 'id' );
-			mc_build_toggles( targetId );
-			el.classList.remove( 'mcjs' );
-		});
+	initjs();
+
+	function initjs() {
+		const calendar = document.querySelectorAll( '.mc-main, .mc-event-list' );
+		if ( calendar ) {
+			calendar.forEach( (el) => {
+				let targetId = el.getAttribute( 'id' );
+				mc_build_toggles( targetId );
+				el.classList.remove( 'mcjs' );
+			});
+		}
 	}
 
 	const loadmore = document.querySelectorAll( '.mc-loader' );
@@ -177,6 +181,7 @@
 	}
 
 	function mc_build_calendar( targetId, ref ) {
+		initjs();
 		// functions to execute when new view loads.
 		// List view.
 		if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
@@ -198,14 +203,14 @@
 		}
 		// Grid view.
 		if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
-			let gridEvents = document.querySelectorAll('.has-events > .calendar-event > *:not(header)');
+			let gridEvents = document.querySelectorAll('.mc-main.calendar .has-events > .calendar-event > *:not(header)');
 			gridEvents.forEach( (el) => {
 				el.style.display = 'none';
 			});
 		}
 		// Mini view.
 		if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
-			let miniEvents = document.querySelectorAll( '.min .has-events > *:not(.mc-date-container)' );
+			let miniEvents = document.querySelectorAll( '.mc-main.mini .has-events .calendar-events' );
 			miniEvents.forEach( (el) => {
 				el.style.display = 'none';
 			});
