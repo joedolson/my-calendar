@@ -419,6 +419,10 @@ function mc_private_event( $event, $type = true ) {
 	if ( ! is_object( $event ) || ! property_exists( $event, 'category_private' ) ) {
 		return true;
 	}
+	// This is a personal event, only visible to the author.
+	if ( property_exists( $event, 'event_approved' ) && 5 === (int) $event->event_approved ) {
+		$status = ( is_user_logged_in() && wp_get_current_user()->ID === $event->event_author ) ? false : true;
+	}
 	// If this event has the private state.
 	if ( property_exists( $event, 'event_approved' ) && 4 === (int) $event->event_approved ) {
 		$status = ( is_user_logged_in() ) ? false : true;

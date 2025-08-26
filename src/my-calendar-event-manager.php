@@ -64,6 +64,9 @@ function mc_bulk_action( $action, $events = array() ) {
 		case 'private':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 4 WHERE event_id IN (' . $prepared . ')';
 			break;
+		case 'personal':
+			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_approved = 5 WHERE event_id IN (' . $prepared . ')';
+			break;
 		case 'archive':
 			$sql = 'UPDATE ' . my_calendar_table() . ' SET event_status = 0 WHERE event_id IN (' . $prepared . ')';
 			break;
@@ -173,6 +176,11 @@ function mc_bulk_message( $results, $action ) {
 			// Translators: Number of events made private, number of events selected.
 			$success = __( '%1$d events made privately available out of %2$d selected.', 'my-calendar' );
 			$error   = __( 'Your events have not been made private. Were these events already private? Please investigate.', 'my-calendar' );
+			break;
+		case 'personal':
+			// Translators: Number of events made personal, number of events selected.
+			$success = __( '%1$d events made personally available out of %2$d selected.', 'my-calendar' );
+			$error   = __( 'Your events have not been made private to you. Were these events already personal events? Please investigate.', 'my-calendar' );
 			break;
 		case 'cancel':
 			// Translators: Number of events cancelled, number of events selected.
@@ -338,6 +346,9 @@ function my_calendar_manage() {
 				case 'mass_private':
 					mc_bulk_action( 'private' );
 					break;
+				case 'mass_personal':
+					mc_bulk_action( 'personal' );
+					break;
 				case 'mass_cancel':
 					mc_bulk_action( 'cancel' );
 					break;
@@ -442,6 +453,7 @@ function mc_show_bulk_actions() {
 		'mass_archive'      => __( 'Archive', 'my-calendar' ),
 		'mass_undo_archive' => __( 'Remove from Archive', 'my-calendar' ),
 		'mass_private'      => __( 'Make private', 'my-calendar' ),
+		'mass_personal'     => __( 'Make personal', 'my-calendar' ),
 		'mass_cancel'       => __( 'Cancel', 'my-calendar' ),
 		'mass_delete'       => __( 'Delete', 'my-calendar' ),
 	);
@@ -588,6 +600,9 @@ function mc_get_event_status_limit() {
 			break;
 		case 'private':
 			$limit = 'WHERE event_approved = 4';
+			break;
+		case 'personal':
+			$limit = 'WHERE event_approved = 5';
 			break;
 		case 'trashed':
 			$limit = 'WHERE event_approved = 2';

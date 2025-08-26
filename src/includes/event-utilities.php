@@ -119,7 +119,7 @@ function mcs_check_conflicts( $begin, $time, $end, $endtime, $loc_id ) {
 
 /**
  * Get all states, labels, types. Valid types are 'hidden', 'public', and 'private'. Hidden statuses
- * are not output to public APIs or shown on calendars at all. Private statuses are shown to logged-in users.
+ * are not output to public APIs or shown on calendars at all. Private statuses have different rules depending on specific values.
  *
  * @return array
  */
@@ -144,6 +144,10 @@ function mc_event_states() {
 		'4' => array(
 			'type'  => 'private',
 			'label' => __( 'Private', 'my-calendar' ),
+		),
+		'5' => array(
+			'type'  => 'private',
+			'label' => __( 'Personal', 'my-calendar' ),
 		),
 	);
 

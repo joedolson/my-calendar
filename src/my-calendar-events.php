@@ -297,6 +297,9 @@ function my_calendar_get_events( $args ) {
 						$event->location = $locs[ $object_id ];
 					}
 				}
+				if ( (int) $event->event_approved === 5 && wp_get_current_user()->ID !== (int) $event->event_author ) {
+					continue;
+				}
 				$object = mc_event_object( $event );
 				if ( false !== $object ) {
 					$arr_events[] = $object;
@@ -387,6 +390,9 @@ function mc_get_all_events( $args ) {
 			$fetched[ $object_id ] = $cats;
 		} else {
 			$event->categories = $fetched[ $object_id ];
+		}
+		if ( (int) $event->event_approved === 5 && wp_get_current_user()->ID !== (int) $event->event_author ) {
+			continue;
 		}
 		$object = mc_event_object( $event );
 		if ( false !== $object ) {
@@ -652,18 +658,21 @@ function mc_get_first_event( $id ) {
 	$ts_string = mc_ts();
 	$event     = ( ! is_admin() ) ? get_transient( 'mc_first_event_cache_' . $id ) : false;
 	if ( $event ) {
-		return $event;
+		$return_event = $event;
 	} else {
 		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( $event ) {
-			$event = mc_event_object( $event );
+			$return_event = mc_event_object( $event );
 			set_transient( 'mc_first_event_cache_' . $id, $event, WEEK_IN_SECONDS );
 		} else {
-			$event = false;
+			$return_event = false;
 		}
 	}
+	if ( $return_event->event_approved === 5 && wp_get_current_user()->ID !== $return_event->event_author ) {
+		return false;
+	}
 
-	return $event;
+	return $return_event;
 }
 
 /**
@@ -696,6 +705,7 @@ function mc_get_nearest_event( $id, $next = false ) {
 	if ( true === $next ) {
 		$next_event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d AND occur_begin > NOW() ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
+
 	$event = ( $next_event ) ? mc_event_object( $next_event ) : mc_event_object( $event );
 
 	return $event;
@@ -1359,7 +1369,12 @@ function mc_status_links( $allow_filters ) {
 		// Translators: Number of total events.
 		$pri_text = sprintf( __( 'Private (%d)', 'my-calendar' ), $counts['private'] );
 	}
-
+	$per_text = '';
+	if ( isset( $counts['personal'] ) && 0 < (int) $counts['personal'] ) {
+		$per_attributes = ( isset( $_GET['limit'] ) && 'personal' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+		// Translators: Number of total events.
+		$per_text = sprintf( __( 'Personal (%d)', 'my-calendar' ), $counts['personal'] );
+	}
 	$spa_attributes = ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$spa_text = sprintf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] );
@@ -1391,6 +1406,12 @@ function mc_status_links( $allow_filters ) {
 		$output .= '
 		<li>
 			<a ' . $pri_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=private' ) . '">' . $pri_text . '</a>
+		</li>';
+	}
+	if ( $per_text ) {
+		$output .= '
+		<li>
+			<a ' . $per_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=personal' ) . '">' . $per_text . '</a>
 		</li>';
 	}
 	if ( ( function_exists( 'akismet_http_post' ) || ( 0 < (int) $counts['spam'] ) ) && $allow_filters ) {
