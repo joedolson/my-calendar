@@ -273,7 +273,7 @@ function mc_event_is_hidden( $event ) {
 		return true;
 	}
 	if ( 5 === (int) $event->event_approved && is_user_logged_in() ) {
-		$can_see = ( (int) $event->event_author === wp_get_current_user()->ID ) ? false : true;
+		$can_see = ( wp_get_current_user()->ID === (int) $event->event_author ) ? false : true;
 		/**
 		 * Filter whether a personal event is visible.
 		 *

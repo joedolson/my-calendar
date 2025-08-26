@@ -297,7 +297,7 @@ function my_calendar_get_events( $args ) {
 						$event->location = $locs[ $object_id ];
 					}
 				}
-				if ( (int) $event->event_approved === 5 && wp_get_current_user()->ID !== (int) $event->event_author ) {
+				if ( 5 === (int) $event->event_approved && wp_get_current_user()->ID !== (int) $event->event_author ) {
 					continue;
 				}
 				$object = mc_event_object( $event );
@@ -391,7 +391,7 @@ function mc_get_all_events( $args ) {
 		} else {
 			$event->categories = $fetched[ $object_id ];
 		}
-		if ( (int) $event->event_approved === 5 && wp_get_current_user()->ID !== (int) $event->event_author ) {
+		if ( 5 === (int) $event->event_approved && wp_get_current_user()->ID !== (int) $event->event_author ) {
 			continue;
 		}
 		$object = mc_event_object( $event );
@@ -668,7 +668,7 @@ function mc_get_first_event( $id ) {
 			$return_event = false;
 		}
 	}
-	if ( $return_event->event_approved === 5 && wp_get_current_user()->ID !== $return_event->event_author ) {
+	if ( 5 === $return_event->event_approved && wp_get_current_user()->ID !== $return_event->event_author ) {
 		return false;
 	}
 
