@@ -570,3 +570,55 @@ function mc_transition_location( $location_id, $location_post ) {
 		delete_post_meta( $location_post, '_mc_location_id' );
 	}
 }
+
+/**
+ * Migrate event accessibility from database to taxonomy.
+ */
+function mc_migrate_event_accessibility() {
+	global $wpdb;
+	$options = mc_event_access();
+	// Add terms.
+	foreach ( $options as $key => $value ) {
+		$term = wp_insert_term( $value, 'mc-event-access' );
+		if ( $term && ! is_wp_error( $term ) ) {
+			update_term_meta( $term['term_id'], '_original_key', $key );
+		}
+	}
+	// Get all events with a value saved for accessibility.
+	// To do: set this up as iterated event in action-scheduler.
+	$events = get_posts(
+		array(
+			'post_type'      => 'mc-events',
+			'meta_query'     => array(
+				array(
+					array(
+						'key'     => '_mc_event_access',
+						'value'   => '',
+						'compare' => '!=',
+					),
+				),
+			),
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		)
+	);
+	// Iterate events and save meta data as taxonomy data.
+	foreach ( $events as $event ) {
+		$access = get_post_meta( $event, '_mc_event_access', true );
+		if ( is_array( $access ) ) {
+			$terms = array();
+			foreach ( $access as $type ) {
+				$terms[] = $type;
+			}
+			wp_set_object_terms( $event, $terms, 'mc-event-access' );
+		}
+	}
+}
+
+add_action( 'admin_notices', 'mc_test_migrate' );
+function mc_test_migrate() {
+	if ( isset( $_GET['test'] ) && '1' === $_GET['test'] ) {
+		$output = mc_migrate_event_accessibility();
+		wp_admin_notice( $output );
+	}
+}

@@ -1200,7 +1200,7 @@ function my_calendar_check() {
 		if ( $my_calendar_exists ) {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '3.1.13', '3.3.0', '3.4.0', '3.5.0' );
+			$valid_upgrades = array( '3.1.13', '3.3.0', '3.4.0', '3.5.0', '3.7.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $old_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -1240,6 +1240,9 @@ function mc_do_upgrades( $upgrade_path ) {
 	}
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.7.0': // Date TBD.
+				mc_migrate_event_accessibility();
+				break;
 			case '3.5.0': // 2024-05-05
 				// Need to set card display settings. TODO.
 				$options = get_option( 'my_calendar_options' );

@@ -119,7 +119,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 				set_post_thumbnail( $post_id, $attachment_id );
 			}
 		}
-		// Set location access.
+		// Set location access. 'event_access' is the event table's representation of the location access choices.
 		$access       = ( isset( $post['event_access'] ) ) ? $post['event_access'] : array();
 		$access_terms = implode( ',', array_values( $access ) );
 		mc_update_event( 'event_access', $access_terms, $event_id, '%s' );
