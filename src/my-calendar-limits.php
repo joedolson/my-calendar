@@ -314,7 +314,6 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
  * @return string limits to add to query
  */
 function mc_access_limit( $access ) {
-	global $wpdb;
 	$options      = mc_event_access();
 	$format       = ( isset( $options[ $access ] ) ) ? esc_sql( $options[ $access ] ) : false;
 	$limit_string = ( $format ) ? "AND event_access LIKE '%$format%'" : '';
