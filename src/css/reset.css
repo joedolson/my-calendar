@@ -1490,10 +1490,6 @@ body.mc-no-scroll {
 	padding: 16px;
 }
 
-.my-calendar-modal #mc-modal-content > * {
-	margin: 0 0 24px;
-}
-
 .my-calendar-modal-overlay[data-background-click="disabled"] {
   cursor: auto;
 }
