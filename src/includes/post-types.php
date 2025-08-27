@@ -382,6 +382,27 @@ function mc_taxonomies() {
 				'rewrite'      => array( 'slug' => $slug ),
 			)
 		);
+		/**
+		 * Filter event access taxonomy slug. Default 'mc-event-access'.
+		 *
+		 * @hook mc_event_access_slug
+		 *
+		 * @param {string} $slug Default slug.
+		 *
+		 * @return {string}
+		 */
+		$slug = apply_filters( 'mc_event_access_slug', 'mc-event-access' );
+		register_taxonomy(
+			'mc-event-access',
+			// Internal name = machine-readable taxonomy name.
+			array( $key ),
+			array(
+				'hierarchical' => false,
+				'label'        => __( 'Event Accessibility', 'my-calendar' ),
+				'query_var'    => true,
+				'rewrite'      => array( 'slug' => $slug ),
+			)
+		);
 	}
 }
 
