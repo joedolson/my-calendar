@@ -1242,6 +1242,7 @@ function mc_do_upgrades( $upgrade_path ) {
 		switch ( $upgrade ) {
 			case '3.7.0': // Date TBD.
 				mc_migrate_event_accessibility();
+				mc_migrate_location_accessibility();
 				break;
 			case '3.5.0': // 2024-05-05
 				// Need to set card display settings. TODO.

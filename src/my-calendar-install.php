@@ -576,14 +576,10 @@ function mc_transition_location( $location_id, $location_post ) {
  * Migrate event accessibility from database to taxonomy.
  */
 function mc_migrate_event_accessibility() {
-	global $wpdb;
 	$options = mc_event_access();
 	// Add terms.
-	foreach ( $options as $key => $value ) {
-		$term = wp_insert_term( $value, 'mc-event-access' );
-		if ( $term && ! is_wp_error( $term ) ) {
-			update_term_meta( $term['term_id'], '_original_key', $key );
-		}
+	foreach ( $options as $value ) {
+		wp_insert_term( $value, 'mc-event-access' );
 	}
 	// Get all events with a value saved for accessibility.
 	// To do: set this up as iterated event in action-scheduler.
@@ -621,5 +617,40 @@ function mc_migrate_event_accessibility() {
 			}
 			wp_set_object_terms( $event, $terms, 'mc-event-access' );
 		}
+	}
+}
+
+/**
+ * Migrate location accessibility from database to taxonomy.
+ */
+function mc_migrate_location_accessibility() {
+	$options = mc_location_access();
+	// Add terms.
+	foreach ( $options as $value ) {
+		wp_insert_term( $value, 'mc-location-access' );
+	}
+	// Get all locations with a value saved for accessibility.
+	global $wpdb;
+	$locations = $wpdb->get_results( 'SELECT location_id, location_access FROM ' . my_calendar_locations_table() );
+	// Iterate locations and save meta data as taxonomy data.
+	foreach ( $locations as $location ) {
+		$access  = unserialize( $location->location_access );
+		$post_id = mc_get_location_post( $location->location_id, false );
+		if ( is_array( $access ) ) {
+			$terms = array();
+			foreach ( $access as $type ) {
+				$value   = $options[ $type ];
+				$terms[] = $value;
+			}
+			wp_set_object_terms( $post_id, $terms, 'mc-location-access' );
+		}
+	}
+}
+
+add_action( 'admin_notices', 'mc_test_migrate' );
+function mc_test_migrate() {
+	if ( isset( $_GET['test'] ) && '1' === $_GET['test'] ) {
+		$output = mc_migrate_location_accessibility();
+		wp_admin_notice( $output );
 	}
 }
