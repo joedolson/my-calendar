@@ -170,6 +170,7 @@ require __DIR__ . '/my-calendar-install.php';
 require __DIR__ . '/my-calendar-settings.php';
 require __DIR__ . '/my-calendar-migrate.php';
 require __DIR__ . '/my-calendar-categories.php';
+require __DIR__ . '/my-calendar-access-terms.php';
 require __DIR__ . '/my-calendar-locations.php';
 require __DIR__ . '/my-calendar-location-manager.php';
 require __DIR__ . '/my-calendar-event-editor.php';
@@ -469,6 +470,7 @@ function my_calendar_menu() {
 			$locations = add_submenu_page( 'my-calendar', __( 'Locations', 'my-calendar' ), __( 'Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
 			add_action( "load-$locations", 'mc_location_help_tab' );
 			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
+			add_submenu_page( 'my-calendar', __( 'Access Terms', 'my-calendar' ), __( 'Access Terms', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-access-terms', 'my_calendar_manage_access_terms' );
 		}
 		// The Design screen is available with any of these permissions.
 		$permission = 'manage_options';

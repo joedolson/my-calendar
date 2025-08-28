@@ -171,28 +171,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
 			if ( mc_output_is_visible( 'access', $type, $event ) ) {
-				$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
-				$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
-				$sublevel       = 'h4';
-				if ( 'single' === $type ) {
-					$sublevel = 'h2';
-				}
-				/**
-				 * Filter subheading levels inside event content.
-				 *
-				 * @hook mc_subheading_level
-				 *
-				 * @param {string} $el Element name. Default 'h4' in grouped templates, h2 on single templates.
-				 * @param {string} $type View type.
-				 * @param {string} $time View timeframe.
-				 * @param {string} $template Current template.
-				 *
-				 * @return {string}
-				 */
-				$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $time, $template );
-				if ( $access_content ) {
-					$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
-				}
+				$access = mc_template_access( $event, $type );
 			}
 			if ( 'true' === $display_gcal || mc_output_is_visible( 'gcal', $type, $event ) ) {
 				$gcal = "	<p class='gcal'>" . mc_draw_template( $data['tags'], '{gcal_link}' ) . '</p>';

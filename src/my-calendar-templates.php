@@ -535,7 +535,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 * @return {array} Template tag array.
 	 */
 	$e           = apply_filters( 'mc_filter_image_data', $e, $event );
-	$e['access'] = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+	$notes       = get_post_meta( $event->event_post, '_mc_event_access', true );
+	if ( is_array( $notes ) ) {
+		$notes = $notes['notes'];
+	}
+	$e['notes']  = $notes;
+	$terms       = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+	$term_list   = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+	$e['access'] = $term_list;
 
 	// Date & time fields.
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
@@ -2095,23 +2102,24 @@ function mc_template_host( $data, $type = 'calendar' ) {
  */
 function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 	$event  = $data->event;
-	$access = '';
+	$output = '';
 	if ( mc_output_is_visible( 'access', $type, $event ) ) {
-		if ( $text ) {
-			$access_heading = $text;
-		} else {
-			$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
-		}
-		$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+		$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
+		$access_heading = ( $text ) ? $text : $access_heading;
+		$access_data    = get_post_meta( $event->event_post, '_mc_event_access', true );
+		$notes          = ( is_array( $access_data ) ) ? $access_data['notes'] : $access_data;
 		$sublevel       = 'h2';
 		if ( 'mini' === $type || 'list' === $type || 'list' === $data->time ) {
-			// In the mini calendar, levels are reduced one because there are multiple events.
-			if ( 'list' === $data->time ) {
-				$sublevel = 'h4';
-			} else {
-				$sublevel = 'h3';
-			}
+			// In some views, levels are reduced one because there are multiple events.
+			$sublevel = ( 'list' === $data->time ) ? 'h4' : 'h3';
 		}
+		$terms     = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+		$term_list = wp_list_pluck( $terms, 'name' );
+		$access    = array();
+		foreach ( $term_list as $term ) {
+			$access[] = '<li class="' . esc_attr( $term->slug ) . '"><span>' . esc_html( $term->name ) . '</span></li>';
+		}
+		$access_content = '<ul class="mc-access">' . implode( '', $access ) . '</ul>';
 		/**
 		 * Filter subheading levels inside event content.
 		 *
@@ -2126,12 +2134,17 @@ function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 		 */
 		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $data->time, 'php' );
 		if ( $access_content ) {
-			$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
+			$output = '
+			<div class="mc-accessibility">
+				<' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>
+				' . $access_content . '
+				<p>' . $notes . '</p>
+			</div>';
 		}
-		$access = ( '' !== $access ) ? '<div class="mc-access-information">' . $access . '</div>' : '';
+		$output = ( '' !== $output ) ? '<div class="mc-access-information">' . $output . '</div>' : '';
 	}
 
-	echo wp_kses_post( $access );
+	echo wp_kses_post( $output );
 }
 
 /**

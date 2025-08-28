@@ -615,11 +615,3 @@ function mc_migrate_event_accessibility() {
 		}
 	}
 }
-
-add_action( 'admin_notices', 'mc_test_migrate' );
-function mc_test_migrate() {
-	if ( isset( $_GET['test'] ) && '1' === $_GET['test'] ) {
-		$output = mc_migrate_event_accessibility();
-		wp_admin_notice( $output );
-	}
-}

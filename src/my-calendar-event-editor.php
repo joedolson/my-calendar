@@ -163,13 +163,23 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	}
 	update_post_meta( $post_id, '_mc_event_shortcode', $data['shortcode'] );
 	// Event access characteristics.
-	$events_access = '';
+	$events_access_notes = '';
+	if ( isset( $post['events_access_notes'] ) ) {
+		$events_access_notes = sanitize_text_field( wp_unslash( $post['events_access_notes'] ) );
+	} else {
+		// My Calendar Rest API.
+		if ( isset( $post['data'] ) && isset( $post['data']['events_access_notes'] ) ) {
+			$events_access_notes = $post['data']['events_access_notes'];
+		}
+	}
 	if ( isset( $post['events_access'] ) ) {
-		$events_access = map_deep( $post['events_access'], 'sanitize_text_field' );
+		$selected_access = map_deep( $post['events_access'], 'absint' );
+		wp_set_object_terms( $post_id, $selected_access, 'mc-event-access' );
 	} else {
 		// My Calendar Rest API.
 		if ( isset( $post['data'] ) && isset( $post['data']['events_access'] ) ) {
-			$events_access = $post['data']['events_access'];
+			$selected_access = map_deep( $post['data']['events_access'], 'absint' );
+			wp_set_object_terms( $post_id, $selected_access, 'mc-event-access' );
 		}
 	}
 	$time_label = '';
@@ -193,7 +203,7 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 		}
 	}
 	// Event access characteristics.
-	update_post_meta( $post_id, '_mc_event_access', $events_access );
+	update_post_meta( $post_id, '_mc_event_access', $events_access_notes );
 	update_post_meta( $post_id, '_event_time_label', $time_label );
 	update_post_meta( $post_id, '_event_same_day', $same_day );
 
@@ -2082,37 +2092,16 @@ function mc_event_access() {
  * @param string $label Primary label for fields.
  */
 function mc_event_accessibility( $form, $data, $label ) {
-	$note_value    = '';
-	$events_access = array();
-	$class         = ( is_admin() ) ? 'screen-reader-text' : 'mc-event-access';
-	$form         .= "
+	$class = ( is_admin() ) ? 'screen-reader-text' : 'mc-event-access';
+	$form .= "
 		<fieldset class='accessibility'>
 			<legend class='$class'>$label</legend>
 			<ul class='accessibility-features checkboxes'>";
-	$access        = mc_event_access();
-	if ( ! empty( $data ) ) {
-		if ( property_exists( $data, 'event_post' ) ) {
-			$events_access = get_post_meta( $data->event_post, '_mc_event_access', true );
-		} else {
-			$events_access = array();
-		}
-	}
-	foreach ( $access as $k => $a ) {
-		$id      = "events_access_$k";
-		$label   = $a;
-		$checked = '';
-		if ( is_array( $events_access ) ) {
-			$checked = ( in_array( $k, $events_access, true ) || in_array( $a, $events_access, true ) ) ? ' checked="checked"' : '';
-		}
-		$item  = sprintf( '<li><input type="checkbox" id="%1$s" name="events_access[]" value="%4$s" class="checkbox" %2$s /> <label for="%1$s">%3$s</label></li>', esc_attr( $id ), $checked, esc_html( $label ), esc_attr( $a ) );
-		$form .= $item;
-	}
-	if ( isset( $events_access['notes'] ) ) {
-		$note_value = esc_attr( $events_access['notes'] );
-	}
-	$form .= '<li class="events_access_notes"><label for="events_access_notes">' . __( 'Notes', 'my-calendar' ) . '</label> <input type="text" id="events_access_notes" name="events_access[notes]" value="' . esc_attr( $note_value ) . '" /></li>';
+	$form .= mc_admin_access_term_list( $data );
+	$notes = property_exists( $data, 'event_post' ) ? get_post_meta( $data->event_post, '_mc_event_access', true ) : '';
+	$form .= '<li class="events_access_notes"><label for="events_access_notes">' . __( 'Notes', 'my-calendar' ) . '</label> <input type="text" id="events_access_notes" name="events_access_notes" value="' . esc_attr( $notes ) . '" /></li>';
 	$form .= '</ul>
-	</fieldset>';
+		</fieldset>';
 
 	return $form;
 }
