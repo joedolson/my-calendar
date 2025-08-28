@@ -2113,10 +2113,9 @@ function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 			// In some views, levels are reduced one because there are multiple events.
 			$sublevel = ( 'list' === $data->time ) ? 'h4' : 'h3';
 		}
-		$terms     = wp_get_object_terms( $event->event_post, 'mc-event-access' );
-		$term_list = wp_list_pluck( $terms, 'name' );
-		$access    = array();
-		foreach ( $term_list as $term ) {
+		$terms  = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+		$access = array();
+		foreach ( $terms as $term ) {
 			$access[] = '<li class="' . esc_attr( $term->slug ) . '"><span>' . esc_html( $term->name ) . '</span></li>';
 		}
 		$access_content = '<ul class="mc-access">' . implode( '', $access ) . '</ul>';
