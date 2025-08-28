@@ -534,8 +534,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @return {array} Template tag array.
 	 */
-	$e           = apply_filters( 'mc_filter_image_data', $e, $event );
-	$notes       = get_post_meta( $event->event_post, '_mc_event_access', true );
+	$e     = apply_filters( 'mc_filter_image_data', $e, $event );
+	$notes = get_post_meta( $event->event_post, '_mc_event_access', true );
 	if ( is_array( $notes ) ) {
 		$notes = $notes['notes'];
 	}

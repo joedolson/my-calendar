@@ -59,7 +59,7 @@ function my_calendar_manage_access_terms() {
 		}
 
 		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-			$add_default_access         = (int) $_GET['default'];
+			$add_default_access = (int) $_GET['default'];
 			mc_update_default_access_terms( $add_default_access );
 			mc_show_notice( __( 'Term Added to Default Event Access Terms', 'my-calendar' ), true, false, 'success' );
 		}
@@ -81,7 +81,7 @@ function my_calendar_manage_access_terms() {
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['access_term_id'] ) && 'delete' === $_GET['mode'] ) {
 			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 			if ( $mcnonce ) {
-				$term_id  = (int) $_GET['access_term_id'];
+				$term_id = (int) $_GET['access_term_id'];
 				$results = wp_delete_term( $term_id, 'mc-event-access' );
 				if ( $results ) {
 					// handle deleted terms.
@@ -98,13 +98,11 @@ function my_calendar_manage_access_terms() {
 			mc_edit_access_term_form( 'edit', $cur_cat );
 		} elseif ( isset( $post['mode'] ) && isset( $post['access_term_id'] ) && isset( $post['access_term_name'] ) && 'edit' === $post['mode'] ) {
 			// This term is in the set, but not checked.
-			print_r( $post );
-			print_r( $default_access );
-			if ( in_array( (int) $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term' ] ) ) {
+			if ( in_array( (int) $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term'] ) ) {
 				mc_update_default_access_terms( (int) $post['access_term_id'], 'remove' );
 			}
 			// This term is checked, but not in the set.
-			if ( ! in_array( (int) $post['access_term_id'], $default_access, true ) && isset( $post['mc_default_access_term' ] ) ) {
+			if ( ! in_array( (int) $post['access_term_id'], $default_access, true ) && isset( $post['mc_default_access_term'] ) ) {
 				mc_update_default_access_terms( $post['access_term_id'] );
 			}
 
@@ -274,7 +272,7 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false ) {
  */
 function mc_manage_access_terms() {
 	$default_access_term = mc_get_option( 'default_access_terms' );
-	$args  = array(
+	$args                = array(
 		'taxonomy'   => 'mc-event-access',
 		'hide_empty' => false,
 	);
@@ -285,12 +283,8 @@ function mc_manage_access_terms() {
 		<table class="widefat striped page fixed mc-responsive-table mc-access-terms" id="my-calendar-admin-table">
 		<thead>
 		<tr>
-			<th scope="col">
-				<?php esc_html_e( 'ID', 'my-calendar' ); ?>
-			</th>
-			<th scope="col">
-				<?php esc_html_e( 'Accessibility Service', 'my-calendar' );	?>
-			</th>
+			<th scope="col"><?php esc_html_e( 'ID', 'my-calendar' ); ?></th>
+			<th scope="col"><?php esc_html_e( 'Accessibility Service', 'my-calendar' ); ?></th>
 		</tr>
 		</thead>
 		<?php
