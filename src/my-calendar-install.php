@@ -608,6 +608,14 @@ function mc_migrate_event_accessibility() {
 		$access = get_post_meta( $event, '_mc_event_access', true );
 		if ( is_array( $access ) ) {
 			$terms = array();
+			$notes = isset( $access['notes'] ) ? $access['notes'] : '';
+			if ( $notes ) {
+				$notes = sanitize_textarea_field( $notes );
+				update_post_meta( $event, '_mc_event_access', $notes );
+			} else {
+				delete_post_meta( $event, '_mc_event_access' );
+			}
+			unset( $access['notes'] );
 			foreach ( $access as $type ) {
 				$terms[] = $type;
 			}
