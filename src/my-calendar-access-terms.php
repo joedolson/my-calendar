@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return bool true if added; false if not.
  */
 function mc_update_default_access_terms( $term_id, $action = 'add' ) {
+	$term_id              = (int) $term_id;
 	$default_access_terms = (array) mc_get_option( 'default_access_terms', array() );
 	if ( ! in_array( $term_id, $default_access_terms, true ) && 'add' === $action ) {
 		$default_access_terms[] = $term_id;
@@ -30,7 +31,7 @@ function mc_update_default_access_terms( $term_id, $action = 'add' ) {
 		return true;
 	}
 	if ( in_array( $term_id, $default_access_terms, true ) && 'remove' === $action ) {
-		$key = array_search( $term_id, $default_access_terms );
+		$key = array_search( $term_id, $default_access_terms, true );
 		unset( $default_access_terms[ $key ] );
 		mc_update_option( 'default_access_terms', $default_access_terms );
 
@@ -272,7 +273,8 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false ) {
  */
 function mc_manage_access_terms() {
 	$default_access_term = mc_get_option( 'default_access_terms' );
-	$args                = array(
+
+	$args  = array(
 		'taxonomy'   => 'mc-event-access',
 		'hide_empty' => false,
 	);
