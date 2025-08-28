@@ -22,15 +22,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return bool true if added; false if not.
  */
 function mc_update_default_access_terms( $term_id, $action = 'add' ) {
-	$default_access_terms   = (array) mc_get_option( 'default_access_terms', array() );
-	if ( ! in_array( $term_id, $default_access_terms ) && 'add' === $action ) {
+	$default_access_terms = (array) mc_get_option( 'default_access_terms', array() );
+	if ( ! in_array( $term_id, $default_access_terms, true ) && 'add' === $action ) {
 		$default_access_terms[] = $term_id;
 		mc_update_option( 'default_access_terms', $default_access_terms );
 
 		return true;
 	}
-	if ( in_array( $term_id, $default_access_terms ) && 'remove' === $action ) {
-		unset( $default_access_terms[ $term_id ] );
+	if ( in_array( $term_id, $default_access_terms, true ) && 'remove' === $action ) {
+		$key = array_search( $term_id, $default_access_terms );
+		unset( $default_access_terms[ $key ] );
 		mc_update_option( 'default_access_terms', $default_access_terms );
 
 		return true;
@@ -97,11 +98,13 @@ function my_calendar_manage_access_terms() {
 			mc_edit_access_term_form( 'edit', $cur_cat );
 		} elseif ( isset( $post['mode'] ) && isset( $post['access_term_id'] ) && isset( $post['access_term_name'] ) && 'edit' === $post['mode'] ) {
 			// This term is in the set, but not checked.
-			if ( in_array( $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term' ] ) ) {
-				mc_update_default_access_terms( $post['access_term_id'], 'remove' );
+			print_r( $post );
+			print_r( $default_access );
+			if ( in_array( (int) $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term' ] ) ) {
+				mc_update_default_access_terms( (int) $post['access_term_id'], 'remove' );
 			}
 			// This term is checked, but not in the set.
-			if ( ! in_array( $post['access_term_id'], $default_access, true ) && isset( $post['mc_default_access_term' ] ) ) {
+			if ( ! in_array( (int) $post['access_term_id'], $default_access, true ) && isset( $post['mc_default_access_term' ] ) ) {
 				mc_update_default_access_terms( $post['access_term_id'] );
 			}
 
