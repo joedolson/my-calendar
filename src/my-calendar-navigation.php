@@ -552,7 +552,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $s
 
 	$next_year   = $cur_year + 1;
 	$mc_next     = mc_get_option( 'next_events' );
-	$next_events = ( '' === $mc_next ) ? '<span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . ' </span>' : stripslashes( $mc_next );
+	$next_events = ( '' === $mc_next ) ? '<span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . ' </span>' : wp_unslash( $mc_next );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 12 === (int) $cur_month ) {
 			$month = 1;
@@ -665,7 +665,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1, $s
 
 	$last_year       = $cur_year - 1;
 	$mc_previous     = mc_get_option( 'previous_events' );
-	$previous_events = ( '' === $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . ' </span>' : stripslashes( $mc_previous );
+	$previous_events = ( '' === $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . ' </span>' : wp_unslash( $mc_previous );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 1 === (int) $cur_month ) {
 			$month = 12;

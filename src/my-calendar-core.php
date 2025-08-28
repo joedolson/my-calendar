@@ -1690,7 +1690,7 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 			if ( is_array( $data ) ) {
 				$data = implode( '|', $data );
 			}
-			$query_string .= $key . '=' . urlencode( stripslashes( (string) $data ) ) . '&';
+			$query_string .= $key . '=' . urlencode( wp_unslash( (string) $data ) ) . '&';
 		}
 		if ( method_exists( 'Akismet', 'http_post' ) ) {
 			$response = Akismet::http_post( $query_string, 'comment-check' );
@@ -2215,7 +2215,7 @@ $plugins_string
 			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 				wp_die( 'My Calendar: Security check failed' );
 			}
-			$request = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( $_POST['support_request'] ) : false;
+			$request = ( ! empty( $_POST['support_request'] ) ) ? sanitize_textarea_field( wp_unslash( $_POST['support_request'] ) ) : false;
 			$subject = 'My Calendar Pro support request.';
 			$message = $request . "\n\n" . $data;
 			// Get the site domain and get rid of www. from pluggable.php.
@@ -2246,7 +2246,7 @@ $plugins_string
 			<code><?php echo esc_html( __( 'From:', 'my-calendar' ) . " \"$current_user->display_name\" &lt;$current_user->user_email&gt;" ); ?></code>
 			</p>
 			<p>
-				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'><?php echo esc_textarea( stripslashes( $request ) ); ?></textarea>
+				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'><?php echo esc_textarea( wp_unslash( $request ) ); ?></textarea>
 			</p>
 			<p>
 				<input type='submit' value='<?php echo esc_attr( __( 'Send Support Request', 'my-calendar' ) ); ?>' name='mc_support' class='button-primary' />
@@ -2450,7 +2450,7 @@ function mc_the_title( $title, $post_id = null ) {
 				$icon = '';
 			}
 			if ( is_object( $event ) ) {
-				$event_title = stripslashes( $event->event_title );
+				$event_title = wp_unslash( $event->event_title );
 				if ( $event_title !== $title ) {
 					$title = $event_title;
 				}

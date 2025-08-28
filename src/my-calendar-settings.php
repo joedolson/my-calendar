@@ -153,7 +153,7 @@ function mc_settings_field( $args = array() ) {
 		} else {
 			$hold = $default;
 		}
-		$value = ( '' !== $value ) ? esc_attr( stripslashes( $value ) ) : $hold;
+		$value = ( '' !== $value ) ? esc_attr( wp_unslash( $value ) ) : $hold;
 	} else {
 		$value = ( ! empty( $value ) ) ? (array) $value : $default;
 	}
@@ -680,12 +680,12 @@ function my_calendar_settings() {
 
 	// Pull templates for passing into functions.
 	$templates              = mc_get_option( 'templates' );
-	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
-	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( stripslashes( $templates['title_solo'] ) ) : '';
-	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( stripslashes( $templates['title_list'] ) ) : '';
-	$mc_title_template_card = ( isset( $templates['title_card'] ) ) ? esc_attr( stripslashes( $templates['title_card'] ) ) : '';
-	$mc_details_label       = ( isset( $templates['label'] ) ) ? esc_attr( stripslashes( $templates['label'] ) ) : '';
-	$mc_link_label          = ( isset( $templates['link'] ) ) ? esc_attr( stripslashes( $templates['link'] ) ) : '';
+	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( wp_unslash( $templates['title'] ) ) : '';
+	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( wp_unslash( $templates['title_solo'] ) ) : '';
+	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( wp_unslash( $templates['title_list'] ) ) : '';
+	$mc_title_template_card = ( isset( $templates['title_card'] ) ) ? esc_attr( wp_unslash( $templates['title_card'] ) ) : '';
+	$mc_details_label       = ( isset( $templates['label'] ) ) ? esc_attr( wp_unslash( $templates['label'] ) ) : '';
+	$mc_link_label          = ( isset( $templates['link'] ) ) ? esc_attr( wp_unslash( $templates['link'] ) ) : '';
 	?>
 
 	<div class="wrap my-calendar-admin mc-settings-page" id="mc_settings">
@@ -2194,7 +2194,7 @@ function mc_location_controls() {
 				foreach ( $mc_location_controls[ $field ] as $key => $value ) {
 					$key        = esc_html( trim( $key ) );
 					$value      = esc_html( trim( $value ) );
-					$locations .= stripslashes( "$key,$value" ) . PHP_EOL;
+					$locations .= wp_unslash( "$key,$value" ) . PHP_EOL;
 				}
 			}
 			if ( '' !== trim( $locations ) ) {

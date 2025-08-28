@@ -484,7 +484,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							}
 							$color = wp_strip_all_tags( $color );
 							if ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) {
-								$cat_name = stripslashes( $cur_cat->category_name );
+								$cat_name = wp_unslash( $cur_cat->category_name );
 							} else {
 								$cat_name = '';
 							}
@@ -880,7 +880,7 @@ function mc_manage_categories() {
 		</thead>
 		<?php
 		foreach ( $categories as $cat ) {
-			$cat_name = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
+			$cat_name = wp_unslash( strip_tags( $cat->category_name, mc_strip_tags() ) );
 			?>
 		<tr>
 			<th scope="row"><?php echo absint( $cat->category_id ); ?></th>
@@ -1118,7 +1118,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					$selected = ( null === $data ) ? '' : ' checked="checked"';
 				}
 			}
-			$category_name = wp_strip_all_tags( stripslashes( trim( $cat->category_name ) ) );
+			$category_name = wp_strip_all_tags( wp_unslash( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
 				$icon = mc_category_icon( $cat );

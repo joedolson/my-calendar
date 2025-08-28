@@ -430,6 +430,7 @@ function mc_default_options() {
 		'location_cpt_base'            => 'mc-locations',
 		'uri_query'                    => '',
 		'default_category'             => '',
+		'default_access_terms'         => array(),
 		'skip_holidays_category'       => '',
 		'hide_icons'                   => '',
 		'use_list_template'            => '',

@@ -600,7 +600,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
 				// wpt_post_to_twiter was changed to wpt_post_to_service on 12.29.2024.
 				if ( function_exists( 'wpt_post_to_service' ) && isset( $post['mc_twitter'] ) && '' !== trim( $post['mc_twitter'] ) ) {
-					wpt_post_to_service( stripslashes( $post['mc_twitter'] ) );
+					wpt_post_to_service( wp_unslash( $post['mc_twitter'] ) );
 				}
 				$event_ids = mc_get_occurrences( $event_id );
 				if ( ! empty( $event_ids ) ) {
@@ -1123,7 +1123,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			if ( $show_block ) {
 				global $current_screen;
 				// Because wp_editor cannot return a value, event_desc fields cannot be filtered if its enabled.
-				$value = ( $has_data ) ? stripslashes( $data->event_desc ) : '';
+				$value = ( $has_data ) ? wp_unslash( $data->event_desc ) : '';
 				/**
 				 * Filter the editor to use a custom content editor field.
 				 *
@@ -1143,7 +1143,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 						$return = '<div class="event_description">
 										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
 										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
-										<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( stripslashes( $value ) ) . '</textarea>
+										<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( wp_unslash( $value ) ) . '</textarea>
 									</div>';
 					} else {
 						echo '
@@ -1152,7 +1152,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 						if ( user_can_richedit() ) {
 							wp_editor( $value, 'content', array( 'textarea_rows' => 20 ) );
 						} else {
-							echo '<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+							echo '<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( wp_unslash( $value ) ) . '</textarea>';
 						}
 						echo '</div>';
 					}
@@ -1164,7 +1164,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$value  = ( $has_data ) ? $data->event_short : '';
 				$return = '
 				<p>
-					<label for="e_short">' . __( 'Excerpt', 'my-calendar' ) . '</label><br /><textarea id="e_short" name="event_short" rows="3" cols="80">' . esc_textarea( stripslashes( $value ) ) . '</textarea>
+					<label for="e_short">' . __( 'Excerpt', 'my-calendar' ) . '</label><br /><textarea id="e_short" name="event_short" rows="3" cols="80">' . esc_textarea( wp_unslash( $value ) ) . '</textarea>
 				</p>';
 			}
 			break;
@@ -1550,7 +1550,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	<div class="postbox">
 		<?php
 			// Translators: Event title.
-			$text = ( 'edit' === $mode ) ? sprintf( __( 'Editing Event: "%s"', 'my-calendar' ), stripslashes( $data->event_title ) ) : __( 'Add Event', 'my-calendar' );
+			$text = ( 'edit' === $mode ) ? sprintf( __( 'Editing Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) ) : __( 'Add Event', 'my-calendar' );
 		?>
 		<h2><?php echo esc_html( $text ); ?></h2>
 		<div class="inside">
@@ -1623,7 +1623,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 						?>
 						<p class='mc-twitter'>
 							<label for='mc_twitter'><span class="dashicons dashicons-share" aria-hidden="true"></span> <?php esc_html_e( 'Post a Status Update (via XPoster)', 'my-calendar' ); ?></label><br/>
-							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter' data-allowed="280"><?php echo esc_textarea( stripslashes( apply_filters( 'mc_twitter_text', '', $data ) ) ); ?></textarea>
+							<textarea cols='70' rows='2' id='mc_twitter' name='mc_twitter' data-allowed="280"><?php echo esc_textarea( wp_unslash( apply_filters( 'mc_twitter_text', '', $data ) ) ); ?></textarea>
 						</p>
 						<?php
 					}
@@ -1913,7 +1913,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 				<option value="none">' . $text . '</option>';
 			foreach ( $locs as $loc ) {
 				if ( is_object( $loc ) ) {
-					$base_loc = strip_tags( stripslashes( $loc->location_label ), mc_strip_tags() );
+					$base_loc = strip_tags( wp_unslash( $loc->location_label ), mc_strip_tags() );
 					if ( ! $event_location ) {
 						$selected = ( is_numeric( mc_get_option( 'default_location' ) ) && (int) mc_get_option( 'default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					} else {
@@ -1964,7 +1964,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 			// translators: 1) URL to create a new location with this data; 2) URL to update the existing location.
 			$current_location .= '<p>' . sprintf( __( 'Some of the location data saved in the event is different from the stored location. <a href="%1$s">Create a new location</a> or <a href="%2$s">update the saved location</a>?', 'my-calendar' ), $add_url, $merge_url ) . '</p><ul class="checkboxes">';
 			foreach ( $differences as $key => $value ) {
-				$current_location .= '<li><strong>' . ucfirst( str_replace( 'location_', '', $key ) ) . '</strong><br /><em>Location:</em> ' . stripslashes( esc_html( $value[0] ) ) . '<br /><em>Event:</em> ' . stripslashes( esc_html( $value[1] ) ) . '</li>';
+				$current_location .= '<li><strong>' . ucfirst( str_replace( 'location_', '', $key ) ) . '</strong><br /><em>Location:</em> ' . wp_unslash( esc_html( $value[0] ) ) . '<br /><em>Event:</em> ' . wp_unslash( esc_html( $value[1] ) ) . '</li>';
 			}
 			$current_location .= '</ul>';
 		}

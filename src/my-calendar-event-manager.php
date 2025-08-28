@@ -253,7 +253,7 @@ function my_calendar_manage() {
 						?>
 						<input type="hidden" name="event_id" value="<?php echo esc_attr( $event_id ); ?>"/>
 						<?php
-							$event_info = ' &quot;' . stripslashes( $result[0]['event_title'] ) . "&quot; $instance_date";
+							$event_info = ' &quot;' . wp_unslash( $result[0]['event_title'] ) . "&quot; $instance_date";
 							// Translators: Title & date of event to delete.
 							$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
 						?>
@@ -956,7 +956,7 @@ function mc_admin_events_table( $events ) {
 						<?php
 					}
 					echo ( 'spam' === $spam ) ? '<strong>' . esc_html__( 'Possible spam', 'my-calendar' ) . ':</strong> ' : '';
-					echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( stripslashes( $event->event_title ) ) . '</span>';
+					echo '<span id="event' . absint( $event->event_id ) . '">' . esc_html( wp_unslash( $event->event_title ) ) . '</span>';
 					if ( $can_edit ) {
 						echo '</a>';
 						if ( '' !== $check ) {
@@ -1034,7 +1034,7 @@ function mc_admin_events_table( $events ) {
 					}
 					if ( '' !== $elabel ) {
 						?>
-					<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $filter ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( stripslashes( $elabel ) ); ?></a>
+					<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $filter ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( wp_unslash( $elabel ) ); ?></a>
 						<?php
 					}
 					?>

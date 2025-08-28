@@ -113,7 +113,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 							$after  = $matches[2][ $i ];
 							$format = $matches[3][ $i ];
 							if ( '' !== $format ) {
-								$value = date_i18n( stripslashes( $format ), strtotime( stripslashes( $value ) ) );
+								$value = date_i18n( wp_unslash( $format ), strtotime( wp_unslash( $value ) ) );
 							}
 							$value    = ( '' === (string) trim( $value ) ) ? '' : $before . $value . $after;
 							$search   = $matches[0][ $i ];
@@ -143,7 +143,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	 */
 	$template = apply_filters( 'mc_template', $template, $data, $meta_type, $event );
 
-	return stripslashes( trim( $template ) );
+	return wp_unslash( trim( $template ) );
 }
 
 /**
@@ -254,7 +254,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	}
 
 	$url        = $event->location_url;
-	$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
+	$map_label  = strip_tags( wp_unslash( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
 	$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
 	$map_string = str_replace( ' ', '+', $map_string );
 	if ( '0.000000' !== $event->location_longitude && '0.000000' !== $event->location_latitude && 'mapquest' !== $map_target ) {
@@ -401,17 +401,17 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$source  = 'location';
 	$the_map = mc_maplink( $event, 'url', $source );
 	$url     = esc_url( $event->location_url );
-	$label   = strip_tags( stripslashes( $event->location_label ), mc_strip_tags() );
-	$street  = strip_tags( stripslashes( $event->location_street ), mc_strip_tags() );
-	$street2 = strip_tags( stripslashes( $event->location_street2 ), mc_strip_tags() );
-	$city    = strip_tags( stripslashes( $event->location_city ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
-	$phone   = strip_tags( stripslashes( $event->location_phone ), mc_strip_tags() );
+	$label   = strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
+	$street  = strip_tags( wp_unslash( $event->location_street ), mc_strip_tags() );
+	$street2 = strip_tags( wp_unslash( $event->location_street2 ), mc_strip_tags() );
+	$city    = strip_tags( wp_unslash( $event->location_city ), mc_strip_tags() );
+	$state   = strip_tags( wp_unslash( $event->location_state ), mc_strip_tags() );
+	$state   = strip_tags( wp_unslash( $event->location_state ), mc_strip_tags() );
+	$zip     = strip_tags( wp_unslash( $event->location_postcode ), mc_strip_tags() );
+	$zip     = strip_tags( wp_unslash( $event->location_postcode ), mc_strip_tags() );
+	$country = strip_tags( wp_unslash( $event->location_country ), mc_strip_tags() );
+	$country = strip_tags( wp_unslash( $event->location_country ), mc_strip_tags() );
+	$phone   = strip_tags( wp_unslash( $event->location_phone ), mc_strip_tags() );
 	$loc_id  = absint( $event->location_id );
 	if ( ! $url && ! $label && ! $street && ! $street2 && ! $city && ! $state && ! $zip && ! $country && ! $phone ) {
 		return '';
@@ -631,8 +631,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// Category fields.
 	$e['cat_id']          = $event->event_category;
 	$e['category_id']     = $event->event_category;
-	$e['category']        = stripslashes( $event->category_name );
-	$e['ical_category']   = wp_strip_all_tags( stripslashes( $event->category_name ) );
+	$e['category']        = wp_unslash( $event->category_name );
+	$e['ical_category']   = wp_strip_all_tags( wp_unslash( $event->category_name ) );
 	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
 	$e['ical_categories'] = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category, 'text' ) : mc_get_categories( $event, 'text' );
 	$e['term']            = intval( $event->category_term );
@@ -656,17 +656,17 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// General text fields.
 	$title                     = mc_search_highlight( $event->event_title );
-	$e['title']                = $cancelled . stripslashes( $title );
-	$e['description']          = wpautop( stripslashes( $event->event_desc ) );
-	$e['description_raw']      = stripslashes( $event->event_desc );
-	$e['description_stripped'] = wp_strip_all_tags( stripslashes( $event->event_desc ) );
-	$e['shortdesc']            = wpautop( stripslashes( $event->event_short ) );
-	$e['shortdesc_raw']        = stripslashes( $event->event_short );
-	$e['shortdesc_stripped']   = wp_strip_all_tags( stripslashes( $event->event_short ) );
+	$e['title']                = $cancelled . wp_unslash( $title );
+	$e['description']          = wpautop( wp_unslash( $event->event_desc ) );
+	$e['description_raw']      = wp_unslash( $event->event_desc );
+	$e['description_stripped'] = wp_strip_all_tags( wp_unslash( $event->event_desc ) );
+	$e['shortdesc']            = wpautop( wp_unslash( $event->event_short ) );
+	$e['shortdesc_raw']        = wp_unslash( $event->event_short );
+	$e['shortdesc_stripped']   = wp_strip_all_tags( wp_unslash( $event->event_short ) );
 
 	// Registration fields.
 	$e['event_tickets']      = $event->event_tickets;
-	$e['event_registration'] = stripslashes( wp_kses_data( $event->event_registration ) );
+	$e['event_registration'] = wp_unslash( wp_kses_data( $event->event_registration ) );
 
 	// Links.
 	$templates  = mc_get_option( 'templates' );
@@ -684,8 +684,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e_template   = apply_filters( 'mc_details_template', $e_template, $event );
 	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
 	$replacements = array(
-		stripslashes( $e['title'] ),
-		stripslashes( ( $location ) ? $location->location_label : '' ),
+		wp_unslash( $e['title'] ),
+		wp_unslash( ( $location ) ? $location->location_label : '' ),
 		$event->category_color,
 		$event->category_icon,
 		$e['date'],
@@ -753,9 +753,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$map           = mc_maplink( $location, 'map', 'location' );
 		$map_url       = mc_maplink( $location, 'url', 'location' );
 		$map_gcal      = mc_maplink( $location, 'gcal', 'location' );
-		$e['location'] = stripslashes( $location->location_label );
-		$e['street']   = stripslashes( $location->location_street );
-		$e['street2']  = stripslashes( $location->location_street2 );
+		$e['location'] = wp_unslash( $location->location_label );
+		$e['street']   = wp_unslash( $location->location_street );
+		$e['street2']  = wp_unslash( $location->location_street2 );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
@@ -766,7 +766,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
+		$e['phone'] = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone ), 'phone' );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
@@ -777,13 +777,13 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ), 'phone2' );
-		$e['city']            = stripslashes( $location->location_city );
-		$e['state']           = stripslashes( $location->location_state );
-		$e['postcode']        = stripslashes( $location->location_postcode );
-		$e['country']         = stripslashes( $location->location_country );
+		$e['phone2']          = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone2 ), 'phone2' );
+		$e['city']            = wp_unslash( $location->location_city );
+		$e['state']           = wp_unslash( $location->location_state );
+		$e['postcode']        = wp_unslash( $location->location_postcode );
+		$e['country']         = wp_unslash( $location->location_country );
 		$e['region']          = $location->location_region;
-		$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
+		$e['hcard']           = wp_unslash( mc_hcard( $location, 'true', 'true', 'location' ) );
 		$e['link_map']        = $map;
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $location, 'location' );

@@ -1296,9 +1296,9 @@ function mc_event_filter( $title ) {
 		}
 		$array    = mc_create_tags( $event );
 		$template = mc_get_option( 'event_title_template', '' );
-		$template = ( '' !== $template ) ? stripslashes( $template ) : '{title} / {date}';
+		$template = ( '' !== $template ) ? wp_unslash( $template ) : '{title} / {date}';
 
-		return esc_html( wp_strip_all_tags( stripslashes( mc_draw_template( $array, $template ) ) ) . ' / ' . get_bloginfo( 'title' ) );
+		return esc_html( wp_strip_all_tags( wp_unslash( mc_draw_template( $array, $template ) ) ) . ' / ' . get_bloginfo( 'title' ) );
 	} else {
 		return $title;
 	}
@@ -1765,7 +1765,7 @@ function my_calendar( $args ) {
 	 */
 	$show_months  = absint( apply_filters( 'mc_show_months', mc_get_option( 'show_months' ), $args ) );
 	$show_months  = ( 0 === $show_months ) ? 1 : $show_months;
-	$caption_text = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . stripslashes( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
+	$caption_text = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . wp_unslash( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
 	$week_format  = ( mc_get_option( 'week_format' ) ) ? mc_get_option( 'week_format' ) : 'M j, \'y';
 	// Translators: Template tag with date format.
 	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
@@ -1983,7 +1983,7 @@ function my_calendar( $args ) {
 					$heading = __( 'Search Results', 'my-calendar' );
 				}
 			} else {
-				$heading = mc_draw_template( $values, stripslashes( $week_template ) );
+				$heading = mc_draw_template( $values, wp_unslash( $week_template ) );
 			}
 			/**
 			 * Filter the main calendar heading level. Default `h2`.
@@ -2590,7 +2590,7 @@ function my_calendar_searchform( $type, $url = '', $id = 'events' ) {
 			<form class="mc-search-form" method="get" action="' . esc_url( $url ) . '" role="search">
 				<div class="mc-search">
 					<label class="screen-reader-text" for="mc_query_search-' . $id . '">' . __( 'Search Events', 'my-calendar' ) . '</label>
-					<input id="mc_query_search-' . $id . '" type="text" value="' . esc_attr( stripslashes( urldecode( $query ) ) ) . '" name="mcs" />
+					<input id="mc_query_search-' . $id . '" type="text" value="' . esc_attr( wp_unslash( urldecode( $query ) ) ) . '" name="mcs" />
 					<button data-href="' . esc_url( $data_href ) . '" class="button" id="mc_submit_search-' . $id . '">' . __( 'Search<span class="screen-reader-text"> Events</span>', 'my-calendar' ) . '</button>
 				</div>
 			</form>
@@ -2684,7 +2684,7 @@ function my_calendar_show_locations( $datatype = 'name', $template = '' ) {
 			$datatype = ( '' === trim( $template ) ) ? 'hcard' : $datatype;
 			foreach ( $locations as $key => $value ) {
 				if ( 'hcard' !== $datatype && '' === $template ) {
-					$label = stripslashes( $value->{$datatype} );
+					$label = wp_unslash( $value->{$datatype} );
 					if ( $label ) {
 						$url     = mc_maplink( $value, 'url', 'location' );
 						$output .= ( $url ) ? "<li><a href='" . esc_url( $url ) . "'>$label</a></li>" : "<li>$label</li>";
