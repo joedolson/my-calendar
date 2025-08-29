@@ -137,6 +137,9 @@ function mc_update_location_custom_fields( $post_id, $post, $data, $location_id 
 	if ( $attachment_id ) {
 		set_post_thumbnail( $post_id, $attachment_id );
 	}
+	// Add access data.
+	$access_terms = ( isset( $post['location_access'] ) ) ? map_deep( $post['location_access'], 'absint' ) : array();
+	wp_set_object_terms( $post_id, $access_terms, 'mc-location-access' );
 
 	$fields       = mc_location_fields();
 	$field_errors = array();
@@ -435,7 +438,7 @@ function my_calendar_add_locations() {
 			'location_zoom'      => $post['location_zoom'],
 			'location_phone'     => $post['location_phone'],
 			'location_phone2'    => $post['location_phone2'],
-			'location_access'    => isset( $post['location_access'] ) ? serialize( $post['location_access'] ) : '',
+			'location_access'    => '',
 		);
 
 		$location_id = mc_insert_location( $add );
@@ -490,7 +493,7 @@ function my_calendar_add_locations() {
 			'location_zoom'      => $post['location_zoom'],
 			'location_phone'     => $post['location_phone'],
 			'location_phone2'    => $post['location_phone2'],
-			'location_access'    => isset( $post['location_access'] ) ? serialize( $post['location_access'] ) : '',
+			'location_access'    => '',
 		);
 
 		$where = array( 'location_id' => (int) $post['location_id'] );
@@ -1011,44 +1014,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	<fieldset>
 	<legend>' . __( 'Location Accessibility', 'my-calendar' ) . '</legend>
 	<ul class="accessibility-features checkboxes">';
-
-	/**
-	 * Filter venue accessibility array.
-	 *
-	 * @hook mc_venue_accessibility
-	 *
-	 * @param {array} $access Access parameters.
-	 * @param {object} $data Current data object.
-	 *
-	 * @return {array}
-	 */
-	$access      = apply_filters( 'mc_venue_accessibility', mc_location_access(), $data );
-	$access_list = '';
-	if ( $has_data ) {
-		if ( 'location' === $context ) {
-			$location_access = unserialize( $data->{$context . '_access'} );
-		} else {
-			if ( property_exists( $data, 'event_location' ) ) {
-				$event_location = $data->event_location;
-			} else {
-				$event_location = false;
-			}
-			$location_access = unserialize( mc_location_data( 'location_access', $event_location ) );
-		}
-	} else {
-		$location_access = array();
-	}
-	foreach ( $access as $k => $a ) {
-		$id      = "loc_access_$k";
-		$label   = $a;
-		$checked = '';
-		if ( is_array( $location_access ) ) {
-			$checked = ( in_array( $a, $location_access, true ) || in_array( $k, $location_access, true ) ) ? " checked='checked'" : '';
-		}
-		$item         = sprintf( '<li><input type="checkbox" id="%1$s" name="' . $context . '_access[]" value="%4$s" class="checkbox" %2$s /> <label for="%1$s">%3$s</label></li>', esc_attr( $id ), $checked, esc_html( $label ), esc_attr( $a ) );
-		$access_list .= $item;
-	}
-	$return .= $access_list;
+	$return .= mc_admin_access_term_list( $data, 'mc-location-access' );
 	$return .= '</ul>
 	</fieldset>';
 	$fields  = mc_display_location_fields( mc_location_fields(), $data, $context );

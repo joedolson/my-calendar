@@ -403,7 +403,12 @@ function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
  * @return string|array
  */
 function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_type = 'string' ) {
-	$terms  = ( property_exists( $event, 'event_post' ) ) ? wp_get_object_terms( $event->event_post, $taxonomy ) : array();
+	if ( 'mc-event-access' === $taxonomy ) {
+		$terms  = ( property_exists( $event, 'event_post' ) ) ? wp_get_object_terms( $event->event_post, $taxonomy ) : array();
+	} else {
+		$location_post = property_exists( $event, 'location_post' ) ? $event->location_post : false;
+		$terms  = ( $location_post ) ? wp_get_object_terms( $location_post, $taxonomy ) : array();
+	}
 	$return = ( 'string' === $return_type ) ? '' : array();
 	if ( 'string' === $return_type ) {
 		$return = print_r( $terms, 1 );
@@ -429,6 +434,7 @@ function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_typ
  * @return string
  */
 function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access' ) {
+
 	$terms    = ( $event ) ? mc_get_access_terms( $event, $taxonomy, 'ids' ) : array();
 	$args     = array(
 		'taxonomy'   => $taxonomy,
@@ -437,8 +443,9 @@ function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access
 	$taxonomy = get_terms( $args );
 	$inputs   = '';
 	foreach ( $taxonomy as $tax ) {
+		$name    = ( 'mc-event-access' === $taxonomy ) ? 'events_access[]' : 'location_access[]';
 		$id      = 'access_term_' . absint( $tax->term_id );
-		$inputs .= '<li><input type="checkbox" ' . checked( true, in_array( $tax->term_id, $terms, true ), false ) . ' name="events_access[]" id="' . $id . '" value="' . absint( $tax->term_id ) . '"> <label for="' . $id . '">' . esc_html( $tax->name ) . '</label></li>';
+		$inputs .= '<li><input type="checkbox" ' . checked( true, in_array( $tax->term_id, $terms, true ), false ) . ' name="' . $name . '" id="' . $id . '" value="' . absint( $tax->term_id ) . '"> <label for="' . $id . '">' . esc_html( $tax->name ) . '</label></li>';
 	}
 
 	return $inputs;
