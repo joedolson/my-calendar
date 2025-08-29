@@ -22,18 +22,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return bool true if added; false if not.
  */
 function mc_update_default_access_terms( $term_id, $action = 'add' ) {
-	$term_id              = (int) $term_id;
-	$default_access_terms = (array) mc_get_option( 'default_access_terms', array() );
-	if ( ! in_array( $term_id, $default_access_terms, true ) && 'add' === $action ) {
-		$default_access_terms[] = $term_id;
-		mc_update_option( 'default_access_terms', $default_access_terms );
+	$term_id       = (int) $term_id;
+	$option        = isset( $_GET['terms'] ) ? 'default_location_terms' : 'default_access_terms';
+	$default_terms = (array) mc_get_option( $option, array() );
+	if ( ! in_array( $term_id, $default_terms, true ) && 'add' === $action ) {
+		$default_terms[] = $term_id;
+		mc_update_option( $option, $default_terms );
 
 		return true;
 	}
-	if ( in_array( $term_id, $default_access_terms, true ) && 'remove' === $action ) {
-		$key = array_search( $term_id, $default_access_terms, true );
-		unset( $default_access_terms[ $key ] );
-		mc_update_option( 'default_access_terms', $default_access_terms );
+	if ( in_array( $term_id, $default_terms, true ) && 'remove' === $action ) {
+		$key = array_search( $term_id, $default_terms, true );
+		unset( $default_terms[ $key ] );
+		mc_update_option( $option, $default_terms );
 
 		return true;
 	}
@@ -45,11 +46,12 @@ function mc_update_default_access_terms( $term_id, $action = 'add' ) {
  * Generate form to manage categories
  */
 function my_calendar_manage_access_terms() {
+	$taxonomy = ( isset( $_GET['terms'] ) ) ? 'mc-location-access' : 'mc-event-access';
 	?>
 	<div class="wrap my-calendar-admin my-calendar-access-terms">
 		<?php
 		$append         = array();
-		$default_access = mc_get_option( 'default_access_terms' );
+		$default_access = ( 'mc-event-access' === $taxonomy ) ? mc_get_option( 'default_access_terms' ) : mc_get_option( 'default_location_terms' );
 		// We do some checking to see what we're doing.
 		if ( ! empty( $_POST ) ) {
 			$post  = map_deep( $_POST, 'sanitize_text_field' );
@@ -83,7 +85,7 @@ function my_calendar_manage_access_terms() {
 			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 			if ( $mcnonce ) {
 				$term_id = (int) $_GET['access_term_id'];
-				$results = wp_delete_term( $term_id, 'mc-event-access' );
+				$results = wp_delete_term( $term_id, $taxonomy );
 				if ( $results ) {
 					// handle deleted terms.
 				}
@@ -96,7 +98,7 @@ function my_calendar_manage_access_terms() {
 			}
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['access_term_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
 			$cur_cat = (int) $_GET['access_term_id'];
-			mc_edit_access_term_form( 'edit', $cur_cat );
+			mc_edit_access_term_form( 'edit', $cur_cat, $taxonomy );
 		} elseif ( isset( $post['mode'] ) && isset( $post['access_term_id'] ) && isset( $post['access_term_name'] ) && 'edit' === $post['mode'] ) {
 			// This term is in the set, but not checked.
 			if ( in_array( (int) $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term'] ) ) {
@@ -109,7 +111,7 @@ function my_calendar_manage_access_terms() {
 
 			$results = wp_update_term(
 				$post['access_term_id'],
-				'mc-event-access',
+				$taxonomy,
 				array(
 					'name' => $post['access_term_name'],
 				)
@@ -120,11 +122,11 @@ function my_calendar_manage_access_terms() {
 				mc_show_error( __( 'Access term was not changed.', 'my-calendar' ) );
 			}
 			$cur_cat = (int) $post['access_term_id'];
-			mc_edit_access_term_form( 'edit', $cur_cat );
+			mc_edit_access_term_form( 'edit', $cur_cat, $taxonomy );
 		}
 
 		if ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] || isset( $post['mode'] ) && 'edit' !== $post['mode'] || ! isset( $_GET['mode'] ) && ! isset( $post['mode'] ) ) {
-			mc_edit_access_term_form( 'add' );
+			mc_edit_access_term_form( 'add', false, $taxonomy );
 		}
 		?>
 		</div>
@@ -134,18 +136,19 @@ function my_calendar_manage_access_terms() {
 /**
  * Create a access_term.
  *
- * @param array $access_term Array of params to update.
+ * @param array  $access_term Array of params to update.
+ * @param string $taxonomy Taxonomy ID for this term.
  *
  * @return mixed boolean|int query result
  */
-function mc_create_access_term( $access_term ) {
+function mc_create_access_term( $access_term, $taxonomy = 'mc-event-access' ) {
 	if ( ! isset( $access_term['access_term_name'] ) ) {
 		return false;
 	}
 	$cat_name    = wp_strip_all_tags( $access_term['access_term_name'] );
-	$term_exists = term_exists( $cat_name, 'mc-event-access' );
+	$term_exists = term_exists( $cat_name, $taxonomy );
 	if ( ! $term_exists ) {
-		$term = wp_insert_term( $cat_name, 'mc-event-access' );
+		$term = wp_insert_term( $cat_name, $taxonomy );
 		if ( ! is_wp_error( $term ) ) {
 			$term = $term['term_id'];
 		} else {
@@ -164,77 +167,97 @@ function mc_create_access_term( $access_term ) {
  *
  * @param string   $view Edit or create.
  * @param int|bool $term_id access term ID.
+ * @param string   $taxonomy Taxonomy for terms.
  */
-function mc_edit_access_term_form( $view = 'edit', $term_id = false ) {
+function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy = 'mc-event-access' ) {
 	$current = false;
 	if ( $term_id ) {
 		$term_id = (int) $term_id;
-		$current = get_term( $term_id, 'mc-event-access' );
+		$current = get_term( $term_id, $taxonomy );
 	} else {
 		// If no access term ID, change view.
 		$view = 'add';
 	}
+	$base_link = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$base_link = isset( $_GET['terms'] ) ? add_query_arg( 'terms', 'locations' ) : $base_link;
 	if ( 'add' === $view ) {
 		?>
-		<h1><?php esc_html_e( 'Event Accessibility Services', 'my-calendar' ); ?></h1>
+		<h1><?php esc_html_e( 'My Calendar Accessibility Terms', 'my-calendar' ); ?></h1>
 		<?php
 	} else {
+		$heading = ( isset( $_GET['terms'] ) ) ? __( 'Edit Location Accessibility Term', 'my-calendar' ) : __( 'Edit Event Accessibility Term', 'my-calendar' );
 		?>
-		<h1 class="wp-heading-inline"><?php esc_html_e( 'Edit accessibility service', 'my-calendar' ); ?></h1>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-access-terms' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
+		<h1 class="wp-heading-inline"><?php echo esc_html( $heading ); ?></h1>
+		<a href="<?php echo esc_url( $base_link ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
 		<hr class="wp-header-end">
 		<?php
 	}
+	$link                 = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$location_link        = add_query_arg( 'terms', 'locations', $link );
+	$is_locations         = ( isset( $_GET['terms'] ) ) ? true : false;
+	$is_current_events    = ( $is_locations ) ? '' : 'aria-current="page"';
+	$is_current_locations = ( $is_locations ) ? 'aria-current="page"' : '';
 	?>
+	<div class="mc-tablinks">
+			<a href="<?php echo esc_url( $link ); ?>" <?php echo $is_current_events; ?>><?php esc_html_e( 'Event Accessibility Terms' ); ?></a>
+			<a href="<?php echo esc_url( $location_link ); ?>" <?php echo $is_current_locations; ?>><?php esc_html_e( 'Location Accessibility Terms' ); ?></a>
+	</div>
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
 
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
-					<h2><?php esc_html_e( 'Accessibility Terms Editor', 'my-calendar' ); ?></h2>
+					<h2>
+					<?php
+						$heading = ( $is_locations ) ? __( 'Location Accessibility Terms Editor', 'my-calendar' ) : __( 'Event Accessibility Terms Editor', 'my-calendar' );
+						esc_html_e( 'Accessibility Terms Editor', 'my-calendar' );
+					?>
+					</h2>
 
 					<div class="inside">
-						<form id="my-calendar" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-access-terms' ) ); ?>">
-							<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/></div>
+						<form id="my-calendar" method="post" action="<?php echo esc_url( $base_link ); ?>">
+							<div>
+								<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 							<?php
 							if ( 'add' === $view ) {
 								?>
-								<div>
-									<input type="hidden" name="mode" value="add"/>
-									<input type="hidden" name="access_term_id" value=""/>
-								</div>
+								<input type="hidden" name="mode" value="add"/>
+								<input type="hidden" name="access_term_id" value=""/>
 								<?php
 							} else {
 								?>
-								<div>
-									<input type="hidden" name="mode" value="edit"/>
-									<input type="hidden" name="access_term_id" value="<?php echo ( is_object( $current ) ) ? absint( $current->term_id ) : ''; ?>" />
-								</div>
+								<input type="hidden" name="mode" value="edit"/>
+								<input type="hidden" name="access_term_id" value="<?php echo ( is_object( $current ) ) ? absint( $current->term_id ) : ''; ?>" />
 								<?php
 							}
-
 							if ( ! empty( $current ) && is_object( $current ) ) {
 								$cat_name = $current->name;
+								$term_id  = $current->term_id;
 							} else {
 								$cat_name = '';
+								$term_id  = false;
 							}
 							?>
+							</div>
+							<div class="mc-term-fields mc-flex">
 							<p>
-								<label for="cat_name"><?php esc_html_e( 'Accessibility Service Name', 'my-calendar' ); ?></label>
+								<label for="cat_name"><?php esc_html_e( 'Accessibility Term', 'my-calendar' ); ?></label>
 								<input type="text" id="cat_name" name="access_term_name" class="input" size="30" value="<?php echo esc_attr( $cat_name ); ?>"/>
 							</p>
+								<p>
 							<?php
-							$is_default = ( 'add' === $view ) ? 'false' : (int) $current->term_id;
-							$in_array   = in_array( $is_default, mc_get_option( 'default_access_terms' ), true ) ? true : false;
-							?>
-							<input type="checkbox" value="on" name="mc_default_access_term" id="mc_default_access_term"<?php checked( $in_array, true ); ?> /> <label for="mc_default_access_term"><?php esc_html_e( 'Enable by default', 'my-calendar' ); ?></label>
-							<?php
+							$is_default = ( 'add' === $view ) ? 'false' : $term_id;
+							$option     = ( $is_locations ) ? 'default_location_terms' : 'default_access_terms';
+							$in_array   = in_array( $is_default, mc_get_option( $option ), true ) ? true : false;
 							if ( 'add' === $view ) {
 								$save_text = __( 'Add Term', 'my-calendar' );
 							} else {
 								$save_text = __( 'Save Changes', 'my-calendar' );
 							}
 							?>
+									<input type="checkbox" value="on" name="mc_default_access_term" id="mc_default_access_term"<?php checked( $in_array, true ); ?> /> <label for="mc_default_access_term"><?php esc_html_e( 'Enable by default', 'my-calendar' ); ?></label>
+								</p>
+							</div>
 							<p>
 								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
 							</p>
@@ -255,10 +278,16 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false ) {
 			</div>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
-					<h2><?php esc_html_e( 'Accessibility Service List', 'my-calendar' ); ?></h2>
+					<?php
+					$heading = ( $is_locations ) ? __( 'Location Accessibility Term List', 'my-calendar' ) : __( 'Event Accessibility Term List', 'my-calendar' );
+					?>
+					<h2><?php echo esc_html( $heading ); ?></h2>
 
 					<div class="inside">
-						<?php mc_manage_access_terms(); ?>
+						<?php
+						$taxonomy = ( $is_locations ) ? 'mc-location-access' : 'mc-event-access';
+						mc_manage_access_terms( $taxonomy );
+						?>
 					</div>
 				</div>
 			</div>
@@ -271,11 +300,13 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false ) {
 /**
  * Generate list of accessibility terms to edit.
  */
-function mc_manage_access_terms() {
-	$default_access_term = mc_get_option( 'default_access_terms' );
-
+function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
+	$is_locations        = ( 'mc-event-access' === $taxonomy ) ? false : true;
+	$base_link           = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$base_link           = ( $is_locations ) ? add_query_arg( 'terms', 'locations', $base_link ) : $base_link;
+	$default_access_term = ( $is_locations ) ? mc_get_option( 'default_location_terms' ) : mc_get_option( 'default_access_terms' );
 	$args  = array(
-		'taxonomy'   => 'mc-event-access',
+		'taxonomy'   => $taxonomy,
 		'hide_empty' => false,
 	);
 	$terms = get_terms( $args );
@@ -309,20 +340,41 @@ function mc_manage_access_terms() {
 				echo ' <strong>' . esc_html__( '(Default)', 'my-calendar' ) . '</strong>';
 				$default = '<span class="mc_default">' . __( 'Default Accessibility Service', 'my-calendar' ) . '</span>';
 			} else {
-				$url     = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-access-terms&amp;default=$term->term_id" ) );
+				$url     = add_query_arg(
+					array(
+						'_mcnonce' => $mcnonce,
+						'default'  => $term->term_id
+					),
+					$base_link
+				);
 				$default = '<a href="' . esc_url( $url ) . '">' . $default_text . '</a>';
 			}
+			$edit_url = add_query_arg(
+				array(
+					'mode'           => 'edit',
+					'access_term_id' => $term->term_id,
+				),
+				$base_link
+			);
 			?>
 				<div class="row-actions">
-					<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-access-terms&amp;mode=edit&amp;access_term_id=$term->term_id" ) ); ?>"
+					<a href="<?php echo esc_url( $edit_url ); ?>"
 					class='edit'><?php echo wp_kses_post( $edit_cat ); ?></a> |
 					<?php
 					echo wp_kses_post( $default );
 					// Cannot delete the default access_term.
 					if ( '1' !== (string) $term->term_id ) {
 						echo ' | ';
+						$delete_link = add_query_arg(
+							array(
+								'_mcnonce'      => $mcnonce,
+								'mode'           => 'delete',
+								'access_term_id' => $term->term_id,
+							),
+							$base_link
+						);
 						?>
-						<a href="<?php echo esc_url( add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-access-terms&amp;mode=delete&amp;access_term_id=$term->term_id" ) ) ); ?>" class="delete" onclick="return confirm('<?php esc_html_e( 'Are you sure you want to delete this access_term?', 'my-calendar' ); ?>')"><?php echo wp_kses_post( $delete_cat ); ?></a>
+						<a href="<?php echo esc_url( $delete_link ); ?>" class="delete" onclick="return confirm('<?php esc_html_e( 'Are you sure you want to delete this access_term?', 'my-calendar' ); ?>')"><?php echo wp_kses_post( $delete_cat ); ?></a>
 						<?php
 					}
 					?>
@@ -344,11 +396,12 @@ function mc_manage_access_terms() {
  *
  * @param object $event Event object.
  * @param string $return_type Type of return: string, ids, objects.
+ * @param string $taxonomy Taxonomy for terms.
  *
  * @return string|array
  */
-function mc_get_access_terms( $event, $return_type = 'string' ) {
-	$terms  = ( property_exists( $event, 'event_post' ) ) ? wp_get_object_terms( $event->event_post, 'mc-event-access' ) : array();
+function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_type = 'string' ) {
+	$terms  = ( property_exists( $event, 'event_post' ) ) ? wp_get_object_terms( $event->event_post, $taxonomy ) : array();
 	$return = ( 'string' === $return_type ) ? '' : array();
 	if ( 'string' === $return_type ) {
 		$return = print_r( $terms, 1 );
@@ -369,13 +422,14 @@ function mc_get_access_terms( $event, $return_type = 'string' ) {
  * Set up access terms input.
  *
  * @param object|boolean $event Event object or false.
+ * @param string         $taxonomy Taxonomy for terms.
  *
  * @return string
  */
-function mc_admin_access_term_list( $event = false ) {
-	$terms    = ( $event ) ? mc_get_access_terms( $event, 'ids' ) : array();
+function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access' ) {
+	$terms    = ( $event ) ? mc_get_access_terms( $event, $taxonomy, 'ids' ) : array();
 	$args     = array(
-		'taxonomy'   => 'mc-event-access',
+		'taxonomy'   => $taxonomy,
 		'hide_empty' => false,
 	);
 	$taxonomy = get_terms( $args );
@@ -392,12 +446,13 @@ function mc_admin_access_term_list( $event = false ) {
  * Generate access term classes.
  *
  * @param object|array $event  Event object.
+ * @param string       $taxonomy Taxonomy for terms.
  * @param string       $prefix Prefix to append to class; varies on context.
  *
  * @return array an array of classes
  */
-function mc_access_term_classes( $event, $prefix = 'mc-' ) {
-	$terms   = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+function mc_access_term_classes( $event, $taxonomy = 'mc-event-access', $prefix = 'mc-' ) {
+	$terms   = wp_get_object_terms( $event->event_post, $taxonomy );
 	$classes = array();
 	foreach ( $terms as $term ) {
 		$classes[] = sanitize_html_class( $prefix . $term->slug );

@@ -431,6 +431,7 @@ function mc_default_options() {
 		'uri_query'                    => '',
 		'default_category'             => '',
 		'default_access_terms'         => array(),
+		'default_location_terms'       => array(),
 		'skip_holidays_category'       => '',
 		'hide_icons'                   => '',
 		'use_list_template'            => '',
@@ -631,7 +632,7 @@ function mc_migrate_location_accessibility() {
 	}
 	// Get all locations with a value saved for accessibility.
 	global $wpdb;
-	$locations = $wpdb->get_results( 'SELECT location_id, location_access FROM ' . my_calendar_locations_table() );
+	$locations = $wpdb->get_results( 'SELECT location_id, location_access FROM ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	// Iterate locations and save meta data as taxonomy data.
 	foreach ( $locations as $location ) {
 		$access  = unserialize( $location->location_access );
@@ -644,13 +645,5 @@ function mc_migrate_location_accessibility() {
 			}
 			wp_set_object_terms( $post_id, $terms, 'mc-location-access' );
 		}
-	}
-}
-
-add_action( 'admin_notices', 'mc_test_migrate' );
-function mc_test_migrate() {
-	if ( isset( $_GET['test'] ) && '1' === $_GET['test'] ) {
-		$output = mc_migrate_location_accessibility();
-		wp_admin_notice( $output );
 	}
 }
