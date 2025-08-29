@@ -794,7 +794,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['link_map']        = $map;
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $location, 'location' );
-		$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
+		$terms                = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+		$term_list            = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+		$e['location_access'] = $term_list;
 		$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
 	} else {
 		// Until 3.5, these were populated from the events table.
@@ -2142,6 +2144,49 @@ function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 		}
 		$output = ( '' !== $output ) ? '<div class="mc-access-information">' . $output . '</div>' : '';
 	}
+
+	echo wp_kses_post( $output );
+}
+
+/**
+ * Print location accessibility features in PHP templates..
+ *
+ * @param object $data Calendar view data.
+ * @param string $text Text for heading. Default 'false'.
+ */
+function mc_template_location_access( $data, $text = false ) {
+	$location = $data->location;
+	$output   = '';
+
+	$access_heading = __( 'Location Accessibility', 'my-calendar' );
+	$access_heading = ( $text ) ? $text : $access_heading;
+	$sublevel       = 'h2';
+
+	$terms  = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+	$access = array();
+	foreach ( $terms as $term ) {
+		$access[] = '<li class="' . esc_attr( $term->slug ) . '"><span>' . esc_html( $term->name ) . '</span></li>';
+	}
+	$access_content = '<ul class="mc-access">' . implode( '', $access ) . '</ul>';
+	/**
+	 * Filter subheading levels inside event content.
+	 *
+	 * @hook mc_subheading_level
+	 *
+	 * @param {string} $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+	 * @param {string} $template Current template.
+	 *
+	 * @return {string}
+	 */
+	$sublevel = apply_filters( 'mc_subheading_level', $sublevel, 'php' );
+	if ( $access_content ) {
+		$output = '
+		<div class="mc-accessibility">
+			<' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>
+			' . $access_content . '
+		</div>';
+	}
+	$output = ( '' !== $output ) ? '<div class="mc-access-information">' . $output . '</div>' : '';
 
 	echo wp_kses_post( $output );
 }

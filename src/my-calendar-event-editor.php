@@ -2423,7 +2423,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 							'location_zoom'      => $event_zoom,
 							'location_phone'     => $event_phone,
 							'location_phone2'    => $event_phone2,
-							'location_access'    => ( is_array( $location_access ) ) ? serialize( $location_access ) : '',
+							'location_access'    => '',
 						);
 						$loc_id         = mc_insert_location( $add_loc );
 						$saved_location = $loc_id;
