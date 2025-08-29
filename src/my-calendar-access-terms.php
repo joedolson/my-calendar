@@ -399,7 +399,7 @@ function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
  * @param object $event Event object.
  * @param string $taxonomy Taxonomy for terms.
  * @param string $return_type Type of return: string, ids, objects.
-*
+ *
  * @return string|array
  */
 function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_type = 'string' ) {
