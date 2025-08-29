@@ -199,8 +199,8 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 	$is_current_locations = ( $is_locations ) ? 'aria-current="page"' : '';
 	?>
 	<div class="mc-tablinks">
-			<a href="<?php echo esc_url( $link ); ?>" <?php echo $is_current_events; ?>><?php esc_html_e( 'Event Accessibility Terms' ); ?></a>
-			<a href="<?php echo esc_url( $location_link ); ?>" <?php echo $is_current_locations; ?>><?php esc_html_e( 'Location Accessibility Terms' ); ?></a>
+			<a href="<?php echo esc_url( $link ); ?>" <?php echo $is_current_events; ?>><?php esc_html_e( 'Event Accessibility Terms', 'my-calendar' ); ?></a>
+			<a href="<?php echo esc_url( $location_link ); ?>" <?php echo $is_current_locations; ?>><?php esc_html_e( 'Location Accessibility Terms', 'my-calendar' ); ?></a>
 	</div>
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
@@ -299,17 +299,19 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 
 /**
  * Generate list of accessibility terms to edit.
+ *
+ * @param string $taxonomy Taxonomy slug for the terms being edited.
  */
 function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
 	$is_locations        = ( 'mc-event-access' === $taxonomy ) ? false : true;
 	$base_link           = admin_url( 'admin.php?page=my-calendar-access-terms' );
 	$base_link           = ( $is_locations ) ? add_query_arg( 'terms', 'locations', $base_link ) : $base_link;
 	$default_access_term = ( $is_locations ) ? mc_get_option( 'default_location_terms' ) : mc_get_option( 'default_access_terms' );
-	$args  = array(
+	$args                = array(
 		'taxonomy'   => $taxonomy,
 		'hide_empty' => false,
 	);
-	$terms = get_terms( $args );
+	$terms               = get_terms( $args );
 
 	if ( ! empty( $terms ) ) {
 		?>
@@ -343,7 +345,7 @@ function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
 				$url     = add_query_arg(
 					array(
 						'_mcnonce' => $mcnonce,
-						'default'  => $term->term_id
+						'default'  => $term->term_id,
 					),
 					$base_link
 				);
@@ -367,7 +369,7 @@ function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
 						echo ' | ';
 						$delete_link = add_query_arg(
 							array(
-								'_mcnonce'      => $mcnonce,
+								'_mcnonce'       => $mcnonce,
 								'mode'           => 'delete',
 								'access_term_id' => $term->term_id,
 							),
@@ -395,9 +397,9 @@ function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
  * Show access term output for editing lists.
  *
  * @param object $event Event object.
- * @param string $return_type Type of return: string, ids, objects.
  * @param string $taxonomy Taxonomy for terms.
- *
+ * @param string $return_type Type of return: string, ids, objects.
+*
  * @return string|array
  */
 function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_type = 'string' ) {
