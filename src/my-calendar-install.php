@@ -247,7 +247,6 @@ function mc_create_demo_content() {
 			)
 		);
 		// Insert a location.
-		$access  = array( 1, 2, 3, 4, 6, 8, 9 );
 		$add     = array(
 			'location_label'     => 'Demo: Minnesota Orchestra',
 			'location_street'    => '1111 Nicollet Mall',
@@ -263,7 +262,7 @@ function mc_create_demo_content() {
 			'location_zoom'      => 16,
 			'location_phone'     => '612-371-5600',
 			'location_phone2'    => '',
-			'location_access'    => serialize( $access ),
+			'location_access'    => '',
 		);
 		$results = mc_insert_location( $add );
 		/**
