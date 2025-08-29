@@ -1391,40 +1391,6 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 }
 
 /**
- * Expand access data into a list of features.
- *
- * @param array $data Either event or location accessibility data.
- *
- * @return string list of features.
- */
-function mc_expand( $data ) {
-	$output = '';
-	if ( is_array( $data ) ) {
-		foreach ( $data as $key => $value ) {
-			$class = ( isset( $value ) ) ? sanitize_html_class( $value ) : '';
-			$label = ( isset( $value ) ) ? $value : false;
-			if ( ! $label ) {
-				continue;
-			}
-			$output .= "<li class='$class'><span>$label</span></li>\n";
-		}
-		$output = ( $output ) ? "<ul class='mc-access'>" . $output . '</ul>' : '';
-	}
-
-	/**
-	 * HTML output from an internal data array, e.g. accessibility features.
-	 *
-	 * @hook mc_expand
-	 *
-	 * @param {string} $output Formatted HTML to be returned.
-	 * @param {array} $data Array of data being parsed.
-	 *
-	 * @return {string} Formatted HTML.
-	 */
-	return apply_filters( 'mc_expand', $output, $data );
-}
-
-/**
  * Get the full date span of a set of events for display.
  *
  * @param int   $group_id Group ID.
