@@ -2099,8 +2099,14 @@ function mc_event_accessibility( $form, $data, $label ) {
 			<ul class='accessibility-features checkboxes'>";
 	$form .= mc_admin_access_term_list( $data );
 	$notes = property_exists( $data, 'event_post' ) ? get_post_meta( $data->event_post, '_mc_event_access', true ) : '';
-	$form .= '<li class="events_access_notes"><label for="events_access_notes">' . __( 'Notes', 'my-calendar' ) . '</label> <input type="text" id="events_access_notes" name="events_access_notes" value="' . esc_attr( $notes ) . '" /></li>';
-	$form .= '</ul>
+	if ( is_array( $notes ) ) {
+		$notes = $notes['notes'];
+	}
+	$form .= '</ul>';
+	$form .= '<p class="events_access_notes">
+		<label for="events_access_notes">' . esc_html__( 'Accessibility Notes', 'my-calendar' ) . '</label>
+		<input type="text" class="widefat" id="events_access_notes" name="events_access_notes" value="' . esc_attr( $notes ) . '" />
+	</p>
 		</fieldset>';
 
 	return $form;
