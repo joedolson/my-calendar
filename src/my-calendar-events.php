@@ -35,7 +35,7 @@ function mc_event_object( $event ) {
 			}
 			$event->uid = $guid;
 		}
-		$access_terms = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+		$access_terms         = wp_get_object_terms( $event->event_post, 'mc-event-access' );
 		$event->accessibility = wp_list_pluck( $access_terms, 'name' );
 
 		/**
