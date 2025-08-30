@@ -576,73 +576,150 @@ function mc_transition_location( $location_id, $location_post ) {
  * Migrate event accessibility from database to taxonomy.
  */
 function mc_migrate_event_accessibility() {
-	$options = mc_event_access();
-	// Add terms.
-	foreach ( $options as $value ) {
-		wp_insert_term( $value, 'mc-event-access' );
+	if ( 'true' !== get_option( 'mc_event_access_migration_completed' ) ) {
+		$options = mc_event_access();
+		// Add terms.
+		foreach ( $options as $value ) {
+			wp_insert_term( $value, 'mc-event-access' );
+		}
+		mc_migrate_event_access();
 	}
-	// Get all events with a value saved for accessibility.
-	// To do: set this up as iterated event in action-scheduler.
+}
+
+/**
+ * Migrate Event access data.
+ *
+ * @param int $limit Number of events to import.
+ */
+function mc_migrate_event_access( $limit = 200 ) {
+	// Get selection of events not already migrated.
 	$events = get_posts(
 		array(
 			'post_type'      => 'mc-events',
 			'meta_query'     => array(
 				array(
-					array(
-						'key'     => '_mc_event_access',
-						'value'   => '',
-						'compare' => '!=',
-					),
+					'key'     => '_mc_event_access',
+					'value'   => '',
+					'compare' => '!=',
+				),
+				array(
+					'key'     => '_mc_access_migrated',
+					'compare' => 'NOT EXISTS',
 				),
 			),
-			'posts_per_page' => -1,
+			'posts_per_page' => $limit,
 			'fields'         => 'ids',
 		)
 	);
-	// Iterate events and save meta data as taxonomy data.
-	foreach ( $events as $event ) {
-		$access = get_post_meta( $event, '_mc_event_access', true );
-		if ( is_array( $access ) ) {
-			$terms = array();
-			$notes = isset( $access['notes'] ) ? $access['notes'] : '';
-			if ( $notes ) {
-				$notes = sanitize_textarea_field( $notes );
-				update_post_meta( $event, '_mc_event_access', $notes );
-			} else {
-				delete_post_meta( $event, '_mc_event_access' );
+	$count  = count( $events );
+	if ( 0 === $count ) {
+		// No longer need this key.
+		delete_post_meta_by_key( '_mc_access_migrated' );
+		update_option( 'mc_event_access_migration_completed', 'true', 'no' );
+	} else {
+		// Iterate events and save meta data as taxonomy data.
+		foreach ( $events as $event ) {
+			$access = get_post_meta( $event, '_mc_event_access', true );
+			if ( is_array( $access ) ) {
+				$terms = array();
+				$notes = isset( $access['notes'] ) ? $access['notes'] : '';
+				if ( $notes ) {
+					$notes = sanitize_textarea_field( $notes );
+					update_post_meta( $event, '_mc_event_access', $notes );
+				} else {
+					delete_post_meta( $event, '_mc_event_access' );
+				}
+				unset( $access['notes'] );
+				foreach ( $access as $type ) {
+					$terms[] = $type;
+				}
+				wp_set_object_terms( $event, $terms, 'mc-event-access' );
+				update_post_meta( $event, '_mc_access_migrated', 'true' );
 			}
-			unset( $access['notes'] );
-			foreach ( $access as $type ) {
-				$terms[] = $type;
-			}
-			wp_set_object_terms( $event, $terms, 'mc-event-access' );
+		}
+
+		if ( false === as_has_scheduled_action( 'mc_event_access_migration' ) ) {
+			as_schedule_recurring_action( strtotime( '+1 minutes' ), 60, 'mc_event_access_migration', array(), 'my-calendar' );
 		}
 	}
 }
+// Register this action in action scheduler.
+add_action( 'mc_event_access_migration', 'mc_migrate_event_access' );
+
+/**
+ * Suspend migration process if completed.
+ */
+function mc_check_migration_progress() {
+	if ( 'true' === get_option( 'mc_event_access_migration_completed' ) ) {
+		as_unschedule_all_actions( 'mc_event_access_migration' );
+	}
+	if ( 'true' === get_option( 'mc_location_access_migration_completed' ) ) {
+		as_unschedule_all_actions( 'mc_location_access_migration' );
+	}
+}
+add_action( 'admin_init', 'mc_check_migration_progress' );
 
 /**
  * Migrate location accessibility from database to taxonomy.
  */
 function mc_migrate_location_accessibility() {
-	$options = mc_location_access();
-	// Add terms.
-	foreach ( $options as $value ) {
-		wp_insert_term( $value, 'mc-location-access' );
-	}
-	// Get all locations with a value saved for accessibility.
-	global $wpdb;
-	$locations = $wpdb->get_results( 'SELECT location_id, location_access FROM ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	// Iterate locations and save meta data as taxonomy data.
-	foreach ( $locations as $location ) {
-		$access  = unserialize( $location->location_access );
-		$post_id = mc_get_location_post( $location->location_id, false );
-		if ( is_array( $access ) ) {
-			$terms = array();
-			foreach ( $access as $type ) {
-				$value   = $options[ $type ];
-				$terms[] = $value;
-			}
-			wp_set_object_terms( $post_id, $terms, 'mc-location-access' );
+	if ( 'true' !== get_option( 'mc_location_access_migration_completed' ) ) {
+		$options = mc_location_access();
+		// Add terms.
+		foreach ( $options as $value ) {
+			wp_insert_term( $value, 'mc-location-access' );
 		}
+		mc_migrate_location_access();
+	}
+}
+
+/**
+ * Migrate Location access data.
+ *
+ * @param int $limit Number of events to import.
+ */
+function mc_migrate_location_access( $limit = 200 ) {
+	global $wpdb;
+	// Get all locations with a value saved for accessibility.
+	$locations = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id, location_access FROM ' . my_calendar_locations_table() . ' WHERE location_access != "" LIMIT 0,%d', $limit ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	// Get location access terms.
+	$options   = mc_location_access();
+	// Get selection of events not already migrated.
+	$count = count( $locations );
+	if ( 0 === $count ) {
+		// No longer need this key.
+		delete_post_meta_by_key( '_mc_access_migrated' );
+		update_option( 'mc_location_access_migration_completed', 'true', 'no' );
+	} else {
+		// Iterate locations and save meta data as taxonomy data.
+		foreach ( $locations as $location ) {
+			$access  = ( $location->location_access ) ? unserialize( $location->location_access ) : array();
+			$post_id = mc_get_location_post( $location->location_id, false );
+			if ( is_array( $access ) ) {
+				$terms = array();
+				foreach ( $access as $type ) {
+					$value   = ( is_numeric( $type ) ) ? $options[ $type ] : $type;
+					$terms[] = $value;
+				}
+
+				wp_set_object_terms( $post_id, $terms, 'mc-location-access' );
+			}
+			// remove location access data.
+			mc_update_location( 'location_access', '', $location->location_id );
+		}
+
+		if ( false === as_has_scheduled_action( 'mc_location_access_migration' ) ) {
+			as_schedule_recurring_action( strtotime( '+1 minutes' ), 60, 'mc_location_access_migration', array(), 'my-calendar' );
+		}
+	}
+}
+// Register this action in action scheduler.
+add_action( 'mc_location_access_migration', 'mc_location_event_access' );
+
+
+add_action( 'admin_notices', 'mc_test_migration' );
+function mc_test_migration() {
+	if ( isset( $_GET['test'] ) ) {
+		mc_migrate_event_access();
 	}
 }
