@@ -63,23 +63,15 @@
 
 	my_calendar_external_links();
 	my_calendar_edit_toggles();
-	mc_render_buttons();
 	if ( 'true' === my_calendar.ajax ) {
+		mc_render_buttons();
 		mc_setup_handlers();
 	}
 
 	function mc_setup_handlers() {
 		// Prevents spacebar from scrolling the page on links with button role.
-		let buttonHandlers = document.querySelectorAll('.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)');
+		let buttonHandlers = document.querySelectorAll('.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-export button), .my-calendar-footer button:not(.mc-export button)');
 		buttonHandlers.forEach( (el) => {
-			el.addEventListener( 'keydown', function(e) {
-				if ( ' ' === e.key ) {
-					e.preventDefault();
-				}
-			});
-		});
-		let navActions = document.querySelectorAll('.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-export button), .my-calendar-footer button:not(.mc-export button)');
-		navActions.forEach( (el) => {
 			el.addEventListener( 'click', function(e) {
 				mc_handle_navigation(e, el);
 			});
@@ -99,67 +91,71 @@
 
 			if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
 				const inputForm = el.closest( 'form' );
-				if ( inputForm.classList.contains( 'mc-date-switcher' ) ) {
-					month = inputForm.querySelector( 'select[name=month]' ).value;
-					let day_input = inputForm.querySelector( 'select[name=dy]' );
-					if ( day_input ) {
-						day = day_input.value;
+				if ( inputForm ) {
+					if ( inputForm.classList.contains( 'mc-date-switcher' ) ) {
+						month = inputForm.querySelector( 'select[name=month]' ).value;
+						let day_input = inputForm.querySelector( 'select[name=dy]' );
+						if ( day_input ) {
+							day = day_input.value;
+						}
+						year  = inputForm.querySelector( 'select[name=yr]' ).value;
 					}
-					year  = inputForm.querySelector( 'select[name=yr]' ).value;
+					if ( inputForm.classList.contains( 'mc-categories-switcher' ) ) {
+						mcat = inputForm.querySelector( 'select[name=mcat]' ).value;
+					}
+					if ( inputForm.classList.contains( 'mc-locations-switcher' ) ) {
+						loc = inputForm.querySelector( 'select[name=loc]' ).value;
+					}
+					if ( inputForm.classList.contains( 'mc-access-switcher' ) ) {
+						access = inputForm.querySelector( 'select[name=access]' ).value;
+					}
+					if ( inputForm.classList.contains( 'mc-search-form' ) ) {
+						mcs = inputForm.querySelector( 'input[name=mcs]' ).value;
+					}
+					link = el.closest( 'form' ).getAttribute( 'action' );
+				} else {
+					link = el.getAttribute('data-href');
 				}
-				if ( inputForm.classList.contains( 'mc-categories-switcher' ) ) {
-					mcat = inputForm.querySelector( 'select[name=mcat]' ).value;
-				}
-				if ( inputForm.classList.contains( 'mc-locations-switcher' ) ) {
-					loc = inputForm.querySelector( 'select[name=loc]' ).value;
-				}
-				if ( inputForm.classList.contains( 'mc-access-switcher' ) ) {
-					access = inputForm.querySelector( 'select[name=access]' ).value;
-				}
-				if ( inputForm.classList.contains( 'mc-search-form' ) ) {
-					mcs = inputForm.querySelector( 'input[name=mcs]' ).value;
-				}
-				link = el.closest( 'form' ).getAttribute( 'action' );
-			} else {
-				link = el.getAttribute('href');
 			}
 			try {
 				url = new URL(link);
 				url.searchParams.delete('embed');
 				url.searchParams.delete('source');
 				if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
-					url.searchParams.delete( 'month' );
-					url.searchParams.delete( 'dy' );
-					url.searchParams.delete( 'yr' );
-					if ( '' !== month && 'undefined' !== typeof( month ) ) {
-						url.searchParams.append( 'month', parseInt( month ) );
-						if ( 'undefined' !== typeof( day ) ) {
-							url.searchParams.append( 'dy', parseInt( day ) );
+					if ( inputForm ) {
+						url.searchParams.delete( 'month' );
+						url.searchParams.delete( 'dy' );
+						url.searchParams.delete( 'yr' );
+						if ( '' !== month && 'undefined' !== typeof( month ) ) {
+							url.searchParams.append( 'month', parseInt( month ) );
+							if ( 'undefined' !== typeof( day ) ) {
+								url.searchParams.append( 'dy', parseInt( day ) );
+							}
+							url.searchParams.append( 'yr', parseInt( year ) );
 						}
-						url.searchParams.append( 'yr', parseInt( year ) );
-					}
-					url.searchParams.delete( 'mcat' );
-					if ( '' !== mcat && 'undefined' !== typeof( mcat ) ) {
-						url.searchParams.append( 'mcat', mcat );
-					}
-					url.searchParams.delete( 'loc' );
-					url.searchParams.delete( 'ltype' );
-					if ( '' !== loc && 'undefined' !== typeof( loc ) ) {
-						url.searchParams.append( 'ltype', 'id' );
-						url.searchParams.append( 'loc', loc );
-					}
-					url.searchParams.delete( 'access' );
-					if ( '' !== access && 'undefined' !== typeof( access ) ) {
-						if ( 'all' !== access ) {
-							url.searchParams.append( 'access', parseInt( access ) );
+						url.searchParams.delete( 'mcat' );
+						if ( '' !== mcat && 'undefined' !== typeof( mcat ) ) {
+							url.searchParams.append( 'mcat', mcat );
 						}
-					}
-					url.searchParams.delete( 'mcs' );
-					if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
-						url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
-					}
+						url.searchParams.delete( 'loc' );
+						url.searchParams.delete( 'ltype' );
+						if ( '' !== loc && 'undefined' !== typeof( loc ) ) {
+							url.searchParams.append( 'ltype', 'id' );
+							url.searchParams.append( 'loc', loc );
+						}
+						url.searchParams.delete( 'access' );
+						if ( '' !== access && 'undefined' !== typeof( access ) ) {
+							if ( 'all' !== access ) {
+								url.searchParams.append( 'access', parseInt( access ) );
+							}
+						}
+						url.searchParams.delete( 'mcs' );
+						if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
+							url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
+						}
 
-					link = url.toString();
+						link = url.toString();
+					}
 				}
 
 				window.history.pushState({}, '', url );
@@ -221,7 +217,6 @@
 				el.style.display = 'none';
 			});
 		}
-		mc_render_buttons();
 		my_calendar_external_links();
 		my_calendar_edit_toggles();
 		let originalFocus = document.getElementById( targetId );
@@ -229,7 +224,10 @@
 		let refAnnounce = document.getElementById( 'mc_head_' + ref );
 		wp.a11y.speak( refAnnounce.innerText );
 		mc_display_usertime();
-		mc_setup_handlers();
+		if ( 'true' === my_calendar.ajax ) {
+			mc_render_buttons();
+			mc_setup_handlers();
+		}
 		my_calendar_table_aria();
 	}
 
@@ -265,7 +263,15 @@
 	function mc_render_buttons() {
 		const links = document.querySelectorAll( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
 		links.forEach( (el) => {
-			el.setAttribute( 'role', 'button' );
+			let button = document.createElement( 'button' );
+			button.setAttribute( 'id', el.getAttribute( 'id' ) );
+			button.setAttribute( 'data-href', el.getAttribute( 'href' ) );
+			classes = el.getAttribute( 'class' ) ?? '';
+			button.setAttribute( 'class', classes );
+			button.classList.add( 'mc-navigation-button' );
+			button.setAttribute( 'type', 'button' );
+			button.innerHTML = el.innerHTML;
+			el.replaceWith( button );
 		});
 	}
 
