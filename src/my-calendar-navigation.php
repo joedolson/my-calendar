@@ -833,7 +833,7 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 	$key = ( $has_multiple ) ? $multiple : $key;
 	// Translators: Type of filter shown. Events, Categories, Locations, or Accessibility Services.
 	$label = sprintf( __( 'Filter %s', 'my-calendar' ), '<span class="screen-reader-text"> ' . $key . '</span>' );
-	$form .= '<p><button id="mc_filter_' . $show . '-' . $id . '" class="button" data-href="' . esc_url( $current_url ) . '">' . $label . '</button></p>
+	$form .= '<p><button id="mc_filter_' . $show . '-' . $id . '" class="button">' . $label . '</button></p>
 	</form></div>';
 	if ( $return ) {
 		return $form;
@@ -986,7 +986,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
 		<label for="access">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
 			<select name="access" id="access">
-			<option value="all"' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
+			<option value=""' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $access_options as $key => $access ) {
 			$access_name = $access;
@@ -1124,7 +1124,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$date_switcher .= $p;
 	$date_switcher .= '<option value="' . $time . '"' . selected( $time, $c_year, false ) . '>' . $time . "</option>\n";
 	$date_switcher .= $f;
-	$date_switcher .= '</select> <input type="submit" class="button" data-href="' . esc_attr( $data_href ) . '" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
+	$date_switcher .= '</select> <input type="submit" class="button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
 
 	/**
 	 * Filter the HTML for the date jumpbox controls.

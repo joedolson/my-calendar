@@ -58,7 +58,6 @@ function mc_allowed_tags( $tags, $context ) {
 				'id'               => true,
 				'checked'          => true,
 				'required'         => true,
-				'data-href'        => true,
 			);
 
 			$tags['select'] = array(
@@ -246,7 +245,6 @@ function mc_kses_elements() {
 			'required'         => array(),
 			'readonly'         => array(),
 			'autocomplete'     => array(),
-			'data-href'        => array(),
 			'placeholder'      => array(),
 			'data-variable'    => array(),
 			'maxlength'        => array(),
@@ -285,7 +283,6 @@ function mc_kses_elements() {
 			'role'                    => array(),
 			'aria-selected'           => array(),
 			'aria-controls'           => array(),
-			'data-href'               => array(),
 			'data-type'               => array(),
 			'aria-pressed'            => array(),
 			'id'                      => array(),

@@ -119,7 +119,7 @@
 				if ( inputForm.classList.contains( 'mc-search-form' ) ) {
 					mcs = inputForm.querySelector( 'input[name=mcs]' ).value;
 				}
-				link = el.getAttribute( 'data-href' );
+				link = el.closest( 'form' ).getAttribute( 'action' );
 			} else {
 				link = el.getAttribute('href');
 			}
@@ -128,29 +128,28 @@
 				url.searchParams.delete('embed');
 				url.searchParams.delete('source');
 				if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
+					url.searchParams.delete( 'month' );
+					url.searchParams.delete( 'dy' );
+					url.searchParams.delete( 'yr' );
 					if ( '' !== month && 'undefined' !== typeof( month ) ) {
-						url.searchParams.delete( 'month' );
-						url.searchParams.delete( 'dy' );
-						url.searchParams.delete( 'yr' );
-
 						url.searchParams.append( 'month', parseInt( month ) );
 						if ( 'undefined' !== typeof( day ) ) {
 							url.searchParams.append( 'dy', parseInt( day ) );
 						}
 						url.searchParams.append( 'yr', parseInt( year ) );
 					}
+					url.searchParams.delete( 'mcat' );
 					if ( '' !== mcat && 'undefined' !== typeof( mcat ) ) {
-						url.searchParams.delete( 'mcat' );
 						url.searchParams.append( 'mcat', mcat );
 					}
+					url.searchParams.delete( 'loc' );
+					url.searchParams.delete( 'ltype' );
 					if ( '' !== loc && 'undefined' !== typeof( loc ) ) {
-						url.searchParams.delete( 'loc' );
-						url.searchParams.delete( 'ltype' );
 						url.searchParams.append( 'ltype', 'id' );
 						url.searchParams.append( 'loc', loc );
 					}
+					url.searchParams.delete( 'access' );
 					if ( '' !== access && 'undefined' !== typeof( access ) ) {
-						url.searchParams.delete( 'access' );
 						if ( 'all' !== access ) {
 							url.searchParams.append( 'access', parseInt( access ) );
 						}
