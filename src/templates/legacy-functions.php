@@ -171,7 +171,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
 			if ( mc_output_is_visible( 'access', $type, $event ) ) {
-				$access = mc_template_access( $event, $type );
+				$access = mc_template_access( $data, $type, '', 'return' );
 			}
 			if ( 'true' === $display_gcal || mc_output_is_visible( 'gcal', $type, $event ) ) {
 				$gcal = "	<p class='gcal'>" . mc_draw_template( $data['tags'], '{gcal_link}' ) . '</p>';

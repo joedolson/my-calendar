@@ -2067,9 +2067,11 @@ function mc_template_host( $data, $type = 'calendar' ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  * @param string $text Optional. Accessibility heading text.
+ * @param string $return_type return or echo.
  */
-function mc_template_access( $data, $type = 'calendar', $text = '' ) {
-	$event  = $data->event;
+function mc_template_access( $data, $type = 'calendar', $text = '', $return_type = 'echo' ) {
+	$event  = ( is_object( $data ) ) ? $data->event : $data['event'];
+	$time   = ( is_object( $data ) ) ? $data->time : $data['time'];
 	$output = '';
 	if ( mc_output_is_visible( 'access', $type, $event ) ) {
 		$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
@@ -2077,16 +2079,16 @@ function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 		$access_data    = get_post_meta( $event->event_post, '_mc_event_access', true );
 		$notes          = ( is_array( $access_data ) ) ? $access_data['notes'] : $access_data;
 		$sublevel       = 'h2';
-		if ( 'mini' === $type || 'list' === $type || 'list' === $data->time ) {
+		if ( 'mini' === $type || 'list' === $type || 'list' === $time ) {
 			// In some views, levels are reduced one because there are multiple events.
-			$sublevel = ( 'list' === $data->time ) ? 'h4' : 'h3';
+			$sublevel = ( 'list' === $time ) ? 'h4' : 'h3';
 		}
 		$terms  = wp_get_object_terms( $event->event_post, 'mc-event-access' );
 		$access = array();
 		foreach ( $terms as $term ) {
 			$access[] = '<li class="' . esc_attr( $term->slug ) . '"><span>' . esc_html( $term->name ) . '</span></li>';
 		}
-		$access_content = '<ul class="mc-access">' . implode( '', $access ) . '</ul>';
+		$access_content = implode( '', $access );
 		/**
 		 * Filter subheading levels inside event content.
 		 *
@@ -2099,19 +2101,22 @@ function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 		 *
 		 * @return {string}
 		 */
-		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $data->time, 'php' );
-		if ( $access_content ) {
+		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $time, 'php' );
+		if ( '' !== trim( $access_content ) ) {
 			$output = '
 			<div class="mc-accessibility">
 				<' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>
-				' . $access_content . '
+				<ul class="mc-access">' . $access_content . '</ul>
 				<p>' . $notes . '</p>
 			</div>';
 		}
 		$output = ( '' !== $output ) ? '<div class="mc-access-information">' . $output . '</div>' : '';
 	}
-
-	echo wp_kses_post( $output );
+	if ( 'return' === $return_type ) {
+		return $output;
+	} else {
+		echo wp_kses_post( $output );
+	}
 }
 
 /**
