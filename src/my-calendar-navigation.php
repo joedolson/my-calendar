@@ -966,14 +966,14 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			}
 		}
 	}
-	$form .= ( 'list' === $show || 'group' === $group ) ? '' : '</div><p>';
-
+	$form          .= ( 'list' === $show || 'group' === $group ) ? '' : '</div><p>';
 	$access_options = array();
-	$args     = array(
+	$args           = array(
 		'taxonomy'   => 'mc-event-access',
 		'hide_empty' => true,
 	);
-	$taxonomy = get_terms( $args );
+	$taxonomy       = get_terms( $args );
+
 	foreach ( $taxonomy as $term ) {
 		$access_options[ $term->term_taxonomy_id ] = $term->name;
 	}

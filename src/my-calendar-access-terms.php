@@ -434,8 +434,8 @@ function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_typ
  * @return string
  */
 function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access' ) {
-	$terms    = ( $event ) ? mc_get_access_terms( $event, $taxonomy, 'ids' ) : array();
-	$args     = array(
+	$terms      = ( $event ) ? mc_get_access_terms( $event, $taxonomy, 'ids' ) : array();
+	$args       = array(
 		'taxonomy'   => $taxonomy,
 		'hide_empty' => false,
 	);
