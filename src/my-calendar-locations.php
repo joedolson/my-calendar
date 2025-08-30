@@ -246,9 +246,9 @@ function mc_get_location_id( $post_ID ) {
 /**
  * Update a single field in a location.
  *
- * @param string    $field field name.
- * @param int|float $data data to update to.
- * @param int       $location location ID.
+ * @param string           $field field name.
+ * @param int|float|string $data data to update to.
+ * @param int              $location location ID.
  *
  * @return mixed boolean/int query result
  */
@@ -258,7 +258,11 @@ function mc_update_location( $field, $data, $location ) {
 	if ( 'location_latitude' === $field || 'location_longitude' === $field ) {
 		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %f WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	} else {
-		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		if ( is_string( $data ) ) {
+			$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %s WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		} else {
+			$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		}
 	}
 
 	return $result;
