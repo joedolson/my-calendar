@@ -125,7 +125,7 @@
 				url.searchParams.delete('embed');
 				url.searchParams.delete('source');
 				if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
-					if ( '' !== month ) {
+					if ( '' !== month && 'undefined' !== typeof( month ) ) {
 						url.searchParams.delete( 'month' );
 						url.searchParams.delete( 'dy' );
 						url.searchParams.delete( 'yr' );
@@ -136,17 +136,17 @@
 						}
 						url.searchParams.append( 'yr', parseInt( year ) );
 					}
-					if ( '' !== mcat ) {
+					if ( '' !== mcat && 'undefined' !== typeof( mcat ) ) {
 						url.searchParams.delete( 'mcat' );
 						url.searchParams.append( 'mcat', mcat );
 					}
-					if ( '' !== loc ) {
+					if ( '' !== loc && 'undefined' !== typeof( loc ) ) {
 						url.searchParams.delete( 'loc' );
 						url.searchParams.delete( 'ltype' );
 						url.searchParams.append( 'ltype', 'id' );
 						url.searchParams.append( 'loc', loc );
 					}
-					if ( '' !== access ) {
+					if ( '' !== access && 'undefined' !== typeof( access ) ) {
 						url.searchParams.delete( 'access' );
 						url.searchParams.append( 'access', parseInt( access ) );
 					}
