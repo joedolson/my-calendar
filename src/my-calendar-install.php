@@ -683,7 +683,7 @@ function mc_migrate_location_access( $limit = 200 ) {
 	// Get all locations with a value saved for accessibility.
 	$locations = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id, location_access FROM ' . my_calendar_locations_table() . ' WHERE location_access != "" LIMIT 0,%d', $limit ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	// Get location access terms.
-	$options   = mc_location_access();
+	$options = mc_location_access();
 	// Get selection of events not already migrated.
 	$count = count( $locations );
 	if ( 0 === $count ) {
@@ -715,11 +715,3 @@ function mc_migrate_location_access( $limit = 200 ) {
 }
 // Register this action in action scheduler.
 add_action( 'mc_location_access_migration', 'mc_location_event_access' );
-
-
-add_action( 'admin_notices', 'mc_test_migration' );
-function mc_test_migration() {
-	if ( isset( $_GET['test'] ) ) {
-		mc_migrate_event_access();
-	}
-}
