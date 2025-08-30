@@ -1238,6 +1238,7 @@ function mc_do_upgrades( $upgrade_path ) {
 	if ( empty( $upgrade_path ) ) {
 		return false;
 	}
+	// Retain upgrade paths for 5 years.
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
 			case '3.7.0': // Date TBD.
