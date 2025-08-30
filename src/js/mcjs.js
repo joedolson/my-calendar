@@ -113,7 +113,9 @@
 				if ( inputForm.classList.contains( 'mc-access-switcher' ) ) {
 					access = inputForm.querySelector( 'select[name=access]' ).value;
 				}
-				mcs  = inputForm.querySelector( 'input[name=mcs]' ).value;
+				if ( inputForm.classList.contains( 'mc-search' ) ) {
+					mcs = inputForm.querySelector( 'input[name=mcs]' ).value;
+				}
 				link = el.getAttribute( 'data-href' );
 			} else {
 				link = el.getAttribute('href');
