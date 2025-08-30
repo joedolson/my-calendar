@@ -93,12 +93,12 @@
 }
 
 /* Navigation */
-.my-calendar-nav .my-calendar-prev a .mc-icon::before {
+.my-calendar-nav .my-calendar-prev .mc-icon::before {
 	content: '\25C0 ';
 	margin-right: 4px;
 }
 
-.my-calendar-nav .my-calendar-next a .mc-icon::before {
+.my-calendar-nav .my-calendar-next .mc-icon::before {
 	content: ' \25b6';
 	margin-left: 4px;
 }

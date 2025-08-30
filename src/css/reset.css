@@ -349,7 +349,7 @@
 	margin-bottom: .5rem;
 }
 
-.mc-main .mc-print a .mc-icon::before {
+.mc-main .mc-print .mc-icon::before {
 	content: "\f497";
 }
 
@@ -369,16 +369,16 @@
 	content: "\f132";
 }
 
-.mc-main .mc-list .event-title a.list .mc-icon::before {
+.mc-main .mc-list .event-title .list .mc-icon::before {
 	content: "\f132";
 }
 
-.mc-main .mc-list .event-title a.list[aria-expanded=true] .mc-icon::before,
+.mc-main .mc-list .event-title .list[aria-expanded=true] .mc-icon::before,
 .mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
 	content: "\f460";
 }
 
-.my-calendar-today a .mc-icon::before {
+.my-calendar-today .mc-icon::before {
 	content: '\f145';
 	width: 0px;
 	color: transparent;
@@ -387,7 +387,7 @@
 }
 
 .mc-loader.mc-previous .mc-icon::before,
-.my-calendar-prev a .mc-icon::before {
+.my-calendar-prev .mc-icon::before {
 	content: '\f341';
 }
 
@@ -405,7 +405,7 @@
 }
 
 .mc-loader.mc-next .mc-icon::before,
-.my-calendar-next a .mc-icon::before {
+.my-calendar-next .mc-icon::before {
 	content: '\f345';
 	margin-left: 2px;
 	margin-right: 0;
