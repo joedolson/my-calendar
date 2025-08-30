@@ -5,11 +5,11 @@
 	mc_display_usertime();
 	initjs();
 
-	function initjs() {
+	function initjs( ref = false ) {
 		const calendar = document.querySelectorAll( '.mc-main, .mc-event-list' );
 		if ( calendar ) {
 			calendar.forEach( (el) => {
-				let targetId = el.getAttribute( 'id' );
+				let targetId = ( ref ) ? ref : el.getAttribute( 'id' );
 				mc_build_toggles( targetId );
 				el.classList.remove( 'mcjs' );
 			});
@@ -94,14 +94,17 @@
 		if ( 'click' === e.type || ( 'keyup' === e.type && ' ' === e.key ) ) {
 			const calendar = el.closest( '.mc-main' );
 			calendar.classList.remove( 'is-main-view' );
-			let targetId   = el.getAttribute( 'id' ), ref = calendar.getAttribute('id'),
-							month, day, year, mcat, loc, access, mcs, link, url;
+			let targetId = el.getAttribute( 'id' ), ref = calendar.getAttribute('id'),
+				month, day, year, mcat, loc, access, mcs, link, url;
 
 			if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
 				const inputForm = el.closest( 'form' );
 				if ( inputForm.classList.contains( 'mc-date-switcher' ) ) {
 					month = inputForm.querySelector( 'select[name=month]' ).value;
-					day   = inputForm.querySelector( 'select[name=dy]' ).value;
+					let day_input = inputForm.querySelector( 'select[name=dy]' );
+					if ( day_input ) {
+						day = day_input.value;
+					}
 					year  = inputForm.querySelector( 'select[name=yr]' ).value;
 				}
 				if ( inputForm.classList.contains( 'mc-categories-switcher' ) ) {
@@ -113,7 +116,7 @@
 				if ( inputForm.classList.contains( 'mc-access-switcher' ) ) {
 					access = inputForm.querySelector( 'select[name=access]' ).value;
 				}
-				if ( inputForm.classList.contains( 'mc-search' ) ) {
+				if ( inputForm.classList.contains( 'mc-search-form' ) ) {
 					mcs = inputForm.querySelector( 'input[name=mcs]' ).value;
 				}
 				link = el.getAttribute( 'data-href' );
@@ -148,7 +151,9 @@
 					}
 					if ( '' !== access && 'undefined' !== typeof( access ) ) {
 						url.searchParams.delete( 'access' );
-						url.searchParams.append( 'access', parseInt( access ) );
+						if ( 'all' !== access ) {
+							url.searchParams.append( 'access', parseInt( access ) );
+						}
 					}
 					url.searchParams.delete( 'mcs' );
 					if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
@@ -183,7 +188,7 @@
 	}
 
 	function mc_build_calendar( targetId, ref ) {
-		initjs();
+		initjs( ref );
 		// functions to execute when new view loads.
 		// List view.
 		if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
@@ -225,7 +230,6 @@
 		let refAnnounce = document.getElementById( 'mc_head_' + ref );
 		wp.a11y.speak( refAnnounce.innerText );
 		mc_display_usertime();
-		mc_build_toggles( ref );
 		mc_setup_handlers();
 		my_calendar_table_aria();
 	}
@@ -298,18 +302,20 @@
 				el.addEventListener( 'click', function() {
 					let controlled = el.getAttribute( 'aria-controls' );
 					let target     = document.getElementById( controlled );
-					if ( target.checkVisibility() ) {
-						target.style.display = 'none';
-						el.setAttribute( 'aria-expanded', 'false' );
-						icon = el.querySelector( '.dashicons' );
-						icon.classList.remove( 'dashicons-arrow-down' );
-						icon.classList.add( 'dashicons-arrow-right' );
-					} else {
-						target.style.display = 'block';
-						el.setAttribute( 'aria-expanded', 'true' );
-						icon = el.querySelector( '.dashicons' );
-						icon.classList.remove( 'dashicons-arrow-right' )
-						icon.classList.add( 'dashicons-arrow-down' );
+					if ( target ) {
+						if ( target.checkVisibility() ) {
+							target.style.display = 'none';
+							el.setAttribute( 'aria-expanded', 'false' );
+							icon = el.querySelector( '.dashicons' );
+							icon.classList.remove( 'dashicons-arrow-down' );
+							icon.classList.add( 'dashicons-arrow-right' );
+						} else {
+							target.style.display = 'block';
+							el.setAttribute( 'aria-expanded', 'true' );
+							icon = el.querySelector( '.dashicons' );
+							icon.classList.remove( 'dashicons-arrow-right' )
+							icon.classList.add( 'dashicons-arrow-down' );
+						}
 					}
 				});
 			});
