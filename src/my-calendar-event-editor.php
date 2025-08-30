@@ -395,7 +395,7 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
  * Handle saving an event.
  */
 function mc_admin_save() {
-	$action   = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
+	$action = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
 	if ( isset( $_GET['mode'] ) ) {
 		$action = sanitize_text_field( $_GET['mode'] );
 	}
@@ -441,7 +441,7 @@ function mc_admin_save() {
 				$response[] = mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>', false );
 			}
 		}
-		if ( ! empty ( $response ) ) {
+		if ( ! empty( $response ) ) {
 			set_transient( 'mc_save_response', $response, 5 );
 			if ( $do_redirect ) {
 				wp_safe_redirect( esc_url_raw( $redirect_url ) );
@@ -638,6 +638,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			if ( '0' === (string) $add['event_approved'] ) {
 				$edit_event = '';
 				if ( mc_can_edit_event( $event_id ) && '' !== $edit_link ) {
+					// Translators: The ID number of the event to be edited.
 					$edit_event = sprintf( ' <a href="%s">' . sprintf( __( 'Continue editing event #%d.', 'my-calendar' ), $event_id ) . '</a>', $edit_link );
 				}
 				$type    = 'draft-saved';
