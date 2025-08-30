@@ -2065,7 +2065,7 @@ function mc_event_accessibility( $form, $data, $label ) {
 			<legend class='$class'>$label</legend>
 			<ul class='accessibility-features checkboxes'>";
 	$form .= mc_admin_access_term_list( $data );
-	$notes = property_exists( $data, 'event_post' ) ? get_post_meta( $data->event_post, '_mc_event_access', true ) : '';
+	$notes = ( is_object( $data ) && property_exists( $data, 'event_post' ) ) ? get_post_meta( $data->event_post, '_mc_event_access', true ) : '';
 	if ( is_array( $notes ) ) {
 		$notes = $notes['notes'];
 	}
