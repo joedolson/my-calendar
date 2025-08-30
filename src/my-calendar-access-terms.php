@@ -439,9 +439,9 @@ function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access
 		'taxonomy'   => $taxonomy,
 		'hide_empty' => false,
 	);
-	$taxonomy = get_terms( $args );
-	$inputs   = '';
-	foreach ( $taxonomy as $tax ) {
+	$taxonomies = get_terms( $args );
+	$inputs     = '';
+	foreach ( $taxonomies as $tax ) {
 		$name    = ( 'mc-event-access' === $taxonomy ) ? 'events_access[]' : 'location_access[]';
 		$id      = 'access_term_' . absint( $tax->term_id );
 		$inputs .= '<li><input type="checkbox" ' . checked( true, in_array( $tax->term_id, $terms, true ), false ) . ' name="' . $name . '" id="' . $id . '" value="' . absint( $tax->term_id ) . '"> <label for="' . $id . '">' . esc_html( $tax->name ) . '</label></li>';
