@@ -71,11 +71,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 			$terms[] = (int) $term;
 		}
 		$event_in_trash = ( isset( $data['event_approved'] ) && 2 === (int) $data['event_approved'] ) ? true : false;
-		if ( $event_in_trash ) {
-			$status = 'trash';
-		} else {
-			$status = $privacy;
-		}
+		$status         = ( $event_in_trash ) ? 'trash' : $privacy;
 
 		$title = $data['event_title'];
 		/**
@@ -396,19 +392,12 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
 }
 
 /**
- * Generate inner wrapper for editing and managing events
+ * Handle saving an event.
  */
-function my_calendar_edit() {
-	mc_check_imports();
-
+function mc_admin_save() {
 	$action   = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
-	$event_id = ! empty( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : '';
-
 	if ( isset( $_GET['mode'] ) ) {
 		$action = sanitize_text_field( $_GET['mode'] );
-		if ( 'edit' === $action || 'copy' === $action ) {
-			$event_id = (int) $_GET['event_id'];
-		}
 	}
 
 	if ( isset( $_POST['event_action'] ) ) {
@@ -419,25 +408,69 @@ function my_calendar_edit() {
 		}
 
 		global $mc_output;
-		$count = 0;
+		$count        = 0;
+		$do_redirect  = false;
+		$redirect_url = '';
 
+		$response = array();
 		if ( isset( $post['event_begin'] ) && is_array( $post['event_begin'] ) ) {
 			$count = count( $post['event_begin'] );
 		} else {
-			$response = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
-			echo wp_kses_post( $response['message'] );
+			$reaction   = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
+			$response[] = $reaction;
+			$type       = $reaction['type'];
+			if ( 'draft-saved' === $type ) {
+				$do_redirect  = true;
+				$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
+			}
 		}
 		for ( $i = 0; $i < $count; $i++ ) {
-			$response = mc_insert_event( $action, $post, $i );
-			echo wp_kses_post( $response['message'] );
+			$reaction   = mc_insert_event( $action, $post, $i );
+			$response[] = $reaction;
+			$type       = $reaction['type'];
+			// Only redirect if there's a single event saved.
+			if ( 'draft-saved' === $type && 1 === $count ) {
+				$do_redirect  = true;
+				$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
+			}
 		}
 		if ( isset( $post['ref'] ) ) {
 			$url = urldecode( sanitize_text_field( $post['ref'] ) );
 			// A link to the main calendar is always shown. Only show this if it was a different calendar.
 			if ( mc_get_uri() !== $url ) {
-				mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>' );
+				$response[] = mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>', false );
 			}
 		}
+		if ( ! empty ( $response ) ) {
+			set_transient( 'mc_save_response', $response, 5 );
+			if ( $do_redirect ) {
+				wp_safe_redirect( esc_url_raw( $redirect_url ) );
+			}
+		}
+	}
+}
+add_action( 'admin_init', 'mc_admin_save' );
+
+/**
+ * Generate inner wrapper for editing and managing events
+ */
+function my_calendar_edit() {
+	mc_check_imports();
+	$action   = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
+	$event_id = ! empty( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : '';
+
+	if ( isset( $_GET['mode'] ) ) {
+		$action = sanitize_text_field( $_GET['mode'] );
+		if ( 'edit' === $action || 'copy' === $action ) {
+			$event_id = (int) $_GET['event_id'];
+		}
+	}
+	$responses = get_transient( 'mc_save_response' );
+	if ( $responses ) {
+		foreach ( $responses as $response ) {
+			mc_show_notice( $response['message'] );
+		}
+		delete_transient( 'mc_save_response' );
 	}
 	?>
 
@@ -518,7 +551,7 @@ function mc_do_event_save_actions( $action, $data, $event_id, $result ) {
  * @param array       $output Checked event data & post data.
  * @param int|boolean $event_id Event ID or false for new events.
  *
- * @return array Array with event_id, event_post, and message keys.
+ * @return array Array with event_id, event_post, message, and type keys.
  */
 function my_calendar_save( $action, $output, $event_id = false ) {
 	global $wpdb;
@@ -565,6 +598,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		mc_increment_event( $event_id );
 		mc_set_category_relationships( $cats, $event_id );
 		if ( ! $result ) {
+			$type    = 'error';
 			$message = mc_show_error( __( "I'm sorry! I couldn't add that event to the database.", 'my-calendar' ), false );
 		} else {
 			// do an action using the $action and processed event data.
@@ -604,9 +638,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			if ( '0' === (string) $add['event_approved'] ) {
 				$edit_event = '';
 				if ( mc_can_edit_event( $event_id ) && '' !== $edit_link ) {
-					$edit_event = sprintf( ' <a href="%s">' . __( 'Continue editing event.', 'my-calendar' ) . '</a>', $edit_link );
+					$edit_event = sprintf( ' <a href="%s">' . sprintf( __( 'Continue editing event #%d.', 'my-calendar' ), $event_id ) . '</a>', $edit_link );
 				}
-				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, 'draft-saved', 'success' );
+				$type    = 'draft-saved';
+				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, $type, 'success' );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
 				// wpt_post_to_twiter was changed to wpt_post_to_service on 12.29.2024.
@@ -707,6 +742,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 						// Only dates were changed.
 						mc_update_instance( $event_instance, $event_id, $update );
 						$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url", false, 'date-updated', 'success' );
+						$type    = 'update';
 					}
 				}
 			} else {
@@ -745,6 +781,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			}
 			if ( false === $result ) {
 				$message = mc_show_error( __( 'Your event was not updated.', 'my-calendar' ) . " $url", false );
+				$type    = 'error';
 			} else {
 				// do an action using the $action and processed event data.
 				$new_event_status = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
@@ -767,9 +804,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					do_action( 'mc_transition_event', (int) $post['prev_event_status'], $new_event_status, $action, $update, $event_id );
 				}
 				$message = mc_show_notice( __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, 'event-updated', 'success' );
+				$type    = 'update';
 			}
 		} else {
 			$message = mc_show_error( __( 'You do not have sufficient permissions to edit that event.', 'my-calendar' ), false );
+			$type    = 'error';
 		}
 	}
 
@@ -778,6 +817,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		'event_id'   => $event_id,
 		'event_post' => $event_post,
 		'message'    => $message,
+		'type'       => $type,
 	);
 	mc_update_count_cache();
 
