@@ -404,9 +404,9 @@ function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
  */
 function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_type = 'string' ) {
 	if ( 'mc-event-access' === $taxonomy ) {
-		$terms = ( property_exists( $event, 'event_post' ) ) ? wp_get_object_terms( $event->event_post, $taxonomy ) : array();
+		$terms = ( is_object( $event ) && property_exists( $event, 'event_post' ) ) ? wp_get_object_terms( $event->event_post, $taxonomy ) : array();
 	} else {
-		$location_post = property_exists( $event, 'location_post' ) ? $event->location_post : false;
+		$location_post = ( is_object( $event ) && property_exists( $event, 'location_post' ) ) ? $event->location_post : false;
 		$terms         = ( $location_post ) ? wp_get_object_terms( $location_post, $taxonomy ) : array();
 	}
 	$return = ( 'string' === $return_type ) ? '' : array();
