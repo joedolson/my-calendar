@@ -968,7 +968,15 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 	}
 	$form .= ( 'list' === $show || 'group' === $group ) ? '' : '</div><p>';
 
-	$access_options = mc_event_access();
+	$access_options = array();
+	$args     = array(
+		'taxonomy'   => 'mc-event-access',
+		'hide_empty' => true,
+	);
+	$taxonomy = get_terms( $args );
+	foreach ( $taxonomy as $term ) {
+		$access_options[ $term->term_id ] = $term->name;
+	}
 	if ( ! empty( $access_options ) && count( $access_options ) >= 1 ) {
 		$output       = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';
 		$url          = mc_build_url( array( 'access' => 'all' ), array() );
