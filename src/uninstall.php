@@ -43,6 +43,8 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		delete_option( 'my_calendar_options' );
 		delete_option( 'ko_calendar_imported' );
 		delete_option( 'mc_count_cache' );
+		delete_option( 'mc_event_access_migration_completed' );
+		delete_option( 'mc_location_access_migration_completed' );
 		// Deletes custom template options.
 		mc_delete_templates();
 	}
