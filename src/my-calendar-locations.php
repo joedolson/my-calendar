@@ -703,6 +703,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
+		$access_terms            = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+		$location->accessibility = wp_list_pluck( $access_terms, 'name' );
 		$prevent_geolocation     = ( '1' === get_post_meta( $location->location_post, '_mc_geolocate_error', true ) && 'force' !== $update_location ) ? true : false;
 		if ( ! $prevent_geolocation ) {
 			if ( $update_location ) {
