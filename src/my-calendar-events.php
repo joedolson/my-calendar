@@ -210,6 +210,7 @@ function my_calendar_get_events( $args ) {
 	$select_host        = ( 'all' !== $clhost ) ? mc_select_host( $clhost ) : '';
 	$select_location    = mc_select_location( $cltype, $clvalue );
 	$select_access      = ( isset( $get['access'] ) ) ? mc_access_limit( $get['access'] ) : '';
+	$if_where           = ( $select_access ) ? '' : 'WHERE ';
 	$select_published   = mc_select_published();
 	$search             = mc_prepare_search_query( $search );
 	$exclude_categories = mc_private_categories();
@@ -263,7 +264,8 @@ function my_calendar_get_events( $args ) {
 	ON (event_category=category_id)
 	$join
 	$location_join
-	WHERE $select_published $select_category $select_author $select_host $select_access $search
+	$select_access
+	$if_where $select_published $select_category $select_author $select_host $search
 	AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 		OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 		OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )

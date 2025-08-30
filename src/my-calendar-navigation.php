@@ -975,7 +975,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 	);
 	$taxonomy = get_terms( $args );
 	foreach ( $taxonomy as $term ) {
-		$access_options[ $term->term_id ] = $term->name;
+		$access_options[ $term->term_taxonomy_id ] = $term->name;
 	}
 	if ( ! empty( $access_options ) && count( $access_options ) >= 1 ) {
 		$output       = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';

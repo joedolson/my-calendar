@@ -314,9 +314,8 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
  * @return string limits to add to query
  */
 function mc_access_limit( $access ) {
-	$options      = mc_event_access();
-	$format       = ( isset( $options[ $access ] ) ) ? esc_sql( $options[ $access ] ) : false;
-	$limit_string = ( $format ) ? "AND event_access LIKE '%$format%'" : '';
+	global $wpdb;
+	$limit_string = ' JOIN ' . $wpdb->term_relationships . ' AS tr ON (tr.object_id=e.event_post) WHERE tr.term_taxonomy_id = ' . absint( $access ) . ' AND ';
 
 	return $limit_string;
 }
