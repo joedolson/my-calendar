@@ -1285,39 +1285,6 @@ function mc_display_location_fields( $fields, $data, $context ) {
 }
 
 /**
- * Array of location access features
- *
- * @return array
- */
-function mc_location_access() {
-	$location_access = array(
-		'1'  => __( 'Accessible Entrance', 'my-calendar' ),
-		'2'  => __( 'Accessible Parking Designated', 'my-calendar' ),
-		'3'  => __( 'Accessible Restrooms', 'my-calendar' ),
-		'4'  => __( 'Accessible Seating', 'my-calendar' ),
-		'5'  => __( 'Accessible Transportation Available', 'my-calendar' ),
-		'6'  => __( 'Wheelchair Accessible', 'my-calendar' ),
-		'7'  => __( 'Courtesy Wheelchairs', 'my-calendar' ),
-		'8'  => __( 'Bariatric Seating Available', 'my-calendar' ),
-		'9'  => __( 'Elevator to all public areas', 'my-calendar' ),
-		'10' => __( 'Braille Signage', 'my-calendar' ),
-		'11' => __( 'Fragrance-Free Policy', 'my-calendar' ),
-		'12' => __( 'Other', 'my-calendar' ),
-	);
-
-	/**
-	 * Filter choices available for location accessibility services.
-	 *
-	 * @hook mc_location_access_choices
-	 *
-	 * @param {array} Array of location choices (numeric keys, string values.)
-	 *
-	 * @return {array}
-	 */
-	return apply_filters( 'mc_location_access_choices', $location_access );
-}
-
-/**
  * Get a specific field with an location ID
  *
  * @param string $field Specific field to get.
