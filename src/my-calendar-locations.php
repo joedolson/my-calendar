@@ -355,18 +355,47 @@ function mc_count_location_events( $location ) {
 /**
  * Update a location.
  *
- * @param array $update Array of location details to modify.
- * @param array $where [location_id => int] Location ID to update.
+ * @param array $post Array of data posted to update.
  *
  * @return mixed boolean/int query result.
  */
-function mc_modify_location( $update, $where ) {
+function mc_update_location( $post ) {
 	global $wpdb;
+	$update = array(
+		'location_label'     => $post['location_label'],
+		'location_street'    => $post['location_street'],
+		'location_street2'   => $post['location_street2'],
+		'location_city'      => $post['location_city'],
+		'location_state'     => $post['location_state'],
+		'location_postcode'  => $post['location_postcode'],
+		'location_region'    => $post['location_region'],
+		'location_country'   => $post['location_country'],
+		'location_url'       => $post['location_url'],
+		'location_longitude' => $post['location_longitude'],
+		'location_latitude'  => $post['location_latitude'],
+		'location_zoom'      => $post['location_zoom'],
+		'location_phone'     => $post['location_phone'],
+		'location_phone2'    => $post['location_phone2'],
+		'location_access'    => '',
+	);
+
+	$where   = array( 'location_id' => (int) $post['location_id'] );
 	$update  = array_map( 'mc_kses_post', $update );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->update( my_calendar_locations_table(), $update, $where, $formats, '%d' );
 
 	delete_transient( 'mc_location_' . absint( $where['location_id'] ) );
+
+	/**
+	 * Executed an action when a location is modified.
+	 *
+	 * @hook mc_modify_location
+	 *
+	 * @param {array} $where Array [location_id => $id].
+	 * @param {array} $update Array of location parameters to update.
+	 * @param {array} $post POST array.
+	 */
+	$results = apply_filters( 'mc_modify_location', $where, $update, $_POST );
 
 	return $results;
 }
@@ -482,25 +511,9 @@ function my_calendar_add_locations() {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
 	} elseif ( isset( $post['location_id'] ) && isset( $post['location_label'] ) && 'edit' === $post['mode'] ) {
-		$update = array(
-			'location_label'     => $post['location_label'],
-			'location_street'    => $post['location_street'],
-			'location_street2'   => $post['location_street2'],
-			'location_city'      => $post['location_city'],
-			'location_state'     => $post['location_state'],
-			'location_postcode'  => $post['location_postcode'],
-			'location_region'    => $post['location_region'],
-			'location_country'   => $post['location_country'],
-			'location_url'       => $post['location_url'],
-			'location_longitude' => $post['location_longitude'],
-			'location_latitude'  => $post['location_latitude'],
-			'location_zoom'      => $post['location_zoom'],
-			'location_phone'     => $post['location_phone'],
-			'location_phone2'    => $post['location_phone2'],
-			'location_access'    => '',
-		);
 
-		$where = array( 'location_id' => (int) $post['location_id'] );
+		$results = mc_update_location( $post );
+
 		if ( isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', (int) $post['location_id'] );
 		}
@@ -508,18 +521,6 @@ function my_calendar_add_locations() {
 		if ( (int) $post['location_id'] === (int) $default_location && ! isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', '' );
 		}
-		$results = mc_modify_location( $update, $where );
-
-		/**
-		 * Executed an action when a location is modified.
-		 *
-		 * @hook mc_modify_location
-		 *
-		 * @param {array} $where Array [location_id => $id].
-		 * @param {array} $update Array of location parameters to update.
-		 * @param {array} $post POST array.
-		 */
-		$results = apply_filters( 'mc_modify_location', $where, $update, $_POST );
 		if ( false === $results ) {
 			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
 		} elseif ( 0 === $results ) {
