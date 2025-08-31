@@ -393,7 +393,7 @@ function mc_location_image( $event, $source = 'event' ) {
  *
  * @return string hcard
  */
-function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event', $omit_title = false ) {
+function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' ) {
 	$event = mc_get_event_location( $event, $source );
 	if ( ! $event ) {
 		return '';
@@ -401,7 +401,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event', 
 	$source  = 'location';
 	$the_map = mc_maplink( $event, 'url', $source );
 	$url     = esc_url( $event->location_url );
-	$label   = ( $omit_title ) ? '' : strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
+	$label   = strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
 	$street  = strip_tags( wp_unslash( $event->location_street ), mc_strip_tags() );
 	$street2 = strip_tags( wp_unslash( $event->location_street2 ), mc_strip_tags() );
 	$city    = strip_tags( wp_unslash( $event->location_city ), mc_strip_tags() );
@@ -1336,19 +1336,9 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				if ( strlen( $address ) < 10 && ! $latlng ) {
 					return '';
 				}
-				$hcard  = mc_hcard( $location, 'true', false, 'location', true );
+				$hcard  = mc_hcard( $location, 'true', false, 'location' );
 				$title  = esc_attr( $location->location_label );
-				$marker = wp_kses(
-					str_replace(
-						array( '</div>', '<br />', '<br><br>' ),
-						'<br>',
-						$hcard
-					),
-					array(
-						'br'     => array(),
-						'strong' => array(),
-					)
-				);
+				$marker = wp_kses_post( $hcard );
 				/**
 				 * Source HTML for a single location marker.
 				 *

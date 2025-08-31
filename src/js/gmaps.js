@@ -151,7 +151,7 @@
 			plot.fitBounds(bounds);
 
 			// if marker contains HTML, add it to an infoWindow
-			let content = $marker.innerHTML;
+			let content = $marker.querySelector( '.mc-google-marker' );
 			if ( content ) {
 				let headerEl = document.createElement( 'strong' );
 				headerEl.innerText = locationTitle;
