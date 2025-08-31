@@ -302,7 +302,7 @@ function mc_create_demo_content() {
 			'event_flagged'      => 0,
 			'event_fifth_week'   => 0,
 			'event_holiday'      => 0,
-			'event_group_id'     => 1,
+			'event_group_id'     => 0,
 			'event_span'         => 0,
 			'event_hide_end'     => 0,
 			// Array: removed before DB insertion.
