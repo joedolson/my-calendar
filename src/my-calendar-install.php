@@ -454,9 +454,9 @@ function mc_default_options() {
 }
 
 /**
- * Save default settings.
+ * Do initial plugin installation.
  */
-function mc_default_settings() {
+function mc_initial_install() {
 	delete_option( 'mc_uninstalled' );
 	$globals = mc_globals();
 	$options = mc_default_options();

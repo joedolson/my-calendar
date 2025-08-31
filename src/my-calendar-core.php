@@ -1227,7 +1227,7 @@ function my_calendar_check() {
 		}
 		// If there are no settings, set up default settings.
 		if ( ! $settings ) {
-			mc_default_settings();
+			mc_initial_install();
 		}
 
 		/*
@@ -1235,7 +1235,7 @@ function my_calendar_check() {
 		 * settings and upgrade db if needed.
 		*/
 		if ( 'true' === get_option( 'mc_uninstalled' ) ) {
-			mc_default_settings();
+			mc_initial_install();
 			update_option( 'mc_db_version', mc_get_version() );
 		}
 	}
