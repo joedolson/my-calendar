@@ -1256,6 +1256,7 @@ function mc_do_upgrades( $upgrade_path ) {
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
 			case '3.7.0': // Date TBD.
+				// Accessibility terms are now saved as taxonomy terms.
 				mc_migrate_event_accessibility();
 				mc_migrate_location_accessibility();
 				break;
