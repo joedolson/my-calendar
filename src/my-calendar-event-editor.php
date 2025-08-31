@@ -2432,18 +2432,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 							'location_phone2'    => $event_phone2,
 							'location_access'    => '',
 						);
-						$loc_id         = mc_insert_location( $add_loc );
-						$saved_location = $loc_id;
-						/**
-						 * Execute an action when a location is created during event editing.
-						 *
-						 * @hook mc_save_location
-						 *
-						 * @param {int|false} $loc_id Result of database insertion. Row ID or false.
-						 * @param {array} $add_loc Array of location parameters to add.
-						 * @param {array} $add_loc Array passed from event creation.
-						 */
-						$results = apply_filters( 'mc_save_location', $loc_id, $add_loc, $add_loc );
+						$result         = mc_insert_location( $add_loc );
+						$saved_location = $result['location_id'];
+
 					}
 				}
 			}

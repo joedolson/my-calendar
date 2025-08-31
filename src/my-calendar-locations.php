@@ -308,11 +308,29 @@ function mc_update_location_post_relationship( $location_id, $location_post ) {
 /**
  * Insert a new location.
  *
- * @param array $add Array of location details to add.
+ * @param array $post Array of location details to insert.
  *
- * @return boolean|int New location ID or false.
+ * @return array Array with location_id and location_post.
  */
-function mc_insert_location( $add ) {
+function mc_insert_location( $post ) {
+	$add = array(
+		'location_label'     => $post['location_label'],
+		'location_street'    => $post['location_street'],
+		'location_street2'   => $post['location_street2'],
+		'location_city'      => $post['location_city'],
+		'location_state'     => $post['location_state'],
+		'location_postcode'  => $post['location_postcode'],
+		'location_region'    => $post['location_region'],
+		'location_country'   => $post['location_country'],
+		'location_url'       => $post['location_url'],
+		'location_longitude' => $post['location_longitude'],
+		'location_latitude'  => $post['location_latitude'],
+		'location_zoom'      => $post['location_zoom'],
+		'location_phone'     => $post['location_phone'],
+		'location_phone2'    => $post['location_phone2'],
+		'location_access'    => '',
+	);
+
 	global $wpdb;
 	$add     = array_map( 'mc_kses_post', $add );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
@@ -323,7 +341,23 @@ function mc_insert_location( $add ) {
 		$insert_id = false;
 	}
 
-	return $insert_id;
+	/**
+	 * Execute an action when a location is saved.
+	 *
+	 * @hook mc_save_location
+	 *
+	 * @param {int|false} $results Result of database insertion. Row ID or false.
+	 * @param {array} $add Array of location parameters to add.
+	 * @param {array} $post POST array.
+	 *
+	 * @return Before priority 10, returns the location ID; after priority 10 returns the location post ID. Sorry.
+	 */
+	$results = apply_filters( 'mc_save_location', $insert_id, $add, $post );
+
+	return array(
+		'location_id'   => $insert_id,
+		'location_post' => $results,
+	);
 }
 
 /**
@@ -456,44 +490,16 @@ function my_calendar_add_locations() {
 	$post = map_deep( $_POST, 'wp_kses_post' );
 
 	if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
-		$add = array(
-			'location_label'     => $post['location_label'],
-			'location_street'    => $post['location_street'],
-			'location_street2'   => $post['location_street2'],
-			'location_city'      => $post['location_city'],
-			'location_state'     => $post['location_state'],
-			'location_postcode'  => $post['location_postcode'],
-			'location_region'    => $post['location_region'],
-			'location_country'   => $post['location_country'],
-			'location_url'       => $post['location_url'],
-			'location_longitude' => $post['location_longitude'],
-			'location_latitude'  => $post['location_latitude'],
-			'location_zoom'      => $post['location_zoom'],
-			'location_phone'     => $post['location_phone'],
-			'location_phone2'    => $post['location_phone2'],
-			'location_access'    => '',
-		);
 
-		$location_id = mc_insert_location( $add );
+		$results     = mc_insert_location( $post );
+		$location_id = $results['location_id'];
 		// If this is being generated from an event/location merge, update the event to the new location ID.
 		if ( isset( $_GET['event_source'] ) ) {
 			$source = absint( $_GET['event_source'] );
 			mc_update_data( $source, 'event_location', $location_id );
 		}
-		if ( isset( $post['mc_default_location'] ) ) {
-			mc_update_option( 'default_location', (int) $location_id );
-		}
-		/**
-		 * Execute an action when a location is saved.
-		 *
-		 * @hook mc_save_location
-		 *
-		 * @param {int|false} $results Result of database insertion. Row ID or false.
-		 * @param {array} $add Array of location parameters to add.
-		 * @param {array} $post POST array.
-		 */
-		$results = apply_filters( 'mc_save_location', $location_id, $add, $post );
-		if ( $results ) {
+
+		if ( $location_id ) {
 			$args     = array(
 				'mode'        => 'edit',
 				'location_id' => $location_id,
@@ -504,6 +510,9 @@ function my_calendar_add_locations() {
 		} else {
 			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
+		if ( isset( $post['mc_default_location'] ) ) {
+			mc_update_option( 'default_location', (int) $location_id );
+		}
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
 		$loc = absint( $_GET['location_id'] );
 		echo wp_kses_post( mc_delete_location( $loc ) );
@@ -511,8 +520,7 @@ function my_calendar_add_locations() {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
 	} elseif ( isset( $post['location_id'] ) && isset( $post['location_label'] ) && 'edit' === $post['mode'] ) {
-
-		$results = mc_update_location( $post );
+		$location_id = mc_update_location( $post );
 
 		if ( isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', (int) $post['location_id'] );
@@ -521,9 +529,9 @@ function my_calendar_add_locations() {
 		if ( (int) $post['location_id'] === (int) $default_location && ! isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', '' );
 		}
-		if ( false === $results ) {
+		if ( false === $location_id ) {
 			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
-		} elseif ( 0 === $results ) {
+		} elseif ( 0 === $location_id ) {
 			mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
 		} else {
 			mc_show_notice( __( 'Location edited successfully', 'my-calendar' ), true, false, 'success' );

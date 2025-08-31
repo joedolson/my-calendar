@@ -264,17 +264,9 @@ function mc_create_demo_content() {
 			'location_phone2'    => '',
 			'location_access'    => '',
 		);
-		$results = mc_insert_location( $add );
-		/**
-		 * Executed an action when the demo location is saved at installation.
-		 *
-		 * @hook mc_save_location
-		 *
-		 * @param {int|false} $results Result of database insertion. Row ID or false.
-		 * @param {array} $add Array of location parameters to add.
-		 * @param {array} $add Demo location array.
-		 */
-		$results = apply_filters( 'mc_save_location', $results, $add, $add );
+		$results     = mc_insert_location( $add );
+		$location_id = $results['location_id'];
+
 		// Insert an event.
 		$submit = array(
 			// Begin strings.
@@ -312,7 +304,7 @@ function mc_create_demo_content() {
 		$event    = array( true, false, $submit, false, array() );
 		$response = my_calendar_save( 'add', $event );
 		$event_id = $response['event_id'];
-		mc_update_event( 'event_location', (int) $results, $event_id );
+		mc_update_event( 'event_location', (int) $location_id, $event_id );
 
 		$e       = mc_get_first_event( $event_id );
 		$post_id = $e->event_post;
