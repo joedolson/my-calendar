@@ -489,20 +489,13 @@ function mc_enqueue_calendar_styles( $stylesheet ) {
 }
 
 /**
- * Generate calendar CSS.
+ * Create CSS variable string from an array of variables.
+ *
+ * @param array $styles CSS variables.
+ *
+ * @return string
  */
-function mc_generate_css() {
-	$category_vars   = '';
-	$category_styles = '';
-	// generate category colors.
-	$category_css = mc_generate_category_styles();
-	if ( ! empty( $category_css ) && is_array( $category_css ) ) {
-		$category_styles = ( isset( $category_css['styles'] ) ) ? $category_css['styles'] : '';
-		$category_vars   = ( isset( $category_css['vars'] ) ) ? $category_css['vars'] : '';
-	}
-
-	$styles     = (array) mc_get_option( 'style_vars' );
-	$styles     = mc_style_variables( $styles );
+function mc_create_css_variable_string( $styles ) {
 	$style_vars = '';
 	foreach ( $styles as $key => $var ) {
 		if ( 'text' === $key || 'sizing' === $key || 'list-presets' === $key ) {
@@ -517,6 +510,27 @@ function mc_generate_css() {
 			}
 		}
 	}
+
+	return $style_vars;
+}
+
+/**
+ * Generate calendar CSS variables.
+ */
+function mc_generate_css() {
+	$category_vars   = '';
+	$category_styles = '';
+	// generate category colors.
+	$category_css = mc_generate_category_styles();
+	if ( ! empty( $category_css ) && is_array( $category_css ) ) {
+		$category_styles = ( isset( $category_css['styles'] ) ) ? $category_css['styles'] : '';
+		$category_vars   = ( isset( $category_css['vars'] ) ) ? $category_css['vars'] : '';
+	}
+
+	$styles      = (array) mc_get_option( 'style_vars' );
+	$styles      = mc_style_variables( $styles );
+	$style_vars  = mc_create_css_variable_string( $styles );
+
 	if ( '' !== $style_vars ) {
 		$style_vars = '.mc-main, .mc-event, .my-calendar-modal, .my-calendar-modal-overlay, .mc-event-list {' . $style_vars . $category_vars . '}';
 	}
