@@ -252,7 +252,7 @@ function mc_get_location_id( $post_ID ) {
  *
  * @return mixed boolean/int query result
  */
-function mc_update_location( $field, $data, $location ) {
+function mc_update_location_field( $field, $data, $location ) {
 	global $wpdb;
 	$field = sanitize_key( $field );
 	if ( 'location_latitude' === $field || 'location_longitude' === $field ) {
@@ -726,8 +726,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 						$lng = isset( $loc['longitude'] ) ? $loc['longitude'] : '';
 
 						if ( $lat && $lng ) {
-							mc_update_location( 'location_longitude', $lng, $location_id );
-							mc_update_location( 'location_latitude', $lat, $location_id );
+							mc_update_location_field( 'location_longitude', $lng, $location_id );
+							mc_update_location_field( 'location_latitude', $lat, $location_id );
 							$location->location_longitude = $lng;
 							$location->location_latitude  = $lat;
 						} else {

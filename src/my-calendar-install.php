@@ -705,7 +705,7 @@ function mc_migrate_location_access( $limit = 200 ) {
 				wp_set_object_terms( $post_id, $terms, 'mc-location-access' );
 			}
 			// remove location access data.
-			mc_update_location( 'location_access', '', $location->location_id );
+			mc_update_location_field( 'location_access', '', $location->location_id );
 		}
 
 		if ( false === as_has_scheduled_action( 'mc_location_access_migration' ) ) {
