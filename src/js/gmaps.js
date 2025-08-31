@@ -112,27 +112,28 @@
 		} else {
 			plot.setCenter( latlng );
 			let args;
+			let locationTitle = $marker.getAttribute( 'data-title' );
 			// create marker
 			try {
 				args = {
 					position     : latlng,
 					map          : plot,
 					gmpClickable : true,
-					title        : $marker.getAttribute( 'data-title' ),
+					title        : locationTitle,
 				};
 				if (window.google?.maps?.marker?.AdvancedMarkerElement) {
 					marker = new window.google.maps.marker.AdvancedMarkerElement( args );
 				} else {
-					throw new Error('advancedmarkerelement not available');
+					throw new Error( 'AdvancedMarkerElement not available.' );
 				}
 			} catch (error) {
 				args = {
 					position	: latlng,
 					map			: plot,
 					clickable	: true,
-					title		: $marker.getAttribute( 'data-title' ),
+					title		: locationTitle,
 				};
-				console.warn( 'Falling back to legacy marker:', error.message );
+				console.warn( 'Falling back to legacy marker: ', error.message );
 				marker = new google.maps.Marker( args );
 			}
 
@@ -152,9 +153,12 @@
 			// if marker contains HTML, add it to an infoWindow
 			let content = $marker.innerHTML;
 			if ( content ) {
+				let headerEl = document.createElement( 'strong' );
+				headerEl.innerText = locationTitle;
 				// create info window
 				const infowindow = new google.maps.InfoWindow({
-					content		: content
+					content : content,
+					headerContent : headerEl,
 				});
 
 				// show info window when marker is clicked

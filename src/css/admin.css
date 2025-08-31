@@ -591,3 +591,9 @@ h4.mc-title {
 	display: inline-block;
 	text-transform: none;
 }
+
+.mc-google-marker {
+	padding-right: 1rem;
+	padding-bottom: 1rem;
+	line-height: 1.5;
+}

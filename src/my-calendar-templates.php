@@ -393,7 +393,7 @@ function mc_location_image( $event, $source = 'event' ) {
  *
  * @return string hcard
  */
-function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' ) {
+function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event', $omit_title = false ) {
 	$event = mc_get_event_location( $event, $source );
 	if ( ! $event ) {
 		return '';
@@ -401,7 +401,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$source  = 'location';
 	$the_map = mc_maplink( $event, 'url', $source );
 	$url     = esc_url( $event->location_url );
-	$label   = strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
+	$label   = ( $omit_title ) ? '' : strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
 	$street  = strip_tags( wp_unslash( $event->location_street ), mc_strip_tags() );
 	$street2 = strip_tags( wp_unslash( $event->location_street2 ), mc_strip_tags() );
 	$city    = strip_tags( wp_unslash( $event->location_city ), mc_strip_tags() );
@@ -1336,7 +1336,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				if ( strlen( $address ) < 10 && ! $latlng ) {
 					return '';
 				}
-				$hcard  = mc_hcard( $location, 'true', false, 'location' );
+				$hcard  = mc_hcard( $location, 'true', false, 'location', true );
 				$title  = esc_attr( $location->location_label );
 				$marker = wp_kses(
 					str_replace(
@@ -1360,7 +1360,11 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				 * @return {string} Formatted HTML to be parsed by Google Maps JS.
 				 */
 				$html      = apply_filters( 'mc_map_html', $marker, $location );
-				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
+				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>
+					<div class='mc-google-marker'>
+					$html
+					</div>
+				</div>" . PHP_EOL;
 				$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 			}
 			/**

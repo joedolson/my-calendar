@@ -1267,6 +1267,12 @@ ol.mc-search-results li.no-results {
 	outline: none;
 }
 
+.mc-google-marker {
+	padding-right: 1rem;
+	padding-bottom: 1rem;
+	line-height: 1.5;
+}
+
 /* Prevent missing background image on google maps */
 .mc-gmap-markers img {
 	max-width: none ! important;
