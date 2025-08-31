@@ -247,7 +247,7 @@ function mc_create_demo_content() {
 			)
 		);
 		// Insert a location.
-		$add     = array(
+		$add_event   = array(
 			'location_label'     => 'Demo: Minnesota Orchestra',
 			'location_street'    => '1111 Nicollet Mall',
 			'location_street2'   => '',
@@ -264,7 +264,7 @@ function mc_create_demo_content() {
 			'location_phone2'    => '',
 			'location_access'    => '',
 		);
-		$results     = mc_insert_location( $add );
+		$results     = mc_insert_location( $add_event );
 		$location_id = $results['location_id'];
 
 		// Insert an event.

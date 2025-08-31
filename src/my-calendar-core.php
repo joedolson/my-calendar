@@ -527,9 +527,9 @@ function mc_generate_css() {
 		$category_vars   = ( isset( $category_css['vars'] ) ) ? $category_css['vars'] : '';
 	}
 
-	$styles      = (array) mc_get_option( 'style_vars' );
-	$styles      = mc_style_variables( $styles );
-	$style_vars  = mc_create_css_variable_string( $styles );
+	$styles     = (array) mc_get_option( 'style_vars' );
+	$styles     = mc_style_variables( $styles );
+	$style_vars = mc_create_css_variable_string( $styles );
 
 	if ( '' !== $style_vars ) {
 		$style_vars = '.mc-main, .mc-event, .my-calendar-modal, .my-calendar-modal-overlay, .mc-event-list {' . $style_vars . $category_vars . '}';
