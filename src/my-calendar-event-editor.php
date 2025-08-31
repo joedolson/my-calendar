@@ -170,7 +170,6 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	}
 	if ( isset( $post['events_access'] ) ) {
 		$selected_access = map_deep( $post['events_access'], 'absint' );
-		print_r( $selected_access );
 		wp_set_object_terms( $post_id, $selected_access, 'mc-event-access' );
 	} else {
 		// My Calendar Rest API.
