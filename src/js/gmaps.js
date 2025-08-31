@@ -61,12 +61,14 @@
 		const $markers = el.querySelectorAll( '.marker' );
 		const count    = $markers.length;
 		let mapType  = el.getAttribute( 'data-maptype' );
+		let thisMapId = el.getAttribute( 'id' );
 		// vars
 		const args = {
 			center    : {lng: 0.0000, lat: 0.0000},
-			mapTypeId : mapType
+			mapTypeId : mapType,
+			mapId : thisMapId
 		};
-	
+
 		// create map
 		const plot   = new google.maps.Map( el, args );
 		const bounds = new google.maps.LatLngBounds();
@@ -109,15 +111,36 @@
 			marker = new getAddress( geocoder, $marker, plot, bounds );
 		} else {
 			plot.setCenter( latlng );
+			let args;
 			// create marker
-			marker = new google.maps.Marker({
-				position	: latlng,
-				map			: plot,
-				clickable	: true,
-				title		: $marker.getAttribute( 'data-title' ),
-			});
+			try {
+				args = {
+					position     : latlng,
+					map          : plot,
+					gmpClickable : true,
+					title        : $marker.getAttribute( 'data-title' ),
+				};
+				if (window.google?.maps?.marker?.AdvancedMarkerElement) {
+					marker = new window.google.maps.marker.AdvancedMarkerElement( args );
+				} else {
+					throw new Error('advancedmarkerelement not available');
+				}
+			} catch (error) {
+				args = {
+					position	: latlng,
+					map			: plot,
+					clickable	: true,
+					title		: $marker.getAttribute( 'data-title' ),
+				};
+				console.warn( 'Falling back to legacy marker:', error.message );
+				marker = new google.maps.Marker( args );
+			}
 
-			latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			if ( marker instanceof google.maps.marker.AdvancedMarkerElement) {
+				latlng = new google.maps.LatLng( marker.position.lat, marker.position.lng );
+			} else {
+				latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			}
 			bounds.extend( latlng );
 			// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 			if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
