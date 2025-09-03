@@ -108,6 +108,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.6.13 =
+
+* Bug fix: Month in date badge was not localized.
+* Bug fix: Default maptype was not inherited from settings correctly.
+* Change: Minor style and text changes on PHP templates screen.
+
 = 3.6.12 =
 
 * Bug fix: Update screen reader text classes to remove `clip`.
