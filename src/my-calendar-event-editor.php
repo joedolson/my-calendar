@@ -1155,14 +1155,15 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			}
 			break;
 		case 'event_author':
-			if ( $show_block && is_object( $data ) && ( '0' === $data->event_author || ! get_user_by( 'ID', $data->event_author ) ) ) {
-				$author = ( empty( $data->event_author ) ) ? $user_ID : $data->event_author;
-				$select = mc_selected_users( $author, 'authors' );
-				$return = '
+			if ( $show_block && is_object( $data ) && current_user_can( 'mc_manage_events' ) ) {
+				$author        = ( empty( $data->event_author ) ) ? $user_ID : $data->event_author;
+				$select        = mc_selected_users( $author, 'authors' );
+				$public_author = ( function_exists( 'mcs_submissions' ) ) ? '<option value="0" selected="selected">Public Submitter</option>' : '';
+				$return        = '
 					<p>
 					<label for="e_author">' . __( 'Author', 'my-calendar' ) . '</label>
-					<select id="e_author" name="event_author">
-						<option value="0" selected="selected">Public Submitter</option>' .
+					<select id="e_author" name="event_author">'
+						. $public_author .
 						$select
 					. '</select>
 				</p>';
