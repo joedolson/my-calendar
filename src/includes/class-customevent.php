@@ -76,7 +76,7 @@ class CustomEvent extends Event {
 	/**
 	 * Add publish method to the object.
 	 *
-	 * @param string $method Publish method
+	 * @param string $method Publish method.
 	 *
 	 * @since 1.0.0
 	 */
