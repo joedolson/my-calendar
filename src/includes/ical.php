@@ -67,10 +67,11 @@ function mc_generate_ical( $events, $context = '' ) {
 				$tz_id = apply_filters( 'mc_ical_timezone', $tz_id, $event );
 				$rrule = mc_generate_rrule( $event );
 
-				$ical = CustomEvent::create( $tags['title'] )
+				$ical = CustomEvent::create( wp_strip_all_tags( $tags['title'] ) )
 					->startsAt( new DateTime( $tags['ical_date_start'], new DateTimeZone( $tz_id ) ) )
 					->endsAt( new DateTime( $tags['ical_date_end'], new DateTimeZone( $tz_id ) ) )
 					->address( $tags['ical_location'] )
+					->method( 'PUBLISH' )
 					->description_html( $tags['excerpt'] )
 					->organizer( $tags['host_email'], $tags['host'] )
 					->categories( explode( ',', $tags['ical_categories'] ) )
