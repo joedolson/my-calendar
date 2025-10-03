@@ -43,6 +43,12 @@ class CustomEvent extends Event {
 	 */
 	public ?string $description_html = null;
 	/**
+	 * Method holder.
+	 *
+	 * @var string
+	 */
+	public ?string $method = null;
+	/**
 	 * Categories.
 	 *
 	 * @var array
@@ -64,6 +70,18 @@ class CustomEvent extends Event {
 	 */
 	public function description_html( string $description_html ): CustomEvent {
 		$this->description_html = $description_html;
+		return $this;
+	}
+
+	/**
+	 * Add publish method to the object.
+	 *
+	 * @param string $method Publish method
+	 *
+	 * @since 1.0.0
+	 */
+	public function method( string $method ): CustomEvent {
+		$this->method = $method;
 		return $this;
 	}
 
@@ -122,6 +140,10 @@ class CustomEvent extends Event {
 			->optional(
 				$this->url,
 				fn () => TextProperty::create( 'URL;VALUE=URI', $this->url )->withoutEscaping()
+			)
+			->optional(
+				$this->method,
+				fn () => TextProperty::create( 'METHOD', $this->method )->withoutEscaping()
 			);
 
 		return $this;
