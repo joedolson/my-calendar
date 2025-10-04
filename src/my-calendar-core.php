@@ -2150,8 +2150,7 @@ function mc_get_support_form() {
 	$checked       = ( 'valid' === $license_valid ) ? true : false;
 
 	if ( $license ) {
-		$license = "
-		License: $license, $license_valid";
+		$license = PHP_EOL . "License: $license, $license_valid";
 	}
 	// send fields for all plugins.
 	$wp_version = get_bloginfo( 'version' );
