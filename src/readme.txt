@@ -108,6 +108,19 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.6.16 =
+
+* Change: Omit `mc_id` parameter on singular event permalinks.
+
+= 3.6.15 =
+
+* Bug fix: Add `METHOD:PUBLISH` to iCal exports.
+* Bug fix: Strip tags from iCal title.
+
+= 3.6.14 =
+
+* Bug fix: Made a dumb mistake in the date badge, and I localized a string instead of a date.
+
 = 3.6.13 =
 
 * Bug fix: Month in date badge was not localized.
