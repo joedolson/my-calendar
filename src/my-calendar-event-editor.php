@@ -1610,8 +1610,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<div class='mc-controls'>
 			<?php
 			if ( $post_id ) {
-				$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
-				$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
+				$deleted  = get_post_meta( $post_id, '_mc_deleted_instances', true );
+				$custom   = get_post_meta( $post_id, '_mc_custom_instances', true );
 				$modified = get_post_meta( $post_id, '_mc_modified_instances', true );
 				if ( $deleted || $custom || $modified ) {
 					$notice = '';
