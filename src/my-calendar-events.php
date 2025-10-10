@@ -673,7 +673,7 @@ function mc_get_first_event( $id ) {
 			$return_event = false;
 		}
 	}
-	if ( 5 === $return_event->event_approved && wp_get_current_user()->ID !== $return_event->event_author ) {
+	if ( $return_event && 5 === $return_event->event_approved && wp_get_current_user()->ID !== $return_event->event_author ) {
 		return false;
 	}
 
