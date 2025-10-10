@@ -774,6 +774,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 						$post_ID = mc_get_data( 'event_post', $event_id );
 						delete_post_meta( $post_ID, '_mc_custom_instances' );
 						delete_post_meta( $post_ID, '_mc_deleted_instances' );
+						delete_post_meta( $post_ID, '_mc_modified_instances' );
 						mc_increment_event( $event_id, array(), false, $instances );
 					}
 				}
@@ -1611,13 +1612,17 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( $post_id ) {
 				$deleted = get_post_meta( $post_id, '_mc_deleted_instances', true );
 				$custom  = get_post_meta( $post_id, '_mc_custom_instances', true );
-				if ( $deleted || $custom ) {
+				$modified = get_post_meta( $post_id, '_mc_modified_instances', true );
+				if ( $deleted || $custom || $modified ) {
 					$notice = '';
 					if ( $deleted ) {
 						$notice = __( 'Some dates in this event have been deleted.', 'my-calendar' );
 					}
 					if ( $custom ) {
-						$notice = __( 'The dates for this event have been added or modified.', 'my-calendar' );
+						$notice = __( 'Extra dates or times have been added to this event.', 'my-calendar' );
+					}
+					if ( $custom ) {
+						$notice = __( 'Dates for this event have been added or modified from its recurring schedule.', 'my-calendar' );
 					}
 					$notice .= ' ' . __( 'Changing the date or repetition pattern will reset its scheduled dates.', 'my-calendar' );
 					mc_show_notice( $notice, true, false, 'warning' );
@@ -2705,6 +2710,12 @@ function mc_update_instance( $event_instance, $event_id, $update = array() ) {
 	}
 
 	$result = $wpdb->update( my_calendar_event_table(), $data, array( 'occur_id' => $event_instance ), $formats, '%d' );
+
+	$event_post  = mc_get_event_post( $event_id );
+	$instances   = get_post_meta( $event_post, '_mc_modified_instances', true );
+	$instances   = ( ! is_array( $instances ) ) ? array() : $instances;
+	$instances[] = $data;
+	update_post_meta( $event_post, '_mc_modified_instances', $instances );
 
 	return $result;
 }
