@@ -62,6 +62,8 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 	}
 
 	unset( $variables['page_id'] );
+	ksort( $variables );
+
 	$home = add_query_arg( $variables, $home );
 	$home = apply_filters( 'mc_build_url', $home, $add, $subtract, $root );
 
