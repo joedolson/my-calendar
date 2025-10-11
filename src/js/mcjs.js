@@ -87,7 +87,7 @@
 			const calendar = el.closest( '.mc-main' );
 			calendar.classList.remove( 'is-main-view' );
 			let targetId = el.getAttribute( 'id' ), ref = calendar.getAttribute('id'),
-				month, day, year, mcat, loc, access, mcs, link, url, inputForm;
+				month, day, year, mcat, loc, access, mcs, link, url, inputForm, searchParams;
 
 			if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
 				inputForm = el.closest( 'form' );
@@ -158,6 +158,8 @@
 						link = url.toString();
 					}
 				}
+				searchParams = url.searchParams;
+				searchParams.sort();
 
 				window.history.pushState({}, '', url );
 			} catch(_) {
