@@ -60,12 +60,6 @@
 	outline: 1px solid #777;
 }
 
-/* Sharing */
-.mc-main.twentyfourteen .details .sharing {
-	padding: .5em;
-	clear: both;
-}
-
 .mc-main.twentyfourteen .details .sharing p {
 	display: inline-block;
 	margin: 0 1em 0 0;

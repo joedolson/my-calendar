@@ -283,6 +283,7 @@ function mc_kses_elements() {
 			'role'                    => array(),
 			'aria-selected'           => array(),
 			'aria-controls'           => array(),
+			'aria-haspopup'           => array(),
 			'data-type'               => array(),
 			'aria-pressed'            => array(),
 			'id'                      => array(),

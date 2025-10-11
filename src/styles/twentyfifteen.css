@@ -61,7 +61,7 @@
 .mc-main.twentyfifteen .heading:not(.widget .mc-main-heading) {
 	font-size: 2em;
 	color: var(--primary-light);
-	background: var(--primary-dark); 
+	background: var(--primary-dark);
 	padding: 5px;
 	text-align: right;
 }
@@ -152,15 +152,10 @@
 	line-height: 1.5;
 }
 
-/* Sharing */
-.mc-main.twentyfifteen .details .sharing {
-	clear: both;
-}
-
 /* Date/times */
 .mc-main.twentyfifteen.mini .time-block p {
 	position: relative;
-	display: block; 
+	display: block;
 	text-align: center;
 	top: 10px;
 	right: 0;
@@ -211,12 +206,12 @@
 /* Navigation */
 .mc-main.twentyfifteen .my-calendar-nav .my-calendar-prev a {
 	border-radius: 5px 0 0 5px;
-	border-right: 1px solid #bbb;	
+	border-right: 1px solid #bbb;
 }
 
 .mc-main.twentyfifteen .my-calendar-nav .my-calendar-next a {
 	border-radius: 0 5px 5px 0;
-	border-left: 1px solid #fff;	
+	border-left: 1px solid #fff;
 }
 
 .mc-main.twentyfifteen .my-calendar-nav .my-calendar-today a {

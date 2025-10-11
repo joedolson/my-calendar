@@ -363,6 +363,59 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	return $source . $base;
 }
 
+
+/**
+ * Generate Add to Outlook calendar.
+ *
+ * @param string $dtstart date begin.
+ * @param string $dtend date end.
+ * @param string $url link to event.
+ * @param string $title Title of event.
+ * @param string $location string version of location.
+ * @param string $description info about event.
+ * @param string $allday 'true' for all day events, default 'false'.
+ *
+ * @return string
+ */
+function mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
+	$start   = gmdate( 'Ymd\THi00\Z', strtotime( $dtstart ) );
+	$end     = gmdate( 'Ymd\THi00\Z', strtotime( $dtend ) );
+	$source  = 'https://outlook.live.com/calendar/0/action/compose';
+
+	$args = array(
+		'path'     => '/calendar/action/compose/',
+		'rru'      => 'addevent',
+		'allday'   => $allday,
+		'startdt'  => $start,
+		'enddt'    => $end,
+		'subject'  => urlencode( $title ),
+		'location' => urlencode( wp_unslash( trim( $location ) ) ),
+		'body'     => urlencode( wp_unslash( trim( $description . ' ' . $location . ' ' . $url ) ) ),
+	);
+
+	return add_query_arg( $args, $source );
+}
+
+/**
+ * Generate Add to Office 365 calendar.
+ *
+ * @param string $dtstart date begin.
+ * @param string $dtend date end.
+ * @param string $url link to event.
+ * @param string $title Title of event.
+ * @param string $location string version of location.
+ * @param string $description info about event.
+ * @param string $allday 'true' for all day events, default 'false'.
+ *
+ * @return string
+ */
+function mc_office_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
+	$url = mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday );
+	$url = str_replace( 'outlook.live.com', 'outlook.office.com', $url );
+
+	return $url;
+}
+
 /**
  * Get the featured image for a location.
  *
@@ -826,9 +879,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$google_start = $dtstart;
 		$google_end   = $dtend;
 	}
-	$aria_described = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
-	$e['gcal']      = mc_google_cal( $google_start, $google_end, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
+	$allday            = mc_is_all_day( $event ) ? 'true' : 'false';
+	$aria_described    = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
+	$e['gcal']         = mc_google_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc );
+	$e['gcal_link']    = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google', 'my-calendar' ) . '</a>';
+	$e['office']       = mc_office_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['office_link']  = "<a href='" . esc_url( $e['office'] ) . "' class='office external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Office 365', 'my-calendar' ) . '</a>';
+	$e['outlook']      = mc_outlook_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['outlook_link'] = "<a href='" . esc_url( $e['outlook'] ) . "' class='outlook external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Outlook Live', 'my-calendar' ) . '</a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
@@ -2186,14 +2244,27 @@ function mc_template_share( $data, $type = 'calendar', $text = '' ) {
 	}
 	$more = apply_filters( 'mc_details_grid_link', $more, $event );
 	if ( mc_output_is_visible( 'gcal', $type, $event ) ) {
-		$gcal = "	<p class='gcal'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '</p>';
+		$gcal  = "	<li class='gcal'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '</li>';
+		$gcal .= "	<li class='outlook'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{outlook_link}' ) . '</li>';
+		$gcal .= "	<li class='office'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{office_link}' ) . '</li>';
 	}
 
 	if ( mc_output_is_visible( 'ical', $type, $event ) ) {
-		$vcal = "	<p class='ical'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</p>';
+		$vcal = "	<li class='ical'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</li>';
 	}
-	$sharing = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
+	$sharing = ( '' === trim( $gcal . $vcal ) ) ? '' : $gcal . $vcal;
 
+	if ( $sharing ) {
+		$sharing = '
+		<div class="mc-calendar-share sharing">
+			<button class="mc-toggle-button has-popup" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="mc-share-links-' . absint( $event->event_id ) . '">' . __( 'Add to Calendar', 'my-calendar' ) . '</button>
+			<ul id="mc-share-links-' . absint( $event->event_id ) . '">
+				' . $sharing . '
+			</ul>
+		</div>';
+	}
+
+	$sharing .= $more;
 	echo wp_kses_post( $sharing );
 }
 

@@ -62,7 +62,7 @@
 	}
 
 	my_calendar_external_links();
-	my_calendar_edit_toggles();
+	mc_disclosures();
 	if ( 'true' === my_calendar.ajax ) {
 		mc_render_buttons();
 		mc_setup_handlers();
@@ -221,7 +221,7 @@
 			});
 		}
 		my_calendar_external_links();
-		my_calendar_edit_toggles();
+		mc_disclosures();
 		let originalFocus = document.getElementById( targetId );
 		originalFocus.focus();
 		let refAnnounce = document.getElementById( 'mc_head_' + ref );
@@ -276,6 +276,30 @@
 			button.innerHTML = el.innerHTML;
 			el.replaceWith( button );
 		});
+	}
+
+	function mc_disclosures() {
+		const hasPopup = document.querySelectorAll( 'button.has-popup' );
+		if ( hasPopup ) {
+			hasPopup.forEach( (el) => {
+				let controlId = el.getAttribute( 'aria-controls' );
+				let controlled = document.getElementById( controlId );
+				//$( this ).append( '<span class="dashicons dashicons-plus" aria-hidden="true">' );
+				controlled.style.display = 'none';
+				el.addEventListener( 'click', function() {
+					let visible = controlled.checkVisibility();
+					let position = el.offsetWidth + 8;
+					controlled.style.left = position + 'px';
+					if ( visible ) {
+						controlled.style.display = 'none';
+						el.setAttribute( 'aria-expanded', 'false' );
+					} else {
+						controlled.style.display = 'block';
+						el.setAttribute( 'aria-expanded', 'true' );
+					}
+				});
+			});
+		}
 	}
 
 	function mc_build_toggles( targetId ) {
@@ -338,27 +362,6 @@
 		});
 	}
 
-	function my_calendar_edit_toggles() {
-		const adminToggles = document.querySelectorAll( '.mc-toggle-edit' );
-		if ( adminToggles ) {
-			adminToggles.forEach( (el) => {
-				let controls = el.getAttribute( 'aria-controls' );
-				let controlled = document.querySelector( '#' + controls );
-				el.addEventListener( 'click', function(e) {
-					let position = el.offsetWidth + 8;
-					controlled.style.left = position + 'px';
-					let expanded = el.getAttribute( 'aria-expanded' );
-					if ( 'true' === expanded ) {
-						controlled.style.display = 'none';
-						el.setAttribute( 'aria-expanded', 'false' );
-					} else {
-						controlled.style.display = 'block';
-						el.setAttribute( 'aria-expanded', 'true' );
-					}
-				});
-			});
-		}
-	}
 	/**
 	 * Map ARIA attributes to My Calendar table so responsive view doesn't break table relationships.
 	 */

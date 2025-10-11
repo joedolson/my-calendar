@@ -520,17 +520,6 @@ h4.mc-title {
 	clear: both;
 }
 
-.mc-main .sharing p {
-	display: inline-block;
-	padding: .5em .5em .5em 0;
-}
-
-.mc-main.mini .sharing p {
-	font-size: 14px;
-	padding: 0 .25em 0 0;
-	margin-bottom: 10px;
-}
-
 .mc-main .sharing .ical a:before, .mc-main .sharing .gcal .mc-icon::before {
 	content: "\f502";
 }
