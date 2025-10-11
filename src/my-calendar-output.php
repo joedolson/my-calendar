@@ -776,6 +776,7 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 		}
 		$image = get_the_post_thumbnail( $event->event_post, $default_size, $atts );
 	} else {
+		// Handles images saved as URL strings in event data.
 		// Get alt attribute from a publicly submitted image.
 		if ( property_exists( $event, 'event_post' ) ) {
 			$alt = get_post_meta( $event->event_post, '_mcs_submitted_alt', true );
@@ -791,6 +792,22 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 		 * @return {string}
 		 */
 		$alt   = apply_filters( 'mc_event_image_alt', $alt, $event );
+		if ( _mc_is_url( $event->event_image ) ) {
+			$check = absint( get_post_meta( $event->event_post, '_mc_remote_image_check', true ) );
+			if ( $check && ( time() - $check ) > MONTH_IN_SECONDS || ! $check ) {
+				$remote = wp_remote_get( $event->event_image );
+				if ( ! is_wp_error( $remote ) ) {
+					$header = wp_remote_retrieve_response_code( $remote );
+					// For any potentially successful header, record as found.
+					if ( $header < 400 ) {
+						update_post_meta( $event->event_post, '_mc_remote_image_check', time() );
+					} else {
+						// Delete image data.
+						mc_update_data( $event->event_id, 'event_image', '', '%s' );
+					}
+				}
+			}
+		}
 		$image = ( '' !== $event->event_image ) ? "<img src='" . esc_url( $event->event_image ) . "' alt='" . esc_attr( $alt ) . "' class='mc-image photo' />" : '';
 	}
 	$return = true;
