@@ -87,10 +87,10 @@
 			const calendar = el.closest( '.mc-main' );
 			calendar.classList.remove( 'is-main-view' );
 			let targetId = el.getAttribute( 'id' ), ref = calendar.getAttribute('id'),
-				month, day, year, mcat, loc, access, mcs, link, url;
+				month, day, year, mcat, loc, access, mcs, link, url, inputForm;
 
 			if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
-				const inputForm = el.closest( 'form' );
+				inputForm = el.closest( 'form' );
 				if ( inputForm ) {
 					if ( inputForm.classList.contains( 'mc-date-switcher' ) ) {
 						month = inputForm.querySelector( 'select[name=month]' ).value;
@@ -122,38 +122,41 @@
 				url.searchParams.delete('embed');
 				url.searchParams.delete('source');
 				if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
-					url.searchParams.delete( 'month' );
-					url.searchParams.delete( 'dy' );
-					url.searchParams.delete( 'yr' );
-					if ( '' !== month && 'undefined' !== typeof( month ) ) {
-						url.searchParams.append( 'month', parseInt( month ) );
-						if ( 'undefined' !== typeof( day ) ) {
-							url.searchParams.append( 'dy', parseInt( day ) );
+					inputForm = el.closest( 'form' );
+					if ( inputForm ) {
+						url.searchParams.delete( 'month' );
+						url.searchParams.delete( 'dy' );
+						url.searchParams.delete( 'yr' );
+						if ( '' !== month && 'undefined' !== typeof( month ) ) {
+							url.searchParams.append( 'month', parseInt( month ) );
+							if ( 'undefined' !== typeof( day ) ) {
+								url.searchParams.append( 'dy', parseInt( day ) );
+							}
+							url.searchParams.append( 'yr', parseInt( year ) );
 						}
-						url.searchParams.append( 'yr', parseInt( year ) );
-					}
-					url.searchParams.delete( 'mcat' );
-					if ( '' !== mcat && 'undefined' !== typeof( mcat ) ) {
-						url.searchParams.append( 'mcat', mcat );
-					}
-					url.searchParams.delete( 'loc' );
-					url.searchParams.delete( 'ltype' );
-					if ( '' !== loc && 'undefined' !== typeof( loc ) ) {
-						url.searchParams.append( 'ltype', 'id' );
-						url.searchParams.append( 'loc', loc );
-					}
-					url.searchParams.delete( 'access' );
-					if ( '' !== access && 'undefined' !== typeof( access ) ) {
-						if ( 'all' !== access ) {
-							url.searchParams.append( 'access', parseInt( access ) );
+						url.searchParams.delete( 'mcat' );
+						if ( '' !== mcat && 'undefined' !== typeof( mcat ) ) {
+							url.searchParams.append( 'mcat', mcat );
 						}
-					}
-					url.searchParams.delete( 'mcs' );
-					if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
-						url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
-					}
+						url.searchParams.delete( 'loc' );
+						url.searchParams.delete( 'ltype' );
+						if ( '' !== loc && 'undefined' !== typeof( loc ) ) {
+							url.searchParams.append( 'ltype', 'id' );
+							url.searchParams.append( 'loc', loc );
+						}
+						url.searchParams.delete( 'access' );
+						if ( '' !== access && 'undefined' !== typeof( access ) ) {
+							if ( 'all' !== access ) {
+								url.searchParams.append( 'access', parseInt( access ) );
+							}
+						}
+						url.searchParams.delete( 'mcs' );
+						if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
+							url.searchParams.append( 'mcs', encodeURIComponent( mcs ) );
+						}
 
-					link = url.toString();
+						link = url.toString();
+					}
 				}
 
 				window.history.pushState({}, '', url );
