@@ -378,9 +378,9 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
  * @return string
  */
 function mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
-	$start   = gmdate( 'Ymd\THi00\Z', strtotime( $dtstart ) );
-	$end     = gmdate( 'Ymd\THi00\Z', strtotime( $dtend ) );
-	$source  = 'https://outlook.live.com/calendar/0/action/compose';
+	$start  = gmdate( 'Ymd\THi00\Z', strtotime( $dtstart ) );
+	$end    = gmdate( 'Ymd\THi00\Z', strtotime( $dtend ) );
+	$source = 'https://outlook.live.com/calendar/0/action/compose';
 
 	$args = array(
 		'path'     => '/calendar/action/compose/',
