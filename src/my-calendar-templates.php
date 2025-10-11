@@ -2211,7 +2211,7 @@ function mc_template_image( $data, $type = 'calendar', $size = '' ) {
 		$img = mc_get_event_image( $event, $data->tags, $size );
 	}
 
-	echo wp_kses_post( $img );
+	echo wp_kses( $img, mc_kses_elements() );
 }
 
 /**

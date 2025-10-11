@@ -381,6 +381,7 @@ function mc_kses_elements() {
 			'tabindex' => true,
 			'loading'  => true,
 			'srcset'   => true,
+			'sizes'    => true,
 		),
 		'br'               => array(),
 		'table'            => array(
