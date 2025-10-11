@@ -467,7 +467,9 @@ function my_calendar_edit() {
 	$responses = get_transient( 'mc_save_response' );
 	if ( $responses ) {
 		foreach ( $responses as $response ) {
-			mc_show_notice( $response['message'] );
+			if ( isset( $response['message'] ) ) {
+				mc_show_notice( $response['message'] );
+			}
 		}
 		delete_transient( 'mc_save_response' );
 	}
