@@ -791,7 +791,7 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 		 *
 		 * @return {string}
 		 */
-		$alt   = apply_filters( 'mc_event_image_alt', $alt, $event );
+		$alt = apply_filters( 'mc_event_image_alt', $alt, $event );
 		if ( _mc_is_url( $event->event_image ) ) {
 			$check = absint( get_post_meta( $event->event_post, '_mc_remote_image_check', true ) );
 			if ( $check && ( time() - $check ) > MONTH_IN_SECONDS || ! $check ) {
