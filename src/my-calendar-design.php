@@ -54,67 +54,71 @@ function my_calendar_design() {
 							echo '</span></p>';
 						}
 						?>
-							<div class="inside">
-								<h3><?php esc_html_e( 'Default List Template', 'my-calendar' ); ?></h3>
-								<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?>">
-									<div>
-										<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
-									<?php
-									if ( ! empty( $_POST ) ) {
-										$nonce = $_REQUEST['_wpnonce'];
-										if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-											wp_die( 'My Calendar: Security check failed' );
+							<div class="inside mc-template-layout">
+								<div class="list-template-settings">
+									<h3><?php esc_html_e( 'Default List Template', 'my-calendar' ); ?></h3>
+									<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?>">
+										<div>
+											<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
+										<?php
+										if ( ! empty( $_POST ) ) {
+											$nonce = $_REQUEST['_wpnonce'];
+											if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+												wp_die( 'My Calendar: Security check failed' );
+											}
+											// Custom sanitizing.
+											$post = map_deep( $_POST, 'sanitize_textarea_field' );
+											if ( isset( $post['mc_list_template'] ) ) {
+												mc_update_option( 'list_template', $post['mc_list_template'] );
+												mc_show_notice( __( 'My Calendar List Template Updated', 'my-calendar' ), true, false, 'success' );
+											}
 										}
-										// Custom sanitizing.
-										$post = map_deep( $_POST, 'sanitize_textarea_field' );
-										if ( isset( $post['mc_list_template'] ) ) {
-											mc_update_option( 'list_template', $post['mc_list_template'] );
-											mc_show_notice( __( 'My Calendar List Template Updated', 'my-calendar' ), true, false, 'success' );
-										}
-									}
-									$template_options = mc_select_preset_templates();
-									mc_settings_field(
-										array(
-											'name'    => 'mc_list_template',
-											'label'   => __( 'Default List Template', 'my-calendar' ),
-											'default' => $template_options,
-											'note'    => __( 'Default format for upcoming event, search results, and other list widgets and shortcodes. Any custom template overrides this.', 'my-calendar' ),
-											'type'    => 'select',
-										)
-									);
-									?>
-									</div>
-									<p>
-										<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>">
-									</p>
-								</form>
-								<div class="list-templates">
-									<h4><?php esc_html_e( 'Preview', 'my-calendar' ); ?></h4>
-									<p><?php esc_html_e( 'The preview shows your next few upcoming events.', 'my-calendar' ); ?>
-									<?php
-									$default   = '<strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}';
-									$templates = array( 'list', 'list_preset_1', 'list_preset_2', 'list_preset_3', 'list_preset_4' );
-									foreach ( $templates as $template ) {
-										echo '<div class="mc-list-preview ' . esc_attr( $template ) . '">';
-										$template = ( 'list' === $template ) ? $default : $template;
-										$atts     = array(
-											'before'   => 0,
-											'after'    => 3,
-											'template' => $template,
+										$template_options = mc_select_preset_templates();
+										mc_settings_field(
+											array(
+												'name'    => 'mc_list_template',
+												'label'   => __( 'Default List Template', 'my-calendar' ),
+												'default' => $template_options,
+												'note'    => __( 'Default format for upcoming event, search results, and other list widgets and shortcodes. Any custom template overrides this.', 'my-calendar' ),
+												'type'    => 'select',
+											)
 										);
-										echo my_calendar_insert_upcoming( $atts );
-										echo '</div>';
-									}
-									?>
+										?>
+										</div>
+										<p>
+											<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>">
+										</p>
+									</form>
+									<div class="list-templates">
+										<h4><?php esc_html_e( 'Preview', 'my-calendar' ); ?></h4>
+										<p><?php esc_html_e( 'The preview shows your next few upcoming events.', 'my-calendar' ); ?>
+										<?php
+										$default   = '<strong>{timerange after=", "}{daterange}</strong> &#8211; {linking_title}';
+										$templates = array( 'list', 'list_preset_1', 'list_preset_2', 'list_preset_3', 'list_preset_4' );
+										foreach ( $templates as $template ) {
+											echo '<div class="mc-list-preview ' . esc_attr( $template ) . '">';
+											$template = ( 'list' === $template ) ? $default : $template;
+											$atts     = array(
+												'before'   => 0,
+												'after'    => 3,
+												'template' => $template,
+											);
+											echo my_calendar_insert_upcoming( $atts );
+											echo '</div>';
+										}
+										?>
+									</div>
 								</div>
-							<?php
-							echo '<h2 class="mc-flex">' . esc_html__( 'PHP Templates', 'my-calendar' ) . '</h2>';
-							echo '<p>';
-							// translators: URL for the PHP templating docs.
-							printf( wp_kses_post( __( 'Learn about the <a href="%s">PHP templating system in My Calendar</a>.', 'my-calendar' ) ), 'https://docs.joedolson.com/my-calendar/php-templates/' );
-							echo '</p>';
-							mc_templates_edit();
-							?>
+								<div class="php-template-settings">
+								<?php
+								echo '<h3 class="mc-flex">' . esc_html__( 'PHP Templates', 'my-calendar' ) . '</h3>';
+								echo '<p>';
+								// translators: URL for the PHP templating docs.
+								printf( wp_kses_post( __( 'Learn about the <a href="%s">PHP templating system in My Calendar</a>.', 'my-calendar' ) ), 'https://docs.joedolson.com/my-calendar/php-templates/' );
+								echo '</p>';
+								mc_templates_edit();
+								?>
+								</div>
 							</div>
 						</div>
 					</div>
