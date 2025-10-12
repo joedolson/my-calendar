@@ -438,6 +438,7 @@ function mc_default_options() {
 		'disable_legacy_templates'     => 'false',
 		'maptype'                      => 'roadmap',
 		'views'                        => array( 'calendar', 'list', 'mini' ),
+		'time_views'                   => array( 'month', 'week', 'day' ),
 		'list_template'                => '',
 	);
 

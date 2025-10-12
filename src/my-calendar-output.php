@@ -1574,6 +1574,11 @@ function mc_calendar_params( $args ) {
 		$time = esc_attr( $time );
 	}
 
+	$time_enabled = mc_get_option( 'time_views' );
+	if ( ! in_array( $time, $time_enabled, true ) ) {
+		$time = ( in_array( 'month', $enabled, true ) ) ? 'month' : $time_enabled[0];
+	}
+
 	if ( 'day' === $time ) {
 		$format = 'list';
 	}

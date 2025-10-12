@@ -385,6 +385,7 @@ function mc_update_output_settings( $post ) {
 	$options['bottomnav']      = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
 	$options['topnav']         = ( empty( $top ) ) ? 'none' : implode( ',', $top );
 	$views                     = ( empty( $post['mc_views'] ) ) ? array() : $post['mc_views'];
+	$time_views                = ( empty( $post['mc_time_views'] ) ) ? array() : $post['mc_time_views'];
 	$single                    = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
 	$main                      = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
 	$card                      = ( empty( $post['mc_display_card'] ) ) ? array() : $post['mc_display_card'];
@@ -394,6 +395,7 @@ function mc_update_output_settings( $post ) {
 	$options['display_card']   = array_map( 'sanitize_text_field', $card );
 	$options['display_mini']   = array_map( 'sanitize_text_field', $mini );
 	$options['views']          = array_map( 'sanitize_text_field', $views );
+	$options['time_views']     = array_map( 'sanitize_text_field', $time_views );
 	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? wp_strip_all_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) && 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
 	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
@@ -1330,6 +1332,23 @@ function mc_remote_db() {
 										'name'    => 'mc_views',
 										'label'   => $default_views,
 										'default' => array( 'calendar', 'list', 'mini' ),
+										'type'    => 'checkbox',
+									)
+								);
+								?>
+							</ul>
+							<ul class="checkboxes">
+								<?php
+								$default_time_views = array(
+									'month' => __( 'Month', 'my-calendar' ),
+									'week'     => __( 'Week', 'my-calendar' ),
+									'day'     => __( 'Day', 'my-calendar' ),
+								);
+								mc_settings_field(
+									array(
+										'name'    => 'mc_time_views',
+										'label'   => $default_time_views,
+										'default' => array( 'month', 'week', 'day' ),
 										'type'    => 'checkbox',
 									)
 								);

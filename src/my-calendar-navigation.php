@@ -1238,6 +1238,11 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
  * @return string HTML output
  */
 function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week, $from, $id ) {
+	$enabled = mc_get_option( 'time_views' );
+	// If there is only one time view enabled, don't show time toggle.
+	if ( count( $enabled ) < 2 ) {
+		return '';
+	}
 	// if dy parameter not set, use today's date instead of first day of month.
 	$aria      = ( '1' !== mc_get_option( 'ajax_javascript' ) ) ? 'pressed' : 'current';
 	$month     = (int) $month;
@@ -1310,9 +1315,17 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	$aria_week    = ( 'week' === $time ) ? " aria-$aria='true'" : '';
 	$aria_day     = ( 'day' === $time ) ? " aria-$aria='true'" : '';
 
-	$toggle .= "<li><a rel='nofollow' id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
-	$toggle .= "<li><a rel='nofollow' id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
-	$toggle .= "<li><a rel='nofollow' id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
+	$enable_day_view   = ( in_array( 'day', $enabled, true ) ) ? true : false;
+	$enable_week_view  = ( in_array( 'week', $enabled, true ) ) ? true : false;
+	$enable_month_view = ( in_array( 'month', $enabled, true ) ) ? true : false;
+	// You can't disable all views.
+	if ( ! ( $enable_day_view || $enable_week_view || $enable_month_view ) ) {
+		$enable_month_view = true;
+	}
+
+	$toggle .= ( ! $enable_month_view ) ? '' : "<li><a rel='nofollow' id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
+	$toggle .= ( ! $enable_week_view ) ? '' : "<li><a rel='nofollow' id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
+	$toggle .= ( ! $enable_day_view ) ? '' : "<li><a rel='nofollow' id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
 	$toggle .= '</ul></div>';
 
 	/**
