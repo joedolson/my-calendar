@@ -381,6 +381,10 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	}
 }
 
+.list-template-settings {
+	max-width: 640px;
+}
+
 .list-templates {
 	padding: 1rem;
 	margin: 1rem 0;
