@@ -1341,8 +1341,8 @@ function mc_remote_db() {
 								<?php
 								$default_time_views = array(
 									'month' => __( 'Month', 'my-calendar' ),
-									'week'     => __( 'Week', 'my-calendar' ),
-									'day'     => __( 'Day', 'my-calendar' ),
+									'week'  => __( 'Week', 'my-calendar' ),
+									'day'   => __( 'Day', 'my-calendar' ),
 								);
 								mc_settings_field(
 									array(
