@@ -370,6 +370,17 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	gap: 4px;
 }
 
+.mc-template-layout {
+	display: flex;
+	gap: 32px;
+}
+
+@media screen and ( width < 782px ) {
+	.mc-template-layout {
+		flex-wrap: wrap;
+	}
+}
+
 .list-templates {
 	padding: 1rem;
 	margin: 1rem 0;
@@ -384,7 +395,8 @@ ol.mc-repeat-events li:last-of-type .buttons {
 }
 
 ul.mc-file-list ul {
-	margin-left: 2rem;
+	margin-left: 1rem;
+	margin-top: .5rem;
 }
 
 ul.mc-file-list > li > code {
