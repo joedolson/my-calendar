@@ -64,8 +64,10 @@
 	my_calendar_external_links();
 	mc_disclosures();
 	if ( 'true' === my_calendar.ajax ) {
-		mc_render_buttons();
+		//mc_render_buttons();
 		mc_setup_handlers();
+	} else {
+		mc_render_links();
 	}
 
 	function mc_setup_handlers() {
@@ -228,8 +230,9 @@
 		wp.a11y.speak( refAnnounce.innerText );
 		mc_display_usertime();
 		if ( 'true' === my_calendar.ajax ) {
-			mc_render_buttons();
 			mc_setup_handlers();
+		} else {
+			mc_render_links();
 		}
 		my_calendar_table_aria();
 	}
@@ -263,18 +266,19 @@
 		});
 	}
 
-	function mc_render_buttons() {
-		const links = document.querySelectorAll( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
-		links.forEach( (el) => {
-			let button = document.createElement( 'button' );
-			button.setAttribute( 'id', el.getAttribute( 'id' ) );
-			button.setAttribute( 'data-href', el.getAttribute( 'href' ) );
+	function mc_render_links() {
+		const buttons = document.querySelectorAll( '.mc-main button.mc-navigation-button' );
+		buttons.forEach( (el) => {
+			let link = document.createElement( 'a' );
+			link.setAttribute( 'id', el.getAttribute( 'id' ) );
+			link.setAttribute( 'href', el.getAttribute( 'data-href' ) );
 			classes = el.getAttribute( 'class' ) ?? '';
-			button.setAttribute( 'class', classes );
-			button.classList.add( 'mc-navigation-button' );
-			button.setAttribute( 'type', 'button' );
-			button.innerHTML = el.innerHTML;
-			el.replaceWith( button );
+			link.setAttribute( 'class', classes );
+			link.setAttribute( 'rel', 'nofollow' );
+			link.classList.remove( 'mc-navigation-button' );
+			link.classList.add( 'mc-navigation-link' );
+			link.innerHTML = el.innerHTML;
+			el.replaceWith( link );
 		});
 	}
 
