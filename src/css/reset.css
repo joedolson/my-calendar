@@ -833,6 +833,12 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	width: auto;
 }
 
+.mc-main .mc-navigation-button {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
 .mc-main .my-calendar-navigation select {
 	padding-right: 3rem;
 	background-image: url("data:image/svg+xml,%3csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3e%3cg id='arrow-down'%3e%3cpath transform='rotate(90 398.52 307.42)' stroke='%23323232' id='svg_2' d='m151.01949%2c560.26198l230.96062%2c-252.90392l-230.96062%2c-252.90574l132.00568%2c-144.53259l362.99432%2c397.43833l-362.99432%2c397.56164' fill='%23323232'/%3e%3c/g%3e%3c/svg%3e");
