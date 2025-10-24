@@ -184,6 +184,8 @@ function mc_style_variables( $styles = array() ) {
 	$core_styles = array(
 		'--close-button'          => '#b32d2e',
 		'--search-highlight-bg '  => '#f5e6ab',
+		'--main-background'       => 'transparent',
+		'--main-color'            => 'inherit',
 		'--navbar-background'     => 'transparent',
 		'--nav-button-bg'         => '#fff',
 		'--nav-button-color'      => '#313233',
@@ -226,6 +228,8 @@ function mc_style_variables( $styles = array() ) {
 		),
 		'sizing'                  => array(
 			'--grid-max-width' => '1260px',
+			'--main-padding'   => '0',
+			'--main-margin'    => '0 auto',
 		),
 		'list-presets'            => array(
 			'--list-preset-border-color'          => '#000000',
