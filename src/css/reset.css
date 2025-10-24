@@ -1090,6 +1090,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	padding: 8px;
 	box-sizing: border-box;
 	white-space: wrap;
+	word-break: break-word;
 }
 
 .mc-main .event-title button:hover,
