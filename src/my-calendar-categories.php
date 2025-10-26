@@ -770,7 +770,7 @@ function mc_no_category_default( $single = false ) {
 		$cat_id = mc_create_category(
 			array(
 				'category_name'  => 'General',
-				'category_color' => '#243f82',
+				'category_color' => '#fafafa',
 				'category_icon'  => 'event.svg',
 			)
 		);
@@ -841,7 +841,7 @@ function mc_manage_categories() {
 		mc_create_category(
 			array(
 				'category_name'  => 'General',
-				'category_color' => '#243f82',
+				'category_color' => '#fafafa',
 				'category_icon'  => 'event.svg',
 			)
 		);
