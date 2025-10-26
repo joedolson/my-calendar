@@ -480,19 +480,18 @@ jQuery(document).ready(function ($) {
 		} // reset all tabs to aria-selected=false and normal font weight
 		e.target.setAttribute('aria-selected', 'true'); //set aria-selected=true for clicked tab
 		for ( let i = 0; i < tabPanels.length; i++) {
-			tabPanels[i].setAttribute( 'aria-hidden', 'true' );
+			tabPanels[i].style.display = 'none';
 		} // hide all tabpanels
 		// If this is an inner tab panel, don't set the window location.
 		if ( inside.length == 0 ) {
-			window.location.hash = tabPanelToOpen;
+			history.pushState(null,null,'#' + tabPanelToOpen);
 		}
-		document.getElementById(tabPanelToOpen).setAttribute( 'aria-hidden', 'false' ); //show tabpanel
+		document.getElementById(tabPanelToOpen).style.display = 'block'; //show tabpanel
 		for ( let i = 0; i < iframes.length; i++ ) {
 			let iframe = iframes[i];
 			resizeIframe(iframe);
 		}
 		$( '#' + tabPanelToOpen ).attr( 'tabindex', '-1' ).trigger( 'focus' );
-		window.scrollTo( 0,0 );
 	}
 
 	/**
@@ -514,10 +513,10 @@ jQuery(document).ready(function ($) {
 		} //reset all tabs to aria-selected=false and normal font weight
 		control.attr('aria-selected', 'true'); //set aria-selected=true for clicked tab
 		for ( let i = 0; i < tabPanels.length; i++) {
-			tabPanels[i].setAttribute( 'aria-hidden', 'true' );
+			tabPanels[i].style.display = 'none';
 		}
 		if ( null !== currentPanel ) {
-			currentPanel.setAttribute( 'aria-hidden', 'false' ); //show tabpanel
+			currentPanel.style.display = 'block';
 		}
 	}
 
@@ -742,7 +741,7 @@ var mediaPopup = '';
 					$('.mcs-tabs .tabs a').removeClass('active').attr( 'aria-selected', 'false' );
 					$(this).addClass('active').attr( 'aria-selected', 'true' );
 					let target = $(this).attr('href');
-					window.location.hash = target;
+					history.pushState(null,null,target);
 					$('.mcs-tabs .wptab').not(target).attr( 'aria-hidden', 'true' );
 					$(target).removeAttr( 'aria-hidden' ).show().trigger( 'focus' );
 				});

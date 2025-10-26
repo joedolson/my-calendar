@@ -763,12 +763,8 @@ label[for=mc_uri_query]::before {
 	width: 100%;
 }
 
-.wp-admin.js .wptab {
+.wp-admin.no-js .wptab {
 	display: none;
-}
-
-.wp-admin.js .wptab[aria-hidden=false] {
-	display: block;
 }
 
 .mc-tabs .tabs, .mc-tablinks {
