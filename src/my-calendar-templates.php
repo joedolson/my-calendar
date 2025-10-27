@@ -1326,6 +1326,11 @@ function mc_get_event_location( $event, $source ) {
  * @return string HTML
  */
 function mc_generate_map( $event, $source = 'event', $multiple = false, $geolocate = false ) {
+	// If map service is disabled, do not return a map.
+	$map_target = mc_get_option( 'map_service' );
+	if ( 'none' === $map_target ) {
+		return '';
+	}
 	if ( ! is_object( $event ) && ! $multiple ) {
 		return '';
 	}
