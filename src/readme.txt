@@ -111,7 +111,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.6.16 =
 
 * Bug fix: Omit `mc_id` parameter on permalinks if event is singular.
-* Bug fix: Hidden focusable elements inside the dialog broke focus management.
+* Bug fix: Hidden focusable elements inside the dialog broke focus management. Props @alh0319.
 * Change: Switch non-modal content from using `aria-hidden` to using `inert`.
 
 = 3.6.15 =
