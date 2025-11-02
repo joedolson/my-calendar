@@ -57,7 +57,6 @@
   var ATTR_OPEN = 'open';
   var ATTR_LABELLEDBY = 'aria-labelledby';
   var ATTR_DESCRIBEDBY = 'aria-describedby';
-  var ATTR_HIDDEN = 'aria-hidden';
   //const ATTR_MODAL = 'aria-modal="true"';
   var ATTR_HASPOPUP = 'aria-haspopup';
   var ATTR_HASPOPUP_VALUE = 'dialog';
@@ -290,7 +289,7 @@
             }));
 
             // hide page
-            wrapperBody.setAttribute(ATTR_HIDDEN, 'true');
+            wrapperBody.setAttribute('inert', '');
 
             // add class noscroll to body
             addClass(body, NO_SCROLL_CLASS);
@@ -337,7 +336,7 @@
               });
 
               // show back page
-              wrapperBody.removeAttribute(ATTR_HIDDEN);
+              wrapperBody.removeAttribute('inert');
 
               // remove class noscroll to body
               removeClass(body, NO_SCROLL_CLASS);
@@ -372,7 +371,7 @@
               });
 
               // show back page
-              wrapperBody.removeAttribute(ATTR_HIDDEN);
+              wrapperBody.removeAttribute('inert');
 
               // remove class noscroll to body
               removeClass(body, NO_SCROLL_CLASS);
