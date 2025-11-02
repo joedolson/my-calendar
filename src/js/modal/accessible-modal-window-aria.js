@@ -355,6 +355,10 @@
             var modalFocusBackId = modalButtonClose.getAttribute(MODAL_BUTTON_FOCUS_BACK_ID);
             var contentBackId = modalButtonClose.getAttribute(MODAL_BUTTON_CONTENT_BACK_ID);
             var listFocusables = [].slice.call(modal.querySelectorAll(FOCUSABLE_ELEMENTS_STRING));
+			listFocusables = listFocusables.filter( checkElementVisibility );
+			function checkElementVisibility(el) {
+				return el.checkVisibility();
+			}
 
             // esc
             if (e.keyCode === 27) {
@@ -380,12 +384,12 @@
               // maj-tab on first element focusable => focus on last
               if (e.shiftKey) {
                 if (e.target === listFocusables[0]) {
-                  listFocusables[listFocusables.length - 1].focus();
+                  listFocusables.at(-1).focus();
                   e.preventDefault();
                 }
               } else {
                 // tab on last element focusable => focus on first
-                if (e.target === listFocusables[listFocusables.length - 1]) {
+                if (e.target === listFocusables.at(-1)) {
                   listFocusables[0].focus();
                   e.preventDefault();
                 }
