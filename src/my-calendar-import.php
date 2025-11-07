@@ -104,18 +104,18 @@ function mc_import_source_calendar() {
 	$events         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar', 'ARRAY_A' );
 	$event_ids      = array();
 	$events_results = false;
-	$cats         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar_categories', 'ARRAY_A' );
-	$cats_results = false;
-	$category_map = array();
+	$cats           = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar_categories', 'ARRAY_A' );
+	$cats_results   = false;
+	$category_map   = array();
 	foreach ( $cats as $key ) {
-		$name     = $key['category_name'];
-		$color    = $key['category_colour'];
-		$id       = (int) $key['category_id'];
-		$category = array(
+		$name                = $key['category_name'];
+		$color               = $key['category_colour'];
+		$id                  = (int) $key['category_id'];
+		$category            = array(
 			'category_name'  => $name,
 			'category_color' => $color,
 		);
-		$new_id   = mc_create_category( $category );
+		$new_id              = mc_create_category( $category );
 		$category_map[ $id ] = $new_id;
 	}
 	foreach ( $events as $key ) {
