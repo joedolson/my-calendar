@@ -47,7 +47,7 @@ function my_calendar_migration() {
 					$import_source = '';
 					$message       = '';
 					$to_import     = 1;
-					if ( function_exists( 'check_calendar' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
+					if ( function_exists( 'calendar_check' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
 						$import_source = 'calendar';
 						$message       = __( 'You have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into My Calendar.', 'my-calendar' );
 					}

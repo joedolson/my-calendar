@@ -422,7 +422,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
  * @return bool
  */
 function mc_has_migration_path() {
-	if ( function_exists( 'check_calendar' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
+	if ( function_exists( 'calendar_check' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		return true;
 	}
 	if ( function_exists( 'tribe_get_event' ) && 'true' !== get_option( 'mc_tribe_imported' ) ) {

@@ -521,7 +521,7 @@ function mc_generate_calendar_page( $slug ) {
  */
 function mc_check_imports() {
 	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
-		if ( function_exists( 'check_calendar' ) ) {
+		if ( function_exists( 'calendar_check' ) ) {
 			?>
 			<div id='message' class='updated'>
 				<p><?php esc_html_e( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ); ?></p>
