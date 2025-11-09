@@ -85,9 +85,12 @@ function mc_directory_list( $directory ) {
  *
  * @return string partial SQL statement
  */
-function mc_private_categories() {
+function mc_private_categories( $args = array() ) {
 	$cats = '';
-	if ( ! is_user_logged_in() ) {
+	$auth = ( isset( $args['auth'] ) && true === $args['auth'] ) ? true : false;
+	if ( is_user_logged_in() || $auth ) {
+		return $cats;
+	} else {
 		$categories = mc_get_private_categories();
 		$cats       = implode( ',', $categories );
 		if ( '' !== $cats ) {

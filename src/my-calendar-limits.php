@@ -325,13 +325,14 @@ function mc_access_limit( $access ) {
  *
  * @return string
  */
-function mc_select_published() {
+function mc_select_published( $args = array() ) {
 	if ( mc_is_preview() ) {
 		$published = 'event_flagged <> 1 AND ( event_approved <> 2 )';
 	} else {
 		$public  = mc_event_states_by_type( 'public' );
 		$private = mc_event_states_by_type( 'private' );
-		if ( is_user_logged_in() ) {
+		$auth    = ( isset( $args['auth'] ) && true === $args['auth'] ) ? true : false;
+		if ( is_user_logged_in() || $auth ) {
 			$public = array_merge( $public, $private );
 		}
 		$public    = implode( ',', $public );

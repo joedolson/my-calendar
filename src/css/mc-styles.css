@@ -598,7 +598,7 @@ ul.mc-file-list ul li {
 	width: 100%
 }
 
-.my-calendar-admin .message pre, .my-calendar-admin li pre {
+.my-calendar-admin .message pre, .my-calendar-admin pre {
 	background: #fff;
 	padding: 5px;
 	border: 1px solid #dcdcde;
@@ -2085,7 +2085,7 @@ input#mc_event_time:valid+span {
 .autocomplete[data-loading=true]:after{
 	animation:rotate 1s linear infinite;border:3px solid rgba(0,0,0,.12);
 	border-radius:100%;border-right-color:rgba(0,0,0,.48);
-	content:"";height:20px;position:absolute;right:12px;top:55%;
+	content:"";height:20px;position:absolute;right:12px;top:75%;
 	transform:translateY(-50%);width:20px
 }
 .autocomplete-result-list{

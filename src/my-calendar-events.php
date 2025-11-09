@@ -214,9 +214,9 @@ function my_calendar_get_events( $args ) {
 	$select_location    = mc_select_location( $cltype, $clvalue );
 	$select_access      = ( isset( $get['access'] ) ) ? mc_access_limit( $get['access'] ) : '';
 	$if_where           = ( $select_access ) ? '' : 'WHERE ';
-	$select_published   = mc_select_published();
+	$select_published   = mc_select_published( $args );
 	$search             = mc_prepare_search_query( $search );
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	$arr_events         = array();
 	$ts_string          = mc_ts();
 
@@ -350,7 +350,7 @@ function mc_get_all_events( $args ) {
 
 	$now                = ( 'now' === $time ) ? 'NOW()' : $time;
 	$now_limit          = ( 'now' === $time ) ? 'NOW()' : "from_unixtime($time)";
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
@@ -358,7 +358,7 @@ function mc_get_all_events( $args ) {
 	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
 
 	$select_access    = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
-	$select_published = mc_select_published();
+	$select_published = mc_select_published( $args );
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string        = mc_ts();
@@ -460,7 +460,7 @@ function mc_get_new_events( $cat_id = false ) {
 	} else {
 		$cat = 'WHERE event_approved IN (' . $public . ') AND event_flagged <> 1';
 	}
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	/**
 	 * Filter how many days of newly added events will be included in ICS subscription links.
 	 *
@@ -817,11 +817,11 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	}
 	$mcdb               = mc_is_remote_db();
 	$arr_events         = array();
-	$select_published   = mc_select_published();
+	$select_published   = mc_select_published( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	$ts_string          = mc_ts();
 
 	// May add support for location/author/host later.
@@ -928,11 +928,11 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 	}
 	$mcdb               = mc_is_remote_db();
 	$arr_events         = array();
-	$select_published   = mc_select_published();
+	$select_published   = mc_select_published( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	$ts_string          = mc_ts();
 
 	// May add support for location/author/host later.
@@ -1162,8 +1162,8 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous', $args = array() ) {
 	$order              = ( 'next' === $adjacent ) ? 'ASC' : 'DESC';
 	$site               = false;
 	$arr_events         = array();
-	$select_published   = mc_select_published();
-	$exclude_categories = mc_private_categories();
+	$select_published   = mc_select_published( $args );
+	$exclude_categories = mc_private_categories( $args );
 	$category           = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
 	$ltype              = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
 	$lvalue             = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';

@@ -390,6 +390,7 @@ function mc_default_options() {
 		'drop_tables'                  => '',
 		'drop_settings'                => '',
 		'api_enabled'                  => '',
+		'api_key'                      => '',
 		'default_sort'                 => '',
 		'current_table'                => '',
 		'open_day_uri'                 => 'false',

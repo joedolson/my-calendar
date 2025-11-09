@@ -267,10 +267,12 @@ function mc_update_management_settings( $post ) {
 	$mc_remote        = ( ! empty( $post['mc_remote'] ) && 'on' === $post['mc_remote'] ) ? 'true' : 'false';
 	$mc_drop_tables   = ( ! empty( $post['mc_drop_tables'] ) && 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
 	$mc_drop_settings = ( ! empty( $post['mc_drop_settings'] ) && 'on' === $post['mc_drop_settings'] ) ? 'true' : 'false';
+	$default_api_key  = ( empty( $post['mc_api_key'] ) || 'on' === $post['mc_api_key'] ) ? '' : mc_get_option( 'api_key' );
 	// Handle My Calendar primary URL. Storing URL string removed in 3.5.0.
 	$option['use_permalinks']    = ( ! empty( $post['mc_use_permalinks'] ) && 'true' !== $mc_remote ) ? 'true' : 'false';
 	$option['uri_id']            = absint( $post['mc_uri_id'] );
 	$option['api_enabled']       = $mc_api_enabled;
+	$option['api_key']           = ( ! empty( $post['mc_api_key'] ) && 'on' !== $post['mc_api_key'] ) ? password_hash( $post['mc_api_key'], PASSWORD_DEFAULT ) : $default_api_key;
 	$option['remote']            = $mc_remote;
 	$option['drop_tables']       = $mc_drop_tables;
 	$option['drop_settings']     = $mc_drop_settings;
@@ -735,215 +737,234 @@ function my_calendar_settings() {
 						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 						<fieldset>
 							<legend class="screen-reader-text"><?php esc_html_e( 'Management', 'my-calendar' ); ?></legend>
-							<ul>
-								<?php
-								$page_title = '';
-								$edit_link  = '';
-								$note       = '';
-								if ( mc_get_option( 'uri_id' ) && 'publish' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
-									$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
-									$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
-									// Translators: Editing URL for calendar page.
-									$note = sprintf( __( 'Search for a different page or <a href="%s">edit the current calendar page</a>.', 'my-calendar' ), $edit_link );
-								} elseif ( mc_get_option( 'uri_id' ) && 'trash' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
-									$note = __( 'Your primary My Calendar page is set, but the page is in the Trash.', 'my-calendar' );
-								}
-								?>
-								<li id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
-								<?php
-								mc_settings_field(
-									array(
-										'name'     => 'mc_uri_query',
-										'label'    => __( 'Set My Calendar Primary Page', 'my-calendar' ),
-										'default'  => $page_title,
-										'note'     => $note,
-										'position' => 'top',
-										'atts'     => array(
-											'size'  => '20',
-											'class' => 'autocomplete-input',
-										),
-									)
-								);
-								?>
-								<ul class="autocomplete-result-list"></ul>
-								<?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_uri_id',
-										'label' => '',
-										'type'  => 'hidden',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_default_sort',
-										'label'   => __( 'Default sort for Admin Events', 'my-calendar' ),
-										'default' => array(
-											'1' => __( 'ID', 'my-calendar' ),
-											'2' => __( 'Title', 'my-calendar' ),
-											'4' => __( 'Date/Time', 'my-calendar' ),
-											'5' => __( 'Author', 'my-calendar' ),
-											'6' => __( 'Category', 'my-calendar' ),
-											'7' => __( 'Location', 'my-calendar' ),
-										),
-										'type'    => 'select',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_default_direction',
-										'label'   => __( 'Default sort direction', 'my-calendar' ),
-										'default' => array(
-											'ASC'  => __( 'Ascending', 'my-calendar' ),
-											'DESC' => __( 'Descending', 'my-calendar' ),
-										),
-										'type'    => 'select',
-									)
-								);
-								?>
-								</li>
-								<?php
-								if ( isset( $_POST['mc_use_permalinks'] ) && ( ! ( 'on' === $_POST['mc_use_permalinks'] && 'true' === $before_permalinks ) ) ) {
-									$url = admin_url( 'options-permalink.php#mc_cpt_base' );
-									// Translators: URL for WordPress Settings > Permalinks.
-									$note = ' <span class="mc-notice notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
+							<?php
+							$page_title = '';
+							$edit_link  = '';
+							$note       = '';
+							if ( mc_get_option( 'uri_id' ) && 'publish' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
+								$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
+								$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
+								// Translators: Editing URL for calendar page.
+								$note = sprintf( __( 'Search for a different page or <a href="%s">edit the current calendar page</a>.', 'my-calendar' ), $edit_link );
+							} elseif ( mc_get_option( 'uri_id' ) && 'trash' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
+								$note = __( 'Your primary My Calendar page is set, but the page is in the Trash.', 'my-calendar' );
+							}
+							?>
+							<div id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
+							<?php
+							mc_settings_field(
+								array(
+									'name'     => 'mc_uri_query',
+									'label'    => __( 'Set My Calendar Primary Page', 'my-calendar' ),
+									'default'  => $page_title,
+									'note'     => $note,
+									'position' => 'top',
+									'atts'     => array(
+										'size'  => '20',
+										'class' => 'autocomplete-input',
+									),
+								)
+							);
+							?>
+							<ul class="autocomplete-result-list"></ul>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_uri_id',
+									'label' => '',
+									'type'  => 'hidden',
+								)
+							);
+							?>
+							</div>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_default_sort',
+									'label'   => __( 'Default sort for Admin Events', 'my-calendar' ),
+									'default' => array(
+										'1' => __( 'ID', 'my-calendar' ),
+										'2' => __( 'Title', 'my-calendar' ),
+										'4' => __( 'Date/Time', 'my-calendar' ),
+										'5' => __( 'Author', 'my-calendar' ),
+										'6' => __( 'Category', 'my-calendar' ),
+										'7' => __( 'Location', 'my-calendar' ),
+									),
+									'type'    => 'select',
+								)
+							);
+							?>
+							</p>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_default_direction',
+									'label'   => __( 'Default sort direction', 'my-calendar' ),
+									'default' => array(
+										'ASC'  => __( 'Ascending', 'my-calendar' ),
+										'DESC' => __( 'Descending', 'my-calendar' ),
+									),
+									'type'    => 'select',
+								)
+							);
+							?>
+							</p>
+							<?php
+							if ( isset( $_POST['mc_use_permalinks'] ) && ( ! ( 'on' === $_POST['mc_use_permalinks'] && 'true' === $before_permalinks ) ) ) {
+								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
+								// Translators: URL for WordPress Settings > Permalinks.
+								$note = ' <span class="mc-notice notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
+							} else {
+								if ( 'true' === mc_get_option( 'remote' ) ) {
+									$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
 								} else {
-									if ( 'true' === mc_get_option( 'remote' ) ) {
-										$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
-									} else {
-										$note = '';
-									}
+									$note = '';
 								}
-								?>
-								<li>
-								<?php
+							}
+							?>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_use_permalinks',
+									'label' => __( 'Use Pretty Permalinks for Events', 'my-calendar' ),
+									'note'  => $note,
+									'type'  => 'checkbox-single',
+								)
+							);
+							?>
+							</p>
+							<?php
+							if ( (int) get_site_option( 'mc_multisite' ) === 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
 								mc_settings_field(
 									array(
-										'name'  => 'mc_use_permalinks',
-										'label' => __( 'Use Pretty Permalinks for Events', 'my-calendar' ),
-										'note'  => $note,
-										'type'  => 'checkbox-single',
+										'name'    => 'mc_current_table',
+										'label'   => array(
+											'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
+											'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
+										),
+										'default' => '0',
+										'type'    => 'radio',
 									)
 								);
-								?>
-								</li>
-								<?php
-								if ( (int) get_site_option( 'mc_multisite' ) === 2 && my_calendar_table() !== my_calendar_table( 'global' ) ) {
-									mc_settings_field(
-										array(
-											'name'    => 'mc_current_table',
-											'label'   => array(
-												'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
-												'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
-											),
-											'default' => '0',
-											'type'    => 'radio',
-										)
-									);
-								} else {
-									if ( mc_get_option( 'remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
-										?>
-										<li><?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></li>
-										<?php
-									}
+							} else {
+								if ( mc_get_option( 'remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
+									?>
+									<p><?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></p>
+									<?php
 								}
-								?>
-							</ul>
+							}
+							?>
 						</fieldset>
 						<fieldset>
 							<legend><?php esc_html_e( 'Advanced', 'my-calendar' ); ?></legend>
-							<ul>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_remote',
-										'label' => __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-								<?php
-								$class = ( 'true' === mc_get_option( 'remote' ) && ! function_exists( 'mc_remote_db' ) ) ? 'visible' : 'hidden';
-								?>
-								<li class="mc_remote_info <?php echo esc_attr( $class ); ?>"><?php echo wp_kses_post( __( "Add this code to your theme's <code>functions.php</code> file:", 'my-calendar' ) ); ?>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_remote',
+									'label' => __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ),
+									'type'  => 'checkbox-single',
+								)
+							);
+							?>
+							</p>
+							<?php
+							$class = ( 'true' === mc_get_option( 'remote' ) && ! function_exists( 'mc_remote_db' ) ) ? 'visible' : 'hidden';
+							?>
+							<div class="mc_remote_info <?php echo esc_attr( $class ); ?>"><?php echo wp_kses_post( __( "Add this code to your theme's <code>functions.php</code> file:", 'my-calendar' ) ); ?>
 <pre>
 function mc_remote_db() {
-	$mcdb = new wpdb('DB_USER','DB_PASSWORD','DB_NAME','DB_ADDRESS');
+$mcdb = new wpdb('DB_USER','DB_PASSWORD','DB_NAME','DB_ADDRESS');
 
-	return $mcdb;
+return $mcdb;
 }
 </pre>
-									<?php esc_html_e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
+								<?php esc_html_e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
+							</div>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_api_enabled',
+									'label' => __( 'Enable events API', 'my-calendar' ),
+									'type'  => 'checkbox-single',
+								)
+							);
+							if ( 'true' === mc_get_option( 'api_enabled' ) ) {
+								$url = add_query_arg(
 									array(
-										'name'  => 'mc_api_enabled',
-										'label' => __( 'Enable events API', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
+										'to'     => mc_date( 'Y-m-d', time() + MONTH_IN_SECONDS ),
+										'from'   => current_time( 'Y-m-d' ),
+										'mc-api' => 'json',
+									),
+									home_url()
 								);
-								if ( 'true' === mc_get_option( 'api_enabled' ) ) {
-									$url = add_query_arg(
+								// Translators: Linked URL to API endpoint.
+								printf( ' <code>' . wp_kses_post( __( 'API URL: %s', 'my-calendar' ) ) . '</code>', '<a href="' . esc_url( $url ) . '">' . esc_html( $url ) . '</a>' );
+							}
+							?>
+							</p>
+							<?php
+							if ( 'true' === mc_get_option( 'api_enabled' ) ) {
+								if ( ! mc_get_option( 'api_key' ) ) {
+									mc_settings_field(
 										array(
-											'to'     => mc_date( 'Y-m-d', time() + MONTH_IN_SECONDS ),
-											'from'   => current_time( 'Y-m-d' ),
-											'mc-api' => 'json',
-										),
-										home_url()
+											'name'  => 'mc_api_key',
+											'label' => __( 'API Authentication Key', 'my-calendar' ),
+											'type'  => 'text',
+											'note'  => __( 'Allows API requests to fetch private and unpublished events.', 'my-calendar' ),
+										)
 									);
-									// Translators: Linked URL to API endpoint.
-									printf( ' <code>' . wp_kses_post( __( 'API URL: %s', 'my-calendar' ) ) . '</code>', '<a href="' . esc_url( $url ) . '">' . esc_html( $url ) . '</a>' );
+								} else {
+									mc_settings_field(
+										array(
+											'name'  => 'mc_api_key',
+											'label' => __( 'Delete API Authentication Key', 'my-calendar' ),
+											'type'  => 'checkbox-single',
+											'value' => 'true',
+										)
+									);
 								}
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_drop_tables',
-										'label' => __( 'Drop database tables on uninstall', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_drop_settings',
-										'label'   => __( 'Delete plugin settings on uninstall', 'my-calendar' ),
-										'default' => 'true',
-										'type'    => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-								<li>
-								<?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_clear_cache',
-										'label'   => __( 'Clear My Calendar fragment cache', 'my-calendar' ),
-										'default' => 'false',
-										'type'    => 'checkbox-single',
-									)
-								);
-								?>
-								</li>
-							</ul>
+							}
+							?>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_drop_tables',
+									'label' => __( 'Drop database tables on uninstall', 'my-calendar' ),
+									'type'  => 'checkbox-single',
+								)
+							);
+							?>
+							</p>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_drop_settings',
+									'label'   => __( 'Delete plugin settings on uninstall', 'my-calendar' ),
+									'default' => 'true',
+									'type'    => 'checkbox-single',
+								)
+							);
+							?>
+							</p>
+							<p>
+							<?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_clear_cache',
+									'label'   => __( 'Clear My Calendar fragment cache', 'my-calendar' ),
+									'default' => 'false',
+									'type'    => 'checkbox-single',
+								)
+							);
+							?>
+							</p>
 						</fieldset>
 						<p>
 							<input type="submit" name="mc_manage" class="button-primary" value="<?php esc_html_e( 'Save Management Settings', 'my-calendar' ); ?>"/>
