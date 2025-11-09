@@ -83,6 +83,8 @@ function mc_directory_list( $directory ) {
 /**
  * Return SQL to select only categories *not* marked as private
  *
+ * @param array $args Event query arguments.
+ *
  * @return string partial SQL statement
  */
 function mc_private_categories( $args = array() ) {

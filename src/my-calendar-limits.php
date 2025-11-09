@@ -323,6 +323,8 @@ function mc_access_limit( $access ) {
 /**
  * SQL modifiers for published vs. preview
  *
+ * @param array $args Event query arguments.
+ *
  * @return string
  */
 function mc_select_published( $args = array() ) {
