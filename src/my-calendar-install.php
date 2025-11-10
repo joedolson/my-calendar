@@ -524,6 +524,7 @@ function mc_check_imports() {
 	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		if ( function_exists( 'calendar_check' ) ) {
 			wp_admin_notice(
+				// translators: link to migration screen.
 				sprintf( __( 'My Calendar has identified that you have the Calendar plugin. You can import those events and categories into the My Calendar database. <a href="%s">Would you like to import these events?</a>', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-migrate' ) ),
 				array(
 					'type' => 'info',
