@@ -301,7 +301,9 @@ function mc_html_type() {
  * @return int|false URL, if valid.
  */
 function _mc_is_url( $url ) {
-
+	if ( ! $url ) {
+		return false;
+	}
 	return preg_match( '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url );
 }
 
