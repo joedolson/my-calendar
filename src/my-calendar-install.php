@@ -523,21 +523,12 @@ function mc_generate_calendar_page( $slug ) {
 function mc_check_imports() {
 	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		if ( function_exists( 'calendar_check' ) ) {
-			?>
-			<div id='message' class='updated'>
-				<p><?php esc_html_e( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ); ?></p>
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-					<div>
-						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
-					</div>
-					<div>
-						<input type="hidden" name="import" value="true"/>
-						<input type="submit" value="<?php esc_attr_e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-					</div>
-				</form>
-				<p><?php esc_html_e( 'Although it is possible that this import could fail to import your events correctly, it should not have any impact on your existing Calendar database.', 'my-calendar' ); ?></p>
-			</div>
-			<?php
+			wp_admin_notice(
+				sprintf( __( 'My Calendar has identified that you have the Calendar plugin. You can import those events and categories into the My Calendar database. <a href="%s">Would you like to import these events?</a>', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-migrate' ) ),
+				array(
+					'type' => 'info',
+				)
+			);
 		}
 	}
 }
