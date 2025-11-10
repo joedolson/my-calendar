@@ -808,7 +808,7 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 				}
 			}
 		}
-		$image = ( '' !== $event->event_image ) ? "<img src='" . esc_url( $event->event_image ) . "' alt='" . esc_attr( $alt ) . "' class='mc-image photo' />" : '';
+		$image = ( '' !== $event->event_image && null !== $event->event_image ) ? "<img src='" . esc_url( $event->event_image ) . "' alt='" . esc_attr( $alt ) . "' class='mc-image photo' />" : '';
 	}
 	$return = true;
 
