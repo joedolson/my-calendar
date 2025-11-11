@@ -1197,7 +1197,7 @@ function mc_location_featured_image_field( $post_id ) {
 		<div class="image_fields">
 			<input type="hidden" name="location_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="l_image_id" /> <input type="hidden" name="location_image" id="l_image" value="' . esc_attr( $image ) . '" /><button type="button" data-context="location" class="button select-image" aria-describedby="location_image">' . $button_text . '</button> ' . $remove . '
 		</div>';
-	if ( '' !== $image ) {
+	if ( '' !== $image && null !== $image ) {
 		$return .= '<div class="event_image" aria-live="assertive"><img id="location_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 	} else {
 		$return .= '<div class="event_image" id="event_image"></div>';

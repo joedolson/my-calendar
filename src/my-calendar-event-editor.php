@@ -1249,7 +1249,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					<div class="image_fields">
 						<input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" /><input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" /> <button type="button" data-context="event" class="button select-image" aria-describedby="event_image">' . $button_text . '</button> ' . $remove . '
 					</div>';
-				if ( '' !== $image ) {
+				if ( '' !== $image && null !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
 					$return .= '<div class="event_image" aria-live="assertive"><img id="event_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 				} else {
