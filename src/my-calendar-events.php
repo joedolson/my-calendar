@@ -1077,6 +1077,24 @@ function mc_instance_list( $args ) {
 }
 
 /**
+ * Fetch instances for an event.
+ *
+ * @param int $id Event ID.
+ *
+ * @return bool|array False or the array of instances.
+ */
+function mc_get_admin_instances( $id ) {
+	global $wpdb;
+	$ts_string = mc_ts();
+	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( empty( $results ) ) {
+		return false;
+	} else {
+		return $results;
+	}
+}
+
+/**
  * Generate a list of instances for the currently edited event
  *
  * @param int $id Event ID.
@@ -1085,11 +1103,9 @@ function mc_instance_list( $args ) {
  * @return bool|string
  */
 function mc_admin_instances( $id, $occur = 0 ) {
-	global $wpdb;
-	$output    = '';
-	$ts_string = mc_ts();
-	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	if ( empty( $results ) ) {
+	$output  = '';
+	$results = mc_get_admin_instances( $id );
+	if ( ! $results ) {
 		return false;
 	}
 	$count = count( $results );
