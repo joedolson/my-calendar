@@ -351,7 +351,6 @@ function mc_get_all_events( $args ) {
 
 	$now                = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : $time;
 	$now_limit          = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : "from_unixtime($time)";
-
 	$exclude_categories = mc_private_categories( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
