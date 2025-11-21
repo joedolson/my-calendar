@@ -234,7 +234,7 @@ function my_calendar_manage() {
 			} else {
 				$instance_date = '';
 			} ?>
-			<div class="error">
+			<div class="notice notice-error">
 				<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>" method="post">
 					<p><strong><?php esc_html_e( 'Delete Event', 'my-calendar' ); ?>:</strong> <?php esc_html_e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
 						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
@@ -1271,6 +1271,8 @@ function mc_delete_instances( $id ) {
 
 /**
  * Check for events with known occurrence overlap problems.
+ *
+ * @return array
  */
 function mc_list_problems() {
 	$events   = get_posts(
