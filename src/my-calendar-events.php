@@ -335,21 +335,23 @@ function my_calendar_get_events( $args ) {
  * @return array Set of matched events.
  */
 function mc_get_all_events( $args ) {
-	$category = isset( $args['category'] ) ? $args['category'] : 'default';
-	$before   = isset( $args['before'] ) ? $args['before'] : 0;
-	$after    = isset( $args['after'] ) ? $args['after'] : 6;
-	$author   = isset( $args['author'] ) ? $args['author'] : 'default';
-	$host     = isset( $args['host'] ) ? $args['host'] : 'default';
-	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : '';
-	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
-	$site     = isset( $args['site'] ) ? $args['site'] : false;
-	$search   = isset( $args['search'] ) ? $args['search'] : '';
-	$offset   = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
-	$time     = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) + $offset : 'now';
-	$mcdb     = mc_is_remote_db();
+	$category     = isset( $args['category'] ) ? $args['category'] : 'default';
+	$before       = isset( $args['before'] ) ? $args['before'] : 0;
+	$after        = isset( $args['after'] ) ? $args['after'] : 6;
+	$author       = isset( $args['author'] ) ? $args['author'] : 'default';
+	$host         = isset( $args['host'] ) ? $args['host'] : 'default';
+	$ltype        = isset( $args['ltype'] ) ? $args['ltype'] : '';
+	$lvalue       = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
+	$site         = isset( $args['site'] ) ? $args['site'] : false;
+	$search       = isset( $args['search'] ) ? $args['search'] : '';
+	$offset_hours = intval( get_option( 'gmt_offset', 0 ) );
+	$offset       = $offset_hours * 60 * 60;
+	$time         = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) + $offset : 'now';
+	$mcdb         = mc_is_remote_db();
 
-	$now                = ( 'now' === $time ) ? 'NOW()' : $time;
-	$now_limit          = ( 'now' === $time ) ? 'NOW()' : "from_unixtime($time)";
+	$now                = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : $time;
+	$now_limit          = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : "from_unixtime($time)";
+
 	$exclude_categories = mc_private_categories( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
@@ -404,7 +406,6 @@ function mc_get_all_events( $args ) {
 			$events[ $key ] = $object;
 		}
 	}
-
 	/**
 	 * Filter events returned by mc_get_all_events queries. Function returns a range of events based on proximity to the current date using parameters for number of days/events before or after today.
 	 *
