@@ -1150,6 +1150,11 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	padding-right: 12px;
 }
 
+.mc-main .category-key li button[aria-pressed=true] {
+	outline: 2px solid;
+	outline-offset: -4px;
+}
+
 .mc-main .category-key li.all-categories .mc-active {
 	padding-right: 4px;
 }
