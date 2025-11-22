@@ -198,10 +198,15 @@ function mc_author_select_ids( $author ) {
 			$authors[] = absint( $author );
 		} else {
 			$author = trim( $author );
-			$author = get_user_by( 'login', $author ); // Get author by username.
-
-			if ( is_object( $author ) ) {
+			if ( 'current' === $author ) {
+				$author    = wp_get_current_user();
 				$authors[] = $author->ID;
+			} else {
+				$author = get_user_by( 'login', $author ); // Get author by username.
+
+				if ( is_object( $author ) ) {
+					$authors[] = $author->ID;
+				}
 			}
 		}
 	}
