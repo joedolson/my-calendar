@@ -11,10 +11,10 @@
  * @param string $hook The hook to trigger.
  * @param array  $args Arguments to pass when the hook triggers.
  * @param string $group The group to assign this job to.
- * @param bool   $unique Whether the action should be unique.
+ * @param bool   $unique Whether the action should be unique. It will not be scheduled if another pending or running action has the same hook and group parameters.
  * @param int    $priority Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.
  *
- * @return int The action ID.
+ * @return int The action ID. Zero if there was an error scheduling the action.
  */
 function as_enqueue_async_action( $hook, $args = array(), $group = '', $unique = false, $priority = 10 ) {
 	if ( ! ActionScheduler::is_initialized( __FUNCTION__ ) ) {
@@ -35,8 +35,9 @@ function as_enqueue_async_action( $hook, $args = array(), $group = '', $unique =
 	 * @param array    $args       Action arguments.
 	 * @param string   $group      Action group.
 	 * @param int      $priority   Action priority.
+	 * @param bool     $unique     Unique action.
 	 */
-	$pre = apply_filters( 'pre_as_enqueue_async_action', null, $hook, $args, $group, $priority );
+	$pre = apply_filters( 'pre_as_enqueue_async_action', null, $hook, $args, $group, $priority, $unique );
 	if ( null !== $pre ) {
 		return is_int( $pre ) ? $pre : 0;
 	}
@@ -60,10 +61,10 @@ function as_enqueue_async_action( $hook, $args = array(), $group = '', $unique =
  * @param string $hook The hook to trigger.
  * @param array  $args Arguments to pass when the hook triggers.
  * @param string $group The group to assign this job to.
- * @param bool   $unique Whether the action should be unique.
+ * @param bool   $unique Whether the action should be unique. It will not be scheduled if another pending or running action has the same hook and group parameters.
  * @param int    $priority Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.
  *
- * @return int The action ID.
+ * @return int The action ID. Zero if there was an error scheduling the action.
  */
 function as_schedule_single_action( $timestamp, $hook, $args = array(), $group = '', $unique = false, $priority = 10 ) {
 	if ( ! ActionScheduler::is_initialized( __FUNCTION__ ) ) {
@@ -85,8 +86,9 @@ function as_schedule_single_action( $timestamp, $hook, $args = array(), $group =
 	 * @param array    $args       Action arguments.
 	 * @param string   $group      Action group.
 	 * @param int      $priorities Action priority.
+	 * @param bool     $unique     Unique action.
 	 */
-	$pre = apply_filters( 'pre_as_schedule_single_action', null, $timestamp, $hook, $args, $group, $priority );
+	$pre = apply_filters( 'pre_as_schedule_single_action', null, $timestamp, $hook, $args, $group, $priority, $unique );
 	if ( null !== $pre ) {
 		return is_int( $pre ) ? $pre : 0;
 	}
@@ -112,10 +114,10 @@ function as_schedule_single_action( $timestamp, $hook, $args = array(), $group =
  * @param string $hook The hook to trigger.
  * @param array  $args Arguments to pass when the hook triggers.
  * @param string $group The group to assign this job to.
- * @param bool   $unique Whether the action should be unique.
+ * @param bool   $unique Whether the action should be unique. It will not be scheduled if another pending or running action has the same hook and group parameters.
  * @param int    $priority Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.
  *
- * @return int The action ID.
+ * @return int The action ID. Zero if there was an error scheduling the action.
  */
 function as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, $args = array(), $group = '', $unique = false, $priority = 10 ) {
 	if ( ! ActionScheduler::is_initialized( __FUNCTION__ ) ) {
@@ -126,6 +128,7 @@ function as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, 
 
 	// We expect an integer and allow it to be passed using float and string types, but otherwise
 	// should reject unexpected values.
+	// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 	if ( ! is_numeric( $interval_in_seconds ) || $interval_in_seconds != $interval ) {
 		_doing_it_wrong(
 			__METHOD__,
@@ -157,8 +160,9 @@ function as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, 
 	 * @param array    $args                Action arguments.
 	 * @param string   $group               Action group.
 	 * @param int      $priority            Action priority.
+	 * @param bool     $unique              Unique action.
 	 */
-	$pre = apply_filters( 'pre_as_schedule_recurring_action', null, $timestamp, $interval_in_seconds, $hook, $args, $group, $priority );
+	$pre = apply_filters( 'pre_as_schedule_recurring_action', null, $timestamp, $interval_in_seconds, $hook, $args, $group, $priority, $unique );
 	if ( null !== $pre ) {
 		return is_int( $pre ) ? $pre : 0;
 	}
@@ -197,10 +201,10 @@ function as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, 
  * @param string $hook The hook to trigger.
  * @param array  $args Arguments to pass when the hook triggers.
  * @param string $group The group to assign this job to.
- * @param bool   $unique Whether the action should be unique.
+ * @param bool   $unique Whether the action should be unique. It will not be scheduled if another pending or running action has the same hook and group parameters.
  * @param int    $priority Lower values take precedence over higher values. Defaults to 10, with acceptable values falling in the range 0-255.
  *
- * @return int The action ID.
+ * @return int The action ID. Zero if there was an error scheduling the action.
  */
 function as_schedule_cron_action( $timestamp, $schedule, $hook, $args = array(), $group = '', $unique = false, $priority = 10 ) {
 	if ( ! ActionScheduler::is_initialized( __FUNCTION__ ) ) {
@@ -223,8 +227,9 @@ function as_schedule_cron_action( $timestamp, $schedule, $hook, $args = array(),
 	 * @param array    $args       Action arguments.
 	 * @param string   $group      Action group.
 	 * @param int      $priority   Action priority.
+	 * @param bool     $unique     Unique action.
 	 */
-	$pre = apply_filters( 'pre_as_schedule_cron_action', null, $timestamp, $schedule, $hook, $args, $group, $priority );
+	$pre = apply_filters( 'pre_as_schedule_cron_action', null, $timestamp, $schedule, $hook, $args, $group, $priority, $unique );
 	if ( null !== $pre ) {
 		return is_int( $pre ) ? $pre : 0;
 	}
@@ -283,9 +288,10 @@ function as_unschedule_action( $hook, $args = array(), $group = '' ) {
 			ActionScheduler::logger()->log(
 				$action_id,
 				sprintf(
-					/* translators: %s is the name of the hook to be cancelled. */
-					__( 'Caught exception while cancelling action: %s', 'action-scheduler' ),
-					esc_attr( $hook )
+					/* translators: %1$s is the name of the hook to be cancelled, %2$s is the exception message. */
+					__( 'Caught exception while cancelling action "%1$s": %2$s', 'action-scheduler' ),
+					$hook,
+					$exception->getMessage()
 				)
 			);
 
@@ -454,7 +460,7 @@ function as_get_scheduled_actions( $args = array(), $return_format = OBJECT ) {
 		$actions[ $action_id ] = $store->fetch_action( $action_id );
 	}
 
-	if ( ARRAY_A == $return_format ) {
+	if ( ARRAY_A === $return_format ) {
 		foreach ( $actions as $action_id => $action_object ) {
 			$actions[ $action_id ] = get_object_vars( $action_object );
 		}
@@ -489,4 +495,19 @@ function as_get_datetime_object( $date_string = null, $timezone = 'UTC' ) {
 		$date = new ActionScheduler_DateTime( null === $date_string ? 'now' : $date_string, new DateTimeZone( $timezone ) );
 	}
 	return $date;
+}
+
+/**
+ * Check if a specific feature is supported by the current version of Action Scheduler.
+ *
+ * @since 3.9.3
+ *
+ * @param string $feature The feature to check support for.
+ *
+ * @return bool True if the feature is supported, false otherwise.
+ */
+function as_supports( string $feature ): bool {
+	$supported_features = array( 'ensure_recurring_actions_hook' );
+
+	return in_array( $feature, $supported_features, true );
 }
