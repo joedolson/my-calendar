@@ -835,6 +835,8 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	height: auto;
 	width: auto;
 	text-transform: none;
+	text-shadow: none;
+	box-shadow: none;
 }
 
 .mc-main .mc-navigation-button {
@@ -1314,26 +1316,29 @@ ol.mc-search-results li.no-results {
 	margin: 16px 0;
 }
 
-.mc-toggle-button {
+button.mc-toggle-button {
 	all: unset;
 	box-sizing: border-box;
 	padding: 4px 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba( 0,0,0,.04 );
+	background: #fefefe;
 	color: #333;
+	text-transform: none;
+	text-shadow: none;
+	box-shadow: none;
 }
 
-.mc-toggle-button:focus,
-.mc-toggle-button:hover {
+button.mc-toggle-button:focus,
+button.mc-toggle-button:hover {
 	background: #333;
 	color: #fffefd;
 	outline: 2px solid #333;
 	outline-offset: 2px;
 }
 
-.mc-toggle-button[aria-expanded=true] {
+button.mc-toggle-button[aria-expanded=true] {
 	background: rgba( 0,0,0,.9 );
 	color: #fff;
 }
@@ -1598,24 +1603,27 @@ body.mc-no-scroll {
   right: auto;
   overflow: auto;
 }
-.my-calendar-modal-close {
-  background: var(--close-button);
-  border-radius: 3px;
-  color: var(--primary-light);
-  border: 0;
-  padding: 12px;
-  cursor: pointer;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  column-gap: 4px;
-  order: 1;
-  font-size: 1rem;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif
+button.my-calendar-modal-close {
+	background: var(--close-button);
+	border-radius: 3px;
+	color: var(--primary-light);
+	border: 0;
+	padding: 12px;
+	cursor: pointer;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	column-gap: 4px;
+	order: 1;
+	font-size: 1rem;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+	text-transform: none;
+	text-shadow: none;
+	box-shadow: none;
 }
-.my-calendar-modal-close:focus,
-.my-calendar-modal-close:hover,
-.my-calendar-modal-close:active {
+button.my-calendar-modal-close:focus,
+button.my-calendar-modal-close:hover,
+button.my-calendar-modal-close:active {
   outline: 2px solid var(--primary-light);
   outline-offset: -4px;
 }
