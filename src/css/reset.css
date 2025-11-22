@@ -800,7 +800,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .mc-active,
 .mc-main .my-calendar-navigation a {
-	padding: 4px;
+	padding: 6px;
 	display: flex;
 	align-items: center;
 	border: 1px solid transparent;
@@ -808,7 +808,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .my-calendar-navigation .mc-active {
 	outline: 2px solid;
-	outline-offset: -2px;
+	outline-offset: -3px;
 	border-radius: 3px;
 	background-color: var(--primary-light);
 	color: var(--primary-dark);
@@ -834,6 +834,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	line-height: 1.62;
 	height: auto;
 	width: auto;
+	text-transform: none;
 }
 
 .mc-main .mc-navigation-button {
