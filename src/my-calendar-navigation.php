@@ -413,7 +413,7 @@ function mc_category_key( $category, $id = '' ) {
 		if ( in_array( $category_id, $selected_categories, true ) || $category === $category_id ) {
 			$selected_categories = array_diff( $selected_categories, array( $category_id ) );
 			$class              .= ' current';
-			$aria_current        = 'aria-current="true"';
+			$aria_current        = 'aria-pressed="true"';
 		} else {
 			$selected_categories[] = $category_id;
 			$aria_current          = '';
