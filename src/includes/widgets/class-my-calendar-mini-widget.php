@@ -133,7 +133,6 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$site            = ( isset( $instance['site'] ) ) ? $instance['site'] : '';
 		$months          = ( isset( $instance['months'] ) ) ? $instance['months'] : '';
 		$author          = ( isset( $instance['author'] ) ) ? $instance['author'] : '';
-		print_r( $instance );
 		?>
 		<div class="my-calendar-widget-wrapper my-calendar-mini-widget">
 		<p>
@@ -276,7 +275,6 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 			$instance['site'] = $new_data['site'];
 		}
 		$instance['months'] = $new_data['months'];
-		wp_mail( 'joe@joedolson.com', 'Test of Saving', print_r( $new_data, 1 ) . PHP_EOL . print_r( $instance, 1 ) );
 
 		return $instance;
 	}
