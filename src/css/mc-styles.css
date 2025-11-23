@@ -370,6 +370,21 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	gap: 4px;
 }
 
+.mc-template-layout {
+	display: flex;
+	gap: 32px;
+}
+
+@media screen and ( width < 782px ) {
+	.mc-template-layout {
+		flex-wrap: wrap;
+	}
+}
+
+.list-template-settings {
+	max-width: 640px;
+}
+
 .list-templates {
 	padding: 1rem;
 	margin: 1rem 0;
@@ -384,7 +399,8 @@ ol.mc-repeat-events li:last-of-type .buttons {
 }
 
 ul.mc-file-list ul {
-	margin-left: 2rem;
+	margin-left: 1rem;
+	margin-top: .5rem;
 }
 
 ul.mc-file-list > li > code {
@@ -531,6 +547,12 @@ ul.mc-file-list ul li {
 	width: 98%
 }
 
+.mc-google-marker {
+	padding-right: 1rem;
+	padding-bottom: 1rem;
+	line-height: 1.5;
+}
+
 #my-calendar-templates h2:not(.mc-flex),
 #my-calendar-templates h2:not(.mc-flex) + p {
 	display: inline-block;
@@ -576,7 +598,7 @@ ul.mc-file-list ul li {
 	width: 100%
 }
 
-.my-calendar-admin .message pre, .my-calendar-admin li pre {
+.my-calendar-admin .message pre, .my-calendar-admin pre {
 	background: #fff;
 	padding: 5px;
 	border: 1px solid #dcdcde;
@@ -741,12 +763,8 @@ label[for=mc_uri_query]::before {
 	width: 100%;
 }
 
-.wp-admin.js .wptab {
+.wp-admin.no-js .wptab {
 	display: none;
-}
-
-.wp-admin.js .wptab[aria-hidden=false] {
-	display: block;
 }
 
 .mc-tabs .tabs, .mc-tablinks {
@@ -2067,7 +2085,7 @@ input#mc_event_time:valid+span {
 .autocomplete[data-loading=true]:after{
 	animation:rotate 1s linear infinite;border:3px solid rgba(0,0,0,.12);
 	border-radius:100%;border-right-color:rgba(0,0,0,.48);
-	content:"";height:20px;position:absolute;right:12px;top:55%;
+	content:"";height:20px;position:absolute;right:12px;top:75%;
 	transform:translateY(-50%);width:20px
 }
 .autocomplete-result-list{

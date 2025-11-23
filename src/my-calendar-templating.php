@@ -39,7 +39,7 @@ function mc_templates_do_edit() {
 			} else {
 				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
 					// Curly braces are not allowed in style attributes, so replace plain color template tags with invalid color before sanitizing.
-					$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( stripslashes( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
+					$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( wp_unslash( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
 					// Restore template tag after sanitizing.
 					$template          = str_replace( array( '#fff1a', '#000a1' ), array( '{color}', '{inverse}' ), $template );
 					$templates         = mc_get_option( 'templates', array() );
@@ -49,7 +49,7 @@ function mc_templates_do_edit() {
 					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=core&mc_template=' . $key . '#my-calendar-templates' ) ) );
 				} elseif ( isset( $_POST['mc_template'] ) ) {
 					// Curly braces are not allowed in style attributes, so replace plain color template tags with invalid color before sanitizing.
-					$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( stripslashes( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
+					$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( wp_unslash( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
 					// Restore template tag after sanitizing.
 					$template = str_replace( array( '#fff1a', '#000a1' ), array( '{color}', '{inverse}' ), $template );
 					if ( mc_key_exists( $key ) ) {
@@ -249,7 +249,7 @@ function mc_templates_edit() {
 	}
 
 	$template = ( mc_is_core_template( $key ) ) ? $templates[ $key ] : mc_get_custom_template( $key );
-	$template = stripslashes( $template );
+	$template = wp_unslash( $template );
 	$core     = mc_admin_template_description( $key );
 	if ( $key ) {
 		?>
@@ -539,6 +539,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 	$skipping = array(
 		'author_id',
 		'cat_id',
+		'icon_html', // Now an alias for `icon`.
 		'category_id',
 		'dateid',
 		'duration',
@@ -582,7 +583,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 				$uncommon = true;
 			}
 		}
-		$tag_output = ( 'code' === $render ) ? '<pre>' . esc_html( $value ) . '</pre>' : wp_kses_post( $value );
+		$tag_output = ( 'code' === $render ) ? '<pre>' . esc_html( $value ) . '</pre>' : wp_kses( $value, mc_kses_elements() );
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$empty .= '<div class="mc-output-' . $key . '">' . $tag_output . '</div></section>';
@@ -698,7 +699,7 @@ function mc_admin_template_description( $key ) {
 	}
 
 	if ( ! mc_is_core_template( $key ) ) {
-		$return = wp_strip_all_tags( stripslashes( get_option( "mc_template_desc_$key" ) ) );
+		$return = wp_strip_all_tags( wp_unslash( get_option( "mc_template_desc_$key" ) ) );
 	}
 
 	return wpautop( $return );

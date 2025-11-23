@@ -113,7 +113,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 							$after  = $matches[2][ $i ];
 							$format = $matches[3][ $i ];
 							if ( '' !== $format ) {
-								$value = date_i18n( stripslashes( $format ), strtotime( stripslashes( $value ) ) );
+								$value = date_i18n( wp_unslash( $format ), strtotime( wp_unslash( $value ) ) );
 							}
 							$value    = ( '' === (string) trim( $value ) ) ? '' : $before . $value . $after;
 							$search   = $matches[0][ $i ];
@@ -143,7 +143,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	 */
 	$template = apply_filters( 'mc_template', $template, $data, $meta_type, $event );
 
-	return stripslashes( trim( $template ) );
+	return wp_unslash( trim( $template ) );
 }
 
 /**
@@ -254,7 +254,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	}
 
 	$url        = $event->location_url;
-	$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
+	$map_label  = strip_tags( wp_unslash( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
 	$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
 	$map_string = str_replace( ' ', '+', $map_string );
 	if ( '0.000000' !== $event->location_longitude && '0.000000' !== $event->location_latitude && 'mapquest' !== $map_target ) {
@@ -363,6 +363,59 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	return $source . $base;
 }
 
+
+/**
+ * Generate Add to Outlook calendar.
+ *
+ * @param string $dtstart date begin.
+ * @param string $dtend date end.
+ * @param string $url link to event.
+ * @param string $title Title of event.
+ * @param string $location string version of location.
+ * @param string $description info about event.
+ * @param string $allday 'true' for all day events, default 'false'.
+ *
+ * @return string
+ */
+function mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
+	$start  = gmdate( 'Ymd\THi00\Z', strtotime( $dtstart ) );
+	$end    = gmdate( 'Ymd\THi00\Z', strtotime( $dtend ) );
+	$source = 'https://outlook.live.com/calendar/0/action/compose';
+
+	$args = array(
+		'path'     => '/calendar/action/compose/',
+		'rru'      => 'addevent',
+		'allday'   => $allday,
+		'startdt'  => $start,
+		'enddt'    => $end,
+		'subject'  => urlencode( $title ),
+		'location' => urlencode( wp_unslash( trim( $location ) ) ),
+		'body'     => urlencode( wp_unslash( trim( $description . ' ' . $location . ' ' . $url ) ) ),
+	);
+
+	return add_query_arg( $args, $source );
+}
+
+/**
+ * Generate Add to Office 365 calendar.
+ *
+ * @param string $dtstart date begin.
+ * @param string $dtend date end.
+ * @param string $url link to event.
+ * @param string $title Title of event.
+ * @param string $location string version of location.
+ * @param string $description info about event.
+ * @param string $allday 'true' for all day events, default 'false'.
+ *
+ * @return string
+ */
+function mc_office_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
+	$url = mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday );
+	$url = str_replace( 'outlook.live.com', 'outlook.office.com', $url );
+
+	return $url;
+}
+
 /**
  * Get the featured image for a location.
  *
@@ -401,17 +454,17 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$source  = 'location';
 	$the_map = mc_maplink( $event, 'url', $source );
 	$url     = esc_url( $event->location_url );
-	$label   = strip_tags( stripslashes( $event->location_label ), mc_strip_tags() );
-	$street  = strip_tags( stripslashes( $event->location_street ), mc_strip_tags() );
-	$street2 = strip_tags( stripslashes( $event->location_street2 ), mc_strip_tags() );
-	$city    = strip_tags( stripslashes( $event->location_city ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
-	$phone   = strip_tags( stripslashes( $event->location_phone ), mc_strip_tags() );
+	$label   = strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
+	$street  = strip_tags( wp_unslash( $event->location_street ), mc_strip_tags() );
+	$street2 = strip_tags( wp_unslash( $event->location_street2 ), mc_strip_tags() );
+	$city    = strip_tags( wp_unslash( $event->location_city ), mc_strip_tags() );
+	$state   = strip_tags( wp_unslash( $event->location_state ), mc_strip_tags() );
+	$state   = strip_tags( wp_unslash( $event->location_state ), mc_strip_tags() );
+	$zip     = strip_tags( wp_unslash( $event->location_postcode ), mc_strip_tags() );
+	$zip     = strip_tags( wp_unslash( $event->location_postcode ), mc_strip_tags() );
+	$country = strip_tags( wp_unslash( $event->location_country ), mc_strip_tags() );
+	$country = strip_tags( wp_unslash( $event->location_country ), mc_strip_tags() );
+	$phone   = strip_tags( wp_unslash( $event->location_phone ), mc_strip_tags() );
 	$loc_id  = absint( $event->location_id );
 	if ( ! $url && ! $label && ! $street && ! $street2 && ! $city && ! $state && ! $zip && ! $country && ! $phone ) {
 		return '';
@@ -534,8 +587,15 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @return {array} Template tag array.
 	 */
-	$e           = apply_filters( 'mc_filter_image_data', $e, $event );
-	$e['access'] = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+	$e     = apply_filters( 'mc_filter_image_data', $e, $event );
+	$notes = get_post_meta( $event->event_post, '_mc_event_access', true );
+	if ( is_array( $notes ) ) {
+		$notes = $notes['notes'];
+	}
+	$e['notes']  = $notes;
+	$terms       = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+	$term_list   = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+	$e['access'] = $term_list;
 
 	// Date & time fields.
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
@@ -577,9 +637,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ), false );  // Date: hcal formatted.
 	$hcal_dt_end       = ( mc_is_all_day( $event ) ) ? strtotime( $real_end_date ) + 60 : strtotime( $real_end_date );
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', $hcal_dt_end, false );    // Date: hcal formatted end.
-	$e['userstart']    = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
-	$e['userend']      = '<time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
-	$e['datebadge']    = mc_date_badge( $real_begin_date );
+	$e['userstart']    = '<time class="mc-user-time" data-type="datetime" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
+	$e['userend']      = '<time class="mc-user-time" data-type="datetime" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
+	// User timezone containining only date or time.
+	$e['userstartdate'] = '<time class="mc-user-time" data-type="date" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
+	$e['userenddate']   = '<time class="mc-user-time" data-type="date" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
+	$e['userstarttime'] = '<time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
+	$e['userendtime']   = '<time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
+	$e['datebadge']     = mc_date_badge( $real_begin_date );
 	/**
 	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
 	 *
@@ -626,13 +691,13 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// Category fields.
 	$e['cat_id']          = $event->event_category;
 	$e['category_id']     = $event->event_category;
-	$e['category']        = stripslashes( $event->category_name );
-	$e['ical_category']   = wp_strip_all_tags( stripslashes( $event->category_name ) );
+	$e['category']        = wp_unslash( $event->category_name );
+	$e['ical_category']   = wp_strip_all_tags( wp_unslash( $event->category_name ) );
 	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
 	$e['ical_categories'] = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category, 'text' ) : mc_get_categories( $event, 'text' );
 	$e['term']            = intval( $event->category_term );
-	$e['icon']            = mc_category_icon( $event, 'img' );
-	$e['icon_html']       = mc_category_icon( $event );
+	$e['icon']            = mc_category_icon( $event );
+	$e['icon_html']       = $e['icon']; // Changed to an alias for icon.
 	$e['color']           = $event->category_color;
 
 	$hex          = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
@@ -651,17 +716,17 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// General text fields.
 	$title                     = mc_search_highlight( $event->event_title );
-	$e['title']                = $cancelled . stripslashes( $title );
-	$e['description']          = wpautop( stripslashes( $event->event_desc ) );
-	$e['description_raw']      = stripslashes( $event->event_desc );
-	$e['description_stripped'] = wp_strip_all_tags( stripslashes( $event->event_desc ) );
-	$e['shortdesc']            = wpautop( stripslashes( $event->event_short ) );
-	$e['shortdesc_raw']        = stripslashes( $event->event_short );
-	$e['shortdesc_stripped']   = wp_strip_all_tags( stripslashes( $event->event_short ) );
+	$e['title']                = $cancelled . wp_unslash( $title );
+	$e['description']          = wpautop( wp_unslash( $event->event_desc ) );
+	$e['description_raw']      = wp_unslash( $event->event_desc );
+	$e['description_stripped'] = wp_strip_all_tags( wp_unslash( $event->event_desc ) );
+	$e['shortdesc']            = wpautop( wp_unslash( $event->event_short ) );
+	$e['shortdesc_raw']        = wp_unslash( $event->event_short );
+	$e['shortdesc_stripped']   = wp_strip_all_tags( wp_unslash( $event->event_short ) );
 
 	// Registration fields.
 	$e['event_tickets']      = $event->event_tickets;
-	$e['event_registration'] = stripslashes( wp_kses_data( $event->event_registration ) );
+	$e['event_registration'] = wp_unslash( wp_kses_data( $event->event_registration ) );
 
 	// Links.
 	$templates  = mc_get_option( 'templates' );
@@ -679,8 +744,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e_template   = apply_filters( 'mc_details_template', $e_template, $event );
 	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
 	$replacements = array(
-		stripslashes( $e['title'] ),
-		stripslashes( ( $location ) ? $location->location_label : '' ),
+		wp_unslash( $e['title'] ),
+		wp_unslash( ( $location ) ? $location->location_label : '' ),
 		$event->category_color,
 		$event->category_icon,
 		$e['date'],
@@ -748,9 +813,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$map           = mc_maplink( $location, 'map', 'location' );
 		$map_url       = mc_maplink( $location, 'url', 'location' );
 		$map_gcal      = mc_maplink( $location, 'gcal', 'location' );
-		$e['location'] = stripslashes( $location->location_label );
-		$e['street']   = stripslashes( $location->location_street );
-		$e['street2']  = stripslashes( $location->location_street2 );
+		$e['location'] = wp_unslash( $location->location_label );
+		$e['street']   = wp_unslash( $location->location_street );
+		$e['street2']  = wp_unslash( $location->location_street2 );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
@@ -761,7 +826,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
+		$e['phone'] = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone ), 'phone' );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
@@ -772,17 +837,19 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ), 'phone2' );
-		$e['city']            = stripslashes( $location->location_city );
-		$e['state']           = stripslashes( $location->location_state );
-		$e['postcode']        = stripslashes( $location->location_postcode );
-		$e['country']         = stripslashes( $location->location_country );
+		$e['phone2']          = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone2 ), 'phone2' );
+		$e['city']            = wp_unslash( $location->location_city );
+		$e['state']           = wp_unslash( $location->location_state );
+		$e['postcode']        = wp_unslash( $location->location_postcode );
+		$e['country']         = wp_unslash( $location->location_country );
 		$e['region']          = $location->location_region;
-		$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
+		$e['hcard']           = wp_unslash( mc_hcard( $location, 'true', 'true', 'location' ) );
 		$e['link_map']        = $map;
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $location, 'location' );
-		$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
+		$terms                = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+		$term_list            = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+		$e['location_access'] = $term_list;
 		$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
 	} else {
 		// Until 3.5, these were populated from the events table.
@@ -812,9 +879,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$google_start = $dtstart;
 		$google_end   = $dtend;
 	}
-	$aria_described = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
-	$e['gcal']      = mc_google_cal( $google_start, $google_end, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google Calendar', 'my-calendar' ) . '</a>';
+	$allday            = mc_is_all_day( $event ) ? 'true' : 'false';
+	$aria_described    = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
+	$e['gcal']         = mc_google_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc );
+	$e['gcal_link']    = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google', 'my-calendar' ) . '</a>';
+	$e['office']       = mc_office_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['office_link']  = "<a href='" . esc_url( $e['office'] ) . "' class='office external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Office 365', 'my-calendar' ) . '</a>';
+	$e['outlook']      = mc_outlook_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['outlook_link'] = "<a href='" . esc_url( $e['outlook'] ) . "' class='outlook external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Outlook Live', 'my-calendar' ) . '</a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
@@ -943,34 +1015,36 @@ function mc_get_details_link( $event ) {
 	$permalinks = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
 	$permalinks = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
 	$permalink  = mc_event_link( $event );
-	if ( 0 !== (int) $event->event_post && 'true' !== mc_get_option( 'remote' ) && $permalinks ) {
-		$permalink = get_permalink( $event->event_post );
-		if ( mc_is_recurring( $event ) ) {
-			$permalink = add_query_arg( 'mc_id', $event->occur_id, $permalink );
-		}
-	} else {
-		if ( mc_get_uri( 'boolean' ) ) {
-			$permalink = mc_build_url(
-				array( 'mc_id' => $event->occur_id ),
-				array(
-					'month',
-					'dy',
-					'yr',
-					'ltype',
-					'loc',
-					'mcat',
-					'format',
-					'feed',
-					'page_id',
-					'p',
-					'mcs',
-					'time',
-					'page',
-					'mode',
-					'event_id',
-				),
-				$uri
-			);
+	if ( '' === trim( $permalink ) ) {
+		if ( 0 !== (int) $event->event_post && 'true' !== mc_get_option( 'remote' ) && $permalinks ) {
+			$permalink = get_permalink( $event->event_post );
+			if ( mc_is_recurring( $event ) ) {
+				$permalink = add_query_arg( 'mc_id', $event->occur_id, $permalink );
+			}
+		} else {
+			if ( mc_get_uri( 'boolean' ) ) {
+				$permalink = mc_build_url(
+					array( 'mc_id' => $event->occur_id ),
+					array(
+						'month',
+						'dy',
+						'yr',
+						'ltype',
+						'loc',
+						'mcat',
+						'format',
+						'feed',
+						'page_id',
+						'p',
+						'mcs',
+						'time',
+						'page',
+						'mode',
+						'event_id',
+					),
+					$uri
+				);
+			}
 		}
 	}
 	/**
@@ -1254,6 +1328,11 @@ function mc_get_event_location( $event, $source ) {
  * @return string HTML
  */
 function mc_generate_map( $event, $source = 'event', $multiple = false, $geolocate = false ) {
+	// If map service is disabled, do not return a map.
+	$map_target = mc_get_option( 'map_service' );
+	if ( 'none' === $map_target ) {
+		return '';
+	}
 	if ( ! is_object( $event ) && ! $multiple ) {
 		return '';
 	}
@@ -1327,17 +1406,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				}
 				$hcard  = mc_hcard( $location, 'true', false, 'location' );
 				$title  = esc_attr( $location->location_label );
-				$marker = wp_kses(
-					str_replace(
-						array( '</div>', '<br />', '<br><br>' ),
-						'<br>',
-						$hcard
-					),
-					array(
-						'br'     => array(),
-						'strong' => array(),
-					)
-				);
+				$marker = wp_kses_post( $hcard );
 				/**
 				 * Source HTML for a single location marker.
 				 *
@@ -1349,7 +1418,11 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				 * @return {string} Formatted HTML to be parsed by Google Maps JS.
 				 */
 				$html      = apply_filters( 'mc_map_html', $marker, $location );
-				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html</div>" . PHP_EOL;
+				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>
+					<div class='mc-google-marker'>
+					$html
+					</div>
+				</div>" . PHP_EOL;
 				$loc_list .= ( $multiple ) ? '<div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '</div>' : '';
 			}
 			/**
@@ -1377,40 +1450,6 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	}
 
 	return $out;
-}
-
-/**
- * Expand access data into a list of features.
- *
- * @param array $data Either event or location accessibility data.
- *
- * @return string list of features.
- */
-function mc_expand( $data ) {
-	$output = '';
-	if ( is_array( $data ) ) {
-		foreach ( $data as $key => $value ) {
-			$class = ( isset( $value ) ) ? sanitize_html_class( $value ) : '';
-			$label = ( isset( $value ) ) ? $value : false;
-			if ( ! $label ) {
-				continue;
-			}
-			$output .= "<li class='$class'><span>$label</span></li>\n";
-		}
-		$output = ( $output ) ? "<ul class='mc-access'>" . $output . '</ul>' : '';
-	}
-
-	/**
-	 * HTML output from an internal data array, e.g. accessibility features.
-	 *
-	 * @hook mc_expand
-	 *
-	 * @param {string} $output Formatted HTML to be returned.
-	 * @param {array} $data Array of data being parsed.
-	 *
-	 * @return {string} Formatted HTML.
-	 */
-	return apply_filters( 'mc_expand', $output, $data );
 }
 
 /**
@@ -2090,26 +2129,28 @@ function mc_template_host( $data, $type = 'calendar' ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  * @param string $text Optional. Accessibility heading text.
+ * @param string $return_type return or echo.
  */
-function mc_template_access( $data, $type = 'calendar', $text = '' ) {
-	$event  = $data->event;
-	$access = '';
+function mc_template_access( $data, $type = 'calendar', $text = '', $return_type = 'echo' ) {
+	$event  = ( is_object( $data ) ) ? $data->event : $data['event'];
+	$time   = ( is_object( $data ) ) ? $data->time : $data['time'];
+	$output = '';
 	if ( mc_output_is_visible( 'access', $type, $event ) ) {
-		if ( $text ) {
-			$access_heading = $text;
-		} else {
-			$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
-		}
-		$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+		$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
+		$access_heading = ( $text ) ? $text : $access_heading;
+		$access_data    = get_post_meta( $event->event_post, '_mc_event_access', true );
+		$notes          = ( is_array( $access_data ) ) ? $access_data['notes'] : $access_data;
 		$sublevel       = 'h2';
-		if ( 'mini' === $type || 'list' === $type || 'list' === $data->time ) {
-			// In the mini calendar, levels are reduced one because there are multiple events.
-			if ( 'list' === $data->time ) {
-				$sublevel = 'h4';
-			} else {
-				$sublevel = 'h3';
-			}
+		if ( 'mini' === $type || 'list' === $type || 'list' === $time ) {
+			// In some views, levels are reduced one because there are multiple events.
+			$sublevel = ( 'list' === $time ) ? 'h4' : 'h3';
 		}
+		$terms  = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+		$access = array();
+		foreach ( $terms as $term ) {
+			$access[] = '<li class="' . esc_attr( $term->slug ) . '"><span>' . esc_html( $term->name ) . '</span></li>';
+		}
+		$access_content = implode( '', $access );
 		/**
 		 * Filter subheading levels inside event content.
 		 *
@@ -2122,14 +2163,65 @@ function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 		 *
 		 * @return {string}
 		 */
-		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $data->time, 'php' );
-		if ( $access_content ) {
-			$access = '<div class="mc-accessibility"><' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>' . $access_content . '</div>';
+		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $time, 'php' );
+		if ( '' !== trim( $access_content ) ) {
+			$output = '
+			<div class="mc-accessibility">
+				<' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>
+				<ul class="mc-access">' . $access_content . '</ul>
+				<p>' . $notes . '</p>
+			</div>';
 		}
-		$access = ( '' !== $access ) ? '<div class="mc-access-information">' . $access . '</div>' : '';
+		$output = ( '' !== $output ) ? '<div class="mc-access-information">' . $output . '</div>' : '';
 	}
+	if ( 'return' === $return_type ) {
+		return $output;
+	} else {
+		echo wp_kses_post( $output );
+	}
+}
 
-	echo wp_kses_post( $access );
+/**
+ * Print location accessibility features in PHP templates..
+ *
+ * @param object $data Calendar view data.
+ * @param string $text Text for heading. Default 'false'.
+ */
+function mc_template_location_access( $data, $text = false ) {
+	$location = $data->location;
+	$output   = '';
+
+	$access_heading = __( 'Location Accessibility', 'my-calendar' );
+	$access_heading = ( $text ) ? $text : $access_heading;
+	$sublevel       = 'h2';
+
+	$terms  = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+	$access = array();
+	foreach ( $terms as $term ) {
+		$access[] = '<li class="' . esc_attr( $term->slug ) . '"><span>' . esc_html( $term->name ) . '</span></li>';
+	}
+	$access_content = '<ul class="mc-access">' . implode( '', $access ) . '</ul>';
+	/**
+	 * Filter subheading levels inside event content.
+	 *
+	 * @hook mc_subheading_level
+	 *
+	 * @param {string} $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+	 * @param {string} $template Current template.
+	 *
+	 * @return {string}
+	 */
+	$sublevel = apply_filters( 'mc_subheading_level', $sublevel, 'php' );
+	if ( $access_content ) {
+		$output = '
+		<div class="mc-accessibility">
+			<' . $sublevel . '>' . $access_heading . '</' . $sublevel . '>
+			' . $access_content . '
+		</div>';
+	}
+	$output = ( '' !== $output ) ? '<div class="mc-access-information">' . $output . '</div>' : '';
+
+	echo wp_kses_post( $output );
 }
 
 /**
@@ -2159,14 +2251,27 @@ function mc_template_share( $data, $type = 'calendar', $text = '' ) {
 	}
 	$more = apply_filters( 'mc_details_grid_link', $more, $event );
 	if ( mc_output_is_visible( 'gcal', $type, $event ) ) {
-		$gcal = "	<p class='gcal'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '</p>';
+		$gcal  = "	<li class='gcal'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '</li>';
+		$gcal .= "	<li class='outlook'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{outlook_link}' ) . '</li>';
+		$gcal .= "	<li class='office'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{office_link}' ) . '</li>';
 	}
 
 	if ( mc_output_is_visible( 'ical', $type, $event ) ) {
-		$vcal = "	<p class='ical'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</p>';
+		$vcal = "	<li class='ical'><span class='mc-icon' aria-hidden='true'></span>" . mc_draw_template( $data->tags, '{ical_html}' ) . '</li>';
 	}
-	$sharing = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	<div class="sharing">' . $vcal . $gcal . $more . '</div>';
+	$sharing = ( '' === trim( $gcal . $vcal ) ) ? '' : $gcal . $vcal;
 
+	if ( $sharing ) {
+		$sharing = '
+		<div class="mc-calendar-share sharing">
+			<button class="mc-toggle-button has-popup" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="mc-share-links-' . absint( $event->event_id ) . '">' . __( 'Add to Calendar', 'my-calendar' ) . '</button>
+			<ul id="mc-share-links-' . absint( $event->event_id ) . '">
+				' . $sharing . '
+			</ul>
+		</div>';
+	}
+
+	$sharing .= $more;
 	echo wp_kses_post( $sharing );
 }
 
@@ -2184,7 +2289,7 @@ function mc_template_image( $data, $type = 'calendar', $size = '' ) {
 		$img = mc_get_event_image( $event, $data->tags, $size );
 	}
 
-	echo wp_kses_post( $img );
+	echo wp_kses( $img, mc_kses_elements() );
 }
 
 /**

@@ -60,12 +60,6 @@
 	outline: 1px solid #777;
 }
 
-/* Sharing */
-.mc-main.twentyfourteen .details .sharing {
-	padding: .5em;
-	clear: both;
-}
-
 .mc-main.twentyfourteen .details .sharing p {
 	display: inline-block;
 	margin: 0 1em 0 0;
@@ -93,12 +87,12 @@
 }
 
 /* Navigation */
-.my-calendar-nav .my-calendar-prev a .mc-icon::before {
+.my-calendar-nav .my-calendar-prev .mc-icon::before {
 	content: '\25C0 ';
 	margin-right: 4px;
 }
 
-.my-calendar-nav .my-calendar-next a .mc-icon::before {
+.my-calendar-nav .my-calendar-next .mc-icon::before {
 	content: ' \25b6';
 	margin-left: 4px;
 }

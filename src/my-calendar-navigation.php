@@ -305,7 +305,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 		 *
 		 * @return {string}
 		 */
-		$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><a id="mc_previous_' . $id . '" href="' . $prev_link . '" rel="nofollow"><span class="mc-icon" aria-hidden="true"></span>' . wp_kses_post( $prev['label'] ) . '</a></li>', $prev );
+		$prev_link = apply_filters( 'mc_previous_link', '<li class="my-calendar-prev"><button type="button" class="mc-navigation-button" id="mc_previous_' . $id . '" data-href="' . $prev_link . '"><span class="mc-icon" aria-hidden="true"></span>' . wp_kses_post( $prev['label'] ) . '</button></li>', $prev );
 	}
 	if ( $next ) {
 		$next_link = mc_build_url(
@@ -329,7 +329,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 		 *
 		 * @return {string}
 		 */
-		$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><a id="mc_next_' . $id . '" href="' . $next_link . '" rel="nofollow">' . wp_kses_post( $next['label'] ) . '<span class="mc-icon" aria-hidden="true"></span></a></li>', $next );
+		$next_link = apply_filters( 'mc_next_link', '<li class="my-calendar-next"><button type="button" class="mc-navigation-button" id="mc_next_' . $id . '" data-href="' . $next_link . '">' . wp_kses_post( $next['label'] ) . '<span class="mc-icon" aria-hidden="true"></span></button></li>', $next );
 	}
 	$today_text = ( '' === mc_get_option( 'today_events' ) ) ? __( 'Today', 'my-calendar' ) : mc_get_option( 'today_events' );
 
@@ -355,7 +355,7 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
 	 *
 	 * @return {string}
 	 */
-	$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><a id="mc_today_' . $id . '" href="' . $today . '" rel="nofollow" class="today' . $active . '"' . $current . '><span class="mc-icon" aria-hidden="true"></span>' . wp_kses_post( $today_text ) . '</a></li>' );
+	$today_link = apply_filters( 'mc_today_link', '<li class="my-calendar-today"><button type="button" id="mc_today_' . $id . '" data-href="' . $today . '" class="mc-navigation-button today' . $active . '"' . $current . '><span class="mc-icon" aria-hidden="true"></span>' . wp_kses_post( $today_text ) . '</button></li>' );
 
 	$nav = '
 		<div class="my-calendar-nav">
@@ -413,7 +413,7 @@ function mc_category_key( $category, $id = '' ) {
 		if ( in_array( $category_id, $selected_categories, true ) || $category === $category_id ) {
 			$selected_categories = array_diff( $selected_categories, array( $category_id ) );
 			$class              .= ' current';
-			$aria_current        = 'aria-current="true"';
+			$aria_current        = 'aria-pressed="true"';
 		} else {
 			$selected_categories[] = $category_id;
 			$aria_current          = '';
@@ -443,7 +443,7 @@ function mc_category_key( $category, $id = '' ) {
 			// If category colors are ignored, don't render HTML for them.
 			$cat_key .= $cat_name;
 		}
-		$key .= '<li class="cat_' . $class . '"><a id="mc_cat_' . $category_id . '-' . $id . '" href="' . esc_url( $url ) . '" ' . $aria_current . ' rel="nofollow">' . $cat_key . '</a></li>';
+		$key .= '<li class="cat_' . $class . '"><button type="button" class="mc-navigation-button" id="mc_cat_' . $category_id . '-' . $id . '" data-href="' . esc_url( $url ) . '" ' . $aria_current . '>' . $cat_key . '</button></li>';
 	}
 	/**
 	 * Filter text label for 'All Categories'.
@@ -457,7 +457,7 @@ function mc_category_key( $category, $id = '' ) {
 	$all = apply_filters( 'mc_text_all_categories', __( 'All Categories', 'my-calendar' ) );
 	if ( isset( $_GET['mcat'] ) ) {
 		$raw_url = remove_query_arg( 'mcat', mc_get_current_url() );
-		$key    .= "<li class='all-categories'><a id='mc_cat_all-$id' href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), $raw_url ) ) ) . "' rel='nofollow'><span>" . $all . '</span></a></li>';
+		$key    .= "<li class='all-categories'><button type='button' class='mc-navigation-button' id='mc_cat_all-$id' data-href='" . esc_url( mc_url_in_loop( mc_build_url( array(), array( 'mcat' ), $raw_url ) ) ) . "'><span>" . $all . '</span></button></li>';
 	} else {
 		$key .= "<li class='all-categories'><span class='mc-active' id='mc_cat_all-$id' tabindex='-1'>" . $all . '</span></li>';
 	}
@@ -552,7 +552,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $s
 
 	$next_year   = $cur_year + 1;
 	$mc_next     = mc_get_option( 'next_events' );
-	$next_events = ( '' === $mc_next ) ? '<span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . ' </span>' : stripslashes( $mc_next );
+	$next_events = ( '' === $mc_next ) ? '<span class="maybe-hide">' . __( 'Next', 'my-calendar' ) . ' </span>' : wp_unslash( $mc_next );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 12 === (int) $cur_month ) {
 			$month = 1;
@@ -665,7 +665,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1, $s
 
 	$last_year       = $cur_year - 1;
 	$mc_previous     = mc_get_option( 'previous_events' );
-	$previous_events = ( '' === $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . ' </span>' : stripslashes( $mc_previous );
+	$previous_events = ( '' === $mc_previous ) ? '<span class="maybe-hide">' . __( 'Previous', 'my-calendar' ) . ' </span>' : wp_unslash( $mc_previous );
 	if ( $months <= 1 || 'list' !== $format ) {
 		if ( 1 === (int) $cur_month ) {
 			$month = 12;
@@ -833,7 +833,7 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 	$key = ( $has_multiple ) ? $multiple : $key;
 	// Translators: Type of filter shown. Events, Categories, Locations, or Accessibility Services.
 	$label = sprintf( __( 'Filter %s', 'my-calendar' ), '<span class="screen-reader-text"> ' . $key . '</span>' );
-	$form .= '<p><button id="mc_filter_' . $show . '-' . $id . '" class="button" data-href="' . esc_url( $current_url ) . '">' . $label . '</button></p>
+	$form .= '<p><button id="mc_filter_' . $show . '-' . $id . '" class="button">' . $label . '</button></p>
 	</form></div>';
 	if ( $return ) {
 		return $form;
@@ -966,9 +966,17 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			}
 		}
 	}
-	$form .= ( 'list' === $show || 'group' === $group ) ? '' : '</div><p>';
+	$form          .= ( 'list' === $show || 'group' === $group ) ? '' : '</div><p>';
+	$access_options = array();
+	$args           = array(
+		'taxonomy'   => 'mc-event-access',
+		'hide_empty' => true,
+	);
+	$taxonomy       = get_terms( $args );
 
-	$access_options = mc_event_access();
+	foreach ( $taxonomy as $term ) {
+		$access_options[ $term->term_taxonomy_id ] = $term->name;
+	}
 	if ( ! empty( $access_options ) && count( $access_options ) >= 1 ) {
 		$output       = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';
 		$url          = mc_build_url( array( 'access' => 'all' ), array() );
@@ -978,7 +986,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
 		<label for="access">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
 			<select name="access" id="access">
-			<option value="all"' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
+			<option value=""' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $access_options as $key => $access ) {
 			$access_name = $access;
@@ -1116,7 +1124,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$date_switcher .= $p;
 	$date_switcher .= '<option value="' . $time . '"' . selected( $time, $c_year, false ) . '>' . $time . "</option>\n";
 	$date_switcher .= $f;
-	$date_switcher .= '</select> <input type="submit" class="button" data-href="' . esc_attr( $data_href ) . '" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
+	$date_switcher .= '</select> <input type="submit" class="button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
 
 	/**
 	 * Filter the HTML for the date jumpbox controls.
@@ -1175,17 +1183,17 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
 		if ( in_array( 'calendar', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'calendar' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_grid-$id' href='$url'" . $is_grid . " class='mc-grid-option$grid_active' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><button type='button' id='mc_grid-$id' data-href='$url'" . $is_grid . " class='mc-navigation-button mc-grid-option$grid_active'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Grid', 'my-calendar' ) . '</button></li>';
 		}
 		if ( in_array( 'card', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'card' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_card-$id' href='$url'" . $is_card . " class='mc-card-option$card_active' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><button type='button' id='mc_card-$id' data-href='$url'" . $is_card . " class='mc-navigation-button mc-card-option$card_active'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>Cards', 'my-calendar' ) . '</button></li>';
 		}
 		if ( in_array( 'list', $enabled, true ) ) {
 			$url     = mc_build_url( array( 'format' => 'list' ), array() );
 			$url     = mc_url_in_loop( $url );
-			$toggle .= "<li><a id='mc_list-$id' href='$url'" . $is_list . "  class='mc-list-option$list_active' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</a></li>';
+			$toggle .= "<li><button type='button' id='mc_list-$id' data-href='$url'" . $is_list . "  class='mc-navigation-button mc-list-option$list_active'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">View as </span>List', 'my-calendar' ) . '</button></li>';
 		}
 		$toggle .= '</ul>
 		</div>';
@@ -1230,6 +1238,11 @@ function mc_format_toggle( $format, $toggle, $time, $id ) {
  * @return string HTML output
  */
 function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week, $from, $id ) {
+	$enabled = mc_get_option( 'time_views' );
+	// If there is only one time view enabled, don't show time toggle.
+	if ( count( $enabled ) < 2 ) {
+		return '';
+	}
 	// if dy parameter not set, use today's date instead of first day of month.
 	$aria      = ( '1' !== mc_get_option( 'ajax_javascript' ) ) ? 'pressed' : 'current';
 	$month     = (int) $month;
@@ -1302,9 +1315,17 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	$aria_week    = ( 'week' === $time ) ? " aria-$aria='true'" : '';
 	$aria_day     = ( 'day' === $time ) ? " aria-$aria='true'" : '';
 
-	$toggle .= "<li><a rel='nofollow' id='mc_month-$id'  href='" . mc_url_in_loop( $month_url ) . "' class='month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</a></li>';
-	$toggle .= "<li><a rel='nofollow' id='mc_week-$id'  href='" . mc_url_in_loop( $week_url ) . "' class='week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</a></li>';
-	$toggle .= "<li><a rel='nofollow' id='mc_day-$id'  href='" . mc_url_in_loop( $day_url ) . "' class='day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</a><li>';
+	$enable_day_view   = ( in_array( 'day', $enabled, true ) ) ? true : false;
+	$enable_week_view  = ( in_array( 'week', $enabled, true ) ) ? true : false;
+	$enable_month_view = ( in_array( 'month', $enabled, true ) ) ? true : false;
+	// You can't disable all views.
+	if ( ! ( $enable_day_view || $enable_week_view || $enable_month_view ) ) {
+		$enable_month_view = true;
+	}
+
+	$toggle .= ( ! $enable_month_view ) ? '' : "<li><button type='button' id='mc_month-$id' data-href='" . mc_url_in_loop( $month_url ) . "' class='mc-navigation-button month$month_active'$aria_month>" . __( 'Month', 'my-calendar' ) . '</button></li>';
+	$toggle .= ( ! $enable_week_view ) ? '' : "<li><button type='button' id='mc_week-$id' data-href='" . mc_url_in_loop( $week_url ) . "' class='mc-navigation-button week$week_active'$aria_week>" . __( 'Week', 'my-calendar' ) . '</button></li>';
+	$toggle .= ( ! $enable_day_view ) ? '' : "<li><button type='button' id='mc_day-$id' data-href='" . mc_url_in_loop( $day_url ) . "' class='mc-navigation-button day$day_active'$aria_day>" . __( 'Day', 'my-calendar' ) . '</button><li>';
 	$toggle .= '</ul></div>';
 
 	/**

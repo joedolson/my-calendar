@@ -274,7 +274,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 		}
 		$date   = date_i18n( 'D, j M, Y', $first->ts_occur_begin );
 		$time   = date_i18n( 'g:i a', $first->ts_occur_begin );
-		$title  = esc_html( stripslashes( $first->event_title ) );
+		$title  = esc_html( wp_unslash( $first->event_title ) );
 		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$first->event_id' id='$type$first->event_id'$checked /> <label for='break$first->event_id'>$title<br />$date, $time</label></li>\n";
 	}
 	$group .= "<li><input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> <label for='$type'>" . __( 'Select all', 'my-calendar' ) . "</label></li>\n</ul>";
@@ -328,9 +328,9 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 	$image       = '';
 
 	if ( is_object( $data ) ) {
-		$title       = stripslashes( $data->event_title );
-		$description = stripslashes( $data->event_desc );
-		$short       = stripslashes( $data->event_short );
+		$title       = wp_unslash( $data->event_title );
+		$description = wp_unslash( $data->event_desc );
+		$short       = wp_unslash( $data->event_short );
 		$image       = $data->event_image;
 	}
 	$args = array(
@@ -417,7 +417,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 						mc_compare_group_members( $group_id, 'event_short' );
 						?>
 						</label><br/>
-						<textarea id="e_short" name="event_short" rows="2" cols="80"><?php echo esc_textarea( stripslashes( $short ) ); ?></textarea>
+						<textarea id="e_short" name="event_short" rows="2" cols="80"><?php echo esc_textarea( wp_unslash( $short ) ); ?></textarea>
 					</p>
 					<?php
 				}
@@ -470,7 +470,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							}
 							?>
 							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" />
-							<input type="hidden" name="event_image" id="e_image" value="<?php echo esc_url( $image ); ?>" /> 
+							<input type="hidden" name="event_image" id="e_image" value="<?php echo esc_url( $image ); ?>" />
 							<button type='button' data-context="event" class="button select-image"><?php echo esc_html( $button_text ); ?></button> <?php echo wp_kses_post( $remove ); ?>
 							</div>
 							<?php
@@ -937,7 +937,7 @@ function mc_list_groups() {
 					if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
 						$elabel = $event->location->location_label;
 					}
-					echo esc_html( wp_strip_all_tags( stripslashes( $elabel ) ) );
+					echo esc_html( wp_strip_all_tags( wp_unslash( $elabel ) ) );
 					?>
 					</td>
 					<?php

@@ -184,17 +184,17 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'author' ) ); ?>"><?php esc_html_e( 'Limit by Author', 'my-calendar' ); ?></label><br/>
-			<select name="<?php echo esc_attr( $this->get_field_name( 'author' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'author' ) ); ?>" multiple="multiple" class="widefat">
-				<option value="all"><?php esc_html_e( 'All authors', 'my-calendar' ); ?></option>
-				<option value="current"><?php esc_html_e( 'Active User', 'my-calendar' ); ?></option>
+			<select name="<?php echo esc_attr( $this->get_field_name( 'author' ) ); ?>[]" id="<?php echo esc_attr( $this->get_field_id( 'author' ) ); ?>" multiple="multiple" class="widefat">
+				<option value="all"<?php selected( true, str_contains( $author, 'all' ) ); ?>><?php esc_html_e( 'All authors', 'my-calendar' ); ?></option>
+				<option value="current"<?php selected( true, str_contains( $author, 'current' ) ); ?>><?php esc_html_e( 'Active User', 'my-calendar' ); ?></option>
 				<?php echo wp_kses( mc_selected_users( $author ), mc_kses_elements() ); ?>
 			</select>
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'host' ) ); ?>"><?php esc_html_e( 'Limit by Host', 'my-calendar' ); ?></label><br/>
-			<select name="<?php echo esc_attr( $this->get_field_name( 'host' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'host' ) ); ?>" multiple="multiple" class="widefat">
-				<option value="all"><?php esc_html_e( 'All hosts', 'my-calendar' ); ?></option>
-				<option value="current"><?php esc_html_e( 'Active User', 'my-calendar' ); ?></option>
+			<select name="<?php echo esc_attr( $this->get_field_name( 'host' ) ); ?>[]" id="<?php echo esc_attr( $this->get_field_id( 'host' ) ); ?>" multiple="multiple" class="widefat">
+				<option value="all"<?php selected( true, str_contains( $host, 'all' ) ); ?>><?php esc_html_e( 'All hosts', 'my-calendar' ); ?></option>
+				<option value="current"<?php selected( true, str_contains( $host, 'current' ) ); ?>><?php esc_html_e( 'Active User', 'my-calendar' ); ?></option>
 				<?php echo wp_kses( mc_selected_users( $host ), mc_kses_elements() ); ?>
 			</select>
 		</p>
@@ -251,13 +251,21 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		$instance['above']                     = ( isset( $new_data['above'] ) && '' !== $new_data['above'] ) ? $new_data['above'] : 'none';
 		$instance['mc_link']                   = $new_data['mc_link'];
 		$instance['below']                     = ( isset( $new_data['below'] ) && '' !== $new_data['below'] ) ? $new_data['below'] : 'none';
-		$author                                = '';
-		$host                                  = '';
-		if ( isset( $new_data['author'] ) && is_array( $new_data['author'] ) ) {
-			$author = implode( ',', $new_data['author'] );
+		$author                                = $instance['author'];
+		$host                                  = $instance['host'];
+		if ( isset( $new_data['author'] ) && ! empty( $new_data['author'] ) ) {
+			if ( is_array( $new_data['author'] ) ) {
+				$author = implode( ',', $new_data['author'] );
+			} else {
+				$author = $new_data['author'];
+			}
 		}
-		if ( isset( $new_data['host'] ) && is_array( $new_data['author'] ) ) {
-			$host = implode( ',', $new_data['host'] );
+		if ( isset( $new_data['host'] ) && ! empty( $new_data['author'] ) ) {
+			if ( is_array( $new_data['host'] ) ) {
+				$host = implode( ',', $new_data['host'] );
+			} else {
+				$host = $new_data['host'];
+			}
 		}
 		$instance['author'] = $author;
 		$instance['host']   = $host;

@@ -227,10 +227,6 @@ nav .mc-format ul, nav .mc-time ul, nav .my-calendar-nav ul {
 	margin: 0 0 1em !important;
 }
 
-.mc-main.twentyeighteen .details .sharing {
-	clear: both;
-}
-
 .mc-main.twentyeighteen .sharing p {
 	display: inline-block;
 	padding: .5em .5em .5em 0;

@@ -272,6 +272,22 @@ function mc_event_is_hidden( $event ) {
 	if ( ! mc_event_published( $event ) && ! mc_can_edit_event( $event->event_id ) ) {
 		return true;
 	}
+	if ( 5 === (int) $event->event_approved && is_user_logged_in() ) {
+		$can_see = ( wp_get_current_user()->ID === (int) $event->event_author ) ? false : true;
+		/**
+		 * Filter whether a personal event is visible.
+		 *
+		 * @hook mc_user_can_see_this_event
+		 *
+		 * @param {bool}  $can_see true if the event should be shown.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {bool}
+		 */
+		$can_see = apply_filters( 'mc_user_can_see_this_event', $can_see, $event );
+
+		return $can_see;
+	}
 	$category = $event->event_category;
 	$private  = mc_get_private_categories();
 	/**

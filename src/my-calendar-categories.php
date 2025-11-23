@@ -83,11 +83,16 @@ function mc_directory_list( $directory ) {
 /**
  * Return SQL to select only categories *not* marked as private
  *
+ * @param array $args Event query arguments.
+ *
  * @return string partial SQL statement
  */
-function mc_private_categories() {
+function mc_private_categories( $args = array() ) {
 	$cats = '';
-	if ( ! is_user_logged_in() ) {
+	$auth = ( isset( $args['auth'] ) && true === $args['auth'] ) ? true : false;
+	if ( is_user_logged_in() || $auth ) {
+		return $cats;
+	} else {
 		$categories = mc_get_private_categories();
 		$cats       = implode( ',', $categories );
 		if ( '' !== $cats ) {
@@ -484,7 +489,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							}
 							$color = wp_strip_all_tags( $color );
 							if ( ! empty( $cur_cat ) && is_object( $cur_cat ) ) {
-								$cat_name = stripslashes( $cur_cat->category_name );
+								$cat_name = wp_unslash( $cur_cat->category_name );
 							} else {
 								$cat_name = '';
 							}
@@ -770,7 +775,7 @@ function mc_no_category_default( $single = false ) {
 		$cat_id = mc_create_category(
 			array(
 				'category_name'  => 'General',
-				'category_color' => '#243f82',
+				'category_color' => '#fafafa',
 				'category_icon'  => 'event.svg',
 			)
 		);
@@ -841,7 +846,7 @@ function mc_manage_categories() {
 		mc_create_category(
 			array(
 				'category_name'  => 'General',
-				'category_color' => '#243f82',
+				'category_color' => '#fafafa',
 				'category_icon'  => 'event.svg',
 			)
 		);
@@ -880,7 +885,7 @@ function mc_manage_categories() {
 		</thead>
 		<?php
 		foreach ( $categories as $cat ) {
-			$cat_name = stripslashes( strip_tags( $cat->category_name, mc_strip_tags() ) );
+			$cat_name = wp_unslash( strip_tags( $cat->category_name, mc_strip_tags() ) );
 			?>
 		<tr>
 			<th scope="row"><?php echo absint( $cat->category_id ); ?></th>
@@ -910,7 +915,7 @@ function mc_manage_categories() {
 			?>
 				<div class="row-actions">
 					<a href="<?php echo esc_url( admin_url( "admin.php?page=my-calendar-categories&amp;mode=edit&amp;category_id=$cat->category_id" ) ); ?>"
-					class='edit'><?php echo wp_kses_post( $edit_cat ); ?></a> | 
+					class='edit'><?php echo wp_kses_post( $edit_cat ); ?></a> |
 					<?php
 					echo wp_kses_post( $default );
 					// Cannot delete the default category.
@@ -1118,7 +1123,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					$selected = ( null === $data ) ? '' : ' checked="checked"';
 				}
 			}
-			$category_name = wp_strip_all_tags( stripslashes( trim( $cat->category_name ) ) );
+			$category_name = wp_strip_all_tags( wp_unslash( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
 				$icon = mc_category_icon( $cat );
@@ -1361,13 +1366,8 @@ function mc_get_img( $file, $is_custom = false, $file_name = '' ) {
 	} else {
 		// If the value passed to mc_get_img is an SVG, that's the icon to use.
 		if ( ! $is_core_svg ) {
-			if ( null === $is_custom ) {
-				$is_custom = mc_is_custom_icon();
-			}
 			$parent_path = plugin_dir_path( __DIR__ );
 			$parent_url  = plugin_dir_url( __DIR__ );
-			$url         = plugin_dir_url( __FILE__ );
-			$self        = plugin_dir_path( __FILE__ );
 			// If running from a subdirectory, plugin_dir_path will be a level up.
 			if ( str_contains( $parent_path, 'my-calendar' ) && $is_custom ) {
 				$parent_path = str_replace( 'my-calendar/', '', $parent_path );
@@ -1377,14 +1377,9 @@ function mc_get_img( $file, $is_custom = false, $file_name = '' ) {
 			require_once ABSPATH . '/wp-admin/includes/file.php';
 			WP_Filesystem();
 
-			if ( $is_custom ) {
-				$path = $parent_path . 'my-calendar-custom/icons/';
-				$link = $parent_url . 'my-calendar-custom/icons/';
-			} else {
-				$path = $self . 'images/icons/';
-				$link = $url . 'images/icons/';
-			}
-			$file = ( $is_custom ) ? $file : str_replace( '.png', '.svg', $file );
+			$path = $parent_path . 'my-calendar-custom/icons/';
+			$link = $parent_url . 'my-calendar-custom/icons/';
+
 			if ( false === stripos( $file, '.svg' ) ) {
 				if ( $wp_filesystem->exists( $path . $file ) ) {
 					return '<img src="' . esc_url( $link . $file ) . '" alt="" />';
@@ -1429,11 +1424,12 @@ function mc_delete_category_icon( $category_id ) {
  * Produce filepath & name or full img HTML for specific category's icon
  *
  * @param object $event_or_category Current event or category object.
- * @param string $type 'html' to generate HTML.
  *
  * @return string image path or HTML
  */
-function mc_category_icon( $event_or_category, $type = 'html' ) {
+function mc_category_icon( $event_or_category ) {
+	// By default, icons are SVG strings.
+	$src = false;
 	/**
 	 * Override the return value for a category icon.
 	 *
@@ -1441,15 +1437,16 @@ function mc_category_icon( $event_or_category, $type = 'html' ) {
 	 *
 	 * @param {bool}   $override Return a string value to short circuit the category icon query.
 	 * @param {object} $event_or_category Event object.
-	 * @param {string} $type Type of output - HTML or URL only.
 	 *
 	 * @return {string|bool}
 	 */
-	$override = apply_filters( 'mc_override_category_icon', false, $event_or_category, $type );
+	$override = apply_filters( 'mc_override_category_icon', false, $event_or_category );
 	if ( $override ) {
 		return $override;
 	}
 	if ( is_object( $event_or_category ) && property_exists( $event_or_category, 'category_icon' ) ) {
+		$color = $event_or_category->category_color;
+		$id    = $event_or_category->category_id;
 		$url   = plugin_dir_url( __FILE__ );
 		$image = '';
 		// Is this an event context or a category context.
@@ -1470,41 +1467,33 @@ function mc_category_icon( $event_or_category, $type = 'html' ) {
 					}
 					$src = $path . $event_or_category->category_icon;
 				} else {
-					$path  = plugins_url( 'images/icons', __FILE__ ) . '/';
-					$src   = $path . str_replace( '.png', '.svg', $event_or_category->category_icon );
 					$image = mc_generate_category_icon( $event_or_category );
 				}
-				$hex      = ( strpos( $event_or_category->category_color, '#' ) !== 0 ) ? '#' : '';
-				$color    = $hex . $event_or_category->category_color;
+				$hex      = ( strpos( $color, '#' ) !== 0 ) ? '#' : '';
+				$hexcolor = $hex . $color;
 				$cat_name = __( 'Category', 'my-calendar' ) . ': ' . esc_attr( $event_or_category->category_name );
-				if ( 'html' === $type ) {
-					if ( ! $image ) {
-						if ( false !== stripos( $src, '.svg' ) ) {
-							$image = get_option( 'mc_category_icon_' . $context . '_' . $event_or_category->category_id, '' );
-							// If there's a value, but it's not an svg, zero out.
-							if ( $image && 0 !== stripos( $image, '<svg' ) ) {
-								$image = '';
-							}
-							if ( '' === $image ) {
-								$image = mc_generate_category_icon( $event_or_category );
-							}
-						} else {
-							$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $color ) . '" />';
+				if ( ! $image ) {
+					if ( $src && false !== stripos( $src, '.svg' ) ) {
+						$image = get_option( 'mc_category_icon_' . $context . '_' . $id, '' );
+						// If there's a value, but it's not an svg, zero out.
+						if ( ( $image && 0 !== stripos( $image, '<svg' ) ) || '' === $image ) {
+							$image = mc_generate_category_icon( $event_or_category );
 						}
+					} else {
+						// An image src has been passed.
+						$image = '<img src="' . esc_url( $src ) . '" alt="' . esc_attr( $cat_name ) . '" class="category-icon" style="background:' . esc_attr( $hexcolor ) . '" />';
 					}
-				} else {
-					$image = $path . $event_or_category->category_icon;
 				}
 			}
 		}
-		$inverse = mc_inverse_color( $event_or_category->category_color );
+		$inverse = mc_inverse_color( $color );
 		if ( 'default' !== mc_get_option( 'apply_color' ) ) {
 			$back  = ( 'background' === mc_get_option( 'apply_color' ) ) ? true : false;
-			$image = ( $back ) ? str_replace( $event_or_category->category_color, $inverse, $image ) : str_replace( $inverse, $event_or_category->category_color, $image );
+			$image = ( $back ) ? str_replace( $color, $inverse, $image ) : str_replace( $inverse, $color, $image );
 		} else {
-			$image = str_replace( array( $event_or_category->category_color, $inverse ), 'inherit', $image );
+			$image = str_replace( array( $color, $inverse ), 'inherit', $image );
 		}
-		$image = str_replace( 'cat_' . $event_or_category->category_id, 'cat_' . $event_or_category->category_id . $substitute, $image );
+		$image = str_replace( 'cat_' . $id, 'cat_' . $id . $substitute, $image );
 		/**
 		 * Filter the HTML output for a category icon.
 		 *
@@ -1512,11 +1501,10 @@ function mc_category_icon( $event_or_category, $type = 'html' ) {
 		 *
 		 * @param {string} $image Image HTML.
 		 * @param {object} $event Event object.
-		 * @param {string} $type Type of output - HTML or URL only.
 		 *
 		 * @return {string}
 		 */
-		return apply_filters( 'mc_category_icon', $image, $event_or_category, $type );
+		return apply_filters( 'mc_category_icon', $image, $event_or_category );
 	}
 
 	return '';
@@ -1533,9 +1521,7 @@ function mc_generate_category_icon( $source ) {
 	if ( '' === $source->category_icon ) {
 		return '';
 	}
-	$path     = plugin_dir_path( __FILE__ ) . 'images/icons/';
 	$filename = str_replace( '.png', '.svg', $source->category_icon );
-	$src      = $path . $filename;
 	$hex      = ( strpos( $source->category_color, '#' ) !== 0 ) ? '#' : '';
 	$color    = $hex . $source->category_color;
 	$apply    = mc_get_option( 'apply_color' );
@@ -1557,13 +1543,7 @@ function mc_generate_category_icon( $source ) {
 	}
 	$label_id = 'cat_' . $occur_id;
 	$image    = ( isset( mc_get_core_icons()[ $filename ] ) ) ? mc_get_core_icons()[ $filename ] : false;
-	// Fetch this image from file if it is not found in the array set.
-	if ( ! $image ) {
-		global $wp_filesystem;
-		require_once ABSPATH . '/wp-admin/includes/file.php';
-		WP_Filesystem();
-		$image = ( $wp_filesystem->exists( $src ) ) ? $wp_filesystem->get_contents( $src ) : false;
-	}
+
 	if ( 0 === stripos( $image, '<svg' ) ) {
 		$image = str_replace( '<svg ', '<svg style="fill:' . $color . '" focusable="false" role="img" aria-labelledby="' . $label_id . '" class="category-icon" ', $image );
 		$image = str_replace( '<path ', "<title id='" . $label_id . "'>" . esc_html( $cat_name ) . '</title><path ', $image );
@@ -1608,4 +1588,39 @@ function mc_category_class( $event_or_category, $prefix ) {
 	$class = ( '' === $class ) ? $id : $class;
 
 	return $prefix . strtolower( $class );
+}
+
+/**
+ * Get all categories on an event.
+ *
+ * @param object $event Event object.
+ * @param string $return_type Return type: string or array.
+ * @param string $prefix Category prefix.
+ *
+ * @return string|array
+ */
+function mc_category_classes( $event, $return_type = 'string', $prefix = 'mc_rel' ) {
+
+	$related_classes = '';
+	if ( property_exists( $event, 'categories' ) ) {
+		$categories = $event->categories;
+	} else {
+		$categories = mc_get_categories( $event, 'objects' );
+	}
+	$classes = array();
+	foreach ( $categories as $category ) {
+		if ( ! is_object( $category ) ) {
+			$category = (object) $category;
+		}
+		if ( 'mc' === $prefix ) {
+			$class = sanitize_html_class( str_replace( ' ', '-', trim( $category->category_name ) ) );
+			$class = ( '' === $class ) ? $category->category_id : $class;
+		} else {
+			$class = sanitize_html_class( $category->category_name, 'mcat' . $category->category_id );
+		}
+		$classes[] = strtolower( $prefix . '_' . $class );
+	}
+	$related_classes = ' ' . implode( ' ', $classes );
+
+	return ( 'string' === $return_type ) ? $related_classes : $classes;
 }

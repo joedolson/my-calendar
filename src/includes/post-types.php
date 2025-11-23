@@ -382,6 +382,51 @@ function mc_taxonomies() {
 				'rewrite'      => array( 'slug' => $slug ),
 			)
 		);
+		/**
+		 * Filter event access taxonomy slug. Default 'mc-event-access'.
+		 *
+		 * @hook mc_event_access_slug
+		 *
+		 * @param {string} $slug Default slug.
+		 *
+		 * @return {string}
+		 */
+		$slug = apply_filters( 'mc_event_access_slug', 'mc-event-access' );
+		register_taxonomy(
+			'mc-event-access',
+			// Internal name = machine-readable taxonomy name.
+			array( $key ),
+			array(
+				'hierarchical' => false,
+				'label'        => __( 'Event Accessibility', 'my-calendar' ),
+				'query_var'    => true,
+				'rewrite'      => array( 'slug' => $slug ),
+			)
+		);
+	}
+	$enabled = array( 'mc-locations' );
+	foreach ( $enabled as $key ) {
+		/**
+		 * Filter location access taxonomy slug. Default 'mc-location-access'.
+		 *
+		 * @hook mc_location_access_slug
+		 *
+		 * @param {string} $slug Default slug.
+		 *
+		 * @return {string}
+		 */
+		$slug = apply_filters( 'mc_location_access_slug', 'mc-location-access' );
+		register_taxonomy(
+			'mc-location-access',
+			// Internal name = machine-readable taxonomy name.
+			array( $key ),
+			array(
+				'hierarchical' => false,
+				'label'        => __( 'Location Accessibility', 'my-calendar' ),
+				'query_var'    => true,
+				'rewrite'      => array( 'slug' => $slug ),
+			)
+		);
 	}
 }
 

@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 function my_calendar_api() {
 	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) {
 		if ( 'true' === mc_get_option( 'api_enabled' ) ) {
+			$data_auth = mc_get_option( 'api_key' ) ? mc_get_option( 'api_key' ) : false;
+			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false;
 			/**
 			 * Filter to test access to the event API. Default 'true'.
 			 *
@@ -30,6 +32,10 @@ function my_calendar_api() {
 			 */
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
+				$authenticated_access = false;
+				if ( $data_auth && password_verify( $data_key, $data_auth ) ) {
+					$authenticated_access = true;
+				}
 				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' );
 				$format  = ( isset( $request['my-calendar-api'] ) ) ? $request['my-calendar-api'] : 'json';
 				$format  = ( isset( $request['mc-api'] ) ) ? $request['mc-api'] : $format;
@@ -62,6 +68,7 @@ function my_calendar_api() {
 					'host'     => $host,
 					'search'   => $search,
 					'source'   => 'api',
+					'auth'     => $authenticated_access,
 				);
 				/**
 				 * Filter arguments submitted to the API.

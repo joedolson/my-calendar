@@ -16,7 +16,7 @@
  * Text Domain: my-calendar
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version:     3.6.16
+ * Version:     3.7.0-alpha
  */
 
 /*
@@ -53,7 +53,7 @@ function mc_get_version( $version = true ) {
 	if ( ! $version ) {
 		return get_option( 'mc_version', '' );
 	}
-	return '3.6.16';
+	return '3.7.0-alpha';
 }
 
 define( 'MC_DEBUG', false );
@@ -96,6 +96,19 @@ register_uninstall_hook( __FILE__, 'mc_uninstall' );
 function mc_plugin_deactivated() {
 	flush_rewrite_rules();
 }
+
+/**
+ * If network activated on multisite, execute action to activate on each site when the admin is initialized.
+ * This does not bulk activate the sites, because of the processing burden on large networks.
+ */
+function mc_multisite_activation() {
+	$is_activated = get_option( 'mc_site_activated', 'false' );
+	if ( 'false' === $is_activated ) {
+		mc_plugin_activated();
+		update_option( 'mc_site_activated', 'true', false );
+	}
+}
+add_action( 'admin_init', 'mc_multisite_activation' );
 
 /**
  * Bulk delete posts.
@@ -157,6 +170,7 @@ require __DIR__ . '/my-calendar-install.php';
 require __DIR__ . '/my-calendar-settings.php';
 require __DIR__ . '/my-calendar-migrate.php';
 require __DIR__ . '/my-calendar-categories.php';
+require __DIR__ . '/my-calendar-access-terms.php';
 require __DIR__ . '/my-calendar-locations.php';
 require __DIR__ . '/my-calendar-location-manager.php';
 require __DIR__ . '/my-calendar-event-editor.php';
@@ -408,7 +422,7 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
  * @return bool
  */
 function mc_has_migration_path() {
-	if ( function_exists( 'check_calendar' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
+	if ( function_exists( 'calendar_check' ) && 'true' !== get_option( 'ko_calendar_imported' ) ) {
 		return true;
 	}
 	if ( function_exists( 'tribe_get_event' ) && 'true' !== get_option( 'mc_tribe_imported' ) ) {
@@ -456,6 +470,7 @@ function my_calendar_menu() {
 			$locations = add_submenu_page( 'my-calendar', __( 'Locations', 'my-calendar' ), __( 'Locations', 'my-calendar' ), 'mc_edit_locations', 'my-calendar-location-manager', 'my_calendar_manage_locations' );
 			add_action( "load-$locations", 'mc_location_help_tab' );
 			add_submenu_page( 'my-calendar', __( 'Categories', 'my-calendar' ), __( 'Categories', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-categories', 'my_calendar_manage_categories' );
+			add_submenu_page( 'my-calendar', __( 'Access Terms', 'my-calendar' ), __( 'Access Terms', 'my-calendar' ), 'mc_edit_cats', 'my-calendar-access-terms', 'my_calendar_manage_access_terms' );
 		}
 		// The Design screen is available with any of these permissions.
 		$permission = 'manage_options';

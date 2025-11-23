@@ -137,6 +137,9 @@ function mc_update_location_custom_fields( $post_id, $post, $data, $location_id 
 	if ( $attachment_id ) {
 		set_post_thumbnail( $post_id, $attachment_id );
 	}
+	// Add access data.
+	$access_terms = ( isset( $post['location_access'] ) ) ? map_deep( $post['location_access'], 'absint' ) : array();
+	wp_set_object_terms( $post_id, $access_terms, 'mc-location-access' );
 
 	$fields       = mc_location_fields();
 	$field_errors = array();
@@ -243,19 +246,23 @@ function mc_get_location_id( $post_ID ) {
 /**
  * Update a single field in a location.
  *
- * @param string    $field field name.
- * @param int|float $data data to update to.
- * @param int       $location location ID.
+ * @param string           $field field name.
+ * @param int|float|string $data data to update to.
+ * @param int              $location location ID.
  *
  * @return mixed boolean/int query result
  */
-function mc_update_location( $field, $data, $location ) {
+function mc_update_location_field( $field, $data, $location ) {
 	global $wpdb;
 	$field = sanitize_key( $field );
 	if ( 'location_latitude' === $field || 'location_longitude' === $field ) {
 		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %f WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	} else {
-		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		if ( is_string( $data ) ) {
+			$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %s WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		} else {
+			$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+		}
 	}
 
 	return $result;
@@ -301,11 +308,29 @@ function mc_update_location_post_relationship( $location_id, $location_post ) {
 /**
  * Insert a new location.
  *
- * @param array $add Array of location details to add.
+ * @param array $post Array of location details to insert.
  *
- * @return boolean|int New location ID or false.
+ * @return array Array with location_id and location_post.
  */
-function mc_insert_location( $add ) {
+function mc_insert_location( $post ) {
+	$add = array(
+		'location_label'     => $post['location_label'],
+		'location_street'    => $post['location_street'],
+		'location_street2'   => $post['location_street2'],
+		'location_city'      => $post['location_city'],
+		'location_state'     => $post['location_state'],
+		'location_postcode'  => $post['location_postcode'],
+		'location_region'    => $post['location_region'],
+		'location_country'   => $post['location_country'],
+		'location_url'       => $post['location_url'],
+		'location_longitude' => $post['location_longitude'],
+		'location_latitude'  => $post['location_latitude'],
+		'location_zoom'      => $post['location_zoom'],
+		'location_phone'     => $post['location_phone'],
+		'location_phone2'    => $post['location_phone2'],
+		'location_access'    => '',
+	);
+
 	global $wpdb;
 	$add     = array_map( 'mc_kses_post', $add );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
@@ -316,7 +341,23 @@ function mc_insert_location( $add ) {
 		$insert_id = false;
 	}
 
-	return $insert_id;
+	/**
+	 * Execute an action when a location is saved.
+	 *
+	 * @hook mc_save_location
+	 *
+	 * @param {int|false} $results Result of database insertion. Row ID or false.
+	 * @param {array} $add Array of location parameters to add.
+	 * @param {array} $post POST array.
+	 *
+	 * @return Before priority 10, returns the location ID; after priority 10 returns the location post ID. Sorry.
+	 */
+	$results = apply_filters( 'mc_save_location', $insert_id, $add, $post );
+
+	return array(
+		'location_id'   => $insert_id,
+		'location_post' => $results,
+	);
 }
 
 /**
@@ -348,18 +389,47 @@ function mc_count_location_events( $location ) {
 /**
  * Update a location.
  *
- * @param array $update Array of location details to modify.
- * @param array $where [location_id => int] Location ID to update.
+ * @param array $post Array of data posted to update.
  *
  * @return mixed boolean/int query result.
  */
-function mc_modify_location( $update, $where ) {
+function mc_update_location( $post ) {
 	global $wpdb;
+	$update = array(
+		'location_label'     => $post['location_label'],
+		'location_street'    => $post['location_street'],
+		'location_street2'   => $post['location_street2'],
+		'location_city'      => $post['location_city'],
+		'location_state'     => $post['location_state'],
+		'location_postcode'  => $post['location_postcode'],
+		'location_region'    => $post['location_region'],
+		'location_country'   => $post['location_country'],
+		'location_url'       => $post['location_url'],
+		'location_longitude' => $post['location_longitude'],
+		'location_latitude'  => $post['location_latitude'],
+		'location_zoom'      => $post['location_zoom'],
+		'location_phone'     => $post['location_phone'],
+		'location_phone2'    => $post['location_phone2'],
+		'location_access'    => '',
+	);
+
+	$where   = array( 'location_id' => (int) $post['location_id'] );
 	$update  = array_map( 'mc_kses_post', $update );
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->update( my_calendar_locations_table(), $update, $where, $formats, '%d' );
 
 	delete_transient( 'mc_location_' . absint( $where['location_id'] ) );
+
+	/**
+	 * Executed an action when a location is modified.
+	 *
+	 * @hook mc_modify_location
+	 *
+	 * @param {array} $where Array [location_id => $id].
+	 * @param {array} $update Array of location parameters to update.
+	 * @param {array} $post POST array.
+	 */
+	$results = apply_filters( 'mc_modify_location', $where, $update, $_POST );
 
 	return $results;
 }
@@ -420,44 +490,16 @@ function my_calendar_add_locations() {
 	$post = map_deep( $_POST, 'wp_kses_post' );
 
 	if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
-		$add = array(
-			'location_label'     => $post['location_label'],
-			'location_street'    => $post['location_street'],
-			'location_street2'   => $post['location_street2'],
-			'location_city'      => $post['location_city'],
-			'location_state'     => $post['location_state'],
-			'location_postcode'  => $post['location_postcode'],
-			'location_region'    => $post['location_region'],
-			'location_country'   => $post['location_country'],
-			'location_url'       => $post['location_url'],
-			'location_longitude' => $post['location_longitude'],
-			'location_latitude'  => $post['location_latitude'],
-			'location_zoom'      => $post['location_zoom'],
-			'location_phone'     => $post['location_phone'],
-			'location_phone2'    => $post['location_phone2'],
-			'location_access'    => isset( $post['location_access'] ) ? serialize( $post['location_access'] ) : '',
-		);
 
-		$location_id = mc_insert_location( $add );
+		$results     = mc_insert_location( $post );
+		$location_id = $results['location_id'];
 		// If this is being generated from an event/location merge, update the event to the new location ID.
 		if ( isset( $_GET['event_source'] ) ) {
 			$source = absint( $_GET['event_source'] );
 			mc_update_data( $source, 'event_location', $location_id );
 		}
-		if ( isset( $post['mc_default_location'] ) ) {
-			mc_update_option( 'default_location', (int) $location_id );
-		}
-		/**
-		 * Execute an action when a location is saved.
-		 *
-		 * @hook mc_save_location
-		 *
-		 * @param {int|false} $results Result of database insertion. Row ID or false.
-		 * @param {array} $add Array of location parameters to add.
-		 * @param {array} $post POST array.
-		 */
-		$results = apply_filters( 'mc_save_location', $location_id, $add, $post );
-		if ( $results ) {
+
+		if ( $location_id ) {
 			$args     = array(
 				'mode'        => 'edit',
 				'location_id' => $location_id,
@@ -468,6 +510,9 @@ function my_calendar_add_locations() {
 		} else {
 			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
 		}
+		if ( isset( $post['mc_default_location'] ) ) {
+			mc_update_option( 'default_location', (int) $location_id );
+		}
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
 		$loc = absint( $_GET['location_id'] );
 		echo wp_kses_post( mc_delete_location( $loc ) );
@@ -475,25 +520,8 @@ function my_calendar_add_locations() {
 		$cur_loc = (int) $_GET['location_id'];
 		mc_show_location_form( 'edit', $cur_loc );
 	} elseif ( isset( $post['location_id'] ) && isset( $post['location_label'] ) && 'edit' === $post['mode'] ) {
-		$update = array(
-			'location_label'     => $post['location_label'],
-			'location_street'    => $post['location_street'],
-			'location_street2'   => $post['location_street2'],
-			'location_city'      => $post['location_city'],
-			'location_state'     => $post['location_state'],
-			'location_postcode'  => $post['location_postcode'],
-			'location_region'    => $post['location_region'],
-			'location_country'   => $post['location_country'],
-			'location_url'       => $post['location_url'],
-			'location_longitude' => $post['location_longitude'],
-			'location_latitude'  => $post['location_latitude'],
-			'location_zoom'      => $post['location_zoom'],
-			'location_phone'     => $post['location_phone'],
-			'location_phone2'    => $post['location_phone2'],
-			'location_access'    => isset( $post['location_access'] ) ? serialize( $post['location_access'] ) : '',
-		);
+		$location_id = mc_update_location( $post );
 
-		$where = array( 'location_id' => (int) $post['location_id'] );
 		if ( isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', (int) $post['location_id'] );
 		}
@@ -501,21 +529,9 @@ function my_calendar_add_locations() {
 		if ( (int) $post['location_id'] === (int) $default_location && ! isset( $post['mc_default_location'] ) ) {
 			mc_update_option( 'default_location', '' );
 		}
-		$results = mc_modify_location( $update, $where );
-
-		/**
-		 * Executed an action when a location is modified.
-		 *
-		 * @hook mc_modify_location
-		 *
-		 * @param {array} $where Array [location_id => $id].
-		 * @param {array} $update Array of location parameters to update.
-		 * @param {array} $post POST array.
-		 */
-		$results = apply_filters( 'mc_modify_location', $where, $update, $_POST );
-		if ( false === $results ) {
+		if ( false === $location_id ) {
 			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
-		} elseif ( 0 === $results ) {
+		} elseif ( 0 === $location_id ) {
 			mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
 		} else {
 			mc_show_notice( __( 'Location edited successfully', 'my-calendar' ), true, false, 'success' );
@@ -700,6 +716,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 	$location = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_locations_table() . ' WHERE location_id = %d', $location_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( is_object( $location ) ) {
 		$location->location_post = mc_get_location_post( $location_id, false );
+		$access_terms            = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+		$location->accessibility = wp_list_pluck( $access_terms, 'name' );
 		$prevent_geolocation     = ( '1' === get_post_meta( $location->location_post, '_mc_geolocate_error', true ) && 'force' !== $update_location ) ? true : false;
 		if ( ! $prevent_geolocation ) {
 			if ( $update_location ) {
@@ -717,8 +735,8 @@ function mc_get_location( $location_id, $update_location = true ) {
 						$lng = isset( $loc['longitude'] ) ? $loc['longitude'] : '';
 
 						if ( $lat && $lng ) {
-							mc_update_location( 'location_longitude', $lng, $location_id );
-							mc_update_location( 'location_latitude', $lat, $location_id );
+							mc_update_location_field( 'location_longitude', $lng, $location_id );
+							mc_update_location_field( 'location_latitude', $lat, $location_id );
 							$location->location_longitude = $lng;
 							$location->location_latitude  = $lat;
 						} else {
@@ -864,7 +882,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$return   .= '
 	<p>
 	<label for="e_label">' . __( 'Name of Location (required)', 'my-calendar' ) . $compare . '</label>';
-	$cur_label = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_label'} ) ) : '';
+	$cur_label = ( is_object( $data ) ) ? ( wp_unslash( (string) $data->{$context . '_label'} ) ) : '';
 	if ( mc_controlled_field( 'label' ) && 'location' !== $context ) {
 		$return .= mc_location_controller( 'label', $cur_label, $context );
 	} else {
@@ -873,8 +891,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare1        = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_street', false ) : '';
 	$compare2        = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_street2', false ) : '';
 	$compare         = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_city', false ) : '';
-	$street_address  = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street'} ) : '';
-	$street_address2 = ( $has_data ) ? stripslashes( (string) $data->{$context . '_street2'} ) : '';
+	$street_address  = ( $has_data ) ? wp_unslash( (string) $data->{$context . '_street'} ) : '';
+	$street_address2 = ( $has_data ) ? wp_unslash( (string) $data->{$context . '_street2'} ) : '';
 	$return         .= '</p>';
 	$image_field     = '';
 	if ( 'location' === $context ) {
@@ -896,7 +914,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	</p>
 	<p>
 		<label for="e_city">' . __( 'City', 'my-calendar' ) . $compare . '</label> ';
-	$cur_city = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_city'} ) ) : '';
+	$cur_city = ( is_object( $data ) ) ? ( wp_unslash( (string) $data->{$context . '_city'} ) ) : '';
 	if ( mc_controlled_field( 'city' ) ) {
 		$return .= mc_location_controller( 'city', $cur_city, $context );
 	} else {
@@ -906,7 +924,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 
 	$compare   = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_state', false ) : '';
 	$return   .= '<label for="e_state">' . __( 'State/Province', 'my-calendar' ) . $compare . '</label> ';
-	$cur_state = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_state'} ) ) : '';
+	$cur_state = ( is_object( $data ) ) ? ( wp_unslash( (string) $data->{$context . '_state'} ) ) : '';
 	if ( mc_controlled_field( 'state' ) ) {
 		$return .= mc_location_controller( 'state', $cur_state, $context );
 	} else {
@@ -914,7 +932,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	}
 	$compare      = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_postcode', false ) : '';
 	$return      .= '</p><p><label for="e_postcode">' . __( 'Postal Code', 'my-calendar' ) . $compare . '</label> ';
-	$cur_postcode = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_postcode'} ) ) : '';
+	$cur_postcode = ( is_object( $data ) ) ? ( wp_unslash( (string) $data->{$context . '_postcode'} ) ) : '';
 	if ( mc_controlled_field( 'postcode' ) ) {
 		$return .= mc_location_controller( 'postcode', $cur_postcode, $context );
 	} else {
@@ -923,7 +941,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare    = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_region', false ) : '';
 	$return    .= '</p><p>';
 	$return    .= '<label for="e_region">' . __( 'Region', 'my-calendar' ) . $compare . '</label> ';
-	$cur_region = ( is_object( $data ) ) ? ( stripslashes( (string) $data->{$context . '_region'} ) ) : '';
+	$cur_region = ( is_object( $data ) ) ? ( wp_unslash( (string) $data->{$context . '_region'} ) ) : '';
 	if ( mc_controlled_field( 'region' ) ) {
 		$return .= mc_location_controller( 'region', $cur_region, $context );
 	} else {
@@ -931,7 +949,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	}
 	$compare     = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_country', false ) : '';
 	$return     .= '</p><p><label for="e_country">' . __( 'Country', 'my-calendar' ) . $compare . '</label><div class="mc-autocomplete autocomplete" id="mc-countries-autocomplete"> ';
-	$cur_country = ( $has_data ) ? ( stripslashes( (string) $data->{$context . '_country'} ) ) : '';
+	$cur_country = ( $has_data ) ? ( wp_unslash( (string) $data->{$context . '_country'} ) ) : '';
 	if ( mc_controlled_field( 'country' ) ) {
 		$return .= mc_location_controller( 'country', $cur_country, $context );
 	} else {
@@ -948,11 +966,11 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$compare_lat  = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_latitude', false ) : '';
 	$compare_lon  = ( $group_id ) ? mc_compare_group_members( $group_id, 'event_longitude', false ) : '';
 	$zoom         = ( $has_data ) ? $data->{$context . '_zoom'} : '16';
-	$event_phone  = ( $has_data ) ? stripslashes( (string) $data->{$context . '_phone'} ) : '';
-	$event_phone2 = ( $has_data ) ? stripslashes( (string) $data->{$context . '_phone2'} ) : '';
-	$event_url    = ( $has_data ) ? stripslashes( (string) $data->{$context . '_url'} ) : '';
-	$event_lat    = ( $has_data ) ? stripslashes( (string) $data->{$context . '_latitude'} ) : '';
-	$event_lon    = ( $has_data ) ? stripslashes( (string) $data->{$context . '_longitude'} ) : '';
+	$event_phone  = ( $has_data ) ? wp_unslash( (string) $data->{$context . '_phone'} ) : '';
+	$event_phone2 = ( $has_data ) ? wp_unslash( (string) $data->{$context . '_phone2'} ) : '';
+	$event_url    = ( $has_data ) ? wp_unslash( (string) $data->{$context . '_url'} ) : '';
+	$event_lat    = ( $has_data ) ? wp_unslash( (string) $data->{$context . '_latitude'} ) : '';
+	$event_lon    = ( $has_data ) ? wp_unslash( (string) $data->{$context . '_longitude'} ) : '';
 	$update_gps   = ( $has_data && mc_get_option( 'gmap_api_key', '' ) && 'location' === $context ) ? '<p class="checkboxes"><input type="checkbox" value="1" id="update_gps" name="update_gps" /> <label for="update_gps">' . __( 'Update GPS Coordinates', 'my-calendar' ) . '</label></p>' : '';
 	$return      .= '</p>
 	<p>
@@ -1011,44 +1029,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	<fieldset>
 	<legend>' . __( 'Location Accessibility', 'my-calendar' ) . '</legend>
 	<ul class="accessibility-features checkboxes">';
-
-	/**
-	 * Filter venue accessibility array.
-	 *
-	 * @hook mc_venue_accessibility
-	 *
-	 * @param {array} $access Access parameters.
-	 * @param {object} $data Current data object.
-	 *
-	 * @return {array}
-	 */
-	$access      = apply_filters( 'mc_venue_accessibility', mc_location_access(), $data );
-	$access_list = '';
-	if ( $has_data ) {
-		if ( 'location' === $context ) {
-			$location_access = unserialize( $data->{$context . '_access'} );
-		} else {
-			if ( property_exists( $data, 'event_location' ) ) {
-				$event_location = $data->event_location;
-			} else {
-				$event_location = false;
-			}
-			$location_access = unserialize( mc_location_data( 'location_access', $event_location ) );
-		}
-	} else {
-		$location_access = array();
-	}
-	foreach ( $access as $k => $a ) {
-		$id      = "loc_access_$k";
-		$label   = $a;
-		$checked = '';
-		if ( is_array( $location_access ) ) {
-			$checked = ( in_array( $a, $location_access, true ) || in_array( $k, $location_access, true ) ) ? " checked='checked'" : '';
-		}
-		$item         = sprintf( '<li><input type="checkbox" id="%1$s" name="' . $context . '_access[]" value="%4$s" class="checkbox" %2$s /> <label for="%1$s">%3$s</label></li>', esc_attr( $id ), $checked, esc_html( $label ), esc_attr( $a ) );
-		$access_list .= $item;
-	}
-	$return .= $access_list;
+	$return .= mc_admin_access_term_list( $data, 'mc-location-access' );
 	$return .= '</ul>
 	</fieldset>';
 	$fields  = mc_display_location_fields( mc_location_fields(), $data, $context );
@@ -1072,10 +1053,13 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$api_key  = mc_get_option( 'gmap_api_key' );
 	$location = ( $has_data && 'event' === $context && property_exists( $data, 'event_location' ) ) ? $data->event_location : false;
 	if ( $api_key && ! ( 'event' === $context && false === (bool) $location ) ) {
-		$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
-		$map     = mc_generate_map( $data, $context );
+		$map_target = mc_get_option( 'map_service' );
+		if ( 'google' === $map_target ) {
+			$return .= '<h3>' . __( 'Location Map', 'my-calendar' ) . '</h3>';
+			$map     = mc_generate_map( $data, $context );
 
-		$return .= ( '' === $map ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
+			$return .= ( '' === $map ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
+		}
 	} else {
 		if ( ! $api_key ) {
 			// Translators: URL to settings page to add key.
@@ -1176,7 +1160,7 @@ function mc_template_location_fields( $e, $event ) {
 		$value = mc_location_custom_data( $event->event_location, $location_post, $name );
 		if ( ! isset( $field['display_callback'] ) || ( isset( $field['display_callback'] ) && ! function_exists( $field['display_callback'] ) ) ) {
 			// if no display callback is provided.
-			$display = stripslashes( $value );
+			$display = wp_unslash( $value );
 		} else {
 			$display = call_user_func( $field['display_callback'], $value, $field );
 		}
@@ -1213,7 +1197,7 @@ function mc_location_featured_image_field( $post_id ) {
 		<div class="image_fields">
 			<input type="hidden" name="location_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="l_image_id" /> <input type="hidden" name="location_image" id="l_image" value="' . esc_attr( $image ) . '" /><button type="button" data-context="location" class="button select-image" aria-describedby="location_image">' . $button_text . '</button> ' . $remove . '
 		</div>';
-	if ( '' !== $image ) {
+	if ( '' !== $image && null !== $image ) {
 		$return .= '<div class="event_image" aria-live="assertive"><img id="location_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
 	} else {
 		$return .= '<div class="event_image" id="event_image"></div>';
@@ -1280,13 +1264,13 @@ function mc_display_location_fields( $fields, $data, $context ) {
 				if ( isset( $field['input_values'] ) ) {
 					$output = "<select name='$name' id='$name'$required>";
 					foreach ( $field['input_values'] as $value ) {
-						$value = stripslashes( $value );
+						$value = wp_unslash( $value );
 						if ( $value === $user_value ) {
 							$selected = " selected='selected'";
 						} else {
 							$selected = '';
 						}
-						$output .= "<option value='" . esc_attr( stripslashes( $value ) ) . "'$selected>" . esc_html( stripslashes( $value ) ) . "</option>\n";
+						$output .= "<option value='" . esc_attr( wp_unslash( $value ) ) . "'$selected>" . esc_html( wp_unslash( $value ) ) . "</option>\n";
 					}
 					$output .= '</select>';
 				}
@@ -1300,7 +1284,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 					} else {
 						$checked = '';
 					}
-					$output = "<input type='" . $field['input_type'] . "' name='$name' id='$name' value='" . esc_attr( stripslashes( $value ) ) . "'$checked $required />";
+					$output = "<input type='" . $field['input_type'] . "' name='$name' id='$name' value='" . esc_attr( wp_unslash( $value ) ) . "'$checked $required />";
 				}
 				break;
 			default:
@@ -1314,39 +1298,6 @@ function mc_display_location_fields( $fields, $data, $context ) {
 	}
 
 	return $return;
-}
-
-/**
- * Array of location access features
- *
- * @return array
- */
-function mc_location_access() {
-	$location_access = array(
-		'1'  => __( 'Accessible Entrance', 'my-calendar' ),
-		'2'  => __( 'Accessible Parking Designated', 'my-calendar' ),
-		'3'  => __( 'Accessible Restrooms', 'my-calendar' ),
-		'4'  => __( 'Accessible Seating', 'my-calendar' ),
-		'5'  => __( 'Accessible Transportation Available', 'my-calendar' ),
-		'6'  => __( 'Wheelchair Accessible', 'my-calendar' ),
-		'7'  => __( 'Courtesy Wheelchairs', 'my-calendar' ),
-		'8'  => __( 'Bariatric Seating Available', 'my-calendar' ),
-		'9'  => __( 'Elevator to all public areas', 'my-calendar' ),
-		'10' => __( 'Braille Signage', 'my-calendar' ),
-		'11' => __( 'Fragrance-Free Policy', 'my-calendar' ),
-		'12' => __( 'Other', 'my-calendar' ),
-	);
-
-	/**
-	 * Filter choices available for location accessibility services.
-	 *
-	 * @hook mc_location_access_choices
-	 *
-	 * @param {array} Array of location choices (numeric keys, string values.)
-	 *
-	 * @return {array}
-	 */
-	return apply_filters( 'mc_location_access_choices', $location_access );
 }
 
 /**

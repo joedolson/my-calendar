@@ -112,16 +112,16 @@
 	border-bottom: none;
 }
 
-.my-calendar-prev a .mc-icon::before,
-.my-calendar-next a .mc-icon::before,
-.mc-export a .mc-icon::before,
+.my-calendar-prev .mc-icon::before,
+.my-calendar-next .mc-icon::before,
+.mc-export .mc-icon::before,
 .mc-main .time-block .mc-icon::before,
-.mc-main .sharing .ical a .mc-icon::before,
-.mc-main .sharing .gcal a .mc-icon::before,
-.mc-main .sharing .mc-details a .mc-icon::before,
-.mc-main .mc-format a .mc-icon::before,
+.mc-main .sharing .ical .mc-icon::before,
+.mc-main .sharing .gcal .mc-icon::before,
+.mc-main .sharing .mc-details .mc-icon::before,
+.mc-main .mc-format .mc-icon::before,
 .mc-main .mc-format span .mc-icon::before,
-.mc-main .mc-print a .mc-icon::before,
+.mc-main .mc-print .mc-icon::before,
 .mc-main .mc-list .event-date button::nth-of-type(1) .mc-icon::before {
 	font-family: 'dashicons';
 	vertical-align: middle;
@@ -433,11 +433,11 @@ h4.mc-title {
 	border-right: 1px solid #bbb;
 }
 
-.my-calendar-prev a .mc-icon::before {
+.my-calendar-prev .mc-icon::before {
 	content: '\f341';
 }
 
-.my-calendar-next a .mc-con::before {
+.my-calendar-next .mc-con::before {
 	content: '\f345';
 	margin-left: 3px;
 }
@@ -520,22 +520,11 @@ h4.mc-title {
 	clear: both;
 }
 
-.mc-main .sharing p {
-	display: inline-block;
-	padding: .5em .5em .5em 0;
-}
-
-.mc-main.mini .sharing p {
-	font-size: 14px;
-	padding: 0 .25em 0 0;
-	margin-bottom: 10px;
-}
-
-.mc-main .sharing .ical a:before, .mc-main .sharing .gcal a .mc-icon::before {
+.mc-main .sharing .ical a:before, .mc-main .sharing .gcal .mc-icon::before {
 	content: "\f502";
 }
 
-.mc-main .sharing .mc-details a .mc-icon::before {
+.mc-main .sharing .mc-details .mc-icon::before {
 	content: "\f242";
 }
 
@@ -590,4 +579,10 @@ h4.mc-title {
 	text-align: left;
 	display: inline-block;
 	text-transform: none;
+}
+
+.mc-google-marker {
+	padding-right: 1rem;
+	padding-bottom: 1rem;
+	line-height: 1.5;
 }

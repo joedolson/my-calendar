@@ -292,9 +292,9 @@ function mc_import_tribe_location( $venue_id ) {
 		'location_access'    => '',
 	);
 
-	$location_id = mc_insert_location( $add );
-	// Ensure the location post is created and get that ID.
-	$post_id = apply_filters( 'mc_save_location', $location_id, $add, array() );
+	$results     = mc_insert_location( $add );
+	$post_id     = $results['location_post'];
+	$location_id = $results['location_id'];
 	if ( is_numeric( $location_id ) ) {
 		// Only set the venue relationship if location ID is set.
 		update_post_meta( $venue_id, '_mc_tribe_location_id', $location_id );
@@ -302,12 +302,12 @@ function mc_import_tribe_location( $venue_id ) {
 		// Set featured image for location.
 		$featured_image_id = get_post_thumbnail_id( $venue_id );
 		if ( $featured_image_id ) {
-			$location_post = ( $post_id ) ? $post_id : mc_get_location_post( $location_id );
-			set_post_thumbnail( $location_post, $featured_image_id );
+			$post_id = ( $post_id ) ? $post_id : mc_get_location_post( $location_id );
+			set_post_thumbnail( $post_id, $featured_image_id );
 		}
 		// Set location post content to venue content.
 		$update_post = array(
-			'ID'           => $location_post,
+			'ID'           => $post_id,
 			'post_content' => $venue->post_content,
 		);
 		wp_update_post( $update_post );

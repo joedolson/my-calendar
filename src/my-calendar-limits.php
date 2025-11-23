@@ -198,10 +198,15 @@ function mc_author_select_ids( $author ) {
 			$authors[] = absint( $author );
 		} else {
 			$author = trim( $author );
-			$author = get_user_by( 'login', $author ); // Get author by username.
-
-			if ( is_object( $author ) ) {
+			if ( 'current' === $author ) {
+				$author    = wp_get_current_user();
 				$authors[] = $author->ID;
+			} else {
+				$author = get_user_by( 'login', $author ); // Get author by username.
+
+				if ( is_object( $author ) ) {
+					$authors[] = $author->ID;
+				}
 			}
 		}
 	}
@@ -315,9 +320,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
  */
 function mc_access_limit( $access ) {
 	global $wpdb;
-	$options      = mc_event_access();
-	$format       = ( isset( $options[ $access ] ) ) ? esc_sql( $options[ $access ] ) : false;
-	$limit_string = ( $format ) ? "AND event_access LIKE '%$format%'" : '';
+	$limit_string = ' JOIN ' . $wpdb->term_relationships . ' AS tr ON (tr.object_id=e.event_post) WHERE tr.term_taxonomy_id = ' . absint( $access ) . ' AND ';
 
 	return $limit_string;
 }
@@ -325,15 +328,18 @@ function mc_access_limit( $access ) {
 /**
  * SQL modifiers for published vs. preview
  *
+ * @param array $args Event query arguments.
+ *
  * @return string
  */
-function mc_select_published() {
+function mc_select_published( $args = array() ) {
 	if ( mc_is_preview() ) {
 		$published = 'event_flagged <> 1 AND ( event_approved <> 2 )';
 	} else {
 		$public  = mc_event_states_by_type( 'public' );
 		$private = mc_event_states_by_type( 'private' );
-		if ( is_user_logged_in() ) {
+		$auth    = ( isset( $args['auth'] ) && true === $args['auth'] ) ? true : false;
+		if ( is_user_logged_in() || $auth ) {
 			$public = array_merge( $public, $private );
 		}
 		$public    = implode( ',', $public );

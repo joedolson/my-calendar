@@ -1,18 +1,20 @@
-(function ($) {
+(() => {
 	const { __, _x, _n, _nx } = wp.i18n;
 
 	'use strict';
-	$(function () {
-		mc_display_usertime();
+	mc_display_usertime();
+	initjs();
+
+	function initjs( ref = false ) {
 		const calendar = document.querySelectorAll( '.mc-main, .mc-event-list' );
 		if ( calendar ) {
 			calendar.forEach( (el) => {
-				let targetId = el.getAttribute( 'id' );
+				let targetId = ( ref ) ? ref : el.getAttribute( 'id' );
 				mc_build_toggles( targetId );
 				el.classList.remove( 'mcjs' );
 			});
 		}
-	});
+	}
 
 	const loadmore = document.querySelectorAll( '.mc-loader' );
 	if ( loadmore ) {
@@ -59,186 +61,96 @@
 		request.send('action=' + my_calendar.action + '&behavior=loadupcoming&' + type + '=' + time + '&args=' + args );
 	}
 
-	if ( 'true' === my_calendar.mini ) {
-		$( ".mini .calendar-events" ).hide();
-		$( document ).on( "click", ".mini .has-events .trigger", function (e) {
-			e.preventDefault();
-			const current_date = $(this).parents( '.has-events' ).children( '.calendar-events' );
-			current_date.toggle();
-			$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
-			$( '.mini .has-events' ).children().not( '.mc-date-container' ).not( current_date ).hide();
-			$( this ).addClass( 'active-toggle' );
-			e.stopImmediatePropagation();
-		});
-		$( document ).on( "click", ".calendar-events .close", function (e) {
-			e.preventDefault();
-			$(this).closest( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
-			$(this).closest( 'div.calendar-events' ).toggle();
-			e.stopImmediatePropagation();
-		});
-	}
-
-	if ( 'true' === my_calendar.list ) {
-		if ( 'false' === my_calendar.links ) {
-			$('li .list-event' ).hide();
-			$('li.current-day .list-event').show();
-			$('li.current-day .event-date .mc-text-button' ).attr( 'aria-expanded', true );
-			$(document).on( 'click', '.event-date button', function (e) {
-				e.preventDefault();
-				$( this ).closest( '.mc-events' ).find( '.mc-event' ).toggle();
-				let visible = $(this).closest( '.mc-events' ).find( '.mc-event' ).is(':visible');
-				if ( visible ) {
-					$(this).attr('aria-expanded', 'true');
-				} else {
-					$(this).attr('aria-expanded', 'false');
-				}
-				e.stopImmediatePropagation();
-				return false;
-			});
-		}
-	}
-
-	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'true' === my_calendar.links ) ) {
-		let container = ( 'true' === my_calendar.grid ) ? '.calendar-event' : '.list-event';
-		let wrapper = ( 'true' === my_calendar.links && 'true' === my_calendar.grid ) ? '.mc-events' : container;
-		$( wrapper + ' .single-details' ).hide();
-		$(document).on('click', wrapper + ' .event-title .open',
-			function (e) {
-				let visible      = $(this).parents( '.mc-event' ).children( '.details' ).is(':visible');
-				let controls     = $( this ).attr( 'aria-controls' );
-				const controlled = $( '#' + controls );
-				if ( visible ) {
-					$(this).attr( 'aria-expanded', 'false' );
-				} else {
-					$(this).attr( 'aria-expanded', 'true' );
-				}
-				e.preventDefault();
-				let current_date = $(this).parents( '.mc-event' ).children();
-
-				$(this).closest( '.mc-main' ).toggleClass( 'grid-open' );
-				controlled.toggle();
-
-				const focusable = current_date.find( 'a, object, :input, iframe, [tabindex]' );
-				const lastFocus  = focusable.last();
-				const firstFocus = focusable.first();
-				firstFocus.attr( 'data-action', 'shiftforward' );
-				lastFocus.attr( 'data-action', 'shiftback' );
-
-				$( wrapper ).children( '.single-details' ).not( current_date ).hide();
-				e.stopImmediatePropagation();
-				return false;
-			}
-		);
-
-		$(document).on('click', '.calendar-event .close',
-			function (e) {
-				e.preventDefault();
-				$(this).parents( '.mc-event' ).find( 'a.open' ).attr( 'aria-expanded', 'false' );
-				$(this).closest( '.mc-main' ).removeClass( 'grid-open' );
-				$(this).closest('.mc-event').find('.event-title a').trigger( 'focus' );
-				$(this).closest('div.single-details').toggle();
-				e.stopImmediatePropagation();
-			});
-
-		$(document).on( 'keydown', function(e) {
-			let keycode = ( e.keyCode ? e.keyCode : e.which );
-			if ( keycode == 27 ) {
-				$( '.mc-main ').removeClass( 'grid-open' );
-				$( '.calendar-event div.single-details' ).hide();
-				$( ".mini .calendar-events" ).hide();
-			}
-		});
-
-		$(document).on( 'keydown', '.mc-event a, .mc-event object, .mc-event :input, .mc-event iframe, .mc-event [tabindex]',
-			function(e) {
-				let keycode = ( e.keyCode ? e.keyCode : e.which );
-				let action  = $( ':focus' ).attr( 'data-action' );
-				if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
-					e.preventDefault();
-					$( '[data-action=shiftforward]' ).trigger( 'focus' );
-				}
-				if ( ( e.shiftKey && keycode == 9 ) && action == 'shiftforward' ) {
-					e.preventDefault();
-					$( '[data-action=shiftback]' ).trigger( 'focus' );
-				}
-			});
-	}
-
-	my_calendar_edit_toggles();
-	mc_render_buttons();
+	my_calendar_external_links();
+	mc_disclosures();
 	if ( 'true' === my_calendar.ajax ) {
-		// Prevents spacebar from scrolling the page on links with button role.
-		$(document).on( 'keydown', '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)', function(e) {
-			if ( 32 === e.which ) {
-				e.preventDefault();
-			}
-		});
-		$(document).on('click keyup', ".my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-export button), .my-calendar-footer button:not(.mc-export button)", function (e) {
-			e.preventDefault();
-			if ( 'click' === e.type || ( 'keyup' === e.type && 32 === e.which ) ) {
-				let targetId   = $( this ).attr( 'id' );
-				const calendar = $( this ).closest( '.mc-main' );
-				calendar.removeClass( 'is-main-view' );
-				let ref        = calendar.attr('id');
-				let month      = '';
-				let day        = '';
-				let year       = '';
-				let mcat       = '';
-				let loc        = '';
-				let access     = '';
-				let mcs        = '';
-				let link       = '';
-				let url;
-				if ( 'INPUT' === this.nodeName || 'BUTTON' === this.nodeName ) {
-					const inputForm = $( this ).parents( 'form' );
-					if ( inputForm.hasClass( 'mc-date-switcher' ) ) {
-						month = inputForm.find( 'select[name=month]' ).val();
-						day   = inputForm.find( 'select[name=dy]' ).val();
-						year  = inputForm.find( 'select[name=yr]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-categories-switcher' ) ) {
-						mcat = inputForm.find( 'select[name=mcat]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-locations-switcher' ) ) {
-						loc = inputForm.find( 'select[name=loc]' ).val();
-					}
-					if ( inputForm.hasClass( 'mc-access-switcher' ) ) {
-						access = inputForm.find( 'select[name=access]' ).val();
-					}
-					mcs  = inputForm.find( 'input[name=mcs]' ).val();
-					link = $( this ).attr( 'data-href' );
-				} else {
-					link = $(this).attr('href');
-				}
-				try {
-					url = new URL(link);
-					url.searchParams.delete('embed');
-					url.searchParams.delete('source');
-					if ( 'INPUT' === this.nodeName || 'BUTTON' === this.nodeName ) {
-						if ( '' !== month ) {
-							url.searchParams.delete( 'month' );
-							url.searchParams.delete( 'dy' );
-							url.searchParams.delete( 'yr' );
+		//mc_render_buttons();
+		mc_setup_handlers();
+	} else {
+		mc_render_links();
+	}
 
+	function mc_setup_handlers() {
+		// Prevents spacebar from scrolling the page on links with button role.
+		let buttonHandlers = document.querySelectorAll('.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a), .my-calendar-header input[type=submit], .my-calendar-footer input[type=submit], .my-calendar-header button:not(.mc-export button), .my-calendar-footer button:not(.mc-export button)');
+		buttonHandlers.forEach( (el) => {
+			el.addEventListener( 'click', function(e) {
+				mc_handle_navigation(e, el);
+			});
+			el.addEventListener( 'keyup', function(e) {
+				mc_handle_navigation(e, el);
+			});
+		});
+	}
+
+	function mc_handle_navigation(e, el) {
+		e.preventDefault();
+		if ( 'click' === e.type || ( 'keyup' === e.type && ' ' === e.key ) ) {
+			const calendar = el.closest( '.mc-main' );
+			calendar.classList.remove( 'is-main-view' );
+			let targetId = el.getAttribute( 'id' ), ref = calendar.getAttribute('id'),
+				month, day, year, mcat, loc, access, mcs, link, url, inputForm, searchParams;
+
+			if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
+				inputForm = el.closest( 'form' );
+				if ( inputForm ) {
+					if ( inputForm.classList.contains( 'mc-date-switcher' ) ) {
+						month = inputForm.querySelector( 'select[name=month]' ).value;
+						let day_input = inputForm.querySelector( 'select[name=dy]' );
+						if ( day_input ) {
+							day = day_input.value;
+						}
+						year  = inputForm.querySelector( 'select[name=yr]' ).value;
+					}
+					if ( inputForm.classList.contains( 'mc-categories-switcher' ) ) {
+						mcat = inputForm.querySelector( 'select[name=mcat]' ).value;
+					}
+					if ( inputForm.classList.contains( 'mc-locations-switcher' ) ) {
+						loc = inputForm.querySelector( 'select[name=loc]' ).value;
+					}
+					if ( inputForm.classList.contains( 'mc-access-switcher' ) ) {
+						access = inputForm.querySelector( 'select[name=access]' ).value;
+					}
+					if ( inputForm.classList.contains( 'mc-search-form' ) ) {
+						mcs = inputForm.querySelector( 'input[name=mcs]' ).value;
+					}
+					link = el.closest( 'form' ).getAttribute( 'action' );
+				} else {
+					link = el.getAttribute('data-href');
+				}
+			}
+			try {
+				url = new URL(link);
+				url.searchParams.delete('embed');
+				url.searchParams.delete('source');
+				if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
+					inputForm = el.closest( 'form' );
+					if ( inputForm ) {
+						url.searchParams.delete( 'month' );
+						url.searchParams.delete( 'dy' );
+						url.searchParams.delete( 'yr' );
+						if ( '' !== month && 'undefined' !== typeof( month ) ) {
 							url.searchParams.append( 'month', parseInt( month ) );
 							if ( 'undefined' !== typeof( day ) ) {
 								url.searchParams.append( 'dy', parseInt( day ) );
 							}
 							url.searchParams.append( 'yr', parseInt( year ) );
 						}
-						if ( '' !== mcat ) {
-							url.searchParams.delete( 'mcat' );
+						url.searchParams.delete( 'mcat' );
+						if ( '' !== mcat && 'undefined' !== typeof( mcat ) ) {
 							url.searchParams.append( 'mcat', mcat );
 						}
-						if ( '' !== loc ) {
-							url.searchParams.delete( 'loc' );
-							url.searchParams.delete( 'ltype' );
+						url.searchParams.delete( 'loc' );
+						url.searchParams.delete( 'ltype' );
+						if ( '' !== loc && 'undefined' !== typeof( loc ) ) {
 							url.searchParams.append( 'ltype', 'id' );
 							url.searchParams.append( 'loc', loc );
 						}
-						if ( '' !== access ) {
-							url.searchParams.delete( 'access' );
-							url.searchParams.append( 'access', parseInt( access ) );
+						url.searchParams.delete( 'access' );
+						if ( '' !== access && 'undefined' !== typeof( access ) ) {
+							if ( 'all' !== access ) {
+								url.searchParams.append( 'access', parseInt( access ) );
+							}
 						}
 						url.searchParams.delete( 'mcs' );
 						if ( '' !== mcs && 'undefined' !== typeof( mcs ) ) {
@@ -247,137 +159,142 @@
 
 						link = url.toString();
 					}
-
-					window.history.pushState({}, '', url );
-				} catch(_) {
-					url = false;
 				}
+				searchParams = url.searchParams;
+				searchParams.sort();
 
-				let height = calendar.height();
-				$('#' + ref ).html('<div class=\"mc-loading\"></div><div class=\"loading\" style=\"height:' + height + 'px\"><span class="screen-reader-text">Loading...</span></div>');
-				wp.a11y.speak( __( 'Loading', 'my-calendar' ) );
-				$( '#' + ref ).load( link + ' #' + ref + ' > *', function ( response, status, xhr ) {
+				window.history.pushState({}, '', url );
+			} catch(_) {
+				url = false;
+			}
 
-					if ( status == 'error' ) {
-						$( '#' + ref ).html( xhr.status + " " + xhr.statusText );
+			calendar.insertAdjacentHTML( 'afterbegin', '<div class="mc-loading"></div><div class="loading"><span class="screen-reader-text">Loading...</span></div>');
+			wp.a11y.speak( __( 'Loading', 'my-calendar' ) );
+
+			fetch( link )
+				.then( response => {
+					if ( response.ok ) {
+						return response.text();
 					}
-					// functions to execute when new view loads.
-					// List view.
-					if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
-						if ( 'false' === my_calendar.links ) {
-							$('li.mc-events').find( '.mc-events' ).hide();
-							$('li.current-day').children().show();
-						} else {
-							$('li.mc-events .single-details' ).hide();
-						}
-					}
-					// Grid view.
-					if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
-						$('.has-events > .calendar-event').children().not('header').hide();
-					}
-					// Mini view.
-					if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
-						$('.mini .has-events').children().not('.mc-date-container').hide();
-					}
-					mc_render_buttons();
-					my_calendar_edit_toggles();
-					// All views.
-					$( '#' + targetId ).trigger( 'focus' );
-					let refText = $( '#mc_head_' + ref ).text();
-					wp.a11y.speak( refText );
-					mc_display_usertime();
-					mc_build_toggles( targetId );
-					my_calendar_table_aria();
+				}).then (html => {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString( html, "text/html" );
+					calendar.replaceWith( doc.querySelector( '#' + ref ) );
+					mc_build_calendar( targetId, ref );
+				}).catch( error => {
+					calendar.insertAdjacentHTML( 'beforebegin', error );
 				});
-			}
-		});
-	}
-
-	function mc_display_usertime() {
-		const usertime = $( '.mc-user-time' );
-		let label = Intl.DateTimeFormat().resolvedOptions().timeZone,
-			udate = '',
-			utime = '';
-		usertime.each(function() {
-			let time  = $( this ).text();
-			// Handle Internet Explorer's lack of timezone info.
-			if (undefined === label) {
-				label = $( this ).attr( 'data-label' );
-			}
-			if ( time.replace( 'Z', '.000Z' ) === new Date( time ).toISOString() ) {
-				$( this ).css( {'display' : 'none'} );
-			}
-			utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
-			udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
-			$( this ).html( '<span class="mc-local-time-label">' + label + ':</span>' + ' ' + udate + '<span class="sep">, </span>' + utime ).attr( 'data-time', time );
-		});
-	}
-
-	function mc_render_buttons() {
-		const links = $( '.my-calendar-header a:not(.mc-print a, .mc-export a), .my-calendar-footer a:not(.mc-print a, .mc-export a)' );
-		links.each( function() {
-			$( this ).attr( 'role', 'button' );
-		});
-	}
-
-	function mc_build_toggles( targetId ) {
-		if ( targetId ) {
-			const subscribe   = $( '#' + targetId + ' .mc-subscribe' );
-			const exports     = $( '#' + targetId + ' .mc-download' );
-			if ( subscribe.length > 0 ) {
-				let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
-				const toggle = document.createElement( 'button' );
-				toggle.setAttribute( 'type', 'button' );
-				toggle.setAttribute( 'aria-controls', controls_id );
-				toggle.setAttribute( 'aria-expanded', false );
-				toggle.innerHTML = my_calendar.subscribe + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
-				subscribe.find( 'ul' ).attr( 'id', controls_id );
-				subscribe.find( 'ul' ).css( { 'display' : 'none' } );
-				subscribe.prepend( toggle );
-			}
-			if ( exports.length > 0 ) {
-				let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
-				const toggle = document.createElement( 'button' );
-				toggle.setAttribute( 'type', 'button' );
-				toggle.setAttribute( 'aria-controls', controls_id );
-				toggle.setAttribute( 'aria-expanded', false );
-				toggle.innerHTML = my_calendar.export + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
-				exports.find( 'ul' ).attr( 'id', controls_id );
-				exports.find( 'ul' ).css( { 'display' : 'none' } );
-				exports.prepend( toggle );
-			}
-			const toggles = $( '#' + targetId + ' .mc-export button' );
-			toggles.each( function() {
-				$( this ).on( 'click', function() {
-					let controlled = $( this ).attr( 'aria-controls' );
-					let target     = $( '#' + controlled );
-					if ( target.is( ':visible' ) ) {
-						target.css( { 'display' : 'none' } );
-						$( this ).attr( 'aria-expanded', 'false' );
-						$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-right' );
-					} else {
-						target.css( { 'display' : 'block' } );
-						$( this ).attr( 'aria-expanded', 'true' );
-						$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-right' ).addClass( 'dashicons-arrow-down' );
-					}
-				});
-			});
 		}
 	}
 
-	$('.mc-main a[target=_blank]').append( ' <span class="dashicons dashicons-external" aria-hidden="true"></span><span class="screen-reader-text"> ' + my_calendar.newWindow + '</span>' );
+	function mc_build_calendar( targetId, ref ) {
+		initjs( ref );
+		// functions to execute when new view loads.
+		// List view.
+		if ( typeof( my_calendar ) !== "undefined" && my_calendar.list == 'true' ) {
+			let listEvents;
+			if ( 'false' === my_calendar.links ) {
+				listEvents = document.querySelectorAll( 'li.mc-events' );
+				listEvents.forEach( (el) => {
+					let target = el.querySelector( '.mc-events' );
+					if ( ! el.classList.contains( 'current-day' ) ) {
+						target.style.display = 'none';
+					}
+				});
+			} else {
+				listEvents =  document.querySelectorAll( 'li.mc-events .single-details' );
+				listEvents.forEach( (el) => {
+					el.style.display = 'none';
+				});
+			}
+		}
+		// Grid view.
+		if ( typeof( my_calendar ) !== "undefined" && my_calendar.grid == 'true' ) {
+			let gridEvents = document.querySelectorAll('.mc-main.calendar .has-events > .calendar-event > *:not(header)');
+			gridEvents.forEach( (el) => {
+				el.style.display = 'none';
+			});
+		}
+		// Mini view.
+		if  ( typeof( my_calendar ) !== "undefined" && my_calendar.mini == 'true' ) {
+			let miniEvents = document.querySelectorAll( '.mc-main.mini .has-events .calendar-events' );
+			miniEvents.forEach( (el) => {
+				el.style.display = 'none';
+			});
+		}
+		my_calendar_external_links();
+		mc_disclosures();
+		let originalFocus = document.getElementById( targetId );
+		originalFocus.focus();
+		let refAnnounce = document.getElementById( 'mc_head_' + ref );
+		wp.a11y.speak( refAnnounce.innerText );
+		mc_display_usertime();
+		if ( 'true' === my_calendar.ajax ) {
+			mc_setup_handlers();
+		} else {
+			mc_render_links();
+		}
+		my_calendar_table_aria();
+	}
 
-	function my_calendar_edit_toggles() {
-		const adminToggles = document.querySelectorAll( '.mc-toggle-edit' );
-		if ( adminToggles ) {
-			adminToggles.forEach( (el) => {
-				let controls = el.getAttribute( 'aria-controls' );
-				let controlled = document.querySelector( '#' + controls );
-				el.addEventListener( 'click', function(e) {
+	function mc_display_usertime() {
+		const usertime = document.querySelectorAll( '.mc-user-time' );
+		let label = new Intl.DateTimeFormat().resolvedOptions().timeZone, udate, utime;
+		usertime.forEach( (el) => {
+			let time  = el.innerText;
+			let type  = el.getAttribute( 'data-type' );
+			// Handle Internet Explorer's lack of timezone info.
+			if (undefined === label) {
+				label = el.getAttribute( 'data-label' );
+			}
+			if ( 'datetime' === type ) {
+				utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
+				udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
+				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + udate + '<span class="sep">, </span>' + utime;
+			}
+			if ( 'date' === type ) {
+				udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
+				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + udate;
+
+			}
+			if ( 'time' === type ) {
+				utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
+				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + utime;
+
+			}
+			el.setAttribute( 'data-time', time );
+		});
+	}
+
+	function mc_render_links() {
+		const buttons = document.querySelectorAll( '.mc-main button.mc-navigation-button' );
+		buttons.forEach( (el) => {
+			let link = document.createElement( 'a' );
+			link.setAttribute( 'id', el.getAttribute( 'id' ) );
+			link.setAttribute( 'href', el.getAttribute( 'data-href' ) );
+			classes = el.getAttribute( 'class' ) ?? '';
+			link.setAttribute( 'class', classes );
+			link.setAttribute( 'rel', 'nofollow' );
+			link.classList.remove( 'mc-navigation-button' );
+			link.classList.add( 'mc-navigation-link' );
+			link.innerHTML = el.innerHTML;
+			el.replaceWith( link );
+		});
+	}
+
+	function mc_disclosures() {
+		const hasPopup = document.querySelectorAll( 'button.has-popup' );
+		if ( hasPopup ) {
+			hasPopup.forEach( (el) => {
+				let controlId = el.getAttribute( 'aria-controls' );
+				let controlled = document.getElementById( controlId );
+				//$( this ).append( '<span class="dashicons dashicons-plus" aria-hidden="true">' );
+				controlled.style.display = 'none';
+				el.addEventListener( 'click', function() {
+					let visible = controlled.checkVisibility();
 					let position = el.offsetWidth + 8;
 					controlled.style.left = position + 'px';
-					let expanded = el.getAttribute( 'aria-expanded' );
-					if ( 'true' === expanded ) {
+					if ( visible ) {
 						controlled.style.display = 'none';
 						el.setAttribute( 'aria-expanded', 'false' );
 					} else {
@@ -388,6 +305,76 @@
 			});
 		}
 	}
+
+	function mc_build_toggles( targetId ) {
+		let exportButton, subscribeButton;
+		if ( targetId ) {
+			const subscribe = document.querySelector( '#' + targetId + ' .mc-subscribe' );
+			const exports   = document.querySelector( '#' + targetId + ' .mc-download' );
+			if ( null !== subscribe ) {
+				subscribeButton = subscribe.querySelector( 'button' );
+				if ( null === subscribeButton ) {
+					let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+					const toggle = document.createElement( 'button' );
+					toggle.setAttribute( 'type', 'button' );
+					toggle.setAttribute( 'aria-controls', controls_id );
+					toggle.setAttribute( 'aria-expanded', false );
+					toggle.innerHTML = my_calendar.subscribe + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
+					subscribe.querySelector( 'ul' ).setAttribute( 'id', controls_id );
+					subscribe.querySelector( 'ul' ).style.display = 'none';
+					subscribe.insertAdjacentElement( 'afterbegin', toggle );
+				}
+			}
+			if ( null !== exports ) {
+				exportButton = exports.querySelector( 'button' );
+				if ( null === exportButton ) {
+					let controls_id = 'mc_control_' + Math.floor(Math.random() * 1000 ).toString();
+					const toggle = document.createElement( 'button' );
+					toggle.setAttribute( 'type', 'button' );
+					toggle.setAttribute( 'aria-controls', controls_id );
+					toggle.setAttribute( 'aria-expanded', false );
+					toggle.innerHTML = my_calendar.export + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
+					exports.querySelector( 'ul' ).setAttribute( 'id', controls_id );
+					exports.querySelector( 'ul' ).style.display = 'none';
+					exports.insertAdjacentElement( 'afterbegin', toggle );
+				}
+			}
+			if ( null === exportButton || null === subscribeButton ) {
+				const toggles = document.querySelectorAll( '#' + targetId + ' .mc-export button' );
+				let icon;
+				toggles.forEach( (el) => {
+					el.addEventListener( 'click', function() {
+						let controlled = el.getAttribute( 'aria-controls' );
+						let target     = document.getElementById( controlled );
+						if ( target ) {
+							if ( target.checkVisibility() ) {
+								target.style.display = 'none';
+								el.setAttribute( 'aria-expanded', 'false' );
+								icon = el.querySelector( '.dashicons' );
+								icon.classList.remove( 'dashicons-arrow-down' );
+								icon.classList.add( 'dashicons-arrow-right' );
+							} else {
+								target.style.display = 'block';
+								el.setAttribute( 'aria-expanded', 'true' );
+								icon = el.querySelector( '.dashicons' );
+								icon.classList.remove( 'dashicons-arrow-right' )
+								icon.classList.add( 'dashicons-arrow-down' );
+							}
+						}
+					});
+				});
+			}
+		}
+	}
+
+	function my_calendar_external_links() {
+		let external_links = document.querySelectorAll('.mc-main a[target=_blank]');
+		external_links.forEach( (el) => {
+			el.classList.add( 'mc-opens-in-new-tab' );
+			el.insertAdjacentHTML( 'beforeend', ' <span class="dashicons dashicons-external" aria-hidden="true"></span><span class="screen-reader-text"> ' + my_calendar.newWindow + '</span>' );
+		});
+	}
+
 	/**
 	 * Map ARIA attributes to My Calendar table so responsive view doesn't break table relationships.
 	 */
@@ -426,5 +413,5 @@
 		}
 	}
 	my_calendar_table_aria();
-	
-}(jQuery));
+
+})();

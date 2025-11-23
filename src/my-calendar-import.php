@@ -104,6 +104,20 @@ function mc_import_source_calendar() {
 	$events         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar', 'ARRAY_A' );
 	$event_ids      = array();
 	$events_results = false;
+	$cats           = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar_categories', 'ARRAY_A' );
+	$cats_results   = false;
+	$category_map   = array();
+	foreach ( $cats as $key ) {
+		$name                = $key['category_name'];
+		$color               = $key['category_colour'];
+		$id                  = (int) $key['category_id'];
+		$category            = array(
+			'category_name'  => $name,
+			'category_color' => $color,
+		);
+		$new_id              = mc_create_category( $category );
+		$category_map[ $id ] = $new_id;
+	}
 	foreach ( $events as $key ) {
 		$endtime        = ( '00:00:00' === $key['event_time'] ) ? '00:00:00' : date( 'H:i:s', strtotime( "$key[event_time] +1 hour" ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		$data           = array(
@@ -116,7 +130,7 @@ function mc_import_source_calendar() {
 			'event_recur'    => $key['event_recur'],
 			'event_repeats'  => $key['event_repeats'],
 			'event_author'   => $key['event_author'],
-			'event_category' => $key['event_category'],
+			'event_category' => $category_map[ $key['event_category'] ],
 			'event_hide_end' => 1,
 			'event_link'     => ( isset( $key['event_link'] ) ) ? $key['event_link'] : '',
 		);
@@ -137,15 +151,7 @@ function mc_import_source_calendar() {
 		);
 		mc_increment_event( $value, $dates );
 	}
-	$cats         = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar_categories', 'ARRAY_A' );
-	$cats_results = false;
-	foreach ( $cats as $key ) {
-		$name         = esc_sql( $key['category_name'] );
-		$color        = esc_sql( $key['category_colour'] );
-		$id           = (int) $key['category_id'];
-		$catsql       = 'INSERT INTO ' . my_calendar_categories_table() . ' SET category_id=%1$d, category_name=%2$s, category_color=%3$s ON DUPLICATE KEY UPDATE category_name=%2$s, category_color=%3$s;';
-		$cats_results = $wpdb->query( $wpdb->prepare( $catsql, $id, $name, $color ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	}
+
 	$message   = ( false !== $cats_results ) ? __( 'Categories imported successfully.', 'my-calendar' ) : __( 'Categories not imported.', 'my-calendar' );
 	$e_message = ( false !== $events_results ) ? __( 'Events imported successfully.', 'my-calendar' ) : __( 'Events not imported.', 'my-calendar' );
 	$return    = "<div id='message' class='notice notice-success'><ul><li>$message</li><li>$e_message</li></ul></div>";

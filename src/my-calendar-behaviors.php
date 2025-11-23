@@ -55,7 +55,7 @@ function my_calendar_behaviors_edit() {
 		</div>
 		<p>
 			<label for="mc_show_js"><?php esc_html_e( 'Insert scripts on these pages (comma separated post IDs)', 'my-calendar' ); ?></label>
-			<input type="text" id="mc_show_js" name="mc_show_js" value="<?php echo esc_attr( stripslashes( $mc_show_js ) ); ?>"/>
+			<input type="text" id="mc_show_js" name="mc_show_js" value="<?php echo esc_attr( wp_unslash( $mc_show_js ) ); ?>"/>
 		</p>
 
 		<div class='controls'>

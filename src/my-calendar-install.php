@@ -242,13 +242,12 @@ function mc_create_demo_content() {
 		mc_create_category(
 			array(
 				'category_name'  => 'General',
-				'category_color' => '#243f82',
+				'category_color' => '#fafafa',
 				'category_icon'  => 'event.svg',
 			)
 		);
 		// Insert a location.
-		$access  = array( 1, 2, 3, 4, 6, 8, 9 );
-		$add     = array(
+		$add_event   = array(
 			'location_label'     => 'Demo: Minnesota Orchestra',
 			'location_street'    => '1111 Nicollet Mall',
 			'location_street2'   => '',
@@ -263,19 +262,11 @@ function mc_create_demo_content() {
 			'location_zoom'      => 16,
 			'location_phone'     => '612-371-5600',
 			'location_phone2'    => '',
-			'location_access'    => serialize( $access ),
+			'location_access'    => '',
 		);
-		$results = mc_insert_location( $add );
-		/**
-		 * Executed an action when the demo location is saved at installation.
-		 *
-		 * @hook mc_save_location
-		 *
-		 * @param {int|false} $results Result of database insertion. Row ID or false.
-		 * @param {array} $add Array of location parameters to add.
-		 * @param {array} $add Demo location array.
-		 */
-		$results = apply_filters( 'mc_save_location', $results, $add, $add );
+		$results     = mc_insert_location( $add_event );
+		$location_id = $results['location_id'];
+
 		// Insert an event.
 		$submit = array(
 			// Begin strings.
@@ -303,7 +294,7 @@ function mc_create_demo_content() {
 			'event_flagged'      => 0,
 			'event_fifth_week'   => 0,
 			'event_holiday'      => 0,
-			'event_group_id'     => 1,
+			'event_group_id'     => 0,
 			'event_span'         => 0,
 			'event_hide_end'     => 0,
 			// Array: removed before DB insertion.
@@ -313,7 +304,7 @@ function mc_create_demo_content() {
 		$event    = array( true, false, $submit, false, array() );
 		$response = my_calendar_save( 'add', $event );
 		$event_id = $response['event_id'];
-		mc_update_event( 'event_location', (int) $results, $event_id );
+		mc_update_event( 'event_location', (int) $location_id, $event_id );
 
 		$e       = mc_get_first_event( $event_id );
 		$post_id = $e->event_post;
@@ -399,9 +390,11 @@ function mc_default_options() {
 		'drop_tables'                  => '',
 		'drop_settings'                => '',
 		'api_enabled'                  => '',
+		'api_key'                      => '',
 		'default_sort'                 => '',
 		'current_table'                => '',
 		'open_day_uri'                 => 'false',
+		'mini_marker'                  => 'events',
 		'upcoming_events_navigation'   => 'false',
 		'mini_uri'                     => '',
 		'show_list_info'               => '',
@@ -429,6 +422,8 @@ function mc_default_options() {
 		'location_cpt_base'            => 'mc-locations',
 		'uri_query'                    => '',
 		'default_category'             => '',
+		'default_access_terms'         => array(),
+		'default_location_terms'       => array(),
 		'skip_holidays_category'       => '',
 		'hide_icons'                   => '',
 		'use_list_template'            => '',
@@ -444,6 +439,7 @@ function mc_default_options() {
 		'disable_legacy_templates'     => 'false',
 		'maptype'                      => 'roadmap',
 		'views'                        => array( 'calendar', 'list', 'mini' ),
+		'time_views'                   => array( 'month', 'week', 'day' ),
 		'list_template'                => '',
 	);
 
@@ -460,9 +456,9 @@ function mc_default_options() {
 }
 
 /**
- * Save default settings.
+ * Do initial plugin installation.
  */
-function mc_default_settings() {
+function mc_initial_install() {
 	delete_option( 'mc_uninstalled' );
 	$globals = mc_globals();
 	$options = mc_default_options();
@@ -526,22 +522,14 @@ function mc_generate_calendar_page( $slug ) {
  */
 function mc_check_imports() {
 	if ( 'true' !== get_option( 'ko_calendar_imported' ) ) {
-		if ( function_exists( 'check_calendar' ) ) {
-			?>
-			<div id='message' class='updated'>
-				<p><?php esc_html_e( 'My Calendar has identified that you have the Calendar plugin by Kieran O\'Shea installed. You can import those events and categories into the My Calendar database. Would you like to import these events?', 'my-calendar' ); ?></p>
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>">
-					<div>
-						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
-					</div>
-					<div>
-						<input type="hidden" name="import" value="true"/>
-						<input type="submit" value="<?php esc_attr_e( 'Import from Calendar', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
-					</div>
-				</form>
-				<p><?php esc_html_e( 'Although it is possible that this import could fail to import your events correctly, it should not have any impact on your existing Calendar database.', 'my-calendar' ); ?></p>
-			</div>
-			<?php
+		if ( function_exists( 'calendar_check' ) ) {
+			wp_admin_notice(
+				// translators: link to migration screen.
+				sprintf( __( 'My Calendar has identified that you have the Calendar plugin. You can import those events and categories into the My Calendar database. <a href="%s">Would you like to import these events?</a>', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-migrate' ) ),
+				array(
+					'type' => 'info',
+				)
+			);
 		}
 	}
 }
@@ -569,3 +557,147 @@ function mc_transition_location( $location_id, $location_post ) {
 		delete_post_meta( $location_post, '_mc_location_id' );
 	}
 }
+
+/**
+ * Migrate event accessibility from database to taxonomy.
+ */
+function mc_migrate_event_accessibility() {
+	if ( 'true' !== get_option( 'mc_event_access_migration_completed' ) ) {
+		$options = mc_event_access();
+		// Add terms.
+		foreach ( $options as $value ) {
+			wp_insert_term( $value, 'mc-event-access' );
+		}
+		mc_migrate_event_access();
+	}
+}
+
+/**
+ * Migrate Event access data.
+ *
+ * @param int $limit Number of events to import.
+ */
+function mc_migrate_event_access( $limit = 200 ) {
+	// Get selection of events not already migrated.
+	$events = get_posts(
+		array(
+			'post_type'      => 'mc-events',
+			'meta_query'     => array(
+				array(
+					'key'     => '_mc_event_access',
+					'value'   => '',
+					'compare' => '!=',
+				),
+				array(
+					'key'     => '_mc_access_migrated',
+					'compare' => 'NOT EXISTS',
+				),
+			),
+			'posts_per_page' => $limit,
+			'fields'         => 'ids',
+		)
+	);
+	$count  = count( $events );
+	if ( 0 === $count ) {
+		// No longer need this key.
+		delete_post_meta_by_key( '_mc_access_migrated' );
+		update_option( 'mc_event_access_migration_completed', 'true', 'no' );
+	} else {
+		// Iterate events and save meta data as taxonomy data.
+		foreach ( $events as $event ) {
+			$access = get_post_meta( $event, '_mc_event_access', true );
+			if ( is_array( $access ) ) {
+				$terms = array();
+				$notes = isset( $access['notes'] ) ? $access['notes'] : '';
+				if ( $notes ) {
+					$notes = sanitize_textarea_field( $notes );
+					update_post_meta( $event, '_mc_event_access', $notes );
+				} else {
+					delete_post_meta( $event, '_mc_event_access' );
+				}
+				unset( $access['notes'] );
+				foreach ( $access as $type ) {
+					$terms[] = $type;
+				}
+				wp_set_object_terms( $event, $terms, 'mc-event-access' );
+				update_post_meta( $event, '_mc_access_migrated', 'true' );
+			}
+		}
+
+		if ( false === as_has_scheduled_action( 'mc_event_access_migration' ) ) {
+			as_schedule_recurring_action( strtotime( '+1 minutes' ), 60, 'mc_event_access_migration', array(), 'my-calendar' );
+		}
+	}
+}
+// Register this action in action scheduler.
+add_action( 'mc_event_access_migration', 'mc_migrate_event_access' );
+
+/**
+ * Suspend migration process if completed.
+ */
+function mc_check_migration_progress() {
+	if ( 'true' === get_option( 'mc_event_access_migration_completed' ) ) {
+		as_unschedule_all_actions( 'mc_event_access_migration' );
+	}
+	if ( 'true' === get_option( 'mc_location_access_migration_completed' ) ) {
+		as_unschedule_all_actions( 'mc_location_access_migration' );
+	}
+}
+add_action( 'admin_init', 'mc_check_migration_progress' );
+
+/**
+ * Migrate location accessibility from database to taxonomy.
+ */
+function mc_migrate_location_accessibility() {
+	if ( 'true' !== get_option( 'mc_location_access_migration_completed' ) ) {
+		$options = mc_location_access();
+		// Add terms.
+		foreach ( $options as $value ) {
+			wp_insert_term( $value, 'mc-location-access' );
+		}
+		mc_migrate_location_access();
+	}
+}
+
+/**
+ * Migrate Location access data.
+ *
+ * @param int $limit Number of events to import.
+ */
+function mc_migrate_location_access( $limit = 200 ) {
+	global $wpdb;
+	// Get all locations with a value saved for accessibility.
+	$locations = $wpdb->get_results( $wpdb->prepare( 'SELECT location_id, location_access FROM ' . my_calendar_locations_table() . ' WHERE location_access != "" LIMIT 0,%d', $limit ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	// Get location access terms.
+	$options = mc_location_access();
+	// Get selection of events not already migrated.
+	$count = count( $locations );
+	if ( 0 === $count ) {
+		// No longer need this key.
+		delete_post_meta_by_key( '_mc_access_migrated' );
+		update_option( 'mc_location_access_migration_completed', 'true', 'no' );
+	} else {
+		// Iterate locations and save meta data as taxonomy data.
+		foreach ( $locations as $location ) {
+			$access  = ( $location->location_access ) ? unserialize( $location->location_access ) : array();
+			$post_id = mc_get_location_post( $location->location_id, false );
+			if ( is_array( $access ) ) {
+				$terms = array();
+				foreach ( $access as $type ) {
+					$value   = ( is_numeric( $type ) ) ? $options[ $type ] : $type;
+					$terms[] = $value;
+				}
+
+				wp_set_object_terms( $post_id, $terms, 'mc-location-access' );
+			}
+			// remove location access data.
+			mc_update_location_field( 'location_access', '', $location->location_id );
+		}
+
+		if ( false === as_has_scheduled_action( 'mc_location_access_migration' ) ) {
+			as_schedule_recurring_action( strtotime( '+1 minutes' ), 60, 'mc_location_access_migration', array(), 'my-calendar' );
+		}
+	}
+}
+// Register this action in action scheduler.
+add_action( 'mc_location_access_migration', 'mc_location_event_access' );

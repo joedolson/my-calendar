@@ -5,6 +5,10 @@
 .mc-main {
 	position: relative;
 	container: mcmain / inline-size;
+	background: var(--main-background);
+	color: var(--main-color);
+	padding: var(--main-padding);
+	margin: var(--main-margin);
 }
 
 .mc-main div, .mc-main span, .mc-main h1, .mc-main h2, .mc-main h3, .mc-main h4, .mc-main h5, .mc-main h6, .mc-main p, .mc-main blockquote, .mc-main pre, .mc-main a, .mc-main img, .mc-main dl, .mc-main dt, .mc-main dd, .mc-main ol, .mc-main ul, .mc-main li, .mc-main fieldset, .mc-main form, .mc-main label, .mc-main legend, .mc-main table, .mc-main caption, .mc-main tbody, .mc-main tfoot, .mc-main thead, .mc-main tr, .mc-main th, .mc-main td, .mc-main article, .mc-main aside, .mc-main details, .mc-main footer, .mc-main header, .mc-main menu, .mc-main meter, .mc-main nav, .mc-main output, .mc-main progress, .mc-main section, .mc-main summary {
@@ -12,7 +16,6 @@
 	outline: 0;
 	font-size: 100%;
 	vertical-align: baseline;
-	background: transparent;
 	margin: 0;
 	padding: 0;
 }
@@ -312,21 +315,21 @@
 }
 
 .mc-loader .mc-icon::before,
-.my-calendar-today a .mc-icon::before,
-.my-calendar-prev a .mc-icon::before,
-.my-calendar-next a .mc-icon::before,
-.view-full a .mc-icon::before,
+.my-calendar-today .mc-icon::before,
+.my-calendar-prev .mc-icon::before,
+.my-calendar-next .mc-icon::before,
+.view-full .mc-icon::before,
 .map a.external .mc-icon::before,
 .location-link.external .mc-icon::before,
-.mc-export a .mc-icon::before,
+.mc-export .mc-icon::before,
 .my-calendar-modal .time-block .mc-icon::before,
 .mc-main .time-block .mc-icon::before,
-.mc-main .sharing .ical a .mc-icon::before,
-.mc-main .sharing .gcal a .mc-icon::before,
-.mc-main .sharing .mc-details a .mc-icon::before,
-.mc-main .mc-format a .mc-icon::before,
-.mc-main .mc-print a .mc-icon::before,
-.mc-main .mc-list .event-title a.list .mc-icon::before,
+.mc-main .sharing .ical .mc-icon::before,
+.mc-main .sharing .gcal .mc-icon::before,
+.mc-main .sharing .mc-details .mc-icon::before,
+.mc-main .mc-format .mc-icon::before,
+.mc-main .mc-print .mc-icon::before,
+.mc-main .mc-list .event-title .list .mc-icon::before,
 .mc-main .mc-list .event-date button:nth-of-type(1) .mc-icon::before {
 	font-family: 'dashicons';
 	display: inline;
@@ -349,7 +352,7 @@
 	margin-bottom: .5rem;
 }
 
-.mc-main .mc-print a .mc-icon::before {
+.mc-main .mc-print .mc-icon::before {
 	content: "\f497";
 }
 
@@ -369,16 +372,16 @@
 	content: "\f132";
 }
 
-.mc-main .mc-list .event-title a.list .mc-icon::before {
+.mc-main .mc-list .event-title .list .mc-icon::before {
 	content: "\f132";
 }
 
-.mc-main .mc-list .event-title a.list[aria-expanded=true] .mc-icon::before,
+.mc-main .mc-list .event-title .list[aria-expanded=true] .mc-icon::before,
 .mc-main .mc-list .event-date button:nth-of-type(1)[aria-expanded=true] .mc-icon::before {
 	content: "\f460";
 }
 
-.my-calendar-today a .mc-icon::before {
+.my-calendar-today .mc-icon::before {
 	content: '\f145';
 	width: 0px;
 	color: transparent;
@@ -387,7 +390,7 @@
 }
 
 .mc-loader.mc-previous .mc-icon::before,
-.my-calendar-prev a .mc-icon::before {
+.my-calendar-prev .mc-icon::before {
 	content: '\f341';
 }
 
@@ -405,7 +408,7 @@
 }
 
 .mc-loader.mc-next .mc-icon::before,
-.my-calendar-next a .mc-icon::before {
+.my-calendar-next .mc-icon::before {
 	content: '\f345';
 	margin-left: 2px;
 	margin-right: 0;
@@ -525,7 +528,7 @@
 	content: ', ';
 }
 
-.mc-author-card, .mc-host-card, .sharing {
+.mc-author-card, .mc-host-card {
 	clear: both;
 }
 
@@ -541,19 +544,8 @@
 	width: auto;
 }
 
-.mc-main .details .sharing {
-	clear: both;
-	margin: 8px 0;
-}
-
 .mc-main p:last-of-type {
 	margin-bottom: 0;
-}
-
-.mc-main.mini .sharing p {
-	font-size: .875rem;
-	padding: 0 4px 0 0;
-	margin-bottom: 8px;
 }
 
 .details .longdesc {
@@ -808,7 +800,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .mc-active,
 .mc-main .my-calendar-navigation a {
-	padding: 4px;
+	padding: 6px;
 	display: flex;
 	align-items: center;
 	border: 1px solid transparent;
@@ -816,7 +808,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .my-calendar-navigation .mc-active {
 	outline: 2px solid;
-	outline-offset: -2px;
+	outline-offset: -3px;
 	border-radius: 3px;
 	background-color: var(--primary-light);
 	color: var(--primary-dark);
@@ -841,6 +833,16 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	appearance: none;
 	line-height: 1.62;
 	height: auto;
+	width: auto;
+	text-transform: none;
+	text-shadow: none;
+	box-shadow: none;
+}
+
+.mc-main .mc-navigation-button {
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 
 .mc-main .my-calendar-navigation select {
@@ -1032,7 +1034,7 @@ img.category-icon {
 }
 
 .mc-main .category-key.has-icons ul li {
-	display: inline;
+	display: flex;
 }
 
 button.mc-toggle {
@@ -1091,6 +1093,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	padding: 8px;
 	box-sizing: border-box;
 	white-space: wrap;
+	word-break: break-word;
 }
 
 .mc-main .event-title button:hover,
@@ -1142,11 +1145,17 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 }
 
 .mc-main .category-key li .mc-active,
-.mc-main .category-key li a {
+.mc-main .category-key li a,
+.mc-main .category-key li button {
 	display: flex;
 	align-items: center;
 	gap: 4px;
 	padding-right: 12px;
+}
+
+.mc-main .category-key li button[aria-pressed=true] {
+	outline: 2px solid;
+	outline-offset: -4px;
 }
 
 .mc-main .category-key li.all-categories .mc-active {
@@ -1157,6 +1166,13 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	display: flex;
 	align-items: center;
 	position: relative;
+}
+
+.mc-main:has(.loading) > .heading,
+.mc-main:has(.loading) > nav,
+.mc-main:has(.loading) > table,
+.mc-main:has(.loading) > div:not(.mc-loading) {
+	opacity: .15;
 }
 
 .mc-main .mc-loading {
@@ -1171,6 +1187,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	background-color: #00000006;
 	border-radius: 50px;
 	animation: animation-rotate 1250ms linear infinite;
+	z-index: 25;
 }
 
 @media (prefers-reduced-motion) {
@@ -1258,6 +1275,12 @@ ol.mc-search-results li.no-results {
 	outline: none;
 }
 
+.mc-google-marker {
+	padding-right: 1rem;
+	padding-bottom: 1rem;
+	line-height: 1.5;
+}
+
 /* Prevent missing background image on google maps */
 .mc-gmap-markers img {
 	max-width: none ! important;
@@ -1293,8 +1316,75 @@ ol.mc-search-results li.no-results {
 	margin: 16px 0;
 }
 
-.details .mc-accessibility ul.mc-access,
-.details .sharing {
+button.mc-toggle-button {
+	all: unset;
+	box-sizing: border-box;
+	padding: 4px 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fefefe;
+	color: #333;
+	text-transform: none;
+	text-shadow: none;
+	box-shadow: none;
+}
+
+button.mc-toggle-button:focus,
+button.mc-toggle-button:hover {
+	background: #333;
+	color: #fffefd;
+	outline: 2px solid #333;
+	outline-offset: 2px;
+}
+
+button.mc-toggle-button[aria-expanded=true] {
+	background: rgba( 0,0,0,.9 );
+	color: #fff;
+}
+
+.mc-events .mc-calendar-share,
+.mc-event .mc-calendar-share,
+.my-calendar-modal .mc-calendar-share,
+.mc-main .details .mc-calendar-share {
+	position: relative;
+}
+
+.mc-events .mc-calendar-share ul,
+.mc-event .mc-calendar-share ul,
+.my-calendar-modal .mc-calendar-share ul,
+.mc-main .details .mc-calendar-share ul {
+	display: none;
+	position: absolute;
+	background: #fff;
+	border: 1px solid;
+	padding: 1rem;
+	bottom: 0;
+	left: 4.5rem;
+	list-style: none;
+	z-index: 2;
+	box-shadow: 3px 3px 1px #ccc;
+	padding: 4px;
+	margin: 0 !important;
+}
+
+.mc-events .mc-calendar-share ul a,
+.mc-event .mc-calendar-share ul a,
+.my-calendar-modal .mc-calendar-share ul a,
+.mc-main .details .mc-calendar-share ul a {
+	padding: 4px;
+	font-size: 1rem;
+	display: block;
+}
+
+.mc-events .mc-calendar-share ul a:hover,
+.mc-event .mc-calendar-share ul a:hover,
+.my-calendar-modal .mc-calendar-share ul a:hover,
+.mc-main .details .mc-calendar-share ul a:hover {
+	background: rgba( 0,0,0,.04 );
+}
+
+.details .mc-accessibility ul.mc-access {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px;
@@ -1403,23 +1493,34 @@ dialog.my-calendar-modal .my-calendar-modal__wrapper {
 }
 
 dialog.my-calendar-modal .mc-modal-title-container {
-	position: relative;
+	position: sticky;
+	top: 0;
 	margin-top: 0;
 	margin-bottom: 0;
-	padding: 16px;
+	padding: 4px 16px;
 	background: var(--highlight-light);
 	z-index: 1;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 16px;
+	align-items: center;
+	border-bottom: 1px solid var(--highlight-dark);
 }
 
 dialog.my-calendar-modal #modal-title {
 	font-size: var(--modal-title);
 	margin: 0;
-	margin-right: 64px;
+	padding: 0;
 	box-sizing: border-box;
 }
 
 dialog.my-calendar-modal .modal-content {
 	display: none;
+}
+
+.my-calendar-modal .calendar-events {
+	display: grid;
+	gap: 60px;
 }
 
 #mc-modal-content .mc-toggle {
@@ -1471,10 +1572,6 @@ body.mc-no-scroll {
 	padding: 16px;
 }
 
-.my-calendar-modal #mc-modal-content > * {
-	margin: 0 0 24px;
-}
-
 .my-calendar-modal-overlay[data-background-click="disabled"] {
   cursor: auto;
 }
@@ -1506,24 +1603,27 @@ body.mc-no-scroll {
   right: auto;
   overflow: auto;
 }
-.my-calendar-modal-close {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  background: var(--close-button);
-  border-radius: 3px;
-  color: var(--primary-light);
-  border: 0;
-  padding: 12px;
-  cursor: pointer;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  column-gap: 4px;
+button.my-calendar-modal-close {
+	background: var(--close-button);
+	border-radius: 3px;
+	color: var(--primary-light);
+	border: 0;
+	padding: 12px;
+	cursor: pointer;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	column-gap: 4px;
+	order: 1;
+	font-size: 1rem;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+	text-transform: none;
+	text-shadow: none;
+	box-shadow: none;
 }
-.my-calendar-modal-close:focus,
-.my-calendar-modal-close:hover,
-.my-calendar-modal-close:active {
+button.my-calendar-modal-close:focus,
+button.my-calendar-modal-close:hover,
+button.my-calendar-modal-close:active {
   outline: 2px solid var(--primary-light);
   outline-offset: -4px;
 }

@@ -224,6 +224,10 @@ dialog.my-calendar-modal .mc-modal-title-container {
 	color: #fff;
 }
 
+.my-calendar-modal #mc-modal-content .mc-calendar-share a {
+	color: #333;
+}
+
 .my-calendar-modal-close:focus, .my-calendar-modal-close:hover, .my-calendar-modal-close:active {
 	outline: 2px solid #aaa;
 	color: #fff;

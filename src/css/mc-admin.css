@@ -1,33 +1,11 @@
-.mc-toggle-edit {
-	all: unset;
-	box-sizing: border-box;
-	padding: 4px 12px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background: rgba( 0,0,0,.04 );
-	color: #333;
-}
-
-.mc-toggle-edit:focus,
-.mc-toggle-edit:hover {
-	background: #333;
-	color: #fffefd;
-	outline: 2px solid #333;
-	outline-offset: 2px;
-}
-
-.mc-toggle-edit[aria-expanded=true] {
-	background: rgba( 0,0,0,.9 );
-	color: #fff;
-}
-
+.mc-events .mc_edit_links,
 .mc-event .mc_edit_links,
 .my-calendar-modal .mc_edit_links,
 .mc-main .details .mc_edit_links {
 	position: relative;
 }
 
+.mc-events .mc_edit_links ul,
 .mc-event .mc_edit_links ul,
 .my-calendar-modal .mc_edit_links ul,
 .mc-main .details .mc_edit_links ul {
@@ -45,6 +23,15 @@
 	margin: 0 !important;
 }
 
+
+.mc-events .mc_edit_links li,
+.mc-event .mc_edit_links li,
+.my-calendar-modal .mc_edit_links li,
+.mc-main .details .mc_edit_links li {
+	margin: 0;
+}
+
+.mc-events .mc_edit_links ul a,
 .mc-event .mc_edit_links ul a,
 .my-calendar-modal .mc_edit_links ul a,
 .mc-main .details .mc_edit_links ul a {
@@ -53,6 +40,7 @@
 	display: block;
 }
 
+.mc-events .mc_edit_links ul a:hover,
 .mc-event .mc_edit_links ul a:hover,
 .my-calendar-modal .mc_edit_links ul a:hover,
 .mc-main .details .mc_edit_links ul a:hover {

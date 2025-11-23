@@ -62,7 +62,7 @@ function my_calendar_iframe() {
 			$body .= mc_get_event( $mc_id, 'html' );
 		}
 	}
-	echo wp_kses( $body, 'mycalendar' );
+	echo wp_kses( $body, mc_kses_elements() );
 	?>
 </body>
 </html>

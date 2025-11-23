@@ -61,12 +61,14 @@
 		const $markers = el.querySelectorAll( '.marker' );
 		const count    = $markers.length;
 		let mapType  = el.getAttribute( 'data-maptype' );
+		let thisMapId = el.getAttribute( 'id' );
 		// vars
 		const args = {
 			center    : {lng: 0.0000, lat: 0.0000},
-			mapTypeId : mapType
+			mapTypeId : mapType,
+			mapId : thisMapId
 		};
-	
+
 		// create map
 		const plot   = new google.maps.Map( el, args );
 		const bounds = new google.maps.LatLngBounds();
@@ -109,15 +111,37 @@
 			marker = new getAddress( geocoder, $marker, plot, bounds );
 		} else {
 			plot.setCenter( latlng );
+			let args;
+			let locationTitle = $marker.getAttribute( 'data-title' );
 			// create marker
-			marker = new google.maps.Marker({
-				position	: latlng,
-				map			: plot,
-				clickable	: true,
-				title		: $marker.getAttribute( 'data-title' ),
-			});
+			try {
+				args = {
+					position     : latlng,
+					map          : plot,
+					gmpClickable : true,
+					title        : locationTitle,
+				};
+				if (window.google?.maps?.marker?.AdvancedMarkerElement) {
+					marker = new window.google.maps.marker.AdvancedMarkerElement( args );
+				} else {
+					throw new Error( 'AdvancedMarkerElement not available.' );
+				}
+			} catch (error) {
+				args = {
+					position	: latlng,
+					map			: plot,
+					clickable	: true,
+					title		: locationTitle,
+				};
+				console.warn( 'Falling back to legacy marker: ', error.message );
+				marker = new google.maps.Marker( args );
+			}
 
-			latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			if ( marker instanceof google.maps.marker.AdvancedMarkerElement) {
+				latlng = new google.maps.LatLng( marker.position.lat, marker.position.lng );
+			} else {
+				latlng = new google.maps.LatLng( marker.position.lat(), marker.position.lng() );
+			}
 			bounds.extend( latlng );
 			// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 			if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
@@ -127,11 +151,14 @@
 			plot.fitBounds(bounds);
 
 			// if marker contains HTML, add it to an infoWindow
-			let content = $marker.innerHTML;
+			let content = $marker.querySelector( '.mc-google-marker' );
 			if ( content ) {
+				let headerEl = document.createElement( 'strong' );
+				headerEl.innerText = locationTitle;
 				// create info window
 				const infowindow = new google.maps.InfoWindow({
-					content		: content
+					content : content,
+					headerContent : headerEl,
 				});
 
 				// show info window when marker is clicked

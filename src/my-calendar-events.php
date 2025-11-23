@@ -35,6 +35,9 @@ function mc_event_object( $event ) {
 			}
 			$event->uid = $guid;
 		}
+		$access_terms         = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+		$event->accessibility = wp_list_pluck( $access_terms, 'name' );
+
 		/**
 		 * Customize the My Calendar event object.
 		 *
@@ -63,6 +66,10 @@ function mc_get_date_bounds( $site = false ) {
 		$mcdb  = mc_is_remote_db();
 		$first = $mcdb->get_var( 'SELECT occur_begin FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_begin ASC LIMIT 0, 1' );
 		$last  = $mcdb->get_var( 'SELECT occur_end FROM ' . my_calendar_event_table( $site ) . ' ORDER BY occur_end DESC LIMIT 0, 1' );
+
+		// If falsey value, set to a usable date value.
+		$first = $first ? $first : gmdate( 'Y-m-d' );
+		$last  = $last ? $last : gmdate( 'Y-m-d' );
 
 		$return = array(
 			'first' => $first,
@@ -206,9 +213,10 @@ function my_calendar_get_events( $args ) {
 	$select_host        = ( 'all' !== $clhost ) ? mc_select_host( $clhost ) : '';
 	$select_location    = mc_select_location( $cltype, $clvalue );
 	$select_access      = ( isset( $get['access'] ) ) ? mc_access_limit( $get['access'] ) : '';
-	$select_published   = mc_select_published();
+	$if_where           = ( $select_access ) ? '' : 'WHERE ';
+	$select_published   = mc_select_published( $args );
 	$search             = mc_prepare_search_query( $search );
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	$arr_events         = array();
 	$ts_string          = mc_ts();
 
@@ -255,11 +263,12 @@ function my_calendar_get_events( $args ) {
 	FROM ' . my_calendar_event_table( $s ) . ' AS o
 	JOIN ' . my_calendar_table( $s ) . ' AS e
 	ON (event_id=occur_event_id)
-	JOIN ' . my_calendar_categories_table( $s ) . " AS c 
+	JOIN ' . my_calendar_categories_table( $s ) . " AS c
 	ON (event_category=category_id)
 	$join
 	$location_join
-	WHERE $select_published $select_category $select_author $select_host $select_access $search
+	$select_access
+	$if_where $select_published $select_category $select_author $select_host $search
 	AND ( DATE(occur_begin) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 		OR DATE(occur_end) BETWEEN '$from 00:00:00' AND '$to 23:59:59'
 		OR ( DATE('$from') BETWEEN DATE(occur_begin) AND DATE(occur_end) )
@@ -293,6 +302,9 @@ function my_calendar_get_events( $args ) {
 						$event->location = $locs[ $object_id ];
 					}
 				}
+				if ( 5 === (int) $event->event_approved && wp_get_current_user()->ID !== (int) $event->event_author ) {
+					continue;
+				}
 				$object = mc_event_object( $event );
 				if ( false !== $object ) {
 					$arr_events[] = $object;
@@ -323,22 +335,23 @@ function my_calendar_get_events( $args ) {
  * @return array Set of matched events.
  */
 function mc_get_all_events( $args ) {
-	$category = isset( $args['category'] ) ? $args['category'] : 'default';
-	$before   = isset( $args['before'] ) ? $args['before'] : 0;
-	$after    = isset( $args['after'] ) ? $args['after'] : 6;
-	$author   = isset( $args['author'] ) ? $args['author'] : 'default';
-	$host     = isset( $args['host'] ) ? $args['host'] : 'default';
-	$ltype    = isset( $args['ltype'] ) ? $args['ltype'] : '';
-	$lvalue   = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
-	$site     = isset( $args['site'] ) ? $args['site'] : false;
-	$search   = isset( $args['search'] ) ? $args['search'] : '';
-	$offset   = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
-	$time     = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) + $offset : 'now';
-	$mcdb     = mc_is_remote_db();
+	$category     = isset( $args['category'] ) ? $args['category'] : 'default';
+	$before       = isset( $args['before'] ) ? $args['before'] : 0;
+	$after        = isset( $args['after'] ) ? $args['after'] : 6;
+	$author       = isset( $args['author'] ) ? $args['author'] : 'default';
+	$host         = isset( $args['host'] ) ? $args['host'] : 'default';
+	$ltype        = isset( $args['ltype'] ) ? $args['ltype'] : '';
+	$lvalue       = isset( $args['lvalue'] ) ? $args['lvalue'] : '';
+	$site         = isset( $args['site'] ) ? $args['site'] : false;
+	$search       = isset( $args['search'] ) ? $args['search'] : '';
+	$offset_hours = intval( get_option( 'gmt_offset', 0 ) );
+	$offset       = $offset_hours * 60 * 60;
+	$time         = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) + $offset : 'now';
+	$mcdb         = mc_is_remote_db();
 
-	$now                = ( 'now' === $time ) ? 'NOW()' : $time;
-	$now_limit          = ( 'now' === $time ) ? 'NOW()' : "from_unixtime($time)";
-	$exclude_categories = mc_private_categories();
+	$now                = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : $time;
+	$now_limit          = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : "from_unixtime($time)";
+	$exclude_categories = mc_private_categories( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
@@ -346,7 +359,7 @@ function mc_get_all_events( $args ) {
 	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
 
 	$select_access    = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
-	$select_published = mc_select_published();
+	$select_published = mc_select_published( $args );
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string        = mc_ts();
@@ -384,12 +397,14 @@ function mc_get_all_events( $args ) {
 		} else {
 			$event->categories = $fetched[ $object_id ];
 		}
+		if ( 5 === (int) $event->event_approved && wp_get_current_user()->ID !== (int) $event->event_author ) {
+			continue;
+		}
 		$object = mc_event_object( $event );
 		if ( false !== $object ) {
 			$events[ $key ] = $object;
 		}
 	}
-
 	/**
 	 * Filter events returned by mc_get_all_events queries. Function returns a range of events based on proximity to the current date using parameters for number of days/events before or after today.
 	 *
@@ -445,7 +460,7 @@ function mc_get_new_events( $cat_id = false ) {
 	} else {
 		$cat = 'WHERE event_approved IN (' . $public . ') AND event_flagged <> 1';
 	}
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	/**
 	 * Filter how many days of newly added events will be included in ICS subscription links.
 	 *
@@ -461,7 +476,7 @@ function mc_get_new_events( $cat_id = false ) {
 		FROM ' . my_calendar_event_table() . '
 		JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
 		JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
-		AND event_added > NOW() - INTERVAL $limit DAY 
+		AND event_added > NOW() - INTERVAL $limit DAY
 		$exclude_categories
 		ORDER BY event_added DESC"
 	);
@@ -648,18 +663,21 @@ function mc_get_first_event( $id ) {
 	$ts_string = mc_ts();
 	$event     = ( ! is_admin() ) ? get_transient( 'mc_first_event_cache_' . $id ) : false;
 	if ( $event ) {
-		return $event;
+		$return_event = $event;
 	} else {
 		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( $event ) {
-			$event = mc_event_object( $event );
+			$return_event = mc_event_object( $event );
 			set_transient( 'mc_first_event_cache_' . $id, $event, WEEK_IN_SECONDS );
 		} else {
-			$event = false;
+			$return_event = false;
 		}
 	}
+	if ( $return_event && 5 === $return_event->event_approved && wp_get_current_user()->ID !== $return_event->event_author ) {
+		return false;
+	}
 
-	return $event;
+	return $return_event;
 }
 
 /**
@@ -692,6 +710,7 @@ function mc_get_nearest_event( $id, $next = false ) {
 	if ( true === $next ) {
 		$next_event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d AND occur_begin > NOW() ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
+
 	$event = ( $next_event ) ? mc_event_object( $next_event ) : mc_event_object( $event );
 
 	return $event;
@@ -798,11 +817,11 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	}
 	$mcdb               = mc_is_remote_db();
 	$arr_events         = array();
-	$select_published   = mc_select_published();
+	$select_published   = mc_select_published( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	$ts_string          = mc_ts();
 
 	// May add support for location/author/host later.
@@ -909,11 +928,11 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 	}
 	$mcdb               = mc_is_remote_db();
 	$arr_events         = array();
-	$select_published   = mc_select_published();
+	$select_published   = mc_select_published( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
 	$select_category    = ( isset( $cat_limit[1] ) ) ? $cat_limit[1] : '';
-	$exclude_categories = mc_private_categories();
+	$exclude_categories = mc_private_categories( $args );
 	$ts_string          = mc_ts();
 
 	// May add support for location/author/host later.
@@ -1058,6 +1077,24 @@ function mc_instance_list( $args ) {
 }
 
 /**
+ * Fetch instances for an event.
+ *
+ * @param int $id Event ID.
+ *
+ * @return bool|array False or the array of instances.
+ */
+function mc_get_admin_instances( $id ) {
+	global $wpdb;
+	$ts_string = mc_ts();
+	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( empty( $results ) ) {
+		return false;
+	} else {
+		return $results;
+	}
+}
+
+/**
  * Generate a list of instances for the currently edited event
  *
  * @param int $id Event ID.
@@ -1066,11 +1103,9 @@ function mc_instance_list( $args ) {
  * @return bool|string
  */
 function mc_admin_instances( $id, $occur = 0 ) {
-	global $wpdb;
-	$output    = '';
-	$ts_string = mc_ts();
-	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-	if ( empty( $results ) ) {
+	$output  = '';
+	$results = mc_get_admin_instances( $id );
+	if ( ! $results ) {
 		return false;
 	}
 	$count = count( $results );
@@ -1143,8 +1178,8 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous', $args = array() ) {
 	$order              = ( 'next' === $adjacent ) ? 'ASC' : 'DESC';
 	$site               = false;
 	$arr_events         = array();
-	$select_published   = mc_select_published();
-	$exclude_categories = mc_private_categories();
+	$select_published   = mc_select_published( $args );
+	$exclude_categories = mc_private_categories( $args );
 	$category           = ( isset( $args['category'] ) ) ? $args['category'] : 'default';
 	$ltype              = ( isset( $args['ltype'] ) ) ? $args['ltype'] : '';
 	$lvalue             = ( isset( $args['lvalue'] ) ) ? $args['lvalue'] : '';
@@ -1355,7 +1390,12 @@ function mc_status_links( $allow_filters ) {
 		// Translators: Number of total events.
 		$pri_text = sprintf( __( 'Private (%d)', 'my-calendar' ), $counts['private'] );
 	}
-
+	$per_text = '';
+	if ( isset( $counts['personal'] ) && 0 < (int) $counts['personal'] ) {
+		$per_attributes = ( isset( $_GET['limit'] ) && 'personal' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+		// Translators: Number of total events.
+		$per_text = sprintf( __( 'Personal (%d)', 'my-calendar' ), $counts['personal'] );
+	}
 	$spa_attributes = ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$spa_text = sprintf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] );
@@ -1387,6 +1427,12 @@ function mc_status_links( $allow_filters ) {
 		$output .= '
 		<li>
 			<a ' . $pri_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=private' ) . '">' . $pri_text . '</a>
+		</li>';
+	}
+	if ( $per_text ) {
+		$output .= '
+		<li>
+			<a ' . $per_attributes . ' href="' . admin_url( 'admin.php?page=my-calendar-manage&amp;limit=personal' ) . '">' . $per_text . '</a>
 		</li>';
 	}
 	if ( ( function_exists( 'akismet_http_post' ) || ( 0 < (int) $counts['spam'] ) ) && $allow_filters ) {
