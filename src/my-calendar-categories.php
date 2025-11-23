@@ -872,12 +872,12 @@ function mc_manage_categories() {
 			<?php
 			if ( ! $hide_icon ) {
 				?>
-			<th scope="col"><?php esc_html_e( 'Icon', 'my-calendar' ); ?></th>
+			<th scope="col" class="mc-icon"><?php esc_html_e( 'Icon', 'my-calendar' ); ?></th>
 				<?php
 			}
 			if ( 'default' !== mc_get_option( 'apply_color' ) ) {
 				?>
-			<th scope="col"><?php esc_html_e( 'Color', 'my-calendar' ); ?></th>
+			<th scope="col" class="mc-color"><?php esc_html_e( 'Color', 'my-calendar' ); ?></th>
 				<?php
 			}
 			?>

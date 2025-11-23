@@ -733,11 +733,11 @@ label[for=mc_uri_query]::before {
 	vertical-align: middle;
 }
 
-.mc-categories th:nth-of-type(5) {
-	width: 80px;
+.mc-categories th.mc-icon {
+	width: 90px;
 }
 
-.mc-categories th:nth-of-type(6) {
+.mc-categories th.mc-color {
 	width: 6em;
 }
 
