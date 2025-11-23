@@ -377,10 +377,9 @@
               removeClass(body, NO_SCROLL_CLASS);
             }
 
-            // tab or Maj Tab in modal => capture focus
-            if (e.keyCode === 9 && listFocusables.indexOf(e.target) >= 0) {
-
-              // maj-tab on first element focusable => focus on last
+            // tab or shift tab in modal => capture focus
+            if (e.key === 'Tab' && listFocusables.indexOf(e.target) >= 0) {
+              // shift-tab on first element focusable => focus on last
               if (e.shiftKey) {
                 if (e.target === listFocusables[0]) {
                   listFocusables.at(-1).focus();
