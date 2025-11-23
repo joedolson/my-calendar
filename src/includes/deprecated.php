@@ -185,3 +185,12 @@ function mc_location_access() {
 	 */
 	return apply_filters( 'mc_location_access_choices', $location_access );
 }
+
+/**
+ * mc_expand was deprecated in 3.7.0. Kept to prevent fatal errors if used for templating.
+ *
+ * @return string
+ */
+function mc_expand( $array ) {
+	return '';
+}
