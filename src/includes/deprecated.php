@@ -194,3 +194,4 @@ function mc_location_access() {
 function mc_expand( $array ) {
 	return '';
 }
+
