@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: my-calendar-access-terms.php - My Calendar Hook Doumentation</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles-docs.css?v=0.1.1">
+</head>
+
+<body>
+
+<div id="main">
+
+    <header><h1 class="page-title">Source: my-calendar-access-terms.php</h1></header>
+	<main>
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;?php
+/**
+ * Manage access terms for events and locations.
+ *
+ * @category Terms
+ * @package  My Calendar
+ * @author   Joe Dolson
+ * @license  GPLv3
+ * @link     https://www.joedolson.com/my-calendar/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Add a term ID to the array of default accessibility terms.
+ *
+ * @param int    $term_id The ID of a term to add.
+ * @param string $action Add or remove.
+ *
+ * @return bool true if added; false if not.
+ */
+function mc_update_default_access_terms( $term_id, $action = 'add' ) {
+	$term_id       = (int) $term_id;
+	$option        = isset( $_GET['terms'] ) ? 'default_location_terms' : 'default_access_terms';
+	$default_terms = (array) mc_get_option( $option, array() );
+	if ( ! in_array( $term_id, $default_terms, true ) &amp;&amp; 'add' === $action ) {
+		$default_terms[] = $term_id;
+		mc_update_option( $option, $default_terms );
+
+		return true;
+	}
+	if ( in_array( $term_id, $default_terms, true ) &amp;&amp; 'remove' === $action ) {
+		$key = array_search( $term_id, $default_terms, true );
+		unset( $default_terms[ $key ] );
+		mc_update_option( $option, $default_terms );
+
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Generate form to manage categories
+ */
+function my_calendar_manage_access_terms() {
+	$taxonomy = ( isset( $_GET['terms'] ) ) ? 'mc-location-access' : 'mc-event-access';
+	?>
+	&lt;div class="wrap my-calendar-admin my-calendar-access-terms">
+		&lt;?php
+		$append         = array();
+		$default_access = ( 'mc-event-access' === $taxonomy ) ? mc_get_option( 'default_access_terms' ) : mc_get_option( 'default_location_terms' );
+		// We do some checking to see what we're doing.
+		if ( ! empty( $_POST ) ) {
+			$post  = map_deep( $_POST, 'sanitize_text_field' );
+			$nonce = $_REQUEST['_wpnonce'];
+			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+				die( 'My Calendar: Security check failed' );
+			}
+		}
+
+		if ( isset( $_GET['default'] ) &amp;&amp; is_numeric( $_GET['default'] ) ) {
+			$add_default_access = (int) $_GET['default'];
+			mc_update_default_access_terms( $add_default_access );
+			mc_show_notice( __( 'Term Added to Default Event Access Terms', 'my-calendar' ), true, false, 'success' );
+		}
+
+		if ( isset( $post['mode'] ) &amp;&amp; 'add' === $post['mode'] ) {
+			$term_id = mc_create_access_term( $post );
+
+			if ( isset( $post['mc_default_access_term'] ) ) {
+				mc_update_default_access_terms( $term_id );
+				$append[] = __( 'Term Added to Default Event Access Terms', 'my-calendar' );
+			}
+
+			if ( $term_id ) {
+				$append = implode( ' ', $append );
+				mc_show_notice( __( 'Access term added successfully', 'my-calendar' ) . ". $append", true, false, 'success' );
+			} else {
+				mc_show_error( __( 'Access term addition failed.', 'my-calendar' ) );
+			}
+		} elseif ( isset( $_GET['mode'] ) &amp;&amp; isset( $_GET['access_term_id'] ) &amp;&amp; 'delete' === $_GET['mode'] ) {
+			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+			if ( $mcnonce ) {
+				$term_id = (int) $_GET['access_term_id'];
+				$results = wp_delete_term( $term_id, $taxonomy );
+				if ( $results ) {
+					// handle deleted terms.
+				}
+				mc_update_default_access_terms( $term_id, 'remove' );
+				if ( $results ) {
+					mc_show_notice( __( 'Accessibility term deleted successfully.', 'my-calendar' ), true, false, 'success' );
+				}
+			} else {
+				mc_show_error( 'Invalid security key; please try again!', 'my-calendar' );
+			}
+		} elseif ( isset( $_GET['mode'] ) &amp;&amp; isset( $_GET['access_term_id'] ) &amp;&amp; 'edit' === $_GET['mode'] &amp;&amp; ! isset( $post['mode'] ) ) {
+			$cur_cat = (int) $_GET['access_term_id'];
+			mc_edit_access_term_form( 'edit', $cur_cat, $taxonomy );
+		} elseif ( isset( $post['mode'] ) &amp;&amp; isset( $post['access_term_id'] ) &amp;&amp; isset( $post['access_term_name'] ) &amp;&amp; 'edit' === $post['mode'] ) {
+			// This term is in the set, but not checked.
+			if ( in_array( (int) $post['access_term_id'], $default_access, true ) &amp;&amp; ! isset( $post['mc_default_access_term'] ) ) {
+				mc_update_default_access_terms( (int) $post['access_term_id'], 'remove' );
+			}
+			// This term is checked, but not in the set.
+			if ( ! in_array( (int) $post['access_term_id'], $default_access, true ) &amp;&amp; isset( $post['mc_default_access_term'] ) ) {
+				mc_update_default_access_terms( $post['access_term_id'] );
+			}
+
+			$results = wp_update_term(
+				$post['access_term_id'],
+				$taxonomy,
+				array(
+					'name' => $post['access_term_name'],
+				)
+			);
+			if ( $results ) {
+				mc_show_notice( __( 'Access term edited successfully.', 'my-calendar' ), true, false, 'success' );
+			} else {
+				mc_show_error( __( 'Access term was not changed.', 'my-calendar' ) );
+			}
+			$cur_cat = (int) $post['access_term_id'];
+			mc_edit_access_term_form( 'edit', $cur_cat, $taxonomy );
+		}
+
+		if ( isset( $_GET['mode'] ) &amp;&amp; 'edit' !== $_GET['mode'] || isset( $post['mode'] ) &amp;&amp; 'edit' !== $post['mode'] || ! isset( $_GET['mode'] ) &amp;&amp; ! isset( $post['mode'] ) ) {
+			mc_edit_access_term_form( 'add', false, $taxonomy );
+		}
+		?>
+		&lt;/div>
+	&lt;?php
+}
+
+/**
+ * Create a access_term.
+ *
+ * @param array  $access_term Array of params to update.
+ * @param string $taxonomy Taxonomy ID for this term.
+ *
+ * @return mixed boolean|int query result
+ */
+function mc_create_access_term( $access_term, $taxonomy = 'mc-event-access' ) {
+	if ( ! isset( $access_term['access_term_name'] ) ) {
+		return false;
+	}
+	$cat_name    = wp_strip_all_tags( $access_term['access_term_name'] );
+	$term_exists = term_exists( $cat_name, $taxonomy );
+	if ( ! $term_exists ) {
+		$term = wp_insert_term( $cat_name, $taxonomy );
+		if ( ! is_wp_error( $term ) ) {
+			$term = $term['term_id'];
+		} else {
+			$term = false;
+		}
+	} else {
+		$term = get_term_by( 'name', $cat_name, 'mc-event-access_term' );
+		$term = $term->term_id;
+	}
+
+	return $term;
+}
+
+/**
+ * Form to edit an access_term
+ *
+ * @param string   $view Edit or create.
+ * @param int|bool $term_id access term ID.
+ * @param string   $taxonomy Taxonomy for terms.
+ */
+function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy = 'mc-event-access' ) {
+	$current = false;
+	if ( $term_id ) {
+		$term_id = (int) $term_id;
+		$current = get_term( $term_id, $taxonomy );
+	} else {
+		// If no access term ID, change view.
+		$view = 'add';
+	}
+	$base_link = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$base_link = isset( $_GET['terms'] ) ? add_query_arg( 'terms', 'locations' ) : $base_link;
+	if ( 'add' === $view ) {
+		?>
+		&lt;h1>&lt;?php esc_html_e( 'My Calendar Accessibility Terms', 'my-calendar' ); ?>&lt;/h1>
+		&lt;?php
+	} else {
+		$heading = ( isset( $_GET['terms'] ) ) ? __( 'Edit Location Accessibility Term', 'my-calendar' ) : __( 'Edit Event Accessibility Term', 'my-calendar' );
+		?>
+		&lt;h1 class="wp-heading-inline">&lt;?php echo esc_html( $heading ); ?>&lt;/h1>
+		&lt;a href="&lt;?php echo esc_url( $base_link ); ?>" class="page-title-action">&lt;?php esc_html_e( 'Add New', 'my-calendar' ); ?>&lt;/a>
+		&lt;hr class="wp-header-end">
+		&lt;?php
+	}
+	$link                 = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$location_link        = add_query_arg( 'terms', 'locations', $link );
+	$is_locations         = ( isset( $_GET['terms'] ) ) ? true : false;
+	$is_current_events    = ( $is_locations ) ? '' : 'aria-current="page"';
+	$is_current_locations = ( $is_locations ) ? 'aria-current="page"' : '';
+	?>
+	&lt;div class="mc-tablinks">
+			&lt;a href="&lt;?php echo esc_url( $link ); ?>" &lt;?php echo $is_current_events; ?>>&lt;?php esc_html_e( 'Event Accessibility Terms', 'my-calendar' ); ?>&lt;/a>
+			&lt;a href="&lt;?php echo esc_url( $location_link ); ?>" &lt;?php echo $is_current_locations; ?>>&lt;?php esc_html_e( 'Location Accessibility Terms', 'my-calendar' ); ?>&lt;/a>
+	&lt;/div>
+	&lt;div class="postbox-container jcd-wide">
+		&lt;div class="metabox-holder">
+
+			&lt;div class="ui-sortable meta-box-sortables">
+				&lt;div class="postbox">
+					&lt;h2>
+					&lt;?php
+						$heading = ( $is_locations ) ? __( 'Location Accessibility Terms Editor', 'my-calendar' ) : __( 'Event Accessibility Terms Editor', 'my-calendar' );
+						esc_html_e( 'Accessibility Terms Editor', 'my-calendar' );
+					?>
+					&lt;/h2>
+
+					&lt;div class="inside">
+						&lt;form id="my-calendar" method="post" action="&lt;?php echo esc_url( $base_link ); ?>">
+							&lt;div>
+								&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
+							&lt;?php
+							if ( 'add' === $view ) {
+								?>
+								&lt;input type="hidden" name="mode" value="add"/>
+								&lt;input type="hidden" name="access_term_id" value=""/>
+								&lt;?php
+							} else {
+								?>
+								&lt;input type="hidden" name="mode" value="edit"/>
+								&lt;input type="hidden" name="access_term_id" value="&lt;?php echo ( is_object( $current ) ) ? absint( $current->term_id ) : ''; ?>" />
+								&lt;?php
+							}
+							if ( ! empty( $current ) &amp;&amp; is_object( $current ) ) {
+								$cat_name = $current->name;
+								$term_id  = $current->term_id;
+							} else {
+								$cat_name = '';
+								$term_id  = false;
+							}
+							?>
+							&lt;/div>
+							&lt;div class="mc-term-fields mc-flex">
+							&lt;p>
+								&lt;label for="cat_name">&lt;?php esc_html_e( 'Accessibility Term', 'my-calendar' ); ?>&lt;/label>
+								&lt;input type="text" id="cat_name" name="access_term_name" class="input" size="30" value="&lt;?php echo esc_attr( $cat_name ); ?>"/>
+							&lt;/p>
+								&lt;p>
+							&lt;?php
+							$is_default = ( 'add' === $view ) ? 'false' : $term_id;
+							$option     = ( $is_locations ) ? 'default_location_terms' : 'default_access_terms';
+							$in_array   = in_array( $is_default, mc_get_option( $option ), true ) ? true : false;
+							if ( 'add' === $view ) {
+								$save_text = __( 'Add Term', 'my-calendar' );
+							} else {
+								$save_text = __( 'Save Changes', 'my-calendar' );
+							}
+							?>
+									&lt;input type="checkbox" value="on" name="mc_default_access_term" id="mc_default_access_term"&lt;?php checked( $in_array, true ); ?> /> &lt;label for="mc_default_access_term">&lt;?php esc_html_e( 'Enable by default', 'my-calendar' ); ?>&lt;/label>
+								&lt;/p>
+							&lt;/div>
+							&lt;p>
+								&lt;input type="submit" name="save" class="button-primary" value="&lt;?php echo esc_attr( $save_text ); ?> "/>
+							&lt;/p>
+							&lt;?php
+							/**
+							 * Execute action after access term editor form prints to screen.
+							 *
+							 * @hook mc_post_access_term_form
+							 *
+							 * @param {object} $cur_cat Current access term object.
+							 * @param {string} $view Type of view ('add' or 'edit').
+							 */
+							do_action( 'mc_post_access_term_form', $current, $view );
+							?>
+						&lt;/form>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+			&lt;div class="ui-sortable meta-box-sortables">
+				&lt;div class="postbox">
+					&lt;?php
+					$heading = ( $is_locations ) ? __( 'Location Accessibility Term List', 'my-calendar' ) : __( 'Event Accessibility Term List', 'my-calendar' );
+					?>
+					&lt;h2>&lt;?php echo esc_html( $heading ); ?>&lt;/h2>
+
+					&lt;div class="inside">
+						&lt;?php
+						$taxonomy = ( $is_locations ) ? 'mc-location-access' : 'mc-event-access';
+						mc_manage_access_terms( $taxonomy );
+						?>
+					&lt;/div>
+				&lt;/div>
+			&lt;/div>
+		&lt;/div>
+	&lt;/div>
+	&lt;?php
+		mc_show_sidebar( '' );
+}
+
+/**
+ * Generate list of accessibility terms to edit.
+ *
+ * @param string $taxonomy Taxonomy slug for the terms being edited.
+ */
+function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
+	$is_locations        = ( 'mc-event-access' === $taxonomy ) ? false : true;
+	$base_link           = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$base_link           = ( $is_locations ) ? add_query_arg( 'terms', 'locations', $base_link ) : $base_link;
+	$default_access_term = ( $is_locations ) ? mc_get_option( 'default_location_terms' ) : mc_get_option( 'default_access_terms' );
+	$args                = array(
+		'taxonomy'   => $taxonomy,
+		'hide_empty' => false,
+	);
+	$terms               = get_terms( $args );
+
+	if ( ! empty( $terms ) ) {
+		?>
+		&lt;table class="widefat striped page fixed mc-responsive-table mc-access-terms" id="my-calendar-admin-table">
+		&lt;thead>
+		&lt;tr>
+			&lt;th scope="col">&lt;?php esc_html_e( 'ID', 'my-calendar' ); ?>&lt;/th>
+			&lt;th scope="col">&lt;?php esc_html_e( 'Accessibility Service', 'my-calendar' ); ?>&lt;/th>
+		&lt;/tr>
+		&lt;/thead>
+		&lt;?php
+		foreach ( $terms as $term ) {
+			$cat_name = wp_unslash( strip_tags( $term->name, mc_strip_tags() ) );
+			?>
+		&lt;tr>
+			&lt;th scope="row">&lt;?php echo absint( $term->term_id ); ?>&lt;/th>
+			&lt;td>
+			&lt;?php
+			echo esc_html( $cat_name );
+			// Translators: Name of access term being edited.
+			$edit_cat = sprintf( __( 'Edit %s', 'my-calendar' ), '&lt;span class="screen-reader-text">' . $cat_name . '&lt;/span>' );
+			// Translators: access term name.
+			$delete_cat = sprintf( __( 'Delete %s', 'my-calendar' ), '&lt;span class="screen-reader-text">' . $cat_name . '&lt;/span>' );
+			// Translators: access term name.
+			$default_text = sprintf( __( 'Add %s to defaults', 'my-calendar' ), '&lt;span class="screen-reader-text">' . $cat_name . '&lt;/span>' );
+			$mcnonce      = wp_create_nonce( 'mcnonce' );
+			if ( in_array( $term->term_id, $default_access_term, true ) ) {
+				echo ' &lt;strong>' . esc_html__( '(Default)', 'my-calendar' ) . '&lt;/strong>';
+				$default = '&lt;span class="mc_default">' . __( 'Default Accessibility Service', 'my-calendar' ) . '&lt;/span>';
+			} else {
+				$url     = add_query_arg(
+					array(
+						'_mcnonce' => $mcnonce,
+						'default'  => $term->term_id,
+					),
+					$base_link
+				);
+				$default = '&lt;a href="' . esc_url( $url ) . '">' . $default_text . '&lt;/a>';
+			}
+			$edit_url = add_query_arg(
+				array(
+					'mode'           => 'edit',
+					'access_term_id' => $term->term_id,
+				),
+				$base_link
+			);
+			?>
+				&lt;div class="row-actions">
+					&lt;a href="&lt;?php echo esc_url( $edit_url ); ?>"
+					class='edit'>&lt;?php echo wp_kses_post( $edit_cat ); ?>&lt;/a> |
+					&lt;?php
+					echo wp_kses_post( $default );
+					// Cannot delete the default access_term.
+					if ( '1' !== (string) $term->term_id ) {
+						echo ' | ';
+						$delete_link = add_query_arg(
+							array(
+								'_mcnonce'       => $mcnonce,
+								'mode'           => 'delete',
+								'access_term_id' => $term->term_id,
+							),
+							$base_link
+						);
+						?>
+						&lt;a href="&lt;?php echo esc_url( $delete_link ); ?>" class="delete" onclick="return confirm('&lt;?php esc_html_e( 'Are you sure you want to delete this access_term?', 'my-calendar' ); ?>')">&lt;?php echo wp_kses_post( $delete_cat ); ?>&lt;/a>
+						&lt;?php
+					}
+					?>
+				&lt;/div>
+			&lt;/td>
+		&lt;/tr>
+			&lt;?php
+		}
+		?>
+	&lt;/table>
+		&lt;?php
+	} else {
+		echo wp_kses_post( '&lt;p>' . __( 'There are no terms in the database - or something has gone wrong!', 'my-calendar' ) . '&lt;/p>' );
+	}
+}
+
+/**
+ * Show access term output for editing lists.
+ *
+ * @param object $event Event object.
+ * @param string $taxonomy Taxonomy for terms.
+ * @param string $return_type Type of return: string, ids, objects.
+ *
+ * @return string|array
+ */
+function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_type = 'string' ) {
+	if ( 'mc-event-access' === $taxonomy ) {
+		$terms = ( is_object( $event ) &amp;&amp; property_exists( $event, 'event_post' ) ) ? wp_get_object_terms( $event->event_post, $taxonomy ) : array();
+	} else {
+		$location_post = ( is_object( $event ) &amp;&amp; property_exists( $event, 'location_post' ) ) ? $event->location_post : false;
+		$terms         = ( $location_post ) ? wp_get_object_terms( $location_post, $taxonomy ) : array();
+	}
+	$return = ( 'string' === $return_type ) ? '' : array();
+	if ( 'string' === $return_type ) {
+		$return = print_r( $terms, 1 );
+	}
+	if ( 'ids' === $return_type ) {
+		foreach ( $terms as $term ) {
+			$return[] = $term->term_id;
+		}
+	}
+	if ( 'objects' === $return_type ) {
+		return $terms;
+	}
+
+	return $return;
+}
+
+/**
+ * Set up access terms input.
+ *
+ * @param object|boolean $event Event object or false.
+ * @param string         $taxonomy Taxonomy for terms.
+ *
+ * @return string
+ */
+function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access' ) {
+	$terms      = ( $event ) ? mc_get_access_terms( $event, $taxonomy, 'ids' ) : array();
+	$args       = array(
+		'taxonomy'   => $taxonomy,
+		'hide_empty' => false,
+	);
+	$taxonomies = get_terms( $args );
+	$inputs     = '';
+	foreach ( $taxonomies as $tax ) {
+		$name    = ( 'mc-event-access' === $taxonomy ) ? 'events_access[]' : 'location_access[]';
+		$id      = 'access_term_' . absint( $tax->term_id );
+		$inputs .= '&lt;li>&lt;input type="checkbox" ' . checked( true, in_array( $tax->term_id, $terms, true ), false ) . ' name="' . $name . '" id="' . $id . '" value="' . absint( $tax->term_id ) . '"> &lt;label for="' . $id . '">' . esc_html( $tax->name ) . '&lt;/label>&lt;/li>';
+	}
+
+	return $inputs;
+}
+
+/**
+ * Generate access term classes.
+ *
+ * @param object|array $event  Event object.
+ * @param string       $taxonomy Taxonomy for terms.
+ * @param string       $prefix Prefix to append to class; varies on context.
+ *
+ * @return array an array of classes
+ */
+function mc_access_term_classes( $event, $taxonomy = 'mc-event-access', $prefix = 'mc-' ) {
+	$terms   = wp_get_object_terms( $event->event_post, $taxonomy );
+	$classes = array();
+	foreach ( $terms as $term ) {
+		$classes[] = sanitize_html_class( $prefix . $term->slug );
+	}
+
+	return $classes;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+	</main>
+    <footer>
+		<a href="https://docs.joedolson.com/my-calendar">My Calendar User Documentation</a> &bull;
+		<a href="https://github.com/joedolson/my-calendar/">My Calendar on GitHub</a> &bull;
+		<a href="https://www.joedolson.com/my-calendar-pro/">Buy My Calendar Pro</a>
+	</footer>
+
+	
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="mc_after_help.html">mc_after_help</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_category_key_array.html">mc_category_key_array</a></li><li><a href="mc_clean_duplicate_locations.html">mc_clean_duplicate_locations</a></li><li><a href="mc_countries_filters.html">mc_countries_filters</a></li><li><a href="mc_create_location_post.html">mc_create_location_post</a></li><li><a href="mc_debug.html">mc_debug</a></li><li><a href="mc_delete_event.html">mc_delete_event</a></li><li><a href="mc_delete_event_instance.html">mc_delete_event_instance</a></li><li><a href="mc_delete_location.html">mc_delete_location</a></li><li><a href="mc_delete_location_posts.html">mc_delete_location_posts</a></li><li><a href="mc_deleted_post.html">mc_deleted_post</a></li><li><a href="mc_event_expired.html">mc_event_expired</a></li><li><a href="mc_event_future.html">mc_event_future</a></li><li><a href="mc_event_happening.html">mc_event_happening</a></li><li><a href="mc_event_over.html">mc_event_over</a></li><li><a href="mc_event_states_by_type.html">mc_event_states_by_type</a></li><li><a href="mc_get_core_icon_index.html">mc_get_core_icon_index</a></li><li><a href="mc_get_core_icons.html">mc_get_core_icons</a></li><li><a href="mc_handle_importer_custom_fields.html">mc_handle_importer_custom_fields</a></li><li><a href="mc_hide_past_dates.html">mc_hide_past_dates</a></li><li><a href="mc_mass_delete_locations.html">mc_mass_delete_locations</a></li><li><a href="mc_mass_%257B$action%257D_events.html">mc_mass_{$action}_events</a></li><li><a href="mc_modify_location.html">mc_modify_location</a></li><li><a href="mc_notify_event_spam.html">mc_notify_event_spam</a></li><li><a href="mc_post_access_term_form.html">mc_post_access_term_form</a></li><li><a href="mc_post_add_category.html">mc_post_add_category</a></li><li><a href="mc_post_category_form.html">mc_post_category_form</a></li><li><a href="mc_preset_template.html">mc_preset_template</a></li><li><a href="mc_print_view_head.html">mc_print_view_head</a></li><li><a href="mc_save_event.html">mc_save_event</a></li><li><a href="mc_save_grouped_events.html">mc_save_grouped_events</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_save_user.html">mc_save_user</a></li><li><a href="mc_select_preset_templates.html">mc_select_preset_templates</a></li><li><a href="mc_tags_created.html">mc_tags_created</a></li><li><a href="mc_transition_event.html">mc_transition_event</a></li><li><a href="mc_update_event_post.html">mc_update_event_post</a></li><li><a href="mc_update_location_posts.html">mc_update_location_posts</a></li><li><a href="mcs_complete_submission.html">mcs_complete_submission</a></li><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li><li><a href="my_calendar_event_imported_from_tribe.html">my_calendar_event_imported_from_tribe</a></li><li><a href="my_calendar_instance_imported_from_tribe.html">my_calendar_instance_imported_from_tribe</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_body_classes.html">mc_body_classes</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_custom_user_select.html">mc_custom_user_select</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_badge.html">mc_date_badge</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_date_utc_format.html">mc_date_utc_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_daterange_begin_format.html">mc_daterange_begin_format</a></li><li><a href="mc_daterange_end_format.html">mc_daterange_end_format</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_db_prefix.html">mc_db_prefix</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_options.html">mc_default_options</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_access_slug.html">mc_event_access_slug</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_controls.html">mc_event_controls</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_details_output.html">mc_event_details_output</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_post_type_args.html">mc_event_post_type_args</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_states.html">mc_event_states</a></li><li><a href="mc_event_states_label.html">mc_event_states_label</a></li><li><a href="mc_event_states_type.html">mc_event_states_type</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_execute_the_content.html">mc_execute_the_content</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_price_array.html">mc_filter_price_array</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_filter_%257Btype%257D.html">mc_filter_{type}</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_format_tribe_event_for_import.html">mc_format_tribe_event_for_import</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_get_week_days.html">mc_get_week_days</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_has_feeds.html">mc_has_feeds</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_additional_days.html">mc_hide_additional_days</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_ical_timezone.html">mc_ical_timezone</a></li><li><a href="mc_ical_x_published_ttl.html">mc_ical_x_published_ttl</a></li><li><a href="mc_import_tribe_tickets_options.html">mc_import_tribe_tickets_options</a></li><li><a href="mc_imported_event.html">mc_imported_event</a></li><li><a href="mc_importer_custom_fields.html">mc_importer_custom_fields</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_inner_content.html">mc_inner_content</a></li><li><a href="mc_inner_content_template_fields.html">mc_inner_content_template_fields</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_is_mobile.html">mc_is_mobile</a></li><li><a href="mc_is_tablet.html">mc_is_tablet</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_access_slug.html">mc_location_access_slug</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_post_type_args.html">mc_location_post_type_args</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_modify_day_uri.html">mc_modify_day_uri</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_month_year_format.html">mc_month_year_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_category_icon.html">mc_override_category_icon</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_private_event.html">mc_private_event</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_save_location.html">mc_save_location</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_skip_search_results.html">mc_skip_search_results</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_html_values.html">mc_time_html_values</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_today_link.html">mc_today_link</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_can_see_this_event.html">mc_user_can_see_this_event</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="mcs_view_admin_links_on_frontend.html">mcs_view_admin_links_on_frontend</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

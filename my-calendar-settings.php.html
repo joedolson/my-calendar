@@ -179,7 +179,7 @@ function mc_settings_field( $args = array() ) {
 		} else {
 			$hold = $default;
 		}
-		$value = ( '' !== $value ) ? esc_attr( stripslashes( $value ) ) : $hold;
+		$value = ( '' !== $value ) ? esc_attr( wp_unslash( $value ) ) : $hold;
 	} else {
 		$value = ( ! empty( $value ) ) ? (array) $value : $default;
 	}
@@ -293,10 +293,12 @@ function mc_update_management_settings( $post ) {
 	$mc_remote        = ( ! empty( $post['mc_remote'] ) &amp;&amp; 'on' === $post['mc_remote'] ) ? 'true' : 'false';
 	$mc_drop_tables   = ( ! empty( $post['mc_drop_tables'] ) &amp;&amp; 'on' === $post['mc_drop_tables'] ) ? 'true' : 'false';
 	$mc_drop_settings = ( ! empty( $post['mc_drop_settings'] ) &amp;&amp; 'on' === $post['mc_drop_settings'] ) ? 'true' : 'false';
+	$default_api_key  = ( empty( $post['mc_api_key'] ) || 'on' === $post['mc_api_key'] ) ? '' : mc_get_option( 'api_key' );
 	// Handle My Calendar primary URL. Storing URL string removed in 3.5.0.
 	$option['use_permalinks']    = ( ! empty( $post['mc_use_permalinks'] ) &amp;&amp; 'true' !== $mc_remote ) ? 'true' : 'false';
 	$option['uri_id']            = absint( $post['mc_uri_id'] );
 	$option['api_enabled']       = $mc_api_enabled;
+	$option['api_key']           = ( ! empty( $post['mc_api_key'] ) &amp;&amp; 'on' !== $post['mc_api_key'] ) ? password_hash( $post['mc_api_key'], PASSWORD_DEFAULT ) : $default_api_key;
 	$option['remote']            = $mc_remote;
 	$option['drop_tables']       = $mc_drop_tables;
 	$option['drop_settings']     = $mc_drop_settings;
@@ -382,6 +384,7 @@ function mc_update_output_settings( $post ) {
 	$options['open_uri']         = ( ! empty( $post['mc_open_uri'] ) ) ? $post['mc_open_uri'] : 'off';
 	$options['mini_uri']         = $post['mc_mini_uri'];
 	$options['open_day_uri']     = ( ! empty( $post['mc_open_day_uri'] ) ) ? $post['mc_open_day_uri'] : '';
+	$options['mini_marker']      = ( ! empty( $post['mc_mini_marker'] ) ) ? $post['mc_mini_marker'] : 'events';
 	$options['show_list_info']   = ( ! empty( $post['mc_show_list_info'] ) &amp;&amp; 'on' === $post['mc_show_list_info'] ) ? 'true' : 'false';
 	$options['list_link_titles'] = ( ! empty( $post['mc_list_link_titles'] ) &amp;&amp; 'on' === $post['mc_list_link_titles'] ) ? 'true' : 'false';
 	$options['hide_past_dates']  = ( ! empty( $post['mc_hide_past_dates'] ) &amp;&amp; 'on' === $post['mc_hide_past_dates'] ) ? 'true' : 'false';
@@ -410,6 +413,7 @@ function mc_update_output_settings( $post ) {
 	$options['bottomnav']      = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
 	$options['topnav']         = ( empty( $top ) ) ? 'none' : implode( ',', $top );
 	$views                     = ( empty( $post['mc_views'] ) ) ? array() : $post['mc_views'];
+	$time_views                = ( empty( $post['mc_time_views'] ) ) ? array() : $post['mc_time_views'];
 	$single                    = ( empty( $post['mc_display_single'] ) ) ? array() : $post['mc_display_single'];
 	$main                      = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
 	$card                      = ( empty( $post['mc_display_card'] ) ) ? array() : $post['mc_display_card'];
@@ -419,6 +423,7 @@ function mc_update_output_settings( $post ) {
 	$options['display_card']   = array_map( 'sanitize_text_field', $card );
 	$options['display_mini']   = array_map( 'sanitize_text_field', $mini );
 	$options['views']          = array_map( 'sanitize_text_field', $views );
+	$options['time_views']     = array_map( 'sanitize_text_field', $time_views );
 	$options['gmap_api_key']   = ( ! empty( $post['mc_gmap_api_key'] ) ) ? wp_strip_all_tags( $post['mc_gmap_api_key'] ) : '';
 	$options['show_weekends']  = ( ! empty( $post['mc_show_weekends'] ) &amp;&amp; 'on' === $post['mc_show_weekends'] ) ? 'true' : 'false';
 	$options['convert']        = ( ! empty( $post['mc_convert'] ) ) ? $post['mc_convert'] : 'false';
@@ -705,12 +710,12 @@ function my_calendar_settings() {
 
 	// Pull templates for passing into functions.
 	$templates              = mc_get_option( 'templates' );
-	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( stripslashes( $templates['title'] ) ) : '';
-	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( stripslashes( $templates['title_solo'] ) ) : '';
-	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( stripslashes( $templates['title_list'] ) ) : '';
-	$mc_title_template_card = ( isset( $templates['title_card'] ) ) ? esc_attr( stripslashes( $templates['title_card'] ) ) : '';
-	$mc_details_label       = ( isset( $templates['label'] ) ) ? esc_attr( stripslashes( $templates['label'] ) ) : '';
-	$mc_link_label          = ( isset( $templates['link'] ) ) ? esc_attr( stripslashes( $templates['link'] ) ) : '';
+	$mc_title_template      = ( isset( $templates['title'] ) ) ? esc_attr( wp_unslash( $templates['title'] ) ) : '';
+	$mc_title_template_solo = ( isset( $templates['title_solo'] ) ) ? esc_attr( wp_unslash( $templates['title_solo'] ) ) : '';
+	$mc_title_template_list = ( isset( $templates['title_list'] ) ) ? esc_attr( wp_unslash( $templates['title_list'] ) ) : '';
+	$mc_title_template_card = ( isset( $templates['title_card'] ) ) ? esc_attr( wp_unslash( $templates['title_card'] ) ) : '';
+	$mc_details_label       = ( isset( $templates['label'] ) ) ? esc_attr( wp_unslash( $templates['label'] ) ) : '';
+	$mc_link_label          = ( isset( $templates['link'] ) ) ? esc_attr( wp_unslash( $templates['link'] ) ) : '';
 	?>
 
 	&lt;div class="wrap my-calendar-admin mc-settings-page" id="mc_settings">
@@ -758,215 +763,234 @@ function my_calendar_settings() {
 						&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 						&lt;fieldset>
 							&lt;legend class="screen-reader-text">&lt;?php esc_html_e( 'Management', 'my-calendar' ); ?>&lt;/legend>
-							&lt;ul>
-								&lt;?php
-								$page_title = '';
-								$edit_link  = '';
-								$note       = '';
-								if ( mc_get_option( 'uri_id' ) &amp;&amp; 'publish' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
-									$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
-									$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
-									// Translators: Editing URL for calendar page.
-									$note = sprintf( __( 'Search for a different page or &lt;a href="%s">edit the current calendar page&lt;/a>.', 'my-calendar' ), $edit_link );
-								} elseif ( mc_get_option( 'uri_id' ) &amp;&amp; 'trash' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
-									$note = __( 'Your primary My Calendar page is set, but the page is in the Trash.', 'my-calendar' );
-								}
-								?>
-								&lt;li id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'     => 'mc_uri_query',
-										'label'    => __( 'Set My Calendar Primary Page', 'my-calendar' ),
-										'default'  => $page_title,
-										'note'     => $note,
-										'position' => 'top',
-										'atts'     => array(
-											'size'  => '20',
-											'class' => 'autocomplete-input',
-										),
-									)
-								);
-								?>
-								&lt;ul class="autocomplete-result-list">&lt;/ul>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_uri_id',
-										'label' => '',
-										'type'  => 'hidden',
-									)
-								);
-								?>
-								&lt;/li>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_default_sort',
-										'label'   => __( 'Default sort for Admin Events', 'my-calendar' ),
-										'default' => array(
-											'1' => __( 'ID', 'my-calendar' ),
-											'2' => __( 'Title', 'my-calendar' ),
-											'4' => __( 'Date/Time', 'my-calendar' ),
-											'5' => __( 'Author', 'my-calendar' ),
-											'6' => __( 'Category', 'my-calendar' ),
-											'7' => __( 'Location', 'my-calendar' ),
-										),
-										'type'    => 'select',
-									)
-								);
-								?>
-								&lt;/li>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_default_direction',
-										'label'   => __( 'Default sort direction', 'my-calendar' ),
-										'default' => array(
-											'ASC'  => __( 'Ascending', 'my-calendar' ),
-											'DESC' => __( 'Descending', 'my-calendar' ),
-										),
-										'type'    => 'select',
-									)
-								);
-								?>
-								&lt;/li>
-								&lt;?php
-								if ( isset( $_POST['mc_use_permalinks'] ) &amp;&amp; ( ! ( 'on' === $_POST['mc_use_permalinks'] &amp;&amp; 'true' === $before_permalinks ) ) ) {
-									$url = admin_url( 'options-permalink.php#mc_cpt_base' );
-									// Translators: URL for WordPress Settings > Permalinks.
-									$note = ' &lt;span class="mc-notice notice">' . sprintf( __( 'Go to &lt;a href="%s">permalink settings&lt;/a> to set the base URL for events.', 'my-calendar' ) . '&lt;/span>', $url );
+							&lt;?php
+							$page_title = '';
+							$edit_link  = '';
+							$note       = '';
+							if ( mc_get_option( 'uri_id' ) &amp;&amp; 'publish' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
+								$page_title = get_post( absint( mc_get_option( 'uri_id' ) ) )->post_title;
+								$edit_link  = esc_url( get_edit_post_link( absint( mc_get_option( 'uri_id' ) ) ) );
+								// Translators: Editing URL for calendar page.
+								$note = sprintf( __( 'Search for a different page or &lt;a href="%s">edit the current calendar page&lt;/a>.', 'my-calendar' ), $edit_link );
+							} elseif ( mc_get_option( 'uri_id' ) &amp;&amp; 'trash' === get_post_status( mc_get_option( 'uri_id' ) ) ) {
+								$note = __( 'Your primary My Calendar page is set, but the page is in the Trash.', 'my-calendar' );
+							}
+							?>
+							&lt;div id="mc-pages-autocomplete" class="mc-autocomplete autocomplete">
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'     => 'mc_uri_query',
+									'label'    => __( 'Set My Calendar Primary Page', 'my-calendar' ),
+									'default'  => $page_title,
+									'note'     => $note,
+									'position' => 'top',
+									'atts'     => array(
+										'size'  => '20',
+										'class' => 'autocomplete-input',
+									),
+								)
+							);
+							?>
+							&lt;ul class="autocomplete-result-list">&lt;/ul>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_uri_id',
+									'label' => '',
+									'type'  => 'hidden',
+								)
+							);
+							?>
+							&lt;/div>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_default_sort',
+									'label'   => __( 'Default sort for Admin Events', 'my-calendar' ),
+									'default' => array(
+										'1' => __( 'ID', 'my-calendar' ),
+										'2' => __( 'Title', 'my-calendar' ),
+										'4' => __( 'Date/Time', 'my-calendar' ),
+										'5' => __( 'Author', 'my-calendar' ),
+										'6' => __( 'Category', 'my-calendar' ),
+										'7' => __( 'Location', 'my-calendar' ),
+									),
+									'type'    => 'select',
+								)
+							);
+							?>
+							&lt;/p>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_default_direction',
+									'label'   => __( 'Default sort direction', 'my-calendar' ),
+									'default' => array(
+										'ASC'  => __( 'Ascending', 'my-calendar' ),
+										'DESC' => __( 'Descending', 'my-calendar' ),
+									),
+									'type'    => 'select',
+								)
+							);
+							?>
+							&lt;/p>
+							&lt;?php
+							if ( isset( $_POST['mc_use_permalinks'] ) &amp;&amp; ( ! ( 'on' === $_POST['mc_use_permalinks'] &amp;&amp; 'true' === $before_permalinks ) ) ) {
+								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
+								// Translators: URL for WordPress Settings > Permalinks.
+								$note = ' &lt;span class="mc-notice notice">' . sprintf( __( 'Go to &lt;a href="%s">permalink settings&lt;/a> to set the base URL for events.', 'my-calendar' ) . '&lt;/span>', $url );
+							} else {
+								if ( 'true' === mc_get_option( 'remote' ) ) {
+									$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
 								} else {
-									if ( 'true' === mc_get_option( 'remote' ) ) {
-										$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
-									} else {
-										$note = '';
-									}
+									$note = '';
 								}
-								?>
-								&lt;li>
-								&lt;?php
+							}
+							?>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_use_permalinks',
+									'label' => __( 'Use Pretty Permalinks for Events', 'my-calendar' ),
+									'note'  => $note,
+									'type'  => 'checkbox-single',
+								)
+							);
+							?>
+							&lt;/p>
+							&lt;?php
+							if ( (int) get_site_option( 'mc_multisite' ) === 2 &amp;&amp; my_calendar_table() !== my_calendar_table( 'global' ) ) {
 								mc_settings_field(
 									array(
-										'name'  => 'mc_use_permalinks',
-										'label' => __( 'Use Pretty Permalinks for Events', 'my-calendar' ),
-										'note'  => $note,
-										'type'  => 'checkbox-single',
+										'name'    => 'mc_current_table',
+										'label'   => array(
+											'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
+											'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
+										),
+										'default' => '0',
+										'type'    => 'radio',
 									)
 								);
-								?>
-								&lt;/li>
-								&lt;?php
-								if ( (int) get_site_option( 'mc_multisite' ) === 2 &amp;&amp; my_calendar_table() !== my_calendar_table( 'global' ) ) {
-									mc_settings_field(
-										array(
-											'name'    => 'mc_current_table',
-											'label'   => array(
-												'0' => __( 'Currently editing my local calendar', 'my-calendar' ),
-												'1' => __( 'Currently editing the network calendar', 'my-calendar' ),
-											),
-											'default' => '0',
-											'type'    => 'radio',
-										)
-									);
-								} else {
-									if ( mc_get_option( 'remote' ) !== 'true' &amp;&amp; current_user_can( 'manage_network' ) &amp;&amp; is_multisite() &amp;&amp; is_main_site() ) {
-										?>
-										&lt;li>&lt;?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?>&lt;/li>
-										&lt;?php
-									}
+							} else {
+								if ( mc_get_option( 'remote' ) !== 'true' &amp;&amp; current_user_can( 'manage_network' ) &amp;&amp; is_multisite() &amp;&amp; is_main_site() ) {
+									?>
+									&lt;p>&lt;?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?>&lt;/p>
+									&lt;?php
 								}
-								?>
-							&lt;/ul>
+							}
+							?>
 						&lt;/fieldset>
 						&lt;fieldset>
 							&lt;legend>&lt;?php esc_html_e( 'Advanced', 'my-calendar' ); ?>&lt;/legend>
-							&lt;ul>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_remote',
-										'label' => __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								&lt;/li>
-								&lt;?php
-								$class = ( 'true' === mc_get_option( 'remote' ) &amp;&amp; ! function_exists( 'mc_remote_db' ) ) ? 'visible' : 'hidden';
-								?>
-								&lt;li class="mc_remote_info &lt;?php echo esc_attr( $class ); ?>">&lt;?php echo wp_kses_post( __( "Add this code to your theme's &lt;code>functions.php&lt;/code> file:", 'my-calendar' ) ); ?>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_remote',
+									'label' => __( 'Get data (events, categories and locations) from a remote database', 'my-calendar' ),
+									'type'  => 'checkbox-single',
+								)
+							);
+							?>
+							&lt;/p>
+							&lt;?php
+							$class = ( 'true' === mc_get_option( 'remote' ) &amp;&amp; ! function_exists( 'mc_remote_db' ) ) ? 'visible' : 'hidden';
+							?>
+							&lt;div class="mc_remote_info &lt;?php echo esc_attr( $class ); ?>">&lt;?php echo wp_kses_post( __( "Add this code to your theme's &lt;code>functions.php&lt;/code> file:", 'my-calendar' ) ); ?>
 &lt;pre>
 function mc_remote_db() {
-	$mcdb = new wpdb('DB_USER','DB_PASSWORD','DB_NAME','DB_ADDRESS');
+$mcdb = new wpdb('DB_USER','DB_PASSWORD','DB_NAME','DB_ADDRESS');
 
-	return $mcdb;
+return $mcdb;
 }
 &lt;/pre>
-									&lt;?php esc_html_e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
-								&lt;/li>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
+								&lt;?php esc_html_e( 'You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation.', 'my-calendar' ); ?>
+							&lt;/div>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_api_enabled',
+									'label' => __( 'Enable events API', 'my-calendar' ),
+									'type'  => 'checkbox-single',
+								)
+							);
+							if ( 'true' === mc_get_option( 'api_enabled' ) ) {
+								$url = add_query_arg(
 									array(
-										'name'  => 'mc_api_enabled',
-										'label' => __( 'Enable events API', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
+										'to'     => mc_date( 'Y-m-d', time() + MONTH_IN_SECONDS ),
+										'from'   => current_time( 'Y-m-d' ),
+										'mc-api' => 'json',
+									),
+									home_url()
 								);
-								if ( 'true' === mc_get_option( 'api_enabled' ) ) {
-									$url = add_query_arg(
+								// Translators: Linked URL to API endpoint.
+								printf( ' &lt;code>' . wp_kses_post( __( 'API URL: %s', 'my-calendar' ) ) . '&lt;/code>', '&lt;a href="' . esc_url( $url ) . '">' . esc_html( $url ) . '&lt;/a>' );
+							}
+							?>
+							&lt;/p>
+							&lt;?php
+							if ( 'true' === mc_get_option( 'api_enabled' ) ) {
+								if ( ! mc_get_option( 'api_key' ) ) {
+									mc_settings_field(
 										array(
-											'to'     => mc_date( 'Y-m-d', time() + MONTH_IN_SECONDS ),
-											'from'   => current_time( 'Y-m-d' ),
-											'mc-api' => 'json',
-										),
-										home_url()
+											'name'  => 'mc_api_key',
+											'label' => __( 'API Authentication Key', 'my-calendar' ),
+											'type'  => 'text',
+											'note'  => __( 'Allows API requests to fetch private and unpublished events.', 'my-calendar' ),
+										)
 									);
-									// Translators: Linked URL to API endpoint.
-									printf( ' &lt;code>' . wp_kses_post( __( 'API URL: %s', 'my-calendar' ) ) . '&lt;/code>', '&lt;a href="' . esc_url( $url ) . '">' . esc_html( $url ) . '&lt;/a>' );
+								} else {
+									mc_settings_field(
+										array(
+											'name'  => 'mc_api_key',
+											'label' => __( 'Delete API Authentication Key', 'my-calendar' ),
+											'type'  => 'checkbox-single',
+											'value' => 'true',
+										)
+									);
 								}
-								?>
-								&lt;/li>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'  => 'mc_drop_tables',
-										'label' => __( 'Drop database tables on uninstall', 'my-calendar' ),
-										'type'  => 'checkbox-single',
-									)
-								);
-								?>
-								&lt;/li>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_drop_settings',
-										'label'   => __( 'Delete plugin settings on uninstall', 'my-calendar' ),
-										'default' => 'true',
-										'type'    => 'checkbox-single',
-									)
-								);
-								?>
-								&lt;/li>
-								&lt;li>
-								&lt;?php
-								mc_settings_field(
-									array(
-										'name'    => 'mc_clear_cache',
-										'label'   => __( 'Clear My Calendar fragment cache', 'my-calendar' ),
-										'default' => 'false',
-										'type'    => 'checkbox-single',
-									)
-								);
-								?>
-								&lt;/li>
-							&lt;/ul>
+							}
+							?>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'  => 'mc_drop_tables',
+									'label' => __( 'Drop database tables on uninstall', 'my-calendar' ),
+									'type'  => 'checkbox-single',
+								)
+							);
+							?>
+							&lt;/p>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_drop_settings',
+									'label'   => __( 'Delete plugin settings on uninstall', 'my-calendar' ),
+									'default' => 'true',
+									'type'    => 'checkbox-single',
+								)
+							);
+							?>
+							&lt;/p>
+							&lt;p>
+							&lt;?php
+							mc_settings_field(
+								array(
+									'name'    => 'mc_clear_cache',
+									'label'   => __( 'Clear My Calendar fragment cache', 'my-calendar' ),
+									'default' => 'false',
+									'type'    => 'checkbox-single',
+								)
+							);
+							?>
+							&lt;/p>
 						&lt;/fieldset>
 						&lt;p>
 							&lt;input type="submit" name="mc_manage" class="button-primary" value="&lt;?php esc_html_e( 'Save Management Settings', 'my-calendar' ); ?>"/>
@@ -979,8 +1003,8 @@ function mc_remote_db() {
 							&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 							&lt;p class="mc-input-settings">
 								&lt;label for="mc-import-settings">&lt;?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>&lt;/label>
-								&lt;input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" /> 
-								&lt;input type="submit" class="button-secondary" value="&lt;?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>">	
+								&lt;input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" />
+								&lt;input type="submit" class="button-secondary" value="&lt;?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>">
 							&lt;/p>
 						&lt;/form>
 						&lt;h3>&lt;?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?>&lt;/h3>
@@ -1360,6 +1384,23 @@ function mc_remote_db() {
 								);
 								?>
 							&lt;/ul>
+							&lt;ul class="checkboxes">
+								&lt;?php
+								$default_time_views = array(
+									'month' => __( 'Month', 'my-calendar' ),
+									'week'  => __( 'Week', 'my-calendar' ),
+									'day'   => __( 'Day', 'my-calendar' ),
+								);
+								mc_settings_field(
+									array(
+										'name'    => 'mc_time_views',
+										'label'   => $default_time_views,
+										'default' => array( 'month', 'week', 'day' ),
+										'type'    => 'checkbox',
+									)
+								);
+								?>
+							&lt;/ul>
 						&lt;/fieldset>
 						&lt;fieldset>
 							&lt;legend>&lt;?php esc_html_e( 'Title Templates', 'my-calendar' ); ?>&lt;/legend>
@@ -1686,7 +1727,7 @@ function mc_remote_db() {
 								);
 								?>
 								&lt;/li>
-							&lt;/ul>				
+							&lt;/ul>
 							&lt;fieldset>
 								&lt;legend>&lt;?php esc_html_e( 'Grid Options', 'my-calendar' ); ?>&lt;/legend>
 								&lt;ul>
@@ -1713,7 +1754,7 @@ function mc_remote_db() {
 										)
 									);
 									?>
-									&lt;/li>								
+									&lt;/li>
 									&lt;li>
 									&lt;?php
 									mc_settings_field(
@@ -1808,11 +1849,8 @@ function mc_remote_db() {
 									&lt;li>
 									&lt;?php
 									$open_day_options = array(
-										'false'          => __( 'Event popup ', 'my-calendar' ),
-										'true'           => __( 'daily view page (above)', 'my-calendar' ),
-										'current'        => __( 'current page (if singular)', 'my-calendar' ),
-										'listanchor'     => __( 'in-page anchor on main calendar page (list)', 'my-calendar' ),
-										'calendaranchor' => __( 'in-page anchor on main calendar page (grid)', 'my-calendar' ),
+										'false' => __( 'Event popup ', 'my-calendar' ),
+										'true'  => __( 'daily view page (above)', 'my-calendar' ),
 									);
 									mc_settings_field(
 										array(
@@ -1820,6 +1858,22 @@ function mc_remote_db() {
 											'label'   => __( 'Link action for mini calendar', 'my-calendar' ),
 											'default' => $open_day_options,
 											'atts'    => $disabled,
+											'type'    => 'select',
+										)
+									);
+									?>
+									&lt;/li>
+									&lt;li>
+									&lt;?php
+									$marker_options = array(
+										'events'     => __( 'Event count indicator dots', 'my-calendar' ),
+										'categories' => __( 'Color-coded category indicators', 'my-calendar' ),
+									);
+									mc_settings_field(
+										array(
+											'name'    => 'mc_mini_marker',
+											'label'   => __( 'Event count indicator', 'my-calendar' ),
+											'default' => $marker_options,
 											'type'    => 'select',
 										)
 									);
@@ -2206,7 +2260,7 @@ function mc_location_controls() {
 				foreach ( $mc_location_controls[ $field ] as $key => $value ) {
 					$key        = esc_html( trim( $key ) );
 					$value      = esc_html( trim( $value ) );
-					$locations .= stripslashes( "$key,$value" ) . PHP_EOL;
+					$locations .= wp_unslash( "$key,$value" ) . PHP_EOL;
 				}
 			}
 			if ( '' !== trim( $locations ) ) {
@@ -2282,7 +2336,7 @@ function mc_cap_checkbox( $role, $cap, $name ) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="mc_after_help.html">mc_after_help</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_category_key_array.html">mc_category_key_array</a></li><li><a href="mc_clean_duplicate_locations.html">mc_clean_duplicate_locations</a></li><li><a href="mc_countries_filters.html">mc_countries_filters</a></li><li><a href="mc_create_location_post.html">mc_create_location_post</a></li><li><a href="mc_debug.html">mc_debug</a></li><li><a href="mc_delete_event.html">mc_delete_event</a></li><li><a href="mc_delete_event_instance.html">mc_delete_event_instance</a></li><li><a href="mc_delete_location.html">mc_delete_location</a></li><li><a href="mc_delete_location_posts.html">mc_delete_location_posts</a></li><li><a href="mc_deleted_post.html">mc_deleted_post</a></li><li><a href="mc_event_expired.html">mc_event_expired</a></li><li><a href="mc_event_future.html">mc_event_future</a></li><li><a href="mc_event_happening.html">mc_event_happening</a></li><li><a href="mc_event_over.html">mc_event_over</a></li><li><a href="mc_event_states_by_type.html">mc_event_states_by_type</a></li><li><a href="mc_get_core_icon_index.html">mc_get_core_icon_index</a></li><li><a href="mc_get_core_icons.html">mc_get_core_icons</a></li><li><a href="mc_handle_importer_custom_fields.html">mc_handle_importer_custom_fields</a></li><li><a href="mc_hide_past_dates.html">mc_hide_past_dates</a></li><li><a href="mc_mass_delete_locations.html">mc_mass_delete_locations</a></li><li><a href="mc_mass_%257B$action%257D_events.html">mc_mass_{$action}_events</a></li><li><a href="mc_modify_location.html">mc_modify_location</a></li><li><a href="mc_notify_event_spam.html">mc_notify_event_spam</a></li><li><a href="mc_post_add_category.html">mc_post_add_category</a></li><li><a href="mc_post_category_form.html">mc_post_category_form</a></li><li><a href="mc_preset_template.html">mc_preset_template</a></li><li><a href="mc_print_view_head.html">mc_print_view_head</a></li><li><a href="mc_save_event.html">mc_save_event</a></li><li><a href="mc_save_grouped_events.html">mc_save_grouped_events</a></li><li><a href="mc_save_location.html">mc_save_location</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_save_user.html">mc_save_user</a></li><li><a href="mc_select_preset_templates.html">mc_select_preset_templates</a></li><li><a href="mc_tags_created.html">mc_tags_created</a></li><li><a href="mc_transition_event.html">mc_transition_event</a></li><li><a href="mc_update_event_post.html">mc_update_event_post</a></li><li><a href="mc_update_location_posts.html">mc_update_location_posts</a></li><li><a href="mcs_complete_submission.html">mcs_complete_submission</a></li><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li><li><a href="my_calendar_event_imported_from_tribe.html">my_calendar_event_imported_from_tribe</a></li><li><a href="my_calendar_instance_imported_from_tribe.html">my_calendar_instance_imported_from_tribe</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_body_classes.html">mc_body_classes</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_custom_user_select.html">mc_custom_user_select</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_badge.html">mc_date_badge</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_date_utc_format.html">mc_date_utc_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_daterange_begin_format.html">mc_daterange_begin_format</a></li><li><a href="mc_daterange_end_format.html">mc_daterange_end_format</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_db_prefix.html">mc_db_prefix</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_options.html">mc_default_options</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_controls.html">mc_event_controls</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_details_output.html">mc_event_details_output</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_post_type_args.html">mc_event_post_type_args</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_states.html">mc_event_states</a></li><li><a href="mc_event_states_label.html">mc_event_states_label</a></li><li><a href="mc_event_states_type.html">mc_event_states_type</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_execute_the_content.html">mc_execute_the_content</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_price_array.html">mc_filter_price_array</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_filter_%257Btype%257D.html">mc_filter_{type}</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_format_tribe_event_for_import.html">mc_format_tribe_event_for_import</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_get_week_days.html">mc_get_week_days</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_has_feeds.html">mc_has_feeds</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_additional_days.html">mc_hide_additional_days</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_ical_timezone.html">mc_ical_timezone</a></li><li><a href="mc_ical_x_published_ttl.html">mc_ical_x_published_ttl</a></li><li><a href="mc_import_tribe_tickets_options.html">mc_import_tribe_tickets_options</a></li><li><a href="mc_imported_event.html">mc_imported_event</a></li><li><a href="mc_importer_custom_fields.html">mc_importer_custom_fields</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_inner_content.html">mc_inner_content</a></li><li><a href="mc_inner_content_template_fields.html">mc_inner_content_template_fields</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_is_mobile.html">mc_is_mobile</a></li><li><a href="mc_is_tablet.html">mc_is_tablet</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_post_type_args.html">mc_location_post_type_args</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_modify_day_uri.html">mc_modify_day_uri</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_month_year_format.html">mc_month_year_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_category_icon.html">mc_override_category_icon</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_private_event.html">mc_private_event</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_skip_search_results.html">mc_skip_search_results</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_html_values.html">mc_time_html_values</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_today_link.html">mc_today_link</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="mcs_view_admin_links_on_frontend.html">mcs_view_admin_links_on_frontend</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="mc_after_help.html">mc_after_help</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_category_key_array.html">mc_category_key_array</a></li><li><a href="mc_clean_duplicate_locations.html">mc_clean_duplicate_locations</a></li><li><a href="mc_countries_filters.html">mc_countries_filters</a></li><li><a href="mc_create_location_post.html">mc_create_location_post</a></li><li><a href="mc_debug.html">mc_debug</a></li><li><a href="mc_delete_event.html">mc_delete_event</a></li><li><a href="mc_delete_event_instance.html">mc_delete_event_instance</a></li><li><a href="mc_delete_location.html">mc_delete_location</a></li><li><a href="mc_delete_location_posts.html">mc_delete_location_posts</a></li><li><a href="mc_deleted_post.html">mc_deleted_post</a></li><li><a href="mc_event_expired.html">mc_event_expired</a></li><li><a href="mc_event_future.html">mc_event_future</a></li><li><a href="mc_event_happening.html">mc_event_happening</a></li><li><a href="mc_event_over.html">mc_event_over</a></li><li><a href="mc_event_states_by_type.html">mc_event_states_by_type</a></li><li><a href="mc_get_core_icon_index.html">mc_get_core_icon_index</a></li><li><a href="mc_get_core_icons.html">mc_get_core_icons</a></li><li><a href="mc_handle_importer_custom_fields.html">mc_handle_importer_custom_fields</a></li><li><a href="mc_hide_past_dates.html">mc_hide_past_dates</a></li><li><a href="mc_mass_delete_locations.html">mc_mass_delete_locations</a></li><li><a href="mc_mass_%257B$action%257D_events.html">mc_mass_{$action}_events</a></li><li><a href="mc_modify_location.html">mc_modify_location</a></li><li><a href="mc_notify_event_spam.html">mc_notify_event_spam</a></li><li><a href="mc_post_access_term_form.html">mc_post_access_term_form</a></li><li><a href="mc_post_add_category.html">mc_post_add_category</a></li><li><a href="mc_post_category_form.html">mc_post_category_form</a></li><li><a href="mc_preset_template.html">mc_preset_template</a></li><li><a href="mc_print_view_head.html">mc_print_view_head</a></li><li><a href="mc_save_event.html">mc_save_event</a></li><li><a href="mc_save_grouped_events.html">mc_save_grouped_events</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_save_user.html">mc_save_user</a></li><li><a href="mc_select_preset_templates.html">mc_select_preset_templates</a></li><li><a href="mc_tags_created.html">mc_tags_created</a></li><li><a href="mc_transition_event.html">mc_transition_event</a></li><li><a href="mc_update_event_post.html">mc_update_event_post</a></li><li><a href="mc_update_location_posts.html">mc_update_location_posts</a></li><li><a href="mcs_complete_submission.html">mcs_complete_submission</a></li><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li><li><a href="my_calendar_event_imported_from_tribe.html">my_calendar_event_imported_from_tribe</a></li><li><a href="my_calendar_instance_imported_from_tribe.html">my_calendar_instance_imported_from_tribe</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_body_classes.html">mc_body_classes</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_custom_user_select.html">mc_custom_user_select</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_badge.html">mc_date_badge</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_date_utc_format.html">mc_date_utc_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_daterange_begin_format.html">mc_daterange_begin_format</a></li><li><a href="mc_daterange_end_format.html">mc_daterange_end_format</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_db_prefix.html">mc_db_prefix</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_options.html">mc_default_options</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_access_slug.html">mc_event_access_slug</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_controls.html">mc_event_controls</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_details_output.html">mc_event_details_output</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_post_type_args.html">mc_event_post_type_args</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_states.html">mc_event_states</a></li><li><a href="mc_event_states_label.html">mc_event_states_label</a></li><li><a href="mc_event_states_type.html">mc_event_states_type</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_execute_the_content.html">mc_execute_the_content</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_price_array.html">mc_filter_price_array</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_filter_%257Btype%257D.html">mc_filter_{type}</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_format_tribe_event_for_import.html">mc_format_tribe_event_for_import</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_get_week_days.html">mc_get_week_days</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_has_feeds.html">mc_has_feeds</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_additional_days.html">mc_hide_additional_days</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_ical_timezone.html">mc_ical_timezone</a></li><li><a href="mc_ical_x_published_ttl.html">mc_ical_x_published_ttl</a></li><li><a href="mc_import_tribe_tickets_options.html">mc_import_tribe_tickets_options</a></li><li><a href="mc_imported_event.html">mc_imported_event</a></li><li><a href="mc_importer_custom_fields.html">mc_importer_custom_fields</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_inner_content.html">mc_inner_content</a></li><li><a href="mc_inner_content_template_fields.html">mc_inner_content_template_fields</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_is_mobile.html">mc_is_mobile</a></li><li><a href="mc_is_tablet.html">mc_is_tablet</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_access_slug.html">mc_location_access_slug</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_post_type_args.html">mc_location_post_type_args</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_modify_day_uri.html">mc_modify_day_uri</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_month_year_format.html">mc_month_year_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_category_icon.html">mc_override_category_icon</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_private_event.html">mc_private_event</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_save_location.html">mc_save_location</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_skip_search_results.html">mc_skip_search_results</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_html_values.html">mc_time_html_values</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_today_link.html">mc_today_link</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_can_see_this_event.html">mc_user_can_see_this_event</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="mcs_view_admin_links_on_frontend.html">mcs_view_admin_links_on_frontend</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
 </nav>
 
 <br class="clear">

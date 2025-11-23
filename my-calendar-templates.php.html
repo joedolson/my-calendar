@@ -139,7 +139,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 							$after  = $matches[2][ $i ];
 							$format = $matches[3][ $i ];
 							if ( '' !== $format ) {
-								$value = date_i18n( stripslashes( $format ), strtotime( stripslashes( $value ) ) );
+								$value = date_i18n( wp_unslash( $format ), strtotime( wp_unslash( $value ) ) );
 							}
 							$value    = ( '' === (string) trim( $value ) ) ? '' : $before . $value . $after;
 							$search   = $matches[0][ $i ];
@@ -169,7 +169,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	 */
 	$template = apply_filters( 'mc_template', $template, $data, $meta_type, $event );
 
-	return stripslashes( trim( $template ) );
+	return wp_unslash( trim( $template ) );
 }
 
 /**
@@ -280,7 +280,7 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	}
 
 	$url        = $event->location_url;
-	$map_label  = strip_tags( stripslashes( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
+	$map_label  = strip_tags( wp_unslash( ( '' !== trim( $event->location_label ) ) ? $event->location_label : '' ), mc_strip_tags() );
 	$zoom       = ( '0' !== $event->location_zoom ) ? $event->location_zoom : '15';
 	$map_string = str_replace( ' ', '+', $map_string );
 	if ( '0.000000' !== $event->location_longitude &amp;&amp; '0.000000' !== $event->location_latitude &amp;&amp; 'mapquest' !== $map_target ) {
@@ -389,6 +389,59 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	return $source . $base;
 }
 
+
+/**
+ * Generate Add to Outlook calendar.
+ *
+ * @param string $dtstart date begin.
+ * @param string $dtend date end.
+ * @param string $url link to event.
+ * @param string $title Title of event.
+ * @param string $location string version of location.
+ * @param string $description info about event.
+ * @param string $allday 'true' for all day events, default 'false'.
+ *
+ * @return string
+ */
+function mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
+	$start  = gmdate( 'Ymd\THi00\Z', strtotime( $dtstart ) );
+	$end    = gmdate( 'Ymd\THi00\Z', strtotime( $dtend ) );
+	$source = 'https://outlook.live.com/calendar/0/action/compose';
+
+	$args = array(
+		'path'     => '/calendar/action/compose/',
+		'rru'      => 'addevent',
+		'allday'   => $allday,
+		'startdt'  => $start,
+		'enddt'    => $end,
+		'subject'  => urlencode( $title ),
+		'location' => urlencode( wp_unslash( trim( $location ) ) ),
+		'body'     => urlencode( wp_unslash( trim( $description . ' ' . $location . ' ' . $url ) ) ),
+	);
+
+	return add_query_arg( $args, $source );
+}
+
+/**
+ * Generate Add to Office 365 calendar.
+ *
+ * @param string $dtstart date begin.
+ * @param string $dtend date end.
+ * @param string $url link to event.
+ * @param string $title Title of event.
+ * @param string $location string version of location.
+ * @param string $description info about event.
+ * @param string $allday 'true' for all day events, default 'false'.
+ *
+ * @return string
+ */
+function mc_office_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
+	$url = mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday );
+	$url = str_replace( 'outlook.live.com', 'outlook.office.com', $url );
+
+	return $url;
+}
+
 /**
  * Get the featured image for a location.
  *
@@ -427,17 +480,17 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$source  = 'location';
 	$the_map = mc_maplink( $event, 'url', $source );
 	$url     = esc_url( $event->location_url );
-	$label   = strip_tags( stripslashes( $event->location_label ), mc_strip_tags() );
-	$street  = strip_tags( stripslashes( $event->location_street ), mc_strip_tags() );
-	$street2 = strip_tags( stripslashes( $event->location_street2 ), mc_strip_tags() );
-	$city    = strip_tags( stripslashes( $event->location_city ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
-	$state   = strip_tags( stripslashes( $event->location_state ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
-	$zip     = strip_tags( stripslashes( $event->location_postcode ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
-	$country = strip_tags( stripslashes( $event->location_country ), mc_strip_tags() );
-	$phone   = strip_tags( stripslashes( $event->location_phone ), mc_strip_tags() );
+	$label   = strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
+	$street  = strip_tags( wp_unslash( $event->location_street ), mc_strip_tags() );
+	$street2 = strip_tags( wp_unslash( $event->location_street2 ), mc_strip_tags() );
+	$city    = strip_tags( wp_unslash( $event->location_city ), mc_strip_tags() );
+	$state   = strip_tags( wp_unslash( $event->location_state ), mc_strip_tags() );
+	$state   = strip_tags( wp_unslash( $event->location_state ), mc_strip_tags() );
+	$zip     = strip_tags( wp_unslash( $event->location_postcode ), mc_strip_tags() );
+	$zip     = strip_tags( wp_unslash( $event->location_postcode ), mc_strip_tags() );
+	$country = strip_tags( wp_unslash( $event->location_country ), mc_strip_tags() );
+	$country = strip_tags( wp_unslash( $event->location_country ), mc_strip_tags() );
+	$phone   = strip_tags( wp_unslash( $event->location_phone ), mc_strip_tags() );
 	$loc_id  = absint( $event->location_id );
 	if ( ! $url &amp;&amp; ! $label &amp;&amp; ! $street &amp;&amp; ! $street2 &amp;&amp; ! $city &amp;&amp; ! $state &amp;&amp; ! $zip &amp;&amp; ! $country &amp;&amp; ! $phone ) {
 		return '';
@@ -560,8 +613,15 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @return {array} Template tag array.
 	 */
-	$e           = apply_filters( 'mc_filter_image_data', $e, $event );
-	$e['access'] = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+	$e     = apply_filters( 'mc_filter_image_data', $e, $event );
+	$notes = get_post_meta( $event->event_post, '_mc_event_access', true );
+	if ( is_array( $notes ) ) {
+		$notes = $notes['notes'];
+	}
+	$e['notes']  = $notes;
+	$terms       = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+	$term_list   = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+	$e['access'] = $term_list;
 
 	// Date &amp; time fields.
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
@@ -603,9 +663,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ), false );  // Date: hcal formatted.
 	$hcal_dt_end       = ( mc_is_all_day( $event ) ) ? strtotime( $real_end_date ) + 60 : strtotime( $real_end_date );
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', $hcal_dt_end, false );    // Date: hcal formatted end.
-	$e['userstart']    = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '&lt;/time>';
-	$e['userend']      = '&lt;time class="mc-user-time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '&lt;/time>';
-	$e['datebadge']    = mc_date_badge( $real_begin_date );
+	$e['userstart']    = '&lt;time class="mc-user-time" data-type="datetime" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '&lt;/time>';
+	$e['userend']      = '&lt;time class="mc-user-time" data-type="datetime" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '&lt;/time>';
+	// User timezone containining only date or time.
+	$e['userstartdate'] = '&lt;time class="mc-user-time" data-type="date" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '&lt;/time>';
+	$e['userenddate']   = '&lt;time class="mc-user-time" data-type="date" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '&lt;/time>';
+	$e['userstarttime'] = '&lt;time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '&lt;/time>';
+	$e['userendtime']   = '&lt;time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '&lt;/time>';
+	$e['datebadge']     = mc_date_badge( $real_begin_date );
 	/**
 	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
 	 *
@@ -652,13 +717,13 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	// Category fields.
 	$e['cat_id']          = $event->event_category;
 	$e['category_id']     = $event->event_category;
-	$e['category']        = stripslashes( $event->category_name );
-	$e['ical_category']   = wp_strip_all_tags( stripslashes( $event->category_name ) );
+	$e['category']        = wp_unslash( $event->category_name );
+	$e['ical_category']   = wp_strip_all_tags( wp_unslash( $event->category_name ) );
 	$e['categories']      = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category ) : mc_get_categories( $event, 'html' );
 	$e['ical_categories'] = ( property_exists( $event, 'categories' ) ) ? mc_categories_html( $event->categories, $event->event_category, 'text' ) : mc_get_categories( $event, 'text' );
 	$e['term']            = intval( $event->category_term );
-	$e['icon']            = mc_category_icon( $event, 'img' );
-	$e['icon_html']       = mc_category_icon( $event );
+	$e['icon']            = mc_category_icon( $event );
+	$e['icon_html']       = $e['icon']; // Changed to an alias for icon.
 	$e['color']           = $event->category_color;
 
 	$hex          = ( strpos( $event->category_color, '#' ) !== 0 ) ? '#' : '';
@@ -677,17 +742,17 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// General text fields.
 	$title                     = mc_search_highlight( $event->event_title );
-	$e['title']                = $cancelled . stripslashes( $title );
-	$e['description']          = wpautop( stripslashes( $event->event_desc ) );
-	$e['description_raw']      = stripslashes( $event->event_desc );
-	$e['description_stripped'] = wp_strip_all_tags( stripslashes( $event->event_desc ) );
-	$e['shortdesc']            = wpautop( stripslashes( $event->event_short ) );
-	$e['shortdesc_raw']        = stripslashes( $event->event_short );
-	$e['shortdesc_stripped']   = wp_strip_all_tags( stripslashes( $event->event_short ) );
+	$e['title']                = $cancelled . wp_unslash( $title );
+	$e['description']          = wpautop( wp_unslash( $event->event_desc ) );
+	$e['description_raw']      = wp_unslash( $event->event_desc );
+	$e['description_stripped'] = wp_strip_all_tags( wp_unslash( $event->event_desc ) );
+	$e['shortdesc']            = wpautop( wp_unslash( $event->event_short ) );
+	$e['shortdesc_raw']        = wp_unslash( $event->event_short );
+	$e['shortdesc_stripped']   = wp_strip_all_tags( wp_unslash( $event->event_short ) );
 
 	// Registration fields.
 	$e['event_tickets']      = $event->event_tickets;
-	$e['event_registration'] = stripslashes( wp_kses_data( $event->event_registration ) );
+	$e['event_registration'] = wp_unslash( wp_kses_data( $event->event_registration ) );
 
 	// Links.
 	$templates  = mc_get_option( 'templates' );
@@ -705,8 +770,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$e_template   = apply_filters( 'mc_details_template', $e_template, $event );
 	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
 	$replacements = array(
-		stripslashes( $e['title'] ),
-		stripslashes( ( $location ) ? $location->location_label : '' ),
+		wp_unslash( $e['title'] ),
+		wp_unslash( ( $location ) ? $location->location_label : '' ),
 		$event->category_color,
 		$event->category_icon,
 		$e['date'],
@@ -774,9 +839,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$map           = mc_maplink( $location, 'map', 'location' );
 		$map_url       = mc_maplink( $location, 'url', 'location' );
 		$map_gcal      = mc_maplink( $location, 'gcal', 'location' );
-		$e['location'] = stripslashes( $location->location_label );
-		$e['street']   = stripslashes( $location->location_street );
-		$e['street2']  = stripslashes( $location->location_street2 );
+		$e['location'] = wp_unslash( $location->location_label );
+		$e['street']   = wp_unslash( $location->location_street );
+		$e['street2']  = wp_unslash( $location->location_street2 );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
@@ -787,7 +852,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone'] = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone ), 'phone' );
+		$e['phone'] = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone ), 'phone' );
 		/**
 		 * Format a phone number for display in template tags.
 		 *
@@ -798,17 +863,19 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @return {string} Formatted number.
 		 */
-		$e['phone2']          = apply_filters( 'mc_phone_format', stripslashes( $location->location_phone2 ), 'phone2' );
-		$e['city']            = stripslashes( $location->location_city );
-		$e['state']           = stripslashes( $location->location_state );
-		$e['postcode']        = stripslashes( $location->location_postcode );
-		$e['country']         = stripslashes( $location->location_country );
+		$e['phone2']          = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone2 ), 'phone2' );
+		$e['city']            = wp_unslash( $location->location_city );
+		$e['state']           = wp_unslash( $location->location_state );
+		$e['postcode']        = wp_unslash( $location->location_postcode );
+		$e['country']         = wp_unslash( $location->location_country );
 		$e['region']          = $location->location_region;
-		$e['hcard']           = stripslashes( mc_hcard( $location, 'true', 'true', 'location' ) );
+		$e['hcard']           = wp_unslash( mc_hcard( $location, 'true', 'true', 'location' ) );
 		$e['link_map']        = $map;
 		$e['map_url']         = $map_url;
 		$e['map']             = mc_generate_map( $location, 'location' );
-		$e['location_access'] = mc_expand( unserialize( $location->location_access ) );
+		$terms                = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+		$term_list            = implode( ', ', wp_list_pluck( $terms, 'name' ) );
+		$e['location_access'] = $term_list;
 		$e['ical_location']   = trim( $location->location_label . ' ' . $location->location_street . ' ' . $location->location_street2 . ' ' . $location->location_city . ' ' . $location->location_state . ' ' . $location->location_postcode );
 	} else {
 		// Until 3.5, these were populated from the events table.
@@ -838,9 +905,14 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$google_start = $dtstart;
 		$google_end   = $dtend;
 	}
-	$aria_described = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
-	$e['gcal']      = mc_google_cal( $google_start, $google_end, $e_link, stripcslashes( $e['title'] ), $map_gcal, $strip_desc );
-	$e['gcal_link'] = "&lt;a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . ">&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . __( 'Google Calendar', 'my-calendar' ) . '&lt;/a>';
+	$allday            = mc_is_all_day( $event ) ? 'true' : 'false';
+	$aria_described    = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
+	$e['gcal']         = mc_google_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc );
+	$e['gcal_link']    = "&lt;a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . ">&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . __( 'Google', 'my-calendar' ) . '&lt;/a>';
+	$e['office']       = mc_office_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['office_link']  = "&lt;a href='" . esc_url( $e['office'] ) . "' class='office external' rel='nofollow'" . $aria_described . ">&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . __( 'Office 365', 'my-calendar' ) . '&lt;/a>';
+	$e['outlook']      = mc_outlook_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['outlook_link'] = "&lt;a href='" . esc_url( $e['outlook'] ) . "' class='outlook external' rel='nofollow'" . $aria_described . ">&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . __( 'Outlook Live', 'my-calendar' ) . '&lt;/a>';
 
 	// IDs.
 	$e['dateid']     = $event->occur_id; // Unique ID for this date of this event.
@@ -969,34 +1041,36 @@ function mc_get_details_link( $event ) {
 	$permalinks = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
 	$permalinks = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
 	$permalink  = mc_event_link( $event );
-	if ( 0 !== (int) $event->event_post &amp;&amp; 'true' !== mc_get_option( 'remote' ) &amp;&amp; $permalinks ) {
-		$permalink = get_permalink( $event->event_post );
-		if ( mc_is_recurring( $event ) ) {
-			$permalink = add_query_arg( 'mc_id', $event->occur_id, $permalink );
-		}
-	} else {
-		if ( mc_get_uri( 'boolean' ) ) {
-			$permalink = mc_build_url(
-				array( 'mc_id' => $event->occur_id ),
-				array(
-					'month',
-					'dy',
-					'yr',
-					'ltype',
-					'loc',
-					'mcat',
-					'format',
-					'feed',
-					'page_id',
-					'p',
-					'mcs',
-					'time',
-					'page',
-					'mode',
-					'event_id',
-				),
-				$uri
-			);
+	if ( '' === trim( $permalink ) ) {
+		if ( 0 !== (int) $event->event_post &amp;&amp; 'true' !== mc_get_option( 'remote' ) &amp;&amp; $permalinks ) {
+			$permalink = get_permalink( $event->event_post );
+			if ( mc_is_recurring( $event ) ) {
+				$permalink = add_query_arg( 'mc_id', $event->occur_id, $permalink );
+			}
+		} else {
+			if ( mc_get_uri( 'boolean' ) ) {
+				$permalink = mc_build_url(
+					array( 'mc_id' => $event->occur_id ),
+					array(
+						'month',
+						'dy',
+						'yr',
+						'ltype',
+						'loc',
+						'mcat',
+						'format',
+						'feed',
+						'page_id',
+						'p',
+						'mcs',
+						'time',
+						'page',
+						'mode',
+						'event_id',
+					),
+					$uri
+				);
+			}
 		}
 	}
 	/**
@@ -1280,6 +1354,11 @@ function mc_get_event_location( $event, $source ) {
  * @return string HTML
  */
 function mc_generate_map( $event, $source = 'event', $multiple = false, $geolocate = false ) {
+	// If map service is disabled, do not return a map.
+	$map_target = mc_get_option( 'map_service' );
+	if ( 'none' === $map_target ) {
+		return '';
+	}
 	if ( ! is_object( $event ) &amp;&amp; ! $multiple ) {
 		return '';
 	}
@@ -1353,17 +1432,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				}
 				$hcard  = mc_hcard( $location, 'true', false, 'location' );
 				$title  = esc_attr( $location->location_label );
-				$marker = wp_kses(
-					str_replace(
-						array( '&lt;/div>', '&lt;br />', '&lt;br>&lt;br>' ),
-						'&lt;br>',
-						$hcard
-					),
-					array(
-						'br'     => array(),
-						'strong' => array(),
-					)
-				);
+				$marker = wp_kses_post( $hcard );
 				/**
 				 * Source HTML for a single location marker.
 				 *
@@ -1375,7 +1444,11 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				 * @return {string} Formatted HTML to be parsed by Google Maps JS.
 				 */
 				$html      = apply_filters( 'mc_map_html', $marker, $location );
-				$markers  .= PHP_EOL . "&lt;div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>$html&lt;/div>" . PHP_EOL;
+				$markers  .= PHP_EOL . "&lt;div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>
+					&lt;div class='mc-google-marker'>
+					$html
+					&lt;/div>
+				&lt;/div>" . PHP_EOL;
 				$loc_list .= ( $multiple ) ? '&lt;div class="mc-location-details" id="mc-location-' . $id . '-' . $loc_id . '">' . $hcard . '&lt;/div>' : '';
 			}
 			/**
@@ -1403,40 +1476,6 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	}
 
 	return $out;
-}
-
-/**
- * Expand access data into a list of features.
- *
- * @param array $data Either event or location accessibility data.
- *
- * @return string list of features.
- */
-function mc_expand( $data ) {
-	$output = '';
-	if ( is_array( $data ) ) {
-		foreach ( $data as $key => $value ) {
-			$class = ( isset( $value ) ) ? sanitize_html_class( $value ) : '';
-			$label = ( isset( $value ) ) ? $value : false;
-			if ( ! $label ) {
-				continue;
-			}
-			$output .= "&lt;li class='$class'>&lt;span>$label&lt;/span>&lt;/li>\n";
-		}
-		$output = ( $output ) ? "&lt;ul class='mc-access'>" . $output . '&lt;/ul>' : '';
-	}
-
-	/**
-	 * HTML output from an internal data array, e.g. accessibility features.
-	 *
-	 * @hook mc_expand
-	 *
-	 * @param {string} $output Formatted HTML to be returned.
-	 * @param {array} $data Array of data being parsed.
-	 *
-	 * @return {string} Formatted HTML.
-	 */
-	return apply_filters( 'mc_expand', $output, $data );
 }
 
 /**
@@ -2116,26 +2155,28 @@ function mc_template_host( $data, $type = 'calendar' ) {
  * @param object $data Calendar view data.
  * @param string $type View type.
  * @param string $text Optional. Accessibility heading text.
+ * @param string $return_type return or echo.
  */
-function mc_template_access( $data, $type = 'calendar', $text = '' ) {
-	$event  = $data->event;
-	$access = '';
+function mc_template_access( $data, $type = 'calendar', $text = '', $return_type = 'echo' ) {
+	$event  = ( is_object( $data ) ) ? $data->event : $data['event'];
+	$time   = ( is_object( $data ) ) ? $data->time : $data['time'];
+	$output = '';
 	if ( mc_output_is_visible( 'access', $type, $event ) ) {
-		if ( $text ) {
-			$access_heading = $text;
-		} else {
-			$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
-		}
-		$access_content = mc_expand( get_post_meta( $event->event_post, '_mc_event_access', true ) );
+		$access_heading = ( '' !== mc_get_option( 'event_accessibility', '' ) ) ? mc_get_option( 'event_accessibility' ) : __( 'Event Accessibility', 'my-calendar' );
+		$access_heading = ( $text ) ? $text : $access_heading;
+		$access_data    = get_post_meta( $event->event_post, '_mc_event_access', true );
+		$notes          = ( is_array( $access_data ) ) ? $access_data['notes'] : $access_data;
 		$sublevel       = 'h2';
-		if ( 'mini' === $type || 'list' === $type || 'list' === $data->time ) {
-			// In the mini calendar, levels are reduced one because there are multiple events.
-			if ( 'list' === $data->time ) {
-				$sublevel = 'h4';
-			} else {
-				$sublevel = 'h3';
-			}
+		if ( 'mini' === $type || 'list' === $type || 'list' === $time ) {
+			// In some views, levels are reduced one because there are multiple events.
+			$sublevel = ( 'list' === $time ) ? 'h4' : 'h3';
 		}
+		$terms  = wp_get_object_terms( $event->event_post, 'mc-event-access' );
+		$access = array();
+		foreach ( $terms as $term ) {
+			$access[] = '&lt;li class="' . esc_attr( $term->slug ) . '">&lt;span>' . esc_html( $term->name ) . '&lt;/span>&lt;/li>';
+		}
+		$access_content = implode( '', $access );
 		/**
 		 * Filter subheading levels inside event content.
 		 *
@@ -2148,14 +2189,65 @@ function mc_template_access( $data, $type = 'calendar', $text = '' ) {
 		 *
 		 * @return {string}
 		 */
-		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $data->time, 'php' );
-		if ( $access_content ) {
-			$access = '&lt;div class="mc-accessibility">&lt;' . $sublevel . '>' . $access_heading . '&lt;/' . $sublevel . '>' . $access_content . '&lt;/div>';
+		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $time, 'php' );
+		if ( '' !== trim( $access_content ) ) {
+			$output = '
+			&lt;div class="mc-accessibility">
+				&lt;' . $sublevel . '>' . $access_heading . '&lt;/' . $sublevel . '>
+				&lt;ul class="mc-access">' . $access_content . '&lt;/ul>
+				&lt;p>' . $notes . '&lt;/p>
+			&lt;/div>';
 		}
-		$access = ( '' !== $access ) ? '&lt;div class="mc-access-information">' . $access . '&lt;/div>' : '';
+		$output = ( '' !== $output ) ? '&lt;div class="mc-access-information">' . $output . '&lt;/div>' : '';
 	}
+	if ( 'return' === $return_type ) {
+		return $output;
+	} else {
+		echo wp_kses_post( $output );
+	}
+}
 
-	echo wp_kses_post( $access );
+/**
+ * Print location accessibility features in PHP templates..
+ *
+ * @param object $data Calendar view data.
+ * @param string $text Text for heading. Default 'false'.
+ */
+function mc_template_location_access( $data, $text = false ) {
+	$location = $data->location;
+	$output   = '';
+
+	$access_heading = __( 'Location Accessibility', 'my-calendar' );
+	$access_heading = ( $text ) ? $text : $access_heading;
+	$sublevel       = 'h2';
+
+	$terms  = wp_get_object_terms( $location->location_post, 'mc-location-access' );
+	$access = array();
+	foreach ( $terms as $term ) {
+		$access[] = '&lt;li class="' . esc_attr( $term->slug ) . '">&lt;span>' . esc_html( $term->name ) . '&lt;/span>&lt;/li>';
+	}
+	$access_content = '&lt;ul class="mc-access">' . implode( '', $access ) . '&lt;/ul>';
+	/**
+	 * Filter subheading levels inside event content.
+	 *
+	 * @hook mc_subheading_level
+	 *
+	 * @param {string} $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+	 * @param {string} $template Current template.
+	 *
+	 * @return {string}
+	 */
+	$sublevel = apply_filters( 'mc_subheading_level', $sublevel, 'php' );
+	if ( $access_content ) {
+		$output = '
+		&lt;div class="mc-accessibility">
+			&lt;' . $sublevel . '>' . $access_heading . '&lt;/' . $sublevel . '>
+			' . $access_content . '
+		&lt;/div>';
+	}
+	$output = ( '' !== $output ) ? '&lt;div class="mc-access-information">' . $output . '&lt;/div>' : '';
+
+	echo wp_kses_post( $output );
 }
 
 /**
@@ -2185,14 +2277,27 @@ function mc_template_share( $data, $type = 'calendar', $text = '' ) {
 	}
 	$more = apply_filters( 'mc_details_grid_link', $more, $event );
 	if ( mc_output_is_visible( 'gcal', $type, $event ) ) {
-		$gcal = "	&lt;p class='gcal'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '&lt;/p>';
+		$gcal  = "	&lt;li class='gcal'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . mc_draw_template( $data->tags, '{gcal_link}' ) . '&lt;/li>';
+		$gcal .= "	&lt;li class='outlook'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . mc_draw_template( $data->tags, '{outlook_link}' ) . '&lt;/li>';
+		$gcal .= "	&lt;li class='office'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . mc_draw_template( $data->tags, '{office_link}' ) . '&lt;/li>';
 	}
 
 	if ( mc_output_is_visible( 'ical', $type, $event ) ) {
-		$vcal = "	&lt;p class='ical'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . mc_draw_template( $data->tags, '{ical_html}' ) . '&lt;/p>';
+		$vcal = "	&lt;li class='ical'>&lt;span class='mc-icon' aria-hidden='true'>&lt;/span>" . mc_draw_template( $data->tags, '{ical_html}' ) . '&lt;/li>';
 	}
-	$sharing = ( '' === trim( $vcal . $gcal . $more ) ) ? '' : '	&lt;div class="sharing">' . $vcal . $gcal . $more . '&lt;/div>';
+	$sharing = ( '' === trim( $gcal . $vcal ) ) ? '' : $gcal . $vcal;
 
+	if ( $sharing ) {
+		$sharing = '
+		&lt;div class="mc-calendar-share sharing">
+			&lt;button class="mc-toggle-button has-popup" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="mc-share-links-' . absint( $event->event_id ) . '">' . __( 'Add to Calendar', 'my-calendar' ) . '&lt;/button>
+			&lt;ul id="mc-share-links-' . absint( $event->event_id ) . '">
+				' . $sharing . '
+			&lt;/ul>
+		&lt;/div>';
+	}
+
+	$sharing .= $more;
 	echo wp_kses_post( $sharing );
 }
 
@@ -2210,7 +2315,7 @@ function mc_template_image( $data, $type = 'calendar', $size = '' ) {
 		$img = mc_get_event_image( $event, $data->tags, $size );
 	}
 
-	echo wp_kses_post( $img );
+	echo wp_kses( $img, mc_kses_elements() );
 }
 
 /**
@@ -2370,7 +2475,7 @@ function mc_template_link( $data, $type = 'calendar', $text = '' ) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="mc_after_help.html">mc_after_help</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_category_key_array.html">mc_category_key_array</a></li><li><a href="mc_clean_duplicate_locations.html">mc_clean_duplicate_locations</a></li><li><a href="mc_countries_filters.html">mc_countries_filters</a></li><li><a href="mc_create_location_post.html">mc_create_location_post</a></li><li><a href="mc_debug.html">mc_debug</a></li><li><a href="mc_delete_event.html">mc_delete_event</a></li><li><a href="mc_delete_event_instance.html">mc_delete_event_instance</a></li><li><a href="mc_delete_location.html">mc_delete_location</a></li><li><a href="mc_delete_location_posts.html">mc_delete_location_posts</a></li><li><a href="mc_deleted_post.html">mc_deleted_post</a></li><li><a href="mc_event_expired.html">mc_event_expired</a></li><li><a href="mc_event_future.html">mc_event_future</a></li><li><a href="mc_event_happening.html">mc_event_happening</a></li><li><a href="mc_event_over.html">mc_event_over</a></li><li><a href="mc_event_states_by_type.html">mc_event_states_by_type</a></li><li><a href="mc_get_core_icon_index.html">mc_get_core_icon_index</a></li><li><a href="mc_get_core_icons.html">mc_get_core_icons</a></li><li><a href="mc_handle_importer_custom_fields.html">mc_handle_importer_custom_fields</a></li><li><a href="mc_hide_past_dates.html">mc_hide_past_dates</a></li><li><a href="mc_mass_delete_locations.html">mc_mass_delete_locations</a></li><li><a href="mc_mass_%257B$action%257D_events.html">mc_mass_{$action}_events</a></li><li><a href="mc_modify_location.html">mc_modify_location</a></li><li><a href="mc_notify_event_spam.html">mc_notify_event_spam</a></li><li><a href="mc_post_add_category.html">mc_post_add_category</a></li><li><a href="mc_post_category_form.html">mc_post_category_form</a></li><li><a href="mc_preset_template.html">mc_preset_template</a></li><li><a href="mc_print_view_head.html">mc_print_view_head</a></li><li><a href="mc_save_event.html">mc_save_event</a></li><li><a href="mc_save_grouped_events.html">mc_save_grouped_events</a></li><li><a href="mc_save_location.html">mc_save_location</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_save_user.html">mc_save_user</a></li><li><a href="mc_select_preset_templates.html">mc_select_preset_templates</a></li><li><a href="mc_tags_created.html">mc_tags_created</a></li><li><a href="mc_transition_event.html">mc_transition_event</a></li><li><a href="mc_update_event_post.html">mc_update_event_post</a></li><li><a href="mc_update_location_posts.html">mc_update_location_posts</a></li><li><a href="mcs_complete_submission.html">mcs_complete_submission</a></li><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li><li><a href="my_calendar_event_imported_from_tribe.html">my_calendar_event_imported_from_tribe</a></li><li><a href="my_calendar_instance_imported_from_tribe.html">my_calendar_instance_imported_from_tribe</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_body_classes.html">mc_body_classes</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_custom_user_select.html">mc_custom_user_select</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_badge.html">mc_date_badge</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_date_utc_format.html">mc_date_utc_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_daterange_begin_format.html">mc_daterange_begin_format</a></li><li><a href="mc_daterange_end_format.html">mc_daterange_end_format</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_db_prefix.html">mc_db_prefix</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_options.html">mc_default_options</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_controls.html">mc_event_controls</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_details_output.html">mc_event_details_output</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_post_type_args.html">mc_event_post_type_args</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_states.html">mc_event_states</a></li><li><a href="mc_event_states_label.html">mc_event_states_label</a></li><li><a href="mc_event_states_type.html">mc_event_states_type</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_execute_the_content.html">mc_execute_the_content</a></li><li><a href="mc_expand.html">mc_expand</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_price_array.html">mc_filter_price_array</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_filter_%257Btype%257D.html">mc_filter_{type}</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_format_tribe_event_for_import.html">mc_format_tribe_event_for_import</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_get_week_days.html">mc_get_week_days</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_has_feeds.html">mc_has_feeds</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_additional_days.html">mc_hide_additional_days</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_ical_timezone.html">mc_ical_timezone</a></li><li><a href="mc_ical_x_published_ttl.html">mc_ical_x_published_ttl</a></li><li><a href="mc_import_tribe_tickets_options.html">mc_import_tribe_tickets_options</a></li><li><a href="mc_imported_event.html">mc_imported_event</a></li><li><a href="mc_importer_custom_fields.html">mc_importer_custom_fields</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_inner_content.html">mc_inner_content</a></li><li><a href="mc_inner_content_template_fields.html">mc_inner_content_template_fields</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_is_mobile.html">mc_is_mobile</a></li><li><a href="mc_is_tablet.html">mc_is_tablet</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_post_type_args.html">mc_location_post_type_args</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_modify_day_uri.html">mc_modify_day_uri</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_month_year_format.html">mc_month_year_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_category_icon.html">mc_override_category_icon</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_private_event.html">mc_private_event</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_skip_search_results.html">mc_skip_search_results</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_html_values.html">mc_time_html_values</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_today_link.html">mc_today_link</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_venue_accessibility.html">mc_venue_accessibility</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="mcs_view_admin_links_on_frontend.html">mcs_view_admin_links_on_frontend</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Actions</h3><ul><li><a href="mc_after_help.html">mc_after_help</a></li><li><a href="mc_bulk_actions.html">mc_bulk_actions</a></li><li><a href="mc_category_key_array.html">mc_category_key_array</a></li><li><a href="mc_clean_duplicate_locations.html">mc_clean_duplicate_locations</a></li><li><a href="mc_countries_filters.html">mc_countries_filters</a></li><li><a href="mc_create_location_post.html">mc_create_location_post</a></li><li><a href="mc_debug.html">mc_debug</a></li><li><a href="mc_delete_event.html">mc_delete_event</a></li><li><a href="mc_delete_event_instance.html">mc_delete_event_instance</a></li><li><a href="mc_delete_location.html">mc_delete_location</a></li><li><a href="mc_delete_location_posts.html">mc_delete_location_posts</a></li><li><a href="mc_deleted_post.html">mc_deleted_post</a></li><li><a href="mc_event_expired.html">mc_event_expired</a></li><li><a href="mc_event_future.html">mc_event_future</a></li><li><a href="mc_event_happening.html">mc_event_happening</a></li><li><a href="mc_event_over.html">mc_event_over</a></li><li><a href="mc_event_states_by_type.html">mc_event_states_by_type</a></li><li><a href="mc_get_core_icon_index.html">mc_get_core_icon_index</a></li><li><a href="mc_get_core_icons.html">mc_get_core_icons</a></li><li><a href="mc_handle_importer_custom_fields.html">mc_handle_importer_custom_fields</a></li><li><a href="mc_hide_past_dates.html">mc_hide_past_dates</a></li><li><a href="mc_mass_delete_locations.html">mc_mass_delete_locations</a></li><li><a href="mc_mass_%257B$action%257D_events.html">mc_mass_{$action}_events</a></li><li><a href="mc_modify_location.html">mc_modify_location</a></li><li><a href="mc_notify_event_spam.html">mc_notify_event_spam</a></li><li><a href="mc_post_access_term_form.html">mc_post_access_term_form</a></li><li><a href="mc_post_add_category.html">mc_post_add_category</a></li><li><a href="mc_post_category_form.html">mc_post_category_form</a></li><li><a href="mc_preset_template.html">mc_preset_template</a></li><li><a href="mc_print_view_head.html">mc_print_view_head</a></li><li><a href="mc_save_event.html">mc_save_event</a></li><li><a href="mc_save_grouped_events.html">mc_save_grouped_events</a></li><li><a href="mc_save_settings.html">mc_save_settings</a></li><li><a href="mc_save_user.html">mc_save_user</a></li><li><a href="mc_select_preset_templates.html">mc_select_preset_templates</a></li><li><a href="mc_tags_created.html">mc_tags_created</a></li><li><a href="mc_transition_event.html">mc_transition_event</a></li><li><a href="mc_update_event_post.html">mc_update_event_post</a></li><li><a href="mc_update_location_posts.html">mc_update_location_posts</a></li><li><a href="mcs_complete_submission.html">mcs_complete_submission</a></li><li><a href="my_calendar_drawing_event.html">my_calendar_drawing_event</a></li><li><a href="my_calendar_event_drawn.html">my_calendar_event_drawn</a></li><li><a href="my_calendar_event_imported_from_tribe.html">my_calendar_event_imported_from_tribe</a></li><li><a href="my_calendar_instance_imported_from_tribe.html">my_calendar_instance_imported_from_tribe</a></li></ul><h3>Filters</h3><ul><li><a href="mc_access_selector.html">mc_access_selector</a></li><li><a href="mc_add_events_url.html">mc_add_events_url</a></li><li><a href="mc_adminbar_uri.html">mc_adminbar_uri</a></li><li><a href="mc_advanced_search.html">mc_advanced_search</a></li><li><a href="mc_after_calendar.html">mc_after_calendar</a></li><li><a href="mc_after_event.html">mc_after_event</a></li><li><a href="mc_after_event_no_details.html">mc_after_event_no_details</a></li><li><a href="mc_after_settings.html">mc_after_settings</a></li><li><a href="mc_ajax_js.html">mc_ajax_js</a></li><li><a href="mc_all_list_dates.html">mc_all_list_dates</a></li><li><a href="mc_api_auto_date.html">mc_api_auto_date</a></li><li><a href="mc_api_can_edit_event.html">mc_api_can_edit_event</a></li><li><a href="mc_api_key.html">mc_api_key</a></li><li><a href="mc_autoclose_comments.html">mc_autoclose_comments</a></li><li><a href="mc_before_calendar.html">mc_before_calendar</a></li><li><a href="mc_before_event.html">mc_before_event</a></li><li><a href="mc_before_event_form.html">mc_before_event_form</a></li><li><a href="mc_before_event_no_details.html">mc_before_event_no_details</a></li><li><a href="mc_before_save_insert.html">mc_before_save_insert</a></li><li><a href="mc_before_save_update.html">mc_before_save_update</a></li><li><a href="mc_body_classes.html">mc_body_classes</a></li><li><a href="mc_cached_pages_to_refresh.html">mc_cached_pages_to_refresh</a></li><li><a href="mc_calendar_attributes.html">mc_calendar_attributes</a></li><li><a href="mc_can_edit_event.html">mc_can_edit_event</a></li><li><a href="mc_capabilities.html">mc_capabilities</a></li><li><a href="mc_category_fields.html">mc_category_fields</a></li><li><a href="mc_category_icon.html">mc_category_icon</a></li><li><a href="mc_category_key.html">mc_category_key</a></li><li><a href="mc_category_list.html">mc_category_list</a></li><li><a href="mc_category_selector.html">mc_category_selector</a></li><li><a href="mc_close_button.html">mc_close_button</a></li><li><a href="mc_convert_locations_select_to_autocomplete.html">mc_convert_locations_select_to_autocomplete</a></li><li><a href="mc_custom_content_editor.html">mc_custom_content_editor</a></li><li><a href="mc_custom_dirs.html">mc_custom_dirs</a></li><li><a href="mc_custom_sidebar_panels.html">mc_custom_sidebar_panels</a></li><li><a href="mc_custom_spam_status.html">mc_custom_spam_status</a></li><li><a href="mc_custom_template.html">mc_custom_template</a></li><li><a href="mc_custom_user_select.html">mc_custom_user_select</a></li><li><a href="mc_customize_details_link.html">mc_customize_details_link</a></li><li><a href="mc_customize_email_headers.html">mc_customize_email_headers</a></li><li><a href="mc_date_badge.html">mc_date_badge</a></li><li><a href="mc_date_format.html">mc_date_format</a></li><li><a href="mc_date_utc_format.html">mc_date_utc_format</a></li><li><a href="mc_datepicker_html.html">mc_datepicker_html</a></li><li><a href="mc_daterange_begin_format.html">mc_daterange_begin_format</a></li><li><a href="mc_daterange_end_format.html">mc_daterange_end_format</a></li><li><a href="mc_datetime_inputs.html">mc_datetime_inputs</a></li><li><a href="mc_db_prefix.html">mc_db_prefix</a></li><li><a href="mc_default_event_length.html">mc_default_event_length</a></li><li><a href="mc_default_image_size.html">mc_default_image_size</a></li><li><a href="mc_default_options.html">mc_default_options</a></li><li><a href="mc_default_output_order.html">mc_default_output_order</a></li><li><a href="mc_details_grid_link.html">mc_details_grid_link</a></li><li><a href="mc_details_template.html">mc_details_template</a></li><li><a href="mc_disable_link.html">mc_disable_link</a></li><li><a href="mc_disable_mobile_js.html">mc_disable_mobile_js</a></li><li><a href="mc_disable_spam_checking.html">mc_disable_spam_checking</a></li><li><a href="mc_display_author.html">mc_display_author</a></li><li><a href="mc_display_css_on_archives.html">mc_display_css_on_archives</a></li><li><a href="mc_display_format.html">mc_display_format</a></li><li><a href="mc_display_host.html">mc_display_host</a></li><li><a href="mc_display_location_events.html">mc_display_location_events</a></li><li><a href="mc_draw_todays_event.html">mc_draw_todays_event</a></li><li><a href="mc_draw_upcoming_event.html">mc_draw_upcoming_event</a></li><li><a href="mc_event_access_choices.html">mc_event_access_choices</a></li><li><a href="mc_event_access_fields.html">mc_event_access_fields</a></li><li><a href="mc_event_access_slug.html">mc_event_access_slug</a></li><li><a href="mc_event_category_slug.html">mc_event_category_slug</a></li><li><a href="mc_event_classes.html">mc_event_classes</a></li><li><a href="mc_event_content.html">mc_event_content</a></li><li><a href="mc_event_controls.html">mc_event_controls</a></li><li><a href="mc_event_detail_%257Bname%257D.html">mc_event_detail_{name}</a></li><li><a href="mc_event_details.html">mc_event_details</a></li><li><a href="mc_event_details_output.html">mc_event_details_output</a></li><li><a href="mc_event_exclude_from_search.html">mc_event_exclude_from_search</a></li><li><a href="mc_event_expired_link.html">mc_event_expired_link</a></li><li><a href="mc_event_has_alarm.html">mc_event_has_alarm</a></li><li><a href="mc_event_image_alt.html">mc_event_image_alt</a></li><li><a href="mc_event_mail_bcc.html">mc_event_mail_bcc</a></li><li><a href="mc_event_mail_body.html">mc_event_mail_body</a></li><li><a href="mc_event_mail_from.html">mc_event_mail_from</a></li><li><a href="mc_event_mail_subject.html">mc_event_mail_subject</a></li><li><a href="mc_event_mail_to.html">mc_event_mail_to</a></li><li><a href="mc_event_notices.html">mc_event_notices</a></li><li><a href="mc_event_object.html">mc_event_object</a></li><li><a href="mc_event_post_content.html">mc_event_post_content</a></li><li><a href="mc_event_post_type_args.html">mc_event_post_type_args</a></li><li><a href="mc_event_recur_string.html">mc_event_recur_string</a></li><li><a href="mc_event_registration.html">mc_event_registration</a></li><li><a href="mc_event_registration_form.html">mc_event_registration_form</a></li><li><a href="mc_event_saved_message.html">mc_event_saved_message</a></li><li><a href="mc_event_schema.html">mc_event_schema</a></li><li><a href="mc_event_slug.html">mc_event_slug</a></li><li><a href="mc_event_states.html">mc_event_states</a></li><li><a href="mc_event_states_label.html">mc_event_states_label</a></li><li><a href="mc_event_states_type.html">mc_event_states_type</a></li><li><a href="mc_event_title.html">mc_event_title</a></li><li><a href="mc_event_today.html">mc_event_today</a></li><li><a href="mc_event_upcoming.html">mc_event_upcoming</a></li><li><a href="mc_event_upcoming_after.html">mc_event_upcoming_after</a></li><li><a href="mc_event_upcoming_before.html">mc_event_upcoming_before</a></li><li><a href="mc_excerpt_length.html">mc_excerpt_length</a></li><li><a href="mc_execute_the_content.html">mc_execute_the_content</a></li><li><a href="mc_fields_required.html">mc_fields_required</a></li><li><a href="mc_file_exists.html">mc_file_exists</a></li><li><a href="mc_filter_admin_grid_args.html">mc_filter_admin_grid_args</a></li><li><a href="mc_filter_api_args.html">mc_filter_api_args</a></li><li><a href="mc_filter_day.html">mc_filter_day</a></li><li><a href="mc_filter_events.html">mc_filter_events</a></li><li><a href="mc_filter_image_data.html">mc_filter_image_data</a></li><li><a href="mc_filter_location_list.html">mc_filter_location_list</a></li><li><a href="mc_filter_location_results.html">mc_filter_location_results</a></li><li><a href="mc_filter_month.html">mc_filter_month</a></li><li><a href="mc_filter_offset.html">mc_filter_offset</a></li><li><a href="mc_filter_price_array.html">mc_filter_price_array</a></li><li><a href="mc_filter_shortcodes.html">mc_filter_shortcodes</a></li><li><a href="mc_filter_year.html">mc_filter_year</a></li><li><a href="mc_filter_%257Btype%257D.html">mc_filter_{type}</a></li><li><a href="mc_footer_navigation.html">mc_footer_navigation</a></li><li><a href="mc_format_toggle_html.html">mc_format_toggle_html</a></li><li><a href="mc_format_tribe_event_for_import.html">mc_format_tribe_event_for_import</a></li><li><a href="mc_from_date.html">mc_from_date</a></li><li><a href="mc_future_search_results.html">mc_future_search_results</a></li><li><a href="mc_gcal_description.html">mc_gcal_description</a></li><li><a href="mc_gcal_location.html">mc_gcal_location</a></li><li><a href="mc_generator_tab_content.html">mc_generator_tab_content</a></li><li><a href="mc_generator_tabs.html">mc_generator_tabs</a></li><li><a href="mc_get_current_url.html">mc_get_current_url</a></li><li><a href="mc_get_events_sites.html">mc_get_events_sites</a></li><li><a href="mc_get_file.html">mc_get_file</a></li><li><a href="mc_get_uri.html">mc_get_uri</a></li><li><a href="mc_get_week_days.html">mc_get_week_days</a></li><li><a href="mc_gmap_html.html">mc_gmap_html</a></li><li><a href="mc_grid_date.html">mc_grid_date</a></li><li><a href="mc_grid_day_wrapper.html">mc_grid_day_wrapper</a></li><li><a href="mc_grid_header_wrapper.html">mc_grid_header_wrapper</a></li><li><a href="mc_grid_js.html">mc_grid_js</a></li><li><a href="mc_grid_week_wrapper.html">mc_grid_week_wrapper</a></li><li><a href="mc_grid_wrapper.html">mc_grid_wrapper</a></li><li><a href="mc_grouped_events.html">mc_grouped_events</a></li><li><a href="mc_groups_pre_checkdata.html">mc_groups_pre_checkdata</a></li><li><a href="mc_happening_next_template.html">mc_happening_next_template</a></li><li><a href="mc_has_feeds.html">mc_has_feeds</a></li><li><a href="mc_hcard.html">mc_hcard</a></li><li><a href="mc_header_navigation.html">mc_header_navigation</a></li><li><a href="mc_heading.html">mc_heading</a></li><li><a href="mc_heading_inner_title.html">mc_heading_inner_title</a></li><li><a href="mc_heading_level.html">mc_heading_level</a></li><li><a href="mc_heading_level_list.html">mc_heading_level_list</a></li><li><a href="mc_heading_level_table.html">mc_heading_level_table</a></li><li><a href="mc_hide_additional_days.html">mc_hide_additional_days</a></li><li><a href="mc_hide_nextmonth.html">mc_hide_nextmonth</a></li><li><a href="mc_ical_attributes.html">mc_ical_attributes</a></li><li><a href="mc_ical_download_from.html">mc_ical_download_from</a></li><li><a href="mc_ical_download_to.html">mc_ical_download_to</a></li><li><a href="mc_ical_timezone.html">mc_ical_timezone</a></li><li><a href="mc_ical_x_published_ttl.html">mc_ical_x_published_ttl</a></li><li><a href="mc_import_tribe_tickets_options.html">mc_import_tribe_tickets_options</a></li><li><a href="mc_imported_event.html">mc_imported_event</a></li><li><a href="mc_importer_custom_fields.html">mc_importer_custom_fields</a></li><li><a href="mc_include_today_in_total.html">mc_include_today_in_total</a></li><li><a href="mc_inner_content.html">mc_inner_content</a></li><li><a href="mc_inner_content_template_fields.html">mc_inner_content_template_fields</a></li><li><a href="mc_insert_author_data.html">mc_insert_author_data</a></li><li><a href="mc_insert_custom_fields.html">mc_insert_custom_fields</a></li><li><a href="mc_insert_recurring.html">mc_insert_recurring</a></li><li><a href="mc_instance_data.html">mc_instance_data</a></li><li><a href="mc_instance_format.html">mc_instance_format</a></li><li><a href="mc_is_mobile.html">mc_is_mobile</a></li><li><a href="mc_is_tablet.html">mc_is_tablet</a></li><li><a href="mc_jumpbox.html">mc_jumpbox</a></li><li><a href="mc_jumpbox_future_years.html">mc_jumpbox_future_years</a></li><li><a href="mc_legacy_templates_enabled.html">mc_legacy_templates_enabled</a></li><li><a href="mc_list_event_title_hint.html">mc_list_event_title_hint</a></li><li><a href="mc_list_js.html">mc_list_js</a></li><li><a href="mc_list_titles_separator.html">mc_list_titles_separator</a></li><li><a href="mc_location_access_choices.html">mc_location_access_choices</a></li><li><a href="mc_location_access_slug.html">mc_location_access_slug</a></li><li><a href="mc_location_container_primary.html">mc_location_container_primary</a></li><li><a href="mc_location_container_secondary.html">mc_location_container_secondary</a></li><li><a href="mc_location_events_link.html">mc_location_events_link</a></li><li><a href="mc_location_exclude_from_search.html">mc_location_exclude_from_search</a></li><li><a href="mc_location_fields.html">mc_location_fields</a></li><li><a href="mc_location_limit_sql.html">mc_location_limit_sql</a></li><li><a href="mc_location_list.html">mc_location_list</a></li><li><a href="mc_location_manager_cells.html">mc_location_manager_cells</a></li><li><a href="mc_location_manager_headers.html">mc_location_manager_headers</a></li><li><a href="mc_location_output.html">mc_location_output</a></li><li><a href="mc_location_post_type_args.html">mc_location_post_type_args</a></li><li><a href="mc_location_schema.html">mc_location_schema</a></li><li><a href="mc_location_selector.html">mc_location_selector</a></li><li><a href="mc_map_height.html">mc_map_height</a></li><li><a href="mc_map_html.html">mc_map_html</a></li><li><a href="mc_map_icon.html">mc_map_icon</a></li><li><a href="mc_map_label.html">mc_map_label</a></li><li><a href="mc_map_url.html">mc_map_url</a></li><li><a href="mc_map_width.html">mc_map_width</a></li><li><a href="mc_mini_js.html">mc_mini_js</a></li><li><a href="mc_modify_day_uri.html">mc_modify_day_uri</a></li><li><a href="mc_month_format.html">mc_month_format</a></li><li><a href="mc_month_year_format.html">mc_month_year_format</a></li><li><a href="mc_next_link.html">mc_next_link</a></li><li><a href="mc_notime_label.html">mc_notime_label</a></li><li><a href="mc_order_location_fields.html">mc_order_location_fields</a></li><li><a href="mc_override_category_icon.html">mc_override_category_icon</a></li><li><a href="mc_override_featured_image.html">mc_override_featured_image</a></li><li><a href="mc_past_search_results.html">mc_past_search_results</a></li><li><a href="mc_phone_format.html">mc_phone_format</a></li><li><a href="mc_post_template.html">mc_post_template</a></li><li><a href="mc_post_thumbnail_atts.html">mc_post_thumbnail_atts</a></li><li><a href="mc_pre_add_category.html">mc_pre_add_category</a></li><li><a href="mc_pre_checkdata.html">mc_pre_checkdata</a></li><li><a href="mc_prev_link.html">mc_prev_link</a></li><li><a href="mc_primary_sort.html">mc_primary_sort</a></li><li><a href="mc_print_return_url.html">mc_print_return_url</a></li><li><a href="mc_private_categories.html">mc_private_categories</a></li><li><a href="mc_private_event.html">mc_private_event</a></li><li><a href="mc_process_shortcodes.html">mc_process_shortcodes</a></li><li><a href="mc_registered_stylesheet.html">mc_registered_stylesheet</a></li><li><a href="mc_registration_state.html">mc_registration_state</a></li><li><a href="mc_related_event_limit.html">mc_related_event_limit</a></li><li><a href="mc_related_template.html">mc_related_template</a></li><li><a href="mc_return_to_calendar.html">mc_return_to_calendar</a></li><li><a href="mc_return_uri.html">mc_return_uri</a></li><li><a href="mc_rss_feed_date_range.html">mc_rss_feed_date_range</a></li><li><a href="mc_save_location.html">mc_save_location</a></li><li><a href="mc_search_after.html">mc_search_after</a></li><li><a href="mc_search_attributes.html">mc_search_attributes</a></li><li><a href="mc_search_before.html">mc_search_before</a></li><li><a href="mc_search_exportlinks.html">mc_search_exportlinks</a></li><li><a href="mc_search_fields.html">mc_search_fields</a></li><li><a href="mc_search_no_results.html">mc_search_no_results</a></li><li><a href="mc_search_page.html">mc_search_page</a></li><li><a href="mc_search_template.html">mc_search_template</a></li><li><a href="mc_searched_events.html">mc_searched_events</a></li><li><a href="mc_secondary_sort.html">mc_secondary_sort</a></li><li><a href="mc_send_notification.html">mc_send_notification</a></li><li><a href="mc_set_primary_category.html">mc_set_primary_category</a></li><li><a href="mc_settings_section_links.html">mc_settings_section_links</a></li><li><a href="mc_setup_allowed_sites.html">mc_setup_allowed_sites</a></li><li><a href="mc_shortcode_generator.html">mc_shortcode_generator</a></li><li><a href="mc_show_block.html">mc_show_block</a></li><li><a href="mc_show_custom_posts_in_menu.html">mc_show_custom_posts_in_menu</a></li><li><a href="mc_show_months.html">mc_show_months</a></li><li><a href="mc_show_week_number.html">mc_show_week_number</a></li><li><a href="mc_single_event_shortcode.html">mc_single_event_shortcode</a></li><li><a href="mc_single_event_title.html">mc_single_event_title</a></li><li><a href="mc_skip_search_results.html">mc_skip_search_results</a></li><li><a href="mc_subheading_level.html">mc_subheading_level</a></li><li><a href="mc_template.html">mc_template</a></li><li><a href="mc_text_all_categories.html">mc_text_all_categories</a></li><li><a href="mc_time_html_values.html">mc_time_html_values</a></li><li><a href="mc_time_max.html">mc_time_max</a></li><li><a href="mc_time_min.html">mc_time_min</a></li><li><a href="mc_time_toggle_html.html">mc_time_toggle_html</a></li><li><a href="mc_titles_format.html">mc_titles_format</a></li><li><a href="mc_to_date.html">mc_to_date</a></li><li><a href="mc_today_attributes.html">mc_today_attributes</a></li><li><a href="mc_today_link.html">mc_today_link</a></li><li><a href="mc_todays_events_after.html">mc_todays_events_after</a></li><li><a href="mc_todays_events_before.html">mc_todays_events_before</a></li><li><a href="mc_todays_events_header.html">mc_todays_events_header</a></li><li><a href="mc_upcoming_attributes.html">mc_upcoming_attributes</a></li><li><a href="mc_upcoming_date_from.html">mc_upcoming_date_from</a></li><li><a href="mc_upcoming_date_to.html">mc_upcoming_date_to</a></li><li><a href="mc_upcoming_events_footer.html">mc_upcoming_events_footer</a></li><li><a href="mc_upcoming_events_header.html">mc_upcoming_events_header</a></li><li><a href="mc_upcoming_events_template.html">mc_upcoming_events_template</a></li><li><a href="mc_update_group_data.html">mc_update_group_data</a></li><li><a href="mc_use_avatars.html">mc_use_avatars</a></li><li><a href="mc_use_custom_template.html">mc_use_custom_template</a></li><li><a href="mc_use_permalinks.html">mc_use_permalinks</a></li><li><a href="mc_user_can_see_private_events.html">mc_user_can_see_private_events</a></li><li><a href="mc_user_can_see_this_event.html">mc_user_can_see_this_event</a></li><li><a href="mc_user_fields.html">mc_user_fields</a></li><li><a href="mc_user_permissions.html">mc_user_permissions</a></li><li><a href="mc_widget_defaults.html">mc_widget_defaults</a></li><li><a href="mcs_check_conflicts.html">mcs_check_conflicts</a></li><li><a href="mcs_submission_permissions.html">mcs_submission_permissions</a></li><li><a href="mcs_time_block.html">mcs_time_block</a></li><li><a href="mcs_view_admin_links_on_frontend.html">mcs_view_admin_links_on_frontend</a></li><li><a href="my_calendar_body.html">my_calendar_body</a></li><li><a href="my_calendar_events_args.html">my_calendar_events_args</a></li></ul>
 </nav>
 
 <br class="clear">
