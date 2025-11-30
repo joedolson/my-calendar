@@ -2463,6 +2463,19 @@ function mc_the_title( $title, $post_id = null ) {
 	return $title;
 }
 
+add_action( 'admin_init', 'mc_dismiss_notice' );
+/**
+ * Dismiss admin notices
+ */
+function mc_dismiss_notice() {
+	if ( isset( $_GET['dismiss'] ) && 'update' === $_GET['dismiss'] ) {
+		$notice = ( isset( $_GET['notice'] ) ) ? sanitize_text_field( $_GET['notice'] ) : '';
+		if ( $notice ) {
+			update_option( 'mc_notice_' . $notice, 1 );
+		}
+	}
+}
+
 add_action( 'admin_notices', 'mc_update_notice' );
 /**
  * Admin notices
