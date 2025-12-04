@@ -261,7 +261,6 @@ function mc_invalid_query() {
 }
 add_action( 'template_redirect', 'mc_invalid_query' );
 
-add_action( 'template_redirect', 'mc_custom_canonical' );
 /**
  * Customize canonical URL for My Calendar custom links
  */
@@ -272,6 +271,7 @@ function mc_custom_canonical() {
 		add_filter( 'wpseo_canonical', 'mc_disable_yoast_canonical' );
 	}
 }
+add_action( 'template_redirect', 'mc_custom_canonical' );
 
 /**
  * When Yoast is enabled with canonical URLs, it returns an invalid URL for single events. Disable on single events.
