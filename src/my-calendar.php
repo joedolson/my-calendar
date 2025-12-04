@@ -231,7 +231,7 @@ function mc_register_widgets() {
  */
 function mc_invalid_query() {
 	$date_bounds = mc_get_date_bounds();
-	$year_query  = isset( $_GET['yr'] ) && ! empty( $_GET['yr'] )  ? absint( $_GET['yr'] ) : mc_date( 'Y' );
+	$year_query  = isset( $_GET['yr'] ) && ! empty( $_GET['yr'] ) ? absint( $_GET['yr'] ) : mc_date( 'Y' );
 	$month_query = isset( $_GET['month'] ) && ! empty( $_GET['month'] ) ? absint( $_GET['month'] ) : mc_date( 'm' );
 	$day_query   = isset( $_GET['dy'] ) && ! empty( $_GET['dy'] ) ? absint( $_GET['dy'] ) : mc_date( 'd' );
 
