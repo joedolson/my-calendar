@@ -108,6 +108,48 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.7.0 =
+
+* Feature: Migrate accessibility characteristics for locations and events to taxonomies and make editable.
+* Feature: Add API authentication key to allow export of private events.
+* Feature: Ability to disable time formats.
+* Feature: Support custom fields in API & remote database access.
+* Feature: New event type: private to author.
+* Change: Simplify event insertion with `mc_insert_event()` function.
+* Change: Make calendar sharing a popup list.
+* Change: Remove mini calendar link targets settings & feature.
+* Change: Sort variables to limit URL permutations generated in navigation.
+* Change: Change calendar navigation from links operated as buttons to use buttons.
+* Change: Added style variables for main background, color, padding, and margin.
+* Change: Default category color from dark blue to light gray.
+* Change: Load Google Maps asynchronously.
+* Change: Update action scheduler and increment required WP version.
+* Change: Rewrite all front-end JS to remove jQuery dependency.
+* Change: If a new event is saved as draft, redirect to the edit screen for that event.
+* Change: Update deprecated Google Maps.marker.
+* Bug fix: Filtering calendars by accessibility characteristics was broken.
+* Bug fix: Don't do preg_match URL check if value is already false.
+* Bug fix: Don't display map requirements if mapping service disabled.
+* Bug fix: Prevent empty notices from showing in responses.
+* Bug fix: If an image URL 404s, delete the internal reference.
+* Bug fix: add srcset and sizes to kses array.
+* Bug fix: Verify that events exists before checking their publication status.
+* Bug fix: Modified dates were not tracked along with deleted and customized dates.
+* Bug fix: Fix migration from Calendar plugin.
+* Bug fix: Handle null values in stored images.
+* Bug fix: Details link didn't return external links.
+* Bug fix: Upcoming events did not consider current time zone when querying.
+* Bug fix: Author & host values not saved correctly in widgets.
+* Bug fix: 'current' keyword ignored if it's the only value passed.
+* Bug fix: prevent rewriting subscribe and export toggles.
+* Performance: Don't parse the instance array multiple times in event editing.
+* Performance: Throw 404 error is date queries go outside valid event boundaries.
+* Removed: SVG files, unused since 3.5.
+* Accessibility: Heading hierarchy incorrect in template management.
+* Accessibility fixes to admin tabs.
+* Accessibility fix when event date selection triggers errors.
+* Accessibility: Use aria-pressed to indicate currently selected categories.
+
 = 3.6.16 =
 
 * Bug fix: Omit `mc_id` parameter on permalinks if event is singular.
