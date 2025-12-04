@@ -231,9 +231,9 @@ function mc_register_widgets() {
  */
 function mc_invalid_query() {
 	$date_bounds = mc_get_date_bounds();
-	$year_query  = isset( $_GET['yr'] )&& ! empty( $_GET['yr'] )  ? absint( $_GET['yr'] ) : date( 'Y' );;
-	$month_query = isset( $_GET['month'] )&& ! empty( $_GET['month'] ) ? absint( $_GET['month'] ) : date( 'm' );;
-	$day_query   = isset( $_GET['dy'] ) && ! empty( $_GET['dy'] ) ? absint( $_GET['dy'] ) : date( 'd' );
+	$year_query  = isset( $_GET['yr'] ) && ! empty( $_GET['yr'] )  ? absint( $_GET['yr'] ) : mc_date( 'Y' );
+	$month_query = isset( $_GET['month'] ) && ! empty( $_GET['month'] ) ? absint( $_GET['month'] ) : mc_date( 'm' );
+	$day_query   = isset( $_GET['dy'] ) && ! empty( $_GET['dy'] ) ? absint( $_GET['dy'] ) : mc_date( 'd' );
 
 	/**
 	 * Ignore the 404 handler that prevents access to dates outside of the calendar bounds.
@@ -242,7 +242,7 @@ function mc_invalid_query() {
 	 */
 	$ignore_bounds = apply_filters( 'mc_ignore_404_handler', false );
 	// If the date requested is today, don't throw a 404 even if outside of bounds.
-	if ( date( 'Y-m-d' ) === $year_query . '-' . $month_query . '-' . $day_query || $ignore_bounds ) {
+	if ( mc_date( 'Y-m-d' ) === $year_query . '-' . $month_query . '-' . $day_query || $ignore_bounds ) {
 		// This protects against throwing a 404 on calendars that haven't been updated recently
 		// when there are no arguments passed.
 		return;
@@ -255,7 +255,7 @@ function mc_invalid_query() {
 		$wp_query->set_404();
 		status_header( 404 );
 		nocache_headers();
-		include( get_query_template( '404' ) );
+		include get_query_template( '404' );
 		exit();
 	}
 }
