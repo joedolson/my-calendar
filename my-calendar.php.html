@@ -249,6 +249,44 @@ function mc_register_widgets() {
 	register_widget( 'My_Calendar_Filters' );
 }
 
+/**
+ * If an invalid query is made, throw a 404. When requests are made
+ * more than a year outside of the saved date bounds, invalidate the query.
+ *
+ * One year beyond bounds is what a user can potentially request using the UI.
+ */
+function mc_invalid_query() {
+	$date_bounds = mc_get_date_bounds();
+	$year_query  = isset( $_GET['yr'] )&amp;&amp; ! empty( $_GET['yr'] )  ? absint( $_GET['yr'] ) : date( 'Y' );;
+	$month_query = isset( $_GET['month'] )&amp;&amp; ! empty( $_GET['month'] ) ? absint( $_GET['month'] ) : date( 'm' );;
+	$day_query   = isset( $_GET['dy'] ) &amp;&amp; ! empty( $_GET['dy'] ) ? absint( $_GET['dy'] ) : date( 'd' );
+
+	/**
+	 * Ignore the 404 handler that prevents access to dates outside of the calendar bounds.
+	 *
+	 * @param {bool} $ignore_bounds Default false.
+	 */
+	$ignore_bounds = apply_filters( 'mc_ignore_404_handler', false );
+	// If the date requested is today, don't throw a 404 even if outside of bounds.
+	if ( date( 'Y-m-d' ) === $year_query . '-' . $month_query . '-' . $day_query || $ignore_bounds ) {
+		// This protects against throwing a 404 on calendars that haven't been updated recently
+		// when there are no arguments passed.
+		return;
+	}
+	$date  = strtotime( $year_query . '-' . $month_query . '-' . $day_query );
+	$last  = strtotime( $date_bounds['last'] );
+	$first = strtotime( $date_bounds['first'] );
+	if ( $date &lt; ( $first - YEAR_IN_SECONDS ) || $date > ( $last + YEAR_IN_SECONDS ) ) {
+		global $wp_query;
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
+		include( get_query_template( '404' ) );
+		exit();
+	}
+}
+add_action( 'template_redirect', 'mc_invalid_query' );
+
 add_action( 'template_redirect', 'mc_custom_canonical' );
 /**
  * Customize canonical URL for My Calendar custom links
