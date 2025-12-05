@@ -146,8 +146,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Performance: Throw 404 error is date queries go outside valid event boundaries.
 * Removed: SVG files, unused since 3.5.
 * Accessibility: Heading hierarchy incorrect in template management.
-* Accessibility fixes to admin tabs.
-* Accessibility fix when event date selection triggers errors.
+* Accessibility: fixes to admin tabs.
+* Accessibility: fix when event date selection triggers errors.
 * Accessibility: Use aria-pressed to indicate currently selected categories.
 
 = 3.6.16 =
