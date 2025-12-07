@@ -466,11 +466,11 @@ function mc_get_new_events( $cat_id = false ) {
 	 *
 	 * @hook mc_rss_feed_date_range
 	 *
-	 * @param {int} $limit Number of days. Default 7.
+	 * @param {int} $limit Number of days. Default 90.
 	 *
 	 * @return {int}
 	 */
-	$limit  = apply_filters( 'mc_rss_feed_date_range', 7 );
+	$limit  = apply_filters( 'mc_rss_feed_date_range', 90 );
 	$events = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table() . '
