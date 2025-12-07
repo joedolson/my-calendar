@@ -1450,6 +1450,69 @@ function mc_show_event_template( $content ) {
 }
 
 /**
+ * Get all recurring events for an event ID. Returns empty if not recurring.
+ *
+ * @param int    $event_id Event ID.
+ * @param string $template Display template.
+ *
+ * @return string series of `li` wrapped recurring event dates.
+ */
+function mc_list_recurring( $event_id, $template ) {
+	$is_recurring = mc_is_recurring( $event_id );
+	if ( ! $is_recurring ) {
+		return '';
+	}
+	$results = mc_get_event_instances( $event_id );
+	$count   = count( $results );
+	$output  = '';
+	/**
+	 * How many recurring events should there be before they are not shown? Default `50`.
+	 *
+	 * @hook mc_recurring_event_limit
+	 *
+	 * @param {int} Number of events where the large limit triggers.
+	 *
+	 * @return {int}.
+	 */
+	if ( $count > apply_filters( 'mc_recurring_event_limit', 50 ) ) {
+		/**
+		 * For large lists of recurring events, recurring events are not shown by default.
+		 * Only runs if number of recurring events higher than `mc_recurring_event_limit`.
+		 *
+		 * @hook mc_recurring_events
+		 *
+		 * @param {string} $output HTML output of events to shown. Default empty string.
+		 * @param {array}  $results Array of related event objects.
+		 *
+		 * @return {bool}
+		 */
+		return apply_filters( 'mc_recurring_events', '', $results );
+	}
+
+	if ( is_array( $results ) && ! empty( $results ) ) {
+		foreach ( $results as $result ) {
+			$start = $result->ts_occur_begin;
+			$end   = $result->ts_occur_end;
+			if ( ( ( $end + 1 ) - $start ) === DAY_IN_SECONDS || ( $end - $start ) === DAY_IN_SECONDS ) {
+				$time = '';
+			} elseif ( ( $end - $start ) <= HOUR_IN_SECONDS ) {
+				$time = mc_date( mc_time_format(), $start );
+			} else {
+				$time = mc_date( mc_time_format(), $start ) . ' - ' . mc_date( mc_time_format(), $end );
+			}
+			// Omitting format from mc_date() returns timestamp.
+			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
+			$date  = "<span id='mc-event-date-$result->occur_id'><strong>" . $date . '</strong><br />' . $time . '</span>';
+			$class = ( my_calendar_date_xcomp( mc_date( 'Y-m-d H:i:00', $start ), mc_date( 'Y-m-d H:i:00', time() ) ) ) ? 'past-event' : 'future-event';
+			$class  .= ( isset( $_GET['mc_id'] ) && $_GET['mc_id'] === $result->occur_id ) ? ' mc-current-event' : '';
+			$output .= "<li class='mc-recurring-event $class'>$date</li>";
+		}
+	}
+
+	return $output;
+}
+
+/**
  * Get all events related to an event ID (group IDs)
  *
  * @param int    $id Event group ID.

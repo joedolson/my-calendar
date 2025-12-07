@@ -1083,7 +1083,7 @@ function mc_instance_list( $args ) {
  *
  * @return bool|array False or the array of instances.
  */
-function mc_get_admin_instances( $id ) {
+function mc_get_event_instances( $id ) {
 	global $wpdb;
 	$ts_string = mc_ts();
 	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -1104,7 +1104,7 @@ function mc_get_admin_instances( $id ) {
  */
 function mc_admin_instances( $id, $occur = 0 ) {
 	$output  = '';
-	$results = mc_get_admin_instances( $id );
+	$results = mc_get_event_instances( $id );
 	if ( ! $results ) {
 		return false;
 	}

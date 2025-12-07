@@ -798,6 +798,23 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		$e['related'] = '';
 	}
 
+	if ( 'recurring' !== $context && ( mc_is_single_event() ) ) {
+		/**
+		 * HTML format for displaying recurring events on a single event view. Default `{date}, {time}`.
+		 *
+		 * @hook mc_recurring_template
+		 *
+		 * @param {string} $template Template to use to draw a recurring event.
+		 * @param {object} $event Event object.
+		 *
+		 * @return {string} Unparsed template.
+		 */
+		$recurring_template = apply_filters( 'mc_recurring_template', '{date}, {time}', $event );
+		$e['recurring']     = '<ul class="recurring-events">' . mc_list_recurring( $event->event_id, $recurring_template ) . '</ul>';
+	} else {
+		$e['recurring'] = '';
+	}
+
 	// location fields.
 	$e['location_source'] = $event->event_location;
 	$map_gcal             = '';

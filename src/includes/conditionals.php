@@ -16,11 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Determine whether an event is recurring.
  *
- * @param object $event Event object.
+ * @param object|int $event Event object or ID.
  *
  * @return bool
  */
 function mc_is_recurring( $event ) {
+	if ( ! is_object( $event ) ) {
+		$event = mc_get_first_event( $event );
+	}
 	$is_recurring = ( ! ( 'S' === $event->event_recur || 'S1' === $event->event_recur ) ) ? true : false;
 
 	return $is_recurring;
