@@ -2394,9 +2394,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		if ( 'none' === $select_location && ( empty( $post['event_label'] ) && ! is_numeric( $saved_location ) ) ) {
 			// If no event data defined, do nothing.
 		} else {
-			// Is a preset chosen?
-			$location_to_set = ( is_numeric( $select_location ) ) ? $select_location : $saved_location;
-			if ( ! is_numeric( $location_to_set ) ) {
+			// Is a preset chosen? Assign as the saved location.
+			$saved_location = ( is_numeric( $select_location ) ) ? $select_location : $saved_location;
+			if ( ! is_numeric( $saved_location ) ) {
 				// The location to set is not an integer, but 'event_label' exists, so add a new location.
 				$event_label       = ! empty( $post['event_label'] ) ? $post['event_label'] : '';
 				$event_street      = ! empty( $post['event_street'] ) ? $post['event_street'] : '';
@@ -2442,7 +2442,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 						);
 						$result         = mc_insert_location( $add_loc );
 						$saved_location = $result['location_id'];
-
 					}
 				}
 			}
