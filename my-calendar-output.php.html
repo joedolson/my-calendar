@@ -1527,9 +1527,9 @@ function mc_list_recurring( $event_id, $template ) {
 				$time = mc_date( mc_time_format(), $start ) . ' - ' . mc_date( mc_time_format(), $end );
 			}
 			// Omitting format from mc_date() returns timestamp.
-			$date  = date_i18n( mc_date_format(), mc_date( '', $start ) );
-			$date  = "&lt;span id='mc-event-date-$result->occur_id'>&lt;strong>" . $date . '&lt;/strong>&lt;br />' . $time . '&lt;/span>';
-			$class = ( my_calendar_date_xcomp( mc_date( 'Y-m-d H:i:00', $start ), mc_date( 'Y-m-d H:i:00', time() ) ) ) ? 'past-event' : 'future-event';
+			$date    = date_i18n( mc_date_format(), mc_date( '', $start ) );
+			$date    = "&lt;span id='mc-event-date-$result->occur_id'>&lt;strong>" . $date . '&lt;/strong>&lt;br />' . $time . '&lt;/span>';
+			$class   = ( my_calendar_date_xcomp( mc_date( 'Y-m-d H:i:00', $start ), mc_date( 'Y-m-d H:i:00', time() ) ) ) ? 'past-event' : 'future-event';
 			$class  .= ( isset( $_GET['mc_id'] ) &amp;&amp; $_GET['mc_id'] === $result->occur_id ) ? ' mc-current-event' : '';
 			$output .= "&lt;li class='mc-recurring-event $class'>$date&lt;/li>";
 		}
