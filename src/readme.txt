@@ -115,6 +115,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Feature: Ability to disable time formats.
 * Feature: Support custom fields in API & remote database access.
 * Feature: New event type: private to author.
+* Feature: New template tag: `{recurring}` to show a list of recurring event dates. Max limit 50.
 * Change: Simplify event insertion with `mc_insert_event()` function.
 * Change: Make calendar sharing a popup list.
 * Change: Remove mini calendar link targets settings & feature.
@@ -142,6 +143,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Author & host values not saved correctly in widgets.
 * Bug fix: 'current' keyword ignored if it's the only value passed.
 * Bug fix: prevent rewriting subscribe and export toggles.
+* Bug fix: Misnamed variable in location saving.
 * Performance: Don't parse the instance array multiple times in event editing.
 * Performance: Throw 404 error is date queries go outside valid event boundaries.
 * Removed: SVG files, unused since 3.5.
