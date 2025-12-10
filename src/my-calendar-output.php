@@ -895,9 +895,10 @@ function mc_get_event_classes( $event, $type, $classes = array() ) {
 	$root      = 'mc-event-' . $event->event_id;
 	$category  = mc_category_class( $event, 'mc_' );
 	$location  = mc_location_class( $event, 'mc_' );
+	$access    = mc_access_class( $event, 'mc_' );
 
 	$classes = ( is_array( $classes ) ) ? $classes : array( $classes );
-	$classes = array_merge( $classes, array( 'mc-' . $uid, $type . '-event', $category, $location, $rel, $primary, $recurring, $length, $start, $group, $root ) );
+	$classes = array_merge( $classes, array( 'mc-' . $uid, $type . '-event', $category, $location, $access, $rel, $primary, $recurring, $length, $start, $group, $root ) );
 
 	if ( $is_today ) {
 		$classes[] = $is_today;
