@@ -440,7 +440,7 @@ function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_typ
 		// This returns an array of strings.
 		$title_array = array();
 		foreach ( $terms as $term ) {
-			$title_array[] = sanitize_html_class( str_replace( ' ', '-',$term->name ) );
+			$title_array[] = sanitize_html_class( str_replace( ' ', '-', $term->name ) );
 		}
 		$return = $title_array;
 	}
@@ -476,7 +476,6 @@ function mc_access_class( $event_or_location, $prefix ) {
 		$terms[] = $prefix . $c;
 	}
 	$classes = implode( ' ', $terms );
-
 
 	return ( $classes ) ? strtolower( $classes ) : '';
 }
