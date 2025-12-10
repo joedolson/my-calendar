@@ -437,7 +437,12 @@ function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_typ
 	}
 	$return = ( 'string' === $return_type ) ? '' : array();
 	if ( 'string' === $return_type ) {
-		$return = print_r( $terms, 1 );
+		// This returns an array of strings.
+		$title_array = array();
+		foreach ( $terms as $term ) {
+			$title_array[] = sanitize_html_class( str_replace( ' ', '-',$term->name ) );
+		}
+		$return = $title_array;
 	}
 	if ( 'ids' === $return_type ) {
 		foreach ( $terms as $term ) {
@@ -449,6 +454,31 @@ function mc_get_access_terms( $event, $taxonomy = 'mc-event-access', $return_typ
 	}
 
 	return $return;
+}
+
+/**
+ * Generate access term classes for a given event or location.
+ *
+ * @param object|array $event_or_location An event or a location.
+ * @param string       $prefix            Prefix to append to class.
+ *
+ * @return string a single class
+ */
+function mc_access_class( $event_or_location, $prefix ) {
+	$class = array();
+	if ( property_exists( $event_or_location, 'location' ) ) {
+		$class = mc_get_access_terms( $event_or_location, 'mc-event-access', 'string' );
+	} elseif ( property_exists( $event_or_location, 'location_label' ) ) {
+		$class = mc_get_access_terms( $event_or_location, 'mc-location-access', 'string' );
+	}
+	$terms = array();
+	foreach ( $class as $c ) {
+		$terms[] = $prefix . $c;
+	}
+	$classes = implode( ' ', $terms );
+
+
+	return ( $classes ) ? strtolower( $classes ) : '';
 }
 
 /**
