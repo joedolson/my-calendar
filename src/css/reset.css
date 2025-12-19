@@ -820,11 +820,16 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .my-calendar-navigation input[type=text],
 .mc-main .my-calendar-navigation input[type=submit],
 .mc-main .my-calendar-navigation button {
+	padding: 4px 8px 4px 8px;
 	padding-top: 4px;
 	padding-bottom: 4px;
 	padding-left: 8px;
 	padding-right: 8px;
 	margin: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 0;
 	font-size: var(--navigation-controls);
 	border: 1px solid var(--nav-input-border);
 	background-color: var(--nav-input-background);
