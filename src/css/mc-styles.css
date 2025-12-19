@@ -370,7 +370,7 @@ ol.mc-repeat-events li:last-of-type .buttons {
 	gap: 4px;
 }
 
-.mc-template-layout {
+.mc-template-layout:not(.legacy-templates) {
 	display: flex;
 	gap: 32px;
 }

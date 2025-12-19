@@ -45,8 +45,10 @@ function my_calendar_design() {
 						<?php
 						$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
 						if ( $disable_templates ) {
+							$class = '';
 							echo '<h2>' . esc_html__( 'Templates', 'my-calendar' ) . '</h2>';
 						} else {
+							$class = ' legacy-templates';
 							echo '<h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '</h2>';
 							echo '<p><span class="mc-flex">';
 							echo ( isset( $_GET['mc_template'] ) && 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '<a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '</a>' );
@@ -54,7 +56,7 @@ function my_calendar_design() {
 							echo '</span></p>';
 						}
 						?>
-							<div class="inside mc-template-layout">
+							<div class="inside mc-template-layout<?php echo esc_attr( $class ); ?>">
 								<div class="list-template-settings">
 									<h3><?php esc_html_e( 'Default List Template', 'my-calendar' ); ?></h3>
 									<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?>">
