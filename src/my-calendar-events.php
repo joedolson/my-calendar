@@ -460,7 +460,7 @@ function mc_get_new_events( $cat_id = false ) {
 	} else {
 		$cat = 'WHERE event_approved IN (' . $public . ') AND event_flagged <> 1';
 	}
-	$exclude_categories = mc_private_categories( $args );
+	$exclude_categories = mc_private_categories();
 	/**
 	 * Filter how many days of newly added events will be included in ICS subscription links.
 	 *
