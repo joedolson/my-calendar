@@ -598,7 +598,7 @@ ul.mc-file-list ul li {
 	width: 100%
 }
 
-.my-calendar-admin .message pre, .my-calendar-admin pre {
+.my-calendar-admin .message pre, .my-calendar-admin pre:not(.CodeMirror pre) {
 	background: #fff;
 	padding: 5px;
 	border: 1px solid #dcdcde;
