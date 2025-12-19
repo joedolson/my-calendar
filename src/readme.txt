@@ -130,6 +130,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Update deprecated Google Maps.marker.
 * Change: Add access terms as classes on event wrapper.
 * Change: Adjust RSS subscription window from 2 days to 90 days.
+* Bug fix: iCal subscription link pointed to export URL.
 * Bug fix: Disabling event links on grid/list views should not also disable single event view.
 * Bug fix: Filtering calendars by accessibility characteristics was broken.
 * Bug fix: Don't do preg_match URL check if value is already false.
