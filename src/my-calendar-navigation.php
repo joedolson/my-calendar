@@ -488,8 +488,8 @@ function mc_sub_links() {
 	$search  = array( 'http:', 'https:' );
 
 	$google = str_replace( $search, $replace, get_feed_link( 'my-calendar-google' ) );
+	$ical   = $google;
 	$google = add_query_arg( 'cid', $google, 'https://www.google.com/calendar/render' );
-	$ical   = get_feed_link( 'my-calendar-ics' );
 
 	$sub_google = "<li class='ics google'><a href='" . esc_url( $google ) . "' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Subscribe in </span>Google', 'my-calendar' ) . '</a></li>';
 	$sub_ical   = "<li class='ics ical'><a href='" . esc_attr( str_replace( $search, $replace, esc_url( $ical ) ) ) . "' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( '<span class="maybe-hide">Subscribe in </span>iCal', 'my-calendar' ) . '</a></li>';
