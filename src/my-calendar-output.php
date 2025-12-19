@@ -964,7 +964,7 @@ function mc_show_details( $time, $type ) {
 	 */
 	$no_link = apply_filters( 'mc_disable_link', false, array() );
 
-	if ( 'card' === $type ) {
+	if ( 'card' === $type || 'instance' === $time ) {
 		return true;
 	} else {
 		return ( ( ( 'calendar' === $type && 'true' === mc_get_option( 'open_uri' ) && 'day' !== $time ) || $no_link ) ) ? false : true;
@@ -1342,6 +1342,7 @@ function mc_show_event_template( $content ) {
 		// Some early versions of this placed the shortcode into the post content. Strip that out.
 		$new_content = $content;
 		if ( 'mc-events' === $post->post_type ) {
+			$time     = 'instance';
 			$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 			if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
 				$mc_id = intval( $_GET['mc_id'] );
@@ -1360,7 +1361,6 @@ function mc_show_event_template( $content ) {
 			}
 			if ( is_object( $event ) ) {
 				$date = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
-				$time = mc_date( 'H:i:00', strtotime( $event->occur_begin ), false );
 			} else {
 				return $content;
 			}
@@ -1377,7 +1377,7 @@ function mc_show_event_template( $content ) {
 				 * @param {string} $new_content Content to prepend before the event.
 				 * @param {object} $event Event object.
 				 * @param {string} $view View type.
-				 * @param {string} $time Time view.
+				 * @param {string} $time Time view. Month, week, day, or instance.
 				 *
 				 * @return {string}
 				 */
@@ -1405,7 +1405,7 @@ function mc_show_event_template( $content ) {
 				 * @param {string} $new_content Content to append after the event.
 				 * @param {object} $event Event object.
 				 * @param {string} $view View type.
-				 * @param {string} $time Time view.
+				 * @param {string} $time Time view. Month, week, day, or instance.
 				 * @param {string} $date Date being processed.
 				 *
 				 * @return {string}
