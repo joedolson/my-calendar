@@ -71,8 +71,10 @@ function my_calendar_design() {
 						&lt;?php
 						$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
 						if ( $disable_templates ) {
+							$class = '';
 							echo '&lt;h2>' . esc_html__( 'Templates', 'my-calendar' ) . '&lt;/h2>';
 						} else {
+							$class = ' legacy-templates';
 							echo '&lt;h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '&lt;/h2>';
 							echo '&lt;p>&lt;span class="mc-flex">';
 							echo ( isset( $_GET['mc_template'] ) &amp;&amp; 'add-new' === $_GET['mc_template'] ) ? '' : wp_kses_post( '&lt;a class="button" href="' . esc_url( add_query_arg( 'mc_template', 'add-new', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . '#my-calendar-templates">' . __( 'Add New Template', 'my-calendar' ) . '&lt;/a>' );
@@ -80,7 +82,7 @@ function my_calendar_design() {
 							echo '&lt;/span>&lt;/p>';
 						}
 						?>
-							&lt;div class="inside mc-template-layout">
+							&lt;div class="inside mc-template-layout&lt;?php echo esc_attr( $class ); ?>">
 								&lt;div class="list-template-settings">
 									&lt;h3>&lt;?php esc_html_e( 'Default List Template', 'my-calendar' ); ?>&lt;/h3>
 									&lt;form method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ); ?>">
