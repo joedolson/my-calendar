@@ -218,6 +218,36 @@ function mc_template_exists( $path ) {
 }
 
 /**
+ * Throw an admin notice if PHP templates are enabled but a legacy template is still active.
+ */
+function mc_legacy_admin_notice() {
+	if ( isset( $_GET['page'] ) && 'my-calendar-design' === $_GET['page'] ) {
+		$legacy_templating = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? false : true;
+		if ( ! $legacy_templating ) {
+			$grid_template   = ( mc_get_option( 'use_grid_template' ) === '1' ) ? true : false;
+			$list_template   = ( mc_get_option( 'use_list_template' ) === '1' ) ? true : false;
+			$mini_template   = ( mc_get_option( 'use_mini_template' ) === '1' ) ? true : false;
+			$card_template   = ( mc_get_option( 'use_card_template' ) === '1' ) ? true : false;
+			$single_template = ( mc_get_option( 'use_details_template' ) === '1' ) ? true : false;
+			if ( $grid_template || $list_template || $mini_template || $card_template || $single_template ) {
+				$args = array(
+					'type' => 'warning',
+				);
+				wp_admin_notice(
+					sprintf(
+						// translators: URL for help document on this topic.
+						__( 'You have PHP templating enabled, but a legacy template is also enabled. The legacy template will override your PHP template. <a href="%s">Fix this issue</a>', 'my-calendar' ),
+						'https://docs.joedolson.com/my-calendar/disabling-legacy-templates/'
+					),
+					$args
+				);
+			}
+		}
+	}
+}
+add_action( 'admin_notices', 'mc_legacy_admin_notice' );
+
+/**
  * Template editing page.
  */
 function mc_templates_edit() {
