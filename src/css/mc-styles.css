@@ -1181,7 +1181,7 @@ input[name="mc_uri"] {
 #my-calendar-manage .inside {
 	display: flex;
 	flex-wrap: wrap;
-	column-gap: 20px;
+	column-gap: 36px;
 }
 
 #mc-generator .custom {
