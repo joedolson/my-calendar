@@ -278,6 +278,14 @@ function mc_style_variables( $styles = array() ) {
 			$styles[ $key ] = $value;
 		}
 	}
+	/**
+	 * Filter the core My Calendar CSS variables.
+	 *
+	 * @param {array} $styles Array of style variables.
+	 *
+	 * @return {array}
+	 */
+	$styles = apply_filters( 'mc_style_variables', $styles );
 
 	return $styles;
 }
