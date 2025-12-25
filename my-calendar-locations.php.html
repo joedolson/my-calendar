@@ -805,10 +805,7 @@ function mc_remove_location_from_event( $event_id ) {
 function mc_controlled_field( $this_field ) {
 	$this_field = trim( $this_field );
 	$controls   = mc_get_option( 'location_controls' );
-	if ( ! is_array( $controls ) || empty( $controls ) ) {
-		$return = false;
-	}
-	$controlled = array_keys( $controls );
+	$controlled = is_array( $controls ) ? array_keys( $controls ) : array();
 	if ( in_array( 'event_' . $this_field, $controlled, true ) &amp;&amp; ! empty( $controls[ 'event_' . $this_field ] ) ) {
 		$return = true;
 	} else {
@@ -823,7 +820,7 @@ function mc_controlled_field( $this_field ) {
 	 * @param {string} $this_field The current field being checked.
 	 * @param {array}  $controls The array of saved data for controlled fields.
 	 */
-	$return = apply_filters( 'mc_controlled_field', $this_field, $controls );
+	$return = apply_filters( 'mc_controlled_field', $return, $this_field, $controls );
 
 	return $return;
 }
@@ -881,7 +878,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	$field    = ( 'location' === $context ) ? 'location_' . $fieldname : 'event_' . $fieldname;
 	$selected = trim( $selected );
 	$options  = mc_get_option( 'location_controls' );
-	$regions  = $options[ 'event_' . $fieldname ];
+	$regions  = ( is_array( $options ) ) ? $options[ 'event_' . $fieldname ] : array();
 	$form     = "&lt;select name='$field' id='e_$fieldname'>";
 	$$options = "&lt;option value=''>" . __( 'Select', 'my-calendar' ) . '&lt;/option>';
 	if ( is_admin() &amp;&amp; '' !== $selected ) {
