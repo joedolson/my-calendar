@@ -594,6 +594,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		'repeats',
 		'skip_holiday',
 		'term',
+		'description',
 		'description_raw',
 		'description_stripped',
 		'shortdesc_raw',
