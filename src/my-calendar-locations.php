@@ -780,14 +780,26 @@ function mc_controlled_field( $this_field ) {
 	$this_field = trim( $this_field );
 	$controls   = mc_get_option( 'location_controls' );
 	if ( ! is_array( $controls ) || empty( $controls ) ) {
-		return false;
+		$return = false;
 	}
 	$controlled = array_keys( $controls );
 	if ( in_array( 'event_' . $this_field, $controlled, true ) && ! empty( $controls[ 'event_' . $this_field ] ) ) {
-		return true;
+		$return = true;
 	} else {
-		return false;
+		$return = false;
 	}
+
+	/**
+	 * Filter whether a controllable location field has controlled values.
+	 *
+	 * @hook mc_controlled_field
+	 *
+	 * @param {string} $this_field The current field being checked.
+	 * @param {array}  $controls The array of saved data for controlled fields.
+	 */
+	$return = apply_filters( 'mc_controlled_field', $this_field, $controls );
+
+	return $return;
 }
 
 /**
@@ -845,17 +857,29 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	$options  = mc_get_option( 'location_controls' );
 	$regions  = $options[ 'event_' . $fieldname ];
 	$form     = "<select name='$field' id='e_$fieldname'>";
-	$form    .= "<option value=''>" . __( 'Select', 'my-calendar' ) . '</option>';
+	$$options = "<option value=''>" . __( 'Select', 'my-calendar' ) . '</option>';
 	if ( is_admin() && '' !== $selected ) {
-		$form .= "<option value='" . esc_attr( $selected ) . "'>" . esc_html( $selected ) . ' :' . __( '(Not a controlled value)', 'my-calendar' ) . '</option>';
+		$options .= "<option value='" . esc_attr( $selected ) . "'>" . esc_html( $selected ) . ' :' . __( '(Not a controlled value)', 'my-calendar' ) . '</option>';
 	}
 	foreach ( $regions as $key => $value ) {
 		$key       = trim( $key );
 		$value     = trim( $value );
 		$aselected = ( $selected === $key ) ? ' selected="selected"' : '';
-		$form     .= "<option value='" . esc_attr( $key ) . "'$aselected>" . esc_html( $value ) . "</option>\n";
+		$options     .= "<option value='" . esc_attr( $key ) . "'$aselected>" . esc_html( $value ) . "</option>\n";
 	}
-	$form .= '</select>';
+
+	/**
+	 * Filter the string of `<option>` elements inside the `<select>` input used for a controlled location field.
+	 *
+	 * @hook mc_location_controller
+	 *
+	 * @param {string} $option An HTML string of <option> elements to go inside the generated select field.
+	 * @param {string} $fieldname The field being generated.
+	 * @param {string} $selected The selected value for this location.
+	 * @param {string} $context Whether this is being edited in a location or an event context.
+	 */
+	$options = apply_filters( 'mc_location_controller', $options, $fieldname, $selected, $context );
+	$form .= $options . '</select>';
 
 	return $form;
 }
