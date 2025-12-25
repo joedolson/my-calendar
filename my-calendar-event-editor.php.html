@@ -1630,8 +1630,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 &lt;div class="ui-sortable meta-box-sortables event-primary">
 	&lt;div class="postbox">
 		&lt;?php
+			$edit_text = ( mc_is_recurring( $event_id ) ) ? sprintf( __( 'Editing Recurring Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) ) : sprintf( __( 'Editing Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) );
 			// Translators: Event title.
-			$text = ( 'edit' === $mode ) ? sprintf( __( 'Editing Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) ) : __( 'Add Event', 'my-calendar' );
+			$text = ( 'edit' === $mode ) ? $edit_text : __( 'Add Event', 'my-calendar' );
 		?>
 		&lt;h2>&lt;?php echo esc_html( $text ); ?>&lt;/h2>
 		&lt;div class="inside">
