@@ -865,7 +865,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 		$key       = trim( $key );
 		$value     = trim( $value );
 		$aselected = ( $selected === $key ) ? ' selected="selected"' : '';
-		$options     .= "<option value='" . esc_attr( $key ) . "'$aselected>" . esc_html( $value ) . "</option>\n";
+		$options  .= "<option value='" . esc_attr( $key ) . "'$aselected>" . esc_html( $value ) . "</option>\n";
 	}
 
 	/**
