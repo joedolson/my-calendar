@@ -489,7 +489,8 @@ function my_calendar_menu() {
 			if ( isset( $_GET['event_id'] ) ) {
 				$event_id = absint( $_GET['event_id'] );
 				// Translators: Title of event.
-				$page_title = sprintf( __( 'Editing Event: %s', 'my-calendar' ), esc_html( wp_strip_all_tags( wp_unslash( mc_get_data( 'event_title', $event_id ) ) ) ) );
+				$string   = ( mc_is_recurring( $event_id ) ) ? __( 'Editing Recurring Event: "%s"', 'my-calendar' ) : __( 'Editing Event: "%s"', 'my-calendar' );
+				$page_title = sprintf( $string, esc_html( wp_strip_all_tags( wp_unslash( mc_get_data( 'event_title', $event_id ) ) ) ) );
 			} else {
 				$page_title = __( 'Add New Event', 'my-calendar' );
 			}
