@@ -614,7 +614,10 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 				$uncommon = true;
 			}
 		}
-		$tag_output = ( 'code' === $render ) ? '<pre>' . esc_html( $value ) . '</pre>' : wp_kses( $value, mc_kses_elements() );
+		if ( is_array( $value ) ) {
+			$value = implode( ', ', $value );
+		}
+		$tag_output = ( 'code' === $render) ? '<pre>' . esc_html( $value ) . '</pre>' : wp_kses( $value, mc_kses_elements() );
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
 			$empty .= '<div class="mc-output-' . $key . '">' . $tag_output . '</div></section>';
