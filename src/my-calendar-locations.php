@@ -876,7 +876,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	 * @param {string} $context Whether this is being edited in a location or an event context.
 	 */
 	$options = apply_filters( 'mc_location_controller', $options, $fieldname, $selected, $context );
-	$form .= $options . '</select>';
+	$form   .= $options . '</select>';
 
 	return $form;
 }
