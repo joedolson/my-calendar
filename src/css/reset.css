@@ -1102,6 +1102,11 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	word-break: break-word;
 }
 
+.mc-main .event-title div {
+	word-break: break-word;
+	hyphens: auto;
+}
+
 .mc-main .event-title button:hover,
 .mc-main .event-title button:focus {
 	cursor: default;
