@@ -833,6 +833,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	font-size: var(--navigation-controls);
 	border: 1px solid var(--nav-input-border);
 	background-color: var(--nav-input-background);
+	background: var(--nav-input-background);
 	color: var(--nav-input-color);
 	-webkit-appearance: none;
 	appearance: none;
