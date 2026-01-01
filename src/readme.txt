@@ -6,7 +6,7 @@ Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.7.0-beta
+Stable tag: 3.7.0-rc1
 License: GPLv3 or later
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -129,7 +129,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: If a new event is saved as draft, redirect to the edit screen for that event.
 * Change: Update deprecated Google Maps.marker.
 * Change: Add access terms as classes on event wrapper.
-* Change: Adjust RSS subscription window from 2 days to 90 days.
+* Change: Adjust RSS subscription window from 7 days to 90 days.
+* Change: New filter `mc_style_variables` to filter CSS variables.
+* Change: Event editor indicates in heading and title if the event is recurring.
+* Change: Add filters to customize location controls from code.
+* Change: Omit 'description' from template previews.
+* Change: Misc. minor tweaks to default styles.
 * Bug fix: iCal subscription link pointed to export URL.
 * Bug fix: Disabling event links on grid/list views should not also disable single event view.
 * Bug fix: Filtering calendars by accessibility characteristics was broken.
