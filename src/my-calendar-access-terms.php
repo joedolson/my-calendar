@@ -192,9 +192,9 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 		<hr class="wp-header-end">
 		<?php
 	}
-	$link                 = admin_url( 'admin.php?page=my-calendar-access-terms' );
-	$location_link        = add_query_arg( 'terms', 'locations', $link );
-	$is_locations         = ( isset( $_GET['terms'] ) ) ? true : false;
+	$link          = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$location_link = add_query_arg( 'terms', 'locations', $link );
+	$is_locations  = ( isset( $_GET['terms'] ) ) ? true : false;
 	// These two variables raise PHPCS security errors. There is no concern.
 	$is_current_events    = ( $is_locations ) ? '' : 'aria-current="page"';
 	$is_current_locations = ( $is_locations ) ? 'aria-current="page"' : '';
