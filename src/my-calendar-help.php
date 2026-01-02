@@ -282,7 +282,7 @@ function mc_get_help_footer( $return_str = '' ) {
 			</li>
 			<li>
 				<div class="dashicons dashicons-star-filled" aria-hidden="true"></div>
-				<a href="http://wordpress.org/support/plugin/my-calendar/reviews/?filter=5">' . __( 'Rate this plugin 5 stars!', 'my-calendar' ) . '</a>
+				<a href="http://wordpress.org/support/plugin/my-calendar/reviews/">' . __( 'Rate this plugin 5 stars!', 'my-calendar' ) . '</a>
 			</li>
 			<li>
 				<div class="dashicons dashicons-translation" aria-hidden="true"></div>
