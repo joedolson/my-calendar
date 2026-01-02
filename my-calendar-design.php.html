@@ -131,7 +131,7 @@ function my_calendar_design() {
 												'after'    => 3,
 												'template' => $template,
 											);
-											echo my_calendar_insert_upcoming( $atts );
+											echo wp_kses_post( my_calendar_insert_upcoming( $atts ) );
 											echo '&lt;/div>';
 										}
 										?>

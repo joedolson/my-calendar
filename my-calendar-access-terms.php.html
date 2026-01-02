@@ -221,12 +221,13 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 	$link                 = admin_url( 'admin.php?page=my-calendar-access-terms' );
 	$location_link        = add_query_arg( 'terms', 'locations', $link );
 	$is_locations         = ( isset( $_GET['terms'] ) ) ? true : false;
+	// These two variables raise PHPCS security errors. There is no concern.
 	$is_current_events    = ( $is_locations ) ? '' : 'aria-current="page"';
 	$is_current_locations = ( $is_locations ) ? 'aria-current="page"' : '';
 	?>
 	&lt;div class="mc-tablinks">
-			&lt;a href="&lt;?php echo esc_url( $link ); ?>" &lt;?php echo $is_current_events; ?>>&lt;?php esc_html_e( 'Event Accessibility Terms', 'my-calendar' ); ?>&lt;/a>
-			&lt;a href="&lt;?php echo esc_url( $location_link ); ?>" &lt;?php echo $is_current_locations; ?>>&lt;?php esc_html_e( 'Location Accessibility Terms', 'my-calendar' ); ?>&lt;/a>
+			&lt;a href="&lt;?php echo esc_url( $link ); ?>" &lt;?php echo $is_current_events; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>&lt;?php esc_html_e( 'Event Accessibility Terms', 'my-calendar' ); ?>&lt;/a>
+			&lt;a href="&lt;?php echo esc_url( $location_link ); ?>" &lt;?php echo $is_current_locations; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>&lt;?php esc_html_e( 'Location Accessibility Terms', 'my-calendar' ); ?>&lt;/a>
 	&lt;/div>
 	&lt;div class="postbox-container jcd-wide">
 		&lt;div class="metabox-holder">
