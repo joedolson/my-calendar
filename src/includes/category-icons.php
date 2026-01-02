@@ -10,6 +10,10 @@
  * @version   1.0.0
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Return an array containing the SVG code for all core icons.
  * Icons by FontAwesome.

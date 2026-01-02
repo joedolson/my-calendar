@@ -10,6 +10,10 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Function to draw a single event.
  *

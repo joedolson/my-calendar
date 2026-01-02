@@ -9,6 +9,10 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Location templates use the location object from $data->location, and can query any function that requires a location object or location ID. The $event object is not available in this template.
  */

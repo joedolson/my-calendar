@@ -9,5 +9,9 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 <div class="mc-events <?php mc_event_classes( $data->event, 'next', array( $data->class ) ); ?>"><?php mc_template( $data->tags, $data->template, 'list' ); ?></div>

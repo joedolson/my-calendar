@@ -9,6 +9,10 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 <div class="mc-v2 <?php mc_event_classes( $data->event, 'calendar' ); ?>">
 	<div class="mc-image-container">

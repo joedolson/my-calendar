@@ -9,6 +9,10 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 <div class="mc-event-container">
 	<h3 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h3>

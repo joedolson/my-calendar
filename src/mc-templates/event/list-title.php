@@ -9,6 +9,10 @@
  * @link     https://www.joedolson.com/my-calendar/
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $title_template = mc_get_template( 'title_list' );
 if ( mc_template_settings( 'title_list' ) !== $title_template ) {
 	// If the title template has been modified, use that.
