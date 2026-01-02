@@ -183,8 +183,8 @@ function mc_api_format_csv( $data ) {
 	header( 'Expires: 0' );
 
 	echo stream_get_contents( map_deep(  $stream, 'wp_kses_post' ) );
-	// Close the stream.
-	fclose( $stream );
+	// Close the stream. No a filesystem write.
+	fclose( $stream ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 	ob_end_flush();
 	die;
 }
