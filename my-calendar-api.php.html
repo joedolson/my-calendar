@@ -208,7 +208,7 @@ function mc_api_format_csv( $data ) {
 	header( 'Pragma: no-cache' );
 	header( 'Expires: 0' );
 
-	echo stream_get_contents( map_deep(  $stream, 'wp_kses_post' ) );
+	echo stream_get_contents( map_deep( $stream, 'wp_kses_post' ) );
 	// Close the stream. No a filesystem write.
 	fclose( $stream ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 	ob_end_flush();
@@ -217,6 +217,10 @@ function mc_api_format_csv( $data ) {
 
 /**
  * Replace line breaks with detectable breaks.
+ *
+ * @param string $text Text to replace breaks in.
+ *
+ * @return string
  */
 function mc_clean_data( $text ) {
 	return str_replace(
