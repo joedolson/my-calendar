@@ -639,9 +639,6 @@ function mc_check_group_data( $action, $post ) {
 	global $current_user;
 
 	$submit = array();
-	if ( version_compare( PHP_VERSION, '7.4', '<' ) && get_magic_quotes_gpc() ) { //phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
-		$post = array_map( 'stripslashes_deep', $post );
-	}
 	if ( ! wp_verify_nonce( $post['event_nonce_name'], 'event_nonce' ) ) {
 		return '';
 	}
