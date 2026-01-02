@@ -2864,7 +2864,9 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 	$locations   = mc_get_list_locations( $datatype, $datatype, ARRAY_A );
 	$current_url = mc_get_uri();
 	$current_url = ( '' !== $target_url &amp;&amp; esc_url( $target_url ) ) ? $target_url : $current_url;
-
+	if ( current_user_can( 'manage_options' ) &amp;&amp; count( $locations ) &lt;= 1 ) {
+		return __( "No locations contain the field you're trying to filter. Update your locations to use this option.", 'my-calendar' );
+	}
 	if ( count( $locations ) > 1 ) {
 		if ( 'list' === $show ) {
 			$url     = mc_build_url(
