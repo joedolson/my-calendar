@@ -74,5 +74,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	}
 
 	delete_option( 'mc_promotion_scheduled' );
+	delete_option( 'mc_version' );
 	add_option( 'mc_uninstalled', 'true' );
 }
