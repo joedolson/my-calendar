@@ -2117,8 +2117,8 @@ function mc_locate_calendar() {
 	}
 
 	if ( ! $has_uri ) {
-		// Locate oldest post containing my_calendar shortcode. Will also locate upcoming events shortcodes, however.
-		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_content LIKE '%[my_calendar%' AND post_status = 'publish'" );
+		// Locate oldest post containing my_calendar shortcode.
+		$post_ID = $wpdb->get_var( "SELECT id FROM $wpdb->posts WHERE post_content LIKE '%[my_calendar %' AND post_status = 'publish'" );
 		if ( $post_ID ) {
 			$link = get_permalink( $post_ID );
 			mc_update_option( 'uri_id', $post_ID );
