@@ -491,7 +491,10 @@ function mc_initial_install() {
 function mc_generate_calendar_page( $slug ) {
 	global $current_user;
 	$current_user = wp_get_current_user();
-	if ( ! get_page_by_path( $slug ) ) {
+	$page_by_path = get_page_by_path( $slug );
+	$page_status  = ( $page_by_path ) ? $page_by_path->post_status : '';
+	$allowed      = array( 'private', 'publish' );
+	if ( ! $page_by_path || ( $page_by_path && ! in_array( $page_status, $allowed, true ) ) ) {
 		$page      = array(
 			'post_title'   => __( 'My Calendar', 'my-calendar' ),
 			'post_status'  => 'publish',
@@ -509,8 +512,8 @@ function mc_generate_calendar_page( $slug ) {
 			)
 		);
 	} else {
-		$post    = get_page_by_path( $slug );
-		$post_ID = $post->ID;
+		// If the path exists, and is published, assign.
+		$post_ID = $page_by_path->ID;
 	}
 	mc_update_option( 'uri_id', $post_ID );
 
