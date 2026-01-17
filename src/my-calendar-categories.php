@@ -1322,7 +1322,7 @@ function mc_get_categories( $event, $ids = true ) {
  */
 function mc_categories_html( $results, $primary, $output = 'html' ) {
 	$primary_category = mc_get_category( (int) $primary );
-	$return[]         = ( 'html' === $output ) ? mc_category_icon( $primary ) . $primary_category->category_name : $primary_category->category_name;
+	$return[]         = ( 'html' === $output ) ? mc_category_icon( $primary_category ) . $primary_category->category_name : $primary_category->category_name;
 	if ( $results ) {
 		foreach ( $results as $result ) {
 			$results[ sanitize_key( $result->category_name ) ] = $result;
