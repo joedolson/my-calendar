@@ -2251,7 +2251,7 @@ function mc_template_location_image( $data, $size = 'full' ) {
 	$output   = '';
 	$post_id  = ( is_object( $location ) && property_exists( $location, 'location_post' ) ) ? $location->location_post : false;
 	if ( $post_id ) {
-		$image    = get_the_post_thumbnail( $post_id, $size);
+		$image = get_the_post_thumbnail( $post_id, $size);
 		if ( $image ) {
 			$output = '<div class="mc-featured-image mc-location-image">' . $image . '</div>';
 		}
