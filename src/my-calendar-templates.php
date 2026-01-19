@@ -429,9 +429,8 @@ function mc_location_image( $event, $source = 'event' ) {
 	if ( ! $event ) {
 		return '';
 	}
-	$source = 'location';
-	$post   = ( absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $event->location_id );
-	$image  = get_the_post_thumbnail( $post, 'full' );
+	$post  = ( absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $event->location_id );
+	$image = get_the_post_thumbnail( $post, 'full' );
 
 	return $image;
 }
