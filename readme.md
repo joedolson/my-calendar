@@ -19,7 +19,7 @@ This is the development environment for My Calendar.
 
 ## Documentation
 
-* [My Calendar Public Documetation](https://docs.joedolson.com/my-calendar/)
+* [My Calendar Public Documentation](https://docs.joedolson.com/my-calendar/)
 * [My Calendar Hook Documentation](https://joedolson.github.io/my-calendar/)
 
 ## Contact
