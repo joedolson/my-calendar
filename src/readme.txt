@@ -6,7 +6,7 @@ Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.7.0-rc1
+Stable tag: 3.7.0
 License: GPL-2.0+
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -24,6 +24,10 @@ You'll find enormous design flexibility fo your custom calendar. With recurring 
 My Calendar is an events calendar focused on holistic accessibility: providing a positive experience for site visitors and administrators who use assistive technology. It includes built-in settings where you can describe the ADA compliance features of your events and venues. Accessibility is a critical part of your website, so your audience can get equal access and experience to the events you list.
 
 Learn about [accessible events](https://docs.joedolson.com/my-calendar/event-accessibility/) or [visit the My Calendar demo](https://demos.joedolson.com/my-calendar/)
+
+= Accessibility-first Software =
+
+While My Calendar has a strong focus on backwards compatibility, it is officially built with an accessibility first mindset. That means that if a choice has to be made between improving accessibility and breaking backwards compatibility, the more accessible choice will always come first.
 
 = Premium Event Management =
 Looking for more? [Buy My Calendar Pro](https://www.joedolson.com/my-calendar/pro/), the premium extension for My Calendar.
@@ -110,6 +114,8 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.7.0 =
 
+Accessibility-first breaking change: The default navigation has changed from using `a` elements to `button` elements. Custom styles may need to be updated.
+
 * Feature: Migrate accessibility characteristics for locations and events to taxonomies and make editable.
 * Feature: Add API authentication key to allow export of private events.
 * Feature: Ability to disable time formats.
@@ -165,6 +171,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Accessibility: fixes to admin tabs.
 * Accessibility: fix when event date selection triggers errors.
 * Accessibility: Use aria-pressed to indicate currently selected categories.
+
+= 3.6.17 =
+
+* Security: Broken Access Control in unused mc_dismiss_notice() function. Props @patchstack and Doan Dinh Van.
+
 
 = 3.6.16 =
 

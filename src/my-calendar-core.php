@@ -1273,7 +1273,7 @@ function mc_do_upgrades( $upgrade_path ) {
 	// Retain upgrade paths for 5 years.
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
-			case '3.7.0': // Date TBD.
+			case '3.7.0': // 2026-01-20
 				// Accessibility terms are now saved as taxonomy terms.
 				mc_migrate_event_accessibility();
 				mc_migrate_location_accessibility();
