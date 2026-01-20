@@ -799,6 +799,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 }
 
 .mc-main .mc-active,
+.mc-main .my-calendar-navigation button,
 .mc-main .my-calendar-navigation a {
 	padding: 6px;
 	display: flex;
@@ -831,10 +832,6 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	margin-left: 0;
 	margin-right: 0;
 	font-size: var(--navigation-controls);
-	border: 1px solid var(--nav-input-border);
-	background-color: var(--nav-input-background);
-	background: var(--nav-input-background);
-	color: var(--nav-input-color);
 	-webkit-appearance: none;
 	appearance: none;
 	line-height: 1.62;
@@ -843,6 +840,15 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	text-transform: none;
 	text-shadow: none;
 	box-shadow: none;
+}
+
+.mc-main .my-calendar-navigation select,
+.mc-main .my-calendar-navigation input[type=text],
+.mc-main .my-calendar-navigation input[type=submit] {
+	border: 1px solid var(--nav-input-border);
+	background-color: var(--nav-input-background);
+	background: var(--nav-input-background);
+	color: var(--nav-input-color);
 }
 
 .mc-main .mc-navigation-button {
@@ -868,6 +874,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	border: 0;
 }
 
+.mc-main .my-calendar-navigation button,
 .mc-main .my-calendar-navigation a {
 	color: var(--nav-button-color);
 	background-color: var(--nav-button-bg);
