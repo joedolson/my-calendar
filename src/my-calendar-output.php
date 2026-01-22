@@ -1639,6 +1639,11 @@ function mc_calendar_params( $args ) {
 	}
 
 	$time_enabled = mc_get_option( 'time_views' );
+	// If month view is enabled, automatically enable other future month views.
+	if ( in_array( 'month', $time_enabled, true ) ) {
+		$alt_months   = array( 'month+1', 'month+2', 'month+3', 'month+4', 'month+5', 'month+6', 'month+7', 'month+8', 'month+9', 'month+10', 'month+11', 'month+12' );
+		$time_enabled = array_merge( $time_enabled, $alt_months );
+	}
 	if ( ! in_array( $time, $time_enabled, true ) ) {
 		$time = ( in_array( 'month', $enabled, true ) ) ? 'month' : $time_enabled[0];
 	}
