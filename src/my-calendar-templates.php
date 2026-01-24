@@ -1244,11 +1244,10 @@ function mc_duration( $event ) {
  * Get event link if not designated to expire & expired.
  *
  * @param object $event Event Object.
- * @param string $context
  *
  * @return string
  */
-function mc_event_link( $event, $context ) {
+function mc_event_link( $event ) {
 	$link = '';
 	if ( ! is_object( $event ) ) {
 		return $link;
