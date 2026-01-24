@@ -880,7 +880,7 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	$options  = mc_get_option( 'location_controls' );
 	$regions  = ( is_array( $options ) ) ? $options[ 'event_' . $fieldname ] : array();
 	$form     = "&lt;select name='$field' id='e_$fieldname'>";
-	$options = "&lt;option value=''>" . __( 'Select', 'my-calendar' ) . '&lt;/option>';
+	$options  = "&lt;option value=''>" . __( 'Select', 'my-calendar' ) . '&lt;/option>';
 	if ( is_admin() &amp;&amp; '' !== $selected ) {
 		$options .= "&lt;option value='" . esc_attr( $selected ) . "'>" . esc_html( $selected ) . ' :' . __( '(Not a controlled value)', 'my-calendar' ) . '&lt;/option>';
 	}
