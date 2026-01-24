@@ -1030,37 +1030,35 @@ function mc_get_details_link( $event ) {
 	 */
 	$permalinks = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
 	$permalinks = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
-	$permalink  = mc_event_link( $event );
-	if ( '' === trim( $permalink ) ) {
-		if ( 0 !== (int) $event->event_post && 'true' !== mc_get_option( 'remote' ) && $permalinks ) {
-			$permalink = get_permalink( $event->event_post );
-			if ( mc_is_recurring( $event ) ) {
-				$permalink = add_query_arg( 'mc_id', $event->occur_id, $permalink );
-			}
-		} else {
-			if ( mc_get_uri( 'boolean' ) ) {
-				$permalink = mc_build_url(
-					array( 'mc_id' => $event->occur_id ),
-					array(
-						'month',
-						'dy',
-						'yr',
-						'ltype',
-						'loc',
-						'mcat',
-						'format',
-						'feed',
-						'page_id',
-						'p',
-						'mcs',
-						'time',
-						'page',
-						'mode',
-						'event_id',
-					),
-					$uri
-				);
-			}
+	$permalink  = '';
+	if ( 0 !== (int) $event->event_post && 'true' !== mc_get_option( 'remote' ) && $permalinks ) {
+		$permalink = get_permalink( $event->event_post );
+		if ( mc_is_recurring( $event ) ) {
+			$permalink = add_query_arg( 'mc_id', $event->occur_id, $permalink );
+		}
+	} else {
+		if ( mc_get_uri( 'boolean' ) ) {
+			$permalink = mc_build_url(
+				array( 'mc_id' => $event->occur_id ),
+				array(
+					'month',
+					'dy',
+					'yr',
+					'ltype',
+					'loc',
+					'mcat',
+					'format',
+					'feed',
+					'page_id',
+					'p',
+					'mcs',
+					'time',
+					'page',
+					'mode',
+					'event_id',
+				),
+				$uri
+			);
 		}
 	}
 	/**
@@ -1246,10 +1244,11 @@ function mc_duration( $event ) {
  * Get event link if not designated to expire & expired.
  *
  * @param object $event Event Object.
+ * @param string $context
  *
  * @return string
  */
-function mc_event_link( $event ) {
+function mc_event_link( $event, $context ) {
 	$link = '';
 	if ( ! is_object( $event ) ) {
 		return $link;
