@@ -112,6 +112,12 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.7.1 =
+
+* Bug fix: Ability to disable specific time views accidentally disable `month+n` views.
+* Bug fix: Misnamed variable in location controller.
+* Bug fix: Accidentally restored a behavior in fetching permalinks that hasn't been used since before 3.0.0, now removed fully.
+
 = 3.7.0 =
 
 Accessibility-first breaking change: The default navigation has changed from using `a` elements to `button` elements. Custom styles may need to be updated.
