@@ -421,6 +421,9 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
  */
 function mc_admin_save() {
 	$action = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
+	if ( 'delete' === $action ) {
+		return;
+	}
 	if ( isset( $_GET['mode'] ) ) {
 		$action = sanitize_text_field( $_GET['mode'] );
 	}
@@ -433,6 +436,7 @@ function mc_admin_save() {
 		}
 
 		global $mc_output;
+
 		$count        = 0;
 		$do_redirect  = false;
 		$redirect_url = '';
