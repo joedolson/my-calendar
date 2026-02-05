@@ -182,7 +182,7 @@
 					calendar.replaceWith( doc.querySelector( '#' + ref ) );
 					mc_build_calendar( targetId, ref );
 				}).catch( error => {
-					calendar.insertAdjacentHTML( 'beforebegin', error );
+					calendar.insertAdjacentHTML( 'afterbegin', error );
 				});
 		}
 	}
@@ -197,7 +197,7 @@
 				listEvents = document.querySelectorAll( 'li.mc-events' );
 				listEvents.forEach( (el) => {
 					let target = el.querySelector( '.mc-events' );
-					if ( ! el.classList.contains( 'current-day' ) ) {
+					if ( ! el.classList.contains( 'current-day' ) && target ) {
 						target.style.display = 'none';
 					}
 				});
