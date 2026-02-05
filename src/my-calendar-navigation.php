@@ -1124,7 +1124,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$date_switcher .= $p;
 	$date_switcher .= '<option value="' . $time . '"' . selected( $time, $c_year, false ) . '>' . $time . "</option>\n";
 	$date_switcher .= $f;
-	$date_switcher .= '</select> <input type="submit" class="button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
+	$date_switcher .= '</select> <input type="submit" class="button" id="' . $cid . '-button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
 
 	/**
 	 * Filter the HTML for the date jumpbox controls.
