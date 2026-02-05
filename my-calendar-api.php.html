@@ -207,10 +207,11 @@ function mc_api_format_csv( $data ) {
 	}
 	header( 'Pragma: no-cache' );
 	header( 'Expires: 0' );
-
-	echo stream_get_contents( map_deep( $stream, 'wp_kses_post' ) );
-	// Close the stream. No a filesystem write.
+	$string = stream_get_contents( $stream );
+	// Close the stream. Not a filesystem write.
 	fclose( $stream ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+
+	echo map_deep( $string, 'wp_kses_post' );
 	ob_end_flush();
 	die;
 }
