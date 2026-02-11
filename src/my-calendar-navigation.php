@@ -429,7 +429,7 @@ function mc_category_key( $category, $id = '' ) {
 		if ( 1 === (int) $cat->category_private ) {
 			$class .= ' private';
 		}
-		$cat_name = wp_strip_all_tags( stripcslashes( $cat->category_name ) );
+		$cat_name = wp_strip_all_tags( wp_unslash( $cat->category_name ) );
 		$cat_name = ( '' === $cat_name ) ? '<span class="screen-reader-text">' . __( 'Untitled Category', 'my-calendar' ) . '</span>' : $cat_name;
 		$cat_key  = '';
 		if ( '' !== $cat->category_icon && $has_icons ) {
@@ -897,7 +897,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 			<option value="all">' . __( 'All Categories', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $categories as $category ) {
-			$category_name = strip_tags( stripcslashes( $category->category_name ), mc_strip_tags() );
+			$category_name = strip_tags( wp_unslash( $category->category_name ), mc_strip_tags() );
 			$mcat          = ( empty( $_GET['mcat'] ) ) ? '' : (int) $_GET['mcat'];
 			$category_id   = (int) $category->category_id;
 			if ( ! empty( $options ) ) {

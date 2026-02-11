@@ -24,7 +24,7 @@ function my_calendar_update_styles() {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 
-		$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : stripcslashes( sanitize_text_field( $_POST['mc_show_css'] ) );
+		$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : wp_unslash( sanitize_text_field( $_POST['mc_show_css'] ) );
 		mc_update_option( 'show_css', $mc_show_css );
 		$use_styles = ( empty( $_POST['use_styles'] ) ) ? '' : 'true';
 		mc_update_option( 'use_styles', $use_styles );
@@ -121,7 +121,7 @@ function my_calendar_update_styles() {
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		$mc_css_file = stripcslashes( sanitize_file_name( $_POST['mc_css_file'] ) );
+		$mc_css_file = wp_unslash( sanitize_file_name( $_POST['mc_css_file'] ) );
 		mc_update_option( 'css_file', $mc_css_file );
 		$message = __( 'New theme selected.', 'my-calendar' );
 		$message = mc_show_notice( $message, false, false, 'success' );

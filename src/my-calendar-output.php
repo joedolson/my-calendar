@@ -1096,7 +1096,7 @@ function mc_list_title( $events ) {
 	 *
 	 * @return {string}
 	 */
-	$event_title = apply_filters( 'mc_list_title_title', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now );
+	$event_title = apply_filters( 'mc_list_title_title', strip_tags( wp_unslash( $now->event_title ), mc_strip_tags() ), $now );
 	if ( 0 === $count ) {
 		$cstate = $event_title;
 	} elseif ( 1 === $count ) {
@@ -1145,7 +1145,7 @@ function mc_list_titles( $events ) {
 		 *
 		 * @return {string}
 		 */
-		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( stripcslashes( $now->event_title ), mc_strip_tags() ), $now, $events );
+		$title    = apply_filters( 'mc_list_event_title_hint', strip_tags( wp_unslash( $now->event_title ), mc_strip_tags() ), $now, $events );
 		$titles[] = $title;
 	}
 	/**
@@ -2887,7 +2887,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 				if ( is_numeric( $value ) && 'id' === $ltype ) {
 					$value = mc_location_data( 'location_label', $value );
 				} else {
-					$value = strip_tags( stripcslashes( $value ), mc_strip_tags() );
+					$value = strip_tags( wp_unslash( $value ), mc_strip_tags() );
 				}
 				if ( '' === trim( $value ) ) {
 					continue;

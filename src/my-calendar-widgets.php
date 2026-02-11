@@ -849,10 +849,10 @@ function my_calendar_todays_events( $args ) {
 			 */
 			$return .= apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
-			$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $args['substitute'] ) . '</div>';
+			$return = '<div class="no-events-fallback todays-events">' . wp_unslash( $args['substitute'] ) . '</div>';
 		}
 	} else {
-		$return = '<div class="no-events-fallback todays-events">' . stripcslashes( $args['substitute'] ) . '</div>';
+		$return = '<div class="no-events-fallback todays-events">' . wp_unslash( $args['substitute'] ) . '</div>';
 	}
 
 	if ( $args['site'] ) {
