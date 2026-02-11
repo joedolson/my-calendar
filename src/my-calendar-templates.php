@@ -80,7 +80,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 			}
 		}
 	}
-	$template = stripcslashes( $template );
+	$template = wp_kses_post( wp_unslash( $template ) );
 	// If there are no brace characters, there is nothing to replace.
 	if ( strpos( $template, '{' ) === false ) {
 		return trim( $template );
@@ -123,7 +123,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 					}
 				} else {
 					// don't do preg match for simple templates.
-					$template = stripcslashes( str_replace( '{' . $key . '}', $value, $template ) );
+					$template = wp_unslash( str_replace( '{' . $key . '}', $value, $template ) );
 				}
 			}
 			// End {$key check.
@@ -357,7 +357,7 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	 *
 	 * @return {string} Encoded parameter.
 	 */
-	$base .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( stripcslashes( trim( $description ) ) ), $description );
+	$base .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( wp_unslash( trim( $description ) ) ), $description );
 	$base .= '&sf=true&output=xml';
 
 	return $source . $base;
@@ -729,7 +729,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 
 	// Links.
 	$templates  = mc_get_option( 'templates' );
-	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
+	$e_template = ( ! empty( $templates['label'] ) ) ? wp_unslash( $templates['label'] ) : __( 'Details about', 'my-calendar' ) . ' {title}';
 	/**
 	 * Filter template for the `{details}` output. Default: `Details about {title}`.
 	 *
@@ -1133,7 +1133,7 @@ function mc_get_uri( $event = false, $args = array() ) {
  */
 function mc_get_details_label( $event, $e ) {
 	$templates  = mc_get_option( 'templates' );
-	$e_template = ( ! empty( $templates['label'] ) ) ? stripcslashes( $templates['label'] ) : __( 'Read more', 'my-calendar' );
+	$e_template = ( ! empty( $templates['label'] ) ) ? wp_unslash( $templates['label'] ) : __( 'Read more', 'my-calendar' );
 	$e_label    = wp_kses(
 		mc_draw_template( $e, $e_template ),
 		array(
