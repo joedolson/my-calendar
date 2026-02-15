@@ -19,7 +19,7 @@ svg.category-icon,
 	min-width: 16px;
 	height: auto;
 	padding: 1px;
-	border-radius: 2px; 
+	border-radius: 2px;
 }
 
 .my-calendar-nav ul, .mc-main .category-key ul, .mc-main .mc-export ul, .mc-main .mc-list {
@@ -30,15 +30,18 @@ svg.category-icon,
 .my-calendar-navigation .category-key ul {
 	display: flex;
 	flex-wrap: wrap;
-	column-gap: 8px;
+	gap: 8px;
 	align-items: center;
 	list-style: none;
 }
 
+.mc-main .category-key li button,
 .mc-main .category-key li a {
 	border: 1px solid transparent;
+	background: transparent;
 }
 
+.mc-main .category-key li.current button,
 .mc-main .category-key li.current a {
 	border: 1px solid var(--highlight-dark);
 	background-color: var(--primary-light);
@@ -48,6 +51,7 @@ svg.category-icon,
 	display: inline;
 }
 
+.mc-main .category-key li button,
 .mc-main .category-key li a {
 	display: flex;
 	align-items: center;
@@ -217,4 +221,5 @@ ul.mc-list {
 
 @media print {
 	.return { display: none; }
+	body { print-color-adjust: exact; }
 }
