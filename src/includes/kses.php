@@ -130,6 +130,30 @@ function mc_allowed_tags( $tags, $context ) {
 			)
 		);
 
+		$tags['svg'] = array(
+			'class'           => true,
+			'style'           => true,
+			'focusable'       => true,
+			'role'            => true,
+			'aria-labelledby' => true,
+			'xmlns'           => true,
+			'viewbox'         => true,
+		);
+
+		$tags['g'] = array(
+			'fill' => true,
+		);
+
+		$tags['title'] = array(
+			'id'    => true,
+			'title' => true,
+		);
+
+		$tags['path'] = array(
+			'd'     => true,
+			'title' => true,
+		);
+
 		$tags['iframe'] = array(
 			'width'           => true,
 			'height'          => true,
