@@ -1,14 +1,12 @@
-.mc-category-icon-wrapper {
-	display: inline-block;
-	width: 1.5rem;
-	height: 1.5rem;
-	vertical-align: middle;
-	margin-right: 6px;
+.mc-category {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 }
 
-.mc-category-icon-wrapper > * {
-	width: auto;
-	height: 100%;
+.mc-category .mc-category-color {
+	padding: 3px;
+	display: inline-flex;
 }
 
 .mc-user-permissions ul {

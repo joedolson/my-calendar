@@ -65,15 +65,15 @@
 	border: 1px solid #a6a6a6;
 }
 
-.mc-category-list {
-	display: grid;
-	gap: 4px;
+.mc-category {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 }
 
-.mc-category-list .mc-category-item {
-	display: flex;
-	align-items: center;
-	gap: 4px;
+.mc-category .mc-category-color {
+	padding: 3px;
+	display: inline-flex;
 }
 
 .category-color.no-border {
@@ -1239,17 +1239,15 @@ input[name="mc_uri"] {
 	margin-bottom: 1em;
 }
 
-.mc-category-icon-wrapper {
-	display: inline-block;
-	width: 1.5rem;
-	height: 1.5rem;
-	vertical-align: middle;
-	margin-right: 6px;
+.mc-main .mc-category {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 }
 
-.mc-category-icon-wrapper > * {
-	width: auto;
-	height: 100%;
+.mc-main .mc-category .mc-category-color {
+	padding: 3px;
+	display: inline-flex;
 }
 
 .my-calendar-admin .icon-list.checkboxes {
@@ -1494,14 +1492,6 @@ ul.mc-variables li:has(.wp-picker-active) label {
 
 .my-calendar-admin fieldset.categories {
 	margin-top: 1em;
-}
-
-.generator .categories label span,
-.my-calendar-admin .categories label span {
-	max-width: 1em;
-	display: inline-block;
-	margin-left: 6px;
-	margin-right: 6px;
 }
 
 .my-calendar-admin .categories label span svg {

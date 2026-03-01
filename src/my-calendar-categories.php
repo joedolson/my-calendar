@@ -1127,8 +1127,8 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
 			if ( $multiple ) {
 				$icon = mc_category_icon( $cat );
-				$icon = ( $icon ) ? '<div class="mc-category-icon-wrapper">' . $icon . '</div>' : '';
-				$c    = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="' . $id . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="' . $id . $cat->category_id . '">' . $icon . $category_name . '</label></li>';
+				$icon = ( $icon ) ? mc_wrap_category_icon( $icon, $cat ) : '';
+				$c    = '<li class="mc_cat_' . $cat->category_id . '"><input type="checkbox"' . $selected . ' name="' . esc_attr( $name ) . '" id="' . $id . $cat->category_id . '" value="' . $cat->category_id . '" ' . $selected . ' /> <label for="' . $id . $cat->category_id . '">' . $icon . '</label></li>';
 			} else {
 				$c = '<option value="' . $cat->category_id . '" ' . $selected . '>' . $category_name . '</option>';
 			}
