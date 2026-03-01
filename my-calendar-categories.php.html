@@ -1347,9 +1347,9 @@ function mc_get_categories( $event, $ids = true ) {
  */
 function mc_wrap_category_icon( $icon, $category ) {
 	if ( $icon &amp;&amp; $category ) {
-		$hex          = ( 0 !== strpos( $category->category_color, '#' ) ) ? '#' : '';
-		$type         = ( stripos( $icon, 'svg' ) ) ? 'svg' : 'img';
-		$back         = ( 'background' === mc_get_option( 'apply_color' ) ) ? ' style="background:' . $hex . $category->category_color . ';"' : '';
+		$hex  = ( 0 !== strpos( $category->category_color, '#' ) ) ? '#' : '';
+		$type = ( stripos( $icon, 'svg' ) ) ? 'svg' : 'img';
+		$back = ( 'background' === mc_get_option( 'apply_color' ) ) ? ' style="background:' . $hex . $category->category_color . ';"' : '';
 		$icon = '&lt;span class="mc-category">&lt;span class="mc-category-color ' . $type . '"' . $back . '>' . $icon . '&lt;/span>&lt;span>' . $category->category_name . '&lt;/span>&lt;/span>';
 	}
 
