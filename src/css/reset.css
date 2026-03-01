@@ -24,6 +24,17 @@
 	display: inline;
 }
 
+.mc-main .mc-category {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.mc-main .mc-category .mc-category-color {
+	padding: 3px;
+	display: inline-flex;
+}
+
 .mc-main .my-calendar-table tbody, .mc-main .my-calendar-list {
 	background: var(--primary-light);
 }
