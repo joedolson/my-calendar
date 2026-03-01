@@ -7,6 +7,8 @@
 .mc-category .mc-category-color {
 	padding: 3px;
 	display: inline-flex;
+	width: 1.125rem;
+	height: 1.125rem;
 }
 
 .mc-user-permissions ul {
