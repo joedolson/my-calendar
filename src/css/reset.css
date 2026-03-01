@@ -33,6 +33,7 @@
 .mc-main .mc-category .mc-category-color {
 	padding: 3px;
 	display: inline-flex;
+	justify-content: center;
 }
 
 .mc-main .my-calendar-table tbody, .mc-main .my-calendar-list {

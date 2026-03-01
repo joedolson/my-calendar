@@ -85,6 +85,7 @@
 .mc-category .mc-category-color {
 	padding: 3px;
 	display: inline-flex;
+	justify-content: center;
 }
 
 .category-color.no-border {
@@ -1248,17 +1249,6 @@ input[name="mc_uri"] {
 
 .category-icon-selector {
 	margin-bottom: 1em;
-}
-
-.mc-main .mc-category {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-}
-
-.mc-main .mc-category .mc-category-color {
-	padding: 3px;
-	display: inline-flex;
 }
 
 .my-calendar-admin .icon-list.checkboxes {
