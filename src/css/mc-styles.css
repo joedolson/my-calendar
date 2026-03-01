@@ -65,6 +65,17 @@
 	border: 1px solid #a6a6a6;
 }
 
+.mc-category-list {
+	display: grid;
+	gap: 4px;
+}
+
+.mc-category-list .mc-category-item {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
 .mc-category {
 	display: inline-flex;
 	align-items: center;
