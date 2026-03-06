@@ -49,6 +49,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_is_recurring( $event ) {
 	if ( ! is_object( $event ) ) {
 		$event = mc_get_first_event( $event );
+		if ( ! is_object( $event ) ) {
+			return false;
+		}
 	}
 	$is_recurring = ( ! ( 'S' === $event->event_recur || 'S1' === $event->event_recur ) ) ? true : false;
 
