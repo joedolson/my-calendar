@@ -488,23 +488,16 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 
 					&lt;div class="inside">
 						&lt;form id="my-calendar" method="post" action="&lt;?php echo esc_url( admin_url( 'admin.php?page=my-calendar-categories' ) ); ?>">
-							&lt;div>&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>&lt;/div>
 							&lt;?php
-							if ( 'add' === $view ) {
-								?>
-								&lt;div>
-									&lt;input type="hidden" name="mode" value="add"/>
-									&lt;input type="hidden" name="category_id" value=""/>
-								&lt;/div>
-								&lt;?php
-							} else {
-								?>
-								&lt;div>
-									&lt;input type="hidden" name="mode" value="edit"/>
-									&lt;input type="hidden" name="category_id" value="&lt;?php echo ( is_object( $cur_cat ) ) ? absint( $cur_cat->category_id ) : ''; ?>" />
-								&lt;/div>
-								&lt;?php
-							}
+							$mode   = ( 'add' === $view ) ? 'add' : 'edit';
+							$cat_id = is_object( $cur_cat ) ? absint( $cur_cat->category_id ) : '';
+							?>
+							&lt;div>
+								&lt;input type="hidden" name="_wpnonce" value="&lt;?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
+								&lt;input type="hidden" name="mode" value="&lt;?php echo esc_attr( $mode ); ?>" />
+								&lt;input type="hidden" name="category_id" value="&lt;?php echo esc_attr( $cat_id ); ?>" />
+							&lt;/div>
+							&lt;?php
 							if ( ! empty( $cur_cat ) &amp;&amp; is_object( $cur_cat ) ) {
 								$color  = ( strpos( $cur_cat->category_color, '#' ) !== 0 ) ? '#' : '';
 								$color .= $cur_cat->category_color;

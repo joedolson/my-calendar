@@ -1269,7 +1269,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				if ( '' !== $image ) {
 					$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 					$button_text = __( 'Change Featured Image', 'my-calendar' );
-					$remove      = '&lt;button type="button" data-context="event" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '&lt;/button>';
+					$remove      = '&lt;button type="button" data-context="event" class="button button-compact remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '&lt;/button>';
 					$alt         = ( '' === $alt ) ? get_post_meta( $data->event_post, '_mcs_submitted_alt', true ) : $alt;
 					$alt         = ( '' === $alt ) ? $data->event_image : $alt;
 					$has_image   = ' has-image';
@@ -1277,7 +1277,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$return = '
 				&lt;div class="mc-image-upload field-holder' . $has_image . '">
 					&lt;div class="image_fields">
-						&lt;input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />&lt;input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" /> &lt;button type="button" data-context="event" class="button select-image" aria-describedby="event_image">' . $button_text . '&lt;/button> ' . $remove . '
+						&lt;input type="hidden" name="event_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="e_image_id" />&lt;input type="hidden" name="event_image" id="e_image" value="' . esc_attr( $image ) . '" /> &lt;button type="button" data-context="event" class="button button-compact select-image" aria-describedby="event_image">' . $button_text . '&lt;/button> ' . $remove . '
 					&lt;/div>';
 				if ( '' !== $image &amp;&amp; null !== $image ) {
 					$image   = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
@@ -1292,7 +1292,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			break;
 		case 'event_category':
 			if ( $show_block ) {
-				$add_category = current_user_can( 'mc_edit_cats' ) ? '&lt;input class="mc-srt" type="checkbox" name="event_category_new" id="event_category_new" value="true" /> &lt;label for="event_category_new" class="button">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>' . __( 'Add Categories', 'my-calendar' ) . '&lt;/label>' : '';
+				$add_category = current_user_can( 'mc_edit_cats' ) ? '&lt;input class="mc-srt" type="checkbox" name="event_category_new" id="event_category_new" value="true" /> &lt;label for="event_category_new" class="button button-compact">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>' . __( 'Add Categories', 'my-calendar' ) . '&lt;/label>' : '';
 				$select       = mc_category_select( $data, true, false );
 				$return       = '&lt;fieldset class="categories">&lt;legend>' . __( 'Categories', 'my-calendar' ) . '&lt;/legend>&lt;ul class="checkboxes">' .
 					mc_category_select( $data, true, true ) .
@@ -1382,7 +1382,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$class   = '';
 				if ( $has_data &amp;&amp; false !== mc_get_event_instances( $data->event_id ) ) {
 					$class   = 'disable-recurrences';
-					$warning = '&lt;div class="recurrences-disabled">&lt;p>&lt;span>' . __( 'Editing the repetition pattern will regenerate scheduled dates for this event.', 'my-calendar' ) . '&lt;/span>&lt;button type="button" class="button enable-repetition" aria-expanded="false">&lt;span class="dashicons dashicons-arrow-right" aria-hidden="true">&lt;/span>' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '&lt;/button>&lt;/p>&lt;/div>';
+					$warning = '&lt;div class="recurrences-disabled">&lt;button type="button" class="button button-compact enable-repetition" aria-expanded="false">&lt;span class="dashicons dashicons-arrow-right" aria-hidden="true">&lt;/span>' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '&lt;/button>&lt;p>&lt;span>' . __( 'Editing the repetition pattern will regenerate scheduled dates for this event.', 'my-calendar' ) . '&lt;/span>&lt;/p>&lt;/div>';
 				}
 				$args        = array(
 					'value' => $repeats,
@@ -1527,7 +1527,7 @@ function mc_additional_dates( $data ) {
 		$input     = mc_recur_datetime_input( $data );
 		$output    = "
 		&lt;div id='mc-scheduled-dates'>
-			&lt;button type='button' aria-expanded='false' class='toggle-dates button'>&lt;span class='dashicons dashicons-arrow-right' aria-hidden='true'>&lt;/span>" . esc_html__( 'View scheduled dates', 'my-calendar' ) . '&lt;/button>
+			&lt;button type='button' aria-expanded='false' class='button button-compact toggle-dates'>&lt;span class='dashicons dashicons-arrow-right' aria-hidden='true'>&lt;/span>" . esc_html__( 'View scheduled dates', 'my-calendar' ) . '&lt;/button>
 			&lt;div id="mc-view-scheduled-dates">' . $edit_desc . "
 				&lt;div class='mc_response' aria-live='assertive'>&lt;/div>
 				&lt;ul class='columns instance-list'>

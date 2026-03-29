@@ -42,7 +42,7 @@
  * Text Domain: my-calendar
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version:     3.7.6
+ * Version:     3.7.7
  */
 
 /*
@@ -79,7 +79,7 @@ function mc_get_version( $version = true ) {
 	if ( ! $version ) {
 		return get_option( 'mc_version', '' );
 	}
-	return '3.7.6';
+	return '3.7.7';
 }
 
 define( 'MC_DEBUG', false );
@@ -555,8 +555,8 @@ function my_calendar_menu() {
 		}
 		add_submenu_page( 'my-calendar', __( 'My Calendar Shortcode Generator', 'my-calendar' ), __( 'Shortcodes', 'my-calendar' ), 'mc_view_help', 'my-calendar-shortcodes', 'my_calendar_shortcodes' );
 		add_submenu_page( 'my-calendar', __( 'My Calendar Help', 'my-calendar' ), __( 'Help', 'my-calendar' ), 'mc_view_help', 'my-calendar-help', 'my_calendar_help' );
-		// Null submenu parent prevents this from appearing in the admin menu.
-		add_submenu_page( '', __( 'My Calendar Contextual Help', 'my-calendar' ), __( 'My Calendar Contextual Help', 'my-calendar' ), 'mc_view_help', 'mc-contextual-help', 'mc_print_contextual_help' );
+		// Invalid submenu parent prevents this from appearing in the admin menu.
+		add_submenu_page( 'omit-page-from-admin-menu', __( 'My Calendar Contextual Help', 'my-calendar' ), __( 'My Calendar Contextual Help', 'my-calendar' ), 'mc_view_help', 'mc-contextual-help', 'mc_print_contextual_help' );
 	}
 	if ( function_exists( 'mcs_submissions' ) ) {
 		$capability = 'manage_options';
