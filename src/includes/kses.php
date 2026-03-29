@@ -14,6 +14,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Replace quotes that have been changed to double quotes by `wp_kses_hair` with single quotes.
+ *
+ * @param string $modified Templates that have been processed by `wp_kses`.
+ * @param string $original Template originally passed to `wp_kses`.
+ *
+ * @return string Fixed template.
+ */
+function mc_kses_replacement( $modified, $original ) {
+	// wp_kses_hair replaces single quoted attributes with double quotes, breaking templates.
+	// Replace single quotes from the original string that are now double quotes.
+	$original  = str_split( wp_unslash( $original ) );
+	$sanitized = str_split( $modified );
+	foreach ( $sanitized as $position => $char ) {
+		if ( $char === '"' && $char !== $original[ $position ] ) {
+			$sanitized[ $position ] = $original[ $position ];
+		}
+	}
+	$template = implode( '', $sanitized );
+
+	return $template;
+}
+
+/**
  * Execute KSES post on strings, otherwise, return as is.
  *
  * @param string $input Any string.

@@ -40,6 +40,7 @@ function mc_templates_do_edit() {
 				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
 					// Curly braces are not allowed in style attributes, so replace plain color template tags with invalid color before sanitizing.
 					$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( wp_unslash( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
+					$template = mc_kses_replacement( $template, $_POST['mc_template'] );
 					// Restore template tag after sanitizing.
 					$template          = str_replace( array( '#fff1a', '#000a1' ), array( '{color}', '{inverse}' ), $template );
 					$templates         = mc_get_option( 'templates', array() );
@@ -838,9 +839,9 @@ add_action(
 				)
 			);
 			// Bail if user disabled CodeMirror.
-			if ( false === $settings ) {
+			//if ( false === $settings ) {
 				return;
-			}
+			//}
 
 			wp_add_inline_script(
 				'code-editor',
