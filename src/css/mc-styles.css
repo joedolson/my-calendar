@@ -2,6 +2,11 @@
 	container: mcadmin / inline-size;
 }
 
+.wp-core-ui .my-calendar-admin .button .dashicons {
+	line-height: .9;
+	vertical-align: middle;
+}
+
 #my-calendar legend {
 	font-weight: 700;
 	font-size: 1em
@@ -88,6 +93,10 @@
 	justify-content: center;
 }
 
+.checkboxes .mc-category .mc-category-color {
+	order: 1;
+}
+
 .category-color.no-border {
 	border: none;
 }
@@ -98,7 +107,7 @@
 
 ul.links li {
 	float: left;
-	margin: 0 5px 10px;
+	margin: 0 8px 0;
 }
 
 .my-calendar-admin .metabox-holder .mc-postbox > h2,
@@ -161,6 +170,10 @@ ul.links li {
 	flex-wrap: wrap;
 	align-items: center;
 	gap: .25rem;
+}
+
+#mc_list_template-note {
+	flex-wrap: nowrap;
 }
 
 .mc-input-description span.mc-notice {
@@ -255,7 +268,7 @@ li.datetime-template.disabled {
 }
 
 li.datetime-template:nth-of-type(even) {
-	background: rgba( 0, 0, 0, .02 );
+	background: rgba( 0, 0, 0, .04 );
 }
 
 .my-calendar-admin li {
@@ -307,7 +320,6 @@ li.datetime-template:nth-of-type(even) {
 	opacity: 0;
 }
 
-
 #e_schedule .columns label:not(.duet-date__mobile-heading),
 .recurrences .columns label:not(.duet-date__mobile-heading),
 .recurring .columns label:not(.duet-date__mobile-heading) {
@@ -327,7 +339,7 @@ li.datetime-template:nth-of-type(even) {
 
 .recurrences .columns.instance-list li,
 #e_schedule .columns.instance-list li {
-	background: rgba( 0,0,0,.05 );
+	background: rgba( 0,0,0,.04 );
 	padding: 0 8px;
 	flex-grow: 1;
 }
@@ -475,8 +487,12 @@ ul.mc-file-list ul li {
 
 .mc-help-links .help:nth-of-type(1) a:hover,
 .mc-help-links .help:nth-of-type(1) a:focus {
-	box-shadow: 4px 4px 0 #007eb3;
+	box-shadow: 4px 4px 0 currentColor;
 	background-color: #f0f0f1;
+}
+
+.mc-help-note {
+	display: inline-flex;
 }
 
 .my-calendar-admin .event_description {
@@ -484,7 +500,7 @@ ul.mc-file-list ul li {
 }
 
 .my-calendar-admin .mc-image-upload {
-	background: rgba( 0,0,0,.03 );
+	background: rgba( 0,0,0,.04 );
 	padding: .5rem;
 	margin-bottom: .5rem;
 	min-height: 3rem;
@@ -495,6 +511,10 @@ ul.mc-file-list ul li {
 	gap: 10px;
 	padding: 10px;
 	z-index: 10;
+}
+
+.my-calendar-admin .mc-image-upload .image_fields button {
+	background: #f0f0f1;
 }
 
 .my-calendar-admin .mc-image-upload.has-image .image_fields {
@@ -618,7 +638,7 @@ ul.mc-file-list ul li {
 }
 
 #mc-shortcodes textarea {
-	background: rgba( 0,0,0,.05 );
+	background: rgba( 0,0,0,.04 );
 	box-shadow: none;
 	border: none;
 	font-size: 1.2em;
@@ -660,7 +680,16 @@ ul.mc-file-list ul li {
 
 .my-calendar-admin .tablenav {
 	display: inline;
-	margin-top: -4em;
+	font-size: 1rem;
+}
+
+.my-calendar-admin .tablenav-pages {
+	display: flex;
+	gap: 2px;
+}
+
+.my-calendar-admin .tablenav .page-numbers {
+	padding: 2px 6px;
 }
 
 label[for=l_preset] {
@@ -1003,13 +1032,13 @@ label[for=mc_uri_query]::before {
 
 .mc-sortable li {
 	border: 1px solid #dcdcde;
-	background: rgba(0, 0, 0, .05);
+	background: rgba(0, 0, 0, .04);
 	padding: .5em 1em;
 	margin: 10px 0 0;
 }
 
 .mc-sortable li.mc-visible {
-	background: rgba( 0, 0, 0, .02 );
+	background: rgba( 0, 0, 0, .04 );
 }
 
 .mc-sortable li {
@@ -1028,7 +1057,7 @@ label[for=mc_uri_query]::before {
 
 #mc-current-location {
 	padding: 6px;
-	background: rgba( 0, 0, 0, .05 );
+	background: rgba( 0, 0, 0, .04 );
 	border-radius: 6px;
 	margin-bottom: 10px;
 }
@@ -1062,14 +1091,6 @@ label[for=mc_uri_query]::before {
 	padding: 1em .5em;
 	box-shadow: 3px 3px 3px #c3c4c7;
 	border: 1px solid #a7aaad;
-}
-
-.add_field .dashicons,
-.add-location .dashicons,
-.toggle-dates .dashicons,
-.add-occurrence .dashicons {
-	vertical-align: middle;
-	font-size: 1.1rem;
 }
 
 #my-calendar .button-link.toggle-inside .dashicons {
@@ -1119,13 +1140,13 @@ label[for=mc_uri_query]::before {
 
 .my-calendar-text span,
 #my-calendar-text span {
-	background: rgba( 0,0,0,.05 );
+	background: rgba( 0,0,0,.04 );
 	padding: 5px;
 	border-radius: 3px;
 }
 
 .notice.mc-promotion {
-	border-left-color: #007eb3;
+	border-left-color: var(--wp-admin-theme-color, #007eb3 );
 }
 
 .notice.mc-promotion p {
@@ -1178,6 +1199,10 @@ label[for=mc_uri_query]::before {
 
 .mc-input-with-note span {
 	padding: 4px;
+}
+
+#mc_css_info {
+	padding: 0;
 }
 
 .mc-sortable li {
@@ -1351,27 +1376,6 @@ input[name="mc_uri"] {
 	font-size: 1.1em;
 }
 
-.my-calendar-admin .checkboxes {
-	margin: 0;
-}
-
-.my-calendar-admin .checkboxes:after {
-	content: '';
-	display: table;
-	clear: both;
-	margin-bottom: 1em;
-}
-
-
-.my-calendar-admin .checkboxes .event-new-category {
-	background: transparent;
-	padding: 0;
-}
-
-.checkboxes .event-new-category .button {
-	margin-top: -3px;
-}
-
 .event-new-category .button .dashicons {
 	vertical-align: middle;
 }
@@ -1388,9 +1392,8 @@ label[for=e_host] {
 }
 
 .new-event-category {
-	background: #0000000a;
-	padding: .5em 1em;
-	margin-top: -1em;
+	background: rgb( 0,0,0,.04 );
+	padding: 0 1rem;
 	display: flex;
 	align-items: end;
 	column-gap: 2px;
@@ -1414,6 +1417,7 @@ label[for=e_host] {
 .mc-admin-mode li,
 .mc-admin-mode {
 	display: inline-block;
+	margin-bottom: 0;
 }
 
 .mc-admin-mode li {
@@ -1422,10 +1426,6 @@ label[for=e_host] {
 
 .mc-admin-mode a {
 	padding: 5px;
-}
-
-.my-calendar-admin .mc_permissions .checkboxes li {
-	display: block;
 }
 
 .mc_permissions fieldset {
@@ -1460,12 +1460,37 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	box-shadow: 5px 5px 5px #aaa;
 }
 
+
+.my-calendar-admin .checkboxes {
+	margin: 0 0 .5rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.my-calendar-admin .checkboxes:after {
+	content: '';
+	display: table;
+	clear: both;
+	margin-bottom: 1em;
+}
+
+.my-calendar-admin .checkboxes .event-new-category {
+	background: transparent;
+	padding: 0;
+}
+
+.my-calendar-admin .mc_permissions .checkboxes li {
+	display: block;
+}
+
 .my-calendar-admin .checkboxes li {
-	padding: 6px;
-	background: rgba(0, 0, 0, .05);
-	margin: 2px;
+	padding: 0 8px;
+	background: rgba(0, 0, 0, .04);
 	display: inline-flex;
 	align-items: center;
+	min-height: 32px;
+	margin: 0;
 }
 
 .my-calendar-admin .checkboxes li:hover {
@@ -1736,7 +1761,6 @@ select[name="event_recur"] {
 	display: grid;
 	grid-template-columns: 1fr 22em;
 	align-items: center;
-	margin-bottom: 1em;
 	clear: both;
 }
 
@@ -1766,18 +1790,8 @@ div.mc-search {
 	text-align: right;
 }
 
-.recurrences-disabled button {
-	float: right;
-	margin-left: 12px;
-	margin-bottom: 12px;
-}
-
-.enable-repetition .dashicons:before {
-	vertical-align: middle;
-}
-
 .mc-submissions input[disabled] {
-	background: rgba( 0,0,0,.05 ) !important;
+	background: rgba( 0,0,0,.04 ) !important;
 	border: 1px solid #ccc !important;
 }
 
@@ -1848,7 +1862,7 @@ div.mc-search {
 }
 
 .mc-support-me {
-	background: #007eb3;
+	background: var(--wp-admin-theme-color, #007eb3 );
 	text-shadow: 1px 1px rgb( 35, 60, 127 );
 }
 
@@ -1889,7 +1903,7 @@ fieldset.mc-flex {
 .mc-support-me p {
 	font-size: 1.6em;
 	font-weight: 600;
-	background: #007eb3;
+	background: var(--wp-admin-theme-color, #007eb3 );
 	text-shadow: 1px 1px rgb( 35, 60, 127 );
 	padding: 1em;
 	text-align: center;
@@ -2047,6 +2061,17 @@ input#mc_event_time:valid+span {
 	padding-bottom: 2em;
 }
 
+.my-calendar-design .jcd-narrow,
+.my-calendar-design .jcd-wide {
+	width: auto;
+	max-width: 100%;
+	float: none;
+}
+
+.my-calendar-design .postbox {
+	margin-right: 0;
+}
+
 /**
  * Autocomplete CSS
  */
@@ -2099,7 +2124,7 @@ input#mc_event_time:valid+span {
 	background-position:6px;background-repeat:no-repeat;cursor:default;padding:6px 6px 6px 36px
 }
 .autocomplete-result:hover,.autocomplete-result[aria-selected=true]{
-	background-color:rgba(0,0,0,.06);
+	background-color:rgba(0,0,0,.04);
 	border-right: 4px solid;
 }
 @keyframes rotate{
@@ -2219,7 +2244,7 @@ input#mc_event_time:valid+span {
 
 	.mc-responsive-table th {
 		padding: 8px 4px;
-		background: rgba( 0,0,0,.05 );
+		background: rgba( 0,0,0,.04 );
 	}
 
 	.mc-responsive-table tbody th {

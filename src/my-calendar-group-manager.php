@@ -464,14 +464,14 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							$alt         = '';
 							if ( '' !== $image ) {
 								$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
-								$remove      = '<button type="button" data-context="event" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
+								$remove      = '<button type="button" data-context="event" class="button button-compact remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 								$button_text = __( 'Change Featured Image', 'my-calendar' );
 								$alt         = ( '' === $alt ) ? $data->event_image : $alt;
 							}
 							?>
 							<input type="hidden" name="event_image_id" value="<?php echo esc_attr( $image_id ); ?>" class="textfield" id="e_image_id" />
 							<input type="hidden" name="event_image" id="e_image" value="<?php echo esc_url( $image ); ?>" />
-							<button type='button' data-context="event" class="button select-image"><?php echo esc_html( $button_text ); ?></button> <?php echo wp_kses_post( $remove ); ?>
+							<button type='button' data-context="event" class="button button-compact select-image"><?php echo esc_html( $button_text ); ?></button> <?php echo wp_kses_post( $remove ); ?>
 							</div>
 							<?php
 							if ( ! empty( $data->event_image ) ) {

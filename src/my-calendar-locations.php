@@ -1209,14 +1209,14 @@ function mc_location_featured_image_field( $post_id ) {
 	if ( '' !== $image ) {
 		$alt         = ( $image_id ) ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
 		$button_text = __( 'Change Featured Image', 'my-calendar' );
-		$remove      = '<button type="button" data-context="location" class="button remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
+		$remove      = '<button type="button" data-context="location" class="button button-compact remove-image" aria-describedby="event_image">' . esc_html__( 'Remove Featured Image', 'my-calendar' ) . '</button>';
 		$alt         = ( '' === $alt ) ? get_post_meta( $post_id, '_mcs_submitted_alt', true ) : $alt;
 		$alt         = ( '' === $alt ) ? $image : $alt;
 	}
 	$return = '
 	<div class="mc-image-upload field-holder">
 		<div class="image_fields">
-			<input type="hidden" name="location_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="l_image_id" /> <input type="hidden" name="location_image" id="l_image" value="' . esc_attr( $image ) . '" /><button type="button" data-context="location" class="button select-image" aria-describedby="location_image">' . $button_text . '</button> ' . $remove . '
+			<input type="hidden" name="location_image_id" value="' . esc_attr( $image_id ) . '" class="textfield" id="l_image_id" /> <input type="hidden" name="location_image" id="l_image" value="' . esc_attr( $image ) . '" /><button type="button" data-context="location" class="button button-compact select-image" aria-describedby="location_image">' . $button_text . '</button> ' . $remove . '
 		</div>';
 	if ( '' !== $image && null !== $image ) {
 		$return .= '<div class="event_image" aria-live="assertive"><img id="location_image" src="' . esc_attr( $image ) . '" alt="' . __( 'Current image: ', 'my-calendar' ) . esc_attr( $alt ) . '" /></div>';
