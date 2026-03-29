@@ -496,7 +496,7 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		if ( is_array( $value ) ) {
 			$value = implode( ', ', $value );
 		}
-		$tag = ( $php_templates ) ? 'mc_template_tag( $event, ' . "'" . $key . "'" . ' );' : '{' . $key . '}';
+		$tag        = ( $php_templates ) ? 'mc_template_tag( $event, ' . "'" . $key . "'" . ' );' : '{' . $key . '}';
 		$tag_output = ( 'code' === $render ) ? '<pre>' . esc_html( $value ) . '</pre>' : wp_kses( $value, mc_kses_elements() );
 		if ( '' === $value ) {
 			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>' . $tag . '</code></div>';
