@@ -8,11 +8,6 @@
 	text-decoration: none;
 }
 
-#my-calendar legend {
-	font-weight: 700;
-	font-size: 1em
-}
-
 #my-calendar #wp-content-editor-tools {
 	background: #fff;
 }
