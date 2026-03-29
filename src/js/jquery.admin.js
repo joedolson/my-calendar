@@ -127,20 +127,32 @@ jQuery(document).ready(function ($) {
 		$( '#' + id + ' input' ).prop( 'disabled', false ).removeClass( 'disabled' ).addClass( 'emabled' );
 	});
 
+	const hasDisclosure = $( '.has-disclosure' );
+	hasDisclosure.each(function() {
+		let controlId = $( this ).attr( 'aria-controls' );
+		let controlled = $( '#' + controlId );
+		$( this ).prepend( '<span class="dashicons" aria-hidden="true">' );
+		controlled.hide();
+		$( this ).on( 'click', function() {
+			let visible = controlled.is( ':visible' );
+			if ( visible ) {
+				controlled.hide();
+				$( this ).attr( 'aria-expanded', 'false' );
+			} else {
+				controlled.show();
+				$( this ).attr( 'aria-expanded', 'true' );
+			}
+		});
+	});
+
+	// Additional changes required in editing repetitions.
 	const recurrences = $( '.disable-recurrences' );
-	recurrences.find( 'fieldset' ).hide();
 	recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', true );
 	$( '.enable-repetition' ).on( 'click', function() {
 		let expanded = $( this ).attr( 'aria-expanded' );
-		if ( 'false' !== expanded ) {
-			$( this ).attr( 'aria-expanded', 'false' );
-			$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-right' );
-			recurrences.find( 'fieldset' ).hide();
+		if ( 'false' === expanded ) {
 			recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', true );
 		} else {
-			$( this ).attr( 'aria-expanded', 'true' );
-			$( this ).find( '.dashicons' ).removeClass( 'dashicons-arrow-right' ).addClass( 'dashicons-arrow-down' );
-			recurrences.find( 'fieldset' ).show();
 			recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', false );
 		}
 	});
@@ -148,65 +160,10 @@ jQuery(document).ready(function ($) {
 	$( '#e_schedule' ).on( 'change', 'input', function() {
 		recurrences.find( 'fieldset' ).show();
 		recurrences.find( '.enable-repetition' ).attr( 'aria-expanded', 'true' );
-		recurrences.find( '.enable-repetition .dashicons' ).addClass( 'dashicons-arrow-down' ).removeClass( 'dashicons-arrow-right' );
 		recurrences.find( 'fieldset input, fieldset select, fieldset duet-date-picker' ).prop( 'disabled', false );
 	});
 
-	const addLocations = document.querySelector( '.add-location' );
-	if ( null !== addLocations ) {
-		let locationSelector    = document.getElementById( 'l_preset' );
-		let presetLocation      = document.getElementById( 'preset_l' );
-		let locationValue       = locationSelector.value;
-		let presetLocationValue = ( presetLocation ) ? presetLocation.value : '';
-
-		let controls = addLocations.getAttribute( 'aria-controls' );
-		const fields = document.getElementById( controls );
-		fields.classList.add( 'hidden' );
-		addLocations.addEventListener( 'click', function(e) {
-			let expanded = this.getAttribute( 'aria-expanded' );
-			if ( 'true' === expanded ) {
-				locationSelector.value = locationValue;
-				if ( presetLocation ) {
-					presetLocation.value = presetLocationValue;
-				}
-				fields.classList.add( 'hidden' );
-				this.setAttribute( 'aria-expanded', 'false' );
-				this.firstChild.classList.add( 'dashicons-plus' );
-				this.firstChild.classList.remove( 'dashicons-minus' );
-			} else {
-				locationSelector.value = 'none';
-				if ( presetLocation ) {
-					presetLocation.value = '';
-				}
-				fields.classList.remove( 'hidden' );
-				this.setAttribute( 'aria-expanded', 'true' );
-				this.firstChild.classList.add( 'dashicons-minus' );
-				this.firstChild.classList.remove( 'dashicons-plus' );
-			}
-		});
-	}
-
-	const toggleInside = document.querySelector( '.toggle-inside' );
-	if ( null !== toggleInside ) {
-		const parentEl = toggleInside.parentNode.parentNode;
-		let target     = parentEl.querySelector( '.inside' );
-		target.classList.add( 'hidden' );
-		toggleInside.addEventListener( 'click', function(e) {
-			let expanded = this.getAttribute( 'aria-expanded' );
-			if ( 'true' === expanded ) {
-				target.classList.add( 'hidden' );
-				this.setAttribute( 'aria-expanded', 'false' );
-				this.firstChild.classList.add( 'dashicons-plus' );
-				this.firstChild.classList.remove( 'dashicons-minus' );
-			} else {
-				target.classList.remove( 'hidden' );
-				this.setAttribute( 'aria-expanded', 'true' );
-				this.firstChild.classList.add( 'dashicons-minus' );
-				this.firstChild.classList.remove( 'dashicons-plus' );
-			}
-		});
-	}
-
+	// Additional changes required when toggling scheduled dates.
 	const viewDates = document.querySelector( '.toggle-dates' );
 	if ( null !== viewDates ) {
 		const addDates = document.getElementById( 'mc-view-scheduled-dates' );
@@ -216,17 +173,14 @@ jQuery(document).ready(function ($) {
 		addDates.classList.add( 'hidden' );
 		viewDates.addEventListener( 'click', function(e) {
 			let expanded = this.getAttribute( 'aria-expanded' );
-			// If prior state is true, do these tasks.
-			if ( 'true' === expanded ) {
+			// If state is true, do these tasks.
+			if ( 'true' !== expanded ) {
 				this.setAttribute( 'data-action', '' );
 				container.classList.remove( 'disabled' );
 				primary.forEach((el) => {
 					el.disabled = false;
 				});
 				addDates.classList.add( 'hidden' );
-				this.setAttribute( 'aria-expanded', 'false' );
-				this.firstChild.classList.add( 'dashicons-arrow-right' );
-				this.firstChild.classList.remove( 'dashicons-arrow-down' );
 			} else {
 				this.setAttribute( 'data-action', 'shiftforward' );
 				primary.forEach((el) => {
@@ -234,9 +188,30 @@ jQuery(document).ready(function ($) {
 				});
 				container.classList.add( 'disabled' );
 				addDates.classList.remove( 'hidden' );
-				this.setAttribute( 'aria-expanded', 'true' );
-				this.firstChild.classList.add( 'dashicons-arrow-down' );
-				this.firstChild.classList.remove( 'dashicons-arrow-right' );
+			}
+		});
+	}
+
+	// Additional tasks for add location disclosure.
+	const addLocations = document.querySelector( '.add-location' );
+	if ( null !== addLocations ) {
+		let locationSelector    = document.getElementById( 'l_preset' );
+		let presetLocation      = document.getElementById( 'preset_l' );
+		let locationValue       = locationSelector.value;
+		let presetLocationValue = ( presetLocation ) ? presetLocation.value : '';
+
+		addLocations.addEventListener( 'click', function(e) {
+			let expanded = this.getAttribute( 'aria-expanded' );
+			if ( 'true' !== expanded ) {
+				locationSelector.value = locationValue;
+				if ( presetLocation ) {
+					presetLocation.value = presetLocationValue;
+				}
+			} else {
+				locationSelector.value = 'none';
+				if ( presetLocation ) {
+					presetLocation.value = '';
+				}
 			}
 		});
 	}

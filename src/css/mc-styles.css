@@ -5,6 +5,7 @@
 .wp-core-ui .my-calendar-admin .button .dashicons {
 	line-height: .9;
 	vertical-align: middle;
+	text-decoration: none;
 }
 
 #my-calendar legend {
@@ -1376,10 +1377,6 @@ input[name="mc_uri"] {
 	font-size: 1.1em;
 }
 
-.event-new-category .button .dashicons {
-	vertical-align: middle;
-}
-
 label[for=e_link],
 label[for=e_author],
 label[for=e_host] {
@@ -1389,6 +1386,14 @@ label[for=e_host] {
 
 .my-calendar-admin .button .dashicons-minus {
 	font-size: 16px;
+}
+
+.my-calendar-admin .has-disclosure[aria-expanded="false"] .dashicons::before {
+	content: "\f132";
+}
+
+.my-calendar-admin .has-disclosure[aria-expanded="true"] .dashicons::before {
+	content: "\f460";
 }
 
 .new-event-category {
