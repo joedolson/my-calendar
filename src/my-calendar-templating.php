@@ -364,130 +364,7 @@ function mc_templates_edit() {
 			</div>
 		</div>
 	</div>
-	<div class="ui-sortable meta-box-sortables">
-		<div class="mc-postbox">
-			<h2 class="mc-flex">
-			<?php
-			esc_html_e( 'Template Tags', 'my-calendar' );
-			mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template-tags', 5 );
-			?>
-			</h2>
-
-			<div class='mc_template_tags mc-inside'>
-				<h3><?php esc_html_e( 'Event Tags', 'my-calendar' ); ?></h3>
-				<dl>
-					<dt><code>{title}</code></dt>
-					<dd><?php esc_html_e( 'Title of the event.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{linking_title}</code></dt>
-					<dd><?php esc_html_e( 'Title of the event as a link if a URL is present, or the title alone if not.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{time}</code></dt>
-					<dd><?php esc_html_e( 'Start time for the event.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{timerange}</code></dt>
-					<dd><?php esc_html_e( 'Beginning time to end time; excludes end time if hidden or same as start time.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{date}</code></dt>
-					<dd><?php esc_html_e( 'Date on which the event begins.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{daterange}</code></dt>
-					<dd><?php esc_html_e( 'Beginning date to end date; excludes end date if same as beginning.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{excerpt}</code></dt>
-					<dd><?php esc_html_e( 'Short event description.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{description}</code></dt>
-					<dd><?php esc_html_e( 'Description of the event.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{image}</code></dt>
-					<dd><?php esc_html_e( 'Featured image with the event.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{link}</code></dt>
-					<dd><?php esc_html_e( 'URL provided for the event.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{details}</code></dt>
-					<dd><?php esc_html_e( 'Link to a page containing information about the event.', 'my-calendar' ); ?>
-				</dl>
-
-				<h3><?php esc_html_e( 'Location Tags', 'my-calendar' ); ?></h3>
-				<dl>
-					<dt><code>{location}</code></dt>
-					<dd><?php esc_html_e( 'Name of the location of the event.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{street}</code></dt>
-					<dd><?php esc_html_e( 'First line of the site address.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{street2}</code></dt>
-					<dd><?php esc_html_e( 'Second line of the site address.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{city}</code></dt>
-					<dd><?php esc_html_e( 'City', 'my-calendar' ); ?></dd>
-
-					<dt><code>{state}</code></dt>
-					<dd><?php esc_html_e( 'State', 'my-calendar' ); ?></dd>
-
-					<dt><code>{postcode}</code></dt>
-					<dd><?php esc_html_e( 'Postal Code', 'my-calendar' ); ?></dd>
-
-					<dt><code>{country}</code></dt>
-					<dd><?php esc_html_e( 'Country for the event location.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{sitelink}</code></dt>
-					<dd><?php esc_html_e( 'Output the URL for the location.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{hcard}</code></dt>
-					<dd><?php esc_html_e( 'HTML Formatted event address.', 'my-calendar' ); ?></dd>
-
-					<dt><code>{link_map}</code></dt>
-					<dd><?php esc_html_e( 'Link to Map to the event, if address information is available.', 'my-calendar' ); ?></dd>
-				</dl>
-			</div>
-		</div>
-	</div>
 	<?php
-	$templates = (array) mc_get_option( 'templates', array() );
-	ksort( $templates );
-	foreach ( $templates as $key => $template ) {
-		if ( 'title' === $key || 'title_list' === $key || 'title_solo' === $key || 'title_card' === $key || 'link' === $key || 'label' === $key || 'rss' === $key ) {
-			continue;
-		}
-		?>
-	<div class="ui-sortable meta-box-sortables">
-		<div class="mc-postbox">
-				<h2>
-		<?php
-		// Translators: name of template being previewed.
-		printf( esc_html( __( 'Template Preview: %s', 'my-calendar' ) ), esc_html( ucfirst( $key ) ) );
-		?>
-				</h2>
-				<div class="template-preview mc-inside">
-		<?php
-		echo wp_kses_post( mc_admin_template_description( $key ) );
-		$mc_id = mc_get_template_tag_preview( false, 'int' );
-		if ( $mc_id ) {
-			$view_url    = mc_get_permalink( $mc_id );
-			$tag_preview = add_query_arg(
-				array(
-					'iframe'   => 'true',
-					'showtags' => 'true',
-					'template' => $key,
-					'mc_id'    => $mc_id,
-				),
-				$view_url
-			);
-			?>
-				<div class="mc-template-preview">
-					<iframe class="mc-iframe" onload="resizeIframe(this)" title="<?php esc_attr_e( 'Event Template Preview', 'my-calendar' ); ?>" src="<?php echo esc_url( $tag_preview ); ?>" width="800" height="600"></iframe>
-				</div>
-			<?php
-		}
-		?>
-			</div>
-		</div>
-	</div>
-		<?php
-	}
 }
 
 /**
@@ -555,13 +432,14 @@ function mc_display_template_preview( $template, $mc_id = false ) {
  * @return string
  */
 function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
-	$data    = mc_get_template_tag_preview( $mc_id );
-	$output  = '';
-	$empty   = '';
-	$oddball = '';
-
+	$data          = mc_get_template_tag_preview( $mc_id );
+	$output        = '';
+	$empty         = '';
+	$oddball       = '';
+	$php_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
 	// Translators: Event title being shown.
 	$post_title = sprintf( __( 'Template tags for &ldquo;%1$s&rdquo;, on %2$s', 'my-calendar' ), $data['title'], $data['date'] );
+
 	ksort( $data );
 	if ( empty( $data ) ) {
 		return __( 'Template tag index will display after you create an event.', 'my-calendar' );
@@ -618,15 +496,16 @@ function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
 		if ( is_array( $value ) ) {
 			$value = implode( ', ', $value );
 		}
+		$tag = ( $php_templates ) ? 'mc_template_tag( $event, ' . "'" . $key . "'" . ' );' : '{' . $key . '}';
 		$tag_output = ( 'code' === $render ) ? '<pre>' . esc_html( $value ) . '</pre>' : wp_kses( $value, mc_kses_elements() );
 		if ( '' === $value ) {
-			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
+			$empty .= '<section class="mc-template-card"><div class="mc-tag-' . $key . '"><code>' . $tag . '</code></div>';
 			$empty .= '<div class="mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		} elseif ( true === $uncommon ) {
-			$oddball .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
+			$oddball .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>' . $tag . '</code></div>';
 			$oddball .= '<div class="mc-output mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		} else {
-			$output .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>{' . $key . '}</code></div>';
+			$output .= '<section class="mc-template-card"><div class="mc-tag mc-tag-' . $key . '"><code>' . $tag . '</code></div>';
 			$output .= '<div class="mc-output mc-output-' . $key . '">' . $tag_output . '</div></section>';
 		}
 	}

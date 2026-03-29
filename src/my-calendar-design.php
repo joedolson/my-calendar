@@ -43,10 +43,13 @@ function my_calendar_design() {
 					<div class="ui-sortable meta-box-sortables" id="templates">
 						<div class="wptab postbox" aria-labelledby="tab_templates" role="tabpanel" id="my-calendar-templates">
 						<?php
-						$disable_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
-						if ( $disable_templates ) {
+						$php_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
+						if ( $php_templates ) {
 							$class = '';
 							echo '<h2>' . esc_html__( 'Templates', 'my-calendar' ) . '</h2>';
+							echo '<p><span class="mc-flex">';
+							mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5 );
+							echo '</span></p>';
 						} else {
 							$class = ' legacy-templates';
 							echo '<h2>' . esc_html__( 'Template Editor (Legacy)', 'my-calendar' ) . '</h2>';
