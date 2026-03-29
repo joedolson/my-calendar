@@ -128,7 +128,6 @@ jQuery( function( $ ) {
 	 */
 	$( '.wrap' ).on( 'click', '.thickbox.my-calendar-contextual-help', function( e ) {
 		let title = $( this ).data( 'title' );
-
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -147,6 +146,7 @@ jQuery( function( $ ) {
 
 		// Set title attribute on the iframe.
 		tbWindow.find( '#TB_iframeContent' ).attr( 'title', title );
+		tbWindow.find( '#TB_ajaxWindowTitle' ).text( title );
 	});
 
 	let reset = document.querySelectorAll( '.reset-my-calendar' );
