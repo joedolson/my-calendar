@@ -1491,6 +1491,7 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	align-items: center;
 	min-height: 32px;
 	margin: 0;
+	gap: 4px;
 }
 
 .my-calendar-admin .checkboxes li:hover {
