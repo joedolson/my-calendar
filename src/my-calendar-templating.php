@@ -839,9 +839,9 @@ add_action(
 				)
 			);
 			// Bail if user disabled CodeMirror.
-			//if ( false === $settings ) {
+			if ( false === $settings ) {
 				return;
-			//}
+			}
 
 			wp_add_inline_script(
 				'code-editor',
