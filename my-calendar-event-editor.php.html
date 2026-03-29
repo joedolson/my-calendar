@@ -1382,7 +1382,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$class   = '';
 				if ( $has_data &amp;&amp; false !== mc_get_event_instances( $data->event_id ) ) {
 					$class   = 'disable-recurrences';
-					$warning = '&lt;div class="recurrences-disabled">&lt;button type="button" class="button button-compact enable-repetition" aria-expanded="false">&lt;span class="dashicons dashicons-arrow-right" aria-hidden="true">&lt;/span>' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '&lt;/button>&lt;p>&lt;span>' . __( 'Editing the repetition pattern will regenerate scheduled dates for this event.', 'my-calendar' ) . '&lt;/span>&lt;/p>&lt;/div>';
+					$warning = '&lt;div class="recurrences-disabled">&lt;button type="button" class="button button-compact has-disclosure enable-repetition" aria-expanded="false" aria-controls="recurring-container">' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '&lt;/button>&lt;p>&lt;span>' . __( 'Editing the repetition pattern will regenerate scheduled dates for this event.', 'my-calendar' ) . '&lt;/span>&lt;/p>&lt;/div>';
 				}
 				$args        = array(
 					'value' => $repeats,
@@ -1396,7 +1396,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$return      = $pre . '
 	&lt;h2>' . __( 'Repetition Pattern', 'my-calendar' ) . mc_help_link( __( 'Help', 'my-calendar' ), __( 'Repetition Pattern', 'my-calendar' ), 'repetition pattern', '2', false ) . '&lt;/h2>
 	&lt;div class="inside recurrences ' . $class . '">' . $prev . $recur_info . $warning . '
-		&lt;fieldset class="recurring">
+		&lt;fieldset class="recurring" id="recurring-container">
 		&lt;legend class="screen-reader-text">' . __( 'Recurring Events', 'my-calendar' ) . '&lt;/legend>
 			&lt;div class="columns">
 			&lt;p>
@@ -1527,7 +1527,7 @@ function mc_additional_dates( $data ) {
 		$input     = mc_recur_datetime_input( $data );
 		$output    = "
 		&lt;div id='mc-scheduled-dates'>
-			&lt;button type='button' aria-expanded='false' class='button button-compact toggle-dates'>&lt;span class='dashicons dashicons-arrow-right' aria-hidden='true'>&lt;/span>" . esc_html__( 'View scheduled dates', 'my-calendar' ) . '&lt;/button>
+			&lt;button type='button' aria-expanded='false' class='button button-compact toggle-dates has-disclosure' aria-controls='mc-view-scheduled-dates'>" . esc_html__( 'View scheduled dates', 'my-calendar' ) . '&lt;/button>
 			&lt;div id="mc-view-scheduled-dates">' . $edit_desc . "
 				&lt;div class='mc_response' aria-live='assertive'>&lt;/div>
 				&lt;ul class='columns instance-list'>
@@ -1915,8 +1915,8 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( current_user_can( 'mc_edit_templates' ) || current_user_can( 'manage_options' ) ) {
 				?>
 		&lt;div class="postbox">
-			&lt;h2>&lt;button type="button" class="button-link toggle-inside">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>&lt;?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?>&lt;/button>&lt;/h2>
-			&lt;div class="inside">
+			&lt;h2>&lt;button type="button" class="button-link has-disclosure" aria-expanded="false" aria-controls="template-tag-preview">&lt;?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?>&lt;/button>&lt;/h2>
+			&lt;div class="inside" id="template-tag-preview">
 				&lt;p>&lt;?php esc_html_e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?>&lt;/p>
 				&lt;div class="mc-preview">
 					&lt;?php
@@ -2065,7 +2065,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 	$current_location = ( $hide_extras ) ? '' : $current_location;
 	$output           = $current_location . '&lt;div class="mc-event-location-dropdown">' . '&lt;div class="location-input">' . $fields . '&lt;/div>';
 	if ( ! $hide_extras ) {
-		$output .= ( current_user_can( 'mc_edit_locations' ) &amp;&amp; ! isset( $_GET['group_id'] ) ) ? '&lt;div class="location-toggle">&lt;button type="button" aria-expanded="false" aria-controls="location-fields" class="add-location button button-secondary">&lt;span class="dashicons dashicons-plus" aria-hidden="true">&lt;/span>&lt;span>' . __( 'Add a new location', 'my-calendar' ) . '&lt;/span>&lt;/button>&lt;/div>' : '';
+		$output .= ( current_user_can( 'mc_edit_locations' ) &amp;&amp; ! isset( $_GET['group_id'] ) ) ? '&lt;div class="location-toggle">&lt;button type="button" aria-expanded="false" aria-controls="location-fields" class="button button-secondary add-location has-disclosure">&lt;span>' . __( 'Add a new location', 'my-calendar' ) . '&lt;/span>&lt;/button>&lt;/div>' : '';
 	}
 	$output .= '&lt;/div>';
 
