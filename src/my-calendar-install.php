@@ -114,7 +114,7 @@ function mc_globals( $data = 'all' ) {
  event_begin DATE NOT NULL,
  event_end DATE NOT NULL,
  event_title VARCHAR(255) NOT NULL,
- event_desc TEXT NOT NULL,
+ event_desc MEDIUMTEXT NOT NULL,
  event_short TEXT NOT NULL,
  event_registration TEXT NOT NULL,
  event_tickets VARCHAR(255) NOT NULL,
