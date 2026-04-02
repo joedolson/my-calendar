@@ -1299,6 +1299,9 @@ function mc_do_upgrades( $upgrade_path ) {
 	// Retain upgrade paths for 5 years.
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.8.0': // TBD.
+				mc_upgrade_db(); // Event description is now MEDIUMTEXT.
+				break;
 			case '3.7.0': // 2026-01-20
 				// Accessibility terms are now saved as taxonomy terms.
 				mc_migrate_event_accessibility();
@@ -1326,8 +1329,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_use_custom_js' );
 				break;
 			case '3.3.0': // 2021-12-13
-				// Event repeats is now a string, and prefers a date-like value.
-				mc_upgrade_db();
 				// Count cache no longer counts 'archived' events as published.
 				mc_update_count_cache();
 				// Shortcodes now executed by default.
@@ -1385,7 +1386,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				break;
 			case '3.1.13': // 2019-03-15
 				delete_option( 'mc_inverse_color' );
-				mc_upgrade_db();
 				break;
 			default:
 				break;
