@@ -218,7 +218,25 @@ function mc_ajax_mcjs_action() {
 			add_filter( 'mc_upcoming_events_footer', 'mc_ajax_clear_wrappers' );
 			$request = isset( $_REQUEST['args'] ) ? wp_unslash( sanitize_text_field( $_REQUEST['args'] ) ) : array();
 			$request = str_replace( '|', '&', $request );
+			// List keys allowed in request arguments.
+			$allowed = array( 'category', 'before', 'after', 'author', 'host', 'ltype', 'lvalue', 'time', 'offset', 'template', 'substitute' );
 			$request = parse_str( $request, $args );
+			foreach ( $args as $key => $value ) {
+				if ( ! in_array( $key, $allowed, true ) ) {
+					unset( $args[ $key ] );
+				} else {
+					if ( 'site' === $key && is_multisite() ) {
+						$value   = absint( $value );
+						$details = get_site( $value );
+						if ( ! $details->public ) {
+							unset( $args[ $key ] );
+						}
+					} else {
+						unset( $args[ $key ] );
+					}
+					$args[ $key ] = sanitize_text_field( $value );
+				}
+			}
 			if ( isset( $_REQUEST['time'] ) ) {
 				$args['time'] = sanitize_text_field( $_REQUEST['time'] );
 			}
