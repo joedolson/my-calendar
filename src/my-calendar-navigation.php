@@ -257,7 +257,11 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	}
 
 	if ( $site && is_multisite() ) {
-		switch_to_blog( $restore );
+		$details = get_site( $restore );
+		$public  = $details->public;
+		if ( $public || current_user_can_for_site( $restore, 'read' ) ) {
+			switch_to_blog( $restore );
+		}
 	}
 
 	return array(

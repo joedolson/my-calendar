@@ -811,8 +811,12 @@ function my_calendar_events( $args ) {
  */
 function my_calendar_events_now( $category = 'default', $template = '<strong>{link_title}</strong> {timerange}', $site = false ) {
 	if ( $site && is_multisite() ) {
-		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
-		switch_to_blog( $site );
+		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$details = get_site( $site );
+		$public  = $details->public;
+		if ( $public || current_user_can_for_site( $site, 'read' ) ) {
+			switch_to_blog( $site );
+		}
 	}
 	$mcdb               = mc_is_remote_db();
 	$arr_events         = array();
@@ -922,8 +926,12 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
  */
 function my_calendar_events_next( $category = 'default', $template = '<strong>{link_title}</strong> {timerange}', $skip = 0, $site = false ) {
 	if ( $site && is_multisite() ) {
-		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
-		switch_to_blog( $site );
+		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$details = get_site( $site );
+		$public  = $details->public;
+		if ( $public || current_user_can_for_site( $site, 'read' ) ) {
+			switch_to_blog( $site );
+		}
 	}
 	$mcdb               = mc_is_remote_db();
 	$arr_events         = array();
