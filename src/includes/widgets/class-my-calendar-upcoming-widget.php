@@ -106,7 +106,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			'navigation'     => $navigation,
 		);
 		$hash  = md5( implode( PHP_EOL, $args ) );
-		$saved = get_option( 'mc_upcoming_' . $hash );
+		$saved = get_transient( 'mc_upcoming_' . $hash );
 		if ( ! $saved ) {
 			// Archive the original arguments for this query.
 			set_transient( 'mc_upcoming_' . $hash, $args, MONTH_IN_SECONDS );
