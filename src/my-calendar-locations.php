@@ -1865,7 +1865,7 @@ function mc_display_location_details( $content ) {
 			// Archive the original arguments for this query.
 			set_transient( 'mc_upcoming_' . $hash, $args, MONTH_IN_SECONDS );
 		}
-		$events  = my_calendar_upcoming_events( $args );
+		$events  = my_calendar_upcoming_events( $args, $hash );
 		$data    = array(
 			'location' => $location,
 			'events'   => $events,
