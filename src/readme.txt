@@ -115,6 +115,15 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.7.7 =
 
 * Update: Adapt admin CSS for WordPress 7.0 design refresh.
+* Bug fix: Verify that `mc_get_first_event()` returns an object before checking event recurrence.
+* Bug fix: Handle change in `wp_kses_hair` for WordPress 7.0 that normalizes attribute quoting.
+* Bug fix: Pass modal title correctly for Help modals.
+* Bug fix: Change submenu page to non-existent string parent instead of `null`, to prevent PHP warning.
+* Bug fix: Remove duplicate styles from admin CSS.
+* Change: Remove legacy template tag previews.
+* Change: Show template tags with PHP function formatting when PHP templates enabled.
+* Change: Combine Admin disclosures into a single JS function.
+* Change: Switch `event_desc` column from TEXT to MEDIUMTEXT.
 
 = 3.7.6 =
 
