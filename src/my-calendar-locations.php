@@ -43,7 +43,7 @@ function mc_update_location_post( $where, $data, $post ) {
 		'post_name'   => sanitize_title( $title ),
 		'post_type'   => $type,
 	);
-	if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) ) {
+	if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) && is_multisite() ) {
 		switch_to_blog( BLOG_ID_CURRENT_SITE );
 	}
 	$post_id = wp_update_post( $my_post );

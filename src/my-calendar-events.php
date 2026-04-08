@@ -810,7 +810,7 @@ function my_calendar_events( $args ) {
  * @return string output HTML
  */
 function my_calendar_events_now( $category = 'default', $template = '<strong>{link_title}</strong> {timerange}', $site = false ) {
-	if ( $site ) {
+	if ( $site && is_multisite() ) {
 		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
 	}
@@ -921,7 +921,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
  * @return string output HTML
  */
 function my_calendar_events_next( $category = 'default', $template = '<strong>{link_title}</strong> {timerange}', $skip = 0, $site = false ) {
-	if ( $site ) {
+	if ( $site && is_multisite() ) {
 		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		switch_to_blog( $site );
 	}
