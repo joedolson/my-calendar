@@ -23,10 +23,11 @@ require __DIR__ . '/includes/widgets/class-my-calendar-mini-widget.php';
  * Generate the widget output for upcoming events.
  *
  * @param array $args Event selection arguments.
+ * @param array $ref Reference ID for original arguments.
  *
  * @return String HTML output list.
  */
-function my_calendar_upcoming_events( $args, $hash ) {
+function my_calendar_upcoming_events( $args, $ref ) {
 	$language = isset( $args['language'] ) ? $args['language'] : '';
 	$switched = '';
 	if ( $language ) {
@@ -48,7 +49,7 @@ function my_calendar_upcoming_events( $args, $hash ) {
 	$args['site']       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 	$args['time']       = ( isset( $args['time'] ) ) ? $args['time'] : '';
 
-	if ( $args['site'] ) {
+	if ( $args['site'] && is_multisite() ) {
 		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
 		switch_to_blog( $args['site'] );
 	}
@@ -231,7 +232,7 @@ function my_calendar_upcoming_events( $args, $hash ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			$output .= mc_produce_upcoming_events( $event_array, $args, 'list', $hash );
+			$output .= mc_produce_upcoming_events( $event_array, $args, 'list', '', $ref );
 		} else {
 			$output = '';
 		}
@@ -630,9 +631,15 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 		return '';
 	}
 	unset( $args['time'] );
-	$json_source         = $args;
-	$json_source['hash'] = $hash;
-	$json_args           = str_replace( '&', '|', http_build_query( $json_source ) );
+	$json_source        = $args;
+	$json_source['ref'] = $hash;
+	$allowed            = array( 'before', 'after', 'offset', 'time', 'ref' );
+	foreach ( $json_source as $key => $arg ) {
+		if ( ! in_array( $key, $allowed, true ) ) {
+			unset( $json_source[ $key ] );
+		}
+	}
+	$json_args   = str_replace( '&', '|', http_build_query( $json_source ) );
 	$prev_button = '';
 	$next_button = '';
 	if ( $first_date ) {
@@ -692,7 +699,7 @@ function my_calendar_todays_events( $args ) {
 	$args['date']       = ( isset( $args['date'] ) ) ? $args['date'] : false;
 	$args['site']       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 
-	if ( $args['site'] ) {
+	if ( $args['site'] && is_multisite() ) {
 		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
 		switch_to_blog( $args['site'] );
 	}
