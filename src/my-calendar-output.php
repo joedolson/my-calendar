@@ -1867,7 +1867,7 @@ function my_calendar( $args ) {
 	if ( $site && is_multisite() ) {
 		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		$details = get_site( $site );
-		$public  = $details->public;
+		$public  = ( $details ) ? $details->public : false;
 		if ( $public || current_user_can_for_site( $site, 'read' ) ) {
 			switch_to_blog( $site );
 		}

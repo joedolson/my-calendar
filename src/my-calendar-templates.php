@@ -1015,7 +1015,7 @@ function mc_get_details_link( $event ) {
 	$restore = false;
 	if ( is_multisite() && property_exists( $event, 'site_id' ) && get_current_blog_id() !== $event->site_id ) {
 		$details = get_site( $event->site_id );
-		$public  = $details->public;
+		$public  = ( $details ) ? $details->public : false;
 		if ( $public || current_user_can_for_site( $event->site_id, 'read' ) ) {
 			switch_to_blog( $event->site_id );
 		}

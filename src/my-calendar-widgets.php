@@ -52,7 +52,7 @@ function my_calendar_upcoming_events( $args, $ref ) {
 	if ( $args['site'] && is_multisite() ) {
 		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
 		$details      = get_site( $args['site'] );
-		$public       = $details->public;
+		$public       = ( $details ) ? $details->public : false;
 		if ( $public || current_user_can_for_site( $args['site'], 'read' ) ) {
 			switch_to_blog( $args['site'] );
 		}
@@ -706,7 +706,7 @@ function my_calendar_todays_events( $args ) {
 	if ( $args['site'] && is_multisite() ) {
 		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
 		$details      = get_site( $args['site'] );
-		$public       = $details->public;
+		$public       = ( $details ) ? $details->public : false;
 		if ( $public || current_user_can_for_site( $args['site'], 'read' ) ) {
 			switch_to_blog( $args['site'] );
 		}
