@@ -2283,15 +2283,15 @@ function my_calendar( $args ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
 								if ( 'list' === $params['format'] ) {
 									if ( 'true' === $list_info ) {
-										$inner = '';
+										// Translators: Number of events on this date.
+										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 										$title = '<span class="mc-list-details-separator"> - </span>' . "<span class='mc-list-details select-event'>" . mc_list_title( $events ) . '</span>';
 									} elseif ( 'true' === $list_events ) {
 										$inner = '';
 										$title = '<span class="mc-list-details-separator"> - </span>' . "<span class='mc-list-details all-events'>" . mc_list_titles( $events ) . '</span>';
 									} else {
 										$title = '';
-										// Translators: Number of events on this date.
-										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
+										$inner = '';
 									}
 									if ( '' !== $event_output ) {
 										$date_params_set = ( isset( $_GET['month'] ) || isset( $_GET['dy'] ) || isset( $_GET['yr'] ) ) ? true : false;
