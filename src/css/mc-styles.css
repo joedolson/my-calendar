@@ -804,6 +804,10 @@ label[for=mc_uri_query]::before {
 	display: none;
 }
 
+.initial-hidden {
+	display: none;
+}
+
 .mc-tabs .tabs, .mc-tablinks {
 	position: relative;
 	border-bottom: 1px solid #c3c4c7;
