@@ -2313,15 +2313,15 @@ function my_calendar( $args ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
 								if ( 'list' === $params['format'] ) {
 									if ( 'true' === $list_info ) {
-										$inner = '';
+										// Translators: Number of events on this date.
+										$inner = ' &lt;span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')&lt;/span>';
 										$title = '&lt;span class="mc-list-details-separator"> - &lt;/span>' . "&lt;span class='mc-list-details select-event'>" . mc_list_title( $events ) . '&lt;/span>';
 									} elseif ( 'true' === $list_events ) {
 										$inner = '';
 										$title = '&lt;span class="mc-list-details-separator"> - &lt;/span>' . "&lt;span class='mc-list-details all-events'>" . mc_list_titles( $events ) . '&lt;/span>';
 									} else {
 										$title = '';
-										// Translators: Number of events on this date.
-										$inner = ' &lt;span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')&lt;/span>';
+										$inner = '';
 									}
 									if ( '' !== $event_output ) {
 										$date_params_set = ( isset( $_GET['month'] ) || isset( $_GET['dy'] ) || isset( $_GET['yr'] ) ) ? true : false;
