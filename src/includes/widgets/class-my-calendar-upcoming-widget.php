@@ -86,7 +86,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		$to             = ( isset( $instance['mc_to'] ) ) ? $instance['mc_to'] : false;
 		$site           = ( isset( $instance['mc_site'] ) ) ? $instance['mc_site'] : false;
 
-		$args = array(
+		$args  = array(
 			'before'         => $before,
 			'after'          => $after,
 			'type'           => $type,

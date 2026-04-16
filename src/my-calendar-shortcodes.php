@@ -135,6 +135,7 @@ function my_calendar_insert_upcoming( $atts ) {
 		$atts,
 		'my_calendar_upcoming'
 	);
+
 	$hash  = md5( implode( PHP_EOL, $args ) );
 	$saved = get_transient( 'mc_upcoming_' . $hash );
 	if ( ! $saved ) {
