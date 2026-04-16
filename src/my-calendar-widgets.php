@@ -23,10 +23,11 @@ require __DIR__ . '/includes/widgets/class-my-calendar-mini-widget.php';
  * Generate the widget output for upcoming events.
  *
  * @param array $args Event selection arguments.
+ * @param array $ref Reference ID for original arguments.
  *
  * @return String HTML output list.
  */
-function my_calendar_upcoming_events( $args ) {
+function my_calendar_upcoming_events( $args, $ref ) {
 	$language = isset( $args['language'] ) ? $args['language'] : '';
 	$switched = '';
 	if ( $language ) {
@@ -48,9 +49,13 @@ function my_calendar_upcoming_events( $args ) {
 	$args['site']       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 	$args['time']       = ( isset( $args['time'] ) ) ? $args['time'] : '';
 
-	if ( $args['site'] ) {
+	if ( $args['site'] && is_multisite() ) {
 		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
-		switch_to_blog( $args['site'] );
+		$details      = get_site( $args['site'] );
+		$public       = ( $details ) ? $details->public : false;
+		if ( $public || current_user_can_for_site( $args['site'], 'read' ) ) {
+			switch_to_blog( $args['site'] );
+		}
 	}
 
 	$hash         = md5( implode( ',', $args ) );
@@ -231,7 +236,7 @@ function my_calendar_upcoming_events( $args ) {
 			}
 		}
 		if ( ! empty( $event_array ) ) {
-			$output .= mc_produce_upcoming_events( $event_array, $args, 'list' );
+			$output .= mc_produce_upcoming_events( $event_array, $args, 'list', '', $ref );
 		} else {
 			$output = '';
 		}
@@ -341,10 +346,11 @@ function mc_span_time( $group_id ) {
  * @param array  $args Array of list arguments from calling function.
  * @param string $type Usually 'list', but also RSS or export.
  * @param string $context Display context.
+ * @param string $hash ID reference for original arguments in changeable contexts.
  *
  * @return string; HTML output of list
  */
-function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 'filters' ) {
+function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 'filters', $hash = '' ) {
 	$template       = $args['template'];
 	$order          = $args['order'];
 	$skip           = $args['skip'];
@@ -571,7 +577,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 	if ( ( $last_date || $first_date ) && 'events' === $args['type'] || 'default' === $args['type'] ) {
 		$args['offset']     = count( $output ) - 1;
 		$args['navigation'] = ( ! isset( $args['navigation'] ) ) ? mc_get_option( 'upcoming_events_navigation' ) : $args['navigation'];
-		$buttons            = mc_upcoming_events_navigation( $args, $first_date, $last_date );
+		$buttons            = mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash );
 		$html               = $buttons . $html;
 	}
 
@@ -620,15 +626,24 @@ function mc_upcoming_dates_navigation( $args ) {
  * @param array    $args Upcoming Events arguments.
  * @param int|bool $first_date Occurrence ID of previous event.
  * @param int|bool $last_date  Occurrence ID of next event.
+ * @param string   $hash ID reference to original arguments.
  *
  * @return string
  */
-function mc_upcoming_events_navigation( $args, $first_date, $last_date ) {
+function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) {
 	if ( 'true' !== $args['navigation'] ) {
 		return '';
 	}
 	unset( $args['time'] );
-	$json_args   = str_replace( '&', '|', http_build_query( $args ) );
+	$json_source        = $args;
+	$json_source['ref'] = $hash;
+	$allowed            = array( 'before', 'after', 'offset', 'time', 'ref' );
+	foreach ( $json_source as $key => $arg ) {
+		if ( ! in_array( $key, $allowed, true ) ) {
+			unset( $json_source[ $key ] );
+		}
+	}
+	$json_args   = str_replace( '&', '|', http_build_query( $json_source ) );
 	$prev_button = '';
 	$next_button = '';
 	if ( $first_date ) {
@@ -688,9 +703,13 @@ function my_calendar_todays_events( $args ) {
 	$args['date']       = ( isset( $args['date'] ) ) ? $args['date'] : false;
 	$args['site']       = ( isset( $args['site'] ) ) ? $args['site'] : false;
 
-	if ( $args['site'] ) {
+	if ( $args['site'] && is_multisite() ) {
 		$args['site'] = ( 'global' === $args['site'] ) ? BLOG_ID_CURRENT_SITE : $args['site'];
-		switch_to_blog( $args['site'] );
+		$details      = get_site( $args['site'] );
+		$public       = ( $details ) ? $details->public : false;
+		if ( $public || current_user_can_for_site( $args['site'], 'read' ) ) {
+			switch_to_blog( $args['site'] );
+		}
 	}
 
 	$params = array(

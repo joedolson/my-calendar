@@ -135,6 +135,12 @@ function my_calendar_insert_upcoming( $atts ) {
 		$atts,
 		'my_calendar_upcoming'
 	);
+	$hash  = md5( implode( PHP_EOL, $args ) );
+	$saved = get_transient( 'mc_upcoming_' . $hash );
+	if ( ! $saved ) {
+		// Archive the original arguments for this query.
+		set_transient( 'mc_upcoming_' . $hash, $args, MONTH_IN_SECONDS );
+	}
 
 	global $user_ID;
 	if ( 'current' === $args['author'] ) {
@@ -164,7 +170,7 @@ function my_calendar_insert_upcoming( $atts ) {
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'upcoming' );
 	}
 
-	return my_calendar_upcoming_events( $args );
+	return my_calendar_upcoming_events( $args, $hash );
 }
 
 /**

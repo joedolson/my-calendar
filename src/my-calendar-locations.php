@@ -43,7 +43,7 @@ function mc_update_location_post( $where, $data, $post ) {
 		'post_name'   => sanitize_title( $title ),
 		'post_type'   => $type,
 	);
-	if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) ) {
+	if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) && is_multisite() ) {
 		switch_to_blog( BLOG_ID_CURRENT_SITE );
 	}
 	$post_id = wp_update_post( $my_post );
@@ -1858,8 +1858,14 @@ function mc_display_location_details( $content ) {
 		 *
 		 * @return {array}
 		 */
-		$args    = apply_filters( 'mc_display_location_events', $args, $location );
-		$events  = my_calendar_upcoming_events( $args );
+		$args  = apply_filters( 'mc_display_location_events', $args, $location );
+		$hash  = md5( implode( PHP_EOL, $args ) );
+		$saved = get_transient( 'mc_upcoming_' . $hash );
+		if ( ! $saved ) {
+			// Archive the original arguments for this query.
+			set_transient( 'mc_upcoming_' . $hash, $args, MONTH_IN_SECONDS );
+		}
+		$events  = my_calendar_upcoming_events( $args, $hash );
 		$data    = array(
 			'location' => $location,
 			'events'   => $events,

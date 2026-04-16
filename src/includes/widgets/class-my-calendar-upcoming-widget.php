@@ -105,8 +105,14 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 			'site'           => $site,
 			'navigation'     => $navigation,
 		);
+		$hash  = md5( implode( PHP_EOL, $args ) );
+		$saved = get_transient( 'mc_upcoming_' . $hash );
+		if ( ! $saved ) {
+			// Archive the original arguments for this query.
+			set_transient( 'mc_upcoming_' . $hash, $args, MONTH_IN_SECONDS );
+		}
 
-		$the_events = my_calendar_upcoming_events( $args );
+		$the_events = my_calendar_upcoming_events( $args, $hash );
 		if ( '' !== $the_events ) {
 			echo wp_kses( $before_widget . $widget_title . $the_events . $after_widget, mc_kses_elements() );
 		}
@@ -266,7 +272,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 				printf( esc_html__( '%s from the past', 'my-calendar' ), esc_html( ucfirst( $type ) ) );
 				?>
 				</label>
-				<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_before' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_before' ) ); ?>" value="<?php echo esc_attr( $before ); ?>" size="1" maxlength="3" /> 
+				<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_before' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_before' ) ); ?>" value="<?php echo esc_attr( $before ); ?>" size="1" maxlength="3" />
 			</p>
 		</div>
 			<?php

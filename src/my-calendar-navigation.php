@@ -256,8 +256,12 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		$mc_bottomnav = PHP_EOL . '<nav class="my-calendar-navigation" aria-label="' . __( 'Calendar (bottom)', 'my-calendar' ) . '">' . PHP_EOL . '<div class="mc_bottomnav my-calendar-footer">' . $mc_bottomnav . '</div>' . PHP_EOL . '</nav>' . PHP_EOL;
 	}
 
-	if ( $site ) {
-		switch_to_blog( $restore );
+	if ( $site && is_multisite() ) {
+		$details = get_site( $restore );
+		$public  = ( $details ) ? $details->public : false;
+		if ( $public || current_user_can_for_site( $restore, 'read' ) ) {
+			switch_to_blog( $restore );
+		}
 	}
 
 	return array(

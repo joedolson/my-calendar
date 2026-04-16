@@ -1864,9 +1864,13 @@ function my_calendar( $args ) {
 	$list_info     = mc_get_option( 'show_list_info' );
 	$list_events   = mc_get_option( 'show_list_events' );
 
-	if ( $site ) {
-		$site = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
-		switch_to_blog( $site );
+	if ( $site && is_multisite() ) {
+		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
+		$details = get_site( $site );
+		$public  = ( $details ) ? $details->public : false;
+		if ( $public || current_user_can_for_site( $site, 'read' ) ) {
+			switch_to_blog( $site );
+		}
 	}
 	my_calendar_check();
 
