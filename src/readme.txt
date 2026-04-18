@@ -114,7 +114,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.7.9 =
 
-* Bug fix: Category icons always created new instead of fetched from cache.
+* Performance: Category icons always created new instead of fetched from cache.
 * Bug fix: Restore 'initial-hidden' class to fix flash of unstyled content in admin.
 * Bug fix: List events options did not accurately reflect behavior.
 
