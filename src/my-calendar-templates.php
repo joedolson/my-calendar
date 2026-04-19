@@ -1163,7 +1163,10 @@ function mc_get_details_label( $event, $e ) {
  */
 function mc_date_badge( $date ) {
 	$time  = strtotime( $date );
-	$badge = '<time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', $time ) . '"><span class="month">' . date_i18n( 'M', mc_date( '', $time ) ) . '</span><span class="day">' . mc_date( 'j', $time ) . '</span></time>';
+	$badge = '<time class="mc-date-badge" datetime="' . mc_date( 'Y-m-d', $time, false ) . '">
+		<span class="month">' . date_i18n( 'M', mc_date( '', $time, false ) ) . '</span>
+		<span class="day">' . mc_date( 'j', $time, false ) . '</span>
+	</time>';
 	/**
 	 * Filter the date badge HTML.
 	 *
