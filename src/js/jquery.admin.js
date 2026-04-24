@@ -220,7 +220,7 @@ jQuery(document).ready(function ($) {
 		function(e) {
 			let keycode = ( e.keyCode ? e.keyCode : e.which );
 			let action  = $( ':focus' ).attr( 'data-action' );
-			if ( ( !e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
+			if ( ( ! e.shiftKey && keycode == 9 ) && action == 'shiftback' ) {
 				e.preventDefault();
 				$( '.toggle-dates' ).trigger( 'focus' );
 			}

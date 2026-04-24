@@ -334,6 +334,7 @@ function mc_kses_elements() {
 			'data-type'               => array(),
 			'aria-pressed'            => array(),
 			'id'                      => array(),
+			'data-action'             => array(),
 			'data-context'            => array(),
 			'data-model'              => array(),
 			'data-event'              => array(),
