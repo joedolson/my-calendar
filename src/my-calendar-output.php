@@ -1817,7 +1817,7 @@ function mc_switch_language( $current, $target_language ) {
 /**
  * Get the heading level for the calendar.
  *
- * @param array $params View parameters.
+ * @param array  $params View parameters.
  * @param string $template Template id.
  * @param string $level Primary, secondary, or tertiary.
  *
@@ -1843,7 +1843,7 @@ function mc_get_heading_level( $params = array(), $template = false, $level = 'p
 	 */
 	$hl = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
 
-	switch( $level ) {
+	switch ( $level ) {
 		case 'secondary':
 			$level = str_replace( 'h', '', $hl );
 			$level = absint( $level ) + 1;

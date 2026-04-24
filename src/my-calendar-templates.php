@@ -2163,7 +2163,7 @@ function mc_template_access( $data, $type = 'calendar', $text = '', $return_type
 		$notes          = ( is_array( $access_data ) ) ? $access_data['notes'] : $access_data;
 		$sublevel       = mc_get_heading_level(
 			array(
-				'format' => $type
+				'format' => $type,
 			),
 			''
 		);
@@ -2172,7 +2172,7 @@ function mc_template_access( $data, $type = 'calendar', $text = '', $return_type
 			if ( 'list' === $time ) {
 				$sublevel = mc_get_heading_level(
 					array(
-						'format' => $type
+						'format' => $type,
 					),
 					'',
 					'tertiary'
@@ -2180,7 +2180,7 @@ function mc_template_access( $data, $type = 'calendar', $text = '', $return_type
 			} else {
 				$sublevel = mc_get_heading_level(
 					array(
-						'format' => $type
+						'format' => $type,
 					),
 					'',
 					'secondary'
