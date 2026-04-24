@@ -218,6 +218,10 @@
 	color: var(--primary-dark);
 }
 
+.mc_edit_links {
+	clear: both;
+}
+
 .mc_edit_links ul {
 	display: flex;
 	gap: 10px;

@@ -763,6 +763,25 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 	 */
 	$default_size = apply_filters( 'mc_default_image_size', $default_size );
 	if ( is_numeric( $event->event_post ) && 0 !== (int) $event->event_post && ( isset( $data[ $default_size ] ) && '' !== $data[ $default_size ] ) ) {
+		$thumbnail_id = get_post_thumbnail_id( $event->event_post );
+		$metadata     = wp_get_attachment_metadata( $thumbnail_id );
+		$cur_size     = ( $metadata[ $default_size ] ) ?? false;
+		if ( ! $cur_size ) {
+			$width  = $metadata['width'];
+			$height = $metadata['height'];
+		} else {
+			$width  = $cur_size['width'];
+			$height = $cur_size['height'];
+		}
+		if ( $width === $height ) {
+			$shape = 'square';
+		}
+		if ( $width < $height ) {
+			$shape = 'portrait';
+		}
+		if ( $width > $height ) {
+			$shape = 'landscape';
+		}
 		/**
 		 * Customize featured image attributes.
 		 *
@@ -773,8 +792,7 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 		 *
 		 * @return {array}
 		 */
-		$atts         = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo' ), $event );
-		$thumbnail_id = get_post_thumbnail_id( $event->event_post );
+		$atts = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image photo ' . $shape ), $event );
 		if ( ! isset( $atts['alt'] ) && ! get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true ) ) {
 			$atts['alt'] = $event->event_title;
 		}

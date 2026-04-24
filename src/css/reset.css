@@ -1622,6 +1622,14 @@ body.mc-no-scroll {
 	height: auto;
 }
 
+.my-calendar-modal .mc-image.square,
+.my-calendar-modal .mc-image.portrait {
+	max-width: 50%;
+	float: left;
+	margin-bottom: 1rem;
+	margin-right: 1rem;
+}
+
 .my-calendar-modal #mc-modal-content {
 	padding: 16px;
 }

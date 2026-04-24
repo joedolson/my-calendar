@@ -3,6 +3,7 @@
 .my-calendar-modal .mc_edit_links,
 .mc-main .details .mc_edit_links {
 	position: relative;
+	clear: both;
 }
 
 .mc-events .mc_edit_links ul,
