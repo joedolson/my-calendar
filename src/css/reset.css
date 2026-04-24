@@ -459,7 +459,7 @@
 	content: '\f504';
 }
 
-.my-calendar-navigation div > * {
+.my-calendar-navigation div > *:not(select) {
 	display: flex;
 }
 
