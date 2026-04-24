@@ -228,7 +228,8 @@ jQuery(document).ready(function ($) {
 				e.preventDefault();
 				$( '[data-action=shiftback]' ).trigger( 'focus' );
 			}
-		});
+		}
+	);
 
 	// Set default conditions.
 	$( '.event_span' ).hide();
