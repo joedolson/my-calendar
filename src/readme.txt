@@ -118,6 +118,10 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Restore 'initial-hidden' class to fix flash of unstyled content in admin.
 * Bug fix: List events options did not accurately reflect behavior.
 * Bug fix: Date badge template format double-calculated timezone offsets.
+* Bug fix: Missing '.button' classes caused misaligned icons.
+* Bug fix: Default set primary category to a selected category.
+* Bug fix: Reduce h2 opacity as well as content opacity when editing scheduled dates.
+* Bug fix: Fix focus management while editing scheduled dates.
 
 = 3.7.8 =
 
@@ -233,7 +237,6 @@ Accessibility-first breaking change: The default navigation has changed from usi
 = 3.6.17 =
 
 * Security: Broken Access Control in unused mc_dismiss_notice() function. Props @patchstack and Doan Dinh Van.
-
 
 = 3.6.16 =
 
