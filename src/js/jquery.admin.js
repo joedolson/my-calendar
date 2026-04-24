@@ -323,23 +323,30 @@ jQuery(document).ready(function ($) {
 		selector.find( 'option[value=' + value + ']' ).show();
 	});
 	$( '.categories input' ).on( 'change', function(e) {
-		let category_count = $( '.categories input:checked' );
-		const categories   = $( '.categories input' );
-		if ( category_count.length > 1 ) {
+		let selected_categories = $( '.categories input:checked' );
+		let initial_primary     = selected_categories[0];
+		const categories        = $( '.categories input' );
+		if ( selected_categories.length > 1 ) {
 			primary_category.show().prop( 'disabled', false );
 		} else {
 			primary_category.hide().prop( 'disabled', true );
 		}
+		const selector = primary_category.find( 'select' );
 		categories.each( function() {
 			let value      = $( this ).val();
 			let checked    = $( this ).prop( 'checked' );
-			const selector = primary_category.find( 'select' );
 			if ( checked ) {
 				selector.find( 'option[value=' + value + ']' ).show().prop( 'disabled', false );
+
 			} else {
 				selector.find( 'option[value=' + value + ']' ).hide().prop( 'disabled', true );
 			}
 		});
+		let primary_selected = selector.find( ':visible:selected' ).val();
+		if ( initial_primary && ! primary_selected ) {
+			let val = initial_primary.value;
+			selector.find( 'option[value=' + val + ']' ).prop( 'selected', true );
+		}
 	});
 
 	$( '.fifth-week-schedule' ).hide();
