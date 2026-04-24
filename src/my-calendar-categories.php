@@ -1492,6 +1492,7 @@ function mc_category_icon( $event_or_category ) {
 					$src = $path . $event_or_category->category_icon;
 				} else {
 					$image = get_option( 'mc_category_icon_' . $context . '_' . $id, '' );
+					$image = ( $image ) ? $image : mc_generate_category_icon( $event_or_category );
 				}
 				$hex      = ( strpos( $color, '#' ) !== 0 ) ? '#' : '';
 				$hexcolor = $hex . $color;
