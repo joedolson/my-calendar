@@ -1507,11 +1507,11 @@ function mc_additional_dates( $data ) {
 				<ul class='columns instance-list'>
 					$instances
 				</ul>
-				<p><button data-action='shiftback' type='button' class='add-occurrence button-secondary' aria-expanded='false'><span class='dashicons dashicons-plus' aria-hidden='true'> </span>" . esc_html__( 'Add another date', 'my-calendar' ) . "</button></p>
+				<p><button data-action='shiftback' type='button' class='add-occurrence button button-secondary' aria-expanded='false'><span class='dashicons dashicons-plus' aria-hidden='true'> </span>" . esc_html__( 'Add another date', 'my-calendar' ) . "</button></p>
 				<div class='mc_add_new'>
 					$input
 					<p>
-					<button type='button' data-action='shiftback' class='save-occurrence button-secondary clear'>" . esc_html__( 'Add Date', 'my-calendar' ) . '</button>
+					<button type='button' data-action='shiftback' class='save-occurrence button button-secondary clear'>" . esc_html__( 'Add Date', 'my-calendar' ) . '</button>
 					</p>
 				</div>
 			</div>
