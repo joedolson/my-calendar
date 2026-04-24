@@ -141,6 +141,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	);
 	$close = '';
 	if ( mc_show_details( $time, $type ) ) {
+		$hlevel = mc_get_heading_level( array(), $template, 'secondary' );
 		/**
 		 * Filter list event heading level. Default 'h3'.
 		 *
@@ -153,7 +154,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @return {string}
 		 */
-		$hlevel = apply_filters( 'mc_heading_level_list', 'h3', $type, $time, $template );
+		$hlevel = apply_filters( 'mc_heading_level_list', $hlevel, $type, $time, $template );
 		if ( false === $details ) {
 			if ( ( 'true' === $display_address || 'true' === $display_map ) || ( mc_output_is_visible( 'address', $type, $event ) || mc_output_is_visible( 'gmap_link', $type, $event ) ) ) {
 				$show_add = ( 'true' === $display_address || mc_output_is_visible( 'address', $type, $event ) ) ? 'true' : 'false';
@@ -221,7 +222,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 				if ( 'modal' === $uitype ) {
 					$inner_title = '';
 				} else {
-					$headingtype = ( 'h3' === $hlevel ) ? 'h4' : 'h' . ( ( (int) str_replace( 'h', '', $hlevel ) ) - 1 );
+					$headingtype = mc_get_heading_level( array(), $template, 'tertiary' );
 					$inner_title = '	&lt;' . $headingtype . ' class="mc-title">' . $event_title . '&lt;/' . $headingtype . '>';
 				}
 			}

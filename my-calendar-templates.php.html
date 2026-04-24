@@ -2187,10 +2187,31 @@ function mc_template_access( $data, $type = 'calendar', $text = '', $return_type
 		$access_heading = ( $text ) ? $text : $access_heading;
 		$access_data    = get_post_meta( $event->event_post, '_mc_event_access', true );
 		$notes          = ( is_array( $access_data ) ) ? $access_data['notes'] : $access_data;
-		$sublevel       = 'h2';
+		$sublevel       = mc_get_heading_level(
+			array(
+				'format' => $type
+			),
+			''
+		);
 		if ( 'mini' === $type || 'list' === $type || 'list' === $time ) {
 			// In some views, levels are reduced one because there are multiple events.
-			$sublevel = ( 'list' === $time ) ? 'h4' : 'h3';
+			if ( 'list' === $time ) {
+				$sublevel = mc_get_heading_level(
+					array(
+						'format' => $type
+					),
+					'',
+					'tertiary'
+				);
+			} else {
+				$sublevel = mc_get_heading_level(
+					array(
+						'format' => $type
+					),
+					'',
+					'secondary'
+				);
+			}
 		}
 		$terms  = wp_get_object_terms( $event->event_post, 'mc-event-access' );
 		$access = array();
@@ -2240,7 +2261,7 @@ function mc_template_location_access( $data, $text = false ) {
 
 	$access_heading = __( 'Location Accessibility', 'my-calendar' );
 	$access_heading = ( $text ) ? $text : $access_heading;
-	$sublevel       = 'h2';
+	$sublevel       = mc_get_heading_level();
 
 	$terms  = wp_get_object_terms( $location->location_post, 'mc-location-access' );
 	$access = array();

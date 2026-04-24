@@ -426,7 +426,8 @@ function mc_category_key( $category, $id = '' ) {
 	 * @param {string} $id The calendar view ID.
 	 */
 	$categories = apply_filters( 'mc_category_key_array', $categories, $category, $id );
-	$key       .= '&lt;div class="category-key ' . $class . '">&lt;h3 class="maybe-hide">' . __( 'Categories', 'my-calendar' ) . "&lt;/h3>\n&lt;ul>\n";
+	$hlevel     = mc_get_heading_level( array(), '', 'primary' );
+	$key       .= '&lt;div class="category-key ' . $class . '">&lt;' . $hlevel . ' class="maybe-hide">' . __( 'Event Categories', 'my-calendar' ) . "&lt;/$hlevel>\n&lt;ul>\n";
 
 	foreach ( $categories as $cat ) {
 		$class = '';
