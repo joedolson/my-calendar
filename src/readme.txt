@@ -122,6 +122,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Default set primary category to a selected category.
 * Bug fix: Reduce h2 opacity as well as content opacity when editing scheduled dates.
 * Bug fix: Fix focus management while editing scheduled dates.
+* Design: Improvements to oft-neglected list view.
+* Change: Add `mc_get_heading_level()` to simplify heading hierarchy management.
+* Change: Shift category key heading to primary.
 
 = 3.7.8 =
 
