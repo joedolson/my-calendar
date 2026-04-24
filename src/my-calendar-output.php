@@ -1834,7 +1834,7 @@ function mc_get_heading_level( $params = array(), $template = false, $level = 'p
 	 *
 	 * @hook mc_heading_level
 	 *
-	 * @param {string} $h1 Main heading level.
+	 * @param {string} $hlevel Main heading level.
 	 * @param {string} $format Current view format.
 	 * @param {string} $time Current view time frame.
 	 * @param {string} $template Current view template.
