@@ -614,8 +614,8 @@
 	display: flex;
 }
 
-.mc-main .mc-list .event-date button.mc-text-button:hover,
-.mc-main .mc-list .event-date button.mc-text-button:focus {
+.mc-main .mc-list button.mc-text-button:hover,
+.mc-main .mc-list button.mc-text-button:focus {
 	background: transparent;
 	background-color: transparent !important;
 	outline: 1px solid var(--nav-button-border);
