@@ -1083,6 +1083,7 @@ label[for=mc_uri_query]::before {
 	margin-top: 8px;
 }
 
+#my-calendar.disabled .ui-sortable h2,
 #my-calendar.disabled .ui-sortable .postbox .inside > *:not(#mc-scheduled-dates) {
 	opacity: .3;
 }
