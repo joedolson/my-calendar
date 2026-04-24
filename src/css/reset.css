@@ -687,9 +687,10 @@
 	padding: 0;
 }
 
+.single-mc-event .mc-image,
 .mc-main .details .mc-image {
 	width: 100%;
-	max-width: 100% !important;
+	max-width: 100%;
 	height: auto;
 }
 

@@ -553,6 +553,7 @@ h4.mc-title {
 	font-style: italic;
 }
 
+.single-mc-event .mc-image,
 .mc-main .details .mc-image {
 	max-width: 100%;
 	height: auto;
