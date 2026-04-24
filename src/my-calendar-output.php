@@ -473,7 +473,11 @@ function mc_draw_event_header( $data, $type, $template ) {
 	}
 
 	$group_class = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
-	$hlevel      = ( mc_get_option( 'show_months' ) > 1 ) ? 'h4' : 'h3';
+	if ( mc_get_option( 'show_months' ) > 1 ) {
+		$hlevel = mc_get_heading_level( array(), $template, 'tertiary' );
+	} else {
+		$hlevel = mc_get_heading_level( array(), $template, 'secondary' );
+	}
 	/**
 	 * Filter default event heading when in a table.
 	 *
@@ -489,7 +493,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
 	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 	if ( 'single' === $type ) {
-		$title = ( ! is_singular( 'mc-events' ) ) ? "	<h2 class='event-title summary'>$image<div>$event_title</div></h2>\n" : '	<span class="summary screen-reader-text">' . wp_strip_all_tags( $event_title ) . '</span>';
+		$title = ( ! is_singular( 'mc-events' ) ) ? "	<$hlevel class='event-title summary'>$image<div>$event_title</div></$hlevel>\n" : '	<span class="summary screen-reader-text">' . wp_strip_all_tags( $event_title ) . '</span>';
 	} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 		/**
 		 * Filter event title inside event heading.
@@ -1808,6 +1812,53 @@ function mc_switch_language( $current, $target_language ) {
 	return $lang;
 }
 
+
+
+/**
+ * Get the heading level for the calendar.
+ *
+ * @param array $params View parameters.
+ * @param string $template Template id.
+ * @param string $level Primary, secondary, or tertiary.
+ *
+ * @return string
+ */
+function mc_get_heading_level( $params = array(), $template = false, $level = 'primary' ) {
+	$defaults = array(
+		'format' => 'calendar',
+		'time'   => 'month',
+	);
+	$params   = array_merge( $params, $defaults );
+	/**
+	 * Main heading level. Default `h2`.
+	 *
+	 * @hook mc_heading_level
+	 *
+	 * @param {string} $h1 Main heading level.
+	 * @param {string} $format Current view format.
+	 * @param {string} $time Current view time frame.
+	 * @param {string} $template Current view template.
+	 *
+	 * @return {string}
+	 */
+	$hl = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
+
+	switch( $level ) {
+		case 'secondary':
+			$level = str_replace( 'h', '', $hl );
+			$level = absint( $level ) + 1;
+			$hl    = ( $level > 6 ) ? 'h6' : 'h' . $level;
+			break;
+		case 'tertiary':
+			$level = str_replace( 'h', '', $hl );
+			$level = absint( $level ) + 2;
+			$hl    = ( $level > 6 ) ? 'h6' : 'h' . $level;
+			break;
+	}
+
+	return $hl;
+}
+
 /**
  * Create calendar output and return.
  *
@@ -1942,20 +1993,8 @@ function my_calendar( $args ) {
 	 * @return {string}
 	 */
 	$date_format = apply_filters( 'mc_date_format', $date_format, $params['format'], $params['time'] );
-	/**
-	 * Main heading level. Default `h2`.
-	 *
-	 * @hook mc_heading_level
-	 *
-	 * @param {string} $h1 Main heading level.
-	 * @param {string} $format Current view format.
-	 * @param {string} $time Current view time frame.
-	 * @param {string} $template Current view template.
-	 *
-	 * @return {string}
-	 */
-	$hl         = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
-	$permalinks = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
+	$hl          = mc_get_heading_level( $params, $template );
+	$permalinks  = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
 	if ( ! $permalinks && isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
 		// single event, main calendar only.
 		$mc_id = ( is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
@@ -2080,19 +2119,7 @@ function my_calendar( $args ) {
 			} else {
 				$heading = mc_draw_template( $values, wp_unslash( $week_template ) );
 			}
-			/**
-			 * Filter the main calendar heading level. Default `h2`.
-			 *
-			 * @hook mc_heading_level
-			 *
-			 * @param {string} $heading HTML heading element.
-			 * @param {string} $format Viewed format.
-			 * @param {string} $time Time frame currently viewed.
-			 * @param {string} $template Heading template.
-			 *
-			 * @return {string}
-			 */
-			$h2 = apply_filters( 'mc_heading_level', 'h2', $params['format'], $params['time'], $template );
+			$hlevel = mc_get_heading_level( $params, $template );
 			/**
 			 * Filter the main calendar heading in multiday views.
 			 *
@@ -2106,7 +2133,7 @@ function my_calendar( $args ) {
 			 * @return {string}
 			 */
 			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'], $template );
-			$body   .= "<$h2 id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>" . trim( $heading ) . "</span></$h2>\n";
+			$body   .= "<$hlevel id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>" . trim( $heading ) . "</span></$hlevel>\n";
 			$body   .= $top;
 
 			/**
@@ -2315,7 +2342,7 @@ function my_calendar( $args ) {
 													</div>
 												</li>';
 											} else {
-												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><h2 class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</h2><div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>" . $event_output . '</div></li>';
+												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><$hlevel class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</$hlevel><div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>" . $event_output . '</div></li>';
 											}
 											$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 										}
