@@ -103,6 +103,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
    My Calendar -> Add New Location
    My Calendar -> Locations
    My Calendar -> Categories
+   My Calendar -> Access Terms
    My Calendar -> Design
    My Calendar -> Settings
    My Calendar -> Shortcodes
@@ -123,6 +124,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Reduce h2 opacity as well as content opacity when editing scheduled dates.
 * Bug fix: Fix focus management while editing scheduled dates.
 * Bug fix: Outlook/O365 event links should use ISO 8601 date formats.
+* Bug fix: Duplicate h2 event title should be hidden on singular list view modals.
 * Design: Improvements to oft-neglected list view.
 * Change: Add `mc_get_heading_level()` to simplify heading hierarchy management.
 * Change: Shift category key heading to primary.
