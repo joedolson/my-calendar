@@ -122,9 +122,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Default set primary category to a selected category.
 * Bug fix: Reduce h2 opacity as well as content opacity when editing scheduled dates.
 * Bug fix: Fix focus management while editing scheduled dates.
+* Bug fix: Outlook/O365 event links should use ISO 8601 date formats.
 * Design: Improvements to oft-neglected list view.
 * Change: Add `mc_get_heading_level()` to simplify heading hierarchy management.
 * Change: Shift category key heading to primary.
+* Change: Add image shape classes: 'square', 'landscape', or 'portrait'. Adjust layout if not landscape.
 
 = 3.7.8 =
 
