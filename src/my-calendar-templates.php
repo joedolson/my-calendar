@@ -476,9 +476,9 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$distance = ' (' . $dist . ')';
 	}
 	if ( is_admin() && isset( $_GET['page'] ) && 'my-calendar-location-manager' === $_GET['page'] ) {
-		$link = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link edit p-name p-org u-url'><span class='dashicons dashicons-edit' aria-hidden='true'></span> <span id='location$event->location_id'>$label</span></a>";
+		$link = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link org edit p-name p-org u-url'><span class='dashicons dashicons-edit' aria-hidden='true'></span> <span id='location$event->location_id'>$label</span></a>";
 	} else {
-		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external p-name p-org u-url'><span class='mc-icon' aria-hidden='true'></span>$label</a>" : $label;
+		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external org p-name p-org u-url'><span class='mc-icon' aria-hidden='true'></span>$label</a>" : '<span class="location-link org edit p-name p-org">' . $label . '</span>';
 		$link = $link . $distance;
 	}
 	$post   = ( property_exists( $event, 'location_post' ) && absint( $event->location_post ) ) ? $event->location_post : mc_get_location_post( $loc_id );
@@ -498,7 +498,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	$hcard  = '<div class="address location vcard">';
 	if ( 'true' === $address ) {
 		$hcard .= '<div class="adr h-card">';
-		$hcard .= ( '' !== $label ) ? '<div><strong class="location-link">' . $link . '</strong></div>' : '';
+		$hcard .= ( '' !== $label ) ? '<div><strong class="location-label">' . $link . '</strong></div>' : '';
 		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "<div class='sub-address'>";
 		$hcard .= ( '' !== $street ) ? '<div class="street-address p-street-address">' . $street . '</div>' : '';
 		$hcard .= ( '' !== $street2 ) ? '<div class="street-address p-extended-address">' . $street2 . '</div>' : '';
