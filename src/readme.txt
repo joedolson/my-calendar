@@ -17,7 +17,7 @@ Accessible WordPress event calendar plugin. Manage single or recurring events, e
 
 = Rich Event Calendar Features =
 
-You'll find enormous design flexibility fo your custom calendar. With recurring event support, design customization tools, custom templating, and category and venue support out of the box, My Calendar gives you a great feature set to get your calendar set up.
+You'll find enormous design flexibility for your custom calendar. With recurring event support, design customization tools, custom templating, and category and venue support out of the box, My Calendar gives you a great feature set to get your calendar set up.
 
 = Built with Accessibility in Mind =
 
