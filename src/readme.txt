@@ -125,6 +125,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix focus management while editing scheduled dates.
 * Bug fix: Outlook/O365 event links should use ISO 8601 date formats.
 * Bug fix: Duplicate h2 event title should be hidden on singular list view modals.
+* Bug fix: org class indicator missing in location hcard when location title unlinked.
 * Design: Improvements to oft-neglected list view.
 * Change: Add `mc_get_heading_level()` to simplify heading hierarchy management.
 * Change: Shift category key heading to primary.
