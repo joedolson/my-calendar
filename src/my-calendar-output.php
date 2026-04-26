@@ -553,8 +553,8 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 		$img = mc_get_event_image( $event, $tags );
 	}
 	$wrapper_class = ( $img ) ? ' has-image' : ' no-image';
-	$gridtype  = mc_get_option( 'calendar_javascript' );
-	$listtype  = mc_get_option( 'list_javascript' );
+	$gridtype      = mc_get_option( 'calendar_javascript' );
+	$listtype      = mc_get_option( 'list_javascript' );
 	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) && 'day' !== $time ) {
 		$wrapper_class .= ' uses-modal';
 	}
