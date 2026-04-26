@@ -552,20 +552,23 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	if ( mc_output_is_visible( 'image', $type, $event ) ) {
 		$img = mc_get_event_image( $event, $tags );
 	}
-	$img_class = ( $img ) ? ' has-image' : ' no-image';
+	$wrapper_class = ( $img ) ? ' has-image' : ' no-image';
 	$gridtype  = mc_get_option( 'calendar_javascript' );
 	$listtype  = mc_get_option( 'list_javascript' );
 	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) && 'day' !== $time ) {
-		$img_class .= ' uses-modal';
+		$wrapper_class .= ' uses-modal';
 	}
 	if ( 'list' === $type || 'calendar' === $type ) {
-		$img_class .= ' single-details';
+		$wrapper_class .= ' single-details';
+	}
+	if ( 'list' === $type ) {
+		$wrapper_class .= ' list-details';
 	}
 	$arialabelled = '';
 	if ( ! ( 'single' === $type ) ) {
 		$arialabelled = " aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'";
 	}
-	$container = "<div id='$container_id' class='details$img_class' $arialabelled>\n";
+	$container = "<div id='$container_id' class='details$wrapper_class' $arialabelled>\n";
 	/**
 	 * Filter details before the event content.
 	 *
