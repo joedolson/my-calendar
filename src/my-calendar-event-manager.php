@@ -712,6 +712,7 @@ function mc_list_events() {
 		$filter          = $filters['filter'];
 		$restrict        = $filters['restrict'];
 		$allow_filters   = true;
+		$nav_label       = __( 'Events Pagination', 'my-calendar' );
 
 		if ( ! current_user_can( 'mc_manage_events' ) && ! current_user_can( 'mc_approve_events' ) ) {
 			$restrict      = 'event_author';
@@ -763,21 +764,20 @@ function mc_list_events() {
 			$found_rows = $wpdb->get_col( 'SELECT COUNT(*) FROM  ' . my_calendar_table() . ' AS e ' . $join . ' JOIN ' . my_calendar_categories_table() . " AS c WHERE e.event_category = c.category_id $limit ORDER BY c.category_name $sortbydirection" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 		}
-		$items     = $found_rows[0];
-		$num_pages = ceil( $items / $query['items_per_page'] );
+		$items      = $found_rows[0];
+		$num_pages  = ceil( $items / $query['items_per_page'] );
+		$page_links = paginate_links(
+			array(
+				'base'      => add_query_arg( 'paged', '%#%' ),
+				'format'    => '',
+				'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
+				'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
+				'total'     => $num_pages,
+				'current'   => $query['current'],
+				'mid_size'  => 2,
+			)
+		);
 		if ( $num_pages > 1 ) {
-			$page_links = paginate_links(
-				array(
-					'base'      => add_query_arg( 'paged', '%#%' ),
-					'format'    => '',
-					'prev_text' => __( '&laquo; Previous<span class="screen-reader-text"> Events</span>', 'my-calendar' ),
-					'next_text' => __( 'Next<span class="screen-reader-text"> Events</span> &raquo;', 'my-calendar' ),
-					'total'     => $num_pages,
-					'current'   => $query['current'],
-					'mid_size'  => 2,
-				)
-			);
-			$nav_label  = __( 'Events Pagination', 'my-calendar' );
 			?>
 			<nav class='tablenav' aria-label='<?php echo esc_attr( $nav_label ); ?>'>
 				<div class='tablenav-pages'>
