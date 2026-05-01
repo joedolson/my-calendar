@@ -792,10 +792,6 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			} else {
 				// do an action using the $action and processed event data.
 				$new_event_status = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
-				// check for event_approved provides support for older versions of My Calendar Pro.
-				if ( isset( $post['event_approved'] ) && $post['event_approved'] !== $new_event_status ) {
-					$new_event_status = absint( $post['event_approved'] );
-				}
 				if ( isset( $post['prev_event_status'] ) ) {
 					/**
 					 * Execute an action when an event changes status.
@@ -2380,10 +2376,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_link   = ! empty( $post['event_link'] ) ? trim( $post['event_link'] ) : '';
 		$expires      = ! empty( $post['event_link_expires'] ) ? $post['event_link_expires'] : '0';
 		$approved     = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
-		// Check for event_approved provides support for older versions of My Calendar Pro.
-		if ( isset( $post['event_approved'] ) && $post['event_approved'] !== $approved ) {
-			$approved = absint( $post['event_approved'] );
-		}
 
 		$saved_location     = ! empty( $post['preset_location'] ) ? $post['preset_location'] : '';
 		$select_location    = ( ! empty( $post['location_preset'] ) ) ? $post['location_preset'] : '';
