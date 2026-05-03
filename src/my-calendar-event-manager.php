@@ -1156,7 +1156,7 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 	}
 
 	/**
-	 * Filter permissions to edit an event via the My Calendar Pro REST API..
+	 * Filter permissions to edit an event via the My Calendar Pro REST API.
 	 *
 	 * @hook mc_api_can_edit_event
 	 *
