@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_category_list - My Calendar Hook Doumentation</title>
+    <title>Action: mc_before_delete_event - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_category_list</h1></header>
+    <header><h1 class="page-title">Action: mc_before_delete_event</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_category_list">apply_filters( 'mc_category_list', <span class="signature">$cats, $data )</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="mc_before_delete_event">do_action( 'mc_before_delete_event', <span class="signature">$event_id, $post_id )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter the categories available in a category selection interface.</p>
+    <p>Action run just before an event is deleted.</p>
 </div>
 
 
@@ -77,13 +77,13 @@
 
         <tr>
             
-                <td class="name"><code>$cats</code></td>
+                <td class="name"><code>$event_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">int</span>
 
 
             
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Array of categories.</p></td>
+            <td class="description last"><p>Event ID.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$data</code></td>
+                <td class="name"><code>$post_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">int</span>
 
 
             
@@ -116,7 +116,7 @@
 
             
 
-            <td class="description last"><p>An object with selected category data.</p></td>
+            <td class="description last"><p>Event Post ID.</p></td>
         </tr>
 
     
@@ -157,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-categories.php.html">my-calendar-categories.php</a>, <a href="my-calendar-categories.php.html#line1063">line 1063</a>
+        <a href="my-calendar-event-editor.php.html">my-calendar-event-editor.php</a>, <a href="my-calendar-event-editor.php.html#line858">line 858</a>
     </li></ul></dd>
     
 
@@ -180,24 +180,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">array</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
