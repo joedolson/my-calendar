@@ -855,6 +855,15 @@ function mc_delete_event( $event_id ) {
 		$instance = false;
 		$post_id  = mc_get_data( 'event_post', $event_id );
 		if ( empty( $_POST['event_instance'] ) ) {
+			/**
+			 * Action run just before an event is deleted.
+			 *
+			 * @hook mc_before_delete_event
+			 *
+			 * @param {int} $event_id Event ID.
+			 * @param {int} $post_id Event Post ID.
+			 */
+			do_action( 'mc_before_delete_event', $event_id, $post_id );
 			// Delete from instance table.
 			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			// Delete from event table.
